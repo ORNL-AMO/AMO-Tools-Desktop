@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PFMonthlyOutputs, PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from './power-factor-correction.component';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AbstractControl, ValidationErrors, ValidatorFn, FormArray, FormGroup } from '@angular/forms';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 
 @Injectable()
 export class PowerFactorCorrectionService {
@@ -138,48 +139,6 @@ export class PowerFactorCorrectionService {
     };
   }
 
-  getResetOutput(): PowerFactorCorrectionOutputs {
-    return {
-      annualPFPenalty: 0,
-      proposedFixedCapacitance: 0,
-      proposedVariableCapacitance: 0,
-      capitalCost: 0,
-      simplePayback: 0,
-      monthlyOutputs: [
-        {
-          actualDemand: 0,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 0,
-          penaltyCost: 0,
-          currentReactivePower: 0,
-          proposedReactivePower: 0,
-          proposedCapacitance: 0,
-        },
-        {
-          actualDemand: 0,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 0,
-          penaltyCost: 0,
-          currentReactivePower: 0,
-          proposedReactivePower: 0,
-          proposedCapacitance: 0,
-        },
-        {
-          actualDemand: 0,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 0,
-          penaltyCost: 0,
-          currentReactivePower: 0,
-          proposedReactivePower: 0,
-          proposedCapacitance: 0,
-        }
-      ]
-    };
-  }
-
   existingApparentPower(data: PowerFactorCorrectionInputs): number {
     return data.existingDemand / data.currentPowerFactor;
   }
@@ -290,9 +249,9 @@ export class PowerFactorCorrectionService {
       monthyInputs: this.formBuilder.array(
         inputData.monthyInputs.map(m => this.formBuilder.group({
           month: [m.month, Validators.required],
-          actualDemand: [m.actualDemand, [Validators.required, Validators.min(0)]],
+          pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+          actualDemand: [m.actualDemand, [Validators.required, GreaterThanValidator.greaterThan(0)]],
           powerFactor: [m.powerFactor, [Validators.required, Validators.min(0), Validators.max(1)]],
-          pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, Validators.min(0)]]
         }))
       ),
       startMonth: [inputData.startMonth],
@@ -302,8 +261,7 @@ export class PowerFactorCorrectionService {
     return form;
   }
 
-
-  powerFactorFormValidator(): ValidatorFn {
+    powerFactorFormValidator(): ValidatorFn {
     return (form: AbstractControl): ValidationErrors | null => {
       const billedForDemand = form.get('billedForDemand')?.value;
       const adjustedOrActual = form.get('adjustedOrActual')?.value;
@@ -312,20 +270,22 @@ export class PowerFactorCorrectionService {
       for (let i = 0; i < monthyInputs.length; i++) {
         const group = monthyInputs.at(i) as FormGroup;
         const actualDemandCtrl = group.get('actualDemand');
-        const powerFactorCtrl = group.get('powerFactor');
         const pfAdjustedDemandCtrl = group.get('pfAdjustedDemand');
 
-        if (billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.POWER_FACTOR && powerFactorCtrl.value > pfAdjustedDemandCtrl.value) {
-          this.setCustomError(pfAdjustedDemandCtrl, 'customPowerFactorError', 'Power Factor cannot be greater than PF Adjusted Demand');
-          this.setCustomError(powerFactorCtrl, 'customPowerFactorError', 'Power Factor cannot be greater than PF Adjusted Demand');
-        } else if (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND && actualDemandCtrl.value < pfAdjustedDemandCtrl.value) {
-          this.setCustomError(actualDemandCtrl, 'customDemandError', 'Actual Demand cannot be less than Apparent Power');
-          this.setCustomError(pfAdjustedDemandCtrl, 'customDemandError', 'Actual Demand cannot be less than Apparent Power');
+        const adjustedVsActualError = billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.BOTH && pfAdjustedDemandCtrl.value < actualDemandCtrl.value;
+        const apparentVsActualError = billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND && pfAdjustedDemandCtrl.value < actualDemandCtrl.value;
+
+        if (adjustedVsActualError) {
+          this.setCustomError(pfAdjustedDemandCtrl, 'adjustedVsActualError', 'PF Adjusted Demand must be greater than or equal to Actual Demand');
+          this.setCustomError(actualDemandCtrl, 'adjustedVsActualError', 'PF Adjusted Demand must be greater than or equal to Actual Demand');
+        } else if (apparentVsActualError) {
+          this.setCustomError(actualDemandCtrl, 'apparentVsActualError', 'Apparent Power must be greater than or equal to Actual Demand');
+          this.setCustomError(pfAdjustedDemandCtrl, 'apparentVsActualError', 'Apparent Power must be greater than or equal to Actual Demand');
         } else {
-          this.setCustomError(powerFactorCtrl, 'customPowerFactorError', null);
-          this.setCustomError(pfAdjustedDemandCtrl, 'customPowerFactorError', null);
-          this.setCustomError(actualDemandCtrl, 'customDemandError', null);
-          this.setCustomError(pfAdjustedDemandCtrl, 'customDemandError', null);
+          this.setCustomError(actualDemandCtrl, 'adjustedVsActualError', null);
+          this.setCustomError(pfAdjustedDemandCtrl, 'adjustedVsActualError', null);
+          this.setCustomError(actualDemandCtrl, 'apparentVsActualError', null);
+          this.setCustomError(pfAdjustedDemandCtrl, 'apparentVsActualError', null);
         }
       }
 

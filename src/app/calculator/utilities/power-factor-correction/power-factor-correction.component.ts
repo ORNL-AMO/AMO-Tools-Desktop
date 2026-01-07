@@ -152,7 +152,6 @@ export class PowerFactorCorrectionComponent implements OnInit {
 
   btnResetData() {
     this.inputData = this.powerFactorCorrectionService.getResetData();
-    this.results = this.powerFactorCorrectionService.getResetOutput();
     this.powerFactorCorrectionService.inputData = this.inputData;
   }
 
