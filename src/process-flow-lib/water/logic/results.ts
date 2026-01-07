@@ -833,7 +833,7 @@ const applySystemDischargeCosts = (
           if (isPathAttributed) {
             break;
           }
-
+          
           const dischargeEdge = graph.edgeMap[path[0]];
           const systemDischarge = dischargeEdge?.data.flowValue ?? 0;
           const pathDischarge = graph.edgeMap[edgeId].data.flowValue ?? 0;
@@ -988,10 +988,10 @@ const applySystemWasteTreatmentCosts = (
   debuggingNameMap: Record<string, string>,
 ) => {
   // * used to deduct flow responsibility from upstream WWT systems
-  let downstreamTreatmentAttributionMap: Record<string, {
+   let downstreamTreatmentAttributionMap: Record<string, {
     chargedPortion: number,
-    chargedSystems: string[]
-  }> = {};
+    systemId: string
+  }[]> = {};
 
   Object.entries(wasteTreatmentCostData).forEach(([treatmentId, treatmentData]: [string, CostComponentPathData]) => {
     let visitedSystemIds: string[] = [];
@@ -1045,10 +1045,13 @@ const applySystemWasteTreatmentCosts = (
           // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
           visitedSystemIds.push(currentNode.id);
 
-          downstreamTreatmentAttributionMap[treatmentId] = {
+          if (downstreamTreatmentAttributionMap[treatmentId] === undefined) {
+            downstreamTreatmentAttributionMap[treatmentId] = [];
+          }
+          downstreamTreatmentAttributionMap[treatmentId].push({
             chargedPortion: systemFlowResponsibility,
-            chargedSystems: visitedSystemIds
-          };
+            systemId: currentNode.id
+          });
 
           break;
         }
@@ -1057,36 +1060,36 @@ const applySystemWasteTreatmentCosts = (
 
   });
 
-
   Object.entries(wasteTreatmentCostData).forEach(([treatmentId, treatmentData]: [string, CostComponentPathData]) => {
-    let visitedSystemIds: string[] = [...downstreamTreatmentAttributionMap[treatmentId]?.chargedSystems || []];
+    let visitedSystemIds: string[] = downstreamTreatmentAttributionMap[treatmentId]?.map(item => item.systemId) || [];
     treatmentData.upstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
-
+      
       for (const edgeId of path) {
         const currentNode = graph.nodeMap[graph.edgeMap[edgeId].source];
         if (visitedSystemIds.includes(currentNode.id)) {
           break;
         }
-
+        
         // * attribute costs to upstream water systems
         if (currentNode.data.processComponentType === 'water-using-system') {
           const treatmentEdge = graph.edgeMap[path[0]];
 
           const systemOutflow = treatmentEdge.data.flowValue ?? 0;
           const pathOutflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
-
+          
           // * fractionPathInflowReceived ternary will ignore cases where sstemOutflow > pathOutflow due to flow from other treatment. We will observe other treatment on another iteration
           const fractionPathInflowReceived = (systemOutflow / pathOutflow) > 1 ? 1 : (systemOutflow / pathOutflow);
           let systemFlowResponsibility = pathOutflow * fractionPathInflowReceived;
-
+          
           // * WWT component has split attribution - below logic is required for accurate attribution of chained WWT components
           if (downstreamTreatmentAttributionMap[treatmentId]) {
             // * remove recycled flow portion already attributed to recycled flows (downstream from WWT)
-            systemFlowResponsibility = systemFlowResponsibility - downstreamTreatmentAttributionMap[treatmentId].chargedPortion;
+            const totalDownstreamChargedPortion = downstreamTreatmentAttributionMap[treatmentId].reduce((total, item) => total + item.chargedPortion, 0);
+            systemFlowResponsibility = systemFlowResponsibility - totalDownstreamChargedPortion;
           }
 
           let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
-
+          
           if (flowAttributionMap[treatmentEdge.id]?.[currentNode.id]?.flowAttributionFraction.adjusted !== undefined) {
             systemAttributionFraction = flowAttributionMap[treatmentEdge.id][currentNode.id].flowAttributionFraction.adjusted;
           } else {
@@ -1099,26 +1102,27 @@ const applySystemWasteTreatmentCosts = (
               debuggingNameMap
             );
           }
-
+    
           // * WWT component has split attribution - below logic is required for accurate attribution of chained WWT components
           if (downstreamTreatmentAttributionMap[treatmentId] && flowAttributionMap[treatmentEdge.id]) {
             // * set flow attribution map for any downstream system already processed related to this edge - its default attribution must be adjusted to reflect the WWT's split
-            Object.entries(flowAttributionMap[treatmentEdge.id]).forEach(([systemId, attribution]) => {
-              if (systemId !== currentNode.id) {
-                const edgeDownstreamAttribution = downstreamTreatmentAttributionMap[treatmentId];
-                const systemAttributionFraction = (edgeDownstreamAttribution.chargedPortion / treatmentData.blockCosts.totalFlow);
-                // costToSystem is calculated and assigned in downstream logic above
+            // todo why, what case was this for? Seems to be no longer needed
+            // Object.entries(flowAttributionMap[treatmentEdge.id]).forEach(([systemId, attribution]) => {
+            //   if (systemId !== currentNode.id) {
+            //     const edgeDownstreamAttribution = downstreamTreatmentAttributionMap[treatmentId]?.find(item => item.systemId === systemId);
+            //     const systemAttributionFraction = (edgeDownstreamAttribution.chargedPortion / treatmentData.blockCosts.totalFlow);
+            //     // costToSystem is calculated and assigned in downstream logic above
 
-                const downStreamSystemAttribution: ComponentAttribution = {
-                  ...attribution,
-                  flowAttributionFraction: {
-                    default: systemAttributionFraction,
-                    adjusted: attribution.flowAttributionFraction.adjusted
-                  },
-                };
-                flowAttributionMap[treatmentEdge.id][systemId] = downStreamSystemAttribution;
-              }
-            });
+            //     const downStreamSystemAttribution: ComponentAttribution = {
+            //       ...attribution,
+            //       flowAttributionFraction: {
+            //         default: systemAttributionFraction,
+            //         adjusted: attribution.flowAttributionFraction.adjusted
+            //       },
+            //     };
+            //     flowAttributionMap[treatmentEdge.id][systemId] = downStreamSystemAttribution;
+            //   }
+            // });
           }
 
           const costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
