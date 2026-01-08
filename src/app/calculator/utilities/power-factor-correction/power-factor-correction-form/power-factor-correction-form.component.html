@@ -156,13 +156,6 @@
         <input type="number" step="any" formControlName="actualDemand" id="{{'actualDemand_'+i}}" (input)="calculate()" (focus)="focusField('actualDemand')">
         <span *ngIf="group.get('actualDemand')?.errors?.required" class="alert-danger pull-right small">Value Required</span>
         <span *ngIf="group.get('actualDemand')?.errors?.greaterThan == 0" class="alert-danger pull-right small">Value must be greater than {{group.get('actualDemand')?.errors?.greaterThan}}</span>
-        <span class="alert-danger pull-right small"
-          *ngIf="group.get('actualDemand')?.invalid && group.get('actualDemand')?.errors?.adjustedVsActualError">
-          {{group.get('actualDemand').errors.adjustedVsActualError}}
-        </span>
-        <span class="alert-danger pull-right small" *ngIf="group.get('actualDemand')?.errors?.apparentVsActualError">
-            {{group.get('actualDemand').errors.apparentVsActualError}}
-      </span>
       </td>
       <td
         *ngIf="billedForDemand == BilledForDemand.REAL_POWER || (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.POWER_FACTOR)">

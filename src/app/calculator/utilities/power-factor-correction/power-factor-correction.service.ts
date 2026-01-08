@@ -154,14 +154,10 @@ export class PowerFactorCorrectionService {
 
         if (adjustedVsActualError) {
           this.setCustomError(pfAdjustedDemandCtrl, 'adjustedVsActualError', 'PF Adjusted Demand must be greater than or equal to Actual Demand');
-          this.setCustomError(actualDemandCtrl, 'adjustedVsActualError', 'PF Adjusted Demand must be greater than or equal to Actual Demand');
         } else if (apparentVsActualError) {
-          this.setCustomError(actualDemandCtrl, 'apparentVsActualError', 'Apparent Power must be greater than or equal to Actual Demand');
           this.setCustomError(pfAdjustedDemandCtrl, 'apparentVsActualError', 'Apparent Power must be greater than or equal to Actual Demand');
         } else {
-          this.setCustomError(actualDemandCtrl, 'adjustedVsActualError', null);
           this.setCustomError(pfAdjustedDemandCtrl, 'adjustedVsActualError', null);
-          this.setCustomError(actualDemandCtrl, 'apparentVsActualError', null);
           this.setCustomError(pfAdjustedDemandCtrl, 'apparentVsActualError', null);
         }
       }
