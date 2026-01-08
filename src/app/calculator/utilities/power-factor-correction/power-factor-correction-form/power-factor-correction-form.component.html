@@ -181,8 +181,16 @@
     Add Month
   </button>
   <button type="button" class="btn btn-danger pull-left btn-sm m-2 btn-form" (click)="btnDeleteLastMonth()"
-    [disabled]="data.monthyInputs.length == 3">
+    [disabled]="monthyInputsFormArray.controls.length == 3">
     Delete Last Month
   </button>
 
+</div>
+<div class="w-100 justify-content-center btn-group btn-group-sm">
+  <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+    Reset Data
+  </button>
+  <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+    Generate Example
+  </button>
 </div>

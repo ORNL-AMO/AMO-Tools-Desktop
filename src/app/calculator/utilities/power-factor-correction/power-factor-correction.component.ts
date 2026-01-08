@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef, Input, Output, EventEmitter } from '@angular/core';
-import { PowerFactorCorrectionService } from './power-factor-correction.service';
+import { PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs, PowerFactorCorrectionService } from './power-factor-correction.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 import { PowerFactorCorrectionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-power-factor-correction',
@@ -17,94 +18,7 @@ export class PowerFactorCorrectionComponent implements OnInit {
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
 
-  inputData: PowerFactorCorrectionInputs = {
-    existingDemand: 100,
-    currentPowerFactor: 0.5,
-    proposedPowerFactor: 0.95,
-    billedForDemand: 0,
-    minimumPowerFactor: 0.95,
-    targetPowerFactor: 0.95,
-    adjustedOrActual: 0,
-    marginalCostOfDemand: 8.15,
-    costOfStaticCapacitance: 50,
-    costOfDynamicCapacitance: 70,
-    monthyInputs: [
-      {
-        month: 'January 2024',
-        actualDemand: 462,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'February 2024',
-        actualDemand: 528,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'March 2024',
-        actualDemand: 492,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'April 2024',
-        actualDemand: 474,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'May 2024',
-        actualDemand: 499,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'June 2024',
-        actualDemand: 513,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'July 2024',
-        actualDemand: 530,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'August 2024',
-        actualDemand: 523,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'September 2024',
-        actualDemand: 547,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'October 2024',
-        actualDemand: 589,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'November 2024',
-        actualDemand: 621,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-      {
-        month: 'December 2024',
-        actualDemand: 607,
-        powerFactor: 0.8,
-        pfAdjustedDemand: 0
-      },
-    ],
-    startMonth: 1,
-    startYear: 2024,
-  };
+  powerFactorInputs: PowerFactorCorrectionInputs;
   results: PowerFactorCorrectionOutputs;
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
@@ -121,19 +35,22 @@ export class PowerFactorCorrectionComponent implements OnInit {
   containerHeight: number;
   headerHeight: number;
   currentField: string;
-  toggleCalculate: boolean = false;
   tabSelect: string = 'results';
-  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService,
-    private analyticsService: AnalyticsService) { }
+  powerFactorInputSubscription: Subscription;
+
+  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService, private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('calculator-UTIL-power-factor-correction');
-    if (!this.powerFactorCorrectionService.inputData) {
-      this.generateExample();
-    } else {
-      this.inputData = this.powerFactorCorrectionService.inputData;
+
+    this.powerFactorInputs = this.powerFactorCorrectionService.powerFactorInputs.getValue();
+    if (!this.powerFactorInputs) {
+      this.powerFactorCorrectionService.powerFactorInputs.next(this.powerFactorCorrectionService.getDefaultEmptyInputs());
+      this.powerFactorCorrectionService.powerFactorOutputs.next(this.powerFactorCorrectionService.getEmptyPowerFactorCorrectionOutputs());
     }
-    this.calculate(this.inputData);
+    this.powerFactorInputSubscription = this.powerFactorCorrectionService.powerFactorInputs.subscribe(val => {
+      this.powerFactorInputs = val;
+    });
   }
 
   ngAfterViewInit() {
@@ -143,26 +60,13 @@ export class PowerFactorCorrectionComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (!this.inTreasureHunt) {
-      this.powerFactorCorrectionService.inputData = this.inputData;
+    if(!this.inTreasureHunt){
+      this.powerFactorCorrectionService.powerFactorInputs.next(this.powerFactorInputs);
     } else {
-      this.powerFactorCorrectionService.inputData = undefined;
+      this.powerFactorCorrectionService.powerFactorInputs.next(undefined);
     }
-  }
 
-  btnResetData() {
-    this.inputData = this.powerFactorCorrectionService.getResetData();
-    this.powerFactorCorrectionService.inputData = this.inputData;
-  }
-
-  generateExample() {
-    this.inputData = this.powerFactorCorrectionService.generateExample();
-    this.powerFactorCorrectionService.inputData = this.inputData;
-  }
-
-  btnGenerateExample() {
-    this.generateExample();
-    this.calculate(this.inputData);
+    this.powerFactorInputSubscription.unsubscribe();
   }
 
   resizeTabs() {
@@ -178,17 +82,9 @@ export class PowerFactorCorrectionComponent implements OnInit {
   setTab(str: string) {
     this.tabSelect = str;
   }
-  changeField(str: string) {
-    this.currentField = str;
-  }
-
-  calculate(data: PowerFactorCorrectionInputs) {
-    this.inputData = data;
-    this.results = this.powerFactorCorrectionService.getResults(data);
-  }
 
   save() {
-    this.emitSave.emit({ inputData: this.inputData, opportunityType: Treasure.powerFactorCorrection });
+    this.emitSave.emit({ inputData: this.powerFactorInputs, opportunityType: Treasure.powerFactorCorrection });
   }
 
   cancel() {
@@ -198,49 +94,4 @@ export class PowerFactorCorrectionComponent implements OnInit {
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
   }
-}
-
-
-export interface PowerFactorCorrectionInputs {
-  existingDemand: number;
-  currentPowerFactor: number;
-  proposedPowerFactor: number;
-  billedForDemand: number;
-  minimumPowerFactor: number;
-  targetPowerFactor: number;
-  adjustedOrActual: number;
-  marginalCostOfDemand: number;
-  costOfStaticCapacitance: number;
-  costOfDynamicCapacitance: number;
-  monthyInputs: Array<MonthyInputs>;
-  startMonth: number;
-  startYear: number;
-}
-
-export interface MonthyInputs {
-  month: string;
-  actualDemand: number;
-  powerFactor: number;
-  pfAdjustedDemand: number;
-}
-
-
-export interface PowerFactorCorrectionOutputs {
-  annualPFPenalty: number;
-  proposedFixedCapacitance: number;
-  proposedVariableCapacitance: number;
-  capitalCost: number;
-  simplePayback: number;
-  monthlyOutputs: Array<PFMonthlyOutputs>;
-}
-
-export interface PFMonthlyOutputs {
-  actualDemand: number;
-  pfAdjustedDemand: number;
-  proposedApparentPower: number;
-  demandPenalty: number;
-  penaltyCost: number;
-  currentReactivePower: number;
-  proposedReactivePower: number;
-  proposedCapacitance: number;
 }

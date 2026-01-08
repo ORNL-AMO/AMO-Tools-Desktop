@@ -1,25 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PowerFactorCorrectionInputs } from '../power-factor-correction.component';
-import { AdjustedOrActual, BilledForDemand, PowerFactorCorrectionService } from '../power-factor-correction.service';
+import { Component, OnInit } from '@angular/core';
+import { AdjustedOrActual, BilledForDemand, PowerFactorCorrectionInputs, PowerFactorCorrectionService } from '../power-factor-correction.service';
 import { FormBuilder, FormGroup, UntypedFormGroup, FormArray, Validators } from '@angular/forms';
 
 @Component({
-    selector: 'app-power-factor-correction-form',
-    templateUrl: './power-factor-correction-form.component.html',
-    styleUrls: ['./power-factor-correction-form.component.css'],
-    standalone: false
+  selector: 'app-power-factor-correction-form',
+  templateUrl: './power-factor-correction-form.component.html',
+  styleUrls: ['./power-factor-correction-form.component.css'],
+  standalone: false
 })
 export class PowerFactorCorrectionFormComponent implements OnInit {
-  
-  @Input()
-  data: PowerFactorCorrectionInputs;
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
   form: UntypedFormGroup;
-
-  @Output('emitCalculate')
-  emitCalculate = new EventEmitter<PowerFactorCorrectionInputs>();
-
   monthList: Array<{ value: number, name: string }> = [
     { value: 1, name: 'January' },
     { value: 2, name: 'February' },
@@ -38,20 +28,39 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   BilledForDemand = BilledForDemand;
   AdjustedOrActual = AdjustedOrActual;
 
-
-  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService,
-    private fb: FormBuilder
-  ) {}
+  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.form = this.powerFactorCorrectionService.getApparentPowerAndPowerFactor(this.data);
+    this.initForm();
+    this.calculate();
+  }
+
+  initForm(inputs?: PowerFactorCorrectionInputs) {
+    if (!inputs) {
+      inputs = this.powerFactorCorrectionService.powerFactorInputs.getValue();
+    }
+    this.form = this.powerFactorCorrectionService.getApparentPowerAndPowerFactor(inputs);
   }
 
   calculate() {
-    this.emitCalculate.emit(this.form.value);
+    let updatedInput: PowerFactorCorrectionInputs = this.form.getRawValue();
+    const results = this.powerFactorCorrectionService.getResults(updatedInput);
+    this.powerFactorCorrectionService.powerFactorInputs.next(updatedInput);
+    this.powerFactorCorrectionService.powerFactorOutputs.next(results);
   }
 
-  updateStartingYear() {   
+  btnResetData() {
+    this.initForm(this.powerFactorCorrectionService.getDefaultEmptyInputs());
+    this.calculate();
+  }
+
+
+  btnGenerateExample() {
+    this.initForm(this.powerFactorCorrectionService.getExampleData());
+    this.calculate();
+  }
+
+  updateStartingYear() {
     if (this.form.value.startYear != null) {
       const updatedInputs = this.form.value.monthyInputs.map((input) => {
         if (input.month) {
@@ -67,12 +76,7 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     }
   }
 
-  focusField(str: string) {
-    this.data.monthyInputs = this.form.value.monthyInputs;
-    this.changeField.emit(str);
-  }
-
-  setBilledForDemand(){
+  setBilledForDemand() {
     if (this.form.value.billedForDemand === 0) {
       this.form.value.minimumPowerFactor = 0.95;
     } else if (this.form.value.billedForDemand === 1) {
@@ -81,8 +85,8 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     this.calculate();
   }
 
-  setAdjustedOrActual(){    
-    if (this.form.value.adjustedOrActual === 2){
+  setAdjustedOrActual() {
+    if (this.form.value.adjustedOrActual === 2) {
       this.form.value.billedForDemand = 0;
     }
     this.calculate();
@@ -104,12 +108,12 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     });
   }
 
-  btnDeleteLastMonth(){
+  btnDeleteLastMonth() {
     this.monthyInputsFormArray.removeAt(this.monthyInputsFormArray.length - 1);
     this.calculate();
   }
 
-  setMonthNames(){
+  setMonthNames() {
     let year = this.form.value.startYear;
     let month = this.form.value.startMonth;
     this.monthyInputsFormArray.controls.forEach((group: FormGroup) => {
@@ -123,6 +127,10 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     });
   }
 
+  focusField(str: string) {
+    this.powerFactorCorrectionService.currentField.next(str);
+  }
+
   get monthyInputsFormArray(): FormArray {
     return this.form.get('monthyInputs') as FormArray;
   }
@@ -133,6 +141,6 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
 
   get adjustedOrActual(): number {
     return this.form.value.adjustedOrActual;
-  } 
-  
+  }
+
 }
