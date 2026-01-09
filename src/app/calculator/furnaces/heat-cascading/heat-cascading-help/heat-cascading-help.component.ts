@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { HeatCascadingService } from '../heat-cascading.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-heat-cascading-help',
@@ -17,6 +18,7 @@ export class HeatCascadingHelpComponent implements OnInit {
   currentField: string;
   displayDescription: boolean = true;
   
+  docsLink: string = environment.measurDocsUrl;
   constructor(private heatCascadingService: HeatCascadingService) { }
   
   ngOnInit(): void {

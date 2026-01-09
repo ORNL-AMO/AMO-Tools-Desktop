@@ -483,17 +483,16 @@ export class ProcessHeatingApiService {
     input.electricallyHeatedEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.electricallyHeatedEfficiency);
     input.fuelFiredHeatInput = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.fuelFiredHeatInput);
 
-    let EnergyEquivalencyElectricInstance = new this.toolsSuiteApiService.ToolsSuiteModule.ElectricalEnergyEquivalency(
+    let results = this.toolsSuiteApiService.ToolsSuiteModule.calculateElectricalEquivalentHeatInput(
+      input.fuelFiredHeatInput,
       input.fuelFiredEfficiency,
-      input.electricallyHeatedEfficiency,
-      input.fuelFiredHeatInput
+      input.electricallyHeatedEfficiency
     );
 
     let output: EnergyEquivalencyElectricOutput = {
-      electricalHeatInput: EnergyEquivalencyElectricInstance.getElectricalHeatInput()
+      electricalHeatInput: results
     };
 
-    EnergyEquivalencyElectricInstance.delete();
     return output;
   }
 
@@ -502,23 +501,19 @@ export class ProcessHeatingApiService {
     input.fuelFiredEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.fuelFiredEfficiency);
     input.electricalHeatInput = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.electricalHeatInput);
 
-    let EnergyEquivalencyFuelInstance = new this.toolsSuiteApiService.ToolsSuiteModule.FuelFiredEnergyEquivalency(
+    let results = this.toolsSuiteApiService.ToolsSuiteModule.calculateFuelFiredEquivalentHeatInput(
+      input.electricalHeatInput,
       input.electricallyHeatedEfficiency,
-      input.fuelFiredEfficiency,
-      input.electricalHeatInput
+      input.fuelFiredEfficiency
     );
 
     let output: EnergyEquivalencyFuelOutput = {
-      fuelFiredHeatInput: EnergyEquivalencyFuelInstance.getFuelFiredHeatInput()
+      fuelFiredHeatInput: results
     };
-
-    EnergyEquivalencyFuelInstance.delete();
     return output;
   }
 
   flowCalculations(input: FlowCalculations): FlowCalculationsOutput {
-    let gasType = this.suiteApiHelperService.getFlowCalculationGasTypeEnum(input.gasType);
-    let section = this.suiteApiHelperService.getFlowCalculationSectionEnum(input.sectionType);
 
     input.operatingTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.operatingTime)
     input.specificGravity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.specificGravity)
@@ -530,12 +525,10 @@ export class ProcessHeatingApiService {
     input.gasPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.gasPressure)
     input.orificePressureDrop = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificePressureDrop)
 
-    let FlowCalculationsInstance = new this.toolsSuiteApiService.ToolsSuiteModule.FlowCalculationsEnergyUse(
-      gasType,
+    let flowCalculationsEnergyUseResults = this.toolsSuiteApiService.ToolsSuiteModule.flowCalculationsEnergyUse(
       input.specificGravity,
       input.orificeDiameter,
       input.insidePipeDiameter,
-      section,
       input.dischargeCoefficient,
       input.gasHeatingValue,
       input.gasTemperature,
@@ -545,12 +538,11 @@ export class ProcessHeatingApiService {
     );
 
     let output: FlowCalculationsOutput = {
-      flow: FlowCalculationsInstance.getFlow(),
-      heatInput: FlowCalculationsInstance.getHeatInput(),
-      totalFlow: FlowCalculationsInstance.getTotalFlow(),
+      flow: flowCalculationsEnergyUseResults.flowPerHour,
+      heatInput: flowCalculationsEnergyUseResults.heatInput,
+      totalFlow: flowCalculationsEnergyUseResults.totalFlow,
     }
 
-    FlowCalculationsInstance.delete();
     return output;
   }
 
@@ -565,7 +557,7 @@ export class ProcessHeatingApiService {
     input.combAirTempEnriched = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.combAirTempEnriched);
     input.fuelConsumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.fuelConsumption);
 
-    let O2EnrichmentInstance = new this.toolsSuiteApiService.ToolsSuiteModule.O2Enrichment(
+    let O2EnrichmentInstance = this.toolsSuiteApiService.ToolsSuiteModule.calculateO2Enrichment(
       input.o2CombAir, input.o2CombAirEnriched,
       input.flueGasTemp, input.flueGasTempEnriched,
       input.o2FlueGas, input.o2FlueGasEnriched,
@@ -573,16 +565,15 @@ export class ProcessHeatingApiService {
       input.fuelConsumption
     );
     let output: RawO2Output = this.getO2EnrichmentOutput(O2EnrichmentInstance);
-    O2EnrichmentInstance.delete();
     return output;
   }
 
   getO2EnrichmentOutput(instance): RawO2Output {
     return {
-      availableHeatInput: instance.getAvailableHeat(),
-      availableHeatEnriched: instance.getAvailableHeatEnriched(),
-      fuelSavingsEnriched: instance.getFuelSavingsEnriched(),
-      fuelConsumptionEnriched: instance.getFuelConsumptionEnriched(),
+      availableHeatInput: instance.availableHeat,
+      availableHeatEnriched: instance.availableHeatEnriched,
+      fuelSavingsEnriched: instance.fuelSavingsEnriched,
+      fuelConsumptionEnriched: instance.fuelConsumptionEnriched,
     }
   }
 
@@ -618,7 +609,6 @@ export class ProcessHeatingApiService {
   }
 
   airHeatingUsingExhaust(input: AirHeatingInput): AirHeatingOutput {
-    let airHeatingInstance;
     let output;
     if (input.gasFuelType) {
       let GasCompositions = new this.toolsSuiteApiService.ToolsSuiteModule.GasCompositions(
@@ -635,33 +625,38 @@ export class ProcessHeatingApiService {
         input.SO2,
         input.O2
       );
-      airHeatingInstance = new this.toolsSuiteApiService.ToolsSuiteModule.AirHeatingUsingExhaust(GasCompositions);
+      output = this.toolsSuiteApiService.ToolsSuiteModule.airHeatingUsingExhaustWithGasComposition(GasCompositions,
+        input.flueTemperature,
+        input.excessAir,
+        input.fireRate,
+        input.airflow,
+        input.inletTemperature,
+        input.heaterEfficiency,
+        input.hxEfficiency,
+        input.operatingHours);
       GasCompositions.delete();
     } else {
-      let SolidLiquidFlueGasMaterial = new this.toolsSuiteApiService.ToolsSuiteModule.SolidLiquidFlueGasMaterial(
-        input.substance,
-        input.carbon,
-        input.hydrogen,
-        input.sulphur,
-        input.inertAsh,
-        input.o2,
-        input.moisture,
-        input.nitrogen
-      );
-      airHeatingInstance = new this.toolsSuiteApiService.ToolsSuiteModule.AirHeatingUsingExhaust(SolidLiquidFlueGasMaterial, true);
-      SolidLiquidFlueGasMaterial.delete();
+      let SolidLiquidFlueGasMaterial = {
+        "substance": input.substance,
+        "carbon": input.carbon,
+        "hydrogen": input.hydrogen,
+        "sulphur": input.sulphur,
+        "inertAsh": input.inertAsh,
+        "oxygen": input.o2,
+        "moisture": input.moisture,
+        "nitrogen": input.nitrogen
+      };
+      output = this.toolsSuiteApiService.ToolsSuiteModule.airHeatingUsingExhaustWithSolidLiquidFlueGasMaterial(SolidLiquidFlueGasMaterial,
+        input.flueTemperature,
+        input.excessAir,
+        input.fireRate,
+        input.airflow,
+        input.inletTemperature,
+        input.heaterEfficiency,
+        input.hxEfficiency,
+        input.operatingHours);
     }
 
-    output = airHeatingInstance.calculate(
-      input.flueTemperature,
-      input.excessAir,
-      input.fireRate,
-      input.airflow,
-      input.inletTemperature,
-      input.heaterEfficiency,
-      input.hxEfficiency,
-      input.operatingHours
-    );
     let results: AirHeatingOutput = {
       hxColdAir: output.hxColdAir,
       hxOutletExhaust: output.hxOutletExhaust,
@@ -672,9 +667,6 @@ export class ProcessHeatingApiService {
       baselineEnergy: output.baselineEnergy,
       modificationEnergy: output.modificationEnergy,
     }
-    output.delete();
-
-    airHeatingInstance.delete();
     return results;
   }
 
@@ -694,8 +686,7 @@ export class ProcessHeatingApiService {
       input.O2
     );
 
-    let airWaterCoolingUsingFlueInstance = new this.toolsSuiteApiService.ToolsSuiteModule.AirWaterCoolingUsingFlue();
-    let output = airWaterCoolingUsingFlueInstance.calculate(GasCompositionsInstance,
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.airWaterCoolingUsingFlue(GasCompositionsInstance,
       input.heatInput,
       input.tempFlueGasInF,
       input.tempFlueGasOutF,
@@ -723,8 +714,6 @@ export class ProcessHeatingApiService {
       totalHeatRecovery: output.totalHeatRecovery,
       annualHeatRecovery: output.annualHeatRecovery,
     }
-    output.delete();
-    airWaterCoolingUsingFlueInstance.delete();
     GasCompositionsInstance.delete();
     return results;
   }
@@ -805,7 +794,7 @@ export class ProcessHeatingApiService {
       input.O2
     );
 
-    let cascadeHeatHighToLowInstance = new this.toolsSuiteApiService.ToolsSuiteModule.CascadeHeatHighToLow(
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.calculateCascadeHeatHighToLow(
       GasCompositionsInstance,
       input.fuelHV,
       input.fuelCost,
@@ -823,7 +812,6 @@ export class ProcessHeatingApiService {
       input.ambientAirTempF,
       input.combAirMoisturePerc
     );
-    let output = cascadeHeatHighToLowInstance.calculate();
     let results: HeatCascadingOutput = {
       priFlueVolume: output.priFlueVolume,
       hxEnergyRate: output.hxEnergyRate,
@@ -839,8 +827,6 @@ export class ProcessHeatingApiService {
       baselineEnergy: output.baselineEnergy,
       modificationEnergy: output.modificationEnergy
     }
-    output.delete();
-    cascadeHeatHighToLowInstance.delete();
     GasCompositionsInstance.delete();
     return results;
   }
