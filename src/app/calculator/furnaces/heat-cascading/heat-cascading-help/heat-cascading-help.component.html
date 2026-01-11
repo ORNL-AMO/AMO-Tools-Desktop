@@ -247,11 +247,13 @@
   <div class="my-2">
     <a class="click-link">
       <span class="fa fa-external-link"></span>
-      <a class="pl-1" [href]="docsLink + 'group__cascade__heat__high__to__low__calculator'" target="_blank">How are heat
-        cascading results calculated?</a>
+      <a class="pl-1" [href]="docsLink + 'group__cascade__heat__high__to__low__calculator'" target="_blank">How are
+        energy use and savings results calculated?</a>
     </a>
   </div>
+
+  <hr *ngIf="currentField != undefined">
   <div class="justify-content-center mx-auto">
     <img src="assets/images/heat-cascading-diagram.png" class="help-img">
   </div>
-
+</div>
