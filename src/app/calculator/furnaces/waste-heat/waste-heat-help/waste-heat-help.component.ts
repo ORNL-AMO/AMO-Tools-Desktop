@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { WasteHeatService } from '../waste-heat.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-waste-heat-help',
@@ -17,6 +18,7 @@ export class WasteHeatHelpComponent implements OnInit {
   currentField: string;
   displayDescription: boolean = true;
 
+  docsLink: string = environment.measurDocsUrl;
   constructor(private wasteHeatService: WasteHeatService) { }
   
   ngOnInit(): void {
