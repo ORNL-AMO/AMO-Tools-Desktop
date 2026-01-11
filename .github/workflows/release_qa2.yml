@@ -1,4 +1,4 @@
-name: "Release: QA"
+name: "Release: QA 2"
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ jobs:
     needs: call_build
     uses: ./.github/workflows/template_deploy.yml
     with:
-      app-dir: qa.measur
+      app-dir: qa2.measur
       artifact-name: dist
       deploy-dir: /var/www/html
       tag: dev

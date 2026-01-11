@@ -805,7 +805,7 @@ export class ProcessHeatingApiService {
       input.O2
     );
 
-    let cascadeHeatHighToLowInstance = new this.toolsSuiteApiService.ToolsSuiteModule.CascadeHeatHighToLow(
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.calculateCascadeHeatHighToLow(
       GasCompositionsInstance,
       input.fuelHV,
       input.fuelCost,
@@ -823,7 +823,6 @@ export class ProcessHeatingApiService {
       input.ambientAirTempF,
       input.combAirMoisturePerc
     );
-    let output = cascadeHeatHighToLowInstance.calculate();
     let results: HeatCascadingOutput = {
       priFlueVolume: output.priFlueVolume,
       hxEnergyRate: output.hxEnergyRate,
@@ -839,8 +838,6 @@ export class ProcessHeatingApiService {
       baselineEnergy: output.baselineEnergy,
       modificationEnergy: output.modificationEnergy
     }
-    output.delete();
-    cascadeHeatHighToLowInstance.delete();
     GasCompositionsInstance.delete();
     return results;
   }
