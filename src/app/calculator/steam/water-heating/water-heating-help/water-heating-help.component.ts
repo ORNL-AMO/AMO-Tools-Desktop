@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { WaterHeatingService } from '../water-heating.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-water-heating-help',
@@ -17,6 +18,7 @@ export class WaterHeatingHelpComponent implements OnInit {
   currentFieldSub: Subscription;
   currentField: string;
 
+  docsLink: string = environment.measurDocsUrl;
   constructor(private waterHeatingService: WaterHeatingService) { }
   
   ngOnInit(): void {
