@@ -30,7 +30,7 @@ export interface PlantResults {
     trueCostOfSystems: TrueCostOfSystems;
     plantSystemSummaryResults: PlantSystemSummaryResults;
     costComponentsTotalsMap: Record<string, BlockCosts>;
-    flowAttributionMap: FlowAttributionMap;
+    systemAttributionMap: SystemAttributionMap;
 }
 
 export interface SystemTrueCostData {
@@ -42,11 +42,6 @@ export interface SystemTrueCostData {
 
 export interface TrueCostOfSystems {
   [systemId: string]: SystemTrueCostContributions
-}
-
-// * Edge id and corresponding attributions by system
-export interface FlowAttributionMap {
-  [edgeId: string]: Record<string, ComponentAttribution>;
 }
 
 
@@ -112,20 +107,28 @@ export interface BlockCostsV2 {
 
 // * Cost Components - nodes that carry block costs that then get attributed to systems depending on flow responsibility and proportions
 
-/**
- * Represented system costs/flows from a given cost component
- */
-export interface ComponentAttribution {
-  systemId: string;
-  systemName: string;
-  flowEdgeId: string;
-  flowEdgeDescription: string;
-  flowAttributionFraction: {
+export interface SystemAttributionMap {
+  [systemId: string]: Record<string, CostComponentAttribution>;
+}
+
+export interface CostComponentAttribution {
+  name: string;
+  componentId: string;
+  totalAttribution: AttributionFraction;
+  componentPathAttribution: PathAttribution[];
+}
+
+export interface AttributionFraction {
     default: number;
     adjusted?: number;
   }
-  costComponentId: string;
+
+export interface PathAttribution {
+  edgeId: string;
+  edgeDescription: string;
+  attribution: number
 }
+
 
 /**
  * Represents a cost from a connected cost component (ex. intake, discharge, treatment etc)
@@ -145,11 +148,6 @@ export interface ConnectedCost {
   targetName: string,
 }
 
-
-export type SystemToCostComponentAttributionMap = Record<string, {
-  name: string,
-  componentAttribution?: Record<string, ComponentAttribution>;
-}>;
 
 export interface CostComponentSummary {
   id: string;

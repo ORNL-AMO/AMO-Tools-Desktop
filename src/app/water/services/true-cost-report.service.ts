@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
-import { ComponentAttribution, SystemToCostComponentAttributionMap } from 'process-flow-lib';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { AttributionFraction, CostComponentAttribution, SystemAttributionMap } from 'process-flow-lib';
 
 @Injectable()
 export class TrueCostReportService {
@@ -11,23 +11,21 @@ export class TrueCostReportService {
    * Creates a form array of form arrays where we map cost components (rows) to attribution by system (columns/cells). Returns as a FormGroup.
    * @returns  FormGroup
    */
-  getCostComponentsForm(systemToCostComponentAttributions: SystemToCostComponentAttributionMap, 
-    systemIds: string[], 
-    costComponentIds: string[], 
-    nullDefaultAttribution: Record<string, {[key: string]: string}>
+    getCostComponentsForm(
+      systemAttributionMap: SystemAttributionMap, 
+      costComponentIds: string[], 
+      nullDefaultAttribution: Record<string, {[key: string]: string}>
   ): FormGroup {
      let costComponents: number[][] = [];
-    if (systemToCostComponentAttributions) {
+    if (systemAttributionMap) {
       costComponentIds.forEach(componentId => {
         const componentSystemAttributions = [];
-        systemIds.forEach((systemId: string) => {
 
-          const componentAttribution: ComponentAttribution = systemToCostComponentAttributions[systemId].componentAttribution[componentId];
+        Object.entries(systemAttributionMap).forEach(([systemId, attributionMap]: [string, Record<string, CostComponentAttribution>]) => {
+          const componentAttribution: AttributionFraction = attributionMap[componentId]?.totalAttribution;
           let systemAttributionToComponent: number = null;
           if (componentAttribution) {
-            systemAttributionToComponent = componentAttribution.flowAttributionFraction.adjusted !== undefined ?  
-            (componentAttribution.flowAttributionFraction.adjusted * 100) 
-            : (componentAttribution.flowAttributionFraction.default * 100);
+            systemAttributionToComponent = componentAttribution.adjusted !== undefined ? (componentAttribution.adjusted * 100) : (componentAttribution.default * 100);
           } else {
             // * Component not connected, or incurs no cost
             if (!nullDefaultAttribution[componentId]) {
@@ -35,7 +33,6 @@ export class TrueCostReportService {
             }
             nullDefaultAttribution[componentId][systemId] = systemId;
           }
-
           componentSystemAttributions.push(systemAttributionToComponent);
         });
         costComponents.push(componentSystemAttributions)
@@ -57,7 +54,6 @@ export class TrueCostReportService {
     return form;
   }
 }
-
 
 
 export interface TrueCostComponentAttributionForm {

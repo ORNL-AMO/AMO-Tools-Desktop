@@ -1,8 +1,8 @@
-import { Component, DestroyRef, Inject, inject, Input } from '@angular/core';
+import { Component, DestroyRef, Inject, inject } from '@angular/core';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
 import { Diagram } from '../../../shared/models/diagram';
-import { BlockCosts, ComponentAttribution, CostComponentSummary, FlowAttributionMap, getComponentTypeLabel, getIsDiagramValid, NodeErrors, PlantResults, PlantSystemSummaryResults, SystemToCostComponentAttributionMap } from 'process-flow-lib';
+import { BlockCosts, CostComponentSummary, getComponentTypeLabel, getIsDiagramValid, NodeErrors, PlantResults, CostComponentAttribution, SystemAttributionMap } from 'process-flow-lib';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Assessment } from '../../../shared/models/assessment';
 import { TrueCostReportService } from '../../services/true-cost-report.service';
@@ -44,12 +44,12 @@ export class TrueCostEditableTableComponent {
 
   costComponents: CostComponentSummary[] = [];
   plantResults: PlantResults;
-  systemToCostComponentAttributions: SystemToCostComponentAttributionMap = {};
-  adjustedFlowAttributionMap: FlowAttributionMap = {};
+  adjustedAttribution: SystemAttributionMap = {};
 
   // * Set disabled, system is not connected to cost component or has an error
   // todo this should probably be restructured
-  nullDefaultAttribution: Record<string, {[key: string]: string}> = {};
+  nullDefaultAttribution: Record<string, { [key: string]: string }> = {};
+  nodeNameMap: Record<string, string> = {};
 
   constructor(@Inject(DIALOG_DATA) modalDialogData: TrueCostEditableTableDataInputs) {
     this.assessment = modalDialogData.assessment;
@@ -62,31 +62,34 @@ export class TrueCostEditableTableComponent {
     let nodeErrors: NodeErrors = this.diagram.waterDiagram.flowDiagramData.nodeErrors;
     this.isDiagramValid = getIsDiagramValid(nodeErrors);
 
+    // todo - this can be assigned earlier in results building
+    if (this.diagram?.waterDiagram?.flowDiagramData?.nodes) {
+      for (const node of this.diagram.waterDiagram.flowDiagramData.nodes) {
+        this.nodeNameMap[node.id] = node.data.name as string;
+      }
+    }
+
     if (this.isDiagramValid) {
       this.plantResults = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
-      if (this.plantResults.flowAttributionMap) {
-        Object.entries(this.plantResults.flowAttributionMap).forEach(([edgeId, attributionMap]) => {
-          const hasAdjustment = Object.values(attributionMap).some(attribution => attribution.flowAttributionFraction.adjusted !== undefined);
-          if (hasAdjustment) {
-            this.adjustedFlowAttributionMap[edgeId] = {...attributionMap};
-          }
-        });
-      } 
-
-      Object.entries(this.plantResults.flowAttributionMap).forEach(([edgeId, attributionMap]) => {
-        Object.entries(attributionMap).forEach(([systemId, attribution]: [systemId: string,  attribution: ComponentAttribution]) => {
-          if (!this.systemToCostComponentAttributions[systemId]) {
-          this.systemToCostComponentAttributions[systemId] =  {
-            name: attribution.systemName,
-            componentAttribution: {
-              [attribution.costComponentId]: attribution
+      if (this.plantResults.systemAttributionMap) {
+        Object.entries(this.plantResults.systemAttributionMap).forEach(([systemId, attributionMap]) => {
+          Object.entries(attributionMap).forEach(([costComponentId, attribution]: [costComponentId: string, attribution: CostComponentAttribution]) => {
+            if (attribution.totalAttribution.adjusted !== undefined) {
+              if (!this.adjustedAttribution[systemId]) {
+                this.adjustedAttribution[systemId] = {};
+              }
+              this.adjustedAttribution[systemId][costComponentId] = attribution;
             }
-          };
-        } else {
-          this.systemToCostComponentAttributions[systemId].componentAttribution[attribution.costComponentId] = attribution;
-        }
+          });
         });
-     });
+      }
+
+      this.systems = Object.keys(this.plantResults.systemAttributionMap).map((id) => {
+        return {
+          id: id,
+          name: this.nodeNameMap[id] || id
+        }
+      });
 
       this.costComponents = Object.entries(this.plantResults.costComponentsTotalsMap).map(([id, comp]: [id: string, comp: BlockCosts]) => {
         const hasAdjustment = this.getRowAdjustmentExists(id);
@@ -101,24 +104,11 @@ export class TrueCostEditableTableComponent {
         }
       });
 
-      
-      this.systems = Object.entries(this.systemToCostComponentAttributions).map(([id, sys]) => {
-        return {
-          id: id,
-          name: sys.name
-        }
-      });
-
-      this.systemToCostComponentAttributions = Object.fromEntries(
-        Object.entries(this.systemToCostComponentAttributions).sort(([, a], [, b]) => a.name.localeCompare(b.name))
-      );
-
       this.form = this.trueCostReportService.getCostComponentsForm(
-        this.systemToCostComponentAttributions,
-        this.systems.map(sys => sys.id), this.costComponents.map(comp => comp.id),
+        this.plantResults.systemAttributionMap,
+        this.costComponents.map(comp => comp.id),
         this.nullDefaultAttribution
       );
-      console.log(this.nullDefaultAttribution);
     }
   }
 
@@ -133,7 +123,6 @@ export class TrueCostEditableTableComponent {
   }
 
   editRow(rowIndex: number) {
-    // todo
     this.selectedEditRow = rowIndex;
   }
 
@@ -141,7 +130,7 @@ export class TrueCostEditableTableComponent {
     const inputElement = event.target as HTMLInputElement;
     const adjustedFractionFlowAttributed = Number(inputElement.value) / 100;
     const componentId = this.costComponents[componentIndex].id;
-    const defaultAttribution = this.systemToCostComponentAttributions[systemId].componentAttribution[componentId];
+    const defaultAttribution = this.plantResults.systemAttributionMap[systemId][componentId].totalAttribution.default;
     console.log(defaultAttribution);
 
     if (!defaultAttribution) {
@@ -149,54 +138,57 @@ export class TrueCostEditableTableComponent {
       return;
     }
 
-    if (!this.adjustedFlowAttributionMap[defaultAttribution.flowEdgeId]) {
-      this.adjustedFlowAttributionMap[defaultAttribution.flowEdgeId] = {};
+    if (!this.adjustedAttribution[systemId]) {
+      this.adjustedAttribution[systemId] = {};
     }
-    this.adjustedFlowAttributionMap[defaultAttribution.flowEdgeId][systemId] = {
-      ...defaultAttribution,
-      flowAttributionFraction: {
-        ...defaultAttribution.flowAttributionFraction,
-        adjusted: adjustedFractionFlowAttributed
-      }
-    };
+
+    if (!this.adjustedAttribution[systemId][componentId]) {
+      this.adjustedAttribution[systemId][componentId] = {
+        ...this.plantResults.systemAttributionMap[systemId][componentId],
+        totalAttribution: {
+          default: defaultAttribution,
+          adjusted: adjustedFractionFlowAttributed
+        }
+      };
+    } else {
+      this.adjustedAttribution[systemId][componentId].totalAttribution.adjusted = adjustedFractionFlowAttributed;
+    }
+
     this.setRowStatus(componentId, 'adjusted');
   }
 
-  getSystemAdjustedAttributions(componentSystemId: string, componentId: string): ComponentAttribution[] | undefined {
-    const systemAttributions: ComponentAttribution[] = Object.entries(this.adjustedFlowAttributionMap).flatMap(([edgeId, attributions]) => {
-      return Object.values(attributions).filter((attr) => {
-        return (componentSystemId === attr.systemId && attr.costComponentId === componentId);
-      });
-    });
-    return systemAttributions.length > 0 ? systemAttributions : undefined;
+  getSystemAdjustedAttributions(systemId: string, componentId: string): CostComponentAttribution[] | undefined {
+    const attributions: CostComponentAttribution[] = [];
+    if (this.adjustedAttribution[systemId]?.[componentId]) {
+      const attribution = this.adjustedAttribution[systemId][componentId];
+      if (attribution.totalAttribution.adjusted !== undefined) {
+        attributions.push(attribution);
+      }
+    }
+    return attributions.length > 0 ? attributions : undefined;
   }
 
   getRowAdjustmentExists(componentId: string): boolean {
-    return Object.entries(this.adjustedFlowAttributionMap).some(([edgeId, attributions]) => {
-      return Object.entries(attributions).some(([systemId, attribution]) => {
-        return attribution.flowAttributionFraction.adjusted !== undefined && attribution.costComponentId === componentId;
-      });
-    });
+    return Object.values(this.adjustedAttribution).some(systemAttributions =>
+      Object.keys(systemAttributions).includes(componentId)
+    );
   }
 
   // todo we can currently revert without needing to confirm the save. If we do revert outside an edit context, we won't run validation.
-  revertToDefaultAttribution(systemCostAttributions: ComponentAttribution[], systemId: string, componentIndex: number, systemIndex: number) {
+  revertToDefaultAttribution(systemAdjustedAttributions: CostComponentAttribution[], systemId: string, componentIndex: number, systemIndex: number) {
     const componentId: string = this.costComponents[componentIndex].id;
 
-    systemCostAttributions.forEach(systemCostAttribution => {
+    const rowControl: FormArray = this.getRowControl(componentIndex);
+    const systemControl: FormControl = this.getSystemCostComponentControl(rowControl, systemIndex);
 
-      delete this.adjustedFlowAttributionMap[systemCostAttribution.flowEdgeId];
-      const flowAttribution: ComponentAttribution = this.systemToCostComponentAttributions[systemId].componentAttribution[componentId];
-      const rowControl: FormArray = this.getRowControl(componentIndex);
-      const systemControl: FormControl = this.getSystemCostComponentControl(rowControl, systemIndex);
-      systemControl.patchValue(flowAttribution.flowAttributionFraction.default * 100);
-      systemControl.updateValueAndValidity();
-      
-      const hasAdjustment = this.getRowAdjustmentExists(componentId);
-      const rowStatus = hasAdjustment ? 'adjusted' : 'default';
-      this.setRowStatus(componentId, rowStatus);
-      this.saveFlowAttributions();
-    });
+    this.adjustedAttribution[systemId][componentId].totalAttribution.adjusted = undefined;
+    systemControl.patchValue(this.adjustedAttribution[systemId][componentId].totalAttribution.default * 100);
+    systemControl.updateValueAndValidity();
+
+    const hasAdjustment = this.getRowAdjustmentExists(componentId);
+    const rowStatus = hasAdjustment ? 'adjusted' : 'default';
+    this.setRowStatus(componentId, rowStatus);
+    this.saveFlowAttributions();
   }
 
   /**
@@ -216,7 +208,7 @@ export class TrueCostEditableTableComponent {
   }
 
   saveFlowAttributions() {
-    this.assessment.water.flowAttributionMap = this.adjustedFlowAttributionMap;
+    this.assessment.water.systemAttributionMap = this.adjustedAttribution;
     this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
   }
 

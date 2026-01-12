@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, PlantResults, ComponentAttribution, getNodeTotalInflow, SystemTrueCostData, getSystemTrueCostData, FlowAttributionMap } from 'process-flow-lib';
+import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, PlantResults, getNodeTotalInflow, SystemTrueCostData, getSystemTrueCostData, SystemAttributionMap } from 'process-flow-lib';
 import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/update-diagram-from-assessment.service';
 import { Assessment } from '../shared/models/assessment';
 import { Edge, Node } from '@xyflow/react';
@@ -167,7 +167,7 @@ export class WaterAssessmentResultsService {
   // todo 7745 performance - getPlantSummaryResults should be called one time at the top level report and emitted to a BS. The whole algorithm is currently being run 2/3 times
   getTrueCostOfSystemsReport(assessment: Assessment, settings: Settings): SystemTrueCostData[] {
     let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
-    let flowAttributionMap: FlowAttributionMap = assessment.water.flowAttributionMap? assessment.water.flowAttributionMap : {};
+    let systemAttributionMap: SystemAttributionMap = assessment.water.systemAttributionMap? assessment.water.systemAttributionMap : {};
   
     let plantResults = getPlantSummaryResults(
       diagram.waterDiagram.flowDiagramData.nodes,
@@ -175,7 +175,7 @@ export class WaterAssessmentResultsService {
       diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
       assessment.water.systemBasics.electricityCost,
       diagram.waterDiagram.flowDiagramData.settings,
-      flowAttributionMap
+      systemAttributionMap
     )
 
     let systemTrueCostReport = getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes);
@@ -186,7 +186,7 @@ export class WaterAssessmentResultsService {
 
   getPlantSummaryReport(assessment: Assessment, settings: Settings): PlantResults {
     let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
-    let flowAttributionMap: FlowAttributionMap = assessment.water.flowAttributionMap? assessment.water.flowAttributionMap : {};
+    let systemAttributionMap: SystemAttributionMap = assessment.water.systemAttributionMap? assessment.water.systemAttributionMap : {};
 
     let plantResults = getPlantSummaryResults(
       diagram.waterDiagram.flowDiagramData.nodes,
@@ -194,7 +194,7 @@ export class WaterAssessmentResultsService {
       diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
       settings.electricityCost,
       diagram.waterDiagram.flowDiagramData.settings,
-      flowAttributionMap
+      systemAttributionMap
     )
 
     console.log('plantResults', plantResults);
