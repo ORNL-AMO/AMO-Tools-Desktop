@@ -37,8 +37,8 @@
       </div>
       <app-utility-type-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-utility-type-dropdown>
       <app-calculator-type-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-calculator-type-dropdown>
-      <app-teams-dropdown *ngIf="!inReport" [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-teams-dropdown>
-      <app-equipments-dropdown *ngIf="!inReport" [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-equipments-dropdown>
+      <app-teams-dropdown *ngIf="!inReport" [ngStyle]="{'font-size': 'medium'}" [settings]="settings"></app-teams-dropdown>
+      <app-equipments-dropdown *ngIf="!inReport" [ngStyle]="{'font-size': 'medium'}" [settings]="settings"></app-equipments-dropdown>
     </div>
   </div>
 
@@ -69,14 +69,14 @@
   
   <app-calculator-type-dropdown class="d-lg-none" [settings]="settings" [dropdownShown]="!bannerCollapsed" [ngClass]="{'collapse': bannerCollapsed}"></app-calculator-type-dropdown>
 
-  <app-teams-dropdown class="d-lg-none" *ngIf="!inReport" [inReport]="inReport" [settings]="settings" [dropdownShown]="!bannerCollapsed" [ngClass]="{'collapse': bannerCollapsed}"></app-teams-dropdown>
+  <app-teams-dropdown class="d-lg-none" *ngIf="!inReport" [settings]="settings"  [ngClass]="{'collapse': bannerCollapsed}"></app-teams-dropdown>
   
-  <app-equipments-dropdown class="d-lg-none" *ngIf="!inReport" [inReport]="inReport" [settings]="settings" [dropdownShown]="!bannerCollapsed" [ngClass]="{'collapse': bannerCollapsed}"></app-equipments-dropdown>
+  <app-equipments-dropdown class="d-lg-none" *ngIf="!inReport"  [settings]="settings" [ngClass]="{'collapse': bannerCollapsed}"></app-equipments-dropdown>
 
 
-  <app-teams-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-teams-dropdown>
+  <app-teams-dropdown *ngIf="inReport"  [settings]="settings"></app-teams-dropdown>
   
-  <app-equipments-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-equipments-dropdown>
+  <app-equipments-dropdown *ngIf="inReport" [settings]="settings"></app-equipments-dropdown>
     
   <div class="nav-item" *ngIf="!inReport" [ngClass]="{'collapse': bannerCollapsed}">
     <div class="btn-group d-none d-lg-flex">

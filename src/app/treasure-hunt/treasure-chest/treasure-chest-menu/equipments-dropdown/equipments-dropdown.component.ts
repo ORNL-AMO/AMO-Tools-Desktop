@@ -19,10 +19,7 @@ import * as _ from 'lodash';
 export class EquipmentsDropdownComponent implements OnInit {
   @Input()
   settings: Settings;
-  @Input()
-  inReport: boolean;
-  @Input()
-  dropdownShown: boolean;
+
   
   equipments: Array<FilterOption>;
   displayEquipment: boolean = false;

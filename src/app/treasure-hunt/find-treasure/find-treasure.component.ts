@@ -4,7 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { CalculatorsService } from '../calculators/calculators.service';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from '../treasure-hunt.service';
-import { OpportunityCardsService, OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
+import { OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 
 @Component({
     selector: 'app-find-treasure',
@@ -34,7 +34,6 @@ export class FindTreasureComponent implements OnInit {
   treasureHuntSub: Subscription;
   infoCardCollapsed: boolean = false;
   opportunityCardList: OpportunityForFiltering[] = opportunities;
-  cardDataList: OpportunityCardData[];
   uniqueModuleTypes: (string | null)[] = [];
   types: string[];
   constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService) { }
@@ -47,19 +46,9 @@ export class FindTreasureComponent implements OnInit {
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
     });
-    this.cardDataList = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
 
-    this.types = this.opportunityCardList.map(card => card.iconCalcType);
-    this.uniqueModuleTypes = Array.from(new Set(this.types)).filter(type => type !== undefined);
-
-    this.applyFilters();
-  }
-
-  onCalculatorTypeChange() {
-    this.applyFilters();
-  }
-
-  onModuleTypeChange() {
+    const types: (string | null | undefined)[] = this.opportunityCardList.map(card => card.iconCalcType);
+    this.uniqueModuleTypes = Array.from(new Set(types)).filter(type => type !== undefined);
     this.applyFilters();
   }
 
@@ -68,8 +57,8 @@ export class FindTreasureComponent implements OnInit {
 
       const isSpecial = card.name === 'Custom Savings Opportunity' || card.name === 'Assessment Opportunity';
 
-      const selectedUtility = (this.displayCalculatorType || '').toLowerCase().trim();
-      const cardUtilityTypes = (card.utilityType || []).map(u => (u || '').toLowerCase().trim());
+      const selectedUtility = (this.displayCalculatorType || '');
+      const cardUtilityTypes = (card.utilityType || []).map(u => (u || ''));
       const utilityMatch = isSpecial || selectedUtility === 'all' || cardUtilityTypes.includes(selectedUtility);
       const moduleMatch = this.displayModuleType === 'All' || card.iconCalcType === this.displayModuleType;
       return utilityMatch && moduleMatch;

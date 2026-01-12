@@ -33,7 +33,7 @@
           </ul>
           <div class="form-group">
             <label for="utilityType">Filter Calculators by Utility Type</label>
-            <select id="utilityType" class="form-control" [(ngModel)]="displayCalculatorType" (ngModelChange)="onCalculatorTypeChange()">
+            <select id="utilityType" class="form-control" [(ngModel)]="displayCalculatorType" (change)="applyFilters()">
                 <option [ngValue]="'All'">All</option>
                 <option [ngValue]="'Electricity'" *ngIf="treasureHunt.currentEnergyUsage.electricityUsed">Electricity
                 </option>
@@ -52,7 +52,7 @@
 
            <div class="form-group">
             <label for="moduleType">Filter Calculators by Module Type</label>
-              <select id="moduleType" class="form-control" [(ngModel)]="displayModuleType" (ngModelChange)="onModuleTypeChange()">
+              <select id="moduleType" class="form-control" [(ngModel)]="displayModuleType" (change)="applyFilters()">
                 <option [ngValue]="'All'">All</option>
                 <option *ngFor="let type of uniqueModuleTypes" [ngValue]="type" [hidden]="!type">{{ type | titlecase }}</option>
                 <option [ngValue]="null">Other/None</option>
