@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { FeedwaterEconomizerService } from '../feedwater-economizer.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-feedwater-economizer-help',
@@ -17,6 +18,7 @@ export class FeedwaterEconomizerHelpComponent implements OnInit {
   currentFieldSub: Subscription;
   currentField: string;
 
+  docsLink: string = environment.measurDocsUrl;
   constructor(private feedWaterEconomizerService: FeedwaterEconomizerService) { }
   
   ngOnInit(): void {

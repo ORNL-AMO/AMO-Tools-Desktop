@@ -58,7 +58,7 @@ jobs:
 
   bundle_macos:
     if: github.ref_name == 'master'
-    runs-on: macos-13
+    runs-on: macos-14
     needs: [build]
     steps:
       - name: Checkout
@@ -262,7 +262,7 @@ jobs:
   release:
     if: github.ref_name == 'master'
     runs-on: ubuntu-22.04
-    needs: [build,bundle_macos,bundle_linux,sign_win]
+    needs: [build, bundle_macos, bundle_linux, sign_win]
     env:
       VERSION: ${{ needs.build.outputs.BUILD_VERSION }}
     steps:

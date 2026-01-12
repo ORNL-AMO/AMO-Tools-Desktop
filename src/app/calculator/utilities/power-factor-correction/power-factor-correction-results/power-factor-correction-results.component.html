@@ -4,20 +4,20 @@
       <th>
         Month
       </th>
-      <th *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 0">
-        Real Demand (kW)
+      <th *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER && inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR">
+        Actual Demand (kW)
       </th>
-      <th *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 1">
+      <th *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER && inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND">
         PF Adjusted Demand (kW)
       </th>
-      <th *ngIf="inputs.billedForDemand == 1 && (inputs.adjustedOrActual == 0 || inputs.adjustedOrActual == 1)">
+      <th *ngIf="inputs.billedForDemand == BilledForDemand.APPARENT_POWER && (inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR || inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND)">
         Proposed Apparent Power (kW)
       </th>
 
-      <th *ngIf="inputs.billedForDemand == 0">
+      <th *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER">
         Demand Penalty (kW)
       </th>
-      <th *ngIf="inputs.billedForDemand == 1">
+      <th *ngIf="inputs.billedForDemand == BilledForDemand.APPARENT_POWER">
         Demand Penalty (kVA)
       </th>
 
@@ -43,13 +43,13 @@
         {{inputs.monthyInputs[i].month}}
       </td>
 
-      <td *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 0">
+      <td *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER && inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR">
         {{output.realDemand | number:'1.2-2'}}
       </td>
-      <td *ngIf="inputs.billedForDemand == 0 && inputs.adjustedOrActual == 1">
+      <td *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER && inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND">
        {{output.pfAdjustedDemand | number:'1.2-2'}}
       </td>
-      <td *ngIf="inputs.billedForDemand == 1 && (inputs.adjustedOrActual == 0 || inputs.adjustedOrActual == 1)">
+      <td *ngIf="inputs.billedForDemand == BilledForDemand.APPARENT_POWER && (inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR || inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND)">
         {{output.proposedApparentPower | number:'1.2-2'}}
       </td>
 
