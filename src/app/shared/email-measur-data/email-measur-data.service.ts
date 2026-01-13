@@ -15,6 +15,7 @@ import { AnalyticsService } from '../analytics/analytics.service';
 export class EmailMeasurDataService {
   modalOpen: BehaviorSubject<boolean>;
   emailSentStatus: BehaviorSubject<EmailSentStatus>;
+  treasureHuntAttachment: any;
   measurItemAttachment: MeasurItemAttachment;
   measurEmailData: MeasurEmailData;
   showEmailMeasurDataModal: BehaviorSubject<boolean>;
@@ -47,8 +48,9 @@ export class EmailMeasurDataService {
       } else if (this.measurItemAttachment.itemType === 'data-explorer') {
         attachmentExportData = this.measurItemAttachment.itemData;
         attachmentExportData['origin'] = "AMO-LOG-TOOL-DATA";
+      } else if (this.measurItemAttachment.itemType === 'opportunities') {
+        attachmentExportData = this.measurItemAttachment.itemData;
       }
-
 
       this.measurEmailData = {
         emailTo: measurEmailForm.controls.emailTo.value,
@@ -110,7 +112,6 @@ export class EmailMeasurDataService {
       } else if (emailItemType === 'CompressedAir') {
         this.analyticsService.sendEvent('sent-email-CA');
       }
-
     }
   }
 

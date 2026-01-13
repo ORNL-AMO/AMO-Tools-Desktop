@@ -3,48 +3,73 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header p-2">
-                <h5 class="mt-auto">Export Content to JUSTIFI Template</h5>
+                <h5 class="mt-auto" *ngIf="!this.showTreasureHunt">Export Content to JUSTIFI Template</h5>
+                <h5 class="mt-auto" *ngIf="this.showTreasureHunt">Export Opportunities Locally</h5>
                 <button class="close p-0 m-0" aria-label="Close" (click)="hideModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body p-2">
-                <p class="mb-0">
-                    The all new <u class="bold">JUSTIFI</u> platform can help you find Non-Energy Benefits (NEBs) of
-                    your energy efficiency projects! If you are new to NEBs, the National Renewable Energy
-                    Laboratory (NREL) has compiled a knowledge library on the topic (<a
-                        href="https://www.nrel.gov/manufacturing/non-energy-benefits" target="_blank">https://www.nrel.gov/manufacturing/non-energy-benefits</a>) where you can
-                    learn more!
-                </p>
-                <ol>
-                    <li>
-                        Clicking "Export" below to download the selected assessments
-                        to a JUSTIFI excel template.
-                    </li>
-                    <li>
-                        Navigate to the JUSTIFI platform at
-                        <a href="https://justifi.ornl.gov" target="_blank">https://justifi.ornl.gov</a>.
-                    </li>
-                    <li>
-                        Upload the downloaded JUSTIFI template file to the platform.
-                    </li>
-                    <li>
-                        Work through the JUSTIFI platform to find NEBs for your energy efficiency projects!
-                    </li>
-                </ol>
+                <div *ngIf="!this.showTreasureHunt">
+                    <p class="mb-0">
+                        The all new <u class="bold">JUSTIFI</u> platform can help you find Non-Energy Benefits (NEBs) of
+                        your energy efficiency projects! If you are new to NEBs, the National Renewable Energy
+                        Laboratory (NREL) has compiled a knowledge library on the topic (<a
+                            href="https://www.nrel.gov/manufacturing/non-energy-benefits" target="_blank">https://www.nrel.gov/manufacturing/non-energy-benefits</a>) where you can
+                        learn more!
+                    </p>
+                    <ol>
+                        <li>
+                            Clicking "Export" below to download the selected assessments
+                            to a JUSTIFI excel template.
+                        </li>
+                        <li>
+                            Navigate to the JUSTIFI platform at
+                            <a href="https://justifi.ornl.gov" target="_blank">https://justifi.ornl.gov</a>.
+                        </li>
+                        <li>
+                            Upload the downloaded JUSTIFI template file to the platform.
+                        </li>
+                        <li>
+                            Work through the JUSTIFI platform to find NEBs for your energy efficiency projects!
+                        </li>
+                    </ol>
+                </div>
+                <div *ngIf="this.showTreasureHunt">
+                     <p class="mb-0">
+                        Export the following Treasure Hunt Opportunities to an excel file.
+                     </p>
+                </div>
                 <form *ngIf="!exportDone">
+                    <div  *ngIf="this.showTreasureHunt" style="max-height: 300px; overflow-y: auto;">
+                        <table class="table table-sm table-bordered mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Opportunity Name</th>
+                                    <th>Opportunity Type</th>
+                                    <th>Utility Types </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let opportunity of treasureHuntAttachment">
+                                    <td>{{opportunity.name}}</td>
+                                    <td>{{opportunity.opportunityType | titlecase}}</td>
+                                    <td>
+                                        <span *ngFor="let utility of opportunity.utilityType; let isLast = last">
+                                            {{utility | titlecase}}{{isLast ? '' : ', '}}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div  *ngIf="!this.showTreasureHunt">
                     <table class="table table-sm table-bordered mb-0">
                         <thead>
                             <tr>
-                                <th>
-                                    Assessment Type
-                                </th>
-                                <th>
-                                    Assessment Name
-                                </th>
-                                <th>
-                                    Select Modification
-                                </th>
+                                <th> Assessment Type</th>
+                                <th> Assessment Name</th>
+                                <th>Select Modification</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,9 +106,7 @@
                                             src="assets/images/water-assessment-small.png"> Water
                                     </ng-container>
                                 </td>
-                                <td>
-                                    {{assessment.name}}
-                                </td>
+                                <td>{{assessment.name}}</td>
                                 <td>
                                     <ng-container *ngIf="assessment.type === 'PSAT'">
                                         <ng-template [ngIf]="assessment.psat.modifications.length > 0"
@@ -170,6 +193,7 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
                 </form>
                 <div *ngIf="exportDone" class="text-center mt-3">
                     <p class="text-success">Export completed successfully!</p>

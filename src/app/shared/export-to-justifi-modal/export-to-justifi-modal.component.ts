@@ -22,7 +22,8 @@ export class ExportToJustifiModalComponent {
   directory: Directory;
   selectedAssessments: Array<Assessment> = [];
   settings: Settings;
-
+  treasureHuntAttachment: any;
+  showTreasureHunt: boolean = false;
   context: 'assessment' | 'directory' = 'directory';
   exportDone: boolean = false;
   constructor(private directoryDashboardService: DirectoryDashboardService,
@@ -35,6 +36,10 @@ export class ExportToJustifiModalComponent {
   ) { }
 
   ngOnInit() {
+    this.treasureHuntAttachment = this.exportToJustifiTemplateService.treasureHuntAttachment;
+    this.showTreasureHunt = !!this.exportToJustifiTemplateService.showTreasureHunt;
+    this.exportToJustifiTemplateService.showTreasureHunt = false;
+
     if (this.router.url.includes('directory-dashboard')) {
       this.context = 'directory';
       let directoryId: number = this.directoryDashboardService.selectedDirectoryId.getValue();

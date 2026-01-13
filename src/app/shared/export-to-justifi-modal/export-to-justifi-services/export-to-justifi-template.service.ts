@@ -19,6 +19,8 @@ export class ExportToJustifiTemplateService {
 
 
   showExportToJustifiModal: BehaviorSubject<boolean>;
+  treasureHuntAttachment: any;
+  showTreasureHunt: boolean = false;
   constructor(private exportToJustifiPsatService: ExportToJustifiPsatService,
     private exportToJustifiFsatService: ExportToJustifiFsatService,
     private exportToJustifiSsmtService: ExportToJustifiSsmtService,

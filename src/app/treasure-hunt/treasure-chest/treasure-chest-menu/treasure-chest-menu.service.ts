@@ -12,6 +12,7 @@ export class TreasureChestMenuService {
   deselectAll: BehaviorSubject<boolean>;
   showImportModal: BehaviorSubject<boolean>;
   showExportModal: BehaviorSubject<boolean>;
+  showTreasureChestModal: BehaviorSubject<boolean>;
   constructor() {
     this.selectAll = new BehaviorSubject<boolean>(false);
     this.deselectAll = new BehaviorSubject<boolean>(false);
@@ -19,6 +20,7 @@ export class TreasureChestMenuService {
     this.sortBy = new BehaviorSubject<SortCardsData>(defaultData);
     this.showImportModal = new BehaviorSubject<boolean>(false);
     this.showExportModal = new BehaviorSubject<boolean>(false);
+    this.showTreasureChestModal = new BehaviorSubject<boolean>(false);
   }
 
   getDefaultSortByData(): SortCardsData {

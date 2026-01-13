@@ -4,7 +4,8 @@ import { Subscription } from 'rxjs';
 import { TreasureChestMenuService } from './treasure-chest-menu.service';
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-
+import { EmailMeasurDataService } from '../../../shared/email-measur-data/email-measur-data.service';
+import { OpportunityCardsService } from '../opportunity-cards/opportunity-cards.service';
 @Component({
     selector: 'app-treasure-chest-menu',
     templateUrl: './treasure-chest-menu.component.html',
@@ -22,11 +23,15 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
     standalone: false
 })
 export class TreasureChestMenuComponent implements OnInit {
+  opportunityCardsSub: Subscription;
+  latestOpportunityCardList: any;
   @Input()
   settings: Settings;
   @Input()
   inReport: boolean;
 
+  showTreasureChestModal: boolean = false;
+  showTreasureChestModalSub: Subscription;
   @ViewChild('navbar', { static: false }) navbar: ElementRef;
   navbarWidth: number;
 
@@ -49,9 +54,17 @@ export class TreasureChestMenuComponent implements OnInit {
   bannerCollapsed: boolean = true;
   dropdownShown: boolean = false;
 
-  constructor(private treasureChestMenuService: TreasureChestMenuService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private treasureChestMenuService: TreasureChestMenuService,
+    private cd: ChangeDetectorRef,
+    private emailMeasurDataService: EmailMeasurDataService,
+    private opportunityCardsService: OpportunityCardsService,
+  ) { }
 
   ngOnInit() {
+    this.opportunityCardsSub = this.opportunityCardsService.opportunityCards.subscribe(cardList => {
+      this.latestOpportunityCardList = cardList;
+    });
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortCardsData = val;
       this.setSortByLabel();
@@ -65,12 +78,17 @@ export class TreasureChestMenuComponent implements OnInit {
       this.showExportModal = val;
     });
 
+    this.showTreasureChestModalSub = this.treasureChestMenuService.showTreasureChestModal.subscribe((showTreasureChestModal: boolean) => {
+      this.showTreasureChestModal = showTreasureChestModal;
+    });
   }
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
+    this.showTreasureChestModalSub.unsubscribe();
+    this.opportunityCardsSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -167,6 +185,18 @@ export class TreasureChestMenuComponent implements OnInit {
   openExportModal() {
     this.treasureChestMenuService.showExportModal.next(true);
   }
+
+  openShareDataModal() {
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'opportunities',
+      itemName: 'Treasure Hunt Opportunities',
+      itemData: this.latestOpportunityCardList
+    }
+
+    this.emailMeasurDataService.emailItemType.next('TreasureHunt');
+    this.treasureChestMenuService.showTreasureChestModal.next(true);
+  }
+
   collapseBanner() {
     this.bannerCollapsed = !this.bannerCollapsed;
     this.sortByDropdown = false;
