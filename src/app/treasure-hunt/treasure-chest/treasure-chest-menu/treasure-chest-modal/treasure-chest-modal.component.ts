@@ -54,6 +54,7 @@ export class TreasureChestModalComponent {
 
   showExportToLocalModal() {
     this.exportToJustifiTemplateService.treasureHuntAttachment = this.latestOpportunityCardList;
+    this.exportToJustifiTemplateService.showTreasureHunt = true;
     this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
     this.hideModal();
   }
