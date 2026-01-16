@@ -47,7 +47,6 @@ export class TrueCostEditableTableComponent {
   adjustedAttribution: SystemAttributionMap = {};
 
   // * Set disabled, system is not connected to cost component or has an error
-  // todo this should probably be restructured
   nullDefaultAttribution: Record<string, { [key: string]: string }> = {};
   nodeNameMap: Record<string, string> = {};
 
@@ -62,13 +61,7 @@ export class TrueCostEditableTableComponent {
     let nodeErrors: NodeErrors = this.diagram.waterDiagram.flowDiagramData.nodeErrors;
     this.isDiagramValid = getIsDiagramValid(nodeErrors);
 
-    // todo - this can be assigned earlier in results building
-    if (this.diagram?.waterDiagram?.flowDiagramData?.nodes) {
-      for (const node of this.diagram.waterDiagram.flowDiagramData.nodes) {
-        this.nodeNameMap[node.id] = node.data.name as string;
-      }
-    }
-
+    
     if (this.isDiagramValid) {
       this.plantResults = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
       if (this.plantResults.systemAttributionMap) {
@@ -83,11 +76,13 @@ export class TrueCostEditableTableComponent {
           });
         });
       }
+      
 
       this.systems = Object.keys(this.plantResults.systemAttributionMap).map((id) => {
+        const systemName = this.diagram.waterDiagram.flowDiagramData.nodes.find(n => n.id === id)?.data.name as string;
         return {
           id: id,
-          name: this.nodeNameMap[id] || id
+          name: systemName || "Unknown System"
         }
       });
 
@@ -134,7 +129,6 @@ export class TrueCostEditableTableComponent {
     console.log(defaultAttribution);
 
     if (!defaultAttribution) {
-      // todo set message, system is not connected to cost component or has an error
       return;
     }
 
@@ -191,18 +185,7 @@ export class TrueCostEditableTableComponent {
     this.saveFlowAttributions();
   }
 
-  /**
-    Will actually save all adjusted attributions. This shouldn't be an issue since only one row can be edited at a time.
-  */
   saveRow(componentIndex: number, rowControl: FormArray) {
-    // this.diagram.waterDiagram.flowDiagramData.edges.map(edge => {
-    //   const sourceId = edge.source;
-    //   const targetId = edge.target;
-    //   if (sourceId && targetId) {
-    //     // todo we cannot just find source to target connections, some costcomponents aren't directly connected to systems
-    //     // todo ie can't just set attributions to edges
-    //   }
-    // });
     this.saveFlowAttributions();
     this.selectedEditRow = null;
   }

@@ -50,7 +50,7 @@ export interface CostComponentMap {
 }
 
 export interface CostComponentPathData {
-    blockCosts: BlockCostsV2;
+    blockCosts: BlockCosts;
     // edge id, id list
     upstreamPathsByEdgeId?: string[][];
     downstreamPathsByEdgeId?: string[][];
@@ -74,29 +74,8 @@ export interface RecycledFlowData {
   recycledDestinationName: string;
 }
 
-/**
- * Block costs represent the total cost center for each non-system node/component. Costs are deducted and attributed to each system based on flow proportions.
- * 
- * Example value representing Sand Filtration (Waste Water Treatment) block costs 
- * {
- *   "name": "Sand Filtration",
- *   "totalBlockCost": 12000,
- *   "totalInflow": 12,
- *   "unpaidCostRemaining": 12000,
- *   "unpaidInflowRemaining": 12
-    * }
- */
-export interface BlockCosts { 
-  name: string, 
-  processComponentType: ProcessFlowNodeType,
-  totalBlockCost: number, 
-  totalInflow?: number, 
-  totalOutflow?: number, 
-  unpaidInflowRemaining: number, 
-  unpaidCostRemaining: number 
-}
 
-export interface BlockCostsV2 { 
+export interface BlockCosts { 
   name: string, 
   processComponentType: ProcessFlowNodeType,
   totalBlockCost: number, 

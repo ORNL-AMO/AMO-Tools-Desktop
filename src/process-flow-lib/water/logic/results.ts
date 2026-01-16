@@ -4,7 +4,7 @@ import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, Dia
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getEdgeDescription, getWaterFlowTotals } from "./water-components";
 import { NodeGraphIndex, createGraphIndex, getAllUpstreamEdgePaths, getAllDownstreamEdgePaths } from "../../graph";
-import { BlockCosts, BlockCostsV2, ConnectedCost, CostComponentMap, CostComponentPathData, PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults, SystemAttributionMap, SystemTrueCostContributions, SystemTrueCostData, TrueCostOfSystems, CostComponentAttribution, PathAttribution } from "../types/results";
+import { BlockCosts, CostComponentMap, CostComponentPathData, PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults, SystemAttributionMap, SystemTrueCostContributions, SystemTrueCostData, TrueCostOfSystems, CostComponentAttribution, PathAttribution } from "../types/results";
 
 export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[], calculatedData: DiagramCalculatedData): WaterBalanceResults => {
   let allSystemBalanceResults = [];
@@ -24,7 +24,6 @@ export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[], ca
     percentTotalBalance: 0,
     totalKnownLosses: 0,
     estimatedUnknownLosses: 0,
-    // todo when was below done
     // estimatedUnknownLosses: allSystemsTotalBalance >= 0 ? allSystemsTotalBalance : 0,
     allSystemBalanceResults: []
   }
@@ -57,9 +56,7 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem, calculate
     percentTotalBalance: 0,
   }
   let consumptiveIrrigationLoss = 0;
-  // todo might not be needed ask Kiran
   if (waterSystem.systemType = WaterSystemTypeEnum.LANDSCAPING) {
-    // todo 7121 need info on what this is
     consumptiveIrrigationLoss = 0;
   }
 
@@ -244,7 +241,7 @@ export const getTotalFlowValue = (flows: Array<EdgeFlowData>) => {
 }
 
 export const sortTrueCostReport = (report: SystemTrueCostData[]): SystemTrueCostData[] => {
-  // todo index 7 is hardcoded for 'total' cost - change to enum or constant
+  // * index 7 is hardcoded for 'total' cost - change to enum or constant
   return report.sort((a, b) => a.connectionCostByType[7] < b.connectionCostByType[7] ? 1 : -1);
 }
 
@@ -574,10 +571,9 @@ export const getHeatEnergyCost = (systemHeatEnergy: HeatEnergy, energyUnitCost: 
  * Example value representing Sand Filtration (Waste Water Treatment) block costs 
  * {
  *   "name": "Sand Filtration",
+ *   "processComponentType": "waste-water-treatment",
  *   "totalBlockCost": 12000,
- *   "totalInflow": 12,
- *   "unpaidCostRemaining": 12000,
- *   "unpaidInflowRemaining": 12
+ *   "totalFlow": 12,
     * }
  */
 const getInflowBlockCosts = (
@@ -593,37 +589,16 @@ const getInflowBlockCosts = (
     name: node.data.name,
     processComponentType: node.data.processComponentType,
     totalBlockCost: costOfInflow,
-    totalInflow: inflow,
-    unpaidCostRemaining: costOfInflow,
-    unpaidInflowRemaining: inflow,
-  };
-
-  return blockCosts;
-}
-
-const getInflowBlockCostsV2 = (
-  node: Node<ProcessFlowPart>,
-  calculatedData: DiagramCalculatedData,
-  unitsOfMeasure: string
-) => {
-  const inflow = getNodeTotalInflow(node.data, calculatedData);
-  const costPerKGal = node.data.cost ?? 0;
-  const costOfInflow = getFlowCost(costPerKGal, inflow, unitsOfMeasure);
-
-  const blockCosts: BlockCostsV2 = {
-    name: node.data.name,
-    processComponentType: node.data.processComponentType,
-    totalBlockCost: costOfInflow,
     totalFlow: inflow,
   };
 
   return blockCosts;
 }
 
+
 /**
  * Sets the block costs for outflow cost components, i.e. water intake. 
  * 
- * NOTE: This is currently only used to read component attribution for the True Cost Attribution table.
  */
 const getOutflowBlockCosts = (
   node: Node<ProcessFlowPart>,
@@ -638,41 +613,22 @@ const getOutflowBlockCosts = (
     name: node.data.name,
     processComponentType: node.data.processComponentType,
     totalBlockCost: costOfOutflow,
-    totalOutflow: outflow,
-    unpaidCostRemaining: costOfOutflow,
-    unpaidInflowRemaining: outflow,
-  };
-
-  return blockCosts;
-}
-
-const getOutflowBlockCostsV2 = (
-  node: Node<ProcessFlowPart>,
-  calculatedData: DiagramCalculatedData,
-  unitsOfMeasure: string
-) => {
-  const outflow = getNodeTotalOutflow(node, calculatedData);
-  const costPerKGal = node.data.cost ?? 0;
-  const costOfOutflow = getFlowCost(costPerKGal, outflow, unitsOfMeasure);
-
-  const blockCosts: BlockCostsV2 = {
-    name: node.data.name,
-    processComponentType: node.data.processComponentType,
-    totalBlockCost: costOfOutflow,
     totalFlow: outflow,
   };
 
   return blockCosts;
 }
 
-// * default attribution, doesn't care about adjusted
+/**
+ * Set default attribution, adjusted is handled in the scope of each apply____Costs method
+ */
 const setSystemAttribution = (
   systemAttributionMap: SystemAttributionMap,
   edge: Edge<CustomEdgeData>,
   currentSystemId: string,
   systemAttributionFraction: number,
   costComponentId: string,
-  debuggingNameMap: Record<string, string>
+  nameMap: Record<string, string>
 ) => {
   if (systemAttributionMap[currentSystemId] === undefined) {
     systemAttributionMap[currentSystemId] = {};
@@ -684,8 +640,8 @@ const setSystemAttribution = (
       edge,
       undefined,
       {
-        source: debuggingNameMap[edge.source],
-        target: debuggingNameMap[edge.target]
+        source: nameMap[edge.source],
+        target: nameMap[edge.target]
       }),
     attribution: systemAttributionFraction
   };
@@ -693,7 +649,7 @@ const setSystemAttribution = (
   if (!systemAttributionMap[currentSystemId][costComponentId]) {
     const newComponentAttribution: CostComponentAttribution = {
       componentId: costComponentId,
-      name: debuggingNameMap[costComponentId],
+      name: nameMap[costComponentId],
       totalAttribution: {
         default: systemAttributionFraction,
         adjusted: undefined
@@ -1455,15 +1411,14 @@ export const getPlantSummaryResults = (
   let intakeCostData: CostComponentMap = {};
   if (intakeNodes?.length > 0) {
     intakeNodes.forEach((node: Node<ProcessFlowPart>) => {
-      const blockCosts = getOutflowBlockCostsV2(node, calculatedData, settings.unitsOfMeasure);
+      const blockCosts = getOutflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
       let downstreamPaths: string[][] = getAllDownstreamEdgePaths(node.id, graph);
       intakeCostData[node.id] = {
         blockCosts: blockCosts,
         downstreamPathsByEdgeId: downstreamPaths,
       }
 
-      const legacyblockCosts = getOutflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
-      costComponentsTotalsMap[node.id] = legacyblockCosts;
+      costComponentsTotalsMap[node.id] = blockCosts;
     });
 
     applySystemIntakeCosts(
@@ -1477,20 +1432,17 @@ export const getPlantSummaryResults = (
     );
   }
 
-  // todo could be an array of the object, we must iterate over keys anyway
   let dischargeCostData: CostComponentMap = {};
   if (dischargeNodes?.length > 0) {
     dischargeNodes.forEach((node: Node<ProcessFlowPart>) => {
-      const blockCosts = getInflowBlockCostsV2(node, calculatedData, settings.unitsOfMeasure);
+      const blockCosts = getInflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
       let upstreamPaths: string[][] = getAllUpstreamEdgePaths(node.id, graph);
       dischargeCostData[node.id] = {
         blockCosts: blockCosts,
         upstreamPathsByEdgeId: upstreamPaths,
       }
 
-      // todo costComponentTotals is for TC table - move to block costs v2
-      const legacyblockCosts = getInflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
-      costComponentsTotalsMap[node.id] = legacyblockCosts;
+      costComponentsTotalsMap[node.id] = blockCosts;
     });
 
     applySystemDischargeCosts(
@@ -1507,17 +1459,14 @@ export const getPlantSummaryResults = (
   let treatmentCostData: CostComponentMap = {};
   if (waterTreatmentNodes?.length > 0) {
     waterTreatmentNodes.forEach((node: Node<ProcessFlowPart>) => {
-      const blockCosts = getInflowBlockCostsV2(node, calculatedData, settings.unitsOfMeasure);
+      const blockCosts = getInflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
       let downstreamPaths: string[][] = getAllDownstreamEdgePaths(node.id, graph);
       treatmentCostData[node.id] = {
         blockCosts: blockCosts,
         downstreamPathsByEdgeId: downstreamPaths
       }
 
-      // todo costComponentTotals is for TC table - move to block costs v2
-      // todo this may be incorrect for treatment
-      const legacyblockCosts = getInflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
-      costComponentsTotalsMap[node.id] = legacyblockCosts;
+      costComponentsTotalsMap[node.id] = blockCosts;
     });
 
     applySystemTreatmentCosts(
@@ -1532,7 +1481,7 @@ export const getPlantSummaryResults = (
   let wasteTreatmentCostData: CostComponentMap = {};
   if (wasteTreatmentNodes?.length > 0) {
     wasteTreatmentNodes.forEach((node: Node<ProcessFlowPart>) => {
-      const blockCosts = getInflowBlockCostsV2(node, calculatedData, settings.unitsOfMeasure);
+      const blockCosts = getInflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
       let downstreamPaths: string[][] = getAllDownstreamEdgePaths(node.id, graph);
       let upstreamPaths: string[][] = getAllUpstreamEdgePaths(node.id, graph);
       wasteTreatmentCostData[node.id] = {
@@ -1541,8 +1490,7 @@ export const getPlantSummaryResults = (
         upstreamPathsByEdgeId: upstreamPaths,
       }
 
-      const legacyblockCosts = getInflowBlockCosts(node, calculatedData, settings.unitsOfMeasure);
-      costComponentsTotalsMap[node.id] = legacyblockCosts;
+      costComponentsTotalsMap[node.id] = blockCosts;
     });
 
     applySystemWasteTreatmentCosts(
@@ -1563,7 +1511,6 @@ export const getPlantSummaryResults = (
     waterUsingSystems.forEach((currentSystem: Node<ProcessFlowPart>) => {
       let waterUsingSystem = currentSystem.data as WaterUsingSystem;
       if (waterUsingSystem.heatEnergy) {
-        // todo cleanup implementation
         const totalInflow = getNodeTotalInflow(currentSystem.data, calculatedData);
         let heatEnergy = JSON.parse(JSON.stringify(waterUsingSystem.heatEnergy));
         heatEnergy.systemWaterUse = totalInflow;
@@ -1595,7 +1542,6 @@ export const getPlantSummaryResults = (
 
   }
 
-  console.log('results systemAttributionMap', systemAttributionMap);
   console.timeEnd('getPlantSummaryResults');
   return { trueCostOfSystems, plantSystemSummaryResults, costComponentsTotalsMap, systemAttributionMap };
 }

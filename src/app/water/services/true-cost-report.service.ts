@@ -8,7 +8,7 @@ export class TrueCostReportService {
    constructor(private fb: FormBuilder) { }
 
    /**
-   * Creates a form array of form arrays where we map cost components (rows) to attribution by system (columns/cells). Returns as a FormGroup.
+   * Creates a form array of form arrays where we map cost components (rows) to attribution by system (columns/cells)
    * @returns  FormGroup
    */
     getCostComponentsForm(
@@ -39,7 +39,6 @@ export class TrueCostReportService {
       });
     }
 
-    // todo above can be combined into this after debugging
     const systemAttributionMatrix = this.fb.array(
       costComponents.map(component =>
         this.fb.array(
