@@ -1,3 +1,14 @@
+/* Make table container scrollable and inputs shrink to fit */
+.table-responsive-custom {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-input-responsive {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
 tr:nth-child(odd) {
     background-color: lightgray;
 }

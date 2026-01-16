@@ -46,7 +46,9 @@
       <input class="form-control" type="number" step="any" name="marginalCostOfDemand"
         formControlName="marginalCostOfDemand" id="marginalCostOfDemand" (input)="calculate()"
         (focus)="focusField('marginalCostOfDemand')">
-      <span class="input-group-addon units">$/kVA</span>
+      <span *ngIf="form.value.billedForDemand == BilledForDemand.APPARENT_POWER" class="input-group-addon units">$/kVA</span>
+      <span *ngIf="form.value.billedForDemand == BilledForDemand.REAL_POWER" class="input-group-addon units">$/kW</span>
+      
     </div>
     <div class="alert-danger pull-right small"
       *ngIf="form.get('marginalCostOfDemand').invalid && (form.get('marginalCostOfDemand').dirty || form.get('marginalCostOfDemand').touched)">
@@ -97,77 +99,77 @@
   </div>
 </form>
 
-<table class="table table-hover">
-  <tr>
-    <th>
-      Month
-    </th>
+<div class="table-responsive-custom">
+  <table class="table table-hover">
+    <tr>
+      <th>
+        Month
+      </th>
 
-    <th>
-      <span *ngIf="billedForDemand == BilledForDemand.REAL_POWER && 
-                (adjustedOrActual == AdjustedOrActual.POWER_FACTOR || adjustedOrActual == AdjustedOrActual.BOTH)">
-        PF Adjusted Demand (kW)
-      </span>
-      <span *ngIf="billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual != AdjustedOrActual.BOTH">
-        Apparent Power (kVA)
-      </span>
-      <span *ngIf="billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND">
-        Actual Demand (kW)
-      </span>
-    </th>
+      <th>
+        <span *ngIf="billedForDemand == BilledForDemand.REAL_POWER && 
+                  (adjustedOrActual == AdjustedOrActual.POWER_FACTOR || adjustedOrActual == AdjustedOrActual.BOTH)">
+          PF Adjusted Demand (kW)
+        </span>
+        <span *ngIf="billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual != AdjustedOrActual.BOTH">
+          Apparent Power (kVA)
+        </span>
+        <span *ngIf="billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND">
+          Actual Demand (kW)
+        </span>
+      </th>
 
-    <th>
-      <span
-        *ngIf="(billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual != AdjustedOrActual.BOTH) 
-                  || (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.POWER_FACTOR)">
+      <th>
+        <span *ngIf="(billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual != AdjustedOrActual.BOTH) 
+        || (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.POWER_FACTOR)">
+          Power Factor
+        </span>
+        <span *ngIf="(billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.BOTH) || (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND)">
+          Actual Demand (kW)
+        </span>
+      </th>
+
+      <th *ngIf="billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.BOTH">
         Power Factor
-      </span>
-      <span
-        *ngIf="(billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.BOTH) || (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND)">
-        Actual Demand (kW)
-      </span>
-    </th>
+      </th>
+    </tr>
 
-    <th *ngIf="billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.BOTH">
-      Power Factor
-    </th>
-  </tr>
+    <tr class="form-group form-array"
+      *ngFor="let group of monthyInputsFormArray.controls; let i = index; let last = last">
+      <ng-container [formGroup]="group">
+        <td>
+          <input type="text" step="any" formControlName="month" id="{{'month_'+i}}" (input)="calculate()" class="table-input-responsive">
+        </td>
 
-  <tr class="form-group form-array"
-    *ngFor="let group of monthyInputsFormArray.controls; let i = index; let last = last">
-    <ng-container [formGroup]="group">
-      <td>
-        <input type="text" step="any" formControlName="month" id="{{'month_'+i}}" (input)="calculate()">
-      </td>
+        <td
+          *ngIf="(billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual != AdjustedOrActual.ACTUAL_DEMAND) || billedForDemand == BilledForDemand.APPARENT_POWER">
+          <input type="number" step="any" formControlName="pfAdjustedDemand" id="{{'pfAdjustedDemand'+i}}" (input)="calculate()" (focus)="focusField('pfAdjustedDemand')" class="table-input-responsive">
+            <span *ngIf="group.get('pfAdjustedDemand')?.errors?.required" class="alert-danger pull-right small">Value Required</span>
+            <span *ngIf="group.get('pfAdjustedDemand')?.errors?.min" class="alert-danger pull-right small">Value must be greater than or equal to 0</span>
+            <span class="alert-danger pull-right small" *ngIf="group.get('pfAdjustedDemand')?.errors?.adjustedVsActualError">
+              {{group.get('pfAdjustedDemand').errors.adjustedVsActualError}}
+            </span>
+            <span class="alert-danger pull-right small" *ngIf="group.get('pfAdjustedDemand')?.errors?.apparentVsActualError">
+              {{group.get('pfAdjustedDemand').errors.apparentVsActualError}}
+            </span>
+        </td> 
+        <td *ngIf="adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND || adjustedOrActual == AdjustedOrActual.BOTH">
+          <input type="number" step="any" formControlName="actualDemand" id="{{'actualDemand_'+i}}" (input)="calculate()" (focus)="focusField('actualDemand')" class="table-input-responsive">
+          <span *ngIf="group.get('actualDemand')?.errors?.required" class="alert-danger pull-right small">Value Required</span>
+          <span *ngIf="group.get('actualDemand')?.errors?.min" class="alert-danger pull-right small">Value must be greater than or equal to 0</span>
+        </td>
+        <td
+          *ngIf="billedForDemand == BilledForDemand.REAL_POWER || (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.POWER_FACTOR)">
+          <input type="number" step="any" formControlName="powerFactor" id="{{'powerFactor_'+i}}" (input)="calculate()" (focus)="focusField('powerFactor')" class="table-input-responsive">
+            <span *ngIf="group.get('powerFactor')?.errors?.required" class="alert-danger pull-right small">Value Required.</span>
+            <span *ngIf="group.get('powerFactor')?.errors?.min" class="alert-danger pull-right small">Value can't be less than {{group.get('powerFactor')?.errors?.min.min}}</span>
+            <span *ngIf="group.get('powerFactor')?.errors?.max" class="alert-danger pull-right small">Value can't be greater than {{group.get('powerFactor')?.errors?.max.max}}</span>
+        </td>
+      </ng-container>
+    </tr>
 
-      <td
-        *ngIf="(billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual != AdjustedOrActual.ACTUAL_DEMAND) || billedForDemand == BilledForDemand.APPARENT_POWER">
-        <input type="number" step="any" formControlName="pfAdjustedDemand" id="{{'pfAdjustedDemand'+i}}" (input)="calculate()" (focus)="focusField('pfAdjustedDemand')">
-          <span *ngIf="group.get('pfAdjustedDemand')?.errors?.required" class="alert-danger pull-right small">Value Required</span>
-          <span *ngIf="group.get('pfAdjustedDemand')?.errors?.greaterThan == 0" class="alert-danger pull-right small">Value must be greater than {{group.get('pfAdjustedDemand')?.errors?.greaterThan}}</span>
-          <span class="alert-danger pull-right small" *ngIf="group.get('pfAdjustedDemand')?.errors?.adjustedVsActualError">
-            {{group.get('pfAdjustedDemand').errors.adjustedVsActualError}}
-          </span>
-          <span class="alert-danger pull-right small" *ngIf="group.get('pfAdjustedDemand')?.errors?.apparentVsActualError">
-            {{group.get('pfAdjustedDemand').errors.apparentVsActualError}}
-          </span>
-      </td>
-      <td *ngIf="adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND || adjustedOrActual == AdjustedOrActual.BOTH">
-        <input type="number" step="any" formControlName="actualDemand" id="{{'actualDemand_'+i}}" (input)="calculate()" (focus)="focusField('actualDemand')">
-        <span *ngIf="group.get('actualDemand')?.errors?.required" class="alert-danger pull-right small">Value Required</span>
-        <span *ngIf="group.get('actualDemand')?.errors?.greaterThan == 0" class="alert-danger pull-right small">Value must be greater than {{group.get('actualDemand')?.errors?.greaterThan}}</span>
-      </td>
-      <td
-        *ngIf="billedForDemand == BilledForDemand.REAL_POWER || (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.POWER_FACTOR)">
-        <input type="number" step="any" formControlName="powerFactor" id="{{'powerFactor_'+i}}" (input)="calculate()" (focus)="focusField('powerFactor')">
-          <span *ngIf="group.get('powerFactor')?.errors?.required" class="alert-danger pull-right small">Value Required.</span>
-          <span *ngIf="group.get('powerFactor')?.errors?.min" class="alert-danger pull-right small">Value can't be less than {{group.get('powerFactor')?.errors?.min.min}}</span>
-          <span *ngIf="group.get('powerFactor')?.errors?.max" class="alert-danger pull-right small">Value can't be greater than {{group.get('powerFactor')?.errors?.max.max}}</span>
-      </td>
-    </ng-container>
-  </tr>
-
-</table>
+  </table>
+</div>
 
 <div class="w-100 justify-content-center btn-group btn-group-sm">
   <button type="button" class="btn btn-primary pull-left btn-sm m-2 btn-form" (click)="btnAddMonth()">

@@ -11,18 +11,23 @@
         PF Adjusted Demand (kW)
       </th>
       <th *ngIf="inputs.billedForDemand == BilledForDemand.APPARENT_POWER && (inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR || inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND)">
-        Proposed Apparent Power (kW)
+        Proposed Apparent Power (kVA)
       </th>
 
       <th *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER">
         Demand Penalty (kW)
       </th>
       <th *ngIf="inputs.billedForDemand == BilledForDemand.APPARENT_POWER">
-        Demand Penalty (kVA)
+        Excess Demand Penalty (kVA)
       </th>
 
-      <th>
+  
+      <th *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER">
         Penalty Cost ($)
+      </th>
+
+      <th *ngIf="inputs.billedForDemand == BilledForDemand.APPARENT_POWER">
+        Excess Penalty Cost ($)
       </th>
 
       <th>
@@ -43,14 +48,25 @@
         {{inputs.monthyInputs[i].month}}
       </td>
 
+      <!-- 'input' / 'column' are interchangable. 
+
+      pfAdjustedDemand - When present is always the first column
+      names: PF Adjusted Demand (kW), Apparent Power (kVA)
+
+      actualDemand - When present is first or second column. realDemand is also used, for clarity.
+      names: Actual Demand (kW)
+
+      powerFactor - When present is the second input or if 'BOTH' will be the third input
+      names: Power Factor -->
+
       <td *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER && inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR">
-        {{output.realDemand | number:'1.2-2'}}
+      {{output.realDemand | number:'1.2-2'}}
       </td>
       <td *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER && inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND">
-       {{output.pfAdjustedDemand | number:'1.2-2'}}
+      {{output.pfAdjustedDemand | number:'1.2-2'}}
       </td>
       <td *ngIf="inputs.billedForDemand == BilledForDemand.APPARENT_POWER && (inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR || inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND)">
-        {{output.proposedApparentPower | number:'1.2-2'}}
+      {{output.proposedApparentPower | number:'1.2-2'}}
       </td>
 
       <td>
