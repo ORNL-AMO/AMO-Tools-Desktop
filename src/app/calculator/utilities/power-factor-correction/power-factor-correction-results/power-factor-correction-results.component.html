@@ -11,7 +11,7 @@
         PF Adjusted Demand (kW)
       </th>
       <th *ngIf="inputs.billedForDemand == BilledForDemand.APPARENT_POWER && (inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR || inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND)">
-        Proposed Apparent Power (kW)
+        Proposed Apparent Power (kVA)
       </th>
 
       <th *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER">
@@ -62,7 +62,8 @@
       </td>
 
       <td>
-        {{output.currentReactivePower | number:'1.2-2'}}
+        <ng-container *ngIf="output.currentReactivePower > 1000000000; else normalReactivePower">&#8734;</ng-container>
+        <ng-template #normalReactivePower>{{output.currentReactivePower | number:'1.2-2'}}</ng-template>
       </td>
 
       <td>
