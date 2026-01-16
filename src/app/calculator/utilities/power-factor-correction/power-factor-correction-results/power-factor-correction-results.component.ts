@@ -32,7 +32,6 @@ export class PowerFactorCorrectionResultsComponent implements OnInit {
      this.powerFactorResultsSubscription = this.powerFactorCorrectionService.powerFactorOutputs.subscribe(val => {
       this.results = val;
     });
-    console.log(this.results.monthlyOutputs);
   }
 
   ngOnDestroy() {
