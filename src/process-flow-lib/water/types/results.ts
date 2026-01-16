@@ -1,4 +1,4 @@
-import { TrueCostOfSystems } from "../logic/results";
+import { ProcessFlowNodeType } from "./diagram";
 
 export interface SystemAnnualSummaryResults {
     id?: string,
@@ -29,4 +29,110 @@ export interface ExecutiveSummaryResults {
 export interface PlantResults {
     trueCostOfSystems: TrueCostOfSystems;
     plantSystemSummaryResults: PlantSystemSummaryResults;
+    costComponentsTotalsMap: Record<string, BlockCosts>;
+    systemAttributionMap: SystemAttributionMap;
+}
+
+export interface SystemTrueCostData {
+  label: string,
+  connectionCostByType: Array<string>,
+  unit: string,
+}
+
+
+export interface TrueCostOfSystems {
+  [systemId: string]: SystemTrueCostContributions
+}
+
+
+export interface CostComponentMap {
+  [costComponentId: string]: CostComponentPathData;
+}
+
+export interface CostComponentPathData {
+    blockCosts: BlockCosts;
+    // edge id, id list
+    upstreamPathsByEdgeId?: string[][];
+    downstreamPathsByEdgeId?: string[][];
+  }
+
+// each property = total cost * flow fraction for all connected to system
+export interface SystemTrueCostContributions {
+  intake: number,
+  discharge: number,
+  thirdParty: number
+  treatment: number,
+  wasteTreatment: number,
+  systemPumpAndMotorEnergy: number,
+  heatEnergyWastewater: number,
+  total: number
+}
+
+export interface RecycledFlowData {
+  recycledSourceName: string;
+  recycledDestinationId: string;
+  recycledDestinationName: string;
+}
+
+
+export interface BlockCosts { 
+  name: string, 
+  processComponentType: ProcessFlowNodeType,
+  totalBlockCost: number, 
+  totalFlow?: number, 
+}
+
+
+
+// * Cost Components - nodes that carry block costs that then get attributed to systems depending on flow responsibility and proportions
+
+export interface SystemAttributionMap {
+  [systemId: string]: Record<string, CostComponentAttribution>;
+}
+
+export interface CostComponentAttribution {
+  name: string;
+  componentId: string;
+  totalAttribution: AttributionFraction;
+  componentPathAttribution: PathAttribution[];
+}
+
+export interface AttributionFraction {
+    default: number;
+    adjusted?: number;
+  }
+
+export interface PathAttribution {
+  edgeId: string;
+  edgeDescription: string;
+  attribution: number
+}
+
+
+/**
+ * Represents a cost from a connected cost component (ex. intake, discharge, treatment etc)
+ */
+export interface ConnectedCost {
+  name: string,
+  componentType: ProcessFlowNodeType,
+  selfTotalCost: number,
+  selfTotalFlow: number,
+  cost: number,
+  flow: number,
+  destinationCost?: number,
+  fractionSelfTotalFlowToTarget?: number,
+  sourceId: string,
+  targetId: string,
+  sourceName: string,
+  targetName: string,
+}
+
+
+export interface CostComponentSummary {
+  id: string;
+  name: string;
+  total: number;
+  processComponentType: ProcessFlowNodeType;
+  componentTypeLabel: string;
+  status: 'adjusted' | 'default';
 }
