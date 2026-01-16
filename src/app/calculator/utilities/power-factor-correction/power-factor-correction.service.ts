@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { AbstractControl, ValidationErrors, ValidatorFn, FormArray, FormGroup } from '@angular/forms';
-import { GreaterThanOrEqualToValidator } from '../../../shared/validators/greater-than-equal-to';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -126,8 +125,8 @@ export class PowerFactorCorrectionService {
       monthyInputs: this.formBuilder.array(
         inputData.monthyInputs.map(m => this.formBuilder.group({
           month: [m.month, Validators.required],
-          pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, GreaterThanOrEqualToValidator.greaterThanOrEqualTo(0)]],
-          actualDemand: [m.actualDemand, [Validators.required, GreaterThanOrEqualToValidator.greaterThanOrEqualTo(0)]],
+          pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, Validators.min(0)]],
+          actualDemand: [m.actualDemand, [Validators.required, Validators.min(0)]],
           powerFactor: [m.powerFactor, [Validators.required, Validators.min(0), Validators.max(1)]],
         }))
       ),

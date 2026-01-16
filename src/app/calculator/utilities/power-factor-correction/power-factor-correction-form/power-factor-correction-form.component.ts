@@ -77,10 +77,6 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
   }
 
   setBilledForDemand() {
-console.log('hit billed for demand');
-    console.log(this.billedForDemand);
-
-
     if (this.form.value.billedForDemand === 0) {
       this.form.value.minimumPowerFactor = 0.95;
     } else if (this.form.value.billedForDemand === 1) {

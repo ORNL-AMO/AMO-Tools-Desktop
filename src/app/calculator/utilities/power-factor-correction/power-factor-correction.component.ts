@@ -70,13 +70,13 @@ export class PowerFactorCorrectionComponent implements OnInit {
   }
 
   resizeTabs() {
-    // if (this.leftPanelHeader.nativeElement.clientHeight) {
-    //   this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
-    //   this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
-    //   if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
-    //     this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
-    //   }
-    // }
+    if (this.leftPanelHeader.nativeElement.clientHeight) {
+      this.headerHeight = this.leftPanelHeader.nativeElement.clientHeight;
+      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
+      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
+        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+      }
+    }
   }
 
   setTab(str: string) {

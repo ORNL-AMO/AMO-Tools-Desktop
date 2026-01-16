@@ -60,10 +60,10 @@
       names: Power Factor -->
 
       <td *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER && inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR">
-        {{output.realDemand | number:'1.2-2'}}
+      {{output.realDemand | number:'1.2-2'}}
       </td>
       <td *ngIf="inputs.billedForDemand == BilledForDemand.REAL_POWER && inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND">
-       wee {{output.pfAdjustedDemand | number:'1.2-2'}}
+      {{output.pfAdjustedDemand | number:'1.2-2'}}
       </td>
       <td *ngIf="inputs.billedForDemand == BilledForDemand.APPARENT_POWER && (inputs.adjustedOrActual == AdjustedOrActual.POWER_FACTOR || inputs.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND)">
       {{output.proposedApparentPower | number:'1.2-2'}}
@@ -78,8 +78,7 @@
       </td>
 
       <td>
-        <ng-container *ngIf="output.currentReactivePower > 1000000000; else normalReactivePower">&#8734;</ng-container>
-        <ng-template #normalReactivePower>{{output.currentReactivePower | number:'1.2-2'}}</ng-template>
+        {{output.currentReactivePower | number:'1.2-2'}}
       </td>
 
       <td>
