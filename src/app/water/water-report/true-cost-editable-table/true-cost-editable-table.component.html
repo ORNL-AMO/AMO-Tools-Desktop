@@ -33,34 +33,37 @@
             </tr>
           </thead>
           <tbody>
-            <ng-container
-              *ngFor="let rowControl of costComponentsSystemAttribution.controls; let componentIndex = index">
+            <ng-container *ngFor="let rowGroup of costComponentsSystemAttribution.controls; let componentIndex = index">
+              @let rowId = rowGroup.get('id').value;
+              @let costComponent = costComponentMap.get(rowId);
               @let isEditingRow = selectedEditRow === componentIndex;
-              @let invalidRowAttributionDifference = getValidRowAttributionDiff(rowControl);
+              @let invalidRowAttributionDifference = getValidRowAttributionDiff(rowGroup.get('systemAttributions'));
 
+              @if(costComponent) {
               <tr [formGroupName]="componentIndex">
                 <td class="component-name-cell">
-                  {{ costComponents[componentIndex].name }}
+                  {{ costComponent.name }}
                   <span class="badge badge-pill"
-                    [class.pill-water-intake]="costComponents[componentIndex].processComponentType === 'water-intake'"
-                    [class.pill-water-discharge]="costComponents[componentIndex].processComponentType === 'water-discharge'"
-                    [class.pill-water-treatment]="costComponents[componentIndex].processComponentType === 'water-treatment'"
-                    [class.pill-waste-water-treatment]="costComponents[componentIndex].processComponentType === 'waste-water-treatment'">
-                    {{ costComponents[componentIndex].componentTypeLabel }}</span>
+                    [class.pill-water-intake]="costComponent.processComponentType === 'water-intake'"
+                    [class.pill-water-discharge]="costComponent.processComponentType === 'water-discharge'"
+                    [class.pill-water-treatment]="costComponent.processComponentType === 'water-treatment'"
+                    [class.pill-waste-water-treatment]="costComponent.processComponentType === 'waste-water-treatment'">
+                    {{ costComponent.componentTypeLabel }}</span>
                 </td>
                 <td class="text-center">
-                  {{ costComponents[componentIndex].total | currency:'USD':'symbol':'1.0-0'}}
+                  {{ costComponent.total | currency:'USD':'symbol':'1.0-0'}}
                 </td>
                 <ng-container *ngFor="let system of systems; let systemIndex = index">
                   <td class="system-cell text-center">
-                    @let systemAdjustedAttributions = getSystemAdjustedAttributions(system.id, costComponents[componentIndex].id);
-                    @let hasNullDefaultAttribution = nullDefaultAttribution[costComponents[componentIndex]?.id] &&
-                    nullDefaultAttribution[costComponents[componentIndex]?.id][system.id] !== undefined;
+                    @let systemAdjustedAttributions = getSystemAdjustedAttributions(system.id, rowId);
+                    @let hasNullDefaultAttribution = nullDefaultAttribution[rowId] &&
+                    nullDefaultAttribution[rowId][system.id] !== undefined;
 
                     @if (hasNullDefaultAttribution) {
                     <span>&mdash;</span>
                     } @else {
-                    <div class="input-group d-inline-flex" [class.border-adjusted]="systemAdjustedAttributions && !isEditingRow">
+                    <div class="input-group d-inline-flex"
+                      [class.border-adjusted]="systemAdjustedAttributions && !isEditingRow">
                       @if (systemAdjustedAttributions && isEditingRow) {
                       <span class="input-group-addon calc-addon units">
                         <a class="click-link" title="Revert to MEASUR calculated value."
@@ -68,10 +71,10 @@
                             class="fa fa-refresh"></span></a>
                       </span>
                       }
-                      <!--  todo switch to formcontrol.disable -->
                       <input type="number" id="{{'component-' + componentIndex + '-system-' + systemIndex}}"
                         class="form-control text-center" [class.width-offset]="selectedEditRow === componentIndex"
-                        formControlName="{{systemIndex}}" (input)="setAdjustedValue($event, componentIndex, system.id)"
+                        [formControl]="rowGroup.get('systemAttributions').at(systemIndex)"
+                        (input)="setAdjustedValue($event, componentIndex, system.id)"
                         [readonly]="selectedEditRow !== componentIndex">
                     </div>
                     }
@@ -79,13 +82,12 @@
                   </td>
                 </ng-container>
                 <td class="text-center font-weight-bold" [class.text-danger]="invalidRowAttributionDifference">
-                  {{ getTotal(rowControl) | number:'1.0-2' }}%
+                  {{ getTotal(rowGroup.get('systemAttributions')) | number:'1.0-2' }}%
                 </td>
                 <td class="component-name-cell">
-                  <span class="badge badge-pill"
-                    [class.badge-light]="costComponents[componentIndex].status === 'default'"
-                    [class.badge-adjusted]="costComponents[componentIndex].status === 'adjusted' && !isEditingRow">
-                    {{ costComponents[componentIndex].status.toUpperCase() }}</span>
+                  <span class="badge badge-pill" [class.badge-light]="costComponent.status === 'default'"
+                    [class.badge-adjusted]="costComponent.status === 'adjusted' && !isEditingRow">
+                    {{ costComponent?.status.toUpperCase() }}</span>
                 </td>
                 <td class="d-flex flex-row justify-content-center">
                   @if (selectedEditRow !== componentIndex) {
@@ -96,18 +98,20 @@
                   } @else if (selectedEditRow === componentIndex) {
                   <button type="button" class="btn btn-link p-0 save-btn" title="Save row"
                     [class.disabled]="invalidRowAttributionDifference" [disabled]="invalidRowAttributionDifference"
-                    (click)="saveRow(componentIndex, rowControl)">
+                    (click)="saveRow(componentIndex, rowGroup.get('systemAttributions'))">
                     <i class="fa fa-save"></i>
                   </button>
                   }
               </tr>
+              }
 
               @if (invalidRowAttributionDifference) {
-                <tr>
-                  <td colspan="100" class="alert alert-danger pt-1 pb-2">
-                    Attribution total must equal 100%. Row has difference of {{ invalidRowAttributionDifference }}% attribution
-                  </td>
-                </tr>
+              <tr>
+                <td colspan="100" class="alert alert-danger pt-1 pb-2">
+                  Attribution total must equal 100%. Row has difference of {{ invalidRowAttributionDifference }}%
+                  attribution
+                </td>
+              </tr>
               }
             </ng-container>
           </tbody>

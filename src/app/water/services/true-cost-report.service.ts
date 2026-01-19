@@ -12,46 +12,47 @@ export class TrueCostReportService {
    * @returns  FormGroup
    */
     getCostComponentsForm(
-      systemAttributionMap: SystemAttributionMap, 
-      costComponentIds: string[], 
-      nullDefaultAttribution: Record<string, {[key: string]: string}>
-  ): FormGroup {
-     let costComponents: number[][] = [];
-    if (systemAttributionMap) {
-      costComponentIds.forEach(componentId => {
-        const componentSystemAttributions = [];
-
-        Object.entries(systemAttributionMap).forEach(([systemId, attributionMap]: [string, Record<string, CostComponentAttribution>]) => {
-          const componentAttribution: AttributionFraction = attributionMap[componentId]?.totalAttribution;
-          let systemAttributionToComponent: number = null;
-          if (componentAttribution) {
-            systemAttributionToComponent = componentAttribution.adjusted !== undefined ? (componentAttribution.adjusted * 100) : (componentAttribution.default * 100);
-          } else {
-            // * Component not connected, or incurs no cost
-            if (!nullDefaultAttribution[componentId]) {
-              nullDefaultAttribution[componentId] = {};
+      systemAttributionMap: SystemAttributionMap,
+      costComponentIds: string[],
+      nullDefaultAttribution: Record<string, { [key: string]: string }>
+    ): FormGroup {
+      let costComponents: { id: string; systemAttributions: number[] }[] = [];
+      if (systemAttributionMap) {
+        costComponentIds.forEach(componentId => {
+          const componentSystemAttributions = [];
+          Object.entries(systemAttributionMap).forEach(([systemId, attributionMap]: [string, Record<string, CostComponentAttribution>]) => {
+            const componentAttribution: AttributionFraction = attributionMap[componentId]?.totalAttribution;
+            let systemAttributionToComponent: number = null;
+            if (componentAttribution) {
+              systemAttributionToComponent = componentAttribution.adjusted !== undefined ? (componentAttribution.adjusted * 100) : (componentAttribution.default * 100);
+            } else {
+              if (!nullDefaultAttribution[componentId]) {
+                nullDefaultAttribution[componentId] = {};
+              }
+              nullDefaultAttribution[componentId][systemId] = systemId;
             }
-            nullDefaultAttribution[componentId][systemId] = systemId;
-          }
-          componentSystemAttributions.push(systemAttributionToComponent);
+            componentSystemAttributions.push(systemAttributionToComponent);
+          });
+          costComponents.push({ id: componentId, systemAttributions: componentSystemAttributions });
         });
-        costComponents.push(componentSystemAttributions)
-      });
-    }
+      }
 
-    const systemAttributionMatrix = this.fb.array(
-      costComponents.map(component =>
-        this.fb.array(
-          component.map(systemAttribution =>
-            this.fb.control(systemAttribution ?? 0, [Validators.min(0), Validators.max(100)])
-          )
+      const systemAttributionMatrix = this.fb.array(
+        costComponents.map(component =>
+          this.fb.group({
+            id: [component.id],
+            systemAttributions: this.fb.array(
+              component.systemAttributions.map(systemAttribution =>
+                this.fb.control(systemAttribution ?? 0, [Validators.min(0), Validators.max(100)])
+              )
+            )
+          })
         )
-      )
-    );
+      );
 
-    const form = this.fb.group({costComponentsSystemAttribution: systemAttributionMatrix});
-    return form;
-  }
+      const form = this.fb.group({ costComponentsSystemAttribution: systemAttributionMatrix });
+      return form;
+    }
 }
 
 

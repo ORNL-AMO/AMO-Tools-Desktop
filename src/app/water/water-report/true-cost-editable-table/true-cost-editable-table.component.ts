@@ -40,6 +40,7 @@ export class TrueCostEditableTableComponent {
   }[] = [];
 
   costComponents: CostComponentSummary[] = [];
+  costComponentMap: Map<string, CostComponentSummary> = new Map();
   plantResults: PlantResults;
   adjustedAttribution: SystemAttributionMap = {};
 
@@ -87,8 +88,10 @@ export class TrueCostEditableTableComponent {
         processComponentType: comp.processComponentType,
         componentTypeLabel: getComponentTypeLabel(comp.processComponentType),
         status: rowStatus
-      }
+      };
     });
+    
+    this.costComponentMap = new Map(this.costComponents.map(component => [component.id, component]));
 
     this.form = this.trueCostReportService.getCostComponentsForm(
       this.plantResults.systemAttributionMap,
@@ -162,8 +165,8 @@ export class TrueCostEditableTableComponent {
   revertToDefaultAttribution(systemAdjustedAttributions: CostComponentAttribution[], systemId: string, componentIndex: number, systemIndex: number) {
     const componentId: string = this.costComponents[componentIndex].id;
 
-    const rowControl: FormArray = this.getRowControl(componentIndex);
-    const systemControl: FormControl = this.getSystemCostComponentControl(rowControl, systemIndex);
+    const rowGroup: FormGroup = this.getRowControl(componentIndex);
+    const systemControl: FormControl = this.getSystemCostComponentControl(rowGroup, systemIndex);
 
     systemControl.patchValue(this.adjustedAttribution[systemId][componentId].totalAttribution.default * 100);
     systemControl.updateValueAndValidity();
@@ -205,12 +208,12 @@ export class TrueCostEditableTableComponent {
     return this.form.get('costComponentsSystemAttribution') as FormArray;
   }
 
-  getRowControl(index: number): FormArray {
-    return this.costComponentsSystemAttribution.at(index) as FormArray;
+  getRowControl(index: number): FormGroup {
+    return this.costComponentsSystemAttribution.at(index) as FormGroup;
   }
 
-  getSystemCostComponentControl(rowControl: FormArray, systemIndex: number): FormControl {
-    return rowControl.at(systemIndex) as FormControl;
+  getSystemCostComponentControl(rowGroup: FormGroup, systemIndex: number): FormControl {
+    return (rowGroup.get('systemAttributions') as FormArray).at(systemIndex) as FormControl;
   }
 
 }
