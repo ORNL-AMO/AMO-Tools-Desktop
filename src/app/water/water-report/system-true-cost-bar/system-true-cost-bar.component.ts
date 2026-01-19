@@ -63,7 +63,9 @@ export class SystemTrueCostBarComponent {
     
     let chartData = displayCostTypes.map((costType, index) => {
       return {
-        x: sortedData.map(item => item.connectionCostByType[index] || 0),
+        x: sortedData.map(item => {
+          return item.connectionCostByType[index]?.cost || 0;
+        }),
         y: sortedData.map(item => item.label),
         name: costType,
         type: 'bar',

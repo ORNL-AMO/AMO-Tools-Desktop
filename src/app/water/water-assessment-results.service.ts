@@ -176,7 +176,7 @@ export class WaterAssessmentResultsService {
       systemAttributionMap
     )
 
-    let systemTrueCostReport = getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes);
+    let systemTrueCostReport = getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes, systemAttributionMap);
     console.log('trueCostOfSystems', plantResults.trueCostOfSystems);
     return systemTrueCostReport;
   }

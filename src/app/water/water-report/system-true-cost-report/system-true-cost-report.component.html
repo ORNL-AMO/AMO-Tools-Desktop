@@ -51,15 +51,31 @@
                 <td>
                     {{systemCosts.label}}
                 </td>
-                <ng-container *ngFor="let result of systemCosts.connectionCostByType">
+                @for (result of systemCosts.connectionCostByType; track result) {
                     <td>
-                        <span *ngIf="result">${{result | number:'1.0-2'}}</span>
-                        <span *ngIf="!result">&mdash;&mdash;</span>
+                        @if (result.cost) {
+                            <span class="d-flex justify-content-center align-items-center">
+                                @if (result.isAdjusted) {
+                                    <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
+                                }
+                                ${{result.cost | number:'1.0-2'}}
+                            </span>
+                        } @else {
+                            <span>&mdash;&mdash;</span>
+                        }
                     </td>
-                </ng-container>
+                }
             </tr>
         </tbody>
     </table>
+    <div class="d-flex w-100 pl-2 pr-2 justify-content-start">
+        <span>
+            <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
+            <span class="small">
+                Adjusted Cost Attribution
+            </span>
+        </span>
+    </div>
     <app-exportable-results-table [tableString]="copyTableString" [horizontalAnchor]="'right'"
         (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 

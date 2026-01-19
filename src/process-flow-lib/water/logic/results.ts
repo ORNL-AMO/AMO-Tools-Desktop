@@ -242,20 +242,50 @@ export const getTotalFlowValue = (flows: Array<EdgeFlowData>) => {
 
 export const sortTrueCostReport = (report: SystemTrueCostData[]): SystemTrueCostData[] => {
   // * index 7 is hardcoded for 'total' cost - change to enum or constant
-  return report.sort((a, b) => a.connectionCostByType[7] < b.connectionCostByType[7] ? 1 : -1);
+  return report;
+  // return report.sort((a, b) => a.connectionCostByType[7] < b.connectionCostByType[7] ? 1 : -1);
 }
 
-export const getSystemTrueCostData = (trueCostOfSystems: TrueCostOfSystems, nodes: Node[]): SystemTrueCostData[] => {
+export const getSystemTrueCostData = (trueCostOfSystems: TrueCostOfSystems, nodes: Node[], systemAttributionMap?: SystemAttributionMap): SystemTrueCostData[] => {
   let systemCosts = [];
   Object.entries(trueCostOfSystems).forEach(([key, systemCostContributions]: [key: string, systemCostContributions: SystemTrueCostContributions]) => {
     const systemKey = key as keyof TrueCostOfSystems;
     const component = nodes.find((node: Node<ProcessFlowPart>) => node.id === systemKey)?.data as WaterUsingSystem;
-    const results = Object.values(systemCostContributions).map((value: number) => {
-      if (value === 0) {
-        return undefined;
+
+    const adjustedComponentTypes: string[] = getSystemAdjustedComponentTypes(systemAttributionMap, systemKey as string);
+    const results: {cost: number, isAdjusted: boolean}[] = Object.entries(systemCostContributions).map(([costType, costValue]: [costType: string, costValue: number]) => {
+      let isAdjusted = false;
+
+      // todo SystemTrueCostCotnributions keys refactor to use ProcessFlowNodeType and remove this
+      switch (costType) {
+        case 'intake':
+          isAdjusted = adjustedComponentTypes.includes('water-intake');
+          break;
+        case 'discharge':
+          isAdjusted = adjustedComponentTypes.includes('water-discharge');
+          break;
+        case 'treatment':
+          isAdjusted = adjustedComponentTypes.includes('water-treatment');
+          break;
+        case 'wasteTreatment':
+          isAdjusted = adjustedComponentTypes.includes('waste-water-treatment');
+          break;
+
+          // * These are combined costs, we would need more information to know if these are adjusted. 
+        // case 'systemPumpAndMotorEnergy':
+        //   isAdjusted = adjustedComponentTypes.includes('pump-and-motor-energy');
+        //   break;
+        // case 'heatEnergyWastewater':
+        //   isAdjusted = adjustedComponentTypes.includes('heat-energy-in-wastewater');
+        //   break;
       }
-      return value;
+      
+      return {
+        cost: costValue,
+        isAdjusted: isAdjusted
+      };
     });
+
     systemCosts.push({
       label: component.name,
       connectionCostByType: results,
@@ -263,6 +293,19 @@ export const getSystemTrueCostData = (trueCostOfSystems: TrueCostOfSystems, node
     });
   });
   return systemCosts;
+}
+
+const getSystemAdjustedComponentTypes = (systemAttributionMap: SystemAttributionMap, systemKey: string) => {
+  let adjustedComponentTypes: string[] = [];
+  if (systemAttributionMap && Object.values(systemAttributionMap[systemKey])) {
+    Object.keys(systemAttributionMap[systemKey]).forEach((componentId: string) => {
+      const attribution: CostComponentAttribution = systemAttributionMap[systemKey][componentId];
+      if (attribution.totalAttribution.adjusted !== undefined) {
+        adjustedComponentTypes.push(attribution.processComponentType);
+      }
+    });
+  }
+  return adjustedComponentTypes;
 }
 
 
@@ -628,7 +671,8 @@ const setSystemAttribution = (
   currentSystemId: string,
   systemAttributionFraction: number,
   costComponentId: string,
-  nameMap: Record<string, string>
+  processComponentType: ProcessFlowNodeType,
+  nameMap: Record<string, string>,
 ) => {
   if (systemAttributionMap[currentSystemId] === undefined) {
     systemAttributionMap[currentSystemId] = {};
@@ -650,6 +694,7 @@ const setSystemAttribution = (
     const newComponentAttribution: CostComponentAttribution = {
       componentId: costComponentId,
       name: nameMap[costComponentId],
+      processComponentType: processComponentType,
       totalAttribution: {
         default: systemAttributionFraction,
         adjusted: undefined
@@ -737,6 +782,7 @@ const applySystemIntakeCosts = (
             currentNode.id,
             systemAttributionFraction,
             intakeId,
+            'water-intake',
             debuggingNameMap
           );
           const hasAdjustedAttribution = systemAttributionMap[currentNode.id][intakeId].totalAttribution.adjusted !== undefined;
@@ -875,6 +921,7 @@ const applySystemDischargeCosts = (
             currentNode.id,
             systemAttributionFraction,
             dischargeId,
+            'water-discharge',
             debuggingNameMap
           );
           const hasAdjustedAttribution = systemAttributionMap[currentNode.id][dischargeId].totalAttribution.adjusted !== undefined;
@@ -1012,6 +1059,7 @@ const applySystemTreatmentCosts = (
             currentNode.id,
             systemAttributionFraction,
             treatmentId,
+            'water-treatment',
             debuggingNameMap
           );
           const hasAdjustedAttribution = systemAttributionMap[currentNode.id][treatmentId].totalAttribution.adjusted !== undefined;
@@ -1137,6 +1185,7 @@ const applySystemWasteTreatmentCosts = (
             currentNode.id,
             systemAttributionFraction,
             treatmentId,
+            'waste-water-treatment',
             debuggingNameMap
           );
           const hasAdjustedAttribution = systemAttributionMap[currentNode.id][treatmentId].totalAttribution.adjusted !== undefined;
@@ -1243,6 +1292,7 @@ const applySystemWasteTreatmentCosts = (
             currentNode.id,
             systemAttributionFraction,
             treatmentId,
+            'waste-water-treatment',
             debuggingNameMap
           );
           const hasAdjustedAttribution = systemAttributionMap[currentNode.id][treatmentId].totalAttribution.adjusted !== undefined;
@@ -1609,7 +1659,7 @@ export const getIsImmediateDescendant = (nodeId: string, graph: NodeGraphIndex, 
 }
 
 
-const DEBUG_SYSTEM_ATTRIBUTION = true;
+const DEBUG_SYSTEM_ATTRIBUTION = false;
 
 
 const logAttributionAndCosts = (

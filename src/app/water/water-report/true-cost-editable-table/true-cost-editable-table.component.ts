@@ -175,9 +175,10 @@ export class TrueCostEditableTableComponent {
     const rowControl: FormArray = this.getRowControl(componentIndex);
     const systemControl: FormControl = this.getSystemCostComponentControl(rowControl, systemIndex);
 
-    this.adjustedAttribution[systemId][componentId].totalAttribution.adjusted = undefined;
     systemControl.patchValue(this.adjustedAttribution[systemId][componentId].totalAttribution.default * 100);
     systemControl.updateValueAndValidity();
+    
+    delete this.adjustedAttribution[systemId][componentId];
 
     const hasAdjustment = this.getRowAdjustmentExists(componentId);
     const rowStatus = hasAdjustment ? 'adjusted' : 'default';

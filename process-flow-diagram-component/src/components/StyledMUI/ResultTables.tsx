@@ -153,7 +153,7 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
               </StyledTableCell>
               {row.connectionCostByType.map((result, index) => (
                 <StyledTableCell key={index} align="right">
-                  {result? currency.format(Number(result)) : '-'}
+                  {result?.cost ? currency.format(Number(result.cost)) : '-'}
                 </StyledTableCell>
               ))}
             </StyledTableRow>
