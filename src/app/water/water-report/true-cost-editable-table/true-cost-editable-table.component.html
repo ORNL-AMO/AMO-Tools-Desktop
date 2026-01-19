@@ -1,11 +1,6 @@
 <div class="output-summary w-100 mx-auto p-3">
   <h4 class="show-print print-section-header">System True Cost Attribution</h4>
 
-  @if (!isDiagramValid) {
-  <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
-    [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
-    [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
-  } @else {
   <div class="p-2">
     <div class="group-label mb-2">True Cost: Cost Component Attribution by System</div>
     <div class="d-flex align-items-center justify-content-between mb-2">
@@ -120,8 +115,5 @@
       </div>
     </form>
   </div>
-
-
-  }
 
 </div>

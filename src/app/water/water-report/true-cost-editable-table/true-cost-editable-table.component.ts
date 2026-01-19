@@ -2,12 +2,11 @@ import { Component, DestroyRef, Inject, inject } from '@angular/core';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
 import { Diagram } from '../../../shared/models/diagram';
-import { BlockCosts, CostComponentSummary, getComponentTypeLabel, getIsDiagramValid, NodeErrors, PlantResults, CostComponentAttribution, SystemAttributionMap } from 'process-flow-lib';
+import { BlockCosts, CostComponentSummary, getComponentTypeLabel, PlantResults, CostComponentAttribution, SystemAttributionMap } from 'process-flow-lib';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Assessment } from '../../../shared/models/assessment';
 import { TrueCostReportService } from '../../services/true-cost-report.service';
 import { Settings } from '../../../shared/models/settings';
-import { WaterReportService } from '../water-report.service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { WaterAssessmentService } from '../../water-assessment.service';
 
@@ -24,7 +23,6 @@ export class TrueCostEditableTableComponent {
   waterAssessmentResultsService = inject(WaterAssessmentResultsService);
   updateDiagramFromAssessmentService = inject(UpdateDiagramFromAssessmentService);
   trueCostReportService = inject(TrueCostReportService);
-  waterReportService = inject(WaterReportService);
   waterAssessmentService = inject(WaterAssessmentService);
 
   inRollup: boolean;
@@ -33,7 +31,6 @@ export class TrueCostEditableTableComponent {
   settings: Settings;
 
   selectedEditRow: number = null;
-  isDiagramValid: boolean;
   isCollapsed = false;
   form: FormGroup;
 
@@ -48,7 +45,6 @@ export class TrueCostEditableTableComponent {
 
   // * Set disabled, system is not connected to cost component or has an error
   nullDefaultAttribution: Record<string, { [key: string]: string }> = {};
-  nodeNameMap: Record<string, string> = {};
 
   constructor(@Inject(DIALOG_DATA) modalDialogData: TrueCostEditableTableDataInputs) {
     this.assessment = modalDialogData.assessment;
@@ -57,54 +53,48 @@ export class TrueCostEditableTableComponent {
   }
 
   ngOnInit() {
-    this.diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
-    let nodeErrors: NodeErrors = this.diagram.waterDiagram.flowDiagramData.nodeErrors;
-    this.isDiagramValid = getIsDiagramValid(nodeErrors);
-
+    this.plantResults = this.waterAssessmentResultsService.plantResults.getValue();
     
-    if (this.isDiagramValid) {
-      this.plantResults = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
-      if (this.plantResults.systemAttributionMap) {
-        Object.entries(this.plantResults.systemAttributionMap).forEach(([systemId, attributionMap]) => {
-          Object.entries(attributionMap).forEach(([costComponentId, attribution]: [costComponentId: string, attribution: CostComponentAttribution]) => {
-            if (attribution.totalAttribution.adjusted !== undefined) {
-              if (!this.adjustedAttribution[systemId]) {
-                this.adjustedAttribution[systemId] = {};
-              }
-              this.adjustedAttribution[systemId][costComponentId] = attribution;
+    if (this.plantResults.systemAttributionMap) {
+      Object.entries(this.plantResults.systemAttributionMap).forEach(([systemId, attributionMap]) => {
+        Object.entries(attributionMap).forEach(([costComponentId, attribution]: [costComponentId: string, attribution: CostComponentAttribution]) => {
+          if (attribution.totalAttribution.adjusted !== undefined) {
+            if (!this.adjustedAttribution[systemId]) {
+              this.adjustedAttribution[systemId] = {};
             }
-          });
+            this.adjustedAttribution[systemId][costComponentId] = attribution;
+          }
         });
-      }
-      
-
-      this.systems = Object.keys(this.plantResults.systemAttributionMap).map((id) => {
-        const systemName = this.diagram.waterDiagram.flowDiagramData.nodes.find(n => n.id === id)?.data.name as string;
-        return {
-          id: id,
-          name: systemName || "Unknown System"
-        }
       });
-
-      this.costComponents = Object.entries(this.plantResults.costComponentsTotalsMap).map(([id, comp]: [id: string, comp: BlockCosts]) => {
-        const hasAdjustment = this.getRowAdjustmentExists(id);
-        const rowStatus = hasAdjustment ? 'adjusted' : 'default';
-        return {
-          id: id,
-          name: comp.name,
-          total: comp.totalBlockCost,
-          processComponentType: comp.processComponentType,
-          componentTypeLabel: getComponentTypeLabel(comp.processComponentType),
-          status: rowStatus
-        }
-      });
-
-      this.form = this.trueCostReportService.getCostComponentsForm(
-        this.plantResults.systemAttributionMap,
-        this.costComponents.map(comp => comp.id),
-        this.nullDefaultAttribution
-      );
     }
+    
+    
+    const nodeNameMap = this.waterAssessmentResultsService.nodeNameMap.getValue();
+    this.systems = Object.keys(this.plantResults.systemAttributionMap).map((id) => {
+      return {
+        id: id,
+        name: nodeNameMap[id] || "Unknown System"
+      }
+    });
+
+    this.costComponents = Object.entries(this.plantResults.costComponentsTotalsMap).map(([id, comp]: [id: string, comp: BlockCosts]) => {
+      const hasAdjustment = this.getRowAdjustmentExists(id);
+      const rowStatus = hasAdjustment ? 'adjusted' : 'default';
+      return {
+        id: id,
+        name: comp.name,
+        total: comp.totalBlockCost,
+        processComponentType: comp.processComponentType,
+        componentTypeLabel: getComponentTypeLabel(comp.processComponentType),
+        status: rowStatus
+      }
+    });
+
+    this.form = this.trueCostReportService.getCostComponentsForm(
+      this.plantResults.systemAttributionMap,
+      this.costComponents.map(comp => comp.id),
+      this.nullDefaultAttribution
+    );
   }
 
   setRowStatus(componentId: string, updatedStatus: 'adjusted' | 'default') {
@@ -177,7 +167,7 @@ export class TrueCostEditableTableComponent {
 
     systemControl.patchValue(this.adjustedAttribution[systemId][componentId].totalAttribution.default * 100);
     systemControl.updateValueAndValidity();
-    
+
     delete this.adjustedAttribution[systemId][componentId];
 
     const hasAdjustment = this.getRowAdjustmentExists(componentId);
@@ -193,6 +183,7 @@ export class TrueCostEditableTableComponent {
 
   saveFlowAttributions() {
     this.assessment.water.systemAttributionMap = this.adjustedAttribution;
+    this.waterAssessmentService.setAssessment(this.assessment);
     this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
   }
 

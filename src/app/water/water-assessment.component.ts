@@ -159,6 +159,7 @@ export class WaterAssessmentComponent {
       this.waterAssessmentService.settings.next(settings);
     }
     this.setDiagram();
+    this.waterAssessmentService.setAssessment(this.assessment);
     this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
   }
 

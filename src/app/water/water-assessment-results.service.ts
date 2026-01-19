@@ -1,22 +1,104 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { WaterSuiteApiService } from '../tools-suite-api/water-suite-api.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, PlantResults, getNodeTotalInflow, SystemTrueCostData, getSystemTrueCostData, SystemAttributionMap } from 'process-flow-lib';
+import { WaterUsingSystem, WaterAssessment, WaterSystemResults, WaterSystemTypeEnum, calculateProcessUseResults, calculateCoolingTowerResults, calculateBoilerWaterResults, calculateKitchenRestroomResults, calculateLandscapingResults, SystemBalanceResults, WaterBalanceResults, PlantSystemSummaryResults, TrueCostOfSystems, createGraphIndex, CustomEdgeData, SystemTrueCostContributions, ProcessFlowPart, getComponentTypeTotalCost, ExecutiveSummaryResults, getHeatEnergyCost, getMotorEnergyCost, getWaterTrueCost, HeatEnergy, MotorEnergy, DischargeOutlet, IntakeSource, WaterProcessComponent, getWaterUsingSystem, getComponentTypeTotalFlow, getPlantSummaryResults, PlantResults, getNodeTotalInflow, SystemTrueCostData, getSystemTrueCostData, SystemAttributionMap, NodeErrors, getIsDiagramValid, sortTrueCostReport } from 'process-flow-lib';
 import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/update-diagram-from-assessment.service';
 import { Assessment } from '../shared/models/assessment';
 import { Edge, Node } from '@xyflow/react';
 import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
+import { WaterAssessmentService } from './water-assessment.service';
+import { Observable, BehaviorSubject, combineLatest, filter, map } from 'rxjs';
+import { Diagram } from '../shared/models/diagram';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WaterAssessmentResultsService {
+  private waterAssessmentService = inject(WaterAssessmentService);
+  systemStackedBarPercentView: BehaviorSubject<boolean>;
+  readonly plantResults = new BehaviorSubject<PlantResults>(undefined);
+  readonly nodeNameMap = new BehaviorSubject<Record<string, string>>(undefined);
+
+  readonly plantResults$: Observable<PlantResults> = combineLatest([
+    this.waterAssessmentService.assessment$,
+    this.waterAssessmentService.settings$,
+    this.waterAssessmentService.isDiagramValid$
+  ]).pipe(
+    filter(([assessment, settings, isDiagramValid]) => assessment !== undefined && settings !== undefined && isDiagramValid),
+    map(([assessment, settings, isDiagramValid]) => {
+      let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
+      const nodeNameMap = diagram.waterDiagram.flowDiagramData.nodes.reduce((map, node) => {
+        map[node.id] = node.data.name as string;
+        return map;
+      }, {} as Record<string, string>);
+      this.nodeNameMap.next(nodeNameMap);
+
+      let plantSummaryReport: PlantResults;
+      if (isDiagramValid) {
+        plantSummaryReport = this.getPlantSummary(assessment, settings);
+      }
+      return plantSummaryReport;
+    })
+  );
+
+  readonly plantSystemSummaryResults$: Observable<PlantSystemSummaryResults> = this.plantResults.pipe(
+    filter((plantResults) => plantResults !== undefined),
+    map((plantResults) => {
+      return plantResults.plantSystemSummaryResults;
+    })
+  );
+
+  readonly trueCostOfSystemsReport$: Observable<SystemTrueCostData[]> = this.plantResults.pipe(
+    filter((plantResults) => plantResults !== undefined),
+    map((plantResults) => {
+      let trueCostOfSystemsReport = getSystemTrueCostData(plantResults.trueCostOfSystems, this.nodeNameMap.getValue(), plantResults.systemAttributionMap);
+      return sortTrueCostReport(trueCostOfSystemsReport);
+    })
+  );
+
 
   constructor(private waterSuiteApiService: WaterSuiteApiService,
     private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService,
     private toolsSuiteApiService: ToolsSuiteApiService,
     private convertWaterAssessmentService: ConvertWaterAssessmentService) {
+    this.systemStackedBarPercentView = new BehaviorSubject<boolean>(false);
+  }
+
+  setPlantResults(plantResults: PlantResults) {
+    this.plantResults.next(plantResults);
+  }
+
+  
+  getPlantSummary(assessment: Assessment, settings: Settings): PlantResults {
+    let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
+    let systemAttributionMap: SystemAttributionMap = assessment.water.systemAttributionMap? assessment.water.systemAttributionMap : {};
+  
+    let plantResults = getPlantSummaryResults(
+      diagram.waterDiagram.flowDiagramData.nodes,
+      diagram.waterDiagram.flowDiagramData.calculatedData,
+      diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
+      settings.electricityCost,
+      diagram.waterDiagram.flowDiagramData.settings,
+      systemAttributionMap
+    )
+
+    return plantResults;
+  }
+
+  getEmptyPlantSystemSummaryResults(): PlantSystemSummaryResults {
+    return {
+      id: undefined,
+      name: undefined,
+      sourceWaterIntake: undefined,
+      dischargeWater: undefined,
+      directCostPerYear: undefined,
+      directCostPerUnit: undefined,
+      trueCostPerYear: undefined,
+      trueCostPerUnit: undefined,
+      trueOverDirectResult: undefined,
+      allSystemResults: []
+    }
   }
 
   getWaterSystemResults(waterSystem: WaterUsingSystem, waterAssessment: WaterAssessment, settings: Settings): WaterSystemResults {
@@ -160,59 +242,6 @@ export class WaterAssessmentResultsService {
     }
 
     return results;
-  }
-
-  // todo 7745 performance - getPlantSummaryResults should be called one time at the top level report and emitted to a BS. The whole algorithm is currently being run 2/3 times
-  getTrueCostOfSystemsReport(assessment: Assessment, settings: Settings): SystemTrueCostData[] {
-    let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
-    let systemAttributionMap: SystemAttributionMap = assessment.water.systemAttributionMap? assessment.water.systemAttributionMap : {};
-  
-    let plantResults = getPlantSummaryResults(
-      diagram.waterDiagram.flowDiagramData.nodes,
-      diagram.waterDiagram.flowDiagramData.calculatedData,
-      diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
-      assessment.water.systemBasics.electricityCost,
-      diagram.waterDiagram.flowDiagramData.settings,
-      systemAttributionMap
-    )
-
-    let systemTrueCostReport = getSystemTrueCostData(plantResults.trueCostOfSystems, diagram.waterDiagram.flowDiagramData.nodes, systemAttributionMap);
-    console.log('trueCostOfSystems', plantResults.trueCostOfSystems);
-    return systemTrueCostReport;
-  }
-
-
-  getPlantSummaryReport(assessment: Assessment, settings: Settings): PlantResults {
-    let diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
-    let systemAttributionMap: SystemAttributionMap = assessment.water.systemAttributionMap? assessment.water.systemAttributionMap : {};
-
-    let plantResults = getPlantSummaryResults(
-      diagram.waterDiagram.flowDiagramData.nodes,
-      diagram.waterDiagram.flowDiagramData.calculatedData,
-      diagram.waterDiagram.flowDiagramData.edges as Edge<CustomEdgeData>[],
-      settings.electricityCost,
-      diagram.waterDiagram.flowDiagramData.settings,
-      systemAttributionMap
-    )
-
-    console.log('plantResults', plantResults);
-    return plantResults;
-  }
-
-
-  getEmptyPlantSystemSummaryResults(): PlantSystemSummaryResults {
-    return {
-      id: undefined,
-      name: undefined,
-      sourceWaterIntake: undefined,
-      dischargeWater: undefined,
-      directCostPerYear: undefined,
-      directCostPerUnit: undefined,
-      trueCostPerYear: undefined,
-      trueCostPerUnit: undefined,
-      trueOverDirectResult: undefined,
-      allSystemResults: []
-    }
   }
 
 }

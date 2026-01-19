@@ -126,7 +126,12 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
     currency: 'USD'
   });
   
-  systemCosts = getSystemTrueCostData(trueCostOfSystems, nodes)
+  const nodeNameMap = nodes.reduce((map, node) => {
+    map[node.id] = node.data.name as string;
+    return map;
+  }, {} as Record<string, string>);
+
+  systemCosts = getSystemTrueCostData(trueCostOfSystems, nodeNameMap)
   sortTrueCostReport(systemCosts);
 
   return (

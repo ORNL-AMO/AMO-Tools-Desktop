@@ -246,12 +246,10 @@ export const sortTrueCostReport = (report: SystemTrueCostData[]): SystemTrueCost
   // return report.sort((a, b) => a.connectionCostByType[7] < b.connectionCostByType[7] ? 1 : -1);
 }
 
-export const getSystemTrueCostData = (trueCostOfSystems: TrueCostOfSystems, nodes: Node[], systemAttributionMap?: SystemAttributionMap): SystemTrueCostData[] => {
+export const getSystemTrueCostData = (trueCostOfSystems: TrueCostOfSystems, nodeNameMap: Record<string, string>, systemAttributionMap?: SystemAttributionMap): SystemTrueCostData[] => {
   let systemCosts = [];
   Object.entries(trueCostOfSystems).forEach(([key, systemCostContributions]: [key: string, systemCostContributions: SystemTrueCostContributions]) => {
     const systemKey = key as keyof TrueCostOfSystems;
-    const component = nodes.find((node: Node<ProcessFlowPart>) => node.id === systemKey)?.data as WaterUsingSystem;
-
     const adjustedComponentTypes: string[] = getSystemAdjustedComponentTypes(systemAttributionMap, systemKey as string);
     const results: {cost: number, isAdjusted: boolean}[] = Object.entries(systemCostContributions).map(([costType, costValue]: [costType: string, costValue: number]) => {
       let isAdjusted = false;
@@ -287,7 +285,7 @@ export const getSystemTrueCostData = (trueCostOfSystems: TrueCostOfSystems, node
     });
 
     systemCosts.push({
-      label: component.name,
+      label: nodeNameMap[systemKey],
       connectionCostByType: results,
       unit: 'currency',
     });

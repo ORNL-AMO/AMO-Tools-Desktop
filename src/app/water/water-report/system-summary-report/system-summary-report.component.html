@@ -1,11 +1,7 @@
 <div class="output-summary w-75 mx-auto">
     <h4 class="show-print print-section-header">System Annual Water Use and Cost Summary</h4>
 
-    @if (!isDiagramValid) {
-    <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
-        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
-        [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
-    } @else {
+    @if(plantSystemSummaryResults$ | async; as plantSummaryResults) {
     <table #copyTable class="table table-bordered table-striped table-hover">
         <thead>
             <tr class="text-center header-highlight">
@@ -122,7 +118,8 @@
     </table>
     <hr class="mt-5 mb-3">
     <div class="d-flex w-100 align-items-center justify-content-center mb-3">
-        <div class="btn-group btn-group-toggle mr-3 flex-shrink-0" ngbRadioGroup name="percentView" (change)="togglePercentView()">
+        <div class="btn-group btn-group-toggle mr-3 flex-shrink-0" ngbRadioGroup name="percentView"
+            (change)="togglePercentView()">
             <label class="btn btn-outline-secondary mb-0" [class.active]="!percentView">
                 <input type="radio" [checked]="!percentView" value="false">View Units/Cost
             </label>
@@ -141,8 +138,12 @@
     </div>
 
     <app-exportable-results-table [tableString]="copyTableString"
-    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
-    }
+        (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 
+    } @else {
+    <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
+        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
+        [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
+    }
 
 </div>

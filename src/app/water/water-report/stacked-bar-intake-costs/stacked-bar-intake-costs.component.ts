@@ -1,10 +1,10 @@
 import { Component, DestroyRef, ElementRef, inject, ViewChild } from '@angular/core';
-import { WaterAssessmentService } from '../../water-assessment.service';
 import { PlotlyService } from 'angular-plotly.js';
-import { combineLatest, Subscription } from 'rxjs';
+import { combineLatest, filter, Subscription } from 'rxjs';
 import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
-import { WaterReportService } from '../water-report.service';
 import { getGraphColors } from '../../../shared/helperFunctions';
+import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
+import { PlantSystemSummaryResults } from 'process-flow-lib';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -14,8 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './stacked-bar-intake-costs.component.css'
 })
 export class StackedBarIntakeCostsComponent {
-  private readonly waterReportService = inject(WaterReportService)
-  private readonly waterAssessmentService = inject(WaterAssessmentService)
+  private readonly waterAssessmentResultsService = inject(WaterAssessmentResultsService);
   private readonly printOptionsMenuService = inject(PrintOptionsMenuService)
   private readonly plotlyService = inject(PlotlyService);
   private readonly destroyRef = inject(DestroyRef);
@@ -25,7 +24,7 @@ export class StackedBarIntakeCostsComponent {
   showPercent: boolean = false;
   @ViewChild('intakeCostsChart', { static: false }) intakeCostsChart: ElementRef;
 
-  plantSummaryReportSubscription: Subscription;
+  plantSystemSummaryResults: PlantSystemSummaryResults;
   showPrintViewSub: Subscription;
   percentViewSubscription: Subscription;
   updateChartSubscription: Subscription;
@@ -44,26 +43,25 @@ export class StackedBarIntakeCostsComponent {
 
   ngAfterViewInit() {
     this.updateChartSubscription = combineLatest([
-      this.waterReportService.plantSummaryReport,
-      this.waterReportService.systemStackedBarPercentView
+      this.waterAssessmentResultsService.plantSystemSummaryResults$,
+      this.waterAssessmentResultsService.systemStackedBarPercentView
     ]).pipe(
+      filter(([plantSystemSummaryResults, systemStackedBarPercentView]) => plantSystemSummaryResults !== undefined && systemStackedBarPercentView !== undefined),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe(([plantSummaryReport, systemStackedBarPercentView]) => {
+    ).subscribe(([plantSystemSummaryResults, systemStackedBarPercentView]) => {
       this.showPercent = systemStackedBarPercentView;
+      this.plantSystemSummaryResults = plantSystemSummaryResults;
       this.renderChart();
     });
   }
 
   renderChart() {
-    const report = this.waterReportService.plantSummaryReport.getValue();
-    if (!report) return;
 
-    const systemLabels: string[] = report.allSystemResults.map((system: any) => system.name || 'System');
-    const trueCostsRaw: number[] = report.allSystemResults.map((system: any) => system.trueCostPerYear);
-    const directCostsRaw: number[] = report.allSystemResults.map((system: any) => system.directCostPerYear);
-    const percentTrueCosts: number[] = trueCostsRaw.map(val => (val / report.trueCostPerYear * 100));
-    const percentDirectCosts: number[] = directCostsRaw.map(val => (val / report.directCostPerYear * 100));
-
+    const systemLabels: string[] = this.plantSystemSummaryResults.allSystemResults.map((system: any) => system.name || 'System');
+    const trueCostsRaw: number[] = this.plantSystemSummaryResults.allSystemResults.map((system: any) => system.trueCostPerYear);
+    const directCostsRaw: number[] = this.plantSystemSummaryResults.allSystemResults.map((system: any) => system.directCostPerYear);
+    const percentTrueCosts: number[] = trueCostsRaw.map(val => (val / this.plantSystemSummaryResults.trueCostPerYear * 100));
+    const percentDirectCosts: number[] = directCostsRaw.map(val => (val / this.plantSystemSummaryResults.directCostPerYear * 100));
     const graphColors = getGraphColors();
     const systemColors = systemLabels.map((_, idx) => graphColors[idx % graphColors.length]);
 
