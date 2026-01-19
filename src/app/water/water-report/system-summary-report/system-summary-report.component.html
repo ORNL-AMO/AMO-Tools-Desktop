@@ -54,30 +54,30 @@
                 <td>
                     <span *ngIf="systemResult.sourceWaterIntake">{{systemResult.sourceWaterIntake |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!systemResult.sourceWaterIntake">&mdash;</span>
+                    <span *ngIf="!systemResult.sourceWaterIntake">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.directCostPerYear">${{systemResult.directCostPerYear |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!systemResult.directCostPerYear">&mdash;</span>
+                    <span *ngIf="!systemResult.directCostPerYear">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.directCostPerUnit">${{systemResult.directCostPerUnit |
                         number:'1.0-4'}}</span>
-                    <span *ngIf="!systemResult.directCostPerUnit">&mdash;</span>
+                    <span *ngIf="!systemResult.directCostPerUnit">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.trueCostPerYear">${{systemResult.trueCostPerYear | number:'1.0-2'}}</span>
-                    <span *ngIf="!systemResult.trueCostPerYear">&mdash;</span>
+                    <span *ngIf="!systemResult.trueCostPerYear">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.trueCostPerUnit">${{systemResult.trueCostPerUnit | number:'1.0-4'}}</span>
-                    <span *ngIf="!systemResult.trueCostPerUnit">&mdash;</span>
+                    <span *ngIf="!systemResult.trueCostPerUnit">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.trueOverDirectResult">{{systemResult.trueOverDirectResult |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!systemResult.trueOverDirectResult">&mdash;</span>
+                    <span *ngIf="!systemResult.trueOverDirectResult">0</span>
                 </td>
 
             </tr>
@@ -90,32 +90,32 @@
                 <td>
                     <span *ngIf="plantSummaryResults.sourceWaterIntake">{{plantSummaryResults.sourceWaterIntake |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!plantSummaryResults.sourceWaterIntake">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.sourceWaterIntake">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.directCostPerYear">${{plantSummaryResults.directCostPerYear |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!plantSummaryResults.directCostPerYear">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.directCostPerYear">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.directCostPerUnit">${{plantSummaryResults.directCostPerUnit |
                         number:'1.0-4'}}</span>
-                    <span *ngIf="!plantSummaryResults.directCostPerUnit">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.directCostPerUnit">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.trueCostPerYear">${{plantSummaryResults.trueCostPerYear |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!plantSummaryResults.trueCostPerYear">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.trueCostPerYear">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.trueCostPerUnit">${{plantSummaryResults.trueCostPerUnit |
                         number:'1.0-4'}}</span>
-                    <span *ngIf="!plantSummaryResults.trueCostPerUnit">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.trueCostPerUnit">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.trueOverDirectResult">{{plantSummaryResults.trueOverDirectResult |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!plantSummaryResults.trueOverDirectResult">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.trueOverDirectResult">0</span>
                 </td>
             </tr>
         </tfoot>
