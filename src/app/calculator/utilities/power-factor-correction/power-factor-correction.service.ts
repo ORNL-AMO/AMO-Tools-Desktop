@@ -73,7 +73,6 @@ export class PowerFactorCorrectionService {
   getResults(data: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
     let results: PowerFactorCorrectionOutputs;
 
-    console.log(data.billedForDemand, data.adjustedOrActual);
     if (data.billedForDemand == BilledForDemand.REAL_POWER) {
       if (data.adjustedOrActual == AdjustedOrActual.POWER_FACTOR) {
         results = this.calculateRealPowerAndPowerFactor(data);
