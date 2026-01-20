@@ -57,9 +57,9 @@ export class StackedBarIntakeCostsComponent {
 
   renderChart() {
 
-    const systemLabels: string[] = this.plantSystemSummaryResults.allSystemResults.map((system: any) => system.name || 'System');
-    const trueCostsRaw: number[] = this.plantSystemSummaryResults.allSystemResults.map((system: any) => system.trueCostPerYear);
-    const directCostsRaw: number[] = this.plantSystemSummaryResults.allSystemResults.map((system: any) => system.directCostPerYear);
+    const systemLabels: string[] = this.plantSystemSummaryResults.allSystemResults.map(system => system.name || 'System');
+    const trueCostsRaw: number[] = this.plantSystemSummaryResults.allSystemResults.map(system => system.trueCostPerYear);
+    const directCostsRaw: number[] = this.plantSystemSummaryResults.allSystemResults.map(system => system.directCostPerYear);
     const percentTrueCosts: number[] = trueCostsRaw.map(val => (val / this.plantSystemSummaryResults.trueCostPerYear * 100));
     const percentDirectCosts: number[] = directCostsRaw.map(val => (val / this.plantSystemSummaryResults.directCostPerYear * 100));
     const graphColors = getGraphColors();
