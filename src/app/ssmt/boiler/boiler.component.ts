@@ -2,7 +2,7 @@ import { SaturatedPropertiesOutput } from './../../shared/models/steam/steam-out
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
-import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
+import { BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
 import { UntypedFormGroup } from '@angular/forms';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -12,7 +12,7 @@ import { FlueGasMaterial, SolidLiquidFlueGasMaterial } from '../../shared/models
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 import { SteamPressureOrTemp, SteamQuality } from '../../shared/models/steam/steam-inputs';
-import { Observable, shareReplay, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 
 @Component({
