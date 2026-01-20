@@ -144,8 +144,7 @@ export class BoilerService {
 
       // * steamTemperature can't be calculated ((will be NAN)) for reference when saturatedPressure is at min
       if (!form.get('saturatedPressure').errors?.min && !isNaN(saturatedPropertiesOutput.saturatedTemperature)) {
-        console.log('settings greater than validator for steam temperature', saturatedPropertiesOutput.saturatedTemperature);
-        validators.push(GreaterThanValidator.greaterThan(saturatedPropertiesOutput.saturatedTemperature));
+        validators.push(GreaterThanValidator.greaterThan(roundVal(saturatedPropertiesOutput.saturatedTemperature, 1)));
       }
       form.controls.steamTemperature.setValidators(validators);
     }
@@ -183,7 +182,7 @@ export class BoilerService {
 
       saturatedPropertiesOutput = this.steamService.saturatedProperties(input, boilerInput.pressureOrTemperature, settings);
       if (boilerInput.pressureOrTemperature === SteamPressureOrTemp.PRESSURE) {
-        boilerInput.steamTemperature = saturatedPropertiesOutput.saturatedTemperature;
+        boilerInput.steamTemperature = roundVal(saturatedPropertiesOutput.saturatedTemperature, 0);
       } else {
         boilerInput.saturatedPressure = saturatedPropertiesOutput.saturatedPressure;
       }
