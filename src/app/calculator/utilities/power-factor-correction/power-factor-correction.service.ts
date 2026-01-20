@@ -72,6 +72,7 @@ export class PowerFactorCorrectionService {
 
   getResults(data: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
     let results: PowerFactorCorrectionOutputs;
+
     if (data.billedForDemand == BilledForDemand.REAL_POWER) {
       if (data.adjustedOrActual == AdjustedOrActual.POWER_FACTOR) {
         results = this.calculateRealPowerAndPowerFactor(data);
@@ -266,19 +267,16 @@ export class PowerFactorCorrectionService {
       });
 
       let proposedCapacitanceList: Array<number> = new Array();
-
       if (monthlyOutputs.length > 0) {
         monthlyOutputs.forEach(output => {
           if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
           }
-          if (output.proposedCapacitance !== 0) {
-            proposedCapacitanceList.push(output.proposedCapacitance);
-          }
+
+          proposedCapacitanceList.push(output.proposedCapacitance);
         });
         annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
-
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
       capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
