@@ -39,7 +39,6 @@ export class TrueCostEditableTableComponent {
     id: string;
   }[] = [];
 
-  costComponents: CostComponentSummary[] = [];
   costComponentMap: Map<string, CostComponentSummary> = new Map();
   plantResults: PlantResults;
   adjustedAttribution: SystemAttributionMap = {};
@@ -78,46 +77,54 @@ export class TrueCostEditableTableComponent {
       }
     });
 
-    this.costComponents = Object.entries(this.plantResults.costComponentsTotalsMap).map(([id, comp]: [id: string, comp: BlockCosts]) => {
-      const hasAdjustment = this.getRowAdjustmentExists(id);
-      const rowStatus = hasAdjustment ? 'adjusted' : 'default';
-      return {
-        id: id,
-        name: comp.name,
-        total: comp.totalBlockCost,
-        processComponentType: comp.processComponentType,
-        componentTypeLabel: getComponentTypeLabel(comp.processComponentType),
-        status: rowStatus
-      };
-    });
-    
-    this.costComponentMap = new Map(this.costComponents.map(component => [component.id, component]));
+    this.costComponentMap = new Map(
+      Object.entries(this.plantResults.costComponentsTotalsMap).map(
+        ([id, comp]: [id: string, comp: BlockCosts]) => {
+          const hasAdjustment = this.getRowAdjustmentExists(id);
+          const rowStatus = hasAdjustment ? 'adjusted' : 'default';
+
+          return [
+            id,
+            {
+              id: id,
+              name: comp.name,
+              total: comp.totalBlockCost,
+              processComponentType: comp.processComponentType,
+              componentTypeLabel: getComponentTypeLabel(comp.processComponentType),
+              status: rowStatus
+            }
+          ];
+        }
+      )
+    );
 
     this.form = this.trueCostReportService.getCostComponentsForm(
       this.plantResults.systemAttributionMap,
-      this.costComponents.map(comp => comp.id),
+      Array.from(this.costComponentMap.keys()),
       this.nullDefaultAttribution
     );
   }
 
   setRowStatus(componentId: string, updatedStatus: 'adjusted' | 'default') {
-    this.costComponents = this.costComponents.map(costComponent => {
-      const status = costComponent.id === componentId ? updatedStatus : costComponent.status;
-      return {
-        ...costComponent,
-        status: status
-      };
-    });
+    this.costComponentMap = new Map(Array.from(this.costComponentMap.values()).map(component => {
+      const status = component.id === componentId ? updatedStatus : component.status;
+      return [component.id, 
+        {
+          ...component,
+          status: status
+        }
+      ];
+    }));
+
   }
 
   editRow(rowIndex: number) {
     this.selectedEditRow = rowIndex;
   }
 
-  setAdjustedValue(event, componentIndex: number, systemId: string) {
+  setAdjustedValue(event, componentId: string, systemId: string) {
     const inputElement = event.target as HTMLInputElement;
     const adjustedFractionFlowAttributed = Number(inputElement.value) / 100;
-    const componentId = this.costComponents[componentIndex].id;
     const defaultAttribution = this.plantResults.systemAttributionMap[systemId][componentId].totalAttribution.default;
     console.log(defaultAttribution);
 
@@ -161,11 +168,7 @@ export class TrueCostEditableTableComponent {
     );
   }
 
-  // todo we can currently revert without needing to confirm the save. If we do revert outside an edit context, we won't run validation.
-  revertToDefaultAttribution(systemAdjustedAttributions: CostComponentAttribution[], systemId: string, componentIndex: number, systemIndex: number) {
-    const componentId: string = this.costComponents[componentIndex].id;
-
-    const rowGroup: FormGroup = this.getRowControl(componentIndex);
+  revertToDefaultAttribution(rowGroup: FormGroup, systemId: string, componentId: string, systemIndex: number) {
     const systemControl: FormControl = this.getSystemCostComponentControl(rowGroup, systemIndex);
 
     systemControl.patchValue(this.adjustedAttribution[systemId][componentId].totalAttribution.default * 100);
@@ -173,8 +176,13 @@ export class TrueCostEditableTableComponent {
 
     delete this.adjustedAttribution[systemId][componentId];
 
+    if (this.adjustedAttribution[systemId] && Object.keys(this.adjustedAttribution[systemId]).length === 0) {
+      delete this.adjustedAttribution[systemId];
+    }
+
     const hasAdjustment = this.getRowAdjustmentExists(componentId);
     const rowStatus = hasAdjustment ? 'adjusted' : 'default';
+
     this.setRowStatus(componentId, rowStatus);
     this.saveFlowAttributions();
   }
@@ -185,7 +193,7 @@ export class TrueCostEditableTableComponent {
   }
 
   saveFlowAttributions() {
-    this.assessment.water.systemAttributionMap = this.adjustedAttribution;
+    this.assessment.water.systemAttributionMap = {...this.adjustedAttribution};
     this.waterAssessmentService.setAssessment(this.assessment);
     this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
   }

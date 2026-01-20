@@ -3,10 +3,10 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import * as _ from 'lodash';
-import { SystemTrueCostData } from 'process-flow-lib';
+import { sortTrueCostReport, SystemTrueCostData } from 'process-flow-lib';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
 import { TrueCostEditableTableComponent, TrueCostEditableTableDataInputs } from '../true-cost-editable-table/true-cost-editable-table.component';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-system-true-cost-report',
@@ -30,7 +30,9 @@ export class SystemTrueCostReportComponent {
     note: string
   }>;
   selectedModificationIndex: number = 1;
-  trueCostOfSystemsReport$: Observable<SystemTrueCostData[]> = this.waterAssessmentResultsService.trueCostOfSystemsReport$;
+  trueCostOfSystemsReport$: Observable<SystemTrueCostData[]> = this.waterAssessmentResultsService.trueCostOfSystemsReport$.pipe(
+    map((report) => sortTrueCostReport(report, 'desc'))
+  );
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
   copyTableString: any;

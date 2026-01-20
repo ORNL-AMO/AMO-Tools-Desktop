@@ -67,14 +67,14 @@
                       @if (systemAdjustedAttributions && isEditingRow) {
                       <span class="input-group-addon calc-addon units">
                         <a class="click-link" title="Revert to MEASUR calculated value."
-                          (click)="revertToDefaultAttribution(systemAdjustedAttributions, system.id, componentIndex, systemIndex)"><span
+                          (click)="revertToDefaultAttribution(rowGroup, system.id, rowId, systemIndex)"><span
                             class="fa fa-refresh"></span></a>
                       </span>
                       }
                       <input type="number" id="{{'component-' + componentIndex + '-system-' + systemIndex}}"
                         class="form-control text-center" [class.width-offset]="selectedEditRow === componentIndex"
                         [formControl]="rowGroup.get('systemAttributions').at(systemIndex)"
-                        (input)="setAdjustedValue($event, componentIndex, system.id)"
+                        (input)="setAdjustedValue($event, rowId, system.id)"
                         [readonly]="selectedEditRow !== componentIndex">
                     </div>
                     }

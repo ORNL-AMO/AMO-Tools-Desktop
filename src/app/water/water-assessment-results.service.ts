@@ -53,7 +53,7 @@ export class WaterAssessmentResultsService {
     filter((plantResults) => plantResults !== undefined),
     map((plantResults) => {
       let trueCostOfSystemsReport = getSystemTrueCostData(plantResults.trueCostOfSystems, this.nodeNameMap.getValue(), plantResults.systemAttributionMap);
-      return sortTrueCostReport(trueCostOfSystemsReport);
+      return trueCostOfSystemsReport;
     })
   );
 

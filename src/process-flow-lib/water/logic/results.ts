@@ -240,10 +240,13 @@ export const getTotalFlowValue = (flows: Array<EdgeFlowData>) => {
   return flows.reduce((total, flow) => total + flow.flowValue, 0);
 }
 
-export const sortTrueCostReport = (report: SystemTrueCostData[]): SystemTrueCostData[] => {
-  // * index 7 is hardcoded for 'total' cost - change to enum or constant
-  return report;
-  // return report.sort((a, b) => a.connectionCostByType[7] < b.connectionCostByType[7] ? 1 : -1);
+export const sortTrueCostReport = (report: SystemTrueCostData[], order: 'asc' | 'desc' = 'desc'): SystemTrueCostData[] => {
+  // * sort by total cost (connectionCostByType[7].cost) in specified order
+  return [...report].sort((a, b) => {
+    const totalA = a.connectionCostByType?.[7]?.cost ?? 0;
+    const totalB = b.connectionCostByType?.[7]?.cost ?? 0;
+    return order === 'asc' ? totalA - totalB : totalB - totalA;
+  });
 }
 
 export const getSystemTrueCostData = (trueCostOfSystems: TrueCostOfSystems, nodeNameMap: Record<string, string>, systemAttributionMap?: SystemAttributionMap): SystemTrueCostData[] => {
@@ -715,7 +718,7 @@ const setSystemAttribution = (
 
 /** Calculate and set intake costs for each system based on their flow responsibility from each intake component
  * 
- * From Algorithm (Dec 2026):
+ * From Algorithm (Dec 2025):
   •	What to follow: Start at the intake node; go downstream through any water treatment units.
   •	Where to stop: At the first water using systems reached on each path. 
       Do not continue into other users even if they later receive recycled water.
@@ -855,7 +858,7 @@ const applySystemIntakeCosts = (
 
 /** Calculate and set discharge costs for each system based on their flow responsibility to each discharge component
  * 
- * From Algorithm (Dec 2026):
+ * From Algorithm (Dec 2025):
  * - What to follow: Start at the discharge node; go upstream until you hit water using systems.
  * - Where to stop: At the first user encountered on each path (the final user causing the discharge).
  * - Do not charge upstream users whose water was reused  before discharging.
@@ -994,7 +997,7 @@ const applySystemDischargeCosts = (
 
 /** Calculate and set treatment costs for each system based on their flow responsibility from each treatment component
  * 
- * From Algorithm (Dec 2026):
+ * From Algorithm (Dec 2025):
  * What to follow: Start at the water treatment unit; go downstream (through any additional treatment) until you reach first water‑using systems.
  * Where to stop: At the first users consuming the treated water.
  * How to split: Split the treatment unit’s cost across those users by the volume of treated water they receive from this unit.
@@ -1123,7 +1126,7 @@ const applySystemTreatmentCosts = (
 
 /** Calculate and set waste water treatment costs for each system based on their flow responsibility from each waste water treatment component
  * 
- * From Algorithm (Dec 2026):
+ * From Algorithm (Dec 2025):
  *  What to follow: Start at the WWT unit.
  *  Downstream: identify how much of its treated water goes to users (reuse) vs to discharge (sewer/storm/losses), possibly through a WWT chain.
  *  Upstream: identify which users sent water into this WWT unit (the dischargers).

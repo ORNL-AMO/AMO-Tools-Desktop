@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
-import { SystemTrueCostData } from 'process-flow-lib';
+import { sortTrueCostReport, SystemTrueCostData } from 'process-flow-lib';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -69,6 +69,8 @@ export class SystemTrueCostBarComponent {
     let displayCostTypes = costTypes.slice(0, -1);
     
     let chartData = displayCostTypes.map((costType, index) => {
+      report = sortTrueCostReport(report, 'asc');
+
       return {
         x: report.map(item => {
           return item.connectionCostByType[index]?.cost || 0;
