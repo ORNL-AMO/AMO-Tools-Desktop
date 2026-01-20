@@ -215,9 +215,7 @@ export class PowerFactorCorrectionService {
           if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
           }
-          if (output.proposedCapacitance !== 0) {
             proposedCapacitanceList.push(output.proposedCapacitance);
-          }
         });
         annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
@@ -319,9 +317,7 @@ export class PowerFactorCorrectionService {
           if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
           }
-          if (output.proposedCapacitance !== 0) {
-            proposedCapacitanceList.push(output.proposedCapacitance);
-          }
+          proposedCapacitanceList.push(output.proposedCapacitance);
         });
         annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
@@ -367,9 +363,7 @@ export class PowerFactorCorrectionService {
           if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
           }
-          if (output.proposedCapacitance !== 0) {
-            proposedCapacitanceList.push(output.proposedCapacitance);
-          }
+          proposedCapacitanceList.push(output.proposedCapacitance);
         });
         annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
@@ -418,9 +412,7 @@ export class PowerFactorCorrectionService {
           if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
           }
-          if (output.proposedCapacitance !== 0) {
-            proposedCapacitanceList.push(output.proposedCapacitance);
-          }
+          proposedCapacitanceList.push(output.proposedCapacitance);
         });
         annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
