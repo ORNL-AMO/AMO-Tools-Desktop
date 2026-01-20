@@ -1444,7 +1444,7 @@ export const getPlantSummaryResults = (
   settings: DiagramSettings,
   systemAttributionMap: SystemAttributionMap,
 ): PlantResults => {
-  console.time('getPlantSummaryResults');
+  // console.time('getPlantSummaryResults');
   const graph: NodeGraphIndex = createGraphIndex(nodes, edges as Edge<CustomEdgeData>[]);
 
   // * STEP 1 - Set block costs and prepare results mapping
