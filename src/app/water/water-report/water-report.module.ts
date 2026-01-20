@@ -5,7 +5,6 @@ import { WaterReportComponent } from './water-report.component';
 import { SystemSummaryReportComponent } from './system-summary-report/system-summary-report.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
 import { SystemTrueCostReportComponent } from './system-true-cost-report/system-true-cost-report.component';
-import { WaterReportService } from './water-report.service';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { AlertInfoContainerComponent } from '../../shared/alert-info-container/alert-info-container.component';
 import { StackedBarIntakeCostsComponent } from './stacked-bar-intake-costs/stacked-bar-intake-costs.component';
@@ -42,7 +41,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     WaterReportComponent,
   ],
   providers: [
-    WaterReportService,
     TrueCostReportService,
   ],
 })

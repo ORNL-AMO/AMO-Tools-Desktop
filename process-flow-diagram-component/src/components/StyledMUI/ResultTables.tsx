@@ -126,7 +126,12 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
     currency: 'USD'
   });
   
-  systemCosts = getSystemTrueCostData(trueCostOfSystems, nodes)
+  const nodeNameMap = nodes.reduce((map, node) => {
+    map[node.id] = node.data.name as string;
+    return map;
+  }, {} as Record<string, string>);
+
+  systemCosts = getSystemTrueCostData(trueCostOfSystems, nodeNameMap)
   sortTrueCostReport(systemCosts);
 
   return (
@@ -153,7 +158,7 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
               </StyledTableCell>
               {row.connectionCostByType.map((result, index) => (
                 <StyledTableCell key={index} align="right">
-                  {result? currency.format(Number(result)) : '-'}
+                  {result?.cost ? currency.format(Number(result.cost)) : '-'}
                 </StyledTableCell>
               ))}
             </StyledTableRow>

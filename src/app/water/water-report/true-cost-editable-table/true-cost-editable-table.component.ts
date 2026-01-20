@@ -2,12 +2,11 @@ import { Component, DestroyRef, Inject, inject } from '@angular/core';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
 import { Diagram } from '../../../shared/models/diagram';
-import { BlockCosts, CostComponentSummary, getComponentTypeLabel, getIsDiagramValid, NodeErrors, PlantResults, CostComponentAttribution, SystemAttributionMap } from 'process-flow-lib';
+import { BlockCosts, CostComponentSummary, getComponentTypeLabel, PlantResults, CostComponentAttribution, SystemAttributionMap } from 'process-flow-lib';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Assessment } from '../../../shared/models/assessment';
 import { TrueCostReportService } from '../../services/true-cost-report.service';
 import { Settings } from '../../../shared/models/settings';
-import { WaterReportService } from '../water-report.service';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { WaterAssessmentService } from '../../water-assessment.service';
 
@@ -24,7 +23,6 @@ export class TrueCostEditableTableComponent {
   waterAssessmentResultsService = inject(WaterAssessmentResultsService);
   updateDiagramFromAssessmentService = inject(UpdateDiagramFromAssessmentService);
   trueCostReportService = inject(TrueCostReportService);
-  waterReportService = inject(WaterReportService);
   waterAssessmentService = inject(WaterAssessmentService);
 
   inRollup: boolean;
@@ -33,7 +31,6 @@ export class TrueCostEditableTableComponent {
   settings: Settings;
 
   selectedEditRow: number = null;
-  isDiagramValid: boolean;
   isCollapsed = false;
   form: FormGroup;
 
@@ -42,13 +39,12 @@ export class TrueCostEditableTableComponent {
     id: string;
   }[] = [];
 
-  costComponents: CostComponentSummary[] = [];
+  costComponentMap: Map<string, CostComponentSummary> = new Map();
   plantResults: PlantResults;
   adjustedAttribution: SystemAttributionMap = {};
 
   // * Set disabled, system is not connected to cost component or has an error
   nullDefaultAttribution: Record<string, { [key: string]: string }> = {};
-  nodeNameMap: Record<string, string> = {};
 
   constructor(@Inject(DIALOG_DATA) modalDialogData: TrueCostEditableTableDataInputs) {
     this.assessment = modalDialogData.assessment;
@@ -57,74 +53,78 @@ export class TrueCostEditableTableComponent {
   }
 
   ngOnInit() {
-    this.diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
-    let nodeErrors: NodeErrors = this.diagram.waterDiagram.flowDiagramData.nodeErrors;
-    this.isDiagramValid = getIsDiagramValid(nodeErrors);
-
+    this.plantResults = this.waterAssessmentResultsService.plantResults.getValue();
     
-    if (this.isDiagramValid) {
-      this.plantResults = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
-      if (this.plantResults.systemAttributionMap) {
-        Object.entries(this.plantResults.systemAttributionMap).forEach(([systemId, attributionMap]) => {
-          Object.entries(attributionMap).forEach(([costComponentId, attribution]: [costComponentId: string, attribution: CostComponentAttribution]) => {
-            if (attribution.totalAttribution.adjusted !== undefined) {
-              if (!this.adjustedAttribution[systemId]) {
-                this.adjustedAttribution[systemId] = {};
-              }
-              this.adjustedAttribution[systemId][costComponentId] = attribution;
+    if (this.plantResults.systemAttributionMap) {
+      Object.entries(this.plantResults.systemAttributionMap).forEach(([systemId, attributionMap]) => {
+        Object.entries(attributionMap).forEach(([costComponentId, attribution]: [costComponentId: string, attribution: CostComponentAttribution]) => {
+          if (attribution.totalAttribution.adjusted !== undefined) {
+            if (!this.adjustedAttribution[systemId]) {
+              this.adjustedAttribution[systemId] = {};
             }
-          });
+            this.adjustedAttribution[systemId][costComponentId] = attribution;
+          }
         });
-      }
-      
-
-      this.systems = Object.keys(this.plantResults.systemAttributionMap).map((id) => {
-        const systemName = this.diagram.waterDiagram.flowDiagramData.nodes.find(n => n.id === id)?.data.name as string;
-        return {
-          id: id,
-          name: systemName || "Unknown System"
-        }
       });
-
-      this.costComponents = Object.entries(this.plantResults.costComponentsTotalsMap).map(([id, comp]: [id: string, comp: BlockCosts]) => {
-        const hasAdjustment = this.getRowAdjustmentExists(id);
-        const rowStatus = hasAdjustment ? 'adjusted' : 'default';
-        return {
-          id: id,
-          name: comp.name,
-          total: comp.totalBlockCost,
-          processComponentType: comp.processComponentType,
-          componentTypeLabel: getComponentTypeLabel(comp.processComponentType),
-          status: rowStatus
-        }
-      });
-
-      this.form = this.trueCostReportService.getCostComponentsForm(
-        this.plantResults.systemAttributionMap,
-        this.costComponents.map(comp => comp.id),
-        this.nullDefaultAttribution
-      );
     }
+    
+    
+    const nodeNameMap = this.waterAssessmentResultsService.nodeNameMap.getValue();
+    this.systems = Object.keys(this.plantResults.systemAttributionMap).map((id) => {
+      return {
+        id: id,
+        name: nodeNameMap[id] || "Unknown System"
+      }
+    });
+
+    this.costComponentMap = new Map(
+      Object.entries(this.plantResults.costComponentsTotalsMap).map(
+        ([id, comp]: [id: string, comp: BlockCosts]) => {
+          const hasAdjustment = this.getRowAdjustmentExists(id);
+          const rowStatus = hasAdjustment ? 'adjusted' : 'default';
+
+          return [
+            id,
+            {
+              id: id,
+              name: comp.name,
+              total: comp.totalBlockCost,
+              processComponentType: comp.processComponentType,
+              componentTypeLabel: getComponentTypeLabel(comp.processComponentType),
+              status: rowStatus
+            }
+          ];
+        }
+      )
+    );
+
+    this.form = this.trueCostReportService.getCostComponentsForm(
+      this.plantResults.systemAttributionMap,
+      Array.from(this.costComponentMap.keys()),
+      this.nullDefaultAttribution
+    );
   }
 
   setRowStatus(componentId: string, updatedStatus: 'adjusted' | 'default') {
-    this.costComponents = this.costComponents.map(costComponent => {
-      const status = costComponent.id === componentId ? updatedStatus : costComponent.status;
-      return {
-        ...costComponent,
-        status: status
-      };
-    });
+    this.costComponentMap = new Map(Array.from(this.costComponentMap.values()).map(component => {
+      const status = component.id === componentId ? updatedStatus : component.status;
+      return [component.id, 
+        {
+          ...component,
+          status: status
+        }
+      ];
+    }));
+
   }
 
   editRow(rowIndex: number) {
     this.selectedEditRow = rowIndex;
   }
 
-  setAdjustedValue(event, componentIndex: number, systemId: string) {
+  setAdjustedValue(event, componentId: string, systemId: string) {
     const inputElement = event.target as HTMLInputElement;
     const adjustedFractionFlowAttributed = Number(inputElement.value) / 100;
-    const componentId = this.costComponents[componentIndex].id;
     const defaultAttribution = this.plantResults.systemAttributionMap[systemId][componentId].totalAttribution.default;
     console.log(defaultAttribution);
 
@@ -168,19 +168,21 @@ export class TrueCostEditableTableComponent {
     );
   }
 
-  // todo we can currently revert without needing to confirm the save. If we do revert outside an edit context, we won't run validation.
-  revertToDefaultAttribution(systemAdjustedAttributions: CostComponentAttribution[], systemId: string, componentIndex: number, systemIndex: number) {
-    const componentId: string = this.costComponents[componentIndex].id;
+  revertToDefaultAttribution(rowGroup: FormGroup, systemId: string, componentId: string, systemIndex: number) {
+    const systemControl: FormControl = this.getSystemCostComponentControl(rowGroup, systemIndex);
 
-    const rowControl: FormArray = this.getRowControl(componentIndex);
-    const systemControl: FormControl = this.getSystemCostComponentControl(rowControl, systemIndex);
-
-    this.adjustedAttribution[systemId][componentId].totalAttribution.adjusted = undefined;
     systemControl.patchValue(this.adjustedAttribution[systemId][componentId].totalAttribution.default * 100);
     systemControl.updateValueAndValidity();
 
+    delete this.adjustedAttribution[systemId][componentId];
+
+    if (this.adjustedAttribution[systemId] && Object.keys(this.adjustedAttribution[systemId]).length === 0) {
+      delete this.adjustedAttribution[systemId];
+    }
+
     const hasAdjustment = this.getRowAdjustmentExists(componentId);
     const rowStatus = hasAdjustment ? 'adjusted' : 'default';
+
     this.setRowStatus(componentId, rowStatus);
     this.saveFlowAttributions();
   }
@@ -191,7 +193,8 @@ export class TrueCostEditableTableComponent {
   }
 
   saveFlowAttributions() {
-    this.assessment.water.systemAttributionMap = this.adjustedAttribution;
+    this.assessment.water.systemAttributionMap = {...this.adjustedAttribution};
+    this.waterAssessmentService.setAssessment(this.assessment);
     this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
   }
 
@@ -213,12 +216,12 @@ export class TrueCostEditableTableComponent {
     return this.form.get('costComponentsSystemAttribution') as FormArray;
   }
 
-  getRowControl(index: number): FormArray {
-    return this.costComponentsSystemAttribution.at(index) as FormArray;
+  getRowControl(index: number): FormGroup {
+    return this.costComponentsSystemAttribution.at(index) as FormGroup;
   }
 
-  getSystemCostComponentControl(rowControl: FormArray, systemIndex: number): FormControl {
-    return rowControl.at(systemIndex) as FormControl;
+  getSystemCostComponentControl(rowGroup: FormGroup, systemIndex: number): FormControl {
+    return (rowGroup.get('systemAttributions') as FormArray).at(systemIndex) as FormControl;
   }
 
 }

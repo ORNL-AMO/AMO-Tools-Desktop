@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -8,8 +8,8 @@ import { PrintOptions } from '../../shared/models/printing';
 import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { Settings } from '../../shared/models/settings';
 import { WaterAssessmentService } from '../water-assessment.service';
-import { WaterReportService } from './water-report.service';
 import { WaterAssessmentResultsService } from '../water-assessment-results.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-water-report',
@@ -18,6 +18,14 @@ import { WaterAssessmentResultsService } from '../water-assessment-results.servi
   styleUrl: './water-report.component.css'
 })
 export class WaterReportComponent {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly waterAssessmentResultsService = inject(WaterAssessmentResultsService);
+  private readonly waterAssessmentService = inject(WaterAssessmentService);
+  private readonly settingsDbService = inject(SettingsDbService);
+  private readonly printOptionsMenuService = inject(PrintOptionsMenuService);
+  private readonly directoryDbService = inject(DirectoryDbService);
+
+
  @Input()
   assessment: Assessment;
   @Input()
@@ -46,12 +54,7 @@ export class WaterReportComponent {
 
   tabsCollapsed: boolean = true;
   systemTrueCostReportSubscription: Subscription;
-  constructor(private settingsDbService: SettingsDbService, 
-    private printOptionsMenuService: PrintOptionsMenuService, 
-    private directoryDbService: DirectoryDbService,
-    private waterReportService: WaterReportService,
-    private waterAssessmentResultsService: WaterAssessmentResultsService,
-    private waterAssessmentService: WaterAssessmentService) { }
+  isDiagramValid$ = this.waterAssessmentService.isDiagramValid$;
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -60,11 +63,13 @@ export class WaterReportComponent {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
 
-      const systemTrueCostReport = this.waterAssessmentResultsService.getTrueCostOfSystemsReport(this.assessment, this.settings);
-      const plantSummaryReport = this.waterAssessmentResultsService.getPlantSummaryReport(this.assessment, this.settings);
-      
-      this.waterReportService.plantSummaryReport.next(plantSummaryReport.plantSystemSummaryResults);
-      this.waterReportService.systemTrueCostReport.next(systemTrueCostReport);
+      this.waterAssessmentResultsService.plantResults$.pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe((plantResults) => {
+        if (plantResults) {
+          this.waterAssessmentResultsService.setPlantResults(plantResults);
+        }
+      });
     }
 
     if (!this.inRollup) {

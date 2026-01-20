@@ -3,68 +3,83 @@
 <div class="output-summary print-width w-75 mx-auto p-5">
     <h4 class="show-print print-section-header">True Cost of Water by System</h4>
 
-    @if (!isDiagramValid) {
-    <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
-        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
-        [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
-    } @else {
-    <div class="d-flex justify-content-end align-items-center mb-2">
-        <button class="btn btn-outline-primary d-flex align-items-center" (click)="openTrueCostEditableTableModal()">
-            <span class="fa fa-calculator mr-3"></span>
-            Adjust Cost Attribution
-        </button>
-    </div>
-    <table #copyTable class="table table-bordered table-striped table-hover">
-        <thead>
-            <tr class="text-center header-highlight">
-                <th>
-                    System
-                </th>
-                <th>
-                    Municipal Water Intake
-                </th>
-                <th>
-                    Municipal Wastewater Discharge
-                </th>
-                <th>
-                    Third-party Disposal
-                </th>
-                <th>
-                    Water Treatment
-                </th>
-                <th>
-                    Wastewater Treatment
-                </th>
-                <th>
-                    Pump and Motor Energy
-                </th>
-                <th>
-                    Heat Energy
-                </th>
-                <th>
-                    Total
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="item-row text-center" *ngFor="let systemCosts of trueCostOfSystemsReport">
-                <td>
-                    {{systemCosts.label}}
-                </td>
-                <ng-container *ngFor="let result of systemCosts.connectionCostByType">
+    @if(trueCostOfSystemsReport$ | async; as trueCostOfSystemsReport) {
+        <div class="d-flex justify-content-end align-items-center mb-2">
+            <button class="btn btn-outline-primary d-flex align-items-center" (click)="openTrueCostEditableTableModal()">
+                <span class="fa fa-calculator mr-3"></span>
+                Adjust Cost Attribution
+            </button>
+        </div>
+        <table #copyTable class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr class="text-center header-highlight">
+                    <th>
+                        System
+                    </th>
+                    <th>
+                        Municipal Water Intake
+                    </th>
+                    <th>
+                        Municipal Wastewater Discharge
+                    </th>
+                    <th>
+                        Third-party Disposal
+                    </th>
+                    <th>
+                        Water Treatment
+                    </th>
+                    <th>
+                        Wastewater Treatment
+                    </th>
+                    <th>
+                        Pump and Motor Energy
+                    </th>
+                    <th>
+                        Heat Energy
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="item-row text-center" *ngFor="let systemCosts of trueCostOfSystemsReport">
                     <td>
-                        <span *ngIf="result">${{result | number:'1.0-2'}}</span>
-                        <span *ngIf="!result">&mdash;&mdash;</span>
+                        {{systemCosts.label}}
                     </td>
-                </ng-container>
-            </tr>
-        </tbody>
-    </table>
-    <app-exportable-results-table [tableString]="copyTableString" [horizontalAnchor]="'right'"
-        (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+                    @for (result of systemCosts.connectionCostByType; track result) {
+                    <td>
+                        @if (result.cost) {
+                        <span class="d-flex justify-content-center align-items-center">
+                            @if (result.isAdjusted) {
+                            <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
+                            }
+                            ${{result.cost | number:'1.0-2'}}
+                        </span>
+                        } @else {
+                        <span>0</span>
+                        }
+                    </td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+        <div class="d-flex w-100 pl-2 pr-2 justify-content-start">
+            <span>
+                <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
+                <span class="small">
+                    Adjusted Cost Attribution
+                </span>
+            </span>
+        </div>
+        <app-exportable-results-table [tableString]="copyTableString" [horizontalAnchor]="'right'"
+            (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 
-    <app-system-true-cost-bar class="print-width"></app-system-true-cost-bar>
-
+        <app-system-true-cost-bar class="print-width"></app-system-true-cost-bar>
+    } @else {
+        <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
+            [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
+            [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
     }
 
 

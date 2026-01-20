@@ -1,12 +1,9 @@
 import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { getIsDiagramValid, NodeErrors, PlantSystemSummaryResults } from 'process-flow-lib';
+import { NodeErrors, PlantSystemSummaryResults } from 'process-flow-lib';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
-import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
-import { Diagram } from '../../../shared/models/diagram';
-import { Subscription } from 'rxjs';
-import { WaterReportService } from '../water-report.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-system-summary-report',
@@ -16,13 +13,9 @@ import { WaterReportService } from '../water-report.service';
 })
 export class SystemSummaryReportComponent {
   private readonly waterAssessmentResultsService = inject(WaterAssessmentResultsService);
-  private readonly updateDiagramFromAssessmentService = inject(UpdateDiagramFromAssessmentService);
-  private readonly waterReportService = inject(WaterReportService);
 
   @Input()
   inRollup: boolean;
-  @Input()
-  assessment: Assessment;
   @Input()
   settings: Settings;
 
@@ -32,7 +25,7 @@ export class SystemSummaryReportComponent {
     note: string
   }>;
   selectedModificationIndex: number = 1;
-  plantSummaryResults: PlantSystemSummaryResults;
+  plantSystemSummaryResults$: Observable<PlantSystemSummaryResults> = this.waterAssessmentResultsService.plantSystemSummaryResults$;
   isDiagramValid: boolean;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
@@ -42,21 +35,14 @@ export class SystemSummaryReportComponent {
 
 
   ngOnInit(): void {
-    let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
-    let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
-
-    this.systemSummaryReportSubscription = this.waterReportService.plantSummaryReport.subscribe(report => {
-      this.isDiagramValid = getIsDiagramValid(nodeErrors);
-      this.plantSummaryResults = this.isDiagramValid ? report : this.waterAssessmentResultsService.getEmptyPlantSystemSummaryResults();
-    });
-    this.waterReportService.systemStackedBarPercentView.subscribe(val => {
+    this.waterAssessmentResultsService.systemStackedBarPercentView.subscribe(val => {
       this.percentView = val;
     });
   }
   
   togglePercentView() {
     this.percentView = !this.percentView;
-    this.waterReportService.systemStackedBarPercentView.next(this.percentView);
+    this.waterAssessmentResultsService.systemStackedBarPercentView.next(this.percentView);
   }
 
   getFlowDecimalPrecisionPipeValue(): string {

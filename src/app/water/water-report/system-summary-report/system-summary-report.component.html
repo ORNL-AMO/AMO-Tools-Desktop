@@ -1,11 +1,7 @@
 <div class="output-summary w-75 mx-auto">
     <h4 class="show-print print-section-header">System Annual Water Use and Cost Summary</h4>
 
-    @if (!isDiagramValid) {
-    <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
-        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
-        [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
-    } @else {
+    @if(plantSystemSummaryResults$ | async; as plantSummaryResults) {
     <table #copyTable class="table table-bordered table-striped table-hover">
         <thead>
             <tr class="text-center header-highlight">
@@ -54,30 +50,30 @@
                 <td>
                     <span *ngIf="systemResult.sourceWaterIntake">{{systemResult.sourceWaterIntake |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!systemResult.sourceWaterIntake">&mdash;</span>
+                    <span *ngIf="!systemResult.sourceWaterIntake">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.directCostPerYear">${{systemResult.directCostPerYear |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!systemResult.directCostPerYear">&mdash;</span>
+                    <span *ngIf="!systemResult.directCostPerYear">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.directCostPerUnit">${{systemResult.directCostPerUnit |
                         number:'1.0-4'}}</span>
-                    <span *ngIf="!systemResult.directCostPerUnit">&mdash;</span>
+                    <span *ngIf="!systemResult.directCostPerUnit">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.trueCostPerYear">${{systemResult.trueCostPerYear | number:'1.0-2'}}</span>
-                    <span *ngIf="!systemResult.trueCostPerYear">&mdash;</span>
+                    <span *ngIf="!systemResult.trueCostPerYear">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.trueCostPerUnit">${{systemResult.trueCostPerUnit | number:'1.0-4'}}</span>
-                    <span *ngIf="!systemResult.trueCostPerUnit">&mdash;</span>
+                    <span *ngIf="!systemResult.trueCostPerUnit">0</span>
                 </td>
                 <td>
                     <span *ngIf="systemResult.trueOverDirectResult">{{systemResult.trueOverDirectResult |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!systemResult.trueOverDirectResult">&mdash;</span>
+                    <span *ngIf="!systemResult.trueOverDirectResult">0</span>
                 </td>
 
             </tr>
@@ -90,39 +86,40 @@
                 <td>
                     <span *ngIf="plantSummaryResults.sourceWaterIntake">{{plantSummaryResults.sourceWaterIntake |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!plantSummaryResults.sourceWaterIntake">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.sourceWaterIntake">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.directCostPerYear">${{plantSummaryResults.directCostPerYear |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!plantSummaryResults.directCostPerYear">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.directCostPerYear">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.directCostPerUnit">${{plantSummaryResults.directCostPerUnit |
                         number:'1.0-4'}}</span>
-                    <span *ngIf="!plantSummaryResults.directCostPerUnit">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.directCostPerUnit">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.trueCostPerYear">${{plantSummaryResults.trueCostPerYear |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!plantSummaryResults.trueCostPerYear">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.trueCostPerYear">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.trueCostPerUnit">${{plantSummaryResults.trueCostPerUnit |
                         number:'1.0-4'}}</span>
-                    <span *ngIf="!plantSummaryResults.trueCostPerUnit">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.trueCostPerUnit">0</span>
                 </td>
                 <td>
                     <span *ngIf="plantSummaryResults.trueOverDirectResult">{{plantSummaryResults.trueOverDirectResult |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!plantSummaryResults.trueOverDirectResult">&mdash;</span>
+                    <span *ngIf="!plantSummaryResults.trueOverDirectResult">0</span>
                 </td>
             </tr>
         </tfoot>
     </table>
     <hr class="mt-5 mb-3">
     <div class="d-flex w-100 align-items-center justify-content-center mb-3">
-        <div class="btn-group btn-group-toggle mr-3 flex-shrink-0" ngbRadioGroup name="percentView" (change)="togglePercentView()">
+        <div class="btn-group btn-group-toggle mr-3 flex-shrink-0" ngbRadioGroup name="percentView"
+            (change)="togglePercentView()">
             <label class="btn btn-outline-secondary mb-0" [class.active]="!percentView">
                 <input type="radio" [checked]="!percentView" value="false">View Units/Cost
             </label>
@@ -141,8 +138,12 @@
     </div>
 
     <app-exportable-results-table [tableString]="copyTableString"
-    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
-    }
+        (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 
+    } @else {
+    <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
+        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
+        [bootstrapLevel]="'alert-danger'"></app-alert-info-container>
+    }
 
 </div>

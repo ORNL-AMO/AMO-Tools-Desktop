@@ -1,9 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
-import { WaterReportService } from '../water-report.service';
 import * as _ from 'lodash';
 import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
+import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
+import { sortTrueCostReport, SystemTrueCostData } from 'process-flow-lib';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-system-true-cost-bar',
@@ -12,15 +14,15 @@ import { PrintOptionsMenuService } from '../../../shared/print-options-menu/prin
   styleUrl: './system-true-cost-bar.component.css'
 })
 export class SystemTrueCostBarComponent {
+  private destroyRef = inject(DestroyRef);
+  private waterAssessmentResultsService: WaterAssessmentResultsService = inject(WaterAssessmentResultsService);
+  private printOptionsMenuService: PrintOptionsMenuService = inject(PrintOptionsMenuService);
+  private plotlyService: PlotlyService = inject(PlotlyService);
+
   printView: boolean;
   @ViewChild('systemTrueCostBarChart', { static: false }) systemTrueCostBarChart: ElementRef;
-
-  systemTrueCostReportSubscription: Subscription;
   showPrintViewSub: Subscription;
-  constructor(
-    private waterReportService: WaterReportService,
-    private printOptionsMenuService: PrintOptionsMenuService,
-    private plotlyService: PlotlyService) { }
+
 
   ngOnInit(): void {
       this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
@@ -29,14 +31,20 @@ export class SystemTrueCostBarComponent {
   }
 
   ngOnDestroy() {
-      this.systemTrueCostReportSubscription.unsubscribe();
       this.showPrintViewSub.unsubscribe();
   }
 
   ngAfterViewInit() {
-    // todo needs print logic, programmatic colors
-    this.systemTrueCostReportSubscription = this.waterReportService.systemTrueCostReport.subscribe(report => {
-    let costTypes = [
+    this.waterAssessmentResultsService.trueCostOfSystemsReport$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((report) => {
+        this.renderChart(report);
+    });
+  }
+  
+  // todo needs print logic, programmatic colors
+  renderChart(report: SystemTrueCostData[]) {
+       let costTypes = [
       "Municipal Water Intake", 
       "Municipal Wastewater Disposal", 
       "Third-party Disposal", 
@@ -59,12 +67,15 @@ export class SystemTrueCostBarComponent {
 
     // * remove total
     let displayCostTypes = costTypes.slice(0, -1);
-    let sortedData = this.waterReportService.getSortedTrueCostReport(report);
     
     let chartData = displayCostTypes.map((costType, index) => {
+      report = sortTrueCostReport(report, 'asc');
+
       return {
-        x: sortedData.map(item => item.connectionCostByType[index] || 0),
-        y: sortedData.map(item => item.label),
+        x: report.map(item => {
+          return item.connectionCostByType[index]?.cost || 0;
+        }),
+        y: report.map(item => item.label),
         name: costType,
         type: 'bar',
         orientation: 'h',
@@ -107,10 +118,7 @@ export class SystemTrueCostBarComponent {
         displayModeBar: true,
         responsive: this.printView? false : true
       };
-      this.plotlyService.newPlot(this.systemTrueCostBarChart.nativeElement, chartData, layout, configOptions);
-
-  
-    });
+      this.plotlyService.newPlot(this.systemTrueCostBarChart.nativeElement, chartData, layout, configOptions);  
   }
 
 

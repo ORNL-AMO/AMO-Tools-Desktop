@@ -35,7 +35,7 @@ export interface PlantResults {
 
 export interface SystemTrueCostData {
   label: string,
-  connectionCostByType: Array<string>,
+  connectionCostByType: {cost: number, isAdjusted: boolean}[],
   unit: string,
 }
 
@@ -93,6 +93,7 @@ export interface SystemAttributionMap {
 export interface CostComponentAttribution {
   name: string;
   componentId: string;
+  processComponentType: ProcessFlowNodeType;
   totalAttribution: AttributionFraction;
   componentPathAttribution: PathAttribution[];
 }
