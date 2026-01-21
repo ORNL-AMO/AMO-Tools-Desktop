@@ -60,6 +60,312 @@ export interface TreasureHunt {
     setupDone: boolean;
 }
 
+export interface OpportunityForFiltering {
+    iconString: string;
+    iconClass: string;
+    imageSizeClass: string;
+    iconCalcType: string;
+    opportunityType: string;
+    utilityType: string[];
+    name: string;
+    description: string;
+}
+
+export const opportunities: OpportunityForFiltering[] = [
+    // ...existing code...
+    // For each opportunity, add 'All' to the utilityType array
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/electricity-reduction-icon.png',
+        iconClass: 'calc-icon',
+        imageSizeClass: 'calc-img',
+        iconCalcType: 'utility',
+        opportunityType: 'electricity-reduction',
+        utilityType: ['All', 'Electricity'],
+        name: 'Electricity Reduction',
+        description: 'This calculator is used to quantify the energy savings associated with reducing electricity usage.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/power-factor-correction-icon.png',
+        iconClass: 'calc-icon utility-calc-icon',
+        imageSizeClass: 'calc-img',
+        iconCalcType: 'utility',
+        opportunityType: 'power-factor-correction',
+        utilityType: ['All', 'Electricity'],
+        name: 'Power Factor Correction',
+        description: 'This calculator is used to identify the capacitance (in kVAR) required for improving the power factor to the proposed level'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/motor-icons/replace.png',
+        iconClass: 'motor-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'motor',
+        opportunityType: 'replace-existing',
+        utilityType: ['All', 'Electricity'],
+        name: 'Replace Existing Motor',
+        description: 'This calculator calculates the energy savings, cost savings, and payback period for replacing an existing motor with a higher efficiency motor.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/motor-icons/motor-drive.png',
+        iconClass: 'motor-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'motor',
+        opportunityType: 'motor-drive',
+        utilityType: ['All', 'Electricity'],
+        name: 'Upgrade Motor Drive',
+        description: 'The Motor Drive Calculator compares the annual energy cost of three motor drives: V-belt drive, Notched V-Belt drive, and Synchronous Belt Drive.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/lighting-replacement-icon.png',
+        iconClass: 'lighting-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'lighting',
+        opportunityType: 'lighting-replacement',
+        utilityType: ['All', 'Electricity'],
+        name: 'Lighting Replacement',
+        description: 'The calculator is designed to quantify the energy savings associated with lighting opportunities.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/furnace-icons/waste-heat-icon.png',
+        iconClass: 'ph-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'process heating',
+        opportunityType: 'waste-heat',
+        utilityType: ['All', 'Other Fuel', 'Electricity'],
+        name: 'Waste Heat',
+        description: 'Calculate energy savings from using exhaust gas (waste) heat to provide energy for an absorption chiller in place of a compressor.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/natural-gas-reduction-icon.png',
+        iconClass: 'calc-icon',
+        imageSizeClass: 'calc-img',
+        iconCalcType: 'utility',
+        opportunityType: 'natural-gas-reduction',
+        utilityType: ['All', 'Natural Gas'],
+        name: 'Natural Gas Reduction',
+        description: 'This calculator is used to quantify the energy savings associated with reducing natural gas usage.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png',
+        iconClass: 'calc-icon',
+        imageSizeClass: 'calc-img',
+        iconCalcType: 'steam',
+        opportunityType: 'steam-reduction',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Other Fuel'],
+        name: 'Steam Reduction',
+        description: 'This calculator is used to quantify the energy savings associated with reducing steam use.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/pipe-ins.png',
+        iconClass: 'steam-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'steam',
+        opportunityType: 'pipe-insulation-reduction',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Electricity', 'Other Fuel'],
+        name: 'Pipe Insulation',
+        description: 'This calculator is used to quantify the energy savings associated with insulating hot pipes.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/tank-ins.png',
+        iconClass: 'steam-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'steam',
+        opportunityType: 'tank-insulation-reduction',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Electricity', 'Other Fuel'],
+        name: 'Tank Insulation',
+        description: 'This calculator is used to quantify the energy savings associated with insulating hot tanks.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/furnace-icons/fluegas.png',
+        iconClass: 'ph-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'process heating',
+        opportunityType: 'flue-gas',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Electricity', 'Other Fuel'],
+        name: 'Flue Gas',
+        description: 'Determine the amount of heat lost in the furnace flue gas'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/furnace-icons/opening.png',
+        iconClass: 'ph-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'process heating',
+        opportunityType: 'opening-loss',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Electricity', 'Other Fuel'],
+        name: 'Opening Loss',
+        description: 'Estimates losses due to openings in the heating system.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/furnace-icons/wall-loss.png',
+        iconClass: 'ph-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'process heating',
+        opportunityType: 'wall-loss',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Electricity', 'Other Fuel'],
+        name: 'Wall Loss',
+        description: 'This calculator can be used to calculate fuel savings due to changes in wall insulation for a heating system.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/furnace-icons/leakage.png',
+        iconClass: 'ph-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'process heating',
+        opportunityType: 'leakage-loss',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Electricity', 'Other Fuel'],
+        name: 'Leakage Loss',
+        description: 'Estimates losses due to gases leaking out of or into the furnace.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/furnace-icons/heat-cascading.png',
+        iconClass: 'ph-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'process heating',
+        opportunityType: 'heat-cascading',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Electricity', 'Other Fuel'],
+        name: 'Heat Cascading',
+        description: 'This calculator can be used to estimate energy and related cost savings when exhaust gases from a higher temperature (primary) process heating equipment is used to supply heat to lower temperature (secondary) process heating equipment.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/furnace-icons/air-heating-icon.png',
+        iconClass: 'ph-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'process heating',
+        opportunityType: 'air-heating',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Electricity', 'Other Fuel'],
+        name: 'Air Heating using Flue Gas',
+        description: 'This calculator can be used to estimate maximum air flow that can be heated by using exhaust gas heat of flue gases from a furnace, oven, or boiler'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/steam-icons/water-heating-icon.png',
+        iconClass: 'steam-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'steam',
+        opportunityType: 'water-heating',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Other Fuel'],
+        name: 'Vent Steam to Heat Water',
+        description: 'This calculator is used to calculate energy and related energy cost saving when vent stream is used to heat water using a steam to liquid heat exchanger.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/steam-icons/blowdown-rate.png',
+        iconClass: 'steam-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'steam',
+        opportunityType: 'boiler-blowdown-rate',
+        utilityType: ['All', 'Water', 'Natural Gas', 'Other Fuel'],
+        name: 'Boiler Blowdown Rate',
+        description: 'Calculate the blowdown rate of a boiler.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png',
+        iconClass: 'calc-icon',
+        imageSizeClass: 'calc-img',
+        iconCalcType: 'compressed Air',
+        opportunityType: 'compressed-air-reduction',
+        utilityType: ['All', 'Electricity', 'Compressed Air'],
+        name: 'Compressed Air Reduction',
+        description: 'This calculator is used to quantify the energy savings associated with reducing compressed air usage.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png',
+        iconClass: 'ca-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img',
+        iconCalcType: 'compressed Air',
+        opportunityType: 'compressed-air-pressure-reduction',
+        utilityType: ['All', 'Electricity'],
+        name: 'Compressed Air Pressure Reduction',
+        description: 'This calculator is used to quantify the energy savings associated with reducing compressed air system pressure.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/compressed-air-icons/CAleak-icon.png',
+        iconClass: 'ca-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'compressed Air',
+        opportunityType: 'air-leak-survey',
+        utilityType: ['All', 'Electricity', 'Compressed Air'],
+        name: 'Compressed Air - Leak Survey',
+        description: 'Used to quantify the energy savings associated with reducing compressed air leaks.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/utilities-icons/water-reduction-icon.png',
+        iconClass: 'calc-icon',
+        imageSizeClass: 'calc-img',
+        iconCalcType: 'utility',
+        opportunityType: 'water-reduction',
+        utilityType: ['All', 'Waste Water', 'Water'],
+        name: 'Water Reduction',
+        description: 'This calculator is used to quantify the energy savings associated with reducing water usage and wastewater disposal.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/process-cooling-icons/cooling-tower-makeup-water.png',
+        iconClass: 'process-cooling-calc-icon',
+        imageSizeClass: 'calc-img',
+        iconCalcType: 'process cooling',
+        opportunityType: 'cooling-tower-makeup',
+        utilityType: ['All', 'Water', 'Natural Gas', 'Other Fuel'],
+        name: 'Cooling Tower Makeup Water',
+        description: 'Analyze cooling tower water consumption.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/process-cooling-icons/chiller-staging.png',
+        iconClass: 'process-cooling-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'process cooling',
+        opportunityType: 'chiller-staging',
+        utilityType: ['All', 'Electricity'],
+        name: 'Chiller Staging',
+        description: 'This calculator is used to analyze the impact of chiller staging on energy performance of chilled water systems.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/process-cooling-icons/chiller-performance.png',
+        iconClass: 'process-cooling-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'process cooling',
+        opportunityType: 'chiller-performance',
+        utilityType: ['All', 'Electricity'],
+        name: 'Chiller Performance',
+        description: 'This calculator is used to analyze the impact of chiller operating parameters on energy performance.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/process-cooling-icons/cooling-tower-fan.png',
+        iconClass: 'process-cooling-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'process cooling',
+        opportunityType: 'cooling-tower-fan',
+        utilityType: ['All', 'Electricity'],
+        name: 'Cooling Tower Fan Energy',
+        description: 'This calculator is used to calculate cooling tower fan energy consumption.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/process-cooling-icons/cooling-tower-basin-heater.png',
+        iconClass: 'process-cooling-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'process cooling',
+        opportunityType: 'cooling-tower-basin',
+        utilityType: ['All', 'Electricity'],
+        name: 'Cooling Tower Basin Heater Energy',
+        description: 'This calculator is used to analyze basin heater energy consumption.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/opportunity-sheet-icon.png',
+        iconClass: 'calc-icon',
+        imageSizeClass: 'calc-img',
+        iconCalcType: 'utility',
+        opportunityType: 'opportunity-sheet',
+        utilityType: ['All', 'Mixed'],
+        name: 'Custom Savings Opportunity',
+        description: 'This calculator provides a space to add a Treasure Hunt Opportunity without using a calculator (such as after having done off-sheet calculations). Enter Baseline and Modification Utility use to calculate savings.'
+    },
+    {
+        iconString: 'assets/images/app-icon.png',
+        iconClass: 'calc-icon',
+        imageSizeClass: 'calc-img',
+        iconCalcType: 'utility',
+        opportunityType: 'assessment-opportunity',
+        utilityType: ['All', 'Mixed'],
+        name: 'Assessment Opportunity',
+        description: 'Create a Treasure Hunt Opportunity from an existing assessment. Baseline and Modification Utility use will be used to calculate savings.'
+    }
+];
+
 export enum Treasure {
     lightingReplacement = 'lighting-replacement',
     opportunitySheet = 'opportunity-sheet',
