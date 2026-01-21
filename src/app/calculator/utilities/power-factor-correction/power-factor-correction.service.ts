@@ -1,311 +1,18 @@
 import { Injectable } from '@angular/core';
-import { MonthyInputs, PFMonthlyOutputs, PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from './power-factor-correction.component';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn, FormArray, FormGroup } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class PowerFactorCorrectionService {
-  inputData: PowerFactorCorrectionInputs;
-  constructor() { }
-
-  generateExample(): PowerFactorCorrectionInputs {
-    return {
-      existingDemand: 286,
-      currentPowerFactor: 0.88,
-      proposedPowerFactor: 0.95,
-      billedForDemand: 0,
-      minimumPowerFactor: 0.95,
-      targetPowerFactor: 0.95,
-      adjustedOrActual: 0,
-      marginalCostOfDemand: 8.15,
-      costOfStaticCapacitance: 50,
-      costOfDynamicCapacitance: 70,
-      monthyInputs: [
-        {
-          month: 'January 2024',
-          input1: 462,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'February 2024',
-          input1: 528,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'March 2024',
-          input1: 492,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'April 2024',
-          input1: 474,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'May 2024',
-          input1: 499,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'June 2024',
-          input1: 513,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'July 2024',
-          input1: 530,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'August 2024',
-          input1: 523,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'September 2024',
-          input1: 547,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'October 2024',
-          input1: 589,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'November 2024',
-          input1: 621,
-          input2: 0.8,
-          input3: 0
-        },
-        {
-          month: 'December 2024',
-          input1: 607,
-          input2: 0.8,
-          input3: 0
-        },
-      ],    
-      startMonth: 1,
-      startYear: 2024,
-    };
-  }
-
-  generateExampleOutput(): PowerFactorCorrectionOutputs {
-    return {
-      annualPFPenalty: 8216,
-      proposedFixedCapacitance: 164,
-      proposedVariableCapacitance: 56,
-      capitalCost: 12145,
-      simplePayback: 1.5,
-      monthlyOutputs: [
-        {
-          realDemand: 389,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 73,
-          penaltyCost: 594.52,
-          currentReactivePower: 292,
-          proposedReactivePower: 128,
-          proposedCapacitance: 164,
-        },
-        {
-          realDemand: 445,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 83,
-          penaltyCost: 679.45,
-          currentReactivePower: 333,
-          proposedReactivePower: 146,
-          proposedCapacitance: 187,
-        },
-        {
-          realDemand: 414,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 78,
-          penaltyCost: 633.13,
-          currentReactivePower: 311,
-          proposedReactivePower: 136,
-          proposedCapacitance: 175,
-        },
-        {
-          realDemand: 399,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 75,
-          penaltyCost: 609.96,
-          currentReactivePower: 299,
-          proposedReactivePower: 131,
-          proposedCapacitance: 168,
-        },
-        {
-          realDemand: 420,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 79,
-          penaltyCost: 642.13,
-          currentReactivePower: 315,
-          proposedReactivePower: 138,
-          proposedCapacitance: 177,
-        },
-        {
-          realDemand: 432,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 81,
-          penaltyCost: 660.15,
-          currentReactivePower: 324,
-          proposedReactivePower: 142,
-          proposedCapacitance: 182,
-        },
-        {
-          realDemand: 446,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 84,
-          penaltyCost: 682.03,
-          currentReactivePower: 335,
-          proposedReactivePower: 147,
-          proposedCapacitance: 188,
-        },
-        {
-          realDemand: 440,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 83,
-          penaltyCost: 673.02,
-          currentReactivePower: 330,
-          proposedReactivePower: 145,
-          proposedCapacitance: 186,
-        },
-        {
-          realDemand: 461,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 86,
-          penaltyCost: 703.90,
-          currentReactivePower: 345,
-          proposedReactivePower: 151,
-          proposedCapacitance: 194,
-        },
-        {
-          realDemand: 496,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 93,
-          penaltyCost: 757.95,
-          currentReactivePower: 372,
-          proposedReactivePower: 163,
-          proposedCapacitance: 209,
-        },
-        {
-          realDemand: 523,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 98,
-          penaltyCost: 799.13,
-          currentReactivePower: 392,
-          proposedReactivePower: 172,
-          proposedCapacitance: 220,
-        },
-        {
-          realDemand: 511,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 96,
-          penaltyCost: 781.11,
-          currentReactivePower: 383,
-          proposedReactivePower: 168,
-          proposedCapacitance: 215,
-        }
-      ]
-    };
-  }
-
-  getResetData(): PowerFactorCorrectionInputs {
-    return {
-      existingDemand: 0,
-      currentPowerFactor: 0,
-      proposedPowerFactor: 0,
-      billedForDemand: 0,
-      minimumPowerFactor: 0,
-      targetPowerFactor: 0,
-      adjustedOrActual: 0,
-      marginalCostOfDemand: 0,
-      costOfStaticCapacitance: 0,
-      costOfDynamicCapacitance: 0,
-      monthyInputs: [
-        {
-          month: 'January 2024',
-          input1: 0,
-          input2: 0,
-          input3: 0
-        },
-        {
-          month: 'February 2024',
-          input1: 0,
-          input2: 0,
-          input3: 0
-        },
-        {
-          month: 'March 2024',
-          input1: 0,
-          input2: 0,
-          input3: 0
-        },
-      ],    
-      startMonth: 1,
-      startYear: 2024,
-    };
-  }
-
-  getResetOutput(): PowerFactorCorrectionOutputs {
-    return {
-      annualPFPenalty: 0,
-      proposedFixedCapacitance: 0,
-      proposedVariableCapacitance: 0,
-      capitalCost: 0,
-      simplePayback: 0,
-      monthlyOutputs: [
-        {
-          realDemand: 0,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 0,
-          penaltyCost: 0,
-          currentReactivePower: 0,
-          proposedReactivePower: 0,
-          proposedCapacitance: 0,
-        },
-        {
-          realDemand: 0,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 0,
-          penaltyCost: 0,
-          currentReactivePower: 0,
-          proposedReactivePower: 0,
-          proposedCapacitance: 0,
-        },
-        {
-          realDemand: 0,
-          pfAdjustedDemand: 0,
-          proposedApparentPower: 0,
-          demandPenalty: 0,
-          penaltyCost: 0,
-          currentReactivePower: 0,
-          proposedReactivePower: 0,
-          proposedCapacitance: 0,
-        }
-      ]
-    };
+  powerFactorInputs: BehaviorSubject<PowerFactorCorrectionInputs>;
+  powerFactorOutputs: BehaviorSubject<PowerFactorCorrectionOutputs>;
+  currentField: BehaviorSubject<string>;
+  
+  constructor(private formBuilder: UntypedFormBuilder) {
+    this.powerFactorInputs = new BehaviorSubject<PowerFactorCorrectionInputs>(undefined);
+    this.powerFactorOutputs = new BehaviorSubject<PowerFactorCorrectionOutputs>(undefined);
+    this.currentField = new BehaviorSubject<string>(undefined);
   }
 
   existingApparentPower(data: PowerFactorCorrectionInputs): number {
@@ -328,7 +35,7 @@ export class PowerFactorCorrectionService {
     return this.existingReactivePower(data) - this.proposedReactivePower(data);
   }
 
-  getEmptyMonthyOutput(): PFMonthlyOutputs{
+  getEmptyMonthyOutput(): PFMonthlyOutputs {
     return {
       realDemand: 0,
       pfAdjustedDemand: 0,
@@ -341,7 +48,7 @@ export class PowerFactorCorrectionService {
     }
   }
 
-  getEmptyPowerFactorCorrectionOutputs(): PowerFactorCorrectionOutputs{
+  getEmptyPowerFactorCorrectionOutputs(): PowerFactorCorrectionOutputs {
     return {
       annualPFPenalty: 0,
       proposedFixedCapacitance: 0,
@@ -363,20 +70,21 @@ export class PowerFactorCorrectionService {
     }
   }
 
-  getResults(data: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs{
+  getResults(data: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
     let results: PowerFactorCorrectionOutputs;
-    if (data.billedForDemand == 0) {
-      if (data.adjustedOrActual == 0) {
+
+    if (data.billedForDemand == BilledForDemand.REAL_POWER) {
+      if (data.adjustedOrActual == AdjustedOrActual.POWER_FACTOR) {
         results = this.calculateRealPowerAndPowerFactor(data);
-      } else if (data.adjustedOrActual == 1) {
+      } else if (data.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND) {
         results = this.calculateRealPowerAndActualDemand(data);
-      } else if (data.adjustedOrActual == 2) {
+      } else if (data.adjustedOrActual == AdjustedOrActual.BOTH) {
         results = this.calculateRealPowerAndBoth(data);
       }
-    } else if (data.billedForDemand == 1) {
-      if (data.adjustedOrActual == 0) {
+    } else if (data.billedForDemand == BilledForDemand.APPARENT_POWER) {
+      if (data.adjustedOrActual == AdjustedOrActual.POWER_FACTOR) {
         results = this.calculateApparentPowerAndPowerFactor(data);
-      } else if (data.adjustedOrActual == 1) {
+      } else if (data.adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND) {
         results = this.calculateApparentPowerAndActualDemand(data);
       }
     } else {
@@ -403,7 +111,73 @@ export class PowerFactorCorrectionService {
     return results;
   }
 
-  calculateRealPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
+  getApparentPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): UntypedFormGroup {
+    let form: UntypedFormGroup = this.formBuilder.group({
+      existingDemand: [inputData.existingDemand],
+      currentPowerFactor: [inputData.currentPowerFactor],
+      proposedPowerFactor: [inputData.proposedPowerFactor],
+      billedForDemand: [inputData.billedForDemand],
+      minimumPowerFactor: [inputData.minimumPowerFactor, [Validators.required, Validators.min(0), Validators.max(1)]],
+      targetPowerFactor: [inputData.targetPowerFactor],
+      adjustedOrActual: [inputData.adjustedOrActual],
+      marginalCostOfDemand: [inputData.marginalCostOfDemand, [Validators.required, Validators.min(0)]],
+      costOfStaticCapacitance: [inputData.costOfStaticCapacitance, [Validators.required, Validators.min(0)]],
+      costOfDynamicCapacitance: [inputData.costOfDynamicCapacitance, [Validators.required, Validators.min(0)]],
+      monthyInputs: this.formBuilder.array(
+        inputData.monthyInputs.map(m => this.formBuilder.group({
+          month: [m.month, Validators.required],
+          pfAdjustedDemand: [m.pfAdjustedDemand, [Validators.required, Validators.min(0)]],
+          actualDemand: [m.actualDemand, [Validators.required, Validators.min(0)]],
+          powerFactor: [m.powerFactor, [Validators.required, Validators.min(0), Validators.max(1)]],
+        }))
+      ),
+      startMonth: [inputData.startMonth],
+      startYear: [inputData.startYear]
+    }, { validators: this.powerFactorFormValidator() });
+
+    return form;
+  }
+
+  powerFactorFormValidator(): ValidatorFn {
+    return (form: AbstractControl): ValidationErrors | null => {
+      const billedForDemand = form.get('billedForDemand')?.value;
+      const adjustedOrActual = form.get('adjustedOrActual')?.value;
+      const monthyInputs = form.get('monthyInputs') as FormArray;
+
+      for (let i = 0; i < monthyInputs.length; i++) {
+        const group = monthyInputs.at(i) as FormGroup;
+        const actualDemandCtrl = group.get('actualDemand');
+        const pfAdjustedDemandCtrl = group.get('pfAdjustedDemand');
+
+        const adjustedVsActualError = billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.BOTH && pfAdjustedDemandCtrl.value < actualDemandCtrl.value;
+        const apparentVsActualError = billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND && pfAdjustedDemandCtrl.value < actualDemandCtrl.value;
+
+        if (adjustedVsActualError) {
+          this.setCustomError(pfAdjustedDemandCtrl, 'adjustedVsActualError', 'PF Adjusted Demand must be greater than or equal to Actual Demand');
+        } else if (apparentVsActualError) {
+          this.setCustomError(pfAdjustedDemandCtrl, 'apparentVsActualError', 'Apparent Power must be greater than or equal to Actual Demand');
+        } else {
+          this.setCustomError(pfAdjustedDemandCtrl, 'adjustedVsActualError', null);
+          this.setCustomError(pfAdjustedDemandCtrl, 'apparentVsActualError', null);
+        }
+      }
+
+      return null;
+    };
+  }
+
+  // * preserve ng built in validator errors
+  setCustomError = (ctrl: AbstractControl, errorKey: string, message: string | null) => {
+    const errors = { ...ctrl.errors };
+    if (message) {
+      ctrl.setErrors({ ...errors, [errorKey]: message });
+    } else {
+      const { [errorKey]: _, ...rest } = errors;
+      ctrl.setErrors(Object.keys(rest).length ? rest : null);
+    }
+  };
+
+    calculateRealPowerAndPowerFactor(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
     let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
     let monthlyOutputs: Array<PFMonthlyOutputs> = new Array();
     let annualPFPenalty: number = 0;
@@ -411,46 +185,53 @@ export class PowerFactorCorrectionService {
     let proposedVariableCapacitance: number = 0;
     let capitalCost: number = 0;
     let simplePayback: number = 0;
-    if (inputData.monthyInputs.length >= 3){
-      inputData.monthyInputs.forEach( input => {
+
+    if (inputData.monthyInputs.length >= 3) {
+      inputData.monthyInputs.forEach(input => {
         let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
-        monthOutput.realDemand = input.input1 * input.input2 / inputData.minimumPowerFactor;    
-        monthOutput.demandPenalty = input.input1 - monthOutput.realDemand; 
+        if (input.powerFactor >= inputData.minimumPowerFactor) {
+          monthOutput.realDemand = input.pfAdjustedDemand;
+        } else {
+          monthOutput.realDemand = input.pfAdjustedDemand * input.powerFactor / inputData.minimumPowerFactor;
+        }
+        monthOutput.demandPenalty = input.pfAdjustedDemand - monthOutput.realDemand;
         monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
-        monthOutput.currentReactivePower = monthOutput.realDemand * Math.tan(Math.acos(input.input2));  
-        monthOutput.proposedReactivePower = monthOutput.realDemand * Math.tan(Math.acos(inputData.minimumPowerFactor));
+        monthOutput.currentReactivePower = monthOutput.realDemand * Math.tan(Math.acos(input.powerFactor));
+        if (isNaN(monthOutput.currentReactivePower)) {
+          monthOutput.currentReactivePower = 0;
+        }
+        if (input.powerFactor >= inputData.minimumPowerFactor) {
+          monthOutput.proposedReactivePower = monthOutput.currentReactivePower;
+        } else {
+          monthOutput.proposedReactivePower = monthOutput.realDemand * Math.tan(Math.acos(inputData.minimumPowerFactor));
+        }
         monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
         monthlyOutputs.push(monthOutput);
-      });      
-  
+      });
+
       let proposedCapacitanceList: Array<number> = new Array();
-  
-      if(monthlyOutputs.length > 0){
-        monthlyOutputs.forEach(output =>{
-          if (output.penaltyCost !== 0){
+      if (monthlyOutputs.length > 0) {
+        monthlyOutputs.forEach(output => {
+          if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
-          } 
-          if (output.proposedCapacitance !== 0) {
-            proposedCapacitanceList.push(output.proposedCapacitance);
           }
+            proposedCapacitanceList.push(output.proposedCapacitance);
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
-  
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
       capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
-      simplePayback = capitalCost / annualPFPenalty;  
-      
+      simplePayback = capitalCost / annualPFPenalty;
     }
     outputData.annualPFPenalty = annualPFPenalty;
     outputData.proposedFixedCapacitance = proposedFixedCapacitance;
     outputData.proposedVariableCapacitance = proposedVariableCapacitance;
     outputData.capitalCost = capitalCost;
     outputData.simplePayback = simplePayback;
-    outputData.monthlyOutputs = monthlyOutputs; 
+    outputData.monthlyOutputs = monthlyOutputs;
     return outputData;
   }
-
 
   calculateRealPowerAndActualDemand(inputData: PowerFactorCorrectionInputs): PowerFactorCorrectionOutputs {
     let outputData: PowerFactorCorrectionOutputs = this.getEmptyPowerFactorCorrectionOutputs();
@@ -460,43 +241,52 @@ export class PowerFactorCorrectionService {
     let proposedVariableCapacitance: number = 0;
     let capitalCost: number = 0;
     let simplePayback: number = 0;
-    if (inputData.monthyInputs.length >= 3){
-      inputData.monthyInputs.forEach( input => {
+    if (inputData.monthyInputs.length >= 3) {
+      inputData.monthyInputs.forEach(input => {
         let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
-        monthOutput.pfAdjustedDemand = input.input1 * inputData.minimumPowerFactor / input.input2;    
-        monthOutput.demandPenalty = monthOutput.pfAdjustedDemand - input.input1;
+        if (input.powerFactor >= inputData.minimumPowerFactor) {
+          monthOutput.pfAdjustedDemand = input.actualDemand;
+        } else {
+          monthOutput.pfAdjustedDemand = input.actualDemand * inputData.minimumPowerFactor / input.powerFactor;
+        }
+        monthOutput.demandPenalty = monthOutput.pfAdjustedDemand - input.actualDemand;
         monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
-        monthOutput.currentReactivePower = input.input1 * Math.tan(Math.acos(input.input2));      
-        monthOutput.proposedReactivePower = input.input1 * Math.tan(Math.acos(inputData.minimumPowerFactor));
+        monthOutput.currentReactivePower = input.actualDemand * Math.tan(Math.acos(input.powerFactor));
+        if (isNaN(monthOutput.currentReactivePower)) {
+          monthOutput.currentReactivePower = 0;
+        }
+        if (input.powerFactor >= inputData.minimumPowerFactor) {
+          monthOutput.proposedReactivePower = monthOutput.currentReactivePower
+        } else {
+          monthOutput.proposedReactivePower = input.actualDemand * Math.tan(Math.acos(inputData.minimumPowerFactor));
+        }
         monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
         monthlyOutputs.push(monthOutput);
-      });      
-  
+      });
+
       let proposedCapacitanceList: Array<number> = new Array();
-  
-      if(monthlyOutputs.length > 0){
-        monthlyOutputs.forEach(output =>{
-          if (output.penaltyCost !== 0){
+      if (monthlyOutputs.length > 0) {
+        monthlyOutputs.forEach(output => {
+          if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
-          } 
-          if (output.proposedCapacitance !== 0) {
-            proposedCapacitanceList.push(output.proposedCapacitance);
           }
+
+          proposedCapacitanceList.push(output.proposedCapacitance);
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
-  
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
       capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
-      simplePayback = capitalCost / annualPFPenalty;  
-      
+      simplePayback = capitalCost / annualPFPenalty;
+
     }
     outputData.annualPFPenalty = annualPFPenalty;
     outputData.proposedFixedCapacitance = proposedFixedCapacitance;
     outputData.proposedVariableCapacitance = proposedVariableCapacitance;
     outputData.capitalCost = capitalCost;
     outputData.simplePayback = simplePayback;
-    outputData.monthlyOutputs = monthlyOutputs; 
+    outputData.monthlyOutputs = monthlyOutputs;
     return outputData;
   }
 
@@ -508,43 +298,42 @@ export class PowerFactorCorrectionService {
     let proposedVariableCapacitance: number = 0;
     let capitalCost: number = 0;
     let simplePayback: number = 0;
-    if (inputData.monthyInputs.length >= 3){
-      inputData.monthyInputs.forEach( input => {
+    if (inputData.monthyInputs.length >= 3) {
+      inputData.monthyInputs.forEach(input => {
         let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
-        monthOutput.proposedApparentPower = input.input2 / inputData.targetPowerFactor;    
-        monthOutput.demandPenalty =  input.input1 - monthOutput.proposedApparentPower;
+        monthOutput.proposedApparentPower = input.actualDemand / inputData.targetPowerFactor;
+        monthOutput.demandPenalty = Math.max(0, input.pfAdjustedDemand - monthOutput.proposedApparentPower);
         monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
-        monthOutput.currentReactivePower = input.input1 * Math.sin(Math.acos(input.input2/input.input1));      
-        monthOutput.proposedReactivePower = input.input2 * Math.tan(Math.acos(inputData.targetPowerFactor));
+        monthOutput.currentReactivePower = input.pfAdjustedDemand * Math.sin(Math.acos(input.actualDemand / input.pfAdjustedDemand));
+        monthOutput.proposedReactivePower = Math.min(monthOutput.currentReactivePower, input.actualDemand * Math.tan(Math.acos(inputData.targetPowerFactor)));
         monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
         monthlyOutputs.push(monthOutput);
-      });      
-  
+      });
+
       let proposedCapacitanceList: Array<number> = new Array();
-  
-      if(monthlyOutputs.length > 0){
-        monthlyOutputs.forEach(output =>{
-          if (output.penaltyCost !== 0){
+
+      if (monthlyOutputs.length > 0) {
+        monthlyOutputs.forEach(output => {
+          if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
-          } 
-          if (output.proposedCapacitance !== 0) {
-            proposedCapacitanceList.push(output.proposedCapacitance);
           }
+          proposedCapacitanceList.push(output.proposedCapacitance);
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
-  
+
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
       capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
-      simplePayback = capitalCost / annualPFPenalty;  
-      
+      simplePayback = capitalCost / annualPFPenalty;
+
     }
     outputData.annualPFPenalty = annualPFPenalty;
     outputData.proposedFixedCapacitance = proposedFixedCapacitance;
     outputData.proposedVariableCapacitance = proposedVariableCapacitance;
     outputData.capitalCost = capitalCost;
     outputData.simplePayback = simplePayback;
-    outputData.monthlyOutputs = monthlyOutputs; 
+    outputData.monthlyOutputs = monthlyOutputs;
     return outputData;
   }
 
@@ -556,43 +345,41 @@ export class PowerFactorCorrectionService {
     let proposedVariableCapacitance: number = 0;
     let capitalCost: number = 0;
     let simplePayback: number = 0;
-    if (inputData.monthyInputs.length >= 3){
-      inputData.monthyInputs.forEach( input => {
+    if (inputData.monthyInputs.length >= 3) {
+      inputData.monthyInputs.forEach(input => {
         let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
-        monthOutput.proposedApparentPower = input.input1 * input.input2 / inputData.targetPowerFactor;    
-        monthOutput.demandPenalty =  input.input1 - monthOutput.proposedApparentPower;
+        monthOutput.proposedApparentPower = input.pfAdjustedDemand * input.powerFactor / inputData.targetPowerFactor;
+        monthOutput.demandPenalty = Math.max(0, input.pfAdjustedDemand - monthOutput.proposedApparentPower);
         monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
-        monthOutput.currentReactivePower = input.input1 * Math.sin(Math.acos(input.input2));      
-        monthOutput.proposedReactivePower = monthOutput.proposedApparentPower * Math.sin(Math.acos(inputData.targetPowerFactor));
-        monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
+        monthOutput.currentReactivePower = input.pfAdjustedDemand * Math.sin(Math.acos(input.powerFactor));
+        monthOutput.proposedReactivePower = Math.min(monthOutput.currentReactivePower, monthOutput.proposedApparentPower * Math.sin(Math.acos(inputData.targetPowerFactor))); monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
         monthlyOutputs.push(monthOutput);
-      });      
-  
+      });
+
       let proposedCapacitanceList: Array<number> = new Array();
-  
-      if(monthlyOutputs.length > 0){
-        monthlyOutputs.forEach(output =>{
-          if (output.penaltyCost !== 0){
+
+      if (monthlyOutputs.length > 0) {
+        monthlyOutputs.forEach(output => {
+          if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
-          } 
-          if (output.proposedCapacitance !== 0) {
-            proposedCapacitanceList.push(output.proposedCapacitance);
           }
+          proposedCapacitanceList.push(output.proposedCapacitance);
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
-  
+
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
       capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
-      simplePayback = capitalCost / annualPFPenalty;  
-      
+      simplePayback = capitalCost / annualPFPenalty;
+
     }
     outputData.annualPFPenalty = annualPFPenalty;
     outputData.proposedFixedCapacitance = proposedFixedCapacitance;
     outputData.proposedVariableCapacitance = proposedVariableCapacitance;
     outputData.capitalCost = capitalCost;
     outputData.simplePayback = simplePayback;
-    outputData.monthlyOutputs = monthlyOutputs; 
+    outputData.monthlyOutputs = monthlyOutputs;
     return outputData;
   }
 
@@ -604,46 +391,237 @@ export class PowerFactorCorrectionService {
     let proposedVariableCapacitance: number = 0;
     let capitalCost: number = 0;
     let simplePayback: number = 0;
-    if (inputData.monthyInputs.length >= 3){
-      inputData.monthyInputs.forEach( input => {
+    if (inputData.monthyInputs.length >= 3) {
+      inputData.monthyInputs.forEach(input => {
         let monthOutput: PFMonthlyOutputs = this.getEmptyMonthyOutput();
-        monthOutput.demandPenalty = input.input1 - input.input3; 
+        monthOutput.demandPenalty = input.pfAdjustedDemand - input.actualDemand;
         monthOutput.penaltyCost = monthOutput.demandPenalty * inputData.marginalCostOfDemand;
-        monthOutput.currentReactivePower = input.input3 * Math.tan(Math.acos(input.input2));  
-        monthOutput.proposedReactivePower = input.input3 * Math.tan(Math.acos(inputData.minimumPowerFactor));
+        monthOutput.currentReactivePower = input.pfAdjustedDemand * Math.tan(Math.acos(input.powerFactor));
+        if (isNaN(monthOutput.currentReactivePower)) {
+          monthOutput.currentReactivePower = 0;
+        }
+        monthOutput.proposedReactivePower = Math.min(monthOutput.currentReactivePower, input.pfAdjustedDemand * Math.tan(Math.acos(inputData.minimumPowerFactor)));
         monthOutput.proposedCapacitance = monthOutput.currentReactivePower - monthOutput.proposedReactivePower;
         monthlyOutputs.push(monthOutput);
-      });      
-  
+      });
+
       let proposedCapacitanceList: Array<number> = new Array();
-  
-      if(monthlyOutputs.length > 0){
-        monthlyOutputs.forEach(output =>{
-          if (output.penaltyCost !== 0){
+
+      if (monthlyOutputs.length > 0) {
+        monthlyOutputs.forEach(output => {
+          if (output.penaltyCost !== 0) {
             annualPFPenalty += output.penaltyCost;
-          } 
-          if (output.proposedCapacitance !== 0) {
-            proposedCapacitanceList.push(output.proposedCapacitance);
           }
+          proposedCapacitanceList.push(output.proposedCapacitance);
         });
+        annualPFPenalty = (annualPFPenalty / monthlyOutputs.length) * 12;
       }
-  
+
       proposedFixedCapacitance = Math.min(...proposedCapacitanceList);
       proposedVariableCapacitance = Math.max(...proposedCapacitanceList) - proposedFixedCapacitance;
       capitalCost = proposedFixedCapacitance * inputData.costOfStaticCapacitance + proposedVariableCapacitance * inputData.costOfDynamicCapacitance;
-      simplePayback = capitalCost / annualPFPenalty;  
-      
+      simplePayback = capitalCost / annualPFPenalty;
+
     }
     outputData.annualPFPenalty = annualPFPenalty;
     outputData.proposedFixedCapacitance = proposedFixedCapacitance;
     outputData.proposedVariableCapacitance = proposedVariableCapacitance;
     outputData.capitalCost = capitalCost;
     outputData.simplePayback = simplePayback;
-    outputData.monthlyOutputs = monthlyOutputs; 
+    outputData.monthlyOutputs = monthlyOutputs;
     return outputData;
   }
 
 
+  getDefaultEmptyInputs() {
+    let emptyInput: PowerFactorCorrectionInputs = {
+      existingDemand: 0,
+      currentPowerFactor: 0,
+      proposedPowerFactor: 0,
+      billedForDemand: 0,
+      minimumPowerFactor: 0,
+      targetPowerFactor: 0,
+      adjustedOrActual: 0,
+      marginalCostOfDemand: 0,
+      costOfStaticCapacitance: 0,
+      costOfDynamicCapacitance: 0,
+      monthyInputs: [
+        {
+          month: 'January 2024',
+          actualDemand: 0,
+          powerFactor: 0,
+          pfAdjustedDemand: 0
+        },
+        {
+          month: 'February 2024',
+          actualDemand: 0,
+          powerFactor: 0,
+          pfAdjustedDemand: 0
+        },
+        {
+          month: 'March 2024',
+          actualDemand: 0,
+          powerFactor: 0,
+          pfAdjustedDemand: 0
+        },
+      ],
+      startMonth: 1,
+      startYear: 2024,
+    };
+
+    return emptyInput;
+
+  }
 
 
+
+  getExampleData() {
+    let exampleInput: PowerFactorCorrectionInputs = {
+      existingDemand: 286,
+      currentPowerFactor: 0.88,
+      proposedPowerFactor: 0.95,
+      billedForDemand: 0,
+      minimumPowerFactor: 0.95,
+      targetPowerFactor: 0.95,
+      adjustedOrActual: 0,
+      marginalCostOfDemand: 8.15,
+      costOfStaticCapacitance: 50,
+      costOfDynamicCapacitance: 70,
+      monthyInputs: [
+        {
+          month: 'January 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 462
+        },
+        {
+          month: 'February 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 528
+        },
+        {
+          month: 'March 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 492
+        },
+        {
+          month: 'April 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 474
+        },
+        {
+          month: 'May 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 499
+        },
+        {
+          month: 'June 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 513
+        },
+        {
+          month: 'July 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 530
+        },
+        {
+          month: 'August 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 523
+        },
+        {
+          month: 'September 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 547
+        },
+        {
+          month: 'October 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 589
+        },
+        {
+          month: 'November 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 621
+        },
+        {
+          month: 'December 2024',
+          actualDemand: 0,
+          powerFactor: 0.8,
+          pfAdjustedDemand: 607
+        },
+      ],
+      startMonth: 1,
+      startYear: 2024,
+    };
+
+    return exampleInput;
+  }
+}
+
+
+
+export enum BilledForDemand {
+  REAL_POWER = 0,
+  APPARENT_POWER = 1
+}
+
+export enum AdjustedOrActual {
+  POWER_FACTOR = 0,
+  ACTUAL_DEMAND = 1,
+  BOTH = 2
+}
+
+export interface PowerFactorCorrectionInputs {
+  existingDemand: number;
+  currentPowerFactor: number;
+  proposedPowerFactor: number;
+  billedForDemand: number;
+  minimumPowerFactor: number;
+  targetPowerFactor: number;
+  adjustedOrActual: number;
+  marginalCostOfDemand: number;
+  costOfStaticCapacitance: number;
+  costOfDynamicCapacitance: number;
+  monthyInputs: Array<MonthyInputs>;
+  startMonth: number;
+  startYear: number;
+}
+
+export interface MonthyInputs {
+  month: string;
+  actualDemand: number;
+  powerFactor: number;
+  pfAdjustedDemand: number;
+}
+
+
+export interface PowerFactorCorrectionOutputs {
+  annualPFPenalty: number;
+  proposedFixedCapacitance: number;
+  proposedVariableCapacitance: number;
+  capitalCost: number;
+  simplePayback: number;
+  monthlyOutputs: Array<PFMonthlyOutputs>;
+}
+
+export interface PFMonthlyOutputs {
+  realDemand: number;
+  pfAdjustedDemand: number;
+  proposedApparentPower: number;
+  demandPenalty: number;
+  penaltyCost: number;
+  currentReactivePower: number;
+  proposedReactivePower: number;
+  proposedCapacitance: number;
 }

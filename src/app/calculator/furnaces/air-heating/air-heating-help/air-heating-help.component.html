@@ -1,241 +1,264 @@
 <div class="p-3 pt-3 d-flex flex-column help-info">
-    <h5>
-      Air Heating Using Flue Gas Help
+  <h5>
+    Air Heating Using Flue Gas Help
+    <br>
+    <small class="text-muted">
+      This calculator can be used to estimate maximum air flow that can be heated by using exhaust gas heat of flue
+      gases from a furnace, oven, or boiler.
+      The hot air can be used as a makeup air for buildings during cold weather months or
+      it can be used as heated makeup air for ovens or other processes. It is necessary to know cold air entering
+      the heat recovery unit and the desired hot air temperature; leaving the heat recovery unit or a heat exchanger.
+      It is also necessary to know the details of operation of the oven or furnace from where the hot exhaust gases are
+      used.
+    </small>
+    <hr>
+  </h5>
+
+  <div class="my-2" *ngIf="currentField == 'materialTypeId'">
+    <h6>
+      Fuel
       <br>
       <small class="text-muted">
-        This calculator can be used to estimate maximum air flow that can be heated by using exhaust gas heat of flue gases from a furnace, oven, or boiler. 
-        The hot air can be used as a makeup air for buildings during cold weather months or 
-        it can be used as heated makeup air for ovens or other processes.  It is necessary to know cold air entering 
-        the heat recovery unit and the desired hot air temperature; leaving the heat recovery unit or a heat exchanger.  
-        It is also necessary to know the details of operation of the oven or furnace from where the hot exhaust gases are used.
+
+        Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
+        are intended
+        to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+        fuel
+        compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+        edit
+        the composition or add a completely new material. You cannot use the name of a fuel already in the database.
       </small>
-      <hr>
-    </h5>
-  
-    <div class="my-2" *ngIf="currentField == 'materialTypeId'">
-      <h6>
-        Fuel
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'materialTypeIdModal'">
+    <h6>
+      Fuel
+      <br>
+      <small class="my-2">If needing to add a new fuel, please do so in the "Custom Materials" page or within a new
+        assessment</small>
+      <br>
+      <small class="text-muted">
+        Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
+        are intended
+        to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
+        fuel
+        compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
+        edit
+        the composition or add a completely new material. You cannot use the name of a fuel already in the database.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'moistureInAirCombustion'">
+    <h6>
+      Moisture in Air
+      <br>
+      <small class="text-muted">
+        The moisture of the air (mass water / mass dry air). Can be determined with a psychrometric chart.
         <br>
-        <small class="text-muted">
-          
-          Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
-          are intended
-          to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
-          fuel
-          compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
-          edit
-          the composition or add a completely new material. You cannot use the name of a fuel already in the database.
-        </small>
-      </h6>
+        Generally, a moisture content of up to 5% is considered acceptable for combustion air in typical industrial
+        applications.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0%</td>
+            <td class="text-center">100%</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 
-    <div class="my-2" *ngIf="currentField == 'materialTypeIdModal'">
-      <h6>
-        Fuel
+  <div class="my-2" *ngIf="currentField == 'flueTemperature' && settings.unitsOfMeasure == 'Imperial'">
+    <h6>
+      Furnace Flue Gas Temperature
+      <br>
+      <small class="text-muted">
+        The temperature of the gas exiting the system. This value must be greater than the combustion air temperature.
+        If your flue gas temperature is less than 212&#8457;
+        then vapor may be condensing in the flue and the calculated available heat may be incorrect.
         <br>
-        <small class="my-2">If needing to add a new fuel, please do so in the "Custom Materials" page or within a new assessment</small>
+        Measure flue gas temperature by using "proper" temperature probe.
+        Type of temperature probe depends on flue gas temperature and composition at the point of measurement.
+        In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the
+        baseline.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flueTemperature' && settings.unitsOfMeasure == 'Metric'">
+    <h6>
+      Furnace Flue Gas Temperature
+      <br>
+      <small class="text-muted">
+        The temperature of the gas exiting the system. This value must be greater than the combustion air temperature.
+        If your flue gas temperature is less than 100&#8451;
+        then vapor may be condensing in the flue and the calculated available heat may be incorrect.
         <br>
-        <small class="text-muted">
-          Type of fuel used within the heating equipment or reaction chamber. The compositions and Heating Values of fuels
-          are intended
-          to represent "typical" compositions of these fuels. This tool can be made more accurate by using more accurate
-          fuel
-          compositions for your process. To add a new fuel , click "Add New Fuel". You can "start with existing fuel" and
-          edit
-          the composition or add a completely new material. You cannot use the name of a fuel already in the database.
-        </small>
-      </h6>
-    </div>
+        Measure flue gas temperature by using "proper" temperature probe.
+        Type of temperature probe depends on flue gas temperature and composition at the point of measurement.
+        In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the
+        baseline.
+      </small>
+    </h6>
+  </div>
 
-    <div class="my-2" *ngIf="currentField == 'moistureInAirCombustion'">
-      <h6>
-        Moisture in Air
+  <div class="my-2" *ngIf="currentField == 'excessAir'">
+    <h6>
+      Excess Air
+      <br>
+      <small class="text-muted">
+        The excess air value represents excess air used in burners plus all air entering the furnace and going as flue
+        gases form the furnace.
+        The value is expressed in terms of percentage of stoichiometric air required for the fuel used and can be
+        calculated as the difference
+        between the measured O<sub>2</sub> and stoichiometric O<sub>2</sub> divided by the stoichiometric O<sub>2</sub>.
         <br>
-        <small class="text-muted">
-          The moisture of the air (mass water / mass dry air). Can be determined with a psychrometric chart.
-          <br>
-          Generally, a moisture content of up to 5% is considered acceptable for combustion air in typical industrial applications.
-          <hr>
-        </small>
-      </h6>
-      <div class="w-100 justify-content-center">
-        <table class="table table-hover table-striped">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-              <th class="text-center">Maximum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0%</td>
-              <td class="text-center">100%</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  
-    <div class="my-2" *ngIf="currentField == 'flueTemperature' && settings.unitsOfMeasure == 'Imperial'">
-      <h6>
-        Furnace Flue Gas Temperature
+        This should be minimized while still ensuring adequate air for complete combustion.
+        The absolute maximum value depends on the fuel, with some natural gas mixes near 500% and coal closer to 100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'flueGasO2'">
+    <h6>
+      O<sub>2</sub> in Flue Gas
+      <br>
+      <small class="text-muted">
+        Molar (or volumetric) fraction (% Dry) of O<sub>2</sub> in outgoing flue gas (ignoring moisture content).
+        Higher O<sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within
+        the flue gas (lowering the available heat).
         <br>
-        <small class="text-muted">
-          The temperature of the gas exiting the system. This value must be greater than the combustion air temperature. 
-          If your flue gas temperature is less than 212&#8457; 
-          then vapor may be condensing in the flue and the calculated available heat may be incorrect. 
-          <br>
-          Measure flue gas temperature by using "proper" temperature probe. 
-          Type of temperature probe depends on flue gas temperature and composition at the point of measurement. 
-          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the baseline.
-        </small>
-      </h6>
+        Flue gas O<sub>2</sub> (dry basis) reading is taken at the same location where flue gas temperature is measured
+        to maintain accuracy of the calculations.
+        For many applications this is less than 10%, though a few systems (e.g., thermal oxidizers, paint shop ovens) it
+        may be higher, but still below 21%.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0%</td>
+            <td class="text-center">21%</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 
-    <div class="my-2" *ngIf="currentField == 'flueTemperature' && settings.unitsOfMeasure == 'Metric'">
-      <h6>
-        Furnace Flue Gas Temperature
+
+  <div class="my-2" *ngIf="currentField == 'combustionAirTemp'">
+    <h6>
+      Combustion Air Temperature
+      <br>
+      <small class="text-muted">
+        Combustion air temperature (Celsius) entering the burners. Use temperature recorder/indicator reading or actual
+        asurement
+        using a temperature gage, thermocouple or estimate based on the furnace supplier's specification.
         <br>
-        <small class="text-muted">
-          The temperature of the gas exiting the system. This value must be greater than the combustion air temperature. 
-          If your flue gas temperature is less than 100&#8451; 
-          then vapor may be condensing in the flue and the calculated available heat may be incorrect. 
-          <br>
-          Measure flue gas temperature by using "proper" temperature probe. 
-          Type of temperature probe depends on flue gas temperature and composition at the point of measurement. 
-          In most cases a commercially available thermocouple probe is used. Placement of the probe depends on the baseline.
-        </small>
-      </h6>
-    </div>
-  
-    <div class="my-2" *ngIf="currentField == 'excessAir'">
-      <h6>
-        Excess Air
-        <br>
-        <small class="text-muted">
-          The excess air value represents excess air used in burners plus all air entering the furnace and going as flue gases form the furnace. 
-          The value is expressed in terms of percentage of stoichiometric air required for the fuel used and can be calculated as the difference 
-          between the measured O<sub>2</sub> and stoichiometric O<sub>2</sub> divided by the stoichiometric O<sub>2</sub>. 
-          <br>
-          This should be minimized while still ensuring adequate air for complete combustion. 
-          The absolute maximum value depends on the fuel, with some natural gas mixes near 500% and coal closer to 100%.
-          <hr>
-        </small>
-      </h6>
-    </div>
-  
-  
-    <div class="my-2" *ngIf="currentField == 'flueGasO2'">
-      <h6>
-        O<sub>2</sub> in Flue Gas
-        <br>
-        <small class="text-muted">
-          Molar (or volumetric) fraction (% Dry) of O<sub>2</sub> in outgoing flue gas (ignoring moisture content). 
-          Higher O<sub>2</sub> in the exhaust indicates higher excess air and a greater amount of heat contained within the flue gas (lowering the available heat). 
-          <br>
-          Flue gas O<sub>2</sub> (dry basis) reading is taken at the same location where flue gas temperature is measured to maintain accuracy of the calculations. 
-          For many applications this is less than 10%, though a few systems (e.g., thermal oxidizers, paint shop ovens) it may be higher, but still below 21%.
-          <hr>
-        </small>
-      </h6>
-      <div class="w-100 justify-content-center">
-        <table class="table table-hover table-striped">
-          <tbody>
-            <tr>
-              <th class="text-center">Minimum</th>
-              <th class="text-center">Maximum</th>
-            </tr>
-            <tr>
-              <td class="text-center">0%</td>
-              <td class="text-center">21%</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  
-  
-    <div class="my-2" *ngIf="currentField == 'combustionAirTemp'">
-      <h6>
-        Combustion Air Temperature
-        <br>
-        <small class="text-muted">
-          Combustion air temperature (Celsius) entering the burners. Use temperature recorder/indicator reading or actual
-          asurement
-          using a temperature gage, thermocouple or estimate based on the furnace supplier's specification.
-          <br>
-          This value must be less than the flue gas temperature.
-        </small>
+        This value must be less than the flue gas temperature.
+      </small>
 
-      </h6>
-    </div>
-
-      
-    <div class="my-2" *ngIf="currentField == 'fireRate'">
-        <h6>
-          Average Firing Rate
-          <br>
-          <small class="text-muted">
-            The average firing rate of the furnace, oven, boiler, etc. This can be obtained from measurement, 
-            the gas bills (or other meters), or the equipment supplier (design specifications). 
-            It can also be estimated using the Process Heating Assessment.
-          </small>
-        </h6>
-      </div>
-
-      <div class="my-2" *ngIf="currentField == 'airflow'">
-        <h6>
-          Air Flow
-          <br>
-          <small class="text-muted">
-            The amount of air currently heated by another heat source (air to be heated by exhaust gas)
-          </small>
-        </h6>
-      </div>
-
-      <div class="my-2" *ngIf="currentField == 'inletTemperature'">
-        <h6>
-          Inlet Air Temperature
-          <br>
-          <small class="text-muted">
-            Average temperature of the air heated by heat source or exhaust gas. Likely to be ambient or external air temperature. This can be a measured value or from the equipment supplier.
-          </small>
-        </h6>
-      </div>
+    </h6>
+  </div>
 
 
-      <div class="my-2" *ngIf="currentField == 'outletTemperature'">
-        <h6>
-          Outlet Air Temperature
-          <br>
-          <small class="text-muted">
-            Average temperature of air after being heated. For HVAC systems, in most cases this will be less than 250 deg. F. 
-            There may be exceptions to this when air is used for other than HVAC. This can be a measured value or from the equipment supplier.
-          </small>
-        </h6>
-      </div>
+  <div class="my-2" *ngIf="currentField == 'fireRate'">
+    <h6>
+      Average Firing Rate
+      <br>
+      <small class="text-muted">
+        The average firing rate of the furnace, oven, boiler, etc. This can be obtained from measurement,
+        the gas bills (or other meters), or the equipment supplier (design specifications).
+        It can also be estimated using the Process Heating Assessment.
+      </small>
+    </h6>
+  </div>
 
-      <div class="my-2" *ngIf="currentField == 'heaterEfficiency'">
-        <h6>
-          Current Heater Efficiency
-          <br>
-          <small class="text-muted">
-            The efficiency of the heat source currently used to heat air. Heater efficiency depends on the heater design and size.  In most cases it can be assumed to be in a range of 75% to 95%.
-          </small>
-        </h6>
-      </div>
+  <div class="my-2" *ngIf="currentField == 'airflow'">
+    <h6>
+      Air Flow
+      <br>
+      <small class="text-muted">
+        The amount of air currently heated by another heat source (air to be heated by exhaust gas)
+      </small>
+    </h6>
+  </div>
 
-      
-      <div class="my-2" *ngIf="currentField == 'hxEfficiency'">
-        <h6>
-            Proposed Heat Exchanger Effectiveness
-          <br>
-          <small class="text-muted">
-            The efficiency of the heat source currently used to heat air. Heater efficiency depends on the heater design and size.  In most cases it can be assumed to be in a range of 50% to 70%.
-          </small>
-        </h6>
-      </div>
+  <div class="my-2" *ngIf="currentField == 'inletTemperature'">
+    <h6>
+      Inlet Air Temperature
+      <br>
+      <small class="text-muted">
+        Average temperature of the air heated by heat source or exhaust gas. Likely to be ambient or external air
+        temperature. This can be a measured value or from the equipment supplier.
+      </small>
+    </h6>
+  </div>
 
-      <hr *ngIf="currentField != undefined">
-      <div class="justify-content-center mx-auto">
-      <img src="assets/images/airheating.png" class="help-img">
-    </div>
 
+  <div class="my-2" *ngIf="currentField == 'outletTemperature'">
+    <h6>
+      Outlet Air Temperature
+      <br>
+      <small class="text-muted">
+        Average temperature of air after being heated. For HVAC systems, in most cases this will be less than 250 deg.
+        F.
+        There may be exceptions to this when air is used for other than HVAC. This can be a measured value or from the
+        equipment supplier.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'heaterEfficiency'">
+    <h6>
+      Current Heater Efficiency
+      <br>
+      <small class="text-muted">
+        The efficiency of the heat source currently used to heat air. Heater efficiency depends on the heater design and
+        size. In most cases it can be assumed to be in a range of 75% to 95%.
+      </small>
+    </h6>
+  </div>
+
+
+  <div class="my-2" *ngIf="currentField == 'hxEfficiency'">
+    <h6>
+      Proposed Heat Exchanger Effectiveness
+      <br>
+      <small class="text-muted">
+        The efficiency of the heat source currently used to heat air. Heater efficiency depends on the heater design and
+        size. In most cases it can be assumed to be in a range of 50% to 70%.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2">
+    <a class="click-link">
+      <span class="fa fa-external-link"></span>
+      <a class="pl-1" [href]="docsLink + 'group__air__heating__using__exhaust__calculator'" target="_blank">How are
+        heat exchanger results calculated?</a>
+    </a>
+  </div>
+  <hr *ngIf="currentField != undefined">
+  <div class="justify-content-center mx-auto">
+    <img src="assets/images/airheating.png" class="help-img">
+  </div>
+</div>

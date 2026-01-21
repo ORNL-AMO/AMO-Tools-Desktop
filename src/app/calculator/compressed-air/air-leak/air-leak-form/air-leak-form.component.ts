@@ -1,10 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
-import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, FacilityCompressorData, OrificeMethodData } from '../../../../shared/models/standalone';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { AirLeakSurveyInput, AirLeakSurveyData } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakService } from '../air-leak.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakFormService } from './air-leak-form.service';
+import { LeakMeasurementMethod, measurementMethods } from '../../compressed-air-constants';
 
 @Component({
     selector: 'app-air-leak-form',
@@ -24,12 +25,9 @@ export class AirLeakFormComponent implements OnInit {
   currentLeakIndexSub: Subscription;
   airLeakInputSub: Subscription;
 
-  measurementMethods: Array<{ display: string, value: number }> = [
-    { display: 'Estimate', value: 0 },
-    { display: 'Decibel Method', value: 1 },
-    { display: 'Bag Method', value: 2 },
-    { display: 'Orifice Method', value: 3 },
-  ];
+  measurementMethods = measurementMethods;
+
+  LeakMeasurementMethod = LeakMeasurementMethod;
 
   constructor(private airLeakService: AirLeakService, private airLeakFormService: AirLeakFormService) { }
 

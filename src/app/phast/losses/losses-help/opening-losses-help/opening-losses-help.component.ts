@@ -2,12 +2,13 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { LossesService } from '../../losses.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Settings } from '../../../../shared/models/settings';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
-    selector: 'app-opening-losses-help',
-    templateUrl: './opening-losses-help.component.html',
-    styleUrls: ['./opening-losses-help.component.css'],
-    standalone: false
+  selector: 'app-opening-losses-help',
+  templateUrl: './opening-losses-help.component.html',
+  styleUrls: ['./opening-losses-help.component.css'],
+  standalone: false
 })
 export class OpeningLossesHelpComponent implements OnInit {
   @Input()
@@ -18,7 +19,7 @@ export class OpeningLossesHelpComponent implements OnInit {
 
 
   @ViewChild('viewFactorModal', { static: false }) public viewFactorModal: ModalDirective;
-
+  docsLink: string = environment.measurDocsUrl;
   constructor(private lossesService: LossesService) { }
 
   ngOnInit() {

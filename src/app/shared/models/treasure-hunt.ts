@@ -20,7 +20,7 @@ import { ChillerStagingInput } from "./chillers";
 import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weather-bins.service";
 import { ExistingIntegrationData } from "../assessment-integration/assessment-integration.service";
 import { BoilerBlowdownRateInputs } from "../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.service";
-import { PowerFactorCorrectionInputs } from "../../calculator/utilities/power-factor-correction/power-factor-correction.component";
+import { PowerFactorCorrectionInputs } from "../../calculator/utilities/power-factor-correction/power-factor-correction.service";
 
 export interface TreasureHunt {
     name: string,

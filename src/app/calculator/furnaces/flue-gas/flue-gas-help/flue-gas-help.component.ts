@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasService } from '../flue-gas.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-flue-gas-help',
@@ -16,7 +17,7 @@ export class FlueGasHelpComponent implements OnInit {
   currentField: string;
   displaySuggestions: boolean = false;
 
-
+  docsLink: string = environment.measurDocsUrl;
   constructor(private flueGasService: FlueGasService) { }
   
   ngOnInit(): void {

@@ -157,54 +157,12 @@ export class SuiteApiHelperService {
     }
   }
 
-  getFlowCalculationGasTypeEnum(gasType: number) {
-    switch (gasType) {
-      case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.AIR;
-      case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.AMMONIA_DISSOCIATED;
-      case 2:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.ARGON;
-      case 3:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.BUTANE;
-      case 4:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.ENDOTHERMIC_AMMONIA;
-      case 5:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.EXOTHERMIC_CRACKED_LEAN;
-      case 6:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.EXOTHERMIC_CRACKED_RICH;
-      case 7:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.HELIUM;
-      case 8:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.NATURAL_GAS;
-      case 9:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.NITROGEN;
-      case 10:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.OXYGEN;
-      case 11:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.PROPANE;
-      case 12:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Gas.OTHER;
-    }
-  }
-
   getOpeningShapeEnum(openingShape: number) {
     switch (openingShape) {
       case 0:
         return this.toolsSuiteApiService.ToolsSuiteModule.OpeningShape.CIRCULAR;
       case 1:
         return this.toolsSuiteApiService.ToolsSuiteModule.OpeningShape.SQUARE;
-    }
-  }
-
-  getFlowCalculationSectionEnum(section: number) {
-    switch (section) {
-      case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Section.SQUARE_EDGE;
-      case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Section.SHARP_EDGE;
-      case 2:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Section.VENTURI;
     }
   }
 

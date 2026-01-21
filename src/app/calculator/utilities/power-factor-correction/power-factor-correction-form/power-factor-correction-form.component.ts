@@ -1,29 +1,15 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MonthyInputs, PowerFactorCorrectionInputs } from '../power-factor-correction.component';
-import { PowerFactorCorrectionService } from '../power-factor-correction.service';
+import { Component, OnInit } from '@angular/core';
+import { AdjustedOrActual, BilledForDemand, PowerFactorCorrectionInputs, PowerFactorCorrectionService } from '../power-factor-correction.service';
+import { FormBuilder, FormGroup, UntypedFormGroup, FormArray, Validators } from '@angular/forms';
 
 @Component({
-    selector: 'app-power-factor-correction-form',
-    templateUrl: './power-factor-correction-form.component.html',
-    styleUrls: ['./power-factor-correction-form.component.css'],
-    standalone: false
+  selector: 'app-power-factor-correction-form',
+  templateUrl: './power-factor-correction-form.component.html',
+  styleUrls: ['./power-factor-correction-form.component.css'],
+  standalone: false
 })
 export class PowerFactorCorrectionFormComponent implements OnInit {
-  
-  // the @Input() decorator defines a variable that will be passed in from the parent
-  //updates to this variable in the parent will update automatically in the child
-  @Input()
-  data: PowerFactorCorrectionInputs;
-  @Output('changeField')
-  changeField = new EventEmitter<string>();
-
-  //the @Output decorator defines a variable as an output to the parent component
-  @Output('emitCalculate')
-  emitCalculate = new EventEmitter<PowerFactorCorrectionInputs>();
-  //to emit a change, we need to define an EventEmitter<Type>() to be able
-  //to call .emit()
-
-
+  form: UntypedFormGroup;
   monthList: Array<{ value: number, name: string }> = [
     { value: 1, name: 'January' },
     { value: 2, name: 'February' },
@@ -39,88 +25,122 @@ export class PowerFactorCorrectionFormComponent implements OnInit {
     { value: 12, name: 'December' }
   ];
 
-  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService) { }
+  BilledForDemand = BilledForDemand;
+  AdjustedOrActual = AdjustedOrActual;
+
+  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService, private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.initForm();
+    this.calculate();
   }
 
-  //this function should be called from the <input> or <select> html
-  //elements when they are updated/changed
+  initForm(inputs?: PowerFactorCorrectionInputs) {
+    if (!inputs) {
+      inputs = this.powerFactorCorrectionService.powerFactorInputs.getValue();
+    }
+    this.form = this.powerFactorCorrectionService.getApparentPowerAndPowerFactor(inputs);
+  }
+
   calculate() {
-    //.emit() will tell the parent to do something
-    this.emitCalculate.emit(this.data);
+    let updatedInput: PowerFactorCorrectionInputs = this.form.getRawValue();
+    const results = this.powerFactorCorrectionService.getResults(updatedInput);
+    this.powerFactorCorrectionService.powerFactorInputs.next(updatedInput);
+    this.powerFactorCorrectionService.powerFactorOutputs.next(results);
   }
 
-  updateStartingYear() {   
-    if (this.data.startYear != null) {
-      const updatedInputs = this.data.monthyInputs.map((input) => {
+  btnResetData() {
+    this.initForm(this.powerFactorCorrectionService.getDefaultEmptyInputs());
+    this.calculate();
+  }
+
+
+  btnGenerateExample() {
+    this.initForm(this.powerFactorCorrectionService.getExampleData());
+    this.calculate();
+  }
+
+  updateStartingYear() {
+    if (this.form.value.startYear != null) {
+      const updatedInputs = this.form.value.monthyInputs.map((input) => {
         if (input.month) {
           const monthOnly = input.month.split(' ')[0];
-          return { ...input, month: `${monthOnly} ${this.data.startYear}` };
+          return { ...input, month: `${monthOnly} ${this.form.value.startYear}` };
         }
         return input;
       });
 
-      this.data.monthyInputs = updatedInputs;
+      this.form.patchValue({ monthyInputs: updatedInputs });
 
       this.calculate();
     }
   }
 
-  focusField(str: string) {
-    this.changeField.emit(str);
-  }
-
-  setBilledForDemand(){
-    if (this.data.billedForDemand === 0) {
-      this.data.minimumPowerFactor = 0.95;
-    } else if (this.data.billedForDemand === 1) {
-      this.data.targetPowerFactor = 0.95;
+  setBilledForDemand() {
+    if (this.form.value.billedForDemand === 0) {
+      this.form.value.minimumPowerFactor = 0.95;
+    } else if (this.form.value.billedForDemand === 1) {
+      this.form.value.targetPowerFactor = 0.95;
     }
     this.calculate();
   }
 
-  setAdjustedOrActual(){    
-    if (this.data.adjustedOrActual === 2){
-      this.data.billedForDemand = 0;
+  setAdjustedOrActual() {
+    if (this.form.value.adjustedOrActual === 2) {
+      this.form.value.billedForDemand = 0;
     }
     this.calculate();
   }
 
-  btnAddMonth(){;
-    let newMonthyInputs: MonthyInputs = {
-      month: "new month",
-      input1: 0,
-      input2: 0,
-      input3: 0
-    }
-    this.data.monthyInputs.push(newMonthyInputs);    
+
+  btnAddMonth() {
+    this.monthyInputsFormArray.push(this.createMonthInputGroup());
     this.setMonthNames();
     this.calculate();
   }
 
-  btnDeleteMonth(index: number){
-    this.data.monthyInputs.splice(index, 1);    
-    this.calculate();
-  }
-
-  btnDeleteLastMonth(){
-    this.data.monthyInputs.pop();    
-    this.calculate();
-  }
-
-  setMonthNames(){
-    let year = this.data.startYear;
-    let monthNumber = this.data.startMonth;
-    this.data.monthyInputs.forEach(month => {
-      let monthName: string = this.monthList[monthNumber - 1].name;
-      month.month = monthName + ' ' + year;
-      monthNumber += 1;
-      if(monthNumber == 13){
-        monthNumber = 1;
-        year += 1;
-      }
+  createMonthInputGroup(): FormGroup {
+    return this.fb.group({
+      'month': ['', Validators.required],
+      'actualDemand': [null, Validators.required],
+      'powerFactor': [null, Validators.required],
+      'pfAdjustedDemand': [null, Validators.required]
     });
   }
-  
+
+  btnDeleteLastMonth() {
+    this.monthyInputsFormArray.removeAt(this.monthyInputsFormArray.length - 1);
+    this.calculate();
+  }
+
+  setMonthNames() {
+    let year = this.form.value.startYear;
+    let month = this.form.value.startMonth;
+    this.monthyInputsFormArray.controls.forEach((group: FormGroup) => {
+      if (month > 12) {
+        month = 1;
+        year++;
+      }
+      const monthName = this.monthList[month - 1].name;
+      group.get('month')?.setValue(`${monthName} ${year}`);
+      month++;
+    });
+  }
+
+  focusField(str: string) {
+    this.powerFactorCorrectionService.currentField.next(str);
+  }
+
+  get monthyInputsFormArray(): FormArray {
+    return this.form.get('monthyInputs') as FormArray;
+  }
+
+  get billedForDemand(): number {
+    return this.form.value.billedForDemand;
+  }
+
+  get adjustedOrActual(): number {
+    return this.form.value.adjustedOrActual;
+  }
+
 }

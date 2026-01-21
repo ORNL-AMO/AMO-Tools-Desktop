@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { PowerFactorCorrectionService } from '../../calculator/utilities/power-factor-correction/power-factor-correction.service';
+import { PowerFactorCorrectionOutputs, PowerFactorCorrectionService } from '../../calculator/utilities/power-factor-correction/power-factor-correction.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { EnergyUsage, OpportunitySheet, OpportunitySummary, OtherCostItem, PowerFactorCorrectionTreasureHunt, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
-import { PowerFactorCorrectionOutputs } from '../../calculator/utilities/power-factor-correction/power-factor-correction.component';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 
 @Injectable()
@@ -16,7 +15,7 @@ export class PowerFactorCorrectionTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(powerFactorCorrectionTreasureHunt: PowerFactorCorrectionTreasureHunt) {
-    this.powerFactorCorrectionService.inputData = powerFactorCorrectionTreasureHunt.inputData;
+    this.powerFactorCorrectionService.powerFactorInputs.next(powerFactorCorrectionTreasureHunt.inputData);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -33,7 +32,7 @@ export class PowerFactorCorrectionTreasureHuntService {
   }
 
   resetCalculatorInputs() {
-    this.powerFactorCorrectionService.inputData = undefined;
+    this.powerFactorCorrectionService.powerFactorInputs.next(this.powerFactorCorrectionService.getDefaultEmptyInputs());
   }
 
   getPowerFactorCorrectionOpportunitySheet(powerFactorCorrection: PowerFactorCorrectionTreasureHunt, opportunitySheet: OpportunitySheet): OpportunitySheet{

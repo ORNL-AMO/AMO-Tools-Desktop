@@ -32,6 +32,7 @@ import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 import { FlowServiceProvider } from '../../services/FlowService';
+import ResultsPanel from './ResultsPanel';
 
 
 export interface DiagramProps {
@@ -179,6 +180,12 @@ const Diagram = (props: DiagramProps) => {
               }}/>
       }
 
+ {/* // * Only for development result checking */}
+
+        <ResultsPanel  style={{
+                left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
+                transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+              }}></ResultsPanel>
       <ReactFlowProvider>
         <div className={'flow-wrapper'} style={{ height: props.height }}>
           <ReactFlow

@@ -141,13 +141,30 @@ npm install
 
 ---
 
-### 4. Reset All Project Build Artifacts and Dependencies
+
+
+## ℹ️ Workflow Specifics
+
+### Reset All Project Build Artifacts and Dependencies
 
 This script removes `/dist`, `package-lock.json`, and `node_modules` for both `/AMO-Tools-Desktop` and `/AMO-Tools-Desktop/process-flow-diagram-component`:
 
 ```sh
 npm run reset
 ```
+---
+### Upgrade MEASUR-Tools-Suite
+
+MEASUR-Tools-Suite available versions are published to the npm registry [measur-tools-suite npm](https://www.npmjs.com/package/measur-tools-suite?activeTab=versions)
+
+> **IMPORTANT:** Both `/AMO-Tools-Desktop` and `/AMO-Tools-Desktop/process-flow-diagram-component` MEASUR-Tools-Suite versions must match to avoid API version conflicts
+
+To upgrade the MEASUR-Tools-Suite dependency:
+- **Specify Version:**  
+modify the package.json file in both `/AMO-Tools-Desktop` and `/AMO-Tools-Desktop/process-flow-diagram-component` with the desired version.
+- **Reset, Install, and Run:**  
+Follow steps above to *Reset All Project Build Artifacts and Dependencies*, then follow steps for *Install and Run the Project*
+
 
 ---
 

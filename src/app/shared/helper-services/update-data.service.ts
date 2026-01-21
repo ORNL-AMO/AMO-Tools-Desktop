@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { SSMT } from '../models/steam/ssmt';
-import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, Treasure } from '../models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData } from '../models/standalone';
+import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData, FacilityCompressorData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -13,6 +13,7 @@ import { environment } from '../../../environments/environment';
 import { getNewIdString } from '../helperFunctions';
 import { Calculator } from '../models/calculators';
 import { SteamPressureOrTemp, SteamQuality } from '../models/steam/steam-inputs';
+import { AdjustedOrActual, BilledForDemand, MonthyInputs } from '../../calculator/utilities/power-factor-correction/power-factor-correction.service';
 
 @Injectable()
 export class UpdateDataService {
@@ -515,12 +516,71 @@ export class UpdateDataService {
             }
             if (assessment.treasureHunt.powerFactorCorrectionOpportunities) {
                 assessment.treasureHunt.powerFactorCorrectionOpportunities.forEach(opportunity => {
+                    this.updatePowerFactorCorrectionTreasureHunt(opportunity);
                     opportunity.opportunityType = Treasure.powerFactorCorrection;
                 });
             }
 
         }
         return assessment;
+    }
+
+    /**
+     * Field names for month properties were updated in v1.6.6 (issue 7922). Original fields were numbered inputs conditionally displayed where each would represent different controls. 
+     * They are now mapped to named properties. See calculator form input table for details.
+     * @param powerFactorCorrectionTreasureHunt 
+     * 
+     */
+    updatePowerFactorCorrectionTreasureHunt(powerFactorCorrectionTreasureHunt: PowerFactorCorrectionTreasureHunt): any {
+        if (powerFactorCorrectionTreasureHunt.inputData) {
+            const billedForDemand = powerFactorCorrectionTreasureHunt.inputData['billedForDemand'];
+            const adjustedOrActual = powerFactorCorrectionTreasureHunt.inputData['adjustedOrActual'];
+            powerFactorCorrectionTreasureHunt.inputData.monthyInputs = powerFactorCorrectionTreasureHunt.inputData.monthyInputs?.map(month => {
+
+                let migratedMonth: MonthyInputs = {
+                    month: month.month,
+                    pfAdjustedDemand: undefined,
+                    actualDemand: undefined,
+                    powerFactor: undefined
+                };
+                if (!('pfAdjustedDemand' in month)) {
+                    // * we are looking at legacy data, migrate fields
+
+                    if (billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.POWER_FACTOR) {
+                        migratedMonth.pfAdjustedDemand = month['input1'];
+                        migratedMonth.powerFactor = month['input2'];
+                    }
+
+                    if (billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND) {
+                        migratedMonth.actualDemand = month['input1'];
+                        migratedMonth.powerFactor = month['input2'];
+                    }
+
+                    if (billedForDemand == BilledForDemand.REAL_POWER && adjustedOrActual == AdjustedOrActual.BOTH) {
+                        migratedMonth.actualDemand = month['input1'];
+                        migratedMonth.powerFactor = month['input2'];
+                        migratedMonth.pfAdjustedDemand = month['input3'];
+                    }
+
+                    if (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.POWER_FACTOR) {
+                        migratedMonth.pfAdjustedDemand = month['input1'];
+                        migratedMonth.powerFactor = month['input2'];
+                    }
+                    
+                    if (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND) {
+                        migratedMonth.pfAdjustedDemand = month['input1'];
+                        migratedMonth.actualDemand = month['input2'];
+                    }
+                    
+                    migratedMonth.month = month['month'];
+                } else {
+                    migratedMonth = month;
+                }
+                return migratedMonth;
+            });
+        }
+
+        return powerFactorCorrectionTreasureHunt;
     }
 
     updateLightingReplacementTreasureHunt(lightingReplacementTreasureHunt: LightingReplacementTreasureHunt): LightingReplacementTreasureHunt {
@@ -585,7 +645,7 @@ export class UpdateDataService {
     updateAirLeakSurveyTreasureHunt(airLeakSurveyTreasureHunt: AirLeakSurveyTreasureHunt): AirLeakSurveyTreasureHunt {
         if (airLeakSurveyTreasureHunt.airLeakSurveyInput && airLeakSurveyTreasureHunt.airLeakSurveyInput.compressedAirLeakSurveyInputVec) {
             airLeakSurveyTreasureHunt.airLeakSurveyInput.compressedAirLeakSurveyInputVec.forEach(airLeak => {
-                airLeak = this.updateAirLeakSurvey(airLeak);
+                airLeak = this.updateAirLeakSurvey(airLeak, airLeakSurveyTreasureHunt.airLeakSurveyInput.facilityCompressorData);
             });
         }
         return airLeakSurveyTreasureHunt;
@@ -626,12 +686,12 @@ export class UpdateDataService {
     }
 
 
-    updateAirLeakSurvey(airLeakSurveyData: AirLeakSurveyData): AirLeakSurveyData {
+    updateAirLeakSurvey(airLeakSurveyData: AirLeakSurveyData, facilityCompressorData: FacilityCompressorData): AirLeakSurveyData {
         if (airLeakSurveyData.bagMethodData && (airLeakSurveyData.bagMethodData['height'] !== undefined || airLeakSurveyData.bagMethodData['diameter'] !== undefined)) {
             airLeakSurveyData.bagMethodData.bagVolume = 0;
             airLeakSurveyData.bagMethodData.bagFillTime = airLeakSurveyData.bagMethodData['fillTime'] ? airLeakSurveyData.bagMethodData['fillTime'] : 0;
             airLeakSurveyData.bagMethodData.numberOfUnits = 1;
-            airLeakSurveyData.bagMethodData.operatingTime = airLeakSurveyData.hoursPerYear;
+            airLeakSurveyData.bagMethodData.operatingTime = facilityCompressorData.hoursPerYear;
         }
         return airLeakSurveyData;
     }

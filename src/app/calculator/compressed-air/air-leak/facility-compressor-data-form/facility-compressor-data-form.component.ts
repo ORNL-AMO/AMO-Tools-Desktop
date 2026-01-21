@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { AirLeakFormService } from '../air-leak-form/air-leak-form.service';
 import { ConvertAirLeakService } from '../convert-air-leak.service';
 import { roundVal } from '../../../../shared/helperFunctions';
+import { measurementMethods } from '../../compressed-air-constants';
 
 @Component({
     selector: 'app-facility-compressor-data-form',
@@ -48,12 +49,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
     { display: 'Electric', value: 1 }
   ];
 
-  measurementMethods: Array<{ display: string, value: number }> = [
-    { display: 'Estimate', value: 0 },
-    { display: 'Decibel Method', value: 1 },
-    { display: 'Bag Method', value: 2 },
-    { display: 'Orifice Method', value: 3 },
-  ];
+  measurementMethods = measurementMethods;
 
   compressorControlTypes: Array<{ value: number, name: string, adjustment: number }> = [
     { value: 100, name: 'Screw Compressor - Inlet Modulation', adjustment: 30 },
@@ -106,7 +102,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
 
   initSubscriptions() {
     this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
-      this.annualTotalElectricity = value.baselineData.annualTotalElectricity;
+      this.annualTotalElectricity = value.baselineTotal.annualTotalElectricity;
     });
 
     this.generateExampleSub = this.airLeakService.generateExample.subscribe(val => {
