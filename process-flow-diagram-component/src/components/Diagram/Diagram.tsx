@@ -181,7 +181,6 @@ const Diagram = (props: DiagramProps) => {
       }
 
  {/* // * Only for development result checking */}
-
         {/* <ResultsPanel  style={{
                 left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
                 transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
