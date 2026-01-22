@@ -19,6 +19,8 @@ import * as _ from 'lodash';
 export class EquipmentsDropdownComponent implements OnInit {
   @Input()
   settings: Settings;
+  @Input()
+  inReport: boolean;
 
   
   equipments: Array<FilterOption>;
