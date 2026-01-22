@@ -1,16 +1,27 @@
-<div class="nav-item dropdown">
+<div *ngIf="inReport" class="nav-item dropdown">
     <a class="nav-link dropdown-toggle text-center" (click)="toggleTeams()">
         Teams
     </a>
-    <div class="dropdown-menu p-0" [ngClass]="{'show': displayTeamDropdown == true}">
-        <div class="list-group calc-width">
+    <div class="dropdown-menu p-0 teams-dropdown" [ngClass]="{'show': displayTeamDropdown == true}">
+        <div class="list-group">
             <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
-                [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">
-                {{team.display}}
+                [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.display}}
                 <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': team.numCalcs > 0}">
                     {{team.numCalcs}}
                 </span>
             </a>
         </div>
+    </div>
+</div>
+
+<div *ngIf="!inReport">
+    <h5>Select Teams</h5>
+    <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action" *ngFor="let team of teams"
+            [ngClass]="{'active': team.selected}" (click)="setSelectedTeam(team)">{{team.display}}
+            <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': team.numCalcs > 0}">
+                {{team.numCalcs}}
+            </span>
+        </a>
     </div>
 </div>

@@ -1,16 +1,27 @@
-<div class="nav-item dropdown">
+<div *ngIf="inReport" class="nav-item dropdown">
     <a class="nav-link dropdown-toggle text-center" (click)="toggleEquipment()">
         Equipment
     </a>
-    <div class="dropdown-menu p-0" [ngClass]="{'show': displayEquipment == true}">
-        <div class="list-group calc-width">
+    <div class="dropdown-menu p-0 teams-dropdown" [ngClass]="{'show': displayEquipment == true}">
+        <div class="list-group">
             <a class="list-group-item list-group-item-action" *ngFor="let option of equipments"
-                [ngClass]="{'active': option.selected}" (click)="setSelectedEquipment(option)">
-                {{option.display}}
+                [ngClass]="{'active': option.selected}" (click)="setSelectedEquipment(option)">{{option.display}}
                 <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': option.numCalcs > 0}">
                     {{option.numCalcs}}
                 </span>
             </a>
         </div>
+    </div>
+</div>
+
+<div *ngIf="!inReport">
+    <h5>Select Equipment</h5>
+    <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action" *ngFor="let equipment of equipments"
+            [ngClass]="{'active': equipment.selected}" (click)="setSelectedEquipment(equipment)">{{equipment.display}}
+            <span class="pull-right pl-2 pr-2" [ngClass]="{'badge badge-pill': equipment.numCalcs > 0}">
+                {{equipment.numCalcs}}
+            </span>
+        </a>
     </div>
 </div>

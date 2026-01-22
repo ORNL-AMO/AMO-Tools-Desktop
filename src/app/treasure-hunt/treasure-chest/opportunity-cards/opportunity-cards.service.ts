@@ -157,6 +157,7 @@ export class OpportunityCardsService {
       }
     });
 
+
     return opportunityCardsData;
   }
 
