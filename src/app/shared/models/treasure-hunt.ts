@@ -21,6 +21,7 @@ import { WeatherBinsInput } from "../../calculator/utilities/weather-bins/weathe
 import { ExistingIntegrationData } from "../assessment-integration/assessment-integration.service";
 import { BoilerBlowdownRateInputs } from "../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.service";
 import { PowerFactorCorrectionInputs } from "../../calculator/utilities/power-factor-correction/power-factor-correction.service";
+import { ImportExportTypes } from "../import-export/import.service";
 
 export interface TreasureHunt {
     name: string,
@@ -597,6 +598,7 @@ export interface OpportunitiesPaybackDetails {
 }
 
 export interface ImportExportOpportunities {
+    origin?: ImportExportTypes;
     lightingReplacements?: Array<LightingReplacementTreasureHunt>;
     opportunitySheets?: Array<OpportunitySheet>;
     assessmentOpportunities?: Array<AssessmentOpportunity>;
