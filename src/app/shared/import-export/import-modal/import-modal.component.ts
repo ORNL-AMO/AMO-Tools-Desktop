@@ -41,11 +41,12 @@ export class ImportModalComponent implements OnInit {
   }
 
   async setImportFile($event) {
+    console.log('setImportFile called');
     if ($event.target.files && $event.target.files.length !== 0) {
       let gzRegex = /.gz$/;
       let jsonRegex = /.json$/;
       let importFile: File = $event.target.files[0];
-
+      console.log(importFile);
       if (gzRegex.test(importFile.name)) {
         try {
           const arrayBuffer = await this.importService.readFileAsArrayBuffer(importFile);

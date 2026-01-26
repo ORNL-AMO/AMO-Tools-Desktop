@@ -36,9 +36,8 @@ export class EmailMeasurDataService {
 
   setEmailData(measurEmailForm: FormGroup) {
 // WK Get opportunities from the export functionality, then pass to the correct locaiton for future implementation
-    console.log(this.measurItemAttachment.itemType);
     if (measurEmailForm.valid && this.measurItemAttachment) {
-      let attachmentExportData: ImportExportData | LogToolDbData;
+      let attachmentExportData: ImportExportData | LogToolDbData | OpportunitiesExportData;
       if (this.measurItemAttachment.itemType === 'assessment') {
         attachmentExportData = this.exportService.getSelectedAssessment(this.measurItemAttachment.itemData);
         attachmentExportData['origin'] = "AMO-TOOLS-DESKTOP";
@@ -49,7 +48,11 @@ export class EmailMeasurDataService {
         attachmentExportData = this.measurItemAttachment.itemData;
         attachmentExportData['origin'] = "AMO-LOG-TOOL-DATA";
       } else if (this.measurItemAttachment.itemType === 'opportunities') {
-        attachmentExportData = this.measurItemAttachment.itemData;
+        // Wrap the array in an object with a type property for opportunities
+        attachmentExportData = {
+          origin: 'AMO-TOOLS-DESKTOP-OPPORTUNITIES',
+          opportunities: this.measurItemAttachment.itemData
+        };
       }
 
       this.measurEmailData = {
@@ -131,10 +134,10 @@ export class SendEmailHttpError extends Error { }
 
 
 export interface MeasurEmailData {
-  emailTo: string
-  emailSender: string,
-  fileName: string,
-  attachment: ImportExportData | LogToolDbData,
+  emailTo: string;
+  emailSender: string;
+  fileName: string;
+  attachment: ImportExportData | LogToolDbData | OpportunitiesExportData;
   isProduction?: boolean;
 }
 
@@ -145,3 +148,8 @@ export interface MeasurItemAttachment {
 }
 
 export type EmailSentStatus = "success" | "error" | "content-too-large" | 'sending';
+
+export interface OpportunitiesExportData {
+  origin: string;
+  opportunities: any[];
+}

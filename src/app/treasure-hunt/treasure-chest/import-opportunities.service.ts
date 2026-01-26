@@ -1,11 +1,68 @@
 import { Injectable } from '@angular/core';
 import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ImportExportOpportunities, Treasure, TreasureHunt } from '../../shared/models/treasure-hunt';
 import { UpdateDataService } from '../../shared/helper-services/update-data.service';
-
 @Injectable()
 export class ImportOpportunitiesService {
 
   constructor(private updateDataService: UpdateDataService) { }
+
+//new import for Opportunity Cards that attempts to reintegrate the opportunities into their respective arrays
+  importOpportunities(importedOpportunities: any[], treasureHunt: TreasureHunt): TreasureHunt {
+    // Map of Treasure enum value to TreasureHunt property name
+    const typeToProp: { [key: string]: keyof ImportExportOpportunities } = {
+      [Treasure.lightingReplacement]: 'lightingReplacements',
+      [Treasure.opportunitySheet]: 'opportunitySheets',
+      [Treasure.assessmentOpportunity]: 'assessmentOpportunities',
+      [Treasure.replaceExisting]: 'replaceExistingMotors',
+      [Treasure.motorDrive]: 'motorDrives',
+      [Treasure.naturalGasReduction]: 'naturalGasReductions',
+      [Treasure.electricityReduction]: 'electricityReductions',
+      [Treasure.compressedAir]: 'compressedAirReductions',
+      [Treasure.compressedAirPressure]: 'compressedAirPressureReductions',
+      [Treasure.waterReduction]: 'waterReductions',
+      [Treasure.steamReduction]: 'steamReductions',
+      [Treasure.pipeInsulation]: 'pipeInsulationReductions',
+      [Treasure.tankInsulation]: 'tankInsulationReductions',
+      [Treasure.airLeak]: 'airLeakSurveys',
+      [Treasure.wallLoss]: 'wallLosses',
+      [Treasure.airHeating]: 'airHeatingOpportunities',
+      [Treasure.flueGas]: 'flueGasLosses',
+      [Treasure.leakageLoss]: 'leakageLosses',
+      [Treasure.wasteHeat]: 'wasteHeatReductions',
+      [Treasure.openingLoss]: 'openingLosses',
+      [Treasure.heatCascading]: 'heatCascadingOpportunities',
+      [Treasure.waterHeating]: 'waterHeatingOpportunities',
+      [Treasure.coolingTowerMakeup]: 'coolingTowerMakeupOpportunities',
+      [Treasure.chillerStaging]: 'chillerStagingOpportunities',
+      [Treasure.chillerPerformance]: 'chillerPerformanceOpportunities',
+      [Treasure.coolingTowerFan]: 'coolingTowerFanOpportunities',
+      [Treasure.coolingTowerBasin]: 'coolingTowerBasinOpportunities',
+      [Treasure.boilerBlowdownRate]: 'boilerBlowdownRateOpportunities',
+      [Treasure.powerFactorCorrection]: 'powerFactorCorrectionOpportunities',
+    };
+
+    // Group opportunities by type
+    const grouped: { [key: string]: any[] } = {};
+    for (const opp of importedOpportunities) {
+      const type = opp.opportunityType;
+      if (!typeToProp[type]) continue; // skip unknown types
+      if (!grouped[type]) grouped[type] = [];
+      grouped[type].push(opp);
+    }
+
+    // Only add non-empty arrays to treasureHunt
+    for (const type in grouped) {
+      const prop = typeToProp[type];
+      if (grouped[type] && grouped[type].length > 0) {
+        // Optionally update legacy fields if needed
+        console.log('GTROUPED TYPE', grouped[type], type);
+        this.updateLegacyOpportunities(grouped[type], type);
+        (treasureHunt as any)[prop] = grouped[type];
+      }
+    }
+    console.log('treasure hunt after import', treasureHunt);
+    return treasureHunt;
+  }
 
   importData(data: ImportExportOpportunities, treasureHunt: TreasureHunt): TreasureHunt {
     if (data.compressedAirReductions) {
@@ -230,18 +287,20 @@ export class ImportOpportunitiesService {
   }
 
   updateCompressedAirPressureFields(compressedAirPressureReductionTH: CompressedAirPressureReductionTreasureHunt) {
-    compressedAirPressureReductionTH.baseline.forEach(baselineInput => {
-      if (!baselineInput.atmosphericPressure) {
-        baselineInput.atmosphericPressure = 0;
-      }
-      if (!baselineInput.pressureRated) {
-        baselineInput.pressureRated = 0;
-      }
-      if (!baselineInput.powerType) {
-        baselineInput.powerType = 'Measured';
-      }
-    });
-    if (compressedAirPressureReductionTH.modification && compressedAirPressureReductionTH.modification.length > 0) {
+    if (compressedAirPressureReductionTH.baseline && Array.isArray(compressedAirPressureReductionTH.baseline)) {
+      compressedAirPressureReductionTH.baseline.forEach(baselineInput => {
+        if (!baselineInput.atmosphericPressure) {
+          baselineInput.atmosphericPressure = 0;
+        }
+        if (!baselineInput.pressureRated) {
+          baselineInput.pressureRated = 0;
+        }
+        if (!baselineInput.powerType) {
+          baselineInput.powerType = 'Measured';
+        }
+      });
+    }
+    if (compressedAirPressureReductionTH.modification && Array.isArray(compressedAirPressureReductionTH.modification)) {
       compressedAirPressureReductionTH.modification.forEach(modification => {
         if (!modification.atmosphericPressure) {
           modification.atmosphericPressure = 0;
@@ -258,22 +317,44 @@ export class ImportOpportunitiesService {
   }
 
   updateCompressedAirReduction(compressedAirReductionTH: CompressedAirReductionTreasureHunt) {
-    compressedAirReductionTH.baseline.map(baselineInput => {
-      return this.updateDataService.updateCompressedAirReduction(baselineInput);
-    });
-    compressedAirReductionTH.modification.map(modInput => {
-      return this.updateDataService.updateCompressedAirReduction(modInput);
-    });
-
+    if (compressedAirReductionTH.baseline && Array.isArray(compressedAirReductionTH.baseline)) {
+      compressedAirReductionTH.baseline.map(baselineInput => {
+        return this.updateDataService.updateCompressedAirReduction(baselineInput);
+      });
+    }
+    if (compressedAirReductionTH.modification && Array.isArray(compressedAirReductionTH.modification)) {
+      compressedAirReductionTH.modification.map(modInput => {
+        return this.updateDataService.updateCompressedAirReduction(modInput);
+      });
+    }
     return compressedAirReductionTH;
   }
 
-   updateAirLeak(airLeakSurvey: AirLeakSurveyTreasureHunt) {
-    airLeakSurvey.airLeakSurveyInput.compressedAirLeakSurveyInputVec.map(input => {
-      return this.updateDataService.updateAirLeakSurvey(input, airLeakSurvey.airLeakSurveyInput.facilityCompressorData);
-    });
-
+  updateAirLeak(airLeakSurvey: AirLeakSurveyTreasureHunt) {
+    if (
+      airLeakSurvey.airLeakSurveyInput &&
+      Array.isArray(airLeakSurvey.airLeakSurveyInput.compressedAirLeakSurveyInputVec)
+    ) {
+      airLeakSurvey.airLeakSurveyInput.compressedAirLeakSurveyInputVec.map(input => {
+        return this.updateDataService.updateAirLeakSurvey(input, airLeakSurvey.airLeakSurveyInput.facilityCompressorData);
+      });
+    }
     return airLeakSurvey;
+  }
+
+  // Defensive wrappers for other opportunity types that may have baseline/modification arrays
+  updateGenericWithBaselineAndModification(obj: any, baselineKey: string = 'baseline', modificationKey: string = 'modification', updateFn?: (item: any) => void) {
+    if (obj[baselineKey] && Array.isArray(obj[baselineKey])) {
+      obj[baselineKey].forEach((item: any) => {
+        if (updateFn) updateFn(item);
+      });
+    }
+    if (obj[modificationKey] && Array.isArray(obj[modificationKey])) {
+      obj[modificationKey].forEach((item: any) => {
+        if (updateFn) updateFn(item);
+      });
+    }
+    return obj;
   }
   
 }

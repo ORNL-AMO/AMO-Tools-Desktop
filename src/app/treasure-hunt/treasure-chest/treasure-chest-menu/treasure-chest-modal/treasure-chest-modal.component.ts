@@ -6,6 +6,11 @@ import { EmailMeasurDataService } from '../../../../shared/email-measur-data/ema
 import { TreasureChestMenuService } from '../treasure-chest-menu.service';
 import { Subscription } from 'rxjs';
 import { OpportunityCardsService } from '../../opportunity-cards/opportunity-cards.service';
+import { ImportExportOpportunities } from '../../../../shared/models/treasure-hunt';
+import { TreasureHuntOpportunity } from '../../../../shared/models/treasure-hunt';
+import { TreasureHuntService } from '../../../treasure-hunt.service';
+import { TreasureHunt } from '../../../../shared/models/treasure-hunt';
+import * as _ from 'lodash';
 @Component({
   selector: 'app-treasure-chest-modal',
   standalone: false,
@@ -18,18 +23,24 @@ export class TreasureChestModalComponent {
 
   opportunityCardsSub: Subscription;
   latestOpportunityCardList: any;
+  exportOpportunities: ImportExportOpportunities
+  treasureHunt: TreasureHunt;
+  //
   constructor(
     private coreService: CoreService,
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private emailMeasurDataService: EmailMeasurDataService,
     private treasureChestMenuService: TreasureChestMenuService,
     private opportunityCardsService: OpportunityCardsService,
+    private treasureHuntService: TreasureHuntService
   ) { }
 
   ngOnInit() {
     this.opportunityCardsSub = this.opportunityCardsService.opportunityCards.subscribe(cardList => {
       this.latestOpportunityCardList = cardList;
+      console.log('!!!!!!!!!!!!!!',this.latestOpportunityCardList);
     });
+     this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
   }
 
   ngAfterViewInit() {
@@ -53,7 +64,9 @@ export class TreasureChestModalComponent {
   }
 
   showExportToLocalModal() {
-    this.exportToJustifiTemplateService.treasureHuntAttachment = this.latestOpportunityCardList;
+    // this.setImportExportData();
+    console.log('show export to justifi modal', this.exportOpportunities);
+    this.exportToJustifiTemplateService.treasureHuntAttachment = this.exportOpportunities;
     this.exportToJustifiTemplateService.showTreasureHunt = true;
     this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
     this.hideModal();

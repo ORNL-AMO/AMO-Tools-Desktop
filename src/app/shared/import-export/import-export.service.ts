@@ -95,7 +95,7 @@ export class ImportExportService {
 
   downloadOpportunities(data: any, name: string) {
     data.origin = 'AMO-TOOLS-DESKTOP-OPPORTUNITIES';
-    let stringifyData = JSON.stringify(data);
+    let stringifyData = JSON.stringify(data, null, 2);
     let doc = this.windowRefService.getDoc();
     let dlLink = doc.createElement("a");
     let dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(stringifyData);
