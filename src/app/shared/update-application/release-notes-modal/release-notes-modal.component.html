@@ -44,6 +44,69 @@
 
           <label>Application</label>
           <ul>
+            <li>Added: New DOE logo to landing page and reports</li>
+            <li>Enhanced: Unit converter unit sorting</li>
+            <li>Enhanced: Power Factor Correction calculator:
+              <ul>
+                <li>Updated calculations to catch cases where the current power factor is actually better than the required power factor</li>
+                <li>Updated validation to include minimum, maximum, and contextually dependent values.</li>
+                <li>Fixed various UI bugs relating to deleting months, labeling and input fields</li>
+                <li>Change unit labels on "Marginal Cost of Demand" based on the selection for "How are you billed for demand".</li>
+                <li>Fixed Input table responsiveness under small screen widths</li>
+                <li>Change Proposed Apparent Power units to (kVA) when "How Billed" value is "Apparent Power"</li>
+                <li>If "How Billed" value is "Apparent Power", then update table headers "Demand Penalty" and "Penalty Cost" with a prefix of "Excess".</li>
+              </ul>
+            </li>
+            <li>Fixed: Update download links point to industrialresources.ornl.gov/measur/downloads</li>
+          </ul>
+
+          <label>Compressed Air</label>
+          <ul>
+            <li>Fixed: Leak Survey calculator correctly calculates results of individual leaks and multiple leaks regardless of "Fix" selection</li>
+          </ul>
+
+          <label>Process Heating</label>
+          <ul>
+            <li>Added: Update Cooling losses with documentation</li>
+            <li>Added: Update Opening losses with documentation</li>
+            <li>Added: Update Auxiliary Power losses with documentation</li>
+            <li>Added: Update Cascade Heat calculators with documentation</li>
+            <li>Added: Water Heating calculators with documentation</li>
+            <li>Added: Update Opening losses with documentation</li>
+            <li>Added: Update Flue Gas losses with documentation</li>
+            <li>Added: Update Charge material losses with documentation</li>
+            <li>Added: Update Exhaust Gas EAF losses with documentation</li>
+            <li>Added: Update Energy Input losses with documentation</li>
+            <li>Added: Update Air Heating Using Flue calculator with documentation</li>
+            <li>Added: Update O2 Enrichment calculator with documentation</li>
+            <li>Added: Update Orifice Meter Flow calculator with documentation</li>
+            <li>Fixed: Orifice Meter Flow calculator "Orifice Type" dropdown should set the "Discharge Coefficient"</li>
+            <li>Fixed: Extended Surface losses form to allow adding of loss</li>
+          </ul>
+
+          <label>Steam</label>
+          <ul>
+            <li>Fixed: Increased precision of SSMT Boiler form saturated properties validation to allow for common saturated properties ranges</li>
+          </ul>
+
+          <label>Water</label>
+          <ul>
+            <li>Added: True Cost adjustment table, allowing users with complex water system designs to ensure correct system cost attribution</li>
+            <li>Enhanced: Updated True Cost of systems algorithm to calculate costs for a broader set of system design scenarios, including situations with:
+              <ul>
+                <li>Losses in treatment</li>
+                <li>Chained water treatment components</li>
+                <li>Chained waste water treatment components</li>
+                <li>Outflow split to multiple systems within chained treatment</li>
+              </ul>
+            </li>
+          </ul>
+  
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.6.5:</label>
+          <br>
+          <label>Application</label>
+          <ul>
             <li>Added: Link to Industrial Resources page from MEASUR</li>
             <li>Added: Unit converter swap units feature</li>
             <li>Enhanced: Unit converter unit sorting</li>
@@ -86,47 +149,6 @@
           <ul>
             <li>Added: Versioning to diagram to enhance backwards compatibility</li>
             <li>Enhanced: Ensured visibility on small screens</li>
-          </ul>
-
-          <!--  Include prev version -->
-          <label class="header-label">Here are the details of what's new in version 1.6.4:</label>
-          <br>
-
-          <label>Application</label>
-          <ul>
-            <li>New: Add Compressed Air Inventory and Inventory Integrations</li>
-            <li>Fixed: Keep application sidebar open while navigating application calculators</li>
-            <li>Enhanced: Add Hover tooltips to assessment banner icons</li>
-          </ul>
-
-          <label>Treasure Hunt</label>
-          <ul>
-            <li>Enhanced: Add placeholder text describing Treasure Hunt opportunities</li>
-            <li>Fixed: Adjust Air Leak Survey conversions and results for Flow Rate, Air Loss, and Electricity
-              Consumption</li>
-            <li>Fixed: Allow conversion of Air Leak survey Treasure Hunt opportunity from Metric to Imperial</li>
-          </ul>
-
-          <label>Steam</label>
-          <ul>
-            <li>Enhanced: Add Boiler Efficiency Calculator modal to SSMT Explore Opportunities</li>
-          </ul>
-
-          <label>Compressed Air</label>
-          <ul>
-            <li>Enhanced: Provide message to user explaining requirements for Compressed Air - Air Flow Sankey
-              Visualization</li>
-            <li>New Feature: Compressed Air Inventory</li>
-            <li>New Feature: A compressor database allowing users to create a catalog of compressors in their facility
-            </li>
-            <li>New Feature: Integrated into Dashboard/Facility Framework</li>
-            <li>New Feature: Sorting & filtering of database</li>
-            <li>New Feature: Summary graphs, tables and printouts</li>
-            <li>New Feature: Comprehensive help text and links to calculators to populate certain fields</li>
-            <li>New Feature: Summary page</li>
-            <li>New Feature: Ability to link a motor inventory item to a compressor inventory item</li>
-            <li>New Feature: Ability to create an assessment from a compressor inventory system and link an assessment
-              to an existing compressor inventory item</li>
           </ul>
 
 

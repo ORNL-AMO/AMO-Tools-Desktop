@@ -14,7 +14,7 @@ export class ExtendedSurfaceLossesService {
       'avgSurfaceTemp': ['', Validators.required],
       'ambientTemp': ['', Validators.required],
       'surfaceEmissivity': [0.9, Validators.required],
-      'name': ['Loss #' + lossNum, , Validators.required]
+      'name': ['Loss #' + lossNum, Validators.required]
     });
   }
 

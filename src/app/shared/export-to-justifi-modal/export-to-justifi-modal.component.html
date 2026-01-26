@@ -10,36 +10,28 @@
                 </button>
             </div>
             <div class="modal-body p-2">
-                <div *ngIf="!this.showTreasureHunt">
-                    <p class="mb-0">
-                        The all new <u class="bold">JUSTIFI</u> platform can help you find Non-Energy Benefits (NEBs) of
-                        your energy efficiency projects! If you are new to NEBs, the National Renewable Energy
-                        Laboratory (NREL) has compiled a knowledge library on the topic (<a
-                            href="https://www.nrel.gov/manufacturing/non-energy-benefits" target="_blank">https://www.nrel.gov/manufacturing/non-energy-benefits</a>) where you can
-                        learn more!
-                    </p>
-                    <ol>
-                        <li>
-                            Clicking "Export" below to download the selected assessments
-                            to a JUSTIFI excel template.
-                        </li>
-                        <li>
-                            Navigate to the JUSTIFI platform at
-                            <a href="https://justifi.ornl.gov" target="_blank">https://justifi.ornl.gov</a>.
-                        </li>
-                        <li>
-                            Upload the downloaded JUSTIFI template file to the platform.
-                        </li>
-                        <li>
-                            Work through the JUSTIFI platform to find NEBs for your energy efficiency projects!
-                        </li>
-                    </ol>
-                </div>
-                <div *ngIf="this.showTreasureHunt">
-                     <p class="mb-0">
-                        Export the following Treasure Hunt Opportunities to an excel file.
-                     </p>
-                </div>
+                <p class="mb-0">
+                    The all new <u class="bold">JUSTIFI</u> platform can help you find Non-Energy Benefits (NEBs) of
+                    your energy efficiency projects! If you are new to NEBs, the National Laboratory of the Rockies (NRL) has compiled a knowledge library on the topic (<a
+                        href="https://www.nrel.gov/manufacturing/non-energy-benefits" target="_blank">https://www.nrel.gov/manufacturing/non-energy-benefits</a>) where you can
+                    learn more!
+                </p>
+                <ol>
+                    <li>
+                        Clicking "Export" below to download the selected assessments
+                        to a JUSTIFI excel template.
+                    </li>
+                    <li>
+                        Navigate to the JUSTIFI platform at
+                        <a href="https://justifi.ornl.gov" target="_blank">https://justifi.ornl.gov</a>.
+                    </li>
+                    <li>
+                        Upload the downloaded JUSTIFI template file to the platform.
+                    </li>
+                    <li>
+                        Work through the JUSTIFI platform to find NEBs for your energy efficiency projects!
+                    </li>
+                </ol>
                 <form *ngIf="!exportDone">
                     <div  *ngIf="this.showTreasureHunt" style="max-height: 300px; overflow-y: auto;">
                         <table class="table table-sm table-bordered mb-0">

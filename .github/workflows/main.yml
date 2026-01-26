@@ -3,15 +3,11 @@ name: CI/CD
 on:
   push:
     branches:
-      - 'master'
-      - 'develop'
+      - "master"
+      - "develop"
   workflow_dispatch:
 
 jobs:
-  qa:
-    if: github.event_name == 'workflow_dispatch'
-    uses: ./.github/workflows/release_qa.yml
-
   web:
     if: github.ref_name == 'develop' || github.ref_name == 'master'
     uses: ./.github/workflows/release_web.yml

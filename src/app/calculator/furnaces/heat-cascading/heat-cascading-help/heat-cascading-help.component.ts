@@ -2,29 +2,31 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { HeatCascadingService } from '../heat-cascading.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
-    selector: 'app-heat-cascading-help',
-    templateUrl: './heat-cascading-help.component.html',
-    styleUrls: ['./heat-cascading-help.component.css'],
-    standalone: false
+  selector: 'app-heat-cascading-help',
+  templateUrl: './heat-cascading-help.component.html',
+  styleUrls: ['./heat-cascading-help.component.css'],
+  standalone: false
 })
 export class HeatCascadingHelpComponent implements OnInit {
   @Input()
   settings: Settings;
-  
+
   currentFieldSub: Subscription;
   currentField: string;
   displayDescription: boolean = true;
-  
+
+  docsLink: string = environment.measurDocsUrl;
   constructor(private heatCascadingService: HeatCascadingService) { }
-  
+
   ngOnInit(): void {
     this.currentFieldSub = this.heatCascadingService.currentField.subscribe(val => {
       this.currentField = val;
     });
   }
-  
+
   ngOnDestroy(): void {
     this.currentFieldSub.unsubscribe();
   }

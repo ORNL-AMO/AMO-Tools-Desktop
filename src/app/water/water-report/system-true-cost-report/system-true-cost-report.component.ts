@@ -1,12 +1,12 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, Injector, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { SystemTrueCostData } from '../../water-assessment-results.service';
-import { WaterReportService } from '../water-report.service';
+import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import * as _ from 'lodash';
-import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
-import { Diagram } from '../../../shared/models/diagram';
-import { checkDiagramNodeErrors, getIsDiagramValid, NodeErrors } from 'process-flow-lib';
+import { sortTrueCostReport, SystemTrueCostData } from 'process-flow-lib';
+import { ModalDialogService } from '../../../shared/modal-dialog.service';
+import { TrueCostEditableTableComponent, TrueCostEditableTableDataInputs } from '../true-cost-editable-table/true-cost-editable-table.component';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-system-true-cost-report',
@@ -15,6 +15,9 @@ import { checkDiagramNodeErrors, getIsDiagramValid, NodeErrors } from 'process-f
   styleUrl: './system-true-cost-report.component.css'
 })
 export class SystemTrueCostReportComponent {
+  private waterAssessmentResultsService = inject(WaterAssessmentResultsService);
+  private destroyRef = inject(DestroyRef);
+  
   @Input()
   inRollup: boolean;
   @Input()
@@ -22,41 +25,24 @@ export class SystemTrueCostReportComponent {
   @Input()
   settings: Settings;
 
-
   notes: Array<{
     modificationName: string,
     note: string
   }>;
   selectedModificationIndex: number = 1;
-  trueCostOfSystemsReport: SystemTrueCostData[] = [];
-  systemTrueCostReportSubscription: any;
-  isDiagramValid: boolean;
+  trueCostOfSystemsReport$: Observable<SystemTrueCostData[]> = this.waterAssessmentResultsService.trueCostOfSystemsReport$.pipe(
+    map((report) => sortTrueCostReport(report, 'desc'))
+  );
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
   copyTableString: any;
 
   constructor(
-    private waterReportService: WaterReportService,
-    private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService
+    private modalDialogService: ModalDialogService,
+    private injector: Injector
   ) { }
 
-  ngOnInit(): void {
-    let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
-    let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
-    
-    this.systemTrueCostReportSubscription = this.waterReportService.systemTrueCostReport.subscribe(report => {
-      this.isDiagramValid = getIsDiagramValid(nodeErrors);
-      if (this.isDiagramValid) {
-        this.trueCostOfSystemsReport = this.waterReportService.getSortedTrueCostReport(report);
-      } else {
-        this.trueCostOfSystemsReport = [];
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.systemTrueCostReportSubscription.unsubscribe();
-  }
+  ngOnInit(): void {}
 
   getFlowDecimalPrecisionPipeValue(): string {
     let pipeVal = `1.0-${this.settings.flowDecimalPrecision}`;
@@ -65,6 +51,22 @@ export class SystemTrueCostReportComponent {
 
   updateCopyTableString() {
     this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+
+  openTrueCostEditableTableModal() {
+    this.modalDialogService.openModal<TrueCostEditableTableComponent, TrueCostEditableTableDataInputs>(
+      TrueCostEditableTableComponent,
+      {
+        minWidth: '900px',
+        width: '90%',
+        data: {
+          inRollup: this.inRollup,
+          assessment: this.assessment,
+          settings: this.settings
+        },
+      },
+      this.injector
+    );
   }
 
 }

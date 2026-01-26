@@ -27,13 +27,12 @@
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     <span *ngIf="baselineResults.totalSourceWaterIntake">{{baselineResults.totalSourceWaterIntake |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!baselineResults.totalSourceWaterIntake">&mdash;&mdash;</span>
+                    <span *ngIf="!baselineResults.totalSourceWaterIntake">0</span>
                 </td>
                 <td *ngFor="let result of modificationResults; let index = index;">
                     <span *ngIf="result.totalSourceWaterIntake">{{result.value
                         | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.totalSourceWaterIntake">&mdash;
-                        &mdash;</span>
+                    <span *ngIf="!result.totalSourceWaterIntake">0</span>
                 </td>
             </tr>
             <tr>
@@ -44,13 +43,12 @@
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     <span *ngIf="baselineResults.totalPerProductionUnit">{{baselineResults.totalPerProductionUnit |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!baselineResults.totalPerProductionUnit">&mdash;&mdash;</span>
+                    <span *ngIf="!baselineResults.totalPerProductionUnit">0</span>
                 </td>
                 <td *ngFor="let result of modificationResults; let index = index;">
                     <span *ngIf="result.totalPerProductionUnit">{{result.value
                         | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.totalPerProductionUnit">&mdash;
-                        &mdash;</span>
+                    <span *ngIf="!result.totalPerProductionUnit">0</span>
                 </td>
             </tr>
 
@@ -58,13 +56,12 @@
                 <td>Direct Cost of Water ($)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     <span *ngIf="baselineResults.directCost">${{baselineResults.directCost | number:'1.0-2'}}</span>
-                    <span *ngIf="!baselineResults.directCost">&mdash;&mdash;</span>
+                    <span *ngIf="!baselineResults.directCost">0</span>
                 </td>
                 <td *ngFor="let result of modificationResults; let index = index;">
                     <span *ngIf="result.directCost">${{result.value
                         | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.directCost">&mdash;
-                        &mdash;</span>
+                    <span *ngIf="!result.directCost">0</span>
                 </td>
             </tr>
 
@@ -90,13 +87,12 @@
                 <td>True Cost ($)</td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     <span *ngIf="baselineResults.trueCost">${{baselineResults.trueCost | number:'1.0-2'}}</span>
-                    <span *ngIf="!baselineResults.trueCost">&mdash;&mdash;</span>
+                    <span *ngIf="!baselineResults.trueCost">0</span>
                 </td>
                 <td *ngFor="let result of modificationResults; let index = index;">
                     <span *ngIf="result.trueCost">${{result.value
                         | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.trueCost">&mdash;
-                        &mdash;</span>
+                    <span *ngIf="!result.trueCost">0</span>
                 </td>
             </tr>
             <tr>
@@ -105,13 +101,12 @@
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     <span *ngIf="baselineResults.trueCostPerProductionUnit">${{baselineResults.trueCostPerProductionUnit
                         | number:'1.0-2'}}</span>
-                    <span *ngIf="!baselineResults.trueCostPerProductionUnit">&mdash;&mdash;</span>
+                    <span *ngIf="!baselineResults.trueCostPerProductionUnit">0</span>
                 </td>
                 <td *ngFor="let result of modificationResults; let index = index;">
                     <span *ngIf="result.trueCostPerProductionUnit">${{result.value
                         | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.trueCostPerProductionUnit">&mdash;
-                        &mdash;</span>
+                    <span *ngIf="!result.trueCostPerProductionUnit">0</span>
                 </td>
             </tr>
             <tr class="bold-row">
@@ -119,13 +114,12 @@
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
                     <span *ngIf="baselineResults.trueOverDirectResult">{{baselineResults.trueOverDirectResult |
                         number:'1.0-2'}}</span>
-                    <span *ngIf="!baselineResults.trueOverDirectResult">&mdash;&mdash;</span>
+                    <span *ngIf="!baselineResults.trueOverDirectResult">0</span>
                 </td>
                 <td *ngFor="let result of modificationResults; let index = index;">
                     <span *ngIf="result.trueOverDirectResult">{{result.value
                         | number:'1.0-2'}}</span>
-                    <span *ngIf="!result.trueOverDirectResult">&mdash;
-                        &mdash;</span>
+                    <span *ngIf="!result.trueOverDirectResult">0</span>
                 </td>
             </tr>
 

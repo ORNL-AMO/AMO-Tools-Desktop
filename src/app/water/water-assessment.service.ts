@@ -1,17 +1,38 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, combineLatest, debounceTime, filter, map, Observable } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
-import { WaterUsingSystemService } from './water-using-system/water-using-system.service';
-import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getNewWaterTreatmentComponent, getWasteWaterTreatmentComponent, getWaterUsingSystem, IntakeSource, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getIsDiagramValid, getNewWaterTreatmentComponent, getWasteWaterTreatmentComponent, getWaterUsingSystem, IntakeSource, NodeErrors, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { Assessment } from '../shared/models/assessment';
+import { Diagram } from '../shared/models/diagram';
+import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/update-diagram-from-assessment.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WaterAssessmentService {
+  private readonly updateDiagramFromAssessmentService = inject(UpdateDiagramFromAssessmentService);
+
+  waterAssessment: BehaviorSubject<WaterAssessment>;
+
+  private readonly assessment = new BehaviorSubject<Assessment>(undefined);
+  readonly assessment$: Observable<Assessment> = this.assessment.asObservable();
+  
+  settings: BehaviorSubject<Settings> = new BehaviorSubject<Settings>(undefined);
+  readonly settings$: Observable<Settings> = this.settings.asObservable();
+
+
+  readonly isDiagramValid$: Observable<boolean> = this.assessment$.pipe(
+    filter((assessment) => assessment !== undefined),
+    map((assessment) => {
+      let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
+      let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
+      const isDiagramValid = getIsDiagramValid(nodeErrors);
+      return isDiagramValid;
+    })
+  );
+
   assessmentId: number;
-  settings: BehaviorSubject<Settings>;
   mainTab: BehaviorSubject<WaterMainTabString>;
   setupTab: BehaviorSubject<WaterSetupTabString>;
   waterUsingSystemTab: BehaviorSubject<WaterUsingSystemTabString>;
@@ -23,7 +44,6 @@ export class WaterAssessmentService {
   assessmentTab: BehaviorSubject<string>;
   secondaryAssessmentTab: BehaviorSubject<string>;
   modalOpen: BehaviorSubject<boolean>;
-  waterAssessment: BehaviorSubject<WaterAssessment>;
   selectedModificationId: BehaviorSubject<string>;
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
@@ -45,10 +65,8 @@ export class WaterAssessmentService {
   ];
 
   constructor(
-    private waterSystemComponentService: WaterSystemComponentService,
-    private waterUsingSystemService: WaterUsingSystemService,
-    private convertUnitsService: ConvertUnitsService) {
-    this.settings = new BehaviorSubject<Settings>(undefined);
+    private waterSystemComponentService: WaterSystemComponentService) {
+    this.waterAssessment = new BehaviorSubject<WaterAssessment>(undefined);
     this.mainTab = new BehaviorSubject<WaterMainTabString>('baseline');
     this.setupTab = new BehaviorSubject<WaterSetupTabString>('system-basics');
     this.waterUsingSystemTab = new BehaviorSubject<WaterUsingSystemTabString>('system');
@@ -59,7 +77,6 @@ export class WaterAssessmentService {
     // this.calcTab = new BehaviorSubject<string>('air-flow-conversion');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.secondaryAssessmentTab = new BehaviorSubject<string>('modifications');
-    this.waterAssessment = new BehaviorSubject<WaterAssessment>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.selectedModificationId = new BehaviorSubject<string>(undefined);
     this.showModificationListModal = new BehaviorSubject<boolean>(false);
@@ -67,12 +84,16 @@ export class WaterAssessmentService {
     this.showExportModal = new BehaviorSubject<boolean>(false);
   }
 
-  updateWaterAssessment(waterAssessment: WaterAssessment) {
-    this.waterAssessment.next(waterAssessment);
+  setAssessment(assessment: Assessment) {
+    this.assessment.next(assessment);
   }
 
-  setConnectedPartsFromEdges() {
+  get assessmentValue(): Assessment {
+    return this.assessment.getValue();
+  }
 
+  updateWaterAssessment(waterAssessment: WaterAssessment) {
+    this.waterAssessment.next(waterAssessment);
   }
 
   setWaterProcessComponentTitle(componentType: WaterProcessComponentType) {
