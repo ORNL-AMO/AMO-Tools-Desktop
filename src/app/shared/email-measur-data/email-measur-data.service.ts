@@ -8,6 +8,7 @@ import { ImportExportData } from '../import-export/importExportModel';
 import { MeasurItemType } from '../models/app';
 import { LogToolDbData } from '../../log-tool/log-tool-models';
 import { AnalyticsService } from '../analytics/analytics.service';
+import { ImportExportOpportunities } from '../models/treasure-hunt';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,9 @@ export class EmailMeasurDataService {
     })
   };
   
-  constructor(private httpClient: HttpClient, private exportService: ExportService, private analyticsService: AnalyticsService) {
+  constructor(private httpClient: HttpClient, 
+    private exportService: ExportService, 
+    private analyticsService: AnalyticsService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.emailSentStatus = new BehaviorSubject<EmailSentStatus>(undefined);
     this.showEmailMeasurDataModal = new BehaviorSubject<boolean>(undefined);
@@ -37,7 +40,7 @@ export class EmailMeasurDataService {
   setEmailData(measurEmailForm: FormGroup) {
 // WK Get opportunities from the export functionality, then pass to the correct locaiton for future implementation
     if (measurEmailForm.valid && this.measurItemAttachment) {
-      let attachmentExportData: ImportExportData | LogToolDbData | OpportunitiesExportData;
+      let attachmentExportData: ImportExportData | LogToolDbData | ImportExportOpportunities;
       if (this.measurItemAttachment.itemType === 'assessment') {
         attachmentExportData = this.exportService.getSelectedAssessment(this.measurItemAttachment.itemData);
         attachmentExportData['origin'] = "AMO-TOOLS-DESKTOP";
@@ -48,11 +51,8 @@ export class EmailMeasurDataService {
         attachmentExportData = this.measurItemAttachment.itemData;
         attachmentExportData['origin'] = "AMO-LOG-TOOL-DATA";
       } else if (this.measurItemAttachment.itemType === 'opportunities') {
-        // Wrap the array in an object with a type property for opportunities
-        attachmentExportData = {
-          origin: 'AMO-TOOLS-DESKTOP-OPPORTUNITIES',
-          opportunities: this.measurItemAttachment.itemData
-        };
+        // * origin is already assigned
+        attachmentExportData = this.measurItemAttachment.itemData
       }
 
       this.measurEmailData = {
@@ -137,7 +137,7 @@ export interface MeasurEmailData {
   emailTo: string;
   emailSender: string;
   fileName: string;
-  attachment: ImportExportData | LogToolDbData | OpportunitiesExportData;
+  attachment: ImportExportData | LogToolDbData | ImportExportOpportunities;
   isProduction?: boolean;
 }
 
@@ -148,8 +148,3 @@ export interface MeasurItemAttachment {
 }
 
 export type EmailSentStatus = "success" | "error" | "content-too-large" | 'sending';
-
-export interface OpportunitiesExportData {
-  origin: string;
-  opportunities: any[];
-}
