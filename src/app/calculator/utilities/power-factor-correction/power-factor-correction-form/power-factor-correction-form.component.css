@@ -1,3 +1,14 @@
+/* Make table container scrollable and inputs shrink to fit */
+.table-responsive-custom {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-input-responsive {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
 tr:nth-child(odd) {
     background-color: lightgray;
 }
@@ -22,4 +33,11 @@ tr {
 .input-group-addon.units.op-hour-addon{
     border-left: solid 1px;
     border-right: none;
+}
+
+.error-narrow {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
 }

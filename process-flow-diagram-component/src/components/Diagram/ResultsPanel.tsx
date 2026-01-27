@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import DebugResults from "../Drawer/DebugResults";
 
 // todo TESTING
-const ResultsPanel = () => {
+const ResultsPanel = (props: { style?: React.CSSProperties }) => {
   return (
     <Box
      sx={{
@@ -12,6 +12,7 @@ const ResultsPanel = () => {
         minWidth: '1000px',
         width: '70%',
         zIndex: 999,
+        ...props.style
       }}>
     <DebugResults />
     </Box>

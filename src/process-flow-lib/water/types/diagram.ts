@@ -28,6 +28,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   export interface CustomEdgeData extends Record<string, unknown> {
     flowValue: number,
     hasOwnEdgeType: string,
+    edgeDescription: string,
   }
   
   // * patches v11 -> v12 typing changes

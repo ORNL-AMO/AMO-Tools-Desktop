@@ -2,7 +2,7 @@ import { SaturatedPropertiesOutput } from './../../shared/models/steam/steam-out
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { BoilerService, BoilerWarnings } from './boiler.service';
-import { BoilerInput, HeaderInput, SSMT } from '../../shared/models/steam/ssmt';
+import { BoilerInput, SSMT } from '../../shared/models/steam/ssmt';
 import { UntypedFormGroup } from '@angular/forms';
 import { SsmtService } from '../ssmt.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -74,10 +74,16 @@ export class BoilerComponent implements OnInit {
 
   ngOnInit() {
     if (this.isBaseline) {
-      this.saturatedPropertiesOutput$ = this.boilerService.baselineSaturatedPropertiesOutput$;
+      this.saturatedPropertiesOutput$ = this.boilerService.baselineSaturatedPropertiesOutput$
+      // .pipe(
+      //   shareReplay(1)
+      // );
     } else {
       this.idString = 'modification_';
-      this.saturatedPropertiesOutput$ = this.boilerService.modificationSaturatedPropertiesOutput$;
+      this.saturatedPropertiesOutput$ = this.boilerService.modificationSaturatedPropertiesOutput$
+      // .pipe(
+      //   shareReplay(1)
+      // );
     }
     this.initForm();
     this.setFuelTypes();
@@ -118,7 +124,7 @@ export class BoilerComponent implements OnInit {
   updateSteamQuality(): void {
     this.saturatedPressure.clearValidators();
     this.steamTemperature.clearValidators();
-    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings);
+    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings, this.isBaseline);
     this.save();
   }
 
@@ -131,7 +137,7 @@ export class BoilerComponent implements OnInit {
       }
     }
 
-    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings);
+    this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings, this.isBaseline);
     this.save();
   }
 

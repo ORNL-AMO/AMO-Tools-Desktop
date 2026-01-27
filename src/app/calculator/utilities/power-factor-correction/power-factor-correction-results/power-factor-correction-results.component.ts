@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from '../power-factor-correction.component';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AdjustedOrActual, BilledForDemand, PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs, PowerFactorCorrectionService } from '../power-factor-correction.service';
 
 @Component({
     selector: 'app-power-factor-correction-results',
@@ -8,19 +9,34 @@ import { PowerFactorCorrectionInputs, PowerFactorCorrectionOutputs } from '../po
     standalone: false
 })
 export class PowerFactorCorrectionResultsComponent implements OnInit {
-  @Input()
-  results: PowerFactorCorrectionOutputs;
-  @Input()
-  inputs: PowerFactorCorrectionInputs;
-
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   @ViewChild('copyChart', { static: false }) copyChart: ElementRef;
   tableString: any;
   chartString: any;
 
-  constructor() { }
+  inputs: PowerFactorCorrectionInputs;
+  results: PowerFactorCorrectionOutputs;
+  powerFactorInputSubscription: Subscription;
+  powerFactorResultsSubscription: Subscription;
+
+  BilledForDemand = BilledForDemand;
+  AdjustedOrActual = AdjustedOrActual;
+
+  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService) { }
 
   ngOnInit() {
+      this.powerFactorInputSubscription = this.powerFactorCorrectionService.powerFactorInputs.subscribe(val => {
+      this.inputs = val;
+    });
+
+     this.powerFactorResultsSubscription = this.powerFactorCorrectionService.powerFactorOutputs.subscribe(val => {
+      this.results = val;
+    });
+  }
+
+  ngOnDestroy() {
+    this.powerFactorInputSubscription.unsubscribe();
+    this.powerFactorResultsSubscription.unsubscribe();
   }
 
   updateTableString() {

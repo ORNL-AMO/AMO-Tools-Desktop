@@ -1,11 +1,11 @@
 import { Component, DestroyRef, ElementRef, inject, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
-import { SystemAnnualSummaryResults } from 'process-flow-lib';
+import { PlantSystemSummaryResults, SystemAnnualSummaryResults } from 'process-flow-lib';
 import { combineLatest, Subscription } from 'rxjs';
 import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
 import { WaterAssessmentService } from '../../water-assessment.service';
-import { WaterReportService } from '../water-report.service';
 import { getGraphColors } from '../../../shared/helperFunctions';
+import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -15,8 +15,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './stacked-bar-intake-flow.component.css'
 })
 export class StackedBarIntakeFlowComponent {
- private readonly waterReportService = inject(WaterReportService);
   private readonly waterAssessmentService = inject(WaterAssessmentService);
+  private readonly waterAssessmentResultsService = inject(WaterAssessmentResultsService);
   private readonly printOptionsMenuService = inject(PrintOptionsMenuService);
   private readonly plotlyService = inject(PlotlyService);
   private readonly destroyRef = inject(DestroyRef);
@@ -41,20 +41,17 @@ export class StackedBarIntakeFlowComponent {
 
   ngAfterViewInit() {
       combineLatest([
-        this.waterReportService.plantSummaryReport,
-        this.waterReportService.systemStackedBarPercentView
+        this.waterAssessmentResultsService.plantSystemSummaryResults$,
+        this.waterAssessmentResultsService.systemStackedBarPercentView
       ]).pipe(
         takeUntilDestroyed(this.destroyRef)
-      ).subscribe(([plantSummaryReport, systemStackedBarPercentView]) => {
+      ).subscribe(([plantSystemSummaryResults, systemStackedBarPercentView]) => {
         this.showPercent = systemStackedBarPercentView;
-        this.renderChart();
+        this.renderChart(plantSystemSummaryResults);
       });
     }
 
-  renderChart() {
-    const report = this.waterReportService.plantSummaryReport.getValue();
-    if (!report) return;
-
+  renderChart(report: PlantSystemSummaryResults) {
     const settings = this.waterAssessmentService.settings.getValue();
     const units = settings && settings.unitsOfMeasure === 'Imperial' ? 'Mgal' : 'm<sup>3</sup>';
     const decimalPrecision = settings.flowDecimalPrecision ?? 2;

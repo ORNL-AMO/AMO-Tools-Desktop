@@ -32,7 +32,7 @@ export class EnergyUseService {
       orificeDiameter: [inputObj.orificeDiameter, [Validators.required, Validators.min(0)]],
       insidePipeDiameter: [inputObj.insidePipeDiameter, [Validators.required, Validators.min(0)]],
       sectionType: [inputObj.sectionType],
-      dischargeCoefficient: [inputObj.dischargeCoefficient, [Validators.required]],
+      dischargeCoefficient: [inputObj.dischargeCoefficient, [Validators.required, Validators.min(0), Validators.max(1)]],
       gasHeatingValue: [inputObj.gasHeatingValue, [Validators.required]],
       gasTemperature: [inputObj.gasTemperature, [Validators.required]],
       gasPressure: [inputObj.gasPressure, [Validators.required]],

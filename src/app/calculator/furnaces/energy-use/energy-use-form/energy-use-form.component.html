@@ -108,7 +108,7 @@
     </div>
     <span class="alert-danger pull-right small" *ngIf="form.controls.dischargeCoefficient.invalid && !form.controls.dischargeCoefficient.pristine">
       <span *ngIf="form.controls.dischargeCoefficient.errors.required">Value required.</span>
-      <span *ngIf="dischargeCoefficientError !== null">{{dischargeCoefficientError}}</span>
+      <span *ngIf="form.controls.dischargeCoefficient.errors.max || form.controls.dischargeCoefficient.errors.min">Discharge coefficient must be between {{this.rangeCheck.dischargeCoefficient.min}} and {{this.rangeCheck.dischargeCoefficient.max}}</span>
     </span>
   </div>
   <div class="form-group">
