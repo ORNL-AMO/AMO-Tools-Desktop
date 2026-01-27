@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry, timeout, map } from 'rxjs/operators';
+import { forkJoin, tap, Observable, of, throwError } from 'rxjs';
+import { catchError, retry, timeout, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { WEATHER_CONTEXT, WeatherContextData } from './modules/weather-data/weather-context.token';
 
@@ -51,14 +51,6 @@ export class WeatherApiService {
     }
   }
 
-  getFinishedRoute(): string {
-    if (this.weatherContextService) {
-      return this.weatherContextService.finishedRoute();
-    } else {
-      throw new Error('Weather context service not available');
-    }
-  }
-
   /**
    * Get hourly weather data for a specific station (POST to api/data)
    * @returns Observable<WeatherDataResponse>
@@ -100,7 +92,6 @@ export class WeatherApiService {
     );
   }
 
-    // todo move to WeatherApiService
   getLocation(addressString: string): Observable<Array<NominatimLocation>> {
     const qp = encodeURIComponent(addressString);
     let url = `https://nominatim.openstreetmap.org/search?q=${qp}&format=json`;
@@ -214,8 +205,62 @@ export class WeatherApiService {
     return throwError(() => apiError);
   };
 
+  /**
+   * Get locations from Nominatim and fetch stations for each location, filtering by TMY
+   * @param addressString - The address string to search
+   * @param radialDistance - The radial distance in miles
+   * @returns Observable<LocationsWithStationsResult>
+   */
+  getLocationsAndStationsTMY(addressString: string, radialDistance: number): Observable<LocationsWithStationsResult> {
+    return this.getLocation(addressString).pipe(
+      switchMap((locations: NominatimLocation[]) => {
+        if (!locations || locations.length === 0) {
+          return of({ locations: [], stationsByPlaceId: {} });
+        }
+
+        const radialMaxLimit = Math.min(radialDistance, 150);
+        const stationsObservables = locations.map(loc =>
+          this.searchStations(
+            this.getStationSearchRequest(loc.lat, loc.lon, radialMaxLimit)
+          ).pipe(
+            timeout(this.defaultTimeout),
+            retry(this.maxRetries),
+            catchError(this.handleError),
+            map(stations => ({ place_id: loc.place_id, stations }))
+          )
+        );
+
+        return forkJoin(stationsObservables).pipe(
+          map((results: { place_id: number, stations: WeatherStation[] }[]) => {
+            const filtered: { locations: NominatimLocation[], stationsByPlaceId: Record<number, WeatherStation[]> } = {
+              locations: [],
+              stationsByPlaceId: {}
+            };
+
+            results.forEach(({ place_id, stations }, idx) => {
+              const tmyStations = stations.filter(station => station.isTMYData);
+              if (tmyStations.length > 0) {
+                filtered.locations.push(locations[idx]);
+                filtered.stationsByPlaceId[place_id] = tmyStations;
+              }
+            });
+            return filtered;
+          }),
+          tap(results => {
+            console.log('Fetched TMY3 stations for locations:', results)
+          }),
+        );
+      })
+    );
+  }
+
 }
 
+
+export interface LocationsWithStationsResult {
+  locations: NominatimLocation[];
+  stationsByPlaceId: Record<number, WeatherStation[]>;
+}
 
 export interface WeatherDataRequest {
   station_id: string;
