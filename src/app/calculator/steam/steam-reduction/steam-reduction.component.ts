@@ -6,7 +6,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SteamReductionService } from './steam-reduction.service';
 import { SteamReductionTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
-
+import { BehaviorSubject } from 'rxjs';
 @Component({
     selector: 'app-steam-reduction',
     templateUrl: './steam-reduction.component.html',
@@ -121,17 +121,22 @@ export class SteamReductionComponent implements OnInit {
         this.modificationExists = true;
       }
     }
+    if(this.steamReductionService.baselineLength.getValue()){
+      this.steamReductionService.baselineLength.next(this.baselineData.length);
+    }
   }
 
   addBaselineEquipment() {
     let tmpObj: SteamReductionData = this.steamReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours, this.baselineData[0].utilityType, this.baselineData[0].steamUtilityCost, this.baselineData[0].naturalGasUtilityCost, this.baselineData[0].otherUtilityCost);
     this.baselineData.push(tmpObj);
     this.getResults();
+    this.steamReductionService.baselineLength.next(this.baselineData.length);
   }
 
   removeBaselineEquipment(i: number) {
     this.baselineData.splice(i, 1);
     this.getResults();
+    this.steamReductionService.baselineLength.next(this.baselineData.length);
   }
 
   createModification() {
