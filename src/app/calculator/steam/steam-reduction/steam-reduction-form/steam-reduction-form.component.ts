@@ -73,7 +73,6 @@ export class SteamReductionFormComponent implements OnInit {
   constructor(private steamReductionService: SteamReductionService) { }
 
   ngOnInit() {
-    console.log('init');
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;
     } else {
