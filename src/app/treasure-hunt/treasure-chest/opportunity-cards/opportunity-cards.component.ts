@@ -34,23 +34,19 @@ export class OpportunityCardsComponent implements OnInit {
   sortByVal: SortCardsData;
   updateOpportunityCardsSub: Subscription;
   deselectAllSub: Subscription;
-  constructor(private opportunityCardsService: OpportunityCardsService, private calculatorsService: CalculatorsService, private treasureHuntService: TreasureHuntService,
-    private treasureChestMenuService: TreasureChestMenuService) { }
+  constructor(private opportunityCardsService: OpportunityCardsService, 
+    private calculatorsService: CalculatorsService, 
+    private treasureHuntService: TreasureHuntService,
+    private treasureChestMenuService: TreasureChestMenuService
+  ) { }
 
   ngOnInit() {
     this.updateOpportunityCardsSub = this.opportunityCardsService.updateOpportunityCards.subscribe(val => {
       if (val == true) {
-        // strips opportunities from treasure hunt and uses opportunityCardsList to display (same structure as imported opportunities, but not but treasure hunt.)
         this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
-        console.log('Updating opportunity cards list', this.treasureHunt);
-        // Force new array reference for Angular change detection
-        const newCardList = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
-        console.log('new card list', newCardList);
-        this.opportunityCardList = Array.from(newCardList);
+        this.opportunityCardList = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
         this.opportunityCardsService.opportunityCards.next(this.opportunityCardList);
         this.opportunityCardsService.updateOpportunityCards.next(false);
-      } else {
-       console.log('lookee here', this.opportunityCardList = this.opportunityCardsService.opportunityCards.getValue());
       }
     });
     this.updatedOpportunityCardSub = this.opportunityCardsService.updatedOpportunityCard.subscribe(updatedOpportunityCard => {

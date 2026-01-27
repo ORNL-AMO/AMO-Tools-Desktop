@@ -7,7 +7,6 @@ import { TreasureChestMenuService } from '../treasure-chest-menu.service';
 import { Subscription } from 'rxjs';
 import { OpportunityCardsService } from '../../opportunity-cards/opportunity-cards.service';
 import { ImportExportOpportunities } from '../../../../shared/models/treasure-hunt';
-import { TreasureHuntOpportunity } from '../../../../shared/models/treasure-hunt';
 import { TreasureHuntService } from '../../../treasure-hunt.service';
 import { TreasureHunt } from '../../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
@@ -27,7 +26,6 @@ export class TreasureChestModalComponent {
   treasureHunt: TreasureHunt;
   //
   constructor(
-    private coreService: CoreService,
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private emailMeasurDataService: EmailMeasurDataService,
     private treasureChestMenuService: TreasureChestMenuService,
@@ -38,7 +36,6 @@ export class TreasureChestModalComponent {
   ngOnInit() {
     this.opportunityCardsSub = this.opportunityCardsService.opportunityCards.subscribe(cardList => {
       this.latestOpportunityCardList = cardList;
-      console.log('!!!!!!!!!!!!!!',this.latestOpportunityCardList);
     });
      this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
   }
@@ -64,8 +61,6 @@ export class TreasureChestModalComponent {
   }
 
   showExportToLocalModal() {
-    // this.setImportExportData();
-    console.log('show export to justifi modal', this.exportOpportunities);
     this.exportToJustifiTemplateService.treasureHuntAttachment = this.exportOpportunities;
     this.exportToJustifiTemplateService.showTreasureHunt = true;
     this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);

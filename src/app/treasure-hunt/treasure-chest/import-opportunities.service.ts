@@ -6,64 +6,6 @@ export class ImportOpportunitiesService {
 
   constructor(private updateDataService: UpdateDataService) { }
 
-//new import for Opportunity Cards that attempts to reintegrate the opportunities into their respective arrays
-  importOpportunities(importedOpportunities: any[], treasureHunt: TreasureHunt): TreasureHunt {
-    // Map of Treasure enum value to TreasureHunt property name
-    const typeToProp: { [key: string]: keyof ImportExportOpportunities } = {
-      [Treasure.lightingReplacement]: 'lightingReplacements',
-      [Treasure.opportunitySheet]: 'opportunitySheets',
-      [Treasure.assessmentOpportunity]: 'assessmentOpportunities',
-      [Treasure.replaceExisting]: 'replaceExistingMotors',
-      [Treasure.motorDrive]: 'motorDrives',
-      [Treasure.naturalGasReduction]: 'naturalGasReductions',
-      [Treasure.electricityReduction]: 'electricityReductions',
-      [Treasure.compressedAir]: 'compressedAirReductions',
-      [Treasure.compressedAirPressure]: 'compressedAirPressureReductions',
-      [Treasure.waterReduction]: 'waterReductions',
-      [Treasure.steamReduction]: 'steamReductions',
-      [Treasure.pipeInsulation]: 'pipeInsulationReductions',
-      [Treasure.tankInsulation]: 'tankInsulationReductions',
-      [Treasure.airLeak]: 'airLeakSurveys',
-      [Treasure.wallLoss]: 'wallLosses',
-      [Treasure.airHeating]: 'airHeatingOpportunities',
-      [Treasure.flueGas]: 'flueGasLosses',
-      [Treasure.leakageLoss]: 'leakageLosses',
-      [Treasure.wasteHeat]: 'wasteHeatReductions',
-      [Treasure.openingLoss]: 'openingLosses',
-      [Treasure.heatCascading]: 'heatCascadingOpportunities',
-      [Treasure.waterHeating]: 'waterHeatingOpportunities',
-      [Treasure.coolingTowerMakeup]: 'coolingTowerMakeupOpportunities',
-      [Treasure.chillerStaging]: 'chillerStagingOpportunities',
-      [Treasure.chillerPerformance]: 'chillerPerformanceOpportunities',
-      [Treasure.coolingTowerFan]: 'coolingTowerFanOpportunities',
-      [Treasure.coolingTowerBasin]: 'coolingTowerBasinOpportunities',
-      [Treasure.boilerBlowdownRate]: 'boilerBlowdownRateOpportunities',
-      [Treasure.powerFactorCorrection]: 'powerFactorCorrectionOpportunities',
-    };
-
-    // Group opportunities by type
-    const grouped: { [key: string]: any[] } = {};
-    for (const opp of importedOpportunities) {
-      const type = opp.opportunityType;
-      if (!typeToProp[type]) continue; // skip unknown types
-      if (!grouped[type]) grouped[type] = [];
-      grouped[type].push(opp);
-    }
-
-    // Only add non-empty arrays to treasureHunt
-    for (const type in grouped) {
-      const prop = typeToProp[type];
-      if (grouped[type] && grouped[type].length > 0) {
-        // Optionally update legacy fields if needed
-        console.log('GTROUPED TYPE', grouped[type], type);
-        this.updateLegacyOpportunities(grouped[type], type);
-        (treasureHunt as any)[prop] = grouped[type];
-      }
-    }
-    console.log('treasure hunt after import', treasureHunt);
-    return treasureHunt;
-  }
-
   importData(data: ImportExportOpportunities, treasureHunt: TreasureHunt): TreasureHunt {
     if (data.compressedAirReductions) {
       if (treasureHunt.compressedAirReductions == undefined) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup } from '@angular/forms';
 import { ExportService } from '../import-export/export.service';
 import { ImportExportData } from '../import-export/importExportModel';
@@ -38,7 +38,7 @@ export class EmailMeasurDataService {
   }
 
   setEmailData(measurEmailForm: FormGroup) {
-// WK Get opportunities from the export functionality, then pass to the correct locaiton for future implementation
+
     if (measurEmailForm.valid && this.measurItemAttachment) {
       let attachmentExportData: ImportExportData | LogToolDbData | ImportExportOpportunities;
       if (this.measurItemAttachment.itemType === 'assessment') {
@@ -51,7 +51,6 @@ export class EmailMeasurDataService {
         attachmentExportData = this.measurItemAttachment.itemData;
         attachmentExportData['origin'] = "AMO-LOG-TOOL-DATA";
       } else if (this.measurItemAttachment.itemType === 'opportunities') {
-        // * origin is already assigned
         attachmentExportData = this.measurItemAttachment.itemData
       }
 
