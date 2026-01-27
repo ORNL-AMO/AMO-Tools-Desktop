@@ -117,7 +117,10 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     border-top: #ddd solid 1px;
 }
 
-
+.btn-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 
 /*grid view*/
@@ -518,5 +521,4 @@ a:not([href]):not([tabindex]).disabled-link:hover {
         display: none;
     }
   }
-  
-  
+

@@ -84,7 +84,7 @@
       <button type="button" class="nav-btn btn-manage" (click)="selectAll()">Select All</button>
       <button type="button" class="nav-btn middle btn-manage" (click)="deselectAll()">Deselect All</button>
       <button type="button" class="nav-btn middle btn-manage" (click)="openImportModal()">Import</button>
-      <button type="button" class="nav-btn btn-manage" (click)="openShareDataModal()">Export</button>
+      <button type="button" class="nav-btn btn-manage btn-disabled" (click)="openShareDataModal()" [disabled]="true">Export</button>
     </div>
     <div class="btn-group-vertical d-lg-none w-100">
       <button type="button" class="nav-btn" (click)="selectAll()">Select All</button>
