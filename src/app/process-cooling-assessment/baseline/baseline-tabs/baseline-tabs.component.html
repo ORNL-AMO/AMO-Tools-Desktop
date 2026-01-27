@@ -1,16 +1,19 @@
-<!--  todo tab links have redundant li and divs which should be removed. 
-  todo Both wrapping element and a tag need to have routerlink directives and attributes to satisfy MEASUR legacy styling -->
+<!--  todo optimization/cleanup - tab links have redundant li and divs which should be removed. Both wrapping element and a tag need to have routerlink directives and attributes to satisfy MEASUR legacy styling -->
 
 <!-- LARGE VIEWPORT TABS -->
 <ul class="tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block">
     @for (link of SETUP_VIEW_LINKS; track $index) {
+        @let isActive = setupView() == link.view;
+        @let isDisabled = isLinkDisabled(link);
+        @let isInvalid = isTabInvalid(link);
+
     <li routerLinkActive="active" [routerLink]="[link.view]" 
-        [ngClass]="{'disabled': isLinkDisabled(link),
-            'missing-data': isTabInvalid(link)
-        }"
+        [class.disabled]="isDisabled"
+        [class.missing-data]="isInvalid"
         (click)="handleCanNavigate($event, link)">
         <a routerLinkActive="active" [routerLink]="[link.view]" 
-            [ngClass]="{'disabled': isLinkDisabled(link)}"
+            [class.disabled]="isDisabled"
+            [class.missing-data]="isInvalid"
             (click)="handleCanNavigate($event, link)">
             <span class="step-number">
                 {{$index + 1}}
@@ -25,17 +28,23 @@
 <nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs process-cooling-assessment flex-wrap flex-fill">
     <ul
         class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill process-cooling-assessment">
-        <li class="page-item" [ngClass]="{'disabled': setupView() == 'system-basics' || !canContinue}">
+        <li class="page-item" [class.disabled]="setupView() == 'system-basics' || !canContinue">
             <a class="nav-link small" (click)="back()"
-                [ngClass]="{'disabled': setupView() == 'system-basics' || !canContinue}">
+                [class.disabled]="setupView() == 'system-basics' || !canContinue">
                 <span class="fa fa-chevron-left"></span></a>
         </li>
+
         @for (link of SETUP_VIEW_LINKS; track $index) {
-            @if (setupView() == link.view) {
-            <li class="page-item" routerLinkActive="active" [ngClass]="{'disabled': isLinkDisabled(link)}"
+            @let isActive = setupView() == link.view;
+            @let isDisabled = isLinkDisabled(link);
+            @let isInvalid = isTabInvalid(link);
+            <li class="page-item" routerLinkActive="active" 
+                [class.disabled]="isDisabled"
+                [class.invalid]="isInvalid"
                 (click)="handleCanNavigate($event, link)" [routerLink]="[link.view]">
                 <a class="nav-link small" routerLinkActive="active" [routerLink]="[link.view]" 
-                [ngClass]="{'disabled': isLinkDisabled(link)}"
+                [class.disabled]="isDisabled"
+                [class.invalid]="isInvalid"
                 (click)="handleCanNavigate($event, link)">
                     <span class="step-number">
                         {{$index + 1}}
@@ -43,10 +52,9 @@
                     {{link.label}}
                 </a>
             </li>
-            }
         }
-        <li class="page-item" [ngClass]="{'disabled': !canContinue}">
-            <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': !canContinue}">
+        <li class="page-item" [class.disabled]="!canContinue">
+            <a class="nav-link small" (click)="continue()" [class.disabled]="!canContinue">
                 <span class="fa fa-chevron-right"></span></a>
         </li>
     </ul>

@@ -51,6 +51,7 @@ export class WeatherStationsComponent {
     }
   }
 
+  // todo for now should only display TMY3 stations
   async searchLatLong() {
     this.selectedLocationId = undefined;
     this.searchingLatLong = true;
@@ -90,6 +91,7 @@ export class WeatherStationsComponent {
   }
 
   async setStations() {
+    // todo call this from the first time this.selectedLocationId is set and cache the result
     if (this.addressLatLong.latitude && this.addressLatLong.longitude && this.furthestDistance) {
       this.fetchingData = true;
       this.stationSearchError = false;
@@ -153,32 +155,6 @@ export class WeatherStationsComponent {
 // * turn on stations for testing weather components/module logic without over hitting API 
 // const testingStations: WeatherStation[] =
 //   [
-//     {
-//       "name": "HINCKLEY/FIELD OF DREAMS AIRPORT",
-//       "lat": 46.023,
-//       "long": -92.895,
-//       "distance": 74.74,
-//       "country": "US",
-//       "state": "MN",
-//       "stationId": "72065799999",
-//       "beginDate": new Date("2010-01-01"),
-//       "endDate": new Date("2013-04-30"),
-//       "isTMYData": false,
-//       "ratingPercent": 14.32
-//     },
-//     {
-//       "name": "MINNEAPOLIS-ST PAUL INTERNATIONAL AP",
-//       "lat": 44.885,
-//       "long": -93.231,
-//       "distance": 8.11,
-//       "country": "US",
-//       "state": "MN",
-//       "stationId": "72658014922",
-//       "beginDate": new Date("2010-01-01"),
-//       "endDate": new Date("2025-08-25"),
-//       "isTMYData": false,
-//       "ratingPercent": 99.8
-//     },
 //     {
 //       "name": "MINNEAPOLIS-ST PAUL INT'L ARP",
 //       "lat": 44.882531,

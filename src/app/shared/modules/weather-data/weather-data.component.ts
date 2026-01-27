@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { WEATHER_CONTEXT } from './weather-context.token';
-
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 // * Components in this Module are a direct copy of the same module in VERIFI. 
 // * Additional unused/unnecessary code has been removed to simplify the module for MEASUR
@@ -15,12 +15,19 @@ import { WEATHER_CONTEXT } from './weather-context.token';
 })
 export class WeatherDataComponent {
   private readonly weatherContextService = inject(WEATHER_CONTEXT);
+  private readonly destroyRef = inject(DestroyRef);
   weatherDataInvalidMessage: string;
   isWeatherDataValid: boolean = false;
+
+  weatherContextData = this.weatherContextService.weatherContextData$;
   
   ngOnInit(): void {
-    this.weatherDataInvalidMessage = this.weatherContextService.getInvalidStatusMessage();
-    this.isWeatherDataValid = this.weatherContextService.isValidWeatherData();
+    this.weatherContextData.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      this.weatherDataInvalidMessage = this.weatherContextService.getInvalidStatusMessage();
+      this.isWeatherDataValid = this.weatherContextService.isValidWeatherData();
+    });
   }
 }
 

@@ -72,8 +72,8 @@ import { AddModificationComponent } from './explore-opportunities/add-modificati
 import { ModificationService } from './services/modification.service';
 import { ModificationListComponent } from './explore-opportunities/modification-list/modification-list.component';
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
-import { ConfirmDeleteComponent } from './confirm-delete/confirm-delete.component';
 import { AlertInfoContainerComponent } from '../shared/alert-info-container/alert-info-container.component';
+import { ConfirmActionComponent } from './confirm-action/confirm-action.component';
 
 
 export const ROUTE_TOKENS = {
@@ -252,7 +252,7 @@ const ROUTES: Route[] = [
     ModificationListComponent,
     AssessmentResultsComponent,
     EemHelpComponent,
-    ConfirmDeleteComponent,
+    ConfirmActionComponent,
   ],
   imports: [
     RouterModule.forChild(ROUTES),

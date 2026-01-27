@@ -5,11 +5,14 @@ import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
 import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
 import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
+import { SystemInformationFormService } from '../system-information/system-information-form.service';
+import { ROUTE_TOKENS as WEATHER_ROUTE_TOKENS } from '../../shared/modules/weather-data/models/routes';
 
 @Injectable()
 export class ProcessCoolingUiService {
   private router = inject(Router);
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private systemInformationFormService = inject(SystemInformationFormService);
   private weatherContextService = inject(WEATHER_CONTEXT);
 
   focusedFieldSignal: WritableSignal<string> = signal<string>('default');
@@ -28,7 +31,7 @@ export class ProcessCoolingUiService {
     subview: 4
   };
 
-    private readonly STEPPED_ROUTES = [
+  private readonly STEPPED_ROUTES = [
     {
       view: ROUTE_TOKENS.assessmentSettings,
       path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.assessmentSettings}`
@@ -49,13 +52,21 @@ export class ProcessCoolingUiService {
       view: ROUTE_TOKENS.condenserCoolingSystem,
       path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemInformation}/${ROUTE_TOKENS.condenserCoolingSystem}`
     },
-     {
+    {
       view: ROUTE_TOKENS.tower,
       path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemInformation}/${ROUTE_TOKENS.tower}`
     },
     {
       view: ROUTE_TOKENS.chillerInventory,
       path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.chillerInventory}`
+    },
+    {
+      view: ROUTE_TOKENS.operatingSchedule,
+      path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.operatingSchedule}`
+    },
+    {
+      view: ROUTE_TOKENS.loadSchedule,
+      path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.loadSchedule}`
     },
     {
       view: ROUTE_TOKENS.assessment,
@@ -66,6 +77,50 @@ export class ProcessCoolingUiService {
       path: `${ROUTE_TOKENS.report}`
     },
   ];
+
+
+  // todo optimization - called on every rerender. 
+  // todo this pattern should be changed or improved when we get concrete information on what is required for results calculation. memoize, or map/array of vals to Observable
+  canVisitSteppedView(steppedRouteIndex: number): boolean {
+    const processCooling = this.processCoolingAssessmentService.processCoolingSignal();
+
+    const isWeatherDataValid = this.weatherContextService.isValidWeatherData();
+    switch (steppedRouteIndex) {
+      case 0:
+        return true;
+      case 1:
+        return true;
+      case 2:
+        return true;
+      case 3:
+        const canVisitPump = isWeatherDataValid;
+        return canVisitPump;
+      case 4:
+        const canVisitCondenser = isWeatherDataValid && this.systemInformationFormService.isPumpValid(processCooling.systemInformation);
+        return canVisitCondenser;
+      case 5:
+        const canVisitTower = isWeatherDataValid && this.systemInformationFormService.isCondenserSystemInputValid(processCooling.systemInformation);
+        return canVisitTower;
+      case 6:
+        const canVisitInventory = isWeatherDataValid && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation);
+        return canVisitInventory;
+      case 7:
+        const canVisitOperatingSchedule = isWeatherDataValid && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory);
+        return canVisitOperatingSchedule;
+      case 8:
+        const canVisitLoadSchedule = isWeatherDataValid && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
+        return canVisitLoadSchedule;
+      case 9:
+        const canVisitAssessment = isWeatherDataValid && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory);
+        return canVisitAssessment;
+      case 10:
+        const canVisitReport = isWeatherDataValid && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
+        return canVisitReport;
+      default:
+        return false;
+    }
+  }
+
 
 
   readonly mainView: Signal<string> = toSignal(
@@ -131,7 +186,7 @@ export class ProcessCoolingUiService {
     return urlSegments[this.urlSegmentIndex.setup] || '';
   }
 
-   private getSetupSubView(): string {
+  private getSetupSubView(): string {
     const urlSegments = this.router.url.split('/').filter(s => s);
     return urlSegments[this.urlSegmentIndex.subview] || '';
   }
@@ -148,6 +203,10 @@ export class ProcessCoolingUiService {
     return `/process-cooling/${id}/${path}`;
   }
 
+  /**
+   * Get stepped index number from full subroute
+   * Ex. 'baseline/system-information/operations' => 1
+   */
   getCurrentStepIndex(): number {
     const fullSubroute = this.getFullSubroute();
     return this.STEPPED_ROUTES.findIndex(route => {
@@ -161,7 +220,7 @@ export class ProcessCoolingUiService {
 
   canContinue(): boolean {
     const currentIndex = this.getCurrentStepIndex();
-    return this.canVisitView(currentIndex + 1);
+    return this.canVisitSteppedView(currentIndex + 1);
   }
 
   canGoBack(): boolean {
@@ -187,34 +246,35 @@ export class ProcessCoolingUiService {
     }
   }
 
-  // * see STEPPED_ROUTES
-  canVisitView(steppedRouteIndex: number): boolean {
-    const processCooling = this.processCoolingAssessmentService.processCoolingSignal();
-    switch (steppedRouteIndex) {
-      case 0: return true;
-      case 1: return true;
-      case 2: return true;
-      case 3: return true;
-      case 4: return true;
-      case 5: return true;
-      case 6: return true;
-      // case 6: return this.processCoolingAssessmentService.isSystemInformationValid(processCooling.systemInformation);
-      case 7: return this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory) && this.weatherContextService.isValidWeatherData();
-      case 8: return this.weatherContextService.isValidWeatherData() && this.processCoolingAssessmentService.isSystemOperatingDataValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
-      default: return false;
+  canVisitView(view: ProcessCoolingView): boolean {
+    let steppedViewIndex = this.STEPPED_ROUTES.findIndex(route => route.view === view);
+    if (view === SetupView.SYSTEM_INFORMATION) {
+      return true;
     }
+    return this.canVisitSteppedView(steppedViewIndex);
   }
 
-  canVisitTab(view: ProcessCoolingView): boolean {
-      let steppedViewIndex = this.STEPPED_ROUTES.findIndex(route => route.view === view);
-      console.log('steppedViewIndex', steppedViewIndex);
-      const canVisit = this.canVisitView(steppedViewIndex);
-      console.log('canVisit', canVisit);
-      return canVisit;
+  navigateSystemInformationTab(link: ViewLink): void {
+    if (link.view === SystemInformationView.WEATHER) {
+      let weatherRoute: string = WEATHER_ROUTE_TOKENS.stations;
+      if (this.weatherContextService.isValidWeatherData()) {
+        weatherRoute = WEATHER_ROUTE_TOKENS.annualStation;
+      }
+
+      const url = this.buildUrl(`${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemInformation}/${ROUTE_TOKENS.weather}/${weatherRoute}`);
+      this.router.navigateByUrl(url);
+    } else {
+      const routeConfig = this.STEPPED_ROUTES.find(route => route.view === link.view);
+      if (routeConfig) {
+        const url = this.buildUrl(routeConfig.path);
+        this.router.navigateByUrl(url);
+      }
+    }
   }
 
 }
 
+// todo move below out to models/types folder
 export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' | 'report' | 'calculators';
 export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
 export type ProcessCoolingAssessmentTabString = 'explore-opportunities';
@@ -243,7 +303,7 @@ export enum SystemInformationView {
 }
 
 export enum AssessmentView {
- EXPLORE_OPPORTUNITIES = 'explore-opportunities',
+  EXPLORE_OPPORTUNITIES = 'explore-opportunities',
 }
 
 export enum ReportView {

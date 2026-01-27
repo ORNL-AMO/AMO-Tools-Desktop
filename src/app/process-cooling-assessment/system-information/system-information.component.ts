@@ -15,7 +15,6 @@ export class SystemInformationComponent {
   private readonly processCoolingService = inject(ProcessCoolingAssessmentService);
   private readonly destroyRef = inject(DestroyRef);
   isSystemInformationValid: boolean = false;
-
   smallScreenPanelTab: string = 'help';
 
   isModalOpen: boolean = false;
@@ -41,24 +40,19 @@ export class SystemInformationComponent {
   }
 
   isLinkDisabled(link: ViewLink): boolean {
-    return false;
-    // return link.view !== ROUTE_TOKENS.tower && !this.isSystemInformationValid;
+    return !this.processCoolingUiService.canVisitView(link.view);
   }
 
   isTabInvalid(link: ViewLink): boolean {
     switch (link.view) {
       case ROUTE_TOKENS.weather:
-        return !this.isSystemInformationValid;
+        return !this.processCoolingService.isWeatherDataValid;
       default:
         return false;
     }
   }
 
-  handleCanNavigate(event: MouseEvent, link: ViewLink) {
-    if (this.isLinkDisabled(link)) {
-      event.preventDefault();
-    } else {
-      return null;
-    }
+  handleSystemInformationNavigation(event: Event, link: ViewLink): void {
+    this.processCoolingUiService.navigateSystemInformationTab(link);
   }
 }

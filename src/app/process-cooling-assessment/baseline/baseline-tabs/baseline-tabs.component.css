@@ -6,4 +6,5 @@ li.page-item{
 
 li.disabled, a.disabled {
   pointer-events: none;
+  color: #999;
 }

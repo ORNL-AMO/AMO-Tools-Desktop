@@ -1,5 +1,5 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { BehaviorSubject, debounceTime, firstValueFrom, map, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, firstValueFrom, map, tap } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ChillerInventoryItem, MonthlyOperatingSchedule, ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
 import { Settings } from '../../shared/models/settings';
@@ -55,7 +55,7 @@ export class ProcessCoolingAssessmentService {
         const isValidWeatherData = this.processCoolingWeatherContextService.isValidWeatherData();
         if (isValidWeatherData) {
           this.setProcessCoolingWeatherData(weatherData);
-        }
+        } 
       }),
       takeUntilDestroyed()
     ).subscribe();
@@ -212,12 +212,12 @@ export class ProcessCoolingAssessmentService {
       if (processCooling) {
         const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
         const isChillerInventoryValid = this.isChillerInventoryValid(processCooling.inventory);
-        const isSystemOperatingDataValid = this.isSystemOperatingDataValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
+        const isOperatingScheduleValid = this.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
-        const isValid = isSystemInformationValid && isChillerInventoryValid && isSystemOperatingDataValid && isWeatherDataValid;
+        const isValid = isSystemInformationValid && isChillerInventoryValid && isOperatingScheduleValid && isWeatherDataValid;
         console.log('isSystemInformationValid', isSystemInformationValid);
         console.log('isChillerInventoryValid', isChillerInventoryValid);
-        console.log('isSystemOperatingDataValid', isSystemOperatingDataValid);
+        console.log('isOperatingScheduleValid', isOperatingScheduleValid);
         console.log('isWeatherDataValid', isWeatherDataValid);
         console.log('isBaselineValid', isValid);
         return isValid;
@@ -226,8 +226,11 @@ export class ProcessCoolingAssessmentService {
     })
   );
 
-  readonly isSystemInformationValid$ = this.processCooling$.pipe(
-    map((processCooling: ProcessCoolingAssessment) => {
+  readonly isSystemInformationValid$ = combineLatest([
+    this.processCooling$,
+    this.processCoolingWeatherContextService.weatherContextData$
+  ]).pipe(
+    map(([processCooling, weatherContextData]: [ProcessCoolingAssessment, WeatherContextData]) => {
       if (processCooling) {
         const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
         return isSystemInformationValid;
@@ -247,7 +250,7 @@ export class ProcessCoolingAssessmentService {
 
   readonly isOperatingScheduleValid$ = this.processCooling$.pipe(
     map((processCooling: ProcessCoolingAssessment) => {
-      return this.isSystemOperatingDataValid(processCooling?.weeklyOperatingSchedule, processCooling?.monthlyOperatingSchedule);
+      return this.isOperatingScheduleValid(processCooling?.weeklyOperatingSchedule, processCooling?.monthlyOperatingSchedule);
     })
   );
 
@@ -257,7 +260,9 @@ export class ProcessCoolingAssessmentService {
     })
   );
 
-
+  get isWeatherDataValid(): boolean {
+    return this.processCoolingWeatherContextService.isValidWeatherData();
+  }
 
   get condenserCoolingMethod(): number {
     return this.processCoolingSignal()?.systemInformation.operations.condenserCoolingMethod;
@@ -270,12 +275,14 @@ export class ProcessCoolingAssessmentService {
 
   isSystemInformationValid(systemInformation: SystemInformation): boolean {
     const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
-    return this.systemInformationFormService.isValidSystemInformationValid(systemInformation) && isWeatherDataValid;
+    return this.systemInformationFormService.isSystemInformationValid(systemInformation) && isWeatherDataValid;
   }
+
   isChillerInventoryValid(chillerInventory: ChillerInventoryItem[]): boolean {
     return chillerInventory && chillerInventory.length > 0;
   }
-  isSystemOperatingDataValid(weeklyOperatingSchedule: WeeklyOperatingSchedule, monthlyOperatingSchedule: MonthlyOperatingSchedule): boolean {
+  
+  isOperatingScheduleValid(weeklyOperatingSchedule: WeeklyOperatingSchedule, monthlyOperatingSchedule: MonthlyOperatingSchedule): boolean {
     if (weeklyOperatingSchedule && monthlyOperatingSchedule) {
       const validWeekly = weeklyOperatingSchedule.hoursOnMonToSun && weeklyOperatingSchedule.hoursOnMonToSun.some(hour => hour > 0);
       const validMonthly = monthlyOperatingSchedule.hoursOnPerMonth && monthlyOperatingSchedule.hoursOnPerMonth.some(hour => hour > 0);

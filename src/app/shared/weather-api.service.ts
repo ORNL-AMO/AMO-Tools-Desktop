@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry, timeout, map, filter } from 'rxjs/operators';
+import { catchError, retry, timeout, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { WEATHER_CONTEXT, WeatherContextData } from './modules/weather-data/weather-context.token';
 
@@ -30,6 +30,14 @@ export class WeatherApiService {
   setWeatherData(data: WeatherContextData): void {
     if (this.weatherContextService) {
       this.weatherContextService.setWeatherData(data);
+    } else {
+      throw new Error('Weather context service not available');
+    }
+  }
+
+  resetWeatherData(): void {
+    if (this.weatherContextService) {
+      this.weatherContextService.setWeatherData(undefined);
     } else {
       throw new Error('Weather context service not available');
     }
