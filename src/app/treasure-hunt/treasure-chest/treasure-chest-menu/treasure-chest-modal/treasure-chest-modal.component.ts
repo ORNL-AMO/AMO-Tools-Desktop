@@ -24,7 +24,7 @@ export class TreasureChestModalComponent {
   latestOpportunityCardList: any;
   exportOpportunities: ImportExportOpportunities
   treasureHunt: TreasureHunt;
-  //
+
   constructor(
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private emailMeasurDataService: EmailMeasurDataService,
