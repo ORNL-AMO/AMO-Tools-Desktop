@@ -184,12 +184,10 @@ export class TreasureChestMenuComponent implements OnInit {
 
   openShareDataModal() {
     const treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-    // * filtering selected opportunities is handled in export service
     const opportunitiesData: ImportExportOpportunities = this.exportOpportunitiesService.setImportExportData(treasureHunt);
     
     this.emailMeasurDataService.measurItemAttachment = {
       itemType: 'opportunities',
-      // todo name from treasureHunt
       itemName: 'Treasure Hunt Opportunities',
       itemData: opportunitiesData
     }
