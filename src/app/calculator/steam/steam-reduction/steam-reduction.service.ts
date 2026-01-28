@@ -5,7 +5,6 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
-import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,11 +13,8 @@ export class SteamReductionService {
   baselineData: Array<SteamReductionData>;
   modificationData: Array<SteamReductionData>;
   operatingHours: OperatingHours;
-  baselineLength: BehaviorSubject<number>;
-  modificationLength: BehaviorSubject<number>;
-  constructor(private fb: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { 
-    this.baselineLength = new BehaviorSubject<number>(0);
-  }
+
+  constructor(private fb: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
   initObject(index: number, settings: Settings, operatingHours: OperatingHours, utilityType: number, steamCost: number, naturalGasCost: number, otherCost: number): SteamReductionData {
     let hoursPerYear: number = 8760;

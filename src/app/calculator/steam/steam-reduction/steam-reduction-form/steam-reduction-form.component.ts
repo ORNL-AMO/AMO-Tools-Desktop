@@ -4,7 +4,6 @@ import { UntypedFormGroup, Validators } from '@angular/forms';
 import { SteamReductionService } from '../steam-reduction.service';
 import { SteamReductionResult, SteamReductionData } from '../../../../shared/models/standalone';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-steam-reduction-form',
@@ -36,7 +35,7 @@ export class SteamReductionFormComponent implements OnInit {
 
   formWidth: number;
   showOperatingHoursModal: boolean;
-  removeEquipmentDisabled: boolean = false;
+
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -69,7 +68,7 @@ export class SteamReductionFormComponent implements OnInit {
   individualResults: SteamReductionResult;
   isEditingName: boolean = false;
   form: UntypedFormGroup;
-  baseOrModLengthSub: Subscription;
+
   constructor(private steamReductionService: SteamReductionService) { }
 
   ngOnInit() {
@@ -83,7 +82,7 @@ export class SteamReductionFormComponent implements OnInit {
       this.form.disable();
     }
     this.calculateIndividualResult();
-    this.setRemoveEquipmentDisabled();
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -226,14 +225,6 @@ export class SteamReductionFormComponent implements OnInit {
   setOpHoursModalWidth() {
     if (this.formElement.nativeElement.clientWidth) {
       this.formWidth = this.formElement.nativeElement.clientWidth;
-    }
-  }
-
-  setRemoveEquipmentDisabled() {
-    if (this.isBaseline) {
-      this.baseOrModLengthSub = this.steamReductionService.baselineLength.subscribe(val => {
-        this.removeEquipmentDisabled = val <= 1;
-      });
     }
   }
 }
