@@ -82,6 +82,7 @@ export class WeatherStationsComponent {
         console.error('Error fetching address lookup items:', error);
         this.addressLookupItems = [];
         this.stationSearchError = true;
+        this.searchingLatLong = false;
       }
     }
   }
@@ -94,7 +95,7 @@ export class WeatherStationsComponent {
     this.clearStations();
   }
 
-  setTMYStations(item: NominatimLocation) {
+  setTMYStations() {
     this.stations = this.locationStations.stationsByPlaceId[this.selectedLocationId] || [];
   }
 

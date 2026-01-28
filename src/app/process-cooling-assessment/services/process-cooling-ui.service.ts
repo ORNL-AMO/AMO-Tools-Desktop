@@ -105,16 +105,26 @@ export class ProcessCoolingUiService {
         const canVisitInventory = isWeatherDataValid && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation);
         return canVisitInventory;
       case 7:
-        const canVisitOperatingSchedule = isWeatherDataValid && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory);
+        const canVisitOperatingSchedule = isWeatherDataValid
+          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation)
+          && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory);
         return canVisitOperatingSchedule;
       case 8:
-        const canVisitLoadSchedule = isWeatherDataValid && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
+        const canVisitLoadSchedule = isWeatherDataValid
+          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation)
+          && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitLoadSchedule;
       case 9:
-        const canVisitAssessment = isWeatherDataValid && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory);
+        const canVisitAssessment = isWeatherDataValid
+          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation)
+          && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory)
+          && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitAssessment;
       case 10:
-        const canVisitReport = isWeatherDataValid && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
+        const canVisitReport = isWeatherDataValid
+          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation)
+          && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory)
+          && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitReport;
       default:
         return false;

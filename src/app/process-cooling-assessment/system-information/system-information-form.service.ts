@@ -100,16 +100,15 @@ export class SystemInformationFormService {
   }
 
   public isSystemInformationValid(systemInformationInput: SystemInformation): boolean {
-    let isValid: boolean = true;
     const isOperationsValid = this.isOperationsValid(systemInformationInput.operations);
     const isPumpValid = this.isPumpValid(systemInformationInput);
     const isSystemInputValid = this.isCondenserSystemInputValid(systemInformationInput);
     const isTowerValid = this.isTowerValid(systemInformationInput.towerInput);
-    isValid = isValid && isOperationsValid && isPumpValid && isSystemInputValid && isTowerValid;
+    const isValid: boolean = isOperationsValid && isPumpValid && isSystemInputValid && isTowerValid;
     return isValid;
   }
   
-  public isPumpValid(systemInformation): boolean {
+  public isPumpValid(systemInformation: SystemInformation): boolean {
     // todo are we sure this will always be condenserWaterPumpInput
     const pumpForm = this.getPumpInputForm(systemInformation.condenserWaterPumpInput);
     return pumpForm.valid;
