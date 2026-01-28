@@ -1,6 +1,5 @@
-import { Component, Input, ViewChild, ElementRef, SimpleChanges, inject } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, SimpleChanges, inject, NgZone } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
-import { AnnualStationDataSummary } from '../annual-station-data.component';
 import { WeatherDataPoint } from '../../../../weather-api.service';
 
 @Component({
@@ -11,12 +10,16 @@ import { WeatherDataPoint } from '../../../../weather-api.service';
 })
 export class AnnualStationGraphComponent {
     private readonly plotlyService: PlotlyService = inject(PlotlyService);
+    private readonly ngZone = inject(NgZone);
+
+    isDrawingChart: boolean = true;
+    
     @ViewChild('annualDataChart', { static: false }) annualDataChart: ElementRef;
     @Input()
     set annualHourlyWeather(value: Array<WeatherDataPoint>) {
         this._annualHourlyWeather = value;
         if (this._annualHourlyWeather && this.annualDataChart) {
-            this.drawChart();
+            this.renderWithoutUIBlocking();
         }
     }
     get annualHourlyWeather(): Array<WeatherDataPoint> {
@@ -25,7 +28,17 @@ export class AnnualStationGraphComponent {
     private _annualHourlyWeather: Array<WeatherDataPoint>;
 
     ngAfterViewInit() {
-        this.drawChart();
+        this.renderWithoutUIBlocking();
+    }
+
+    renderWithoutUIBlocking() {
+        // * Run outside NG to ignore change detection on plotly processes. Use timeout to allow render of parents components. Otherwise lift the chart processing up to a higher component and pass processed data down
+        this.ngZone.runOutsideAngular(() => {
+            setTimeout(() => {
+                this.drawChart();
+                this.isDrawingChart = false;
+            }, 0);
+        });
     }
 
     drawChart() {
