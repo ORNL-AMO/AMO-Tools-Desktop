@@ -79,7 +79,7 @@ export class ProcessCoolingUiService {
   ];
 
 
-  // todo optimization - called on every rerender. 
+  // todo 8129 optimization - called on every rerender. 
   // todo this pattern should be changed or improved when we get concrete information on what is required for results calculation. memoize, or map/array of vals to Observable
   canVisitSteppedView(steppedRouteIndex: number): boolean {
     const processCooling = this.processCoolingAssessmentService.processCoolingSignal();
@@ -127,7 +127,8 @@ export class ProcessCoolingUiService {
           && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitReport;
       default:
-        return false;
+        // * route does not need protection (ex. baseline)
+        return true;
     }
   }
 

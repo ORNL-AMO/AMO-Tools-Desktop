@@ -207,8 +207,11 @@ export class ProcessCoolingAssessmentService {
     return Promise.resolve();
   }
 
-  readonly isBaselineValid$ = this.processCooling$.pipe(
-    map((processCooling: ProcessCoolingAssessment) => {
+  readonly isBaselineValid$ = combineLatest([
+    this.processCooling$,
+    this.processCoolingWeatherContextService.weatherContextData$
+  ]).pipe(
+    map(([processCooling, weatherContextData]: [ProcessCoolingAssessment, WeatherContextData]) => {
       if (processCooling) {
         const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
         const isChillerInventoryValid = this.isChillerInventoryValid(processCooling.inventory);
