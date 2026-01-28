@@ -1,5 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
+import { CompressedAirAssessmentService } from '../../compressed-air-assessment.service';
+import { ExploreOpportunitiesService } from './explore-opportunities.service';
+import { CompressedAirAssessment, CompressedAirDayType } from '../../../shared/models/compressed-air-assessment';
 
 @Component({
   selector: 'app-explore-opportunities',
@@ -21,9 +24,12 @@ export class ExploreOpportunitiesComponent implements OnInit {
   isDragging: boolean = false;
 
   resizeSubscription: Subscription;
-  constructor() { }
+  constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private exploreOpportunitiesService: ExploreOpportunitiesService
+  ) { }
 
   ngOnInit(): void {
+    this.setSelectedDayType();
     this.setResultsWidth();
     this.resizeSubscription = fromEvent(window, 'resize').subscribe(() => {
       this.setResultsWidth();
@@ -34,10 +40,18 @@ export class ExploreOpportunitiesComponent implements OnInit {
     this.resizeSubscription?.unsubscribe();
   }
 
-  ngAfterViewInit() {
-    // setTimeout(() => {
-    //   this.resizeTabs();
-    // }, 100);
+  setSelectedDayType() {
+    //check day type is selected and valid.
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
+    let selectedDayType: CompressedAirDayType = this.exploreOpportunitiesService.selectedDayType.getValue();
+    if(!selectedDayType && compressedAirAssessment.compressedAirDayTypes && compressedAirAssessment.compressedAirDayTypes.length != 0){
+      this.exploreOpportunitiesService.selectedDayType.next(compressedAirAssessment.compressedAirDayTypes[0]);
+    }else if(selectedDayType && compressedAirAssessment.compressedAirDayTypes && compressedAirAssessment.compressedAirDayTypes.length != 0){
+      let matchingDayType: CompressedAirDayType = compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == selectedDayType.dayTypeId});
+      if(!matchingDayType){
+        this.exploreOpportunitiesService.selectedDayType.next(compressedAirAssessment.compressedAirDayTypes[0]);
+      }
+    }
   }
 
   setSmallScreenTab(selectedTab: string) {

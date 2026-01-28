@@ -46,7 +46,7 @@
 <form class="p-0" *ngIf="form.controls.order.value != 100">
     <div class="scroll-item">
         <!--Original Compressors-->
-        <label class="w-100">
+        <label class="w-100 color-label">
             Select Current Compressors to Salvage/Replace
         </label>
         <table class="table bg-white">
@@ -109,7 +109,7 @@
         </div>
         }
         <!--Replacement Compressors-->
-        <label class="w-100">
+        <label class="w-100 color-label">
             Select Replacement Compressors to Install
         </label>
         <table class="table bg-white">
@@ -181,7 +181,7 @@
         }
         <!--TRIM COMPRESSOR SELECTION-->
         @if(hasTrimCompressor){
-        <label>
+        <label class="color-label">
             Select Trim Compressor
         </label>
         <table class="table bg-white">
@@ -220,7 +220,7 @@
         }
 
         <ng-container *ngFor="let dayTypeValidation of profileValidation">
-            <label>
+            <label class="color-label">
                 Resulting Profile Validation
             </label>
             <table class="table bg-white">

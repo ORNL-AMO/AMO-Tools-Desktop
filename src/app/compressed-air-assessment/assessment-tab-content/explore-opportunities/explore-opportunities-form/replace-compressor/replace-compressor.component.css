@@ -93,3 +93,8 @@ option.invalid{
     font-style: italic;
     font-weight: normal;
 }
+
+.color-label{
+  color: #7030a0;
+  font-weight: bold;
+}
