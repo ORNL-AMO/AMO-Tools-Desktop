@@ -53,7 +53,7 @@
     "@popperjs/core": "2.11.8",
     "angular-plotly.js": "5.2.1",
     "plotly.js-dist": "2.9.0",
-    "billboard.js": "3.17.0",
+    "billboard.js": "3.18.0",
     "bootstrap": "4.3.1",
     "core-js": "3.21.1",
     "electron-log": "4.4.8",
