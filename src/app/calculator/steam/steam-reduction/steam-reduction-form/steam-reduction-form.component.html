@@ -5,7 +5,7 @@
       <span (click)="editEquipmentName()" class="fa fa-pencil pr-2 btn-edit-name"></span>
       <span>{{form.controls.name.value}}</span>
       <span class="fa fa-times-circle-o pull-right large" 
-        (click)="!removeEquipmentDisabled && removeEquipment(index)"
+        (click)="removeEquipment()"
         *ngIf="!isBaseline || (isBaseline && index !== 0)">
       </span>
     </label>
