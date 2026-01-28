@@ -26,8 +26,6 @@ import { ExportOpportunitiesService } from '../export-opportunities.service';
     standalone: false
 })
 export class TreasureChestMenuComponent implements OnInit {
-  opportunityCardsSub: Subscription;
-  latestOpportunityCardList: any;
   @Input()
   settings: Settings;
   @Input()
@@ -67,9 +65,7 @@ export class TreasureChestMenuComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.opportunityCardsSub = this.opportunityCardsService.opportunityCards.subscribe(cardList => {
-      this.latestOpportunityCardList = cardList;
-    });
+
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortCardsData = val;
       this.setSortByLabel();
@@ -93,7 +89,6 @@ export class TreasureChestMenuComponent implements OnInit {
     this.showImportModalSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
     this.showTreasureChestModalSub.unsubscribe();
-    this.opportunityCardsSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -185,10 +180,6 @@ export class TreasureChestMenuComponent implements OnInit {
 
   openImportModal() {
     this.treasureChestMenuService.showImportModal.next(true);
-  }
-
-  openExportModal() {
-    this.treasureChestMenuService.showExportModal.next(true);
   }
 
   openShareDataModal() {

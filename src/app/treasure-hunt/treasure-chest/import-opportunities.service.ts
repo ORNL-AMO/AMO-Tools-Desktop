@@ -229,7 +229,7 @@ export class ImportOpportunitiesService {
   }
 
   updateCompressedAirPressureFields(compressedAirPressureReductionTH: CompressedAirPressureReductionTreasureHunt) {
-    if (compressedAirPressureReductionTH.baseline && Array.isArray(compressedAirPressureReductionTH.baseline)) {
+    if (compressedAirPressureReductionTH.modification && compressedAirPressureReductionTH.modification.length > 0) {
       compressedAirPressureReductionTH.baseline.forEach(baselineInput => {
         if (!baselineInput.atmosphericPressure) {
           baselineInput.atmosphericPressure = 0;
@@ -284,19 +284,4 @@ export class ImportOpportunitiesService {
     return airLeakSurvey;
   }
 
-  // Defensive wrappers for other opportunity types that may have baseline/modification arrays
-  updateGenericWithBaselineAndModification(obj: any, baselineKey: string = 'baseline', modificationKey: string = 'modification', updateFn?: (item: any) => void) {
-    if (obj[baselineKey] && Array.isArray(obj[baselineKey])) {
-      obj[baselineKey].forEach((item: any) => {
-        if (updateFn) updateFn(item);
-      });
-    }
-    if (obj[modificationKey] && Array.isArray(obj[modificationKey])) {
-      obj[modificationKey].forEach((item: any) => {
-        if (updateFn) updateFn(item);
-      });
-    }
-    return obj;
-  }
-  
 }

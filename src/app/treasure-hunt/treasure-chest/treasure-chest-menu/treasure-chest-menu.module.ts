@@ -25,7 +25,7 @@ import { TreasureChestModalComponent } from './treasure-chest-modal/treasure-che
   ],
   imports: [
     CommonModule,
-    ModalModule.forRoot(),
+    ModalModule,
     FormsModule
   ],
   providers: [
