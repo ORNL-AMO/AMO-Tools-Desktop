@@ -26,7 +26,7 @@ export class WeatherStationsComponent {
     };
   listByCountry: boolean = false;
 
-  addressLookupItems: Array<NominatimLocation> = [];
+  addressLookupItems: Array<NominatimLocation>;
   locationStations: LocationsWithStationsResult;
 
   searchingLatLong: boolean = false;
@@ -45,7 +45,7 @@ export class WeatherStationsComponent {
 
     if (weatherData?.addressString) {
       this.addressString = weatherData.addressString;
-      this.searchLatLong();
+      this.getLocationAndStations();
     }
     if (weatherData?.selectedStation) {
       this.addressLatLong.latitude = weatherData.selectedStation.lat;
@@ -54,7 +54,7 @@ export class WeatherStationsComponent {
   }
 
   // todo for now should only display TMY3 stations
-  async searchLatLong() {
+  async getLocationAndStations() {
     this.selectedLocationId = undefined;
     this.searchingLatLong = true;
 
@@ -99,39 +99,37 @@ export class WeatherStationsComponent {
     this.stations = this.locationStations.stationsByPlaceId[this.selectedLocationId] || [];
   }
 
-  // * currently only support TMY3 data, we already have stations at location search step
-  // async setStations() {
-  //   if (this.addressLatLong.latitude && this.addressLatLong.longitude && this.furthestDistance) {
-  //     this.fetchingData = true;
-  //     this.stationSearchError = false;
+  async getStationsByLatLong() {
+    if (this.addressLatLong.latitude && this.addressLatLong.longitude && this.furthestDistance) {
+      this.fetchingData = true;
+      this.stationSearchError = false;
 
-  //     this.stations = this.locationStations.stationsByPlaceId[this.selectedLocationId] || [];
+      const stationSearchRequest = this.weatherApiService.getStationSearchRequest(
+        this.addressLatLong.latitude,
+        this.addressLatLong.longitude,
+        this.furthestDistance
+      );
 
-  //     // const stationSearchRequest = this.weatherApiService.getStationSearchRequest(
-  //     //   this.addressLatLong.latitude,
-  //     //   this.addressLatLong.longitude,
-  //     //   this.furthestDistance
-  //     // );
-
-  //     // this.stations = testingStations
-  //     // try {
-  //     //   this.stations = await firstValueFrom(this.weatherApiService.searchStations(stationSearchRequest));
-  //     //   console.log(this.stations);
-  //     //   this.fetchingData = false;
-  //     // } catch (error) {
-  //     //   console.error('Error fetching weather stations:', error);
-  //     //   this.stationSearchError = true;
-  //     //   this.clearStations();
-  //     //   this.fetchingData = false;
-  //     // }
-  //   } else {
-  //     this.fetchingData = false;
-  //     this.clearStations();
-  //   }
-  // }
+      // this.stations = testingStations
+      try {
+        this.stations = await firstValueFrom(this.weatherApiService.searchStations(stationSearchRequest));
+        console.log(this.stations);
+        this.fetchingData = false;
+      } catch (error) {
+        console.error('Error fetching weather stations:', error);
+        this.stationSearchError = true;
+        this.clearStations();
+        this.fetchingData = false;
+      }
+    } else {
+      this.fetchingData = false;
+      this.clearStations();
+    }
+  }
 
 
   clearStations() {
+    this.addressLookupItems = [];
     this.stations = [];
   }
 
