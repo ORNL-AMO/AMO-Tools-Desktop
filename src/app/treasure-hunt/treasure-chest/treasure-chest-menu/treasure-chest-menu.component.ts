@@ -8,6 +8,7 @@ import { EmailMeasurDataService } from '../../../shared/email-measur-data/email-
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { ImportExportOpportunities, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { ExportOpportunitiesService } from '../export-opportunities.service';
+import { CoreService } from '../../../core/core.service';
 @Component({
     selector: 'app-treasure-chest-menu',
     templateUrl: './treasure-chest-menu.component.html',
@@ -30,8 +31,9 @@ export class TreasureChestMenuComponent implements OnInit {
   @Input()
   inReport: boolean;
 
-  showTreasureChestModal: boolean = false;
-  showTreasureChestModalSub: Subscription;
+  showShareDataModal: boolean = false;
+  showShareDataModalSub: Subscription;
+
   @ViewChild('navbar', { static: false }) navbar: ElementRef;
   navbarWidth: number;
 
@@ -59,7 +61,8 @@ export class TreasureChestMenuComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private emailMeasurDataService: EmailMeasurDataService,
     private treasureHuntService: TreasureHuntService,
-    private exportOpportunitiesService: ExportOpportunitiesService
+    private exportOpportunitiesService: ExportOpportunitiesService,
+    private coreService: CoreService,
   ) { }
 
   ngOnInit() {
@@ -77,8 +80,8 @@ export class TreasureChestMenuComponent implements OnInit {
       this.showExportModal = val;
     });
 
-    this.showTreasureChestModalSub = this.treasureChestMenuService.showTreasureChestModal.subscribe((showTreasureChestModal: boolean) => {
-      this.showTreasureChestModal = showTreasureChestModal;
+    this.showShareDataModalSub = this.coreService.showShareDataModal.subscribe((showShareDataModal: boolean) => {
+      this.showShareDataModal = showShareDataModal;
     });
   }
 
@@ -86,7 +89,7 @@ export class TreasureChestMenuComponent implements OnInit {
     this.sortBySub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
-    this.showTreasureChestModalSub.unsubscribe();
+    this.showShareDataModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -191,7 +194,7 @@ export class TreasureChestMenuComponent implements OnInit {
     }
 
     this.emailMeasurDataService.emailItemType.next('opportunities');
-    this.treasureChestMenuService.showTreasureChestModal.next(true);
+    this.coreService.showShareDataModal.next(true);
   }
 
   collapseBanner() {
