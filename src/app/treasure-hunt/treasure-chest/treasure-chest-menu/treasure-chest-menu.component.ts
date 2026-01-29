@@ -5,7 +5,6 @@ import { TreasureChestMenuService } from './treasure-chest-menu.service';
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { EmailMeasurDataService } from '../../../shared/email-measur-data/email-measur-data.service';
-import { OpportunityCardsService } from '../opportunity-cards/opportunity-cards.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { ImportExportOpportunities, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { ExportOpportunitiesService } from '../export-opportunities.service';
@@ -59,7 +58,6 @@ export class TreasureChestMenuComponent implements OnInit {
     private treasureChestMenuService: TreasureChestMenuService,
     private cd: ChangeDetectorRef,
     private emailMeasurDataService: EmailMeasurDataService,
-    private opportunityCardsService: OpportunityCardsService,
     private treasureHuntService: TreasureHuntService,
     private exportOpportunitiesService: ExportOpportunitiesService
   ) { }
