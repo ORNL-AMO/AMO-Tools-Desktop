@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LocationsWithStationsResult, NominatimLocation, WeatherApiService, WeatherStation } from '../../../weather-api.service';
+import { WeatherApiServiceMock } from '../weather-api.service.mock';
 import { GEO_DATA_STATE_LINES } from '../geo-assets/geo-data-state-lines';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
@@ -12,6 +13,13 @@ import { environment } from '../../../../../environments/environment';
 })
 export class WeatherStationsComponent {
   private weatherApiService: WeatherApiService = inject(WeatherApiService);
+  private weatherApiServiceMock: WeatherApiServiceMock = inject(WeatherApiServiceMock);
+
+  useDevelopmentMock: boolean = (environment as any).useMockWeatherApi === true && !environment.production;
+  private weatherService: WeatherApiService | WeatherApiServiceMock = this.useDevelopmentMock
+      ? this.weatherApiServiceMock
+      : this.weatherApiService;
+
   furthestDistance: number = environment.production ? 50 : 25;
   stations: Array<WeatherStation> = [];
 
@@ -41,7 +49,6 @@ export class WeatherStationsComponent {
   ngOnInit() {
     this.stateLines = GEO_DATA_STATE_LINES;
     const weatherData = { ...this.weatherApiService.getWeatherData() };
-
     if (weatherData?.addressString) {
       this.addressString = weatherData.addressString;
       this.getLocationAndStations();
@@ -59,7 +66,7 @@ export class WeatherStationsComponent {
 
     if (this.addressString) {
       try {
-        this.locationStations = await firstValueFrom(this.weatherApiService.getLocationsAndStationsTMY(this.addressString, this.furthestDistance));
+        this.locationStations = await firstValueFrom(this.weatherService.getLocationsAndStationsTMY(this.addressString, this.furthestDistance));
         this.addressLookupItems = this.locationStations.locations;
 
         if (this.addressLookupItems?.length > 0) {
@@ -68,7 +75,7 @@ export class WeatherStationsComponent {
             const bUS = b.display_name.includes('United States') ? 0 : 1;
             return aUS - bUS;
           });
-          this.selectedLocationId = this.addressLookupItems[0].place_id
+          this.selectedLocationId = this.addressLookupItems[0].place_id;
           const weatherData = { ...this.weatherApiService.getWeatherData() };
           weatherData.addressString = this.addressString;
           this.weatherApiService.setWeatherData(weatherData);
@@ -133,50 +140,3 @@ export class WeatherStationsComponent {
   }
 
 }
-
-// * test location
- // const testitem = {
-        //     "name": "MINNEAPOLIS-ST PAUL INTERNATIONAL AP",
-        //     "lat": 44.885,
-        //     "long": -93.231,
-        //     "distance": 8.11,
-        //     "country": "US",
-        //     "state": "MN",
-        //     "stationId": "72658014922",
-        //     "beginDate": "2010-01-01T00:00:00.000Z",
-        //     "endDate": "2025-08-25T00:00:00.000Z",
-        //     "isTMYData": false,
-        //     "ratingPercent": 99.8
-        //   };
-
-        //   this.selectedLocationId = Number(testitem.stationId)
-        //   this.addressLatLong = {
-        //     latitude: testitem.lat,
-        //     longitude: testitem.long
-        //   };
-
-        //   const weatherData = {...this.weatherApiService.getWeatherData()};
-        //   weatherData.addressString = this.addressString;
-        //   this.weatherApiService.setWeatherData(weatherData);
-
-
-// * test stations
-// const testingStations: WeatherStation[] =
-//   [
-//     {
-//       "name": "MINNEAPOLIS-ST PAUL INT'L ARP",
-//       "lat": 44.882531,
-//       "long": -93.231909,
-//       "distance": 8.24,
-//       "country": "US",
-//       "state": "MN",
-//       "stationId": "72658000000",
-//       "beginDate": new Date("1500-01-01"),
-//       "endDate": new Date("2000-12-31"),
-//       "isTMYData": true,
-//       "ratingPercent": 100
-//     }
-
-//   ];
-
-

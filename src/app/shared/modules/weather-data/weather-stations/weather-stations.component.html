@@ -37,6 +37,11 @@
 <form>
     <div class="row">
         <div class="col-6">
+            @if (useDevelopmentMock) {
+            <div class="alert alert-warning p-2 small">
+                Local Development mode: using Mock Weather API data
+            </div>
+            }
             <ng-template [ngIf]="isLocationSearch" [ngIfElse]="latLongSearchBlock">
                 <div class="row">
                     <div class="col-12">

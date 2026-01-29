@@ -13,6 +13,7 @@ import { LoadingSpinnerComponent } from '../../loading-spinner/loading-spinner.c
 import { WeatherApiService } from '../../weather-api.service';
 import { AnnualStationGraphComponent } from './annual-station-data/annual-station-graph/annual-station-graph.component';
 import WEATHER_ROUTES from './models/routes';
+import { WeatherApiServiceMock } from './weather-api.service.mock';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import WEATHER_ROUTES from './models/routes';
     LoadingSpinnerComponent
   ],
   providers: [
-    WeatherApiService
+    WeatherApiService,
+    WeatherApiServiceMock
   ]
 })
 export class WeatherDataModule { }
