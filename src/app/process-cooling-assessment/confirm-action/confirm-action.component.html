@@ -5,11 +5,13 @@
     </button>
 </div>
 <div class="modal-body process-cooling-assessment">
-    <p class="small">
+    <p>
         {{data.confirmMessage}}
     </p>
        <div class="modal-footer p-2">
         <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close(false)">Cancel</button>
-        <button type="button" class="btn btn-primary btn-sm " (click)="close(true)">Delete</button>
+        <button type="button" class="btn btn-primary btn-sm " (click)="close(true)">
+            {{data.actionName ? data.actionName : 'Delete'}}
+        </button>
     </div>
 </div>

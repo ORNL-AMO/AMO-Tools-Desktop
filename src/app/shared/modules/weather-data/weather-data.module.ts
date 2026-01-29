@@ -12,20 +12,8 @@ import { AnnualStationDataComponent } from './annual-station-data/annual-station
 import { LoadingSpinnerComponent } from '../../loading-spinner/loading-spinner.component';
 import { WeatherApiService } from '../../weather-api.service';
 import { AnnualStationGraphComponent } from './annual-station-data/annual-station-graph/annual-station-graph.component';
-
-export const ROUTES: Route[] = [
-  //  working
-  {
-    path: "",
-    component: WeatherDataComponent,
-    children: [
-      { path: '', pathMatch: 'full', redirectTo: 'stations' },
-      { path: 'stations', component: WeatherStationsComponent },
-      { path: 'annual-station', component: AnnualStationDataComponent },
-    ]
-  }
-];
-
+import WEATHER_ROUTES from './models/routes';
+import { WeatherApiServiceMock } from './weather-api.service.mock';
 
 @NgModule({
   declarations: [
@@ -40,7 +28,7 @@ export const ROUTES: Route[] = [
     WeatherDataComponent
   ],
   imports: [
-    RouterModule.forChild(ROUTES),
+    RouterModule.forChild(WEATHER_ROUTES),
     CommonModule,
     FormsModule,
     NgbPaginationModule,
@@ -48,7 +36,8 @@ export const ROUTES: Route[] = [
     LoadingSpinnerComponent
   ],
   providers: [
-    WeatherApiService
+    WeatherApiService,
+    WeatherApiServiceMock
   ]
 })
 export class WeatherDataModule { }

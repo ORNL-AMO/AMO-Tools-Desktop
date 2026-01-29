@@ -7,7 +7,7 @@ import { ChillerInventoryService, InventoryValidState } from '../../services/chi
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
-import { ConfirmDeleteComponent, ConfirmDeleteData } from '../../confirm-delete/confirm-delete.component';
+import { ConfirmActionComponent, ConfirmActionData } from '../../confirm-action/confirm-action.component';
 
 @Component({
   selector: 'app-inventory-table',
@@ -65,14 +65,14 @@ export class InventoryTableComponent {
   }
 
   openConfirmDeleteModal(item: ChillerInventoryItem) {
-    this.modalDialogService.openModal<ConfirmDeleteComponent, ConfirmDeleteData>(
-      ConfirmDeleteComponent,
+    this.modalDialogService.openModal<ConfirmActionComponent, ConfirmActionData>(
+      ConfirmActionComponent,
       {
         width: '600px',
         data: {
           modalTitle: 'Delete Chiller Inventory Item',
           confirmMessage: `Are you sure you want to delete '${item.name}'?`,
-          deleteId: item.itemId,
+          resourceId: item.itemId,
         },
       },
     );

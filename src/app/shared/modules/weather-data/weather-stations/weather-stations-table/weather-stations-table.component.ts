@@ -10,8 +10,14 @@ import { WeatherApiService, WeatherStation } from '../../../../weather-api.servi
   standalone: false
 })
 export class WeatherStationsTableComponent {
+  private _stations: Array<WeatherStation>;
   @Input()
-  stations: Array<WeatherStation>;
+  set stations(value: Array<WeatherStation>) {
+    this._stations = value;
+  }
+  get stations(): Array<WeatherStation> {
+    return this._stations;
+  }
 
   currentPageNumber: number = 1;
   itemsPerPage: number = 6;

@@ -99,20 +99,39 @@ export class SystemInformationFormService {
     };
   }
 
-  public isValidSystemInformationValid(systemInformationInput: SystemInformation): boolean {
-    let isValid: boolean = true;
-    const operationsForm = this.getOperationsForm(systemInformationInput.operations);
-    const pumpForm = this.getPumpInputForm(systemInformationInput.condenserWaterPumpInput);
-    const towerForm = this.getTowerForm(systemInformationInput.towerInput);
+  public isSystemInformationValid(systemInformationInput: SystemInformation): boolean {
+    const isOperationsValid = this.isOperationsValid(systemInformationInput.operations);
+    const isPumpValid = this.isPumpValid(systemInformationInput);
+    const isSystemInputValid = this.isCondenserSystemInputValid(systemInformationInput);
+    const isTowerValid = this.isTowerValid(systemInformationInput.towerInput);
+    const isValid: boolean = isOperationsValid && isPumpValid && isSystemInputValid && isTowerValid;
+    return isValid;
+  }
+  
+  public isPumpValid(systemInformation: SystemInformation): boolean {
+    // todo are we sure this will always be condenserWaterPumpInput
+    const pumpForm = this.getPumpInputForm(systemInformation.condenserWaterPumpInput);
+    return pumpForm.valid;
+  }
+
+  public isOperationsValid(operations: Operations): boolean {
+    const operationsForm = this.getOperationsForm(operations);
+    return operationsForm.valid;
+  }
+
+  public isTowerValid(towerInput: TowerInput): boolean {
+    const towerForm = this.getTowerForm(towerInput);
+    return towerForm.valid;
+  }
+
+  public isCondenserSystemInputValid(systemInformationInput: SystemInformation): boolean {
     let systemInputForm: FormGroup<any>;
-    if (operationsForm.controls.condenserCoolingMethod.value === CondenserCoolingMethod.Water) {
+    if (systemInformationInput.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
       systemInputForm = this.getWaterCooledSystemInputForm(systemInformationInput.waterCooledSystemInput);
     } else {
       systemInputForm = this.getAirCooledSystemInputForm(systemInformationInput.airCooledSystemInput);
     }
-
-    isValid = operationsForm.valid && pumpForm.valid && systemInputForm.valid && towerForm.valid;
-    return isValid;
+    return systemInputForm.valid;
   }
 }
 

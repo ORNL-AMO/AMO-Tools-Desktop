@@ -94,7 +94,7 @@ export class ProcessCoolingBannerComponent {
   }
 
   isLinkDisabled(link: ViewLink): boolean {
-    return link.view !== ROUTE_TOKENS.baseline && !this.isBaselineValid;
+    return !this.processCoolingUiService.canVisitView(link.view);
   }
 
   handleCanNavigate(event: MouseEvent, link: ViewLink) {

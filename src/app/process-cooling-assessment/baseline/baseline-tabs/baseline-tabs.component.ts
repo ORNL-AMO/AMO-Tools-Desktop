@@ -30,17 +30,6 @@ export class BaselineTabsComponent {
   isSystemInformationValid: boolean = false;
 
   ngOnInit(): void {
-     this.processCoolingService.isChillerInventoryValid$.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(val => {
-      this.isChillerInventoryValid = val;
-    });
-
-    this.processCoolingService.isOperatingScheduleValid$.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(val => {
-      this.isOperatingScheduleValid = val;
-    });
 
     this.processCoolingService.isSystemInformationValid$.pipe(
       takeUntilDestroyed(this.destroyRef)
@@ -73,14 +62,7 @@ export class BaselineTabsComponent {
   }
 
   isLinkDisabled(link: ViewLink): boolean {
-    switch (link.view) {
-      case ROUTE_TOKENS.operatingSchedule:
-        return !this.isChillerInventoryValid;
-      case ROUTE_TOKENS.loadSchedule:
-        return !this.isChillerInventoryValid || !this.isOperatingScheduleValid;
-      default:
-        return false;
-    }
+    return !this.processCoolingUiService.canVisitView(link.view);
   }
 
   handleCanNavigate(event: MouseEvent, link: ViewLink) {

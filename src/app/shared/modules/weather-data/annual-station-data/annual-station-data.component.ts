@@ -1,46 +1,65 @@
-import { Component } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { WeatherApiService, WeatherDataPoint, WeatherDataResponse, WeatherStation } from '../../../weather-api.service';
 import { firstValueFrom } from 'rxjs';
+import { ModalDialogService } from '../../../modal-dialog.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ConfirmActionComponent, ConfirmActionData } from '../../../../process-cooling-assessment/confirm-action/confirm-action.component';
 
 @Component({
-    selector: 'app-annual-station-data',
-    templateUrl: './annual-station-data.component.html',
-    styleUrls: ['./annual-station-data.component.css'],
-    standalone: false
+  selector: 'app-annual-station-data',
+  templateUrl: './annual-station-data.component.html',
+  styleUrls: ['./annual-station-data.component.css'],
+  standalone: false
 })
 export class AnnualStationDataComponent {
+  private modalDialogService: ModalDialogService = inject(ModalDialogService);
+  private weatherApiService: WeatherApiService = inject(WeatherApiService);
+  private router: Router = inject(Router);
+  private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
 
   weatherStation: WeatherStation;
   stationWeatherData: WeatherDataPoint[];
+  selectedDataset: string;
   selectedYear: number;
   years: Array<number> = [];
-  
+
   calculating: boolean;
   hasGapsInData: boolean;
-  constructor(private router: Router,
-    private weatherApiService: WeatherApiService,
-    // private toastNotificationService: ToastNotificationsService,
-    private activatedRoute: ActivatedRoute
-  ) {
-
-  }
 
   ngOnInit() {
-    const weatherData = {...this.weatherApiService.getWeatherData()};
+    const weatherData = { ...this.weatherApiService.getWeatherData() };
     this.weatherStation = weatherData.selectedStation;
 
     if (!this.weatherStation) {
       this.goToStations();
-    } else { 
-      if (!this.weatherStation?.isTMYData) {
-        this.setYears();
+    } else {
+
+      if (weatherData.weatherDataPoints?.length > 0) {
+        this.selectedDataset = `${weatherData.selectedStation.name} - TMY3 Year`;
+        this.stationWeatherData = weatherData.weatherDataPoints;
       } else {
+        // * not currently used, will use in the future for calendarizaed data
+        // if (!this.weatherStation?.isTMYData) {
+        //   this.setYears();
+        // } else {
+        //   this.selectedYear = this.weatherApiService.getTMYYear();
+        // }
         this.selectedYear = this.weatherApiService.getTMYYear();
+        this.setWeatherData();
       }
-      this.setWeatherData();
     }
+
+    this.modalDialogService.closedResult.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((removeDataset: string) => {
+      if (removeDataset) {
+        this.weatherApiService.resetWeatherData();
+        this.goToStations();
+      }
+    });
   }
 
 
@@ -56,6 +75,13 @@ export class AnnualStationDataComponent {
     }
   }
 
+  async useDataset() {
+    let updatedData = { ...this.weatherApiService.getWeatherData() };
+    updatedData.selectedStation = this.weatherStation;
+    updatedData.weatherDataPoints = this.stationWeatherData;
+    this.selectedDataset = this.weatherStation.name;
+    this.weatherApiService.setWeatherData(updatedData);
+  }
 
   async setWeatherData() {
     this.hasGapsInData = false;
@@ -83,22 +109,28 @@ export class AnnualStationDataComponent {
     this.calculating = false;
   }
 
-  async useDataset() {
-    let updatedData = { ...this.weatherApiService.getWeatherData()};
-    updatedData.selectedStation = this.weatherStation;
-    updatedData.weatherDataPoints = this.stationWeatherData;
-    this.weatherApiService.setWeatherData(updatedData);
-    this.goToFinishedRoute();
-  }
-
-  goToFinishedRoute() {
-    const finishedRoute = this.weatherApiService.getFinishedRoute();
-    console.log(finishedRoute);
-    this.router.navigate([finishedRoute]);
-  }
 
   goToStations() {
     this.router.navigate(['../stations'], { relativeTo: this.activatedRoute });
+  }
+
+  selectNewDataset() {
+    if (this.selectedDataset) {
+      this.modalDialogService.openModal<ConfirmActionComponent, ConfirmActionData>(
+        ConfirmActionComponent,
+        {
+          width: '800px',
+          data: {
+            modalTitle: 'Select New Weather Dataset',
+            confirmMessage: `This action will remove '${this.selectedDataset}' as your active weather dataset and return you to the Weather Station Search. Continue?`,
+            resourceId: this.selectedDataset,
+            actionName: 'Select New Dataset'
+          },
+        },
+      );
+    } else {
+      this.goToStations();
+    }
   }
 }
 
