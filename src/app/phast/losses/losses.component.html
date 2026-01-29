@@ -21,13 +21,21 @@
       [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'assessment-small-screen-tab': smallScreenTab === 'baseline'}"
       [ngStyle]="{'height.px': containerHeight}">
       <div class="header ml-2 mr-2">
-        <h3>Baseline</h3>
-        <h5 class="d-flex justify-content-end panel-add" *ngIf="inSetup && !modificationExists && selectedTab.showAdd">
-          <a class="small" [ngClass]="{'disabled': !baselineSelected}">
-            <span *ngIf="selectedTab.componentStr != 'charge-material'" (click)="addLoss()">+Add Loss</span>
-            <span *ngIf="selectedTab.componentStr == 'charge-material'" (click)="addLoss()">+Add Charge Material</span>
-          </a>
-        </h5>
+        <div class="d-flex justify-content-between">
+          <div>
+            <h3>Baseline</h3>
+          </div>
+          <div>
+            <h5 class="d-flex justify-content-end panel-add"
+              *ngIf="inSetup && !modificationExists && selectedTab.showAdd">
+              <a class="small" [ngClass]="{'disabled': !baselineSelected}">
+                <span *ngIf="selectedTab.componentStr != 'charge-material'" (click)="addLoss()">+Add Loss</span>
+                <span *ngIf="selectedTab.componentStr == 'charge-material'" (click)="addLoss()">+Add Charge
+                  Material</span>
+              </a>
+            </h5>
+          </div>
+        </div>
       </div>
 
       <app-charge-material (fieldChange)="changeField($event)" [baselineSelected]="baselineSelected"

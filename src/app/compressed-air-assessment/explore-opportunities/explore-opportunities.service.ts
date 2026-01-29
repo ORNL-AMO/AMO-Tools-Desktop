@@ -254,4 +254,5 @@ export class ExploreOpportunitiesService {
       return dayTypeModificationResults.flowAllocationProfileSummary;
     }
   }
+
 }

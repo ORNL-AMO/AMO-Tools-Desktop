@@ -1,7 +1,7 @@
 name: "Release: QA"
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
   call_build:

@@ -81,7 +81,7 @@ export class SystemInformationFormService {
     return this.formBuilder.group({
       usesFreeCooling: [input.usesFreeCooling, Validators.required],
       isHEXRequired: [input.isHEXRequired],
-      HEXApproachTemp: [input.HEXApproachTemp, [Validators.required, Validators.min(0)]],
+      HEXApproachTemp: [input.HEXApproachTemp, [Validators.required]],
       numberOfTowers: [input.numberOfTowers, [Validators.required, Validators.min(1)]],
       towerType: [input.towerType],
       numberOfFans: [input.numberOfFans, [Validators.required, Validators.min(1)]],

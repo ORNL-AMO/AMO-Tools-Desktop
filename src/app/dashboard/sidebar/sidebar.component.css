@@ -86,5 +86,16 @@ a.list-group-item.active:hover{
 
 .info-icon {
     font-size: 22px;
-    color: #156739;
+    color: var(--measur-brand);
+}
+
+.sidebar-app-icon {
+    width: 25px;
+}
+
+.app-brand {
+    font-family: 'Muli', sans-serif;
+    font-weight: 700;
+    font-size: 2em;
+    color: var(--measur-brand);
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { FlowCalculations, FlowCalculationsOutput } from '../../../../shared/models/phast/flowCalculations';
 import { ConvertUnitsService } from "../../../../shared/convert-units/convert-units.service";
@@ -101,14 +101,10 @@ export class EnergyUseFormComponent implements OnInit {
       this.insidePipeDiameterError = null;
     }
 
-    const dischargeCoefficient = this.flowCalculations.dischargeCoefficient;
     properties = this.rangeCheck.dischargeCoefficient;
-    if (dischargeCoefficient > properties.max || dischargeCoefficient < properties.min) {
-      this.dischargeCoefficientError = 'Discharge coefficient must be between ' + properties.max + ' and ' + properties.min;
-    } else {
-      this.dischargeCoefficientError = null;
-    }
+
     this.emitCalculate.emit(true);
+
   }
 
   focusField(str: string) {
@@ -116,12 +112,12 @@ export class EnergyUseFormComponent implements OnInit {
   }
 
   setDischargeCoefficient() {
-    if (this.flowCalculations.sectionType === 0) {
-      this.flowCalculations.dischargeCoefficient = .5;
-    } else if (this.flowCalculations.sectionType === 1) {
-      this.flowCalculations.dischargeCoefficient = .6;
-    } else if (this.flowCalculations.sectionType === 2) {
-      this.flowCalculations.dischargeCoefficient = .8;
+    if (this.form.controls['sectionType'].value === 0) {
+      this.form.controls['dischargeCoefficient'].setValue(0.5);
+    } else if (this.form.controls['sectionType'].value === 1) {
+      this.form.controls['dischargeCoefficient'].setValue(0.6);
+    } else if (this.form.controls['sectionType'].value === 2) {
+      this.form.controls['dischargeCoefficient'].setValue(0.8);
     }
     this.calculate();
   }

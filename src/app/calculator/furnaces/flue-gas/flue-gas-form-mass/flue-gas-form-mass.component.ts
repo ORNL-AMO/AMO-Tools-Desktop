@@ -80,7 +80,7 @@ export class FlueGasFormMassComponent implements OnInit {
   initFormSetup() {
     this.setFormState();
     if (this.byMassForm.controls.gasTypeId.value && this.byMassForm.controls.gasTypeId.value !== '') {
-      if (this.byMassForm.controls.carbon.value === 0) {
+      if (this.byMassForm.controls.carbon.value === 0 || this.byMassForm.controls.carbon.invalid) {
         this.setProperties();
       }
     }

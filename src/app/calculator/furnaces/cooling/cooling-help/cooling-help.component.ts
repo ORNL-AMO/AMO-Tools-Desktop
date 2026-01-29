@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { CoolingService } from '../cooling.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-cooling-help',
@@ -16,7 +17,7 @@ export class CoolingHelpComponent implements OnInit {
   currentFieldSub: Subscription;
   currentField: string;
   displaySuggestions: boolean;
-
+  docsLink: string = environment.measurDocsUrl;
   constructor(private coolingService: CoolingService) { }
 
   ngOnInit(): void {

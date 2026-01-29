@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { PowerFactorCorrectionService } from '../power-factor-correction.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-power-factor-correction-help',
@@ -7,11 +9,18 @@ import { Component, OnInit, Input } from '@angular/core';
     standalone: false
 })
 export class PowerFactorCorrectionHelpComponent implements OnInit {
-  @Input()
   currentField: string;
-  constructor() { }
+  currentFieldSub: Subscription;
+  constructor(private powerFactorCorrectionService: PowerFactorCorrectionService) { }
 
   ngOnInit() {
+    this.currentFieldSub = this.powerFactorCorrectionService.currentField.subscribe(val => {
+      this.currentField = val;
+    });
+  }
+
+  ngOnDestroy() {
+    this.currentFieldSub.unsubscribe();
   }
 
 }
