@@ -5,7 +5,6 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
-
 @Injectable({
   providedIn: 'root'
 })
