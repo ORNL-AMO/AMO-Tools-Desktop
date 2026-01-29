@@ -1,28 +1,24 @@
-<div class="d-flex w-100 justify-content-between">
-    <div class="mt-auto">
+<div class="row">
+    <div class="col-6">
+<div class="mt-auto">
         <label class="semibold form-section-label mb-2">
             Search For Weather Stations
         </label>
         <ol class="small">
-            <ng-template [ngIf]="isLocationSearch" [ngIfElse]="notLocationSearchBlock">
-                <li>
-                    Use the location search below to find latitude and longitude associated with a location.
-                </li>
-                <li>
-                    Select the location from the table populated on the right.
-                </li>
-            </ng-template>
-            <ng-template #notLocationSearchBlock>
-                <li>
-                    Enter the latitude and longitude of a location.
-                </li>
-            </ng-template>
+             <li>
+                Choose the lookup method used to find locations.
+            </li>
             <li>
-                "Fetch Stations" will retrieve the list of closest weather stations in our system and display below.
+                Adjust the furthest distance to search. Results can be found up to {{maxSearchDistance}} miles away.
+            </li>
+            <li>
+                Select the location from the table populated on the right.
             </li>
         </ol>
     </div>
-    <div class="d-flex flex-column">
+    </div>
+    <div class="col-6">
+        <div class="d-flex flex-column ml-3">
         <label class="semibold">Lookup Method</label>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="locationSearch"
@@ -35,10 +31,10 @@
             <label class="form-check-label" for="latLongEntry">Lat/Long Entry</label>
         </div>
     </div>
+    </div>
 </div>
 <hr>
 <form>
-
     <div class="row">
         <div class="col-6">
             <ng-template [ngIf]="isLocationSearch" [ngIfElse]="latLongSearchBlock">
@@ -46,7 +42,7 @@
                     <div class="col-12">
                         <label class="w-100 form-section-label" for="address">Location Search</label>
                         <p class="fw-light mb-0 small">
-                            Use the Lat/Long search to find locations.
+                            Enter an address, city, state, or zip code to find corresponding locations.
                         </p>
                         <input type="text" class="form-control" name="addressString" id="addressString"
                             [(ngModel)]="addressString" [disabled]="fetchingData">

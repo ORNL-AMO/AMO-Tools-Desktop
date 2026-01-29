@@ -16,12 +16,14 @@ export class WeatherApiService {
   private readonly STATIONS_URL = `${this.baseUrl}/stations`;
   private readonly defaultTimeout = 30000;
   private readonly maxRetries = 2;
-
+  // * 150 miles constrained by API
+  
   private readonly defaultHeaders = new HttpHeaders({
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   });
-
+  
+  readonly MAX_SEARCH_DISTANCE = 150;
 
   /**
    * Set the weather data context on injected service for use elsewhere in the app
@@ -218,7 +220,7 @@ export class WeatherApiService {
           return of({ locations: [], stationsByPlaceId: {} });
         }
 
-        const radialMaxLimit = Math.min(radialDistance, 150);
+        const radialMaxLimit = Math.min(radialDistance, this.MAX_SEARCH_DISTANCE);
         const stationsObservables = locations.map(loc =>
           this.searchStations(
             this.getStationSearchRequest(loc.lat, loc.lon, radialMaxLimit)

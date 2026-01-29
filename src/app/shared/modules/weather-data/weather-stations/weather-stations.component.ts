@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LocationsWithStationsResult, NominatimLocation, WeatherApiService, WeatherStation } from '../../../weather-api.service';
 import { GEO_DATA_STATE_LINES } from '../geo-assets/geo-data-state-lines';
 import { firstValueFrom } from 'rxjs';
@@ -11,7 +11,7 @@ import { environment } from '../../../../../environments/environment';
   standalone: false
 })
 export class WeatherStationsComponent {
-
+  private weatherApiService: WeatherApiService = inject(WeatherApiService);
   furthestDistance: number = environment.production ? 50 : 25;
   stations: Array<WeatherStation> = [];
 
@@ -34,10 +34,9 @@ export class WeatherStationsComponent {
   selectedLocationId: number;
   stationSearchError: boolean = false;
 
+  maxSearchDistance = this.weatherApiService.MAX_SEARCH_DISTANCE;
+
   stateLines: any;
-  constructor(
-    private weatherApiService: WeatherApiService
-  ) { }
 
   ngOnInit() {
     this.stateLines = GEO_DATA_STATE_LINES;
@@ -135,7 +134,7 @@ export class WeatherStationsComponent {
 
 }
 
-// * test for searchLatLong
+// * test location
  // const testitem = {
         //     "name": "MINNEAPOLIS-ST PAUL INTERNATIONAL AP",
         //     "lat": 44.885,
@@ -161,7 +160,7 @@ export class WeatherStationsComponent {
         //   this.weatherApiService.setWeatherData(weatherData);
 
 
-// * turn on stations for testing weather components/module logic without over hitting API 
+// * test stations
 // const testingStations: WeatherStation[] =
 //   [
 //     {
