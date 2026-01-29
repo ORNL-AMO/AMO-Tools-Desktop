@@ -1,0 +1,123 @@
+<div class="output-summary w-100 mx-auto p-3">
+  <h4 class="show-print print-section-header">System True Cost Attribution</h4>
+
+  <div class="p-2">
+    <div class="group-label mb-2">True Cost: Cost Component Attribution by System</div>
+    <div class="d-flex align-items-center justify-content-between mb-2">
+      <small class="form-text text-muted">Enter the
+        percent cost attributed to each component if known attribution differs from those calculated by MEASUR. Each row
+        must
+        total 100%.</small>
+    </div>
+
+    <form [formGroup]="form">
+      <div formArrayName="costComponentsSystemAttribution" class="table-responsive">
+        <table class="table table-bordered table-sm mb-0">
+          <colgroup>
+            <col class="col-component-name" />
+            <col class="col-total" />
+            <col *ngFor="let system of systems" class="col-system" />
+            <col class="col-total" />
+            <col class="col-status" />
+            <col class="col-action" />
+          </colgroup>
+          <thead class="thead-light">
+            <tr>
+              <th>Cost Components</th>
+              <th>Total Cost</th>
+              <th *ngFor="let system of systems">{{ system.name }}</th>
+              <th>Total %</th>
+              <th>Status</th>
+              <th></th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let rowGroup of costComponentsSystemAttribution.controls; let componentIndex = index">
+              @let rowId = rowGroup.get('id').value;
+              @let costComponent = costComponentMap.get(rowId);
+              @let isEditingRow = selectedEditRow === componentIndex;
+              @let invalidRowAttributionDifference = getValidRowAttributionDiff(rowGroup.get('systemAttributions'));
+
+              @if(costComponent) {
+              <tr [formGroupName]="componentIndex">
+                <td class="component-name-cell">
+                  {{ costComponent.name }}
+                  <span class="badge badge-pill"
+                    [class.pill-water-intake]="costComponent.processComponentType === 'water-intake'"
+                    [class.pill-water-discharge]="costComponent.processComponentType === 'water-discharge'"
+                    [class.pill-water-treatment]="costComponent.processComponentType === 'water-treatment'"
+                    [class.pill-waste-water-treatment]="costComponent.processComponentType === 'waste-water-treatment'">
+                    {{ costComponent.componentTypeLabel }}</span>
+                </td>
+                <td class="text-center">
+                  {{ costComponent.total | currency:'USD':'symbol':'1.0-0'}}
+                </td>
+                <ng-container *ngFor="let system of systems; let systemIndex = index">
+                  <td class="system-cell text-center">
+                    @let systemAdjustedAttributions = getSystemAdjustedAttributions(system.id, rowId);
+                    @let hasNullDefaultAttribution = nullDefaultAttribution[rowId] &&
+                    nullDefaultAttribution[rowId][system.id] !== undefined;
+
+                    @if (hasNullDefaultAttribution) {
+                    <span>&mdash;</span>
+                    } @else {
+                    <div class="input-group d-inline-flex"
+                      [class.border-adjusted]="systemAdjustedAttributions && !isEditingRow">
+                      @if (systemAdjustedAttributions && isEditingRow) {
+                      <span class="input-group-addon calc-addon units">
+                        <a class="click-link" title="Revert to MEASUR calculated value."
+                          (click)="revertToDefaultAttribution(rowGroup, system.id, rowId, systemIndex)"><span
+                            class="fa fa-refresh"></span></a>
+                      </span>
+                      }
+                      <input type="number" id="{{'component-' + componentIndex + '-system-' + systemIndex}}"
+                        class="form-control text-center" [class.width-offset]="selectedEditRow === componentIndex"
+                        [formControl]="rowGroup.get('systemAttributions').at(systemIndex)"
+                        (input)="setAdjustedValue($event, rowId, system.id)"
+                        [readonly]="selectedEditRow !== componentIndex">
+                    </div>
+                    }
+
+                  </td>
+                </ng-container>
+                <td class="text-center font-weight-bold" [class.text-danger]="invalidRowAttributionDifference">
+                  {{ getTotal(rowGroup.get('systemAttributions')) | number:'1.0-2' }}%
+                </td>
+                <td class="component-name-cell">
+                  <span class="badge badge-pill" [class.badge-light]="costComponent.status === 'default'"
+                    [class.badge-adjusted]="costComponent.status === 'adjusted' && !isEditingRow">
+                    {{ costComponent?.status.toUpperCase() }}</span>
+                </td>
+                <td class="d-flex flex-row justify-content-center">
+                  @if (selectedEditRow !== componentIndex) {
+                  <button type="button" class="btn btn-link p-0 mr-1 edit-btn" title="Edit row"
+                    (click)="editRow(componentIndex)">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  } @else if (selectedEditRow === componentIndex) {
+                  <button type="button" class="btn btn-link p-0 save-btn" title="Save row"
+                    [class.disabled]="invalidRowAttributionDifference" [disabled]="invalidRowAttributionDifference"
+                    (click)="saveRow(componentIndex, rowGroup.get('systemAttributions'))">
+                    <i class="fa fa-save"></i>
+                  </button>
+                  }
+              </tr>
+              }
+
+              @if (invalidRowAttributionDifference) {
+              <tr>
+                <td colspan="100" class="alert alert-danger pt-1 pb-2">
+                  Attribution total must equal 100%. Row has difference of {{ invalidRowAttributionDifference }}%
+                  attribution
+                </td>
+              </tr>
+              }
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+
+</div>

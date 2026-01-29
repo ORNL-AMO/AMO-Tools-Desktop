@@ -270,7 +270,7 @@ export class ImportOpportunitiesService {
 
    updateAirLeak(airLeakSurvey: AirLeakSurveyTreasureHunt) {
     airLeakSurvey.airLeakSurveyInput.compressedAirLeakSurveyInputVec.map(input => {
-      return this.updateDataService.updateAirLeakSurvey(input);
+      return this.updateDataService.updateAirLeakSurvey(input, airLeakSurvey.airLeakSurveyInput.facilityCompressorData);
     });
 
     return airLeakSurvey;

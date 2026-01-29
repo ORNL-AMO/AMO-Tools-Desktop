@@ -3,6 +3,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { OpeningService } from '../opening.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-opening-help',
@@ -18,6 +19,7 @@ export class OpeningHelpComponent implements OnInit {
   @ViewChild('viewFactorModal', { static: false }) public viewFactorModal: ModalDirective;
   currentFieldSub: Subscription;
   currentField: string;
+  docsLink: string = environment.measurDocsUrl;
   constructor(private openingService: OpeningService) { }
 
   ngOnInit() {

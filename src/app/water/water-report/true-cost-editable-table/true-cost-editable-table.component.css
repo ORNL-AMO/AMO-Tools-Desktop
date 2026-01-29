@@ -1,0 +1,110 @@
+
+.card-header {
+  cursor: pointer;
+}
+
+.fa-edit, .fa-save {
+  font-size: 1.5rem;
+}
+
+.disabled {
+  color: #6c757d;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.table thead th, .table thead.thead-light th {
+  background-color: var(--water-assessment);
+  color: #fff !important;
+  padding: .5rem 1rem !important;
+}
+
+.system-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.col-component-name { min-width: 150px; }
+.col-total { width: 100px; }
+.col-system { min-width: 80px; text-align: center; }
+.col-total { width: 80px; }
+.col-action { width: 60px; }
+
+input[type="number"] {
+  display: inline-block;
+  text-align: center;
+  padding: 1px 4px;
+  height: 23px;
+  margin: 0 auto;
+  /* width: 100%; */
+}
+
+.width-offset {
+  width: calc(100% - 30px)
+}
+
+.table th, .table td {
+  vertical-align: middle;
+  padding: .5rem .5rem;
+}
+
+.table th {
+  white-space: nowrap;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+.component-name-cell {
+  text-align: left;
+  font-weight: bold;
+  font-size: .75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.badge-pill {
+  margin-left:.5rem;
+  padding: 0.5em 0.75em;
+  border-radius: 8px;
+  font-size: 11px;
+}
+.pill-water-intake {
+  background: #75a1ff;
+  color: #fff;
+}
+.pill-water-discharge {
+  background: #7f7fff;
+  color: #fff;
+}
+.pill-water-treatment {
+  background: #009386;
+  color: #fff;
+}
+.pill-waste-water-treatment {
+  background: #93e200;
+  color: #000;
+}
+
+
+.badge-default {
+  background: #fff;
+  color: #000;
+}
+
+.badge-adjusted {
+  background: #ffc107;
+  color: #000;
+}
+
+.border-adjusted {
+  /* border: 3px solid #93e200; */
+  border: 3px solid #ffc107;
+  border-radius: 4px;
+}
+
+.input-group-addon.calc-addon{
+    border-left: solid 1px;
+}

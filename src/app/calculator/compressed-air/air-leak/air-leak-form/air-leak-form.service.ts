@@ -5,6 +5,7 @@ import { GreaterThanValidator } from '../../../../shared/validators/greater-than
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertAirLeakService } from '../convert-air-leak.service';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { LeakMeasurementMethod } from '../../compressed-air-constants';
 
 @Injectable()
 export class AirLeakFormService {
@@ -66,7 +67,7 @@ export class AirLeakFormService {
       leakDescription: '',
       name: 'New Leak',
       selected: false,
-      measurementMethod: 0,
+      measurementMethod: LeakMeasurementMethod.Estimate,
       estimateMethodData: {
         leakRateEstimate: 0.1
       },
