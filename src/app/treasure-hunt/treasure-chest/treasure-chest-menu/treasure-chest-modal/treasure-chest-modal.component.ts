@@ -1,11 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { ExportToJustifiTemplateService } from '../../../../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-template.service';
 import { EmailMeasurDataService } from '../../../../shared/email-measur-data/email-measur-data.service';
 import { TreasureChestMenuService } from '../treasure-chest-menu.service';
-import { Subscription } from 'rxjs';
 import { ImportExportOpportunities } from '../../../../shared/models/treasure-hunt';
-import { TreasureHuntService } from '../../../treasure-hunt.service';
 import { TreasureHunt } from '../../../../shared/models/treasure-hunt';
 import * as _ from 'lodash';
 @Component({
@@ -22,15 +19,11 @@ export class TreasureChestModalComponent {
   treasureHunt: TreasureHunt;
 
   constructor(
-    private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private emailMeasurDataService: EmailMeasurDataService,
     private treasureChestMenuService: TreasureChestMenuService,
-
-    private treasureHuntService: TreasureHuntService
   ) { }
 
   ngOnInit() {
-    this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
   }
 
   ngAfterViewInit() {
@@ -54,9 +47,6 @@ export class TreasureChestModalComponent {
   }
 
   showExportToLocalModal() {
-    // this.exportToJustifiTemplateService.treasureHuntAttachment = this.exportOpportunities;
-    // this.exportToJustifiTemplateService.showTreasureHunt = true;
-    // this.exportToJustifiTemplateService.showExportToJustifiModal.next(true);
     this.treasureChestMenuService.showExportModal.next(true);
     this.hideModal();
   }
