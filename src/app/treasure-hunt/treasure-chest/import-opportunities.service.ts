@@ -229,20 +229,18 @@ export class ImportOpportunitiesService {
   }
 
   updateCompressedAirPressureFields(compressedAirPressureReductionTH: CompressedAirPressureReductionTreasureHunt) {
+    compressedAirPressureReductionTH.baseline.forEach(baselineInput => {
+      if (!baselineInput.atmosphericPressure) {
+        baselineInput.atmosphericPressure = 0;
+      }
+      if (!baselineInput.pressureRated) {
+        baselineInput.pressureRated = 0;
+      }
+      if (!baselineInput.powerType) {
+        baselineInput.powerType = 'Measured';
+      }
+    });
     if (compressedAirPressureReductionTH.modification && compressedAirPressureReductionTH.modification.length > 0) {
-      compressedAirPressureReductionTH.baseline.forEach(baselineInput => {
-        if (!baselineInput.atmosphericPressure) {
-          baselineInput.atmosphericPressure = 0;
-        }
-        if (!baselineInput.pressureRated) {
-          baselineInput.pressureRated = 0;
-        }
-        if (!baselineInput.powerType) {
-          baselineInput.powerType = 'Measured';
-        }
-      });
-    }
-    if (compressedAirPressureReductionTH.modification && Array.isArray(compressedAirPressureReductionTH.modification)) {
       compressedAirPressureReductionTH.modification.forEach(modification => {
         if (!modification.atmosphericPressure) {
           modification.atmosphericPressure = 0;
@@ -259,28 +257,21 @@ export class ImportOpportunitiesService {
   }
 
   updateCompressedAirReduction(compressedAirReductionTH: CompressedAirReductionTreasureHunt) {
-    if (compressedAirReductionTH.baseline && Array.isArray(compressedAirReductionTH.baseline)) {
-      compressedAirReductionTH.baseline.map(baselineInput => {
-        return this.updateDataService.updateCompressedAirReduction(baselineInput);
-      });
-    }
-    if (compressedAirReductionTH.modification && Array.isArray(compressedAirReductionTH.modification)) {
-      compressedAirReductionTH.modification.map(modInput => {
-        return this.updateDataService.updateCompressedAirReduction(modInput);
-      });
-    }
+    compressedAirReductionTH.baseline.map(baselineInput => {
+      return this.updateDataService.updateCompressedAirReduction(baselineInput);
+    });
+    compressedAirReductionTH.modification.map(modInput => {
+      return this.updateDataService.updateCompressedAirReduction(modInput);
+    });
+
     return compressedAirReductionTH;
   }
 
-  updateAirLeak(airLeakSurvey: AirLeakSurveyTreasureHunt) {
-    if (
-      airLeakSurvey.airLeakSurveyInput &&
-      Array.isArray(airLeakSurvey.airLeakSurveyInput.compressedAirLeakSurveyInputVec)
-    ) {
-      airLeakSurvey.airLeakSurveyInput.compressedAirLeakSurveyInputVec.map(input => {
-        return this.updateDataService.updateAirLeakSurvey(input, airLeakSurvey.airLeakSurveyInput.facilityCompressorData);
-      });
-    }
+   updateAirLeak(airLeakSurvey: AirLeakSurveyTreasureHunt) {
+    airLeakSurvey.airLeakSurveyInput.compressedAirLeakSurveyInputVec.map(input => {
+      return this.updateDataService.updateAirLeakSurvey(input, airLeakSurvey.airLeakSurveyInput.facilityCompressorData);
+    });
+
     return airLeakSurvey;
   }
 
