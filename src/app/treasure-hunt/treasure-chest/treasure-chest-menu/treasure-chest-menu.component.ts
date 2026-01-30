@@ -42,7 +42,6 @@ export class TreasureChestMenuComponent implements OnInit {
     this.getNavbarWidth();
   }
 
-  displayAdditionalFiltersDropdown: string = 'hide';
   sortByDropdown: boolean = false;
   sortCardsData: SortCardsData;
   sortBySub: Subscription;
@@ -94,14 +93,6 @@ export class TreasureChestMenuComponent implements OnInit {
 
   ngAfterViewInit() {
     this.getNavbarWidth();
-  }
-
-  toggleAdditionalFilters() {
-    if (this.displayAdditionalFiltersDropdown == 'hide') {
-      this.displayAdditionalFiltersDropdown = 'show';
-    } else {
-      this.displayAdditionalFiltersDropdown = 'hide';
-    }
   }
 
   toggleSortBy() {
