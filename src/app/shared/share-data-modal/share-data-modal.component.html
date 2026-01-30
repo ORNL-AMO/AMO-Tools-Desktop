@@ -5,14 +5,14 @@
             <div class="modal-header p-2">
                 <h5 class="mt-auto">
                     <span class="fa fa-share-square-o"></span>
-                    Share MEASUR Data
+                    {{ isTreasureHuntOpportunities ? 'Share Treasure Hunt Opportunities' : 'Share MEASUR Data' }}
                 </h5>
                 <button class="close p-0 m-0" aria-label="Close" (click)="hideModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body p-2">
-                <div class="d-flex w-100">
+                <div *ngIf="!isTreasureHuntOpportunities" class="d-flex w-100">
                     <div class="w-50 m-2">
                         <button class="btn btn-secondary w-100" (click)="showEmailMeasurDataModal()">
                             <span class="fa fa-envelope"></span><br><br>
@@ -23,12 +23,32 @@
                         </p>
                     </div>
                     <div class="w-50 m-2">
-                        <button class="btn btn-secondary w-100" (click)="showExportToJustifiModal()">
+                        <button class="btn btn-secondary w-100" (click)="showExportModal()">
                             <span class="fa fa-file-excel-o"> </span><br><br>
                             Export to JUSTIFI
                         </button>
                         <p class="small text-center">
                             Export your MEASUR assessment data to an excel file and upload it to JUSTIFI.
+                        </p>
+                    </div>
+                </div>
+                <div *ngIf="isTreasureHuntOpportunities" class="d-flex w-100">
+                    <div class="w-50 m-2">
+                        <button class="btn btn-secondary w-100" (click)="showEmailMeasurDataModal()">
+                            <span class="fa fa-envelope"></span><br><br>
+                            Email Treasure Hunt Opportunities Data
+                        </button>
+                        <p class="small text-center">
+                            Share your Treasure Hunt Opportunities data with others by emailing it to them.
+                        </p>
+                    </div>
+                    <div class="w-50 m-2">
+                        <button class="btn btn-secondary w-100" (click)="showExportModal()">
+                            <span class="fa fa-file-excel-o"> </span><br><br>
+                            Export Locally
+                        </button>
+                        <p class="small text-center">
+                            Export your Treasure Hunt Opportunities data to an excel file for local use.
                         </p>
                     </div>
                 </div>
