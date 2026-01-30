@@ -24,7 +24,7 @@
         <span class="alert-danger w-100 pull-right small py-1 px-2"
           *ngIf="emailDataForm.controls.emailTo.invalid && !emailDataForm.controls.emailTo.pristine">
           <span *ngIf="emailDataForm.controls.emailTo.errors.required">Email is required</span>
-          <span *ngIf="emailDataForm.controls.emailTo.errors.email">Must be a valid email address</span>
+          <span *ngIf="emailDataForm.controls.emailTo.errors.invalidEmails">One or more emails are invalid</span>
         </span>
       </div>
     </div>
