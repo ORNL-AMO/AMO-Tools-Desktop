@@ -25,7 +25,8 @@ export class EmailMeasurDataComponent {
   ngOnInit() {
     this.emailDataForm = this.fb.group({
       emailTo: ['', [Validators.required, Validators.email]],
-      emailSender: ['', [Validators.email]]
+      emailSender: ['', [Validators.email]],
+      emailAttachmentName: [this.emailMeasurDataService.measurItemAttachment.itemName, Validators.required]
     });
 
     this.emailSentStatusSubscription = this.emailMeasurDataService.emailSentStatus.subscribe(sentStatus => {
