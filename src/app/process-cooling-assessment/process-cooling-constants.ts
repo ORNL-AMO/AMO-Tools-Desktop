@@ -112,8 +112,8 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
               },
             operations: {
               annualOperatingHours: 8760,
-              fuelCost: settings.fuelCost || 3.99,
-              electricityCost: settings.electricityCost || 0.066,
+              fuelCost: settings.fuelCost || 10,
+              electricityCost: settings.electricityCost || 0.20,
               chilledWaterSupplyTemp: 44,
               condenserCoolingMethod: 0, // water
               doChillerLoadSchedulesVary: undefined
@@ -143,17 +143,17 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
             },
             chilledWaterPumpInput: {
               variableFlow: true,
-              flowRate: 500,
-              efficiency: 0.8,
+              flowRate: 2.4,
+              efficiency: 75,
               motorSize: 0,
-              motorEfficiency: 0,
+              motorEfficiency: 85,
             },
             condenserWaterPumpInput: {
               variableFlow: true,
-              flowRate: 0,
-              efficiency: 0,
+              flowRate: 3,
+              efficiency: 75,
               motorSize: 0,
-              motorEfficiency: 0,
+              motorEfficiency: 85,
             },
           },
           inventory: [

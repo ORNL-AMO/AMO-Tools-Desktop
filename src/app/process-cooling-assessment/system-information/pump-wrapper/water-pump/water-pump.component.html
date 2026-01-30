@@ -39,7 +39,7 @@
         <div class="input-group">
             <input name="motorSize" type="number" step="any" class="form-control" id="{{controlIds.motorSize}}"
                 formControlName="motorSize" (focus)="focusField('motorSize')">
-            <app-input-unit [defaultUnit]="'hp'"></app-input-unit>
+            <app-input-unit [imperialUnit]="'hp'" [metricUnit]="'kW'"></app-input-unit>
         </div>
         <app-form-control-errors [control]="motorSize"></app-form-control-errors>
     </div>
