@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, FormControl } from '@angular/forms';
 import { EmailMeasurDataService, EmailSentStatus } from './email-measur-data.service';
 import { Subscription } from 'rxjs';
-
 @Component({
     selector: 'app-email-measur-data',
     templateUrl: './email-measur-data.component.html',
@@ -24,7 +23,7 @@ export class EmailMeasurDataComponent {
 
   ngOnInit() {
     this.emailDataForm = this.fb.group({
-      emailTo: ['', [Validators.required, Validators.email]],
+      emailTo: ['', [Validators.required, this.multipleEmailsValidator()]],
       emailSender: ['', [Validators.email]]
     });
 
@@ -51,5 +50,18 @@ export class EmailMeasurDataComponent {
   togglePreview() {
     this.showPreview = !this.showPreview;
   }
+
+  multipleEmailsValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+
+      const emails = control.value.split(/[, ]+/).map((email: string) => email.trim());
+      const invalidEmails = emails.filter(email => Validators.email(new FormControl(email)) !== null);
+
+      return invalidEmails.length > 0 ? { invalidEmails: true } : null;
+    };
+}
 
 }
