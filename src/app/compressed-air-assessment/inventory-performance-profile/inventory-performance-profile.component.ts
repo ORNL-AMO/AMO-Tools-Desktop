@@ -251,14 +251,12 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   }
 
   drawChart() {
-    console.log('draw chart called');
     if (this.printView) {
       this.showAvgOpPoints = true;
       this.showAllCompressors = true;
     }
     let unloadingLines = [];
     if (this.performanceProfileChart && ((this.inAssessment && this.adjustedCompressors) || this.selectedCompressor) && this.compressedAirAssessment) {
-      console.log('drawing chart');
       let chartData: Array<ProfileChartData>;
       let avgOpPointData: Array<ProfileChartData>;
       if (!this.inAssessment) {
