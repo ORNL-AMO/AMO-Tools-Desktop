@@ -5,9 +5,11 @@ import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure
 import { OperatingHours } from '../../../shared/models/operations';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { LightingFixtureData } from '../lighting-fixture-data/lighting-data';
-import { MetalHalideFixtures } from '../lighting-fixture-data/metal-halide';
-import { HighBayLEDFixtures } from '../lighting-fixture-data/high-bay-LED';
+// import { LightingFixtureData } from '../lighting-fixture-data/lighting-data';
+// import { MetalHalideFixtures } from '../lighting-fixture-data/metal-halide';
+// import { HighBayLEDFixtures } from '../lighting-fixture-data/high-bay-LED';
+import { LightingSuiteApiService, LightingFixtureData } from '../../../tools-suite-api/lighting-suite-api.service';
+
 
 @Injectable()
 export class LightingReplacementService {
@@ -17,10 +19,11 @@ export class LightingReplacementService {
   baselineElectricityCost: number;
   modificationElectricityCost: number;
   operatingHours: OperatingHours;
-  selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
+  selectedFixtureTypes: LightingFixtureData;
   showAdditionalDetails: boolean = false;
-  constructor(private fb: UntypedFormBuilder) {
-    this.selectedFixtureTypes = new BehaviorSubject(undefined);
+  constructor(private fb: UntypedFormBuilder, private lightingSuiteApiService: LightingSuiteApiService) {
+    // this.selectedFixtureTypes = new BehaviorSubject(undefined);
+    this.selectedFixtureTypes = this.lightingSuiteApiService.getLightingSystems();
   }
 
   initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {
