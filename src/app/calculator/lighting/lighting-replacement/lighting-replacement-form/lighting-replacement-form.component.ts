@@ -3,8 +3,8 @@ import { LightingReplacementData } from '../../../../shared/models/lighting';
 import { UntypedFormGroup } from '@angular/forms';
 import { LightingReplacementService } from '../lighting-replacement.service';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { LightingFixtureData, LightingFixtureCategories } from '../../lighting-fixture-data/lighting-data';
-
+import { LightingFixtureData } from '../../../../tools-suite-api/lighting-suite-api.service';
+import { LightingSuiteApiService } from '../../../../tools-suite-api/lighting-suite-api.service';
 @Component({
     selector: 'app-lighting-replacement-form',
     templateUrl: './lighting-replacement-form.component.html',
@@ -53,11 +53,10 @@ export class LightingReplacementFormComponent implements OnInit {
   indicateLumenDegradationFactorDiff: boolean = false;
   indicateFixtureTypeDiff: boolean = false;
 
-  constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef) {
-    this.lightingFixtureCategories = LightingFixtureCategories;
-  }
+  constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef, private lightingSuiteApiService: LightingSuiteApiService) {}
 
   ngOnInit() {
+    this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
     this.displayDetails = this.lightingReplacementService.showAdditionalDetails;
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;

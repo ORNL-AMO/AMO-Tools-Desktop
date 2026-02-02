@@ -4,10 +4,8 @@ import { LightingReplacementResults, LightingReplacementData, LightingReplacemen
 import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { LightingSuiteApiService, LightingFixtureData } from '../../../tools-suite-api/lighting-suite-api.service';
 import { BehaviorSubject } from 'rxjs';
-import { LightingFixtureData } from '../lighting-fixture-data/lighting-data';
-import { MetalHalideFixtures } from '../lighting-fixture-data/metal-halide';
-import { HighBayLEDFixtures } from '../lighting-fixture-data/high-bay-LED';
 
 @Injectable()
 export class LightingReplacementService {
@@ -17,11 +15,14 @@ export class LightingReplacementService {
   baselineElectricityCost: number;
   modificationElectricityCost: number;
   operatingHours: OperatingHours;
+  lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
   selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
+
   showAdditionalDetails: boolean = false;
-  constructor(private fb: UntypedFormBuilder) {
+  constructor(private fb: UntypedFormBuilder, private lightingSuiteApiService: LightingSuiteApiService) {
     this.selectedFixtureTypes = new BehaviorSubject(undefined);
   }
+
 
   initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {
     let hoursPerYear: number = 8760;
@@ -90,8 +91,16 @@ export class LightingReplacementService {
   }
 
   generateExample(isBaseline: boolean): LightingReplacementData {
+    this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
+
     if (isBaseline) {
-      let fixtureData = MetalHalideFixtures.find(fixture => { return fixture.type == '350-W Metal Halide' });
+      let fixtureData;
+      for (const category of this.lightingFixtureCategories) {
+        if (category.category === 1) {
+          fixtureData = category.fixturesData.find(fixture => fixture.type === '350-W Metal Halide');
+          break;
+        }
+      }
       let exampleData: LightingReplacementData = {
         name: 'Fixture #1',
         hoursPerYear: 8760,
@@ -112,7 +121,14 @@ export class LightingReplacementService {
       exampleData = this.calculateTotalLighting(exampleData);
       return exampleData;
     } else {
-      let fixtureData = HighBayLEDFixtures.find(fixture => { return fixture.type == 'LED HID Replacement - 150W Equivalent' });
+      let fixtureData;
+
+      for (const category of this.lightingFixtureCategories) {
+        if (category.category === 9) {
+          fixtureData = category.fixturesData.find(fixture => fixture.type === 'LED HID Replacement - 150W Equivalent');
+          break;
+        }
+      }
       let exampleData: LightingReplacementData = {
         name: 'Fixture #1',
         hoursPerYear: 8760,
