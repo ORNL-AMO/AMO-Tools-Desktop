@@ -58,43 +58,24 @@ export interface Modification {
     notes?: string
 }
 
-// Just an adapter to serve up values from the modification service
+/**
+ * UI Model for Baseline Values for Explore Opportunities - just an adapter to serve up values from the modification service
+ * if the EEM is a direct change to properties of the baseline, names should match properties defined in the ProcessCoolingAssessment objects 
+*/
 export interface ExploreOppsBaseline {
-      increaseChilledWaterTemp: {
-          chilledWaterSupplyTemp: number,
-      },
-      decreaseCondenserWaterTemp: {
-          condenserWaterTemp: number,
-      },
-      useSlidingCondenserWaterTemp: {
-          followingTempDifferential: number,
-          isConstantCondenserWaterTemp: boolean,
-      },
-      applyVariableSpeedControls: {
-          fanSpeedType: FanSpeedType,
-      },
-      replaceChillers: {
-          currentChillerId: string,
-          newChiller: ChillerInventoryItem,
-      },
-      upgradeCoolingTowerFans: {
-          numberOfFans: TowerType,
-      },
-      useFreeCooling: {
-          usesFreeCooling: boolean,
-          isHEXRequired: boolean,
-          HEXApproachTemp: number,
-      },
-      replaceRefrigerant: {
-          currentRefrigerant: string,
-          newRefrigerant: string,
-      },
-      installVSDOnCentrifugalCompressor: {
-      },      
+    increaseChilledWaterTemp: IncreaseChilledWaterTemp,
+    decreaseCondenserWaterTemp: DecreaseCondenserWaterTemp,
+    useSlidingCondenserWaterTemp: UseSlidingCondenserWaterTemp,
+    applyVariableSpeedControls: ApplyVariableSpeedControls,
+    replaceChillers: ReplaceChillers,
+    upgradeCoolingTowerFans: UpgradeCoolingTowerFans,
+    useFreeCooling: UseFreeCooling,
+    replaceRefrigerant: ReplaceRefrigerant,
+    installVSDOnCentrifugalCompressor: InstallVSDOnCentrifugalCompressor,     
 }
 
 export interface EEM {
-    useOpportunity: boolean,
+    useOpportunity?: boolean,
     implementationCost?: number,
 }
 
@@ -116,7 +97,10 @@ export interface UseSlidingCondenserWaterTemp extends EEM {
 
 export interface ApplyVariableSpeedControls extends EEM {
     // *should be set to Enum 1 (Variable)
-    fanSpeedType: FanSpeedType,
+    // fanSpeedType: FanSpeedType,
+    // todo unclear how fanSpeedtype got here, original app source suggests only a change to the bools for variable speed
+    chilledWaterVariableFlow: boolean,
+    condenserWaterVariableFlow: boolean,
 }
 
 export interface ReplaceChillers extends EEM {
@@ -141,6 +125,7 @@ export interface ReplaceRefrigerant extends EEM {
 }
 
 export interface InstallVSDOnCentrifugalCompressor extends EEM {
+    compressorType: CompressorChillerTypeEnum,  
     // todo original CWSAT - this one is the least clear what should happen
 }
 
