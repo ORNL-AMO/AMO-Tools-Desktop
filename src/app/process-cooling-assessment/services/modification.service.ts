@@ -113,8 +113,14 @@ export class ModificationService {
     }
   }
 
+   /**
+   * Map Baseline Explore Opportunities values to a modification
+   * @param processCoolingAssessment 
+   * @param modification 
+   * @returns 
+   */
   getNewModification(): Modification {
-    const baselineValues = this.getBaselineValues();
+    const baselineValues = this.getBaselineExploreOppsValues();
     return {
       name: 'Modification',
       id: getNewIdString(),
@@ -134,7 +140,8 @@ export class ModificationService {
         useOpportunity: false,
       },
       applyVariableSpeedControls: {
-        fanSpeedType: baselineValues.applyVariableSpeedControls.fanSpeedType,
+        chilledWaterVariableFlow: baselineValues.applyVariableSpeedControls.chilledWaterVariableFlow,
+        condenserWaterVariableFlow: baselineValues.applyVariableSpeedControls.condenserWaterVariableFlow,
         useOpportunity: false,
       },
       replaceChillers: {
@@ -158,12 +165,18 @@ export class ModificationService {
         useOpportunity: false,
       },
       installVSDOnCentrifugalCompressor: {
+        compressorType: undefined,
         useOpportunity: false,
       },
     }
   }
 
-  
+  /**
+   * Map Explore Opportunities (Modification) values to a new process cooling assessment representing the baseline
+   * @param processCoolingAssessment 
+   * @param modification 
+   * @returns 
+   */
   getModifiedProcessCoolingAssessment(processCoolingAssessment: ProcessCoolingAssessment, modification: Modification): ProcessCoolingAssessment {
     let modifiedProcessCoolingAssessment: ProcessCoolingAssessment = { ...processCoolingAssessment };
 
@@ -176,13 +189,21 @@ export class ModificationService {
       waterCooledSystemInput: {
         ...processCoolingAssessment.systemInformation.waterCooledSystemInput,
         condenserWaterTemp: modification.decreaseCondenserWaterTemp.condenserWaterTemp,
+      },
+      chilledWaterPumpInput: {
+        ...processCoolingAssessment.systemInformation.chilledWaterPumpInput,
+        variableFlow: modification.applyVariableSpeedControls.chilledWaterVariableFlow,
+      },
+      condenserWaterPumpInput: {
+        ...processCoolingAssessment.systemInformation.condenserWaterPumpInput,
+        variableFlow: modification.applyVariableSpeedControls.condenserWaterVariableFlow,
       }
     };
 
     return modifiedProcessCoolingAssessment;
   }
 
-  getBaselineValues(): ExploreOppsBaseline {
+  getBaselineExploreOppsValues(): ExploreOppsBaseline {
     const processCooling = this.processCoolingSignal();
     let exploreOpportunitiesBaseline: ExploreOppsBaseline = {
       increaseChilledWaterTemp: {
@@ -196,7 +217,8 @@ export class ModificationService {
         isConstantCondenserWaterTemp: processCooling.systemInformation.waterCooledSystemInput.isConstantCondenserWaterTemp,
       },
       applyVariableSpeedControls: {
-        fanSpeedType: processCooling.systemInformation.towerInput.fanSpeedType,
+        chilledWaterVariableFlow: processCooling.systemInformation.chilledWaterPumpInput.variableFlow,
+        condenserWaterVariableFlow: processCooling.systemInformation.condenserWaterPumpInput?.variableFlow,
       },
       upgradeCoolingTowerFans: {
         numberOfFans: processCooling.systemInformation.towerInput.numberOfFans,

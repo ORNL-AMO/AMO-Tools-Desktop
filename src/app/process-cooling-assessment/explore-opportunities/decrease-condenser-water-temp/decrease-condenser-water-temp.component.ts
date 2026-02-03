@@ -26,7 +26,7 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
 
-  baselineCondenserWaterTemperature: number = this.modificationService.getBaselineValues().decreaseCondenserWaterTemp.condenserWaterTemp;
+  baselineCondenserWaterTemperature: number = this.modificationService.getBaselineExploreOppsValues().decreaseCondenserWaterTemp.condenserWaterTemp;
   form: FormGroup<DecreaseCondenserWaterTempForm>;
 
   ngOnInit(): void {

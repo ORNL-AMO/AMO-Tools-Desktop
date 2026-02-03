@@ -25,7 +25,7 @@ export class IncreaseChilledTemperatureComponent implements OnInit {
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
 
-  baselineChilledWaterTemperature: number = this.modificationService.getBaselineValues().increaseChilledWaterTemp.chilledWaterSupplyTemp;
+  baselineChilledWaterTemperature: number = this.modificationService.getBaselineExploreOppsValues().increaseChilledWaterTemp.chilledWaterSupplyTemp;
   form: FormGroup<IncreaseChilledTempForm>;
 
   ngOnInit(): void {

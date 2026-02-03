@@ -1,3 +1,4 @@
+import { ApplyVariableSpeedControlComponent } from './explore-opportunities/apply-variable-speed-control/apply-variable-speed-control.component';
 import { EemHelpComponent } from './results-panel/help-panel/eem-help/eem-help.component';
 import { NgModule } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
@@ -221,6 +222,7 @@ const ROUTES: Route[] = [
     ReportComponent,
     ExploreOpportunitiesComponent,
     IncreaseChilledTemperatureComponent,
+    ApplyVariableSpeedControlComponent,
     DecreaseCondenserWaterTempComponent,
     BaselineComponent,
     ResultsPanelComponent,

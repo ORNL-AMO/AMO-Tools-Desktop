@@ -45,7 +45,8 @@ export const MockProcessCoolingAssessment: Assessment = {
                     "useOpportunity": false
                 },
                 "applyVariableSpeedControls": {
-                    "fanSpeedType": 0,
+                    "chilledWaterVariableFlow": false,
+                    "condenserWaterVariableFlow": false,
                     "useOpportunity": false
                 },
                 "replaceChillers": {
@@ -69,6 +70,7 @@ export const MockProcessCoolingAssessment: Assessment = {
                     "newRefrigerant": ""
                 },
                 "installVSDOnCentrifugalCompressor": {
+                    "compressorType": undefined,
                     "useOpportunity": false
                 }
             }

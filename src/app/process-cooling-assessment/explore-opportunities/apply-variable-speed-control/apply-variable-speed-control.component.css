@@ -1,0 +1,27 @@
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+.group-label:hover{
+	cursor: pointer;
+	background-color: lightgray;
+}
+
+
+.vsd-checkbox {
+  width: 1.3em;
+  height: 1.3em;
+  min-width: 1.3em;
+  min-height: 1.3em;
+  vertical-align: middle;
+}
+
+.version-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: .5rem;
+}
