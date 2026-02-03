@@ -11,10 +11,17 @@
 	background-color: lightgray;
 }
 
-
 .group-label .form-control{
 	width: fit-content;
 	display: inherit;
     background-color: var(--process-cooling-assessment);
     color: white;
+}
+
+.use-sliding-checkbox {
+  width: 1.3em;
+  height: 1.3em;
+  min-width: 1.3em;
+  min-height: 1.3em;
+  vertical-align: middle;
 }

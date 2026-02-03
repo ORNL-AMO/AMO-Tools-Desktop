@@ -189,6 +189,8 @@ export class ModificationService {
       waterCooledSystemInput: {
         ...processCoolingAssessment.systemInformation.waterCooledSystemInput,
         condenserWaterTemp: modification.decreaseCondenserWaterTemp.condenserWaterTemp,
+        isConstantCondenserWaterTemp: modification.useSlidingCondenserWaterTemp.isConstantCondenserWaterTemp,
+        followingTempDifferential: modification.useSlidingCondenserWaterTemp.followingTempDifferential,
       },
       chilledWaterPumpInput: {
         ...processCoolingAssessment.systemInformation.chilledWaterPumpInput,
@@ -210,11 +212,11 @@ export class ModificationService {
         chilledWaterSupplyTemp: processCooling.systemInformation.operations.chilledWaterSupplyTemp,
       },
       decreaseCondenserWaterTemp: {
-        condenserWaterTemp: processCooling.systemInformation.waterCooledSystemInput.condenserWaterTemp,
+        condenserWaterTemp: processCooling.systemInformation.waterCooledSystemInput?.condenserWaterTemp,
       },
       useSlidingCondenserWaterTemp: {
-        followingTempDifferential: processCooling.systemInformation.airCooledSystemInput.followingTempDifferential,
-        isConstantCondenserWaterTemp: processCooling.systemInformation.waterCooledSystemInput.isConstantCondenserWaterTemp,
+        followingTempDifferential: processCooling.systemInformation.waterCooledSystemInput?.followingTempDifferential,
+        isConstantCondenserWaterTemp: processCooling.systemInformation.waterCooledSystemInput?.isConstantCondenserWaterTemp,
       },
       applyVariableSpeedControls: {
         chilledWaterVariableFlow: processCooling.systemInformation.chilledWaterPumpInput.variableFlow,
