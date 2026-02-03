@@ -8,7 +8,8 @@ import { SolidLoadMaterialDbService } from '../../indexedDb/solid-load-material-
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 import { AtmosphereDbService } from '../../indexedDb/atmosphere-db.service';
-
+import { LightingFixtureData } from '../../tools-suite-api/lighting-suite-api.service';
+import { LightingSuiteApiService } from '../../tools-suite-api/lighting-suite-api.service';
 @Injectable()
 export class CustomMaterialsService {
 
@@ -19,6 +20,7 @@ export class CustomMaterialsService {
   selectedSolidLiquidFlueGas: Array<SolidLiquidFlueGasMaterial>;
   selectedSolidCharge: Array<SolidLoadChargeMaterial>;
   selectedWall: Array<WallLossesSurface>;
+  selectedLightingFixtures: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
 
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
@@ -30,6 +32,7 @@ export class CustomMaterialsService {
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
+    private lightingSuiteApiService: LightingSuiteApiService
   ) {
     this.selectedAtmosphere = new Array<AtmosphereSpecificHeat>();
     this.selectedFlueGas = new Array<FlueGasMaterial>();
@@ -40,6 +43,7 @@ export class CustomMaterialsService {
     this.selectedWall = new Array<WallLossesSurface>();
     this.getSelected = new BehaviorSubject<boolean>(false);
     this.selectAll = new BehaviorSubject<boolean>(false);
+    this.selectedLightingFixtures = this.lightingSuiteApiService.getLightingSystems();
   }
 
 
@@ -51,7 +55,8 @@ export class CustomMaterialsService {
       liquidLoadChargeMaterial: this.selectedLiquidLoadCharge,
       solidLiquidFlueGasMaterial: this.selectedSolidLiquidFlueGas,
       solidLoadChargeMaterial: this.selectedSolidCharge,
-      wallLossesSurface: this.selectedWall
+      wallLossesSurface: this.selectedWall,
+      lightingFixtureCategories: this.selectedLightingFixtures
     };
     return data;
   }
@@ -78,8 +83,16 @@ export class CustomMaterialsService {
     if (data.wallLossesSurface.length !== 0) {
       this.importWallLossSurfaces(data.wallLossesSurface);
     }
+    if (data.lightingFixtureCategories.length !== 0) {
+      this.selectedLightingFixtures = data.lightingFixtureCategories;
+    }
   }
 
+
+  async importLightingFixtures(data: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>) {
+    //flesh this out. for now just set selectedLightingFixtures to data
+    this.selectedLightingFixtures = data;
+  }
 
   async importAtmosphere(data: Array<AtmosphereSpecificHeat>) {
     for (let i = 0; i < data.length; i++) {
@@ -176,6 +189,14 @@ export class CustomMaterialsService {
     if (data.wallLossesSurface.length !== 0) {
       this.deleteWallLossSurfaces(data.wallLossesSurface);
     }
+    if( data.lightingFixtureCategories.length !== 0) {
+      // do nothing for lighting fixtures as they are not stored in indexed db
+      //WK BUT THEY SHOULD BE. TAKEN FROM THE VIEW THEY WILL BE APPLIED TO THE indexed DB SERVICES
+    }
+  }
+
+  deleteLightingFixtures(data: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>) {
+    //WK Come back and finish delete.
   }
 
   async deleteAtmosphere(data: Array<AtmosphereSpecificHeat>) {
@@ -264,6 +285,7 @@ export interface MaterialData {
   solidLiquidFlueGasMaterial: Array<SolidLiquidFlueGasMaterial>;
   solidLoadChargeMaterial: Array<SolidLoadChargeMaterial>;
   wallLossesSurface: Array<WallLossesSurface>;
+  lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
 }
 
 
