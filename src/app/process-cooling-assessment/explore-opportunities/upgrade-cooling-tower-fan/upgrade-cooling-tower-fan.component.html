@@ -1,0 +1,34 @@
+<form *ngIf="form" [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="upgradeCoolingTowerFan">
+            Upgrade Cooling Tower Fan Speed Control
+        </label>
+    </div>
+
+    <div class="row no-gutters mt-3">
+        <div class="col-6 pr-2">
+            <div class="form-group">
+                <label for="baselineTowerType">
+                    Current Tower Type
+                </label>
+                <div class="input-group">
+                    <input type="text" id="baselineTowerType" class="form-control" [value]="baselineTowerType" readonly
+                        disabled>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 pl-2">
+            <div class="form-group">
+                <label for="modificationTowerType">
+                    Proposed Tower Type
+                </label>
+                <select class="form-control" id="modificationTowerType" formControlName="towerType"
+                    (focus)="focusField('towerType')">
+                    @for (towerType of towerTypes; track towerType.value) {
+                    <option [ngValue]="towerType.value">{{ towerType.name }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+</form>

@@ -25,7 +25,7 @@ export class SlidingCondenserWaterTemperatureComponent implements OnInit {
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
 
-  baselineFollowingTempDifferential: number = this.modificationService.getBaselineValues().useSlidingCondenserWaterTemp.followingTempDifferential;
+  baselineFollowingTempDifferential: number = this.modificationService.getBaselineExploreOppsValues().useSlidingCondenserWaterTemp.followingTempDifferential;
   form: FormGroup<SlidingCondenserWaterTempForm>;
 
   ngOnInit(): void {

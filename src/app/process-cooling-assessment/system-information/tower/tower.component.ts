@@ -53,38 +53,9 @@ export class TowerComponent {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(
       (towerType) => {
-        switch(towerType) {
-            case TowerType.OneCellOneSpeed:
-              this.numberOfFans.patchValue(1, { emitEvent: false });
-            this.fanSpeedType.patchValue(1, { emitEvent: false });
-            break;
-          case TowerType.OneCellTwoSpeed:
-            this.numberOfFans.patchValue(1, { emitEvent: false });
-            this.fanSpeedType.patchValue(2, { emitEvent: false });
-            break;
-          case TowerType.TwoCellOneSpeed:
-            this.numberOfFans.patchValue(2, { emitEvent: false });
-            this.fanSpeedType.patchValue(1, { emitEvent: false });
-            break;
-          case TowerType.TwoCellTwoSpeed:
-            this.numberOfFans.patchValue(2, { emitEvent: false });
-            this.fanSpeedType.patchValue(2, { emitEvent: false });
-            break;
-          case TowerType.ThreeCellOneSpeed:
-            this.numberOfFans.patchValue(3, { emitEvent: false });
-            this.fanSpeedType.patchValue(1, { emitEvent: false });
-            break;
-          case TowerType.ThreeCellTwoSpeed:
-            this.numberOfFans.patchValue(3, { emitEvent: false });
-            this.fanSpeedType.patchValue(2, { emitEvent: false });
-            break;
-          case TowerType.VariableSpeed:
-            //  todo 7641 unknown sideeffects
-          default:
-            break;
-        }
-        console.log('Number of Fans:', this.numberOfFans.value);
-        console.log('Fan Speed Type:', this.fanSpeedType.value);
+        const dependentValues = this.systemInformationFormService.getTowerTypeDependentValues(towerType);
+        this.numberOfFans.setValue(dependentValues.numberOfFans, { emitEvent: false });
+        this.fanSpeedType.setValue(dependentValues.fanSpeedType, { emitEvent: false });
         this.updateAssessment();
       }
     );
