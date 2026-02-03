@@ -1,0 +1,37 @@
+<form *ngIf="form" [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label" for="slidingCondenserWaterTemperatureSetpoint">
+            Sliding Condenser Water Temperature Setpoint
+        </label>
+    </div>
+
+    <div class="row no-gutters mt-3">
+        <div class="col-6 pr-2">
+            <div class="form-group">
+                <label for="baselineFollowingTempDifferential">
+                    Current Following Temp Differential
+                </label>
+                <div class="input-group">
+                    <input type="number" id="baselineFollowingTempDifferential" class="form-control"
+                        [value]="baselineFollowingTempDifferential" readonly disabled>
+                    <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+                        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 pl-2">
+            <div class="form-group">
+                <label for="modificationFollowingTempDifferential">
+                    Proposed Following Temp Differential
+                </label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="modificationFollowingTempDifferential" formControlName="followingTempDifferential"
+                        (focus)="focusField('modificationFollowingTempDifferential')">
+                    <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+                        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+                    <app-form-control-errors [control]="followingTempDifferential"></app-form-control-errors>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

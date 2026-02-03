@@ -75,6 +75,7 @@ import { ModificationListComponent } from './explore-opportunities/modification-
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
 import { AlertInfoContainerComponent } from '../shared/alert-info-container/alert-info-container.component';
 import { ConfirmActionComponent } from './confirm-action/confirm-action.component';
+import { SlidingCondenserWaterTemperatureComponent } from './explore-opportunities/sliding-condenser-water-temperature/sliding-condenser-water-temperature.component';
 
 
 export const ROUTE_TOKENS = {
@@ -224,6 +225,7 @@ const ROUTES: Route[] = [
     IncreaseChilledTemperatureComponent,
     ApplyVariableSpeedControlComponent,
     DecreaseCondenserWaterTempComponent,
+    SlidingCondenserWaterTemperatureComponent,
     BaselineComponent,
     ResultsPanelComponent,
     BaselineTabsComponent,
