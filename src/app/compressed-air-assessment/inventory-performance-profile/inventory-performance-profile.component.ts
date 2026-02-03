@@ -144,9 +144,6 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   }
 
   setCompressorData() {
-    console.log('set compressor data called');
-    console.log(this.selectedDayType);
-    console.log(this.compressedAirAssessmentModificationResults);
     if (this.compressedAirAssessmentModificationResults && this.selectedDayType) {
       this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
       this.adjustedCompressors = this.compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(result => { return result.dayType.dayTypeId == this.selectedDayType.dayTypeId }).adjustedCompressors;

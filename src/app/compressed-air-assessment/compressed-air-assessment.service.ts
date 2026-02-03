@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { CompressedAirAssessment, Modification } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirAssessmentValidationService } from './compressed-air-assessment-validation/compressed-air-assessment-validation.service';
-import { CompressedAirAssessmentValidation } from './compressed-air-assessment-validation/CompressedAirAssessmentValidation';
+import { CompressedAirAssessmentValidation, CompressedAirModificationValid } from './compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 import { CompressedAirAssessmentBaselineResults } from './calculations/CompressedAirAssessmentBaselineResults';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirCalculationService } from './compressed-air-calculation.service';
@@ -49,7 +49,7 @@ export class CompressedAirAssessmentService {
   }
 
   updateCompressedAir(compressedAirAssessment: CompressedAirAssessment, isBaselineChange: boolean) {
-    if(!compressedAirAssessment.replacementCompressorInventoryItems){
+    if (!compressedAirAssessment.replacementCompressorInventoryItems) {
       compressedAirAssessment.replacementCompressorInventoryItems = [];
     }
     if (isBaselineChange) {
@@ -61,6 +61,11 @@ export class CompressedAirAssessmentService {
         this.compressedAirAssessmentBaselineResults.next(compressedAirAssessmentBaselineResults);
       } else {
         this.compressedAirAssessmentBaselineResults.next(undefined);
+        this.compressedAirAssessmentModificationResults.next(undefined);
+      }
+      let modification: Modification = this.selectedModification.getValue();
+      if (modification) {
+        this.setModificationResults(modification);
       }
     }
     this.compressedAirAssessment.next(compressedAirAssessment);
@@ -79,16 +84,23 @@ export class CompressedAirAssessmentService {
   }
 
   setModificationResults(modification: Modification) {
-    if (modification) {
-      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = this.compressedAirAssessmentBaselineResults.getValue();
-      let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessment.getValue();
+    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = this.compressedAirAssessmentBaselineResults.getValue();
+    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessment.getValue();
+    if (modification && compressedAirAssessmentBaselineResults && compressedAirAssessment.setupDone) {
+      console.log('setting modification results');
       let settings: Settings = this.settings.getValue();
       let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(compressedAirAssessment, modification, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
       this.compressedAirAssessmentModificationResults.next(compressedAirAssessmentModificationResults);
       this.exploreOpportunitiesValidationService.setModificationValid(modification, compressedAirAssessmentBaselineResults.baselineResults, compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries, compressedAirAssessment, settings, compressedAirAssessmentModificationResults);
     } else {
-      this.compressedAirAssessmentModificationResults.next(undefined);
-      this.exploreOpportunitiesValidationService.compressedAirModificationValid.next(undefined);
+      let currentResults: CompressedAirAssessmentModificationResults = this.compressedAirAssessmentModificationResults.getValue();
+      if (currentResults != undefined) {
+        this.compressedAirAssessmentModificationResults.next(undefined);
+      }
+      let currentValidation: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.compressedAirModificationValid.getValue();
+      if (currentValidation != undefined) {
+        this.exploreOpportunitiesValidationService.compressedAirModificationValid.next(undefined);
+      }
     }
   }
 
