@@ -4,6 +4,7 @@ import { Settings } from '../../../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { CustomMaterialsService } from '../custom-materials.service';
+import { LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite-api.service';
 @Component({
     selector: 'app-custom-lighting-fixtures-materials',
     templateUrl: './custom-lighting-fixtures-materials.component.html',
@@ -29,13 +30,36 @@ import { CustomMaterialsService } from '../custom-materials.service';
     selectAllSub: Subscription;
     lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<any> }>;
     ngOnInit() {
-        // this.wallLossesSurfaces = new Array<WallLossesSurface>();
+        this.lightingFixtureCategories = new Array<{ category: number, label: string, fixturesData: Array<any> }>();
+        this.getCustomMaterials();
+        // this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
+        //     if (val) {
+        //     this.getSelected();
+        //     }
+        // });
+    
+        // this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
+        //     this.selectAll(val);
+        // });
     }
 
-    constructor( private customMaterialService: CustomMaterialsService) {}
+    constructor( private customMaterialService: CustomMaterialsService,
+        private lightingSuiteApiService: LightingSuiteApiService) {}
 
     async getCustomMaterials() {
         this.lightingFixtureCategories = await firstValueFrom(this.lightingSuiteApiService.getLightingSystems());
         this.emitNumMaterials.emit(this.lightingFixtureCategories.length);
+        
     }
+
+    ngOnDestroy() {
+        this.selectAllSub.unsubscribe();
+        this.selectedSub.unsubscribe();
+    }
+
+    // selectAll(val: boolean) {
+    // this.lightingFixtureCategories.forEach(fixture => {
+    //   fixture.selected = val;
+    // });
+  }
 }
