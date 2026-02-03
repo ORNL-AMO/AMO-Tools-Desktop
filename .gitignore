@@ -26,6 +26,8 @@
 .vscode/launch.json
 .vscode/extensions.json
 
+.prompts/
+
 # misc
 /docker
 /.sass-cache
