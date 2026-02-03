@@ -11,3 +11,11 @@
 	background-color: lightgray;
 }
 
+
+.group-label .form-control{
+	width: fit-content;
+	display: inherit;
+    background-color: var(--process-cooling-assessment);
+    color: white;
+}
+
