@@ -72,7 +72,8 @@ export class ReplaceCompressorResults {
             order,
             replaceCompressor.trimSelections);
         this.profileSummary = flowReallocationResults.profileSummary;
-        this.savings = flowReallocationResults.savings;
+
+        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, implementationCost, summaryDataInterval, undefined);
     }
 
 

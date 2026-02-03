@@ -65,7 +65,7 @@ export class UseAutomaticSequencerResults {
             order,
             trimSelections);
         this.profileSummary = flowReallocationResults.profileSummary;
-        this.savings = flowReallocationResults.savings;
+        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, useAutomaticSequencer.implementationCost, summaryDataInterval, auxiliaryPowerUsage);
     }
 
 
