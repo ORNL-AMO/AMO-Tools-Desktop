@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, TowerType } from '../../shared/models/process-cooling-assessment';
+import { PROCESS_COOLING_VALIDATION } from '../validation/process-cooling-validation';
 
 
 @Injectable()
@@ -11,11 +12,25 @@ export class SystemInformationFormService {
 
   getOperationsForm(operations: Operations): FormGroup<OperationsForm> {
     return this.formBuilder.group({
-      annualOperatingHours: [operations.annualOperatingHours, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      fuelCost: [operations.fuelCost, [Validators.required, Validators.min(0)]],
-      electricityCost: [operations.electricityCost, [Validators.required, Validators.min(0)]],
-      chilledWaterSupplyTemp: [operations.chilledWaterSupplyTemp, Validators.required],
-      condenserCoolingMethod: [operations.condenserCoolingMethod, Validators.required],
+      annualOperatingHours: [operations.annualOperatingHours, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.annualOperatingHours.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.annualOperatingHours.max)
+      ]],
+      fuelCost: [operations.fuelCost, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.fuelCost.min)
+      ]],
+      electricityCost: [operations.electricityCost, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.electricityCost.min)
+      ]],
+      chilledWaterSupplyTemp: [operations.chilledWaterSupplyTemp, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.max)
+      ]],
+      condenserCoolingMethod: [operations.condenserCoolingMethod],
       doChillerLoadSchedulesVary: [operations.doChillerLoadSchedulesVary],
     });
   }
@@ -31,11 +46,29 @@ export class SystemInformationFormService {
 
   getPumpInputForm(pumpInput: PumpInput): FormGroup<PumpInputForm> {
     return this.formBuilder.group({
-      variableFlow: [pumpInput.variableFlow, Validators.required],
-      flowRate: [pumpInput.flowRate, [Validators.required, Validators.min(0)]],
-      efficiency: [pumpInput.efficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
-      motorSize: [pumpInput.motorSize, [Validators.required, Validators.min(0)]],
-      motorEfficiency: [pumpInput.motorEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]],
+      variableFlow: [pumpInput.variableFlow, [
+        Validators.required
+      ]],
+      flowRate: [pumpInput.flowRate, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.flowRate.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.flowRate.max)
+      ]],
+      efficiency: [pumpInput.efficiency, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.efficiency.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.efficiency.max)
+      ]],
+      motorSize: [pumpInput.motorSize, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.motorSize.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.motorSize.max)
+      ]],
+      motorEfficiency: [pumpInput.motorEfficiency, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.motorEfficiency.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.motorEfficiency.max)
+      ]],
     });
   }
 
@@ -48,10 +81,24 @@ export class SystemInformationFormService {
 
   getAirCooledSystemInputForm(input: AirCooledSystemInput): FormGroup<AirCooledSystemInputForm> {
     return this.formBuilder.group({
-      outdoorAirTemp: [input.outdoorAirTemp, [Validators.required]],
-      airCoolingSource: [input.airCoolingSource, [Validators.required]],
-      indoorTemp: [input.indoorTemp, [Validators.required]],
-      followingTempDifferential: [input.followingTempDifferential, [Validators.required]],
+      outdoorAirTemp: [input.outdoorAirTemp, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.outdoorAirTemp.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.outdoorAirTemp.max)
+      ]],
+      airCoolingSource: [input.airCoolingSource, [
+        Validators.required
+      ]],
+      indoorTemp: [input.indoorTemp, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.indoorTemp.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.indoorTemp.max)
+      ]],
+      followingTempDifferential: [input.followingTempDifferential, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.followingTempDifferential.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.followingTempDifferential.max)
+      ]],
     });
   }
 
@@ -64,9 +111,19 @@ export class SystemInformationFormService {
 
   getWaterCooledSystemInputForm(input: WaterCooledSystemInput): FormGroup<WaterCooledSystemInputForm> {
     return this.formBuilder.group({
-      isConstantCondenserWaterTemp: [input.isConstantCondenserWaterTemp, [Validators.required]],
-      condenserWaterTemp: [input.condenserWaterTemp, [Validators.required]],
-      followingTempDifferential: [input.followingTempDifferential, [Validators.required]],
+      isConstantCondenserWaterTemp: [input.isConstantCondenserWaterTemp, [
+        Validators.required
+      ]],
+      condenserWaterTemp: [input.condenserWaterTemp, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.condenserWaterTemp.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.condenserWaterTemp.max)
+      ]],
+      followingTempDifferential: [input.followingTempDifferential, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.followingTempDifferential.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.followingTempDifferential.max)
+      ]],
     });
   }
 
@@ -79,16 +136,34 @@ export class SystemInformationFormService {
 
   public getTowerForm(input: TowerInput): FormGroup<TowerForm> {
     return this.formBuilder.group({
-      usesFreeCooling: [input.usesFreeCooling, Validators.required],
+      usesFreeCooling: [input.usesFreeCooling, [
+        Validators.required
+      ]],
       isHEXRequired: [input.isHEXRequired],
-      HEXApproachTemp: [input.HEXApproachTemp, [Validators.required]],
-      numberOfTowers: [input.numberOfTowers, [Validators.required, Validators.min(1)]],
+      HEXApproachTemp: [input.HEXApproachTemp, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.HEXApproachTemp.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.HEXApproachTemp.max)
+      ]],
+      numberOfTowers: [input.numberOfTowers, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.numberOfTowers.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.numberOfTowers.max)
+      ]],
       towerType: [input.towerType],
-      numberOfFans: [input.numberOfFans, [Validators.required, Validators.min(1)]],
+      numberOfFans: [input.numberOfFans, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.numberOfFans.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.numberOfFans.max)
+      ]],
       fanSpeedType: [input.fanSpeedType],
       towerSizeMetric: [input.towerSizeMetric],
       fanType: [input.fanType],
-      towerSize: [input.towerSize, [Validators.required, Validators.min(0)]],
+      towerSize: [input.towerSize, [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.towerSize.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.towerSize.max)
+      ]],
     });
   }
 

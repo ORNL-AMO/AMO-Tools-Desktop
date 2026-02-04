@@ -23,6 +23,7 @@ export class SystemInformationComponent {
   readonly ROUTE_TOKENS = ROUTE_TOKENS;
   SYSTEM_INFORMATION_VIEW_LINKS = SYSTEM_INFORMATION_VIEW_LINKS;
 
+  // todo this component needs to track validity of all sub-forms and only enable next when all are valid
   ngOnInit(): void {
     this.processCoolingService.isSystemInformationValid$.pipe(
       takeUntilDestroyed(this.destroyRef)

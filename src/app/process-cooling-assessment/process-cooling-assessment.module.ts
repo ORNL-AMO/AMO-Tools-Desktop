@@ -36,7 +36,6 @@ import { ConvertProcessCoolingService } from './services/convert-process-cooling
 import { ProcessCoolingResultsService } from './services/process-cooling-results.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
 import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
-import { FormControlRequiredComponent } from '../shared/form-control-required.component';
 import { InputUnitComponent } from '../shared/input-unit.component';
 import { OperationsComponent } from './system-information/operations/operations.component';
 import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
@@ -279,7 +278,6 @@ const ROUTES: Route[] = [
     ModalModule,
     NgbModule,
     FormControlErrorsComponent,
-    FormControlRequiredComponent,
     InputUnitComponent,
     OperatingHoursModalModule,
     AlertInfoContainerComponent
