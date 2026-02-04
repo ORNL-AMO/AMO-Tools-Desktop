@@ -4,7 +4,10 @@
     <label *ngIf="!isEditingName" class="group-label w-100 bold">
       <span (click)="editEquipmentName()" class="fa fa-pencil pr-2 btn-edit-name"></span>
       <span>{{form.controls.name.value}}</span>
-      <span class="fa fa-times-circle-o pull-right large" (click)="removeEquipment(index)"></span>
+      <span class="fa fa-times-circle-o pull-right large" 
+        (click)="removeEquipment()"
+        *ngIf="!isBaseline || (isBaseline && index !== 0)">
+      </span>
     </label>
     <label *ngIf="isEditingName" class="group-label w-100">
       <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>

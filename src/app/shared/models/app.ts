@@ -1,5 +1,5 @@
 
-export type MeasurItemType = 'page' | 'assessment' | 'inventory' | 'data-explorer';
+export type MeasurItemType = 'page' | 'assessment' | 'inventory' | 'data-explorer' | 'opportunities';
 
 
 export type LocalStorageKey = 'disabledDefaultNotifications';

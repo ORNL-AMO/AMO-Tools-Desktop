@@ -2,7 +2,7 @@ import { Component, OnInit, HostListener, ViewChild, ElementRef, Input, ChangeDe
 import { Settings } from '../../../../shared/models/settings';
 import { DataPoint, SimpleChart, TraceCoordinates, TraceData } from '../../../../shared/models/plotting';
 import { UntypedFormGroup } from '@angular/forms';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 
 import { MotorPerformanceChartService, MotorPoint } from '../motor-performance-chart.service';
 import { PlotlyService } from 'angular-plotly.js';

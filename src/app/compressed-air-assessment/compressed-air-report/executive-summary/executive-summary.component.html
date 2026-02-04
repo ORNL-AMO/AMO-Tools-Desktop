@@ -246,6 +246,20 @@
                     <span *ngIf="!result.combinedResults.annualEmissionOutput">&mdash; &mdash;</span>
                 </td>
             </tr>
+            <tr class="bold-row">
+                <td>Average Airflow
+                    <span>(acfm)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{baselineResults.total.averageAirFlow | number:'1.0-0'}}</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.averageAirFlow">{{result.combinedResults.averageAirFlow
+                        | number:'1.0-0'}}</span>
+                    <span *ngIf="!result.combinedResults.averageAirFlow">&mdash; &mdash;</span>
+                </td>
+            </tr>
             <tr class="bold-row bg-row">
                 <td>Peak Demand Savings
                     <span> (kW)</span>

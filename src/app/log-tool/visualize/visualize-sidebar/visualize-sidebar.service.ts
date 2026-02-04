@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { VisualizeService } from '../visualize.service';
 import { AnnotationData, GraphObj, LogToolField, XAxisDataOption } from '../../log-tool-models';
 import { LogToolDataService } from '../../log-tool-data.service';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../shared/graphColors';
 import * as _ from 'lodash';
 
 @Injectable({

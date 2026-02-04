@@ -3,7 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 
 import { SimpleChart } from '../../../../shared/models/plotting';
 import { SteamPropertiesOutput } from '../../../../shared/models/steam/steam-outputs';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { SaturatedPropertiesService, IsothermCoordinates } from '../../saturated-properties.service';
 import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 import { PlotlyService } from 'angular-plotly.js';

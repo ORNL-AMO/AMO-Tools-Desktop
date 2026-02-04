@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { SSMT, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { SSMTLosses } from '../../../../shared/models/steam/steam-outputs';
 import { ReportGraphsService } from '../report-graphs.service';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 
