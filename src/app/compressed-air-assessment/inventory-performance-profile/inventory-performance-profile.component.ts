@@ -412,10 +412,18 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     return chartData;
   }
   getAvgOpPointsData(): Array<ProfileChartData> {
-    let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-    let profileSummary: Array<CompressedAirProfileSummary> = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.flatMap(dayTypeProfileSummary => {
-      return dayTypeProfileSummary.profileSummary;
-    });
+    let profileSummary: Array<CompressedAirProfileSummary>;
+    if (this.inAssessment) {
+      let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = this.compressedAirAssessmentModificationResults;
+      profileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.flatMap(dayTypeProfileSummary => {
+        return dayTypeProfileSummary.adjustedProfileSummary;
+      });
+    } else {
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      profileSummary = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.flatMap(dayTypeProfileSummary => {
+        return dayTypeProfileSummary.profileSummary;
+      });
+    }
     let chartData: Array<ProfileChartData> = new Array();
     if (this.showAvgOpPoints && this.showAllCompressors) {
       this.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
