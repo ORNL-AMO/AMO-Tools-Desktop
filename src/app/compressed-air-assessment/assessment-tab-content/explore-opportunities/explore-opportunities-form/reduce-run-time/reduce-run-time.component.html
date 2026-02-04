@@ -159,6 +159,9 @@
     </div>
 </div>
 
-<div *ngIf="trimCompressorId" class="trim-note mb-2">
-    <span class="fa fa-asterisk"></span> Indicates a trim compressor in a base-trim control setup. Trim compressors cannot be selected to reduce run time.
+@if(trimCompressorId && reduceRuntime && reduceRuntime.order != 100){
+<div class="trim-note mb-2">
+    <span class="fa fa-asterisk"></span> Indicates a trim compressor in a base-trim control setup. Trim compressors
+    cannot be selected to reduce run time.
 </div>
+}
