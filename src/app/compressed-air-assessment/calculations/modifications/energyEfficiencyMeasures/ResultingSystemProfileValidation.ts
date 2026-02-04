@@ -21,7 +21,7 @@ export class ResultingSystemProfileValidation {
 
     setDataArrays(previousOrderProfile: Array<ProfileSummary>, dataInterval: number,
         eemProfileSummary: Array<ProfileSummary>, adjustedCompressors: Array<CompressorInventoryItemClass>) {
-        
+
         let totalIntervals: number = 24 / dataInterval;
         this.requiredAirflow = new Array(totalIntervals).fill(0)
         this.availableAirflow = new Array(totalIntervals).fill(0)
@@ -33,30 +33,29 @@ export class ResultingSystemProfileValidation {
                 if (summary.profileSummaryData[index].order != 0) {
                     this.requiredAirflow[index] = this.requiredAirflow[index] + summary.profileSummaryData[index].airflow;
                 }
+
+                let totalAvailableAirFlow: number = 0;
+                adjustedCompressors.forEach(compressor => {
+                    totalAvailableAirFlow = totalAvailableAirFlow + compressor.performancePoints.fullLoad.airflow;
+                });
+                this.availableAirflow[index] = totalAvailableAirFlow;
                 let eemDataOn: Array<ProfileSummary> = eemProfileSummary.filter(eemSummary => {
                     let intervalData: ProfileSummaryData = eemSummary.profileSummaryData.find(data => { return data.timeInterval == i });
                     return intervalData.order != 0;
                 })
-                let intervalSummaryData: Array<ProfileSummaryData> = eemDataOn.flatMap(eemSummary => { return eemSummary.profileSummaryData});
-                //calculate available airflow
-                let compressorsOn: Array<string> = eemDataOn.map(eemSummary => { return eemSummary.compressorId });
-                let availableAirflow: number = 0;
-                compressorsOn.forEach((compressorId) => {
-                    let fullLoadCapacity: number = this.getFullLoadCapacity(compressorId, adjustedCompressors);
-                    availableAirflow = availableAirflow + fullLoadCapacity;
-                });
-                this.availableAirflow[index] = availableAirflow;
+                let intervalSummaryData: Array<ProfileSummaryData> = eemDataOn.flatMap(eemSummary => { return eemSummary.profileSummaryData });
                 //calculate power
-                this.profilePower[index] = _.sumBy(intervalSummaryData, (data: ProfileSummaryData) => { return data.power });
+                this.profilePower[index] = _.sumBy(intervalSummaryData, (data: ProfileSummaryData) => {
+                    if (data.timeInterval == i) {
+                        return data.power;
+                    } else {
+                        return 0
+                    }
+                });
                 i = i + dataInterval;
                 index++;
             }
         });
-    }
-
-    getFullLoadCapacity(compressorId: string, adjustedCompressors: Array<CompressorInventoryItemClass>): number {
-        let compressor: CompressorInventoryItemClass = adjustedCompressors.find(compressor => { return compressor.itemId == compressorId });
-        return compressor.performancePoints.fullLoad.airflow;
     }
 
     checkAirflowValid(requiredAirflow: Array<number>, availableAirflow: Array<number>): boolean {
