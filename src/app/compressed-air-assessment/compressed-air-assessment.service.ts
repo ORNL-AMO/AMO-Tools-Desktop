@@ -65,7 +65,8 @@ export class CompressedAirAssessmentService {
       }
       let modification: Modification = this.selectedModification.getValue();
       if (modification) {
-        this.setModificationResults(modification);
+        let updatedModification: Modification = compressedAirAssessment.modifications.find(mod => { return mod.modificationId == modification.modificationId; });
+        this.setSelectedModification(updatedModification);
       }
     }
     this.compressedAirAssessment.next(compressedAirAssessment);
@@ -86,7 +87,7 @@ export class CompressedAirAssessmentService {
   setModificationResults(modification: Modification) {
     let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = this.compressedAirAssessmentBaselineResults.getValue();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessment.getValue();
-    if (modification && compressedAirAssessmentBaselineResults && compressedAirAssessment.setupDone) {
+    if (modification && compressedAirAssessmentBaselineResults && compressedAirAssessment?.setupDone) {
       let settings: Settings = this.settings.getValue();
       let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(compressedAirAssessment, modification, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
       this.compressedAirAssessmentModificationResults.next(compressedAirAssessmentModificationResults);

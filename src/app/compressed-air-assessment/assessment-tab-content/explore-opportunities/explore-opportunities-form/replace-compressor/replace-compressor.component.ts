@@ -28,7 +28,7 @@ export class ReplaceCompressorComponent {
   compressedAirAssessment: CompressedAirAssessment;
   settingsSub: Subscription;
   settings: Settings;
-  
+
   form: UntypedFormGroup
   currentCompressorMapping: Array<{
     originalCompressorId: string,
@@ -168,8 +168,12 @@ export class ReplaceCompressorComponent {
   }
 
   goToReplacementInventory() {
+    //add replacement compressor then navigate to replacement inventory tab
     this.inventoryService.tabSelect.next('replacementInventory');
-    this.router.navigate(['../../baseline/inventory-setup'], { relativeTo: this.activatedRoute });
+    let result: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.inventoryService.addNewCompressor(this.compressedAirAssessment);
+    this.compressedAirAssessmentService.updateCompressedAir(result.compressedAirAssessment, true);
+    this.inventoryService.setSelectedCompressor(result.newInventoryItem);
+    this.router.navigate(['../../baseline/inventory-setup'], { relativeTo: this.activatedRoute, queryParams: { from: 'assessment' } });
   }
 
   getIsTrimCompressor(compressorId: string): boolean {
@@ -200,7 +204,7 @@ export class ReplaceCompressorComponent {
       }
     });
   }
-  
+
   setReplaceCompressorTrimSelections(modification: Modification) {
     let compressorsIdsInSystem: Array<string> = new Array();
     modification.replaceCompressor.currentCompressorMapping.forEach(mapping => {

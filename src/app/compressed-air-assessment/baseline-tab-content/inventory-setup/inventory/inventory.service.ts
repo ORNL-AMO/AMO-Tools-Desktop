@@ -149,7 +149,7 @@ export class InventoryService {
   }
 
   addNewCompressor(compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } {
-
+    console.log('adding new compressor');
     let inventoryTab: 'inventory' | 'replacementInventory' | 'help' = this.tabSelect.getValue();
     if (!newInventoryItem) {
       newInventoryItem = this.getNewInventoryItem();
@@ -210,10 +210,12 @@ export class InventoryService {
   }
 
   addReplacementCompressor(compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } {
+    console.log('adding replacement compressor');
     if (!newInventoryItem) {
       newInventoryItem = this.getNewInventoryItem();
     }
     newInventoryItem.isReplacementCompressor = true;
+    newInventoryItem.name = 'Replacement Compressor';
     newInventoryItem.modifiedDate = new Date();
     compressedAirAssessment.replacementCompressorInventoryItems.push(newInventoryItem);
     compressedAirAssessment.modifications.forEach(modification => {
