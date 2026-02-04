@@ -23,7 +23,7 @@
                 <div class="w-100 justify-content-center p-2 d-flex">
                     <button class="btn btn-primary" (click)="addModification()">Add New Scenario</button>
                 </div>
-                <!--  todo facelift EEM components to follow UI from other exopps -->
+                <!--  todo facelift EEM components to follow UI from other exopps, need refined reqs on when to show each-->
                 <div class="d-flex flex-column">
                     <div class="form-group group-name">
                         <label for="modificatonName">Modification Name</label>
@@ -34,8 +34,8 @@
                     <app-increase-chilled-temperature></app-increase-chilled-temperature>
                     <app-decrease-condenser-water-temp></app-decrease-condenser-water-temp>
                     <app-apply-variable-speed-control></app-apply-variable-speed-control>
-                    <!-- todo only show if the is water cooled and is constant temp -->
                     <app-sliding-condenser-water-temperature></app-sliding-condenser-water-temperature>
+                    <app-upgrade-cooling-tower-fan></app-upgrade-cooling-tower-fan>
                 </div>
             </div>
         </div>

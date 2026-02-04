@@ -150,7 +150,7 @@ export class ModificationService {
         useOpportunity: false,
       },
       upgradeCoolingTowerFans: {
-        numberOfFans: baselineValues.upgradeCoolingTowerFans.numberOfFans,
+        towerType: baselineValues.upgradeCoolingTowerFans.towerType,
         useOpportunity: false,
       },
       useFreeCooling: {
@@ -199,6 +199,10 @@ export class ModificationService {
       condenserWaterPumpInput: {
         ...processCoolingAssessment.systemInformation.condenserWaterPumpInput,
         variableFlow: modification.applyVariableSpeedControls.condenserWaterVariableFlow,
+      },
+      towerInput: {
+        ...processCoolingAssessment.systemInformation.towerInput,
+        ...(modification.upgradeCoolingTowerFans?.useOpportunity ? { towerType: modification.upgradeCoolingTowerFans.towerType } : {})
       }
     };
 
@@ -223,7 +227,7 @@ export class ModificationService {
         condenserWaterVariableFlow: processCooling.systemInformation.condenserWaterPumpInput?.variableFlow,
       },
       upgradeCoolingTowerFans: {
-        numberOfFans: processCooling.systemInformation.towerInput.numberOfFans,
+        towerType: processCooling.systemInformation.towerInput.towerType,
       },
       useFreeCooling: {
         usesFreeCooling: processCooling.systemInformation.towerInput.usesFreeCooling,

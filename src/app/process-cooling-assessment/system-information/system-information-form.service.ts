@@ -1,7 +1,7 @@
 // (TowerForm and methods moved into class below)
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation } from '../../shared/models/process-cooling-assessment';
+import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, TowerType } from '../../shared/models/process-cooling-assessment';
 
 
 @Injectable()
@@ -98,6 +98,36 @@ export class SystemInformationFormService {
       ...formValue,
     };
   }
+
+   public getTowerTypeDependentValues(towerType: number): { numberOfFans: number; fanSpeedType: number; } {
+      let dependentValues: { numberOfFans: number; fanSpeedType: number; } = { numberOfFans: 1, fanSpeedType: 1 };
+      switch(towerType) {
+        case TowerType.OneCellOneSpeed:
+          dependentValues = { numberOfFans: 1, fanSpeedType: 1 };
+          break;
+        case TowerType.OneCellTwoSpeed:
+          dependentValues = { numberOfFans: 1, fanSpeedType: 2 };
+          break;
+        case TowerType.TwoCellOneSpeed:
+          dependentValues = { numberOfFans: 2, fanSpeedType: 1 };
+          break;
+        case TowerType.TwoCellTwoSpeed:
+          dependentValues = { numberOfFans: 2, fanSpeedType: 2 };
+          break;
+        case TowerType.ThreeCellOneSpeed:
+          dependentValues = { numberOfFans: 3, fanSpeedType: 1 };
+          break;
+        case TowerType.ThreeCellTwoSpeed:
+          dependentValues = { numberOfFans: 3, fanSpeedType: 2 };
+          break;
+        case TowerType.VariableSpeed:
+          //  todo 7641 unknown sideeffects
+          break;
+        default:
+          dependentValues = { numberOfFans: 0, fanSpeedType: 0 };
+      }
+      return dependentValues;
+    }
 
   public isSystemInformationValid(systemInformationInput: SystemInformation): boolean {
     const isOperationsValid = this.isOperationsValid(systemInformationInput.operations);
