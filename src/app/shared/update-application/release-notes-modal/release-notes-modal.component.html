@@ -41,7 +41,32 @@
 
           <label class="header-label">Here are the details of what's new in version {{versionNum}}:</label>
           <br>
+          <label>Application</label>
+            <ul>
+              <li>Fixed: length unit conversions bug introduced by previous feature upgrade to unit converter</li>
+            </ul>
 
+          <label>Treasure Hunt</label>
+            <ul>
+              <li>Added: Filter Treasure Hunt opportunities by MEASUR equipment/module type</li>
+              <li>Added: Email Treasure Hunt opportunities directly</li>
+            </ul>
+
+          <label>Compressed Air</label>
+          <ul>
+            <li>Added: Airflow Average and Peak results to Compressed Air Assessment Report tables and graphs</li>
+          </ul>
+
+          <label>Steam</label>
+          <ul>
+            <li>Fixed: Default to Steam Pressure when selected quality is Saturated</li>
+            <li>Fixed: Steam Reduction calculator Quality field not updating validation after "Known Steam Variable" changes</li>
+            <li>Fixed: Steam Reduction errors when deleting baseline and modification items</li>
+          </ul>
+          <br>
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.6.7:</label>
+          <br>
           <label>Application</label>
           <ul>
             <li>Added: New DOE logo to landing page and reports</li>
@@ -102,54 +127,6 @@
             </li>
           </ul>
   
-          <!--  Include prev version -->
-          <label class="header-label">Here are the details of what's new in version 1.6.5:</label>
-          <br>
-          <label>Application</label>
-          <ul>
-            <li>Added: Link to Industrial Resources page from MEASUR</li>
-            <li>Added: Unit converter swap units feature</li>
-            <li>Enhanced: Unit converter unit sorting</li>
-            <li>Fixed: Mouse behavior on hover for better user experience</li>
-            <li>Fixed: Power Factor Starting Year to apply to previously entered months</li>
-            <li>Fixed: Application icons to differentiate between inventories and assessments</li>
-          </ul>
-
-          <label>Pumps</label>
-          <ul>
-            <li>Fixed: Updated Pump Stages validation and defaults through PSAT and Pump inventory</li>
-            <li>Enhanced: Added warning for negative values in Pump Achievable Efficiency</li>
-          </ul>
-
-          <label>Fans</label>
-          <ul>
-            <li>Fixed: Fan Traverse analysis calculator text</li>
-          </ul>
-
-          <label>Process Heating</label>
-          <ul>
-            <li>Added: Update Fixture losses with documentation</li>
-            <li>Added: Update Leakage losses with documentation</li>
-            <li>Enhanced: Added validation messaging for Auxiliary Power and EAF</li>
-            <li>Fixed: Don't calculate Auxiliary Power or EAF until user input is valid</li>
-            <li>Fixed: Populate default loss name if none is given</li>
-            <li>Fixed: Added validation so loss name is a required field</li>
-            <li>Fixed: Field can be saved with a custom name</li>
-            <li>Fixed: Cooling form patching default name to gas instead of liquid</li>
-            <li>Fixed: Fixture Calculator material properties not being set on load</li>
-          </ul>
-
-          <label>Steam</label>
-          <ul>
-            <li>Enhanced: Steam Boiler form integrates steam properties to automatically provide saturated
-              temperature/pressure and collect temperature and pressure at the same time</li>
-          </ul>
-
-          <label>Water</label>
-          <ul>
-            <li>Added: Versioning to diagram to enhance backwards compatibility</li>
-            <li>Enhanced: Ensured visibility on small screens</li>
-          </ul>
 
 
           <div class="modal-footer p-2 d-flex flex-row justify-content-end">

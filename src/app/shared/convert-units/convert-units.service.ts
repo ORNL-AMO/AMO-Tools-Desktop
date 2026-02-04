@@ -272,10 +272,6 @@ export class ConvertUnitsService {
     return Number((Math.round(val * 100) / 100).toFixed(digits));
   }
 
-  measures() {
-    return _.keys(this._measures);
-  }
-
   
   convertFt3AndM3Value(val: number, oldSettings: Settings, newSettings: Settings): number {
     if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
