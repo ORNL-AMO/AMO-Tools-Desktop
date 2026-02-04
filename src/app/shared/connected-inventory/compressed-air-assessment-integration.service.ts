@@ -19,6 +19,7 @@ import { CompressedAirInventoryService } from '../../compressed-air-inventory/co
 import { CompressedAirAssessmentService } from '../../compressed-air-assessment/compressed-air-assessment.service';
 import { CompressedAirAssessment, CompressorInventoryItem, SystemInformation } from '../models/compressed-air-assessment';
 import { CentrifugalSpecifics, CompressedAirControlsProperties, CompressedAirDesignDetailsProperties, CompressedAirInventorySystem, CompressedAirItem, CompressedAirMotorProperties, CompressedAirPerformancePointsProperties, NameplateData, PerformancePoint } from '../../compressed-air-inventory/compressed-air-inventory';
+import { InventoryService } from '../../compressed-air-assessment/baseline-tab-content/inventory-setup/inventory/inventory.service';
 
 
 // todo Not immediately required but we should probably address a few things at some point:
@@ -39,6 +40,7 @@ export class CompressedAirAssessmentIntegrationService {
         private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService,
         private compressedAirInventoryService: CompressedAirInventoryService,
         private compressedAirAssessmentService: CompressedAirAssessmentService,
+        private caInventoryService: InventoryService
     ) { }
 
     async initAssessmentsAndOptions() {
@@ -130,7 +132,7 @@ export class CompressedAirAssessmentIntegrationService {
         if (connectedInventoryData.canConnect) {
             let inventoryCompressorToConnectedCompressorMap: Record<string, string> = {};
             selectedSystem.catalog.forEach(item => {
-                let compressorInventoryItem: CompressorInventoryItem = this.getNewInventoryItem();
+                let compressorInventoryItem: CompressorInventoryItem = this.caInventoryService.getNewInventoryItem();
                 inventoryCompressorToConnectedCompressorMap[item.id] = compressorInventoryItem.itemId;
                 compressorInventoryItem.name = item.name;
 
@@ -850,108 +852,6 @@ export class CompressedAirAssessmentIntegrationService {
         connectedInventoryData.shouldRestoreConnectedValues = false;
         this.integrationStateService.connectedInventoryData.next(connectedInventoryData)
     }
-
-    getNewInventoryItem(): CompressorInventoryItem {
-        return {
-            itemId: Math.random().toString(36).substr(2, 9),
-            name: 'New Compressor',
-            description: undefined,
-            modifiedDate: new Date(),
-            nameplateData: {
-                compressorType: undefined,
-                motorPower: undefined,
-                fullLoadOperatingPressure: undefined,
-                fullLoadRatedCapacity: undefined,
-                ratedLoadPower: undefined,
-                ploytropicCompressorExponent: 1.4,
-                fullLoadAmps: undefined,
-                totalPackageInputPower: undefined
-            },
-            compressorControls: {
-                controlType: undefined,
-                unloadPointCapacity: 100,
-                numberOfUnloadSteps: 2,
-                automaticShutdown: false,
-                unloadSumpPressure: 15
-            },
-            designDetails: {
-                blowdownTime: 40,
-                modulatingPressureRange: undefined,
-                inputPressure: undefined,
-                designEfficiency: undefined,
-                serviceFactor: 1.15,
-                noLoadPowerFM: undefined,
-                noLoadPowerUL: undefined,
-                maxFullFlowPressure: undefined
-            },
-            centrifugalSpecifics: {
-                surgeAirflow: undefined,
-                maxFullLoadPressure: undefined,
-                maxFullLoadCapacity: undefined,
-                minFullLoadPressure: undefined,
-                minFullLoadCapacity: undefined
-            },
-            performancePoints: {
-                fullLoad: {
-                    dischargePressure: undefined,
-                    isDefaultPower: true,
-                    airflow: undefined,
-                    isDefaultAirFlow: true,
-                    power: undefined,
-                    isDefaultPressure: true
-                },
-                maxFullFlow: {
-                    dischargePressure: undefined,
-                    isDefaultPower: true,
-                    airflow: undefined,
-                    isDefaultAirFlow: true,
-                    power: undefined,
-                    isDefaultPressure: true
-                },
-                midTurndown: {
-                    dischargePressure: undefined,
-                    isDefaultPower: true,
-                    airflow: undefined,
-                    isDefaultAirFlow: true,
-                    power: undefined,
-                    isDefaultPressure: true
-                },
-                turndown: {
-                    dischargePressure: undefined,
-                    isDefaultPower: true,
-                    airflow: undefined,
-                    isDefaultAirFlow: true,
-                    power: undefined,
-                    isDefaultPressure: true
-                },
-                unloadPoint: {
-                    dischargePressure: undefined,
-                    isDefaultPower: true,
-                    airflow: undefined,
-                    isDefaultAirFlow: true,
-                    power: undefined,
-                    isDefaultPressure: true
-                },
-                noLoad: {
-                    dischargePressure: undefined,
-                    isDefaultPower: true,
-                    airflow: undefined,
-                    isDefaultAirFlow: true,
-                    power: undefined,
-                    isDefaultPressure: true
-                },
-                blowoff: {
-                    dischargePressure: undefined,
-                    isDefaultPower: true,
-                    airflow: undefined,
-                    isDefaultAirFlow: true,
-                    power: undefined,
-                    isDefaultPressure: true
-                }
-            }
-        }
-    }
-
 }
 
 

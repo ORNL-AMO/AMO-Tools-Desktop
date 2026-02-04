@@ -117,7 +117,7 @@ export class SystemProfileGraphsComponent implements OnInit {
     //baseline daytype summary
     if (this.selectedDayType) {
       let compressedAirBaselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = new CompressedAirBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-      
+
       if (!this.inModification && this.compressedAirAssessment) {
         this.trimSelections = this.compressedAirAssessment.systemInformation.trimSelections;
         this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
@@ -310,7 +310,8 @@ export class SystemProfileGraphsComponent implements OnInit {
           marker: {
             line: {
               width: 3
-            }
+            },
+            color: this.getCompressorColor(compressorProfile.compressorId)
           },
 
         }
@@ -397,6 +398,9 @@ export class SystemProfileGraphsComponent implements OnInit {
             line: {
               width: 3
             }
+          },
+          line: {
+            color: this.getCompressorColor(compressorProfile.compressorId)
           }
         }
         traceData.push(trace);
@@ -447,7 +451,8 @@ export class SystemProfileGraphsComponent implements OnInit {
           marker: {
             line: {
               width: 3
-            }
+            },
+            color: this.getCompressorColor(compressorProfile.compressorId)
           }
         }
         traceData.push(trace);
@@ -505,8 +510,11 @@ export class SystemProfileGraphsComponent implements OnInit {
           name: this.getCompressorName(compressorProfile.compressorId),
           marker: {
             line: {
-              width: 3
+              width: 3,
             }
+          },
+          line: {
+            color: this.getCompressorColor(compressorProfile.compressorId)
           }
         }
         traceData.push(trace);
@@ -531,7 +539,6 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   getCompressorName(compressorId: string): string {
     let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == compressorId });
-
     if (compressor && this.selectedDayType) {
       if (this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'baseTrim') {
         let selection = this.trimSelections.find(selection => { return selection.dayTypeId == this.selectedDayType.dayTypeId && selection.compressorId == compressorId });
@@ -542,6 +549,15 @@ export class SystemProfileGraphsComponent implements OnInit {
         }
       }
       return compressor.name
+    } else {
+      return '';
+    }
+  }
+
+  getCompressorColor(compressorId: string): string {
+    let compressor: CompressorInventoryItem = this.inventoryItems.find(item => { return item.itemId == compressorId });
+    if (compressor) {
+      return compressor.color;
     } else {
       return '';
     }

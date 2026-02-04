@@ -33,14 +33,20 @@
                 <textarea class="form-control" type="text" id="description" formControlName="description"
                     (focus)="focusField('compresorDescription')" (input)="save()"></textarea>
             </div>
+            <div class="form-group">
+                <label for="color">Graphs Color</label>
+                <input type="color" class="form-control form-control-color" id="color" name="color"
+                    formControlName="color" (focus)="focusField('color')" (input)="save()"
+                    [ngStyle]="{'background-color':form.controls.color.value}" />
+            </div>
             <a class="click-link small pull-right" (click)="openCompressorModal()">Set Data From Existing Compressor</a>
         </form>
         <br>
-        <app-connected-assessment-status class="w-100" *ngIf="hasConnectedCompressedAirInventory" [connectedToType]="'inventory'"
-            [connectedFormGroupName]="'motor'">
+        <app-connected-assessment-status class="w-100" *ngIf="hasConnectedCompressedAirInventory"
+            [connectedToType]="'inventory'" [connectedFormGroupName]="'motor'">
         </app-connected-assessment-status>
-        <app-connected-assessment-status class="w-100" *ngIf="hasConnectedCompressedAirInventory" [connectedToType]="'inventory'"
-            [connectedFormGroupName]="'compressed-air'"
+        <app-connected-assessment-status class="w-100" *ngIf="hasConnectedCompressedAirInventory"
+            [connectedToType]="'inventory'" [connectedFormGroupName]="'compressed-air'"
             [itemId]="selectedCompressor.itemId">
         </app-connected-assessment-status>
         <app-nameplate-data></app-nameplate-data>

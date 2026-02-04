@@ -186,11 +186,12 @@ export class CompressedAirDataManagementService {
   }
 
   //name and description
-  updateNameAndDescription(name: string, description: string) {
+  updateNameAndDescription(name: string, description: string, color: string) {
     let selectedCompressor: CompressorInventoryItem = this.inventoryService.selectedCompressor.getValue();
     selectedCompressor.modifiedDate = new Date();
     selectedCompressor.name = name;
     selectedCompressor.description = description;
+    selectedCompressor.color = color;
     //save updated compressor
     this.updateAssessmentFromDependentCompressorItem(selectedCompressor, false, false);
   }

@@ -234,6 +234,7 @@ export interface CompressorInventoryItem {
     itemId: string,
     name: string,
     description: string,
+    color: string,
     // isValid?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,

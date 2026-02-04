@@ -48,7 +48,7 @@ export class ReportGraphsComponent implements OnInit {
     if (this.selectedGraph === 'cost') {
       this.drawModificationGraph();
     } else if (this.selectedGraph === 'airflow') {
-      this.drawAirflowGraph();
+      // this.drawAirflowGraph();
     } else if (this.selectedGraph === 'energy') {
       this.drawEnergyGraph();
     }
@@ -206,39 +206,39 @@ export class ReportGraphsComponent implements OnInit {
     }
   }
 
-  drawAirflowGraph() {
-    if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
+  // drawAirflowGraph() {
+  //   if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
 
-      let x: Array<string> = this.combinedDayTypeResults.map(result => { return result.modification.name });
-      x.unshift('Baseline');
-      let yValue = this.getAverageAirFlow();
-      let traceData = new Array();
+  //     let x: Array<string> = this.combinedDayTypeResults.map(result => { return result.modification.name });
+  //     x.unshift('Baseline');
+  //     let yValue = this.getAverageAirFlow();
+  //     let traceData = new Array();
 
-      //each trace will display the data we are looking for.
-      // each of below will become a data stack on the y axis.
-      traceData.push({
-        x: x,
-        y: yValue,
-        text: yValue.map(value => `${value.toLocaleString()} acfm`),
-        textposition: 'auto',
-        type: 'bar',
-        name: 'Total Average Air Flow',
-        hoverinfo: "name+y",
-        marker: {
-          line: {
-            width: 3
-          }
-        },
-      });
+  //     //each trace will display the data we are looking for.
+  //     // each of below will become a data stack on the y axis.
+  //     traceData.push({
+  //       x: x,
+  //       y: yValue,
+  //       text: yValue.map(value => `${value.toLocaleString()} acfm`),
+  //       textposition: 'auto',
+  //       type: 'bar',
+  //       name: 'Total Average Air Flow',
+  //       hoverinfo: "name+y",
+  //       marker: {
+  //         line: {
+  //           width: 3
+  //         }
+  //       },
+  //     });
 
-      var layout = this.getLayout("Total Average Air Flow", "acfm ");
-      var config = {
-        responsive: true,
-        displaylogo: false
-      };
-      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
-    }
-  }
+  //     var layout = this.getLayout("Total Average Air Flow", "acfm ");
+  //     var config = {
+  //       responsive: true,
+  //       displaylogo: false
+  //     };
+  //     this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
+  //   }
+  // }
 
   drawEnergyGraph() {
     if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
@@ -340,13 +340,13 @@ export class ReportGraphsComponent implements OnInit {
     return y;
   }
 
-  getAverageAirFlow(): Array<number> {
-    let y: Array<number> = [this.assessmentResults[0].totalAverageAirFlow];
-    this.combinedDayTypeResults.forEach(result => {
-      y.push(result.combinedResults.averageAirFlow);
-    });
-    return y;
-  }
+  // getAverageAirFlow(): Array<number> {
+  //   let y: Array<number> = [this.assessmentResults[0].totalAverageAirFlow];
+  //   this.combinedDayTypeResults.forEach(result => {
+  //     y.push(result.combinedResults.averageAirFlow);
+  //   });
+  //   return y;
+  // }
 
   getTotalEnergyConsumption(): Array<number> {
     let y: Array<number> = [this.assessmentResults[0].totalBaselinePower];

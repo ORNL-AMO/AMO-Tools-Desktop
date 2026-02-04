@@ -87,7 +87,6 @@ export class CompressedAirAssessmentService {
     let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = this.compressedAirAssessmentBaselineResults.getValue();
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessment.getValue();
     if (modification && compressedAirAssessmentBaselineResults && compressedAirAssessment.setupDone) {
-      console.log('setting modification results');
       let settings: Settings = this.settings.getValue();
       let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(compressedAirAssessment, modification, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
       this.compressedAirAssessmentModificationResults.next(compressedAirAssessmentModificationResults);

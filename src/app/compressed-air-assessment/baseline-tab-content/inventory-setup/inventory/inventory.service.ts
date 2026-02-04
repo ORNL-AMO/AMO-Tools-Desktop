@@ -8,6 +8,7 @@ import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import { ExploreOpportunitiesService } from '../../../assessment-tab-content/explore-opportunities/explore-opportunities.service';
 import { getEmptyProfileSummaryData } from '../../../calculations/caCalculationHelpers';
+import { getRandomFlatColor } from '../../../../shared/helperFunctions';
 
 @Injectable()
 export class InventoryService {
@@ -51,6 +52,7 @@ export class InventoryService {
       name: 'New Compressor',
       description: undefined,
       modifiedDate: new Date(),
+      color: getRandomFlatColor(),
       nameplateData: {
         compressorType: undefined,
         motorPower: undefined,

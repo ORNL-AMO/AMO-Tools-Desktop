@@ -13,10 +13,11 @@ export class InventoryFormService {
   constructor(private formBuilder: UntypedFormBuilder, private performancePointsFormService: PerformancePointsFormService) {}
 
   //general information
-  getGeneralInformationFormFromObj(name: string, description: string): UntypedFormGroup {
+  getGeneralInformationFormFromObj(name: string, description: string, color: string): UntypedFormGroup {
     let form: UntypedFormGroup = this.formBuilder.group({
       name: [name, Validators.required],
-      description: [description]
+      description: [description],
+      color: [color]
     });
     return form;
   }

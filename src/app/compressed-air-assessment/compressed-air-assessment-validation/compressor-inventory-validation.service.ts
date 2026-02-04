@@ -35,7 +35,7 @@ export class CompressorInventoryValidationService {
 
   validateCompressorItem(compressor: CompressorInventoryItem, systemInformation: SystemInformation): CompressorItemValidation {
     
-    let generalInformationValid: boolean = this.inventoryFormService.getGeneralInformationFormFromObj(compressor.name, compressor.description).valid;
+    let generalInformationValid: boolean = this.inventoryFormService.getGeneralInformationFormFromObj(compressor.name, compressor.description, compressor.color).valid;
     let nameplateValid: boolean = this.inventoryFormService.getNameplateDataFormFromObj(compressor.nameplateData).valid;
     let compressorTypeValid: boolean = true;
     if (systemInformation.multiCompressorSystemControls == 'loadSharing') {

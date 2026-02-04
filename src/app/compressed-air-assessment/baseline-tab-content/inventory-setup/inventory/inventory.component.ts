@@ -9,6 +9,7 @@ import { CompressedAirDataManagementService } from '../../../compressed-air-data
 import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
 import { InventoryFormService } from './inventory-form.service';
 import { IntegrationStateService } from '../../../../shared/connected-inventory/integration-state.service';
+import { calculateAirFlow } from '../../../calculations/performancePoints/performancePointHelpers';
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',
@@ -58,7 +59,7 @@ export class InventoryComponent implements OnInit {
         this.compressorType = val.nameplateData.compressorType;
         this.controlType = val.compressorControls.controlType;
         if (this.isFormChange == false) {
-          this.form = this.inventoryFormService.getGeneralInformationFormFromObj(val.name, val.description);
+          this.form = this.inventoryFormService.getGeneralInformationFormFromObj(val.name, val.description, val.color);
         } else {
           this.isFormChange = false;
         }
@@ -123,7 +124,7 @@ export class InventoryComponent implements OnInit {
 
   save() {
     this.isFormChange = true;
-    this.compressedAirDataManagementService.updateNameAndDescription(this.form.controls.name.value, this.form.controls.description.value);
+    this.compressedAirDataManagementService.updateNameAndDescription(this.form.controls.name.value, this.form.controls.description.value, this.form.controls.color.value);
   }
 
   openCompressorModal() {

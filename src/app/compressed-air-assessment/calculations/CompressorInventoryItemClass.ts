@@ -26,6 +26,8 @@ export class CompressorInventoryItemClass {
     showUnloadPoint: boolean;
     showNoLoadPoint: boolean;
     showBlowoffPoint: boolean;
+
+    color: string;
     constructor(inventoryItem: CompressorInventoryItem) {
         this.itemId = inventoryItem.itemId;
         this.description = inventoryItem.description;
@@ -38,6 +40,7 @@ export class CompressorInventoryItemClass {
         this.centrifugalSpecifics = inventoryItem.centrifugalSpecifics;
         // this.originalCompressorId = inventoryItem.originalCompressorId;
         this.isReplacementCompressor = inventoryItem.isReplacementCompressor;
+        this.color = inventoryItem.color;
         this.setShowMaxFlowPerformancePoint();
         this.setShowMidTurndownPerformancePoint();
         this.setShowTurndownPerformancePoint();
@@ -145,7 +148,8 @@ export class CompressorInventoryItemClass {
             centrifugalSpecifics: this.centrifugalSpecifics,
             modifiedDate: this.modifiedDate,
             // originalCompressorId: this.originalCompressorId,
-            isReplacementCompressor: this.isReplacementCompressor
+            isReplacementCompressor: this.isReplacementCompressor,
+            color: this.color
 
         }
     }
