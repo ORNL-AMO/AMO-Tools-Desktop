@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../shared/graphColors';
 import { Settings } from '../../shared/models/settings';
 import { CalculationsTableRow, WasteWater, WasteWaterResults } from '../../shared/models/waste-water';
 import { WasteWaterService } from '../waste-water.service';

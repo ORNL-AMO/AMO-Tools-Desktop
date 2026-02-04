@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, ChangeDetectorRef } from '@angular/core';
 import { EnrichmentInput } from '../../../../shared/models/phast/o2Enrichment';
 import { Settings } from '../../../../shared/models/settings';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 
 import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
 import { O2EnrichmentService, DisplayPoint, Axis } from '../o2-enrichment.service';

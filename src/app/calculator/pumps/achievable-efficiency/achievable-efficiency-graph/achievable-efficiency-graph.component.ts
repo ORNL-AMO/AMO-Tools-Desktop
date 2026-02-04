@@ -2,7 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, HostLis
 import { PsatService } from '../../../../psat/psat.service';
 import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { FormGroup } from '../../../../../../node_modules/@angular/forms';
 import { SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
 import { AchievableEfficiencyService, EfficiencyPoint, EfficiencyTrace } from '../achievable-efficiency.service';

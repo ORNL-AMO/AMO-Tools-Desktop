@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { Calculator } from '../../../shared/models/calculators';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../shared/graphColors';
 import { PreAssessmentService, PreAssessmentResult } from '../../../calculator/utilities/pre-assessment/pre-assessment.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 

@@ -1,7 +1,7 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { SavingsItem } from '../../../../shared/models/treasure-hunt';
 
 @Component({
