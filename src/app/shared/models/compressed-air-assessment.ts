@@ -335,7 +335,7 @@ export interface ProfileSummary {
     logToolFieldIdVolts?: string,
     avgPower?: number,
     avgAirflow?: number,
-    avgPrecentPower?: number,
+    avgPercentPower?: number,
     avgPercentCapacity?: number,
     profileSummaryForPrint?: Array<Array<ProfileSummaryData>>,
     adjustedIsentropicEfficiency?: number,

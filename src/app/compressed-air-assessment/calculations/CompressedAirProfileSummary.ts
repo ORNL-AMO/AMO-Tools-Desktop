@@ -20,7 +20,7 @@ export class CompressedAirProfileSummary {
     constructor(profileSummary: ProfileSummary, includeSummaryData: boolean) {
         this.isCompressorReplaced = profileSummary.isCompressorReplaced;
         this.fullLoadPressure = profileSummary.fullLoadPressure;
-        this.fullLoadCapacity = profileSummary.fullLoadPressure;
+        this.fullLoadCapacity = profileSummary.fullLoadCapacity;
         this.compressorId = profileSummary.compressorId;
         this.dayTypeId = profileSummary.dayTypeId;
         this.automaticShutdownTimer = profileSummary.automaticShutdownTimer;
@@ -37,7 +37,7 @@ export class CompressedAirProfileSummary {
             this.profileSummaryData = new Array();
             this.avgPower = profileSummary.avgPower;
             this.avgAirflow = profileSummary.avgAirflow;
-            this.avgPercentPower = profileSummary.avgPrecentPower;
+            this.avgPercentPower = profileSummary.avgPercentPower;
             this.avgPercentCapacity = profileSummary.avgPercentCapacity;
         }
     }

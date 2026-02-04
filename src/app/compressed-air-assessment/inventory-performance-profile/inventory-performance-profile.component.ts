@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InventoryService } from '../baseline-tab-content/inventory-setup/inventory/inventory.service';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem } from '../../shared/models/compressed-air-assessment';
 import { CompressedAirCalculationService, CompressorCalcResult } from '../compressed-air-calculation.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { TraceData } from '../../shared/models/plotting';
@@ -13,6 +13,7 @@ import { CompressedAirAssessmentModificationResults } from '../calculations/modi
 import { ExploreOpportunitiesService } from '../assessment-tab-content/explore-opportunities/explore-opportunities.service';
 import { CompressorInventoryValidationService } from '../compressed-air-assessment-validation/compressor-inventory-validation.service';
 import { getRandomFlatColor } from '../../shared/helperFunctions';
+import { CompressedAirProfileSummary } from '../calculations/CompressedAirProfileSummary';
 
 @Component({
   selector: 'app-inventory-performance-profile',
@@ -412,7 +413,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
   }
   getAvgOpPointsData(): Array<ProfileChartData> {
     let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(this.compressedAirAssessment, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-    let profileSummary: Array<ProfileSummary> = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.flatMap(dayTypeProfileSummary => {
+    let profileSummary: Array<CompressedAirProfileSummary> = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.flatMap(dayTypeProfileSummary => {
       return dayTypeProfileSummary.profileSummary;
     });
     let chartData: Array<ProfileChartData> = new Array();
@@ -444,7 +445,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
               data: profileData,
               unloadingData: null,
               controlType: 0,
-              color: getRandomFlatColor()
+              color: this.selectedCompressor.color
             });
           }
         });
@@ -533,13 +534,13 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     return compressorData;
   }
 
-  getProfileData(compressor: ProfileSummary): Array<CompressorCalcResult> {
+  getProfileData(compressor: CompressedAirProfileSummary): Array<CompressorCalcResult> {
     let compressorData: Array<CompressorCalcResult> = new Array();
     if (compressor.avgPercentCapacity) {
       let results: CompressorCalcResult = {
         powerCalculated: compressor.avgPower,
         capacityCalculated: compressor.avgAirflow,
-        percentagePower: compressor.avgPrecentPower,
+        percentagePower: compressor.avgPercentPower,
         percentageCapacity: compressor.avgPercentCapacity
       }
       compressorData.push(results);
@@ -547,14 +548,14 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     }
     return compressorData;
   }
-  getProfileSummaryData(compressorSummary: Array<ProfileSummary>, dayTypeId: string): Array<CompressorCalcResult> {
+  getProfileSummaryData(compressorSummary: Array<CompressedAirProfileSummary>, dayTypeId: string): Array<CompressorCalcResult> {
     let compressorData: Array<CompressorCalcResult> = new Array();
     compressorSummary.forEach(compressor => {
       if (dayTypeId === compressor.dayTypeId && compressor.avgPercentCapacity) {
         let results: CompressorCalcResult = {
           powerCalculated: compressor.avgPower,
           capacityCalculated: compressor.avgAirflow,
-          percentagePower: compressor.avgPrecentPower,
+          percentagePower: compressor.avgPercentPower,
           percentageCapacity: compressor.avgPercentCapacity
         }
         compressorData.push(results);
