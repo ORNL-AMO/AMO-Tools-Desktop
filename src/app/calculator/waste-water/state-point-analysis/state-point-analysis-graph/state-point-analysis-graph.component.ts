@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 
 import { StatePointAnalysisService } from '../state-point-analysis.service';
 import { Subscription } from 'rxjs';

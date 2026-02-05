@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plotting';
 import { Settings } from '../../../../shared/models/settings';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../../../../shared/models/phast/efficiencyImprovement';
 import { Axis, DisplayPoint, EfficiencyImprovementGraphService } from '../efficiency-improvement-graph.service';
 import { PlotlyService } from 'angular-plotly.js';
