@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EmailMeasurDataService, EmailSentStatus } from './email-measur-data.service';
 import { Subscription } from 'rxjs';
 
@@ -26,12 +26,24 @@ export class EmailMeasurDataComponent {
     this.emailDataForm = this.fb.group({
       emailTo: ['', [Validators.required, Validators.email]],
       emailSender: ['', [Validators.email]],
-      emailAttachmentName: [this.emailMeasurDataService.measurItemAttachment.itemName, Validators.required]
+      emailAttachmentName: [
+        this.emailMeasurDataService.measurItemAttachment.itemName,
+        [Validators.required, this.invalidCharactersValidator()]
+      ]
     });
 
     this.emailSentStatusSubscription = this.emailMeasurDataService.emailSentStatus.subscribe(sentStatus => {
       this.emailSentStatus = sentStatus;
     });
+  }
+
+  invalidCharactersValidator() {
+    // * allows letters, numbers, dot, underscore, hyphen, and space.
+    const regex = /^[a-zA-Z0-9._\- ]+$/;
+    return (control: AbstractControl) => {
+      if (!control.value) return null;
+      return regex.test(control.value) ? null : { invalidCharacters: true };
+    };
   }
 
   ngOnDestroy() {
@@ -53,4 +65,7 @@ export class EmailMeasurDataComponent {
     this.showPreview = !this.showPreview;
   }
 
+  get emailAttachmentName() {
+    return this.emailDataForm.get('emailAttachmentName');
+  }
 }
