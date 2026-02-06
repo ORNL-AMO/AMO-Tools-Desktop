@@ -29,6 +29,19 @@
       </div>
     </div>
 
+    <div class="form-group d-flex flex-column w-100 mb-3">
+      <label class="bold mr-2 w-25" for="emailAttachmentName">Attachment Name</label>
+      <div class="input-group">
+        <input type="text" formControlName="emailAttachmentName" class="form-control" (input)="save()" id="emailAttachmentName" />
+      </div>
+      <div class="input-group">
+        <span class="alert-danger w-100 pull-right small py-1 px-2"
+          *ngIf="emailDataForm.controls.emailAttachmentName.invalid && !emailDataForm.controls.emailAttachmentName.pristine">
+          <span *ngIf="emailDataForm.controls.emailAttachmentName.errors.required">Email is required</span>
+        </span>
+      </div>
+    </div>
+
   </form>
 </ng-container>
 

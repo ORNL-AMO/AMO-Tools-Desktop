@@ -1,6 +1,6 @@
 <nav class="navbar d-block d-lg-flex" [ngClass]="{'justify-content-around': inReport}" #navbar>
   <div class="d-lg-none nav-item dropdown">
-    <button type="button" class="export-btn" (click)="openExportModal()">Export Opportunities</button>
+    <button type="button" class="export-btn" (click)="openShareDataModal()">Export Opportunities</button>
     <button type="button" class="nav-btn" (click)="collapseBanner()">Options 
       <span *ngIf="!bannerCollapsed" class="fa fa-chevron-up"></span>
       <span *ngIf="bannerCollapsed" class="fa fa-chevron-down"></span>
@@ -37,10 +37,8 @@
       </div>
       <app-utility-type-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-utility-type-dropdown>
       <app-calculator-type-dropdown [ngStyle]="{'font-size': 'medium'}" [settings]="settings" [dropdownShown]="dropdownShown"></app-calculator-type-dropdown>
-      <div class="nav-item dropdown">
-        <button type="button" class="nav-btn btn-block" (click)="toggleAdditionalFilters()">Add'l Filters</button>
-      </div>
-
+      <app-teams-dropdown *ngIf="!inReport" [ngStyle]="{'font-size': 'medium'}" [settings]="settings"></app-teams-dropdown>
+      <app-equipments-dropdown *ngIf="!inReport" [ngStyle]="{'font-size': 'medium'}" [settings]="settings"></app-equipments-dropdown>
     </div>
   </div>
 
@@ -66,25 +64,26 @@
       </div>
     </div>
   </div>
-
+  
   <app-utility-type-dropdown class="d-lg-none" [settings]="settings" [dropdownShown]="!bannerCollapsed" [ngClass]="{'collapse': bannerCollapsed}"></app-utility-type-dropdown>
   
   <app-calculator-type-dropdown class="d-lg-none" [settings]="settings" [dropdownShown]="!bannerCollapsed" [ngClass]="{'collapse': bannerCollapsed}"></app-calculator-type-dropdown>
 
-  <div *ngIf="!inReport" class="nav-item dropdown d-lg-none" [ngClass]="{'collapse': bannerCollapsed}">
-    <button type="button" class="nav-btn" (click)="toggleAdditionalFilters()">Add'l Filters</button>
-  </div>
+  <app-teams-dropdown class="d-lg-none" *ngIf="!inReport" [settings]="settings"  [ngClass]="{'collapse': bannerCollapsed}"></app-teams-dropdown>
   
-  <app-teams-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-teams-dropdown>
+  <app-equipments-dropdown class="d-lg-none" *ngIf="!inReport"  [settings]="settings" [ngClass]="{'collapse': bannerCollapsed}"></app-equipments-dropdown>
+
+
+  <app-teams-dropdown *ngIf="inReport"  [settings]="settings"></app-teams-dropdown>
   
-  <app-equipments-dropdown *ngIf="inReport" [inReport]="inReport" [settings]="settings"></app-equipments-dropdown>
+  <app-equipments-dropdown *ngIf="inReport" [settings]="settings"></app-equipments-dropdown>
     
   <div class="nav-item" *ngIf="!inReport" [ngClass]="{'collapse': bannerCollapsed}">
     <div class="btn-group d-none d-lg-flex">
       <button type="button" class="nav-btn btn-manage" (click)="selectAll()">Select All</button>
       <button type="button" class="nav-btn middle btn-manage" (click)="deselectAll()">Deselect All</button>
       <button type="button" class="nav-btn middle btn-manage" (click)="openImportModal()">Import</button>
-      <button type="button" class="nav-btn btn-manage" (click)="openExportModal()">Export</button>
+      <button type="button" class="nav-btn btn-manage" (click)="openShareDataModal()">Export</button>
     </div>
     <div class="btn-group-vertical d-lg-none w-100">
       <button type="button" class="nav-btn" (click)="selectAll()">Select All</button>
@@ -117,27 +116,6 @@
     <button class="nav-btn-selections" (click)="clearAllFilters()">Clear All</button>
   </div>
 </nav>
-
-<div class="card menu-modal" [@menuModal]="displayAdditionalFiltersDropdown" [ngStyle]="{'width.px': navbarWidth}"
-  *ngIf="!inReport">
-  <div class="card-header p-2">
-    <span class="modal-card-header">Additional Filters</span>
-  </div>
-  <div class="card-body p-2 scroll-item">
-    <div class="row no-gutters" *ngIf="displayAdditionalFiltersDropdown == 'show'">
-      <div class="col-6 pr-1">
-        <app-teams-dropdown [inReport]="inReport" [settings]="settings"></app-teams-dropdown>
-      </div>
-      <div class="col-6 pl-1">
-        <app-equipments-dropdown [inReport]="inReport" [settings]="settings"></app-equipments-dropdown>
-      </div>
-    </div>
-  </div>
-  <div class="card-footer p-2">
-    <button class="nav-btn pull-left" (click)="clearAllFilters()">Reset Filters</button>
-    <button class="nav-btn pull-right" (click)="toggleAdditionalFilters()">Close</button>
-  </div>
-</div>
 
 <app-import-opportunities *ngIf="showImportModal"></app-import-opportunities>
 <app-export-opportunities *ngIf="showExportModal"></app-export-opportunities>

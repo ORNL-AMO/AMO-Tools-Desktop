@@ -33,7 +33,7 @@ export class BoilerService {
       'blowdownFlashed': [false, [Validators.required]],
       'preheatMakeupWater': [false, [Validators.required]],
       'steamQuality': [SteamQuality.SATURATED, [Validators.required]],
-      'pressureOrTemperature': [SteamPressureOrTemp.TEMPERATURE, [Validators.required]],
+      'pressureOrTemperature': [SteamPressureOrTemp.PRESSURE, [Validators.required]],
       'saturatedPressure': ['', [Validators.required]],
       'steamTemperature': ['', [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
       'deaeratorVentRate': ['', [Validators.required, Validators.min(0), Validators.max(10)]],

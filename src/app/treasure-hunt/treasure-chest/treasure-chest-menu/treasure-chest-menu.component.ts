@@ -4,7 +4,11 @@ import { Subscription } from 'rxjs';
 import { TreasureChestMenuService } from './treasure-chest-menu.service';
 import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-
+import { EmailMeasurDataService } from '../../../shared/email-measur-data/email-measur-data.service';
+import { TreasureHuntService } from '../../treasure-hunt.service';
+import { ImportExportOpportunities, TreasureHunt } from '../../../shared/models/treasure-hunt';
+import { ExportOpportunitiesService } from '../export-opportunities.service';
+import { CoreService } from '../../../core/core.service';
 @Component({
     selector: 'app-treasure-chest-menu',
     templateUrl: './treasure-chest-menu.component.html',
@@ -27,6 +31,9 @@ export class TreasureChestMenuComponent implements OnInit {
   @Input()
   inReport: boolean;
 
+  showShareDataModal: boolean = false;
+  showShareDataModalSub: Subscription;
+
   @ViewChild('navbar', { static: false }) navbar: ElementRef;
   navbarWidth: number;
 
@@ -35,7 +42,6 @@ export class TreasureChestMenuComponent implements OnInit {
     this.getNavbarWidth();
   }
 
-  displayAdditionalFiltersDropdown: string = 'hide';
   sortByDropdown: boolean = false;
   sortCardsData: SortCardsData;
   sortBySub: Subscription;
@@ -49,9 +55,17 @@ export class TreasureChestMenuComponent implements OnInit {
   bannerCollapsed: boolean = true;
   dropdownShown: boolean = false;
 
-  constructor(private treasureChestMenuService: TreasureChestMenuService, private cd: ChangeDetectorRef) { }
+  constructor(
+    private treasureChestMenuService: TreasureChestMenuService,
+    private cd: ChangeDetectorRef,
+    private emailMeasurDataService: EmailMeasurDataService,
+    private treasureHuntService: TreasureHuntService,
+    private exportOpportunitiesService: ExportOpportunitiesService,
+    private coreService: CoreService,
+  ) { }
 
   ngOnInit() {
+
     this.sortBySub = this.treasureChestMenuService.sortBy.subscribe(val => {
       this.sortCardsData = val;
       this.setSortByLabel();
@@ -65,24 +79,20 @@ export class TreasureChestMenuComponent implements OnInit {
       this.showExportModal = val;
     });
 
+    this.showShareDataModalSub = this.coreService.showShareDataModal.subscribe((showShareDataModal: boolean) => {
+      this.showShareDataModal = showShareDataModal;
+    });
   }
 
   ngOnDestroy() {
     this.sortBySub.unsubscribe();
     this.showImportModalSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
+    this.showShareDataModalSub.unsubscribe();
   }
 
   ngAfterViewInit() {
     this.getNavbarWidth();
-  }
-
-  toggleAdditionalFilters() {
-    if (this.displayAdditionalFiltersDropdown == 'hide') {
-      this.displayAdditionalFiltersDropdown = 'show';
-    } else {
-      this.displayAdditionalFiltersDropdown = 'hide';
-    }
   }
 
   toggleSortBy() {
@@ -164,9 +174,20 @@ export class TreasureChestMenuComponent implements OnInit {
     this.treasureChestMenuService.showImportModal.next(true);
   }
 
-  openExportModal() {
-    this.treasureChestMenuService.showExportModal.next(true);
+  openShareDataModal() {
+    const treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
+    const opportunitiesData: ImportExportOpportunities = this.exportOpportunitiesService.setImportExportData(treasureHunt);
+    
+    this.emailMeasurDataService.measurItemAttachment = {
+      itemType: 'opportunities',
+      itemName: 'Treasure Hunt Opportunities',
+      itemData: opportunitiesData
+    }
+
+    this.emailMeasurDataService.emailItemType.next('opportunities');
+    this.coreService.showShareDataModal.next(true);
   }
+
   collapseBanner() {
     this.bannerCollapsed = !this.bannerCollapsed;
     this.sortByDropdown = false;

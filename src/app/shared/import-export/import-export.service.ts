@@ -3,6 +3,7 @@ import { WindowRefService } from '../../indexedDb/window-ref.service';
 import { Directory } from '../../shared/models/directory';
 import * as pako from 'pako';
 import { BehaviorSubject } from 'rxjs';
+import { ImportExportOpportunities } from '../models/treasure-hunt';
 
 @Injectable()
 export class ImportExportService {
@@ -93,7 +94,7 @@ export class ImportExportService {
     dlLink.click();
   }
 
-  downloadOpportunities(data: any, name: string) {
+  downloadOpportunities(data: ImportExportOpportunities, name: string) {
     data.origin = 'AMO-TOOLS-DESKTOP-OPPORTUNITIES';
     let stringifyData = JSON.stringify(data);
     let doc = this.windowRefService.getDoc();

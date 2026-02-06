@@ -3,7 +3,7 @@ import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 
 import * as Plotly from 'plotly.js-dist';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from "../../../../shared/models/settings";
 import { PlotlyService } from 'angular-plotly.js';
 
