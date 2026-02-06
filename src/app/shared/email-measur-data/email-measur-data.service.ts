@@ -37,7 +37,6 @@ export class EmailMeasurDataService {
   }
 
   setEmailData(measurEmailForm: FormGroup) {
-
     if (measurEmailForm.valid && this.measurItemAttachment) {
       let attachmentExportData: ImportExportData | LogToolDbData | ImportExportOpportunities;
       if (this.measurItemAttachment.itemType === 'assessment') {
@@ -56,7 +55,7 @@ export class EmailMeasurDataService {
       this.measurEmailData = {
         emailTo: measurEmailForm.controls.emailTo.value,
         emailSender: measurEmailForm.controls.emailSender.value,
-        fileName: this.measurItemAttachment.itemName,
+        fileName: measurEmailForm.controls.emailAttachmentName.value,
         attachment: attachmentExportData,
         isProduction: environment.production
       }
