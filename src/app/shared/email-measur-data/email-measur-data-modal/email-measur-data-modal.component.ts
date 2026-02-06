@@ -50,6 +50,7 @@ export class EmailMeasurDataModalComponent {
 
   onFormValid(isFormValid?: boolean) {
     this.isFormValid = isFormValid;
+    this.emailMeasurDataService.emailSentStatus.next(undefined);
   }
 
   close() {
