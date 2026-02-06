@@ -63,9 +63,21 @@ PRs should:
 - Only fix or add the functionality in question.
 - Address a single concern with a focus on readability and the minimum amount of implementation as possible
 - Use a hashtag to connect the issue number it satisfies 
+- Avoid merge commits in your PR branch; instead, use rebase or cherry-pick to keep the commit history clean.
 - Follow best practices for code style:
-    - Contributors should do their best to follow the conventions of modern Angular, React, Typescript, and Javascript versions.
-    - A project code and style conventions document is in progress. Maintainers acknowledge that legacy portions of the repository may not follow best practices for code styling conventions. 
+    - [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.md)
+
+#### Pre-PR Checklist
+Before creating a pull request, please review your code using this checklist:
+
+- [ ] The code builds and runs locally without errors or warnings
+- [ ] Only relevant files are included in the PR (no debug, temp, or unrelated changes)
+- [ ] Variable, function, and class names are descriptive and clear
+- [ ] UI changes have been manually tested for usability and appearance
+- [ ] For open source contributors: The PR description clearly explains the purpose and scope of the changes
+- [ ] For development team members: The related issue is updated to explain the purpose and scope of the changes
+- [ ] The PR references the related issue number (if applicable)
+
 
 #### Please follow the "fork-and-pull" Git workflow
 
@@ -86,7 +98,10 @@ Fork and pull process for contributors:
 
 ## Coding Style
 
-The team is working on a coding style document. Contributors should do their best to follow the conventions of modern Angular, React, Typescript, and Javascript versions.
+MEASUR specific style and pattern guidelines can be found in the [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.md)
+
+Above all else, contributors should do their best to follow the conventions of modern Angular, React, Typescript, and Javascript versions.
+
 
 ## Release Process
 
