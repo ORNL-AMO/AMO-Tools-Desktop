@@ -23,9 +23,12 @@ export class EmailMeasurDataComponent {
 
   ngOnInit() {
     this.emailDataForm = this.fb.group({
-      emailTo: ['', [Validators.required, Validators.email]],
+      emailTo: ['', [Validators.required, this.multipleEmailsValidator()]],
       emailSender: ['', [Validators.email]],
-      emailAttachmentName: [this.emailMeasurDataService.measurItemAttachment.itemName, Validators.required]
+      emailAttachmentName: [
+        this.emailMeasurDataService.measurItemAttachment.itemName,
+        [Validators.required, this.invalidCharactersValidator()]
+      ]
     });
 
     this.emailSentStatusSubscription = this.emailMeasurDataService.emailSentStatus.subscribe(sentStatus => {
@@ -63,6 +66,19 @@ export class EmailMeasurDataComponent {
 
       return invalidEmails.length > 0 ? { invalidEmails: true } : null;
     };
-}
+  }
 
+  invalidCharactersValidator() {
+    // * allows letters, numbers, dot, underscore, hyphen, and space.
+    const regex = /^[a-zA-Z0-9._\- ]+$/;
+    return (control: AbstractControl) => {
+      if (!control.value) return null;
+      return regex.test(control.value) ? null : { invalidCharacters: true };
+    };
+  }
+
+
+  get emailAttachmentName() {
+    return this.emailDataForm.get('emailAttachmentName');
+  }
 }

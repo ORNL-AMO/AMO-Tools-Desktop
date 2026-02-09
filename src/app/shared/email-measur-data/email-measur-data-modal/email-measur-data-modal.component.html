@@ -17,7 +17,7 @@
                         <span *ngIf="!emailSentStatus">Cancel</span>
                         <span *ngIf="emailSentStatus">Close</span>
                     </button>
-                    <button type="button" class="btn btn-primary ml-2" [disabled]="!isFormValid || emailSentStatus" (click)="sendEmail()">Send</button>
+                    <button type="button" class="btn btn-primary ml-2" [disabled]="!isFormValid || emailSentStatus === 'success'" (click)="sendEmail()">Send</button>
                 </div>
             </div>
         </div>
