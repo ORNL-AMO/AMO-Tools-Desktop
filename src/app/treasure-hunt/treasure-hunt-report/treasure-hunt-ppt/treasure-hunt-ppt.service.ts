@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, OpportunityCost, TreasureHuntCo2EmissionsResults, EnergyUsage, TreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from '../treasure-hunt-report.service';
 import { OpportunityCardData } from '../../treasure-chest/opportunity-cards/opportunity-cards.service';
 import pptxgen from 'pptxgenjs';
