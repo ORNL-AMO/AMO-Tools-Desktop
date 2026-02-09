@@ -43,7 +43,7 @@ export class TreasureHuntPptService {
       sectionSlideImg = undefined;
       contentSlideImg = undefined;
     } else if (pptThemeOption == 1) {      
-      titleColor = 'FFFFFF';
+      titleColor = '1D428A';
       titleSlideImg = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
       sectionSlideImg = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
       contentSlideImg = { data: betterPlantsPPTimg.betterPlantsSlide };

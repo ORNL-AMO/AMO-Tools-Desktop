@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { TreasureHuntReportService } from '../treasure-hunt-report.service';
 import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
 
 @Injectable()
 export class TreasureHuntPptPropertiesService {
 
-    constructor(private treasureHuntReportService: TreasureHuntReportService) { }
+    constructor() { }
     
     getPieChartProperties() {
         let pieChartOptions: pptxgen.IChartOpts = {
