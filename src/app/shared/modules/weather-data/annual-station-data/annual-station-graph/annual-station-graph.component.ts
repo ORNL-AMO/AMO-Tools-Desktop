@@ -49,7 +49,7 @@ export class AnnualStationGraphComponent {
                     x: this.annualHourlyWeather.map(data => new Date(data.time)),
                     y: this.annualHourlyWeather.map(data => { return data.dry_bulb_temp }),
                     type: 'scatter',
-                    mode: 'lines+markers',
+                    mode: 'lines',
                     name: 'Dry Bulb Temp',
                     // yaxis: 'y',
                     marker: {
@@ -60,7 +60,7 @@ export class AnnualStationGraphComponent {
                     x: this.annualHourlyWeather.map(data => new Date(data.time)),
                     y: this.annualHourlyWeather.map(data => { return data.wet_bulb_temp }),
                     type: 'scatter',
-                    mode: 'lines+markers',
+                    mode: 'lines',
                     name: 'Wet Bulb Temp',
                     // yaxis: 'y',
                     marker: {
