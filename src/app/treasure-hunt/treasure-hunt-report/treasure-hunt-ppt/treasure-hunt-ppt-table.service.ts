@@ -230,7 +230,7 @@ export class TreasureHuntPptTableService {
         return slide;
     }
 
-    getOpportunityTableRows(rows: any[], opportunity: OpportunitySummary, settings: Settings) {
+    getOpportunityTableRows(rows: any[], opportunity: OpportunitySummary, settings: Settings, totalCostSavings: boolean) {
         let utilityUnit: string;
         if (opportunity.mixedIndividualResults) {
             opportunity.mixedIndividualResults.forEach(opp => {
@@ -248,6 +248,26 @@ export class TreasureHuntPptTableService {
             }
             utilityUnit = this.getUtilityUnit(opportunity.utilityType, settings);
             rows.push([opportunity.opportunityName, opportunity.utilityType, this.roundValToFormatString(opportunity.totalEnergySavings), utilityUnit, this.roundValToCurrency(opportunity.costSavings + additionalSavings), this.roundValToCurrency(opportunity.opportunityCost.material), this.roundValToCurrency(opportunity.opportunityCost.labor), this.getOtherCost(opportunity.opportunityCost), this.roundValToCurrency(opportunity.totalCost), this.roundValToFormatString(opportunity.payback)]);
+        }
+
+        if (rows.length > 1) {
+            const header = rows[0];
+            const dataRows = rows.slice(1);
+            const sortIndex = totalCostSavings === true ? 4 : 2;
+            function extractNumber(val: any): number {
+                if (typeof val === 'number') return val;
+                if (typeof val === 'string') {
+                    let cleaned = val.replace(/[$,\s]/g, '');
+                    if (cleaned === '-' || cleaned === '') return 0;
+                    let num = parseFloat(cleaned);
+                    return isNaN(num) ? 0 : num;
+                }
+                return 0;
+            }
+            dataRows.sort((a, b) => {
+                return extractNumber(b[sortIndex]) - extractNumber(a[sortIndex]);
+            });
+            rows = [header, ...dataRows];
         }
         return rows;
     }

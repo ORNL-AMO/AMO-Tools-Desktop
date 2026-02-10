@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, OpportunityCost, TreasureHuntCo2EmissionsResults, EnergyUsage, TreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from '../treasure-hunt-report.service';
 import { OpportunityCardData } from '../../treasure-chest/opportunity-cards/opportunity-cards.service';
 import pptxgen from 'pptxgenjs';
@@ -43,7 +43,7 @@ export class TreasureHuntPptService {
       sectionSlideImg = undefined;
       contentSlideImg = undefined;
     } else if (pptThemeOption == 1) {      
-      titleColor = 'FFFFFF';
+      titleColor = '1D428A';
       titleSlideImg = { data: betterPlantsPPTimg.betterPlantsTitleSlide };
       sectionSlideImg = { data: betterPlantsPPTimg.betterPlantsSectionSlide };
       contentSlideImg = { data: betterPlantsPPTimg.betterPlantsSlide };
@@ -68,7 +68,7 @@ export class TreasureHuntPptService {
       title: "Section Header",
       background: sectionSlideImg,
       objects: [
-        { placeholder: { options: { name: 'title', type: 'title', x: 1.38, y: 2.97, w: 9.42, h: 0.99, align: 'left', bold: true, color: titleColor, fontSize: 28, fontFace: 'Arial (Headings)', valign: 'middle' }, text: 'Click To Edit Master Title Style' } },
+        { placeholder: { options: { name: 'title', type: 'title', x: 1.38, y: 2.97, w: 9.42, h: 0.99, align: 'left', bold: true, color: "FFFFFF", fontSize: 28, fontFace: 'Arial (Headings)', valign: 'middle' }, text: 'Click To Edit Master Title Style' } },
       ],
       margin: 0.0
     });
@@ -342,7 +342,7 @@ export class TreasureHuntPptService {
         for (let i = 0; i < 3; i++) {
           let x: OpportunitySummary = teamOpportunities[i];
           if (x) {
-            rows = this.treasureHuntPptTableService.getOpportunityTableRows(rows, x, settings);
+            rows = this.treasureHuntPptTableService.getOpportunityTableRows(rows, x, settings, false);
           }
         }
         slideTeamTopOpps.addTable(rows, { x: 0.14, y: 2.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
@@ -376,7 +376,7 @@ export class TreasureHuntPptService {
         for (let i = 0; i < 3; i++) {
           let x: OpportunitySummary = teamTop3Opportunities[i];
           if (x) {
-            top3Rows = this.treasureHuntPptTableService.getOpportunityTableRows(top3Rows, x, settings);
+            top3Rows = this.treasureHuntPptTableService.getOpportunityTableRows(top3Rows, x, settings, true);
           }
         }
         slideTeam3TopOppsCostSaving.addTable(top3Rows, { x: 0.14, y: 2.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
@@ -431,7 +431,7 @@ export class TreasureHuntPptService {
         for (let i = 3; i < teamOpportunities.length; i++) {
           let x: OpportunitySummary = teamOpportunities[i];
           if (x) {
-            rows = this.treasureHuntPptTableService.getOpportunityTableRows(rows, x, settings);
+            rows = this.treasureHuntPptTableService.getOpportunityTableRows(rows, x, settings, false);
           }
         }
         slideTeamAllOpps.addTable(rows, { x: 0.14, y: 1.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
@@ -463,9 +463,9 @@ export class TreasureHuntPptService {
           { text: "Total Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
           { text: "Payback (Years)", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
         ]);
-        
+
         teamOpportunitiesCostSaving.forEach(teamOpp => {
-          costSavingRows = this.treasureHuntPptTableService.getOpportunityTableRows(costSavingRows, teamOpp, settings);
+          costSavingRows = this.treasureHuntPptTableService.getOpportunityTableRows(costSavingRows, teamOpp, settings, true);
         });
 
         slideTeamOppsCostSaving.addTable(costSavingRows, { x: 0.14, y: 1.5, w: 11.05, colW: [2, 1.5, 1.5, 0.8, 1.25, 1.25, 1.25, 1.25, 1.25, 1], color: "1D428A", fontSize: 12, fontFace: 'Arial (Body)', border: { type: "solid", color: '1D428A' }, fill: { color: 'BDEEFF' }, align: 'left', valign: 'middle' });
