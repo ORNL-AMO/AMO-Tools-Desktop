@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DayScheduleData, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
-import { getHoursOnMonToSun } from '../process-cooling-constants';
+import { getHoursOnMonToSun } from '../constants/process-cooling-constants';
 
 @Injectable()
 export class WeeklyOperatingScheduleService {

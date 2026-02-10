@@ -4,7 +4,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { ProcessCoolingResults } from '../../../shared/models/process-cooling-assessment';
 import { ProcessCoolingResultsService } from '../../services/process-cooling-results.service';
 import { Observable } from 'rxjs';
-import { LOAD_LABELS, WET_BULB_BINS } from '../../process-cooling-constants';
+import { LOAD_LABELS, WET_BULB_BINS } from '../../constants/process-cooling-constants';
 import { TEMPERATURE_HTML } from '../../../shared/app-constants';
 import { Settings } from '../../../shared/models/settings';
 

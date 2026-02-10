@@ -6,7 +6,7 @@ import { WeeklyOperatingScheduleService, WeeklyOperatingScheduleForm } from '../
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
-import { DAY_LABELS, getDefaultWeeklyOperatingSchedule, HOUR_OPTIONS } from '../../process-cooling-constants';
+import { DAY_LABELS, getDefaultWeeklyOperatingSchedule, HOUR_OPTIONS } from '../../constants/process-cooling-constants';
 
 @Component({
   selector: 'app-weekly-operating-schedule',

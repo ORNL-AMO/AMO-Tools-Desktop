@@ -5,7 +5,7 @@ import { debounceTime} from 'rxjs';
 import { ChillerLoadScheduleService, LoadForm } from '../services/chiller-load-schedule.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
-import { LOAD_LABELS, MONTHS } from '../process-cooling-constants';
+import { LOAD_LABELS, MONTHS } from '../constants/process-cooling-constants';
 
 @Component({
   selector: 'app-chiller-load-schedule',

@@ -6,12 +6,13 @@ import { Co2SavingsData } from "../../../calculator/utilities/co2-savings/co2-sa
 import { TEMPERATURE_HTML } from "../../../shared/app-constants";
 import { OperatingHours } from "../../../shared/models/operations";
 import { ProcessCoolingAssessment } from "../../../shared/models/process-cooling-assessment";
-import { getCondenserCoolingMethods } from "../../process-cooling-constants";
+import { getCondenserCoolingMethods } from "../../constants/process-cooling-constants";
 import { ProcessCoolingAssessmentService } from "../../services/process-cooling-asessment.service";
 import { OperationsForm, SystemInformationFormService } from "../system-information-form.service";
 import { Settings } from "../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../services/process-cooling-ui.service";
 import { FormControlIds, generateFormControlIds } from "../../../shared/helperFunctions";
+import { PROCESS_COOLING_UNITS } from "../../constants/process-cooling-units";
 
 
 // * outline changes from typical MEASUR patterns
@@ -38,6 +39,8 @@ export class OperationsComponent {
   co2SavingsData: Co2SavingsData;
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
+  PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
+
   showOperatingHoursModal: boolean;
   condenserCoolingMethods = getCondenserCoolingMethods();
   controlIds: FormControlIds<OperationsForm>;
@@ -49,7 +52,7 @@ export class OperationsComponent {
   ngOnInit(): void {
     const operations = this.processCooling().systemInformation.operations;
     this.co2SavingsData = this.processCooling().systemInformation.co2SavingsData;
-    this.form = this.systemInformationFormService.getOperationsForm(operations);
+    this.form = this.systemInformationFormService.getOperationsForm(operations, this.settings());
     this.doChillerLoadSchedulesVary.disable();
     // * new getter for form control ids to create unique id srings when multiple instances of one component (should move to global helpersor global ng service). We need to standardize this across app
     this.controlIds = generateFormControlIds(this.form.controls);

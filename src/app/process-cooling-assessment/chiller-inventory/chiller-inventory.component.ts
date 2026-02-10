@@ -6,7 +6,7 @@ import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/mod
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 import { ChillerInventoryForm, ChillerInventoryService } from '../services/chiller-inventory.service';
-import { getChillerTypes, getDefaultInventoryItem } from '../process-cooling-constants';
+import { getChillerTypes, getDefaultInventoryItem } from '../constants/process-cooling-constants';
 import { FormControlIds, generateFormControlIds } from '../../shared/helperFunctions';
 
 @Component({

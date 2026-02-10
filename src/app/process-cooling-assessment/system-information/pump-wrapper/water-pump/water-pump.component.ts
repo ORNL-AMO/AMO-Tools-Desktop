@@ -8,6 +8,7 @@ import { PumpInputForm, SystemInformationFormService } from "../../system-inform
 import { Settings } from "../../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../../services/process-cooling-ui.service";
 import { FormControlIds, generateFormControlIds } from "../../../../shared/helperFunctions";
+import { PROCESS_COOLING_UNITS } from "../../../constants/process-cooling-units";
 
 @Component({
   selector: 'app-water-pump',
@@ -27,12 +28,14 @@ export class WaterPumpComponent {
   controlIds: FormControlIds<PumpInputForm>;
   formWidth: number = 0;
 
+  PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
+
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
 
   ngOnInit(): void {
     const pumpInput = this.processCooling().systemInformation[this.pumpFormType];
-    this.form = this.systemInformationFormService.getPumpInputForm(pumpInput);
+    this.form = this.systemInformationFormService.getPumpInputForm(pumpInput, this.settings());
     this.controlIds = generateFormControlIds(this.form.controls);
     this.observeFormChanges();
   }

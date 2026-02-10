@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { ProcessCoolingAssessment, SystemInformation, Operations, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, PumpInput, ChillerInventoryItem, Modification, IncreaseChilledWaterTemp, DecreaseCondenserWaterTemp, UseSlidingCondenserWaterTemp, UseFreeCooling, ReplaceChillers, ProcessCoolingChillerOutput, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingAssessment, SystemInformation, Operations, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, PumpInput, ChillerInventoryItem, Modification, IncreaseChilledWaterTemp, DecreaseCondenserWaterTemp, UseSlidingCondenserWaterTemp, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 import { roundVal } from '../../shared/helperFunctions';
+import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 
 @Injectable()
 export class ConvertProcessCoolingService {
@@ -39,13 +40,13 @@ export class ConvertProcessCoolingService {
   convertOperations(operations: Operations, oldSettings: Settings, newSettings: Settings): Operations {
     if (!operations) return operations;
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      const convertOne: number = new ConvertValue(1, 'GJ', 'MMBtu').convertedValue;
+      const convertOne: number = new ConvertValue(1, PROCESS_COOLING_UNITS.fuelCost.metric, PROCESS_COOLING_UNITS.fuelCost.imperial).convertedValue;
       operations.fuelCost = roundVal(operations.fuelCost / convertOne, 4);
-      operations.chilledWaterSupplyTemp = new ConvertValue(operations.chilledWaterSupplyTemp, 'C', 'F').convertedValue;
+      operations.chilledWaterSupplyTemp = new ConvertValue(operations.chilledWaterSupplyTemp, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      const convertOne: number = new ConvertValue(1, 'MMBtu', 'GJ').convertedValue;
+      const convertOne: number = new ConvertValue(1, PROCESS_COOLING_UNITS.fuelCost.imperial, PROCESS_COOLING_UNITS.fuelCost.metric).convertedValue;
       operations.fuelCost = roundVal(operations.fuelCost / convertOne, 4);
-      operations.chilledWaterSupplyTemp = new ConvertValue(operations.chilledWaterSupplyTemp, 'F', 'C').convertedValue;
+      operations.chilledWaterSupplyTemp = new ConvertValue(operations.chilledWaterSupplyTemp, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue;
     }
     
     operations.chilledWaterSupplyTemp = roundVal(operations.chilledWaterSupplyTemp, 2);
@@ -55,13 +56,13 @@ export class ConvertProcessCoolingService {
   convertAirCooledSystemInput(airCooledSystemInput: AirCooledSystemInput, oldSettings: Settings, newSettings: Settings): AirCooledSystemInput {
     if (!airCooledSystemInput) return airCooledSystemInput;
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      airCooledSystemInput.outdoorAirTemp = new ConvertValue(airCooledSystemInput.outdoorAirTemp, 'C', 'F').convertedValue;
-      airCooledSystemInput.indoorTemp = new ConvertValue(airCooledSystemInput.indoorTemp, 'C', 'F').convertedValue;
-      airCooledSystemInput.followingTempDifferential = new ConvertValue(airCooledSystemInput.followingTempDifferential, 'C', 'F').convertedValue;
+      airCooledSystemInput.outdoorAirTemp = new ConvertValue(airCooledSystemInput.outdoorAirTemp, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
+      airCooledSystemInput.indoorTemp = new ConvertValue(airCooledSystemInput.indoorTemp, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
+      airCooledSystemInput.followingTempDifferential = new ConvertValue(airCooledSystemInput.followingTempDifferential, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      airCooledSystemInput.outdoorAirTemp = new ConvertValue(airCooledSystemInput.outdoorAirTemp, 'F', 'C').convertedValue;
-      airCooledSystemInput.indoorTemp = new ConvertValue(airCooledSystemInput.indoorTemp, 'F', 'C').convertedValue;
-      airCooledSystemInput.followingTempDifferential = new ConvertValue(airCooledSystemInput.followingTempDifferential, 'F', 'C').convertedValue;
+      airCooledSystemInput.outdoorAirTemp = new ConvertValue(airCooledSystemInput.outdoorAirTemp, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue;
+      airCooledSystemInput.indoorTemp = new ConvertValue(airCooledSystemInput.indoorTemp, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue;
+      airCooledSystemInput.followingTempDifferential = new ConvertValue(airCooledSystemInput.followingTempDifferential, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue;
     }
     
     airCooledSystemInput.outdoorAirTemp = roundVal(airCooledSystemInput.outdoorAirTemp, 2);
@@ -75,11 +76,11 @@ export class ConvertProcessCoolingService {
     if (!waterCooledSystemInput) return waterCooledSystemInput;
     
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      waterCooledSystemInput.condenserWaterTemp = new ConvertValue(waterCooledSystemInput.condenserWaterTemp, 'C', 'F').convertedValue;
-      waterCooledSystemInput.followingTempDifferential = new ConvertValue(waterCooledSystemInput.followingTempDifferential, 'C', 'F').convertedValue;
+      waterCooledSystemInput.condenserWaterTemp = new ConvertValue(waterCooledSystemInput.condenserWaterTemp, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
+      waterCooledSystemInput.followingTempDifferential = new ConvertValue(waterCooledSystemInput.followingTempDifferential, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {      
-      waterCooledSystemInput.condenserWaterTemp = new ConvertValue(waterCooledSystemInput.condenserWaterTemp, 'F', 'C').convertedValue;
-      waterCooledSystemInput.followingTempDifferential = new ConvertValue(waterCooledSystemInput.followingTempDifferential, 'F', 'C').convertedValue;
+      waterCooledSystemInput.condenserWaterTemp = new ConvertValue(waterCooledSystemInput.condenserWaterTemp, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue;
+      waterCooledSystemInput.followingTempDifferential = new ConvertValue(waterCooledSystemInput.followingTempDifferential, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue;
     }
     
     waterCooledSystemInput.condenserWaterTemp = roundVal(waterCooledSystemInput.condenserWaterTemp, 2);
@@ -88,33 +89,19 @@ export class ConvertProcessCoolingService {
     return waterCooledSystemInput;
   }
 
+  /**
+   * towerSize is a unique case where the unit is not strictly imperial vs metric, but is set by the user. It does not need conversion
+   */
   convertTowerInput(towerInput: TowerInput, oldSettings: Settings, newSettings: Settings): TowerInput {
     if (!towerInput) return towerInput;
     
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      towerInput.HEXApproachTemp = new ConvertValue(towerInput.HEXApproachTemp, 'C', 'F').convertedValue;
-      
-      // Convert tower size based on metric: 0 = Tonnes, 1 = HP
-      if (towerInput.towerSizeMetric === 0) { // Tonnes to Tons
-        towerInput.towerSize = new ConvertValue(towerInput.towerSize, 'kW', 'tons').convertedValue;
-      } else if (towerInput.towerSizeMetric === 1) { // kW to HP
-        towerInput.towerSize = new ConvertValue(towerInput.towerSize, 'kW', 'hp').convertedValue;
-      }
-      
+      towerInput.HEXApproachTemp = new ConvertValue(towerInput.HEXApproachTemp, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      towerInput.HEXApproachTemp = new ConvertValue(towerInput.HEXApproachTemp, 'F', 'C').convertedValue;
-      
-      // Convert tower size based on metric: 0 = Tonnes, 1 = HP
-      if (towerInput.towerSizeMetric === 0) { // Tons to kW
-        towerInput.towerSize = new ConvertValue(towerInput.towerSize, 'tons', 'kW').convertedValue;
-      } else if (towerInput.towerSizeMetric === 1) { // HP to kW
-        towerInput.towerSize = new ConvertValue(towerInput.towerSize, 'hp', 'kW').convertedValue;
-      }
-      
+      towerInput.HEXApproachTemp = new ConvertValue(towerInput.HEXApproachTemp, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue; 
     }
     
     towerInput.HEXApproachTemp = roundVal(towerInput.HEXApproachTemp, 2);
-    towerInput.towerSize = roundVal(towerInput.towerSize, 2);
     
     return towerInput;
   }
@@ -123,15 +110,12 @@ export class ConvertProcessCoolingService {
     if (!pumpInput) return pumpInput;
     
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      // m³/min/kW to gpm/ton
-      pumpInput.flowRate = new ConvertValue(pumpInput.flowRate, 'm3', 'gal').convertedValue;
-      pumpInput.flowRate = pumpInput.flowRate * new ConvertValue(1, 'kW', 'tons').convertedValue; // Adjust for per-ton vs per-kW
-      pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, 'kW', 'hp').convertedValue;
+      // todo flowRate awaiting proper unit
+      pumpInput.flowRate = new ConvertValue(pumpInput.flowRate, PROCESS_COOLING_UNITS.volumeFlowRate.metric, PROCESS_COOLING_UNITS.volumeFlowRate.imperial).convertedValue;
+      pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, PROCESS_COOLING_UNITS.power.metric, PROCESS_COOLING_UNITS.power.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      // gpm/ton to m³/min/kW
-      pumpInput.flowRate = new ConvertValue(pumpInput.flowRate, 'gal', 'm3').convertedValue;
-      pumpInput.flowRate = pumpInput.flowRate / new ConvertValue(1, 'kW', 'tons').convertedValue; // Adjust for per-kW vs per-ton
-      pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, 'hp', 'kW').convertedValue;
+      pumpInput.flowRate = new ConvertValue(pumpInput.flowRate, PROCESS_COOLING_UNITS.volumeFlowRate.imperial, PROCESS_COOLING_UNITS.volumeFlowRate.metric).convertedValue;
+      pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, PROCESS_COOLING_UNITS.power.imperial, PROCESS_COOLING_UNITS.power.metric).convertedValue;
     }
     
     pumpInput.flowRate = roundVal(pumpInput.flowRate, 2);
@@ -153,10 +137,10 @@ export class ConvertProcessCoolingService {
     if (!chillerItem) return chillerItem;
     
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      chillerItem.capacity = new ConvertValue(chillerItem.capacity, 'kW', 'tons').convertedValue;
+      chillerItem.capacity = new ConvertValue(chillerItem.capacity, PROCESS_COOLING_UNITS.capacity.metric, PROCESS_COOLING_UNITS.capacity.imperial).convertedValue;
+      // todo full load efficiency conversion when we have definition for units
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      // chillerItem.capacity = new ConvertValue(chillerItem.capacity, 'ton', 'kW').convertedValue;
-      chillerItem.capacity = new ConvertValue(chillerItem.capacity, 'tons', 'kW').convertedValue;
+      chillerItem.capacity = new ConvertValue(chillerItem.capacity, PROCESS_COOLING_UNITS.capacity.imperial, PROCESS_COOLING_UNITS.capacity.metric).convertedValue;
     }
     
     chillerItem.capacity = roundVal(chillerItem.capacity, 2);
@@ -168,9 +152,8 @@ export class ConvertProcessCoolingService {
 
     modification.increaseChilledWaterTemp = this.convertIncreaseChilledWaterTemp(modification.increaseChilledWaterTemp, oldSettings, newSettings);
     modification.decreaseCondenserWaterTemp = this.convertDecreaseCondenserWaterTemp(modification.decreaseCondenserWaterTemp, oldSettings, newSettings);
-    // modification.useSlidingCondenserWaterTemp = this.convertUseSlidingCondenserWaterTemp(modification.useSlidingCondenserWaterTemp, oldSettings, newSettings);
-    // modification.useFreeCooling = this.convertUseFreeCooling(modification.useFreeCooling, oldSettings, newSettings);
-    // modification.replaceChillers = this.convertReplaceChillers(modification.replaceChillers, oldSettings, newSettings);
+    modification.useSlidingCondenserWaterTemp = this.convertUseSlidingCondenserWaterTemp(modification.useSlidingCondenserWaterTemp, oldSettings, newSettings);
+    // todo EEM conversions 8149
     
     return modification;
   }
@@ -179,9 +162,9 @@ export class ConvertProcessCoolingService {
     if (!increaseChilledWaterTemp) return increaseChilledWaterTemp;
     
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      increaseChilledWaterTemp.chilledWaterSupplyTemp = new ConvertValue(increaseChilledWaterTemp.chilledWaterSupplyTemp, 'C', 'F').convertedValue;
+      increaseChilledWaterTemp.chilledWaterSupplyTemp = new ConvertValue(increaseChilledWaterTemp.chilledWaterSupplyTemp, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      increaseChilledWaterTemp.chilledWaterSupplyTemp = new ConvertValue(increaseChilledWaterTemp.chilledWaterSupplyTemp, 'F', 'C').convertedValue;
+      increaseChilledWaterTemp.chilledWaterSupplyTemp = new ConvertValue(increaseChilledWaterTemp.chilledWaterSupplyTemp, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue;
     }
     
     increaseChilledWaterTemp.chilledWaterSupplyTemp = roundVal(increaseChilledWaterTemp.chilledWaterSupplyTemp, 2);
@@ -192,13 +175,26 @@ export class ConvertProcessCoolingService {
     if (!decreaseCondenserWaterTemp) return decreaseCondenserWaterTemp;
     
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      decreaseCondenserWaterTemp.condenserWaterTemp = new ConvertValue(decreaseCondenserWaterTemp.condenserWaterTemp, 'C', 'F').convertedValue;
+      decreaseCondenserWaterTemp.condenserWaterTemp = new ConvertValue(decreaseCondenserWaterTemp.condenserWaterTemp, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
-      decreaseCondenserWaterTemp.condenserWaterTemp = new ConvertValue(decreaseCondenserWaterTemp.condenserWaterTemp, 'F', 'C').convertedValue;
+      decreaseCondenserWaterTemp.condenserWaterTemp = new ConvertValue(decreaseCondenserWaterTemp.condenserWaterTemp, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue;
     }
     
     decreaseCondenserWaterTemp.condenserWaterTemp = roundVal(decreaseCondenserWaterTemp.condenserWaterTemp, 2);
     return decreaseCondenserWaterTemp;
+  }
+
+  convertUseSlidingCondenserWaterTemp(useSlidingCondenserWaterTemp: UseSlidingCondenserWaterTemp, oldSettings: Settings, newSettings: Settings): UseSlidingCondenserWaterTemp {
+    if (!useSlidingCondenserWaterTemp) return useSlidingCondenserWaterTemp;
+
+    if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      useSlidingCondenserWaterTemp.followingTempDifferential = new ConvertValue(useSlidingCondenserWaterTemp.followingTempDifferential, PROCESS_COOLING_UNITS.temperature.metric, PROCESS_COOLING_UNITS.temperature.imperial).convertedValue;
+    } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
+      useSlidingCondenserWaterTemp.followingTempDifferential = new ConvertValue(useSlidingCondenserWaterTemp.followingTempDifferential, PROCESS_COOLING_UNITS.temperature.imperial, PROCESS_COOLING_UNITS.temperature.metric).convertedValue;
+    }
+    
+    useSlidingCondenserWaterTemp.followingTempDifferential = roundVal(useSlidingCondenserWaterTemp.followingTempDifferential, 2);
+    return useSlidingCondenserWaterTemp;
   }
 
   convertProcessCoolingResults(results: ProcessCoolingResults, oldSettings: Settings, newSettings: Settings): ProcessCoolingResults {

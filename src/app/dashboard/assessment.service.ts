@@ -14,7 +14,7 @@ import { environment } from '../../environments/environment';
 import { DashboardService } from './dashboard.service';
 import { WaterAssessment } from 'process-flow-lib';
 import { ProcessCoolingAssessment } from '../shared/models/process-cooling-assessment';
-import { getDefaultProcessCoolingAssessment } from '../process-cooling-assessment/process-cooling-constants';
+import { getDefaultProcessCoolingAssessment } from '../process-cooling-assessment/constants/process-cooling-constants';
 
 @Injectable()
 export class AssessmentService {

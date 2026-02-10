@@ -6,7 +6,7 @@ import { ProcessCoolingUiService } from '../../services/process-cooling-ui.servi
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
 import { Modification, TowerType } from '../../../shared/models/process-cooling-assessment';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
-import { getTowerTypes } from '../../process-cooling-constants';
+import { getTowerTypes } from '../../constants/process-cooling-constants';
 
 @Component({
     selector: 'app-upgrade-cooling-tower-fan',

@@ -28,16 +28,25 @@ export class FormControlErrorsComponent {
   private decimalPipe: DecimalPipe = inject(DecimalPipe);
 
   get showError(): boolean {
-    return Boolean(this.control) && this.control.invalid && !this.control.pristine;
+    return Boolean(this.control) && this.control.invalid;
   }
 
   get errorMessages(): string[] {
     if (!this.control || !this.control.errors) return [];
     const errors = this.control.errors;
     const messages: string[] = [];
-    if (errors['required']) messages.push('Value Required');
-    if (errors['max']) messages.push(`Value can't be greater than ${this.formatNumber(errors['max'].max)}${this.unit}`);
-    if (errors['min']) messages.push(`Value can't be less than ${this.formatNumber(errors['min'].min)}${this.unit}`);
+    if (errors['required']) {
+      // console.log(`FormControlErrors: control name: ${this.control?.parent && this.control['name'] ? this.control['name'] : '(unknown)'} | error: required | value:`, errors['required']);
+      messages.push('Value Required');
+    }
+    if (errors['max']) {
+      // console.log(`FormControlErrors: control name: ${this.control?.parent && this.control['name'] ? this.control['name'] : '(unknown)'} | error: max | value:`, errors['max']);
+      messages.push(`Value can't be greater than ${this.formatNumber(errors['max'].max)}${this.unit}`);
+    }
+    if (errors['min']) {
+      // console.log(`FormControlErrors: control name: ${this.control?.parent && this.control['name'] ? this.control['name'] : '(unknown)'} | error: min | value:`, errors['min']);
+      messages.push(`Value can't be less than ${this.formatNumber(errors['min'].min)}${this.unit}`);
+    }
     return messages;
   }
 

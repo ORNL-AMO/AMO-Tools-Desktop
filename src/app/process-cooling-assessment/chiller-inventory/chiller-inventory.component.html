@@ -12,7 +12,7 @@
                 <label for="{{controlIds.towerSizeMetric}}">Chiller Name</label>
                 <input type="text" class="form-control" name="name" formControlName="name"
                     (focus)="focusField('chiller-name')" />
-                <app-form-control-required [control]="form.controls.name"></app-form-control-required>
+                <app-form-control-errors [control]="form.controls.name"></app-form-control-errors>
             </div>
             <div class="form-group">
                 <label for="{{controlIds.description}}">Description</label>

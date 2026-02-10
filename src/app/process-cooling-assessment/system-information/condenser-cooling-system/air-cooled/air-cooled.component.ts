@@ -9,6 +9,7 @@ import { Settings } from "../../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../../services/process-cooling-ui.service";
 import { FormControlIds, generateFormControlIds } from "../../../../shared/helperFunctions";
 import { TEMPERATURE_HTML } from "../../../../shared/app-constants";
+import { PROCESS_COOLING_UNITS } from "../../../constants/process-cooling-units";
 
 @Component({
   selector: 'app-air-cooled',
@@ -25,15 +26,17 @@ export class AirCooledComponent {
   form: FormGroup<AirCooledSystemInputForm>;
   controlIds: FormControlIds<AirCooledSystemInputForm>;
   TEMPERATURE_HTML = TEMPERATURE_HTML;
+  PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
   AirCoolingSource = AirCoolingSource;
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
 
   ngOnInit(): void {
     const airCooledInput = this.processCooling().systemInformation.airCooledSystemInput;
-    this.form = this.systemInformationFormService.getAirCooledSystemInputForm(airCooledInput);
+    this.form = this.systemInformationFormService.getAirCooledSystemInputForm(airCooledInput, this.settings());
     this.controlIds = generateFormControlIds(this.form.controls);
     this.observeFormChanges();
+    this.observeAirCoolingSourceChanges();
   }
 
   observeFormChanges() {
@@ -46,6 +49,24 @@ export class AirCooledComponent {
         const airCooledInput = this.systemInformationFormService.getAirCooledSystemInput(this.form.getRawValue(), currentInput);
         this.processCoolingAssessmentService.updateSystemInformationProperty('airCooledSystemInput', airCooledInput);
       }
+    );
+  }
+
+  observeAirCoolingSourceChanges() {
+    this.airCoolingSource.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+       (airCoolingSource) => {
+        if (airCoolingSource === AirCoolingSource.Indoor) {
+          this.indoorTemp.setValidators(this.systemInformationFormService.getIndoorTempValidators(this.settings()));
+          this.followingTempDifferential.clearValidators();
+        } else {
+          this.followingTempDifferential.setValidators(this.systemInformationFormService.getFollowingTempDifferentialValidators(this.settings()));
+          this.indoorTemp.clearValidators();
+        }
+        this.indoorTemp.updateValueAndValidity();
+        this.followingTempDifferential.updateValueAndValidity();
+       }
     );
   }
 

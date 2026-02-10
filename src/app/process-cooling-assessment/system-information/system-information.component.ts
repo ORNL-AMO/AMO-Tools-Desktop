@@ -23,11 +23,34 @@ export class SystemInformationComponent {
   readonly ROUTE_TOKENS = ROUTE_TOKENS;
   SYSTEM_INFORMATION_VIEW_LINKS = SYSTEM_INFORMATION_VIEW_LINKS;
 
+  isPumpValid: boolean = false;
+  isCondenserValid: boolean = false;
+  isTowerValid: boolean = false;
+
+  // todo this component needs to track validity of all sub-forms and only enable next when all are valid
   ngOnInit(): void {
     this.processCoolingService.isSystemInformationValid$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(val => {
       this.isSystemInformationValid = val;
+    });
+
+    this.processCoolingService.isPumpValid$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(val => {
+      this.isPumpValid = val;
+    });
+
+    this.processCoolingService.isCondenserValid$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(val => {
+      this.isCondenserValid = val;
+    });
+
+    this.processCoolingService.isTowerValid$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(val => {
+      this.isTowerValid = val;
     });
   }
 
@@ -47,6 +70,12 @@ export class SystemInformationComponent {
     switch (link.view) {
       case ROUTE_TOKENS.weather:
         return !this.processCoolingService.isWeatherDataValid;
+      case ROUTE_TOKENS.waterPump:
+        return !this.isPumpValid;
+      case ROUTE_TOKENS.condenserCoolingSystem:
+        return !this.isCondenserValid;
+      case ROUTE_TOKENS.tower:
+        return !this.isTowerValid;
       default:
         return false;
     }
