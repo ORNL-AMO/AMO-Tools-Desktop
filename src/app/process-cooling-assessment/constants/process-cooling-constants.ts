@@ -1,6 +1,7 @@
-import { getNewIdString } from "../shared/helperFunctions";
-import { ChillerInventoryItem, CompressorChillerTypeEnum, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../shared/models/process-cooling-assessment";
-import { Settings } from "../shared/models/settings";
+
+import { getNewIdString } from "../../shared/helperFunctions";
+import { ChillerInventoryItem, CompressorChillerTypeEnum, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../../shared/models/process-cooling-assessment";
+import { Settings } from "../../shared/models/settings";
 
 export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 export const HOUR_OPTIONS = Array.from({ length: 25 }, (_, hour) => hour);
@@ -224,6 +225,8 @@ export const getMonthsMaxDays = () => {
     { name: 'December', days: 31 }
   ];
 }
+
+
 
 
 

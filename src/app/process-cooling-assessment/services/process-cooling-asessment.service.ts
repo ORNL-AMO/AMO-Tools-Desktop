@@ -5,7 +5,7 @@ import { ChillerInventoryItem, MonthlyOperatingSchedule, ProcessCoolingAssessmen
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
-import { getDefaultInventoryItem } from '../process-cooling-constants';
+import { getDefaultInventoryItem } from '../constants/process-cooling-constants';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
@@ -207,6 +207,7 @@ export class ProcessCoolingAssessmentService {
     return Promise.resolve();
   }
 
+  // todo revise all validation observables, now that we need granular checks. Use combine lateest on baseline
   readonly isBaselineValid$ = combineLatest([
     this.processCooling$,
     this.processCoolingWeatherContextService.weatherContextData$
@@ -241,6 +242,35 @@ export class ProcessCoolingAssessmentService {
       return false;
     })
   );
+
+  readonly isPumpValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling && processCooling.systemInformation) {
+        const isPumpValid = this.systemInformationFormService.isPumpValid(processCooling.systemInformation, this.settingsSignal());
+        return isPumpValid;
+      }
+      return false;
+    })
+  );
+
+  readonly isCondenserValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling && processCooling.systemInformation) {
+        return this.systemInformationFormService.isCondenserSystemInputValid(processCooling.systemInformation, this.settingsSignal());
+      }
+      return false;
+    })
+  );
+
+  readonly isTowerValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling && processCooling.systemInformation) {
+        return this.systemInformationFormService.isTowerValid(processCooling.systemInformation.towerInput, this.settingsSignal());
+      }
+      return false;
+    })
+  );
+
 
   readonly isChillerInventoryValid$ = this.processCooling$.pipe(
     map((processCooling: ProcessCoolingAssessment) => {
@@ -278,7 +308,7 @@ export class ProcessCoolingAssessmentService {
 
   isSystemInformationValid(systemInformation: SystemInformation): boolean {
     const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
-    return this.systemInformationFormService.isSystemInformationValid(systemInformation) && isWeatherDataValid;
+    return this.systemInformationFormService.isSystemInformationValid(systemInformation, this.settingsSignal()) && isWeatherDataValid;
   }
 
   isChillerInventoryValid(chillerInventory: ChillerInventoryItem[]): boolean {

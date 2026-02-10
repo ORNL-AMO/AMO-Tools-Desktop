@@ -4,7 +4,7 @@ import { ProcessCoolingAssessmentService } from '../../services/process-cooling-
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
 import { MonthlyOperatingScheduleService } from '../../services/monthly-operating-schedule.service';
-import { getDefaultMonthlyScheduleData, getMonthsMaxDays } from '../../process-cooling-constants';
+import { getDefaultMonthlyScheduleData, getMonthsMaxDays } from '../../constants/process-cooling-constants';
 
 
 @Component({

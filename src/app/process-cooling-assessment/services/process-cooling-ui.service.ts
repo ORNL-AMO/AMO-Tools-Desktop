@@ -83,6 +83,7 @@ export class ProcessCoolingUiService {
   // todo this pattern should be changed or improved when we get concrete information on what is required for results calculation. memoize, or map/array of vals to Observable
   canVisitSteppedView(steppedRouteIndex: number): boolean {
     const processCooling = this.processCoolingAssessmentService.processCoolingSignal();
+    const settings = this.processCoolingAssessmentService.settingsSignal();
 
     const isWeatherDataValid = this.weatherContextService.isValidWeatherData();
     switch (steppedRouteIndex) {
@@ -96,33 +97,33 @@ export class ProcessCoolingUiService {
         const canVisitPump = isWeatherDataValid;
         return canVisitPump;
       case 4:
-        const canVisitCondenser = isWeatherDataValid && this.systemInformationFormService.isPumpValid(processCooling.systemInformation);
+        const canVisitCondenser = isWeatherDataValid && this.systemInformationFormService.isPumpValid(processCooling.systemInformation, settings);
         return canVisitCondenser;
       case 5:
-        const canVisitTower = isWeatherDataValid && this.systemInformationFormService.isCondenserSystemInputValid(processCooling.systemInformation);
+        const canVisitTower = isWeatherDataValid && this.systemInformationFormService.isCondenserSystemInputValid(processCooling.systemInformation, settings);
         return canVisitTower;
       case 6:
-        const canVisitInventory = isWeatherDataValid && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation);
+        const canVisitInventory = isWeatherDataValid && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings);
         return canVisitInventory;
       case 7:
         const canVisitOperatingSchedule = isWeatherDataValid
-          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation)
+          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
           && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory);
         return canVisitOperatingSchedule;
       case 8:
         const canVisitLoadSchedule = isWeatherDataValid
-          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation)
+          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
           && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitLoadSchedule;
       case 9:
         const canVisitAssessment = isWeatherDataValid
-          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation)
+          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
           && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory)
           && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitAssessment;
       case 10:
         const canVisitReport = isWeatherDataValid
-          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation)
+          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
           && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory)
           && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitReport;

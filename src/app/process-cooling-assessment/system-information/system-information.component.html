@@ -11,7 +11,7 @@
         <li [class.active]="isActive" [class.disabled]="isDisabled">
             <a [class.disabled]="isDisabled"
                 (click)="handleSystemInformationNavigation($event, link)">
-                @if (isInvalid) {
+                @if (!isDisabled && isInvalid) {
                     <span class="fa fa-exclamation-circle ml-2 mr-1"></span>
                 }
                 <span class="px-2">{{link.label}}</span>
@@ -36,7 +36,7 @@
             <li [class.active]="isActive" [class.disabled]="isDisabled">
                 <a [class.disabled]="isDisabled"
                     (click)="handleSystemInformationNavigation($event, link)">
-                    @if (isInvalid) {
+                    @if (!isDisabled && isInvalid) {
                     <span class="fa fa-exclamation-circle ml-2 mr-1"></span>
                     }
                     <span class="px-2">{{link.label}}</span>

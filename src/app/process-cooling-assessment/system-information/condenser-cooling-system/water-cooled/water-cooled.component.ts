@@ -1,7 +1,6 @@
 import { Component, DestroyRef, inject, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
-import { tap } from "rxjs";
 import { WaterCooledSystemInput, ProcessCoolingAssessment } from "../../../../shared/models/process-cooling-assessment";
 import { ProcessCoolingAssessmentService } from "../../../services/process-cooling-asessment.service";
 import { WaterCooledSystemInputForm, SystemInformationFormService } from "../../system-information-form.service";
@@ -9,6 +8,7 @@ import { Settings } from "../../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../../services/process-cooling-ui.service";
 import { FormControlIds, generateFormControlIds } from "../../../../shared/helperFunctions";
 import { TEMPERATURE_HTML } from "../../../../shared/app-constants";
+import { PROCESS_COOLING_UNITS } from "../../../constants/units";
 
 @Component({
   selector: 'app-water-cooled',
@@ -25,12 +25,13 @@ export class WaterCooledComponent {
   form: FormGroup<WaterCooledSystemInputForm>;
   controlIds: FormControlIds<WaterCooledSystemInputForm>;
   TEMPERATURE_HTML = TEMPERATURE_HTML;
+  PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
 
   ngOnInit(): void {
     const waterCooledInput = this.processCooling().systemInformation.waterCooledSystemInput;
-    this.form = this.systemInformationFormService.getWaterCooledSystemInputForm(waterCooledInput);
+    this.form = this.systemInformationFormService.getWaterCooledSystemInputForm(waterCooledInput, this.settings());
     this.controlIds = generateFormControlIds(this.form.controls);
     this.observeFormChanges();
   }

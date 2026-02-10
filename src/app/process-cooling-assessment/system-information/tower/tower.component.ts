@@ -1,14 +1,15 @@
 import { Component, DestroyRef, inject, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
-import { ProcessCoolingAssessment, TowerInput, TowerSizeMetric, TowerType } from "../../../shared/models/process-cooling-assessment";
+import { ProcessCoolingAssessment, TowerInput, TowerSizeMetric } from "../../../shared/models/process-cooling-assessment";
 import { ProcessCoolingAssessmentService } from "../../services/process-cooling-asessment.service";
 import { TowerForm, SystemInformationFormService } from "../system-information-form.service";
 import { Settings } from "../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../services/process-cooling-ui.service";
 import { FormControlIds, generateFormControlIds } from "../../../shared/helperFunctions";
-import { getFanType, getTowerSizeMetrics, getTowerTypes } from "../../process-cooling-constants";
+import { getFanType, getTowerSizeMetrics, getTowerTypes } from "../../constants/process-cooling-constants";
 import { TEMPERATURE_HTML } from "../../../shared/app-constants";
+import { PROCESS_COOLING_UNITS } from "../../constants/units";
 
 @Component({
   selector: 'app-tower',
@@ -25,6 +26,7 @@ export class TowerComponent {
   form: FormGroup<TowerForm>;
   controlIds: FormControlIds<TowerForm>;
   TEMPERATURE_HTML = TEMPERATURE_HTML;
+  PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
 
   towerTypes = getTowerTypes();
   towerSizeMetrics = getTowerSizeMetrics();
@@ -36,10 +38,11 @@ export class TowerComponent {
 
   ngOnInit(): void {
     const towerInput: TowerInput = this.processCooling().systemInformation.towerInput;
-    this.form = this.systemInformationFormService.getTowerForm(towerInput);
+    this.form = this.systemInformationFormService.getTowerForm(towerInput, this.settings());
     this.controlIds = generateFormControlIds(this.form.controls);
     this.observeFormChanges();
     this.observeTowerTypeChange();
+    this.observeTowerSizeChange();
   }
 
   observeFormChanges() {
@@ -59,6 +62,16 @@ export class TowerComponent {
         this.updateAssessment();
       }
     );
+  }
+
+    observeTowerSizeChange() {
+    this.towerSizeMetric.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (towerSizeMetric) => {
+        this.towerSize.setValidators(this.systemInformationFormService.getTowerSizeValidators(towerSizeMetric));
+        this.towerSize.updateValueAndValidity({ emitEvent: false });
+      });
   }
 
   updateAssessment() {

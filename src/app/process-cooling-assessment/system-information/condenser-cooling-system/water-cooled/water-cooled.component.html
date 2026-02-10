@@ -20,8 +20,8 @@
       <input name="condenserWaterTemp" type="number" step="any" class="form-control"
         id="{{controlIds.condenserWaterTemp}}" formControlName="condenserWaterTemp"
         (focus)="focusField('condenserWaterTemp')">
-      <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
-        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+      <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+        [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
     </div>
     <app-form-control-errors [control]="condenserWaterTemp"></app-form-control-errors>
   </div>
@@ -32,8 +32,8 @@
       <input name="followingTempDifferential" type="number" step="any" class="form-control"
         id="{{controlIds.followingTempDifferential}}" formControlName="followingTempDifferential"
         (focus)="focusField('followingTempDifferential')">
-      <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
-        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+      <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+        [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
     </div>
     <app-form-control-errors [control]="followingTempDifferential"></app-form-control-errors>
   </div>

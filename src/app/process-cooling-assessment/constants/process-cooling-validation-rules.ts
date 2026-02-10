@@ -1,9 +1,10 @@
 // * Validation rules for Process Cooling Assessment forms pulled from CWSAT Engineering Ref doc (Doc updated 11/26/2024) 
 
 /**
- * Validation defined here as constant for ease of maintenance and sharing with SME's
+ * Validation defined here for better maintenance and verification.
+ * All units in Imperial, conversion handled in form services as needed.
  */
-export const PROCESS_COOLING_VALIDATION = {
+export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
   // OperationsForm
   annualOperatingHours: {
     required: true,
@@ -97,10 +98,15 @@ export const PROCESS_COOLING_VALIDATION = {
   fanSpeedType: {},
   towerSizeMetric: {},
   fanType: {},
-  towerSize: {
+  towerSizeTons: {
     required: true,
     min: 20,
     max: 3000
+  },
+  towerSizeHP: {
+    required: true,
+    min: 1,
+    max: 100
   }
 
 

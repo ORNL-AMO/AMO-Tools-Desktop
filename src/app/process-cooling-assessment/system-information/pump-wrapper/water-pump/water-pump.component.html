@@ -19,7 +19,7 @@
         <div class="input-group">
             <input name="flowRate" type="number" step="any" class="form-control" id="{{controlIds.flowRate}}"
                 formControlName="flowRate" (focus)="focusField('flowRate')">
-            <app-input-unit [settings]="settings()" [imperialUnit]="'gpm/ton'" [metricUnit]="'m<sup>3</sup>/kW'"></app-input-unit>
+            <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.volumeFlowRate.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.volumeFlowRate.labelHTML.metric"></app-input-unit>
         </div>
         <app-form-control-errors [control]="flowRate"></app-form-control-errors>
     </div>
@@ -39,7 +39,7 @@
         <div class="input-group">
             <input name="motorSize" type="number" step="any" class="form-control" id="{{controlIds.motorSize}}"
                 formControlName="motorSize" (focus)="focusField('motorSize')">
-            <app-input-unit [imperialUnit]="'hp'" [metricUnit]="'kW'"></app-input-unit>
+            <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.power.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.power.labelHTML.metric"></app-input-unit>
         </div>
         <app-form-control-errors [control]="motorSize"></app-form-control-errors>
     </div>

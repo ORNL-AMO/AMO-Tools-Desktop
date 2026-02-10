@@ -25,8 +25,6 @@ export class BaselineTabsComponent {
   mainView: Signal<string> = this.processCoolingUiService.mainView;
   setupView: Signal<string> = this.processCoolingUiService.childView;
 
-  isChillerInventoryValid: boolean = false;
-  isOperatingScheduleValid: boolean = false;
   isSystemInformationValid: boolean = false;
 
   ngOnInit(): void {

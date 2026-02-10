@@ -1,8 +1,11 @@
 // (TowerForm and methods moved into class below)
 import { Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, TowerType } from '../../shared/models/process-cooling-assessment';
-import { PROCESS_COOLING_VALIDATION } from '../validation/process-cooling-validation';
+import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, TowerType, AirCoolingSource, TowerSizeMetric } from '../../shared/models/process-cooling-assessment';
+import { PROCESS_COOLING_VALIDATION } from '../constants/process-cooling-validation-rules';
+import { ConvertValue } from '../../shared/convert-units/ConvertValue';
+import { Settings } from '../../shared/models/settings';
+import { PROCESS_COOLING_UNITS } from '../constants/units';
 
 
 @Injectable()
@@ -10,7 +13,22 @@ export class SystemInformationFormService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getOperationsForm(operations: Operations): FormGroup<OperationsForm> {
+  getOperationsForm(operations: Operations, settings: Settings): FormGroup<OperationsForm> {
+    let chilledWaterSupplyTempMin: number;
+    let chilledWaterSupplyTempMax: number;
+    if (settings.unitsOfMeasure === 'Metric') {
+      chilledWaterSupplyTempMin = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.min,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      chilledWaterSupplyTempMax = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.max,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+    }
+
     return this.formBuilder.group({
       annualOperatingHours: [operations.annualOperatingHours, [
         Validators.required,
@@ -27,8 +45,8 @@ export class SystemInformationFormService {
       ]],
       chilledWaterSupplyTemp: [operations.chilledWaterSupplyTemp, [
         Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.max)
+        Validators.min(chilledWaterSupplyTempMin),
+        Validators.max(chilledWaterSupplyTempMax)
       ]],
       condenserCoolingMethod: [operations.condenserCoolingMethod],
       doChillerLoadSchedulesVary: [operations.doChillerLoadSchedulesVary],
@@ -44,15 +62,29 @@ export class SystemInformationFormService {
     };
   }
 
-  getPumpInputForm(pumpInput: PumpInput): FormGroup<PumpInputForm> {
+  getPumpInputForm(pumpInput: PumpInput, settings: Settings): FormGroup<PumpInputForm> {
+    let flowRateMin = PROCESS_COOLING_VALIDATION.flowRate.min;
+    let flowRateMax = PROCESS_COOLING_VALIDATION.flowRate.max;
+    if (settings.unitsOfMeasure === 'Metric') {
+      flowRateMin = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.flowRate.min,
+        PROCESS_COOLING_UNITS.volumeFlowRate.imperial,
+        PROCESS_COOLING_UNITS.volumeFlowRate.metric
+      ).convertedValue;
+      flowRateMax = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.flowRate.max,
+        PROCESS_COOLING_UNITS.volumeFlowRate.imperial,
+        PROCESS_COOLING_UNITS.volumeFlowRate.metric
+      ).convertedValue;
+    }
     return this.formBuilder.group({
       variableFlow: [pumpInput.variableFlow, [
         Validators.required
       ]],
       flowRate: [pumpInput.flowRate, [
         Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.flowRate.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.flowRate.max)
+        Validators.min(flowRateMin),
+        Validators.max(flowRateMax)
       ]],
       efficiency: [pumpInput.efficiency, [
         Validators.required,
@@ -79,26 +111,72 @@ export class SystemInformationFormService {
     };
   }
 
-  getAirCooledSystemInputForm(input: AirCooledSystemInput): FormGroup<AirCooledSystemInputForm> {
+  getAirCooledSystemInputForm(input: AirCooledSystemInput, settings: Settings): FormGroup<AirCooledSystemInputForm> {
+    let indoorTempMin = PROCESS_COOLING_VALIDATION.indoorTemp.min;
+    let indoorTempMax = PROCESS_COOLING_VALIDATION.indoorTemp.max;
+    let outdoorAirTempMin = PROCESS_COOLING_VALIDATION.outdoorAirTemp.min;
+    let outdoorAirTempMax = PROCESS_COOLING_VALIDATION.outdoorAirTemp.max;
+    let tempDiffMin = PROCESS_COOLING_VALIDATION.followingTempDifferential.min;
+    let tempDiffMax = PROCESS_COOLING_VALIDATION.followingTempDifferential.max;
+    if (settings.unitsOfMeasure === 'Metric') {
+      indoorTempMin = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.indoorTemp.min,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      indoorTempMax = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.indoorTemp.max,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      outdoorAirTempMin = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.outdoorAirTemp.min,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      outdoorAirTempMax = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.outdoorAirTemp.max,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      tempDiffMin = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.followingTempDifferential.min,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      tempDiffMax = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.followingTempDifferential.max,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+    }
+    let indoorTempValidators = [];
+    let tempDifferentialValidators = [];
+    if (input.airCoolingSource === AirCoolingSource.Indoor) {
+      indoorTempValidators = [
+        Validators.required,
+        Validators.min(indoorTempMin),
+        Validators.max(indoorTempMax)
+      ];
+    }
+    if (input.airCoolingSource === AirCoolingSource.Outdoor) {
+      tempDifferentialValidators = [
+        Validators.required,
+        Validators.min(tempDiffMin),
+        Validators.max(tempDiffMax)
+      ];
+    }
     return this.formBuilder.group({
       outdoorAirTemp: [input.outdoorAirTemp, [
         Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.outdoorAirTemp.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.outdoorAirTemp.max)
+        Validators.min(outdoorAirTempMin),
+        Validators.max(outdoorAirTempMax)
       ]],
       airCoolingSource: [input.airCoolingSource, [
         Validators.required
       ]],
-      indoorTemp: [input.indoorTemp, [
-        Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.indoorTemp.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.indoorTemp.max)
-      ]],
-      followingTempDifferential: [input.followingTempDifferential, [
-        Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.followingTempDifferential.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.followingTempDifferential.max)
-      ]],
+      indoorTemp: [input.indoorTemp, indoorTempValidators],
+      followingTempDifferential: [input.followingTempDifferential, tempDifferentialValidators],
     });
   }
 
@@ -109,21 +187,47 @@ export class SystemInformationFormService {
     };
   }
 
-  getWaterCooledSystemInputForm(input: WaterCooledSystemInput): FormGroup<WaterCooledSystemInputForm> {
+  getWaterCooledSystemInputForm(input: WaterCooledSystemInput, settings: Settings): FormGroup<WaterCooledSystemInputForm> {
+    let condenserWaterTempMin = PROCESS_COOLING_VALIDATION.condenserWaterTemp.min;
+    let condenserWaterTempMax = PROCESS_COOLING_VALIDATION.condenserWaterTemp.max;
+    let tempDiffMin = PROCESS_COOLING_VALIDATION.followingTempDifferential.min;
+    let tempDiffMax = PROCESS_COOLING_VALIDATION.followingTempDifferential.max;
+    if (settings.unitsOfMeasure === 'Metric') {
+      condenserWaterTempMin = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.condenserWaterTemp.min,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      condenserWaterTempMax = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.condenserWaterTemp.max,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      tempDiffMin = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.followingTempDifferential.min,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      tempDiffMax = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.followingTempDifferential.max,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+    }
     return this.formBuilder.group({
       isConstantCondenserWaterTemp: [input.isConstantCondenserWaterTemp, [
         Validators.required
       ]],
-      condenserWaterTemp: [input.condenserWaterTemp, [
+      condenserWaterTemp: [input.condenserWaterTemp, input.isConstantCondenserWaterTemp ? [
         Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.condenserWaterTemp.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.condenserWaterTemp.max)
-      ]],
-      followingTempDifferential: [input.followingTempDifferential, [
+        Validators.min(condenserWaterTempMin),
+        Validators.max(condenserWaterTempMax)
+      ] : []],
+      followingTempDifferential: [input.followingTempDifferential, !input.isConstantCondenserWaterTemp ? [
         Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.followingTempDifferential.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.followingTempDifferential.max)
-      ]],
+        Validators.min(tempDiffMin),
+        Validators.max(tempDiffMax)
+      ] : []],
     });
   }
 
@@ -134,17 +238,36 @@ export class SystemInformationFormService {
     };
   }
 
-  public getTowerForm(input: TowerInput): FormGroup<TowerForm> {
+  public getTowerForm(input: TowerInput, settings: Settings): FormGroup<TowerForm> {
+    let hexApproachTempMin = PROCESS_COOLING_VALIDATION.HEXApproachTemp.min;
+    let hexApproachTempMax = PROCESS_COOLING_VALIDATION.HEXApproachTemp.max;
+    if (settings.unitsOfMeasure === 'Metric') {
+      hexApproachTempMin = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.HEXApproachTemp.min,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      hexApproachTempMax = new ConvertValue(
+        PROCESS_COOLING_VALIDATION.HEXApproachTemp.max,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+    }
+    let hexApproachTempValidators = [];
+    if (input.isHEXRequired) {
+      hexApproachTempValidators = [
+        Validators.required,
+        Validators.min(hexApproachTempMin),
+        Validators.max(hexApproachTempMax)
+      ];
+    }
+    let towerSizeValidators = this.getTowerSizeValidators(input.towerSizeMetric);
     return this.formBuilder.group({
       usesFreeCooling: [input.usesFreeCooling, [
         Validators.required
       ]],
       isHEXRequired: [input.isHEXRequired],
-      HEXApproachTemp: [input.HEXApproachTemp, [
-        Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.HEXApproachTemp.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.HEXApproachTemp.max)
-      ]],
+      HEXApproachTemp: [input.HEXApproachTemp, hexApproachTempValidators],
       numberOfTowers: [input.numberOfTowers, [
         Validators.required,
         Validators.min(PROCESS_COOLING_VALIDATION.numberOfTowers.min),
@@ -159,12 +282,26 @@ export class SystemInformationFormService {
       fanSpeedType: [input.fanSpeedType],
       towerSizeMetric: [input.towerSizeMetric],
       fanType: [input.fanType],
-      towerSize: [input.towerSize, [
-        Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.towerSize.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.towerSize.max)
-      ]],
+      towerSize: [input.towerSize, towerSizeValidators],
     });
+  }
+
+  getTowerSizeValidators(towerSizeMetric: number): any[] {
+    let validators = [];
+    if (towerSizeMetric === TowerSizeMetric.Tons) {
+      validators = [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.towerSizeTons.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.towerSizeTons.max)
+      ];
+    } else if (towerSizeMetric === TowerSizeMetric.HP) {
+      validators = [
+        Validators.required,
+        Validators.min(PROCESS_COOLING_VALIDATION.towerSizeHP.min),
+        Validators.max(PROCESS_COOLING_VALIDATION.towerSizeHP.max)
+      ];
+    }
+    return validators;
   }
 
   public getTowerInput(formValue: Partial<TowerInput>, currentInput: TowerInput): TowerInput {
@@ -204,37 +341,37 @@ export class SystemInformationFormService {
       return dependentValues;
     }
 
-  public isSystemInformationValid(systemInformationInput: SystemInformation): boolean {
-    const isOperationsValid = this.isOperationsValid(systemInformationInput.operations);
-    const isPumpValid = this.isPumpValid(systemInformationInput);
-    const isSystemInputValid = this.isCondenserSystemInputValid(systemInformationInput);
-    const isTowerValid = this.isTowerValid(systemInformationInput.towerInput);
-    const isValid: boolean = isOperationsValid && isPumpValid && isSystemInputValid && isTowerValid;
+  public isSystemInformationValid(systemInformationInput: SystemInformation, settings: Settings): boolean {
+    const isOperationsValid = this.isOperationsValid(systemInformationInput.operations, settings);
+    const isPumpValid = this.isPumpValid(systemInformationInput, settings);
+    const isCondenserValid = this.isCondenserSystemInputValid(systemInformationInput, settings);
+    const isTowerValid = this.isTowerValid(systemInformationInput.towerInput, settings);
+    const isValid: boolean = isOperationsValid && isPumpValid && isCondenserValid && isTowerValid;
     return isValid;
   }
   
-  public isPumpValid(systemInformation: SystemInformation): boolean {
+  public isPumpValid(systemInformation: SystemInformation, settings: Settings): boolean {
     // todo are we sure this will always be condenserWaterPumpInput
-    const pumpForm = this.getPumpInputForm(systemInformation.condenserWaterPumpInput);
+    const pumpForm = this.getPumpInputForm(systemInformation.condenserWaterPumpInput, settings);
     return pumpForm.valid;
   }
 
-  public isOperationsValid(operations: Operations): boolean {
-    const operationsForm = this.getOperationsForm(operations);
+  public isOperationsValid(operations: Operations, settings: Settings): boolean {
+    const operationsForm = this.getOperationsForm(operations, settings);
     return operationsForm.valid;
   }
 
-  public isTowerValid(towerInput: TowerInput): boolean {
-    const towerForm = this.getTowerForm(towerInput);
+  public isTowerValid(towerInput: TowerInput, settings: Settings): boolean {
+    const towerForm = this.getTowerForm(towerInput, settings);
     return towerForm.valid;
   }
 
-  public isCondenserSystemInputValid(systemInformationInput: SystemInformation): boolean {
+  public isCondenserSystemInputValid(systemInformationInput: SystemInformation, settings: Settings): boolean {
     let systemInputForm: FormGroup<any>;
     if (systemInformationInput.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
-      systemInputForm = this.getWaterCooledSystemInputForm(systemInformationInput.waterCooledSystemInput);
+      systemInputForm = this.getWaterCooledSystemInputForm(systemInformationInput.waterCooledSystemInput, settings);
     } else {
-      systemInputForm = this.getAirCooledSystemInputForm(systemInformationInput.airCooledSystemInput);
+      systemInputForm = this.getAirCooledSystemInputForm(systemInformationInput.airCooledSystemInput, settings);
     }
     return systemInputForm.valid;
   }
