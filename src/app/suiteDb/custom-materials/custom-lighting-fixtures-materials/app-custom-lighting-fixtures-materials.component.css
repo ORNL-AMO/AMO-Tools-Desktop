@@ -1,0 +1,126 @@
+.card-container-col {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.add-material-container {
+  /* height: 268px; */
+  line-height: 268px;
+  /* width: 100%; */
+  /* background-color: blue; */
+  border-radius: 0.25rem;
+  border: 1px dashed black;
+  /* padding-left: 15px;
+  padding-right: 15px; */
+}
+
+.test-add-material-container {
+  border: 1px dashed black;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.text-small {
+  font-size: 14px;
+}
+
+
+td{
+  padding: 0px;
+  font-size: small;
+}
+
+
+
+a:not([href]):not([tabindex]):hover {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .calc-card:hover{
+    background-color: #95A4AF;
+    cursor: pointer;
+  }
+  
+  .calc-card{
+    text-align: center;
+  }
+  
+  .summary-card{
+    padding-top: 10px;
+  }
+  
+  
+  .summary-card-body{
+    height: 200px;
+  }
+  
+  
+  .summary-card-header,
+  .summary-card-body,
+  .summary-card-footer{
+    padding: 6px;
+  }
+  
+  /*
+  Assessments: Grid View
+  =========================================== */
+  .list-card {
+    border: #95A4AF solid 1px;
+    -webkit-box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
+    -moz-box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
+    box-shadow: 0px 2px 6px 0px rgba(149,164,175,0.3);
+    padding: 20px;
+    min-height: 320px;
+    background-color: #fff;
+  }
+    /* .list-card input[type="checkbox"] {
+      vertical-align: top;
+      margin-top: 6px;
+    } */
+    .list-card button {
+      background: transparent;
+      border: none;
+      padding: 0;
+      box-shadow: none;
+      font-size: 14px;
+      color: #0076FF;
+    }
+      .list-card button:hover {
+        cursor: pointer;
+      }
+    .list-card .menu {
+      display: none;
+    }
+    .last-updated {
+      font-size: 13px;
+      color: #999;
+    }
+  
+
+    
+  .btn-delete-material {
+    font-size: 13px;
+    color: #dc3545;
+  }
+
+  .btn-delete-material:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .modal-dialog{
+    top: .5rem;
+  }
+
+  .fa-edit:hover{
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .fa-edit{
+    padding-top: 4px;
+    font-size: larger;
+  }

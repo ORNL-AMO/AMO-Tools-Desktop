@@ -47,7 +47,7 @@ import { LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite
         private lightingSuiteApiService: LightingSuiteApiService) {}
 
     async getCustomMaterials() {
-        this.lightingFixtureCategories = await firstValueFrom(this.lightingSuiteApiService.getLightingSystems());
+        this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
         this.emitNumMaterials.emit(this.lightingFixtureCategories.length);
         
     }
@@ -61,5 +61,11 @@ import { LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite
     // this.lightingFixtureCategories.forEach(fixture => {
     //   fixture.selected = val;
     // });
-  }
+
+    // what is the shape of the data object. that is it recieving.
+
+    // likely an array of lighting fixtures. what can i do with that data
+
+    // The lighting data does not match the shape I am expecting.
+
 }
