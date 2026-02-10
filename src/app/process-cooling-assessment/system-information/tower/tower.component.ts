@@ -9,7 +9,7 @@ import { ProcessCoolingUiService } from "../../services/process-cooling-ui.servi
 import { FormControlIds, generateFormControlIds } from "../../../shared/helperFunctions";
 import { getFanType, getTowerSizeMetrics, getTowerTypes } from "../../constants/process-cooling-constants";
 import { TEMPERATURE_HTML } from "../../../shared/app-constants";
-import { PROCESS_COOLING_UNITS } from "../../constants/units";
+import { PROCESS_COOLING_UNITS } from "../../constants/process-cooling-units";
 
 @Component({
   selector: 'app-tower',
@@ -43,6 +43,7 @@ export class TowerComponent {
     this.observeFormChanges();
     this.observeTowerTypeChange();
     this.observeTowerSizeChange();
+    this.observeIsHEXRequiredChange();
   }
 
   observeFormChanges() {
@@ -72,6 +73,21 @@ export class TowerComponent {
         this.towerSize.setValidators(this.systemInformationFormService.getTowerSizeValidators(towerSizeMetric));
         this.towerSize.updateValueAndValidity({ emitEvent: false });
       });
+  }
+
+  observeIsHEXRequiredChange() {
+    this.isHEXRequired.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (isHEXRequired) => {
+        let validators = [];
+        if (isHEXRequired) {
+          validators = this.systemInformationFormService.getHexApproachTempValidators(this.settings());
+        }
+        this.HEXApproachTemp.setValidators(validators);
+        this.HEXApproachTemp.updateValueAndValidity({ emitEvent: false });
+      }
+    );
   }
 
   updateAssessment() {

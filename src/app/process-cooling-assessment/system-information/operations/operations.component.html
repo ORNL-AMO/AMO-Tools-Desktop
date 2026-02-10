@@ -12,7 +12,7 @@
                     (focus)="focusField('annualOperatingHours')">
                 <app-input-unit [defaultUnit]="'hrs/yr'"></app-input-unit>
             </div>
-            <app-form-control-errors [control]="annualOperatingHours" [settings]="settings"
+            <app-form-control-errors [control]="annualOperatingHours" [settings]="settings()"
                 [defaultUnit]="'hrs/yr'"></app-form-control-errors>
         </div>
 
@@ -23,7 +23,7 @@
                     formControlName="electricityCost" (focus)="focusField('electricityCost')">
                 <app-input-unit [defaultUnit]="'$/kWh'"></app-input-unit>
             </div>
-            <app-form-control-errors [control]="electricityCost" [settings]="settings"
+            <app-form-control-errors [control]="electricityCost" [settings]="settings()"
                 [defaultUnit]="'$/kWh'"></app-form-control-errors>
         </div>
 
@@ -35,7 +35,7 @@
                 <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.fuelCost.labelHTML.imperial"
                     [metricUnit]="'$/GJ'"></app-input-unit>
             </div>
-            <app-form-control-errors [control]="fuelCost" [settings]="settings" [imperialUnit]="PROCESS_COOLING_UNITS.fuelCost.labelHTML.imperial"
+            <app-form-control-errors [control]="fuelCost" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.fuelCost.labelHTML.imperial"
                 [metricUnit]="PROCESS_COOLING_UNITS.fuelCost.labelHTML.metric"></app-form-control-errors>
         </div>
     </form>
@@ -55,7 +55,7 @@
                 <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial" 
                 [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
             </div>
-            <app-form-control-errors [control]="chilledWaterSupplyTemp" [settings]="settings" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+            <app-form-control-errors [control]="chilledWaterSupplyTemp" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
                 [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
         </div>
 

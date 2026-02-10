@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { ProcessCoolingAssessment, SystemInformation, Operations, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, PumpInput, ChillerInventoryItem, Modification, IncreaseChilledWaterTemp, DecreaseCondenserWaterTemp, UseSlidingCondenserWaterTemp, UseFreeCooling, ReplaceChillers, ProcessCoolingChillerOutput, ProcessCoolingResults, TowerSizeMetric } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingAssessment, SystemInformation, Operations, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, PumpInput, ChillerInventoryItem, Modification, IncreaseChilledWaterTemp, DecreaseCondenserWaterTemp, UseSlidingCondenserWaterTemp, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 import { roundVal } from '../../shared/helperFunctions';
-import { PROCESS_COOLING_UNITS } from '../constants/units';
+import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 
 @Injectable()
 export class ConvertProcessCoolingService {
@@ -110,6 +110,7 @@ export class ConvertProcessCoolingService {
     if (!pumpInput) return pumpInput;
     
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
+      // todo flowRate awaiting proper unit
       pumpInput.flowRate = new ConvertValue(pumpInput.flowRate, PROCESS_COOLING_UNITS.volumeFlowRate.metric, PROCESS_COOLING_UNITS.volumeFlowRate.imperial).convertedValue;
       pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, PROCESS_COOLING_UNITS.power.metric, PROCESS_COOLING_UNITS.power.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {

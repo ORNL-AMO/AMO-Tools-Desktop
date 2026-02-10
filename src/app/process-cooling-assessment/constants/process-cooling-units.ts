@@ -17,7 +17,7 @@ export const PROCESS_COOLING_UNITS = {
   // },
   // todo temporary until we have definition for the above
    volumeFlowRate: {
-    imperial: 'gpm/ton',
+    imperial: 'gpm',
     metric: 'm3/min',
     labelHTML: {
       imperial: 'gpm/ton',

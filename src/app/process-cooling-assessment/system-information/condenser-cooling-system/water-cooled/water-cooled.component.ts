@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { FormGroup } from "@angular/forms";
+import { FormGroup, ValidatorFn } from "@angular/forms";
 import { WaterCooledSystemInput, ProcessCoolingAssessment } from "../../../../shared/models/process-cooling-assessment";
 import { ProcessCoolingAssessmentService } from "../../../services/process-cooling-asessment.service";
 import { WaterCooledSystemInputForm, SystemInformationFormService } from "../../system-information-form.service";
@@ -8,7 +8,7 @@ import { Settings } from "../../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../../services/process-cooling-ui.service";
 import { FormControlIds, generateFormControlIds } from "../../../../shared/helperFunctions";
 import { TEMPERATURE_HTML } from "../../../../shared/app-constants";
-import { PROCESS_COOLING_UNITS } from "../../../constants/units";
+import { PROCESS_COOLING_UNITS } from "../../../constants/process-cooling-units";
 
 @Component({
   selector: 'app-water-cooled',
@@ -34,6 +34,7 @@ export class WaterCooledComponent {
     this.form = this.systemInformationFormService.getWaterCooledSystemInputForm(waterCooledInput, this.settings());
     this.controlIds = generateFormControlIds(this.form.controls);
     this.observeFormChanges();
+    this.observeIsConstantCondenserWaterTempChanges();
   }
 
   observeFormChanges() {
@@ -48,6 +49,28 @@ export class WaterCooledComponent {
       }
     );
   }
+
+  observeIsConstantCondenserWaterTempChanges() {
+    this.isConstantCondenserWaterTemp.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (isConstant) => {
+        let validators: ValidatorFn[] = [];
+        if (isConstant) {
+          this.followingTempDifferential.clearValidators();
+          validators = this.systemInformationFormService.getCondenserWaterTempValidators(this.settings());
+          this.condenserWaterTemp.setValidators(validators);
+        } else {
+          this.condenserWaterTemp.clearValidators();
+          validators = this.systemInformationFormService.getFollowingTempDifferentialValidators(this.settings());
+          this.followingTempDifferential.setValidators(validators);
+        }
+        this.followingTempDifferential.updateValueAndValidity();
+        this.condenserWaterTemp.updateValueAndValidity();
+      }
+    );
+  }
+
   focusField(str: string) {
     this.processCoolingUiService.focusedFieldSignal.set(str);
   }

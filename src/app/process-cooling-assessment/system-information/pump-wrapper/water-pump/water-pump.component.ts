@@ -8,7 +8,7 @@ import { PumpInputForm, SystemInformationFormService } from "../../system-inform
 import { Settings } from "../../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../../services/process-cooling-ui.service";
 import { FormControlIds, generateFormControlIds } from "../../../../shared/helperFunctions";
-import { PROCESS_COOLING_UNITS } from "../../../constants/units";
+import { PROCESS_COOLING_UNITS } from "../../../constants/process-cooling-units";
 
 @Component({
   selector: 'app-water-pump',
