@@ -8,7 +8,7 @@ import { SolidLoadMaterialDbService } from '../../indexedDb/solid-load-material-
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 import { AtmosphereDbService } from '../../indexedDb/atmosphere-db.service';
-import { LightingFixtureData } from '../../tools-suite-api/lighting-suite-api.service';
+import { LightingFixtureCategory } from '../../tools-suite-api/lighting-suite-api.service';
 import { LightingSuiteApiService } from '../../tools-suite-api/lighting-suite-api.service';
 @Injectable()
 export class CustomMaterialsService {
@@ -20,7 +20,7 @@ export class CustomMaterialsService {
   selectedSolidLiquidFlueGas: Array<SolidLiquidFlueGasMaterial>;
   selectedSolidCharge: Array<SolidLoadChargeMaterial>;
   selectedWall: Array<WallLossesSurface>;
-  selectedLightingFixtures: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
+  selectedLightingFixtures: Array<LightingFixtureCategory>;
 
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
@@ -43,7 +43,7 @@ export class CustomMaterialsService {
     this.selectedWall = new Array<WallLossesSurface>();
     this.getSelected = new BehaviorSubject<boolean>(false);
     this.selectAll = new BehaviorSubject<boolean>(false);
-    this.selectedLightingFixtures = this.lightingSuiteApiService.getLightingSystems();
+    this.selectedLightingFixtures = this.lightingSuiteApiService.lightingFixtureCategories;
   }
 
 
@@ -89,7 +89,7 @@ export class CustomMaterialsService {
   }
 
 
-  async importLightingFixtures(data: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>) {
+  async importLightingFixtures(data: Array<LightingFixtureCategory>) {
     //flesh this out. for now just set selectedLightingFixtures to data
     this.selectedLightingFixtures = data;
   }
@@ -195,7 +195,7 @@ export class CustomMaterialsService {
     }
   }
 
-  deleteLightingFixtures(data: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>) {
+  deleteLightingFixtures(data: Array<LightingFixtureCategory>) {
     //WK Come back and finish delete.
   }
 
@@ -285,7 +285,7 @@ export interface MaterialData {
   solidLiquidFlueGasMaterial: Array<SolidLiquidFlueGasMaterial>;
   solidLoadChargeMaterial: Array<SolidLoadChargeMaterial>;
   wallLossesSurface: Array<WallLossesSurface>;
-  lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
+  lightingFixtureCategories: Array<LightingFixtureCategory>;
 }
 
 

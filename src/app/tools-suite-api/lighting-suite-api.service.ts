@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
-
 @Injectable({
     providedIn: 'root'
 })
 export class LightingSuiteApiService {
-    constructor(
-        private toolsSuiteApiService: ToolsSuiteApiService,
-    ) { }
 
-    getLightingSystems() {
+    lightingFixtureCategories: Array<LightingFixtureCategory> = [];
+
+    constructor(
+        private toolsSuiteApiService: ToolsSuiteApiService
+    ) { 
+        this.setLightingSystemServiceState();
+    }
+
+
+    setLightingSystemServiceState() {
         let defaultDataInstance = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
         let lightingFixtureData = defaultDataInstance.getLightingData();
 
-        let LightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }> = [
+        this.lightingFixtureCategories = [
             {
                 category: 0,
                 label: 'Custom',
@@ -69,14 +74,16 @@ export class LightingSuiteApiService {
                 label: 'LED Troffers',
                 fixturesData: []
             }
-        ]
+        ];
 
-        this.buildLightingList(lightingFixtureData, LightingFixtureCategories);
+        this.buildLightingList(lightingFixtureData, this.lightingFixtureCategories);
 
-        return LightingFixtureCategories;
+        defaultDataInstance.delete();
+        // this.lightingReplacementService.lightingFixtureCategories = this.lightingFixtureCategories;
+        return this.lightingFixtureCategories;
     }   
 
-    buildLightingList(wasmLightingSystems, lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }> ) {
+    buildLightingList(wasmLightingSystems, lightingFixtureCategories: Array<LightingFixtureCategory> ) {
         for (let i = 0; i < wasmLightingSystems.size(); i++) {
             let wasmClass = wasmLightingSystems.get(i);
 
@@ -120,4 +127,8 @@ export interface LightingFixtureData {
     lumenDegradationFactor: number
 }
 
-
+export interface LightingFixtureCategory {
+    category: number,
+    label: string,
+    fixturesData: Array<LightingFixtureData>
+}

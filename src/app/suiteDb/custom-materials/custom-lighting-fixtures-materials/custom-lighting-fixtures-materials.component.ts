@@ -47,7 +47,7 @@ import { LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite
         private lightingSuiteApiService: LightingSuiteApiService) {}
 
     async getCustomMaterials() {
-        this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
+        this.lightingFixtureCategories = this.lightingSuiteApiService.lightingFixtureCategories;
         this.emitNumMaterials.emit(this.lightingFixtureCategories.length);
         
     }
