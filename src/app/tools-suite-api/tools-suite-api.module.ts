@@ -14,7 +14,7 @@ import { SviSuiteApiService } from './svi-suite-api.service';
 import { WaterSuiteApiService } from './water-suite-api.service';
 import { MotorDataApiService } from './motor-data-api.service';
 import { DefaultCompressorApiService } from './default-compressor-api.service';
-
+import { LightingSuiteApiService } from './lighting-suite-api.service';
 @NgModule({
   declarations: [],
   imports: [
@@ -34,7 +34,8 @@ import { DefaultCompressorApiService } from './default-compressor-api.service';
     SviSuiteApiService,
     WaterSuiteApiService,
     MotorDataApiService,
-    DefaultCompressorApiService
+    DefaultCompressorApiService,
+    LightingSuiteApiService
   ]
 })
 export class ToolsSuiteApiModule { }

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { LightingFixtureData, LightingFixtureCategories } from '../../lighting-fixture-data/lighting-data';
+import { LightingFixtureData, LightingFixtureCategory } from '../../../../tools-suite-api/lighting-suite-api.service';
 import { LightingReplacementService } from '../lighting-replacement.service';
 import { Subscription } from 'rxjs';
-
+import { LightingSuiteApiService } from '../../../../tools-suite-api/lighting-suite-api.service';
 @Component({
     selector: 'app-lighting-replacement-help',
     templateUrl: './lighting-replacement-help.component.html',
@@ -13,14 +13,13 @@ export class LightingReplacementHelpComponent implements OnInit {
   @Input()
   currentField: string;
 
-  lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
+  lightingFixtureCategories: Array<LightingFixtureCategory>;
   selectedFixtureTypesSub: Subscription;
   fixtureTypes: Array<LightingFixtureData>;
-  constructor(private lightingReplacementService: LightingReplacementService) { 
-    this.lightingFixtureCategories = LightingFixtureCategories;
-  }
+  constructor(private lightingReplacementService: LightingReplacementService, private lightingSuiteApiService: LightingSuiteApiService) { }
 
   ngOnInit() {
+    this.lightingFixtureCategories = this.lightingSuiteApiService.lightingFixtureCategories;
     this.selectedFixtureTypesSub = this.lightingReplacementService.selectedFixtureTypes.subscribe(fixtureTypes => {
       this.fixtureTypes = fixtureTypes;
     })

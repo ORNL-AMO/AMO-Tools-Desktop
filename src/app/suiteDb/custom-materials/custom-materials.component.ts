@@ -23,6 +23,7 @@ export class CustomMaterialsComponent implements OnInit {
   showSolidLoadChargeModal: boolean = false;
   showAtmosphereModal: boolean = false;
   showWallSurfaceModal: boolean = false;
+  showLightingFixturesModal: boolean = false;
 
   showFlueMaterials: boolean = true;
   showSolidLiquidFlueMaterials: boolean = true;
@@ -39,6 +40,7 @@ export class CustomMaterialsComponent implements OnInit {
   hasSolidLoadChargeMaterials: boolean = false;
   hasAtmosphereMaterials: boolean = false;
   hasWallSurfaceMaterials: boolean = false;
+  haslightingFixtureMaterials: boolean = false;
 
   isAllSelected: boolean = false;
   deleteModalOpen: boolean = false;
@@ -86,6 +88,9 @@ export class CustomMaterialsComponent implements OnInit {
       case 'wall-surface':
         this.showWallSurfaceModal = !this.showWallSurfaceModal;
         break;
+      case 'lighting-fixtures':
+        this.showLightingFixturesModal = !this.showLightingFixturesModal;
+        break;
       default:
         break;
     }
@@ -116,6 +121,9 @@ export class CustomMaterialsComponent implements OnInit {
       case 'wall-surface':
         this.showWallSurfaceMaterials = !this.showWallSurfaceMaterials || !this.hasWallSurfaceMaterials;
         break;
+        case 'lighting-fixtures':
+        this.showLightingFixturesModal = !this.showLightingFixturesModal || !this.haslightingFixtureMaterials;
+        break;
       default:
         break;
     }
@@ -132,7 +140,8 @@ export class CustomMaterialsComponent implements OnInit {
       test.liquidLoadChargeMaterial.length !== 0 ||
       test.solidLiquidFlueGasMaterial.length !== 0 ||
       test.solidLoadChargeMaterial.length !== 0 ||
-      test.wallLossesSurface.length !== 0
+      test.wallLossesSurface.length !== 0 ||
+      test.lightingFixtureCategories.length !== 0
     ) {
       return true;
     } else {
@@ -207,6 +216,8 @@ export class CustomMaterialsComponent implements OnInit {
       this.hasAtmosphereMaterials = (numMaterials > 0);
     } else if (propertyKey == 'hasWallSurfaceMaterials') {
       this.hasWallSurfaceMaterials = (numMaterials > 0);
+    } else if (propertyKey == 'haslightingFixtureMaterials') {
+      this.haslightingFixtureMaterials = (numMaterials > 0);
     }
   }
 
