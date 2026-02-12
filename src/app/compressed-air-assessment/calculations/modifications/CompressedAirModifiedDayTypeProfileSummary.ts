@@ -59,6 +59,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
     peakDemandCostSavings: number;
     totalModifiedAnnualOperatingCost: number;
     trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
+    maxAirFlow: number;
+    averageAirFlow: number;
     constructor(dayType: CompressedAirDayType,
         baselineDayTypeProfileSummaries: Array<CompressedAirBaselineDayTypeProfileSummary>,
         settings: Settings,
@@ -154,6 +156,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         }
         //Calculate peak demand and cost
         this.setPeakDemandCosts(compressedAirAssessment, baselineDayTypeProfileSummary);
+        this.setMaxAirFlow();
     }
 
     setInventoryItems(caInventoryItems: Array<CompressorInventoryItem>) {
@@ -479,6 +482,12 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         this.totalModifiedAnnualOperatingCost = this.peakDemandCost + this.modificationSavings.adjustedResults.cost;
     }
 
+    setMaxAirFlow(){
+        let peakAirflowObj: ProfileSummaryTotal = _.maxBy(this.adjustedProfileSummaryTotals, (result: ProfileSummaryTotal) => { return result.airflow });
+        this.maxAirFlow = peakAirflowObj?.airflow || 0;
+        this.averageAirFlow = _.meanBy(this.adjustedProfileSummaryTotals, (result: ProfileSummaryTotal) => { return result.airflow }) || 0;
+    }
+
 
     getDayTypeModificationResult(): DayTypeModificationResult {
         return {
@@ -511,7 +520,9 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             peakDemandCost: this.peakDemandCost,
             peakDemandCostSavings: this.peakDemandCostSavings,
             totalAnnualOperatingCost: this.totalModifiedAnnualOperatingCost,
-            annualEmissionOutput: this.modificationSavings.adjustedResults.annualEmissionOutput
+            annualEmissionOutput: this.modificationSavings.adjustedResults.annualEmissionOutput,
+            maxAirFlow: this.maxAirFlow,
+            averageAirFlow: this.averageAirFlow
         }
     }
 

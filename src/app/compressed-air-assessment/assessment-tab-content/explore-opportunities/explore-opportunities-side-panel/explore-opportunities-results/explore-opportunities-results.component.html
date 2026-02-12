@@ -204,7 +204,38 @@
             <span class="bold table-text">{{dayTypeModificationResult.peakDemand | number:'1.0-2'}} kW</span>
         </div>
     </div>
-
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Peak Airflow</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text"> {{dayTypeBaselineResult.maxAirFlow | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span></span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            <span class="bold table-text">{{dayTypeModificationResult.maxAirFlow | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span></span>
+        </div>
+    </div>
+    @if(selectedDayType){
+    <div class="d-flex my-table-item">
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text">Average Total Airflow</span>
+        </div>
+        <div class="d-flex align-items-center pl-1 pr-1 col-4">
+            <span class="bold table-text"> {{dayTypeBaselineResult.averageAirFlow | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span></span>
+        </div>
+        <div class="col-4 d-flex align-items-center pl-1 pr-1 table-text">
+            <span class="bold table-text">{{dayTypeModificationResult.averageAirFlow | number:'1.0-2'}}
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span></span>
+        </div>
+    </div>
+    }
     <div class="d-flex my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1 col-4">
             <span class="bold table-text">Annual Energy</span>
@@ -238,6 +269,7 @@
             </span>
         </div>
     </div>
+
 
     <div class="d-flex my-table-bg my-table-item">
         <div class="d-flex align-items-center pl-1 pr-1 col-4">

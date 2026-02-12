@@ -22,7 +22,7 @@ export class CompressedAirCombinedDayTypeResults {
     peakDemandCostSavings: number = 0;
     totalAnnualOperatingCost: number = 0;
     annualEmissionOutput: number = 0;
-
+    maxAirFlow: number = 0;
     constructor(compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults) {
         this.totalAnnualOperatingCost = compressedAirAssessmentModificationResults.totalModificationAnnualOperatingCost;
         this.annualEmissionOutput = compressedAirAssessmentModificationResults.totalModificationAnnualEmissionOutput;
@@ -37,6 +37,7 @@ export class CompressedAirCombinedDayTypeResults {
         this.setReduceSystemAirPressureSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
         this.setUseAutomaticSequencerSavings(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
         this.setPeakDemand(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries, compressedAirAssessmentModificationResults.baselineDemandCost);
+        this.setMaxAirFlow(compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries);
         this.setAllSavingsResults(compressedAirAssessmentModificationResults);
     }
 
@@ -179,6 +180,10 @@ export class CompressedAirCombinedDayTypeResults {
         this.peakDemandCostSavings = baselineDemandCost - this.peakDemandCost;
     }
 
+    setMaxAirFlow(modifiedDayTypeProfileSummaries: Array<CompressedAirModifiedDayTypeProfileSummary>) {
+        this.maxAirFlow = _.maxBy(modifiedDayTypeProfileSummaries, (result: CompressedAirModifiedDayTypeProfileSummary) => { return result.maxAirFlow }).maxAirFlow;
+    }
+
     setAllSavingsResults(compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults) {
         let percentSavings: number = ((compressedAirAssessmentModificationResults.totalAnnualOperatingCostSavings) / compressedAirAssessmentModificationResults.totalBaselineAnnualOperatingCost) * 100
         let allEemSavingsItems: Array<EemSavingsResults> = [
@@ -249,7 +254,9 @@ export class CompressedAirCombinedDayTypeResults {
             peakDemandCost: this.peakDemandCost,
             peakDemandCostSavings: this.peakDemandCostSavings,
             totalAnnualOperatingCost: this.totalAnnualOperatingCost,
-            annualEmissionOutput: this.annualEmissionOutput
+            annualEmissionOutput: this.annualEmissionOutput,
+            maxAirFlow: this.maxAirFlow,
+            averageAirFlow: undefined
         }
     }
 

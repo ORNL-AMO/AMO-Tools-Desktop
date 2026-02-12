@@ -42,7 +42,9 @@ export interface DayTypeModificationResult {
   peakDemandCost: number,
   peakDemandCostSavings: number,
   totalAnnualOperatingCost: number,
-  annualEmissionOutput: number
+  annualEmissionOutput: number,
+  maxAirFlow: number,
+  averageAirFlow: number
 }
 
 

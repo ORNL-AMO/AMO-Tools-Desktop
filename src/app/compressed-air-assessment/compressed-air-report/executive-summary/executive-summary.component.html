@@ -218,6 +218,22 @@
                 </td>
             </tr>
             <tr class="bold-row">
+                <td>Peak Airflow
+                    <span> (
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{baselineResults.total.maxAirFlow | number:'1.0-2'}}</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="result.combinedResults.maxAirFlow">{{result.combinedResults.maxAirFlow
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.maxAirFlow">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr class="bold-row">
                 <td>Annual Energy Used
                     <span> (kWh)</span>
                 </td>
@@ -232,7 +248,7 @@
                 </td>
             </tr>
             <tr class="bold-row">
-                <td>Annual Emission Output Rate 
+                <td>Annual Emission Output Rate
                     <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
                     <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
                 </td>
@@ -244,20 +260,6 @@
                         *ngIf="result.combinedResults.annualEmissionOutput">{{result.combinedResults.annualEmissionOutput
                         | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.annualEmissionOutput">&mdash; &mdash;</span>
-                </td>
-            </tr>
-            <tr class="bold-row">
-                <td>Average Airflow
-                    <span>(acfm)</span>
-                </td>
-                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    {{baselineResults.total.averageAirFlow | number:'1.0-0'}}</td>
-                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
-                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span
-                        *ngIf="result.combinedResults.averageAirFlow">{{result.combinedResults.averageAirFlow
-                        | number:'1.0-0'}}</span>
-                    <span *ngIf="!result.combinedResults.averageAirFlow">&mdash; &mdash;</span>
                 </td>
             </tr>
             <tr class="bold-row bg-row">
