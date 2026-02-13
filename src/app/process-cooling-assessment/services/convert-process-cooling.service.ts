@@ -203,13 +203,13 @@ export class ConvertProcessCoolingService {
     if (!results) return results;
   }
 
-  convertWeatherDataForSuiteApi(weatherData: WeatherContextData, settings?: Settings): WeatherContextData {
+  convertWeatherDataForSuiteApi(weatherData: WeatherContextData, settings: Settings): WeatherContextData {
     if (settings.unitsOfMeasure !== 'Imperial') {
       const convertedWeatherDataPoints = weatherData.weatherDataPoints.map((dataPoint: WeatherDataPoint) => {
         return {
           ...dataPoint,
-          dryBulb: new ConvertValue(dataPoint.dry_bulb_temp, 'C', 'F').convertedValue,
-          wetBulb: new ConvertValue(dataPoint.wet_bulb_temp, 'C', 'F').convertedValue,
+          dry_bulb_temp: new ConvertValue(dataPoint.dry_bulb_temp, 'C', 'F').convertedValue,
+          wet_bulb_temp: new ConvertValue(dataPoint.wet_bulb_temp, 'C', 'F').convertedValue,
         }
       });
 

@@ -10,7 +10,7 @@ export class ProcessCoolingWeatherContextService implements WeatherContext {
   private router: Router = inject(Router);
   private readonly weatherContextData = new BehaviorSubject<WeatherContextData>(undefined);
   readonly weatherContextData$ = this.weatherContextData.asObservable();
-  readonly settings: Settings;
+  settings: Settings;
 
   getWeatherData() {
     return this.weatherContextData.getValue();

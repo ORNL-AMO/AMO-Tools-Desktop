@@ -50,7 +50,7 @@ export class ProcessCoolingResultsService {
     const weatherData: WeatherContextData = this.processCoolingWeatherContextService.getWeatherData();
     const isValidWeatherData: boolean = this.processCoolingWeatherContextService.isValidWeatherData();
     if (isValidWeatherData) {
-      const convertedWeatherDataInput = this.convertProcessCoolingService.convertWeatherDataForSuiteApi(weatherData);
+      const convertedWeatherDataInput = this.convertProcessCoolingService.convertWeatherDataForSuiteApi(weatherData, this.processCoolingAssessmentService.settingsSignal());
       if (processCoolingAssessment.systemInformation.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
         results = this.suiteApi.getWaterCooledResults(processCoolingAssessment, convertedWeatherDataInput);
       } else {
