@@ -266,9 +266,7 @@ export class SystemInformationFormService {
     }
 
     return this.formBuilder.group({
-      usesFreeCooling: [input.usesFreeCooling, [
-        Validators.required
-      ]],
+      usesFreeCooling: [input.usesFreeCooling],
       isHEXRequired: [input.isHEXRequired],
       HEXApproachTemp: [input.HEXApproachTemp, hexApproachTempValidators],
       numberOfTowers: [input.numberOfTowers, [
@@ -278,7 +276,6 @@ export class SystemInformationFormService {
       ]],
       towerType: [input.towerType],
       numberOfFans: [input.numberOfFans, [
-        Validators.required,
         Validators.min(PROCESS_COOLING_VALIDATION.numberOfFans.min),
         Validators.max(PROCESS_COOLING_VALIDATION.numberOfFans.max)
       ]],
@@ -318,13 +315,11 @@ export class SystemInformationFormService {
     let validators: ValidatorFn[] = [];
     if (towerSizeMetric === TowerSizeMetric.Tons) {
       validators = [
-        Validators.required,
         Validators.min(PROCESS_COOLING_VALIDATION.towerSizeTons.min),
         Validators.max(PROCESS_COOLING_VALIDATION.towerSizeTons.max)
       ];
     } else if (towerSizeMetric === TowerSizeMetric.HP) {
       validators = [
-        Validators.required,
         Validators.min(PROCESS_COOLING_VALIDATION.towerSizeHP.min),
         Validators.max(PROCESS_COOLING_VALIDATION.towerSizeHP.max)
       ];
@@ -361,10 +356,10 @@ export class SystemInformationFormService {
         dependentValues = { numberOfFans: 3, fanSpeedType: 2 };
         break;
       case TowerType.VariableSpeed:
-        //  todo 7641 unknown sideeffects
+        dependentValues = { numberOfFans: 1, fanSpeedType: 0 };
         break;
       default:
-        dependentValues = { numberOfFans: 0, fanSpeedType: 0 };
+        dependentValues = { numberOfFans: 1, fanSpeedType: 0 };
     }
     return dependentValues;
   }

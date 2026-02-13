@@ -305,7 +305,8 @@ export enum AirCoolingSource {
 
 export enum TowerSizeMetric {
     Tons = 0,
-    HP = 1
+    HP = 1,
+    Unknown = 2,
 }
 
 export enum FanSpeedType {

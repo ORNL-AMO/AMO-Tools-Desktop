@@ -17,6 +17,7 @@ export const getTowerSizeMetrics = () => {
     return [
         { value: TowerSizeMetric.Tons, name: 'Tons' },
         { value: TowerSizeMetric.HP, name: 'HP' },
+        { value: TowerSizeMetric.Unknown, name: 'Unknown' },
     ] as const;
 };
 

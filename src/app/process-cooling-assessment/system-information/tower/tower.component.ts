@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
-import { ProcessCoolingAssessment, TowerInput, TowerSizeMetric } from "../../../shared/models/process-cooling-assessment";
+import { ProcessCoolingAssessment, TowerInput, TowerSizeMetric, TowerType } from "../../../shared/models/process-cooling-assessment";
 import { ProcessCoolingAssessmentService } from "../../services/process-cooling-asessment.service";
 import { TowerForm, SystemInformationFormService } from "../system-information-form.service";
 import { Settings } from "../../../shared/models/settings";
@@ -27,6 +27,7 @@ export class TowerComponent {
   controlIds: FormControlIds<TowerForm>;
   TEMPERATURE_HTML = TEMPERATURE_HTML;
   PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
+  TowerType = TowerType;
 
   towerTypes = getTowerTypes();
   towerSizeMetrics = getTowerSizeMetrics();
@@ -58,6 +59,7 @@ export class TowerComponent {
     ).subscribe(
       (towerType) => {
         const dependentValues = this.systemInformationFormService.getTowerTypeDependentValues(towerType);
+        // todo 8173 if tower type changes to unknown we shold be settings tower size based on some coefficient and chiller cap total. 
         this.numberOfFans.setValue(dependentValues.numberOfFans, { emitEvent: false });
         this.fanSpeedType.setValue(dependentValues.fanSpeedType, { emitEvent: false });
         this.updateAssessment();
