@@ -3,12 +3,14 @@ import { WeatherContext, WeatherContextData } from '../shared/modules/weather-da
 import { ROUTE_TOKENS } from './process-cooling-assessment.module';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { Settings } from '../shared/models/settings';
 
 @Injectable()
 export class ProcessCoolingWeatherContextService implements WeatherContext {
   private router: Router = inject(Router);
   private readonly weatherContextData = new BehaviorSubject<WeatherContextData>(undefined);
   readonly weatherContextData$ = this.weatherContextData.asObservable();
+  readonly settings: Settings;
 
   getWeatherData() {
     return this.weatherContextData.getValue();

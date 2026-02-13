@@ -4,6 +4,7 @@ import { forkJoin, tap, Observable, of, throwError } from 'rxjs';
 import { catchError, retry, timeout, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { WEATHER_CONTEXT, WeatherContextData } from './modules/weather-data/weather-context.token';
+import { ConvertValue } from './convert-units/ConvertValue';
 
 
 @Injectable()
@@ -69,6 +70,24 @@ export class WeatherApiService {
     return this.http.post<WeatherDataResponse>(this.DATA_URL, stationDataRequest, {
       headers: this.defaultHeaders
     }).pipe(
+      map(response => {
+        const mappedData: WeatherDataResponse = {
+          // * 8190 - TMY data is now being returned only in C
+          hourly_data: response.hourly_data.map(dataPoint => {
+
+            const settings = this.weatherContextService.settings;
+            if (settings && settings.unitsOfMeasure === 'Imperial') {
+              dataPoint.dry_bulb_temp = new ConvertValue(dataPoint.dry_bulb_temp, 'C', 'F').convertedValue;
+              dataPoint.wet_bulb_temp = new ConvertValue(dataPoint.wet_bulb_temp, 'C', 'F').convertedValue;
+            }
+            return {
+              ...dataPoint,
+            };
+          })
+        };
+
+        return mappedData;
+      }),
       timeout(this.defaultTimeout),
       retry(this.maxRetries),
       catchError(this.handleError)

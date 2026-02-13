@@ -116,7 +116,6 @@ export class WeatherStationsComponent {
         this.furthestDistance
       );
 
-      // this.stations = testingStations
       try {
         this.stations = await firstValueFrom(this.weatherApiService.searchStations(stationSearchRequest));
         console.log(this.stations);

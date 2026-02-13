@@ -1,10 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingSuiteApiService } from '../../tools-suite-api/process-cooling-suite-api.service';
-import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
+import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
 import { combineLatest, map, Observable } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
 import { CondenserCoolingMethod, Modification, ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
 import { ModificationService } from './modification.service';
+import { ConvertProcessCoolingService } from './convert-process-cooling.service';
 
 @Injectable()
 export class ProcessCoolingResultsService {
@@ -12,6 +13,7 @@ export class ProcessCoolingResultsService {
   private readonly modificationService = inject(ModificationService);
   private readonly processCoolingWeatherContextService = inject(WEATHER_CONTEXT);
   private readonly suiteApi = inject(ProcessCoolingSuiteApiService);
+  private readonly convertProcessCoolingService = inject(ConvertProcessCoolingService);
 
   readonly baselineResults$: Observable<ProcessCoolingResults> = combineLatest([
     this.processCoolingAssessmentService.processCooling$,
@@ -45,14 +47,14 @@ export class ProcessCoolingResultsService {
   getResults(processCoolingAssessment: ProcessCoolingAssessment): ProcessCoolingResults {
     console.log('[ProcessCoolingResultsService]  processCoolingAssessment:', processCoolingAssessment);
     let results: ProcessCoolingResults;
-    const weatherData = this.processCoolingWeatherContextService.getWeatherData();
-    const isValidWeatherData = this.processCoolingWeatherContextService.isValidWeatherData();
-    
+    const weatherData: WeatherContextData = this.processCoolingWeatherContextService.getWeatherData();
+    const isValidWeatherData: boolean = this.processCoolingWeatherContextService.isValidWeatherData();
     if (isValidWeatherData) {
+      const convertedWeatherDataInput = this.convertProcessCoolingService.convertWeatherDataForSuiteApi(weatherData);
       if (processCoolingAssessment.systemInformation.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
-        results = this.suiteApi.getWaterCooledResults(processCoolingAssessment, weatherData);
+        results = this.suiteApi.getWaterCooledResults(processCoolingAssessment, convertedWeatherDataInput);
       } else {
-        results = this.suiteApi.getAirCooledResults(processCoolingAssessment, weatherData);
+        results = this.suiteApi.getAirCooledResults(processCoolingAssessment, convertedWeatherDataInput);
       }
     }
     return results;
