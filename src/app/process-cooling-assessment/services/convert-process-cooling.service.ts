@@ -4,6 +4,8 @@ import { ProcessCoolingAssessment, SystemInformation, Operations, AirCooledSyste
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 import { roundVal } from '../../shared/helperFunctions';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
+import { WeatherDataPoint } from '../../shared/weather-api.service';
 
 @Injectable()
 export class ConvertProcessCoolingService {
@@ -200,5 +202,24 @@ export class ConvertProcessCoolingService {
   convertProcessCoolingResults(results: ProcessCoolingResults, oldSettings: Settings, newSettings: Settings): ProcessCoolingResults {
     if (!results) return results;
   }
+
+  convertWeatherDataForSuiteApi(weatherData: WeatherContextData, settings: Settings): WeatherContextData {
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      const convertedWeatherDataPoints = weatherData.weatherDataPoints.map((dataPoint: WeatherDataPoint) => {
+        return {
+          ...dataPoint,
+          dry_bulb_temp: new ConvertValue(dataPoint.dry_bulb_temp, 'C', 'F').convertedValue,
+          wet_bulb_temp: new ConvertValue(dataPoint.wet_bulb_temp, 'C', 'F').convertedValue,
+        }
+      });
+
+      return {
+        ...weatherData,
+        weatherDataPoints: convertedWeatherDataPoints
+      }
+    }
+    return weatherData;
+  }
+
   
 }

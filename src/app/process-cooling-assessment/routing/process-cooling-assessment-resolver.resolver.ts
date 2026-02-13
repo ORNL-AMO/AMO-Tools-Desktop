@@ -3,7 +3,7 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
 import { Injectable, Inject, inject } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
-import { catchError, forkJoin, from, map, Observable, of, switchMap, take, throwError } from 'rxjs';
+import { catchError, forkJoin, from, map, Observable, of, switchMap, take, throwError, tap } from 'rxjs';
 import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { Settings } from '../../shared/models/settings';
 import { MeasurAppError } from '../../shared/errors/errors';
@@ -62,11 +62,11 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
     let assessment = this.assessmentDbService.findById(Number(id));
     let getAssessment$: Observable<Assessment>;
     if (assessment) {
-      // * is first load of this assessmet
+      // * is first load of this assessment
       getAssessment$ = of(assessment);
     } else {
       // * is refresh or direct route access
-      // todo This getAssessment$ block is a workaround for an old pattern - core.service init db logic should be refactored so it's in an appInitializer and we don't set all data here
+      // ? This getAssessment$ block is a workaround for an old pattern - core.service init db logic should be refactored so it's in an appInitializer and we don't set all data here
       getAssessment$ = forkJoin([
         this.assessmentDbService.setAll(),
         this.settingsDbService.setAll()
@@ -85,6 +85,8 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
       switchMap(assessment => {
         this.processCoolingAssessmentService.setAssessment(assessment);
         this.processCoolingAssessmentService.setProcessCooling(assessment.processCooling);
+        this.inventoryService.setDefaultSelectedChiller(assessment.processCooling.inventory);
+        this.inventoryService.setInventoryValidState(assessment.processCooling.inventory);
 
         if (assessment.processCooling.weatherData) {
           this.processCoolingWeatherContextService.setWeatherData(assessment.processCooling.weatherData);
@@ -93,7 +95,6 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
         }
 
 
-        
         let selectedModificationId: string;
         try {
           selectedModificationId = this.localStorageService.retrieve(PC_SELECTED_MODIFICATION_KEY);
@@ -107,12 +108,16 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
         if (!this.egridService.subRegionsByZipcode) {
           this.egridService.getAllSubRegions();
         }
-        this.inventoryService.setDefaultSelectedChiller(assessment.processCooling.inventory);
 
         return from(this.processCoolingAssessmentService.initAssessmentSettings(assessment)).pipe(
           switchMap(() =>
             this.processCoolingAssessmentService.settings$.pipe(
               take(1),
+              tap((settings: Settings) => {
+                if (settings) {
+                  this.processCoolingWeatherContextService.settings = settings;
+                }
+              }),
               map(settings => ({
                 assessment,
                 settings

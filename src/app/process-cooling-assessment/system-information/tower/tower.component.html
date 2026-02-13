@@ -9,6 +9,18 @@
         </select>
     </div>
 
+    @if (towerType.value === TowerType.VariableSpeed) {
+    <div class="form-group">
+        <label for="{{controlIds.numberOfFans}}">Number of Fans</label>
+        <select class="form-control" id="{{controlIds.numberOfFans}}" formControlName="numberOfFans"
+            (focus)="focusField('numberOfFans')">
+            <option [ngValue]="1">1</option>
+            <option [ngValue]="2">2</option>
+            <option [ngValue]="3">3</option>
+        </select>
+    </div>
+    }
+
     <div class="form-group">
         <label for="{{controlIds.numberOfTowers}}">Number of Towers</label>
         <div class="input-group">
@@ -28,6 +40,7 @@
         </select>
     </div>
 
+    @if (towerSizeMetric.value !== TowerSizeMetrics.Unknown) {
     <div class="form-group">
         <label for="{{controlIds.towerSize}}">Tower Size</label>
         <div class="input-group">
@@ -38,6 +51,17 @@
         </div>
         <app-form-control-errors [control]="towerSize"></app-form-control-errors>
     </div>
+
+    <div class="form-group">
+        <label for="{{controlIds.fanType}}">Fan Type</label>
+        <select class="form-control" id="{{controlIds.fanType}}" formControlName="fanType"
+            (focus)="focusField('fanType')">
+            @for (fanType of fanTypes; track fanType.value) {
+            <option [ngValue]="fanType.value">{{ fanType.name }}</option>
+            }
+        </select>
+    </div>
+    }
 
     <div class="form-group">
         <label for="{{controlIds.usesFreeCooling}}">Uses Free Cooling</label>
@@ -65,23 +89,15 @@
                 <input name="HEXApproachTemp" type="number" step="any" class="form-control"
                     id="{{controlIds.HEXApproachTemp}}" formControlName="HEXApproachTemp"
                     (focus)="focusField('HEXApproachTemp')">
-                <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+                <app-input-unit [settings]="settings()"
+                    [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
                     [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
             </div>
-            <app-form-control-errors [control]="HEXApproachTemp" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
-                    [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
+            <app-form-control-errors [control]="HEXApproachTemp" [settings]="settings()"
+                [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+                [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
         </div>
         }
     }
-
-    <div class="form-group">
-        <label for="{{controlIds.fanType}}">Fan Type</label>
-        <select class="form-control" id="{{controlIds.fanType}}" formControlName="fanType"
-            (focus)="focusField('fanType')">
-            @for (fanType of fanTypes; track fanType.value) {
-            <option [ngValue]="fanType.value">{{ fanType.name }}</option>
-            }
-        </select>
-    </div>
 
 </form>
