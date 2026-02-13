@@ -13,7 +13,8 @@
       <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
         [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
     </div>
-    <app-form-control-errors [control]="outdoorAirTemp"></app-form-control-errors>
+    <app-form-control-errors [control]="outdoorAirTemp" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+                [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
   </div>
 
   <div class="form-group">
@@ -36,7 +37,8 @@
       <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
         [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
     </div>
-    <app-form-control-errors [control]="indoorTemp"></app-form-control-errors>
+    <app-form-control-errors [control]="indoorTemp" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+                [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
   </div>
 
   } @else {
@@ -49,7 +51,8 @@
       <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
         [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
     </div>
-    <app-form-control-errors [control]="followingTempDifferential"></app-form-control-errors>
+    <app-form-control-errors [control]="followingTempDifferential" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+                [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
   </div>
   }
 

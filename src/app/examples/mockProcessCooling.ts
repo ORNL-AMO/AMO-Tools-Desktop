@@ -332,7 +332,7 @@ export const MockProcessCoolingSettings: Settings = {
     "otherFuelType": "",
     "userEnteredBaselineEmissions": false,
     "userEnteredModificationEmissions": false,
-    "zipcode": "00000",
+    "zipcode": "37830",
     "commonRollupUnit": "MMBtu",
     "pumpsRollupUnit": "MWh",
     "fansRollupUnit": "MWh",

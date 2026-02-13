@@ -10,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
+import { ChillerInventoryService } from './chiller-inventory.service';
 
 /**
  * Service currently uses both signals and observables for the same state. This is a prototype, 
@@ -21,6 +22,7 @@ export class ProcessCoolingAssessmentService {
   private readonly convertProcessCoolingService = inject(ConvertProcessCoolingService);
   private readonly assessmentDbService = inject(AssessmentDbService);
   private readonly processCoolingWeatherContextService = inject(WEATHER_CONTEXT);
+  private readonly inventoryService = inject(ChillerInventoryService);
 
   private readonly systemInformationFormService = inject(SystemInformationFormService);
   
@@ -215,7 +217,7 @@ export class ProcessCoolingAssessmentService {
     map(([processCooling, weatherContextData]: [ProcessCoolingAssessment, WeatherContextData]) => {
       if (processCooling) {
         const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
-        const isChillerInventoryValid = this.isChillerInventoryValid(processCooling.inventory);
+        const isChillerInventoryValid = this.isChillerInventoryValid();
         const isOperatingScheduleValid = this.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
         const isValid = isSystemInformationValid && isChillerInventoryValid && isOperatingScheduleValid && isWeatherDataValid;
@@ -275,7 +277,7 @@ export class ProcessCoolingAssessmentService {
   readonly isChillerInventoryValid$ = this.processCooling$.pipe(
     map((processCooling: ProcessCoolingAssessment) => {
       if (processCooling && processCooling.inventory) {
-        return this.isChillerInventoryValid(processCooling.inventory);
+        return this.isChillerInventoryValid();
       }
       return false;
     })
@@ -311,8 +313,9 @@ export class ProcessCoolingAssessmentService {
     return this.systemInformationFormService.isSystemInformationValid(systemInformation, this.settingsSignal()) && isWeatherDataValid;
   }
 
-  isChillerInventoryValid(chillerInventory: ChillerInventoryItem[]): boolean {
-    return chillerInventory && chillerInventory.length > 0;
+  isChillerInventoryValid(): boolean {
+    // return chillerInventory && chillerInventory.length > 0;
+    return this.inventoryService.inventoryValidState().isValid;
   }
   
   isOperatingScheduleValid(weeklyOperatingSchedule: WeeklyOperatingSchedule, monthlyOperatingSchedule: MonthlyOperatingSchedule): boolean {
@@ -331,6 +334,19 @@ export class ProcessCoolingAssessmentService {
         const hasAllMonths = chiller.loadScheduleAllMonths?.length > 0;
         return hasByMonth || hasAllMonths;
       });
+    }
+  }
+
+  setDefaultWeatherZipcode() {
+    let processCooling = { ...this.processCoolingSignal() };
+    const existingWeatherData = this.processCoolingWeatherContextService.getWeatherData();
+    if (!existingWeatherData && processCooling.systemInformation.co2SavingsData?.zipcode) {
+      const zipcode = processCooling.systemInformation.co2SavingsData.zipcode;
+        this.processCoolingWeatherContextService.setWeatherData({
+          selectedStation: undefined,
+          weatherDataPoints: [],
+          addressString: zipcode.toString(),
+        });
     }
   }
 

@@ -8,6 +8,8 @@ import { ProcessCoolingUiService } from '../services/process-cooling-ui.service'
 import { ChillerInventoryForm, ChillerInventoryService } from '../services/chiller-inventory.service';
 import { getChillerTypes, getDefaultInventoryItem } from '../constants/process-cooling-constants';
 import { FormControlIds, generateFormControlIds } from '../../shared/helperFunctions';
+import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { Settings } from '../../shared/models/settings';
 
 @Component({
   selector: 'app-chiller-inventory',
@@ -28,9 +30,16 @@ export class ChillerInventoryComponent implements OnInit {
   selectedChiller$: Observable<ChillerInventoryItem> = this.inventoryService.selectedChiller$;
   chillerTypes = getChillerTypes();
 
+  PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
+  settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
+  
+
   ngOnInit(): void {
   const defaultChillerValues = this.inventoryService.selectedChillerValue ? this.inventoryService.selectedChillerValue : getDefaultInventoryItem();
   this.form = this.inventoryService.getChillerForm(defaultChillerValues);
+  // * Disable until we can populate FLE from a generic compressor db
+  this.form.get('isFullLoadEfficiencyKnown').disable();
+
   this.controlIds = generateFormControlIds(this.form.controls);
 
     this.observeFormChanges();
@@ -53,7 +62,6 @@ export class ChillerInventoryComponent implements OnInit {
     ).subscribe(() => {
       const updatedChiller: ChillerInventoryItem = this.inventoryService.getChiller(this.form.getRawValue(), this.inventoryService.selectedChillerValue);
       this.processCoolingAssessmentService.updateAssessmentChiller(updatedChiller);
-      this.inventoryService.setSelectedChiller(updatedChiller);
     });
   }
 

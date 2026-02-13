@@ -92,6 +92,7 @@ export class OperationsComponent {
 
   updateCo2SavingsData(co2SavingsData: Co2SavingsData) {
     this.processCoolingAssessmentService.updateSystemInformationProperty('co2SavingsData', co2SavingsData);
+    this.processCoolingAssessmentService.setDefaultWeatherZipcode();
   }
 
   // todo move to service

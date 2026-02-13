@@ -43,16 +43,18 @@
 
                     <input type="number" class="form-control" id="fullLoadEfficiency"
                         formControlName="fullLoadEfficiency" (focus)="focusField('fullLoadEfficiency')" />
-                    <app-input-unit [defaultUnit]="'kW/ton'"></app-input-unit>
+                    <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.fullLoadEfficiency.labelHTML.imperial"
+                [metricUnit]="PROCESS_COOLING_UNITS.fullLoadEfficiency.labelHTML.metric"></app-input-unit>
                 </div>
-
+                <app-form-control-errors [control]="form.controls.fullLoadEfficiency"></app-form-control-errors>
             </div>
             <div class="form-group">
                 <label for="{{controlIds.capacity}}">Capacity</label>
                 <div class="input-group">
                     <input type="number" class="form-control" id="capacity" formControlName="capacity"
                         (focus)="focusField('capacity')" />
-                    <app-input-unit [defaultUnit]="'tons'"></app-input-unit>
+                    <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.capacity.labelHTML.imperial"
+                [metricUnit]="PROCESS_COOLING_UNITS.capacity.labelHTML.metric"></app-input-unit>
                 </div>
             </div>
             <div class="form-group">

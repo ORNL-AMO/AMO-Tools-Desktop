@@ -49,7 +49,7 @@ export class ChillerInventoryService {
       isFullLoadEfficiencyKnown: [chiller.isFullLoadEfficiencyKnown],
       chillerType: [chiller.chillerType],
       capacity: [chiller.capacity],
-      fullLoadEfficiency: [chiller.fullLoadEfficiency],
+      fullLoadEfficiency: [chiller.fullLoadEfficiency, chiller.isFullLoadEfficiencyKnown ? Validators.required : null],
       age: [chiller.age]
     });
     return form;
