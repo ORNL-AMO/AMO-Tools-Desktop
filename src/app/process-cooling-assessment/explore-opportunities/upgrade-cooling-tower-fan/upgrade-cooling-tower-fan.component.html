@@ -24,11 +24,23 @@
                 </label>
                 <select class="form-control" id="modificationTowerType" formControlName="towerType"
                     (focus)="focusField('towerType')">
-                    @for (towerType of towerTypes; track towerType.value) {
-                    <option [ngValue]="towerType.value">{{ towerType.name }}</option>
+                    @for (towerTypeObj of towerTypes; track towerTypeObj.value) {
+                    <option [ngValue]="towerTypeObj.value">{{ towerTypeObj.name }}</option>
                     }
                 </select>
             </div>
+
+                @if (towerType.value === TowerType.VariableSpeed) {
+                <div class="form-group">
+                    <label for="modificationNumberOfFans">Number of Fans</label>
+                    <select class="form-control" id="modificationNumberOfFans" formControlName="numberOfFans"
+                        (focus)="focusField('numberOfFans')">
+                        <option [ngValue]="1">1</option>
+                        <option [ngValue]="2">2</option>
+                        <option [ngValue]="3">3</option>
+                    </select>
+                </div>
+                }
         </div>
     </div>
 </form>

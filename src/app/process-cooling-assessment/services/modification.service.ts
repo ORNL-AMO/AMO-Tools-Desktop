@@ -151,6 +151,8 @@ export class ModificationService {
       },
       upgradeCoolingTowerFans: {
         towerType: baselineValues.upgradeCoolingTowerFans.towerType,
+        fanSpeedType: baselineValues.upgradeCoolingTowerFans.fanSpeedType,
+        numberOfFans: baselineValues.upgradeCoolingTowerFans.numberOfFans,
         useOpportunity: false,
       },
       useFreeCooling: {
@@ -228,6 +230,8 @@ export class ModificationService {
       },
       upgradeCoolingTowerFans: {
         towerType: processCooling.systemInformation.towerInput.towerType,
+        fanSpeedType: processCooling.systemInformation.towerInput.fanSpeedType,
+        numberOfFans: processCooling.systemInformation.towerInput.numberOfFans,
       },
       useFreeCooling: {
         usesFreeCooling: processCooling.systemInformation.towerInput.usesFreeCooling,
