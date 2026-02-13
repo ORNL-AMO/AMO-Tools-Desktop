@@ -11,6 +11,7 @@ import { CompressedAirCalculationService } from '../compressed-air-calculation.s
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { CompressedAirModifiedDayTypeProfileSummary } from '../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
 import { ExploreOpportunitiesService } from '../assessment-tab-content/explore-opportunities/explore-opportunities.service';
+import * as Plotly from 'plotly.js-dist';
 
 @Component({
   selector: 'app-system-profile-graphs',
@@ -90,9 +91,9 @@ export class SystemProfileGraphsComponent implements OnInit {
       this.drawCharts();
     });
     this.xAxisHoverSub = this.systemProfileGraphService.xAxisHover.subscribe(val => {
-      if (val) {
+      // if (val) {
         this.setHover(val);
-      }
+      // }
     });
   }
 
@@ -157,11 +158,11 @@ export class SystemProfileGraphsComponent implements OnInit {
     }
   }
 
-  getMaxLineTrace(xAxisRange: Array<number>, yMaxvalue: number, name: string) {
+  getMaxLineTrace(xData: Array<number>, yMaxvalue: number, name: string) {
     if (yMaxvalue !== undefined) {
       let maxLineTrace = {
-        x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
-        y: [yMaxvalue, yMaxvalue],
+        x: xData,
+        y: xData.map(x => yMaxvalue),
         type: 'scatter',
         // showlegend: this.isBaseline === false ? false : true,
         mode: 'lines',
@@ -171,17 +172,18 @@ export class SystemProfileGraphsComponent implements OnInit {
           width: 6,
           color: '#7030A0',
         },
+        hovertemplate: name + ': %{y}<extra></extra>',
       };
 
       return maxLineTrace;
     }
   }
 
-  getPeakLineTrace(xAxisRange: Array<number>, peakValue: number, name: string) {
+  getPeakLineTrace(xData: Array<number>, peakValue: number, name: string) {
     if (peakValue !== undefined) {
       let peakValueTrace = {
-        x: [xAxisRange[0] - 1, xAxisRange[1] + 1],
-        y: [peakValue, peakValue],
+        x: xData,
+        y: xData.map(x => peakValue),
         type: 'scatter',
         mode: 'lines',
         name: name,
@@ -190,6 +192,7 @@ export class SystemProfileGraphsComponent implements OnInit {
           width: 3,
           color: '#fc7f03',
         },
+        hovertemplate: name + ': %{y}<extra></extra>',
       };
 
       return peakValueTrace;
@@ -239,25 +242,41 @@ export class SystemProfileGraphsComponent implements OnInit {
   }
 
   setHover(hoverPositionData: HoverPositionData) {
-    // if (hoverPositionData.chartName == 'systemCapacityGraph' && this.systemCapacityGraph.nativeElement && hoverPositionData.points != undefined) {
-    //   Plotly.Fx.hover(this.systemCapacityGraph.nativeElement, hoverPositionData.points)
-    // }
-    // if (hoverPositionData.chartName == 'compressorCapacityGraph' && this.compressorCapacityGraph.nativeElement && hoverPositionData.points != undefined) {
-    //   Plotly.Fx.hover(this.compressorCapacityGraph.nativeElement, hoverPositionData.points)
-    // }
-    // if (hoverPositionData.chartName == 'systemPowerGraph' && this.systemPowerGraph.nativeElement && hoverPositionData.points != undefined) {
-    //   Plotly.Fx.hover(this.systemPowerGraph.nativeElement, hoverPositionData.points)
-    // }
-    // if (hoverPositionData.chartName == 'compressorPowerGraph' && this.compressorPowerGraph.nativeElement && hoverPositionData.points != undefined) {
-    //   Plotly.Fx.hover(this.compressorPowerGraph.nativeElement, hoverPositionData.points)
-    // }
+    if (hoverPositionData) {
+      if (hoverPositionData.chartName == 'systemCapacityGraph' && this.systemCapacityGraph.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
+        Plotly.Fx.hover(this.systemCapacityGraph.nativeElement, hoverPositionData.points)
+      }
+      if (hoverPositionData.chartName == 'compressorCapacityGraph' && this.compressorCapacityGraph.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
+        Plotly.Fx.hover(this.compressorCapacityGraph.nativeElement, hoverPositionData.points)
+      }
+      if (hoverPositionData.chartName == 'systemPowerGraph' && this.systemPowerGraph.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
+        Plotly.Fx.hover(this.systemPowerGraph.nativeElement, hoverPositionData.points)
+      }
+      if (hoverPositionData.chartName == 'compressorPowerGraph' && this.compressorPowerGraph.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
+        Plotly.Fx.hover(this.compressorPowerGraph.nativeElement, hoverPositionData.points)
+      }
+    }else{
+      if (this.systemCapacityGraph?.nativeElement) {
+        Plotly.Fx.unhover(this.systemCapacityGraph.nativeElement);
+      }
+      if (this.compressorCapacityGraph?.nativeElement) {
+        Plotly.Fx.unhover(this.compressorCapacityGraph.nativeElement);
+      }
+      if (this.systemPowerGraph?.nativeElement) {
+        Plotly.Fx.unhover(this.systemPowerGraph.nativeElement);
+      }
+      if (this.compressorPowerGraph?.nativeElement) {
+        Plotly.Fx.unhover(this.compressorPowerGraph.nativeElement);
+      }
+    }
   }
 
   updateHoverPositionData(chart: any, chartName: string) {
     chart.on('plotly_hover', (data) => {
       let hoverPositionData: HoverPositionData = {
         chartName: chartName,
-        points: data.points
+        points: data.points,
+        labelName: this.labelName
       }
       this.systemProfileGraphService.xAxisHover.next(hoverPositionData);
     });
@@ -336,8 +355,9 @@ export class SystemProfileGraphsComponent implements OnInit {
         displaylogo: false
       };
 
+      let xData = traceData[0]?.x;
       if (this.isBaseline !== false || (this.isBaseline === false && this.systemProfileGraphService.showingCapacityMax.getValue() === true)) {
-        let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadCapacity, 'Max System Capacity');
+        let maxLineTrace = this.getMaxLineTrace(xData, this.totalFullLoadCapacity, 'Max System Capacity');
         traceData.push(maxLineTrace);
       }
 
@@ -345,7 +365,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         return _.sum(intervalAirflows);
       });
       let peakAirflow = Math.max(...maxFlows);
-      let peakTrace = this.getPeakLineTrace(xRange, peakAirflow, 'Peak Airflow');
+      let peakTrace = this.getPeakLineTrace(xData, peakAirflow, 'Peak Airflow');
       traceData.push(peakTrace);
 
       this.plotlyService.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
@@ -471,9 +491,9 @@ export class SystemProfileGraphsComponent implements OnInit {
         responsive: !this.printView,
         displaylogo: false
       };
-
+      let xData = traceData[0]?.x;
       if (this.isBaseline !== false || (this.isBaseline === false && this.systemProfileGraphService.showingPowerMax.getValue() === true)) {
-        let maxLineTrace = this.getMaxLineTrace(xRange, this.totalFullLoadPower, 'Max Full Load Power');
+        let maxLineTrace = this.getMaxLineTrace(xData, this.totalFullLoadPower, 'Max Full Load Power');
         traceData.push(maxLineTrace);
       }
 
@@ -481,7 +501,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         return _.sum(intervalPower);
       });
       let peakPower = Math.max(...maxPowers);
-      let peakTrace = this.getPeakLineTrace(xRange, peakPower, 'Peak Power');
+      let peakTrace = this.getPeakLineTrace(xData, peakPower, 'Peak Power');
       traceData.push(peakTrace);
 
       this.plotlyService.newPlot(this.systemPowerGraph.nativeElement, traceData, layout, config).then(chart => {
@@ -606,7 +626,8 @@ export class SystemProfileGraphsComponent implements OnInit {
       legend: {
         orientation: "h",
         y: 1.25
-      }
+      },
+      hovermode: 'x unified'
     };
   }
 }

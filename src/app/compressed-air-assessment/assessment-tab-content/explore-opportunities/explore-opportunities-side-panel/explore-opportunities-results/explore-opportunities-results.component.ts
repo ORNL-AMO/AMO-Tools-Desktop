@@ -82,8 +82,6 @@ export class ExploreOpportunitiesResultsComponent implements OnInit {
     } else if (this.modificationResults && !this.selectedDayType) {
       this.dayTypeModificationResult = new CompressedAirCombinedDayTypeResults(this.modificationResults).getDayTypeModificationResult();
     }
-    console.log('modification result', this.dayTypeModificationResult);
-    console.log('baseline result', this.dayTypeBaselineResult);
   }
 
 }

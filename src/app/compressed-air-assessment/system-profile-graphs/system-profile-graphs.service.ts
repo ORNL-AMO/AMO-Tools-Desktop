@@ -21,7 +21,8 @@ export class SystemProfileGraphsService {
 
 export interface HoverPositionData {
   chartName: string,
-  points: { curveNumber: number, pointNumber: number }
+  points: { curveNumber: number, pointNumber: number },
+  labelName: string
 }
 
 export interface AxisRanges {
