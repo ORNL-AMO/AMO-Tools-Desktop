@@ -85,7 +85,13 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
       switchMap(assessment => {
         this.processCoolingAssessmentService.setAssessment(assessment);
         this.processCoolingAssessmentService.setProcessCooling(assessment.processCooling);
-        this.processCoolingWeatherContextService.setWeatherData(assessment.processCooling.weatherData);
+
+        if (assessment.processCooling.weatherData) {
+          this.processCoolingWeatherContextService.setWeatherData(assessment.processCooling.weatherData);
+        } else {
+          this.processCoolingAssessmentService.setDefaultWeatherZipcode();
+        }
+
 
         
         let selectedModificationId: string;

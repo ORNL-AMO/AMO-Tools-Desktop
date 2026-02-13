@@ -39,7 +39,8 @@ export class IncreaseChilledTemperatureComponent implements OnInit {
         this.form.patchValue({ chilledWaterTemperature: modification.increaseChilledWaterTemp.chilledWaterSupplyTemp }, { emitEvent: false });
         this.chilledWaterTemperature.setValidators([
           Validators.required,
-          Validators.min(this.baselineChilledWaterTemperature),
+          // * hidden - waiting on feedback 2/11
+          // Validators.min(this.baselineChilledWaterTemperature),
         ]);
         this.chilledWaterTemperature.updateValueAndValidity({ emitEvent: false });
       }

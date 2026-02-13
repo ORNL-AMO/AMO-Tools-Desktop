@@ -217,7 +217,7 @@ export interface WaterCooledSystemInput {
      * 
      * MEASUR Tool Suite and CWSAT original input mapping and info
      * @property numberOfTowers - numTower integer, # of Towers
-     * @property numberOfFans - numFanPerTower_Cells integer, # Cells
+     * @property numberOfFans - numFanPerTower_Cells integer, # Cells (1, 2, 3)
      * @property fanSpeedType Enumeration FanMotorSpeedType
      * @property towerSizeMetric - towerSizing Enumeration TowerSizedBy, sized by tonnage or fan hp
      * @property fanType - towerCellFanType Enumeration CellFanType
@@ -230,7 +230,9 @@ export interface TowerInput {
     HEXApproachTemp: number;  
     numberOfTowers: number;
     towerType: number;
-    numberOfFans: number; // * set by towerType choice - number of cells/fans
+    // * set by towerType choice - number of cells/fans 
+    // * - unless variable, then user sets this value
+    numberOfFans: number; 
     fanSpeedType: number; // * set by towerType choice - 1 = Two Speed, 2 = Variable Speed
     towerSizeMetric: number; 
     fanType: number; 

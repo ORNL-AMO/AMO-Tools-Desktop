@@ -108,23 +108,25 @@ export class ProcessCoolingUiService {
       case 7:
         const canVisitOperatingSchedule = isWeatherDataValid
           && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
-          && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory);
+          && this.processCoolingAssessmentService.isChillerInventoryValid();
         return canVisitOperatingSchedule;
       case 8:
         const canVisitLoadSchedule = isWeatherDataValid
           && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
+          && this.processCoolingAssessmentService.isChillerInventoryValid()
           && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitLoadSchedule;
       case 9:
         const canVisitAssessment = isWeatherDataValid
           && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
-          && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory)
+          && this.processCoolingAssessmentService.isChillerInventoryValid()
           && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitAssessment;
       case 10:
+        // todo if isAssessmentValid
         const canVisitReport = isWeatherDataValid
           && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
-          && this.processCoolingAssessmentService.isChillerInventoryValid(processCooling.inventory)
+          && this.processCoolingAssessmentService.isChillerInventoryValid()
           && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitReport;
       default:

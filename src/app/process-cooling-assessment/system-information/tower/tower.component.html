@@ -68,7 +68,8 @@
                 <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
                     [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
             </div>
-            <app-form-control-errors [control]="HEXApproachTemp"></app-form-control-errors>
+            <app-form-control-errors [control]="HEXApproachTemp" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+                    [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
         </div>
         }
     }

@@ -41,11 +41,11 @@ export class FormControlErrorsComponent {
     }
     if (errors['max']) {
       // console.log(`FormControlErrors: control name: ${this.control?.parent && this.control['name'] ? this.control['name'] : '(unknown)'} | error: max | value:`, errors['max']);
-      messages.push(`Value can't be greater than ${this.formatNumber(errors['max'].max)}${this.unit}`);
+      messages.push(`Value can't be greater than ${this.formatNumber(errors['max'].max)} ${this.unit}`);
     }
     if (errors['min']) {
       // console.log(`FormControlErrors: control name: ${this.control?.parent && this.control['name'] ? this.control['name'] : '(unknown)'} | error: min | value:`, errors['min']);
-      messages.push(`Value can't be less than ${this.formatNumber(errors['min'].min)}${this.unit}`);
+      messages.push(`Value can't be less than ${this.formatNumber(errors['min'].min)} ${this.unit}`);
     }
     return messages;
   }
@@ -59,14 +59,14 @@ export class FormControlErrorsComponent {
 
   get unit(): string {
     if (this.defaultUnit) {
-      return ` ${this.defaultUnit}`;
+      return ` <span>${this.defaultUnit}</span>`;
     }
     if (this.settings && this.settings.unitsOfMeasure) {
       if (this.settings.unitsOfMeasure === 'Imperial' && this.imperialUnit) {
-        return ` ${this.imperialUnit}`;
+        return `<span>${this.imperialUnit}</span>`;
       }
       if (this.settings.unitsOfMeasure === 'Metric' && this.metricUnit) {
-        return ` ${this.metricUnit}`;
+        return `<span>${this.metricUnit}</span>`;
       }
     }
     return '';
