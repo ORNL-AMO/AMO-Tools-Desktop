@@ -230,7 +230,7 @@ export class TreasureHuntPptTableService {
         return slide;
     }
 
-    getOpportunityTableRows(rows: any[], opportunity: OpportunitySummary, settings: Settings, totalCostSavings: boolean) {
+    getOpportunityTableRows(rows: any[], opportunity: OpportunitySummary, settings: Settings, isTotalCostSavings: boolean) {
         let utilityUnit: string;
         if (opportunity.mixedIndividualResults) {
             opportunity.mixedIndividualResults.forEach(opp => {
@@ -249,11 +249,17 @@ export class TreasureHuntPptTableService {
             utilityUnit = this.getUtilityUnit(opportunity.utilityType, settings);
             rows.push([opportunity.opportunityName, opportunity.utilityType, this.roundValToFormatString(opportunity.totalEnergySavings), utilityUnit, this.roundValToCurrency(opportunity.costSavings + additionalSavings), this.roundValToCurrency(opportunity.opportunityCost.material), this.roundValToCurrency(opportunity.opportunityCost.labor), this.getOtherCost(opportunity.opportunityCost), this.roundValToCurrency(opportunity.totalCost), this.roundValToFormatString(opportunity.payback)]);
         }
+        rows = this.filterTableBySavingsType(rows, isTotalCostSavings);
 
+        return rows;
+    }
+
+    filterTableBySavingsType(rows: any[], isTotalCostSavings: boolean) {
         if (rows.length > 1) {
+            var newRows: any[] = [];
             const header = rows[0];
             const dataRows = rows.slice(1);
-            const sortIndex = totalCostSavings === true ? 4 : 2;
+            const sortIndex = isTotalCostSavings === true ? 4 : 2;
             function extractNumber(val: any): number {
                 if (typeof val === 'number') return val;
                 if (typeof val === 'string') {
@@ -267,9 +273,9 @@ export class TreasureHuntPptTableService {
             dataRows.sort((a, b) => {
                 return extractNumber(b[sortIndex]) - extractNumber(a[sortIndex]);
             });
-            rows = [header, ...dataRows];
+            newRows = [header, ...dataRows];
         }
-        return rows;
+        return newRows;
     }
 
 
