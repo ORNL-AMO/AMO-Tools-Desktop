@@ -256,10 +256,12 @@ export class TreasureHuntPptTableService {
 
     filterTableBySavingsType(rows: any[], isTotalCostSavings: boolean) {
         if (rows.length > 1) {
+            const sortByCostSavings = 4;
+            const sortByEnergySavings = 2;
             var newRows: any[] = [];
             const header = rows[0];
             const dataRows = rows.slice(1);
-            const sortIndex = isTotalCostSavings === true ? 4 : 2;
+            const sortIndex = isTotalCostSavings === true ? sortByCostSavings : sortByEnergySavings;
             function extractNumber(val: any): number {
                 if (typeof val === 'number') return val;
                 if (typeof val === 'string') {
