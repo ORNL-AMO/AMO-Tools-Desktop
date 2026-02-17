@@ -42,11 +42,13 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
             takeUntilDestroyed(this.destroyRef)
         ).subscribe((modification: Modification) => {
             if (modification) {
+                this.useOpportunity = modification.upgradeCoolingTowerFans.useOpportunity;     
                 this.form.patchValue({ 
                     towerType: modification.upgradeCoolingTowerFans.towerType,
                     numberOfFans: modification.upgradeCoolingTowerFans.numberOfFans,
                     fanSpeedType: modification.upgradeCoolingTowerFans.fanSpeedType
                 }, { emitEvent: false });
+                this.form.updateValueAndValidity({ emitEvent: false });
             }
         });
     }

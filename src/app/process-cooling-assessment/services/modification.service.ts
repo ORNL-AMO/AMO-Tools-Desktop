@@ -162,7 +162,11 @@ export class ModificationService {
     let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
     let modification: Modification = this.getNewModification();
     modification.name = name ? name : modification.name;
-    processCoolingAssessment.modifications.push(modification);
+
+    let updatedModifications = [...processCoolingAssessment.modifications];
+    updatedModifications.push(modification);
+    processCoolingAssessment.modifications = updatedModifications;
+
     this.processCoolingAssessmentService.setProcessCooling(processCoolingAssessment);
     this.setSelectedModificationId(modification.id);
   }
