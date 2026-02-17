@@ -6,7 +6,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { LightingSuiteApiService, LightingFixtureData } from '../../../tools-suite-api/lighting-suite-api.service';
 import { BehaviorSubject } from 'rxjs';
-
+import { LightingFixtureCategory } from '../../../tools-suite-api/lighting-suite-api.service';
 @Injectable()
 export class LightingReplacementService {
 
@@ -15,7 +15,7 @@ export class LightingReplacementService {
   baselineElectricityCost: number;
   modificationElectricityCost: number;
   operatingHours: OperatingHours;
-  lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
+  lightingFixtureCategories: Array<LightingFixtureCategory>;
   selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
 
   showAdditionalDetails: boolean = false;
@@ -101,6 +101,21 @@ export class LightingReplacementService {
           break;
         }
       }
+      // Fallback if not found
+      if (!fixtureData) {
+        fixtureData = {
+          category: 'Metal Halide',
+          type: '350-W Metal Halide',
+          lampsPerFixture: 1,
+          wattsPerLamp: 400,
+          lumensPerLamp: 36000,
+          lampLife: 20000,
+          coefficientOfUtilization: 0.7,
+          ballastFactor: 1,
+          lumenDegradationFactor: 0.8
+        };
+      }
+
       let exampleData: LightingReplacementData = {
         name: 'Fixture #1',
         hoursPerYear: 8760,
@@ -129,6 +144,21 @@ export class LightingReplacementService {
           break;
         }
       }
+      // Fallback if not found
+      if (!fixtureData) {
+        fixtureData = {
+          category: 'High Bay LED',
+          type: 'LED HID Replacement - 150W Equivalent',
+          lampsPerFixture: 1,
+          wattsPerLamp: 150,
+          lumensPerLamp: 21000,
+          lampLife: 50000,
+          coefficientOfUtilization: 0.8,
+          ballastFactor: 1,
+          lumenDegradationFactor: 0.9
+        };
+      }
+
       let exampleData: LightingReplacementData = {
         name: 'Fixture #1',
         hoursPerYear: 8760,

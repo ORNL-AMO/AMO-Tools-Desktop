@@ -5,6 +5,7 @@ import { LightingReplacementService } from '../lighting-replacement.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { LightingFixtureData } from '../../../../tools-suite-api/lighting-suite-api.service';
 import { LightingSuiteApiService } from '../../../../tools-suite-api/lighting-suite-api.service';
+import { LightingFixtureCategory } from '../../../../tools-suite-api/lighting-suite-api.service';
 @Component({
     selector: 'app-lighting-replacement-form',
     templateUrl: './lighting-replacement-form.component.html',
@@ -41,7 +42,7 @@ export class LightingReplacementFormComponent implements OnInit {
 
   showOperatingHoursModal: boolean;
 
-  lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
+  lightingFixtureCategories: Array<LightingFixtureCategory>;
   fixtureTypes: Array<LightingFixtureData>;
   displayDetails: boolean = false;
 
