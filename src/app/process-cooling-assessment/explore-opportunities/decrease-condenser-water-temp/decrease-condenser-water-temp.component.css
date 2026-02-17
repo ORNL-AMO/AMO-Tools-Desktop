@@ -18,12 +18,3 @@
     background-color: var(--process-cooling-assessment);
     color: white;
 }
-
-.disabled {
-	background-color: #e3e3e3;
-	pointer-events: none;
-}
-
-.disabled span {
-	color: rgba(0, 0, 0, 0.38);
-}

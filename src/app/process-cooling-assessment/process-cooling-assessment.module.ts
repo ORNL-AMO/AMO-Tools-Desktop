@@ -76,6 +76,7 @@ import { AlertInfoContainerComponent } from '../shared/alert-info-container/aler
 import { ConfirmActionComponent } from './confirm-action/confirm-action.component';
 import { SlidingCondenserWaterTemperatureComponent } from './explore-opportunities/sliding-condenser-water-temperature/sliding-condenser-water-temperature.component';
 import { UpgradeCoolingTowerFanComponent } from './explore-opportunities/upgrade-cooling-tower-fan/upgrade-cooling-tower-fan.component';
+import { ExploreOpportunitiesFormService } from './services/explore-opportunities-form.service';
 
 
 export const ROUTE_TOKENS = {
@@ -294,6 +295,7 @@ const ROUTES: Route[] = [
     ChillerLoadScheduleService,
     MonthlyOperatingScheduleService,
     ModificationService,
+    ExploreOpportunitiesFormService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })

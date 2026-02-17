@@ -7,6 +7,7 @@ import { ProcessCoolingAssessmentService } from '../../services/process-cooling-
 import { Modification, TowerType } from '../../../shared/models/process-cooling-assessment';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 import { getTowerTypes, TowerTypes } from '../../constants/process-cooling-constants';
+import { ExploreOpportunitiesFormService, UpgradeCoolingTowerFanForm } from '../../services/explore-opportunities-form.service';
 
 @Component({
     selector: 'app-upgrade-cooling-tower-fan',
@@ -22,7 +23,7 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
 
     readonly settings = this.processCoolingAssessmentService.settingsSignal;
 
-    private formBuilder: FormBuilder = inject(UntypedFormBuilder);
+    private exploreOpportunitiesFormService = inject(ExploreOpportunitiesFormService);
     private destroyRef = inject(DestroyRef);
 
     baselineTowerType: string = TowerTypes[this.modificationService.getBaselineExploreOppsValues().upgradeCoolingTowerFans.towerType];
@@ -34,11 +35,7 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
 
     ngOnInit(): void {
         const baselineValues = this.modificationService.getBaselineExploreOppsValues().upgradeCoolingTowerFans;
-        this.form = this.formBuilder.group({ 
-            towerType: [baselineValues.towerType],
-            numberOfFans: [baselineValues.numberOfFans],
-            fanSpeedType: [baselineValues.fanSpeedType]
-        });
+        this.form = this.exploreOpportunitiesFormService.getUpgradeCoolingTowerFanForm(baselineValues);
         this.observeFormChanges();
 
         this.modificationService.selectedModification$.pipe(
@@ -106,9 +103,3 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
     }
 
 }
-
-export type UpgradeCoolingTowerFanForm = {
-    towerType: FormControl<number>;
-    numberOfFans: FormControl<number>;
-    fanSpeedType: FormControl<number>;
-};

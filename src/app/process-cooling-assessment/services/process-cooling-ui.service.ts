@@ -7,11 +7,14 @@ import { ProcessCoolingAssessmentService } from './process-cooling-asessment.ser
 import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
 import { ROUTE_TOKENS as WEATHER_ROUTE_TOKENS } from '../../shared/modules/weather-data/models/routes';
+import { ModificationService } from './modification.service';
 
 @Injectable()
 export class ProcessCoolingUiService {
   private router = inject(Router);
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private modificationService = inject(ModificationService);
+  // todo move this service out when we revise valid handling in the assessment service
   private systemInformationFormService = inject(SystemInformationFormService);
   private weatherContextService = inject(WEATHER_CONTEXT);
 
@@ -127,7 +130,8 @@ export class ProcessCoolingUiService {
         const canVisitReport = isWeatherDataValid
           && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
           && this.processCoolingAssessmentService.isChillerInventoryValid()
-          && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
+          && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule)
+          && this.modificationService.isModificationValid();
         return canVisitReport;
       default:
         // * route does not need protection (ex. baseline)

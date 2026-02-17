@@ -1,7 +1,16 @@
-.pc-explore-checkbox {
+.pc-checkbox {
   width: 1em;
   height: 1em;
   min-width: 1em;
   min-height: 1em;
   vertical-align: middle;
+}
+
+.eem-disabled {
+	background-color: #e3e3e3;
+	pointer-events: none;
+}
+
+.eem-disabled span {
+	color: rgba(0, 0, 0, 0.38);
 }

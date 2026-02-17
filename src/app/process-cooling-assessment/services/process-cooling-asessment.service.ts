@@ -163,14 +163,6 @@ export class ProcessCoolingAssessmentService {
     this.setProcessCooling(updatedProcessCooling);
   }
 
-  setIsSetupDone(assessment: ProcessCoolingAssessment) {
-    // let settings: Settings = this.settings.getValue();
-    // let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(assessment.systemInformation, settings).valid;
-    let hasValidSystemSetup = true;
-    let hasValidInventory = true;
-    assessment.setupDone = hasValidSystemSetup && hasValidInventory;
-  }
-
   // * logic used in every top level assessment component
   // todo move to assessments.service, return the new settings, if changed then handle assessment conversion in component
     /**
