@@ -65,7 +65,7 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
             this.modificationService.updateModificationEEM('upgradeCoolingTowerFans',
                 {
                     ...this.form.getRawValue(),
-                    useOpportunity: true
+                    useOpportunity: this.useOpportunity
                 }
             );
         });
@@ -76,7 +76,7 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
             this.modificationService.updateModificationEEM('upgradeCoolingTowerFans',
                 {
                     ...this.form.getRawValue(),
-                    useOpportunity: true
+                    useOpportunity: this.useOpportunity
                 }
             );
         });
