@@ -1,11 +1,12 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, Signal } from '@angular/core';
 import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
-import { BehaviorSubject, EMPTY, map, Observable, of, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, EMPTY, of, switchMap, tap } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
 import { LocalStorageService } from '../../shared/local-storage.service';
 import { PC_SELECTED_MODIFICATION_KEY } from '../../shared/models/app';
 import { AppErrorService } from '../../shared/errors/app-error.service';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable()
 export class ModificationService {
@@ -13,27 +14,31 @@ export class ModificationService {
   private localStorageService = inject(LocalStorageService);
   private appErrorService = inject(AppErrorService);
   private processCoolingSignal = this.processCoolingAssessmentService.processCoolingSignal;
-  modifications = computed(() => {
-    return this.processCoolingSignal().modifications;
-  });
-
+  
+  
   private readonly selectedModificationId = new BehaviorSubject<string>(undefined);
   readonly selectedModificationId$ = this.selectedModificationId.asObservable();
-
-  // * this needs to be set from an assessment with mods that is being loaded for the first time
-    readonly selectedModification$: Observable<Modification> = this.selectedModificationId$.pipe(
-    tap(id => {
+  
+  
+  modifications: Signal<Array<Modification>> = computed(() => {
+    return this.processCoolingSignal()?.modifications ?? [];
+  });
+  readonly selectedModification$ = combineLatest([
+    this.selectedModificationId$,
+    toObservable(this.modifications)
+  ]).pipe(
+    tap(([id, modifications]) => {
       if (id) {
         this.localStorageService.store(PC_SELECTED_MODIFICATION_KEY, id);
       }
     }),
-    switchMap((selectedModificationId: string) => {
+    switchMap(([selectedModificationId, modifications]: [string, Modification[]]) => {
       if (selectedModificationId) {
         const selectedModification = this.getModificationById(selectedModificationId);
         return of(selectedModification);
-      } else if (this.modifications() && this.modifications().length > 0) {
+      } else if (modifications && modifications.length > 0) {
         let defaultSelectedId = this.getStorageSelectedId();
-        defaultSelectedId = defaultSelectedId ? defaultSelectedId : this.modifications()[0].id;
+        defaultSelectedId = defaultSelectedId ? defaultSelectedId : modifications[0].id;
         this.setSelectedModificationId(defaultSelectedId);
         return EMPTY;
       } else {
@@ -64,10 +69,13 @@ export class ModificationService {
     let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
     const modIndex = processCoolingAssessment.modifications.findIndex(mod => mod.id === modification.id);
     if (modIndex !== -1) {
-      const updatedModification = { ...modification }
-      processCoolingAssessment.modifications[modIndex] = updatedModification;
-      console.log('Updating modification:', updatedModification);
-      this.processCoolingAssessmentService.setProcessCooling(processCoolingAssessment);
+      processCoolingAssessment.modifications[modIndex] = { ...modification };
+      const updatedModifications = [...processCoolingAssessment.modifications];
+      const updatedProcessCooling = {
+        ...processCoolingAssessment,
+        modifications: updatedModifications
+      };
+      this.processCoolingAssessmentService.setProcessCooling(updatedProcessCooling);
     }
   }
 
@@ -174,39 +182,71 @@ export class ModificationService {
   }
 
   /**
-   * Map Explore Opportunities (Modification) values to a new process cooling assessment representing the baseline
-   * @param processCoolingAssessment 
+   * Map Explore Opportunities (Modification) values to a new process cooling assessment representing the modification
+   * @param processCoolingAssessment - Full assessment from which baseline values are pulled
    * @param modification 
    * @returns 
    */
   getModifiedProcessCoolingAssessment(processCoolingAssessment: ProcessCoolingAssessment, modification: Modification): ProcessCoolingAssessment {
     let modifiedProcessCoolingAssessment: ProcessCoolingAssessment = { ...processCoolingAssessment };
+    let systemInformation = { ...modifiedProcessCoolingAssessment.systemInformation };
+    // * EEMS currently only update systemInformation values
 
-    modifiedProcessCoolingAssessment.systemInformation = {
-      ...processCoolingAssessment.systemInformation,
-      operations: {
-        ...processCoolingAssessment.systemInformation.operations,
+    if (modification.increaseChilledWaterTemp.useOpportunity) {
+      systemInformation.operations = {
+        ...systemInformation.operations,
         chilledWaterSupplyTemp: modification.increaseChilledWaterTemp.chilledWaterSupplyTemp,
-      },
-      waterCooledSystemInput: {
-        ...processCoolingAssessment.systemInformation.waterCooledSystemInput,
+      };
+    }
+
+    if (modification.decreaseCondenserWaterTemp.useOpportunity) {
+      systemInformation.waterCooledSystemInput = {
+        ...systemInformation.waterCooledSystemInput,
         condenserWaterTemp: modification.decreaseCondenserWaterTemp.condenserWaterTemp,
+      };
+    }
+
+    if (modification.useSlidingCondenserWaterTemp.useOpportunity) {
+      systemInformation.waterCooledSystemInput = {
+        ...systemInformation.waterCooledSystemInput,
         isConstantCondenserWaterTemp: modification.useSlidingCondenserWaterTemp.isConstantCondenserWaterTemp,
         followingTempDifferential: modification.useSlidingCondenserWaterTemp.followingTempDifferential,
-      },
-      chilledWaterPumpInput: {
-        ...processCoolingAssessment.systemInformation.chilledWaterPumpInput,
+      };
+    }
+
+    if (modification.applyVariableSpeedControls.useOpportunity) {
+      systemInformation.chilledWaterPumpInput = {
+        ...systemInformation.chilledWaterPumpInput,
         variableFlow: modification.applyVariableSpeedControls.chilledWaterVariableFlow,
-      },
-      condenserWaterPumpInput: {
-        ...processCoolingAssessment.systemInformation.condenserWaterPumpInput,
+      };
+    }
+
+    if (modification.applyVariableSpeedControls.useOpportunity) {
+      systemInformation.condenserWaterPumpInput = {
+        ...systemInformation.condenserWaterPumpInput,
         variableFlow: modification.applyVariableSpeedControls.condenserWaterVariableFlow,
-      },
-      towerInput: {
-        ...processCoolingAssessment.systemInformation.towerInput,
-        ...(modification.upgradeCoolingTowerFans?.useOpportunity ? { towerType: modification.upgradeCoolingTowerFans.towerType } : {})
-      }
-    };
+      };
+    }
+
+    if (modification.upgradeCoolingTowerFans.useOpportunity) {
+      systemInformation.towerInput = {
+        ...systemInformation.towerInput,
+        towerType: modification.upgradeCoolingTowerFans.towerType,
+        fanSpeedType: modification.upgradeCoolingTowerFans.fanSpeedType,
+        numberOfFans: modification.upgradeCoolingTowerFans.numberOfFans,
+      };
+    }
+
+    if (modification.useFreeCooling.useOpportunity) {
+      systemInformation.towerInput = {
+        ...systemInformation.towerInput,
+        usesFreeCooling: modification.useFreeCooling.usesFreeCooling,
+        isHEXRequired: modification.useFreeCooling.isHEXRequired,
+        HEXApproachTemp: modification.useFreeCooling.HEXApproachTemp,
+      };
+    }
+
+    modifiedProcessCoolingAssessment.systemInformation = systemInformation;
 
     return modifiedProcessCoolingAssessment;
   }

@@ -1,10 +1,19 @@
-<form *ngIf="form" [formGroup]="form" class="p-0">
-    <div class="checkbox">
-        <label class="group-label" for="increaseChilledWaterTemperatureSetpoint">
+<div>
+    <label class="group-label" for="useApplyVariableSpeedControl">
+        <input class="pc-explore-checkbox" type="checkbox" 
+            id="useApplyVariableSpeedControl" 
+            (focus)="focusField('useApplyVariableSpeedControl')" 
+            (change)="setUseOpportunity()"
+            [(ngModel)]="useOpportunity" />
+        <span class="ml-2">
             Apply Variable Speed Control to Chilled and/or Condenser Water Pumps
-        </label>
-    </div>
+        </span>
+    </label>
+</div>
 
+
+@if(useOpportunity && form) {
+<form [formGroup]="form" class="p-0">
     <div class="row no-gutters mt-3">
         <div class="col-6 pr-2">
             <div class="form-group">
@@ -44,3 +53,4 @@
         </div>
     </div>
 </form>
+}

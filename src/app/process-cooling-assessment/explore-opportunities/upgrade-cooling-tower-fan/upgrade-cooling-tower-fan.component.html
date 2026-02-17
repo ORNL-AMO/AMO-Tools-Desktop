@@ -1,10 +1,19 @@
-<form *ngIf="form" [formGroup]="form" class="p-0">
-    <div class="checkbox">
-        <label class="group-label" for="upgradeCoolingTowerFan">
+<div>
+    <label class="group-label" for="useUpgradeCoolingTower">
+        <input class="pc-explore-checkbox" type="checkbox" 
+            id="useUpgradeCoolingTower" 
+            (focus)="focusField('useUpgradeCoolingTower')" 
+            (change)="setUseOpportunity()"
+            [(ngModel)]="useOpportunity" />
+        <span class="ml-2">
             Upgrade Cooling Tower Fan Speed Control
-        </label>
-    </div>
+        </span>
+    </label>
+</div>
 
+
+@if(useOpportunity && form) {
+<form [formGroup]="form" class="p-0">
     <div class="row no-gutters mt-3">
         <div class="col-6 pr-2">
             <div class="form-group">
@@ -44,3 +53,4 @@
         </div>
     </div>
 </form>
+}

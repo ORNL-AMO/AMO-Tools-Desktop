@@ -24,6 +24,7 @@ export class ApplyVariableSpeedControlComponent implements OnInit {
 
   baselineChilledWaterVariableFlow: boolean = this.modificationService.getBaselineExploreOppsValues().applyVariableSpeedControls.chilledWaterVariableFlow;
   baselineCondenserWaterVariableFlow: boolean = this.modificationService.getBaselineExploreOppsValues().applyVariableSpeedControls.condenserWaterVariableFlow;
+  useOpportunity: boolean = this.modificationService.getBaselineExploreOppsValues().applyVariableSpeedControls.useOpportunity;
   form: FormGroup<ApplyVariableSpeedControlForm>;
 
   ngOnInit(): void {
@@ -45,6 +46,14 @@ export class ApplyVariableSpeedControlComponent implements OnInit {
     });
   }
 
+  setUseOpportunity() {
+    this.modificationService.updateModificationEEM('applyVariableSpeedControls', {
+      chilledWaterVariableFlow: this.form.getRawValue().chilledWaterVariableFlow,
+      condenserWaterVariableFlow: this.form.getRawValue().condenserWaterVariableFlow,
+      useOpportunity: this.useOpportunity
+    });
+  }
+
   observeFormChanges() {
     this.form.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
@@ -52,7 +61,7 @@ export class ApplyVariableSpeedControlComponent implements OnInit {
       this.modificationService.updateModificationEEM('applyVariableSpeedControls', {
         chilledWaterVariableFlow: this.form.getRawValue().chilledWaterVariableFlow,
         condenserWaterVariableFlow: this.form.getRawValue().condenserWaterVariableFlow,
-        useOpportunity: true
+        useOpportunity: this.useOpportunity
       });
     });
   }

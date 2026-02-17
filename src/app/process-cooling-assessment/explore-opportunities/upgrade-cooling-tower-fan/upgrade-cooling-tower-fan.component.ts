@@ -26,6 +26,8 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
     private destroyRef = inject(DestroyRef);
 
     baselineTowerType: string = TowerTypes[this.modificationService.getBaselineExploreOppsValues().upgradeCoolingTowerFans.towerType];
+    useOpportunity: boolean = this.modificationService.getBaselineExploreOppsValues().upgradeCoolingTowerFans.useOpportunity;
+    
     form: FormGroup<UpgradeCoolingTowerFanForm>;
     towerTypes = getTowerTypes();
     TowerType = TowerType;
@@ -57,7 +59,7 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
             takeUntilDestroyed(this.destroyRef)
         ).subscribe((towerType) => {
             const dependentValues = this.systemInformationFormService.getTowerTypeDependentValues(this.towerType.value);
-            // todo 8173 if tower type changes to unknown we shold be settings tower size based on some coefficient and chiller cap total. 
+            // todo 8173 if tower type changes to unknown we should be settings tower size based on some coefficient and chiller cap total. 
             this.numberOfFans.setValue(dependentValues.numberOfFans, { emitEvent: false });
             this.fanSpeedType.setValue(dependentValues.fanSpeedType, { emitEvent: false });
             this.modificationService.updateModificationEEM('upgradeCoolingTowerFans',
@@ -77,6 +79,13 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
                     useOpportunity: true
                 }
             );
+        });
+    }
+
+    setUseOpportunity() {
+        this.modificationService.updateModificationEEM('upgradeCoolingTowerFans', {
+            ...this.form.getRawValue(),
+            useOpportunity: this.useOpportunity
         });
     }
 

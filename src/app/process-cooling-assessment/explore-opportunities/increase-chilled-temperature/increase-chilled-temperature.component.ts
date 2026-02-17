@@ -1,11 +1,12 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { UntypedFormBuilder, Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, Validators, FormBuilder, FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { ModificationService } from '../../services/modification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TEMPERATURE_HTML } from '../../../shared/app-constants';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
 import { Modification } from '../../../shared/models/process-cooling-assessment';
+import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 
 @Component({
   selector: 'app-increase-chilled-temperature',
@@ -17,6 +18,7 @@ export class IncreaseChilledTemperatureComponent implements OnInit {
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   private modificationService = inject(ModificationService);
   private processCoolingUiService = inject(ProcessCoolingUiService);
+  private systemInformationService = inject(SystemInformationFormService);
 
   readonly settings = this.processCoolingAssessmentService.settingsSignal;
 
@@ -26,22 +28,21 @@ export class IncreaseChilledTemperatureComponent implements OnInit {
   TEMPERATURE_HTML = TEMPERATURE_HTML;
 
   baselineChilledWaterTemperature: number = this.modificationService.getBaselineExploreOppsValues().increaseChilledWaterTemp.chilledWaterSupplyTemp;
+  useOpportunity: boolean;
   form: FormGroup<IncreaseChilledTempForm>;
 
   ngOnInit(): void {
-    this.form = this.formBuilder.group({ chilledWaterTemperature: [0, [Validators.required]] });
+    // * min comparison vs default - waiting on feedback 2/11
+    const validators: ValidatorFn[] = this.systemInformationService.getChilledWaterTemperatureValidators(this.settings(), this.baselineChilledWaterTemperature);
+    this.form = this.formBuilder.group({ chilledWaterTemperature: [0, validators] });
     this.observeFormChanges();
 
     this.modificationService.selectedModification$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((modification: Modification) => {
       if (modification) {
+        this.useOpportunity = modification.increaseChilledWaterTemp.useOpportunity;
         this.form.patchValue({ chilledWaterTemperature: modification.increaseChilledWaterTemp.chilledWaterSupplyTemp }, { emitEvent: false });
-        this.chilledWaterTemperature.setValidators([
-          Validators.required,
-          // * hidden - waiting on feedback 2/11
-          // Validators.min(this.baselineChilledWaterTemperature),
-        ]);
         this.chilledWaterTemperature.updateValueAndValidity({ emitEvent: false });
       }
     });
@@ -55,15 +56,24 @@ export class IncreaseChilledTemperatureComponent implements OnInit {
       this.modificationService.updateModificationEEM('increaseChilledWaterTemp',
         {
           chilledWaterSupplyTemp: this.form.getRawValue().chilledWaterTemperature,
-          useOpportunity: true
+          useOpportunity: this.useOpportunity
         }
       );
     });
   }
 
   get chilledWaterTemperature() {
-    return this.form.get('chilledWaterTemperature');
+    return this.form.get('chilledWaterTemperature') as FormControl;
   }
+
+  setUseOpportunity() {
+    this.modificationService.updateModificationEEM('increaseChilledWaterTemp',
+      {
+        chilledWaterSupplyTemp: this.form.getRawValue().chilledWaterTemperature,
+        useOpportunity: this.useOpportunity
+      }
+    );
+  } 
 
   focusField(str: string) {
     this.processCoolingUiService.focusedFieldSignal.set(str);

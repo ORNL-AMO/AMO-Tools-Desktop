@@ -1,10 +1,19 @@
-<form *ngIf="form" [formGroup]="form" class="p-0">
-    <div class="checkbox">
-        <label class="group-label" for="increaseChilledWaterTemperatureSetpoint">
+<div>
+    <label class="group-label" for="useIncreasedChilledWaterTemp">
+        <input class="pc-explore-checkbox" type="checkbox" 
+            id="useIncreasedChilledWaterTemp" 
+            (focus)="focusField('useIncreasedChilledWaterTemp')" 
+            (change)="setUseOpportunity()"
+            [(ngModel)]="useOpportunity" />
+        <span class="ml-2">
             Increase Chilled Water Temperature Setpoint
-        </label>
-    </div>
+        </span>
+    </label>
+</div>
 
+
+@if(useOpportunity && form) {
+<form [formGroup]="form" class="p-0 explore-opps-item">
     <div class="row no-gutters mt-3">
         <div class="col-6 pr-2">
             <div class="form-group">
@@ -25,13 +34,16 @@
                     Modified Chilled Water Temperature
                 </label>
                 <div class="input-group">
-                    <input type="number" class="form-control" id="modificationChilledWaterTemp" formControlName="chilledWaterTemperature"
-                        (focus)="focusField('modificationChilledWaterTemp')">
+                    <input type="number" class="form-control" id="modificationChilledWaterTemp"
+                        formControlName="chilledWaterTemperature" (focus)="focusField('modificationChilledWaterTemp')">
                     <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
                         [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
-                    <app-form-control-errors class="w-100" [control]="chilledWaterTemperature"></app-form-control-errors>
+                    <app-form-control-errors class="w-100"
+                        [control]="chilledWaterTemperature"></app-form-control-errors>
                 </div>
             </div>
         </div>
     </div>
 </form>
+
+}

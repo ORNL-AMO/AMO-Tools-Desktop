@@ -18,10 +18,11 @@
     color: white;
 }
 
-.use-sliding-checkbox {
-  width: 1.3em;
-  height: 1.3em;
-  min-width: 1.3em;
-  min-height: 1.3em;
-  vertical-align: middle;
+.disabled {
+	background-color: #e3e3e3;
+	pointer-events: none;
+}
+
+.disabled span {
+	color: rgba(0, 0, 0, 0.38);
 }
