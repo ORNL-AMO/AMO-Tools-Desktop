@@ -56,6 +56,8 @@ export const MockProcessCoolingAssessment: Assessment = {
                 },
                 "upgradeCoolingTowerFans": {
                     "towerType": 2,
+                    "fanSpeedType": 0,
+                    "numberOfFans": 1,
                     "useOpportunity": false
                 },
                 "useFreeCooling": {

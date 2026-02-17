@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, Signal } from '@angular/core';
-import { UntypedFormBuilder, Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { UntypedFormBuilder, Validators, FormBuilder, FormGroup, FormControl, ValidatorFn } from '@angular/forms';
 import { ModificationService } from '../../services/modification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Modification } from '../../../shared/models/process-cooling-assessment';
@@ -7,6 +7,7 @@ import { ProcessCoolingUiService } from '../../services/process-cooling-ui.servi
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
 import { Settings } from '../../../shared/models/settings';
 import { TEMPERATURE_HTML } from '../../../shared/app-constants';
+import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 
 @Component({
   selector: 'app-decrease-condenser-water-temp',
@@ -18,6 +19,8 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   private modificationService = inject(ModificationService);
   private processCoolingUiService = inject(ProcessCoolingUiService);
+  private systemInformationService = inject(SystemInformationFormService);
+
 
   readonly settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
 
@@ -26,26 +29,38 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
 
-  baselineCondenserWaterTemperature: number = this.modificationService.getBaselineExploreOppsValues().decreaseCondenserWaterTemp.condenserWaterTemp;
+  baselineCondenserWaterTemperature: number;
+  useOpportunity: boolean;
+  isOpportunityDisabled: boolean;
   form: FormGroup<DecreaseCondenserWaterTempForm>;
 
   ngOnInit(): void {
-    this.form = this.formBuilder.group({ condenserWaterTemperature: [0, [Validators.required]] });
+    const baselineValues = this.modificationService.getBaselineExploreOppsValues();
+    this.baselineCondenserWaterTemperature = baselineValues.decreaseCondenserWaterTemp.condenserWaterTemp;
+    
+    const validators: ValidatorFn[] = this.systemInformationService.getCondenserWaterTempValidators(this.settings(), this.baselineCondenserWaterTemperature);
+    this.form = this.formBuilder.group({ condenserWaterTemperature: [0, validators] });
     this.observeFormChanges();
-
+    
     this.modificationService.selectedModification$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((modification: Modification) => {
       if (modification) {
-          this.form.patchValue({ condenserWaterTemperature: modification.decreaseCondenserWaterTemp.condenserWaterTemp }, { emitEvent: false });
-          this.condenserWaterTemperature.setValidators([
-              Validators.required,
-              Validators.max(this.baselineCondenserWaterTemperature),
-          ]);
-          this.condenserWaterTemperature.updateValueAndValidity({ emitEvent: false });
+        this.useOpportunity = modification.decreaseCondenserWaterTemp.useOpportunity;
+        this.isOpportunityDisabled = modification.useSlidingCondenserWaterTemp.useOpportunity === true;
+
+        this.form.patchValue({ condenserWaterTemperature: modification.decreaseCondenserWaterTemp.condenserWaterTemp }, { emitEvent: false });
+        this.condenserWaterTemperature.updateValueAndValidity({ emitEvent: false });
       }
     });
 
+  }
+
+  setUseOpportunity() {
+    this.modificationService.updateModificationEEM('decreaseCondenserWaterTemp', {
+      condenserWaterTemp: this.form.getRawValue().condenserWaterTemperature,
+      useOpportunity: this.useOpportunity
+    });
   }
 
   observeFormChanges() {
@@ -56,7 +71,7 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
       'decreaseCondenserWaterTemp', 
       {
         condenserWaterTemp: this.form.getRawValue().condenserWaterTemperature,
-        useOpportunity: true
+        useOpportunity: this.useOpportunity
       }
     );
     });

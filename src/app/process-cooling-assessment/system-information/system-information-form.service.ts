@@ -54,6 +54,32 @@ export class SystemInformationFormService {
     });
   }
 
+  getChilledWaterTemperatureValidators(settings: Settings, baselineChilledWaterTemp?: number): ValidatorFn[] {
+    let chilledWaterSupplyTempMin: number = PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.min;
+    let chilledWaterSupplyTempMax: number = PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.max;
+
+    if (settings.unitsOfMeasure === 'Metric') {
+      chilledWaterSupplyTempMin = new ConvertValue(
+        chilledWaterSupplyTempMin,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      chilledWaterSupplyTempMax = new ConvertValue(
+        chilledWaterSupplyTempMax,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+    }
+
+    let validators: ValidatorFn[] = [
+      Validators.required,
+      Validators.min(baselineChilledWaterTemp !== undefined ? baselineChilledWaterTemp : chilledWaterSupplyTempMin),
+      Validators.max(chilledWaterSupplyTempMax)
+    ];
+
+    return validators;
+  }
+
   // * spread all current values of operations and then apply the new values from the form, 
   // * since it is only a partial object
   getOperations(formValue: Partial<Operations>, currentOperations: Operations): Operations {
@@ -224,7 +250,7 @@ export class SystemInformationFormService {
     return formGroup;
   }
 
-  getCondenserWaterTempValidators(settings: Settings): ValidatorFn[] {
+  getCondenserWaterTempValidators(settings: Settings, baselineCondenserWaterTemp?: number): ValidatorFn[] {
     let condenserWaterTempMin = PROCESS_COOLING_VALIDATION.condenserWaterTemp.min;
     let condenserWaterTempMax = PROCESS_COOLING_VALIDATION.condenserWaterTemp.max;
 
@@ -244,7 +270,7 @@ export class SystemInformationFormService {
     let validators: ValidatorFn[] = [
       Validators.required,
       Validators.min(condenserWaterTempMin),
-      Validators.max(condenserWaterTempMax)
+      Validators.max(baselineCondenserWaterTemp !== undefined ? baselineCondenserWaterTemp : condenserWaterTempMax)
     ];
 
     return validators;

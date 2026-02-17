@@ -109,8 +109,9 @@ export interface ReplaceChillers extends EEM {
 }
 
 export interface UpgradeCoolingTowerFans extends EEM {
-    // todo this seems to actually be tower type?ex. original CWSAT dropdown "2-cell with .."
     towerType: TowerType,
+    fanSpeedType: FanSpeedType,
+    numberOfFans: number,
 }
 
 export interface UseFreeCooling extends EEM {

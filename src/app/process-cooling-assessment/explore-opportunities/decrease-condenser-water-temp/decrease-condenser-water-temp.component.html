@@ -1,39 +1,50 @@
-<form *ngIf="form" [formGroup]="form" class="p-0">
-    <div class="checkbox">
-        <label class="group-label" for="decreaseCondenserWaterTemperatureSetpoint">
+<div>
+    <label class="group-label" for="useDecreaseCondenserWater" [class.disabled]="isOpportunityDisabled">
+        <input class="pc-explore-checkbox" type="checkbox" id="useDecreaseCondenserWater"
+            (focus)="focusField('useDecreaseCondenserWater')" (change)="setUseOpportunity()"
+            [disabled]="isOpportunityDisabled"
+            [(ngModel)]="useOpportunity" />
+        <span class="ml-2">
             Decrease Condenser Water Temperature Setpoint
-        </label>
-    </div>
+        </span>
+    </label>
+</div>
 
-    <div class="row no-gutters mt-3">
-        <div class="col-6 pr-2">
-            <!-- <h5 class="version-header">Baseline</h5> -->
-            <div class="form-group">
-                <label for="baselineCondenserWaterTemp">
-                    Current Condenser Water Temperature
-                </label>
-                <div class="input-group">
-                    <input type="number" id="baselineCondenserWaterTemp" class="form-control"
-                        [value]="baselineCondenserWaterTemperature" readonly disabled>
-                    <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
-                        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+
+    @if(useOpportunity && form) {
+    <form [formGroup]="form" class="p-0">
+        <div class="row no-gutters mt-3">
+            <div class="col-6 pr-2">
+                <!-- <h5 class="version-header">Baseline</h5> -->
+                <div class="form-group">
+                    <label for="baselineCondenserWaterTemp">
+                        Current Condenser Water Temperature
+                    </label>
+                    <div class="input-group">
+                        <input type="number" id="baselineCondenserWaterTemp" class="form-control"
+                            [value]="baselineCondenserWaterTemperature" readonly disabled>
+                        <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+                            [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 pl-2">
+                <!-- <h5 class="version-header">Modification</h5> -->
+                <div class="form-group">
+                    <label for="modificationCondenserWaterTemp">
+                        Modified Condenser Water Temperature
+                    </label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="modificationCondenserWaterTemp"
+                            formControlName="condenserWaterTemperature"
+                            (focus)="focusField('modificationCondenserWaterTemp')">
+                        <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
+                            [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+                        <app-form-control-errors class="w-100"
+                            [control]="condenserWaterTemperature"></app-form-control-errors>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-6 pl-2">
-            <!-- <h5 class="version-header">Modification</h5> -->
-            <div class="form-group">
-                <label for="modificationCondenserWaterTemp">
-                    Modified Condenser Water Temperature
-                </label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="modificationCondenserWaterTemp" formControlName="condenserWaterTemperature"
-                        (focus)="focusField('modificationCondenserWaterTemp')">
-                    <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial"
-                        [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
-                    <app-form-control-errors class="w-100" [control]="condenserWaterTemperature"></app-form-control-errors>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+    </form>
+    }

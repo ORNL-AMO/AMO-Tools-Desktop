@@ -6,7 +6,7 @@ import { ProcessCoolingUiService } from '../../services/process-cooling-ui.servi
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
 import { Modification, TowerType } from '../../../shared/models/process-cooling-assessment';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
-import { getTowerTypes } from '../../constants/process-cooling-constants';
+import { getTowerTypes, TowerTypes } from '../../constants/process-cooling-constants';
 
 @Component({
     selector: 'app-upgrade-cooling-tower-fan',
@@ -25,20 +25,31 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
     private formBuilder: FormBuilder = inject(UntypedFormBuilder);
     private destroyRef = inject(DestroyRef);
 
-    baselineTowerType: string = TowerType[this.modificationService.getBaselineExploreOppsValues().upgradeCoolingTowerFans.towerType];
+    baselineTowerType: string = TowerTypes[this.modificationService.getBaselineExploreOppsValues().upgradeCoolingTowerFans.towerType];
+    useOpportunity: boolean = this.modificationService.getBaselineExploreOppsValues().upgradeCoolingTowerFans.useOpportunity;
+    
     form: FormGroup<UpgradeCoolingTowerFanForm>;
     towerTypes = getTowerTypes();
+    TowerType = TowerType;
 
     ngOnInit(): void {
-        this.form = this.formBuilder.group({ towerType: [0] });
+        const baselineValues = this.modificationService.getBaselineExploreOppsValues().upgradeCoolingTowerFans;
+        this.form = this.formBuilder.group({ 
+            towerType: [baselineValues.towerType],
+            numberOfFans: [baselineValues.numberOfFans],
+            fanSpeedType: [baselineValues.fanSpeedType]
+        });
         this.observeFormChanges();
 
         this.modificationService.selectedModification$.pipe(
             takeUntilDestroyed(this.destroyRef)
         ).subscribe((modification: Modification) => {
             if (modification) {
-                this.form.patchValue({ towerType: modification.upgradeCoolingTowerFans.towerType }, { emitEvent: false });
-                this.towerType.updateValueAndValidity({ emitEvent: false });
+                this.form.patchValue({ 
+                    towerType: modification.upgradeCoolingTowerFans.towerType,
+                    numberOfFans: modification.upgradeCoolingTowerFans.numberOfFans,
+                    fanSpeedType: modification.upgradeCoolingTowerFans.fanSpeedType
+                }, { emitEvent: false });
             }
         });
     }
@@ -46,20 +57,48 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
     observeFormChanges() {
         this.towerType.valueChanges.pipe(
             takeUntilDestroyed(this.destroyRef)
-        ).subscribe((formValue) => {
+        ).subscribe((towerType) => {
             const dependentValues = this.systemInformationFormService.getTowerTypeDependentValues(this.towerType.value);
-            // todo should dependent fields be updated here
+            // todo 8173 if tower type changes to unknown we should be settings tower size based on some coefficient and chiller cap total. 
+            this.numberOfFans.setValue(dependentValues.numberOfFans, { emitEvent: false });
+            this.fanSpeedType.setValue(dependentValues.fanSpeedType, { emitEvent: false });
             this.modificationService.updateModificationEEM('upgradeCoolingTowerFans',
                 {
-                    towerType: this.towerType.value,
-                    useOpportunity: true
+                    ...this.form.getRawValue(),
+                    useOpportunity: this.useOpportunity
+                }
+            );
+        });
+
+        this.numberOfFans.valueChanges.pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe((numberOfFans) => {
+            this.modificationService.updateModificationEEM('upgradeCoolingTowerFans',
+                {
+                    ...this.form.getRawValue(),
+                    useOpportunity: this.useOpportunity
                 }
             );
         });
     }
 
+    setUseOpportunity() {
+        this.modificationService.updateModificationEEM('upgradeCoolingTowerFans', {
+            ...this.form.getRawValue(),
+            useOpportunity: this.useOpportunity
+        });
+    }
+
     get towerType() {
         return this.form.get('towerType') as FormControl;
+    }
+    
+    get numberOfFans() {
+        return this.form.get('numberOfFans') as FormControl;
+    }
+
+    get fanSpeedType() {
+        return this.form.get('fanSpeedType') as FormControl;
     }
 
     focusField(str: string) {
@@ -70,4 +109,6 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
 
 export type UpgradeCoolingTowerFanForm = {
     towerType: FormControl<number>;
+    numberOfFans: FormControl<number>;
+    fanSpeedType: FormControl<number>;
 };

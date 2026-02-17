@@ -1,10 +1,19 @@
-<form *ngIf="form" [formGroup]="form" class="p-0">
-    <div class="checkbox">
-        <label class="group-label" for="upgradeCoolingTowerFan">
+<div>
+    <label class="group-label" for="useUpgradeCoolingTower">
+        <input class="pc-explore-checkbox" type="checkbox" 
+            id="useUpgradeCoolingTower" 
+            (focus)="focusField('useUpgradeCoolingTower')" 
+            (change)="setUseOpportunity()"
+            [(ngModel)]="useOpportunity" />
+        <span class="ml-2">
             Upgrade Cooling Tower Fan Speed Control
-        </label>
-    </div>
+        </span>
+    </label>
+</div>
 
+
+@if(useOpportunity && form) {
+<form [formGroup]="form" class="p-0">
     <div class="row no-gutters mt-3">
         <div class="col-6 pr-2">
             <div class="form-group">
@@ -24,11 +33,24 @@
                 </label>
                 <select class="form-control" id="modificationTowerType" formControlName="towerType"
                     (focus)="focusField('towerType')">
-                    @for (towerType of towerTypes; track towerType.value) {
-                    <option [ngValue]="towerType.value">{{ towerType.name }}</option>
+                    @for (towerTypeObj of towerTypes; track towerTypeObj.value) {
+                    <option [ngValue]="towerTypeObj.value">{{ towerTypeObj.name }}</option>
                     }
                 </select>
             </div>
+
+                @if (towerType.value === TowerType.VariableSpeed) {
+                <div class="form-group">
+                    <label for="modificationNumberOfFans">Number of Fans</label>
+                    <select class="form-control" id="modificationNumberOfFans" formControlName="numberOfFans"
+                        (focus)="focusField('numberOfFans')">
+                        <option [ngValue]="1">1</option>
+                        <option [ngValue]="2">2</option>
+                        <option [ngValue]="3">3</option>
+                    </select>
+                </div>
+                }
         </div>
     </div>
 </form>
+}

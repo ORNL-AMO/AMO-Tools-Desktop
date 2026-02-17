@@ -10,8 +10,8 @@
         </div>
     </div>
 
-        <div *ngIf="selectedModification$ | async as selectedModification; else noSelectedModification" 
-            [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+    @if(selectedModification$ | async; as selectedModification) {
+        <div [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
             <div class="header mr-2 ml-2">
                 <h3>Select Potential Energy Efficiency Measures</h3>
             </div>
@@ -39,14 +39,15 @@
                 </div>
             </div>
         </div>
-        <ng-template #noSelectedModification>
-            <div *ngIf="!selectedModification" class="no-data assessment-panel-container lookup-form scroll-item"
-                [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
-                <h2 class="h6">Explore energy efficiency measures (EEMs) to increase the efficiency and effectiveness of
-                    your system.</h2>
-                <p class="mt-2 small text-muted">EEMS will be modeled starting from Baseline conditions.</p>
-                <button type="button" class="btn btn-primary" (click)="addModification()">Explore Opportunities</button>
-            </div>
-        </ng-template>
+    } @else {
+        <div class="no-data assessment-panel-container lookup-form scroll-item"
+            [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+            <h2 class="h6">Explore energy efficiency measures (EEMs) to increase the efficiency and effectiveness of
+                your system.</h2>
+            <p class="mt-2 small text-muted">EEMS will be modeled starting from Baseline conditions.</p>
+            <button type="button" class="btn btn-primary" (click)="addModification()">Explore Opportunities</button>
+        </div>
+    }
+
 
 </div>
