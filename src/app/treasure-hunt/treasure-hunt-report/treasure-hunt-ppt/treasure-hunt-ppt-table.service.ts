@@ -247,6 +247,7 @@ export class TreasureHuntPptTableService {
                 additionalSavings = opportunity.opportunityCost.additionalAnnualSavings.cost;
             }
             utilityUnit = this.getUtilityUnit(opportunity.utilityType, settings);
+                // It's an array of strings, but each row is an array of different data types
             rows.push([opportunity.opportunityName, opportunity.utilityType, this.roundValToFormatString(opportunity.totalEnergySavings), utilityUnit, this.roundValToCurrency(opportunity.costSavings + additionalSavings), this.roundValToCurrency(opportunity.opportunityCost.material), this.roundValToCurrency(opportunity.opportunityCost.labor), this.getOtherCost(opportunity.opportunityCost), this.roundValToCurrency(opportunity.totalCost), this.roundValToFormatString(opportunity.payback)]);
         }
         rows = this.filterTableBySavingsType(rows, isTotalCostSavings);
@@ -256,28 +257,30 @@ export class TreasureHuntPptTableService {
 
     filterTableBySavingsType(rows: any[], isTotalCostSavings: boolean) {
         if (rows.length > 1) {
-            const sortByCostSavings = 4;
-            const sortByEnergySavings = 2;
+            const sortByCostSavingsIndex = 4;
+            const sortByEnergySavingsIndex = 2;
             var newRows: any[] = [];
             const header = rows[0];
+            // It's an array of strings, but each row is an array of different data types
             const dataRows = rows.slice(1);
-            const sortIndex = isTotalCostSavings === true ? sortByCostSavings : sortByEnergySavings;
-            function extractNumber(val: any): number {
-                if (typeof val === 'number') return val;
-                if (typeof val === 'string') {
-                    let cleaned = val.replace(/[$,\s]/g, '');
-                    if (cleaned === '-' || cleaned === '') return 0;
-                    let num = parseFloat(cleaned);
-                    return isNaN(num) ? 0 : num;
-                }
-                return 0;
-            }
+            const sortIndex = isTotalCostSavings === true ? sortByCostSavingsIndex : sortByEnergySavingsIndex;
             dataRows.sort((a, b) => {
-                return extractNumber(b[sortIndex]) - extractNumber(a[sortIndex]);
+                return this.extractNumberFromOpportunityColumn(b[sortIndex]) - this.extractNumberFromOpportunityColumn(a[sortIndex]);
             });
             newRows = [header, ...dataRows];
         }
         return newRows;
+    }
+
+    extractNumberFromOpportunityColumn (val: any) {
+        if (typeof val === 'number') return val;
+            if (typeof val === 'string') {
+                // Remove any non-numeric characters (like $ and commas) before parsing
+                let cleaned = val.replace(/[$,\s]/g, '');
+                let num = parseFloat(cleaned);
+                return isNaN(num) ? 0 : num;
+            }
+        return 0;
     }
 
 
