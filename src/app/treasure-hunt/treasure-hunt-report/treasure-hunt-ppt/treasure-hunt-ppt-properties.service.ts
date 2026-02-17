@@ -1,17 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Settings } from '../../../shared/models/settings';
-import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, OpportunityCost, TreasureHuntCo2EmissionsResults, EnergyUsage, TreasureHunt } from '../../../shared/models/treasure-hunt';
-import { TreasureHuntReportService } from '../treasure-hunt-report.service';
-import { OpportunityCardData } from '../../treasure-chest/opportunity-cards/opportunity-cards.service';
 import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
-import * as betterPlantsPPTimg from '../better-plants-ppt-img.js';
-import moment from 'moment';
 
 @Injectable()
 export class TreasureHuntPptPropertiesService {
 
-    constructor(private treasureHuntReportService: TreasureHuntReportService) { }
+    constructor() { }
     
     getPieChartProperties() {
         let pieChartOptions: pptxgen.IChartOpts = {
