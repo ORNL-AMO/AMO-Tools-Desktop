@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { debounceTime, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
-import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 import { ChillerInventoryForm, ChillerInventoryService } from '../services/chiller-inventory.service';
 import { getChillerTypes, getDefaultInventoryItem } from '../constants/process-cooling-constants';

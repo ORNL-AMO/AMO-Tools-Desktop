@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup, ValidatorFn } from "@angular/forms";
 import { WaterCooledSystemInput, ProcessCoolingAssessment } from "../../../../shared/models/process-cooling-assessment";
-import { ProcessCoolingAssessmentService } from "../../../services/process-cooling-asessment.service";
+import { ProcessCoolingAssessmentService } from "../../../services/process-cooling-assessment.service";
 import { WaterCooledSystemInputForm, SystemInformationFormService } from "../../system-information-form.service";
 import { Settings } from "../../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../../services/process-cooling-ui.service";

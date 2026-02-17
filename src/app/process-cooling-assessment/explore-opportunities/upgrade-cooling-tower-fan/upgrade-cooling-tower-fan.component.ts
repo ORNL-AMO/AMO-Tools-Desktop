@@ -3,7 +3,7 @@ import { UntypedFormBuilder, FormBuilder, FormGroup, FormControl } from '@angula
 import { ModificationService } from '../../services/modification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { Modification, TowerType } from '../../../shared/models/process-cooling-assessment';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
 import { getTowerTypes, TowerTypes } from '../../constants/process-cooling-constants';

@@ -1,6 +1,6 @@
 import { Component, inject, WritableSignal } from '@angular/core';
 import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.service';
-import { ProcessCoolingAssessmentService } from '../../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../../services/process-cooling-assessment.service';
 import { CondenserCoolingMethod } from '../../../../shared/models/process-cooling-assessment';
 import { Observable } from 'rxjs';
 

@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { BehaviorSubject, combineLatest, EMPTY, of, switchMap, tap } from 'rxjs';
-import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
 import { LocalStorageService } from '../../shared/local-storage.service';
 import { PC_SELECTED_MODIFICATION_KEY } from '../../shared/models/app';
@@ -199,7 +199,7 @@ export class ModificationService {
   */
   getNewModification(): Modification {
     const baselineValues = this.getBaselineExploreOppsValues();
-    return {
+    const modification: Modification = {
       name: 'Modification',
       id: getNewIdString(),
       notes: undefined,
@@ -249,6 +249,8 @@ export class ModificationService {
         useOpportunity: false,
       },
     }
+
+    return modification;
   }
 
   /**

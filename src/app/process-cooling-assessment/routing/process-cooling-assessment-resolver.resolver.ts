@@ -1,6 +1,6 @@
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
-import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { Injectable, Inject, inject } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { catchError, forkJoin, from, map, Observable, of, switchMap, take, throwError, tap } from 'rxjs';

@@ -7,7 +7,7 @@ import { TEMPERATURE_HTML } from "../../../shared/app-constants";
 import { OperatingHours } from "../../../shared/models/operations";
 import { ProcessCoolingAssessment } from "../../../shared/models/process-cooling-assessment";
 import { getCondenserCoolingMethods } from "../../constants/process-cooling-constants";
-import { ProcessCoolingAssessmentService } from "../../services/process-cooling-asessment.service";
+import { ProcessCoolingAssessmentService } from "../../services/process-cooling-assessment.service";
 import { OperationsForm, SystemInformationFormService } from "../system-information-form.service";
 import { Settings } from "../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../services/process-cooling-ui.service";

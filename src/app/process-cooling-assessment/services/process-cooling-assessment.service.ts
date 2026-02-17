@@ -213,11 +213,6 @@ export class ProcessCoolingAssessmentService {
         const isOperatingScheduleValid = this.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
         const isValid = isSystemInformationValid && isChillerInventoryValid && isOperatingScheduleValid && isWeatherDataValid;
-        console.log('isSystemInformationValid', isSystemInformationValid);
-        console.log('isChillerInventoryValid', isChillerInventoryValid);
-        console.log('isOperatingScheduleValid', isOperatingScheduleValid);
-        console.log('isWeatherDataValid', isWeatherDataValid);
-        console.log('isBaselineValid', isValid);
         return isValid;
       }
       return false;

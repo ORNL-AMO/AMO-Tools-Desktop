@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ProcessCoolingAssessmentComponent } from './process-cooling-assessment/process-cooling-assessment.component';
 import { Route, RouterModule } from '@angular/router';
-import { ProcessCoolingAssessmentService } from './services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from './services/process-cooling-assessment.service';
 import { ProcessCoolingUiService } from './services/process-cooling-ui.service';
 import { ProcessCoolingBannerComponent } from './process-cooling-banner/process-cooling-banner.component';
 import { AssessmentRedirectGuard } from './routing/assessment-redirect-guard';

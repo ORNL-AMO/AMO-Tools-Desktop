@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
-import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
 import { ROUTE_TOKENS as WEATHER_ROUTE_TOKENS } from '../../shared/modules/weather-data/models/routes';

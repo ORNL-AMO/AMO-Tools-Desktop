@@ -4,7 +4,7 @@ import { ModificationService } from '../../services/modification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TEMPERATURE_HTML } from '../../../shared/app-constants';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { Modification } from '../../../shared/models/process-cooling-assessment';
 import { ExploreOpportunitiesFormService, IncreaseChilledTempForm } from '../../services/explore-opportunities-form.service';
 

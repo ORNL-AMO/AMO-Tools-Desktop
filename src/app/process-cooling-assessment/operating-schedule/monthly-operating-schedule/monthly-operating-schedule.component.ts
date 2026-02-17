@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, Signal } from '@angular/core';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
 import { MonthlyOperatingScheduleService } from '../../services/monthly-operating-schedule.service';

@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, WritableSignal } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { ChillerInventoryItem } from '../../../shared/models/process-cooling-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { ChillerInventoryService, InventoryValidState } from '../../services/chiller-inventory.service';

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingSuiteApiService } from '../../tools-suite-api/process-cooling-suite-api.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
 import { combineLatest, map, Observable } from 'rxjs';
-import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { CondenserCoolingMethod, Modification, ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
 import { ModificationService } from './modification.service';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
