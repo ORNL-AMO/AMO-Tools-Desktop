@@ -1,5 +1,5 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { BehaviorSubject, combineLatest, debounceTime, firstValueFrom, map, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, firstValueFrom, map, switchMap, tap } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ChillerInventoryItem, MonthlyOperatingSchedule, ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
 import { Settings } from '../../shared/models/settings';
@@ -39,15 +39,21 @@ export class ProcessCoolingAssessmentService {
 
   constructor() {
     // * keep DB updates in service as a side-effect of state changes (instead of top-level component)
-    this.assessment$.pipe(
+     this.assessment$.pipe(
       debounceTime(300),
-      tap(assessment => {
+      switchMap(assessment => {
         if (assessment) {
-          this.assessmentDbService.updateWithObservable(assessment).subscribe(
-            () => { console.log('Updated assessment in db'); },
-            (error) => { console.error('Error updating assessment in db', error); }
+          return this.assessmentDbService.updateWithObservable(assessment).pipe(
+            // * getAllAssessments -> setAll workflow is only to satisfy legacy MEASUR patterns that are used for keeping items in memory. 
+            // * Satisfying this pattern fixes stale assessment data in the directories
+            switchMap(() => this.assessmentDbService.getAllAssessments()),
+            tap(allAssessments => {
+              this.assessmentDbService.setAll(allAssessments);
+            }),
+            tap(() => console.log('saving assessment in db', assessment))
           );
         }
+        return [];
       }),
       takeUntilDestroyed()
     ).subscribe();
