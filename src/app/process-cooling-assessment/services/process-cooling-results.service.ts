@@ -57,6 +57,7 @@ export class ProcessCoolingResultsService {
         results = this.suiteApi.getAirCooledResults(processCoolingAssessment, convertedWeatherDataInput);
       }
     }
+    console.log('[ProcessCoolingResultsService] getResults results:', results);
     return results;
   }
 }

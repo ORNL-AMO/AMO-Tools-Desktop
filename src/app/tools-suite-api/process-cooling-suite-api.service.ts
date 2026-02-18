@@ -13,7 +13,6 @@ import {
   ProcessCoolingResults
 } from '../shared/models/process-cooling-assessment';
 import { SuiteApiHelperService } from './suite-api-helper.service';
-import { HttpClient } from '@angular/common/http';
 // import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleAirCooledConstant';
 // import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleVINPLTConstants';
 import { WeatherContextData } from '../shared/modules/weather-data/weather-context.token';
@@ -24,8 +23,7 @@ import { ToolsSuiteApiService } from './tools-suite-api.service';
 })
 export class ProcessCoolingSuiteApiService {
   constructor(private suiteApiHelperService: SuiteApiHelperService, 
-    private toolsSuiteApiService: ToolsSuiteApiService,
-    private httpClient: HttpClient) { }
+    private toolsSuiteApiService: ToolsSuiteApiService) { }
 
   /**
  * Calculates chiller energy for a water-cooled system.
@@ -160,16 +158,6 @@ export class ProcessCoolingSuiteApiService {
     const chillers = new this.toolsSuiteApiService.ToolsSuiteModule.ChillerInputV();
 
     for (const input of chillerInventoryItems as ChillerInventoryItem[]) {
-      // console.log('ChillerInventoryItem input:', input);
-      // console.log('  chillerType:', input.chillerType);
-      // console.log('  capacity:', input.capacity);
-      // console.log('  isFullLoadEfficiencyKnown:', input.isFullLoadEfficiencyKnown);
-      // console.log('  fullLoadEfficiency:', input.fullLoadEfficiency);
-      // console.log('  age:', input.age);
-      // console.log('  installVSD:', input.installVSD);
-      // console.log('  useARIloadScheduleByMonthchedule:', input.useARIloadScheduleByMonthchedule);
-      // console.log('  loadScheduleByMonth:', input.loadScheduleByMonth);
-
       const loadSchedule = input.useSameMonthlyLoading ? [input.loadScheduleAllMonths] : input.loadScheduleByMonth;
       const chillerMonthlyLoading = this.suiteApiHelperService.returnDoubleVector2d(loadSchedule);
 
@@ -214,11 +202,11 @@ export class ProcessCoolingSuiteApiService {
     
     for (const hour of weatherData.weatherDataPoints) {
       if (hour.wet_bulb_temp == undefined) {
-        console.log('hour undefined', hour);
+        // console.log('hour undefined', hour);
         wetbulbUndefined++;
         hour.wet_bulb_temp = 0;
       } else if (hour.dry_bulb_temp == undefined) {
-        console.log('hour undefined', hour);
+        // console.log('hour undefined', hour);
         dryBulbUndefined++;
         hour.dry_bulb_temp = 0;
       }
@@ -226,8 +214,8 @@ export class ProcessCoolingSuiteApiService {
       wetBulbHourly.push(hour.wet_bulb_temp);
     }
 
-    console.log('wetbulbUndefined', wetbulbUndefined);
-    console.log('dryBulbUndefined', dryBulbUndefined);
+    console.log('Number Wet Bulb datapoints undefined:', wetbulbUndefined);
+    console.log('Number Dry Bulb datapoints undefined:', dryBulbUndefined);
 
     // * test values
     // let onHoursVector = new this.toolsSuiteApiService.ToolsSuiteModule.IntVector();
@@ -334,12 +322,12 @@ export class ProcessCoolingSuiteApiService {
    */
   private _createAirCooledSystemInput(input: AirCooledSystemInput, operations: Operations): any {
     const ACSource = this.suiteApiHelperService.getProcessCoolingCoolingAirSourceEnum(input.airCoolingSource);
-    console.log('AirCooledSystemInput Inputs:');
-    console.log('chilledWaterSupplyTemp:', operations.chilledWaterSupplyTemp);
-    console.log('outdoorAirTemp (Outdoor Air Design Temp):', input.outdoorAirTemp);
-    console.log('ACSource (Cooling Air Source):', ACSource);
-    console.log('indoorTemp (Average Indoor Temp):', input.indoorTemp);
-    console.log('followingTempDifferential:', input.followingTempDifferential);
+    // console.log('AirCooledSystemInput Inputs:');
+    // console.log('chilledWaterSupplyTemp:', operations.chilledWaterSupplyTemp);
+    // console.log('outdoorAirTemp (Outdoor Air Design Temp):', input.outdoorAirTemp);
+    // console.log('ACSource (Cooling Air Source):', ACSource);
+    // console.log('indoorTemp (Average Indoor Temp):', input.indoorTemp);
+    // console.log('followingTempDifferential:', input.followingTempDifferential);
 
     return new this.toolsSuiteApiService.ToolsSuiteModule.AirCooledSystemInput(
       operations.chilledWaterSupplyTemp,
