@@ -10,7 +10,8 @@ import { ProcessCoolingResultsService } from '../services/process-cooling-result
   selector: 'app-report',
   standalone: false,
   templateUrl: './report.component.html',
-  styleUrl: './report.component.css'
+  styleUrl: './report.component.css',
+  host: { style: 'height: 100%; display: flex; flex-direction: column; overflow: hidden;' }
 })
 export class ReportComponent {
   private readonly processCoolingResultsService = inject(ProcessCoolingResultsService);
