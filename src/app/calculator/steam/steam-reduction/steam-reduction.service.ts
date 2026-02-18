@@ -393,7 +393,7 @@ export class SteamReductionService {
   convertMetricInput(input: SteamReductionData, settings: Settings): SteamReductionData {
     let utilityCostConversionHelper: number = 0;
     if(input.utilityType == 0){
-      utilityCostConversionHelper = this.convertUnitsService.value(1).from('tonne').to('kJ');
+      utilityCostConversionHelper = this.convertUnitsService.value(1).from('tonne').to('klb');
     } else if(input.utilityType == 1 || input.utilityType == 2 ){
       utilityCostConversionHelper = this.convertUnitsService.value(1).from('GJ').to('kJ');
     }
