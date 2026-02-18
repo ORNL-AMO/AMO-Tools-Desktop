@@ -4,7 +4,7 @@ import { Component, OnInit, inject, DestroyRef, Signal } from '@angular/core';
 import { FormArray, FormGroup, FormControl } from '@angular/forms';
 import { WeeklyOperatingScheduleService, WeeklyOperatingScheduleForm } from '../../services/weekly-operating-schedule.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
 import { DAY_LABELS, getDefaultWeeklyOperatingSchedule, HOUR_OPTIONS } from '../../constants/process-cooling-constants';
 

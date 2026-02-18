@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ProcessCoolingAssessmentComponent } from './process-cooling-assessment/process-cooling-assessment.component';
 import { Route, RouterModule } from '@angular/router';
-import { ProcessCoolingAssessmentService } from './services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from './services/process-cooling-assessment.service';
 import { ProcessCoolingUiService } from './services/process-cooling-ui.service';
 import { ProcessCoolingBannerComponent } from './process-cooling-banner/process-cooling-banner.component';
 import { AssessmentRedirectGuard } from './routing/assessment-redirect-guard';
@@ -76,6 +76,7 @@ import { AlertInfoContainerComponent } from '../shared/alert-info-container/aler
 import { ConfirmActionComponent } from './confirm-action/confirm-action.component';
 import { SlidingCondenserWaterTemperatureComponent } from './explore-opportunities/sliding-condenser-water-temperature/sliding-condenser-water-temperature.component';
 import { UpgradeCoolingTowerFanComponent } from './explore-opportunities/upgrade-cooling-tower-fan/upgrade-cooling-tower-fan.component';
+import { ExploreOpportunitiesFormService } from './services/explore-opportunities-form.service';
 
 
 export const ROUTE_TOKENS = {
@@ -294,6 +295,7 @@ const ROUTES: Route[] = [
     ChillerLoadScheduleService,
     MonthlyOperatingScheduleService,
     ModificationService,
+    ExploreOpportunitiesFormService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })

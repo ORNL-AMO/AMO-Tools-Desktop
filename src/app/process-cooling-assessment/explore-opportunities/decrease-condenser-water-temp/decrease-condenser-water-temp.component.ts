@@ -1,13 +1,14 @@
 import { Component, DestroyRef, inject, OnInit, Signal } from '@angular/core';
-import { UntypedFormBuilder, Validators, FormBuilder, FormGroup, FormControl, ValidatorFn } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ModificationService } from '../../services/modification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Modification } from '../../../shared/models/process-cooling-assessment';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { Settings } from '../../../shared/models/settings';
 import { TEMPERATURE_HTML } from '../../../shared/app-constants';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
+import { DecreaseCondenserWaterTempForm, ExploreOpportunitiesFormService } from '../../services/explore-opportunities-form.service';
 
 @Component({
   selector: 'app-decrease-condenser-water-temp',
@@ -24,7 +25,7 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
 
   readonly settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
 
-  private formBuilder: FormBuilder = inject(UntypedFormBuilder);
+  private exploreOpportunitiesFormService = inject(ExploreOpportunitiesFormService);
   private destroyRef = inject(DestroyRef);  
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
@@ -37,18 +38,14 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
   ngOnInit(): void {
     const baselineValues = this.modificationService.getBaselineExploreOppsValues();
     this.baselineCondenserWaterTemperature = baselineValues.decreaseCondenserWaterTemp.condenserWaterTemp;
-    
-    const validators: ValidatorFn[] = this.systemInformationService.getCondenserWaterTempValidators(this.settings(), this.baselineCondenserWaterTemperature);
-    this.form = this.formBuilder.group({ condenserWaterTemperature: [0, validators] });
+    this.form = this.exploreOpportunitiesFormService.getDecreaseCondenserWaterTempForm(this.baselineCondenserWaterTemperature,this.settings());
     this.observeFormChanges();
-    
     this.modificationService.selectedModification$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((modification: Modification) => {
       if (modification) {
         this.useOpportunity = modification.decreaseCondenserWaterTemp.useOpportunity;
         this.isOpportunityDisabled = modification.useSlidingCondenserWaterTemp.useOpportunity === true;
-
         this.form.patchValue({ condenserWaterTemperature: modification.decreaseCondenserWaterTemp.condenserWaterTemp }, { emitEvent: false });
         this.condenserWaterTemperature.updateValueAndValidity({ emitEvent: false });
       }
@@ -88,22 +85,3 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
 
 }
 
-export interface DecreaseCondenserWaterTempForm {
-  condenserWaterTemperature: FormControl<number>;
-}
-
-
-//  help
-
-// Decrease Condenser Water Temperature
-
-// NOTE: When selecting to decrease the condenser water temperature, using a sliding condenser water temperature cannot be used and vice versa.
-
-// Lowering the condenser temperature results in less energy required in the compression cycle.
-//  In water cooled systems, lowering the temperature is accomplished by increasing the speed of the cooling
-//  tower fans or by increasing the number of cooling tower fans running, both of which increase cooling tower energy usage.
-//  In air-cooled systems, lowering the condenser temperature is accomplished by operating the cooling fans more frequently.
-//  There is a greater potential for condenser temperature reduction in water cooled systems since the condenser cooling water
-//  temperature leaving the tower approaches the ambient wet-bulb while the air-cooled temperature approaches the outdoor
-//  dry-bulb temperature.  At typical design conditions, a chiller will consume five to ten times as much energy as
-//  the cooling tower and therefore trading increased cooling tower energy for more efficient chiller operation is frequently justified.

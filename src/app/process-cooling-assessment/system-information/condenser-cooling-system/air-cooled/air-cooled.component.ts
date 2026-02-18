@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
 import { tap } from "rxjs";
 import { AirCooledSystemInput, AirCoolingSource, ProcessCoolingAssessment } from "../../../../shared/models/process-cooling-assessment";
-import { ProcessCoolingAssessmentService } from "../../../services/process-cooling-asessment.service";
+import { ProcessCoolingAssessmentService } from "../../../services/process-cooling-assessment.service";
 import { AirCooledSystemInputForm, SystemInformationFormService } from "../../system-information-form.service";
 import { Settings } from "../../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../../services/process-cooling-ui.service";

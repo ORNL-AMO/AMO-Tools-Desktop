@@ -1,9 +1,10 @@
 <div>
-    <label class="group-label" for="useApplyVariableSpeedControl">
-        <input class="pc-explore-checkbox" type="checkbox" 
+    <label class="group-label" for="useApplyVariableSpeedControl" [class.eem-disabled]="isOpportunityDisabled">
+        <input class="pc-checkbox" type="checkbox" 
             id="useApplyVariableSpeedControl" 
             (focus)="focusField('useApplyVariableSpeedControl')" 
             (change)="setUseOpportunity()"
+            [disabled]="isOpportunityDisabled"
             [(ngModel)]="useOpportunity" />
         <span class="ml-2">
             Apply Variable Speed Control to Chilled and/or Condenser Water Pumps
@@ -18,34 +19,36 @@
         <div class="col-6 pr-2">
             <div class="form-group">
                 <label for="baselineChilledWaterVariableFlow">Chilled Water Pump</label>
-                <select id="baselineChilledWaterVariableFlow" class="form-control"
-                    [value]="baselineChilledWaterVariableFlow ? 'Variable' : 'Constant'" disabled>
-                    <option value="Variable">Variable Flow</option>
-                    <option value="Constant">Constant Flow</option>
+                <select id="baselineChilledWaterVariableFlow" class="form-control" 
+                [value]="baselineChilledWaterVariableFlow ? 'Variable Flow' : 'Constant Flow'" disabled>
+                    <option>Variable Flow</option>
+                    <option>Constant Flow</option>
                 </select>
             </div>
             @if (baselineCondenserWaterVariableFlow !== undefined) {
             <div class="form-group mt-3">
                 <label for="baselineCondenserWaterVariableFlow">Condenser Water Pump</label>
                 <select id="baselineCondenserWaterVariableFlow" class="form-control"
-                    [value]="baselineCondenserWaterVariableFlow ? 'Variable' : 'Constant'" disabled>
-                    <option value="Variable">Variable Flow</option>
-                    <option value="Constant">Constant Flow</option>
+                [value]="baselineCondenserWaterVariableFlow ? 'Variable Flow' : 'Constant Flow'" disabled>
+                    <option>Variable Flow</option>
+                    <option>Constant Flow</option>
                 </select>
             </div>
             }
         </div>
         <div class="col-6 pl-2">
+            @if (baselineChilledWaterVariableFlow === false) {
             <div class="form-group">
                 <label class="mb-1 w-100">
-                    <input type="checkbox" class="vsd-checkbox mr-2" id="modificationChilledWaterVariableFlow"
+                    <input type="checkbox" class="pc-checkbox mr-1" id="modificationChilledWaterVariableFlow"
                         formControlName="chilledWaterVariableFlow" />
                     Apply VSD
                 </label>
             </div>
-            @if (baselineCondenserWaterVariableFlow !== undefined) {
+            }
+            @if (baselineCondenserWaterVariableFlow === false) {
             <label class="mb-1 w-100">
-                <input type="checkbox" class="vsd-checkbox mr-2" id="modificationCondenserWaterVariableFlow"
+                <input type="checkbox" class="pc-checkbox mr-1" id="modificationCondenserWaterVariableFlow"
                     formControlName="condenserWaterVariableFlow" />
                 Apply VSD
             </label>

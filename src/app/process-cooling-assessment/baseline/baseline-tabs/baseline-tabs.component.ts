@@ -2,7 +2,7 @@ import { Component, DestroyRef, ElementRef, inject, Signal, ViewChild } from '@a
 import { ProcessCoolingUiService, SETUP_VIEW_LINKS, ViewLink } from '../../services/process-cooling-ui.service';
 import { ROUTE_TOKENS } from '../../process-cooling-assessment.module';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 
 @Component({
   selector: 'app-baseline-tabs',

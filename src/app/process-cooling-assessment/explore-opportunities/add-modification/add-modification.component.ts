@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { ModificationService } from '../../services/modification.service';
 import { DialogRef } from '@angular/cdk/dialog';
 

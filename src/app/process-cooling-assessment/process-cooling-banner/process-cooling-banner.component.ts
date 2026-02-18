@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, Signal } from '@angular/core';
-import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { map, Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ROUTE_TOKENS } from '../process-cooling-assessment.module';

@@ -4,9 +4,10 @@ import { ModificationService } from '../../services/modification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TEMPERATURE_HTML } from '../../../shared/app-constants';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { Modification } from '../../../shared/models/process-cooling-assessment';
 import { SystemInformationFormService } from '../../system-information/system-information-form.service';
+import { ExploreOpportunitiesFormService } from '../../services/explore-opportunities-form.service';
 
 @Component({
   selector: 'app-sliding-condenser-water-temperature',
@@ -22,7 +23,7 @@ export class SlidingCondenserWaterTemperatureComponent implements OnInit {
 
   readonly settings = this.processCoolingAssessmentService.settingsSignal;
 
-  private formBuilder: FormBuilder = inject(UntypedFormBuilder);
+  private exploreOpportunitiesFormService = inject(ExploreOpportunitiesFormService);
   private destroyRef = inject(DestroyRef);
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
@@ -36,9 +37,7 @@ export class SlidingCondenserWaterTemperatureComponent implements OnInit {
   ngOnInit(): void {
     const baselineValues = this.modificationService.getBaselineExploreOppsValues();
     this.baselineFollowingTempDifferential = baselineValues.useSlidingCondenserWaterTemp.followingTempDifferential;
-    
-    const validators: ValidatorFn[] = this.systemInformationService.getFollowingTempDifferentialValidators(this.settings());
-    this.form = this.formBuilder.group({ followingTempDifferential: [0, validators] });
+    this.form = this.exploreOpportunitiesFormService.getSlidingCondenserWaterTempForm(this.baselineFollowingTempDifferential, this.settings());
     this.observeFormChanges();
     
     this.modificationService.selectedModification$.pipe(

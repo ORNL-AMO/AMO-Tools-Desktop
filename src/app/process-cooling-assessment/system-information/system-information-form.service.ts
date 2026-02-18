@@ -272,7 +272,6 @@ export class SystemInformationFormService {
       Validators.min(condenserWaterTempMin),
       Validators.max(baselineCondenserWaterTemp !== undefined ? baselineCondenserWaterTemp : condenserWaterTempMax)
     ];
-
     return validators;
   }
 

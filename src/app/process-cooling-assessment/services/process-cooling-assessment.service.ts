@@ -1,5 +1,5 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { BehaviorSubject, combineLatest, debounceTime, firstValueFrom, map, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, debounceTime, firstValueFrom, map, switchMap, tap } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ChillerInventoryItem, MonthlyOperatingSchedule, ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
 import { Settings } from '../../shared/models/settings';
@@ -39,15 +39,21 @@ export class ProcessCoolingAssessmentService {
 
   constructor() {
     // * keep DB updates in service as a side-effect of state changes (instead of top-level component)
-    this.assessment$.pipe(
+     this.assessment$.pipe(
       debounceTime(300),
-      tap(assessment => {
+      switchMap(assessment => {
         if (assessment) {
-          this.assessmentDbService.updateWithObservable(assessment).subscribe(
-            () => { console.log('Updated assessment in db'); },
-            (error) => { console.error('Error updating assessment in db', error); }
+          return this.assessmentDbService.updateWithObservable(assessment).pipe(
+            // * getAllAssessments -> setAll workflow is only to satisfy legacy MEASUR patterns that are used for keeping items in memory. 
+            // * Satisfying this pattern fixes stale assessment data in the directories
+            switchMap(() => this.assessmentDbService.getAllAssessments()),
+            tap(allAssessments => {
+              this.assessmentDbService.setAll(allAssessments);
+            }),
+            tap(() => console.log('saving assessment in db', assessment))
           );
         }
+        return [];
       }),
       takeUntilDestroyed()
     ).subscribe();
@@ -163,14 +169,6 @@ export class ProcessCoolingAssessmentService {
     this.setProcessCooling(updatedProcessCooling);
   }
 
-  setIsSetupDone(assessment: ProcessCoolingAssessment) {
-    // let settings: Settings = this.settings.getValue();
-    // let hasValidSystemInformation = this.systemInformationFormService.getFormFromObj(assessment.systemInformation, settings).valid;
-    let hasValidSystemSetup = true;
-    let hasValidInventory = true;
-    assessment.setupDone = hasValidSystemSetup && hasValidInventory;
-  }
-
   // * logic used in every top level assessment component
   // todo move to assessments.service, return the new settings, if changed then handle assessment conversion in component
     /**
@@ -221,11 +219,6 @@ export class ProcessCoolingAssessmentService {
         const isOperatingScheduleValid = this.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
         const isValid = isSystemInformationValid && isChillerInventoryValid && isOperatingScheduleValid && isWeatherDataValid;
-        console.log('isSystemInformationValid', isSystemInformationValid);
-        console.log('isChillerInventoryValid', isChillerInventoryValid);
-        console.log('isOperatingScheduleValid', isOperatingScheduleValid);
-        console.log('isWeatherDataValid', isWeatherDataValid);
-        console.log('isBaselineValid', isValid);
         return isValid;
       }
       return false;

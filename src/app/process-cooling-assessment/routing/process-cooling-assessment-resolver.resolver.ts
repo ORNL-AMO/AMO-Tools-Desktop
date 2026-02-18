@@ -1,6 +1,6 @@
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
-import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { Injectable, Inject, inject } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { catchError, forkJoin, from, map, Observable, of, switchMap, take, throwError, tap } from 'rxjs';
@@ -37,7 +37,6 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
   ) { }
 
   resolve(route: ActivatedRouteSnapshot): Observable<ProcessCoolingResolverData> {
-    // console.time('ProcessCoolingAssessmentResolver.resolve');
     const id = route.paramMap.get('assessmentId');
     if (!id || isNaN(Number(id))) {
       this.router.navigate(['/error']);
@@ -49,14 +48,12 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
 
     const settingsValue = this.processCoolingAssessmentService.settingsValue;
     if (assessmentValue && isIdMatch && settingsValue) {
-      // console.timeEnd('ProcessCoolingAssessmentResolver.resolve');
       return of({
         assessment: assessmentValue,
         settings: settingsValue
       }).pipe(
         map(data => ({ assessment: data.assessment, settings: data.settings }))
       );
-
     }
 
     let assessment = this.assessmentDbService.findById(Number(id));
@@ -102,6 +99,10 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
           this.appErrorService.handleAppError('Error retrieving selectedModificationId from localStorage', error);
         }
         if (selectedModificationId) {
+          const modification = this.modificationService.getModificationById(selectedModificationId);
+          if (!modification) {
+            selectedModificationId = assessment.processCooling.modifications[0]?.id;
+          }
           this.modificationService.setSelectedModificationId(selectedModificationId);
         }
 
@@ -131,8 +132,6 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
         return throwError(() => new MeasurAppError('Resolver initializedModuleData error', error));
       })
     );
-
-    // console.timeEnd('ProcessCoolingAssessmentResolver.resolve');
 
     return initializedModuleData$;
   }

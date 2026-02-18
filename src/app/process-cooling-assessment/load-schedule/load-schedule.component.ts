@@ -1,5 +1,5 @@
 import { Component, inject, WritableSignal } from '@angular/core';
-import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 
 @Component({

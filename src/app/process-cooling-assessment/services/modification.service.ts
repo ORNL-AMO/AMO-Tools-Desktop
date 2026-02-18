@@ -1,25 +1,27 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { BehaviorSubject, combineLatest, EMPTY, of, switchMap, tap } from 'rxjs';
-import { ProcessCoolingAssessmentService } from './process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
 import { LocalStorageService } from '../../shared/local-storage.service';
 import { PC_SELECTED_MODIFICATION_KEY } from '../../shared/models/app';
 import { AppErrorService } from '../../shared/errors/app-error.service';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { ExploreOpportunitiesFormService } from './explore-opportunities-form.service';
 
 @Injectable()
 export class ModificationService {
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private exploreOpportunitiesFormService = inject(ExploreOpportunitiesFormService);
   private localStorageService = inject(LocalStorageService);
   private appErrorService = inject(AppErrorService);
   private processCoolingSignal = this.processCoolingAssessmentService.processCoolingSignal;
-  
-  
+
+
   private readonly selectedModificationId = new BehaviorSubject<string>(undefined);
   readonly selectedModificationId$ = this.selectedModificationId.asObservable();
-  
-  
+
+
   modifications: Signal<Array<Modification>> = computed(() => {
     return this.processCoolingSignal()?.modifications ?? [];
   });
@@ -65,6 +67,74 @@ export class ModificationService {
     return this.modifications().find(mod => mod.id === modificationId);
   }
 
+  isModificationValid(): boolean {
+    const selectedModificationId = this.selectedModificationId.getValue();
+    if (!selectedModificationId) {
+      return true;
+    }
+    const modification = this.getModificationById(selectedModificationId);
+    if (!modification) {
+      return true;
+    }
+
+    const baselineValues = this.getBaselineExploreOppsValues();
+
+    if (modification.increaseChilledWaterTemp?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getIncreaseChilledTempForm(
+        modification.increaseChilledWaterTemp.chilledWaterSupplyTemp,
+        this.processCoolingAssessmentService.settingsSignal(),
+        baselineValues.increaseChilledWaterTemp.chilledWaterSupplyTemp
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    if (modification.decreaseCondenserWaterTemp?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getDecreaseCondenserWaterTempForm(
+        modification.decreaseCondenserWaterTemp.condenserWaterTemp,
+        this.processCoolingAssessmentService.settingsSignal(),
+        baselineValues.decreaseCondenserWaterTemp.condenserWaterTemp
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    if (modification.useSlidingCondenserWaterTemp?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getSlidingCondenserWaterTempForm(
+        modification.useSlidingCondenserWaterTemp.followingTempDifferential,
+        this.processCoolingAssessmentService.settingsSignal(),
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    if (modification.applyVariableSpeedControls?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getApplyVariableSpeedControlForm(
+        modification.applyVariableSpeedControls.chilledWaterVariableFlow,
+        modification.applyVariableSpeedControls.condenserWaterVariableFlow
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    if (modification.upgradeCoolingTowerFans?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getUpgradeCoolingTowerFanForm({
+        towerType: modification.upgradeCoolingTowerFans.towerType,
+        numberOfFans: modification.upgradeCoolingTowerFans.numberOfFans,
+        fanSpeedType: modification.upgradeCoolingTowerFans.fanSpeedType
+      });
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   updateModification(modification: Modification) {
     let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
     const modIndex = processCoolingAssessment.modifications.findIndex(mod => mod.id === modification.id);
@@ -92,7 +162,11 @@ export class ModificationService {
     let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
     let modification: Modification = this.getNewModification();
     modification.name = name ? name : modification.name;
-    processCoolingAssessment.modifications.push(modification);
+
+    let updatedModifications = [...processCoolingAssessment.modifications];
+    updatedModifications.push(modification);
+    processCoolingAssessment.modifications = updatedModifications;
+
     this.processCoolingAssessmentService.setProcessCooling(processCoolingAssessment);
     this.setSelectedModificationId(modification.id);
   }
@@ -121,15 +195,15 @@ export class ModificationService {
     }
   }
 
-   /**
-   * Map Baseline Explore Opportunities values to a modification
-   * @param processCoolingAssessment 
-   * @param modification 
-   * @returns 
-   */
+  /**
+  * Map Baseline Explore Opportunities values to a modification
+  * @param processCoolingAssessment 
+  * @param modification 
+  * @returns 
+  */
   getNewModification(): Modification {
     const baselineValues = this.getBaselineExploreOppsValues();
-    return {
+    const modification: Modification = {
       name: 'Modification',
       id: getNewIdString(),
       notes: undefined,
@@ -179,6 +253,8 @@ export class ModificationService {
         useOpportunity: false,
       },
     }
+
+    return modification;
   }
 
   /**
@@ -219,6 +295,11 @@ export class ModificationService {
         ...systemInformation.chilledWaterPumpInput,
         variableFlow: modification.applyVariableSpeedControls.chilledWaterVariableFlow,
       };
+      systemInformation.condenserWaterPumpInput = {
+        ...systemInformation.condenserWaterPumpInput,
+        variableFlow: modification.applyVariableSpeedControls.condenserWaterVariableFlow,
+      };
+
     }
 
     if (modification.applyVariableSpeedControls.useOpportunity) {

@@ -1,11 +1,11 @@
 <div>
-    <label class="group-label" for="useDecreaseCondenserWater" [class.disabled]="isOpportunityDisabled">
-        <input class="pc-explore-checkbox" type="checkbox" id="useDecreaseCondenserWater"
+    <label class="group-label" for="useDecreaseCondenserWater" [class.eem-disabled]="isOpportunityDisabled">
+        <input class="pc-checkbox" type="checkbox" id="useDecreaseCondenserWater"
             (focus)="focusField('useDecreaseCondenserWater')" (change)="setUseOpportunity()"
             [disabled]="isOpportunityDisabled"
             [(ngModel)]="useOpportunity" />
         <span class="ml-2">
-            Decrease Condenser Water Temperature Setpoint
+            Decrease Condenser Water Temperature
         </span>
     </label>
 </div>
@@ -15,7 +15,6 @@
     <form [formGroup]="form" class="p-0">
         <div class="row no-gutters mt-3">
             <div class="col-6 pr-2">
-                <!-- <h5 class="version-header">Baseline</h5> -->
                 <div class="form-group">
                     <label for="baselineCondenserWaterTemp">
                         Current Condenser Water Temperature
@@ -29,7 +28,6 @@
                 </div>
             </div>
             <div class="col-6 pl-2">
-                <!-- <h5 class="version-header">Modification</h5> -->
                 <div class="form-group">
                     <label for="modificationCondenserWaterTemp">
                         Modified Condenser Water Temperature

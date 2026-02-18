@@ -8,7 +8,7 @@ import { SettingsService } from '../../settings/settings.service';
 import { copyObject } from '../../shared/helperFunctions';
 import { ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { ConvertProcessCoolingService } from '../services/convert-process-cooling.service';
-import { ProcessCoolingAssessmentService } from '../services/process-cooling-asessment.service';
+import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 
 @Component({
