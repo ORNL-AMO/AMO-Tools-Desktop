@@ -23,6 +23,10 @@ export class LightingReplacementService {
     this.selectedFixtureTypes = new BehaviorSubject(undefined);
   }
 
+  setLightingFixtureCategories() {
+    this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems()
+  }
+
 
   initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {
     let hoursPerYear: number = 8760;
@@ -91,8 +95,6 @@ export class LightingReplacementService {
   }
 
   generateExample(isBaseline: boolean): LightingReplacementData {
-    this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
-
     if (isBaseline) {
       let fixtureData;
       for (const category of this.lightingFixtureCategories) {

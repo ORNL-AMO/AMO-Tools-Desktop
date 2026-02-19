@@ -17,10 +17,10 @@ export class LightingReplacementHelpComponent implements OnInit {
   lightingFixtureCategories: Array<LightingFixtureCategory>;
   selectedFixtureTypesSub: Subscription;
   fixtureTypes: Array<LightingFixtureData>;
-  constructor(private lightingReplacementService: LightingReplacementService, private lightingSuiteApiService: LightingSuiteApiService) { }
+  constructor(private lightingReplacementService: LightingReplacementService) { }
 
   ngOnInit() {
-    this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
+    this.lightingFixtureCategories = this.lightingReplacementService.lightingFixtureCategories;
     this.selectedFixtureTypesSub = this.lightingReplacementService.selectedFixtureTypes.subscribe(fixtureTypes => {
       this.fixtureTypes = fixtureTypes;
     })

@@ -54,10 +54,10 @@ export class LightingReplacementFormComponent implements OnInit {
   indicateLumenDegradationFactorDiff: boolean = false;
   indicateFixtureTypeDiff: boolean = false;
 
-  constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef, private lightingSuiteApiService: LightingSuiteApiService) {}
+  constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
+    this.lightingFixtureCategories = this.lightingReplacementService.lightingFixtureCategories;
     this.displayDetails = this.lightingReplacementService.showAdditionalDetails;
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;
