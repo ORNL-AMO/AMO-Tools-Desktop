@@ -28,14 +28,13 @@ export class EnergyUseFormComponent implements OnInit {
   ngOnInit() {
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
-      this.updateAvailableEnergyTypes();
+      if (this.treasureHunt && this.treasureHunt.currentEnergyUsage) {
+        this.updateAvailableEnergyTypes();
+      }
     });
-    this.updateAvailableEnergyTypes();
   }
 
   updateAvailableEnergyTypes() {
-    var currentEnergyUsage = this.treasureHunt.currentEnergyUsage;
-    if (!currentEnergyUsage) return;
     const allTypes = [
       'Electricity',
       'Gas',
@@ -46,13 +45,13 @@ export class EnergyUseFormComponent implements OnInit {
       'WWT'
     ];
     const energyUsageToType = {
-      'Electricity': currentEnergyUsage.electricityUsed,
-      'Gas': currentEnergyUsage.naturalGasUsed,
-      'Compressed Air': currentEnergyUsage.compressedAirUsed,
-      'Other Fuel': currentEnergyUsage.otherFuelUsed,
-      'Steam': currentEnergyUsage.steamUsed,
-      'Water': currentEnergyUsage.waterUsed,
-      'WWT': currentEnergyUsage.wasteWaterUsed
+      'Electricity': this.treasureHunt.currentEnergyUsage.electricityUsed,
+      'Gas': this.treasureHunt.currentEnergyUsage.naturalGasUsed,
+      'Compressed Air': this.treasureHunt.currentEnergyUsage.compressedAirUsed,
+      'Other Fuel': this.treasureHunt.currentEnergyUsage.otherFuelUsed,
+      'Steam': this.treasureHunt.currentEnergyUsage.steamUsed,
+      'Water': this.treasureHunt.currentEnergyUsage.waterUsed,
+      'WWT': this.treasureHunt.currentEnergyUsage.wasteWaterUsed
     };
     this.availableEnergyTypes = allTypes.filter(type => energyUsageToType[type]);
   }
