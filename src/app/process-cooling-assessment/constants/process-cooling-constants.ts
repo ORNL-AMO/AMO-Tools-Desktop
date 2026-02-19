@@ -67,6 +67,18 @@ export const TowerTypes =
     [TowerType.VariableSpeed]: 'Tower With Variable Speed Motor(s)',
 }
 
+export const EEM_LABELS = {
+  increaseChilledWaterTemp: 'Increase Chilled Water Temperature',
+  decreaseCondenserWaterTemp: 'Decrease Condenser Water Temperature',
+  useSlidingCondenserWaterTemp: 'Use Sliding Condenser Water Temperature',
+  applyVariableSpeedControls: 'Apply Variable Speed Controls',
+  replaceChillers: 'Replace Chillers',
+  upgradeCoolingTowerFans: 'Upgrade Cooling Tower Fans',
+  useFreeCooling: 'Use Free Cooling',
+  replaceRefrigerant: 'Replace Refrigerant',
+  installVSDOnCentrifugalCompressor: 'Install VSD on Centrifugal Compressor'
+}
+
 export const getDefaultInventoryItem = (): ChillerInventoryItem => {
     return {
         itemId: getNewIdString(),

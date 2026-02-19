@@ -1,3 +1,4 @@
+
 export const PROCESS_COOLING_UNITS = {
   temperature: {
     imperial: 'F',
@@ -70,6 +71,14 @@ export const PROCESS_COOLING_UNITS = {
       metric: 'kW'
     }
   },
+  energy: {
+    imperial: 'kWh',
+    metric: 'kWh',
+    labelHTML: {
+      imperial: 'kWh',
+      metric: 'kWh'
+    }
+  }
 };
 
 export interface AppUnits {

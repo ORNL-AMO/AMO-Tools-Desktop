@@ -35,6 +35,8 @@ export class ProcessCoolingSuiteApiService {
  */
   getWaterCooledResults(assessment: ProcessCoolingAssessment, weatherData: WeatherContextData): ProcessCoolingResults {
     let results: ProcessCoolingResults = {
+      id: undefined,
+      name: assessment.name,
       chiller: undefined as ProcessCoolingChillerOutput[],
       pump: undefined as ProcessCoolingPumpOutput,
       tower: undefined as ProcessCoolingTowerOutput
@@ -66,6 +68,8 @@ export class ProcessCoolingSuiteApiService {
    */
   getAirCooledResults(assessment: ProcessCoolingAssessment, weatherData: WeatherContextData): ProcessCoolingResults {
     let results: ProcessCoolingResults = {
+      id: undefined,
+      name: assessment.name,
       chiller: undefined as ProcessCoolingChillerOutput[],
       pump: undefined as ProcessCoolingPumpOutput,
     };

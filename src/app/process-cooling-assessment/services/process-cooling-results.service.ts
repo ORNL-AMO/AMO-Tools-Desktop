@@ -6,6 +6,7 @@ import { ProcessCoolingAssessmentService } from './process-cooling-assessment.se
 import { CondenserCoolingMethod, Modification, ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
 import { ModificationService } from './modification.service';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable()
 export class ProcessCoolingResultsService {
@@ -22,13 +23,13 @@ export class ProcessCoolingResultsService {
     map(([processCooling, isBaselineValid]: [ProcessCoolingAssessment, boolean]) => {
       let results: ProcessCoolingResults;
       if (processCooling && isBaselineValid) {
-        results = this.getResults(processCooling);
+        results = this.getProcessCoolingSuiteResults(processCooling);
       }
       return results;
     })
   );
 
-  readonly modificationResults$: Observable<ProcessCoolingResults> = combineLatest([
+  readonly selectedModificationResults$: Observable<ProcessCoolingResults> = combineLatest([
     this.processCoolingAssessmentService.processCooling$,
     this.processCoolingAssessmentService.isBaselineValid$,
     this.modificationService.selectedModification$
@@ -37,14 +38,36 @@ export class ProcessCoolingResultsService {
       let results: ProcessCoolingResults;
       if (processCooling && isBaselineValid && modification && modification.isValid) {
         const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(processCooling, modification);
-        results = this.getResults(modifiedProcessCoolingAssessment);
+        results = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment);
       } 
-      console.log('[ProcessCoolingResultsService] modificationResults$ results:', results);
+      console.log('[ProcessCoolingResultsService] selectedModificationResults$ results:', results);
       return results;
     })
   );
 
-  getResults(processCoolingAssessment: ProcessCoolingAssessment): ProcessCoolingResults {
+  readonly modificationResults$: Observable<ProcessCoolingResults[]> = combineLatest([
+    this.processCoolingAssessmentService.processCooling$,
+    this.processCoolingAssessmentService.isBaselineValid$,
+    toObservable(this.modificationService.modifications)
+  ]).pipe(
+    map(([processCooling, isBaselineValid, modifications]: [ProcessCoolingAssessment, boolean, Modification[]]) => {
+
+      let modificationResults: ProcessCoolingResults[] = [];
+      if (processCooling && isBaselineValid && modifications) {
+        modificationResults = modifications.map(modification => {
+          if (modification && modification.isValid) {
+            const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(processCooling, modification);
+            let results: ProcessCoolingResults = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment);
+            return results;
+          }
+        }).filter(result => result !== undefined);
+      } 
+      console.log('[ProcessCoolingResultsService] modificationResults$ results:', modificationResults);
+      return modificationResults;
+    })
+  );
+
+  getProcessCoolingSuiteResults(processCoolingAssessment: ProcessCoolingAssessment): ProcessCoolingResults {
     console.log('[ProcessCoolingResultsService]  processCoolingAssessment:', processCoolingAssessment);
     let results: ProcessCoolingResults;
     const weatherData: WeatherContextData = this.processCoolingWeatherContextService.getWeatherData();
@@ -57,7 +80,7 @@ export class ProcessCoolingResultsService {
         results = this.suiteApi.getAirCooledResults(processCoolingAssessment, convertedWeatherDataInput);
       }
     }
-    console.log('[ProcessCoolingResultsService] getResults results:', results);
+    console.log('[ProcessCoolingResultsService] getProcessCoolingSuiteResults results:', results);
     return results;
   }
 }

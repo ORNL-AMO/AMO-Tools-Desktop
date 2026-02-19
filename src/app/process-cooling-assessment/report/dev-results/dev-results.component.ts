@@ -39,7 +39,7 @@ private resultsService = inject(ProcessCoolingResultsService);
   isValid: boolean;
 
   baselineResults$: Observable<ProcessCoolingResults> = this.resultsService.baselineResults$;
-  modificationResults$: Observable<ProcessCoolingResults> = this.resultsService.modificationResults$;
+  modificationResults$: Observable<ProcessCoolingResults> = this.resultsService.selectedModificationResults$;
 
   @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
   copyTable1String: any;

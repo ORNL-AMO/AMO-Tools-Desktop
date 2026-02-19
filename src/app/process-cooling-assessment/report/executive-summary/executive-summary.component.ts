@@ -1,53 +1,36 @@
-import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
-import { ExecutiveSummaryResults } from 'process-flow-lib';
-import { Assessment } from '../../../shared/models/assessment';
-import { ProcessCoolingResults } from '../../../shared/models/process-cooling-assessment';
-import { ProcessCoolingResultsService } from '../../services/process-cooling-results.service';
+import { Component, ElementRef, inject, Signal, ViewChild } from '@angular/core';
+import { ExecutiveSummaryResultsService, ExecutiveSummaryRow } from '../../services/executive-summary-results.service';
+import { ModificationEEMSUsed } from '../../../shared/models/process-cooling-assessment';
+import { ModificationService } from '../../services/modification.service';
 import { Observable } from 'rxjs';
-import { LOAD_LABELS, WET_BULB_BINS } from '../../constants/process-cooling-constants';
-import { TEMPERATURE_HTML } from '../../../shared/app-constants';
-import { Settings } from '../../../shared/models/settings';
+
 
 @Component({
   selector: 'app-executive-summary',
   standalone: false,
   templateUrl: './executive-summary.component.html',
-  styleUrl: './executive-summary.component.css'
+  styleUrls: ['./executive-summary.component.css']
 })
 export class ExecutiveSummaryComponent {
-  private resultsService = inject(ProcessCoolingResultsService);
-  
-  @Input()
-  inRollup: boolean;
-  @Input()
-  assessment: Assessment;
-  @Input()
-  settings: Settings;
-
+  private executiveSummaryResultsService = inject(ExecutiveSummaryResultsService);
+  private modificationService = inject(ModificationService);
   notes: Array<{
     modificationName: string,
     note: string
   }>;
-  selectedModificationIndex: number = 1;
+  selectedModificationIndex: number;
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  copyTableString: any;
 
-  LOAD_LABELS = LOAD_LABELS;
-  WET_BULB_BINS = WET_BULB_BINS;
-  TEMPERATURE_HTML = TEMPERATURE_HTML;
+  executiveSummaryRows$: Observable<ExecutiveSummaryRow[]> = this.executiveSummaryResultsService.executiveSummaryRows$;
+  modificationNames$: Observable<string[]> = this.executiveSummaryResultsService.modificationNames$;
+  modificationEEMsUsedSignal: Signal<ModificationEEMSUsed[]> = this.modificationService.modificationEEMsUsedSignal;
 
-  baselineResults: ExecutiveSummaryResults;
-  modificationResults: ExecutiveSummaryResults[] = [];
-  isValid: boolean;
-
-  baselineResults$: Observable<ProcessCoolingResults> = this.resultsService.baselineResults$;
-  modificationResults$: Observable<ProcessCoolingResults> = this.resultsService.modificationResults$;
-
-  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
-  copyTable1String: any;
-
-
-  updateCopyTable1String() {
-    this.copyTable1String = this.copyTable1.nativeElement.innerText;
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
-
+  // todo needs notes
+  // todo needs percent savings
 }
+

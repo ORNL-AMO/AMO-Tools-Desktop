@@ -1,203 +1,77 @@
-<!--  todo show print view -->
-<div class="my-3">
-    <h5>DEVELOPMENT Debug Results</h5>
-</div>
-<div class="debug-results-container">
-    <div class="debug-results-column">
-        <ng-container *ngIf="baselineResults$ | async as results">
-            <div class="debug-results"
-                style="background: #f8f9fa; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;">
-                <h5><span class="bold">Baseline</span></h5>
+<div class="output-summary p-3">
+    <h4 class="show-print print-section-header">Executive Summary</h4>
+    <table #copyTable class="table table-hover">
+        <thead>
+            <tr>
+                @let modificationNames = modificationNames$ | async;
+                
+                <th [style.width.%]="100 /(modificationNames.length+2)"></th>
+                <th [style.width.%]="100 /(modificationNames.length+2)">Baseline</th>
+                @for (modificationName of modificationNames; track modificationName; let modIndex = $index) {
+                    <th [style.width.%]="100 /(modificationNames.length+2)">
+                        {{modificationName}}</th>
+                }
 
-                <div *ngIf="results">
-                    <div *ngFor="let chiller of results.chiller; let i = index">
-                        <strong>Chiller {{i + 1}}</strong>
-                        <table class="table table-sm table-bordered mb-2">
-                            <thead>
-                                <tr>
-                                    <th>Bin</th>
-                                    <th>Efficiency</th>
-                                    <th>Hours</th>
-                                    <th>Power(kW)</th>
-                                    <th>Energy (kWh)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let bin of chiller.efficiency; let j = index">
-                                    <td>{{LOAD_LABELS[j]}}</td>
-                                    <td>{{ (chiller.efficiency[j] * 100) | number:'1.0-1' }}%</td>
-                                    <td>{{chiller.hours[j] | number:'1.0-1'}}</td>
-                                    <td>{{chiller.power[j] | number:'1.0-1'}}</td>
-                                    <td>{{chiller.energy[j] | number:'1.0-2'}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <h6>Pump</h6>
-                    <table class="table table-sm table-bordered mb-2">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th *ngFor="let idx of results.pump.chillerPumpingEnergy; let i = index">Chiller {{i}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>Chiller Pumping Energy</th>
-                                <td *ngFor="let val of results.pump.chillerPumpingEnergy">{{val | number:'1.0-3'}}</td>
-                            </tr>
-                            <tr>
-                                <th>Condenser Pumping Energy</th>
-                                <td *ngFor="let val of results.pump.condenserPumpingEnergy">{{val | number:'1.0-3'}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <h6>Tower</h6>
-                    <table class="table table-sm table-bordered mb-2">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th *ngFor="let idx of results.tower.hours; let i = index">{{WET_BULB_BINS[i]}}
-                                    <span [innerHTML]="TEMPERATURE_HTML.imperial"></span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>Hours</th>
-                                <td *ngFor="let val of results.tower.hours">{{val | number:'1.0-3'}}</td>
-                            </tr>
-                            <tr>
-                                <th>Energy</th>
-                                <td *ngFor="let val of results.tower.energy">{{val | number:'1.0-3'}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- todo  Percent Savings Graph row (this component only) -->
+            <tr class="bg-row">
+                <td class="percent-savings">Percent Savings (%)</td>
+                <td>&mdash; &mdash;</td>
+                @for (modificationNames of modificationNames$ | async; track modificationNames; let modIndex = $index) {
+                    <td class="percent-savings">Percent Savings (%)</td>
+                }   
+            </tr>
 
+            @if (executiveSummaryRows$ | async; as executiveSummaryRows) {
+                @for (row of executiveSummaryRows; track row) {
+                    <tr [class.bold-row]="row.rowType === 'bold' || row.rowType === 'bold-bg' || row.rowType === 'bold-row-stripe'"
+                        [class.bg-row]="row.rowType === 'bold-bg' || row.rowType === 'bold-row-stripe'"
+                        [class.row-stripe]="row.rowType === 'bold-row-stripe'" 
+                        [class.hide-print]="row.rowType === 'hide-print'">
+                        <td [innerHTML]="row.label"></td>
+                        <td>
+                            @if (row.baseline.numberPipe && row.baseline.value !== null && row.baseline.value !== undefined) {
+                                {{ row.baseline.value | number: row.baseline.numberPipe }}
+                            } @else {
+                                {{ row.baseline.value ?? '— —' }}
+                            }
+                        </td>
+                        @for (modResult of row.modifications; track modResult.id; let modificationIndex = $index) {
+                            <td>
+                                @if (modResult.numberPipe && modResult.value !== null && modResult.value !== undefined) {
+                                {{ modResult.value | number: modResult.numberPipe }}
+                                } @else {
+                                {{ modResult.value ?? '— —' }}
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            }
 
-            <div class="results scroll-item print-height page-break-before">
-                <div class="output-summary w-75 mx-auto">
-                    @if (!isValid) {
-                    <!-- <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
-        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
-        [bootstrapLevel]="'alert-danger'"></app-alert-info-container> -->
-                    } @else if (baselineResults && modificationResults) {
-                    <h4 class="show-print print-section-header">Executive Summary Table</h4>
-                    <app-exportable-results-table [tableString]="copyTable1String"
-                        (updateTableString)="updateCopyTable1String()"></app-exportable-results-table>
+            <tr>
+                <td>Energy Efficiency Measures used</td>
+                <td>&mdash; &mdash;</td>
+                
+                @for(modificationEEMs of modificationEEMsUsedSignal(); track modificationEEMs.modificationId; let modEEMsIndex = $index) {
+                <td>
+                    @if (modificationEEMs.eemsUsed.length > 0) {
+                        @for (eem of modificationEEMs.eemsUsed; track eem) {
+                            {{eem}} <br>
+                        }
+                    } @else {
+                        {{ '— —' }}
                     }
+                </td>
+                }
+            </tr>
 
-                </div>
+        </tbody>
+    </table>
 
-
-
-            </div>
-            <!-- <div class="results scroll-item print-height page-break-before"
-            *ngIf="(currentTab == 'pump-summary' && !showPrintView) || (showPrintView && printOptions.printPumpSummaryReport)"
-            [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-pump-summary-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-pump-summary-report>
-        </div>
-        <div class="results scroll-item print-height page-break-before"
-            *ngIf="(currentTab == 'tower-summary' && !showPrintView) || (showPrintView && printOptions.printTowerSummaryReport)"
-            [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-tower-summary-report [inRollup]="inRollup" [assessment]="assessment" [settings]="settings"></app-tower-summary-report>
-        </div> -->
-
-        </ng-container>
-    </div>
-
-    <div class="debug-results-column">
-        <ng-container *ngIf="modificationResults$ | async as results">
-            <div class="debug-results"
-                style="background: #f8f9fa; border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem;">
-                <h5><span class="bold">Explore Opportunities - Modification</span></h5>
-
-                <div *ngIf="results">
-                    <div *ngFor="let chiller of results.chiller; let i = index">
-                        <strong>Chiller {{i + 1}}</strong>
-                        <table class="table table-sm table-bordered mb-2">
-                            <thead>
-                                <tr>
-                                    <th>Bin</th>
-                                    <th>Efficiency</th>
-                                    <th>Hours</th>
-                                    <th>Power(kW)</th>
-                                    <th>Energy (kWh)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let bin of chiller.efficiency; let j = index">
-                                    <td>{{LOAD_LABELS[j]}}</td>
-                                    <td>{{ (chiller.efficiency[j] * 100) | number:'1.0-1' }}%</td>
-                                    <td>{{chiller.hours[j] | number:'1.0-1'}}</td>
-                                    <td>{{chiller.power[j] | number:'1.0-1'}}</td>
-                                    <td>{{chiller.energy[j] | number:'1.0-2'}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <h6>Pump</h6>
-                    <table class="table table-sm table-bordered mb-2">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th *ngFor="let idx of results.pump.chillerPumpingEnergy; let i = index">Chiller {{i}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>Chiller Pumping Energy (kWh)</th>
-                                <td *ngFor="let val of results.pump.chillerPumpingEnergy">{{val | number:'1.0-3'}}</td>
-                            </tr>
-                            <tr>
-                                <th>Condenser Pumping Energy (kWh)</th>
-                                <td *ngFor="let val of results.pump.condenserPumpingEnergy">{{val | number:'1.0-3'}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <h6>Tower</h6>
-                    <table class="table table-sm table-bordered mb-2">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th *ngFor="let idx of results.tower.hours; let i = index">{{WET_BULB_BINS[i]}}
-                                    <span [innerHTML]="TEMPERATURE_HTML.imperial"></span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th>Hours</th>
-                                <td *ngFor="let val of results.tower.hours">{{val | number:'1.0-3'}}</td>
-                            </tr>
-                            <tr>
-                                <th>Energy (kWh)</th>
-                                <td *ngFor="let val of results.tower.energy">{{val | number:'1.0-3'}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-
-            <div class="results scroll-item print-height page-break-before">
-                <div class="output-summary w-75 mx-auto">
-                    @if (!isValid) {
-                    <!-- <app-alert-info-container class="m-3 w-50" [header]="'Diagram flow data contains errors'"
-        [content]="'Visit the diagram to fix issues and ensure entered flow values are valid'" [showIcon]="false"
-        [bootstrapLevel]="'alert-danger'"></app-alert-info-container> -->
-                    } @else if (baselineResults && modificationResults) {
-                    <h4 class="show-print print-section-header">Executive Summary Table</h4>
-                    <app-exportable-results-table [tableString]="copyTable1String"
-                        (updateTableString)="updateCopyTable1String()"></app-exportable-results-table>
-                    }
-                </div>
-            </div>
-
-        </ng-container>
-    </div>
 </div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
