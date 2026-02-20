@@ -1,6 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowProperty, ProcessFlowNodeType, ProcessFlowPart } from "../types/diagram";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterTreatment, WaterUsingSystem } from "../types/water-components";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterTreatment, WaterUsingSystem, WasteWaterTreatment } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getEdgeDescription, getWaterFlowTotals } from "./water-components";
 import { NodeGraphIndex, createGraphIndex, getAllUpstreamEdgePaths, getAllDownstreamEdgePaths } from "../../graph";
@@ -109,7 +109,7 @@ export const getNodeTotalOutflow = (node: Node<ProcessFlowPart> | ProcessFlowPar
 }
 
 export const getSystemEstimatedUnknownLosses = (
-  componentData: WaterUsingSystem,
+  componentData: WaterUsingSystem | WaterTreatment | WasteWaterTreatment,
   systemTotalSourceFlow: number,
   systemTotalDischargeFlow: number
 ): number => {
