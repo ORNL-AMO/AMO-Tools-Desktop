@@ -16,7 +16,7 @@ export class ProcessCoolingUiService {
   // todo move this service out when we revise valid handling in the assessment service
   private systemInformationFormService = inject(SystemInformationFormService);
   private weatherContextService = inject(WEATHER_CONTEXT);
-
+  
   focusedFieldSignal: WritableSignal<string> = signal<string>('default');
   helpTextFieldSignal: WritableSignal<string> = signal<string>('default');
   modalOpenSignal: WritableSignal<boolean> = signal<boolean>(false);
@@ -24,7 +24,7 @@ export class ProcessCoolingUiService {
   showModificationListModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
-
+  
   executiveSummaryView: WritableSignal<SummaryView> = signal<SummaryView>('baseline-panel');
 
   private readonly urlSegmentIndex = {
@@ -418,9 +418,6 @@ export const REPORT_VIEW_LINKS: ViewLink[] = [
   {
     view: ReportView.PUMP_SUMMARY,
     label: 'Pump Summary',
-    meta: {
-      disabled: true
-    }
   },
   {
     view: ReportView.TOWER_SUMMARY,

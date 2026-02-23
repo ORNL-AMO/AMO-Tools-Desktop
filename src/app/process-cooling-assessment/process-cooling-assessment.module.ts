@@ -79,6 +79,8 @@ import { UpgradeCoolingTowerFanComponent } from './explore-opportunities/upgrade
 import { ExploreOpportunitiesFormService } from './services/explore-opportunities-form.service';
 import { DevResultsComponent } from './report/dev-results/dev-results.component';
 import { ExecutiveSummaryResultsService } from './services/executive-summary-results.service';
+import { PumpSummaryComponent } from './report/pump-summary/pump-summary.component';
+import { PumpSummaryResultsService } from './services/pump-summary-results.service';
 
 
 export const ROUTE_TOKENS = {
@@ -195,10 +197,10 @@ const ROUTES: Route[] = [
             path: ROUTE_TOKENS.executiveSummary,
             component: ExecutiveSummaryComponent,
           },
-          // {
-          //   path: ROUTE_TOKENS.pumpSummary,
-          //   // component: PumpSummaryComponent,
-          // },
+          {
+            path: ROUTE_TOKENS.pumpSummary,
+            component: PumpSummaryComponent,
+          },
           // {
           //   path: ROUTE_TOKENS.towerSummary,
           //   // component: TowerSummaryComponent,
@@ -261,7 +263,8 @@ const ROUTES: Route[] = [
     AssessmentResultsComponent,
     EemHelpComponent,
     ConfirmActionComponent,
-    DevResultsComponent
+    DevResultsComponent,
+    PumpSummaryComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -301,6 +304,7 @@ const ROUTES: Route[] = [
     ModificationService,
     ExploreOpportunitiesFormService,
     ExecutiveSummaryResultsService,
+    PumpSummaryResultsService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })
