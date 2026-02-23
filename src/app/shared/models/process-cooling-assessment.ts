@@ -10,9 +10,15 @@ export interface ProcessCoolingChillerOutput {
 }
 
 export interface ProcessCoolingPumpOutput {
-    chillerPumpingEnergy: number[];
+    chillerPumpingEnergy: PumpChillerItemEnergy[];
     // only appears for water cooled systems
-    condenserPumpingEnergy?: number[];
+    condenserPumpingEnergy?: PumpChillerItemEnergy[];
+}
+
+export interface PumpChillerItemEnergy {
+    id: string;
+    name: string;
+    value: number;
 }
 
 export interface ProcessCoolingTowerOutput {
@@ -50,8 +56,21 @@ export interface ExecutiveSummaryResults {
 }
 
 export interface PumpResults {
-    // * pump detail from suite api results
+    id: string;
+    name: string;
+    chillerPumpingEnergy: PumpChillerItemEnergy[];
+    condenserPumpingEnergy?: PumpChillerItemEnergy[];
+    totalChillerPumpingEnergy: number;
+    totalCondenserPumpingEnergy?: number;
+    totalPumpEnergy: number;
+    electricityCost: number;
+    totalPumpCost: number;
+    energySavings?: number;
+    percentEnergySavings?: number;
+    costSavings?: number;
+    percentCostSavings?: number;
 }
+
 export interface TowerResults {
     // * tower detail from suite api results
 }

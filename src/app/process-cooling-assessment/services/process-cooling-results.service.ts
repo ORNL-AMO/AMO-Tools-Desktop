@@ -7,7 +7,7 @@ import { CondenserCoolingMethod, Modification, ProcessCoolingAssessment, Process
 import { ModificationService } from './modification.service';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { ModificationNameCell } from './executive-summary-results.service';
+import { ModificationNameCell } from '../report/report-ui-models';
 
 @Injectable()
 export class ProcessCoolingResultsService {

@@ -10,7 +10,8 @@ import {
   ProcessCoolingTowerOutput,
   Operations,
   ChillerInventoryItem,
-  ProcessCoolingResults
+  ProcessCoolingResults,
+  PumpChillerItemEnergy
 } from '../shared/models/process-cooling-assessment';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 // import { drybulbValues, wetbulbValues, systemOnHoursYearly } from '../examples/CWSATExampleAirCooledConstant';
@@ -24,7 +25,14 @@ import { ToolsSuiteApiService } from './tools-suite-api.service';
 export class ProcessCoolingSuiteApiService {
   constructor(private suiteApiHelperService: SuiteApiHelperService, 
     private toolsSuiteApiService: ToolsSuiteApiService) { }
+  
+    // todo update suite to take chiller ids
+    // * track chiller input index to chiller name for labeling results, assuming no ordering changes on the suite API side. 
+    chillerInputResultMap:  {
+      [inputIndex: number]: {id: string, name: string};
+    }
 
+    
   /**
  * Calculates chiller energy for a water-cooled system.
  * @param assessment {ProcessCoolingAssessment} - Assessment input object.
@@ -43,6 +51,8 @@ export class ProcessCoolingSuiteApiService {
       pump: undefined as ProcessCoolingPumpOutput,
       tower: undefined as ProcessCoolingTowerOutput
     };
+
+    this.setChillerDataResultMapping(assessment);
 
     const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
     const towerInputInstance = this._createTowerInput(assessment.systemInformation.towerInput);
@@ -78,6 +88,8 @@ export class ProcessCoolingSuiteApiService {
       pump: undefined as ProcessCoolingPumpOutput,
     };
 
+    this.setChillerDataResultMapping(assessment);
+
     const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
     const airCooledSystemInputInstance = this._createAirCooledSystemInput(assessment.systemInformation.airCooledSystemInput, assessment.systemInformation.operations);
     const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, airCooledSystemInputInstance, assessment, weatherData);
@@ -89,6 +101,13 @@ export class ProcessCoolingSuiteApiService {
     chillerInputVector.delete();
     airCooledSystemInputInstance.delete();
     return results;
+  }
+
+  setChillerDataResultMapping(assessment: ProcessCoolingAssessment) {
+    this.chillerInputResultMap = {};
+    assessment.inventory.forEach((item, idx) => {
+      this.chillerInputResultMap[idx] = { id: item.itemId, name: item.name };
+    });
   }
 
   /**
@@ -105,9 +124,25 @@ export class ProcessCoolingSuiteApiService {
     const pumpInputCHWInstance = this._createPumpInput(assessment.systemInformation.chilledWaterPumpInput);
     const pumpCWHOutput = processCoolingInstance.calculatePumpEnergy(pumpInputCHWInstance);
 
+    let chillerPumpingEnergy: PumpChillerItemEnergy[] = this.suiteApiHelperService.extractWASMArray(pumpCWHOutput.chillerPumpingEnergy).map((energy, idx) => {
+      return {
+        id: this.chillerInputResultMap[idx]?.id ?? `chiller-${idx + 1}`, 
+        name: this.chillerInputResultMap[idx]?.name ?? `Chiller ${idx + 1}`, 
+        value: energy
+      };
+    });
+
+    let condenserPumpingEnergy: PumpChillerItemEnergy[] = this.suiteApiHelperService.extractWASMArray(pumpCWOutput.chillerPumpingEnergy).map((energy, idx) => {
+      return {
+        id: this.chillerInputResultMap[idx]?.id ?? `chiller-${idx + 1}`, 
+        name: this.chillerInputResultMap[idx]?.name ?? `Chiller ${idx + 1}`, 
+        value: energy
+      };
+    });
+
     const result: ProcessCoolingPumpOutput = {
-      chillerPumpingEnergy: this.suiteApiHelperService.extractWASMArray(pumpCWHOutput.chillerPumpingEnergy),
-      condenserPumpingEnergy: this.suiteApiHelperService.extractWASMArray(pumpCWOutput.chillerPumpingEnergy)
+      chillerPumpingEnergy: chillerPumpingEnergy,
+      condenserPumpingEnergy: condenserPumpingEnergy
     };
 
     pumpCWHOutput.delete();
@@ -129,8 +164,17 @@ export class ProcessCoolingSuiteApiService {
     // assessment.systemInformation.condenserWaterPumpInput.flowRate = 0; // used in water-cooled systems only
     const pumpInputCHWInstance = this._createPumpInput(assessment.systemInformation.chilledWaterPumpInput);
     const pumpCWHOutput = processCoolingInstance.calculatePumpEnergy(pumpInputCHWInstance);
+
+    let chillerPumpingEnergy: PumpChillerItemEnergy[] = this.suiteApiHelperService.extractWASMArray(pumpCWHOutput.chillerPumpingEnergy).map((energy, idx) => {
+      return {
+        id: this.chillerInputResultMap[idx]?.id ?? `chiller-${idx + 1}`, 
+        name: this.chillerInputResultMap[idx]?.name ?? `Chiller ${idx + 1}`, 
+        value: energy
+      };
+    });
+
     const result: ProcessCoolingPumpOutput = {
-      chillerPumpingEnergy: this.suiteApiHelperService.extractWASMArray(pumpCWHOutput.chillerPumpingEnergy),
+      chillerPumpingEnergy: chillerPumpingEnergy,
     };
 
     pumpCWHOutput.delete();

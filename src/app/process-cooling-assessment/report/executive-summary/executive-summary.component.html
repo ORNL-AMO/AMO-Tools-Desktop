@@ -2,15 +2,18 @@
     <h4 class="show-print print-section-header">Executive Summary</h4>
 
     @let executiveSummaryUI = executiveSummaryUI$ | async;
+    
 
     @if (executiveSummaryUI) {
+	    @let columnWidth = 100 /(executiveSummaryUI.modificationNames.length+2);
+
     <table #copyTable class="table table-hover">
         <thead>
             <tr>
-                <th [style.width.%]="100 /(executiveSummaryUI.modificationNames.length+2)"></th>
-                <th [style.width.%]="100 /(executiveSummaryUI.modificationNames.length+2)">Baseline</th>
+                <th [style.width.%]="columnWidth"></th>
+                <th [style.width.%]="columnWidth">Baseline</th>
                 @for (modificationName of executiveSummaryUI.modificationNames; track $index) {
-                    <th [style.width.%]="100 /(executiveSummaryUI.modificationNames.length+2)">
+                    <th [style.width.%]="columnWidth">
                         {{modificationName.name}}</th>
                 }
 
@@ -80,9 +83,7 @@
                                 {{eem}} <br>
                             }
                         </span>
-                    } @else {
-                        <span>{{ '— —' }}</span>
-                    }
+                    } 
                 </td>
                 }
             </tr>
