@@ -1,5 +1,6 @@
 import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { MainView, ProcessCoolingSetupTabString, ProcessCoolingUiService, SetupView } from '../services/process-cooling-ui.service';
+import { SummaryView } from '../services/executive-summary-results.service';
 
 @Component({
   selector: 'app-results-panel',
@@ -22,12 +23,25 @@ export class ResultsPanelComponent {
     return this.mainView() === MainView.BASELINE && (this.setupView() === SetupView.INVENTORY || this.setupView() === SetupView.LOAD_SCHEDULE);
   });
 
+  resultsSummaryView: SummaryView = 'baseline-panel';
+
   constructor() {
     effect(() => {
-      if (this.setupView() === SetupView.INVENTORY || this.setupView() === SetupView.LOAD_SCHEDULE) {
+      const setupView = this.setupView();
+      if (setupView === SetupView.INVENTORY || setupView === SetupView.LOAD_SCHEDULE) {
         this.setPanelTab('inventory');
       } else {
-        this.setPanelTab('help');
+        this.setPanelTab('results');
+      }
+    });
+
+    effect(() => {
+      const mainView = this.mainView();
+      
+      if (mainView === MainView.ASSESSMENT) {
+        this.processCoolingUIService.executiveSummaryView.set('modification-panel');
+      } else {
+        this.processCoolingUIService.executiveSummaryView.set('baseline-panel');
       }
     });
   }

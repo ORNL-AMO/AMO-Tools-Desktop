@@ -1,53 +1,53 @@
-import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
-import { ExecutiveSummaryResults } from 'process-flow-lib';
-import { Assessment } from '../../../shared/models/assessment';
-import { ProcessCoolingResults } from '../../../shared/models/process-cooling-assessment';
-import { ProcessCoolingResultsService } from '../../services/process-cooling-results.service';
+import { Component, effect, ElementRef, inject, ViewChild, WritableSignal } from '@angular/core';
+import { ExecutiveSummaryResultsService, ExecutiveSummaryUI, SummaryView } from '../../services/executive-summary-results.service';
 import { Observable } from 'rxjs';
-import { LOAD_LABELS, WET_BULB_BINS } from '../../constants/process-cooling-constants';
-import { TEMPERATURE_HTML } from '../../../shared/app-constants';
-import { Settings } from '../../../shared/models/settings';
+import { ModificationService } from '../../services/modification.service';
+import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
+
 
 @Component({
   selector: 'app-executive-summary',
   standalone: false,
   templateUrl: './executive-summary.component.html',
-  styleUrl: './executive-summary.component.css'
+  styleUrls: ['./executive-summary.component.css']
 })
 export class ExecutiveSummaryComponent {
-  private resultsService = inject(ProcessCoolingResultsService);
+  private executiveSummaryResultsService = inject(ExecutiveSummaryResultsService);
+  private modificationService = inject(ModificationService);
+  private processCoolingUiService = inject(ProcessCoolingUiService);
   
-  @Input()
-  inRollup: boolean;
-  @Input()
-  assessment: Assessment;
-  @Input()
-  settings: Settings;
-
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  copyTableString: any;
+  
+  // todo needs notes
   notes: Array<{
     modificationName: string,
     note: string
   }>;
-  selectedModificationIndex: number = 1;
-
-  LOAD_LABELS = LOAD_LABELS;
-  WET_BULB_BINS = WET_BULB_BINS;
-  TEMPERATURE_HTML = TEMPERATURE_HTML;
-
-  baselineResults: ExecutiveSummaryResults;
-  modificationResults: ExecutiveSummaryResults[] = [];
-  isValid: boolean;
-
-  baselineResults$: Observable<ProcessCoolingResults> = this.resultsService.baselineResults$;
-  modificationResults$: Observable<ProcessCoolingResults> = this.resultsService.modificationResults$;
-
-  @ViewChild('copyTable1', { static: false }) copyTable1: ElementRef;
-  copyTable1String: any;
+  
+  resultsViewSignal: WritableSignal<SummaryView> = this.processCoolingUiService.executiveSummaryView;
+  executiveSummaryUI$: Observable<ExecutiveSummaryUI>;
+  invalidModificationIds: WritableSignal<Array<string>> = this.modificationService.invalidModificationIds;
 
 
-  updateCopyTable1String() {
-    this.copyTable1String = this.copyTable1.nativeElement.innerText;
+  constructor() {
+    effect(() => {
+      const view = this.resultsViewSignal();
+
+      if (view === 'report') {
+        this.executiveSummaryUI$ = this.executiveSummaryResultsService.executiveSummaryUI$;
+      } else if (view === 'baseline-panel') {
+        this.executiveSummaryUI$ = this.executiveSummaryResultsService.executiveSummaryBaseline$;
+      } else if (view === 'modification-panel') {
+        this.executiveSummaryUI$ = this.executiveSummaryResultsService.executiveSummarySelectedModificationUI$;
+      }
+    })
   }
 
 
+  updateCopyTableString() {
+    this.copyTableString = this.copyTable.nativeElement.innerText;
+  }
+
 }
+

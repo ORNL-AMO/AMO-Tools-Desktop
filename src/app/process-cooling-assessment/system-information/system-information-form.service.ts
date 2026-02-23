@@ -399,9 +399,9 @@ export class SystemInformationFormService {
   }
 
   public isPumpValid(systemInformation: SystemInformation, settings: Settings): boolean {
-    // todo are we sure this will always be condenserWaterPumpInput
-    const pumpForm = this.getPumpInputForm(systemInformation.condenserWaterPumpInput, settings);
-    return pumpForm.valid;
+    const pumpCondenserForm = this.getPumpInputForm(systemInformation.condenserWaterPumpInput, settings);
+    const pumpChilledForm = this.getPumpInputForm(systemInformation.chilledWaterPumpInput, settings);
+    return pumpCondenserForm.valid && pumpChilledForm.valid;
   }
 
   public isOperationsValid(operations: Operations, settings: Settings): boolean {

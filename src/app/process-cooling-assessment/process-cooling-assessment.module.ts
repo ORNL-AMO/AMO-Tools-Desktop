@@ -77,6 +77,8 @@ import { ConfirmActionComponent } from './confirm-action/confirm-action.componen
 import { SlidingCondenserWaterTemperatureComponent } from './explore-opportunities/sliding-condenser-water-temperature/sliding-condenser-water-temperature.component';
 import { UpgradeCoolingTowerFanComponent } from './explore-opportunities/upgrade-cooling-tower-fan/upgrade-cooling-tower-fan.component';
 import { ExploreOpportunitiesFormService } from './services/explore-opportunities-form.service';
+import { DevResultsComponent } from './report/dev-results/dev-results.component';
+import { ExecutiveSummaryResultsService } from './services/executive-summary-results.service';
 
 
 export const ROUTE_TOKENS = {
@@ -259,6 +261,7 @@ const ROUTES: Route[] = [
     AssessmentResultsComponent,
     EemHelpComponent,
     ConfirmActionComponent,
+    DevResultsComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -281,7 +284,8 @@ const ROUTES: Route[] = [
     FormControlErrorsComponent,
     InputUnitComponent,
     OperatingHoursModalModule,
-    AlertInfoContainerComponent
+    AlertInfoContainerComponent,
+    PercentGraphModule
   ],
   providers: [
     ProcessCoolingAssessmentService,
@@ -296,6 +300,7 @@ const ROUTES: Route[] = [
     MonthlyOperatingScheduleService,
     ModificationService,
     ExploreOpportunitiesFormService,
+    ExecutiveSummaryResultsService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })

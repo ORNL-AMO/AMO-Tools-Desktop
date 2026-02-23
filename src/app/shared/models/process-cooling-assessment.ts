@@ -20,15 +20,55 @@ export interface ProcessCoolingTowerOutput {
     energy: number[];
 }
 
+/**
+ * Represents Baseline or Modification results, depending on the context of use
+ */
 export interface ProcessCoolingResults {
+    // baseline or modification id
+    id: string;
+    name: string;
+    fuelCost: number;
+    electricityCost: number;
     chiller: ProcessCoolingChillerOutput[];
     pump: ProcessCoolingPumpOutput;
     tower?: ProcessCoolingTowerOutput;
 }
 
+export interface ExecutiveSummaryResults {
+    pumpTotalChilledEnergy: number;
+    pumpTotalCondenserEnergy: number;
+    totalChillerEnergy: number;
+    totalTowerEnergy: number;
+    totalPumpEnergy: number;
+    totalEnergy: number;
+    totalCost: number;
+    // * modification results
+    energySavings?: number;
+    percentEnergySavings?: number;
+    costSavings?: number;
+    percentCostSavings?: number;
+}
+
+export interface PumpResults {
+    // * pump detail from suite api results
+}
+export interface TowerResults {
+    // * tower detail from suite api results
+}
+export interface ChillerResults {
+    // * chiller detail from suite api results
+}
+export interface InputSummaryResults {
+    // * summary of inputs from system-information and operating schedule forms
+}
+
+
+
 export interface ProcessCoolingAssessment {
     name: string;
     setupDone: boolean;
+    // * in some cases this will represent a modification
+    modificationId?: string;
     isValid: boolean;
     selectedModificationId: string;
     existingDataUnits: string;
@@ -79,6 +119,11 @@ export interface EEM {
     implementationCost?: number,
 }
 
+export interface ModificationEEMSUsed {
+    modificationId: string;
+    modificationName: string;
+    eemsUsed: string[];
+}
 
 export interface IncreaseChilledWaterTemp extends EEM {
     chilledWaterSupplyTemp: number,
@@ -350,4 +395,13 @@ export type ProcessCoolingDataProperty = keyof Pick<ProcessCoolingAssessment, 's
 export type ProcessCoolingSystemInformationProperty = keyof Pick<SystemInformation, 'operations' | 'co2SavingsData' | 'airCooledSystemInput' | 'chilledWaterPumpInput' | 'condenserWaterPumpInput' | 'towerInput' | 'waterCooledSystemInput'>;
 export type CoolingWaterPumpType = keyof Pick<SystemInformation, 'chilledWaterPumpInput' | 'condenserWaterPumpInput'>;
 
-export type ModificationEEMProperty = keyof Omit<Modification, 'name' | 'id' | 'notes' | 'isValid'>;
+export type ModificationEEMProperty = keyof Pick<Modification, 
+        'increaseChilledWaterTemp' | 
+        'decreaseCondenserWaterTemp' | 
+        'useSlidingCondenserWaterTemp' | 
+        'applyVariableSpeedControls' | 
+        'replaceChillers' | 
+        'upgradeCoolingTowerFans' | 
+        'useFreeCooling' | 
+        'replaceRefrigerant' | 
+        'installVSDOnCentrifugalCompressor'>;

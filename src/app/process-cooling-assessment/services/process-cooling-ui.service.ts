@@ -7,13 +7,12 @@ import { ProcessCoolingAssessmentService } from './process-cooling-assessment.se
 import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
 import { ROUTE_TOKENS as WEATHER_ROUTE_TOKENS } from '../../shared/modules/weather-data/models/routes';
-import { ModificationService } from './modification.service';
+import { SummaryView } from './executive-summary-results.service';
 
 @Injectable()
 export class ProcessCoolingUiService {
   private router = inject(Router);
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
-  private modificationService = inject(ModificationService);
   // todo move this service out when we revise valid handling in the assessment service
   private systemInformationFormService = inject(SystemInformationFormService);
   private weatherContextService = inject(WEATHER_CONTEXT);
@@ -25,6 +24,8 @@ export class ProcessCoolingUiService {
   showModificationListModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
+
+  executiveSummaryView: WritableSignal<SummaryView> = signal<SummaryView>('baseline-panel');
 
   private readonly urlSegmentIndex = {
     assessmentURL: 0,
@@ -126,12 +127,10 @@ export class ProcessCoolingUiService {
           && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
         return canVisitAssessment;
       case 10:
-        // todo if isAssessmentValid
         const canVisitReport = isWeatherDataValid
           && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
           && this.processCoolingAssessmentService.isChillerInventoryValid()
           && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule)
-          && this.modificationService.isModificationValid();
         return canVisitReport;
       default:
         // * route does not need protection (ex. baseline)

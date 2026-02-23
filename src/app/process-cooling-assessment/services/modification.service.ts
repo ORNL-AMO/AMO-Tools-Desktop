@@ -1,6 +1,6 @@
-import { computed, inject, Injectable, Signal } from '@angular/core';
-import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
-import { BehaviorSubject, combineLatest, EMPTY, of, switchMap, tap } from 'rxjs';
+import { computed, effect, inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
+import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
+import { BehaviorSubject, combineLatest, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
 import { LocalStorageService } from '../../shared/local-storage.service';
@@ -8,6 +8,7 @@ import { PC_SELECTED_MODIFICATION_KEY } from '../../shared/models/app';
 import { AppErrorService } from '../../shared/errors/app-error.service';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { ExploreOpportunitiesFormService } from './explore-opportunities-form.service';
+import { EEM_LABELS } from '../constants/process-cooling-constants';
 
 @Injectable()
 export class ModificationService {
@@ -19,12 +20,38 @@ export class ModificationService {
 
 
   private readonly selectedModificationId = new BehaviorSubject<string>(undefined);
-  readonly selectedModificationId$ = this.selectedModificationId.asObservable();
-
+  readonly selectedModificationId$: Observable<string> = this.selectedModificationId.asObservable();
 
   modifications: Signal<Array<Modification>> = computed(() => {
-    return this.processCoolingSignal()?.modifications ?? [];
+    const modifications = this.processCoolingSignal()?.modifications ?? [];
+    return modifications;
   });
+
+  invalidModificationIds: WritableSignal<Array<string>> = signal<Array<string>>([]);
+
+  constructor() {
+    effect(() => {
+      const settings = this.processCoolingAssessmentService.settingsSignal();
+      if (settings) {
+        const invalidIds: string[] = this.modifications()
+        .filter(mod => !this.isModificationValid(mod))
+        .map(mod => mod.id);
+        this.invalidModificationIds.set(invalidIds);
+      }
+    });
+  }
+
+  readonly modificationEEMsUsedSignal: Signal<Array<ModificationEEMSUsed>> = computed(() => {
+    const modifications = this.modifications();
+    if (!modifications) {
+      return [];
+    }
+    return modifications.map((modification: Modification) => {
+      const eems: string[] = this.getModificationEEMNames(modification);
+      return { modificationId: modification.id, modificationName: modification.name, eemsUsed: eems };
+    });
+  });
+
   readonly selectedModification$ = combineLatest([
     this.selectedModificationId$,
     toObservable(this.modifications)
@@ -67,12 +94,13 @@ export class ModificationService {
     return this.modifications().find(mod => mod.id === modificationId);
   }
 
-  isModificationValid(): boolean {
+  isModificationValid(modification?: Modification): boolean {
     const selectedModificationId = this.selectedModificationId.getValue();
     if (!selectedModificationId) {
       return true;
     }
-    const modification = this.getModificationById(selectedModificationId);
+
+    modification = modification ?? this.getModificationById(selectedModificationId);
     if (!modification) {
       return true;
     }
@@ -133,6 +161,17 @@ export class ModificationService {
     }
 
     return true;
+  }
+
+  getModificationEEMNames(modification: Modification): string[] {
+    const eems: string[] = [];
+    Object.keys(modification).forEach((key) => {
+      const propertyKey = key as ModificationEEMProperty;
+      if (modification[propertyKey]?.useOpportunity) {
+        eems.push(EEM_LABELS[propertyKey]);
+      }
+    });
+    return eems;
   }
 
   updateModification(modification: Modification) {
@@ -328,6 +367,7 @@ export class ModificationService {
     }
 
     modifiedProcessCoolingAssessment.systemInformation = systemInformation;
+    modifiedProcessCoolingAssessment.name = modification.name;
 
     return modifiedProcessCoolingAssessment;
   }
