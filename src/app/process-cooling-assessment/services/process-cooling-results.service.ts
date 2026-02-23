@@ -25,6 +25,7 @@ export class ProcessCoolingResultsService {
       let results: ProcessCoolingResults;
       if (processCooling && isBaselineValid) {
         results = this.getProcessCoolingSuiteResults(processCooling);
+        results.id = String(this.processCoolingAssessmentService.assessmentValue.id);
       }
       return results;
     })
