@@ -60,21 +60,13 @@ tr > th:not(:first-child){
     border: solid 4px #27AE60;
 }
 
-.selected-modification{
-    z-index: 2;
-    background: #e5efe9;
-}
-
-.bold-row{
+.emphasis {
     font-weight: bold;
-}
-
-.bg-row{
     background-color: #D6DBDF;
 }
 
-.row-stripe{
-    border-bottom: solid;
+.savings-graph-row{
+    background-color: #D6DBDF;
 }
 
 .hidden-copy-table {

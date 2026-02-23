@@ -1,76 +1,94 @@
 <div class="output-summary p-3">
     <h4 class="show-print print-section-header">Executive Summary</h4>
+
+    @let executiveSummaryUI = executiveSummaryUI$ | async;
+
+    @if (executiveSummaryUI) {
     <table #copyTable class="table table-hover">
         <thead>
             <tr>
-                @let modificationNames = modificationNames$ | async;
-                
-                <th [style.width.%]="100 /(modificationNames.length+2)"></th>
-                <th [style.width.%]="100 /(modificationNames.length+2)">Baseline</th>
-                @for (modificationName of modificationNames; track modificationName; let modIndex = $index) {
-                    <th [style.width.%]="100 /(modificationNames.length+2)">
-                        {{modificationName}}</th>
+                <th [style.width.%]="100 /(executiveSummaryUI.modificationNames.length+2)"></th>
+                <th [style.width.%]="100 /(executiveSummaryUI.modificationNames.length+2)">Baseline</th>
+                @for (modificationName of executiveSummaryUI.modificationNames; track $index) {
+                    <th [style.width.%]="100 /(executiveSummaryUI.modificationNames.length+2)">
+                        {{modificationName.name}}</th>
                 }
 
             </tr>
         </thead>
         <tbody>
-            <!-- todo  Percent Savings Graph row (this component only) -->
-            <tr class="bg-row">
+            <tr class="savings-graph-row">
                 <td class="percent-savings">Percent Savings (%)</td>
                 <td>&mdash; &mdash;</td>
-                @for (modificationNames of modificationNames$ | async; track modificationNames; let modIndex = $index) {
-                    <td class="percent-savings">Percent Savings (%)</td>
-                }   
+                @for (percentSavings of executiveSummaryUI.modificationPercentSavings; track $index; let modIndex = $index) {
+                    @let isValidModification = !invalidModificationIds()?.includes(percentSavings.id);
+
+                    @if(isValidModification) {
+                        <td class="hide-print">
+                                <app-percent-graph [value]="percentSavings.value"></app-percent-graph>
+                        </td>
+                    } @else {
+                        <td>
+                            <span class="alert-danger">
+                                Modification Invalid:<br>    
+                                <span>Errors found in Explore Opportunities<br></span>
+                            </span>
+                        </td>
+                    }   
+            }
             </tr>
 
-            @if (executiveSummaryRows$ | async; as executiveSummaryRows) {
-                @for (row of executiveSummaryRows; track row) {
-                    <tr [class.bold-row]="row.rowType === 'bold' || row.rowType === 'bold-bg' || row.rowType === 'bold-row-stripe'"
-                        [class.bg-row]="row.rowType === 'bold-bg' || row.rowType === 'bold-row-stripe'"
-                        [class.row-stripe]="row.rowType === 'bold-row-stripe'" 
-                        [class.hide-print]="row.rowType === 'hide-print'">
-                        <td [innerHTML]="row.label"></td>
+                @for (row of executiveSummaryUI.resultRows; track row) {
+                    <tr [class]="row.className">
                         <td>
-                            @if (row.baseline.numberPipe && row.baseline.value !== null && row.baseline.value !== undefined) {
-                                {{ row.baseline.value | number: row.baseline.numberPipe }}
+                            <span [innerHTML]="row.label"></span>
+                            @if(row.units) {
+                               <span class="pl-1" [innerHTML]="row.units"></span>
+                            }
+                        </td>
+                        <td>
+                            @if (row.baseline?.pipeFormat !== 'currency' && row.baseline.value !== null && row.baseline.value !== undefined) {
+                                {{ row.baseline.value | number: row.baseline.pipeFormat }}
+                            } @else if (row.baseline?.pipeFormat === 'currency' && row.baseline.value !== null && row.baseline.value !== undefined) {
+                                {{ row.baseline.value | currency:'USD':'symbol':'1.0-0' }}
                             } @else {
                                 {{ row.baseline.value ?? '— —' }}
                             }
                         </td>
-                        @for (modResult of row.modifications; track modResult.id; let modificationIndex = $index) {
+                        @for (modResult of row.modifications; track modResult) {
                             <td>
-                                @if (modResult.numberPipe && modResult.value !== null && modResult.value !== undefined) {
-                                {{ modResult.value | number: modResult.numberPipe }}
+                                @if (modResult?.pipeFormat !== 'currency' && modResult.value !== null && modResult.value !== undefined) {
+                                    {{ modResult.value | number: modResult.pipeFormat }}
+                                } @else if (modResult?.pipeFormat === 'currency' && modResult.value !== null && modResult.value !== undefined) {
+                                    {{ modResult.value | currency:'USD':'symbol':'1.0-0' }}
                                 } @else {
-                                {{ modResult.value ?? '— —' }}
+                                    {{ modResult.value ?? '— —' }}
                                 }
                             </td>
                         }
                     </tr>
                 }
-            }
 
             <tr>
-                <td>Energy Efficiency Measures used</td>
+                <td>Energy Efficiency Measures Used</td>
                 <td>&mdash; &mdash;</td>
-                
-                @for(modificationEEMs of modificationEEMsUsedSignal(); track modificationEEMs.modificationId; let modEEMsIndex = $index) {
+                @for(modificationEEMs of executiveSummaryUI.modificationEEMsUsed; track modificationEEMs.modificationId; let modEEMsIndex = $index) {
                 <td>
                     @if (modificationEEMs.eemsUsed.length > 0) {
-                        @for (eem of modificationEEMs.eemsUsed; track eem) {
-                            {{eem}} <br>
-                        }
+                        <span>
+                            @for (eem of modificationEEMs.eemsUsed; track eem) {
+                                {{eem}} <br>
+                            }
+                        </span>
                     } @else {
-                        {{ '— —' }}
+                        <span>{{ '— —' }}</span>
                     }
                 </td>
                 }
             </tr>
-
         </tbody>
     </table>
-
+}
 </div>
 
 <app-exportable-results-table [tableString]="copyTableString"

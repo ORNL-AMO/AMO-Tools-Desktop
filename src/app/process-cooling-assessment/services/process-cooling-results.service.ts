@@ -7,6 +7,7 @@ import { CondenserCoolingMethod, Modification, ProcessCoolingAssessment, Process
 import { ModificationService } from './modification.service';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { ModificationNameCell } from './executive-summary-results.service';
 
 @Injectable()
 export class ProcessCoolingResultsService {
@@ -39,6 +40,7 @@ export class ProcessCoolingResultsService {
       if (processCooling && isBaselineValid && modification && modification.isValid) {
         const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(processCooling, modification);
         results = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment);
+        results.id = modification.id;
       } 
       console.log('[ProcessCoolingResultsService] selectedModificationResults$ results:', results);
       return results;
@@ -55,9 +57,15 @@ export class ProcessCoolingResultsService {
       let modificationResults: ProcessCoolingResults[] = [];
       if (processCooling && isBaselineValid && modifications) {
         modificationResults = modifications.map(modification => {
-          if (modification && modification.isValid) {
+          const isValid = !this.modificationService.invalidModificationIds().includes(modification.id);
+          if (isValid) {
             const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(processCooling, modification);
             let results: ProcessCoolingResults = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment);
+            results.id = modification.id;
+            return results;
+          } else {
+            // * we need an empty result set - MEASUR'S UX is to still show invalid modifications in the executive summary
+            let results: ProcessCoolingResults = this.getEmptyInvalidResults(modification);
             return results;
           }
         }).filter(result => result !== undefined);
@@ -67,6 +75,11 @@ export class ProcessCoolingResultsService {
     })
   );
 
+  /**
+   * Retrieve assessment results from the Suite API. Represents either baseline or modification results, depending on the context of use
+   * @param processCoolingAssessment 
+   * @returns Baseline or Modification results
+   */
   getProcessCoolingSuiteResults(processCoolingAssessment: ProcessCoolingAssessment): ProcessCoolingResults {
     console.log('[ProcessCoolingResultsService]  processCoolingAssessment:', processCoolingAssessment);
     let results: ProcessCoolingResults;
@@ -83,4 +96,29 @@ export class ProcessCoolingResultsService {
     console.log('[ProcessCoolingResultsService] getProcessCoolingSuiteResults results:', results);
     return results;
   }
+
+    getResultModificationNames(modificationResults: ProcessCoolingResults[] | null): ModificationNameCell[] {
+    if (!modificationResults) return [];
+      return modificationResults.map((result, idx) => {
+        return { id: result?.id ?? `modification-${idx + 1}`, name: result?.name ?? `Modification ${idx + 1}` };
+      });
+    }
+
+    getEmptyInvalidResults(modification: Modification): ProcessCoolingResults {
+    return {
+        id: modification.id,
+        name: modification.name,
+        fuelCost: 0,
+        electricityCost: 0,
+        chiller: [],
+        pump: {
+            chillerPumpingEnergy: [],
+            condenserPumpingEnergy: [],
+        },
+        tower: {
+            hours: [],
+            energy: [],
+        },
+    };
+}
 }

@@ -284,7 +284,8 @@ const ROUTES: Route[] = [
     FormControlErrorsComponent,
     InputUnitComponent,
     OperatingHoursModalModule,
-    AlertInfoContainerComponent
+    AlertInfoContainerComponent,
+    PercentGraphModule
   ],
   providers: [
     ProcessCoolingAssessmentService,

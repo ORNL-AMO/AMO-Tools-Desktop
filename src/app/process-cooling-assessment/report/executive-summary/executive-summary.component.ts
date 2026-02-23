@@ -1,8 +1,8 @@
-import { Component, ElementRef, inject, Signal, ViewChild } from '@angular/core';
-import { ExecutiveSummaryResultsService, ExecutiveSummaryRow } from '../../services/executive-summary-results.service';
-import { ModificationEEMSUsed } from '../../../shared/models/process-cooling-assessment';
-import { ModificationService } from '../../services/modification.service';
+import { Component, effect, ElementRef, inject, ViewChild, WritableSignal } from '@angular/core';
+import { ExecutiveSummaryResultsService, ExecutiveSummaryUI, SummaryView } from '../../services/executive-summary-results.service';
 import { Observable } from 'rxjs';
+import { ModificationService } from '../../services/modification.service';
+import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
 
 
 @Component({
@@ -14,23 +14,40 @@ import { Observable } from 'rxjs';
 export class ExecutiveSummaryComponent {
   private executiveSummaryResultsService = inject(ExecutiveSummaryResultsService);
   private modificationService = inject(ModificationService);
+  private processCoolingUiService = inject(ProcessCoolingUiService);
+  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
+  copyTableString: any;
+  
+  // todo needs notes
   notes: Array<{
     modificationName: string,
     note: string
   }>;
-  selectedModificationIndex: number;
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  copyTableString: any;
+  
+  resultsViewSignal: WritableSignal<SummaryView> = this.processCoolingUiService.executiveSummaryView;
+  executiveSummaryUI$: Observable<ExecutiveSummaryUI>;
+  invalidModificationIds: WritableSignal<Array<string>> = this.modificationService.invalidModificationIds;
 
-  executiveSummaryRows$: Observable<ExecutiveSummaryRow[]> = this.executiveSummaryResultsService.executiveSummaryRows$;
-  modificationNames$: Observable<string[]> = this.executiveSummaryResultsService.modificationNames$;
-  modificationEEMsUsedSignal: Signal<ModificationEEMSUsed[]> = this.modificationService.modificationEEMsUsedSignal;
+
+  constructor() {
+    effect(() => {
+      const view = this.resultsViewSignal();
+
+      if (view === 'report') {
+        this.executiveSummaryUI$ = this.executiveSummaryResultsService.executiveSummaryUI$;
+      } else if (view === 'baseline-panel') {
+        this.executiveSummaryUI$ = this.executiveSummaryResultsService.executiveSummaryBaseline$;
+      } else if (view === 'modification-panel') {
+        this.executiveSummaryUI$ = this.executiveSummaryResultsService.executiveSummarySelectedModificationUI$;
+      }
+    })
+  }
+
 
   updateCopyTableString() {
     this.copyTableString = this.copyTable.nativeElement.innerText;
   }
 
-  // todo needs notes
-  // todo needs percent savings
 }
 

@@ -3,8 +3,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { PrintOptions } from '../../shared/models/printing';
 import { Directory } from '../../shared/models/directory';
-import { REPORT_VIEW_LINKS } from '../services/process-cooling-ui.service';
-import { ProcessCoolingResultsService } from '../services/process-cooling-results.service';
+import { ProcessCoolingUiService, REPORT_VIEW_LINKS } from '../services/process-cooling-ui.service';
 
 @Component({
   selector: 'app-report',
@@ -14,8 +13,8 @@ import { ProcessCoolingResultsService } from '../services/process-cooling-result
   host: { style: 'height: 100%; display: flex; flex-direction: column; overflow: hidden;' }
 })
 export class ReportComponent {
-  private readonly processCoolingResultsService = inject(ProcessCoolingResultsService);
-@Input()
+  private readonly processCoolingUiService = inject(ProcessCoolingUiService);
+  @Input()
   assessment: Assessment;
   @Input()
   inAssessment: boolean;
@@ -45,6 +44,8 @@ export class ReportComponent {
 
 
   ngOnInit(): void {
+    this.processCoolingUiService.executiveSummaryView.set('report');
+    
     // this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     this.createdDate = new Date();
     if (this.assessment) {

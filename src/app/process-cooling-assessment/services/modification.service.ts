@@ -1,5 +1,5 @@
-import { computed, inject, Injectable, Signal } from '@angular/core';
-import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
+import { computed, effect, inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
+import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
 import { BehaviorSubject, combineLatest, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
@@ -23,8 +23,23 @@ export class ModificationService {
   readonly selectedModificationId$: Observable<string> = this.selectedModificationId.asObservable();
 
   modifications: Signal<Array<Modification>> = computed(() => {
-    return this.processCoolingSignal()?.modifications ?? [];
+    const modifications = this.processCoolingSignal()?.modifications ?? [];
+    return modifications;
   });
+
+  invalidModificationIds: WritableSignal<Array<string>> = signal<Array<string>>([]);
+
+  constructor() {
+    effect(() => {
+      const settings = this.processCoolingAssessmentService.settingsSignal();
+      if (settings) {
+        const invalidIds: string[] = this.modifications()
+        .filter(mod => !this.isModificationValid(mod))
+        .map(mod => mod.id);
+        this.invalidModificationIds.set(invalidIds);
+      }
+    });
+  }
 
   readonly modificationEEMsUsedSignal: Signal<Array<ModificationEEMSUsed>> = computed(() => {
     const modifications = this.modifications();
@@ -32,7 +47,7 @@ export class ModificationService {
       return [];
     }
     return modifications.map((modification: Modification) => {
-      const eems: string[] = this.getModificationEEMsUsed(modification);
+      const eems: string[] = this.getModificationEEMNames(modification);
       return { modificationId: modification.id, modificationName: modification.name, eemsUsed: eems };
     });
   });
@@ -79,12 +94,13 @@ export class ModificationService {
     return this.modifications().find(mod => mod.id === modificationId);
   }
 
-  isModificationValid(): boolean {
+  isModificationValid(modification?: Modification): boolean {
     const selectedModificationId = this.selectedModificationId.getValue();
     if (!selectedModificationId) {
       return true;
     }
-    const modification = this.getModificationById(selectedModificationId);
+
+    modification = modification ?? this.getModificationById(selectedModificationId);
     if (!modification) {
       return true;
     }
@@ -147,7 +163,7 @@ export class ModificationService {
     return true;
   }
 
-  getModificationEEMsUsed(modification: Modification): string[] {
+  getModificationEEMNames(modification: Modification): string[] {
     const eems: string[] = [];
     Object.keys(modification).forEach((key) => {
       const propertyKey = key as ModificationEEMProperty;

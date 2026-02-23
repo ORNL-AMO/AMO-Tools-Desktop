@@ -37,6 +37,8 @@ export class ProcessCoolingSuiteApiService {
     let results: ProcessCoolingResults = {
       id: undefined,
       name: assessment.name,
+      fuelCost: assessment.systemInformation.operations.fuelCost,
+      electricityCost: assessment.systemInformation.operations.electricityCost,
       chiller: undefined as ProcessCoolingChillerOutput[],
       pump: undefined as ProcessCoolingPumpOutput,
       tower: undefined as ProcessCoolingTowerOutput
@@ -69,6 +71,8 @@ export class ProcessCoolingSuiteApiService {
   getAirCooledResults(assessment: ProcessCoolingAssessment, weatherData: WeatherContextData): ProcessCoolingResults {
     let results: ProcessCoolingResults = {
       id: undefined,
+      fuelCost: assessment.systemInformation.operations.fuelCost,
+      electricityCost: assessment.systemInformation.operations.electricityCost,
       name: assessment.name,
       chiller: undefined as ProcessCoolingChillerOutput[],
       pump: undefined as ProcessCoolingPumpOutput,

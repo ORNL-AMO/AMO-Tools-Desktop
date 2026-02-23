@@ -20,17 +20,21 @@ export interface ProcessCoolingTowerOutput {
     energy: number[];
 }
 
+/**
+ * Represents Baseline or Modification results, depending on the context of use
+ */
 export interface ProcessCoolingResults {
     // baseline or modification id
     id: string;
     name: string;
+    fuelCost: number;
+    electricityCost: number;
     chiller: ProcessCoolingChillerOutput[];
     pump: ProcessCoolingPumpOutput;
     tower?: ProcessCoolingTowerOutput;
 }
 
 export interface ExecutiveSummaryResults {
-    towerTotalHours: number;
     pumpTotalChilledEnergy: number;
     pumpTotalCondenserEnergy: number;
     totalChillerEnergy: number;
@@ -38,7 +42,11 @@ export interface ExecutiveSummaryResults {
     totalPumpEnergy: number;
     totalEnergy: number;
     totalCost: number;
-    eemOpportunities: Array<{ opportunity: string; inUse: boolean; savings: number }>;
+    // * modification results
+    energySavings?: number;
+    percentEnergySavings?: number;
+    costSavings?: number;
+    percentCostSavings?: number;
 }
 
 export interface PumpResults {
