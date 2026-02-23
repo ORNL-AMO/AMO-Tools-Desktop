@@ -4,6 +4,7 @@ import { ExecutiveSummaryResults, ModificationEEMSUsed, ProcessCoolingResults } 
 import { map, combineLatest } from 'rxjs';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { ModificationService } from './modification.service';
+import { ModificationNameCell, PercentSavings, ReportTableRow } from '../report/report-ui-models';
 
 @Injectable({ providedIn: 'root' })
 export class ExecutiveSummaryResultsService {
@@ -56,7 +57,7 @@ export class ExecutiveSummaryResultsService {
           });
           executiveSummaryUI.modificationNames = this.resultsService.getResultModificationNames(modificationResults);
           let modificationEEMsUsed = this.modificationService.modificationEEMsUsedSignal();
-          modificationEEMsUsed = modificationEEMsUsed.filter(modification => modificationResults.some(result => result.id === modification.modificationId));
+          executiveSummaryUI.modificationEEMsUsed = modificationEEMsUsed.filter(modification => modificationResults.some(result => result.id === modification.modificationId));
       }
       executiveSummaryUI.resultRows = this.mapToExecutiveSummaryRows(baselineSummary, modificationSummaries);
       return executiveSummaryUI;
@@ -73,8 +74,8 @@ export class ExecutiveSummaryResultsService {
     }, 0);
 
     const totalTowerEnergy = processCoolingResults.tower?.energy?.reduce((sum, energy) => sum + energy, 0);
-    const pumpTotalCondenserEnergy = processCoolingResults.pump?.condenserPumpingEnergy?.reduce((sum, energy) => sum + energy, 0); 
-    const pumpTotalChilledEnergy = processCoolingResults.pump?.chillerPumpingEnergy?.reduce((sum, energy) => sum + energy, 0);
+    const pumpTotalCondenserEnergy = processCoolingResults.pump?.condenserPumpingEnergy?.reduce((sum, energy) => sum + energy.value, 0); 
+    const pumpTotalChilledEnergy = processCoolingResults.pump?.chillerPumpingEnergy?.reduce((sum, energy) => sum + energy.value, 0);
     const totalPumpEnergy = pumpTotalCondenserEnergy + pumpTotalChilledEnergy;
     
     let totalEnergy = totalChillerEnergy + totalTowerEnergy + totalPumpEnergy;
@@ -114,12 +115,12 @@ export class ExecutiveSummaryResultsService {
   private mapToExecutiveSummaryRows(
     baseline: ExecutiveSummaryResults | null,
     modifications: ExecutiveSummaryResults[] | null
-  ): ExecutiveSummaryRow[] {      
+  ): ReportTableRow[] {      
     const defaultpipeFormat = '1.0-0';
     const defaultclassName: 'default' | 'emphasis' = 'default';
     const defaultEnergyUnit = PROCESS_COOLING_UNITS.energy.labelHTML.imperial; 
     
-    const defaultRow: ExecutiveSummaryRow = {
+    const defaultRow: ReportTableRow = {
       label: 'Result',
       units: `(${defaultEnergyUnit})`,
       className: defaultclassName,
@@ -190,7 +191,7 @@ export class ExecutiveSummaryResultsService {
         ...defaultRow,
         className: 'emphasis',
         label: 'Total Cost',
-        units: `($/${PROCESS_COOLING_UNITS.energy.labelHTML.imperial})`,
+        units: `($)`,
         baseline: { value: baseline?.totalCost ?? null, pipeFormat: 'currency' },
         modifications: modifications.map(modification => {
           return { value: modification.totalCost ?? null, pipeFormat: 'currency' };
@@ -200,6 +201,7 @@ export class ExecutiveSummaryResultsService {
         ...defaultRow,
         className: 'emphasis',
         label: 'Cost Savings',
+        units: `($)`,
         baseline: { value: null },
         modifications: modifications.map(modification => {
           return { value: modification.costSavings ?? null, pipeFormat: 'currency' };
@@ -215,32 +217,7 @@ export type SummaryView = 'baseline-panel' | 'modification-panel' | 'report';
 
 export interface ExecutiveSummaryUI {
   modificationNames: ModificationNameCell[];
-  resultRows: ExecutiveSummaryRow[];
+  resultRows: ReportTableRow[];
   modificationPercentSavings: PercentSavings[];
   modificationEEMsUsed: ModificationEEMSUsed[];
 }
-
-export interface ExecutiveSummaryRow {
-  label: string;
-  units?: string;
-  className?: 'default' | 'emphasis';
-  baseline: ReportColumnCell;
-  modifications: Array<ReportColumnCell>;
-}
-
-export interface PercentSavings { 
-  id: string;
-  value: number | null;
-}
-
-export interface ModificationNameCell {
-  id: string;
-  name: string;
-}
-
-export interface ReportColumnCell {
-  value: string | number;
-  // * e.g. '1.0-0', '1.0-2', etc.
-  pipeFormat?: string; 
-}
-
