@@ -5,7 +5,7 @@
 
 	@if (pumpSummaryUI) {
 	@let columnWidth = 100 /(pumpSummaryUI.modificationNames.length+2);
-	<table class="table table-hover mb-4">
+	<table #pumpingEnergyTable class="table table-hover mb-4">
 		<thead>
 			<tr>
 				<th [style.width.%]="columnWidth"></th>
@@ -75,8 +75,10 @@
 			}
 		</tbody>
 	</table>
+	<app-exportable-results-table [tableString]="pumpingEnergyTableString"
+	(updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 
-	<table #copyTable class="table table-hover">
+	<table #totalsTable class="table table-hover mt-3">
 		<tbody>
 			@for (row of pumpSummaryUI.summaryRows; track row) {
 			<tr [class]="row.className">
@@ -101,5 +103,5 @@
 	}
 </div>
 
-<app-exportable-results-table [tableString]="copyTableString"
+<app-exportable-results-table [tableString]="totalsTableString"
 	(updateTableString)="updateCopyTableString()"></app-exportable-results-table>

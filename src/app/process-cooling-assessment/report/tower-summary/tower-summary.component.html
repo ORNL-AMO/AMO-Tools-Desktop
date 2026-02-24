@@ -1,1 +1,46 @@
-<p>tower-summary works!</p>
+<div class="output-summary p-3">
+  <h4 class="show-print print-section-header">Tower Summary</h4>
+
+  @let towerSummaryUI = towerSummaryUI$ | async;
+
+  @if (towerSummaryUI) {
+    
+    @let columnWidth = 100 /(towerSummaryUI.modificationNames.length+2);
+    <table #copyTable class="table table-hover">
+      <thead>
+        <tr>
+          <th [style.width.%]="columnWidth"></th>
+          <th [style.width.%]="columnWidth">Baseline</th>
+          @for (modificationName of towerSummaryUI.modificationNames; track $index) {
+            <th [style.width.%]="columnWidth">
+              {{modificationName.name}}
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of towerSummaryUI.totalRows; track row) {
+          <tr [class]="row.className">
+            <td>
+              <span [innerHTML]="row.label"></span>
+              @if(row.units) {
+                <span class="pl-1" [innerHTML]="row.units"></span>
+              }
+            </td>
+            <td>
+              {{ row.baseline | reportTableCell }}
+            </td>
+            @for (modification of row.modifications; track $index) {
+              <td>
+                {{ modification | reportTableCell }}
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
+
+<app-exportable-results-table [tableString]="copyTableString"
+    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

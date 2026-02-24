@@ -81,7 +81,9 @@ import { DevResultsComponent } from './report/dev-results/dev-results.component'
 import { ExecutiveSummaryResultsService } from './services/executive-summary-results.service';
 import { PumpSummaryComponent } from './report/pump-summary/pump-summary.component';
 import { PumpSummaryResultsService } from './services/pump-summary-results.service';
+import { TowerSummaryService } from './services/tower-summary.service';
 import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
+import { TowerSummaryComponent } from './report/tower-summary/tower-summary.component';
 
 
 export const ROUTE_TOKENS = {
@@ -202,10 +204,10 @@ const ROUTES: Route[] = [
             path: ROUTE_TOKENS.pumpSummary,
             component: PumpSummaryComponent,
           },
-          // {
-          //   path: ROUTE_TOKENS.towerSummary,
-          //   // component: TowerSummaryComponent,
-          // },
+          {
+            path: ROUTE_TOKENS.towerSummary,
+            component: TowerSummaryComponent,
+          },
           // {
           //   path: ROUTE_TOKENS.graphs,
           //   // component: GraphsComponent,
@@ -265,7 +267,8 @@ const ROUTES: Route[] = [
     EemHelpComponent,
     ConfirmActionComponent,
     DevResultsComponent,
-    PumpSummaryComponent
+    PumpSummaryComponent,
+    TowerSummaryComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -307,6 +310,7 @@ const ROUTES: Route[] = [
     ExploreOpportunitiesFormService,
     ExecutiveSummaryResultsService,
     PumpSummaryResultsService,
+    TowerSummaryService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })

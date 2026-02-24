@@ -422,9 +422,6 @@ export const REPORT_VIEW_LINKS: ViewLink[] = [
   {
     view: ReportView.TOWER_SUMMARY,
     label: 'Tower Summary',
-    meta: {
-      disabled: true
-    }
   },
   {
     view: ReportView.GRAPHS,

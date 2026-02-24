@@ -64,17 +64,14 @@
             <tr>
                 <td>Energy Efficiency Measures Used</td>
                 <td>&mdash; &mdash;</td>
-                @for(modificationEEMs of executiveSummaryUI.modificationEEMsUsed; track modificationEEMs.modificationId;
-                let modEEMsIndex = $index) {
-                <td>
-                    @if (modificationEEMs.eemsUsed.length > 0) {
-                    <span>
-                        @for (eem of modificationEEMs.eemsUsed; track eem) {
-                        {{eem}} <br>
+                @for(modificationEEMs of executiveSummaryUI.modificationEEMsUsed; track modificationEEMs.modificationId; let modEEMsIndex = $index) {
+                    <td>
+                        @if (modificationEEMs.eemsUsed.length > 0) {
+                            @for (eem of modificationEEMs.eemsUsed; track eem) {
+                                {{eem}} <br>
+                            }
                         }
-                    </span>
-                    }
-                </td>
+                    </td>
                 }
             </tr>
         </tbody>

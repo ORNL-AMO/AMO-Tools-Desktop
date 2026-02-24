@@ -14,15 +14,17 @@ export class PumpSummaryComponent {
   private pumpSummaryResultsService = inject(PumpSummaryResultsService);
   private modificationService = inject(ModificationService);
 
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  copyTableString: string;
+  @ViewChild('totalsTable', { static: false }) totalsTable: ElementRef;
+  totalsTableString: string;
+  @ViewChild('pumpingEnergyTable', { static: false }) pumpingEnergyTable: ElementRef;
+  pumpingEnergyTableString: string;
 
   pumpSummaryUI$: Observable<PumpSummaryUI> = this.pumpSummaryResultsService.pumpSummaryUI$;
   invalidModificationIds: WritableSignal<Array<string>> = this.modificationService.invalidModificationIds;
 
-
   updateCopyTableString() {
-    this.copyTableString = this.copyTable?.nativeElement?.innerText;
+    this.totalsTableString = this.totalsTable?.nativeElement?.innerText;
+    this.pumpingEnergyTableString = this.pumpingEnergyTable?.nativeElement?.innerText;
   }
 
 }
