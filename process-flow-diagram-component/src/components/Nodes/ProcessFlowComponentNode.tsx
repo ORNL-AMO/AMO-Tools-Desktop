@@ -5,17 +5,34 @@ import CustomHandle from './CustomHandle';
 import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
-import { DiagramNode, NodeFlowData, ProcessFlowPart } from 'process-flow-lib';
-import { selectNodeCalculatedFlowData } from '../Diagram/store';
+import { DiagramNode, ProcessFlowPart, getSystemEstimatedUnknownLosses, WaterUsingSystem } from 'process-flow-lib';
+import { selectTotalSourceFlow, selectNodeErrors, selectTotalDischargeFlow } from '../Diagram/store';
 import CustomNodeToolbar from './CustomNodeToolbar';
-
+import { Tooltip } from '@mui/material';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
-  const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeCalculatedFlowData(state, id));
+
   let showInSystemTreatment: boolean;
   if (data.processComponentType === 'water-using-system' && data.inSystemTreatment.length > 0) {
     showInSystemTreatment = true;
   }
+
+  const totalSourceFlow = useAppSelector(state => selectTotalSourceFlow(state, id));
+  const nodeError = useAppSelector(state => selectNodeErrors(state)[id]);
+  const totalDischargeFlow = useAppSelector(state => selectTotalDischargeFlow(state, id));
+  let totalUnknownLoss = getSystemEstimatedUnknownLosses(data as WaterUsingSystem, totalSourceFlow, totalDischargeFlow);
+
+  const isWaterSystemComponentType = [
+    'water-using-system',
+    'water-treatment',
+    'waste-water-treatment'
+  ].includes(data.processComponentType);
+
+
+  const showWarningAlert = isWaterSystemComponentType && totalSourceFlow > totalDischargeFlow && totalUnknownLoss !== 0;
+  const showErrorAlert = nodeError?.source?.level === 'error' || nodeError?.discharge?.level === 'error';
 
   const onEditNode = () => {
     dispatch(openDrawerWithSelected(id));
@@ -30,7 +47,6 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         id="a"
       />
     }
-
       <div
         style={{
           display: 'flex',
@@ -93,13 +109,24 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
             </span>
           </div>
         }
-
+         {showWarningAlert && (
+              <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: 4 }}>
+                <Tooltip title="System Imbalance" placement="top" arrow>
+                  <WarningAmberIcon color="warning" sx={{ fontSize: 30, verticalAlign: 'middle', marginRight: 0.5 }} />
+                </Tooltip>
+              </div>
+            )}
+            {showErrorAlert && (
+              <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: 4 }}>
+                <Tooltip title="Node Error" placement="top" arrow>
+                  <ErrorOutlineIcon color="error" sx={{ fontSize: 30, verticalAlign: 'middle', marginRight: 0.5 }} />
+                </Tooltip>
+              </div>
+            )}
         <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
-
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>
-
       </div>
 
       {data.handles.outflowHandles.e &&
