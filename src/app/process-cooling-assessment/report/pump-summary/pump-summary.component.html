@@ -66,7 +66,7 @@
 				<td>
 					{{ row.baseline | reportTableCell }}
 				</td>
-				@for (modResult of row.modifications; track modResult) {
+				@for (modResult of row.modifications; track $index) {
 				<td>
 					{{ modResult | reportTableCell }}
 				</td>
@@ -80,7 +80,7 @@
 
 	<table #totalsTable class="table table-hover mt-3">
 		<tbody>
-			@for (row of pumpSummaryUI.summaryRows; track row) {
+			@for (row of pumpSummaryUI.summaryRows; track row.label) {
 			<tr [class]="row.className">
 				<td [style.width.%]="columnWidth">
 					<span [innerHTML]="row.label"></span>
@@ -91,7 +91,7 @@
 				<td [style.width.%]="columnWidth">
 					{{ row.baseline | reportTableCell }}
 				</td>
-				@for (modResult of row.modifications; track modResult) {
+				@for (modResult of row.modifications; track $index) {
 				<td [style.width.%]="columnWidth">
 					{{ modResult | reportTableCell }}
 				</td>

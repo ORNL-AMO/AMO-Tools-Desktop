@@ -12,7 +12,7 @@
             <tr>
                 <th [style.width.%]="columnWidth"></th>
                 <th [style.width.%]="columnWidth">Baseline</th>
-                @for (modificationName of executiveSummaryUI.modificationNames; track $index) {
+                @for (modificationName of executiveSummaryUI.modificationNames; track modificationName.id) {
                 <th [style.width.%]="columnWidth">
                     {{modificationName.name}}</th>
                 }
@@ -23,7 +23,7 @@
             <tr class="savings-graph-row">
                 <td class="percent-savings">Percent Savings (%)</td>
                 <td>&mdash; &mdash;</td>
-                @for (percentSavings of executiveSummaryUI.modificationPercentSavings; track $index; let modIndex =
+                @for (percentSavings of executiveSummaryUI.modificationPercentSavings; track percentSavings.id; let modIndex =
                 $index) {
                 @let isValidModification = !invalidModificationIds()?.includes(percentSavings.id);
 
@@ -42,7 +42,7 @@
                 }
             </tr>
 
-            @for (row of executiveSummaryUI.resultRows; track row) {
+            @for (row of executiveSummaryUI.resultRows; track row.label) {
             <tr [class]="row.className">
                 <td>
                     <span [innerHTML]="row.label"></span>

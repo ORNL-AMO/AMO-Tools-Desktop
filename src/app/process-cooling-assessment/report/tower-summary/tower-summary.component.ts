@@ -1,6 +1,7 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, WritableSignal } from '@angular/core';
 import { TowerSummaryService, TowerSummaryUI } from '../../services/tower-summary.service';
 import { Observable } from 'rxjs';
+import { ModificationService } from '../../services/modification.service';
 
 @Component({
   selector: 'app-tower-summary',
@@ -10,11 +11,13 @@ import { Observable } from 'rxjs';
 })
 export class TowerSummaryComponent {
   private readonly towerSummaryService = inject(TowerSummaryService);
+  private modificationService = inject(ModificationService);
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   copyTableString: any;
 
   readonly towerSummaryUI$: Observable<TowerSummaryUI> = this.towerSummaryService.towerSummaryUI$;
+  invalidModificationIds: WritableSignal<Array<string>> = this.modificationService.invalidModificationIds;
 
   updateCopyTableString() {
     this.copyTableString = this.copyTable.nativeElement.innerText;
