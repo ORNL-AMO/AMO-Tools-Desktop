@@ -4,6 +4,8 @@
   @let towerSummaryUI = towerSummaryUI$ | async;
 
   @if (towerSummaryUI) {
+    <!-- This Chart needs feedback -->
+    <!-- <app-tower-energy-histogram [towerSummaryUI]="towerSummaryUI"></app-tower-energy-histogram> -->
     
     @let columnWidth = 100 /(towerSummaryUI.modificationNames.length+2);
     <table #copyTable class="table table-hover">

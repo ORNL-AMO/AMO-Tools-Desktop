@@ -45,10 +45,11 @@ export class TowerSummaryService {
         
         let binTemps: number[][] = this.getBinTemps();
         let binLabels: string[] = this.getBinLabels(binTemps);
+        towerSummaryUI.binLabels = binLabels;
         
-        towerSummaryUI.baselineEnergyBins = this.addTowerBinRows(baselineTower, binLabels);
+        towerSummaryUI.baselineEnergyBins = this.addTowerBinRow(baselineTower, binLabels);
         modificationTowers.forEach(modification => {
-            towerSummaryUI.modificationEnergyBins.push(this.addTowerBinRows(modification, binLabels));
+            towerSummaryUI.modificationEnergyBins.push(this.addTowerBinRow(modification, binLabels));
         });
         
         towerSummaryUI.totalRows = this.mapToTowerSummaryRows(baselineTower, modificationTowers);
@@ -148,10 +149,10 @@ export class TowerSummaryService {
     }
 
 
-    addTowerBinRows(results: TowerResults | null, binTemps: string[]): TowerBinRows[] {
+    addTowerBinRow(results: TowerResults | null, binTemps: string[]): TowerBinRow[] {
         if (binTemps.length > 0) {
-            let towerEnergyRows: TowerBinRows[] = [];
-            const binHeaderRow: TowerBinRows = {
+            let towerEnergyRows: TowerBinRow[] = [];
+            const binHeaderRow: TowerBinRow = {
                 label: `Bins`,
                 units: `(Wet Bulb ${this.temperatureUnit})`,
                 className: this.defaultclassName,
@@ -165,7 +166,7 @@ export class TowerSummaryService {
                 binValues: binTemps.map((temp, index) => results.hours[index] ?? null),
             });
             towerEnergyRows.push({
-                label: `Energy`,
+                label: `${results.name} Energy`,
                 units: `(${this.defaultEnergyUnit})`,
                 className: this.defaultclassName,
                 binValues: binTemps.map((temp, index) => results.energy[index] ?? null),
@@ -197,12 +198,13 @@ export class TowerSummaryService {
 
     getBinLabels(binTemps: number[][]): string[] {
         let binLabels: string[] = [];
+        const unit = this.temperatureUnit;
         if (binTemps.length === 6) {
-            binLabels.push(`< ${binTemps[0][0]}`);
+            binLabels.push(`< ${binTemps[0][0]}${unit}`);
             for (let i = 1; i < binTemps.length - 1; i++) {
-                binLabels.push(`${binTemps[i][0]} - ${binTemps[i][1]}`);
+                binLabels.push(`${binTemps[i][0]} - ${binTemps[i][1]}${unit}`);
             }
-            binLabels.push(`> ${binTemps[5][0]}`);
+            binLabels.push(`> ${binTemps[5][0]}${unit}`);
         }
         return binLabels;
     }
@@ -214,12 +216,12 @@ export class TowerSummaryService {
 export interface TowerSummaryUI {
     modificationNames: ModificationNameCell[];
     totalRows: ReportTableRow[];
-    baselineEnergyBins?: TowerBinRows[];
-    modificationEnergyBins?: TowerBinRows[][];
+    baselineEnergyBins?: TowerBinRow[];
+    modificationEnergyBins?: TowerBinRow[][];
     binLabels: string[];
 }
 
-export interface TowerBinRows {
+export interface TowerBinRow {
     label: string;
     units?: string;
     className: 'default' | 'emphasis';

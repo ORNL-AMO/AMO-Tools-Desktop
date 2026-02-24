@@ -1,3 +1,4 @@
+import { TowerEnergyHistogramComponent } from './report/tower-energy-histogram/tower-energy-histogram.component';
 import { ApplyVariableSpeedControlComponent } from './explore-opportunities/apply-variable-speed-control/apply-variable-speed-control.component';
 import { EemHelpComponent } from './results-panel/help-panel/eem-help/eem-help.component';
 import { NgModule } from '@angular/core';
@@ -268,7 +269,8 @@ const ROUTES: Route[] = [
     ConfirmActionComponent,
     DevResultsComponent,
     PumpSummaryComponent,
-    TowerSummaryComponent
+    TowerSummaryComponent,
+    TowerEnergyHistogramComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
