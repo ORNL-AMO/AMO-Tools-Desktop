@@ -61,7 +61,10 @@ export class TowerSummaryService {
 
 
         const totalTowerEnergy = result.tower?.energy?.reduce((sum, e) => sum + e, 0) ?? null;
-        const totalTowerCost = totalTowerEnergy && result.electricityCost ? totalTowerEnergy * result.electricityCost : null;
+        let totalTowerCost;
+        if (totalTowerEnergy != null && result.electricityCost != null) {
+            totalTowerCost = totalTowerEnergy * result.electricityCost;
+        }
 
         // let energySavings, percentEnergySavings, costSavings, percentCostSavings;
         // if (baseline && baseline.totalTowerEnergy != null && totalTowerEnergy != null) {
@@ -150,29 +153,31 @@ export class TowerSummaryService {
 
 
     addTowerBinRow(results: TowerResults | null, binTemps: string[]): TowerBinRow[] {
-        if (binTemps.length > 0) {
-            let towerEnergyRows: TowerBinRow[] = [];
-            const binHeaderRow: TowerBinRow = {
-                label: `Bins`,
-                units: `(Wet Bulb ${this.temperatureUnit})`,
-                className: this.defaultclassName,
-                binValues: binTemps.map((temp, index) => results.hours[index] ?? null),
-            }
-
-            towerEnergyRows.push(binHeaderRow);
-            towerEnergyRows.push({
-                label: `Hours`,
-                className: this.defaultclassName,
-                binValues: binTemps.map((temp, index) => results.hours[index] ?? null),
-            });
-            towerEnergyRows.push({
-                label: `${results.name} Energy`,
-                units: `(${this.defaultEnergyUnit})`,
-                className: this.defaultclassName,
-                binValues: binTemps.map((temp, index) => results.energy[index] ?? null),
-            });
-            return towerEnergyRows;
+        if (!results || binTemps.length === 0) {
+            return [];
         }
+
+        let towerEnergyRows: TowerBinRow[] = [];
+        const binHeaderRow: TowerBinRow = {
+            label: `Bins`,
+            units: `(Wet Bulb ${this.temperatureUnit})`,
+            className: this.defaultclassName,
+            binValues: binTemps.map((temp, index) => results.hours[index] ?? null),
+        }
+
+        towerEnergyRows.push(binHeaderRow);
+        towerEnergyRows.push({
+            label: `Hours`,
+            className: this.defaultclassName,
+            binValues: binTemps.map((temp, index) => results.hours[index] ?? null),
+        });
+        towerEnergyRows.push({
+            label: `${results.name} Energy`,
+            units: `(${this.defaultEnergyUnit})`,
+            className: this.defaultclassName,
+            binValues: binTemps.map((temp, index) => results.energy[index] ?? null),
+        });
+        return towerEnergyRows;
     }
 
     getBinTemps(): number[][] {
