@@ -81,6 +81,7 @@ import { DevResultsComponent } from './report/dev-results/dev-results.component'
 import { ExecutiveSummaryResultsService } from './services/executive-summary-results.service';
 import { PumpSummaryComponent } from './report/pump-summary/pump-summary.component';
 import { PumpSummaryResultsService } from './services/pump-summary-results.service';
+import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
 
 
 export const ROUTE_TOKENS = {
@@ -288,7 +289,8 @@ const ROUTES: Route[] = [
     InputUnitComponent,
     OperatingHoursModalModule,
     AlertInfoContainerComponent,
-    PercentGraphModule
+    PercentGraphModule,
+    ReportTableCellPipe
   ],
   providers: [
     ProcessCoolingAssessmentService,

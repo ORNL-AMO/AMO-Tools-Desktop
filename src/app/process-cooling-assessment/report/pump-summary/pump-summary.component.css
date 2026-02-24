@@ -16,10 +16,6 @@ tr > th:not(:first-child){
 }
 
 
-.graph-col{
-    padding-left: 0px;
-}
-
 @media print {
     .show-print{
         display: inline !important;

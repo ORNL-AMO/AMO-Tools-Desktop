@@ -2,10 +2,10 @@
     <h4 class="show-print print-section-header">Executive Summary</h4>
 
     @let executiveSummaryUI = executiveSummaryUI$ | async;
-    
+
 
     @if (executiveSummaryUI) {
-	    @let columnWidth = 100 /(executiveSummaryUI.modificationNames.length+2);
+    @let columnWidth = 100 /(executiveSummaryUI.modificationNames.length+2);
 
     <table #copyTable class="table table-hover">
         <thead>
@@ -13,8 +13,8 @@
                 <th [style.width.%]="columnWidth"></th>
                 <th [style.width.%]="columnWidth">Baseline</th>
                 @for (modificationName of executiveSummaryUI.modificationNames; track $index) {
-                    <th [style.width.%]="columnWidth">
-                        {{modificationName.name}}</th>
+                <th [style.width.%]="columnWidth">
+                    {{modificationName.name}}</th>
                 }
 
             </tr>
@@ -23,73 +23,63 @@
             <tr class="savings-graph-row">
                 <td class="percent-savings">Percent Savings (%)</td>
                 <td>&mdash; &mdash;</td>
-                @for (percentSavings of executiveSummaryUI.modificationPercentSavings; track $index; let modIndex = $index) {
-                    @let isValidModification = !invalidModificationIds()?.includes(percentSavings.id);
+                @for (percentSavings of executiveSummaryUI.modificationPercentSavings; track $index; let modIndex =
+                $index) {
+                @let isValidModification = !invalidModificationIds()?.includes(percentSavings.id);
 
-                    @if(isValidModification) {
-                        <td class="hide-print">
-                                <app-percent-graph [value]="percentSavings.value"></app-percent-graph>
-                        </td>
-                    } @else {
-                        <td>
-                            <span class="alert-danger">
-                                Modification Invalid:<br>    
-                                <span>Errors found in Explore Opportunities<br></span>
-                            </span>
-                        </td>
-                    }   
-            }
+                @if(isValidModification) {
+                <td class="hide-print">
+                    <app-percent-graph [value]="percentSavings.value"></app-percent-graph>
+                </td>
+                } @else {
+                <td>
+                    <span class="alert-danger">
+                        Modification Invalid:<br>
+                        <span>Errors found in Explore Opportunities<br></span>
+                    </span>
+                </td>
+                }
+                }
             </tr>
 
-                @for (row of executiveSummaryUI.resultRows; track row) {
-                    <tr [class]="row.className">
-                        <td>
-                            <span [innerHTML]="row.label"></span>
-                            @if(row.units) {
-                               <span class="pl-1" [innerHTML]="row.units"></span>
-                            }
-                        </td>
-                        <td>
-                            @if (row.baseline?.pipeFormat !== 'currency' && row.baseline.value !== null && row.baseline.value !== undefined) {
-                                {{ row.baseline.value | number: row.baseline.pipeFormat }}
-                            } @else if (row.baseline?.pipeFormat === 'currency' && row.baseline.value !== null && row.baseline.value !== undefined) {
-                                {{ row.baseline.value | currency:'USD':'symbol':'1.0-0' }}
-                            } @else {
-                                {{ row.baseline.value ?? '— —' }}
-                            }
-                        </td>
-                        @for (modResult of row.modifications; track modResult) {
-                            <td>
-                                @if (modResult?.pipeFormat !== 'currency' && modResult.value !== null && modResult.value !== undefined) {
-                                    {{ modResult.value | number: modResult.pipeFormat }}
-                                } @else if (modResult?.pipeFormat === 'currency' && modResult.value !== null && modResult.value !== undefined) {
-                                    {{ modResult.value | currency:'USD':'symbol':'1.0-0' }}
-                                } @else {
-                                    {{ modResult.value ?? '— —' }}
-                                }
-                            </td>
-                        }
-                    </tr>
+            @for (row of executiveSummaryUI.resultRows; track row) {
+            <tr [class]="row.className">
+                <td>
+                    <span [innerHTML]="row.label"></span>
+                    @if(row.units) {
+                    <span class="pl-1" [innerHTML]="row.units"></span>
+                    }
+                </td>
+                <td>
+                    {{ row.baseline | reportTableCell }}
+                </td>
+                @for (modification of row.modifications; track $index) {
+                <td>
+                    {{ modification | reportTableCell }}
+                </td>
                 }
+            </tr>
+            }
 
             <tr>
                 <td>Energy Efficiency Measures Used</td>
                 <td>&mdash; &mdash;</td>
-                @for(modificationEEMs of executiveSummaryUI.modificationEEMsUsed; track modificationEEMs.modificationId; let modEEMsIndex = $index) {
+                @for(modificationEEMs of executiveSummaryUI.modificationEEMsUsed; track modificationEEMs.modificationId;
+                let modEEMsIndex = $index) {
                 <td>
                     @if (modificationEEMs.eemsUsed.length > 0) {
-                        <span>
-                            @for (eem of modificationEEMs.eemsUsed; track eem) {
-                                {{eem}} <br>
-                            }
-                        </span>
-                    } 
+                    <span>
+                        @for (eem of modificationEEMs.eemsUsed; track eem) {
+                        {{eem}} <br>
+                        }
+                    </span>
+                    }
                 </td>
                 }
             </tr>
         </tbody>
     </table>
-}
+    }
 </div>
 
 <app-exportable-results-table [tableString]="copyTableString"

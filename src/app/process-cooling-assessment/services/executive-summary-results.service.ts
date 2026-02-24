@@ -5,11 +5,14 @@ import { map, combineLatest } from 'rxjs';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { ModificationService } from './modification.service';
 import { ModificationNameCell, PercentSavings, ReportTableRow } from '../report/report-ui-models';
+import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 
 @Injectable({ providedIn: 'root' })
 export class ExecutiveSummaryResultsService {
   private readonly resultsService = inject(ProcessCoolingResultsService);
   private readonly modificationService = inject(ModificationService);
+  private readonly processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  settingsSignal = this.processCoolingAssessmentService.settingsSignal;
 
   readonly executiveSummaryUI$ = combineLatest([
     this.resultsService.baselineResults$,
@@ -118,13 +121,13 @@ export class ExecutiveSummaryResultsService {
   ): ReportTableRow[] {      
     const defaultpipeFormat = '1.0-0';
     const defaultclassName: 'default' | 'emphasis' = 'default';
-    const defaultEnergyUnit = PROCESS_COOLING_UNITS.energy.labelHTML.imperial; 
+    const defaultEnergyUnit = this.settingsSignal().unitsOfMeasure? PROCESS_COOLING_UNITS.energy.labelHTML.imperial : PROCESS_COOLING_UNITS.energy.labelHTML.metric;
     
     const defaultRow: ReportTableRow = {
       label: 'Result',
       units: `(${defaultEnergyUnit})`,
       className: defaultclassName,
-      baseline: { value: undefined, pipeFormat: defaultpipeFormat },
+      baseline: { value: undefined, decimalPipe: defaultpipeFormat },
       modifications: []
     }
 
@@ -132,50 +135,51 @@ export class ExecutiveSummaryResultsService {
       {
         ...defaultRow,
         label: 'Pump Total Chilled Energy',
-        baseline: { value: baseline?.pumpTotalChilledEnergy ?? null, pipeFormat: defaultpipeFormat },
+        baseline: { 
+          value: baseline?.pumpTotalChilledEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
-          return { value: modification.pumpTotalChilledEnergy ?? null, pipeFormat: defaultpipeFormat };
+          return { value: modification.pumpTotalChilledEnergy ?? null, decimalPipe: defaultpipeFormat };
         }),
       },
       {
         ...defaultRow,
         label: 'Pump Total Condenser Energy',
-        baseline: { value: baseline?.pumpTotalCondenserEnergy ?? null, pipeFormat: defaultpipeFormat },
+        baseline: { value: baseline?.pumpTotalCondenserEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
-          return { value: modification.pumpTotalCondenserEnergy ?? null, pipeFormat: defaultpipeFormat };
+          return { value: modification.pumpTotalCondenserEnergy ?? null, decimalPipe: defaultpipeFormat };
         }),
       },
       {
         ...defaultRow,
         label: 'Total Chiller Energy',
-        baseline: { value: baseline?.totalChillerEnergy ?? null, pipeFormat: defaultpipeFormat },
+        baseline: { value: baseline?.totalChillerEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
-          return { value: modification.totalChillerEnergy ?? null, pipeFormat: defaultpipeFormat };
+          return { value: modification.totalChillerEnergy ?? null, decimalPipe: defaultpipeFormat };
         }),
       },
       {
         ...defaultRow,
         label: 'Total Tower Energy',
-        baseline: { value: baseline?.totalTowerEnergy ?? null, pipeFormat: defaultpipeFormat },
+        baseline: { value: baseline?.totalTowerEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
-          return { value: modification.totalTowerEnergy ?? null, pipeFormat: defaultpipeFormat };
+          return { value: modification.totalTowerEnergy ?? null, decimalPipe: defaultpipeFormat };
         }),
       },
       {
         ...defaultRow,
         label: 'Total Pump Energy',
-        baseline: { value: baseline?.totalPumpEnergy ?? null, pipeFormat: defaultpipeFormat },
+        baseline: { value: baseline?.totalPumpEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
-          return { value: modification.totalPumpEnergy ?? null, pipeFormat: defaultpipeFormat };
+          return { value: modification.totalPumpEnergy ?? null, decimalPipe: defaultpipeFormat };
         }),
       },
       {
         ...defaultRow,
         className: 'emphasis',
         label: 'Total Energy',
-        baseline: { value: baseline?.totalEnergy ?? null, pipeFormat: defaultpipeFormat },
+        baseline: { value: baseline?.totalEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
-          return { value: modification.totalEnergy ?? null, pipeFormat: defaultpipeFormat };
+          return { value: modification.totalEnergy ?? null, decimalPipe: defaultpipeFormat };
         }),
       },
       {
@@ -184,7 +188,7 @@ export class ExecutiveSummaryResultsService {
         label: 'Energy Savings',
         baseline: { value: null },
         modifications: modifications.map(modification => {
-          return { value: modification.energySavings ?? null, pipeFormat: defaultpipeFormat };
+          return { value: modification.energySavings ?? null, decimalPipe: defaultpipeFormat };
         }),
       },
       {
@@ -192,9 +196,9 @@ export class ExecutiveSummaryResultsService {
         className: 'emphasis',
         label: 'Total Cost',
         units: `($)`,
-        baseline: { value: baseline?.totalCost ?? null, pipeFormat: 'currency' },
+        baseline: { value: baseline?.totalCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
         modifications: modifications.map(modification => {
-          return { value: modification.totalCost ?? null, pipeFormat: 'currency' };
+          return { value: modification.totalCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } };
         }),
       },
       {
@@ -204,7 +208,7 @@ export class ExecutiveSummaryResultsService {
         units: `($)`,
         baseline: { value: null },
         modifications: modifications.map(modification => {
-          return { value: modification.costSavings ?? null, pipeFormat: 'currency' };
+          return { value: modification.costSavings ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } };
         }),
       },
     ];

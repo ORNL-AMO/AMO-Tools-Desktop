@@ -1,3 +1,5 @@
+import { CurrencyPipeParams } from "../../shared/pipes/report-table-cell.pipe";
+
 export interface ReportTableRow {
   label: string;
   units?: string;
@@ -18,5 +20,6 @@ export interface ModificationNameCell {
 
 export interface ReportColumnCell {
   value: string | number;
-  pipeFormat?: string; 
+  decimalPipe?: string; 
+  currencyPipe?: CurrencyPipeParams;
 }
