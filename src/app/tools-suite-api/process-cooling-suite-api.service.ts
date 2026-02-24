@@ -195,7 +195,7 @@ export class ProcessCoolingSuiteApiService {
       hours: this.suiteApiHelperService.extractWASMArray(towerOutput.hours),
       energy: this.suiteApiHelperService.extractWASMArray(towerOutput.energy)
     };
-    console.log('towerOutput hours total', result.hours.reduce((a, b) => a + b, 0));
+    // console.log('towerOutput hours total', result.hours.reduce((a, b) => a + b, 0));
     towerOutput.delete();
     return result;
   }
@@ -266,8 +266,8 @@ export class ProcessCoolingSuiteApiService {
       wetBulbHourly.push(hour.wet_bulb_temp);
     }
 
-    console.log('Number Wet Bulb datapoints undefined:', wetbulbUndefined);
-    console.log('Number Dry Bulb datapoints undefined:', dryBulbUndefined);
+    // console.log('Number Wet Bulb datapoints undefined:', wetbulbUndefined);
+    // console.log('Number Dry Bulb datapoints undefined:', dryBulbUndefined);
 
     // * test values
     // let onHoursVector = new this.toolsSuiteApiService.ToolsSuiteModule.IntVector();
@@ -348,17 +348,18 @@ export class ProcessCoolingSuiteApiService {
    * @returns {any} Module.WaterCooledSystemInput instance
    */
   private _createWaterCooledSystemInput(input: WaterCooledSystemInput, operations: Operations, condenserPumpInput: PumpInput, towerInput: TowerInput): any {
-    return new this.toolsSuiteApiService.ToolsSuiteModule.WaterCooledSystemInput(
-      operations.chilledWaterSupplyTemp,
-      towerInput.usesFreeCooling,
-      towerInput.HEXApproachTemp,
-      input.isConstantCondenserWaterTemp,
-      input.condenserWaterTemp,
-      // todo 7655 2 pumpInputs need defaults?
-      condenserPumpInput.variableFlow,
-      condenserPumpInput.flowRate,
-      input.followingTempDifferential,
-    );
+
+      return new this.toolsSuiteApiService.ToolsSuiteModule.WaterCooledSystemInput(
+        operations.chilledWaterSupplyTemp,
+        towerInput.usesFreeCooling,
+        towerInput.HEXApproachTemp,
+        input.isConstantCondenserWaterTemp,
+        input.condenserWaterTemp,
+        // todo 7655 2 pumpInputs need defaults?
+        condenserPumpInput.variableFlow,
+        condenserPumpInput.flowRate,
+        input.followingTempDifferential,
+      );
   }
 
     /**
