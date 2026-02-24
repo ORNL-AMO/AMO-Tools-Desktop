@@ -1,3 +1,4 @@
+import { TowerEnergyHistogramComponent } from './report/tower-energy-histogram/tower-energy-histogram.component';
 import { ApplyVariableSpeedControlComponent } from './explore-opportunities/apply-variable-speed-control/apply-variable-speed-control.component';
 import { EemHelpComponent } from './results-panel/help-panel/eem-help/eem-help.component';
 import { NgModule } from '@angular/core';
@@ -81,6 +82,9 @@ import { DevResultsComponent } from './report/dev-results/dev-results.component'
 import { ExecutiveSummaryResultsService } from './services/executive-summary-results.service';
 import { PumpSummaryComponent } from './report/pump-summary/pump-summary.component';
 import { PumpSummaryResultsService } from './services/pump-summary-results.service';
+import { TowerSummaryService } from './services/tower-summary.service';
+import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
+import { TowerSummaryComponent } from './report/tower-summary/tower-summary.component';
 
 
 export const ROUTE_TOKENS = {
@@ -201,10 +205,10 @@ const ROUTES: Route[] = [
             path: ROUTE_TOKENS.pumpSummary,
             component: PumpSummaryComponent,
           },
-          // {
-          //   path: ROUTE_TOKENS.towerSummary,
-          //   // component: TowerSummaryComponent,
-          // },
+          {
+            path: ROUTE_TOKENS.towerSummary,
+            component: TowerSummaryComponent,
+          },
           // {
           //   path: ROUTE_TOKENS.graphs,
           //   // component: GraphsComponent,
@@ -264,7 +268,9 @@ const ROUTES: Route[] = [
     EemHelpComponent,
     ConfirmActionComponent,
     DevResultsComponent,
-    PumpSummaryComponent
+    PumpSummaryComponent,
+    TowerSummaryComponent,
+    TowerEnergyHistogramComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -288,7 +294,8 @@ const ROUTES: Route[] = [
     InputUnitComponent,
     OperatingHoursModalModule,
     AlertInfoContainerComponent,
-    PercentGraphModule
+    PercentGraphModule,
+    ReportTableCellPipe
   ],
   providers: [
     ProcessCoolingAssessmentService,
@@ -305,6 +312,7 @@ const ROUTES: Route[] = [
     ExploreOpportunitiesFormService,
     ExecutiveSummaryResultsService,
     PumpSummaryResultsService,
+    TowerSummaryService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })

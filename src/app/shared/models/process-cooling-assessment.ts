@@ -72,8 +72,19 @@ export interface PumpResults {
 }
 
 export interface TowerResults {
-    // * tower detail from suite api results
+    id: string;
+    name: string;
+    hours: number[];
+    energy: number[];
+    totalTowerEnergy: number;
+    electricityCost: number;
+    totalTowerCost: number;
+    energySavings?: number;
+    percentEnergySavings?: number;
+    costSavings?: number;
+    percentCostSavings?: number;
 }
+
 export interface ChillerResults {
     // * chiller detail from suite api results
 }
