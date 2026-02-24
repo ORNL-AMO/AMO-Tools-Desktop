@@ -298,12 +298,11 @@ export class ModificationService {
 
   /**
    * Map Explore Opportunities (Modification) values to a new process cooling assessment representing the modification
-   * @param processCoolingAssessment - Full assessment from which baseline values are pulled
    * @param modification 
    * @returns 
    */
-  getModifiedProcessCoolingAssessment(processCoolingAssessment: ProcessCoolingAssessment, modification: Modification): ProcessCoolingAssessment {
-    let modifiedProcessCoolingAssessment: ProcessCoolingAssessment = { ...processCoolingAssessment };
+  getModifiedProcessCoolingAssessment(modification: Modification): ProcessCoolingAssessment {
+    let modifiedProcessCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingAssessmentService.assessmentValue.processCooling };
     let systemInformation = { ...modifiedProcessCoolingAssessment.systemInformation };
     // * EEMS currently only update systemInformation values
 

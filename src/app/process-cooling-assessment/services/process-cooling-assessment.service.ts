@@ -50,7 +50,7 @@ export class ProcessCoolingAssessmentService {
             tap(allAssessments => {
               this.assessmentDbService.setAll(allAssessments);
             }),
-            tap(() => console.log('saving assessment in db', assessment))
+            // tap(() => console.log('saving assessment in db', assessment))
           );
         }
         return [];
@@ -83,7 +83,7 @@ export class ProcessCoolingAssessmentService {
 
   // todo too many sources of truth
   setProcessCooling(processCooling: ProcessCoolingAssessment) {
-    console.log('[ProcessCoolingService] processCooling:', processCooling);
+    // console.log('[ProcessCoolingService] processCooling:', processCooling);
     // todo will have race conditions if used together (isBaselineValid$)
     this.processCooling.next(processCooling);
     this.processCoolingSignal.set(processCooling);
