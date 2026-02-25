@@ -13,7 +13,23 @@ import {
     // } from './CWSATExampleAirCooledConstant';
 } from './CWSATExampleVINPLTConstants';
 import { Settings } from "../shared/models/settings";
+// import exampleWeatherData from "./exampleVINPLTweather";
 import exampleWeatherData from "./exampleWeatherData";
+
+// Convert exampleWeatherData weatherDataPoints temps from C to F
+function convertWeatherDataTempsToF(weatherData: any) {
+    if (weatherData && Array.isArray(weatherData.weatherDataPoints)) {
+        weatherData.weatherDataPoints = weatherData.weatherDataPoints.map((point: any) => ({
+            ...point,
+            dry_bulb_temp: point.dry_bulb_temp != null ? (point.dry_bulb_temp * 9/5) + 32 : point.dry_bulb_temp,
+            wet_bulb_temp: point.wet_bulb_temp != null ? (point.wet_bulb_temp * 9/5) + 32 : point.wet_bulb_temp
+        }));
+    }
+    return weatherData;
+}
+
+// * NOTE: Conversion only necessary for ./exampleWeatherData, data is saved in Celcius
+const exampleWeatherDataF = convertWeatherDataTempsToF(exampleWeatherData);
 
 export const MockProcessCoolingAssessment: Assessment = {
     "name": "Process Cooling Example",
@@ -92,7 +108,7 @@ export const MockProcessCoolingAssessment: Assessment = {
         selectedModificationId: null,
         selected: false,
         existingDataUnits: 'Imperial',
-        weatherData: exampleWeatherData,
+        weatherData: exampleWeatherDataF,
         weeklyOperatingSchedule: {
             "useSameSchedule": false,
             "hoursOnMonToSun": [
