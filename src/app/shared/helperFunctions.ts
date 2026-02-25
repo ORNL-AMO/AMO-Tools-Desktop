@@ -1,5 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
+import { FlatColors, graphColors } from './graphColors';
 
 export function copyObject(object) {
     return cloneDeep(object);
@@ -22,7 +23,7 @@ export function truncate(text: string, specifiedLimit?: number) {
 export function roundVal(val: number, places: number = 3): number {
     let rounded = Number(val.toFixed(places));
     return rounded;
-  }
+}
 
 export function getNewIdString() {
     return uuidv4();
@@ -34,23 +35,12 @@ export function getNameDateString(currentDate: Date) {
 }
 
 
-export const getGraphColors = (): Array<any> => {
-    const defaultColors = [
-        '#1E7640',
-        '#2ABDDA',
-        '#84B641',
-        '#7030A0',
-        '#E1CD00',
-        '#306DBE',
-        '#A03123',
-        '#7FD7E9',
-        '#DE762D',
-        '#948A54',
-        '#A9D58B',
-        '#FFE166',
-        '#DD7164',
-        '#3f4a7d'
-    ];
-
-    return [...defaultColors];
+export const getGraphColors = (): Array<string> => {
+    return [...graphColors];
 };
+
+
+export function getRandomFlatColor(): string {
+    let randomIndex = Math.floor(Math.random() * FlatColors.length);
+    return FlatColors[randomIndex];
+}

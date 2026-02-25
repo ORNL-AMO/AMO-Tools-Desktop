@@ -39,7 +39,6 @@ export class CalculatorsComponent implements OnInit {
   ngOnInit() {
     this.selectedCalcSubscription = this.calculatorsService.selectedCalc.subscribe(val => {
       this.selectedCalc = val;
-      console.log('selected calc ', this.selectedCalc);
     });
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 

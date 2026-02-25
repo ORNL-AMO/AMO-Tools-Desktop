@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { TreasureHuntCo2EmissionsResults, TreasureHuntResults, UtilityUsageData } from '../../../../shared/models/treasure-hunt';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';

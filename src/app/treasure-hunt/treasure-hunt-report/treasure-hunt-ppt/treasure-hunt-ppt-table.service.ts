@@ -230,7 +230,7 @@ export class TreasureHuntPptTableService {
         return slide;
     }
 
-    getOpportunityTableRows(rows: any[], opportunity: OpportunitySummary, settings: Settings) {
+    getOpportunityTableRows(rows: any[], opportunity: OpportunitySummary, settings: Settings, isTotalCostSavings: boolean) {
         let utilityUnit: string;
         if (opportunity.mixedIndividualResults) {
             opportunity.mixedIndividualResults.forEach(opp => {
@@ -247,9 +247,40 @@ export class TreasureHuntPptTableService {
                 additionalSavings = opportunity.opportunityCost.additionalAnnualSavings.cost;
             }
             utilityUnit = this.getUtilityUnit(opportunity.utilityType, settings);
+                // It's an array of strings, but each row is an array of different data types
             rows.push([opportunity.opportunityName, opportunity.utilityType, this.roundValToFormatString(opportunity.totalEnergySavings), utilityUnit, this.roundValToCurrency(opportunity.costSavings + additionalSavings), this.roundValToCurrency(opportunity.opportunityCost.material), this.roundValToCurrency(opportunity.opportunityCost.labor), this.getOtherCost(opportunity.opportunityCost), this.roundValToCurrency(opportunity.totalCost), this.roundValToFormatString(opportunity.payback)]);
         }
+        rows = this.filterTableBySavingsType(rows, isTotalCostSavings);
+
         return rows;
+    }
+
+    filterTableBySavingsType(rows: any[], isTotalCostSavings: boolean) {
+        if (rows.length > 1) {
+            const sortByCostSavingsIndex = 4;
+            const sortByEnergySavingsIndex = 2;
+            var newRows: any[] = [];
+            const header = rows[0];
+            // It's an array of strings, but each row is an array of different data types
+            const dataRows = rows.slice(1);
+            const sortIndex = isTotalCostSavings === true ? sortByCostSavingsIndex : sortByEnergySavingsIndex;
+            dataRows.sort((a, b) => {
+                return this.extractNumberFromOpportunityColumn(b[sortIndex]) - this.extractNumberFromOpportunityColumn(a[sortIndex]);
+            });
+            newRows = [header, ...dataRows];
+        }
+        return newRows;
+    }
+
+    extractNumberFromOpportunityColumn (val: any) {
+        if (typeof val === 'number') return val;
+            if (typeof val === 'string') {
+                // Remove any non-numeric characters (like $ and commas) before parsing
+                let cleaned = val.replace(/[$,\s]/g, '');
+                let num = parseFloat(cleaned);
+                return isNaN(num) ? 0 : num;
+            }
+        return 0;
     }
 
 
