@@ -53,11 +53,14 @@ export class ChillerProfileChartComponent implements AfterViewInit {
       x: this.loadPercentages,
       y: chiller.efficiency,
       type: 'scatter',
-      mode: 'lines',
+      mode: 'lines+markers',
       name: chiller.name,
       line: {
         width: 3,
-        dash: 'dot'
+        dash: 'dot',
+        marker: {
+          size: 8
+        }
       },
       hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (kW/Ton): %{y:.2f}<extra></extra>`
     }));

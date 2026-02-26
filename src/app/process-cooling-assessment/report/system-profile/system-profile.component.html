@@ -8,19 +8,19 @@
     @if (systemProfileUI && selectedResultsId() !== undefined) {
 
         @if(resultsViewSignal() === 'report') {
-            <div class="form-group">
-                    <select id="resultsSelect" class="form-control" [(ngModel)]="selectedResultsId">
-                        @for (systemProfile of systemProfileUI.systemProfileChillerOutput; track systemProfile.id) {
-                            <option [value]="systemProfile.id">{{systemProfile.name || 'Modification'}}</option>
-                        }
-                    </select>
-            </div>
+			<div class="selected-result-dropdown my-3">
+				<select id="resultsSelect" class="form-control" [(ngModel)]="selectedResultsId">
+					@for (systemProfile of systemProfileUI.systemProfileChillerOutput; track systemProfile.id) {
+						<option [value]="systemProfile.id">{{systemProfile.name || 'Modification'}}</option>
+					}
+				</select>
+			</div>
         }
 
     <table #copyTable class="table table-hover mt-3">
 		<thead>
 			<tr>
-				<th></th>
+				<th>Load %</th>
                 @for(load of LOAD_LABELS; track load) {
                      <th>{{load}}</th>
                 }
@@ -29,8 +29,9 @@
 		<tbody>
             @for(chiller of (systemProfileUI.systemProfileChillerOutput | filterChillerOutputs:selectedResultsId()); track chiller.id) {
 			<ng-container>
-				<tr class="bg-secondary text-white font-weight-bold">
-					<td colspan="{{LOAD_LABELS.length + 1}}">{{chiller.name}}</td>
+                @let columnSpan = LOAD_LABELS.length + 1;
+				<tr class="chiller-name-row">
+					<td colspan="100" class="text-left pl-2">{{chiller.name}}</td>
 				</tr>
 				<tr>
 					<td>Efficiency</td>

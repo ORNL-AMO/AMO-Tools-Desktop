@@ -1,13 +1,29 @@
 
-.bg-secondary {
-	background-color: #6c757d !important;
+.table td, .table th {
+  border: 2px solid #dee2e6;
+  padding: 2px;
+  text-align: left;
 }
-.text-white {
-	color: #fff !important;
+
+.chiller-name-row {
+  background-color: lightgrey !important;
+  color: #000 !important;
+  font-weight: bold !important;
 }
-.font-weight-bold {
-	font-weight: bold !important;
+
+.chiller-name-row td {
+  border-top: none !important;
+  border-bottom: none !important;
 }
-.mt-3 {
-	margin-top: 1rem !important;
+
+select:hover {
+  cursor: pointer;
+}
+
+.selected-result-dropdown {
+  display: flex;
+  justify-content: center;
+  width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }

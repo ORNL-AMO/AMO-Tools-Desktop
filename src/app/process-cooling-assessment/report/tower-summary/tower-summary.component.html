@@ -21,22 +21,25 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-				<td></td>
-				<td></td>
-				@for (modification of towerSummaryUI.modificationNames; track modification.id; let modIndex = $index) {
-          @let isValidModification = !invalidModificationIds()?.includes(modification.id);
+        @if (invalidModificationIds() && invalidModificationIds().length > 0) {
+          <tr>
+            <td></td>
+            <td></td>
+            @for (modification of towerSummaryUI.modificationNames; track modification.id) {
+              @let isValidModification = !invalidModificationIds().includes(modification.id);
 
-          @if(!isValidModification) {
-          <td>
-            <span class="alert-danger">
-              Modification Invalid:<br>
-              <span>Errors found in Explore Opportunities<br></span>
-            </span>
-          </td>
-          }
-				}
-			</tr>
+              @if(!isValidModification) {
+              <td>
+                <span class="alert-danger">
+                  Modification Invalid:<br>
+                  <span>Errors found in Explore Opportunities<br></span>
+                </span>
+              </td>
+              }
+            }
+          </tr>
+        }
+
         @for (row of towerSummaryUI.totalRows; track row.label) {
           <tr [class]="row.className">
             <td>
