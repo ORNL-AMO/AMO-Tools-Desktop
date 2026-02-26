@@ -39,9 +39,9 @@ export class ResultsPanelComponent {
       const mainView = this.mainView();
       
       if (mainView === MainView.ASSESSMENT) {
-        this.processCoolingUIService.executiveSummaryView.set('modification-panel');
+        this.processCoolingUIService.executiveSummaryViewSignal.set('modification-panel');
       } else {
-        this.processCoolingUIService.executiveSummaryView.set('baseline-panel');
+        this.processCoolingUIService.executiveSummaryViewSignal.set('baseline-panel');
       }
     });
   }

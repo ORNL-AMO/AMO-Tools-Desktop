@@ -87,6 +87,9 @@ import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
 import { TowerSummaryComponent } from './report/tower-summary/tower-summary.component';
 import { PerformanceProfileComponent } from './report/performance-profile/performance-profile.component';
 import { ChillerProfileChartComponent } from './report/performance-profile/chiller-profile-chart/chiller-profile-chart.component';
+import { SystemProfileComponent } from './report/system-profile/system-profile.component';
+import { SystemProfileService } from './services/system-profile.service';
+import { FilterChillerOutputsPipe } from './report/system-profile/filter-chiller-outputs.pipe';
 
 
 export const ROUTE_TOKENS = {
@@ -114,6 +117,7 @@ export const ROUTE_TOKENS = {
   // report sub tabs
   executiveSummary: 'executive-summary',
   performanceProfile: 'performance-profile',
+  systemProfile: 'system-profile',
   pumpSummary: 'pump-summary',
   towerSummary: 'tower-summary',
   graphs: 'graphs',
@@ -208,6 +212,10 @@ const ROUTES: Route[] = [
             component: PerformanceProfileComponent,
           },
           {
+            path: ROUTE_TOKENS.systemProfile,
+            component: SystemProfileComponent,
+          },
+          {
             path: ROUTE_TOKENS.pumpSummary,
             component: PumpSummaryComponent,
           },
@@ -278,7 +286,9 @@ const ROUTES: Route[] = [
     TowerSummaryComponent,
     TowerEnergyHistogramComponent,
     PerformanceProfileComponent,
-    ChillerProfileChartComponent
+    ChillerProfileChartComponent,
+    SystemProfileComponent,
+    FilterChillerOutputsPipe
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -321,6 +331,7 @@ const ROUTES: Route[] = [
     ExecutiveSummaryResultsService,
     PumpSummaryResultsService,
     TowerSummaryService,
+    SystemProfileService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })
