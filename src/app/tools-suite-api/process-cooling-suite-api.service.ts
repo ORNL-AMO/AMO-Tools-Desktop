@@ -27,7 +27,7 @@ export class ProcessCoolingSuiteApiService {
     private toolsSuiteApiService: ToolsSuiteApiService) { }
   
     // todo update suite to take chiller ids
-    // * track chiller input index to chiller name for labeling results, assuming no ordering changes on the suite API side. 
+    // * map chiller input index to chiller name for labeling results, assuming no ordering changes on the suite API side. 
     chillerInputResultMap:  {
       [inputIndex: number]: {id: string, name: string};
     }
@@ -406,6 +406,8 @@ export class ProcessCoolingSuiteApiService {
     const numChillers = chillerOutputInstance.efficiency.size();
     for (let i = 0; i < numChillers; i++) {
       chillerOutput.push({
+        id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
+        name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
         efficiency: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.efficiency.get(i)),
         hours: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i)),
         power: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i)),

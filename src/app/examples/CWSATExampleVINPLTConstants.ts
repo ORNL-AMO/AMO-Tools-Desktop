@@ -88,7 +88,7 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   {
   itemId: '1',
   isValid: true,
-  name: 'Chiller1',
+  name: 'Centrifugal Chiller 1',
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.CENTRIFUGAL,
   capacity: 1000,
@@ -118,7 +118,7 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
   {
   itemId: '2',
   isValid: true,
-  name: 'Chiller2',
+  name: 'Centrifugal Chiller 2',
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.CENTRIFUGAL,
   capacity: 1000,
@@ -148,7 +148,7 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
 {
   itemId: '3',
   isValid: true,
-  name: 'Chiller3',
+  name: 'Helical Rotary Chiller',
   modifiedDate: new Date(),
   chillerType: CompressorChillerTypeEnum.SCREW,
   capacity: 350,
