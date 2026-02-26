@@ -1,0 +1,67 @@
+
+
+<div class="output-summary p-3">
+    <h4 class="show-print print-section-header">System Profile</h4>
+
+    @let systemProfileUI = systemProfileUI$ | async;
+    
+    @if (systemProfileUI && selectedResultsId() !== undefined) {
+
+        @if(resultsViewSignal() === 'report') {
+            <div class="form-group">
+                    <select id="resultsSelect" class="form-control" [(ngModel)]="selectedResultsId">
+                        @for (systemProfile of systemProfileUI.systemProfileChillerOutput; track systemProfile.id) {
+                            <option [value]="systemProfile.id">{{systemProfile.name || 'Modification'}}</option>
+                        }
+                    </select>
+            </div>
+        }
+
+    <table #copyTable class="table table-hover mt-3">
+		<thead>
+			<tr>
+				<th></th>
+                @for(load of LOAD_LABELS; track load) {
+                     <th>{{load}}</th>
+                }
+			</tr>
+		</thead>
+		<tbody>
+            @for(chiller of (systemProfileUI.systemProfileChillerOutput | filterChillerOutputs:selectedResultsId()); track chiller.id) {
+			<ng-container>
+				<tr class="bg-secondary text-white font-weight-bold">
+					<td colspan="{{LOAD_LABELS.length + 1}}">{{chiller.name}}</td>
+				</tr>
+				<tr>
+					<td>Efficiency</td>
+                    @for(eff of chiller.efficiency; track $index) {
+                        <td>{{eff | number:'1.0-3'}}</td>
+                    }
+				</tr>
+				<tr>
+					<td>Hours</td>
+					 @for(hr of chiller.hours; track $index) {
+                        <td>{{hr | number:'1.0-0'}}</td>
+                    }
+				</tr>
+				<tr>
+					<td>Power</td>
+					 @for(power of chiller.power; track $index) {
+                        <td>{{power | number:'1.0-1'}}</td>
+                    }
+				</tr>
+				<tr>
+					<td>Energy</td>
+					 @for(energy of chiller.energy; track $index) {
+                        <td>{{energy | number:'1.0-0'}}</td>
+                    }
+				</tr>
+			</ng-container>
+        }
+		</tbody>
+	</table>
+
+    }
+</div>
+
+	<app-exportable-results-table [tableString]="copyTableString" (updateTableString)="updateCopyTableString()"></app-exportable-results-table>

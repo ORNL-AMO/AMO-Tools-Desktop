@@ -25,7 +25,7 @@ export class ExecutiveSummaryComponent {
     note: string
   }>;
   
-  resultsViewSignal: WritableSignal<SummaryView> = this.processCoolingUiService.executiveSummaryView;
+  resultsViewSignal: WritableSignal<SummaryView> = this.processCoolingUiService.executiveSummaryViewSignal;
   executiveSummaryUI$: Observable<ExecutiveSummaryUI>;
   invalidModificationIds: WritableSignal<Array<string>> = this.modificationService.invalidModificationIds;
 

@@ -8,6 +8,7 @@ import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-conte
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
 import { ROUTE_TOKENS as WEATHER_ROUTE_TOKENS } from '../../shared/modules/weather-data/models/routes';
 import { SummaryView } from './executive-summary-results.service';
+import { ProfileView } from './system-profile.service';
 
 @Injectable()
 export class ProcessCoolingUiService {
@@ -25,7 +26,8 @@ export class ProcessCoolingUiService {
   showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   
-  executiveSummaryView: WritableSignal<SummaryView> = signal<SummaryView>('baseline-panel');
+  executiveSummaryViewSignal: WritableSignal<SummaryView> = signal<SummaryView>('baseline-panel');
+  profileViewSignal: WritableSignal<ProfileView> = signal<ProfileView>('baseline');
 
   private readonly urlSegmentIndex = {
     assessmentURL: 0,
@@ -329,6 +331,7 @@ export enum ReportView {
   PUMP_SUMMARY = 'pump-summary',
   TOWER_SUMMARY = 'tower-summary',
   GRAPHS = 'graphs',
+  SYSTEM_PROFILE = "system-profile",
 }
 
 
@@ -419,6 +422,10 @@ export const REPORT_VIEW_LINKS: ViewLink[] = [
   {
     view: ReportView.PERFORMANCE_PROFILE,
     label: 'Performance Profile',
+  },
+  {
+    view: ReportView.SYSTEM_PROFILE,
+    label: 'System Profile',
   },
   {
     view: ReportView.PUMP_SUMMARY,

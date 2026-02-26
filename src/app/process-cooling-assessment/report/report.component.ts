@@ -44,7 +44,8 @@ export class ReportComponent {
 
 
   ngOnInit(): void {
-    this.processCoolingUiService.executiveSummaryView.set('report');
+    this.processCoolingUiService.executiveSummaryViewSignal.set('report');
+    this.processCoolingUiService.profileViewSignal.set('report');
     
     // this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     this.createdDate = new Date();

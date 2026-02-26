@@ -7,7 +7,7 @@ import { ModificationService } from './modification.service';
 import { ModificationNameCell, PercentSavings, ReportTableRow } from '../report/report-ui-models';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ExecutiveSummaryResultsService {
   private readonly resultsService = inject(ProcessCoolingResultsService);
   private readonly modificationService = inject(ModificationService);
