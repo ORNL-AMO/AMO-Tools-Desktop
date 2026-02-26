@@ -54,7 +54,7 @@
                             @if (result.isAdjusted) {
                             <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
                             }
-                            ${{result.cost | number:'1.0-2'}}
+                            ${{result.cost | number:getFlowDecimalPrecisionPipeValue()}}
                         </span>
                         } @else {
                         <span>0</span>
