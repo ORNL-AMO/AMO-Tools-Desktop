@@ -3,6 +3,8 @@ import { WeatherContextData } from "../modules/weather-data/weather-context.toke
 
 // Output interfaces for process cooling API service
 export interface ProcessCoolingChillerOutput {
+    id: string;
+    name: string;
     efficiency: number[];
     hours: number[];
     power: number[];

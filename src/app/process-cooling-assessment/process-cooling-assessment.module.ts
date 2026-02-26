@@ -85,6 +85,8 @@ import { PumpSummaryResultsService } from './services/pump-summary-results.servi
 import { TowerSummaryService } from './services/tower-summary.service';
 import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
 import { TowerSummaryComponent } from './report/tower-summary/tower-summary.component';
+import { PerformanceProfileComponent } from './report/performance-profile/performance-profile.component';
+import { ChillerProfileChartComponent } from './report/performance-profile/chiller-profile-chart/chiller-profile-chart.component';
 
 
 export const ROUTE_TOKENS = {
@@ -111,7 +113,7 @@ export const ROUTE_TOKENS = {
 
   // report sub tabs
   executiveSummary: 'executive-summary',
-
+  performanceProfile: 'performance-profile',
   pumpSummary: 'pump-summary',
   towerSummary: 'tower-summary',
   graphs: 'graphs',
@@ -202,6 +204,10 @@ const ROUTES: Route[] = [
             component: ExecutiveSummaryComponent,
           },
           {
+            path: ROUTE_TOKENS.performanceProfile,
+            component: PerformanceProfileComponent,
+          },
+          {
             path: ROUTE_TOKENS.pumpSummary,
             component: PumpSummaryComponent,
           },
@@ -270,7 +276,9 @@ const ROUTES: Route[] = [
     DevResultsComponent,
     PumpSummaryComponent,
     TowerSummaryComponent,
-    TowerEnergyHistogramComponent
+    TowerEnergyHistogramComponent,
+    PerformanceProfileComponent,
+    ChillerProfileChartComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
