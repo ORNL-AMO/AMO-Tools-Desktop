@@ -1,4 +1,5 @@
 
+// todo metric conversions for some of these units have not been implemented
 export const PROCESS_COOLING_UNITS = {
   temperature: {
     imperial: 'F',
@@ -52,6 +53,14 @@ export const PROCESS_COOLING_UNITS = {
     labelHTML: {
       imperial: 'kW/ton',
       metric: 'kW/ton'
+    }
+  },
+  efficiency: {
+    imperial: 'kw/ton',
+    metric: 'kw/ton',
+    labelHTML: {
+      imperial: 'kW/RT',
+      metric: 'COP'
     }
   },
   capacity: {

@@ -2,7 +2,7 @@
 .table td, .table th {
   border: 2px solid #dee2e6;
   padding: 2px;
-  text-align: left;
+  text-align: right;
 }
 
 .chiller-name-row {
