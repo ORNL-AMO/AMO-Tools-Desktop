@@ -52,7 +52,6 @@ import { MotorPerformanceComponent } from '../calculator/motors/motor-performanc
 import { NemaEnergyEfficiencyComponent } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.component';
 import { PercentLoadEstimationComponent } from '../calculator/motors/percent-load-estimation/percent-load-estimation.component';
 import { ReplaceExistingComponent } from '../calculator/motors/replace-existing/replace-existing.component';
-import { EfficiencyImprovementComponent } from '../calculator/furnaces/efficiency-improvement/efficiency-improvement.component';
 import { EnergyEquivalencyComponent } from '../calculator/furnaces/energy-equivalency/energy-equivalency.component';
 import { EnergyUseComponent } from '../calculator/furnaces/energy-use/energy-use.component';
 import { O2EnrichmentComponent } from '../calculator/furnaces/o2-enrichment/o2-enrichment.component';
@@ -375,11 +374,6 @@ export const coreRoutes: Routes = [
           {
             path: 'full-load-amps',
             component: FullLoadAmpsComponent
-          },
-          //  issue 3007 Efficiency Improvement is hidden
-          {
-            path: 'efficiency-improvement',
-            component: EfficiencyImprovementComponent
           },
           {
             path: 'energy-equivalency',
