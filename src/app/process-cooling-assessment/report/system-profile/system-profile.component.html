@@ -34,25 +34,39 @@
 					<td colspan="100" class="text-left pl-2">{{chiller.name}}</td>
 				</tr>
 				<tr>
-					<td>Efficiency</td>
+					<td class="text-left">Performance (
+						<span [innerHTML]="settingsSignal().unitsOfMeasure === 'Imperial' ? 
+						PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial :
+						PROCESS_COOLING_UNITS.efficiency.labelHTML.metric
+					"></span>)</td>
                     @for(eff of chiller.efficiency; track $index) {
-                        <td>{{eff | number:'1.0-3'}}</td>
+                        <td>{{eff | number:'1.0-0'}}</td>
                     }
 				</tr>
 				<tr>
-					<td>Hours</td>
+					<td class="text-left">Hours</td>
 					 @for(hr of chiller.hours; track $index) {
                         <td>{{hr | number:'1.0-0'}}</td>
                     }
 				</tr>
 				<tr>
-					<td>Power</td>
+					<td class="text-left">Power
+						(<span [innerHTML]="settingsSignal().unitsOfMeasure === 'Imperial' ? 
+						PROCESS_COOLING_UNITS.power.labelHTML.imperial :
+						PROCESS_COOLING_UNITS.power.labelHTML.metric
+					"></span>)
+					</td>
 					 @for(power of chiller.power; track $index) {
                         <td>{{power | number:'1.0-1'}}</td>
                     }
 				</tr>
 				<tr>
-					<td>Energy</td>
+					<td class="text-left">Energy 
+						(<span [innerHTML]="settingsSignal().unitsOfMeasure === 'Imperial' ? 
+						PROCESS_COOLING_UNITS.energy.labelHTML.imperial :
+						PROCESS_COOLING_UNITS.energy.labelHTML.metric
+					"></span>)
+					</td>
 					 @for(energy of chiller.energy; track $index) {
                         <td>{{energy | number:'1.0-0'}}</td>
                     }

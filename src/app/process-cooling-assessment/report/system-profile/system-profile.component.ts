@@ -5,6 +5,8 @@ import { ProfileView, SystemProfileService, SystemProfileUI } from '../../servic
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
 import { take, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { PROCESS_COOLING_UNITS } from '../../constants/process-cooling-units';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 
 @Component({
   selector: 'app-system-profile',
@@ -15,11 +17,16 @@ import { Observable } from 'rxjs';
 export class SystemProfileComponent {
   private systemProfileService = inject(SystemProfileService);
   private processCoolingUiService = inject(ProcessCoolingUiService);
+  private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   copyTableString: any;
   
   LOAD_LABELS = LOAD_LABELS;
+
+  PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
+
+  settingsSignal = this.processCoolingAssessmentService.settingsSignal;
 
   selectedResultsId = signal<string>(undefined);
   systemProfileUI$: Observable<SystemProfileUI>;
