@@ -7,22 +7,21 @@ import { CompressedAirAssessmentModificationResults } from '../../calculations/m
 import { CompressedAirModificationValid } from '../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 
 @Component({
-    selector: 'app-report-graphs',
-    templateUrl: './report-graphs.component.html',
-    styleUrls: ['./report-graphs.component.css'],
-    standalone: false
+  selector: 'app-report-graphs',
+  templateUrl: './report-graphs.component.html',
+  styleUrls: ['./report-graphs.component.css'],
+  standalone: false
 })
 export class ReportGraphsComponent implements OnInit {
-    selectedGraph: 'cost' | 'airflow' | 'energy' = 'cost';
   @Input()
   assessmentResults: Array<CompressedAirAssessmentModificationResults>;
   @Input()
-  combinedDayTypeResults: Array<{modification: Modification, combinedResults: DayTypeModificationResult, validation: CompressedAirModificationValid}>;
+  combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult, validation: CompressedAirModificationValid }>;
   @Input()
   compressedAirAssessment: CompressedAirAssessment;
   @Input()
   printView: boolean;
-  
+
   @ViewChild("modificationGraph", { static: false }) modificationGraph: ElementRef;
 
   selectedDayType: CompressedAirDayType;
@@ -33,178 +32,32 @@ export class ReportGraphsComponent implements OnInit {
   useAutomaticSequencer: boolean;
   reduceRuntime: boolean;
   addPrimaryReceiverVolume: boolean;
+  selectedGraph: 'cost' | 'airflow' | 'energy' = 'cost';
   constructor(private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
-    this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes[0];
-    this.setDisplayValues();
+    // this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes[0];
+    // this.setDisplayValues();
   }
 
-  ngAfterViewInit() {
-    this.showSelectedGraph();
+  // ngAfterViewInit() {
+  //   this.showSelectedGraph();
+  // }
+
+  setSelectedGraph(selectedGraph: 'cost' | 'airflow' | 'energy') {
+    this.selectedGraph = selectedGraph;
   }
 
-  showSelectedGraph() {
-    if (this.selectedGraph === 'cost') {
-      this.drawModificationGraph();
-    } else if (this.selectedGraph === 'airflow') {
-      // this.drawAirflowGraph();
-    } else if (this.selectedGraph === 'energy') {
-      this.drawEnergyGraph();
-    }
-  }
+  // showSelectedGraph() {
+  //   if (this.selectedGraph === 'cost') {
+  //     this.drawModificationGraph();
+  //   } else if (this.selectedGraph === 'airflow') {
+  //     // this.drawAirflowGraph();
+  //   } else if (this.selectedGraph === 'energy') {
+  //     this.drawEnergyGraph();
+  //   }
+  // }
 
-  drawModificationGraph() {
-    if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
-      let x: Array<string> = this.combinedDayTypeResults.map(result => { 
-        return result.modification.name });
-      x.unshift('Baseline');
-      let yValue = this.getAnnualCost();
-      let traceData = new Array();
-      let currencyPipe = new CurrencyPipe('en-US')
-      traceData.push({
-        x: x,
-        y: yValue,
-        text: yValue.map(value => { return currencyPipe.transform(value, undefined, undefined, '1.0-0')}),
-        textposition: 'auto',
-        type: 'bar',
-        name: 'Adjusted Annual Cost',
-        hoverinfo: "name+y",
-        marker: {
-          line: {
-            width: 3
-          }
-        },
-      })
-      
-      let trace = {
-        x: x,
-        y: this.getFlowReallocationTrace(),
-        type: 'bar',
-        name: 'Flow Reallocation',
-        hoverinfo: "name+y",
-        marker: {
-          line: {
-            width: 3
-          }
-        },
-      }
-      traceData.push(trace);
-      if (this.reduceAirLeaks) {
-        let trace = {
-          x: x,
-          y: this.getReduceAirLeaksTrace(),
-          type: 'bar',
-          name: 'Reduce Air Leaks',
-          hoverinfo: "name+y",
-          marker: {
-            line: {
-              width: 3
-            }
-          },
-        }
-        traceData.push(trace);
-      }
-      if (this.improveEndUseEfficiency) {
-        let trace = {
-          x: x,
-          y: this.getImproveEfficiencyTrace(),
-          type: 'bar',
-          name: 'Improve End Use Efficiency',
-          hoverinfo: "name+y",
-          marker: {
-            line: {
-              width: 3
-            }
-          },
-        }
-        traceData.push(trace);
-      }
-      if (this.reduceSystemAirPressure) {
-        let trace = {
-          x: x,
-          y: this.getReduceAirSystemPressureTrace(),
-          type: 'bar',
-          name: 'Reduce System Air Pressure',
-          hoverinfo: "name+y",
-          marker: {
-            line: {
-              width: 3
-            }
-          },
-        }
-        traceData.push(trace);
-      }
-      if (this.adjustCascadingSetPoints) {
-        let trace = {
-          x: x,
-          y: this.getAdjustCascadePointTrace(),
-          type: 'bar',
-          name: 'Adjust Cascading Set Points',
-          hoverinfo: "name+y",
-          marker: {
-            line: {
-              width: 3
-            }
-          },
-        }
-        traceData.push(trace);
-      }
-      if (this.useAutomaticSequencer) {
-        let trace = {
-          x: x,
-          y: this.getAutomaticSequencerTrace(),
-          type: 'bar',
-          name: 'Use Automatic Sequencer',
-          hoverinfo: "name+y",
-          marker: {
-            line: {
-              width: 3
-            }
-          },
-        }
-        traceData.push(trace);
-      }
-      if (this.reduceRuntime) {
-        let trace = {
-          x: x,
-          y: this.getReduceRuntimeTrace(),
-          type: 'bar',
-          name: 'Reduce Runtime',
-          hoverinfo: "name+y",
-          marker: {
-            line: {
-              width: 3
-            }
-          },
-        }
-        traceData.push(trace);
-      }
-      if (this.addPrimaryReceiverVolume) {
-        let trace = {
-          x: x,
-          y: this.getReceiverVolumeTrace(),
-          type: 'bar',
-          name: 'Add Primary Receiver Volume',
-          hoverinfo: "name+y",
-          marker: {
-            line: {
-              width: 3
-            }
-          },
-        }
-        traceData.push(trace);
-      }
-
-
-      var layout = this.getLayout("Modification Project Savings", "$");
-      var config = {
-        responsive: true,
-        displaylogo: false
-      };
-      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
-    }
-  }
 
   // drawAirflowGraph() {
   //   if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
@@ -252,7 +105,7 @@ export class ReportGraphsComponent implements OnInit {
       traceData.push({
         x: x,
         y: yValue,
-        text: yValue.map(value => `${value.toLocaleString()} kWh`),        
+        text: yValue.map(value => `${value.toLocaleString()} kWh`),
         textposition: 'auto',
         type: 'bar',
         name: 'Total Energy Consumption',
@@ -320,6 +173,14 @@ export class ReportGraphsComponent implements OnInit {
     let y: Array<number> = [0];
     this.combinedDayTypeResults.forEach(result => {
       y.push(result.combinedResults.addReceiverVolumeSavings.savings.cost);
+    });
+    return y;
+  }
+
+  getReplaceCompressorTrace(): Array<number> {
+    let y: Array<number> = [0];
+    this.combinedDayTypeResults.forEach(result => {
+      y.push(result.combinedResults.replaceCompressorsSavings.savings.cost);
     });
     return y;
   }

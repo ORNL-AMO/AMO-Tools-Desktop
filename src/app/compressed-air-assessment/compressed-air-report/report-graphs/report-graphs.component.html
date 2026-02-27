@@ -1,14 +1,31 @@
-
-<div class="btn-group mb-3" role="group" aria-label="Graph selection">
-    <button type="button" class="btn btn-primary" [class.active]="selectedGraph === 'cost'" (click)="selectedGraph = 'cost'; showSelectedGraph()">Cost</button>
-    <button type="button" class="btn btn-primary" [class.active]="selectedGraph === 'airflow'" (click)="selectedGraph = 'airflow'; showSelectedGraph()">Air Flow</button>
-    <button type="button" class="btn btn-primary" [class.active]="selectedGraph === 'energy'" (click)="selectedGraph = 'energy'; showSelectedGraph()">Energy</button>
+@if(assessmentResults && assessmentResults.length > 0){
+<div class="btn-group mb-3 " role="group" aria-label="Graph selection">
+    <button type="button" class="btn btn-secondary p-2" [class.active]="selectedGraph === 'cost'"
+        (click)="setSelectedGraph('cost')">Cost</button>
+    <button type="button" class="btn btn-secondary p-2" [class.active]="selectedGraph === 'airflow'"
+        (click)="setSelectedGraph('airflow')">Air Flow</button>
+    <button type="button" class="btn btn-secondary p-2" [class.active]="selectedGraph === 'energy'"
+        (click)="setSelectedGraph('energy')">Energy</button>
 </div>
 
+
+@if(selectedGraph == 'cost'){
+<div class="page-break-before d-flex w-100" [ngClass]="{'print-graphs-container': printView}">
+    <app-compressed-air-cost-savings-graph [assessmentResults]="assessmentResults"
+        [combinedDayTypeResults]="combinedDayTypeResults"
+        [compressedAirAssessment]="compressedAirAssessment"></app-compressed-air-cost-savings-graph>
+</div>
+}@else if(selectedGraph == 'energy'){
 <div class="page-break-before" [ngClass]="{'print-graphs-container': printView}">
-        <div #modificationGraph id="modificationGraph"></div>
+    <app-compressed-air-energy-savings-graph></app-compressed-air-energy-savings-graph>
 </div>
-
-<div class="alert alert-warning p-2" *ngIf="assessmentResults && assessmentResults.length == 0">
+}@else if(selectedGraph == 'airflow'){
+<div class="page-break-before" [ngClass]="{'print-graphs-container': printView}">
+    <app-compressed-air-airflow-savings-graph></app-compressed-air-airflow-savings-graph>
+</div>
+}
+}@else {
+<div class="alert alert-warning p-2">
     No modifications found. Create a modification to see results graphs.
 </div>
+}
