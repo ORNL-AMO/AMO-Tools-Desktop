@@ -126,7 +126,7 @@ export interface Modification {
     upgradeCoolingTowerFans: UpgradeCoolingTowerFans,
     useFreeCooling: UseFreeCooling,
     replaceRefrigerant: ReplaceRefrigerant,
-    installVSDOnCentrifugalCompressor: InstallVSDOnCentrifugalCompressor,
+    installVSDOnCentrifugalCompressors: InstallVSDOnCentrifugalCompressor,
     notes?: string
 }
 
@@ -143,7 +143,7 @@ export interface ExploreOppsBaseline {
     upgradeCoolingTowerFans: UpgradeCoolingTowerFans,
     useFreeCooling: UseFreeCooling,
     replaceRefrigerant: ReplaceRefrigerant,
-    installVSDOnCentrifugalCompressor: InstallVSDOnCentrifugalCompressor,     
+    installVSDOnCentrifugalCompressors: InstallVSDOnCentrifugalCompressor,     
 }
 
 export interface EEM {
@@ -203,7 +203,7 @@ export interface ReplaceRefrigerant extends EEM {
 }
 
 export interface InstallVSDOnCentrifugalCompressor extends EEM {
-    compressorType: CompressorChillerTypeEnum,  
+    installOnAll: boolean,
     // todo original CWSAT - this one is the least clear what should happen
 }
 
@@ -348,7 +348,7 @@ export interface PumpInput {
      * @param isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
      * @param fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
      * @param age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is degraded by 1% / year
-     * @param installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
+     * @param installVSD boolean, Modification/EEM only. Install a VSD on each Centrifugal Compressor Motor
      * @param useARIloadScheduleByMonthchedule boolean, if true loadScheduleByMonth not needed and can be set to empty
      * @param loadScheduleByMonth double, 12x11 array or 1x11 of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
      */
@@ -363,6 +363,7 @@ export interface ChillerInventoryItem {
     isFullLoadEfficiencyKnown: boolean;
     fullLoadEfficiency: number;
     age: number;
+    // * installVSD is Modification/EEM only
     installVSD: boolean;
     useARIloadScheduleByMonthchedule: boolean;
     loadScheduleByMonth?: number[][]; // * This is hours per percent load for each month
@@ -436,4 +437,4 @@ export type ModificationEEMProperty = keyof Pick<Modification,
         'upgradeCoolingTowerFans' | 
         'useFreeCooling' | 
         'replaceRefrigerant' | 
-        'installVSDOnCentrifugalCompressor'>;
+        'installVSDOnCentrifugalCompressors'>;

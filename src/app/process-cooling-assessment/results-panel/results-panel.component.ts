@@ -26,6 +26,8 @@ export class ResultsPanelComponent {
   resultsSummaryView: SummaryView = 'baseline-panel';
 
   constructor() {
+    this.processCoolingUIService.inventoryTableViewSignal.set('results-panel');
+    
     effect(() => {
       const setupView = this.setupView();
       if (setupView === SetupView.INVENTORY || setupView === SetupView.LOAD_SCHEDULE) {

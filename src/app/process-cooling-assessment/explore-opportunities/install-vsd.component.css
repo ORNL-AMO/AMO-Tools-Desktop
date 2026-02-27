@@ -1,0 +1,31 @@
+.group-label{
+	font-size: 16px;
+    text-transform: none;
+	letter-spacing: 1px;
+	padding-top: 6.5px;
+	padding-bottom: 6.5px;
+}
+
+.group-label:hover{
+	cursor: pointer;
+	background-color: lightgray;
+}
+
+.group-label .form-control{
+	width: fit-content;
+	display: inherit;
+    background-color: var(--process-cooling-assessment);
+    color: white;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+}
+.table th, .table td {
+    border: 1px solid #dee2e6;
+    padding: 0.5rem;
+    vertical-align: top;
+}

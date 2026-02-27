@@ -87,8 +87,8 @@ export const MockProcessCoolingAssessment: Assessment = {
                     "currentRefrigerant": "",
                     "newRefrigerant": ""
                 },
-                "installVSDOnCentrifugalCompressor": {
-                    "compressorType": undefined,
+                "installVSDOnCentrifugalCompressors": {
+                    "installOnAll": undefined,
                     "useOpportunity": false
                 }
             }

@@ -28,6 +28,7 @@ export class ProcessCoolingUiService {
   
   executiveSummaryViewSignal: WritableSignal<SummaryView> = signal<SummaryView>('baseline-panel');
   profileViewSignal: WritableSignal<ProfileView> = signal<ProfileView>('baseline');
+  inventoryTableViewSignal: WritableSignal<InventoryTableView> = signal<InventoryTableView>('results-panel');
 
   private readonly urlSegmentIndex = {
     assessmentURL: 0,
@@ -298,6 +299,7 @@ export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' 
 export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
 export type ProcessCoolingAssessmentTabString = 'explore-opportunities';
 export type ProcessCoolingView = SetupView | MainView | ReportView | AssessmentView | SystemInformationView;
+export type InventoryTableView = 'results-panel' | 'install-vsd';
 
 export enum MainView {
   BASELINE = 'baseline',
