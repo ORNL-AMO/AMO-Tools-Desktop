@@ -89,7 +89,9 @@ import { PerformanceProfileComponent } from './report/performance-profile/perfor
 import { ChillerProfileChartComponent } from './report/performance-profile/chiller-profile-chart/chiller-profile-chart.component';
 import { SystemProfileComponent } from './report/system-profile/system-profile.component';
 import { SystemProfileService } from './services/system-profile.service';
-import { FilterChillerOutputsPipe } from './report/system-profile/filter-chiller-outputs.pipe';
+import { FilterChillerOutputsPipe } from './pipes/filter-chiller-outputs.pipe';
+import { InstallVSDComponent } from './explore-opportunities/install-vsd/install-vsd.component';
+import { FilterChillerInventoryPipe } from './pipes/filter-chiller-inventory.pipe';
 
 
 export const ROUTE_TOKENS = {
@@ -288,7 +290,9 @@ const ROUTES: Route[] = [
     PerformanceProfileComponent,
     ChillerProfileChartComponent,
     SystemProfileComponent,
-    FilterChillerOutputsPipe
+    FilterChillerOutputsPipe,
+    InstallVSDComponent,
+    FilterChillerInventoryPipe
   ],
   imports: [
     RouterModule.forChild(ROUTES),

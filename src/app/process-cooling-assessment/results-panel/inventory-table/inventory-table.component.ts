@@ -1,13 +1,15 @@
 import { Component, DestroyRef, inject, WritableSignal } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
-import { ChillerInventoryItem } from '../../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, CompressorChillerTypeEnum } from '../../../shared/models/process-cooling-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { ChillerInventoryService, InventoryValidState } from '../../services/chiller-inventory.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
 import { ConfirmActionComponent, ConfirmActionData } from '../../confirm-action/confirm-action.component';
+import { InventoryTableView, ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
+import { FilterChillerInventoryParams } from '../../pipes/filter-chiller-inventory.pipe';
 
 @Component({
   selector: 'app-inventory-table',
@@ -18,14 +20,23 @@ import { ConfirmActionComponent, ConfirmActionData } from '../../confirm-action/
 export class InventoryTableComponent {
   private inventoryService: ChillerInventoryService = inject(ChillerInventoryService);
   private processCoolingService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private processCoolingUIService = inject(ProcessCoolingUiService);
   private modalDialogService: ModalDialogService = inject(ModalDialogService);
   private destroyRef = inject(DestroyRef);
 
   inventoryUIState$: Observable<InventoryState>;
   inventoryValidState: WritableSignal<InventoryValidState> = this.inventoryService.inventoryValidState;
   settings: Settings;
+  tableView: InventoryTableView = this.processCoolingUIService.inventoryTableViewSignal();
+
+  filterInventoryParams: FilterChillerInventoryParams;
   
   ngOnInit(): void {
+    if (this.tableView === 'install-vsd') {
+      this.filterInventoryParams = {
+        chillerType: CompressorChillerTypeEnum.CENTRIFUGAL
+      }
+    }
     this.inventoryUIState$ = combineLatest({
       processCooling: this.processCoolingService.processCooling$,
       selectedChiller: this.inventoryService.selectedChiller$,

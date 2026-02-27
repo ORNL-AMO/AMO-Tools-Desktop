@@ -1,5 +1,5 @@
 import { computed, effect, inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
-import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, CompressorChillerTypeEnum, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment, ProcessCoolingResults, SystemInformation } from '../../shared/models/process-cooling-assessment';
 import { BehaviorSubject, combineLatest, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
@@ -160,6 +160,16 @@ export class ModificationService {
       }
     }
 
+    if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getInstallVSDOnCentrifugalCompressorsForm({
+        installOnAll: modification.installVSDOnCentrifugalCompressors.installOnAll,
+        useOpportunity: modification.installVSDOnCentrifugalCompressors.useOpportunity
+      });
+      if (!form.valid) {
+        return false;
+      }
+    }
+
     return true;
   }
 
@@ -287,8 +297,8 @@ export class ModificationService {
         newRefrigerant: undefined,
         useOpportunity: false,
       },
-      installVSDOnCentrifugalCompressor: {
-        compressorType: undefined,
+      installVSDOnCentrifugalCompressors: {
+        installOnAll: false,
         useOpportunity: false,
       },
     }
@@ -303,8 +313,10 @@ export class ModificationService {
    */
   getModifiedProcessCoolingAssessment(modification: Modification): ProcessCoolingAssessment {
     let modifiedProcessCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingAssessmentService.assessmentValue.processCooling };
-    let systemInformation = { ...modifiedProcessCoolingAssessment.systemInformation };
-    // * EEMS currently only update systemInformation values
+    let systemInformation: SystemInformation = { ...modifiedProcessCoolingAssessment.systemInformation };
+    let chillerInventory: ChillerInventoryItem[] = [...modifiedProcessCoolingAssessment.inventory.map(item => {
+      return { ...item };
+    })];
 
     if (modification.increaseChilledWaterTemp.useOpportunity) {
       systemInformation.operations = {
@@ -365,7 +377,14 @@ export class ModificationService {
       };
     }
 
+    if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
+      chillerInventory = chillerInventory.map(chiller =>
+        chiller.chillerType === CompressorChillerTypeEnum.CENTRIFUGAL ? { ...chiller, installVSD: true } : chiller
+      );
+    }
+
     modifiedProcessCoolingAssessment.systemInformation = systemInformation;
+    modifiedProcessCoolingAssessment.inventory = chillerInventory;
     modifiedProcessCoolingAssessment.name = modification.name;
 
     return modifiedProcessCoolingAssessment;
@@ -407,8 +426,9 @@ export class ModificationService {
         currentRefrigerant: undefined,
         newRefrigerant: undefined,
       },
-      installVSDOnCentrifugalCompressor: {
-        compressorType: undefined,
+      installVSDOnCentrifugalCompressors: {
+        installOnAll: false,
+        useOpportunity: false,
       },
     }
 
@@ -416,35 +436,34 @@ export class ModificationService {
   }
 
   getEEMBadges(modification: Modification): Array<string> {
-    let badges: Array<string> = new Array();
+    let badges: Array<string> = [];
     if (modification.increaseChilledWaterTemp?.useOpportunity) {
-      badges.push('Increase Chilled Water Temperature');
+      badges.push(EEM_LABELS.increaseChilledWaterTemp);
     }
     if (modification.decreaseCondenserWaterTemp?.useOpportunity) {
-      badges.push('Decrease Condenser Water Temperature');
+      badges.push(EEM_LABELS.decreaseCondenserWaterTemp);
     }
     if (modification.useSlidingCondenserWaterTemp?.useOpportunity) {
-      badges.push('Use Sliding Condenser Water Temperature');
+      badges.push(EEM_LABELS.useSlidingCondenserWaterTemp);
     }
     if (modification.applyVariableSpeedControls?.useOpportunity) {
-      badges.push('Apply Variable Speed Controls');
+      badges.push(EEM_LABELS.applyVariableSpeedControls);
     }
     if (modification.replaceChillers?.useOpportunity) {
-      badges.push('Replace Chillers');
+      badges.push(EEM_LABELS.replaceChillers);
     }
     if (modification.upgradeCoolingTowerFans?.useOpportunity) {
-      badges.push('Upgrade Cooling Tower Fans');
+      badges.push(EEM_LABELS.upgradeCoolingTowerFans);
     }
     if (modification.useFreeCooling?.useOpportunity) {
-      badges.push('Use Free Cooling');
+      badges.push(EEM_LABELS.useFreeCooling);
     }
     if (modification.replaceRefrigerant?.useOpportunity) {
-      badges.push('Replace Refrigerant');
+      badges.push(EEM_LABELS.replaceRefrigerant);
     }
-    if (modification.installVSDOnCentrifugalCompressor?.useOpportunity) {
-      badges.push('Install VSD on Centrifugal Compressor');
+    if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
+      badges.push(EEM_LABELS.installVSDOnCentrifugalCompressors);
     }
-
     return badges;
   }
 }

@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { SystemProfileChillerOutput } from '../../services/system-profile.service';
+import { SystemProfileChillerOutput } from '../services/system-profile.service';
 
 @Pipe({
   name: 'filterChillerOutputs',
