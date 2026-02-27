@@ -1,3 +1,4 @@
+import { EEM_LABELS } from '../../constants/process-cooling-constants';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ModificationService } from '../../services/modification.service';
@@ -32,6 +33,7 @@ export class UpgradeCoolingTowerFanComponent implements OnInit {
     form: FormGroup<UpgradeCoolingTowerFanForm>;
     towerTypes = getTowerTypes();
     TowerType = TowerType;
+    EEM_LABELS = EEM_LABELS;
 
     ngOnInit(): void {
         const baselineValues = this.modificationService.getBaselineExploreOppsValues().upgradeCoolingTowerFans;

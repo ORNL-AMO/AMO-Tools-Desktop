@@ -76,7 +76,7 @@ export const EEM_LABELS = {
   upgradeCoolingTowerFans: 'Upgrade Cooling Tower Fans',
   useFreeCooling: 'Use Free Cooling',
   replaceRefrigerant: 'Replace Refrigerant',
-  installVSDOnCentrifugalCompressor: 'Install VSD on Centrifugal Compressor'
+  installVSDOnCentrifugalCompressors: 'Install VSD on Centrifugal Compressors'
 }
 
 export const getDefaultInventoryItem = (): ChillerInventoryItem => {

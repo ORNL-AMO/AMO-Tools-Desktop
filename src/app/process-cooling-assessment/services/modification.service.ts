@@ -436,35 +436,34 @@ export class ModificationService {
   }
 
   getEEMBadges(modification: Modification): Array<string> {
-    let badges: Array<string> = new Array();
+    let badges: Array<string> = [];
     if (modification.increaseChilledWaterTemp?.useOpportunity) {
-      badges.push('Increase Chilled Water Temperature');
+      badges.push(EEM_LABELS.increaseChilledWaterTemp);
     }
     if (modification.decreaseCondenserWaterTemp?.useOpportunity) {
-      badges.push('Decrease Condenser Water Temperature');
+      badges.push(EEM_LABELS.decreaseCondenserWaterTemp);
     }
     if (modification.useSlidingCondenserWaterTemp?.useOpportunity) {
-      badges.push('Use Sliding Condenser Water Temperature');
+      badges.push(EEM_LABELS.useSlidingCondenserWaterTemp);
     }
     if (modification.applyVariableSpeedControls?.useOpportunity) {
-      badges.push('Apply Variable Speed Controls');
+      badges.push(EEM_LABELS.applyVariableSpeedControls);
     }
     if (modification.replaceChillers?.useOpportunity) {
-      badges.push('Replace Chillers');
+      badges.push(EEM_LABELS.replaceChillers);
     }
     if (modification.upgradeCoolingTowerFans?.useOpportunity) {
-      badges.push('Upgrade Cooling Tower Fans');
+      badges.push(EEM_LABELS.upgradeCoolingTowerFans);
     }
     if (modification.useFreeCooling?.useOpportunity) {
-      badges.push('Use Free Cooling');
+      badges.push(EEM_LABELS.useFreeCooling);
     }
     if (modification.replaceRefrigerant?.useOpportunity) {
-      badges.push('Replace Refrigerant');
+      badges.push(EEM_LABELS.replaceRefrigerant);
     }
     if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
-      badges.push('Install VSD on Centrifugal Compressor');
+      badges.push(EEM_LABELS.installVSDOnCentrifugalCompressors);
     }
-
     return badges;
   }
 }

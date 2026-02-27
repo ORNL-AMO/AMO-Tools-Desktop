@@ -1,3 +1,4 @@
+import { EEM_LABELS } from '../../constants/process-cooling-constants';
 import { Component, DestroyRef, inject, OnInit, Signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModificationService } from '../../services/modification.service';
@@ -29,6 +30,7 @@ export class DecreaseCondenserWaterTempComponent implements OnInit {
   private destroyRef = inject(DestroyRef);  
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
+  EEM_LABELS = EEM_LABELS;
 
   baselineCondenserWaterTemperature: number;
   useOpportunity: boolean;

@@ -90,7 +90,7 @@ import { ChillerProfileChartComponent } from './report/performance-profile/chill
 import { SystemProfileComponent } from './report/system-profile/system-profile.component';
 import { SystemProfileService } from './services/system-profile.service';
 import { FilterChillerOutputsPipe } from './report/system-profile/filter-chiller-outputs.pipe';
-import { InstallVSDComponent } from './explore-opportunities/install-vsd.component';
+import { InstallVSDComponent } from './explore-opportunities/install-vsd/install-vsd.component';
 import { FilterChillerInventoryPipe } from './pipes/filter-chiller-inventory.pipe';
 
 

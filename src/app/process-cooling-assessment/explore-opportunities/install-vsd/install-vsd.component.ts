@@ -1,11 +1,12 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ExploreOpportunitiesFormService, InstallVSDForm } from '../services/explore-opportunities-form.service';
-import { ModificationService } from '../services/modification.service';
-import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
-import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
-import { InstallVSDOnCentrifugalCompressor, Modification } from '../../shared/models/process-cooling-assessment';
+import { ExploreOpportunitiesFormService, InstallVSDForm } from '../../services/explore-opportunities-form.service';
+import { ModificationService } from '../../services/modification.service';
+import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
+import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
+import { InstallVSDOnCentrifugalCompressor, Modification } from '../../../shared/models/process-cooling-assessment';
+import { EEM_LABELS } from '../../constants/process-cooling-constants';
 
 @Component({
     selector: 'app-install-vsd',
@@ -24,10 +25,11 @@ export class InstallVSDComponent implements OnInit {
     useOpportunity: boolean = false;
     form: FormGroup<InstallVSDForm>;
 
+    EEM_LABELS = EEM_LABELS;
+
     constructor() { 
         this.processCoolingUiService.inventoryTableViewSignal.set('install-vsd');
     }
-
 
     ngOnInit(): void {
         const baselineValues: InstallVSDOnCentrifugalCompressor = this.modificationService.getBaselineExploreOppsValues().installVSDOnCentrifugalCompressors;
