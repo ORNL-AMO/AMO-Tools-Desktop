@@ -65,49 +65,49 @@ export class CompressedAirCostSavingsGraphComponent {
       traceData.push(trace);
 
       if (this.assessmentResults.some(result => { return result.modification.reduceAirLeaks.order != 100 })) {
-        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).reduceAirLeaksResults.savings.savings.cost  });
+        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).reduceAirLeaksResults?.savings.savings.cost  });
         xValue.unshift(0);
         let trace = this.getTrace(xValue, y, 'Reduce Air Leaks');
         traceData.push(trace);
       }
       if (this.assessmentResults.some(result => { return result.modification.improveEndUseEfficiency.order != 100 })) {
-        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).improveEndUseEfficiencyResults.savings.savings.cost  });
+        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).improveEndUseEfficiencyResults?.savings.savings.cost  });
         xValue.unshift(0);
         let trace = this.getTrace(xValue, y, 'Improve End Use Efficiency');
         traceData.push(trace);
       }
       if (this.assessmentResults.some(result => { return result.modification.reduceSystemAirPressure.order != 100 })) {
-        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).reduceSystemAirPressureResults.savings.savings.cost  });
+        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).reduceSystemAirPressureResults?.savings.savings.cost  });
         xValue.unshift(0);
         let trace = this.getTrace(xValue, y, 'Reduce System Air Pressure');
         traceData.push(trace);
       }
       if (this.assessmentResults.some(result => { return result.modification.adjustCascadingSetPoints.order != 100 })) {
-        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).adjustCascadingSetPointsResults.savings.savings.cost  });
+        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).adjustCascadingSetPointsResults?.savings.savings.cost  });
         xValue.unshift(0);
         let trace = this.getTrace(xValue, y, 'Adjust Cascading Set Points');
         traceData.push(trace);
       }
       if (this.assessmentResults.some(result => { return result.modification.useAutomaticSequencer.order != 100 })) {
-        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).useAutomaticSequencerResults.savings.savings.cost  });
+        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).useAutomaticSequencerResults?.savings.savings.cost  });
         xValue.unshift(0);
         let trace = this.getTrace(xValue, y, 'Use Automatic Sequencer');
         traceData.push(trace);
       }
       if (this.assessmentResults.some(result => { return result.modification.reduceRuntime.order != 100 })) {
-        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).reduceRunTimeResults.savings.savings.cost  });
+        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).reduceRunTimeResults?.savings.savings.cost  });
         xValue.unshift(0);
         let trace = this.getTrace(xValue, y, 'Reduce Runtime');
         traceData.push(trace);
       }
       if (this.assessmentResults.some(result => { return result.modification.addPrimaryReceiverVolume.order != 100 })) {
-        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).addPrimaryReceiverVolumeResults.savings.savings.cost  });
+        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).addPrimaryReceiverVolumeResults?.savings.savings.cost  });
         xValue.unshift(0);
         let trace = this.getTrace(xValue, y, 'Add Primary Receiver Volume');
         traceData.push(trace);
       }
       if (this.assessmentResults.some(result => { return result.modification.replaceCompressor.order != 100 })) {
-        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).replaceCompressorResults.savings.savings.cost });
+        let xValue = this.assessmentResults.map(result => { return result.modifiedDayTypeProfileSummaries.find(dayTypeResult => { return dayTypeResult.dayType.dayTypeId === this.dayTypeId }).replaceCompressorResults?.savings.savings.cost });
         xValue.unshift(0);
         let trace = this.getTrace(xValue, y, 'Replace Compressors');
         traceData.push(trace);
