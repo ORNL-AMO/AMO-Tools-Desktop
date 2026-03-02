@@ -110,11 +110,14 @@ npm install
 
 > **Note:** It is recommended to develop using the web build (`npm run start`) unless you are specifically working on Electron-only features. This provides faster reloads and a smoother development experience.
 
-- **Serve the web build:**  
+- **Serve the web build:**
   ```sh
   npm run start
   ```
-- **Build for Electron development with hot-reload:**  
+
+  > Some dev-server warnings may appear on startup — see [Known Issues](#known-issues).
+
+- **Build for Electron development with hot-reload:**
   ```sh
   npm run build-watch
   ```
@@ -178,7 +181,30 @@ MEASUR depends on this native web component built in React (using ReactFlow). Th
 #### **Process Flow Library**
 Both MEASUR and the Process Flow Diagram Component depend on `/process-flow-lib` as a shared library of types, calculations, and utility methods.
 
+---
 
+### Known Issues
+
+#### Dev-server warnings on `npm run start`
+
+The following warnings appear at startup when running `npm run start` and can be safely ignored:
+
+- **Terminal:** `[vite] (client) Pre-transform error: Failed to load url /assets/process-flow-diagram-component.js. Does the file exist?`
+- **Browser console:** `Unable to add filesystem: <illegal path>`
+
+**Cause:** Angular 17+ replaced the legacy webpack-based dev server with a Vite-based one. Vite crawls `index.html` at startup and eagerly tries to resolve all `<script type="module">` entries before Angular's asset middleware is ready to serve them. The `process-flow-diagram-component.js` bundle — built separately by webpack and served as a static asset — is not part of Vite's module graph, so Vite cannot pre-transform it.
+
+These warnings are dev-server artifacts only. App functionality, hot-reload, and all production builds (`build-prod-web`, `build-prod-desktop`) are unaffected. A proper fix is being investigated.
+
+#### Electron development not supported on WSL
+
+Running or building the Electron app from within WSL is not supported. WSL presents itself as Linux to Electron, but lacks the display server required to launch a native window. Attempting to run `npm run electron` or `npm run build-prod-desktop` from a WSL terminal will fail.
+
+**Workaround:** Run Electron-related scripts from a native Windows terminal (PowerShell or CMD) where the project is accessible via the `\\wsl$\` UNC path, or develop using the web build (`npm run start`) which has no such limitation.
+
+See the [Electron Forge guide on developing with WSL](https://www.electronforge.io/guides/developing-with-wsl) for further details.
+
+---
 
 # License
 
