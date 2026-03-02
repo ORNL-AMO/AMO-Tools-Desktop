@@ -219,8 +219,8 @@
             </tr>
             <tr class="bold-row">
                 <td>Peak Airflow
-                    <span> (
-                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                    <span> 
+                        (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)</span>
                 </td>
                 <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">

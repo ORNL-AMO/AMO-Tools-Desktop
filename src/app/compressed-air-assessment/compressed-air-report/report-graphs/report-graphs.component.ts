@@ -5,6 +5,7 @@ import { CurrencyPipe } from '@angular/common';
 import { PlotlyService } from 'angular-plotly.js';
 import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirModificationValid } from '../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
+import { Settings } from '../../../shared/models/settings';
 
 @Component({
   selector: 'app-report-graphs',
@@ -23,6 +24,8 @@ export class ReportGraphsComponent implements OnInit {
   printView: boolean;
   @Input()
   baselineResults: BaselineResults;
+  @Input()
+  settings: Settings;
 
   @ViewChild("modificationGraph", { static: false }) modificationGraph: ElementRef;
 
