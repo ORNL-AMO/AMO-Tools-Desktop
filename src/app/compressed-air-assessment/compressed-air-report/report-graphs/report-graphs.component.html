@@ -31,7 +31,23 @@
 </div>
 }@else if(selectedGraph == 'energy'){
 <div class="page-break-before" [ngClass]="{'print-graphs-container': printView}">
-    <app-compressed-air-energy-savings-graph></app-compressed-air-energy-savings-graph>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <app-compressed-air-energy-savings-graph [assessmentResults]="assessmentResults"
+                [combinedDayTypeResults]="combinedDayTypeResults"
+                [compressedAirAssessment]="compressedAirAssessment"></app-compressed-air-energy-savings-graph>
+        </div>
+        @if(baselineResults.dayTypeResults && baselineResults.dayTypeResults.length > 1){
+        @for(dayTypeResult of baselineResults.dayTypeResults; track dayTypeResult.dayTypeId){
+        <div class="col-12 col-md-6">
+            <app-compressed-air-energy-savings-graph [assessmentResults]="assessmentResults"
+                [combinedDayTypeResults]="combinedDayTypeResults" [compressedAirAssessment]="compressedAirAssessment"
+                [baselineResults]="baselineResults"
+                [dayTypeId]="dayTypeResult.dayTypeId"></app-compressed-air-energy-savings-graph>
+        </div>
+        }
+        }
+    </div>
 </div>
 }@else if(selectedGraph == 'airflow'){
 <div class="page-break-before" [ngClass]="{'print-graphs-container': printView}">
