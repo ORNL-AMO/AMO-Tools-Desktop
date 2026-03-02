@@ -168,7 +168,8 @@
             *ngIf="(currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-report-graphs [assessmentResults]="assessmentResults" [combinedDayTypeResults]="combinedDayTypeResults"
-                [compressedAirAssessment]="assessment.compressedAirAssessment" [printView]="showPrintView">
+                [compressedAirAssessment]="assessment.compressedAirAssessment" [printView]="showPrintView"
+                [baselineResults]="baselineResults">
             </app-report-graphs>
         </div>
         <div class="results scroll-item print-height page-break-before"

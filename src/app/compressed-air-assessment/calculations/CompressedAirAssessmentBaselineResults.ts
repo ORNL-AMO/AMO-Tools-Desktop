@@ -51,7 +51,6 @@ export class CompressedAirAssessmentBaselineResults {
         let peakDemand: number = _.maxBy(dayTypeResults, (result: BaselineResult) => { return result.peakDemand }).peakDemand;
         let demandCost: number = peakDemand * 12 * compressedAirAssessment.systemBasics.demandCost;
         let maxAirflow: number = _.maxBy(dayTypeResults, (result: BaselineResult) => { return result.maxAirFlow }).maxAirFlow;
-
         this.baselineResults = {
             dayTypeResults: dayTypeResults,
             total: {

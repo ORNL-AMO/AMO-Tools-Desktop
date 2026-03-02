@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { DayTypeModificationResult } from '../../calculations/caCalculationModels';
+import { BaselineResults, DayTypeModificationResult } from '../../calculations/caCalculationModels';
 import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../../shared/models/compressed-air-assessment';
 import { CurrencyPipe } from '@angular/common';
 import { PlotlyService } from 'angular-plotly.js';
@@ -21,6 +21,8 @@ export class ReportGraphsComponent implements OnInit {
   compressedAirAssessment: CompressedAirAssessment;
   @Input()
   printView: boolean;
+  @Input()
+  baselineResults: BaselineResults;
 
   @ViewChild("modificationGraph", { static: false }) modificationGraph: ElementRef;
 
