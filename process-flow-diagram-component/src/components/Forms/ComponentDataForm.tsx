@@ -112,7 +112,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 
     return (
         <>
-            {isWaterUsingSystem && totalDischargeFlow > totalSourceFlow && totalUnknownLoss !== 0 &&
+            {isWaterUsingSystem && totalUnknownLoss > 0 &&
                 <Alert severity="warning" sx={{ marginBottom: '1rem', width: '100%' }}>
                     <span>System Imbalance: </span>
                     <span>{totalUnknownLoss}</span>

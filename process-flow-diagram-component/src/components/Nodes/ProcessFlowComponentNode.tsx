@@ -30,8 +30,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
     'water-treatment',
     'waste-water-treatment'
   ].includes(data.processComponentType);
-  const showWarningAlert = isWaterSystemComponentType && totalUnknownLoss !== 0;
-
+  const showWarningAlert = isWaterSystemComponentType && totalUnknownLoss > 0;
   const onEditNode = () => {
     dispatch(openDrawerWithSelected(id));
   }
@@ -80,6 +79,32 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         }
       </div>
 
+      {/* Overlays above node */}
+      {(showWarningAlert || getNodeHasErrorLevel(nodeError)) && (
+        <div
+          style={{
+            position: 'absolute',
+            top: -36,
+            left: 0,
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            zIndex: 2,
+            pointerEvents: 'none',
+          }}
+        >
+          {showWarningAlert && (
+            <Tooltip title="System Imbalance" placement="top" arrow>
+              <WarningAmberIcon color="warning" sx={{ fontSize: 30, mr: getNodeHasErrorLevel(nodeError) ? 1 : 0 }} />
+            </Tooltip>
+          )}
+          {getNodeHasErrorLevel(nodeError) && (
+            <Tooltip title="Node Error" placement="top" arrow>
+              <ErrorOutlineIcon color="error" sx={{ fontSize: 30 }} />
+            </Tooltip>
+          )}
+        </div>
+      )}
       <div className="node-inner-input">
         {showInSystemTreatment &&
           <div style={{
@@ -107,20 +132,6 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
             </span>
           </div>
         }
-         {showWarningAlert && (
-              <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: 4 }}>
-                <Tooltip title="System Imbalance" placement="top" arrow>
-                  <WarningAmberIcon color="warning" sx={{ fontSize: 30, verticalAlign: 'middle', marginRight: 0.5 }} />
-                </Tooltip>
-              </div>
-            )}
-            {getNodeHasErrorLevel(nodeError) && (
-              <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: 4 }}>
-                <Tooltip title="Node Error" placement="top" arrow>
-                  <ErrorOutlineIcon color="error" sx={{ fontSize: 30, verticalAlign: 'middle', marginRight: 0.5 }} />
-                </Tooltip>
-              </div>
-            )}
         <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
         <Typography sx={{ width: '100%' }} >
           {data.name}
