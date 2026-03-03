@@ -51,7 +51,7 @@ export const mass = {
                 plural: 'Tonne',
                 display: '(t)'
             },
-            to_anchor: 1000000,
+            to_anchor: 1_000_000,
             group: 'Metric'
         },
         sl: {
@@ -99,7 +99,7 @@ export const mass = {
                 plural: 'Imperial Ton',
                 display: '()'
             },
-            to_anchor: 2240,
+            to_anchor: 2000,
             group: 'Imperial'
         }
     },
