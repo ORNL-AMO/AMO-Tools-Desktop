@@ -6,6 +6,7 @@ import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import { DiagramNode, ProcessFlowPart, getSystemEstimatedUnknownLosses, WaterUsingSystem } from 'process-flow-lib';
+import { getNodeHasErrorLevel } from 'process-flow-lib/water/logic/validation';
 import { selectTotalSourceFlow, selectNodeErrors, selectTotalDischargeFlow } from '../Diagram/store';
 import CustomNodeToolbar from './CustomNodeToolbar';
 import { Tooltip } from '@mui/material';
@@ -29,10 +30,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
     'water-treatment',
     'waste-water-treatment'
   ].includes(data.processComponentType);
-
-
-  const showWarningAlert = isWaterSystemComponentType && totalSourceFlow > totalDischargeFlow && totalUnknownLoss !== 0;
-  const showErrorAlert = nodeError?.source?.level === 'error' || nodeError?.discharge?.level === 'error';
+  const showWarningAlert = isWaterSystemComponentType && totalUnknownLoss !== 0;
 
   const onEditNode = () => {
     dispatch(openDrawerWithSelected(id));
@@ -116,7 +114,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
                 </Tooltip>
               </div>
             )}
-            {showErrorAlert && (
+            {getNodeHasErrorLevel(nodeError) && (
               <div style={{ display: 'inline-flex', alignItems: 'center', marginBottom: 4 }}>
                 <Tooltip title="Node Error" placement="top" arrow>
                   <ErrorOutlineIcon color="error" sx={{ fontSize: 30, verticalAlign: 'middle', marginRight: 0.5 }} />
