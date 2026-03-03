@@ -56,7 +56,7 @@
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                     ).</span>
                 <span *ngIf="form.controls.airflow.errors.lessThan !== undefined">
-                    Value must be less than Full Load Air Flow ({{form.controls.airflow.errors.lessThan}})
+                    Value must be less than Full Load Airflow ({{form.controls.airflow.errors.lessThan}})
                     <span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                     <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>
                 </span>

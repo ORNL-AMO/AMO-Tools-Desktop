@@ -3,7 +3,7 @@
     <button type="button" class="btn btn-secondary p-2" [class.active]="selectedGraph === 'cost'"
         (click)="setSelectedGraph('cost')">Cost</button>
     <button type="button" class="btn btn-secondary p-2" [class.active]="selectedGraph === 'airflow'"
-        (click)="setSelectedGraph('airflow')">Air Flow</button>
+        (click)="setSelectedGraph('airflow')">Airflow</button>
     <button type="button" class="btn btn-secondary p-2" [class.active]="selectedGraph === 'energy'"
         (click)="setSelectedGraph('energy')">Energy</button>
 </div>
@@ -27,6 +27,11 @@
         </div>
         }
         }
+    </div>
+    <div class="d-flex">
+        <div class="alert alert-info p-1 small">
+            Cost values do not include peak demand costs and are strictly accounting for energy costs.
+        </div>
     </div>
 </div>
 }@else if(selectedGraph == 'energy'){

@@ -140,6 +140,10 @@ export class ExecutiveSummaryComponent implements OnInit {
       supplyProjects = supplyProjects + "Reduce System Air Pressure<br>";
       hasProjects = true;
     }
+    if(modification.replaceCompressor.order != 100){
+      supplyProjects = supplyProjects + "Replace Compressor(s)<br>";
+      hasProjects = true;
+    }
     if (!hasProjects) {
       return '&mdash; &mdash;';
     }

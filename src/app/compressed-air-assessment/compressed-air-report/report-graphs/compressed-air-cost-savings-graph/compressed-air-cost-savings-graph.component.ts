@@ -116,7 +116,7 @@ export class CompressedAirCostSavingsGraphComponent {
         showlegend: true,
         barmode: 'stack',
         title: {
-          text: `Adjust Annual Cost by Modification <br> ${dayType.name}`,
+          text: `Adjusted Annual Cost by Modification <br> ${dayType.name}`,
         },
         yaxis: {
           autotick: false,
@@ -213,7 +213,7 @@ export class CompressedAirCostSavingsGraphComponent {
         showlegend: true,
         barmode: 'stack',
         title: {
-          text: "Adjust Annual Cost by Modification <br> All Day Types Combined",
+          text: "Adjusted Annual Cost by Modification <br> All Day Types Combined",
         },
         yaxis: {
           autotick: false,

@@ -5,10 +5,10 @@ import { CompressedAirAssessment, CompressorInventoryItem, Modification, Profile
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
 import { InventoryService } from '../inventory/inventory.service';
-import { PerformancePointsFormService } from '../inventory/performance-points/performance-points-form.service';
 import { SystemProfileService } from '../../baseline-system-profile-setup/system-profile.service';
 import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
 import { CompressedAirAssessmentValidation } from '../../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
+import { getRandomFlatColor } from '../../../../shared/helperFunctions';
 
 @Component({
   selector: 'app-inventory-table',
@@ -35,7 +35,7 @@ export class InventoryTableComponent implements OnInit {
   validationStatusSub: Subscription;
   validationStatus: CompressedAirAssessmentValidation;
   constructor(private inventoryService: InventoryService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private systemProfileService: SystemProfileService, private performancePointsFormService: PerformancePointsFormService,
+    private systemProfileService: SystemProfileService,
     private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService) { }
 
   ngOnInit(): void {
@@ -174,6 +174,7 @@ export class InventoryTableComponent implements OnInit {
   createCopy(compressor: CompressorInventoryItem) {
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let compressorCpy: CompressorInventoryItem = JSON.parse(JSON.stringify(compressor));
+    compressorCpy.color = getRandomFlatColor();
     compressorCpy.itemId = Math.random().toString(36).substr(2, 9);
     compressorCpy.name = compressorCpy.name + ' (copy)';
     this.inventoryService.addNewCompressor(compressedAirAssessment, compressorCpy);
