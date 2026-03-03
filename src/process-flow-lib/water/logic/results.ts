@@ -68,7 +68,7 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem, calculate
   const totalSourceFlow = calculatedData ? getNodeTotalInflow(waterSystem, calculatedData) : waterSystem.userEnteredData.totalSourceFlow ?? 0;
   // * reconcile asessment value waterSystem.systemFlowTotals.dischargeWater
   const totalDischargeFlow = calculatedData ? getNodeTotalOutflow(waterSystem, calculatedData) : waterSystem.userEnteredData.totalDischargeFlow ?? 0;
-  const estimatedUnknownLosses = getSystemEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
+  const estimatedUnknownLosses = getNodeEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
 
   systemBalanceResults.incomingWater = totalSourceFlow;
   systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct
@@ -108,7 +108,7 @@ export const getNodeTotalOutflow = (node: Node<ProcessFlowPart> | ProcessFlowPar
   return totalOutflow ?? 0;
 }
 
-export const getSystemEstimatedUnknownLosses = (
+export const getNodeEstimatedUnknownLosses = (
   componentData: WaterUsingSystem | WaterTreatment | WasteWaterTreatment,
   systemTotalSourceFlow: number,
   systemTotalDischargeFlow: number
