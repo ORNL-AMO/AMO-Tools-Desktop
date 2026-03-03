@@ -53,6 +53,7 @@ export interface EemSavingsResults {
   adjustedResults: SavingsItem,
   savings: SavingsItem,
   implementationCost: number,
+  salvageValue: number,
   paybackPeriod: number,
   dayTypeId: string,
 }

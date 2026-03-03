@@ -18,6 +18,11 @@
                         <td class="bold">
                             Implementation Cost <br> ($)
                         </td>
+                        @if(showSalvageValue){
+                        <td class="bold">
+                            Salvage Value <br> ($)
+                        </td>
+                        }
                         <td class="bold">
                             Payback <br> (months)
                         </td>
@@ -35,6 +40,11 @@
                         <td>
                             {{result.combinedResults.flowReallocationSavings.implementationCost | number:'1.0-0'}}
                         </td>
+                        @if(showSalvageValue){
+                        <td>
+                            &mdash;
+                        </td>
+                        }
                         <td>
                             {{result.combinedResults.flowReallocationSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
@@ -52,6 +62,11 @@
                         <td>
                             {{result.combinedResults.replaceCompressorsSavings.implementationCost | number:'1.0-0'}}
                         </td>
+                        @if(showSalvageValue){
+                        <td>
+                            {{result.combinedResults.replaceCompressorsSavings.salvageValue | number:'1.0-0'}}
+                        </td>
+                        }
                         <td>
                             {{result.combinedResults.replaceCompressorsSavings.paybackPeriod | number:'1.0-2'}}
                         </td>
@@ -67,8 +82,14 @@
                             &mdash;
                         </td>
                         <td>
-                            {{result.combinedResults.addReceiverVolumeSavings.implementationCost}}
+                            {{result.combinedResults.addReceiverVolumeSavings.implementationCost | number:'1.0-0'}}
                         </td>
+
+                        @if(showSalvageValue){
+                        <td>
+                            &mdash;
+                        </td>
+                        }
                         <td>
                             <span *ngIf="result.combinedResults.addReceiverVolumeSavings.paybackPeriod != 0">
                                 {{result.combinedResults.addReceiverVolumeSavings.paybackPeriod | number:'1.0-2'}}
@@ -89,8 +110,14 @@
                             &mdash;
                         </td>
                         <td>
-                            {{result.combinedResults.adjustCascadingSetPointsSavings.implementationCost}}
+                            {{result.combinedResults.adjustCascadingSetPointsSavings.implementationCost |
+                            number:'1.0-0'}}
                         </td>
+                        @if(showSalvageValue){
+                        <td>
+                            &mdash;
+                        </td>
+                        }
                         <td>
                             <span *ngIf="result.combinedResults.adjustCascadingSetPointsSavings.paybackPeriod != 0">
                                 {{result.combinedResults.adjustCascadingSetPointsSavings.paybackPeriod |
@@ -113,8 +140,14 @@
                             &mdash;
                         </td>
                         <td>
-                            {{result.combinedResults.improveEndUseEfficiencySavings.implementationCost}}
+                            {{result.combinedResults.improveEndUseEfficiencySavings.implementationCost |
+                            number:'1.0-0'}}
                         </td>
+                        @if(showSalvageValue){
+                        <td>
+                            &mdash;
+                        </td>
+                        }
                         <td>
                             <span *ngIf="result.combinedResults.improveEndUseEfficiencySavings.paybackPeriod != 0">
                                 {{result.combinedResults.improveEndUseEfficiencySavings.paybackPeriod | number:'1.0-2'}}
@@ -135,8 +168,13 @@
                             &mdash;
                         </td>
                         <td>
-                            {{result.combinedResults.reduceAirLeaksSavings.implementationCost}}
+                            {{result.combinedResults.reduceAirLeaksSavings.implementationCost | number:'1.0-0'}}
                         </td>
+                        @if(showSalvageValue){
+                        <td>
+                            &mdash;
+                        </td>
+                        }
                         <td>
                             <span *ngIf="result.combinedResults.reduceAirLeaksSavings.paybackPeriod != 0">
                                 {{result.combinedResults.reduceAirLeaksSavings.paybackPeriod | number:'1.0-2'}}
@@ -157,8 +195,13 @@
                             &mdash;
                         </td>
                         <td>
-                            {{result.combinedResults.reduceRunTimeSavings.implementationCost}}
+                            {{result.combinedResults.reduceRunTimeSavings.implementationCost | number:'1.0-0'}}
                         </td>
+                        @if(showSalvageValue){
+                        <td>
+                            &mdash;
+                        </td>
+                        }
                         <td>
                             <span *ngIf="result.combinedResults.reduceRunTimeSavings.paybackPeriod != 0">
                                 {{result.combinedResults.reduceRunTimeSavings.paybackPeriod | number:'1.0-2'}}
@@ -179,8 +222,14 @@
                             &mdash;
                         </td>
                         <td>
-                            {{result.combinedResults.reduceSystemAirPressureSavings.implementationCost}}
+                            {{result.combinedResults.reduceSystemAirPressureSavings.implementationCost |
+                            number:'1.0-0'}}
                         </td>
+                        @if(showSalvageValue){
+                        <td>
+                            &mdash;
+                        </td>
+                        }
                         <td>
                             <span *ngIf="result.combinedResults.reduceSystemAirPressureSavings.paybackPeriod != 0">
                                 {{result.combinedResults.reduceSystemAirPressureSavings.paybackPeriod | number:'1.0-2'}}
@@ -201,8 +250,13 @@
                             &mdash;
                         </td>
                         <td>
-                            {{result.combinedResults.useAutomaticSequencerSavings.implementationCost}}
+                            {{result.combinedResults.useAutomaticSequencerSavings.implementationCost | number:'1.0-0'}}
                         </td>
+                        @if(showSalvageValue){
+                        <td>
+                            &mdash;
+                        </td>
+                        }
                         <td>
                             <span *ngIf="result.combinedResults.useAutomaticSequencerSavings.paybackPeriod != 0">
                                 {{result.combinedResults.useAutomaticSequencerSavings.paybackPeriod | number:'1.0-2'}}
@@ -223,8 +277,13 @@
                             {{result.combinedResults.peakDemandCostSavings | number:'1.0-0'}}
                         </td>
                         <td>
-                            {{result.combinedResults.allSavingsResults.implementationCost}}
+                            {{result.combinedResults.allSavingsResults.implementationCost | number:'1.0-0'}}
                         </td>
+                        @if(showSalvageValue){
+                        <td>
+                            {{result.combinedResults.allSavingsResults.salvageValue | number:'1.0-0'}}
+                        </td>
+                        }
                         <td>
                             <span *ngIf="result.combinedResults.allSavingsResults.paybackPeriod != 0">
                                 {{result.combinedResults.allSavingsResults.paybackPeriod | number:'1.0-2'}}

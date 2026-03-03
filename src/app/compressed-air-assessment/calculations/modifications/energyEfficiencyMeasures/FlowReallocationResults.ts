@@ -43,7 +43,7 @@ export class FlowReallocationResults {
             reduceRuntime,
             _compressedAirCalculationService,
             trimSelections);
-        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, implementationCost, summaryDataInterval, auxiliaryPowerUsage);
+        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, implementationCost, summaryDataInterval, auxiliaryPowerUsage, 0);
     }
 
     reallocateFlow(dayType: CompressedAirDayType,

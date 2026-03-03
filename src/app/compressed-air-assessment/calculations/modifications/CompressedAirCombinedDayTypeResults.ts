@@ -139,18 +139,19 @@ export class CompressedAirCombinedDayTypeResults {
             //prevent double counting of implementation cost
             if (index == 0) {
                 eemSavingsResults.implementationCost = result.implementationCost;
+                eemSavingsResults.salvageValue = result.salvageValue;
             }
         });
 
         if (additionalCosts) {
             eemSavingsResults.savings.cost -= additionalCosts;
         }
-        eemSavingsResults.paybackPeriod = this.getPaybackPeriod(eemSavingsResults.implementationCost, eemSavingsResults.savings.cost);
+        eemSavingsResults.paybackPeriod = this.getPaybackPeriod(eemSavingsResults.implementationCost, eemSavingsResults.salvageValue, eemSavingsResults.savings.cost);
         return eemSavingsResults;
     }
 
-    getPaybackPeriod(implementationCost: number, costSavings: number): number {
-        let paybackPeriod: number = (implementationCost / costSavings) * 12;
+    getPaybackPeriod(implementationCost: number, salvageValue: number, costSavings: number): number {
+        let paybackPeriod: number = ((implementationCost - salvageValue) / costSavings) * 12;
         if (paybackPeriod < 0 || isNaN(paybackPeriod)) {
             paybackPeriod = 0;
         }
@@ -198,7 +199,8 @@ export class CompressedAirCombinedDayTypeResults {
             this.replaceCompressorsSavings
         ];
         let totalImplementationCost: number = _.sumBy(allEemSavingsItems, (item: EemSavingsResults) => { return item.implementationCost; });
-        let paybackPeriod: number = this.getPaybackPeriod(totalImplementationCost, compressedAirAssessmentModificationResults.totalAnnualOperatingCostSavings);
+        let totalSalvageValue: number = _.sumBy(allEemSavingsItems, (item: EemSavingsResults) => { return item.salvageValue ? item.salvageValue : 0; });
+        let paybackPeriod: number = this.getPaybackPeriod(totalImplementationCost, totalSalvageValue, compressedAirAssessmentModificationResults.totalAnnualOperatingCostSavings);
         this.allSavingsResults = {
             baselineResults: {
                 cost: compressedAirAssessmentModificationResults.totalBaselineCost,
@@ -218,6 +220,7 @@ export class CompressedAirCombinedDayTypeResults {
                 percentSavings: percentSavings
             },
             implementationCost: totalImplementationCost,
+            salvageValue: totalSalvageValue,
             paybackPeriod: paybackPeriod,
             dayTypeId: undefined
         }

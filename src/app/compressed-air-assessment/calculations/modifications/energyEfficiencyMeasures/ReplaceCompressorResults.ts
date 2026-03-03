@@ -50,9 +50,6 @@ export class ReplaceCompressorResults {
         // this.replaceCompressors(replaceCompressor.compressorsMapping, replacementCompressors);
         //2. Reallocate flow based on new compressors..
         let implementationCost: number = replaceCompressor.implementationCost;
-        if (replaceCompressor.salvageValue) {
-            implementationCost = implementationCost - replaceCompressor.salvageValue;
-        }
 
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
@@ -73,7 +70,7 @@ export class ReplaceCompressorResults {
             replaceCompressor.trimSelections);
         this.profileSummary = flowReallocationResults.profileSummary;
 
-        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, implementationCost, summaryDataInterval, undefined);
+        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, implementationCost, summaryDataInterval, undefined, replaceCompressor.salvageValue);
     }
 
 

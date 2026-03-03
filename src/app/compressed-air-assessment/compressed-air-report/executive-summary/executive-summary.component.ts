@@ -42,6 +42,8 @@ export class ExecutiveSummaryComponent implements OnInit {
   displayReplaceCompressor: boolean;
   selectedModificationIndex: number;
 
+  displaySalvageValue: boolean;
+
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
   copyTableString: any;
 
@@ -82,6 +84,9 @@ export class ExecutiveSummaryComponent implements OnInit {
       }
       if(!this.displayReplaceCompressor){
         this.displayReplaceCompressor = modResult.combinedResults.replaceCompressorsSavings.savings.power != 0;
+      }
+      if(!this.displaySalvageValue){
+        this.displaySalvageValue = modResult.combinedResults.allSavingsResults.salvageValue != 0;
       }
     });
     this.setNotes();

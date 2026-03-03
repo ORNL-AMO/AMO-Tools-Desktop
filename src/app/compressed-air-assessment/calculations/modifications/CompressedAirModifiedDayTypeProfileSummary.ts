@@ -52,6 +52,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
     costKwh: number;
     summaryDataInterval: number;
     modificationImplementationCost: number;
+    modificationSalvageValue: number;
     modificationSavings: CompressedAirEemSavingsResult;
 
     peakDemand: number;
@@ -76,6 +77,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         this.costKwh = compressedAirAssessment.systemBasics.electricityCost;
         this.summaryDataInterval = compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
         this.trimSelections = compressedAirAssessment.systemInformation.trimSelections;
+        this.setTotalImplementationCost(modification);
+        this.setModificationSalvageValue(modification);
 
         //baseline profile summary
         let baselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = baselineDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == dayType.dayTypeId });
@@ -145,7 +148,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         //Final profile totals
         this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, true, this.dayType, improveEndUseEfficiency, this.adjustedCompressors);
         //Calculate total savings
-        this.modificationSavings = new CompressedAirEemSavingsResult(baselineDayTypeProfileSummary.profileSummary, this.adjustedProfileSummary, dayType, this.costKwh, this.modificationImplementationCost, this.summaryDataInterval, this.auxiliaryPowerUsage);
+        this.modificationSavings = new CompressedAirEemSavingsResult(baselineDayTypeProfileSummary.profileSummary, this.adjustedProfileSummary, dayType, this.costKwh, this.modificationImplementationCost, this.summaryDataInterval, this.auxiliaryPowerUsage, this.modificationSalvageValue);
         //Calculate CO2 savings
         if (compressedAirAssessment.systemInformation.co2SavingsData) {
             compressedAirAssessment.systemInformation.co2SavingsData.electricityUse = this.modificationSavings.adjustedResults.power;
@@ -468,6 +471,16 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             implementationCost += modification.flowReallocation.implementationCost;
         }
         this.modificationImplementationCost = implementationCost;
+    }
+
+    setModificationSalvageValue(modification: Modification) {
+        let salvageValue: number = 0;
+        if(modification.replaceCompressor.order != 100) {
+            if(modification.replaceCompressor.salvageValue) {
+                salvageValue += modification.replaceCompressor.salvageValue;
+            }
+        }
+        this.modificationSalvageValue = salvageValue;
     }
 
     setPeakDemandCosts(compressedAirAssessment: CompressedAirAssessment,

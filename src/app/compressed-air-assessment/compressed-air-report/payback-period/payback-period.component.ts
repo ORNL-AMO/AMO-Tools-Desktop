@@ -3,21 +3,25 @@ import { Modification } from '../../../shared/models/compressed-air-assessment';
 import { DayTypeModificationResult } from '../../calculations/caCalculationModels';
 
 @Component({
-    selector: 'app-payback-period',
-    templateUrl: './payback-period.component.html',
-    styleUrls: ['./payback-period.component.css'],
-    standalone: false
+  selector: 'app-payback-period',
+  templateUrl: './payback-period.component.html',
+  styleUrls: ['./payback-period.component.css'],
+  standalone: false
 })
 export class PaybackPeriodComponent implements OnInit {
   @Input()
   combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult }>;
 
-  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
+  @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   copyTableString: any;
 
+  showSalvageValue: boolean;
   constructor() { }
 
   ngOnInit(): void {
+    this.showSalvageValue = this.combinedDayTypeResults.some(modResult => {
+      return modResult.combinedResults.allSavingsResults.salvageValue != 0;
+    })
   }
 
   updateCopyTableString() {

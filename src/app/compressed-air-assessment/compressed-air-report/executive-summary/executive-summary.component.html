@@ -219,7 +219,7 @@
             </tr>
             <tr class="bold-row">
                 <td>Peak Airflow
-                    <span> 
+                    <span>
                         (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
                         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)</span>
                 </td>
@@ -556,6 +556,22 @@
                     <span *ngIf="!result.combinedResults.allSavingsResults.implementationCost">&mdash; &mdash;</span>
                 </td>
             </tr>
+            @if(displaySalvageValue){
+            <tr>
+                <td>
+                    Salvage Value
+                    <span> ($)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.allSavingsResults.salvageValue">{{result.combinedResults.allSavingsResults.salvageValue
+                        | number:'1.0-0'}}</span>
+                    <span *ngIf="!result.combinedResults.allSavingsResults.salvageValue">&mdash; &mdash;</span>
+                </td>
+            </tr>
+            }
             <tr>
                 <td>
                     Simple Payback Period

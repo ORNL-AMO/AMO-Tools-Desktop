@@ -20,6 +20,7 @@ export function getEmptyEemSavings(): EemSavingsResults {
             percentSavings: 0,
         },
         implementationCost: 0,
+        salvageValue: 0,
         paybackPeriod: 0,
         dayTypeId: undefined,
     };

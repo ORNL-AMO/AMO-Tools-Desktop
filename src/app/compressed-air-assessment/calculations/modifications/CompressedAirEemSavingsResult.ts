@@ -46,8 +46,9 @@ export class CompressedAirEemSavingsResult extends CompressedAirSavingsItem {
     implementationCost: number;
     paybackPeriod: number
     dayTypeId: string
+    salvageValue: number
 
-    constructor(profileSummary: Array<ProfileSummary>, adjustedProfileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, costKwh: number, implementationCost: number, summaryDataInterval: number, auxiliaryPowerUsage: { cost: number, energyUse: number }) {
+    constructor(profileSummary: Array<ProfileSummary>, adjustedProfileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, costKwh: number, implementationCost: number, summaryDataInterval: number, auxiliaryPowerUsage: { cost: number, energyUse: number }, salvageValue: number) {
         super();
         this.baselineResults = new CompressedAirSavingsItem();
         this.baselineResults.setEnergyAndCost(profileSummary, dayType, costKwh, summaryDataInterval, { cost: 0, energyUse: 0 });
@@ -58,7 +59,8 @@ export class CompressedAirEemSavingsResult extends CompressedAirSavingsItem {
 
         this.dayTypeId = dayType.dayTypeId;
         this.implementationCost = implementationCost;
-        this.paybackPeriod = (this.implementationCost / this.savings.cost) * 12;
+        this.salvageValue = salvageValue;
+        this.paybackPeriod = ((this.implementationCost - this.salvageValue) / this.savings.cost) * 12;
         if (this.paybackPeriod < 0) {
             this.paybackPeriod = 0;
         }
@@ -72,6 +74,7 @@ export class CompressedAirEemSavingsResult extends CompressedAirSavingsItem {
             implementationCost: this.implementationCost,
             paybackPeriod: this.paybackPeriod,
             dayTypeId: this.dayTypeId,
+            salvageValue: this.salvageValue
         }
     }
 }
@@ -92,6 +95,7 @@ export function getEmptyEemSavings(): EemSavingsResults {
             percentSavings: 0,
         },
         implementationCost: 0,
+        salvageValue: 0,
         paybackPeriod: 0,
         dayTypeId: undefined,
     };
