@@ -10,60 +10,62 @@
                 Adjust Cost Attribution
             </button>
         </div>
-        <table #copyTable class="table table-bordered table-striped table-hover">
-            <thead>
-                <tr class="text-center header-highlight">
-                    <th>
-                        System
-                    </th>
-                    <th>
-                        Municipal Water Intake
-                    </th>
-                    <th>
-                        Municipal Wastewater Discharge
-                    </th>
-                    <th>
-                        Third-party Disposal
-                    </th>
-                    <th>
-                        Water Treatment
-                    </th>
-                    <th>
-                        Wastewater Treatment
-                    </th>
-                    <th>
-                        Pump and Motor Energy
-                    </th>
-                    <th>
-                        Heat Energy
-                    </th>
-                    <th>
-                        Total
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="item-row text-center" *ngFor="let systemCosts of trueCostOfSystemsReport">
-                    <td>
-                        {{systemCosts.label}}
-                    </td>
-                    @for (result of systemCosts.connectionCostByType; track result) {
-                    <td>
-                        @if (result.cost) {
-                        <span class="d-flex justify-content-center align-items-center">
-                            @if (result.isAdjusted) {
-                            <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
+        <div style="overflow-x: auto; width: 100%;">
+            <table #copyTable class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr class="text-center header-highlight">
+                        <th>
+                            System
+                        </th>
+                        <th>
+                            Municipal Water Intake
+                        </th>
+                        <th>
+                            Municipal Wastewater Discharge
+                        </th>
+                        <th>
+                            Third-party Disposal
+                        </th>
+                        <th>
+                            Water Treatment
+                        </th>
+                        <th>
+                            Wastewater Treatment
+                        </th>
+                        <th>
+                            Pump and Motor Energy
+                        </th>
+                        <th>
+                            Heat Energy
+                        </th>
+                        <th>
+                            Total
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="item-row text-center" *ngFor="let systemCosts of trueCostOfSystemsReport">
+                        <td>
+                            {{systemCosts.label}}
+                        </td>
+                        @for (result of systemCosts.connectionCostByType; track result) {
+                        <td>
+                            @if (result.cost) {
+                            <span class="d-flex justify-content-center align-items-center">
+                                @if (result.isAdjusted) {
+                                <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
+                                }
+                                ${{result.cost | number:getFlowDecimalPrecisionPipeValue()}}
+                            </span>
+                            } @else {
+                            <span>0</span>
                             }
-                            ${{result.cost | number:getFlowDecimalPrecisionPipeValue()}}
-                        </span>
-                        } @else {
-                        <span>0</span>
+                        </td>
                         }
-                    </td>
-                    }
-                </tr>
-            </tbody>
-        </table>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div class="d-flex w-100 pl-2 pr-2 justify-content-start">
             <span>
                 <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
