@@ -198,7 +198,8 @@
           <!--blowdown flash tank-->
           <app-blowdown-flash-tank *ngIf="inputData.boilerInput.blowdownFlashed == true"
             [flashTank]="outputData.blowdownFlashTank" (emitSetHover)="setHover($event)"
-            (emitSelectEquipment)="selectTable($event)" [settings]="settings">
+            (emitSelectEquipment)="selectTable($event)" [settings]="settings"
+            [numberOfHeaders]="inputData.headerInput.numberOfHeaders">
           </app-blowdown-flash-tank>
         </div>
       </div>
