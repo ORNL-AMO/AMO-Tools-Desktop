@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfilesForPrint, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
-import { CompressedAirAssessmentResult, DayTypeModificationResult } from '../../calculations/caCalculationModels';
+import { DayTypeModificationResult } from '../../calculations/caCalculationModels';
 import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirBaselineDayTypeProfileSummary } from '../../calculations/CompressedAirBaselineDayTypeProfileSummary';
@@ -25,9 +25,6 @@ export class SystemProfilesComponent implements OnInit {
   settings: Settings;
   @Input()
   printView: boolean;
-  // @Input()
-  // combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult }>;
-
 
   selectedProfileSummary: Array<ProfileSummary>;
   selectedTotals: Array<ProfileSummaryTotal>;

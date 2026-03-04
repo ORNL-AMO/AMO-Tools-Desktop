@@ -25,7 +25,7 @@
     <p>Explore Opportunities to view results</p>
 </div>
 <div class="p-2 text-center"
-    *ngIf="modification && (tabSelect == 'results' || tabSelect == 'compressor-profile') && dayTypeOptions.length > 1">
+    *ngIf="modification && tabSelect == 'results' && dayTypeOptions.length > 1">
     <select class="day-type-select" id="selectedDayType" name="selectedDayType" [(ngModel)]="selectedDayType"
         (change)="changeDayType()">
         <option *ngIf="tabSelect == 'results'" [ngValue]=undefined>All Day Types</option>
@@ -37,7 +37,7 @@
 </app-explore-opportunities-results>
 
 <div class="p-2" *ngIf="modification && tabSelect == 'compressor-profile'">
-    <app-inventory-performance-profile [inAssessment]="true">
+    <app-inventory-performance-profile  [context]="'assessment'">
     </app-inventory-performance-profile>
 </div>
 <div class="p-2" *ngIf="modification && tabSelect == 'help'">

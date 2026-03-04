@@ -93,6 +93,8 @@ export class InventoryComponent implements OnInit {
           let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.compressorInventoryItems, 'modifiedDate');
           this.inventoryService.setSelectedCompressor(lastItemModified);
         }
+      }else{
+        this.inventoryService.setSelectedCompressor(undefined);
       }
     } else if (this.inventoryTab == 'replacementInventory') {
       this.hasInventoryItems = (compressedAirAssessment.replacementCompressorInventoryItems.length != 0);
@@ -108,6 +110,8 @@ export class InventoryComponent implements OnInit {
           let lastItemModified: CompressorInventoryItem = _.maxBy(compressedAirAssessment.replacementCompressorInventoryItems, 'modifiedDate');
           this.inventoryService.setSelectedCompressor(lastItemModified);
         }
+      }else{
+        this.inventoryService.setSelectedCompressor(undefined);
       }
     }
     let connectedInventoryData = this.integrationStateService.connectedInventoryData.getValue();

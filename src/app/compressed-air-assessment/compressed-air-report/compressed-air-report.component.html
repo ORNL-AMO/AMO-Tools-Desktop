@@ -196,7 +196,8 @@
             *ngIf="(currentTab == 'performanceProfile' && !showPrintView) || (showPrintView && printOptions.printPerformanceProfiles)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-performance-profiles [inReport]="true" [printView]="showPrintView"
-                [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings">
+                [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings"
+                [assessmentResults]="assessmentResults">
             </app-performance-profiles>
         </div>
     </div>

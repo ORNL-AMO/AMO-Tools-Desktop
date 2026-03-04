@@ -1,4 +1,4 @@
-<div *ngIf="selectedCompressor" class="group-label">
+<!-- <div *ngIf="selectedCompressor" class="group-label">
     <span *ngIf="inReport"> Baseline Performance Profiles </span>
     <span *ngIf="!inReport"> Performance Profile </span>
     <span *ngIf="!showAllCompressors && !inAssessment"> ({{selectedCompressor.name}}) </span>
@@ -12,5 +12,46 @@
             Graph Average Operating Points
         </label>
     </div>
+</div> -->
+@if(context == 'inventory'){
+<div class="group-label">
+    Inventory Performance Profile
+    <div class="input-group checkbox">
+        @if(context != 'report'){
+        <label class="p-2">
+            <input type="checkbox" id="showAllCompressors" (change)="drawChart()" [(ngModel)]="showAllCompressors" />
+            Graph All Compressors
+        </label>
+        }
+        <label class="p-2">
+            <input type="checkbox" id="showAvgOpPoints" (change)="drawChart()" [(ngModel)]="showAvgOpPoints" />
+            Graph Average Operating Points
+        </label>
+    </div>
 </div>
-<div [hidden]="(!inAssessment && !selectedCompressor) || (inAssessment && !compressedAirAssessment) " #performanceProfileChart id="performanceProfileChart" [ngClass]="{'print-view': printView}"></div>
+}@else if(context == 'assessment'){
+<div class="input-group checkbox">
+    <label class="p-2">
+        <input type="checkbox" id="showAvgOpPoints" (change)="drawChart()" [(ngModel)]="showAvgOpPoints" />
+        Graph Average Operating Points
+    </label>
+</div>
+}@else if(context == 'report'){
+<div class="group-label">
+    @if(compressedAirAssessmentModificationResults){
+    {{compressedAirAssessmentModificationResults.modification.name}} Inventory Performance Profile
+    }@else{
+    Baseline Inventory Performance Profile
+    }
+    <div class="input-group checkbox">
+        <label class="p-2">
+            <input type="checkbox" id="showAvgOpPoints" (change)="drawChart()" [(ngModel)]="showAvgOpPoints" />
+            Graph Average Operating Points
+        </label>
+    </div>
+</div>
+}
+
+
+
+<div #performanceProfileChart id="performanceProfileChart" [ngClass]="{'print-view': printView}"></div>

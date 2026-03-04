@@ -26,13 +26,13 @@
             <div class="p-2" *ngIf="tabSelect == 'inventory'">
                 <app-inventory-table></app-inventory-table>
                 <hr>
-                <app-inventory-performance-profile></app-inventory-performance-profile>
+                <app-inventory-performance-profile [context]="'inventory'"></app-inventory-performance-profile>
                 <app-centrifugal-graph></app-centrifugal-graph>
             </div>
             <div class="p-2" *ngIf="tabSelect == 'replacementInventory'">
                 <app-inventory-table [isReplacementInventory]="true"></app-inventory-table>
                 <hr>
-                <app-inventory-performance-profile></app-inventory-performance-profile>
+                <app-inventory-performance-profile [context]="'inventory'"></app-inventory-performance-profile>
                 <app-centrifugal-graph></app-centrifugal-graph>
             </div>
             <div class="p-2">

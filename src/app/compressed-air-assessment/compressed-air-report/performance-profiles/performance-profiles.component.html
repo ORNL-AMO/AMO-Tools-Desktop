@@ -1,16 +1,35 @@
-<div class="print-container">
-    <div class="page-break-before">
-        <h4 class="show-print print-section-header">Performance Profiles</h4>
-        <app-inventory-performance-profile [inReport]="true" [printView]="printView" [compressedAirAssessment]="compressedAirAssessment" [settings]="settings">
+@if(compressedAirAssessment.modifications.length > 1){
+<div class="row justify-content-end">
+    <div class="col-sm-12 col-md-6">
+        <div class="d-flex justify-content-center">
+            <select class="day-type-select" id="selectedDayType" name="selectedDayType"
+                [(ngModel)]="selectedModification" (change)="setSelectedModification()">
+                <option *ngFor="let modification of compressedAirAssessment.modifications" [ngValue]="modification">
+                    {{modification.name}}</option>
+            </select>
+        </div>
+    </div>
+</div>
+}
+<div class="row">
+    <!--baseline-->
+    <div class="col-sm-12 col-md-6">
+        <app-inventory-performance-profile class="mt-auto" [context]="'report'" [printView]="printView"
+            [settings]="settings">
         </app-inventory-performance-profile>
-        <app-centrifugal-graph [inReport]="true" [printView]="printView" [compressedAirAssessment]="compressedAirAssessment" [settings]="settings">
+    </div>
+    <!--modification-->
+    <div class="col-sm-12 col-md-6">
+        <div>
+            <app-inventory-performance-profile [context]="'report'" [printView]="printView" [settings]="settings"
+                [compressedAirAssessmentModificationResults]="selectedModificationResults">
+            </app-inventory-performance-profile>
+            <!-- <app-centrifugal-graph [inReport]="true" [printView]="printView"
+            [compressedAirAssessment]="compressedAirAssessment" [settings]="settings">
         </app-centrifugal-graph>
-        <app-compressor-summary-table 
-            [compressedAirAssessment]="compressedAirAssessment"
-            [settings]="settings"
-            [printView]="printView"
-            [inReport]="true">
-        </app-compressor-summary-table>
-
+        <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
+            [printView]="printView" [inReport]="true">
+        </app-compressor-summary-table> -->
+        </div>
     </div>
 </div>
