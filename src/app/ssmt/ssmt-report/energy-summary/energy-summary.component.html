@@ -91,49 +91,51 @@
           <span *ngIf="!modResults.valid.isValid || !modResults.outputData.operationsOutput">&mdash;</span>
         </td>
       </tr>
-      <tr>
-        <td class="pl-4">
-          CO<sub>2</sub> Emissions 
-          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>  
-        </td>
-        <td [ngClass]="{
-                  'selected-modification': selectedModificationIndex == -1
-                }">
-          <span *ngIf="baselineOutput.co2EmissionsOutput">
-            {{ baselineOutput.co2EmissionsOutput.totalEmissionOutput | number: "1.0-2" }}
-          </span>
-          <span *ngIf="!baselineOutput.co2EmissionsOutput">&mdash;</span>
-        </td>
-        <td *ngFor="let modResults of modificationOutputs; let index = index" [ngClass]="{
-                  'selected-modification': index == selectedModificationIndex
-                }">
-          <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput">
-            {{ modResults.outputData.co2EmissionsOutput.totalEmissionOutput | number: "1.0-2" }}
-          </span>
-          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput">&mdash;</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="pl-4">
-          CO<sub>2</sub> Emissions Savings
+      @if (showOperationalImpacts()) {
+        <tr>
+          <td class="pl-4">
+            CO<sub>2</sub> Emissions
             <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
-            <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span> 
-        </td>
-        <td [ngClass]="{
-                  'selected-modification': selectedModificationIndex == -1
-                }">
-          <span >&mdash;</span>
-        </td>
-        <td *ngFor="let modResults of modificationOutputs; let index = index" [ngClass]="{
-                  'selected-modification': index == selectedModificationIndex
-                }">
-          <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput">
-            {{ modResults.outputData.co2EmissionsOutput.emissionsSavings | number: "1.0-2" }}
-          </span>
-          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput">&mdash;</span>
-        </td>
-      </tr>
+            <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+          </td>
+          <td [ngClass]="{
+                    'selected-modification': selectedModificationIndex == -1
+                  }">
+            <span *ngIf="baselineOutput.co2EmissionsOutput">
+              {{ baselineOutput.co2EmissionsOutput.totalEmissionOutput | number: "1.0-2" }}
+            </span>
+            <span *ngIf="!baselineOutput.co2EmissionsOutput">&mdash;</span>
+          </td>
+          <td *ngFor="let modResults of modificationOutputs; let index = index" [ngClass]="{
+                    'selected-modification': index == selectedModificationIndex
+                  }">
+            <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput">
+              {{ modResults.outputData.co2EmissionsOutput.totalEmissionOutput | number: "1.0-2" }}
+            </span>
+            <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput">&mdash;</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="pl-4">
+            CO<sub>2</sub> Emissions Savings
+              <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+              <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+          </td>
+          <td [ngClass]="{
+                    'selected-modification': selectedModificationIndex == -1
+                  }">
+            <span>&mdash;</span>
+          </td>
+          <td *ngFor="let modResults of modificationOutputs; let index = index" [ngClass]="{
+                    'selected-modification': index == selectedModificationIndex
+                  }">
+            <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput">
+              {{ modResults.outputData.co2EmissionsOutput.emissionsSavings | number: "1.0-2" }}
+            </span>
+            <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput">&mdash;</span>
+          </td>
+        </tr>
+      }
       <tr>
         <td class="bold">Power ({{settings.currency}}/yr)</td>
         <td
@@ -575,115 +577,117 @@
         </td>
       </tr>
 
-      <tr>
-        <td class="bold" [ngStyle]="{ 'width.%': 15 }">CO<sub>2</sub> Emissions 
-          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span></td>
-        <td
-          [ngClass]="{
-            'selected-modification': selectedModificationIndex == -1
-          }"
-        ></td>
-        <td
-          *ngFor="let modResults of modificationOutputs; let index = index"
-          [ngClass]="{
-            'selected-modification': index == selectedModificationIndex
-          }"
-        ></td>
-      </tr>
-      <tr>
-        <td class="pl-4">
-          Emissions From Fuel
-        </td>
-        <td
-          [ngClass]="{
-            'selected-modification': selectedModificationIndex == -1
-          }"
-        >
-          <span *ngIf="baselineOutput.co2EmissionsOutput.fuelEmissionOutput">
-            {{
-              baselineOutput.co2EmissionsOutput.fuelEmissionOutput | number: "1.0-2"
-            }}
-          </span>
-          <span *ngIf="!baselineOutput.co2EmissionsOutput.fuelEmissionOutput">&mdash;</span>
-        </td>
-        <td
-          *ngFor="let modResults of modificationOutputs; let index = index"
-          [ngClass]="{
-            'selected-modification': index == selectedModificationIndex
-          }"
-        >
-          <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput.fuelEmissionOutput">
-            {{
-              modResults.outputData.co2EmissionsOutput.fuelEmissionOutput
-              | number: "1.0-2"
-            }}
-          </span>
-          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput.fuelEmissionOutput">&mdash;</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="pl-4">
-          Emissions From Selling Electricity
-        </td>
-        <td
-          [ngClass]="{
-            'selected-modification': selectedModificationIndex == -1
-          }"
-        >
-          <span *ngIf="baselineOutput.co2EmissionsOutput.electricityEmissionsFromSelling">
-            {{
-              baselineOutput.co2EmissionsOutput.electricityEmissionsFromSelling | number: "1.0-2"
-            }}
-          </span>
-          <span *ngIf="!baselineOutput.co2EmissionsOutput.electricityEmissionsFromSelling">&mdash;</span>
-        </td>
-        <td
-          *ngFor="let modResults of modificationOutputs; let index = index"
-          [ngClass]="{
-            'selected-modification': index == selectedModificationIndex
-          }"
-        >
-          <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput.electricityEmissionsFromSelling">
-            {{
-              modResults.outputData.co2EmissionsOutput.electricityEmissionsFromSelling
-              | number: "1.0-2"
-            }}
-          </span>
-          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput.electricityEmissionsFromSelling">&mdash;</span>
-        </td>
-      </tr>
-      <tr>
-        <td class="pl-4">
-          Emissions From Change in Electricity Imports
-        </td>
-        <td
-          [ngClass]="{
-            'selected-modification': selectedModificationIndex == -1
-          }"
-        >
-          <span *ngIf="baselineOutput.co2EmissionsOutput.electricityEmissionsFromChange">
-            {{
-              baselineOutput.co2EmissionsOutput.electricityEmissionsFromChange | number: "1.0-2"
-            }}
-          </span>
-          <span *ngIf="!baselineOutput.co2EmissionsOutput.electricityEmissionsFromChange">&mdash;</span>
-        </td>
-        <td
-          *ngFor="let modResults of modificationOutputs; let index = index"
-          [ngClass]="{
-            'selected-modification': index == selectedModificationIndex
-          }"
-        >
-          <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput.electricityEmissionsFromChange">
-            {{
-              modResults.outputData.co2EmissionsOutput.electricityEmissionsFromChange
-              | number: "1.0-2"
-            }}
-          </span>
-          <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput.electricityEmissionsFromChange">&mdash;</span>
-        </td>
-      </tr>
+      @if (showOperationalImpacts()) {
+        <tr>
+          <td class="bold" [ngStyle]="{ 'width.%': 15 }">CO<sub>2</sub> Emissions
+            <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+            <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span></td>
+          <td
+            [ngClass]="{
+              'selected-modification': selectedModificationIndex == -1
+            }"
+          ></td>
+          <td
+            *ngFor="let modResults of modificationOutputs; let index = index"
+            [ngClass]="{
+              'selected-modification': index == selectedModificationIndex
+            }"
+          ></td>
+        </tr>
+        <tr>
+          <td class="pl-4">
+            Emissions From Fuel
+          </td>
+          <td
+            [ngClass]="{
+              'selected-modification': selectedModificationIndex == -1
+            }"
+          >
+            <span *ngIf="baselineOutput.co2EmissionsOutput.fuelEmissionOutput">
+              {{
+                baselineOutput.co2EmissionsOutput.fuelEmissionOutput | number: "1.0-2"
+              }}
+            </span>
+            <span *ngIf="!baselineOutput.co2EmissionsOutput.fuelEmissionOutput">&mdash;</span>
+          </td>
+          <td
+            *ngFor="let modResults of modificationOutputs; let index = index"
+            [ngClass]="{
+              'selected-modification': index == selectedModificationIndex
+            }"
+          >
+            <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput.fuelEmissionOutput">
+              {{
+                modResults.outputData.co2EmissionsOutput.fuelEmissionOutput
+                | number: "1.0-2"
+              }}
+            </span>
+            <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput.fuelEmissionOutput">&mdash;</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="pl-4">
+            Emissions From Selling Electricity
+          </td>
+          <td
+            [ngClass]="{
+              'selected-modification': selectedModificationIndex == -1
+            }"
+          >
+            <span *ngIf="baselineOutput.co2EmissionsOutput.electricityEmissionsFromSelling">
+              {{
+                baselineOutput.co2EmissionsOutput.electricityEmissionsFromSelling | number: "1.0-2"
+              }}
+            </span>
+            <span *ngIf="!baselineOutput.co2EmissionsOutput.electricityEmissionsFromSelling">&mdash;</span>
+          </td>
+          <td
+            *ngFor="let modResults of modificationOutputs; let index = index"
+            [ngClass]="{
+              'selected-modification': index == selectedModificationIndex
+            }"
+          >
+            <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput.electricityEmissionsFromSelling">
+              {{
+                modResults.outputData.co2EmissionsOutput.electricityEmissionsFromSelling
+                | number: "1.0-2"
+              }}
+            </span>
+            <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput.electricityEmissionsFromSelling">&mdash;</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="pl-4">
+            Emissions From Change in Electricity Imports
+          </td>
+          <td
+            [ngClass]="{
+              'selected-modification': selectedModificationIndex == -1
+            }"
+          >
+            <span *ngIf="baselineOutput.co2EmissionsOutput.electricityEmissionsFromChange">
+              {{
+                baselineOutput.co2EmissionsOutput.electricityEmissionsFromChange | number: "1.0-2"
+              }}
+            </span>
+            <span *ngIf="!baselineOutput.co2EmissionsOutput.electricityEmissionsFromChange">&mdash;</span>
+          </td>
+          <td
+            *ngFor="let modResults of modificationOutputs; let index = index"
+            [ngClass]="{
+              'selected-modification': index == selectedModificationIndex
+            }"
+          >
+            <span *ngIf="modResults.valid.isValid && modResults.outputData.co2EmissionsOutput.electricityEmissionsFromChange">
+              {{
+                modResults.outputData.co2EmissionsOutput.electricityEmissionsFromChange
+                | number: "1.0-2"
+              }}
+            </span>
+            <span *ngIf="!modResults.valid.isValid || !modResults.outputData.co2EmissionsOutput.electricityEmissionsFromChange">&mdash;</span>
+          </td>
+        </tr>
+      }
       <tr class="hide-print" *ngIf="inRollup">
         <td>Use for Summary</td>
         <td

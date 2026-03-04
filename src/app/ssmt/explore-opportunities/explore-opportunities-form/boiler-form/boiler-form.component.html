@@ -124,31 +124,33 @@
   </div>
   </li>
 
-  <li class="explore-opps-item mb-2">
+  @if (showOperationalImpacts()) {
+    <li class="explore-opps-item mb-2">
+      <div class="explore-opps-form">
+        <div class="text-center">
+          <label for="fuelType" class="baseline-value-label">Total Fuel Emission Output Rate</label>
+          <div class="text-muted text-center baseline-value-input">
+            {{ baselineCo2SavingsData.totalFuelEmissionOutputRate }}
+          </div>
+        </div>
+      </div>
+
     <div class="explore-opps-form">
-      <div class="text-center">
-        <label for="fuelType" class="baseline-value-label">Total Fuel Emission Output Rate</label>
-        <div class="text-muted text-center baseline-value-input">
-          {{ baselineCo2SavingsData.totalFuelEmissionOutputRate }}
+      <div class="form-group explore-opps-formgroup">
+        <label for="fuelType" class="mod-value-label">Total Fuel Emission Output Rate</label>
+        <div class="input-group">
+          <input class="form-control" name="totalFuelEmissionOutputRate" type="number"
+            (focus)="focusField('totalEmissionOutputRate')"
+            [(ngModel)]="modificationCo2SavingsData.totalFuelEmissionOutputRate" (input)="save()">
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
+            CO<sub>2</sub>/MMBtu</span>
+          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
+            CO<sub>2</sub>/GJ</span>
         </div>
       </div>
     </div>
-    
-  <div class="explore-opps-form">
-    <div class="form-group explore-opps-formgroup">
-      <label for="fuelType" class="mod-value-label">Total Fuel Emission Output Rate</label>
-      <div class="input-group">
-        <input class="form-control" name="totalFuelEmissionOutputRate" type="number"
-          (focus)="focusField('totalEmissionOutputRate')"
-          [(ngModel)]="modificationCo2SavingsData.totalFuelEmissionOutputRate" (input)="save()">
-        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kg
-          CO<sub>2</sub>/MMBtu</span>
-        <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">kg
-          CO<sub>2</sub>/GJ</span>
-      </div>
-    </div>
-  </div>
-  </li>
+    </li>
+  }
 </div>
 
   <li class="explore-opps-item">
