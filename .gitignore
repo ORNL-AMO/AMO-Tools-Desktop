@@ -27,6 +27,8 @@
 .vscode/extensions.json
 
 .prompts/
+.claude/
+CLAUDE.md
 
 # misc
 /docker
