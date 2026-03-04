@@ -3,27 +3,37 @@
   Calculators</span>
   <!--general-->
 <div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/general-list']" collapseSidebarDirective routerLinkActive="selected">General</span>
+  <span class="sidebar-item" [routerLink]="['/calculators/general-list']" collapseSidebarDirective
+    routerLinkActive="selected">General</span>
   <div class="directory-item">
-    <span [routerLink]="['/calculators/unit-converter']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Unit
+    <span [routerLink]="['/calculators/unit-converter']" collapseSidebarDirective routerLinkActive="selected"
+      class="sidebar-item">Unit
       Converter</span>
-    <span [routerLink]="['/calculators/combined-heat-power']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Combined
+    <span [routerLink]="['/calculators/combined-heat-power']" collapseSidebarDirective routerLinkActive="selected"
+      class="sidebar-item">Combined
       Heat and Power</span>
-    <span [routerLink]="['/calculators/cash-flow']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Cash Flow</span>
-    <span [routerLink]="['/calculators/power-factor-correction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Power
+    <span [routerLink]="['/calculators/cash-flow']" collapseSidebarDirective routerLinkActive="selected"
+      class="sidebar-item">Cash Flow</span>
+    <span [routerLink]="['/calculators/power-factor-correction']" collapseSidebarDirective routerLinkActive="selected"
+      class="sidebar-item">Power
       Factor Correction</span>
     <span [routerLink]="['/calculators/power-factor-triangle']" collapseSidebarDirective routerLinkActive="selected"
       class="sidebar-item">Power Factor Triangle</span>
-    <span [routerLink]="['/calculators/co2-savings']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">CO<sub>2</sub>
+    @if (showOperationalImpacts()) {
+    <span [routerLink]="['/calculators/co2-savings']" collapseSidebarDirective routerLinkActive="selected"
+      class="sidebar-item">CO<sub>2</sub>
       Savings</span>
+    }
     <span [routerLink]="['/calculators/electricity-reduction']" collapseSidebarDirective routerLinkActive="selected"
       class="sidebar-item">Electricity Reduction</span>
-    <span [routerLink]="['/calculators/natural-gas-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Natural
+    <span [routerLink]="['/calculators/natural-gas-reduction']" collapseSidebarDirective routerLinkActive="selected"
+      class="sidebar-item">Natural
       Gas Reduction</span>
-    <span [routerLink]="['/calculators/altitude-correction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Altitude
+    <span [routerLink]="['/calculators/altitude-correction']" collapseSidebarDirective routerLinkActive="selected"
+      class="sidebar-item">Altitude
       Correction</span>
     <span [routerLink]="['/calculators/weather-bins']" collapseSidebarDirective routerLinkActive="selected"
-    class="sidebar-item">Weather Bins</span>
+      class="sidebar-item">Weather Bins</span>
   </div>
 </div>
 <!--compressed air-->
