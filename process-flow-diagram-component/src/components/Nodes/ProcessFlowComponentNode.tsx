@@ -10,8 +10,8 @@ import { getNodeHasErrorLevel } from 'process-flow-lib/water/logic/validation';
 import { selectTotalSourceFlow, selectNodeErrors, selectTotalDischargeFlow } from '../Diagram/store';
 import CustomNodeToolbar from './CustomNodeToolbar';
 import { Tooltip } from '@mui/material';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
 
@@ -93,14 +93,14 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
             pointerEvents: 'none',
           }}
         >
-          {showWarningAlert && (
+          {showWarningAlert && !getNodeHasErrorLevel(nodeError) && (
             <Tooltip title="System Imbalance" placement="top" arrow>
-              <WarningAmberIcon color="warning" sx={{ fontSize: 30, mr: getNodeHasErrorLevel(nodeError) ? 1 : 0 }} />
+              <WarningIcon color="warning" sx={{ fontSize: 30, mr: getNodeHasErrorLevel(nodeError) ? 1 : 0 }} />
             </Tooltip>
           )}
           {getNodeHasErrorLevel(nodeError) && (
             <Tooltip title="Node Error" placement="top" arrow>
-              <ErrorOutlineIcon color="error" sx={{ fontSize: 30 }} />
+              <ErrorIcon color="error" sx={{ fontSize: 30 }} />
             </Tooltip>
           )}
         </div>
