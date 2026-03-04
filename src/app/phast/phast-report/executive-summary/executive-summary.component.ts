@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { PHAST, ExecutiveSummary, PhastResults } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -15,6 +16,9 @@ import { PhastResultsService } from '../../phast-results.service';
     standalone: false
 })
 export class ExecutiveSummaryComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   settings: Settings;
   @Input()
