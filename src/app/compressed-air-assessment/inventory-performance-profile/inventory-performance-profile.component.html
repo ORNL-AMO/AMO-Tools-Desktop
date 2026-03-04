@@ -1,18 +1,3 @@
-<!-- <div *ngIf="selectedCompressor" class="group-label">
-    <span *ngIf="inReport"> Baseline Performance Profiles </span>
-    <span *ngIf="!inReport"> Performance Profile </span>
-    <span *ngIf="!showAllCompressors && !inAssessment"> ({{selectedCompressor.name}}) </span>
-    <div class="input-group checkbox" *ngIf="!inAssessment">
-        <label *ngIf="!inReport" class="p-2">
-            <input type="checkbox" id="showAllCompressors" (change)="drawChart()" [(ngModel)]="showAllCompressors" />
-            Graph All Compressors
-        </label>
-        <label *ngIf="!printView" class="p-2">
-            <input type="checkbox" id="showAvgOpPoints" (change)="drawChart()" [(ngModel)]="showAvgOpPoints" />
-            Graph Average Operating Points
-        </label>
-    </div>
-</div> -->
 @if(context == 'inventory'){
 <div class="group-label">
     Inventory Performance Profile
