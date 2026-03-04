@@ -43,7 +43,6 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     const selectedNode = useAppSelector(selectCurrentNode);
     const settings = useAppSelector((state) => state.diagram.settings);
     const isIntakeSource = selectedNode.type === 'waterIntake';
-    console.log(selectedNode.type);
 
     const isWaterSystem = selectedNode.type === 'waterTreatment' || selectedNode.type === 'wasteWaterTreatment' || selectedNode.type === 'waterUsingSystem';
 
