@@ -1,5 +1,6 @@
 import { AssessmentCo2SavingsService } from "../../../shared/assessment-co2-savings/assessment-co2-savings.service";
-import { AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ImproveEndUseEfficiency, Modification, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, ReplaceCompressor, SystemInformation, SystemProfileSetup, UseAutomaticSequencer } from "../../../shared/models/compressed-air-assessment";
+import { roundVal } from "../../../shared/helperFunctions";
+import { AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorSummary, ImproveEndUseEfficiency, Modification, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, ReplaceCompressor, SystemInformation, SystemProfileSetup, UseAutomaticSequencer } from "../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../compressed-air-calculation.service";
 import { getProfileSummaryTotals } from "../caCalculationHelpers";
@@ -475,8 +476,8 @@ export class CompressedAirModifiedDayTypeProfileSummary {
 
     setModificationSalvageValue(modification: Modification) {
         let salvageValue: number = 0;
-        if(modification.replaceCompressor.order != 100) {
-            if(modification.replaceCompressor.salvageValue) {
+        if (modification.replaceCompressor.order != 100) {
+            if (modification.replaceCompressor.salvageValue) {
                 salvageValue += modification.replaceCompressor.salvageValue;
             }
         }
@@ -495,7 +496,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         this.totalModifiedAnnualOperatingCost = this.peakDemandCost + this.modificationSavings.adjustedResults.cost;
     }
 
-    setMaxAirFlow(){
+    setMaxAirFlow() {
         let peakAirflowObj: ProfileSummaryTotal = _.maxBy(this.adjustedProfileSummaryTotals, (result: ProfileSummaryTotal) => { return result.airflow });
         this.maxAirFlow = peakAirflowObj?.airflow || 0;
         this.averageAirFlow = _.meanBy(this.adjustedProfileSummaryTotals, (result: ProfileSummaryTotal) => { return result.airflow }) || 0;
@@ -562,5 +563,24 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         } else {
             return this.flowReallocationResults.profileSummary;
         }
+    }
+    
+    getCompressorDayTypeSummaries(settings: Settings): Array<CompressorSummary> {
+        let compressorSummaries: Array<CompressorSummary> = new Array<CompressorSummary>();
+        this.adjustedProfileSummary.forEach(profile => {
+            let specificPowerAvgLoad: number = (profile.avgPower / profile.avgAirflow) * 100;
+            specificPowerAvgLoad = roundVal(specificPowerAvgLoad, 4);
+            let compressor: CompressorInventoryItemClass = this.adjustedCompressors.find(compressor => { return compressor.findItem(profile.compressorId) });
+            let ratedSpecificPower: number = compressor.getRatedSpecificPower();
+            let ratedIsentropicEfficiency: number = compressor.getRatedIsentropicEfficiency(settings);
+            let compressorSummary: CompressorSummary = {
+                dayType: this.dayType,
+                specificPowerAvgLoad: specificPowerAvgLoad,
+                ratedSpecificPower: roundVal(ratedSpecificPower, 4),
+                ratedIsentropicEfficiency: ratedIsentropicEfficiency
+            }
+            compressorSummaries.push(compressorSummary);
+        });
+        return compressorSummaries;
     }
 }

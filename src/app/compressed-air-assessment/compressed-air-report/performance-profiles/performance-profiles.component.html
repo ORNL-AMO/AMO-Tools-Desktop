@@ -21,6 +21,7 @@
         </app-centrifugal-graph>
     </div>
     <!--modification-->
+    @if(selectedModificationResults){
     <div class="col-sm-12 col-md-6">
         <div>
             <app-inventory-performance-profile [context]="'report'" [printView]="printView" [settings]="settings"
@@ -29,9 +30,21 @@
             <app-centrifugal-graph [inReport]="true" [printView]="printView" [settings]="settings"
                 [compressedAirAssessmentModificationResults]="selectedModificationResults">
             </app-centrifugal-graph>
-            <!-- <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
-                [printView]="printView" [inReport]="true">
-            </app-compressor-summary-table> -->
         </div>
     </div>
+    }
+</div>
+<div class="row">
+    <div class="col-12">
+        <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
+            [printView]="printView" [inReport]="true">
+        </app-compressor-summary-table>
+    </div>
+    @if(selectedModificationResults){
+    <div class="col-12">
+        <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
+            [printView]="printView" [inReport]="true" [modificationResults]="selectedModificationResults">
+        </app-compressor-summary-table>
+    </div>
+    }
 </div>

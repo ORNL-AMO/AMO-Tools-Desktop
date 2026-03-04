@@ -1,5 +1,5 @@
 import { AssessmentCo2SavingsService } from "../../../shared/assessment-co2-savings/assessment-co2-savings.service";
-import { CompressedAirAssessment, Modification } from "../../../shared/models/compressed-air-assessment";
+import { CompressedAirAssessment, CompressorSummary, Modification } from "../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../compressed-air-calculation.service";
 import { CompressedAirAssessmentResult } from "./../caCalculationModels";
@@ -10,7 +10,7 @@ import * as _ from 'lodash';
 export class CompressedAirAssessmentModificationResults {
 
     modifiedDayTypeProfileSummaries: Array<CompressedAirModifiedDayTypeProfileSummary>
-    
+
     totalBaselineCost: number;
     totalBaselinePower: number;
     totalBaselineAnnualOperatingCost: number;
@@ -20,7 +20,7 @@ export class CompressedAirAssessmentModificationResults {
     totalModificationPower: number;
     totalModificationAnnualOperatingCost: number;
     totalModificationAnnualEmissionOutput: number;
-    
+
     totalCostSavings: number;
     totalPowerSavings: number;
     totalAnnualOperatingCostSavings: number;
@@ -93,5 +93,14 @@ export class CompressedAirAssessmentModificationResults {
             totalPowerSavings: this.totalPowerSavings,
             modification: this.modification
         }
+    }
+
+    getCompressorSummaries(settings: Settings): Array<Array<CompressorSummary>> {
+        let dayTypeCompressorSummaries: Array<Array<CompressorSummary>> = new Array<Array<CompressorSummary>>();
+        this.modifiedDayTypeProfileSummaries.forEach(modifiedProfileSummary => {
+            let compressorSummaries: Array<CompressorSummary> = modifiedProfileSummary.getCompressorDayTypeSummaries(settings);
+            dayTypeCompressorSummaries.push(compressorSummaries);
+        });
+        return dayTypeCompressorSummaries;
     }
 }

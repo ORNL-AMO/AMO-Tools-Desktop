@@ -144,7 +144,7 @@ export class InventoryTableComponent implements OnInit {
             selection.compressorId = undefined;
           }
         });
-        if(modification.modificationId == selectedModification.modificationId){
+        if(selectedModification && modification.modificationId == selectedModification.modificationId){
           this.compressedAirAssessmentService.updateModification(modification);
         }
       });
