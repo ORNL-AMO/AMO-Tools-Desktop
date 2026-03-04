@@ -1,4 +1,5 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, Signal, ViewChild } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { CompressedAirReportRollupService } from '../../../report-rollup/compressed-air-report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Modification } from '../../../shared/models/compressed-air-assessment';
@@ -12,6 +13,9 @@ import { BaselineResults, DayTypeModificationResult } from '../../compressed-air
     standalone: false
 })
 export class ExecutiveSummaryComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   baselineResults: BaselineResults;
   @Input()
