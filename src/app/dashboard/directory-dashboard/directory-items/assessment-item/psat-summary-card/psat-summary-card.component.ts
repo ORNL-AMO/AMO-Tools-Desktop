@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, inject, Signal } from '@angular/core';
 import { Assessment } from '../../../../../shared/models/assessment';
 import { PsatOutputs, PSAT } from '../../../../../shared/models/psat';
 import { Settings } from '../../../../../shared/models/settings';
@@ -6,6 +6,7 @@ import { PsatService } from '../../../../../psat/psat.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { AssessmentService } from '../../../../assessment.service';
+import { FeatureFlagService } from '../../../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-psat-summary-card',
@@ -14,6 +15,9 @@ import { AssessmentService } from '../../../../assessment.service';
     standalone: false
 })
 export class PsatSummaryCardComponent implements OnInit {
+    private featureFlagService = inject(FeatureFlagService);
+    showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+    
     @Input()
     assessment: Assessment;
     psatResults: PsatOutputs;

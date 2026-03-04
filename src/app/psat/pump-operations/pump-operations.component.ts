@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, Input, SimpleChanges, ElementRef, HostListener, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 import { PSAT } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { CompareService } from '../compare.service';
@@ -20,6 +21,8 @@ import { Subscription } from 'rxjs';
     standalone: false
 })
 export class PumpOperationsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
   @Input()
   psat: PSAT;
   @Output('saved')

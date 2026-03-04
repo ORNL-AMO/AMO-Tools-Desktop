@@ -33,15 +33,17 @@
         </div>
       </div>
 
+      <!--  todo ng flow -->
       <div class="form-section">
-        <label class="group-label general" (click)="toggleOperationalImpacts()">Operational Impacts
-          <span *ngIf="!showOperationalImpacts" class="fa fa-chevron-up pull-right m-1"></span>
-          <span *ngIf="showOperationalImpacts" class="fa fa-chevron-down pull-right m-1"></span>
+        <label class="group-label general" (click)="toggleOperationalImpactsOptions()">Operational Impacts
+          <span *ngIf="!showOperationalImpactOptions" class="fa fa-chevron-up pull-right m-1"></span>
+          <span *ngIf="showOperationalImpactOptions" class="fa fa-chevron-down pull-right m-1"></span>
         </label>
-        <div *ngIf="showOperationalImpacts">
+        <div *ngIf="showOperationalImpactOptions">
           <p class="help-text">Enable or disable Operational Impacts features</p>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="operationalImpactsCheckbox" [checked]="operationalImpactsEnabled" (change)="setOperationalImpactsEnabled($event.target.checked)">
+            <input class="form-check-input" type="checkbox" id="operationalImpactsCheckbox" [checked]="showOperationalImpacts()" 
+            (input)="setOperationalImpactsEnabled($event.target.checked)">
             <label class="form-check-label" for="operationalImpactsCheckbox">
               Show Additional Operational Impacts, including: CO<sub>2</sub> Impacts and Savings
             </label>
@@ -49,7 +51,7 @@
         </div>
       </div>
 
-      <div class="form-section" *ngIf="operationalImpactsEnabled">
+      <div class="form-section" *ngIf="showOperationalImpacts()">
         <label class="group-label general" (click)="toggleCo2Settings()">CO<sub>2</sub> Savings Settings
           <span *ngIf="!showCo2Settings" class="fa fa-chevron-up pull-right m-1"></span>
           <span *ngIf="showCo2Settings" class="fa fa-chevron-down pull-right m-1"></span>
