@@ -1,4 +1,3 @@
-@if (showOperationalImpacts()) {
     <table class="table" *ngIf="settings && setupDone && assessment.psat.valid.isValid">
     <tr>
         <td class="bold no-border-top" colspan="2">Baseline Data:</td>
@@ -49,7 +48,6 @@
         </td>
     </tr>
     </table>
-}
 <table class="table" *ngIf="settings && setupDone && assessment.psat.valid.isValid">
     <tr>
         <td class="bold" colspan="2">

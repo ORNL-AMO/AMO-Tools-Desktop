@@ -6,7 +6,6 @@ import { PsatService } from '../../../../../psat/psat.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../../../../../indexedDb/settings-db.service';
 import { AssessmentService } from '../../../../assessment.service';
-import { FeatureFlagService } from '../../../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-psat-summary-card',
@@ -15,8 +14,6 @@ import { FeatureFlagService } from '../../../../../shared/feature-flag.service';
     standalone: false
 })
 export class PsatSummaryCardComponent implements OnInit {
-    private featureFlagService = inject(FeatureFlagService);
-    showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
     
     @Input()
     assessment: Assessment;
