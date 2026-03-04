@@ -137,8 +137,9 @@
           | number:'1.0-1'}}</td>
       </tr>  
       
+      @if (showOperationalImpacts()) {
       <tr class="callout">
-        <th>Annual CO2 Emissions 
+        <th>Annual CO2 Emissions
           <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
           <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
         </th>
@@ -152,7 +153,7 @@
         </th>
       </tr>
       <tr class="callout">
-        <th>Annual CO2 Emissions Savings 
+        <th>Annual CO2 Emissions Savings
           <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
           <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
         </th>
@@ -167,6 +168,7 @@
             &mdash;</span>
         </th>
       </tr>
+      }
       <tr>
         <th>Annual Energy (MWh)</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">

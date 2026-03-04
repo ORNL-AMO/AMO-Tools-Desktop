@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-fan-operations-help',
@@ -7,6 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
     standalone: false
 })
 export class FanOperationsHelpComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   currentField: string;
 
