@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../settings.service'
  
@@ -28,14 +29,20 @@ export class AssessmentSettingsComponent implements OnInit {
   showPrintSettings: boolean = false;
   showSettingsModal: boolean = false;
   showCo2Settings: boolean = false;
+  showOperationalImpacts: boolean = false;
+  operationalImpactsEnabled: boolean = true;
 
   constructor(   
-    private egridService: EGridService, private settingsDbService: SettingsDbService, private settingsService: SettingsService) {
+    private egridService: EGridService, 
+    private settingsDbService: SettingsDbService, 
+    private settingsService: SettingsService,
+    public featureFlagService: FeatureFlagService) {
   }
 
   ngOnInit() {
     this.egridService.getAllSubRegions();
     this.initializeSettings();
+    this.operationalImpactsEnabled = this.featureFlagService.isOperationalImpactsEnabled();
   }
 
   initializeSettings() {
@@ -44,6 +51,7 @@ export class AssessmentSettingsComponent implements OnInit {
   }
 
   async updateSettings() {
+    this.operationalImpactsEnabled = this.featureFlagService.isOperationalImpactsEnabled();
     let tmpSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
     tmpSettings.directoryId = this.settings.directoryId;
     tmpSettings.id = this.settings.id;
@@ -53,6 +61,15 @@ export class AssessmentSettingsComponent implements OnInit {
     let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.settings = this.settingsDbService.findById(this.settings.id);
+  }
+
+  toggleOperationalImpacts() {
+    this.showOperationalImpacts = !this.showOperationalImpacts;
+  }
+
+  setOperationalImpactsEnabled(enabled: boolean) {
+    this.featureFlagService.setOperationalImpactsEnabled(enabled);
+    this.operationalImpactsEnabled = enabled;
   }
 
   async saveSettings() {
