@@ -72,20 +72,20 @@
             </div>
         </div>
         @if (showOperationalImpacts()) {
-            <div class="d-block d-lg-flex calc-item-row w-100">
-                <div class="p-2 col-12 col-lg-2 d-flex justify-content-center align-items-center">
-                    <div class="calc-icon-div d-flex justify-content-center align-items-center">
-                        <img src="assets/images/calculator-icons/utilities-icons/co2-savings.png" class="calc-img"
-                        [routerLink]="['/calculators/co2-savings']">
-                    </div>
-                </div>
-                <div class="d-flex flex-fill flex-column justify-content-center">
-                    <a [routerLink]="['/calculators/co2-savings']">CO<sub>2</sub> Savings</a>
-                    <p>
-                        Estimate carbon dioxide (CO<sub>2</sub>) emissions for given electricity and fuel uses
-                    </p>
+        <div class="d-block d-lg-flex calc-item-row w-100">
+            <div class="p-2 col-12 col-lg-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/utilities-icons/co2-savings.png" class="calc-img"
+                        [routerLink]="['/calculators/co2-conversion']">
                 </div>
             </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/co2-conversion']">CO<sub>2</sub> Conversion</a>
+                <p>
+                    Estimate carbon dioxide (CO<sub>2</sub>) products for given electricity and fuel uses
+                </p>
+            </div>
+        </div>
         }
         <div class="d-block d-lg-flex calc-item-row w-100">
             <div class="p-2 col-12 col-lg-2 d-flex justify-content-center align-items-center">

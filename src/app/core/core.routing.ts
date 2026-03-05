@@ -284,7 +284,7 @@ export const coreRoutes: Routes = [
             component: CashFlowComponent
           },
           {
-            path: 'co2-savings',
+            path: 'co2-conversion',
             component: Co2SavingsComponent
           },
           {
