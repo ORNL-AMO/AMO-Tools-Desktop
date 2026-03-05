@@ -1,10 +1,14 @@
 import { CSSProperties } from "react";
 import EditIcon from '@mui/icons-material/Edit';
+import WarningIcon from '@mui/icons-material/Warning';
+import ErrorIcon from '@mui/icons-material/Error';
 import { Button, ButtonGroup, useTheme } from "@mui/material";
-import { useAppDispatch } from "../../hooks/state";
-import { ProcessFlowPart } from "process-flow-lib";
+import { useAppDispatch, useAppSelector } from "../../hooks/state";
+import { ProcessFlowPart, getSystemEstimatedUnknownLosses, WaterUsingSystem } from 'process-flow-lib';
+import { selectTotalSourceFlow, selectNodeErrors, selectTotalDischargeFlow } from '../Diagram/store';
+import { getNodeHasErrorLevel } from 'process-flow-lib/water/logic/validation';
 
-const CustomNodeToolbar = ({ onEdit, nodeData, selected }: NodeToolbarProps) => {
+const CustomNodeToolbar = ({ onEdit, nodeData, selected, id }: NodeToolbarProps) => {
     const NODE_UPPER_CORNER_LOCATION = `translate(0%, 0%) translate(166px, -45px)`;
     // const componentTypeColor = useAppSelector(selectedDataColor);
     const theme = useTheme();
@@ -16,6 +20,19 @@ const CustomNodeToolbar = ({ onEdit, nodeData, selected }: NodeToolbarProps) => 
     }
 
     const backgroundColor = theme.palette.background.paper;
+
+    const totalSourceFlow = useAppSelector(state => selectTotalSourceFlow(state, id));
+    const nodeError = useAppSelector(state => selectNodeErrors(state)[id]);
+    const totalDischargeFlow = useAppSelector(state => selectTotalDischargeFlow(state, id));
+    let totalUnknownLoss = getSystemEstimatedUnknownLosses(nodeData as WaterUsingSystem, totalSourceFlow, totalDischargeFlow);
+
+    const isWaterSystemComponentType = [
+        'water-using-system',
+        'water-treatment',
+        'waste-water-treatment'
+    ].includes(nodeData.processComponentType);
+
+    const showWarningAlert = isWaterSystemComponentType && totalUnknownLoss > 0;
     return (
         <div
             className="nodrag nopan custom-node-toolbar"
@@ -26,23 +43,41 @@ const CustomNodeToolbar = ({ onEdit, nodeData, selected }: NodeToolbarProps) => 
                 borderRadius: '4px',
             }} >
                 <ButtonGroup variant="contained" aria-label="Node tool button group"
-                    sx={{ fontSize: '10px', 
-                    backgroundColor: backgroundColor,
-                    border: selected ? '1px solid black' : 'none'}}>
+                    sx={{ fontSize: '10px', backgroundColor: backgroundColor, border: selected ? '1px solid black' : 'none'}}>
+                    <Button
+                        className="edit-btn"
+                        sx={{
+                            padding: '.25rem .5rem',
+                            color: theme.palette.primary.main,
+                            backgroundColor: backgroundColor,
+                        }}
+                        onClick={onEdit}
+                    >
+                        <EditIcon />
+                    </Button>
+                    {(showWarningAlert || getNodeHasErrorLevel(nodeError)) && (
                         <Button
+                            className="error-warning-btn"
                             sx={{
                                 padding: '.25rem .5rem',
-                                color: theme.palette.primary.main,
-                                backgroundColor: backgroundColor,
+                                minWidth: 0,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
                             }}
-                            onClick={onEdit}
+                            disabled
                         >
-                            <EditIcon />
+                            {showWarningAlert && !getNodeHasErrorLevel(nodeError) && (
+                                <WarningIcon color="warning" sx={{ fontSize: 24, mr: getNodeHasErrorLevel(nodeError) ? 1 : 0 }} />
+                            )}
+                            {getNodeHasErrorLevel(nodeError) && (
+                                <ErrorIcon color="error" sx={{ fontSize: 24 }} />
+                            )}
                         </Button>
+                    )}
                 </ButtonGroup>
             </div>
         </div>
-
     );
 }
 
@@ -52,4 +87,5 @@ export interface NodeToolbarProps {
     onEdit: () => void;
     selected?: boolean;
     nodeData: ProcessFlowPart;
+    id: string;
 }

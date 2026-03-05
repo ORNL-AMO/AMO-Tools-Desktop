@@ -91,11 +91,18 @@ const DischargeOutletNode = ({ data, id, selected }: NodeProps<DiagramNode>) => 
 
       </div>
 
-      <div className="node-inner-input" style={{
-        padding: condensedPadding ? '0' : undefined
-      }}>
+      <div className="node-inner-input" 
+        style={{
+          padding: condensedPadding ? '0' : undefined
+        }}
+      >
 
-        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
+        <CustomNodeToolbar 
+          onEdit={onEditNode} 
+          nodeData={data as ProcessFlowPart} 
+          selected={selected} 
+          id={id}
+        />
 
         <Typography sx={{ width: '100%' }} >
           {data.name}

@@ -369,7 +369,8 @@ a {
 }
 /* Custom Node End */
 
-.react-flow__node.selectable .custom-node-toolbar {
+/* Custom Node Toolbar */
+/* .react-flow__node.selectable .custom-node-toolbar {
   visibility: hidden;
   pointer-events: none;
 }
@@ -378,6 +379,19 @@ a {
 .react-flow__node.selectable.selected .custom-node-toolbar {
   visibility: visible;
   pointer-events: all;
+} */
+ 
+/* Show the Toolbar edit button only on hover */
+.react-flow__node .custom-node-toolbar .edit-btn {
+  display: none;
+}
+.react-flow__node:hover .custom-node-toolbar .edit-btn {
+  display: inline-flex;
+}
+
+/* Always show the error/warning button */
+.react-flow__node .custom-node-toolbar .error-warning-btn {
+  display: inline-flex;
 }
 
 

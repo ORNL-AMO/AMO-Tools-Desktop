@@ -3,15 +3,11 @@ import { Position, NodeProps } from '@xyflow/react';
 import { Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import { openDrawerWithSelected } from '../Diagram/diagramReducer';
-import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { useAppDispatch } from '../../hooks/state';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
-import { DiagramNode, ProcessFlowPart, getSystemEstimatedUnknownLosses, WaterUsingSystem } from 'process-flow-lib';
-import { getNodeHasErrorLevel } from 'process-flow-lib/water/logic/validation';
-import { selectTotalSourceFlow, selectNodeErrors, selectTotalDischargeFlow } from '../Diagram/store';
+import { DiagramNode, ProcessFlowPart } from 'process-flow-lib';
 import CustomNodeToolbar from './CustomNodeToolbar';
-import { Tooltip } from '@mui/material';
-import WarningIcon from '@mui/icons-material/Warning';
-import ErrorIcon from '@mui/icons-material/Error';
+
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
 
@@ -20,17 +16,6 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
     showInSystemTreatment = true;
   }
 
-  const totalSourceFlow = useAppSelector(state => selectTotalSourceFlow(state, id));
-  const nodeError = useAppSelector(state => selectNodeErrors(state)[id]);
-  const totalDischargeFlow = useAppSelector(state => selectTotalDischargeFlow(state, id));
-  let totalUnknownLoss = getSystemEstimatedUnknownLosses(data as WaterUsingSystem, totalSourceFlow, totalDischargeFlow);
-
-  const isWaterSystemComponentType = [
-    'water-using-system',
-    'water-treatment',
-    'waste-water-treatment'
-  ].includes(data.processComponentType);
-  const showWarningAlert = isWaterSystemComponentType && totalUnknownLoss > 0;
   const onEditNode = () => {
     dispatch(openDrawerWithSelected(id));
   }
@@ -79,32 +64,6 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         }
       </div>
 
-      {/* Overlays above node */}
-      {(showWarningAlert || getNodeHasErrorLevel(nodeError)) && (
-        <div
-          style={{
-            position: 'absolute',
-            top: -36,
-            left: 0,
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            zIndex: 2,
-            pointerEvents: 'none',
-          }}
-        >
-          {showWarningAlert && !getNodeHasErrorLevel(nodeError) && (
-            <Tooltip title="System Imbalance" placement="top" arrow>
-              <WarningIcon color="warning" sx={{ fontSize: 30, mr: getNodeHasErrorLevel(nodeError) ? 1 : 0 }} />
-            </Tooltip>
-          )}
-          {getNodeHasErrorLevel(nodeError) && (
-            <Tooltip title="Node Error" placement="top" arrow>
-              <ErrorIcon color="error" sx={{ fontSize: 30 }} />
-            </Tooltip>
-          )}
-        </div>
-      )}
       <div className="node-inner-input">
         {showInSystemTreatment &&
           <div style={{
@@ -132,7 +91,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
             </span>
           </div>
         }
-        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
+        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} id={id} />
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>
