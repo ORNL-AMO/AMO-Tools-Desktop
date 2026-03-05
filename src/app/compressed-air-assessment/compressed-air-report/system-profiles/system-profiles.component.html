@@ -27,7 +27,25 @@
         [trimSelections]="trimSelections">
     </app-profile-summary-table>
 
-    <app-system-profile-graphs [printView]="showPrintView"></app-system-profile-graphs>
+    @if(!selectedModification){
+    <app-system-profile-graphs [printView]="showPrintView" [isBaseline]="true" [labelName]="'Baseline'"
+        [context]="'report'" [selectedDayType]="selectedDayType"></app-system-profile-graphs>
+    }@else {
+    <div class="row">
+        <div class="col-6">
+            <app-system-profile-graphs [printView]="showPrintView" [context]="'report'" [isBaseline]="true"
+                [labelName]="'Baseline'" [selectedDayType]="selectedDayType">
+            </app-system-profile-graphs>
+        </div>
+        <div class="col-6">
+            <app-system-profile-graphs [printView]="showPrintView" [context]="'report'" [isBaseline]="false"
+                [labelName]="selectedModification ? selectedModification.name : 'Modification'"
+                [compressedAirModifiedDayTypeProfileSummary]="compressedAirModifiedDayTypeProfileSummary"
+                [selectedDayType]="selectedDayType">
+            </app-system-profile-graphs>
+        </div>
+    </div>
+    }
 </div>
 
 <div *ngIf="printView">

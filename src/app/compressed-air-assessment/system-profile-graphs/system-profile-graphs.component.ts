@@ -21,13 +21,17 @@ import * as Plotly from 'plotly.js-dist';
 })
 export class SystemProfileGraphsComponent implements OnInit {
   @Input()
-  inModification: boolean;
+  context: 'baseline' | 'modification' | 'report';
   @Input()
   isBaseline: boolean;
   @Input()
   labelName: string;
   @Input()
   printView: boolean;
+  @Input()
+  compressedAirModifiedDayTypeProfileSummary: CompressedAirModifiedDayTypeProfileSummary;
+  @Input()
+  selectedDayType: CompressedAirDayType;
 
   @ViewChild("systemCapacityGraph", { static: false }) systemCapacityGraph: ElementRef;
   @ViewChild("compressorCapacityGraph", { static: false }) compressorCapacityGraph: ElementRef;
@@ -38,7 +42,6 @@ export class SystemProfileGraphsComponent implements OnInit {
   profileSummary: Array<ProfileSummary>;
   inventoryItems: Array<CompressorInventoryItem>;
   compressedAirAssessment: CompressedAirAssessment;
-  selectedDayType: CompressedAirDayType;
   selectedDayTypeSub: Subscription;
   xAxisHoverSub: Subscription;
   axisRangeAdjustment: number = .25;
@@ -56,11 +59,17 @@ export class SystemProfileGraphsComponent implements OnInit {
     private assessmentCo2SavingsService: AssessmentCo2SavingsService) { }
 
   ngOnInit(): void {
+    if(!this.context){
+      this.labelName = 'Baseline';
+      this.context = 'baseline';
+      this.isBaseline = true;
+    }
+
     this.settings = this.compressedAirAssessmentService.settings.getValue();
     this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(val => {
       this.compressedAirAssessment = val;
       this.timeInterval = this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval;
-      if (!this.inModification) {
+      if (this.context === 'baseline') {
         this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes.find(dayType => { return dayType.dayTypeId == this.compressedAirAssessment.systemProfile.systemProfileSetup.dayTypeId });
       }
       this.inventoryItems = val.compressorInventoryItems.concat(val.replacementCompressorInventoryItems);
@@ -79,20 +88,25 @@ export class SystemProfileGraphsComponent implements OnInit {
       }
     });
 
-    if (this.inModification) {
+    if (this.context === 'modification' || this.context == 'report') {
       this.initModificationSubs();
     }
   }
 
   initModificationSubs() {
-    this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
-      this.selectedDayType = val;
+    if (this.context === 'modification') {
+      console.log('modification')
+      this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
+        this.selectedDayType = val;
+        this.setProfileData();
+        this.drawCharts();
+      });
+    }else{
       this.setProfileData();
-      this.drawCharts();
-    });
+    }
     this.xAxisHoverSub = this.systemProfileGraphService.xAxisHover.subscribe(val => {
       // if (val) {
-        this.setHover(val);
+      this.setHover(val);
       // }
     });
   }
@@ -101,10 +115,8 @@ export class SystemProfileGraphsComponent implements OnInit {
     this.compressedAirAssessmentSub.unsubscribe();
     this.showingPowerMaxSub.unsubscribe();
     this.showingCapacityMaxSub.unsubscribe();
-    if (this.inModification) {
-      this.xAxisHoverSub.unsubscribe();
-      this.selectedDayTypeSub.unsubscribe();
-    }
+    this.xAxisHoverSub?.unsubscribe();
+    this.selectedDayTypeSub?.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -118,18 +130,15 @@ export class SystemProfileGraphsComponent implements OnInit {
     //baseline daytype summary
     if (this.selectedDayType) {
       let compressedAirBaselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = new CompressedAirBaselineDayTypeProfileSummary(this.compressedAirAssessment, this.selectedDayType, this.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
-
-      if (!this.inModification && this.compressedAirAssessment) {
+      if (this.context === 'baseline' && this.compressedAirAssessment) {
         this.trimSelections = this.compressedAirAssessment.systemInformation.trimSelections;
         this.profileSummary = compressedAirBaselineDayTypeProfileSummary.profileSummary;
         this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems);
         this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
       } else if (this.compressedAirAssessment && !this.isBaseline) {
-        let modification: Modification = this.compressedAirAssessmentService.selectedModification.getValue();
-        let compressedAirModifiedDayTypeProfileSummary: CompressedAirModifiedDayTypeProfileSummary = new CompressedAirModifiedDayTypeProfileSummary(this.selectedDayType, [compressedAirBaselineDayTypeProfileSummary], this.settings, this.compressedAirCalculationService, this.compressedAirAssessment, modification, this.assessmentCo2SavingsService);
-        this.trimSelections = compressedAirModifiedDayTypeProfileSummary.trimSelections;
-        this.profileSummary = compressedAirModifiedDayTypeProfileSummary.adjustedProfileSummary;
-        this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems, compressedAirModifiedDayTypeProfileSummary.adjustedCompressors);
+        this.trimSelections = this.compressedAirModifiedDayTypeProfileSummary.trimSelections;
+        this.profileSummary = this.compressedAirModifiedDayTypeProfileSummary.adjustedProfileSummary;
+        this.setMaxLineValues(this.compressedAirAssessment.compressorInventoryItems, this.compressedAirModifiedDayTypeProfileSummary.adjustedCompressors);
         this.setYAxisRanges(this.compressedAirAssessment.systemProfile.profileSummary, this.profileSummary);
       } else if (this.compressedAirAssessment && this.isBaseline) {
         this.trimSelections = this.compressedAirAssessment.systemInformation.trimSelections;
@@ -255,7 +264,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       if (hoverPositionData.chartName == 'compressorPowerGraph' && this.compressorPowerGraph.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
         Plotly.Fx.hover(this.compressorPowerGraph.nativeElement, hoverPositionData.points)
       }
-    }else{
+    } else {
       if (this.systemCapacityGraph?.nativeElement) {
         Plotly.Fx.unhover(this.systemCapacityGraph.nativeElement);
       }

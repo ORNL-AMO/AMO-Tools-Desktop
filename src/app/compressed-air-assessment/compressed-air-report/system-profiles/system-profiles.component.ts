@@ -33,7 +33,7 @@ export class SystemProfilesComponent implements OnInit {
   profliesForPrint: Array<ProfilesForPrint>;
   compressorInventoryItems: Array<CompressorInventoryItem>;
   trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
-
+  compressedAirModifiedDayTypeProfileSummary: CompressedAirModifiedDayTypeProfileSummary;
   constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
@@ -52,9 +52,9 @@ export class SystemProfilesComponent implements OnInit {
     } else if (this.selectedDayType && this.selectedModification) {
       //day type and modification
       let modificationResults: CompressedAirAssessmentModificationResults = this.assessmentResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
-      let dayTypeModificationResults: CompressedAirModifiedDayTypeProfileSummary = modificationResults.modifiedDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId });
-      let dayTypeModificationResult: DayTypeModificationResult = dayTypeModificationResults.getDayTypeModificationResult();
-      this.trimSelections = dayTypeModificationResults.trimSelections;
+      this.compressedAirModifiedDayTypeProfileSummary = modificationResults.modifiedDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId });
+      let dayTypeModificationResult: DayTypeModificationResult = this.compressedAirModifiedDayTypeProfileSummary.getDayTypeModificationResult();
+      this.trimSelections = this.compressedAirModifiedDayTypeProfileSummary.trimSelections;
       this.selectedProfileSummary = dayTypeModificationResult.adjustedProfileSummary;
       this.selectedTotals = dayTypeModificationResult.profileSummaryTotals;
     }

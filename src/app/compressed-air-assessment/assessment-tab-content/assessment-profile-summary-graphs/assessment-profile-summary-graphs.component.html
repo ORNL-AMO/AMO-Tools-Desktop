@@ -9,14 +9,13 @@
 
 <div class="d-flex">
     <div class="col-lg-6 col-12">
-        <!-- <label class="group-label bg-white">Baseline</label> -->
-        <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="true" [labelName]="'Baseline'">
+        <app-system-profile-graphs class="w-100" [context]="'modification'" [isBaseline]="true" [labelName]="'Baseline'">
         </app-system-profile-graphs>
     </div>
     <div class="col-lg-6 col-12">
-        <!-- <label class="group-label bg-white">{{modification.name}}</label> -->
-        <app-system-profile-graphs class="w-100" [inModification]="true" [isBaseline]="false"
-            [labelName]="modification.name">
+        <app-system-profile-graphs class="w-100" [context]="'modification'" [isBaseline]="false"
+            [labelName]="modification.name"
+            [compressedAirModifiedDayTypeProfileSummary]="compressedAirModifiedDayTypeProfileSummary">
         </app-system-profile-graphs>
     </div>
 </div>
