@@ -63,8 +63,8 @@ export class AssessmentSettingsComponent implements OnInit {
     this.showOperationalImpactOptions = !this.showOperationalImpactOptions;
   }
 
-  setOperationalImpactsEnabled(enabled: boolean) {
-    this.featureFlagService.setOperationalImpactsEnabled(enabled);
+  setShowOperationalImpacts(enabled: boolean) {
+    this.featureFlagService.setShowOperationalImpacts(enabled);
   }
 
   async saveSettings() {

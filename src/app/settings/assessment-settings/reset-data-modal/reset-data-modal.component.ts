@@ -35,6 +35,7 @@ import { AppErrorService } from '../../../shared/errors/app-error.service';
 import { DiagramIdbService } from '../../../indexedDb/diagram-idb.service';
 import { Diagram } from '../../../shared/models/diagram';
 import { MockWaterdiagram, MockWaterDiagramSettings } from '../../../examples/mockWaterDiagram';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-reset-data-modal',
@@ -71,6 +72,7 @@ export class ResetDataModalComponent implements OnInit {
     private diagramIdbService: DiagramIdbService,
     private appErrorService: AppErrorService,
     private inventoryDbService: InventoryDbService,
+    private featureFlagService: FeatureFlagService
   ) { }
 
   ngOnInit() {
@@ -168,6 +170,7 @@ export class ResetDataModalComponent implements OnInit {
     await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
     let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(settings);
+    this.featureFlagService.restoreUserFlagsToDefault();
     this.hideResetSystemSettingsModal();
   }
 
@@ -358,6 +361,7 @@ async resetAllExampleAssessments(dirId: number) {
   }
 
   async resetAllData() {
+    this.featureFlagService.restoreUserFlagsToDefault();
     try {
       this.dbService.deleteDatabase()
         .pipe(

@@ -42,10 +42,10 @@
         <div *ngIf="showOperationalImpactOptions">
           <p class="help-text">Enable or disable Operational Impacts features</p>
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="operationalImpactsCheckbox" [checked]="showOperationalImpacts()" 
-            (input)="setOperationalImpactsEnabled($event.target.checked)">
+            <input class="form-check-input base-checkbox" type="checkbox" id="operationalImpactsCheckbox" [checked]="showOperationalImpacts()" 
+            (input)="setShowOperationalImpacts($event.target.checked)">
             <label class="form-check-label" for="operationalImpactsCheckbox">
-              Show Additional Operational Impacts, including: CO<sub>2</sub> Impacts and Savings
+              Show CO<sub>2</sub> Impacts and Savings scenarios
             </label>
           </div>
         </div>

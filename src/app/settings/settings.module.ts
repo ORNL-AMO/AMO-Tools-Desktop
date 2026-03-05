@@ -20,7 +20,6 @@ import { PrintSettingsComponent } from './print-settings/print-settings.componen
 import { Co2SavingsSettingsComponent } from './co2-savings-settings/co2-savings-settings.component';
 import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
-import { FeatureFlagService } from '../shared/feature-flag.service';
 
 @NgModule({
     declarations: [
@@ -50,7 +49,6 @@ import { FeatureFlagService } from '../shared/feature-flag.service';
     ],
     providers: [
         SettingsService,
-        FeatureFlagService
     ],
     exports: [
         PsatSettingsComponent,
