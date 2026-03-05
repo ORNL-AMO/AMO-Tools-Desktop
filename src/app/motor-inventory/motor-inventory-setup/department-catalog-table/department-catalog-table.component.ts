@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, Signal } from '@angular/core';
 import { MotorInventoryService } from '../../motor-inventory.service';
 import { MotorCatalogService } from '../motor-catalog/motor-catalog.service';
 import { Subscription } from 'rxjs';
@@ -6,6 +6,7 @@ import { MotorInventoryDepartment, MotorInventoryData, MotorItem } from '../../m
 import { Settings } from '../../../shared/models/settings';
 import { BatchAnalysisService } from '../../batch-analysis/batch-analysis.service';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-department-catalog-table',
@@ -33,6 +34,9 @@ export class DepartmentCatalogTableComponent implements OnInit {
 
   selectedMotorItem: MotorItem;
   selectedMotorItemSub: Subscription;
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   constructor(private motorInventoryService: MotorInventoryService, private motorCatalogService: MotorCatalogService, private batchAnalysisService: BatchAnalysisService) { }
 
   ngOnInit(): void {

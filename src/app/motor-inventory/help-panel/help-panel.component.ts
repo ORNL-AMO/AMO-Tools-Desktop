@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject, Signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MotorInventoryService } from '../motor-inventory.service';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-help-panel',
@@ -18,6 +19,9 @@ export class HelpPanelComponent implements OnInit {
   focusedDataGroupSub: Subscription;
   focusedFieldSub: Subscription;
   focusedField: string;
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   constructor(private motorInventoryService: MotorInventoryService) { }
 
   ngOnInit(): void {

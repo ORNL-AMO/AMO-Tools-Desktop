@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, Signal } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FormGroup, UntypedFormGroup } from '@angular/forms';
 import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
@@ -14,6 +14,7 @@ import _ from 'lodash';
 import { AltitudeCorrectionService } from '../../../calculator/utilities/altitude-correction/altitude-correction.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ConvertCompressedAirInventoryService } from '../../convert-compressed-air-inventory.service';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
   selector: 'app-plant-setup',
@@ -39,6 +40,9 @@ export class PlantSetupComponent implements OnInit {
   @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
   showSystemCapacityModal: boolean = false;
 
+
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   constructor(private settingsDbService: SettingsDbService,
     private settingsService: SettingsService,
