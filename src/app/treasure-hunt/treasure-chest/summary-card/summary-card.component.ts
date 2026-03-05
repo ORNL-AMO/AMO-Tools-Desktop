@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject, Signal } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { OpportunityCardsService, OpportunityCardData } from '../opportunity-cards/opportunity-cards.service';
@@ -10,6 +10,7 @@ import { TreasureHuntService } from '../../treasure-hunt.service';
 import { TreasureHunt, TreasureHuntCo2EmissionsResults, TreasureHuntResults } from '../../../shared/models/treasure-hunt';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { TreasureHuntReportService } from '../../treasure-hunt-report/treasure-hunt-report.service';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-summary-card',
@@ -18,6 +19,9 @@ import { TreasureHuntReportService } from '../../treasure-hunt-report/treasure-h
     standalone: false
 })
 export class SummaryCardComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   settings: Settings;
 

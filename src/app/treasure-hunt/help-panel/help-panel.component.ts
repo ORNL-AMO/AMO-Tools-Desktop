@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject, Signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from '../treasure-hunt.service';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 
 
 @Component({
@@ -10,6 +11,9 @@ import { TreasureHuntService } from '../treasure-hunt.service';
     standalone: false
 })
 export class HelpPanelComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   currentTab: string;
 
