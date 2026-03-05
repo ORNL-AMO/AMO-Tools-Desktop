@@ -14,9 +14,11 @@
                 <th>
                     Annual Energy Cost
                 </th>
+                @if (showOperationalImpacts()) {
                 <th>
                     Emissions Output
                 </th>
+                }
             </tr>
 
         </thead>
@@ -46,16 +48,18 @@
                         $ &mdash;
                     </span>
                 </td>
+                @if (showOperationalImpacts()) {
                 <td>
                     <span *ngIf="departmentSummaryItem.co2EmissionOutput">
                         {{departmentSummaryItem.co2EmissionOutput | number :'1.0-0'}}
                     </span>
                     <span *ngIf="!departmentSummaryItem.co2EmissionOutput">
-                        &mdash; 
+                        &mdash;
                     </span>
                     <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
                     <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
                 </td>
+                }
             </tr>
         </tbody>
         <tfoot>
@@ -82,16 +86,18 @@
                         $ &mdash;
                     </span>
                 </td>
+                @if (showOperationalImpacts()) {
                 <td>
                     <span *ngIf="inventorySummary.totalEmissions">
                         {{inventorySummary.totalEmissions | number :'1.0-0'}}
                     </span>
                     <span *ngIf="!inventorySummary.totalEmissions">
-                        &mdash; 
+                        &mdash;
                     </span>
                     <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
                     <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
                 </td>
+                }
             </tr>
         </tfoot>
     </table>

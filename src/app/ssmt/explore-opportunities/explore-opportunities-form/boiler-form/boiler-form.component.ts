@@ -1,4 +1,5 @@
-import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, SimpleChanges, ElementRef, HostListener, ViewChild, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 import { SsmtService } from '../../../ssmt.service';
 import { SSMT, BoilerInput } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
@@ -25,6 +26,9 @@ import { SaturatedPropertiesOutput } from '../../../../shared/models/steam/steam
     standalone: false
 })
 export class BoilerFormComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   ssmt: SSMT;
   @Input()

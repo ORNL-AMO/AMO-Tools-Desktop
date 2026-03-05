@@ -48,29 +48,30 @@
                 </div>
         </ng-container>
 
-        <hr [ngClass]="{'collapse': graphsCollapsed}">
+        @if (showOperationalImpacts()) {
+          <hr [ngClass]="{'collapse': graphsCollapsed}">
 
-        <ng-container *ngIf="pieChartData.length !== 0 || carbonBarChart.length !== 0">
-                <div class="w-100 text-center" [ngClass]="{'collapse': graphsCollapsed}">
-                        <h4>Annual Carbon Emissions</h4>
-                </div>
-                <div class="row no-gutters justify-content-center" [ngClass]="{'collapse': graphsCollapsed}">
-                        <div class="col-12 col-lg-6" *ngIf="pieChartData.length !== 0">
-                                <app-report-summary-pie-chart [pieChartData]="pieChartData" 
-                                        [carbonEmissionsUnit]="carbonEmissionsUnit"
-                                        [dataOption]="'carbon'"
-                                        [energyUnit]="reportSummaryEnergyUnit">
-                                </app-report-summary-pie-chart>
-                        </div>
-                        <div class="col-12 col-lg-6" *ngIf="carbonBarChart.length !== 0">
-                                <app-report-summary-bar-chart [barChartData]="carbonBarChart"
-                                        [yAxisLabel]="carbonEmissionsBarYLabel"
-                                        [tickFormat]="'.2s'">
-                                </app-report-summary-bar-chart>
-                        </div>
-                </div>
-        </ng-container>
-
+          <ng-container *ngIf="pieChartData.length !== 0 || carbonBarChart.length !== 0">
+                  <div class="w-100 text-center" [ngClass]="{'collapse': graphsCollapsed}">
+                          <h4>Annual Carbon Emissions</h4>
+                  </div>
+                  <div class="row no-gutters justify-content-center" [ngClass]="{'collapse': graphsCollapsed}">
+                          <div class="col-12 col-lg-6" *ngIf="pieChartData.length !== 0">
+                                  <app-report-summary-pie-chart [pieChartData]="pieChartData"
+                                          [carbonEmissionsUnit]="carbonEmissionsUnit"
+                                          [dataOption]="'carbon'"
+                                          [energyUnit]="reportSummaryEnergyUnit">
+                                  </app-report-summary-pie-chart>
+                          </div>
+                          <div class="col-12 col-lg-6" *ngIf="carbonBarChart.length !== 0">
+                                  <app-report-summary-bar-chart [barChartData]="carbonBarChart"
+                                          [yAxisLabel]="carbonEmissionsBarYLabel"
+                                          [tickFormat]="'.2s'">
+                                  </app-report-summary-bar-chart>
+                          </div>
+                  </div>
+          </ng-container>
+        }
 
         <hr [ngClass]="{'collapse': graphsCollapsed}">
 

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, OnInit, Signal, SimpleChanges } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
@@ -9,6 +9,7 @@ import { WasteWater, WasteWaterData, WasteWaterOperations } from '../../shared/m
 import { CompareService, OperationsDifferent } from '../modify-conditions/compare.service';
 import { WasteWaterService } from '../waste-water.service';
 import { WasteWaterOperationsService } from './waste-water-operations.service';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-waste-water-operations',
@@ -17,6 +18,9 @@ import { WasteWaterOperationsService } from './waste-water-operations.service';
     standalone: false
 })
 export class WasteWaterOperationsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   assessment: Assessment;
   @Input()

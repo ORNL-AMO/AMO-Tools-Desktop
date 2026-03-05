@@ -222,6 +222,7 @@
     </div>
   </div>
 
+  @if (showOperationalImpacts()) {
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       <span class="bold table-text">Annual CO2 Emissions
@@ -241,7 +242,7 @@
 
   <div class="d-flex stripe my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">Annual CO2 Emissions Savings 
+      <span class="bold table-text">Annual CO2 Emissions Savings
         <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
         <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
       </span>
@@ -256,6 +257,7 @@
       <span class="bold table-text" *ngIf="!modificationResults.co2EmissionsOutput || isWhatIfScenario == false">&mdash;</span>
     </div>
   </div>
+  }
 
   <div class="d-flex my-table-bg my-table-item">
     <div class="d-flex align-items-center pl-1 pr-1"

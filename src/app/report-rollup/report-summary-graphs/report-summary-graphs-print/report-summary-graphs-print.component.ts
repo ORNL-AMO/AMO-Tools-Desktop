@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, Signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { ReportRollupService } from '../../report-rollup.service';
 import { BarChartDataItem } from '../../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { ReportSummaryGraphsService } from '../report-summary-graphs.service';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-report-summary-graphs-print',
@@ -13,6 +14,8 @@ import { ReportSummaryGraphsService } from '../report-summary-graphs.service';
     standalone: false
 })
 export class ReportSummaryGraphsPrintComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   pieChartDataOption: string = 'energy';
   reportSummaryEnergyUnit: string;

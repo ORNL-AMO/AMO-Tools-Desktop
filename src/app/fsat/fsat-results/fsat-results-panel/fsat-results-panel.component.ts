@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, HostListener, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, HostListener, inject, Signal, SimpleChanges } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { FSAT, FsatOutput } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { FsatService } from '../../fsat.service';
@@ -11,6 +12,9 @@ import { Subscription } from 'rxjs';
     standalone: false
 })
 export class FsatResultsPanelComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   fsat: FSAT;
   @Input()

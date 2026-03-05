@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { SSMT, SSMTInputs, SSMTResults, SsmtValid } from '../../../shared/models/steam/ssmt';
 import { Settings } from '../../../shared/models/settings';
 import { SSMTOutput, SSMTLosses } from '../../../shared/models/steam/steam-outputs';
@@ -15,6 +16,9 @@ import { SteamService } from '../../../calculator/steam/steam.service';
     standalone: false
 })
 export class SsmtResultsPanelComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   ssmt: SSMT;
   @Input()

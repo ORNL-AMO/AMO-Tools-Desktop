@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Signal, inject } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 @Component({
     selector: 'app-input-summary',
     templateUrl: './input-summary.component.html',
@@ -10,6 +11,9 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
     standalone: false
 })
 export class InputSummaryComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+  
   @Input()
   psat: PSAT;
   @Input()

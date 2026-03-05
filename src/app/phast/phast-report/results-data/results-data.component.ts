@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { PHAST, PhastResults, ShowResultsCategories, Modification, ExecutiveSummary } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -16,6 +17,8 @@ import { ConvertPhastService } from '../../convert-phast.service';
     standalone: false
 })
 export class ResultsDataComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   @Input()
   settings: Settings;

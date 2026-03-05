@@ -33,12 +33,29 @@
         </div>
       </div>
 
+      <!--  todo ng flow -->
       <div class="form-section">
+        <label class="group-label general" (click)="toggleOperationalImpactsOptions()">Operational Impacts
+          <span *ngIf="!showOperationalImpactOptions" class="fa fa-chevron-up pull-right m-1"></span>
+          <span *ngIf="showOperationalImpactOptions" class="fa fa-chevron-down pull-right m-1"></span>
+        </label>
+        <div *ngIf="showOperationalImpactOptions">
+          <p class="help-text">Enable or disable Operational Impacts features</p>
+          <div class="form-check">
+            <input class="form-check-input base-checkbox" type="checkbox" id="operationalImpactsCheckbox" [checked]="showOperationalImpacts()" 
+            (input)="setShowOperationalImpacts($event.target.checked)">
+            <label class="form-check-label" for="operationalImpactsCheckbox">
+              Show CO<sub>2</sub> Impacts and Savings scenarios
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section" *ngIf="showOperationalImpacts()">
         <label class="group-label general" (click)="toggleCo2Settings()">CO<sub>2</sub> Savings Settings
           <span *ngIf="!showCo2Settings" class="fa fa-chevron-up pull-right m-1"></span>
           <span *ngIf="showCo2Settings" class="fa fa-chevron-down pull-right m-1"></span>
         </label>
-
         <div *ngIf="showCo2Settings">
           <p class="help-text">These will be default settings for any new assessments and folders.</p>
           <app-co2-savings-settings [(settingsForm)]="settingsForm" (startSavePolling)="updateSettings()"></app-co2-savings-settings>

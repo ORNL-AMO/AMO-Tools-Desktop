@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from '../treasure-hunt-report.service';
@@ -10,15 +10,16 @@ import moment from 'moment';
 import { TreasureHuntPptPropertiesService } from './treasure-hunt-ppt-properties.service';
 import { PptxgenjsChartData, TreasureHuntPptDataService } from './treasure-hunt-ppt-data.service';
 import { TreasureHuntPptTableService } from './treasure-hunt-ppt-table.service';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Injectable()
 export class TreasureHuntPptService {
-
-  constructor(private treasureHuntReportService: TreasureHuntReportService,
-    private treasureHuntPptPropertiesService: TreasureHuntPptPropertiesService,
-    private treasureHuntPptDataService: TreasureHuntPptDataService,
-    private treasureHuntPptTableService: TreasureHuntPptTableService) { }
-
+    private featureFlagService = inject(FeatureFlagService);
+    private treasureHuntReportService = inject(TreasureHuntReportService);
+    private treasureHuntPptPropertiesService = inject(TreasureHuntPptPropertiesService);
+    private treasureHuntPptDataService = inject(TreasureHuntPptDataService);
+    private treasureHuntPptTableService = inject(TreasureHuntPptTableService);
+    
 
   createPPT(settings: Settings, treasureHunt: TreasureHunt, treasureHuntResults: TreasureHuntResults, opportunityCardsData: Array<OpportunityCardData>,
     opportunitiesPaybackDetails: OpportunitiesPaybackDetails, pptThemeOption: number): pptxgen {
@@ -290,16 +291,17 @@ export class TreasureHuntPptService {
 
 
 
+    if (this.featureFlagService.showOperationalImpacts()) {
     let slide7 = pptx.addSlide({ masterName: "Title Only" });
-    slide7.addText('Carbon Emission Results (tonne CO2)', {placeholder: 'title'});
-    doughnutChartOptions = this.treasureHuntPptPropertiesService.getDoughnutChartProperties();
-    slide7 = this.treasureHuntPptTableService.getCarbonSummaryTable(slide7, treasureHuntResults.co2EmissionsResults);
-    let carbonSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getCarbonSavingsData(treasureHuntResults.co2EmissionsResults);
-    slide7.addChart("doughnut", carbonSavingsData, doughnutChartOptions);
-    let totalEmissions: string = this.treasureHuntPptTableService.roundValToFormatString(treasureHuntResults.co2EmissionsResults.totalCO2CurrentUse);
-    slide7.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
-    slide7.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
-
+      slide7.addText('Carbon Emission Results (tonne CO2)', { placeholder: 'title' });
+      doughnutChartOptions = this.treasureHuntPptPropertiesService.getDoughnutChartProperties();
+      slide7 = this.treasureHuntPptTableService.getCarbonSummaryTable(slide7, treasureHuntResults.co2EmissionsResults);
+      let carbonSavingsData: PptxgenjsChartData[] = this.treasureHuntPptDataService.getCarbonSavingsData(treasureHuntResults.co2EmissionsResults);
+      slide7.addChart("doughnut", carbonSavingsData, doughnutChartOptions);
+      let totalEmissions: string = this.treasureHuntPptTableService.roundValToFormatString(treasureHuntResults.co2EmissionsResults.totalCO2CurrentUse);
+      slide7.addText("Total Current CO2 Emissions", { w: 2.27, h: 0.57, x: 1.63, y: 3.48, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+      slide7.addText(`${totalEmissions}`, { w: 2, h: 0.34, x: 1.77, y: 4.05, align: 'center', bold: true, color: '000000', fontSize: 14, fontFace: 'Arial (Body)', valign: 'middle', isTextBox: true, autoFit: true });
+    }
 
     if (this.treasureHuntReportService.getTeamData(opportunityCardsData).length > 0) {
       let slide8 = pptx.addSlide({ masterName: "Title Only" });

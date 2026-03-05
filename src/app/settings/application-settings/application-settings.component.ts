@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, inject, Signal } from '@angular/core';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { SettingsService } from '../settings.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { CoreService } from '../../core/core.service';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 declare var google: any;
 
 @Component({
@@ -12,6 +13,9 @@ declare var google: any;
     standalone: false
 })
 export class ApplicationSettingsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   settingsForm: UntypedFormGroup;
   @Output('startSavePolling')
