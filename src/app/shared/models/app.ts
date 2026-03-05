@@ -1,6 +1,6 @@
 
 export type MeasurItemType = 'page' | 'assessment' | 'inventory' | 'data-explorer' | 'opportunities';
-
+export type MeasurStandardUnitType = 'Metric' | 'Imperial' | 'Custom';
 
 export type LocalStorageKey = 'disabledDefaultNotifications';
 export const DISABLED__DEFAULT_NOTIFICATIONS_KEY: LocalStorageKey = 'disabledDefaultNotifications';
