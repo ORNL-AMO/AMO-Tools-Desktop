@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { TreasureHuntResults, OpportunitiesPaybackDetails, OpportunitySummary, OpportunitySheet, OpportunityCost, TreasureHuntCo2EmissionsResults, EnergyUsage, TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { TreasureHuntReportService } from '../treasure-hunt-report.service';
 import { OpportunityCardData } from '../../treasure-chest/opportunity-cards/opportunity-cards.service';
 import pptxgen from 'pptxgenjs';
 import * as _ from 'lodash';
-import * as betterPlantsPPTimg from '../better-plants-ppt-img.js';
 import moment from 'moment';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Injectable()
 export class TreasureHuntPptTableService {
-
-    constructor(private treasureHuntReportService: TreasureHuntReportService) { }
+    private treasureHuntReportService: TreasureHuntReportService = inject(TreasureHuntReportService);
+    private featureFlagService = inject(FeatureFlagService);
 
     getDetailedSummaryTable(slide: pptxgen.Slide, treasureHuntResults: TreasureHuntResults, settings: Settings): pptxgen.Slide {
         let rows = [];
@@ -562,6 +562,7 @@ export class TreasureHuntPptTableService {
         return slide;
     }
 
+    // todo
     getEnergyUtilityTable(slide: pptxgen.Slide, currentEnergyUsage: EnergyUsage, settings: Settings): pptxgen.Slide {
         let rows = [];
         rows.push([
@@ -569,8 +570,12 @@ export class TreasureHuntPptTableService {
             { text: "Unit Cost", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
             { text: "Annual Consumption", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
             { text: "Annual Costs", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },
-            { text: "Total Carbon Emission Output Rate", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } }
         ]);
+
+        if (this.featureFlagService.showOperationalImpacts()) {
+            rows.push({ text: "Total Carbon Emission Output Rate", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } });
+        }
+
         if (currentEnergyUsage.electricityUsage) {
             let utilityUnit: string = this.getUtilityUnit("Electricity", settings);
             rows.push([
