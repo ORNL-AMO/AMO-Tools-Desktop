@@ -28,7 +28,6 @@ export class AssessmentSettingsComponent implements OnInit {
   showTutorialSettings: boolean = false;
   showPrintSettings: boolean = false;
   showSettingsModal: boolean = false;
-  showCo2Settings: boolean = false;
   showOperationalImpactOptions: boolean = false;
   showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
@@ -98,10 +97,6 @@ export class AssessmentSettingsComponent implements OnInit {
 
   togglePrintSettings() {
     this.showPrintSettings = !this.showPrintSettings;
-  }
-
-  toggleCo2Settings() {
-    this.showCo2Settings = !this.showCo2Settings;
   }
 
   showResetSystemSettingsModal() {
