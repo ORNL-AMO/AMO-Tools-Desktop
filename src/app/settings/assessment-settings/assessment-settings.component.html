@@ -45,14 +45,14 @@
             <input class="form-check-input base-checkbox" type="checkbox" id="operationalImpactsCheckbox" [checked]="showOperationalImpacts()" 
             (input)="setShowOperationalImpacts($event.target.checked)">
             <label class="form-check-label" for="operationalImpactsCheckbox">
-              Show CO<sub>2</sub> Impacts and Savings scenarios
+              Assess other impacts of your operations?
             </label>
           </div>
         </div>
       </div>
 
       <div class="form-section" *ngIf="showOperationalImpacts()">
-        <label class="group-label general" (click)="toggleCo2Settings()">CO<sub>2</sub> Savings Settings
+        <label class="group-label general" (click)="toggleCo2Settings()">eGRID Settings
           <span *ngIf="!showCo2Settings" class="fa fa-chevron-up pull-right m-1"></span>
           <span *ngIf="showCo2Settings" class="fa fa-chevron-down pull-right m-1"></span>
         </label>
