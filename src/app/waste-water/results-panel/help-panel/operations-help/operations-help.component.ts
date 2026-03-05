@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WasteWaterService } from '../../../waste-water.service';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-operations-help',
@@ -9,6 +10,8 @@ import { WasteWaterService } from '../../../waste-water.service';
     standalone: false
 })
 export class OperationsHelpComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   focusedField: string;
   focusedFieldSub: Subscription;
