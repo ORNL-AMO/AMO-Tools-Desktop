@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, DestroyRef, inject } from '@angular/core';
 import { PHAST } from '../../../../shared/models/phast/phast';
 import { Settings } from '../../../../shared/models/settings';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
-import { firstValueFrom } from 'rxjs';
+import { take } from 'rxjs';
 
 @Component({
     selector: 'app-wall-summary',
@@ -45,48 +45,43 @@ export class WallSummaryComponent implements OnInit {
     private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.correctionFactorDifferent = new Array();
-    this.surfaceAreaDifferent = new Array();
-    this.avgSurfaceTempDiff = new Array();
-    this.ambientTempDiff = new Array();
-    this.windVelocityDiff = new Array();
-    this.surfaceShapeDiff = new Array();
-    this.conditionFactorDiff = new Array();
-    this.emissivityDiff = new Array();
-    //get substances
-    this.setWallSurfaces();
-    //init array
+    this.wallDbService.getAllWithObservable().pipe(
+      take(1)
+    ).subscribe((options: WallLossesSurface[]) => {
+      this.surfaceOrientationOptions = options;
+      this.correctionFactorDifferent = new Array();
+      this.surfaceAreaDifferent = new Array();
+      this.avgSurfaceTempDiff = new Array();
+      this.ambientTempDiff = new Array();
+      this.windVelocityDiff = new Array();
+      this.surfaceShapeDiff = new Array();
+      this.conditionFactorDiff = new Array();
+      this.emissivityDiff = new Array();
+      this.initLossData();
+    });
+  }
+
+  initLossData() {
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {
         this.numMods = this.phast.modifications.length;
       }
-      //check losses exist
       if (this.phast.losses.wallLosses) {
-        //set num losses
         this.numLosses = this.phast.losses.wallLosses.length;
-        //used to get loss for pairing with baseline in lossData array
         let index: number = 0;
-        //iterate each loss
         this.phast.losses.wallLosses.forEach(loss => {
-          //for each loss create array to hold corresponding loss data for each modification
           let modificationData = new Array();
-          //if modifications exist
           if (this.phast.modifications) {
-            //iterate each modification to get corresponding loss data
             this.phast.modifications.forEach(mod => {
-              //use index to get corresponding loss data
               let modData = mod.phast.losses.wallLosses[index];
-              //add modification loss data to modification array
               modificationData.push(modData);
             });
           }
-          //add baseline and modification data to lossData
           this.lossData.push({
             baseline: loss,
             modifications: modificationData
           });
-          //initialize array values for every defined loss
           this.correctionFactorDifferent.push(false);
           this.surfaceAreaDifferent.push(false);
           this.avgSurfaceTempDiff.push(false);
@@ -95,16 +90,10 @@ export class WallSummaryComponent implements OnInit {
           this.surfaceShapeDiff.push(false);
           this.conditionFactorDiff.push(false);
           this.emissivityDiff.push(false);
-          //index +1 for next loss
           index++;
         });
       }
     }
-  }
-
-  async setWallSurfaces() {
-    this.surfaceOrientationOptions = await firstValueFrom(this.wallDbService.getAllWithObservable());
-
   }
 
 
@@ -127,7 +116,6 @@ export class WallSummaryComponent implements OnInit {
     }
   }
 
-  //function for getting surface from suiteDb
   getSurfaceOption(id: number) {
     if (id) {
       let option = this.surfaceOrientationOptions.filter(val => { return id === val.id; });
