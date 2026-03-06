@@ -100,8 +100,8 @@ export class EnergyUsedComponent implements OnInit {
     }
   }
 
-  async setEnergyUsed() {
-    this.energyUsed = await this.phastResultsService.getEnergyUseReportData(this.phast, this.phastResults, this.settings);
+  setEnergyUsed() {
+    this.energyUsed = this.phastResultsService.getEnergyUseReportData(this.phast, this.phastResults, this.settings);
     this.baseEnergyUnit = this.energyUsed.baseEnergyUnit;
     this.energyPerMassUnit = this.energyUsed.energyPerMassUnit;
   }
