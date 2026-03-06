@@ -10,7 +10,6 @@
                 Adjust Cost Attribution
             </button>
         </div>
-        <div style="overflow-x: auto; width: 100%;">
             <table #copyTable class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr class="text-center header-highlight">
@@ -55,7 +54,7 @@
                                 @if (result.isAdjusted) {
                                 <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
                                 }
-                                ${{result.cost | number:getFlowDecimalPrecisionPipeValue()}}
+                                ${{result.cost | number:'1.0-2'}}
                             </span>
                             } @else {
                             <span>0</span>
@@ -65,7 +64,6 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
         <div class="d-flex w-100 pl-2 pr-2 justify-content-start">
             <span>
                 <span class="fa fa-info-circle mr-1 info-icon-adjusted"></span>
