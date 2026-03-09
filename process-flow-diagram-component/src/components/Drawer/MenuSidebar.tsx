@@ -1,4 +1,4 @@
-import React, { ChangeEvent, memo, useState } from 'react';
+import React, { ChangeEvent, memo, useState, useEffect, useRef } from 'react';
 import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
@@ -9,12 +9,11 @@ import { RootState, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { blue } from '@mui/material/colors';
-import { ParentContainerDimensions, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getIsDiagramValid } from 'process-flow-lib';
+import { NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getIsDiagramValid } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
 import { Node } from '@xyflow/react';
-
+import TextField from '@mui/material/TextField';
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(2),
@@ -26,6 +25,7 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
 }));
 
 const MenuSidebar = memo((props: MenuSidebarProps) => {
+  const { diagramNotes, setDiagramNotes, saveFlowDiagramData, processDiagram } = props;
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -86,28 +86,60 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
   return (
     <>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
-          <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
-            <Tab sx={{ fontSize: '.75rem' }} label="Build" />
-            <Tab sx={{ fontSize: '.75rem' }} label="Results" />
-            <Tab sx={{ fontSize: '.75rem' }} label="Options" />
-            <Tab sx={{ fontSize: '.75rem' }} label="Help" />
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%', overflowX: 'auto' }}>
+          <Tabs
+            value={selectedTab}
+            onChange={handleTabChange}
+            aria-label="diagram context tabs"
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+          >
+            <Tab sx={{ fontSize: '.70rem' }} label="Build" />
+            <Tab sx={{ fontSize: '.70rem' }} label="Results" />
+            <Tab sx={{ fontSize: '.70rem' }} label="Options" />
+            <Tab sx={{ fontSize: '.70rem' }} label="Help" />
+            <Tab sx={{ fontSize: '.70rem' }} label="Notes" />
             {!isDiagramValid && validationWindowLocation === 'alerts-tab'? 
-              <Tab sx={{ fontSize: '.75rem' }} label={
+              <Tab sx={{ fontSize: '.70rem' }} label={
                 <Box display={'block'}>
                   <Badge badgeContent={Boolean(nodeErrors)? Object.keys(nodeErrors).length : 0} color="error" sx={{ paddingRight: '.25rem' }}>
                         <NotificationsIcon sx={{ width: '.75em', color: selectedTab === 4 ? `${theme.palette.primary.main} !important` : 'inherit' }} />
                       </Badge>
-
-                <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem', marginLeft: '.5rem', color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
+                <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.70rem', marginLeft: '.5rem', color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
                 </Box>
               } />
               : 
-              <Tab sx={{ fontSize: '.75rem' }} label="Alerts" disabled />
+              <Tab sx={{ fontSize: '.70rem' }} label="Alerts" disabled />
             }
-
           </Tabs>
         </Box>
+        <TabPanel value={selectedTab} index={4}>
+          <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
+            <div className="form-group pt-4">
+              <TextField
+                id="diagramNotes"
+                name="diagramNotes"
+                label="Diagram Notes"
+                multiline
+                minRows={8}
+                value={diagramNotes}
+                onChange={e => {
+                  setDiagramNotes(e.target.value);
+                  if (saveFlowDiagramData && processDiagram) {
+                    saveFlowDiagramData({
+                      ...processDiagram.flowDiagramData,
+                      diagramNotes: e.target.value,
+                    });
+                  }
+                }}
+                placeholder="Add additional information for your diagram"
+                fullWidth
+                variant="outlined"
+              />
+            </div>
+          </Box>
+        </TabPanel>
 
         <TabPanel value={selectedTab} index={0}>
           <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', padding: '.5rem', marginTop: '.5rem', whiteSpace: "normal" }}>
@@ -364,7 +396,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={4}>
+        <TabPanel value={selectedTab} index={5}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
                 {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
                   <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} />
@@ -378,7 +410,12 @@ export default MenuSidebar;
 
 export interface MenuSidebarProps {
   shadowRootRef: any;
+  diagramNotes: string;
+  setDiagramNotes: (notes: string) => void;
+  saveFlowDiagramData: (data: any) => void;
+  processDiagram: any;
 }
+
 
 const keyInputDirections = [
   { primary: 'Move a component', secondary: 'Press arrow keys to move the component. Use Shift + Arrow for quicker movement' },

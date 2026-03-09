@@ -41,6 +41,8 @@ export interface DiagramProps {
   parentContainer: ParentContainerDimensions,
   processDiagram?: WaterDiagram;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
+  diagramNotes: string;
+  setDiagramNotes: (notes: string) => void;
 }
 
 
@@ -110,6 +112,7 @@ const Diagram = (props: DiagramProps) => {
         calculatedData,
         recentNodeColors,
         recentEdgeColors,
+        diagramNotes: props.processDiagram.flowDiagramData.diagramNotes || '',
       };
 
       // console.log('=== SAVED FlowDiagramData', JSON.parse(JSON.stringify(updatedDiagramData)));
@@ -239,7 +242,13 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-              <MenuSidebar shadowRootRef={props.shadowRoot}/>
+              <MenuSidebar
+                shadowRootRef={props.shadowRoot}
+                diagramNotes={props.diagramNotes}
+                setDiagramNotes={props.setDiagramNotes}
+                saveFlowDiagramData={props.saveFlowDiagramData}
+                processDiagram={props.processDiagram}
+              />
           </SharedDrawer>
         )}
 
