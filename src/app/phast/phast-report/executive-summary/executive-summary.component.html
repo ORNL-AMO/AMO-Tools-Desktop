@@ -53,32 +53,33 @@
           <span *ngIf="!mod.energyPerMass">&mdash; &mdash;</span>
         </td>
       </tr>
-      <tr>
-        <td> Total CO<sub>2</sub> Emissions
-          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
-        </td>
-        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{baselineSummary.co2EmissionsOutput.totalEmissionOutput | number:'1.0-2'}}</td>
-        <td *ngFor="let mod of modificationSummaries; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="mod.co2EmissionsOutput">{{mod.co2EmissionsOutput.totalEmissionOutput | number:'1.0-2'}}</span>
-          <span *ngIf="!mod.co2EmissionsOutput">&mdash; &mdash;</span>
-        </td>
-      </tr>
-      <tr>
-        <td> CO<sub>2</sub> Emissions Savings
-          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
-        </td>
-        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
-        <td *ngFor="let mod of modificationSummaries; let index = index;">
-          <span>
-            {{mod.co2EmissionsOutput.emissionsSavings | number:'1.0-2'}}
-          </span>
-
-        </td>
-      </tr>
+      @if (showOperationalImpacts()) {
+        <tr>
+          <td> Total CO<sub>2</sub> Emissions
+            <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+            <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+          </td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+            {{baselineSummary.co2EmissionsOutput.totalEmissionOutput | number:'1.0-2'}}</td>
+          <td *ngFor="let mod of modificationSummaries; let index = index;"
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            <span *ngIf="mod.co2EmissionsOutput">{{mod.co2EmissionsOutput.totalEmissionOutput | number:'1.0-2'}}</span>
+            <span *ngIf="!mod.co2EmissionsOutput">&mdash; &mdash;</span>
+          </td>
+        </tr>
+        <tr>
+          <td> CO<sub>2</sub> Emissions Savings
+            <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
+            <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
+          </td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+          <td *ngFor="let mod of modificationSummaries; let index = index;">
+            <span>
+              {{mod.co2EmissionsOutput.emissionsSavings | number:'1.0-2'}}
+            </span>
+          </td>
+        </tr>
+      }
       <tr>
         <td> Energy Used
           <span> ({{timeUnit}})</span>
@@ -315,6 +316,7 @@
   </ng-container>
 
 
+  @if (showOperationalImpacts()) {
   <ng-container *ngIf="settings.energySourceType === 'Electricity'">
     <table #copyTable3 class="table table-hover table-striped">
       <thead>
@@ -431,6 +433,7 @@
     <app-exportable-results-table [tableString]="copyTable3String"
     (updateTableString)="updateCopyTable3String()"></app-exportable-results-table>
   </ng-container>
+  }
 
 
   <ng-container *ngIf="settings.energySourceType === 'Electricity'">

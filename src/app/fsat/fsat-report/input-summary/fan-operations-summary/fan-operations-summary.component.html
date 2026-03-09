@@ -50,6 +50,7 @@
 
 
 
+              @if (showOperationalImpacts()) {
               <tr>
                 <td [ngClass]="{'indicate-report-field-different':totalEmissionOutputRateDiff[0] == true}">
                   Total Emission Output Rate <span>(kg CO<sub>2</sub>/MWh)</span>
@@ -61,6 +62,7 @@
                   {{mod.cO2SavingsData.totalEmissionOutputRate | number : '1.0-2'}}
                 </td>
               </tr>
+              }
             </tbody>
           </table>
           <app-exportable-results-table [tableString]="copyTableString"

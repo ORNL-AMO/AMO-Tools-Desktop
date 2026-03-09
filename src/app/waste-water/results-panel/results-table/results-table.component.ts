@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWaterData, WasteWaterResults, WasteWaterValid } from '../../../shared/models/waste-water';
 import { WasteWaterService } from '../../waste-water.service';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-results-table',
@@ -11,6 +12,8 @@ import { WasteWaterService } from '../../waste-water.service';
     standalone: false
 })
 export class ResultsTableComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   wasteWaterSub: Subscription;
   modificationValid: WasteWaterValid;

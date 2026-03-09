@@ -55,7 +55,6 @@
               <select id="moduleType" class="form-control" [(ngModel)]="displayModuleType" (change)="applyFilters()">
                 <option [ngValue]="'All'">All</option>
                 <option *ngFor="let type of uniqueModuleTypes" [ngValue]="type" [hidden]="!type">{{ type | titlecase }}</option>
-                <option [ngValue]="null">Other/None</option>
               </select>
           </div>
         </div>

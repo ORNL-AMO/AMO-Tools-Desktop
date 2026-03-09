@@ -55,6 +55,7 @@ export class Co2SavingsComponent implements OnInit {
     this.analyticsService.sendEvent('calculator-UTIL-co2-savings');
     this.egridService.getAllSubRegions();
     this.settings = this.settingsDbService.globalSettings;
+    this.co2SavingsService.setEmissionsUnit(this.settings);
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }

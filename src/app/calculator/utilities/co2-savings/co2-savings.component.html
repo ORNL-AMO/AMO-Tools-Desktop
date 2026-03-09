@@ -4,7 +4,7 @@
         <img src="assets/images/calculator-icons/utilities-icons/co2-savings.png">
       </div>
       <div class="pl-2">
-        <h3>CO<sub>2</sub> Savings</h3>
+        <h3>CO<sub>2</sub> Conversion</h3>
       </div>
     </div>
 
@@ -102,7 +102,7 @@
           </div>
 
           <div class="p-2">
-            <app-co2-savings-results *ngIf="tabSelect == 'results'" [settings]="settings" [baselineData]="baselineData"
+            <app-co2-savings-results *ngIf="tabSelect == 'results'" [baselineData]="baselineData"
             [modificationData]="modificationData" [baselineTotal]="baselineTotal" [modificationTotal]="modificationTotal" ></app-co2-savings-results>
             <app-co2-savings-help *ngIf="tabSelect == 'help'" [currentField]="currentField"></app-co2-savings-help>
           </div>

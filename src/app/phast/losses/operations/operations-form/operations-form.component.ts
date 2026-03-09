@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, HostListener, SimpleChanges, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 import { OperationsCompareService } from '../operations-compare.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { OperationsService, OperationsWarnings } from '../operations.service';
@@ -17,6 +18,9 @@ import { Subscription } from 'rxjs';
     standalone: false
 })
 export class OperationsFormComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Output('saveEmit')

@@ -213,6 +213,7 @@
         </div>
     </form>
 
+    @if (showOperationalImpacts()) {
     <div class="header mr-2 ml-2">
         <h3>Carbon Emissions</h3>
         <br>
@@ -223,6 +224,7 @@
             (emitCurrentField)="focusField($event)"
             (emitUpdateCo2SavingsData)="save($event)"></app-assessment-co2-savings>
     </div>
+    }
 </div>
 
 <div bsModal #systemCapacityModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"

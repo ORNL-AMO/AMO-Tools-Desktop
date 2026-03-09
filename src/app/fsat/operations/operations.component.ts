@@ -1,4 +1,5 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output, Signal, SimpleChanges, ViewChild } from '@angular/core';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { FSAT, FsatInput, FsatOperations } from '../../shared/models/fans';
 import { OperatingHours } from '../../shared/models/operations';
@@ -19,6 +20,9 @@ import { Subscription } from 'rxjs';
     standalone: false
 })
 export class OperationsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   fsat: FSAT;  
   @Input()

@@ -45,7 +45,9 @@
             </small>
         </h5>
         <hr class="my-1 hr-spacer">
-        <app-co2-help-text [currentField]="focusedField"></app-co2-help-text>
+        @if (showOperationalImpacts()) {
+            <app-co2-help-text [currentField]="focusedField"></app-co2-help-text>
+        }
     </div>
     <div class="p-2 pt-3" *ngIf="setupTab == 'end-uses'">
         <h5>

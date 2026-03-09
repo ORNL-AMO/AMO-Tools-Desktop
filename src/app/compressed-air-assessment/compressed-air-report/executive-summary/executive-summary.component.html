@@ -247,6 +247,7 @@
                     <span *ngIf="!result.combinedResults.allSavingsResults.adjustedResults.power">&mdash; &mdash;</span>
                 </td>
             </tr>
+            @if (showOperationalImpacts()) {
             <tr class="bold-row">
                 <td>Annual Emission Output Rate
                     <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
@@ -262,6 +263,7 @@
                     <span *ngIf="!result.combinedResults.annualEmissionOutput">&mdash; &mdash;</span>
                 </td>
             </tr>
+            }
             <tr class="bold-row bg-row">
                 <td>Peak Demand Savings
                     <span> (kW)</span>
@@ -292,6 +294,7 @@
                 </td>
             </tr>
 
+            @if (showOperationalImpacts()) {
             <tr class="bold-row row-stripe bg-row">
                 <td>Annual Emission Savings
                     <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
@@ -307,6 +310,7 @@
                         &mdash;</span>
                 </td>
             </tr>
+            }
 
             <!--cost-->
             <tr class="bold-row">

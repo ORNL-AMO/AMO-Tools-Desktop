@@ -1,12 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { MeasurStandardUnitType } from '../../../shared/models/app';
+import { ConvertValue } from '../../../shared/convert-units/ConvertValue';
+import { copyObject } from '../../../shared/helperFunctions';
 
 @Injectable()
 export class Co2SavingsService {
   baselineData: Array<Co2SavingsData>;
   modificationData: Array<Co2SavingsData>;
+
+  // * use app default tonnes
+  emissionsUnit: MeasurStandardUnitType = 'Metric';
   constructor(private convertUnitsService: ConvertUnitsService) { }
+
+  setEmissionsUnit(settings: Settings) {
+    if (settings.emissionsUnit) {
+      this.emissionsUnit = settings.emissionsUnit;
+    } else {
+      this.emissionsUnit = settings.unitsOfMeasure as MeasurStandardUnitType;
+    }
+  }
 
   generateExample(isBaseline: boolean, settings: Settings): Co2SavingsData {
     let emissionOutputRate: number = 53.06;
@@ -32,24 +46,28 @@ export class Co2SavingsService {
   }
 
   calculate(data: Co2SavingsData, settings: Settings): Co2SavingsData {
-    //use copy for conversion data
-    let dataCpy: Co2SavingsData = JSON.parse(JSON.stringify(data));
+    let formData: Co2SavingsData = copyObject(data);
+    let totalEmissionOutput: number = 0;
+
     if (settings.unitsOfMeasure != 'Imperial' && data.energyType == 'fuel') {
       let conversionHelper: number = this.convertUnitsService.value(1).from('GJ').to('MMBtu');
-      dataCpy.totalEmissionOutputRate = dataCpy.totalEmissionOutputRate / conversionHelper;
-      dataCpy.electricityUse = this.convertUnitsService.value(dataCpy.electricityUse).from('GJ').to('MMBtu');
-    }
-    if (dataCpy.totalEmissionOutputRate && dataCpy.electricityUse) {
-      //set results on original obj
-      data.totalEmissionOutput = (dataCpy.totalEmissionOutputRate) * (dataCpy.electricityUse / 1000);
-    } else {
-      data.totalEmissionOutput = 0;
+      formData.totalEmissionOutputRate = formData.totalEmissionOutputRate / conversionHelper;
+      formData.electricityUse = this.convertUnitsService.value(formData.electricityUse).from('GJ').to('MMBtu');
     }
 
-    if (settings.unitsOfMeasure !== 'Metric') {
-      data.totalEmissionOutput = this.convertUnitsService.value(data.totalEmissionOutput).from('tonne').to('ton');
-    }
+    if (formData.totalEmissionOutputRate && formData.electricityUse) {
+      // * formData.totalEmissionOutputRate (in kg CO2/MWh OR kb Co2/MMBtu) * formData.electricityUse
+      // * divide by 1000 to convert kg CO2 to tonnes or kb CO2 to tons, ie (1 tonne / 1000 kg)
 
+      // * tonnes
+      totalEmissionOutput = formData.totalEmissionOutputRate * (formData.electricityUse / 1000);
+    } 
+
+    if (this.emissionsUnit == 'Imperial') {
+      totalEmissionOutput = new ConvertValue(totalEmissionOutput, 'tonne', 'ton').convertedValue;
+    } 
+
+    data.totalEmissionOutput = totalEmissionOutput;
     return data;
   }
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-calculator-list',
@@ -7,6 +8,8 @@ import { Component, OnInit } from '@angular/core';
     standalone: false
 })
 export class CalculatorListComponent implements OnInit {
-
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+  
   ngOnInit() {}
 }

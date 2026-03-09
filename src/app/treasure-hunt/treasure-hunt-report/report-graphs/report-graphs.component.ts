@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject, Signal } from '@angular/core';
 import { SavingsItem, TreasureHuntResults } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 @Component({
     selector: 'app-report-graphs',
     templateUrl: './report-graphs.component.html',
@@ -8,6 +9,9 @@ import { Settings } from '../../../shared/models/settings';
     standalone: false
 })
 export class ReportGraphsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   treasureHuntResults: TreasureHuntResults;
   @Input()

@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 import { PHAST } from "../../../../shared/models/phast/phast";
 import { Settings } from '../../../../shared/models/settings';
 
@@ -9,6 +10,9 @@ import { Settings } from '../../../../shared/models/settings';
     standalone: false
 })
 export class OperationDataComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   phast: PHAST;
   @Input()

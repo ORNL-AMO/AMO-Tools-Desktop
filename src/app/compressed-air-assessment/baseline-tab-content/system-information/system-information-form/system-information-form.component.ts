@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, inject, Signal, ViewChild } from '@angular/core';
 import { Co2SavingsData } from '../../../../calculator/utilities/co2-savings/co2-savings.service';
 import { CompressedAirAssessment, SystemInformation } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
@@ -10,6 +10,7 @@ import { SystemInformationFormService } from './system-information-form.service'
 import { SystemProfileService } from '../../baseline-system-profile-setup/system-profile.service';
 import { AltitudeCorrectionService } from '../../../../calculator/utilities/altitude-correction/altitude-correction.service';
 import { IntegrationStateService } from '../../../../shared/connected-inventory/integration-state.service';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 
 @Component({
   selector: 'app-system-information-form',
@@ -18,6 +19,8 @@ import { IntegrationStateService } from '../../../../shared/connected-inventory/
   standalone: false
 })
 export class SystemInformationFormComponent {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   settings: Settings;
   @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
