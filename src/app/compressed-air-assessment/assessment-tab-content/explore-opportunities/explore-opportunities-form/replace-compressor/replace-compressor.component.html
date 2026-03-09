@@ -76,7 +76,8 @@
                         <input type="checkbox" [(ngModel)]="compressorMap.isReplaced" (change)="save(false)"
                             name="{{compressorMap.originalCompressorId}}-replace-compressor"
                             id="{{compressorMap.originalCompressorId}}-replace-compressor"
-                            [disabled]="compressorInventoryItems.length == 1 && !compressorMap.isReplaced" />
+                            [disabled]="compressorInventoryItems.length == 1 && !compressorMap.isReplaced"
+                            (focus)="helpTextField('replaceExisting')" />
                     </td>
                     <td>
                         @if(compressorMap.isTrimCompressor){
@@ -148,7 +149,8 @@
                         <input type="checkbox" [(ngModel)]="compressorMap.isAdded" (change)="save(false)"
                             name="{{compressorMap.replacementCompressorId}}-replace-compressor"
                             id="{{compressorMap.replacementCompressorId}}-replace-compressor"
-                            [disabled]="compressorInventoryItems.length == 1 && compressorMap.isAdded" />
+                            [disabled]="compressorInventoryItems.length == 1 && compressorMap.isAdded"
+                            (focus)="helpTextField('addNewCompressor')" />
                     </td>
                     <td>
                         {{compressorMap.replacementCompressorId |
@@ -205,7 +207,8 @@
                             <select class="form-control w-100" [(ngModel)]="trimCompressor.compressorId"
                                 (change)="save(false)"
                                 name="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor"
-                                id="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor">
+                                id="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor"
+                                (focus)="helpTextField('trimSelection')">
                                 <option *ngFor="let compressor of compressorInventoryItems"
                                     [ngValue]="compressor.itemId">
                                     {{compressor.name}}

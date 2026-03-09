@@ -161,6 +161,7 @@ import { ModificationListModalComponent } from './assessment-tab-content/modific
 import { AddModificationModalComponent } from './assessment-tab-content/add-modification-modal/add-modification-modal.component';
 import { CompressorPressureMinMaxPipe } from './shared-compressor-pipes/compressor-pressure-min-max.pipe';
 import { GenericCompressorDbService } from '../shared/generic-compressor-db.service';
+import { ReplaceCompressorHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/replace-compressor-help/replace-compressor-help.component';
 
 
 @NgModule({
@@ -263,7 +264,8 @@ import { GenericCompressorDbService } from '../shared/generic-compressor-db.serv
     IntegrateCompressedAirInventoryComponent,
     AssessmentProfileSummaryTableComponent,
     AssessmentProfileSummaryGraphsComponent,
-    CompressorPressureMinMaxPipe
+    CompressorPressureMinMaxPipe,
+    ReplaceCompressorHelpComponent
   ],
   imports: [
     CommonModule,

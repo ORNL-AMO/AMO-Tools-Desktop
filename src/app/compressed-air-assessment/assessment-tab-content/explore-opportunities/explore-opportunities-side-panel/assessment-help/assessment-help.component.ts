@@ -17,6 +17,7 @@ export class AssessmentHelpComponent implements OnInit {
   ngOnInit(): void {
     this.focusedFieldSub = this.compressedAirService.focusedField.subscribe(val => {
       this.focusedField = val;
+      console.log('focused field: ' + this.focusedField);
     });
   }
 
