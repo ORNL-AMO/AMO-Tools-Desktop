@@ -1,4 +1,4 @@
-<table class="table" *ngIf="settings && setupDone && assessment.psat.valid.isValid">
+    <table class="table" *ngIf="settings && setupDone && assessment.psat.valid.isValid">
     <tr>
         <td class="bold no-border-top" colspan="2">Baseline Data:</td>
     </tr>
@@ -47,7 +47,7 @@
             {{maxCostSavings| currency:'USD':'symbol':'2.0-0'}}
         </td>
     </tr>
-</table>
+    </table>
 <table class="table" *ngIf="settings && setupDone && assessment.psat.valid.isValid">
     <tr>
         <td class="bold" colspan="2">

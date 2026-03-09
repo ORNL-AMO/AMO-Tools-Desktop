@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 import { SSMTInputs, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -9,6 +10,9 @@ import { Settings } from '../../../../shared/models/settings';
     standalone: false
 })
 export class OperationsSummaryComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   baselineInputData: SSMTInputs;
   @Input()

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../shared/models/phast/efficiencyImprovement';
 import { EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuel, EnergyEquivalencyFuelOutput } from '../shared/models/phast/energyEquivalency';
 import { O2Enrichment, RawO2Output } from '../shared/models/phast/o2Enrichment';
 import { FlowCalculations, FlowCalculationsOutput } from '../shared/models/phast/flowCalculations';
@@ -579,22 +578,6 @@ export class PhastService {
     }
     
     return results;
-  }
-
-  efficiencyImprovement(input: EfficiencyImprovementInputs, settings: Settings): EfficiencyImprovementOutputs {
-    let inputs = this.createInputCopy(input);
-    if (settings.unitsOfMeasure === 'Metric') {
-      inputs.currentCombustionAirTemp = this.convertUnitsService.value(inputs.currentCombustionAirTemp).from('C').to('F');
-      inputs.currentFlueGasTemp = this.convertUnitsService.value(inputs.currentFlueGasTemp).from('C').to('F');
-      inputs.newCombustionAirTemp = this.convertUnitsService.value(inputs.newCombustionAirTemp).from('C').to('F');
-      inputs.newFlueGasTemp = this.convertUnitsService.value(inputs.newFlueGasTemp).from('C').to('F');
-      inputs.currentEnergyInput = this.convertUnitsService.value(inputs.currentEnergyInput).from('GJ').to('MMBtu');
-      let results: EfficiencyImprovementOutputs = this.processHeatingApiService.efficiencyImprovement(inputs);
-      results.newEnergyInput = this.convertUnitsService.value(results.newEnergyInput).from('MMBtu').to('GJ');
-      return results;
-    } else {
-      return this.processHeatingApiService.efficiencyImprovement(inputs);
-    }
   }
 
   energyEquivalencyElectric(input: EnergyEquivalencyElectric, settings: Settings) {

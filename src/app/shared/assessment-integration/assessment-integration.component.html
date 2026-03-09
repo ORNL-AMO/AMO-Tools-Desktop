@@ -113,6 +113,7 @@
                                     <span *ngIf="!modification.annualEnergy">&mdash;</span>
                                 </td>
                             </tr>
+                            @if (showOperationalImpacts()) {
                             <tr>
                                 <td class="bold">Annual CO2 Emissions (tonne CO<sub>2</sub>)</td>
                                 <td>
@@ -125,6 +126,7 @@
                                     <span *ngIf="!modification.co2EmissionsOutput">&mdash;</span>
                                 </td>
                             </tr>
+                            }
                             <tr>
                                 <td class="bold">Annual Cost ({{settings.currency}})</td>
                                 <td>
@@ -171,6 +173,7 @@
                                 <span *ngIf="!modification.annualEnergy">&mdash;</span>
                             </td>
                         </tr>
+                        @if (showOperationalImpacts()) {
                         <tr>
                             <td class="bold">Annual CO2 Emissions (tonne CO<sub>2</sub>)</td>
                             <td>
@@ -182,6 +185,7 @@
                                 <span *ngIf="!modification.co2EmissionsOutput">&mdash;</span>
                             </td>
                         </tr>
+                        }
                         <tr>
                             <td class="bold">Annual Cost ({{settings.currency}})</td>
                             <td>

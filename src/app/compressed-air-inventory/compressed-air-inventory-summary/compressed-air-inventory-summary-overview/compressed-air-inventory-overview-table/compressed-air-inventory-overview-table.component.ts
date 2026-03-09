@@ -1,7 +1,8 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject, Signal } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { CompressedAirInventorySummaryOverviewService, InventorySummary } from '../compressed-air-inventory-summary-overview.service';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 
 @Component({
   selector: 'app-compressed-air-inventory-overview-table',
@@ -16,6 +17,9 @@ export class CompressedAirInventoryOverviewTableComponent implements OnInit {
   tableString: any;
   inventorySummary: InventorySummary;
   inventorySummarySub: Subscription;
+
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   constructor(private compressedAirInventorySummaryOverviewService: CompressedAirInventorySummaryOverviewService) { }
   

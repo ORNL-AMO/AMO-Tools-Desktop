@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AirHeatingInput, AirHeatingOutput } from '../shared/models/phast/airHeating';
-import { EfficiencyImprovementInputs, EfficiencyImprovementOutputs } from '../shared/models/phast/efficiencyImprovement';
 import { EnergyEquivalencyElectric, EnergyEquivalencyElectricOutput, EnergyEquivalencyFuel, EnergyEquivalencyFuelOutput } from '../shared/models/phast/energyEquivalency';
 import { FlowCalculations, FlowCalculationsOutput } from '../shared/models/phast/flowCalculations';
 import { HeatCascadingInput, HeatCascadingOutput } from '../shared/models/phast/heatCascading';
@@ -444,38 +443,6 @@ export class ProcessHeatingApiService {
     );
 
     return totalHeatLoss;
-  }
-
-  efficiencyImprovement(input: EfficiencyImprovementInputs): EfficiencyImprovementOutputs {
-    input.currentFlueGasOxygen = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.currentFlueGasOxygen)
-    input.newFlueGasOxygen = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.newFlueGasOxygen)
-    input.currentFlueGasTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.currentFlueGasTemp)
-    input.newFlueGasTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.newFlueGasTemp)
-    input.currentCombustionAirTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.currentCombustionAirTemp)
-    input.newCombustionAirTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.newCombustionAirTemp)
-    input.currentEnergyInput = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.currentEnergyInput)
-
-    let EfficiencyImprovementInstance = new this.toolsSuiteApiService.ToolsSuiteModule.EfficiencyImprovement(
-      input.currentFlueGasOxygen,
-      input.newFlueGasOxygen,
-      input.currentFlueGasTemp,
-      input.newFlueGasTemp,
-      input.currentCombustionAirTemp,
-      input.newCombustionAirTemp,
-      input.currentEnergyInput
-    );
-
-    let output: EfficiencyImprovementOutputs = {
-      currentExcessAir: EfficiencyImprovementInstance.getCurrentExcessAir(),
-      newExcessAir: EfficiencyImprovementInstance.getNewExcessAir(),
-      currentAvailableHeat: EfficiencyImprovementInstance.getCurrentAvailableHeat(),
-      newAvailableHeat: EfficiencyImprovementInstance.getNewAvailableHeat(),
-      newFuelSavings: EfficiencyImprovementInstance.getNewFuelSavings(),
-      newEnergyInput: EfficiencyImprovementInstance.getNewEnergyInput(),
-    }
-
-    EfficiencyImprovementInstance.delete();
-    return output;
   }
 
   energyEquivalencyElectric(input: EnergyEquivalencyElectric): EnergyEquivalencyElectricOutput {

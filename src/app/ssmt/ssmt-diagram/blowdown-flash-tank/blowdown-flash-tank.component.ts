@@ -17,6 +17,8 @@ export class BlowdownFlashTankComponent implements OnInit {
   emitSelectEquipment = new EventEmitter<string>();
   @Input()
   settings: Settings;
+  @Input()
+  numberOfHeaders: number;
 
   steamPressureClasses: Array<string>;
   outletCondensateClasses: Array<string>;
@@ -35,6 +37,8 @@ export class BlowdownFlashTankComponent implements OnInit {
     this.inletCondensateClasses = ['blowdown'];
     if (this.flashTank.outletGasMassFlow < 1e-3) {
       this.steamPressureClasses = ['no-steam-flow']
+    }else if(this.numberOfHeaders == 1){
+      this.steamPressureClasses = ['vents'];
     }
 
     if (this.flashTank.outletLiquidMassFlow < 1e-3) {

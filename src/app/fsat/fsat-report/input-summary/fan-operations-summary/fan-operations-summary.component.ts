@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT, FsatOperations } from '../../../../shared/models/fans';
 
@@ -10,6 +11,8 @@ import { FSAT, FsatOperations } from '../../../../shared/models/fans';
     standalone: false
 })
 export class FanOperationsSummaryComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   @Input()
   settings: Settings;

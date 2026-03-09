@@ -27,6 +27,7 @@ import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.serv
 import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 import {Dialog, DialogRef} from '@angular/cdk/dialog';
 import { ModalDialogService } from '../shared/modal-dialog.service';
+import { FeatureFlagService } from '../shared/feature-flag.service';
 
 @Component({
   selector: 'app-core',
@@ -100,7 +101,8 @@ export class CoreComponent implements OnInit {
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private toolsSuiteApiService: ToolsSuiteApiService,
-    private modalDialogService: ModalDialogService
+    private modalDialogService: ModalDialogService,
+    private featureFlagService: FeatureFlagService,
   ) {
   }
 
@@ -173,10 +175,12 @@ export class CoreComponent implements OnInit {
             ]);
           }, 3000);
         }
+        this.featureFlagService.setFeatureFlags(browserStorageOptions);
         this.initData();
       } else {
         this.snackBarService.setSnackbarMessage(CORE_DATA_WARNING, 'danger', 'none');
       }
+
     });
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {

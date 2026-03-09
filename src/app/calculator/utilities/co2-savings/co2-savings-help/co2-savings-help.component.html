@@ -1,30 +1,30 @@
 <div class="p-2 pt-3 d-flex flex-column help-info">
   <h5>
-    CO<sub>2</sub> Savings Help
+    CO<sub>2</sub> Conversion Help
     <br>
-    <small class="text-muted small">This calculator lets the user determine carbon dioxide (CO<sub>2</sub>) emissions for given combustion fuel, biofuel, refrigerant charge, purchased gases, purchased electricity from the grid. 
-      It also helps to calculate the emissions fuel use for transportation. Select the emission source type to select the emission from combustion fuel, biofuel, refrigerant charge, purchased gases, purchased electricity from the grid. 
-      Next select the emission source and corresponding fuel type. For calculating emission from purchased electricity from the grid select Electricity under Emission Source Type.
-      Enter the facility’s eGrid region for electricity. The emission output rate can be edited but will return to the default value when the electricity/fuel options are changed. 
-      Emission Output Rates were obtained from the EPA and the Electronic Code of Federal Regulations.
+    <small class="text-muted small">This calculator lets the user determine carbon dioxide (CO<sub>2</sub>) products for given combustion fuel, biofuel, refrigerant charge, purchased gases, purchased electricity from the grid. 
+      It also helps to calculate the output fuel use for transportation. Select the product source type to select the product from combustion fuel, biofuel, refrigerant charge, purchased gases, purchased electricity from the grid. 
+      Next select the product source and corresponding fuel type. For calculating product from purchased electricity from the grid select Electricity under Energy Type.
+      Enter the facility’s eGrid region for electricity. The product output rate can be edited but will return to the default value when the electricity/fuel options are changed. 
+      <!-- Product Output Rates were obtained from the EPA and the Electronic Code of Federal Regulations. -->
     </small>
     <hr>
   </h5>
-  <div>
+  <!-- <div>
     <h6>
       <small class="text-muted">
         <a href="https://www.epa.gov/sites/production/files/2020-04/documents/ghg-emission-factors-hub.pdf" target="_blank">
           US EPA Emissions Factors for Greenhouse Gas Inventories (PDF)</a>
       </small>
     </h6>
-  </div>
+  </div> -->
 
   <div class="my-2" *ngIf="currentField == 'energyType'">
     <h6>
       Energy Type
       <small class="text-muted">
         <br>
-        The type of energy creating the emission: Electricity or Fuel.
+        The type of energy creating the product: Electricity or Fuel.
         <hr>
       </small>
     </h6>
@@ -34,7 +34,7 @@
       Energy Source
       <small class="text-muted">
         <br>
-        Type of fuel creating the emission (used to set Fuel Type dropdown options). 
+        Type of fuel creating the product (used to set Fuel Type dropdown options). 
         Can choose from Steam & Hot Water, Natural Gas, Petroleum-based fuels 
         (including diesel and gasoline), biomass fuels (including biodiesel and 
         landfill gas), coal, and other fuels (including coke).
@@ -47,17 +47,17 @@
       Fuel Type
       <small class="text-muted">
         <br>
-        Specific fuel creating the emission (set by Energy Source).
+        Specific fuel creating the product (set by Energy Source).
         <hr>
       </small>
     </h6>
   </div>
   <div class="my-2" *ngIf="currentField == 'totalEmissionOutputRate'">
     <h6>
-      Total Emission Output Rate
+      Total Product Output Rate
       <small class="text-muted">
         <br>
-        The total emissions per unit of energy use. By default, this is set by the
+        The total product per unit of energy use. By default, this is set by the
          dropdown options, but is changeable. The default values are only kg of
           carbon dioxide (not carbon dioxide equivalent).
         <hr>
@@ -69,7 +69,7 @@
       Energy Use
       <small class="text-muted">
         <br>
-        Amount of energy used creating the emission.
+        Amount of energy used creating the product.
         <hr>
       </small>
     </h6>

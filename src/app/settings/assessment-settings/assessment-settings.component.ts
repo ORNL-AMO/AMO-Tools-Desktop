@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../settings.service'
  
@@ -14,7 +15,7 @@ import { firstValueFrom } from 'rxjs';
     standalone: false
 })
 export class AssessmentSettingsComponent implements OnInit {
-
+  public featureFlagService: FeatureFlagService = inject(FeatureFlagService);
   settings: Settings;
   settingsForm: UntypedFormGroup;
 
@@ -27,17 +28,20 @@ export class AssessmentSettingsComponent implements OnInit {
   showTutorialSettings: boolean = false;
   showPrintSettings: boolean = false;
   showSettingsModal: boolean = false;
-  showCo2Settings: boolean = false;
+  showOperationalImpactOptions: boolean = false;
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   constructor(   
-    private egridService: EGridService, private settingsDbService: SettingsDbService, private settingsService: SettingsService) {
+    private egridService: EGridService, 
+    private settingsDbService: SettingsDbService, 
+    private settingsService: SettingsService) {
   }
 
   ngOnInit() {
     this.egridService.getAllSubRegions();
     this.initializeSettings();
   }
-
+  
   initializeSettings() {
     this.settings = this.settingsDbService.globalSettings;
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
@@ -53,6 +57,14 @@ export class AssessmentSettingsComponent implements OnInit {
     let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
     this.settingsDbService.setAll(updatedSettings);
     this.settings = this.settingsDbService.findById(this.settings.id);
+  }
+
+  toggleOperationalImpactsOptions() {
+    this.showOperationalImpactOptions = !this.showOperationalImpactOptions;
+  }
+
+  setShowOperationalImpacts(enabled: boolean) {
+    this.featureFlagService.setShowOperationalImpacts(enabled);
   }
 
   async saveSettings() {
@@ -86,10 +98,6 @@ export class AssessmentSettingsComponent implements OnInit {
 
   togglePrintSettings() {
     this.showPrintSettings = !this.showPrintSettings;
-  }
-
-  toggleCo2Settings() {
-    this.showCo2Settings = !this.showCo2Settings;
   }
 
   showResetSystemSettingsModal() {
