@@ -70,13 +70,12 @@ PRs should:
 #### Pre-PR Checklist
 Before creating a pull request, please review your code using this checklist:
 
-- [ ] The code builds and runs locally without errors or warnings
-- [ ] Only relevant files are included in the PR (no debug, temp, or unrelated changes)
-- [ ] Variable, function, and class names are descriptive and clear
+- [ ] Variable, function, and class names are descriptive
+- [ ] Code leverages existing architecture, helper methods, and shared modules when applicable
+- [ ] Development artifacts such as console logs, test values, and comments have been removed
+- [ ] All Copilot, Claude Code, or other LLM implementations have been reviewed as if contributed by another developer
 - [ ] UI changes have been manually tested for usability and appearance
-- [ ] For open source contributors: The PR description clearly explains the purpose and scope of the changes
-- [ ] For development team members: The related issue is updated to explain the purpose and scope of the changes
-- [ ] The PR references the related issue number (if applicable)
+- [ ] The PR references the related issue number (if applicable), ex. issue -> `#0000`
 
 
 #### Please follow the "fork-and-pull" Git workflow

@@ -3,9 +3,7 @@
 This guide describes ideal practices for contributing to MEASUR. It is intended to help all contributors—team and open source—improve the codebase with clear, maintainable code. These guidelines are not absolute rules; use your best judgment and prioritize consistency with the existing codebase. Use [Angular’s official style guide](https://angular.io/guide/styleguide) as a baseline.
 
 ## Usage Examples
-For details on usage examples, contributors may reference code in the `process-cooling-assessment` module. 
-
-NOTE: this code is currently on feature branch `process-cooling`
+For details on existing patterns and usage examples, contributors may reference code first in the `process-cooling-assessment` module and additionally in the `compressed-air-assessment` module.
 
 ## General Principles
 - **Consistency:** Follow existing patterns for file structure, naming, and code organization.
@@ -24,7 +22,7 @@ NOTE: this code is currently on feature branch `process-cooling`
 - Use the async pipe for observables when no side-effects are needed.
 
 ## Components
-- Check `/shared` for reusable components before creating new ones.
+- Check `/shared` and `helperFunctions.ts` for reusable components and methods before creating new ones.
 - Keep components focused on a single responsibility.
 - Use `input()` and `output()` functions (not decorators) for data flow.
 - Use setters/getters for input logic instead of lifecycle hooks.
