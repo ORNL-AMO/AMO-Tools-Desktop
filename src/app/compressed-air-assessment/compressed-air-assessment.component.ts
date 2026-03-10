@@ -84,7 +84,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
       //set connected inventory data 
       let fromConnectedItem = this.activatedRoute.snapshot.queryParamMap.get('fromConnectedItem');
       if (!fromConnectedItem) {
-        this.compressedAirAssessmentIntegrationService.setCompressedAirAssessmentConnectedInventoryData(this.assessment, this.settings);
+        this.compressedAirAssessmentIntegrationService.setCompressedAirAssessmentConnectedInventoryData(this.assessment.compressedAirAssessment, this.settings);
       }
 
       let connectedInventory = this.activatedRoute.snapshot.queryParamMap.get('connectedInventory');
@@ -203,7 +203,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   async save(compressedAirAssessment: CompressedAirAssessment) {
     this.assessment.compressedAirAssessment = compressedAirAssessment;
-    this.compressedAirAssessmentIntegrationService.setCompressedAirAssessmentConnectedInventoryData(this.assessment, this.settings);
+    this.compressedAirAssessmentIntegrationService.setCompressedAirAssessmentConnectedInventoryData(this.assessment.compressedAirAssessment, this.settings);
     this.hasConnectedMotorItem = compressedAirAssessment.connectedItem && compressedAirAssessment.connectedItem.inventoryType === 'motor';
     if (this.assessment.compressedAirAssessment.connectedItem && this.assessment.compressedAirAssessment.connectedItem.inventoryType === 'compressed-air') {
       this.compressedAirAssessmentIntegrationService.checkConnectedInventoryDiffers(this.assessment);

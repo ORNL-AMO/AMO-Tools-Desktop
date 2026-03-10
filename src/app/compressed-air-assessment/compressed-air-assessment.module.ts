@@ -152,7 +152,7 @@ import { AddReceiverVolumeHelpComponent } from './assessment-tab-content/explore
 import { AdjustCascadingSetPointsHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/adjust-cascading-set-points-help/adjust-cascading-set-points-help.component';
 import { CaDisableNextButtonPipe } from './baseline-tab-content/baseline-footer-nav-buttons/ca-disable-next-button-pipe';
 import { ConnectedInventoryModule } from '../shared/connected-inventory/connected-inventory-module';
-import { IntegrateCompressedAirInventoryComponent } from './integrate-compressed-air-inventory/integrate-compressed-air-inventory.component';
+import { IntegrateCompressedAirInventoryComponent } from './baseline-tab-content/system-basics/integrate-compressed-air-inventory/integrate-compressed-air-inventory.component';
 
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { AssessmentProfileSummaryTableComponent } from './assessment-tab-content/assessment-profile-summary-table/assessment-profile-summary-table.component';

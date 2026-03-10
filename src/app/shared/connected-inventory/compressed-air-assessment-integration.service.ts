@@ -348,25 +348,28 @@ export class CompressedAirAssessmentIntegrationService {
     }
 
 
-    setCompressedAirAssessmentConnectedInventoryData(assessment: Assessment, settings: Settings) {
+    setCompressedAirAssessmentConnectedInventoryData(compressedAirAssessment: CompressedAirAssessment, settings: Settings): boolean {
+        let needsSave: boolean = false;
         let connectedInventoryData: ConnectedInventoryData = this.integrationStateService.getEmptyConnectedInventoryData();
-        if (assessment.compressedAirAssessment.connectedItem) {
+        if (compressedAirAssessment.connectedItem) {
             let connectedItem: CompressedAirInventorySystem | MotorItem;
-            if (assessment.compressedAirAssessment.connectedItem.inventoryType === 'compressed-air') {
-                connectedItem = this.getConnectedSystem(assessment.compressedAirAssessment.connectedItem);
-            } else if (assessment.compressedAirAssessment.connectedItem.inventoryType === 'motor') {
-                connectedItem = this.compressedAirMotorIntegrationService.getConnectedMotorItem(assessment.compressedAirAssessment.connectedItem, settings);
+            if (compressedAirAssessment.connectedItem.inventoryType === 'compressed-air') {
+                connectedItem = this.getConnectedSystem(compressedAirAssessment.connectedItem);
+            } else if (compressedAirAssessment.connectedItem.inventoryType === 'motor') {
+                connectedItem = this.compressedAirMotorIntegrationService.getConnectedMotorItem(compressedAirAssessment.connectedItem, settings);
             }
             if (connectedItem) {
-                connectedInventoryData.connectedItem = assessment.compressedAirAssessment.connectedItem;
+                connectedInventoryData.connectedItem = compressedAirAssessment.connectedItem;
                 connectedInventoryData.isConnected = true;
                 this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
             } else {
                 // item was deleted
-                delete assessment.compressedAirAssessment.connectedItem;
+                delete compressedAirAssessment.connectedItem;
                 this.integrationStateService.connectedAssessmentState.next(this.integrationStateService.getEmptyIntegrationState());
+                needsSave = true;
             }
         }
+        return needsSave;
     }
 
     getHasConnectedCompressedAirAssessment(inventoryItem: InventoryItem) {
@@ -703,8 +706,6 @@ export class CompressedAirAssessmentIntegrationService {
 
             }
         }
-
-        console.log('checkConnectedInventoryDiffers - differingConnectedValues', differingConnectedValues);
         this.setConnectionDiffers(differingConnectedValues.length !== 0, differingConnectedValues);
     }
 

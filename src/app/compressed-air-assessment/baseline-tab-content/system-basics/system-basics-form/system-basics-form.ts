@@ -9,7 +9,7 @@ import { CompressedAirAssessmentService } from '../../../compressed-air-assessme
 import { ConvertCompressedAirService } from '../../../convert-compressed-air.service';
 import { SystemBasicsFormService } from './../system-basics-form.service';
 import * as _ from 'lodash';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { IntegrationState } from '../../../../shared/connected-inventory/integrations';
 
 @Component({
@@ -20,6 +20,8 @@ import { IntegrationState } from '../../../../shared/connected-inventory/integra
 })
 export class SystemBasicsFormComponent {
 
+  compressedAirAssessmentSub: Subscription;
+
   showUpdateUnitsModal: boolean = false;
   settingsForm: UntypedFormGroup;
   oldSettings: Settings;
@@ -27,6 +29,7 @@ export class SystemBasicsFormComponent {
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   connectedAssessmentState: IntegrationState;
+  isFormChange: boolean = false;
   constructor(private settingsService: SettingsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private convertCompressedAirService: ConvertCompressedAirService,
@@ -35,21 +38,23 @@ export class SystemBasicsFormComponent {
 
 
   ngOnInit() {
-    let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
-    this.systemBasicsForm = this.systemBasicsFormService.getFormFromObj(compressedAirAssessment.systemBasics);
     let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
     this.settingsForm = this.settingsService.getFormFromSettings(settings);
     this.oldSettings = this.settingsService.getSettingsFromForm(this.settingsForm);
 
-    if (compressedAirAssessment.existingDataUnits && compressedAirAssessment.existingDataUnits != this.oldSettings.unitsOfMeasure) {
-      this.oldSettings = this.getExistingDataSettings(compressedAirAssessment);
-      this.showUpdateDataReminder = true;
-    }
-    this.setConnectedInventoryWarning(compressedAirAssessment);
+    this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
+      this.setConnectedInventoryWarning(compressedAirAssessment);
+      this.setShowUpdateDataReminder(compressedAirAssessment);
+      if (!this.isFormChange) {
+        this.systemBasicsForm = this.systemBasicsFormService.getFormFromObj(compressedAirAssessment.systemBasics);
+      } else {
+        this.isFormChange = false;
+      }
+    });
   }
 
   ngOnDestroy() {
-
+    this.compressedAirAssessmentSub.unsubscribe();
     //TODO: ADD ROUTE GAURD TO SHOW UPDATE UNITS MODAL
     // if(this.showUpdateDataReminder && this.oldSettings) {
     //   this.openUpdateUnitsModal.emit(this.oldSettings);
@@ -76,6 +81,7 @@ export class SystemBasicsFormComponent {
   }
 
   saveSystemBasics() {
+    this.isFormChange = true;
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     let systemBasics: CASystemBasics = this.systemBasicsFormService.getObjFromForm(this.systemBasicsForm);
     compressedAirAssessment.systemBasics = systemBasics;
@@ -164,6 +170,15 @@ export class SystemBasicsFormComponent {
       this.updateData();
     }
     this.closeUpdateUnitsModal(shouldUpdateData);
+  }
+
+  setShowUpdateDataReminder(compressedAirAssessment: CompressedAirAssessment) {
+    if (compressedAirAssessment.existingDataUnits && compressedAirAssessment.existingDataUnits != this.oldSettings.unitsOfMeasure) {
+      this.oldSettings = this.getExistingDataSettings(compressedAirAssessment);
+      this.showUpdateDataReminder = true;
+    } else {
+      this.showUpdateDataReminder = false;
+    }
   }
 
   // updateData() {
