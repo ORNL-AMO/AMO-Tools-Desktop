@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as Papa from 'papaparse';
+import * as Papa from 'papaparse/papaparse.js';
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { Settings } from './models/settings';
 import { CompressorTypeOptions, ControlTypes } from '../compressed-air-assessment/inventory/inventoryOptions';
