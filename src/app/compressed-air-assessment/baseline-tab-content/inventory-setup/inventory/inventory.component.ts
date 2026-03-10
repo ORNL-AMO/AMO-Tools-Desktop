@@ -9,7 +9,7 @@ import { CompressedAirDataManagementService } from '../../../compressed-air-data
 import { CompressedAirAssessmentValidationService } from '../../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
 import { InventoryFormService } from './inventory-form.service';
 import { IntegrationStateService } from '../../../../shared/connected-inventory/integration-state.service';
-import { calculateAirFlow } from '../../../calculations/performancePoints/performancePointHelpers';
+
 @Component({
   selector: 'app-inventory',
   templateUrl: './inventory.component.html',

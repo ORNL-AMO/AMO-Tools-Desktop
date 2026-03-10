@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
@@ -19,17 +19,22 @@ import { IntegrationState } from '../../../../shared/connected-inventory/integra
   standalone: false
 })
 export class SystemBasicsFormComponent {
+  @Output('emitShowUpdateDataReminder')
+  emitShowUpdateDataReminder = new EventEmitter<boolean>();
+  @Input()
+  showUpdateUnitsModal: boolean;
+  @Input()
+  confirmResult: (result: boolean) => void;
+
 
   compressedAirAssessmentSub: Subscription;
-
-  showUpdateUnitsModal: boolean = false;
   settingsForm: UntypedFormGroup;
   oldSettings: Settings;
   systemBasicsForm: UntypedFormGroup;
-  showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   connectedAssessmentState: IntegrationState;
   isFormChange: boolean = false;
+  showUpdateDataReminder: boolean;
   constructor(private settingsService: SettingsService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private convertCompressedAirService: ConvertCompressedAirService,
@@ -55,18 +60,7 @@ export class SystemBasicsFormComponent {
 
   ngOnDestroy() {
     this.compressedAirAssessmentSub.unsubscribe();
-    //TODO: ADD ROUTE GAURD TO SHOW UPDATE UNITS MODAL
-    // if(this.showUpdateDataReminder && this.oldSettings) {
-    //   this.openUpdateUnitsModal.emit(this.oldSettings);
-    // }
   }
-
-  //Is this state going to change externally?
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes.assessment) {
-  //     this.setConnectedInventoryWarning();
-  //   }
-  // }
 
   setConnectedInventoryWarning(compressedAirAssessment: CompressedAirAssessment) {
     if (compressedAirAssessment.connectedItem) {
@@ -100,6 +94,7 @@ export class SystemBasicsFormComponent {
       compressedAirAssessment.existingDataUnits = this.oldSettings.unitsOfMeasure;
       this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
       this.showUpdateDataReminder = true;
+      this.emitShowUpdateDataReminder.emit(this.showUpdateDataReminder);
     }
 
     if (this.showSuccessMessage === true) {
@@ -115,17 +110,19 @@ export class SystemBasicsFormComponent {
     this.compressedAirAssessmentService.settings.next(newSettings);
   }
 
-  updateData(showSuccess?: boolean) {
+  async updateData(showSuccess?: boolean) {
     if (showSuccess) {
       this.initSuccessMessage();
     }
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     let compressedAirAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(compressedAirAssessment, this.oldSettings, newSettings);
-    this.showUpdateDataReminder = false;
     compressedAirAssessment.existingDataUnits = newSettings.unitsOfMeasure;
     this.compressedAirAssessmentService.updateCompressedAir(compressedAirAssessment, true);
     this.oldSettings = newSettings;
+    await this.saveSettings();
+    this.showUpdateDataReminder = false;
+    this.emitShowUpdateDataReminder.emit(this.showUpdateDataReminder);
   }
 
   focusField(str: string) {
@@ -150,26 +147,16 @@ export class SystemBasicsFormComponent {
     this.showSuccessMessage = false;
   }
 
-  initUpdateUnitsModal(oldSettings: Settings) {
-    this.oldSettings = oldSettings;
-    this.showUpdateUnitsModal = true;
-    // this.cd.detectChanges();
-  }
-
-  closeUpdateUnitsModal(updated?: boolean) {
-    // if (updated) {
-    //   this.compressedAirAssessmentService.mainTab.next('baseline');
-    //   this.compressedAirAssessmentService.setupTab.next('system-basics');
-    // }
+  closeUpdateUnitsModal() {
     this.showUpdateUnitsModal = false;
-    // this.cd.detectChanges();
+    this.confirmResult(true);
   }
 
   selectUpdateAction(shouldUpdateData: boolean) {
     if (shouldUpdateData == true) {
       this.updateData();
     }
-    this.closeUpdateUnitsModal(shouldUpdateData);
+    this.closeUpdateUnitsModal();
   }
 
   setShowUpdateDataReminder(compressedAirAssessment: CompressedAirAssessment) {
@@ -179,12 +166,6 @@ export class SystemBasicsFormComponent {
     } else {
       this.showUpdateDataReminder = false;
     }
+    this.emitShowUpdateDataReminder.emit(this.showUpdateDataReminder);
   }
-
-  // updateData() {
-  //   let currentSettings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-  //   this.assessment.compressedAirAssessment = this.convertCompressedAirService.convertCompressedAir(this.assessment.compressedAirAssessment, this.oldSettings, currentSettings);
-  //   this.assessment.compressedAirAssessment.existingDataUnits = currentSettings.unitsOfMeasure;
-  //   this.save(this.assessment.compressedAirAssessment);
-  // }
 }

@@ -1,7 +1,8 @@
 <div class="d-flex w-100 h-100">
-  <div class="assessment-panel-container lookup-form modification scroll-item w-50">
+  <div class="assessment-panel-container lookup-form modification scroll-item w-50" [ngClass]="{'no-z-index': showUpdateUnitsModal}">
     <div class="d-flex flex-column panel-container">
-      <app-system-basics-form></app-system-basics-form>
+      <app-system-basics-form [showUpdateUnitsModal]="showUpdateUnitsModal" [confirmResult]="confirmResult"
+        (emitShowUpdateDataReminder)="setShowUpdateDataReminder($event)"></app-system-basics-form>
       <app-integrate-compressed-air-inventory></app-integrate-compressed-air-inventory>
     </div>
   </div>
