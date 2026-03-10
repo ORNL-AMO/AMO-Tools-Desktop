@@ -2,7 +2,7 @@
     <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
         <div class="nav-item" (click)="setSmallScreenTab('form')"
             [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
-            <a class="nav-link" *ngIf="setupTab == 'plant-setup' && initPlantSetup">Plant Setup</a>
+            <a class="nav-link" *ngIf="setupTab == 'plant-setup'">Plant Setup</a>
             <a class="nav-link" *ngIf="setupTab == 'system-setup'">System Setup</a>
             <a class="nav-link" *ngIf="setupTab == 'compressor-properties'">Compressed Air Properties</a>
             <a class="nav-link" *ngIf="setupTab == 'compressed-air-catalog'">Catalog</a>
@@ -18,7 +18,7 @@
         <div class="assessment-panel-container lookup-form modification scroll-item"
             [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}"
             [ngStyle]="{'height.px': containerHeight}">
-            <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
+            <app-plant-setup *ngIf="setupTab == 'plant-setup'"></app-plant-setup>
             <app-system-setup *ngIf="setupTab == 'system-setup'"></app-system-setup>
             <app-compressed-air-properties *ngIf="setupTab == 'compressor-properties'"></app-compressed-air-properties>
             <app-compressed-air-catalog *ngIf="setupTab == 'compressed-air-catalog'"></app-compressed-air-catalog>

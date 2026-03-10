@@ -5,7 +5,6 @@ import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
  
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { EGridService } from '../shared/helper-services/e-grid.service';
 import { AirPropertiesCsvService } from '../shared/helper-services/air-properties-csv.service';
 import { Assessment } from '../shared/models/assessment';
 import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
@@ -78,7 +77,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private settingsDbService: SettingsDbService, 
     private compressedAirAssessmentService: CompressedAirAssessmentService,  
     private dayTypeService: DayTypeService,
-    private egridService: EGridService,
     private endUseService: EndUsesService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
     private exploreOpportunitiesService: ExploreOpportunitiesService, private assessmentService: AssessmentService,
@@ -89,7 +87,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-compressed-air-assessment', undefined);
-    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
