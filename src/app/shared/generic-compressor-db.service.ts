@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
-import { Settings } from '../shared/models/settings';
-import { CompressorTypeOptions, ControlTypes } from '../compressed-air-assessment/baseline-tab-content/inventory-setup/inventory/inventoryOptions';
+import { ConvertUnitsService } from './convert-units/convert-units.service';
+import { Settings } from './models/settings';
 import { DefaultCompressorApiService } from '../tools-suite-api/default-compressor-api.service';
+import { CompressorTypeOptions, ControlTypes } from '../compressed-air-assessment/baseline-tab-content/inventory-setup/inventory/inventoryOptions';
 @Injectable()
 export class GenericCompressorDbService {
 

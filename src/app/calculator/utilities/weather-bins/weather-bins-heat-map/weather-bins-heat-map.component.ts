@@ -3,7 +3,7 @@ import { WeatherBinsInput, WeatherBinsService } from '../weather-bins.service';
 import { Subscription } from 'rxjs';
 import * as Plotly from 'plotly.js-dist';
 import { Settings } from '../../../../shared/models/settings';
-// import * as Papa from 'papaparse';
+import * as Papa from 'papaparse/papaparse.js';
 import { WindowRefService } from '../../../../indexedDb/window-ref.service';
 import { copyObject } from '../../../../shared/helperFunctions';
 
@@ -178,10 +178,10 @@ export class WeatherBinsHeatMapComponent {
       data: heatMapData
     }
 
-    // const csv = Papa.unparse(csvData, {
-    //   delimiter: "\t",
-    // });
-    // this.heatmapCSVstring = csv;
+    const csv = Papa.unparse(csvData, {
+      delimiter: "\t",
+    });
+    this.heatmapCSVstring = csv;
   }
 
     copySuccess() {

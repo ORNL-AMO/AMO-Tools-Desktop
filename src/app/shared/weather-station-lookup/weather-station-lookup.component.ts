@@ -1,7 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { WeatherStation, WeatherStationLookupService } from './weather-station-lookup.service';
-// import * as Papa from 'papaparse';
+import * as Papa from 'papaparse/papaparse.js';
 import { CsvImportData } from '../helper-services/csv-to-json.service';
 import { WeatherBinsService, WeatherDataSourceView,  } from '../../calculator/utilities/weather-bins/weather-bins.service';
 import * as _ from 'lodash';
@@ -89,11 +88,10 @@ export class WeatherStationLookupComponent implements OnInit {
     this.weatherLookupError = undefined;
     this.weatherStationLookupService.getCSV(weatherStation.USAF).subscribe({
       next: csvString => {
-        // let stationCSVWeatherData: CsvImportData = Papa.parse(csvString, {
-        //   header: true,
-        //   dynamicTyping: true
-        // });
-        let stationCSVWeatherData: CsvImportData;
+        let stationCSVWeatherData: CsvImportData = Papa.parse(csvString, {
+          header: true,
+          dynamicTyping: true
+        });
         this.weatherBinsService.importDataFromCsv.next(stationCSVWeatherData);
       },
       error: (error: MeasurHttpError) => {
