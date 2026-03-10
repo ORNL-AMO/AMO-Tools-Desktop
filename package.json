@@ -66,7 +66,7 @@
     "ngx-indexed-db": "16.0.0",
     "ngx-webstorage": "19.0.1",
     "ngx-bootstrap": "19.0.2",
-    "papaparse": "5.2.0",
+    "papaparse": "5.5.3",
     "pako": "2.1.0",
     "pptxgenjs": "  3.10.0",
     "process-flow-diagram-component": "file:process-flow-diagram-component",

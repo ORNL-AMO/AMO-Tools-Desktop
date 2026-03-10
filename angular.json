@@ -19,8 +19,7 @@
               "pptxgenjs",
               "file-saver",
               "moment",
-              "plotly.js-dist",
-              "papaparse"
+              "plotly.js-dist"
             ],
             "outputPath": "dist",
             "index": "src/index.html",

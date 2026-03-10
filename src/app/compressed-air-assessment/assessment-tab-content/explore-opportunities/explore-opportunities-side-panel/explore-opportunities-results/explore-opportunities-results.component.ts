@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
@@ -10,6 +10,7 @@ import { CompressedAirCombinedDayTypeResults } from '../../../../calculations/mo
 import { CompressedAirAssessmentModificationResults } from '../../../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirAssessmentBaselineResults } from '../../../../calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirModificationValid } from '../../../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
+import { FeatureFlagService } from '../../../../../shared/feature-flag.service';
 
 @Component({
   selector: 'app-explore-opportunities-results',
@@ -18,6 +19,9 @@ import { CompressedAirModificationValid } from '../../../../compressed-air-asses
   standalone: false
 })
 export class ExploreOpportunitiesResultsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+  
   dayTypeOptions: Array<CompressedAirDayType>;
   compressedAirAssessment: CompressedAirAssessment;
 

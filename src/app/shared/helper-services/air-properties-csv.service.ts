@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as Papa from 'papaparse';
+// import * as Papa from 'papaparse';
 import * as _ from 'lodash';
 
 @Injectable()
@@ -11,19 +11,20 @@ export class AirPropertiesCsvService {
   constructor() {}
   
   initAirPropertiesData(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      Papa.parse("assets/airpropertiescsv_final.csv", {
-        header: true,
-        download: true,
-        complete: results => {
-          this.setAirPropertiesData(results.data);
-          resolve(true);
-        },
-        error: results => {
-          reject(true);
-        },
-      });
-    });
+    // return new Promise((resolve, reject) => {
+    //   Papa.parse("assets/airpropertiescsv_final.csv", {
+    //     header: true,
+    //     download: true,
+    //     complete: results => {
+    //       this.setAirPropertiesData(results.data);
+    //       resolve(true);
+    //     },
+    //     error: results => {
+    //       reject(true);
+    //     },
+    //   });
+    // });
+    return
 
   }
 
