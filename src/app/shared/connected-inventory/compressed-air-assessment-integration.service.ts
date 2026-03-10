@@ -20,6 +20,7 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment/
 import { CompressedAirAssessment, CompressorInventoryItem, SystemInformation } from '../models/compressed-air-assessment';
 import { CentrifugalSpecifics, CompressedAirControlsProperties, CompressedAirDesignDetailsProperties, CompressedAirInventorySystem, CompressedAirItem, CompressedAirMotorProperties, CompressedAirPerformancePointsProperties, NameplateData, PerformancePoint } from '../../compressed-air-inventory/compressed-air-inventory';
 import { InventoryService } from '../../compressed-air-assessment/baseline-tab-content/inventory-setup/inventory/inventory.service';
+import { CompressorInventoryItemClass } from '../../compressed-air-assessment/calculations/CompressorInventoryItemClass';
 
 
 // todo Not immediately required but we should probably address a few things at some point:
@@ -133,51 +134,11 @@ export class CompressedAirAssessmentIntegrationService {
             let inventoryCompressorToConnectedCompressorMap: Record<string, string> = {};
             selectedSystem.catalog.forEach(item => {
                 let compressorInventoryItem: CompressorInventoryItem = this.caInventoryService.getNewInventoryItem();
+                compressorInventoryItem = this.setCompressorInventoryDataFromConnectedItem(compressorInventoryItem, item);
+                let results: { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } = this.caInventoryService.addNewCompressor(compressedAirAssessment, compressorInventoryItem);
+                compressorInventoryItem = results.newInventoryItem;
+                compressedAirAssessment = results.compressedAirAssessment;
                 inventoryCompressorToConnectedCompressorMap[item.id] = compressorInventoryItem.itemId;
-                compressorInventoryItem.name = item.name;
-
-                compressorInventoryItem.nameplateData.compressorType = item.nameplateData.compressorType;
-                compressorInventoryItem.nameplateData.fullLoadOperatingPressure = item.nameplateData.fullLoadOperatingPressure;
-                compressorInventoryItem.nameplateData.fullLoadRatedCapacity = item.nameplateData.fullLoadRatedCapacity;
-                compressorInventoryItem.nameplateData.totalPackageInputPower = item.nameplateData.totalPackageInputPower;
-
-                compressorInventoryItem.nameplateData.motorPower = item.compressedAirMotor.motorPower;
-                compressorInventoryItem.nameplateData.fullLoadAmps = item.compressedAirMotor.motorFullLoadAmps;
-
-                compressorInventoryItem.compressorControls.controlType = item.compressedAirControlsProperties.controlType;
-                compressorInventoryItem.compressorControls.unloadPointCapacity = item.compressedAirControlsProperties.unloadPointCapacity;
-                compressorInventoryItem.compressorControls.numberOfUnloadSteps = item.compressedAirControlsProperties.numberOfUnloadSteps;
-                compressorInventoryItem.compressorControls.automaticShutdown = item.compressedAirControlsProperties.automaticShutdown;
-                compressorInventoryItem.compressorControls.unloadSumpPressure = item.compressedAirControlsProperties.unloadSumpPressure;
-
-                compressorInventoryItem.designDetails.blowdownTime = item.compressedAirDesignDetailsProperties.blowdownTime;
-                compressorInventoryItem.designDetails.modulatingPressureRange = item.compressedAirDesignDetailsProperties.modulatingPressureRange;
-                compressorInventoryItem.designDetails.inputPressure = item.compressedAirDesignDetailsProperties.inputPressure;
-                compressorInventoryItem.designDetails.designEfficiency = item.compressedAirDesignDetailsProperties.designEfficiency;
-                compressorInventoryItem.designDetails.serviceFactor = item.compressedAirDesignDetailsProperties.serviceFactor;
-                compressorInventoryItem.designDetails.noLoadPowerFM = item.compressedAirDesignDetailsProperties.noLoadPowerFM;
-                compressorInventoryItem.designDetails.noLoadPowerUL = item.compressedAirDesignDetailsProperties.noLoadPowerUL;
-                compressorInventoryItem.designDetails.maxFullFlowPressure = item.compressedAirDesignDetailsProperties.maxFullFlowPressure;
-
-                // todo watch object reassignments here
-                compressorInventoryItem.performancePoints.fullLoad = item.compressedAirPerformancePointsProperties.fullLoad;
-                compressorInventoryItem.performancePoints.maxFullFlow = item.compressedAirPerformancePointsProperties.maxFullFlow;
-                compressorInventoryItem.performancePoints.midTurndown = item.compressedAirPerformancePointsProperties.midTurndown;
-                compressorInventoryItem.performancePoints.turndown = item.compressedAirPerformancePointsProperties.turndown;
-                compressorInventoryItem.performancePoints.unloadPoint = item.compressedAirPerformancePointsProperties.unloadPoint;
-                compressorInventoryItem.performancePoints.noLoad = item.compressedAirPerformancePointsProperties.noLoad;
-                compressorInventoryItem.performancePoints.blowoff = item.compressedAirPerformancePointsProperties.blowoff;
-
-                compressorInventoryItem.centrifugalSpecifics.surgeAirflow = item.centrifugalSpecifics.surgeAirflow;
-                compressorInventoryItem.centrifugalSpecifics.maxFullLoadPressure = item.centrifugalSpecifics.maxFullLoadPressure;
-                compressorInventoryItem.centrifugalSpecifics.maxFullLoadCapacity = item.centrifugalSpecifics.maxFullLoadCapacity;
-                compressorInventoryItem.centrifugalSpecifics.minFullLoadPressure = item.centrifugalSpecifics.minFullLoadPressure;
-                compressorInventoryItem.centrifugalSpecifics.minFullLoadCapacity = item.centrifugalSpecifics.minFullLoadCapacity;
-
-
-                compressedAirAssessment.compressorInventoryItems.push(compressorInventoryItem);
-
-
             });
 
             compressedAirAssessment.systemInformation.totalAirStorage = selectedSystem.totalAirStorage;
@@ -233,6 +194,49 @@ export class CompressedAirAssessmentIntegrationService {
             this.inventoryDbService.setAll(updatedInventoryItems);
             this.integrationStateService.connectedInventoryData.next(connectedInventoryData);
         }
+    }
+
+    setCompressorInventoryDataFromConnectedItem(compressorInventoryItem: CompressorInventoryItem, item: CompressedAirItem): CompressorInventoryItem {
+        compressorInventoryItem.name = item.name;
+
+        compressorInventoryItem.nameplateData.compressorType = item.nameplateData.compressorType;
+        compressorInventoryItem.nameplateData.fullLoadOperatingPressure = item.nameplateData.fullLoadOperatingPressure;
+        compressorInventoryItem.nameplateData.fullLoadRatedCapacity = item.nameplateData.fullLoadRatedCapacity;
+        compressorInventoryItem.nameplateData.totalPackageInputPower = item.nameplateData.totalPackageInputPower;
+
+        compressorInventoryItem.nameplateData.motorPower = item.compressedAirMotor.motorPower;
+        compressorInventoryItem.nameplateData.fullLoadAmps = item.compressedAirMotor.motorFullLoadAmps;
+
+        compressorInventoryItem.compressorControls.controlType = item.compressedAirControlsProperties.controlType;
+        compressorInventoryItem.compressorControls.unloadPointCapacity = item.compressedAirControlsProperties.unloadPointCapacity;
+        compressorInventoryItem.compressorControls.numberOfUnloadSteps = item.compressedAirControlsProperties.numberOfUnloadSteps;
+        compressorInventoryItem.compressorControls.automaticShutdown = item.compressedAirControlsProperties.automaticShutdown;
+        compressorInventoryItem.compressorControls.unloadSumpPressure = item.compressedAirControlsProperties.unloadSumpPressure;
+
+        compressorInventoryItem.designDetails.blowdownTime = item.compressedAirDesignDetailsProperties.blowdownTime;
+        compressorInventoryItem.designDetails.modulatingPressureRange = item.compressedAirDesignDetailsProperties.modulatingPressureRange;
+        compressorInventoryItem.designDetails.inputPressure = item.compressedAirDesignDetailsProperties.inputPressure;
+        compressorInventoryItem.designDetails.designEfficiency = item.compressedAirDesignDetailsProperties.designEfficiency;
+        compressorInventoryItem.designDetails.serviceFactor = item.compressedAirDesignDetailsProperties.serviceFactor;
+        compressorInventoryItem.designDetails.noLoadPowerFM = item.compressedAirDesignDetailsProperties.noLoadPowerFM;
+        compressorInventoryItem.designDetails.noLoadPowerUL = item.compressedAirDesignDetailsProperties.noLoadPowerUL;
+        compressorInventoryItem.designDetails.maxFullFlowPressure = item.compressedAirDesignDetailsProperties.maxFullFlowPressure;
+
+        // todo watch object reassignments here
+        compressorInventoryItem.performancePoints.fullLoad = item.compressedAirPerformancePointsProperties.fullLoad;
+        compressorInventoryItem.performancePoints.maxFullFlow = item.compressedAirPerformancePointsProperties.maxFullFlow;
+        compressorInventoryItem.performancePoints.midTurndown = item.compressedAirPerformancePointsProperties.midTurndown;
+        compressorInventoryItem.performancePoints.turndown = item.compressedAirPerformancePointsProperties.turndown;
+        compressorInventoryItem.performancePoints.unloadPoint = item.compressedAirPerformancePointsProperties.unloadPoint;
+        compressorInventoryItem.performancePoints.noLoad = item.compressedAirPerformancePointsProperties.noLoad;
+        compressorInventoryItem.performancePoints.blowoff = item.compressedAirPerformancePointsProperties.blowoff;
+
+        compressorInventoryItem.centrifugalSpecifics.surgeAirflow = item.centrifugalSpecifics.surgeAirflow;
+        compressorInventoryItem.centrifugalSpecifics.maxFullLoadPressure = item.centrifugalSpecifics.maxFullLoadPressure;
+        compressorInventoryItem.centrifugalSpecifics.maxFullLoadCapacity = item.centrifugalSpecifics.maxFullLoadCapacity;
+        compressorInventoryItem.centrifugalSpecifics.minFullLoadPressure = item.centrifugalSpecifics.minFullLoadPressure;
+        compressorInventoryItem.centrifugalSpecifics.minFullLoadCapacity = item.centrifugalSpecifics.minFullLoadCapacity;
+        return compressorInventoryItem;
     }
 
 
@@ -539,7 +543,7 @@ export class CompressedAirAssessmentIntegrationService {
             return !(isMotorMatch && isNameplateDataMatch && isControlsMatch && isDesignDetailsMatch && isPerformancePointsMatch && isCentrifugalSpecificsMatch);
         });
 
-        console.log('checkConnectedAssessmentDiffers - differingConnectedValues', differingConnectedValues);
+        // console.log('checkConnectedAssessmentDiffers - differingConnectedValues', differingConnectedValues);
         this.setConnectionDiffers(differingAssessments.length !== 0, differingConnectedValues);
     }
 
@@ -701,7 +705,7 @@ export class CompressedAirAssessmentIntegrationService {
                                 return valuesEqual;
                             });
                         });
-                    } 
+                    }
                 });
 
             }

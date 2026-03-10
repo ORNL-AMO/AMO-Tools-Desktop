@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, ReduceRuntimeData, SystemProfileSetup } from '../../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ReduceRuntimeData } from '../../../../shared/models/compressed-air-assessment';
 import { FilterCompressorOptions } from './generic-compressor-modal/filter-compressors.pipe';
 import { CompressorInventoryItemClass } from '../../../calculations/CompressorInventoryItemClass';
 import { CompressedAirAssessmentService } from '../../../compressed-air-assessment.service';
