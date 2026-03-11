@@ -32,7 +32,6 @@ import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 import { FlowServiceProvider } from '../../services/FlowService';
-import ResultsPanel from './ResultsPanel';
 
 
 export interface DiagramProps {
@@ -41,8 +40,6 @@ export interface DiagramProps {
   parentContainer: ParentContainerDimensions,
   processDiagram?: WaterDiagram;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
-  diagramNotes: string;
-  setDiagramNotes: (notes: string) => void;
 }
 
 
@@ -53,6 +50,7 @@ const Diagram = (props: DiagramProps) => {
       return node;
     }
   })
+  const diagramNotes = useAppSelector((state: RootState) => state.diagram.diagramNotes);
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
@@ -112,16 +110,15 @@ const Diagram = (props: DiagramProps) => {
         calculatedData,
         recentNodeColors,
         recentEdgeColors,
-        diagramNotes: props.processDiagram.flowDiagramData.diagramNotes || '',
+        diagramNotes
       };
-
       // console.log('=== SAVED FlowDiagramData', JSON.parse(JSON.stringify(updatedDiagramData)));
       formatDataForMEASUR(updatedDiagramData);
 
       props.saveFlowDiagramData(updatedDiagramData);
       // console.log('=== SAVED FORMATTED FlowDiagramData', updatedDiagramData);
     }
-  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings]);
+  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings, diagramNotes]);
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -242,13 +239,7 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-              <MenuSidebar
-                shadowRootRef={props.shadowRoot}
-                diagramNotes={props.diagramNotes}
-                setDiagramNotes={props.setDiagramNotes}
-                saveFlowDiagramData={props.saveFlowDiagramData}
-                processDiagram={props.processDiagram}
-              />
+          <MenuSidebar shadowRootRef={props.shadowRoot}/>
           </SharedDrawer>
         )}
 

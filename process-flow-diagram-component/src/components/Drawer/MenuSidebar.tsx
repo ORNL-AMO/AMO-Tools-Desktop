@@ -1,4 +1,4 @@
-import React, { ChangeEvent, memo, useState, useEffect, useRef } from 'react';
+import React, { ChangeEvent, memo, useState } from 'react';
 import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
@@ -14,6 +14,7 @@ import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
 import { Node } from '@xyflow/react';
 import TextField from '@mui/material/TextField';
+import { setDiagramNotes } from '../Diagram/diagramReducer';
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(2),
@@ -25,10 +26,9 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
 }));
 
 const MenuSidebar = memo((props: MenuSidebarProps) => {
-  const { diagramNotes, setDiagramNotes, saveFlowDiagramData, processDiagram } = props;
   const theme = useTheme();
   const dispatch = useAppDispatch();
-
+  const diagramNotes = useAppSelector((state) => state.diagram.diagramNotes);
   const hasAssessment = useAppSelector(selectHasAssessment);
   const edgeType = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const strokeWidth = useAppSelector((state: RootState) => state.diagram.diagramOptions.strokeWidth);
@@ -98,7 +98,6 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             <Tab sx={{ fontSize: '.70rem' }} label="Build" />
             <Tab sx={{ fontSize: '.70rem' }} label="Results" />
             <Tab sx={{ fontSize: '.70rem' }} label="Options" />
-            <Tab sx={{ fontSize: '.70rem' }} label="Help" />
             <Tab sx={{ fontSize: '.70rem' }} label="Notes" />
             {!isDiagramValid && validationWindowLocation === 'alerts-tab'? 
               <Tab sx={{ fontSize: '.70rem' }} label={
@@ -112,34 +111,9 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               : 
               <Tab sx={{ fontSize: '.70rem' }} label="Alerts" disabled />
             }
+            <Tab sx={{ fontSize: '.70rem' }} label="Help" />
           </Tabs>
         </Box>
-        <TabPanel value={selectedTab} index={4}>
-          <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
-            <div className="form-group pt-4">
-              <TextField
-                id="diagramNotes"
-                name="diagramNotes"
-                label="Diagram Notes"
-                multiline
-                minRows={8}
-                value={diagramNotes}
-                onChange={e => {
-                  setDiagramNotes(e.target.value);
-                  if (saveFlowDiagramData && processDiagram) {
-                    saveFlowDiagramData({
-                      ...processDiagram.flowDiagramData,
-                      diagramNotes: e.target.value,
-                    });
-                  }
-                }}
-                placeholder="Add additional information for your diagram"
-                fullWidth
-                variant="outlined"
-              />
-            </div>
-          </Box>
-        </TabPanel>
 
         <TabPanel value={selectedTab} index={0}>
           <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', padding: '.5rem', marginTop: '.5rem', whiteSpace: "normal" }}>
@@ -368,6 +342,35 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         </TabPanel>
 
         <TabPanel value={selectedTab} index={3}>
+          <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
+            <div className="form-group pt-4">
+              <TextField
+                id="diagramNotes"
+                name="diagramNotes"
+                label="Diagram Notes"
+                multiline
+                minRows={8}
+                value={diagramNotes}
+                onChange={e => {
+                  dispatch(setDiagramNotes(e.target.value));
+                }}
+                placeholder="Add additional information for your diagram"
+                fullWidth
+                variant="outlined"
+              />
+            </div>
+          </Box>
+        </TabPanel>
+
+        <TabPanel value={selectedTab} index={4}>
+          <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
+                {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
+                  <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} />
+                }
+          </Box>
+        </TabPanel>
+
+        <TabPanel value={selectedTab} index={5}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
             <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', paddingTop: '.5rem' }}>
               Many diagram actions support keyboard input and key combinations:
@@ -395,14 +398,6 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             </Box>
           </Box>
         </TabPanel>
-
-        <TabPanel value={selectedTab} index={5}>
-          <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
-                {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
-                  <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} />
-                }
-          </Box>
-        </TabPanel>
       </>
   );
 });
@@ -410,10 +405,6 @@ export default MenuSidebar;
 
 export interface MenuSidebarProps {
   shadowRootRef: any;
-  diagramNotes: string;
-  setDiagramNotes: (notes: string) => void;
-  saveFlowDiagramData: (data: any) => void;
-  processDiagram: any;
 }
 
 

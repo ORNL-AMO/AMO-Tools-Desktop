@@ -35,8 +35,9 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
         isModalOpen: false,
         diagramAlert: {
           open: false,
-        }
-      },
+        },
+        diagramNotes: waterDiagram.flowDiagramData.diagramNotes
+      }
     },
     middleware: (getDefaultMiddleware) => {
       const listenerMiddleware = createListenerMiddleware();
@@ -150,6 +151,10 @@ export const selectTotalDischargeFlow = createSelector([selectCalculatedNodeData
   return nodeTotalFlow;
 });
 
+export const selectDiagramNotes = createSelector(
+  (state: RootState) => state.diagram.diagramNotes,
+  (diagramNotes) => diagramNotes
+);
 
 export const selectIntakeSourceNodes = createSelector(
   [selectNodes],
