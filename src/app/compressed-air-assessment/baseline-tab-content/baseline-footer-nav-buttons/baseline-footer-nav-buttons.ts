@@ -3,6 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { CompressedAirAssessmentValidation } from '../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentValidationService } from '../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
+import { CaRouteTree, SetupTabRoutes } from '../../routing/compressed-air-route-tree';
 
 @Component({
   selector: 'app-baseline-footer-nav-buttons',
@@ -81,7 +82,6 @@ export class BaselineFooterNavButtonsComponent {
   }
 
   setSetupTab() {
-
     if (this.router.url.includes('system-basics')) {
       this.setupTab = 'system-basics';
     } else if (this.router.url.includes('system-information')) {
@@ -95,35 +95,5 @@ export class BaselineFooterNavButtonsComponent {
     } else if (this.router.url.includes('end-uses')) {
       this.setupTab = 'end-uses';
     }
-  }
-}
-
-//TODO: Connect to routing
-export type SetupTabRoutes = 'system-basics' | 'system-information' | 'inventory-setup' | 'day-types-setup' | 'system-profile-setup' | 'end-uses';
-
-export const CaRouteTree = {
-  "system-basics": {
-    next: 'system-information',
-    back: null
-  },
-  "system-information": {
-    next: 'inventory-setup',
-    back: 'system-basics'
-  },
-  "inventory-setup": {
-    next: 'day-types-setup',
-    back: 'system-information'
-  },
-  "day-types-setup": {
-    next: 'system-profile-setup',
-    back: 'inventory-setup'
-  },
-  "system-profile-setup": {
-    next: 'end-uses',
-    back: 'day-types-setup'
-  },
-  "end-uses": {
-    next: null,
-    back: 'system-profile-setup'
   }
 }

@@ -75,8 +75,6 @@ export class CompressedAirBannerComponent implements OnInit {
     this.compressedAirAssessmentService.showModificationListModal.next(true);
   }
 
-
-
   openExportModal() {
     this.compressedAirAssessmentService.showExportModal.next(true);
   }
@@ -91,13 +89,22 @@ export class CompressedAirBannerComponent implements OnInit {
     this.coreService.showShareDataModal.next(true);
   }
 
-  setMainTab(){
-    if(this.router.url.includes('baseline')){
+  setMainTab() {
+    if (this.router.url.includes('baseline')) {
       this.mainTab = 'baseline';
-    } else if(this.router.url.includes('assessment')){
+    } else if (this.router.url.includes('assessment')) {
       this.mainTab = 'assessment';
-    } else if(this.router.url.includes('calculators')){
+    } else if (this.router.url.includes('calculators')) {
       this.mainTab = 'calculators';
     }
+  }
+
+  continue() {
+    //TODO: implement
+  }
+
+  back() {
+    //TODO: implement
+
   }
 }

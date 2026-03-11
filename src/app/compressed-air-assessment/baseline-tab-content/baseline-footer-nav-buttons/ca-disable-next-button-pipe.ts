@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { SetupTabRoutes } from './baseline-footer-nav-buttons';
 import { CompressedAirAssessmentValidation } from '../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
+import { SetupTabRoutes } from '../../routing/compressed-air-route-tree';
 
 @Pipe({
   name: 'caDisableNextButton',

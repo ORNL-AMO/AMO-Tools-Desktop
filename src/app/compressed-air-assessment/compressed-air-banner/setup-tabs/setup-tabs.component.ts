@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessmentValidation } from '../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 import { CompressedAirAssessmentValidationService } from '../../compressed-air-assessment-validation/compressed-air-assessment-validation.service';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { CaRouteTree, SetupTabRoutes } from '../../routing/compressed-air-route-tree';
 
 @Component({
   selector: 'app-setup-tabs',
@@ -11,7 +13,6 @@ import { CompressedAirAssessmentValidationService } from '../../compressed-air-a
 })
 export class SetupTabsComponent implements OnInit {
 
-  systemBasicsClassStatus: Array<string> = [];
   systemBasicsBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
   systemInformationClassStatus: Array<string> = [];
   systemInformationBadge: { display: boolean, hover: boolean } = { display: false, hover: false };
@@ -26,13 +27,25 @@ export class SetupTabsComponent implements OnInit {
 
   validationSub: Subscription;
   validationStatus: CompressedAirAssessmentValidation;
-  constructor(private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService) { }
+
+  setupTab: SetupTabRoutes;
+  constructor(private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService,
+    private router: Router, private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.validationSub = this.compressedAirAssessmentValidationService.validationStatus.subscribe(val => {
       this.validationStatus = val;
       this.setTabStatus();
-    })
+    });
+
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.setSetupTab();
+      }
+    });
+    this.setSetupTab();
   }
 
   ngOnDestroy() {
@@ -64,13 +77,6 @@ export class SetupTabsComponent implements OnInit {
     this.setDayTypesStatus(hasValidDayTypes, canViewDayTypes);
     this.setSystemProfileStatus(hasValidSystemProfile, canViewSystemProfile);
     this.setEndUsesStatus(hasValidEndUses, canViewEndUses);
-
-    // if ((hasValidDayTypes && hasValidSystemInformation && hasValidCompressors && hasValidSystemProfile && hasValidEndUses) || (this.setupTab == 'system-basics')) {
-    //   this.canContinue = true;
-    // } else {
-    //   this.canContinue = false;
-    // }
-
   }
 
   setSystemInformationStatus(hasValidSystemInformation: boolean) {
@@ -138,6 +144,43 @@ export class SetupTabsComponent implements OnInit {
       badge.display = true;
     } else {
       badge.display = false;
+    }
+  }
+
+  back() {
+    const backTab = CaRouteTree[this.setupTab].back;
+    if (backTab) {
+      this.router.navigate(['baseline/'+backTab], { relativeTo: this.route });
+    }
+  }
+
+  goToAssessment() {
+    this.router.navigate(['assessment'], { relativeTo: this.route });
+  }
+
+  continue() {
+    const nextTab = CaRouteTree[this.setupTab].next;
+    if (nextTab) {
+      this.router.navigate(['baseline/'+nextTab], { relativeTo: this.route });
+    } else {
+      //go to assessment
+      this.goToAssessment();
+    }
+  }
+
+  setSetupTab() {
+    if (this.router.url.includes('system-basics')) {
+      this.setupTab = 'system-basics';
+    } else if (this.router.url.includes('system-information')) {
+      this.setupTab = 'system-information';
+    } else if (this.router.url.includes('inventory-setup')) {
+      this.setupTab = 'inventory-setup';
+    } else if (this.router.url.includes('day-types-setup')) {
+      this.setupTab = 'day-types-setup';
+    } else if (this.router.url.includes('system-profile-setup')) {
+      this.setupTab = 'system-profile-setup';
+    } else if (this.router.url.includes('end-uses')) {
+      this.setupTab = 'end-uses';
     }
   }
 }
