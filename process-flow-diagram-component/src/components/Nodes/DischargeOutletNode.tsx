@@ -100,8 +100,7 @@ const DischargeOutletNode = ({ data, id, selected }: NodeProps<DiagramNode>) => 
         <CustomNodeToolbar 
           onEdit={onEditNode} 
           nodeData={data as ProcessFlowPart} 
-          selected={selected} 
-          id={id}
+          selected={selected}
         />
 
         <Typography sx={{ width: '100%' }} >

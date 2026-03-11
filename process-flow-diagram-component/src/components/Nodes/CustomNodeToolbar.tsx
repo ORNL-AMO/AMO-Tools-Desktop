@@ -7,8 +7,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import { ProcessFlowPart, getSystemEstimatedUnknownLosses, WaterUsingSystem } from 'process-flow-lib';
 import { selectTotalSourceFlow, selectNodeErrors, selectTotalDischargeFlow } from '../Diagram/store';
 import { getNodeHasErrorLevel } from 'process-flow-lib/water/logic/validation';
-
-const CustomNodeToolbar = ({ onEdit, nodeData, selected, id }: NodeToolbarProps) => {
+import * as storeSelectors from '../Diagram/store';
+const CustomNodeToolbar = ({ onEdit, nodeData, selected }: NodeToolbarProps) => {
     const NODE_UPPER_CORNER_LOCATION = `translate(0%, 0%) translate(166px, -45px)`;
     // const componentTypeColor = useAppSelector(selectedDataColor);
     const theme = useTheme();
@@ -21,9 +21,10 @@ const CustomNodeToolbar = ({ onEdit, nodeData, selected, id }: NodeToolbarProps)
 
     const backgroundColor = theme.palette.background.paper;
 
-    const totalSourceFlow = useAppSelector(state => selectTotalSourceFlow(state, id));
-    const nodeError = useAppSelector(state => selectNodeErrors(state)[id]);
-    const totalDischargeFlow = useAppSelector(state => selectTotalDischargeFlow(state, id));
+    const totalSourceFlow = useAppSelector(state => selectTotalSourceFlow(state, nodeData.diagramNodeId));
+    const nodeError = useAppSelector(state => selectNodeErrors(state)[nodeData.diagramNodeId]);
+    const totalDischargeFlow = useAppSelector(state => selectTotalDischargeFlow(state, nodeData.diagramNodeId));
+
     let totalUnknownLoss = getSystemEstimatedUnknownLosses(nodeData as WaterUsingSystem, totalSourceFlow, totalDischargeFlow);
 
     const isWaterSystemComponentType = [
@@ -64,8 +65,10 @@ const CustomNodeToolbar = ({ onEdit, nodeData, selected, id }: NodeToolbarProps)
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
+                                pointerEvents: 'none',
+                                backgroundColor: backgroundColor,
                             }}
-                            disabled
+                            onClick={() => {}}
                         >
                             {showWarningAlert && !getNodeHasErrorLevel(nodeError) && (
                                 <WarningIcon color="warning" sx={{ fontSize: 24, mr: getNodeHasErrorLevel(nodeError) ? 1 : 0 }} />
@@ -87,5 +90,4 @@ export interface NodeToolbarProps {
     onEdit: () => void;
     selected?: boolean;
     nodeData: ProcessFlowPart;
-    id: string;
 }

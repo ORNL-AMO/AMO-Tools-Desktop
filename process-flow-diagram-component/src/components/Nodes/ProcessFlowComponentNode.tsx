@@ -91,7 +91,7 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
             </span>
           </div>
         }
-        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} id={id} />
+        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>

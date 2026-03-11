@@ -24,7 +24,7 @@ const KnownLossNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   return (
     <div>
       <div className="node-inner-input" style={lossInnerStyle}>
-        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} id={id} />
+        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>

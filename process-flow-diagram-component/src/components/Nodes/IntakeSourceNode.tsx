@@ -64,7 +64,7 @@ const IntakeSourceNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
       <div className="node-inner-input" style={{
         padding: condensedPadding ? '0' : undefined
       }}>
-        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} id={id} />
+        <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
 
         <Typography sx={{ width: '100%' }} >
           {data.name}
