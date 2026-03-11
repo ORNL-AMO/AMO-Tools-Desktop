@@ -1,3 +1,4 @@
+@if(!printView){
 @if(compressedAirAssessment.modifications.length > 1){
 <div class="row justify-content-end">
     <div class="col-sm-12 col-md-6">
@@ -48,3 +49,39 @@
     </div>
     }
 </div>
+}@else {
+<!--print-->
+<!--baseline-->
+<div class="row">
+    <div class="col-12">
+        <app-inventory-performance-profile class="mt-auto" [context]="'report'" [printView]="printView"
+            [settings]="settings">
+        </app-inventory-performance-profile>
+        <app-centrifugal-graph [inReport]="true" [printView]="printView" [settings]="settings" [isBaseline]="true">
+        </app-centrifugal-graph>
+    </div>
+    <div class="col-12">
+        <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
+            [printView]="printView" [inReport]="true">
+        </app-compressor-summary-table>
+    </div>
+</div>
+<!--modifications-->
+@for(modificationResult of assessmentResults; track modificationResult.modification.modificationId){
+<div class="row">
+    <div class="col-12">
+        <app-inventory-performance-profile [context]="'report'" [printView]="printView" [settings]="settings"
+            [compressedAirAssessmentModificationResults]="modificationResult">
+        </app-inventory-performance-profile>
+        <app-centrifugal-graph [inReport]="true" [printView]="printView" [settings]="settings"
+            [compressedAirAssessmentModificationResults]="modificationResult">
+        </app-centrifugal-graph>
+    </div>
+    <div class="col-12">
+        <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
+            [printView]="printView" [inReport]="true" [modificationResults]="modificationResult">
+        </app-compressor-summary-table>
+    </div>
+</div>
+}
+}

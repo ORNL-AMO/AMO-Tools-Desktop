@@ -45,7 +45,10 @@ export class ProfileSummaryTableComponent implements OnChanges {
   }
 
   checkShowAuxiliary() {
-    let auxTotal: ProfileSummaryTotal = this.totals.find(totalData => { return totalData.auxiliaryPower != 0 });
-    return auxTotal != undefined;
+    if (!this.printView) {
+      return this.totals.some(totalData => { return totalData.auxiliaryPower != 0 });
+    } else {
+      return this.totalsForPrint.some(totalData => { return totalData.some(total => total.auxiliaryPower != 0) });
+    }
   }
 }

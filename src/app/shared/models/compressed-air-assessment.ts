@@ -1,4 +1,5 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
+import { CompressedAirModifiedDayTypeProfileSummary } from "../../compressed-air-assessment/calculations/modifications/CompressedAirModifiedDayTypeProfileSummary";
 import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
 import { ConnectedItem } from "../connected-inventory/integrations";
 
@@ -386,4 +387,5 @@ export interface ProfilesForPrint {
     dayType: CompressedAirDayType,
     profileSummary: Array<ProfileSummary>,
     totalsForPrint: Array<Array<ProfileSummaryTotal>>;
+    compressedAirModifiedDayTypeProfileSummary?: CompressedAirModifiedDayTypeProfileSummary
 }

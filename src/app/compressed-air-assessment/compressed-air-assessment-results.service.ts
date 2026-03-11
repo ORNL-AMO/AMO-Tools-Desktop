@@ -125,15 +125,26 @@ export class CompressedAirAssessmentResultsService {
   }
 
   setProfileSummariesForPrinting(compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults): Array<ProfilesForPrint> {
-    //TODO: Update with trimSelections and replacement compressors
     let profliesForPrint: Array<ProfilesForPrint> = compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.map(dayTypeProfileSummary => {
       return {
         dayType: dayTypeProfileSummary.dayType,
-        profileSummary: dayTypeProfileSummary.profileSummary,
+        profileSummary: this.getProfileSummariesForPrinting(dayTypeProfileSummary.profileSummary),
         totalsForPrint: this.getProfileSummariesTotalsForPrinting(dayTypeProfileSummary.profileSummaryTotals)
       }
     });
     return profliesForPrint;
   }
 
+  setModificationProfileSummariesForPrinting(modificationResults: CompressedAirAssessmentModificationResults): Array<ProfilesForPrint> {
+    let profliesForPrint: Array<ProfilesForPrint> = modificationResults.modifiedDayTypeProfileSummaries.map(dayTypeProfileSummary => {
+      let dayTypeModificationResult: DayTypeModificationResult = dayTypeProfileSummary.getDayTypeModificationResult();
+      return {
+        dayType: dayTypeProfileSummary.dayType,
+        profileSummary: this.getProfileSummariesForPrinting(dayTypeModificationResult.adjustedProfileSummary),
+        totalsForPrint: this.getProfileSummariesTotalsForPrinting(dayTypeModificationResult.profileSummaryTotals),
+        compressedAirModifiedDayTypeProfileSummary: dayTypeProfileSummary
+      }
+    });
+    return profliesForPrint;
+  }
 }

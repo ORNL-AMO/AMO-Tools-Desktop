@@ -28,12 +28,14 @@
     }@else{
     Baseline Inventory Performance Profile
     }
+    @if(!printView){
     <div class="input-group checkbox">
         <label class="p-2">
             <input type="checkbox" id="showAvgOpPoints" (change)="drawChart()" [(ngModel)]="showAvgOpPoints" />
             Graph Average Operating Points
         </label>
     </div>
+    }
 </div>
 }
 

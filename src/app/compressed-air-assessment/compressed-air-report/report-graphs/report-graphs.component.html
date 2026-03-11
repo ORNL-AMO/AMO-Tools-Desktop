@@ -1,4 +1,5 @@
 @if(assessmentResults && assessmentResults.length > 0){
+@if(!printView){
 <div class="btn-group mb-3 " role="group" aria-label="Graph selection">
     <button type="button" class="btn btn-secondary p-2" [class.active]="selectedGraph === 'cost'"
         (click)="setSelectedGraph('cost')">Cost</button>
@@ -59,6 +60,66 @@
     <div class="row justify-content-center">
         @for(dayTypeResult of baselineResults.dayTypeResults; track dayTypeResult.dayTypeId){
         <div class="col-12 col-md-6">
+            <app-compressed-air-airflow-savings-graph [assessmentResults]="assessmentResults"
+                [compressedAirAssessment]="compressedAirAssessment" [baselineResults]="baselineResults"
+                [dayTypeId]="dayTypeResult.dayTypeId" [settings]="settings"></app-compressed-air-airflow-savings-graph>
+        </div>
+        }
+    </div>
+</div>
+}
+}@else {
+<!--PRINT VIEW-->
+<!--COST GRAPH-->
+<div class="page-break-before print-graphs-container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <app-compressed-air-cost-savings-graph [assessmentResults]="assessmentResults"
+                [combinedDayTypeResults]="combinedDayTypeResults"
+                [compressedAirAssessment]="compressedAirAssessment"></app-compressed-air-cost-savings-graph>
+        </div>
+        @if(baselineResults.dayTypeResults && baselineResults.dayTypeResults.length > 1){
+        @for(dayTypeResult of baselineResults.dayTypeResults; track dayTypeResult.dayTypeId){
+        <div class="col-12">
+            <app-compressed-air-cost-savings-graph [assessmentResults]="assessmentResults"
+                [combinedDayTypeResults]="combinedDayTypeResults" [compressedAirAssessment]="compressedAirAssessment"
+                [baselineResults]="baselineResults"
+                [dayTypeId]="dayTypeResult.dayTypeId"></app-compressed-air-cost-savings-graph>
+        </div>
+        }
+        }
+    </div>
+    <div class="d-flex">
+        <div class="alert alert-info p-1 small">
+            Cost values do not include peak demand costs and are strictly accounting for energy costs.
+        </div>
+    </div>
+</div>
+<!--energy-->
+<div class="page-break-before print-graphs-container">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <app-compressed-air-energy-savings-graph [assessmentResults]="assessmentResults"
+                [combinedDayTypeResults]="combinedDayTypeResults"
+                [compressedAirAssessment]="compressedAirAssessment"></app-compressed-air-energy-savings-graph>
+        </div>
+        @if(baselineResults.dayTypeResults && baselineResults.dayTypeResults.length > 1){
+        @for(dayTypeResult of baselineResults.dayTypeResults; track dayTypeResult.dayTypeId){
+        <div class="col-12">
+            <app-compressed-air-energy-savings-graph [assessmentResults]="assessmentResults"
+                [combinedDayTypeResults]="combinedDayTypeResults" [compressedAirAssessment]="compressedAirAssessment"
+                [baselineResults]="baselineResults"
+                [dayTypeId]="dayTypeResult.dayTypeId"></app-compressed-air-energy-savings-graph>
+        </div>
+        }
+        }
+    </div>
+</div>
+<!--airflow-->
+<div class="page-break-before print-graphs-container">
+    <div class="row justify-content-center">
+        @for(dayTypeResult of baselineResults.dayTypeResults; track dayTypeResult.dayTypeId){
+        <div class="col-12">
             <app-compressed-air-airflow-savings-graph [assessmentResults]="assessmentResults"
                 [compressedAirAssessment]="compressedAirAssessment" [baselineResults]="baselineResults"
                 [dayTypeId]="dayTypeResult.dayTypeId" [settings]="settings"></app-compressed-air-airflow-savings-graph>

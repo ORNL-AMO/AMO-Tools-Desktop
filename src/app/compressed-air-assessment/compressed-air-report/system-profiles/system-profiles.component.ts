@@ -34,6 +34,11 @@ export class SystemProfilesComponent implements OnInit {
   compressorInventoryItems: Array<CompressorInventoryItem>;
   trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
   compressedAirModifiedDayTypeProfileSummary: CompressedAirModifiedDayTypeProfileSummary;
+
+  modificationsForPrint: Array<{
+    modification: Modification,
+    profilesForPrint: Array<ProfilesForPrint>,
+  }>
   constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
@@ -60,14 +65,14 @@ export class SystemProfilesComponent implements OnInit {
     }
     if (this.printView) {
       this.profliesForPrint = this.compressedAirAssessmentResultsService.setProfileSummariesForPrinting(this.compressedAirAssessmentBaselineResults);
+      this.modificationsForPrint = this.assessmentResults.map(result => {
+        let profilesForPrint: Array<ProfilesForPrint> = this.compressedAirAssessmentResultsService.setModificationProfileSummariesForPrinting(result);
+        return {
+          modification: result.modification,
+          profilesForPrint: profilesForPrint,
+        }
+      })
     }
-    // else if (!this.selectedDayType && this.selectedModification) {
-    //   //no day type (combined) and modification
-    //   let combinedModificationResult: { modification: Modification, combinedResults: DayTypeModificationResult } = this.combinedDayTypeResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
-    //   this.selectedProfileSummary = combinedModificationResult.combinedResults.adjustedProfileSummary;
-    //   this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(combinedModificationResult.combinedResults.adjustedCompressors, this.selectedDayType, this.selectedProfileSummary);
-    // }
-
 
   }
 }
