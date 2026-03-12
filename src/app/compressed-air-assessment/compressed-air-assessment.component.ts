@@ -4,7 +4,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { EGridService } from '../shared/helper-services/e-grid.service';
+import { AirPropertiesCsvService } from '../shared/helper-services/air-properties-csv.service';
 import { Assessment } from '../shared/models/assessment';
 import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
@@ -56,7 +56,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     private endUseDayTypeSetupService: DayTypeSetupService,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService,
     private settingsDbService: SettingsDbService, private compressedAirAssessmentService: CompressedAirAssessmentService,
-    private egridService: EGridService,
     private endUseFormService: EndUsesFormService,
     private genericCompressorDbService: GenericCompressorDbService, private inventoryService: InventoryService,
     private exploreOpportunitiesService: ExploreOpportunitiesService,
@@ -67,7 +66,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-compressed-air-assessment', undefined);
-    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.initializingAssessment = true;
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));

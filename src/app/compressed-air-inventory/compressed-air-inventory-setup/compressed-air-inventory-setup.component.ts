@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { CompressedAirInventoryService } from '../compressed-air-inventory.service';
-import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Subscription } from 'rxjs';
 
@@ -20,18 +19,12 @@ export class CompressedAirInventorySetupComponent implements OnInit {
   modalOpenSub: Subscription;
   isModalOpen: boolean;
   helpPanelTabSub: Subscription;
-  initPlantSetup: boolean = false;
   smallScreenTab: string = 'form';
 
-  constructor(private compressedAirInventoryService: CompressedAirInventoryService, private egridService: EGridService,
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService,
     private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
-    this.egridService.processCSVData().then(result => {
-      this.initPlantSetup = true;
-    }).catch(err => {
-      this.initPlantSetup = false;
-    });
     this.helpPanelTabSub = this.compressedAirInventoryService.helpPanelTab.subscribe(val => {
       if (val) {
         this.tabSelect = val;
