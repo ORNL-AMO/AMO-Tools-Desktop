@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as Papa from 'papaparse';
+import * as Papa from 'papaparse/papaparse.js';
 import * as _ from 'lodash';
 
 
@@ -14,25 +14,6 @@ export class EGridService {
 
   constructor() {}
   
-  getAllSubRegions() {
-    Papa.parse("assets/eGRID-co2-emissions.csv", {
-      header: true,
-      download: true,
-      complete: results => {
-        this.setCo2Emissions(results.data);
-      }
-    });
-
-    Papa.parse("assets/eGrid_zipcode_lookup.csv", {
-      header: true,
-      download: true,
-      complete: results => {
-        this.setSubRegionsByZip(results.data);
-      }
-    });
-    
-  }
-
   getEmissionsParsed(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       Papa.parse("assets/eGRID-co2-emissions.csv", {

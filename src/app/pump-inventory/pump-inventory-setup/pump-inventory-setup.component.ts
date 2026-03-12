@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { PumpInventoryService } from '../pump-inventory.service';
 
 @Component({
@@ -20,17 +19,11 @@ export class PumpInventorySetupComponent implements OnInit {
   modalOpenSub: Subscription;
   isModalOpen: boolean;
   helpPanelTabSub: Subscription;
-  initPlantSetup: boolean = false;
   smallScreenTab: string = 'form';
-  constructor(private pumpInventoryService: PumpInventoryService, private egridService: EGridService,
+  constructor(private pumpInventoryService: PumpInventoryService,
     private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
 
   ngOnInit(): void {
-    this.egridService.processCSVData().then(result => {
-      this.initPlantSetup = true;
-    }).catch(err => {
-      this.initPlantSetup = false;
-    });
     this.helpPanelTabSub = this.pumpInventoryService.helpPanelTab.subscribe(val => {
       if (val) {
         this.tabSelect = val;

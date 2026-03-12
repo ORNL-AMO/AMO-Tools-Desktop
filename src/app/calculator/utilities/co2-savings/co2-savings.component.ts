@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, HostListener, ElementRef } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Co2SavingsService, Co2SavingsData } from './co2-savings.service';
 import * as _ from 'lodash';
-import { EGridService } from '../../../shared/helper-services/e-grid.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 @Component({
@@ -47,13 +46,11 @@ export class Co2SavingsComponent implements OnInit {
   smallScreenTab: string = 'baseline';
 
   constructor(private settingsDbService: SettingsDbService,
-    private egridService: EGridService,
     private co2SavingsService: Co2SavingsService,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('calculator-UTIL-co2-savings');
-    this.egridService.getAllSubRegions();
     this.settings = this.settingsDbService.globalSettings;
     this.co2SavingsService.setEmissionsUnit(this.settings);
     if (this.settingsDbService.globalSettings.defaultPanelTab) {

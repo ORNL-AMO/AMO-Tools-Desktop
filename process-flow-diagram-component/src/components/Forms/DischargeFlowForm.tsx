@@ -44,6 +44,8 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     const settings = useAppSelector((state) => state.diagram.settings);
     const isIntakeSource = selectedNode.type === 'waterIntake';
 
+    const isWaterSystem = selectedNode.type === 'waterTreatment' || selectedNode.type === 'wasteWaterTreatment' || selectedNode.type === 'waterUsingSystem';
+
     const onFlowValueInputChange = (event, dischargeEdgeId: string, handleChange: (event: React.ChangeEvent<any>) => void) => {
         handleChange(event);
         let flowValue = event.target.value === "" ? null : Number(event.target.value);
@@ -196,7 +198,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                             </Box>
                         }
 
-                        {selectedNode.type === 'waterUsingSystem' &&
+                        {isWaterSystem &&
                             <Box sx={{
                                 display: 'flex',
                                 flexDirection: 'column',
