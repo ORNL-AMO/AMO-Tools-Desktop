@@ -65,3 +65,19 @@ li.page-item{
 .list-modal{
     z-index: 10000;
 }
+
+.progress-tabs li.page-item:not(.active) {
+    display: none;
+}
+
+.progress-tabs li.page-item.active, .progress-tabs li.page-item.chevron {
+    display: block;
+}
+
+.progress-tabs.mobile-tabs.display .mobile-link.display{
+    display: block;
+}
+
+.progress-tabs.mobile-tabs.display .mobile-link:not(.display){
+    display: none;
+}

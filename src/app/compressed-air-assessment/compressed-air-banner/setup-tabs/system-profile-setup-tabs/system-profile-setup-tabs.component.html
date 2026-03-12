@@ -1,47 +1,50 @@
 <!--NOT MOBILE-->
-<ul class="tabs subtabs progress-tabs compressed-air d-none d-lg-flex" [routerLinkActive]="'display'">
-    <li [routerLinkActive]="'active'">
-        <a routerLink="baseline/system-profile-setup/setup-profile">Setup Profile</a>
-    </li>
-    <li [routerLinkActive]="'active'">
-        <a routerLink="baseline/system-profile-setup/profile-summary">Profile Summary</a>
-    </li>
-    <li [routerLinkActive]="'active'">
-        <a routerLink="baseline/system-profile-setup/profile-graphs">Graphs</a>
-    </li>
-    <li [routerLinkActive]="'active'">
-        <a routerLink="baseline/system-profile-setup/annual-summary">Annual Summary</a>
-    </li>
-    <li [routerLinkActive]="'active'">
-        <a routerLink="baseline/system-profile-setup/compressor-summary">Compressor Summary</a>
-    </li>
-</ul>
-
-<!--MOBILE-->
-<nav class="hide-print d-lg-none tabs subtabs progress-tabs mobile-tabs compressed-air flex-wrap flex-fill" [routerLinkActive]="'display'">
-    <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill compressed-air">
-        <li class="page-item">
-            <a class="nav-link small" (click)="back()">
-                <span class="fa fa-chevron-left"></span></a>
-        </li>
-        <li class="mobile-link" [routerLinkActive]="'display active'">
+<div class="tabs-bar" [routerLinkActive]="'display'">
+    <ul class="tabs subtabs progress-tabs compressed-air d-none d-lg-flex">
+        <li [routerLinkActive]="'active'">
             <a routerLink="baseline/system-profile-setup/setup-profile">Setup Profile</a>
         </li>
-        <li class="mobile-link" [routerLinkActive]="'display active'">
+        <li [routerLinkActive]="'active'">
             <a routerLink="baseline/system-profile-setup/profile-summary">Profile Summary</a>
         </li>
-        <li class="mobile-link" [routerLinkActive]="'display active'">
+        <li [routerLinkActive]="'active'">
             <a routerLink="baseline/system-profile-setup/profile-graphs">Graphs</a>
         </li>
-        <li class="mobile-link" [routerLinkActive]="'display active'">
+        <li [routerLinkActive]="'active'">
             <a routerLink="baseline/system-profile-setup/annual-summary">Annual Summary</a>
         </li>
-        <li class="mobile-link" [routerLinkActive]="'display active'">
+        <li [routerLinkActive]="'active'">
             <a routerLink="baseline/system-profile-setup/compressor-summary">Compressor Summary</a>
         </li>
-        <li class="page-item">
-            <a class="nav-link small" (click)="continue()">
-                <span class="fa fa-chevron-right"></span></a>
-        </li>
     </ul>
-</nav>
+
+    <!--MOBILE-->
+    <nav class="hide-print d-lg-none tabs subtabs progress-tabs mobile-tabs compressed-air flex-wrap flex-fill"
+        [routerLinkActive]="'display'">
+        <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill compressed-air">
+            <li class="page-item">
+                <a class="nav-link small" (click)="back()">
+                    <span class="fa fa-chevron-left"></span></a>
+            </li>
+            <li class="mobile-link" [routerLinkActive]="'display active'">
+                <a routerLink="baseline/system-profile-setup/setup-profile">Setup Profile</a>
+            </li>
+            <li class="mobile-link" [routerLinkActive]="'display active'">
+                <a routerLink="baseline/system-profile-setup/profile-summary">Profile Summary</a>
+            </li>
+            <li class="mobile-link" [routerLinkActive]="'display active'">
+                <a routerLink="baseline/system-profile-setup/profile-graphs">Graphs</a>
+            </li>
+            <li class="mobile-link" [routerLinkActive]="'display active'">
+                <a routerLink="baseline/system-profile-setup/annual-summary">Annual Summary</a>
+            </li>
+            <li class="mobile-link" [routerLinkActive]="'display active'">
+                <a routerLink="baseline/system-profile-setup/compressor-summary">Compressor Summary</a>
+            </li>
+            <li class="page-item">
+                <a class="nav-link small" (click)="continue()">
+                    <span class="fa fa-chevron-right"></span></a>
+            </li>
+        </ul>
+    </nav>
+</div>

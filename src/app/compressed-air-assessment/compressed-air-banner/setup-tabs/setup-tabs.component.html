@@ -33,7 +33,7 @@
 </ul>
 
 <!--MOBILE SCREENS-->
-<nav class="hide-print d-flex d-none d-lg-none tabs subtabs progress-tabs compressed-air flex-wrap flex-fill">
+<nav class="hide-print d-lg-none tabs subtabs progress-tabs mobile-tabs compressed-air flex-wrap flex-fill" [routerLinkActive]="'display'">
     <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill compressed-air">
         <li class="page-item chevron" [ngClass]="{'disabled': setupTab == 'system-basics'}">
             <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': setupTab == 'system-basics'}">

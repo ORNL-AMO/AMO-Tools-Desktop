@@ -7,7 +7,7 @@ import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/sec
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-compressed-air-banner',
@@ -30,7 +30,8 @@ export class CompressedAirBannerComponent implements OnInit {
     private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
     private coreService: CoreService,
-    private router: Router) { }
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.selectedModificationSub = this.compressedAirAssessmentService.selectedModification.subscribe(val => {
@@ -99,12 +100,41 @@ export class CompressedAirBannerComponent implements OnInit {
     }
   }
 
+  /*
+  MAIN TABS:
+  baseline
+  assessment
+  diagram
+  report
+  sankey
+  calculators
+  */
+
   continue() {
-    //TODO: implement
+    if(this.router.url.includes('baseline')){
+      this.router.navigate(['assessment/explore-opportunities'], { relativeTo: this.route });
+    }else if(this.router.url.includes('assessment')){
+      this.router.navigate(['diagram'], { relativeTo: this.route });
+    }else if(this.router.url.includes('diagram')){
+      this.router.navigate(['report'], { relativeTo: this.route });
+    }else if(this.router.url.includes('report')){
+      this.router.navigate(['sankey'], { relativeTo: this.route });
+    }else if(this.router.url.includes('sankey')){
+      this.router.navigate(['calculators'], { relativeTo: this.route });
+    }
   }
 
   back() {
-    //TODO: implement
-
+    if(this.router.url.includes('assessment')){
+      this.router.navigate(['baseline'], { relativeTo: this.route });
+    }else if(this.router.url.includes('diagram')){
+      this.router.navigate(['assessment/explore-opportunities'], { relativeTo: this.route });
+    }else if(this.router.url.includes('report')){
+      this.router.navigate(['diagram'], { relativeTo: this.route });
+    }else if(this.router.url.includes('sankey')){
+      this.router.navigate(['report'], { relativeTo: this.route });
+    }else if(this.router.url.includes('calculators')){
+      this.router.navigate(['sankey'], { relativeTo: this.route });
+    }
   }
 }
