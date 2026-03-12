@@ -15,7 +15,6 @@ import {
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
-
 import { formatDataForMEASUR, getEdgeTypesFromString, updateAssessmentCreatedNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
@@ -32,7 +31,6 @@ import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 import { FlowServiceProvider } from '../../services/FlowService';
-import ResultsPanel from './ResultsPanel';
 
 
 export interface DiagramProps {

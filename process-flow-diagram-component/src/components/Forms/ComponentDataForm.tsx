@@ -1,8 +1,8 @@
-import { Alert, Box, Button, Chip, createTheme, FormControl, InputAdornment, InputLabel, MenuItem, Select, Typography, useTheme, } from "@mui/material";
+import { Alert, Box, Button, Chip, createTheme, FormControl, InputAdornment, InputLabel, MenuItem, Select } from "@mui/material";
 import { getEdgeSourceAndTarget } from "../Diagram/FlowUtils";
 import { Edge, getConnectedEdges, Node } from "@xyflow/react";
 
-import React, { memo, useState } from "react";
+import { memo, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import FlowValueDisplay from "../Diagram/FlowValueDisplay";
@@ -12,7 +12,7 @@ import SourceFlowForm from "./SourceFlowForm";
 import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
 import DischargeFlowForm from "./DischargeFlowForm";
 import InvalidIcon from "../../validation/InvalidIcon";
-import { blue, yellow } from "@mui/material/colors";
+import { yellow } from "@mui/material/colors";
 import SelectTreatmentType from "./SelectTreatmentType";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import CalculateIcon from '@mui/icons-material/Calculate';
@@ -112,7 +112,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
 
     return (
         <>
-            {isWaterUsingSystem && totalDischargeFlow > totalSourceFlow && totalUnknownLoss !== 0 &&
+            {isWaterUsingSystem && totalUnknownLoss > 0 &&
                 <Alert severity="warning" sx={{ marginBottom: '1rem', width: '100%' }}>
                     <span>System Imbalance: </span>
                     <span>{totalUnknownLoss}</span>
