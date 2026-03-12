@@ -18,7 +18,6 @@ export class AssessmentTabsComponent {
   profile-summary-graphs
   */
 
-
   selectedModification: Modification;
   selectedModificationSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,

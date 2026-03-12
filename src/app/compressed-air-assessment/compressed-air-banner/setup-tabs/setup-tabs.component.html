@@ -1,135 +1,90 @@
-<!--NON MOBILE SCREENS-->
-<ul class="tabs subtabs progress-tabs compressed-air d-none d-lg-block" [routerLinkActive]="'display'">
-    <li [routerLinkActive]="'active'">
-        <a routerLink="baseline/system-basics">
-            <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
-                class="step-number">1</span>Assessment Basics</a>
-    </li>
-    <li [ngClass]="systemInformationClassStatus" [routerLinkActive]="'active'">
-        <a routerLink="baseline/system-information">
-            <span (mouseenter)="showTooltip(systemInformationBadge)" (mouseleave)="hideTooltip(systemInformationBadge)"
-                class="step-number">2</span>System Information</a>
-    </li>
-    <li [ngClass]="inventoryStatus" [routerLinkActive]="'active'">
-        <a routerLink="baseline/inventory-setup">
-            <span (mouseenter)="showTooltip(inventoryBadge)" (mouseleave)="hideTooltip(inventoryBadge)"
-                class="step-number">3</span>Inventory</a>
-    </li>
-    <li [ngClass]="dayTypesClassStatus" [routerLinkActive]="'active'">
-        <a routerLink="baseline/day-types-setup">
-            <span (mouseenter)="showTooltip(dayTypesBadge)" (mouseleave)="hideTooltip(dayTypesBadge)"
-                class="step-number">4</span>Day Types</a>
-    </li>
-    <li [ngClass]="systemProfileStatus" [routerLinkActive]="'active'">
-        <a routerLink="baseline/system-profile-setup">
-            <span (mouseenter)="showTooltip(systemProfileBadge)" (mouseleave)="hideTooltip(systemProfileBadge)"
-                class="step-number">5</span>System Profile</a>
-    </li>
-    <li [ngClass]="endUsesStatus" [routerLinkActive]="'active'">
-        <a routerLink="baseline/end-uses">
-            <span (mouseenter)="showTooltip(endUsesBadge)" (mouseleave)="hideTooltip(endUsesBadge)"
-                class="step-number">6</span>End Uses</a>
-    </li>
-</ul>
-
-<!--MOBILE SCREENS-->
-<nav class="hide-print d-lg-none tabs subtabs progress-tabs mobile-tabs compressed-air flex-wrap flex-fill" [routerLinkActive]="'display'">
-    <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill compressed-air">
-        <li class="page-item chevron" [ngClass]="{'disabled': setupTab == 'system-basics'}">
-            <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': setupTab == 'system-basics'}">
-                <span class="fa fa-chevron-left"></span></a>
-        </li>
-        <li class="page-item" [routerLinkActive]="'active'">
+<div class="ca-setup-tabs" [routerLinkActive]="'display'">
+    <!--NON MOBILE SCREENS-->
+    <ul class="tabs subtabs progress-tabs compressed-air d-none d-lg-block">
+        <li [routerLinkActive]="'active'">
             <a routerLink="baseline/system-basics">
                 <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
                     class="step-number">1</span>Assessment Basics</a>
-
         </li>
-        <li class="page-item" [ngClass]="systemInformationClassStatus" [routerLinkActive]="'active'">
+        <li [ngClass]="systemInformationClassStatus" [routerLinkActive]="'active'">
             <a routerLink="baseline/system-information">
                 <span (mouseenter)="showTooltip(systemInformationBadge)"
                     (mouseleave)="hideTooltip(systemInformationBadge)" class="step-number">2</span>System
                 Information</a>
-
         </li>
-        <li class="page-item" [ngClass]="inventoryStatus" [routerLinkActive]="'active'">
+        <li [ngClass]="inventoryStatus" [routerLinkActive]="'active'">
             <a routerLink="baseline/inventory-setup">
                 <span (mouseenter)="showTooltip(inventoryBadge)" (mouseleave)="hideTooltip(inventoryBadge)"
                     class="step-number">3</span>Inventory</a>
-
         </li>
-        <li class="page-item" [ngClass]="dayTypesClassStatus" [routerLinkActive]="'active'">
+        <li [ngClass]="dayTypesClassStatus" [routerLinkActive]="'active'">
             <a routerLink="baseline/day-types-setup">
                 <span (mouseenter)="showTooltip(dayTypesBadge)" (mouseleave)="hideTooltip(dayTypesBadge)"
                     class="step-number">4</span>Day Types</a>
-
         </li>
-        <li class="page-item" [ngClass]="systemProfileStatus" [routerLinkActive]="'active'">
+        <li [ngClass]="systemProfileStatus" [routerLinkActive]="'active'">
             <a routerLink="baseline/system-profile-setup">
                 <span (mouseenter)="showTooltip(systemProfileBadge)" (mouseleave)="hideTooltip(systemProfileBadge)"
                     class="step-number">5</span>System Profile</a>
-
         </li>
-        <li class="page-item" [ngClass]="endUsesStatus" [routerLinkActive]="'active'">
+        <li [ngClass]="endUsesStatus" [routerLinkActive]="'active'">
             <a routerLink="baseline/end-uses">
                 <span (mouseenter)="showTooltip(endUsesBadge)" (mouseleave)="hideTooltip(endUsesBadge)"
                     class="step-number">6</span>End Uses</a>
-
-        </li>
-        @let disableNext = setupTab | caDisableNextButton: validationStatus;
-        <li class="page-item chevron" [ngClass]="{'disabled': disableNext}">
-            <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': disableNext}">
-                <span class="fa fa-chevron-right"></span></a>
         </li>
     </ul>
-</nav>
 
+    <!--MOBILE SCREENS-->
+    <nav class="hide-print d-lg-none tabs subtabs progress-tabs mobile-tabs compressed-air flex-wrap flex-fill"
+        [routerLinkActive]="'display'">
+        <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill compressed-air">
+            <li class="page-item chevron" [ngClass]="{'disabled': setupTab == 'system-basics'}">
+                <a class="nav-link small" (click)="back()" [ngClass]="{'disabled': setupTab == 'system-basics'}">
+                    <span class="fa fa-chevron-left"></span></a>
+            </li>
+            <li class="page-item" [routerLinkActive]="'active'">
+                <a routerLink="baseline/system-basics">
+                    <span (mouseenter)="showTooltip(systemBasicsBadge)" (mouseleave)="hideTooltip(systemBasicsBadge)"
+                        class="step-number">1</span>Assessment Basics</a>
+
+            </li>
+            <li class="page-item" [ngClass]="systemInformationClassStatus" [routerLinkActive]="'active'">
+                <a routerLink="baseline/system-information">
+                    <span (mouseenter)="showTooltip(systemInformationBadge)"
+                        (mouseleave)="hideTooltip(systemInformationBadge)" class="step-number">2</span>System
+                    Information</a>
+
+            </li>
+            <li class="page-item" [ngClass]="inventoryStatus" [routerLinkActive]="'active'">
+                <a routerLink="baseline/inventory-setup">
+                    <span (mouseenter)="showTooltip(inventoryBadge)" (mouseleave)="hideTooltip(inventoryBadge)"
+                        class="step-number">3</span>Inventory</a>
+
+            </li>
+            <li class="page-item" [ngClass]="dayTypesClassStatus" [routerLinkActive]="'active'">
+                <a routerLink="baseline/day-types-setup">
+                    <span (mouseenter)="showTooltip(dayTypesBadge)" (mouseleave)="hideTooltip(dayTypesBadge)"
+                        class="step-number">4</span>Day Types</a>
+
+            </li>
+            <li class="page-item" [ngClass]="systemProfileStatus" [routerLinkActive]="'active'">
+                <a routerLink="baseline/system-profile-setup">
+                    <span (mouseenter)="showTooltip(systemProfileBadge)" (mouseleave)="hideTooltip(systemProfileBadge)"
+                        class="step-number">5</span>System Profile</a>
+
+            </li>
+            <li class="page-item" [ngClass]="endUsesStatus" [routerLinkActive]="'active'">
+                <a routerLink="baseline/end-uses">
+                    <span (mouseenter)="showTooltip(endUsesBadge)" (mouseleave)="hideTooltip(endUsesBadge)"
+                        class="step-number">6</span>End Uses</a>
+
+            </li>
+            @let disableNext = setupTab | caDisableNextButton: validationStatus;
+            <li class="page-item chevron" [ngClass]="{'disabled': disableNext}">
+                <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled': disableNext}">
+                    <span class="fa fa-chevron-right"></span></a>
+            </li>
+        </ul>
+    </nav>
+</div>
 <app-system-profile-setup-tabs></app-system-profile-setup-tabs>
-
-<!-- <ul *ngIf="setupTab == 'system-profile'" class="tabs subtabs progress-tabs compressed-air d-none d-lg-block">
-    <li [ngClass]="{'active': profileTab == 'setup'}">
-        <a (click)="changeProfileTab('setup')">Setup Profile</a>
-    </li>
-    <li [ngClass]="{'active': profileTab == 'summary'}">
-        <a (click)="changeProfileTab('summary')">Profile Summary</a>
-    </li>
-    <li [ngClass]="{'active': profileTab == 'graphs'}">
-        <a (click)="changeProfileTab('graphs')">Graphs</a>
-    </li>
-    <li [ngClass]="{'active': profileTab == 'annual-summary'}">
-        <a (click)="changeProfileTab('annual-summary')">Annual Summary</a>
-    </li>
-    <li [ngClass]="{'active': profileTab == 'compressor-summary'}">
-        <a (click)="changeProfileTab('compressor-summary')">Compressor Summary</a>
-    </li>
-</ul> -->
-
-<!-- <nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs compressed-air flex-wrap flex-fill">
-    <ul *ngIf="setupTab == 'system-profile'"
-        class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill compressed-air">
-        <li class="page-item" [ngClass]="{'disabled': profileTab == 'setup'}">
-            <a class="nav-link small" (click)="backProfileTab()" [ngClass]="{'disabled': profileTab == 'setup'}">
-                <span class="fa fa-chevron-left"></span></a>
-        </li>
-        <li [ngClass]="{'active': profileTab == 'setup'}" *ngIf="profileTab == 'setup'">
-            <a (click)="changeProfileTab('setup')">Setup Profile</a>
-        </li>
-        <li [ngClass]="{'active': profileTab == 'summary'}" *ngIf="profileTab == 'summary'">
-            <a (click)="changeProfileTab('summary')">Profile Summary</a>
-        </li>
-        <li [ngClass]="{'active': profileTab == 'graphs'}" *ngIf="profileTab == 'graphs'">
-            <a (click)="changeProfileTab('graphs')">Graphs</a>
-        </li>
-        <li [ngClass]="{'active': profileTab == 'annual-summary'}" *ngIf="profileTab == 'annual-summary'">
-            <a (click)="changeProfileTab('annual-summary')">Annual Summary</a>
-        </li>
-        <li [ngClass]="{'active': profileTab == 'compressor-summary'}" *ngIf="profileTab == 'compressor-summary'">
-            <a (click)="changeProfileTab('compressor-summary')">Compressor Summary</a>
-        </li>
-        <li class="page-item" [ngClass]="{'disabled': profileTab == 'compressor-summary'}">
-            <a class="nav-link small" (click)="continueProfileTab()"
-                [ngClass]="{'disabled': profileTab == 'compressor-summary'}">
-                <span class="fa fa-chevron-right"></span></a>
-        </li>
-    </ul>
-</nav> -->

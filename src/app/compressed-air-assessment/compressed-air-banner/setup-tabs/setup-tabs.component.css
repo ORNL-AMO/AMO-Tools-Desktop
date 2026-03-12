@@ -17,3 +17,11 @@ li.page-item{
 .progress-tabs li.page-item.active {
     display: block;
 }
+
+.ca-setup-tabs{
+    display: none;
+}
+
+.ca-setup-tabs.display{
+    display: block;
+}

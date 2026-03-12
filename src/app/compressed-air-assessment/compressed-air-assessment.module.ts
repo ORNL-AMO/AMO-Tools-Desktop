@@ -118,7 +118,6 @@ import { MidTurndownComponent } from './baseline-tab-content/inventory-setup/inv
 import { FlaModalComponent } from './baseline-tab-content/inventory-setup/inventory/nameplate-data/fla-modal/fla-modal.component';
 import { EndUseTableComponent } from './baseline-tab-content/end-uses-setup/end-use-table/end-use-table.component';
 import { EndUseChartComponent } from './baseline-tab-content/end-uses-setup/end-use-chart/end-use-chart.component';
-import { IntervalHourLabelModule } from './interval-hour-label/interval-hour-label.module';
 import { EndUseHelpComponent } from './baseline-tab-content/end-uses-setup/end-use-help/end-use-help.component';
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { BaselineTabContentComponent } from './baseline-tab-content/baseline-tab-content';
@@ -300,7 +299,6 @@ import { ReplaceCompressorHelpComponent } from './assessment-tab-content/explore
     Co2HelpTextModule,
     CentrifugalGraphModule,
     BleedTestModule,
-    IntervalHourLabelModule,
     ImportExportModule,
     EndUseDayTypeSetupModule,
     CompressedAirSankeyModule,

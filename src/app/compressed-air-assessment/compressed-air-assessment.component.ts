@@ -1,10 +1,8 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { AirPropertiesCsvService } from '../shared/helper-services/air-properties-csv.service';
 import { Assessment } from '../shared/models/assessment';
 import { CompressedAirAssessment } from '../shared/models/compressed-air-assessment';
 import { Settings } from '../shared/models/settings';
@@ -27,23 +25,11 @@ import { GenericCompressorDbService } from '../shared/generic-compressor-db.serv
   standalone: false
 })
 export class CompressedAirAssessmentComponent implements OnInit {
-  @ViewChild('header', { static: false }) header: ElementRef;
-  @ViewChild('footer', { static: false }) footer: ElementRef;
-  @ViewChild('content', { static: false }) content: ElementRef;
-  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
-  containerHeight: number;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setContainerHeight();
-  }
 
   compressedAirAssessment: CompressedAirAssessment;
   assessment: Assessment;
   settings: Settings;
-  showUpdateUnitsModal: boolean = false;
-  oldSettings: Settings;
   compressedAirAsseementSub: Subscription;
-  disableNext: boolean = false;
   isModalOpen: boolean;
   modalOpenSub: Subscription;
   showWelcomeScreen: boolean = false;
@@ -51,7 +37,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
   showExportModalSub: Subscription;
   initializingAssessment: boolean = true;
   connectedInventoryDataSub: Subscription;
-  hasConnectedMotorItem: boolean;
   constructor(private activatedRoute: ActivatedRoute,
     private endUseDayTypeSetupService: DayTypeSetupService,
     private convertCompressedAirService: ConvertCompressedAirService, private assessmentDbService: AssessmentDbService,
@@ -101,17 +86,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
       }
     })
 
-    //TODO: see when to fire checkConnectedInventoryDiffers
-    // this.setupTabSub = this.compressedAirAssessmentService.setupTab.subscribe(val => {
-    //   this.setupTab = val;
-    //   if (this.assessment.compressedAirAssessment.connectedItem && this.assessment.compressedAirAssessment.connectedItem.inventoryType === 'compressed-air') {
-    //     this.compressedAirAssessmentIntegrationService.checkConnectedInventoryDiffers(this.assessment);
-    //   }
-    //   this.setDisableNext();
-    //   this.setContainerHeight();
-    // });
-
-
     this.modalOpenSub = this.compressedAirAssessmentService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
     });
@@ -122,7 +96,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     });
 
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
-      this.hasConnectedMotorItem = this.compressedAirAssessment.connectedItem && this.compressedAirAssessment.connectedItem.inventoryType === 'motor';
       if (connectedInventoryData.shouldRestoreConnectedValues) {
         const selectedCompressor = this.inventoryService.selectedCompressor.getValue();
         this.compressedAirAssessmentIntegrationService.restoreConnectedAssessmentValues(selectedCompressor, connectedInventoryData, this.compressedAirAssessment);
@@ -141,7 +114,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.showExportModalSub.unsubscribe();
     this.inventoryService.selectedCompressor.next(undefined);
     this.inventoryService.tabSelect.next('inventory');
-    // this.endUseService.endUses.next(undefined);
     this.endUseFormService.selectedEndUse.next(undefined);
     this.endUseFormService.selectedDayTypeEndUse.next(undefined);
     this.endUseDayTypeSetupService.endUseDayTypeSetup.next(undefined)
@@ -153,12 +125,7 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.setContainerHeight();
-    }, 100);
-  }
-
+  //initialize settings for assessment
   async addSettings(settings: Settings) {
     delete settings.id;
     delete settings.directoryId;
@@ -167,7 +134,8 @@ export class CompressedAirAssessmentComponent implements OnInit {
     let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-
+    //if settings are metric convert default assessment to metric
+    //default assessment is created in imperial
     if (this.settings.unitsOfMeasure == 'Metric') {
       let oldSettings: Settings = JSON.parse(JSON.stringify(this.settings));
       oldSettings.unitsOfMeasure = 'Imperial';
@@ -177,32 +145,9 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.compressedAirAssessmentService.settings.next(this.settings);
   }
 
-  setContainerHeight() {
-    if (this.content) {
-      setTimeout(() => {
-        let contentHeight = this.content.nativeElement.offsetHeight;
-        let headerHeight = this.header.nativeElement.offsetHeight;
-        let footerHeight = 0;
-        if (this.footer) {
-          footerHeight = this.footer.nativeElement.offsetHeight;
-        }
-        this.containerHeight = contentHeight - headerHeight - footerHeight;
-        if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
-          this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
-        }
-      }, 100);
-    }
-  }
-
-  saveCompressedAirAssessment(getNewCompressedAirAssessment: CompressedAirAssessment) {
-    this.compressedAirAssessment = getNewCompressedAirAssessment;
-    this.save(this.compressedAirAssessment);
-  }
-
   async save(compressedAirAssessment: CompressedAirAssessment) {
     this.assessment.compressedAirAssessment = compressedAirAssessment;
     this.compressedAirAssessmentIntegrationService.setCompressedAirAssessmentConnectedInventoryData(this.assessment.compressedAirAssessment, this.settings);
-    this.hasConnectedMotorItem = compressedAirAssessment.connectedItem && compressedAirAssessment.connectedItem.inventoryType === 'motor';
     if (this.assessment.compressedAirAssessment.connectedItem && this.assessment.compressedAirAssessment.connectedItem.inventoryType === 'compressed-air') {
       this.compressedAirAssessmentIntegrationService.checkConnectedInventoryDiffers(this.assessment);
     }
@@ -229,10 +174,5 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   closeExportModal(input: boolean) {
     this.compressedAirAssessmentService.showExportModal.next(input);
-  }
-
-  saveAndUpdateSettings() {
-    // this.getSettings();
-    // this.save();
   }
 }
