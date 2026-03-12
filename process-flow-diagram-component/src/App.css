@@ -380,6 +380,9 @@ a {
   pointer-events: all;
 }
 
+.MuiTabs-scrollButtons.Mui-disabled {
+  display: none !important;
+}
 
 .node-button {
   width: 36px;
