@@ -62,8 +62,6 @@ export class FlowReallocationResults {
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
-        //TODO: Don't think this is necessary..
-        this.profileSummary = this.profileSummary.filter(summary => { return summary.dayTypeId == dayType.dayTypeId });
         totals.forEach(total => {
             this.adjustProfile(total.airflow,
                 settings,
@@ -132,7 +130,6 @@ export class FlowReallocationResults {
                     data.summaryData.order = orderCount;
                 }
                 reduceRuntimeShutdownTimer = reduceRuntimeData.automaticShutdownTimer;
-                console.log(reduceRuntimeShutdownTimer);
             }
             if (data.summaryData.order != 0 && isTurnedOn) {
                 let compressor: CompressorInventoryItemClass = adjustedCompressors.find(item => { return item.findItem(data.compressorId) });

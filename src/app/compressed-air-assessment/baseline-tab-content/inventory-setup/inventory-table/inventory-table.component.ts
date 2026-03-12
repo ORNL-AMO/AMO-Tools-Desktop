@@ -53,10 +53,6 @@ export class InventoryTableComponent implements OnInit {
         if (!this.isReplacementInventory) {
           this.compressorInventoryItems = val.compressorInventoryItems;
         } else {
-          //todo: data update
-          if (!val.replacementCompressorInventoryItems) {
-            val.replacementCompressorInventoryItems = [];
-          }
           this.compressorInventoryItems = val.replacementCompressorInventoryItems;
         }
         this.compressorInventoryItems.forEach(compressor => {
@@ -135,7 +131,6 @@ export class InventoryTableComponent implements OnInit {
       let itemIndex: number = compressedAirAssessment.replacementCompressorInventoryItems.findIndex(inventoryItem => { return inventoryItem.itemId == this.deleteSelectedId });
       compressedAirAssessment.replacementCompressorInventoryItems.splice(itemIndex, 1);
       let selectedModification: Modification = this.compressedAirAssessmentService.selectedModification.getValue();
-      //TODO: update modificaitons
       compressedAirAssessment.modifications.forEach(modification => {
         modification.replaceCompressor.replacementCompressorMapping = modification.replaceCompressor.replacementCompressorMapping.filter(mapping => { return mapping.replacementCompressorId != this.deleteSelectedId });
         modification.reduceRuntime.runtimeData = modification.reduceRuntime.runtimeData.filter(data => { return data.compressorId != this.deleteSelectedId });

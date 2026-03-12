@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-baseline-system-profile-setup',
@@ -10,18 +11,22 @@ import { NavigationEnd, Router } from '@angular/router';
 export class BaselineSystemProfileSetupComponent {
 
   showProfileSetupForm: boolean;
-
+  eventsSub: Subscription;
   constructor(private router: Router) {
   }
 
   ngOnInit() {
-    this.router.events.subscribe(event => {
+    this.eventsSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.setShowProfileSetupForm();
       }
     });
     //event doesn't fire on init
     this.setShowProfileSetupForm();
+  }
+
+  ngOnDestroy(){
+    this.eventsSub.unsubscribe();
   }
 
   setShowProfileSetupForm() {

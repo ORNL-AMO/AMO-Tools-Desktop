@@ -19,7 +19,7 @@ export function systemPressureChangeAdjustProfile(originalCompressors: Array<Com
     let orderedCompressors: Array<CompressorInventoryItemClass> = _.orderBy(adjustedCompressors, (compressor) => {
         return compressor.performancePoints.fullLoad.dischargePressure
     }, 'desc');
-    //iterate hour intervals. TODO: HANDLE 1 day interval
+    //iterate hour intervals.
     for (let i = 0; i < profileSummary[0].profileSummaryData.length; i++) {
         let newOrder: number = 1;
         //iterate new ordered compressors and update corresponding summary order

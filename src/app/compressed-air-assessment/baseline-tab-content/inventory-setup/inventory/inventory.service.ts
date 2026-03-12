@@ -149,7 +149,6 @@ export class InventoryService {
   }
 
   addNewCompressor(compressedAirAssessment: CompressedAirAssessment, newInventoryItem?: CompressorInventoryItem): { newInventoryItem: CompressorInventoryItem, compressedAirAssessment: CompressedAirAssessment } {
-    console.log('adding new compressor');
     let inventoryTab: 'inventory' | 'replacementInventory' | 'help' = this.tabSelect.getValue();
     if (!newInventoryItem) {
       newInventoryItem = this.getNewInventoryItem();

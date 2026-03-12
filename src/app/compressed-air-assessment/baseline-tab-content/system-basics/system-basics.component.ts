@@ -18,7 +18,6 @@ export class SystemBasicsComponent {
     constructor(private compressedAirAssessmentService: CompressedAirAssessmentService) { }
 
     canDeactivate(): Observable<boolean> {
-        console.log(this.showUpdateDataReminder);
         if (this.showUpdateDataReminder) {
             return this.initUpdateUnitsModal();
         }

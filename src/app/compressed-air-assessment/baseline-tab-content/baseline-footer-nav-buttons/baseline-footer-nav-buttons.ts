@@ -29,7 +29,8 @@ export class BaselineFooterNavButtonsComponent {
 
   validationStatus: CompressedAirAssessmentValidation;
   validationSub: Subscription;
-
+  queryParamsSub: Subscription;
+  eventsSub: Subscription;
   navFromAssessment: boolean = false;
   constructor(private router: Router,
     private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService,
@@ -42,13 +43,13 @@ export class BaselineFooterNavButtonsComponent {
     });
 
     //naving from assessment tab. shows back button to assessment
-    this.route.queryParams.subscribe(params => {
+    this.queryParamsSub = this.route.queryParams.subscribe(params => {
       if (params['from'] && params['from'] === 'assessment') {
         this.navFromAssessment = true;
       }
     });
 
-    this.router.events.subscribe(event => {
+    this.eventsSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.setSetupTab();
       }
@@ -58,6 +59,8 @@ export class BaselineFooterNavButtonsComponent {
 
   ngOnDestroy() {
     this.validationSub.unsubscribe();
+    this.queryParamsSub.unsubscribe();
+    this.eventsSub.unsubscribe();
   }
 
   next() {

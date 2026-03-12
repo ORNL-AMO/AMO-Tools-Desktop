@@ -5,7 +5,6 @@ import { roundPowerForPresentation, roundPressureForPresentation } from "./perfo
 
 export class NoLoadPerformancePoint implements PerformancePoint {
 
-
     dischargePressure: number;
     isDefaultPressure: boolean;
     airflow: number;
@@ -25,10 +24,6 @@ export class NoLoadPerformancePoint implements PerformancePoint {
         this.setPressure(nameplateData, compressorControls, designDetails, fullLoad, settings);
         this.setAirFlow();
         this.setPower(nameplateData, compressorControls, designDetails, fullLoad);
-        // selectedCompressor.performancePoints.noLoad.dischargePressure = this.getNoLoadPressure(selectedCompressor, selectedCompressor.performancePoints.noLoad.isDefaultPressure, settings);
-        // selectedCompressor.performancePoints.noLoad.airflow = this.getNoLoadAirFlow(selectedCompressor, selectedCompressor.performancePoints.noLoad.isDefaultAirFlow);
-        // selectedCompressor.performancePoints.noLoad.power = this.getNoLoadPower(selectedCompressor, selectedCompressor.performancePoints.noLoad.isDefaultPower);
-        // return selectedCompressor.performancePoints.noLoad;
     }
 
     setPressure(nameplateData: CompressorNameplateData, compressorControls: CompressorControls, designDetails: DesignDetails, fullLoad: FullLoadPerformancePoint, settings: Settings) {

@@ -98,7 +98,6 @@ export class AdjustSequencerProfileComponent implements OnInit {
 
 
   save() {
-    console.log(this.profileSummary);
     this.emitSave.emit(true);
   }
 

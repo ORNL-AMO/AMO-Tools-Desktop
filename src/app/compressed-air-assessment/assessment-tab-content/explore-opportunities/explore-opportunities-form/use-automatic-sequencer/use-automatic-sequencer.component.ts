@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, UseAutomaticSequencer } from '../../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment.service';
-import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { UseAutomaticSequencerService } from './use-automatic-sequencer.service';
 import { CompressedAirAssessmentModificationResults } from '../../../../calculations/modifications/CompressedAirAssessmentModificationResults';
@@ -83,19 +82,8 @@ export class UseAutomaticSequencerComponent implements OnInit {
   }
 
   setData() {
-    // this.compressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
     if (this.modification) {
       this.useAutomaticSequencer = JSON.parse(JSON.stringify(this.modification.useAutomaticSequencer));
-      //TODO: update modifications logic from baseline
-      // if (this.selectedDayType && this.compressedAirAssessment && (!this.useAutomaticSequencer.profileSummary || this.useAutomaticSequencer.profileSummary.length == 0)) {
-      //   this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
-      // }
-      // if (this.baselineHasSequencer && this.useAutomaticSequencer.targetPressure == undefined) {
-      //   this.useAutomaticSequencer.targetPressure = this.compressedAirAssessment.systemInformation.targetPressure;
-      // }
-      // if (this.baselineHasSequencer && this.useAutomaticSequencer.variance == undefined) {
-      //   this.useAutomaticSequencer.variance = this.compressedAirAssessment.systemInformation.variance;
-      // }
       this.form = this.useAutomaticSequencerService.getFormFromObj(this.useAutomaticSequencer);
       if (this.modification.replaceCompressor?.order != 100 && this.compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
         this.form.controls.order.disable();

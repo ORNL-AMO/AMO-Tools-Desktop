@@ -132,13 +132,6 @@ export class CompressedAirBaselineDayTypeProfileSummary {
     setProfileSummaryTotals(selectedHourInterval: number) {
         let totalSystemCapacity: number = getTotalCapacity(this.inventoryItems);
         let totalFullLoadPower: number = getTotalPower(this.inventoryItems);
-        //already baseline summary by day type
-        //let allData: Array<ProfileSummaryData> = new Array();
-        // this.profileSummary.forEach(summary => {
-        //   if (summary.dayTypeId == selectedDayType.dayTypeId) {
-        //     allData = allData.concat(summary.profileSummaryData);
-        //   }
-        // });
         let allData: Array<ProfileSummaryData> = this.profileSummary.flatMap(summary => {
             return summary.profileSummaryData;
         });
@@ -156,8 +149,6 @@ export class CompressedAirBaselineDayTypeProfileSummary {
                     }
                 }
             });
-            //no aux power for baseline
-            //   let auxiliaryPower: number = this.getTotalAuxiliaryPower(selectedDayType, interval, improveEndUseEfficiency);
             this.profileSummaryTotals.push({
                 auxiliaryPower: 0,
                 airflow: totalAirFlow,
@@ -178,10 +169,6 @@ export class CompressedAirBaselineDayTypeProfileSummary {
         flatSummaryData = flatSummaryData.filter(data => { return isNaN(data.power) == false })
         let sumPower: number = _.sumBy(flatSummaryData, 'power');
         sumPower = sumPower * selectedHourInterval * this.dayType.numberOfDays;
-        //no aux power baseline
-        // if (auxiliaryPowerUsage) {
-        //     sumPower = sumPower + auxiliaryPowerUsage.energyUse;
-        // }
         let sumCost: number = sumPower * costKwh;
         this.savingsItem = {
             cost: sumCost,

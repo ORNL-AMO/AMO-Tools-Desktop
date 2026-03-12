@@ -26,6 +26,7 @@ export class CompressedAirBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
 
   mainTab: 'baseline' | 'assessment' | 'calculators';
+  routerSub: Subscription;
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
@@ -44,7 +45,7 @@ export class CompressedAirBannerComponent implements OnInit {
       }
     });
 
-    this.router.events.subscribe(event => {
+    this.routerSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.setMainTab();
       }
@@ -60,6 +61,7 @@ export class CompressedAirBannerComponent implements OnInit {
   ngOnDestroy() {
     this.selectedModificationSub.unsubscribe();
     this.compresssedAirAssessmentSub.unsubscribe();
+    this.routerSub.unsubscribe();
   }
 
   navigateHome() {

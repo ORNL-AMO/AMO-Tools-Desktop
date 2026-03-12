@@ -81,14 +81,6 @@ export class ReplaceCompressorResults {
         }>
     ) {
         let compressorToTurnOff: Array<string> = currentCompressorMapping.filter(mapping => { return mapping.isReplaced == true }).map(mapping => { return mapping.originalCompressorId });
-        // this.profileSummary.forEach(summary => {
-        //     if (compressorToTurnOff.includes(summary.compressorId)) {
-        //         summary.isCompressorReplaced = true;
-        //         summary.profileSummaryData.forEach(data => {
-        //             data.order = 0;
-        //         })
-        //     }
-        // });
         this.profileSummary = this.profileSummary.filter(summary => { return !compressorToTurnOff.includes(summary.compressorId) });
         this.adjustedCompressors = this.adjustedCompressors.filter(compressor => { return !compressorToTurnOff.includes(compressor.itemId) });
     }

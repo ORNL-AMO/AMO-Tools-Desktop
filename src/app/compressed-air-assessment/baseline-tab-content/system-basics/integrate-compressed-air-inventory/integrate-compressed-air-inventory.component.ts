@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { IntegrationState, InventorySelectOptions, InventoryOption, ConnectedInventoryData, ConnectedItem } from '../../../../shared/connected-inventory/integrations';
 import { Subscription } from 'rxjs';
 import { IntegrationStateService } from '../../../../shared/connected-inventory/integration-state.service';
@@ -25,10 +25,8 @@ export class IntegrateCompressedAirInventoryComponent {
     compressedAirAssessmentSub: Subscription;
     compressedAirAssessment: CompressedAirAssessment;
     settings: Settings;
-    // assessment: Assessment;
 
     constructor(private compressedAirAssessmentIntegrationService: CompressedAirAssessmentIntegrationService,
-        //private helpPanelService: HelpPanelService,
         private integrationStateService: IntegrationStateService,
         private compressedAirAssessmentService: CompressedAirAssessmentService,
         private router: Router,
@@ -36,6 +34,7 @@ export class IntegrateCompressedAirInventoryComponent {
     ) { }
 
     ngOnInit() {
+        this.settings = this.compressedAirAssessmentService.settings.getValue();
         this.compressedAirAssessmentSub = this.compressedAirAssessmentService.compressedAirAssessment.subscribe(compressedAirAssessment => {
             this.compressedAirAssessment = compressedAirAssessment;
             if (this.compressedAirAssessment.connectedItem) {
@@ -57,7 +56,7 @@ export class IntegrateCompressedAirInventoryComponent {
     }
 
     focusedField(field: string) {
-        //this.helpPanelService.currentField.next(field);
+        this.compressedAirAssessmentService.focusedField.next(field);
     }
 
     async handleConnectedInventoryEvents(connectedInventoryData: ConnectedInventoryData) {
@@ -67,7 +66,6 @@ export class IntegrateCompressedAirInventoryComponent {
                 let assessment: Assessment = this.assessmentDbService.findById(assessmentId);
                 await this.compressedAirAssessmentIntegrationService.setCompressedAirAssessmentFromExistingCompressedAirItem(connectedInventoryData, this.compressedAirAssessment, assessment);
                 if (connectedInventoryData.isConnected) {
-                    // this.saved.emit(true);
                     this.saveChanges();
                 }
             }
@@ -76,7 +74,6 @@ export class IntegrateCompressedAirInventoryComponent {
         if (connectedInventoryData.shouldDisconnect) {
             this.compressedAirAssessmentIntegrationService.removeConnectedCompressedAirInventory(connectedInventoryData.connectedItem, connectedInventoryData.ownerAssessmentId);
             delete this.compressedAirAssessment.connectedItem;
-            // this.saved.emit(true);
             this.saveChanges();
         }
     }

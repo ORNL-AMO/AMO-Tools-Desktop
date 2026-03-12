@@ -29,6 +29,7 @@ export class SetupTabsComponent implements OnInit {
   validationStatus: CompressedAirAssessmentValidation;
 
   setupTab: SetupTabRoutes;
+  routerSub: Subscription;
   constructor(private compressedAirAssessmentValidationService: CompressedAirAssessmentValidationService,
     private router: Router, private route: ActivatedRoute
   ) { }
@@ -40,7 +41,7 @@ export class SetupTabsComponent implements OnInit {
     });
 
 
-    this.router.events.subscribe(event => {
+    this.routerSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.setSetupTab();
       }
@@ -50,6 +51,7 @@ export class SetupTabsComponent implements OnInit {
 
   ngOnDestroy() {
     this.validationSub.unsubscribe();
+    this.routerSub.unsubscribe();
   }
 
   setTabStatus() {

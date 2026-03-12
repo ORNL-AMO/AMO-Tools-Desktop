@@ -17,7 +17,6 @@ export class CompressorInventoryItemClass {
     centrifugalSpecifics: CentrifugalSpecifics;
     description: string;
     modifiedDate: Date;
-    // originalCompressorId: string;
     isReplacementCompressor: boolean;
 
     showMaxFullFlow: boolean;
@@ -38,7 +37,6 @@ export class CompressorInventoryItemClass {
         this.compressorControls = inventoryItem.compressorControls;
         this.designDetails = inventoryItem.designDetails;
         this.centrifugalSpecifics = inventoryItem.centrifugalSpecifics;
-        // this.originalCompressorId = inventoryItem.originalCompressorId;
         this.isReplacementCompressor = inventoryItem.isReplacementCompressor;
         this.color = inventoryItem.color;
         this.setShowMaxFlowPerformancePoint();
@@ -147,7 +145,6 @@ export class CompressorInventoryItemClass {
             performancePoints: this.performancePoints,
             centrifugalSpecifics: this.centrifugalSpecifics,
             modifiedDate: this.modifiedDate,
-            // originalCompressorId: this.originalCompressorId,
             isReplacementCompressor: this.isReplacementCompressor,
             color: this.color
 
@@ -174,22 +171,14 @@ export class CompressorInventoryItemClass {
     }
 
     findItem(itemId: string): boolean {
-        // if (this.isReplacementCompressor) {
-        //     return this.originalCompressorId == itemId;
-        // } else {
         return this.itemId == itemId;
-        // }
     }
 
     setShowMaxFlowPerformancePoint() {
         if (this.nameplateData.compressorType == 6 && (this.compressorControls.controlType == 7 || this.compressorControls.controlType == 9)) {
             this.showMaxFullFlow = false;
         } else if ((this.nameplateData.compressorType == 1 || this.nameplateData.compressorType == 2) && this.compressorControls.controlType == 1) {
-            // if (this.compressorControls.controlType == 1) {
             this.showMaxFullFlow = false;
-            // } else {
-            //     this.showMaxFullFlow = true;
-            // }
         } else if (this.compressorControls.controlType === 11) {
             this.showMaxFullFlow = false;
         } else {

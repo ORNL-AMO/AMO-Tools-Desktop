@@ -30,7 +30,6 @@ export class UseAutomaticSequencerResults {
         order: number,
         trimSelections: Array<{ dayTypeId: string, compressorId: string }>) {
         this.order = order;
-        // this.adjustedCompressors = adjustedCompressors;
 
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);

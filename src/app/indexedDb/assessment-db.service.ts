@@ -35,7 +35,7 @@ export class AssessmentDbService {
     return this.dbService.getAll(this.storeName).pipe(
       mergeMap(async (assessments: Array<Assessment>) => {
         for await (let assessment of assessments) {
-          if (assessment.appVersion !== environment.version || true) {
+          if (assessment.appVersion !== environment.version) {
             this.updateDataService.updateAssessmentVersion(assessment);
             await firstValueFrom(this.updateWithObservable(assessment));
             let assessmentCalculators: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
