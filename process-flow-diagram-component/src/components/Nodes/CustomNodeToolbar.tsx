@@ -4,7 +4,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import ErrorIcon from '@mui/icons-material/Error';
 import { Button, ButtonGroup, useTheme } from "@mui/material";
 import { useAppSelector } from "../../hooks/state";
-import { ProcessFlowPart, getSystemEstimatedUnknownLosses, WaterUsingSystem } from 'process-flow-lib';
+import { ProcessFlowPart, WaterUsingSystem, getNodeEstimatedUnknownLosses } from 'process-flow-lib';
 import { selectTotalSourceFlow, selectNodeErrors, selectTotalDischargeFlow } from '../Diagram/store';
 import { getNodeHasErrorLevel } from 'process-flow-lib/water/logic/validation';
 
@@ -25,7 +25,7 @@ const CustomNodeToolbar = ({ onEdit, nodeData, selected }: NodeToolbarProps) => 
     const nodeError = useAppSelector(state => selectNodeErrors(state)[nodeData.diagramNodeId]);
     const totalDischargeFlow = useAppSelector(state => selectTotalDischargeFlow(state, nodeData.diagramNodeId));
 
-    let totalUnknownLoss = getSystemEstimatedUnknownLosses(nodeData as WaterUsingSystem, totalSourceFlow, totalDischargeFlow);
+    let totalUnknownLoss = getNodeEstimatedUnknownLosses(nodeData as WaterUsingSystem, totalSourceFlow, totalDischargeFlow);
 
     const isWaterSystemComponentType = [
         'water-using-system',
