@@ -36,7 +36,12 @@ export class ResultingSystemProfileValidation {
 
                 let totalAvailableAirFlow: number = 0;
                 adjustedCompressors.forEach(compressor => {
-                    totalAvailableAirFlow = totalAvailableAirFlow + compressor.performancePoints.fullLoad.airflow;
+                    let compressorProfileSummary: ProfileSummary = eemProfileSummary.find(summary => { return summary.compressorId == compressor.itemId });
+                    let compressorIntervalData: ProfileSummaryData = compressorProfileSummary.profileSummaryData.find(data => { return data.timeInterval == i });
+                    if (compressorIntervalData.order != 0) {
+                        totalAvailableAirFlow = totalAvailableAirFlow + compressor.performancePoints.fullLoad.airflow;
+                    }
+                    // totalAvailableAirFlow = totalAvailableAirFlow + compressor.performancePoints.fullLoad.airflow;
                 });
                 this.availableAirflow[index] = totalAvailableAirFlow;
                 let eemDataOn: Array<ProfileSummary> = eemProfileSummary.filter(eemSummary => {

@@ -36,9 +36,6 @@ export class UseAutomaticSequencerResults {
         });
         //1. Adjust compressor set points
         this.adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(useAutomaticSequencer, systemInformation, settings, adjustedCompressors);
-        //2. Adjust profile based on new orders
-        this.profileSummary = this.useAutomaticSequencerMapOrders(useAutomaticSequencer.profileSummary, this.profileSummary);       
-        //3. Reallocate flow based on new set points
         let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
             summaryDataInterval,
             this.profileSummary,
@@ -46,6 +43,9 @@ export class UseAutomaticSequencerResults {
             dayType,
             undefined,
             this.adjustedCompressors);
+        //2. Adjust profile based on new orders
+        this.profileSummary = this.useAutomaticSequencerMapOrders(useAutomaticSequencer.profileSummary, this.profileSummary);
+        //3. Reallocate flow based on new set points
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
             this.profileSummary,
