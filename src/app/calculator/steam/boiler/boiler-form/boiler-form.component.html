@@ -78,37 +78,37 @@
           [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.</span>
     </span>
   </div>
-  <div class="form-group">
-    <label class="small" for="thermodynamicQuantity">Known Variable</label>
-    <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
-      id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')"
-      >
-      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
-    </select>
-  </div>
 
   <div class="form-group">
-    <label class="small" for="quantityValue">{{getOptionDisplay()}} Value</label>
-    <div class="input-group">
-      <input class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue" type="number"
-        (input)="calculate()" (focus)="focusField('quantityValue')"  onfocus="this.select();">
-      <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" class="input-group-addon units"
-        [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+    <div class="known-row-parent"> 
+      <div class="input-group calc-addon-group">
+        <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
+          id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')">
+          <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+        </select>
+      </div>
+      <div class="form-group known-conditional-flex">
+        <div class="known-conditional-position">
+          <div class="input-group calc-addon-group known-conditional-input-group">
+            <input type="number" step="1" class="form-control" formControlName="quantityValue" id="quantityValue"
+              onfocus="this.select();" (input)="calculate()" (focus)="focusField('quantityValue')" autofocus>
+            <span class="input-group-addon units" *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3"
+              [innerHTML]="getOptionDisplayUnit(boilerForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>
+          </div>
+        </div>
+
+        <span class="alert-danger pull-right small"
+          *ngIf="boilerForm.controls.quantityValue.invalid && !boilerForm.controls.quantityValue.pristine">
+          <span *ngIf="boilerForm.controls.quantityValue.errors.required">Value Required</span>
+          <span *ngIf="boilerForm.controls.quantityValue.errors.max">Value can't be greater than {{boilerForm.controls.quantityValue.errors.max.max}}
+            <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(boilerForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>.
+          </span>
+          <span *ngIf="boilerForm.controls.quantityValue.errors.min">Value can't be less than {{boilerForm.controls.quantityValue.errors.min.min}}
+            <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit(boilerForm.controls.thermodynamicQuantity.value) | settingsLabel"></span>.
+          </span>
+        </span>
+      </div>
     </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="boilerForm.controls.quantityValue.invalid && !boilerForm.controls.quantityValue.pristine">
-      <span *ngIf="boilerForm.controls.quantityValue.errors.required">Value Required</span>
-      <span *ngIf="boilerForm.controls.quantityValue.errors.max">Value can't be greater than
-        {{boilerForm.controls.quantityValue.errors.max.max}}
-        <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3"
-          [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
-        .</span>
-      <span *ngIf="boilerForm.controls.quantityValue.errors.min">Value can't be less than
-        {{boilerForm.controls.quantityValue.errors.min.min}}
-        <span *ngIf="boilerForm.controls.thermodynamicQuantity.value != 3"
-          [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
-      </span>
-    </span>
   </div>
 
   <div class="form-group">
