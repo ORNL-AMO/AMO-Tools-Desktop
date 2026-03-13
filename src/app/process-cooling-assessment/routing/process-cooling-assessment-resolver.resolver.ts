@@ -106,10 +106,6 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
           this.modificationService.setSelectedModificationId(selectedModificationId);
         }
 
-        if (!this.egridService.subRegionsByZipcode) {
-          this.egridService.getAllSubRegions();
-        }
-
         return from(this.processCoolingAssessmentService.initAssessmentSettings(assessment)).pipe(
           switchMap(() =>
             this.processCoolingAssessmentService.settings$.pipe(
