@@ -3,15 +3,14 @@ import { Position, NodeProps } from '@xyflow/react';
 import { Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
 import { openDrawerWithSelected } from '../Diagram/diagramReducer';
-import { useAppDispatch, useAppSelector } from '../../hooks/state';
+import { useAppDispatch } from '../../hooks/state';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
-import { DiagramNode, NodeFlowData, ProcessFlowPart } from 'process-flow-lib';
-import { selectNodeCalculatedFlowData } from '../Diagram/store';
+import { DiagramNode, ProcessFlowPart } from 'process-flow-lib';
 import CustomNodeToolbar from './CustomNodeToolbar';
 
 const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
-  const calculatedData: NodeFlowData = useAppSelector((state) => selectNodeCalculatedFlowData(state, id));
+
   let showInSystemTreatment: boolean;
   if (data.processComponentType === 'water-using-system' && data.inSystemTreatment.length > 0) {
     showInSystemTreatment = true;
@@ -30,7 +29,6 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
         id="a"
       />
     }
-
       <div
         style={{
           display: 'flex',
@@ -93,13 +91,10 @@ const ProcessFlowComponentNode = ({ data, id, isConnectable, selected }: NodePro
             </span>
           </div>
         }
-
         <CustomNodeToolbar onEdit={onEditNode} nodeData={data as ProcessFlowPart} selected={selected} />
-
         <Typography sx={{ width: '100%' }} >
           {data.name}
         </Typography>
-
       </div>
 
       {data.handles.outflowHandles.e &&

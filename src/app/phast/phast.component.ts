@@ -17,7 +17,6 @@ import { SettingsService } from '../settings/settings.service';
 import { PhastValidService } from './phast-valid.service';
 import { SavingsOpportunity } from '../shared/models/explore-opps';
 import { ConvertPhastService } from './convert-phast.service';
-import { EGridService } from '../shared/helper-services/e-grid.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { getNewIdString } from '../shared/helperFunctions';
 
@@ -64,7 +63,6 @@ export class PhastComponent implements OnInit {
   isModalOpen: boolean = false;
   selectedLossTab: LossTab;
   calcTab: string;
-  hasEgridDataInit: boolean;
   assessmentTab: string = 'explore-opportunities';
   sankeyPhast: PHAST;
   modificationIndex: number;
@@ -99,17 +97,11 @@ export class PhastComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
     private settingsService: SettingsService,
-    private egridService: EGridService,
     private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-process-heating-assessment');
-    this.egridService.processCSVData().then(result => {
-      this.hasEgridDataInit = true;
-    }).catch(err => {
-      this.hasEgridDataInit = false;
-    });
     this.tab1Status = '';
     this.tab2Status = '';
 

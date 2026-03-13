@@ -15,7 +15,6 @@ import {
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
-
 import { formatDataForMEASUR, getEdgeTypesFromString, updateAssessmentCreatedNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';

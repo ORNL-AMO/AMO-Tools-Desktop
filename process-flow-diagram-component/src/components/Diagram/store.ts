@@ -92,9 +92,9 @@ export const selectNodeCalculatedFlowData = (state: RootState, nodeId: string): 
   return state.diagram.calculatedData.nodes[nodeId];
 };
 
-export const selectNodeId = (state: RootState, nodeId?: number) => {
+export const selectNodeId = (state: RootState, nodeId?: string) => {
   return nodeId ? nodeId : state.diagram.selectedDataId;
-} 
+}
 
 export const selectCurrentDataId = (state: RootState, selectedId?: string) => {
   return state.diagram.selectedDataId;
