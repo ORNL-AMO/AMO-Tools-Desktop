@@ -6,6 +6,7 @@ import { ProcessCoolingResultsService } from '../../../services/process-cooling-
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingChillerOutput } from '../../../../shared/models/process-cooling-assessment';
 import { LOAD_PERCENTAGES } from '../../../constants/process-cooling-constants';
+import { PROCESS_COOLING_UNITS } from '../../../constants/process-cooling-units';
 
 @Component({
   selector: 'app-chiller-profile-chart',
@@ -51,7 +52,7 @@ export class ChillerProfileChartComponent implements AfterViewInit {
   private renderChart(chillerOutput?: ProcessCoolingChillerOutput[]): void {
     const traces = chillerOutput.map((chiller, idx) => ({
       x: this.loadPercentages,
-      y: chiller.efficiency,
+      y: chiller.ariEfficiencyProfile,
       type: 'scatter',
       mode: 'lines+markers',
       name: chiller.name,
@@ -62,7 +63,7 @@ export class ChillerProfileChartComponent implements AfterViewInit {
           size: 8
         }
       },
-      hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (kW/Ton): %{y:.2f}<extra></extra>`
+      hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial}): %{y:.2f}<extra></extra>`
     }));
 
     const layout = {
@@ -74,7 +75,7 @@ export class ChillerProfileChartComponent implements AfterViewInit {
         automargin: true
       },
       yaxis: {
-        title: { text: 'Efficiency (kW/Ton)', font: { size: 16 } },
+        title: { text: `Efficiency (${PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial})`, font: { size: 16 } },
         rangemode: 'tozero',
         hoverformat: '.2f',
         automargin: true,

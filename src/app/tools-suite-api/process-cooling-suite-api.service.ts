@@ -409,6 +409,7 @@ export class ProcessCoolingSuiteApiService {
         id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
         name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
         efficiency: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.efficiency.get(i)),
+        ariEfficiencyProfile: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.ariEfficiencyProfile.get(i)),
         hours: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i)),
         power: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i)),
         energy: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i))
