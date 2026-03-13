@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { SSMTOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
@@ -12,6 +13,9 @@ import { SsmtReportRollupService } from '../../../report-rollup/ssmt-report-roll
     standalone: false
 })
 export class EnergySummaryComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   baselineOutput: SSMTOutput;
   @Input()

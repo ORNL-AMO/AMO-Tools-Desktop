@@ -5,7 +5,7 @@ import { SolidLoadChargeMaterial } from '../../../../shared/models/materials';
 import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { SolidLoadMaterialDbService } from '../../../../indexedDb/solid-load-material-db.service';
-import { firstValueFrom } from 'rxjs';
+import { take } from 'rxjs';
 import { roundVal } from '../../../../shared/helperFunctions';
 @Component({
   selector: 'app-fixture-summary',
@@ -41,15 +41,22 @@ export class FixtureSummaryComponent implements OnInit {
     private solidLoadMaterialDbService: SolidLoadMaterialDbService
   ) { }
 
-  async ngOnInit() {
-    this.materialNameDiff = new Array();
-    this.specificHeatDiff = new Array();
-    this.feedRateDiff = new Array();
-    this.initialTemperatureDiff = new Array();
-    this.finalTemperatureDiff = new Array();
-    this.correctionFactorDiff = new Array();
+  ngOnInit() {
+    this.solidLoadMaterialDbService.getAllWithObservable().pipe(
+      take(1)
+    ).subscribe((options: SolidLoadChargeMaterial[]) => {
+      this.materialOptions = options;
+      this.materialNameDiff = new Array();
+      this.specificHeatDiff = new Array();
+      this.feedRateDiff = new Array();
+      this.initialTemperatureDiff = new Array();
+      this.finalTemperatureDiff = new Array();
+      this.correctionFactorDiff = new Array();
+      this.initLossData();
+    });
+  }
 
-    this.materialOptions = await firstValueFrom(this.solidLoadMaterialDbService.getAllWithObservable());
+  initLossData() {
     this.lossData = new Array();
     if (this.phast.losses) {
       if (this.phast.modifications) {
@@ -70,14 +77,12 @@ export class FixtureSummaryComponent implements OnInit {
             baseline: loss,
             modifications: modificationData
           });
-          //initialize array values for every defined loss
           this.materialNameDiff.push(false);
           this.specificHeatDiff.push(false);
           this.feedRateDiff.push(false);
           this.initialTemperatureDiff.push(false);
           this.finalTemperatureDiff.push(false);
           this.correctionFactorDiff.push(false);
-          //index +1 for next loss
           index++;
         });
       }

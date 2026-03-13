@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, ViewChild, ChangeDetectorRef, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 import { SSMT, GeneralSteamOperations } from '../../shared/models/steam/ssmt';
 import { Settings } from '../../shared/models/settings';
 import { UntypedFormGroup } from '@angular/forms';
@@ -23,6 +24,9 @@ import { copyObject } from '../../shared/helperFunctions';
     standalone: false
 })
 export class OperationsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   ssmt: SSMT;
   @Input()

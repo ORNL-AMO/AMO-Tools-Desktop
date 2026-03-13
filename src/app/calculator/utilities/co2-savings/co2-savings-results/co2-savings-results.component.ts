@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { Co2SavingsData } from '../co2-savings.service';
+import { Component, OnInit, Input, ViewChild, ElementRef, inject } from '@angular/core';
+import { Co2SavingsData, Co2SavingsService } from '../co2-savings.service';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -9,6 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
     standalone: false
 })
 export class Co2SavingsResultsComponent implements OnInit {
+  private co2SavingsService = inject(Co2SavingsService);
   @Input()
   baselineData: Array<Co2SavingsData>;
   @Input()
@@ -17,8 +18,8 @@ export class Co2SavingsResultsComponent implements OnInit {
   baselineTotal: number;
   @Input()
   modificationTotal: number;
-  @Input()
-  settings: Settings;
+
+  emissionsUnitLabel: string;
 
   @ViewChild('copyTable0', { static: false }) copyTable0: ElementRef;
   table0String: any;
@@ -32,6 +33,7 @@ export class Co2SavingsResultsComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    this.emissionsUnitLabel = this.co2SavingsService.emissionsUnit === 'Metric' ? `tonne CO<sub>2</sub>` : `ton CO<sub>2</sub>`;
   }
 
   updateTable0String() {

@@ -10,6 +10,7 @@ import { UpdateApplicationService } from './shared/update-application/update-app
 import { MeasurAppError } from './shared/errors/errors';
 import { ToolsSuiteApiService } from './tools-suite-api/tools-suite-api.service';
 import { CoreService } from './core/core.service';
+import { EGridService } from './shared/helper-services/e-grid.service';
 // declare ga as a function to access the JS code in TS
 declare let gtag: Function;
 
@@ -32,7 +33,8 @@ export class AppComponent {
     private appErrorService: AppErrorService,
     private router: Router,
     private toolsSuiteApiService: ToolsSuiteApiService,
-    private coreService: CoreService) {
+    private coreService: CoreService,
+    private eGridService: EGridService) {
 
     if (environment.production) {
       // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
@@ -118,6 +120,7 @@ export class AppComponent {
 
   async initializeToolsSuiteApi(){
     await this.toolsSuiteApiService.initializeModule();
+    await this.eGridService.processCSVData();
     this.coreService.initializedToolsSuiteModule.next(true);
   }
 

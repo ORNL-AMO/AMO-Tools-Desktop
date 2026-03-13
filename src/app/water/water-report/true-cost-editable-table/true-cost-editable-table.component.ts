@@ -101,7 +101,8 @@ export class TrueCostEditableTableComponent {
     this.form = this.trueCostReportService.getCostComponentsForm(
       this.plantResults.systemAttributionMap,
       Array.from(this.costComponentMap.keys()),
-      this.nullDefaultAttribution
+      this.nullDefaultAttribution,
+      this.settings?.flowDecimalPrecision ?? 2
     );
   }
 

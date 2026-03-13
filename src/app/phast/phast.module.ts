@@ -23,7 +23,6 @@ import { ConvertPhastService } from './convert-phast.service';
 import { PhastCalculatorTabsComponent } from './phast-calculator-tabs/phast-calculator-tabs.component';
 import { PreAssessmentModule } from '../calculator/utilities/pre-assessment/pre-assessment.module';
 import { O2EnrichmentModule } from '../calculator/furnaces/o2-enrichment/o2-enrichment.module';
-import { EfficiencyImprovementModule } from '../calculator/furnaces/efficiency-improvement/efficiency-improvement.module';
 import { EnergyEquivalencyModule } from '../calculator/furnaces/energy-equivalency/energy-equivalency.module';
 import { EnergyUseModule } from '../calculator/furnaces/energy-use/energy-use.module';
 import { ExplorePhastOpportunitiesModule } from './explore-phast-opportunities/explore-phast-opportunities.module';
@@ -75,7 +74,6 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     PreAssessmentModule,
     O2EnrichmentModule,
     FlueGasModule,
-    EfficiencyImprovementModule,
     EnergyEquivalencyModule,
     EnergyUseModule,
     ExplorePhastOpportunitiesModule,

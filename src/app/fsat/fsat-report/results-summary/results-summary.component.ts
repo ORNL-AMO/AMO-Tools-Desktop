@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { FSAT } from '../../../shared/models/fans';
@@ -12,6 +13,8 @@ import { FsatReportRollupService } from '../../../report-rollup/fsat-report-roll
     standalone: false
 })
 export class ResultsSummaryComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   @Input()
   settings: Settings;

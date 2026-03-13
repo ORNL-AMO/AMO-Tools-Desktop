@@ -22,3 +22,12 @@
     top: 0;
     z-index: 100 !important;
 }
+
+.base-checkbox {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}

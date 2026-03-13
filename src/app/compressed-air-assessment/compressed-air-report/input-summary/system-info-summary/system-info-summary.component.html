@@ -78,6 +78,7 @@
                                 <span *ngIf="!systemInformation.isSequencerUsed">&mdash;</span>
                             </td>
                         </tr>
+                        @if (showOperationalImpacts()) {
                         <tr>
                             <td>
                                 Total Emission Output Rate
@@ -90,6 +91,7 @@
                                 <span *ngIf="!systemInformation.co2SavingsData.totalEmissionOutputRate">&mdash;</span>
                             </td>
                         </tr>
+                        }
                     </tbody>
                 </table>
                 <app-exportable-results-table [tableString]="copyTableString"

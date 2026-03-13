@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, inject, Signal } from '@angular/core';
 import { Assessment } from '../../../../../shared/models/assessment';
 import { PsatOutputs, PSAT } from '../../../../../shared/models/psat';
 import { Settings } from '../../../../../shared/models/settings';
@@ -14,6 +14,7 @@ import { AssessmentService } from '../../../../assessment.service';
     standalone: false
 })
 export class PsatSummaryCardComponent implements OnInit {
+    
     @Input()
     assessment: Assessment;
     psatResults: PsatOutputs;

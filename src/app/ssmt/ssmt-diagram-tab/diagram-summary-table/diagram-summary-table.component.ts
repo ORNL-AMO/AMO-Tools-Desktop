@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { BoilerOutput, SSMTOperationsOutput, SteamCo2EmissionsOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
@@ -9,6 +10,9 @@ import { Settings } from '../../../shared/models/settings';
     standalone: false
 })
 export class DiagramSummaryTableComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   operationsOutput: SSMTOperationsOutput;
   @Input()

@@ -2,7 +2,7 @@
     <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
         <div class="nav-item" (click)="setSmallScreenTab('form')"
             [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
-            <a class="nav-link" *ngIf="setupTab == 'plant-setup' && initPlantSetup">Plant Setup</a>
+            <a class="nav-link" *ngIf="setupTab == 'plant-setup'">Plant Setup</a>
             <a class="nav-link" *ngIf="setupTab == 'department-setup'">Departments</a>
             <a class="nav-link" *ngIf="setupTab == 'motor-properties'">Motor Properties</a>
             <a class="nav-link" *ngIf="setupTab == 'motor-catalog'">Catalog</a>
@@ -16,7 +16,7 @@
     <div class="assessment-container tab-content">
         <div class="assessment-panel-container lookup-form modification scroll-item"
             [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
-            <app-plant-setup *ngIf="setupTab == 'plant-setup' && initPlantSetup"></app-plant-setup>
+            <app-plant-setup *ngIf="setupTab == 'plant-setup'"></app-plant-setup>
             <app-motor-properties *ngIf="setupTab == 'motor-properties'"></app-motor-properties>
             <app-motor-catalog *ngIf="setupTab == 'motor-catalog'"></app-motor-catalog>
             <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup>

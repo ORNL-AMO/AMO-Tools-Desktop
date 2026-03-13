@@ -5,7 +5,7 @@ import { DataPoint, SimpleChart, TraceData } from '../../../shared/models/plotti
 import { Settings } from '../../../shared/models/settings';
 import { SystemAndEquipmentCurveService } from '../system-and-equipment-curve.service';
 import { SystemAndEquipmentCurveGraphService, HoverGroupData, SystemCurveDataPoint, CurveTraceData } from './system-and-equipment-curve-graph.service';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../shared/graphColors';
 import { CurveDataService } from '../curve-data.service';
 import { PlotlyService } from 'angular-plotly.js';
 import * as Plotly from 'plotly.js-dist';

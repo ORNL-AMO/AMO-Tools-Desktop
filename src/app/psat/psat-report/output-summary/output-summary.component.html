@@ -144,6 +144,7 @@
           </td>
         </tr>
 
+        @if(showOperationalImpacts()) {
       <tr class="callout">
         <td>Annual CO2 Emissions 
           <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
@@ -174,6 +175,7 @@
             &mdash;</span>
         </td>
       </tr>
+    }
       <tr class="callout">
         <td>Annual Energy (MWh)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{psat.outputs.annual_energy |

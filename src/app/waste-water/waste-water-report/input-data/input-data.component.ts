@@ -1,7 +1,8 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, Signal, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWater } from '../../../shared/models/waste-water';
 import { CompareService, WasteWaterDifferent } from '../../modify-conditions/compare.service';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-input-data',
@@ -10,6 +11,9 @@ import { CompareService, WasteWaterDifferent } from '../../modify-conditions/com
     standalone: false
 })
 export class InputDataComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   wasteWater: WasteWater;
   @Input()

@@ -275,7 +275,7 @@ export class PhastResultsService {
   }
 
 
-  async getEnergyUseReportData(phast: PHAST, phastResults: PhastResults, settings: Settings): Promise<EnergyUseReportData> {
+  getEnergyUseReportData(phast: PHAST, phastResults: PhastResults, settings: Settings): EnergyUseReportData {
     let energyUseReportData: EnergyUseReportData = {
       fuelName: undefined,
       fuelEnergyUsed: undefined,

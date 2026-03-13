@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef, ChangeDetectorRef, HostListener } from '@angular/core';
 import { PsatService } from '../../../../psat/psat.service';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { UntypedFormGroup } from '@angular/forms';
 import { SpecificSpeedService } from '../specific-speed.service';
 

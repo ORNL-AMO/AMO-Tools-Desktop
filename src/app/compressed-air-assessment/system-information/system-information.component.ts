@@ -1,5 +1,6 @@
-import { ViewChild } from '@angular/core';
+import { ViewChild, inject, Signal } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AltitudeCorrectionService } from '../../calculator/utilities/altitude-correction/altitude-correction.service';
@@ -19,6 +20,9 @@ import { IntegrationStateService } from '../../shared/connected-inventory/integr
     standalone: false
 })
 export class SystemInformationComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   settings: Settings;
   @ViewChild('systemCapacityModal', { static: false }) public systemCapacityModal: ModalDirective;
   showSystemCapacityModal: boolean = false;

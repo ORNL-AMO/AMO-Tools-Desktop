@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, Signal } from '@angular/core';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { Subscription } from 'rxjs';
 import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfileSummary } from '../../../shared/models/compressed-air-assessment';
 import { BaselineResult, BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
@@ -14,6 +15,9 @@ import { Settings } from '../../../shared/models/settings';
     standalone: false
 })
 export class ExploreOpportunitiesResultsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   compressedAirAssessmentSub: Subscription;
   adjustedProfileSummary: Array<ProfileSummary>;
   dayTypeOptions: Array<CompressedAirDayType>;

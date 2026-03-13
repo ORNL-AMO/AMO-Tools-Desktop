@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ElementRef, ViewChild, HostListener } from '@
 import { Settings } from '../../../shared/models/settings';
 import { PreAssessment } from './pre-assessment';
 import * as _ from 'lodash';
-import { graphColors } from '../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../shared/graphColors';
 import { Calculator } from '../../../shared/models/calculators';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PreAssessmentService } from './pre-assessment.service';
