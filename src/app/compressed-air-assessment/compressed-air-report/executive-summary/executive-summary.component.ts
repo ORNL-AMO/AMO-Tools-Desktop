@@ -4,7 +4,7 @@ import { CompressedAirReportRollupService } from '../../../report-rollup/compres
 import { Assessment } from '../../../shared/models/assessment';
 import { Modification } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResults, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
+import { BaselineResults, DayTypeModificationResult } from '../../calculations/caCalculationModels';
 
 @Component({
     selector: 'app-executive-summary',
@@ -43,7 +43,10 @@ export class ExecutiveSummaryComponent implements OnInit {
   displayReduceSystemPressure: boolean;
   displayUseAutomaticSequencer: boolean;
   displayAuxiliaryPower: boolean;
+  displayReplaceCompressor: boolean;
   selectedModificationIndex: number;
+
+  displaySalvageValue: boolean;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
   copyTableString: any;
@@ -82,6 +85,12 @@ export class ExecutiveSummaryComponent implements OnInit {
       }
       if(!this.displayFlowReallocation){
         this.displayFlowReallocation = modResult.combinedResults.flowReallocationSavings.savings.power != 0;
+      }
+      if(!this.displayReplaceCompressor){
+        this.displayReplaceCompressor = modResult.combinedResults.replaceCompressorsSavings.savings.power != 0;
+      }
+      if(!this.displaySalvageValue){
+        this.displaySalvageValue = modResult.combinedResults.allSavingsResults.salvageValue != 0;
       }
     });
     this.setNotes();
@@ -138,6 +147,10 @@ export class ExecutiveSummaryComponent implements OnInit {
     }
     if (modification.reduceSystemAirPressure.order != 100) {
       supplyProjects = supplyProjects + "Reduce System Air Pressure<br>";
+      hasProjects = true;
+    }
+    if(modification.replaceCompressor.order != 100){
+      supplyProjects = supplyProjects + "Replace Compressor(s)<br>";
       hasProjects = true;
     }
     if (!hasProjects) {

@@ -73,6 +73,20 @@
                     <span *ngIf="!result.combinedResults.flowReallocationSavings.savings.power">&mdash; &mdash;</span>
                 </td>
             </tr>
+            <tr *ngIf="displayReplaceCompressor">
+                <td>Replace Compressor Savings
+                    <span> (kWh)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    &mdash; &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.replaceCompressorsSavings.savings.power">{{result.combinedResults.replaceCompressorsSavings.savings.power
+                        | number:'1.0-0'}}</span>
+                    <span *ngIf="!result.combinedResults.replaceCompressorsSavings.savings.power">&mdash; &mdash;</span>
+                </td>
+            </tr>
             <tr *ngIf="displayAddReceiverVolume">
                 <td>Add Receiver Volume Savings
                     <span> (kWh)</span>
@@ -204,6 +218,22 @@
                 </td>
             </tr>
             <tr class="bold-row">
+                <td>Peak Airflow
+                    <span>
+                        (<span *ngIf="settings.unitsOfMeasure == 'Imperial'">acfm</span>
+                        <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    {{baselineResults.total.maxAirFlow | number:'1.0-2'}}</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span *ngIf="result.combinedResults.maxAirFlow">{{result.combinedResults.maxAirFlow
+                        | number:'1.0-2'}}</span>
+                    <span *ngIf="!result.combinedResults.maxAirFlow">&mdash;
+                        &mdash;</span>
+                </td>
+            </tr>
+            <tr class="bold-row">
                 <td>Annual Energy Used
                     <span> (kWh)</span>
                 </td>
@@ -234,20 +264,6 @@
                 </td>
             </tr>
             }
-            <tr class="bold-row">
-                <td>Average Airflow
-                    <span>(acfm)</span>
-                </td>
-                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-                    {{baselineResults.total.averageAirFlow | number:'1.0-0'}}</td>
-                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
-                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-                    <span
-                        *ngIf="result.combinedResults.averageAirFlow">{{result.combinedResults.averageAirFlow
-                        | number:'1.0-0'}}</span>
-                    <span *ngIf="!result.combinedResults.averageAirFlow">&mdash; &mdash;</span>
-                </td>
-            </tr>
             <tr class="bold-row bg-row">
                 <td>Peak Demand Savings
                     <span> (kW)</span>
@@ -312,6 +328,20 @@
                         *ngIf="result.combinedResults.flowReallocationSavings.savings.cost">{{result.combinedResults.flowReallocationSavings.savings.cost
                         | number:'1.0-0'}}</span>
                     <span *ngIf="!result.combinedResults.flowReallocationSavings.savings.cost">&mdash; &mdash;</span>
+                </td>
+            </tr>
+            <tr *ngIf="displayReplaceCompressor">
+                <td>Replace Compressor Savings
+                    <span> ($)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+                    &mdash; &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.replaceCompressorsSavings.savings.cost">{{result.combinedResults.replaceCompressorsSavings.savings.cost
+                        | number:'1.0-0'}}</span>
+                    <span *ngIf="!result.combinedResults.replaceCompressorsSavings.savings.cost">&mdash; &mdash;</span>
                 </td>
             </tr>
             <tr *ngIf="displayAddReceiverVolume">
@@ -530,6 +560,22 @@
                     <span *ngIf="!result.combinedResults.allSavingsResults.implementationCost">&mdash; &mdash;</span>
                 </td>
             </tr>
+            @if(displaySalvageValue){
+            <tr>
+                <td>
+                    Salvage Value
+                    <span> ($)</span>
+                </td>
+                <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash; &mdash;</td>
+                <td *ngFor="let result of combinedDayTypeResults; let index = index;"
+                    [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+                    <span
+                        *ngIf="result.combinedResults.allSavingsResults.salvageValue">{{result.combinedResults.allSavingsResults.salvageValue
+                        | number:'1.0-0'}}</span>
+                    <span *ngIf="!result.combinedResults.allSavingsResults.salvageValue">&mdash; &mdash;</span>
+                </td>
+            </tr>
+            }
             <tr>
                 <td>
                     Simple Payback Period

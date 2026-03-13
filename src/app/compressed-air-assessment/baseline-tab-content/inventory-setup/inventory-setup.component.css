@@ -1,0 +1,10 @@
+
+
+.modal-open {
+    z-index: initial !important;
+}
+
+
+.inventory-container{
+    height: 100%;
+}

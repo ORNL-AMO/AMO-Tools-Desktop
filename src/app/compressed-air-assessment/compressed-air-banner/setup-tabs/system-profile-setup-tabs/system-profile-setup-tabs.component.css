@@ -1,0 +1,24 @@
+.progress-tabs.mobile-tabs{
+    display: none;
+}
+
+.progress-tabs.mobile-tabs.display{
+    display: flex;
+}
+
+.progress-tabs.mobile-tabs.display .mobile-link.display{
+    display: block;
+}
+
+.progress-tabs.mobile-tabs.display .mobile-link:not(.display){
+    display: none;
+}
+
+
+.tabs-bar{
+    display: none;
+}
+
+.tabs-bar.display{
+    display: flex;
+}

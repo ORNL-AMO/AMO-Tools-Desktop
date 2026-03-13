@@ -147,6 +147,30 @@ export class UpdateDataService {
             }
         }
 
+        if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.modifications) {
+            assessment.compressedAirAssessment.modifications.forEach(mod => {
+                if (!mod.replaceCompressor) {
+                    mod['replaceCompressor'] = {
+                        order: 100,
+                        implementationCost: 0,
+                        salvageValue: 0,
+                        currentCompressorMapping: assessment.compressedAirAssessment.compressorInventoryItems.map(item => {
+                            return {
+                                originalCompressorId: item.itemId,
+                                isReplaced: false
+                            };
+                        }),
+                        replacementCompressorMapping: [],
+                        trimSelections: assessment.compressedAirAssessment.systemInformation.trimSelections.map(selection => {
+                            return {
+                                dayTypeId: selection.dayTypeId,
+                                compressorId: selection.compressorId
+                            };
+                        })
+                    };
+                }
+            })
+        }
         if (assessment.compressedAirAssessment.modifications && assessment.compressedAirAssessment.modifications.length > 0) {
             assessment.compressedAirAssessment.modifications.forEach(mod => {
                 if (mod.flowReallocation === undefined || mod.flowReallocation === null) {

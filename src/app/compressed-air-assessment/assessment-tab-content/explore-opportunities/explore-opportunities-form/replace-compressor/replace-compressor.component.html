@@ -1,0 +1,271 @@
+<form *ngIf="form" [formGroup]="form" class="p-0">
+    <div class="checkbox">
+        <label class="group-label w-100" for="reduceRuntime">
+            Replace Compressors
+            <span *ngIf="(hasInvalidForm || form.invalid) && form.controls.order.value != 100">
+                <span class="fa fa-exclamation-circle"></span>
+            </span>
+            <select id="replaceCompressorOrder" formControlName="order" class="form-control pull-right"
+                (change)="save(true)">
+                <option [ngValue]=100>Off</option>
+                <option *ngFor="let option of orderOptions" [ngValue]="option">{{option}}</option>
+            </select>
+        </label>
+    </div>
+    <div *ngIf="form.controls.order.value != 100" class="mb-0 pt-1 pl-0 pr-0">
+        <div class="form-group" [ngClass]="{'invalid': form.controls.implementationCost.invalid}">
+            <label for="replaceCompressorImplementationCost">Implementation Cost</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="implementationCost"
+                    name="replaceCompressorImplementationCost" id="replaceCompressorImplementationCost"
+                    (input)="save(false)" (focus)="helpTextField('implementationCost')">
+                <span class="input-group-addon units">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.implementationCost.invalid && !form.controls.implementationCost.pristine">
+                <span *ngIf="form.controls.implementationCost.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+        <div class="form-group" [ngClass]="{'invalid': form.controls.salvageValue.invalid}">
+            <label for="replaceCompressorSalvageValue">Salvage Value</label>
+            <div class="input-group">
+                <input type="number" class="form-control" formControlName="salvageValue"
+                    name="replaceCompressorSalvageValue" id="replaceCompressorSalvageValue" (input)="save(false)"
+                    (focus)="helpTextField('salvageValue')">
+                <span class="input-group-addon units">$</span>
+            </div>
+            <span class="alert-danger pull-right small"
+                *ngIf="form.controls.salvageValue.invalid && !form.controls.salvageValue.pristine">
+                <span *ngIf="form.controls.salvageValue.errors.min">Value can't be negative.
+                </span>
+            </span>
+        </div>
+    </div>
+</form>
+<form class="p-0" *ngIf="form.controls.order.value != 100">
+    <div class="scroll-item">
+        <!--Original Compressors-->
+        <label class="w-100 color-label">
+            Select Current Compressors to Salvage/Replace
+        </label>
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        Compressor Name
+                    </th>
+                    <th>
+                        Compressor Type
+                    </th>
+                    <th>
+                        Control Type
+                    </th>
+                    <th>
+                        Pressure Range
+                    </th>
+                    <th>
+                        Motor Power
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let compressorMap of currentCompressorMapping"
+                    [ngClass]="{'replaced': compressorMap.isReplaced}">
+                    <td class="checkbox-cell">
+                        <input type="checkbox" [(ngModel)]="compressorMap.isReplaced" (change)="save(false)"
+                            name="{{compressorMap.originalCompressorId}}-replace-compressor"
+                            id="{{compressorMap.originalCompressorId}}-replace-compressor"
+                            [disabled]="compressorInventoryItems.length == 1 && !compressorMap.isReplaced"
+                            (focus)="helpTextField('replaceExisting')" />
+                    </td>
+                    <td>
+                        @if(compressorMap.isTrimCompressor){
+                        <span class="fa fa-asterisk"></span>
+                        }
+                        {{compressorMap.originalCompressorId |
+                        compressorName:compressedAirAssessment.compressorInventoryItems}}
+                    </td>
+                    @let compressorInventoryItem = compressorMap.originalCompressorId |
+                    compressorItem:compressedAirAssessment.compressorInventoryItems;
+                    <td>
+                        {{compressorInventoryItem.nameplateData.compressorType | compressorType}}
+                    </td>
+                    <td>
+                        {{compressorInventoryItem.compressorControls.controlType | controlType}}
+                    </td>
+                    <td>
+                        {{compressorInventoryItem | compressorPressureMinMax:settings}}
+                    </td>
+                    <td>
+                        {{compressorInventoryItem.nameplateData.motorPower}} hp
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        @if(hasTrimCompressor){
+        <div class="trim-note mb-2">
+            <span class="fa fa-asterisk"></span> Indicates a baseline trim compressor in a base-trim control setup.
+            Update the selection below if replacing this compressor.
+        </div>
+        }
+        <!--Replacement Compressors-->
+        <label class="w-100 color-label">
+            Select Replacement Compressors to Install
+        </label>
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        Compressor Name
+                    </th>
+                    <th>
+                        Compressor Type
+                    </th>
+                    <th>
+                        Control Type
+                    </th>
+                    <th>
+                        Pressure Range
+                    </th>
+                    <th>
+                        Motor Power
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(replacementCompressorMapping.length == 0){
+                <tr>
+                    <td colspan="6" class="text-center">
+                        <a class="click-link" (click)="goToReplacementInventory()"> Click here to add replacement
+                            compressors to the
+                            compressor inventory.</a>
+                    </td>
+                </tr>
+                }@else{
+                <tr *ngFor="let compressorMap of replacementCompressorMapping"
+                    [ngClass]="{'replaced': !compressorMap.isAdded}">
+                    <td class="checkbox-cell">
+                        <input type="checkbox" [(ngModel)]="compressorMap.isAdded" (change)="save(false)"
+                            name="{{compressorMap.replacementCompressorId}}-replace-compressor"
+                            id="{{compressorMap.replacementCompressorId}}-replace-compressor"
+                            [disabled]="compressorInventoryItems.length == 1 && compressorMap.isAdded"
+                            (focus)="helpTextField('addNewCompressor')" />
+                    </td>
+                    <td>
+                        {{compressorMap.replacementCompressorId |
+                        compressorName:compressedAirAssessment.replacementCompressorInventoryItems}}
+                    </td>
+                    @let compressorInventoryItem = compressorMap.replacementCompressorId |
+                    compressorItem:compressedAirAssessment.replacementCompressorInventoryItems;
+                    <td>
+                        {{compressorInventoryItem.nameplateData.compressorType | compressorType}}
+                    </td>
+                    <td>
+                        {{compressorInventoryItem.compressorControls.controlType | controlType}}
+                    </td>
+                    <td>
+                        {{compressorInventoryItem | compressorPressureMinMax:settings}}
+                    </td>
+                    <td>
+                        {{compressorInventoryItem.nameplateData.motorPower}} hp
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        @if(replacementCompressorMapping.length != 0){
+        <div class="w-100 text-right">
+            <a class="click-link small" (click)="goToReplacementInventory()">
+                <span class="fa fa-plus"></span>
+                Add Replacement Compressor</a>
+        </div>
+        }
+        <!--TRIM COMPRESSOR SELECTION-->
+        @if(hasTrimCompressor){
+        <label class="color-label">
+            Select Trim Compressor
+        </label>
+        <table class="table bg-white">
+            <thead>
+                <tr>
+                    <th class="w-50">
+                        Day Type
+                    </th>
+                    <th>
+                        Trim Compressor
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let trimCompressor of trimSelections">
+                    <td>
+                        {{trimCompressor.dayTypeId | dayTypeName:compressedAirAssessment.compressedAirDayTypes}}
+                    </td>
+                    <td>
+                        <div class="form-group w-100" [ngClass]="{'invalid': !trimCompressor.compressorId}">
+                            <select class="form-control w-100" [(ngModel)]="trimCompressor.compressorId"
+                                (change)="save(false)"
+                                name="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor"
+                                id="{{trimCompressor.compressorId+trimCompressor.dayTypeId}}-trim-compressor"
+                                (focus)="helpTextField('trimSelection')">
+                                <option *ngFor="let compressor of compressorInventoryItems"
+                                    [ngValue]="compressor.itemId">
+                                    {{compressor.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+        }
+
+        <ng-container *ngFor="let dayTypeValidation of profileValidation">
+            <label class="color-label">
+                Resulting Profile Validation
+            </label>
+            <table class="table bg-white">
+                <thead>
+                    <tr>
+                        <th [ngClass]="{'text-danger':!dayTypeValidation.isValid}">
+                            {{dayTypeValidation.dayType.name}}
+                        </th>
+
+                        <th class="text-center" *ngFor="let dataTimeInterval of dayTypeValidation.timeInterval;">
+                            {{dataTimeInterval | intervalHourLabel}}
+                        </th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td>
+                            Available Airflow
+                        </td>
+                        <td *ngFor="let airflow of dayTypeValidation.availableAirflow; let index = index"
+                            [ngClass]="{'cell-error': (airflow - dayTypeValidation.requiredAirflow[index]) < 0}">
+                            {{airflow | number:numberPipeDecimals}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Required Airflow
+                        </td>
+                        <td *ngFor="let airflow of dayTypeValidation.requiredAirflow">
+                            {{airflow| number:numberPipeDecimals}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Power, kW
+                        </td>
+                        <td *ngFor="let power of dayTypeValidation.profilePower">
+                            {{power| number:'1.0-1'}}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </ng-container>
+    </div>
+</form>

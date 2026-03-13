@@ -4,8 +4,10 @@ import { CompressorInventoryItem } from '../shared/models/compressed-air-assessm
 import { Settings } from '../shared/models/settings';
 import { CompressedAirSuiteApiService } from '../tools-suite-api/compressed-air-suite-api.service';
 import { ConvertCompressedAirService } from './convert-compressed-air.service';
-import { InventoryService } from './inventory/inventory.service';
-import { CompressorTypeOptions, ControlTypes } from './inventory/inventoryOptions';
+import { InventoryService } from './baseline-tab-content/inventory-setup/inventory/inventory.service';
+import { CompressorTypeOptions, ControlTypes } from './baseline-tab-content/inventory-setup/inventory/inventoryOptions';
+import { CompressorInventoryItemClass } from './calculations/CompressorInventoryItemClass';
+import { InventoryFormService } from './baseline-tab-content/inventory-setup/inventory/inventory-form.service';
 
 
 // enum CompressorType {
@@ -54,8 +56,9 @@ import { CompressorTypeOptions, ControlTypes } from './inventory/inventoryOption
 @Injectable()
 export class CompressedAirCalculationService {
 
-  constructor(private inventoryService: InventoryService,
-    private convertUnitsService: ConvertUnitsService, private convertCompressedAirService: ConvertCompressedAirService, private compressedAirSuiteApiService: CompressedAirSuiteApiService) { }
+  constructor(
+    private convertUnitsService: ConvertUnitsService, private convertCompressedAirService: ConvertCompressedAirService, private compressedAirSuiteApiService: CompressedAirSuiteApiService,
+    private inventoryFormService: InventoryFormService) { }
 
 
   //computeFrom
@@ -65,9 +68,9 @@ export class CompressedAirCalculationService {
   // 3 = CapacityMeasured,
   // 4 = PowerFactor (Volt amps and powerfactor)
 
-  compressorsCalc(compressor: CompressorInventoryItem, settings: Settings, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean, powerFactorData?: { amps: number, volts: number }): CompressorCalcResult {
+  compressorsCalc(compressor: CompressorInventoryItem | CompressorInventoryItemClass, settings: Settings, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number, canShutdown?: boolean, powerFactorData?: { amps: number, volts: number }): CompressorCalcResult {
     let isShutdown: boolean = false;
-    let hasShutdownTimer: boolean = this.inventoryService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType) && compressor.compressorControls.automaticShutdown;
+    let hasShutdownTimer: boolean = this.inventoryFormService.checkDisplayAutomaticShutdown(compressor.compressorControls.controlType) && compressor.compressorControls.automaticShutdown;
     if (canShutdown && (computeFrom == 1 || computeFrom == 3) && computeFromVal == 0) {
       if (hasShutdownTimer) {
         isShutdown = true;
@@ -171,7 +174,7 @@ export class CompressedAirCalculationService {
     }
   }
 
-  getCentrifugalInput(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number): CentrifugalInput {
+  getCentrifugalInput(compressor: CompressorInventoryItem | CompressorInventoryItemClass, computeFrom: number, computeFromVal: number): CentrifugalInput {
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
     if (computeFrom == 0 || computeFrom == 1) {
@@ -214,7 +217,7 @@ export class CompressedAirCalculationService {
     }
   }
 
-  getInputFromInventoryItem(compressor: CompressorInventoryItem, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number): CompressorsCalcInput {
+  getInputFromInventoryItem(compressor: CompressorInventoryItem | CompressorInventoryItemClass, computeFrom: number, computeFromVal: number, atmosphericPressure: number, totalAirStorage: number, additionalRecieverVolume?: number): CompressorsCalcInput {
     let compressorEnumVal: number = this.getCompressorTypeEnumValue(compressor);
     let controlTypeEnumVal: number = this.getControlTypeEnumValue(compressor);
     let stageTypeEnumVal: number = this.getStageTypeEnumVal(compressor);
@@ -313,7 +316,7 @@ export class CompressedAirCalculationService {
     }
   }
 
-  getCompressorTypeEnumValue(compressor: CompressorInventoryItem): number {
+  getCompressorTypeEnumValue(compressor: CompressorInventoryItem | CompressorInventoryItemClass): number {
     let selectedOption = CompressorTypeOptions.find(option => { return option.value == compressor.nameplateData.compressorType });
     if (selectedOption) {
       return selectedOption.enumValue;
@@ -322,7 +325,7 @@ export class CompressedAirCalculationService {
     }
   }
 
-  getControlTypeEnumValue(compressor: CompressorInventoryItem): number {
+  getControlTypeEnumValue(compressor: CompressorInventoryItem | CompressorInventoryItemClass): number {
     let selectedOption = ControlTypes.find(option => { return option.value == compressor.compressorControls.controlType });
     if (selectedOption) {
       return selectedOption.enumValue;
@@ -331,7 +334,7 @@ export class CompressedAirCalculationService {
     }
   }
 
-  getStageTypeEnumVal(compressor: CompressorInventoryItem): number {
+  getStageTypeEnumVal(compressor: CompressorInventoryItem | CompressorInventoryItemClass): number {
     let selectedOption = CompressorTypeOptions.find(option => { return option.value == compressor.nameplateData.compressorType });
     if (selectedOption) {
       return selectedOption.stageTypeEnumValue;
@@ -340,7 +343,7 @@ export class CompressedAirCalculationService {
     }
   }
 
-  getLubricantTypeEnumVal(compressor: CompressorInventoryItem): number {
+  getLubricantTypeEnumVal(compressor: CompressorInventoryItem | CompressorInventoryItemClass): number {
     let selectedOption = CompressorTypeOptions.find(option => { return option.value == compressor.nameplateData.compressorType });
     if (selectedOption) {
       return selectedOption.lubricantTypeEnumValue;
