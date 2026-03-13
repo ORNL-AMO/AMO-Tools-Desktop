@@ -49,6 +49,7 @@ const Diagram = (props: DiagramProps) => {
       return node;
     }
   })
+  const diagramNotes = useAppSelector((state: RootState) => state.diagram.diagramNotes);
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
@@ -72,10 +73,9 @@ const Diagram = (props: DiagramProps) => {
 
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
-  const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
-  const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
 
-  // * on xyFlow instance ready
+  const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
+  const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
   useEffect(() => {
     if (reactFlowInstance && props.height) {
       const parentState = {
@@ -108,16 +108,12 @@ const Diagram = (props: DiagramProps) => {
         calculatedData,
         recentNodeColors,
         recentEdgeColors,
+        diagramNotes: debouncedDiagramNotes
       };
-
-      // console.log('=== SAVED FlowDiagramData', JSON.parse(JSON.stringify(updatedDiagramData)));
       formatDataForMEASUR(updatedDiagramData);
-
       props.saveFlowDiagramData(updatedDiagramData);
-      // console.log('=== SAVED FORMATTED FlowDiagramData', updatedDiagramData);
     }
-  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings]);
-
+  }, [assessmentCreatedNodes.length, debouncedNodes, debouncedEdges, userDiagramOptions, settings, debouncedDiagramNotes]);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -237,7 +233,7 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-              <MenuSidebar shadowRootRef={props.shadowRoot}/>
+          <MenuSidebar shadowRootRef={props.shadowRoot}/>
           </SharedDrawer>
         )}
 
