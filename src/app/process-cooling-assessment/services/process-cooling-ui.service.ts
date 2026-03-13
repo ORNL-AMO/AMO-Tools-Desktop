@@ -424,9 +424,9 @@ export const REPORT_VIEW_LINKS: ViewLink[] = [
   {
     view: ReportView.PERFORMANCE_PROFILE,
     label: 'Performance Profile',
-    meta: {
-      disabled: true
-    }
+    // meta: {
+    //   disabled: true
+    // }
   },
   {
     view: ReportView.SYSTEM_PROFILE,
