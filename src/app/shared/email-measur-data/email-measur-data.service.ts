@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup } from '@angular/forms';
 import { ExportService } from '../import-export/export.service';
 import { ImportExportData } from '../import-export/importExportModel';
 import { MeasurItemType } from '../models/app';
 import { LogToolDbData } from '../../log-tool/log-tool-models';
 import { AnalyticsService } from '../analytics/analytics.service';
+import { ImportExportOpportunities } from '../models/treasure-hunt';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,9 @@ export class EmailMeasurDataService {
     })
   };
   
-  constructor(private httpClient: HttpClient, private exportService: ExportService, private analyticsService: AnalyticsService) {
+  constructor(private httpClient: HttpClient, 
+    private exportService: ExportService, 
+    private analyticsService: AnalyticsService) {
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.emailSentStatus = new BehaviorSubject<EmailSentStatus>(undefined);
     this.showEmailMeasurDataModal = new BehaviorSubject<boolean>(undefined);
@@ -35,7 +38,7 @@ export class EmailMeasurDataService {
 
   setEmailData(measurEmailForm: FormGroup) {
     if (measurEmailForm.valid && this.measurItemAttachment) {
-      let attachmentExportData: ImportExportData | LogToolDbData;
+      let attachmentExportData: ImportExportData | LogToolDbData | ImportExportOpportunities;
       if (this.measurItemAttachment.itemType === 'assessment') {
         attachmentExportData = this.exportService.getSelectedAssessment(this.measurItemAttachment.itemData);
         attachmentExportData['origin'] = "AMO-TOOLS-DESKTOP";
@@ -45,13 +48,14 @@ export class EmailMeasurDataService {
       } else if (this.measurItemAttachment.itemType === 'data-explorer') {
         attachmentExportData = this.measurItemAttachment.itemData;
         attachmentExportData['origin'] = "AMO-LOG-TOOL-DATA";
+      } else if (this.measurItemAttachment.itemType === 'opportunities') {
+        attachmentExportData = this.measurItemAttachment.itemData
       }
-
 
       this.measurEmailData = {
         emailTo: measurEmailForm.controls.emailTo.value,
         emailSender: measurEmailForm.controls.emailSender.value,
-        fileName: this.measurItemAttachment.itemName,
+        fileName: measurEmailForm.controls.emailAttachmentName.value,
         attachment: attachmentExportData,
         isProduction: environment.production
       }
@@ -108,7 +112,6 @@ export class EmailMeasurDataService {
       } else if (emailItemType === 'CompressedAir') {
         this.analyticsService.sendEvent('sent-email-CA');
       }
-
     }
   }
 
@@ -128,10 +131,10 @@ export class SendEmailHttpError extends Error { }
 
 
 export interface MeasurEmailData {
-  emailTo: string
-  emailSender: string,
-  fileName: string,
-  attachment: ImportExportData | LogToolDbData,
+  emailTo: string;
+  emailSender: string;
+  fileName: string;
+  attachment: ImportExportData | LogToolDbData | ImportExportOpportunities;
   isProduction?: boolean;
 }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Settings } from '../shared/models/settings';
+import { getDefaultSettings, Settings } from '../shared/models/settings';
 import * as _ from 'lodash';
 import { Assessment } from '../shared/models/assessment';
 import { SettingsService } from '../settings/settings.service';
@@ -33,6 +33,9 @@ export class SettingsDbService {
       this.allSettings = await firstValueFrom(this.getAllSettings());
     }
     this.globalSettings = this.getByDirectoryId(1);
+    if(!this.globalSettings){
+      this.globalSettings = getDefaultSettings();
+    }
     this.globalSettings = this.checkSettings(this.globalSettings);
     if (!environment.production) {
       this.setTutorialsOff();
@@ -138,6 +141,9 @@ export class SettingsDbService {
 
 
   checkSettings(settings: Settings, assessment?: Assessment): Settings {
+    if(!settings) {
+      settings = getDefaultSettings();
+    }
     if (!settings.energyResultUnit) {
       settings = this.settingService.setEnergyResultUnitSetting(settings);
     }

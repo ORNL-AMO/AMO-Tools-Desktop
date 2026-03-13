@@ -20,11 +20,28 @@
       <div class="input-group">
         <input type="text" formControlName="emailTo" class="form-control" (input)="save()" id="emailTo" />
       </div>
+      <small class="form-text text-muted">Separate multiple email addresses with commas (ex. user1&#64;example.com, admin&#64;example.com)</small>
       <div class="input-group">
         <span class="alert-danger w-100 pull-right small py-1 px-2"
           *ngIf="emailDataForm.controls.emailTo.invalid && !emailDataForm.controls.emailTo.pristine">
           <span *ngIf="emailDataForm.controls.emailTo.errors.required">Email is required</span>
-          <span *ngIf="emailDataForm.controls.emailTo.errors.email">Must be a valid email address</span>
+          <span *ngIf="emailDataForm.controls.emailTo.errors.invalidEmails">One or more emails are invalid</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group d-flex flex-column w-100 mb-3">
+      <label class="bold mr-2 w-25" for="emailAttachmentName">Attachment Name</label>
+      <div class="input-group">
+        <input type="text" formControlName="emailAttachmentName" class="form-control" (input)="save()" id="emailAttachmentName" />
+      </div>
+      <div class="input-group">
+        <span class="alert-danger w-100 pull-right small py-1 px-2"
+          *ngIf="emailAttachmentName.invalid">
+          <span *ngIf="emailAttachmentName.errors.required">Attachment name is required</span>
+          <span *ngIf="emailAttachmentName.errors.invalidCharacters">
+            Only letters, numbers, dot (.), underscore (_), and hyphen (-) are allowed in the attachment name
+          </span>
         </span>
       </div>
     </div>

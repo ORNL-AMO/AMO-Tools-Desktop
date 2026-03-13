@@ -121,6 +121,7 @@ export class SteamReductionComponent implements OnInit {
         this.modificationExists = true;
       }
     }
+
   }
 
   addBaselineEquipment() {
@@ -142,6 +143,10 @@ export class SteamReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
+    if (!this.modificationData) {
+      this.createModification();
+      return;
+    }
     let tmpObj: SteamReductionData = this.steamReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, this.baselineData[0].utilityType, this.baselineData[0].steamUtilityCost, this.baselineData[0].naturalGasUtilityCost, this.baselineData[0].otherUtilityCost);
     this.modificationData.push(tmpObj);
     this.getResults();

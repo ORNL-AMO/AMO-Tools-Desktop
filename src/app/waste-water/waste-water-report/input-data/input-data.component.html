@@ -46,6 +46,7 @@
           &mdash;
         </td>
       </tr>
+      @if (showOperationalImpacts()) {
       <tr>
         <td [ngClass]="{'indicate-report-field-different': checkCo2DataItemDifferent('totalEmissionOutputRate') == true}">
           Total Emission Output Rate (kg CO<sub>2</sub>/MWh)
@@ -58,6 +59,7 @@
           {{mod.co2SavingsData.totalEmissionOutputRate}}
         </td>
       </tr>
+      }
       <tr>
         <th class="section-header">Activated Sludge Data</th>
         <th></th>

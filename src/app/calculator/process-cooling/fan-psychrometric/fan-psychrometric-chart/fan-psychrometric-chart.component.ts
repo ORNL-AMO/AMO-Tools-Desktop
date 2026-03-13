@@ -9,7 +9,7 @@ import { FanPsychrometricService } from '../fan-psychrometric.service';
 import { Subscription } from 'rxjs';
 import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
 import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 
 @Component({
     selector: 'app-fan-psychrometric-chart',

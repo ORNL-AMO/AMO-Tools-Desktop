@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { LocalStorageKey } from "./models/app";
 
 /**
  * Read/Write local Storage
@@ -19,7 +20,7 @@ export class LocalStorageService {
         return JSON.parse(value);
       }
     } catch (e) {
-      console.error('Error retrieving from localStorage', e);
+      console.error(`Error retrieving from localStorage for key: ${key}`, e);
       return null;
     }
   }
@@ -28,7 +29,16 @@ export class LocalStorageService {
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch (e) { 
-      console.error('Error storing to localStorage', e);
+      console.error(`Error storing to localStorage for key: ${key}`, e);
     } 
   }
+
+  clearUserControlledKey(key: LocalStorageKey): void {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.error(`Error clearing user-controlled localStorage for key: ${key}`, e);
+    }
+  }
+
 }

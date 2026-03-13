@@ -32,6 +32,7 @@
           [ngClass]="{'indicate-report-field-different': modification.psat.inputs.cost_kw_hour != psat.inputs.cost_kw_hour}">
           {{modification.psat.inputs.cost_kw_hour | currency: 'USD': 'symbol' : '1.0-0'}}</td>
       </tr>
+      @if (showOperationalImpacts()) {
       <tr>
         <td [ngClass]="{'indicate-report-field-different': totalEmissionOutputRateDiff == true}">
           Total Emission Output Rate <span>(kg CO<sub>2</sub>/MWh)</span>
@@ -45,7 +46,8 @@
           {{modification.psat.inputs.co2SavingsData.totalEmissionOutputRate}}
         </span>
       </td>
-      </tr>
+    </tr>
+  }
 
 
       <tr>

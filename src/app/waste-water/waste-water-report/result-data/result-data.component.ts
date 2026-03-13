@@ -1,8 +1,9 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, Signal, ViewChild } from '@angular/core';
 import { WasteWaterReportRollupService } from '../../../report-rollup/waste-water-report-rollup.service';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-result-data',
@@ -11,6 +12,9 @@ import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
     standalone: false
 })
 export class ResultDataComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   assessment: Assessment;
   @Input()

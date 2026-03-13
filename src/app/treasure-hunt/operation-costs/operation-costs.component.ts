@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener, inject, Signal } from '@angular/core';
 import { TreasureHunt, EnergyUsage, TreasureHuntResults } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt-report.service';
@@ -12,6 +12,7 @@ import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { current } from '../../shared/convert-units/definitions/current';
+import { FeatureFlagService } from '../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-operation-costs',
@@ -20,6 +21,9 @@ import { current } from '../../shared/convert-units/definitions/current';
     standalone: false
 })
 export class OperationCostsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   settings: Settings;
   @Output('updateSettings')

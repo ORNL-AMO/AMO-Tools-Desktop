@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, Signal } from '@angular/core';
 import { FormGroup, UntypedFormGroup } from '@angular/forms';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-savings.service';
@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 import { ConvertPumpInventoryService } from '../../convert-pump-inventory.service';
 import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
 import { IntegrationState } from '../../../shared/connected-inventory/integrations';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 
 @Component({
@@ -33,6 +34,9 @@ export class PlantSetupComponent implements OnInit {
   showSuccessMessage: boolean = false;
   oldSettings: Settings;
   connectedAssessmentState: IntegrationState;
+
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   constructor(private settingsDbService: SettingsDbService, private settingsService: SettingsService,
     private convertPumpInventoryService: ConvertPumpInventoryService,

@@ -96,14 +96,16 @@
                         *ngIf="sortByField == 'currentEnergyCost' && sortByDirection == 'asc'"></span>
                     Current Energy Cost
                 </th>
+                @if (showOperationalImpacts()) {
                 <th class="header-cell" [ngClass]="{'sort-by-active': 'currentEmissionOutput' == sortByField}"
                     (click)="setSortByField('currentEmissionOutput')">
                     <span class="fa fa-chevron-up"
                         *ngIf="sortByField == 'currentEmissionOutput' && sortByDirection == 'desc'"></span>
                     <span class="fa fa-chevron-down"
                         *ngIf="sortByField == 'currentEmissionOutput' && sortByDirection == 'asc'"></span>
-                    Current Emissions 
+                    Current Emissions
                 </th>
+                }
                 <th class="header-cell" [ngClass]="{'sort-by-active': 'rewindEnergyUse' == sortByField}"
                     (click)="setSortByField('rewindEnergyUse')">
                     <span class="fa fa-chevron-up"
@@ -120,14 +122,16 @@
                         *ngIf="sortByField == 'rewindEnergyCost' && sortByDirection == 'asc'"></span>
                     Rewind Energy Cost
                 </th>
+                @if (showOperationalImpacts()) {
                 <th class="header-cell" [ngClass]="{'sort-by-active': 'rewindEmissionOutput' == sortByField}"
                     (click)="setSortByField('rewindEmissionOutput')">
                     <span class="fa fa-chevron-up"
                         *ngIf="sortByField == 'rewindEmissionOutput' && sortByDirection == 'desc'"></span>
                     <span class="fa fa-chevron-down"
                         *ngIf="sortByField == 'rewindEmissionOutput' && sortByDirection == 'asc'"></span>
-                    Rewind Emissions 
+                    Rewind Emissions
                 </th>
+                }
                 <th class="header-cell" [ngClass]="{'sort-by-active': 'replacementEnergyUse' == sortByField}"
                     (click)="setSortByField('replacementEnergyUse')">
                     <span class="fa fa-chevron-up"
@@ -144,14 +148,16 @@
                         *ngIf="sortByField == 'replacementEnergyCost' && sortByDirection == 'asc'"></span>
                     Replacement Energy Cost
                 </th>
+                @if (showOperationalImpacts()) {
                 <th class="header-cell" [ngClass]="{'sort-by-active': 'replacementEmissionOutput' == sortByField}"
                     (click)="setSortByField('replacementEmissionOutput')">
                     <span class="fa fa-chevron-up"
                         *ngIf="sortByField == 'replacementEmissionOutput' && sortByDirection == 'desc'"></span>
                     <span class="fa fa-chevron-down"
                         *ngIf="sortByField == 'replacementEmissionOutput' && sortByDirection == 'asc'"></span>
-                    Replacement Emissions 
+                    Replacement Emissions
                 </th>
+                }
                 <th class="header-cell" [ngClass]="{'sort-by-active': 'replacementNowPayback' == sortByField}"
                     (click)="setSortByField('replacementNowPayback')">
                     <span class="fa fa-chevron-up"
@@ -264,6 +270,7 @@
                         &mdash;
                     </span>
                 </td>
+                @if (showOperationalImpacts()) {
                 <td>
                     <span *ngIf="batchAnalysisDataItem.currentEmissionOutput">
                         {{batchAnalysisDataItem.currentEmissionOutput | number:'1.0-0'}} tonne CO<sub>2</sub>
@@ -272,6 +279,7 @@
                         &mdash; tonne CO<sub>2</sub>
                     </span>
                 </td>
+                }
                 <td class="incomplete-cell" colspan="7" *ngIf="!batchAnalysisDataItem.isBatchAnalysisValid">
                     Unable to run batch analysis on motor, data missing:
                     <span class="bold" *ngFor="let missing of batchAnalysisDataItem.missingData; let last=last">
@@ -295,6 +303,7 @@
                         &mdash;
                     </span>
                 </td>
+                @if (showOperationalImpacts()) {
                 <td>
                     <span *ngIf="batchAnalysisDataItem.rewindEmissionOutput">
                         {{batchAnalysisDataItem.rewindEmissionOutput | number:'1.0-0'}} tonne CO<sub>2</sub>
@@ -303,6 +312,7 @@
                         &mdash; tonne CO<sub>2</sub>
                     </span>
                 </td>
+                }
                 <td *ngIf="batchAnalysisDataItem.isBatchAnalysisValid">
                     <span *ngIf="batchAnalysisDataItem.replacementEnergyUse">
                         {{batchAnalysisDataItem.replacementEnergyUse | number:'1.0-0'}} kWh/yr
@@ -319,6 +329,7 @@
                         &mdash;
                     </span>
                 </td>
+                @if (showOperationalImpacts()) {
                 <td>
                     <span *ngIf="batchAnalysisDataItem.replacementEmissionOutput">
                         {{batchAnalysisDataItem.replacementEmissionOutput | number:'1.0-0'}} tonne CO<sub>2</sub>
@@ -327,6 +338,7 @@
                         &mdash; tonne CO<sub>2</sub>
                     </span>
                 </td>
+                }
                 <td *ngIf="batchAnalysisDataItem.isBatchAnalysisValid">
                     <span *ngIf="batchAnalysisDataItem.replacementNowPayback">
                         {{batchAnalysisDataItem.replacementNowPayback | number:'1.0-0'}} yrs

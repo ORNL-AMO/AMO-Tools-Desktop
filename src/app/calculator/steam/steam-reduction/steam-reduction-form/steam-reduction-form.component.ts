@@ -36,6 +36,7 @@ export class SteamReductionFormComponent implements OnInit {
   formWidth: number;
   showOperatingHoursModal: boolean;
 
+
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -73,8 +74,7 @@ export class SteamReductionFormComponent implements OnInit {
   ngOnInit() {
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;
-    }
-    else {
+    } else {
       this.idString = 'modification_' + this.index;
     }
     this.form = this.steamReductionService.getFormFromObj(this.data, this.index, this.isBaseline, this.settings);
@@ -82,6 +82,7 @@ export class SteamReductionFormComponent implements OnInit {
       this.form.disable();
     }
     this.calculateIndividualResult();
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -150,6 +151,8 @@ export class SteamReductionFormComponent implements OnInit {
       steamVariableMax = 1;
     }
     this.form.controls.steamVariable.setValidators([Validators.required, Validators.min(steamVariableMin), Validators.max(steamVariableMax)]);
+    this.form.controls.steamVariable.setValue(0);
+    this.form.controls.steamVariable.updateValueAndValidity();
   }
 
   getOptionDisplayUnit(quantity: number) {

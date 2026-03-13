@@ -1,18 +1,15 @@
 import { PreAssessment } from "../../calculator/utilities/pre-assessment/pre-assessment";
 import { MotorPerformanceInputs } from "../../calculator/motors/motor-performance/motor-performance.service";
 import { NemaInputs } from "../../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.service";
-import { O2Enrichment, EnrichmentInput } from "./phast/o2Enrichment";
-import { EfficiencyImprovementInputs } from "./phast/efficiencyImprovement";
+import { EnrichmentInput } from "./phast/o2Enrichment";
 import { EnergyEquivalencyFuel, EnergyEquivalencyElectric } from "./phast/energyEquivalency";
 import { FlowCalculations } from "./phast/flowCalculations";
 import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
 import { Fan203Inputs, FanMotor } from "./fans";
 import { SystemAndEquipmentCurveData } from "./system-and-equipment-curve";
-import { AirLeakSurveyInput, AirSystemCapacityInput, CalculateUsableCapacity, CompressedAirPressureReductionData, CompressedAirPressureReductionInput, ReceiverTank, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredStorage } from "./standalone";
+import { AirLeakSurveyInput, AirSystemCapacityInput, CompressedAirPressureReductionData } from "./standalone";
 import { AirFlowConversionInput } from "./compressed-air/compressed-air";
 import { ReceiverTankInputs } from "../../calculator/compressed-air/receiver-tank/receiver-tank.service";
-import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
-
 
 export interface Calculator {
     directoryId?: number;
@@ -43,7 +40,6 @@ export interface Calculator {
     airFlowConversionInputs?: AirFlowConversionInput;
     //airSystemCapacityInputs: AirSystemCapacityInput;
     o2EnrichmentInputs?: Array<EnrichmentInput>;
-    efficiencyImprovementInputs?: EfficiencyImprovementInputs;
     energyEquivalencyInputs?: {
         energyEquivalencyFuel: EnergyEquivalencyFuel,
         energyEquivalencyElectric: EnergyEquivalencyElectric

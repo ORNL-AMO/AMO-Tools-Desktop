@@ -4,7 +4,7 @@ import { Calculator } from '../../shared/models/calculators';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { PieChartDataItem } from '../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';
-import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../shared/graphColors';
 import * as _ from 'lodash';
 import { FsatReportRollupService } from '../fsat-report-rollup.service';
 import { ReportRollupService } from '../report-rollup.service';

@@ -25,9 +25,11 @@
                 <th>
                     Energy Cost ($)
                 </th>
+                @if (showOperationalImpacts()) {
                 <th>
                     Emissions Output (tonne CO<sub>2</sub>)
                 </th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -80,6 +82,7 @@
                         &mdash;
                     </span>
                 </td>
+                @if (showOperationalImpacts()) {
                 <td>
                     <span *ngIf="tableDataItem.co2EmissionOutput">
                         {{tableDataItem.co2EmissionOutput | number :'1.0-2'}}
@@ -88,6 +91,7 @@
                         &mdash;
                     </span>
                 </td>
+                }
                 <td>
                     <a class="fa fa-trash danger" [ngClass]="{'disabled': tableDataItems.length <= 1}" (click)="openConfirmDeleteModal(tableDataItem.motorItem)"></a>                    
                 </td>

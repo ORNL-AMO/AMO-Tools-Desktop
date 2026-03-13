@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef, ViewChild, Input, HostListener } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
-import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../graphColors';
 
 @Component({
     selector: 'app-plotly-pie-chart',

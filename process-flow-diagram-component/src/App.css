@@ -369,17 +369,34 @@ a {
 }
 /* Custom Node End */
 
-.react-flow__node.selectable .custom-node-toolbar {
-  visibility: hidden;
-  pointer-events: none;
-}
+/* Custom Node Toolbar */
 
-.react-flow__node.selectable:hover .custom-node-toolbar,
-.react-flow__node.selectable.selected .custom-node-toolbar {
+/* Toolbar always visible, but edit button only on hover/selected */
+.react-flow__node .custom-node-toolbar {
   visibility: visible;
   pointer-events: all;
 }
 
+.react-flow__node .custom-node-toolbar .edit-btn {
+  display: none;
+}
+.react-flow__node.selectable:hover .custom-node-toolbar .edit-btn,
+.react-flow__node.selectable.selected .custom-node-toolbar .edit-btn {
+  display: inline-flex;
+}
+ 
+/* Show the Toolbar edit button only on hover */
+/* .react-flow__node .custom-node-toolbar .edit-btn {
+  display: none;
+}
+.react-flow__node:hover .custom-node-toolbar .edit-btn {
+  display: inline-flex;
+}
+
+/* Always show the error/warning button */
+.react-flow__node .custom-node-toolbar .error-warning-btn {
+  display: inline-flex;
+}
 
 .node-button {
   width: 36px;

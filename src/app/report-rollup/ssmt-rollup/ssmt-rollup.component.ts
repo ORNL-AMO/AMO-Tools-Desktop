@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../shared/graphColors';
 import { SsmtResultsData } from '../report-rollup-models';
 import { BarChartDataItem } from '../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
 import { RollupSummaryTableData } from '../rollup-summary-table/rollup-summary-table.component';

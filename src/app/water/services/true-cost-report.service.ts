@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { AttributionFraction, CostComponentAttribution, SystemAttributionMap } from 'process-flow-lib';
+import { roundVal } from '../../shared/helperFunctions';
 
 @Injectable()
 export class TrueCostReportService {
@@ -14,7 +15,8 @@ export class TrueCostReportService {
     getCostComponentsForm(
       systemAttributionMap: SystemAttributionMap,
       costComponentIds: string[],
-      nullDefaultAttribution: Record<string, { [key: string]: string }>
+      nullDefaultAttribution: Record<string, { [key: string]: string }>,
+      flowDecimalPrecision: number
     ): FormGroup {
       let costComponents: { id: string; systemAttributions: number[] }[] = [];
       if (systemAttributionMap) {
@@ -24,7 +26,8 @@ export class TrueCostReportService {
             const componentAttribution: AttributionFraction = attributionMap[componentId]?.totalAttribution;
             let systemAttributionToComponent: number = null;
             if (componentAttribution) {
-              systemAttributionToComponent = componentAttribution.adjusted !== undefined ? (componentAttribution.adjusted * 100) : (componentAttribution.default * 100);
+              const value = componentAttribution.adjusted !== undefined ? (componentAttribution.adjusted * 100) : (componentAttribution.default * 100);
+              systemAttributionToComponent = roundVal(value, flowDecimalPrecision);
             } else {
               if (!nullDefaultAttribution[componentId]) {
                 nullDefaultAttribution[componentId] = {};

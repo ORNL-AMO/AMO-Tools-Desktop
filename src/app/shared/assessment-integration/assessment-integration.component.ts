@@ -1,4 +1,5 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject, Signal } from '@angular/core';
+import { FeatureFlagService } from '../feature-flag.service';
 import { AssessmentIntegrationService, ExistingIntegrationData, IntegratedAssessment } from './assessment-integration.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AssessmentOption } from '../connected-inventory/integrations';
@@ -16,6 +17,8 @@ import { Subscription } from 'rxjs';
     standalone: false
 })
 export class AssessmentIntegrationComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
   @Input()
   existingIntegrationData: ExistingIntegrationData;
   @Input()

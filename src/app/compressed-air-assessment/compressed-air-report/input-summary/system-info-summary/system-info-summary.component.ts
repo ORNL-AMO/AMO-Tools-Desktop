@@ -1,4 +1,5 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, OnInit, Signal, ViewChild } from '@angular/core';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 import { SystemInformation } from '../../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../../shared/models/settings';
 
@@ -9,6 +10,9 @@ import { Settings } from '../../../../shared/models/settings';
     standalone: false
 })
 export class SystemInfoSummaryComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   @Input()
   systemInformation: SystemInformation;
   @Input()

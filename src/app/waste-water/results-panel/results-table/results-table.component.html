@@ -353,11 +353,12 @@
             <span class="table-text">{{modificationResults.AeCost | number: '1.0-0'}}</span>
         </div>
     </div>
+    @if (showOperationalImpacts()) {
     <!-- co2EmissionsOutput -->
     <div class="d-flex stripe my-table-item my-table-bg bold">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="bold table-text">Annual CO<sub>2</sub> 
+            <span class="bold table-text">Annual CO<sub>2</sub>
                 <span *ngIf="settings.emissionsUnit === 'Imperial'"> (ton CO<sub>2</sub>)</span>
                 <span *ngIf="settings.emissionsUnit === 'Metric'"> (tonne CO<sub>2</sub>)</span>
             </span>
@@ -374,7 +375,7 @@
      <div class="d-flex stripe my-table-item my-table-bg bold">
         <div class="d-flex align-items-center pl-1 pr-1"
             [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-            <span class="bold table-text">Annual CO<sub>2</sub> Savings 
+            <span class="bold table-text">Annual CO<sub>2</sub> Savings
                 <span *ngIf="settings.emissionsUnit === 'Imperial'"> (ton CO<sub>2</sub>)</span>
                 <span *ngIf="settings.emissionsUnit === 'Metric'"> (tonne CO<sub>2</sub>)</span>
             </span>
@@ -384,6 +385,7 @@
             <span class="table-text">{{modificationResults.co2EmissionsSavings | number: '1.0-0'}}</span>
         </div>
     </div>
+    }
     <!-- costSavings -->
     <div class="d-flex stripe my-table-item my-table-bg bold">
         <div class="d-flex align-items-center pl-1 pr-1"

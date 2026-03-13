@@ -7,7 +7,6 @@ export const environment = {
   version: packageInfo.version,
   useServiceWorker: true,
   measurWeatherApi: 'https://lcd.ornl.gov/api',
-  measurWeatherApiLegacy: 'https://ir-utilities.ornl.gov/',
   measurUtilitiesApi: 'https://ir-utilities.ornl.gov/',
   measurDocsUrl: 'https://industrialresources.ornl.gov/measur/suite/docs/',
 };

@@ -82,7 +82,7 @@ export class CompressedAirInventorySummaryOverviewService {
       power = this.convertUnitsService.value(power).from('hp').to('kW');
     }    
     let percentTimeLoaded: number = compressedAirItem.compressedAirDesignDetailsProperties.estimatedTimeLoaded / 100;
-    let emissionsFactor: number = compressedAirInventoryData.co2SavingsData.totalEmissionOutputRate;
+    let emissionsFactor: number = compressedAirInventoryData.co2SavingsData?.totalEmissionOutputRate || 0;
     let efficiency: number = compressedAirItem.compressedAirDesignDetailsProperties.designEfficiency / 100;
     
     let percentUnloadPower: number = 0;

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-
+import { Subscription } from 'rxjs';
+import { TreasureHuntService } from '../../../treasure-hunt.service';
+import { TreasureHunt } from '../../../../shared/models/treasure-hunt';
 @Component({
     selector: 'app-energy-use-form',
     templateUrl: './energy-use-form.component.html',
@@ -16,17 +18,49 @@ export class EnergyUseFormComponent implements OnInit {
   emitSave = new EventEmitter<Array<{ type: string, amount: number }>>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
+
+  treasureHuntSub: Subscription;
+  treasureHunt: TreasureHunt;
+  availableEnergyTypes: Array<string> = [];
   
-  constructor() { }
+  constructor(private treasureHuntService: TreasureHuntService,) { }
 
   ngOnInit() {
+    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
+      this.treasureHunt = val;
+      if (this.treasureHunt && this.treasureHunt.currentEnergyUsage) {
+        this.updateAvailableEnergyTypes();
+      }
+    });
+  }
+
+  updateAvailableEnergyTypes() {
+    const allTypes = [
+      'Electricity',
+      'Gas',
+      'Compressed Air',
+      'Other Fuel',
+      'Steam',
+      'Water',
+      'WWT'
+    ];
+    const energyUsageToType = {
+      'Electricity': this.treasureHunt.currentEnergyUsage.electricityUsed,
+      'Gas': this.treasureHunt.currentEnergyUsage.naturalGasUsed,
+      'Compressed Air': this.treasureHunt.currentEnergyUsage.compressedAirUsed,
+      'Other Fuel': this.treasureHunt.currentEnergyUsage.otherFuelUsed,
+      'Steam': this.treasureHunt.currentEnergyUsage.steamUsed,
+      'Water': this.treasureHunt.currentEnergyUsage.waterUsed,
+      'WWT': this.treasureHunt.currentEnergyUsage.wasteWaterUsed
+    };
+    this.availableEnergyTypes = allTypes.filter(type => energyUsageToType[type]);
   }
 
   addEnergyField() {
     this.energyItems.push({
-      type: 'Electricity',
+      type: this.availableEnergyTypes[0] || 'Electricity',
       amount: 0.0
-    })
+    });
   }
 
   removeEnergyItem(index: number) {
