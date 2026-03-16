@@ -76,6 +76,14 @@ const Diagram = (props: DiagramProps) => {
 
   const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
   const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     if (reactFlowInstance && props.height) {
       const parentState = {
@@ -113,7 +121,7 @@ const Diagram = (props: DiagramProps) => {
       formatDataForMEASUR(updatedDiagramData);
       props.saveFlowDiagramData(updatedDiagramData);
     }
-  }, [assessmentCreatedNodes.length, debouncedNodes, debouncedEdges, userDiagramOptions, settings, debouncedDiagramNotes]);
+  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings, debouncedDiagramNotes]);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
