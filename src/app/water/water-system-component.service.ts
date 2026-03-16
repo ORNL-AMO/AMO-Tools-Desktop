@@ -90,7 +90,8 @@ export class WaterSystemComponentService {
       customTreatmentType: [obj.customTreatmentType],
       cost: [obj.cost],
       name: [obj.name],
-      flowValue: [obj.userEnteredData.totalSourceFlow]
+      flowValue: [obj.userEnteredData.totalSourceFlow],
+      knownLosses: [obj.userEnteredData.totalKnownLosses]
     });
     return form;
   }
@@ -101,6 +102,7 @@ export class WaterSystemComponentService {
     waterTreatment.name = form.controls.name.value;
     waterTreatment.customTreatmentType = form.controls.customTreatmentType.value;
     waterTreatment.userEnteredData.totalSourceFlow = form.controls.flowValue.value;
+    waterTreatment.userEnteredData.totalKnownLosses = form.controls.knownLosses.value;
     return waterTreatment;
   }
 
@@ -110,7 +112,8 @@ export class WaterSystemComponentService {
       customTreatmentType: [obj.customTreatmentType],
       cost: [obj.cost],
       name: [obj.name],
-      flowValue: [obj.userEnteredData.totalSourceFlow]
+      flowValue: [obj.userEnteredData.totalSourceFlow],
+      knownLosses: [obj.userEnteredData.totalKnownLosses]
     });
     return form;
   }
@@ -121,6 +124,7 @@ export class WaterSystemComponentService {
     wasteWaterTreatment.name = form.controls.name.value;
     wasteWaterTreatment.customTreatmentType = form.controls.customTreatmentType.value;
     wasteWaterTreatment.userEnteredData.totalSourceFlow = form.controls.flowValue.value;
+    wasteWaterTreatment.userEnteredData.totalKnownLosses = form.controls.knownLosses.value;
     return wasteWaterTreatment;
   }
 
