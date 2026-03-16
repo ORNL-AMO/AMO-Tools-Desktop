@@ -1,14 +1,14 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { CompressorInventoryItem, ProfileSummary, ProfileSummaryTotal, SystemInformation, SystemProfileSetup } from '../../shared/models/compressed-air-assessment';
+import { Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
+import { CompressedAirDayType, CompressorInventoryItem, MultiCompressorSystemControls, ProfileSummary, ProfileSummaryTotal } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
-    selector: 'app-profile-summary-table',
-    templateUrl: './profile-summary-table.component.html',
-    styleUrls: ['./profile-summary-table.component.css'],
-    standalone: false
+  selector: 'app-profile-summary-table',
+  templateUrl: './profile-summary-table.component.html',
+  styleUrls: ['./profile-summary-table.component.css'],
+  standalone: false
 })
-export class ProfileSummaryTableComponent implements OnInit {
+export class ProfileSummaryTableComponent implements OnChanges {
   @Input()
   inventoryItems: Array<CompressorInventoryItem>;
   @Input()
@@ -22,19 +22,21 @@ export class ProfileSummaryTableComponent implements OnInit {
   @Input()
   totalsForPrint: Array<Array<ProfileSummaryTotal>>;
   @Input()
-  systemProfileSetup: SystemProfileSetup;
+  dayType: CompressedAirDayType;
   @Input()
-  systemInformation: SystemInformation;
+  multiCompressorSystemControls: MultiCompressorSystemControls;
+  @Input()
+  trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
+
   selectedTrimCompressorId: string;
 
   @ViewChild('profileTable', { static: false }) profileTable: ElementRef;
   allTablesString: string;
-  constructor() { }
 
-  ngOnInit(): void {
-    if (this.systemInformation.trimSelections && this.systemProfileSetup.dayTypeId) {
-      let selection = this.systemInformation.trimSelections.find(selection => selection.dayTypeId == this.systemProfileSetup.dayTypeId);
-      this.selectedTrimCompressorId = selection? selection.compressorId : undefined;
+  ngOnChanges() {
+    if (this.multiCompressorSystemControls == 'baseTrim' && this.trimSelections && this.dayType) {
+      let selection = this.trimSelections.find(selection => selection.dayTypeId == this.dayType.dayTypeId);
+      this.selectedTrimCompressorId = selection ? selection.compressorId : undefined;
     }
   }
 
@@ -43,7 +45,10 @@ export class ProfileSummaryTableComponent implements OnInit {
   }
 
   checkShowAuxiliary() {
-    let auxTotal: ProfileSummaryTotal = this.totals.find(totalData => { return totalData.auxiliaryPower != 0 });
-    return auxTotal != undefined;
+    if (!this.printView) {
+      return this.totals.some(totalData => { return totalData.auxiliaryPower != 0 });
+    } else {
+      return this.totalsForPrint.some(totalData => { return totalData.some(total => total.auxiliaryPower != 0) });
+    }
   }
 }

@@ -24,7 +24,6 @@ export class AirPropertiesCsvService {
         },
       });
     });
-
   }
 
   setAirPropertiesData(csvResults: Array<any>) {

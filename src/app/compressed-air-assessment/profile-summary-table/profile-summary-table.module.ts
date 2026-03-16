@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ProfileSummaryTableComponent } from './profile-summary-table.component';
 import { SharedCompressorPipesModule } from '../shared-compressor-pipes/shared-compressor-pipes.module';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
-import { IntervalHourLabelModule } from '../interval-hour-label/interval-hour-label.module';
-
-
 
 @NgModule({
   declarations: [
@@ -14,8 +11,7 @@ import { IntervalHourLabelModule } from '../interval-hour-label/interval-hour-la
   imports: [
     CommonModule,
     SharedCompressorPipesModule,
-    ExportableResultsTableModule,
-    IntervalHourLabelModule
+    ExportableResultsTableModule
   ],
   exports: [
     ProfileSummaryTableComponent

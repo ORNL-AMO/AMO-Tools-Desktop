@@ -10,7 +10,7 @@ import { TreasureHuntResults, OpportunitiesPaybackDetails } from '../shared/mode
 import { OpportunityCardData } from '../treasure-hunt/treasure-chest/opportunity-cards/opportunity-cards.service';
 import { WasteWaterData, WasteWaterResults } from '../shared/models/waste-water';
 import { CompressedAirAssessment, Modification } from '../shared/models/compressed-air-assessment';
-import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../compressed-air-assessment/compressed-air-assessment-results.service';
+import { BaselineResults, DayTypeModificationResult } from '../compressed-air-assessment/calculations/caCalculationModels'
 
 export interface ReportItem {
     assessment: Assessment;

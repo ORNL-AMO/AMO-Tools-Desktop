@@ -1,0 +1,8 @@
+a.disabled{
+    opacity: .5;
+}
+
+a.disabled:hover{
+    cursor: not-allowed;
+    text-decoration: none;
+}

@@ -23,6 +23,9 @@ import { CentrifugalGraphModule } from '../centrifugal-graph/centrifugal-graph.m
 import { EndUseSummaryComponent } from './input-summary/end-use-summary/end-use-summary.component';
 import { CompressedAirSankeyModule } from '../compressed-air-sankey/compressed-air-sankey.module';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
+import { CompressedAirCostSavingsGraphComponent } from './report-graphs/compressed-air-cost-savings-graph/compressed-air-cost-savings-graph.component';
+import { CompressedAirEnergySavingsGraphComponent } from './report-graphs/compressed-air-energy-savings-graph/compressed-air-energy-savings-graph.component';
+import { CompressedAirAirflowSavingsGraphComponent } from './report-graphs/compressed-air-airflow-savings-graph/compressed-air-airflow-savings-graph.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,10 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     SystemInfoSummaryComponent,
     CompressorItemSummaryComponent,
     PerformanceProfilesComponent,
-    EndUseSummaryComponent
+    EndUseSummaryComponent,
+    CompressedAirCostSavingsGraphComponent,
+    CompressedAirEnergySavingsGraphComponent,
+    CompressedAirAirflowSavingsGraphComponent
   ],
   imports: [
     CommonModule,

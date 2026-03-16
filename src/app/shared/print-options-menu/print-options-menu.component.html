@@ -171,7 +171,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions || showCompressedAirOptions"
+                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions"
                     class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
                     <div class="col-2">
                         <app-animated-checkmark [active]="printOptions.printReportSankey"></app-animated-checkmark>
