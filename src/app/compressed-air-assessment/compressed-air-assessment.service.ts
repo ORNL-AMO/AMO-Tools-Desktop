@@ -118,4 +118,13 @@ export class CompressedAirAssessmentService {
     this.selectedModification.next(modification);
     this.setModificationResults(modification);
   }
+
+  clearBehaviorSubjects() {
+    this.settings.next(undefined);
+    this.compressedAirAssessment.next(undefined);
+    this.selectedModification.next(undefined);
+    this.compressedAirAssessmentBaselineResults.next(undefined);
+    this.compressedAirAssessmentModificationResults.next(undefined);
+    this.compressedAirAssessmentValidationService.validationStatus.next(undefined);
+  }
 }

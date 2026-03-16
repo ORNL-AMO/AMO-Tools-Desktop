@@ -56,6 +56,7 @@ export class CompressorInventoryValidationService {
       centrifugalSpecsValid: centrifugalSpecsValid,
       performancePointsValid: performancePointsValid,
       generalInformationValid: generalInformationValid,
+      isReplacement: compressor.isReplacementCompressor,
       isValid: (nameplateValid && compressorTypeValid && compressorControlsValid && designDetailsValid && centrifugalSpecsValid && performancePointsValid && generalInformationValid)
     }
   }

@@ -52,7 +52,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
     });
 
     this.validationStatusSub = this.exploreOpportunitiesValidationService.compressedAirModificationValid.subscribe(val => {
-      this.hasInvalidForm = val.adjustCascadingSetPoints == false;
+      this.hasInvalidForm = val?.adjustCascadingSetPoints == false;
     });
   }
 

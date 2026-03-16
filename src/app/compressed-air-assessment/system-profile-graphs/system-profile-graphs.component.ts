@@ -95,7 +95,6 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   initModificationSubs() {
     if (this.context === 'modification') {
-      console.log('modification')
       this.selectedDayTypeSub = this.exploreOpportunitiesService.selectedDayType.subscribe(val => {
         this.selectedDayType = val;
         this.setProfileData();
@@ -105,9 +104,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       this.setProfileData();
     }
     this.xAxisHoverSub = this.systemProfileGraphService.xAxisHover.subscribe(val => {
-      // if (val) {
       this.setHover(val);
-      // }
     });
   }
 
@@ -252,16 +249,16 @@ export class SystemProfileGraphsComponent implements OnInit {
 
   setHover(hoverPositionData: HoverPositionData) {
     if (hoverPositionData) {
-      if (hoverPositionData.chartName == 'systemCapacityGraph' && this.systemCapacityGraph.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
+      if (hoverPositionData.chartName == 'systemCapacityGraph' && this.systemCapacityGraph?.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
         Plotly.Fx.hover(this.systemCapacityGraph.nativeElement, hoverPositionData.points)
       }
-      if (hoverPositionData.chartName == 'compressorCapacityGraph' && this.compressorCapacityGraph.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
+      if (hoverPositionData.chartName == 'compressorCapacityGraph' && this.compressorCapacityGraph?.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
         Plotly.Fx.hover(this.compressorCapacityGraph.nativeElement, hoverPositionData.points)
       }
-      if (hoverPositionData.chartName == 'systemPowerGraph' && this.systemPowerGraph.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
+      if (hoverPositionData.chartName == 'systemPowerGraph' && this.systemPowerGraph?.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
         Plotly.Fx.hover(this.systemPowerGraph.nativeElement, hoverPositionData.points)
       }
-      if (hoverPositionData.chartName == 'compressorPowerGraph' && this.compressorPowerGraph.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
+      if (hoverPositionData.chartName == 'compressorPowerGraph' && this.compressorPowerGraph?.nativeElement && hoverPositionData.points != undefined && this.labelName != hoverPositionData.labelName) {
         Plotly.Fx.hover(this.compressorPowerGraph.nativeElement, hoverPositionData.points)
       }
     } else {

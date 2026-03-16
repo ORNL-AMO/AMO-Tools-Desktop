@@ -1,19 +1,31 @@
 <div class="d-flex w-100 inventory-container">
-    <div class="assessment-panel-container lookup-form modification scroll-item w-50" [ngClass]="{'modal-open': isModalOpen == true}">
+    <div class="assessment-panel-container lookup-form modification scroll-item w-50"
+        [ngClass]="{'modal-open': isModalOpen == true}">
         <app-inventory></app-inventory>
     </div>
     <div class="assessment-panel-container scroll-item w-50" [ngClass]="{'modal-open': isModalOpen == true}">
         <div class="d-flex flex-column">
-            <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top" [ngClass]="{'modal-open': isModalOpen == true}">
+            <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top"
+                [ngClass]="{'modal-open': isModalOpen == true}">
                 <div class="h-100 flex-fill" [ngClass]="{'active': tabSelect == 'inventory'}">
                     <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('inventory')">
-                        <div>Current Inventory</div>
+                        <div>
+                            @if(hasInvalidBaselineCompressors){
+                            <span class="fa fa-exclamation-circle"></span>
+                            }
+                            Current Inventory
+                        </div>
                     </a>
                 </div>
                 <div class="h-100 flex-fill" [ngClass]="{'active': tabSelect == 'replacementInventory'}">
                     <a class="h-100 d-flex justify-content-center align-items-center"
                         (click)="setTab('replacementInventory')">
-                        <div>Replacement Inventory</div>
+                        <div>
+                            @if(hasInvalidReplacementCompressors){
+                            <span class="fa fa-exclamation-circle"></span>
+                            }
+                            Replacement Inventory
+                        </div>
                     </a>
                 </div>
                 <div class="h-100 flex-fill" [ngClass]="{'active': tabSelect == 'help'}">

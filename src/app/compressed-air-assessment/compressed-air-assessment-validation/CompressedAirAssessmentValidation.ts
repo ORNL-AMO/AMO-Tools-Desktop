@@ -19,6 +19,7 @@ export interface CompressorItemValidation {
     performancePointsValid: boolean;
     generalInformationValid: boolean;
     isValid: boolean;
+    isReplacement: boolean;
 }
 
 export interface ProfileSummaryValid {
