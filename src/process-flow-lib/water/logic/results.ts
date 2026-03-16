@@ -130,6 +130,14 @@ export const getBalancePercent = (total: number, segment: number) => {
   return 0;
 }
 
+
+/**
+ * TODO - Needs maintenance. The functionality this is meant to support is not fully implemented nor currently being used. Logic may not be correct. 
+ * TODO advise starting fresh when we come back to assessment enhancements
+ * 
+ * related - 7432, 7433
+ * Sets the individual water flows for each water using system based on the edges in the diagram and user entered data.
+ */
 export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], edges: Edge[]): DiagramWaterSystemFlows[] => {
   let diagramWaterSystemFlows: DiagramWaterSystemFlows[] = []
   waterUsingSystems = waterUsingSystems.map((system: WaterUsingSystem) => {

@@ -96,6 +96,7 @@ export interface WaterUsingSystem extends ProcessFlowPart {
     hoursPerYear: number,
     systemType: number,
     systemFlowTotals: WaterSystemFlowsTotals;
+    // * important - need to pull user overrides for flows into waterUsingSystem for use in calculations and display. These values will override diagram flows when set by user and default to diagram flows when not set by user
     userDiagramFlowOverrides?: WaterSystemFlowsTotals;
     processUse?: ProcessUse,
     coolingTower?: CoolingTower,
