@@ -81,15 +81,6 @@
             <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
             <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
         </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.knownLosses.invalid && !form.controls.knownLosses.pristine">
-            <span *ngIf="form.controls.knownLosses.errors.required">Value Required</span>
-            <span *ngIf="form.controls.knownLosses.errors.min">Value can't be less than
-                {{form.controls.knownLosses.errors.min.min}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
-            </span>
-        </span>
     </div>
         <app-alert-info-container class="m-3"
 [header]="'Coming Soon: Inflow and Outflow Management'" 

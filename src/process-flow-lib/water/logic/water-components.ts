@@ -288,7 +288,7 @@ export const getNewProcessComponent = (processComponentType: WaterProcessCompone
 
   if (newProcessComponent.processComponentType === 'water-treatment' || newProcessComponent.processComponentType === 'waste-water-treatment') {
     newProcessComponent.treatmentType = 0;
-    newProcessComponent.userEnteredData.totalKnownLosses = diagramComponent.totalKnownLosses? diagramComponent.totalKnownLosses as number : 0;
+    newProcessComponent.userEnteredData.totalKnownLosses = diagramComponent.userEnteredData?.totalKnownLosses ? diagramComponent.userEnteredData.totalKnownLosses as number : 0;
   }
 
   return newProcessComponent;
