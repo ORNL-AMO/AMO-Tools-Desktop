@@ -8,6 +8,7 @@ import { ExploreOpportunitiesService } from '../../explore-opportunities.service
 import { UseAutomaticSequencerService } from './use-automatic-sequencer.service';
 import { CompressedAirAssessmentModificationResults } from '../../../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
+import { copyObject } from '../../../../../shared/helperFunctions';
 
 @Component({
   selector: 'app-use-automatic-sequencer',
@@ -129,7 +130,7 @@ export class UseAutomaticSequencerComponent implements OnInit {
   }
 
   resetOrdering() {
-    this.useAutomaticSequencer.profileSummary = JSON.parse(JSON.stringify(this.compressedAirAssessment.systemProfile.profileSummary));
+    this.useAutomaticSequencer.profileSummary = copyObject(this.compressedAirAssessment.systemProfile.profileSummary);
     this.useAutomaticSequencer.profileSummary.forEach(summary => {
       let compressor: CompressorInventoryItem = this.compressedAirAssessment.compressorInventoryItems.find(item => { return item.itemId == summary.compressorId });
       if (compressor.compressorControls.automaticShutdown) {

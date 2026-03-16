@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { CascadingSetPointData, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ReduceRuntimeData, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { CompressorInventoryItemClass } from '../../calculations/CompressorInventoryItemClass';
+import { getNewIdString } from '../../../shared/helperFunctions';
 
 @Injectable()
 export class ExploreOpportunitiesService {
@@ -77,7 +78,7 @@ export class ExploreOpportunitiesService {
 
     return {
       name: 'Modification',
-      modificationId: Math.random().toString(36).substr(2, 9),
+      modificationId: getNewIdString(),
       notes: undefined,
       flowReallocation: {
         implementationCost: 0,

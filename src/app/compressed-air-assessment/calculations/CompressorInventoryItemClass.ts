@@ -134,6 +134,8 @@ export class CompressorInventoryItemClass {
         this.performancePoints.updatePerformancePoints(this.nameplateData, this.centrifugalSpecifics, this.designDetails, this.compressorControls, atmosphericPressure, settings)
     }
 
+    //used to convert CompressorInventoryItemClass back to CompressorInventoryItem for storage
+    //in indexedDb.
     toModel(): CompressorInventoryItem {
         return {
             itemId: this.itemId,
