@@ -157,6 +157,7 @@ export class ResetDataModalComponent implements OnInit {
     defaultSettings.disableDataExplorerTutorial = this.settingsDbService.globalSettings.disableDataExplorerTutorial;
     defaultSettings.disableTutorial = this.settingsDbService.globalSettings.disableTutorial;
     defaultSettings.printAll = this.settingsDbService.globalSettings.printAll;
+    defaultSettings.suiteDbItemsInitialized = true;
     delete defaultSettings.facilityInfo;
     await firstValueFrom(this.settingsDbService.updateWithObservable(defaultSettings));
     let settings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
@@ -262,13 +263,13 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   async resetFactoryCustomMaterials() {
-    await firstValueFrom(this.gasLoadDbService.clearGasLoadChargeMaterial());
-    await firstValueFrom(this.atmosphereDbService.clearAtmosphereSpecificHeat());
-    await firstValueFrom(this.flueGasMaterialDbService.clearFlueGasMaterials());
-    await firstValueFrom(this.liquidLoadMaterialDbService.clearLiquidLoadChargeMaterial());
-    await firstValueFrom(this.solidLiquidMaterialDbService.clearSolidLiquidFlueGasMaterials());
-    await firstValueFrom(this.solidLoadMaterialDbService.clearSolidLoadChargeMaterial());
-    await firstValueFrom(this.wallLossesSurfaceDbService.clearWallLossesSurface());
+    await this.gasLoadDbService.deleteAllCustomMaterials();
+    await this.atmosphereDbService.deleteAllCustomMaterials();
+    await this.flueGasMaterialDbService.deleteAllCustomMaterials();
+    await this.liquidLoadMaterialDbService.deleteAllCustomMaterials();
+    await this.solidLiquidMaterialDbService.deleteAllCustomMaterials();
+    await this.solidLoadMaterialDbService.deleteAllCustomMaterials();
+    await this.wallLossesSurfaceDbService.deleteAllCustomMaterials();
     this.hideResetSystemSettingsModal();
   }
 
