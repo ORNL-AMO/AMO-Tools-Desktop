@@ -232,6 +232,7 @@ export function getDefaultSettings(): Settings {
         steamRollupUnit: "MMBtu",
         wasteWaterRollupUnit: "MWh",
         compressedAirRollupUnit: "MWh",
-        flowDecimalPrecision: 2
+        flowDecimalPrecision: 2,
+        suiteDbItemsInitialized: false
     }
 };

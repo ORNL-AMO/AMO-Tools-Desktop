@@ -93,7 +93,7 @@ export class CoreService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const text = await response.text();
-      const backupData: ImportExportData = JSON.parse(text);
+      let backupData: ImportExportData = JSON.parse(text);
       await this.importService.importData(backupData, 1)
     } catch (err) {
       console.log(err);
@@ -108,5 +108,7 @@ export class CoreService {
       parentDirectoryId: null,
     };
     let allDirectory: Directory = await firstValueFrom(this.directoryDbService.addWithObservable(allAssessmentsDir));
+    let defaultSettings = this.getDefaultSettingsObject();
+    await firstValueFrom(this.settingsDbService.addWithObservable(defaultSettings));
   }
 }
