@@ -56,7 +56,7 @@ export class LightingReplacementFormComponent implements OnInit {
   constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef, private lightingSuiteApiService: LightingSuiteApiService) {}
 
   ngOnInit() {
-    this.lightingFixtureCategories = this.lightingSuiteApiService.lightingFixtureCategories;
+    this.lightingFixtureCategories = this.lightingSuiteApiService.setLightingSystemServiceState();
     this.displayDetails = this.lightingReplacementService.showAdditionalDetails;
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;

@@ -9,9 +9,7 @@ export class LightingSuiteApiService {
 
     constructor(
         private toolsSuiteApiService: ToolsSuiteApiService
-    ) { 
-        this.setLightingSystemServiceState();
-    }
+    ) {}
 
 
     setLightingSystemServiceState() {
