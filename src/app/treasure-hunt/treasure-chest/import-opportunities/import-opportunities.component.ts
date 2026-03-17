@@ -68,10 +68,6 @@ export class ImportOpportunitiesComponent implements OnInit {
 
         if (this.fileImportStatus.fileType === 'AMO-TOOLS-DESKTOP') {
           this.patchTreasureHuntAssessmentOpportunities();
-          this.fileImportStatus = {
-            fileType: 'AMO-TOOLS-DESKTOP-OPPORTUNITIES',
-            isValid: true
-          };
         }
       } else {
         this.fileImportStatus = {
@@ -84,9 +80,10 @@ export class ImportOpportunitiesComponent implements OnInit {
 
   patchTreasureHuntAssessmentOpportunities() {
     if (this.importJson?.assessments?.length === 1) {
-      const {assessment, settings}: {assessment: Assessment, settings: Settings} = this.importJson.assessments[0];
+      const assessment: Assessment = this.importJson.assessments[0]?.assessment;
       if (assessment.type === 'TreasureHunt' && assessment.treasureHunt) {
         const importExportOpportunities: ImportExportOpportunities = {
+          origin: 'AMO-TOOLS-DESKTOP-OPPORTUNITIES',
           lightingReplacements: assessment.treasureHunt.lightingReplacements,
           opportunitySheets: assessment.treasureHunt.opportunitySheets,
           assessmentOpportunities: assessment.treasureHunt.assessmentOpportunities,
@@ -118,6 +115,10 @@ export class ImportOpportunitiesComponent implements OnInit {
           powerFactorCorrectionOpportunities: assessment.treasureHunt.powerFactorCorrectionOpportunities
         };
         this.importJson = importExportOpportunities;
+        this.fileImportStatus = {
+            fileType: 'AMO-TOOLS-DESKTOP-OPPORTUNITIES',
+            isValid: true
+        };
       }
     }
 
