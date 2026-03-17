@@ -1,4 +1,4 @@
-.known-row-parent {
+/* .known-row-parent {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,10 +14,41 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-grow: 0; /* prevent full stretch */
+  flex-grow: 0; 
 }
 
 .known-conditional-input-group {
-  flex-grow: 0; /* prevent input from stretching */
+  flex-grow: 0;
   min-width: 12rem;
+} */
+
+
+/*  Sol A */
+.form-group.label-select {
+  display: flex;
+  align-items: center;
 }
+
+.form-group.label-select select {
+  width: calc(50% - 1rem);
+  flex-shrink: 0;
+}
+
+.form-group.label-select .spacer {
+  width: 1rem;
+  flex-shrink: 0;
+}
+
+.form-group.label-select .input-group {
+  flex: 1;
+}
+
+
+/*  Solution B */
+/* .form-group.label-select {
+  display: flex;
+}
+
+.form-group.label-select .input-group {
+  width: 50%;
+}  */
