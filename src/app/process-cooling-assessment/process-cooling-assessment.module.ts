@@ -92,6 +92,7 @@ import { SystemProfileService } from './services/system-profile.service';
 import { FilterChillerOutputsPipe } from './pipes/filter-chiller-outputs.pipe';
 import { InstallVSDComponent } from './explore-opportunities/install-vsd/install-vsd.component';
 import { FilterChillerInventoryPipe } from './pipes/filter-chiller-inventory.pipe';
+import { UseFreeCoolingComponent } from './explore-opportunities/use-free-cooling/use-free-cooling.component';
 
 
 export const ROUTE_TOKENS = {
@@ -292,7 +293,8 @@ const ROUTES: Route[] = [
     SystemProfileComponent,
     FilterChillerOutputsPipe,
     InstallVSDComponent,
-    FilterChillerInventoryPipe
+    FilterChillerInventoryPipe,
+    UseFreeCoolingComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, UntypedFormBuilder } from '@angular/forms';
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
 import { Settings } from '../../shared/models/settings';
-import { InstallVSDOnCentrifugalCompressor, UpgradeCoolingTowerFans } from '../../shared/models/process-cooling-assessment';
+import { InstallVSDOnCentrifugalCompressor, UpgradeCoolingTowerFans, UseFreeCooling } from '../../shared/models/process-cooling-assessment';
 
 @Injectable()
 export class ExploreOpportunitiesFormService {
@@ -53,7 +53,16 @@ export class ExploreOpportunitiesFormService {
       installOnAll: [formValues.installOnAll]
     });
   }
-  
+
+  getUseFreeCoolingForm(formValues: UseFreeCooling, settings: Settings): FormGroup<UseFreeCoolingForm> {
+    const hexValidators = formValues.isHEXRequired ? this.systemInformationService.getHexApproachTempValidators(settings) : [];
+    return this.formBuilder.group({
+      usesFreeCooling: [formValues.usesFreeCooling],
+      isHEXRequired: [formValues.isHEXRequired],
+      HEXApproachTemp: [formValues.HEXApproachTemp, hexValidators]
+    });
+  }
+
 }
 
 export interface IncreaseChilledTempForm {
@@ -81,4 +90,10 @@ export interface UpgradeCoolingTowerFanForm {
 
 export interface InstallVSDForm {
   installOnAll: FormControl<boolean>;
+}
+
+export interface UseFreeCoolingForm {
+  usesFreeCooling: FormControl<boolean>;
+  isHEXRequired: FormControl<boolean>;
+  HEXApproachTemp: FormControl<number>;
 }
