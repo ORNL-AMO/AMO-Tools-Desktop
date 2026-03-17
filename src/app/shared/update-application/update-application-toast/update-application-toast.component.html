@@ -10,11 +10,10 @@
         [ngClass]="{'alert alert-danger ': updateStatus === 'error' || updateStatus === 'web-error'}">
             <ng-container *ngIf="updateStatus === 'error'">
                 <p class="card-text text-left px-3 py-1">
-                    An error has occured. Please restart your application and try again. 
+                    An error has occured. Please try again or download the update manually from <a class="click-link-error" href="https://industrialresources.ornl.gov/measur/downloads/">https://industrialresources.ornl.gov/measur/downloads/</a> 
                     <br><br>
-                    If the error persists, please use the "Feedback" page to notify the MEASUR team of your issue.
+                    If the error persists, please notify the MEASUR team of your issue by contacting <a id="supportEmail" href="mailto:measur-help@ornl.gov?subject=AMO Tools Support Request">measur-help&#64;ornl.gov</a>
                 </p>
-                <p class="text-left">This update can also be downloaded from <a class="click-link" href="https://industrialresources.ornl.gov/measur/downloads/">https://industrialresources.ornl.gov/measur/downloads/</a></p>
             </ng-container>
 
             <ng-container *ngIf="updateStatus === 'web-error'">
@@ -22,7 +21,7 @@
                     Error updating MEASUR. The application can be updated manually by doing a hard-refresh on the current tab or window. 
                     If the application is installed to the desktop, uninstall the current version, then install the new version. 
                     <br><br>
-                    If the error persists, please use the "Feedback" page to notify the MEASUR team of your issue.
+                    If the error persists, please notify the MEASUR team of your issue by contacting <a id="supportEmail" href="mailto:measur-help@ornl.gov?subject=AMO Tools Support Request">measur-help&#64;ornl.gov</a>
                 </p>
             </ng-container>
 
