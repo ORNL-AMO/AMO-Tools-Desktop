@@ -21,17 +21,23 @@ import { LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite
     @Output()
     emitNumMaterials: EventEmitter<number> = new EventEmitter<number>();
 
+
     editExistingMaterial: boolean = false;
-    // existingMaterial: LightingFixtures;
+    existingMaterial: any = null; // LightingFixtureData
     deletingMaterial: boolean = false;
+    selectedCategory: any = null;
 
     @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
     selectedSub: Subscription;
     selectAllSub: Subscription;
-    lightingMaterials: Array<{ category: number, label: string, fixturesData: Array<any> }>;
-    ngOnInit() {
-        this.lightingMaterials = this.lightingSuiteApiService.setLightingSystemServiceState();
+    lightingMaterials: Array<{ category: number, label: string, fixturesData: Array<any> }> = [];
+    customCategory: any = null;
 
+    ngOnInit() {
+        const allCategories = this.lightingSuiteApiService.setLightingSystemServiceState();
+        // Only show the 'Custom' category (category: 0 or label: 'Custom')
+        this.customCategory = allCategories.find(cat => cat.label === 'Custom' || cat.category === 0);
+        this.lightingMaterials = this.customCategory ? [this.customCategory] : [];
     }
 
     constructor( private customMaterialService: CustomMaterialsService,
@@ -51,18 +57,39 @@ import { LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite
         }
     }
 
+
     showMaterialModal() {
         this.showModal = true;
         this.materialModal.show();
     }
 
-      hideMaterialModal(event?: any) {
-        this.materialModal.hide();
-        this.showModal = false;
-        this.editExistingMaterial = false;
+    editMaterial(categoryIdx: number, fixtureIdx: number) {
+        this.selectedCategory = this.lightingMaterials[categoryIdx];
+        console.log(this.lightingMaterials[categoryIdx], this.lightingMaterials[categoryIdx].fixturesData[fixtureIdx]);
+        this.existingMaterial = this.lightingMaterials[categoryIdx].fixturesData[fixtureIdx];
+        this.editExistingMaterial = true;
         this.deletingMaterial = false;
-        this.getCustomMaterials();
+        this.showMaterialModal();
     }
+
+    deleteMaterial(categoryIdx: number, fixtureIdx: number) {
+        this.selectedCategory = this.lightingMaterials[categoryIdx];
+        this.existingMaterial = this.lightingMaterials[categoryIdx].fixturesData[fixtureIdx];
+        this.editExistingMaterial = true;
+        this.deletingMaterial = true;
+        this.showMaterialModal();
+    }
+
+
+        hideMaterialModal(event?: any) {
+                this.materialModal.hide();
+                this.showModal = false;
+                this.editExistingMaterial = false;
+                this.deletingMaterial = false;
+                this.existingMaterial = null;
+                this.selectedCategory = null;
+                this.getCustomMaterials();
+        }
     
     getSelected() {
         // let selected: Array<{ category: number, label: string, fixturesData: Array<any> }> = _.filter(this.lightingMaterials, (material) => { return material.selected === true; });
@@ -78,7 +105,9 @@ import { LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite
     }
 
     async getCustomMaterials() {
-        this.lightingMaterials = this.lightingSuiteApiService.lightingFixtureCategories;
+        const allCategories = this.lightingSuiteApiService.lightingFixtureCategories;
+        this.customCategory = allCategories.find(cat => cat.label === 'Custom' || cat.category === 0);
+        this.lightingMaterials = this.customCategory ? [this.customCategory] : [];
         this.emitNumMaterials.emit(this.lightingMaterials.length);
         console.log(this.lightingMaterials);
     }
