@@ -170,6 +170,16 @@ export class ModificationService {
       }
     }
 
+    if (modification.useFreeCooling?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getUseFreeCoolingForm(
+        modification.useFreeCooling,
+        this.processCoolingAssessmentService.settingsSignal()
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
     return true;
   }
 

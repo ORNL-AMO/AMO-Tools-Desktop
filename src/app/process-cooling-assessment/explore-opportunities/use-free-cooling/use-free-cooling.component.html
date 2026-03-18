@@ -1,0 +1,85 @@
+<div>
+    <label class="group-label" for="useUseFreeCooling">
+        <input class="pc-checkbox" type="checkbox" id="useUseFreeCooling" (focus)="focusField('useUseFreeCooling')"
+            (change)="setUseOpportunity()" [(ngModel)]="useOpportunity" />
+        <span class="ml-2">
+            {{ EEM_LABELS.useFreeCooling }}
+        </span>
+    </label>
+</div>
+
+@if(useOpportunity && form) {
+<div class="row no-gutters mt-3">
+    <div class="col-6 pr-2">
+        <div class="form-group">
+            <label for="baselineUsesFreeCooling">
+                Current Uses Free Cooling
+            </label>
+            <select id="baselineUsesFreeCooling" class="form-control" [ngModel]="baselineUsesFreeCooling"
+                disabled>
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+            </select>
+        </div>
+        @if (baselineUsesFreeCooling) {
+        <div class="form-group">
+            <label for="baselineIsHEXRequired">Current Is HEX Required</label>
+            <select id="baselineIsHEXRequired" class="form-control" [ngModel]="baselineIsHEXRequired"
+                disabled>
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+            </select>
+        </div>
+        @if (baselineIsHEXRequired) {
+        <div class="form-group">
+            <label for="baselineHEXApproachTemp">Current HEX Approach Temp</label>
+            <div class="input-group">
+                <input type="number" id="baselineHEXApproachTemp" class="form-control" [ngModel]="baselineHEXApproachTemp"
+                    readonly disabled>
+                <app-input-unit [settings]="settings()"
+                    [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+                    [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
+            </div>
+        </div>
+        }
+        }
+    </div>
+
+    <div class="col-6 pl-2">
+        <form [formGroup]="form" class="p-0">
+            <div class="form-group">
+                <label for="modificationUsesFreeCooling">Modified Uses Free Cooling</label>
+                <select class="form-control" id="modificationUsesFreeCooling" formControlName="usesFreeCooling"
+                    (focus)="focusField('usesFreeCooling')">
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                </select>
+            </div>
+            @if (usesFreeCooling.value === true) {
+            <div class="form-group">
+                <label for="modificationIsHEXRequired">Modified Is HEX Required</label>
+                <select class="form-control" id="modificationIsHEXRequired" formControlName="isHEXRequired"
+                    (focus)="focusField('isHEXRequired')">
+                    <option [ngValue]="true">Yes</option>
+                    <option [ngValue]="false">No</option>
+                </select>
+            </div>
+            @if (isHEXRequired.value === true) {
+            <div class="form-group">
+                <label for="modificationHEXApproachTemp">Modified HEX Approach Temp</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="modificationHEXApproachTemp"
+                        formControlName="HEXApproachTemp" (focus)="focusField('HEXApproachTemp')">
+                    <app-input-unit [settings]="settings()"
+                        [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
+                        [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
+                    <app-form-control-errors class="w-100" [control]="HEXApproachTemp"></app-form-control-errors>
+                </div>
+            </div>
+            }
+            }
+        </form>
+    </div>
+
+</div>
+}
