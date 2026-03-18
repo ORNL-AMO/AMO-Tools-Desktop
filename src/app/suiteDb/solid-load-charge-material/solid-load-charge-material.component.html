@@ -18,7 +18,6 @@
               <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
                 (focus)="focusField('selectedMaterial')">
                 <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.substance}}</option>
-                <option [ngValue]="null"></option>
               </select>
             </div>
           </div>
