@@ -94,6 +94,8 @@ export class ExportModalComponent implements OnInit {
       this.isSelectAllDirectory = directory.selected;
       this.exportData = this.exportService.getSelected(directory, this.isSelectAllDirectory);
     }
+
+    this.exportService.markAsUserItems(this.exportData);
     this.setDisplayFilteredData();
     this.setExportDefaultName();
   }

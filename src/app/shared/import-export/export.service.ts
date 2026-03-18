@@ -95,7 +95,39 @@ export class ExportService {
       inventories: this.exportInventories,
       diagrams: this.exportDiagrams
     };
+    this.markAsUserItems(this.exportData);
     return this.exportData;
+  }
+
+  /**
+   * On export all data should be considered user/modified.
+   * Transform all example assessments, inventories, diagrams and directories to user data by removing the example flag. 
+   * @param exportData 
+   */
+  markAsUserItems(exportData: ImportExportData) {
+    exportData.assessments.forEach(assessment => {
+      if (assessment.assessment?.isExample) {
+        assessment.assessment.isExample = false;
+      }
+      if (assessment.diagram?.isExample) {
+        assessment.diagram.isExample = false;
+      }
+    });
+    exportData.inventories.forEach(inventory => {
+      if (inventory.inventoryItem?.isExample) {
+        inventory.inventoryItem.isExample = false;
+      }
+    });
+    exportData.diagrams.forEach(diagram => {
+      if (diagram.diagram?.isExample) {
+        diagram.diagram.isExample = false;
+      }
+    });
+    exportData.directories.forEach(directory => {
+      if (directory.directory?.isExample) {
+        directory.directory.isExample = false;
+      }
+    });
   }
 
   getSelectedAssessment(assessment: Assessment): ImportExportData {
