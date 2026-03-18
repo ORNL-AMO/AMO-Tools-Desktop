@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, SimpleChanges, EventEmitter, Output } from "@angular/core";
 import { Settings } from '../../../shared/models/settings';
 // import { LightingFixtures } from '../../../shared/models/materials';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -28,28 +28,59 @@ import { LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite
     @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
     selectedSub: Subscription;
     selectAllSub: Subscription;
-    lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<any> }>;
+    lightingMaterials: Array<{ category: number, label: string, fixturesData: Array<any> }>;
     ngOnInit() {
-        this.lightingFixtureCategories = new Array<{ category: number, label: string, fixturesData: Array<any> }>();
-        this.getCustomMaterials();
-        // this.selectedSub = this.customMaterialService.getSelected.subscribe((val) => {
-        //     if (val) {
-        //     this.getSelected();
-        //     }
-        // });
-    
-        // this.selectAllSub = this.customMaterialService.selectAll.subscribe(val => {
-        //     this.selectAll(val);
-        // });
+        this.lightingMaterials = this.lightingSuiteApiService.setLightingSystemServiceState();
+
     }
 
     constructor( private customMaterialService: CustomMaterialsService,
-        private lightingSuiteApiService: LightingSuiteApiService) {}
+    private lightingSuiteApiService: LightingSuiteApiService) {}
+
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.showModal && !changes.showModal.firstChange) {
+            if (changes.showModal.currentValue !== changes.showModal.previousValue) {
+            this.showMaterialModal();
+            }
+        }
+        if (changes.importing) {
+            if (changes.importing.currentValue === false && changes.importing.previousValue === true) {
+            this.getCustomMaterials();
+            }
+        }
+    }
+
+    showMaterialModal() {
+        this.showModal = true;
+        this.materialModal.show();
+    }
+
+      hideMaterialModal(event?: any) {
+        this.materialModal.hide();
+        this.showModal = false;
+        this.editExistingMaterial = false;
+        this.deletingMaterial = false;
+        this.getCustomMaterials();
+    }
+    
+    getSelected() {
+        // let selected: Array<{ category: number, label: string, fixturesData: Array<any> }> = _.filter(this.lightingMaterials, (material) => { return material.selected === true; });
+        // this.customMaterialService.selectedFlueGas = selected;
+        // add way to be selected
+    }
+
+    selectAll(val: boolean) {
+        // this.lightingMaterials.forEach(material => {
+        //     material.selected = val;
+        // });
+        //continue way to be selected.
+    }
 
     async getCustomMaterials() {
-        this.lightingFixtureCategories = this.lightingSuiteApiService.lightingFixtureCategories;
-        this.emitNumMaterials.emit(this.lightingFixtureCategories.length);
-        
+        this.lightingMaterials = this.lightingSuiteApiService.lightingFixtureCategories;
+        this.emitNumMaterials.emit(this.lightingMaterials.length);
+        console.log(this.lightingMaterials);
     }
 
     ngOnDestroy() {

@@ -1,0 +1,34 @@
+<div class="d-flex flex-wrap w-100">
+    <!-- <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let flueGasMaterial of flueGasMaterials; let i = index">
+        <div class="card card-item">
+            <div class="card-header summary-card-header">
+            </div>
+
+            <div class="card-body scroll-item summary-card-body">
+                <table class="table">
+                    <tr>
+                        <td>
+                            {{flueGasMaterial.substance}}
+                            // Displays all data in a table, easily visible.
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="card-footer summary-card-footer">
+                <div class="last-updated pull-right btn-delete-material" (click)="deleteMaterial(flueGasMaterial.id)">Delete Material</div>
+            </div>
+
+        </div>
+    </div> -->
+</div>
+
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content tab-content">
+      <app-lighting-fixtures-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+        [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial" [deletingMaterial]="deletingMaterial"></app-lighting-fixtures-material>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="card">
+    <div class="card-body custom-card-body card-container col">
+        <div class="row">
+           <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-column">
+                <div class="row phast align-items-top">
+                    <div class="col-12">
+                        <div class="header card-header">
+                        <h3 *ngIf="!editExistingMaterial">Create Light Fixtures</h3>
+                        <h3 *ngIf="editExistingMaterial">Edit Light Fixtures</h3>
+                        </div>
+                    </div>
+                </div>
+                <form>
+                    <!-- <div class="form-section" *ngIf="!editExistingMaterial">
+                        <div class="form-group">
+                            <label class="small" for="selectedMaterial">Start with existing material</label>
+                            <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="setExisting()" [(ngModel)]="selectedMaterial"
+                                (focus)="focusField('selectedMaterial')">
+                                <option *ngFor="let material of allMaterials" [ngValue]="material">{{material.fixture}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label class="small" for="fixture">Fixture Name</label>
+                            <input type="text" class="form-control" id="fixture" name="fixture" [(ngModel)]="material.fixture"
+                                (focus)="focusField('fixture')">
+                        </div>
+                    </div> -->
+
+                </form>
+           </div>
+
+            <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-help-column">
+                <div class="tab-content">
+                    <app-lighting-fixtures-material-help [currentField]="currentField"></app-lighting-fixtures-material-help>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

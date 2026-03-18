@@ -11,6 +11,7 @@ export class DefaultCompressorApiService {
     ) { }
 
     getGenericCompressors() {
+                console.log('comp', this.toolsSuiteApiService.ToolsSuiteModule);
         let DefaultDataInstance = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
         let defaultCompressors: Array<GenericCompressor> = [];
 
