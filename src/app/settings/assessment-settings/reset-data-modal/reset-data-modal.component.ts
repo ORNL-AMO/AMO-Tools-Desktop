@@ -187,61 +187,112 @@ export class ResetDataModalComponent implements OnInit {
     }
   }
 
-  getAssessmentsAndDataIds(deleteExamples: boolean = false, dirId?: number): DirectoryDataIds {
+
+  async getExampleDataIds(dirId: number): Promise<DirectoryDataIds> {
     let assessmentsIds: Array<number> = [];
     let settingsIds: Array<number> = [];
     let calculatorIds: Array<number> = [];
-    for (let index: number = 0; index < this.assessmentDbService.allAssessments.length; index++) {
-      let assessment: Assessment = this.assessmentDbService.allAssessments[index];
-      if (deleteExamples && assessment.isExample && dirId === assessment.directoryId) {
+    let inventoriesIds: Array<number> = [];
+    let diagramsIds: Array<number> = [];
+
+    const allAssessments: Array<Assessment> = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    const allInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.getAllInventory());
+    const allDiagrams: Array<Diagram> = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+    const allCalculators: Array<Calculator> = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+    const allSettings: Array<Settings> = await firstValueFrom(this.settingsDbService.getAllSettings());
+
+    allAssessments.forEach(assessment => {
+      if (assessment.isExample && dirId === assessment.directoryId) {
         assessmentsIds.push(assessment.id);
-        settingsIds.push(this.settingsDbService.allSettings.find(settings => { return settings.assessmentId == assessment.id }).id);
-        let assessmentCalculator = this.calculatorDbService.allCalculators.find(calculator => { return calculator.assessmentId == assessment.id });
-        if (assessmentCalculator) {
-          calculatorIds.push(assessmentCalculator.id);
-        }
-      } else if (!deleteExamples && !assessment.isExample) {
-        assessmentsIds.push(assessment.id);
-        settingsIds.push(this.settingsDbService.allSettings.find(settings => { return settings.assessmentId == assessment.id }).id);
-        let assessmentCalculator = this.calculatorDbService.allCalculators.find(calculator => { return calculator.assessmentId == assessment.id });
+        settingsIds.push(allSettings.find(settings => { return settings.assessmentId == assessment.id }).id);
+        let assessmentCalculator = allCalculators.find(calculator => { return calculator.assessmentId == assessment.id });
         if (assessmentCalculator) {
           calculatorIds.push(assessmentCalculator.id);
         }
       }
-    }
+    });
+
+    allInventoryItems.forEach(item => {
+      if (item.isExample && dirId === item.directoryId) {
+        inventoriesIds.push(item.id);
+      }
+    });
+
+    allDiagrams.forEach(diagram => {
+      if (diagram.isExample && dirId === diagram.directoryId) {
+        diagramsIds.push(diagram.id);
+      }
+    });
+
     return {
       assessments: assessmentsIds,
       settings: settingsIds,
-      calculators: calculatorIds
+      calculators: calculatorIds,
+      inventories: inventoriesIds,
+      diagrams: diagramsIds
     }
   }
 
+  async getUserDataIds(): Promise<DirectoryDataIds> {
+    let assessmentsIds: Array<number> = [];
+    let settingsIds: Array<number> = [];
+    let calculatorIds: Array<number> = [];
+    let inventoriesIds: Array<number> = [];
+    let diagramsIds: Array<number> = [];
+
+    const allAssessments: Array<Assessment> = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    const allInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.getAllInventory());
+    const allDiagrams: Array<Diagram> = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+    const allCalculators: Array<Calculator> = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+    const allSettings: Array<Settings> = await firstValueFrom(this.settingsDbService.getAllSettings());
+
+    allAssessments.forEach(assessment => {
+      if (!assessment.isExample) {
+        assessmentsIds.push(assessment.id);
+        settingsIds.push(allSettings.find(settings => { return settings.assessmentId == assessment.id }).id);
+        let assessmentCalculator = allCalculators.find(calculator => { return calculator.assessmentId == assessment.id });
+        if (assessmentCalculator) {
+          calculatorIds.push(assessmentCalculator.id);
+        }
+      }
+    });
+
+    allInventoryItems.forEach(item => {
+      if (!item.isExample) {
+        inventoriesIds.push(item.id);
+      }
+    });
+
+    allDiagrams.forEach(diagram => {
+      if (!diagram.isExample) {
+        diagramsIds.push(diagram.id);
+      }
+    });
+
+
+    return {
+      assessments: assessmentsIds,
+      settings: settingsIds,
+      calculators: calculatorIds,
+      inventories: inventoriesIds,
+      diagrams: diagramsIds
+    }
+  } 
+
   async resetAllExampleAssessments(dirId: number) {
-    // Delete all
-    let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds(true, dirId);
+    let directoryDataIds: DirectoryDataIds = await this.getExampleDataIds(dirId);
     let allAssessments: Array<Assessment[]> = await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments));
     let allSettings: Array<Settings[]> = await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings));
     let allCalculators: Array<Calculator[]> = await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(directoryDataIds.calculators));
+    let allInventoryItems: Array<InventoryItem[]> = await firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(directoryDataIds.inventories));
+    let allDiagrams: Array<Diagram[]> = await firstValueFrom(this.diagramIdbService.bulkDeleteWithObservable(directoryDataIds.diagrams));
 
-    let updatedInventoryItems: Array<InventoryItem> = await firstValueFrom(this.inventoryDbService.getAllInventory());
-    this.inventoryDbService.setAll(updatedInventoryItems);
-    let exampleInventories: Array<InventoryItem> = this.inventoryDbService.allInventoryItems.filter(item => { return item.isExample && item.directoryId === dirId });
-    let allInventoryItems: Array<InventoryItem[]> = await firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(exampleInventories.map(inventory => inventory.id)));
-
-
-    let updatedDiagrams: Array<Diagram> = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
-    this.diagramIdbService.setAll(updatedDiagrams);
-    let exampleDiagrams: Array<Diagram> = updatedDiagrams.filter(diagram => { return diagram.isExample && diagram.directoryId === dirId });
-    let allDiagrams: Array<Diagram[]> = await firstValueFrom(this.diagramIdbService.bulkDeleteWithObservable(exampleDiagrams.map(diagram => diagram.id)));
-
-
+    // * take the first value. NgxIndexedDBService inexplicably returns an array of arrays where each has the same representation of current state
     this.inventoryDbService.setAll(allInventoryItems[0]);
     this.assessmentDbService.setAll(allAssessments[0]);
     this.settingsDbService.setAll(allSettings[0]);
     this.calculatorDbService.setAll(allCalculators[0]);
     this.diagramIdbService.setAll(allDiagrams[0]);
-
-
 
     await this.coreService.loadExampleDirectory();
     await firstValueFrom(this.directoryDbService.deleteByIdWithObservable(dirId));
@@ -250,15 +301,19 @@ export class ResetDataModalComponent implements OnInit {
   }
 
   async resetAllUserAssessments() {
-    // todo 6925 aren't these all stored within the directory as well?
-    let directoryDataIds: DirectoryDataIds = this.getAssessmentsAndDataIds();
+    let directoryDataIds: DirectoryDataIds = await this.getUserDataIds();
     let assessments: Array<Assessment[]> = await firstValueFrom(this.assessmentDbService.bulkDeleteWithObservable(directoryDataIds.assessments));
     let settings: Array<Settings[]> = await firstValueFrom(this.settingsDbService.bulkDeleteWithObservable(directoryDataIds.settings));
-    let calculators: Array<Calculator[]> = await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(directoryDataIds.calculators))
+    let calculators: Array<Calculator[]> = await firstValueFrom(this.calculatorDbService.bulkDeleteWithObservable(directoryDataIds.calculators));
+    let inventoryItems: Array<InventoryItem[]> = await firstValueFrom(this.inventoryDbService.bulkDeleteWithObservable(directoryDataIds.inventories));
+    let diagrams: Array<Diagram[]> = await firstValueFrom(this.diagramIdbService.bulkDeleteWithObservable(directoryDataIds.diagrams));
 
+    // * take the first value. NgxIndexedDBService inexplicably returns an array of arrays where each has the same representation of current state
     this.assessmentDbService.setAll(assessments[0]);
     this.calculatorDbService.setAll(calculators[0]);
     this.settingsDbService.setAll(settings[0]);
+    this.inventoryDbService.setAll(inventoryItems[0]);
+    this.diagramIdbService.setAll(diagrams[0]);
     this.hideResetSystemSettingsModal();
   }
 
@@ -313,5 +368,7 @@ export class ResetDataModalComponent implements OnInit {
 export interface DirectoryDataIds {
   assessments: Array<number>,
   settings: Array<number>,
-  calculators: Array<number>
+  calculators: Array<number>,
+  inventories?: Array<number>,
+  diagrams?: Array<number>
 }
