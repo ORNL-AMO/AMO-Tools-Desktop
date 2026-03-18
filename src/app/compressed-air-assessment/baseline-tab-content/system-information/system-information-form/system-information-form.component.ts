@@ -64,9 +64,9 @@ export class SystemInformationFormComponent {
   }
 
   openSystemCapacityModal() {
-    this.showSystemCapacityModal = true;
     this.systemCapacityModal.show();
     this.compressedAirAssessmentService.modalOpen.next(true);
+    this.showSystemCapacityModal = true;
   }
 
   closeSystemCapacityModal(totalCapacityOfCompressedAirSystem?: number) {
