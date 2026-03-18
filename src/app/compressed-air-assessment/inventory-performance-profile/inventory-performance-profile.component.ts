@@ -299,7 +299,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
                 size: 12,
                 symbol: currentMarkerShape,
               },
-              fillcolor: dataItem.color,
+              fillcolor: undefined,
             }
             traceData.push(trace);
           }
@@ -542,7 +542,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
     compressorSummary.forEach(compressorSummary => {
       if (dayTypeId === compressorSummary.dayTypeId && compressorSummary.avgPercentCapacity) {
         let compressor: CompressorInventoryItem = this.adjustedCompressors.find(item => { return item.itemId === compressorSummary.compressorId });
-        let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, this.settings, 1, compressorSummary.avgAirflow, this.compressedAirAssessment.systemInformation.atmosphericPressure, this.compressedAirAssessment.systemInformation.totalAirStorage, 0, false);
+        let results: CompressorCalcResult = this.compressedAirCalculationService.compressorsCalc(compressor, this.settings, 3, compressorSummary.avgAirflow, this.compressedAirAssessment.systemInformation.atmosphericPressure, this.compressedAirAssessment.systemInformation.totalAirStorage, 0, false);
         compressorData.push(results);
       }
     });
