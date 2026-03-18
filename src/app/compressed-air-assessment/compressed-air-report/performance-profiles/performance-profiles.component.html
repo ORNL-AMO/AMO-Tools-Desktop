@@ -14,7 +14,7 @@
 }
 <div class="row">
     <!--baseline-->
-    <div class="col-sm-12 col-md-6">
+    <div class="col-sm-12 col-md-6" [ngClass]="{'col-md-12': !selectedModificationResults}">
         <app-inventory-performance-profile class="mt-auto" [context]="'report'" [printView]="printView"
             [settings]="settings">
         </app-inventory-performance-profile>
