@@ -129,7 +129,7 @@ export class ResetDataModalComponent implements OnInit {
       if (this.resetAll) {
         this.resetAllData();
       } else if (this.resetUserAssessments) {
-        this.resetAllUserAssessments();
+        this.resetAllUserItems();
       } else if (this.resetAppSettings) {
         this.resetFactorySystemSettings();
       } else if (this.resetExampleItems) {
@@ -274,7 +274,7 @@ export class ResetDataModalComponent implements OnInit {
       ])
     );
 
-    // * set current entities from the first array of items. NgxIndexedDBService inexplicably returns an array of arrays where each has the same representation of current state
+     // * use the first inner array - NgxIndexedDBService.bulkDelete (via bulkDeleteWithObservable) returns an Array<Array<T>> snapshots of the current store state; All arrays are identical
     this.assessmentDbService.setAll(assessments[0]);
     this.settingsDbService.setAll(settings[0]);
     this.calculatorDbService.setAll(calculators[0]);
@@ -292,7 +292,7 @@ export class ResetDataModalComponent implements OnInit {
   }
 
 
-  async resetAllUserAssessments() {
+  async resetAllUserItems() {
     const directoryDataIds = await this.getUserDataIds();
     await this.resetByDataIds(directoryDataIds);
     this.hideResetSystemSettingsModal();
@@ -350,6 +350,6 @@ export interface DirectoryDataIds {
   assessments: Array<number>,
   settings: Array<number>,
   calculators: Array<number>,
-  inventories?: Array<number>,
-  diagrams?: Array<number>
+  inventories: Array<number>,
+  diagrams: Array<number>
 }

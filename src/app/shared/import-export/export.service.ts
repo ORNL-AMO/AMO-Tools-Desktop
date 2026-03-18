@@ -33,6 +33,9 @@ export class ExportService {
     private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService) {
   }
+  
+  // todo 8296 - db items export workflows are treated as mutable, should instead be copied or treated as immutable to avoid side effects
+
   getSelected(dir: Directory, isSelectAll: boolean): ImportExportData {
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDiagrams = new Array<ImportExportDiagram>();
@@ -105,7 +108,9 @@ export class ExportService {
    * @param exportData 
    */
   markAsUserItems(exportData: ImportExportData) {
-    exportData.assessments.forEach(assessment => {
+    const copyOfExportData = _.cloneDeep(exportData);
+
+    copyOfExportData.assessments.forEach(assessment => {
       if (assessment.assessment?.isExample) {
         assessment.assessment.isExample = false;
       }
@@ -113,23 +118,26 @@ export class ExportService {
         assessment.diagram.isExample = false;
       }
     });
-    exportData.inventories.forEach(inventory => {
+    copyOfExportData.inventories.forEach(inventory => {
       if (inventory.inventoryItem?.isExample) {
         inventory.inventoryItem.isExample = false;
       }
     });
-    exportData.diagrams.forEach(diagram => {
+    copyOfExportData.diagrams.forEach(diagram => {
       if (diagram.diagram?.isExample) {
         diagram.diagram.isExample = false;
       }
     });
-    exportData.directories.forEach(directory => {
+    copyOfExportData.directories.forEach(directory => {
       if (directory.directory?.isExample) {
         directory.directory.isExample = false;
       }
     });
+
+    this.exportData = copyOfExportData;
   }
 
+  // todo 8296 refactor - confusing usage. redundantly modifying class prop + side effects
   getSelectedAssessment(assessment: Assessment): ImportExportData {
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
@@ -149,9 +157,11 @@ export class ExportService {
       inventories: this.exportInventories,
       diagrams: this.exportDiagrams
     };
+    this.markAsUserItems(this.exportData);
     return this.exportData;
   }
 
+  // todo 8296 refactor - confusing usage. redundantly modifying class prop + side effects
   getSelectedInventory(inventoryItem: InventoryItem): ImportExportData {
     this.exportAssessments = new Array<ImportExportAssessment>();
     this.exportDirectories = new Array<ImportExportDirectory>();
@@ -171,6 +181,7 @@ export class ExportService {
       inventories: this.exportInventories,
       diagrams: this.exportDiagrams
     };
+    this.markAsUserItems(this.exportData);
     return this.exportData;
   }
 
