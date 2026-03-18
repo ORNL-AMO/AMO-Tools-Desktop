@@ -55,21 +55,9 @@ export class UseFreeCoolingComponent implements OnInit {
           isHEXRequired: modification.useFreeCooling.isHEXRequired,
           HEXApproachTemp: modification.useFreeCooling.HEXApproachTemp
         }, { emitEvent: false });
+        this.updateHEXApproachTempValidators(modification.useFreeCooling.isHEXRequired);
         this.form.updateValueAndValidity({ emitEvent: false });
       }
-    });
-  }
-
-  observeIsHEXRequiredChange() {
-    this.isHEXRequired.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe((isHEXRequired) => {
-      let validators = [];
-        if (isHEXRequired) {
-          validators = this.systemInformationFormService.getHexApproachTempValidators(this.settings());
-        }
-      this.HEXApproachTemp.setValidators(validators);
-      this.HEXApproachTemp.updateValueAndValidity({ emitEvent: false });
     });
   }
 
@@ -82,6 +70,24 @@ export class UseFreeCoolingComponent implements OnInit {
         useOpportunity: this.useOpportunity
       });
     });
+  }
+
+  observeIsHEXRequiredChange() {
+    this.isHEXRequired.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((isHEXRequired) => {
+      this.updateHEXApproachTempValidators(isHEXRequired);
+    });
+  }
+
+
+  updateHEXApproachTempValidators(isHEXRequired: boolean) {
+    let validators = [];
+      if (isHEXRequired) {
+        validators = this.systemInformationFormService.getHexApproachTempValidators(this.settings());
+      }
+      this.HEXApproachTemp.setValidators(validators);
+      this.HEXApproachTemp.updateValueAndValidity({ emitEvent: false });
   }
 
   setUseOpportunity() {
