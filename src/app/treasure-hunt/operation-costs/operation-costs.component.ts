@@ -11,9 +11,9 @@ import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savin
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { current } from '../../shared/convert-units/definitions/current';
 import { FeatureFlagService } from '../../shared/feature-flag.service';
 
+                           
 @Component({
     selector: 'app-operation-costs',
     templateUrl: './operation-costs.component.html',
@@ -65,6 +65,7 @@ export class OperationCostsComponent implements OnInit {
   constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
        private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
 
+    // todo 8299 gut this component and start over - resolving changes outlined in issue
   ngOnInit() {
     this.globalSettings = this.settingsDbService.globalSettings;
     this.otherFuels = otherFuels;
@@ -74,6 +75,7 @@ export class OperationCostsComponent implements OnInit {
     });
   }
 
+  // todo 8922 pull save functionality from ngOnDestroy
   ngOnDestroy() {
     if (this.saveSettingsOnDestroy == true) {
       this.saveSettings();
@@ -136,6 +138,7 @@ export class OperationCostsComponent implements OnInit {
     }
   }
 
+  // todo 8922 called on init, but also calls save
   initCurrentEnergyUse() {
     let defaultUsage: EnergyUsage = {
       electricityUsage: 0,
@@ -439,44 +442,53 @@ export class OperationCostsComponent implements OnInit {
   calculateElectricityUnitCosts(){
     this.settings.electricityCost = this.treasureHunt.currentEnergyUsage.electricityCosts / this.treasureHunt.currentEnergyUsage.electricityUsage;
     this.save();
+    this.saveSettings();
   }
   calculateElectricityAnnualConsumption(){
     this.treasureHunt.currentEnergyUsage.electricityUsage = this.treasureHunt.currentEnergyUsage.electricityCosts / this.settings.electricityCost;
     this.save();
+    this.saveSettings();
   }
   calculateElectricityAnnualCosts(){
     this.treasureHunt.currentEnergyUsage.electricityCosts = this.settings.electricityCost * this.treasureHunt.currentEnergyUsage.electricityUsage;
     this.save();
+    this.saveSettings();
   }
 
   calculateNaturalGasUnitCosts(){
     this.settings.fuelCost = this.treasureHunt.currentEnergyUsage.naturalGasCosts / this.treasureHunt.currentEnergyUsage.naturalGasUsage;
     this.save();
+    this.saveSettings();
   }
 
   calculateNaturalGasAnnualConsumption(){
     this.treasureHunt.currentEnergyUsage.naturalGasUsage = this.treasureHunt.currentEnergyUsage.naturalGasCosts / this.settings.fuelCost;
     this.save();
+    this.saveSettings();
   }
 
   calculateNaturalGasAnnualCosts(){
     this.treasureHunt.currentEnergyUsage.naturalGasCosts = this.treasureHunt.currentEnergyUsage.naturalGasUsage * this.settings.fuelCost;
     this.save();
+    this.saveSettings();
   }
 
   calculateOtherFuelUnitCosts(){
     this.settings.otherFuelCost = this.treasureHunt.currentEnergyUsage.otherFuelCosts/this.treasureHunt.currentEnergyUsage.otherFuelUsage;
     this.save();
+    this.saveSettings();
   }
 
   calculateOtherFuelAnnualConsumption(){
     this.treasureHunt.currentEnergyUsage.otherFuelUsage = this.treasureHunt.currentEnergyUsage.otherFuelCosts/this.settings.otherFuelCost;
     this.save();
+    this.saveSettings();
   }
 
   calculateOtherFuelAnnualCosts(){
     this.treasureHunt.currentEnergyUsage.otherFuelCosts = this.treasureHunt.currentEnergyUsage.otherFuelUsage*this.settings.otherFuelCost;
     this.save();
+    this.saveSettings();
   }
   
   calculateWaterUnitCosts(){
@@ -487,6 +499,7 @@ export class OperationCostsComponent implements OnInit {
       this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / this.treasureHunt.currentEnergyUsage.waterUsage;
     }
     this.save();
+    this.saveSettings();
   }
 
   calculateWaterAnnualConsumption(){
@@ -497,6 +510,7 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.waterUsage = this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost;
     }
     this.save();
+    this.saveSettings();
   }
 
   calculateWaterAnnualCosts(){
@@ -508,6 +522,7 @@ export class OperationCostsComponent implements OnInit {
     }
 
     this.save();
+    this.saveSettings();
   }
 
   calculateWastewaterUnitCosts(){
@@ -518,6 +533,7 @@ export class OperationCostsComponent implements OnInit {
       this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
     }
     this.save();
+    this.saveSettings();
   }
 
   calculateWastewaterAnnualConsumption(){
@@ -528,6 +544,7 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
     }
     this.save();
+    this.saveSettings();
   }
 
   calculateWastewaterAnnualCosts(){
@@ -538,6 +555,7 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.wasteWaterCosts = this.treasureHunt.currentEnergyUsage.wasteWaterUsage * this.settings.waterWasteCost;
     }
     this.save();
+    this.saveSettings();
   }
 
   calculateCompressedAirUnitCosts(){
@@ -548,6 +566,7 @@ export class OperationCostsComponent implements OnInit {
       this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.treasureHunt.currentEnergyUsage.compressedAirUsage;
     }
     this.save();
+    this.saveSettings();
   }
 
   calculateCompressedAirAnnualConsumption(){
@@ -558,6 +577,7 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
     }
     this.save();
+    this.saveSettings();
   }
 
   calculateCompressedAirAnnualCosts(){
@@ -568,21 +588,25 @@ export class OperationCostsComponent implements OnInit {
       this.treasureHunt.currentEnergyUsage.compressedAirCosts = this.treasureHunt.currentEnergyUsage.compressedAirUsage * this.settings.compressedAirCost;
     }
     this.save();
+    this.saveSettings();
   }
 
   calculateSteamUnitCosts(){
     this.settings.steamCost = this.treasureHunt.currentEnergyUsage.steamCosts / this.treasureHunt.currentEnergyUsage.steamUsage;
     this.save();
+    this.saveSettings();
   }
 
   calculateSteamAnnualConsumption(){
     this.treasureHunt.currentEnergyUsage.steamUsage = this.treasureHunt.currentEnergyUsage.steamCosts / this.settings.steamCost;
     this.save();
+    this.saveSettings();
   }
 
   calculateSteamAnnualCosts(){
     this.treasureHunt.currentEnergyUsage.steamCosts = this.settings.steamCost * this.treasureHunt.currentEnergyUsage.steamUsage;
     this.save();
+    this.saveSettings();
   }
 
 }
