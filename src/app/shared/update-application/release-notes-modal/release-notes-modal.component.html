@@ -41,6 +41,46 @@
 
           <label class="header-label">Here are the details of what's new in version {{versionNum}}:</label>
           <br>
+            <br>
+            <label>Application</label>
+            <ul>
+              <li>Added: Support email to auto-update notification</li>
+              <li>Enhanced: "Delete User Assessments" has become "Delete User Items", will now also delete inventory and diagram items</li>
+              <li>Fixed: Exported MEASUR examples will be marked as user-created so they behave as expected on import</li>
+            </ul>
+
+            <label>Compressed Air</label>
+            <ul>
+              <li>Added: Select compressor color so that the same color is used to represent the compressor in all graphs</li>
+              <li>Enhanced: Improved the report graphs section of the application to provide more meaningful data visualizations.</li>
+              <li>Enhanced: Improved the performance profile plots enhanced hover functionality and added all day type and modifications profiles in the report.</li>
+              <li>Enhanced: Update pipe sizing and velocity in pipe sizing help text with common heuristics</li>
+              <li>Fixed: The compressed air module has been refactored to address a variety of bugs, including bugs related to printing, performance point calculations and graphing.</li>
+            </ul>
+
+            <label>Treasure Hunt</label>
+            <ul>
+              <li>Enhanced: Exported Treasure Hunt assessments can be imported through Treasure Chest -> Import Opportunities, where the opportunities will be added and the exported Treasure Hunt data will be discarded</li>
+              <li>Fixed: Facility Basics bug where field data populated by "Estimate.." feature is not being saved.</li>
+            </ul>
+
+            <label>Process Heating</label>
+            <ul>
+              <li>Fixed: Blank material removed from Solid, Liquid, Gas Charge materials</li>
+            </ul>
+
+            <label>Water</label>
+            <ul>
+              <li>Enhanced: Total Known Losses field now available in Water Treatment and Waste Water Treatment to allow users to balance component flow</li>
+              <li>Enhanced: Add icons to diagram water components indicating validation and unknown loss states</li>
+              <li>Fixed: True Cost Editable table uses decimal precision set by user</li>
+            </ul>
+
+            <br>
+
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.6.10:</label>
+          <br>
           <label>Application</label>
           <ul>
             <li>Enhanced: Added application setting which allows users to choose optional results related to operational
@@ -56,23 +96,6 @@
           <ul>
             <li>Fixed: incorrect blowdown flash tank results displayed in the diagram when there is a single header
               system</li>
-          </ul>
-          <br>
-
-          <!--  Include prev version -->
-          <label class="header-label">Here are the details of what's new in version 1.6.9:</label>
-          <br>
-          <label>Application</label>
-          <ul>
-            <li>Enhanced: Allow customized filename and multiple receivers for emailed assessments</li>
-          </ul>
-          <label>Treasure Hunt</label>
-          <ul>
-            <li>Enhanced: Limit Opportunity Sheet Utility Types by Facility Basics selections</li>
-            <li>Enhanced: Allow sorting Treasure Hunt opportunities by Implementation Effort</li>
-            <li>Fixed: Importing Steam Reduction Treasure Hunt opportunities</li>
-            <li>Fixed: Issues related to Steam Reduction opportunities when Treasure Hunt is created in metric</li>
-            <li>Fixed: Update Better Plants PowerPoint template</li>
           </ul>
 
 

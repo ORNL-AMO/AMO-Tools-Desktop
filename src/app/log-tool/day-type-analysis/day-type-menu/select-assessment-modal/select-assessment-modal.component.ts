@@ -1,7 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { CompressedAirAssessmentService } from '../../../../compressed-air-assessment/compressed-air-assessment.service';
 import { AssessmentDbService } from '../../../../indexedDb/assessment-db.service';
  
 import { Assessment } from '../../../../shared/models/assessment';
@@ -16,7 +14,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { DayTypeAnalysisService } from '../../day-type-analysis.service';
 import { LogToolService } from '../../../log-tool.service';
-import { InventoryService } from '../../../../compressed-air-assessment/inventory/inventory.service';
+import { InventoryService } from '../../../../compressed-air-assessment/baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { firstValueFrom } from 'rxjs';
 import { LogToolDataService } from '../../../log-tool-data.service';
 
@@ -38,8 +36,7 @@ export class SelectAssessmentModalComponent implements OnInit {
   addingNewAssessment: boolean = false;
   newAssessmentForm: UntypedFormGroup;
   constructor(private assessmentDbService: AssessmentDbService, private logToolService: LogToolService,
-    private logToolDataService: LogToolDataService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService, private directoryDbService: DirectoryDbService,
+    private logToolDataService: LogToolDataService, private directoryDbService: DirectoryDbService,
     private formBuilder: UntypedFormBuilder, private assessmentService: AssessmentService, private settingsDbService: SettingsDbService,
     private dayTypeAnalysisService: DayTypeAnalysisService, private inventoryService: InventoryService) { }
 
@@ -91,9 +88,6 @@ export class SelectAssessmentModalComponent implements OnInit {
     await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
-    this.compressedAirAssessmentService.mainTab.next('baseline');
-    this.compressedAirAssessmentService.setupTab.next('day-types');
-    // this.router.navigateByUrl('/compressed-air/' + assessment.id);
     this.assessmentService.goToAssessment(assessment, 'baseline', 'day-types');
 
   }

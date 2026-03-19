@@ -71,10 +71,18 @@ export class AssessmentService {
       }
       itemSegment = '/waste-water/';
     } else if (assessment.type == 'CompressedAir') {
-      if (assessment.compressedAirAssessment.setupDone && !mainTab && !assessment.isExample) {
-        this.startingTab = 'assessment';
+      let url: string = '/compressed-air/' + assessment.id;
+      if (mainTab == 'baseline' && subTab == 'day-types') {
+        url = '/compressed-air/' + assessment.id + '/baseline/day-types-setup';
+      } else if (mainTab == 'assessment') {
+        url = '/compressed-air/' + assessment.id + '/assessment/explore-opportunities';
+      } else if (mainTab == 'report') {
+        url = '/compressed-air/' + assessment.id + '/report';
+      } else if (assessment.compressedAirAssessment.setupDone && !mainTab && !assessment.isExample) {
+        url = '/compressed-air/' + assessment.id + '/assessment/explore-opportunities';
       }
-      itemSegment = '/compressed-air/';
+      this.dashboardService.navigateWithSidebarOptions(url, { shouldCollapse: true })
+      return
     } else if (assessment.type == 'Water') {
       // todo check setupDone or validation
       if (assessment.water && !mainTab && !assessment.isExample) {
@@ -83,7 +91,7 @@ export class AssessmentService {
       itemSegment = '/water/';
     }
 
-    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, {shouldCollapse: true})
+    this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, { shouldCollapse: true })
 
   }
 
@@ -371,7 +379,7 @@ export class AssessmentService {
     }
   }
 
-  
+
   getNewWaterAssessment(settings: Settings): WaterAssessment {
     return {
       name: 'Baseline',
@@ -386,7 +394,7 @@ export class AssessmentService {
         productionUnit: 'lb',
         annualProduction: undefined
       },
-      diagramWaterSystemFlows:[],
+      diagramWaterSystemFlows: [],
       intakeSources: [],
       dischargeOutlets: [],
       waterUsingSystems: [],
@@ -423,6 +431,7 @@ export class AssessmentService {
           compressorId: undefined
         }]
       },
+      replacementCompressorInventoryItems: new Array(),
       compressorInventoryItems: new Array(),
       systemProfile: {
         systemProfileSetup: {

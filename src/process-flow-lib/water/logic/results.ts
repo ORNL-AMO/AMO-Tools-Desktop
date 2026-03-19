@@ -1,6 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowProperty, ProcessFlowNodeType, ProcessFlowPart } from "../types/diagram";
-import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterTreatment, WaterUsingSystem } from "../types/water-components";
+import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterTreatment, WaterUsingSystem, WasteWaterTreatment } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getEdgeDescription, getWaterFlowTotals } from "./water-components";
 import { NodeGraphIndex, createGraphIndex, getAllUpstreamEdgePaths, getAllDownstreamEdgePaths } from "../../graph";
@@ -68,7 +68,7 @@ export const getSystemBalanceResults = (waterSystem: WaterUsingSystem, calculate
   const totalSourceFlow = calculatedData ? getNodeTotalInflow(waterSystem, calculatedData) : waterSystem.userEnteredData.totalSourceFlow ?? 0;
   // * reconcile asessment value waterSystem.systemFlowTotals.dischargeWater
   const totalDischargeFlow = calculatedData ? getNodeTotalOutflow(waterSystem, calculatedData) : waterSystem.userEnteredData.totalDischargeFlow ?? 0;
-  const estimatedUnknownLosses = getSystemEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
+  const estimatedUnknownLosses = getNodeEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
 
   systemBalanceResults.incomingWater = totalSourceFlow;
   systemBalanceResults.outgoingWater = waterSystem.systemFlowTotals.waterInProduct
@@ -108,8 +108,8 @@ export const getNodeTotalOutflow = (node: Node<ProcessFlowPart> | ProcessFlowPar
   return totalOutflow ?? 0;
 }
 
-export const getSystemEstimatedUnknownLosses = (
-  componentData: WaterUsingSystem,
+export const getNodeEstimatedUnknownLosses = (
+  componentData: WaterUsingSystem | WaterTreatment | WasteWaterTreatment,
   systemTotalSourceFlow: number,
   systemTotalDischargeFlow: number
 ): number => {
@@ -130,6 +130,14 @@ export const getBalancePercent = (total: number, segment: number) => {
   return 0;
 }
 
+
+/**
+ * TODO - Needs maintenance. The functionality this is meant to support is not fully implemented nor currently being used. Logic may not be correct. 
+ * TODO advise starting fresh when we come back to assessment enhancements
+ * 
+ * related - 7432, 7433
+ * Sets the individual water flows for each water using system based on the edges in the diagram and user entered data.
+ */
 export const setWaterUsingSystemFlows = (waterUsingSystems: WaterUsingSystem[], edges: Edge[]): DiagramWaterSystemFlows[] => {
   let diagramWaterSystemFlows: DiagramWaterSystemFlows[] = []
   waterUsingSystems = waterUsingSystems.map((system: WaterUsingSystem) => {

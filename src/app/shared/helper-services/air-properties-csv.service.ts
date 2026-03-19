@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as Papa from 'papaparse';
+import * as Papa from 'papaparse/papaparse.js';
 import * as _ from 'lodash';
 
 @Injectable()
@@ -24,7 +24,6 @@ export class AirPropertiesCsvService {
         },
       });
     });
-
   }
 
   setAirPropertiesData(csvResults: Array<any>) {

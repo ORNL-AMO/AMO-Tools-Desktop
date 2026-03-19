@@ -1,3 +1,27 @@
 li.page-item{
     background-color:#ECECEC !important;
 }
+
+.progress-tabs{
+    display: none;
+}
+
+.progress-tabs.display{
+    display: block;
+}
+
+.progress-tabs li.page-item:not(.chevron){
+    display: none;
+}
+
+.progress-tabs li.page-item.active {
+    display: block;
+}
+
+.ca-setup-tabs{
+    display: none;
+}
+
+.ca-setup-tabs.display{
+    display: block;
+}

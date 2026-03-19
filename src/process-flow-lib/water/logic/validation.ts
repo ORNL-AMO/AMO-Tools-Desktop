@@ -77,9 +77,15 @@ export const hasValidDischargeForm = (errors: NodeFlowTypeErrors) => {
 
 export const getHasErrorLevel = (errors: NodeErrors) => {
     return errors && Object.entries(errors as NodeErrors).some(([, errors]) => {
-        return errors.source?.level === 'error' || errors.discharge?.level === 'error';
+        return getNodeHasErrorLevel(errors);
     });
 }
+
+export const getNodeHasErrorLevel = (nodeErrors: NodeFlowTypeErrors) => {
+     if (!nodeErrors) return false;
+    return nodeErrors.source?.level === 'error' || nodeErrors.discharge?.level === 'error';
+}
+
 /**
    * Check if any node flow has errors or specify by type
    */

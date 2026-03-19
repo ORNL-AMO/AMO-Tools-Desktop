@@ -13,7 +13,6 @@ import * as _ from 'lodash';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { SettingsService, SteamImperialDefaults, SteamMetricDefaults } from '../settings/settings.service';
 import { ConvertSsmtService } from './convert-ssmt.service';
-import { EGridService } from '../shared/helper-services/e-grid.service';
 import { SteamService } from '../calculator/steam/steam.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
@@ -93,7 +92,6 @@ export class SsmtComponent implements OnInit {
   saturatedPropertiesOutput: SaturatedPropertiesOutput;
 
   constructor(
-    private egridService: EGridService,
     private activatedRoute: ActivatedRoute,
     private boilerService: BoilerService,
     private router: Router,
@@ -112,7 +110,6 @@ export class SsmtComponent implements OnInit {
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-steam-assessment');
-    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
       if (!this.assessment || (this.assessment && this.assessment.type !== 'SSMT')) {

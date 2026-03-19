@@ -5,7 +5,6 @@ import { SettingsService } from '../settings.service'
  
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { UntypedFormGroup } from '@angular/forms';
-import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -32,13 +31,11 @@ export class AssessmentSettingsComponent implements OnInit {
   showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   constructor(   
-    private egridService: EGridService, 
     private settingsDbService: SettingsDbService, 
     private settingsService: SettingsService) {
   }
 
   ngOnInit() {
-    this.egridService.getAllSubRegions();
     this.initializeSettings();
   }
   

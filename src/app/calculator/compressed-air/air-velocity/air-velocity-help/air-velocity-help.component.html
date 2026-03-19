@@ -2,7 +2,8 @@
   <h5>
     Velocity in the Piping Help
     <br>
-    <small class="text-muted">This calculator helps in finding the velocity of compressed air through all the different piping involved in the system.
+    <small class="text-muted">This calculator helps in finding the velocity of compressed air through all the different
+      piping involved in the system.
     </small>
   </h5>
   <hr class="my-1 hr-spacer">
@@ -35,9 +36,30 @@
       <br>
       <small class="text-muted">
 
-        General value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric pressure
+        General value is 14.7 psi. In case the receiver tank is at higher altitude location, the respective atmospheric
+        pressure
         at that location can be given.
         <hr>
+      </small>
+    </h6>
+  </div>
+  <div class="my-2">
+    <h6>
+      Heuristics recommend that velocity in the compressed air piping is no more than:
+      <small class="text-muted">
+        @if(settings.unitsOfMeasure == 'Metric'){
+        <ul>
+          <li>6 m/s in the compressed air room</li>
+          <li>9 m/s in the plant header</li>
+          <li>15 m/s in the final drop to an end use</li>
+        </ul>
+        }@else {
+        <ul>
+          <li>20 ft/s in the compressed air room</li>
+          <li>30 ft/s in the plant header</li>
+          <li>50 ft/s in the final drop to an end use</li>
+        </ul>
+        }
       </small>
     </h6>
   </div>

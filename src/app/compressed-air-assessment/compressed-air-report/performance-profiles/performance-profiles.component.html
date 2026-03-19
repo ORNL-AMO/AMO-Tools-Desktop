@@ -1,16 +1,87 @@
-<div class="print-container">
-    <div class="page-break-before">
-        <h4 class="show-print print-section-header">Performance Profiles</h4>
-        <app-inventory-performance-profile [inReport]="true" [printView]="printView" [compressedAirAssessment]="compressedAirAssessment" [settings]="settings">
-        </app-inventory-performance-profile>
-        <app-centrifugal-graph [inReport]="true" [printView]="printView" [compressedAirAssessment]="compressedAirAssessment" [settings]="settings">
-        </app-centrifugal-graph>
-        <app-compressor-summary-table 
-            [compressedAirAssessment]="compressedAirAssessment"
-            [settings]="settings"
-            [printView]="printView"
-            [inReport]="true">
-        </app-compressor-summary-table>
-
+@if(!printView){
+@if(compressedAirAssessment.modifications.length > 1){
+<div class="row justify-content-end">
+    <div class="col-sm-12 col-md-6">
+        <div class="d-flex justify-content-center">
+            <select class="day-type-select" id="selectedDayType" name="selectedDayType"
+                [(ngModel)]="selectedModification" (change)="setSelectedModification()">
+                <option *ngFor="let modification of compressedAirAssessment.modifications" [ngValue]="modification">
+                    {{modification.name}}</option>
+            </select>
+        </div>
     </div>
 </div>
+}
+<div class="row">
+    <!--baseline-->
+    <div class="col-sm-12 col-md-6" [ngClass]="{'col-md-12': !selectedModificationResults}">
+        <app-inventory-performance-profile class="mt-auto" [context]="'report'" [printView]="printView"
+            [settings]="settings">
+        </app-inventory-performance-profile>
+        <app-centrifugal-graph [inReport]="true" [printView]="printView" [settings]="settings" [isBaseline]="true">
+        </app-centrifugal-graph>
+    </div>
+    <!--modification-->
+    @if(selectedModificationResults){
+    <div class="col-sm-12 col-md-6">
+        <div>
+            <app-inventory-performance-profile [context]="'report'" [printView]="printView" [settings]="settings"
+                [compressedAirAssessmentModificationResults]="selectedModificationResults">
+            </app-inventory-performance-profile>
+            <app-centrifugal-graph [inReport]="true" [printView]="printView" [settings]="settings"
+                [compressedAirAssessmentModificationResults]="selectedModificationResults">
+            </app-centrifugal-graph>
+        </div>
+    </div>
+    }
+</div>
+<div class="row">
+    <div class="col-12">
+        <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
+            [printView]="printView" [inReport]="true">
+        </app-compressor-summary-table>
+    </div>
+    @if(selectedModificationResults){
+    <div class="col-12">
+        <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
+            [printView]="printView" [inReport]="true" [modificationResults]="selectedModificationResults">
+        </app-compressor-summary-table>
+    </div>
+    }
+</div>
+}@else {
+<!--print-->
+<!--baseline-->
+<div class="row">
+    <div class="col-12">
+        <app-inventory-performance-profile class="mt-auto" [context]="'report'" [printView]="printView"
+            [settings]="settings">
+        </app-inventory-performance-profile>
+        <app-centrifugal-graph [inReport]="true" [printView]="printView" [settings]="settings" [isBaseline]="true">
+        </app-centrifugal-graph>
+    </div>
+    <div class="col-12">
+        <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
+            [printView]="printView" [inReport]="true">
+        </app-compressor-summary-table>
+    </div>
+</div>
+<!--modifications-->
+@for(modificationResult of assessmentResults; track modificationResult.modification.modificationId){
+<div class="row">
+    <div class="col-12">
+        <app-inventory-performance-profile [context]="'report'" [printView]="printView" [settings]="settings"
+            [compressedAirAssessmentModificationResults]="modificationResult">
+        </app-inventory-performance-profile>
+        <app-centrifugal-graph [inReport]="true" [printView]="printView" [settings]="settings"
+            [compressedAirAssessmentModificationResults]="modificationResult">
+        </app-centrifugal-graph>
+    </div>
+    <div class="col-12">
+        <app-compressor-summary-table [compressedAirAssessment]="compressedAirAssessment" [settings]="settings"
+            [printView]="printView" [inReport]="true" [modificationResults]="modificationResult">
+        </app-compressor-summary-table>
+    </div>
+</div>
+}
+}
