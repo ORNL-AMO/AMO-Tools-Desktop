@@ -366,6 +366,22 @@ export const SolidLiquidFlueGasMaterialStoreMeta = {
   ]
 }
 
+export const LightingFixtureMaterialStoreMeta = {
+  store: 'lightingFixtureMaterial',
+  storeConfig: { keyPath: 'id', autoIncrement: true },
+  storeSchema: [
+    { name: 'category', keypath: 'category', options: { unique: false } },
+    { name: 'type', keypath: 'type', options: { unique: false } },
+    { name: 'lampsPerFixture', keypath: 'lampsPerFixture', options: { unique: false } },
+    { name: 'wattsPerLamp', keypath: 'wattsPerLamp', options: { unique: false } },
+    { name: 'lumensPerLamp', keypath: 'lumensPerLamp', options: { unique: false } },
+    { name: 'lampLife', keypath: 'lampLife', options: { unique: false } },
+    { name: 'coefficientOfUtilization', keypath: 'coefficientOfUtilization', options: { unique: false } },
+    { name: 'ballastFactor', keypath: 'ballastFactor', options: { unique: false } },
+    { name: 'lumenDegradationFactor', keypath: 'lumenDegradationFactor', options: { unique: false } }
+  ]
+};
+
 
 export const dbConfig: DBConfig = {
   name: 'CrudDB',
@@ -387,6 +403,7 @@ export const dbConfig: DBConfig = {
     WallLossesSurfaceStoreMeta,
     FlueGasMaterialStoreMeta,
     SolidLiquidFlueGasMaterialStoreMeta,
-    DiagramStoreMeta
+    DiagramStoreMeta,
+    LightingFixtureMaterialStoreMeta
   ]
 };
