@@ -105,6 +105,27 @@
               </small>
             </h6>
           </div>
+
+          <div class="my-2">
+            <h6>
+              Heuristics recommend that velocity in the compressed air piping is no more than:
+              <small class="text-muted">
+                @if(settings.unitsOfMeasure == 'Metric'){
+                <ul>
+                  <li>6 m/s in the compressed air room</li>
+                  <li>9 m/s in the plant header</li>
+                  <li>15 m/s in the final drop to an end use</li>
+                </ul>
+                }@else {
+                <ul>
+                  <li>20 ft/s in the compressed air room</li>
+                  <li>30 ft/s in the plant header</li>
+                  <li>50 ft/s in the final drop to an end use</li>
+                </ul>
+                }
+              </small>
+            </h6>
+          </div>
         </div>
       </div>
     </div>
