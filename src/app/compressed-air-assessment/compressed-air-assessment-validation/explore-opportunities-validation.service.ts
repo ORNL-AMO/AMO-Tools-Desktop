@@ -111,7 +111,6 @@ export class ExploreOpportunitiesValidationService {
 
   checkReduceRuntimeValid(compressedAirAssessment: CompressedAirAssessment, modification: Modification, compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults): boolean {
     let isValid: boolean = true;
-    console.log(compressedAirAssessment.name);
     if (modification.reduceRuntime.order != 100) {
       let form: UntypedFormGroup = this.reduceRunTimeService.getFormFromObj(modification.reduceRuntime);
       isValid = form.valid;
@@ -119,8 +118,9 @@ export class ExploreOpportunitiesValidationService {
         compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
           if (isValid) {
             let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId });
-            // * Errors happening on reduceRunTimeProfileValidation?.isValid after manually assigning empty selections on versoin upgrade
-            isValid = modificationProfileSummary.reduceRunTimeProfileValidation?.isValid;
+            if (modificationProfileSummary) {
+              isValid = modificationProfileSummary.reduceRunTimeProfileValidation?.isValid;
+            }
           }
         });
       }

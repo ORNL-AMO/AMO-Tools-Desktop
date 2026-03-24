@@ -125,11 +125,6 @@ export class CompressedAirAssessmentComponent implements OnInit {
     this.integrationStateService.connectedInventoryData.next(this.integrationStateService.getEmptyConnectedInventoryData());
   }
 
-
-  finishInitialization(){
-    
-  }
-
   //initialize settings for assessment
   async addSettings(settings: Settings) {
     delete settings.id;
