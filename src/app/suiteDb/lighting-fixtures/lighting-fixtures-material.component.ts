@@ -72,7 +72,6 @@ export class LightingFixturesMaterialComponent implements OnInit {
 
     setExisting() {
         if (this.editExistingMaterial && this.existingMaterial) {
-            // Editing an existing LightingFixtureMaterial
             this.newMaterial = {
                 id: this.existingMaterial.id,
                 name: this.existingMaterial.name ?? '',
@@ -90,7 +89,6 @@ export class LightingFixturesMaterialComponent implements OnInit {
             };
         }
         else if (this.selectedMaterial) {
-            // Use the first fixture from fixturesData, which is already set for the selected material
             const firstFixture = this.fixturesData && this.fixturesData.length > 0
                 ? this.fixturesData[0]
                 : null;
