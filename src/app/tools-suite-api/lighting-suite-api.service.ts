@@ -77,7 +77,6 @@ export class LightingSuiteApiService {
         this.buildLightingList(lightingFixtureData, this.lightingFixtureCategories);
 
         defaultDataInstance.delete();
-        // this.lightingReplacementService.lightingFixtureCategories = this.lightingFixtureCategories;
         return this.lightingFixtureCategories;
     }   
 

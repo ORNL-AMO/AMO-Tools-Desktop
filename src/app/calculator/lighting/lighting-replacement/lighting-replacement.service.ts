@@ -16,13 +16,12 @@ export class LightingReplacementService {
   modificationElectricityCost: number;
   operatingHours: OperatingHours;
   lightingFixtureCategories: Array<LightingFixtureCategory>;
+  selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
+  showAdditionalDetails: boolean = false;
+
   constructor(private fb: UntypedFormBuilder, private lightingSuiteApiService: LightingSuiteApiService) {
     this.selectedFixtureTypes = new BehaviorSubject(undefined);
   }
-  selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
-
-  showAdditionalDetails: boolean = false;
-
 
   initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {
     let hoursPerYear: number = 8760;
