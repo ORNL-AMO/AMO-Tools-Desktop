@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Signal, inject } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { CompareService } from '../../compare.service';
 import { PsatReportRollupService } from '../../../report-rollup/psat-report-rollup.service';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-output-summary',
@@ -12,6 +13,9 @@ import { PsatReportRollupService } from '../../../report-rollup/psat-report-roll
     standalone: false
 })
 export class OutputSummaryComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+      
   @Input()
   settings: Settings;
   @Input()

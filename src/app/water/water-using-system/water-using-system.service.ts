@@ -82,8 +82,8 @@ export class WaterUsingSystemService {
       sourceWater: [systemFlowTotals.sourceWater, [Validators.required, Validators.min(0)]],
       recirculatedWater: [systemFlowTotals.recirculatedWater, [Validators.min(0)]],
       dischargeWater: [systemFlowTotals.dischargeWater, [Validators.required, Validators.min(0)]],
-      knownLosses: [systemFlowTotals.knownLosses, [Validators.required, Validators.min(0)]],
-      waterInProduct: [systemFlowTotals.waterInProduct, [Validators.required, Validators.min(0)]],
+      knownLosses: [systemFlowTotals.knownLosses],
+      waterInProduct: [systemFlowTotals.waterInProduct],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;

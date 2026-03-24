@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, HostListener, inject, Signal } from '@angular/core';
 import { PsatOutputs, PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-explore-opportunities-results',
@@ -9,6 +10,9 @@ import { Settings } from '../../../shared/models/settings';
     standalone: false
 })
 export class ExploreOpportunitiesResultsComponent implements OnInit {
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+  
   @Input()
   baselineResults: PsatOutputs;
   @Input()

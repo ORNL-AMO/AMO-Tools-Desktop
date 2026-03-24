@@ -41,9 +41,10 @@ export class FlueGasMaterialDbService {
   }
 
   clearFlueGasMaterials(): Observable<boolean> {
+    //this clears the suite db items as well
     return this.dbService.clear(this.storeName);
   }
-  
+
   getById(id: number): FlueGasMaterial {
     let allMaterials: Array<FlueGasMaterial> = this.dbFlueGasMaterials.getValue();
     return allMaterials.find(material => material.id === id);
@@ -79,4 +80,13 @@ export class FlueGasMaterialDbService {
     return material.id;
   }
 
+  async deleteAllCustomMaterials(): Promise<boolean> {
+    const materials: Array<FlueGasMaterial> = await firstValueFrom(this.dbService.getAll(this.storeName));
+    const customMaterials: Array<FlueGasMaterial> = materials.filter((material: FlueGasMaterial) => !material.isDefault);
+    for (const material of customMaterials) {
+      await firstValueFrom(this.deleteByIdWithObservable(material.id));
+    }
+    await this.setAllMaterialsFromDb();
+    return true;
+  }
 }

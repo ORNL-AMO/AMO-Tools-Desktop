@@ -92,5 +92,4 @@ export class AssessmentDbService {
     return this.dbService.update(this.storeName, assessment);
   }
 
-
 }

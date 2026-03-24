@@ -25,8 +25,9 @@ import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browse
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
 import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
-import {Dialog, DialogRef} from '@angular/cdk/dialog';
+import { DialogRef} from '@angular/cdk/dialog';
 import { ModalDialogService } from '../shared/modal-dialog.service';
+import { FeatureFlagService } from '../shared/feature-flag.service';
 
 @Component({
   selector: 'app-core',
@@ -100,7 +101,8 @@ export class CoreComponent implements OnInit {
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private toolsSuiteApiService: ToolsSuiteApiService,
-    private modalDialogService: ModalDialogService
+    private modalDialogService: ModalDialogService,
+    private featureFlagService: FeatureFlagService,
   ) {
   }
 
@@ -173,10 +175,12 @@ export class CoreComponent implements OnInit {
             ]);
           }, 3000);
         }
+        this.featureFlagService.setFeatureFlags(browserStorageOptions);
         this.initData();
       } else {
         this.snackBarService.setSnackbarMessage(CORE_DATA_WARNING, 'danger', 'none');
       }
+
     });
 
     this.openingTutorialSub = this.assessmentService.showTutorial.subscribe(val => {
@@ -242,8 +246,7 @@ export class CoreComponent implements OnInit {
       try {
         await this.coreService.setNewApplicationInstanceData();
         await this.coreService.createDefaultDirectories();
-        await this.coreService.createExamples();
-        await this.coreService.createDirectorySettings();
+        await this.coreService.loadExampleDirectory();
       } catch (e) {
         this.appErrorService.handleAppError(e, 'Error creating MEASUR database');
       }

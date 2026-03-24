@@ -2,9 +2,15 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AllCompressedAirResultsData, CompressedAirCompare, CompressedAirResultsData, ReportItem, ReportUtilityTotal } from './report-rollup-models';
 import * as _ from 'lodash';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../compressed-air-assessment/compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResultsService } from '../compressed-air-assessment/compressed-air-assessment-results.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
+import { BaselineResults, CompressedAirAssessmentResult, DayTypeModificationResult } from '../compressed-air-assessment/calculations/caCalculationModels';
+import { CompressedAirCalculationService } from '../compressed-air-assessment/compressed-air-calculation.service';
+import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { CompressedAirAssessmentBaselineResults } from '../compressed-air-assessment/calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirAssessmentModificationResults } from '../compressed-air-assessment/calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirCombinedDayTypeResults } from '../compressed-air-assessment/calculations/modifications/CompressedAirCombinedDayTypeResults';
 @Injectable()
 export class CompressedAirReportRollupService {
 
@@ -14,7 +20,9 @@ export class CompressedAirReportRollupService {
   allAssessmentResults: Array<AllCompressedAirResultsData>;
   totals: ReportUtilityTotal;
   constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService,
-    private convertUnitsService: ConvertUnitsService) {
+    private convertUnitsService: ConvertUnitsService,
+    private compressedAirCalculationService: CompressedAirCalculationService,
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService) {
     this.initSummary();
   }
 
@@ -69,13 +77,15 @@ export class CompressedAirReportRollupService {
     this.allAssessmentResults = new Array<AllCompressedAirResultsData>();
     assessmentArr.forEach(val => {
       if (val.assessment.compressedAirAssessment.setupDone) {
-        let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val.assessment.compressedAirAssessment, val.settings);
+        let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(val.assessment.compressedAirAssessment, val.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+        let baselineResults: BaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
         if (val.assessment.compressedAirAssessment.modifications) {
           if (val.assessment.compressedAirAssessment.modifications.length !== 0) {
             let modResultsArr: Array<DayTypeModificationResult> = new Array<DayTypeModificationResult>();
             val.assessment.compressedAirAssessment.modifications.forEach(mod => {
-              let tmpResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, mod, val.settings, undefined, baselineResults);
-              let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(tmpResults, baselineResults);
+              let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(val.assessment.compressedAirAssessment, mod, val.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
+              let compressedAirCombinedDayTypeResults: CompressedAirCombinedDayTypeResults = new CompressedAirCombinedDayTypeResults(compressedAirAssessmentModificationResults);
+              let combinedResults: DayTypeModificationResult = compressedAirCombinedDayTypeResults.getDayTypeModificationResult();
               modResultsArr.push(combinedResults);
             });
             this.allAssessmentResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
@@ -96,10 +106,12 @@ export class CompressedAirReportRollupService {
   setAssessmentResultsFromSelected(selectedAssessments: Array<CompressedAirCompare>) {
     this.selectedAssessmentResults = new Array<CompressedAirResultsData>();
     selectedAssessments.forEach(val => {
-      let baselineResults: BaselineResults = this.compressedAirAssessmentResultsService.calculateBaselineResults(val.assessment.compressedAirAssessment, val.settings);
+      let compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(val.assessment.compressedAirAssessment, val.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService);
+      let baselineResults: BaselineResults = compressedAirAssessmentBaselineResults.baselineResults;
       if (val.modification) {
-        let modificationResults: CompressedAirAssessmentResult = this.compressedAirAssessmentResultsService.calculateModificationResults(val.assessment.compressedAirAssessment, val.modification, val.settings, undefined, baselineResults);
-        let combinedResults: DayTypeModificationResult = this.compressedAirAssessmentResultsService.combineDayTypeResults(modificationResults, baselineResults);
+        let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(val.assessment.compressedAirAssessment, val.modification, val.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
+        let compressedAirCombinedDayTypeResults: CompressedAirCombinedDayTypeResults = new CompressedAirCombinedDayTypeResults(compressedAirAssessmentModificationResults);
+        let combinedResults: DayTypeModificationResult = compressedAirCombinedDayTypeResults.getDayTypeModificationResult();
         this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: combinedResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
       } else {
         this.selectedAssessmentResults.push({ baselineResults: baselineResults, modificationResults: undefined, assessmentId: val.assessmentId, name: val.name, modName: 'Baseline', baseline: val.baseline, modification: val.modification, settings: val.settings });
@@ -123,7 +135,7 @@ export class CompressedAirReportRollupService {
         diffEnergy = result.baselineResults.total.energyUse - result.modificationResults.allSavingsResults.adjustedResults.power;
         sumEnergy += result.modificationResults.allSavingsResults.adjustedResults.power;
         // * results already in ton/tonne (calculated from assessment)
-        sumCo2Savings += result.modificationResults.allSavingsResults.savings.annualEmissionOutputSavings; 
+        sumCo2Savings += result.modificationResults.allSavingsResults.savings.annualEmissionOutputSavings;
         sumCo2Emissions += result.modificationResults.annualEmissionOutput;
       } else {
         sumCost += result.baselineResults.total.totalAnnualOperatingCost;

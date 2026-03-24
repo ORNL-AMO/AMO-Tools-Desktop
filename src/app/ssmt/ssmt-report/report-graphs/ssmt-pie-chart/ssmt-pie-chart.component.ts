@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { SSMT } from '../../../../shared/models/steam/ssmt';
 import { ReportGraphsService } from '../report-graphs.service';
-import { graphColors } from '../../../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 

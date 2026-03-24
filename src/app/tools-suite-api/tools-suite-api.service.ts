@@ -47,6 +47,7 @@ export class ToolsSuiteApiService {
 
     async initializeDefaultDbData() {
         let globalSettings: Settings = this.settingsDbService.globalSettings;
+        // suiteDbItemsInitialized - flag is just continuing to support current app init logic - settings doesn't really need to be coupled to init logic. 
         if (!globalSettings.suiteDbItemsInitialized) {
             console.log('==== Initializing default database items');
             // Initialize default data here

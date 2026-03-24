@@ -124,6 +124,10 @@ export class BoilerComponent implements OnInit {
   updateSteamQuality(): void {
     this.saturatedPressure.clearValidators();
     this.steamTemperature.clearValidators();
+
+    if (this.steamQuality.value === SteamQuality.SATURATED) {
+      this.pressureOrTemperature.setValue(SteamPressureOrTemp.PRESSURE);
+    }
     this.boilerService.setPressureAndTemperatureValidators(this.boilerForm, this.settings, this.isBaseline);
     this.save();
   }

@@ -153,3 +153,86 @@ export interface Contact {
     phoneNumber?: number;
     email?: string;
 }
+
+
+export function getDefaultSettings(): Settings {
+    return {
+        language: "English",
+        currency: "$",
+        unitsOfMeasure: "Imperial",
+        distanceMeasurement: "ft",
+        flowMeasurement: "gpm",
+        powerMeasurement: "hp",
+        pressureMeasurement: "psi",
+        currentMeasurement: null,
+        viscosityMeasurement: null,
+        voltageMeasurement: null,
+        energySourceType: "Fuel",
+        customFurnaceName: null,
+        temperatureMeasurement: "F",
+        steamTemperatureMeasurement: "F",
+        steamPressureMeasurement: "psig",
+        steamSpecificEnthalpyMeasurement: "btuLb",
+        steamSpecificEntropyMeasurement: "btulbF",
+        steamSpecificVolumeMeasurement: "ft3lb",
+        steamMassFlowMeasurement: "klb",
+        fuelCost: 3.99,
+        steamCost: 4.69,
+        electricityCost: 0.066,
+        compressedAirCost: 0.022,
+        defaultPanelTab: 'results',
+        phastRollupFuelUnit: 'MMBtu',
+        phastRollupElectricityUnit: 'kWh',
+        phastRollupSteamUnit: 'MMBtu',
+        energyResultUnit: "MMBtu",
+        phastRollupUnit: 'MMBtu',
+        facilityInfo: {
+            companyName: 'ORNL',
+            facilityName: 'ORNL Test Facility',
+            address: {
+                street: '1 Bethel Valley Rd.',
+                city: 'Oak Ridge',
+                state: 'TN',
+                country: 'U.S.',
+                zip: '37831'
+            },
+            facilityContact: {
+                contactName: 'T. Owner',
+                phoneNumber: 8655767658,
+                email: 't.owner@ornl.com'
+            },
+            assessmentContact: {
+                contactName: 'D.O. Energy',
+                phoneNumber: 1234567890,
+                email: 'AMO_ToolHelpDesk@ee.doe.gov'
+            }
+        },
+        co2SavingsEnergyType: "electricity",
+        co2SavingsEnergySource: "Natural Gas",
+        co2SavingsFuelType: "Natural Gas",
+        totalEmissionOutputRate: 401.07,
+        emissionsUnit: 'Metric',
+        totalFuelEmissionOutputRate: 0,
+        totalNaturalGasEmissionOutputRate: 53.06,
+        totalCoalEmissionOutputRate: 0,
+        totalOtherEmissionOutputRate: 0,
+        coalFuelType: 'Mixed - Industrial Sector',
+        eafOtherFuelSource: 'None',
+        otherFuelType: '',
+        electricityUse: 0,
+        eGridRegion: '',
+        eGridSubregion: 'U.S. Average',
+        totalEmissionOutput: 0,
+        userEnteredBaselineEmissions: false,
+        userEnteredModificationEmissions: false,
+        zipcode: '00000',
+        commonRollupUnit: "MMBtu",
+        pumpsRollupUnit: "MWh",
+        fansRollupUnit: "MWh",
+        steamRollupUnit: "MMBtu",
+        wasteWaterRollupUnit: "MWh",
+        compressedAirRollupUnit: "MWh",
+        flowDecimalPrecision: 2,
+        suiteDbItemsInitialized: false
+    }
+};

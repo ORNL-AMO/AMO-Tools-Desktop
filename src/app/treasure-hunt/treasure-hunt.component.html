@@ -23,6 +23,7 @@
       <app-system-basics *ngIf="subTab == 'settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)" [(settings)]="settings" [assessment]="assessment"
         (updateSettings)="getSettings()">
       </app-system-basics>
+  <!-- todo 8922 potential issues with calling getSettings() here (on operation-costs destroy), with operation costs accepting settings as input -->
       <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings" (updateSettings)="getSettings()">
       </app-operation-costs>
 

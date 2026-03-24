@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
 import { AssessmentService } from '../dashboard/assessment.service';
-import { PSAT, Modification, PsatOutputs, PsatInputs } from '../shared/models/psat';
+import { PSAT, Modification, PsatOutputs } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +17,6 @@ import { UntypedFormGroup } from '@angular/forms';
 import { MotorService } from './motor/motor.service';
 import { FieldDataService } from './field-data/field-data.service';
 import { SettingsService } from '../settings/settings.service';
-import { EGridService } from '../shared/helper-services/e-grid.service';
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
 import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
@@ -103,14 +102,12 @@ export class PsatComponent implements OnInit {
     private motorService: MotorService,
     private fieldDataService: FieldDataService,
     private cd: ChangeDetectorRef,
-    private egridService: EGridService,
     private settingsService: SettingsService,
     private analyticsService: AnalyticsService) {
   }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-pump-assessment');
-    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       this.getSettings();

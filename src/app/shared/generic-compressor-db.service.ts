@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import * as Papa from 'papaparse';
 import { ConvertUnitsService } from './convert-units/convert-units.service';
 import { Settings } from './models/settings';
-import { CompressorTypeOptions, ControlTypes } from '../compressed-air-assessment/inventory/inventoryOptions';
 import { DefaultCompressorApiService } from '../tools-suite-api/default-compressor-api.service';
+import { CompressorTypeOptions, ControlTypes } from '../compressed-air-assessment/baseline-tab-content/inventory-setup/inventory/inventoryOptions';
 @Injectable()
 export class GenericCompressorDbService {
 

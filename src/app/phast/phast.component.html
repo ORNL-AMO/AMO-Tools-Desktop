@@ -40,7 +40,7 @@
   </div>
   <div *ngIf="mainTab == 'baseline' && stepTab.step != 1" class="assessment-tab-container tab-content">
     <!--Step: 4 Heat Balance-->
-    <app-losses *ngIf="stepTab.step  == 2 && hasEgridDataInit" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="true"
+    <app-losses *ngIf="stepTab.step  == 2" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings" [inSetup]="true"
       [containerHeight]="containerHeight"></app-losses>
     <!--Step: 5 Aux Equipment-->
     <app-aux-equipment *ngIf="stepTab.step  == 3" [(phast)]="_phast" (save)="saveDb()"
@@ -60,7 +60,7 @@
         [assessment]="assessment" (save)="saveDb()" [exploreModIndex]="modificationIndex" (emitAddNewMod)="addNewMod()">
       </app-explore-phast-opportunities>
     </div>
-    <div *ngIf="assessmentTab == 'modify-conditions' && hasEgridDataInit">
+    <div *ngIf="assessmentTab == 'modify-conditions'">
       <app-losses [containerHeight]="containerHeight" [(phast)]="_phast" (saved)="saveDb()" [settings]="settings"
         [inSetup]="false" [modificationIndex]="modificationIndex"></app-losses>
     </div>

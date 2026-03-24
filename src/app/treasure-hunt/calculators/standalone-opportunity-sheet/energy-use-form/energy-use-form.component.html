@@ -6,13 +6,7 @@
   <div class="form-group" *ngFor="let energyItem of energyItems; let index = index;">
     <select class="form-control" [(ngModel)]="energyItem.type" name="{{'type_'+index}}" (change)="save()"np
       (focus)="focusField('energyUseType')">
-      <option [ngValue]="'Electricity'">Electricity</option>
-      <option [ngValue]="'Gas'">Gas</option>
-      <option [ngValue]="'Compressed Air'">Compressed Air</option>
-      <option [ngValue]="'Other Fuel'">Other Fuel</option>
-      <option [ngValue]="'Steam'">Steam</option>
-      <option [ngValue]="'Water'">Water</option>
-      <option [ngValue]="'WWT'">WWT</option>
+      <option *ngFor="let option of availableEnergyTypes" [ngValue]="option">{{option}}</option>
     </select>
     <div class="input-group pl-2">
       <input type="number" class="form-control" [(ngModel)]="energyItem.amount" name="{{'amount_'+index}}"

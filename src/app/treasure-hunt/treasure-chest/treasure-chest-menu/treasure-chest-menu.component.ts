@@ -147,6 +147,8 @@ export class TreasureChestMenuComponent implements OnInit {
       this.sortByLabel = 'Implementation Cost';
     } else if (this.sortCardsData.sortBy == 'paybackPeriod') {
       this.sortByLabel = 'Payback Period';
+    } else if (this.sortCardsData.sortBy == 'opportunitySheet.opportunityCost.implementationEffort') {
+      this.sortByLabel = 'Implementation Effort';
     }
   }
 

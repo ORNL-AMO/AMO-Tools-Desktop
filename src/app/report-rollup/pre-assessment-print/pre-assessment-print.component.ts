@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Calculator } from '../../shared/models/calculators';
 import { Settings } from '../../shared/models/settings';
 import { PreAssessmentService, PreAssessmentResult } from '../../calculator/utilities/pre-assessment/pre-assessment.service';
-import { graphColors } from '../../phast/phast-report/report-graphs/graphColors';
+import { graphColors } from '../../shared/graphColors';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 @Component({

@@ -35,6 +35,10 @@ export class UpdateAssessmentFromDiagramService {
     this.diagramIdbService.setAll();
   }
 
+  /**
+   * This is the entry point method for syncing an assessment to diagram.
+   * Checks if the diagram has been modified since the last time the assessment was updated. If it has, updates the assessment with the diagram data and saves it to indexedDB.
+   */
   async syncAssessmentToDiagram(assessment: Assessment, assessmentSettings: Settings) {
     let integratedDiagram = this.diagramIdbService.findById(assessment.diagramId);
     if (integratedDiagram && assessment.modifiedDate < integratedDiagram.modifiedDate) {

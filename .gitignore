@@ -26,6 +26,10 @@
 .vscode/launch.json
 .vscode/extensions.json
 
+.prompts/
+.claude/
+CLAUDE.md
+
 # misc
 /docker
 /.sass-cache

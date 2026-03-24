@@ -1,0 +1,14 @@
+
+
+.modal-open {
+    z-index: initial !important;
+}
+
+
+.inventory-container{
+    height: 100%;
+}
+
+.fa-exclamation-circle{
+    color: red;
+}

@@ -1,12 +1,29 @@
-<div *ngIf="showGraph" class="group-label">
-    <span *ngIf="inReport"> Baseline Centrifugal Graphs </span>
-    <span *ngIf="!inReport"> Centrifugal Graph </span>
-    <span *ngIf="selectedCompressor && !inReport"> ({{selectedCompressor.name}}) </span>
-    <div class="input-group checkbox" *ngIf="!printView && !inReport">
+@if(showGraph){
+<div class="group-label">
+    @if(inReport){
+    @if(isBaseline){
+    Baseline Centrifugal Graph
+    }@else{
+    @if(compressedAirAssessmentModificationResults){
+    {{compressedAirAssessmentModificationResults.modification.name}} Centrifugal Graph
+    }@else{
+    Modification Centrifugal Graph
+    }
+    }
+    }@else{
+    Centrifugal Graph
+    @if(selectedCompressor){
+    ({{selectedCompressor.name}})
+    }
+    }
+    @if(!printView && !inReport && centrifugalCompressors.length > 1){
+    <div class="input-group checkbox">
         <label class="p-2">
             <input type="checkbox" id="showAllCompressors" (change)="drawChart()" [(ngModel)]="showAllCompressors" />
             Graph All Centrifugal Compressors
         </label>
     </div>
+    }
 </div>
+}
 <div [hidden]="!showGraph" #centrifugalGraph id="centrifugalGraph"></div>

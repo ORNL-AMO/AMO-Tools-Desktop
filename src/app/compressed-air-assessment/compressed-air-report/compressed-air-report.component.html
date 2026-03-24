@@ -1,4 +1,4 @@
-<div class="assessment-report report-in-compressed-air compressed-air"
+<div class="assessment-report report-in-compressed-air compressed-air h-100"
     [ngClass]="{'assessment-report-padding': inAssessment, 'report-in-rollup': inRollup}">
     <div *ngIf="inAssessment" class="report-cover">
         <img src="assets/images/Logo_Color_Seal_Blue_Lettering_Horizontal.png" class="doe-logo">
@@ -168,13 +168,14 @@
             *ngIf="(currentTab == 'reportGraphs' && !showPrintView) || (showPrintView && printOptions.printReportGraphs)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-report-graphs [assessmentResults]="assessmentResults" [combinedDayTypeResults]="combinedDayTypeResults"
-                [compressedAirAssessment]="assessment.compressedAirAssessment" [printView]="showPrintView">
+                [compressedAirAssessment]="assessment.compressedAirAssessment" [printView]="showPrintView"
+                [baselineResults]="baselineResults" [settings]="settings">
             </app-report-graphs>
         </div>
         <div class="results scroll-item print-height page-break-before"
-            *ngIf="(currentTab == 'reportSankey' && !showPrintView) || (showPrintView && printOptions.printReportSankey)"
+            *ngIf="(currentTab == 'reportSankey' && !showPrintView)"
             [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-compressed-air-sankey [inReport]="true" [assessment]="assessment"
+            <app-compressed-air-sankey [inReport]="true" [compressedAirAssessment]="assessment.compressedAirAssessment"
                 [showPrintView]="showPrintView"></app-compressed-air-sankey>
         </div>
         <div class="print-height page-break-before" [ngClass]="{'results scroll-item':!showPrintView}"
@@ -182,10 +183,9 @@
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-profiles [printView]="showPrintView"
                 [compressedAirAssessment]="assessment.compressedAirAssessment"
-                [baselineProfileSummaries]="baselineProfileSummaries" [assessmentResults]="assessmentResults"
-                [settings]="settings">
+                [compressedAirAssessmentBaselineResults]="compressedAirAssessmentBaselineResults"
+                [assessmentResults]="assessmentResults" [settings]="settings">
             </app-system-profiles>
-            <app-system-profile-graphs [printView]="showPrintView"></app-system-profile-graphs>
         </div>
         <div class="results scroll-item print-height page-break-before"
             *ngIf="(currentTab == 'paybackPeriod' && !showPrintView) || (showPrintView && printOptions.printReportOpportunityPayback)"
@@ -196,7 +196,8 @@
             *ngIf="(currentTab == 'performanceProfile' && !showPrintView) || (showPrintView && printOptions.printPerformanceProfiles)"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-performance-profiles [inReport]="true" [printView]="showPrintView"
-                [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings">
+                [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings"
+                [assessmentResults]="assessmentResults">
             </app-performance-profiles>
         </div>
     </div>

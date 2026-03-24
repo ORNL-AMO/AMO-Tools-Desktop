@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, Signal } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { SettingsService } from '../../../settings/settings.service';
@@ -12,7 +12,7 @@ import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savi
 import { ConvertMotorInventoryService } from '../../convert-motor-inventory.service';
 import * as _ from 'lodash';
 import { IntegrationStateService } from '../../../shared/connected-inventory/integration-state.service';
-
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-plant-setup',
@@ -31,6 +31,9 @@ export class PlantSetupComponent implements OnInit {
   showSuccessMessage: boolean;
   oldSettings: Settings;
   showUpdateDataReminder: boolean;
+
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
 
   constructor(private settingsDbService: SettingsDbService, private settingsService: SettingsService, private convertMotorInventoryService: ConvertMotorInventoryService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,

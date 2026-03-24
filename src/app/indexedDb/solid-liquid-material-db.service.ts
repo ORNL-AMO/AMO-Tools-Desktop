@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, Observable } from 'rxjs';
 import { SolidLiquidFlueGasMaterial } from '../shared/models/materials';
 import { SolidLiquidFlueGasMaterialStoreMeta } from './dbConfig';
 
@@ -16,7 +16,7 @@ export class SolidLiquidMaterialDbService {
     await firstValueFrom(this.dbService.bulkAdd(this.storeName, defaultMaterials));
     await this.setAllMaterialsFromDb();
   }
-  
+
   private getAllWithObservable(): Observable<Array<SolidLiquidFlueGasMaterial>> {
     return this.dbService.getAll(this.storeName);
   }
@@ -38,6 +38,7 @@ export class SolidLiquidMaterialDbService {
   }
 
   clearSolidLiquidFlueGasMaterials(): Observable<boolean> {
+    //this clears the suite db items as well
     return this.dbService.clear(this.storeName);
   }
 
@@ -46,7 +47,7 @@ export class SolidLiquidMaterialDbService {
     return allMaterials.find(material => material.id === id);
   }
 
-  getAllMaterials(): Array<SolidLiquidFlueGasMaterial>{
+  getAllMaterials(): Array<SolidLiquidFlueGasMaterial> {
     return this.dbSolidLiquidFlueGasMaterials.getValue();
   }
 
@@ -74,5 +75,15 @@ export class SolidLiquidMaterialDbService {
     material = await firstValueFrom(this.addWithObservable(material));
     await this.setAllMaterialsFromDb();
     return material.id;
+  }
+
+  async deleteAllCustomMaterials(): Promise<boolean> {
+    const materials: Array<SolidLiquidFlueGasMaterial> = await firstValueFrom(this.dbService.getAll(this.storeName));
+    const customMaterials: Array<SolidLiquidFlueGasMaterial> = materials.filter((material: SolidLiquidFlueGasMaterial) => !material.isDefault);
+    for (const material of customMaterials) {
+      await firstValueFrom(this.deleteByIdWithObservable(material.id));
+    }
+    await this.setAllMaterialsFromDb();
+    return true;
   }
 }

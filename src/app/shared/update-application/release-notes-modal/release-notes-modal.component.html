@@ -41,115 +41,63 @@
 
           <label class="header-label">Here are the details of what's new in version {{versionNum}}:</label>
           <br>
+            <br>
+            <label>Application</label>
+            <ul>
+              <li>Added: Support email to auto-update notification</li>
+              <li>Enhanced: "Delete User Assessments" has become "Delete User Items", will now also delete inventory and diagram items</li>
+              <li>Fixed: Exported MEASUR examples will be marked as user-created so they behave as expected on import</li>
+            </ul>
 
-          <label>Application</label>
-          <ul>
-            <li>Added: New DOE logo to landing page and reports</li>
-            <li>Enhanced: Unit converter unit sorting</li>
-            <li>Enhanced: Power Factor Correction calculator:
-              <ul>
-                <li>Updated calculations to catch cases where the current power factor is actually better than the required power factor</li>
-                <li>Updated validation to include minimum, maximum, and contextually dependent values.</li>
-                <li>Fixed various UI bugs relating to deleting months, labeling and input fields</li>
-                <li>Change unit labels on "Marginal Cost of Demand" based on the selection for "How are you billed for demand".</li>
-                <li>Fixed Input table responsiveness under small screen widths</li>
-                <li>Change Proposed Apparent Power units to (kVA) when "How Billed" value is "Apparent Power"</li>
-                <li>If "How Billed" value is "Apparent Power", then update table headers "Demand Penalty" and "Penalty Cost" with a prefix of "Excess".</li>
-              </ul>
-            </li>
-            <li>Fixed: Update download links point to industrialresources.ornl.gov/measur/downloads</li>
-          </ul>
+            <label>Compressed Air</label>
+            <ul>
+              <li>Added: Select compressor color so that the same color is used to represent the compressor in all graphs</li>
+              <li>Enhanced: Improved the report graphs section of the application to provide more meaningful data visualizations.</li>
+              <li>Enhanced: Improved the performance profile plots enhanced hover functionality and added all day type and modifications profiles in the report.</li>
+              <li>Enhanced: Update pipe sizing and velocity in pipe sizing help text with common heuristics</li>
+              <li>Fixed: The compressed air module has been refactored to address a variety of bugs, including bugs related to printing, performance point calculations and graphing.</li>
+            </ul>
 
-          <label>Compressed Air</label>
-          <ul>
-            <li>Fixed: Leak Survey calculator correctly calculates results of individual leaks and multiple leaks regardless of "Fix" selection</li>
-          </ul>
+            <label>Treasure Hunt</label>
+            <ul>
+              <li>Enhanced: Exported Treasure Hunt assessments can be imported through Treasure Chest -> Import Opportunities, where the opportunities will be added and the exported Treasure Hunt data will be discarded</li>
+              <li>Fixed: Facility Basics bug where field data populated by "Estimate.." feature is not being saved.</li>
+            </ul>
 
-          <label>Process Heating</label>
-          <ul>
-            <li>Added: Update Cooling losses with documentation</li>
-            <li>Added: Update Opening losses with documentation</li>
-            <li>Added: Update Auxiliary Power losses with documentation</li>
-            <li>Added: Update Cascade Heat calculators with documentation</li>
-            <li>Added: Water Heating calculators with documentation</li>
-            <li>Added: Update Opening losses with documentation</li>
-            <li>Added: Update Flue Gas losses with documentation</li>
-            <li>Added: Update Charge material losses with documentation</li>
-            <li>Added: Update Exhaust Gas EAF losses with documentation</li>
-            <li>Added: Update Energy Input losses with documentation</li>
-            <li>Added: Update Air Heating Using Flue calculator with documentation</li>
-            <li>Added: Update O2 Enrichment calculator with documentation</li>
-            <li>Added: Update Orifice Meter Flow calculator with documentation</li>
-            <li>Fixed: Orifice Meter Flow calculator "Orifice Type" dropdown should set the "Discharge Coefficient"</li>
-            <li>Fixed: Extended Surface losses form to allow adding of loss</li>
-          </ul>
+            <label>Process Heating</label>
+            <ul>
+              <li>Fixed: Blank material removed from Solid, Liquid, Gas Charge materials</li>
+            </ul>
 
-          <label>Steam</label>
-          <ul>
-            <li>Fixed: Increased precision of SSMT Boiler form saturated properties validation to allow for common saturated properties ranges</li>
-          </ul>
+            <label>Water</label>
+            <ul>
+              <li>Enhanced: Total Known Losses field now available in Water Treatment and Waste Water Treatment to allow users to balance component flow</li>
+              <li>Enhanced: Add icons to diagram water components indicating validation and unknown loss states</li>
+              <li>Fixed: True Cost Editable table uses decimal precision set by user</li>
+            </ul>
 
-          <label>Water</label>
-          <ul>
-            <li>Added: True Cost adjustment table, allowing users with complex water system designs to ensure correct system cost attribution</li>
-            <li>Enhanced: Updated True Cost of systems algorithm to calculate costs for a broader set of system design scenarios, including situations with:
-              <ul>
-                <li>Losses in treatment</li>
-                <li>Chained water treatment components</li>
-                <li>Chained waste water treatment components</li>
-                <li>Outflow split to multiple systems within chained treatment</li>
-              </ul>
-            </li>
-          </ul>
-  
+            <br>
+
           <!--  Include prev version -->
-          <label class="header-label">Here are the details of what's new in version 1.6.5:</label>
+          <label class="header-label">Here are the details of what's new in version 1.6.10:</label>
           <br>
           <label>Application</label>
           <ul>
-            <li>Added: Link to Industrial Resources page from MEASUR</li>
-            <li>Added: Unit converter swap units feature</li>
-            <li>Enhanced: Unit converter unit sorting</li>
-            <li>Fixed: Mouse behavior on hover for better user experience</li>
-            <li>Fixed: Power Factor Starting Year to apply to previously entered months</li>
-            <li>Fixed: Application icons to differentiate between inventories and assessments</li>
-          </ul>
-
-          <label>Pumps</label>
-          <ul>
-            <li>Fixed: Updated Pump Stages validation and defaults through PSAT and Pump inventory</li>
-            <li>Enhanced: Added warning for negative values in Pump Achievable Efficiency</li>
-          </ul>
-
-          <label>Fans</label>
-          <ul>
-            <li>Fixed: Fan Traverse analysis calculator text</li>
+            <li>Enhanced: Added application setting which allows users to choose optional results related to operational
+              impacts throughout the application</li>
           </ul>
 
           <label>Process Heating</label>
           <ul>
-            <li>Added: Update Fixture losses with documentation</li>
-            <li>Added: Update Leakage losses with documentation</li>
-            <li>Enhanced: Added validation messaging for Auxiliary Power and EAF</li>
-            <li>Fixed: Don't calculate Auxiliary Power or EAF until user input is valid</li>
-            <li>Fixed: Populate default loss name if none is given</li>
-            <li>Fixed: Added validation so loss name is a required field</li>
-            <li>Fixed: Field can be saved with a custom name</li>
-            <li>Fixed: Cooling form patching default name to gas instead of liquid</li>
-            <li>Fixed: Fixture Calculator material properties not being set on load</li>
+            <li>Fixed: Wall and Fixture loss rendering in report input summaries</li>
           </ul>
 
           <label>Steam</label>
           <ul>
-            <li>Enhanced: Steam Boiler form integrates steam properties to automatically provide saturated
-              temperature/pressure and collect temperature and pressure at the same time</li>
+            <li>Fixed: incorrect blowdown flash tank results displayed in the diagram when there is a single header
+              system</li>
           </ul>
 
-          <label>Water</label>
-          <ul>
-            <li>Added: Versioning to diagram to enhance backwards compatibility</li>
-            <li>Enhanced: Ensured visibility on small screens</li>
-          </ul>
 
 
           <div class="modal-footer p-2 d-flex flex-row justify-content-end">

@@ -17,11 +17,9 @@ import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanImperialDefaults, SettingsService } from '../settings/settings.service';
 import { ConvertFsatService } from './convert-fsat.service';
-import { EGridService } from '../shared/helper-services/e-grid.service';
 import * as _ from 'lodash';
 import { OperationsService } from './operations/operations.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
-import { copyObject } from '../shared/helperFunctions';
 
 @Component({
     selector: 'app-fsat',
@@ -98,7 +96,6 @@ export class FsatComponent implements OnInit {
     private fanSetupService: FanSetupService,
     private cd: ChangeDetectorRef,
     private settingsService: SettingsService,
-    private egridService: EGridService,
     private convertFsatService: ConvertFsatService,
     private fsatOperationsService: OperationsService,
     private analyticsService: AnalyticsService) {
@@ -106,7 +103,6 @@ export class FsatComponent implements OnInit {
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-fan-assessment');
-    this.egridService.getAllSubRegions();
     this.activatedRoute.params.subscribe(params => {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
       if (!this.assessment || (this.assessment && this.assessment.type !== 'FSAT')) {

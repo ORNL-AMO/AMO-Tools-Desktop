@@ -34,3 +34,9 @@
     cursor: pointer;
     background: #efefef;
 }
+
+
+.sub-label {
+    text-decoration: underline;
+    font-size: .875rem;
+}

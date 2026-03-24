@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, Observable } from 'rxjs';
 import { LiquidLoadChargeMaterial } from '../shared/models/materials';
 import { LiquidLoadMaterialStoreMeta } from './dbConfig';
 
@@ -44,7 +44,17 @@ export class LiquidLoadMaterialDbService {
   }
 
   clearLiquidLoadChargeMaterial(): Observable<boolean> {
+    //this clears the suite db items as well
     return this.dbService.clear(this.storeName);
+  }
+
+  async deleteAllCustomMaterials(): Promise<boolean> {
+    const materials: Array<LiquidLoadChargeMaterial> = await firstValueFrom(this.dbService.getAll(this.storeName));
+    const customMaterials: Array<LiquidLoadChargeMaterial> = materials.filter((material: LiquidLoadChargeMaterial) => !material.isDefault);
+    for (const material of customMaterials) {
+      await firstValueFrom(this.deleteByIdWithObservable(material.id));
+    }
+    return true;
   }
 
 }

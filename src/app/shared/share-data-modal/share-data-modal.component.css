@@ -5,3 +5,7 @@ button.btn .fa{
 h5{
     margin-bottom: 0px;
 }
+
+.modal-btn-height{
+    min-height: 120px;
+}

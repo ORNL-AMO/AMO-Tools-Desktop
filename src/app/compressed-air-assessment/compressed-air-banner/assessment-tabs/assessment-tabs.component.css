@@ -1,0 +1,83 @@
+.nav-link{
+    padding: 6px;
+    font-size: medium;
+    color: #fff;
+}
+
+.nav-link:not(.disabled):hover{
+    cursor: pointer;
+    background-color: #808B96;
+}
+
+.nav-link.disabled:hover{
+    cursor: default;
+    color: initial;
+}
+
+.btn{
+    padding: 6px;
+}
+
+.mod-name a:hover{
+    text-decoration: none !important;
+    cursor: default !important;
+}
+
+.btn-primary{
+   font-size: small;
+}
+
+.navbar.assessment-bar{
+    padding: 0px;
+    background-color: #e5e5e5;
+}
+
+.br-color-white{
+    background: #fff;
+}
+
+.btn.chevron-btn{
+    border: none !important;
+    width: 20px;
+    height: 28px;
+    color: white;
+    box-shadow: none !important;
+}
+
+.fa.fa-chevron-right,
+.fa.fa-chevron-left {
+    font-size: 28px;
+}
+
+li.page-item{
+    background-color:#ECECEC !important;
+}
+
+.assessment-bar{
+    display: none;
+}
+
+.assessment-bar.display{
+    display: flex;
+}
+
+
+.list-modal{
+    z-index: 10000;
+}
+
+.progress-tabs li.page-item:not(.active) {
+    display: none;
+}
+
+.progress-tabs li.page-item.active, .progress-tabs li.page-item.chevron {
+    display: block;
+}
+
+.progress-tabs.mobile-tabs.display .mobile-link.display{
+    display: block;
+}
+
+.progress-tabs.mobile-tabs.display .mobile-link:not(.display){
+    display: none;
+}

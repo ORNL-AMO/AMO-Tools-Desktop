@@ -5,6 +5,7 @@ import { LightingReplacementService } from '../lighting-replacement.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { LightingFixtureData, LightingFixtureCategory } from '../../../../tools-suite-api/lighting-suite-api.service';
 import { LightingSuiteApiService } from '../../../../tools-suite-api/lighting-suite-api.service';
+import { LightingFixtureCategory } from '../../../../tools-suite-api/lighting-suite-api.service';
 @Component({
     selector: 'app-lighting-replacement-form',
     templateUrl: './lighting-replacement-form.component.html',
@@ -53,7 +54,7 @@ export class LightingReplacementFormComponent implements OnInit {
   indicateLumenDegradationFactorDiff: boolean = false;
   indicateFixtureTypeDiff: boolean = false;
 
-  constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef, private lightingSuiteApiService: LightingSuiteApiService) {}
+  constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.lightingFixtureCategories = this.lightingSuiteApiService.setLightingSystemServiceState();

@@ -1,7 +1,8 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, inject, Signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { InventorySummaryOverviewService, InventorySummary } from '../inventory-summary-overview.service';
 import { Settings } from '../../../../shared/models/settings';
+import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 
 @Component({
     selector: 'app-inventory-overview-table',
@@ -16,6 +17,9 @@ export class InventoryOverviewTableComponent implements OnInit {
   settings: Settings;
   inventorySummary: InventorySummary;
   invetorySummarySub: Subscription;
+  private featureFlagService = inject(FeatureFlagService);
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+
   constructor(private inventorySummaryOverviewService: InventorySummaryOverviewService) { }
 
   ngOnInit(): void {

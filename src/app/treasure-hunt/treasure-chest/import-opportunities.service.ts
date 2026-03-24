@@ -8,12 +8,12 @@ export class ImportOpportunitiesService {
   constructor(private updateDataService: UpdateDataService) { }
 
   importData(data: ImportExportOpportunities, treasureHunt: TreasureHunt): TreasureHunt {
-    if (data.compressedAirReductions) {
-      if (treasureHunt.compressedAirReductions == undefined) {
-        treasureHunt.compressedAirReductions = new Array();
+    if (data.lightingReplacements) {
+      if (treasureHunt.lightingReplacements == undefined) {
+        treasureHunt.lightingReplacements = new Array();
       }
-      this.updateLegacyOpportunities(data.compressedAirReductions, Treasure.compressedAir);
-      treasureHunt.compressedAirReductions = treasureHunt.compressedAirReductions.concat(data.compressedAirReductions);
+      this.updateLegacyOpportunities(data.lightingReplacements, Treasure.lightingReplacement);
+      treasureHunt.lightingReplacements = treasureHunt.lightingReplacements.concat(data.lightingReplacements);
     }
     if (data.opportunitySheets) {
       if (treasureHunt.opportunitySheets == undefined) {
@@ -57,12 +57,12 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.electricityReductions, Treasure.electricityReduction);
       treasureHunt.electricityReductions = treasureHunt.electricityReductions.concat(data.electricityReductions);
     }
-    if (data.lightingReplacements) {
-      if (treasureHunt.lightingReplacements == undefined) {
-        treasureHunt.lightingReplacements = new Array();
+    if (data.compressedAirReductions) {
+      if (treasureHunt.compressedAirReductions == undefined) {
+        treasureHunt.compressedAirReductions = new Array();
       }
-      this.updateLegacyOpportunities(data.lightingReplacements, Treasure.lightingReplacement);
-      treasureHunt.lightingReplacements = treasureHunt.lightingReplacements.concat(data.lightingReplacements);
+      this.updateLegacyOpportunities(data.compressedAirReductions, Treasure.compressedAir);
+      treasureHunt.compressedAirReductions = treasureHunt.compressedAirReductions.concat(data.compressedAirReductions);
     }
     if (data.waterReductions) {
       if (treasureHunt.waterReductions == undefined) {
@@ -78,6 +78,13 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.compressedAirPressureReductions, Treasure.compressedAirPressure);
       treasureHunt.compressedAirPressureReductions = treasureHunt.compressedAirPressureReductions.concat(data.compressedAirPressureReductions);
     }
+    if (data.steamReductions) {
+      if (treasureHunt.steamReductions == undefined) {
+        treasureHunt.steamReductions = new Array();
+      }
+      this.updateLegacyOpportunities(data.steamReductions, Treasure.steamReduction);
+      treasureHunt.steamReductions = treasureHunt.steamReductions.concat(data.steamReductions);
+    }
     if (data.pipeInsulationReductions) {
       if (treasureHunt.pipeInsulationReductions == undefined) {
         treasureHunt.pipeInsulationReductions = new Array();
@@ -92,72 +99,70 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.tankInsulationReductions, Treasure.tankInsulation);
       treasureHunt.tankInsulationReductions = treasureHunt.tankInsulationReductions.concat(data.tankInsulationReductions);
     }
-
-    if(data.flueGasLosses){
-      if (treasureHunt.flueGasLosses == undefined) {
-        treasureHunt.flueGasLosses = new Array();
-      }
-      this.updateLegacyOpportunities(data.flueGasLosses, Treasure.flueGas);
-      treasureHunt.flueGasLosses = treasureHunt.flueGasLosses.concat(data.flueGasLosses);
-    }
-
-    if(data.airLeakSurveys){
+    if (data.airLeakSurveys) {
       if (treasureHunt.airLeakSurveys == undefined) {
         treasureHunt.airLeakSurveys = new Array();
       }
       this.updateLegacyOpportunities(data.airLeakSurveys, Treasure.airLeak);
       treasureHunt.airLeakSurveys = treasureHunt.airLeakSurveys.concat(data.airLeakSurveys);
     }
-    if(data.openingLosses){
+    if (data.openingLosses) {
       if (treasureHunt.openingLosses == undefined) {
         treasureHunt.openingLosses = new Array();
       }
       this.updateLegacyOpportunities(data.openingLosses, Treasure.openingLoss);
       treasureHunt.openingLosses = treasureHunt.openingLosses.concat(data.openingLosses);
     }
-    if(data.wallLosses){
-      if (treasureHunt.wallLosses == undefined) {
-        treasureHunt.wallLosses = new Array();
-      }
-      this.updateLegacyOpportunities(data.wallLosses, Treasure.wallLoss);
-      treasureHunt.wallLosses = treasureHunt.wallLosses.concat(data.wallLosses);
-    }
-    if(data.wasteHeatReductions){
-      if (treasureHunt.wasteHeatReductions == undefined) {
-        treasureHunt.wasteHeatReductions = new Array();
-      }
-      this.updateLegacyOpportunities(data.wasteHeatReductions, Treasure.wasteHeat);
-      treasureHunt.wasteHeatReductions = treasureHunt.wasteHeatReductions.concat(data.wasteHeatReductions);
-    }
-    if(data.airHeatingOpportunities){
+    if (data.airHeatingOpportunities) {
       if (treasureHunt.airHeatingOpportunities == undefined) {
         treasureHunt.airHeatingOpportunities = new Array();
       }
       this.updateLegacyOpportunities(data.airHeatingOpportunities, Treasure.airHeating);
       treasureHunt.airHeatingOpportunities = treasureHunt.airHeatingOpportunities.concat(data.airHeatingOpportunities);
     }
-    if(data.leakageLosses){
+    if (data.wallLosses) {
+      if (treasureHunt.wallLosses == undefined) {
+        treasureHunt.wallLosses = new Array();
+      }
+      this.updateLegacyOpportunities(data.wallLosses, Treasure.wallLoss);
+      treasureHunt.wallLosses = treasureHunt.wallLosses.concat(data.wallLosses);
+    }
+    if (data.leakageLosses) {
       if (treasureHunt.leakageLosses == undefined) {
         treasureHunt.leakageLosses = new Array();
       }
       this.updateLegacyOpportunities(data.leakageLosses, Treasure.leakageLoss);
       treasureHunt.leakageLosses = treasureHunt.leakageLosses.concat(data.leakageLosses);
     }
-    if(data.heatCascadingOpportunities){
+    if (data.flueGasLosses) {
+      if (treasureHunt.flueGasLosses == undefined) {
+        treasureHunt.flueGasLosses = new Array();
+      }
+      this.updateLegacyOpportunities(data.flueGasLosses, Treasure.flueGas);
+      treasureHunt.flueGasLosses = treasureHunt.flueGasLosses.concat(data.flueGasLosses);
+    }
+    if (data.wasteHeatReductions) {
+      if (treasureHunt.wasteHeatReductions == undefined) {
+        treasureHunt.wasteHeatReductions = new Array();
+      }
+      this.updateLegacyOpportunities(data.wasteHeatReductions, Treasure.wasteHeat);
+      treasureHunt.wasteHeatReductions = treasureHunt.wasteHeatReductions.concat(data.wasteHeatReductions);
+    }
+    if (data.heatCascadingOpportunities) {
       if (treasureHunt.heatCascadingOpportunities == undefined) {
         treasureHunt.heatCascadingOpportunities = new Array();
       }
       this.updateLegacyOpportunities(data.heatCascadingOpportunities, Treasure.heatCascading);
       treasureHunt.heatCascadingOpportunities = treasureHunt.heatCascadingOpportunities.concat(data.heatCascadingOpportunities);
     }
-    if(data.waterHeatingOpportunities){
+    if (data.waterHeatingOpportunities) {
       if (treasureHunt.waterHeatingOpportunities == undefined) {
         treasureHunt.waterHeatingOpportunities = new Array();
       }
       this.updateLegacyOpportunities(data.waterHeatingOpportunities, Treasure.waterHeating);
       treasureHunt.waterHeatingOpportunities = treasureHunt.waterHeatingOpportunities.concat(data.waterHeatingOpportunities);
     }
-    if(data.coolingTowerMakeupOpportunities){
+    if (data.coolingTowerMakeupOpportunities) {
       if (treasureHunt.coolingTowerMakeupOpportunities == undefined) {
         treasureHunt.coolingTowerMakeupOpportunities = new Array();
       }

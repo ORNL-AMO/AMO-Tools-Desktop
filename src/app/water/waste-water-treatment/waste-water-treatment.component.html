@@ -73,6 +73,15 @@
                 <span *ngIf="form.controls.flowValue.errors.required">Value Required</span>
             </span>
         </div>
+        <div class="form-group" [ngClass]="{'invalid': form.controls.knownLosses.invalid}">
+        <label for="knownLosses">Known Losses</label>
+        <div class="input-group">
+            <input name="knownLosses" type="number" class="form-control" id="knownLosses" formControlName="knownLosses"
+                (input)="save()" (focus)="focusField('knownLosses')">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'" class="input-group-addon units">Mgal/yr</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'" class="input-group-addon units">m<sup>3</sup>/yr</span>
+        </div>
+    </div>
         <app-alert-info-container class="m-3"
 [header]="'Coming Soon: Inflow and Outflow Management'" 
 [content]="'Inflow and outflow data can currently be managed by visiting the Diagram, then selecting and editing a system component'" ></app-alert-info-container>

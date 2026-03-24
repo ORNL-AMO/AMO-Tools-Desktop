@@ -29,24 +29,26 @@
         </app-report-summary-bar-chart>
     </div>
 </div>
-<div class="row print-avoid-break">
-    <div class="col-12">
-        <label class="group-label text-center">Annual Carbon Emissions</label>
-    </div>
-    <div class="col-6" *ngIf="pieChartData">
-        <app-report-summary-pie-chart [pieChartData]="pieChartData" 
-            [dataOption]="'carbon'"
-            [settings]="settings"
-            [energyUnit]="carbonEmissionsUnit" [printView]="true">
-        </app-report-summary-pie-chart>
-    </div>
-    <div class="col-6" *ngIf="carbonBarChart">
-        <app-report-summary-bar-chart [barChartData]="carbonBarChart"
-            [yAxisLabel]="carbonEmissionsBarYLabel"
-            [printView]="true">
-        </app-report-summary-bar-chart>
-    </div>
-</div>
+@if (showOperationalImpacts()) {
+  <div class="row print-avoid-break">
+      <div class="col-12">
+          <label class="group-label text-center">Annual Carbon Emissions</label>
+      </div>
+      <div class="col-6" *ngIf="pieChartData">
+          <app-report-summary-pie-chart [pieChartData]="pieChartData"
+              [dataOption]="'carbon'"
+              [settings]="settings"
+              [energyUnit]="carbonEmissionsUnit" [printView]="true">
+          </app-report-summary-pie-chart>
+      </div>
+      <div class="col-6" *ngIf="carbonBarChart">
+          <app-report-summary-bar-chart [barChartData]="carbonBarChart"
+              [yAxisLabel]="carbonEmissionsBarYLabel"
+              [printView]="true">
+          </app-report-summary-bar-chart>
+      </div>
+  </div>
+}
 <div class="row print-avoid-break">
     <div class="col-12">
         <label class="group-label text-center">Fuel vs Electricity Energy Usage</label>

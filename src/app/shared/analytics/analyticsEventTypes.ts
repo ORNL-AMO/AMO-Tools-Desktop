@@ -40,7 +40,6 @@ export type AnalyticsEventString = 'page_view' |
     'calculator-PH-atmosphere' |
     'calculator-PH-charge-material' |
     'calculator-PH-cooling' |
-    'calculator-PH-efficiency-improvement' |
     'calculator-PH-energy-equivalency' |
     'calculator-PH-energy-use' |
     'calculator-PH-fixture' |

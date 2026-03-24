@@ -52,7 +52,6 @@ import { MotorPerformanceComponent } from '../calculator/motors/motor-performanc
 import { NemaEnergyEfficiencyComponent } from '../calculator/motors/nema-energy-efficiency/nema-energy-efficiency.component';
 import { PercentLoadEstimationComponent } from '../calculator/motors/percent-load-estimation/percent-load-estimation.component';
 import { ReplaceExistingComponent } from '../calculator/motors/replace-existing/replace-existing.component';
-import { EfficiencyImprovementComponent } from '../calculator/furnaces/efficiency-improvement/efficiency-improvement.component';
 import { EnergyEquivalencyComponent } from '../calculator/furnaces/energy-equivalency/energy-equivalency.component';
 import { EnergyUseComponent } from '../calculator/furnaces/energy-use/energy-use.component';
 import { O2EnrichmentComponent } from '../calculator/furnaces/o2-enrichment/o2-enrichment.component';
@@ -119,6 +118,7 @@ import { WaterAssessmentComponent } from '../water/water-assessment.component';
 import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
 import { PowerFactorTriangleComponent } from '../calculator/utilities/power-factor-triangle/power-factor-triangle.component';
 import { ValveEnergyLossComponent } from '../calculator/pumps/valve-energy-loss/valve-energy-loss.component';
+import { compressedAirAssessmentRoutes } from '../compressed-air-assessment/routing/compressed-air.routing';
 import { CompressedAirInventoryComponent } from '../compressed-air-inventory/compressed-air-inventory.component';
 import { compressedAirInventoryRoutes } from '../compressed-air-inventory/compressed-air-inventory.routing';
 
@@ -285,7 +285,7 @@ export const coreRoutes: Routes = [
             component: CashFlowComponent
           },
           {
-            path: 'co2-savings',
+            path: 'co2-conversion',
             component: Co2SavingsComponent
           },
           {
@@ -375,11 +375,6 @@ export const coreRoutes: Routes = [
           {
             path: 'full-load-amps',
             component: FullLoadAmpsComponent
-          },
-          //  issue 3007 Efficiency Improvement is hidden
-          {
-            path: 'efficiency-improvement',
-            component: EfficiencyImprovementComponent
           },
           {
             path: 'energy-equivalency',
@@ -576,7 +571,8 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'compressed-air/:id',
-    component: CompressedAirAssessmentComponent
+    component: CompressedAirAssessmentComponent,
+    children: compressedAirAssessmentRoutes
   },
   {
     path: 'report-rollup',

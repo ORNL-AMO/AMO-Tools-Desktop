@@ -6,8 +6,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 
-
-
 @NgModule({
   declarations: [
     InventoryPerformanceProfileComponent
@@ -20,8 +18,8 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     NgbModule,
     SharedPipesModule
   ],
-   exports: [
+  exports: [
     InventoryPerformanceProfileComponent
-   ]
+  ]
 })
 export class InventoryPerformanceProfileModule { }
