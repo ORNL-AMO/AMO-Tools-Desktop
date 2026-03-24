@@ -97,13 +97,22 @@ export class CompressedAirBaselineDayTypeProfileSummary {
                         powerFactorData = { amps: summaryData.amps, volts: summaryData.volts };
                         computeFromVal = summaryData.powerFactor;
                     }
-                    let calcResult: CompressorCalcResult = _compressedAirCalculationService.compressorsCalc(compressor, settings, computeFrom, computeFromVal, atmosphericPressure, totalAirStorage, 0, true, powerFactorData);
-                    summaryData.airflow = roundVal(calcResult.capacityCalculated, 2);
-                    summaryData.power = calcResult.powerCalculated;
-                    summaryData.percentCapacity = calcResult.percentageCapacity;
-                    summaryData.percentPower = calcResult.percentagePower;
-                    summaryData.percentSystemCapacity = (calcResult.capacityCalculated / this.totalFullLoadCapacity) * 100;
-                    summaryData.percentSystemPower = (calcResult.powerCalculated / this.totalFullLoadPower) * 100;
+                    if (isNaN(computeFromVal) == false) {
+                        let calcResult: CompressorCalcResult = _compressedAirCalculationService.compressorsCalc(compressor, settings, computeFrom, computeFromVal, atmosphericPressure, totalAirStorage, 0, true, powerFactorData);
+                        summaryData.airflow = roundVal(calcResult.capacityCalculated, 2);
+                        summaryData.power = calcResult.powerCalculated;
+                        summaryData.percentCapacity = calcResult.percentageCapacity;
+                        summaryData.percentPower = calcResult.percentagePower;
+                        summaryData.percentSystemCapacity = (calcResult.capacityCalculated / this.totalFullLoadCapacity) * 100;
+                        summaryData.percentSystemPower = (calcResult.powerCalculated / this.totalFullLoadPower) * 100;
+                    } else {
+                        summaryData.airflow = 0;
+                        summaryData.power = 0;
+                        summaryData.percentCapacity = 0;
+                        summaryData.percentPower = 0;
+                        summaryData.percentSystemCapacity = 0;
+                        summaryData.percentSystemPower = 0;
+                    }
                 } else {
                     summaryData.airflow = 0;
                     summaryData.power = 0;

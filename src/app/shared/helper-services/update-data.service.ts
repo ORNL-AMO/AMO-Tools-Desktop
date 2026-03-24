@@ -125,15 +125,20 @@ export class UpdateDataService {
         if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.systemInformation) {
             if (!assessment.compressedAirAssessment.systemInformation.trimSelections) {
                 assessment.compressedAirAssessment.systemInformation.trimSelections = [];
-            }
 
-            if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
-                assessment.compressedAirAssessment.systemInformation.trimSelections = assessment.compressedAirAssessment.compressedAirDayTypes.map(dayType => {
-                    return {
-                        dayTypeId: dayType.dayTypeId,
-                        compressorId: undefined
-                    };
-                });
+                if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
+                    let trimCompressorId: string = undefined;
+                    if (assessment.compressedAirAssessment.compressorInventoryItems && assessment.compressedAirAssessment.compressorInventoryItems.length > 0) {
+                        trimCompressorId = assessment.compressedAirAssessment.compressorInventoryItems[0].itemId;
+                    }
+                    //trim compressor id
+                    assessment.compressedAirAssessment.systemInformation.trimSelections = assessment.compressedAirAssessment.compressedAirDayTypes.map(dayType => {
+                        return {
+                            dayTypeId: dayType.dayTypeId,
+                            compressorId: trimCompressorId
+                        };
+                    });
+                }
             }
         }
 
@@ -198,7 +203,7 @@ export class UpdateDataService {
                 }
             });
         }
-
+        console.log('====done====')
         return assessment;
     }
 

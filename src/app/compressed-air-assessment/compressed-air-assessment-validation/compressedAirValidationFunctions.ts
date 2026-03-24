@@ -102,13 +102,22 @@ export function getHourIntervals(systemProfileSetup: SystemProfileSetup, hours?:
 }
 
 export function getHasMissingTrimSelection(compressedAirAssessment: CompressedAirAssessment): boolean {
-    let hasMissingTrimSelection: boolean = compressedAirAssessment.systemInformation.trimSelections.some(selection => {
-        let dayTypeInUse = compressedAirAssessment.compressedAirDayTypes.some(dayType => dayType.dayTypeId === selection.dayTypeId);
-        if (dayTypeInUse && selection.compressorId) {
-            return false;
-        } else {
-            return true;
-        }
-    });
-    return hasMissingTrimSelection;
+    //check every day type has a trim selection if multi compressor system controls is base trim
+    if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls === 'baseTrim') {
+        let hasMissingTrimSelection: boolean = compressedAirAssessment.compressedAirDayTypes.some(dayType => {
+            if (dayType.numberOfDays > 0) {
+                let hasTrimSelection: boolean = compressedAirAssessment.systemInformation.trimSelections.some(trimSelection => dayType.dayTypeId === trimSelection.dayTypeId);
+                if (hasTrimSelection) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return false;
+            }
+        });
+        return hasMissingTrimSelection;
+    } else {
+        return false;
+    }
 }
