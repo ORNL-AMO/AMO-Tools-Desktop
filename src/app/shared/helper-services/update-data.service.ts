@@ -76,6 +76,8 @@ export class UpdateDataService {
 
     updateCompressedAir(assessment: Assessment): Assessment {
         assessment.appVersion = environment.version;
+
+        //check mid turndown and turndown performance points
         if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.compressorInventoryItems
             && assessment.compressedAirAssessment.compressorInventoryItems.length > 0) {
             assessment.compressedAirAssessment.compressorInventoryItems.forEach(item => {
@@ -102,7 +104,7 @@ export class UpdateDataService {
             });
         };
 
-        // todo conditions to check end uses and trimSelections should be decoupled?
+        // check end use data
         if (assessment.compressedAirAssessment && !assessment.compressedAirAssessment.endUseData) {
             assessment.compressedAirAssessment.endUseData = {
                 endUseDayTypeSetup: {
@@ -119,28 +121,36 @@ export class UpdateDataService {
             };
         };
 
+        //check trim selections
         if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.systemInformation) {
             if (!assessment.compressedAirAssessment.systemInformation.trimSelections) {
                 assessment.compressedAirAssessment.systemInformation.trimSelections = [];
             }
+
+            if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
+                assessment.compressedAirAssessment.systemInformation.trimSelections = assessment.compressedAirAssessment.compressedAirDayTypes.map(dayType => {
+                    return {
+                        dayTypeId: dayType.dayTypeId,
+                        compressorId: undefined
+                    };
+                });
+            }
         }
 
-        if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
-            assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = []
-            assessment.compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-                assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates.push(
-                    {
+        //check day type leak rates
+        if (!assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates) {
+            assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = [];
+            if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
+                assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = assessment.compressedAirAssessment.compressedAirDayTypes.map(dayType => {
+                    return {
                         dayTypeId: dayType.dayTypeId,
                         dayTypeLeakRate: 0
-                    }
-                )
-                assessment.compressedAirAssessment.systemInformation.trimSelections?.push({
-                    dayTypeId: dayType.dayTypeId,
-                    compressorId: undefined
+                    };
                 });
-            });
+            }
         }
 
+        //set multiCompressorSystemControls
         if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.systemInformation) {
             if (!assessment.compressedAirAssessment.systemInformation.multiCompressorSystemControls) {
                 if (assessment.compressedAirAssessment.systemInformation.isSequencerUsed) {
@@ -151,6 +161,7 @@ export class UpdateDataService {
             }
         }
 
+        //add replace compressor to modifications
         if (assessment.compressedAirAssessment && assessment.compressedAirAssessment.modifications) {
             assessment.compressedAirAssessment.modifications.forEach(mod => {
                 if (!mod.replaceCompressor) {
@@ -176,6 +187,8 @@ export class UpdateDataService {
                 }
             })
         }
+
+        // add flow reallocation to modifications
         if (assessment.compressedAirAssessment.modifications && assessment.compressedAirAssessment.modifications.length > 0) {
             assessment.compressedAirAssessment.modifications.forEach(mod => {
                 if (mod.flowReallocation === undefined || mod.flowReallocation === null) {
@@ -415,7 +428,7 @@ export class UpdateDataService {
         assessment.ssmt = this.updateBoiler(assessment.ssmt);
         if (assessment.ssmt.modifications) {
             assessment.ssmt.modifications.forEach(mod => {
-                if(!mod.modificationId){
+                if (!mod.modificationId) {
                     mod.modificationId = getNewIdString();
                 }
                 mod.ssmt = this.updateHeaders(mod.ssmt);
@@ -457,7 +470,7 @@ export class UpdateDataService {
                 let defaultSaturatedPressure = 0;
                 if (ssmt.headerInput && ssmt.headerInput.highPressureHeader?.pressure !== undefined) {
                     defaultSaturatedPressure = ssmt.headerInput.highPressureHeader.pressure;
-                } 
+                }
                 ssmt.boilerInput.saturatedPressure = defaultSaturatedPressure;
             }
         }
@@ -595,12 +608,12 @@ export class UpdateDataService {
                         migratedMonth.pfAdjustedDemand = month['input1'];
                         migratedMonth.powerFactor = month['input2'];
                     }
-                    
+
                     if (billedForDemand == BilledForDemand.APPARENT_POWER && adjustedOrActual == AdjustedOrActual.ACTUAL_DEMAND) {
                         migratedMonth.pfAdjustedDemand = month['input1'];
                         migratedMonth.actualDemand = month['input2'];
                     }
-                    
+
                     migratedMonth.month = month['month'];
                 } else {
                     migratedMonth = month;
