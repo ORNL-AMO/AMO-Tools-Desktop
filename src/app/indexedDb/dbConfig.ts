@@ -370,6 +370,7 @@ export const LightingFixtureMaterialStoreMeta = {
   store: 'lightingFixtureMaterial',
   storeConfig: { keyPath: 'id', autoIncrement: true },
   storeSchema: [
+    { name: 'name', keypath: 'name', options: { unique: false } },
     { name: 'category', keypath: 'category', options: { unique: false } },
     { name: 'type', keypath: 'type', options: { unique: false } },
     { name: 'lampsPerFixture', keypath: 'lampsPerFixture', options: { unique: false } },
@@ -385,7 +386,7 @@ export const LightingFixtureMaterialStoreMeta = {
 
 export const dbConfig: DBConfig = {
   name: 'CrudDB',
-  version: 9,
+  version: 10,
   objectStoresMeta: [
     ApplicationInstanceDataStoreMeta,
     AssessmentStoreMeta,

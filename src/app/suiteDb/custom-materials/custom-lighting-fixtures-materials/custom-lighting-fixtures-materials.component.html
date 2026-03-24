@@ -1,13 +1,17 @@
 
 <div class="d-flex flex-wrap w-100">
-    <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let lightingCategory of lightingMaterials; let catIdx = index">
-        <div class="card card-item" *ngFor="let fixture of lightingCategory.fixturesData; let fixIdx = index">
+    <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let fixture of lightingMaterials">
+        <div class="card card-item">
             <div class="card-header summary-card-header">
-                {{fixture.type}}
-                <i (click)="editMaterial(catIdx, fixIdx)" class="fa fa-edit pull-right" style="cursor:pointer;"></i>
+                {{fixture.name}}
+                <i (click)="editMaterial(fixture.id)" class="fa fa-edit pull-right" style="cursor:pointer;"></i>
             </div>
             <div class="card-body scroll-item summary-card-body">
                 <table class="table">
+                    <tr>
+                        <td>Category:</td>
+                        <td>{{fixture.category}}</td>
+                    </tr>
                     <tr>
                         <td>Type:</td>
                         <td>{{fixture.type}}</td>
@@ -43,7 +47,7 @@
                 </table>
             </div>
             <div class="card-footer summary-card-footer">
-                <div class="last-updated pull-right btn-delete-material" (click)="deleteMaterial(catIdx, fixIdx)">Delete Material</div>
+                <div class="last-updated pull-right btn-delete-material" (click)="deleteMaterial(fixture.id)">Delete Material</div>
             </div>
         </div>
     </div>

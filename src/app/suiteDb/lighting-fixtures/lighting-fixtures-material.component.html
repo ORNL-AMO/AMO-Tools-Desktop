@@ -12,40 +12,52 @@
                     </div>
                 </div>
                 <form>
+                    <div class="form-section" *ngIf="!editExistingMaterial">
+                        <div class="form-group">
+                            <label class="small" for="selectedMaterial">Start with existing material</label>
+                            <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="onCategoryChange(selectedMaterial)" [(ngModel)]="selectedMaterial"
+                                (focus)="focusField('selectedMaterial')">
+                                <option *ngFor="let material of allLightingCategories" [ngValue]="material">{{material.label}}</option>
+                            </select>
+
+                            <label class="small" for="type">Fixture Type</label>
+                            <select id="type" name="type" class="form-control" [(ngModel)]="newMaterial.type" (change)="onFixtureTypeChange(getFixtureByType($event.target.value))" (focus)="focusField('type')">
+                                <option *ngFor="let fixture of fixturesData" [value]="fixture.type">{{fixture.type}}</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-section">
                         <div class="form-group">
-                            <label class="small" for="type">Fixture Type</label>
-                            <select id="type" name="type" class="form-control" [(ngModel)]="newMaterial.type" (focus)="focusField && focusField('type')">
-                                <option *ngFor="let category of lightingCategories" [value]="category.type">{{category.type}}</option>
-                            </select>
+                            <label class="small" for="name">Material Name</label>
+                            <input type="text" id="name" name="name" class="form-control" [(ngModel)]="newMaterial.name" (focus)="focusField('name')" (input)="checkEditMaterialName()"/>
                         </div>
                         <div class="form-group">
                             <label class="small" for="lampsPerFixture">Lamps Per Fixture</label>
-                            <input type="number" id="lampsPerFixture" name="lampsPerFixture" class="form-control" [(ngModel)]="newMaterial.lampsPerFixture" (focus)="focusField && focusField('lampsPerFixture')" />
+                            <input type="number" id="lampsPerFixture" name="lampsPerFixture" class="form-control" [(ngModel)]="newMaterial.lampsPerFixture" (focus)="focusField('lampsPerFixture')" />
                         </div>
                         <div class="form-group">
                             <label class="small" for="wattsPerLamp">Watts Per Lamp</label>
-                            <input type="number" id="wattsPerLamp" name="wattsPerLamp" class="form-control" [(ngModel)]="newMaterial.wattsPerLamp" (focus)="focusField && focusField('wattsPerLamp')" />
+                            <input type="number" id="wattsPerLamp" name="wattsPerLamp" class="form-control" [(ngModel)]="newMaterial.wattsPerLamp" (focus)="focusField('wattsPerLamp')" />
                         </div>
                         <div class="form-group">
                             <label class="small" for="lumensPerLamp">Lumens Per Lamp</label>
-                            <input type="number" id="lumensPerLamp" name="lumensPerLamp" class="form-control" [(ngModel)]="newMaterial.lumensPerLamp" (focus)="focusField && focusField('lumensPerLamp')" />
+                            <input type="number" id="lumensPerLamp" name="lumensPerLamp" class="form-control" [(ngModel)]="newMaterial.lumensPerLamp" (focus)="focusField('lumensPerLamp')" />
                         </div>
                         <div class="form-group">
                             <label class="small" for="lampLife">Lamp Life (h)</label>
-                            <input type="number" id="lampLife" name="lampLife" class="form-control" [(ngModel)]="newMaterial.lampLife" (focus)="focusField && focusField('lampLife')" />
+                            <input type="number" id="lampLife" name="lampLife" class="form-control" [(ngModel)]="newMaterial.lampLife" (focus)="focusField('lampLife')" />
                         </div>
                         <div class="form-group">
                             <label class="small" for="coefficientOfUtilization">Coefficient Of Utilization</label>
-                            <input type="number" id="coefficientOfUtilization" name="coefficientOfUtilization" class="form-control" [(ngModel)]="newMaterial.coefficientOfUtilization" (focus)="focusField && focusField('coefficientOfUtilization')" />
+                            <input type="number" id="coefficientOfUtilization" name="coefficientOfUtilization" class="form-control" [(ngModel)]="newMaterial.coefficientOfUtilization" (focus)="focusField('coefficientOfUtilization')" />
                         </div>
                         <div class="form-group">
                             <label class="small" for="ballastFactor">Ballast Factor</label>
-                            <input type="number" id="ballastFactor" name="ballastFactor" class="form-control" [(ngModel)]="newMaterial.ballastFactor" (focus)="focusField && focusField('ballastFactor')" />
+                            <input type="number" id="ballastFactor" name="ballastFactor" class="form-control" [(ngModel)]="newMaterial.ballastFactor" (focus)="focusField('ballastFactor')" />
                         </div>
                         <div class="form-group">
                             <label class="small" for="lumenDegradationFactor">Lumen Degradation Factor</label>
-                            <input type="number" id="lumenDegradationFactor" name="lumenDegradationFactor" class="form-control" [(ngModel)]="newMaterial.lumenDegradationFactor" (focus)="focusField && focusField('lumenDegradationFactor')" />
+                            <input type="number" id="lumenDegradationFactor" name="lumenDegradationFactor" class="form-control" [(ngModel)]="newMaterial.lumenDegradationFactor" (focus)="focusField('lumenDegradationFactor')" />
                         </div>
                     </div>
                 </form>

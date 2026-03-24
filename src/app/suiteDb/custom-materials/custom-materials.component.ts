@@ -142,7 +142,7 @@ export class CustomMaterialsComponent implements OnInit {
       test.solidLiquidFlueGasMaterial.length !== 0 ||
       test.solidLoadChargeMaterial.length !== 0 ||
       test.wallLossesSurface.length !== 0 ||
-      test.lightingFixtureCategories.length !== 0
+      test.lightingFixtureMaterial.length !== 0
     ) {
       return true;
     } else {
