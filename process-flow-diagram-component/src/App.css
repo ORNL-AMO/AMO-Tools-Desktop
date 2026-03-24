@@ -377,6 +377,10 @@ a {
   pointer-events: all;
 }
 
+.MuiTabs-scrollButtons.Mui-disabled {
+  display: none !important;
+}
+
 .react-flow__node .custom-node-toolbar .edit-btn {
   display: none;
 }
