@@ -103,20 +103,20 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
   onScheduleTypeChange(scheduleType: string, dayIndex: number) {
     const dayGroup = this.getDayGroup(dayIndex);
     if (scheduleType === 'off') {
-      dayGroup.get('off').setValue(true, { emitEvent: true });
-      dayGroup.get('allDay').setValue(false, { emitEvent: true });
+      dayGroup.get('off').setValue(true );
+      dayGroup.get('allDay').setValue(false);
 
-      dayGroup.get('start').setValue(0, { emitEvent: false });
-      dayGroup.get('end').setValue(0, { emitEvent: false });
+      dayGroup.get('start').setValue(0 );
+      dayGroup.get('end').setValue(0);
     } else if (scheduleType === 'allDay') {
-      dayGroup.get('off').setValue(false, { emitEvent: true });
-      dayGroup.get('allDay').setValue(true, { emitEvent: true });
+      dayGroup.get('off').setValue(false);
+      dayGroup.get('allDay').setValue(true);
 
-      dayGroup.get('start').setValue(0, { emitEvent: false });
-      dayGroup.get('end').setValue(24, { emitEvent: false });
+      dayGroup.get('start').setValue(0);
+      dayGroup.get('end').setValue(24);
     } else {
-      dayGroup.get('off').setValue(false, { emitEvent: true });
-      dayGroup.get('allDay').setValue(false, { emitEvent: true });
+      dayGroup.get('off').setValue(false);
+      dayGroup.get('allDay').setValue(false);
     }
 
     if (this.useSameSchedule.value) {

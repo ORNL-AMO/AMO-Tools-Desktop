@@ -163,24 +163,6 @@ export const MockProcessCoolingAssessment: Assessment = {
                     "end": 24,
                     "allDay": true
                 },
-                {
-                    "off": false,
-                    "start": 0,
-                    "end": 24,
-                    "allDay": true
-                },
-                {
-                    "off": false,
-                    "start": 0,
-                    "end": 24,
-                    "allDay": true
-                },
-                {
-                    "off": false,
-                    "start": 0,
-                    "end": 24,
-                    "allDay": true
-                }
             ]
         },
         monthlyOperatingSchedule: {
