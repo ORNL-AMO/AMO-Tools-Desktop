@@ -222,10 +222,12 @@ export const getHoursOnMonToSun = (days: DayScheduleData[]) => {
 }
 
 export const getMonthsMaxDays = () => {
+  const currentYear = new Date().getFullYear();
+  // * leap year condition
+  const februaryDays = (currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0)) ? 29 : 28;
   return [
     { name: 'January', days: 31 },
-    // * Leap year max
-    { name: 'February', days: 29 },
+    { name: 'February', days: februaryDays },
     { name: 'March', days: 31 },
     { name: 'April', days: 30 },
     { name: 'May', days: 31 },
