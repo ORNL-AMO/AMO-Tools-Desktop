@@ -51,13 +51,13 @@ export class CompressedAirAssessmentComponent implements OnInit {
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-compressed-air-assessment', undefined);
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.params.subscribe(async params => {
       this.initializingAssessment = true;
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
       let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
       if (!settings) {
         settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-        this.addSettings(settings);
+        await this.addSettings(settings);
       } else {
         this.settings = settings;
         this.compressedAirAssessmentService.settings.next(settings);

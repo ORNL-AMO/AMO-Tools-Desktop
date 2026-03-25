@@ -102,13 +102,31 @@ export function getHourIntervals(systemProfileSetup: SystemProfileSetup, hours?:
 }
 
 export function getHasMissingTrimSelection(compressedAirAssessment: CompressedAirAssessment): boolean {
-    let hasMissingTrimSelection: boolean = compressedAirAssessment.systemInformation.trimSelections.some(selection => {
-        let dayTypeInUse = compressedAirAssessment.compressedAirDayTypes.some(dayType => dayType.dayTypeId === selection.dayTypeId);
-        if (dayTypeInUse && selection.compressorId) {
+    //check every day type has a trim selection if multi compressor system controls is base trim
+    if (!compressedAirAssessment.systemInformation || compressedAirAssessment.systemInformation.multiCompressorSystemControls !== 'baseTrim') {
+        return false;
+    }
+
+    const trimSelections: { dayTypeId: string, compressorId: string }[] = compressedAirAssessment.systemInformation.trimSelections;
+    if (!trimSelections || trimSelections.length === 0) {
+        const hasInUseDayType = compressedAirAssessment.compressedAirDayTypes.some(dayType => dayType.numberOfDays > 0);
+        return hasInUseDayType;
+    }
+
+    const hasMissingTrimSelection: boolean = compressedAirAssessment.compressedAirDayTypes.some(dayType => {
+        if (dayType.numberOfDays <= 0) {
             return false;
-        } else {
-            return true;
         }
+
+        const hasValidTrimSelection = trimSelections.some((trimSelection: { dayTypeId: string, compressorId: string }) => {
+            if (trimSelection.dayTypeId === dayType.dayTypeId) {
+                return Boolean(trimSelection.compressorId);
+            } else {
+                return false;
+            }
+        });
+
+        return !hasValidTrimSelection;
     });
     return hasMissingTrimSelection;
 }

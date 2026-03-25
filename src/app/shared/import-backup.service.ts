@@ -196,7 +196,7 @@ export class ImportBackupService {
     // * patch assessment diagram id
     for await (let assessment of this.assessmentDbService.dbAssessments.getValue()) {
       assessment.diagramId = this.importDiagramIdMap[assessment.diagramId];
-      await firstValueFrom(this.settingsDbService.updateWithObservable(assessment));
+      await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
     };
     assessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.assessmentDbService.setAll(assessments);
