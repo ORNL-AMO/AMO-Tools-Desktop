@@ -20,14 +20,9 @@ import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterT
 import InputField from "../StyledMUI/InputField";
 
 
-const theme = createTheme({
-    palette: {
-        info: yellow,
-    },
-});
+
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
-    // const theme = useTheme();
     const { selectedNode } = props;
     const edges = useAppSelector((state) => state.diagram.edges);
     const connectedEdges = getConnectedEdges([selectedNode], edges);

@@ -3,7 +3,7 @@ import { DiagramSettings, validateKnownLosses, validateTotalFlowValue } from "pr
 import * as Yup from 'yup';
 export const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
 export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
-export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Total Discharge Flow must be greater than or equal to 0 for water using systems`;
+export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Total Discharge Flow must be greater than or equal to 0`;
 // todo move to forms
 const getSystemNumberFieldValidation = (fieldLabel: string) => Yup.number()
     .nullable()
@@ -49,22 +49,17 @@ export const getDefaultFlowValidationSchema = (
         'total-flow-min',
         totalFlowError,
         function (value) {
-            if (value === null || value === undefined) return true;
-            if (flowLabel === 'Discharge' && isWaterUsingSystem) {
-                return value >= 0;
-            }
-            return value > 0;
+            return waterUsingSystemDischargeValidation(value);
         }
     );
 
     totalFlowSchema = totalFlowSchema.test(
         'sum-differs',
-        totalFlowError,
+        'Total Flow must be equal to the sum of individual flows',
         function (value) {
             const { path, createError } = this;
             const flowDifference = Math.abs(totalCalculatedFlow - value);
             const unallocated = Number((flowDifference).toFixed(settings.flowDecimalPrecision));
-            const totalCalculatedFlowFixed = Number(totalCalculatedFlow.toFixed(settings.flowDecimalPrecision));
             const isValid = validateTotalFlowValue(connectedEdges, totalCalculatedFlow, unaccountedFlow, value, settings.flowDecimalPrecision);
             if (!isValid) {
                 return createError({
@@ -77,11 +72,26 @@ export const getDefaultFlowValidationSchema = (
     );
     let defaultSchema = {
         totalFlow: totalFlowSchema,
-        flows: Yup.array().of(Yup.number()
+        flows: Yup.array().of(
+        Yup.number()
             .nullable()
-            .moreThan(0, `Flow must be greater than 0`)
+            .test(
+                'flow-min',
+                flowLabel === 'Source' ? TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR : (isWaterUsingSystem ? TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR : TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR),
+                function (value) {
+                    return waterUsingSystemDischargeValidation(value);
+                }
+            )
         )
     };
+
+    function waterUsingSystemDischargeValidation (value) {
+        if (value === null || value === undefined) return true;
+        if (flowLabel === 'Discharge' && isWaterUsingSystem) {
+            return value >= 0;
+        }
+        return value > 0;
+    }
 
     const knownLossesSchema = Yup.number()
         .nullable()
