@@ -203,7 +203,6 @@ export class UpdateDataService {
                 }
             });
         }
-        console.log('====done====')
         return assessment;
     }
 

@@ -107,10 +107,6 @@ export class FlowReallocationResults {
             //set base trim ordering
             let trimSelection: { dayTypeId: string, compressorId: string } = trimSelections.find(selection => { return selection.dayTypeId == dayType.dayTypeId });
 
-            // * Errors happening on trimSelection?.compressorId after manually assigning empty selections on versoin upgrade
-            if (!trimSelection) {
-                console.log('undefined trim selection');
-            }
             if (trimSelection?.compressorId) {
                 intervalData = this.setBaseTrimOrdering(intervalData, adjustedCompressors, neededAirFlow, trimSelection.compressorId, dayType, reduceRuntime);
             }
