@@ -98,7 +98,8 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     // todo 7339 - don't validate when flows dont exist
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, nodes, selectedDataId);
     const totalKnownLosses = getKnownLossComponentTotals(componentDischargeEdges, nodes, selectedDataId);
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, selectedNode.data.userEnteredData.intakeUnaccounted, settings, totalKnownLosses);
+    const isWaterUsingSystem = selectedNode.data.processComponentType === 'water-using-system';
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, selectedNode.data.userEnteredData.intakeUnaccounted, settings, totalKnownLosses, isWaterUsingSystem);
 
     return (
         <Formik
