@@ -105,7 +105,7 @@ export class FlowReallocationResults {
             return;
         } else if (systemInformation.multiCompressorSystemControls == 'baseTrim') {
             //set base trim ordering
-            let trimSelection: { dayTypeId: string, compressorId: string } = trimSelections.find(selection => { return selection.dayTypeId == dayType.dayTypeId });
+            let trimSelection: { dayTypeId: string, compressorId: string } = trimSelections?.find(selection => { return selection.dayTypeId == dayType.dayTypeId });
 
             if (trimSelection?.compressorId) {
                 intervalData = this.setBaseTrimOrdering(intervalData, adjustedCompressors, neededAirFlow, trimSelection.compressorId, dayType, reduceRuntime);

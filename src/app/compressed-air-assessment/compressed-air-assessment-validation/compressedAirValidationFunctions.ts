@@ -103,21 +103,30 @@ export function getHourIntervals(systemProfileSetup: SystemProfileSetup, hours?:
 
 export function getHasMissingTrimSelection(compressedAirAssessment: CompressedAirAssessment): boolean {
     //check every day type has a trim selection if multi compressor system controls is base trim
-    if (compressedAirAssessment.systemInformation && compressedAirAssessment.systemInformation.multiCompressorSystemControls === 'baseTrim') {
-        let hasMissingTrimSelection: boolean = compressedAirAssessment.compressedAirDayTypes.some(dayType => {
-            if (dayType.numberOfDays > 0) {
-                let hasTrimSelection: boolean = compressedAirAssessment.systemInformation.trimSelections.some(trimSelection => dayType.dayTypeId === trimSelection.dayTypeId);
-                if (hasTrimSelection) {
-                    return false;
-                } else {
-                    return true;
-                }
+    if (!compressedAirAssessment.systemInformation || compressedAirAssessment.systemInformation.multiCompressorSystemControls !== 'baseTrim') {
+        return false;
+    }
+
+    const trimSelections: { dayTypeId: string, compressorId: string }[] = compressedAirAssessment.systemInformation.trimSelections;
+    if (!trimSelections || trimSelections.length === 0) {
+        const hasInUseDayType = compressedAirAssessment.compressedAirDayTypes.some(dayType => dayType.numberOfDays > 0);
+        return hasInUseDayType;
+    }
+
+    const hasMissingTrimSelection: boolean = compressedAirAssessment.compressedAirDayTypes.some(dayType => {
+        if (dayType.numberOfDays <= 0) {
+            return false;
+        }
+
+        const hasValidTrimSelection = trimSelections.some((trimSelection: { dayTypeId: string, compressorId: string }) => {
+            if (trimSelection.dayTypeId === dayType.dayTypeId) {
+                return Boolean(trimSelection.compressorId);
             } else {
                 return false;
             }
         });
-        return hasMissingTrimSelection;
-    } else {
-        return false;
-    }
+
+        return !hasValidTrimSelection;
+    });
+    return hasMissingTrimSelection;
 }

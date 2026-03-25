@@ -143,7 +143,7 @@ export class UpdateDataService {
         }
 
         //check day type leak rates
-        if (!assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates) {
+        if (!assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates || assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates.length == 0) {
             assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = [];
             if (assessment.compressedAirAssessment.compressedAirDayTypes && assessment.compressedAirAssessment.compressedAirDayTypes.length > 0) {
                 assessment.compressedAirAssessment.endUseData.endUseDayTypeSetup.dayTypeLeakRates = assessment.compressedAirAssessment.compressedAirDayTypes.map(dayType => {
@@ -174,21 +174,29 @@ export class UpdateDataService {
                         order: 100,
                         implementationCost: 0,
                         salvageValue: 0,
-                        currentCompressorMapping: assessment.compressedAirAssessment.compressorInventoryItems?.map(item => {
+                        currentCompressorMapping: [],
+                        replacementCompressorMapping: [],
+                        trimSelections: []
+                    };
+
+                    if (assessment.compressedAirAssessment.compressorInventoryItems?.length > 0) {
+                        mod.replaceCompressor.currentCompressorMapping = assessment.compressedAirAssessment.compressorInventoryItems?.map(item => {
                             return {
                                 originalCompressorId: item.itemId,
                                 isReplaced: false
                             };
-                        }),
-                        replacementCompressorMapping: [],
-                        // * don't assume trimSelections have been added
-                        trimSelections: assessment.compressedAirAssessment.systemInformation.trimSelections?.map(selection => {
+                        })
+                    }
+
+                    if (assessment.compressedAirAssessment.systemInformation.trimSelections?.length > 0) {
+                        mod.replaceCompressor.trimSelections = assessment.compressedAirAssessment.systemInformation.trimSelections.map(selection => {
                             return {
                                 dayTypeId: selection.dayTypeId,
                                 compressorId: selection.compressorId
                             };
-                        })
-                    };
+                        });
+                    }
+
                 }
             })
         }

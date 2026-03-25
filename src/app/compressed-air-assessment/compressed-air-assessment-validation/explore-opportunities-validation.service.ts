@@ -114,15 +114,13 @@ export class ExploreOpportunitiesValidationService {
     if (modification.reduceRuntime.order != 100) {
       let form: UntypedFormGroup = this.reduceRunTimeService.getFormFromObj(modification.reduceRuntime);
       isValid = form.valid;
+      
       if (isValid) {
-        compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
-          if (isValid) {
-            let modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => { return dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId });
-            if (modificationProfileSummary) {
-              isValid = modificationProfileSummary.reduceRunTimeProfileValidation?.isValid;
-            }
-          }
+        const hasInvalidRunTimeOrSummary = compressedAirAssessment.compressedAirDayTypes.some(dayType => {
+          const modificationProfileSummary: CompressedAirModifiedDayTypeProfileSummary = compressedAirAssessmentModificationResults.modifiedDayTypeProfileSummaries.find(dayTypeModResult => dayTypeModResult.dayType.dayTypeId == dayType.dayTypeId);
+          return !modificationProfileSummary || !modificationProfileSummary.reduceRunTimeProfileValidation?.isValid;
         });
+        isValid = !hasInvalidRunTimeOrSummary;
       }
     }
     return isValid;

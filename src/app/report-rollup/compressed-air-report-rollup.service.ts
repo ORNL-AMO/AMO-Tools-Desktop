@@ -48,19 +48,29 @@ export class CompressedAirReportRollupService {
     }
   }
 
-  //USED FOR Compressed air  SUMMARY
+    //USED FOR Compressed air  SUMMARY
   initCompressedAirCompare() {
     let tmpResults: Array<CompressedAirCompare> = new Array<CompressedAirCompare>();
     let compressedAirAssessments: Array<ReportItem> = this.compressedAirAssessments.value;
     this.allAssessmentResults.forEach(result => {
       let assessmentIndex: number = compressedAirAssessments.findIndex(val => val.assessment.id === result.assessmentId);
       let item: ReportItem = compressedAirAssessments[assessmentIndex];
+
+      const baselineResults: CompressedAirCompare = { baseline: item.assessment.compressedAirAssessment, modification: undefined, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings };
       if (result.isBaseline) {
-        tmpResults.push({ baseline: item.assessment.compressedAirAssessment, modification: undefined, assessmentId: result.assessmentId, selectedIndex: -1, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+        tmpResults.push(baselineResults);
       } else {
-        let minCost: DayTypeModificationResult = _.minBy(result.modificationResults, (result: DayTypeModificationResult) => { return result.totalAnnualOperatingCost; });
-        let modIndex: number = result.modificationResults.findIndex(mod => mod.dayTypeId == minCost.dayTypeId);
-        tmpResults.push({ baseline: item.assessment.compressedAirAssessment, modification: item.assessment.compressedAirAssessment.modifications[modIndex], assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+        const modificationResults: Array<DayTypeModificationResult> = result.modificationResults || [];
+        if (modificationResults.length === 0) {
+          tmpResults.push(baselineResults);
+        } else {
+          const minCost: DayTypeModificationResult = _.minBy(modificationResults, (res: DayTypeModificationResult) => { return res.totalAnnualOperatingCost; });
+          let modIndex: number = modificationResults.indexOf(minCost);
+          if (modIndex === -1) {
+            modIndex = 0;
+          }
+          tmpResults.push({ baseline: item.assessment.compressedAirAssessment, modification: item.assessment.compressedAirAssessment.modifications[modIndex], assessmentId: result.assessmentId, selectedIndex: modIndex, name: item.assessment.name, assessment: item.assessment, settings: item.settings });
+        }
       }
     });
     this.selectedAssessments.next(tmpResults);
@@ -104,7 +114,6 @@ export class CompressedAirReportRollupService {
               let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(val.assessment.compressedAirAssessment, mod, val.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
               let modificationValid: CompressedAirModificationValid = this.exploreOpportunitiesValidationService.setModificationValid(mod, baselineResults, baselineProfileSummaries, val.assessment.compressedAirAssessment, val.settings, compressedAirAssessmentModificationResults);
               if (modificationValid.isValid) {
-                let compressedAirAssessmentModificationResults: CompressedAirAssessmentModificationResults = new CompressedAirAssessmentModificationResults(val.assessment.compressedAirAssessment, mod, val.settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, compressedAirAssessmentBaselineResults);
                 let compressedAirCombinedDayTypeResults: CompressedAirCombinedDayTypeResults = new CompressedAirCombinedDayTypeResults(compressedAirAssessmentModificationResults);
                 let combinedResults: DayTypeModificationResult = compressedAirCombinedDayTypeResults.getDayTypeModificationResult();
                 modResultsArr.push(combinedResults);
