@@ -3,7 +3,7 @@ import { DiagramSettings, validateKnownLosses, validateTotalFlowValue } from "pr
 import * as Yup from 'yup';
 export const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
 export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
-
+export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Total Discharge Flow must be greater than or equal to 0 for water using systems`;
 // todo move to forms
 const getSystemNumberFieldValidation = (fieldLabel: string) => Yup.number()
     .nullable()
@@ -43,7 +43,7 @@ export const getDefaultFlowValidationSchema = (
     sumUserKnownLosses?: number,
     isWaterUsingSystem?: boolean
 ): Yup.ObjectSchema<FlowForm> => {
-    const totalFlowError = flowLabel === 'Source' ? TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR : TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR;
+    const totalFlowError = flowLabel === 'Source' ? TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR : (isWaterUsingSystem ? TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR : TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR);
     const unit = settings.unitsOfMeasure === 'Imperial'? 'Mgal' : 'm<sup>3</sup>';
     let totalFlowSchema = Yup.number().nullable().test(
         'total-flow-min',
