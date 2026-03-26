@@ -1,9 +1,13 @@
 import { Edge } from "@xyflow/react";
 import { DiagramSettings, validateKnownLosses, validateTotalFlowValue } from "process-flow-lib";
 import * as Yup from 'yup';
-export const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
-export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
-export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Total Discharge Flow must be greater than or equal to 0 for water using systems`;
+
+const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
+const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
+const TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Total Discharge Flow must be greater than or equal to 0`;
+const CONNECTED_FLOW_GREATER_THAN_ERROR = `Flow must be greater than 0`;
+const CONNECTED_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Flow must be greater than or equal to 0`;
+
 const getSystemNumberFieldValidation = (fieldLabel: string) => Yup.number()
     .nullable()
     .required(`${fieldLabel} is required`)
@@ -43,7 +47,6 @@ export const getDefaultFlowValidationSchema = (
     isWaterUsingSystem?: boolean
 ): Yup.ObjectSchema<FlowForm> => {
     let totalFlowError = TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR;
-    
     if (flowLabel === 'Discharge' && isWaterUsingSystem) {
         totalFlowError = TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR;
     } else if (flowLabel === 'Discharge') {
@@ -52,15 +55,34 @@ export const getDefaultFlowValidationSchema = (
 
     const unit = settings.unitsOfMeasure === 'Imperial'? 'Mgal' : 'm<sup>3</sup>';
 
-    const getFlowMinError = (value: number | null, path: string, createError: any, isTotalFlow: boolean = false) => {
+    const getTotalFlowMinError = (value: number | null, path: string, createError: any) => {
         if (value === null || value === undefined) return true;
 
-        let invalidMessage = `${isTotalFlow ? 'Total' : ''} Flow Must be greater than 0`;
-        let isValid = value > 0;
+        let invalidMessage = totalFlowError;
+        let isValid: boolean = value > 0;
         if (flowLabel === 'Discharge' && isWaterUsingSystem) {
-            invalidMessage = `${isTotalFlow ? 'Total' : ''} Flow Must be greater than or equal to 0`;
             isValid = value >= 0;
         }
+
+        if (!isValid) {
+            return createError({
+                path,
+                message: invalidMessage,
+            });
+        }
+        return true;
+    };
+
+    const getConnectedFlowMinError = (value: number | null, path: string, createError: any) => {
+        if (value === null || value === undefined) return true;
+
+        let invalidMessage: string = CONNECTED_FLOW_GREATER_THAN_ERROR;
+        let isValid: boolean = value > 0;
+        if (flowLabel === 'Discharge' && isWaterUsingSystem) {
+            invalidMessage = CONNECTED_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR;
+            isValid = value >= 0;
+        }
+
         if (!isValid) {
             return createError({
                 path,
@@ -77,7 +99,7 @@ export const getDefaultFlowValidationSchema = (
             totalFlowError,
             function (value) {
                 const { path, createError } = this;
-                return getFlowMinError(value, path, createError, true);
+                return getTotalFlowMinError(value, path, createError);
             }
         )
         .test(
@@ -91,7 +113,7 @@ export const getDefaultFlowValidationSchema = (
                 if (!isValid) {
                     return createError({
                         path,
-                        message: `Total Flow must be equal to the sum of individual flows. There is unallocated flow of ${unallocated} ${unit}.`,
+                        message: `Total ${flowLabel} Flow must be equal to the sum of individual flows. There is unallocated flow of ${unallocated} ${unit}.`,
                     });
                 }
                 return true;
@@ -106,7 +128,7 @@ export const getDefaultFlowValidationSchema = (
             'Flow must be greater than 0',
             function (value) {
                 const { path, createError } = this;
-                return getFlowMinError(value, path, createError);
+                return getConnectedFlowMinError(value, path, createError);
             }
         )
     )

@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectCurrentNode, selectNodes, selectNodeTargetEdges, selectTotalDischargeFlow } from "../Diagram/store";
-import { FlowForm, getDefaultFlowValidationSchema, TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
+import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
 import { FieldArray, Form, Formik, useFormikContext } from "formik";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
@@ -115,7 +115,8 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
         >
             {({ values, errors, handleChange, setFieldValue }) => {
                 const disabledToggle = values.totalFlow === null;
-                const disabledPercentDataEntryFields = inPercent && (disabledToggle || (errors.totalFlow && errors.totalFlow === TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR));
+                // * 8322 previously checking specific errors to determine enabled status - percent field entry hasn't been fully implemented. reqs need clarification.
+                const disabledPercentDataEntryFields = inPercent && (disabledToggle || Boolean(errors.totalFlow));
 
                 return (
                     <Form>
