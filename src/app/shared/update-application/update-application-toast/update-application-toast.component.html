@@ -12,8 +12,18 @@
                 <p class="card-text text-left px-3 py-1">
                     An error has occured. Please try again or download the update manually from <a class="click-link-error" href="https://industrialresources.ornl.gov/measur/downloads/">https://industrialresources.ornl.gov/measur/downloads/</a> 
                     <br><br>
-                    If the error persists, please notify the MEASUR team of your issue by contacting <a id="supportEmail" href="mailto:measur-help@ornl.gov?subject=AMO Tools Support Request">measur-help&#64;ornl.gov</a>
+                    Please notify the MEASUR team of your issue by contacting <a id="supportEmail" href="mailto:measur-help@ornl.gov?subject=AMO Tools Support Request">measur-help&#64;ornl.gov</a> and including the error text below
+                    <br><br>
                 </p>
+                <div class="mt-1">
+                    <button type="button" class="btn btn-outline-secondary btn-sm mb-2 w-100" [cdkCopyToClipboard]="updateError">
+                        <span class="fa fa-copy"></span> Copy
+                    </button>
+                    <label for="errorTextArea" class="form-label sr-only">Error Details</label>
+                    <textarea id="errorTextArea" readonly class="form-control error-details-textarea"
+                        [value]="updateError"></textarea>
+                </div>
+                <div class="small text-muted mt-1">You can copy and paste this error text in your support email.</div>
             </ng-container>
 
             <ng-container *ngIf="updateStatus === 'web-error'">
