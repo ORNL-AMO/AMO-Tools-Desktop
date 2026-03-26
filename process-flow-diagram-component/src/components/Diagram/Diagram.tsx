@@ -77,13 +77,6 @@ const Diagram = (props: DiagramProps) => {
   const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
   const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   useEffect(() => {
     if (reactFlowInstance && props.height) {
       const parentState = {
