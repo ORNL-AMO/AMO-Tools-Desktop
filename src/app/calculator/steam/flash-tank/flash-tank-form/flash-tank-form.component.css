@@ -1,28 +1,18 @@
-.known-row-parent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-}
-
-.known-conditional-flex {
-  display: flex;
-  flex-direction: column;
-}
-
-.known-conditional-position {
+.form-group.label-select {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-grow: 0;
 }
 
-.known-conditional-input-group {
-  flex-grow: 0;
-  min-width: 12rem;
+.form-group.label-select select {
+  width: calc(50% - 1rem);
+  flex-shrink: 0;
 }
 
-.input-group.calc-addon-group {
-  display: flex;
-  align-items: center;
+.form-group.label-select .spacer {
+  width: 1rem;
+  flex-shrink: 0;
+}
+
+.form-group.label-select .input-group {
+  flex: 1;
 }

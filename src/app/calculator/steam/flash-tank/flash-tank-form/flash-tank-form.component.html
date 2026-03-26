@@ -21,38 +21,27 @@
   </div>
 
 
-  <div class="form-group">
-    <div class="known-row-parent">
-      <div class="input-group calc-addon-group">
-        <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
-          id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')">
-          <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
-        </select>
-      </div>
-      <div class="form-group known-conditional-flex">
-        <div class="known-conditional-position">
-          <div class="input-group calc-addon-group known-conditional-input-group">
-            <input class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue"
-              type="number" (input)="calculate()" (focus)="focusField('quantityValue')" onfocus="this.select();">
-            <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3" class="input-group-addon units"
-              [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
-          </div>
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="flashTankForm.controls.quantityValue.invalid && !flashTankForm.controls.quantityValue.pristine">
-          <span *ngIf="flashTankForm.controls.quantityValue.errors.required">Value Required</span>
-          <span *ngIf="flashTankForm.controls.quantityValue.errors.max">Value can't be greater than
-            {{flashTankForm.controls.quantityValue.errors.max.max}}
-            <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3"
-              [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
-            .</span>
-          <span *ngIf="flashTankForm.controls.quantityValue.errors.min">Value can't be less than
-            {{flashTankForm.controls.quantityValue.errors.min.min}}
-            <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3"
-              [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
-          </span>
+  <div class="form-group label-select">
+    <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
+      id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')">
+      <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
+    </select>
+    <div class="spacer"></div>
+    <div class="input-group">
+      <input type="number" class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue"
+        onfocus="this.select();" (input)="calculate()" (focus)="focusField('quantityValue')">
+      <span class="input-group-addon units" *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3"
+        [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
+      <span class="alert-danger pull-right small"
+        *ngIf="flashTankForm.controls.quantityValue.invalid && !flashTankForm.controls.quantityValue.pristine">
+        <span *ngIf="flashTankForm.controls.quantityValue.errors.required">Value Required</span>
+        <span *ngIf="flashTankForm.controls.quantityValue.errors.max">Value can't be greater than {{flashTankForm.controls.quantityValue.errors.max.max}}
+          <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
         </span>
-      </div>
+        <span *ngIf="flashTankForm.controls.quantityValue.errors.min">Value can't be less than {{flashTankForm.controls.quantityValue.errors.min.min}}
+          <span *ngIf="flashTankForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
+        </span>
+      </span>
     </div>
   </div>
 
