@@ -8,16 +8,15 @@ import { MeasurBackupFile } from '../shared/backup-data.service';
 export class ElectronService {
   updateAvailable: BehaviorSubject<boolean>;
   releaseData: BehaviorSubject<ReleaseData>;
-  updateError: BehaviorSubject<boolean>;
+  updateError: BehaviorSubject<string>;
   updateDownloaded: BehaviorSubject<boolean>;
   backupFilePath: BehaviorSubject<string>;
-  accountLatestBackupFile: BehaviorSubject<MeasurBackupFile>;
   isElectron: boolean;
   constructor() {
 
     this.updateAvailable = new BehaviorSubject<boolean>(false);
     this.releaseData = new BehaviorSubject<ReleaseData>(undefined);
-    this.updateError = new BehaviorSubject<boolean>(false);
+    this.updateError = new BehaviorSubject<string>(undefined);
     this.updateDownloaded = new BehaviorSubject<boolean>(false);
     this.backupFilePath = new BehaviorSubject<string>(undefined);
 
@@ -32,26 +31,23 @@ export class ElectronService {
   //listens for messages from electron about updates
   listen(): void {
     if (!window["electronAPI"]) {
+      console.log('[ElectronService] Electron API not found, cannot listen for updates');
       return;
     }
     window["electronAPI"].on("release-info", (data: ReleaseData) => {
-      console.log('release-info');
-      console.log(data)
+      console.log('[ElectronService] release-info', data);
       this.releaseData.next(data);
     });
     window["electronAPI"].on("available", (data) => {
-      console.log('available');
-      console.log(data)
+      console.log('[ElectronService] available', data);
       this.updateAvailable.next(true);
     });
-    window["electronAPI"].on("error", (data) => {
-      console.log('error');
-      console.log(data)
-      this.updateError.next(true);
+    window["electronAPI"].on("error", (error: string) => {
+      console.log('[ElectronService] error', error);
+      this.updateError.next(error);
     });
     window["electronAPI"].on("update-downloaded", (data) => {
-      console.log('update-downloaded');
-      console.log(data)
+      console.log('[ElectronService] update-downloaded', data);
       this.updateDownloaded.next(true);
     });
 
@@ -67,6 +63,7 @@ export class ElectronService {
   //does nothing when in browser
   sendAppReady(data: any): void {
     if (!window["electronAPI"]) {
+      console.log('[ElectronService] Electron API not found, cannot send app ready signal');
       return;
     }
     window["electronAPI"].send("ready", data);
@@ -75,6 +72,7 @@ export class ElectronService {
   //send signal to ipcMain to update
   sendUpdateSignal() {
     if (!window["electronAPI"]) {
+      console.log('[ElectronService] Electron API not found, cannot send update signal');
       return;
     }
     window["electronAPI"].send("update");
@@ -82,9 +80,10 @@ export class ElectronService {
 
   sendAppRelaunch(){
     if(!window["electronAPI"]){
+      console.log('[ElectronService] Electron API not found, cannot send app relaunch signal');
       return;
     }
-    console.log('relaunch1');
+    console.log('[ElectronService] relaunch1');
     window["electronAPI"].send("relaunch");
   }
 
@@ -92,7 +91,7 @@ export class ElectronService {
     if(!window["electronAPI"]){
       return;
     }
-    console.log('quit and install');
+    console.log('[ElectronService] quit and install');
     window["electronAPI"].send("quit-and-install");
   }
 

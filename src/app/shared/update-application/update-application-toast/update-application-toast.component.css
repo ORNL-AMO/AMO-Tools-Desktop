@@ -1,3 +1,19 @@
+.error-details-summary {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.error-details-textarea {
+    width: 100%;
+    min-height: 80px;
+    font-family: monospace;
+    font-size: 0.95em;
+    padding: 0.5em;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #f8f8f8;
+    resize: vertical;
+}
 .card.card-toast-notification {
     position: fixed;
     z-index: 9999;

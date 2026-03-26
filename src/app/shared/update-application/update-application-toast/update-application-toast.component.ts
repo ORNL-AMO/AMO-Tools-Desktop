@@ -23,6 +23,7 @@ export class UpdateApplicationToastComponent {
   releaseData: ReleaseData;
   toastAnimate: 'hide' | 'show' = 'hide';
   updateStatus: UpdateStatus;
+  updateError: string;
   isDownloading: boolean;
 
   electronUpdateAvailableSub: Subscription;
@@ -74,8 +75,9 @@ export class UpdateApplicationToastComponent {
       });   
       this.updateErrorSub = this.electronService.updateError.subscribe(error => {
         if (error) {
+          this.updateError = error;
           this.updateStatus = 'error';
-        }
+        } 
       });
     }
   }
