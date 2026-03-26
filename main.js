@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, crashReporter, Menu, shell, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, shell, dialog } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
@@ -53,23 +53,23 @@ app.on('ready', function () {
   ipcMain.on('ready', (coreCompEvent, arg) => {
     if (!isDev()) {
       autoUpdater.checkForUpdates().then(() => {
-        log.info('done checking for updates');
+        log.info('[autoUpdater] done checking for updates');
         coreCompEvent.sender.send('release-info', autoUpdater.updateInfoAndProvider.info);
       });
       autoUpdater.on('update-available', (event, info) => {
-        log.info('update available');
+        log.info('[autoUpdater] update available');
         coreCompEvent.sender.send('available', true);
       });
       autoUpdater.on('update-not-available', (event, info) => {
-        log.info('no update available..');
+        log.info('[autoUpdater] no update available');
       });
       autoUpdater.on('error', (event, error) => {
-        log.info('error');
+        log.info('[autoUpdater] error');
         coreCompEvent.sender.send('error', error);
       });
 
       autoUpdater.on('update-downloaded', (event, info) => {
-        // autoUpdater.quitAndInstall();
+        log.info('[autoUpdater] update downloaded');
         coreCompEvent.sender.send('update-downloaded');
       });
     }
@@ -82,13 +82,6 @@ app.on('ready', function () {
   //Check for updates and install
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = false;
-
-  crashReporter.start({
-    productName: "ORNL-AMO",
-    companyName: "ornl-amo",
-    submitURL: "https://ornl-amo.sp.backtrace.io:6098/post?format=minidump&token=9e914fbd14a36589b7e2ce09cf8c3b4b5b3e37368da52bf1dabff576f156126c",
-    uploadToServer: true
-  });
 
   var template = [{
     label: "Application",
@@ -128,16 +121,12 @@ app.on('window-all-closed', function () {
 
 // Listen for message from core.component to either download updates or not
 ipcMain.once('update', (event, arg) => {
-  log.info('update')
+  log.info('[ipcMain] Download Update selected');
   autoUpdater.downloadUpdate();
 });
 
-ipcMain.once('later', (event, arg) => {
-  update = null;
-});
-
 ipcMain.once('relaunch', () => {
-  console.log('ipcMain relaunch emitted');
+  log.info('[ipcMain] relaunch emitted');
   app.relaunch();
   app.exit();
 });

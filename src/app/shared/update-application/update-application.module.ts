@@ -4,7 +4,7 @@ import { UpdateApplicationService } from './update-application.service';
 import { ReleaseNotesModalComponent } from './release-notes-modal/release-notes-modal.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { UpdateApplicationToastComponent } from './update-application-toast/update-application-toast.component';
-
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 
 @NgModule({
@@ -14,7 +14,8 @@ import { UpdateApplicationToastComponent } from './update-application-toast/upda
   ],
   imports: [
     CommonModule,
-    ModalModule
+    ModalModule,
+    ClipboardModule
   ],
   exports: [
     ReleaseNotesModalComponent,
