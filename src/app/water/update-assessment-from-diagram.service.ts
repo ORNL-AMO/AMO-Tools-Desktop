@@ -38,7 +38,6 @@ export class UpdateAssessmentFromDiagramService {
   async syncAssessmentToDiagram(assessment: Assessment, assessmentSettings: Settings) {
     let integratedDiagram = this.diagramIdbService.findById(assessment.diagramId);
     if (integratedDiagram && assessment.modifiedDate < integratedDiagram.modifiedDate) {
-      // console.log('=== ASSESSMENT STALE -> syncing to diagram')
       this.updateAssessmentWithDiagram(integratedDiagram, assessment, assessmentSettings);
       await firstValueFrom(this.assessmentIdbService.updateWithObservable(assessment));
     }
@@ -48,7 +47,6 @@ export class UpdateAssessmentFromDiagramService {
     this.updateAssessmentWaterComponents(diagram, assessment.water, diagram.waterDiagram.flowDiagramData.calculatedData);
     assessment.water.diagramWaterSystemFlows = setWaterUsingSystemFlows(assessment.water.waterUsingSystems, diagram.waterDiagram.flowDiagramData.edges);
     assessment.water.calculatedData = diagram.waterDiagram.flowDiagramData.calculatedData;
-    
     this.setAssessmentSettingsFromDiagram(assessment, assessmentSettings, diagram);
     await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings));
     this.waterAssessmentService.settings.next(assessmentSettings);
@@ -61,6 +59,7 @@ export class UpdateAssessmentFromDiagramService {
     settings.flowDecimalPrecision = diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision;
     assessment.water.systemBasics.electricityCost = diagram.waterDiagram.flowDiagramData.settings.electricityCost;
     assessment.water.systemBasics.conductivityUnit = diagram.waterDiagram.flowDiagramData.settings.conductivityUnit;
+    assessment.water.systemBasics.notes = diagram.waterDiagram.flowDiagramData.diagramNotes;
   }
 
   getTotalFlowValue(flows: Array<EdgeFlowData>) {
