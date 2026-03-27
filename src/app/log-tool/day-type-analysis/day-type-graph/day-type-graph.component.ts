@@ -79,9 +79,9 @@ export class DayTypeGraphComponent implements OnInit {
     graphData.forEach(entry => {
       this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.name })
     });
+    console.log(this.graph.layout, this.dayTypeGraph.nativeElement);
     if (this.dayTypeGraph) {
-      this.plotlyService.newPlot(this.dayTypeGraph.nativeElement, this.graph.data, this.graph.layout, { responsive: true });
-    }
+      this.plotlyService.newPlot(this.dayTypeGraph.nativeElement, this.graph.data, this.graph.layout, { responsive: true,  modeBarButtonsToRemove: ['select2d', 'lasso2d'],  displaylogo: false });    }
   }
 
   getGraphData(): Array<DayTypeGraphItem> {
