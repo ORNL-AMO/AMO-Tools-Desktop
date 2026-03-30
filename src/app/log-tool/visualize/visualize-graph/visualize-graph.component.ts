@@ -8,7 +8,7 @@ import { LogToolDataService } from '../../log-tool-data.service';
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import * as Plotly from 'plotly.js-dist';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 
 @Component({
     selector: 'app-visualize-graph',
@@ -144,7 +144,7 @@ export class VisualizeGraphComponent implements OnInit {
 
   plotGraph(graphObj: GraphObj) {
     this.checkLegendDisplay(graphObj);
-    this.plotlyService.newPlot(this.visualizeGraph.nativeElement, graphObj.data, graphObj.layout, graphObj.mode)
+    this.plotlyService.newPlot(this.visualizeGraph.nativeElement, graphObj.data, graphObj.layout, defaultPlotlyConfig(graphObj.mode))
       .then(chart => {
         graphObj.shouldRenderNewPlot = false;
         this.selectedGraphObj.hasChanges = false;

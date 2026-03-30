@@ -7,7 +7,7 @@ import { WaterAssessmentService } from '../../water-assessment.service';
 import { getGraphColors } from '../../../shared/helperFunctions';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 @Component({
   selector: 'app-stacked-bar-intake-flow',
   standalone: false,
@@ -128,7 +128,7 @@ export class StackedBarIntakeFlowComponent {
       responsive: this.printView ? false : true
     };
 
-    this.plotlyService.newPlot(this.intakeFlowsChart.nativeElement, chartData, layout, configOptions);
+    this.plotlyService.newPlot(this.intakeFlowsChart.nativeElement, chartData, layout, defaultPlotlyConfig(configOptions));
   }
 
 

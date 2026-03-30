@@ -4,7 +4,7 @@ import { CompressedAirAssessment, CompressedAirDayType } from '../../../../share
 import { CompressedAirAssessmentModificationResults } from '../../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { BaselineResults } from '../../../calculations/caCalculationModels';
 import { Settings } from '../../../../shared/models/settings';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
   selector: 'app-compressed-air-airflow-savings-graph',
   templateUrl: './compressed-air-airflow-savings-graph.component.html',
@@ -79,7 +79,7 @@ export class CompressedAirAirflowSavingsGraphComponent {
         responsive: true,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
+      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config));
     }
   }
 

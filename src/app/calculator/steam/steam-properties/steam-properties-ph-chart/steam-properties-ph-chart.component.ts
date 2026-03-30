@@ -7,7 +7,7 @@ import { graphColors } from '../../../../shared/graphColors';
 import { SaturatedPropertiesService, IsothermCoordinates } from '../../saturated-properties.service';
 import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 
 
 @Component({
@@ -115,9 +115,9 @@ export class SteamPropertiesPhChartComponent implements OnInit {
 
     let chartLayout = JSON.parse(JSON.stringify(this.enthalpyChart.layout));
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, this.enthalpyChart.config)
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, defaultPlotlyConfig(this.enthalpyChart.config))
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, this.enthalpyChart.config)
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, defaultPlotlyConfig(this.enthalpyChart.config))
     }
     this.save();
   }
@@ -128,9 +128,9 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     }
     let chartLayout = JSON.parse(JSON.stringify(this.enthalpyChart.layout));
     if(this.expanded){
-      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout);
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, defaultPlotlyConfig(this.enthalpyChart.config));
     }else{
-      this.plotlyService.update(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout);
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, defaultPlotlyConfig(this.enthalpyChart.config));
     }
     this.save();
   }

@@ -221,6 +221,7 @@ export class SaturatedPropertiesPhChartComponent implements OnInit, OnChanges {
   removePointTrace() {
     this.enthalpyChart.data.splice(this.enthalpyChart.data.length - 1, 1);
     this.enthalpyChart.existingPoint = false;
+    // no need, has its correct config
     let chartLayout = JSON.parse(JSON.stringify(this.enthalpyChart.layout));
     if (this.expanded) {
       this.plotlyService.update(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout);

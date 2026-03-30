@@ -15,7 +15,7 @@ import { PsatService } from "../../psat/psat.service";
 import { DecimalPipe } from "@angular/common";
 import { PlotlyService } from "angular-plotly.js";
 import { SankeyNode } from "../models/sankey";
-
+import { defaultPlotlyConfig } from "../helperFunctions";
 @Component({
     selector: 'app-psat-sankey',
     templateUrl: './psat-sankey.component.html',
@@ -256,7 +256,7 @@ export class PsatSankeyComponent implements OnInit {
       };
     }
 
-    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config).then(() => {
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config)).then(() => {
       this.addGradientElement();
       this.buildSvgArrows();
     });

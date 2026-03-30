@@ -2,10 +2,9 @@ import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { SSMT, SsmtValid } from '../../../../shared/models/steam/ssmt';
 import { SSMTLosses } from '../../../../shared/models/steam/steam-outputs';
 import { ReportGraphsService } from '../report-graphs.service';
-import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-ssmt-waterfall',
     templateUrl: './ssmt-waterfall.component.html',
@@ -116,7 +115,7 @@ export class SsmtWaterfallComponent implements OnInit {
       responsive: true
     };
 
-    this.plotlyService.newPlot(this.ssmtWaterfall.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.ssmtWaterfall.nativeElement, data, layout, defaultPlotlyConfig(configOptions));
   }
 
   getSsmtWatefallData(ssmt: SSMT): Array<{ value: number, label: string, stackTraceValue: number, color: string }> {
@@ -189,7 +188,7 @@ export class SsmtWaterfallComponent implements OnInit {
       displayModeBar: false
     };
 
-    this.plotlyService.newPlot(this.ssmtWaterfall.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.ssmtWaterfall.nativeElement, data, layout, defaultPlotlyConfig(configOptions));
   }
 
 }

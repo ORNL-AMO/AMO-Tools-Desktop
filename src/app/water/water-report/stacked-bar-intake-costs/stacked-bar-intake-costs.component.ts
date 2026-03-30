@@ -6,7 +6,7 @@ import { getGraphColors } from '../../../shared/helperFunctions';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { PlantSystemSummaryResults } from 'process-flow-lib';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 @Component({
   selector: 'app-stacked-bar-intake-costs',
   standalone: false,
@@ -147,7 +147,7 @@ export class StackedBarIntakeCostsComponent {
       responsive: this.printView ? false : true
     };
 
-    this.plotlyService.newPlot(this.intakeCostsChart.nativeElement, chartData, layout, configOptions)
+    this.plotlyService.newPlot(this.intakeCostsChart.nativeElement, chartData, layout, defaultPlotlyConfig(configOptions))
     .then(chart => {
           chart.on('plotly_legendclick', event => false);
           chart.on('plotly_legenddoubleclick', event => false);

@@ -6,6 +6,7 @@ import { graphColors } from '../../../../shared/graphColors';
 
 import { MotorPerformanceChartService, MotorPoint } from '../motor-performance-chart.service';
 import { PlotlyService } from 'angular-plotly.js';
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 
 
 @Component({
@@ -97,18 +98,18 @@ export class MotorPerformanceChartComponent implements OnInit {
     });
     this.dataPointTraces.forEach(trace => {
       traceData.push(trace);
-    })
-
+    });
     let chartLayout = JSON.parse(JSON.stringify(this.performanceChart.layout));
+    const config = defaultPlotlyConfig(this.performanceChart.config);
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, this.performanceChart.config)
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, config)
         .then(chart => {
           chart.on('plotly_click', chartData => {
             this.addSelectedPointTraces(chartData);
           });
         });
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, this.performanceChart.config)
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, config)
         .then(chart => {
           chart.on('plotly_click', chartData => {
             this.addSelectedPointTraces(chartData);

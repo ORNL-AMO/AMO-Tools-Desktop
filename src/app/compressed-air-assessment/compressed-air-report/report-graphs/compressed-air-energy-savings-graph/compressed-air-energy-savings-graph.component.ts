@@ -4,7 +4,7 @@ import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../
 import { CompressedAirAssessmentModificationResults } from '../../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { BaselineResults, DayTypeModificationResult } from '../../../calculations/caCalculationModels';
 import { CompressedAirModificationValid } from '../../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
   selector: 'app-compressed-air-energy-savings-graph',
   templateUrl: './compressed-air-energy-savings-graph.component.html',
@@ -138,7 +138,7 @@ export class CompressedAirEnergySavingsGraphComponent {
         responsive: true,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
+      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config));
     }
   }
 
@@ -236,7 +236,7 @@ export class CompressedAirEnergySavingsGraphComponent {
         responsive: true,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, config);
+      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config));
     }
   }
 

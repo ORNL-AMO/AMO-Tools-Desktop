@@ -11,7 +11,7 @@ import { CompressedAirCalculationService } from '../../../compressed-air-calcula
 import { AssessmentCo2SavingsService } from '../../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { DayTypeSetupService } from '../end-uses-form/day-type-setup-form/day-type-setup.service';
 import { EndUseEnergy, EndUseEnergyData, EndUsesFormService } from '../end-uses-form/end-uses-form.service';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
   selector: 'app-end-use-chart',
   templateUrl: './end-use-chart.component.html',
@@ -216,7 +216,7 @@ export class EndUseChartComponent implements OnInit {
       responsive: true
     };
 
-    this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions));
   }
 
   getChunkedArray(array, size) {

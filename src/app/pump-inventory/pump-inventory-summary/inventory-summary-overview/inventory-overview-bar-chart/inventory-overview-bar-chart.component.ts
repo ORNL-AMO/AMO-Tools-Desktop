@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
 import { InventorySummaryOverviewService, InventorySummary } from '../inventory-summary-overview.service';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-inventory-overview-bar-chart',
     templateUrl: './inventory-overview-bar-chart.component.html',
@@ -48,7 +48,7 @@ export class PumpInventoryOverviewBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.pumpInventoryBarChart.nativeElement, dataArray, layout, configOptions);
+      this.plotlyService.newPlot(this.pumpInventoryBarChart.nativeElement, dataArray, layout, defaultPlotlyConfig(configOptions));
     })
   }
 

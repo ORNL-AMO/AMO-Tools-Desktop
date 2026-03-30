@@ -6,7 +6,7 @@ import { SpecificSpeedService } from '../specific-speed.service';
 
 import { DataPoint, SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-specific-speed-graph',
     templateUrl: './specific-speed-graph.component.html',
@@ -107,14 +107,14 @@ export class SpecificSpeedGraphComponent implements OnInit {
     })
     let chartLayout = JSON.parse(JSON.stringify(this.specificSpeedChart.layout));
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, this.specificSpeedChart.config)
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.specificSpeedChart.config))
         .then(chart => {
           chart.on('plotly_click', (graphData) => {
             this.createDataPoint(graphData);
           });
         });
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, this.specificSpeedChart.config)
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.specificSpeedChart.config))
         .then(chart => {
           chart.on('plotly_click', (graphData) => {
             this.createDataPoint(graphData);

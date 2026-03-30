@@ -7,6 +7,7 @@ import { graphColors } from '../../../../shared/graphColors';
 import { SaturatedPropertiesService, IsobarCoordinates } from '../../saturated-properties.service';
 import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 import { PlotlyService } from 'angular-plotly.js';
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 
 @Component({
     selector: 'app-saturated-properties-chart',
@@ -92,9 +93,9 @@ export class SaturatedPropertiesChartComponent implements OnChanges {
 
     let chartLayout = JSON.parse(JSON.stringify(this.entropyChart.layout));
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.entropyChart.data, chartLayout, this.entropyChart.config)
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.entropyChart.data, chartLayout, defaultPlotlyConfig(this.entropyChart.config))
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.entropyChart.data, chartLayout, this.entropyChart.config)
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.entropyChart.data, chartLayout, defaultPlotlyConfig(this.entropyChart.config))
     }
     this.save();
   }

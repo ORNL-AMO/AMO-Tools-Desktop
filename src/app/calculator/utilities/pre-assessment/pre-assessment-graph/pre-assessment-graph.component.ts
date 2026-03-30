@@ -113,7 +113,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
       };
 
       var modebarBtns = {
-        modeBarButtonsToRemove: ['hoverClosestPie'],
+        modeBarButtonsToRemove: ['hoverClosestPie', 'select2d', 'lasso2d'],
         displaylogo: false,
         displayModeBar: true,
         responsive: true

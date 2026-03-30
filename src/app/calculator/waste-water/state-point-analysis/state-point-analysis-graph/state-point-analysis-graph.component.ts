@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { StatePointAnalysisGraphService } from '../state-point-analysis-graph.service';
 import { StatePointAnalysisOutput, StatePointAnalysisResults } from '../../../../shared/models/waste-water';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-state-point-analysis-graph',
     templateUrl: './state-point-analysis-graph.component.html',
@@ -87,9 +87,9 @@ export class StatePointAnalysisGraphComponent implements OnInit {
 
     let chartLayout = JSON.parse(JSON.stringify(this.spaGraph.layout));
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.spaGraph.data, chartLayout, this.spaGraph.config);
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.spaGraph.data, chartLayout, defaultPlotlyConfig(this.spaGraph.config));
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.spaGraph.data, chartLayout, this.spaGraph.config);
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.spaGraph.data, chartLayout, defaultPlotlyConfig(this.spaGraph.config));
     }
     this.save();
   }

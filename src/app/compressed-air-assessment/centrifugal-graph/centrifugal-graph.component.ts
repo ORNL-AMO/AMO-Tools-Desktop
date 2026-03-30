@@ -7,7 +7,7 @@ import { Settings } from '../../shared/models/settings';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { InventoryService } from '../baseline-tab-content/inventory-setup/inventory/inventory.service';
 import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
-
+import { defaultPlotlyConfig } from '../../shared/helperFunctions';
 @Component({
   selector: 'app-centrifugal-graph',
   templateUrl: './centrifugal-graph.component.html',
@@ -170,7 +170,7 @@ export class CentrifugalGraphComponent implements OnInit {
         responsive: true,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.centrifugalGraph.nativeElement, traceData, layout, config);
+      this.plotlyService.newPlot(this.centrifugalGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config));
     }
   }
 

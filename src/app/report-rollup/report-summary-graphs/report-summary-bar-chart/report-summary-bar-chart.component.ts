@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { BarChartDataItem } from '../../rollup-summary-bar-chart/rollup-summary-bar-chart.component';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 @Component({
     selector: 'app-report-summary-bar-chart',
     templateUrl: './report-summary-bar-chart.component.html',
@@ -64,13 +64,13 @@ export class ReportSummaryBarChartComponent implements OnInit {
       }
     };
     let configOptions = {
-      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+      modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'pan2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
       displaylogo: false,
       displayModeBar: true,
       responsive: true
     };
 
-    this.plotlyService.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, configOptions);
+    this.plotlyService.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, defaultPlotlyConfig(configOptions));
   }
 
   createPrintChart() {
@@ -101,7 +101,7 @@ export class ReportSummaryBarChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false,
     };
-    this.plotlyService.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, configOptions);
+    this.plotlyService.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, defaultPlotlyConfig(configOptions));
   }
 
 

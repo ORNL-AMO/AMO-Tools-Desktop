@@ -7,6 +7,7 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { PlotlyService } from 'angular-plotly.js';
 import { LogToolDataService } from '../../log-tool-data.service';
 import { truncate } from '../../../shared/helperFunctions';
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 @Component({
     selector: 'app-day-type-graph',
     templateUrl: './day-type-graph.component.html',
@@ -79,9 +80,9 @@ export class DayTypeGraphComponent implements OnInit {
     graphData.forEach(entry => {
       this.graph.data.push({ x: entry.xData, y: entry.yData, type: 'scatter', mode: 'lines+markers', marker: { color: entry.color }, name: entry.name })
     });
-    console.log(this.graph.layout, this.dayTypeGraph.nativeElement);
     if (this.dayTypeGraph) {
-      this.plotlyService.newPlot(this.dayTypeGraph.nativeElement, this.graph.data, this.graph.layout, { responsive: true,  modeBarButtonsToRemove: ['select2d', 'lasso2d'],  displaylogo: false });    }
+      this.plotlyService.newPlot(this.dayTypeGraph.nativeElement, this.graph.data, this.graph.layout, defaultPlotlyConfig({ responsive: true}));
+    }
   }
 
   getGraphData(): Array<DayTypeGraphItem> {
