@@ -3,6 +3,7 @@ const {
     ipcRenderer
 } = require("electron");
 
+// todo strings to literal types
 
 //from https://github.com/electron/electron/issues/9920#issuecomment-575839738
 // Expose protected methods that allow the renderer process to use
@@ -17,7 +18,7 @@ contextBridge.exposeInMainWorld(
             }
         },
         on: (channel, func) => {
-            let validChannels = ["release-info", "available", "error", "update-downloaded", "backup-file-path"];
+            let validChannels = ["release-info", "available", "error", "update-downloaded", "backup-file-path", "download-progress"];
             if (validChannels.includes(channel)) {
                 // Deliberately strip event as it includes `sender` 
                 ipcRenderer.on(channel, (event, ...args) => func(...args));
