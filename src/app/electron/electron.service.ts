@@ -11,6 +11,7 @@ export class ElectronService {
   updateError: BehaviorSubject<string>;
   updateDownloaded: BehaviorSubject<boolean>;
   backupFilePath: BehaviorSubject<string>;
+  downloadProgress: BehaviorSubject<DownloadProgress>;
   isElectron: boolean;
   constructor() {
 
@@ -19,6 +20,8 @@ export class ElectronService {
     this.updateError = new BehaviorSubject<string>(undefined);
     this.updateDownloaded = new BehaviorSubject<boolean>(false);
     this.backupFilePath = new BehaviorSubject<string>(undefined);
+    this.downloadProgress = new BehaviorSubject<DownloadProgress>(undefined);
+
 
     this.isElectron = window["electronAPI"]
     if (this.isElectron) {
@@ -42,15 +45,19 @@ export class ElectronService {
       console.log('[ElectronService] available', data);
       this.updateAvailable.next(true);
     });
-    window["electronAPI"].on("error", (error: string) => {
+    window["electronAPI"].on("error", (error) => {
       console.log('[ElectronService] error', error);
       this.updateError.next(error);
+    });
+     window["electronAPI"].on("download-progress", (progress: DownloadProgress) => {
+      if (progress) {
+        this.downloadProgress.next(progress);
+      }
     });
     window["electronAPI"].on("update-downloaded", (data) => {
       console.log('[ElectronService] update-downloaded', data);
       this.updateDownloaded.next(true);
     });
-
     window["electronAPI"].on("backup-file-path", (filePath) => {
       if (filePath) {
         this.backupFilePath.next(filePath);
@@ -61,6 +68,7 @@ export class ElectronService {
 
   //Used to tell electron that app is ready
   //does nothing when in browser
+  // todo don't really need params here?
   sendAppReady(data: any): void {
     if (!window["electronAPI"]) {
       console.log('[ElectronService] Electron API not found, cannot send app ready signal');
@@ -131,3 +139,4 @@ export class ElectronService {
 }
 
 export interface ReleaseData { releaseName: string, releaseNotes: string, version: string}
+export interface DownloadProgress { percent: number, mbPerSecond: number, transferred: number, total: number }
