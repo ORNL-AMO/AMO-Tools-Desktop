@@ -10,6 +10,7 @@ import { SummaryView } from '../services/executive-summary-results.service';
 })
 export class ResultsPanelComponent {
   private readonly processCoolingUIService = inject(ProcessCoolingUiService);
+  readonly inventoryTableView = 'results-panel';
   selectedPanelTab: PanelTab = 'help';
 
   mainView: Signal<string> = this.processCoolingUIService.mainView;
@@ -26,7 +27,6 @@ export class ResultsPanelComponent {
   resultsSummaryView: SummaryView = 'baseline-panel';
 
   constructor() {
-    this.processCoolingUIService.inventoryTableViewSignal.set('results-panel');
     
     effect(() => {
       const setupView = this.setupView();

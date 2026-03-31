@@ -17,7 +17,9 @@
             <div class="alert alert-info my-2 w-100 small">
                 The chillers below will have their compressor motors upgraded to VSDs.
             </div>
-            <app-inventory-table class="w-100"></app-inventory-table>
+            <app-inventory-table class="w-100" 
+                [filterInventoryParams]="inventoryTableFilterParams" 
+                [tableView]="inventoryTableView"></app-inventory-table>
         </div>
     </form>
 }

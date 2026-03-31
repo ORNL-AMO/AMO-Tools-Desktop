@@ -5,7 +5,7 @@ import { ExploreOpportunitiesFormService, InstallVSDForm } from '../../services/
 import { ModificationService } from '../../services/modification.service';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
-import { InstallVSDOnCentrifugalCompressor, Modification } from '../../../shared/models/process-cooling-assessment';
+import { CompressorChillerTypeEnum, InstallVSDOnCentrifugalCompressor, Modification } from '../../../shared/models/process-cooling-assessment';
 import { EEM_LABELS } from '../../constants/process-cooling-constants';
 
 @Component({
@@ -24,12 +24,12 @@ export class InstallVSDComponent implements OnInit {
     readonly settings = this.processCoolingAssessmentService.settingsSignal;
     useOpportunity: boolean = false;
     form: FormGroup<InstallVSDForm>;
-
     EEM_LABELS = EEM_LABELS;
 
-    constructor() { 
-        this.processCoolingUiService.inventoryTableViewSignal.set('install-vsd');
+    inventoryTableFilterParams = {
+        chillerType: CompressorChillerTypeEnum.CENTRIFUGAL
     }
+    inventoryTableView = 'eem-modification';
 
     ngOnInit(): void {
         const baselineValues: InstallVSDOnCentrifugalCompressor = this.modificationService.getBaselineExploreOppsValues().installVSDOnCentrifugalCompressors;

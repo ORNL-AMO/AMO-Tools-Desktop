@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, WritableSignal } from '@angular/core';
+import { Component, DestroyRef, inject, input, InputSignal, WritableSignal } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { ChillerInventoryItem, CompressorChillerTypeEnum } from '../../../shared/models/process-cooling-assessment';
@@ -24,19 +24,14 @@ export class InventoryTableComponent {
   private modalDialogService: ModalDialogService = inject(ModalDialogService);
   private destroyRef = inject(DestroyRef);
 
+  tableView: InputSignal<InventoryTableView> = input('results-panel');
+  filterInventoryParams: InputSignal<FilterChillerInventoryParams> = input(null);
+
   inventoryUIState$: Observable<InventoryState>;
   inventoryValidState: WritableSignal<InventoryValidState> = this.inventoryService.inventoryValidState;
   settings: Settings;
-  tableView: InventoryTableView = this.processCoolingUIService.inventoryTableViewSignal();
-
-  filterInventoryParams: FilterChillerInventoryParams;
   
   ngOnInit(): void {
-    if (this.tableView === 'install-vsd') {
-      this.filterInventoryParams = {
-        chillerType: CompressorChillerTypeEnum.CENTRIFUGAL
-      }
-    }
     this.inventoryUIState$ = combineLatest({
       processCooling: this.processCoolingService.processCooling$,
       selectedChiller: this.inventoryService.selectedChiller$,
