@@ -1,6 +1,6 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
-import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable({
@@ -42,20 +42,21 @@ export class ChillerInventoryService {
     });
   }
 
-  getChillerForm(chiller: ChillerInventoryItem): UntypedFormGroup {
-    let form: UntypedFormGroup = this.formBuilder.group({
+  getChillerForm(chiller: ChillerInventoryItem): FormGroup<ChillerInventoryForm> {
+    let form: FormGroup<ChillerInventoryForm> = this.formBuilder.group({
       name: [chiller.name, Validators.required],
       description: [chiller.description],
       isFullLoadEfficiencyKnown: [chiller.isFullLoadEfficiencyKnown],
       chillerType: [chiller.chillerType],
       capacity: [chiller.capacity],
       fullLoadEfficiency: [chiller.fullLoadEfficiency, chiller.isFullLoadEfficiencyKnown ? Validators.required : null],
-      age: [chiller.age]
+      age: [chiller.age],
+      refrigerantType: [chiller.refrigerantType]
     });
     return form;
   }
 
-  patchChillerForm(form: UntypedFormGroup, chiller: ChillerInventoryItem) {
+  patchChillerForm(form: FormGroup<ChillerInventoryForm>, chiller: ChillerInventoryItem) {
     form.patchValue({
       name: chiller.name,
       description: chiller.description,
@@ -63,7 +64,8 @@ export class ChillerInventoryService {
       chillerType: chiller.chillerType,
       capacity: chiller.capacity,
       fullLoadEfficiency: chiller.fullLoadEfficiency,
-      age: chiller.age
+      age: chiller.age,
+      refrigerantType: chiller.refrigerantType
     }, { emitEvent: false });
   }
 
@@ -76,6 +78,7 @@ export class ChillerInventoryService {
       capacity: formValue.capacity,
       fullLoadEfficiency: formValue.isFullLoadEfficiencyKnown ? formValue.fullLoadEfficiency : null,
       age: formValue.age,
+      refrigerantType: formValue.refrigerantType,
       modifiedDate: new Date()
     };
   }
@@ -113,7 +116,7 @@ export class ChillerInventoryService {
 
 
   isValidChiller(chiller: ChillerInventoryItem): boolean {
-    let chillerForm: UntypedFormGroup = this.getChillerForm(chiller);
+    let chillerForm: FormGroup<ChillerInventoryForm> = this.getChillerForm(chiller);
     return chillerForm.valid;
   }
 
@@ -128,6 +131,7 @@ export interface ChillerInventoryForm {
   capacity: FormControl<number>;
   fullLoadEfficiency: FormControl<number>;
   age: FormControl<number>;
+  refrigerantType: FormControl<number>;
 }
 
 export interface InventoryValidState {

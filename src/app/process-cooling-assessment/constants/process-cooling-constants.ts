@@ -1,6 +1,6 @@
 
 import { getNewIdString } from "../../shared/helperFunctions";
-import { ChillerInventoryItem, CompressorChillerTypeEnum, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../../shared/models/process-cooling-assessment";
+import { ChillerInventoryItem, CompressorChillerTypeEnum, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, RefrigerantType, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../../shared/models/process-cooling-assessment";
 import { Settings } from "../../shared/models/settings";
 
 export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -41,6 +41,17 @@ export const getTowerTypes = () => {
     ] as const;
 };
 
+export const getRefrigerantTypes = () => {
+    return [
+        { value: RefrigerantType.R11, name: Refrigerants[RefrigerantType.R11] },
+        { value: RefrigerantType.R123, name: Refrigerants[RefrigerantType.R123] },
+        { value: RefrigerantType.R12, name: Refrigerants[RefrigerantType.R12] },
+        { value: RefrigerantType.R134a, name: Refrigerants[RefrigerantType.R134a] },
+        { value: RefrigerantType.R22, name: Refrigerants[RefrigerantType.R22] },
+        { value: RefrigerantType.R717, name: Refrigerants[RefrigerantType.R717] },
+    ] as const;
+}
+
 export const getChillerTypes = () => {
   return [
     {value: CompressorChillerTypeEnum.CENTRIFUGAL, name: CompressorChillerTypes[CompressorChillerTypeEnum.CENTRIFUGAL]},
@@ -67,6 +78,16 @@ export const TowerTypes =
     [TowerType.VariableSpeed]: 'Tower With Variable Speed Motor(s)',
 }
 
+export const Refrigerants = {
+
+  [RefrigerantType.R11]: 'R11',
+  [RefrigerantType.R123]: 'R123',
+  [RefrigerantType.R12]: 'R12',
+  [RefrigerantType.R134a]: 'R134a',
+  [RefrigerantType.R22]: 'R22',
+  [RefrigerantType.R717]: 'R717',
+};
+
 export const EEM_LABELS = {
   increaseChilledWaterTemp: 'Increase Chilled Water Temperature',
   decreaseCondenserWaterTemp: 'Decrease Condenser Water Temperature',
@@ -92,6 +113,7 @@ export const getDefaultInventoryItem = (): ChillerInventoryItem => {
         age: 10,
         installVSD: false,
         useARIloadScheduleByMonthchedule: false,
+        refrigerantType: RefrigerantType.R11,
         useSameMonthlyLoading: true,
         loadScheduleAllMonths: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0],
         loadScheduleByMonth: Array(12).fill(Array(11).fill(0)),

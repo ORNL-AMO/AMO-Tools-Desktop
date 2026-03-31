@@ -367,6 +367,8 @@ export interface ChillerInventoryItem {
     // * installVSD is Modification/EEM only
     installVSD: boolean;
     useARIloadScheduleByMonthchedule: boolean;
+    refrigerantType: number;
+    proposedRefrigerantType?: number;
     loadScheduleByMonth?: number[][]; // * This is hours per percent load for each month
     loadScheduleAllMonths?: number[]; 
     useSameMonthlyLoading: boolean;
@@ -416,6 +418,15 @@ export enum TowerType {
     ThreeCellOneSpeed = 4,
     ThreeCellTwoSpeed = 5,
     VariableSpeed = 6
+}
+
+export enum RefrigerantType {
+    R11 = 0,
+    R123 = 1,
+    R12 = 2,
+    R134a = 3,
+    R22 = 4,
+    R717 = 5,
 }
 
 

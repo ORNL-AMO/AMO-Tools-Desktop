@@ -467,7 +467,7 @@ export class SuiteApiHelperService {
       case 'R_717': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_717;
     }
   }
-
+  
   getProcessCoolingCoolingAirSourceEnum(loc: number | string) {
     if (loc === 0 || loc === 'Inside') return this.toolsSuiteApiService.ToolsSuiteModule.ACSourceLocation.Inside;
     if (loc === 1 || loc === 'Outside') return this.toolsSuiteApiService.ToolsSuiteModule.ACSourceLocation.Outside;
