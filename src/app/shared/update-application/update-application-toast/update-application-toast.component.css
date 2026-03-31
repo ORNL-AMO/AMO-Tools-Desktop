@@ -1,3 +1,24 @@
+/* Custom progress bar for Bootstrap 4 compatibility */
+.custom-progress-bar-container {
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.custom-progress-bar {
+    background: repeating-linear-gradient(135deg, var(--measur-brand), var(--measur-brand) 10px, #104d2a 10px, #104d2a 20px);
+    color: #fff;
+    font-weight: 500;
+    font-size: .75rem;
+    line-height: 20px;
+    transition: width 0.6s ease;
+    height: 100%;
+    border-radius: 0.25rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
 .error-details-summary {
     cursor: pointer;
     font-weight: 500;

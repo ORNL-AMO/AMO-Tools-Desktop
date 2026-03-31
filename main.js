@@ -8,13 +8,17 @@ const jetpack = require('fs-jetpack');
 // * If left enabled, causes flashing on app first rendering. 
 // * Likely caused by some dependency of the process-flow-diagram
 app.disableHardwareAcceleration();
-app.allowRendererProcessReuse = false
+
+app.allowRendererProcessReuse = false;
+
 autoUpdater.logger = log;
-// autoUpdater.logger.transports.file.level = 'info';
-autoUpdater.logger.transports.file.level = 'debug';
+autoUpdater.logger.transports.file.level = 'info';
 autoUpdater.forceDevUpdateConfig = true;
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = false;
+
+// * signing process does not currently support differential downloads - block maps would need to be regenerated and signed
+autoUpdater.disableDifferentialDownload = true;
 
 let win = null;
 
@@ -110,13 +114,9 @@ app.whenReady().then(() => {
       });
 
       autoUpdater.on('download-progress', (progressObj) => {
-        let log_message = "Download speed: " + progressObj.bytesPerSecond;
-        log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
-        log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
         coreCompEvent.sender.send('download-progress', {
           percent: progressObj.percent,
           mbPerSecond: (progressObj.bytesPerSecond / 1000000).toFixed(2),
-          // todo what is transferred in? bytes? mb?
           transferred: progressObj.transferred,
           total: progressObj.total
         });

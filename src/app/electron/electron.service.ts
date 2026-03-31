@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MeasurBackupFile } from '../shared/backup-data.service';
 
@@ -13,7 +13,7 @@ export class ElectronService {
   backupFilePath: BehaviorSubject<string>;
   downloadProgress: BehaviorSubject<DownloadProgress>;
   isElectron: boolean;
-  constructor() {
+  constructor(private ngZone: NgZone) {
 
     this.updateAvailable = new BehaviorSubject<boolean>(false);
     this.releaseData = new BehaviorSubject<ReleaseData>(undefined);
@@ -21,7 +21,6 @@ export class ElectronService {
     this.updateDownloaded = new BehaviorSubject<boolean>(false);
     this.backupFilePath = new BehaviorSubject<string>(undefined);
     this.downloadProgress = new BehaviorSubject<DownloadProgress>(undefined);
-
 
     this.isElectron = window["electronAPI"]
     if (this.isElectron) {
@@ -31,36 +30,44 @@ export class ElectronService {
     }
   }
 
-  //listens for messages from electron about updates
+  // ! next() calls will not trigger change detection unless called inside of Angular zone.
   listen(): void {
     if (!window["electronAPI"]) {
       console.log('[ElectronService] Electron API not found, cannot listen for updates');
       return;
     }
-    window["electronAPI"].on("release-info", (data: ReleaseData) => {
-      console.log('[ElectronService] release-info', data);
-      this.releaseData.next(data);
-    });
     window["electronAPI"].on("available", (data) => {
-      console.log('[ElectronService] available', data);
-      this.updateAvailable.next(true);
+      this.ngZone.run(() => {
+        console.log('[ElectronService] available', data);
+        this.updateAvailable.next(true);
+        this.releaseData.next(data);
+      });
     });
     window["electronAPI"].on("error", (error) => {
-      console.log('[ElectronService] error', error);
-      this.updateError.next(error);
+      this.ngZone.run(() => {
+        console.log('[ElectronService] error', error);
+        this.updateError.next(error);
+      });
     });
      window["electronAPI"].on("download-progress", (progress: DownloadProgress) => {
       if (progress) {
-        this.downloadProgress.next(progress);
+        this.ngZone.run(() => {
+          console.log('[ElectronService] download-progress', progress);
+          this.downloadProgress.next(progress);
+        });
       }
     });
     window["electronAPI"].on("update-downloaded", (data) => {
-      console.log('[ElectronService] update-downloaded', data);
-      this.updateDownloaded.next(true);
+      this.ngZone.run(() => {
+        console.log('[ElectronService] update-downloaded', data);
+        this.updateDownloaded.next(true);
+      });
     });
     window["electronAPI"].on("backup-file-path", (filePath) => {
       if (filePath) {
-        this.backupFilePath.next(filePath);
+        this.ngZone.run(() => {
+          this.backupFilePath.next(filePath);
+        });
       }
     });
 
