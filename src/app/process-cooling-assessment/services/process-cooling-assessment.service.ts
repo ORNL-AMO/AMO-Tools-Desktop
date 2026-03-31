@@ -160,6 +160,7 @@ export class ProcessCoolingAssessmentService {
       }
       return chiller;
     });
+    this.inventoryService.setSelectedChiller(updatedChiller);
     this.setProcessCooling(updatedProcessCooling);
   }
 

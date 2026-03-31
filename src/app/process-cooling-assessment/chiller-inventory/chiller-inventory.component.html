@@ -9,7 +9,7 @@
             <!-- <a class="click-link small pull-right" (click)="openChillerModal()">Set Data From Existing Chiller</a> -->
 
             <div class="form-group" [ngClass]="{'invalid': form.controls.name.invalid}">
-                <label for="{{controlIds.towerSizeMetric}}">Chiller Name</label>
+                <label for="{{controlIds.name}}">Chiller Name</label>
                 <input type="text" class="form-control" name="name" formControlName="name"
                     (focus)="focusField('chiller-name')" />
                 <app-form-control-errors [control]="form.controls.name"></app-form-control-errors>
