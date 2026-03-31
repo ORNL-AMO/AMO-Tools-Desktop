@@ -70,6 +70,7 @@
         </div>
     </form>
 
+    @if (showOperationalImpacts()) {
     <div class="header mr-2 ml-2">
         <h3>Carbon Emissions</h3>
         <br>
@@ -80,6 +81,7 @@
             (emitCurrentField)="focusField($event)"
             (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)"></app-assessment-co2-savings>
     </div>
+    }
 </div>
 
 <app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"

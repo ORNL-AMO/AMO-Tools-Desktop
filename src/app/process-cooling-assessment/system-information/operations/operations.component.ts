@@ -13,6 +13,7 @@ import { Settings } from "../../../shared/models/settings";
 import { ProcessCoolingUiService } from "../../services/process-cooling-ui.service";
 import { FormControlIds, generateFormControlIds } from "../../../shared/helperFunctions";
 import { PROCESS_COOLING_UNITS } from "../../constants/process-cooling-units";
+import { FeatureFlagService } from "../../../shared/feature-flag.service";
 
 
 // * outline changes from typical MEASUR patterns
@@ -28,24 +29,26 @@ export class OperationsComponent {
   private processCoolingUiService = inject(ProcessCoolingUiService);
   private systemInformationFormService = inject(SystemInformationFormService);
   private destroyRef = inject(DestroyRef);
-
+  private featureFlagService = inject(FeatureFlagService);
+  
   @ViewChild('wrapperElement', { static: false }) wrapperElement: ElementRef;
   // * prefer resizeObserver over onResize - only triggers on element change, not viewport
   // todo investigate, resize may no longer be needed with overhauled styling
   private resizeObserver: ResizeObserver;
-
+  
   // * use typed forms - get intellisense on properties
   form: FormGroup<OperationsForm>;
   co2SavingsData: Co2SavingsData;
 
   TEMPERATURE_HTML = TEMPERATURE_HTML;
   PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
-
+  
   showOperatingHoursModal: boolean;
   condenserCoolingMethods = getCondenserCoolingMethods();
   controlIds: FormControlIds<OperationsForm>;
   formWidth: number = 0;
-
+  
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
 
