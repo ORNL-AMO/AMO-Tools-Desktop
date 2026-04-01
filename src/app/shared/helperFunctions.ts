@@ -1,6 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { FlatColors, graphColors } from './graphColors';
+import { SimpleChart } from './models/plotting';
 
 export function copyObject(object) {
     return cloneDeep(object);
@@ -43,4 +44,17 @@ export const getGraphColors = (): Array<string> => {
 export function getRandomFlatColor(): string {
     let randomIndex = Math.floor(Math.random() * FlatColors.length);
     return FlatColors[randomIndex];
+}
+
+
+// Returns a Plotly config object with base options, merging any provided config
+export function defaultPlotlyConfig(config?: Partial<SimpleChart['config']>): Partial<SimpleChart['config']> {
+    const mergedConfig = {
+        modeBarButtonsToRemove: ['select2d', 'lasso2d'],
+        displaylogo: false,
+        displayModeBar: true,
+        responsive: true,
+        ...config
+    };
+    return mergedConfig;
 }

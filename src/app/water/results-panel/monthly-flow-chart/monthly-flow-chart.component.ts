@@ -4,7 +4,7 @@ import { PlotlyService } from 'angular-plotly.js';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { Subscription } from 'rxjs';
 import { DischargeOutlet, IntakeSource, WaterAssessment, WaterProcessComponentType } from 'process-flow-lib';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 @Component({
   selector: 'app-monthly-flow-chart',
   standalone: false,
@@ -113,6 +113,6 @@ export class MonthlyFlowChartComponent {
       displaylogo: false
     }
 
-    this.plotlyService.newPlot(this.monthlyFlowChart.nativeElement, this.plantMonthlyFlowTraces, layout, config)
+    this.plotlyService.newPlot(this.monthlyFlowChart.nativeElement, this.plantMonthlyFlowTraces, layout, defaultPlotlyConfig(config))
   }
 }

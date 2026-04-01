@@ -1,4 +1,4 @@
-import { Component, DestroyRef, ElementRef, inject, Input, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, inject, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
@@ -6,7 +6,7 @@ import { PrintOptionsMenuService } from '../../../shared/print-options-menu/prin
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { sortTrueCostReport, SystemTrueCostData } from 'process-flow-lib';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 @Component({
   selector: 'app-system-true-cost-bar',
   standalone: false,
@@ -118,7 +118,7 @@ export class SystemTrueCostBarComponent {
         displayModeBar: true,
         responsive: this.printView? false : true
       };
-      this.plotlyService.newPlot(this.systemTrueCostBarChart.nativeElement, chartData, layout, configOptions);  
+      this.plotlyService.newPlot(this.systemTrueCostBarChart.nativeElement, chartData, layout, defaultPlotlyConfig(configOptions));  
   }
 
 

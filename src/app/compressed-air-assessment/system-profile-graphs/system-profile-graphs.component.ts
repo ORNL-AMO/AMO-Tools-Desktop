@@ -12,7 +12,7 @@ import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings
 import { CompressedAirModifiedDayTypeProfileSummary } from '../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
 import { ExploreOpportunitiesService } from '../assessment-tab-content/explore-opportunities/explore-opportunities.service';
 import * as Plotly from 'plotly.js-dist';
-
+import { defaultPlotlyConfig } from '../../shared/helperFunctions';
 @Component({
   selector: 'app-system-profile-graphs',
   templateUrl: './system-profile-graphs.component.html',
@@ -374,7 +374,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let peakTrace = this.getPeakLineTrace(xData, peakAirflow, 'Peak Airflow');
       traceData.push(peakTrace);
 
-      this.plotlyService.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
+      this.plotlyService.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config)).then(chart => {
         this.updateHoverPositionData(chart, 'systemCapacityGraph');
         this.updateLayout(chart, this.systemCapacityGraph);
       });

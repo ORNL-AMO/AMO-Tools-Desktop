@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { TreasureHuntCo2EmissionsResults, TreasureHuntResults, UtilityUsageData } from '../../../../shared/models/treasure-hunt';
+import { TreasureHuntResults, UtilityUsageData } from '../../../../shared/models/treasure-hunt';
 import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-cost-pie-chart',
     templateUrl: './cost-pie-chart.component.html',
@@ -81,7 +81,7 @@ export class CostPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
   }
 
 
@@ -119,7 +119,7 @@ export class CostPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false,
     };
-    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
   }
 
 

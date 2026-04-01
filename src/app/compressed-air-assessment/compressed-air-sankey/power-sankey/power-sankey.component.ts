@@ -13,7 +13,7 @@ import { CompressedAirAssessmentBaselineResults } from '../../calculations/Compr
 import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { DayTypeSetupService } from '../../baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/day-type-setup.service';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 @Component({
   selector: 'app-power-sankey',
   templateUrl: './power-sankey.component.html',
@@ -253,7 +253,7 @@ export class PowerSankeyComponent implements OnInit {
       config.responsive = false
     }
 
-    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config))
       .then(chart => {
         this.addGradientElement();
         this.buildSvgArrows();

@@ -4,7 +4,7 @@ import { ReportGraphsService } from '../report-graphs.service';
 import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-ssmt-pie-chart',
     templateUrl: './ssmt-pie-chart.component.html',
@@ -94,7 +94,7 @@ export class SsmtPieChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
+      this.plotlyService.newPlot(this.ssmtPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
     } else {
       this.noData = true;
       this.cd.detectChanges();
@@ -147,7 +147,7 @@ export class SsmtPieChartComponent implements OnInit {
         displaylogo: false,
         displayModeBar: false
       };
-      this.plotlyService.newPlot(this.ssmtPieChart.nativeElement, data, layout, modebarBtns);
+      this.plotlyService.newPlot(this.ssmtPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
     } else {
       this.noData = true;
       this.cd.detectChanges();

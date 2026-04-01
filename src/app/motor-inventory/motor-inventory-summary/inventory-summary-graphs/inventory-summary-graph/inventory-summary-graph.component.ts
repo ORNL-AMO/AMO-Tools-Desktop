@@ -3,7 +3,7 @@ import { InventorySummaryGraphsService } from '../inventory-summary-graphs.servi
 import { MotorInventoryService } from '../../../motor-inventory.service';
 import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-inventory-summary-graph',
     templateUrl: './inventory-summary-graph.component.html',
@@ -106,7 +106,7 @@ export class InventorySummaryGraphComponent implements OnInit {
 
         let config = { responsive: true }
         if (this.visualizeChart) {
-          this.plotlyService.newPlot(this.visualizeChart.nativeElement, data, layout, config);
+          this.plotlyService.newPlot(this.visualizeChart.nativeElement, data, layout, defaultPlotlyConfig(config));
         }
       }
     });

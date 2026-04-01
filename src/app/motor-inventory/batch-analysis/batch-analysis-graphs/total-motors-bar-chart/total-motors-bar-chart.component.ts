@@ -3,7 +3,7 @@ import { BatchAnalysisService, BatchAnalysisSettings, BatchAnalysisResults } fro
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-total-motors-bar-chart',
     templateUrl: './total-motors-bar-chart.component.html',
@@ -52,7 +52,7 @@ export class TotalMotorsBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.barChart.nativeElement, [data], layout, configOptions);
+      this.plotlyService.newPlot(this.barChart.nativeElement, [data], layout, defaultPlotlyConfig(configOptions));
     });
   }
 

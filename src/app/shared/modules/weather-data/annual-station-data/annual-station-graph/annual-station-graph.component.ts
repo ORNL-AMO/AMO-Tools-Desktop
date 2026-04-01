@@ -1,8 +1,7 @@
-import { Component, Input, ViewChild, ElementRef, SimpleChanges, inject } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, inject } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
-import { AnnualStationDataSummary } from '../annual-station-data.component';
 import { WeatherDataPoint } from '../../../../weather-api.service';
-
+import { defaultPlotlyConfig } from '../../../../../shared/helperFunctions';
 @Component({
     selector: 'app-annual-station-graph',
     templateUrl: './annual-station-graph.component.html',
@@ -92,7 +91,7 @@ export class AnnualStationGraphComponent {
                 displaylogo: false,
                 responsive: true,
             };
-            this.plotlyService.newPlot(this.annualDataChart.nativeElement, traceData, layout, config);
+            this.plotlyService.newPlot(this.annualDataChart.nativeElement, traceData, layout, defaultPlotlyConfig(config));
         }
     }
 

@@ -3,6 +3,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { WasteWaterAnalysisService } from '../../waste-water-analysis.service';
 import { Settings } from '../../../../shared/models/settings'; 
 import { PlotlyService } from 'angular-plotly.js';
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-energy-analysis-bar-chart',
     templateUrl: './energy-analysis-bar-chart.component.html',
@@ -62,7 +63,7 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
       displayModeBar: !this.printView,
       responsive: true,
     };
-    this.plotlyService.newPlot(this.analysisBarChart.nativeElement, traceData, layout, configOptions);
+    this.plotlyService.newPlot(this.analysisBarChart.nativeElement, traceData, layout, defaultPlotlyConfig(configOptions));
   }
 
   getEnergyCostData() {
