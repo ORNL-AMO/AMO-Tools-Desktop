@@ -94,7 +94,7 @@ export class ProcessCoolingSuiteApiService {
 
     this.setChillerDataResultMapping(assessment);
 
-    const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
+    const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary, suiteModificationArgs);
     const airCooledSystemInputInstance = this._createAirCooledSystemInput(assessment.systemInformation.airCooledSystemInput, assessment.systemInformation.operations);
     const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, airCooledSystemInputInstance, assessment, weatherData);
 
@@ -219,7 +219,7 @@ export class ProcessCoolingSuiteApiService {
       const chillerMonthlyLoading = this.suiteApiHelperService.returnDoubleVector2d(loadSchedule);
       let chiller;
 
-      if (suiteModificationArgs?.changeRefrig && input.proposedRefrigerantType != null && input.proposedRefrigerantType != null) {
+      if (suiteModificationArgs?.changeRefrig && input.proposedRefrigerantType != null && input.proposedRefrigerantType != undefined) {
         const currentRefrigEnum = this.suiteApiHelperService.getProcessCoolingRefrigerantTypeEnum(input.refrigerantType);
         const proposedRefrigEnum = this.suiteApiHelperService.getProcessCoolingRefrigerantTypeEnum(input.proposedRefrigerantType);
 
