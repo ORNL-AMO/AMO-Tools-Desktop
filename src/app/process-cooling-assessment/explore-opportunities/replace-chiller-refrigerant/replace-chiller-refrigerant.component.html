@@ -1,0 +1,43 @@
+<div>
+    <label class="group-label" for="useReplaceChillerRefrigerant">
+        <input class="pc-checkbox" type="checkbox"
+            id="useReplaceChillerRefrigerant"
+            (focus)="focusField('useReplaceChillerRefrigerant')"
+            (change)="setUseOpportunity()"
+            [(ngModel)]="useOpportunity" />
+        <span class="ml-2">{{ EEM_LABELS.replaceChillerRefrigerant }}</span>
+    </label>
+</div>
+
+@if(useOpportunity) {
+    <div class="alert alert-info my-2 w-100 small">
+        Select a chiller from the table to set its proposed refrigerant.
+    </div>
+<div class="d-flex mt-3 explore-opps-item">
+    <div class="w-50 pr-3">
+        <app-inventory-table [tableView]="inventoryTableView"></app-inventory-table>
+    </div>
+
+    <div class="w-50 px-3">
+        @if(selectedChiller) {
+        <p class="font-weight-bold mb-1 small">{{ selectedChiller.name }}</p>
+        <div class="form-group mb-1">
+            <label for="currentRefrigerant">Current Refrigerant</label>
+            <input type="text" id="currentRefrigerant" class="form-control"
+                [value]="Refrigerants[selectedChiller.refrigerantType]"
+                readonly disabled>
+        </div>
+        <div class="form-group mb-1" [formGroup]="form">
+            <label for="proposedRefrigerant">Proposed Refrigerant</label>
+            <select id="proposedRefrigerant" class="form-control"
+                formControlName="proposedRefrigerantType"
+                (focus)="focusField('proposedRefrigerant')">
+                <option [ngValue]="null">None</option>
+                <option *ngFor="let type of refrigerantTypes" [ngValue]="type.value">{{ type.name }}</option>
+            </select>
+        </div>
+        } 
+    </div>
+
+</div>
+}

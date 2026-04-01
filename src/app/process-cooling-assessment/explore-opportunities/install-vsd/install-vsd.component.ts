@@ -29,7 +29,9 @@ export class InstallVSDComponent implements OnInit {
     inventoryTableFilterParams = {
         chillerType: CompressorChillerTypeEnum.CENTRIFUGAL
     }
-    inventoryTableView = 'eem-modification';
+    inventoryTableView = {
+        parent: 'eem-modification'
+    };
 
     ngOnInit(): void {
         const baselineValues: InstallVSDOnCentrifugalCompressor = this.modificationService.getBaselineExploreOppsValues().installVSDOnCentrifugalCompressors;

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ProcessCoolingSuiteApiService } from '../../tools-suite-api/process-cooling-suite-api.service';
+import { ProcessCoolingSuiteApiService, SuiteModificationArgs } from '../../tools-suite-api/process-cooling-suite-api.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
 import { combineLatest, map, Observable } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
@@ -42,7 +42,7 @@ export class ProcessCoolingResultsService {
         results = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment);
         results.id = modification.id;
       }
-      console.log('[ProcessCoolingResultsService] selectedModificationResults$ results:', results);
+      // console.log('[ProcessCoolingResultsService] selectedModificationResults$ results:', results);
       return results;
     })
   );
@@ -56,8 +56,11 @@ export class ProcessCoolingResultsService {
           const isValid = !this.modificationService.invalidModificationIds().includes(modification.id);
           console.log(`[ProcessCoolingResultsService] modification ${modification.name} isValid:`, isValid);
           if (isValid) {
+            const suiteModificationArgs: SuiteModificationArgs = {
+              changeRefrig: modification.replaceChillerRefrigerant?.useOpportunity ?? false
+            };
             const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(modification);
-            let results: ProcessCoolingResults = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment);
+            let results: ProcessCoolingResults = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment, suiteModificationArgs);
             results.id = modification.id;
             return results;
           } else {
@@ -77,7 +80,7 @@ export class ProcessCoolingResultsService {
    * @param processCoolingAssessment 
    * @returns Baseline or Modification results
    */
-  getProcessCoolingSuiteResults(processCoolingAssessment: ProcessCoolingAssessment): ProcessCoolingResults {
+  getProcessCoolingSuiteResults(processCoolingAssessment: ProcessCoolingAssessment, suiteModificationArgs?: SuiteModificationArgs): ProcessCoolingResults {
     console.log('[ProcessCoolingResultsService]  processCoolingAssessment:', processCoolingAssessment);
     let results: ProcessCoolingResults;
     const weatherData: WeatherContextData = this.processCoolingWeatherContextService.getWeatherData();
@@ -85,9 +88,9 @@ export class ProcessCoolingResultsService {
     if (isValidWeatherData) {
       const convertedWeatherDataInput = this.convertProcessCoolingService.convertWeatherDataForSuiteApi(weatherData, this.processCoolingAssessmentService.settingsSignal());
       if (processCoolingAssessment.systemInformation.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
-        results = this.suiteApi.getWaterCooledResults(processCoolingAssessment, convertedWeatherDataInput);
+        results = this.suiteApi.getWaterCooledResults(processCoolingAssessment, convertedWeatherDataInput, suiteModificationArgs);
       } else {
-        results = this.suiteApi.getAirCooledResults(processCoolingAssessment, convertedWeatherDataInput);
+        results = this.suiteApi.getAirCooledResults(processCoolingAssessment, convertedWeatherDataInput, suiteModificationArgs);
       }
     }
     // console.log('[ProcessCoolingResultsService] getProcessCoolingSuiteResults results:', results);

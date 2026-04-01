@@ -300,11 +300,9 @@ export class ModificationService {
         usesFreeCooling: baselineValues.useFreeCooling.usesFreeCooling,
         isHEXRequired: baselineValues.useFreeCooling.isHEXRequired,
         HEXApproachTemp: baselineValues.useFreeCooling.HEXApproachTemp,
-        useOpportunity: false,
+        useOpportunity: false,    
       },
-      replaceRefrigerant: {
-        currentRefrigerant: undefined,
-        newRefrigerant: undefined,
+      replaceChillerRefrigerant: {
         useOpportunity: false,
       },
       installVSDOnCentrifugalCompressors: {
@@ -388,10 +386,14 @@ export class ModificationService {
     }
 
     if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
+      // todo unimplemented - choose which chillers have vsd applied
       chillerInventory = chillerInventory.map(chiller =>
         chiller.chillerType === CompressorChillerTypeEnum.CENTRIFUGAL ? { ...chiller, installVSD: true } : chiller
       );
     }
+
+    // * modification.replaceChillerRefrigerant isn't like the other EEMs.
+    // * this EEM will modify chiller inventory directly and use suiteModificationArgs for differing suite calculation
 
     modifiedProcessCoolingAssessment.systemInformation = systemInformation;
     modifiedProcessCoolingAssessment.inventory = chillerInventory;
@@ -432,9 +434,8 @@ export class ModificationService {
         currentChillerId: '',
         newChiller: {} as ChillerInventoryItem,
       },
-      replaceRefrigerant: {
-        currentRefrigerant: undefined,
-        newRefrigerant: undefined,
+      replaceChillerRefrigerant: {
+        useOpportunity: false,
       },
       installVSDOnCentrifugalCompressors: {
         installOnAll: false,
@@ -468,8 +469,8 @@ export class ModificationService {
     if (modification.useFreeCooling?.useOpportunity) {
       badges.push(EEM_LABELS.useFreeCooling);
     }
-    if (modification.replaceRefrigerant?.useOpportunity) {
-      badges.push(EEM_LABELS.replaceRefrigerant);
+    if (modification.replaceChillerRefrigerant?.useOpportunity) {
+      badges.push(EEM_LABELS.replaceChillerRefrigerant);
     }
     if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
       badges.push(EEM_LABELS.installVSDOnCentrifugalCompressors);

@@ -97,6 +97,7 @@ export const EEM_LABELS = {
   upgradeCoolingTowerFans: 'Upgrade Cooling Tower Fans',
   useFreeCooling: 'Use Free Cooling',
   replaceRefrigerant: 'Replace Refrigerant',
+  replaceChillerRefrigerant: 'Replace Chiller Refrigerant',
   installVSDOnCentrifugalCompressors: 'Install VSD on Centrifugal Compressors'
 }
 

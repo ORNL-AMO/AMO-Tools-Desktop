@@ -126,7 +126,7 @@ export interface Modification {
     replaceChillers: ReplaceChillers,
     upgradeCoolingTowerFans: UpgradeCoolingTowerFans,
     useFreeCooling: UseFreeCooling,
-    replaceRefrigerant: ReplaceRefrigerant,
+    replaceChillerRefrigerant: ReplaceChillerRefrigerant,
     installVSDOnCentrifugalCompressors: InstallVSDOnCentrifugalCompressor,
     notes?: string
 }
@@ -143,8 +143,8 @@ export interface ExploreOppsBaseline {
     replaceChillers: ReplaceChillers,
     upgradeCoolingTowerFans: UpgradeCoolingTowerFans,
     useFreeCooling: UseFreeCooling,
-    replaceRefrigerant: ReplaceRefrigerant,
-    installVSDOnCentrifugalCompressors: InstallVSDOnCentrifugalCompressor,     
+    replaceChillerRefrigerant: ReplaceChillerRefrigerant,
+    installVSDOnCentrifugalCompressors: InstallVSDOnCentrifugalCompressor,
 }
 
 export interface EEM {
@@ -198,9 +198,8 @@ export interface UseFreeCooling extends EEM {
     HEXApproachTemp: number,
 }
 
-export interface ReplaceRefrigerant extends EEM {
-    currentRefrigerant: string,
-    newRefrigerant: string,
+export interface ReplaceChillerRefrigerant extends EEM {
+    // per-chiller proposed refrigerant stored on ChillerInventoryItem.proposedRefrigerantType
 }
 
 export interface InstallVSDOnCentrifugalCompressor extends EEM {
@@ -448,5 +447,5 @@ export type ModificationEEMProperty = keyof Pick<Modification,
         'replaceChillers' | 
         'upgradeCoolingTowerFans' | 
         'useFreeCooling' | 
-        'replaceRefrigerant' | 
+        'replaceChillerRefrigerant' |
         'installVSDOnCentrifugalCompressors'>;

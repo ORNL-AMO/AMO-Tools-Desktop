@@ -54,6 +54,12 @@ export class ExploreOpportunitiesFormService {
     });
   }
 
+  getReplaceChillerRefrigerantForm(proposedRefrigerantType: number): FormGroup<ReplaceChillerRefrigerantForm> {
+    return this.formBuilder.group({
+      proposedRefrigerantType: [proposedRefrigerantType]
+    });
+  }
+
   getUseFreeCoolingForm(formValues: UseFreeCooling, settings: Settings): FormGroup<UseFreeCoolingForm> {
     const hexValidators = formValues.isHEXRequired ? this.systemInformationService.getHexApproachTempValidators(settings) : [];
     return this.formBuilder.group({
@@ -96,4 +102,8 @@ export interface UseFreeCoolingForm {
   usesFreeCooling: FormControl<boolean>;
   isHEXRequired: FormControl<boolean>;
   HEXApproachTemp: FormControl<number>;
+}
+
+export interface ReplaceChillerRefrigerantForm {
+  proposedRefrigerantType: FormControl<number>;
 }

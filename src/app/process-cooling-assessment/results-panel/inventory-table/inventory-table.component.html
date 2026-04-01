@@ -9,12 +9,18 @@
                     <th>
                         Name
                     </th>
-                    <th>Compressor / Chiller Type</th>
-                    <th>Full Load Efficiency (kW/ton)</th>
-                    <th>Chiller Capacity (tons)</th>
-                    @if(tableView() !== 'eem-modification') {
-                    <th></th>
-                    <th></th>
+                    @if(tableView().parent !== 'eem-modification') {
+                        <th>Compressor / Chiller Type</th>
+                        <th>Full Load Efficiency (kW/ton)</th>
+                        <th>Chiller Capacity (tons)</th>
+                        <th></th>
+                        <th></th>
+                    }
+                     @if(tableView().columns?.refrigerantType) {
+                        <th>Current Refrigerant</th>
+                    }
+                    @if(tableView().columns?.proposedRefrigerantType) {
+                        <th>Proposed Refrigerant</th>
                     }
                 </tr>
             </thead>
@@ -29,6 +35,7 @@
                         <a class="click-link"
                             (click)="selectItem(chillerInventoryItem)">{{chillerInventoryItem.name}}</a>
                     </td>
+                    @if(tableView().parent !== 'eem-modification') {
                     <td>
                         {{chillerInventoryItem.chillerType | chillerCompressorType}}
                     </td>
@@ -37,15 +44,28 @@
                     </td>
                     <td>
                         {{chillerInventoryItem.capacity}}
-
+                        
                     </td>
-                    @if(tableView() !== 'eem-modification') {
-                    <td>
-                        <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(chillerInventoryItem)"></a>
+                        <td>
+                            <a class="fa fa-trash danger" (click)="openConfirmDeleteModal(chillerInventoryItem)"></a>
 
-                    </td>
+                        </td>
+                        <td>
+                            <a class="fa fa-copy" (click)="createCopy(chillerInventoryItem)"></a>
+                        </td>
+                    }
+                     @if(tableView().columns?.refrigerantType) {
                     <td>
-                        <a class="fa fa-copy" (click)="createCopy(chillerInventoryItem)"></a>
+                        {{chillerInventoryItem.refrigerantType | refrigerantType}}
+                    </td>
+                    }
+                    @if(tableView().columns?.proposedRefrigerantType) {
+                    <td>
+                        @if(chillerInventoryItem.proposedRefrigerantType !== undefined && chillerInventoryItem.proposedRefrigerantType !== null) {
+                            {{chillerInventoryItem.proposedRefrigerantType | refrigerantType}}
+                        } @else {
+                            None
+                        }
                     </td>
                     }
                 </tr>
@@ -53,7 +73,7 @@
             </tbody>
         </table>
 
-        @if(tableView() !== 'eem-modification') {
+        @if(tableView().parent !== 'eem-modification') {
         <div class="w-100 text-right">
             <a class="click-link small" (click)="addNewChiller()">+Add New Chiller</a>
         </div>

@@ -24,7 +24,7 @@ export class InventoryTableComponent {
   private modalDialogService: ModalDialogService = inject(ModalDialogService);
   private destroyRef = inject(DestroyRef);
 
-  tableView: InputSignal<InventoryTableView> = input('results-panel');
+  tableView: InputSignal<InventoryTableView> = input({parent:'results-panel'});
   filterInventoryParams: InputSignal<FilterChillerInventoryParams> = input(null);
 
   inventoryUIState$: Observable<InventoryState>;

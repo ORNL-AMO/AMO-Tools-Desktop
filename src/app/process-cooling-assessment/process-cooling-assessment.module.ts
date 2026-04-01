@@ -93,6 +93,8 @@ import { FilterChillerOutputsPipe } from './pipes/filter-chiller-outputs.pipe';
 import { InstallVSDComponent } from './explore-opportunities/install-vsd/install-vsd.component';
 import { FilterChillerInventoryPipe } from './pipes/filter-chiller-inventory.pipe';
 import { UseFreeCoolingComponent } from './explore-opportunities/use-free-cooling/use-free-cooling.component';
+import { ReplaceChillerRefrigerantComponent } from './explore-opportunities/replace-chiller-refrigerant/replace-chiller-refrigerant.component';
+import { RefrigerantTypePipe } from './pipes/refrigerant-type.pipe';
 
 
 export const ROUTE_TOKENS = {
@@ -276,6 +278,7 @@ const ROUTES: Route[] = [
     ChillerLoadScheduleComponent,
     WeatherComponent,
     ChillerCompressorTypePipe,
+    RefrigerantTypePipe,
     OperatingScheduleComponent,
     WeeklyOperatingScheduleComponent,
     MonthlyOperatingScheduleComponent,
@@ -294,7 +297,8 @@ const ROUTES: Route[] = [
     FilterChillerOutputsPipe,
     InstallVSDComponent,
     FilterChillerInventoryPipe,
-    UseFreeCoolingComponent
+    UseFreeCoolingComponent,
+    ReplaceChillerRefrigerantComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),

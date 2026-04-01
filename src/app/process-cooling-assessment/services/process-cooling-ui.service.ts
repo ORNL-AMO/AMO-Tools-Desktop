@@ -298,7 +298,17 @@ export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' 
 export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
 export type ProcessCoolingAssessmentTabString = 'explore-opportunities';
 export type ProcessCoolingView = SetupView | MainView | ReportView | AssessmentView | SystemInformationView;
-export type InventoryTableView = 'results-panel' | 'eem-modification';
+
+export type InventoryTableParent = 'results-panel' | 'eem-modification';
+
+export interface InventoryTableView {
+  parent: InventoryTableParent;
+  columns?: {
+    fullLoadEfficiency: boolean;
+    capacity: boolean;
+    proposedRefrigerantType: boolean;
+  };
+}
 
 export enum MainView {
   BASELINE = 'baseline',
