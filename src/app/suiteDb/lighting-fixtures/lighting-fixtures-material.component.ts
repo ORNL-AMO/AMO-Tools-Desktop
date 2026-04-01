@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { LightingFixtureCategory, LightingSuiteApiService, LightingFixtureData } from '../../tools-suite-api/lighting-suite-api.service';
+import { LightingSuiteApiService, LightingFixtureData } from '../../tools-suite-api/lighting-suite-api.service';
 import { LightingFixtureServiceDbService } from '../../indexedDb/lighting-fixture-db.service';
 import { firstValueFrom } from 'rxjs';
 import { LightingFixtureMaterial } from '../../shared/models/materials';
@@ -26,7 +26,7 @@ export class LightingFixturesMaterialComponent implements OnInit {
 
     selectedFixture: any = null;
     selectedMaterial: LightingFixtureMaterial;
-    allLightingCategories: Array<LightingFixtureCategory>;
+    allLightingCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
     allMaterials: Array<LightingFixtureMaterial>;
     allCustomMaterials: Array<LightingFixtureMaterial>;
     fixturesData: Array<LightingFixtureData>;
@@ -34,6 +34,7 @@ export class LightingFixturesMaterialComponent implements OnInit {
     nameError: string = null;
     canAdd: boolean;
     idbEditMaterialId: number;
+    hideTypes: boolean = false;
     currentField: string = 'selectedMaterial';
     newMaterial: LightingFixtureMaterial = {
         name: 'New Material',
@@ -63,7 +64,7 @@ export class LightingFixturesMaterialComponent implements OnInit {
     }
 
     async setAllMaterials() {
-        this.allLightingCategories = this.lightingSuiteApiService.setLightingSystemServiceState();
+        this.allLightingCategories = this.lightingSuiteApiService.getLightingSystems();
         this.allMaterials = await firstValueFrom(this.lightingFixtureServiceDbService.getAllWithObservable());
         this.allCustomMaterials = await firstValueFrom(this.lightingFixtureServiceDbService.getAllCustomMaterials());
         this.idbEditMaterialId = this.allCustomMaterials.find(material => this.existingMaterial?.type === material.type)?.id;
@@ -176,8 +177,13 @@ export class LightingFixturesMaterialComponent implements OnInit {
 
     onCategoryChange(selected: any) {
         this.fixturesData = selected?.fixturesData || [];
-        if (selected && selected.label) {
-            this.newMaterial.category = selected.label;
+        this.hideTypes = selected.category === 0;
+        this.newMaterial.category = selected?.label || '';
+        if (this.fixturesData.length > 0) {
+            this.newMaterial.type = this.fixturesData[0].type;
+            this.onFixtureTypeChange(this.fixturesData[0]);
+        } else {
+            this.newMaterial.type = '';
         }
     }
 

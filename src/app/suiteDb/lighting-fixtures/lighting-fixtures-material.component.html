@@ -20,10 +20,12 @@
                                 <option *ngFor="let material of allLightingCategories" [ngValue]="material">{{material.label}}</option>
                             </select>
 
-                            <label class="small" for="type">Fixture Type</label>
-                            <select id="type" name="type" class="form-control" [(ngModel)]="newMaterial.type" (change)="onFixtureTypeChange(getFixtureByType($event.target.value))" (focus)="focusField('type')">
-                                <option *ngFor="let fixture of fixturesData" [value]="fixture.type">{{fixture.type}}</option>
-                            </select>
+                            <ng-container *ngIf="hideTypes === false">
+                                <label class="small" for="type">Fixture Type</label>
+                                <select id="type" name="type" class="form-control" [(ngModel)]="newMaterial.type" (change)="onFixtureTypeChange(getFixtureByType($event.target.value))" (focus)="focusField('type')">
+                                        <option *ngFor="let fixture of fixturesData" [value]="fixture.type">{{fixture.type}}</option>
+                                </select>
+                            </ng-container>
                         </div>
                     </div>
                     <div class="form-section">

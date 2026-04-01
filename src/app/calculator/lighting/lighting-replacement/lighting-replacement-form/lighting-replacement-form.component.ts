@@ -3,7 +3,7 @@ import { LightingReplacementData } from '../../../../shared/models/lighting';
 import { UntypedFormGroup } from '@angular/forms';
 import { LightingReplacementService } from '../lighting-replacement.service';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { LightingFixtureData, LightingFixtureCategory } from '../../../../tools-suite-api/lighting-suite-api.service';
+import { LightingFixtureData } from '../../../../tools-suite-api/lighting-suite-api.service';
 import { LightingSuiteApiService } from '../../../../tools-suite-api/lighting-suite-api.service';
 @Component({
     selector: 'app-lighting-replacement-form',
@@ -41,7 +41,7 @@ export class LightingReplacementFormComponent implements OnInit {
 
   showOperatingHoursModal: boolean;
 
-  lightingFixtureCategories: Array<LightingFixtureCategory>;
+  lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
   fixtureTypes: Array<LightingFixtureData>;
   displayDetails: boolean = false;
 
@@ -56,7 +56,7 @@ export class LightingReplacementFormComponent implements OnInit {
   constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef, private lightingSuiteApiService: LightingSuiteApiService) {}
 
   ngOnInit() {
-    this.lightingFixtureCategories = this.lightingSuiteApiService.setLightingSystemServiceState();
+    this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
     this.displayDetails = this.lightingReplacementService.showAdditionalDetails;
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;

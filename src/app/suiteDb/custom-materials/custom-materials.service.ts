@@ -90,8 +90,14 @@ export class CustomMaterialsService {
 
 
   async importLightingFixtures(data: Array<LightingFixtureMaterial>) {
-    //flesh this out. for now just set selectedLightingFixtures to data
-    this.selectedLightingFixtures = data;
+    for (let i = 0; i < data.length; i++) {
+      let material: LightingFixtureMaterial = data[i]
+      material.selected = false;
+      delete material.id;
+      await firstValueFrom(this.lightingFixtureServiceDbService.addWithObservable(material));
+      let materials = await firstValueFrom(this.lightingFixtureServiceDbService.getAllWithObservable());
+      this.lightingFixtureServiceDbService.dbLightingFixtureMaterials.next(materials);
+    }
   }
 
   async importAtmosphere(data: Array<AtmosphereSpecificHeat>) {

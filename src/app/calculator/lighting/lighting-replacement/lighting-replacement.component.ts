@@ -54,7 +54,6 @@ export class LightingReplacementComponent implements OnInit {
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
-    // this.lightingReplacementService.setLightingFixtureCategories();
     this.analyticsService.sendEvent('calculator-lighting-replacement');
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;

@@ -1,22 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+
 @Injectable({
     providedIn: 'root'
 })
 export class LightingSuiteApiService {
-
-    lightingFixtureCategories: Array<LightingFixtureCategory> = [];
-
     constructor(
-        private toolsSuiteApiService: ToolsSuiteApiService
-    ) {}
+        private toolsSuiteApiService: ToolsSuiteApiService,
+    ) { }
 
-
-    setLightingSystemServiceState() {
+    getLightingSystems() {
         let defaultDataInstance = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
         let lightingFixtureData = defaultDataInstance.getLightingData();
 
-        this.lightingFixtureCategories = [
+        let LightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }> = [
             {
                 category: 0,
                 label: 'Custom',
@@ -72,15 +69,14 @@ export class LightingSuiteApiService {
                 label: 'LED Troffers',
                 fixturesData: []
             }
-        ];
+        ]
 
-        this.buildLightingList(lightingFixtureData, this.lightingFixtureCategories);
+        this.buildLightingList(lightingFixtureData, LightingFixtureCategories);
 
-        defaultDataInstance.delete();
-        return this.lightingFixtureCategories;
+        return LightingFixtureCategories;
     }   
 
-    buildLightingList(wasmLightingSystems, lightingFixtureCategories: Array<LightingFixtureCategory> ) {
+    buildLightingList(wasmLightingSystems, lightingFixtureCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }> ) {
         for (let i = 0; i < wasmLightingSystems.size(); i++) {
             let wasmClass = wasmLightingSystems.get(i);
 
@@ -124,8 +120,4 @@ export interface LightingFixtureData {
     lumenDegradationFactor: number
 }
 
-export interface LightingFixtureCategory {
-    category: number,
-    label: string,
-    fixturesData: Array<LightingFixtureData>
-}
+

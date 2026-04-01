@@ -141,7 +141,6 @@
         <span class="fa fa-chevron-down pull-right m-1" *ngIf="showLightingFixturesMaterials && hasLightingFixtureMaterials"></span>
       </label>
       <a class="click-link pull-right small" *ngIf="showLightingFixturesMaterials" (click)="toggleModal('lighting-fixtures')">+Add New Lighting Fixture</a>
-      <!-- <p class="help-text">View, create, edit your custom lighting fixtures.</p> -->
     </div>
   </div>
   <app-custom-lighting-fixtures-materials *ngIf="showLightingFixturesMaterials" [settings]="settings" [showModal]="showLightingFixturesModal"

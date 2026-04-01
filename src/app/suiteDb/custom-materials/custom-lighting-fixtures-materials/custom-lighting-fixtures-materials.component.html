@@ -3,7 +3,7 @@
     <div class="col-lg-4 col-md-6 col-sm-12 card-container-col" *ngFor="let fixture of lightingMaterials">
         <div class="card card-item">
             <div class="card-header summary-card-header">
-                {{fixture.name}}
+                <input type="checkbox" [(ngModel)]="fixture.selected"> {{fixture.name}}
                 <i (click)="editMaterial(fixture.id)" class="fa fa-edit pull-right" style="cursor:pointer;"></i>
             </div>
             <div class="card-body scroll-item summary-card-body">
