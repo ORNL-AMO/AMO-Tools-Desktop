@@ -352,7 +352,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 minRows={8}
                 value={diagramNotes}
                 onChange={e => {
-                  dispatch(setDiagramNotes(e.target.value));
+                  dispatch(setDiagramNotes(e.target.value ?? ""));
                 }}
                 placeholder="Add additional information for your diagram"
                 fullWidth
