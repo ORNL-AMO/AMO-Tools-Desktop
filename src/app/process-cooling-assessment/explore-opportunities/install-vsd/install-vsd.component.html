@@ -1,8 +1,8 @@
 <div>
     <label class="group-label" for="useInstallVSD">
-        <input class="pc-checkbox" type="checkbox" 
-            id="useInstallVSD" 
-            (focus)="focusField('useInstallVSD')" 
+        <input class="pc-checkbox" type="checkbox"
+            id="useInstallVSD"
+            (focus)="focusField('useInstallVSD')"
             (change)="setUseOpportunity()"
             [(ngModel)]="useOpportunity" />
         <span class="ml-2">
@@ -12,14 +12,10 @@
 </div>
 
 @if(useOpportunity && form) {
-    <form [formGroup]="form" class="p-0">
-        <div class="row no-gutters">
-            <div class="alert alert-info my-2 w-100 small">
-                The chillers below will have their compressor motors upgraded to VSDs.
-            </div>
-            <app-inventory-table class="w-100" 
-                [filterInventoryParams]="inventoryTableFilterParams" 
-                [tableView]="inventoryTableView"></app-inventory-table>
+    <div class="row no-gutters">
+        <div class="alert alert-info my-2 w-100 small">
+            The chillers below will have their compressor motors upgraded to VSDs.
         </div>
-    </form>
+        <app-vsd-inventory-table class="w-100"></app-vsd-inventory-table>
+    </div>
 }

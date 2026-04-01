@@ -95,6 +95,8 @@ import { FilterChillerInventoryPipe } from './pipes/filter-chiller-inventory.pip
 import { UseFreeCoolingComponent } from './explore-opportunities/use-free-cooling/use-free-cooling.component';
 import { ReplaceChillerRefrigerantComponent } from './explore-opportunities/replace-chiller-refrigerant/replace-chiller-refrigerant.component';
 import { RefrigerantTypePipe } from './pipes/refrigerant-type.pipe';
+import { VsdInventoryTableComponent } from './explore-opportunities/install-vsd/vsd-inventory-table/vsd-inventory-table.component';
+import { RefrigerantInventoryTableComponent } from './explore-opportunities/replace-chiller-refrigerant/refrigerant-inventory-table/refrigerant-inventory-table.component';
 
 
 export const ROUTE_TOKENS = {
@@ -298,7 +300,9 @@ const ROUTES: Route[] = [
     InstallVSDComponent,
     FilterChillerInventoryPipe,
     UseFreeCoolingComponent,
-    ReplaceChillerRefrigerantComponent
+    ReplaceChillerRefrigerantComponent,
+    VsdInventoryTableComponent,
+    RefrigerantInventoryTableComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),

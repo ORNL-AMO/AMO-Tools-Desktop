@@ -299,17 +299,6 @@ export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-infor
 export type ProcessCoolingAssessmentTabString = 'explore-opportunities';
 export type ProcessCoolingView = SetupView | MainView | ReportView | AssessmentView | SystemInformationView;
 
-export type InventoryTableParent = 'results-panel' | 'eem-modification';
-
-export interface InventoryTableView {
-  parent: InventoryTableParent;
-  columns?: {
-    fullLoadEfficiency: boolean;
-    capacity: boolean;
-    proposedRefrigerantType: boolean;
-  };
-}
-
 export enum MainView {
   BASELINE = 'baseline',
   ASSESSMENT = 'assessment',

@@ -5,7 +5,7 @@ import { ExploreOpportunitiesFormService, InstallVSDForm } from '../../services/
 import { ModificationService } from '../../services/modification.service';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
-import { CompressorChillerTypeEnum, InstallVSDOnCentrifugalCompressor, Modification } from '../../../shared/models/process-cooling-assessment';
+import { InstallVSDOnCentrifugalCompressor, Modification } from '../../../shared/models/process-cooling-assessment';
 import { EEM_LABELS } from '../../constants/process-cooling-constants';
 
 @Component({
@@ -26,13 +26,6 @@ export class InstallVSDComponent implements OnInit {
     form: FormGroup<InstallVSDForm>;
     EEM_LABELS = EEM_LABELS;
 
-    inventoryTableFilterParams = {
-        chillerType: CompressorChillerTypeEnum.CENTRIFUGAL
-    }
-    inventoryTableView = {
-        parent: 'eem-modification'
-    };
-
     ngOnInit(): void {
         const baselineValues: InstallVSDOnCentrifugalCompressor = this.modificationService.getBaselineExploreOppsValues().installVSDOnCentrifugalCompressors;
         this.form = this.exploreOpportunitiesFormService.getInstallVSDOnCentrifugalCompressorsForm(baselineValues);
@@ -42,7 +35,7 @@ export class InstallVSDComponent implements OnInit {
         ).subscribe((modification: Modification) => {
             if (modification) {
                 this.useOpportunity = modification.installVSDOnCentrifugalCompressors.useOpportunity;
-                this.form.patchValue({ 
+                this.form.patchValue({
                     installOnAll: modification.installVSDOnCentrifugalCompressors.installOnAll
                 }, { emitEvent: false });
                 this.form.updateValueAndValidity({ emitEvent: false });

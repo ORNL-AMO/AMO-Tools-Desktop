@@ -6,14 +6,14 @@ import { Settings } from "../../shared/models/settings";
 export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 export const HOUR_OPTIONS = Array.from({ length: 25 }, (_, hour) => hour);
 
-export const getCondenserCoolingMethods = () => {
+export const getCondenserCoolingMethods = (): SelectOption[] => {
     return [
         { value: 0, name: 'Water' },
         { value: 1, name: 'Air' },
     ] as const;
 };
 
-export const getTowerSizeMetrics = () => {
+export const getTowerSizeMetrics = (): SelectOption[] => {
     return [
         { value: TowerSizeMetric.Tons, name: 'Tons' },
         { value: TowerSizeMetric.HP, name: 'HP' },
@@ -21,7 +21,7 @@ export const getTowerSizeMetrics = () => {
     ] as const;
 };
 
-export const getFanType = () => {
+export const getFanType = (): SelectOption[] => {
   return [
         { value: FanType.Axial, name: 'Axial' },
         { value: FanType.Centrifugal, name: 'Centrifugal' },
@@ -29,7 +29,7 @@ export const getFanType = () => {
   ] as const;
 }
 
-export const getTowerTypes = () => {
+export const getTowerTypes = (): SelectOption[] => {
     return [
         { value: TowerType.OneCellOneSpeed, name: TowerTypes[TowerType.OneCellOneSpeed] },
         { value: TowerType.OneCellTwoSpeed, name: TowerTypes[TowerType.OneCellTwoSpeed] },
@@ -41,7 +41,7 @@ export const getTowerTypes = () => {
     ] as const;
 };
 
-export const getRefrigerantTypes = () => {
+export const getRefrigerantTypes = (): SelectOption[] => {
     return [
         { value: RefrigerantType.R11, name: Refrigerants[RefrigerantType.R11] },
         { value: RefrigerantType.R123, name: Refrigerants[RefrigerantType.R123] },
@@ -52,7 +52,7 @@ export const getRefrigerantTypes = () => {
     ] as const;
 }
 
-export const getChillerTypes = () => {
+export const getChillerTypes = (): SelectOption[] => {
   return [
     {value: CompressorChillerTypeEnum.CENTRIFUGAL, name: CompressorChillerTypes[CompressorChillerTypeEnum.CENTRIFUGAL]},
     {value: CompressorChillerTypeEnum.RECIPROCATING, name: CompressorChillerTypes[CompressorChillerTypeEnum.RECIPROCATING]},
@@ -273,3 +273,7 @@ export const LOAD_LABELS = ['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%
 // todo this constant has been made elsewhere
 export const WET_BULB_BINS = ['< 35', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'];
 export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+export interface SelectOption {
+  value: number | string;
+  name: string;
+}
