@@ -34,8 +34,8 @@ input[type="checkbox"]:hover {
 }
 
 .form-group.label-select select {
-  width: calc(50% - 1rem);
-  flex-shrink: 0;
+  width: calc(50% - 1rem) !important;
+  flex-shrink: 0 !important;
 }
 
 .form-group.label-select .spacer {
