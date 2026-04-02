@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { LightingFixtureData } from '../../../../tools-suite-api/lighting-suite-api.service';
+import { LightingFixtureData} from '../../../../tools-suite-api/lighting-suite-api.service';
 import { LightingReplacementService } from '../lighting-replacement.service';
 import { Subscription } from 'rxjs';
 import { LightingSuiteApiService } from '../../../../tools-suite-api/lighting-suite-api.service';
@@ -17,10 +17,10 @@ export class LightingReplacementHelpComponent implements OnInit {
   lightingFixtureCategories: Array<LightingFixtureCategory>;
   selectedFixtureTypesSub: Subscription;
   fixtureTypes: Array<LightingFixtureData>;
-  constructor(private lightingReplacementService: LightingReplacementService) { }
+  constructor(private lightingReplacementService: LightingReplacementService, private lightingSuiteApiService: LightingSuiteApiService) { }
 
   ngOnInit() {
-    this.lightingFixtureCategories = this.lightingReplacementService.lightingFixtureCategories;
+    this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
     this.selectedFixtureTypesSub = this.lightingReplacementService.selectedFixtureTypes.subscribe(fixtureTypes => {
       this.fixtureTypes = fixtureTypes;
     })
