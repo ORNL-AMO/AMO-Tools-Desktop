@@ -203,8 +203,7 @@ export interface ReplaceChillerRefrigerant extends EEM {
 }
 
 export interface InstallVSDOnCentrifugalCompressor extends EEM {
-    installOnAll: boolean,
-    // todo original CWSAT - this one is the least clear what should happen
+    chillerIds: string[];
 }
 
 export interface MonthlyOperatingSchedule {

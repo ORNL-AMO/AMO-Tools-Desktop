@@ -4,6 +4,8 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Compressor Type</th>
+                    <th>Install VSD</th>
                 </tr>
             </thead>
             <tbody>
@@ -11,6 +13,12 @@
                 <tr [class.invalid-item]="!inventoryValidState().items[chillerInventoryItem.itemId]">
                     <td>
                        {{chillerInventoryItem.name}}
+                    </td>
+                    <td>{{chillerInventoryItem.chillerType | chillerCompressorType}}</td>
+                    <td>
+                        <input type="checkbox" class="pc-form-checkbox"
+                            [ngModel]="isVsdSelected(chillerInventoryItem.itemId)"
+                            (ngModelChange)="setInstallVSD(chillerInventoryItem, $event)" />
                     </td>
                 </tr>
                 }

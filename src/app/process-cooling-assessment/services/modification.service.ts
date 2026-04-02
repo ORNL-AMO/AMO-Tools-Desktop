@@ -1,5 +1,5 @@
 import { computed, effect, inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
-import { ChillerInventoryItem, CompressorChillerTypeEnum, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment, ProcessCoolingResults, SystemInformation } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment, SystemInformation } from '../../shared/models/process-cooling-assessment';
 import { BehaviorSubject, combineLatest, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
@@ -160,16 +160,7 @@ export class ModificationService {
       }
     }
 
-    if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
-      const form = this.exploreOpportunitiesFormService.getInstallVSDOnCentrifugalCompressorsForm({
-        installOnAll: modification.installVSDOnCentrifugalCompressors.installOnAll,
-        useOpportunity: modification.installVSDOnCentrifugalCompressors.useOpportunity
-      });
-      if (!form.valid) {
-        return false;
-      }
-    }
-
+    
     if (modification.useFreeCooling?.useOpportunity) {
       const form = this.exploreOpportunitiesFormService.getUseFreeCoolingForm(
         modification.useFreeCooling,
@@ -306,7 +297,7 @@ export class ModificationService {
         useOpportunity: false,
       },
       installVSDOnCentrifugalCompressors: {
-        installOnAll: false,
+        chillerIds: [],
         useOpportunity: false,
       },
     }
@@ -386,9 +377,9 @@ export class ModificationService {
     }
 
     if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
-      // todo unimplemented - choose which chillers have vsd applied
+      const vsdChillerIds = new Set(modification.installVSDOnCentrifugalCompressors.chillerIds);
       chillerInventory = chillerInventory.map(chiller =>
-        chiller.chillerType === CompressorChillerTypeEnum.CENTRIFUGAL ? { ...chiller, installVSD: true } : chiller
+        vsdChillerIds.has(chiller.itemId) ? { ...chiller, installVSD: true } : chiller
       );
     }
 
@@ -438,7 +429,7 @@ export class ModificationService {
         useOpportunity: false,
       },
       installVSDOnCentrifugalCompressors: {
-        installOnAll: false,
+        chillerIds: [],
         useOpportunity: false,
       },
     }

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, UntypedFormBuilder } from '@angular/forms';
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
 import { Settings } from '../../shared/models/settings';
-import { InstallVSDOnCentrifugalCompressor, UpgradeCoolingTowerFans, UseFreeCooling } from '../../shared/models/process-cooling-assessment';
+import { UpgradeCoolingTowerFans, UseFreeCooling } from '../../shared/models/process-cooling-assessment';
 
 @Injectable()
 export class ExploreOpportunitiesFormService {
@@ -48,12 +48,6 @@ export class ExploreOpportunitiesFormService {
     });
   }
 
-  getInstallVSDOnCentrifugalCompressorsForm(formValues: InstallVSDOnCentrifugalCompressor): FormGroup<InstallVSDForm> {
-    return this.formBuilder.group({
-      installOnAll: [formValues.installOnAll]
-    });
-  }
-
   getReplaceChillerRefrigerantForm(proposedRefrigerantType: number): FormGroup<ReplaceChillerRefrigerantForm> {
     return this.formBuilder.group({
       proposedRefrigerantType: [proposedRefrigerantType]
@@ -92,10 +86,6 @@ export interface UpgradeCoolingTowerFanForm {
   towerType: FormControl<number>;
   numberOfFans: FormControl<number>;
   fanSpeedType: FormControl<number>;
-}
-
-export interface InstallVSDForm {
-  installOnAll: FormControl<boolean>;
 }
 
 export interface UseFreeCoolingForm {

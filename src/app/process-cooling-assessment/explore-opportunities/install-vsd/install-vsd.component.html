@@ -11,11 +11,11 @@
     </label>
 </div>
 
-@if(useOpportunity && form) {
+@if(useOpportunity) {
     <div class="row no-gutters">
         <div class="alert alert-info my-2 w-100 small">
-            The chillers below will have their compressor motors upgraded to VSDs.
+            Select which centrifugal compressor chillers will have their motors upgraded to VSDs.
         </div>
-        <app-vsd-inventory-table class="w-100"></app-vsd-inventory-table>
+        <app-vsd-inventory-table class="w-100" [useOpportunity]="useOpportunity"></app-vsd-inventory-table>
     </div>
 }
