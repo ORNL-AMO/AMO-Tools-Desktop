@@ -5,6 +5,7 @@ import { LightingFixtureServiceDbService } from '../../indexedDb/lighting-fixtur
 import { firstValueFrom } from 'rxjs';
 import { LightingFixtureMaterial } from '../../shared/models/materials';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { LightingFixtureCategory } from '../../tools-suite-api/lighting-suite-api.service';
 import * as _ from 'lodash';
 @Component({
   selector: 'app-lighting-fixtures-material',
@@ -26,7 +27,7 @@ export class LightingFixturesMaterialComponent implements OnInit {
 
     selectedFixture: any = null;
     selectedMaterial: LightingFixtureMaterial;
-    allLightingCategories: Array<{ category: number, label: string, fixturesData: Array<LightingFixtureData> }>;
+    allLightingCategories: Array<LightingFixtureCategory>;
     allMaterials: Array<LightingFixtureMaterial>;
     allCustomMaterials: Array<LightingFixtureMaterial>;
     fixturesData: Array<LightingFixtureData>;
