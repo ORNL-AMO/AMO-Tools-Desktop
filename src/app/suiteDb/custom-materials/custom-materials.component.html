@@ -190,7 +190,7 @@
         </div>
         <div class="pb-1" *ngIf="selectedMaterialData.lightingFixtureMaterial.length != 0">
           <h6>Lighting Fixtures</h6>
-          <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.lightingFixtureMaterial">{{material.name}}</div>
+        <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.lightingFixtureMaterial">{{material.name}}</div>
         </div>
       </div>
       <div class="modal-footer justify-content-between">
@@ -290,6 +290,10 @@
         <div class="pb-1" *ngIf="selectedMaterialData.wallLossesSurface.length != 0">
           <h6>Wall Loss Surfaces</h6>
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.wallLossesSurface">{{material.surface}}</div>
+        </div>
+        <div class="pb-1" *ngIf="selectedMaterialData.lightingFixtureMaterial.length != 0">
+          <h6>Lighting Fixtures</h6>
+        <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.lightingFixtureMaterial">{{material.name}}</div>
         </div>
       </div>
       <div class="modal-body" *ngIf="deleteModalOpen && importing">
