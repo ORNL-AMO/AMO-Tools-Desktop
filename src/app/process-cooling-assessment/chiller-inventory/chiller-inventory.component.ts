@@ -6,7 +6,7 @@ import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/mod
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 import { ChillerInventoryForm, ChillerInventoryService } from '../services/chiller-inventory.service';
-import { getChillerTypes, getDefaultInventoryItem } from '../constants/process-cooling-constants';
+import { getChillerTypes, getDefaultInventoryItem, getRefrigerantTypes } from '../constants/process-cooling-constants';
 import { FormControlIds, generateFormControlIds } from '../../shared/helperFunctions';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { Settings } from '../../shared/models/settings';
@@ -29,6 +29,8 @@ export class ChillerInventoryComponent implements OnInit {
   controlIds: FormControlIds<ChillerInventoryForm>;
   selectedChiller$: Observable<ChillerInventoryItem> = this.inventoryService.selectedChiller$;
   chillerTypes = getChillerTypes();
+
+  refrigerantTypes = getRefrigerantTypes();
 
   PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;

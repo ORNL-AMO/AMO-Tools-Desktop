@@ -454,20 +454,20 @@ export class SuiteApiHelperService {
   getProcessCoolingRefrigerantTypeEnum(type: number | string) {
     switch (type) {
       case 0:
-      case 'R_11': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_11;
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_11;
       case 1:
-      case 'R_123': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_123;
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_123;
       case 2:
-      case 'R_12': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_12;
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_12;
       case 3:
-      case 'R_134a': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_134a;
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_134a;
       case 4:
-      case 'R_22': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_22;
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_22;
       case 5:
-      case 'R_717': return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_717;
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_717;
     }
   }
-
+  
   getProcessCoolingCoolingAirSourceEnum(loc: number | string) {
     if (loc === 0 || loc === 'Inside') return this.toolsSuiteApiService.ToolsSuiteModule.ACSourceLocation.Inside;
     if (loc === 1 || loc === 'Outside') return this.toolsSuiteApiService.ToolsSuiteModule.ACSourceLocation.Outside;

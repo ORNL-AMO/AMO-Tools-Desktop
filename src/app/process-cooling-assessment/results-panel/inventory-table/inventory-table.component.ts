@@ -1,54 +1,23 @@
-import { Component, DestroyRef, inject, WritableSignal } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
-import { ChillerInventoryItem, CompressorChillerTypeEnum } from '../../../shared/models/process-cooling-assessment';
-import { Settings } from '../../../shared/models/settings';
-import { ChillerInventoryService, InventoryValidState } from '../../services/chiller-inventory.service';
+import { Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs/operators';
+import { ChillerInventoryItem } from '../../../shared/models/process-cooling-assessment';
+import { ChillerInventoryBaseComponent } from './chiller-inventory-base.component';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
 import { ConfirmActionComponent, ConfirmActionData } from '../../confirm-action/confirm-action.component';
-import { InventoryTableView, ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
 import { FilterChillerInventoryParams } from '../../pipes/filter-chiller-inventory.pipe';
 
 @Component({
   selector: 'app-inventory-table',
   standalone: false,
   templateUrl: './inventory-table.component.html',
-  styleUrl: './inventory-table.component.css'
+  styleUrl: './chiller-inventory-base.component.css'
 })
-export class InventoryTableComponent {
-  private inventoryService: ChillerInventoryService = inject(ChillerInventoryService);
-  private processCoolingService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
-  private processCoolingUIService = inject(ProcessCoolingUiService);
+export class InventoryTableComponent extends ChillerInventoryBaseComponent {
   private modalDialogService: ModalDialogService = inject(ModalDialogService);
-  private destroyRef = inject(DestroyRef);
+  filterInventoryParams: FilterChillerInventoryParams = null;
 
-  inventoryUIState$: Observable<InventoryState>;
-  inventoryValidState: WritableSignal<InventoryValidState> = this.inventoryService.inventoryValidState;
-  settings: Settings;
-  tableView: InventoryTableView = this.processCoolingUIService.inventoryTableViewSignal();
-
-  filterInventoryParams: FilterChillerInventoryParams;
-  
-  ngOnInit(): void {
-    if (this.tableView === 'install-vsd') {
-      this.filterInventoryParams = {
-        chillerType: CompressorChillerTypeEnum.CENTRIFUGAL
-      }
-    }
-    this.inventoryUIState$ = combineLatest({
-      processCooling: this.processCoolingService.processCooling$,
-      selectedChiller: this.inventoryService.selectedChiller$,
-    }).pipe(
-      map(({ processCooling, selectedChiller }) => {
-        this.inventoryService.setInventoryValidState(processCooling.inventory);
-        return {
-          inventory: processCooling.inventory && processCooling.inventory.length > 0 ? processCooling.inventory : [],
-          selectedChillerId: selectedChiller?.itemId ?? null,
-        };
-      }),
-    );
+  override ngOnInit(): void {
+    super.ngOnInit();
 
     this.modalDialogService.closedResult.pipe(
       takeUntilDestroyed(this.destroyRef)
@@ -57,21 +26,15 @@ export class InventoryTableComponent {
         this.deleteItem(deleteId);
       }
     });
-
-
-  }
-
-  selectItem(item: ChillerInventoryItem) {
-    this.inventoryService.setSelectedChiller(item);
   }
 
   addNewChiller() {
-    let newChiller = this.processCoolingService.addNewChillerToAssessment();
+    const newChiller = this.processCoolingService.addNewChillerToAssessment();
     this.inventoryService.setSelectedChiller(newChiller);
   }
 
   deleteItem(itemId: string) {
-    let updatedInventory = this.processCoolingService.deleteChillerFromAssessment(itemId);
+    const updatedInventory = this.processCoolingService.deleteChillerFromAssessment(itemId);
     this.inventoryService.setSelectedChiller(updatedInventory[0]);
   }
 
@@ -87,11 +50,9 @@ export class InventoryTableComponent {
         },
       },
     );
-
   }
 
-
-  createCopy(chiller: ChillerInventoryItem) {
+  createCopy(_chiller: ChillerInventoryItem) {
     // let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingService.processCooling.getValue();
     // let chillerCpy: ChillerInventoryItem = {
     //   ...chiller,
@@ -103,10 +64,4 @@ export class InventoryTableComponent {
     // this.inventoryService.selectedChiller.next(chillerCpy);
     // this.processCoolingService.updateProcessCooling(processCoolingAssessment, true);
   }
-}
-
-interface InventoryState {
-  inventory: ChillerInventoryItem[];
-  selectedChillerId: string | null;
-  hasValidChillers?: boolean;
 }

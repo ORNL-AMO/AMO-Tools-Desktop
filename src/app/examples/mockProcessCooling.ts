@@ -82,10 +82,8 @@ export const MockProcessCoolingAssessment: Assessment = {
                     "HEXApproachTemp": 0,
                     "useOpportunity": false
                 },
-                "replaceRefrigerant": {
-                    "useOpportunity": false,
-                    "currentRefrigerant": "",
-                    "newRefrigerant": ""
+                "replaceChillerRefrigerant": {
+                    "useOpportunity": false
                 },
                 "installVSDOnCentrifugalCompressors": {
                     "installOnAll": undefined,

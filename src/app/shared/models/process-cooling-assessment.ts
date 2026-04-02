@@ -126,7 +126,7 @@ export interface Modification {
     replaceChillers: ReplaceChillers,
     upgradeCoolingTowerFans: UpgradeCoolingTowerFans,
     useFreeCooling: UseFreeCooling,
-    replaceRefrigerant: ReplaceRefrigerant,
+    replaceChillerRefrigerant: ReplaceChillerRefrigerant,
     installVSDOnCentrifugalCompressors: InstallVSDOnCentrifugalCompressor,
     notes?: string
 }
@@ -143,8 +143,8 @@ export interface ExploreOppsBaseline {
     replaceChillers: ReplaceChillers,
     upgradeCoolingTowerFans: UpgradeCoolingTowerFans,
     useFreeCooling: UseFreeCooling,
-    replaceRefrigerant: ReplaceRefrigerant,
-    installVSDOnCentrifugalCompressors: InstallVSDOnCentrifugalCompressor,     
+    replaceChillerRefrigerant: ReplaceChillerRefrigerant,
+    installVSDOnCentrifugalCompressors: InstallVSDOnCentrifugalCompressor,
 }
 
 export interface EEM {
@@ -198,14 +198,12 @@ export interface UseFreeCooling extends EEM {
     HEXApproachTemp: number,
 }
 
-export interface ReplaceRefrigerant extends EEM {
-    currentRefrigerant: string,
-    newRefrigerant: string,
+export interface ReplaceChillerRefrigerant extends EEM {
+    // per-chiller proposed refrigerant stored on ChillerInventoryItem.proposedRefrigerantType
 }
 
 export interface InstallVSDOnCentrifugalCompressor extends EEM {
-    installOnAll: boolean,
-    // todo original CWSAT - this one is the least clear what should happen
+    chillerIds: string[];
 }
 
 export interface MonthlyOperatingSchedule {
@@ -367,6 +365,8 @@ export interface ChillerInventoryItem {
     // * installVSD is Modification/EEM only
     installVSD: boolean;
     useARIloadScheduleByMonthchedule: boolean;
+    refrigerantType: number;
+    proposedRefrigerantType?: number;
     loadScheduleByMonth?: number[][]; // * This is hours per percent load for each month
     loadScheduleAllMonths?: number[]; 
     useSameMonthlyLoading: boolean;
@@ -418,6 +418,15 @@ export enum TowerType {
     VariableSpeed = 6
 }
 
+export enum RefrigerantType {
+    R11 = 0,
+    R123 = 1,
+    R12 = 2,
+    R134a = 3,
+    R22 = 4,
+    R717 = 5,
+}
+
 
 export interface ProcessCoolingAssessmentResults { }
 export type CompressorChillerType = 'centrifugal' | 'reciprocating' | 'helical-rotary';
@@ -437,5 +446,5 @@ export type ModificationEEMProperty = keyof Pick<Modification,
         'replaceChillers' | 
         'upgradeCoolingTowerFans' | 
         'useFreeCooling' | 
-        'replaceRefrigerant' | 
+        'replaceChillerRefrigerant' |
         'installVSDOnCentrifugalCompressors'>;

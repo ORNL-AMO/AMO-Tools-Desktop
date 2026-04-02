@@ -1,19 +1,19 @@
 
 import { getNewIdString } from "../../shared/helperFunctions";
-import { ChillerInventoryItem, CompressorChillerTypeEnum, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../../shared/models/process-cooling-assessment";
+import { ChillerInventoryItem, CompressorChillerTypeEnum, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, RefrigerantType, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../../shared/models/process-cooling-assessment";
 import { Settings } from "../../shared/models/settings";
 
 export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 export const HOUR_OPTIONS = Array.from({ length: 25 }, (_, hour) => hour);
 
-export const getCondenserCoolingMethods = () => {
+export const getCondenserCoolingMethods = (): SelectOption[] => {
     return [
         { value: 0, name: 'Water' },
         { value: 1, name: 'Air' },
     ] as const;
 };
 
-export const getTowerSizeMetrics = () => {
+export const getTowerSizeMetrics = (): SelectOption[] => {
     return [
         { value: TowerSizeMetric.Tons, name: 'Tons' },
         { value: TowerSizeMetric.HP, name: 'HP' },
@@ -21,7 +21,7 @@ export const getTowerSizeMetrics = () => {
     ] as const;
 };
 
-export const getFanType = () => {
+export const getFanType = (): SelectOption[] => {
   return [
         { value: FanType.Axial, name: 'Axial' },
         { value: FanType.Centrifugal, name: 'Centrifugal' },
@@ -29,7 +29,7 @@ export const getFanType = () => {
   ] as const;
 }
 
-export const getTowerTypes = () => {
+export const getTowerTypes = (): SelectOption[] => {
     return [
         { value: TowerType.OneCellOneSpeed, name: TowerTypes[TowerType.OneCellOneSpeed] },
         { value: TowerType.OneCellTwoSpeed, name: TowerTypes[TowerType.OneCellTwoSpeed] },
@@ -41,7 +41,18 @@ export const getTowerTypes = () => {
     ] as const;
 };
 
-export const getChillerTypes = () => {
+export const getRefrigerantTypes = (): SelectOption[] => {
+    return [
+        { value: RefrigerantType.R11, name: Refrigerants[RefrigerantType.R11] },
+        { value: RefrigerantType.R123, name: Refrigerants[RefrigerantType.R123] },
+        { value: RefrigerantType.R12, name: Refrigerants[RefrigerantType.R12] },
+        { value: RefrigerantType.R134a, name: Refrigerants[RefrigerantType.R134a] },
+        { value: RefrigerantType.R22, name: Refrigerants[RefrigerantType.R22] },
+        { value: RefrigerantType.R717, name: Refrigerants[RefrigerantType.R717] },
+    ] as const;
+}
+
+export const getChillerTypes = (): SelectOption[] => {
   return [
     {value: CompressorChillerTypeEnum.CENTRIFUGAL, name: CompressorChillerTypes[CompressorChillerTypeEnum.CENTRIFUGAL]},
     {value: CompressorChillerTypeEnum.RECIPROCATING, name: CompressorChillerTypes[CompressorChillerTypeEnum.RECIPROCATING]},
@@ -67,6 +78,16 @@ export const TowerTypes =
     [TowerType.VariableSpeed]: 'Tower With Variable Speed Motor(s)',
 }
 
+export const Refrigerants = {
+
+  [RefrigerantType.R11]: 'R11',
+  [RefrigerantType.R123]: 'R123',
+  [RefrigerantType.R12]: 'R12',
+  [RefrigerantType.R134a]: 'R134a',
+  [RefrigerantType.R22]: 'R22',
+  [RefrigerantType.R717]: 'R717',
+};
+
 export const EEM_LABELS = {
   increaseChilledWaterTemp: 'Increase Chilled Water Temperature',
   decreaseCondenserWaterTemp: 'Decrease Condenser Water Temperature',
@@ -75,7 +96,7 @@ export const EEM_LABELS = {
   replaceChillers: 'Replace Chillers',
   upgradeCoolingTowerFans: 'Upgrade Cooling Tower Fans',
   useFreeCooling: 'Use Free Cooling',
-  replaceRefrigerant: 'Replace Refrigerant',
+  replaceChillerRefrigerant: 'Replace Chiller Refrigerant',
   installVSDOnCentrifugalCompressors: 'Install VSD on Centrifugal Compressors'
 }
 
@@ -92,6 +113,7 @@ export const getDefaultInventoryItem = (): ChillerInventoryItem => {
         age: 10,
         installVSD: false,
         useARIloadScheduleByMonthchedule: false,
+        refrigerantType: RefrigerantType.R11,
         useSameMonthlyLoading: true,
         loadScheduleAllMonths: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0],
         loadScheduleByMonth: Array(12).fill(Array(11).fill(0)),
@@ -250,3 +272,7 @@ export const LOAD_LABELS = ['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%
 // todo this constant has been made elsewhere
 export const WET_BULB_BINS = ['< 35', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'];
 export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+export interface SelectOption {
+  value: number | string;
+  name: string;
+}

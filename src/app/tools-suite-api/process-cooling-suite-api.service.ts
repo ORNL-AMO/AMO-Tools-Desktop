@@ -36,12 +36,14 @@ export class ProcessCoolingSuiteApiService {
   /**
  * Calculates chiller energy for a water-cooled system.
  * @param assessment {ProcessCoolingAssessment} - Assessment input object.
+ * @param weatherData {WeatherContextData} - Weather data for the location of the system.
+ * @param suiteModificationArgs {SuiteModificationArgs} - (Optional) Arguments to determine if and how to modify inputs for modification scenarios, such as changing refrigerant type
  * @returns ProcessCoolingResults - Object with:
  *   - chiller: ProcessCoolingChillerOutput[] - Array of chiller outputs
  *   - pump: ProcessCoolingPumpOutput - Pump energy outputs
  *   - tower: ProcessCoolingTowerOutput - Tower energy outputs
  */
-  getWaterCooledResults(assessment: ProcessCoolingAssessment, weatherData: WeatherContextData): ProcessCoolingResults {
+  getWaterCooledResults(assessment: ProcessCoolingAssessment, weatherData: WeatherContextData, suiteModificationArgs?: SuiteModificationArgs): ProcessCoolingResults {
     let results: ProcessCoolingResults = {
       id: undefined,
       name: assessment.name,
@@ -54,7 +56,7 @@ export class ProcessCoolingSuiteApiService {
 
     this.setChillerDataResultMapping(assessment);
 
-    const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
+    const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary, suiteModificationArgs);
     const towerInputInstance = this._createTowerInput(assessment.systemInformation.towerInput);
     const waterCooledSystemInputInstance = this._createWaterCooledSystemInput(assessment.systemInformation.waterCooledSystemInput, assessment.systemInformation.operations, assessment.systemInformation.condenserWaterPumpInput, assessment.systemInformation.towerInput);
     const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, waterCooledSystemInputInstance, assessment, weatherData, towerInputInstance);
@@ -74,11 +76,13 @@ export class ProcessCoolingSuiteApiService {
   /**
    * Calculates chiller energy for an air-cooled system.
    * @param assessment {ProcessCoolingAssessment} - Assessment input object.
+   * @param weatherData {WeatherContextData} - Weather data for the location of the system.
+   * @param suiteModificationArgs {SuiteModificationArgs} - (Optional) Arguments to determine if and how to modify inputs for modification scenarios, such as changing refrigerant type
    * @returns ProcessCoolingResults - Object with:
    *  - chiller: ProcessCoolingChillerOutput[] - Array of chiller outputs
    *  - pump: ProcessCoolingPumpOutput - Pump energy outputs
    */
-  getAirCooledResults(assessment: ProcessCoolingAssessment, weatherData: WeatherContextData): ProcessCoolingResults {
+  getAirCooledResults(assessment: ProcessCoolingAssessment, weatherData: WeatherContextData, suiteModificationArgs?: SuiteModificationArgs): ProcessCoolingResults {
     let results: ProcessCoolingResults = {
       id: undefined,
       fuelCost: assessment.systemInformation.operations.fuelCost,
@@ -90,7 +94,7 @@ export class ProcessCoolingSuiteApiService {
 
     this.setChillerDataResultMapping(assessment);
 
-    const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary);
+    const chillerInputVector = this._createChillerInputVector(assessment.inventory, assessment.systemInformation.operations.doChillerLoadSchedulesVary, suiteModificationArgs);
     const airCooledSystemInputInstance = this._createAirCooledSystemInput(assessment.systemInformation.airCooledSystemInput, assessment.systemInformation.operations);
     const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, airCooledSystemInputInstance, assessment, weatherData);
 
@@ -200,29 +204,50 @@ export class ProcessCoolingSuiteApiService {
     return result;
   }
 
-  // todo 7655, will need additional create methods  for changing refrigerants, etc.
   /**
    * Creates a Module.ChillerInputV vector and populates it with Module.ChillerInput instances.
    * @param chillerInventoryItems {ChillerInventoryItem[]} - Array of chiller inventory items.
+   * @param doChillerLoadSchedulesVary {boolean} - Whether chiller load schedules vary by month, used to determine how to structure chiller loading input for the suite API
+   * @param suiteModificationArgs {SuiteModificationArgs} - (Optional) Arguments to determine if and how to modify chiller inputs for modification scenarios, such as changing refrigerant type
    * @returns {any} Module.ChillerInputV instance
    */
-  private _createChillerInputVector(chillerInventoryItems: ChillerInventoryItem[], doChillerLoadSchedulesVary: boolean): any {
+  private _createChillerInputVector(chillerInventoryItems: ChillerInventoryItem[], doChillerLoadSchedulesVary: boolean, suiteModificationArgs?: SuiteModificationArgs): any {
     const chillers = new this.toolsSuiteApiService.ToolsSuiteModule.ChillerInputV();
 
     for (const input of chillerInventoryItems as ChillerInventoryItem[]) {
       const loadSchedule = input.useSameMonthlyLoading ? [input.loadScheduleAllMonths] : input.loadScheduleByMonth;
       const chillerMonthlyLoading = this.suiteApiHelperService.returnDoubleVector2d(loadSchedule);
+      let chiller;
 
-      const chiller = this._createChillerInput(
-        this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
-        input.capacity,
-        input.isFullLoadEfficiencyKnown,
-        input.fullLoadEfficiency,
-        input.age,
-        input.installVSD,
-        input.useARIloadScheduleByMonthchedule,
-        chillerMonthlyLoading,
-      );
+      if (suiteModificationArgs?.changeRefrig && input.proposedRefrigerantType != null && input.proposedRefrigerantType != undefined) {
+        const currentRefrigEnum = this.suiteApiHelperService.getProcessCoolingRefrigerantTypeEnum(input.refrigerantType);
+        const proposedRefrigEnum = this.suiteApiHelperService.getProcessCoolingRefrigerantTypeEnum(input.proposedRefrigerantType);
+
+        chiller = this._createChillerInputWithRefrigChange(
+          this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
+          input.capacity,
+          input.isFullLoadEfficiencyKnown,
+          input.fullLoadEfficiency,
+          input.age,
+          input.installVSD,
+          input.useARIloadScheduleByMonthchedule,
+          chillerMonthlyLoading,
+          true,
+          currentRefrigEnum,
+          proposedRefrigEnum
+        );
+      } else {
+        chiller = this._createChillerInput(
+          this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
+          input.capacity,
+          input.isFullLoadEfficiencyKnown,
+          input.fullLoadEfficiency,
+          input.age,
+          input.installVSD,
+          input.useARIloadScheduleByMonthchedule,
+          chillerMonthlyLoading
+        );
+      }
 
       chillers.push_back(chiller);
       chiller.delete();
@@ -496,6 +521,50 @@ export class ProcessCoolingSuiteApiService {
     );
   }
 
+    /**
+  *
+  * @details Use this constructor when replacing chiller refrigerant
+  *
+  * @author Suite constructor param names
+  * @property chillerType Enumeration ChillerCompressorType
+  * @property capacity double, units ton
+  * @property isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
+  * @property fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
+  * @property age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is degraded by 1% / year
+  * @property installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
+  * @property useARIloadScheduleByMonthchedule boolean, if true loadScheduleByMonth not needed and can be set to empty
+  * @property loadScheduleByMonth double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar months
+  * @property changeRefrig boolean, should track with useOpportunity for refrigeration change
+  * @property currentRefrig Enumeration RefrigerantType
+  * @property proposedRefrig Enumeration RefrigerantType
+  */
+  private _createChillerInputWithRefrigChange(chillerInputType,
+        capacity,
+        isFullLoadEffKnown,
+        fullLoadEff,
+        age,
+        installVSD,
+        useARIloadScheduleByMonthchedule,
+        chillerMonthlyLoad2D,
+        changeRefrig,
+        currentRefrig,
+        proposedRefrig): any {
+        
+    return new this.toolsSuiteApiService.ToolsSuiteModule.ChillerInput(
+      chillerInputType,
+      capacity,
+      isFullLoadEffKnown,
+      fullLoadEff,
+      age,
+      installVSD,
+      useARIloadScheduleByMonthchedule,
+      chillerMonthlyLoad2D,
+      changeRefrig,
+      currentRefrig,
+      proposedRefrig
+    );
+  }
+
   /**
    * Creates a Module.PumpInput instance for chilled water or condenser water.
    * 
@@ -552,4 +621,13 @@ export class ProcessCoolingSuiteApiService {
     );
   }
 
+}
+
+/**
+ * Some suite constructors require specific args to output modification results
+ * 
+ * @changeRefrig boolean - should track with useOpportunity for refrigeration change. Required even to handle chillers with non null proposed refrigerant, but useOpportunity == false; 
+ */
+export interface SuiteModificationArgs {
+  changeRefrig?: boolean;
 }

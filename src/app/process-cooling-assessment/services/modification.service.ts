@@ -1,5 +1,5 @@
 import { computed, effect, inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
-import { ChillerInventoryItem, CompressorChillerTypeEnum, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment, ProcessCoolingResults, SystemInformation } from '../../shared/models/process-cooling-assessment';
+import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment, SystemInformation } from '../../shared/models/process-cooling-assessment';
 import { BehaviorSubject, combineLatest, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { copyObject, getNewIdString } from '../../shared/helperFunctions';
@@ -160,16 +160,7 @@ export class ModificationService {
       }
     }
 
-    if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
-      const form = this.exploreOpportunitiesFormService.getInstallVSDOnCentrifugalCompressorsForm({
-        installOnAll: modification.installVSDOnCentrifugalCompressors.installOnAll,
-        useOpportunity: modification.installVSDOnCentrifugalCompressors.useOpportunity
-      });
-      if (!form.valid) {
-        return false;
-      }
-    }
-
+    
     if (modification.useFreeCooling?.useOpportunity) {
       const form = this.exploreOpportunitiesFormService.getUseFreeCoolingForm(
         modification.useFreeCooling,
@@ -300,15 +291,13 @@ export class ModificationService {
         usesFreeCooling: baselineValues.useFreeCooling.usesFreeCooling,
         isHEXRequired: baselineValues.useFreeCooling.isHEXRequired,
         HEXApproachTemp: baselineValues.useFreeCooling.HEXApproachTemp,
-        useOpportunity: false,
+        useOpportunity: false,    
       },
-      replaceRefrigerant: {
-        currentRefrigerant: undefined,
-        newRefrigerant: undefined,
+      replaceChillerRefrigerant: {
         useOpportunity: false,
       },
       installVSDOnCentrifugalCompressors: {
-        installOnAll: false,
+        chillerIds: [],
         useOpportunity: false,
       },
     }
@@ -388,10 +377,14 @@ export class ModificationService {
     }
 
     if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
+      const vsdChillerIds = new Set(modification.installVSDOnCentrifugalCompressors.chillerIds);
       chillerInventory = chillerInventory.map(chiller =>
-        chiller.chillerType === CompressorChillerTypeEnum.CENTRIFUGAL ? { ...chiller, installVSD: true } : chiller
+        vsdChillerIds.has(chiller.itemId) ? { ...chiller, installVSD: true } : chiller
       );
     }
+
+    // * modification.replaceChillerRefrigerant isn't like the other EEMs.
+    // * this EEM will modify chiller inventory directly and use suiteModificationArgs for differing suite calculation
 
     modifiedProcessCoolingAssessment.systemInformation = systemInformation;
     modifiedProcessCoolingAssessment.inventory = chillerInventory;
@@ -432,12 +425,11 @@ export class ModificationService {
         currentChillerId: '',
         newChiller: {} as ChillerInventoryItem,
       },
-      replaceRefrigerant: {
-        currentRefrigerant: undefined,
-        newRefrigerant: undefined,
+      replaceChillerRefrigerant: {
+        useOpportunity: false,
       },
       installVSDOnCentrifugalCompressors: {
-        installOnAll: false,
+        chillerIds: [],
         useOpportunity: false,
       },
     }
@@ -468,8 +460,8 @@ export class ModificationService {
     if (modification.useFreeCooling?.useOpportunity) {
       badges.push(EEM_LABELS.useFreeCooling);
     }
-    if (modification.replaceRefrigerant?.useOpportunity) {
-      badges.push(EEM_LABELS.replaceRefrigerant);
+    if (modification.replaceChillerRefrigerant?.useOpportunity) {
+      badges.push(EEM_LABELS.replaceChillerRefrigerant);
     }
     if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
       badges.push(EEM_LABELS.installVSDOnCentrifugalCompressors);

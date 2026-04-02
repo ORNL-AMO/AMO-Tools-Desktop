@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label for="{{controlIds.isFullLoadEfficiencyKnown}}">Is Full Load Efficiency Known?</label>
-                <select class="form-control" id="isFullLoadEfficiencyKnown" formControlName="isFullLoadEfficiencyKnown"
+                <select class="form-control" id="{{controlIds.isFullLoadEfficiencyKnown}}" formControlName="isFullLoadEfficiencyKnown"
                     (focus)="focusField('isFullLoadEfficiencyKnown')">
                     <option [ngValue]="true">Yes</option>
                     <option [ngValue]="false">No</option>
@@ -49,9 +49,18 @@
                 <app-form-control-errors [control]="form.controls.fullLoadEfficiency"></app-form-control-errors>
             </div>
             <div class="form-group">
+                <label for="{{controlIds.refrigerantType}}">Refrigerant Type</label>
+                <select class="form-control" id="{{controlIds.refrigerantType}}" formControlName="refrigerantType"
+                    (focus)="focusField('refrigerantType')">
+                    @for (refrigerantType of refrigerantTypes; track refrigerantType.value) {
+                    <option [ngValue]="refrigerantType.value">{{ refrigerantType.name }}</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
                 <label for="{{controlIds.capacity}}">Capacity</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" id="capacity" formControlName="capacity"
+                    <input type="number" class="form-control" id="{{controlIds.capacity}}" formControlName="capacity"
                         (focus)="focusField('capacity')" />
                     <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.capacity.labelHTML.imperial"
                 [metricUnit]="PROCESS_COOLING_UNITS.capacity.labelHTML.metric"></app-input-unit>
@@ -60,7 +69,7 @@
             <div class="form-group">
                 <label for="{{controlIds.age}}">Age</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" id="age" formControlName="age"
+                    <input type="number" class="form-control" id="{{controlIds.age}}" formControlName="age"
                         (focus)="focusField('age')" />
                     <app-input-unit [defaultUnit]="'years'"></app-input-unit>
                 </div>
