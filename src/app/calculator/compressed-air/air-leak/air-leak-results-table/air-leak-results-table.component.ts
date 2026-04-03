@@ -16,7 +16,7 @@ export class AirLeakResultsTableComponent implements OnInit {
   airLeakOutputSub: Subscription;
   
   resetDataSub: Subscription;
-  allSelected: boolean = false;
+  allSelected: boolean = true;
 
   @Input()
   settings: Settings;
@@ -29,7 +29,7 @@ export class AirLeakResultsTableComponent implements OnInit {
     });
     this.resetDataSub = this.airLeakService.resetData.subscribe(value => {
       if (value) {
-        this.allSelected = false;
+        this.allSelected = true;
       } 
     });
   }
