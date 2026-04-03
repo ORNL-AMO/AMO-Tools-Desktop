@@ -194,7 +194,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     domeOutlineTrace.line.width = 2;
     domeOutlineTrace.line.color = "#000000";
     domeOutlineTrace.name = "Saturated"
-    domeOutlineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+    domeOutlineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, false);
 
     this.enthalpyChart.data.push(domeFillTrace, domeOutlineTrace);
   }
@@ -208,7 +208,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     pointTrace.marker.color = graphColors[0];
     pointTrace.x = [enthalpy];
     pointTrace.y = [convertedPressure];
-    pointTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+    pointTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, false);
 
     if (this.enthalpyChart.existingPoint) {
       this.enthalpyChart.data[this.enthalpyChart.data.length - 1] = pointTrace;

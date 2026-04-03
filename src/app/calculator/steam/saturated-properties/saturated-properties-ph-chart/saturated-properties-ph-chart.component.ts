@@ -156,7 +156,7 @@ export class SaturatedPropertiesPhChartComponent implements OnInit, OnChanges {
       let trace = this.saturatedPropertiesService.getEmptyTrace();
       trace.x = line.enthalpy;
       trace.y = line.pressure;
-      trace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+      trace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, false);
       this.enthalpyChart.data.push(trace);
     });
   }
@@ -189,7 +189,7 @@ export class SaturatedPropertiesPhChartComponent implements OnInit, OnChanges {
     domeOutlineTrace.line.width = 2;
     domeOutlineTrace.line.color = "#000000";
     domeOutlineTrace.name = "Saturated"
-    domeOutlineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+    domeOutlineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, false);
 
     this.enthalpyChart.data.push(domeFillTrace, domeOutlineTrace);
   }
@@ -208,7 +208,7 @@ export class SaturatedPropertiesPhChartComponent implements OnInit, OnChanges {
     let lineTrace = this.saturatedPropertiesService.getLineTrace(x, y);
     lineTrace.marker.color = graphColors[0];
     lineTrace.marker.line.color = graphColors[0];
-    lineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, true);
+    lineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, false);
 
     if (this.enthalpyChart.existingPoint) {
       this.enthalpyChart.data[this.enthalpyChart.data.length - 1] = lineTrace;
