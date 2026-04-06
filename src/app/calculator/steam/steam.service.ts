@@ -324,6 +324,7 @@ export class SteamService {
 
   steamModeler(inputData: SSMTInputs, settings: Settings): SSMTOutput {
     let convertedInputData: SSMTInputs = this.convertSteamService.convertInputData(JSON.parse(JSON.stringify(inputData)), settings);
+    console.log(convertedInputData);
     let outputData: SSMTOutput;
     try {
       outputData = this.steamSuiteApiService.steamModeler(convertedInputData);
@@ -335,6 +336,7 @@ export class SteamService {
       outputData.hasSteamModelerError = true;
       return outputData;
     }
+    console.log('=====')
     this.steamModelerError.next(undefined);
     return this.convertSteamService.convertSsmtOutput(outputData, settings);
   }

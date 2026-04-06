@@ -492,6 +492,7 @@ export class ConvertSteamService {
     boilerInput.steamTemperature = this.convertSteamTemperatureInput(boilerInput.steamTemperature, settings);
     boilerInput.deaeratorPressure = this.convertSteamPressureInput(boilerInput.deaeratorPressure, settings);
     boilerInput.approachTemperature = this.convertApproachTemperature(boilerInput.approachTemperature, settings);
+    boilerInput.saturatedPressure = this.convertSteamPressureInput(boilerInput.saturatedPressure, settings);
     return boilerInput;
   }
 
