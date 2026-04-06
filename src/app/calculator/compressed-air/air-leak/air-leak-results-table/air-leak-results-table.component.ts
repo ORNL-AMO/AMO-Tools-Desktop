@@ -24,14 +24,15 @@ export class AirLeakResultsTableComponent implements OnInit {
   constructor(private airLeakService: AirLeakService) { }
 
   ngOnInit(): void {
-    this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
-      this.airLeakOutput = value;
-    });
-    this.resetDataSub = this.airLeakService.resetData.subscribe(value => {
-      if (value) {
-        this.allSelected = true;
-      } 
-    });
+      this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
+        this.airLeakOutput = value;
+        this.updateAllSelected();
+      });
+      this.resetDataSub = this.airLeakService.resetData.subscribe(value => {
+        if (value) {
+          this.allSelected = true;
+        }
+      });
   }
   
   ngOnDestroy() {
@@ -53,11 +54,21 @@ export class AirLeakResultsTableComponent implements OnInit {
 
   toggleSelected(index: number, selected: boolean) {
     this.airLeakService.setLeakForModification(index, selected);
+    this.updateAllSelected();
   }
 
   toggleSelectAll(){
-    this.airLeakService.setLeakForModificationSelectAll(!this.allSelected);
-    this.allSelected = !this.allSelected;
+    const newValue = !this.allSelected;
+    this.airLeakService.setLeakForModificationSelectAll(newValue);
+    this.allSelected = newValue;
+  }
+
+  private updateAllSelected() {
+    if (this.airLeakOutput && this.airLeakOutput.individualLeaks && this.airLeakOutput.individualLeaks.length > 0) {
+      this.allSelected = this.airLeakOutput.individualLeaks.every(leak => leak.selected);
+    } else {
+      this.allSelected = true;
+    }
   }
 
 }
