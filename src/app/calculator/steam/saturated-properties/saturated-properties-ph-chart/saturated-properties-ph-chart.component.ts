@@ -208,7 +208,7 @@ export class SaturatedPropertiesPhChartComponent implements OnInit, OnChanges {
     let lineTrace = this.saturatedPropertiesService.getLineTrace(x, y);
     lineTrace.marker.color = graphColors[0];
     lineTrace.marker.line.color = graphColors[0];
-    lineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEntropyMeasurement, this.settings.steamTemperatureMeasurement, false);
+    lineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, false);
 
     if (this.enthalpyChart.existingPoint) {
       this.enthalpyChart.data[this.enthalpyChart.data.length - 1] = lineTrace;
