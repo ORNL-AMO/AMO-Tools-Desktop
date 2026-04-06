@@ -161,7 +161,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
       let trace = this.saturatedPropertiesService.getEmptyTrace();
       trace.x = line.enthalpy;
       trace.y = line.pressure;
-      trace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+      trace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, false);
       this.enthalpyChart.data.push(trace);
     });
   }
