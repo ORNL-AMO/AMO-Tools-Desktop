@@ -1,6 +1,6 @@
-import { Alert, Box, Button, Chip, createTheme, FormControl, InputAdornment, InputLabel, MenuItem, Select } from "@mui/material";
+import { Alert, Box, Button, Chip, FormControl, InputAdornment, InputLabel, MenuItem, Select } from "@mui/material";
 import { getHasSources } from "../Diagram/FlowUtils";
-import { Edge, getConnectedEdges, Node } from "@xyflow/react";
+import { getConnectedEdges, Node } from "@xyflow/react";
 
 import { memo, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
@@ -12,7 +12,6 @@ import SourceFlowForm from "./SourceFlowForm";
 import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
 import DischargeFlowForm from "./DischargeFlowForm";
 import InvalidIcon from "../../validation/InvalidIcon";
-import { yellow } from "@mui/material/colors";
 import SelectTreatmentType from "./SelectTreatmentType";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import CalculateIcon from '@mui/icons-material/Calculate';
