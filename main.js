@@ -17,6 +17,15 @@ app.allowRendererProcessReuse = false
 // Logger for autoUpdater
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
+
+if (process.env.MEASUR_UPDATE_CHANNEL === '-rc') {
+  // Allow prerelease versions to be installed.
+  autoUpdater.allowPrerelease = true;
+  autoUpdater.channel = '-rc';
+} else {
+  autoUpdater.channel = 'latest';
+}
+
 log.info('App starting...');
 
 let win = null;

@@ -109,7 +109,12 @@ jobs:
 
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile
       - name: Bundle
-        run: npm run dist -- --mac --universal --publish never
+        run: |
+          if [ "$MEASUR_UPDATE_CHANNEL" = "-rc" ]; then
+            npm run dist -- --mac --universal --publish never --prerelease
+          else
+            npm run dist -- --mac --universal --publish never
+          fi
       - name: Notarize
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -160,7 +165,12 @@ jobs:
       - *npm-setup
       - name: Bundle
         shell: bash
-        run: npm run dist -- --win --x64 --publish never
+        run: |
+          if [ "$MEASUR_UPDATE_CHANNEL" = "-rc" ]; then
+            npm run dist -- --win --x64 --publish never --prerelease
+          else
+            npm run dist -- --win --x64 --publish never
+          fi
       - name: Upload codesign artifact
         uses: actions/upload-artifact@v4
         with:
@@ -207,7 +217,12 @@ jobs:
           restore-keys: npm-
       - *npm-setup
       - name: Bundle
-        run: npm run dist -- --linux --x64 --publish never
+        run: |
+          if [ "$MEASUR_UPDATE_CHANNEL" = "-rc" ]; then
+            npm run dist -- --linux --x64 --publish never --prerelease
+          else
+            npm run dist -- --linux --x64 --publish never
+          fi
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
@@ -258,7 +273,7 @@ jobs:
           retention-days: 1
       - name: Cleanup
         run: rm -rf ./output
-
+# TODO modify below to read MEASUR_UPDATE_CHANNEL to handle prerelease tag creation
   release:
     if: github.ref_name == 'master'
     runs-on: ubuntu-22.04
