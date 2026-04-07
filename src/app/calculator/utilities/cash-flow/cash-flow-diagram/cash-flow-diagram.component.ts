@@ -61,9 +61,9 @@ export class CashFlowDiagramComponent implements OnInit {
     this.cashFlowChart.data = chartTraces;
     let chartLayout = JSON.parse(JSON.stringify(this.cashFlowChart.layout));
     if(this.expanded && this.expandedChartDiv){
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.cashFlowChart.data, chartLayout, defaultPlotlyConfig(this.cashFlowChart.config));
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.cashFlowChart.data, chartLayout, defaultPlotlyConfig(this.cashFlowChart.config, chartTraces));
     }else if(!this.expanded && this.panelChartDiv){
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.cashFlowChart.data, chartLayout, defaultPlotlyConfig(this.cashFlowChart.config));
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.cashFlowChart.data, chartLayout, defaultPlotlyConfig(this.cashFlowChart.config, chartTraces));
     }
   }
 

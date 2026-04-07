@@ -71,7 +71,7 @@ export class EnergyCostPieChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions));
+      this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions, data));
     });
   }
 

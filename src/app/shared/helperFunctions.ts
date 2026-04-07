@@ -2,7 +2,7 @@ import { cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { FlatColors, graphColors } from './graphColors';
 import { SimpleChart } from './models/plotting';
-
+import { TraceData } from './models/plotting';
 export function copyObject(object) {
     return cloneDeep(object);
 }
@@ -48,11 +48,16 @@ export function getRandomFlatColor(): string {
 
 
 // Returns a Plotly config object with base options, merging any provided config
-export function defaultPlotlyConfig(config?: Partial<SimpleChart['config']>, chartType?: string): Partial<SimpleChart['config']> {
+export function defaultPlotlyConfig(config?: Partial<SimpleChart['config']>, chartType?: string | any): Partial<SimpleChart['config']> {
+    let modeBarButtonsToRemove = ['select2d', 'lasso2d'];
+    if (Array.isArray(chartType)) {
+        if (chartType.some(trace => ['pie', 'bar'].includes(trace.type))) {
+            modeBarButtonsToRemove.push('zoom2d');
+        }
+    }
 
-    console.log(config);
     const mergedConfig = {
-        modeBarButtonsToRemove: ['select2d', 'lasso2d'],
+        modeBarButtonsToRemove: modeBarButtonsToRemove,
         displaylogo: false,
         displayModeBar: true,
         responsive: true,
@@ -60,20 +65,3 @@ export function defaultPlotlyConfig(config?: Partial<SimpleChart['config']>, cha
     };
     return mergedConfig;
 }
-
-/**
- * Returns the first matching Plotly trace type from the provided array, or 'scatter' if none found.
- * @param traces Array of trace objects (must have a 'type' property)
- * @param typesToFind Array of type strings to look for (e.g., ['bar','scatter'])
- */
-// export function getFirstTraceTypeOrDefault(traces: Array<{ type?: string }>, typesToFind: string[] = ['scatter','bar','line','pie','sankey','scattergl']): string {
-//     if (!Array.isArray(traces)) return 'scatter';
-//     for (const trace of traces) {
-//         if (trace && typeof trace.type === 'string' && typesToFind.includes(trace.type)) {
-//             return trace.type;
-//         }
-//     }
-//     return 'scatter';
-// }
-
-export function ()

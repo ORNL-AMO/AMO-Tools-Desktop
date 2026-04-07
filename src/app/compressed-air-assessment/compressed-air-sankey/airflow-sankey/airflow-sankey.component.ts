@@ -205,16 +205,8 @@ export class AirflowSankeyComponent implements OnInit {
 
         let config = {
           modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
-          responsive: true,
-          displayModeBar: true,
-          displaylogo: true
+          responsive: !this.printView
         };
-        if (this.printView) {
-          config.displaylogo = false;
-          config.displayModeBar = false;
-          config.responsive = false
-        }
-
         this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config))
           .then(chart => {
             this.addGradientElement();

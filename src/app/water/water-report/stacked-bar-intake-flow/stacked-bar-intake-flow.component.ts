@@ -128,7 +128,7 @@ export class StackedBarIntakeFlowComponent {
       responsive: this.printView ? false : true
     };
 
-    this.plotlyService.newPlot(this.intakeFlowsChart.nativeElement, chartData, layout, defaultPlotlyConfig(configOptions));
+    this.plotlyService.newPlot(this.intakeFlowsChart.nativeElement, chartData, layout, defaultPlotlyConfig(configOptions, chartData));
   }
 
 

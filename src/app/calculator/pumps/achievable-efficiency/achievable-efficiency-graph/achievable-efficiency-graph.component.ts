@@ -8,7 +8,7 @@ import { SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/mod
 import { AchievableEfficiencyService, EfficiencyPoint, EfficiencyTrace } from '../achievable-efficiency.service';
 import { pumpTypeRanges } from '../../../../psat/psatConstants';
 import { PlotlyService } from 'angular-plotly.js';
-import { defaultPlotlyConfig, getFirstTraceTypeOrDefault } from '../../../../shared/helperFunctions';
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-achievable-efficiency-graph',
     templateUrl: './achievable-efficiency-graph.component.html',
@@ -105,36 +105,29 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   }
 
   newPlot() {
-    let traceData: Array<TraceData> = [];
-    this.efficiencyChart.data.forEach(trace => traceData.push(trace));
-    this.dataPointTraces.forEach(trace => traceData.push(trace));
-
-    // Use helper to determine chart type (no extra variables needed)
-    const chartType = getFirstTraceTypeOrDefault(traceData);
+    let traceData: Array<TraceData> = new Array();
+    this.efficiencyChart.data.forEach((trace, i) => {
+      traceData.push(trace);
+    });
+    this.dataPointTraces.forEach(trace => {
+      traceData.push(trace);
+    });
 
     let chartLayout = JSON.parse(JSON.stringify(this.efficiencyChart.layout));
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(
-        this.expandedChartDiv.nativeElement,
-        traceData,
-        chartLayout,
-        defaultPlotlyConfig(this.efficiencyChart.config, chartType)
-      ).then(chart => {
-        chart.on('plotly_click', (graphData) => {
-          this.createDataPoints(graphData);
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.efficiencyChart.config, traceData))
+        .then(chart => {
+          chart.on('plotly_click', (graphData) => {
+            this.createDataPoints(graphData);
+          });
         });
-      });
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(
-        this.panelChartDiv.nativeElement,
-        traceData,
-        chartLayout,
-        defaultPlotlyConfig(this.efficiencyChart.config, chartType)
-      ).then(chart => {
-        chart.on('plotly_click', (graphData) => {
-          this.createDataPoints(graphData);
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.efficiencyChart.config, traceData))
+        .then(chart => {
+          chart.on('plotly_click', (graphData) => {
+            this.createDataPoints(graphData);
+          });
         });
-      });
     }
   }
 
