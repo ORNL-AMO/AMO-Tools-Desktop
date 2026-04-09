@@ -13,7 +13,7 @@ app.allowRendererProcessReuse = false;
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
-autoUpdater.forceDevUpdateConfig = true;
+// autoUpdater.forceDevUpdateConfig = true;
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = false;
 
