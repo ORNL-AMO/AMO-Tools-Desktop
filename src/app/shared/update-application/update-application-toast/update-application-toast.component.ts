@@ -31,6 +31,7 @@ export class UpdateApplicationToastComponent {
   updateErrorSub: Subscription;
   showUpdateToastSub: Subscription;
   webAndPwaUpdateSub: Subscription;
+  downloadProgressSub: Subscription;
   progress: DownloadProgress;
 
   constructor(private electronService: ElectronService,
@@ -83,7 +84,7 @@ export class UpdateApplicationToastComponent {
         } 
       });
       
-      this.electronService.downloadProgress.subscribe(progress => {
+      this.downloadProgressSub = this.electronService.downloadProgress.subscribe(progress => {
         if (progress) {
           this.progress = progress;
         }
@@ -95,11 +96,13 @@ export class UpdateApplicationToastComponent {
     this.toastAnimate = 'hide';
     this.updateStatus = undefined;
     this.webAndPwaUpdateSub.unsubscribe();
+    this.showUpdateToastSub.unsubscribe();
+
     if (this.electronService.isElectron) {
       this.electronUpdateAvailableSub.unsubscribe();
       this.updateDownloadedSub.unsubscribe();
       this.updateErrorSub.unsubscribe();
-
+      this.downloadProgressSub.unsubscribe();
     }
   }
 
