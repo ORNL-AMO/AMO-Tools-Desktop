@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 interface ColorPaletteDropdownProps {
@@ -72,13 +72,11 @@ export function getContrastTextColor(bgColor: string): string {
 
 const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, onChange }) => {
   const [open, setOpen] = useState(false);
-  const anchorRef = useRef<HTMLDivElement>(null);
 
   return (
     <div style={{ margin: '24px 0', position: 'relative' }}>
       <h3 style={{ fontSize: 16, marginBottom: 12 }}>Color Options</h3>
       <div
-        ref={anchorRef}
         style={{
           display: 'inline-flex',
           alignItems: 'center',
