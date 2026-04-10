@@ -24,8 +24,6 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   settings: Settings;
   @Input()
   assessment: Assessment;
-  @Output('updateSettings')
-  updateSettings = new EventEmitter<boolean>();
   @Output('openUpdateUnitsModal') 
   openUpdateUnitsModal = new EventEmitter<Settings>();
 
@@ -42,8 +40,9 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   oldSettings: Settings;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
-  constructor(private settingsService: SettingsService,   
-    private settingsDbService: SettingsDbService, private treasureHuntService: TreasureHuntService, private convertInputDataService: ConvertInputDataService,
+  constructor(private settingsService: SettingsService, 
+    private treasureHuntService: TreasureHuntService, 
+    private convertInputDataService: ConvertInputDataService,
     private convertUnitsService: ConvertUnitsService) { }
 
   ngOnInit() {
@@ -68,10 +67,12 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
   }
 
   async saveSettings() {
-    let id: number = this.settings.id;
-    this.settings = this.settingsService.getSettingsFromForm(this.settingsForm);
-    this.settings.id = id;
-    this.settings.assessmentId = this.assessment.id;
+    const updatedSettingsForm: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
+    this.settings = {
+      ...this.settings,
+      ...updatedSettingsForm
+    }
+    
     if (this.settings.unitsOfMeasure != this.oldSettings.unitsOfMeasure) {
       this.assessment.treasureHunt.existingDataUnits = this.oldSettings.unitsOfMeasure;
       this.saveTreasureHunt();
@@ -82,10 +83,7 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
       this.showSuccessMessage = false;
     }
 
-    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(updatedSettings);
-    this.updateSettings.emit(true);
+    this.treasureHuntService.setTreasureHuntSettings(this.settings);
   }
 
   saveTreasureHunt() {
@@ -123,9 +121,9 @@ export class SystemBasicsComponent implements OnInit, OnDestroy {
 
   updateData(showSuccess?: boolean) {
     this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
-    this.settings = this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
+    this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings);
-    this.saveSettings();    
+    this.saveSettings(); 
     if(showSuccess) {
       this.initSuccessMessage();
     }

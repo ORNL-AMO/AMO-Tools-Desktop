@@ -514,7 +514,7 @@ export class ConvertUnitsService {
     return outputRate;
   }
 
-  convertSettingsUnitCosts(oldSettings: Settings, newSettings: Settings): Settings {
+  convertSettingsUnitCosts(oldSettings: Settings, newSettings: Settings) {
     //imperial: $/MMBtu, metric: $/GJ
     newSettings.fuelCost = this.convertDollarsPerMMBtuAndGJ(newSettings.fuelCost, oldSettings, newSettings);
     //imperial: $/klb, metric: $/tonne
@@ -527,7 +527,6 @@ export class ConvertUnitsService {
     newSettings.waterWasteCost = this.convertDollarsPerGalAndLiter(newSettings.waterWasteCost, oldSettings, newSettings);
     //imperial: $/scf, metric: $/m2
     newSettings.compressedAirCost = this.convertDollarsPerFt3AndM3(newSettings.compressedAirCost, oldSettings, newSettings);
-    return newSettings;
   }
 
   convertTemperatures(XYValues: Array<number>, settings: Settings) {

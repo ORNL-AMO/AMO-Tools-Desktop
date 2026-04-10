@@ -186,6 +186,7 @@ export class CreateAssessmentModalComponent {
         let tmpAssessment: Assessment = this.assessmentService.getNewAssessment('TreasureHunt');
         tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
         tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        tmpAssessment.treasureHunt = this.assessmentService.getDefaultTreasureHunt(this.settings);
         let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
         this.finishAndNavigate(createdAssessment, '/treasure-hunt/' + createdAssessment.id);
       } 
