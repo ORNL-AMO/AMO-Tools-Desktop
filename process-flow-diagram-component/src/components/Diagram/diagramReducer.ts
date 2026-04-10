@@ -76,7 +76,6 @@ export const getStoreSerializedDate = (dateObject: Date): string => {
   return dateObject.toISOString();
 }
 
-
 /**
  * Sets initialized state on process-flow-diagram-component's parent first render
  */
@@ -94,10 +93,28 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
     upgradeDiagram(diagramData);
   }
 
-  state.nodes = diagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
+  // Always reset node styles to default palette on load, by type order
+  const { allPalettes, getContrastTextColor } = require('../Drawer/ColorPaletteDropdown');
+  const { processFlowDiagramParts } = require('process-flow-lib');
+  const palette = allPalettes[0];
+  state.nodes = diagramData.nodes.filter((node) => {
     if (node.position) {
+      // Always assign background and text color by typeIdx and palette
+      const typeIdx = processFlowDiagramParts.findIndex(
+        (part) => part.processComponentType === node.data.processComponentType
+      );
+      const paletteIdx = typeIdx >= 0 ? typeIdx : 0;
+      const bgColor = palette[paletteIdx % palette.length];
+      // Always compute contrast after bgColor is set
+      const textColor = getContrastTextColor(bgColor);
+      node.style = {
+        ...node.style,
+        backgroundColor: bgColor,
+        color: textColor
+      };
       return node;
     }
+    return false;
   });
   state.edges = diagramData.edges.map((edge: Edge<CustomEdgeData>) => edge);
   state.diagramOptions = diagramData.userDiagramOptions ? { ...diagramData.userDiagramOptions } : getDefaultUserDiagramOptions();
@@ -290,6 +307,13 @@ const setNodeStyleReducer = (state: DiagramState, action: PayloadAction<CSSPrope
   const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart>;
   updateNode.style = action.payload;
 }
+
+const setAllNodeStylesReducer = (state: DiagramState, action: PayloadAction<CSSProperties[]>) => {
+  state.nodes = state.nodes.map((node, idx) => ({
+    ...node,
+    style: { ...node.style, ...action.payload[idx] }
+  }));
+};
 
 /**
  * "Delete Component" button click from drawer
@@ -619,6 +643,7 @@ export const diagramSlice = createSlice({
     edgesChangeFromPropagation: edgesChangeFromPropagationReducer,
     sumTotalFlowChange: sumTotalFlowChangeReducer,
     setDiagramNotes: setDiagramNotesReducer,
+    setAllNodeStyles: setAllNodeStylesReducer,
   }
 })
 
@@ -666,7 +691,8 @@ export const {
   diagramAlertChange,
   toggleMenuDrawer,
   edgesChangeFromPropagation,
-  setDiagramNotes
+  setDiagramNotes,
+  setAllNodeStyles,
 } = diagramSlice.actions
 export default diagramSlice.reducer
 

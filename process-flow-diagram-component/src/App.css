@@ -252,44 +252,9 @@ a {
 }
 
 .react-flow__node-summingNode.expandIcon:hover {
-      box-shadow: 0px 3.54px 4.55px 0px #00000005, 
-      0px 3.54px 4.55px 0px #0000000D, 
-      0px 0.51px 1.01px 0px #0000001A
-}
-
-.react-flow__node-summingNode,
-.react-flow__node-group {
-  min-width: 150px;
-  border: 1px solid rgb(108, 117, 125);
-  background-color: rgb(108, 117, 125);
-}
-
-.react-flow__node-waterIntake,
-.react-flow__node-group {
-  /* background-color: var(--water-intake); */
-  background-color: #75a1ff;
-}
-
-.react-flow__node-waterUsingSystem,
-.react-flow__node-group {
-  /* background-color: var(--water-using-system); */
-  background-color: rgb(0, 187, 255);
-}
-
-.react-flow__node-waterDischarge,
-.react-flow__node-group {
-  /* background-color: var(--water-discharge); */
-  background-color: rgb(127, 127, 255);
-}
-
-.react-flow__node-waterTreatment,
-.react-flow__node-group {
-  background-color: #009386;
-}
-
-.react-flow__node-wasteWaterTreatment,
-.react-flow__node-group {
-  background-color: #93e200;
+  box-shadow: 0px 3.54px 4.55px 0px #00000005, 
+  0px 3.54px 4.55px 0px #0000000D, 
+  0px 0.51px 1.01px 0px #0000001A
 }
 
 
@@ -446,6 +411,21 @@ a {
   z-index: 11;
 }
 
+.sidebar-color-picker .react-colorful {
+  height: 240px;
+}
+.sidebar-color-picker .react-colorful__saturation {
+  border-radius: 4px 4px 0 0;
+}
+.sidebar-color-picker .react-colorful__hue {
+  height: 40px;
+  border-radius: 0 0 4px 4px;
+}
+.sidebar-color-picker .react-colorful__hue-pointer {
+  width: 12px;
+  height: inherit;
+  border-radius: 0;
+}
 
 .picker-wrapper {
   display: flex;
