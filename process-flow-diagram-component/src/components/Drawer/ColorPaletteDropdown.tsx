@@ -11,7 +11,7 @@ export const mainPalettes = [
   ['#88EFBF', '#FE5000', '#008A8F', '#B50094', '#FFFFFF', '#BDBDBD'],
   ['#00B8B5', '#42008E', '#373A36', '#006BA6', '#005776', '#BDBDBD'],
   ['#00662C', '#88EFBF', '#F9BF1B', '#008A8F', '#006BA6', '#BDBDBD'],
-  ['#00454D', '#7DA800', '#FE5000', '#e60b0b', '#BDBDBD', '#DBDCDB'],
+  ['#00454D', '#7DA800', '#FE5000', '#e60b0b', '#ffffff', '#DBDCDB'],
 ];
 // 3 colorblind-friendly palettes (user provided, with gray as 6th color)
 export const colorblindPalettes = [
@@ -94,7 +94,8 @@ const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, o
       <div
         ref={anchorRef}
         style={{
-          display: 'inline-block',
+          display: 'inline-flex',
+          alignItems: 'center',
           cursor: 'pointer',
           border: '2px solid #1976d2',
           borderRadius: 8,
@@ -107,6 +108,20 @@ const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, o
         title="Select color palette"
       >
         <ColorRow colors={allPalettes[selected]} style={{ margin: 0 }} />
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ display: 'inline', verticalAlign: 'middle', marginLeft: 8 }}
+        >
+          {open ? (
+            <path d="M5 13l5-5 5 5" stroke="#1976d2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          ) : (
+            <path d="M5 7l5 5 5-5" stroke="#1976d2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          )}
+        </svg>
       </div>
       {open && (
         <ClickAwayListener onClickAway={() => setOpen(false)}>
@@ -130,7 +145,7 @@ const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, o
             {allPalettes.map((palette, i) => {
               if (i === mainPalettes.length) {
                 return [
-                  <div key="cb-header" style={{ fontSize: 13, color: '#75a1ff', fontWeight: 600, padding: '4px 0 2px 0', borderBottom: '1px solid #eee', margin: '4px 0 2px 0' }}>
+                  <div key="cb-header" style={{ fontSize: 13, color: '#000', fontWeight: 600, padding: '4px 0 2px 0', borderBottom: '1px solid #eee', margin: '4px 0 2px 0' }}>
                     Colorblind Palettes
                   </div>,
                   <div
