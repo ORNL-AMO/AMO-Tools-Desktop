@@ -411,22 +411,6 @@ a {
   z-index: 11;
 }
 
-.sidebar-color-picker .react-colorful {
-  height: 240px;
-}
-.sidebar-color-picker .react-colorful__saturation {
-  border-radius: 4px 4px 0 0;
-}
-.sidebar-color-picker .react-colorful__hue {
-  height: 40px;
-  border-radius: 0 0 4px 4px;
-}
-.sidebar-color-picker .react-colorful__hue-pointer {
-  width: 12px;
-  height: inherit;
-  border-radius: 0;
-}
-
 .picker-wrapper {
   display: flex;
   flex-direction: column;
