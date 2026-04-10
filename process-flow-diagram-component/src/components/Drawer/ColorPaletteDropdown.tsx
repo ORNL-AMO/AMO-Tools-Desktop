@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 
 interface ColorPaletteDropdownProps {
@@ -77,6 +77,10 @@ const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, o
     <div style={{ margin: '24px 0', position: 'relative' }}>
       <h3 style={{ fontSize: 16, marginBottom: 12 }}>Color Options</h3>
       <div
+        role="button"
+        tabIndex={0}
+        aria-haspopup="listbox"
+        aria-expanded={open}
         style={{
           display: 'inline-flex',
           alignItems: 'center',
