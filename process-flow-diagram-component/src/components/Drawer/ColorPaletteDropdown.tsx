@@ -70,23 +70,9 @@ export function getContrastTextColor(bgColor: string): string {
 }
 
 
-const setPaletteCSSVars = (palette: string[]) => {
-  const root = document.documentElement;
-  root.style.setProperty('--water-intake', palette[0]);
-  root.style.setProperty('--water-using-system', palette[1]);
-  root.style.setProperty('--water-discharge', palette[2]);
-  root.style.setProperty('--water-treatment', palette[3]);
-  root.style.setProperty('--waste-water-treatment', palette[4]);
-  root.style.setProperty('--known-loss-bg', palette[5]);
-};
-
 const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, onChange }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    setPaletteCSSVars(allPalettes[selected]);
-  }, [selected]);
 
   return (
     <div style={{ margin: '24px 0', position: 'relative' }}>
