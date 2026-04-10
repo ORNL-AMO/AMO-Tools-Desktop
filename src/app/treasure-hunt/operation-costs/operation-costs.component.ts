@@ -461,16 +461,17 @@ export class OperationCostsComponent implements OnInit {
     this.calcAnnualCosts('steamCosts', this.treasureHunt.currentEnergyUsage.steamUsage, this.settings.steamCost);
   }
 
+  // * re: conversions for below calculations - usage/cost units only differ for imperial units
   private calcUnitCost(
     settingsCostKey: keyof Settings,
     costs: number, 
     usage: number,
-    imperialStoredUnit?: string, 
-    imperialBaseUnit?: string
+    imperialUsageUnit?: string, 
+    imperialCostUnit?: string
   ) {
     let utilityTypeUsage = usage;
-    if (imperialStoredUnit && imperialBaseUnit && this.settings.unitsOfMeasure === 'Imperial') {
-      utilityTypeUsage = this.convertUnitsService.value(usage).from(imperialStoredUnit).to(imperialBaseUnit);
+    if (imperialUsageUnit && imperialCostUnit && this.settings.unitsOfMeasure === 'Imperial') {
+      utilityTypeUsage = this.convertUnitsService.value(usage).from(imperialUsageUnit).to(imperialCostUnit);
     }
 
     // * as any because Settings has mixed property types
@@ -483,12 +484,12 @@ export class OperationCostsComponent implements OnInit {
     usageKey: keyof EnergyUsage,
     costs: number, 
     unitCost: number,
-    imperialBaseUnit?: string, 
-    imperialStoredUnit?: string
+    imperialCostUnit?: string, 
+    imperialUsageUnit?: string
   ) {
     let usage = costs / unitCost;
-    if (imperialBaseUnit && imperialStoredUnit && this.settings.unitsOfMeasure === 'Imperial') {
-      usage = this.convertUnitsService.value(usage).from(imperialBaseUnit).to(imperialStoredUnit);
+    if (imperialCostUnit && imperialUsageUnit && this.settings.unitsOfMeasure === 'Imperial') {
+      usage = this.convertUnitsService.value(usage).from(imperialCostUnit).to(imperialUsageUnit);
     }
 
     // * as any because EnergyUsage has mixed property types
@@ -500,12 +501,12 @@ export class OperationCostsComponent implements OnInit {
     costsKey: keyof EnergyUsage,
     usage: number, 
     unitCost: number,
-    imperialStoredUnit?: string, 
-    imperialBaseUnit?: string
+    imperialUsageUnit?: string, 
+    imperialCostUnit?: string
   ) {
     let utilityTypeUsage = usage;
-    if (imperialStoredUnit && imperialBaseUnit && this.settings.unitsOfMeasure === 'Imperial') {
-      utilityTypeUsage = this.convertUnitsService.value(usage).from(imperialStoredUnit).to(imperialBaseUnit);
+    if (imperialUsageUnit && imperialCostUnit && this.settings.unitsOfMeasure === 'Imperial') {
+      utilityTypeUsage = this.convertUnitsService.value(usage).from(imperialUsageUnit).to(imperialCostUnit);
     }
 
     // * as any because EnergyUsage has mixed property types
