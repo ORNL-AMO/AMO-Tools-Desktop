@@ -48,16 +48,20 @@
             </ng-container>
 
             <ng-container *ngIf="updateStatus === 'downloading'">
-                <div class="mb-2 align-items-center w-100 text-center">
-                    <div class="spinner w-100">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
-                </div>
                 <p class="card-text text-center">
                     Downloading Update. This may take a few minutes.
                 </p>
+                <div class="progress my-2 custom-progress-bar-container">
+                    <div class="progress-bar custom-progress-bar" role="progressbar"
+                        [style.width]="progress?.percent ? progress.percent + '%' : '0%'" [attr.aria-valuenow]="progress?.percent || 0"
+                        aria-valuemin="0" aria-valuemax="100">
+                        @if (progress?.percent) {
+                            {{ progress.percent | number:'1.0-0' }}%
+                        } @else {
+                            0%
+                        }
+                    </div>
+                </div>
             </ng-container>
 
             <ng-container *ngIf="updateStatus === 'downloaded'">
