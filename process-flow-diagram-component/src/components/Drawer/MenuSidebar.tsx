@@ -1,4 +1,4 @@
-import React, { ChangeEvent, memo, useState } from 'react';
+import React, { ChangeEvent, memo, useEffect, useState } from 'react';
 import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
 import ColorPaletteDropdown, { allPalettes, getContrastTextColor } from "./ColorPaletteDropdown";
 import ContinuousSlider from './ContinuousSlider';
@@ -91,10 +91,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
   const summingNode = processFlowParts.pop();
 
-  const handlePaletteChange = (idx: number) => {
-    setSelectedPaletteIdx(idx);
-    // Assign by processComponentType order, not array index
-    const palette = allPalettes[idx];
+  const applyPaletteToNodes = (idx: number) => {
+    const palette = allPalettes[idx] ?? allPalettes[0];
     const newStyles = nodes.map((node) => {
       const typeIdx = processFlowDiagramParts.findIndex(
         (part) => part.processComponentType === node.data.processComponentType
@@ -108,7 +106,31 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         color
       };
     });
-    dispatch(setAllNodeStyles(newStyles));
+
+    const hasStyleChanges = nodes.some((node, index) => {
+      const nextStyle = newStyles[index];
+      return (
+        node.style?.backgroundColor !== nextStyle.backgroundColor ||
+        node.style?.color !== nextStyle.color
+      );
+    });
+
+    if (hasStyleChanges) {
+      dispatch(setAllNodeStyles(newStyles));
+    }
+  };
+
+  useEffect(() => {
+    applyPaletteToNodes(selectedPaletteIdx);
+  }, [dispatch, nodes, selectedPaletteIdx]);
+
+  const handlePaletteChange = (idx: number) => {
+    setSelectedPaletteIdx(idx);
+    dispatch(diagramOptionsChange({
+      optionsProp: 'colorPaletteIndex' as keyof UserDiagramOptions,
+      updatedValue: idx
+    }));
+    applyPaletteToNodes(idx);
   };
 
 
