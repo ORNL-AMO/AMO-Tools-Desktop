@@ -47,8 +47,14 @@ export function getRandomFlatColor(): string {
 }
 
 
-// Returns a Plotly config object with base options, merging any provided config
-export function defaultPlotlyConfig(config?: Partial<SimpleChart['config']>, chartType?: string | any): Partial<SimpleChart['config']> {
+  /**
+ * defaultPlotlyConfig
+ *
+ * @param {object} config - as object, generally expected as Partial<SimpleChart['config']>
+ * @param {string} chartType - as string or an unknown
+ * @returns {object} mergedConfig - the default config merged with the provided config, with some adjustments based on chart type, expected to fit Partial<SimpleChart['config']>.
+ */
+export function defaultPlotlyConfig(config?: object, chartType?: string | unknown): object {
     let modeBarButtonsToRemove = ['select2d', 'lasso2d'];
     if (Array.isArray(chartType)) {
         if (chartType.some(trace => ['pie', 'bar'].includes(trace.type))) {
