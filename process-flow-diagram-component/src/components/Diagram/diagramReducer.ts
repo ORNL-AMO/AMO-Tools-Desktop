@@ -97,8 +97,9 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   const { allPalettes, getContrastTextColor } = require('../Drawer/ColorPaletteDropdown');
   const { processFlowDiagramParts } = require('process-flow-lib');
   const palette = allPalettes[0];
-  state.nodes = diagramData.nodes.filter((node) => {
-    if (node.position) {
+  state.nodes = diagramData.nodes
+    .filter((node) => Boolean(node.position))
+    .map((node) => {
       // Always assign background and text color by typeIdx and palette
       const typeIdx = processFlowDiagramParts.findIndex(
         (part) => part.processComponentType === node.data.processComponentType
@@ -107,15 +108,16 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
       const bgColor = palette[paletteIdx % palette.length];
       // Always compute contrast after bgColor is set
       const textColor = getContrastTextColor(bgColor);
-      node.style = {
-        ...node.style,
-        backgroundColor: bgColor,
-        color: textColor
+
+      return {
+        ...node,
+        style: {
+          ...node.style,
+          backgroundColor: bgColor,
+          color: textColor
+        }
       };
-      return node;
-    }
-    return false;
-  });
+    });
   state.edges = diagramData.edges.map((edge: Edge<CustomEdgeData>) => edge);
   state.diagramOptions = diagramData.userDiagramOptions ? { ...diagramData.userDiagramOptions } : getDefaultUserDiagramOptions();
   state.settings = diagramData.settings ? { ...diagramData.settings } : getDefaultSettings();
