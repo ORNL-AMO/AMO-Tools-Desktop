@@ -5,7 +5,7 @@ import { WeatherApiService, WeatherDataPoint, WeatherDataResponse, WeatherStatio
 import { firstValueFrom } from 'rxjs';
 import { ModalDialogService } from '../../../modal-dialog.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ConfirmActionComponent, ConfirmActionData } from '../../../../process-cooling-assessment/confirm-action/confirm-action.component';
+import { ConfirmActionComponent, ConfirmActionData } from '../../../confirm-action/confirm-action.component';
 
 @Component({
   selector: 'app-annual-station-data',

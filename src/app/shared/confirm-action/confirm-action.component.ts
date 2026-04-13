@@ -1,14 +1,14 @@
+import { ChangeDetectionStrategy, Component, inject, Inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { Component, inject, Inject } from '@angular/core';
 
 @Component({
   selector: 'app-confirm-action',
-  standalone: false,
+  standalone: true,
   templateUrl: './confirm-action.component.html',
-  styleUrl: './confirm-action.component.css'
+  styleUrl: './confirm-action.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmActionComponent {
-  // TODO MOVE TO SHARED AFTER PROCESS-COOLING IS MERGED
   dialogRef = inject<DialogRef<string>>(DialogRef<string>);
   data: ConfirmActionData;
 
