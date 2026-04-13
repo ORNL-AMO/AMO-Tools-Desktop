@@ -17,7 +17,7 @@ export class AssessmentCo2SavingsService {
     this.co2SavingsField = new BehaviorSubject<string>(undefined);
     this.baselineCo2SavingsData = new BehaviorSubject<Co2SavingsData>(undefined);
     this.modificationCo2SavingsData = new BehaviorSubject<Co2SavingsData>(undefined);
-   }
+  }
 
   getEmissionsForm(inputObj: Co2SavingsData): UntypedFormGroup {
     let form: UntypedFormGroup = this.formBuilder.group({
@@ -25,7 +25,7 @@ export class AssessmentCo2SavingsService {
       energySource: [inputObj.energySource],
       totalEmissionOutputRate: [inputObj.totalEmissionOutputRate],
       electricityUse: [inputObj.electricityUse],
-      fuelType: [inputObj.fuelType ],
+      fuelType: [inputObj.fuelType],
       eGridRegion: [inputObj.eGridRegion],
       eGridSubregion: [inputObj.eGridSubregion],
       totalEmissionOutput: [inputObj.totalEmissionOutput],
@@ -129,7 +129,7 @@ export class AssessmentCo2SavingsService {
       totalEmissionOutputRate = totalEmissionOutputRate / conversionHelper;
       dataCpy.electricityUse = this.convertUnitsService.value(dataCpy.electricityUse).from('GJ').to('MMBtu');
     }
-    
+
     if (totalEmissionOutputRate && dataCpy.electricityUse) {
       // * totalEmissionOutputRate (in kg CO2/MWh) * electricityUse (converted to MWH)
       totalEmissionsOutput = totalEmissionOutputRate * (dataCpy.electricityUse / 1000);
@@ -140,7 +140,7 @@ export class AssessmentCo2SavingsService {
     if (settings.emissionsUnit !== 'Metric') {
       totalEmissionsOutput = this.convertUnitsService.value(totalEmissionsOutput).from('tonne').to('ton');
     }
-    
+
     return totalEmissionsOutput;
   }
 
@@ -153,6 +153,57 @@ export class AssessmentCo2SavingsService {
       fuelType: false,
     }
   }
+
+  getDefaultElectricityCO2Data(settings: Settings) {
+    let convertOutputRate: number = settings.totalEmissionOutputRate / 1000;
+    return {
+      energyType: 'electricity',
+      energySource: '',
+      fuelType: '',
+      totalEmissionOutputRate: convertOutputRate,
+      electricityUse: 0,
+      eGridRegion: '',
+      eGridSubregion: settings.eGridSubregion,
+      totalEmissionOutput: 0,
+      userEnteredBaselineEmissions: false,
+      userEnteredModificationEmissions: false,
+      zipcode: settings.zipcode
+    }
+  }
+
+  getDefaultOtherFuelCO2Data() {
+    return {
+      energyType: 'fuel',
+      energySource: 'Petroleum-based fuels',
+      fuelType: 'Motor Gasoline',
+      totalEmissionOutputRate: 70.22,
+      electricityUse: 0,
+      eGridRegion: '',
+      eGridSubregion: '',
+      totalEmissionOutput: 0,
+      userEnteredBaselineEmissions: false,
+      userEnteredModificationEmissions: false,
+      zipcode: ''
+    }
+  }
+
+  getDefaultNaturalGasCO2Data() {
+    return {
+      energyType: 'fuel',
+      energySource: 'Natural Gas',
+      fuelType: 'Natural Gas',
+      totalEmissionOutputRate: 53.06,
+      electricityUse: 0,
+      eGridRegion: '',
+      eGridSubregion: '',
+      totalEmissionOutput: 0,
+      userEnteredBaselineEmissions: false,
+      userEnteredModificationEmissions: false,
+      zipcode: ''
+    }
+  }
+
+
 
 }
 
