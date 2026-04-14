@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { Subscription } from 'rxjs';
 import { CompressedAirInventoryData } from '../compressed-air-inventory';
@@ -29,19 +29,21 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   mainTabSub: Subscription;
   compressedAirInventoryData: CompressedAirInventoryData;
   compressedAirInventoryDataSub: Subscription;
-  selectedSystemId: string;
+  selectedTab: string = 'compressor-properties';
   selectedSystemIdSub: Subscription;
   connectedInventoryDataSub: Subscription;
   showConnectedItemBadge: boolean;
   catalogClassStatus: string[];
   bannerCollapsed: boolean = true;
+  isSelected: boolean = false;
 
   constructor(private compressedAirInventoryService: CompressedAirInventoryService, 
     private securityAndPrivacyService: SecurityAndPrivacyService, 
     private emailMeasurDataService: EmailMeasurDataService, 
     private dashboardService: DashboardService, 
     private compressedAirCatalogService: CompressedAirCatalogService,
-    private integrationStateService: IntegrationStateService) { }
+    private integrationStateService: IntegrationStateService,
+    private cd: ChangeDetectorRef) { }
 
 
   ngOnInit(): void {
@@ -58,7 +60,11 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     });
 
     this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
-      this.selectedSystemId = val;
+      if (val && val !== '') {
+        this.selectedTab = val;
+      } else if (val === '') {
+        this.selectedTab = 'compressor-properties';
+      }
     });
 
     this.summaryTabSub = this.compressedAirInventoryService.summaryTab.subscribe(val => {
@@ -68,6 +74,20 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
       this.showConnectedItemBadge = connectedInventoryData.connectedItem !== undefined;
     });
+  }
+
+
+  selectTab(tabId: string) {
+    this.selectedTab = tabId;
+    if (tabId === 'compressor-properties') {
+      this.isSelected = true;
+      this.compressedAirCatalogService.showCompressorProperties.next(true);
+      this.compressedAirCatalogService.selectedSystemId.next('');
+    } else {
+      this.isSelected = false;
+      this.compressedAirCatalogService.showCompressorProperties.next(false);
+      this.compressedAirCatalogService.selectedSystemId.next(tabId);
+    }
   }
 
   ngOnDestroy() {
@@ -83,9 +103,6 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     this.compressedAirInventoryService.setupTab.next(str);
   }
 
-  selectedSystem(systemId: string) {
-    this.compressedAirCatalogService.selectedSystemId.next(systemId);
-  }
 
   setMainTab(str: string) {
     this.compressedAirInventoryService.mainTab.next(str);
@@ -143,7 +160,10 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   continueCompressedAirCatalogTabs() {
-    let currentIndex: number = _.findIndex(this.compressedAirInventoryData.systems, (system) => { return system.id == this.selectedSystemId });
+    if (!this.compressedAirInventoryData?.systems || this.compressedAirInventoryData.systems.length === 0) {
+      return;
+    }
+    let currentIndex: number = _.findIndex(this.compressedAirInventoryData.systems, (system) => { return system.id == this.selectedTab });
     if (currentIndex != this.compressedAirInventoryData.systems.length - 1) {
       let nextID: string = this.compressedAirInventoryData.systems[currentIndex + 1].id;
       this.compressedAirCatalogService.selectedSystemId.next(nextID);
@@ -151,7 +171,10 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   backCompressedAirCatalogTabs() {
-    let currentIndex: number = _.findIndex(this.compressedAirInventoryData.systems, (system) => { return system.id == this.selectedSystemId });
+    if (!this.compressedAirInventoryData?.systems || this.compressedAirInventoryData.systems.length === 0) {
+      return;
+    }
+    let currentIndex: number = _.findIndex(this.compressedAirInventoryData.systems, (system) => { return system.id == this.selectedTab });
     if (currentIndex != 0) {
       let nextID: string = this.compressedAirInventoryData.systems[currentIndex - 1].id;
       this.compressedAirCatalogService.selectedSystemId.next(nextID);
