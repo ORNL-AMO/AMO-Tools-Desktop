@@ -15,7 +15,7 @@ export class MotorCatalogComponent implements OnInit {
 
   motorInventoryData: MotorInventoryData;
   motorInventoryDataSub: Subscription;
-
+  selectedTabId: string;
   selectedDepartmentIdSub: Subscription;
   showSelectMotorModal: boolean = false;
   showDeleteMotorModal: boolean = false;
@@ -34,7 +34,7 @@ export class MotorCatalogComponent implements OnInit {
       }
     });
     this.selectedDepartmentIdSub = this.motorCatalogService.selectedDepartmentId.subscribe(val => {
-      if (!val) {
+      if (!val && val !== '') {
         this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
       } else {
         let findDepartment: MotorInventoryDepartment = this.motorInventoryData.departments.find(department => { return department.id == val });
@@ -51,7 +51,9 @@ export class MotorCatalogComponent implements OnInit {
           }
         } else {
           this.showDeleteMotorButton = (this.motorInventoryData.departments[0].catalog.length > 1);
-          this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
+          if (this.motorCatalogService.showMotorProperties.getValue() === false) {
+            this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryData.departments[0].id);
+          }
           this.motorCatalogService.selectedMotorItem.next(this.motorInventoryData.departments[0].catalog[0]);
         }
       }

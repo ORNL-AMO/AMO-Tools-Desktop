@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 import { MotorInventoryService } from '../motor-inventory.service';
 import { MotorCatalogService } from '../motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { MotorInventoryData } from '../motor-inventory';
@@ -28,8 +28,11 @@ export class MotorInventoryBannerComponent implements OnInit {
   motorInventoryData: MotorInventoryData;
   motorInventoryDataSub: Subscription;
   selectedDepartmentId: string;
+  selectedTab: string = 'motor-properties';
   selectedDepartmentIdSub: Subscription;
   bannerCollapsed: boolean = true;
+  isSelected: boolean = false;
+  showMotorProperties: BehaviorSubject<boolean>;
   constructor(private motorInventoryService: MotorInventoryService, 
     private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private motorCatalogService: MotorCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService ) { }
@@ -48,7 +51,11 @@ export class MotorInventoryBannerComponent implements OnInit {
     });
 
     this.selectedDepartmentIdSub = this.motorCatalogService.selectedDepartmentId.subscribe(val => {
-      this.selectedDepartmentId = val;
+      if (val && val !== '') {
+        this.selectedTab = val;
+      } else if (val === '') {
+        this.selectedTab = 'motor-properties';
+      }
     });
 
     this.summaryTabSub = this.motorInventoryService.summaryTab.subscribe(val => {
@@ -77,9 +84,22 @@ export class MotorInventoryBannerComponent implements OnInit {
     this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
   }
 
-  selectedDepartment(departmentId: string) {
-    this.motorCatalogService.selectedDepartmentId.next(departmentId);
+  // selectedDepartment(departmentId: string) {
+  //   this.motorCatalogService.selectedDepartmentId.next(departmentId);
+  // }
+  selectTab(tabId: string) {
+    this.selectedTab = tabId;
+    if (tabId === 'motor-properties') {
+      this.isSelected = true;
+      this.motorCatalogService.showMotorProperties.next(true);
+      this.motorCatalogService.selectedDepartmentId.next('');
+    } else {
+      this.isSelected = false;
+      this.motorCatalogService.showMotorProperties.next(false);
+      this.motorCatalogService.selectedDepartmentId.next(tabId);
+    }
   }
+
 
   setMainTab(str: string) {
     this.motorInventoryService.mainTab.next(str);
@@ -132,7 +152,10 @@ export class MotorInventoryBannerComponent implements OnInit {
   }
 
   continueMotorCatalogTabs(){
-    let currentIndex: number = _.findIndex(this.motorInventoryData.departments, (department) => {return department.id == this.selectedDepartmentId});
+    if (!this.motorInventoryData?.departments || this.motorInventoryData.departments.length === 0) {
+      return;
+    }
+    let currentIndex: number = _.findIndex(this.motorInventoryData.departments, (department) => {return department.id == this.selectedTab});
     if (currentIndex != this.motorInventoryData.departments.length - 1) {
       let nextID: string = this.motorInventoryData.departments[currentIndex + 1].id;
       this.motorCatalogService.selectedDepartmentId.next(nextID);      
@@ -140,7 +163,10 @@ export class MotorInventoryBannerComponent implements OnInit {
   }
 
   backMotorCatalogTabs(){
-    let currentIndex: number = _.findIndex(this.motorInventoryData.departments, (department) => {return department.id == this.selectedDepartmentId});
+    if (!this.motorInventoryData?.departments || this.motorInventoryData.departments.length === 0) {
+      return;
+    }
+    let currentIndex: number = _.findIndex(this.motorInventoryData.departments, (department) => {return department.id == this.selectedTab});
     if (currentIndex != 0) {
       let nextID: string = this.motorInventoryData.departments[currentIndex - 1].id;
       this.motorCatalogService.selectedDepartmentId.next(nextID);      

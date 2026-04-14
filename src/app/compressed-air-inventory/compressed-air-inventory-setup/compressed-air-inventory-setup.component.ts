@@ -25,15 +25,12 @@ export class CompressedAirInventorySetupComponent implements OnInit {
   showCompressorPropertiesSub: Subscription;
 
   constructor(private compressedAirInventoryService: CompressedAirInventoryService,
-    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService, 
-    private ngZone: NgZone, private compressedAirCatalogService: CompressedAirCatalogService) { }
+    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService, private compressedAirCatalogService: CompressedAirCatalogService) { }
 
   ngOnInit(): void {
     this.showCompressorPropertiesSub = this.compressedAirCatalogService.showCompressorProperties.subscribe(val => {
-      this.ngZone.run(() => {
-        this.showCompressorProperties = val;
-        this.cd.detectChanges();
-      });
+      this.showCompressorProperties = val;
+      this.cd.detectChanges();
     });
 
     this.helpPanelTabSub = this.compressedAirInventoryService.helpPanelTab.subscribe(val => {
