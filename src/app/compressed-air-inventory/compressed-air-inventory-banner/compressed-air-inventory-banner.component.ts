@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { Subscription } from 'rxjs';
 import { CompressedAirInventoryData } from '../compressed-air-inventory';
@@ -42,8 +42,7 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     private emailMeasurDataService: EmailMeasurDataService, 
     private dashboardService: DashboardService, 
     private compressedAirCatalogService: CompressedAirCatalogService,
-    private integrationStateService: IntegrationStateService,
-    private cd: ChangeDetectorRef) { }
+    private integrationStateService: IntegrationStateService) { }
 
 
   ngOnInit(): void {

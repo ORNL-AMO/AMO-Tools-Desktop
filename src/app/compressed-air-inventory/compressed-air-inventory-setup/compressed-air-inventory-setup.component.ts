@@ -48,9 +48,6 @@ export class CompressedAirInventorySetupComponent implements OnInit {
       this.cd.detectChanges();
     });
   }
-  hideCompressorProperties() {
-    this.showCompressorProperties = false;
-  }
 
   ngOnDestroy() {
     this.setupTabSubscription.unsubscribe();

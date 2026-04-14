@@ -19,7 +19,7 @@ export class PumpCatalogComponent implements OnInit {
 
   pumpInventoryData: PumpInventoryData;
   pumpInventoryDataSub: Subscription;
-
+  selectedTabId: string;
   selectedDepartmentIdSub: Subscription;
   showDeletePumpButton: boolean = false;
   showConfirmDeleteModal: boolean = false;
@@ -45,7 +45,7 @@ export class PumpCatalogComponent implements OnInit {
     });
 
     this.selectedDepartmentIdSub = this.pumpCatalogService.selectedDepartmentId.subscribe(val => {
-      if (!val) {
+      if (!val && val !== '') {
         this.pumpCatalogService.selectedDepartmentId.next(this.pumpInventoryData.departments[0].id);
       } else {
         let findDepartment: PumpInventoryDepartment = this.pumpInventoryData.departments.find(department => { return department.id == val });
@@ -62,7 +62,9 @@ export class PumpCatalogComponent implements OnInit {
           }
         } else {
           this.showDeletePumpButton = (this.pumpInventoryData.departments[0].catalog.length != 1);
-          this.pumpCatalogService.selectedDepartmentId.next(this.pumpInventoryData.departments[0].id);
+          if (this.pumpCatalogService.showPumpProperties.getValue() === false) {
+            this.pumpCatalogService.selectedDepartmentId.next(this.pumpInventoryData.departments[0].id);
+          }
           this.pumpCatalogService.selectedPumpItem.next(this.pumpInventoryData.departments[0].catalog[0]);
         }
       }

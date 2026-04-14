@@ -4,7 +4,7 @@
             [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
             <a class="nav-link" *ngIf="setupTab == 'plant-setup'">Plant Setup</a>
             <a class="nav-link" *ngIf="setupTab == 'department-setup'">Departments</a>
-            <a class="nav-link" *ngIf="setupTab == 'pump-properties'">Pump Properties</a>
+            <!-- <a class="nav-link" *ngIf="setupTab == 'pump-properties'">Pump Properties</a> -->
             <a class="nav-link" *ngIf="setupTab == 'pump-catalog'">Catalog</a>
         </div>
         <div class="nav-item" (click)="setSmallScreenTab('details')"
@@ -17,7 +17,7 @@
         <div class="assessment-panel-container lookup-form modification scroll-item"
             [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
             <app-plant-setup *ngIf="setupTab == 'plant-setup'"></app-plant-setup>
-            <app-pump-properties *ngIf="setupTab == 'pump-properties'"></app-pump-properties>
+            <app-pump-properties *ngIf="showPumpProperties"></app-pump-properties>
             <app-pump-catalog *ngIf="setupTab == 'pump-catalog'"></app-pump-catalog>
             <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup>
         </div>

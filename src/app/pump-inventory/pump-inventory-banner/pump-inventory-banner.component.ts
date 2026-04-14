@@ -28,17 +28,19 @@ export class PumpInventoryBannerComponent implements OnInit {
   mainTabSub: Subscription;
   pumpInventoryData: PumpInventoryData;
   pumpInventoryDataSub: Subscription;
-  selectedDepartmentId: string;
+  selectedTab: string;
   selectedDepartmentIdSub: Subscription;
   connectedInventoryDataSub: Subscription;
   showConnectedItemBadge: boolean;
   catalogClassStatus: string[];
   bannerCollapsed: boolean = true;
-  // hasInvalidPumpItem: boolean;
-    constructor(private pumpInventoryService: PumpInventoryService, 
+  isSelected: boolean = false;
+
+  constructor(private pumpInventoryService: PumpInventoryService, 
     private emailMeasurDataService: EmailMeasurDataService,
     private integrationStateService: IntegrationStateService, 
-      private pumpCatalogService: PumpCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService, private dashboardService: DashboardService) { }
+    private pumpCatalogService: PumpCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService, 
+    private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
@@ -59,7 +61,11 @@ export class PumpInventoryBannerComponent implements OnInit {
     });
 
     this.selectedDepartmentIdSub = this.pumpCatalogService.selectedDepartmentId.subscribe(val => {
-      this.selectedDepartmentId = val;
+      if (val && val !== '') {
+        this.selectedTab = val;
+      } else if (val === '') {
+        this.selectedTab = 'pump-properties';
+      }
     });
 
     this.summaryTabSub = this.pumpInventoryService.summaryTab.subscribe(val => {
@@ -84,8 +90,17 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.pumpInventoryService.setupTab.next(str);
   }
 
-  selectedDepartment(departmentId: string) {
-    this.pumpCatalogService.selectedDepartmentId.next(departmentId);
+  selectTab(tabId: string) {
+    this.selectedTab = tabId;
+    if (tabId === 'pump-properties') {
+      this.isSelected = true;
+      this.pumpCatalogService.showPumpProperties.next(true);
+      this.pumpCatalogService.selectedDepartmentId.next('');
+    } else {
+      this.isSelected = false;
+      this.pumpCatalogService.showPumpProperties.next(false);
+      this.pumpCatalogService.selectedDepartmentId.next(tabId);
+    }
   }
 
   setMainTab(str: string) {
@@ -140,7 +155,10 @@ export class PumpInventoryBannerComponent implements OnInit {
   }
 
   continuePumpCatalogTabs(){
-    let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => {return department.id == this.selectedDepartmentId});
+    if (!this.pumpInventoryData?.departments || this.pumpInventoryData.departments.length === 0) {
+      return;
+    }
+    let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => {return department.id == this.selectedTab});
     if (currentIndex != this.pumpInventoryData.departments.length - 1) {
       let nextID: string = this.pumpInventoryData.departments[currentIndex + 1].id;
       this.pumpCatalogService.selectedDepartmentId.next(nextID);      
@@ -148,7 +166,10 @@ export class PumpInventoryBannerComponent implements OnInit {
   }
 
   backPumpCatalogTabs(){
-    let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => {return department.id == this.selectedDepartmentId});
+    if (!this.pumpInventoryData?.departments || this.pumpInventoryData.departments.length === 0) {
+      return;
+    }
+    let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => {return department.id == this.selectedTab});
     if (currentIndex != 0) {
       let nextID: string = this.pumpInventoryData.departments[currentIndex - 1].id;
       this.pumpCatalogService.selectedDepartmentId.next(nextID);      
