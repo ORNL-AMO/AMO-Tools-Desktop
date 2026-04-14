@@ -19,3 +19,8 @@
 .drop-zone:hover {
   border-color: #999;
 }
+
+.form-check-input[type="radio"],
+.form-check-label {
+  cursor: pointer;
+}

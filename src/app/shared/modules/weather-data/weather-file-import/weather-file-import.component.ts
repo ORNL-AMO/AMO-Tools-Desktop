@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { WeatherApiService, WeatherStation } from '../../../weather-api.service';
 import { WeatherFileParseResult, WeatherFileParserService } from './weather-file-parser.service';
 import { ROUTE_TOKENS } from '../models/routes';
+import { ConvertValue } from '../../../convert-units/ConvertValue';
 
 @Component({
   selector: 'app-weather-file-import',
@@ -25,6 +26,7 @@ export class WeatherFileImportComponent {
   parseResult: WeatherFileParseResult | null = null;
   isProcessing = false;
   isDragOver = false;
+  temperatureUnit: 'F' | 'C' = 'F';
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
@@ -75,7 +77,13 @@ export class WeatherFileImportComponent {
 
     const weatherData = { ...this.weatherApiService.getWeatherData() };
     weatherData.selectedStation = fileImportStation;
-    weatherData.weatherDataPoints = this.parseResult.dataPoints;
+    weatherData.weatherDataPoints = this.temperatureUnit === 'C'
+      ? this.parseResult.dataPoints.map(p => ({
+          ...p,
+          dry_bulb_temp: p.dry_bulb_temp != null ? new ConvertValue(p.dry_bulb_temp, 'C', 'F').convertedValue : p.dry_bulb_temp,
+          wet_bulb_temp: p.wet_bulb_temp != null ? new ConvertValue(p.wet_bulb_temp, 'C', 'F').convertedValue : p.wet_bulb_temp,
+        }))
+      : this.parseResult.dataPoints;
     weatherData.importedFileName = this.fileName;
     weatherData.addressString = null;
     this.weatherApiService.setWeatherData(weatherData);
@@ -105,6 +113,7 @@ export class WeatherFileImportComponent {
     this.fileName = file.name;
     this.isProcessing = true;
     this.parseResult = null;
+    this.temperatureUnit = 'F';
     this.cdr.markForCheck();
 
     try {
