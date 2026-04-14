@@ -4,6 +4,7 @@ import { WeatherApiServiceMock } from '../weather-api.service.mock';
 import { GEO_DATA_STATE_LINES } from '../geo-assets/geo-data-state-lines';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
+import { ROUTE_TOKENS } from '../models/routes';
 
 @Component({
   selector: 'app-weather-stations',
@@ -15,7 +16,8 @@ export class WeatherStationsComponent {
   private weatherApiService: WeatherApiService = inject(WeatherApiService);
   private weatherApiServiceMock: WeatherApiServiceMock = inject(WeatherApiServiceMock);
 
-  useDevelopmentMock: boolean = (environment as any).useMockWeatherApi === true && !environment.production;
+  useDevelopmentMock: boolean = false;
+  // useDevelopmentMock: boolean = (environment as any).useMockWeatherApi === true && !environment.production;
   private weatherService: WeatherApiService | WeatherApiServiceMock = this.useDevelopmentMock
       ? this.weatherApiServiceMock
       : this.weatherApiService;
@@ -43,6 +45,7 @@ export class WeatherStationsComponent {
   stationSearchError: boolean = false;
 
   maxSearchDistance = this.weatherApiService.MAX_SEARCH_DISTANCE;
+  ROUTE_TOKENS = ROUTE_TOKENS;
 
   stateLines: any;
 

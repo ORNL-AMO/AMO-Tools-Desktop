@@ -20,4 +20,5 @@ export interface WeatherContextData {
     addressString: string;
     selectedStation: WeatherStation | null;
     weatherDataPoints: WeatherDataPoint[];
+    importedFileName?: string;
 }

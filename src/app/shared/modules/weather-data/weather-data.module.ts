@@ -14,6 +14,8 @@ import { WeatherApiService } from '../../weather-api.service';
 import { AnnualStationGraphComponent } from './annual-station-data/annual-station-graph/annual-station-graph.component';
 import WEATHER_ROUTES from './models/routes';
 import { WeatherApiServiceMock } from './weather-api.service.mock';
+import { WeatherFileImportComponent } from './weather-file-import/weather-file-import.component';
+import { WeatherFileParserService } from './weather-file-import/weather-file-parser.service';
 
 @NgModule({
   declarations: [
@@ -22,10 +24,11 @@ import { WeatherApiServiceMock } from './weather-api.service.mock';
     WeatherStationsTableComponent,
     WeatherStationsMapComponent,
     AnnualStationDataComponent,
-    AnnualStationGraphComponent
+    AnnualStationGraphComponent,
+    WeatherFileImportComponent,
   ],
    exports: [
-    WeatherDataComponent
+    WeatherDataComponent,
   ],
   imports: [
     RouterModule.forChild(WEATHER_ROUTES),
@@ -37,7 +40,8 @@ import { WeatherApiServiceMock } from './weather-api.service.mock';
   ],
   providers: [
     WeatherApiService,
-    WeatherApiServiceMock
+    WeatherApiServiceMock,
+    WeatherFileParserService
   ]
 })
 export class WeatherDataModule { }

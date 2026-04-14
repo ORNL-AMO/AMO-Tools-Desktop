@@ -38,7 +38,9 @@ export class AnnualStationDataComponent {
     } else {
 
       if (weatherData.weatherDataPoints?.length > 0) {
-        this.selectedDataset = `${weatherData.selectedStation.name} - TMY3 Year`;
+        this.selectedDataset = weatherData.importedFileName
+          ? weatherData.importedFileName
+          : `${weatherData.selectedStation.name} - TMY3 Year`;
         this.stationWeatherData = weatherData.weatherDataPoints;
       } else {
         // * not currently used, will use in the future for calendarizaed data

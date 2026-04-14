@@ -1,0 +1,21 @@
+.form-section-label {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.drop-zone {
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+  background-color: #fafafa;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.drop-zone-active {
+  border-color: #0d6efd;
+  background-color: #e8f0fe;
+}
+
+.drop-zone:hover {
+  border-color: #999;
+}
