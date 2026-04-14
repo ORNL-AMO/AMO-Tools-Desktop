@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { TreasureHuntService } from '../../../treasure-hunt.service';
-import { TreasureHunt } from '../../../../shared/models/treasure-hunt';
+import { EnergyUseType, TreasureHunt } from '../../../../shared/models/treasure-hunt';
 @Component({
     selector: 'app-energy-use-form',
     templateUrl: './energy-use-form.component.html',
@@ -11,17 +11,17 @@ import { TreasureHunt } from '../../../../shared/models/treasure-hunt';
 })
 export class EnergyUseFormComponent implements OnInit {
   @Input()
-  energyItems: Array<{ type: string, amount: number }>;
+  energyItems: Array<{ type: EnergyUseType, amount: number }>;
   @Input()
   settings: Settings;
   @Output('emitSave')
-  emitSave = new EventEmitter<Array<{ type: string, amount: number }>>();
+  emitSave = new EventEmitter<Array<{ type: EnergyUseType, amount: number }>>();
   @Output('emitChangeField')
   emitChangeField = new EventEmitter<string>();
 
   treasureHuntSub: Subscription;
   treasureHunt: TreasureHunt;
-  availableEnergyTypes: Array<string> = [];
+  availableEnergyTypes: Array<EnergyUseType> = [];
   
   constructor(private treasureHuntService: TreasureHuntService,) { }
 
@@ -35,7 +35,7 @@ export class EnergyUseFormComponent implements OnInit {
   }
 
   updateAvailableEnergyTypes() {
-    const allTypes = [
+    const allTypes: Array<EnergyUseType> = [
       'Electricity',
       'Gas',
       'Compressed Air',
