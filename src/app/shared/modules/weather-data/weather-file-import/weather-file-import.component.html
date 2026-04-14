@@ -26,8 +26,10 @@
                 </li>
                 }
             </ul>
+            <p class="mb-1"><strong>Any additional columns beyond the above required will be ignored</strong></p>
             <div class="mb-0">
-                <strong>Time column</strong> (applies to both sets) — any of:
+                <strong>Time column</strong> — each column set above defines its own expected time column(s).
+                If no recognized time column is found, the below fallback formats are also accepted:
                 <ul class="mb-0">
                     @for (option of timeColumnFormats; track option.label) {
                     <li>
@@ -42,7 +44,6 @@
                     }
                 </ul>
             </div>
-            <p class="mb-1"><strong>Any additional columns beyond the above required will be ignored</strong></p>
         </div>
     </div>
 </div>

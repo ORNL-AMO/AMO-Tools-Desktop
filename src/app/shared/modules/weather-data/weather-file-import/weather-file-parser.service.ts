@@ -88,7 +88,6 @@ export class WeatherFileParserService {
     };
   }
 
-  // todo this needs revised instruction on what we'll accept
   /**
    * Determines which column(s) should be used as the time source.
    *
@@ -139,17 +138,17 @@ export class WeatherFileParserService {
     return raw;
   }
 
-  /** Converts "MM/DD/YYYY HH:MM" → "YYYY-MM-DDTHH:mm". Returns the original string if it does not match. */
+  /** Converts "M/D/YYYY H:MM" → "YYYY-MM-DDTHH:mm". Returns the original string if it does not match. */
   private normalizeMdyDatetime(value: string): string {
     const match = value.match(
-      /^(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})\s+(?<time>\d{1,2}:\d{2})/
+      /^(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})\s+(?<hour>\d{1,2}):(?<minute>\d{2})/
     );
     if (!match) {
       return value;
     }
 
-    const { month, day, year, time } = match.groups;
-    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${time}`;
+    const { month, day, year, hour, minute } = match.groups;
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hour.padStart(2, '0')}:${minute}`;
   }
 
   private buildTimeLabel(timeSource: TimeSourceDetection): string {
@@ -263,7 +262,7 @@ export const TIME_COLUMN_FORMAT_OPTIONS: TimeColumnFormatOption[] = [
 
 const ORNL_LCD_SCHEMA: ColumnSchema = {
   name: 'ORNL/LCD',
-  requiredHeaders: ['dry_bulb_temp', 'wet_bulb_temp'],
+  requiredHeaders: ['time', 'dry_bulb_temp', 'wet_bulb_temp'],
   columnMappings: {
     'dry_bulb_temp': 'dry_bulb_temp',
     'wet_bulb_temp': 'wet_bulb_temp',
@@ -271,16 +270,18 @@ const ORNL_LCD_SCHEMA: ColumnSchema = {
   dateFormat: 'iso',
 };
 
-
+// Expected CSV pattern:
+// Date (MM/DD/YYYY),Time (HH:MM),Dry-bulb Temperature (F),RHum (%),Atm Pressure (psia),Wet Bulb Temperature (F),Enthalpy (BTU/lbm)
+// 1/1/1976,1:00,41,89,14.19919455,38.32824516,15.20486032
 const WEATHER_STATION_EXPORT_SCHEMA: ColumnSchema = {
   name: 'Weather Station Export',
-  requiredHeaders: ['Dry-bulb Temperature (F)', 'Wet Bulb Temperature (F)'],
+  requiredHeaders: ['Date (MM/DD/YYYY)', 'Time (HH:MM)', 'Dry-bulb Temperature (F)', 'Wet Bulb Temperature (F)'],
   columnMappings: {
     'Dry-bulb Temperature (F)': 'dry_bulb_temp',
     'Wet Bulb Temperature (F)': 'wet_bulb_temp',
   },
   dateFormat: 'mm/dd/yyyy',
-  dateFormatNote: 'Dates must be in MM/DD/YYYY format.',
+  dateFormatNote: `Requires separate 'Date (MM/DD/YYYY)' and 'Time (HH:MM)' columns; dates must be in M/D/YYYY format.`,
 };
 
 const COLUMN_SCHEMAS: ColumnSchema[] = [ORNL_LCD_SCHEMA, WEATHER_STATION_EXPORT_SCHEMA];
