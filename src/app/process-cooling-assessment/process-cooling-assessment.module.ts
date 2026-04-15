@@ -74,7 +74,7 @@ import { ModificationService } from './services/modification.service';
 import { ModificationListComponent } from './explore-opportunities/modification-list/modification-list.component';
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
 import { AlertInfoContainerComponent } from '../shared/alert-info-container/alert-info-container.component';
-import { ConfirmActionComponent } from './confirm-action/confirm-action.component';
+import { ConfirmActionComponent } from '../shared/confirm-action/confirm-action.component';
 import { SlidingCondenserWaterTemperatureComponent } from './explore-opportunities/sliding-condenser-water-temperature/sliding-condenser-water-temperature.component';
 import { UpgradeCoolingTowerFanComponent } from './explore-opportunities/upgrade-cooling-tower-fan/upgrade-cooling-tower-fan.component';
 import { ExploreOpportunitiesFormService } from './services/explore-opportunities-form.service';
@@ -288,7 +288,6 @@ const ROUTES: Route[] = [
     ModificationListComponent,
     AssessmentResultsComponent,
     EemHelpComponent,
-    ConfirmActionComponent,
     DevResultsComponent,
     PumpSummaryComponent,
     TowerSummaryComponent,
