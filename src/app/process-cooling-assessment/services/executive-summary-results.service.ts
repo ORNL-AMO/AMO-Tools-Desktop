@@ -134,7 +134,7 @@ export class ExecutiveSummaryResultsService {
     return [
       {
         ...defaultRow,
-        label: 'Pump Total Chilled Energy',
+        label: 'Chilled Water Pumping Energy',
         baseline: { 
           value: baseline?.pumpTotalChilledEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
@@ -143,7 +143,7 @@ export class ExecutiveSummaryResultsService {
       },
       {
         ...defaultRow,
-        label: 'Pump Total Condenser Energy',
+        label: 'Condenser Water Pumping Energy',
         baseline: { value: baseline?.pumpTotalCondenserEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
           return { value: modification.pumpTotalCondenserEnergy ?? null, decimalPipe: defaultpipeFormat };
@@ -151,7 +151,7 @@ export class ExecutiveSummaryResultsService {
       },
       {
         ...defaultRow,
-        label: 'Total Chiller Energy',
+        label: 'Chiller Energy',
         baseline: { value: baseline?.totalChillerEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
           return { value: modification.totalChillerEnergy ?? null, decimalPipe: defaultpipeFormat };
@@ -159,7 +159,7 @@ export class ExecutiveSummaryResultsService {
       },
       {
         ...defaultRow,
-        label: 'Total Tower Energy',
+        label: 'Tower Energy',
         baseline: { value: baseline?.totalTowerEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
           return { value: modification.totalTowerEnergy ?? null, decimalPipe: defaultpipeFormat };
@@ -167,7 +167,7 @@ export class ExecutiveSummaryResultsService {
       },
       {
         ...defaultRow,
-        label: 'Total Pump Energy',
+        label: 'Pump Energy',
         baseline: { value: baseline?.totalPumpEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
           return { value: modification.totalPumpEnergy ?? null, decimalPipe: defaultpipeFormat };

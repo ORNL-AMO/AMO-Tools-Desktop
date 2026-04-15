@@ -39,9 +39,9 @@
         <div class="input-group">
             <input name="motorSize" type="number" step="any" class="form-control" id="{{controlIds.motorSize}}"
                 formControlName="motorSize" (focus)="focusField('motorSize')">
-            <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.power.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.power.labelHTML.metric"></app-input-unit>
+            <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.motorPower.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.motorPower.labelHTML.metric"></app-input-unit>
         </div>
-        <app-form-control-errors [control]="motorSize" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.power.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.power.labelHTML.metric"></app-form-control-errors>
+        <app-form-control-errors [control]="motorSize" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.motorPower.labelHTML.imperial" [metricUnit]="PROCESS_COOLING_UNITS.motorPower.labelHTML.metric"></app-form-control-errors>
     </div>
 
     <div class="form-group">

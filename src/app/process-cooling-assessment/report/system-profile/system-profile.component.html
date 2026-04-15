@@ -52,8 +52,8 @@
 				<tr>
 					<td class="text-left">Power
 						(<span [innerHTML]="settingsSignal().unitsOfMeasure === 'Imperial' ? 
-						PROCESS_COOLING_UNITS.power.labelHTML.imperial :
-						PROCESS_COOLING_UNITS.power.labelHTML.metric
+						PROCESS_COOLING_UNITS.chillerPower.labelHTML.imperial :
+						PROCESS_COOLING_UNITS.chillerPower.labelHTML.metric
 					"></span>)
 					</td>
 					 @for(power of chiller.power; track $index) {

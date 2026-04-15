@@ -49,7 +49,6 @@ export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
     min: 80,
     max: 95
   },
-
   // AirCooledSystemInputForm
   outdoorAirTemp: {
     required: true,
@@ -62,12 +61,17 @@ export const PROCESS_COOLING_VALIDATION: ProcessCoolingValidation = {
     min: 60,
     max: 90
   },
-  followingTempDifferential: {
+  airCooledFollowingTempDiffential: {
     required: true,
     min: 5,
     max: 30
   },
-
+  waterCooledFollowingTempDiffential: {
+    required: true,
+    // * no explicity min/max is listed for !isConstantCondenserWaterTemp, so continue to use below for both cases
+    min: 2,
+    max: 20
+  },
   // WaterCooledSystemInputForm
   isConstantCondenserWaterTemp: {},
   condenserWaterTemp: {

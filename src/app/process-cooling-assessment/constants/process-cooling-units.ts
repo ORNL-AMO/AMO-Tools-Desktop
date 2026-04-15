@@ -71,12 +71,20 @@ export const PROCESS_COOLING_UNITS = {
       metric: 'kW'
     }
   },
-  power: {
+  motorPower: {
     imperial: 'hp',
     // kW is a default guess
     metric: 'kW',
     labelHTML: {
       imperial: 'hp',
+      metric: 'kW'
+    }
+  },
+  chillerPower: {
+    imperial: 'kW',
+    metric: 'kW',
+    labelHTML: {
+      imperial: 'kW',
       metric: 'kW'
     }
   },

@@ -114,10 +114,10 @@ export class ConvertProcessCoolingService {
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       // todo flowRate awaiting proper unit
       pumpInput.flowRate = new ConvertValue(pumpInput.flowRate, PROCESS_COOLING_UNITS.volumeFlowRate.metric, PROCESS_COOLING_UNITS.volumeFlowRate.imperial).convertedValue;
-      pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, PROCESS_COOLING_UNITS.power.metric, PROCESS_COOLING_UNITS.power.imperial).convertedValue;
+      pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, PROCESS_COOLING_UNITS.motorPower.metric, PROCESS_COOLING_UNITS.motorPower.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       pumpInput.flowRate = new ConvertValue(pumpInput.flowRate, PROCESS_COOLING_UNITS.volumeFlowRate.imperial, PROCESS_COOLING_UNITS.volumeFlowRate.metric).convertedValue;
-      pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, PROCESS_COOLING_UNITS.power.imperial, PROCESS_COOLING_UNITS.power.metric).convertedValue;
+      pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, PROCESS_COOLING_UNITS.motorPower.imperial, PROCESS_COOLING_UNITS.motorPower.metric).convertedValue;
     }
     
     pumpInput.flowRate = roundVal(pumpInput.flowRate, 2);

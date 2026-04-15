@@ -62,7 +62,7 @@ export class WaterCooledComponent {
           this.condenserWaterTemp.setValidators(validators);
         } else {
           this.condenserWaterTemp.clearValidators();
-          validators = this.systemInformationFormService.getFollowingTempDifferentialValidators(this.settings());
+          validators = this.systemInformationFormService.getWaterCooledFollowingTempDifferentialValidators(this.settings());
           this.followingTempDifferential.setValidators(validators);
         }
         this.followingTempDifferential.updateValueAndValidity();
