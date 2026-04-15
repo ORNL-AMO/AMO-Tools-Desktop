@@ -35,6 +35,7 @@ export class PumpInventoryBannerComponent implements OnInit {
   catalogClassStatus: string[];
   bannerCollapsed: boolean = true;
   isSelected: boolean = false;
+  showPumpPropertiesSub: Subscription;
 
   constructor(private pumpInventoryService: PumpInventoryService, 
     private emailMeasurDataService: EmailMeasurDataService,
@@ -43,6 +44,10 @@ export class PumpInventoryBannerComponent implements OnInit {
     private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
+        // Subscribe to showPumpProperties to keep isSelected in sync
+        this.showPumpPropertiesSub = this.pumpCatalogService.showPumpProperties.subscribe(val => {
+          this.isSelected = val;
+        });
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
     });
@@ -84,6 +89,7 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.mainTabSub.unsubscribe();
     this.summaryTabSub.unsubscribe();
     this.connectedInventoryDataSub.unsubscribe();
+    this.showPumpPropertiesSub.unsubscribe();
   }
 
   setSetupTab(str: string) {
@@ -93,11 +99,9 @@ export class PumpInventoryBannerComponent implements OnInit {
   selectTab(tabId: string) {
     this.selectedTab = tabId;
     if (tabId === 'pump-properties') {
-      this.isSelected = true;
       this.pumpCatalogService.showPumpProperties.next(true);
       this.pumpCatalogService.selectedDepartmentId.next('');
     } else {
-      this.isSelected = false;
       this.pumpCatalogService.showPumpProperties.next(false);
       this.pumpCatalogService.selectedDepartmentId.next(tabId);
     }

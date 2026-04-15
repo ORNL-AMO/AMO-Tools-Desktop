@@ -19,7 +19,6 @@ export class PumpCatalogComponent implements OnInit {
 
   pumpInventoryData: PumpInventoryData;
   pumpInventoryDataSub: Subscription;
-  selectedTabId: string;
   selectedDepartmentIdSub: Subscription;
   showDeletePumpButton: boolean = false;
   showConfirmDeleteModal: boolean = false;
