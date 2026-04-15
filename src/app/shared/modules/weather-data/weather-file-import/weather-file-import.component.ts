@@ -21,6 +21,7 @@ export class WeatherFileImportComponent {
 
   readonly columnSchemas = this.weatherFileParserService.columnSchemas;
   readonly timeColumnFormats = this.weatherFileParserService.timeColumnFormats;
+  readonly xlsxEnabled = this.weatherFileParserService.xlsxEnabled;
 
   fileName: string | null = null;
   parseResult: WeatherFileParseResult | null = null;
@@ -77,13 +78,22 @@ export class WeatherFileImportComponent {
 
     const weatherData = { ...this.weatherApiService.getWeatherData() };
     weatherData.selectedStation = fileImportStation;
-    weatherData.weatherDataPoints = this.temperatureUnit === 'C'
-      ? this.parseResult.dataPoints.map(p => ({
+
+    if (this.temperatureUnit === 'C') {
+      const UnitConverter: ConvertValue = new ConvertValue(0, 'C', 'F');
+      weatherData.weatherDataPoints = this.parseResult.dataPoints.map(p => {
+        const convertedDryBulb = p.dry_bulb_temp != null ? UnitConverter.convertValue(p.dry_bulb_temp) : p.dry_bulb_temp;
+        const convertedWetBulb = p.wet_bulb_temp != null ? UnitConverter.convertValue(p.wet_bulb_temp) : p.wet_bulb_temp;
+        return {
           ...p,
-          dry_bulb_temp: p.dry_bulb_temp != null ? new ConvertValue(p.dry_bulb_temp, 'C', 'F').convertedValue : p.dry_bulb_temp,
-          wet_bulb_temp: p.wet_bulb_temp != null ? new ConvertValue(p.wet_bulb_temp, 'C', 'F').convertedValue : p.wet_bulb_temp,
-        }))
-      : this.parseResult.dataPoints;
+          dry_bulb_temp: convertedDryBulb,
+          wet_bulb_temp: convertedWetBulb,
+        };
+      });
+    } else {
+      weatherData.weatherDataPoints = this.parseResult.dataPoints;
+    }
+
     weatherData.importedFileName = this.fileName;
     weatherData.addressString = null;
     this.weatherApiService.setWeatherData(weatherData);
@@ -92,8 +102,10 @@ export class WeatherFileImportComponent {
 
   private getFileError(file: File): string | null {
     const ext = file.name.split('.').pop()?.toLowerCase();
-    if (ext !== 'csv' && ext !== 'xlsx') {
-      return 'Unsupported file type. Please upload a .csv or .xlsx file.';
+    const allowed = ext === 'csv' || (this.xlsxEnabled && ext === 'xlsx');
+    if (!allowed) {
+      const accepted = this.xlsxEnabled ? '.csv or .xlsx' : '.csv';
+      return `Unsupported file type. Please upload a ${accepted} file.`;
     }
     if (file.size === 0) {
       return 'The selected file is empty.';

@@ -9,7 +9,7 @@
     <div class="col-12">
         <label class="semibold form-section-label mb-2">Import Weather Data from File</label>
         <p class="small mb-1">
-            Upload a <strong>.csv</strong> or <strong>.xlsx</strong> file containing hourly rows of weather data.
+            Upload a <strong>.csv</strong>@if (xlsxEnabled) { or <strong>.xlsx</strong>} file containing hourly rows of weather data.
             Two column sets are supported:
         </p>
         <div class="d-flex flex-column small">
@@ -54,12 +54,15 @@
             (dragleave)="onDragLeave()" (drop)="onDrop($event)">
             <div class="text-center p-4">
                 <span class="fa fa-upload fa-2x text-muted mb-2 d-block"></span>
-                <p class="mb-1">Drag and drop a .csv or .xlsx file here</p>
+                <p class="mb-1">Drag and drop a .csv
+                    @if (xlsxEnabled) { 
+                        or .xlsx
+                    } file here</p>
                 <p class="small text-muted mb-2">— or —</p>
                 <label for="weatherFileInput" class="btn btn-sm btn-outline-secondary mb-0">
                     Browse Files
                 </label>
-                <input type="file" id="weatherFileInput" accept=".csv,.xlsx" class="d-none"
+                <input type="file" id="weatherFileInput" [attr.accept]="xlsxEnabled ? '.csv,.xlsx' : '.csv'" class="d-none"
                     (change)="onFileChange($event)">
             </div>
         </div>

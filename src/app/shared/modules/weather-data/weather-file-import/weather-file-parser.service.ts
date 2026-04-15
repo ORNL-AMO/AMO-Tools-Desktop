@@ -3,12 +3,17 @@ import * as Papa from 'papaparse/papaparse.js';
 import * as XLSX from 'xlsx';
 import { WeatherDataPoint } from '../../../weather-api.service';
 
+const ENFORCE_8760_ROW_CONSTRAINT = true;
+const ENFORCE_DUPLICATE_TIMESTAMP_CONSTRAINT = false;
+const ENFORCE_DATETIME_SEMANTIC_VALIDATION = true;
+const ENABLE_XLSX_IMPORT = false;
 
 @Injectable()
 export class WeatherFileParserService {
 
   readonly columnSchemas: ColumnSchema[] = COLUMN_SCHEMAS;
   readonly timeColumnFormats: TimeColumnFormatOption[] = TIME_COLUMN_FORMAT_OPTIONS;
+  readonly xlsxEnabled = ENABLE_XLSX_IMPORT;
 
   async parseFile(file: File): Promise<WeatherFileParseResult> {
     const ext = file.name.split('.').pop()?.toLowerCase();
@@ -17,12 +22,13 @@ export class WeatherFileParserService {
     if (ext === 'csv') {
       const text = await file.text();
       rows = this.parseCsv(text);
-    } else if (ext === 'xlsx') {
+    } else if (ext === 'xlsx' && ENABLE_XLSX_IMPORT) {
       const buffer = await file.arrayBuffer();
       rows = this.parseXlsx(buffer);
     } else {
+      const accepted = ENABLE_XLSX_IMPORT ? '.csv or .xlsx' : '.csv';
       return {
-        dataPoints: [], errors: ['Unsupported file type. Please upload a .csv or .xlsx file.'],
+        dataPoints: [], errors: [`Unsupported file type. Please upload a ${accepted} file.`],
         rowCount: 0, detectedColumns: [], timeLabel: null, previewRawRows: [],
       };
     }
@@ -166,7 +172,7 @@ export class WeatherFileParserService {
     const workbook = XLSX.read(buffer, { type: 'array' });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
-    return XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: '' });
+    return XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { raw: false, defval: '' });
   }
 
   private mapRowToDataPoint(
@@ -261,7 +267,7 @@ export const TIME_COLUMN_FORMAT_OPTIONS: TimeColumnFormatOption[] = [
 ];
 
 const ORNL_LCD_SCHEMA: ColumnSchema = {
-  name: 'ORNL/LCD',
+  name: 'ORNL LCD',
   requiredHeaders: ['time', 'dry_bulb_temp', 'wet_bulb_temp'],
   columnMappings: {
     'dry_bulb_temp': 'dry_bulb_temp',
@@ -302,8 +308,3 @@ const NO_SCHEMA_HELP = [
   'Additional columns will be ignored.',
 ].join(' ');
 
-// TODO: re-enable once testing with variable-length files is complete
-const ENFORCE_8760_ROW_CONSTRAINT = true;
-// TODO: re-enable once timestamp normalization is verified across all import formats
-const ENFORCE_DUPLICATE_TIMESTAMP_CONSTRAINT = false;
-const ENFORCE_DATETIME_SEMANTIC_VALIDATION = true;
