@@ -57,8 +57,12 @@ export function getRandomFlatColor(): string {
 export function defaultPlotlyConfig(config?: object, chartType?: string | unknown): object {
     let modeBarButtonsToRemove = ['select2d', 'lasso2d'];
     if (Array.isArray(chartType)) {
+        // Remove zoom for pie and bar
         if (chartType.some(trace => ['pie', 'bar'].includes(trace.type))) {
-            modeBarButtonsToRemove.push('zoom2d');
+            modeBarButtonsToRemove.push('zoom2d', 'zoomin2d', 'zoomout2d');
+        }
+        if (chartType.some(trace => trace.type.startsWith('scatter'))) {
+            modeBarButtonsToRemove = modeBarButtonsToRemove.filter(button => !['zoom2d', 'zoomin2d', 'zoomout2d'].includes(button));
         }
     }
 
