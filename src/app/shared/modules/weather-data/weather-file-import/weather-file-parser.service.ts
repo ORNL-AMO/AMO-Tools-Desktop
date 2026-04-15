@@ -144,7 +144,14 @@ export class WeatherFileParserService {
     return raw;
   }
 
-  /** Converts "M/D/YYYY H:MM" → "YYYY-MM-DDTHH:mm". Returns the original string if it does not match. */
+  /**
+   * Converts "M/D/YYYY H:MM" → "YYYY-MM-DDTHH:mm". Returns the original string if it does not match.
+   *
+   * The regex accepts 1- or 2-digit months/days (M or MM, D or DD) and 1- or 2-digit hours (H or HH),
+   * which matches the variable-width values produced by the Weather Station Export format.
+   * Named capture groups (month, day, year, hour, minute) are used for readability.
+   * Minutes are always 2 digits in the source format so no width tolerance is needed there.
+   */
   private normalizeMdyDatetime(value: string): string {
     const match = value.match(
       /^(?<month>\d{1,2})\/(?<day>\d{1,2})\/(?<year>\d{4})\s+(?<hour>\d{1,2}):(?<minute>\d{2})/
@@ -154,6 +161,8 @@ export class WeatherFileParserService {
     }
 
     const { month, day, year, hour, minute } = match.groups;
+    // padStart(2, '0') zero-pads single-digit months, days, and hours to satisfy the
+    // ISO 8601 requirement of exactly 2 digits in each position (e.g. "1" → "01").
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hour.padStart(2, '0')}:${minute}`;
   }
 
@@ -215,7 +224,7 @@ export interface WeatherFileParseResult {
   detectedColumns: string[];
   // * column name that was used for time value
   timeLabel: string | null;
-  // * first 5 raw rows from the file, keyed by original header name — used for the preview table
+  // * first x raw rows from the file, keyed by original import header name
   previewRawRows: Record<string, unknown>[];
 }
 
