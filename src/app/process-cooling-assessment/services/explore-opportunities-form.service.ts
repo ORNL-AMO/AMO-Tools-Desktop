@@ -28,7 +28,7 @@ export class ExploreOpportunitiesFormService {
   }
 
   getSlidingCondenserWaterTempForm(followingTempDifferential: number, settings: Settings): FormGroup<SlidingCondenserWaterTempForm> {
-    const validators = this.systemInformationService.getFollowingTempDifferentialValidators(settings);
+    const validators = this.systemInformationService.getWaterCooledFollowingTempDifferentialValidators(settings);
     return this.formBuilder.group({ followingTempDifferential: [followingTempDifferential, validators] });
   }
 

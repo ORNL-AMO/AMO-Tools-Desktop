@@ -61,7 +61,7 @@ export class AirCooledComponent {
           this.indoorTemp.setValidators(this.systemInformationFormService.getIndoorTempValidators(this.settings()));
           this.followingTempDifferential.clearValidators();
         } else {
-          this.followingTempDifferential.setValidators(this.systemInformationFormService.getFollowingTempDifferentialValidators(this.settings()));
+          this.followingTempDifferential.setValidators(this.systemInformationFormService.getAirCooledFollowingTempDifferentialValidators(this.settings()));
           this.indoorTemp.clearValidators();
         }
         this.indoorTemp.updateValueAndValidity();

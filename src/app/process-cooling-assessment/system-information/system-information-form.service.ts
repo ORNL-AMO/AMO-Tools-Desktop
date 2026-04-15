@@ -159,7 +159,7 @@ export class SystemInformationFormService {
       indoorTempValidators = this.getIndoorTempValidators(settings);
     }
     if (input.airCoolingSource === AirCoolingSource.Outdoor) {
-      tempDifferentialValidators = this.getFollowingTempDifferentialValidators(settings);
+      tempDifferentialValidators = this.getAirCooledFollowingTempDifferentialValidators(settings);
     }
 
     return this.formBuilder.group({
@@ -199,18 +199,44 @@ export class SystemInformationFormService {
     return indoorTempValidators;
   }
 
-  getFollowingTempDifferentialValidators(settings: Settings): ValidatorFn[] {
-    let tempDiffMin = PROCESS_COOLING_VALIDATION.followingTempDifferential.min;
-    let tempDiffMax = PROCESS_COOLING_VALIDATION.followingTempDifferential.max;
+  getAirCooledFollowingTempDifferentialValidators(settings: Settings): ValidatorFn[] {
+    let tempDiffMin = PROCESS_COOLING_VALIDATION.airCooledFollowingTempDiffential.min;
+    let tempDiffMax = PROCESS_COOLING_VALIDATION.airCooledFollowingTempDiffential.max;
 
     if (settings.unitsOfMeasure === 'Metric') {
       tempDiffMin = new ConvertValue(
-        PROCESS_COOLING_VALIDATION.followingTempDifferential.min,
+        tempDiffMin,
         PROCESS_COOLING_UNITS.temperature.imperial,
         PROCESS_COOLING_UNITS.temperature.metric
       ).convertedValue;
       tempDiffMax = new ConvertValue(
-        PROCESS_COOLING_VALIDATION.followingTempDifferential.max,
+        tempDiffMax,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+    }
+
+    let followingTempDifferentialValidators: ValidatorFn[] = [
+      Validators.required,
+      Validators.min(tempDiffMin),
+      Validators.max(tempDiffMax)
+    ];
+
+    return followingTempDifferentialValidators;
+  }
+
+getWaterCooledFollowingTempDifferentialValidators(settings: Settings): ValidatorFn[] {
+    let tempDiffMin = PROCESS_COOLING_VALIDATION.waterCooledFollowingTempDiffential.min;
+    let tempDiffMax = PROCESS_COOLING_VALIDATION.waterCooledFollowingTempDiffential.max;
+
+    if (settings.unitsOfMeasure === 'Metric') {
+      tempDiffMin = new ConvertValue(
+        tempDiffMin,
+        PROCESS_COOLING_UNITS.temperature.imperial,
+        PROCESS_COOLING_UNITS.temperature.metric
+      ).convertedValue;
+      tempDiffMax = new ConvertValue(
+        tempDiffMax,
         PROCESS_COOLING_UNITS.temperature.imperial,
         PROCESS_COOLING_UNITS.temperature.metric
       ).convertedValue;
@@ -239,7 +265,7 @@ export class SystemInformationFormService {
     if (input.isConstantCondenserWaterTemp) {
       condenserWaterTempValidators = this.getCondenserWaterTempValidators(settings);
     } else {
-      followingTempDifferentialValidators = this.getFollowingTempDifferentialValidators(settings);
+      followingTempDifferentialValidators = this.getWaterCooledFollowingTempDifferentialValidators(settings);
     }
 
     const formGroup = this.formBuilder.group({
