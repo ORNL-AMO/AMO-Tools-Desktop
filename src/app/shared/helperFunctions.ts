@@ -56,13 +56,31 @@ export function getRandomFlatColor(): string {
  */
 export function defaultPlotlyConfig(config?: object, chartType?: string | unknown): object {
     let modeBarButtonsToRemove = ['select2d', 'lasso2d'];
-    if (Array.isArray(chartType)) {
-        // Remove zoom for pie and bar
-        if (chartType.some(trace => ['pie', 'bar'].includes(trace.type))) {
-            modeBarButtonsToRemove.push('zoom2d', 'zoomin2d', 'zoomout2d');
+    let typeToCheck: any = chartType;
+
+    if (!typeToCheck && config) {
+        if ((config as any).type !== undefined) {
+            typeToCheck = (config as any).type;
+        } else if (Array.isArray((config as any).data)) {
+            typeToCheck = (config as any).data.map(trace => trace.type);
         }
-        if (chartType.some(trace => trace.type.startsWith('scatter'))) {
-            modeBarButtonsToRemove = modeBarButtonsToRemove.filter(button => !['zoom2d', 'zoomin2d', 'zoomout2d'].includes(button));
+    }
+
+    if (typeToCheck) {
+        if (Array.isArray(typeToCheck)) {
+            if (typeToCheck.some(t => ['pie', 'bar'].includes(t))) {
+                modeBarButtonsToRemove.push('zoom2d', 'zoomin2d', 'zoomout2d');
+            }
+            if (typeToCheck.some(t => t && typeof t === 'string' && t.startsWith('scatter'))) {
+                modeBarButtonsToRemove = modeBarButtonsToRemove.filter(button => !['zoom2d', 'zoomin2d', 'zoomout2d'].includes(button));
+            }
+        } else if (typeof typeToCheck === 'string') {
+            if (['pie', 'bar'].includes(typeToCheck)) {
+                modeBarButtonsToRemove.push('zoom2d', 'zoomin2d', 'zoomout2d');
+            }
+            if (typeToCheck.startsWith('scatter')) {
+                modeBarButtonsToRemove = modeBarButtonsToRemove.filter(button => !['zoom2d', 'zoomin2d', 'zoomout2d'].includes(button));
+            }
         }
     }
 
