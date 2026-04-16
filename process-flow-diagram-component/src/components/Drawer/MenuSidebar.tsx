@@ -1,5 +1,5 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme, Select, MenuItem } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
@@ -175,13 +175,18 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             <div className="sidebar-options">
             <Box className={'sidebar-option-container'}>
                   <label htmlFor={'unitsOfMeasure'}>Units of Measure</label>
-                  <select className="form-control diagram-select" id={'unitsOfMeasure'} name="unitsOfMeasure"
+                  <Select
+                    id={'unitsOfMeasure'}
+                    name="unitsOfMeasure"
                     value={unitsOfMeasure}
                     disabled={hasAssessment}
-                    onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}>
-                    <option key={'imperial'} value={'Imperial'}>Imperial</option>
-                    <option key={'metric'} value={'Metric'}>Metric</option>
-                  </select>
+                    size="small"
+                    onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}
+                    sx={{ width: '100%' }}
+                  >
+                    <MenuItem key={'imperial'} value={'Imperial'}>Imperial</MenuItem>
+                    <MenuItem key={'metric'} value={'Metric'}>Metric</MenuItem>
+                  </Select>
                 </Box>
 
               <Box className={'sidebar-option-container'} padding={'.5rem'}>
@@ -204,42 +209,50 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 
             <Box className={'sidebar-option-container'}>
                   <label htmlFor={'flowDecimalPrecision'}>Decimal Precision</label>
-                  <select className="form-control diagram-select" id={'flowDecimalPrecision'} name="flowDecimalPrecision"
+                  <Select
+                    id={'flowDecimalPrecision'}
+                    name="flowDecimalPrecision"
                     value={flowDecimalPrecision}
-                    onChange={(e) => dispatch(flowDecimalPrecisionChange(e.target.value))}>
-                    {flowDecimalPrecisionOptions.map((option) => {
-                    return (
-                      <option key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</option>
-                    )
-                  })}
-                  </select>
+                    size="small"
+                    onChange={(e) => dispatch(flowDecimalPrecisionChange(JSON.stringify(e.target.value)))}
+                    sx={{ width: '100%' }}
+                  >
+                    {flowDecimalPrecisionOptions.map((option) => (
+                      <MenuItem key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</MenuItem>
+                    ))}
+                  </Select>
                 </Box>
 
                 <Box className={'sidebar-option-container'}>
                   <label htmlFor={'conductivityUnit'}>Conductivity Unit</label>
-                  <select className="form-control diagram-select" id={'conductivityUnit'} name="conductivityUnit"
+                  <Select
+                    id={'conductivityUnit'}
+                    name="conductivityUnit"
                     value={conductivityUnit}
-                    onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}>
-                    {conductivityUnitOptions.map((option) => {
-                    return (
-                      <option key={`conductivityUnit_${option.value}`} value={option.value}>{option.display}</option>
-                    )
-                  })}
-                  </select>
+                    size="small"
+                    onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}
+                    sx={{ width: '100%' }}
+                  >
+                    {conductivityUnitOptions.map((option) => (
+                      <MenuItem key={`conductivityUnit_${option.value}`} value={option.value}>{option.display}</MenuItem>
+                    ))}
+                  </Select>
                 </Box>
 
               <Box className={'sidebar-option-container'}>
                 <label htmlFor="edgeType" className="diagram-label">Default Line Type</label>
-                <select className="form-control diagram-select" id="edgeType"
+                <Select
+                  id="edgeType"
                   name="edgeType"
                   value={edgeType}
-                  onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}>
-                  {edgeTypeOptions.map((option: SelectListOption) => {
-                    return (
-                      <option key={option.value} value={option.value}>{option.display}</option>
-                    )
-                  })}
-                </select>
+                  size="small"
+                  onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}
+                  sx={{ width: '100%' }}
+                >
+                  {edgeTypeOptions.map((option: SelectListOption) => (
+                    <MenuItem key={option.value} value={option.value}>{option.display}</MenuItem>
+                  ))}
+                </Select>
               </Box>
 
               <Box className={'sidebar-option-container'}>

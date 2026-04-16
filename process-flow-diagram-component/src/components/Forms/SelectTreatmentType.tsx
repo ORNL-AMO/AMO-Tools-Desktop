@@ -1,5 +1,6 @@
 import { waterTreatmentTypeOptions } from "process-flow-lib";
 import { CSSProperties, memo } from "react";
+import { Select, MenuItem } from "@mui/material";
 
 /**
 * Render a select element for water or water water treatment types
@@ -12,17 +13,20 @@ const SelectedTreatmentType = (props: SelectedTreatmentTypeProps) => {
         height: '2.25rem'
     };
     return (
-        <select className="form-control diagram-select" id={'treatmentType'} name="treatmentType"
-            style={{...defaultStyle, ...style}}
+        <Select
+            id={'treatmentType'}
+            name="treatmentType"
             value={treatmentType}
-            onChange={(e) => handleTreatmentTypeChange(e)}>
-            {treatmentTypeOptions.map((option, index) => {
-                return (
-                    <option key={option.display + '_' + index} value={option.value}>{option.display}</option>
-                )
-            })
-            }
-        </select>
+            onChange={handleTreatmentTypeChange}
+            size="small"
+            sx={{ width: '100%', height: '2.25rem', ...style }}
+        >
+            {treatmentTypeOptions.map((option, index) => (
+                <MenuItem key={option.display + '_' + index} value={option.value}>
+                    {option.display}
+                </MenuItem>
+            ))}
+        </Select>
     );
 }
 

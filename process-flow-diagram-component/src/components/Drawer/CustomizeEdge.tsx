@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Select, MenuItem } from '@mui/material';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import { Edge } from '@xyflow/react';
 import { useEffect, useState } from 'react';
@@ -40,15 +40,20 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
     <Box sx={{ marginTop: 1 }}>
           <Box display={'flex'} sx={{fontSize: '.75rem', marginTop: 2}} justifyContent={'space-between'} width={'100%'}>
             <label htmlFor={selectId} className="diagram-label" style={{fontSize: '.75rem'}}>Line Type</label>
-            <select className="form-control diagram-select" id={selectId} name="edgeType" style={{ marginLeft: '16px' }}
+            <Select
+              id={selectId}
+              name="edgeType"
+              size="small"
               value={getCurrentEdgeType()}
-              onChange={(e) => handleEdgeTypeChange(e.target.value)}>
-              {edgeTypeOptions.map((option: SelectListOption) => {
-                return (
-                  <option key={option.value} value={option.value}>{option.display}</option>
-                )
-              })}
-            </select>
+              onChange={(e) => handleEdgeTypeChange(e.target.value)}
+              sx={{ marginLeft: '16px', minWidth: 120 }}
+            >
+              {edgeTypeOptions.map((option: SelectListOption) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.display}
+                </MenuItem>
+              ))}
+            </Select>
           </Box>
 
           <Box sx={{fontSize: '.75rem'}}>
