@@ -202,8 +202,8 @@
     </div>
     <div class="d-flex d-lg-none tabs subtabs progress-tabs flex-wrap pump-inventory">
         <ul class="pagination d-flex justify-content-between tabs pump-inventory subtabs progress-tabs flex-fill">
-            <li class="page-item" [ngClass]="{'disabled': selectedTab == 'pump-properties' && pumpInventoryData.departments.length === 0}">
-                <a class="nav-link small" (click)="mobileBackPumpCatalogTabs()" [ngClass]="{'disabled': selectedTab == 'pump-properties' && pumpInventoryData.departments.length === 0}">
+            <li class="page-item" [ngClass]="{'disabled': selectedTab == 'pump-properties'}">
+                <a class="nav-link small" (click)="mobileBackPumpCatalogTabs()" [ngClass]="{'disabled': selectedTab == 'pump-properties'}">
                     <span class="fa fa-chevron-left"></span></a>
             </li>
             <li *ngIf="selectedTab === 'pump-properties'" class="fixed-tab-size active" (click)="selectTab('pump-properties')">
