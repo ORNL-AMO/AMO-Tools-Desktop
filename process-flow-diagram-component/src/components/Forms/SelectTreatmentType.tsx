@@ -20,6 +20,17 @@ const SelectedTreatmentType = (props: SelectedTreatmentTypeProps) => {
             onChange={handleTreatmentTypeChange}
             size="small"
             sx={{ width: '100%', height: '2.25rem', ...style }}
+            MenuProps={{
+                disablePortal: true,
+                anchorOrigin: {
+                vertical: 'bottom',
+                horizontal: 'left',
+                },
+                transformOrigin: {
+                vertical: 'top',
+                horizontal: 'left',
+                }
+            }}
         >
             {treatmentTypeOptions.map((option, index) => (
                 <MenuItem key={option.display + '_' + index} value={option.value}>
