@@ -152,7 +152,7 @@
             (click)="setSetupTab('department-setup')">
             <a><span class="step-number">2</span>Departments</a>
         </div>
-        <div *ngIf="pumpInventoryData && pumpInventoryData.isValid" class="fixed-tab-size" [ngClass]="{'active': setupTab == 'pump-catalog'}"
+        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'pump-catalog'}"
             (click)="setSetupTab('pump-catalog')">
             <a><span class="step-number">3</span>Catalog</a>
         </div>
@@ -171,7 +171,7 @@
                 (click)="setSetupTab('department-setup')">
                 <a><span class="step-number">2</span>Departments</a>
             </li>
-            <li *ngIf="setupTab == 'pump-catalog' && pumpInventoryData && pumpInventoryData.isValid" class="fixed-tab-size" [ngClass]="{'active': setupTab == 'pump-catalog'}"
+            <li *ngIf="setupTab == 'pump-catalog'" class="fixed-tab-size" [ngClass]="{'active': setupTab == 'pump-catalog'}"
                 (click)="setSetupTab('pump-catalog')">
                 <a><span class="step-number">3</span>Catalog</a>
             </li>
