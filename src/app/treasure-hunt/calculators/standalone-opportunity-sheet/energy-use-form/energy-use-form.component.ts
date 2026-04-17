@@ -67,7 +67,7 @@ export class EnergyUseFormComponent implements OnInit {
     this.energyItems.splice(index, 1);
   }
 
-  getEnergyUnit(str: string): string {
+  getEnergyUnit(str: EnergyUseType): string {
     if (str == 'Electricity') {
       return 'kWh';
     } else if (this.settings.unitsOfMeasure == 'Metric') {
