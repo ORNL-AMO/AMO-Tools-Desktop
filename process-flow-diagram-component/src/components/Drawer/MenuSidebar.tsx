@@ -173,8 +173,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         <TabPanel value={selectedTab} index={2}>
           <Box paddingX={'.5rem'}>
             <div className="sidebar-options">
-            <Box className={'sidebar-option-container'}>
-              <FormControl fullWidth size="small" variant="outlined" sx={{ marginBottom: '1rem' }}>
+            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <FormControl>
                 <Select
                   id="unitsOfMeasure"
                   name="unitsOfMeasure"
@@ -219,8 +219,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 />
               </Box>
                 
-            <Box className={'sidebar-option-container'}>
-              <FormControl fullWidth size="small" variant="outlined" sx={{ marginBottom: '1rem' }}>
+            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <FormControl>
                 <Select
                   id="flowDecimalPrecision"
                   name="flowDecimalPrecision"
@@ -247,8 +247,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               </FormControl>
             </Box>
 
-            <Box className={'sidebar-option-container'}>
-              <FormControl fullWidth size="small" variant="outlined" sx={{ marginBottom: '1rem' }}>
+            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <FormControl>
                 <Select
                   id="conductivityUnit"
                   name="conductivityUnit"
@@ -275,8 +275,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               </FormControl>
             </Box>
 
-            <Box className={'sidebar-option-container'}>
-              <FormControl fullWidth size="small" variant="outlined" sx={{ marginBottom: '1rem' }}>
+            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <FormControl>
                 <Select
                   id="edgeType"
                   name="edgeType"
