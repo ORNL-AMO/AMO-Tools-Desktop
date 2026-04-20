@@ -1,5 +1,5 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme, Select, MenuItem, FormControl } from '@mui/material';
+import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
@@ -174,11 +174,14 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           <Box paddingX={'.5rem'}>
             <div className="sidebar-options">
             <Box className={'sidebar-option-container'} padding={'.5rem'}>
-              <FormControl>
+              <FormControl fullWidth size="small">
+                <InputLabel id="unitsOfMeasure-label">Units of Measure</InputLabel>
                 <Select
+                  labelId="unitsOfMeasure-label"
                   id="unitsOfMeasure"
                   name="unitsOfMeasure"
                   size="small"
+                  label="Units of Measure"
                   value={unitsOfMeasure}
                   onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}
                   disabled={hasAssessment}
@@ -220,11 +223,14 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               </Box>
                 
             <Box className={'sidebar-option-container'} padding={'.5rem'}>
-              <FormControl>
+              <FormControl fullWidth size="small">
+                <InputLabel id="flowDecimalPrecision-label">Decimal Precision</InputLabel>
                 <Select
+                  labelId="flowDecimalPrecision-label"
                   id="flowDecimalPrecision"
                   name="flowDecimalPrecision"
                   size="small"
+                  label="Flow Decimal Precision"
                   value={flowDecimalPrecision}
                   onChange={(e) => dispatch(flowDecimalPrecisionChange(String(e.target.value)))}
                   sx={{ minWidth: 120 }}
@@ -248,11 +254,14 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             </Box>
 
             <Box className={'sidebar-option-container'} padding={'.5rem'}>
-              <FormControl>
+              <FormControl fullWidth size="small">
+                <InputLabel id="conductivityUnit-label">Conductivity Unit</InputLabel>
                 <Select
+                  labelId="conductivityUnit-label"
                   id="conductivityUnit"
                   name="conductivityUnit"
                   size="small"
+                  label="Conductivity Unit"
                   value={conductivityUnit}
                   onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}
                   sx={{ minWidth: 120 }}
@@ -276,11 +285,14 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             </Box>
 
             <Box className={'sidebar-option-container'} padding={'.5rem'}>
-              <FormControl>
+              <FormControl fullWidth size="small">
+                <InputLabel id="edgeType-label">Default Line Type</InputLabel>
                 <Select
+                  labelId="edgeType-label"
                   id="edgeType"
                   name="edgeType"
                   size="small"
+                  label="Edge Type"
                   value={edgeType}
                   onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}
                   sx={{ minWidth: 120 }}
