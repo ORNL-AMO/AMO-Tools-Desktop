@@ -102,14 +102,14 @@ export class MotorPerformanceChartComponent implements OnInit {
     let chartLayout = JSON.parse(JSON.stringify(this.performanceChart.layout));
     const config = defaultPlotlyConfig(this.performanceChart.config);
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, config)
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(config, traceData))
         .then(chart => {
           chart.on('plotly_click', chartData => {
             this.addSelectedPointTraces(chartData);
           });
         });
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, config)
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(config, traceData))
         .then(chart => {
           chart.on('plotly_click', chartData => {
             this.addSelectedPointTraces(chartData);

@@ -417,6 +417,7 @@ export class SystemProfileGraphsComponent implements OnInit {
               return 0;
             }
           }),
+          type: 'scatter',
           mode: 'lines+markers',
           hovertemplate: `%{y:.3r}`,
           name: this.getCompressorName(compressorProfile.compressorId),
@@ -531,6 +532,7 @@ export class SystemProfileGraphsComponent implements OnInit {
               return 0;
             }
           }),
+          type: 'scatter',
           mode: 'lines+markers',
           hovertemplate: `%{y:.3r}`,
           name: this.getCompressorName(compressorProfile.compressorId),
