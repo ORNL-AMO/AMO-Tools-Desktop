@@ -10,6 +10,8 @@ export interface ProcessCoolingChillerOutput {
     hours: number[];
     power: number[];
     energy: number[];
+    totalHours: number;
+    totalEnergy: number;
 }
 
 export interface ProcessCoolingPumpOutput {
