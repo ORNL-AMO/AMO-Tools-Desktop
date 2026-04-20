@@ -102,7 +102,7 @@ export class PumpSummaryResultsService {
     if (baseline?.chillerPumpingEnergy) {
       baseline.chillerPumpingEnergy.forEach((pumpEnergyItem: PumpChillerItemEnergy, idx) => {
         chillerRows.push({
-          label: pumpEnergyItem.name ? pumpEnergyItem.name : `Chiller Pumping Energy ${idx + 1}`,
+          label: pumpEnergyItem.name ? pumpEnergyItem.name : `Chilled Water Pumping Energy ${idx + 1}`,
           units: `(${defaultEnergyUnit})`,
           className: 'default',
           baseline: { value: pumpEnergyItem.value ?? null, decimalPipe: defaultpipeFormat },
@@ -117,7 +117,7 @@ export class PumpSummaryResultsService {
     if (baseline?.condenserPumpingEnergy) {
       baseline.condenserPumpingEnergy.forEach((pumpEnergyItem: PumpChillerItemEnergy, idx) => {
         condenserRows.push({
-          label: pumpEnergyItem.name ? pumpEnergyItem.name : `Condenser Pumping Energy ${idx + 1}`,
+          label: pumpEnergyItem.name ? pumpEnergyItem.name : `Condenser Water Pumping Energy ${idx + 1}`,
           units: `(${defaultEnergyUnit})`,
           className: 'default',
           baseline: { value: pumpEnergyItem.value ?? null, decimalPipe: defaultpipeFormat },

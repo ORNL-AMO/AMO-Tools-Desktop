@@ -85,6 +85,8 @@ export class AnnualStationGraphComponent {
                 xaxis: {
                     automargin: true,
                     autorange: true,
+                    // * NOTE: month ticks only is for TMY3 data. For actual year data, remove
+                    tickformat: '%b',
                 },
                 yaxis: {
                     title: {
