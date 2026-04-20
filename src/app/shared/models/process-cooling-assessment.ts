@@ -46,11 +46,16 @@ export interface ProcessCoolingResults {
 }
 
 export interface ExecutiveSummaryResults {
-    pumpTotalChilledEnergy: number;
-    pumpTotalCondenserEnergy: number;
     totalChillerEnergy: number;
+    totalChillerCost: number;
     totalTowerEnergy: number;
+    totalTowerCost: number;
+    pumpTotalChilledEnergy: number;
+    pumpTotalChilledCost: number;
+    pumpTotalCondenserEnergy: number;
+    pumpTotalCondenserCost: number;
     totalPumpEnergy: number;
+    totalPumpCost: number;
     totalEnergy: number;
     totalCost: number;
     // * modification results
