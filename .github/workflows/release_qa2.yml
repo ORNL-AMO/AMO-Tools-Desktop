@@ -9,7 +9,7 @@ jobs:
     uses: ./.github/workflows/template_build.yml
     with:
       artifact-name: dist
-      artifact-path: dist
+      artifact-path: dist/browser
 
   call_deploy-qa:
     if: github.ref_name != 'develop' || github.ref_name != 'master'
