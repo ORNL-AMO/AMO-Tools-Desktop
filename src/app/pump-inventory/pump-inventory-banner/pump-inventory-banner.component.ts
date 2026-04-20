@@ -66,9 +66,9 @@ export class PumpInventoryBannerComponent implements OnInit {
     });
 
     this.selectedDepartmentIdSub = this.pumpCatalogService.selectedDepartmentId.subscribe(val => {
-      if (val && val !== '') {
+      if (val && val !== 'pump-properties') {
         this.selectedTab = val;
-      } else if (val === '') {
+      } else if (val === 'pump-properties') {
         this.selectedTab = 'pump-properties';
       }
     });
@@ -100,7 +100,7 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.selectedTab = tabId;
     if (tabId === 'pump-properties') {
       this.pumpCatalogService.showPumpProperties.next(true);
-      this.pumpCatalogService.selectedDepartmentId.next('');
+      this.pumpCatalogService.selectedDepartmentId.next('pump-properties');
     } else {
       this.pumpCatalogService.showPumpProperties.next(false);
       this.pumpCatalogService.selectedDepartmentId.next(tabId);

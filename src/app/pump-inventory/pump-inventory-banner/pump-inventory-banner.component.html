@@ -173,7 +173,7 @@
             </li>
             <li *ngIf="setupTab == 'pump-catalog'" class="fixed-tab-size" [ngClass]="{'active': setupTab == 'pump-catalog'}"
                 (click)="setSetupTab('pump-catalog')">
-                <a><span class="step-number">3</span>Catalog</a>
+                <a><span class="step-number" [ngClass]="{'missing-data-tab': pumpInventoryData && !pumpInventoryData.isValid}">3</span>Catalog</a>
             </li>
             <li class="page-item" [ngClass]="{'disabled': setupTab == 'pump-catalog'}">
                 <a class="nav-link small" (click)="continueSetupTabs()" [ngClass]="{'disabled': setupTab == 'pump-catalog'}">
