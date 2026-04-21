@@ -116,7 +116,7 @@ export class PlotlyBarChartComponent implements OnInit {
       displayModeBar: false,
       responsive: false
     };
-    this.plotlyService.newPlot(this.barChart.nativeElement, traces, layout, defaultPlotlyConfig(configOptions));
+    this.plotlyService.newPlot(this.barChart.nativeElement, traces, layout, defaultPlotlyConfig(configOptions, traces));
 
   }
 

@@ -89,7 +89,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.paybackBarChart.nativeElement, traces, layout, defaultPlotlyConfig(configOptions));
+    this.plotlyService.newPlot(this.paybackBarChart.nativeElement, traces, layout, defaultPlotlyConfig(configOptions, traces));
 
   }
 
@@ -142,7 +142,7 @@ export class OpportunityPaybackBarChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    this.plotlyService.newPlot(this.paybackBarChart.nativeElement, traces, layout, defaultPlotlyConfig(configOptions));
+    this.plotlyService.newPlot(this.paybackBarChart.nativeElement, traces, layout, defaultPlotlyConfig(configOptions, traces));
   }
 
   getLabelsAndData(): Array<{ label: string, data: number }> {

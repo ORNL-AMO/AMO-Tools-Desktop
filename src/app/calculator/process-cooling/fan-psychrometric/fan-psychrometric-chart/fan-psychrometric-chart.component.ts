@@ -85,7 +85,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
     
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.chart.data, this.chart.layout, defaultPlotlyConfig(this.chart.config))
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.chart.data, this.chart.layout, defaultPlotlyConfig(this.chart.config, this.chart.data))
       .then(chart => {
         chart.on('plotly_click', chartData => {
           this.addSelectedPointTraces(chartData);

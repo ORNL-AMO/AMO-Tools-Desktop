@@ -130,14 +130,14 @@ export class FanSystemChecklistChartComponent implements OnInit {
         this.expandedChartDiv.nativeElement,
         traces,
         chartLayout,
-        defaultPlotlyConfig(this.fanChecklistChart.config)
+        defaultPlotlyConfig(this.fanChecklistChart.config, this.fanChecklistChart.data)
       );
     }else if(!this.expanded && this.panelChartDiv){
       this.plotlyService.newPlot(
         this.panelChartDiv.nativeElement,
         traces,
         chartLayout,
-        defaultPlotlyConfig(this.fanChecklistChart.config)
+        defaultPlotlyConfig(this.fanChecklistChart.config, this.fanChecklistChart.data)
       );
     }
   }

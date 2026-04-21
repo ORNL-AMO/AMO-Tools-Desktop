@@ -147,11 +147,11 @@ export class StackedBarIntakeCostsComponent {
       responsive: this.printView ? false : true
     };
 
-    this.plotlyService.newPlot(this.intakeCostsChart.nativeElement, chartData, layout, defaultPlotlyConfig(configOptions))
+    this.plotlyService.newPlot(this.intakeCostsChart.nativeElement, chartData, layout, defaultPlotlyConfig(configOptions, chartData as any))
     .then(chart => {
-          chart.on('plotly_legendclick', event => false);
-          chart.on('plotly_legenddoubleclick', event => false);
-        });
+      chart.on('plotly_legendclick', event => false);
+      chart.on('plotly_legenddoubleclick', event => false);
+    });
   }
 
   getPercentLabels(costsPercent: number[], costsRaw: number[], index: number, label: string): { dataLabel: string, hoverLabel: string } {

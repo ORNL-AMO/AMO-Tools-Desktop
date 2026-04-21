@@ -101,7 +101,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
   drawPrintPlot() {
@@ -158,7 +158,7 @@ export class RollupSummaryPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    this.plotlyService.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.rollupSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 }
 

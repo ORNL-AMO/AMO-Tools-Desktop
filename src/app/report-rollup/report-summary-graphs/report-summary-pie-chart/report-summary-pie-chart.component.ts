@@ -115,7 +115,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data[0].type));
   }
 
   drawPrintPlot() {
@@ -179,7 +179,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data[0].type));
   }
 
 

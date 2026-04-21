@@ -63,7 +63,7 @@ export class EnergyAnalysisBarChartComponent implements OnInit {
       displayModeBar: !this.printView,
       responsive: true,
     };
-    this.plotlyService.newPlot(this.analysisBarChart.nativeElement, traceData, layout, defaultPlotlyConfig(configOptions));
+    this.plotlyService.newPlot(this.analysisBarChart.nativeElement, traceData, layout, defaultPlotlyConfig(configOptions, traceData));
   }
 
   getEnergyCostData() {

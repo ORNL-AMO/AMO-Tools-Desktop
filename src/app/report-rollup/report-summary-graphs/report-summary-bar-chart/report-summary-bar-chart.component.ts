@@ -70,7 +70,7 @@ export class ReportSummaryBarChartComponent implements OnInit {
       responsive: true
     };
 
-    this.plotlyService.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, defaultPlotlyConfig(configOptions));
+    this.plotlyService.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, defaultPlotlyConfig(configOptions, this.barChartData));
   }
 
   createPrintChart() {
@@ -101,7 +101,7 @@ export class ReportSummaryBarChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false,
     };
-    this.plotlyService.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, defaultPlotlyConfig(configOptions));
+    this.plotlyService.newPlot(this.reportBarChart.nativeElement, this.barChartData, layout, defaultPlotlyConfig(configOptions, this.barChartData));
   }
 
 

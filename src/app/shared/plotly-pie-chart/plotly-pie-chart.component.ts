@@ -76,7 +76,7 @@ export class PlotlyPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, defaultPlotlyConfig(modebarBtns, data.type));
   }
 
   drawPrintPlot() {
@@ -110,6 +110,6 @@ export class PlotlyPieChartComponent implements OnInit {
       displayModeBar: false
     };
 
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, defaultPlotlyConfig(modebarBtns, data.type));
   }
 }

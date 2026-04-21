@@ -110,7 +110,7 @@ export class CompressedAirSummaryGraphComponent {
 
         let config = { responsive: true }
         if (this.visualizeChart) {
-          this.plotlyService.newPlot(this.visualizeChart.nativeElement, data, layout, defaultPlotlyConfig(config));
+          this.plotlyService.newPlot(this.visualizeChart.nativeElement, data, layout, defaultPlotlyConfig(config, type));
         }
       }
     });

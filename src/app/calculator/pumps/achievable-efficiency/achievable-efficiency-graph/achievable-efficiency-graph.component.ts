@@ -115,14 +115,14 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     let chartLayout = JSON.parse(JSON.stringify(this.efficiencyChart.layout));
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.efficiencyChart.config))
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.efficiencyChart.config, traceData))
         .then(chart => {
           chart.on('plotly_click', (graphData) => {
             this.createDataPoints(graphData);
           });
         });
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.efficiencyChart.config))
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.efficiencyChart.config, traceData))
         .then(chart => {
           chart.on('plotly_click', (graphData) => {
             this.createDataPoints(graphData);

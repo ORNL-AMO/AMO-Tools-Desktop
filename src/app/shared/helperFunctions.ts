@@ -2,7 +2,7 @@ import { cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { FlatColors, graphColors } from './graphColors';
 import { SimpleChart } from './models/plotting';
-
+import { TraceData } from './models/plotting';
 export function copyObject(object) {
     return cloneDeep(object);
 }
@@ -47,10 +47,35 @@ export function getRandomFlatColor(): string {
 }
 
 
-// Returns a Plotly config object with base options, merging any provided config
-export function defaultPlotlyConfig(config?: Partial<SimpleChart['config']>): Partial<SimpleChart['config']> {
+  /**
+ * defaultPlotlyConfig
+ *
+ * @param {object} config - as object, generally expected as Partial<SimpleChart['config']>
+ * @param {string} chartType - as string or an unknown
+ * @returns {object} mergedConfig - the default config merged with the provided config, with some adjustments based on chart type, expected to fit Partial<SimpleChart['config']>.
+ */
+export function defaultPlotlyConfig(config?: object, chartType?: string | unknown): object {
+    let modeBarButtonsToRemove = ['select2d', 'lasso2d'];
+    if (chartType) {
+        if (Array.isArray(chartType)) {
+            if (chartType.some(t => ['pie', 'bar'].includes(t.type))) {
+                modeBarButtonsToRemove.push('zoom2d', 'zoomin2d', 'zoomout2d');
+            }
+            if (chartType.some(t => t.type && t.type.startsWith('scatter'))) {
+                modeBarButtonsToRemove = modeBarButtonsToRemove.filter(button => !['zoom2d', 'zoomin2d', 'zoomout2d'].includes(button));
+            }
+        } else if (typeof chartType === 'string') {
+            if (['pie', 'bar'].includes(chartType)) {
+                modeBarButtonsToRemove.push('zoom2d', 'zoomin2d', 'zoomout2d');
+            }
+            if (chartType.startsWith('scatter')) {
+                modeBarButtonsToRemove = modeBarButtonsToRemove.filter(button => !['zoom2d', 'zoomin2d', 'zoomout2d'].includes(button));
+            }
+        }
+    }
+
     const mergedConfig = {
-        modeBarButtonsToRemove: ['select2d', 'lasso2d'],
+        modeBarButtonsToRemove: modeBarButtonsToRemove,
         displaylogo: false,
         displayModeBar: true,
         responsive: true,
