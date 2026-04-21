@@ -1,5 +1,5 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
@@ -173,16 +173,36 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         <TabPanel value={selectedTab} index={2}>
           <Box paddingX={'.5rem'}>
             <div className="sidebar-options">
-            <Box className={'sidebar-option-container'}>
-                  <label htmlFor={'unitsOfMeasure'}>Units of Measure</label>
-                  <select className="form-control diagram-select" id={'unitsOfMeasure'} name="unitsOfMeasure"
-                    value={unitsOfMeasure}
-                    disabled={hasAssessment}
-                    onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}>
-                    <option key={'imperial'} value={'Imperial'}>Imperial</option>
-                    <option key={'metric'} value={'Metric'}>Metric</option>
-                  </select>
-                </Box>
+            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <FormControl fullWidth size="small">
+                <InputLabel id="unitsOfMeasure-label">Units of Measure</InputLabel>
+                <Select
+                  labelId="unitsOfMeasure-label"
+                  id="unitsOfMeasure"
+                  name="unitsOfMeasure"
+                  size="small"
+                  label="Units of Measure"
+                  value={unitsOfMeasure}
+                  onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}
+                  disabled={hasAssessment}
+                  sx={{ minWidth: 120 }}
+                  MenuProps={{
+                    disablePortal: true,
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }
+                  }}
+                >
+                  <MenuItem key={'imperial'} value={'Imperial'}>Imperial</MenuItem>
+                  <MenuItem key={'metric'} value={'Metric'}>Metric</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
 
               <Box className={'sidebar-option-container'} padding={'.5rem'}>
                 <InputField
@@ -202,45 +222,98 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 />
               </Box>
                 
-            <Box className={'sidebar-option-container'}>
-                  <label htmlFor={'flowDecimalPrecision'}>Decimal Precision</label>
-                  <select className="form-control diagram-select" id={'flowDecimalPrecision'} name="flowDecimalPrecision"
-                    value={flowDecimalPrecision}
-                    onChange={(e) => dispatch(flowDecimalPrecisionChange(e.target.value))}>
-                    {flowDecimalPrecisionOptions.map((option) => {
-                    return (
-                      <option key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</option>
-                    )
-                  })}
-                  </select>
-                </Box>
+            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <FormControl fullWidth size="small">
+                <InputLabel id="flowDecimalPrecision-label">Decimal Precision</InputLabel>
+                <Select
+                  labelId="flowDecimalPrecision-label"
+                  id="flowDecimalPrecision"
+                  name="flowDecimalPrecision"
+                  size="small"
+                  label="Flow Decimal Precision"
+                  value={flowDecimalPrecision}
+                  onChange={(e) => dispatch(flowDecimalPrecisionChange(String(e.target.value)))}
+                  sx={{ minWidth: 120 }}
+                  MenuProps={{
+                    disablePortal: true,
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }
+                  }}
+                >
+                  {flowDecimalPrecisionOptions.map((option) => (
+                    <MenuItem key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
 
-                <Box className={'sidebar-option-container'}>
-                  <label htmlFor={'conductivityUnit'}>Conductivity Unit</label>
-                  <select className="form-control diagram-select" id={'conductivityUnit'} name="conductivityUnit"
-                    value={conductivityUnit}
-                    onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}>
-                    {conductivityUnitOptions.map((option) => {
-                    return (
-                      <option key={`conductivityUnit_${option.value}`} value={option.value}>{option.display}</option>
-                    )
-                  })}
-                  </select>
-                </Box>
+            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <FormControl fullWidth size="small">
+                <InputLabel id="conductivityUnit-label">Conductivity Unit</InputLabel>
+                <Select
+                  labelId="conductivityUnit-label"
+                  id="conductivityUnit"
+                  name="conductivityUnit"
+                  size="small"
+                  label="Conductivity Unit"
+                  value={conductivityUnit}
+                  onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}
+                  sx={{ minWidth: 120 }}
+                  MenuProps={{
+                    disablePortal: true,
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }
+                  }}
+                >
+                  {conductivityUnitOptions.map((option) => (
+                    <MenuItem key={`conductivityUnit_${option.value}`} value={option.value}>{option.display}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
 
-              <Box className={'sidebar-option-container'}>
-                <label htmlFor="edgeType" className="diagram-label">Default Line Type</label>
-                <select className="form-control diagram-select" id="edgeType"
+            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <FormControl fullWidth size="small">
+                <InputLabel id="edgeType-label">Default Line Type</InputLabel>
+                <Select
+                  labelId="edgeType-label"
+                  id="edgeType"
                   name="edgeType"
+                  size="small"
+                  label="Edge Type"
                   value={edgeType}
-                  onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}>
-                  {edgeTypeOptions.map((option: SelectListOption) => {
-                    return (
-                      <option key={option.value} value={option.value}>{option.display}</option>
-                    )
-                  })}
-                </select>
-              </Box>
+                  onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}
+                  sx={{ minWidth: 120 }}
+                  MenuProps={{
+                    disablePortal: true,
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }
+                  }}
+                >
+                  {edgeTypeOptions.map((option: SelectListOption) => (
+                    <MenuItem key={option.value} value={option.value}>{option.display}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
 
               <Box className={'sidebar-option-container'}>
                 <label htmlFor={'strokeWidth'} >Line Thickness</label>
@@ -350,7 +423,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 label="Diagram Notes"
                 multiline
                 minRows={8}
-                value={diagramNotes}
+                value={diagramNotes ?? ""}
                 onChange={e => {
                   dispatch(setDiagramNotes(e.target.value ?? ""));
                 }}
