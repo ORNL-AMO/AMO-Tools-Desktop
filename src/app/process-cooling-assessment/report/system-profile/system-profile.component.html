@@ -24,6 +24,7 @@
                 @for(load of LOAD_LABELS; track load) {
                      <th>{{load}}</th>
                 }
+				<th>Total</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -42,12 +43,16 @@
                     @for(eff of chiller.efficiency; track $index) {
                         <td>{{eff | number:'1.0-3'}}</td>
                     }
+					<td></td>
 				</tr>
 				<tr>
 					<td class="text-left">Hours</td>
 					 @for(hr of chiller.hours; track $index) {
                         <td>{{hr | number:'1.0-0'}}</td>
                     }
+					<td>
+						{{chiller.totalHours | number:'1.0-0'}}
+					</td>
 				</tr>
 				<tr>
 					<td class="text-left">Power
@@ -59,6 +64,8 @@
 					 @for(power of chiller.power; track $index) {
                         <td>{{power | number:'1.0-1'}}</td>
                     }
+					<td>
+					</td>
 				</tr>
 				<tr>
 					<td class="text-left">Energy 
@@ -70,6 +77,9 @@
 					 @for(energy of chiller.energy; track $index) {
                         <td>{{energy | number:'1.0-0'}}</td>
                     }
+					<td>
+						{{chiller.totalEnergy | number:'1.0-0'}}
+					</td>
 				</tr>
 			</ng-container>
         }

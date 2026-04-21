@@ -75,22 +75,34 @@ export class ExecutiveSummaryResultsService {
     const totalChillerEnergy = processCoolingResults.chiller?.reduce((allChillerEnergy, chiller) => {
       return allChillerEnergy + (chiller.energy?.reduce((sum, energy) => sum + energy, 0));
     }, 0);
+    const totalChillerCost = totalChillerEnergy ? totalChillerEnergy * (processCoolingResults.electricityCost) : null;
+    
+    const totalTowerEnergy = processCoolingResults.tower?.energy?.reduce((sum, energy) => sum + energy, 0) ?? 0;
+    const totalTowerCost = totalTowerEnergy ? totalTowerEnergy * (processCoolingResults.electricityCost) : null;
 
-    const totalTowerEnergy = processCoolingResults.tower?.energy?.reduce((sum, energy) => sum + energy, 0);
-    const pumpTotalCondenserEnergy = processCoolingResults.pump?.condenserPumpingEnergy?.reduce((sum, energy) => sum + energy.value, 0); 
+    const pumpTotalCondenserEnergy = processCoolingResults.pump?.condenserPumpingEnergy?.reduce((sum, energy) => sum + energy.value, 0) ?? 0; 
+    const pumpTotalCondenserCost = pumpTotalCondenserEnergy ? pumpTotalCondenserEnergy * (processCoolingResults.electricityCost) : null;
     const pumpTotalChilledEnergy = processCoolingResults.pump?.chillerPumpingEnergy?.reduce((sum, energy) => sum + energy.value, 0);
+    const pumpTotalChilledCost = pumpTotalChilledEnergy ? pumpTotalChilledEnergy * (processCoolingResults.electricityCost) : null;
+
     const totalPumpEnergy = pumpTotalCondenserEnergy + pumpTotalChilledEnergy;
+    const totalPumpCost = pumpTotalCondenserCost && pumpTotalChilledCost ? pumpTotalCondenserCost + pumpTotalChilledCost : null;
     
     let totalEnergy = totalChillerEnergy + totalTowerEnergy + totalPumpEnergy;
     totalEnergy = totalEnergy || null;
     const totalCost = totalEnergy ? totalEnergy * (processCoolingResults.electricityCost) : null;
 
     let summary: ExecutiveSummaryResults = {
-      pumpTotalChilledEnergy,
-      pumpTotalCondenserEnergy,
       totalChillerEnergy,
+      totalChillerCost,
       totalTowerEnergy,
+      totalTowerCost,
+      pumpTotalChilledEnergy,
+      pumpTotalChilledCost,
+      pumpTotalCondenserEnergy,
+      pumpTotalCondenserCost,
       totalPumpEnergy,
+      totalPumpCost,
       totalEnergy,
       totalCost,
     };
@@ -134,27 +146,19 @@ export class ExecutiveSummaryResultsService {
     return [
       {
         ...defaultRow,
-        label: 'Chilled Water Pumping Energy',
-        baseline: { 
-          value: baseline?.pumpTotalChilledEnergy ?? null, decimalPipe: defaultpipeFormat },
-        modifications: modifications.map(modification => {
-          return { value: modification.pumpTotalChilledEnergy ?? null, decimalPipe: defaultpipeFormat };
-        }),
-      },
-      {
-        ...defaultRow,
-        label: 'Condenser Water Pumping Energy',
-        baseline: { value: baseline?.pumpTotalCondenserEnergy ?? null, decimalPipe: defaultpipeFormat },
-        modifications: modifications.map(modification => {
-          return { value: modification.pumpTotalCondenserEnergy ?? null, decimalPipe: defaultpipeFormat };
-        }),
-      },
-      {
-        ...defaultRow,
         label: 'Chiller Energy',
         baseline: { value: baseline?.totalChillerEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
           return { value: modification.totalChillerEnergy ?? null, decimalPipe: defaultpipeFormat };
+        }),
+      },
+      {
+        ...defaultRow,
+        label: 'Chiller Cost',
+        units: `($)`,
+        baseline: { value: baseline?.totalChillerCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
+        modifications: modifications.map(modification => {
+          return { value: modification.totalChillerCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } };
         }),
       },
       {
@@ -165,12 +169,65 @@ export class ExecutiveSummaryResultsService {
           return { value: modification.totalTowerEnergy ?? null, decimalPipe: defaultpipeFormat };
         }),
       },
+        {
+        ...defaultRow,
+        label: 'Tower Cost',
+        units: `($)`,
+        baseline: { value: baseline?.totalTowerCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
+        modifications: modifications.map(modification => {
+          return { value: modification.totalTowerCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } };
+        }),
+      },
       {
         ...defaultRow,
-        label: 'Pump Energy',
+        label: 'Chilled Water Pumping Energy',
+        baseline: { 
+          value: baseline?.pumpTotalChilledEnergy ?? null, decimalPipe: defaultpipeFormat },
+        modifications: modifications.map(modification => {
+          return { value: modification.pumpTotalChilledEnergy ?? null, decimalPipe: defaultpipeFormat };
+        }),
+      },
+      {
+        ...defaultRow,
+        label: 'Chilled Water Pumping Cost',
+        units: `($)`,
+        baseline: { value: baseline?.pumpTotalChilledCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
+        modifications: modifications.map(modification => {
+          return { value: modification.pumpTotalChilledCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } };
+        }),
+      },
+      {
+        ...defaultRow,
+        label: 'Condenser Water Pumping Energy',
+        baseline: { value: baseline?.pumpTotalCondenserEnergy ?? null, decimalPipe: defaultpipeFormat },
+        modifications: modifications.map(modification => {
+          return { value: modification.pumpTotalCondenserEnergy ?? null, decimalPipe: defaultpipeFormat };
+        }),
+      },
+    {
+        ...defaultRow,
+        label: 'Condenser Water Pumping Cost',
+        units: `($)`,
+        baseline: { value: baseline?.pumpTotalCondenserCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
+        modifications: modifications.map(modification => {
+          return { value: modification.pumpTotalCondenserCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } };
+        }),
+      },
+      {
+        ...defaultRow,
+        label: 'Total Pump Energy',
         baseline: { value: baseline?.totalPumpEnergy ?? null, decimalPipe: defaultpipeFormat },
         modifications: modifications.map(modification => {
           return { value: modification.totalPumpEnergy ?? null, decimalPipe: defaultpipeFormat };
+        }),
+      },
+      {
+        ...defaultRow,
+        label: 'Total Pump Cost',
+        units: `($)`,
+        baseline: { value: baseline?.totalPumpCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
+        modifications: modifications.map(modification => {
+          return { value: modification.totalPumpCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } };
         }),
       },
       {

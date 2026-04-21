@@ -24,7 +24,7 @@ export class InstallVSDComponent implements OnInit {
             takeUntilDestroyed(this.destroyRef)
         ).subscribe((modification: Modification) => {
             if (modification) {
-                this.useOpportunity = modification.installVSDOnCentrifugalCompressors.useOpportunity;
+                this.useOpportunity = modification.installVSDOnCentrifugalCompressors?.useOpportunity;
             }
         });
     }
