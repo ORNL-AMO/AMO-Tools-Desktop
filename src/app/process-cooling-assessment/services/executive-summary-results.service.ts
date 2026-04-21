@@ -77,10 +77,10 @@ export class ExecutiveSummaryResultsService {
     }, 0);
     const totalChillerCost = totalChillerEnergy ? totalChillerEnergy * (processCoolingResults.electricityCost) : null;
     
-    const totalTowerEnergy = processCoolingResults.tower?.energy?.reduce((sum, energy) => sum + energy, 0);
+    const totalTowerEnergy = processCoolingResults.tower?.energy?.reduce((sum, energy) => sum + energy, 0) ?? 0;
     const totalTowerCost = totalTowerEnergy ? totalTowerEnergy * (processCoolingResults.electricityCost) : null;
 
-    const pumpTotalCondenserEnergy = processCoolingResults.pump?.condenserPumpingEnergy?.reduce((sum, energy) => sum + energy.value, 0); 
+    const pumpTotalCondenserEnergy = processCoolingResults.pump?.condenserPumpingEnergy?.reduce((sum, energy) => sum + energy.value, 0) ?? 0; 
     const pumpTotalCondenserCost = pumpTotalCondenserEnergy ? pumpTotalCondenserEnergy * (processCoolingResults.electricityCost) : null;
     const pumpTotalChilledEnergy = processCoolingResults.pump?.chillerPumpingEnergy?.reduce((sum, energy) => sum + energy.value, 0);
     const pumpTotalChilledCost = pumpTotalChilledEnergy ? pumpTotalChilledEnergy * (processCoolingResults.electricityCost) : null;
@@ -223,7 +223,7 @@ export class ExecutiveSummaryResultsService {
       },
       {
         ...defaultRow,
-        label: 'Total Pump Costs',
+        label: 'Total Pump Cost',
         units: `($)`,
         baseline: { value: baseline?.totalPumpCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
         modifications: modifications.map(modification => {

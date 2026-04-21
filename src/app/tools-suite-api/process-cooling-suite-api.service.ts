@@ -430,8 +430,8 @@ export class ProcessCoolingSuiteApiService {
     const chillerOutput: ProcessCoolingChillerOutput[] = [];
     const numChillers = chillerOutputInstance.efficiency.size();
     for (let i = 0; i < numChillers; i++) {
-      const hours = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i))
-      const energy = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i))
+      const hours = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i));
+      const energy = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i));
       const chillerResult = {
         id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
         name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
@@ -442,7 +442,7 @@ export class ProcessCoolingSuiteApiService {
         energy: energy,
         totalHours: hours.reduce((a, b) => a + b, 0),
         totalEnergy: energy.reduce((a, b) => a + b, 0)
-      }
+      };
       chillerOutput.push(chillerResult);
     }
 
