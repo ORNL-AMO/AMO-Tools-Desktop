@@ -12,9 +12,11 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
 import { Calculator } from '../../shared/models/calculators';
 import { Directory } from '../../shared/models/directory';
+import { Diagram } from '../../shared/models/diagram';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { DashboardService } from '../dashboard.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
+import { DiagramIdbService } from '../../indexedDb/diagram-idb.service';
 
 @Component({
     selector: 'app-move-items',
@@ -40,7 +42,8 @@ export class MoveItemsComponent implements OnInit {
       
     private assessmentDbService: AssessmentDbService,
     private calculatorDbService: CalculatorDbService,
-    private inventoryDbService: InventoryDbService) { }
+    private inventoryDbService: InventoryDbService,
+    private diagramIdbService: DiagramIdbService) { }
 
   ngOnInit() {
     this.setDirectories();
@@ -101,6 +104,7 @@ export class MoveItemsComponent implements OnInit {
 
   async save() {
     await this.saveAssessments();
+    await this.saveDiagrams();
     await this.saveCalculators();
     await this.saveDirectories();
     await this.saveInventories();
@@ -117,9 +121,43 @@ export class MoveItemsComponent implements OnInit {
         this.directoryDbService.setIsMovedExample(selectedAssessment, this.moveForm);
         selectedAssessment.directoryId = this.moveForm.controls.directoryId.value;
         await firstValueFrom(this.assessmentDbService.updateWithObservable(selectedAssessment));
+        if (selectedAssessment.diagramId) {
+          let linkedDiagram: Diagram = this.diagramIdbService.findById(selectedAssessment.diagramId);
+          if (linkedDiagram) {
+            linkedDiagram.directoryId = selectedAssessment.directoryId;
+            await firstValueFrom(this.diagramIdbService.updateWithObservable(linkedDiagram));
+          }
+        }
         updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
         selectedAssessment.selected = false;
       }
+      this.assessmentDbService.setAll(updatedAssessments);
+      let updatedDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+      this.diagramIdbService.setAll(updatedDiagrams);
+      this.dashboardService.updateDashboardData.next(true);
+    }
+  }
+
+  async saveDiagrams() {
+    let selectedDiagrams: Diagram[] = this.directory.diagrams.filter(diagram => diagram.selected);
+    if (selectedDiagrams.length !== 0) {
+      let updatedDiagrams: Diagram[] = [];
+      for await (let diagram of selectedDiagrams) { 
+        diagram.directoryId = this.moveForm.controls.directoryId.value;
+        await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
+        if (diagram.assessmentId) {
+          let linkedAssessment: Assessment = this.assessmentDbService.findById(diagram.assessmentId);
+          if (linkedAssessment) {
+            this.directoryDbService.setIsMovedExample(linkedAssessment, this.moveForm);
+            linkedAssessment.directoryId = diagram.directoryId;
+            await firstValueFrom(this.assessmentDbService.updateWithObservable(linkedAssessment));
+          }
+        }
+        updatedDiagrams = await firstValueFrom(this.diagramIdbService.getAllDiagrams()); 
+        diagram.selected = false;
+      };
+      let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+      this.diagramIdbService.setAll(updatedDiagrams);
       this.assessmentDbService.setAll(updatedAssessments);
       this.dashboardService.updateDashboardData.next(true);
     }

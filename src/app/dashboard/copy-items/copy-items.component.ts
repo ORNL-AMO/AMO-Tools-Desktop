@@ -8,10 +8,12 @@ import { CalculatorDbService } from '../../indexedDb/calculator-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
  
 import { InventoryDbService } from '../../indexedDb/inventory-db.service';
+import { DiagramIdbService } from '../../indexedDb/diagram-idb.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
 import { Calculator } from '../../shared/models/calculators';
 import { Directory } from '../../shared/models/directory';
+import { Diagram } from '../../shared/models/diagram';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { Settings } from '../../shared/models/settings';
 import { DashboardService } from '../dashboard.service';
@@ -35,6 +37,7 @@ export class CopyItemsComponent implements OnInit {
   selectedAssessments: Array<Assessment> = [];
   selectedInventories: Array<InventoryItem> = [];
   selectedCalculators: Array<Calculator> = [];
+  selectedDiagrams: Array<Diagram> = [];
   selectedDirData: SelectedDirectoryData;
   showNewFolder: boolean = false;
   newFolderForm: UntypedFormGroup;
@@ -50,6 +53,7 @@ export class CopyItemsComponent implements OnInit {
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private calculatorDbService: CalculatorDbService,
     private inventoryDbService: InventoryDbService,
+    private diagramIdbService: DiagramIdbService,
     private settingsDbService: SettingsDbService,
     private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
@@ -89,6 +93,15 @@ export class CopyItemsComponent implements OnInit {
       } else if (userSelectedParentDirectoryId != undefined) {
         this.selectedDirData.inventories.push(inventory);
         this.selectedDirData.inventoryToDirectoryIdMap[inventory.id] = userSelectedParentDirectoryId;
+      }
+    });
+
+    directory.diagrams.forEach(diagram => {
+      if (diagram.selected) {
+        this.selectedDiagrams.push(diagram);
+      } else if (userSelectedParentDirectoryId != undefined) {
+        this.selectedDirData.diagrams.push(diagram);
+        this.selectedDirData.diagramToDirectoryIdMap[diagram.id] = userSelectedParentDirectoryId;
       }
     });
   }
@@ -141,6 +154,7 @@ export class CopyItemsComponent implements OnInit {
     this.selectedAssessments = undefined;
     this.selectedCalculators = undefined;
     this.selectedInventories = undefined;
+    this.selectedDiagrams = undefined;
     this.selectedDirData = this.getResetSelectedDirData();
     this.copyModal.hide();
     this.dashboardService.copyItems.next(false);
@@ -179,9 +193,13 @@ export class CopyItemsComponent implements OnInit {
       this.selectedAssessments.push(...this.selectedDirData.assessments);
       this.selectedInventories.push(...this.selectedDirData.inventories);
       this.selectedCalculators.push(...this.selectedDirData.calculators);
+      this.selectedDiagrams.push(...this.selectedDirData.diagrams);
     }
 
-    await this.copyDirectoryAssessmentsAndSettings();
+    let copiedAssessmentIdsBySourceId: { [sourceId: number]: number } = {};
+    let copiedDiagramIdsBySourceId: { [sourceId: number]: number } = {};
+    await this.copyDirectoryAssessmentsAndSettings(copiedAssessmentIdsBySourceId, copiedDiagramIdsBySourceId);
+    await this.copyDirectoryDiagrams(copiedAssessmentIdsBySourceId, copiedDiagramIdsBySourceId);
     await this.copyDirectoryCalculators();
     await this.copyDirectoryInventory();
     this.hideCopyModal();
@@ -207,10 +225,13 @@ export class CopyItemsComponent implements OnInit {
       return newDirectory.id;
   }
 
-  async copyDirectoryAssessmentsAndSettings() {
+  async copyDirectoryAssessmentsAndSettings(copiedAssessmentIdsBySourceId: { [sourceId: number]: number },
+    copiedDiagramIdsBySourceId: { [sourceId: number]: number }) {
     if (this.selectedAssessments.length !== 0) {
+      let selectedDiagramIds: Array<number> = this.selectedDiagrams.map(diagram => diagram.id);
       for await (let assessment of this.selectedAssessments) {
           let assessmentCopy: Assessment = JSON.parse(JSON.stringify(assessment));
+          let originalAssessmentId: number = assessmentCopy.id;
 
           // * if item is member of selected directory
           let originalDirectoryId: number = this.selectedDirData.assessmentToDirectoryIdMap[assessmentCopy.id];
@@ -254,8 +275,34 @@ export class CopyItemsComponent implements OnInit {
           }
 
           let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessmentCopy));
+          copiedAssessmentIdsBySourceId[originalAssessmentId] = addedAssessment.id;
           settingsCopy.assessmentId = addedAssessment.id;
           await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
+
+          if (assessment.diagramId && selectedDiagramIds.includes(assessment.diagramId) === false) {
+            let sourceDiagram: Diagram = this.diagramIdbService.findById(assessment.diagramId);
+            if (sourceDiagram) {
+              let diagramCopy: Diagram = JSON.parse(JSON.stringify(sourceDiagram));
+              delete diagramCopy.id;
+              diagramCopy.assessmentId = addedAssessment.id;
+              diagramCopy.name = sourceDiagram.name + ' (copy)';
+              diagramCopy.directoryId = assessmentCopy.directoryId;
+              let addedDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(diagramCopy));
+              copiedDiagramIdsBySourceId[sourceDiagram.id] = addedDiagram.id;
+
+              let tempDiagramSettings: Settings = this.settingsDbService.getByDiagramId(sourceDiagram, true);
+              if (tempDiagramSettings) {
+                let diagramSettingsCopy: Settings = JSON.parse(JSON.stringify(tempDiagramSettings));
+                delete diagramSettingsCopy.id;
+                diagramSettingsCopy.diagramId = addedDiagram.id;
+                await firstValueFrom(this.settingsDbService.addWithObservable(diagramSettingsCopy));
+              }
+
+              addedAssessment.diagramId = addedDiagram.id;
+              await firstValueFrom(this.assessmentDbService.updateWithObservable(addedAssessment));
+            }
+          }
+
           if (this.copyForm.controls.copyCalculators.value === true) {
             assessmentCalculatorCopy.assessmentId = addedAssessment.id;
             await firstValueFrom(this.calculatorDbService.addWithObservable(assessmentCalculatorCopy));
@@ -264,9 +311,87 @@ export class CopyItemsComponent implements OnInit {
       let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
       let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
       let updatedCalculators: Calculator[] = await firstValueFrom(this.calculatorDbService.getAllCalculators());
+      let updatedDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
       this.assessmentDbService.setAll(updatedAssessments);
       this.settingsDbService.setAll(updatedSettings);
       this.calculatorDbService.setAll(updatedCalculators);
+      this.diagramIdbService.setAll(updatedDiagrams);
+      this.dashboardService.updateDashboardData.next(true);
+    }
+  }
+
+  async copyDirectoryDiagrams(copiedAssessmentIdsBySourceId: { [sourceId: number]: number },
+    copiedDiagramIdsBySourceId: { [sourceId: number]: number }) {
+    if (this.selectedDiagrams.length !== 0) {
+      let selectedAssessmentIds: Array<number> = this.selectedAssessments.map(assessment => assessment.id);
+      for await (let diagram of this.selectedDiagrams) {
+          let diagramCopy: Diagram = JSON.parse(JSON.stringify(diagram));
+          let originalDiagramId: number = diagramCopy.id;
+
+          // * if item is member of selected directory
+          let originalDirectoryId: number = this.selectedDirData.diagramToDirectoryIdMap[diagramCopy.id];
+          let destinationDirectoryId: number = this.selectedDirData.newDirectoryIdMap[originalDirectoryId];
+
+          delete diagramCopy.id;
+          if (destinationDirectoryId !== undefined) {
+            diagramCopy.directoryId = destinationDirectoryId;
+          } else {
+            diagramCopy.directoryId = this.copyForm.controls.destinationDirectoryId.value;
+          }
+          diagramCopy.name = diagram.name + ' (copy)';
+          let linkedAssessmentId: number = diagram.assessmentId;
+          delete diagramCopy.assessmentId;
+          let newDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(diagramCopy));
+          copiedDiagramIdsBySourceId[originalDiagramId] = newDiagram.id;
+
+          let tmpSettings: Settings = this.settingsDbService.getByDiagramId(diagram, true);
+          if (tmpSettings) {
+            let settingsCopy: Settings = JSON.parse(JSON.stringify(tmpSettings));
+            delete settingsCopy.id;
+            settingsCopy.diagramId = newDiagram.id;
+            await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
+          }
+
+          if (linkedAssessmentId) {
+            if (selectedAssessmentIds.includes(linkedAssessmentId) && copiedAssessmentIdsBySourceId[linkedAssessmentId]) {
+              let copiedAssessment: Assessment = this.assessmentDbService.findById(copiedAssessmentIdsBySourceId[linkedAssessmentId]);
+              if (copiedAssessment) {
+                newDiagram.assessmentId = copiedAssessment.id;
+                copiedAssessment.diagramId = newDiagram.id;
+                await firstValueFrom(this.assessmentDbService.updateWithObservable(copiedAssessment));
+              }
+            } else {
+              let sourceAssessment: Assessment = this.assessmentDbService.findById(linkedAssessmentId);
+              if (sourceAssessment) {
+                let assessmentCopy: Assessment = JSON.parse(JSON.stringify(sourceAssessment));
+                delete assessmentCopy.id;
+                assessmentCopy.name = sourceAssessment.name + ' (copy)';
+                assessmentCopy.isExample = false;
+                assessmentCopy.directoryId = diagramCopy.directoryId;
+                assessmentCopy.diagramId = newDiagram.id;
+                let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessmentCopy));
+                copiedAssessmentIdsBySourceId[sourceAssessment.id] = addedAssessment.id;
+
+                let tmpAssessmentSettings: Settings = this.settingsDbService.getByAssessmentId(sourceAssessment, true);
+                if (tmpAssessmentSettings) {
+                  let assessmentSettingsCopy: Settings = JSON.parse(JSON.stringify(tmpAssessmentSettings));
+                  delete assessmentSettingsCopy.id;
+                  assessmentSettingsCopy.assessmentId = addedAssessment.id;
+                  await firstValueFrom(this.settingsDbService.addWithObservable(assessmentSettingsCopy));
+                }
+
+                newDiagram.assessmentId = addedAssessment.id;
+              }
+            }
+            await firstValueFrom(this.diagramIdbService.updateWithObservable(newDiagram));
+          }
+      }
+      let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+      let updatedDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+      let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+      this.assessmentDbService.setAll(updatedAssessments);
+      this.diagramIdbService.setAll(updatedDiagrams);
+      this.settingsDbService.setAll(updatedSettings);
       this.dashboardService.updateDashboardData.next(true);
     }
   }
@@ -379,11 +504,13 @@ export class CopyItemsComponent implements OnInit {
       assessments: [],
       inventories: [],
       calculators: [],
+      diagrams: [],
       subDirectories: [],
       selectedDirectories: [],
       assessmentToDirectoryIdMap: {},
       inventoryToDirectoryIdMap: {},
       calculatorToDirectoryIdMap: {},
+      diagramToDirectoryIdMap: {},
       newDirectoryIdMap: {},
     }
   }
@@ -394,12 +521,14 @@ export interface SelectedDirectoryData {
   assessments: Array<Assessment>;
   inventories: Array<InventoryItem>;
   calculators: Array<Calculator>;
+  diagrams: Array<Diagram>;
   selectedDirectories: Array<SelectedDirectory>;
   subDirectories: Array<Directory>;
   // * map items from a selected directory to move with copied directory
   assessmentToDirectoryIdMap: { [itemId: number]: number };
   inventoryToDirectoryIdMap: { [itemId: number]: number };
   calculatorToDirectoryIdMap: { [itemId: number]: number };
+  diagramToDirectoryIdMap: { [itemId: number]: number };
   newDirectoryIdMap: { [oldDirId: number]: number };
 }
 
