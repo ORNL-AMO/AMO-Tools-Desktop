@@ -279,7 +279,7 @@ export class CopyItemsComponent implements OnInit {
           settingsCopy.assessmentId = addedAssessment.id;
           await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
 
-          if (assessment.diagramId && selectedDiagramIds.includes(assessment.diagramId) === false) {
+          if (assessment.diagramId && !selectedDiagramIds.includes(assessment.diagramId)) {
             let sourceDiagram: Diagram = this.diagramIdbService.findById(assessment.diagramId);
             if (sourceDiagram) {
               let diagramCopy: Diagram = JSON.parse(JSON.stringify(sourceDiagram));

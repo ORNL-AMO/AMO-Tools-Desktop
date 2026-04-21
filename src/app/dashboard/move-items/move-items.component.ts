@@ -141,7 +141,6 @@ export class MoveItemsComponent implements OnInit {
   async saveDiagrams() {
     let selectedDiagrams: Diagram[] = this.directory.diagrams.filter(diagram => diagram.selected);
     if (selectedDiagrams.length !== 0) {
-      let updatedDiagrams: Diagram[] = [];
       for await (let diagram of selectedDiagrams) { 
         diagram.directoryId = this.moveForm.controls.directoryId.value;
         await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
@@ -153,9 +152,9 @@ export class MoveItemsComponent implements OnInit {
             await firstValueFrom(this.assessmentDbService.updateWithObservable(linkedAssessment));
           }
         }
-        updatedDiagrams = await firstValueFrom(this.diagramIdbService.getAllDiagrams()); 
         diagram.selected = false;
       };
+      let updatedDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
       let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
       this.diagramIdbService.setAll(updatedDiagrams);
       this.assessmentDbService.setAll(updatedAssessments);

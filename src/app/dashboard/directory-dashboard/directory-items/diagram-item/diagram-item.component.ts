@@ -40,7 +40,7 @@ export class DiagramItemComponent {
 
   constructor(private directoryDashboardService: DirectoryDashboardService,
     private diagramIdbService: DiagramIdbService,
-    private assessmenDbService: AssessmentDbService,
+    private assessmentDbService: AssessmentDbService,
     private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService,
     private formBuilder: UntypedFormBuilder,    
     private dashboardService: DashboardService, 
@@ -99,17 +99,17 @@ export class DiagramItemComponent {
     this.diagram.directoryId = this.editForm.controls.directoryId.value;
     await firstValueFrom(this.diagramIdbService.updateWithObservable(this.diagram));
     if (this.diagram.assessmentId) {
-      let linkedAssessment: Assessment = this.assessmenDbService.findById(this.diagram.assessmentId);
+      let linkedAssessment: Assessment = this.assessmentDbService.findById(this.diagram.assessmentId);
       if (linkedAssessment) {
         this.directoryDbService.setIsMovedExample(linkedAssessment, this.editForm);
         linkedAssessment.directoryId = this.diagram.directoryId;
-        await firstValueFrom(this.assessmenDbService.updateWithObservable(linkedAssessment));
+        await firstValueFrom(this.assessmentDbService.updateWithObservable(linkedAssessment));
       }
     }
     let updatedDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
-    let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmenDbService.getAllAssessments());
+    let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     this.diagramIdbService.setAll(updatedDiagrams);
-    this.assessmenDbService.setAll(updatedAssessments);
+    this.assessmentDbService.setAll(updatedAssessments);
     this.dashboardService.updateDashboardData.next(true);
     this.hideEditModal();
 
@@ -178,7 +178,7 @@ export class DiagramItemComponent {
     await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
 
     if (this.diagram.assessmentId) {
-      let sourceAssessment: Assessment = this.assessmenDbService.findById(this.diagram.assessmentId);
+      let sourceAssessment: Assessment = this.assessmentDbService.findById(this.diagram.assessmentId);
       if (sourceAssessment) {
         let assessmentCopy: Assessment = JSON.parse(JSON.stringify(sourceAssessment));
         delete assessmentCopy.id;
@@ -186,7 +186,7 @@ export class DiagramItemComponent {
         assessmentCopy.directoryId = newDiagram.directoryId;
         assessmentCopy.isExample = false;
         assessmentCopy.diagramId = newDiagram.id;
-        let addedAssessment: Assessment = await firstValueFrom(this.assessmenDbService.addWithObservable(assessmentCopy));
+        let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessmentCopy));
 
         let sourceAssessmentSettings: Settings = this.settingsDbService.getByAssessmentId(sourceAssessment, true);
         if (sourceAssessmentSettings) {
@@ -202,10 +202,10 @@ export class DiagramItemComponent {
     }
 
     let updatedDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
-    let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmenDbService.getAllAssessments());
+    let updatedAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
     let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.diagramIdbService.setAll(updatedDiagrams);
-    this.assessmenDbService.setAll(updatedAssessments);
+    this.assessmentDbService.setAll(updatedAssessments);
     this.settingsDbService.setAll(updatedSettings);
     this.dashboardService.updateDashboardData.next(true);
     this.hideCopyModal();
