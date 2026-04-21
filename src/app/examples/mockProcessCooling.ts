@@ -86,9 +86,9 @@ export const MockProcessCoolingAssessment: Assessment = {
                     "useOpportunity": false
                 },
                 "installVSDOnCentrifugalCompressors": {
-                    "installOnAll": undefined,
+                    "chillerIds": [],
                     "useOpportunity": false
-                }
+                },
             }
         ],
         setupDone: true,
