@@ -377,6 +377,11 @@ export interface ChillerInventoryItem {
     loadScheduleByMonth?: number[][]; // * This is hours per percent load for each month
     loadScheduleAllMonths?: number[]; 
     useSameMonthlyLoading: boolean;
+    // * custom chiller curve inputs
+    // * ex. [100, 75, 50, 25] 
+    loadAtPercent?: number[];
+    // * ex. [0.5, .33, .66, 1] kW/ton at the corresponding load %
+    kWPerTonAtLoad?: number[];
 }
 
 

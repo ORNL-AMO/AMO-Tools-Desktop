@@ -219,6 +219,7 @@ export class ProcessCoolingSuiteApiService {
       const chillerMonthlyLoading = this.suiteApiHelperService.returnDoubleVector2d(loadSchedule);
       let chiller;
 
+      // * 8117 refrigerant flow is currently hidden in UI
       if (suiteModificationArgs?.changeRefrig && input.proposedRefrigerantType != null && input.proposedRefrigerantType != undefined) {
         const currentRefrigEnum = this.suiteApiHelperService.getProcessCoolingRefrigerantTypeEnum(input.refrigerantType);
         const proposedRefrigEnum = this.suiteApiHelperService.getProcessCoolingRefrigerantTypeEnum(input.proposedRefrigerantType);
@@ -236,7 +237,23 @@ export class ProcessCoolingSuiteApiService {
           currentRefrigEnum,
           proposedRefrigEnum
         );
-      } else {
+      } else if (input.loadAtPercent && input.kWPerTonAtLoad) {
+        const loadAtPercent = this.suiteApiHelperService.returnDoubleVector(input.loadAtPercent);
+        const kWPerTonAtLoad = this.suiteApiHelperService.returnDoubleVector(input.kWPerTonAtLoad);
+
+        chiller = this._createChillerInputWithCustomCurve(
+          this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
+          input.capacity,
+          input.isFullLoadEfficiencyKnown,
+          input.fullLoadEfficiency,
+          input.age,
+          input.installVSD,
+          input.useARIloadScheduleByMonthchedule,
+          chillerMonthlyLoading,
+          loadAtPercent,
+          kWPerTonAtLoad
+        );
+      }else {
         chiller = this._createChillerInput(
           this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
           input.capacity,
@@ -569,6 +586,53 @@ export class ProcessCoolingSuiteApiService {
       proposedRefrig
     );
   }
+
+
+  /**
+  *
+  * @details Use this constructor to define custom Chiller
+  *
+  * @author Suite constructor param names
+  * @param chillerType Enumeration ChillerCompressorType
+  * @param capacity double, @unit{\ton}
+  * @param isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
+  * @param fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
+  * @param age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is
+  * degraded by 1% / year
+  * @param installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
+  * @param useARIMonthlyLoadSchedule boolean, if true monthlyLoads not needed and can be set to empty
+  * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar
+  * months In case of non varying monthly loads expects a 1X11 array of 11 %load bins
+  *
+  * @param loadAtPercent double array, % loading
+  * @param kwPerTonLoads double array, kW/ton at the corresponding % loading
+  */
+  private _createChillerInputWithCustomCurve(
+    chillerType, 
+    capacity, 
+    isFullLoadEffKnown, 
+    fullLoadEff,
+    age, 
+    installVSD, 
+    useARIMonthlyLoadSchedule, 
+    monthlyLoads,
+    loadAtPercent, 
+    kwPerTonLoads
+  ): any {
+    return new this.toolsSuiteApiService.ToolsSuiteModule.ChillerInput(
+      chillerType,
+      capacity,
+      isFullLoadEffKnown,
+      fullLoadEff,
+      age,
+      installVSD,
+      useARIMonthlyLoadSchedule,
+      monthlyLoads,
+      loadAtPercent,
+      kwPerTonLoads
+    );
+  }
+
 
   /**
    * Creates a Module.PumpInput instance for chilled water or condenser water.
