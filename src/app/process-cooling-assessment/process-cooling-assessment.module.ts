@@ -99,6 +99,7 @@ import { RefrigerantTypePipe } from './pipes/refrigerant-type.pipe';
 import { VsdInventoryTableComponent } from './explore-opportunities/install-vsd/vsd-inventory-table/vsd-inventory-table.component';
 import { RefrigerantInventoryTableComponent } from './explore-opportunities/replace-chiller-refrigerant/refrigerant-inventory-table/refrigerant-inventory-table.component';
 
+import { SystemInfoSummaryComponent } from './report/input-summary/system-info-summary/system-info-summary.component';
 
 export const ROUTE_TOKENS = {
   // Main tabs
@@ -300,6 +301,7 @@ const ROUTES: Route[] = [
     FilterChillerOutputsPipe,
     InstallVSDComponent,
     FilterChillerInventoryPipe,
+    SystemInfoSummaryComponent,
     UseFreeCoolingComponent,
     ReplaceChillerRefrigerantComponent,
     VsdInventoryTableComponent,
