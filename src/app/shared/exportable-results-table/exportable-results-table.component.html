@@ -1,16 +1,16 @@
-<textarea type="text" class="form-control clipboard-text" [(ngModel)]="tableString" placeholder="content will be copied after clicking the copy button"></textarea>
+<textarea type="text" class="form-control clipboard-text hide-print" [(ngModel)]="tableString" placeholder="content will be copied after clicking the copy button"></textarea>
 <div class="d-flex w-100 justify-content-center pl-2 pr-2"
      [ngClass]="{'justify-content-start': horizontalAnchor === 'left', 
      'justify-content-center': horizontalAnchor === 'center',
     'justify-content-end': horizontalAnchor === 'right'}">
-  <span class="input-group-btn">
-    <button (mouseenter)="emitUpdateTableString()" class="btn-copy-table" type="button" ngxClipboard [cbContent]="tableString"
+  <span class="input-group-btn hide-print">
+    <button (mouseenter)="emitUpdateTableString()" class="btn-copy-table hide-print" type="button" ngxClipboard [cbContent]="tableString"
       (cbOnSuccess)="copySuccess()">Copy Table</button>
   </span>
 </div>
 
 
-<div class="clipboard-notification" [ngClass]="{'show-notification': showNotification }">
+<div class="clipboard-notification hide-print" [ngClass]="{'show-notification': showNotification }">
   <div class="checkmark-container">
     <app-animated-checkmark [active]="activateCheckmark"></app-animated-checkmark>
   </div>

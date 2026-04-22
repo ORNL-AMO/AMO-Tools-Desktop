@@ -288,6 +288,7 @@ export const getNewProcessComponent = (processComponentType: WaterProcessCompone
 
   if (newProcessComponent.processComponentType === 'water-treatment' || newProcessComponent.processComponentType === 'waste-water-treatment') {
     newProcessComponent.treatmentType = 0;
+    newProcessComponent.userEnteredData.totalKnownLosses = diagramComponent.userEnteredData?.totalKnownLosses ? diagramComponent.userEnteredData.totalKnownLosses as number : 0;
   }
 
   return newProcessComponent;
@@ -355,6 +356,7 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
     ...waterProcessComponent,
     createdByAssessment: createdByAssessment,
     hoursPerYear: 8760,
+    // * important - need to pull user overrides for flows into waterUsingSystem for use in calculations and display. These values will override diagram flows when set by user and default to diagram flows when not set by user
     userDiagramFlowOverrides: {
       sourceWater: waterProcessComponent.userDiagramFlowOverrides?.sourceWater,
       recirculatedWater: waterProcessComponent.userDiagramFlowOverrides?.recirculatedWater,

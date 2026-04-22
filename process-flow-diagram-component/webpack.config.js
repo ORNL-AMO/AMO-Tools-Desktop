@@ -71,7 +71,7 @@ module.exports = options => {
       path: path.resolve(__dirname, EXPORT_DIR),
     },
     plugins: [
-      new MiniCssExtractPlugin({filename: 'process-flow-diagram-component.css'}),
+      new MiniCssExtractPlugin({filename: 'assets/process-flow-diagram-component.css'}),
       new HtmlWebpackPlugin({
         template: './index.html',
       }),

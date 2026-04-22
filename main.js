@@ -1,29 +1,32 @@
-const { app, BrowserWindow, ipcMain, crashReporter, Menu, shell, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, shell, dialog } = require('electron');
 const path = require('path');
 const url = require('url');
 const log = require('electron-log');
 const { autoUpdater } = require('electron-updater');
 const jetpack = require('fs-jetpack');
 
-
-function isDev() {
-  return require.main.filename.indexOf('app.asar') === -1;
-};
-
-// * If left enabled, causes flashing on app first rendering. Likely caused by some dependency of the process-flow-diagram
+// * If left enabled, causes flashing on app first rendering. 
+// * Likely caused by some dependency of the process-flow-diagram
 app.disableHardwareAcceleration();
 
-app.allowRendererProcessReuse = false
-// Logger for autoUpdater
+app.allowRendererProcessReuse = false;
+
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
-log.info('App starting...');
+// autoUpdater.forceDevUpdateConfig = true;
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = false;
+
+// * signing process does not currently support differential downloads - block maps would need to be regenerated and signed
+autoUpdater.disableDifferentialDownload = true;
 
 let win = null;
 
-app.on('ready', function () {
+function isDev() {
+  return app.isPackaged === false;
+};
 
-  // Initialize the window to our specified dimensions
+function createWindow() {
   win = new BrowserWindow({
     width: 1000,
     height: 600,
@@ -34,10 +37,8 @@ app.on('ready', function () {
     }
   });
   win.maximize();
-
-  // Specify entry point
   win.loadURL(url.format({
-    pathname: path.join(__dirname, 'dist/index.html'),
+    pathname: path.join(__dirname, 'dist/browser/index.html'),
     protocol: 'file',
     slashes: true
   }));
@@ -45,52 +46,8 @@ app.on('ready', function () {
   if (isDev()) {
     win.toggleDevTools();
   }
-  // Remove window once app is closed
-  win.on('closed', function () {
-    win = null;
-  });
-  //signal from core.component to check for update
-  ipcMain.on('ready', (coreCompEvent, arg) => {
-    if (!isDev()) {
-      autoUpdater.checkForUpdates().then(() => {
-        log.info('done checking for updates');
-        coreCompEvent.sender.send('release-info', autoUpdater.updateInfoAndProvider.info);
-      });
-      autoUpdater.on('update-available', (event, info) => {
-        log.info('update available');
-        coreCompEvent.sender.send('available', true);
-      });
-      autoUpdater.on('update-not-available', (event, info) => {
-        log.info('no update available..');
-      });
-      autoUpdater.on('error', (event, error) => {
-        log.info('error');
-        coreCompEvent.sender.send('error', error);
-      });
-
-      autoUpdater.on('update-downloaded', (event, info) => {
-        // autoUpdater.quitAndInstall();
-        coreCompEvent.sender.send('update-downloaded');
-      });
-    }
-  })
-
-  ipcMain.once('quit-and-install', (event, arg) => {
-    autoUpdater.quitAndInstall(false);
-  })
-
-  //Check for updates and install
-  autoUpdater.autoDownload = false;
-  autoUpdater.autoInstallOnAppQuit = false;
-
-  crashReporter.start({
-    productName: "ORNL-AMO",
-    companyName: "ornl-amo",
-    submitURL: "https://ornl-amo.sp.backtrace.io:6098/post?format=minidump&token=9e914fbd14a36589b7e2ce09cf8c3b4b5b3e37368da52bf1dabff576f156126c",
-    uploadToServer: true
-  });
-
-  var template = [{
+  
+  const menuTemplate = [{
     label: "Application",
     submenu: [
       { label: "Quit", accelerator: "Command+Q", click: function () { app.quit(); } },
@@ -109,7 +66,7 @@ app.on('ready', function () {
   }
   ];
 
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
   win.setMenuBarVisibility(false);
 
   win.webContents.on('new-window', function (e, url) {
@@ -120,28 +77,75 @@ app.on('ready', function () {
     e.preventDefault();
     shell.openExternal(url);
   });
-});
 
-app.on('window-all-closed', function () {
-  app.quit();
-});
+  win.on('closed', function () {
+    win = null;
+  });
+}
 
-// Listen for message from core.component to either download updates or not
-ipcMain.once('update', (event, arg) => {
-  log.info('update')
+app.whenReady().then(() => {
+    console.log('app.on.ready: App is ready');
+    createWindow();
+
+    // * necessary to recreate window when docked on macOS
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow()
+        }
+    });
+
+  ipcMain.on('ready', (coreCompEvent, arg) => {
+    console.log('ipcMain.on.ready');
+
+    if (!isDev()) {
+      autoUpdater.checkForUpdates(() => {
+        log.info('[autoUpdater] done checking for updates');
+      });
+      autoUpdater.on('update-available', (info) => {
+        log.info('[autoUpdater] update available');
+        coreCompEvent.sender.send('available', info);
+      });
+      autoUpdater.on('update-not-available', (info) => {
+        log.info('[autoUpdater] no update available');
+      });
+      autoUpdater.on('error', (err) => {
+        log.info('[autoUpdater] error');
+        coreCompEvent.sender.send('error', err);
+      });
+
+      autoUpdater.on('download-progress', (progressObj) => {
+        coreCompEvent.sender.send('download-progress', {
+          percent: progressObj.percent,
+          mbPerSecond: (progressObj.bytesPerSecond / 1000000).toFixed(2),
+          transferred: progressObj.transferred,
+          total: progressObj.total
+        });
+      });
+
+      autoUpdater.on('update-downloaded', (info) => {
+        log.info('[autoUpdater] update downloaded', info);
+        coreCompEvent.sender.send('update-downloaded', info);
+      });
+    }
+  })
+
+  ipcMain.once('quit-and-install', (event, arg) => {
+    autoUpdater.quitAndInstall(false);
+  })
+
+})
+
+
+ipcMain.on('update', (event, arg) => {  
+  log.info('[ipcMain] Download Update selected');
   autoUpdater.downloadUpdate();
 });
 
-ipcMain.once('later', (event, arg) => {
-  update = null;
-});
-
 ipcMain.once('relaunch', () => {
-  console.log('ipcMain relaunch emitted');
+  log.info('[ipcMain] relaunch emitted');
   app.relaunch();
   app.exit();
 });
-
 
 ipcMain.on("saveFile", (event, arg) => {
   delete arg.fileData.dataBackupFilePath;
@@ -151,8 +155,8 @@ ipcMain.on("saveFile", (event, arg) => {
 ipcMain.on("openDialog", (event, arg) => {
   let saveDialogOptions = {
     filters: [{
-      name: "JSON Files",
-      extensions: ["json"]
+      name: "JSON Files, Gzip Files",
+      extensions: ["json", "gz"]
     }],
     defaultPath: arg.fileName
   }

@@ -189,7 +189,7 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
   {
     name: 'Bag Leak',
     leakDescription: "Enter notes about the leak here.",
-    selected: false,
+    selected: true,
     measurementMethod: 2,
     estimateMethodData: {
       leakRateEstimate: 0
@@ -225,7 +225,7 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
  {
     name: 'Estimate Leak',
     leakDescription: "Enter notes about the leak here.",
-    selected: false,
+    selected: true,
     measurementMethod: 0,
     estimateMethodData: {
       leakRateEstimate: .1
@@ -261,7 +261,7 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
  {
     name: 'Orifice Leak',
     leakDescription: "Enter notes about the leak here.",
-    selected: false,
+    selected: true,
     measurementMethod: 3,
     bagMethodData: {
       operatingTime: 0,
@@ -296,7 +296,7 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
   }, {
     name: 'Decibel leak',
     leakDescription: "Enter notes about the leak here.",
-    selected: false,
+    selected: true,
     measurementMethod: 1,
     estimateMethodData: {
       leakRateEstimate: 0

@@ -12,7 +12,7 @@ import { distributeTotalSourceFlow, sourceFlowValueChange, totalFlowChange, node
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectCalculatedNodeData, selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
-import { FlowForm, getDefaultFlowValidationSchema, TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR } from "../../validation/Validation";
+import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
@@ -76,7 +76,8 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
         >
             {({ values, errors, handleChange, setFieldValue }) => {
                 const disabledToggle = values.totalFlow === null;
-                const disabledPercentDataEntryFields = inPercent && (disabledToggle || (errors.totalFlow && errors.totalFlow === TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR));
+                // * 8322 previously checking specific errors to determine enabled status - percent field entry hasn't been fully implemented. reqs need clarification.
+                const disabledPercentDataEntryFields = inPercent && (disabledToggle || Boolean(errors.totalFlow));
 
                 return (
                     <Form>

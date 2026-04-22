@@ -321,6 +321,7 @@ export class CopyItemsComponent implements OnInit {
           }
 
           inventoryCopy.selected = false;
+          inventoryCopy.isExample = false;
           inventoryCopy.name = inventory.name + ' (copy)';
           if (destinationDirectoryId !== undefined) {
             inventoryCopy.directoryId = destinationDirectoryId;

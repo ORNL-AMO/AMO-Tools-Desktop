@@ -1,3 +1,40 @@
+/* Custom progress bar for Bootstrap 4 compatibility */
+.custom-progress-bar-container {
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.custom-progress-bar {
+    background: repeating-linear-gradient(135deg, var(--measur-brand), var(--measur-brand) 10px, #104d2a 10px, #104d2a 20px);
+    color: #fff;
+    font-weight: 500;
+    font-size: .75rem;
+    line-height: 20px;
+    transition: width 0.6s ease;
+    height: 100%;
+    border-radius: 0.25rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.error-details-summary {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.error-details-textarea {
+    width: 100%;
+    min-height: 80px;
+    font-family: monospace;
+    font-size: 0.95em;
+    padding: 0.5em;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #f8f8f8;
+    resize: vertical;
+}
 .card.card-toast-notification {
     position: fixed;
     z-index: 9999;

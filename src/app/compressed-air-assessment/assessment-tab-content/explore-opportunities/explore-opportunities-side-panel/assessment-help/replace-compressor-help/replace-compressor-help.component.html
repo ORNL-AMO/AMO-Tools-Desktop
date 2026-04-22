@@ -1,0 +1,49 @@
+<div class="pt-2 d-flex flex-column help-info">
+    <h5>
+        Replace Compressor Help
+        <br>
+        <small class="text-muted">This EEM models the impact of adding additional compressors to the system or removing
+            compressors that were in the baseline.
+        </small>
+        <br>
+        <small class="text-muted">
+            Use the checkboxes in the tables to select which compressors to add and/or salvage/replace from the system.
+        </small>
+        
+    </h5>
+    <hr class="my-1 hr-spacer">
+
+    <div class="my-2" *ngIf="helpTextField == 'implementationCost'">
+        <h6>
+            Implementation Costs
+            <br>
+            <small class="text-muted">
+                Estimated cost to implement modifications.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="helpTextField == 'salvageValue'">
+        <h6>
+            Salvage Value
+            <br>
+            <small class="text-muted">
+                Money that can be earned by selling or recycling machinery that is removed from the system.
+                <hr>
+            </small>
+        </h6>
+    </div>
+    <div class="my-2" *ngIf="helpTextField == 'trimSelection'">
+        <h6>
+            Trim Selection
+            <br>
+            <small class="text-muted">
+                Select the appropriate trim compressor for each day type to optimize system performance.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
+</div>

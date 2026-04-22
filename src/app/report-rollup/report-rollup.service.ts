@@ -63,8 +63,8 @@ export class ReportRollupService {
   }
 
   pushAssessment(assessment: Assessment) {
-    let settings = this.settingsDbService.getByAssessmentId(assessment);
-    let tmpSettings = this.checkSettings(settings);
+    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+    let tmpSettings: Settings = this.checkSettings(settings);
     this.assessmentsArray.push({ assessment: assessment, settings: tmpSettings });
   }
 
@@ -89,19 +89,19 @@ export class ReportRollupService {
         this.getChildDirectories(subDir);
       }
     });
-    let phastArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'PHAST' });
+    let phastArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem: ReportItem) => { return assessmentItem.assessment.type === 'PHAST' });
     this.phastReportRollupService.phastAssessments.next(phastArray);
-    let psatArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'PSAT' });
+    let psatArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem: ReportItem) => { return assessmentItem.assessment.type === 'PSAT' });
     this.psatReportRollupService.psatAssessments.next(psatArray);
-    let fsatArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'FSAT' });
+    let fsatArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem: ReportItem) => { return assessmentItem.assessment.type === 'FSAT' });
     this.fsatReportRollupService.fsatAssessments.next(fsatArray);
-    let ssmtArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'SSMT' });
+    let ssmtArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem: ReportItem) => { return assessmentItem.assessment.type === 'SSMT' });
     this.ssmtReportRollupService.ssmtAssessments.next(ssmtArray);
-    let treasureHuntArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'TreasureHunt' });
+    let treasureHuntArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem: ReportItem) => { return assessmentItem.assessment.type === 'TreasureHunt' });
     this.treasureHuntReportRollupService.treasureHuntAssessments.next(treasureHuntArray);
-    let wasteWaterArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'WasteWater' });
+    let wasteWaterArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem: ReportItem) => { return assessmentItem.assessment.type === 'WasteWater' });
     this.wasteWaterReportRollupService.wasteWaterAssessments.next(wasteWaterArray);
-    let compressedAirArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem) => { return assessmentItem.assessment.type === 'CompressedAir' });
+    let compressedAirArray: Array<ReportItem> = _.filter(this.assessmentsArray, (assessmentItem: ReportItem) => { return assessmentItem.assessment.type === 'CompressedAir' });
     this.compressedAirReportRollupService.compressedAirAssessments.next(compressedAirArray);
     this.reportAssessments.next(this.assessmentsArray);
   }

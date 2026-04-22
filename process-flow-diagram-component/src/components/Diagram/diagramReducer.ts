@@ -35,7 +35,8 @@ export interface DiagramState {
   validationWindowLocation: ValidationWindowLocation,
   isModalOpen: boolean,
   manageDataTabs: ManageDataTab[],
-  diagramAlert: DiagramAlertState
+  diagramAlert: DiagramAlertState,
+  diagramNotes: string,
 }
 
 export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState => {
@@ -66,7 +67,8 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     manageDataTabs: [],
     diagramAlert: {
       open: false,
-    }
+    },
+    diagramNotes: '',
   }
 }
 
@@ -444,6 +446,10 @@ const setEdgeStrokeColorReducer = (state: DiagramState, action: PayloadAction<{ 
   }
 }
 
+const setDiagramNotesReducer = (state: DiagramState, action: PayloadAction<string>) => {
+  state.diagramNotes = action.payload;
+};
+
 const unitsOfMeasureChangeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   const convertedDiagramData = {
     nodes: state.nodes,
@@ -612,6 +618,7 @@ export const diagramSlice = createSlice({
     toggleMenuDrawer: toggleMenuDrawerReducer,
     edgesChangeFromPropagation: edgesChangeFromPropagationReducer,
     sumTotalFlowChange: sumTotalFlowChangeReducer,
+    setDiagramNotes: setDiagramNotesReducer,
   }
 })
 
@@ -658,7 +665,8 @@ export const {
   selectedIdChange,
   diagramAlertChange,
   toggleMenuDrawer,
-  edgesChangeFromPropagation
+  edgesChangeFromPropagation,
+  setDiagramNotes
 } = diagramSlice.actions
 export default diagramSlice.reducer
 

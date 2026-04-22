@@ -2,8 +2,8 @@ import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
-import { TreasureHuntCo2EmissionsResults, TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
-
+import { TreasureHuntCo2EmissionsResults } from '../../../../shared/models/treasure-hunt';
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-carbon-emissions-summary-pie-chart',
     templateUrl: './carbon-emissions-summary-pie-chart.component.html',
@@ -118,7 +118,7 @@ export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
   drawPrintPlot() {
@@ -151,7 +151,7 @@ export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
       displayModeBar: false,
       responsive: true
     };
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
 
 
   }

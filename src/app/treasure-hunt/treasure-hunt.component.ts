@@ -6,13 +6,12 @@ import { AssessmentService } from '../dashboard/assessment.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { EMPTY, filter, firstValueFrom, from, Subscription, switchMap } from 'rxjs';
 import { TreasureHuntService } from './treasure-hunt.service';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { CalculatorsService } from './calculators/calculators.service';
 import { TreasureChestMenuService } from './treasure-chest/treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsData } from './treasure-chest/opportunity-cards/sort-cards-by.pipe';
-import { SettingsService } from '../settings/settings.service';
 import { ConvertInputDataService } from './convert-input-data.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
@@ -56,6 +55,7 @@ export class TreasureHuntComponent implements OnInit {
   smallScreenTab: string = 'form';
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
+  settingsSub: Subscription;
   constructor(
     private assessmentService: AssessmentService,
     private router: Router,
@@ -67,49 +67,41 @@ export class TreasureHuntComponent implements OnInit {
     private convertInputDataService: ConvertInputDataService,
     private calculatorsService: CalculatorsService,
     private treasureChestMenuService: TreasureChestMenuService,
-    private settingsService: SettingsService,
     private convertUnitsService: ConvertUnitsService,
     private analyticsService: AnalyticsService
   ) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-treasure-hunt-assessment');
-    this.activatedRoute.params.subscribe(params => {
-      this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
-      if (this.assessment && this.assessment.type !== 'TreasureHunt') {
-        this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
-      } else { 
-        if (!this.assessment.treasureHunt) {
-          this.assessment.treasureHunt = {
-            name: 'Treasure Hunt',
-            setupDone: false,
-            operatingHours: {
-              weeksPerYear: 52.14,
-              daysPerWeek: 7,
-              hoursPerDay: 24,
-              minutesPerHour: 60,
-              secondsPerMinute: 60,
-              hoursPerYear: 8760
-            }
-          }
+
+    this.settingsSub = this.treasureHuntService.settings$.pipe(
+      filter(settings => Boolean(settings))
+    ).subscribe(settings => {
+        this.settings = settings;
+    });
+
+    this.activatedRoute.params.pipe(
+      switchMap(params => {
+        this.assessment = this.assessmentDbService.findById(parseInt(params['id']));
+        if (this.assessment && this.assessment.type !== 'TreasureHunt') {
+          this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' } });
+          return EMPTY;
         }
-        if (!this.assessment.treasureHunt.operatingHours) {
-          this.assessment.treasureHunt.operatingHours = {
-            weeksPerYear: 52.14,
-            daysPerWeek: 7,
-            hoursPerDay: 24,
-            minutesPerHour: 60,
-            secondsPerMinute: 60,
-            hoursPerYear: 8760
-          }
-        }
-        this.getSettings();
-        let tmpTab = this.assessmentService.getStartingTab();
-        if (tmpTab) {
-          this.treasureHuntService.mainTab.next(tmpTab);
-        }
-        this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
+        return from(this.treasureHuntService.initializeSettings(this.assessment));
+      })
+    ).subscribe(() => {
+      let startingTab = this.assessmentService.getStartingTab();
+      if (startingTab) {
+        this.treasureHuntService.mainTab.next(startingTab);
       }
+
+      if (this.assessment && !this.assessment.treasureHunt && this.settings) {
+        this.assessment.treasureHunt = this.assessmentService.getDefaultTreasureHunt(this.settings);
+      }
+      if (this.assessment && !this.assessment.treasureHunt.currentEnergyUsage) {
+        this.assessment.treasureHunt.currentEnergyUsage = this.assessmentService.getDefaultTreasureHunt(this.settings).currentEnergyUsage;
+      }
+      this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
     });
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
@@ -155,6 +147,7 @@ export class TreasureHuntComponent implements OnInit {
     let defaultData: SortCardsData = this.treasureChestMenuService.getDefaultSortByData();
     this.treasureChestMenuService.sortBy.next(defaultData); 
     this.showExportModalSub.unsubscribe();
+    this.settingsSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -163,14 +156,6 @@ export class TreasureHuntComponent implements OnInit {
     }, 100);
   }
 
-
-  getSettings() {
-    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-    if (!this.settings) {
-      let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, false);
-      this.addSettings(settings);
-    }
-  }
 
   getContainerHeight() {
     if (this.content) {
@@ -232,16 +217,6 @@ export class TreasureHuntComponent implements OnInit {
       this.treasureHuntService.mainTab.next('find-treasure');
     }
   }
-  
-  async addSettings(settings: Settings) {
-    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(settings);
-    newSettings.assessmentId = this.assessment.id;
-    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
-    let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(updatedSettings);
-    this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
-
-  }
 
   initUpdateUnitsModal(oldSettings: Settings) {
     this.oldSettings = oldSettings;
@@ -258,22 +233,22 @@ export class TreasureHuntComponent implements OnInit {
     this.cd.detectChanges();
   }
 
-  selectUpdateAction(shouldUpdateData: boolean) {
-    if(shouldUpdateData == true) {
-      this.updateData();
+  selectUpdateAction(shouldUpdateUnitData: boolean) {
+    if(shouldUpdateUnitData == true) {
+      this.convertValuesFromSettingsChange();
     } else {
       this.saveTreasureHunt(this.assessment.treasureHunt);
     }
-    this.closeUpdateUnitsModal(shouldUpdateData);
+    this.closeUpdateUnitsModal(shouldUpdateUnitData);
   }
 
-  updateData() {
+  async convertValuesFromSettingsChange() {
     this.assessment.treasureHunt = this.convertInputDataService.convertTreasureHuntInputData(this.assessment.treasureHunt, this.oldSettings, this.settings);
-    let settings = this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
-    this.addSettings(settings);
+    this.convertUnitsService.convertSettingsUnitCosts(this.oldSettings, this.settings);
     this.assessment.treasureHunt.existingDataUnits = this.settings.unitsOfMeasure;
+
+    this.treasureHuntService.setTreasureHuntSettings(this.settings);
     this.saveTreasureHunt(this.assessment.treasureHunt);
-    this.getSettings();
   }
 
   checkShowWelcomeScreen() {
@@ -284,10 +259,7 @@ export class TreasureHuntComponent implements OnInit {
   }
 
  async closeWelcomeScreen() {
-    this.settingsDbService.globalSettings.disableTreasureHuntTutorial = true;
-    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settingsDbService.globalSettings));
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(updatedSettings);
+    await this.treasureHuntService.setTreasureHuntTutorialsDisabled();
     this.showWelcomeScreen = false;
     this.treasureHuntService.modalOpen.next(false);
   }

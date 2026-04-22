@@ -33,3 +33,22 @@
 input[type="checkbox"]:hover {
   cursor: pointer;
 }
+
+.form-group.label-select {
+  display: flex;
+  align-items: center;
+}
+
+.form-group.label-select select {
+  width: calc(50% - 1rem) !important;
+  flex-shrink: 0 !important;
+}
+
+.form-group.label-select .spacer {
+  width: 1rem;
+  flex-shrink: 0;
+}
+
+.form-group.label-select .input-group {
+  flex: 1;
+}

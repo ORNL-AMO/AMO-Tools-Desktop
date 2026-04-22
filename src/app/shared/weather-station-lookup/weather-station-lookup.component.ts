@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { WeatherStation, WeatherStationLookupService } from './weather-station-lookup.service';
 import * as Papa from 'papaparse/papaparse.js';
 import { CsvImportData } from '../helper-services/csv-to-json.service';

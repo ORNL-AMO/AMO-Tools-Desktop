@@ -8,7 +8,7 @@ import { SsmtService } from "../../ssmt/ssmt.service";
 import { DecimalPipe } from "@angular/common";
 import { PlotlyService } from "angular-plotly.js";
 import { SankeyNode } from "../models/sankey";
-
+import { defaultPlotlyConfig } from "../../shared/helperFunctions";
 
 @Component({
     selector: 'app-ssmt-sankey',
@@ -213,7 +213,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
       responsive: true,
     };
 
-    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config, sankeyData.type))
     .then(chart => {
       this.addGradientElement();
       this.buildSvgArrows();
@@ -233,6 +233,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
         this.setGradient();
       });
     });
+    // console.log('chart: ', chart);
     }
   }
 

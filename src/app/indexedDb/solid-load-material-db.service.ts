@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, map, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, Observable } from 'rxjs';
 import { SolidLoadChargeMaterial } from '../shared/models/materials';
 import { SolidLoadMaterialStoreMeta } from './dbConfig';
 
@@ -44,7 +44,16 @@ export class SolidLoadMaterialDbService {
   }
 
   clearSolidLoadChargeMaterial(): Observable<boolean> {
+    //this clears the suite db items as well
     return this.dbService.clear(this.storeName);
   }
 
+  async deleteAllCustomMaterials(): Promise<boolean> {
+    const materials: Array<SolidLoadChargeMaterial> = await firstValueFrom(this.dbService.getAll(this.storeName));
+    const customMaterials: Array<SolidLoadChargeMaterial> = materials.filter((material: SolidLoadChargeMaterial) => !material.isDefault);
+    for (const material of customMaterials) {
+      await firstValueFrom(this.deleteByIdWithObservable(material.id));
+    }
+    return true;
+  }
 }

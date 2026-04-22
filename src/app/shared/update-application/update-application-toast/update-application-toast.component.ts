@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { combineLatestWith, Observable, Subscription } from 'rxjs';
-import { ReleaseData, ElectronService } from '../../../electron/electron.service';
+import { ReleaseData, ElectronService, DownloadProgress } from '../../../electron/electron.service';
 import { UpdateApplicationService } from '../update-application.service';
 import { SwUpdate } from '@angular/service-worker';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -23,6 +23,7 @@ export class UpdateApplicationToastComponent {
   releaseData: ReleaseData;
   toastAnimate: 'hide' | 'show' = 'hide';
   updateStatus: UpdateStatus;
+  updateError: string;
   isDownloading: boolean;
 
   electronUpdateAvailableSub: Subscription;
@@ -30,6 +31,8 @@ export class UpdateApplicationToastComponent {
   updateErrorSub: Subscription;
   showUpdateToastSub: Subscription;
   webAndPwaUpdateSub: Subscription;
+  downloadProgressSub: Subscription;
+  progress: DownloadProgress;
 
   constructor(private electronService: ElectronService,
     private updateApplicationService: UpdateApplicationService,
@@ -47,7 +50,7 @@ export class UpdateApplicationToastComponent {
     this.showUpdateToastSub = this.updateApplicationService.showUpdateToast.subscribe(showUpdateToast => {
       if (showUpdateToast) {
         let platformAvailable: 'desktop-available' | 'web-available' = this.electronService.isElectron? 'desktop-available' : 'web-available';
-        console.log(`${platformAvailable}update available - show update toast`);
+        console.log(`${platformAvailable} update available - show update toast`);
         this.showUpdateToast(platformAvailable);
       }
     });
@@ -70,11 +73,20 @@ export class UpdateApplicationToastComponent {
       this.updateDownloadedSub = this.electronService.updateDownloaded.subscribe(downloaded => {
         if (downloaded) {
           this.updateStatus = 'downloaded';
+          console.log('updateDownloaded updateStatus', this.updateStatus);
         }
       });   
       this.updateErrorSub = this.electronService.updateError.subscribe(error => {
         if (error) {
+          this.updateError = error;
           this.updateStatus = 'error';
+          console.log('updateError updateStatus', this.updateStatus);
+        } 
+      });
+      
+      this.downloadProgressSub = this.electronService.downloadProgress.subscribe(progress => {
+        if (progress) {
+          this.progress = progress;
         }
       });
     }
@@ -84,32 +96,36 @@ export class UpdateApplicationToastComponent {
     this.toastAnimate = 'hide';
     this.updateStatus = undefined;
     this.webAndPwaUpdateSub.unsubscribe();
+    this.showUpdateToastSub.unsubscribe();
+
     if (this.electronService.isElectron) {
       this.electronUpdateAvailableSub.unsubscribe();
       this.updateDownloadedSub.unsubscribe();
       this.updateErrorSub.unsubscribe();
-
+      this.downloadProgressSub.unsubscribe();
     }
   }
 
-  async downloadUpdate() {
+  downloadUpdate() {
     this.updateStatus = 'downloading';
+    console.log('downloadUpdate updateStatus', this.updateStatus);
     this.electronService.sendUpdateSignal();
   }
 
-  async quitAndInstall() {
+  quitAndInstall() {
     this.electronService.sendQuitAndInstall();
   }
 
   updateWeb() {
     this.serviceWorkerUpdates.activateUpdate()
         .then((success) => {
-          console.log('MEASUR updated successfully')
+          console.log('MEASUR Web updated successfully')
           window.location.reload();
         })
         .catch(error => {
-          console.log('error during MEASUR update')
+          console.log('error during MEASUR Web update')
           this.updateStatus = 'web-error';
+          console.log('updateWeb updateStatus', this.updateStatus);
         });
   }
 
@@ -119,6 +135,7 @@ export class UpdateApplicationToastComponent {
 
   showUpdateToast(platformAvailable: 'web-available' | 'desktop-available' = 'desktop-available') {
     this.updateStatus = platformAvailable;
+    console.log('showUpdateToast updateStatus', this.updateStatus);
     this.toastAnimate = 'show';
   }
 
@@ -127,6 +144,7 @@ export class UpdateApplicationToastComponent {
     setTimeout(() => {
       // * allow animation to finish
       this.updateStatus = undefined;
+      console.log('closeUpdateToast updateStatus', this.updateStatus);
     }, 550);
   }
 

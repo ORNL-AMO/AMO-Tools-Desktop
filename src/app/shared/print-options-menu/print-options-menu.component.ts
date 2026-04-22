@@ -118,7 +118,9 @@ export class PrintOptionsMenuComponent implements OnInit {
     this.printMenuModal.hide();
     this.printMenuModal.onHidden.subscribe(() => {
       this.printOptionsMenuService.showPrintView.next(true);
-      let hasCompressedAirSankey: boolean =  this.showCompressedAirOptions && this.printOptions.printReportSankey;
+      //See issue #8260
+      // let hasCompressedAirSankey: boolean =  this.showCompressedAirOptions && this.printOptions.printReportSankey;
+      let hasCompressedAirSankey: boolean = false;
       if (!hasCompressedAirSankey) {
         this.print();
       } else {
