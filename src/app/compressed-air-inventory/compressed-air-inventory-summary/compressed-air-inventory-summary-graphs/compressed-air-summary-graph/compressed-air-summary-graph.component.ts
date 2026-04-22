@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { CompressedAirInventorySummaryGraphsService } from '../compressed-air-inventory-summary-graphs.service';
 import { PlotlyService } from 'angular-plotly.js';
 import { CompressedAirInventoryService } from '../../../compressed-air-inventory.service';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
   selector: 'app-compressed-air-summary-graph',
   templateUrl: './compressed-air-summary-graph.component.html',
@@ -110,7 +110,7 @@ export class CompressedAirSummaryGraphComponent {
 
         let config = { responsive: true }
         if (this.visualizeChart) {
-          this.plotlyService.newPlot(this.visualizeChart.nativeElement, data, layout, config);
+          this.plotlyService.newPlot(this.visualizeChart.nativeElement, data, layout, defaultPlotlyConfig(config, type));
         }
       }
     });

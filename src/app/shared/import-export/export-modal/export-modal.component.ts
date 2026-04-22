@@ -39,6 +39,8 @@ export class ExportModalComponent implements OnInit {
     private importExportService: ImportExportService) { }
 
   ngOnInit() {
+    // todo 8296 - db items export workflows are treated as mutable, should instead be copied or treated as immutable to avoid side effects
+
     if (this.exportService.exportAll == true) {
       this.exportAllData();
       this.setDisplayFilteredData();
@@ -74,7 +76,7 @@ export class ExportModalComponent implements OnInit {
     let directory: Directory = this.directoryDbService.getById(this.workingDirectoryId);
     this.exportData = this.exportService.getSelected(directory, true);
   }
-  
+
   exportDirectoryData() {
     if (this.inAssessment) {
       if (this.assessment) {
@@ -94,6 +96,7 @@ export class ExportModalComponent implements OnInit {
       this.isSelectAllDirectory = directory.selected;
       this.exportData = this.exportService.getSelected(directory, this.isSelectAllDirectory);
     }
+
     this.setDisplayFilteredData();
     this.setExportDefaultName();
   }

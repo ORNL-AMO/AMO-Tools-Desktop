@@ -7,7 +7,7 @@ import { DecimalPipe } from "@angular/common";
 import { PlotlyService } from 'angular-plotly.js';
 import { FuelResults, SankeyService } from './sankey.service';
 import { SankeyNode } from '../models/sankey';
-
+import { defaultPlotlyConfig } from '../helperFunctions';
 
 @Component({
     selector: 'app-phast-sankey',
@@ -204,7 +204,7 @@ export class PhastSankeyComponent implements OnInit, OnChanges {
       responsive: true,
     };
 
-    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config))
       .then(chart => {
         this.addGradientElement();
         this.buildSvgArrows();

@@ -1,6 +1,6 @@
-import { Alert, Box, Button, Chip, createTheme, FormControl, InputAdornment, InputLabel, MenuItem, Select } from "@mui/material";
-import { getEdgeSourceAndTarget } from "../Diagram/FlowUtils";
-import { Edge, getConnectedEdges, Node } from "@xyflow/react";
+import { Alert, Box, Button, Chip, FormControl, InputAdornment, InputLabel, MenuItem, Select } from "@mui/material";
+import { getHasSources } from "../Diagram/FlowUtils";
+import { getConnectedEdges, Node } from "@xyflow/react";
 
 import { memo, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/AccordianComponents";
@@ -12,19 +12,12 @@ import SourceFlowForm from "./SourceFlowForm";
 import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
 import DischargeFlowForm from "./DischargeFlowForm";
 import InvalidIcon from "../../validation/InvalidIcon";
-import { yellow } from "@mui/material/colors";
 import SelectTreatmentType from "./SelectTreatmentType";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import CalculateIcon from '@mui/icons-material/Calculate';
 import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterTreatment, wasteWaterTreatmentTypeOptions, CustomEdgeData, waterUsingSystemTypeOptions, WaterUsingSystem, getNodeEstimatedUnknownLosses, hasValidSourceForm, hasValidDischargeForm } from "process-flow-lib";
 import InputField from "../StyledMUI/InputField";
 
-
-const theme = createTheme({
-    palette: {
-        info: yellow,
-    },
-});
 
 const ComponentDataForm = (props: ComponentDataFormProps) => {
     // const theme = useTheme();
@@ -85,14 +78,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         const updatedValue = event.target.value === "" ? null : Number(event.target.value);
         dispatch(nodeDataPropertyChange({ optionsProp: nodeProp, updatedValue: updatedValue }));
     };
-    const hasSources = connectedEdges.some((edge: Edge<CustomEdgeData>) => {
-        const { source, target } = getEdgeSourceAndTarget(edge, nodes);
-        return selectedNode.id === target.diagramNodeId;
-    });
-    const hasTargets = connectedEdges.some((edge: Edge<CustomEdgeData>) => {
-        const { source, target } = getEdgeSourceAndTarget(edge, nodes);
-        return selectedNode.id === source.diagramNodeId;
-    });
+    const hasSources = getHasSources(connectedEdges, nodes, selectedNode);
     const hasSourceErrors = errors && hasValidSourceForm(errors);
     const hasTargetErrors = errors && hasValidDischargeForm(errors);
 

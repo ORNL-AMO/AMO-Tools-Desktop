@@ -3,7 +3,7 @@ import { BatchAnalysisService, BatchAnalysisSettings } from '../../batch-analysi
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-energy-cost-pie-chart',
     templateUrl: './energy-cost-pie-chart.component.html',
@@ -71,7 +71,7 @@ export class EnergyCostPieChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, configOptions);
+      this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions, data));
     });
   }
 

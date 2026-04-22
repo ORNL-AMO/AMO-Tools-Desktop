@@ -1,3 +1,9 @@
+.borderless-close {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  outline: none !important;
+}
 
 .card-header {
   cursor: pointer;

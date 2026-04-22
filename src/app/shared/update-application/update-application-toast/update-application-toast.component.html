@@ -10,11 +10,20 @@
         [ngClass]="{'alert alert-danger ': updateStatus === 'error' || updateStatus === 'web-error'}">
             <ng-container *ngIf="updateStatus === 'error'">
                 <p class="card-text text-left px-3 py-1">
-                    An error has occured. Please restart your application and try again. 
+                    An error has occured. Please try again or download the update manually from <a class="click-link-error" href="https://industrialresources.ornl.gov/measur/downloads/">https://industrialresources.ornl.gov/measur/downloads/</a> 
                     <br><br>
-                    If the error persists, please use the "Feedback" page to notify the MEASUR team of your issue.
+                    Please notify the MEASUR team of your issue by contacting <a id="supportEmail" href="mailto:measur-help@ornl.gov?subject=AMO Tools Support Request">measur-help&#64;ornl.gov</a> and including the error text below
+                    <br><br>
                 </p>
-                <p class="text-left">This update can also be downloaded from <a class="click-link" href="https://industrialresources.ornl.gov/measur/downloads/">https://industrialresources.ornl.gov/measur/downloads/</a></p>
+                <div class="mt-1">
+                    <button type="button" class="btn btn-outline-secondary btn-sm mb-2 w-100" [cdkCopyToClipboard]="updateError">
+                        <span class="fa fa-copy"></span> Copy
+                    </button>
+                    <label for="errorTextArea" class="form-label sr-only">Error Details</label>
+                    <textarea id="errorTextArea" readonly class="form-control error-details-textarea"
+                        [value]="updateError"></textarea>
+                </div>
+                <div class="small text-muted mt-1">You can copy and paste this error text in your support email.</div>
             </ng-container>
 
             <ng-container *ngIf="updateStatus === 'web-error'">
@@ -22,7 +31,7 @@
                     Error updating MEASUR. The application can be updated manually by doing a hard-refresh on the current tab or window. 
                     If the application is installed to the desktop, uninstall the current version, then install the new version. 
                     <br><br>
-                    If the error persists, please use the "Feedback" page to notify the MEASUR team of your issue.
+                    If the error persists, please notify the MEASUR team of your issue by contacting <a id="supportEmail" href="mailto:measur-help@ornl.gov?subject=AMO Tools Support Request">measur-help&#64;ornl.gov</a>
                 </p>
             </ng-container>
 
@@ -39,16 +48,20 @@
             </ng-container>
 
             <ng-container *ngIf="updateStatus === 'downloading'">
-                <div class="mb-2 align-items-center w-100 text-center">
-                    <div class="spinner w-100">
-                        <div class="bounce1"></div>
-                        <div class="bounce2"></div>
-                        <div class="bounce3"></div>
-                    </div>
-                </div>
                 <p class="card-text text-center">
                     Downloading Update. This may take a few minutes.
                 </p>
+                <div class="progress my-2 custom-progress-bar-container">
+                    <div class="progress-bar custom-progress-bar" role="progressbar"
+                        [style.width]="progress?.percent ? progress.percent + '%' : '0%'" [attr.aria-valuenow]="progress?.percent || 0"
+                        aria-valuemin="0" aria-valuemax="100">
+                        @if (progress?.percent) {
+                            {{ progress.percent | number:'1.0-0' }}%
+                        } @else {
+                            0%
+                        }
+                    </div>
+                </div>
             </ng-container>
 
             <ng-container *ngIf="updateStatus === 'downloaded'">

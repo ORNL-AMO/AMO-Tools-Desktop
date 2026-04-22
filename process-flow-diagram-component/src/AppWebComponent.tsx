@@ -45,7 +45,8 @@ class AppWebComponent extends HTMLElement {
     // * using link ref in this way may require polyfill - check if required
     const link = document.createElement("link");
     link.setAttribute("rel", "stylesheet");
-    link.setAttribute("href", "process-flow-diagram-component.css");
+    // * if building diagram as standalone app, url may remove assets/ prefix (or adjust webpack build)
+    link.setAttribute("href", "assets/process-flow-diagram-component.css");
     this.shadowRoot.appendChild(link);
 
     this.appRef = createRoot(this.mountPoint!);

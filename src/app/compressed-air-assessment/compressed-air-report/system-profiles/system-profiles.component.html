@@ -1,4 +1,5 @@
-<div class="d-flex flex-column" *ngIf="!printView">
+@if(!printView){
+<div class="d-flex flex-column">
     <div class="d-flex justify-content-center">
         <div class="pr-1">
             <select class="day-type-select" id="selectedDayType" name="selectedDayType"
@@ -21,29 +22,65 @@
     </div>
 
     <app-profile-summary-table [printView]="printView" [profileSummary]="selectedProfileSummary"
-        [inventoryItems]="compressedAirAssessment.compressorInventoryItems" [totals]="selectedTotals"
-        [settings]="settings" [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup"
-        [systemInformation]="compressedAirAssessment.systemInformation">
+        [inventoryItems]="compressorInventoryItems" [totals]="selectedTotals" [settings]="settings"
+        [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup"
+        [multiCompressorSystemControls]="compressedAirAssessment.systemInformation.multiCompressorSystemControls"
+        [trimSelections]="trimSelections">
     </app-profile-summary-table>
 
-</div>
-
-<div *ngIf="printView">
-    <div class="d-flex flex-column avoid-break print-container" *ngFor="let profile of profliesForPrint">
-        <h4 class="show-print print-section-header">System Profiles</h4>
-        <div class="d-flex justify-content-center">
-            <div class="pr-1">
-                <h5>Baseline</h5>
-            </div>
-            <div class="pl-1">
-                <h5>{{profile.dayType.name}}</h5>
-            </div>
+    @if(!selectedModification){
+    <app-system-profile-graphs [printView]="showPrintView" [isBaseline]="true" [labelName]="'Baseline'"
+        [context]="'report'" [selectedDayType]="selectedDayType"></app-system-profile-graphs>
+    }@else {
+    <div class="row">
+        <div class="col-6">
+            <app-system-profile-graphs [printView]="showPrintView" [context]="'report'" [isBaseline]="true"
+                [labelName]="'Baseline'" [selectedDayType]="selectedDayType">
+            </app-system-profile-graphs>
         </div>
-        <app-profile-summary-table [printView]="printView" [profileSummary]="profile.profileSummary"
-            [inventoryItems]="compressedAirAssessment.compressorInventoryItems" [totals]="selectedTotals"
-            [settings]="settings" [totalsForPrint]="profile.totalsForPrint"
-            [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup"
-            [systemInformation]="compressedAirAssessment.systemInformation">
-        </app-profile-summary-table>
+        <div class="col-6">
+            <app-system-profile-graphs [printView]="showPrintView" [context]="'report'" [isBaseline]="false"
+                [labelName]="selectedModification ? selectedModification.name : 'Modification'"
+                [compressedAirModifiedDayTypeProfileSummary]="compressedAirModifiedDayTypeProfileSummary"
+                [selectedDayType]="selectedDayType">
+            </app-system-profile-graphs>
+        </div>
     </div>
+    }
 </div>
+}@else {
+<h4 class="show-print print-section-header">System Profiles</h4>
+@for(profile of profliesForPrint; track profile.dayTypeId){
+<div class="d-flex flex-column print-container">
+    <h5 class="mb-0 text-center">Baseline - {{profile.dayType.name}}</h5>
+    <app-profile-summary-table [printView]="printView" [profileSummary]="profile.profileSummary"
+        [inventoryItems]="compressorInventoryItems" [settings]="settings" [totalsForPrint]="profile.totalsForPrint"
+        [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup"
+        [multiCompressorSystemControls]="compressedAirAssessment.systemInformation.multiCompressorSystemControls"
+        [trimSelections]="trimSelections">
+    </app-profile-summary-table>
+    <app-system-profile-graphs [printView]="showPrintView" [context]="'report'" [isBaseline]="true"
+        [labelName]="'Baseline'" [selectedDayType]="profile.dayType">
+    </app-system-profile-graphs>
+</div>
+}
+@for(modificationForPrint of modificationsForPrint; track modificationForPrint.modification.modificationId){
+@for(profile of modificationForPrint.profilesForPrint; track profile.dayType.dayTypeId){
+<div class="d-flex flex-column print-container">
+    <h5 class="mb-0 text-center">{{modificationForPrint.modification.name}} - {{profile.dayType.name}}</h5>
+    <app-profile-summary-table [printView]="printView" [profileSummary]="profile.profileSummary"
+        [inventoryItems]="profile.compressedAirModifiedDayTypeProfileSummary.adjustedCompressors" [settings]="settings"
+        [totalsForPrint]="profile.totalsForPrint"
+        [systemProfileSetup]="compressedAirAssessment.systemProfile.systemProfileSetup"
+        [multiCompressorSystemControls]="compressedAirAssessment.systemInformation.multiCompressorSystemControls"
+        [trimSelections]="profile.compressedAirModifiedDayTypeProfileSummary.trimSelections">
+    </app-profile-summary-table>
+    <app-system-profile-graphs [printView]="showPrintView" [context]="'report'" [isBaseline]="false"
+        [labelName]="modificationForPrint.modification.name"
+        [compressedAirModifiedDayTypeProfileSummary]="profile.compressedAirModifiedDayTypeProfileSummary"
+        [selectedDayType]="profile.dayType">
+    </app-system-profile-graphs>
+</div>
+}
+}
+}

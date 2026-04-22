@@ -72,6 +72,7 @@ export class UpdateDiagramFromAssessmentService {
       diagram.waterDiagram.flowDiagramData.settings.fuelCost = integratedAssessment.water.systemBasics.fuelCost;
       diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision = settings.flowDecimalPrecision;
       diagram.waterDiagram.flowDiagramData.settings.conductivityUnit = integratedAssessment.water.systemBasics.conductivityUnit;
+      diagram.waterDiagram.flowDiagramData.diagramNotes = integratedAssessment.water.systemBasics.notes;
     }
 
   setSummingNodes(nodes) {
@@ -95,7 +96,7 @@ export class UpdateDiagramFromAssessmentService {
   */
   updateDiagramNodesFromAssessmentOverrides(diagramNodes: Node[], assessmentComponents: WaterProcessComponent[]) {
     diagramNodes.map((node: Node<ProcessFlowPart>) => {
-
+      // * 3/6/26 userDiagramFlowOverrides are currently being hidden in the water using system form
       if (node.data.processComponentType === 'water-using-system') {
         let systemMatch: WaterUsingSystem = assessmentComponents.find((component: WaterProcessComponent) => component.diagramNodeId === node.data.diagramNodeId && component.processComponentType === 'water-using-system') as WaterUsingSystem;
         if (systemMatch && systemMatch.userDiagramFlowOverrides) {

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
 import { WeatherBinnedChartData } from '../models/chillers';
-
+import { defaultPlotlyConfig } from '../helperFunctions';
 @Component({
     selector: 'app-cooling-weather-chart',
     templateUrl: './cooling-weather-chart.component.html',
@@ -84,7 +84,7 @@ export class CoolingWeatherChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    Plotly.newPlot(this.barChart.nativeElement, traces, layout, configOptions);
+    Plotly.newPlot(this.barChart.nativeElement, traces, layout, defaultPlotlyConfig(configOptions, traces[0].type));
   }
 
   getTraces(): Array<CoolingChartTraceData>{

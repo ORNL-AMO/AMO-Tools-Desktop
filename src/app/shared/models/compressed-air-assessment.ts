@@ -1,5 +1,5 @@
 import { Co2SavingsData } from "../../calculator/utilities/co2-savings/co2-savings.service";
-import { ProfileSummaryValid } from "../../compressed-air-assessment/compressed-air-assessment.service";
+import { CompressedAirModifiedDayTypeProfileSummary } from "../../compressed-air-assessment/calculations/modifications/CompressedAirModifiedDayTypeProfileSummary";
 import { DayTypeSummary, LogToolField } from "../../log-tool/log-tool-models";
 import { ConnectedItem } from "../connected-inventory/integrations";
 
@@ -11,6 +11,7 @@ export interface CompressedAirAssessment {
     systemBasics: CASystemBasics,
     systemInformation: SystemInformation,
     compressorInventoryItems: Array<CompressorInventoryItem>,
+    replacementCompressorInventoryItems: Array<CompressorInventoryItem>,
     systemProfile: SystemProfile,
     // logToolDbData?: LogToolDbData,
     logToolData?: {
@@ -20,7 +21,7 @@ export interface CompressedAirAssessment {
     endUseData: EndUseData,
     compressedAirDayTypes: Array<CompressedAirDayType>,
     setupDone: boolean
-    selectedModificationId?: string    
+    selectedModificationId?: string
     connectedItem?: ConnectedItem,
 }
 
@@ -35,11 +36,30 @@ export interface Modification {
     useAutomaticSequencer: UseAutomaticSequencer,
     reduceRuntime: ReduceRuntime,
     addPrimaryReceiverVolume: AddPrimaryReceiverVolume,
+    replaceCompressor: ReplaceCompressor,
     notes?: string
 }
 
 export interface FlowReallocation {
     implementationCost: number,
+}
+
+export interface ReplaceCompressor {
+    order: number
+    implementationCost: number,
+    salvageValue: number,
+    currentCompressorMapping: Array<{
+        originalCompressorId: string,
+        isReplaced: boolean
+    }>,
+    replacementCompressorMapping: Array<{
+        replacementCompressorId: string,
+        isAdded: boolean
+    }>,
+    trimSelections: Array<{
+        dayTypeId: string,
+        compressorId: string
+    }>
 }
 
 export interface ReduceAirLeaks {
@@ -145,9 +165,22 @@ export interface UseAutomaticSequencer {
     targetPressure: number,
     variance: number,
     order: number,
-    profileSummary: Array<ProfileSummary>,
+    profileSummary: Array<UseAutomaticSequencerProfileSummary>,
     implementationCost: number,
 }
+
+export interface UseAutomaticSequencerProfileSummary {
+        fullLoadPressure: number,
+        fullLoadCapacity?: number,
+        compressorId: string,
+        dayTypeId: string,
+        automaticShutdownTimer?: boolean
+        profileSummaryData: Array<{
+            timeInterval: number,
+            order: number,
+        }>
+}
+
 
 export interface ReduceRuntime {
     runtimeData: Array<ReduceRuntimeData>,
@@ -189,24 +222,28 @@ export interface SystemInformation {
     variance: number,
     co2SavingsData?: Co2SavingsData,
     plantMaxPressure: number,
-    multiCompressorSystemControls: 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim',
+    multiCompressorSystemControls: MultiCompressorSystemControls,
     trimSelections?: Array<{
         dayTypeId: string,
         compressorId: string
     }>
 }
 
+export type MultiCompressorSystemControls = 'cascading' | 'isentropicEfficiency' | 'loadSharing' | 'targetPressureSequencer' | 'baseTrim'
+
 export interface CompressorInventoryItem {
     itemId: string,
     name: string,
     description: string,
-    isValid?: boolean,
+    color: string,
+    // isValid?: boolean,
     nameplateData: CompressorNameplateData,
     compressorControls: CompressorControls,
     designDetails: DesignDetails,
     performancePoints: PerformancePoints,
     centrifugalSpecifics: CentrifugalSpecifics,
-    modifiedDate: Date
+    modifiedDate: Date,
+    isReplacementCompressor?: boolean
 
 }
 
@@ -272,8 +309,10 @@ export interface SystemProfileSetup {
     dayTypeId: string,
     numberOfHours: number,
     dataInterval: 1 | 24,
-    profileDataType: "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower"
+    profileDataType: ProfileDataType
 }
+
+export type ProfileDataType = "power" | "percentCapacity" | "airflow" | "powerFactor" | "percentPower";
 
 export interface CentrifugalSpecifics {
     surgeAirflow: number,
@@ -297,11 +336,11 @@ export interface ProfileSummary {
     logToolFieldIdVolts?: string,
     avgPower?: number,
     avgAirflow?: number,
-    avgPrecentPower?: number,
+    avgPercentPower?: number,
     avgPercentCapacity?: number,
-    profileSummaryValid?: ProfileSummaryValid
     profileSummaryForPrint?: Array<Array<ProfileSummaryData>>,
-    adjustedIsentropicEfficiency?: number
+    adjustedIsentropicEfficiency?: number,
+    isCompressorReplaced?: boolean
 }
 
 export interface ProfileSummaryData {
@@ -348,4 +387,5 @@ export interface ProfilesForPrint {
     dayType: CompressedAirDayType,
     profileSummary: Array<ProfileSummary>,
     totalsForPrint: Array<Array<ProfileSummaryTotal>>;
+    compressedAirModifiedDayTypeProfileSummary?: CompressedAirModifiedDayTypeProfileSummary
 }

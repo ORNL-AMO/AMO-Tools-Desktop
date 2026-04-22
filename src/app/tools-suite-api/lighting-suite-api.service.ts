@@ -5,6 +5,9 @@ import { ToolsSuiteApiService } from './tools-suite-api.service';
     providedIn: 'root'
 })
 export class LightingSuiteApiService {
+
+    lightingFixtureCategories: Array<LightingFixtureCategory> = [];
+
     constructor(
         private toolsSuiteApiService: ToolsSuiteApiService,
     ) { }
@@ -13,8 +16,7 @@ export class LightingSuiteApiService {
         let defaultDataInstance = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
         let lightingFixtureData = defaultDataInstance.getLightingData();
 
-        let LightingFixtureCategories: Array<LightingFixtureCategory> = [
-            {
+        this.lightingFixtureCategories = [            {
                 category: 0,
                 label: 'Custom',
                 fixturesData: []
@@ -70,10 +72,10 @@ export class LightingSuiteApiService {
                 fixturesData: []
             }
         ]
-        defaultDataInstance.delete();
-        this.buildLightingList(lightingFixtureData, LightingFixtureCategories);
 
-        return LightingFixtureCategories;
+        this.buildLightingList(lightingFixtureData, this.lightingFixtureCategories);
+
+        return this.lightingFixtureCategories;
     }   
 
     buildLightingList(wasmLightingSystems, lightingFixtureCategories: Array<LightingFixtureCategory> ) {

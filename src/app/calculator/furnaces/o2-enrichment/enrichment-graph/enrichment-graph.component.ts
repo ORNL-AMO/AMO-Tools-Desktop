@@ -7,6 +7,7 @@ import { SimpleChart, TraceCoordinates } from '../../../../shared/models/plottin
 import { O2EnrichmentService, DisplayPoint, Axis } from '../o2-enrichment.service';
 import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 
 @Component({
     selector: 'app-enrichment-graph',
@@ -117,7 +118,7 @@ export class EnrichmentGraphComponent implements OnInit {
 
     let chartLayout = JSON.parse(JSON.stringify(this.enrichmentChart.layout));
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.enrichmentChart.data, chartLayout, this.enrichmentChart.config)
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.enrichmentChart.data, chartLayout, defaultPlotlyConfig(this.enrichmentChart.config))
         .then(chart => {
           chart.on('plotly_hover', hoverData => {
             this.displayHoverGroupData(hoverData);
@@ -127,7 +128,7 @@ export class EnrichmentGraphComponent implements OnInit {
           });
         });
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.enrichmentChart.data, chartLayout, this.enrichmentChart.config)
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.enrichmentChart.data, chartLayout, defaultPlotlyConfig(this.enrichmentChart.config))
         .then(chart => {
           chart.on('plotly_hover', hoverData => {
             this.displayHoverGroupData(hoverData);

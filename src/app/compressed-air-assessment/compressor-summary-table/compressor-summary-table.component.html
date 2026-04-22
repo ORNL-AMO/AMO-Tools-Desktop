@@ -1,8 +1,13 @@
 <div class="d-flex flex-column">
     <div class="d-flex justify-content-center">
         <div class="pt-2 pr-1 group-label">
-            <span *ngIf="inReport">Baseline Compressor Summary</span>
-            <span *ngIf="!inReport">Compressor Summary</span>
+            @if(!inReport){
+                Compressor Summary
+            }@else if(!modificationResults){
+                Baseline Compressor Summary
+            }@else{
+                {{modificationResults.modification.name}} Compressor Summary
+            }
         </div>
     </div>
     <div class="pl-2 pt-3 pr-2">
@@ -30,7 +35,7 @@
                     </td>
                     <td *ngFor="let compressor of compressorSummary">
                         <span *ngIf="compressor.specificPowerAvgLoad && !getIsFinite(compressor.specificPowerAvgLoad)">No Flow</span>
-                        <span *ngIf="compressor.specificPowerAvgLoad && getIsFinite(compressor.specificPowerAvgLoad)">{{compressor.specificPowerAvgLoad}}</span>
+                        <span *ngIf="compressor.specificPowerAvgLoad && getIsFinite(compressor.specificPowerAvgLoad)">{{compressor.specificPowerAvgLoad | number:'1.0-2'}}</span>
                         <span *ngIf="!compressor.specificPowerAvgLoad">&mdash;</span>
                     </td>
 
@@ -42,7 +47,7 @@
                     </th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
                         <span *ngIf="compressor.ratedSpecificPower && !getIsFinite(compressor.ratedSpecificPower)">No Flow</span>
-                        <span *ngIf="compressor.ratedSpecificPower && getIsFinite(compressor.ratedSpecificPower)">{{compressor.ratedSpecificPower}}</span>
+                        <span *ngIf="compressor.ratedSpecificPower && getIsFinite(compressor.ratedSpecificPower)">{{compressor.ratedSpecificPower | number:'1.0-2'}}</span>
                         <span *ngIf="!compressor.ratedSpecificPower">&mdash;</span>
                     </td>
                 </tr>
@@ -50,7 +55,7 @@
                     <th colspan="2">Rated Isentropic Efficiency, %</th>
                     <td *ngFor="let compressor of compressorSummaries[0]">
                         <span *ngIf="compressor.ratedIsentropicEfficiency">
-                            {{compressor.ratedIsentropicEfficiency}}
+                            {{compressor.ratedIsentropicEfficiency | number:'1.0-2'}}
                         </span>
                         <span *ngIf="!compressor.ratedIsentropicEfficiency">
                             &mdash;

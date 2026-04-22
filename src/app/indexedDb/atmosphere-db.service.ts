@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, firstValueFrom, map } from 'rxjs';
 import { AtmosphereSpecificHeat } from '../shared/models/materials';
 import { AtmosphereStoreMeta } from './dbConfig';
 
@@ -45,7 +45,16 @@ export class AtmosphereDbService {
   }
 
   clearAtmosphereSpecificHeat(): Observable<boolean> {
+    //this clears the suite db items as well
     return this.dbService.clear(this.storeName);
+  }
+  async deleteAllCustomMaterials(): Promise<boolean> {
+    const materials: Array<AtmosphereSpecificHeat> = await firstValueFrom(this.dbService.getAll(this.storeName));
+    const customMaterials: Array<AtmosphereSpecificHeat> = materials.filter((material: AtmosphereSpecificHeat) => !material.isDefault);
+    for (const material of customMaterials) {
+      await firstValueFrom(this.deleteByIdWithObservable(material.id));
+    }
+    return true;
   }
 
 }

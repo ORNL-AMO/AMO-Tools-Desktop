@@ -1,9 +1,9 @@
-import { CurrencyPipe, DecimalPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { graphColors } from '../../../../shared/graphColors';
 import { SavingsItem } from '../../../../shared/models/treasure-hunt';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-utility-donut-chart',
     templateUrl: './utility-donut-chart.component.html',
@@ -95,7 +95,7 @@ export class UtilityDonutChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.utilityDonutChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.utilityDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
   createPrintChart() {
@@ -152,6 +152,6 @@ export class UtilityDonutChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    this.plotlyService.newPlot(this.utilityDonutChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.utilityDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 }

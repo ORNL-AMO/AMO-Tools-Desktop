@@ -3,7 +3,7 @@ import { WeatherBinsService, WeatherBinsInput, WeatherBinCase } from '../weather
 import * as Plotly from 'plotly.js-dist';
 import { Settings } from '../../../../shared/models/settings';
 import { Subscription } from 'rxjs';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-weather-bins-bar-chart',
     templateUrl: './weather-bins-bar-chart.component.html',
@@ -92,7 +92,7 @@ export class WeatherBinsBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      Plotly.newPlot(this.weatherBinsBarChart.nativeElement, traces, layout, configOptions);
+      Plotly.newPlot(this.weatherBinsBarChart.nativeElement, traces, layout, defaultPlotlyConfig(configOptions, traces) );
     } else if (this.weatherBinsBarChart) {
       Plotly.purge(this.weatherBinsBarChart.nativeElement);
     }

@@ -1,3 +1,18 @@
+export interface LightingFixtureMaterial {
+    name: string;
+    category: string;
+    type: string;
+    lampsPerFixture: number;
+    wattsPerLamp: number;
+    lumensPerLamp: number;
+    lampLife: number;
+    coefficientOfUtilization: number;
+    ballastFactor: number;
+    lumenDegradationFactor: number;
+    id?: number;
+    selected?: boolean;
+    isDefault?: boolean;
+}
 export interface FlueGasMaterial {
     C2H6: number;
     C3H8: number;

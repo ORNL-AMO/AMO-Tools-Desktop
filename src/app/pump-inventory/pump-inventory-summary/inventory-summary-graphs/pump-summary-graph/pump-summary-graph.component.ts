@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { PumpSummaryGraphsService } from '../pump-summary-graphs.service';
 import { PlotlyService } from 'angular-plotly.js';
 import { PumpInventoryService } from '../../../pump-inventory.service';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-pump-summary-graph',
     templateUrl: './pump-summary-graph.component.html',
@@ -107,7 +107,7 @@ export class PumpSummaryGraphComponent {
 
         let config = { responsive: true }
         if (this.visualizeChart) {
-          this.plotlyService.newPlot(this.visualizeChart.nativeElement, data, layout, config);
+          this.plotlyService.newPlot(this.visualizeChart.nativeElement, data, layout,defaultPlotlyConfig(config));
         }
       }
     });

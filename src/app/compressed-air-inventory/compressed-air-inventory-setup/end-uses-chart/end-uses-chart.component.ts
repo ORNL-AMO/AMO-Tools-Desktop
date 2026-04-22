@@ -7,7 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { CompressedAirInventoryData, CompressedAirInventorySystem } from '../../compressed-air-inventory';
 import { Subscription } from 'rxjs';
 import { CompressedAirCatalogService } from '../compressed-air-catalog/compressed-air-catalog.service';
-
+import { defaultPlotlyConfig} from '../../../shared/helperFunctions';
 @Component({
   selector: 'app-end-uses-chart',
   templateUrl: './end-uses-chart.component.html',
@@ -194,7 +194,7 @@ export class EndUsesChartComponent implements OnInit {
       responsive: true
     };
 
-    this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions, data));
   }
 
   getChunkedArray(array, size) {

@@ -1,64 +1,78 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CompressedAirAssessment, CompressedAirDayType, Modification, ProfilesForPrint, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfilesForPrint, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
-import { BaselineResults, CompressedAirAssessmentResult, CompressedAirAssessmentResultsService, DayTypeModificationResult } from '../../compressed-air-assessment-results.service';
+import { CompressedAirAssessmentResultsService } from '../../compressed-air-assessment-results.service';
+import { DayTypeModificationResult } from '../../calculations/caCalculationModels';
+import { CompressedAirAssessmentBaselineResults } from '../../calculations/CompressedAirAssessmentBaselineResults';
+import { CompressedAirAssessmentModificationResults } from '../../calculations/modifications/CompressedAirAssessmentModificationResults';
+import { CompressedAirBaselineDayTypeProfileSummary } from '../../calculations/CompressedAirBaselineDayTypeProfileSummary';
+import { CompressedAirModifiedDayTypeProfileSummary } from '../../calculations/modifications/CompressedAirModifiedDayTypeProfileSummary';
 
 @Component({
-    selector: 'app-system-profiles',
-    templateUrl: './system-profiles.component.html',
-    styleUrls: ['./system-profiles.component.css'],
-    standalone: false
+  selector: 'app-system-profiles',
+  templateUrl: './system-profiles.component.html',
+  styleUrls: ['./system-profiles.component.css'],
+  standalone: false
 })
 export class SystemProfilesComponent implements OnInit {
   @Input()
   compressedAirAssessment: CompressedAirAssessment;
   @Input()
-  baselineProfileSummaries: Array<{ profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType }>;
+  compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults
   @Input()
-  assessmentResults: Array<CompressedAirAssessmentResult>;
+  assessmentResults: Array<CompressedAirAssessmentModificationResults>;
   @Input()
   settings: Settings;
   @Input()
   printView: boolean;
-  // @Input()
-  // combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult }>;
-
 
   selectedProfileSummary: Array<ProfileSummary>;
   selectedTotals: Array<ProfileSummaryTotal>;
   selectedDayType: CompressedAirDayType;
   selectedModification: Modification;
   profliesForPrint: Array<ProfilesForPrint>;
+  compressorInventoryItems: Array<CompressorInventoryItem>;
+  trimSelections: Array<{ dayTypeId: string, compressorId: string }>;
+  compressedAirModifiedDayTypeProfileSummary: CompressedAirModifiedDayTypeProfileSummary;
 
+  modificationsForPrint: Array<{
+    modification: Modification,
+    profilesForPrint: Array<ProfilesForPrint>,
+  }>
   constructor(private compressedAirAssessmentResultsService: CompressedAirAssessmentResultsService) { }
 
   ngOnInit(): void {
     this.selectedDayType = this.compressedAirAssessment.compressedAirDayTypes[0];
     this.setSelectedProfileSummary();
+    this.compressorInventoryItems = this.compressedAirAssessment.compressorInventoryItems.concat(this.compressedAirAssessment.replacementCompressorInventoryItems);
   }
 
   setSelectedProfileSummary() {
     if (this.selectedDayType && !this.selectedModification) {
       //Day type and baseline
-      this.selectedProfileSummary = this.baselineProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId }).profileSummary;
-      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(this.compressedAirAssessment.compressorInventoryItems, this.selectedDayType, this.selectedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
+      let baselineDayTypeProfileSummary: CompressedAirBaselineDayTypeProfileSummary = this.compressedAirAssessmentBaselineResults.baselineDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId });
+      this.trimSelections = this.compressedAirAssessment.systemInformation.trimSelections;
+      this.selectedProfileSummary = baselineDayTypeProfileSummary.profileSummary;
+      this.selectedTotals = baselineDayTypeProfileSummary.profileSummaryTotals;
     } else if (this.selectedDayType && this.selectedModification) {
       //day type and modification
-      let assessmentResult: CompressedAirAssessmentResult = this.assessmentResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
-      let dayTypeModificationResult: DayTypeModificationResult = assessmentResult.dayTypeModificationResults.find(modificationResult => { return modificationResult.dayTypeId == this.selectedDayType.dayTypeId });
+      let modificationResults: CompressedAirAssessmentModificationResults = this.assessmentResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
+      this.compressedAirModifiedDayTypeProfileSummary = modificationResults.modifiedDayTypeProfileSummaries.find(summary => { return summary.dayType.dayTypeId == this.selectedDayType.dayTypeId });
+      let dayTypeModificationResult: DayTypeModificationResult = this.compressedAirModifiedDayTypeProfileSummary.getDayTypeModificationResult();
+      this.trimSelections = this.compressedAirModifiedDayTypeProfileSummary.trimSelections;
       this.selectedProfileSummary = dayTypeModificationResult.adjustedProfileSummary;
-      this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(dayTypeModificationResult.adjustedCompressors, this.selectedDayType, this.selectedProfileSummary, this.compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval, this.selectedModification.improveEndUseEfficiency);
-    }     
-    if (this.printView) {
-      this.profliesForPrint = this.compressedAirAssessmentResultsService.setProfileSummariesForPrinting(this.compressedAirAssessment, this.baselineProfileSummaries);
+      this.selectedTotals = dayTypeModificationResult.profileSummaryTotals;
     }
-    // else if (!this.selectedDayType && this.selectedModification) {
-    //   //no day type (combined) and modification
-    //   let combinedModificationResult: { modification: Modification, combinedResults: DayTypeModificationResult } = this.combinedDayTypeResults.find(result => { return result.modification.modificationId == this.selectedModification.modificationId });
-    //   this.selectedProfileSummary = combinedModificationResult.combinedResults.adjustedProfileSummary;
-    //   this.selectedTotals = this.compressedAirAssessmentResultsService.calculateProfileSummaryTotals(combinedModificationResult.combinedResults.adjustedCompressors, this.selectedDayType, this.selectedProfileSummary);
-    // }
-
+    if (this.printView) {
+      this.profliesForPrint = this.compressedAirAssessmentResultsService.setProfileSummariesForPrinting(this.compressedAirAssessmentBaselineResults);
+      this.modificationsForPrint = this.assessmentResults.map(result => {
+        let profilesForPrint: Array<ProfilesForPrint> = this.compressedAirAssessmentResultsService.setModificationProfileSummariesForPrinting(result);
+        return {
+          modification: result.modification,
+          profilesForPrint: profilesForPrint,
+        }
+      })
+    }
 
   }
 }

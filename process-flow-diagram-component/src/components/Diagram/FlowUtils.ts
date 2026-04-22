@@ -97,6 +97,20 @@ export const getEdgeSourceAndTarget = (edge: Edge, nodes: Node[]) => {
 
 }
 
+export const getHasSources = (connectedEdges: Edge[], nodes: Node[], selectedNode: Node) => {
+    return connectedEdges.some((edge: Edge) => {
+        const { source, target } = getEdgeSourceAndTarget(edge, nodes);
+        return selectedNode.id === target.diagramNodeId;
+    });
+}
+
+export const getHasTargets = (connectedEdges: Edge[], nodes: Node[], selectedNode: Node) => {
+    return connectedEdges.some((edge: Edge) => {
+         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
+         return selectedNode.id === source.diagramNodeId;
+     });
+}
+
 export const createNewNode = (nodeType: WaterProcessComponentType, position: { x: number, y: number }, existingNames?: string[]) => {
   let newNode: Node;
   if (nodeType.includes('splitter-node')) {
@@ -239,12 +253,14 @@ export const formatDataForMEASUR = (diagramData: FlowDiagramData): FlowDiagramDa
 export const getNodeSourceEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.target === nodeId);
 export const getNodeTargetEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.source === nodeId);
 
-
 /**
  * Retrieve user input total flow, otherwise calculated total flow
  */
 export const getNodeTotalFlow = (flowProperty: NodeFlowProperty, calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
    const selectedNode: Node<ProcessFlowPart> = nodes.find((node: Node<ProcessFlowPart>) => node.id === nodeId);
+   if (!selectedNode) {
+     return null;
+   }
    if (selectedNode.data.userEnteredData[flowProperty] !== undefined) {
      return selectedNode.data.userEnteredData[flowProperty];
    } else if (calculatedNode) {
