@@ -154,16 +154,18 @@ export class ProcessCoolingAssessmentService {
 
   updateAssessmentChiller(itemId: string, fields: Partial<ChillerInventoryItem>) {
     let updatedProcessCooling = { ...this.processCooling.getValue() };
+    let updatedChiller: ChillerInventoryItem;
     updatedProcessCooling.inventory = updatedProcessCooling.inventory.map(chiller => {
       if (chiller.itemId === itemId) {
-        return { 
-          ...chiller, 
-          ...fields, 
-          modifiedDate: new Date() 
-        };
+        updatedChiller = { ...chiller, ...fields, modifiedDate: new Date() };
+        return updatedChiller;
       }
       return chiller;
     });
+    if (updatedChiller && this.inventoryService.selectedChillerValue?.itemId === itemId) {
+      this.inventoryService.setSelectedChiller(updatedChiller);
+    }
+    this.inventoryService.setInventoryValidState(updatedProcessCooling.inventory);
     this.setProcessCooling(updatedProcessCooling);
   }
 
