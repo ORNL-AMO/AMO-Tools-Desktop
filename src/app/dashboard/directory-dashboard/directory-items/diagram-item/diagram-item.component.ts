@@ -172,6 +172,7 @@ export class DiagramItemComponent {
     diagramCopy.name = this.copyForm.controls.name.value;
     diagramCopy.directoryId = this.copyForm.controls.directoryId.value;
     delete diagramCopy.assessmentId;
+    diagramCopy.isExample = false;
 
     let newDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(diagramCopy));
     settingsCopy.diagramId = newDiagram.id;

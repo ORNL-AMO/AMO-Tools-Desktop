@@ -170,6 +170,7 @@ export class AssessmentItemComponent implements OnInit {
         diagramCopy.directoryId = addedAssessment.directoryId;
         diagramCopy.assessmentId = addedAssessment.id;
         diagramCopy.name = sourceDiagram.name + ' (copy)';
+        diagramCopy.isExample = false;
         let addedDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(diagramCopy));
 
         let diagramSettings: Settings = this.settingsDbService.getByDiagramId(sourceDiagram, true);
@@ -221,6 +222,7 @@ export class AssessmentItemComponent implements OnInit {
     if (this.assessment.diagramId) {
       let linkedDiagram: Diagram = this.diagramIdbService.findById(this.assessment.diagramId);
       if (linkedDiagram) {
+        this.directoryDbService.setIsMovedExample(linkedDiagram, this.editForm);
         linkedDiagram.directoryId = this.assessment.directoryId;
         await firstValueFrom(this.diagramIdbService.updateWithObservable(linkedDiagram));
       }

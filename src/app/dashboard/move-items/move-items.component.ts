@@ -124,6 +124,7 @@ export class MoveItemsComponent implements OnInit {
         if (selectedAssessment.diagramId) {
           let linkedDiagram: Diagram = this.diagramIdbService.findById(selectedAssessment.diagramId);
           if (linkedDiagram) {
+            this.directoryDbService.setIsMovedExample(linkedDiagram, this.moveForm);
             linkedDiagram.directoryId = selectedAssessment.directoryId;
             await firstValueFrom(this.diagramIdbService.updateWithObservable(linkedDiagram));
           }
@@ -142,6 +143,7 @@ export class MoveItemsComponent implements OnInit {
     let selectedDiagrams: Diagram[] = this.directory.diagrams.filter(diagram => diagram.selected);
     if (selectedDiagrams.length !== 0) {
       for await (let diagram of selectedDiagrams) { 
+        this.directoryDbService.setIsMovedExample(diagram, this.moveForm);
         diagram.directoryId = this.moveForm.controls.directoryId.value;
         await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
         if (diagram.assessmentId) {

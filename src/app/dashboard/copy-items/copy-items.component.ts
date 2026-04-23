@@ -287,6 +287,7 @@ export class CopyItemsComponent implements OnInit {
               diagramCopy.assessmentId = addedAssessment.id;
               diagramCopy.name = sourceDiagram.name + ' (copy)';
               diagramCopy.directoryId = assessmentCopy.directoryId;
+              diagramCopy.isExample = false;
               let addedDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(diagramCopy));
               copiedDiagramIdsBySourceId[sourceDiagram.id] = addedDiagram.id;
 
@@ -339,6 +340,7 @@ export class CopyItemsComponent implements OnInit {
             diagramCopy.directoryId = this.copyForm.controls.destinationDirectoryId.value;
           }
           diagramCopy.name = diagram.name + ' (copy)';
+          diagramCopy.isExample = false;
           let linkedAssessmentId: number = diagram.assessmentId;
           delete diagramCopy.assessmentId;
           let newDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(diagramCopy));
