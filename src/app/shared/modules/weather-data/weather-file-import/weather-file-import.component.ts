@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject } from '@
 import { ActivatedRoute, Router } from '@angular/router';
 import { WeatherApiService, WeatherStation } from '../../../weather-api.service';
 import { WeatherFileParseResult, WeatherFileParserService } from './weather-file-parser.service';
-import { ROUTE_TOKENS } from '../models/routes';
+import { ROUTE_TOKENS } from '../models/route-tokens';
 import { ConvertValue } from '../../../convert-units/ConvertValue';
 
 @Component({

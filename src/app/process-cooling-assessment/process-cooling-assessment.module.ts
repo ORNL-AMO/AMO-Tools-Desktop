@@ -159,12 +159,7 @@ const ROUTES: Route[] = [
               },
               {
                 path: ROUTE_TOKENS.weather,
-                children: [
-                  {
-                    path: '',
-                    loadChildren: () => import('../shared/modules/weather-data/weather-data.module').then(m => m.WeatherDataModule)
-                  }
-                ]
+                loadChildren: () => import('../shared/modules/weather-data/weather-data.module').then(m => m.WeatherDataModule)
               },
               {
                 path: ROUTE_TOKENS.waterPump,
