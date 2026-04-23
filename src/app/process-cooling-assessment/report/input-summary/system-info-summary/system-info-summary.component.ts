@@ -2,7 +2,8 @@ import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, inj
 import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FSAT, FsatOperations } from '../../../../shared/models/fans';
-
+import { InputSummaryService } from '../../../services/input-summary.service';
+import { InputSummaryUI } from '../../../services/input-summary.service';
 
 @Component({
     selector: 'app-system-info-summary',
@@ -12,6 +13,9 @@ import { FSAT, FsatOperations } from '../../../../shared/models/fans';
 })
 export class SystemInfoSummaryComponent implements OnInit {
     private featureFlagService = inject(FeatureFlagService);
+    private inputSummaryService = inject(InputSummaryService);
+
+    inputSummaryUI$ = this.inputSummaryService.inputSummaryUI$;
 
     @Input()
     printView: boolean;
@@ -22,7 +26,7 @@ export class SystemInfoSummaryComponent implements OnInit {
     showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
     @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
     copyTableString: any;
-     
+
     collapse: boolean = true;
 
 
@@ -34,5 +38,9 @@ export class SystemInfoSummaryComponent implements OnInit {
 
     toggleCollapse() {
         this.collapse = !this.collapse;
+    }
+
+    updateCopyTableString() {
+        this.copyTableString = this.copyTable.nativeElement.innerText;
     }
 }

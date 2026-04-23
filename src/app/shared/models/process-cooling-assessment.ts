@@ -99,6 +99,10 @@ export interface ChillerResults {
     // * chiller detail from suite api results
 }
 export interface InputSummaryResults {
+    id: string;
+    name: string;
+    electricityCost: number;
+    fuelCost: number;
     // * summary of inputs from system-information and operating schedule forms
 }
 
