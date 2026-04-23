@@ -3,13 +3,8 @@ import { WeatherStationsComponent } from "../weather-stations/weather-stations.c
 import { AnnualStationDataComponent } from "../annual-station-data/annual-station-data.component";
 import { WeatherFileImportComponent } from "../weather-file-import/weather-file-import.component";
 import { Route } from '@angular/router';
-
-export const ROUTE_TOKENS = {
-    home: 'weather',
-    stations: 'stations',
-    annualStation: 'annual-station',
-    fileImport: 'file-import'
-} as const;
+import { ROUTE_TOKENS } from './route-tokens';
+export { ROUTE_TOKENS } from './route-tokens';
 
 const WEATHER_ROUTES: Route[] = [
   {

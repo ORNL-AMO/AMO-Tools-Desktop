@@ -4,7 +4,7 @@ import { WeatherApiServiceMock } from '../weather-api.service.mock';
 import { GEO_DATA_STATE_LINES } from '../geo-assets/geo-data-state-lines';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
-import { ROUTE_TOKENS } from '../models/routes';
+import { ROUTE_TOKENS } from '../models/route-tokens';
 
 @Component({
   selector: 'app-weather-stations',
