@@ -69,17 +69,16 @@ export class ChillerInventoryService {
     }, { emitEvent: false });
   }
 
-  getChiller(formValue: Partial<ChillerInventoryItem>, currentChiller: ChillerInventoryItem): ChillerInventoryItem {
+  getChillerFields(formValue: Partial<ChillerInventoryItem>): Partial<ChillerInventoryItem> {
     return {
-      ...currentChiller,
-      ...formValue,
+      name: formValue.name,
+      description: formValue.description,
       isFullLoadEfficiencyKnown: formValue.isFullLoadEfficiencyKnown,
       chillerType: formValue.chillerType,
       capacity: formValue.capacity,
       fullLoadEfficiency: formValue.isFullLoadEfficiencyKnown ? formValue.fullLoadEfficiency : null,
       age: formValue.age,
       refrigerantType: formValue.refrigerantType,
-      modifiedDate: new Date()
     };
   }
   

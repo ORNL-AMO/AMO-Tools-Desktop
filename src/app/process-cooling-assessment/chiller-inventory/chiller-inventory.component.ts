@@ -62,8 +62,9 @@ export class ChillerInventoryComponent implements OnInit {
       debounceTime(100),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
-      const updatedChiller: ChillerInventoryItem = this.inventoryService.getChiller(this.form.getRawValue(), this.inventoryService.selectedChillerValue);
-      this.processCoolingAssessmentService.updateAssessmentChiller(updatedChiller);
+      const itemId = this.inventoryService.selectedChillerValue?.itemId;
+      const fields = this.inventoryService.getChillerFields(this.form.getRawValue());
+      this.processCoolingAssessmentService.updateAssessmentChiller(itemId, fields);
     });
   }
 

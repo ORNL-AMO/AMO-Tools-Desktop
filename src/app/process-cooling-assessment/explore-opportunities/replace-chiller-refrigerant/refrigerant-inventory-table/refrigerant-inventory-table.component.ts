@@ -20,8 +20,7 @@ export class RefrigerantInventoryTableComponent extends ChillerInventoryBaseComp
   filterInventoryParams: InputSignal<FilterChillerInventoryParams> = input(null);
 
   setProposedRefrigerant(chiller: ChillerInventoryItem, proposedRefrigerantType: number) {
-    const updatedChiller: ChillerInventoryItem = { ...chiller, proposedRefrigerantType };
-    this.processCoolingService.updateAssessmentChiller(updatedChiller);
+    this.processCoolingService.updateAssessmentChiller(chiller.itemId, { proposedRefrigerantType });
     this.modificationService.updateModificationEEM('replaceChillerRefrigerant', {
       useOpportunity: this.useOpportunity()
     });
