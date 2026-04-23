@@ -36,9 +36,9 @@ export class ChillerLoadScheduleComponent implements OnInit {
     this.form.valueChanges.pipe(
       debounceTime(150),
       takeUntilDestroyed(this.destroyRef)
-    ).subscribe((val)=> {
-      this.chillerLoadScheduleService.setChillerLoadSchedule(this.form.getRawValue(), this.chiller);
-      this.processCoolingAssessmentService.updateAssessmentChiller(this.chiller);
+    ).subscribe(() => {
+      const fields = this.chillerLoadScheduleService.getLoadScheduleFields(this.form.getRawValue());
+      this.processCoolingAssessmentService.updateAssessmentChiller(this.chiller.itemId, fields);
     });
   }
 

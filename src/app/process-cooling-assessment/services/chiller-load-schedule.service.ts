@@ -16,10 +16,12 @@ export class ChillerLoadScheduleService {
     return form;
   }
 
-  setChillerLoadSchedule(formValue: LoadScheduleData, currentChiller: ChillerInventoryItem) {
-    currentChiller.loadScheduleByMonth = formValue.loadScheduleByMonth;
-    currentChiller.loadScheduleAllMonths = formValue.loadScheduleAllMonths;
-    currentChiller.useSameMonthlyLoading = formValue.useSameMonthlyLoading;
+  getLoadScheduleFields(formValue: LoadScheduleData): Partial<ChillerInventoryItem> {
+    return {
+      loadScheduleByMonth: formValue.loadScheduleByMonth,
+      loadScheduleAllMonths: formValue.loadScheduleAllMonths,
+      useSameMonthlyLoading: formValue.useSameMonthlyLoading,
+    };
   }
 
   /**

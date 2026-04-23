@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, DestroyRef, Signal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { debounceTime, Observable } from 'rxjs';
+import { debounceTime, distinct, distinctUntilChanged, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
@@ -46,6 +46,7 @@ export class ChillerInventoryComponent implements OnInit {
 
     this.observeFormChanges();
     this.inventoryService.selectedChiller$.pipe(
+      distinctUntilChanged((prev, curr) => prev?.itemId === curr?.itemId),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((chiller) => {
         if (chiller) {
@@ -62,8 +63,12 @@ export class ChillerInventoryComponent implements OnInit {
       debounceTime(100),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
-      const updatedChiller: ChillerInventoryItem = this.inventoryService.getChiller(this.form.getRawValue(), this.inventoryService.selectedChillerValue);
-      this.processCoolingAssessmentService.updateAssessmentChiller(updatedChiller);
+      const itemId = this.inventoryService.selectedChillerValue?.itemId;
+      if (!itemId) {
+        return;
+      } 
+      const fields = this.inventoryService.getChillerFields(this.form.getRawValue());
+      this.processCoolingAssessmentService.updateAssessmentChiller(itemId, fields);
     });
   }
 
