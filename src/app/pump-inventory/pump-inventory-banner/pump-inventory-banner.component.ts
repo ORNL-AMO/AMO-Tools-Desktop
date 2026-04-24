@@ -80,6 +80,10 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
       this.showConnectedItemBadge = connectedInventoryData.connectedItem !== undefined;
     });
+
+    this.pumpInventoryService.setupTab.next('plant-setup');
+    let nextID: string = this.pumpInventoryData.departments[0].id;
+    this.pumpCatalogService.selectedDepartmentId.next(nextID);  
   }
 
   ngOnDestroy() {

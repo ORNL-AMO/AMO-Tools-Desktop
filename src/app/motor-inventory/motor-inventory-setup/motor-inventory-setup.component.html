@@ -17,9 +17,9 @@
         <div class="assessment-panel-container lookup-form modification scroll-item"
             [ngClass]="{'modal-open': isModalOpen == true, 'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
             <app-plant-setup *ngIf="setupTab == 'plant-setup'"></app-plant-setup>
-            <app-motor-properties *ngIf="showCompressorProperties"></app-motor-properties>
-            <app-motor-catalog *ngIf="setupTab == 'motor-catalog'"></app-motor-catalog>
             <app-department-setup *ngIf="setupTab == 'department-setup'"></app-department-setup>
+            <app-motor-properties *ngIf="setupTab == 'motor-catalog' && showMotorProperties"></app-motor-properties>
+            <app-motor-catalog *ngIf="setupTab == 'motor-catalog' && !showMotorProperties"></app-motor-catalog>
         </div>
         <div class="row no-gutters assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
             <div class="col-12">

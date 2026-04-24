@@ -20,13 +20,18 @@ export class MotorInventorySetupComponent implements OnInit {
   isModalOpen: boolean;
   helpPanelTabSub: Subscription;
   smallScreenTab: string = 'form';
-  showCompressorProperties: boolean = false;
-  showCompressorPropertiesSub: Subscription;
+  showMotorProperties: boolean = false;
+  showMotorPropertiesSub: Subscription;
   
   constructor(private motorInventoryService: MotorInventoryService,
     private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService, private motorCatalogService: MotorCatalogService) { }
 
   ngOnInit(): void {
+    this.showMotorPropertiesSub = this.motorCatalogService.showMotorProperties.subscribe(val => {
+      this.showMotorProperties = val;
+      this.cd.detectChanges();
+    });
+
     this.helpPanelTabSub = this.motorInventoryService.helpPanelTab.subscribe(val => {
       if (val) {
         this.tabSelect = val;
@@ -41,22 +46,13 @@ export class MotorInventorySetupComponent implements OnInit {
       this.isModalOpen = val;
       this.cd.detectChanges();
     });
-
-    if (this.motorCatalogService.showMotorProperties) {
-      this.showCompressorPropertiesSub = this.motorCatalogService.showMotorProperties.subscribe(val => {
-        this.showCompressorProperties = val;
-        this.cd.detectChanges();
-      });
-    }
   }
 
   ngOnDestroy() {
     this.setupTabSubscription.unsubscribe();
     this.modalOpenSub.unsubscribe();
     this.helpPanelTabSub.unsubscribe();
-    if (this.showCompressorPropertiesSub) {
-      this.showCompressorPropertiesSub.unsubscribe();
-    }
+    this.showMotorPropertiesSub.unsubscribe();
   }
 
   setTab(str: string) {

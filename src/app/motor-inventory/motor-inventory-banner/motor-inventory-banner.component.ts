@@ -27,8 +27,7 @@ export class MotorInventoryBannerComponent implements OnInit {
   mainTabSub: Subscription;
   motorInventoryData: MotorInventoryData;
   motorInventoryDataSub: Subscription;
-  selectedDepartmentId: string;
-  selectedTab: string = 'motor-properties';
+  selectedTab: string;
   selectedDepartmentIdSub: Subscription;
   bannerCollapsed: boolean = true;
   isSelected: boolean = false;
@@ -51,9 +50,9 @@ export class MotorInventoryBannerComponent implements OnInit {
     });
 
     this.selectedDepartmentIdSub = this.motorCatalogService.selectedDepartmentId.subscribe(val => {
-      if (val && val !== '') {
+      if (val && val !== 'motor-properties') {
         this.selectedTab = val;
-      } else if (val === '') {
+      } else if (val === 'motor-properties') {
         this.selectedTab = 'motor-properties';
       }
     });
@@ -61,6 +60,10 @@ export class MotorInventoryBannerComponent implements OnInit {
     this.summaryTabSub = this.motorInventoryService.summaryTab.subscribe(val => {
       this.summaryTab = val;
     });
+
+    this.motorInventoryService.setupTab.next('plant-setup');
+    let nextID: string = this.motorInventoryData.departments[0].id;
+    this.motorCatalogService.selectedDepartmentId.next(nextID);  
   }
 
   showSecurityAndPrivacyModal() {
@@ -133,8 +136,6 @@ export class MotorInventoryBannerComponent implements OnInit {
 
   backSetupTabs(){
     if (this.setupTab == 'motor-catalog') {
-      this.motorInventoryService.setupTab.next('motor-properties');
-    } else if (this.setupTab == 'motor-properties') {
       this.motorInventoryService.setupTab.next('department-setup');
     } else if (this.setupTab == 'department-setup') {
       this.motorInventoryService.setupTab.next('plant-setup');
@@ -145,8 +146,6 @@ export class MotorInventoryBannerComponent implements OnInit {
     if (this.setupTab == 'plant-setup') {
       this.motorInventoryService.setupTab.next('department-setup');
     } else if (this.setupTab == 'department-setup') {
-      this.motorInventoryService.setupTab.next('motor-properties');
-    } else if (this.setupTab == 'motor-properties') {
       this.motorInventoryService.setupTab.next('motor-catalog');
     } 
   }
@@ -170,6 +169,22 @@ export class MotorInventoryBannerComponent implements OnInit {
     if (currentIndex != 0) {
       let nextID: string = this.motorInventoryData.departments[currentIndex - 1].id;
       this.motorCatalogService.selectedDepartmentId.next(nextID);      
+    }
+  }
+
+  mobileBackMotorCatalogTabs() {
+    if (this.selectedTab === this.motorInventoryData.departments[0]?.id) {
+      this.selectTab('motor-properties');
+    } else if (this.selectedTab !== 'motor-properties') {
+      this.backMotorCatalogTabs();
+    }
+  }
+
+  mobileContinueMotorCatalogTabs() {
+    if (this.selectedTab === 'motor-properties' && this.motorInventoryData.departments.length > 0) {
+      this.selectTab(this.motorInventoryData.departments[0].id);
+    } else if (this.selectedTab !== 'motor-properties') {
+      this.continueMotorCatalogTabs();
     }
   }
 
