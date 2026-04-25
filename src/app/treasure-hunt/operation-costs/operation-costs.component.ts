@@ -1,38 +1,40 @@
-import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, HostListener, inject, Signal } from '@angular/core';
-import { TreasureHunt, EnergyUsage, TreasureHuntResults } from '../../shared/models/treasure-hunt';
+import { Component, OnInit, Input, ViewChild, ElementRef, HostListener, inject, Signal } from '@angular/core';
+import { TreasureHunt, TreasureHuntResults, EnergyUsage } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
-import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt-report.service';
 import { TreasureHuntService } from '../treasure-hunt.service';
-import { firstValueFrom, Subscription } from 'rxjs';
- 
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { Subscription } from 'rxjs';
+
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Co2SavingsData } from '../../calculator/utilities/co2-savings/co2-savings.service';
 import { OtherFuel, otherFuels } from '../../calculator/utilities/co2-savings/co2-savings-form/co2FuelSavingsFuels';
-import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { FeatureFlagService } from '../../shared/feature-flag.service';
+import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { TreasureHuntReportService } from '../treasure-hunt-report/treasure-hunt-report.service';
 
-                           
+
 @Component({
-    selector: 'app-operation-costs',
-    templateUrl: './operation-costs.component.html',
-    styleUrls: ['./operation-costs.component.css'],
-    standalone: false
+  selector: 'app-operation-costs',
+  templateUrl: './operation-costs.component.html',
+  styleUrls: ['./operation-costs.component.css'],
+  standalone: false
 })
 export class OperationCostsComponent implements OnInit {
   private featureFlagService = inject(FeatureFlagService);
-  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+  private treasureHuntService = inject(TreasureHuntService);
+  private convertUnitsService = inject(ConvertUnitsService);
+  private assessmentCo2SavingsService = inject(AssessmentCo2SavingsService);
+  private treasureHuntReportService = inject(TreasureHuntReportService);
 
   @Input()
   settings: Settings;
-  @Output('updateSettings')
-  updateSettings = new EventEmitter<boolean>();
-
+  @Input()
+  treasureHunt: TreasureHunt;
+  
   @ViewChild('modalBody', { static: false }) public modalBody: ElementRef;
   @ViewChild('zipCodeModal', { static: false }) public zipCodeModal: ModalDirective;
   @ViewChild('mixedCO2EmissionsModal', { static: false }) public mixedCO2EmissionsModal: ModalDirective;
-
+  
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -40,47 +42,45 @@ export class OperationCostsComponent implements OnInit {
   }
   zipCodeModalSub: Subscription;
   mixedCO2EmissionsModalSub: Subscription;
+  showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+  
   mixedCO2Emissions: number;
   usingMixedCO2: boolean;
-
   formWidth: number;
   bodyHeight: number;
   co2SavingsData: Co2SavingsData;
-
-  globalSettings: Settings;
-
-  otherFuels: Array<OtherFuel>;
+  otherFuelEnergySources: Array<OtherFuel> = otherFuels;
   fuelOptions: Array<{
     fuelType: string,
     outputRate: number
   }>;
-
-  treasureHuntSub: Subscription;
-  treasureHunt: TreasureHunt;
-  treasureHuntResults: TreasureHuntResults;
-  saveSettingsOnDestroy: boolean = false;
   electricityModalShown: boolean = false;
   naturalGasEmissionsShown: boolean = false;
+  treasureHuntResults: TreasureHuntResults;
 
-  constructor(private treasureHuntReportService: TreasureHuntReportService, private treasureHuntService: TreasureHuntService,
-       private settingsDbService: SettingsDbService, private convertUnitsService: ConvertUnitsService) { }
+  hasUtilityTypeOpportunity: {
+    electricity: boolean,
+    naturalGas: boolean,
+    otherFuel: boolean,
+    water: boolean,
+    wasteWater: boolean,
+    compressedAir: boolean,
+    steam: boolean
+  } = {
+    electricity: false,
+    naturalGas: false,
+    otherFuel: false,
+    water: false,
+    wasteWater: false,
+    compressedAir: false,
+    steam: false
+  };
 
-    // todo 8299 gut this component and start over - resolving changes outlined in issue
   ngOnInit() {
-    this.globalSettings = this.settingsDbService.globalSettings;
-    this.otherFuels = otherFuels;
-    this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
-      this.treasureHunt = val;
-      this.initData();
-    });
+    this.initForm();
   }
 
-  // todo 8922 pull save functionality from ngOnDestroy
   ngOnDestroy() {
-    if (this.saveSettingsOnDestroy == true) {
-      this.saveSettings();
-    }
-    this.treasureHuntSub.unsubscribe();
     this.zipCodeModalSub.unsubscribe();
     this.mixedCO2EmissionsModalSub.unsubscribe();
   }
@@ -94,205 +94,249 @@ export class OperationCostsComponent implements OnInit {
     });
   }
 
-  getBodyHeight() {
-    if (this.modalBody) {
-      this.bodyHeight = this.modalBody.nativeElement.clientHeight;
-    } else {
-      this.bodyHeight = 0;
-    }
-  }
-
-  focusField(inputName: string) {
-    this.treasureHuntService.currentField.next(inputName);
-  }
-
-  initData() {
-    if (this.treasureHunt.currentEnergyUsage == undefined) {
-      this.initCurrentEnergyUse();
-    }
-    this.setCo2SavingsData(); 
-    this.setOtherFuelCo2SavingsData();   
-    this.setNaturalGasCO2SavingsData(); 
-
-    this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
-    if (this.treasureHuntResults.electricity.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.electricityUsed) {
-      this.treasureHunt.currentEnergyUsage.electricityUsed = true;
-    }
-    if (this.treasureHuntResults.naturalGas.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.naturalGasUsed) {
-      this.treasureHunt.currentEnergyUsage.naturalGasUsed = true;
-    }
-    if (this.treasureHuntResults.otherFuel.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.otherFuelUsed) {
-      this.treasureHunt.currentEnergyUsage.otherFuelUsed = true;
-    }
-    if (this.treasureHuntResults.water.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.waterUsed) {
-      this.treasureHunt.currentEnergyUsage.waterUsed = true;
-    }
-    if (this.treasureHuntResults.wasteWater.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.wasteWaterUsed) {
-      this.treasureHunt.currentEnergyUsage.wasteWaterUsed = true;
-    }
-    if (this.treasureHuntResults.compressedAir.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.compressedAirUsed) {
-      this.treasureHunt.currentEnergyUsage.compressedAirUsed = true;
-    }
-    if (this.treasureHuntResults.steam.energySavings != 0 && !this.treasureHunt.currentEnergyUsage.steamUsed) {
-      this.treasureHunt.currentEnergyUsage.steamUsed = true;
-    }
-  }
-
-  // todo 8922 called on init, but also calls save
-  initCurrentEnergyUse() {
-    let defaultUsage: EnergyUsage = {
-      electricityUsage: 0,
-      electricityCosts: 0,
-      electricityUsed: false,
-      naturalGasUsage: 0,
-      naturalGasCosts: 0,
-      naturalGasUsed: false,
-      otherFuelUsage: 0,
-      otherFuelCosts: 0,
-      otherFuelUsed: false,
-      waterUsage: 0,
-      waterCosts: 0,
-      waterUsed: false,
-      waterCO2OutputRate: 0,
-      wasteWaterUsage: 0,
-      wasteWaterCosts: 0,
-      wasteWaterUsed: false,
-      wasteWaterCO2OutputRate: 0,
-      compressedAirUsage: 0,
-      compressedAirCosts: 0,
-      compressedAirUsed: false,
-      compressedAirCO2OutputRate: 0,
-      steamUsage: 0,
-      steamCosts: 0,
-      steamUsed: false,
-      steamCO2OutputRate: 0,
-    }
-    this.treasureHunt.currentEnergyUsage = defaultUsage;
-    this.setCo2SavingsData(); 
-    this.setOtherFuelCo2SavingsData();   
-    this.setNaturalGasCO2SavingsData();
-    this.save();
-  }
-
-
-  save() {
-    if (this.treasureHuntResults){
-      this.treasureHuntResults.co2EmissionsResults = this.treasureHuntReportService.getCO2EmissionsResults(this.treasureHunt, this.treasureHuntResults, this.settings);
-    }   
+  
+  saveTreasureHunt() {
     this.treasureHuntService.treasureHunt.next(this.treasureHunt);
   }
 
-  toggleElectricityUsed() {
-    if (this.treasureHunt.currentEnergyUsage.electricityUsed != true) {
+  saveSettings() {
+    this.treasureHuntService.setTreasureHuntSettings(this.settings);
+  }
+
+  initForm() {
+    this.setDefaultCo2SavingsData(this.settings);
+
+    this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
+    this.setFuelOptions();
+    this.checkIsUsingMixedFuel();
+    this.setHasUtilityTypeOpportunity();
+    this.setUtilityTypeIsUsed();
+  }
+
+  setDefaultCo2SavingsData(settings: Settings) {
+    if (!this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData) {
+      this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData = this.assessmentCo2SavingsService.getDefaultElectricityCO2Data(settings);
+    }
+    if (!this.treasureHunt.currentEnergyUsage.naturalGasCO2SavingsData) {
+      this.treasureHunt.currentEnergyUsage.naturalGasCO2SavingsData = this.assessmentCo2SavingsService.getDefaultNaturalGasCO2Data();
+    }
+    if (!this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData) {
+      this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData = this.assessmentCo2SavingsService.getDefaultOtherFuelCO2Data();
+    }
+  }
+
+  setUtilityTypeIsUsed() {
+    if (this.hasUtilityTypeOpportunity.electricity && !this.treasureHunt.currentEnergyUsage.electricityUsed) {
       this.treasureHunt.currentEnergyUsage.electricityUsed = true;
-    } else if (this.treasureHuntResults.electricity.energySavings == 0) {
-      this.treasureHunt.currentEnergyUsage.electricityUsed = false;
+    }
+    if (this.hasUtilityTypeOpportunity.naturalGas && !this.treasureHunt.currentEnergyUsage.naturalGasUsed) {
+      this.treasureHunt.currentEnergyUsage.naturalGasUsed = true;
+    }
+    if (this.hasUtilityTypeOpportunity.otherFuel && !this.treasureHunt.currentEnergyUsage.otherFuelUsed) {
+      this.treasureHunt.currentEnergyUsage.otherFuelUsed = true;
+    }
+    if (this.hasUtilityTypeOpportunity.water && !this.treasureHunt.currentEnergyUsage.waterUsed) {
+      this.treasureHunt.currentEnergyUsage.waterUsed = true;
+    }
+    if (this.hasUtilityTypeOpportunity.wasteWater && !this.treasureHunt.currentEnergyUsage.wasteWaterUsed) {
+      this.treasureHunt.currentEnergyUsage.wasteWaterUsed = true;
+    }
+    if (this.hasUtilityTypeOpportunity.compressedAir && !this.treasureHunt.currentEnergyUsage.compressedAirUsed) {
+      this.treasureHunt.currentEnergyUsage.compressedAirUsed = true;
+    }
+    if (this.hasUtilityTypeOpportunity.steam && !this.treasureHunt.currentEnergyUsage.steamUsed) {
+      this.treasureHunt.currentEnergyUsage.steamUsed = true;
+    }
+  }
+
+
+  /**
+   * Check utility types in use. If an opportunity is using an enabled utility type, it must stay enabled. 
+   * Currently, checking the result energy usage is the closest available method to matching opportunities in use to utility types
+   * 
+   */
+  setHasUtilityTypeOpportunity() {
+    // todo below should be replaced with a more effective way to check utility types in use (i.e. looking at opportunity summaries 'type' or opportunity sheets utilitytype)
+
+    this.treasureHuntResults = this.treasureHuntReportService.calculateTreasureHuntResults(this.treasureHunt, this.settings);
+
+    // * treasureHuntResults.electricity.baselineEneryUse can't be used because it's built from treasureHunt.currentEnergyUse and will persist when all opps are deleted
+    if (this.treasureHuntResults?.electricity.energySavings) {
+      this.hasUtilityTypeOpportunity.electricity = true;
+    }
+    if (this.treasureHuntResults?.naturalGas.energySavings) {
+      this.hasUtilityTypeOpportunity.naturalGas = true;
+    }
+    if (this.treasureHuntResults?.otherFuel.energySavings) {
+      this.hasUtilityTypeOpportunity.otherFuel = true;
+    }
+    if (this.treasureHuntResults?.water.energySavings) {
+      this.hasUtilityTypeOpportunity.water = true;
+    }
+    if (this.treasureHuntResults?.wasteWater.energySavings) {
+      this.hasUtilityTypeOpportunity.wasteWater = true;
+    }
+    if (this.treasureHuntResults?.compressedAir.energySavings) {
+      this.hasUtilityTypeOpportunity.compressedAir = true;
+    }
+    if (this.treasureHuntResults?.steam.energySavings) {
+      this.hasUtilityTypeOpportunity.steam = true;
+    }
+
+    // todo this requires 8351
+    // let energyItemTypes: Set<string> = new Set<string>();
+    // Ex
+    // A
+    // Object.values(this.treasureHunt).forEach(treasureHuntProperty => {
+    //   if (!Array.isArray(treasureHuntProperty)) return;
+    //   (treasureHuntProperty as Array<any>).forEach(opportunity => {
+    //     //  When should we take from the baselineEnergyUseItems and when should we take from the opportunitySheet baselineEnergyUseItems?
+    //     const items: Array<EnergyUseItem> = opportunity.baselineEnergyUseItems ?? opportunity.opportunitySheet?.baselineEnergyUseItems;
+    //     if (items) {
+    //       items.forEach(item => energyItemTypes.add(item.type));
+    //     }
+    //   });
+    // });
+
+    // OR B
+    // let opportunitySummaries: Array<OpportunitySummary> = this.opportunitySummaryService.getOpportunitySummaries(this.treasureHunt, this.settings);
+    //   opportunitySummaries.forEach(summary => {
+    //     if (summary.utilityType) {
+    //       energyItemTypes.add(summary.utilityType);
+    //     }
+    //   });
+
+
+    // console.log('Energy Item Types:', energyItemTypes);
+    // this.hasUtilityTypeOpportunity.electricity = energyItemTypes.has('Electricity');
+    // this.hasUtilityTypeOpportunity.naturalGas = energyItemTypes.has('Gas');
+    // this.hasUtilityTypeOpportunity.otherFuel = energyItemTypes.has('Other Fuel');
+    // this.hasUtilityTypeOpportunity.water = energyItemTypes.has('Water');
+    // this.hasUtilityTypeOpportunity.wasteWater = energyItemTypes.has('WWT');
+    // this.hasUtilityTypeOpportunity.compressedAir = energyItemTypes.has('Compressed Air');
+    // this.hasUtilityTypeOpportunity.steam = energyItemTypes.has('Steam');
+    
+  }
+
+  // * toggle handlers preventatively reset usage/cost levels to keep legacy functionality. Unsure if this could cause issues where an opportunity has a side-effect utility type, 
+  // * i.e. the opportunity visilibity is enabled by 'Water' but also has 'Electricity' energy use items 
+  toggleElectricityUsed() {
+    if (this.hasUtilityTypeOpportunity.electricity) {
+      return;
+    }
+    this.treasureHunt.currentEnergyUsage.electricityUsed = !this.treasureHunt.currentEnergyUsage.electricityUsed;
+    if (!this.treasureHunt.currentEnergyUsage.electricityUsed) {
       this.treasureHunt.currentEnergyUsage.electricityUsage = 0;
       this.treasureHunt.currentEnergyUsage.electricityCosts = 0;
     }
-    this.save();
+    this.saveTreasureHunt();
   }
-
   toggleNaturalGasUsed() {
-    if (this.treasureHunt.currentEnergyUsage.naturalGasUsed != true) {
-      this.treasureHunt.currentEnergyUsage.naturalGasUsed = true;
-    } else if (this.treasureHuntResults.naturalGas.energySavings == 0) {
-      this.treasureHunt.currentEnergyUsage.naturalGasUsed = false;
+    if (this.hasUtilityTypeOpportunity.naturalGas) {
+      return;
+    }
+    this.treasureHunt.currentEnergyUsage.naturalGasUsed = !this.treasureHunt.currentEnergyUsage.naturalGasUsed;
+    if (!this.treasureHunt.currentEnergyUsage.naturalGasUsed) {
       this.treasureHunt.currentEnergyUsage.naturalGasUsage = 0;
       this.treasureHunt.currentEnergyUsage.naturalGasCosts = 0;
     }
-    this.save();
+    this.saveTreasureHunt();
   }
-
   toggleOtherFuelUsed() {
-    if (this.treasureHunt.currentEnergyUsage.otherFuelUsed != true) {
-      this.treasureHunt.currentEnergyUsage.otherFuelUsed = true;
-    } else if (this.treasureHuntResults.otherFuel.energySavings == 0) {
-      this.treasureHunt.currentEnergyUsage.otherFuelUsed = false;
+    if (this.hasUtilityTypeOpportunity.otherFuel) {
+      return;
+    }
+    this.treasureHunt.currentEnergyUsage.otherFuelUsed = !this.treasureHunt.currentEnergyUsage.otherFuelUsed;
+    if (!this.treasureHunt.currentEnergyUsage.otherFuelUsed) {
       this.treasureHunt.currentEnergyUsage.otherFuelUsage = 0;
       this.treasureHunt.currentEnergyUsage.otherFuelCosts = 0;
     }
-    this.save();
+    this.saveTreasureHunt();
   }
-
   toggleWaterUsed() {
-    if (this.treasureHunt.currentEnergyUsage.waterUsed != true) {
-      this.treasureHunt.currentEnergyUsage.waterUsed = true;
-    } else if (this.treasureHuntResults.water.energySavings == 0) {
-      this.treasureHunt.currentEnergyUsage.waterUsed = false;
+    if (this.hasUtilityTypeOpportunity.water) {
+      return;
+    }
+    this.treasureHunt.currentEnergyUsage.waterUsed = !this.treasureHunt.currentEnergyUsage.waterUsed;
+    if (!this.treasureHunt.currentEnergyUsage.waterUsed) {
       this.treasureHunt.currentEnergyUsage.waterUsage = 0;
       this.treasureHunt.currentEnergyUsage.waterCosts = 0;
-      this.treasureHunt.currentEnergyUsage.waterCO2OutputRate = 0;
     }
-    this.save();
+    this.saveTreasureHunt();
   }
-
   toggleWasteWaterUsed() {
-    if (this.treasureHunt.currentEnergyUsage.wasteWaterUsed != true) {
-      this.treasureHunt.currentEnergyUsage.wasteWaterUsed = true;
-    } else if (this.treasureHuntResults.wasteWater.energySavings == 0) {
-      this.treasureHunt.currentEnergyUsage.wasteWaterUsed = false;
+    if (this.hasUtilityTypeOpportunity.wasteWater) {
+      return;
+    }
+    this.treasureHunt.currentEnergyUsage.wasteWaterUsed = !this.treasureHunt.currentEnergyUsage.wasteWaterUsed;
+    if (!this.treasureHunt.currentEnergyUsage.wasteWaterUsed) {
       this.treasureHunt.currentEnergyUsage.wasteWaterUsage = 0;
       this.treasureHunt.currentEnergyUsage.wasteWaterCosts = 0;
-      this.treasureHunt.currentEnergyUsage.wasteWaterCO2OutputRate = 0;
     }
-    this.save();
+    this.saveTreasureHunt();
   }
-
   toggleCompressedAirUsed() {
-    if (this.treasureHunt.currentEnergyUsage.compressedAirUsed != true) {
-      this.treasureHunt.currentEnergyUsage.compressedAirUsed = true;
-    } else if (this.treasureHuntResults.compressedAir.energySavings == 0) {
-      this.treasureHunt.currentEnergyUsage.compressedAirUsed = false;
+    if (this.hasUtilityTypeOpportunity.compressedAir) {
+      return;
+    }
+    this.treasureHunt.currentEnergyUsage.compressedAirUsed = !this.treasureHunt.currentEnergyUsage.compressedAirUsed;
+    if (!this.treasureHunt.currentEnergyUsage.compressedAirUsed) {
       this.treasureHunt.currentEnergyUsage.compressedAirUsage = 0;
       this.treasureHunt.currentEnergyUsage.compressedAirCosts = 0;
-      this.treasureHunt.currentEnergyUsage.compressedAirCO2OutputRate = 0;
     }
-    this.save();
+    this.saveTreasureHunt();
   }
 
   toggleSteamUsed() {
-    if (this.treasureHunt.currentEnergyUsage.steamUsed != true) {
-      this.treasureHunt.currentEnergyUsage.steamUsed = true;
-    } else if (this.treasureHuntResults.steam.energySavings == 0) {
-      this.treasureHunt.currentEnergyUsage.steamUsed = false;
+    if (this.hasUtilityTypeOpportunity.steam) {
+      return;
+    }
+    this.treasureHunt.currentEnergyUsage.steamUsed = !this.treasureHunt.currentEnergyUsage.steamUsed;
+    if (!this.treasureHunt.currentEnergyUsage.steamUsed) {
       this.treasureHunt.currentEnergyUsage.steamUsage = 0;
       this.treasureHunt.currentEnergyUsage.steamCosts = 0;
-      this.treasureHunt.currentEnergyUsage.steamCO2OutputRate = 0;
     }
-    this.save();
+    this.saveTreasureHunt();
   }
 
-  setSaveSettings() {
-    this.saveSettingsOnDestroy = true;
-  }
-
-  async saveSettings() {
-    await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(updatedSettings);
-    this.updateSettings.emit(true);
-  }
-
-  setNaturalGasCO2SavingsData(){
-    if(!this.treasureHunt.currentEnergyUsage.naturalGasCO2SavingsData){
-      let co2SavingsData: Co2SavingsData = {
-        energyType: 'fuel',
-        energySource: 'Natural Gas',
-        fuelType: 'Natural Gas',
-        totalEmissionOutputRate: 53.06,
-        electricityUse: 0,
-        eGridRegion: '',
-        eGridSubregion: '',
-        totalEmissionOutput: 0,
-        userEnteredBaselineEmissions: false,
-        userEnteredModificationEmissions: false,
-        zipcode: ''
-      }
-      this.treasureHunt.currentEnergyUsage.naturalGasCO2SavingsData = co2SavingsData;
+  checkIsUsingMixedFuel() {
+    if (this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource == 'Mixed Fuels') {
+      this.usingMixedCO2 = true;
+    } else {
+      this.usingMixedCO2 = false;
     }
-
   }
+
+  setFuelOptions() {
+    let tmpOtherFuel: OtherFuel = this.otherFuelEnergySources.find(val => val.energySource === this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource);
+    this.fuelOptions = tmpOtherFuel.fuelTypes;
+  }
+
+  setEnergySource() {
+    this.setFuelOptions();
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = this.fuelOptions[0].fuelType;
+    let outputRate: number = this.fuelOptions[0].outputRate;
+    if (this.settings.unitsOfMeasure !== 'Imperial') {
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+      outputRate = Number(outputRate.toFixed(2));
+    }
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = outputRate;
+    this.checkIsUsingMixedFuel();
+    this.saveTreasureHunt();
+  }
+
+  setFuel() {
+    let tmpFuel: { fuelType: string, outputRate: number } = this.fuelOptions.find(val => val.fuelType === this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType);
+    let outputRate: number = tmpFuel.outputRate;
+    if (this.settings.unitsOfMeasure !== 'Imperial') {
+      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
+      outputRate = Number(outputRate.toFixed(2));
+    }
+    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = outputRate;
+    this.saveTreasureHunt();
+  }
+
+
   showZipCodeModal() {
     this.electricityModalShown = true;
     this.treasureHuntService.modalOpen.next(true);
@@ -307,7 +351,7 @@ export class OperationCostsComponent implements OnInit {
 
   applyModalData() {
     this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData = this.co2SavingsData;
-    this.save();
+    this.saveTreasureHunt();
     this.treasureHuntService.modalOpen.next(false);
     this.zipCodeModal.hide();
   }
@@ -316,98 +360,6 @@ export class OperationCostsComponent implements OnInit {
     this.co2SavingsData = co2SavingsData;
   }
 
-  setCo2SavingsData() {
-    if (!this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData) {
-      let convertOutputRate: number = this.globalSettings.totalEmissionOutputRate/1000;
-      let co2SavingsData: Co2SavingsData = {
-        energyType: 'electricity',
-        energySource: '',
-        fuelType: '',
-        totalEmissionOutputRate: convertOutputRate,
-        electricityUse: 0,
-        eGridRegion: '',
-        eGridSubregion: this.globalSettings.eGridSubregion,
-        totalEmissionOutput: 0,
-        userEnteredBaselineEmissions: false,
-        userEnteredModificationEmissions: false,
-        zipcode: this.globalSettings.zipcode
-      }
-      this.treasureHunt.currentEnergyUsage.waterCO2OutputRate = co2SavingsData.totalEmissionOutputRate; 
-      this.treasureHunt.currentEnergyUsage.wasteWaterCO2OutputRate = co2SavingsData.totalEmissionOutputRate; 
-      this.treasureHunt.currentEnergyUsage.compressedAirCO2OutputRate = co2SavingsData.totalEmissionOutputRate; 
-      this.treasureHunt.currentEnergyUsage.steamCO2OutputRate = co2SavingsData.totalEmissionOutputRate; 
-      this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData = co2SavingsData;
-    }
-    this.co2SavingsData = this.treasureHunt.currentEnergyUsage.electricityCO2SavingsData;
-  }
-
-  setOtherFuelCo2SavingsData() {
-    if (!this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData) {
-      let co2SavingsData: Co2SavingsData = {
-        energyType: 'fuel',
-        energySource: 'Petroleum-based fuels',
-        fuelType: 'Motor Gasoline',
-        totalEmissionOutputRate: 70.22,
-        electricityUse: 0,
-        eGridRegion: '',
-        eGridSubregion: '',
-        totalEmissionOutput: 0,
-        userEnteredBaselineEmissions: false,
-        userEnteredModificationEmissions: false,
-        zipcode: ''
-      }
-      this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData = co2SavingsData; 
-      if (!this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData) {
-        this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = new Array<Co2SavingsData>();
-      }
-  
-      
-    }
-    
-    this.checkIsUsingMixedFuel();
-
-    this.setFuelOptions();
-  }
-
-  checkIsUsingMixedFuel(){
-    if(this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource == 'Mixed Fuels'){
-      this.usingMixedCO2 = true;
-    } else{
-      this.usingMixedCO2 = false;
-    }
-  }
-
-  setFuelOptions(){    
-    let tmpOtherFuel: OtherFuel = _.find(this.otherFuels, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.energySource === val.energySource; });
-    this.fuelOptions = tmpOtherFuel.fuelTypes;
-    
-  }
-
-  setEnergySource() {
-    this.setFuelOptions();
-    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = this.fuelOptions[0].fuelType;
-    let outputRate: number = this.fuelOptions[0].outputRate;
-    if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
-      outputRate = Number(outputRate.toFixed(2));
-    }
-    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = outputRate;
-    this.checkIsUsingMixedFuel();
-    this.save();
-  }
-
-  setFuel() {
-    let tmpFuel: { fuelType: string, outputRate: number } = _.find(this.fuelOptions, (val) => { return this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType === val.fuelType; });
-    let outputRate: number = tmpFuel.outputRate;
-    if(this.settings.unitsOfMeasure !== 'Imperial'){
-      outputRate = this.convertUnitsService.convertInvertedEnergy(outputRate, 'MMBtu', 'GJ');
-      outputRate = Number(outputRate.toFixed(2));
-    }
-    this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = outputRate;
-    this.save();
-  }
-
-  
   showMixedCO2EmissionsModal() {
     this.naturalGasEmissionsShown = true;
     this.treasureHuntService.modalOpen.next(true);
@@ -429,184 +381,150 @@ export class OperationCostsComponent implements OnInit {
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.fuelType = undefined;
     this.treasureHunt.currentEnergyUsage.otherFuelCO2SavingsData.totalEmissionOutputRate = this.mixedCO2Emissions;
     this.usingMixedCO2 = true;
-    this.save();
+    this.saveTreasureHunt();
     this.treasureHuntService.modalOpen.next(false);
     this.mixedCO2EmissionsModal.hide();
   }
-  
+
   saveOtherFuelsMixedList(mixedFuelsList: Array<Co2SavingsData>) {
     this.treasureHunt.currentEnergyUsage.otherFuelMixedCO2SavingsData = mixedFuelsList;
-    this.save();
+    this.saveTreasureHunt();
   }
 
-  calculateElectricityUnitCosts(){
-    this.settings.electricityCost = this.treasureHunt.currentEnergyUsage.electricityCosts / this.treasureHunt.currentEnergyUsage.electricityUsage;
-    this.save();
-    this.saveSettings();
+  calculateElectricityUnitCosts() {
+    this.calcUnitCost('electricityCost', this.treasureHunt.currentEnergyUsage.electricityCosts, this.treasureHunt.currentEnergyUsage.electricityUsage);
   }
-  calculateElectricityAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.electricityUsage = this.treasureHunt.currentEnergyUsage.electricityCosts / this.settings.electricityCost;
-    this.save();
-    this.saveSettings();
+  calculateElectricityAnnualConsumption() {
+    this.calcAnnualConsumption('electricityUsage', this.treasureHunt.currentEnergyUsage.electricityCosts, this.settings.electricityCost);
   }
-  calculateElectricityAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.electricityCosts = this.settings.electricityCost * this.treasureHunt.currentEnergyUsage.electricityUsage;
-    this.save();
-    this.saveSettings();
+  calculateElectricityAnnualCosts() {
+    this.calcAnnualCosts('electricityCosts', this.treasureHunt.currentEnergyUsage.electricityUsage, this.settings.electricityCost);
   }
 
-  calculateNaturalGasUnitCosts(){
-    this.settings.fuelCost = this.treasureHunt.currentEnergyUsage.naturalGasCosts / this.treasureHunt.currentEnergyUsage.naturalGasUsage;
-    this.save();
-    this.saveSettings();
+  calculateNaturalGasUnitCosts() {
+    this.calcUnitCost('fuelCost', this.treasureHunt.currentEnergyUsage.naturalGasCosts, this.treasureHunt.currentEnergyUsage.naturalGasUsage);
+  }
+  calculateNaturalGasAnnualConsumption() {
+    this.calcAnnualConsumption('naturalGasUsage', this.treasureHunt.currentEnergyUsage.naturalGasCosts, this.settings.fuelCost);
+  }
+  calculateNaturalGasAnnualCosts() {
+    this.calcAnnualCosts('naturalGasCosts', this.treasureHunt.currentEnergyUsage.naturalGasUsage, this.settings.fuelCost);
   }
 
-  calculateNaturalGasAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.naturalGasUsage = this.treasureHunt.currentEnergyUsage.naturalGasCosts / this.settings.fuelCost;
-    this.save();
-    this.saveSettings();
+  calculateOtherFuelUnitCosts() {
+    this.calcUnitCost('otherFuelCost', this.treasureHunt.currentEnergyUsage.otherFuelCosts, this.treasureHunt.currentEnergyUsage.otherFuelUsage);
+  }
+  calculateOtherFuelAnnualConsumption() {
+    this.calcAnnualConsumption('otherFuelUsage', this.treasureHunt.currentEnergyUsage.otherFuelCosts, this.settings.otherFuelCost);
+  }
+  calculateOtherFuelAnnualCosts() {
+    this.calcAnnualCosts('otherFuelCosts', this.treasureHunt.currentEnergyUsage.otherFuelUsage, this.settings.otherFuelCost);
   }
 
-  calculateNaturalGasAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.naturalGasCosts = this.treasureHunt.currentEnergyUsage.naturalGasUsage * this.settings.fuelCost;
-    this.save();
-    this.saveSettings();
+  calculateWaterUnitCosts() {
+    this.calcUnitCost('waterCost', this.treasureHunt.currentEnergyUsage.waterCosts, this.treasureHunt.currentEnergyUsage.waterUsage, 'kgal', 'gal');
+  }
+  calculateWaterAnnualConsumption() {
+    this.calcAnnualConsumption('waterUsage', this.treasureHunt.currentEnergyUsage.waterCosts, this.settings.waterCost, 'gal', 'kgal');
+  }
+  calculateWaterAnnualCosts() {
+    this.calcAnnualCosts('waterCosts', this.treasureHunt.currentEnergyUsage.waterUsage, this.settings.waterCost, 'kgal', 'gal');
   }
 
-  calculateOtherFuelUnitCosts(){
-    this.settings.otherFuelCost = this.treasureHunt.currentEnergyUsage.otherFuelCosts/this.treasureHunt.currentEnergyUsage.otherFuelUsage;
-    this.save();
-    this.saveSettings();
+  calculateWastewaterUnitCosts() {
+    this.calcUnitCost('waterWasteCost', this.treasureHunt.currentEnergyUsage.wasteWaterCosts, this.treasureHunt.currentEnergyUsage.wasteWaterUsage, 'kgal', 'gal');
+  }
+  calculateWastewaterAnnualConsumption() {
+    this.calcAnnualConsumption('wasteWaterUsage', this.treasureHunt.currentEnergyUsage.wasteWaterCosts, this.settings.waterWasteCost, 'gal', 'kgal');
+  }
+  calculateWastewaterAnnualCosts() {
+    this.calcAnnualCosts('wasteWaterCosts', this.treasureHunt.currentEnergyUsage.wasteWaterUsage, this.settings.waterWasteCost, 'kgal', 'gal');
   }
 
-  calculateOtherFuelAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.otherFuelUsage = this.treasureHunt.currentEnergyUsage.otherFuelCosts/this.settings.otherFuelCost;
-    this.save();
-    this.saveSettings();
+  calculateCompressedAirUnitCosts() {
+    this.calcUnitCost('compressedAirCost', this.treasureHunt.currentEnergyUsage.compressedAirCosts, this.treasureHunt.currentEnergyUsage.compressedAirUsage, 'kscf', 'ft3');
+  }
+  calculateCompressedAirAnnualConsumption() {
+    this.calcAnnualConsumption('compressedAirUsage', this.treasureHunt.currentEnergyUsage.compressedAirCosts, this.settings.compressedAirCost, 'ft3', 'kscf');
+  }
+  calculateCompressedAirAnnualCosts() {
+    this.calcAnnualCosts('compressedAirCosts', this.treasureHunt.currentEnergyUsage.compressedAirUsage, this.settings.compressedAirCost, 'kscf', 'ft3');
   }
 
-  calculateOtherFuelAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.otherFuelCosts = this.treasureHunt.currentEnergyUsage.otherFuelUsage*this.settings.otherFuelCost;
-    this.save();
-    this.saveSettings();
+  calculateSteamUnitCosts() {
+    this.calcUnitCost('steamCost', this.treasureHunt.currentEnergyUsage.steamCosts, this.treasureHunt.currentEnergyUsage.steamUsage);
   }
-  
-  calculateWaterUnitCosts(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      let waterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.waterUsage).from('kgal').to('gal');
-      this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / waterUsageInGal;
-    } else {
-      this.settings.waterCost = this.treasureHunt.currentEnergyUsage.waterCosts / this.treasureHunt.currentEnergyUsage.waterUsage;
+  calculateSteamAnnualConsumption() {
+    this.calcAnnualConsumption('steamUsage', this.treasureHunt.currentEnergyUsage.steamCosts, this.settings.steamCost);
+  }
+  calculateSteamAnnualCosts() {
+    this.calcAnnualCosts('steamCosts', this.treasureHunt.currentEnergyUsage.steamUsage, this.settings.steamCost);
+  }
+
+  // * re: conversions for below calculations - usage/cost units only differ for imperial units
+  private calcUnitCost(
+    settingsCostKey: keyof Settings,
+    costs: number, 
+    usage: number,
+    imperialUsageUnit?: string, 
+    imperialCostUnit?: string
+  ) {
+    let utilityTypeUsage = usage;
+    if (imperialUsageUnit && imperialCostUnit && this.settings.unitsOfMeasure === 'Imperial') {
+      utilityTypeUsage = this.convertUnitsService.value(usage).from(imperialUsageUnit).to(imperialCostUnit);
     }
-    this.save();
+
+    // * as any because Settings has mixed property types
+    (this.settings as any)[settingsCostKey] = costs / utilityTypeUsage;
+    this.saveTreasureHunt();
     this.saveSettings();
   }
 
-  calculateWaterAnnualConsumption(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      let waterUsageInGal: number = this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost;
-      this.treasureHunt.currentEnergyUsage.waterUsage = this.convertUnitsService.value(waterUsageInGal).from('gal').to('kgal');
-    } else {
-      this.treasureHunt.currentEnergyUsage.waterUsage = this.treasureHunt.currentEnergyUsage.waterCosts / this.settings.waterCost;
-    }
-    this.save();
-    this.saveSettings();
-  }
-
-  calculateWaterAnnualCosts(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      let waterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.waterUsage).from('kgal').to('gal');
-      this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * waterUsageInGal;
-    } else {
-      this.treasureHunt.currentEnergyUsage.waterCosts = this.settings.waterCost * this.treasureHunt.currentEnergyUsage.waterUsage;
+  private calcAnnualConsumption(
+    usageKey: keyof EnergyUsage,
+    costs: number, 
+    unitCost: number,
+    imperialCostUnit?: string, 
+    imperialUsageUnit?: string
+  ) {
+    let usage = costs / unitCost;
+    if (imperialCostUnit && imperialUsageUnit && this.settings.unitsOfMeasure === 'Imperial') {
+      usage = this.convertUnitsService.value(usage).from(imperialCostUnit).to(imperialUsageUnit);
     }
 
-    this.save();
-    this.saveSettings();
+    // * as any because EnergyUsage has mixed property types
+    (this.treasureHunt.currentEnergyUsage as any)[usageKey] = usage;
+    this.saveTreasureHunt();
   }
 
-  calculateWastewaterUnitCosts(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      let wasteWaterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.wasteWaterUsage).from('kgal').to('gal');
-      this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / wasteWaterUsageInGal;
-    } else {
-      this.settings.waterWasteCost = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.treasureHunt.currentEnergyUsage.wasteWaterUsage;
+  private calcAnnualCosts(
+    costsKey: keyof EnergyUsage,
+    usage: number, 
+    unitCost: number,
+    imperialUsageUnit?: string, 
+    imperialCostUnit?: string
+  ) {
+    let utilityTypeUsage = usage;
+    if (imperialUsageUnit && imperialCostUnit && this.settings.unitsOfMeasure === 'Imperial') {
+      utilityTypeUsage = this.convertUnitsService.value(usage).from(imperialUsageUnit).to(imperialCostUnit);
     }
-    this.save();
-    this.saveSettings();
+
+    // * as any because EnergyUsage has mixed property types
+    (this.treasureHunt.currentEnergyUsage as any)[costsKey] = utilityTypeUsage * unitCost;
+    this.saveTreasureHunt();
   }
 
-  calculateWastewaterAnnualConsumption(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {      
-      let wasteWaterUsageInGal: number = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
-      this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.convertUnitsService.value(wasteWaterUsageInGal).from('gal').to('kgal');
+  getBodyHeight() {
+    if (this.modalBody) {
+      this.bodyHeight = this.modalBody.nativeElement.clientHeight;
     } else {
-      this.treasureHunt.currentEnergyUsage.wasteWaterUsage = this.treasureHunt.currentEnergyUsage.wasteWaterCosts / this.settings.waterWasteCost;
+      this.bodyHeight = 0;
     }
-    this.save();
-    this.saveSettings();
   }
 
-  calculateWastewaterAnnualCosts(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      let wasteWaterUsageInGal: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.wasteWaterUsage).from('kgal').to('gal');
-      this.treasureHunt.currentEnergyUsage.wasteWaterCosts = wasteWaterUsageInGal * this.settings.waterWasteCost;
-    } else {
-      this.treasureHunt.currentEnergyUsage.wasteWaterCosts = this.treasureHunt.currentEnergyUsage.wasteWaterUsage * this.settings.waterWasteCost;
-    }
-    this.save();
-    this.saveSettings();
+  focusField(inputName: string) {
+    this.treasureHuntService.currentField.next(inputName);
   }
 
-  calculateCompressedAirUnitCosts(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {
-      let compressedAirUsageInSCF: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.compressedAirUsage).from('kscf').to('ft3');
-      this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / compressedAirUsageInSCF;
-    } else {
-      this.settings.compressedAirCost = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.treasureHunt.currentEnergyUsage.compressedAirUsage;
-    }
-    this.save();
-    this.saveSettings();
-  }
-
-  calculateCompressedAirAnnualConsumption(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {   
-      let compressedAirUsageInSCF: number = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
-      this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.convertUnitsService.value(compressedAirUsageInSCF).from('ft3').to('kscf');
-    } else {
-      this.treasureHunt.currentEnergyUsage.compressedAirUsage = this.treasureHunt.currentEnergyUsage.compressedAirCosts / this.settings.compressedAirCost;
-    }
-    this.save();
-    this.saveSettings();
-  }
-
-  calculateCompressedAirAnnualCosts(){
-    if (this.settings.unitsOfMeasure == 'Imperial') {      
-      let compressedAirUsageInSCF: number = this.convertUnitsService.value(this.treasureHunt.currentEnergyUsage.compressedAirUsage).from('kscf').to('ft3');
-      this.treasureHunt.currentEnergyUsage.compressedAirCosts = compressedAirUsageInSCF * this.settings.compressedAirCost;
-    } else {
-      this.treasureHunt.currentEnergyUsage.compressedAirCosts = this.treasureHunt.currentEnergyUsage.compressedAirUsage * this.settings.compressedAirCost;
-    }
-    this.save();
-    this.saveSettings();
-  }
-
-  calculateSteamUnitCosts(){
-    this.settings.steamCost = this.treasureHunt.currentEnergyUsage.steamCosts / this.treasureHunt.currentEnergyUsage.steamUsage;
-    this.save();
-    this.saveSettings();
-  }
-
-  calculateSteamAnnualConsumption(){
-    this.treasureHunt.currentEnergyUsage.steamUsage = this.treasureHunt.currentEnergyUsage.steamCosts / this.settings.steamCost;
-    this.save();
-    this.saveSettings();
-  }
-
-  calculateSteamAnnualCosts(){
-    this.treasureHunt.currentEnergyUsage.steamCosts = this.settings.steamCost * this.treasureHunt.currentEnergyUsage.steamUsage;
-    this.save();
-    this.saveSettings();
-  }
 
 }

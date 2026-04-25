@@ -138,7 +138,7 @@ export class CompressedAirEnergySavingsGraphComponent {
         responsive: true,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config));
+      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config, traceData));
     }
   }
 
@@ -236,7 +236,7 @@ export class CompressedAirEnergySavingsGraphComponent {
         responsive: true,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config));
+      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config, traceData));
     }
   }
 

@@ -19,8 +19,6 @@ const CustomNodeToolbar = ({ onEdit, nodeData, selected }: NodeToolbarProps) => 
     }
 
     const backgroundColor = theme.palette.background.paper;
-// TODO: Investigate selector call, as using memoized version: useAppSelector(state => selectTotalSourceFlow) 
-// errors - Uncaught TypeError: Cannot read properties of undefined (reading 'data') at getNodeTotalFlow (FlowUtils.ts:248:21) at store.ts:144:41
     const totalSourceFlow = useAppSelector(state => selectTotalSourceFlow(state, nodeData.diagramNodeId));
     const nodeError = useAppSelector(state => selectNodeErrors(state)[nodeData.diagramNodeId]);
     const totalDischargeFlow = useAppSelector(state => selectTotalDischargeFlow(state, nodeData.diagramNodeId));

@@ -5,7 +5,7 @@ import { Settings } from '../../../../shared/models/settings';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-pre-assessment-graph',
     templateUrl: './pre-assessment-graph.component.html',
@@ -118,7 +118,7 @@ export class PreAssessmentGraphComponent implements OnInit, OnChanges {
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.preAssessmentPieChart.nativeElement, data, layout, modebarBtns);
+      this.plotlyService.newPlot(this.preAssessmentPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
     }
   }
 

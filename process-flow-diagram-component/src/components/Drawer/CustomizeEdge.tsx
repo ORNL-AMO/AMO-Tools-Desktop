@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import { Edge } from '@xyflow/react';
 import { useEffect, useState } from 'react';
@@ -7,7 +7,6 @@ import ColorPicker from './ColorPicker';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { customEdgeTypeChange, setEdgeStrokeColor } from '../Diagram/diagramReducer';
 import { CustomEdgeData } from 'process-flow-lib';
-
 export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
   const dispatch = useAppDispatch();
   const recentEdgeColors = useAppSelector((state) => state.diagram.recentEdgeColors);
@@ -39,16 +38,35 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
   return (
     <Box sx={{ marginTop: 1 }}>
           <Box display={'flex'} sx={{fontSize: '.75rem', marginTop: 2}} justifyContent={'space-between'} width={'100%'}>
-            <label htmlFor={selectId} className="diagram-label" style={{fontSize: '.75rem'}}>Line Type</label>
-            <select className="form-control diagram-select" id={selectId} name="edgeType" style={{ marginLeft: '16px' }}
-              value={getCurrentEdgeType()}
-              onChange={(e) => handleEdgeTypeChange(e.target.value)}>
-              {edgeTypeOptions.map((option: SelectListOption) => {
-                return (
-                  <option key={option.value} value={option.value}>{option.display}</option>
-                )
-              })}
-            </select>
+            <FormControl fullWidth size="small" variant="outlined" sx={{ marginBottom: '1rem', marginLeft: '16px', minWidth: 120 }}>
+              <InputLabel id={`${selectId}-label`}>Line Type</InputLabel>
+              <Select
+                labelId={`${selectId}-label`}
+                label={'Line Type'}
+                id={selectId}
+                name="edgeType"
+                size="small"
+                value={getCurrentEdgeType()}
+                onChange={(e) => handleEdgeTypeChange(e.target.value)}
+                MenuProps={{
+                  disablePortal: true,
+                  anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  },
+                  transformOrigin: {
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }
+                }}
+              >
+                {edgeTypeOptions.map((option: SelectListOption) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.display}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
 
           <Box sx={{fontSize: '.75rem'}}>

@@ -113,6 +113,6 @@ export class MonthlyFlowChartComponent {
       displaylogo: false
     }
 
-    this.plotlyService.newPlot(this.monthlyFlowChart.nativeElement, this.plantMonthlyFlowTraces, layout, defaultPlotlyConfig(config))
+    this.plotlyService.newPlot(this.monthlyFlowChart.nativeElement, this.plantMonthlyFlowTraces, layout, defaultPlotlyConfig(config, this.plantMonthlyFlowTraces));
   }
 }

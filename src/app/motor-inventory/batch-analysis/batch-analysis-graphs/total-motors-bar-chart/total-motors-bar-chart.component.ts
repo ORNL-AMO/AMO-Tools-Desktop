@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
 import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
+import { TraceData } from '../../../../shared/models/plotting';
 @Component({
     selector: 'app-total-motors-bar-chart',
     templateUrl: './total-motors-bar-chart.component.html',
@@ -52,7 +53,7 @@ export class TotalMotorsBarChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.barChart.nativeElement, [data], layout, defaultPlotlyConfig(configOptions));
+      this.plotlyService.newPlot(this.barChart.nativeElement, [data], layout, defaultPlotlyConfig(configOptions, [data]));
     });
   }
 
@@ -61,7 +62,7 @@ export class TotalMotorsBarChartComponent implements OnInit {
     this.batchAnalysisDataItemsSub.unsubscribe();
   }
 
-  getTraceData(batchAnalysisDataItems: Array<BatchAnalysisResults>): { x: Array<any>, y: Array<any>, type: string, marker: { color: Array<string> }, text: Array<string>, textposition: string, hoverinfo: string } {
+  getTraceData(batchAnalysisDataItems: Array<BatchAnalysisResults>): TraceData {
     let batchAnalysisSettings: BatchAnalysisSettings = this.batchAnalysisService.batchAnalysisSettings.getValue();
     let counts = _.countBy(batchAnalysisDataItems, 'replaceMotor');
     let xVals = new Array();

@@ -118,7 +118,7 @@ export class SystemTrueCostBarComponent {
         displayModeBar: true,
         responsive: this.printView? false : true
       };
-      this.plotlyService.newPlot(this.systemTrueCostBarChart.nativeElement, chartData, layout, defaultPlotlyConfig(configOptions));  
+      this.plotlyService.newPlot(this.systemTrueCostBarChart.nativeElement, chartData, layout, defaultPlotlyConfig(configOptions, chartData));  
   }
 
 

@@ -342,7 +342,7 @@ export class TreasureHuntReportService {
       } else if (item.type === 'Water') {
         treasureHuntEmissions.waterEmissions += integratedEmissions;
 
-      } else if (item.type === 'Waste Water') {
+      } else if (item.type === 'WWT') {
         treasureHuntEmissions.wasteWaterEmissions += integratedEmissions;
       }
     });

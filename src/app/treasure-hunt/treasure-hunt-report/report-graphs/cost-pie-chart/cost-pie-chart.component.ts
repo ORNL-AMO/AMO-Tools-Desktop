@@ -81,7 +81,7 @@ export class CostPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
 
@@ -119,7 +119,7 @@ export class CostPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false,
     };
-    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.costPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
 

@@ -66,7 +66,7 @@ export class AirLeakFormService {
     let emptyData: AirLeakSurveyData = {
       leakDescription: '',
       name: 'New Leak',
-      selected: false,
+      selected: true,
       measurementMethod: LeakMeasurementMethod.Estimate,
       estimateMethodData: {
         leakRateEstimate: 0.1

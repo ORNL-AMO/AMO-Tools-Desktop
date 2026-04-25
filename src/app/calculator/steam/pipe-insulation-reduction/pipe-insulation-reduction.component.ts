@@ -139,7 +139,6 @@ export class PipeInsulationReductionComponent implements OnInit {
     if (this.modificationExists) {
       this.modificationForm.enable();
       this.modificationForm.controls.utilityType.disable();
-      this.modificationForm.controls.utilityCost.disable();
       this.modificationForm.controls.heatedOrChilled.disable();
       if (this.modificationForm.controls.insulationMaterialSelection.value == 0) {
         this.modificationForm.controls.pipeJacketMaterialSelection.disable();

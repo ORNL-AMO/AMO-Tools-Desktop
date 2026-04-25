@@ -374,7 +374,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let peakTrace = this.getPeakLineTrace(xData, peakAirflow, 'Peak Airflow');
       traceData.push(peakTrace);
 
-      this.plotlyService.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config)).then(chart => {
+      this.plotlyService.newPlot(this.systemCapacityGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config, traceData)).then(chart => {
         this.updateHoverPositionData(chart, 'systemCapacityGraph');
         this.updateLayout(chart, this.systemCapacityGraph);
       });
@@ -417,6 +417,7 @@ export class SystemProfileGraphsComponent implements OnInit {
               return 0;
             }
           }),
+          type: 'scatter',
           mode: 'lines+markers',
           hovertemplate: `%{y:.3r}`,
           name: this.getCompressorName(compressorProfile.compressorId),
@@ -442,7 +443,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         responsive: !this.printView,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.compressorCapacityGraph.nativeElement, traceData, layout, config).then(chart => {
+      this.plotlyService.newPlot(this.compressorCapacityGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config, traceData)).then(chart => {
         this.updateHoverPositionData(chart, 'compressorCapacityGraph');
       });
     }
@@ -510,7 +511,7 @@ export class SystemProfileGraphsComponent implements OnInit {
       let peakTrace = this.getPeakLineTrace(xData, peakPower, 'Peak Power');
       traceData.push(peakTrace);
 
-      this.plotlyService.newPlot(this.systemPowerGraph.nativeElement, traceData, layout, config).then(chart => {
+      this.plotlyService.newPlot(this.systemPowerGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config, traceData)).then(chart => {
         this.updateHoverPositionData(chart, 'systemPowerGraph');
         this.updateLayout(chart, this.systemPowerGraph);
       });
@@ -531,6 +532,7 @@ export class SystemProfileGraphsComponent implements OnInit {
               return 0;
             }
           }),
+          type: 'scatter',
           mode: 'lines+markers',
           hovertemplate: `%{y:.3r}`,
           name: this.getCompressorName(compressorProfile.compressorId),
@@ -556,7 +558,7 @@ export class SystemProfileGraphsComponent implements OnInit {
         responsive: !this.printView,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.compressorPowerGraph.nativeElement, traceData, layout, config).then(chart => {
+      this.plotlyService.newPlot(this.compressorPowerGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config, traceData)).then(chart => {
         this.updateHoverPositionData(chart, 'compressorPowerGraph');
       });
     }

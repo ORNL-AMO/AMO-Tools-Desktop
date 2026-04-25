@@ -118,7 +118,7 @@ export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
   drawPrintPlot() {
@@ -151,7 +151,7 @@ export class CarbonEmissionsSummaryPieChartComponent implements OnInit {
       displayModeBar: false,
       responsive: true
     };
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
 
 
   }

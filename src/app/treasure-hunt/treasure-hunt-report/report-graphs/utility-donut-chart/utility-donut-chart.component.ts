@@ -95,7 +95,7 @@ export class UtilityDonutChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.utilityDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.utilityDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
   createPrintChart() {
@@ -152,6 +152,6 @@ export class UtilityDonutChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    this.plotlyService.newPlot(this.utilityDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.utilityDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 }

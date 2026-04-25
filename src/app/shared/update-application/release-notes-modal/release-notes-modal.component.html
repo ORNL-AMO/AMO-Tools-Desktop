@@ -29,6 +29,9 @@
           </p>
           <label class="header-label">Warnings</label>
           <ul>
+            <li>
+              Users are experiencing issues with the desktop auto-update feature on some machines. This can often be resolved by simply closing the application, re-opening, and allowing the auto-update to finish. The development team is actively working on this issue.
+            </li>
             <li>Installing v1.0.0 or an earlier version of this tool will automatically reset your app data. Data can be
               imported into an earlier version from v1.0.0</li>
             <li>Do not install an earlier version of this tool without resetting your app data (in settings).</li>
@@ -40,56 +43,27 @@
           </ul>
 
           <label class="header-label">Here are the details of what's new in version {{versionNum}}:</label>
-          <br>
           <label>Application</label>
           <ul>
-            <li>Fixed: Errors resulting from migrating Compressed Air Assessments from previous versions to version 1.7.0</li>
+            <li>Enhanced: Added download progress for the desktop auto-update downloads</li>
+            <li>Fixed: Address issues from the desktop auto-update feature</li>
           </ul>
           
-          <label>Water</label>
-          <ul>
-            <li>Enhanced: Water using systems may decide to use all water in product and/or known losses without receiving
-              validation or warning messages.</li>
-          </ul>
-          <br>
 
           <!--  Include prev version -->
-          <label class="header-label">Here are the details of what's new in version 1.7.0:</label>
-            <br>
-            <label>Application</label>
-            <ul>
-              <li>Added: Support email to auto-update notification</li>
-              <li>Enhanced: "Delete User Assessments" has become "Delete User Items", will now also delete inventory and diagram items</li>
-              <li>Fixed: Exported MEASUR examples will be marked as user-created so they behave as expected on import</li>
-            </ul>
-
-            <label>Compressed Air</label>
-            <ul>
-              <li>Added: Select compressor color so that the same color is used to represent the compressor in all graphs</li>
-              <li>Enhanced: Improved the report graphs section of the application to provide more meaningful data visualizations.</li>
-              <li>Enhanced: Improved the performance profile plots enhanced hover functionality and added all day type and modifications profiles in the report.</li>
-              <li>Enhanced: Update pipe sizing and velocity in pipe sizing help text with common heuristics</li>
-              <li>Fixed: The compressed air module has been refactored to address a variety of bugs, including bugs related to printing, performance point calculations and graphing.</li>
-            </ul>
-
-            <label>Treasure Hunt</label>
-            <ul>
-              <li>Enhanced: Exported Treasure Hunt assessments can be imported through Treasure Chest -> Import Opportunities, where the opportunities will be added and the exported Treasure Hunt data will be discarded</li>
-              <li>Fixed: Facility Basics bug where field data populated by "Estimate.." feature is not being saved.</li>
-            </ul>
-
-            <label>Process Heating</label>
-            <ul>
-              <li>Fixed: Blank material removed from Solid, Liquid, Gas Charge materials</li>
-            </ul>
-
-            <label>Water</label>
-            <ul>
-              <li>Enhanced: Total Known Losses field now available in Water Treatment and Waste Water Treatment to allow users to balance component flow</li>
-              <li>Enhanced: Add icons to diagram water components indicating validation and unknown loss states</li>
-              <li>Fixed: True Cost Editable table uses decimal precision set by user</li>
-            </ul>
-
+          <label class="header-label">Here are the details of what's new in version 1.7.1:</label>
+              <br>
+              <label>Application</label>
+              <ul>
+                <li>Fixed: Errors resulting from migrating Compressed Air Assessments from previous versions to version 1.7.0</li>
+              </ul>
+              
+              <label>Water</label>
+              <ul>
+                <li>Enhanced: Water using systems may decide to use all water in product and/or known losses without receiving
+                  validation or warning messages.</li>
+              </ul>
+              <br>
 
           <div class="modal-footer p-2 d-flex flex-row justify-content-end">
             <div>

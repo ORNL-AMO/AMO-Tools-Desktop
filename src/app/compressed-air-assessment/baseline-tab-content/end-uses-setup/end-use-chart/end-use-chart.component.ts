@@ -216,7 +216,7 @@ export class EndUseChartComponent implements OnInit {
       responsive: true
     };
 
-    this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions));
+    this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions, data));
   }
 
   getChunkedArray(array, size) {

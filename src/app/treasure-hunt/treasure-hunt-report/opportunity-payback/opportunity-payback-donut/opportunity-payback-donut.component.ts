@@ -68,7 +68,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
   createPrintChart(){
@@ -103,7 +103,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
+    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
 

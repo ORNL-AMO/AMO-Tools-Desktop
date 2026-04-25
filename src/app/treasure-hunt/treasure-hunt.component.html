@@ -1,10 +1,7 @@
-<!--all main psat content-->
 <div #content class="treasure-hunt-container treasure-hunt d-flex flex-column" *ngIf="assessment && settings">
-  <!--header-->
   <div #header class="w-100 hide-print sticky-top" id="treasureHuntBanner">
     <app-treasure-hunt-banner [assessment]="assessment"></app-treasure-hunt-banner>
   </div>
-  <!--end header-->
 
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline'">
     <div class="nav-item" (click)="setSmallScreenTab('form')"
@@ -19,16 +16,19 @@
   </div>
 
   <div *ngIf="mainTab == 'baseline'" class="assessment-container tab-content">
-    <div class="assessment-panel-container lookup-form modification scroll-item" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}" [ngStyle]="{'height.px': containerHeight}">
-      <app-system-basics *ngIf="subTab == 'settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)" [(settings)]="settings" [assessment]="assessment"
-        (updateSettings)="getSettings()">
+    <div class="assessment-panel-container lookup-form modification scroll-item"
+      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <app-system-basics *ngIf="subTab == 'settings'" (openUpdateUnitsModal)="initUpdateUnitsModal($event)"
+        [settings]="settings" [assessment]="assessment">
       </app-system-basics>
-  <!-- todo 8922 potential issues with calling getSettings() here (on operation-costs destroy), with operation costs accepting settings as input -->
-      <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings" (updateSettings)="getSettings()">
+      <app-operation-costs *ngIf="subTab == 'operation-costs'" [settings]="settings"
+        [treasureHunt]="assessment.treasureHunt">
       </app-operation-costs>
 
     </div>
-    <div class="assessment-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
+    <div class="assessment-panel-container" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
+      [ngStyle]="{'height.px': containerHeight}">
       <app-help-panel [currentTab]="subTab"></app-help-panel>
     </div>
   </div>
@@ -42,15 +42,15 @@
     <app-treasure-chest class="w-100" [settings]="settings" [containerHeight]="containerHeight"></app-treasure-chest>
   </div>
 
-  
+
   <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
-      <app-treasure-hunt-report [assessment]="assessment" [settings]="settings" [directory]="directory" [containerHeight]="containerHeight">
-      </app-treasure-hunt-report>
+    <app-treasure-hunt-report [assessment]="assessment" [settings]="settings" [directory]="directory"
+      [containerHeight]="containerHeight">
+    </app-treasure-hunt-report>
   </div>
 
 
 
-  <!--footer-->
   <div #footer id="thuntFooter" class="footer hide-print d-none d-lg-block"
     *ngIf="mainTab == 'baseline' && selectedCalc == 'none'">
     <div class="pull-left" *ngIf="subTab != 'settings'">
@@ -60,7 +60,6 @@
       <button class="btn btn-primary" [disabled]="nextDisabled" (click)="continue()">Next</button>
     </div>
   </div>
-  <!--end footer-->
 </div>
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
 
@@ -69,4 +68,5 @@
 </app-update-units-modal>
 
 
-<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>
+<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment"
+  (close)="closeExportModal($event)"></app-export-modal>
