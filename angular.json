@@ -155,8 +155,12 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/custom-webpack:karma",
           "options": {
+            "customWebpackConfig": {
+              "path": "./webpack.test.config.js"
+            },
+            "karmaConfig": "karma.conf.cjs",
             "tsConfig": "src/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
