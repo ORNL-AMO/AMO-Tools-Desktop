@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ImportModalComponent } from './import-modal/import-modal.component';
 import { ExportModalComponent } from './export-modal/export-modal.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
+import { ExportItemComponent } from './export-item/export-item.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     FormsModule,
     ModalModule
   ],
-  declarations: [ImportModalComponent, ExportModalComponent],
+  declarations: [ImportModalComponent, ExportModalComponent, ExportItemComponent],
   providers: [
     ImportExportService,
     ExportService,
@@ -22,7 +23,8 @@ import { ModalModule } from 'ngx-bootstrap/modal';
   ],
   exports: [  
     ImportModalComponent,
-    ExportModalComponent
+    ExportModalComponent,
+    ExportItemComponent
   ]
 })
 export class ImportExportModule { }

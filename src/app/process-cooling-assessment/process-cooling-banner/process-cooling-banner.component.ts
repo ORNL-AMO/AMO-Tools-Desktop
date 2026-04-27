@@ -6,6 +6,8 @@ import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
 import { MAIN_VIEW_LINKS, MainView, ProcessCoolingUiService, ViewLink } from '../services/process-cooling-ui.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { ExportItemComponent } from '../../shared/import-export/export-item/export-item.component';
 
 @Component({
   selector: 'app-process-cooling-banner',
@@ -18,6 +20,8 @@ export class ProcessCoolingBannerComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);
   private readonly dashboardService = inject(DashboardService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly modalDialogService: ModalDialogService = inject(ModalDialogService);
+  
   isBaselineValid: boolean = false
   
   readonly ROUTE_TOKENS = ROUTE_TOKENS;
@@ -62,8 +66,20 @@ export class ProcessCoolingBannerComponent {
     // this.processCoolingUiService.showModificationListModalSignal.set(true);
   }
   
-  openExportModal(){
-    // this.processCoolingUiService.showExportModalSignal.set(true);
+  openExportModal() {
+    this.modalDialogService.openModal<ExportItemComponent, {
+      inAssessment: boolean,
+      assessment: Assessment
+    }>(
+      ExportItemComponent,
+      {
+        width: '600px',
+        data: {
+          inAssessment: true,
+          assessment: this.processCoolingService.assessmentValue
+        },
+      },
+    );
   }
 
   emailAssessment() {
