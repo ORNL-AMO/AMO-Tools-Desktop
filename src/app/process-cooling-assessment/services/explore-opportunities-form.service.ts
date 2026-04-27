@@ -9,21 +9,14 @@ export class ExploreOpportunitiesFormService {
   private formBuilder: FormBuilder = inject(UntypedFormBuilder);
   private systemInformationService = inject(SystemInformationFormService);
 
-  getIncreaseChilledTempForm(chilledWaterTemperature: number, settings: Settings, baselineChilledWaterTemperature?: number): FormGroup<IncreaseChilledTempForm> {
-    // * min comparison vs default - waiting on feedback 2/11
-    if (baselineChilledWaterTemperature === undefined) {
-      baselineChilledWaterTemperature = chilledWaterTemperature;
-    }
-    const validators = this.systemInformationService.getChilledWaterTemperatureValidators(settings, baselineChilledWaterTemperature);
+  getIncreaseChilledTempForm(chilledWaterTemperature: number, settings: Settings): FormGroup<IncreaseChilledTempForm> {
+    const validators = this.systemInformationService.getChilledWaterTemperatureValidators(settings);
     const form: FormGroup<IncreaseChilledTempForm> = this.formBuilder.group({ chilledWaterTemperature: [chilledWaterTemperature, validators] });
     return form;
   }
 
-  getDecreaseCondenserWaterTempForm(condenserWaterTemperature: number, settings: Settings, baselineCondenserWaterTemperature?: number): FormGroup<DecreaseCondenserWaterTempForm> {
-    if (baselineCondenserWaterTemperature === undefined) {
-      baselineCondenserWaterTemperature = condenserWaterTemperature;
-    }
-    const validators = this.systemInformationService.getCondenserWaterTempValidators(settings, baselineCondenserWaterTemperature);
+  getDecreaseCondenserWaterTempForm(condenserWaterTemperature: number, settings: Settings): FormGroup<DecreaseCondenserWaterTempForm> {
+    const validators = this.systemInformationService.getCondenserWaterTempValidators(settings);
     return this.formBuilder.group({ condenserWaterTemperature: [condenserWaterTemperature, validators] });
   }
 

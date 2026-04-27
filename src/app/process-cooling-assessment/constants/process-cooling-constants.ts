@@ -89,8 +89,8 @@ export const Refrigerants = {
 };
 
 export const EEM_LABELS = {
-  increaseChilledWaterTemp: 'Increase Chilled Water Temperature',
-  decreaseCondenserWaterTemp: 'Decrease Condenser Water Temperature',
+  increaseChilledWaterTemp: 'Modify Chilled Water Temperature',
+  decreaseCondenserWaterTemp: 'Modify Condenser Water Temperature',
   useSlidingCondenserWaterTemp: 'Use Sliding Condenser Water Temperature',
   applyVariableSpeedControls: 'Apply Variable Speed Controls',
   replaceChillers: 'Replace Chillers',

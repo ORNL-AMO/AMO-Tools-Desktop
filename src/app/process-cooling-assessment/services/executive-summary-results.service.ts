@@ -154,7 +154,7 @@ export class ExecutiveSummaryResultsService {
       },
       {
         ...defaultRow,
-        label: 'Chiller Cost',
+        label: 'Chiller Energy Cost',
         units: `($)`,
         baseline: { value: baseline?.totalChillerCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
         modifications: modifications.map(modification => {
@@ -171,7 +171,7 @@ export class ExecutiveSummaryResultsService {
       },
         {
         ...defaultRow,
-        label: 'Tower Cost',
+        label: 'Tower Energy Cost',
         units: `($)`,
         baseline: { value: baseline?.totalTowerCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
         modifications: modifications.map(modification => {
@@ -189,7 +189,7 @@ export class ExecutiveSummaryResultsService {
       },
       {
         ...defaultRow,
-        label: 'Chilled Water Pumping Cost',
+        label: 'Chilled Water Pumping Energy Cost',
         units: `($)`,
         baseline: { value: baseline?.pumpTotalChilledCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
         modifications: modifications.map(modification => {
@@ -206,7 +206,7 @@ export class ExecutiveSummaryResultsService {
       },
     {
         ...defaultRow,
-        label: 'Condenser Water Pumping Cost',
+        label: 'Condenser Water Pumping Energy Cost',
         units: `($)`,
         baseline: { value: baseline?.pumpTotalCondenserCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
         modifications: modifications.map(modification => {
@@ -223,7 +223,7 @@ export class ExecutiveSummaryResultsService {
       },
       {
         ...defaultRow,
-        label: 'Total Pump Cost',
+        label: 'Total Pump Energy Cost',
         units: `($)`,
         baseline: { value: baseline?.totalPumpCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
         modifications: modifications.map(modification => {
