@@ -330,6 +330,7 @@ export enum ReportView {
   PERFORMANCE_PROFILE = 'performance-profile',
   PUMP_SUMMARY = 'pump-summary',
   TOWER_SUMMARY = 'tower-summary',
+  INPUT_SUMMARY = 'input-summary',
   GRAPHS = 'graphs',
   SYSTEM_PROFILE = "system-profile",
 }
@@ -437,6 +438,10 @@ export const REPORT_VIEW_LINKS: ViewLink[] = [
   {
     view: ReportView.TOWER_SUMMARY,
     label: 'Tower Summary',
+  },
+  {
+    view: ReportView.INPUT_SUMMARY,
+    label: 'Input Summary',
   },
   {
     view: ReportView.GRAPHS,

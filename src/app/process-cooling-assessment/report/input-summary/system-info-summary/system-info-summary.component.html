@@ -1,0 +1,32 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>System Information
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div class="card-body" *ngIf="!collapse || printView">
+    <table #copyTable class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Label</th>
+          <th>Value</th>
+          <th>Units</th>
+        </tr>
+      </thead>
+      <tbody>
+        @let inputSummaryUI = inputSummaryUI$ | async;
+        @if (inputSummaryUI && inputSummaryUI.operationSummaryRows && inputSummaryUI.operationSummaryRows.baseOperations) {
+          @for (row of inputSummaryUI.operationSummaryRows.baseOperations; track row.label) {
+            <tr>
+              <td>{{ row.label }}</td>
+              <td>{{ row.baseline?.value }}</td>
+              <td>{{ row.units }}</td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+      <app-exportable-results-table [tableString]="copyTableString"
+      (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+  </div>
+</div>

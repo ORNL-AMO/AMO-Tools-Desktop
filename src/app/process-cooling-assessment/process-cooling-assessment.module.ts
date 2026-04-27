@@ -92,12 +92,14 @@ import { SystemProfileService } from './services/system-profile.service';
 import { FilterChillerOutputsPipe } from './pipes/filter-chiller-outputs.pipe';
 import { InstallVSDComponent } from './explore-opportunities/install-vsd/install-vsd.component';
 import { FilterChillerInventoryPipe } from './pipes/filter-chiller-inventory.pipe';
-import { UseFreeCoolingComponent } from './explore-opportunities/use-free-cooling/use-free-cooling.component';
+import { InputSummaryComponent } from './report/input-summary/input-summary.component';
+import { InputSummaryService } from './services/input-summary.service';import { UseFreeCoolingComponent } from './explore-opportunities/use-free-cooling/use-free-cooling.component';
 import { ReplaceChillerRefrigerantComponent } from './explore-opportunities/replace-chiller-refrigerant/replace-chiller-refrigerant.component';
 import { RefrigerantTypePipe } from './pipes/refrigerant-type.pipe';
 import { VsdInventoryTableComponent } from './explore-opportunities/install-vsd/vsd-inventory-table/vsd-inventory-table.component';
 import { RefrigerantInventoryTableComponent } from './explore-opportunities/replace-chiller-refrigerant/refrigerant-inventory-table/refrigerant-inventory-table.component';
 
+import { SystemInfoSummaryComponent } from './report/input-summary/system-info-summary/system-info-summary.component';
 
 export const ROUTE_TOKENS = {
   // Main tabs
@@ -126,6 +128,7 @@ export const ROUTE_TOKENS = {
   performanceProfile: 'performance-profile',
   systemProfile: 'system-profile',
   pumpSummary: 'pump-summary',
+  inputSummary: 'input-summary',
   towerSummary: 'tower-summary',
   graphs: 'graphs',
 } as const;
@@ -222,6 +225,10 @@ const ROUTES: Route[] = [
             component: PumpSummaryComponent,
           },
           {
+            path: ROUTE_TOKENS.inputSummary,
+            component: InputSummaryComponent,
+          },
+          {
             path: ROUTE_TOKENS.towerSummary,
             component: TowerSummaryComponent,
           },
@@ -285,6 +292,7 @@ const ROUTES: Route[] = [
     EemHelpComponent,
     DevResultsComponent,
     PumpSummaryComponent,
+    InputSummaryComponent,
     TowerSummaryComponent,
     TowerEnergyHistogramComponent,
     PerformanceProfileComponent,
@@ -293,6 +301,7 @@ const ROUTES: Route[] = [
     FilterChillerOutputsPipe,
     InstallVSDComponent,
     FilterChillerInventoryPipe,
+    SystemInfoSummaryComponent,
     UseFreeCoolingComponent,
     ReplaceChillerRefrigerantComponent,
     VsdInventoryTableComponent,
@@ -340,6 +349,7 @@ const ROUTES: Route[] = [
     PumpSummaryResultsService,
     TowerSummaryService,
     SystemProfileService,
+    InputSummaryService,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })
