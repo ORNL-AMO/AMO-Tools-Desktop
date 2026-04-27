@@ -111,7 +111,6 @@ export class ModificationService {
       const form = this.exploreOpportunitiesFormService.getIncreaseChilledTempForm(
         modification.increaseChilledWaterTemp.chilledWaterSupplyTemp,
         this.processCoolingAssessmentService.settingsSignal(),
-        baselineValues.increaseChilledWaterTemp.chilledWaterSupplyTemp
       );
       if (!form.valid) {
         return false;
@@ -122,7 +121,6 @@ export class ModificationService {
       const form = this.exploreOpportunitiesFormService.getDecreaseCondenserWaterTempForm(
         modification.decreaseCondenserWaterTemp.condenserWaterTemp,
         this.processCoolingAssessmentService.settingsSignal(),
-        baselineValues.decreaseCondenserWaterTemp.condenserWaterTemp
       );
       if (!form.valid) {
         return false;

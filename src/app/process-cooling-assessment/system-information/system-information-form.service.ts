@@ -54,7 +54,7 @@ export class SystemInformationFormService {
     });
   }
 
-  getChilledWaterTemperatureValidators(settings: Settings, baselineChilledWaterTemp?: number): ValidatorFn[] {
+  getChilledWaterTemperatureValidators(settings: Settings): ValidatorFn[] {
     let chilledWaterSupplyTempMin: number = PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.min;
     let chilledWaterSupplyTempMax: number = PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.max;
 
@@ -73,7 +73,7 @@ export class SystemInformationFormService {
 
     let validators: ValidatorFn[] = [
       Validators.required,
-      Validators.min(baselineChilledWaterTemp !== undefined ? baselineChilledWaterTemp : chilledWaterSupplyTempMin),
+      Validators.min(chilledWaterSupplyTempMin),
       Validators.max(chilledWaterSupplyTempMax)
     ];
 
@@ -276,7 +276,7 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     return formGroup;
   }
 
-  getCondenserWaterTempValidators(settings: Settings, baselineCondenserWaterTemp?: number): ValidatorFn[] {
+  getCondenserWaterTempValidators(settings: Settings): ValidatorFn[] {
     let condenserWaterTempMin = PROCESS_COOLING_VALIDATION.condenserWaterTemp.min;
     let condenserWaterTempMax = PROCESS_COOLING_VALIDATION.condenserWaterTemp.max;
 
@@ -296,7 +296,7 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     let validators: ValidatorFn[] = [
       Validators.required,
       Validators.min(condenserWaterTempMin),
-      Validators.max(baselineCondenserWaterTemp !== undefined ? baselineCondenserWaterTemp : condenserWaterTempMax)
+      Validators.max(condenserWaterTempMax)
     ];
     return validators;
   }

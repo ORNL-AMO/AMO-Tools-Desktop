@@ -370,7 +370,7 @@ export const SETUP_VIEW_LINKS: ViewLink[] = [
   },
   {
     view: SetupView.INVENTORY,
-    label: 'Inventory',
+    label: 'Chiller Inventory',
   },
   {
     view: SetupView.OPERATING_SCHEDULE,
