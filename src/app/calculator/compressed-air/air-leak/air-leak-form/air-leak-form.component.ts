@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { AirLeakSurveyInput, AirLeakSurveyData } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakService } from '../air-leak.service';
@@ -11,6 +11,7 @@ import { LeakMeasurementMethod, measurementMethods } from '../../compressed-air-
     selector: 'app-air-leak-form',
     templateUrl: './air-leak-form.component.html',
     styleUrls: ['./air-leak-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class AirLeakFormComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, HostListener, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 import { AirLeakService } from './air-leak.service';
 import { AirLeakSurveyInput } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
@@ -16,6 +16,8 @@ import { AnalyticsService } from '../../../shared/analytics/analytics.service';
     selector: 'app-air-leak',
     templateUrl: './air-leak.component.html',
     styleUrls: ['./air-leak.component.css'],
+    host: { '(window:resize)': 'onResize($event)' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class AirLeakComponent implements OnInit, AfterViewInit {
@@ -50,8 +52,7 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
   @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   @ViewChild('panelHeader', { static: false }) panelHeader: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(event: Event) {
     setTimeout(() => {
       this.resizeTabs();
     }, 100);

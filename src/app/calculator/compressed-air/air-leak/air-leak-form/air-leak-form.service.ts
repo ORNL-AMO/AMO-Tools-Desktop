@@ -203,11 +203,14 @@ export class AirLeakFormService {
     let form: UntypedFormGroup = (facilityCompressorDataForm.get("compressorElectricityData") as UntypedFormGroup);
     if (facilityCompressorDataForm.controls.utilityType.value == 1) {
       form.controls.compressorControl.setValidators([Validators.required]);
+      form.controls.compressorControl.updateValueAndValidity();
       if (form.controls.compressorControl.value == 8) {
         form.controls.compressorControlAdjustment.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
+        form.controls.compressorControlAdjustment.updateValueAndValidity();
       }
       if (form.controls.compressorSpecificPowerControl.value == 4) {
         form.controls.compressorSpecificPower.setValidators([Validators.required, Validators.min(0)]);
+        form.controls.compressorSpecificPower.updateValueAndValidity();
       }
     }
     return facilityCompressorDataForm;

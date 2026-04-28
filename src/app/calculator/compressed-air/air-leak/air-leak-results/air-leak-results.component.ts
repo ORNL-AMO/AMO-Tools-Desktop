@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakSurveyOutput } from '../../../../shared/models/standalone';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { AirLeakService } from '../air-leak.service';
     selector: 'app-air-leak-results',
     templateUrl: './air-leak-results.component.html',
     styleUrls: ['./air-leak-results.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class AirLeakSurveyResultsComponent implements OnInit {

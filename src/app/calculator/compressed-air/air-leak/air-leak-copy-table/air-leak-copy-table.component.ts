@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectionStrategy } from '@angular/core';
 import { AirLeakService } from '../air-leak.service';
 import { AirLeakSurveyOutput } from '../../../../shared/models/standalone';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { Settings } from '../../../../shared/models/settings';
     selector: 'app-air-leak-copy-table',
     templateUrl: './air-leak-copy-table.component.html',
     styleUrls: ['./air-leak-copy-table.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class AirLeakCopyTableComponent implements OnInit {

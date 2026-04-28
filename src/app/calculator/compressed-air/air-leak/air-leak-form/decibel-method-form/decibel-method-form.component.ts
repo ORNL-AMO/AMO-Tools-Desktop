@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UntypedFormGroup } from '@angular/forms';
 import { AirLeakService } from '../../air-leak.service';
@@ -10,6 +10,7 @@ import { Settings } from '../../../../../shared/models/settings';
     selector: 'app-decibel-method-form',
     templateUrl: './decibel-method-form.component.html',
     styleUrls: ['./decibel-method-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class DecibelMethodFormComponent implements OnInit {

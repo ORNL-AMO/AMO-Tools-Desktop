@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakSurveyInput, AirLeakSurveyData } from '../../../../../shared/models/standalone';
@@ -10,6 +10,7 @@ import { Settings } from '../../../../../shared/models/settings';
     selector: 'app-estimate-method-form',
     templateUrl: './estimate-method-form.component.html',
     styleUrls: ['./estimate-method-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class EstimateMethodFormComponent implements OnInit {

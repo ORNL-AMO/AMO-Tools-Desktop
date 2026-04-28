@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AirLeakService } from '../../air-leak.service';
@@ -10,6 +10,7 @@ import { Settings } from '../../../../../shared/models/settings';
     selector: 'app-bag-method-form',
     templateUrl: './bag-method-form.component.html',
     styleUrls: ['./bag-method-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class BagMethodFormComponent implements OnInit {

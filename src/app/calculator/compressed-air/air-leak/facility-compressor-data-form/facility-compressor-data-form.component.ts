@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { AirLeakSurveyInput } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { OperatingCostService } from '../../operating-cost/operating-cost.service';
@@ -15,6 +15,8 @@ import { measurementMethods } from '../../compressed-air-constants';
     selector: 'app-facility-compressor-data-form',
     templateUrl: './facility-compressor-data-form.component.html',
     styleUrls: ['./facility-compressor-data-form.component.css'],
+    host: { '(window:resize)': 'onResize($event)' },
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class FacilityCompressorDataFormComponent implements OnInit {
@@ -39,8 +41,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
 
   @ViewChild('leaksTable', { static: false }) leaksTable: ElementRef;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(event: Event) {
     this.setOpHoursModalWidth();
   }
 

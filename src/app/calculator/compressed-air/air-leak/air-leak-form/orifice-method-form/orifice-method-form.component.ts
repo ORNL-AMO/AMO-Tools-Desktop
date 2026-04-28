@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AirLeakService } from '../../air-leak.service';
 import { AirLeakFormService } from '../air-leak-form.service';
@@ -10,6 +10,7 @@ import { Settings } from '../../../../../shared/models/settings';
     selector: 'app-orifice-method-form',
     templateUrl: './orifice-method-form.component.html',
     styleUrls: ['./orifice-method-form.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class OrificeMethodFormComponent implements OnInit {
