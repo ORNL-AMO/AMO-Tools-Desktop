@@ -112,6 +112,7 @@ export class MotorInventoryComponent implements OnInit {
     this.motorCatalogService.selectedMotorItem.next(undefined);
     this.motorCatalogService.selectedDepartmentId.next(undefined);
     this.motorCatalogService.filterMotorOptions.next(undefined);
+    this.motorCatalogService.showMotorProperties.next(false);
     this.modalOpenSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
   }

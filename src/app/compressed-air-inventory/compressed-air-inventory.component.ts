@@ -133,6 +133,7 @@ export class CompressedAirInventoryComponent implements OnInit {
     this.modalOpenSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
     this.compressedAirInventoryDataSub.unsubscribe();
+    this.compressedAirCatalogService.showCompressorProperties.next(false);
     this.integrationStateSub.unsubscribe();
   }
 
