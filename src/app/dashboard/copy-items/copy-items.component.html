@@ -70,6 +70,21 @@
                                 </li>
                             </ul>
                         </li>
+                        <li *ngIf="selectedDiagrams.length != 0">
+                            <span class="bold">Diagrams</span>
+                            <ul>
+                                <li *ngFor="let diagram of selectedDiagrams">
+                                    <div class="d-flex align-items-center">
+                                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                                            <img class="icon" src="assets/images/water-process-diagram-small.png">
+                                        </span>
+                                        <span class="p-1">
+                                            {{diagram.name}}
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
                         <li *ngIf="selectedDirData.selectedDirectories.length != 0">
                             <span class="bold">Directories</span>
                             <ul>

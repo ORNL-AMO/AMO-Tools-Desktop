@@ -9,6 +9,7 @@ import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { DirectoryStoreMeta } from './dbConfig';
 import { Assessment } from '../shared/models/assessment';
 import { InventoryItem } from '../shared/models/inventory/inventory';
+import { Diagram } from '../shared/models/diagram';
 import { FormGroup } from '@angular/forms';
 import { DiagramIdbService } from './diagram-idb.service';
 @Injectable()
@@ -40,7 +41,7 @@ export class DirectoryDbService {
     this.dbDirectories.next(this.allDirectories);
   }
 
-  setIsMovedExample(item: Assessment | InventoryItem, form: FormGroup) {
+  setIsMovedExample(item: Assessment | InventoryItem | Diagram, form: FormGroup) {
     let exampleDirectory: Directory = this.getExample();
     if (exampleDirectory 
       && exampleDirectory.id === item.directoryId

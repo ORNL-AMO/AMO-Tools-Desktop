@@ -1,50 +1,40 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { SwUpdate } from '@angular/service-worker';
-import { ApplicationRef } from '@angular/core';
-import { Router } from '@angular/router';
-import { MockAnalyticsService, MockElectronService, MockAppErrorService, MockUpdateApplicationService } from './testing/service-mocks';
 import { AnalyticsService } from './shared/analytics/analytics.service';
+import { SwUpdate } from '@angular/service-worker';
 import { ElectronService } from './electron/electron.service';
 import { AppErrorService } from './shared/errors/app-error.service';
 import { UpdateApplicationService } from './shared/update-application/update-application.service';
+import { ToolsSuiteApiService } from './tools-suite-api/tools-suite-api.service';
+import { CoreService } from './core/core.service';
+import { EGridService } from './shared/helper-services/e-grid.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { EMPTY, Subject } from 'rxjs';
 
-// describe('AppComponent', () => {
-//     let component: AppComponent;
-//     let fixture: ComponentFixture<AppComponent>;
-//     const routerEventsMock = new BehaviorSubject<any>(null);
-//     // ...existing code...
-//     beforeEach(async () => {
-//         await TestBed.configureTestingModule({
-//             declarations: [AppComponent],
-//             schemas: [NO_ERRORS_SCHEMA],
-//             providers: [
-//                 { provide: AnalyticsService, useClass: MockAnalyticsService },
-//                 { provide: ElectronService, useClass: MockElectronService },
-//                 { provide: AppErrorService, useClass: MockAppErrorService },
-//                 { provide: UpdateApplicationService, useClass: MockUpdateApplicationService },
-//                 {
-//                     provide: SwUpdate, useValue: {
-//                         versionUpdates: new BehaviorSubject<any>(null),
-//                         checkForUpdate: () => Promise.resolve(false),
-//                         unrecoverable: new BehaviorSubject<any>(null)
-//                     }
-//                 },
-//                 { provide: ApplicationRef, 
-//                     useValue: { isStable: new BehaviorSubject<boolean>(true) } },
-//                 { provide: Router, useValue: { events: routerEventsMock } }
+describe('AppComponent', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [RouterTestingModule],
+      declarations: [AppComponent],
+      providers: [
+        { provide: AnalyticsService, useValue: { sendEvent: () => {} } },
+        { provide: SwUpdate, useValue: { versionUpdates: EMPTY, unrecoverable: EMPTY } },
+        { provide: ElectronService, useValue: { isElectron: false } },
+        { provide: AppErrorService, useValue: { measurFormattedError: new Subject(), handleObservableAppError: () => EMPTY } },
+        { provide: UpdateApplicationService, useValue: { webUpdateAvailable: { next: () => {} } } },
+        { provide: ToolsSuiteApiService, useValue: { initializeModule: () => Promise.resolve() } },
+        { provide: CoreService, useValue: { initializedToolsSuiteModule: { next: () => {} } } },
+        { provide: EGridService, useValue: { processCSVData: () => Promise.resolve() } },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+  });
 
-
-//             ]
-//         }).compileComponents();
-
-//         fixture = TestBed.createComponent(AppComponent);
-//         component = fixture.componentInstance;
-//     });
-
-//     it('should create', () => {
-//         expect(component).toBeTruthy();
-//     });
-// });
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
+});
