@@ -41,29 +41,23 @@ export class AirLeakService {
 
   initDefaultEmptyOutputs(): AirLeakSurveyOutput {
     let emptyAirLeakSurveyOutput: AirLeakSurveyOutput = {
-     individualLeaks: [
-      ],
-      baselineTotal: {
-        totalFlowRate: 0,
-        annualTotalElectricity: 0,
-        annualTotalFlowRate: 0,
-        annualTotalElectricityCost: 0,
-      },
-      modificationTotal: {
-        totalFlowRate: 0,
-        annualTotalElectricity: 0,
-        annualTotalFlowRate: 0,
-        annualTotalElectricityCost: 0,
-      },
-      savings: {
-        totalFlowRate: 0,
-        annualTotalElectricity: 0,
-        annualTotalFlowRate: 0,
-        annualTotalElectricityCost: 0,
-      },
+      individualLeaks: [
+       ],
+      baselineTotal: this.getEmptyAirLeakSurveyResult(),
+      modificationTotal: this.getEmptyAirLeakSurveyResult(),
+      savings: this.getEmptyAirLeakSurveyResult(),
     };
     this.airLeakOutput.next(emptyAirLeakSurveyOutput);
     return emptyAirLeakSurveyOutput;
+  }
+
+  private getEmptyAirLeakSurveyResult(): AirLeakSurveyResult {
+    return {
+      totalFlowRate: 0,
+      annualTotalElectricity: 0,
+      annualTotalFlowRate: 0,
+      annualTotalElectricityCost: 0,
+    };
   }
 
   generateExampleData(settings: Settings) {
@@ -134,19 +128,14 @@ export class AirLeakService {
     let validInput: boolean = this.airLeakFormService.checkValidInput(inputCopy);
 
     if (!validInput) {
-      this.initDefaultEmptyOutputs();
+      return this.initDefaultEmptyOutputs();
     }
     
     this.convertAirleakService.convertInputs(inputCopy.compressedAirLeakSurveyInputVec, settings);
     inputCopy.facilityCompressorData.compressorElectricityData.compressorSpecificPower = this.convertAirleakService.convertCompressorSpecificPower(inputCopy.facilityCompressorData.compressorElectricityData.compressorSpecificPower, settings);
 
     let individualLeaks = Array<AirLeakSurveyResult>();
-    let cumulativeModificationResults: AirLeakSurveyResult = {
-      totalFlowRate: 0,
-      annualTotalElectricity: 0,
-      annualTotalElectricityCost: 0,
-      annualTotalFlowRate: 0,
-    }
+    let cumulativeModificationResults: AirLeakSurveyResult = this.getEmptyAirLeakSurveyResult();
     const cumulativeBaselineResults = inputCopy.compressedAirLeakSurveyInputVec.reduce((cumulative: AirLeakSurveyResult, leak: AirLeakSurveyData) => {
       const leakResult: AirLeakSurveyResult = this.standaloneService.airLeakSurvey({ compressedAirLeakSurveyInputVec: [leak], facilityCompressorData: inputCopy.facilityCompressorData });
       leakResult.name = leak.name;
@@ -176,12 +165,7 @@ export class AirLeakService {
         annualTotalElectricityCost: cumulative.annualTotalElectricityCost + convertedResult.annualTotalElectricityCost,
         annualTotalFlowRate: cumulative.annualTotalFlowRate + convertedResult.annualTotalFlowRate,
       };
-    }, {
-      totalFlowRate: 0,
-      annualTotalElectricity: 0,
-      annualTotalElectricityCost: 0,
-      annualTotalFlowRate: 0,
-    });
+    }, this.getEmptyAirLeakSurveyResult());
 
     let savings: AirLeakSurveyResult = {
       totalFlowRate: cumulativeBaselineResults.totalFlowRate - cumulativeModificationResults.totalFlowRate,

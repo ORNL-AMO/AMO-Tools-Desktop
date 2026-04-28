@@ -14,17 +14,17 @@ export class AirLeakFormService {
               private convertAirLeakService: ConvertAirLeakService) { }
 
   checkValidInput(input: AirLeakSurveyInput): boolean {
+    if (!input?.facilityCompressorData || !Array.isArray(input.compressedAirLeakSurveyInputVec)) {
+      return false;
+    }
     let facilityCompressorDataForm = this.getFacilityCompressorFormFromObj(input.facilityCompressorData);
     if (!facilityCompressorDataForm.valid) {
       return false;
     }
-    input.compressedAirLeakSurveyInputVec.forEach(leak => {
+    return input.compressedAirLeakSurveyInputVec.every(leak => {
       let leakForm = this.getLeakFormFromObj(leak);
-      if (!leakForm.valid) {
-        return false;
-      }
-    })
-    return true;
+      return leakForm.valid;
+    });
   }
 
   getLeakFormFromObj(inputObj: AirLeakSurveyData): UntypedFormGroup {
