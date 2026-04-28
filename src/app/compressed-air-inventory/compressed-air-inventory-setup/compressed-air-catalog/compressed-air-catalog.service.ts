@@ -10,10 +10,12 @@ export class CompressedAirCatalogService {
   selectedSystemId: BehaviorSubject<string>;
   selectedCompressedAirItem: BehaviorSubject<CompressedAirItem>;
   filterCompressorOptions: BehaviorSubject<FilterCompressorOptions>;
+  showCompressorProperties: BehaviorSubject<boolean>;
   constructor(private compressedAirInventoryService: CompressedAirInventoryService) {
     this.selectedSystemId = new BehaviorSubject<string>(undefined);
     this.selectedCompressedAirItem = new BehaviorSubject<CompressedAirItem>(undefined);
     this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
+    this.showCompressorProperties = new BehaviorSubject<boolean>(false);
   }
 
   getUpdatedSelectedCompressedAirItem(): CompressedAirItem {

@@ -90,10 +90,12 @@ export class DepartmentCatalogTableComponent implements OnInit {
 
   setTableData() {
     let tableDataItems: Array<DepartmentCatalogTableDataItem> = new Array();
-    this.selectedMotorDepartment.catalog.forEach(motorItem => {
-      let motorItemData: DepartmentCatalogTableDataItem = this.getMotorItemData(motorItem);
-      tableDataItems.push(motorItemData);
-    });
+    if(this.selectedMotorDepartment) {
+      this.selectedMotorDepartment.catalog.forEach(motorItem => {
+        let motorItemData: DepartmentCatalogTableDataItem = this.getMotorItemData(motorItem);
+        tableDataItems.push(motorItemData);
+      });
+    }
     this.tableDataItems = tableDataItems;
   }
 

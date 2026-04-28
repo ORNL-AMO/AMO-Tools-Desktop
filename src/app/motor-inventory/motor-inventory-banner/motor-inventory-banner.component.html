@@ -176,13 +176,13 @@
             (click)="setSetupTab('department-setup')">
             <a><span class="step-number">2</span>Departments</a>
         </div>
-        <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-properties'}"
+        <!-- <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-properties'}"
             (click)="setSetupTab('motor-properties')">
             <a><span class="step-number">3</span>Motor Properties</a>
-        </div>
+        </div> -->
         <div class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-catalog'}"
             (click)="setSetupTab('motor-catalog')">
-            <a><span class="step-number">4</span>Catalog</a>
+            <a><span class="step-number">3</span>Catalog</a>
         </div>
     </div>
     <div class="d-lg-none d-flex tabs subtabs progress-tabs flex-wrap motor-inventory">
@@ -199,13 +199,13 @@
                 (click)="setSetupTab('department-setup')">
                 <a><span class="step-number">2</span>Departments</a>
             </li>
-            <li *ngIf="setupTab == 'motor-properties'" class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-properties'}"
+            <!-- <li *ngIf="setupTab == 'motor-properties'" class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-properties'}"
                 (click)="setSetupTab('motor-properties')">
                 <a><span class="step-number">3</span>Motor Properties</a>
-            </li>
+            </li> -->
             <li *ngIf="setupTab == 'motor-catalog'" class="fixed-tab-size" [ngClass]="{'active': setupTab == 'motor-catalog'}"
                 (click)="setSetupTab('motor-catalog')">
-                <a><span class="step-number">4</span>Catalog</a>
+                <a><span class="step-number" [ngClass]="{'missing-data-tab': motorInventoryData && !motorInventoryData.isValid}">3</span>Catalog</a>
             </li>
             <li class="page-item" [ngClass]="{'disabled': setupTab == 'motor-catalog'}">
                 <a class="nav-link small" (click)="continueSetupTabs()" [ngClass]="{'disabled': setupTab == 'motor-catalog'}">
@@ -217,8 +217,14 @@
 
 <nav class="hide-print" *ngIf="setupTab == 'motor-catalog' && mainTab == 'setup'">
     <div class="d-lg-flex d-none tabs subtabs progress-tabs flex-wrap motor-inventory">
+        <div class="fixed-tab-size" [ngClass]="{'active': isSelected === true}" (click)="selectTab('motor-properties')">
+            <a>
+                Motor Properties
+                <span class="badge gray-badge"></span>
+            </a>
+        </div>
         <div *ngFor="let department of motorInventoryData.departments"
-            [ngClass]="{'active': selectedDepartmentId == department.id}" (click)="selectedDepartment(department.id)">
+            [ngClass]="{'active': selectedTab == department.id}" (click)="selectTab(department.id)">
             <a>{{department.name}}
                 <span class="badge gray-badge">
                     <strong>{{department.catalog.length}}</strong>
@@ -228,12 +234,17 @@
     </div>
     <div class="d-flex d-lg-none tabs subtabs progress-tabs flex-wrap motor-inventory">
         <ul class="pagination d-flex justify-content-between tabs motor-inventory subtabs progress-tabs flex-fill">
-            <li class="page-item" [ngClass]="{'disabled': selectedDepartmentId == motorInventoryData.departments[0].id}">
-                <a class="nav-link small" (click)="backMotorCatalogTabs()" [ngClass]="{'disabled': selectedDepartmentId == motorInventoryData.departments[0].id}">
+            <li class="page-item" [ngClass]="{'disabled': selectedTab == 'motor-properties'}">
+                <a class="nav-link small" (click)="mobileBackMotorCatalogTabs()" [ngClass]="{'disabled': selectedTab == 'motor-properties'}">
                     <span class="fa fa-chevron-left"></span></a>
             </li>
+            <li class="fixed-tab-size" [ngClass]="{'active': selectedTab === 'motor-properties'}" (click)="selectTab('motor-properties')">
+                <a>Motor Properties
+                    <span class="badge gray-badge"></span>
+                </a>
+            </li>
             <ng-container *ngFor="let department of motorInventoryData.departments">
-                <li *ngIf="selectedDepartmentId == department.id" [ngClass]="{'active': selectedDepartmentId == department.id}" (click)="selectedDepartment(department.id)">
+                <li class="fixed-tab-size" [ngClass]="{'active': selectedTab == department.id}" (click)="selectTab(department.id)">
                     <a>{{department.name}}
                         <span class="badge gray-badge">
                             <strong>{{department.catalog.length}}</strong>
@@ -241,8 +252,8 @@
                     </a>
                 </li> 
             </ng-container>
-            <li class="page-item" [ngClass]="{'disabled': selectedDepartmentId == motorInventoryData.departments[motorInventoryData.departments.length - 1].id}">
-                <a class="nav-link small" (click)="continueMotorCatalogTabs()" [ngClass]="{'disabled': selectedDepartmentId == motorInventoryData.departments[motorInventoryData.departments.length - 1].id}">
+            <li class="page-item" [ngClass]="{'disabled': selectedTab == motorInventoryData.departments[motorInventoryData.departments.length - 1].id && motorInventoryData.departments.length > 0}">
+                <a class="nav-link small" (click)="mobileContinueMotorCatalogTabs()" [ngClass]="{'disabled': selectedTab == motorInventoryData.departments[motorInventoryData.departments.length - 1].id && motorInventoryData.departments.length > 0}">
                     <span class="fa fa-chevron-right"></span></a>
             </li>           
         </ul>

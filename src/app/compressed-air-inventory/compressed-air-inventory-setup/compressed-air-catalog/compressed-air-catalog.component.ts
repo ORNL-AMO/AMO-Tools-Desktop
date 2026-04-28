@@ -18,7 +18,7 @@ export class CompressedAirCatalogComponent implements OnInit {
 
   compressedAirInventoryData: CompressedAirInventoryData;
   compressedAirInventoryDataSub: Subscription;
-
+  selectedTabId
   selectedSystemIdSub: Subscription;
   showDeleteCompressedAirButton: boolean = false;
   showConfirmDeleteModal: boolean = false;
@@ -51,7 +51,7 @@ export class CompressedAirCatalogComponent implements OnInit {
 
     // todo review
     this.selectedSystemIdSub = this.compressedAirCatalogService.selectedSystemId.subscribe(val => {
-      if (!val) {
+      if (!val && val !== '') {
         this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
       } else {
         let findSystem: CompressedAirInventorySystem = this.compressedAirInventoryData.systems.find(system => { return system.id == val });
@@ -68,7 +68,9 @@ export class CompressedAirCatalogComponent implements OnInit {
           }
         } else {
           this.showDeleteCompressedAirButton = (this.compressedAirInventoryData.systems[0].catalog.length != 1);
-          this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
+          if (this.compressedAirCatalogService.showCompressorProperties.getValue() === false) {
+            this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryData.systems[0].id);
+          }
           this.compressedAirCatalogService.selectedCompressedAirItem.next(this.compressedAirInventoryData.systems[0].catalog[0]);
         }
       }

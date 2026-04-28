@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, NgZone } from '@angular/core';
 import { CompressedAirInventoryService } from '../compressed-air-inventory.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { CompressedAirCatalogService } from './compressed-air-catalog/compressed-air-catalog.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -20,11 +21,18 @@ export class CompressedAirInventorySetupComponent implements OnInit {
   isModalOpen: boolean;
   helpPanelTabSub: Subscription;
   smallScreenTab: string = 'form';
+  showCompressorProperties: boolean = false;
+  showCompressorPropertiesSub: Subscription;
 
   constructor(private compressedAirInventoryService: CompressedAirInventoryService,
-    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
+    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService, private compressedAirCatalogService: CompressedAirCatalogService) { }
 
   ngOnInit(): void {
+    this.showCompressorPropertiesSub = this.compressedAirCatalogService.showCompressorProperties.subscribe(val => {
+      this.showCompressorProperties = val;
+      this.cd.detectChanges();
+    });
+
     this.helpPanelTabSub = this.compressedAirInventoryService.helpPanelTab.subscribe(val => {
       if (val) {
         this.tabSelect = val;
@@ -38,13 +46,14 @@ export class CompressedAirInventorySetupComponent implements OnInit {
     this.modalOpenSub = this.compressedAirInventoryService.modalOpen.subscribe(val => {
       this.isModalOpen = val;
       this.cd.detectChanges();
-    })
+    });
   }
 
   ngOnDestroy() {
     this.setupTabSubscription.unsubscribe();
     this.modalOpenSub.unsubscribe();
     this.helpPanelTabSub.unsubscribe();
+    this.showCompressorPropertiesSub.unsubscribe();
   }
 
   setTab(str: string) {

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PumpInventoryService } from '../pump-inventory.service';
-
+import { PumpCatalogService } from './pump-catalog/pump-catalog.service';
 @Component({
     selector: 'app-pump-inventory-setup',
     templateUrl: './pump-inventory-setup.component.html',
@@ -20,10 +20,19 @@ export class PumpInventorySetupComponent implements OnInit {
   isModalOpen: boolean;
   helpPanelTabSub: Subscription;
   smallScreenTab: string = 'form';
+  showPumpProperties: boolean = false;
+  showPumpPropertiesSub: Subscription;
   constructor(private pumpInventoryService: PumpInventoryService,
-    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService) { }
+    private cd: ChangeDetectorRef, private settingsDbService: SettingsDbService,
+    private pumpCatalogService: PumpCatalogService) { }
 
   ngOnInit(): void {
+    if (this.pumpCatalogService.showPumpProperties) {
+      this.showPumpPropertiesSub = this.pumpCatalogService.showPumpProperties.subscribe(val => {
+        this.showPumpProperties = val;
+        this.cd.detectChanges();
+      });
+    }
     this.helpPanelTabSub = this.pumpInventoryService.helpPanelTab.subscribe(val => {
       if (val) {
         this.tabSelect = val;
@@ -44,6 +53,7 @@ export class PumpInventorySetupComponent implements OnInit {
     this.setupTabSubscription.unsubscribe();
     this.modalOpenSub.unsubscribe();
     this.helpPanelTabSub.unsubscribe();
+    this.showPumpPropertiesSub.unsubscribe();
   }
 
   setTab(str: string) {
