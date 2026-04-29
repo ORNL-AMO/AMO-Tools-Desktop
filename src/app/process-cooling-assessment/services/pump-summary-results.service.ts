@@ -3,7 +3,7 @@ import { ProcessCoolingResultsService } from './process-cooling-results.service'
 import { PumpResults, ProcessCoolingResults, PumpChillerItemEnergy } from '../../shared/models/process-cooling-assessment';
 import { map, combineLatest } from 'rxjs';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
-import { ModificationNameCell, ReportTableRow } from '../report/report-ui-models';
+import { ModificationNameCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 
 @Injectable({ providedIn: 'root' })

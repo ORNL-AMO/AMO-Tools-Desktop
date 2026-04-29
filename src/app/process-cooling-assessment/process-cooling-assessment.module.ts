@@ -97,6 +97,8 @@ import { ReplaceChillerRefrigerantComponent } from './explore-opportunities/repl
 import { RefrigerantTypePipe } from './pipes/refrigerant-type.pipe';
 import { VsdInventoryTableComponent } from './explore-opportunities/install-vsd/vsd-inventory-table/vsd-inventory-table.component';
 import { RefrigerantInventoryTableComponent } from './explore-opportunities/replace-chiller-refrigerant/refrigerant-inventory-table/refrigerant-inventory-table.component';
+import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
+import { ProcessCoolingReportAdapter } from './report/process-cooling-report.adapter';
 
 
 export const ROUTE_TOKENS = {
@@ -321,7 +323,8 @@ const ROUTES: Route[] = [
     OperatingHoursModalModule,
     AlertInfoContainerComponent,
     PercentGraphModule,
-    ReportTableCellPipe
+    ReportTableCellPipe,
+    ReportBuilderModule
   ],
   providers: [
     ProcessCoolingAssessmentService,
@@ -340,6 +343,7 @@ const ROUTES: Route[] = [
     PumpSummaryResultsService,
     TowerSummaryService,
     SystemProfileService,
+    ProcessCoolingReportAdapter,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })

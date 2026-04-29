@@ -1,4 +1,14 @@
-import { CurrencyPipeParams } from "../../shared/pipes/report-table-cell.pipe";
+export interface CurrencyPipeParams {
+  code?: string;
+  display?: 'symbol' | 'code' | 'name';
+  digitsInfo?: string;
+}
+
+export interface ReportColumnCell {
+  value: string | number;
+  decimalPipe?: string;
+  currencyPipe?: CurrencyPipeParams;
+}
 
 export interface ReportTableRow {
   label: string;
@@ -8,7 +18,7 @@ export interface ReportTableRow {
   modifications: Array<ReportColumnCell>;
 }
 
-export interface PercentSavings { 
+export interface PercentSavings {
   id: string;
   value: number | null;
 }
@@ -16,10 +26,4 @@ export interface PercentSavings {
 export interface ModificationNameCell {
   id: string;
   name: string;
-}
-
-export interface ReportColumnCell {
-  value: string | number;
-  decimalPipe?: string; 
-  currencyPipe?: CurrencyPipeParams;
 }
