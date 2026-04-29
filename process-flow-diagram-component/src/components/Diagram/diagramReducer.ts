@@ -5,12 +5,34 @@ import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
 import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getConnectionFromEdgeId, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection } from 'process-flow-lib';
-import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
+import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue, getContrastTextColor } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
 
 import packageJson from '../../../package.json';
 const CURRENT_DIAGRAM_VERSION: string = packageJson.version;
+
+/**
+ * Maps palette array index to its WaterProcessComponentType.
+ * Must stay in sync with allPalettes ordering in ColorPaletteDropdown.
+ */
+export const PALETTE_COMPONENT_ORDER: WaterProcessComponentType[] = [
+  'water-intake',
+  'water-using-system',
+  'water-discharge',
+  'water-treatment',
+  'waste-water-treatment',
+  'known-loss',
+];
+
+export const getDefaultPaletteColors = (): string[] => [
+  '#75a1ff', '#00bbff', '#7f7fff', '#009386', '#93e200', '#ffffff'
+];
+
+export const getPaletteColorForType = (type: WaterProcessComponentType, paletteColors: string[]): string | undefined => {
+  const typeIndex = PALETTE_COMPONENT_ORDER.indexOf(type);
+  return typeIndex !== -1 && paletteColors[typeIndex] ? paletteColors[typeIndex] : undefined;
+};
 
 export interface DiagramState {
   name: string,
@@ -46,7 +68,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     edges: [],
     composedNodeData: [],
     settings: getDefaultSettings(),
-    diagramOptions: getDefaultUserDiagramOptions(),
+    diagramOptions: { ...getDefaultUserDiagramOptions(), paletteColors: getDefaultPaletteColors() },
     isDataDrawerOpen: false,
     isMenuDrawerOpen: true,
     selectedDataId: undefined,
@@ -106,7 +128,7 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.nodeErrors = diagramData.nodeErrors ? { ...diagramData.nodeErrors } : {};
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
-  state.isDataDrawerOpen = false;
+state.diagramOptions.paletteColors = diagramData.userDiagramOptions?.paletteColors ?? getDefaultPaletteColors();  state.isDataDrawerOpen = false;
   state.isMenuDrawerOpen = state.isMenuDrawerOpen ?? true;
   state.focusedEdgeId = undefined;
   state.selectedDataId = undefined;
@@ -139,6 +161,13 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: W
   let newNode: Node = createNewNode(nodeType, position, existingNames);
   // * modifiedDate is not currently being read in the app
   newNode.data.modifiedDate = getStoreSerializedDate(newNode.data.modifiedDate as Date);
+  // Apply the active palette color for this node's component type
+  const paletteColor = getPaletteColorForType(nodeType, state.diagramOptions.paletteColors ?? getDefaultPaletteColors());
+  if (paletteColor) {
+    if (!newNode.style) newNode.style = {};
+    newNode.style.backgroundColor = paletteColor;
+    newNode.style.color = getContrastTextColor(paletteColor);
+  }
   state.nodes.push(newNode);
 };
 
@@ -450,6 +479,22 @@ const setDiagramNotesReducer = (state: DiagramState, action: PayloadAction<strin
   state.diagramNotes = action.payload;
 };
 
+/**
+ * Apply a full color palette to all nodes, coloring each by its processComponentType.
+ * Uses the same node.style.backgroundColor pattern as setNodeColorReducer.
+ */
+const setPaletteColorsReducer = (state: DiagramState, action: PayloadAction<string[]>) => {
+  const palette = action.payload;
+  state.diagramOptions.paletteColors = palette;
+  state.nodes = state.nodes.map((node: Node<ProcessFlowPart>) => {
+    const paletteColor = getPaletteColorForType(node.data.processComponentType as WaterProcessComponentType, palette);
+    if (!paletteColor) {
+      return node;
+    }
+    return { ...node, style: { ...node.style, backgroundColor: paletteColor, color: getContrastTextColor(paletteColor) } };
+  });
+};
+
 const unitsOfMeasureChangeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   const convertedDiagramData = {
     nodes: state.nodes,
@@ -619,6 +664,7 @@ export const diagramSlice = createSlice({
     edgesChangeFromPropagation: edgesChangeFromPropagationReducer,
     sumTotalFlowChange: sumTotalFlowChangeReducer,
     setDiagramNotes: setDiagramNotesReducer,
+    setPaletteColors: setPaletteColorsReducer,
   }
 })
 
@@ -666,7 +712,8 @@ export const {
   diagramAlertChange,
   toggleMenuDrawer,
   edgesChangeFromPropagation,
-  setDiagramNotes
+  setDiagramNotes,
+  setPaletteColors,
 } = diagramSlice.actions
 export default diagramSlice.reducer
 
