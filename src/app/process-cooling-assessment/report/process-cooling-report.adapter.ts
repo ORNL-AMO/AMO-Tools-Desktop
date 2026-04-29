@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { combineLatest, map, Observable } from 'rxjs';
+import { combineLatest, firstValueFrom, map, Observable } from 'rxjs';
+import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
 import { decodeHtmlEntities, divider, formatCell, formatNumber, labelWithUnits } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta } from '../../shared/report-builder/models/report-document.model';
@@ -8,6 +9,8 @@ import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from '../services/
 import { PumpSummaryResultsService, PumpSummaryUI } from '../services/pump-summary-results.service';
 import { TowerBinRow, TowerSummaryService, TowerSummaryUI } from '../services/tower-summary.service';
 import { SystemProfileService, SystemProfileUI } from '../services/system-profile.service';
+import { ProcessCoolingResultsService } from '../services/process-cooling-results.service';
+import { ProcessCoolingChartsService } from '../services/process-cooling-charts.service';
 import { ModificationNameCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { LOAD_LABELS } from '../constants/process-cooling-constants';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
@@ -18,6 +21,9 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
   private readonly pumpSummaryService = inject(PumpSummaryResultsService);
   private readonly towerSummaryService = inject(TowerSummaryService);
   private readonly systemProfileService = inject(SystemProfileService);
+  private readonly resultsService = inject(ProcessCoolingResultsService);
+  private readonly chartsService = inject(ProcessCoolingChartsService);
+  private readonly plotlyService = inject(PlotlyService);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [0, 152, 133]; // #009885
 
@@ -33,7 +39,6 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         meta: moduleMeta,
         sections: [
           ...this.buildExecutiveSummarySections(execSummary),
-          divider(),
           ...this.buildSystemProfileSections(systemProfile),
           divider(),
           ...this.buildPerformanceProfileSections(),
@@ -126,10 +131,28 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
     const section: ChartSection = {
       type: 'chart',
       title: 'Chiller Performance Profile',
-      elementId: 'pc-chiller-profile-chart',
+      imageDataProvider: async () => {
+        const results = await firstValueFrom(this.resultsService.baselineResults$);
+        if (!results?.chiller?.length) throw new Error('No chiller results available');
+
+        const { traces, layout } = this.chartsService.buildChillerProfileChart(results.chiller);
+
+        const div = document.createElement('div');
+        div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
+        document.body.appendChild(div);
+
+        const plotly = await this.plotlyService.getPlotly();
+        try {
+          await plotly.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
+          return await plotly.toImage(div, { format: 'png', width: 1400, height: 700 });
+        } finally {
+          plotly.purge(div);
+          document.body.removeChild(div);
+        }
+      },
     };
 
-    return [...[section]];
+    return [section];
   }
 
   private buildPumpSummarySections(ui: PumpSummaryUI): SummaryTableSection[] {
