@@ -58,7 +58,7 @@ const Diagram = (props: DiagramProps) => {
   const settings: DiagramSettings = useAppSelector((state: RootState) => state.diagram.settings);
   const recentNodeColors = useAppSelector((state: RootState) => state.diagram.recentNodeColors);
   const recentEdgeColors = useAppSelector((state: RootState) => state.diagram.recentEdgeColors);
-  const paletteColors = useAppSelector((state: RootState) => state.diagram.paletteColors);
+  const paletteColors = userDiagramOptions.paletteColors;
   const calculatedData: DiagramCalculatedData = useAppSelector((state: RootState) => state.diagram.calculatedData);
   const animated: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.animated);
   const minimapVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
@@ -110,7 +110,6 @@ const Diagram = (props: DiagramProps) => {
         calculatedData,
         recentNodeColors,
         recentEdgeColors,
-        paletteColors,
         diagramNotes: debouncedDiagramNotes
       };
       formatDataForMEASUR(updatedDiagramData);

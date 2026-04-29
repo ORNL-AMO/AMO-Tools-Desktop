@@ -101,7 +101,6 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     recentNodeColors: string[];
     recentEdgeColors: string[];
     diagramNotes?: string;
-    paletteColors?: string[];
   }
 
   export interface DiagramMetaData {
@@ -139,6 +138,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     directionalArrowsVisible: boolean,
     flowLabelSize: number,
     animated: boolean,
+    paletteColors?: string[],
   }
   
   

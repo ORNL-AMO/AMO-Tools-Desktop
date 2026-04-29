@@ -31,8 +31,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const diagramNotes = useAppSelector((state) => state.diagram.diagramNotes);
-  const paletteColors = useAppSelector((state: RootState) => state.diagram.paletteColors);
-  const selectedPaletteIdx = allPalettes.findIndex((palette) => palette.every((color, i) => color === paletteColors[i]));
+  const paletteColors = useAppSelector((state: RootState) => state.diagram.diagramOptions.paletteColors);
+  const selectedPaletteIdx = allPalettes.findIndex((palette) => palette.every((color, i) => color === paletteColors?.[i]));
   const hasAssessment = useAppSelector(selectHasAssessment);
   const edgeType = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const strokeWidth = useAppSelector((state: RootState) => state.diagram.diagramOptions.strokeWidth);
@@ -126,7 +126,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
               {processFlowParts.map((part: ProcessFlowPart) => {
-                const bgColor = getPaletteColorForType(part.processComponentType as any, paletteColors);
+                const bgColor = getPaletteColorForType(part.processComponentType as any, paletteColors ?? []);
                 const textColor = bgColor ? getContrastTextColor(bgColor) : undefined;
                 return (
                   <Grid size={{ xs: 1, sm: 2, md: 2 }}  key={part.processComponentType}>
@@ -181,14 +181,14 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
         <TabPanel value={selectedTab} index={2}>
           <Box paddingX={'.5rem'}>
-            <ColorPaletteDropdown
-              selected={selectedPaletteIdx}
-              onChange={(paletteIdx) => {
-                dispatch(setPaletteColors(allPalettes[paletteIdx]));
-              }}
-            />
             <div className="sidebar-options">
             <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <ColorPaletteDropdown
+                selected={selectedPaletteIdx}
+                onChange={(paletteIdx) => {
+                  dispatch(setPaletteColors(allPalettes[paletteIdx]));
+                }}
+              />
               <FormControl fullWidth size="small">
                 <InputLabel id="unitsOfMeasure-label">Units of Measure</InputLabel>
                 <Select

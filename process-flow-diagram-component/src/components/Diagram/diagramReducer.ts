@@ -59,7 +59,6 @@ export interface DiagramState {
   manageDataTabs: ManageDataTab[],
   diagramAlert: DiagramAlertState,
   diagramNotes: string,
-  paletteColors: string[],
 }
 
 export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState => {
@@ -69,7 +68,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     edges: [],
     composedNodeData: [],
     settings: getDefaultSettings(),
-    diagramOptions: getDefaultUserDiagramOptions(),
+    diagramOptions: { ...getDefaultUserDiagramOptions(), paletteColors: getDefaultPaletteColors() },
     isDataDrawerOpen: false,
     isMenuDrawerOpen: true,
     selectedDataId: undefined,
@@ -92,7 +91,6 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
       open: false,
     },
     diagramNotes: '',
-    paletteColors: getDefaultPaletteColors(),
   }
 }
 
@@ -130,8 +128,7 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.nodeErrors = diagramData.nodeErrors ? { ...diagramData.nodeErrors } : {};
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
-  state.paletteColors = diagramData.paletteColors ?? getDefaultPaletteColors();
-  state.isDataDrawerOpen = false;
+state.diagramOptions.paletteColors = diagramData.userDiagramOptions?.paletteColors ?? getDefaultPaletteColors();  state.isDataDrawerOpen = false;
   state.isMenuDrawerOpen = state.isMenuDrawerOpen ?? true;
   state.focusedEdgeId = undefined;
   state.selectedDataId = undefined;
@@ -165,7 +162,7 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: W
   // * modifiedDate is not currently being read in the app
   newNode.data.modifiedDate = getStoreSerializedDate(newNode.data.modifiedDate as Date);
   // Apply the active palette color for this node's component type
-  const paletteColor = getPaletteColorForType(nodeType, state.paletteColors);
+  const paletteColor = getPaletteColorForType(nodeType, state.diagramOptions.paletteColors ?? getDefaultPaletteColors());
   if (paletteColor) {
     if (!newNode.style) newNode.style = {};
     newNode.style.backgroundColor = paletteColor;
@@ -488,7 +485,7 @@ const setDiagramNotesReducer = (state: DiagramState, action: PayloadAction<strin
  */
 const setPaletteColorsReducer = (state: DiagramState, action: PayloadAction<string[]>) => {
   const palette = action.payload;
-  state.paletteColors = palette;
+  state.diagramOptions.paletteColors = palette;
   state.nodes = state.nodes.map((node: Node<ProcessFlowPart>) => {
     const paletteColor = getPaletteColorForType(node.data.processComponentType as WaterProcessComponentType, palette);
     if (!paletteColor) {
