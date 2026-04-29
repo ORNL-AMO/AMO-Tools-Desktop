@@ -4,7 +4,7 @@ import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
+import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange, setPaletteColors, getPaletteColorForType } from '../Diagram/diagramReducer';
 import { RootState, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
@@ -15,6 +15,8 @@ import InputField from '../StyledMUI/InputField';
 import { Node } from '@xyflow/react';
 import TextField from '@mui/material/TextField';
 import { setDiagramNotes } from '../Diagram/diagramReducer';
+import ColorPaletteDropdown, { allPalettes } from "./ColorPaletteDropdown"
+import { getContrastTextColor } from '../Diagram/FlowUtils';
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(2),
@@ -29,6 +31,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const diagramNotes = useAppSelector((state) => state.diagram.diagramNotes);
+  const paletteColors = useAppSelector((state: RootState) => state.diagram.paletteColors);
+  const selectedPaletteIdx = allPalettes.findIndex((palette) => palette.every((color, i) => color === paletteColors[i]));
   const hasAssessment = useAppSelector(selectHasAssessment);
   const edgeType = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const strokeWidth = useAppSelector((state: RootState) => state.diagram.diagramOptions.strokeWidth);
@@ -121,15 +125,20 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Typography>
           <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
-              {processFlowParts.map((part: ProcessFlowPart) => (
-                <Grid size={{ xs: 1, sm: 2, md: 2 }}  key={part.processComponentType}>
-                  <WaterComponent className={`dndnode ${part.processComponentType}`}
-                    onDragStart={(event) => onDragStart(event, part.processComponentType)}
-                    draggable={true}>
-                    {part.name}
-                  </WaterComponent>
-                </Grid>
-              ))}
+              {processFlowParts.map((part: ProcessFlowPart) => {
+                const bgColor = getPaletteColorForType(part.processComponentType as any, paletteColors);
+                const textColor = bgColor ? getContrastTextColor(bgColor) : undefined;
+                return (
+                  <Grid size={{ xs: 1, sm: 2, md: 2 }}  key={part.processComponentType}>
+                    <WaterComponent className={`dndnode ${part.processComponentType}`}
+                      onDragStart={(event) => onDragStart(event, part.processComponentType)}
+                      draggable={true}
+                      style={{ backgroundColor: bgColor, color: textColor }}>
+                      {part.name}
+                    </WaterComponent>
+                  </Grid>
+                );
+              })}
               {/* <Grid item xs={1} sm={2} md={2}>
                 <WaterComponent className={`dndnode splitterNode`}
                   onDragStart={(event) => onDragStart(event, 'splitter-node-4')} draggable> 4-way Connection</WaterComponent>
@@ -172,6 +181,12 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
         <TabPanel value={selectedTab} index={2}>
           <Box paddingX={'.5rem'}>
+            <ColorPaletteDropdown
+              selected={selectedPaletteIdx}
+              onChange={(paletteIdx) => {
+                dispatch(setPaletteColors(allPalettes[paletteIdx]));
+              }}
+            />
             <div className="sidebar-options">
             <Box className={'sidebar-option-container'} padding={'.5rem'}>
               <FormControl fullWidth size="small">

@@ -288,3 +288,20 @@ export const getFlowDisplayValues = (componentEdges: Edge<CustomEdgeData>[]) => 
     return flowValue;
   });
 }
+
+/** Returns black or white for best contrast against the given hex background color. */
+export function getContrastTextColor(bgColor: string): string {
+  const hex = bgColor.replace('#', '');
+  let r = 0, g = 0, b = 0;
+  if (hex.length === 3) {
+    r = parseInt(hex[0] + hex[0], 16);
+    g = parseInt(hex[1] + hex[1], 16);
+    b = parseInt(hex[2] + hex[2], 16);
+  } else if (hex.length === 6) {
+    r = parseInt(hex.substring(0, 2), 16);
+    g = parseInt(hex.substring(2, 4), 16);
+    b = parseInt(hex.substring(4, 6), 16);
+  }
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.6 ? '#000' : '#fff';
+}
