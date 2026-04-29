@@ -11,7 +11,7 @@ export class ConvertAirLeakService {
 
   //input metric => imperial
   convertInputs(inputArray: Array<AirLeakSurveyData>, settings: Settings): void {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       for (let i = 0; i < inputArray.length; i++) {
         inputArray[i].bagMethodData.bagVolume = this.convertUnitsService.value(inputArray[i].bagMethodData.bagVolume).from('L').to('ft3');
 
@@ -38,7 +38,7 @@ export class ConvertAirLeakService {
   }
 
   convertCompressorSpecificPower(compressorSpecificPower: number, settings: Settings): number {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       let conversionHelper = this.convertUnitsService.value(1).from('m3').to('ft3');
       return compressorSpecificPower / conversionHelper;
     } else {
@@ -64,7 +64,7 @@ export class ConvertAirLeakService {
    * 
    */
   convertResult(result: AirLeakSurveyResult, settings: Settings) {
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       result.totalFlowRate = this.convertUnitsService.value(result.totalFlowRate).from('ft3').to('m3');
       result.annualTotalFlowRate = this.convertUnitsService.value(result.annualTotalFlowRate).from('ft3').to('m3');
     } else {
@@ -80,7 +80,7 @@ export class ConvertAirLeakService {
   convertBagMethodResult(result: AirLeakSurveyResult, settings: Settings) {
     result.annualTotalElectricity = result.annualTotalElectricity * 1000;
     result.annualTotalElectricityCost = result.annualTotalElectricityCost * 1000;
-    if (settings.unitsOfMeasure == 'Metric') {
+    if (settings.unitsOfMeasure === 'Metric') {
       result.annualTotalFlowRate = result.annualTotalFlowRate * 1000;
       result.totalFlowRate = this.convertUnitsService.value(result.totalFlowRate).from('ft3').to('m3');
       result.annualTotalFlowRate = this.convertUnitsService.value(result.annualTotalFlowRate).from('ft3').to('m3');
@@ -165,8 +165,8 @@ export class ConvertAirLeakService {
   }
 
   convertExample(airLeakInputExample: AirLeakSurveyInput): AirLeakSurveyInput {
-    airLeakInputExample.compressedAirLeakSurveyInputVec.forEach(inputData => {
-      inputData = this.convertInputDataImperialToMetric(inputData)
+    airLeakInputExample.compressedAirLeakSurveyInputVec.forEach((inputData, index) => {
+      airLeakInputExample.compressedAirLeakSurveyInputVec[index] = this.convertInputDataImperialToMetric(inputData);
     });
     airLeakInputExample.facilityCompressorData = this.convertImperialFacilityCompressorData(airLeakInputExample.facilityCompressorData);
     return airLeakInputExample;

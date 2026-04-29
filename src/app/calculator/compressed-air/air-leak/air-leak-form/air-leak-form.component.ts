@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AirLeakSurveyInput, AirLeakSurveyData } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakService } from '../air-leak.service';
-import { UntypedFormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 import { AirLeakFormService } from './air-leak-form.service';
 import { LeakMeasurementMethod, measurementMethods } from '../../compressed-air-constants';
 
@@ -16,47 +16,45 @@ import { LeakMeasurementMethod, measurementMethods } from '../../compressed-air-
 })
 export class AirLeakFormComponent implements OnInit {
 
-
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @Input()
   settings: Settings;
 
   currentLeakIndex: number;
-  leakForm: UntypedFormGroup;
-  currentLeakIndexSub: Subscription;
-  airLeakInputSub: Subscription;
+  leakForm: FormGroup;
 
   measurementMethods = measurementMethods;
-
   LeakMeasurementMethod = LeakMeasurementMethod;
 
-  constructor(private airLeakService: AirLeakService, private airLeakFormService: AirLeakFormService) { }
+  private destroyRef = inject(DestroyRef);
+
+  constructor(private airLeakService: AirLeakService, private airLeakFormService: AirLeakFormService,
+              private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.initSubscriptions();
   }
 
-  ngOnDestroy() {
-    this.currentLeakIndexSub.unsubscribe();
-    this.airLeakInputSub.unsubscribe();
-  }
-
   initSubscriptions() {
-    this.currentLeakIndexSub = this.airLeakService.currentLeakIndex.subscribe(value => {
-      this.currentLeakIndex = value;
-      let airLeakInput: AirLeakSurveyInput = this.airLeakService.airLeakInput.getValue();
-      if (airLeakInput) {
-        let tempLeak = airLeakInput.compressedAirLeakSurveyInputVec[value]
-        this.leakForm = this.airLeakFormService.getLeakFormFromObj(tempLeak);
-      }
-    })
-    this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(airLeakInput => {
-      if (airLeakInput) {
-        this.currentLeakIndex = this.airLeakService.currentLeakIndex.getValue();
-        let tempLeak = airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex]
-        this.leakForm = this.airLeakFormService.getLeakFormFromObj(tempLeak);
-      }
-    })
+    this.airLeakService.currentLeakIndex
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.currentLeakIndex = value;
+        const airLeakInput: AirLeakSurveyInput = this.airLeakService.airLeakInput.getValue();
+        if (airLeakInput) {
+          this.leakForm = this.airLeakFormService.getLeakFormFromObj(airLeakInput.compressedAirLeakSurveyInputVec[value]);
+          this.cdr.markForCheck();
+        }
+      });
+    this.airLeakService.airLeakInput
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(airLeakInput => {
+        if (airLeakInput) {
+          this.currentLeakIndex = this.airLeakService.currentLeakIndex.getValue();
+          this.leakForm = this.airLeakFormService.getLeakFormFromObj(airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex]);
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   addLeak() {

@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AirLeakService } from '../../air-leak.service';
 import { AirLeakFormService } from '../air-leak-form.service';
 import { AirLeakSurveyData, AirLeakSurveyInput, OrificeMethodData } from '../../../../../shared/models/standalone';
-import { UntypedFormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 
 @Component({
@@ -17,27 +17,28 @@ export class OrificeMethodFormComponent implements OnInit {
 
   @Input()
   settings: Settings;
-  currentLeakIndexSub: Subscription;
   currentLeakIndex: number;
 
-  orificeMethodForm: UntypedFormGroup;
+  orificeMethodForm: FormGroup;
+
+  private destroyRef = inject(DestroyRef);
 
   constructor(private airLeakService: AirLeakService,
-    private airLeakFormService: AirLeakFormService) { }
+    private airLeakFormService: AirLeakFormService,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.currentLeakIndexSub = this.airLeakService.currentLeakIndex.subscribe(value => {
-      this.currentLeakIndex = value;
-      let airLeakInput = this.airLeakService.airLeakInput.getValue();
-      if (airLeakInput) {
-        let tempLeak: AirLeakSurveyData = airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex]
-        this.orificeMethodForm = this.airLeakFormService.getOrificeFormFromObj(tempLeak);
-      }
-    })
-  }
-
-  ngOnDestroy(): void {
-    this.currentLeakIndexSub.unsubscribe();
+    this.airLeakService.currentLeakIndex
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.currentLeakIndex = value;
+        const airLeakInput = this.airLeakService.airLeakInput.getValue();
+        if (airLeakInput) {
+          const tempLeak: AirLeakSurveyData = airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex];
+          this.orificeMethodForm = this.airLeakFormService.getOrificeFormFromObj(tempLeak);
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   save() {

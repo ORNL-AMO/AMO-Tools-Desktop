@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, Input, EventEmitter, Output, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AirLeakService } from './air-leak.service';
 import { AirLeakSurveyInput } from '../../../shared/models/standalone';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
-import { Subscription } from 'rxjs';
 import { AirLeakSurveyTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
@@ -35,7 +35,6 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   assessment: Assessment;
   
   currentField: string;
-  currentFieldSub: Subscription;
 
   tabSelect: string = 'results';
   containerHeight: number;
@@ -43,7 +42,8 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
   modificationExists: boolean;
 
   airLeakInput: AirLeakSurveyInput;
-  airLeakInputSub: Subscription;
+
+  private destroyRef = inject(DestroyRef);
 
   saving: boolean;
   assessmentCalculator: Calculator;
@@ -60,7 +60,8 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
 
   constructor(private airLeakService: AirLeakService, private calculatorDbService: CalculatorDbService,
               private settingsDbService: SettingsDbService,
-              private analyticsService: AnalyticsService) { }
+              private analyticsService: AnalyticsService,
+              private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.analyticsService.sendEvent('calculator-CA-air-leak');
@@ -84,18 +85,22 @@ export class AirLeakComponent implements OnInit, AfterViewInit {
 
   ngOnDestroy() {
     this.airLeakService.currentLeakIndex.next(0);
-    this.currentFieldSub.unsubscribe();
-    this.airLeakInputSub.unsubscribe();
   }
 
   initSubscriptions() {
-    this.currentFieldSub = this.airLeakService.currentField.subscribe(val => {
-      this.currentField = val;
-    });
-    this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(value => {
-      this.airLeakInput = value;
-      this.calculate();
-    })
+    this.airLeakService.currentField
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(val => {
+        this.currentField = val;
+        this.cdr.markForCheck();
+      });
+    this.airLeakService.airLeakInput
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.airLeakInput = value;
+        this.calculate();
+        this.cdr.markForCheck();
+      });
   }
   
   async calculate() {

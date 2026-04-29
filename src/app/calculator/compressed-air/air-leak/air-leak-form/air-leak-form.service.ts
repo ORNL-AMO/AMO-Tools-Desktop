@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FacilityCompressorData, AirLeakSurveyData, OrificeMethodData, DecibelsMethodData, EstimateMethodData, AirLeakSurveyInput, BagMethodInput } from '../../../../shared/models/standalone';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 import { Settings } from '../../../../shared/models/settings';
 import { ConvertAirLeakService } from '../convert-air-leak.service';
@@ -10,7 +10,7 @@ import { LeakMeasurementMethod } from '../../compressed-air-constants';
 @Injectable()
 export class AirLeakFormService {
 
-  constructor(private formBuilder: UntypedFormBuilder, 
+  constructor(private formBuilder: FormBuilder, 
               private convertAirLeakService: ConvertAirLeakService) { }
 
   checkValidInput(input: AirLeakSurveyInput): boolean {
@@ -27,8 +27,8 @@ export class AirLeakFormService {
     });
   }
 
-  getLeakFormFromObj(inputObj: AirLeakSurveyData): UntypedFormGroup {
-    let form: UntypedFormGroup = this.formBuilder.group({
+  getLeakFormFromObj(inputObj: AirLeakSurveyData): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
       selected: [inputObj.selected],
       name: [inputObj.name, [Validators.required]],
       leakDescription: [inputObj.leakDescription, [Validators.required]],
@@ -64,7 +64,7 @@ export class AirLeakFormService {
 
   getEmptyAirLeakData() {
     let emptyData: AirLeakSurveyData = {
-      leakDescription: '',
+      leakDescription: 'New leak description',
       name: 'New Leak',
       selected: true,
       measurementMethod: LeakMeasurementMethod.Estimate,
@@ -102,7 +102,7 @@ export class AirLeakFormService {
     return emptyData;
   }
 
-  getAirLeakObjFromForm(form: UntypedFormGroup): AirLeakSurveyData {
+  getAirLeakObjFromForm(form: FormGroup): AirLeakSurveyData {
     let bagMethodObj: BagMethodInput = {
       operatingTime: form.controls.operatingTime.value,
       bagVolume: form.controls.bagVolume.value,
@@ -162,7 +162,7 @@ export class AirLeakFormService {
         compressorSpecificPower: 16
       },
     };
-    if (settings && settings.unitsOfMeasure == 'Metric') {
+    if (settings && settings.unitsOfMeasure === 'Metric') {
       emptyData = this.convertAirLeakService.convertImperialFacilityCompressorData(emptyData);
     }
     return emptyData;
@@ -183,8 +183,8 @@ export class AirLeakFormService {
     return exampleData;
   }
 
-  getFacilityCompressorFormFromObj(inputObj: FacilityCompressorData): UntypedFormGroup {
-    let form: UntypedFormGroup = this.formBuilder.group({
+  getFacilityCompressorFormFromObj(inputObj: FacilityCompressorData): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       utilityType: [inputObj.utilityType],
       utilityCost: [inputObj.utilityCost, [Validators.required, Validators.min(0)]],
@@ -199,16 +199,16 @@ export class AirLeakFormService {
     return form;
   }
 
-  setCompressorDataValidators(facilityCompressorDataForm: UntypedFormGroup): UntypedFormGroup {
-    let form: UntypedFormGroup = (facilityCompressorDataForm.get("compressorElectricityData") as UntypedFormGroup);
-    if (facilityCompressorDataForm.controls.utilityType.value == 1) {
+  setCompressorDataValidators(facilityCompressorDataForm: FormGroup): FormGroup {
+    let form: FormGroup = (facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
+    if (facilityCompressorDataForm.controls.utilityType.value === 1) {
       form.controls.compressorControl.setValidators([Validators.required]);
       form.controls.compressorControl.updateValueAndValidity();
-      if (form.controls.compressorControl.value == 8) {
+      if (form.controls.compressorControl.value === 8) {
         form.controls.compressorControlAdjustment.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
         form.controls.compressorControlAdjustment.updateValueAndValidity();
       }
-      if (form.controls.compressorSpecificPowerControl.value == 4) {
+      if (form.controls.compressorSpecificPowerControl.value === 4) {
         form.controls.compressorSpecificPower.setValidators([Validators.required, Validators.min(0)]);
         form.controls.compressorSpecificPower.updateValueAndValidity();
       }
@@ -216,21 +216,21 @@ export class AirLeakFormService {
     return facilityCompressorDataForm;
   }
 
-  getEstimateFormFromObj(inputObj: AirLeakSurveyData): UntypedFormGroup {
-    let form: UntypedFormGroup = this.formBuilder.group({
+  getEstimateFormFromObj(inputObj: AirLeakSurveyData): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
       leakRateEstimate: [inputObj.estimateMethodData.leakRateEstimate],
     });
     form = this.setEstimateValidators(form);
     return form;
   }
 
-  setEstimateValidators(form: UntypedFormGroup): UntypedFormGroup {
+  setEstimateValidators(form: FormGroup): FormGroup {
     form.controls.leakRateEstimate.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
     return form;
   }
 
-  getDecibelFormFromObj(inputObj: AirLeakSurveyData): UntypedFormGroup {
-    let form: UntypedFormGroup = this.formBuilder.group({
+  getDecibelFormFromObj(inputObj: AirLeakSurveyData): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
       linePressure: [inputObj.decibelsMethodData.linePressure],
       decibels: [inputObj.decibelsMethodData.decibels],
       decibelRatingA: [inputObj.decibelsMethodData.decibelRatingA],
@@ -246,7 +246,7 @@ export class AirLeakFormService {
     return form;
   }
 
-  getDecibelObjFromForm(form: UntypedFormGroup): DecibelsMethodData {
+  getDecibelObjFromForm(form: FormGroup): DecibelsMethodData {
     let decibelsMethodData: DecibelsMethodData = {
       linePressure: form.controls.linePressure.value,
       decibels: form.controls.decibels.value,
@@ -262,7 +262,7 @@ export class AirLeakFormService {
     return decibelsMethodData;
   }
 
-  setDecibelValidators(form: UntypedFormGroup): UntypedFormGroup {
+  setDecibelValidators(form: FormGroup): FormGroup {
     form.controls.linePressure.setValidators([Validators.required, Validators.min(0)]);
     form.controls.decibels.setValidators([Validators.required, Validators.min(0)]);
     form.controls.decibelRatingA.setValidators([Validators.required, Validators.min(0)]);
@@ -278,8 +278,8 @@ export class AirLeakFormService {
   }
 
 
-  getOrificeFormFromObj(inputObj: AirLeakSurveyData): UntypedFormGroup {
-    let form: UntypedFormGroup = this.formBuilder.group({
+  getOrificeFormFromObj(inputObj: AirLeakSurveyData): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
       compressorAirTemp: [inputObj.orificeMethodData.compressorAirTemp],
       atmosphericPressure: [inputObj.orificeMethodData.atmosphericPressure],
       dischargeCoefficient: [inputObj.orificeMethodData.dischargeCoefficient],
@@ -292,7 +292,7 @@ export class AirLeakFormService {
     return form;
   }
 
-  getOrificeObjFromForm(form: UntypedFormGroup): OrificeMethodData {
+  getOrificeObjFromForm(form: FormGroup): OrificeMethodData {
     let orificeMethodData: OrificeMethodData = {
       compressorAirTemp: form.controls.compressorAirTemp.value,
       atmosphericPressure: form.controls.atmosphericPressure.value,
@@ -304,7 +304,7 @@ export class AirLeakFormService {
     return orificeMethodData;
   }
 
-  setOrificeValidators(form: UntypedFormGroup): UntypedFormGroup {
+  setOrificeValidators(form: FormGroup): FormGroup {
     form.controls.compressorAirTemp.setValidators([Validators.required, Validators.min(0)]);
     form.controls.atmosphericPressure.setValidators([Validators.required, Validators.min(0)]);
     form.controls.dischargeCoefficient.setValidators([Validators.required, Validators.min(0)]);
@@ -314,8 +314,8 @@ export class AirLeakFormService {
     return form;
   }
 
-  getBagFormFromObj(inputObj: AirLeakSurveyData, operatingHours: number): UntypedFormGroup {
-    let form: UntypedFormGroup = this.formBuilder.group({
+  getBagFormFromObj(inputObj: AirLeakSurveyData, operatingHours: number): FormGroup {
+    let form: FormGroup = this.formBuilder.group({
       operatingTime: [operatingHours],
       numberOfUnits: [inputObj.bagMethodData.numberOfUnits],
       bagVolume: [inputObj.bagMethodData.bagVolume],
@@ -325,7 +325,7 @@ export class AirLeakFormService {
     return form;
   }
 
-  getBagObjFromForm(form: UntypedFormGroup, operatingHours: number): BagMethodInput {
+  getBagObjFromForm(form: FormGroup, operatingHours: number): BagMethodInput {
     let bagMethodObj: BagMethodInput = {
       operatingTime: operatingHours,
       bagFillTime: form.controls.bagFillTime.value,
@@ -335,7 +335,7 @@ export class AirLeakFormService {
     return bagMethodObj;
   }
 
-  setBagValidators(form: UntypedFormGroup): UntypedFormGroup {
+  setBagValidators(form: FormGroup): FormGroup {
     form.controls.bagVolume.setValidators([Validators.required, Validators.min(0)]);
     form.controls.bagFillTime.setValidators([Validators.required, Validators.min(0)]);
     return form;

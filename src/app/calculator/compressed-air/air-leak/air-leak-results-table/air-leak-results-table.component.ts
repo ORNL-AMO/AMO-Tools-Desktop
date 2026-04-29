@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AirLeakService } from '../air-leak.service';
 import { AirLeakSurveyOutput } from '../../../../shared/models/standalone';
-import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -14,31 +14,31 @@ import { Settings } from '../../../../shared/models/settings';
 export class AirLeakResultsTableComponent implements OnInit {
 
   airLeakOutput: AirLeakSurveyOutput;
-  airLeakOutputSub: Subscription;
-  
-  resetDataSub: Subscription;
   allSelected: boolean = true;
 
   @Input()
   settings: Settings;
 
-  constructor(private airLeakService: AirLeakService) { }
+  private destroyRef = inject(DestroyRef);
+
+  constructor(private airLeakService: AirLeakService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-      this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
+    this.airLeakService.airLeakOutput
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
         this.airLeakOutput = value;
         this.updateAllSelected();
+        this.cdr.markForCheck();
       });
-      this.resetDataSub = this.airLeakService.resetData.subscribe(value => {
+    this.airLeakService.resetData
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
         if (value) {
           this.allSelected = true;
+          this.cdr.markForCheck();
         }
       });
-  }
-  
-  ngOnDestroy() {
-    this.airLeakOutputSub.unsubscribe();    
-    this.resetDataSub.unsubscribe();
   }
 
   editLeak(index: number) {
@@ -53,7 +53,8 @@ export class AirLeakResultsTableComponent implements OnInit {
     this.airLeakService.deleteLeak(index);
   }
 
-  toggleSelected(index: number, selected: boolean) {
+  toggleSelected(index: number, event: Event) {
+    const selected = (event.target as HTMLInputElement).checked;
     this.airLeakService.setLeakForModification(index, selected);
     this.updateAllSelected();
   }

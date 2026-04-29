@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AirLeakSurveyInput } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { OperatingCostService } from '../../operating-cost/operating-cost.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { AirLeakService } from '../air-leak.service';
-import { UntypedFormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { FormGroup } from '@angular/forms';
 import { AirLeakFormService } from '../air-leak-form/air-leak-form.service';
 import { ConvertAirLeakService } from '../convert-air-leak.service';
 import { roundVal } from '../../../../shared/helperFunctions';
@@ -26,9 +26,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
 
   airLeakInput: AirLeakSurveyInput;
 
-  airLeakOutputSub: Subscription;
-  generateExampleSub: Subscription;
-  resetDataSub: Subscription;
+  private destroyRef = inject(DestroyRef);
 
   annualTotalElectricity: number;
   currentField: string;
@@ -37,7 +35,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   compressorCustomSpecificPower: boolean;
   formWidth: number;
   currentElectricityUse: number;
-  facilityCompressorDataForm: UntypedFormGroup;
+  facilityCompressorDataForm: FormGroup;
 
   @ViewChild('leaksTable', { static: false }) leaksTable: ElementRef;
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
@@ -77,17 +75,12 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   constructor(private operatingCostService: OperatingCostService,
     private airLeakService: AirLeakService,
     private airLeakFormService: AirLeakFormService,
-    private convertAirLeakService: ConvertAirLeakService) { }
+    private convertAirLeakService: ConvertAirLeakService,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.setFormFromInputs();
     this.initSubscriptions();
-  }
-
-  ngOnDestroy() {
-    this.airLeakOutputSub.unsubscribe();
-    this.generateExampleSub.unsubscribe();
-    this.resetDataSub.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -102,21 +95,30 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
-      this.annualTotalElectricity = value.baselineTotal.annualTotalElectricity;
-    });
+    this.airLeakService.airLeakOutput
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.annualTotalElectricity = value.baselineTotal.annualTotalElectricity;
+        this.cdr.markForCheck();
+      });
 
-    this.generateExampleSub = this.airLeakService.generateExample.subscribe(val => {
-      if (val == true) {
-        this.setFormFromInputs();
-      }
-    });
+    this.airLeakService.generateExample
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(val => {
+        if (val === true) {
+          this.setFormFromInputs();
+          this.cdr.markForCheck();
+        }
+      });
 
-    this.resetDataSub = this.airLeakService.resetData.subscribe(val => {
-      if (val == true) {
-        this.setFormFromInputs();
-      }
-    })
+    this.airLeakService.resetData
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(val => {
+        if (val === true) {
+          this.setFormFromInputs();
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   save() {
@@ -129,12 +131,12 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
   changeCompressorControl() {
-    let compressorElectricityForm: UntypedFormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as UntypedFormGroup);
+    let compressorElectricityForm: FormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
     if (!this.compressorCustomControl) {
-      if (compressorElectricityForm.controls.compressorControl.value == 8) {
+      if (compressorElectricityForm.controls.compressorControl.value === 8) {
         this.compressorCustomControl = true;
       }
-      let control = this.compressorControlTypes.find(controlItem => { return controlItem.value == compressorElectricityForm.controls.compressorControl.value });
+      let control = this.compressorControlTypes.find(controlItem => { return controlItem.value === compressorElectricityForm.controls.compressorControl.value });
       compressorElectricityForm.patchValue({ compressorControlAdjustment: control.adjustment });
     }
     else if (compressorElectricityForm.controls.compressorControl.value !== 8) {
@@ -153,15 +155,15 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
   changeCompressorType() {
-    let compressorElectricityForm: UntypedFormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as UntypedFormGroup);
+    let compressorElectricityForm: FormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
     if (!this.compressorCustomSpecificPower) {
-      if (compressorElectricityForm.controls.compressorSpecificPowerControl.value == 4) {
+      if (compressorElectricityForm.controls.compressorSpecificPowerControl.value === 4) {
         this.compressorCustomSpecificPower = true;
       }
       let specificPower: number = this.getSpecificPower(compressorElectricityForm);
       compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
     }
-    else if (compressorElectricityForm.controls.compressorSpecificPowerControl.value != 4) {
+    else if (compressorElectricityForm.controls.compressorSpecificPowerControl.value !== 4) {
       this.compressorCustomSpecificPower = false;
       let specificPower: number = this.getSpecificPower(compressorElectricityForm);
       compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
@@ -176,9 +178,9 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
 
-  getSpecificPower(compressorElectricityForm: UntypedFormGroup): number {
+  getSpecificPower(compressorElectricityForm: FormGroup): number {
     let specificPower: number = this.compressorTypes[compressorElectricityForm.controls.compressorSpecificPowerControl.value].specificPower;
-    if (this.settings.unitsOfMeasure != 'Imperial') {
+    if (this.settings.unitsOfMeasure !== 'Imperial') {
       specificPower = this.convertAirLeakService.convertSpecificPowerToMetric(specificPower);
       specificPower = roundVal(specificPower);
     } else {
@@ -215,7 +217,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
   changeUtilityType() {
-    if (this.facilityCompressorDataForm.controls.utilityType.value == 0) {
+    if (this.facilityCompressorDataForm.controls.utilityType.value === 0) {
       this.facilityCompressorDataForm.controls.utilityCost.patchValue(this.settings.compressedAirCost);
     } else {
       this.facilityCompressorDataForm.controls.utilityCost.patchValue(this.settings.electricityCost);

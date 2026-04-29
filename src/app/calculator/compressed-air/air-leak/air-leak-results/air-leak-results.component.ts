@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakSurveyOutput } from '../../../../shared/models/standalone';
-import { Subscription } from 'rxjs';
 import { AirLeakService } from '../air-leak.service';
 
 @Component({
@@ -14,8 +14,6 @@ import { AirLeakService } from '../air-leak.service';
 export class AirLeakSurveyResultsComponent implements OnInit {
 
   airLeakOutput: AirLeakSurveyOutput;
-  airLeakOutputSub: Subscription;
-  airLeakInputSub: Subscription;
 
   @Input()
   settings: Settings;
@@ -29,24 +27,28 @@ export class AirLeakSurveyResultsComponent implements OnInit {
   savingsTableString: string;
   allTablesString: string;
   compressorControlAdjustment: number;
-  constructor(private airLeakService: AirLeakService) { }
+
+  private destroyRef = inject(DestroyRef);
+
+  constructor(private airLeakService: AirLeakService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
-      this.airLeakOutput = value;
-    });
-    this.airLeakInputSub = this.airLeakService.airLeakInput.subscribe(value => {
-      if (value && value.facilityCompressorData.utilityType == 1) {
-       this.compressorControlAdjustment = value.facilityCompressorData.compressorElectricityData.compressorControlAdjustment;
-      } else {
-        this.compressorControlAdjustment = undefined;
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.airLeakOutputSub.unsubscribe();
-    this.airLeakInputSub.unsubscribe();
+    this.airLeakService.airLeakOutput
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.airLeakOutput = value;
+        this.cdr.markForCheck();
+      });
+    this.airLeakService.airLeakInput
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        if (value && value.facilityCompressorData.utilityType === 1) {
+          this.compressorControlAdjustment = value.facilityCompressorData.compressorElectricityData.compressorControlAdjustment;
+        } else {
+          this.compressorControlAdjustment = undefined;
+        }
+        this.cdr.markForCheck();
+      });
   }
 
   updateTableString() {

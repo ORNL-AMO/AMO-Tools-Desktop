@@ -4,25 +4,25 @@
       <tr class="bold text-center no-border">
         <td>Fix
           <div>
-            <input type="checkbox" [(ngModel)]="allSelected" (click)="toggleSelectAll()"/>
+            <input type="checkbox" [checked]="allSelected" (click)="toggleSelectAll()"/>
           </div>
         </td>
         <td class="w-25">Leak Name</td>
         <td>Flow Rate
-          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/min</span>)
+          (<span *ngIf="settings.unitsOfMeasure !== 'Metric'">scfm</span>
+          <span *ngIf="settings.unitsOfMeasure === 'Metric'">m<sup>3</sup>/min</span>)
         </td>
         <td>Air Loss
-          (<span *ngIf="settings.unitsOfMeasure != 'Metric'">kscf/yr</span>
-          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>)
+          (<span *ngIf="settings.unitsOfMeasure !== 'Metric'">kscf/yr</span>
+          <span *ngIf="settings.unitsOfMeasure === 'Metric'">m<sup>3</sup>/yr</span>)
         </td>
-        <td *ngIf="airLeakOutput.facilityCompressorData.utilityType == 1">Electricity Consumption (kWh/yr)</td>
+        <td *ngIf="airLeakOutput.facilityCompressorData.utilityType === 1">Electricity Consumption (kWh/yr)</td>
         <td class="w-25"></td>
       </tr>
       <tr class="text-center" *ngFor="let leak of airLeakOutput.individualLeaks; let index = index">
         <td class="p-3">
           <div>
-            <input type="checkbox" [(ngModel)]="leak.selected" (change)="toggleSelected(index, leak.selected)" />
+            <input type="checkbox" [checked]="leak.selected" (change)="toggleSelected(index, $event)" />
           </div>
         </td>
         <td class="p-3 col-item-br">
@@ -34,7 +34,7 @@
         </td>
         <td class="p-3 col-item-br">
           <span *ngIf="leak.totalFlowRate">
-            @if (settings.unitsOfMeasure != 'Metric') {
+            @if (settings.unitsOfMeasure !== 'Metric') {
               {{ leak.totalFlowRate | number:'1.0-1'}}
             } @else {
               {{ leak.totalFlowRate | number:'1.3-3'}}
@@ -52,7 +52,7 @@
             --
           </span>
         </td>
-        <td *ngIf="airLeakOutput.facilityCompressorData.utilityType == 1" class="p-3 col-item-br">
+        <td *ngIf="airLeakOutput.facilityCompressorData.utilityType === 1" class="p-3 col-item-br">
           <span *ngIf="leak.annualTotalElectricity">
             {{ leak.annualTotalElectricity | number:'1.0-0' }}
           </span>

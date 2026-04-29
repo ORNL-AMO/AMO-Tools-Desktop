@@ -67,7 +67,7 @@ export class AirLeakService {
       facilityCompressorData: this.airLeakFormService.getExampleFacilityCompressorData()
     }
     //convert example
-    if (settings.unitsOfMeasure != 'Imperial') {
+    if (settings.unitsOfMeasure !== 'Imperial') {
       airLeakInputExample = this.convertAirleakService.convertExample(airLeakInputExample);
     }
     this.currentLeakIndex.next(0);
@@ -77,7 +77,11 @@ export class AirLeakService {
   }
 
   deleteLeak(deleteIndex: number) {
-    if(this.airLeakInput.value.compressedAirLeakSurveyInputVec.length == 1 && deleteIndex == 0){
+    const vec = this.airLeakInput.value.compressedAirLeakSurveyInputVec;
+    if (deleteIndex < 0 || deleteIndex >= vec.length) {
+      return;
+    }
+    if (vec.length === 1 && deleteIndex === 0) {
       this.currentLeakIndex.next(0);
       this.initDefaultEmptyInputs(this.settings);
     } else {
@@ -93,14 +97,22 @@ export class AirLeakService {
   }
 
   copyLeak(index: number) {
-    let leakCopy = JSON.parse(JSON.stringify(this.airLeakInput.value.compressedAirLeakSurveyInputVec[index]));
+    const vec = this.airLeakInput.value.compressedAirLeakSurveyInputVec;
+    if (index < 0 || index >= vec.length) {
+      return;
+    }
+    let leakCopy = JSON.parse(JSON.stringify(vec[index]));
     leakCopy.name = 'Copy of ' + leakCopy.name;
-    this.airLeakInput.value.compressedAirLeakSurveyInputVec.push(leakCopy);
-    this.airLeakInput.next(this.airLeakInput.value)
+    vec.push(leakCopy);
+    this.airLeakInput.next(this.airLeakInput.value);
   }
 
   setLeakForModification(index: number, selected: boolean) {
-    this.airLeakInput.value.compressedAirLeakSurveyInputVec[index].selected = selected;
+    const vec = this.airLeakInput.value?.compressedAirLeakSurveyInputVec;
+    if (!vec || index < 0 || index >= vec.length) {
+      return;
+    }
+    vec[index].selected = selected;
     this.airLeakInput.next(this.airLeakInput.value);
   }
 
@@ -143,14 +155,14 @@ export class AirLeakService {
       leakResult.selected = leak.selected;
 
       let convertedResult: AirLeakSurveyResult = leakResult;
-      if (leak.measurementMethod == LeakMeasurementMethod.Bag) {
+      if (leak.measurementMethod === LeakMeasurementMethod.Bag) {
         // * is bag method, different suite endpoint requires handling with different conversions
         convertedResult = this.convertAirleakService.convertBagMethodResult(leakResult, settings);
       } else {
         convertedResult = this.convertAirleakService.convertResult(leakResult, settings);
       }
 
-      if (!leak.selected) {
+      if (!leak?.selected) {
         // * if leak is not selected for fixing, keep it in the modification scenario - we will still pay for its costs
         cumulativeModificationResults.annualTotalElectricity += convertedResult.annualTotalElectricity;
         cumulativeModificationResults.annualTotalElectricityCost += convertedResult.annualTotalElectricityCost;
@@ -174,7 +186,7 @@ export class AirLeakService {
       annualTotalFlowRate: cumulativeBaselineResults.annualTotalFlowRate - cumulativeModificationResults.annualTotalFlowRate,
     }
 
-    if (inputCopy.facilityCompressorData.utilityType == 1) {
+    if (inputCopy.facilityCompressorData.utilityType === 1) {
       let compressorControlAdjustment: number = airLeakSurveyInput.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment || 1;
       savings.annualTotalElectricity = savings.annualTotalElectricity * (compressorControlAdjustment / 100);
       savings.annualTotalElectricityCost = savings.annualTotalElectricityCost * (compressorControlAdjustment / 100);

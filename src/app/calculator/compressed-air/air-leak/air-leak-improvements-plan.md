@@ -5,9 +5,9 @@ Branch: `copilot/upgrade-air-leak-survey`
 
 ---
 
-## P0 — Critical Convention Violations (Block Review)
+## P0 — Critical Convention Violations (Block Review) ✓ DONE
 
-### 1. Add `ChangeDetectionStrategy.OnPush` to all components
+### 1. Add `ChangeDetectionStrategy.OnPush` to all components ✓ DONE
 
 All 10 components are missing `ChangeDetectionStrategy.OnPush`, which is a hard project requirement and the most impactful performance issue in the module.
 
@@ -38,7 +38,7 @@ import { ChangeDetectionStrategy } from '@angular/core';
 
 ---
 
-### 2. Replace `@HostListener` with `host` object in decorator
+### 2. Replace `@HostListener` with `host` object in decorator ✓ DONE
 
 `@HostListener` is forbidden by project convention. Two components use it for `window:resize`.
 
@@ -64,9 +64,9 @@ Also remove any `@HostBinding` imports that are no longer needed.
 
 ---
 
-## P1 — High Priority: Type Safety and Form Correctness
+## P1 — High Priority: Type Safety and Form Correctness ✓ DONE
 
-### 3. Fix `updateValueAndValidity()` missing after dynamic validator changes
+### 3. Fix `updateValueAndValidity()` missing after dynamic validator changes ✓ DONE
 
 In `air-leak-form.service.ts`, `setCompressorDataValidators()` calls `setValidators()` on form controls but never calls `updateValueAndValidity()`. This means the form validity state is stale after validator updates.
 
@@ -82,7 +82,7 @@ This is a correctness bug: the form can appear invalid when it is valid or vice 
 
 ---
 
-### 4. Replace `UntypedFormGroup` with typed `FormGroup`
+### 4. Replace `UntypedFormGroup` with typed `FormGroup` ✓ DONE
 
 All form groups use `UntypedFormGroup`, losing compile-time safety on control names and values.
 
@@ -94,7 +94,7 @@ All form groups use `UntypedFormGroup`, losing compile-time safety on control na
 
 ---
 
-### 5. Remove mixed `ngModel` + reactive form bindings in results table
+### 5. Remove mixed `ngModel` + reactive form bindings in results table ✓ DONE
 
 `air-leak-results-table.component.html` uses both `[(ngModel)]` and reactive form event bindings simultaneously on the same checkboxes. This creates conflicting state updates.
 
@@ -109,7 +109,7 @@ All form groups use `UntypedFormGroup`, losing compile-time safety on control na
 
 ---
 
-### 6. Fix `==` strict equality — use `===` throughout
+### 6. Fix `==` strict equality — use `===` throughout ✓ DONE
 
 `air-leak.service.ts` and templates use `==` for comparisons where `===` is required.
 
@@ -121,9 +121,9 @@ All form groups use `UntypedFormGroup`, losing compile-time safety on control na
 
 ---
 
-## P2 — Medium Priority: Subscription Management and Async Patterns
+## P2 — Medium Priority: Subscription Management and Async Patterns ✓ DONE
 
-### 7. Convert manual subscriptions to `async` pipe (or `takeUntilDestroyed`)
+### 7. Convert manual subscriptions to `async` pipe (or `takeUntilDestroyed`) ✓ DONE
 
 All components manually subscribe to BehaviorSubjects in `ngOnInit` and store results in component properties. This is fragile (subscription leaks if `ngOnDestroy` is missed), bypasses `OnPush` change detection, and is verbose.
 
@@ -153,7 +153,7 @@ This is required to be done before enabling `OnPush` on components that rely on 
 
 ---
 
-### 8. Fix `convertInputDataImperialToMetric` dead assignment in `convert-air-leak.service.ts`
+### 8. Fix `convertInputDataImperialToMetric` dead assignment in `convert-air-leak.service.ts` ✓ DONE
 
 Line ~169 in `convert-air-leak.service.ts` reassigns `inputData =` inside a `forEach` callback, which has no effect on the original array. The object reference is local to the callback.
 
@@ -172,7 +172,7 @@ inputData.forEach((data, index) => {
 
 ---
 
-### 9. Add null guards for `leak.selected` and array index access in `air-leak.service.ts`
+### 9. Add null guards for `leak.selected` and array index access in `air-leak.service.ts` ✓ DONE
 
 `getResults()` accesses `leak.selected` (line ~153) without null checking. If a leak object is partially initialized (e.g., during copy/delete mid-calculation), this throws.
 
@@ -260,9 +260,9 @@ Validators.max(HOURS_PER_YEAR)
 
 ---
 
-## P5 — Test Coverage Expansion
+## P5 — Test Coverage Expansion ✓ DONE
 
-### 16. Expand `air-leak.service.spec.ts` test cases
+### 16. Expand `air-leak.service.spec.ts` test cases ✓ DONE
 
 Current: 3 tests. Missing coverage:
 
@@ -277,7 +277,7 @@ Current: 3 tests. Missing coverage:
 
 ---
 
-### 17. Expand `air-leak-form.service.spec.ts` test cases
+### 17. Expand `air-leak-form.service.spec.ts` test cases ✓ DONE
 
 Current: 1 test. Missing coverage:
 
@@ -291,7 +291,7 @@ Current: 1 test. Missing coverage:
 
 ---
 
-### 18. Add component-level unit tests for `AirLeakFormComponent`
+### 18. Add component-level unit tests for `AirLeakFormComponent` ✓ DONE
 
 No component tests exist. At minimum:
 - Renders correct method-specific form when `measurementMethod` changes
@@ -312,3 +312,148 @@ No component tests exist. At minimum:
 | P5 — Test coverage | 3 | Spec files |
 
 **Suggested sequence:** P0 → P1#3 (validators) → P1#5 (ngModel conflict) → P2#7 (subscriptions, required before OnPush) → P0#1 (OnPush, now safe) → remainder in order.
+
+---
+
+## Addendum — Architectural Reorganization
+
+This addendum describes what a complete reorganization of the module would look like, the problems it would actually solve that the piecemeal items above cannot, and an honest comparison of the two approaches.
+
+---
+
+### Root Architectural Problems
+
+Three structural issues drive a disproportionate share of the bugs in this module. The piecemeal items treat symptoms of each; only a reorganization removes the causes.
+
+**1. The flat mega-form**
+
+`AirLeakFormService.getLeakFormFromObj()` builds a single flat `FormGroup` that contains every field from all four measurement methods simultaneously — bag, decibel, orifice, and estimate fields all exist in the same group regardless of which method is selected. The method-specific form components each receive this single group and bind only to their own slice of it. This is why:
+- Typed `FormGroup` (P1 #4) can be introduced but will still describe an awkward all-methods-present shape.
+- Validators must be manually toggled via `setCompressorDataValidators()` / `setValidators()` and the `updateValueAndValidity()` bug (P1 #3) exists because the form structure makes dynamic validators necessary.
+- `getAirLeakObjFromForm()` unconditionally reads every method's fields back out, regardless of which one is active.
+
+**2. The BehaviorSubject mutation pattern**
+
+`AirLeakService` exposes its state as public `BehaviorSubject` instances. Several methods mutate the `.value` reference directly and then call `.next()` on the same object (e.g., `copyLeak()`, `setLeakForModification()`, `addLeak()` in the form component). This means subscribers are sometimes receiving the same object reference they already hold, making change detection unreliable and `OnPush` unsafe without `markForCheck()` or the `async` pipe. It also makes the state effectively mutable from anywhere that injects the service.
+
+**3. Form rebuilt on every state emission**
+
+`AirLeakFormComponent` subscribes to both `currentLeakIndex` and `airLeakInput`. Both subscriptions call `getLeakFormFromObj()`, which creates a brand new `FormGroup` instance from the model object on every emission. Every user keystroke that triggers `saveLeak()` → `airLeakInput.next()` → subscription fires → form is destroyed and replaced. This means the form loses focus on each save, validators reset, and any in-flight user input is discarded.
+
+---
+
+### Target Architecture
+
+The changes below address the root causes. They assume the existing calculation logic in `getResults()` is correct and is preserved as-is.
+
+#### State as signals in the service
+
+Replace the six BehaviorSubjects in `AirLeakService` with signals. `airLeakOutput` becomes a `computed()` — it derives from `airLeakInput` automatically and the manual `calculate()` call chain disappears:
+
+```typescript
+airLeakInput = signal<AirLeakSurveyInput>(undefined);
+currentLeakIndex = signal<number>(0);
+currentField = signal<string>('default');
+
+airLeakOutput = computed(() => {
+  const input = this.airLeakInput();
+  if (!input) return this.emptyOutput();
+  return this.getResults(input, this.settings);
+});
+```
+
+`resetData` and `generateExample` as BehaviorSubjects exist only to fire side-effect notifications. These become simple methods that call `airLeakInput.set(...)` directly; consumers react to the input change, not to a separate signal.
+
+#### Per-method form groups instead of a flat mega-form
+
+Split `getLeakFormFromObj()` into one builder per measurement method. Each method-specific form component receives and owns only its own `FormGroup`:
+
+```typescript
+getEstimateForm(data: EstimateMethodData): FormGroup<EstimateFormControls>
+getBagForm(data: BagMethodInput, hoursPerYear: number): FormGroup<BagFormControls>
+getOrificeForm(data: OrificeMethodData): FormGroup<OrificeFormControls>
+getDecibelForm(data: DecibelsMethodData): FormGroup<DecibelFormControls>
+```
+
+The parent `AirLeakFormComponent` builds the correct form when `currentLeakIndex` changes, not when `airLeakInput` emits. Method switches destroy the old sub-form and create the new one. This makes typed `FormGroup` (P1 #4) natural — each interface maps directly to one method's shape.
+
+#### Build form once, patch on model change
+
+`AirLeakFormComponent` should build its form when the active leak index changes, then `patchValue()` if the model is externally replaced (e.g., reset/example), not rebuild from scratch. Save on `valueChanges` with `debounceTime`:
+
+```typescript
+ngOnInit() {
+  effect(() => {
+    const index = this.airLeakService.currentLeakIndex();
+    const leak = this.airLeakService.airLeakInput()?.compressedAirLeakSurveyInputVec[index];
+    if (leak) this.buildForm(leak);
+  });
+
+  this.leakForm.valueChanges.pipe(
+    debounceTime(150),
+    takeUntilDestroyed(this.destroyRef)
+  ).subscribe(() => this.saveLeak());
+}
+```
+
+This eliminates the "form rebuilt while typing" problem without requiring `markForCheck()`.
+
+#### Components as pure inputs/outputs
+
+With signals powering the service and per-method forms owned locally, the leaf method form components (`BagMethodFormComponent`, etc.) no longer need to inject `AirLeakService` at all. They receive their `FormGroup` as an `input()` and emit field focus changes as an `output()`. Only `AirLeakFormComponent` and `FacilityCompressorDataFormComponent` need service injection.
+
+#### Validation without form instances
+
+Remove `checkValidInput()` from `AirLeakFormService`. Move the validity check to a standalone pure function that operates on the data model directly, not by recreating a `FormGroup` to interrogate its `.valid` state. Call this from `airLeakOutput`'s `computed()` before running calculations.
+
+---
+
+### Comparison: Complete Reorganization vs. Piecemeal
+
+#### What the piecemeal items fix
+
+The 18 items in P0–P5 address real bugs and real convention violations. Completing them leaves the module:
+- Convention-compliant (`OnPush`, `host`, `@if`/`@for`)
+- Free of the `updateValueAndValidity` correctness bug
+- Free of the `[(ngModel)]` conflict
+- Free of the dead assignment in `convertExample()`
+- Typed at the `FormGroup` level (though still with the flat shape)
+- With meaningful test coverage
+
+This is a legitimate, shippable outcome. Each item is independently reviewable.
+
+#### What the piecemeal items cannot fix
+
+| Problem | Piecemeal result | Reorganization result |
+|---|---|---|
+| Flat mega-form | Typed, but still flat and all-methods-present | Per-method forms; each typed naturally |
+| Dynamic validator fragility | `updateValueAndValidity()` added; still dynamic | Validators are static per form; no dynamic toggling needed |
+| Form rebuilt on every save | Subscription converted to `async` pipe or `takeUntilDestroyed`; form still rebuilt | Form built once; patched on external resets only |
+| BehaviorSubject mutation | Side effects of mutation remain; `markForCheck()` required after OnPush | Signals are immutable; `OnPush` is safe by default |
+| `checkValidInput()` re-creates forms | Still re-creates forms; just cleaner subscriptions elsewhere | Replaced by a pure function on the model |
+| Leaf components depend on `AirLeakService` | Still injected in all components | Injected only at the form-coordinator level |
+
+After all piecemeal work is done, the module will have a mixture of BehaviorSubjects (in the service) and signals (new state added to components), `async` pipe in some templates and `takeUntilDestroyed` in others, and a typed `FormGroup` that still describes a flat all-method shape. It will be significantly better but not architecturally clean.
+
+#### Tradeoffs
+
+**Piecemeal approach**
+- Lower regression risk — each change is small and independently testable against the existing spec suite.
+- Shorter total calendar time if work is incremental and reviewed item-by-item.
+- Can stop after P0/P1 and still be in a meaningfully better state.
+- Fits the project's contribution model (focused PRs, minimal scope).
+- Leaves the module in a "better legacy" state rather than a modern state.
+
+**Complete reorganization**
+- Eliminates all three root causes rather than patching their symptoms.
+- Results in a module that matches the `process-cooling-assessment` reference pattern outright.
+- Test surface for a signals-based service is significantly simpler — no subscription setup or BehaviorSubject initialization in specs.
+- Higher upfront risk: the calculation logic in `getResults()` is non-trivial and must be preserved exactly. A rewrite introduces regression surface that the current spec suite (4 tests total) cannot adequately catch.
+- Requires a meaningful test suite to be written before or alongside the reorganization, not after. Without it, regressions in calculation results may not be caught until QA.
+- Scope is roughly 3–4x the piecemeal work. Realistically a multi-day effort vs. several focused hours.
+
+#### Recommendation
+
+If this module is expected to receive continued feature work, reorganization is the right long-term investment — but only after the P5 test coverage items are completed first. The reorganization changes the service API, the form structure, and the component communication pattern simultaneously; without test coverage of `getResults()` output correctness and form round-trip fidelity, regressions will be caught late.
+
+A practical sequence: complete P0, P1 #3 (correctness bug), and P5 (test coverage) as piecemeal items. Then treat the remaining work as a reorganization rather than continuing to patch, using the new tests as a regression harness. This avoids doing the piecemeal work twice while ensuring the reorganization is safe to ship.

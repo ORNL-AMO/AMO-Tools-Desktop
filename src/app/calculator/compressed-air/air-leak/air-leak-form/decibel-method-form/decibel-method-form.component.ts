@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { UntypedFormGroup } from '@angular/forms';
+import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormGroup } from '@angular/forms';
 import { AirLeakService } from '../../air-leak.service';
 import { AirLeakFormService } from '../air-leak-form.service';
 import { AirLeakSurveyData, AirLeakSurveyInput } from '../../../../../shared/models/standalone';
@@ -17,27 +17,28 @@ export class DecibelMethodFormComponent implements OnInit {
 
   @Input()
   settings: Settings;
-  currentLeakIndexSub: Subscription;
   currentLeakIndex: number;
 
-  decibelsMethodForm: UntypedFormGroup;
+  decibelsMethodForm: FormGroup;
+
+  private destroyRef = inject(DestroyRef);
 
   constructor(private airLeakService: AirLeakService,
-    private airLeakFormService: AirLeakFormService) { }
+    private airLeakFormService: AirLeakFormService,
+    private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.currentLeakIndexSub = this.airLeakService.currentLeakIndex.subscribe(value => {
-      this.currentLeakIndex = value;
-      let airLeakInput = this.airLeakService.airLeakInput.getValue();
-      if (airLeakInput) {
-        let tempLeak: AirLeakSurveyData = airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex]
-        this.decibelsMethodForm = this.airLeakFormService.getDecibelFormFromObj(tempLeak);
-      }
-    })
-  }
-
-  ngOnDestroy(): void {
-    this.currentLeakIndexSub.unsubscribe();
+    this.airLeakService.currentLeakIndex
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.currentLeakIndex = value;
+        const airLeakInput = this.airLeakService.airLeakInput.getValue();
+        if (airLeakInput) {
+          const tempLeak: AirLeakSurveyData = airLeakInput.compressedAirLeakSurveyInputVec[this.currentLeakIndex];
+          this.decibelsMethodForm = this.airLeakFormService.getDecibelFormFromObj(tempLeak);
+          this.cdr.markForCheck();
+        }
+      });
   }
 
   save() {

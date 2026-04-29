@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, ChangeDetectionStrategy, ChangeDetectorRef, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AirLeakService } from '../air-leak.service';
 import { AirLeakSurveyOutput } from '../../../../shared/models/standalone';
-import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -12,26 +12,26 @@ import { Settings } from '../../../../shared/models/settings';
     standalone: false
 })
 export class AirLeakCopyTableComponent implements OnInit {
-  
+
   @ViewChild('leaksTable', { static: false }) leaksTable: ElementRef;
   @Input()
   settings: Settings;
 
   airLeakOutput: AirLeakSurveyOutput;
-  airLeakOutputSub: Subscription;
 
   leaksTableString: any;
 
-  constructor(private airLeakService: AirLeakService) { }
+  private destroyRef = inject(DestroyRef);
+
+  constructor(private airLeakService: AirLeakService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.airLeakOutputSub = this.airLeakService.airLeakOutput.subscribe(value => {
-      this.airLeakOutput = value;
-    })
-  }
-
-  ngOnDestroy() {
-    this.airLeakOutputSub.unsubscribe();
+    this.airLeakService.airLeakOutput
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.airLeakOutput = value;
+        this.cdr.markForCheck();
+      });
   }
   updateLeaksTableString() {
     this.leaksTableString = this.leaksTable.nativeElement.innerText;

@@ -1,4 +1,4 @@
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { LeakMeasurementMethod } from '../../compressed-air-constants';
 import { AirLeakFormService } from './air-leak-form.service';
 import { AirLeakSurveyData, AirLeakSurveyInput } from '../../../../shared/models/standalone';
@@ -8,7 +8,7 @@ describe('AirLeakFormService', () => {
   let service: AirLeakFormService;
 
   beforeEach(() => {
-    service = new AirLeakFormService(new UntypedFormBuilder(), {} as any);
+    service = new AirLeakFormService(new FormBuilder(), {} as any);
   });
 
   it('checkValidInput returns false when any leak row is invalid', () => {
