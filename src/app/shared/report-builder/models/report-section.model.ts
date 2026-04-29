@@ -27,10 +27,10 @@ export interface SummaryTableSection extends ReportSection {
 export interface ChartSection extends ReportSection {
   type: 'chart';
   /**
-   * DOM element id that html2canvas will capture at export time.
-   * The element must be visible in the DOM when export is triggered.
+   * Optional async provider that returns a PNG data URL.
+   * Chart sections must provide this to generate images for PDF export.
    */
-  elementId: string;
+  imageDataProvider?: () => Promise<string>;
   /** Fallback table for formats that cannot embed images (PPTX, XLSX) */
   altData?: SummaryTableSection;
 }

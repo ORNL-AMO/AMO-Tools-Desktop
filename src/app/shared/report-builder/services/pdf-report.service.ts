@@ -10,7 +10,6 @@ import {
 } from '../models/report-section.model';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import html2canvas from 'html2canvas';
 
 const DEFAULT_ACCENT_COLOR: [number, number, number] = [30, 90, 140];
 
@@ -206,31 +205,38 @@ export class PdfReportService extends BaseReportService {
   }
 
   /**
-   * Captures a DOM element by id using html2canvas and embeds it as an image in the PDF.
+   * Renders a chart section using the provided imageDataProvider.
    * Adds a new page when the image height exceeds the remaining space on the current page.
-   * Falls back to rendering altData as a table when the element is not found or capture fails.
+   * Falls back to rendering altData as a table when image generation fails.
    * Returns the Y position after the image or fallback table.
    */
   private async renderChart(pdf: jsPDF, section: ChartSection, cursorY: number): Promise<number> {
     cursorY = this.renderSectionTitle(pdf, section.title, cursorY);
-    const chartElement = globalThis.document?.getElementById(section.elementId);
 
-    if (chartElement) {
+    let imageData: string | null = null;
+    let imageAspectRatio: number = 2;
+
+    if (section.imageDataProvider) {
       try {
-        const canvas = await html2canvas(chartElement, { scale: 2, useCORS: true, logging: false });
-        const imageData = canvas.toDataURL('image/png');
-        const imageHeightMM = (canvas.height * CONTENT_WIDTH_MM) / canvas.width;
-        const remainingPageHeightMM = PAGE_HEIGHT_MM - PAGE_MARGIN_MM - cursorY;
-
-        if (imageHeightMM > remainingPageHeightMM) {
-          pdf.addPage();
-          cursorY = PAGE_MARGIN_MM;
-        }
-        pdf.addImage(imageData, 'PNG', PAGE_MARGIN_MM, cursorY, CONTENT_WIDTH_MM, imageHeightMM);
-        return cursorY + imageHeightMM + SECTION_GAP_MM;
+        imageData = await section.imageDataProvider();
+        // Plotly.toImage returns a data URL; derive aspect from a known fixed ratio (1400×700)
+        imageAspectRatio = 2; // width / height
       } catch {
         // fall through to altData
+        // todo display section with a message "Chart image failed to generate" and a warning icon
       }
+    }
+
+    if (imageData) {
+      const imageHeightMM = CONTENT_WIDTH_MM / imageAspectRatio;
+      const remainingPageHeightMM = PAGE_HEIGHT_MM - PAGE_MARGIN_MM - cursorY;
+
+      if (imageHeightMM > remainingPageHeightMM) {
+        pdf.addPage();
+        cursorY = PAGE_MARGIN_MM;
+      }
+      pdf.addImage(imageData, 'PNG', PAGE_MARGIN_MM, cursorY, CONTENT_WIDTH_MM, imageHeightMM);
+      return cursorY + imageHeightMM + SECTION_GAP_MM;
     }
 
     if (section.altData) {
