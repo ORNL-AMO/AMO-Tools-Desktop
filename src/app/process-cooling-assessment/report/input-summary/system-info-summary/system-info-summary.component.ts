@@ -1,10 +1,10 @@
 import { Component, ViewChild, inject, Signal } from '@angular/core';
 import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 import { InputSummaryService } from '../../../services/input-summary.service';
-import { InputSummarySection } from '../../report-ui-models';
 import { OperationSummaryRows } from '../../../services/input-summary.service';
 import { map } from 'rxjs';
 import { InputSummaryTableComponent } from '../input-summary-table/input-summary-table.component';
+import { InputSummarySection } from '../../../../shared/report-builder/models/report-ui-models';
 
 @Component({
     selector: 'app-system-info-summary',

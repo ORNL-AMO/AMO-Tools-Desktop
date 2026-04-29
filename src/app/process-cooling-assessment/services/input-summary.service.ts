@@ -2,12 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingResultsService } from './process-cooling-results.service';
 import { ProcessCoolingResults, ProcessCoolingAssessment, CondenserCoolingMethod } from '../../shared/models/process-cooling-assessment';
 import { map, combineLatest } from 'rxjs';
-import { ModificationNameCell, ReportTableRow, InputSummarySection } from '../report/report-ui-models';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { InputSummaryResults } from '../../shared/models/process-cooling-assessment';
 import { ModificationService } from './modification.service';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { TowerTypes, TowerSizeMetricLabels, FanTypeLabels, CondenserCoolingMethodLabels, CompressorChillerTypes, Refrigerants } from '../constants/process-cooling-constants';
+import { InputSummarySection, ModificationNameCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 
 @Injectable({ providedIn: 'root' })
 export class InputSummaryService {

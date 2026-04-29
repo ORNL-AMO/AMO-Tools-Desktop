@@ -4,7 +4,7 @@ import { ExecutiveSummaryResults, ModificationEEMSUsed, ProcessCoolingResults } 
 import { map, combineLatest } from 'rxjs';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { ModificationService } from './modification.service';
-import { ModificationNameCell, PercentSavings, ReportTableRow } from '../report/report-ui-models';
+import { ModificationNameCell, PercentSavings, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 
 @Injectable()

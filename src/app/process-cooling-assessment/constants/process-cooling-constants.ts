@@ -1,6 +1,6 @@
 
 import { getNewIdString } from "../../shared/helperFunctions";
-import { ChillerInventoryItem, CompressorChillerTypeEnum, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, RefrigerantType, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../../shared/models/process-cooling-assessment";
+import { ChillerInventoryItem, CompressorChillerTypeEnum, CondenserCoolingMethod, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, RefrigerantType, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../../shared/models/process-cooling-assessment";
 import { Settings } from "../../shared/models/settings";
 
 export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
