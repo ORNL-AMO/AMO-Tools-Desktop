@@ -1,0 +1,192 @@
+<form [formGroup]="form()" class="pt-1">
+  <label class="group-label">Leak Data</label>
+
+  <div class="form-group">
+    <label for="survey-linePressure">Line Pressure</label>
+    <div class="input-group">
+      <input name="linePressure" class="form-control" type="number" step="any"
+        formControlName="linePressure" id="survey-linePressure" onfocus="this.select();"
+        (focus)="fieldFocused.emit('linePressure')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">psig</span>
+      } @else {
+        <span class="input-group-addon units">kPag</span>
+      }
+      @if (form().controls.linePressure.invalid && !form().controls.linePressure.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.linePressure.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.linePressure.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.linePressure.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="survey-decibels">Leak Decibels</label>
+    <div class="input-group">
+      <input name="decibels" class="form-control" type="number" step="any"
+        formControlName="decibels" id="survey-decibels" onfocus="this.select();"
+        (focus)="fieldFocused.emit('leakDecibels')">
+      <span class="input-group-addon units">Db</span>
+      @if (form().controls.decibels.invalid && !form().controls.decibels.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.decibels.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.decibels.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.decibels.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="pt-1">
+    <label class="group-label">
+      Estimated Free Air Flow Table <span class="small">(Table for Interpolation)</span>
+    </label>
+
+    <div class="form-group d-flex justify-content-end">
+      <label class="text-center"><span class="group-label">Pressures</span></label>
+    </div>
+
+    <div class="form-group row no-gutters">
+      <div class="col-6"></div>
+      <div class="col-3 pr-2">
+        <div class="input-group pt-1">
+          <input name="pressureA" class="form-control" type="number" step="any"
+            formControlName="pressureA" id="survey-pressureA" onfocus="this.select();"
+            (focus)="fieldFocused.emit('pressureA')">
+          @if (settings().unitsOfMeasure !== 'Metric') {
+            <span class="input-group-addon units">psig</span>
+          } @else {
+            <span class="input-group-addon units">kPag</span>
+          }
+          @if (form().controls.pressureA.invalid && !form().controls.pressureA.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form().controls.pressureA.errors?.['required']) { <span>Value required.</span> }
+            </span>
+          }
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="input-group pt-1">
+          <input name="pressureB" class="form-control" type="number" step="any"
+            formControlName="pressureB" id="survey-pressureB" onfocus="this.select();"
+            (focus)="fieldFocused.emit('pressureB')">
+          @if (settings().unitsOfMeasure !== 'Metric') {
+            <span class="input-group-addon units">psig</span>
+          } @else {
+            <span class="input-group-addon units">kPag</span>
+          }
+          @if (form().controls.pressureB.invalid && !form().controls.pressureB.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form().controls.pressureB.errors?.['required']) { <span>Value required.</span> }
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row no-gutters">
+      <div class="col-6">
+        <label class="pt-2"><span class="group-label">Decibel Ratings</span></label>
+        <div class="col-6 input-group pt-1">
+          <input name="decibelRatingA" class="form-control" type="number" step="any"
+            formControlName="decibelRatingA" id="survey-decibelRatingA" onfocus="this.select();"
+            (focus)="fieldFocused.emit('decibelRatingA')">
+          <span class="input-group-addon units">Db</span>
+          @if (form().controls.decibelRatingA.invalid && !form().controls.decibelRatingA.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form().controls.decibelRatingA.errors?.['required']) { <span>Value required.</span> }
+            </span>
+          }
+        </div>
+      </div>
+      <div class="col-3 pr-2">
+        <div class="input-group pt-1">
+          <input name="firstFlowA" class="form-control" type="number" step="any"
+            formControlName="firstFlowA" id="survey-firstFlowA" onfocus="this.select();"
+            (focus)="fieldFocused.emit('firstFlowA')">
+          @if (settings().unitsOfMeasure !== 'Metric') {
+            <span class="input-group-addon units">scfm</span>
+          } @else {
+            <span class="input-group-addon units">m<sup>3</sup>/min</span>
+          }
+          @if (form().controls.firstFlowA.invalid && !form().controls.firstFlowA.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form().controls.firstFlowA.errors?.['required']) { <span>Value required.</span> }
+            </span>
+          }
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="input-group pt-1">
+          <input name="secondFlowA" class="form-control" type="number" step="any"
+            formControlName="secondFlowA" id="survey-secondFlowA" onfocus="this.select();"
+            (focus)="fieldFocused.emit('secondFlowA')">
+          @if (settings().unitsOfMeasure !== 'Metric') {
+            <span class="input-group-addon units">scfm</span>
+          } @else {
+            <span class="input-group-addon units">m<sup>3</sup>/min</span>
+          }
+          @if (form().controls.secondFlowA.invalid && !form().controls.secondFlowA.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form().controls.secondFlowA.errors?.['required']) { <span>Value required.</span> }
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row no-gutters">
+      <div class="col-6">
+        <div class="col-6 ml-auto input-group pt-1">
+          <input name="decibelRatingB" class="form-control" type="number" step="any"
+            formControlName="decibelRatingB" id="survey-decibelRatingB" onfocus="this.select();"
+            (focus)="fieldFocused.emit('decibelRatingB')">
+          <span class="input-group-addon units">Db</span>
+          @if (form().controls.decibelRatingB.invalid && !form().controls.decibelRatingB.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form().controls.decibelRatingB.errors?.['required']) { <span>Value required.</span> }
+            </span>
+          }
+        </div>
+      </div>
+      <div class="col-3 pr-2">
+        <div class="input-group pt-1">
+          <input name="firstFlowB" class="form-control" type="number" step="any"
+            formControlName="firstFlowB" id="survey-firstFlowB" onfocus="this.select();"
+            (focus)="fieldFocused.emit('firstFlowB')">
+          @if (settings().unitsOfMeasure !== 'Metric') {
+            <span class="input-group-addon units">scfm</span>
+          } @else {
+            <span class="input-group-addon units">m<sup>3</sup>/min</span>
+          }
+          @if (form().controls.firstFlowB.invalid && !form().controls.firstFlowB.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form().controls.firstFlowB.errors?.['required']) { <span>Value required.</span> }
+            </span>
+          }
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="input-group pt-1">
+          <input name="secondFlowB" class="form-control" type="number" step="any"
+            formControlName="secondFlowB" id="survey-secondFlowB" onfocus="this.select();"
+            (focus)="fieldFocused.emit('secondFlowB')">
+          @if (settings().unitsOfMeasure !== 'Metric') {
+            <span class="input-group-addon units">scfm</span>
+          } @else {
+            <span class="input-group-addon units">m<sup>3</sup>/min</span>
+          }
+          @if (form().controls.secondFlowB.invalid && !form().controls.secondFlowB.pristine) {
+            <span class="alert-danger pull-right small">
+              @if (form().controls.secondFlowB.errors?.['required']) { <span>Value required.</span> }
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

@@ -11,6 +11,7 @@ import { SystemCapacityModule } from './system-capacity/system-capacity.module';
 import { CompressedAirListComponent } from './compressed-air-list/compressed-air-list.component';
 import { RouterModule } from '@angular/router';
 import { AirLeakModule } from './air-leak/air-leak.module';
+import { AirLeakSurveyModule } from './air-leak-survey/air-leak-survey.module';
 import { CompressedAirReductionModule } from './compressed-air-reduction/compressed-air-reduction.module';
 import { CompressedAirPressureReductionModule } from './compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { AirFlowConversionModule } from './air-flow-conversion/air-flow-conversion.module';
@@ -22,7 +23,8 @@ import { BleedTestModule } from './bleed-test/bleed-test.module';
     AirVelocityModule,
     AirFlowConversionModule,
     BagMethodModule,
-    AirLeakModule,
+    // AirLeakModule,
+    AirLeakSurveyModule,
     BleedTestModule,
     // FlowFactorModule,
     OperatingCostModule,
