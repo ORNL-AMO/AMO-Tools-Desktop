@@ -16,12 +16,20 @@ export class ReportTableCellPipe implements PipeTransform {
 
   transform(cell: ReportColumnCell): string | number {
     const value = cell?.value ?? null;
-    if (typeof cell?.decimalPipe === 'string' && value !== null && value !== undefined) {
-      return this.numberPipe.transform(value, cell.decimalPipe || '1.0-0');
-    } else if (value !== null && value !== undefined) {
-      return this.currencyPipe.transform(value, 'USD', 'symbol', '1.0-0');
+    if (value === null || value === undefined) {
+      return '— —';
+    }
+    if (typeof cell?.decimalPipe === 'string') {
+      return this.numberPipe.transform(value, cell.decimalPipe || '1.0-0') ?? '— —';
+    } else if (cell?.currencyPipe) {
+      return this.currencyPipe.transform(
+        value,
+        cell.currencyPipe.code || 'USD',
+        cell.currencyPipe.display || 'symbol',
+        cell.currencyPipe.digitsInfo || '1.0-0'
+      ) ?? '— —';
     } else {
-      return value ?? '— —';
+      return value;
     }
   }
 }
