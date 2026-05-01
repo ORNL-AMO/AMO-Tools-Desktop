@@ -43,13 +43,9 @@ export class SystemInfoSummaryComponent implements OnInit {
     }
 
     private buildSections(rows: OperationSummaryRows): InputSummarySection[] {
-        const sections: InputSummarySection[] = [
+        return [
             { label: 'Operations', rows: rows.baseOperations ?? [] },
             { label: 'Chiller Setup', rows: rows.chillerSetup ?? [] },
         ];
-        if (rows.towerSetup?.length) {
-            sections.push({ label: 'Tower Setup', rows: rows.towerSetup });
-        }
-        return sections;
     }
 }

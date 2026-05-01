@@ -1,12 +1,10 @@
-import { inject, Injectable, input } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingResultsService } from './process-cooling-results.service';
-import { PumpResults, ProcessCoolingResults, PumpChillerItemEnergy } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingResults, CompressorChillerTypeEnum, RefrigerantType, CondenserCoolingMethod } from '../../shared/models/process-cooling-assessment';
 import { map, combineLatest } from 'rxjs';
-import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
-import { ModificationNameCell, ReportTableRow } from '../report/report-ui-models';
+import { ModificationNameCell, ReportTableRow, InputSummarySection } from '../report/report-ui-models';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { InputSummaryResults } from '../../shared/models/process-cooling-assessment';
-import { getCipherInfo } from 'crypto';
 
 @Injectable({ providedIn: 'root' })
 export class InputSummaryService {
@@ -33,6 +31,10 @@ export class InputSummaryService {
                 carbonEmissions: [],
             },
             summaryRows: [],
+            pumpSections: [],
+            condenserSections: [],
+            towerSections: [],
+            inventorySections: [],
         };
 
         const baselineSummary: InputSummaryResults = baselineResults ? this.getInputSummaryResults(baselineResults) : null;
@@ -45,35 +47,42 @@ export class InputSummaryService {
         // Use the new mapping function
         const operationSummaryRows = this.mapToInputSummaryRows(baselineSummary, modificationSummaries);
         inputSummaryUI.operationSummaryRows = operationSummaryRows;
-        // Log chilledWaterSupplyTemp for debugging
-        console.log('Input Summary UI:', inputSummaryUI);
+        inputSummaryUI.pumpSections = this.mapToPumpSections(baselineSummary, modificationSummaries);
+        inputSummaryUI.condenserSections = this.mapToCondenserSections(baselineSummary, modificationSummaries);
+        inputSummaryUI.towerSections = this.mapToTowerSections(baselineSummary, modificationSummaries);
+        inputSummaryUI.inventorySections = this.mapToInventorySections(baselineSummary, modificationSummaries);
         return inputSummaryUI;
     }
 
     private getInputSummaryResults(processCoolingResults: ProcessCoolingResults): InputSummaryResults {
-        // Try to extract systemInformation.operations and towerInput from ProcessCoolingResults
-        let ops = (processCoolingResults as any)?.systemInformation?.operations;
-        let towerInput = (processCoolingResults as any)?.towerInput;
-        // Fallback: if not present, try to get from attached assessment (if available)
-        if (!ops && (processCoolingResults as any)?.assessment?.systemInformation?.operations) {
-            ops = (processCoolingResults as any).assessment.systemInformation.operations;
-        }
-        if (!towerInput && (processCoolingResults as any)?.assessment?.systemInformation?.towerInput) {
-            towerInput = (processCoolingResults as any).assessment.systemInformation.towerInput;
-        }
+        const sysInfo = (processCoolingResults as any)?.systemInformation;
+        const ops = sysInfo?.operations;
+        const towerInput = sysInfo?.towerInput ?? (processCoolingResults as any)?.towerInput;
+        const chilledWaterPumpInput = sysInfo?.chilledWaterPumpInput;
+        const condenserWaterPumpInput = sysInfo?.condenserWaterPumpInput;
+        const waterCooledSystemInput = sysInfo?.waterCooledSystemInput;
+        const airCooledSystemInput = sysInfo?.airCooledSystemInput;
+        const inventory = (processCoolingResults as any)?.inventory ?? [];
         return {
             id: processCoolingResults.id,
             name: processCoolingResults.name,
             electricityCost: processCoolingResults.electricityCost,
             fuelCost: processCoolingResults.fuelCost,
-            // Chiller setup fields
+            // Operations / chiller setup
             chilledWaterSupplyTemp: ops?.chilledWaterSupplyTemp ?? null,
             condenserCoolingMethod: ops?.condenserCoolingMethod ?? null,
+            // Pump fields
+            chilledWaterPumpInput,
+            condenserWaterPumpInput,
+            // Condenser fields
+            waterCooledSystemInput,
+            airCooledSystemInput,
             // Tower fields
             towerType: towerInput?.towerType ?? null,
             towerTypeLabel: this.getTowerTypeLabel(towerInput?.towerType),
             towerSizeMetric: towerInput?.towerSizeMetric ?? null,
             towerSizeMetricLabel: this.getTowerSizeMetricLabel(towerInput?.towerSizeMetric),
+            towerSize: towerInput?.towerSize ?? null,
             fanType: towerInput?.fanType ?? null,
             fanTypeLabel: this.getFanTypeLabel(towerInput?.fanType),
             numberOfTowers: towerInput?.numberOfTowers ?? null,
@@ -81,6 +90,8 @@ export class InputSummaryService {
             usesFreeCooling: towerInput?.usesFreeCooling ?? null,
             isHEXRequired: towerInput?.isHEXRequired ?? null,
             HEXApproachTemp: towerInput?.HEXApproachTemp ?? null,
+            // Inventory
+            inventory,
         } as any;
     }
 
@@ -239,12 +250,228 @@ export class InputSummaryService {
         return String(method);
     }
 
+    private mapToPumpSections(baseline: any, mods: any[]): InputSummarySection[] {
+        const pumpRows = (pump: any, modPumps: any[], fieldName: string): ReportTableRow[] => [
+            {
+                label: 'Variable Flow', units: '', className: 'default',
+                baseline: { value: pump ? (pump.variableFlow ? 'Yes' : 'No') : null },
+                modifications: modPumps.map(m => ({ value: m?.[fieldName] ? (m[fieldName].variableFlow ? 'Yes' : 'No') : null }))
+            },
+            {
+                label: 'Flow Rate', units: 'gpm/ton', className: 'default',
+                baseline: { value: pump?.flowRate ?? null, decimalPipe: '1.2-2' },
+                modifications: modPumps.map(m => ({ value: m?.[fieldName]?.flowRate ?? null, decimalPipe: '1.2-2' }))
+            },
+            {
+                label: 'Efficiency', units: '%', className: 'default',
+                baseline: { value: pump?.efficiency ?? null, decimalPipe: '1.0-0' },
+                modifications: modPumps.map(m => ({ value: m?.[fieldName]?.efficiency ?? null, decimalPipe: '1.0-0' }))
+            },
+            {
+                label: 'Motor Size', units: 'hp', className: 'default',
+                baseline: { value: pump?.motorSize ?? null, decimalPipe: '1.0-0' },
+                modifications: modPumps.map(m => ({ value: m?.[fieldName]?.motorSize ?? null, decimalPipe: '1.0-0' }))
+            },
+            {
+                label: 'Motor Efficiency', units: '%', className: 'default',
+                baseline: { value: pump?.motorEfficiency ?? null, decimalPipe: '1.0-0' },
+                modifications: modPumps.map(m => ({ value: m?.[fieldName]?.motorEfficiency ?? null, decimalPipe: '1.0-0' }))
+            },
+        ];
+        return [
+            { label: 'Chilled Water Pump',   rows: pumpRows(baseline?.chilledWaterPumpInput, mods, 'chilledWaterPumpInput') },
+            { label: 'Condenser Water Pump', rows: pumpRows(baseline?.condenserWaterPumpInput, mods, 'condenserWaterPumpInput') },
+        ];
+    }
+
+    private mapToCondenserSections(baseline: any, mods: any[]): InputSummarySection[] {
+        const tempUnit = this.settingsSignal().unitsOfMeasure === 'Imperial' ? '°F' : '°C';
+        const isWaterCooled = baseline?.condenserCoolingMethod === CondenserCoolingMethod.Water;
+        if (isWaterCooled) {
+            return [{
+                label: 'Condenser Cooling',
+                rows: [
+                    {
+                        label: 'Cooling Method', units: '', className: 'default',
+                        baseline: { value: 'Water' },
+                        modifications: mods.map(m => ({ value: this.getCondenserCoolingMethodLabel(m?.condenserCoolingMethod) }))
+                    },
+                    {
+                        label: 'Constant Condenser Water Temperature', units: '', className: 'default',
+                        baseline: { value: baseline?.waterCooledSystemInput ? (baseline.waterCooledSystemInput.isConstantCondenserWaterTemp ? 'Yes' : 'No') : null },
+                        modifications: mods.map(m => ({ value: m?.waterCooledSystemInput ? (m.waterCooledSystemInput.isConstantCondenserWaterTemp ? 'Yes' : 'No') : null }))
+                    },
+                    {
+                        label: 'Condenser Water Temperature', units: tempUnit, className: 'default',
+                        baseline: { value: baseline?.waterCooledSystemInput?.condenserWaterTemp ?? null, decimalPipe: '1.0-0' },
+                        modifications: mods.map(m => ({ value: m?.waterCooledSystemInput?.condenserWaterTemp ?? null, decimalPipe: '1.0-0' }))
+                    },
+                    {
+                        label: 'Following Temperature Differential', units: tempUnit, className: 'default',
+                        baseline: { value: baseline?.waterCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-0' },
+                        modifications: mods.map(m => ({ value: m?.waterCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-0' }))
+                    },
+                ]
+            }];
+        } else {
+            const airSource = (aci: any) => aci?.airCoolingSource === 0 ? 'Indoor' : 'Outdoor';
+            return [{
+                label: 'Condenser Cooling',
+                rows: [
+                    {
+                        label: 'Cooling Method', units: '', className: 'default',
+                        baseline: { value: this.getCondenserCoolingMethodLabel(baseline?.condenserCoolingMethod) },
+                        modifications: mods.map(m => ({ value: this.getCondenserCoolingMethodLabel(m?.condenserCoolingMethod) }))
+                    },
+                    {
+                        label: 'Outdoor Air Design Temperature', units: tempUnit, className: 'default',
+                        baseline: { value: baseline?.airCooledSystemInput?.outdoorAirTemp ?? null, decimalPipe: '1.0-0' },
+                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput?.outdoorAirTemp ?? null, decimalPipe: '1.0-0' }))
+                    },
+                    {
+                        label: 'Air Cooling Source', units: '', className: 'default',
+                        baseline: { value: baseline?.airCooledSystemInput ? airSource(baseline.airCooledSystemInput) : null },
+                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput ? airSource(m.airCooledSystemInput) : null }))
+                    },
+                    {
+                        label: 'Indoor Temperature', units: tempUnit, className: 'default',
+                        baseline: { value: baseline?.airCooledSystemInput?.indoorTemp ?? null, decimalPipe: '1.0-0' },
+                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput?.indoorTemp ?? null, decimalPipe: '1.0-0' }))
+                    },
+                    {
+                        label: 'Following Temperature Differential', units: tempUnit, className: 'default',
+                        baseline: { value: baseline?.airCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-0' },
+                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-0' }))
+                    },
+                ]
+            }];
+        }
+    }
+
+    private mapToTowerSections(baseline: any, mods: any[]): InputSummarySection[] {
+        const tempUnit = this.settingsSignal().unitsOfMeasure === 'Imperial' ? '°F' : '°C';
+        return [{
+            label: 'Tower Setup',
+            rows: [
+                {
+                    label: 'Tower Type', units: '', className: 'default',
+                    baseline: { value: this.getTowerTypeLabel(baseline?.towerType) },
+                    modifications: mods.map(m => ({ value: this.getTowerTypeLabel(m?.towerType) }))
+                },
+                {
+                    label: 'Number of Towers', units: '', className: 'default',
+                    baseline: { value: baseline?.numberOfTowers ?? null },
+                    modifications: mods.map(m => ({ value: m?.numberOfTowers ?? null }))
+                },
+                {
+                    label: 'Number of Fans', units: '', className: 'default',
+                    baseline: { value: baseline?.numberOfFans ?? null },
+                    modifications: mods.map(m => ({ value: m?.numberOfFans ?? null }))
+                },
+                {
+                    label: 'Tower Size Metric', units: '', className: 'default',
+                    baseline: { value: this.getTowerSizeMetricLabel(baseline?.towerSizeMetric) },
+                    modifications: mods.map(m => ({ value: this.getTowerSizeMetricLabel(m?.towerSizeMetric) }))
+                },
+                {
+                    label: 'Tower Size', units: '', className: 'default',
+                    baseline: { value: baseline?.towerSize ?? null, decimalPipe: '1.0-0' },
+                    modifications: mods.map(m => ({ value: m?.towerSize ?? null, decimalPipe: '1.0-0' }))
+                },
+                {
+                    label: 'Fan Type', units: '', className: 'default',
+                    baseline: { value: this.getFanTypeLabel(baseline?.fanType) },
+                    modifications: mods.map(m => ({ value: this.getFanTypeLabel(m?.fanType) }))
+                },
+                {
+                    label: 'Uses Free Cooling', units: '', className: 'default',
+                    baseline: { value: baseline?.usesFreeCooling != null ? (baseline.usesFreeCooling ? 'Yes' : 'No') : null },
+                    modifications: mods.map(m => ({ value: m?.usesFreeCooling != null ? (m.usesFreeCooling ? 'Yes' : 'No') : null }))
+                },
+                {
+                    label: 'HEX Required', units: '', className: 'default',
+                    baseline: { value: baseline?.isHEXRequired != null ? (baseline.isHEXRequired ? 'Yes' : 'No') : null },
+                    modifications: mods.map(m => ({ value: m?.isHEXRequired != null ? (m.isHEXRequired ? 'Yes' : 'No') : null }))
+                },
+                {
+                    label: 'HEX Approach Temperature', units: tempUnit, className: 'default',
+                    baseline: { value: baseline?.HEXApproachTemp ?? null, decimalPipe: '1.0-0' },
+                    modifications: mods.map(m => ({ value: m?.HEXApproachTemp ?? null, decimalPipe: '1.0-0' }))
+                },
+            ]
+        }];
+    }
+
+    private mapToInventorySections(baseline: any, mods: any[]): InputSummarySection[] {
+        const baselineInventory: any[] = baseline?.inventory ?? [];
+        return baselineInventory.map((chiller, idx) => ({
+            label: chiller.name || 'Chiller',
+            rows: [
+                {
+                    label: 'Chiller Type', units: '', className: 'default',
+                    baseline: { value: this.getChillerTypeLabel(chiller.chillerType) },
+                    modifications: mods.map(m => ({ value: this.getChillerTypeLabel(m?.inventory?.[idx]?.chillerType) }))
+                },
+                {
+                    label: 'Capacity', units: 'ton', className: 'default',
+                    baseline: { value: chiller.capacity ?? null, decimalPipe: '1.0-0' },
+                    modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.capacity ?? null, decimalPipe: '1.0-0' }))
+                },
+                {
+                    label: 'Full Load Efficiency Known', units: '', className: 'default',
+                    baseline: { value: chiller.isFullLoadEfficiencyKnown ? 'Yes' : 'No' },
+                    modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.isFullLoadEfficiencyKnown ? 'Yes' : 'No' }))
+                },
+                {
+                    label: 'Full Load Efficiency', units: 'kW/ton', className: 'default',
+                    baseline: { value: chiller.fullLoadEfficiency ?? null, decimalPipe: '1.2-2' },
+                    modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.fullLoadEfficiency ?? null, decimalPipe: '1.2-2' }))
+                },
+                {
+                    label: 'Age', units: 'yrs', className: 'default',
+                    baseline: { value: chiller.age ?? null, decimalPipe: '1.1-1' },
+                    modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.age ?? null, decimalPipe: '1.1-1' }))
+                },
+                {
+                    label: 'Refrigerant Type', units: '', className: 'default',
+                    baseline: { value: this.getRefrigerantLabel(chiller.refrigerantType) },
+                    modifications: mods.map(m => ({ value: this.getRefrigerantLabel(m?.inventory?.[idx]?.refrigerantType) }))
+                },
+            ]
+        }));
+    }
+
+    private getChillerTypeLabel(type: number | null | undefined): string {
+        switch (type) {
+            case CompressorChillerTypeEnum.CENTRIFUGAL:   return 'Centrifugal';
+            case CompressorChillerTypeEnum.SCREW:         return 'Screw';
+            case CompressorChillerTypeEnum.RECIPROCATING: return 'Reciprocating';
+            default: return '';
+        }
+    }
+
+    private getRefrigerantLabel(type: number | null | undefined): string {
+        switch (type) {
+            case RefrigerantType.R11:   return 'R-11';
+            case RefrigerantType.R123:  return 'R-123';
+            case RefrigerantType.R12:   return 'R-12';
+            case RefrigerantType.R134a: return 'R-134a';
+            case RefrigerantType.R22:   return 'R-22';
+            case RefrigerantType.R717:  return 'R-717';
+            default: return '';
+        }
+    }
+
 }
 
 export interface InputSummaryUI {
     modificationNames: ModificationNameCell[];
-    operationSummaryRows: OperationSummaryRows; // parent object for all operation sections
+    operationSummaryRows: OperationSummaryRows;
     summaryRows: ReportTableRow[];
+    pumpSections: InputSummarySection[];
+    condenserSections: InputSummarySection[];
+    towerSections: InputSummarySection[];
+    inventorySections: InputSummarySection[];
 }
 
 export interface OperationSummaryRows {

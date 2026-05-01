@@ -101,6 +101,11 @@ import { RefrigerantInventoryTableComponent } from './explore-opportunities/repl
 
 import { SystemInfoSummaryComponent } from './report/input-summary/system-info-summary/system-info-summary.component';
 import { InputSummaryTableComponent } from './report/input-summary/input-summary-table/input-summary-table.component';
+import { WeatherSummaryComponent } from './report/input-summary/weather-summary/weather-summary.component';
+import { PumpInputSummaryComponent } from './report/input-summary/pump-input-summary/pump-input-summary.component';
+import { CondenserInputSummaryComponent } from './report/input-summary/condenser-input-summary/condenser-input-summary.component';
+import { TowerInputSummaryComponent } from './report/input-summary/tower-input-summary/tower-input-summary.component';
+import { InventoryInputSummaryComponent } from './report/input-summary/inventory-input-summary/inventory-input-summary.component';
 
 export const ROUTE_TOKENS = {
   // Main tabs
@@ -304,6 +309,11 @@ const ROUTES: Route[] = [
     FilterChillerInventoryPipe,
     SystemInfoSummaryComponent,
     InputSummaryTableComponent,
+    WeatherSummaryComponent,
+    PumpInputSummaryComponent,
+    CondenserInputSummaryComponent,
+    TowerInputSummaryComponent,
+    InventoryInputSummaryComponent,
     UseFreeCoolingComponent,
     ReplaceChillerRefrigerantComponent,
     VsdInventoryTableComponent,

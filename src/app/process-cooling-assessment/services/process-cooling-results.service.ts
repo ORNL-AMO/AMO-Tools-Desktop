@@ -92,9 +92,10 @@ export class ProcessCoolingResultsService {
       } else {
         results = this.suiteApi.getAirCooledResults(processCoolingAssessment, convertedWeatherDataInput, suiteModificationArgs);
       }
-      // Attach systemInformation and towerInput for summary service access
+      // Attach systemInformation, towerInput, and inventory for summary service access
       (results as any).systemInformation = processCoolingAssessment.systemInformation;
       (results as any).towerInput = processCoolingAssessment.systemInformation?.towerInput;
+      (results as any).inventory = processCoolingAssessment.inventory;
     }
 
 
