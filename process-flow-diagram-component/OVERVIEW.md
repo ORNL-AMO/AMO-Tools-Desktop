@@ -1,3 +1,5 @@
+**Date Generated:** May 1, 2026
+
 # process-flow-diagram-component
 
 A self-contained React + Redux diagram editor compiled as a browser-native **Custom Element** (Web Component). It is embedded inside an Angular application via a thin wrapper component. Domain logic is sourced from `src/process-flow-lib`.

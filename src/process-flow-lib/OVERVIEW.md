@@ -1,3 +1,5 @@
+**Date Generated:** May 1, 2026
+
 # process-flow-lib
 
 Domain logic and type definitions for the MEASUR water process flow diagram feature. This library is framework-agnostic TypeScript, consumed by both the Angular shell and the React diagram web component.
