@@ -1,4 +1,5 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
+import { Subject } from 'rxjs';
 import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, AirLeakSurveyResult } from '../../../shared/models/standalone';
 import { Settings } from '../../../shared/models/settings';
 import { StandaloneService } from '../../standalone.service';
@@ -17,11 +18,7 @@ export class AirLeakSurveyService {
   readonly input = signal<AirLeakSurveyInput | undefined>(undefined);
   readonly currentLeakIndex = signal<number>(0);
   readonly currentField = signal<string>('default');
-
-  // todo needs explanation
-  /** Incremented whenever input is replaced externally (reset / generate-example).
-   *  Form coordinator watches this to rebuild forms instead of patching. */
-  readonly lastExternalReset = signal<number>(0);
+  readonly resetEvents$ = new Subject<void>();
 
   readonly output = computed<AirLeakSurveyOutput>(() => {
     const input = this.input();
@@ -49,13 +46,13 @@ export class AirLeakSurveyService {
     }
     this.currentLeakIndex.set(0);
     this.input.set(example);
-    this.lastExternalReset.update(n => n + 1);
+    this.resetEvents$.next();
   }
 
   resetToEmpty(settings: Settings): void {
     this.currentLeakIndex.set(0);
     this.initDefaultEmptyInputs(settings);
-    this.lastExternalReset.update(n => n + 1);
+    this.resetEvents$.next();
   }
 
   deleteLeak(deleteIndex: number): void {
@@ -67,7 +64,7 @@ export class AirLeakSurveyService {
     if (vec.length === 1 && deleteIndex === 0) {
       this.currentLeakIndex.set(0);
       this.initDefaultEmptyInputs(this.settings);
-      this.lastExternalReset.update(n => n + 1);
+      this.resetEvents$.next();
       return;
     }
 
@@ -78,8 +75,9 @@ export class AirLeakSurveyService {
     this.input.set({ ...current, compressedAirLeakSurveyInputVec: newVec });
     if (newIndex !== currentIndex) {
       this.currentLeakIndex.set(newIndex);
+    } else {
+      this.resetEvents$.next();
     }
-    this.lastExternalReset.update(n => n + 1);
   }
 
   copyLeak(index: number): void {

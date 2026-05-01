@@ -1,6 +1,6 @@
 import {
   Component, ChangeDetectionStrategy, OnInit, AfterViewInit,
-  ViewChild, ElementRef, inject, effect, untracked, input,
+  ViewChild, ElementRef, inject, effect, computed, input,
 } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
@@ -35,11 +35,12 @@ export class SurveyFacilityCompressorDataFormComponent implements OnInit, AfterV
 
   @ViewChild('formElement') formElement!: ElementRef;
 
+  
   readonly utilityTypeOptions: Array<{ display: string; value: number }> = [
     { display: 'Compressed Air', value: 0 },
     { display: 'Electric', value: 1 },
   ];
-
+  
   readonly compressorControlTypes: Array<{ value: number; name: string; adjustment: number }> = [
     { value: 100, name: 'Screw Compressor - Inlet Modulation', adjustment: 30 },
     { value: 101, name: 'Screw Compressor - Variable Displacement', adjustment: 60 },
@@ -62,14 +63,14 @@ export class SurveyFacilityCompressorDataFormComponent implements OnInit, AfterV
     { value: 3, display: 'Centrifugal', specificPower: 0.21 },
     { value: 4, display: 'Custom', specificPower: 0.0 },
   ];
-
+  
+  private readonly facilityData = computed(() => this.surveyService.input()?.facilityCompressorData);
+  
   constructor() {
     effect(() => {
-      // Re-build form whenever an external reset fires.
-      const _reset = this.surveyService.lastExternalReset();
-      const input = untracked(() => this.surveyService.input());
-      if (input) {
-        this.facilityForm = this.formService.buildFacilityCompressorForm(input.facilityCompressorData);
+      const facilityData = this.facilityData();
+      if (facilityData) {
+        this.facilityForm = this.formService.buildFacilityCompressorForm(facilityData);
         this.compressorCustomControl = this.facilityForm.controls.compressorElectricityData.controls.compressorControl.value === 8;
         this.compressorCustomSpecificPower = this.facilityForm.controls.compressorElectricityData.controls.compressorSpecificPowerControl.value === 4;
       }

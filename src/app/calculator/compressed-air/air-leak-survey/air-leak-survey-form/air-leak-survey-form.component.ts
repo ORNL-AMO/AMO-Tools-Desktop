@@ -2,6 +2,7 @@ import {
   Component, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy,
   inject, effect, untracked, input,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { merge, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -45,10 +46,19 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
 
   constructor() {
     effect(() => {
-      // Rebuild all forms when the active leak index changes OR an external reset fires.
       const index = this.surveyService.currentLeakIndex();
-      const _reset = this.surveyService.lastExternalReset();
       const surveyInput = untracked(() => this.surveyService.input());
+      if (surveyInput) {
+        const leak = surveyInput.compressedAirLeakSurveyInputVec[index];
+        if (leak) {
+          this.buildForms(leak, surveyInput.facilityCompressorData.hoursPerYear);
+        }
+      }
+    });
+
+    this.surveyService.resetEvents$.pipe(takeUntilDestroyed()).subscribe(() => {
+      const surveyInput = this.surveyService.input();
+      const index = this.surveyService.currentLeakIndex();
       if (surveyInput) {
         const leak = surveyInput.compressedAirLeakSurveyInputVec[index];
         if (leak) {
@@ -68,7 +78,6 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
     this.cdr.markForCheck();
   }
 
-  // todo interesting - keeps form components dumb
   private subscribeToFormChanges(): void {
     this.formChangeSub?.unsubscribe();
     this.formChangeSub = merge(
