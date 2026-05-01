@@ -8,22 +8,10 @@
     @let inputSummaryUI = inputSummaryUI$ | async;
     @if (inputSummaryUI) {
       <div #copyTable class="output-summary">
-        <table class="table table-hover table-striped">
-          <thead>
-            <tr>
-              <th [ngStyle]="{'width.%': 100 / (inputSummaryUI.modificationNames.length + 2)}"></th>
-              <th [ngStyle]="{'width.%': 100 / (inputSummaryUI.modificationNames.length + 2)}">Baseline</th>
-              <th *ngFor="let mod of inputSummaryUI.modificationNames"
-                  [ngStyle]="{'width.%': 100 / (inputSummaryUI.modificationNames.length + 2)}">
-                {{mod.name}}
-              </th>
-            </tr>
-          </thead>
-        </table>
-        <app-system-info-input-table
-          [operationSummaryRows]="inputSummaryUI.operationSummaryRows"
+        <app-input-summary-table
+          [sections]="sections$ | async"
           [modificationNames]="inputSummaryUI.modificationNames">
-        </app-system-info-input-table>
+        </app-input-summary-table>
       </div>
     }
     <app-exportable-results-table [tableString]="copyTableString"

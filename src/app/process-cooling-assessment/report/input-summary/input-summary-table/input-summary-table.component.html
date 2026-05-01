@@ -1,0 +1,31 @@
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th [ngStyle]="{'width.%': 100 / (numMods + 2)}"></th>
+      <th [ngStyle]="{'width.%': 100 / (numMods + 2)}">Baseline</th>
+      <th *ngFor="let mod of modificationNames"
+          [ngStyle]="{'width.%': 100 / (numMods + 2)}">
+        {{mod.name}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let section of sections">
+      <!-- Section header row -->
+      <tr>
+        <td class="bold">{{section.label}}</td>
+        <td></td>
+        <td *ngFor="let mod of modificationNames"></td>
+      </tr>
+      <!-- Data rows -->
+      <tr *ngFor="let row of section.rows">
+        <td>{{ row.label }}{{ row.units ? ' (' + row.units + ')' : '' }}</td>
+        <td>{{ row.baseline | reportTableCell }}</td>
+        <td *ngFor="let mod of row.modifications"
+            [ngClass]="{'indicate-report-field-different': row.baseline.value !== mod.value}">
+          {{ mod | reportTableCell }}
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>

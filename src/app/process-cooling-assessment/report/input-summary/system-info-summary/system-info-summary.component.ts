@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, inject, Signal } from '@angular/core';
 import { FeatureFlagService } from '../../../../shared/feature-flag.service';
 import { Settings } from '../../../../shared/models/settings';
-import { FSAT, FsatOperations } from '../../../../shared/models/fans';
-import { InputSummaryService } from '../../../services/input-summary.service';
-import { InputSummaryUI } from '../../../services/input-summary.service';
+import { InputSummaryService, InputSummaryUI } from '../../../services/input-summary.service';
+import { InputSummarySection } from '../../report-ui-models';
+import { OperationSummaryRows } from '../../../services/input-summary.service';
+import { map } from 'rxjs';
 
 @Component({
     selector: 'app-system-info-summary',
@@ -17,24 +18,21 @@ export class SystemInfoSummaryComponent implements OnInit {
 
     inputSummaryUI$ = this.inputSummaryService.inputSummaryUI$;
 
-    @Input()
-    printView: boolean;
-    @Input()
-    settings: Settings;
+    sections$ = this.inputSummaryUI$.pipe(
+        map(ui => ui ? this.buildSections(ui.operationSummaryRows) : [])
+    );
 
+    @Input() printView: boolean;
+    @Input() settings: Settings;
 
     showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
     @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
     copyTableString: any;
-
     collapse: boolean = true;
-
 
     constructor(private cd: ChangeDetectorRef) { }
 
-    ngOnInit() {
-
-    }
+    ngOnInit() { }
 
     toggleCollapse() {
         this.collapse = !this.collapse;
@@ -42,5 +40,16 @@ export class SystemInfoSummaryComponent implements OnInit {
 
     updateCopyTableString() {
         this.copyTableString = this.copyTable.nativeElement.innerText;
+    }
+
+    private buildSections(rows: OperationSummaryRows): InputSummarySection[] {
+        const sections: InputSummarySection[] = [
+            { label: 'Operations', rows: rows.baseOperations ?? [] },
+            { label: 'Chiller Setup', rows: rows.chillerSetup ?? [] },
+        ];
+        if (rows.towerSetup?.length) {
+            sections.push({ label: 'Tower Setup', rows: rows.towerSetup });
+        }
+        return sections;
     }
 }
