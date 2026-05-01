@@ -28,19 +28,26 @@ export class PumpInventoryBannerComponent implements OnInit {
   mainTabSub: Subscription;
   pumpInventoryData: PumpInventoryData;
   pumpInventoryDataSub: Subscription;
-  selectedDepartmentId: string;
+  selectedTab: string;
   selectedDepartmentIdSub: Subscription;
   connectedInventoryDataSub: Subscription;
   showConnectedItemBadge: boolean;
   catalogClassStatus: string[];
   bannerCollapsed: boolean = true;
-  // hasInvalidPumpItem: boolean;
-    constructor(private pumpInventoryService: PumpInventoryService, 
+  isSelected: boolean = false;
+  showPumpPropertiesSub: Subscription;
+
+  constructor(private pumpInventoryService: PumpInventoryService, 
     private emailMeasurDataService: EmailMeasurDataService,
     private integrationStateService: IntegrationStateService, 
-      private pumpCatalogService: PumpCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService, private dashboardService: DashboardService) { }
+    private pumpCatalogService: PumpCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService, 
+    private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
+        // Subscribe to showPumpProperties to keep isSelected in sync
+        this.showPumpPropertiesSub = this.pumpCatalogService.showPumpProperties.subscribe(val => {
+          this.isSelected = val;
+        });
     this.mainTabSub = this.pumpInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
     });
@@ -59,7 +66,11 @@ export class PumpInventoryBannerComponent implements OnInit {
     });
 
     this.selectedDepartmentIdSub = this.pumpCatalogService.selectedDepartmentId.subscribe(val => {
-      this.selectedDepartmentId = val;
+      if (val && val !== 'pump-properties') {
+        this.selectedTab = val;
+      } else if (val === 'pump-properties') {
+        this.selectedTab = 'pump-properties';
+      }
     });
 
     this.summaryTabSub = this.pumpInventoryService.summaryTab.subscribe(val => {
@@ -69,6 +80,10 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
       this.showConnectedItemBadge = connectedInventoryData.connectedItem !== undefined;
     });
+
+    this.pumpInventoryService.setupTab.next('plant-setup');
+    let nextID: string = this.pumpInventoryData.departments[0].id;
+    this.pumpCatalogService.selectedDepartmentId.next(nextID);  
   }
 
   ngOnDestroy() {
@@ -78,14 +93,22 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.mainTabSub.unsubscribe();
     this.summaryTabSub.unsubscribe();
     this.connectedInventoryDataSub.unsubscribe();
+    this.showPumpPropertiesSub.unsubscribe();
   }
 
   setSetupTab(str: string) {
     this.pumpInventoryService.setupTab.next(str);
   }
 
-  selectedDepartment(departmentId: string) {
-    this.pumpCatalogService.selectedDepartmentId.next(departmentId);
+  selectTab(tabId: string) {
+    this.selectedTab = tabId;
+    if (tabId === 'pump-properties') {
+      this.pumpCatalogService.showPumpProperties.next(true);
+      this.pumpCatalogService.selectedDepartmentId.next('pump-properties');
+    } else {
+      this.pumpCatalogService.showPumpProperties.next(false);
+      this.pumpCatalogService.selectedDepartmentId.next(tabId);
+    }
   }
 
   setMainTab(str: string) {
@@ -121,26 +144,25 @@ export class PumpInventoryBannerComponent implements OnInit {
 
   backSetupTabs(){
     if (this.setupTab == 'pump-catalog') {
-      this.pumpInventoryService.setupTab.next('pump-properties');
-    } else if (this.setupTab == 'pump-properties') {
       this.pumpInventoryService.setupTab.next('department-setup');
     } else if (this.setupTab == 'department-setup') {
       this.pumpInventoryService.setupTab.next('plant-setup');
-    } 
+    }
   }
 
   continueSetupTabs(){
     if (this.setupTab == 'plant-setup') {
       this.pumpInventoryService.setupTab.next('department-setup');
     } else if (this.setupTab == 'department-setup') {
-      this.pumpInventoryService.setupTab.next('pump-properties');
-    } else if (this.setupTab == 'pump-properties') {
       this.pumpInventoryService.setupTab.next('pump-catalog');
-    } 
+    }
   }
 
   continuePumpCatalogTabs(){
-    let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => {return department.id == this.selectedDepartmentId});
+    if (!this.pumpInventoryData?.departments || this.pumpInventoryData.departments.length === 0) {
+      return;
+    }
+    let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => {return department.id == this.selectedTab});
     if (currentIndex != this.pumpInventoryData.departments.length - 1) {
       let nextID: string = this.pumpInventoryData.departments[currentIndex + 1].id;
       this.pumpCatalogService.selectedDepartmentId.next(nextID);      
@@ -148,10 +170,30 @@ export class PumpInventoryBannerComponent implements OnInit {
   }
 
   backPumpCatalogTabs(){
-    let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => {return department.id == this.selectedDepartmentId});
+    if (!this.pumpInventoryData?.departments || this.pumpInventoryData.departments.length === 0) {
+      return;
+    }
+    let currentIndex: number = _.findIndex(this.pumpInventoryData.departments, (department) => {return department.id == this.selectedTab});
     if (currentIndex != 0) {
       let nextID: string = this.pumpInventoryData.departments[currentIndex - 1].id;
       this.pumpCatalogService.selectedDepartmentId.next(nextID);      
+    }
+  }
+
+  mobileBackPumpCatalogTabs() {
+    if (this.selectedTab === this.pumpInventoryData.departments[0]?.id) {
+      this.selectTab('pump-properties');
+    } else if (this.selectedTab !== 'pump-properties') {
+      this.backPumpCatalogTabs();
+    }
+
+  }
+
+  mobileContinuePumpCatalogTabs() {
+    if (this.selectedTab === 'pump-properties' && this.pumpInventoryData.departments.length > 0) {
+      this.selectTab(this.pumpInventoryData.departments[0].id);
+    } else if (this.selectedTab !== 'pump-properties') {
+      this.continuePumpCatalogTabs();
     }
   }
 

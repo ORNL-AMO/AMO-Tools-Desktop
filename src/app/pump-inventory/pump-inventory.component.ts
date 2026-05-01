@@ -110,6 +110,7 @@ export class PumpInventoryComponent implements OnInit {
     this.integrationStateSub.unsubscribe();
     this.pumpCatalogService.selectedPumpItem.next(undefined);
     this.pumpCatalogService.selectedDepartmentId.next(undefined);
+    this.pumpCatalogService.showPumpProperties.next(false);
     this.modalOpenSub.unsubscribe();   
     this.showExportModalSub.unsubscribe();
   }
