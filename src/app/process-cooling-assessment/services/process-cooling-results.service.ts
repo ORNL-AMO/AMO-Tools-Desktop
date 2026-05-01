@@ -92,19 +92,29 @@ export class ProcessCoolingResultsService {
       } else {
         results = this.suiteApi.getAirCooledResults(processCoolingAssessment, convertedWeatherDataInput, suiteModificationArgs);
       }
+      // Attach systemInformation and towerInput for summary service access
+      (results as any).systemInformation = processCoolingAssessment.systemInformation;
+      (results as any).towerInput = processCoolingAssessment.systemInformation?.towerInput;
     }
+
+
+
+
+
+
+
     // console.log('[ProcessCoolingResultsService] getProcessCoolingSuiteResults results:', results);
     return results;
   }
 
-    getResultModificationNames(modificationResults: ProcessCoolingResults[] | null): ModificationNameCell[] {
-    if (!modificationResults) return [];
-      return modificationResults.map((result, idx) => {
-        return { id: result?.id ?? `modification-${idx + 1}`, name: result?.name ?? `Modification ${idx + 1}` };
-      });
-    }
+  getResultModificationNames(modificationResults: ProcessCoolingResults[] | null): ModificationNameCell[] {
+  if (!modificationResults) return [];
+    return modificationResults.map((result, idx) => {
+      return { id: result?.id ?? `modification-${idx + 1}`, name: result?.name ?? `Modification ${idx + 1}` };
+    });
+  }
 
-    getEmptyInvalidResults(modification: Modification): ProcessCoolingResults {
+  getEmptyInvalidResults(modification: Modification): ProcessCoolingResults {
     return {
         id: modification.id,
         name: modification.name,
@@ -112,13 +122,13 @@ export class ProcessCoolingResultsService {
         electricityCost: 0,
         chiller: [],
         pump: {
-            chillerPumpingEnergy: [],
-            condenserPumpingEnergy: [],
+          chillerPumpingEnergy: [],
+          condenserPumpingEnergy: [],
         },
         tower: {
-            hours: [],
-            energy: [],
-        },
+          hours: [],
+          energy: [],
+      },
     };
-}
+  }
 }

@@ -6,15 +6,12 @@
   </div>
   <div class="card-body" *ngIf="!collapse || printView">
     <table #copyTable class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th>Label</th>
-          <th>Value</th>
-          <th>Units</th>
-        </tr>
-      </thead>
       <tbody>
         @let inputSummaryUI = inputSummaryUI$ | async;
+        <!-- Operations Section -->
+        <tr>
+          <td class="bold" colspan="3">Operations</td>
+        </tr>
         @if (inputSummaryUI && inputSummaryUI.operationSummaryRows && inputSummaryUI.operationSummaryRows.baseOperations) {
           @for (row of inputSummaryUI.operationSummaryRows.baseOperations; track row.label) {
             <tr>
@@ -24,9 +21,35 @@
             </tr>
           }
         }
+        <!-- Chiller Setup Section -->
+        <tr>
+          <td class="bold" colspan="3">Chiller Setup</td>
+        </tr>
+        @if (inputSummaryUI && inputSummaryUI.operationSummaryRows && inputSummaryUI.operationSummaryRows.chillerSetup) {
+          @for (row of inputSummaryUI.operationSummaryRows.chillerSetup; track row.label) {
+            <tr>
+              <td>{{ row.label }}</td>
+              <td>{{ row.baseline?.value }}</td>
+              <td>{{ row.units }}</td>
+            </tr>
+          }
+        }
+        <!-- Tower Setup Section -->
+        <tr>
+          <td class="bold" colspan="3">Tower Setup</td>
+        </tr>
+        @if (inputSummaryUI && inputSummaryUI.operationSummaryRows && inputSummaryUI.operationSummaryRows.towerSetup) {
+          @for (row of inputSummaryUI.operationSummaryRows.towerSetup; track row.label) {
+            <tr>
+              <td>{{ row.label }}</td>
+              <td>{{ row.baseline?.value }}</td>
+              <td>{{ row.units }}</td>
+            </tr>
+          }
+        }
       </tbody>
     </table>
-      <app-exportable-results-table [tableString]="copyTableString"
+    <app-exportable-results-table [tableString]="copyTableString"
       (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
   </div>
 </div>
