@@ -21,7 +21,7 @@ export interface SummaryTableSection extends ReportSection {
   headers: string[];
   rows: string[][];
   emphasisRowsIndices?: number[];
-  subGroupHeaderIndicies?: number[];
+  subGroupHeaderIndices?: number[];
 }
 
 export interface ChartSection extends ReportSection {

@@ -14,6 +14,8 @@ import { ProcessCoolingChartsService } from '../services/process-cooling-charts.
 import { ModificationNameCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { LOAD_LABELS } from '../constants/process-cooling-constants';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { Assessment } from '../../shared/models/assessment';
+import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 
 @Injectable()
 export class ProcessCoolingReportAdapter implements ReportDataAdapter {
@@ -24,10 +26,16 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
   private readonly resultsService = inject(ProcessCoolingResultsService);
   private readonly chartsService = inject(ProcessCoolingChartsService);
   private readonly plotlyService = inject(PlotlyService);
+  private readonly processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [0, 152, 133]; // #009885
 
-  buildDocument(meta: ReportMeta): Observable<ReportDocument> {
+  buildDocument(assessment: Assessment): Observable<ReportDocument> {
+     const meta: ReportMeta = {
+      title: assessment?.name ?? 'Process Cooling Assessment',
+      date: new Date().toISOString(),
+    };
+
     const moduleMeta: ReportMeta = { ...meta, moduleColor: ProcessCoolingReportAdapter.ACCENT_COLOR };
     return combineLatest([
       this.execSummaryService.executiveSummaryUI$,
@@ -44,7 +52,6 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
           ...this.buildPerformanceProfileSections(),
           divider(),
           ...this.buildPumpSummarySections(pumpSummary),
-          divider(),
           ...this.buildTowerSummarySections(towerSummary),
         ],
       }))
@@ -84,11 +91,11 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
 
     for (const result of ui.systemProfileChillerOutput) {
       const rows: string[][] = [];
-      const subGroupHeaderIndicies: number[] = [];
+      const subGroupHeaderIndices: number[] = [];
       const emptyLoadCells = Array(LOAD_LABELS.length + 1).fill('');
 
       for (const chiller of result.chillerOutputs) {
-        subGroupHeaderIndicies.push(rows.length);
+        subGroupHeaderIndices.push(rows.length);
         rows.push([chiller.name, ...emptyLoadCells]);
 
         rows.push([
@@ -118,7 +125,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         title: `System Profile — ${decodeHtmlEntities(result.name)}`,
         headers: ['', ...LOAD_LABELS, 'Total'],
         rows,
-        subGroupHeaderIndicies,
+        subGroupHeaderIndices,
         pageBreakBefore: true,
       };
       sections.push(section);
@@ -214,11 +221,10 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
       sections.push(totalsSection);
     }
 
-    if (ui.baselineEnergyBins?.length && ui.binLabels?.length) {
+    if (ui.baselineEnergyBins?.length) {
       const baselineBinSection = this.buildBinTable(
         'Tower Energy by Temperature Bin (Baseline)',
         ui.baselineEnergyBins,
-        ui.binLabels,
       );
       sections.push(baselineBinSection);
     }
@@ -229,7 +235,6 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         const modBinSection = this.buildBinTable(
           `Tower Energy by Temperature Bin (${modName})`,
           bins,
-          ui.binLabels,
         );
         sections.push(modBinSection);
       }
@@ -238,12 +243,24 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
     return [...sections];
   }
 
-  private buildBinTable(title: string, binRows: TowerBinRow[], binLabels: string[]): SummaryTableSection {
-    const decodedLabels = binLabels.map(decodeHtmlEntities);
+  private buildBinTable(title: string, binRows: TowerBinRow[]): SummaryTableSection {
+    const isImperial = this.processCoolingAssessmentService.settingsSignal().unitsOfMeasure === 'Imperial';
+    const tempUnit = isImperial ? '°F' : '°C';
+
+    const binTemps = this.towerSummaryService.getBinTemps();
+    const binLabels: string[] = [];
+    if (binTemps.length >= 2) {
+      binLabels.push(`< ${Math.round(binTemps[0][0])} ${tempUnit}`);
+      for (let i = 1; i < binTemps.length - 1; i++) {
+        binLabels.push(`${Math.round(binTemps[i][0])} - ${Math.round(binTemps[i][1])} ${tempUnit}`);
+      }
+      binLabels.push(`> ${Math.round(binTemps[binTemps.length - 1][0])} ${tempUnit}`);
+    }
+
     const section: SummaryTableSection = {
       type: 'summary-table',
       title,
-      headers: ['', ...decodedLabels],
+      headers: ['', ...binLabels],
       rows: binRows.map(row => [
         labelWithUnits(row.label, row.units),
         ...row.binValues.map(v => (v != null ? formatNumber(v, 0) : '—')),

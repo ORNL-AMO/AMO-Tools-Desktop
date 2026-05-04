@@ -23,20 +23,6 @@ export class ChillerProfileChartComponent implements AfterViewInit {
 
   @ViewChild('chillerProfileChart', { static: false }) chartRef: ElementRef<HTMLDivElement>;
 
-  printView: boolean = false;
-  showPrintViewSub: Subscription;
-
-  ngOnInit(): void {
-    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
-      this.printView = val;
-    });
-  }
-  ngOnDestroy(): void {
-    if (this.showPrintViewSub) {
-      this.showPrintViewSub.unsubscribe();
-    }
-  }
-
   ngAfterViewInit(): void {
     this.processCoolingResultsService.baselineResults$.pipe(
       takeUntilDestroyed(this.destroyRef)
@@ -48,7 +34,7 @@ export class ChillerProfileChartComponent implements AfterViewInit {
   }
 
   private renderChart(chillerOutput?: ProcessCoolingChillerOutput[]): void {
-    if (!this.chartRef?.nativeElement) return;
+    if (!this.chartRef?.nativeElement && !chillerOutput) return;
     const { traces, layout, config } = this.chartsService.buildChillerProfileChart(chillerOutput);
     this.plotlyService.newPlot(this.chartRef.nativeElement, traces, layout, config);
   }

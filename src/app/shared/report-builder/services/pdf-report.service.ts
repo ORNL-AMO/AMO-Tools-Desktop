@@ -160,7 +160,7 @@ export class PdfReportService extends BaseReportService {
     cursorY = this.renderSectionTitle(pdf, section.title, cursorY);
 
     const emphasisRowsIndiceset = new Set(section.emphasisRowsIndices ?? []);
-    const subGroupHeaderIndicieset = new Set(section.subGroupHeaderIndicies ?? []);
+    const subGroupHeaderIndiceset = new Set(section.subGroupHeaderIndices ?? []);
     const [accentRed, accentGreen, accentBlue] = this.moduleColor;
 
     const emphasisFillColor: [number, number, number] = [
@@ -191,7 +191,7 @@ export class PdfReportService extends BaseReportService {
       rowPageBreak: 'avoid',
       didParseCell: (data) => {
         if (data.section !== 'body') return;
-        if (subGroupHeaderIndicieset.has(data.row.index)) {
+        if (subGroupHeaderIndiceset.has(data.row.index)) {
           data.cell.styles.fontStyle = 'bold';
           data.cell.styles.fillColor = groupHeaderFillColor;
           data.cell.styles.textColor = [255, 255, 255];
