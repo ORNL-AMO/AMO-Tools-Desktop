@@ -164,9 +164,7 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: W
   // Apply the active palette color for this node's component type
   const paletteColor = getPaletteColorForType(nodeType, state.diagramOptions.paletteColors ?? getDefaultPaletteColors());
   if (paletteColor) {
-    if (!newNode.style) newNode.style = {};
-    newNode.style.backgroundColor = paletteColor;
-    newNode.style.color = getContrastTextColor(paletteColor);
+    newNode.style = { ...newNode.style, backgroundColor: paletteColor, color: getContrastTextColor(paletteColor) };
   }
   state.nodes.push(newNode);
 };
