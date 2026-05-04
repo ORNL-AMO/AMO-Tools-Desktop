@@ -32,7 +32,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const dispatch = useAppDispatch();
   const diagramNotes = useAppSelector((state) => state.diagram.diagramNotes);
   const paletteColors = useAppSelector((state: RootState) => state.diagram.diagramOptions.paletteColors);
-  const selectedPaletteIdx = allPalettes.findIndex((palette) => palette.every((color, i) => color === paletteColors?.[i]));
+  const selectedPaletteIdx = allPalettes.findIndex((palette) => palette.every((color, i) => color?.toLowerCase() === paletteColors?.[i]?.toLowerCase()));
   const hasAssessment = useAppSelector(selectHasAssessment);
   const edgeType = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const strokeWidth = useAppSelector((state: RootState) => state.diagram.diagramOptions.strokeWidth);
@@ -179,17 +179,17 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={2}>
-          <Box paddingX={'.5rem'}>
+        <TabPanel value={selectedTab} index={2} style={{ paddingTop: 0 }}>
+          <Box paddingX={'.5rem'} paddingTop={0}>
             <div className="sidebar-options">
-            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0} sx={{paddingTop: 0, marginTop: 0}}>
               <ColorPaletteDropdown
                 selected={selectedPaletteIdx}
                 onChange={(paletteIdx) => {
                   dispatch(setPaletteColors(allPalettes[paletteIdx]));
                 }}
               />
-              <FormControl fullWidth size="small">
+              <FormControl fullWidth size="small" sx={{ paddingTop: 0 }}>
                 <InputLabel id="unitsOfMeasure-label">Units of Measure</InputLabel>
                 <Select
                   labelId="unitsOfMeasure-label"
@@ -219,7 +219,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               </FormControl>
             </Box>
 
-              <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
                 <InputField
                   name={'electricityCost'}
                   id={'electricityCost'}
@@ -237,7 +237,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 />
               </Box>
                 
-            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
               <FormControl fullWidth size="small">
                 <InputLabel id="flowDecimalPrecision-label">Decimal Precision</InputLabel>
                 <Select
@@ -268,7 +268,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               </FormControl>
             </Box>
 
-            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
               <FormControl fullWidth size="small">
                 <InputLabel id="conductivityUnit-label">Conductivity Unit</InputLabel>
                 <Select
@@ -299,7 +299,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
               </FormControl>
             </Box>
 
-            <Box className={'sidebar-option-container'} padding={'.5rem'}>
+            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
               <FormControl fullWidth size="small">
                 <InputLabel id="edgeType-label">Default Line Type</InputLabel>
                 <Select

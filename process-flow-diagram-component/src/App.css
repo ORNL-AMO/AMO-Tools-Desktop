@@ -469,6 +469,7 @@ a {
   width: 16px;
   height: 16px;
   cursor: pointer;
+  accent-color: #1976d2;
 }
 
 .diagram-checkbox-label {

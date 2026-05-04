@@ -26,7 +26,7 @@ export const PALETTE_COMPONENT_ORDER: WaterProcessComponentType[] = [
 ];
 
 export const getDefaultPaletteColors = (): string[] => [
-  '#75a1ff', '#00bbff', '#7f7fff', '#009386', '#93e200', '#ffffff'
+  '#75a1ff', '#00bbff', '#7f7fff', '#009386', '#93e200'
 ];
 
 export const getPaletteColorForType = (type: WaterProcessComponentType, paletteColors: string[]): string | undefined => {

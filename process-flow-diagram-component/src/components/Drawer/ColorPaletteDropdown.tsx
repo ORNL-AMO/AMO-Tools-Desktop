@@ -8,17 +8,17 @@ interface ColorPaletteDropdownProps {
 }
 
 export const mainPalettes = [
-  ['#75a1ff', '#00bbff', '#7f7fff', '#009386', '#93e200', '#ffffff'],
-  ['#88EFBF', '#FE5000', '#008A8F', '#B50094', '#FFFFFF', '#BDBDBD'],
-  ['#00B8B5', '#42008E', '#373A36', '#006BA6', '#005776', '#BDBDBD'],
-  ['#00662C', '#88EFBF', '#F9BF1B', '#008A8F', '#006BA6', '#BDBDBD'],
-  ['#00454D', '#7DA800', '#FE5000', '#e60b0b', '#ffffff', '#DBDCDB'],
+  ['#75a1ff', '#00bbff', '#7f7fff', '#009386', '#93e200'],
+  ['#88EFBF', '#FE5000', '#121212', '#008A8F', '#B50094'],
+  ['#00B8B5', '#42008E', '#373A36', '#006BA6', '#005776'],
+  ['#00662C', '#88EFBF', '#F9BF1B', '#008A8F', '#006BA6'],
+  ['#00454D', '#7DA800', '#FE5000', '#e60b0b', '#848383'],
 ];
 // 3 colorblind-friendly palettes (user provided, with gray as 6th color)
 export const colorblindPalettes = [
-  ['#FFD600', '#2962FF', '#00C853', '#FF6D00', '#30352e', '#BDBDBD'],
-  ['#D5810B', '#DF69F7', '#1C24F2', '#00B30C', '#EEFF00', '#BDBDBD'],
-  ['#D50000', '#FFD600', '#00C853', '#2962FF', '#AA00FF', '#BDBDBD'],
+  ['#FFD600', '#2962FF', '#00C853', '#FF6D00', '#30352e'],
+  ['#D5810B', '#DF69F7', '#1C24F2', '#00B30C', '#EEFF00'],
+  ['#D50000', '#FFD600', '#00C853', '#2962FF', '#AA00FF'],
 ];
 export const allPalettes = [...mainPalettes, ...colorblindPalettes];
 
@@ -54,8 +54,8 @@ const ColorRow: React.FC<{ colors: string[]; style?: React.CSSProperties }> = ({
 const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, onChange }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ margin: '24px 0', position: 'relative' }}>
-      <h3 style={{ fontSize: 16, marginBottom: 12 }}>Color Options</h3>
+    <div style={{ margin: '0 0 24px 0', position: 'relative' }}>
+      <h3 style={{ fontSize: 16, marginBottom: 12 }}>Diagram Node Color Options</h3>
       <div
         role="button"
         tabIndex={0}
@@ -74,7 +74,7 @@ const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, o
         }}
         onClick={() => setOpen((prev) => !prev)}
         title="Select color palette"
-        >  <ColorRow colors={allPalettes[selected]} style={{ margin: 0 }} />
+        >  <ColorRow colors={allPalettes[selected] ?? allPalettes[0]} style={{ margin: 0 }} />
         <svg
           width="20"
           height="20"
@@ -113,7 +113,7 @@ const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, o
               if (i === mainPalettes.length) {
                 return [
                   <div key="cb-header" style={{ fontSize: 13, color: '#000', fontWeight: 600, padding: '4px 0 2px 0', borderBottom: '1px solid #eee', margin: '4px 0 2px 0' }}>
-                    Colorblind Palettes
+                    Colorblind Accessible Palettes
                   </div>,
                   <div
                     key={i}

@@ -5,10 +5,11 @@ interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
+  style?: CSSProperties;
 }
 
 function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
+  const { children, value, index, style, ...other } = props;
 
   let wrapperCSSProps: CSSProperties = { 
     width: '100%', 
@@ -18,6 +19,7 @@ function TabPanel(props: TabPanelProps) {
     overflowY: 'auto',   
     minHeight: 0,
     flexDirection: 'column',
+    ...style,
   };
 
   if (value === index && (value === 0 || value === 2)) {
