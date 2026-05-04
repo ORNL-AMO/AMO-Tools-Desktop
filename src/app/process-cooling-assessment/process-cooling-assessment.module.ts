@@ -110,37 +110,7 @@ import { CondenserInputSummaryComponent } from './report/input-summary/condenser
 import { TowerInputSummaryComponent } from './report/input-summary/tower-input-summary/tower-input-summary.component';
 import { InventoryInputSummaryComponent } from './report/input-summary/inventory-input-summary/inventory-input-summary.component';
 
-export const ROUTE_TOKENS = {
-  // Main tabs
-  baseline: 'baseline',
-  assessment: 'assessment',
-  report: 'report',
-
-  // Baseline sub-tabs
-  assessmentSettings: 'assessment-settings',
-  systemInformation: 'system-information',
-  operations: 'operations',
-  weather: 'weather',
-  waterPump: 'pump',
-  condenserCoolingSystem: 'condenser-cooling-system',
-  tower: 'tower',
-  chillerInventory: 'chiller-inventory',
-  loadSchedule: 'load-schedule',
-  operatingSchedule: 'operating-schedule',
-
-  // Assessment sub-tabs
-  exploreOpportunities: 'explore-opportunities',
-  modificationGraphs: 'modification-graphs',
-
-  // report sub tabs
-  executiveSummary: 'executive-summary',
-  performanceProfile: 'performance-profile',
-  systemProfile: 'system-profile',
-  pumpSummary: 'pump-summary',
-  inputSummary: 'input-summary',
-  towerSummary: 'tower-summary',
-  graphs: 'graphs',
-} as const;
+import { ROUTE_TOKENS } from './constants/process-cooling-routes';
 
 const ROUTES: Route[] = [
   {

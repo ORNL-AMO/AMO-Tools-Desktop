@@ -1,7 +1,7 @@
 import { Component, inject, Injector, Signal } from '@angular/core';
 import { ASSESSMENT_VIEW_LINKS, ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 import { Modification } from '../../shared/models/process-cooling-assessment';
-import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
+import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { ModificationService } from '../services/modification.service';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { ModificationListComponent } from '../explore-opportunities/modification-list/modification-list.component';

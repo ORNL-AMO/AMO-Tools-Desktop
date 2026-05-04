@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, Signal } from '@angular/core';
 import { ProcessCoolingUiService, SYSTEM_INFORMATION_VIEW_LINKS, ViewLink } from '../services/process-cooling-ui.service';
-import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
+import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 

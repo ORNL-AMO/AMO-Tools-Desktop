@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, Signal } from '@angular/core';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { map, Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
-import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
+import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { MAIN_VIEW_LINKS, MainView, ProcessCoolingUiService, ViewLink } from '../services/process-cooling-ui.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

@@ -40,7 +40,14 @@ export class PdfReportService extends BaseReportService {
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
     let cursorY = this.renderCover(pdf, document);
 
-    for (const section of document.sections) {
+    const sections = [...document.sections];
+
+    // * When the user exports a selection, the first included section may already have that flag set — strip it so we don't open with a blank page.
+    if (sections.length > 0 && sections[0].pageBreakBefore) {
+      sections[0] = { ...sections[0], pageBreakBefore: false };
+    }
+
+    for (const section of sections) {
       cursorY = await this.renderSection(pdf, section, cursorY);
     }
 
@@ -109,9 +116,6 @@ export class PdfReportService extends BaseReportService {
         return this.renderTable(pdf, section as SummaryTableSection, cursorY);
       case 'chart':
         return this.renderChart(pdf, section as ChartSection, cursorY);
-      case 'divider':
-        pdf.addPage();
-        return PAGE_MARGIN_MM;
       default:
         return cursorY;
     }
