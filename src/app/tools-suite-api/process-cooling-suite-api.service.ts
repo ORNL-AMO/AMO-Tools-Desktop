@@ -432,11 +432,14 @@ export class ProcessCoolingSuiteApiService {
     for (let i = 0; i < numChillers; i++) {
       const hours = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i));
       const energy = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i));
+
+      // todo we will call processCoolingInstance.getChillerEnergyEfficiency
+      const ariEfficiencyProfile = [0, 0, 0, 0];
       const chillerResult = {
         id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
         name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
         efficiency: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.efficiency.get(i)),
-        ariEfficiencyProfile: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.ariEfficiencyProfile.get(i)),
+        ariEfficiencyProfile: ariEfficiencyProfile,
         hours: hours,
         power: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i)),
         energy: energy,
@@ -615,6 +618,7 @@ export class ProcessCoolingSuiteApiService {
     const towerSizingEnum = this.suiteApiHelperService.getProcessCoolingTowerSizedByEnum(input.towerSizeMetric)
     const towerCellFanTypeEnum = this.suiteApiHelperService.getProcessCoolingFanTypeEnum(input.fanType)
 
+    // * towerSize is passed twice because the suite asks for both cellFanHP and tonnage. UI model does not require separate properties for this.
     return new this.toolsSuiteApiService.ToolsSuiteModule.TowerInput(
       input.numberOfTowers,
       input.numberOfFans,

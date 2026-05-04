@@ -481,6 +481,7 @@ export class SuiteApiHelperService {
   getProcessCoolingTowerSizedByEnum(val: number | string) {
     if (val === 0 || val === 'Tonnage') return this.toolsSuiteApiService.ToolsSuiteModule.TowerSizedBy.Tonnage;
     if (val === 1 || val === 'Fan_HP') return this.toolsSuiteApiService.ToolsSuiteModule.TowerSizedBy.Fan_HP;
+    if (val === 2 || val === 'Unknown') return this.toolsSuiteApiService.ToolsSuiteModule.TowerSizedBy.Unknown;
   }
 
   
