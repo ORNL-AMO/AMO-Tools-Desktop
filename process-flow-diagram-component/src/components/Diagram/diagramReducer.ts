@@ -128,7 +128,7 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.nodeErrors = diagramData.nodeErrors ? { ...diagramData.nodeErrors } : {};
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
-state.diagramOptions.paletteColors = diagramData.userDiagramOptions?.paletteColors ?? getDefaultPaletteColors();  state.isDataDrawerOpen = false;
+  state.diagramOptions.paletteColors = diagramData.userDiagramOptions?.paletteColors ?? getDefaultPaletteColors();  state.isDataDrawerOpen = false;
   state.isMenuDrawerOpen = state.isMenuDrawerOpen ?? true;
   state.focusedEdgeId = undefined;
   state.selectedDataId = undefined;
