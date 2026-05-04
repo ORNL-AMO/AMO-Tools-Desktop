@@ -6,7 +6,7 @@ export function divider(): DividerSection {
   return { type: 'divider' };
 }
 
-/** Appends decoded units in parentheses to the label when present. Both sides are decoded. */
+/** Appends decoded units to the label when present. Both sides are decoded. */
 export function labelWithUnits(label: string, units: string | undefined): string {
   const decoded = decodeHtmlEntities(label);
   if (!units) return decoded;

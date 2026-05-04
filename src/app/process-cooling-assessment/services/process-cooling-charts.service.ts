@@ -21,7 +21,9 @@ export class ProcessCoolingChartsService {
       type: 'scatter',
       mode: 'lines+markers',
       name: chiller.name,
-      line: { width: 3, dash: 'dot', marker: { size: 8 } },
+      marker: { size: 8 },
+      line: { width: 3, dash: 'dot', 
+       },
       hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`,
     }));
 
@@ -43,7 +45,11 @@ export class ProcessCoolingChartsService {
         tickformat: '.1f',
       },
       margin: { t: 20, r: 20, l: 60, b: 60 },
-      legend: { orientation: 'h', y: 1.15 },
+      legend: { orientation: 'h', y: 1.15, 
+        font: { 
+          size: 14 
+        }
+       },
       showlegend: true,
       hovermode: 'closest',
       responsive: true,

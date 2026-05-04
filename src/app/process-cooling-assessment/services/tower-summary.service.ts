@@ -159,7 +159,7 @@ export class TowerSummaryService {
         let towerEnergyRows: TowerBinRow[] = [];
         const binHeaderRow: TowerBinRow = {
             label: `Bins`,
-            units: `(Wet Bulb ${this.temperatureUnit})`,
+            units: `(Wet Bulb ${this.settingsSignal().unitsOfMeasure === 'Imperial' ? '°F' : '°C'})`,
             className: this.defaultclassName,
             binValues: binTemps.map((temp, index) => results.hours[index] ?? null),
         }

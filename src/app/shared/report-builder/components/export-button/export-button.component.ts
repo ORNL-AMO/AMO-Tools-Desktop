@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
+import { firstValueFrom, Observable } from 'rxjs';
 import { PdfReportService } from '../../services/pdf-report.service';
 import { ReportDocument } from '../../models/report-document.model';
 
@@ -8,32 +9,33 @@ import { ReportDocument } from '../../models/report-document.model';
   template: `
     <button
       class="btn btn-primary"
-      [disabled]="exporting()"
+      [disabled]="isExporting()"
       (click)="onExport()">
-      @if (exporting()) {
+      @if (isExporting()) {
         <span class="fa fa-spinner fa-spin mr-1"></span>
       }
-      {{ exporting() ? 'Generating PDF...' : 'Export PDF' }}
+      {{ isExporting() ? 'Generating PDF...' : 'Export PDF' }}
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExportButtonComponent {
-  readonly document = input.required<ReportDocument>();
+  readonly document = input.required<Observable<ReportDocument>>();
   readonly assessmentName = input('report');
 
   private readonly pdf = inject(PdfReportService);
-  readonly exporting = signal(false);
+  readonly isExporting = signal(false);
 
   readonly filename = computed(() => `${this.assessmentName()}-report.pdf`);
 
   async onExport(): Promise<void> {
-    if (this.exporting() || !this.document()) return;
-    this.exporting.set(true);
+    if (this.isExporting()) return;
+    this.isExporting.set(true);
     try {
-      await this.pdf.export(this.document(), this.filename());
+      const doc = await firstValueFrom(this.document());
+      await this.pdf.export(doc, this.filename());
     } finally {
-      this.exporting.set(false);
+      this.isExporting.set(false);
     }
   }
 }
