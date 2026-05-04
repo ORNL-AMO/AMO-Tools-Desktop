@@ -150,6 +150,6 @@ Below is a categorized list of all available standalone calculators in MEASUR. C
 |------------|-------------|------|------|
 | [O₂ Utilization Rate](https://measur.ornl.gov/calculators/o2-utilization-rate) | Estimate Oxygen Utilization Rate (OUR) from DO values. | [Code](https://github.com/ORNL-AMO/AMO-Tools-Desktop/tree/master/src/app/calculator/waste-water/o2-utilization-rate/o2-utilization-rate.component.ts) | Coming Soon |
 | [State Point Analysis Tool](https://measur.ornl.gov/calculators/state-point-analysis) | Use a state point analysis to assess activated sludge design, operations, and troubleshoot systems. | [Code](https://github.com/ORNL-AMO/AMO-Tools-Desktop/tree/master/src/app/calculator/waste-water/state-point-analysis/state-point-analysis.component.ts) | Coming Soon |
-| [Water/Wastewater Reduction](https://measur.ornl.gov/calculators/water-reduction) | Quantify water and wastewater reduction opportunities. | [Code](https://github.com/ORNL-AMO/AMO-Tools-Desktop/tree/master/src/app/calculator/waste-water/water-reduction/water-reduction.component.ts) | Coming Soon |
+| [Water/Wastewater Reduction](https://measur.ornl.gov/calculators/water-reduction) | Quantify water and wastewater reduction opportunities. | [Code](https://github.com/ORNL-AMO/AMO-Tools-Desktop/tree/master/src/app/calculator/waste-water/water-reduction/water-reduction.component.ts) | [Docs](https://industrialresources.ornl.gov/measur/suite/docs/group__water__reduction__calculator) |
 
 ---

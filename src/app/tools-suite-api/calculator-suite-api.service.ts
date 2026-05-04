@@ -323,11 +323,11 @@ export class CalculatorSuiteApiService {
       waterReduction.bucketMethodData.bucketFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketFillTime);
       waterReduction.bucketMethodData.bucketVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketVolume);
       waterReduction.otherMethodData.consumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.otherMethodData.consumption);
-
+      const measurementMethod = this.suiteApiHelperService.getWaterReductionMeasurementMethodEnum(waterReduction.measurementMethod);
       inputs.push_back({
         hoursPerYear: waterReduction.hoursPerYear,
         waterCost: waterReduction.waterCost,
-        measurementMethod: waterReduction.measurementMethod,
+        measurementMethod: measurementMethod,
         meteredFlowMethodData: { meterReading: waterReduction.meteredFlowMethodData.meterReading },
         volumeMeterMethodData: {
           finalMeterReading: waterReduction.volumeMeterMethodData.finalMeterReading,
