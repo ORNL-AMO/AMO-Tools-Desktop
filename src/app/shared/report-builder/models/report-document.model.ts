@@ -1,5 +1,11 @@
 import { ReportSection } from './report-section.model';
 
+export interface ReportSectionGroup {
+  key: string;
+  label: string;
+  description: string;
+}
+
 export interface ReportMeta {
   title: string;
   subtitle?: string;

@@ -1,7 +1,7 @@
 import { Component, inject, Signal } from '@angular/core';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
 import { Subscription } from 'rxjs';
-import { ROUTE_TOKENS } from '../../process-cooling-assessment.module';
+import { ROUTE_TOKENS } from '../../constants/process-cooling-routes';
 
 @Component({
   selector: 'app-help-panel',

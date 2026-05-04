@@ -2,8 +2,8 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ProcessCoolingUiService, REPORT_VIEW_LINKS } from '../services/process-cooling-ui.service';
-import { ProcessCoolingReportAdapter } from './process-cooling-report.adapter';
-import { ReportDocument } from '../../shared/report-builder/models/report-document.model';
+import { PROCESS_COOLING_SECTION_GROUPS, ProcessCoolingReportAdapter } from './process-cooling-report.adapter';
+import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 
 @Component({
   selector: 'app-report',
@@ -24,6 +24,7 @@ export class ReportComponent implements OnInit {
   reportDocument$: Observable<ReportDocument>;
   assessmentDirectories: any[] = [];
   REPORT_VIEW_LINKS = REPORT_VIEW_LINKS;
+  readonly sectionGroups: ReportSectionGroup[] = PROCESS_COOLING_SECTION_GROUPS;
 
   ngOnInit(): void {
     this.processCoolingUiService.executiveSummaryViewSignal.set('report');

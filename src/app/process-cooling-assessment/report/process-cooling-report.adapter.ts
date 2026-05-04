@@ -2,8 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { combineLatest, firstValueFrom, map, Observable } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { decodeHtmlEntities, divider, formatCell, formatNumber, labelWithUnits } from '../../shared/report-builder/adapters/report-adapter.utils';
-import { ReportDocument, ReportMeta } from '../../shared/report-builder/models/report-document.model';
+import { decodeHtmlEntities, formatCell, formatNumber, labelWithUnits } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from '../services/executive-summary-results.service';
 import { PumpSummaryResultsService, PumpSummaryUI } from '../services/pump-summary-results.service';
@@ -16,6 +16,15 @@ import { LOAD_LABELS } from '../constants/process-cooling-constants';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { Assessment } from '../../shared/models/assessment';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
+import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
+
+export const PROCESS_COOLING_SECTION_GROUPS: ReportSectionGroup[] = [
+  { key: ROUTE_TOKENS.executiveSummary, label: 'Executive Summary', description: 'High-level baseline to modification comparison' },
+  { key: ROUTE_TOKENS.performanceProfile, label: 'Performance Profile', description: 'Chiller performance curves by load level' },
+  { key: ROUTE_TOKENS.systemProfile, label: 'System Profile', description: 'Chiller energy and hours by load bin' },
+  { key: ROUTE_TOKENS.pumpSummary, label: 'Pump Summary', description: 'Chilled and condenser water pumping energy' },
+  { key: ROUTE_TOKENS.towerSummary, label: 'Tower Summary', description: 'Cooling tower energy by temperature bin' },
+];
 
 @Injectable()
 export class ProcessCoolingReportAdapter implements ReportDataAdapter {
@@ -48,9 +57,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         sections: [
           ...this.buildExecutiveSummarySections(execSummary),
           ...this.buildSystemProfileSections(systemProfile),
-          divider(),
           ...this.buildPerformanceProfileSections(),
-          divider(),
           ...this.buildPumpSummarySections(pumpSummary),
           ...this.buildTowerSummarySections(towerSummary),
         ],
@@ -70,6 +77,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
       headers,
       rows: ui.resultRows.map(row => this.resultRowToStrings(row)),
       emphasisRowsIndices,
+      group: ROUTE_TOKENS.executiveSummary,
     };
 
     return [...[section]];
@@ -127,6 +135,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         rows,
         subGroupHeaderIndices,
         pageBreakBefore: true,
+        group: ROUTE_TOKENS.systemProfile,
       };
       sections.push(section);
     }
@@ -138,6 +147,8 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
     const section: ChartSection = {
       type: 'chart',
       title: 'Chiller Performance Profile',
+      group: ROUTE_TOKENS.performanceProfile,
+      pageBreakBefore: true,
       imageDataProvider: async () => {
         const results = await firstValueFrom(this.resultsService.baselineResults$);
         if (!results?.chiller?.length) throw new Error('No chiller results available');
@@ -167,37 +178,40 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
     const sections: SummaryTableSection[] = [];
 
     if (ui.chillerPumpingEnergy?.length) {
-      const chillerSection: SummaryTableSection = {
+      sections.push({
         type: 'summary-table',
         title: 'Chilled Water Pumping Energy',
         headers,
         rows: ui.chillerPumpingEnergy.map(row => this.resultRowToStrings(row)),
-      };
-      sections.push(chillerSection);
+        group: ROUTE_TOKENS.pumpSummary,
+        pageBreakBefore: sections.length === 0,
+      });
     }
 
     if (ui.condenserPumpingEnergy?.length) {
-      const condenserSection: SummaryTableSection = {
+      sections.push({
         type: 'summary-table',
         title: 'Condenser Water Pumping Energy',
         headers,
         rows: ui.condenserPumpingEnergy.map(row => this.resultRowToStrings(row)),
-      };
-      sections.push(condenserSection);
+        group: ROUTE_TOKENS.pumpSummary,
+        pageBreakBefore: sections.length === 0,
+      });
     }
 
     if (ui.summaryRows?.length) {
       const emphasisRowsIndices = ui.summaryRows
         .map((row, idx) => (row.className === 'emphasis' ? idx : -1))
         .filter(idx => idx !== -1);
-      const summarySection: SummaryTableSection = {
+      sections.push({
         type: 'summary-table',
         title: 'Pump Summary',
         headers,
         rows: ui.summaryRows.map(row => this.resultRowToStrings(row)),
         emphasisRowsIndices,
-      };
-      sections.push(summarySection);
+        group: ROUTE_TOKENS.pumpSummary,
+        pageBreakBefore: sections.length === 0,
+      });
     }
 
     return [...sections];
@@ -211,39 +225,40 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
       const emphasisRowsIndices = ui.totalRows
         .map((row, idx) => (row.className === 'emphasis' ? idx : -1))
         .filter(idx => idx !== -1);
-      const totalsSection: SummaryTableSection = {
+      sections.push({
         type: 'summary-table',
         title: 'Tower Summary',
         headers: resultHeaders,
         rows: ui.totalRows.map(row => this.resultRowToStrings(row)),
         emphasisRowsIndices,
-      };
-      sections.push(totalsSection);
+        group: ROUTE_TOKENS.towerSummary,
+        pageBreakBefore: sections.length === 0,
+      });
     }
 
     if (ui.baselineEnergyBins?.length) {
-      const baselineBinSection = this.buildBinTable(
+      sections.push(this.buildBinTable(
         'Tower Energy by Temperature Bin (Baseline)',
         ui.baselineEnergyBins,
-      );
-      sections.push(baselineBinSection);
+        sections.length === 0,
+      ));
     }
 
     ui.modificationEnergyBins?.forEach((bins, i) => {
       if (bins?.length) {
         const modName = ui.modificationNames?.[i]?.name ?? `Modification ${i + 1}`;
-        const modBinSection = this.buildBinTable(
+        sections.push(this.buildBinTable(
           `Tower Energy by Temperature Bin (${modName})`,
           bins,
-        );
-        sections.push(modBinSection);
+          sections.length === 0,
+        ));
       }
     });
 
     return [...sections];
   }
 
-  private buildBinTable(title: string, binRows: TowerBinRow[]): SummaryTableSection {
+  private buildBinTable(title: string, binRows: TowerBinRow[], pageBreakBefore = false): SummaryTableSection {
     const isImperial = this.processCoolingAssessmentService.settingsSignal().unitsOfMeasure === 'Imperial';
     const tempUnit = isImperial ? '°F' : '°C';
 
@@ -265,6 +280,8 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         labelWithUnits(row.label, row.units),
         ...row.binValues.map(v => (v != null ? formatNumber(v, 0) : '—')),
       ]),
+      group: ROUTE_TOKENS.towerSummary,
+      pageBreakBefore,
     };
 
     return section;

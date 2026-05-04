@@ -1,9 +1,10 @@
-export type ReportSectionType = 'text' | 'key-value-list' | 'summary-table' | 'chart' | 'divider';
+export type ReportSectionType = 'text' | 'key-value-list' | 'summary-table' | 'chart';
 
 export interface ReportSection {
   type: ReportSectionType;
   title?: string;
   pageBreakBefore?: boolean;
+  group?: string;
 }
 
 export interface TextSection extends ReportSection {
@@ -33,8 +34,4 @@ export interface ChartSection extends ReportSection {
   imageDataProvider?: () => Promise<string>;
   /** Fallback table for formats that cannot embed images (PPTX, XLSX) */
   altData?: SummaryTableSection;
-}
-
-export interface DividerSection extends ReportSection {
-  type: 'divider';
 }

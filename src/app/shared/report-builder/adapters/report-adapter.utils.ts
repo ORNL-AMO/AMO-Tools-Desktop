@@ -1,10 +1,4 @@
-import { DividerSection } from '../models/report-section.model';
 import { ReportColumnCell } from '../models/report-ui-models';
-
-/** Convenience factory for a page-break divider section. */
-export function divider(): DividerSection {
-  return { type: 'divider' };
-}
 
 /** Appends decoded units to the label when present. Both sides are decoded. */
 export function labelWithUnits(label: string, units: string | undefined): string {

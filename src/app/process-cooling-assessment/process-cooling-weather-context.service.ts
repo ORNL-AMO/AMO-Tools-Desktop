@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { WeatherContext, WeatherContextData } from '../shared/modules/weather-data/weather-context.token';
-import { ROUTE_TOKENS } from './process-cooling-assessment.module';
+import { ROUTE_TOKENS } from './constants/process-cooling-routes';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';

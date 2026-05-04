@@ -99,38 +99,7 @@ import { VsdInventoryTableComponent } from './explore-opportunities/install-vsd/
 import { RefrigerantInventoryTableComponent } from './explore-opportunities/replace-chiller-refrigerant/refrigerant-inventory-table/refrigerant-inventory-table.component';
 import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
 import { ProcessCoolingReportAdapter } from './report/process-cooling-report.adapter';
-
-
-export const ROUTE_TOKENS = {
-  // Main tabs
-  baseline: 'baseline',
-  assessment: 'assessment',
-  report: 'report',
-
-  // Baseline sub-tabs
-  assessmentSettings: 'assessment-settings',
-  systemInformation: 'system-information',
-  operations: 'operations',
-  weather: 'weather',
-  waterPump: 'pump',
-  condenserCoolingSystem: 'condenser-cooling-system',
-  tower: 'tower',
-  chillerInventory: 'chiller-inventory',
-  loadSchedule: 'load-schedule',
-  operatingSchedule: 'operating-schedule',
-
-  // Assessment sub-tabs
-  exploreOpportunities: 'explore-opportunities',
-  modificationGraphs: 'modification-graphs',
-
-  // report sub tabs
-  executiveSummary: 'executive-summary',
-  performanceProfile: 'performance-profile',
-  systemProfile: 'system-profile',
-  pumpSummary: 'pump-summary',
-  towerSummary: 'tower-summary',
-  graphs: 'graphs',
-} as const;
+import { ROUTE_TOKENS } from './constants/process-cooling-routes';
 
 const ROUTES: Route[] = [
   {
