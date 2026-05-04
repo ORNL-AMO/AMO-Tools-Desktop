@@ -324,40 +324,31 @@ export class CalculatorSuiteApiService {
       waterReduction.bucketMethodData.bucketVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketVolume);
       waterReduction.otherMethodData.consumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.otherMethodData.consumption);
 
-      let MeteredFlowMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.MeteredFlowMethodData(waterReduction.meteredFlowMethodData.meterReading);
-      let VolumeMeterMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.VolumeMeterMethodData(waterReduction.volumeMeterMethodData.initialMeterReading,
-        waterReduction.volumeMeterMethodData.finalMeterReading, waterReduction.volumeMeterMethodData.elapsedTime);
-      let BucketMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.BucketMethodData(waterReduction.bucketMethodData.bucketVolume, waterReduction.bucketMethodData.bucketFillTime);
-      let OtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.WaterOtherMethodData(waterReduction.otherMethodData.consumption);
-
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.WaterReductionInput(
-        waterReduction.hoursPerYear,
-        waterReduction.waterCost,
-        waterReduction.measurementMethod,
-        MeteredFlowMethodData,
-        VolumeMeterMethodData,
-        BucketMethodData,
-        OtherMethodData
-      );
-      inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      MeteredFlowMethodData.delete();
-      VolumeMeterMethodData.delete();
-      BucketMethodData.delete();
-      OtherMethodData.delete();
+      inputs.push_back({
+        hoursPerYear: waterReduction.hoursPerYear,
+        waterCost: waterReduction.waterCost,
+        measurementMethod: waterReduction.measurementMethod,
+        meteredFlowMethodData: { meterReading: waterReduction.meteredFlowMethodData.meterReading },
+        volumeMeterMethodData: {
+          finalMeterReading: waterReduction.volumeMeterMethodData.finalMeterReading,
+          initialMeterReading: waterReduction.volumeMeterMethodData.initialMeterReading,
+          elapsedTime: waterReduction.volumeMeterMethodData.elapsedTime
+        },
+        bucketMethodData: {
+          bucketVolume: waterReduction.bucketMethodData.bucketVolume,
+          bucketFillTime: waterReduction.bucketMethodData.bucketFillTime
+        },
+        otherMethodData: { consumption: waterReduction.otherMethodData.consumption }
+      });
     });
 
-    let WaterReductionCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.WaterReduction(inputs);
-    let output = WaterReductionCalculator.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.waterReduction(inputs);
     let results: WaterReductionResult = {
       waterUse: output.waterUse,
       waterCost: output.waterCost,
-      annualWaterSavings: output.annualWaterSavings,
-      costSavings: output.costSavings
+      annualWaterSavings: 0,
+      costSavings: 0
     };
-    output.delete();
-    WaterReductionCalculator.delete();
     inputs.delete();
     return results;
   }
