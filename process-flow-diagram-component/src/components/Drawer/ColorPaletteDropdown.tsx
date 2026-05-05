@@ -55,7 +55,7 @@ const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, o
   const [open, setOpen] = useState(false);
   return (
     <div style={{ margin: '0 0 24px 0', position: 'relative' }}>
-      <h3 style={{ fontSize: 16, marginBottom: 12 }}>Diagram Node Color Options</h3>
+      <label style={{ display: 'block' }}>Set Water Component Colors</label>
       <div
         role="button"
         tabIndex={0}
