@@ -31,7 +31,7 @@ li a {
     width: 100%;
     flex: 1 1 auto;
     min-height: 0;
-    overflow-y: auto;
+    /* overflow-y: auto; */
 }
 
 /* Screens below 1024 */
@@ -49,7 +49,7 @@ li a {
     }
 
     .assessment-panel-container {
-        display: none;
+        /* display: none; */
         width: 100%;
     }
 

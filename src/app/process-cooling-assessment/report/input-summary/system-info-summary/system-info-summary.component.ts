@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, ChangeDetectorRef, ViewChild, ElementRef, inject, Signal } from '@angular/core';
+import { Component, ViewChild, inject, Signal } from '@angular/core';
 import { FeatureFlagService } from '../../../../shared/feature-flag.service';
-import { Settings } from '../../../../shared/models/settings';
-import { InputSummaryService, InputSummaryUI } from '../../../services/input-summary.service';
+import { InputSummaryService } from '../../../services/input-summary.service';
 import { InputSummarySection } from '../../report-ui-models';
 import { OperationSummaryRows } from '../../../services/input-summary.service';
 import { map } from 'rxjs';
+import { InputSummaryTableComponent } from '../input-summary-table/input-summary-table.component';
 
 @Component({
     selector: 'app-system-info-summary',
@@ -12,34 +12,25 @@ import { map } from 'rxjs';
     styleUrls: ['./system-info-summary.component.css'],
     standalone: false
 })
-export class SystemInfoSummaryComponent implements OnInit {
+export class SystemInfoSummaryComponent {
     private featureFlagService = inject(FeatureFlagService);
     private inputSummaryService = inject(InputSummaryService);
+    @ViewChild(InputSummaryTableComponent) inputSummaryTable: InputSummaryTableComponent;
+    showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+    copyTableString: string;
+    collapse: boolean = true;
 
     inputSummaryUI$ = this.inputSummaryService.inputSummaryUI$;
-
     sections$ = this.inputSummaryUI$.pipe(
         map(ui => ui ? this.buildSections(ui.operationSummaryRows) : [])
     );
-
-    @Input() printView: boolean;
-    @Input() settings: Settings;
-
-    showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
-    @ViewChild('copyTable', { static: false }) copyTable: ElementRef;  
-    copyTableString: any;
-    collapse: boolean = true;
-
-    constructor(private cd: ChangeDetectorRef) { }
-
-    ngOnInit() { }
 
     toggleCollapse() {
         this.collapse = !this.collapse;
     }
 
     updateCopyTableString() {
-        this.copyTableString = this.copyTable.nativeElement.innerText;
+        this.copyTableString = this.inputSummaryTable?.tableEl?.nativeElement?.innerText;
     }
 
     private buildSections(rows: OperationSummaryRows): InputSummarySection[] {

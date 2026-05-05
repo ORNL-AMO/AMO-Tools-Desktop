@@ -30,6 +30,15 @@ a:not([href]):not([tabindex]).disabled-link:hover {
 
 
 /**Input Data Report **/
+.hidden-copy-table {
+    z-index: -10;
+    position: fixed;
+    opacity: 0;
+    top: -1000px;
+    height: 0;
+    width: 0;
+}
+
 .summary-card .card-header h5 {
     margin-bottom: 0px;
     font-size: 16px;
@@ -44,6 +53,11 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     background-color: #D5D8DC;
     cursor: pointer;
 } */
+
+.summary-card .card-header:hover {
+    background-color: #efefef;
+    cursor: pointer;
+}
 
 
 

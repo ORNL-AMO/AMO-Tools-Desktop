@@ -1,20 +1,18 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { inject } from '@angular/core';
-import { map } from 'rxjs';
 import { InputSummaryService } from '../../../services/input-summary.service';
+import { InputSummaryTableComponent } from '../input-summary-table/input-summary-table.component';
 
 @Component({
     selector: 'app-pump-input-summary',
     templateUrl: './pump-input-summary.component.html',
-    styleUrls: ['./pump-input-summary.component.css'],
     standalone: false
 })
 export class PumpInputSummaryComponent {
     private readonly inputSummaryService = inject(InputSummaryService);
 
-    @Input() printView: boolean;
-    @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-    copyTableString: any;
+    @ViewChild(InputSummaryTableComponent) inputSummaryTable: InputSummaryTableComponent;
+    copyTableString: string;
     collapse: boolean = true;
 
     readonly inputSummaryUI$ = this.inputSummaryService.inputSummaryUI$;
@@ -24,6 +22,6 @@ export class PumpInputSummaryComponent {
     }
 
     updateCopyTableString() {
-        this.copyTableString = this.copyTable.nativeElement.innerText;
+        this.copyTableString = this.inputSummaryTable?.tableEl?.nativeElement?.innerText;
     }
 }

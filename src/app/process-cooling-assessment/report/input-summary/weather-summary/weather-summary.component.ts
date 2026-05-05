@@ -1,22 +1,21 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { inject } from '@angular/core';
 import { map } from 'rxjs';
 import { ProcessCoolingAssessmentService } from '../../../services/process-cooling-assessment.service';
 import { InputSummarySection } from '../../report-ui-models';
 import { WeatherContextData } from '../../../../shared/modules/weather-data/weather-context.token';
+import { InputSummaryTableComponent } from '../input-summary-table/input-summary-table.component';
 
 @Component({
     selector: 'app-weather-summary',
     templateUrl: './weather-summary.component.html',
-    styleUrls: ['./weather-summary.component.css'],
     standalone: false
 })
 export class WeatherSummaryComponent {
     private readonly assessmentService = inject(ProcessCoolingAssessmentService);
 
-    @Input() printView: boolean;
-    @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-    copyTableString: any;
+    @ViewChild(InputSummaryTableComponent) inputSummaryTable: InputSummaryTableComponent;
+    copyTableString: string;
     collapse: boolean = true;
 
     sections$ = this.assessmentService.processCooling$.pipe(
@@ -28,7 +27,7 @@ export class WeatherSummaryComponent {
     }
 
     updateCopyTableString() {
-        this.copyTableString = this.copyTable.nativeElement.innerText;
+        this.copyTableString = this.inputSummaryTable?.tableEl?.nativeElement?.innerText;
     }
 
     private buildSections(weatherData: WeatherContextData | undefined): InputSummarySection[] {

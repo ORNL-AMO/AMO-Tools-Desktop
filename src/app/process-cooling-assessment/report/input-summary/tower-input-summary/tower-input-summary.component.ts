@@ -1,19 +1,18 @@
-import { Component, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { inject } from '@angular/core';
 import { InputSummaryService } from '../../../services/input-summary.service';
+import { InputSummaryTableComponent } from '../input-summary-table/input-summary-table.component';
 
 @Component({
     selector: 'app-tower-input-summary',
     templateUrl: './tower-input-summary.component.html',
-    styleUrls: ['./tower-input-summary.component.css'],
     standalone: false
 })
 export class TowerInputSummaryComponent {
     private readonly inputSummaryService = inject(InputSummaryService);
 
-    @Input() printView: boolean;
-    @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-    copyTableString: any;
+    @ViewChild(InputSummaryTableComponent) inputSummaryTable: InputSummaryTableComponent;
+    copyTableString: string;
     collapse: boolean = true;
 
     readonly inputSummaryUI$ = this.inputSummaryService.inputSummaryUI$;
@@ -23,6 +22,6 @@ export class TowerInputSummaryComponent {
     }
 
     updateCopyTableString() {
-        this.copyTableString = this.copyTable.nativeElement.innerText;
+        this.copyTableString = this.inputSummaryTable?.tableEl?.nativeElement?.innerText;
     }
 }
