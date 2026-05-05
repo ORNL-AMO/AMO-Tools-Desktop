@@ -126,7 +126,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
               {processFlowParts.map((part: ProcessFlowPart) => {
-                const bgColor = getPaletteColorForType(part.processComponentType as any, paletteColors ?? []);
+                const bgColor = getPaletteColorForType(part.processComponentType as WaterProcessComponentType, paletteColors ?? []);
                 const textColor = bgColor ? getContrastTextColor(bgColor) : undefined;
                 return (
                   <Grid size={{ xs: 1, sm: 2, md: 2 }}  key={part.processComponentType}>

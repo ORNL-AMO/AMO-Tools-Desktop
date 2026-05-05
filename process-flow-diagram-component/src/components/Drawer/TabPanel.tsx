@@ -1,8 +1,8 @@
-import { ParentContainerDimensions } from "process-flow-lib";
+import type { ReactNode } from "react";
 import { CSSProperties } from "react";
 
 interface TabPanelProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   index: number;
   value: number;
   style?: CSSProperties;

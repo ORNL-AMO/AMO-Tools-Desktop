@@ -257,6 +257,10 @@ a {
   0px 0.51px 1.01px 0px #0000001A
 }
 
+.react-flow__node-summingNode,
+.react-flow__node-group {
+  min-width: 150px;
+}
 
 .react-flow__handle.knownLoss-handle {
   background-color: #ffffff;

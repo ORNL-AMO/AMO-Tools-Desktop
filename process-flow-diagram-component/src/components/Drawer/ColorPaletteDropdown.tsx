@@ -14,7 +14,7 @@ export const mainPalettes = [
   ['#00662C', '#88EFBF', '#F9BF1B', '#008A8F', '#006BA6'],
   ['#00454D', '#7DA800', '#FE5000', '#e60b0b', '#848383'],
 ];
-// 3 colorblind-friendly palettes (user provided, with gray as 6th color)
+// 3 colorblind-friendly palettes (user provided)
 export const colorblindPalettes = [
   ['#FFD600', '#2962FF', '#00C853', '#FF6D00', '#30352e'],
   ['#D5810B', '#DF69F7', '#1C24F2', '#00B30C', '#EEFF00'],
@@ -73,6 +73,12 @@ const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, o
           boxShadow: open ? '0 2px 8px rgba(0,0,0,0.15)' : undefined,
         }}
         onClick={() => setOpen((prev) => !prev)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            setOpen((prev) => !prev);
+          }
+        }}
         title="Select color palette"
         >  <ColorRow colors={allPalettes[selected] ?? allPalettes[0]} style={{ margin: 0 }} />
         <svg
