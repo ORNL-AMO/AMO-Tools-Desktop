@@ -113,7 +113,10 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
   ],
-  description: ''
+  description: '',
+  isCustomChiller: false,
+  loadAtPercent: [25, 50, 75, 100],
+  kWPerTonAtLoad: [],
 },
   {
   itemId: '2',
@@ -143,7 +146,10 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
     [5, 0, 0, 0, 10, 20, 20, 20, 15, 10, 0],
   ],
-  description: ''
+  description: '',
+  isCustomChiller: false,
+  loadAtPercent: [25, 50, 75, 100],
+  kWPerTonAtLoad: [],
 },
 {
   itemId: '3',
@@ -173,7 +179,10 @@ export const EXAMPLE_INVENTORY: ChillerInventoryItem[] = [
     [30, 0, 0, 30, 0, 30, 0, 0, 0, 0, 10],
     [30, 0, 0, 30, 0, 30, 0, 0, 0, 0, 10],
   ],
-  description: ''
+  description: '',
+  isCustomChiller: false,
+  loadAtPercent: [25, 50, 75, 100],
+  kWPerTonAtLoad: [],
 }
 ];
 

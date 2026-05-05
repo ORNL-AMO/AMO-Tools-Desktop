@@ -1,6 +1,6 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
-import { FormControl, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable({
@@ -43,6 +43,7 @@ export class ChillerInventoryService {
   }
 
   getChillerForm(chiller: ChillerInventoryItem): FormGroup<ChillerInventoryForm> {
+    const curvePoints: ChillerCurvePoint[] = chiller.loadAtPercent.map((lp, i) => ({ loadPercent: lp, kWPerTon: chiller.kWPerTonAtLoad?.[i] }))
     let form: FormGroup<ChillerInventoryForm> = this.formBuilder.group({
       name: [chiller.name, Validators.required],
       description: [chiller.description],
@@ -51,12 +52,17 @@ export class ChillerInventoryService {
       capacity: [chiller.capacity],
       fullLoadEfficiency: [chiller.fullLoadEfficiency, chiller.isFullLoadEfficiencyKnown ? Validators.required : null],
       age: [chiller.age],
-      refrigerantType: [chiller.refrigerantType]
+      refrigerantType: [chiller.refrigerantType],
+      isCustomChiller: [chiller.isCustomChiller ?? false],
+      chillerCurvePoints: this.formBuilder.array(
+        curvePoints.map(p => this._buildCurvePointGroup(p.loadPercent, p.kWPerTon))
+      ),
     });
     return form;
   }
 
   patchChillerForm(form: FormGroup<ChillerInventoryForm>, chiller: ChillerInventoryItem) {
+    const curvePoints = chiller.loadAtPercent.map((lp, i) => ({ loadPercent: lp, kWPerTon: chiller.kWPerTonAtLoad?.[i] }))
     form.patchValue({
       name: chiller.name,
       description: chiller.description,
@@ -65,11 +71,24 @@ export class ChillerInventoryService {
       capacity: chiller.capacity,
       fullLoadEfficiency: chiller.fullLoadEfficiency,
       age: chiller.age,
-      refrigerantType: chiller.refrigerantType
+      refrigerantType: chiller.refrigerantType,
+      isCustomChiller: chiller.isCustomChiller ?? false,
     }, { emitEvent: false });
+
+    const curvePointsArray = form.controls.chillerCurvePoints;
+    curvePoints.forEach((p, i) => {
+      curvePointsArray.at(i).patchValue(
+        { loadPercent: p.loadPercent, kWPerTon: p.kWPerTon ?? null },
+        { emitEvent: false }
+      );
+    });
   }
 
-  getChillerFields(formValue: Partial<ChillerInventoryItem>): Partial<ChillerInventoryItem> {
+    getChillerFields(formValue: Partial<ChillerInventoryItem> & { chillerCurvePoints?: ChillerCurvePoint[] }): Partial<ChillerInventoryItem> {
+    const curvePoints = formValue.chillerCurvePoints ?? [];
+    const loadAtPercent = curvePoints.map(p => p.loadPercent);
+    const kWPerTonAtLoad = curvePoints.map(p => p.kWPerTon);
+
     return {
       name: formValue.name,
       description: formValue.description,
@@ -79,7 +98,18 @@ export class ChillerInventoryService {
       fullLoadEfficiency: formValue.isFullLoadEfficiencyKnown ? formValue.fullLoadEfficiency : null,
       age: formValue.age,
       refrigerantType: formValue.refrigerantType,
+      loadAtPercent: loadAtPercent,
+      kWPerTonAtLoad: kWPerTonAtLoad,
+      isCustomChiller: formValue.isCustomChiller ?? false,
+      modifiedDate: new Date()
     };
+  }
+
+  private _buildCurvePointGroup(loadPercent: number, kWPerTon?: number): FormGroup<ChillerCurvePointForm> {
+    return this.formBuilder.group({
+      loadPercent: [loadPercent],
+      kWPerTon: [kWPerTon ?? null]
+    }) as FormGroup<ChillerCurvePointForm>;
   }
   
   hasValidChillers(processCoolingAssessment: ProcessCoolingAssessment) {
@@ -122,6 +152,11 @@ export class ChillerInventoryService {
 }
 
 
+export interface ChillerCurvePointForm {
+  loadPercent: FormControl<number>;
+  kWPerTon: FormControl<number>;
+}
+
 export interface ChillerInventoryForm {
   name: FormControl<string>;
   description: FormControl<string>;
@@ -131,9 +166,16 @@ export interface ChillerInventoryForm {
   fullLoadEfficiency: FormControl<number>;
   age: FormControl<number>;
   refrigerantType: FormControl<number>;
+  isCustomChiller: FormControl<boolean>;
+  chillerCurvePoints: FormArray<FormGroup<ChillerCurvePointForm>>;
 }
 
 export interface InventoryValidState {
   isValid: boolean;
   items: Record<string, boolean>;
+}
+
+export interface ChillerCurvePoint {
+  loadPercent: number;
+  kWPerTon: number;
 }

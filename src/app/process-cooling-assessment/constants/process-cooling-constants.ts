@@ -134,6 +134,9 @@ export const getDefaultInventoryItem = (): ChillerInventoryItem => {
         useSameMonthlyLoading: true,
         loadScheduleAllMonths: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 0],
         loadScheduleByMonth: Array(12).fill(Array(11).fill(0)),
+        isCustomChiller: false,
+        loadAtPercent: [25, 50, 75, 100],
+        kWPerTonAtLoad: [],
     };
 }
 

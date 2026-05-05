@@ -41,7 +41,13 @@
 						PROCESS_COOLING_UNITS.efficiency.labelHTML.metric
 					"></span>)</td>
                     @for(eff of chiller.efficiency; track $index) {
-                        <td>{{eff | number:'1.0-3'}}</td>
+						<td>
+							@if ($index !== 0) {
+								{{eff | number:'1.0-3'}}
+							} @else {
+								-
+							}
+						</td>
                     }
 					<td></td>
 				</tr>
