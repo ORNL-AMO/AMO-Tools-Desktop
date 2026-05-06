@@ -91,9 +91,8 @@ export const FanTypeLabels: Record<number, string> = {
 };
 
 export const CondenserCoolingMethodLabels: Record<number, string> = {
-    0: 'Air',
-    1: 'Water',
-    2: 'Evaporative',
+    [CondenserCoolingMethod.Water]: 'Water',
+    [CondenserCoolingMethod.Air]: 'Air',
 };
 
 export const Refrigerants = {
