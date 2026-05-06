@@ -11,7 +11,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { AirLeakSurveyService } from '../air-leak-survey.service';
 import {
   AirLeakSurveyFormService,
-  leakMetaFormControls,
+  LeakMetaFormControls,
   EstimateFormControls,
   BagFormControls,
   OrificeFormControls,
@@ -33,7 +33,7 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
   private readonly formService = inject(AirLeakSurveyFormService);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  leakMetaForm!: FormGroup<leakMetaFormControls>;
+  leakMetaForm!: FormGroup<LeakMetaFormControls>;
   estimateForm!: FormGroup<EstimateFormControls>;
   bagForm!: FormGroup<BagFormControls>;
   orificeForm!: FormGroup<OrificeFormControls>;
@@ -51,27 +51,27 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
       if (surveyInput) {
         const leak = surveyInput.compressedAirLeakSurveyInputVec[index];
         if (leak) {
-          this.buildForms(leak, surveyInput.facilityCompressorData.hoursPerYear);
+          this.buildForms(leak);
         }
       }
     });
 
-    this.surveyService.resetEvents$.pipe(takeUntilDestroyed()).subscribe(() => {
+    this.surveyService.resetEvents.pipe(takeUntilDestroyed()).subscribe(() => {
       const surveyInput = this.surveyService.input();
       const index = this.surveyService.currentLeakIndex();
       if (surveyInput) {
         const leak = surveyInput.compressedAirLeakSurveyInputVec[index];
         if (leak) {
-          this.buildForms(leak, surveyInput.facilityCompressorData.hoursPerYear);
+          this.buildForms(leak);
         }
       }
     });
   }
 
-  private buildForms(leak: AirLeakSurveyData, hoursPerYear: number): void {
-    this.leakMetaForm = this.formService.buildleakMetaForm(leak);
+  private buildForms(leak: AirLeakSurveyData): void {
+    this.leakMetaForm = this.formService.buildLeakMetaForm(leak);
     this.estimateForm = this.formService.buildEstimateForm(leak);
-    this.bagForm = this.formService.buildBagForm(leak, hoursPerYear);
+    this.bagForm = this.formService.buildBagForm(leak);
     this.orificeForm = this.formService.buildOrificeForm(leak);
     this.decibelForm = this.formService.buildDecibelForm(leak);
     this.subscribeToFormChanges();

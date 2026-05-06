@@ -18,11 +18,13 @@ export class AirLeakSurveyService {
   readonly input = signal<AirLeakSurveyInput | undefined>(undefined);
   readonly currentLeakIndex = signal<number>(0);
   readonly currentField = signal<string>('default');
-  readonly resetEvents$ = new Subject<void>();
+  private readonly resetEventsSubject = new Subject<void>();
+  readonly resetEvents = this.resetEventsSubject.asObservable();
 
   readonly output = computed<AirLeakSurveyOutput>(() => {
     const input = this.input();
     if (!input) return this.emptyOutput();
+    if (!this.settings) return this.emptyOutput();
     if (!isValidAirLeakInput(input)) return this.emptyOutput();
     return this.getResults(this.settings, input);
   });
@@ -46,13 +48,13 @@ export class AirLeakSurveyService {
     }
     this.currentLeakIndex.set(0);
     this.input.set(example);
-    this.resetEvents$.next();
+    this.resetEventsSubject.next();
   }
 
   resetToEmpty(settings: Settings): void {
     this.currentLeakIndex.set(0);
     this.initDefaultEmptyInputs(settings);
-    this.resetEvents$.next();
+    this.resetEventsSubject.next();
   }
 
   deleteLeak(deleteIndex: number): void {
@@ -63,8 +65,13 @@ export class AirLeakSurveyService {
 
     if (vec.length === 1 && deleteIndex === 0) {
       this.currentLeakIndex.set(0);
-      this.initDefaultEmptyInputs(this.settings);
-      this.resetEvents$.next();
+      if (this.settings) {
+        this.initDefaultEmptyInputs(this.settings);
+      } else {
+        const emptyLeak = this.formService.getEmptyAirLeakData();
+        this.input.set({ ...current, compressedAirLeakSurveyInputVec: [emptyLeak] });
+      }
+      this.resetEventsSubject.next();
       return;
     }
 
@@ -76,7 +83,7 @@ export class AirLeakSurveyService {
     if (newIndex !== currentIndex) {
       this.currentLeakIndex.set(newIndex);
     } else {
-      this.resetEvents$.next();
+      this.resetEventsSubject.next();
     }
   }
 
@@ -163,7 +170,7 @@ export class AirLeakSurveyService {
 
     if (inputCopy.facilityCompressorData.utilityType === 1) {
       const compressorControlAdjustment =
-        surveyInput.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment || 1;
+        surveyInput.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment ?? 1;
         savings.annualTotalElectricity = savings.annualTotalElectricity * (compressorControlAdjustment / 100);
         savings.annualTotalElectricityCost = savings.annualTotalElectricityCost * (compressorControlAdjustment / 100);
     }

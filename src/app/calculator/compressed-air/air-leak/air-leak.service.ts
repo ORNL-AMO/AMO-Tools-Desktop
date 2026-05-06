@@ -187,7 +187,7 @@ export class AirLeakService {
     }
 
     if (inputCopy.facilityCompressorData.utilityType === 1) {
-      let compressorControlAdjustment: number = airLeakSurveyInput.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment || 1;
+      let compressorControlAdjustment: number = airLeakSurveyInput.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment ?? 1;
       savings.annualTotalElectricity = savings.annualTotalElectricity * (compressorControlAdjustment / 100);
       savings.annualTotalElectricityCost = savings.annualTotalElectricityCost * (compressorControlAdjustment / 100);
     }

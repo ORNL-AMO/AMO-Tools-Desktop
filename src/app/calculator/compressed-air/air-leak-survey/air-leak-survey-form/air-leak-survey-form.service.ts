@@ -17,7 +17,7 @@ import { LeakMeasurementMethod } from '../../compressed-air-constants';
 const HOURS_PER_YEAR = 8760;
 
 
-export interface leakMetaFormControls {
+export interface LeakMetaFormControls {
   selected: FormControl<boolean | null>;
   name: FormControl<string | null>;
   leakDescription: FormControl<string | null>;
@@ -76,8 +76,8 @@ export class AirLeakSurveyFormService {
   private readonly fb = inject(FormBuilder);
   private readonly convertAirLeakService = inject(ConvertAirLeakService);
 
-  buildleakMetaForm(leak: AirLeakSurveyData): FormGroup<leakMetaFormControls> {
-    return this.fb.group<leakMetaFormControls>({
+  buildLeakMetaForm(leak: AirLeakSurveyData): FormGroup<LeakMetaFormControls> {
+    return this.fb.group<LeakMetaFormControls>({
       selected: new FormControl(leak.selected),
       name: new FormControl(leak.name, [Validators.required]),
       leakDescription: new FormControl(leak.leakDescription, [Validators.required]),
@@ -95,7 +95,7 @@ export class AirLeakSurveyFormService {
     });
   }
 
-  buildBagForm(leak: AirLeakSurveyData, hoursPerYear: number): FormGroup<BagFormControls> {
+  buildBagForm(leak: AirLeakSurveyData): FormGroup<BagFormControls> {
     return this.fb.group<BagFormControls>({
       numberOfUnits: new FormControl(leak.bagMethodData.numberOfUnits),
       bagVolume: new FormControl(leak.bagMethodData.bagVolume, [Validators.required, Validators.min(0)]),

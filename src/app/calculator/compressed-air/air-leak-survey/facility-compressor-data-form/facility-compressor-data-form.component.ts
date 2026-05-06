@@ -117,7 +117,10 @@ export class SurveyFacilityCompressorDataFormComponent implements OnInit, AfterV
       const ctrl = this.compressorControlTypes.find(c => c.value === elec.controls.compressorControl.value);
       if (ctrl) elec.patchValue({ compressorControlAdjustment: ctrl.adjustment });
     } else if (elec.controls.compressorControlAdjustment.valid) {
-      this.compressorControlTypes[11].adjustment = elec.controls.compressorControlAdjustment.value ?? 0;
+      const customControl = this.compressorControlTypes.find(control => control.value === 8);
+      if (customControl) {
+        customControl.adjustment = elec.controls.compressorControlAdjustment.value ?? 0;
+      }
     }
     this.formService.applyCompressorValidators(this.facilityForm);
     this.save();
