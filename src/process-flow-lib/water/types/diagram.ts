@@ -138,6 +138,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     directionalArrowsVisible: boolean,
     flowLabelSize: number,
     animated: boolean,
+    paletteColors?: string[],
   }
   
   
