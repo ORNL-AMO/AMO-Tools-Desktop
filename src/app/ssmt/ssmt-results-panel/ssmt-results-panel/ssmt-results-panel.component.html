@@ -8,7 +8,7 @@
       [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       Baseline
     </div>
-    <div  *ngIf="!modValid && !inSetup" class="col-4 bold table-text d-flex align-items-center pl-1 pr-1">
+    <div  *ngIf="!inSetup" class="col-4 bold table-text d-flex align-items-center pl-1 pr-1">
       {{ ssmt.modifications[modificationIndex].ssmt.name }}
     </div>
   </div>

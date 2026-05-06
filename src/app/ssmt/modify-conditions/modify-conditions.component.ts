@@ -23,6 +23,8 @@ export class ModifyConditionsComponent implements OnInit {
   emitSaveAssessment = new EventEmitter<SSMT>();
   @Input()
   containerHeight: number;
+  @Input()  
+  inSetup: boolean;
 
   @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
   
