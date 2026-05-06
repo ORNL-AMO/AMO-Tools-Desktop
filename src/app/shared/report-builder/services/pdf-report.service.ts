@@ -126,13 +126,28 @@ export class PdfReportService extends BaseReportService {
    * Returns the Y position after the text block.
    */
   private renderText(pdf: jsPDF, section: TextSection, cursorY: number): number {
+    const LINE_HEIGHT_MM = 4.5;
+    const BOTTOM_MARGIN_MM = PAGE_HEIGHT_MM - PAGE_MARGIN_MM;
+
     cursorY = this.renderSectionTitle(pdf, section.title, cursorY);
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(BODY_FONT_SIZE);
     pdf.setTextColor(40, 40, 40);
-    const wrappedLines = pdf.splitTextToSize(section.content, CONTENT_WIDTH_MM);
-    pdf.text(wrappedLines, PAGE_MARGIN_MM, cursorY);
-    return cursorY + wrappedLines.length * 4.5 + SECTION_GAP_MM;
+
+    const wrappedLines: string[] = pdf.splitTextToSize(section.content, CONTENT_WIDTH_MM);
+    for (const line of wrappedLines) {
+      if (cursorY + LINE_HEIGHT_MM > BOTTOM_MARGIN_MM) {
+        pdf.addPage();
+        cursorY = PAGE_MARGIN_MM;
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(BODY_FONT_SIZE);
+        pdf.setTextColor(40, 40, 40);
+      }
+      pdf.text(line, PAGE_MARGIN_MM, cursorY);
+      cursorY += LINE_HEIGHT_MM;
+    }
+
+    return cursorY + SECTION_GAP_MM;
   }
 
   /**
@@ -215,8 +230,6 @@ export class PdfReportService extends BaseReportService {
    * Returns the Y position after the image or fallback table.
    */
   private async renderChart(pdf: jsPDF, section: ChartSection, cursorY: number): Promise<number> {
-    cursorY = this.renderSectionTitle(pdf, section.title, cursorY);
-
     let imageData: string | null = null;
     let imageAspectRatio: number = 2;
 
@@ -239,10 +252,12 @@ export class PdfReportService extends BaseReportService {
         pdf.addPage();
         cursorY = PAGE_MARGIN_MM;
       }
+      cursorY = this.renderSectionTitle(pdf, section.title, cursorY);
       pdf.addImage(imageData, 'PNG', PAGE_MARGIN_MM, cursorY, CONTENT_WIDTH_MM, imageHeightMM);
       return cursorY + imageHeightMM + SECTION_GAP_MM;
     }
 
+    cursorY = this.renderSectionTitle(pdf, section.title, cursorY);
     if (section.altData) {
       return this.renderTable(pdf, section.altData, cursorY);
     }

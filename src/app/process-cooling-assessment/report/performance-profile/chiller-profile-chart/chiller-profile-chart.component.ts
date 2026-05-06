@@ -1,7 +1,5 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, inject, DestroyRef } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
-import { Subscription } from 'rxjs';
-import { PrintOptionsMenuService } from '../../../../shared/print-options-menu/print-options-menu.service';
 import { ProcessCoolingResultsService } from '../../../services/process-cooling-results.service';
 import { ProcessCoolingChartsService } from '../../../services/process-cooling-charts.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -18,7 +16,6 @@ export class ChillerProfileChartComponent implements AfterViewInit {
   private plotlyService: PlotlyService = inject(PlotlyService);
   private destroyRef = inject(DestroyRef);
   private processCoolingResultsService: ProcessCoolingResultsService = inject(ProcessCoolingResultsService);
-  private printOptionsMenuService: PrintOptionsMenuService = inject(PrintOptionsMenuService);
   private chartsService = inject(ProcessCoolingChartsService);
 
   @ViewChild('chillerProfileChart', { static: false }) chartRef: ElementRef<HTMLDivElement>;
@@ -34,7 +31,7 @@ export class ChillerProfileChartComponent implements AfterViewInit {
   }
 
   private renderChart(chillerOutput?: ProcessCoolingChillerOutput[]): void {
-    if (!this.chartRef?.nativeElement && !chillerOutput) return;
+    if (!this.chartRef?.nativeElement || !chillerOutput?.length) return;
     const { traces, layout, config } = this.chartsService.buildChillerProfileChart(chillerOutput);
     this.plotlyService.newPlot(this.chartRef.nativeElement, traces, layout, config);
   }
