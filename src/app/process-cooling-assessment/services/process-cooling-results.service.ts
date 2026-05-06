@@ -27,7 +27,7 @@ export class ProcessCoolingResultsService {
         results = this.getProcessCoolingSuiteResults(processCooling);
         results.id = String(this.processCoolingAssessmentService.assessmentValue.id);
       }
-      console.log('[ProcessCoolingResultsService] baselineResults$ results:', results);
+      // console.log('[ProcessCoolingResultsService] baselineResults$ results:', results);
       return results;
     })
   );
@@ -38,7 +38,7 @@ export class ProcessCoolingResultsService {
       const isValid = !this.modificationService.invalidModificationIds().includes(modification.id);
       if (modification && isValid) {
         const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(modification);
-        console.log(`[ProcessCoolingResultsService] modification ${modification.name} isValid:`, isValid);
+        // console.log(`[ProcessCoolingResultsService] modification ${modification.name} isValid:`, isValid);
         results = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment);
         results.id = modification.id;
       }
@@ -54,7 +54,7 @@ export class ProcessCoolingResultsService {
         modificationResults = modifications.map(modification => {
           // todo we may still have race condition with invalidModificationids
           const isValid = !this.modificationService.invalidModificationIds().includes(modification.id);
-          console.log(`[ProcessCoolingResultsService] modification ${modification.name} isValid:`, isValid);
+          // console.log(`[ProcessCoolingResultsService] modification ${modification.name} isValid:`, isValid);
           if (isValid) {
             const suiteModificationArgs: SuiteModificationArgs = {
               changeRefrig: modification.replaceChillerRefrigerant?.useOpportunity ?? false
@@ -70,7 +70,7 @@ export class ProcessCoolingResultsService {
           }
         }).filter(result => result !== undefined);
       }
-      console.log('[ProcessCoolingResultsService] modificationResults$ results:', modificationResults);
+      // console.log('[ProcessCoolingResultsService] modificationResults$ results:', modificationResults);
       return modificationResults;
     })
   );
@@ -81,7 +81,7 @@ export class ProcessCoolingResultsService {
    * @returns Baseline or Modification results
    */
   getProcessCoolingSuiteResults(processCoolingAssessment: ProcessCoolingAssessment, suiteModificationArgs?: SuiteModificationArgs): ProcessCoolingResults {
-    console.log('[ProcessCoolingResultsService]  processCoolingAssessment:', processCoolingAssessment);
+    // console.log('[ProcessCoolingResultsService]  processCoolingAssessment:', processCoolingAssessment);
     let results: ProcessCoolingResults;
     const weatherData: WeatherContextData = this.processCoolingWeatherContextService.getWeatherData();
     const isValidWeatherData: boolean = this.processCoolingWeatherContextService.isValidWeatherData();
@@ -97,14 +97,14 @@ export class ProcessCoolingResultsService {
     return results;
   }
 
-    getResultModificationNames(modificationResults: ProcessCoolingResults[] | null): ModificationNameCell[] {
-    if (!modificationResults) return [];
-      return modificationResults.map((result, idx) => {
-        return { id: result?.id ?? `modification-${idx + 1}`, name: result?.name ?? `Modification ${idx + 1}` };
-      });
-    }
+  getResultModificationNames(modificationResults: ProcessCoolingResults[] | null): ModificationNameCell[] {
+  if (!modificationResults) return [];
+    return modificationResults.map((result, idx) => {
+      return { id: result?.id ?? `modification-${idx + 1}`, name: result?.name ?? `Modification ${idx + 1}` };
+    });
+  }
 
-    getEmptyInvalidResults(modification: Modification): ProcessCoolingResults {
+  getEmptyInvalidResults(modification: Modification): ProcessCoolingResults {
     return {
         id: modification.id,
         name: modification.name,
@@ -112,13 +112,13 @@ export class ProcessCoolingResultsService {
         electricityCost: 0,
         chiller: [],
         pump: {
-            chillerPumpingEnergy: [],
-            condenserPumpingEnergy: [],
+          chillerPumpingEnergy: [],
+          condenserPumpingEnergy: [],
         },
         tower: {
-            hours: [],
-            energy: [],
-        },
+          hours: [],
+          energy: [],
+      },
     };
-}
+  }
 }

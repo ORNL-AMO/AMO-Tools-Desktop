@@ -46,7 +46,6 @@ export class TowerSummaryService {
         let binTemps: number[][] = this.getBinTemps();
         let binLabels: string[] = this.getBinLabels(binTemps);
         towerSummaryUI.binLabels = binLabels;
-        
         towerSummaryUI.baselineEnergyBins = this.addTowerBinRow(baselineTower, binLabels);
         modificationTowers.forEach(modification => {
             towerSummaryUI.modificationEnergyBins.push(this.addTowerBinRow(modification, binLabels));

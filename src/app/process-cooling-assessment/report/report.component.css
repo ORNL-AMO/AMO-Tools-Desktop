@@ -49,7 +49,7 @@ li a {
     }
 
     .assessment-panel-container {
-        display: none;
+        /* display: none; */
         width: 100%;
     }
 

@@ -37,7 +37,7 @@ export class ProcessCoolingBannerComponent {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(val => {
       this.isBaselineValid = val;
-      console.log('isBaselineValid change', this.isBaselineValid);
+      // console.log('isBaselineValid change', this.isBaselineValid);
     });
   }
 

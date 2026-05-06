@@ -78,6 +78,23 @@ export const TowerTypes =
     [TowerType.VariableSpeed]: 'Tower With Variable Speed Motor(s)',
 }
 
+export const TowerSizeMetricLabels: Record<number, string> = {
+    [TowerSizeMetric.Tons]: 'Tons',
+    [TowerSizeMetric.HP]: 'HP',
+    [TowerSizeMetric.Unknown]: 'Unknown',
+};
+
+export const FanTypeLabels: Record<number, string> = {
+    [FanType.Axial]: 'Axial',
+    [FanType.Centrifugal]: 'Centrifugal',
+    [FanType.Unknown]: 'Unknown',
+};
+
+export const CondenserCoolingMethodLabels: Record<number, string> = {
+    [CondenserCoolingMethod.Water]: 'Water',
+    [CondenserCoolingMethod.Air]: 'Air',
+};
+
 export const Refrigerants = {
 
   [RefrigerantType.R11]: 'R11',

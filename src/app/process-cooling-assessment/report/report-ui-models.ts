@@ -23,3 +23,8 @@ export interface ReportColumnCell {
   decimalPipe?: string; 
   currencyPipe?: CurrencyPipeParams;
 }
+
+export interface InputSummarySection {
+  label: string;
+  rows: ReportTableRow[];
+}

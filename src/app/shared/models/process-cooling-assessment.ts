@@ -99,7 +99,35 @@ export interface ChillerResults {
     // * chiller detail from suite api results
 }
 export interface InputSummaryResults {
-    // * summary of inputs from system-information and operating schedule forms
+    id: string;
+    name: string;
+    // Cost rates (e.g., $/kWh and $/MMBtu or $/GJ)
+    electricityCost: number;
+    fuelCost: number;
+    // Operations / chiller setup
+    chilledWaterSupplyTemp: number | null;
+    condenserCoolingMethod: number | null;
+    // Pump inputs
+    chilledWaterPumpInput: PumpInput | null;
+    condenserWaterPumpInput: PumpInput | null;
+    // Condenser inputs
+    waterCooledSystemInput: WaterCooledSystemInput | null;
+    airCooledSystemInput: AirCooledSystemInput | null;
+    // Tower inputs (flattened from TowerInput for convenient row mapping)
+    towerType: number | null;
+    towerTypeLabel: string;
+    towerSizeMetric: number | null;
+    towerSizeMetricLabel: string;
+    towerSize: number | null;
+    fanType: number | null;
+    fanTypeLabel: string;
+    numberOfTowers: number | null;
+    numberOfFans: number | null;
+    usesFreeCooling: boolean | null;
+    isHEXRequired: boolean | null;
+    HEXApproachTemp: number | null;
+    // Chiller inventory
+    inventory: ChillerInventoryItem[];
 }
 
 
