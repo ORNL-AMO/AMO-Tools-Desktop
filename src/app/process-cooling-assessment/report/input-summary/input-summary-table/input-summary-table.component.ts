@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { InputSummarySection, ModificationNameCell } from '../../report-ui-models';
+import { InputSummarySection, ModificationNameCell } from '../../../../shared/report-builder/models/report-ui-models';
 
 @Component({
     selector: 'app-input-summary-table',

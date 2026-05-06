@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { CurrencyPipe, DecimalPipe  } from '@angular/common';
-import { ReportColumnCell } from '../../process-cooling-assessment/report/report-ui-models';
+import { ReportColumnCell } from '../report-builder/models/report-ui-models';
 
 /**
  * Pipe for outputting MEASUR standard table cell formatting.
@@ -32,10 +32,4 @@ export class ReportTableCellPipe implements PipeTransform {
       return value;
     }
   }
-}
-
-export interface CurrencyPipeParams {
-  code?: string;
-  display?: 'symbol' | 'code' | 'name';
-  digitsInfo?: string;
 }

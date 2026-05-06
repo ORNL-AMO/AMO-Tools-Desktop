@@ -99,6 +99,8 @@ import { ReplaceChillerRefrigerantComponent } from './explore-opportunities/repl
 import { RefrigerantTypePipe } from './pipes/refrigerant-type.pipe';
 import { VsdInventoryTableComponent } from './explore-opportunities/install-vsd/vsd-inventory-table/vsd-inventory-table.component';
 import { RefrigerantInventoryTableComponent } from './explore-opportunities/replace-chiller-refrigerant/refrigerant-inventory-table/refrigerant-inventory-table.component';
+import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
+import { ProcessCoolingReportAdapter } from './report/process-cooling-report.adapter';
 
 import { SystemInfoSummaryComponent } from './report/input-summary/system-info-summary/system-info-summary.component';
 import { InputSummaryTableComponent } from './report/input-summary/input-summary-table/input-summary-table.component';
@@ -108,37 +110,7 @@ import { CondenserInputSummaryComponent } from './report/input-summary/condenser
 import { TowerInputSummaryComponent } from './report/input-summary/tower-input-summary/tower-input-summary.component';
 import { InventoryInputSummaryComponent } from './report/input-summary/inventory-input-summary/inventory-input-summary.component';
 
-export const ROUTE_TOKENS = {
-  // Main tabs
-  baseline: 'baseline',
-  assessment: 'assessment',
-  report: 'report',
-
-  // Baseline sub-tabs
-  assessmentSettings: 'assessment-settings',
-  systemInformation: 'system-information',
-  operations: 'operations',
-  weather: 'weather',
-  waterPump: 'pump',
-  condenserCoolingSystem: 'condenser-cooling-system',
-  tower: 'tower',
-  chillerInventory: 'chiller-inventory',
-  loadSchedule: 'load-schedule',
-  operatingSchedule: 'operating-schedule',
-
-  // Assessment sub-tabs
-  exploreOpportunities: 'explore-opportunities',
-  modificationGraphs: 'modification-graphs',
-
-  // report sub tabs
-  executiveSummary: 'executive-summary',
-  performanceProfile: 'performance-profile',
-  systemProfile: 'system-profile',
-  pumpSummary: 'pump-summary',
-  inputSummary: 'input-summary',
-  towerSummary: 'tower-summary',
-  graphs: 'graphs',
-} as const;
+import { ROUTE_TOKENS } from './constants/process-cooling-routes';
 
 const ROUTES: Route[] = [
   {
@@ -343,7 +315,8 @@ const ROUTES: Route[] = [
     OperatingHoursModalModule,
     AlertInfoContainerComponent,
     PercentGraphModule,
-    ReportTableCellPipe
+    ReportTableCellPipe,
+    ReportBuilderModule
   ],
   providers: [
     ProcessCoolingAssessmentService,
@@ -363,6 +336,7 @@ const ROUTES: Route[] = [
     TowerSummaryService,
     SystemProfileService,
     InputSummaryService,
+    ProcessCoolingReportAdapter,
     { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
   ]
 })

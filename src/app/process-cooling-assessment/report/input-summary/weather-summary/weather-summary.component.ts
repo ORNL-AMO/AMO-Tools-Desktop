@@ -2,9 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { inject } from '@angular/core';
 import { map } from 'rxjs';
 import { ProcessCoolingAssessmentService } from '../../../services/process-cooling-assessment.service';
-import { InputSummarySection } from '../../report-ui-models';
 import { WeatherContextData } from '../../../../shared/modules/weather-data/weather-context.token';
 import { InputSummaryTableComponent } from '../input-summary-table/input-summary-table.component';
+import { InputSummarySection } from '../../../../shared/report-builder/models/report-ui-models';
 
 @Component({
     selector: 'app-weather-summary',

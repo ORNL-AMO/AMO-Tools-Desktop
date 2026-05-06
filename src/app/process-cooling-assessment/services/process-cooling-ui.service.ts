@@ -2,7 +2,7 @@ import { inject, Injectable, Signal, signal, WritableSignal } from '@angular/cor
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
-import { ROUTE_TOKENS } from '../process-cooling-assessment.module';
+import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
