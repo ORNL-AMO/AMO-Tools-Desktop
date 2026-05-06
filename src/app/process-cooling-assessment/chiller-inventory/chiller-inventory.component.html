@@ -48,7 +48,8 @@
                 </div>
                 <app-form-control-errors [control]="form.controls.fullLoadEfficiency"></app-form-control-errors>
             </div>
-            <div class="form-group">
+            <!-- * 8117 refrigerant change hidden intentionally  -->
+            <!-- <div class="form-group">
                 <label for="{{controlIds.refrigerantType}}">Refrigerant Type</label>
                 <select class="form-control" id="{{controlIds.refrigerantType}}" formControlName="refrigerantType"
                     (focus)="focusField('refrigerantType')">
@@ -56,7 +57,7 @@
                     <option [ngValue]="refrigerantType.value">{{ refrigerantType.name }}</option>
                     }
                 </select>
-            </div>
+            </div> -->
             <div class="form-group">
                 <label for="{{controlIds.capacity}}">Capacity</label>
                 <div class="input-group">
@@ -74,6 +75,34 @@
                     <app-input-unit [defaultUnit]="'years'"></app-input-unit>
                 </div>
             </div>
+            <hr>
+            <label class="group-label" for="{{controlIds.isCustomChiller}}">
+                <input class="pc-checkbox" type="checkbox"
+                    id="{{controlIds.isCustomChiller}}"
+                    formControlName="isCustomChiller"
+                    (focus)="focusField('isCustomChiller')" />
+                <span class="ml-2">Use Custom Performance (per AHRI 550/590)</span>
+            </label>
+
+            @if (form.controls.isCustomChiller.value) {
+                @let htmlUnit = settings().unitsOfMeasure === 'Imperial' ? PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial : PROCESS_COOLING_UNITS.efficiency.labelHTML.metric;
+                <div class="alert alert-info my-2 w-100 small">
+                    Specify efficiency values (<span [innerHTML]="htmlUnit"></span>) at 25%, 50%, 75% and 100% loadings as per AHRI 550/590 Specification
+                </div>
+            <ng-container formArrayName="chillerCurvePoints">
+                @for (point of form.controls.chillerCurvePoints.controls; track $index) {
+                <div [formGroupName]="$index" class="form-group">
+                    <label>{{ point.controls.loadPercent.value }}% Load</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" formControlName="kWPerTon"
+                            (focus)="focusField('kWPerTon_' + $index)" />
+                        <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial"
+                            [metricUnit]="PROCESS_COOLING_UNITS.efficiency.labelHTML.metric"></app-input-unit>
+                    </div>
+                </div>
+                }
+            </ng-container>
+            }
         </form>
     </div>
     <ng-template #hasNoChiller>

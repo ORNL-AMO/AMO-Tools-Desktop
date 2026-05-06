@@ -14,18 +14,24 @@ export class ProcessCoolingChartsService {
 
   buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[]): PlotlyChartConfig {
     const efficiencyLabel = PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial;
+    const loadPercentages: number[] = [...LOAD_PERCENTAGES];
 
-    const traces = chillerOutput.map(chiller => ({
-      x: LOAD_PERCENTAGES,
-      y: chiller.ariEfficiencyProfile,
-      type: 'scatter',
-      mode: 'lines+markers',
-      name: chiller.name,
-      marker: { size: 8 },
-      line: { width: 3, dash: 'dot', 
-       },
-      hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`,
-    }));
+    loadPercentages.shift();
+    const traces = chillerOutput.map((chiller, idx) => {
+      const ariEfficiencyProfile = [...chiller.ariEfficiencyProfile];
+      ariEfficiencyProfile.shift();
+      return {
+        x: loadPercentages,
+        y: ariEfficiencyProfile,
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: chiller.name,
+        marker: { size: 8 },
+        line: {
+          width: 3, dash: 'dot',
+        },
+        hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`,
+      }});
 
     const layout = {
       xaxis: {
@@ -45,11 +51,12 @@ export class ProcessCoolingChartsService {
         tickformat: '.1f',
       },
       margin: { t: 20, r: 20, l: 60, b: 60 },
-      legend: { orientation: 'h', y: 1.15, 
-        font: { 
-          size: 14 
+      legend: {
+        orientation: 'h', y: 1.15,
+        font: {
+          size: 14
         }
-       },
+      },
       showlegend: true,
       hovermode: 'closest',
       responsive: true,

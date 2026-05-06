@@ -61,7 +61,7 @@ export class ProcessCoolingSuiteApiService {
     const waterCooledSystemInputInstance = this._createWaterCooledSystemInput(assessment.systemInformation.waterCooledSystemInput, assessment.systemInformation.operations, assessment.systemInformation.condenserWaterPumpInput, assessment.systemInformation.towerInput);
     const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, waterCooledSystemInputInstance, assessment, weatherData, towerInputInstance);
 
-    results.chiller = this._getChillerOutput(processCoolingInstance);
+    results.chiller = this._getChillerOutput(processCoolingInstance, assessment.inventory);
     results.tower = this.getTowerEnergy(processCoolingInstance);
     results.pump = this.getWaterCooledPumpEnergy(assessment, processCoolingInstance);
 
@@ -98,7 +98,7 @@ export class ProcessCoolingSuiteApiService {
     const airCooledSystemInputInstance = this._createAirCooledSystemInput(assessment.systemInformation.airCooledSystemInput, assessment.systemInformation.operations);
     const processCoolingInstance = this._createProcessCoolingInput(chillerInputVector, airCooledSystemInputInstance, assessment, weatherData);
 
-    results.chiller = this._getChillerOutput(processCoolingInstance);
+    results.chiller = this._getChillerOutput(processCoolingInstance, assessment.inventory);
     results.pump = this.getAirCooledPumpEnergy(assessment, processCoolingInstance);
 
     processCoolingInstance.delete();
@@ -219,6 +219,7 @@ export class ProcessCoolingSuiteApiService {
       const chillerMonthlyLoading = this.suiteApiHelperService.returnDoubleVector2d(loadSchedule);
       let chiller;
 
+      // * 8117 refrigerant flow is currently hidden in UI
       if (suiteModificationArgs?.changeRefrig && input.proposedRefrigerantType != null && input.proposedRefrigerantType != undefined) {
         const currentRefrigEnum = this.suiteApiHelperService.getProcessCoolingRefrigerantTypeEnum(input.refrigerantType);
         const proposedRefrigEnum = this.suiteApiHelperService.getProcessCoolingRefrigerantTypeEnum(input.proposedRefrigerantType);
@@ -236,7 +237,29 @@ export class ProcessCoolingSuiteApiService {
           currentRefrigEnum,
           proposedRefrigEnum
         );
-      } else {
+      } else if (input.isCustomChiller) {
+
+        // * reverse inputs to be in descending order for suite
+        // const descendingLoadPoints = input.loadAtPercent.slice().reverse();
+        // const descendingKWPerTonPoints = input.kWPerTonAtLoad.slice().reverse();
+        const descendingLoadPoints = input.loadAtPercent;
+        const descendingKWPerTonPoints = input.kWPerTonAtLoad;
+        const loadAtPercent = this.suiteApiHelperService.returnDoubleVector(descendingLoadPoints);
+        const kWPerTonAtLoad = this.suiteApiHelperService.returnDoubleVector(descendingKWPerTonPoints);
+
+        chiller = this._createChillerInputWithCustomCurve(
+          this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
+          input.capacity,
+          input.isFullLoadEfficiencyKnown,
+          input.fullLoadEfficiency,
+          input.age,
+          input.installVSD,
+          input.useARIloadScheduleByMonthchedule,
+          chillerMonthlyLoading,
+          loadAtPercent,
+          kWPerTonAtLoad
+        );
+      }else {
         chiller = this._createChillerInput(
           this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
           input.capacity,
@@ -425,18 +448,34 @@ export class ProcessCoolingSuiteApiService {
  *   - power: number[] (power usage for each bin, kW)
  *   - energy: number[] (energy usage for each bin, kWh)
  */
-  private _getChillerOutput(processCoolingInstance): ProcessCoolingChillerOutput[] {
+  private _getChillerOutput(processCoolingInstance, chillerInventoryItems: ChillerInventoryItem[]): ProcessCoolingChillerOutput[] {
     const chillerOutputInstance = processCoolingInstance.calculateChillerEnergy();
     const chillerOutput: ProcessCoolingChillerOutput[] = [];
     const numChillers = chillerOutputInstance.efficiency.size();
+
     for (let i = 0; i < numChillers; i++) {
       const hours = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i));
       const energy = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i));
+
+      const defaultLoads = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+      let loadPercents = this.suiteApiHelperService.returnDoubleVector(defaultLoads);
+      let curveLoadPercents = this.suiteApiHelperService.returnDoubleVector(defaultLoads);
+      if (chillerInventoryItems[i].isCustomChiller) {
+        const customCurveLoadPercents = [0, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 100];
+        curveLoadPercents = this.suiteApiHelperService.returnDoubleVector(customCurveLoadPercents);
+      }
+
+      const efficiencyAtLoadWasm = processCoolingInstance.getChillerEnergyEfficiency(i, loadPercents);
+      const efficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(efficiencyAtLoadWasm);
+      const curveEfficiencyAtLoadWasm = processCoolingInstance.getChillerEnergyEfficiency(i, curveLoadPercents);
+      const curveEfficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasm);
+
       const chillerResult = {
         id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
         name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
-        efficiency: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.efficiency.get(i)),
-        ariEfficiencyProfile: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.ariEfficiencyProfile.get(i)),
+        efficiency: efficiencyAtLoad,
+        // todo remove once other changes are integrated. ariEfficiencyProfile and efficiency are now one in the same
+        ariEfficiencyProfile: curveEfficiencyAtLoad,
         hours: hours,
         power: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i)),
         energy: energy,
@@ -570,6 +609,53 @@ export class ProcessCoolingSuiteApiService {
     );
   }
 
+
+  /**
+  *
+  * @details Use this constructor to define custom Chiller
+  *
+  * @author Suite constructor param names
+  * @param chillerType Enumeration ChillerCompressorType
+  * @param capacity double, @unit{\ton}
+  * @param isFullLoadEffKnown boolean, Is full load efficiency known? for this Chiller
+  * @param fullLoadEff double, fraction, 0.2 - 2.5 increments of .01
+  * @param age double # of years, 0 - 20, (can be 1.5 for eighteen months), assumption chiller efficiency is
+  * degraded by 1% / year
+  * @param installVSD boolean, Install a VSD on each Centrifugal Compressor Motor
+  * @param useARIMonthlyLoadSchedule boolean, if true monthlyLoads not needed and can be set to empty
+  * @param monthlyLoads double, 12x11 array of 11 %load bins (0,10,20,30,40,50,60,70,80,90,100) for 12 calendar
+  * months In case of non varying monthly loads expects a 1X11 array of 11 %load bins
+  *
+  * @param loadAtPercent double array, % loading
+  * @param kwPerTonLoads double array, kW/ton at the corresponding % loading
+  */
+  private _createChillerInputWithCustomCurve(
+    chillerType, 
+    capacity, 
+    isFullLoadEffKnown, 
+    fullLoadEff,
+    age, 
+    installVSD, 
+    useARIMonthlyLoadSchedule, 
+    monthlyLoads,
+    loadAtPercent, 
+    kwPerTonLoads
+  ): any {
+    return new this.toolsSuiteApiService.ToolsSuiteModule.ChillerInput(
+      chillerType,
+      capacity,
+      isFullLoadEffKnown,
+      fullLoadEff,
+      age,
+      installVSD,
+      useARIMonthlyLoadSchedule,
+      monthlyLoads,
+      loadAtPercent,
+      kwPerTonLoads
+    );
+  }
+
+
   /**
    * Creates a Module.PumpInput instance for chilled water or condenser water.
    * 
@@ -615,6 +701,7 @@ export class ProcessCoolingSuiteApiService {
     const towerSizingEnum = this.suiteApiHelperService.getProcessCoolingTowerSizedByEnum(input.towerSizeMetric)
     const towerCellFanTypeEnum = this.suiteApiHelperService.getProcessCoolingFanTypeEnum(input.fanType)
 
+    // * towerSize is passed twice because the suite asks for both cellFanHP and tonnage. UI model does not require separate properties for this.
     return new this.toolsSuiteApiService.ToolsSuiteModule.TowerInput(
       input.numberOfTowers,
       input.numberOfFans,
