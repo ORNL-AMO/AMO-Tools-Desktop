@@ -3,13 +3,14 @@
         <div class="row no-gutters">
             <div class="col-12">
                 <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
-                    <div *ngIf="displayInventory()"
-                        class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': selectedPanelTab == 'inventory'}">
-                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('inventory')">
-                            <div>Inventory</div>
-                        </a>
-                    </div>
-                    <div  
+                    @if (displayInventory()) {
+                        <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': selectedPanelTab == 'inventory'}">
+                            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('inventory')">
+                                <div>Inventory</div>
+                            </a>
+                        </div>
+                    }
+                    <div
                         class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': selectedPanelTab == 'results'}">
                         <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('results')">
                             <div>Results</div>
@@ -25,9 +26,16 @@
         </div>
         <div class="row no-gutters">
             <div class="col-12 pr-2 pl-2 pb-4 mt-1">
-                <app-inventory-table *ngIf="displayInventory() && selectedPanelTab == 'inventory'"></app-inventory-table>
-                <app-help-panel *ngIf="selectedPanelTab == 'help'"></app-help-panel>
-                <app-assessment-results *ngIf="selectedPanelTab == 'results'"></app-assessment-results>
+                @if (displayInventory() && selectedPanelTab == 'inventory') {
+                    <app-inventory-table></app-inventory-table>
+                    <app-chiller-profile-chart [selectedChillerId]="selectedChillerId$ | async"></app-chiller-profile-chart>
+                }
+                @if (selectedPanelTab == 'help') {
+                    <app-help-panel></app-help-panel>
+                }
+                @if (selectedPanelTab == 'results') {
+                    <app-assessment-results></app-assessment-results>
+                }
             </div>
         </div>
     </div>

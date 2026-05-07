@@ -1,6 +1,8 @@
 import { Component, computed, effect, inject, Signal } from '@angular/core';
 import { MainView, ProcessCoolingSetupTabString, ProcessCoolingUiService, SetupView } from '../services/process-cooling-ui.service';
 import { SummaryView } from '../services/executive-summary-results.service';
+import { ChillerInventoryService } from '../services/chiller-inventory.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-results-panel',
@@ -10,7 +12,10 @@ import { SummaryView } from '../services/executive-summary-results.service';
 })
 export class ResultsPanelComponent {
   private readonly processCoolingUIService = inject(ProcessCoolingUiService);
+  private readonly inventoryService = inject(ChillerInventoryService);
   selectedPanelTab: PanelTab = 'help';
+
+  selectedChillerId$: Observable<string | null> = this.inventoryService.selectedChillerId$;
 
   mainView: Signal<string> = this.processCoolingUIService.mainView;
   setupView: Signal<string> = this.processCoolingUIService.childView;

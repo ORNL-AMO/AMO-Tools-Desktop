@@ -80,6 +80,13 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
 
     const initializedModuleData$ = getAssessment$.pipe(
       switchMap(assessment => {
+        // ! only for QA testing - patch changed fields
+        assessment.processCooling.inventory.forEach(item => {
+          if (!item.loadAtPercent) item.loadAtPercent = [25, 50, 75, 100];
+          if (!item.kWPerTonAtLoad) item.kWPerTonAtLoad = [];
+        });
+
+
         this.processCoolingAssessmentService.setAssessment(assessment);
         this.processCoolingAssessmentService.setProcessCooling(assessment.processCooling);
         this.inventoryService.setDefaultSelectedChiller(assessment.processCooling.inventory);

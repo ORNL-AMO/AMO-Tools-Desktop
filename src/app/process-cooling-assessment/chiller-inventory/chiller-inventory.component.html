@@ -99,6 +99,7 @@
                         <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial"
                             [metricUnit]="PROCESS_COOLING_UNITS.efficiency.labelHTML.metric"></app-input-unit>
                     </div>
+                    <app-form-control-errors [control]="point.controls.kWPerTon"></app-form-control-errors>
                 </div>
                 }
             </ng-container>
