@@ -34,46 +34,42 @@ export class CalculatorSuiteApiService {
       electricityReduction.powerMeterData.power = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.powerMeterData.power);
       electricityReduction.otherMethodData.energy = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.otherMethodData.energy);
 
-      let MultimeterData = new this.toolsSuiteApiService.ToolsSuiteModule.MultimeterData(
-        electricityReduction.multimeterData.numberOfPhases,
-        electricityReduction.multimeterData.supplyVoltage,
-        electricityReduction.multimeterData.averageCurrent,
-        electricityReduction.multimeterData.powerFactor
-      );
-      let NameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.NameplateData(electricityReduction.nameplateData.ratedMotorPower, electricityReduction.nameplateData.variableSpeedMotor,
-        electricityReduction.nameplateData.operationalFrequency, electricityReduction.nameplateData.lineFrequency, electricityReduction.nameplateData.motorAndDriveEfficiency, electricityReduction.nameplateData.loadFactor);
-      let PowerMeterData = new this.toolsSuiteApiService.ToolsSuiteModule.PowerMeterData(electricityReduction.powerMeterData.power);
-      let OtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.OtherMethodData(electricityReduction.otherMethodData.energy);
-
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReductionInput(
-        electricityReduction.operatingHours,
-        electricityReduction.electricityCost,
-        electricityReduction.measurementMethod,
-        MultimeterData,
-        NameplateData,
-        PowerMeterData,
-        OtherMethodData,
-        electricityReduction.units
-      );
+      let wasmConvertedInput = {
+        operatingHours: electricityReduction.operatingHours,
+        electricityCost: electricityReduction.electricityCost,
+        measurementMethod: electricityReduction.measurementMethod,
+        multimeterData: {
+          numberOfPhases: electricityReduction.multimeterData.numberOfPhases,
+          supplyVoltage: electricityReduction.multimeterData.supplyVoltage,
+          averageCurrent: electricityReduction.multimeterData.averageCurrent,
+          powerFactor: electricityReduction.multimeterData.powerFactor
+        },
+        nameplateData: {
+          ratedMotorPower: electricityReduction.nameplateData.ratedMotorPower,
+          variableSpeedMotor: electricityReduction.nameplateData.variableSpeedMotor,
+          operationalFrequency: electricityReduction.nameplateData.operationalFrequency,
+          lineFrequency: electricityReduction.nameplateData.lineFrequency,
+          motorAndDriveEfficiency: electricityReduction.nameplateData.motorAndDriveEfficiency,
+          loadFactor: electricityReduction.nameplateData.loadFactor
+        },
+        powerMeterData: {
+          power: electricityReduction.powerMeterData.power
+        },
+        otherMethodData: {
+          energy: electricityReduction.otherMethodData.energy
+        },
+        units: electricityReduction.units
+      };
 
       inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      MultimeterData.delete();
-      NameplateData.delete();
-      PowerMeterData.delete();
-      OtherMethodData.delete();
     });
 
-    let ElectricityReductionCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReduction(inputs);
-    let output = ElectricityReductionCalculator.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.electricityReduction(inputs);
     let results: ElectricityReductionResult = {
       energyUse: output.energyUse,
       energyCost: output.energyCost,
       power: output.power
     }
-    output.delete();
-    ElectricityReductionCalculator.delete();
     inputs.delete();
     return results;
   }
