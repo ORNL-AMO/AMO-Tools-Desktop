@@ -199,7 +199,7 @@ export class ProcessCoolingSuiteApiService {
       hours: this.suiteApiHelperService.extractWASMArray(towerOutput.hours),
       energy: this.suiteApiHelperService.extractWASMArray(towerOutput.energy)
     };
-    console.log('towerOutput hours total', result.hours.reduce((a, b) => a + b, 0));
+    // console.log('towerOutput hours total', result.hours.reduce((a, b) => a + b, 0));
     towerOutput.delete();
     return result;
   }

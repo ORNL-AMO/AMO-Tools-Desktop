@@ -220,7 +220,7 @@ export class ProcessCoolingAssessmentService {
   ]).pipe(
     map(([processCooling, weatherContextData]: [ProcessCoolingAssessment, WeatherContextData]) => {
       if (processCooling) {
-        this.getIsBaselineValid(processCooling, weatherContextData);
+        return this.getIsBaselineValid(processCooling, weatherContextData);
       }
       return false;
     })

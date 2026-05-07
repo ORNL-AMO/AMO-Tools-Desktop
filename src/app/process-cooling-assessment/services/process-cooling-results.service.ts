@@ -17,7 +17,7 @@ export class ProcessCoolingResultsService {
   private readonly suiteApi = inject(ProcessCoolingSuiteApiService);
   private readonly convertProcessCoolingService = inject(ConvertProcessCoolingService);
 
-  readonly baselineResults$: Observable<ProcessCoolingResults> = combineLatest([
+  readonly baselineResults$: Observable<ProcessCoolingResults | undefined> = combineLatest([
     this.processCoolingAssessmentService.processCooling$,
     this.processCoolingWeatherContextService.weatherContextData$
   ]).pipe(
