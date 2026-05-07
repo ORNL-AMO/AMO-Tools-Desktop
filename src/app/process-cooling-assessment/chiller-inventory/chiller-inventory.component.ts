@@ -34,27 +34,24 @@ export class ChillerInventoryComponent implements OnInit {
 
   PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
-  
-
   ngOnInit(): void {
-  const defaultChillerValues = this.inventoryService.selectedChillerValue ? this.inventoryService.selectedChillerValue : getDefaultInventoryItem();
-  this.form = this.inventoryService.getChillerForm(defaultChillerValues);
-  // * Disable until we can populate FLE from a generic compressor db
-  this.form.get('isFullLoadEfficiencyKnown').disable();
+    const defaultChillerValues = this.inventoryService.selectedChillerValue ? this.inventoryService.selectedChillerValue : getDefaultInventoryItem();
+    this.form = this.inventoryService.getChillerForm(defaultChillerValues);
+    // * Disable until we can populate FLE from a generic compressor db
+    this.form.get('isFullLoadEfficiencyKnown').disable();
 
-  this.controlIds = generateFormControlIds(this.form.controls);
-
+    this.controlIds = generateFormControlIds(this.form.controls);
     this.observeFormChanges();
     this.inventoryService.selectedChiller$.pipe(
       distinctUntilChanged((prev, curr) => prev?.itemId === curr?.itemId),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((chiller) => {
-        if (chiller) {
-          this.inventoryService.patchChillerForm(this.form, chiller);
-        } else {
-          this.inventoryService.setDefaultSelectedChiller(this.processCooling().inventory);
-        }
+      if (chiller) {
+        this.inventoryService.patchChillerForm(this.form, chiller);
+      } else {
+        this.inventoryService.setDefaultSelectedChiller(this.processCooling().inventory);
       }
+    }
     );
   }
 
@@ -66,7 +63,11 @@ export class ChillerInventoryComponent implements OnInit {
       const itemId = this.inventoryService.selectedChillerValue?.itemId;
       if (!itemId) {
         return;
-      } 
+      }
+
+      const isCustomChiller = this.form.get('isCustomChiller')?.value;
+      this.inventoryService.updateKwPerTonValidators(this.form, isCustomChiller);
+
       const fields = this.inventoryService.getChillerFields(this.form.getRawValue());
       this.processCoolingAssessmentService.updateAssessmentChiller(itemId, fields);
     });

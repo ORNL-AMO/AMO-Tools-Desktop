@@ -55,7 +55,7 @@ export class ChillerInventoryService {
       refrigerantType: [chiller.refrigerantType],
       isCustomChiller: [chiller.isCustomChiller ?? false],
       chillerCurvePoints: this.formBuilder.array(
-        curvePoints.map(p => this._buildCurvePointGroup(p.loadPercent, p.kWPerTon))
+        curvePoints.map(p => this._buildCurvePointGroup(p.loadPercent, p.kWPerTon, chiller.isCustomChiller))
       ),
     });
     return form;
@@ -82,6 +82,7 @@ export class ChillerInventoryService {
         { emitEvent: false }
       );
     });
+    this.updateKwPerTonValidators(form, chiller.isCustomChiller);
   }
 
     getChillerFields(formValue: Partial<ChillerInventoryItem> & { chillerCurvePoints?: ChillerCurvePoint[] }): Partial<ChillerInventoryItem> {
@@ -105,10 +106,19 @@ export class ChillerInventoryService {
     };
   }
 
-  private _buildCurvePointGroup(loadPercent: number, kWPerTon?: number): FormGroup<ChillerCurvePointForm> {
+  updateKwPerTonValidators(form: FormGroup<ChillerInventoryForm>, isCustomChiller: boolean): void {
+    const isRequiredValidator = isCustomChiller ? Validators.required : null;
+    form.controls.chillerCurvePoints.controls.forEach(group => {
+      const control = group.controls.kWPerTon;
+      control.setValidators(isRequiredValidator);
+      control.updateValueAndValidity({ emitEvent: false });
+    });
+  }
+
+  private _buildCurvePointGroup(loadPercent: number, kWPerTon: number, isCustomChiller: boolean): FormGroup<ChillerCurvePointForm> {
     return this.formBuilder.group({
       loadPercent: [loadPercent],
-      kWPerTon: [kWPerTon ?? null]
+      kWPerTon: [kWPerTon ?? null, isCustomChiller ? Validators.required : null]
     }) as FormGroup<ChillerCurvePointForm>;
   }
   

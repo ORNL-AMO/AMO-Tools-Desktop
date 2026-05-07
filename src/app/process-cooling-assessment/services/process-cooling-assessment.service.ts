@@ -220,16 +220,20 @@ export class ProcessCoolingAssessmentService {
   ]).pipe(
     map(([processCooling, weatherContextData]: [ProcessCoolingAssessment, WeatherContextData]) => {
       if (processCooling) {
-        const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
-        const isChillerInventoryValid = this.isChillerInventoryValid();
-        const isOperatingScheduleValid = this.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
-        const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
-        const isValid = isSystemInformationValid && isChillerInventoryValid && isOperatingScheduleValid && isWeatherDataValid;
-        return isValid;
+        this.getIsBaselineValid(processCooling, weatherContextData);
       }
       return false;
     })
   );
+
+  getIsBaselineValid(processCooling: ProcessCoolingAssessment, weatherData: WeatherContextData): boolean {
+    const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
+    const isChillerInventoryValid = this.isChillerInventoryValid();
+    const isOperatingScheduleValid = this.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
+    const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
+    const isValid = isSystemInformationValid && isChillerInventoryValid && isOperatingScheduleValid && isWeatherDataValid;
+    return isValid;
+  }
 
   readonly isSystemInformationValid$ = combineLatest([
     this.processCooling$,

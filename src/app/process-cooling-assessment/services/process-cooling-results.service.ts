@@ -19,15 +19,14 @@ export class ProcessCoolingResultsService {
 
   readonly baselineResults$: Observable<ProcessCoolingResults> = combineLatest([
     this.processCoolingAssessmentService.processCooling$,
-    this.processCoolingAssessmentService.isBaselineValid$
+    this.processCoolingWeatherContextService.weatherContextData$
   ]).pipe(
-    map(([processCooling, isBaselineValid]: [ProcessCoolingAssessment, boolean]) => {
-      let results: ProcessCoolingResults;
-      if (processCooling && isBaselineValid) {
-        results = this.getProcessCoolingSuiteResults(processCooling);
-        results.id = String(this.processCoolingAssessmentService.assessmentValue.id);
-      }
-      console.log('[ProcessCoolingResultsService] baselineResults$ results:', results);
+    map(([processCooling, weatherContextData]: [ProcessCoolingAssessment, WeatherContextData]) => {
+      if (!processCooling) return undefined;
+      const isValid = this.processCoolingAssessmentService.getIsBaselineValid(processCooling, weatherContextData);
+      if (!isValid) return undefined;
+      const results = this.getProcessCoolingSuiteResults(processCooling);
+      results.id = String(this.processCoolingAssessmentService.assessmentValue.id);
       return results;
     })
   );
