@@ -199,7 +199,7 @@ export class ProcessCoolingSuiteApiService {
       hours: this.suiteApiHelperService.extractWASMArray(towerOutput.hours),
       energy: this.suiteApiHelperService.extractWASMArray(towerOutput.energy)
     };
-    // console.log('towerOutput hours total', result.hours.reduce((a, b) => a + b, 0));
+    console.log('towerOutput hours total', result.hours.reduce((a, b) => a + b, 0));
     towerOutput.delete();
     return result;
   }
@@ -239,13 +239,8 @@ export class ProcessCoolingSuiteApiService {
         );
       } else if (input.isCustomChiller) {
 
-        // * reverse inputs to be in descending order for suite
-        // const descendingLoadPoints = input.loadAtPercent.slice().reverse();
-        // const descendingKWPerTonPoints = input.kWPerTonAtLoad.slice().reverse();
-        const descendingLoadPoints = input.loadAtPercent;
-        const descendingKWPerTonPoints = input.kWPerTonAtLoad;
-        const loadAtPercent = this.suiteApiHelperService.returnDoubleVector(descendingLoadPoints);
-        const kWPerTonAtLoad = this.suiteApiHelperService.returnDoubleVector(descendingKWPerTonPoints);
+        const suiteLoadAtPercent = this.suiteApiHelperService.returnDoubleVector(input.loadAtPercent);
+        const suiteKWPerTonAtLoad = this.suiteApiHelperService.returnDoubleVector(input.kWPerTonAtLoad);
 
         chiller = this._createChillerInputWithCustomCurve(
           this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
@@ -256,8 +251,8 @@ export class ProcessCoolingSuiteApiService {
           input.installVSD,
           input.useARIloadScheduleByMonthchedule,
           chillerMonthlyLoading,
-          loadAtPercent,
-          kWPerTonAtLoad
+          suiteLoadAtPercent,
+          suiteKWPerTonAtLoad
         );
       }else {
         chiller = this._createChillerInput(
@@ -456,6 +451,7 @@ export class ProcessCoolingSuiteApiService {
     for (let i = 0; i < numChillers; i++) {
       const hours = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i));
       const energy = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i));
+      const power = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i));
 
       const defaultLoads = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
       let loadPercents = this.suiteApiHelperService.returnDoubleVector(defaultLoads);
@@ -465,8 +461,11 @@ export class ProcessCoolingSuiteApiService {
         curveLoadPercents = this.suiteApiHelperService.returnDoubleVector(customCurveLoadPercents);
       }
 
+      // * used for table data
       const efficiencyAtLoadWasm = processCoolingInstance.getChillerEnergyEfficiency(i, loadPercents);
       const efficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(efficiencyAtLoadWasm);
+
+      // * used to visualize performance curve
       const curveEfficiencyAtLoadWasm = processCoolingInstance.getChillerEnergyEfficiency(i, curveLoadPercents);
       const curveEfficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasm);
 
@@ -474,10 +473,9 @@ export class ProcessCoolingSuiteApiService {
         id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
         name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
         efficiency: efficiencyAtLoad,
-        // todo remove once other changes are integrated. ariEfficiencyProfile and efficiency are now one in the same
         ariEfficiencyProfile: curveEfficiencyAtLoad,
         hours: hours,
-        power: this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i)),
+        power: power,
         energy: energy,
         totalHours: hours.reduce((a, b) => a + b, 0),
         totalEnergy: energy.reduce((a, b) => a + b, 0)
