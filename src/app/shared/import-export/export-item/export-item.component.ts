@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, inject, Inject, Input, ViewChild } from '@angular/core';
 import { DirectoryDashboardService } from '../../../dashboard/directory-dashboard/directory-dashboard.service';
 import { DirectoryDbService } from '../../../indexedDb/directory-db.service';
 import { Assessment } from '../../models/assessment';
@@ -25,8 +25,6 @@ export class ExportItemComponent {
   inventoryItem: InventoryItem;
   @Input()
   inAssessment: boolean;
-  @Output('close')
-  close = new EventEmitter<boolean>();
 
   exportData: ImportExportData;
   exportDisplayData: ImportExportData;
@@ -58,9 +56,10 @@ export class ExportItemComponent {
   hideExportModal() {
     this.exportService.exportAll = false;
     if (this.inAssessment) {
-      this.close.emit(false);
+      this.dialogRef.close('false');
     } else {
       this.directoryDashboardService.showExportModal.next(false);
+      this.dialogRef.close('false');
     }
   }
 
