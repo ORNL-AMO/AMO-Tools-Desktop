@@ -7,8 +7,8 @@ import { MAIN_VIEW_LINKS, MainView, ProcessCoolingUiService, ViewLink } from '..
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { ExportItemComponent } from '../../shared/import-export/export-item/export-item.component';
-
 @Component({
   selector: 'app-process-cooling-banner',
   standalone: false,
@@ -20,8 +20,7 @@ export class ProcessCoolingBannerComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);
   private readonly dashboardService = inject(DashboardService);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly modalDialogService: ModalDialogService = inject(ModalDialogService);
-  
+  private readonly modalDialogService = inject(ModalDialogService);
   isBaselineValid: boolean = false
   
   readonly ROUTE_TOKENS = ROUTE_TOKENS;
@@ -51,9 +50,15 @@ export class ProcessCoolingBannerComponent {
   }
 
   showSecurityAndPrivacyModal() {
-    // this.securityAndPrivacyService.modalOpen.next(true);
-    // this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+      {
+        width: '1400px',
+      },
+    );
   }
+
+  
 
   changeTab() {
     // if (str == 'baseline' || str == 'diagram' || this.isBaselineValid) {
