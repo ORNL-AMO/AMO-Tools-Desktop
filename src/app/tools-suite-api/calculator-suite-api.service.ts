@@ -34,10 +34,13 @@ export class CalculatorSuiteApiService {
       electricityReduction.powerMeterData.power = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.powerMeterData.power);
       electricityReduction.otherMethodData.energy = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.otherMethodData.energy);
 
+      const measurementMethod = this.suiteApiHelperService.getElectricityReductionMeasurementMethodEnum(electricityReduction.measurementMethod);
+
+
       let wasmConvertedInput = {
         operatingHours: electricityReduction.operatingHours,
         electricityCost: electricityReduction.electricityCost,
-        measurementMethod: electricityReduction.measurementMethod,
+        measurementMethod: measurementMethod,
         multimeterData: {
           numberOfPhases: electricityReduction.multimeterData.numberOfPhases,
           supplyVoltage: electricityReduction.multimeterData.supplyVoltage,
@@ -153,7 +156,7 @@ export class CalculatorSuiteApiService {
       compressedAirReduction.flowMeterMethodData.meterReading = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.flowMeterMethodData.meterReading);
       compressedAirReduction.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagFillTime);
       compressedAirReduction.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagVolume);
-      
+
       compressedAirReduction.pressureMethodData.nozzleType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.nozzleType);
       compressedAirReduction.pressureMethodData.numberOfNozzles = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.numberOfNozzles);
       compressedAirReduction.pressureMethodData.supplyPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.supplyPressure);
@@ -170,7 +173,7 @@ export class CalculatorSuiteApiService {
       let CompressedAirOtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirOtherMethodData(compressedAirReduction.otherMethodData.consumption);
       let CompressorElectricityData = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorElectricityData(compressedAirReduction.compressorElectricityData.compressorControlAdjustment,
         compressedAirReduction.compressorElectricityData.compressorSpecificPower);
-      
+
       let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirReductionInput(
         compressedAirReduction.hoursPerYear,
         compressedAirReduction.utilityType,
@@ -218,7 +221,7 @@ export class CalculatorSuiteApiService {
       // TODO all methods should not calculate if missing required props
       input.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagFillTime);
       input.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagVolume);
-      
+
       // estimate method
       input.estimateMethodData.leakRateEstimate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.estimateMethodData.leakRateEstimate);
       // orifice method
@@ -249,7 +252,7 @@ export class CalculatorSuiteApiService {
       airLeakSurvey.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagVolume);
 
       // make TH backwards compatible. hours are undefined in update-data service. There is probably a bug in TH init for air leak daa 
-      let operatingTime = airLeakSurvey.bagMethodData.operatingTime? airLeakSurvey.bagMethodData.operatingTime : inputObj.facilityCompressorData.hoursPerYear;
+      let operatingTime = airLeakSurvey.bagMethodData.operatingTime ? airLeakSurvey.bagMethodData.operatingTime : inputObj.facilityCompressorData.hoursPerYear;
       // hardcoded 1 - always calculate as single unit
       let BagMethod = new this.toolsSuiteApiService.ToolsSuiteModule.BagMethod(operatingTime, airLeakSurvey.bagMethodData.bagFillTime, airLeakSurvey.bagMethodData.bagVolume, 1);
       let DecibelsMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.DecibelsMethodData(airLeakSurvey.decibelsMethodData.linePressure,
@@ -380,12 +383,12 @@ export class CalculatorSuiteApiService {
         steamReduction.measurementMethod,
         steamReduction.systemEfficiency,
         steamReduction.pressure,
-        FlowMeterMethodData, 
-        AirMassFlowMethodData, 
-        WaterMassFlowMethodData, 
-        OtherMethodData, 
-        steamReduction.units, 
-        steamReduction.boilerEfficiency, 
+        FlowMeterMethodData,
+        AirMassFlowMethodData,
+        WaterMassFlowMethodData,
+        OtherMethodData,
+        steamReduction.units,
+        steamReduction.boilerEfficiency,
         steamVariableOptionThermodynamicQuantity,
         steamReduction.steamVariable,
         steamReduction.feedWaterTemperature);
@@ -485,7 +488,7 @@ export class CalculatorSuiteApiService {
   powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
     let modeEnum = this.suiteApiHelperService.getPowerFactorModeEnum(inputObj.mode);
     inputObj.mode = modeEnum;
-    inputObj.input1 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input1);    
+    inputObj.input1 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input1);
     inputObj.input2 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input2);
     inputObj.inputPowerFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.inputPowerFactor);
     let PowerFactor = new this.toolsSuiteApiService.ToolsSuiteModule.PowerFactor();
@@ -534,5 +537,5 @@ export class CalculatorSuiteApiService {
 
     return valveEnergyLossOutputs;
   }
-  
+
 }

@@ -422,4 +422,17 @@ export class SuiteApiHelperService {
         return this.toolsSuiteApiService.ToolsSuiteModule.WaterReductionMeasurementMethod.Other;
     }
   }
+
+  getElectricityReductionMeasurementMethodEnum(method: number) {
+    switch (method) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReductionMeasurementMethod.Multimeter;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReductionMeasurementMethod.Nameplate;
+      case 2:
+        return this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReductionMeasurementMethod.PowerMeter;
+      case 3:
+        return this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReductionMeasurementMethod.Other;
+    }
+  }
 }
