@@ -81,7 +81,7 @@
     <!-- Help Panel -->
     <div class="assessment-content-panel modify-results-panel help-panel" [ngClass]="{'assessment-small-screen-tab': smallScreenTab === 'details'}">
       <app-help-panel *ngIf="modificationExists" [ssmt]="ssmt" [settings]="settings"
-        [modificationIndex]="modificationIndex" [containerHeight]="containerHeight"></app-help-panel>
+        [modificationIndex]="modificationIndex" [containerHeight]="containerHeight" [inSetup]="inSetup"></app-help-panel>
       <div *ngIf="!modificationExists">
         <div class="header mr-2 ml-2">
           <h3>Help</h3>

@@ -8,7 +8,7 @@
       [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
       Baseline
     </div>
-    <div  *ngIf="!modValid && !inSetup" class="col-4 bold table-text d-flex align-items-center pl-1 pr-1">
+    <div  *ngIf="!inSetup" class="col-4 bold table-text d-flex align-items-center pl-1 pr-1">
       {{ ssmt.modifications[modificationIndex].ssmt.name }}
     </div>
   </div>
@@ -17,7 +17,7 @@
       <span class="table-text">Percent Savings (%)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="table-text"> &mdash; &mdash;</span>
+      <span class="table-text">&mdash; &mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex d-lg-none align-items-center pl-1 pr-1">
       <span *ngIf="percentSavings && modValid && percentSavings >= 0" class="table-text">
@@ -26,14 +26,14 @@
       <span *ngIf="percentSavings && modValid && percentSavings < 0" class="table-text">
         0%
       </span>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !percentSavings" class="table-text">&mdash; &mdash;</span>
     </div>
-    <div *ngIf="!inSetup" class="col-4 d-none d-lg-flex">
+    <div *ngIf="!inSetup" class="col-4 d-none d-lg-flex" [ngClass]="{'percent-savings-padding': !modValid || !percentSavings}">
       <app-percent-graph
         *ngIf="percentSavings && modValid"
         [value]="percentSavings"
       ></app-percent-graph>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !percentSavings" class="table-text">&mdash; &mdash;</span>
     </div>
   </div>
   <div class="d-flex stripe my-table-item">
@@ -46,16 +46,16 @@
       </span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineOutput.operationsOutput" class="table-text">{{
         baselineOutput.operationsOutput.boilerFuelUsage | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineOutput.operationsOutput">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid && modificationOutput.operationsOutput" class="table-text">{{
         modificationOutput.operationsOutput.boilerFuelUsage | number: "1.0-1"
       }}</span>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !modificationOutput.operationsOutput">&mdash;</span>
     </div>
   </div>
   <div class="d-flex my-table-item">
@@ -63,18 +63,18 @@
       <span class="table-text">Fuel Cost ({{settings.currency}}/yr)</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineOutput.operationsOutput" class="table-text">{{
         baselineOutput.operationsOutput.boilerFuelCost 
           | currency: "USD":"symbol":"1.0-0"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineOutput.operationsOutput">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid && modificationOutput.operationsOutput" class="table-text">{{
         modificationOutput.operationsOutput.boilerFuelCost 
           | currency: "USD":"symbol":"1.0-0"
       }}</span>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !modificationOutput.operationsOutput">&mdash;</span>
     </div>
   </div>
   <div class="d-flex stripe my-table-item">
@@ -86,7 +86,7 @@
         baselineOutput.operationsOutput.sitePowerImport *
           baselineInputs.operationsInput.operatingHoursPerYear | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineOutput.operationsOutput">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid && modificationOutput.operationsOutput" class="table-text">{{
@@ -94,7 +94,7 @@
           modificationInputs.operationsInput.operatingHoursPerYear
           | number: "1.0-1"
       }}</span>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !modificationOutput.operationsOutput">&mdash;</span>
     </div>
   </div>
   <div class="d-flex my-table-item">
@@ -106,14 +106,14 @@
         baselineOutput.operationsOutput.powerGenerationCost 
           | number: "2.0-0"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineOutput.operationsOutput">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid && modificationOutput.operationsOutput" class="table-text">{{
         modificationOutput.operationsOutput.powerGenerationCost 
           | number: "2.0-0"
       }}</span>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !modificationOutput.operationsOutput">&mdash;</span>
     </div>
   </div>
   <div class="d-flex stripe my-table-item">
@@ -130,14 +130,14 @@
         baselineOutput.operationsOutput.makeupWaterVolumeFlowAnnual
           | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineOutput.operationsOutput">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid && modificationOutput.operationsOutput" class="table-text">{{
         modificationOutput.operationsOutput.makeupWaterVolumeFlowAnnual
           | number: "1.0-1"
       }}</span>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !modificationOutput.operationsOutput">&mdash;</span>
     </div>
   </div>
   <div class="d-flex my-table-item">
@@ -149,14 +149,14 @@
         baselineOutput.operationsOutput.makeupWaterCost 
           | number: "2.0-0"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineOutput.operationsOutput">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid && modificationOutput.operationsOutput" class="table-text">{{
         modificationOutput.operationsOutput.makeupWaterCost 
           | number: "2.0-0"
       }}</span>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !modificationOutput.operationsOutput">&mdash;</span>
     </div>
   </div>
   <div class="d-flex stripe my-table-item">
@@ -172,13 +172,13 @@
       <span *ngIf="baselineValid && baselineOutput.operationsOutput" class="table-text">{{
         baselineOutput.operationsOutput.powerGenerated | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineOutput.operationsOutput">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid && modificationOutput.operationsOutput" class="table-text">{{
         modificationOutput.operationsOutput.powerGenerated | number: "1.0-1"
       }}</span>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !modificationOutput.operationsOutput">&mdash;</span>
     </div>
   </div>
   <div class="d-flex my-table-item">
@@ -191,16 +191,16 @@
       >
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineLosses" class="table-text">{{
         baselineLosses.allProcessUsageUsefulEnergy | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineLosses">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid && modificationLosses" class="table-text">{{
         modificationLosses.allProcessUsageUsefulEnergy | number: "1.0-1"
       }}</span>
-      <span *ngIf="!modValid">&mdash;</span>
+      <span *ngIf="!modValid || !modificationLosses">&mdash;</span>
     </div>
   </div>
   <div class="d-flex stripe my-table-item">
@@ -213,10 +213,10 @@
       >
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineLosses" class="table-text">{{
         baselineLosses.stack | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineLosses">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
@@ -236,10 +236,10 @@
       >
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineLosses" class="table-text">{{
         baselineLosses.totalVentLosses | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineLosses">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
@@ -259,10 +259,10 @@
       >
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineLosses" class="table-text">{{
         baselineLosses.totalProcessLosses | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineLosses">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
@@ -282,10 +282,10 @@
       >
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineLosses" class="table-text">{{
         baselineLosses.totalTurbineLosses | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineLosses">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
@@ -305,10 +305,10 @@
       >
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span *ngIf="baselineValid" class="table-text">{{
+      <span *ngIf="baselineValid && baselineLosses" class="table-text">{{
         baselineLosses.totalOtherLosses | number: "1.0-1"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineLosses">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span *ngIf="modValid" class="table-text">{{
@@ -382,18 +382,16 @@
       <span class="bold table-text">Annual Cost ({{settings.currency}})</span>
     </div>
     <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span *ngIf="baselineValid" class="bold table-text">{{
+      <span *ngIf="baselineValid && baselineOutput.operationsOutput" class="bold table-text">{{
         baselineOutput.operationsOutput.totalOperatingCost 
           | number: "2.0-0"
       }}</span>
-      <span *ngIf="!baselineValid">&mdash;</span>
+      <span *ngIf="!baselineValid || !baselineOutput.operationsOutput" class=" bold table-text">&mdash;</span>
     </div>
     <div *ngIf="!inSetup" class="col-4 d-flex align-items-center pl-1 pr-1">
       <span
         class="bold table-text"
-        *ngIf="
-          modValid && modificationOutput.operationsOutput
-        "
+        *ngIf="modValid && modificationOutput.operationsOutput"
         [ngClass]="{ 'positive-savings': percentSavings > 10 }"
         >{{
           modificationOutput.operationsOutput.totalOperatingCost 
@@ -402,9 +400,7 @@
       >
       <span
         class="bold table-text"
-        *ngIf="
-          !modValid || !modificationOutput.operationsOutput
-        "
+        *ngIf="!modValid || !modificationOutput.operationsOutput"
         >&mdash;</span
       >
     </div>
