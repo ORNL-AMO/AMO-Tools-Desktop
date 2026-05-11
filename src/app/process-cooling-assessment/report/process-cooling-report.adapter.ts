@@ -17,6 +17,7 @@ import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { Assessment } from '../../shared/models/assessment';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
+import { InputSummaryService, InputSummaryUI } from '../services/input-summary.service';
 
 export const PROCESS_COOLING_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: ROUTE_TOKENS.executiveSummary, label: 'Executive Summary', description: 'High-level baseline to modification comparison' },
@@ -24,6 +25,7 @@ export const PROCESS_COOLING_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: ROUTE_TOKENS.systemProfile, label: 'System Profile', description: 'Chiller energy and hours by load bin' },
   { key: ROUTE_TOKENS.pumpSummary, label: 'Pump Summary', description: 'Chilled and condenser water pumping energy' },
   { key: ROUTE_TOKENS.towerSummary, label: 'Tower Summary', description: 'Cooling tower energy by temperature bin' },
+  { key: ROUTE_TOKENS.inputSummary, label: 'Input Summary', description: 'Summary of user input data' },
 ];
 
 @Injectable()
@@ -35,6 +37,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
   private readonly resultsService = inject(ProcessCoolingResultsService);
   private readonly chartsService = inject(ProcessCoolingChartsService);
   private readonly plotlyService = inject(PlotlyService);
+  private readonly inputSummaryService = inject(InputSummaryService);
   private readonly processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [0, 152, 133]; // #009885
@@ -51,8 +54,9 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
       this.pumpSummaryService.pumpSummaryUI$,
       this.towerSummaryService.towerSummaryUI$,
       this.systemProfileService.reportProfileUI$,
+      this.inputSummaryService.inputSummaryUI$,
     ]).pipe(
-      map(([execSummary, pumpSummary, towerSummary, systemProfile]): ReportDocument => ({
+      map(([execSummary, pumpSummary, towerSummary, systemProfile, inputSummary]): ReportDocument => ({
         meta: moduleMeta,
         sections: [
           ...this.buildExecutiveSummarySections(execSummary),
@@ -60,6 +64,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
           ...this.buildPerformanceProfileSections(),
           ...this.buildPumpSummarySections(pumpSummary),
           ...this.buildTowerSummarySections(towerSummary),
+          ...this.buildInputSummarySections(inputSummary),
         ],
       }))
     );
@@ -254,6 +259,69 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         ));
       }
     });
+
+    return [...sections];
+  }
+
+  private buildInputSummarySections(ui: InputSummaryUI): SummaryTableSection[] {
+    const sections: SummaryTableSection[] = [];
+    const headers = this.buildResultHeaders(ui.modificationNames);
+    const { baseOperations, chillerSetup } = ui.operationSummaryRows ?? {};
+
+    if (baseOperations?.length) {
+      sections.push({
+        type: 'summary-table',
+        title: 'Operations',
+        headers,
+        rows: baseOperations.map(row => this.resultRowToStrings(row)),
+        group: ROUTE_TOKENS.inputSummary,
+        pageBreakBefore: sections.length === 0,
+      });
+    }
+
+    if (chillerSetup?.length) {
+      sections.push({
+        type: 'summary-table',
+        title: 'Chiller Setup',
+        headers,
+        rows: chillerSetup.map(row => this.resultRowToStrings(row)),
+        group: ROUTE_TOKENS.inputSummary,
+        pageBreakBefore: sections.length === 0,
+      });
+    }
+
+    const inputGroups = [
+      { title: 'Pump Input',        subSections: ui.pumpSections },
+      { title: 'Condenser Input',   subSections: ui.condenserSections },
+      { title: 'Tower Input',       subSections: ui.towerSections },
+      { title: 'Chiller Inventory', subSections: ui.inventorySections },
+    ];
+
+    for (const { title, subSections } of inputGroups) {
+      if (!subSections?.length) continue;
+
+      const rows: string[][] = [];
+      const subGroupHeaderIndices: number[] = [];
+
+      for (const sub of subSections) {
+        if (!sub.rows?.length) continue;
+        subGroupHeaderIndices.push(rows.length);
+        rows.push([sub.label, ...Array(headers.length - 1).fill('')]);
+        rows.push(...sub.rows.map(row => this.resultRowToStrings(row)));
+      }
+
+      if (rows.length) {
+        sections.push({
+          type: 'summary-table',
+          title,
+          headers,
+          rows,
+          subGroupHeaderIndices,
+          group: ROUTE_TOKENS.inputSummary,
+          pageBreakBefore: sections.length === 0,
+        });
+      }
+    }
 
     return [...sections];
   }
