@@ -455,18 +455,18 @@ export class ProcessCoolingSuiteApiService {
 
       const defaultLoads = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
       let loadPercents = this.suiteApiHelperService.returnDoubleVector(defaultLoads);
-      let curveLoadPercents = this.suiteApiHelperService.returnDoubleVector(defaultLoads);
+      let curveLoadPercents = defaultLoads;
       if (chillerInventoryItems[i].isCustomChiller) {
-        const customCurveLoadPercents = [0, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 100];
-        curveLoadPercents = this.suiteApiHelperService.returnDoubleVector(customCurveLoadPercents);
+        curveLoadPercents = [0, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 100];
       }
+      const suiteCurveLoadPercents = this.suiteApiHelperService.returnDoubleVector(curveLoadPercents);
 
       // * used for table data
       const efficiencyAtLoadWasm = processCoolingInstance.getChillerEnergyEfficiency(i, loadPercents);
       const efficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(efficiencyAtLoadWasm);
 
       // * used to visualize performance curve
-      const curveEfficiencyAtLoadWasm = processCoolingInstance.getChillerEnergyEfficiency(i, curveLoadPercents);
+      const curveEfficiencyAtLoadWasm = processCoolingInstance.getChillerEnergyEfficiency(i, suiteCurveLoadPercents);
       const curveEfficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasm);
 
       const chillerResult = {
@@ -474,6 +474,7 @@ export class ProcessCoolingSuiteApiService {
         name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
         efficiency: efficiencyAtLoad,
         ariEfficiencyProfile: curveEfficiencyAtLoad,
+        loadPercents: curveLoadPercents,
         hours: hours,
         power: power,
         energy: energy,

@@ -7,6 +7,7 @@ export interface ProcessCoolingChillerOutput {
     name: string;
     efficiency: number[];
     ariEfficiencyProfile: number[]; 
+    loadPercents: number[];
     hours: number[];
     power: number[];
     energy: number[];
