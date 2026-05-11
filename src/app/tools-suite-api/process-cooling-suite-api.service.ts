@@ -482,6 +482,10 @@ export class ProcessCoolingSuiteApiService {
         totalEnergy: energy.reduce((a, b) => a + b, 0)
       };
       chillerOutput.push(chillerResult);
+      suiteCurveLoadPercents.delete();
+      loadPercents.delete();
+      efficiencyAtLoadWasm.delete();
+      curveEfficiencyAtLoadWasm.delete();
     }
 
     chillerOutputInstance.delete();

@@ -81,7 +81,4 @@ export class AirCooledComponent {
   get indoorTemp() {
     return this.form.get('indoorTemp');
   }
-  get followingTempDifferential() {
-    return this.form.get('followingTempDifferential');
-  }
 }
