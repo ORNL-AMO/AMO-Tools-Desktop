@@ -358,64 +358,62 @@ export class CalculatorSuiteApiService {
     let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.SteamReductionInputV();
 
     inputObj.steamReductionInputVec.forEach(steamReduction => {
-      let FlowMeterMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamFlowMeterMethodData(steamReduction.flowMeterMethodData.flowRate);
+      const measurementMethod = this.suiteApiHelperService.getSteamMeasurementMethodEnum(steamReduction.measurementMethod);
+      const utilityType = this.suiteApiHelperService.getSteamUtilityTypeEnum(steamReduction.utilityType);
+      const steamVariableOption = this.suiteApiHelperService.getThermodynamicQuantityType(steamReduction.steamVariableOption);
 
-      let AirMassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMeasuredData(steamReduction.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
-        steamReduction.airMassFlowMethodData.massFlowMeasuredData.airVelocity);
-      let AirMassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowNameplateData(steamReduction.airMassFlowMethodData.massFlowNameplateData.flowRate);
-      let AirMassFlowMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMethodData(steamReduction.airMassFlowMethodData.isNameplate,
-        AirMassFlowMeasuredData, AirMassFlowNameplateData,
-        steamReduction.airMassFlowMethodData.inletTemperature, steamReduction.airMassFlowMethodData.outletTemperature);
-
-      let WaterMassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMeasuredData(steamReduction.waterMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
-        steamReduction.waterMassFlowMethodData.massFlowMeasuredData.airVelocity);
-      let WaterMassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowNameplateData(steamReduction.waterMassFlowMethodData.massFlowNameplateData.flowRate);
-      let WaterMassFlowMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMethodData(steamReduction.waterMassFlowMethodData.isNameplate,
-        WaterMassFlowMeasuredData, WaterMassFlowNameplateData,
-        steamReduction.waterMassFlowMethodData.inletTemperature, steamReduction.waterMassFlowMethodData.outletTemperature);
-
-      let OtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamOffsheetMethodData(steamReduction.otherMethodData.consumption);
-
-      let steamVariableOptionThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(steamReduction.steamVariableOption)
-
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.SteamReductionInput(
-        steamReduction.hoursPerYear,
-        steamReduction.utilityType,
-        steamReduction.utilityCost,
-        steamReduction.measurementMethod,
-        steamReduction.systemEfficiency,
-        steamReduction.pressure,
-        FlowMeterMethodData,
-        AirMassFlowMethodData,
-        WaterMassFlowMethodData,
-        OtherMethodData,
-        steamReduction.units,
-        steamReduction.boilerEfficiency,
-        steamVariableOptionThermodynamicQuantity,
-        steamReduction.steamVariable,
-        steamReduction.feedWaterTemperature);
+      let wasmConvertedInput = {
+        hoursPerYear: steamReduction.hoursPerYear,
+        utilityType: utilityType,
+        utilityCost: steamReduction.utilityCost,
+        measurementMethod: measurementMethod,
+        systemEfficiency: steamReduction.systemEfficiency,
+        pressure: steamReduction.pressure,
+        flowMeterMethodData: {
+          flowRate: steamReduction.flowMeterMethodData.flowRate
+        },
+        airMassFlowMethodData: {
+          isNameplate: steamReduction.airMassFlowMethodData.isNameplate,
+          massFlowMeasuredData: {
+            areaOfDuct: steamReduction.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
+            airVelocity: steamReduction.airMassFlowMethodData.massFlowMeasuredData.airVelocity
+          },
+          massFlowNameplateData: {
+            flowRate: steamReduction.airMassFlowMethodData.massFlowNameplateData.flowRate
+          },
+          inletTemperature: steamReduction.airMassFlowMethodData.inletTemperature,
+          outletTemperature: steamReduction.airMassFlowMethodData.outletTemperature
+        },
+        waterMassFlowMethodData: {
+          isNameplate: steamReduction.waterMassFlowMethodData.isNameplate,
+          massFlowMeasuredData: {
+            areaOfDuct: steamReduction.waterMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
+            airVelocity: steamReduction.waterMassFlowMethodData.massFlowMeasuredData.airVelocity
+          },
+          massFlowNameplateData: {
+            flowRate: steamReduction.waterMassFlowMethodData.massFlowNameplateData.flowRate
+          },
+          inletTemperature: steamReduction.waterMassFlowMethodData.inletTemperature,
+          outletTemperature: steamReduction.waterMassFlowMethodData.outletTemperature
+        },
+        offsheetMethodData: {
+          consumption: steamReduction.otherMethodData.consumption
+        },
+        units: steamReduction.units,
+        boilerEfficiency: steamReduction.boilerEfficiency,
+        steamVariableOption: steamVariableOption,
+        steamVariable: steamReduction.steamVariable,
+        feedWaterTemperature: steamReduction.feedWaterTemperature
+      };
       inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      OtherMethodData.delete();
-      WaterMassFlowMethodData.delete();
-      AirMassFlowMethodData.delete();
-      AirMassFlowMeasuredData.delete();
-      AirMassFlowNameplateData.delete();
-      WaterMassFlowMeasuredData.delete();
-      WaterMassFlowNameplateData.delete();
-      FlowMeterMethodData.delete();
     });
 
-    let SteamReductionCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.SteamReduction(inputs);
-    let output = SteamReductionCalculator.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.steamReduction(inputs);
     let results: SteamReductionResult = {
       energyCost: output.energyCost,
       energyUse: output.energyUse,
       steamUse: output.steamUse
     };
-    output.delete();
-    SteamReductionCalculator.delete();
     inputs.delete();
     return results;
   }

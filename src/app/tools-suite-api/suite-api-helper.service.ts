@@ -448,4 +448,28 @@ export class SuiteApiHelperService {
         return this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasMeasurementMethod.Other;
     }
   }
+
+  getSteamMeasurementMethodEnum(method: number) {
+    switch (method) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.SteamMeasurementMethod.FlowMeter;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.SteamMeasurementMethod.AirMassFlow;
+      case 2:
+        return this.toolsSuiteApiService.ToolsSuiteModule.SteamMeasurementMethod.WaterMassFlow;
+      case 3:
+        return this.toolsSuiteApiService.ToolsSuiteModule.SteamMeasurementMethod.Offsheet;
+    }
+  }
+
+  getSteamUtilityTypeEnum(type: number) {
+    switch (type) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.SteamUtilityType.Steam;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.SteamUtilityType.NaturalGas;
+      case 2:
+        return this.toolsSuiteApiService.ToolsSuiteModule.SteamUtilityType.Other;
+    }
+  }
 }
