@@ -31,12 +31,16 @@
                     </div>
                     <hr>
                     <app-increase-chilled-temperature></app-increase-chilled-temperature>
-                    <app-decrease-condenser-water-temp></app-decrease-condenser-water-temp>
-                    <app-sliding-condenser-water-temperature></app-sliding-condenser-water-temperature>
+                    @if (!isAirCooled) {
+                        <app-decrease-condenser-water-temp></app-decrease-condenser-water-temp>
+                        <app-sliding-condenser-water-temperature></app-sliding-condenser-water-temperature>
+                    }
                     <app-apply-variable-speed-control></app-apply-variable-speed-control>
-                    <app-upgrade-cooling-tower-fan></app-upgrade-cooling-tower-fan>
-                    <app-use-free-cooling></app-use-free-cooling>
-                    <app-install-vsd></app-install-vsd>
+                    @if (!isAirCooled) {
+                        <app-upgrade-cooling-tower-fan></app-upgrade-cooling-tower-fan>
+                        <app-use-free-cooling></app-use-free-cooling>
+                        <app-install-vsd></app-install-vsd>
+                    }
                     <!-- <app-replace-chiller-refrigerant></app-replace-chiller-refrigerant> -->
                 </div>
             </div>
