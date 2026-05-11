@@ -435,4 +435,17 @@ export class SuiteApiHelperService {
         return this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReductionMeasurementMethod.Other;
     }
   }
+
+  getNaturalGasReductionMeasurementMethodEnum(method: number) {
+    switch (method) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasMeasurementMethod.FlowMeter;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasMeasurementMethod.AirMassFlow;
+      case 2:
+        return this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasMeasurementMethod.WaterMassFlow;
+      case 3:
+        return this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasMeasurementMethod.Other;
+    }
+  }
 }

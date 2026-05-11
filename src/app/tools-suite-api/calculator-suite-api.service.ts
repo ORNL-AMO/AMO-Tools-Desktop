@@ -81,7 +81,6 @@ export class CalculatorSuiteApiService {
     let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasReductionInputV();
 
     inputObj.naturalGasReductionInputVec.forEach(naturalGasReduction => {
-      // TODO calc only get results if valid
       naturalGasReduction.operatingHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.operatingHours);
       naturalGasReduction.units = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.units);
       naturalGasReduction.fuelCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.fuelCost);
@@ -101,46 +100,49 @@ export class CalculatorSuiteApiService {
       naturalGasReduction.waterMassFlowData.systemEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.systemEfficiency);
       naturalGasReduction.waterMassFlowData.waterFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.waterFlow);
 
-      let FlowMeterMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.FlowMeterMethodData(naturalGasReduction.flowMeterMethodData.flowRate);
-      let NaturalGasOtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasOtherMethodData(naturalGasReduction.otherMethodData.consumption);
-      let AirMassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.AirMassFlowMeasuredData(naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.areaOfDuct,
-        naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.airVelocity);
-      let AirMassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.AirMassFlowNameplateData(naturalGasReduction.airMassFlowData.airMassFlowNameplateData.airFlow);
-      let AirMassFlowData = new this.toolsSuiteApiService.ToolsSuiteModule.AirMassFlowData(naturalGasReduction.airMassFlowData.isNameplate, AirMassFlowMeasuredData, AirMassFlowNameplateData,
-        naturalGasReduction.airMassFlowData.inletTemperature, naturalGasReduction.airMassFlowData.outletTemperature, naturalGasReduction.airMassFlowData.systemEfficiency);
-      let WaterMassFlowData = new this.toolsSuiteApiService.ToolsSuiteModule.WaterMassFlowData(naturalGasReduction.waterMassFlowData.waterFlow,
-        naturalGasReduction.waterMassFlowData.inletTemperature, naturalGasReduction.waterMassFlowData.outletTemperature, naturalGasReduction.waterMassFlowData.systemEfficiency);
+      const measurementMethod = this.suiteApiHelperService.getNaturalGasReductionMeasurementMethodEnum(naturalGasReduction.measurementMethod);
 
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasReductionInput(
-        naturalGasReduction.operatingHours,
-        naturalGasReduction.fuelCost,
-        naturalGasReduction.measurementMethod,
-        FlowMeterMethodData,
-        NaturalGasOtherMethodData,
-        AirMassFlowData,
-        WaterMassFlowData,
-        naturalGasReduction.units);
+      let wasmConvertedInput = {
+        operatingHours: naturalGasReduction.operatingHours,
+        fuelCost: naturalGasReduction.fuelCost,
+        measurementMethod: measurementMethod,
+        flowMeterMethodData: {
+          flowRate: naturalGasReduction.flowMeterMethodData.flowRate
+        },
+        otherMethodData: {
+          consumption: naturalGasReduction.otherMethodData.consumption
+        },
+        airMassFlowData: {
+          isNameplate: naturalGasReduction.airMassFlowData.isNameplate,
+          measuredData: {
+            areaOfDuct: naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.areaOfDuct,
+            airVelocity: naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.airVelocity
+          },
+          nameplateData: {
+            airFlow: naturalGasReduction.airMassFlowData.airMassFlowNameplateData.airFlow
+          },
+          inletTemperature: naturalGasReduction.airMassFlowData.inletTemperature,
+          outletTemperature: naturalGasReduction.airMassFlowData.outletTemperature,
+          systemEfficiency: naturalGasReduction.airMassFlowData.systemEfficiency
+        },
+        waterMassFlowData: {
+          waterFlow: naturalGasReduction.waterMassFlowData.waterFlow,
+          inletTemperature: naturalGasReduction.waterMassFlowData.inletTemperature,
+          outletTemperature: naturalGasReduction.waterMassFlowData.outletTemperature,
+          systemEfficiency: naturalGasReduction.waterMassFlowData.systemEfficiency
+        },
+        units: naturalGasReduction.units
+      };
       inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      FlowMeterMethodData.delete();
-      NaturalGasOtherMethodData.delete();
-      AirMassFlowMeasuredData.delete();
-      AirMassFlowNameplateData.delete();
-      AirMassFlowData.delete();
-      WaterMassFlowData.delete();
     });
 
-    let NaturalGasReductionCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasReduction(inputs);
-    let output = NaturalGasReductionCalculator.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.naturalGasReduction(inputs);
     let results: NaturalGasReductionResult = {
       energyUse: output.energyUse,
       energyCost: output.energyCost,
       heatFlow: output.heatFlow,
       totalFlow: output.totalFlow
     };
-    output.delete();
-    NaturalGasReductionCalculator.delete();
     inputs.delete();
     return results;
   }
