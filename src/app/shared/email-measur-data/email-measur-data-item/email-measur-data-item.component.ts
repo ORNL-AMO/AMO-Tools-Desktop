@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { EmailMeasurDataService, EmailSentStatus, MeasurItemAttachment } from '../email-measur-data.service';
 import { truncate } from '../../helperFunctions';
 
+// * NOTE this component is a new email-measur-data-item to be used with the angular cdk dialog and modal-dialog service as we move way from the bootstrap wrapper. it is essentially a copy of "email-measur-data-modal"
 @Component({
   selector: 'app-email-measur-data-item',
   templateUrl: './email-measur-data-item.component.html',

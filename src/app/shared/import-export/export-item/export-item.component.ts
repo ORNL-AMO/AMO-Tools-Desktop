@@ -56,10 +56,10 @@ export class ExportItemComponent {
   hideExportModal() {
     this.exportService.exportAll = false;
     if (this.inAssessment) {
-      this.dialogRef.close('false');
+      this.dialogRef.close();
     } else {
       this.directoryDashboardService.showExportModal.next(false);
-      this.dialogRef.close('false');
+      this.dialogRef.close();
     }
   }
 
