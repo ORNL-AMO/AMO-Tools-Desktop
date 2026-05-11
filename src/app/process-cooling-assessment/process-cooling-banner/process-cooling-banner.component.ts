@@ -9,6 +9,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { ExportItemComponent } from '../../shared/import-export/export-item/export-item.component';
+import { EmailMeasurDataItemComponent, EmailMeasurDataItemComponentDataInputs } from '../../shared/email-measur-data/email-measur-data-item/email-measur-data-item.component';
 @Component({
   selector: 'app-process-cooling-banner',
   standalone: false,
@@ -36,7 +37,6 @@ export class ProcessCoolingBannerComponent {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(val => {
       this.isBaselineValid = val;
-      // console.log('isBaselineValid change', this.isBaselineValid);
     });
   }
 
@@ -82,19 +82,26 @@ export class ProcessCoolingBannerComponent {
         data: {
           inAssessment: true,
           assessment: this.processCoolingService.assessmentValue
-        },
-      },
+        }
+      }
     );
   }
 
   emailAssessment() {
-    // this.emailMeasurDataService.measurItemAttachment = {
-    //   itemType: 'assessment',
-    //   itemName: this.assessment.name,
-    //   itemData: this.assessment
-    // }
-    // this.emailMeasurDataService.emailItemType.next('ProcessCooling');
-    // this.emailMeasurDataService.showEmailMeasurDataModal.next(true);
+    const assessment = this.processCoolingService.assessmentValue;
+    this.modalDialogService.openModal<EmailMeasurDataItemComponent, EmailMeasurDataItemComponentDataInputs>(
+      EmailMeasurDataItemComponent,
+      {
+        width: '800px',
+        data: {
+          measurItemAttachment: {
+            itemType: 'assessment',
+            itemName: assessment.name,
+            itemData: assessment
+          }
+        }
+      }
+    );
   }
 
   
