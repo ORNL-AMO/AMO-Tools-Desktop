@@ -65,7 +65,8 @@
                         (focus)="focusField('capacity')" />
                     <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.capacity.labelHTML.imperial"
                 [metricUnit]="PROCESS_COOLING_UNITS.capacity.labelHTML.metric"></app-input-unit>
-                </div>
+            </div>
+            <app-form-control-errors [control]="form.controls.capacity"></app-form-control-errors>
             </div>
             <div class="form-group">
                 <label for="{{controlIds.age}}">Age</label>
@@ -74,6 +75,7 @@
                         (focus)="focusField('age')" />
                     <app-input-unit [defaultUnit]="'years'"></app-input-unit>
                 </div>
+            <app-form-control-errors [control]="form.controls.age"></app-form-control-errors>
             </div>
             <hr>
             <label class="group-label" for="{{controlIds.isCustomChiller}}">

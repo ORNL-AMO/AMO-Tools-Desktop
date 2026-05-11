@@ -25,7 +25,7 @@
                     <option>Constant Flow</option>
                 </select>
             </div>
-            @if (baselineCondenserWaterVariableFlow !== undefined) {
+            @if (baselineCondenserWaterVariableFlow !== undefined && !isAirCooled) {
             <div class="form-group mt-3">
                 <label for="baselineCondenserWaterVariableFlow">Condenser Water Pump</label>
                 <select id="baselineCondenserWaterVariableFlow" class="form-control"
