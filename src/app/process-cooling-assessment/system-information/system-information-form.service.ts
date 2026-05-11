@@ -154,12 +154,8 @@ export class SystemInformationFormService {
       ).convertedValue;
     }
     let indoorTempValidators: ValidatorFn[] = [];
-    let tempDifferentialValidators: ValidatorFn[] = [];
     if (input.airCoolingSource === AirCoolingSource.Indoor) {
       indoorTempValidators = this.getIndoorTempValidators(settings);
-    }
-    if (input.airCoolingSource === AirCoolingSource.Outdoor) {
-      tempDifferentialValidators = this.getAirCooledFollowingTempDifferentialValidators(settings);
     }
 
     return this.formBuilder.group({
@@ -170,7 +166,6 @@ export class SystemInformationFormService {
       ]],
       airCoolingSource: [input.airCoolingSource, [Validators.required]],
       indoorTemp: [input.indoorTemp, indoorTempValidators],
-      followingTempDifferential: [input.followingTempDifferential, tempDifferentialValidators],
     });
   }
 
@@ -197,32 +192,6 @@ export class SystemInformationFormService {
       Validators.max(indoorTempMax)
     ];
     return indoorTempValidators;
-  }
-
-  getAirCooledFollowingTempDifferentialValidators(settings: Settings): ValidatorFn[] {
-    let tempDiffMin = PROCESS_COOLING_VALIDATION.airCooledFollowingTempDiffential.min;
-    let tempDiffMax = PROCESS_COOLING_VALIDATION.airCooledFollowingTempDiffential.max;
-
-    if (settings.unitsOfMeasure === 'Metric') {
-      tempDiffMin = new ConvertValue(
-        tempDiffMin,
-        PROCESS_COOLING_UNITS.temperature.imperial,
-        PROCESS_COOLING_UNITS.temperature.metric
-      ).convertedValue;
-      tempDiffMax = new ConvertValue(
-        tempDiffMax,
-        PROCESS_COOLING_UNITS.temperature.imperial,
-        PROCESS_COOLING_UNITS.temperature.metric
-      ).convertedValue;
-    }
-
-    let followingTempDifferentialValidators: ValidatorFn[] = [
-      Validators.required,
-      Validators.min(tempDiffMin),
-      Validators.max(tempDiffMax)
-    ];
-
-    return followingTempDifferentialValidators;
   }
 
 getWaterCooledFollowingTempDifferentialValidators(settings: Settings): ValidatorFn[] {
@@ -486,7 +455,6 @@ export interface AirCooledSystemInputForm {
   outdoorAirTemp: FormControl<number>;
   airCoolingSource: FormControl<number>;
   indoorTemp: FormControl<number>;
-  followingTempDifferential: FormControl<number>;
 }
 
 export interface WaterCooledSystemInputForm {

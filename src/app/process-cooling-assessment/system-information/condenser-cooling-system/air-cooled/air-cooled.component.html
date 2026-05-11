@@ -41,19 +41,6 @@
                 [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
   </div>
 
-  } @else {
-  <div class="form-group">
-    <label for="{{controlIds.followingTempDifferential}}">Following Temperature Differential</label>
-    <div class="input-group">
-      <input name="followingTempDifferential" type="number" step="any" class="form-control"
-        id="{{controlIds.followingTempDifferential}}" formControlName="followingTempDifferential"
-        (focus)="focusField('followingTempDifferential')">
-      <app-input-unit [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
-        [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-input-unit>
-    </div>
-    <app-form-control-errors [control]="followingTempDifferential" [settings]="settings()" [imperialUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.imperial"
-                [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
-  </div>
-  }
+  } 
 
 </form>
