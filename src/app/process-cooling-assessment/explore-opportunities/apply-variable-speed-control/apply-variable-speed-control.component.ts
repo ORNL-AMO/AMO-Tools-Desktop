@@ -4,7 +4,7 @@ import { ModificationService } from '../../services/modification.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
-import { Modification } from '../../../shared/models/process-cooling-assessment';
+import { CondenserCoolingMethod, Modification } from '../../../shared/models/process-cooling-assessment';
 import { ExploreOpportunitiesFormService } from '../../services/explore-opportunities-form.service';
 
 @Component({
@@ -33,7 +33,8 @@ export class ApplyVariableSpeedControlComponent implements OnInit {
     const baselineValues = this.modificationService.getBaselineExploreOppsValues();
     this.baselineChilledWaterVariableFlow = baselineValues.applyVariableSpeedControls.chilledWaterVariableFlow;
     this.baselineCondenserWaterVariableFlow = baselineValues.applyVariableSpeedControls.condenserWaterVariableFlow;
-    this.isOpportunityDisabled = this.baselineChilledWaterVariableFlow && this.baselineCondenserWaterVariableFlow;
+    this.isOpportunityDisabled = (this.isAirCooled && this.baselineChilledWaterVariableFlow) 
+      || (!this.isAirCooled && (this.baselineCondenserWaterVariableFlow && this.baselineChilledWaterVariableFlow));
     
     this.form = this.exploreOpportunitiesFormService.getApplyVariableSpeedControlForm(
       this.baselineChilledWaterVariableFlow,
@@ -80,6 +81,10 @@ export class ApplyVariableSpeedControlComponent implements OnInit {
   get condenserWaterVariableFlow() {
     return this.form.get('condenserWaterVariableFlow');
   }
+
+    get isAirCooled(): boolean {
+      return this.processCoolingAssessmentService.condenserCoolingMethod === CondenserCoolingMethod.Air;
+    }
 
   focusField(str: string) {
     this.processCoolingUiService.focusedFieldSignal.set(str);

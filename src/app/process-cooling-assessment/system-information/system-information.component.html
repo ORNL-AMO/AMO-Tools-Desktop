@@ -4,6 +4,7 @@
 
 <ul class="tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block">
     @for (link of SYSTEM_INFORMATION_VIEW_LINKS; track $index) {
+        @if (!isAirCooled || link.view !== ROUTE_TOKENS.tower) {
         @let isActive = (setupSubView() == link.view);
         @let isDisabled = isLinkDisabled(link);
         @let isInvalid = isTabInvalid(link);
@@ -17,6 +18,7 @@
                 <span class="px-2">{{link.label}}</span>
             </a>
         </li>
+        }
     }
 </ul>
 
@@ -29,6 +31,7 @@
                 <span class="fa fa-chevron-left"></span></a>
         </li>
         @for (link of SYSTEM_INFORMATION_VIEW_LINKS; track $index) {
+            @if (!isAirCooled || link.view !== ROUTE_TOKENS.tower) {
             @let isActive = (setupSubView() == link.view);
             @let isDisabled = isLinkDisabled(link);
             @let isInvalid = isTabInvalid(link);
@@ -42,6 +45,7 @@
                     <span class="px-2">{{link.label}}</span>
                 </a>
             </li>
+            }
         }
         <li class="page-item">
             <a class="nav-link small" (click)="next()">

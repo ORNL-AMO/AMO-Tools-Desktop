@@ -59,13 +59,10 @@ export class AirCooledComponent {
        (airCoolingSource) => {
         if (airCoolingSource === AirCoolingSource.Indoor) {
           this.indoorTemp.setValidators(this.systemInformationFormService.getIndoorTempValidators(this.settings()));
-          this.followingTempDifferential.clearValidators();
         } else {
-          this.followingTempDifferential.setValidators(this.systemInformationFormService.getAirCooledFollowingTempDifferentialValidators(this.settings()));
           this.indoorTemp.clearValidators();
         }
         this.indoorTemp.updateValueAndValidity();
-        this.followingTempDifferential.updateValueAndValidity();
        }
     );
   }
@@ -83,8 +80,5 @@ export class AirCooledComponent {
   }
   get indoorTemp() {
     return this.form.get('indoorTemp');
-  }
-  get followingTempDifferential() {
-    return this.form.get('followingTempDifferential');
   }
 }

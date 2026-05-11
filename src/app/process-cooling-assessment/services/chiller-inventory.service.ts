@@ -49,9 +49,9 @@ export class ChillerInventoryService {
       description: [chiller.description],
       isFullLoadEfficiencyKnown: [chiller.isFullLoadEfficiencyKnown],
       chillerType: [chiller.chillerType],
-      capacity: [chiller.capacity],
+      capacity: [chiller.capacity, Validators.required],
       fullLoadEfficiency: [chiller.fullLoadEfficiency, chiller.isFullLoadEfficiencyKnown ? Validators.required : null],
-      age: [chiller.age],
+      age: [chiller.age, Validators.required],
       refrigerantType: [chiller.refrigerantType],
       isCustomChiller: [chiller.isCustomChiller ?? false],
       chillerCurvePoints: this.formBuilder.array(

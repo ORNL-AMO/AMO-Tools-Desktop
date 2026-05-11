@@ -6,7 +6,7 @@ import { ProcessCoolingAssessmentService } from './process-cooling-assessment.se
 import { InputSummaryResults } from '../../shared/models/process-cooling-assessment';
 import { ModificationService } from './modification.service';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
-import { TowerTypes, TowerSizeMetricLabels, FanTypeLabels, CondenserCoolingMethodLabels, CompressorChillerTypes, Refrigerants } from '../constants/process-cooling-constants';
+import { TowerTypes, TowerSizeMetricLabels, FanTypeLabels, CondenserCoolingMethodLabels, CompressorChillerTypes } from '../constants/process-cooling-constants';
 import { InputSummarySection, ModificationNameCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 
 @Injectable({ providedIn: 'root' })
@@ -404,11 +404,6 @@ export class InputSummaryService {
                     label: 'Age', units: 'yrs', className: 'default',
                     baseline: { value: chiller.age ?? null, decimalPipe: '1.1-1' },
                     modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.age ?? null, decimalPipe: '1.1-1' }))
-                },
-                {
-                    label: 'Refrigerant Type', units: '', className: 'default',
-                    baseline: { value: Refrigerants[chiller.refrigerantType] ?? '' },
-                    modifications: mods.map(m => ({ value: Refrigerants[m?.inventory?.[idx]?.refrigerantType] ?? '' }))
                 },
             ]
         }));

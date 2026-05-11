@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ProcessCoolingChillerOutput } from '../../shared/models/process-cooling-assessment';
-import { LOAD_PERCENTAGES } from '../constants/process-cooling-constants';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 
 export interface PlotlyChartConfig {
@@ -14,15 +13,11 @@ export class ProcessCoolingChartsService {
 
   buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[]): PlotlyChartConfig {
     const efficiencyLabel = PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial;
-    const loadPercentages: number[] = [...LOAD_PERCENTAGES];
 
-    loadPercentages.shift();
-    const traces = chillerOutput.map((chiller, idx) => {
-      const ariEfficiencyProfile = [...chiller.ariEfficiencyProfile];
-      ariEfficiencyProfile.shift();
+    const traces = chillerOutput.map((chiller) => {
       return {
-        x: loadPercentages,
-        y: ariEfficiencyProfile,
+        x: chiller.loadPercents.slice(1),
+        y: chiller.ariEfficiencyProfile.slice(1),
         type: 'scatter',
         mode: 'lines+markers',
         name: chiller.name,
@@ -46,8 +41,8 @@ export class ProcessCoolingChartsService {
         rangemode: 'tozero',
         hoverformat: '.2f',
         automargin: true,
-        range: [0, 1],
-        tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1.0],
+        range: [0, 1.2],
+        tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
         tickformat: '.1f',
       },
       margin: { t: 20, r: 20, l: 60, b: 60 },
