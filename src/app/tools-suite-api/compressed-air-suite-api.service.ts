@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CentrifugalInput, CompressorCalcResult, CompressorsCalcInput } from '../compressed-air-assessment/compressed-air-calculation.service';
-import { CompEEM_kWAdjustedInput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult } from '../shared/models/standalone';
+import { CompressedAirPressureReductionInput, CompressedAirPressureReductionResult } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 
@@ -10,31 +10,37 @@ export class CompressedAirSuiteApiService {
     private toolsSuiteApiService: ToolsSuiteApiService
   ) { }
   compressedAirPressureReduction(inputObj: CompressedAirPressureReductionInput): CompressedAirPressureReductionResult {
-    if (inputObj.compressedAirPressureReductionInputVec && inputObj.compressedAirPressureReductionInputVec.length > 0) {
-      inputObj.compressedAirPressureReductionInputVec[0].compressorPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].compressorPower);
-      inputObj.compressedAirPressureReductionInputVec[0].pressureRated = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].pressureRated);
-      inputObj.compressedAirPressureReductionInputVec[0].pressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].pressure);
-      inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure);
+    let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirPressureReductionInputV();
 
-      let input: CompEEM_kWAdjustedInput = {
-        kW_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].compressorPower,
-        P_fl_rated: inputObj.compressedAirPressureReductionInputVec[0].pressureRated,
-        P_discharge: inputObj.compressedAirPressureReductionInputVec[0].pressure,
-        P_alt: inputObj.compressedAirPressureReductionInputVec[0].atmosphericPressure,
-        P_atm: 14.7
-      }
-      let kW_adjusted: number = this.toolsSuiteApiService.ToolsSuiteModule.kWAdjusted(input.kW_fl_rated, input.P_fl_rated, input.P_discharge, input.P_alt, input.P_atm);
-      let annualEnergyUsage: number = kW_adjusted * inputObj.compressedAirPressureReductionInputVec[0].hoursPerYear;
-      let annualEnergyCost: number = annualEnergyUsage * inputObj.compressedAirPressureReductionInputVec[0].electricityCost;
-      return {
-        energyCost: annualEnergyCost,
-        energyUse: annualEnergyUsage
-      }
-    }
-    return {
-      energyCost: 0,
-      energyUse: 0
-    }
+    inputObj.compressedAirPressureReductionInputVec.forEach(item => {
+      item.compressorPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(item.compressorPower);
+      item.pressureRated = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(item.pressureRated);
+      item.pressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(item.pressure);
+      item.proposedPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(item.proposedPressure);
+      item.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(item.atmosphericPressure);
+      item.hoursPerYear = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(item.hoursPerYear);
+      item.electricityCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(item.electricityCost);
+
+      let wasmInput = {
+        isBaseline: item.isBaseline,
+        hoursPerYear: item.hoursPerYear,
+        electricityCost: item.electricityCost,
+        compressorPower: item.compressorPower,
+        pressure: item.pressure,
+        proposedPressure: item.proposedPressure,
+        atmosphericPressure: item.atmosphericPressure,
+        pressureRated: item.pressureRated
+      };
+      inputs.push_back(wasmInput);
+    });
+
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.compressedAirPressureReduction(inputs);
+    let results: CompressedAirPressureReductionResult = {
+      energyUse: output.energyUse,
+      energyCost: output.energyCost
+    };
+    inputs.delete();
+    return results;
   }
 
 
