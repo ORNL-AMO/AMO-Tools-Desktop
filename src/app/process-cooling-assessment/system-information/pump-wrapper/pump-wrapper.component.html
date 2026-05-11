@@ -1,2 +1,4 @@
 <app-water-pump pumpFormType="chilledWaterPumpInput"></app-water-pump>
-<app-water-pump pumpFormType="condenserWaterPumpInput"></app-water-pump>
+@if (!isAirCooled) {
+  <app-water-pump pumpFormType="condenserWaterPumpInput"></app-water-pump>
+}

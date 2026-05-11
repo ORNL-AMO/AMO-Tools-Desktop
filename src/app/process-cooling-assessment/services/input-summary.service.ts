@@ -405,11 +405,6 @@ export class InputSummaryService {
                     baseline: { value: chiller.age ?? null, decimalPipe: '1.1-1' },
                     modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.age ?? null, decimalPipe: '1.1-1' }))
                 },
-                {
-                    label: 'Refrigerant Type', units: '', className: 'default',
-                    baseline: { value: Refrigerants[chiller.refrigerantType] ?? '' },
-                    modifications: mods.map(m => ({ value: Refrigerants[m?.inventory?.[idx]?.refrigerantType] ?? '' }))
-                },
             ]
         }));
     }
