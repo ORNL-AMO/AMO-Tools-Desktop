@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { TwoCellResultRow } from "../../StyledMUI/ResultTables";
 import FlowDisplayUnit from "../../Diagram/FlowDisplayUnit";
-import { WaterSystemFormMapping } from "../../../validation/Validation";
+import { WaterSystemFormMapping } from "../../../validation/form-validation";
 import FlowResultDisplay from '../../Diagram/FlowResultDisplay';
 
 export const getInitialValuesFromForm = (systemFormMapping: WaterSystemFormMapping) => {

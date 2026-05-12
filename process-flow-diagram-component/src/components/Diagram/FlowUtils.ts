@@ -253,23 +253,6 @@ export const formatDataForMEASUR = (diagramData: FlowDiagramData): FlowDiagramDa
 export const getNodeSourceEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.target === nodeId);
 export const getNodeTargetEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.source === nodeId);
 
-/**
- * Retrieve user input total flow, otherwise calculated total flow
- */
-export const getNodeTotalFlow = (flowProperty: NodeFlowProperty, calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
-   const selectedNode: Node<ProcessFlowPart> = nodes.find((node: Node<ProcessFlowPart>) => node.id === nodeId);
-   if (!selectedNode) {
-     return null;
-   }
-   if (selectedNode.data.userEnteredData[flowProperty] !== undefined) {
-     return selectedNode.data.userEnteredData[flowProperty];
-   } else if (calculatedNode) {
-     return calculatedNode[flowProperty];
-   } else {
-     return null;
-   }
-}
-
 export const getFlowValueFromPercent = (flowValue: number, totalFlow: number) => {
   let flowValueConverted = (flowValue / 100) * totalFlow;
   flowValueConverted = Number(formatDecimalPlaces(flowValueConverted, MAX_FLOW_DECIMALS));

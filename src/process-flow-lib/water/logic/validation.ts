@@ -1,5 +1,16 @@
 import { Edge, Node } from "@xyflow/react";
-import { CustomEdgeData, DiagramSettings, FlowErrors, FlowType, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "../types/diagram";
+import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowErrors, FlowType, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart, WaterProcessComponentType } from "../types/diagram";
+import { getNodeEstimatedUnknownLosses } from "./results";
+import { WaterUsingSystem } from "../types/water-components";
+import { getNodeTotalFlow } from "./utils";
+
+export const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
+export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
+export const TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Total Discharge Flow must be greater than or equal to 0`;
+export const CONNECTED_FLOW_GREATER_THAN_ERROR = `Flow must be greater than 0`;
+export const CONNECTED_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Flow must be greater than or equal to 0`;
+export const ESTIMATED_UNKNOWN_LOSS_LABEL = `Estimated Unknown Loss`;
+export const SYSTEM_IMBALANCE_LABEL = `System Imbalance`;
 
 export const getIsDiagramValid = (nodeErrors: NodeErrors) => {
     return !nodeErrors || Object.keys(nodeErrors).length === 0;
@@ -107,65 +118,75 @@ export const getHasFlowError = (errors: NodeFlowTypeErrors, flowType?: FlowType)
     }
 }
 
+export const getHasUnknownLossWarning = (errors: NodeFlowTypeErrors): boolean => {
+    return errors?.unknownLoss !== undefined;
+}
 
-export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], settings: DiagramSettings): NodeErrors => {
+
+export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], settings: DiagramSettings, calculatedData: DiagramCalculatedData): NodeErrors => {
     let diagramNodeErrors: NodeErrors = {};
     nodes.forEach((nd: Node<ProcessFlowPart>) => {
-        const componentSourceEdges = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.target === nd.data.diagramNodeId);
-        const componentDischargeEdges = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.source === nd.data.diagramNodeId);
-        let flowErrors: NodeFlowTypeErrors = {
-            source: {
-                level: undefined,
-                totalFlow: undefined,
-                flows: []
-            },
-            discharge: {
-                level: undefined,
-                totalFlow: undefined,
-                flows: []
-            }
-        };
+        const { userEnteredData, diagramNodeId } = nd.data;
+        const sourceEdges = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.target === diagramNodeId) as Edge<CustomEdgeData>[];
+        const dischargeEdges = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.source === diagramNodeId) as Edge<CustomEdgeData>[];
 
+        validateFlowType(diagramNodeErrors, nd.id, 'source', sourceEdges, userEnteredData.dischargeUnaccounted, userEnteredData.totalSourceFlow, settings.flowDecimalPrecision);
+        validateFlowType(diagramNodeErrors, nd.id, 'discharge', dischargeEdges, userEnteredData.intakeUnaccounted, userEnteredData.totalDischargeFlow, settings.flowDecimalPrecision);
 
-        // * Source errors
-        const calculatedSourceFlow = componentSourceEdges.reduce((sum, e: Edge<CustomEdgeData>) => sum + (e.data?.flowValue ?? 0), 0);
-        const isTotalFlowValid = validateTotalFlowValue(componentSourceEdges, calculatedSourceFlow, nd.data.userEnteredData.dischargeUnaccounted, nd.data.userEnteredData.totalSourceFlow, settings.flowDecimalPrecision);
-        componentSourceEdges.forEach((edge: Edge<CustomEdgeData>) => {
-            const validationMessage = validateFlowValue(edge.data.flowValue);
-            if (validationMessage) {
-                flowErrors.source.flows.push(validationMessage);
-            }
-        });
-        flowErrors.source.totalFlow = !isTotalFlowValid ? 'Total source flow does not match calculated flow' : undefined;
-        flowErrors.source.level = !isTotalFlowValid ? 'error' : flowErrors.source.flows.length > 0 ? 'warning' : undefined;
-        const sourceErrorsExist: boolean = getFlowTypeErrorsExist(flowErrors.source);
-        if (sourceErrorsExist) {
-            setFlowErrors(diagramNodeErrors, nd.id, 'source', flowErrors.source);
-        } else if (diagramNodeErrors[nd.id]) {
-            removeFlowErrors(diagramNodeErrors, nd.id, 'source');
-        }
+        // * Unknown loss warning (water-using-system, water-treatment, waste-water-treatment only)
+        const unknownLossTypes: WaterProcessComponentType[] = ['water-using-system', 'water-treatment', 'waste-water-treatment'];
+        if (unknownLossTypes.includes(nd.data.processComponentType as WaterProcessComponentType)) {
+            const totalSourceFlow = getNodeTotalFlow('totalSourceFlow', nd, calculatedData.nodes[nd.id]);
+            const totalDischargeFlow = getNodeTotalFlow('totalDischargeFlow', nd, calculatedData.nodes[nd.id]);
+            const totalUnknownLoss = getNodeEstimatedUnknownLosses(nd.data as WaterUsingSystem, totalSourceFlow, totalDischargeFlow);
 
-        // * Discharge errors
-        const calculatedDischargeFlow = componentDischargeEdges.reduce((sum, e: Edge<CustomEdgeData>) => sum + (e.data?.flowValue ?? 0), 0);
-        const isTotalDischargeValid = validateTotalFlowValue(componentDischargeEdges, calculatedDischargeFlow, nd.data.userEnteredData.intakeUnaccounted, nd.data.userEnteredData.totalDischargeFlow, settings.flowDecimalPrecision);
-        componentDischargeEdges.forEach((edge: Edge<CustomEdgeData>) => {
-            const validationMessage = validateFlowValue(edge.data.flowValue);
-            if (validationMessage) {
-                flowErrors.discharge.flows.push(validationMessage);
+            if (totalUnknownLoss !== 0) {
+                if (!diagramNodeErrors[nd.id]) {
+                    diagramNodeErrors[nd.id] = {};
+                }
+                diagramNodeErrors[nd.id].unknownLoss = {
+                    message: totalUnknownLoss < 0 ? SYSTEM_IMBALANCE_LABEL : ESTIMATED_UNKNOWN_LOSS_LABEL,
+                    value: totalUnknownLoss,
+                    level: 'warning'
+                };
+            } else if (diagramNodeErrors[nd.id]?.unknownLoss) {
+                delete diagramNodeErrors[nd.id].unknownLoss;
             }
-        });
-        flowErrors.discharge.totalFlow = !isTotalDischargeValid ? 'Total discharge flow does not match calculated flow' : undefined;
-        flowErrors.discharge.level = !isTotalDischargeValid ? 'error' : flowErrors.discharge.flows.length > 0 ? 'warning' : undefined;
-        const dischargeErrorsExist: boolean = getFlowTypeErrorsExist(flowErrors.discharge);
-        if (dischargeErrorsExist) {
-            setFlowErrors(diagramNodeErrors, nd.id, 'discharge', flowErrors.discharge);
-        } else if (diagramNodeErrors[nd.id]) {
-            removeFlowErrors(diagramNodeErrors, nd.id, 'discharge');
         }
     });
 
     console.log('diagramNodeErrors', diagramNodeErrors);
     return diagramNodeErrors;
+}
+
+const validateFlowType = (
+    diagramNodeErrors: NodeErrors,
+    nodeId: string,
+    flowType: FlowType,
+    edges: Edge<CustomEdgeData>[],
+    unaccountedFlow: number,
+    userEnteredTotalFlow: number,
+    precision: number
+) => {
+    const flowErrors: FlowErrors = { level: undefined, totalFlow: undefined, flows: [] };
+    const calculatedFlow = edges.reduce((sum, e: Edge<CustomEdgeData>) => sum + (e.data?.flowValue ?? 0), 0);
+    const isTotalValid = validateTotalFlowValue(edges, calculatedFlow, unaccountedFlow, userEnteredTotalFlow, precision);
+
+    edges.forEach((edge: Edge<CustomEdgeData>) => {
+        const validationMessage = validateFlowValue(edge.data.flowValue);
+        if (validationMessage) {
+            flowErrors.flows.push(validationMessage);
+        }
+    });
+
+    flowErrors.totalFlow = !isTotalValid ? `Total ${flowType} flow does not match calculated flow` : undefined;
+    flowErrors.level = !isTotalValid ? 'error' : flowErrors.flows.length > 0 ? 'warning' : undefined;
+
+    if (getFlowTypeErrorsExist(flowErrors)) {
+        setFlowErrors(diagramNodeErrors, nodeId, flowType, flowErrors);
+    } else if (diagramNodeErrors[nodeId]) {
+        removeFlowErrors(diagramNodeErrors, nodeId, flowType);
+    }
 }
 
 

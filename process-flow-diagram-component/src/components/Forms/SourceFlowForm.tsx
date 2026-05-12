@@ -12,7 +12,7 @@ import { distributeTotalSourceFlow, sourceFlowValueChange, totalFlowChange, node
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectCalculatedNodeData, selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
-import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
+import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/form-validation";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";

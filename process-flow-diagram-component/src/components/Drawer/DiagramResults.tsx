@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { Box } from '@mui/material';
-import { checkDiagramNodeErrors, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, getComponentTypeTotalCost, getHeatEnergyCost, getInSystemTreatmentCost, getIsDiagramValid, getMotorEnergyCost, getNodeTotalInflow, getNodeTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
+import { checkDiagramNodeErrors, CustomEdgeData, DiagramCalculatedData, DiagramSettings, DischargeOutlet, ESTIMATED_UNKNOWN_LOSS_LABEL, getComponentTypeTotalCost, getHeatEnergyCost, getInSystemTreatmentCost, getIsDiagramValid, getMotorEnergyCost, getNodeTotalInflow, getNodeTotalOutflow, getWaterBalanceResults, getWaterTrueCost, HeatEnergy, IntakeSource, MotorEnergy, NodeErrors, ProcessFlowPart, setWaterUsingSystemFlows, WaterBalanceResults, WaterUsingSystem } from 'process-flow-lib';
 import { selectDischargeOutletNodes, selectEdges, selectIntakeSourceNodes, selectNodes, selectNodesAsWaterUsingSystems, selectWasteTreatmentNodes, selectWaterTreatmentNodes } from '../Diagram/store';
 import { useAppSelector } from '../../hooks/state';
 import { Node, Edge } from '@xyflow/react';
@@ -22,11 +22,7 @@ const DiagramResults = () => {
   const calculatedData: DiagramCalculatedData = useAppSelector((state) => state.diagram.calculatedData);
   
   const validationErrors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
-  const nodeErrors: NodeErrors = checkDiagramNodeErrors(nodes, edges, settings);
-  // console.log('NEWnodeErrors', nodeErrors);
-  // console.log('OLDnodeErrors', validationErrors);
   const isDiagramValid = getIsDiagramValid(validationErrors);
-  // console.log(isDiagramValid);
 
   setWaterUsingSystemFlows(waterUsingSystems, edges);
   const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems, calculatedData);
@@ -134,7 +130,7 @@ const DiagramResults = () => {
   const totalFacilityDischargeFormatted = formatDecimalPlaces(totalFacilityDischarge, settings.flowDecimalPrecision);
   dischargeRows.push(
     { label: 'Total Known Loss (water users)', result: totalKnownLossesFormatted, unit: <FlowDisplayUnit /> },
-    { label: 'Estimated Unknown Loss (water users)', result: estimatedUnknownLossesFormatted, unit: <FlowDisplayUnit /> },
+    { label: `${ESTIMATED_UNKNOWN_LOSS_LABEL} (water users)`, result: estimatedUnknownLossesFormatted, unit: <FlowDisplayUnit /> },
     { label: 'Total Discharge', result: totalFacilityDischargeFormatted, unit: <FlowDisplayUnit /> },
   )
   

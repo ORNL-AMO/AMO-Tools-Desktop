@@ -4,7 +4,7 @@ import { TextField, FormControl, InputAdornment, FormHelperText, Box } from '@mu
 import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
 import { EstimateSystemContext, EstimateSystemState, WaterAssessmentModuleConsumer } from './EstimateWaterSystem';
-import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
+import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/form-validation';
 import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
 import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
 import { KitchenRestroomResults, KitchenRestroom, calculateKitchenRestroomResults, convertAnnualFlowResult } from 'process-flow-lib';

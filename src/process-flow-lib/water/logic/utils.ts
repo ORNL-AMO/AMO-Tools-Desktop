@@ -1,6 +1,6 @@
 import { Node, Edge } from "@xyflow/react";
 import { FlowMetric } from "../constants";
-import { CustomEdgeData, DiagramCalculatedData, NodeFlowData, ProcessFlowPart } from "../types/diagram";
+import { CustomEdgeData, DiagramCalculatedData, NodeFlowData, NodeFlowProperty, ProcessFlowPart } from "../types/diagram";
 import { KnownLoss } from "../types/water-components";
 
 
@@ -117,3 +117,19 @@ export const convertAnnualFlow = (flowInput: number, metric: number, hoursPerYea
 export const getIsKnownLossFlow = (targetId: string, knownLosses: KnownLoss[]) => {
   return knownLosses.some((knownLoss: KnownLoss) => knownLoss.diagramNodeId === targetId);
 } 
+
+/**
+ * Retrieve user input total flow, otherwise calculated total flow
+ */
+export const getNodeTotalFlow = (flowProperty: NodeFlowProperty, selectedNode: Node<ProcessFlowPart>, calculatedNode: NodeFlowData) => {
+   if (!selectedNode) {
+     return null;
+   }
+   if (selectedNode.data.userEnteredData[flowProperty] !== undefined) {
+     return selectedNode.data.userEnteredData[flowProperty];
+   } else if (calculatedNode) {
+     return calculatedNode[flowProperty];
+   } else {
+     return null;
+   }
+}

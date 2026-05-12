@@ -1,12 +1,6 @@
 import { Edge } from "@xyflow/react";
-import { DiagramSettings, validateKnownLosses, validateTotalFlowValue } from "process-flow-lib";
+import { CONNECTED_FLOW_GREATER_THAN_ERROR, CONNECTED_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR, DiagramSettings, TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR, TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR, TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR, validateKnownLosses, validateTotalFlowValue } from "process-flow-lib";
 import * as Yup from 'yup';
-
-const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
-const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
-const TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Total Discharge Flow must be greater than or equal to 0`;
-const CONNECTED_FLOW_GREATER_THAN_ERROR = `Flow must be greater than 0`;
-const CONNECTED_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Flow must be greater than or equal to 0`;
 
 const getSystemNumberFieldValidation = (fieldLabel: string) => Yup.number()
     .nullable()
@@ -125,7 +119,7 @@ export const getDefaultFlowValidationSchema = (
         .nullable()
         .test(
             'flow-min',
-            'Flow must be greater than 0',
+            CONNECTED_FLOW_GREATER_THAN_ERROR,
             function (value) {
                 const { path, createError } = this;
                 return getConnectedFlowMinError(value, path, createError);

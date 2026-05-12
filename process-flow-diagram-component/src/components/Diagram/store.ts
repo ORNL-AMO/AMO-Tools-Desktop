@@ -1,8 +1,8 @@
 import { configureStore, createListenerMiddleware, createSelector, isAnyOf } from '@reduxjs/toolkit'
 import diagramReducer, { addNode, saveDiagramState } from './diagramReducer'
 import { Edge, getConnectedEdges, Node } from '@xyflow/react';
-import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
-import { createGraphIndex, CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
+import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges } from './FlowUtils';
+import { createGraphIndex, CustomEdgeData, DiagramCalculatedData, getNodeTotalFlow, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
 
 
 export function configureAppStore(waterDiagram: WaterDiagram) {
@@ -142,12 +142,14 @@ export const selectCalculatedNodeData = createSelector([selectCalculatedData, se
 });
 
 export const selectTotalSourceFlow = createSelector([selectCalculatedNodeData, selectNodes, selectNodeId], (calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
-  const nodeTotalFlow = getNodeTotalFlow('totalSourceFlow', calculatedNode, nodes, nodeId);
+  const selectedNode: Node<ProcessFlowPart> = nodes.find((node: Node<ProcessFlowPart>) => node.id === nodeId);
+  const nodeTotalFlow = getNodeTotalFlow('totalSourceFlow', selectedNode, calculatedNode);
   return nodeTotalFlow;
 });
 
 export const selectTotalDischargeFlow = createSelector([selectCalculatedNodeData, selectNodes, selectNodeId], (calculatedNode: NodeFlowData, nodes: Node<ProcessFlowPart>[], nodeId?: string) => {
-  let nodeTotalFlow = getNodeTotalFlow('totalDischargeFlow', calculatedNode, nodes, nodeId);
+  const selectedNode: Node<ProcessFlowPart> = nodes.find((node: Node<ProcessFlowPart>) => node.id === nodeId);
+  let nodeTotalFlow = getNodeTotalFlow('totalDischargeFlow', selectedNode, calculatedNode);
   return nodeTotalFlow;
 });
 

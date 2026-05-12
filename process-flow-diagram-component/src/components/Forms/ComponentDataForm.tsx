@@ -15,7 +15,7 @@ import InvalidIcon from "../../validation/InvalidIcon";
 import SelectTreatmentType from "./SelectTreatmentType";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import CalculateIcon from '@mui/icons-material/Calculate';
-import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterTreatment, wasteWaterTreatmentTypeOptions, CustomEdgeData, waterUsingSystemTypeOptions, WaterUsingSystem, getNodeEstimatedUnknownLosses, hasValidSourceForm, hasValidDischargeForm } from "process-flow-lib";
+import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterTreatment, wasteWaterTreatmentTypeOptions, CustomEdgeData, waterUsingSystemTypeOptions, WaterUsingSystem, getNodeEstimatedUnknownLosses, hasValidSourceForm, hasValidDischargeForm, ESTIMATED_UNKNOWN_LOSS_LABEL, SYSTEM_IMBALANCE_LABEL } from "process-flow-lib";
 import InputField from "../StyledMUI/InputField";
 
 
@@ -55,6 +55,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
     let defaultSelectedTreatmentType: number = 0;
     let treatmentTypeOptions: Array<{ value: number, display: string }> = [];
 
+    debugger;
     if (isWaterTreatment) {
         componentData = componentData as WaterTreatment;
         defaultSelectedTreatmentType = componentData.treatmentType !== undefined ? Number(componentData.treatmentType) : 0;
@@ -101,7 +102,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         <>
             {isWaterUsingSystem && totalUnknownLoss > 0 &&
                 <Alert severity="warning" sx={{ marginBottom: '1rem', width: '100%' }}>
-                    <span>System Imbalance: </span>
+                    <span>{SYSTEM_IMBALANCE_LABEL}: </span>
                     <span>{totalUnknownLoss}</span>
                     <FlowDisplayUnit />
                 </Alert>
@@ -256,7 +257,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                         />
                     </AccordionSummary>
                     <AccordionDetails sx={{padding: '16px 0;'}}>
-                        {(isWaterUsingSystem || isWaterTreatment || isWasteWaterTreatment) && totalSourceFlow > totalDischargeFlow && totalUnknownLoss !== 0 &&
+                         {(isWaterUsingSystem || isWaterTreatment || isWasteWaterTreatment) && totalSourceFlow > totalDischargeFlow && totalUnknownLoss !== 0 &&
                             <Alert severity="warning" sx={{ marginBottom: '1rem', width: '100%' }}>
                                 <span>Estimated Unknown Loss: </span>
                                 <span>{Math.abs(totalUnknownLoss)}</span>

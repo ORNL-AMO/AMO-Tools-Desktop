@@ -125,7 +125,7 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.settings = diagramData.settings ? { ...diagramData.settings } : getDefaultSettings();
   state.calculatedData = diagramData.calculatedData ? { ...diagramData.calculatedData } : { nodes: {} };
   
-  const nodeErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
+  const nodeErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings, state.calculatedData);
   state.nodeErrors = nodeErrors;
 
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();

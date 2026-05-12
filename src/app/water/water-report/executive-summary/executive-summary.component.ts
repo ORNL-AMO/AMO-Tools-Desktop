@@ -43,11 +43,6 @@ export class ExecutiveSummaryComponent {
 
   ngOnInit(): void {
     let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
-    // let nodeErrors: NodeErrors = checkDiagramNodeErrors(
-    //   diagram.waterDiagram.flowDiagramData.nodes,
-    //   diagram.waterDiagram.flowDiagramData.edges,
-    //   diagram.waterDiagram.flowDiagramData.calculatedData,
-    //   diagram.waterDiagram.flowDiagramData.settings);
     let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
     this.isDiagramValid = getIsDiagramValid(nodeErrors);
     if (this.isDiagramValid) {

@@ -118,13 +118,20 @@ export interface ProcessFlowPart extends Record<string, unknown> {
   
   export type NodeFlowTypeErrors = {
     source?: FlowErrors,
-    discharge?: FlowErrors
+    discharge?: FlowErrors,
+    unknownLoss?: UnknownLossWarning
   }
-  
-  export type FlowErrors = { 
-    totalFlow?: string | number; 
-    flows?: (string | number)[], 
-    level: ValidationLevel, 
+
+  export type UnknownLossWarning = {
+    message: string;
+    value: number;
+    level: 'warning';
+  }
+
+  export type FlowErrors = {
+    totalFlow?: string | number;
+    flows?: (string | number)[],
+    level: ValidationLevel,
   }
   export type ValidationLevel = 'error' | 'warning'
   export type FlowType = 'source' | 'discharge';

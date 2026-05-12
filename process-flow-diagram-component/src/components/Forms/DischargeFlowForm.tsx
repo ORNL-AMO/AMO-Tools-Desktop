@@ -11,7 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectCurrentNode, selectNodes, selectNodeTargetEdges, selectTotalDischargeFlow } from "../Diagram/store";
-import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
+import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/form-validation";
 import { FieldArray, Form, Formik, useFormikContext } from "formik";
 import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";

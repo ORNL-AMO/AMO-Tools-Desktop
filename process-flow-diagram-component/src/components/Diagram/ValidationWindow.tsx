@@ -8,7 +8,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { memo, useState } from "react";
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
-import { getHasErrorLevel, getHasFlowError, getHasTotalFlowError, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "process-flow-lib";
+import { getHasErrorLevel, getHasFlowError, getHasTotalFlowError, getHasUnknownLossWarning, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "process-flow-lib";
 
 const ValidationWindow = (props: ValidationWindowProps) => {
   const dispatch = useAppDispatch();
@@ -93,9 +93,10 @@ const ValidationWindow = (props: ValidationWindowProps) => {
                       const name = node.data.name || "Unnamed Component";
                       const hasTotalFlowError = getHasTotalFlowError(errors);
                       const hasFlowError = getHasFlowError(errors);
+                      const hasUnknownLoss = getHasUnknownLossWarning(errors);
                       const currentAlertLevel = hasTotalFlowError ? 'error' : 'warning';
-                      
-                      if (hasTotalFlowError || hasFlowError) {
+
+                      if (hasTotalFlowError || hasFlowError || hasUnknownLoss) {
                         return (
                           <Alert severity={currentAlertLevel}
                             key={key}
@@ -117,7 +118,6 @@ const ValidationWindow = (props: ValidationWindowProps) => {
                             <Typography variant="body2" fontWeight="bold" sx={{ color: `${currentAlertLevel}.dark`, fontSize: '.75rem' }}>
                               {/* // todo truncate */}
                               <span>{name}</span>
-
                             </Typography>
                           </Alert>
                         )

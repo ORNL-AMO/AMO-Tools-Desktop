@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/state';
 import { RootState } from '../../Diagram/store';
 import { EstimateSystemContext, EstimateSystemState, WaterAssessmentModuleConsumer } from './EstimateWaterSystem';
 import HoursPerYearInputField from './HoursPerYearInputField';
-import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
+import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/form-validation';
 import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
 import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
 import { CoolingTowerResults, CoolingTower, calculateCoolingTowerResults, convertAnnualFlowResult } from 'process-flow-lib';
