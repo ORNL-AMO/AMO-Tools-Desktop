@@ -8,13 +8,18 @@ li a {
     padding: 12px;
 }
 
+.report-page {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 .report-container {
     height: 100%; 
     display: flex; 
     flex-direction: column; 
     overflow: hidden;
 }
-
 
 /* Screens above  1024 */
 .assessment-container {
@@ -32,6 +37,7 @@ li a {
     flex: 1 1 auto;
     min-height: 0;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* Screens below 1024 */
