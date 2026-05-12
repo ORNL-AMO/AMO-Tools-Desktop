@@ -767,6 +767,13 @@ const applySystemIntakeCosts = (
 
         if (currentNode.data.processComponentType === 'water-using-system') {
           let pathToSystem: string[] = [...path].slice(0, path.indexOf(edgeId) + 1);
+          // const pathToSystemNames: string[] = pathToSystem.map((edgeId: string) => {
+          //   const edge = graph.edgeMap[edgeId];
+          //   return getEdgeDescription(edge, undefined, {
+          //     source: debuggingNameMap[edge.source],
+          //     target: debuggingNameMap[edge.target]
+          //   });
+          // });
 
           // * we should not attribute costs if the edges in the path from the starting edge to the current system exist in attributed paths
           const isPathAttributed = pathsAttributed.find((attributedPath: string[]) => {
@@ -816,7 +823,9 @@ const applySystemIntakeCosts = (
             // * cost component has losses from intermediate treatment node 
             // * attribute cost by outflow share of total outflow, but use total cost component inflow for cost basis
             systemFlowResponsibility = systemInflow;
-            systemAttributionFraction = systemInflow / totalTreatmentOutflow;
+
+            // * attribute based on the percentage of total intake it is receiving
+            systemAttributionFraction = systemInflow / intakeData.blockCosts.totalFlow;
             costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
           } else {
             // * no losses from intermediate treatment node - attribute cost based on path inflow received
@@ -1466,6 +1475,8 @@ export const getPlantSummaryResults = (
       nodeNameMap[node.id] = node.data.name;
     }
   });
+
+  console.log(nodeNameMap);
 
   const trueCostOfSystems: TrueCostOfSystems = {};
   const systemAnnualSummaryResultsMap: Record<string, SystemAnnualSummaryResults> = {};
