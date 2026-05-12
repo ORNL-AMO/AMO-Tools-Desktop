@@ -93,17 +93,6 @@ export interface TrueCostOfSystemTableProps extends React.HTMLAttributes<TableCo
 }
 
 
-// const headerCells = [
-//   'Water Intake',
-//   'Wastewater Disposal',
-//   'Third Party Disposal',
-//   'Water Treatment',
-//   'Wastewater Treatment ',
-//   'Pump and Motor Energy',
-//   'Heat Energy in Wastewater',
-//   'Total',
-// ];
-
 const headerCells = [
   'Intake',
   'Disposal',
@@ -111,7 +100,7 @@ const headerCells = [
   'Treatment',
   'Waste Treatment',
   'Motor Energy',
-  'Heat Energy ',
+  'Heat Energy',
   'Total',
 ];
 
@@ -135,8 +124,7 @@ export const TrueCostOfSystemResultTable = (props: TrueCostOfSystemTableProps) =
   sortTrueCostReport(systemCosts);
 
   return (
-    <TableContainer component={Paper} sx={{ ...props.style }}>
-      <p style={{color: 'red', fontWeight: 'bold'}}>TABLE IS NOT USER-FACING. DEVELOPMENT ONLY. (* DOES NOT REFLECT ADJUSTED ATTRIBUTION)</p>
+    <TableContainer component={Paper} sx={{ overflow: 'auto', ...props.style }}>
       <Table sx={{ minWidth: 300 }} size="small" aria-label="customized table">
         <TableHead>
           <StyledHeadTableRow>
