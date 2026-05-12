@@ -1,6 +1,5 @@
 import { Edge, Node } from "@xyflow/react";
-import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, FlowErrors, FlowType, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "../types/diagram";
-import { getNodeTotalOutflow, getNodeTotalInflow } from "./results";
+import { CustomEdgeData, DiagramSettings, FlowErrors, FlowType, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "../types/diagram";
 
 export const getIsDiagramValid = (nodeErrors: NodeErrors) => {
     return !nodeErrors || Object.keys(nodeErrors).length === 0;
@@ -109,9 +108,8 @@ export const getHasFlowError = (errors: NodeFlowTypeErrors, flowType?: FlowType)
 }
 
 
-export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], calculatedData: DiagramCalculatedData, settings: DiagramSettings): NodeErrors => {
+export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], settings: DiagramSettings): NodeErrors => {
     let diagramNodeErrors: NodeErrors = {};
-    console.time('checkDiagramNodeErrors');
     nodes.forEach((nd: Node<ProcessFlowPart>) => {
         const componentSourceEdges = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.target === nd.data.diagramNodeId);
         const componentDischargeEdges = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.source === nd.data.diagramNodeId);
@@ -128,14 +126,18 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], calculat
             }
         };
 
+
         // * Source errors
-        const totalSourceFlow = getNodeTotalInflow(nd.data, calculatedData);
-        const isTotalFlowValid = validateTotalFlowValue(componentSourceEdges, totalSourceFlow, nd.data.userEnteredData.dischargeUnaccounted, nd.data.userEnteredData.totalSourceFlow, settings.flowDecimalPrecision);
-        componentSourceEdges.map((edge: Edge<CustomEdgeData>) => {
+        const calculatedSourceFlow = componentSourceEdges.reduce((sum, e: Edge<CustomEdgeData>) => sum + (e.data?.flowValue ?? 0), 0);
+        const isTotalFlowValid = validateTotalFlowValue(componentSourceEdges, calculatedSourceFlow, nd.data.userEnteredData.dischargeUnaccounted, nd.data.userEnteredData.totalSourceFlow, settings.flowDecimalPrecision);
+        componentSourceEdges.forEach((edge: Edge<CustomEdgeData>) => {
             const validationMessage = validateFlowValue(edge.data.flowValue);
-            flowErrors.source.flows.push(validationMessage);
+            if (validationMessage) {
+                flowErrors.source.flows.push(validationMessage);
+            }
         });
-        flowErrors.source.level = !isTotalFlowValid ? 'error' : flowErrors.source.flows?.length > 0 ? 'warning' : undefined;
+        flowErrors.source.totalFlow = !isTotalFlowValid ? 'Total source flow does not match calculated flow' : undefined;
+        flowErrors.source.level = !isTotalFlowValid ? 'error' : flowErrors.source.flows.length > 0 ? 'warning' : undefined;
         const sourceErrorsExist: boolean = getFlowTypeErrorsExist(flowErrors.source);
         if (sourceErrorsExist) {
             setFlowErrors(diagramNodeErrors, nd.id, 'source', flowErrors.source);
@@ -144,13 +146,16 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], calculat
         }
 
         // * Discharge errors
-        const totalDischargeFlow = getNodeTotalOutflow(nd.data, calculatedData);
-        const isTotalDischargeValid = validateTotalFlowValue(componentDischargeEdges, totalDischargeFlow, nd.data.userEnteredData.intakeUnaccounted, nd.data.userEnteredData.totalDischargeFlow, settings.flowDecimalPrecision);
-        componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => {
+        const calculatedDischargeFlow = componentDischargeEdges.reduce((sum, e: Edge<CustomEdgeData>) => sum + (e.data?.flowValue ?? 0), 0);
+        const isTotalDischargeValid = validateTotalFlowValue(componentDischargeEdges, calculatedDischargeFlow, nd.data.userEnteredData.intakeUnaccounted, nd.data.userEnteredData.totalDischargeFlow, settings.flowDecimalPrecision);
+        componentDischargeEdges.forEach((edge: Edge<CustomEdgeData>) => {
             const validationMessage = validateFlowValue(edge.data.flowValue);
-            flowErrors.discharge.flows.push(validationMessage);
+            if (validationMessage) {
+                flowErrors.discharge.flows.push(validationMessage);
+            }
         });
-        flowErrors.discharge.level = !isTotalDischargeValid ? 'error' : flowErrors.discharge.flows?.length > 0 ? 'warning' : undefined;
+        flowErrors.discharge.totalFlow = !isTotalDischargeValid ? 'Total discharge flow does not match calculated flow' : undefined;
+        flowErrors.discharge.level = !isTotalDischargeValid ? 'error' : flowErrors.discharge.flows.length > 0 ? 'warning' : undefined;
         const dischargeErrorsExist: boolean = getFlowTypeErrorsExist(flowErrors.discharge);
         if (dischargeErrorsExist) {
             setFlowErrors(diagramNodeErrors, nd.id, 'discharge', flowErrors.discharge);
@@ -159,7 +164,7 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], calculat
         }
     });
 
-    // console.timeEnd('checkDiagramNodeErrors');
+    console.log('diagramNodeErrors', diagramNodeErrors);
     return diagramNodeErrors;
 }
 
