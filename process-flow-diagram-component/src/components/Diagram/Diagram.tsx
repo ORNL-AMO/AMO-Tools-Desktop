@@ -73,6 +73,7 @@ const Diagram = (props: DiagramProps) => {
   const isMenuDrawerOpen = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
 
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
+  console.log('nodeErrors', nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
 
   const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
