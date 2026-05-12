@@ -22,7 +22,7 @@ const DiagramResults = () => {
   const calculatedData: DiagramCalculatedData = useAppSelector((state) => state.diagram.calculatedData);
   
   const validationErrors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
-  const nodeErrors: NodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
+  const nodeErrors: NodeErrors = checkDiagramNodeErrors(nodes, edges, settings);
   // console.log('NEWnodeErrors', nodeErrors);
   // console.log('OLDnodeErrors', validationErrors);
   const isDiagramValid = getIsDiagramValid(validationErrors);
