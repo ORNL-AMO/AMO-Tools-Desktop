@@ -873,13 +873,14 @@ const applySystemIntakeCosts = (
             );
 
             trueCostOfSystems[currentNode.id].intake += costToSystem;
-            systemAnnualSummaryResultsMap[currentNode.id].sourceWaterIntake += systemInflow;
-
+            
             const intakeNode = graph.nodeMap[intakeId];
             const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(intakeNode.data as IntakeSource, settings.electricityCost, settings.unitsOfMeasure);
             const energyCost = pumpAndMotorEnergyCost * systemAttributionFraction;
             trueCostOfSystems[currentNode.id].systemPumpAndMotorEnergy += energyCost;
           }
+          
+          systemAnnualSummaryResultsMap[currentNode.id].sourceWaterIntake += systemInflow;
 
           // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
           visitedSystemIds.push(currentNode.id);
