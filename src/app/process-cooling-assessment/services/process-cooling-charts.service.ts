@@ -28,6 +28,11 @@ export class ProcessCoolingChartsService {
         hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`,
       }});
 
+    const maxEfficiency = Math.max(...chillerOutput.flatMap(c => c.ariEfficiencyProfile.slice(1)));
+    const tickStep = maxEfficiency <= 1.2 ? 0.2 : Math.ceil((maxEfficiency / 6) / 0.2) * 0.2;
+    const yMax = Math.ceil(maxEfficiency / tickStep) * tickStep;
+    const tickvals = Array.from({ length: Math.round(yMax / tickStep) + 1 }, (_, i) => parseFloat((i * tickStep).toFixed(1))).slice(0, 7);
+
     const layout = {
       xaxis: {
         title: { text: '% Load', font: { size: 16 } },
@@ -41,8 +46,8 @@ export class ProcessCoolingChartsService {
         rangemode: 'tozero',
         hoverformat: '.2f',
         automargin: true,
-        range: [0, 1.2],
-        tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
+        range: [0, yMax],
+        tickvals,
         tickformat: '.1f',
       },
       margin: { t: 20, r: 20, l: 60, b: 60 },
