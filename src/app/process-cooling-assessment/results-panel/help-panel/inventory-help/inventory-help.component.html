@@ -29,6 +29,70 @@
         </h6>
     </div>
 
+    <div class="my-2" *ngIf="focusedField() == 'chillerType'">
+        <h6>
+            Chiller Type
+            <br>
+            <small class="text-muted">
+                In the mechanical vapor compression cycle, a compressor
+                increases the energy of the refrigerant by increasing the pressure and temperature of the saturated
+                vapor. The tool supports three compressor types, namely “Centrifugal”,
+                “Reciprocating”, and “Helical Rotary”. It also supports user defined chiller with custom
+                performance curve.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+    <div class="my-2" *ngIf="(focusedField() == 'isFullLoadEfficiencyKnown') || focusedField() == 'fullLoadEfficiency'">
+        <h6>
+            {{ focusedField() == 'isFullLoadEfficiencyKnown' ? 'Is Full Load Efficiency Known?' : 'Full Load Efficiency' }}
+            <br>
+            <small class="text-muted">
+                The analysis of chiller performance is dependent on knowledge of
+                the rated efficiency of the chiller. If the rated efficiency of a specific chiller is known, a
+                performance curve can be adapted to this value to predict part load performance. If the full load
+                efficiency is not known, a database value for a generic chiller of equivalent size must be used.
+                This generic value may or may not accurately predict the energy consumption of your chiller.
+                Therefore, it is recommended that the full load efficiency is determined whenever possible. This
+                will improve the accuracy of the analysis results. If the full load efficiency is known select “Yes”
+                from the pull-down menu. Otherwise, select “No”.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
+    <div class="my-2" *ngIf="focusedField() == 'capacity'">
+        <h6>
+            Capacity
+            <br>
+            <small class="text-muted">
+                Typical values range from 0.6 to 1.0 kW/ton
+                for water-cooled chillers and 1.0 to 1.4 kW/ton for air-cooled chillers. The allowable range is 0.02 to 3, selectable in increments of .01.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+        <div class="my-2" *ngIf="focusedField() == 'age'">
+        <h6>
+            Age
+            <br>
+            <small class="text-muted">
+                The age of a chiller has been shown to affect its performance due to tube fouling.
+                This fouling inhibits heat transfer, and thus reduces the overall efficiency of the chiller. 
+                
+                <br><br>The allowable range is 0 to 20. If the chiller has been
+                rebuilt or the tubes are cleaned as part of general maintenance, record the age of the chiller as the
+                time since the last tube cleaning. The program assumes that chiller efficiency is degraded by 1%
+                / year.
+                <hr>
+            </small>
+        </h6>
+    </div>
+
+
 
 
 </div>
