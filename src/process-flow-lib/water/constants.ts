@@ -170,11 +170,11 @@ export const CustomNodeStyleMap: Record<WaterProcessComponentType, CSSProperties
   },
   'waste-water-treatment': {
     backgroundColor: '#93e200',
-    color: "#000"
+    color: "#000000"
   },
   'known-loss': {
-    backgroundColor: '#fff',
-    color: "#000"
+    backgroundColor: '#ffffff',
+    color: "#000000"
   }
 };
 

@@ -10,6 +10,7 @@ import { PsatService } from '../../../psat/psat.service';
 @Injectable()
 export class MotorCatalogService {
 
+  showMotorProperties: BehaviorSubject<boolean>;
   selectedDepartmentId: BehaviorSubject<string>;
   selectedMotorItem: BehaviorSubject<MotorItem>;
   filterMotorOptions: BehaviorSubject<FilterMotorOptions>;
@@ -17,6 +18,7 @@ export class MotorCatalogService {
     this.selectedDepartmentId = new BehaviorSubject<string>(undefined);
     this.selectedMotorItem = new BehaviorSubject<MotorItem>(undefined);
     this.filterMotorOptions = new BehaviorSubject<FilterMotorOptions>(undefined);
+    this.showMotorProperties = new BehaviorSubject<boolean>(false);
   }
 
   //forms update motorInventoryData, 

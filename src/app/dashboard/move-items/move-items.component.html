@@ -30,6 +30,11 @@
                         {{inventory.name}} <br>
                     </span>
                 </div>
+                <div *ngFor="let diagram of directory.diagrams">
+                    <span *ngIf="diagram.selected">
+                        {{diagram.name}} <br>
+                    </span>
+                </div>
                 <form [formGroup]="moveForm" *ngIf="!showNewFolder">
                     <div class="form-group" *ngIf="allDirectories">
                         <label>Move Item(s) to Different Location</label>

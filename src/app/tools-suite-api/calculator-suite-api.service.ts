@@ -34,46 +34,45 @@ export class CalculatorSuiteApiService {
       electricityReduction.powerMeterData.power = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.powerMeterData.power);
       electricityReduction.otherMethodData.energy = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.otherMethodData.energy);
 
-      let MultimeterData = new this.toolsSuiteApiService.ToolsSuiteModule.MultimeterData(
-        electricityReduction.multimeterData.numberOfPhases,
-        electricityReduction.multimeterData.supplyVoltage,
-        electricityReduction.multimeterData.averageCurrent,
-        electricityReduction.multimeterData.powerFactor
-      );
-      let NameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.NameplateData(electricityReduction.nameplateData.ratedMotorPower, electricityReduction.nameplateData.variableSpeedMotor,
-        electricityReduction.nameplateData.operationalFrequency, electricityReduction.nameplateData.lineFrequency, electricityReduction.nameplateData.motorAndDriveEfficiency, electricityReduction.nameplateData.loadFactor);
-      let PowerMeterData = new this.toolsSuiteApiService.ToolsSuiteModule.PowerMeterData(electricityReduction.powerMeterData.power);
-      let OtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.OtherMethodData(electricityReduction.otherMethodData.energy);
+      const measurementMethod = this.suiteApiHelperService.getElectricityReductionMeasurementMethodEnum(electricityReduction.measurementMethod);
 
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReductionInput(
-        electricityReduction.operatingHours,
-        electricityReduction.electricityCost,
-        electricityReduction.measurementMethod,
-        MultimeterData,
-        NameplateData,
-        PowerMeterData,
-        OtherMethodData,
-        electricityReduction.units
-      );
+
+      let wasmConvertedInput = {
+        operatingHours: electricityReduction.operatingHours,
+        electricityCost: electricityReduction.electricityCost,
+        measurementMethod: measurementMethod,
+        multimeterData: {
+          numberOfPhases: electricityReduction.multimeterData.numberOfPhases,
+          supplyVoltage: electricityReduction.multimeterData.supplyVoltage,
+          averageCurrent: electricityReduction.multimeterData.averageCurrent,
+          powerFactor: electricityReduction.multimeterData.powerFactor
+        },
+        nameplateData: {
+          ratedMotorPower: electricityReduction.nameplateData.ratedMotorPower,
+          variableSpeedMotor: electricityReduction.nameplateData.variableSpeedMotor,
+          operationalFrequency: electricityReduction.nameplateData.operationalFrequency,
+          lineFrequency: electricityReduction.nameplateData.lineFrequency,
+          motorAndDriveEfficiency: electricityReduction.nameplateData.motorAndDriveEfficiency,
+          loadFactor: electricityReduction.nameplateData.loadFactor
+        },
+        powerMeterData: {
+          power: electricityReduction.powerMeterData.power
+        },
+        otherMethodData: {
+          energy: electricityReduction.otherMethodData.energy
+        },
+        units: electricityReduction.units
+      };
 
       inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      MultimeterData.delete();
-      NameplateData.delete();
-      PowerMeterData.delete();
-      OtherMethodData.delete();
     });
 
-    let ElectricityReductionCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReduction(inputs);
-    let output = ElectricityReductionCalculator.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.electricityReduction(inputs);
     let results: ElectricityReductionResult = {
       energyUse: output.energyUse,
       energyCost: output.energyCost,
       power: output.power
     }
-    output.delete();
-    ElectricityReductionCalculator.delete();
     inputs.delete();
     return results;
   }
@@ -82,7 +81,6 @@ export class CalculatorSuiteApiService {
     let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasReductionInputV();
 
     inputObj.naturalGasReductionInputVec.forEach(naturalGasReduction => {
-      // TODO calc only get results if valid
       naturalGasReduction.operatingHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.operatingHours);
       naturalGasReduction.units = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.units);
       naturalGasReduction.fuelCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.fuelCost);
@@ -102,46 +100,49 @@ export class CalculatorSuiteApiService {
       naturalGasReduction.waterMassFlowData.systemEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.systemEfficiency);
       naturalGasReduction.waterMassFlowData.waterFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.waterFlow);
 
-      let FlowMeterMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.FlowMeterMethodData(naturalGasReduction.flowMeterMethodData.flowRate);
-      let NaturalGasOtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasOtherMethodData(naturalGasReduction.otherMethodData.consumption);
-      let AirMassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.AirMassFlowMeasuredData(naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.areaOfDuct,
-        naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.airVelocity);
-      let AirMassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.AirMassFlowNameplateData(naturalGasReduction.airMassFlowData.airMassFlowNameplateData.airFlow);
-      let AirMassFlowData = new this.toolsSuiteApiService.ToolsSuiteModule.AirMassFlowData(naturalGasReduction.airMassFlowData.isNameplate, AirMassFlowMeasuredData, AirMassFlowNameplateData,
-        naturalGasReduction.airMassFlowData.inletTemperature, naturalGasReduction.airMassFlowData.outletTemperature, naturalGasReduction.airMassFlowData.systemEfficiency);
-      let WaterMassFlowData = new this.toolsSuiteApiService.ToolsSuiteModule.WaterMassFlowData(naturalGasReduction.waterMassFlowData.waterFlow,
-        naturalGasReduction.waterMassFlowData.inletTemperature, naturalGasReduction.waterMassFlowData.outletTemperature, naturalGasReduction.waterMassFlowData.systemEfficiency);
+      const measurementMethod = this.suiteApiHelperService.getNaturalGasReductionMeasurementMethodEnum(naturalGasReduction.measurementMethod);
 
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasReductionInput(
-        naturalGasReduction.operatingHours,
-        naturalGasReduction.fuelCost,
-        naturalGasReduction.measurementMethod,
-        FlowMeterMethodData,
-        NaturalGasOtherMethodData,
-        AirMassFlowData,
-        WaterMassFlowData,
-        naturalGasReduction.units);
+      let wasmConvertedInput = {
+        operatingHours: naturalGasReduction.operatingHours,
+        fuelCost: naturalGasReduction.fuelCost,
+        measurementMethod: measurementMethod,
+        flowMeterMethodData: {
+          flowRate: naturalGasReduction.flowMeterMethodData.flowRate
+        },
+        otherMethodData: {
+          consumption: naturalGasReduction.otherMethodData.consumption
+        },
+        airMassFlowData: {
+          isNameplate: naturalGasReduction.airMassFlowData.isNameplate,
+          measuredData: {
+            areaOfDuct: naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.areaOfDuct,
+            airVelocity: naturalGasReduction.airMassFlowData.airMassFlowMeasuredData.airVelocity
+          },
+          nameplateData: {
+            airFlow: naturalGasReduction.airMassFlowData.airMassFlowNameplateData.airFlow
+          },
+          inletTemperature: naturalGasReduction.airMassFlowData.inletTemperature,
+          outletTemperature: naturalGasReduction.airMassFlowData.outletTemperature,
+          systemEfficiency: naturalGasReduction.airMassFlowData.systemEfficiency
+        },
+        waterMassFlowData: {
+          waterFlow: naturalGasReduction.waterMassFlowData.waterFlow,
+          inletTemperature: naturalGasReduction.waterMassFlowData.inletTemperature,
+          outletTemperature: naturalGasReduction.waterMassFlowData.outletTemperature,
+          systemEfficiency: naturalGasReduction.waterMassFlowData.systemEfficiency
+        },
+        units: naturalGasReduction.units
+      };
       inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      FlowMeterMethodData.delete();
-      NaturalGasOtherMethodData.delete();
-      AirMassFlowMeasuredData.delete();
-      AirMassFlowNameplateData.delete();
-      AirMassFlowData.delete();
-      WaterMassFlowData.delete();
     });
 
-    let NaturalGasReductionCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasReduction(inputs);
-    let output = NaturalGasReductionCalculator.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.naturalGasReduction(inputs);
     let results: NaturalGasReductionResult = {
       energyUse: output.energyUse,
       energyCost: output.energyCost,
       heatFlow: output.heatFlow,
       totalFlow: output.totalFlow
     };
-    output.delete();
-    NaturalGasReductionCalculator.delete();
     inputs.delete();
     return results;
   }
@@ -157,7 +158,7 @@ export class CalculatorSuiteApiService {
       compressedAirReduction.flowMeterMethodData.meterReading = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.flowMeterMethodData.meterReading);
       compressedAirReduction.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagFillTime);
       compressedAirReduction.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagVolume);
-      
+
       compressedAirReduction.pressureMethodData.nozzleType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.nozzleType);
       compressedAirReduction.pressureMethodData.numberOfNozzles = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.numberOfNozzles);
       compressedAirReduction.pressureMethodData.supplyPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.supplyPressure);
@@ -174,7 +175,7 @@ export class CalculatorSuiteApiService {
       let CompressedAirOtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirOtherMethodData(compressedAirReduction.otherMethodData.consumption);
       let CompressorElectricityData = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorElectricityData(compressedAirReduction.compressorElectricityData.compressorControlAdjustment,
         compressedAirReduction.compressorElectricityData.compressorSpecificPower);
-      
+
       let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirReductionInput(
         compressedAirReduction.hoursPerYear,
         compressedAirReduction.utilityType,
@@ -222,7 +223,7 @@ export class CalculatorSuiteApiService {
       // TODO all methods should not calculate if missing required props
       input.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagFillTime);
       input.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagVolume);
-      
+
       // estimate method
       input.estimateMethodData.leakRateEstimate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.estimateMethodData.leakRateEstimate);
       // orifice method
@@ -253,7 +254,7 @@ export class CalculatorSuiteApiService {
       airLeakSurvey.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagVolume);
 
       // make TH backwards compatible. hours are undefined in update-data service. There is probably a bug in TH init for air leak daa 
-      let operatingTime = airLeakSurvey.bagMethodData.operatingTime? airLeakSurvey.bagMethodData.operatingTime : inputObj.facilityCompressorData.hoursPerYear;
+      let operatingTime = airLeakSurvey.bagMethodData.operatingTime ? airLeakSurvey.bagMethodData.operatingTime : inputObj.facilityCompressorData.hoursPerYear;
       // hardcoded 1 - always calculate as single unit
       let BagMethod = new this.toolsSuiteApiService.ToolsSuiteModule.BagMethod(operatingTime, airLeakSurvey.bagMethodData.bagFillTime, airLeakSurvey.bagMethodData.bagVolume, 1);
       let DecibelsMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.DecibelsMethodData(airLeakSurvey.decibelsMethodData.linePressure,
@@ -323,41 +324,32 @@ export class CalculatorSuiteApiService {
       waterReduction.bucketMethodData.bucketFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketFillTime);
       waterReduction.bucketMethodData.bucketVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketVolume);
       waterReduction.otherMethodData.consumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.otherMethodData.consumption);
-
-      let MeteredFlowMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.MeteredFlowMethodData(waterReduction.meteredFlowMethodData.meterReading);
-      let VolumeMeterMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.VolumeMeterMethodData(waterReduction.volumeMeterMethodData.initialMeterReading,
-        waterReduction.volumeMeterMethodData.finalMeterReading, waterReduction.volumeMeterMethodData.elapsedTime);
-      let BucketMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.BucketMethodData(waterReduction.bucketMethodData.bucketVolume, waterReduction.bucketMethodData.bucketFillTime);
-      let OtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.WaterOtherMethodData(waterReduction.otherMethodData.consumption);
-
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.WaterReductionInput(
-        waterReduction.hoursPerYear,
-        waterReduction.waterCost,
-        waterReduction.measurementMethod,
-        MeteredFlowMethodData,
-        VolumeMeterMethodData,
-        BucketMethodData,
-        OtherMethodData
-      );
-      inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      MeteredFlowMethodData.delete();
-      VolumeMeterMethodData.delete();
-      BucketMethodData.delete();
-      OtherMethodData.delete();
+      const measurementMethod = this.suiteApiHelperService.getWaterReductionMeasurementMethodEnum(waterReduction.measurementMethod);
+      inputs.push_back({
+        hoursPerYear: waterReduction.hoursPerYear,
+        waterCost: waterReduction.waterCost,
+        measurementMethod: measurementMethod,
+        meteredFlowMethodData: { meterReading: waterReduction.meteredFlowMethodData.meterReading },
+        volumeMeterMethodData: {
+          finalMeterReading: waterReduction.volumeMeterMethodData.finalMeterReading,
+          initialMeterReading: waterReduction.volumeMeterMethodData.initialMeterReading,
+          elapsedTime: waterReduction.volumeMeterMethodData.elapsedTime
+        },
+        bucketMethodData: {
+          bucketVolume: waterReduction.bucketMethodData.bucketVolume,
+          bucketFillTime: waterReduction.bucketMethodData.bucketFillTime
+        },
+        otherMethodData: { consumption: waterReduction.otherMethodData.consumption }
+      });
     });
 
-    let WaterReductionCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.WaterReduction(inputs);
-    let output = WaterReductionCalculator.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.waterReduction(inputs);
     let results: WaterReductionResult = {
       waterUse: output.waterUse,
       waterCost: output.waterCost,
-      annualWaterSavings: output.annualWaterSavings,
-      costSavings: output.costSavings
+      annualWaterSavings: 0,
+      costSavings: 0
     };
-    output.delete();
-    WaterReductionCalculator.delete();
     inputs.delete();
     return results;
   }
@@ -366,64 +358,62 @@ export class CalculatorSuiteApiService {
     let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.SteamReductionInputV();
 
     inputObj.steamReductionInputVec.forEach(steamReduction => {
-      let FlowMeterMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamFlowMeterMethodData(steamReduction.flowMeterMethodData.flowRate);
+      const measurementMethod = this.suiteApiHelperService.getSteamMeasurementMethodEnum(steamReduction.measurementMethod);
+      const utilityType = this.suiteApiHelperService.getSteamUtilityTypeEnum(steamReduction.utilityType);
+      const steamVariableOption = this.suiteApiHelperService.getThermodynamicQuantityType(steamReduction.steamVariableOption);
 
-      let AirMassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMeasuredData(steamReduction.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
-        steamReduction.airMassFlowMethodData.massFlowMeasuredData.airVelocity);
-      let AirMassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowNameplateData(steamReduction.airMassFlowMethodData.massFlowNameplateData.flowRate);
-      let AirMassFlowMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMethodData(steamReduction.airMassFlowMethodData.isNameplate,
-        AirMassFlowMeasuredData, AirMassFlowNameplateData,
-        steamReduction.airMassFlowMethodData.inletTemperature, steamReduction.airMassFlowMethodData.outletTemperature);
-
-      let WaterMassFlowMeasuredData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMeasuredData(steamReduction.waterMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
-        steamReduction.waterMassFlowMethodData.massFlowMeasuredData.airVelocity);
-      let WaterMassFlowNameplateData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowNameplateData(steamReduction.waterMassFlowMethodData.massFlowNameplateData.flowRate);
-      let WaterMassFlowMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamMassFlowMethodData(steamReduction.waterMassFlowMethodData.isNameplate,
-        WaterMassFlowMeasuredData, WaterMassFlowNameplateData,
-        steamReduction.waterMassFlowMethodData.inletTemperature, steamReduction.waterMassFlowMethodData.outletTemperature);
-
-      let OtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.SteamOffsheetMethodData(steamReduction.otherMethodData.consumption);
-
-      let steamVariableOptionThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(steamReduction.steamVariableOption)
-
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.SteamReductionInput(
-        steamReduction.hoursPerYear,
-        steamReduction.utilityType,
-        steamReduction.utilityCost,
-        steamReduction.measurementMethod,
-        steamReduction.systemEfficiency,
-        steamReduction.pressure,
-        FlowMeterMethodData, 
-        AirMassFlowMethodData, 
-        WaterMassFlowMethodData, 
-        OtherMethodData, 
-        steamReduction.units, 
-        steamReduction.boilerEfficiency, 
-        steamVariableOptionThermodynamicQuantity,
-        steamReduction.steamVariable,
-        steamReduction.feedWaterTemperature);
+      let wasmConvertedInput = {
+        hoursPerYear: steamReduction.hoursPerYear,
+        utilityType: utilityType,
+        utilityCost: steamReduction.utilityCost,
+        measurementMethod: measurementMethod,
+        systemEfficiency: steamReduction.systemEfficiency,
+        pressure: steamReduction.pressure,
+        flowMeterMethodData: {
+          flowRate: steamReduction.flowMeterMethodData.flowRate
+        },
+        airMassFlowMethodData: {
+          isNameplate: steamReduction.airMassFlowMethodData.isNameplate,
+          massFlowMeasuredData: {
+            areaOfDuct: steamReduction.airMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
+            airVelocity: steamReduction.airMassFlowMethodData.massFlowMeasuredData.airVelocity
+          },
+          massFlowNameplateData: {
+            flowRate: steamReduction.airMassFlowMethodData.massFlowNameplateData.flowRate
+          },
+          inletTemperature: steamReduction.airMassFlowMethodData.inletTemperature,
+          outletTemperature: steamReduction.airMassFlowMethodData.outletTemperature
+        },
+        waterMassFlowMethodData: {
+          isNameplate: steamReduction.waterMassFlowMethodData.isNameplate,
+          massFlowMeasuredData: {
+            areaOfDuct: steamReduction.waterMassFlowMethodData.massFlowMeasuredData.areaOfDuct,
+            airVelocity: steamReduction.waterMassFlowMethodData.massFlowMeasuredData.airVelocity
+          },
+          massFlowNameplateData: {
+            flowRate: steamReduction.waterMassFlowMethodData.massFlowNameplateData.flowRate
+          },
+          inletTemperature: steamReduction.waterMassFlowMethodData.inletTemperature,
+          outletTemperature: steamReduction.waterMassFlowMethodData.outletTemperature
+        },
+        offsheetMethodData: {
+          consumption: steamReduction.otherMethodData.consumption
+        },
+        units: steamReduction.units,
+        boilerEfficiency: steamReduction.boilerEfficiency,
+        steamVariableOption: steamVariableOption,
+        steamVariable: steamReduction.steamVariable,
+        feedWaterTemperature: steamReduction.feedWaterTemperature
+      };
       inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      OtherMethodData.delete();
-      WaterMassFlowMethodData.delete();
-      AirMassFlowMethodData.delete();
-      AirMassFlowMeasuredData.delete();
-      AirMassFlowNameplateData.delete();
-      WaterMassFlowMeasuredData.delete();
-      WaterMassFlowNameplateData.delete();
-      FlowMeterMethodData.delete();
     });
 
-    let SteamReductionCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.SteamReduction(inputs);
-    let output = SteamReductionCalculator.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.steamReduction(inputs);
     let results: SteamReductionResult = {
       energyCost: output.energyCost,
       energyUse: output.energyUse,
       steamUse: output.steamUse
     };
-    output.delete();
-    SteamReductionCalculator.delete();
     inputs.delete();
     return results;
   }
@@ -498,7 +488,7 @@ export class CalculatorSuiteApiService {
   powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
     let modeEnum = this.suiteApiHelperService.getPowerFactorModeEnum(inputObj.mode);
     inputObj.mode = modeEnum;
-    inputObj.input1 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input1);    
+    inputObj.input1 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input1);
     inputObj.input2 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input2);
     inputObj.inputPowerFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.inputPowerFactor);
     let PowerFactor = new this.toolsSuiteApiService.ToolsSuiteModule.PowerFactor();
@@ -547,5 +537,5 @@ export class CalculatorSuiteApiService {
 
     return valveEnergyLossOutputs;
   }
-  
+
 }

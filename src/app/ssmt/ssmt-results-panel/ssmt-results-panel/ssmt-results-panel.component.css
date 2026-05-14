@@ -56,3 +56,7 @@ tbody{
 .group-label{
     font-weight: bold;
 }
+
+.percent-savings-padding {
+    padding-left: 0.25rem !important;
+}
