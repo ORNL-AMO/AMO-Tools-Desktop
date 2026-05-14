@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-compressed-air-pressure-reduction-help',
@@ -12,6 +13,7 @@ export class CompressedAirPressureReductionHelpComponent implements OnInit {
   settings: Settings;
   @Input()
   currentField: string;
+  docsLink: string = environment.measurDocsUrl;
 
   constructor() { }
 
