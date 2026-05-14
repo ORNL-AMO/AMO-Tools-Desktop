@@ -21,6 +21,7 @@ export const ROUTE_TOKENS = {
   modificationGraphs: 'modification-graphs',
 
   // report sub tabs
+  facilityInfo: 'facility-info',
   executiveSummary: 'executive-summary',
   performanceProfile: 'performance-profile',
   systemProfile: 'system-profile',

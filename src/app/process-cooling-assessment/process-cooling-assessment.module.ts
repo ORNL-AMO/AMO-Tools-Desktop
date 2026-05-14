@@ -21,6 +21,7 @@ import { DecreaseCondenserWaterTempComponent } from './explore-opportunities/dec
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { BaselineTabsComponent } from './baseline/baseline-tabs/baseline-tabs.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
+import { FacilityInfoComponent } from './report/facility-info/facility-info.component';
 import { SettingsModule } from '../settings/settings.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -188,6 +189,10 @@ const ROUTES: Route[] = [
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.executiveSummary, pathMatch: 'full' },
           {
+            path: ROUTE_TOKENS.facilityInfo,
+            component: FacilityInfoComponent,
+          },
+          {
             path: ROUTE_TOKENS.executiveSummary,
             component: ExecutiveSummaryComponent,
           },
@@ -251,6 +256,7 @@ const ROUTES: Route[] = [
     WaterPumpHelpComponent,
     OperationsHelpComponent,
     ExecutiveSummaryComponent,
+    FacilityInfoComponent,
     AirCooledComponent,
     WaterCooledComponent,
     CondenserCoolingSystemComponent,

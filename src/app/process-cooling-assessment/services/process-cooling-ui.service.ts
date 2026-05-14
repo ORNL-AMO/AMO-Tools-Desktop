@@ -333,6 +333,7 @@ export enum ReportView {
   INPUT_SUMMARY = 'input-summary',
   GRAPHS = 'graphs',
   SYSTEM_PROFILE = "system-profile",
+  FACILITY_INFO = 'facility-info',
 }
 
 
@@ -442,6 +443,10 @@ export const REPORT_VIEW_LINKS: ViewLink[] = [
   {
     view: ReportView.INPUT_SUMMARY,
     label: 'Input Summary',
+  },
+  {
+    view: ReportView.FACILITY_INFO,
+    label: 'Facility Info',
   },
   {
     view: ReportView.GRAPHS,
