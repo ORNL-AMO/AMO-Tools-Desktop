@@ -155,9 +155,13 @@ export class PdfReportService extends BaseReportService {
    * Returns the Y position after the table.
    */
   private renderKeyValue(pdf: jsPDF, section: KeyValueSection, cursorY: number): number {
+    const showHeaders = section.showHeaders !== false;
     cursorY = this.renderSectionTitle(pdf, section.title, cursorY);
+    const headRow = section.headerLabel
+      ? [section.headerLabel, '', '']
+      : showHeaders ? ['Property', 'Value', 'Unit'] : ['', '', ''];
     autoTable(pdf, {
-      head: [['Property', 'Value', 'Unit']],
+      head: [headRow],
       body: section.rows.map(row => [row.label, row.value, row.unit ?? '']),
       startY: cursorY,
       margin: { left: PAGE_MARGIN_MM, right: PAGE_MARGIN_MM },

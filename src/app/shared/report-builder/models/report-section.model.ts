@@ -15,6 +15,8 @@ export interface TextSection extends ReportSection {
 export interface KeyValueSection extends ReportSection {
   type: 'key-value-list';
   rows: Array<{ label: string; value: string; unit?: string }>;
+  showHeaders?: boolean;
+  headerLabel?: string;
 }
 
 export interface SummaryTableSection extends ReportSection {

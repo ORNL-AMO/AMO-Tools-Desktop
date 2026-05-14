@@ -4,7 +4,8 @@ import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
 import { decodeHtmlEntities, formatCell, formatNumber, labelWithUnits } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
-import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { ChartSection, KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { FacilityInfo } from '../../shared/models/settings';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from '../services/executive-summary-results.service';
 import { PumpSummaryResultsService, PumpSummaryUI } from '../services/pump-summary-results.service';
 import { TowerBinRow, TowerSummaryService, TowerSummaryUI } from '../services/tower-summary.service';
@@ -19,6 +20,7 @@ import { ProcessCoolingAssessmentService } from '../services/process-cooling-ass
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 
 export const PROCESS_COOLING_SECTION_GROUPS: ReportSectionGroup[] = [
+  { key: ROUTE_TOKENS.facilityInfo, label: 'Facility Info', description: 'Facility and contact information' },
   { key: ROUTE_TOKENS.executiveSummary, label: 'Executive Summary', description: 'High-level baseline to modification comparison' },
   { key: ROUTE_TOKENS.performanceProfile, label: 'Performance Profile', description: 'Chiller performance curves by load level' },
   { key: ROUTE_TOKENS.systemProfile, label: 'System Profile', description: 'Chiller energy and hours by load bin' },
@@ -55,6 +57,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
       map(([execSummary, pumpSummary, towerSummary, systemProfile]): ReportDocument => ({
         meta: moduleMeta,
         sections: [
+          ...this.buildFacilityInfoSections(),
           ...this.buildExecutiveSummarySections(execSummary),
           ...this.buildSystemProfileSections(systemProfile),
           ...this.buildPerformanceProfileSections(),
@@ -63,6 +66,62 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         ],
       }))
     );
+  }
+
+  private buildFacilityInfoSections(): KeyValueSection[] {
+    const facilityInfo: FacilityInfo = this.processCoolingAssessmentService.settingsSignal()?.facilityInfo;
+    if (!facilityInfo) {
+      return [];
+    }
+
+    const general: KeyValueSection = {
+      type: 'key-value-list',
+      title: 'Facility Info',
+      group: ROUTE_TOKENS.facilityInfo,
+      headerLabel: 'General',
+      rows: [
+        { label: 'Company Name', value: facilityInfo.companyName ?? '' },
+        { label: 'Facility Name', value: facilityInfo.facilityName ?? '' },
+        { label: 'Assessment Date', value: facilityInfo.date ?? '' },
+      ],
+    };
+
+    const location: KeyValueSection = {
+      type: 'key-value-list',
+      group: ROUTE_TOKENS.facilityInfo,
+      headerLabel: 'Location',
+      rows: [
+        { label: 'Street', value: facilityInfo.address?.street ?? '' },
+        { label: 'City', value: facilityInfo.address?.city ?? '' },
+        { label: 'State', value: facilityInfo.address?.state ?? '' },
+        { label: 'Zip', value: facilityInfo.address?.zip ?? '' },
+        { label: 'Country', value: facilityInfo.address?.country ?? '' },
+      ],
+    };
+
+    const facilityContact: KeyValueSection = {
+      type: 'key-value-list',
+      group: ROUTE_TOKENS.facilityInfo,
+      headerLabel: 'Facility Contact',
+      rows: [
+        { label: 'Name', value: facilityInfo.facilityContact?.contactName ?? '' },
+        { label: 'Phone', value: String(facilityInfo.facilityContact?.phoneNumber ?? '') },
+        { label: 'Email', value: facilityInfo.facilityContact?.email ?? '' },
+      ],
+    };
+
+    const assessmentContact: KeyValueSection = {
+      type: 'key-value-list',
+      group: ROUTE_TOKENS.facilityInfo,
+      headerLabel: 'Assessment Contact',
+      rows: [
+        { label: 'Name', value: facilityInfo.assessmentContact?.contactName ?? '' },
+        { label: 'Phone', value: String(facilityInfo.assessmentContact?.phoneNumber ?? '') },
+        { label: 'Email', value: facilityInfo.assessmentContact?.email ?? '' },
+      ],
+    };
+
+    return [general, location, facilityContact, assessmentContact];
   }
 
   private buildExecutiveSummarySections(ui: ExecutiveSummaryUI): SummaryTableSection[] {
