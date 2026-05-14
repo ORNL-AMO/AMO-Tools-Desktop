@@ -1,4 +1,4 @@
-**Date Generated:** May 1, 2026
+**Date Generated:** May 14, 2026
 
 # Apply System Treatment Costs
 
@@ -89,6 +89,31 @@ Flow on the edge immediately upstream of the system.
     Cost to system = Attribution fraction × Treatment total block cost
 
 The key distinction: the cost basis is the block cost computed on the full inflow (which is what drives the treatment operating cost), but the downstream allocation denominator is the reduced outflow volume. This correctly reflects that a system receiving 100% of the product from a loss-generating treatment unit bears 100% of that unit's cost.
+
+### 3.3 — Single-System RO Override
+
+Even when the RO loss-adjusted formula from Section 3.2 produces a fraction less than 1 (because only a portion of the inflow reaches the system as product water), the attribution fraction is overridden to 1 when the RO unit is identified as a single-system configuration.
+
+**Rationale:** The reject stream is an operational byproduct, not water consumed by another beneficiary. Because there is exactly one downstream system on the product water path, that system bears 100% of the treatment block cost. The override guarantees this outcome for both the loss-adjusted (outflow < inflow) code branch and the standard (no losses) code branch.
+
+**Attribution condition:**
+
+    graph.systemsWithRODirectDischarge[systemId]?.treatmentNode.id === treatmentId
+
+When this condition is true, `systemAttributionFraction` is set to `1` after the branch-specific formula runs.
+
+**Worked example:**
+
+```
+  RO Unit (inflow: 100 Mgal/yr, $5.00/kgal)
+       ├──► (product water, 70 Mgal/yr) ──► System A
+       └──► (reject,  30 Mgal/yr) ──► Discharge
+```
+
+- Block cost = 100 Mgal/yr × 1,000 × $5.00/kgal = $500,000/yr
+- Loss-adjusted formula: attribution fraction = 70 / 70 = 1.0 (already 100% when System A is the sole product water recipient)
+- **Override:** guarantees attribution fraction = 1.0 for both the loss-adjusted branch and the no-loss branch path evaluation
+- Cost to System A = 1.0 × $500,000 = **$500,000/yr**
 
 ---
 
@@ -187,3 +212,4 @@ System E bears 100% of the softener cost because it receives all of the product 
 | Series treatment | Each unit in series is an independent cost center; no duplication |
 | Adjusted attribution | User-supplied fraction replaces computed default |
 | De-duplication | Identical paths from treatment node to system are attributed only once |
+| Single-system RO override | Attribution fraction forced to 1.0 when treatment node is the RO unit of a single-system configuration |
