@@ -14,6 +14,7 @@ export interface NodeGraphIndex {
   edgesByNode: Record<string, Edge<CustomEdgeData>[]>;
   // nodeId, node
   nodeMap?: Record<string, Node>;
+  systemsWithRODirectDischarge?: Record<string, { intakeNode: Node, treatmentNode: Node, dischargeNode: Node, wasteTreatmentNode?: Node }>;
 }
 
 export const createGraphIndex = (nodes: Node[], edges: Edge<CustomEdgeData>[]) => {
