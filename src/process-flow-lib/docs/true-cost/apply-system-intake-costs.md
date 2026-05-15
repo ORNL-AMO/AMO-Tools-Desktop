@@ -1,4 +1,4 @@
-**Date Generated:** May 14, 2026
+**Date Generated:** May 15, 2026
 
 # Apply System Intake Costs
 
@@ -67,25 +67,30 @@ The cap at 1.0 prevents over-attribution when a system also receives water from 
 
     Cost to system = Attribution fraction × Intake total block cost
 
-### 3.2 Case with Losses in Intermediate Treatment
+### 3.2 Delivered-Flow-Volume Basis (Treatment Chain with Losses)
 
-When an intermediate treatment unit reduces the flow volume (outflow < inflow), the calculation changes because the cost basis remains the full intake volume while the attributed fraction is based on the reduced downstream flow:
+When water passes through a treatment chain and volume is lost somewhere in that chain, the attribution fraction denominator switches from the full intake outflow to the **delivered flow volume** — the outflow of the immediate treatment node upstream of the system. This ensures that all downstream systems collectively absorb 100% of the intake cost, including the cost of water lost in treatment.
 
-**Step 1 — Determine treatment unit outflow:**  
-Total outflow from the intermediate treatment node.
+**Conditions — both must hold:**
+
+1. **`intakeHasSingleOutflow`:** The intake node has exactly one outgoing child. When the intake splits to multiple paths, systems on each branch are attributed using the intake-flow-volume basis regardless of treatment losses; the other paths cover their portion of the intake cost.
+2. **Treatment chain has losses:** Either the immediate upstream treatment node has losses (`deliveredFlowVolume < treatmentNodeInflow`), or any treatment node traversed earlier in the same path has losses (`hasUpstreamTreatmentLoss`). The upstream scan supports chained configurations where Treatment A loses water but Treatment B (the immediate treatment source) is balanced.
+
+**Step 1 — Determine delivered flow volume:**  
+Total outflow of the treatment node immediately upstream of the system (`deliveredFlowVolume`). For a chained configuration (Treatment A → Treatment B → System), this is Treatment B's total outflow — the volume actually delivered to downstream systems.
 
 **Step 2 — Determine system inflow from this path:**  
 Flow on the edge immediately upstream of the system.
 
-**Step 3 — Compute attribution fraction (based on share of treatment outflow):**
+**Step 3 — Compute attribution fraction (delivered-flow-volume basis):**
 
-    Attribution fraction = System inflow / Treatment unit total outflow
+    Attribution fraction = System inflow / deliveredFlowVolume
 
 **Step 4 — Compute cost to system (cost basis is the full intake block cost):**
 
     Cost to system = Attribution fraction × Intake total block cost
 
-The distinction from the standard case is that the denominator for the attribution fraction is the treatment unit's outflow rather than the total intake flow. This correctly reflects that the cost component cost is incurred on the full intake volume, but the remaining downstream allocation is split among the systems receiving the (reduced) treated output.
+The denominator is the treatment chain's delivered output, not the intake total. This correctly distributes 100% of intake cost among the systems receiving the treated water, including the proportional share of cost attributable to water lost in treatment.
 
 ### 3.3 Single-System RO Override
 
@@ -127,11 +132,22 @@ The 30 Mgal/yr reject is an unavoidable consequence of RO operation, not consump
 
 ---
 
-## 4. Treatment Chain Limitation
+## 4. Treatment Chain Support
 
-When two treatment nodes appear consecutively on a path (Treatment A → Treatment B → System), the algorithm detects this configuration and **falls back to the standard flow-fraction method** rather than applying the treatment-loss adjustment. Applying the loss-adjustment formula through a chain of treatment nodes with different loss rates is not currently supported.
+Chained treatment configurations (Treatment A → Treatment B → System) are fully supported. The algorithm scans all treatment nodes traversed earlier in the current path (`hasUpstreamTreatmentLoss`) to detect losses that occurred upstream of the immediate treatment node. When such a loss is found, the delivered-flow-volume basis applies using the immediate treatment node's outflow as the denominator — which for a chain equals the volume the chain ultimately delivers to downstream systems.
 
-See *Known Limitations* for further detail.
+**Example — Treatment A with losses, Treatment B balanced:**
+
+```
+  Intake (10 Mgal) ──► Treatment A (10 in / 8 out) ──► Treatment B (8 in / 8 out)
+                                                              ├──► System C: 5 Mgal
+                                                              └──► System D: 3 Mgal
+```
+
+- `deliveredFlowVolume` = Treatment B outflow = 8 Mgal
+- System C attribution fraction = 5 / 8 = 62.5%
+- System D attribution fraction = 3 / 8 = 37.5%
+- Total: 100% of intake cost distributed ✓
 
 ---
 
@@ -212,8 +228,8 @@ A system may appear on multiple downstream paths from the same intake (for examp
 | Walk direction | Downstream from intake |
 | Stopping point | First water-using system on each path |
 | Cost basis | Full intake block cost (unit cost × total intake outflow) |
-| Attribution denominator (standard) | Total intake outflow |
-| Attribution denominator (with treatment losses) | Treatment unit total outflow |
+| Attribution denominator — intake-flow-volume basis | Total intake outflow. Used when intake splits to multiple paths, or when no treatment losses exist in the chain. |
+| Attribution denominator — delivered-flow-volume basis | Immediate treatment node total outflow (`deliveredFlowVolume`). Used when the intake has a single outgoing path AND treatment losses exist anywhere in the chain (including upstream nodes). |
 | Cap on fraction per path | Min(system inflow / path inflow, 1.0) |
 | Pump/motor energy | Attributed using same fraction as intake cost |
 | Adjusted attribution | User-supplied fraction replaces computed default |

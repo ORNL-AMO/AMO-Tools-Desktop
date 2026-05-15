@@ -779,45 +779,60 @@ const applySystemIntakeCosts = (
           const currentSource = graph.nodeMap[currentEdge.source];
           const hasTreatmentSource = currentSource?.data.processComponentType === 'water-treatment';
 
-          let hasTreatmentChain = false;
-          // * this patch bypasses logic to test treatment chain losses. Supporting chains with accurate intake costs AND losses not currently implemented
-          if (hasTreatmentSource && pathToSystem.length > 1) {
-            const currentSourceIndex = pathToSystem.indexOf(currentEdge.id);
-            if (currentSourceIndex > 0) {
-              const previousEdgeId = pathToSystem[currentSourceIndex - 1];
-              const previousEdge = graph.edgeMap[previousEdgeId];
-              if (previousEdge) {
-                const previousNode = graph.nodeMap[previousEdge.source];
-                if (previousNode?.data.processComponentType === 'water-treatment') {
-                  hasTreatmentChain = true;
-                }
-              }
-            }
+          // * deliveredFlowVolume: the flow volume the treatment chain actually delivers to downstream
+          // * systems — the immediate treatment node's total outflow. Used as the attribution
+          // * denominator when the intake routes all its flow through a single treatment path
+          // * (delivered-flow-volume basis). Zero when no treatment node is upstream.
+          let deliveredFlowVolume = 0;
+          let treatmentNodeInflow = 0;
+          if (hasTreatmentSource) {
+            let treatmentNode = graph.nodeMap[currentEdge.source];
+            deliveredFlowVolume = getNodeTotalOutflow(treatmentNode as Node<ProcessFlowPart>, calculatedData);
+            treatmentNodeInflow = getNodeTotalInflow(treatmentNode as Node<ProcessFlowPart>, calculatedData);
           }
 
-          let totalTreatmentOutflow = 0;
-          if (!hasTreatmentChain && hasTreatmentSource) {
-            let treatmentNode = graph.nodeMap[currentEdge.source];
-            totalTreatmentOutflow = getNodeTotalOutflow(treatmentNode as Node<ProcessFlowPart>, calculatedData);
-          }
+          // * Delivered-flow-volume basis requires the intake to route all its flow through a single
+          // * path. When the intake splits to multiple children, each system's share must be
+          // * computed against the full intake-flow-volume total — the other intake paths cover
+          // * the remainder and switching to delivered-flow-volume basis would overcharge.
+          const intakeHasSingleOutflow = (graph.childMap[intakeId] || []).length === 1;
+
+          // * Detect whether any treatment node earlier in this path has losses. Required for
+          // * chained configurations (TreatA loses water → TreatB balanced → System): TreatB's
+          // * own inflow equals its outflow, but the chain's delivered-flow-volume is still
+          // * reduced relative to intake, so delivered-flow-volume basis must apply.
+          const currentEdgeIdx = path.indexOf(edgeId);
+          const hasUpstreamTreatmentLoss = path.slice(0, currentEdgeIdx).some(prevEdgeId => {
+            const prevEdge = graph.edgeMap[prevEdgeId];
+            const prevNode = graph.nodeMap[prevEdge.target];
+            if (prevNode?.data.processComponentType === 'water-treatment') {
+              const prevOutflow = getNodeTotalOutflow(prevNode as Node<ProcessFlowPart>, calculatedData);
+              const prevInflow = getNodeTotalInflow(prevNode as Node<ProcessFlowPart>, calculatedData);
+              return prevOutflow < prevInflow && prevOutflow > 0;
+            }
+            return false;
+          });
 
           const intakeEdge = graph.edgeMap[path[0]];
           const systemInflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
           const pathInflow = intakeEdge.data.flowValue ?? 0;
           const ROParentIntakeNode = graph.systemsWithRODirectDischarge[currentNode.id]?.intakeNode;
-          
+
           let systemFlowResponsibility: number;
           let systemAttributionFraction: number;
           let costToSystem: number;
           let fractionPathIntakeReceived: number;
 
-          // * Treatment losses and special cases (Single RO treatment)
-          if (totalTreatmentOutflow < pathInflow && totalTreatmentOutflow > 0) {
-            // * cost component has losses from intermediate treatment node 
-            // * attribute cost by outflow share of total outflow, but use total cost component inflow for cost basis
+          // * Delivered-flow-volume basis: use deliveredFlowVolume (treatment outflow) as the
+          // * attribution denominator so all downstream systems collectively absorb 100% of
+          // * intake cost, including the cost of water lost in treatment.
+          // * Applies when: (1) the intake has a single outgoing path so all intake flow enters
+          // * the treatment chain, AND (2) the chain has losses — either in the immediate
+          // * treatment node (deliveredFlowVolume < treatmentNodeInflow) or in an upstream node
+          // * (hasUpstreamTreatmentLoss). Special case: single RO system overrides to fraction 1.
+          if (intakeHasSingleOutflow && (deliveredFlowVolume < treatmentNodeInflow || hasUpstreamTreatmentLoss) && deliveredFlowVolume > 0) {
             systemFlowResponsibility = systemInflow;
-            // * attribute based on the percentage of total intake it is receiving
-            systemAttributionFraction = systemInflow / intakeData.blockCosts.totalFlow;
+            systemAttributionFraction = systemInflow / deliveredFlowVolume;
 
             // * Single system with single RO treatment outflowing to discharge will take all costs
             if (ROParentIntakeNode && ROParentIntakeNode.id === intakeId) {
@@ -826,7 +841,8 @@ const applySystemIntakeCosts = (
             costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
 
           } else {
-            // * no losses from intermediate treatment node - attribute cost based on path inflow received
+            // * Intake-flow-volume basis: attribute by each system's share of the full intake
+            // * total. Used when the intake splits or the treatment chain has no losses.
 
             // * fractionPathIntakeReceived ternary will ignore cases where systemIntake > pathIntake due to flow from other intakes. We will observe other intakes on another iteration
             fractionPathIntakeReceived = (systemInflow / pathInflow) > 1 ? 1 : (systemInflow / pathInflow);

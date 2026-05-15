@@ -1,4 +1,4 @@
-**Date Generated:** May 1, 2026
+**Date Generated:** May 15, 2026
 
 # Cost Attribution Rules — Reference
 
@@ -41,8 +41,8 @@ Before any attribution occurs, the total annual cost (block cost) for each cost-
 | **Which systems are eligible?** | Systems that receive water — directly or through treatment — from this intake. Only the first system encountered on each downstream path is charged. |
 | **Walk direction** | Downstream from the intake node. |
 | **Stopping criterion** | First water-using system on each path. |
-| **Attribution fraction — standard (no treatment losses)** | (System inflow from path) / (Total intake outflow). Capped at 1.0 per path. |
-| **Attribution fraction — with intermediate treatment losses** | (System inflow) / (Total treatment unit outflow). Uses intake block cost as cost basis. |
+| **Attribution fraction — intake-flow-volume basis** | (System inflow from path) / (Total intake outflow). Used when the intake splits to multiple paths, or when no treatment losses exist in the chain. Capped at 1.0 per path. |
+| **Attribution fraction — delivered-flow-volume basis** | (System inflow) / (`deliveredFlowVolume` — immediate treatment node total outflow). Used when the intake has a single outgoing path AND the treatment chain has losses (in the immediate treatment node or any upstream node in the path). Uses intake block cost as the cost basis. |
 | **Cost to system** | Attribution fraction × Intake total block cost. |
 | **Pump/motor energy** | Also attributed to the system using the same attribution fraction. |
 | **Systems excluded** | Systems further downstream that receive water only as reuse from the first-charged system. |
