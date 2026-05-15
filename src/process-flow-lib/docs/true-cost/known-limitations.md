@@ -1,4 +1,4 @@
-**Date Generated:** May 1, 2026
+**Date Generated:** May 15, 2026
 
 # Known Limitations and Unhandled Cases
 
@@ -12,49 +12,14 @@ Water assessment practitioners should be aware of these limitations when interpr
 
 | # | Issue | Affected Component | Severity | Status | Source Location |
 |---|---|---|---|---|---|
-| 1 | Treatment chain losses with intake cost attribution | Water Intake | Moderate | Open — bypassed with fallback | `results.ts:786` |
-| 2 | Wastewater treatment chain edge cases | Wastewater Treatment | Moderate | Open — partial support | `results.ts:1197` |
-| 3 | System flow totals population | All systems | High | Open — flagged for rewrite | `results.ts:134–207` |
-| 4 | Pump/motor energy overwrite in Step 3 | All systems | Moderate | Open — known design gap | `results.ts:1641` |
-| 5 | Empty result type placeholders | Reporting layer | Low | Open — declared, unpopulated | `types/results.ts` |
+| 1 | Wastewater treatment chain edge cases | Wastewater Treatment | Moderate | Open — partial support | `results.ts` ~`applySystemWasteTreatmentCosts` |
+| 2 | System flow totals population | All systems | High | Open — flagged for rewrite | `results.ts` ~`setWaterUsingSystemFlows` |
+| 3 | Pump/motor energy overwrite in Step 3 | All systems | Moderate | Open — known design gap | `results.ts` ~Step 3 finalization |
+| 4 | Empty result type placeholders | Reporting layer | Low | Open — declared, unpopulated | `types/results.ts` |
 
 ---
 
-## 2. Detail: Treatment Chain Losses with Intake Cost Attribution
-
-### Description
-
-When a Water Intake feeds water through two or more Water Treatment units connected in **series**, and those intermediate treatment units have **volume losses** (outflow < inflow), the algorithm cannot correctly apply the loss-adjusted attribution formula for the intake cost.
-
-**Affected configuration:**
-
-```
-  Intake ──► Treatment A (with losses) ──► Treatment B (with losses) ──► System
-```
-
-### Current Behavior
-
-The algorithm detects when two consecutive treatment nodes appear on the same path between an intake and a system. When this configuration is found (`hasTreatmentChain = true`), the loss-adjusted calculation is bypassed entirely. The standard flow-fraction method is applied instead, using the edge flows directly without adjusting for treatment losses.
-
-### Expected Behavior
-
-The intake cost should be attributed based on the actual volume that exits the treatment chain and reaches the system, with the cost basis remaining the full intake outflow. For a series chain, this requires propagating the loss adjustments through each treatment node in sequence.
-
-### Consequence for Results
-
-The system's attributed intake cost will be slightly understated or overstated depending on the specific loss fractions in the chain. The error is proportional to the magnitude of the losses.
-
-### Workaround
-
-Users can apply an adjusted attribution override to manually correct the attribution fraction for systems downstream of treatment chains with losses.
-
-### Reference
-
-Source location: `results.ts`, approximately line 786. Tracked as TODOs #7410 and #7423.
-
----
-
-## 3. Detail: Wastewater Treatment Chain Edge Cases
+## 2. Detail: Wastewater Treatment Chain Edge Cases
 
 ### Description
 
@@ -81,7 +46,7 @@ Users can apply adjusted attribution overrides to correct the attribution for af
 
 ### Reference
 
-Source location: `results.ts`, approximately line 1197.
+Source location: `results.ts`, `applySystemWasteTreatmentCosts`.
 
 ---
 
@@ -143,7 +108,7 @@ Pump and motor energy for intake and discharge infrastructure can be entered dir
 
 ### Reference
 
-Source location: `results.ts`, approximately line 1641.
+Source location: `results.ts`, Step 3 finalization loop.
 
 ---
 
