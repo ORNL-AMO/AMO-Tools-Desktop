@@ -168,7 +168,7 @@ export class PdfReportService extends BaseReportService {
       theme: 'striped',
       headStyles: { fillColor: this.moduleColor, fontSize: BODY_FONT_SIZE, fontStyle: 'bold' },
       styles: { fontSize: BODY_FONT_SIZE, cellPadding: 2 },
-      columnStyles: { 0: { cellWidth: 80 }, 1: { cellWidth: 80 }, 2: { cellWidth: 30 } },
+      columnStyles: { 0: { cellWidth: 80 } }
     });
     return (pdf as any).lastAutoTable.finalY + SECTION_GAP_MM;
   }
