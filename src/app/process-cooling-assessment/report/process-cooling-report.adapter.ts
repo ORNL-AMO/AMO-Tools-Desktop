@@ -4,7 +4,7 @@ import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
 import { decodeHtmlEntities, formatCell, formatNumber, labelWithUnits } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
-import { ChartSection, KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { ChartSection, KeyValueSection, PairedKeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { FacilityInfo } from '../../shared/models/settings';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from '../services/executive-summary-results.service';
 import { PumpSummaryResultsService, PumpSummaryUI } from '../services/pump-summary-results.service';
@@ -68,60 +68,58 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
     );
   }
 
-  private buildFacilityInfoSections(): KeyValueSection[] {
+  private buildFacilityInfoSections(): PairedKeyValueSection[] {
     const facilityInfo: FacilityInfo = this.processCoolingAssessmentService.settingsSignal()?.facilityInfo;
     if (!facilityInfo) {
       return [];
     }
 
-    const general: KeyValueSection = {
-      type: 'key-value-list',
+    const generalAndLocation: PairedKeyValueSection = {
+      type: 'paired-key-value',
       title: 'Facility Info',
       group: ROUTE_TOKENS.facilityInfo,
-      headerLabel: 'General',
-      rows: [
-        { label: 'Company Name', value: facilityInfo.companyName ?? '' },
-        { label: 'Facility Name', value: facilityInfo.facilityName ?? '' },
-        { label: 'Assessment Date', value: facilityInfo.date ?? '' },
-      ],
+      left: {
+        headerLabel: 'General',
+        rows: [
+          { label: 'Company Name', value: facilityInfo.companyName ?? '' },
+          { label: 'Facility Name', value: facilityInfo.facilityName ?? '' },
+          { label: 'Assessment Date', value: facilityInfo.date ?? '' },
+        ],
+      },
+      right: {
+        headerLabel: 'Location',
+        rows: [
+          { label: 'Street', value: facilityInfo.address?.street ?? '' },
+          { label: 'City', value: facilityInfo.address?.city ?? '' },
+          { label: 'State', value: facilityInfo.address?.state ?? '' },
+          { label: 'Zip', value: facilityInfo.address?.zip ?? '' },
+          { label: 'Country', value: facilityInfo.address?.country ?? '' },
+        ],
+      },
     };
 
-    const location: KeyValueSection = {
-      type: 'key-value-list',
+    const contacts: PairedKeyValueSection = {
+      type: 'paired-key-value',
       group: ROUTE_TOKENS.facilityInfo,
-      headerLabel: 'Location',
-      rows: [
-        { label: 'Street', value: facilityInfo.address?.street ?? '' },
-        { label: 'City', value: facilityInfo.address?.city ?? '' },
-        { label: 'State', value: facilityInfo.address?.state ?? '' },
-        { label: 'Zip', value: facilityInfo.address?.zip ?? '' },
-        { label: 'Country', value: facilityInfo.address?.country ?? '' },
-      ],
+      left: {
+        headerLabel: 'Facility Contact',
+        rows: [
+          { label: 'Name', value: facilityInfo.facilityContact?.contactName ?? '' },
+          { label: 'Phone', value: String(facilityInfo.facilityContact?.phoneNumber ?? '') },
+          { label: 'Email', value: facilityInfo.facilityContact?.email ?? '' },
+        ],
+      },
+      right: {
+        headerLabel: 'Assessment Contact',
+        rows: [
+          { label: 'Name', value: facilityInfo.assessmentContact?.contactName ?? '' },
+          { label: 'Phone', value: String(facilityInfo.assessmentContact?.phoneNumber ?? '') },
+          { label: 'Email', value: facilityInfo.assessmentContact?.email ?? '' },
+        ],
+      },
     };
 
-    const facilityContact: KeyValueSection = {
-      type: 'key-value-list',
-      group: ROUTE_TOKENS.facilityInfo,
-      headerLabel: 'Facility Contact',
-      rows: [
-        { label: 'Name', value: facilityInfo.facilityContact?.contactName ?? '' },
-        { label: 'Phone', value: String(facilityInfo.facilityContact?.phoneNumber ?? '') },
-        { label: 'Email', value: facilityInfo.facilityContact?.email ?? '' },
-      ],
-    };
-
-    const assessmentContact: KeyValueSection = {
-      type: 'key-value-list',
-      group: ROUTE_TOKENS.facilityInfo,
-      headerLabel: 'Assessment Contact',
-      rows: [
-        { label: 'Name', value: facilityInfo.assessmentContact?.contactName ?? '' },
-        { label: 'Phone', value: String(facilityInfo.assessmentContact?.phoneNumber ?? '') },
-        { label: 'Email', value: facilityInfo.assessmentContact?.email ?? '' },
-      ],
-    };
-
-    return [general, location, facilityContact, assessmentContact];
+    return [generalAndLocation, contacts];
   }
 
   private buildExecutiveSummarySections(ui: ExecutiveSummaryUI): SummaryTableSection[] {

@@ -1,4 +1,4 @@
-export type ReportSectionType = 'text' | 'key-value-list' | 'summary-table' | 'chart';
+export type ReportSectionType = 'text' | 'key-value-list' | 'paired-key-value' | 'summary-table' | 'chart';
 
 export interface ReportSection {
   type: ReportSectionType;
@@ -17,6 +17,17 @@ export interface KeyValueSection extends ReportSection {
   rows: Array<{ label: string; value: string; unit?: string }>;
   showHeaders?: boolean;
   headerLabel?: string;
+}
+
+export interface KeyValueColumn {
+  rows: Array<{ label: string; value: string; unit?: string }>;
+  headerLabel?: string;
+}
+
+export interface PairedKeyValueSection extends ReportSection {
+  type: 'paired-key-value';
+  left: KeyValueColumn;
+  right: KeyValueColumn;
 }
 
 export interface SummaryTableSection extends ReportSection {

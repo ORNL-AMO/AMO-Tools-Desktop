@@ -4,6 +4,7 @@ import { ReportDocument } from '../models/report-document.model';
 import {
   ChartSection,
   KeyValueSection,
+  PairedKeyValueSection,
   ReportSection,
   SummaryTableSection,
   TextSection,
@@ -112,6 +113,8 @@ export class PdfReportService extends BaseReportService {
         return this.renderText(pdf, section as TextSection, cursorY);
       case 'key-value-list':
         return this.renderKeyValue(pdf, section as KeyValueSection, cursorY);
+      case 'paired-key-value':
+        return this.renderPairedKeyValue(pdf, section as PairedKeyValueSection, cursorY);
       case 'summary-table':
         return this.renderTable(pdf, section as SummaryTableSection, cursorY);
       case 'chart':
@@ -170,6 +173,50 @@ export class PdfReportService extends BaseReportService {
       styles: { fontSize: BODY_FONT_SIZE, cellPadding: 2 },
       columnStyles: { 0: { cellWidth: 80 } }
     });
+    return (pdf as any).lastAutoTable.finalY + SECTION_GAP_MM;
+  }
+
+  /**
+   * Renders a paired section as a single 4-column table: [leftLabel | leftValue | rightLabel | rightValue].
+   * The two section headers span their respective column pairs in the header row.
+   * Returns the Y position after the table.
+   */
+  private renderPairedKeyValue(pdf: jsPDF, section: PairedKeyValueSection, cursorY: number): number {
+    cursorY = this.renderSectionTitle(pdf, section.title, cursorY);
+
+    const leftRows = section.left.rows;
+    const rightRows = section.right.rows;
+    const maxRows = Math.max(leftRows.length, rightRows.length);
+
+    const body: any[][] = [];
+    for (let i = 0; i < maxRows; i++) {
+      const l = leftRows[i];
+      const r = rightRows[i];
+      body.push([l?.label ?? '', l?.value ?? '', r?.label ?? '', r?.value ?? '']);
+    }
+
+    const LABEL_COL_WIDTH = 60;
+    const valueColWidth = (CONTENT_WIDTH_MM - LABEL_COL_WIDTH * 2) / 2;
+
+    autoTable(pdf, {
+      head: [[
+        { content: section.left.headerLabel ?? 'Property', colSpan: 2, styles: { halign: 'left' } },
+        { content: section.right.headerLabel ?? 'Property', colSpan: 2, styles: { halign: 'left' } },
+      ]],
+      body,
+      startY: cursorY,
+      margin: { left: PAGE_MARGIN_MM, right: PAGE_MARGIN_MM },
+      theme: 'striped',
+      headStyles: { fillColor: this.moduleColor, fontSize: BODY_FONT_SIZE, fontStyle: 'bold' },
+      styles: { fontSize: BODY_FONT_SIZE, cellPadding: 2 },
+      columnStyles: {
+        0: { cellWidth: LABEL_COL_WIDTH },
+        1: { cellWidth: valueColWidth },
+        2: { cellWidth: LABEL_COL_WIDTH },
+        3: { cellWidth: valueColWidth },
+      },
+    });
+
     return (pdf as any).lastAutoTable.finalY + SECTION_GAP_MM;
   }
 
