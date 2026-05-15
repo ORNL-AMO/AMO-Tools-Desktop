@@ -29,9 +29,30 @@ export class ProcessCoolingChartsService {
       }});
 
     const maxEfficiency = Math.max(...chillerOutput.flatMap(c => c.ariEfficiencyProfile.slice(1)));
-    const tickStep = maxEfficiency <= 1.2 ? 0.2 : Math.ceil((maxEfficiency / 6) / 0.2) * 0.2;
-    const yMax = Math.ceil(maxEfficiency / tickStep) * tickStep;
-    const tickvals = Array.from({ length: Math.round(yMax / tickStep) + 1 }, (_, i) => parseFloat((i * tickStep).toFixed(1))).slice(0, 7);
+    const NUM_INTERVALS = 6;
+    let tickStep: number;
+    let yMax: number;
+    let tickformat: string;
+
+    if (maxEfficiency >= 10) {
+      yMax = Math.ceil(maxEfficiency) + 1;
+      tickStep = yMax / NUM_INTERVALS;
+      tickformat = '.0f';
+      console.log('maxEfficiency >= 10', { maxEfficiency, yMax, tickStep });
+    } else if (maxEfficiency >= 1) {
+      yMax = parseFloat((Math.ceil(maxEfficiency * 10) / 10 + 0.2).toFixed(1));
+      tickStep = parseFloat((yMax / NUM_INTERVALS).toFixed(1));
+      tickformat = '.1f';
+      console.log('maxEfficiency >= 10', { maxEfficiency, yMax, tickStep });
+    } else {
+      yMax = parseFloat((Math.ceil(maxEfficiency * 10) / 10 + 0.02).toFixed(2));
+      tickStep = parseFloat((yMax / NUM_INTERVALS).toFixed(2));
+      tickformat = '.2f';
+            console.log('maxEfficiency <1.0>', { maxEfficiency, yMax, tickStep });
+
+    }
+    const tickvals = Array.from({ length: NUM_INTERVALS + 1 }, (_, i) => parseFloat((i * tickStep).toFixed(2)));
+    const rangeMax = tickvals[tickvals.length - 1];
 
     const layout = {
       xaxis: {
@@ -46,9 +67,9 @@ export class ProcessCoolingChartsService {
         rangemode: 'tozero',
         hoverformat: '.2f',
         automargin: true,
-        range: [0, yMax],
+        range: [0, rangeMax],
         tickvals,
-        tickformat: '.1f',
+        tickformat,
       },
       margin: { t: 20, r: 20, l: 60, b: 60 },
       legend: {
