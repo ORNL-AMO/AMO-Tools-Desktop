@@ -1,6 +1,6 @@
 
     <div #content class="d-none d-lg-flex water-process-diagram-container water-process-diagram flex-column"  *ngIf="mainTab == 'diagram'">
-        <div #header *ngIf="!integratedDiagram" class="w-100 hide-print sticky-top">
+        <div #header *ngIf="!isIntegrated" class="w-100 hide-print sticky-top">
             <app-water-diagram-banner [diagram]="diagram"></app-water-diagram-banner>
         </div>
         <div class="assessment-container" [ngStyle]="{'height.px': containerHeight}"
@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <div #footer *ngIf="!integratedDiagram" id="waterProcessDiagramFooter" class="footer d-lg-block d-none hide-print">
+        <div #footer *ngIf="!isIntegrated" id="waterProcessDiagramFooter" class="footer d-lg-block d-none hide-print">
             <div class="w-100">
                 <!-- <button class="btn btn-default" (click)="back()" [disabled]="mainTab === 'setup'">Back</button> -->
                 <!-- <button *ngIf="mainTab == 'setup'" class="btn btn-primary pull-right" (click)="continue()">Next</button> -->
