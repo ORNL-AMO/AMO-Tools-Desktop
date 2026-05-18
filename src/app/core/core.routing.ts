@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { diagramResolver } from '../water-process-diagram/diagram.resolver';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { PhastComponent } from '../phast/phast.component';
 import { PsatComponent } from '../psat/psat.component';
@@ -610,11 +611,20 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'water/:id',
-    component: WaterAssessmentComponent
+    component: WaterAssessmentComponent,
+    children: [
+      {
+        path: 'diagram/:diagramId',
+        component: WaterProcessDiagramComponent,
+        resolve: { diagram: diagramResolver },
+        data: { integrated: true },
+      }
+    ]
   },
   {
     path: 'process-flow-diagram/:id',
     component: WaterProcessDiagramComponent,
+    resolve: { diagram: diagramResolver },
   },
   { 
     path: '**', 

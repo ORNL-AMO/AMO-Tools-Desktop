@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, firstValueFrom } from 'rxjs';
 import { AssessmentService } from '../dashboard/assessment.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -9,10 +9,10 @@ import { Assessment } from '../shared/models/assessment';
 import { WaterAssessmentService, WaterMainTabString } from './water-assessment.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
 import { Settings } from '../shared/models/settings';
-import { IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { UpdateAssessmentFromDiagramService } from './update-assessment-from-diagram.service';
 import { WaterSystemComponentService } from './water-system-component.service';
 import { ParentContainerDimensions, WasteWaterTreatment, WaterAssessment } from 'process-flow-lib';
+import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
 
 @Component({
   selector: 'app-water-assessment',
@@ -33,7 +33,6 @@ export class WaterAssessmentComponent {
 
   diagramId: number;
   diagramContainerDimensions: ParentContainerDimensions;
-  integratedDiagram: IntegratedAssessmentDiagram;
   assessment: Assessment;
   settings: Settings;
   showUpdateUnitsModal: boolean = false;
@@ -57,6 +56,7 @@ export class WaterAssessmentComponent {
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
   constructor(private activatedRoute: ActivatedRoute,
+    private router: Router,
     private convertWaterAssessmentService: ConvertWaterAssessmentService, 
     private updateAssessmentFromDiagramService: UpdateAssessmentFromDiagramService,
     private assessmentDbService: AssessmentDbService, 
@@ -65,7 +65,8 @@ export class WaterAssessmentComponent {
     private settingsDbService: SettingsDbService, 
     private waterAssessmentService: WaterAssessmentService,
     private assessmentService: AssessmentService,
-    private analyticsService: AnalyticsService) { }
+    private analyticsService: AnalyticsService,
+    private waterProcessDiagramService: WaterProcessDiagramService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-water-assessment', undefined);
@@ -188,11 +189,10 @@ export class WaterAssessmentComponent {
       this.save(this.assessment.water);
     }
 
-    this.integratedDiagram = {
-      diagramId: this.assessment.diagramId,
-      assessment: this.assessment,
-      parentDimensions: undefined
-    }
+    this.router.navigate(['diagram', this.assessment.diagramId], {
+      relativeTo: this.activatedRoute,
+      skipLocationChange: true,
+    });
   }
 
   async save(waterAssessment: WaterAssessment) {
@@ -229,16 +229,15 @@ export class WaterAssessmentComponent {
           footerHeight = this.footer.nativeElement.offsetHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
-        if (this.integratedDiagram) {
-
-          this.integratedDiagram.parentDimensions = {
-            height: contentHeight,
-            headerHeight: headerHeight,
-            footerHeight: footerHeight
-          }
-        }
         if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
           this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+        }
+        if (this.mainTab === 'diagram') {
+          this.waterProcessDiagramService.parentContainer.next({
+            height: contentHeight,
+            headerHeight: headerHeight,
+            footerHeight: footerHeight,
+          });
         }
       }, 100);
     }
