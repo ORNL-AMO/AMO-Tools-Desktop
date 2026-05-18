@@ -1,8 +1,11 @@
-
-    <div #content class="d-none d-lg-flex water-process-diagram-container water-process-diagram flex-column"  *ngIf="mainTab == 'diagram'">
-        <div #header *ngIf="!isIntegrated" class="w-100 hide-print sticky-top">
-            <app-water-diagram-banner [diagram]="diagram"></app-water-diagram-banner>
-        </div>
+<!-- * IMPORTANT: content container and assessment container must be allowed to render without delay so the web component contained in water diagram can mount properly -->
+@if (mainTab == 'diagram') {
+    <div #content class="d-none d-lg-flex water-process-diagram-container water-process-diagram flex-column">
+        @if (!isIntegrated) {
+            <div #header class="w-100 hide-print sticky-top">
+                <app-water-diagram-banner [diagram]="diagram"></app-water-diagram-banner>
+            </div>
+        }
         <div class="assessment-container" [ngStyle]="{'height.px': containerHeight}"
             [ngClass]="{'scroll-item': mainTab == 'summary' || mainTab == 'analysis'}">
             <div class="w-100" [ngClass]="{'modal-open': isModalOpen == true}">
@@ -11,24 +14,33 @@
             </div>
         </div>
 
-        <div #footer *ngIf="!isIntegrated" id="waterProcessDiagramFooter" class="footer d-lg-block d-none hide-print">
-            <div class="w-100">
-                <!-- <button class="btn btn-default" (click)="back()" [disabled]="mainTab === 'setup'">Back</button> -->
-                <!-- <button *ngIf="mainTab == 'setup'" class="btn btn-primary pull-right" (click)="continue()">Next</button> -->
-                <button *ngIf="mainTab == 'diagram' && diagram.assessmentId === undefined" class="btn btn-primary pull-right" (click)="createAssessment()">Create Assessment</button>
-                <button *ngIf="mainTab == 'diagram' && diagram.assessmentId !== undefined" class="btn btn-primary pull-right" (click)="goToAssessment()">Go To Assessment</button>
+        @if (!isIntegrated) {
+            <div #footer id="waterProcessDiagramFooter" class="footer d-lg-block d-none hide-print">
+                <div class="w-100">
+                    <!-- <button class="btn btn-default" (click)="back()" [disabled]="mainTab === 'setup'">Back</button> -->
+                    <!-- <button *ngIf="mainTab == 'setup'" class="btn btn-primary pull-right" (click)="continue()">Next</button> -->
+                    @if (diagram.assessmentId === undefined) {
+                        <button class="btn btn-primary pull-right" (click)="createAssessment()">Create Assessment</button>
+                    }
+                    @if (diagram.assessmentId !== undefined) {
+                        <button class="btn btn-primary pull-right" (click)="goToAssessment()">Go To Assessment</button>
+                    }
+                </div>
             </div>
-        </div>
+        }
     </div>
+}
 
-<app-create-assessment-modal *ngIf="displayCreateAssessmentModal" 
-[diagram]="diagram" 
-[integratedCreateType]="'Water'"
-(onClose)="hideCreateAssessmentModal()"></app-create-assessment-modal>
+@if (displayCreateAssessmentModal) {
+    <app-create-assessment-modal
+    [diagram]="diagram"
+    [integratedCreateType]="'Water'"
+    (onClose)="hideCreateAssessmentModal()"></app-create-assessment-modal>
+}
 
 <div class="d-flex d-lg-none" [class.d-none]="isTouchDevice">
   <span class="alert-warning pull-right small">
-    Water Diagram is unavailable to view on your current device. 
+    Water Diagram is unavailable to view on your current device.
     Please export the assessment and upload to a desktop or a device with a larger screen size.
-  </span>    
+  </span>
 </div>
