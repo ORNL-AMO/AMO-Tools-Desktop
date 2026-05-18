@@ -306,7 +306,7 @@ export const getSystemTrueCostData = (trueCostOfSystems: TrueCostOfSystems, node
 
 const getSystemAdjustedComponentTypes = (systemAttributionMap: SystemAttributionMap, systemKey: string) => {
   let adjustedComponentTypes: string[] = [];
-  if (systemAttributionMap && Object.values(systemAttributionMap[systemKey])) {
+  if (systemAttributionMap && systemAttributionMap[systemKey] && Object.keys(systemAttributionMap[systemKey]).length > 0) {
     Object.keys(systemAttributionMap[systemKey]).forEach((componentId: string) => {
       const attribution: CostComponentAttribution = systemAttributionMap[systemKey][componentId];
       if (attribution.totalAttribution.adjusted !== undefined) {
