@@ -15,6 +15,18 @@ export class ChillerProfileChartComponent {
   private plotlyService = inject(PlotlyService);
   private processCoolingResultsService = inject(ProcessCoolingResultsService);
   private chartsService = inject(ProcessCoolingChartsService);
+  plotlyMarkerShapes: Array<string> = [
+    'star',
+    'star-diamond',
+    'hexagram',
+    'star-square',
+    'square',
+    'diamond',
+    'cross',
+    'x',
+    'diamond-wide',
+    'diamond-tall'
+  ];
 
   chartRef = viewChild<ElementRef<HTMLDivElement>>('chillerProfileChart');
 
@@ -32,7 +44,44 @@ export class ChillerProfileChartComponent {
 
       if (!filteredChillers.length) return;
       const { traces, layout, config } = this.chartsService.buildChillerProfileChart(filteredChillers);
-      this.plotlyService.newPlot(nativeElement, traces, layout, config);
+
+      let currentShapeIndex = 0;
+
+      filteredChillers.forEach((chiller, i) => {
+        let currentMarkerShape = this.plotlyMarkerShapes[currentShapeIndex];
+        if (traces[i]) {
+          traces[i].marker = {
+            ...traces[i].marker,
+            size: 12,
+            symbol: currentMarkerShape,
+          };
+        }
+
+        if (currentShapeIndex === this.plotlyMarkerShapes.length - 1) {
+          currentShapeIndex = 0;
+        } else {
+          currentShapeIndex++;
+        }
+      });
+
+      const haloTraces = filteredChillers.map((chiller, i) => ({
+        x: traces[i].x,
+        y: traces[i].y,
+        type: 'scatter',
+        mode: 'markers',
+        name: chiller.name,
+        showlegend: false,
+        hoverinfo: 'skip',
+        marker: {
+          size: 22,
+          symbol: 'circle-open',
+          color: traces[i].marker.color,
+          line: { color: traces[i].marker.color, width: 1.5 },
+          opacity: 0.45,
+        },
+      }));
+
+      this.plotlyService.newPlot(nativeElement, [...traces, ...haloTraces], layout, config);
     });
   }
 }
