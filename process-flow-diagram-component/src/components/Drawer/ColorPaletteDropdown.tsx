@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { getContrastTextColor } from '../Diagram/FlowUtils';
+import { getContrastTextColor } from 'process-flow-lib';
 
 interface ColorPaletteDropdownProps {
   selected: number;
