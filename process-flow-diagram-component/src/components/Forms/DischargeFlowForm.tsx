@@ -348,9 +348,10 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
                 helperText={hasError ? String(errors.totalFlow) : ""}
                 FormHelperTextProps={{ sx: { whiteSpace: 'normal'} }}
                 InputProps={{
-                    endAdornment: <InputAdornment position="end">
+                    endAdornment: 
+                    <InputAdornment position="end">
                         <FlowDisplayUnit />
-                    </InputAdornment>,
+                    </InputAdornment>
                 }}
             />
 
