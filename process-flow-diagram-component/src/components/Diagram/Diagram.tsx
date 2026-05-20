@@ -74,7 +74,6 @@ const Diagram = (props: DiagramProps) => {
   const isMenuDrawerOpen = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
 
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
-  console.log('nodeErrors', nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
 
   const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
@@ -264,7 +263,6 @@ export default (props: DiagramProps) => {
   // * prevent multiple store instances on parent re-renders. Could also be lifted to AppWebComponent.tsx if needed
   const storeRef = useRef<AppStore | null>(null);
   if (!storeRef.current) {
-    console.log('=== configureAppStore ===', props.processDiagram);
     storeRef.current = configureAppStore(props.processDiagram);
   }
   return (
