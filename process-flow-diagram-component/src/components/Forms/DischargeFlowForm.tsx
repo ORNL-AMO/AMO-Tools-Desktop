@@ -125,7 +125,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                         <TotalDischargeFlowField inView={inView} />
 
 
-                        {componentDischargeEdges.length > 0 &&
+                        {componentDischargeEdges && componentDischargeEdges.length > 0 &&
                             <Box sx={{ border: `1px solid ${theme.palette.primary.main}`, padding: '1rem', borderRadius: '8px', marginTop: '2rem', paddingTop: '2rem' }}>
                                 <ToggleDataEntryUnitButton inPercent={inPercent} disabled={disabledToggle} handleToggleDataEntryUnit={onToggleDataEntryUnit} />
 
@@ -165,17 +165,6 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                                                             }}
                                                             onChange={(event) => onFlowValueInputChange(event, edge.id, handleChange)}
                                                             sx={{ m: 1, width: '100%' }}
-                                                            InputProps={{
-                                                                endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
-                                                                    <span style={{ zIndex: 1, background: 'white' }}>
-                                                                        {inPercent ?
-                                                                            <span>%</span>
-                                                                            :
-                                                                            <FlowDisplayUnit />
-                                                                        }
-                                                                    </span>
-                                                                </InputAdornment>,
-                                                            }}
                                                         />
                                                         <SmallTooltip title={`Set all flow values to the end of path`}
                                                             slotProps={{
@@ -366,7 +355,7 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
             />
 
             {/* This button group is being collapse-animated to smoothly hide/display it as absolute within the parent accordian. When we no longer have the parent accordian, this can be removed  */}
-            {componentDischargeEdges?.length &&
+            {componentDischargeEdges && componentDischargeEdges.length > 0 && (
             <Collapse in={inView} timeout={{ enter: 10, exit: 100 }} unmountOnExit>
                 <Box display={'flex'} justifyContent={'center'} position={'absolute'} width="100%" marginTop={'1rem'}>
                     <Box position={'relative'}
@@ -422,7 +411,7 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
                     </Box>
                 </Box>
             </Collapse>
-            }
+            )}
         </Box>
     );
 };
