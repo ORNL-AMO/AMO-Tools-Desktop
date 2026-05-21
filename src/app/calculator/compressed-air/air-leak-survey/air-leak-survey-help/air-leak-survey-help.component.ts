@@ -4,7 +4,6 @@ import { Settings } from '../../../../shared/models/settings';
 @Component({
   selector: 'app-air-leak-survey-help',
   templateUrl: './air-leak-survey-help.component.html',
-  styleUrls: ['./air-leak-survey-help.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
