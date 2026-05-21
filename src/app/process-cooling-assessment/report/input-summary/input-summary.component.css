@@ -47,6 +47,4 @@ tr > th:not(:first-child){
 
 .chart-body {
     padding: 20px; 
-    overflow-x: hidden;
-    overflow-y: auto;
 }
