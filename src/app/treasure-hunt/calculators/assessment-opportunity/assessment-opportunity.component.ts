@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
-import { AssessmentOpportunity, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
+import { AssessmentOpportunity, EnergyUseItem, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
 import { AssessmentOpportunityService } from '../../treasure-hunt-calculator-services/assessment-opportunity.service';
 import { AssessmentEnergyOption, IntegratedAssessment, ModificationEnergyOption } from '../../../shared/assessment-integration/assessment-integration.service';
 import { Subscription } from 'rxjs';
@@ -98,12 +98,12 @@ export class AssessmentOpportunityComponent {
     this.tabSelect = str;
   }
 
-  saveBaseline(baselineData: Array<{ type: string, amount: number }>) {
+  saveBaseline(baselineData: Array<EnergyUseItem>) {
     this.assessmentOpportunity.baselineEnergyUseItems = baselineData;
     this.getResults();
   }
 
-  saveModification(modificationData: Array<{ type: string, amount: number }>) {
+  saveModification(modificationData: Array<EnergyUseItem>) {
     this.assessmentOpportunity.modificationEnergyUseItems = modificationData;
     this.getResults();
   }

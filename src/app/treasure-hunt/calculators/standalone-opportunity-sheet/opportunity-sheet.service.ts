@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem, OpportunityCost, Treasure } from '../../../shared/models/treasure-hunt';
+import { OpportunitySheet, OpportunitySheetResult, OpportunitySheetResults, EnergyUseItem, EnergyUseType, OpportunityCost, Treasure } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import * as _ from 'lodash';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -88,7 +88,7 @@ export class OpportunitySheetService {
     };
   }
 
-  getEnergyUseData(oppItems: Array<EnergyUseItem>, unitCost: number, type: string, settings: Settings): { energyUse: number, energyCost: number, numItems: number } {
+  getEnergyUseData(oppItems: Array<EnergyUseItem>, unitCost: number, type: EnergyUseType, settings: Settings): { energyUse: number, energyCost: number, numItems: number } {
     let items: Array<EnergyUseItem> = oppItems.filter(item => { return item.type == type });
     let energyUse: number = 0;
     let numItems: number = 0;

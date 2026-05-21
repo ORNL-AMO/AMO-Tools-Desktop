@@ -1,0 +1,131 @@
+<div class="row phast align-items-top">
+  <div class="col-12">
+    <div class="header card-header">
+      <h3>Help</h3>
+    </div>
+  </div>
+</div>
+<div class="row justify-content-center data-row align-items-center">
+  <div class="col-11">
+    <div class="p-2 pt-3 d-flex flex-column help-info">
+      <h5>
+        Custom Lighting Fixture Material Help
+        <br>
+        <small class="text-muted">
+        </small>
+      </h5>
+      <hr class="my-1 hr-spacer">
+
+      <div class="my-2" *ngIf="currentField == 'selectedMaterial'">
+        <h6>
+          Start With Existing
+          <br>
+          <small class="text-muted">
+            Use an existing fixture's properties to get started.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'name'">
+        <h6>
+          Material Name
+          <br>
+          <small class="text-muted">
+            Use a unique name for your new material. Duplicates will not be saved.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'category'">
+        <h6>
+          Category
+          <br>
+          <small class="text-muted">
+            Select the type of fixture (e.g., Metal Halide, LED Troffers, etc.).
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'type'">
+        <h6>
+          Fixture Type
+          <br>
+          <small class="text-muted">
+            Subtype of light fixture, based on Wattage, Number of Lamps or tube diameter.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'lampsPerFixture'">
+        <h6>
+          Lamps per Fixture
+          <br>
+          <small class="text-muted">
+            Number of lamps or bulbs in the fixture.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'wattsPerLamp'">
+        <h6>
+          Watts per Lamp
+          <br>
+          <small class="text-muted">
+            Power used by each lamp or bulb in the fixture.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'lumensPerLamp'">
+        <h6>
+          Lumens per Lamp
+          <br>
+          <small class="text-muted">
+            Light output for each lamp. (Optional)
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'lampLife'">
+        <h6>
+          Lamp Life (h)
+          <br>
+          <small class="text-muted">
+            Expected operating life of the lamp in hours. (Optional)
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'coefficientOfUtilization'">
+        <h6>
+          Coefficient of Utilization
+          <br>
+          <small class="text-muted">
+            A coefficient of utilization (CU) is a measure of the efficiency of a light in transferring luminous energy to the working plane in a particular area. The CU is the ratio of luminous flux from a luminaire incident upon a work plane to that emitted by the lamps within the luminaire. (Optional)
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'ballastFactor'">
+        <h6>
+          Ballast Factor
+          <br>
+          <small class="text-muted">
+            A light ballast regulates the amount of electric current passing through the lamp by distributing the current equally among the various components of the lighting device. The Ballast Factor is the fraction of the light that will be emitted from a lamp when using that particular ballast. Note: LEDs do not require ballasts, if planning a lighting upgrade to LEDs, without bypassing or removing your ballasts, you will not see as much energy savings or LED life. Ballast Factors are usually between 0.7 and 1.2.
+          </small>
+        </h6>
+      </div>
+
+      <div class="my-2" *ngIf="currentField == 'lumenDegradationFactor'">
+        <h6>
+          Lumen Degradation Factor
+          <br>
+          <small class="text-muted">
+            The ratio of lumen output at lamp half-life to the initial lumen output. (Optional)
+          </small>
+        </h6>
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AssessmentOpportunity, AssessmentOpportunityResult, AssessmentOpportunityResults, EnergyUsage, EnergyUseItem, OpportunityCost, OpportunitySheetResults, OpportunitySummary, Treasure, TreasureHunt } from '../../shared/models/treasure-hunt';
+import { AssessmentOpportunity, AssessmentOpportunityResult, AssessmentOpportunityResults, EnergyUsage, EnergyUseItem, EnergyUseType, OpportunityCost, OpportunitySheetResults, OpportunitySummary, Treasure, TreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 
 @Injectable({
@@ -40,7 +40,7 @@ export class AssessmentOpportunityService {
   }
 
   getResults(assessmentOpportunity: AssessmentOpportunity, settings: Settings): AssessmentOpportunityResults {
-    let energyTypes: Set<string> =  new Set(assessmentOpportunity.baselineEnergyUseItems.map(energyItem => energyItem.type));
+    let energyTypes: Set<EnergyUseType> =  new Set(assessmentOpportunity.baselineEnergyUseItems.map(energyItem => energyItem.type));
 
     let totalCostSavings: number = 0;
     let baselineElectricityResult: { energyUse: number, energyCost: number, numItems: number };
@@ -145,7 +145,7 @@ export class AssessmentOpportunityService {
     };
   }
 
-  getEnergyUseData(oppItems: Array<EnergyUseItem>, type: string): { energyUse: number, energyCost: number, numItems: number } {
+  getEnergyUseData(oppItems: Array<EnergyUseItem>, type: EnergyUseType): { energyUse: number, energyCost: number, numItems: number } {
     let items: Array<EnergyUseItem> = oppItems.filter(item => { return item.type == type });
     let energyUse: number = 0;
     let integratedCost: number = 0;

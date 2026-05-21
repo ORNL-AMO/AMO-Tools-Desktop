@@ -1,20 +1,21 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme } from '@mui/material';
+import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange } from '../Diagram/diagramReducer';
+import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange, setPaletteColors, getPaletteColorForType } from '../Diagram/diagramReducer';
 import { RootState, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { blue } from '@mui/material/colors';
-import { ParentContainerDimensions, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getIsDiagramValid } from 'process-flow-lib';
+import { NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getContrastTextColor, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
 import { Node } from '@xyflow/react';
-
+import TextField from '@mui/material/TextField';
+import { setDiagramNotes } from '../Diagram/diagramReducer';
+import ColorPaletteDropdown, { allPalettes } from "./ColorPaletteDropdown"
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(2),
@@ -28,7 +29,9 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
 const MenuSidebar = memo((props: MenuSidebarProps) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-
+  const diagramNotes = useAppSelector((state) => state.diagram.diagramNotes);
+  const paletteColors = useAppSelector((state: RootState) => state.diagram.diagramOptions.paletteColors);
+  const selectedPaletteIdx = allPalettes.findIndex((palette) => palette.every((color, i) => color?.toLowerCase() === paletteColors?.[i]?.toLowerCase()));
   const hasAssessment = useAppSelector(selectHasAssessment);
   const edgeType = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const strokeWidth = useAppSelector((state: RootState) => state.diagram.diagramOptions.strokeWidth);
@@ -86,26 +89,32 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
   return (
     <>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%' }}>
-          <Tabs value={selectedTab} onChange={handleTabChange} aria-label="diagram context tabs">
-            <Tab sx={{ fontSize: '.75rem' }} label="Build" />
-            <Tab sx={{ fontSize: '.75rem' }} label="Results" />
-            <Tab sx={{ fontSize: '.75rem' }} label="Options" />
-            <Tab sx={{ fontSize: '.75rem' }} label="Help" />
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: '100%', overflowX: 'auto' }}>
+          <Tabs
+            value={selectedTab}
+            onChange={handleTabChange}
+            aria-label="diagram context tabs"
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+          >
+            <Tab sx={{ fontSize: '.70rem' }} label="Build" />
+            <Tab sx={{ fontSize: '.70rem' }} label="Results" />
+            <Tab sx={{ fontSize: '.70rem' }} label="Options" />
+            <Tab sx={{ fontSize: '.70rem' }} label="Notes" />
             {!isDiagramValid && validationWindowLocation === 'alerts-tab'? 
-              <Tab sx={{ fontSize: '.75rem' }} label={
+              <Tab sx={{ fontSize: '.70rem' }} label={
                 <Box display={'block'}>
                   <Badge badgeContent={Boolean(nodeErrors)? Object.keys(nodeErrors).length : 0} color="error" sx={{ paddingRight: '.25rem' }}>
                         <NotificationsIcon sx={{ width: '.75em', color: selectedTab === 4 ? `${theme.palette.primary.main} !important` : 'inherit' }} />
                       </Badge>
-
-                <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.75rem', marginLeft: '.5rem', color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
+                <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.70rem', marginLeft: '.5rem', color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
                 </Box>
               } />
               : 
-              <Tab sx={{ fontSize: '.75rem' }} label="Alerts" disabled />
+              <Tab sx={{ fontSize: '.70rem' }} label="Alerts" disabled />
             }
-
+            <Tab sx={{ fontSize: '.70rem' }} label="Help" />
           </Tabs>
         </Box>
 
@@ -115,15 +124,20 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Typography>
           <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
             <Grid container spacing={{ xs: 1, sm: 1, md: 2 }} columns={{ xs: 1, sm: 2, md: 4 }}>
-              {processFlowParts.map((part: ProcessFlowPart) => (
-                <Grid size={{ xs: 1, sm: 2, md: 2 }}  key={part.processComponentType}>
-                  <WaterComponent className={`dndnode ${part.processComponentType}`}
-                    onDragStart={(event) => onDragStart(event, part.processComponentType)}
-                    draggable={true}>
-                    {part.name}
-                  </WaterComponent>
-                </Grid>
-              ))}
+              {processFlowParts.map((part: ProcessFlowPart) => {
+                const bgColor = getPaletteColorForType(part.processComponentType as WaterProcessComponentType, paletteColors ?? []);
+                const textColor = bgColor ? getContrastTextColor(bgColor) : undefined;
+                return (
+                  <Grid size={{ xs: 1, sm: 2, md: 2 }}  key={part.processComponentType}>
+                    <WaterComponent className={`dndnode ${part.processComponentType}`}
+                      onDragStart={(event) => onDragStart(event, part.processComponentType)}
+                      draggable={true}
+                      style={{ backgroundColor: bgColor, color: textColor }}>
+                      {part.name}
+                    </WaterComponent>
+                  </Grid>
+                );
+              })}
               {/* <Grid item xs={1} sm={2} md={2}>
                 <WaterComponent className={`dndnode splitterNode`}
                   onDragStart={(event) => onDragStart(event, 'splitter-node-4')} draggable> 4-way Connection</WaterComponent>
@@ -164,21 +178,47 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
           </Box>
         </TabPanel>
 
-        <TabPanel value={selectedTab} index={2}>
-          <Box paddingX={'.5rem'}>
+        <TabPanel value={selectedTab} index={2} style={{ paddingTop: 0 }}>
+          <Box paddingX={'.5rem'} paddingTop={0}>
             <div className="sidebar-options">
-            <Box className={'sidebar-option-container'}>
-                  <label htmlFor={'unitsOfMeasure'}>Units of Measure</label>
-                  <select className="form-control diagram-select" id={'unitsOfMeasure'} name="unitsOfMeasure"
-                    value={unitsOfMeasure}
-                    disabled={hasAssessment}
-                    onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}>
-                    <option key={'imperial'} value={'Imperial'}>Imperial</option>
-                    <option key={'metric'} value={'Metric'}>Metric</option>
-                  </select>
-                </Box>
+            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0} sx={{paddingTop: 0, marginTop: 0}}>
+              <ColorPaletteDropdown
+                selected={selectedPaletteIdx}
+                onChange={(paletteIdx) => {
+                  dispatch(setPaletteColors(allPalettes[paletteIdx]));
+                }}
+              />
+              <FormControl fullWidth size="small" sx={{ paddingTop: 0 }}>
+                <InputLabel id="unitsOfMeasure-label">Units of Measure</InputLabel>
+                <Select
+                  labelId="unitsOfMeasure-label"
+                  id="unitsOfMeasure"
+                  name="unitsOfMeasure"
+                  size="small"
+                  label="Units of Measure"
+                  value={unitsOfMeasure}
+                  onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}
+                  disabled={hasAssessment}
+                  sx={{ minWidth: 120 }}
+                  MenuProps={{
+                    disablePortal: true,
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }
+                  }}
+                >
+                  <MenuItem key={'imperial'} value={'Imperial'}>Imperial</MenuItem>
+                  <MenuItem key={'metric'} value={'Metric'}>Metric</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
 
-              <Box className={'sidebar-option-container'} padding={'.5rem'}>
+              <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
                 <InputField
                   name={'electricityCost'}
                   id={'electricityCost'}
@@ -196,45 +236,98 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                 />
               </Box>
                 
-            <Box className={'sidebar-option-container'}>
-                  <label htmlFor={'flowDecimalPrecision'}>Decimal Precision</label>
-                  <select className="form-control diagram-select" id={'flowDecimalPrecision'} name="flowDecimalPrecision"
-                    value={flowDecimalPrecision}
-                    onChange={(e) => dispatch(flowDecimalPrecisionChange(e.target.value))}>
-                    {flowDecimalPrecisionOptions.map((option) => {
-                    return (
-                      <option key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</option>
-                    )
-                  })}
-                  </select>
-                </Box>
+            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
+              <FormControl fullWidth size="small">
+                <InputLabel id="flowDecimalPrecision-label">Decimal Precision</InputLabel>
+                <Select
+                  labelId="flowDecimalPrecision-label"
+                  id="flowDecimalPrecision"
+                  name="flowDecimalPrecision"
+                  size="small"
+                  label="Flow Decimal Precision"
+                  value={flowDecimalPrecision}
+                  onChange={(e) => dispatch(flowDecimalPrecisionChange(String(e.target.value)))}
+                  sx={{ minWidth: 120 }}
+                  MenuProps={{
+                    disablePortal: true,
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }
+                  }}
+                >
+                  {flowDecimalPrecisionOptions.map((option) => (
+                    <MenuItem key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
 
-                <Box className={'sidebar-option-container'}>
-                  <label htmlFor={'conductivityUnit'}>Conductivity Unit</label>
-                  <select className="form-control diagram-select" id={'conductivityUnit'} name="conductivityUnit"
-                    value={conductivityUnit}
-                    onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}>
-                    {conductivityUnitOptions.map((option) => {
-                    return (
-                      <option key={`conductivityUnit_${option.value}`} value={option.value}>{option.display}</option>
-                    )
-                  })}
-                  </select>
-                </Box>
+            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
+              <FormControl fullWidth size="small">
+                <InputLabel id="conductivityUnit-label">Conductivity Unit</InputLabel>
+                <Select
+                  labelId="conductivityUnit-label"
+                  id="conductivityUnit"
+                  name="conductivityUnit"
+                  size="small"
+                  label="Conductivity Unit"
+                  value={conductivityUnit}
+                  onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}
+                  sx={{ minWidth: 120 }}
+                  MenuProps={{
+                    disablePortal: true,
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }
+                  }}
+                >
+                  {conductivityUnitOptions.map((option) => (
+                    <MenuItem key={`conductivityUnit_${option.value}`} value={option.value}>{option.display}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
 
-              <Box className={'sidebar-option-container'}>
-                <label htmlFor="edgeType" className="diagram-label">Default Line Type</label>
-                <select className="form-control diagram-select" id="edgeType"
+            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
+              <FormControl fullWidth size="small">
+                <InputLabel id="edgeType-label">Default Line Type</InputLabel>
+                <Select
+                  labelId="edgeType-label"
+                  id="edgeType"
                   name="edgeType"
+                  size="small"
+                  label="Edge Type"
                   value={edgeType}
-                  onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}>
-                  {edgeTypeOptions.map((option: SelectListOption) => {
-                    return (
-                      <option key={option.value} value={option.value}>{option.display}</option>
-                    )
-                  })}
-                </select>
-              </Box>
+                  onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}
+                  sx={{ minWidth: 120 }}
+                  MenuProps={{
+                    disablePortal: true,
+                    anchorOrigin: {
+                      vertical: 'bottom',
+                      horizontal: 'left',
+                    },
+                    transformOrigin: {
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }
+                  }}
+                >
+                  {edgeTypeOptions.map((option: SelectListOption) => (
+                    <MenuItem key={option.value} value={option.value}>{option.display}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
 
               <Box className={'sidebar-option-container'}>
                 <label htmlFor={'strokeWidth'} >Line Thickness</label>
@@ -336,6 +429,35 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         </TabPanel>
 
         <TabPanel value={selectedTab} index={3}>
+          <Box sx={{ flexGrow: 1, paddingY: '1rem', paddingX: '.5rem' }}>
+            <div className="form-group pt-4">
+              <TextField
+                id="diagramNotes"
+                name="diagramNotes"
+                label="Diagram Notes"
+                multiline
+                minRows={8}
+                value={diagramNotes ?? ""}
+                onChange={e => {
+                  dispatch(setDiagramNotes(e.target.value ?? ""));
+                }}
+                placeholder="Add additional information for your diagram"
+                fullWidth
+                variant="outlined"
+              />
+            </div>
+          </Box>
+        </TabPanel>
+
+        <TabPanel value={selectedTab} index={4}>
+          <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
+                {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
+                  <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} />
+                }
+          </Box>
+        </TabPanel>
+
+        <TabPanel value={selectedTab} index={5}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
             <Typography variant='h2' component={'div'} sx={{ fontSize: '16px', paddingTop: '.5rem' }}>
               Many diagram actions support keyboard input and key combinations:
@@ -363,14 +485,6 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             </Box>
           </Box>
         </TabPanel>
-
-        <TabPanel value={selectedTab} index={4}>
-          <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
-                {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
-                  <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} />
-                }
-          </Box>
-        </TabPanel>
       </>
   );
 });
@@ -379,6 +493,7 @@ export default MenuSidebar;
 export interface MenuSidebarProps {
   shadowRootRef: any;
 }
+
 
 const keyInputDirections = [
   { primary: 'Move a component', secondary: 'Press arrow keys to move the component. Use Shift + Arrow for quicker movement' },

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, HostListener, ElementRef, Output, EventEmitter, Input } from '@angular/core';
-import { OpportunitySheet, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
+import { EnergyUseItem, OpportunitySheet, OpportunitySheetResults } from '../../../shared/models/treasure-hunt';
 import { Settings } from '../../../shared/models/settings';
 import { OpportunitySheetService } from './opportunity-sheet.service';
 
@@ -78,12 +78,12 @@ export class StandaloneOpportunitySheetComponent implements OnInit {
   }
 
 
-  saveBaseline(baselineData: Array<{ type: string, amount: number }>) {
+  saveBaseline(baselineData: Array<EnergyUseItem>) {
     this.opportunitySheet.baselineEnergyUseItems = baselineData;
     this.getResults();
   }
 
-  saveModification(modificationData: Array<{ type: string, amount: number }>) {
+  saveModification(modificationData: Array<EnergyUseItem>) {
     this.opportunitySheet.modificationEnergyUseItems = modificationData;
     this.getResults();
   }

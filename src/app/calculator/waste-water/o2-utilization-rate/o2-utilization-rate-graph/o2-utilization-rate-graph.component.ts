@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
 import { O2UtilizationDataPoints, O2UtilizationRateService } from '../o2-utilization-rate.service';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-o2-utilization-rate-graph',
     templateUrl: './o2-utilization-rate-graph.component.html',
@@ -78,7 +78,7 @@ export class O2UtilizationRateGraphComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       }
-      this.plotlyService.newPlot(this.o2UtilizationChart.nativeElement, [trace], layout, config);
+      this.plotlyService.newPlot(this.o2UtilizationChart.nativeElement, [trace], layout, defaultPlotlyConfig(config));
     }
   }
 

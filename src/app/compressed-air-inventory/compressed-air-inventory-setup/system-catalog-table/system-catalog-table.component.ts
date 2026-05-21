@@ -86,13 +86,15 @@ export class SystemCatalogTableComponent implements OnInit {
 
   setTableData() {
     let tableDataItems: Array<SystemCatalogTableDataItem> = new Array();
-    this.selectedCompressedAirSystem.catalog.forEach(compressedAirItem => {
-      let compressedAirItemData: SystemCatalogTableDataItem = this.getCompressedAirItemData(compressedAirItem);
-      if (!compressedAirItemData.name) {
-        compressedAirItemData.name = 'Compressor ' + (this.selectedCompressedAirSystem.catalog.indexOf(compressedAirItem) + 1);
-      }
-      tableDataItems.push(compressedAirItemData);
-    });
+    if(this.selectedCompressedAirSystem) {
+      this.selectedCompressedAirSystem.catalog.forEach(compressedAirItem => {
+        let compressedAirItemData: SystemCatalogTableDataItem = this.getCompressedAirItemData(compressedAirItem);
+        if (!compressedAirItemData.name) {
+          compressedAirItemData.name = 'Compressor ' + (this.selectedCompressedAirSystem.catalog.indexOf(compressedAirItem) + 1);
+        }
+        tableDataItems.push(compressedAirItemData);
+      });
+    }
     this.tableDataItems = tableDataItems;
   }
 

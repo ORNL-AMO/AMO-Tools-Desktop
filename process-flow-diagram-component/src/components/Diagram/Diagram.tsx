@@ -31,6 +31,7 @@ import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 import { FlowServiceProvider } from '../../services/FlowService';
+import ResultsPanel from './ResultsPanel';
 
 
 export interface DiagramProps {
@@ -49,6 +50,7 @@ const Diagram = (props: DiagramProps) => {
       return node;
     }
   })
+  const diagramNotes = useAppSelector((state: RootState) => state.diagram.diagramNotes);
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
@@ -57,6 +59,7 @@ const Diagram = (props: DiagramProps) => {
   const settings: DiagramSettings = useAppSelector((state: RootState) => state.diagram.settings);
   const recentNodeColors = useAppSelector((state: RootState) => state.diagram.recentNodeColors);
   const recentEdgeColors = useAppSelector((state: RootState) => state.diagram.recentEdgeColors);
+  const paletteColors = userDiagramOptions.paletteColors;
   const calculatedData: DiagramCalculatedData = useAppSelector((state: RootState) => state.diagram.calculatedData);
   const animated: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.animated);
   const minimapVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
@@ -72,10 +75,10 @@ const Diagram = (props: DiagramProps) => {
 
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
-  const { debouncedNodes, debouncedEdges } = useDiagramStateDebounce(nodes, edges);
+
+  const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
   const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
 
-  // * on xyFlow instance ready
   useEffect(() => {
     if (reactFlowInstance && props.height) {
       const parentState = {
@@ -108,16 +111,12 @@ const Diagram = (props: DiagramProps) => {
         calculatedData,
         recentNodeColors,
         recentEdgeColors,
+        diagramNotes: debouncedDiagramNotes
       };
-
-      // console.log('=== SAVED FlowDiagramData', JSON.parse(JSON.stringify(updatedDiagramData)));
       formatDataForMEASUR(updatedDiagramData);
-
       props.saveFlowDiagramData(updatedDiagramData);
-      // console.log('=== SAVED FORMATTED FlowDiagramData', updatedDiagramData);
     }
-  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings]);
-
+  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings, debouncedDiagramNotes, paletteColors]);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -179,8 +178,8 @@ const Diagram = (props: DiagramProps) => {
       }
 
  {/* // * Only for development result checking */}
-
-      {/* <ResultsPanel  style={{
+{/* 
+      <ResultsPanel  style={{
                 left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
                 transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
               }}></ResultsPanel> */}
@@ -237,7 +236,7 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-              <MenuSidebar shadowRootRef={props.shadowRoot}/>
+          <MenuSidebar shadowRootRef={props.shadowRoot}/>
           </SharedDrawer>
         )}
 
@@ -264,7 +263,6 @@ export default (props: DiagramProps) => {
   // * prevent multiple store instances on parent re-renders. Could also be lifted to AppWebComponent.tsx if needed
   const storeRef = useRef<AppStore | null>(null);
   if (!storeRef.current) {
-    console.log('=== configureAppStore ===', props.processDiagram);
     storeRef.current = configureAppStore(props.processDiagram);
   }
   return (

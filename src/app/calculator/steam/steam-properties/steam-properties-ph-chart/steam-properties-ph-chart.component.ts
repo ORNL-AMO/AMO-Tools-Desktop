@@ -7,7 +7,7 @@ import { graphColors } from '../../../../shared/graphColors';
 import { SaturatedPropertiesService, IsothermCoordinates } from '../../saturated-properties.service';
 import { SaturatedPropertiesConversionService } from '../../saturated-properties-conversion.service';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 
 
 @Component({
@@ -115,9 +115,9 @@ export class SteamPropertiesPhChartComponent implements OnInit {
 
     let chartLayout = JSON.parse(JSON.stringify(this.enthalpyChart.layout));
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, this.enthalpyChart.config)
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, defaultPlotlyConfig(this.enthalpyChart.config))
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, this.enthalpyChart.config)
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, defaultPlotlyConfig(this.enthalpyChart.config))
     }
     this.save();
   }
@@ -128,9 +128,9 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     }
     let chartLayout = JSON.parse(JSON.stringify(this.enthalpyChart.layout));
     if(this.expanded){
-      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout);
+      this.plotlyService.update(this.expandedChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, defaultPlotlyConfig(this.enthalpyChart.config));
     }else{
-      this.plotlyService.update(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout);
+      this.plotlyService.update(this.panelChartDiv.nativeElement, this.enthalpyChart.data, chartLayout, defaultPlotlyConfig(this.enthalpyChart.config));
     }
     this.save();
   }
@@ -161,7 +161,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
       let trace = this.saturatedPropertiesService.getEmptyTrace();
       trace.x = line.enthalpy;
       trace.y = line.pressure;
-      trace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+      trace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, false);
       this.enthalpyChart.data.push(trace);
     });
   }
@@ -194,7 +194,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     domeOutlineTrace.line.width = 2;
     domeOutlineTrace.line.color = "#000000";
     domeOutlineTrace.name = "Saturated"
-    domeOutlineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+    domeOutlineTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, false);
 
     this.enthalpyChart.data.push(domeFillTrace, domeOutlineTrace);
   }
@@ -208,7 +208,7 @@ export class SteamPropertiesPhChartComponent implements OnInit {
     pointTrace.marker.color = graphColors[0];
     pointTrace.x = [enthalpy];
     pointTrace.y = [convertedPressure];
-    pointTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, true);
+    pointTrace.hovertemplate = this.saturatedPropertiesService.getHoverTemplate(this.settings.steamSpecificEnthalpyMeasurement, this.settings.steamPressureMeasurement, false);
 
     if (this.enthalpyChart.existingPoint) {
       this.enthalpyChart.data[this.enthalpyChart.data.length - 1] = pointTrace;

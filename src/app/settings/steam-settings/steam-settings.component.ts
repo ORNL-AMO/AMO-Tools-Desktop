@@ -117,6 +117,7 @@ export class SteamSettingsComponent implements OnInit {
 
     //massFlowMeasurements
     tmpList = [
+      'lb',
       'klb',
       'tonne',
       'kg'

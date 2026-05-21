@@ -64,7 +64,7 @@
       </div>
   
       <div class="scroll-item" *ngIf="modificationExists && tabSelect == 'results'" [ngStyle]="{'height.px': helpHeight}">
-        <app-ssmt-results-panel [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex"></app-ssmt-results-panel>
+        <app-ssmt-results-panel [ssmt]="ssmt" [settings]="settings" [modificationIndex]="modificationIndex" [inSetup]="false"></app-ssmt-results-panel>
       </div>
       <div *ngIf="!modificationExists && tabSelect != 'help'">
         <!--Placeholder for help text -->

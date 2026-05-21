@@ -2,6 +2,7 @@ import './App.css'
 import Diagram from './components/Diagram/Diagram';
 import { DiagramProps } from './components/Diagram/Diagram';
 
+
 function App(props?: ProcessFlowDiagramWrapperProps) {
   let availableHeight = props.parentContainer.height - props.parentContainer.headerHeight - props.parentContainer.footerHeight;
 

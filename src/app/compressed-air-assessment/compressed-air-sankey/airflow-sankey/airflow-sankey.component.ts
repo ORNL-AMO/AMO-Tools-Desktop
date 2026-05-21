@@ -11,7 +11,7 @@ import { CompressedAirAssessmentService } from '../../compressed-air-assessment.
 import { AirflowSankeyService, CompressedAirSankeyNode, AirFlowSankeyResults } from './airflow-sankey.service';
 import { EndUseEnergyData, EndUsesFormService } from '../../baseline-tab-content/end-uses-setup/end-uses-form/end-uses-form.service';
 import { DayTypeSetupService } from '../../baseline-tab-content/end-uses-setup/end-uses-form/day-type-setup-form/day-type-setup.service';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 @Component({
     selector: 'app-airflow-sankey',
     templateUrl: './airflow-sankey.component.html',
@@ -205,17 +205,9 @@ export class AirflowSankeyComponent implements OnInit {
 
         let config = {
           modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian'],
-          responsive: true,
-          displayModeBar: true,
-          displaylogo: true
+          responsive: !this.printView
         };
-        if (this.printView) {
-          config.displaylogo = false;
-          config.displayModeBar = false;
-          config.responsive = false
-        }
-
-        this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config)
+        this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config))
           .then(chart => {
             this.addGradientElement();
             this.buildSvgArrows();

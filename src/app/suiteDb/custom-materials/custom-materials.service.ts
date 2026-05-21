@@ -7,8 +7,9 @@ import { LiquidLoadMaterialDbService } from '../../indexedDb/liquid-load-materia
 import { SolidLoadMaterialDbService } from '../../indexedDb/solid-load-material-db.service';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
+import { LightingFixtureServiceDbService } from '../../indexedDb/lighting-fixture-db.service';
+import { LightingFixtureMaterial } from '../../shared/models/materials';
 import { AtmosphereDbService } from '../../indexedDb/atmosphere-db.service';
-
 @Injectable()
 export class CustomMaterialsService {
 
@@ -19,6 +20,7 @@ export class CustomMaterialsService {
   selectedSolidLiquidFlueGas: Array<SolidLiquidFlueGasMaterial>;
   selectedSolidCharge: Array<SolidLoadChargeMaterial>;
   selectedWall: Array<WallLossesSurface>;
+  selectedLightingFixtures: Array<LightingFixtureMaterial>;
 
   getSelected: BehaviorSubject<boolean>;
   selectAll: BehaviorSubject<boolean>;
@@ -30,6 +32,7 @@ export class CustomMaterialsService {
     private flueGasMaterialDbService: FlueGasMaterialDbService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private atmosphereDbService: AtmosphereDbService,
+    private lightingFixtureServiceDbService: LightingFixtureServiceDbService
   ) {
     this.selectedAtmosphere = new Array<AtmosphereSpecificHeat>();
     this.selectedFlueGas = new Array<FlueGasMaterial>();
@@ -37,6 +40,7 @@ export class CustomMaterialsService {
     this.selectedLiquidLoadCharge = new Array<LiquidLoadChargeMaterial>();
     this.selectedSolidLiquidFlueGas = new Array<SolidLiquidFlueGasMaterial>();
     this.selectedSolidCharge = new Array<SolidLoadChargeMaterial>();
+    this.selectedLightingFixtures = new Array<LightingFixtureMaterial>();
     this.selectedWall = new Array<WallLossesSurface>();
     this.getSelected = new BehaviorSubject<boolean>(false);
     this.selectAll = new BehaviorSubject<boolean>(false);
@@ -51,7 +55,8 @@ export class CustomMaterialsService {
       liquidLoadChargeMaterial: this.selectedLiquidLoadCharge,
       solidLiquidFlueGasMaterial: this.selectedSolidLiquidFlueGas,
       solidLoadChargeMaterial: this.selectedSolidCharge,
-      wallLossesSurface: this.selectedWall
+      wallLossesSurface: this.selectedWall,
+      lightingFixtureMaterial: this.selectedLightingFixtures
     };
     return data;
   }
@@ -78,8 +83,22 @@ export class CustomMaterialsService {
     if (data.wallLossesSurface.length !== 0) {
       this.importWallLossSurfaces(data.wallLossesSurface);
     }
+    if (data.lightingFixtureMaterial.length !== 0) {
+      this.importLightingFixtures(data.lightingFixtureMaterial);
+    }
   }
 
+
+  async importLightingFixtures(data: Array<LightingFixtureMaterial>) {
+    for (let i = 0; i < data.length; i++) {
+      let material: LightingFixtureMaterial = data[i]
+      material.selected = false;
+      delete material.id;
+      await firstValueFrom(this.lightingFixtureServiceDbService.addWithObservable(material));
+      let materials = await firstValueFrom(this.lightingFixtureServiceDbService.getAllWithObservable());
+      this.lightingFixtureServiceDbService.dbLightingFixtureMaterials.next(materials);
+    }
+  }
 
   async importAtmosphere(data: Array<AtmosphereSpecificHeat>) {
     for (let i = 0; i < data.length; i++) {
@@ -176,6 +195,17 @@ export class CustomMaterialsService {
     if (data.wallLossesSurface.length !== 0) {
       this.deleteWallLossSurfaces(data.wallLossesSurface);
     }
+    if( data.lightingFixtureMaterial.length !== 0) {
+      this.deleteLightingFixtures(data.lightingFixtureMaterial);
+    }
+  }
+
+  async deleteLightingFixtures(data: Array<LightingFixtureMaterial>) {
+    for (let i = 0; i < data.length; i++) {
+      let material: LightingFixtureMaterial = data[i];
+      let materials: Array<LightingFixtureMaterial> = await firstValueFrom(this.lightingFixtureServiceDbService.deleteByIdWithObservable(material.id));
+      this.lightingFixtureServiceDbService.dbLightingFixtureMaterials.next(materials);
+    };
   }
 
   async deleteAtmosphere(data: Array<AtmosphereSpecificHeat>) {
@@ -264,6 +294,7 @@ export interface MaterialData {
   solidLiquidFlueGasMaterial: Array<SolidLiquidFlueGasMaterial>;
   solidLoadChargeMaterial: Array<SolidLoadChargeMaterial>;
   wallLossesSurface: Array<WallLossesSurface>;
+  lightingFixtureMaterial: Array<LightingFixtureMaterial>;
 }
 
 

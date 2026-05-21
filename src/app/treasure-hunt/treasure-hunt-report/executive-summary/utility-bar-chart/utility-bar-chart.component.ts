@@ -3,7 +3,7 @@ import { TreasureHuntResults } from '../../../../shared/models/treasure-hunt';
 import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-utility-bar-chart',
     templateUrl: './utility-bar-chart.component.html',
@@ -79,7 +79,7 @@ export class UtilityBarChartComponent implements OnInit {
       responsive: true
     };
 
-    this.plotlyService.newPlot(this.utilityBarChart.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.utilityBarChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions));
   }
 
   createPrintBarChart() {
@@ -114,7 +114,7 @@ export class UtilityBarChartComponent implements OnInit {
       displayModeBar: false
     };
 
-    this.plotlyService.newPlot(this.utilityBarChart.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.utilityBarChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions));
   }
 
   createRollupPrintBarChart() {
@@ -149,7 +149,7 @@ export class UtilityBarChartComponent implements OnInit {
       displayModeBar: false
     };
 
-    this.plotlyService.newPlot(this.utilityBarChart.nativeElement, data, layout, configOptions);
+    this.plotlyService.newPlot(this.utilityBarChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions));
   }
 
   getDataObject(){

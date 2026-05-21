@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { PieChartDataItem } from '../../rollup-summary-pie-chart/rollup-summary-pie-chart.component';
-import { Settings } from '../../../shared/models/settings';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 @Component({
     selector: 'app-report-summary-pie-chart',
     templateUrl: './report-summary-pie-chart.component.html',
@@ -116,7 +115,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data[0].type));
   }
 
   drawPrintPlot() {
@@ -180,7 +179,7 @@ export class ReportSummaryPieChartComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.reportSummaryPieChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data[0].type));
   }
 
 

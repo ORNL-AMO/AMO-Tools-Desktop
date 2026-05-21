@@ -157,10 +157,12 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                                                             value={currentValue}
                                                             warning={hasWarning}
                                                             helperText={hasWarning ? String(errors.flows[index]) : ""}
-                                                            FormHelperTextProps={{
-                                                                sx: {
-                                                                    whiteSpace: 'normal',
-                                                                    maxWidth: 250,
+                                                            slotProps={{
+                                                                formHelperText: {
+                                                                    sx: {
+                                                                        whiteSpace: 'normal',
+                                                                        maxWidth: 250,
+                                                                    }
                                                                 }
                                                             }}
                                                             onChange={(event) => onFlowValueInputChange(event, edge.id, handleChange)}
@@ -357,11 +359,14 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
                 onChange={(event) => onTotalFlowValueInputChange(event)}
                 error={hasError}
                 helperText={hasError ? String(errors.totalFlow) : ""}
-                FormHelperTextProps={{ sx: { whiteSpace: 'normal'} }}
-                InputProps={{
-                    endAdornment: <InputAdornment position="end">
-                        <FlowDisplayUnit />
-                    </InputAdornment>,
+                slotProps={{
+                    formHelperText: { sx: { whiteSpace: 'normal' } },
+                    htmlInput: { onWheel: (e: React.WheelEvent<HTMLInputElement>) => (e.target as HTMLElement).blur() },
+                    input: {
+                        endAdornment: <InputAdornment position="end">
+                            <FlowDisplayUnit />
+                        </InputAdornment>,
+                    },
                 }}
             />
 

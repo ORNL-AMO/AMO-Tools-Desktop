@@ -2,7 +2,7 @@ import { Component, DestroyRef, Inject, inject } from '@angular/core';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
 import { Diagram } from '../../../shared/models/diagram';
-import { BlockCosts, CostComponentSummary, getComponentTypeLabel, PlantResults, CostComponentAttribution, SystemAttributionMap } from 'process-flow-lib';
+import { BlockCosts, CostComponentSummary, getComponentTypeLabel, PlantResults, CostComponentAttribution, SystemAttributionMap, WaterProcessComponentType, getContrastTextColor } from 'process-flow-lib';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Assessment } from '../../../shared/models/assessment';
 import { TrueCostReportService } from '../../services/true-cost-report.service';
@@ -33,6 +33,15 @@ export class TrueCostEditableTableComponent {
   selectedEditRow: number = null;
   isCollapsed = false;
   form: FormGroup;
+  paletteColors: string[] = [];
+
+  private readonly PALETTE_COMPONENT_ORDER: WaterProcessComponentType[] = [
+    'water-intake',
+    'water-using-system',
+    'water-discharge',
+    'water-treatment',
+    'waste-water-treatment'
+  ];
 
   systems: {
     name: string;
@@ -54,6 +63,8 @@ export class TrueCostEditableTableComponent {
 
   ngOnInit() {
     this.plantResults = this.waterAssessmentResultsService.plantResults.getValue();
+    const diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
+    this.paletteColors = diagram?.waterDiagram?.flowDiagramData?.userDiagramOptions?.paletteColors ?? [];
     
     if (this.plantResults.systemAttributionMap) {
       Object.entries(this.plantResults.systemAttributionMap).forEach(([systemId, attributionMap]) => {
@@ -211,6 +222,13 @@ export class TrueCostEditableTableComponent {
     if (row && row.controls) {
       return row.controls.reduce((sum, ctrl) => sum + (Number(ctrl.value) || 0), 0);
     }
+  }
+
+  getPillStyles(type: WaterProcessComponentType): { background: string; color: string } {
+    const idx = this.PALETTE_COMPONENT_ORDER.indexOf(type);
+    const bg = idx !== -1 && this.paletteColors[idx] ? this.paletteColors[idx] : undefined;
+    if (!bg) return { background: '#e0e0e0', color: '#000000' };
+    return { background: bg, color: getContrastTextColor(bg) };
   }
 
   get costComponentsSystemAttribution(): FormArray {

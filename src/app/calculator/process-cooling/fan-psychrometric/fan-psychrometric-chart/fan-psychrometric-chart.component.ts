@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
 import { BaseGasDensity, PsychrometricResults } from '../../../../shared/models/fans';
 import { GasDensityFormService } from '../../../fans/fan-analysis/fan-analysis-form/gas-density-form/gas-density-form.service';
 import { graphColors } from '../../../../shared/graphColors';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-fan-psychrometric-chart',
     templateUrl: './fan-psychrometric-chart.component.html',
@@ -85,7 +85,7 @@ export class FanPsychrometricChartComponent implements OnInit {
     }
     
     if (this.expanded && this.expandedChartDiv) {
-      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
+      this.plotlyService.newPlot(this.expandedChartDiv.nativeElement, this.chart.data, this.chart.layout, defaultPlotlyConfig(this.chart.config, this.chart.data))
       .then(chart => {
         chart.on('plotly_click', chartData => {
           this.addSelectedPointTraces(chartData);
@@ -93,7 +93,7 @@ export class FanPsychrometricChartComponent implements OnInit {
       });
 
     } else if (!this.expanded && this.panelChartDiv) {
-      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.chart.data, this.chart.layout, this.chart.config)
+      this.plotlyService.newPlot(this.panelChartDiv.nativeElement, this.chart.data, this.chart.layout, defaultPlotlyConfig(this.chart.config))
       .then(chart => {
         chart.on('plotly_click', chartData => {
           this.addSelectedPointTraces(chartData);

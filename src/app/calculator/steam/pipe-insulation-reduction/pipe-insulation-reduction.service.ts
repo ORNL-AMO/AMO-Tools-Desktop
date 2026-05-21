@@ -248,7 +248,6 @@ export class PipeInsulationReductionService {
       if (modification) {
         let modificationCopy: PipeInsulationReductionInput = JSON.parse(JSON.stringify(modification));
         modificationCopy.utilityType = baselineResults.energySourceType;
-        modificationCopy.utilityCost = baselineCopy.utilityCost;
         modificationCopy.heatedOrChilled = baselineResults.heatedOrChilled;
         modificationResults = this.calculate(modificationCopy, settings);
         annualHeatLossReduction = baselineResults.annualHeatLoss - modificationResults.annualHeatLoss;

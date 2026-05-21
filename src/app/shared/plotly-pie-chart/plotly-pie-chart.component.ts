@@ -1,7 +1,7 @@
-import { Component, OnInit, ElementRef, ViewChild, Input, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Input } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { graphColors } from '../graphColors';
-
+import { defaultPlotlyConfig } from '../helperFunctions';
 @Component({
     selector: 'app-plotly-pie-chart',
     templateUrl: './plotly-pie-chart.component.html',
@@ -76,7 +76,7 @@ export class PlotlyPieChartComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, modebarBtns);
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, defaultPlotlyConfig(modebarBtns, data.type));
   }
 
   drawPrintPlot() {
@@ -110,6 +110,6 @@ export class PlotlyPieChartComponent implements OnInit {
       displayModeBar: false
     };
 
-    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, modebarBtns);
+    this.plotlyService.newPlot(this.plotlyPieChart.nativeElement, [data], layout, defaultPlotlyConfig(modebarBtns, data.type));
   }
 }

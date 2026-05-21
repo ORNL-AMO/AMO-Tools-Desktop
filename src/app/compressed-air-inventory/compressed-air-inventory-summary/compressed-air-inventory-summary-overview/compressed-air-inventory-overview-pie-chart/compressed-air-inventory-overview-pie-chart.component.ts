@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
 import { CompressedAirInventorySummaryOverviewService, InventorySummary } from '../compressed-air-inventory-summary-overview.service';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
   selector: 'app-compressed-air-inventory-overview-pie-chart',
   templateUrl: './compressed-air-inventory-overview-pie-chart.component.html',
@@ -60,7 +60,7 @@ export class CompressedAirInventoryOverviewPieChartComponent implements OnInit {
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, configOptions);
+      this.plotlyService.newPlot(this.overviewPieChart.nativeElement, data, layout, defaultPlotlyConfig(configOptions, data));
     })
   }
 

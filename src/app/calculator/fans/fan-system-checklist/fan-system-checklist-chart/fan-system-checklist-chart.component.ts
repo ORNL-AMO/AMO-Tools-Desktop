@@ -3,7 +3,7 @@ import { PlotlyService } from 'angular-plotly.js';
 import { FanSystemChecklistOutput } from '../../../../shared/models/fans';
 import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { Settings } from '../../../../shared/models/settings';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-fan-system-checklist-chart',
     templateUrl: './fan-system-checklist-chart.component.html',
@@ -130,14 +130,14 @@ export class FanSystemChecklistChartComponent implements OnInit {
         this.expandedChartDiv.nativeElement,
         traces,
         chartLayout,
-        this.fanChecklistChart.config
+        defaultPlotlyConfig(this.fanChecklistChart.config, this.fanChecklistChart.data)
       );
     }else if(!this.expanded && this.panelChartDiv){
       this.plotlyService.newPlot(
         this.panelChartDiv.nativeElement,
         traces,
         chartLayout,
-        this.fanChecklistChart.config
+        defaultPlotlyConfig(this.fanChecklistChart.config, this.fanChecklistChart.data)
       );
     }
   }

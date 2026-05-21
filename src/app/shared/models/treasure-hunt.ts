@@ -518,7 +518,7 @@ export interface UtilityTypeTreasureHuntEmissions {
     steamEmissions: number,
 }
 export interface EnergyUseItem {
-    type: string, 
+    type: EnergyUseType, 
     amount: number,
     integratedUnit?: string,
     integratedEmissionRate?: number,
@@ -869,8 +869,15 @@ export interface OpportunitySummary {
     owner: string
 }
 
-//TODO: WHAT IS OTHER?
+// OpportunityUtilityType: used in OpportunitySummary and TreasureHuntOpportunityResults (report/summary layer).
+// Uses full display names. 'Mixed' applies when an opportunity spans multiple utility types.
+// 'Other' is a fallback/catch-all for unrecognized types.
 export type OpportunityUtilityType = 'Electricity' | 'Natural Gas' | 'Water' | 'Waste Water' | 'Other Fuel' | 'Compressed Air' | 'Steam' | 'Mixed' | 'Other';
+
+// EnergyUseType: used in EnergyUseItem.type (opportunity sheet input layer).
+// Uses abbreviated names that map to the operation-costs utility toggles and Settings cost fields.
+// Mapping to OpportunityUtilityType: 'Gas' -> 'Natural Gas', 'WWT' -> 'Waste Water'.
+export type EnergyUseType = 'Electricity' | 'Gas' | 'Water' | 'WWT' | 'Other Fuel' | 'Compressed Air' | 'Steam';
 
 
 export interface SavingsItem { 

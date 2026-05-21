@@ -12,7 +12,7 @@ import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings
 import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressorInventoryValidationService } from '../compressed-air-assessment-validation/compressor-inventory-validation.service';
 import { CompressedAirProfileSummary } from '../calculations/CompressedAirProfileSummary';
-
+import { defaultPlotlyConfig } from '../../shared/helperFunctions';
 @Component({
   selector: 'app-inventory-performance-profile',
   templateUrl: './inventory-performance-profile.component.html',
@@ -343,7 +343,7 @@ export class InventoryPerformanceProfileComponent implements OnInit {
         responsive: true,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.performanceProfileChart.nativeElement, traceData, layout, config);
+      this.plotlyService.newPlot(this.performanceProfileChart.nativeElement, traceData, layout,defaultPlotlyConfig(config));
     }
   }
 

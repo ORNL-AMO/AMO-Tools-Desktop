@@ -12,7 +12,7 @@ import * as Plotly from 'plotly.js-dist';
 import { copyObject, getNewIdString, roundVal } from '../../../shared/helperFunctions';
 import { FanSystemCurveData, PumpSystemCurveData } from '../../../shared/models/system-and-equipment-curve';
 import { RegressionEquationsService } from '../regression-equations.service';
-
+import { defaultPlotlyConfig } from '../../../shared/helperFunctions';
 
 @Component({
     selector: 'app-system-and-equipment-curve-graph',
@@ -219,7 +219,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
       }
     })
     if (this.expanded && this.expandedSystemChartDiv) {
-      this.plotlyService.newPlot(this.expandedSystemChartDiv.nativeElement, traceData, chartLayout, this.curveEquipmentChart.config)
+      this.plotlyService.newPlot(this.expandedSystemChartDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.curveEquipmentChart.config))
         .then(chart => {
           chart.on('plotly_click', (graphData) => {
             this.createDataPoint(graphData);
@@ -233,7 +233,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
         });
 
     } else if (!this.expanded && this.systemPanelDiv) {
-      this.plotlyService.newPlot(this.systemPanelDiv.nativeElement, traceData, chartLayout, this.curveEquipmentChart.config)
+      this.plotlyService.newPlot(this.systemPanelDiv.nativeElement, traceData, chartLayout, defaultPlotlyConfig(this.curveEquipmentChart.config))
         .then(chart => {
           chart.on('plotly_click', (graphData) => {
             this.createDataPoint(graphData);
@@ -251,7 +251,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
     if (this.displayPowerChart) {
       let powerChartLayout = copyObject(this.powerChart.layout);
       if (this.powerExpanded && this.expandedPowerChartDiv) {
-        this.plotlyService.newPlot(this.expandedPowerChartDiv.nativeElement, this.powerChart.data, powerChartLayout, this.powerChart.config)
+        this.plotlyService.newPlot(this.expandedPowerChartDiv.nativeElement, this.powerChart.data, powerChartLayout, defaultPlotlyConfig(this.powerChart.config))
           .then(chart => {
             chart.on('plotly_hover', powerHoverData => {
               this.displayHoverData(powerHoverData, true);
@@ -261,7 +261,7 @@ export class SystemAndEquipmentCurveGraphComponent implements OnInit {
             });
           });
       } else if (!this.powerExpanded && this.powerChartPanelDiv) {
-        this.plotlyService.newPlot(this.powerChartPanelDiv.nativeElement, this.powerChart.data, powerChartLayout, this.powerChart.config)
+        this.plotlyService.newPlot(this.powerChartPanelDiv.nativeElement, this.powerChart.data, powerChartLayout, defaultPlotlyConfig(this.powerChart.config))
           .then(chart => {
             chart.on('plotly_hover', powerHoverData => {
               this.displayHoverData(powerHoverData, true);

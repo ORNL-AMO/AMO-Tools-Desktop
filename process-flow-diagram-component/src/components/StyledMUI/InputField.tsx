@@ -2,7 +2,16 @@ import { TextField, TextFieldProps, styled } from "@mui/material";
 
 const InputField = styled(
     (props: TextFieldProps & { warning?: boolean }) => (
-        <TextField {...props} />
+        <TextField
+            {...props}
+            slotProps={{
+                ...props.slotProps,
+                htmlInput: {
+                    onWheel: (e: React.WheelEvent<HTMLInputElement>) => (e.target as HTMLElement).blur(),
+                    ...(props.slotProps?.htmlInput as object),
+                },
+            }}
+        />
     ),
     { shouldForwardProp: (prop) => prop !== "warning" }
 )(({ warning, theme }) => {

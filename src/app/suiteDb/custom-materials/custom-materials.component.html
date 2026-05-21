@@ -118,7 +118,7 @@
 </div>
 
 
-<div class="col-11 mx-auto mb-5">
+<div class="col-11 mx-auto">
   <div class="tab-content content-container">
     <div class="card-form">
       <label class="group-label general" (click)="toggleMaterial('wall-surface')">Wall Surfaces
@@ -132,6 +132,21 @@
   <app-custom-wall-losses-surfaces *ngIf="showWallSurfaceMaterials" [settings]="settings" [showModal]="showWallSurfaceModal"
     [importing]="importing" (emitNumMaterials)="setHasMaterials('hasWallSurfaceMaterials', $event)"></app-custom-wall-losses-surfaces>
 </div>
+
+<div class="col-11 mx-auto mb-5">
+  <div class="tab-content content-container">
+    <div class="card-form">
+      <label class="group-label general" (click)="toggleMaterial('lighting-fixtures')">Lighting Fixtures
+        <span class="fa fa-chevron-up pull-right m-1" *ngIf="!showLightingFixturesMaterials"></span>
+        <span class="fa fa-chevron-down pull-right m-1" *ngIf="showLightingFixturesMaterials && hasLightingFixtureMaterials"></span>
+      </label>
+      <a class="click-link pull-right small" *ngIf="showLightingFixturesMaterials" (click)="toggleModal('lighting-fixtures')">+Add New Lighting Fixture</a>
+    </div>
+  </div>
+  <app-custom-lighting-fixtures-materials *ngIf="showLightingFixturesMaterials" [settings]="settings" [showModal]="showLightingFixturesModal"
+    [importing]="importing" (emitNumMaterials)="setHasMaterials('hasLightingFixtureMaterials', $event)"></app-custom-lighting-fixtures-materials>
+</div>
+
 
 <!--Export Modal-->
 <div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true"
@@ -172,6 +187,10 @@
         <div class="pb-1" *ngIf="selectedMaterialData.wallLossesSurface.length != 0">
           <h6>Wall Loss Surfaces</h6>
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.wallLossesSurface">{{material.surface}}</div>
+        </div>
+        <div class="pb-1" *ngIf="selectedMaterialData.lightingFixtureMaterial.length != 0">
+          <h6>Lighting Fixtures</h6>
+        <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.lightingFixtureMaterial">{{material.name}}</div>
         </div>
       </div>
       <div class="modal-footer justify-content-between">
@@ -271,6 +290,10 @@
         <div class="pb-1" *ngIf="selectedMaterialData.wallLossesSurface.length != 0">
           <h6>Wall Loss Surfaces</h6>
           <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.wallLossesSurface">{{material.surface}}</div>
+        </div>
+        <div class="pb-1" *ngIf="selectedMaterialData.lightingFixtureMaterial.length != 0">
+          <h6>Lighting Fixtures</h6>
+        <div class="pl-2 material-item" *ngFor="let material of selectedMaterialData.lightingFixtureMaterial">{{material.name}}</div>
         </div>
       </div>
       <div class="modal-body" *ngIf="deleteModalOpen && importing">

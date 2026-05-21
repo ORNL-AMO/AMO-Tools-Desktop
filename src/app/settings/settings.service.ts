@@ -292,6 +292,7 @@ export class SettingsService {
       viscosityMeasurement: settings.viscosityMeasurement,
       voltageMeasurement: settings.voltageMeasurement,
       energySourceType: settings.energySourceType,
+      energyResultUnit: settings.energyResultUnit || defaultSettings.energyResultUnit,
       furnaceType: settings.furnaceType,
       customFurnaceName: settings.customFurnaceName,
       temperatureMeasurement: settings.temperatureMeasurement,

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { PowerFactorTriangleOutputs } from '../../../../shared/models/standalone';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-power-factor-triangle-results',
     templateUrl: './power-factor-triangle-results.component.html',
@@ -100,11 +100,12 @@ export class PowerFactorTriangleResultsComponent implements OnInit {
     };
 
     var modebarBtns = {
+      modeBarButtonsToRemove: ['select2d', 'lasso2d'],
       displaylogo: false,
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.powerFactorTiangle.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.powerFactorTiangle.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns));
   }
 
 

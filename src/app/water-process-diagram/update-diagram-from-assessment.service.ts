@@ -72,6 +72,7 @@ export class UpdateDiagramFromAssessmentService {
       diagram.waterDiagram.flowDiagramData.settings.fuelCost = integratedAssessment.water.systemBasics.fuelCost;
       diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision = settings.flowDecimalPrecision;
       diagram.waterDiagram.flowDiagramData.settings.conductivityUnit = integratedAssessment.water.systemBasics.conductivityUnit;
+      diagram.waterDiagram.flowDiagramData.diagramNotes = integratedAssessment.water.systemBasics.notes;
     }
 
   setSummingNodes(nodes) {

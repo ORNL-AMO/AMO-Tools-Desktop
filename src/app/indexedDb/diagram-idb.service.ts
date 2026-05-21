@@ -39,6 +39,10 @@ export class DiagramIdbService {
     return _.find(this.allDiagrams, (diagram) => { return diagram.id === id; });
   }
 
+  getByIdAsync(id: number): Observable<Diagram> {
+    return this.dbService.getByID(this.storeName, id);
+  }
+
   addWithObservable(data: Diagram): Observable<any> {
     data.modifiedDate = new Date();
     return this.dbService.add(this.storeName, data);

@@ -1,4 +1,9 @@
 <div class="output-summary w-100 mx-auto p-3">
+  <div class="w-100 d-flex justify-content-end">
+    <button class="close borderless-close" (click)="dialogRef.close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
   <h4 class="show-print print-section-header">System True Cost Attribution</h4>
 
   <div class="p-2">
@@ -44,10 +49,7 @@
                   <td class="component-name-cell">
                     {{ costComponent.name }}
                     <span class="badge badge-pill"
-                      [class.pill-water-intake]="costComponent.processComponentType === 'water-intake'"
-                      [class.pill-water-discharge]="costComponent.processComponentType === 'water-discharge'"
-                      [class.pill-water-treatment]="costComponent.processComponentType === 'water-treatment'"
-                      [class.pill-waste-water-treatment]="costComponent.processComponentType === 'waste-water-treatment'">
+                      [ngStyle]="getPillStyles(costComponent.processComponentType)">
                       {{ costComponent.componentTypeLabel }}</span>
                   </td>
                   <td class="text-center">

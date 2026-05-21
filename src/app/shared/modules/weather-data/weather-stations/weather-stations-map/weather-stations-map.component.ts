@@ -2,7 +2,7 @@ import { Component, SimpleChanges, ElementRef, ViewChild, Input } from '@angular
 import { PlotlyService } from 'angular-plotly.js';
 import * as _ from 'lodash';
 import { WeatherStation } from '../../../../weather-api.service';
-
+import { defaultPlotlyConfig } from '../../../../helperFunctions';
 @Component({
   selector: 'app-weather-stations-map',
   templateUrl: './weather-stations-map.component.html',
@@ -123,7 +123,7 @@ export class WeatherStationsMapComponent {
       const allData = [this.stateLines, ...data];
 
       // Create the plot
-      this.plotlyService.newPlot(this.weatherStationMap.nativeElement, allData, layout, config);
+      this.plotlyService.newPlot(this.weatherStationMap.nativeElement, allData, layout, defaultPlotlyConfig(config));
     }
   }
 

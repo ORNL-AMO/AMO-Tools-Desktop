@@ -8,7 +8,7 @@ module.exports = options => {
   return {
     mode: options.mode,
     entry: "./process-flow-diagram-component/src/index.tsx",
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     devServer: {
             static: path.join(__dirname, EXPORT_DIR),
             port: 3000,
@@ -57,7 +57,7 @@ module.exports = options => {
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: 'process-flow-diagram-component.css',
+        filename: 'assets/process-flow-diagram-component.css',
       }),
       new CopyPlugin({
         patterns: [

@@ -3,6 +3,7 @@ import { OpportunitiesPaybackDetails } from '../../../../shared/models/treasure-
 import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from '../../../../shared/models/settings';
 import { PlotlyService } from 'angular-plotly.js';
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-opportunity-payback-donut',
     templateUrl: './opportunity-payback-donut.component.html',
@@ -67,7 +68,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       displayModeBar: true,
       responsive: true
     };
-    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
   createPrintChart(){
@@ -102,7 +103,7 @@ export class OpportunityPaybackDonutComponent implements OnInit {
       displaylogo: false,
       displayModeBar: false
     };
-    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, modebarBtns);
+    this.plotlyService.newPlot(this.paybackDonutChart.nativeElement, data, layout, defaultPlotlyConfig(modebarBtns, data));
   }
 
 

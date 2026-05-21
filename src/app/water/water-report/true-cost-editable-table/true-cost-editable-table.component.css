@@ -1,3 +1,9 @@
+.borderless-close {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  outline: none !important;
+}
 
 .card-header {
   cursor: pointer;
@@ -71,23 +77,6 @@ input[type="number"] {
   border-radius: 8px;
   font-size: 11px;
 }
-.pill-water-intake {
-  background: #75a1ff;
-  color: #fff;
-}
-.pill-water-discharge {
-  background: #7f7fff;
-  color: #fff;
-}
-.pill-water-treatment {
-  background: #009386;
-  color: #fff;
-}
-.pill-waste-water-treatment {
-  background: #93e200;
-  color: #000;
-}
-
 
 .badge-default {
   background: #fff;

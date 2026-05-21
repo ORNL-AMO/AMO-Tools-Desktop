@@ -3,7 +3,7 @@ import { BatchAnalysisService, BatchAnalysisResults, BatchAnalysisSettings } fro
 import * as _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
     selector: 'app-energy-cost-bar-chart',
     templateUrl: './energy-cost-bar-chart.component.html',
@@ -85,12 +85,12 @@ export class EnergyCostBarChartComponent implements OnInit {
       };
 
       let configOptions = {
-        modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+        modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'pan2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
         displaylogo: false,
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.energyBarChart.nativeElement, dataArray, layout, configOptions);
+      this.plotlyService.newPlot(this.energyBarChart.nativeElement, dataArray, layout, defaultPlotlyConfig(configOptions));
     });
   }
 

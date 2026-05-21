@@ -10,6 +10,7 @@ import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { CalculatorDbService } from '../../../../indexedDb/calculator-db.service';
 import { Calculator } from '../../../../shared/models/calculators';
+import { DiagramIdbService } from '../../../../indexedDb/diagram-idb.service';
 import { AssessmentService } from '../../../assessment.service';
 import { DashboardService } from '../../../dashboard.service';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -18,6 +19,7 @@ import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { PsatIntegrationService } from '../../../../shared/connected-inventory/psat-integration.service';
 import { UpdateAssessmentFromDiagramService } from '../../../../water/update-assessment-from-diagram.service';
 import { CompressedAirAssessmentIntegrationService } from '../../../../shared/connected-inventory/compressed-air-assessment-integration.service';
+import { Diagram } from '../../../../shared/models/diagram';
 
 @Component({
     selector: 'app-assessment-item',
@@ -43,7 +45,7 @@ export class AssessmentItemComponent implements OnInit {
   constructor(private assessmentService: AssessmentService,
        private formBuilder: UntypedFormBuilder,
     private assessmentDbService: AssessmentDbService, private settingsDbService: SettingsDbService,
-    private calculatorDbService: CalculatorDbService, private dashboardService: DashboardService,
+    private calculatorDbService: CalculatorDbService, private diagramIdbService: DiagramIdbService, private dashboardService: DashboardService,
     private updateAssessmentFromDiagramService: UpdateAssessmentFromDiagramService,
     private psatIntegrationService: PsatIntegrationService,
     private directoryDbService: DirectoryDbService, private directoryDashboardService: DirectoryDashboardService,
@@ -156,20 +158,47 @@ export class AssessmentItemComponent implements OnInit {
 
 
     let addedAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(assessmentCopy));
-    let updatedAssessments = await firstValueFrom(this.assessmentDbService.getAllAssessments());
-    this.assessmentDbService.setAll(updatedAssessments);
     settingsCopy.assessmentId = addedAssessment.id;
 
     await firstValueFrom(this.settingsDbService.addWithObservable(settingsCopy));
-    let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(allSettings);
+
+    if (this.assessment.diagramId) {
+      let sourceDiagram: Diagram = this.diagramIdbService.findById(this.assessment.diagramId);
+      if (sourceDiagram) {
+        let diagramCopy: Diagram = JSON.parse(JSON.stringify(sourceDiagram));
+        delete diagramCopy.id;
+        diagramCopy.directoryId = addedAssessment.directoryId;
+        diagramCopy.assessmentId = addedAssessment.id;
+        diagramCopy.name = sourceDiagram.name + ' (copy)';
+        diagramCopy.isExample = false;
+        let addedDiagram: Diagram = await firstValueFrom(this.diagramIdbService.addWithObservable(diagramCopy));
+
+        let diagramSettings: Settings = this.settingsDbService.getByDiagramId(sourceDiagram, true);
+        if (diagramSettings) {
+          let diagramSettingsCopy: Settings = JSON.parse(JSON.stringify(diagramSettings));
+          delete diagramSettingsCopy.id;
+          diagramSettingsCopy.diagramId = addedDiagram.id;
+          await firstValueFrom(this.settingsDbService.addWithObservable(diagramSettingsCopy));
+        }
+
+        addedAssessment.diagramId = addedDiagram.id;
+        await firstValueFrom(this.assessmentDbService.updateWithObservable(addedAssessment));
+      }
+    }
 
     if (this.copyForm.controls.copyCalculators.value === true) {
       assessmentCalculatorCopy.assessmentId = addedAssessment.id;
       await firstValueFrom(this.calculatorDbService.addWithObservable(assessmentCalculatorCopy));
-      let allCalculators: Calculator[] =  await firstValueFrom(this.calculatorDbService.getAllCalculators());
-      this.calculatorDbService.setAll(allCalculators);
     } 
+
+    let allAssessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    let allDiagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
+    let allSettings: Settings[] =  await firstValueFrom(this.settingsDbService.getAllSettings());
+    let allCalculators: Calculator[] =  await firstValueFrom(this.calculatorDbService.getAllCalculators());
+    this.assessmentDbService.setAll(allAssessments);
+    this.diagramIdbService.setAll(allDiagrams);
+    this.settingsDbService.setAll(allSettings);
+    this.calculatorDbService.setAll(allCalculators);
     
     this.dashboardService.updateDashboardData.next(true);
     this.hideCopyModal();
@@ -190,9 +219,19 @@ export class AssessmentItemComponent implements OnInit {
     this.directoryDbService.setIsMovedExample(this.assessment, this.editForm);
     this.assessment.directoryId = this.editForm.controls.directoryId.value;
     await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
+    if (this.assessment.diagramId) {
+      let linkedDiagram: Diagram = this.diagramIdbService.findById(this.assessment.diagramId);
+      if (linkedDiagram) {
+        this.directoryDbService.setIsMovedExample(linkedDiagram, this.editForm);
+        linkedDiagram.directoryId = this.assessment.directoryId;
+        await firstValueFrom(this.diagramIdbService.updateWithObservable(linkedDiagram));
+      }
+    }
     let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
+    let diagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
 
     this.assessmentDbService.setAll(assessments);
+    this.diagramIdbService.setAll(diagrams);
     this.dashboardService.updateDashboardData.next(true);
     this.hideEditModal();
   }

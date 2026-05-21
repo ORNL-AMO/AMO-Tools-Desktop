@@ -56,7 +56,9 @@ export class CompressedAirMotorCatalogComponent implements OnInit {
   ngOnDestroy() {
     this.selectedCompressedAirItemSub.unsubscribe();
     this.settingsSub.unsubscribe();
-    this.connectedInventoryDataSub.unsubscribe();
+    if (this.connectedInventoryDataSub) {
+      this.connectedInventoryDataSub.unsubscribe();
+    }
   }
 
   save() {

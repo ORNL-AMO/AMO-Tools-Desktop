@@ -17,37 +17,28 @@
   </div>
 
 
-  <div class="form-group">
-    <label class="small" for="thermodynamicQuantity">Known Variable</label>
+  <div class="form-group label-select">
     <select name="thermodynamicQuantity" class="form-control" formControlName="thermodynamicQuantity"
-      id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')"
-      >
+      id="thermodynamicQuantity" (change)="setQuantityRanges()" (focus)="focusField('thermodynamicQuantity')">
       <option *ngFor="let option of thermoOptions" [ngValue]="option.value">{{option.display}}</option>
     </select>
-  </div>
-
-  <div class="form-group">
-    <label class="small" for="quantityValue">{{getOptionDisplay()}} Value</label>
+    <div class="spacer"></div>
     <div class="input-group">
-      <input class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue" type="number"
-        (input)="calculate()" (focus)="focusField('quantityValue')"  onfocus="this.select();">
-      <span *ngIf="heatLossForm.controls.thermodynamicQuantity.value != 3" class="input-group-addon units"
+      <input type="number" class="form-control" name="quantityValue" id="quantityValue" formControlName="quantityValue"
+        onfocus="this.select();" (input)="calculate()" (focus)="focusField('quantityValue')">
+      <span class="input-group-addon units" *ngIf="heatLossForm.controls.thermodynamicQuantity.value != 3"
         [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
-    </div>
-    <span class="alert-danger pull-right small"
-      *ngIf="heatLossForm.controls.quantityValue.invalid && !heatLossForm.controls.quantityValue.pristine">
-      <span *ngIf="heatLossForm.controls.quantityValue.errors.required">Value Required</span>
-      <span *ngIf="heatLossForm.controls.quantityValue.errors.max">Value can't be greater than
-        {{heatLossForm.controls.quantityValue.errors.max.max}}
-        <span *ngIf="heatLossForm.controls.thermodynamicQuantity.value != 3"
-          [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>
-        .</span>
-      <span *ngIf="heatLossForm.controls.quantityValue.errors.min">Value can't be less than
-        {{heatLossForm.controls.quantityValue.errors.min.min}}
-        <span *ngIf="heatLossForm.controls.thermodynamicQuantity.value != 3"
-          [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
+      <span class="alert-danger pull-right small"
+        *ngIf="heatLossForm.controls.quantityValue.invalid && !heatLossForm.controls.quantityValue.pristine">
+        <span *ngIf="heatLossForm.controls.quantityValue.errors.required">Value Required</span>
+        <span *ngIf="heatLossForm.controls.quantityValue.errors.max">Value can't be greater than {{heatLossForm.controls.quantityValue.errors.max.max}}
+          <span *ngIf="heatLossForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
+        </span>
+        <span *ngIf="heatLossForm.controls.quantityValue.errors.min">Value can't be less than {{heatLossForm.controls.quantityValue.errors.min.min}}
+          <span *ngIf="heatLossForm.controls.thermodynamicQuantity.value != 3" [innerHTML]="getOptionDisplayUnit() | settingsLabel"></span>.
+        </span>
       </span>
-    </span>
+    </div>
   </div>
 
   <div class="form-group">

@@ -6,7 +6,7 @@ import { FsatService } from '../../fsat/fsat.service';
 import { DecimalPipe } from '@angular/common';
 import { PlotlyService } from 'angular-plotly.js';
 import { SankeyNode } from '../models/sankey';
-
+import { defaultPlotlyConfig } from '../helperFunctions';
 
 @Component({
     selector: 'app-fsat-sankey',
@@ -226,7 +226,7 @@ export class FsatSankeyComponent implements OnInit {
       };
     }
 
-    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, config).then(() =>{
+    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config)).then(() =>{
       this.addGradientElement();
       this.buildSvgArrows();
     });

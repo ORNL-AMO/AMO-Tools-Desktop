@@ -6,7 +6,7 @@ import { SimpleChart, TraceData } from '../../../../shared/models/plotting';
 import { graphColors } from '../../../../shared/graphColors';
 import { Settings } from "../../../../shared/models/settings";
 import { PlotlyService } from 'angular-plotly.js';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 export interface ChartOpportunity {
   curveNumber: number,
   pointNumber: number,
@@ -131,7 +131,7 @@ export class EffortSavingsChartComponent implements OnInit {
 
   newPlot() {
     let chartLayout = JSON.parse(JSON.stringify(this.effortChart.layout));
-    this.plotlyService.newPlot(this.effortChartDiv.nativeElement, this.effortChart.data, chartLayout, this.effortChart.config)
+    this.plotlyService.newPlot(this.effortChartDiv.nativeElement, this.effortChart.data, chartLayout, defaultPlotlyConfig(this.effortChart.config))
       .then(chart => {
         chart.on('plotly_beforehover', () => {
           if (this.showingHoverLabels) {
@@ -192,7 +192,7 @@ export class EffortSavingsChartComponent implements OnInit {
 
     this.buildTrace();
     let chartLayout = JSON.parse(JSON.stringify(this.effortChart.layout));
-    this.plotlyService.newPlot(this.effortChartDiv.nativeElement, this.effortChart.data, chartLayout, this.effortChart.config);
+    this.plotlyService.newPlot(this.effortChartDiv.nativeElement, this.effortChart.data, chartLayout, defaultPlotlyConfig(this.effortChart.config));
   }
 
   updateVisibleLabels(legendClick) {

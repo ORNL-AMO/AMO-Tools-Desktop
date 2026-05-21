@@ -1,0 +1,110 @@
+
+<div class="card">
+    <div class="card-body custom-card-body card-container col">
+        <div class="row">
+            <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-column">
+                <div class="row phast align-items-top">
+                    <div class="col-12">
+                        <div class="header card-header">
+                            <h3 *ngIf="!editExistingMaterial">Create Lighting Fixture</h3>
+                            <h3 *ngIf="editExistingMaterial">Edit Lighting Fixture</h3>
+                        </div>
+                    </div>
+                </div>
+                <form>
+                    <div class="form-section" *ngIf="!editExistingMaterial">
+                        <div class="form-group">
+                            <label class="small" for="selectedMaterial">Start with existing material</label>
+                            <select name="selectedMaterial" class="form-control" id="selectedMaterial" (change)="onCategoryChange(selectedMaterial)" [(ngModel)]="selectedMaterial"
+                                (focus)="focusField('selectedMaterial')">
+                                <option *ngFor="let material of allLightingCategories" [ngValue]="material">{{material.label}}</option>
+                            </select>
+
+                            <ng-container *ngIf="hideTypes === false">
+                                <label class="small" for="type">Fixture Type</label>
+                                <select id="type" name="type" class="form-control" [(ngModel)]="newMaterial.type" (change)="onFixtureTypeChange(getFixtureByType($event.target.value))" (focus)="focusField('type')">
+                                        <option *ngFor="let fixture of fixturesData" [value]="fixture.type">{{fixture.type}}</option>
+                                </select>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <div class="form-group">
+                            <label class="small" for="name">Material Name</label>
+                            <input type="text" id="name" name="name" class="form-control" [(ngModel)]="newMaterial.name" (focus)="focusField('name')" (input)="checkEditMaterialName()"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="small" for="lampsPerFixture">Lamps Per Fixture</label>
+                            <input type="number" id="lampsPerFixture" name="lampsPerFixture" class="form-control" [(ngModel)]="newMaterial.lampsPerFixture" (focus)="focusField('lampsPerFixture')" />
+                        </div>
+                        <div class="form-group">
+                            <label class="small" for="wattsPerLamp">Watts Per Lamp</label>
+                            <input type="number" id="wattsPerLamp" name="wattsPerLamp" class="form-control" [(ngModel)]="newMaterial.wattsPerLamp" (focus)="focusField('wattsPerLamp')" />
+                        </div>
+                        <div class="form-group">
+                            <label class="small" for="lumensPerLamp">Lumens Per Lamp</label>
+                            <input type="number" id="lumensPerLamp" name="lumensPerLamp" class="form-control" [(ngModel)]="newMaterial.lumensPerLamp" (focus)="focusField('lumensPerLamp')" />
+                        </div>
+                        <div class="form-group">
+                            <label class="small" for="lampLife">Lamp Life (h)</label>
+                            <input type="number" id="lampLife" name="lampLife" class="form-control" [(ngModel)]="newMaterial.lampLife" (focus)="focusField('lampLife')" />
+                        </div>
+                        <div class="form-group">
+                            <label class="small" for="coefficientOfUtilization">Coefficient Of Utilization</label>
+                            <input type="number" id="coefficientOfUtilization" name="coefficientOfUtilization" class="form-control" [(ngModel)]="newMaterial.coefficientOfUtilization" (focus)="focusField('coefficientOfUtilization')" />
+                        </div>
+                        <div class="form-group">
+                            <label class="small" for="ballastFactor">Ballast Factor</label>
+                            <input type="number" id="ballastFactor" name="ballastFactor" class="form-control" [(ngModel)]="newMaterial.ballastFactor" (focus)="focusField('ballastFactor')" />
+                        </div>
+                        <div class="form-group">
+                            <label class="small" for="lumenDegradationFactor">Lumen Degradation Factor</label>
+                            <input type="number" id="lumenDegradationFactor" name="lumenDegradationFactor" class="form-control" [(ngModel)]="newMaterial.lumenDegradationFactor" (focus)="focusField('lumenDegradationFactor')" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div *ngIf="!deletingMaterial" class="col-sm-6 col-md-6 card-help-column">
+                <div class="tab-content">
+                    <app-lighting-fixtures-material-help [currentField]="currentField"></app-lighting-fixtures-material-help>
+                </div>
+            </div>
+
+            <div *ngIf="deletingMaterial" class="col-sm-12 col-md-12 card-column">
+                <div class="text-center">
+                    <div class="row phast align-items-top">
+                        <div class="col-12">
+                            <div class="header card-header">
+                                <h3>Confirm Delete</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="delete-warning-container">
+                        <div class="row">
+                            <div class="col-12">
+                                Fixture Name: {{newMaterial.name}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                Are you sure you want to
+                                <strong>
+                                    <u>permanently delete</u>
+                                </strong> this fixture?
+                                <br>This cannot be undone.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-btn-container">
+            <button type="button" class="btn btn-secondary btn-sm modal-btn" (click)="hideMaterialModal()">Cancel</button>
+            <button *ngIf="!editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="addMaterial()">Submit</button>
+            <button *ngIf="editExistingMaterial && !deletingMaterial" type="button" class="btn btn-primary btn-sm modal-btn" (click)="updateMaterial()">Submit</button>
+            <button *ngIf="deletingMaterial" type="button" class="btn btn-danger btn-sm modal-btn" (click)="deleteMaterial()">Delete</button>
+        </div>
+    </div>
+</div>

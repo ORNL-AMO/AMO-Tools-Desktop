@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { Subscription } from 'rxjs';
 import { CompressedAirInventorySummaryOverviewService, InventorySummary } from '../compressed-air-inventory-summary-overview.service';
-
+import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
   selector: 'app-compressed-air-inventory-overview-bar-chart',
   templateUrl: './compressed-air-inventory-overview-bar-chart.component.html',
@@ -43,12 +43,12 @@ export class CompressedAirInventoryOverviewBarChartComponent implements OnInit {
       };
 
       let configOptions = {
-        modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
+        modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'pan2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
         displaylogo: false,
         displayModeBar: true,
         responsive: true
       };
-      this.plotlyService.newPlot(this.compressedAirInventoryBarChart.nativeElement, dataArray, layout, configOptions);
+      this.plotlyService.newPlot(this.compressedAirInventoryBarChart.nativeElement, dataArray, layout, defaultPlotlyConfig(configOptions));
     })
   }
 

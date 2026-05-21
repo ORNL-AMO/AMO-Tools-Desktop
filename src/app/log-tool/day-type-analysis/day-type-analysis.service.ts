@@ -212,7 +212,6 @@ export class DayTypeAnalysisService {
       }
     });
     this.dayTypeSummaries.next(dayTypeSummaries);
-    console.log('Day Type Summaries: ', dayTypeSummaries);
     console.timeEnd('setDayTypeSummaries');
   }
 

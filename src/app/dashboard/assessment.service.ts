@@ -3,7 +3,6 @@ import { PSAT, PsatInputs } from '../shared/models/psat';
 import { Assessment, AssessmentType } from '../shared/models/assessment';
 import { PHAST } from '../shared/models/phast/phast';
 import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
 import { FSAT } from '../shared/models/fans';
 import { SSMT } from '../shared/models/steam/ssmt';
 import { WasteWater } from '../shared/models/waste-water';
@@ -13,6 +12,9 @@ import { environment } from '../../environments/environment';
 
 import { DashboardService } from './dashboard.service';
 import { WaterAssessment } from 'process-flow-lib';
+import { TreasureHunt } from '../shared/models/treasure-hunt';
+import { OperatingHours } from '../shared/models/operations';
+import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 
 @Injectable()
 export class AssessmentService {
@@ -24,7 +26,7 @@ export class AssessmentService {
 
   showTutorial: BehaviorSubject<string>;
   tutorialShown: boolean = false;
-  constructor(private router: Router, private dashboardService: DashboardService) {
+  constructor(private dashboardService: DashboardService, private assessmentCo2SavingsService: AssessmentCo2SavingsService) {
     this.showTutorial = new BehaviorSubject<string>(null);
   }
 
@@ -403,6 +405,62 @@ export class AssessmentService {
       knownLosses: []
     }
   }
+
+  getDefaultTreasureHunt(settings: Settings): TreasureHunt {
+    // todo what unit
+    // * convert output rate from mWh ?? to kg/kWh
+    let convertOutputRate: number = settings.totalEmissionOutputRate / 1000;
+
+    return {
+      name: 'Treasure Hunt',
+      operatingHours: this.getDefaultTreasureHuntHours(),
+      currentEnergyUsage: {
+        electricityUsage: 0,
+        electricityCosts: 0,
+        electricityUsed: false,
+        naturalGasUsage: 0,
+        naturalGasCosts: 0,
+        naturalGasUsed: false,
+        otherFuelUsage: 0,
+        otherFuelCosts: 0,
+        otherFuelUsed: false,
+        waterUsage: 0,
+        waterCosts: 0,
+        waterUsed: false,
+        waterCO2OutputRate: convertOutputRate,
+        wasteWaterUsage: 0,
+        wasteWaterCosts: 0,
+        wasteWaterUsed: false,
+        wasteWaterCO2OutputRate: convertOutputRate,
+        compressedAirUsage: 0,
+        compressedAirCosts: 0,
+        compressedAirUsed: false,
+        compressedAirCO2OutputRate: convertOutputRate,
+        steamUsage: 0,
+        steamCosts: 0,
+        steamUsed: false,
+        steamCO2OutputRate: convertOutputRate,
+        otherFuelMixedCO2SavingsData: [],
+        naturalGasCO2SavingsData: this.assessmentCo2SavingsService.getDefaultNaturalGasCO2Data(),
+        otherFuelCO2SavingsData: this.assessmentCo2SavingsService.getDefaultOtherFuelCO2Data(), 
+        electricityCO2SavingsData: this.assessmentCo2SavingsService.getDefaultElectricityCO2Data(settings)
+      },
+      existingDataUnits: undefined,
+      setupDone: false
+    }
+  }
+
+  getDefaultTreasureHuntHours(): OperatingHours {
+    return {
+      weeksPerYear: 52.14,
+      daysPerWeek: 7,
+      hoursPerDay: 24,
+      minutesPerHour: 60,
+      secondsPerMinute: 60,
+      hoursPerYear: 8760
+    }
+  }
+
 
   getNewCompressedAirAssessment(settings: Settings): CompressedAirAssessment {
     let initDayTypeId: string = Math.random().toString(36).substr(2, 9);

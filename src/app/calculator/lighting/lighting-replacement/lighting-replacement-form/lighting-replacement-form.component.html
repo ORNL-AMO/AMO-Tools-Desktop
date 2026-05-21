@@ -41,7 +41,6 @@
 
       <div class="form-group">
         <label for="{{'category_'+idString}}">Fixture Category
-          <!-- <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a> -->
         </label>
         <select name="type" class="form-control" id="{{'category_'+idString}}" formControlName="category"
           (change)="setCategory()" (focus)="focusField('category')">
@@ -52,7 +51,6 @@
 
       <div class="form-group" *ngIf="form.controls.category.value != 0">
         <label for="{{'type_'+idString}}">Fixture type
-          <!-- <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal()" [ngClass]="{'disabled-link': !baselineSelected}">Add New Gas</a> -->
         </label>
         <select name="type" class="form-control" id="{{'type_'+idString}}" formControlName="type"
           (change)="setProperties()" (focus)="focusField('type')"
@@ -164,7 +162,6 @@
           <input name="coefficientOfUtilization" formControlName="coefficientOfUtilization" type="number" step="any"
             class="form-control" id="{{'coefficientOfUtilization_'+idString}}" (input)="calculate()"
             onfocus="this.select();" (focus)="focusField('coefficientOfUtilization')">
-          <!-- <span class="input-group-addon units">lm/lamp</span> -->
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.coefficientOfUtilization.invalid && !form.controls.coefficientOfUtilization.pristine">
@@ -182,7 +179,6 @@
           <input name="lumenDegradationFactor" formControlName="lumenDegradationFactor" type="number" step="any"
             class="form-control" id="{{'lumenDegradationFactor_'+idString}}" (input)="calculate()"
             onfocus="this.select();" (focus)="focusField('lumenDegradationFactor')">
-          <!-- <span class="input-group-addon units">lm/lamp</span> -->
         </div>
         <span class="alert-danger pull-right small"
           *ngIf="form.controls.lumenDegradationFactor.invalid && !form.controls.lumenDegradationFactor.pristine">
