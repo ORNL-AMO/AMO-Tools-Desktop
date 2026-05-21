@@ -54,13 +54,8 @@
     <div *ngIf="mainTab == 'assessment' && !showModificationList" [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal}"
       class="assessment-tab-container tab-content">
     </div>
-    <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'diagram'">
-      @if (integratedDiagram) {
-         <!-- todo if mobile size, don't render, send alert notif -->
-         <app-water-process-diagram 
-          [integratedDiagram]="integratedDiagram" 
-          ></app-water-process-diagram>
-       } 
+    <div class="assessment-tab-container tab-content" [class.d-none]="mainTab !== 'diagram'" [ngStyle]="{'height.px': containerHeight}">
+      <router-outlet></router-outlet>
     </div>
   
     <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
