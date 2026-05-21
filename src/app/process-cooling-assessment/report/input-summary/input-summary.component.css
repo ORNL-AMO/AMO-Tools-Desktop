@@ -46,12 +46,5 @@ tr > th:not(:first-child){
 }
 
 .chart-body {
-    padding-top: 20px;
-    background: #fff;
-    min-height: 0;
-}
-
-.summary-item {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 20px; 
 }

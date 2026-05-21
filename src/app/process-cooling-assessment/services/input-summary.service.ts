@@ -386,7 +386,7 @@ export class InputSummaryService {
                     modifications: mods.map(m => ({ value: CompressorChillerTypes[m?.inventory?.[idx]?.chillerType] ?? '' }))
                 },
                 {
-                    label: 'Capacity', units: 'ton', className: 'default',
+                    label: 'Capacity', units: 'tons', className: 'default',
                     baseline: { value: chiller.capacity ?? null, decimalPipe: '1.0-0' },
                     modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.capacity ?? null, decimalPipe: '1.0-0' }))
                 },
