@@ -165,6 +165,17 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                                                             }}
                                                             onChange={(event) => onFlowValueInputChange(event, edge.id, handleChange)}
                                                             sx={{ m: 1, width: '100%' }}
+                                                            InputProps={{
+                                                                endAdornment: <InputAdornment position="end" sx={{ zIndex: 1 }}>
+                                                                    <span style={{ zIndex: 1, background: 'white' }}>
+                                                                        {inPercent ?
+                                                                            <span>%</span>
+                                                                            :
+                                                                            <FlowDisplayUnit />
+                                                                        }
+                                                                    </span>
+                                                                </InputAdornment>,
+                                                            }}
                                                         />
                                                         <SmallTooltip title={`Set all flow values to the end of path`}
                                                             slotProps={{
