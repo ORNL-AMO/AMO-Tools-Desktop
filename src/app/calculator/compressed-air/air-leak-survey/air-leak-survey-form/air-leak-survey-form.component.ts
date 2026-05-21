@@ -47,7 +47,7 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
   constructor() {
     effect(() => {
       const index = this.surveyService.currentLeakIndex();
-      const surveyInput = untracked(() => this.surveyService.input());
+      const surveyInput = untracked(() => this.surveyService.airLeakInput());
       if (surveyInput) {
         const leak = surveyInput.compressedAirLeakSurveyInputVec[index];
         if (leak) {
@@ -57,7 +57,7 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
     });
 
     this.surveyService.resetEvents.pipe(takeUntilDestroyed()).subscribe(() => {
-      const surveyInput = this.surveyService.input();
+      const surveyInput = this.surveyService.airLeakInput();
       const index = this.surveyService.currentLeakIndex();
       if (surveyInput) {
         const leak = surveyInput.compressedAirLeakSurveyInputVec[index];
@@ -92,7 +92,7 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
   }
 
   private saveLeak(): void {
-    const current = this.surveyService.input();
+    const current = this.surveyService.airLeakInput();
     if (!current || !this.leakMetaForm) return;
 
     const index = this.surveyService.currentLeakIndex();
@@ -113,19 +113,19 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
       decibelsMethodData: this.formService.getDecibelDataFromForm(this.decibelForm),
     };
 
-    const newVec = current.compressedAirLeakSurveyInputVec.map((leak, i) =>
+    const updatedLeaks = current.compressedAirLeakSurveyInputVec.map((leak, i) =>
       i === index ? updatedLeak : leak
     );
-    this.surveyService.input.set({ ...current, compressedAirLeakSurveyInputVec: newVec });
+    this.surveyService.airLeakInput.set({ ...current, compressedAirLeakSurveyInputVec: updatedLeaks });
   }
 
   addLeak(): void {
-    const current = this.surveyService.input();
+    const current = this.surveyService.airLeakInput();
     if (!current) return;
     const newLeak = this.formService.getEmptyAirLeakData();
-    const newVec = [...current.compressedAirLeakSurveyInputVec, newLeak];
-    this.surveyService.input.set({ ...current, compressedAirLeakSurveyInputVec: newVec });
-    this.surveyService.currentLeakIndex.set(newVec.length - 1);
+    const updatedLeaks = [...current.compressedAirLeakSurveyInputVec, newLeak];
+    this.surveyService.airLeakInput.set({ ...current, compressedAirLeakSurveyInputVec: updatedLeaks });
+    this.surveyService.currentLeakIndex.set(updatedLeaks.length - 1);
   }
 
   setCurrentField(field: string): void {

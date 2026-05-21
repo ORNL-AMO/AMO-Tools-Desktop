@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AirLeakSurveyService } from './air-leak-survey.service';
-import { ConvertAirLeakService } from '../air-leak/convert-air-leak.service';
+import { ConvertAirLeakService } from './convert-air-leak.service';
 import { StandaloneService } from '../../standalone.service';
 import { AirLeakSurveyFormService } from './air-leak-survey-form/air-leak-survey-form.service';
 import { Settings } from '../../../shared/models/settings';
@@ -21,14 +22,12 @@ describe('AirLeakSurveyService', () => {
     standaloneService = jasmine.createSpyObj('StandaloneService', ['airLeakSurvey']);
 
     TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule],
       providers: [
         AirLeakSurveyService,
+        AirLeakSurveyFormService,
         { provide: ConvertAirLeakService, useValue: convertAirleakService },
         { provide: StandaloneService, useValue: standaloneService },
-        {
-          provide: AirLeakSurveyFormService,
-          useValue: jasmine.createSpyObj('AirLeakSurveyFormService', ['getEmptyAirLeakData'])
-        }
       ]
     });
 
@@ -36,7 +35,7 @@ describe('AirLeakSurveyService', () => {
   });
 
   it('returns empty output if settings were not initialized', () => {
-    service.input.set(getInput([getLeak('Leak A', true)], 1, 25));
+    service.airLeakInput.set(getInput([getLeak('Leak A', true)], 1, 25));
     const output = service.output();
 
     expect(output.baselineTotal).toEqual({ totalFlowRate: 0, annualTotalFlowRate: 0, annualTotalElectricity: 0, annualTotalElectricityCost: 0 });

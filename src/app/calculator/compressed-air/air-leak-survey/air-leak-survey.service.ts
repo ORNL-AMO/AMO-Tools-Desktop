@@ -3,9 +3,10 @@ import { Subject } from 'rxjs';
 import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, AirLeakSurveyResult } from '../../../shared/models/standalone';
 import { Settings } from '../../../shared/models/settings';
 import { StandaloneService } from '../../standalone.service';
-import { ConvertAirLeakService } from '../air-leak/convert-air-leak.service';
+import { ConvertAirLeakService } from './convert-air-leak.service';
 import { AirLeakSurveyFormService } from './air-leak-survey-form/air-leak-survey-form.service';
 import { exampleLeakInputs, LeakMeasurementMethod } from '../compressed-air-constants';
+import { copyObject } from '../../../shared/helperFunctions';
 
 @Injectable()
 export class AirLeakSurveyService {
@@ -15,30 +16,30 @@ export class AirLeakSurveyService {
 
   settings: Settings;
 
-  readonly input = signal<AirLeakSurveyInput | undefined>(undefined);
+  readonly airLeakInput = signal<AirLeakSurveyInput | undefined>(undefined);
   readonly currentLeakIndex = signal<number>(0);
   readonly currentField = signal<string>('default');
   private readonly resetEventsSubject = new Subject<void>();
   readonly resetEvents = this.resetEventsSubject.asObservable();
 
   readonly output = computed<AirLeakSurveyOutput>(() => {
-    const input = this.input();
+    const input = this.airLeakInput();
     if (!input) return this.emptyOutput();
     if (!this.settings) return this.emptyOutput();
-    if (!isValidAirLeakInput(input)) return this.emptyOutput();
+    if (!this.isValidInput(input)) return this.emptyOutput();
     return this.getResults(this.settings, input);
   });
 
   initDefaultEmptyInputs(settings: Settings): void {
     const emptyLeak = this.formService.getEmptyAirLeakData();
-    this.input.set({
+    this.airLeakInput.set({
       compressedAirLeakSurveyInputVec: [emptyLeak],
       facilityCompressorData: this.formService.getEmptyFacilityCompressorData(settings),
     });
   }
 
   generateExampleData(settings: Settings): void {
-    const exampleLeaks: Array<AirLeakSurveyData> = JSON.parse(JSON.stringify(exampleLeakInputs));
+    const exampleLeaks: Array<AirLeakSurveyData> = copyObject(exampleLeakInputs);
     let example: AirLeakSurveyInput = {
       compressedAirLeakSurveyInputVec: exampleLeaks,
       facilityCompressorData: this.formService.getExampleFacilityCompressorData(),
@@ -47,7 +48,7 @@ export class AirLeakSurveyService {
       example = this.convertAirleakService.convertExample(example);
     }
     this.currentLeakIndex.set(0);
-    this.input.set(example);
+    this.airLeakInput.set(example);
     this.resetEventsSubject.next();
   }
 
@@ -58,28 +59,28 @@ export class AirLeakSurveyService {
   }
 
   deleteLeak(deleteIndex: number): void {
-    const current = this.input();
+    const current = this.airLeakInput();
     if (!current) return;
-    const vec = current.compressedAirLeakSurveyInputVec;
-    if (deleteIndex < 0 || deleteIndex >= vec.length) return;
+    const leakInputs = current.compressedAirLeakSurveyInputVec;
+    if (deleteIndex < 0 || deleteIndex >= leakInputs.length) return;
 
-    if (vec.length === 1 && deleteIndex === 0) {
+    if (leakInputs.length === 1 && deleteIndex === 0) {
       this.currentLeakIndex.set(0);
       if (this.settings) {
         this.initDefaultEmptyInputs(this.settings);
       } else {
         const emptyLeak = this.formService.getEmptyAirLeakData();
-        this.input.set({ ...current, compressedAirLeakSurveyInputVec: [emptyLeak] });
+        this.airLeakInput.set({ ...current, compressedAirLeakSurveyInputVec: [emptyLeak] });
       }
       this.resetEventsSubject.next();
       return;
     }
 
-    const newVec = vec.filter((_, i) => i !== deleteIndex);
+    const updatedLeaks = leakInputs.filter((_, i) => i !== deleteIndex);
     const currentIndex = this.currentLeakIndex();
     const newIndex = currentIndex >= deleteIndex && currentIndex > 0 ? currentIndex - 1 : currentIndex;
 
-    this.input.set({ ...current, compressedAirLeakSurveyInputVec: newVec });
+    this.airLeakInput.set({ ...current, compressedAirLeakSurveyInputVec: updatedLeaks });
     if (newIndex !== currentIndex) {
       this.currentLeakIndex.set(newIndex);
     } else {
@@ -88,35 +89,34 @@ export class AirLeakSurveyService {
   }
 
   copyLeak(index: number): void {
-    const current = this.input();
+    const current = this.airLeakInput();
     if (!current) return;
-    const vec = current.compressedAirLeakSurveyInputVec;
-    if (index < 0 || index >= vec.length) return;
+    const leakInputs = current.compressedAirLeakSurveyInputVec;
+    if (index < 0 || index >= leakInputs.length) return;
 
-    const copy: AirLeakSurveyData = JSON.parse(JSON.stringify(vec[index]));
-    copy.name = 'Copy of ' + copy.name;
-    this.input.set({ ...current, compressedAirLeakSurveyInputVec: [...vec, copy] });
+    const copy: AirLeakSurveyData = { ...leakInputs[index], name: 'Copy of ' + leakInputs[index].name };
+    this.airLeakInput.set({ ...current, compressedAirLeakSurveyInputVec: [...leakInputs, copy] });
   }
 
   setLeakForModification(index: number, selected: boolean): void {
-    const current = this.input();
+    const current = this.airLeakInput();
     if (!current) return;
-    const vec = current.compressedAirLeakSurveyInputVec;
-    if (index < 0 || index >= vec.length) return;
+    const leakInputs = current.compressedAirLeakSurveyInputVec;
+    if (index < 0 || index >= leakInputs.length) return;
 
-    const newVec = vec.map((leak, i) => i === index ? { ...leak, selected } : leak);
-    this.input.set({ ...current, compressedAirLeakSurveyInputVec: newVec });
+    const updatedLeaks = leakInputs.map((leak, i) => i === index ? { ...leak, selected } : leak);
+    this.airLeakInput.set({ ...current, compressedAirLeakSurveyInputVec: updatedLeaks });
   }
 
   setLeakForModificationSelectAll(selectAll: boolean): void {
-    const current = this.input();
+    const current = this.airLeakInput();
     if (!current) return;
-    const newVec = current.compressedAirLeakSurveyInputVec.map(leak => ({ ...leak, selected: selectAll }));
-    this.input.set({ ...current, compressedAirLeakSurveyInputVec: newVec });
+    const updatedLeaks = current.compressedAirLeakSurveyInputVec.map(leak => ({ ...leak, selected: selectAll }));
+    this.airLeakInput.set({ ...current, compressedAirLeakSurveyInputVec: updatedLeaks });
   }
 
   getResults(settings: Settings, surveyInput: AirLeakSurveyInput): AirLeakSurveyOutput {
-    const inputCopy: AirLeakSurveyInput = JSON.parse(JSON.stringify(surveyInput));
+    const inputCopy: AirLeakSurveyInput = copyObject(surveyInput);
 
     this.convertAirleakService.convertInputs(inputCopy.compressedAirLeakSurveyInputVec, settings);
     inputCopy.facilityCompressorData.compressorElectricityData.compressorSpecificPower =
@@ -187,6 +187,12 @@ export class AirLeakSurveyService {
     };
   }
 
+  private isValidInput(input: AirLeakSurveyInput): boolean {
+    if (!input?.facilityCompressorData || !Array.isArray(input.compressedAirLeakSurveyInputVec)) return false;
+    if (!this.formService.buildFacilityCompressorForm(input.facilityCompressorData).valid) return false;
+    return true;
+  }
+
   private emptyOutput(): AirLeakSurveyOutput {
     return {
       individualLeaks: [],
@@ -199,49 +205,4 @@ export class AirLeakSurveyService {
 
 function emptyResult(): AirLeakSurveyResult {
   return { totalFlowRate: 0, annualTotalElectricity: 0, annualTotalFlowRate: 0, annualTotalElectricityCost: 0 };
-}
-
-export function isValidAirLeakInput(input: AirLeakSurveyInput): boolean {
-  if (!input?.facilityCompressorData || !Array.isArray(input.compressedAirLeakSurveyInputVec)) return false;
-
-  const { hoursPerYear, utilityCost } = input.facilityCompressorData;
-  if (hoursPerYear == null || hoursPerYear < 0 || hoursPerYear > 8760) return false;
-  if (utilityCost == null || utilityCost < 0) return false;
-
-  return input.compressedAirLeakSurveyInputVec.every(isValidLeak);
-}
-
-function isValidLeak(leak: AirLeakSurveyData): boolean {
-  if (!leak.name?.trim() || !leak.leakDescription?.trim()) return false;
-
-  switch (leak.measurementMethod) {
-    case LeakMeasurementMethod.Estimate:
-      return leak.estimateMethodData.leakRateEstimate > 0;
-    case LeakMeasurementMethod.Bag:
-      return leak.bagMethodData.bagVolume >= 0 && leak.bagMethodData.bagFillTime >= 0;
-    case LeakMeasurementMethod.Orifice:
-      return (
-        leak.orificeMethodData.compressorAirTemp >= 0 &&
-        leak.orificeMethodData.atmosphericPressure >= 0 &&
-        leak.orificeMethodData.dischargeCoefficient >= 0 &&
-        leak.orificeMethodData.orificeDiameter >= 0 &&
-        leak.orificeMethodData.supplyPressure >= 0 &&
-        leak.orificeMethodData.numberOfOrifices >= 1
-      );
-    case LeakMeasurementMethod.Decibel:
-      return (
-        leak.decibelsMethodData.linePressure >= 0 &&
-        leak.decibelsMethodData.decibels >= 0 &&
-        leak.decibelsMethodData.decibelRatingA >= 0 &&
-        leak.decibelsMethodData.pressureA >= 0 &&
-        leak.decibelsMethodData.firstFlowA >= 0 &&
-        leak.decibelsMethodData.secondFlowA >= 0 &&
-        leak.decibelsMethodData.decibelRatingB >= 0 &&
-        leak.decibelsMethodData.pressureB >= 0 &&
-        leak.decibelsMethodData.firstFlowB >= 0 &&
-        leak.decibelsMethodData.secondFlowB >= 0
-      );
-    default:
-      return false;
-  }
 }

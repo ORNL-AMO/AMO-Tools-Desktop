@@ -39,7 +39,7 @@
   </div>
 
   <div class="panel-group">
-    @if (surveyService.input()) {
+    @if (surveyService.airLeakInput()) {
       <div class="calculator-panel-container leak-form-width modification"
         [class.small-screen-tab]="smallScreenTab === 'form'">
         <div class="tab-content">
@@ -55,7 +55,7 @@
         <div class="m-2">
           <app-air-leak-survey-results-table [settings]="activeSettings" />
         </div>
-        <!-- <app-air-leak-survey-copy-table [settings]="activeSettings" /> -->
+        <app-air-leak-survey-copy-table [settings]="activeSettings" />
         <div class="w-100 justify-content-end btn-group btn-group-sm">
           <div class="btn-group btn-group-sm">
             <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form"

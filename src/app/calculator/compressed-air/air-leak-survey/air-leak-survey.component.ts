@@ -35,7 +35,7 @@ export class AirLeakSurveyComponent implements OnInit, OnDestroy {
   private readonly calculatorDbService = inject(CalculatorDbService);
   private readonly analyticsService = inject(AnalyticsService);
 
-  activeSettings!: Settings;
+  activeSettings: Settings;
   tabSelect = 'results';
   smallScreenTab = 'form';
 
@@ -52,7 +52,7 @@ export class AirLeakSurveyComponent implements OnInit, OnDestroy {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
 
-    if (!this.surveyService.input()) {
+    if (!this.surveyService.airLeakInput()) {
       this.surveyService.initDefaultEmptyInputs(this.activeSettings);
     }
 
@@ -83,7 +83,7 @@ export class AirLeakSurveyComponent implements OnInit, OnDestroy {
   }
 
   save(): void {
-    const surveyInput = this.surveyService.input();
+    const surveyInput = this.surveyService.airLeakInput();
     if (surveyInput) {
       this.emitSave.emit({ airLeakSurveyInput: surveyInput as AirLeakSurveyInput, opportunityType: Treasure.airLeak });
     }
@@ -97,14 +97,14 @@ export class AirLeakSurveyComponent implements OnInit, OnDestroy {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(assessment.id);
     if (this.assessmentCalculator) {
       if (this.assessmentCalculator.airLeakInput) {
-        this.surveyService.input.set(this.assessmentCalculator.airLeakInput);
+        this.surveyService.airLeakInput.set(this.assessmentCalculator.airLeakInput);
       } else {
-        this.assessmentCalculator.airLeakInput = this.surveyService.input();
+        this.assessmentCalculator.airLeakInput = this.surveyService.airLeakInput();
       }
     } else {
       this.assessmentCalculator = {
         assessmentId: assessment.id,
-        airLeakInput: this.surveyService.input(),
+        airLeakInput: this.surveyService.airLeakInput(),
       };
       await this.calculatorDbService.saveAssessmentCalculator(assessment, this.assessmentCalculator);
     }

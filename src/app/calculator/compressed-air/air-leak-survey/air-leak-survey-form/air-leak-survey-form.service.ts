@@ -10,9 +10,9 @@ import {
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 import { Settings } from '../../../../shared/models/settings';
-import { ConvertAirLeakService } from '../../air-leak/convert-air-leak.service';
+import { ConvertAirLeakService } from '../convert-air-leak.service';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { LeakMeasurementMethod } from '../../compressed-air-constants';
+import { LeakMeasurementMethod, CompressorControlType, CompressorSpecificPowerType, FacilityUtilityType } from '../../compressed-air-constants';
 
 const HOURS_PER_YEAR = 8760;
 
@@ -187,14 +187,14 @@ export class AirLeakSurveyFormService {
 
   applyCompressorValidators(form: FormGroup<FacilityCompressorFormControls>): FormGroup<FacilityCompressorFormControls> {
     const elec = form.controls.compressorElectricityData;
-    if (form.controls.utilityType.value === 1) {
+    if (form.controls.utilityType.value === FacilityUtilityType.Electric) {
       elec.controls.compressorControl.setValidators([Validators.required]);
       elec.controls.compressorControl.updateValueAndValidity();
-      if (elec.controls.compressorControl.value === 8) {
+      if (elec.controls.compressorControl.value === CompressorControlType.Custom) {
         elec.controls.compressorControlAdjustment.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
         elec.controls.compressorControlAdjustment.updateValueAndValidity();
       }
-      if (elec.controls.compressorSpecificPowerControl.value === 4) {
+      if (elec.controls.compressorSpecificPowerControl.value === CompressorSpecificPowerType.Custom) {
         elec.controls.compressorSpecificPower.setValidators([Validators.required, Validators.min(0)]);
         elec.controls.compressorSpecificPower.updateValueAndValidity();
       }

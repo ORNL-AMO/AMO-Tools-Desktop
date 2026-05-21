@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AirLeakFormComponent } from './air-leak-form.component';
 import { AirLeakService } from '../air-leak.service';
 import { AirLeakFormService } from './air-leak-form.service';
-import { ConvertAirLeakService } from '../convert-air-leak.service';
+import { ConvertAirLeakService } from '../../air-leak-survey/convert-air-leak.service';
 import { LeakMeasurementMethod } from '../../compressed-air-constants';
 import { AirLeakSurveyData, AirLeakSurveyInput } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';

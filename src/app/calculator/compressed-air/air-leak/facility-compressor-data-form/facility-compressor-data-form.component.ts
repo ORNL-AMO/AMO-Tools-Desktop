@@ -7,9 +7,9 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import { AirLeakService } from '../air-leak.service';
 import { FormGroup } from '@angular/forms';
 import { AirLeakFormService } from '../air-leak-form/air-leak-form.service';
-import { ConvertAirLeakService } from '../convert-air-leak.service';
+import { ConvertAirLeakService } from '../../air-leak-survey/convert-air-leak.service';
 import { roundVal } from '../../../../shared/helperFunctions';
-import { measurementMethods } from '../../compressed-air-constants';
+import { measurementMethods, CompressorControlType, CompressorSpecificPowerType, FacilityUtilityType } from '../../compressed-air-constants';
 
 @Component({
     selector: 'app-facility-compressor-data-form',
@@ -44,32 +44,32 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
   utilityTypeOptions: Array<{ display: string, value: number }> = [
-    { display: 'Compressed Air', value: 0 },
-    { display: 'Electric', value: 1 }
+    { display: 'Compressed Air', value: FacilityUtilityType.CompressedAir },
+    { display: 'Electric', value: FacilityUtilityType.Electric }
   ];
 
   measurementMethods = measurementMethods;
 
   compressorControlTypes: Array<{ value: number, name: string, adjustment: number }> = [
-    { value: 100, name: 'Screw Compressor - Inlet Modulation', adjustment: 30 },
-    { value: 101, name: 'Screw Compressor - Variable Displacement', adjustment: 60 },
-    { value: 102, name: 'Screw Compressor – Variable Speed Drives', adjustment: 97 },
-    { value: 103, name: 'Oil Injected Screw - Load/Unload (short cycle)', adjustment: 48 },
-    { value: 104, name: 'Oil Injected Screw - Load/Unload (2+ minutes cycle)', adjustment: 68 },
-    { value: 105, name: 'Oil Free Screw - Load/Unload', adjustment: 73 },
-    { value: 106, name: 'Reciprocating Compressor - Load/Unload', adjustment: 74 },
-    { value: 107, name: 'Reciprocating Compressor - On/Off', adjustment: 100 },
-    { value: 108, name: 'Centrifugal Compressor – In blowoff (Venting)', adjustment: 0 },
-    { value: 109, name: 'Centrifugal – Modulating (IBV) in throttle range (Non-Venting)', adjustment: 67 },
-    { value: 110, name: 'Centrifugal– Modulating (IGV) in throttle range (Non-Venting)', adjustment: 86 },
-    { value: 8, name: 'Custom', adjustment: 0 }
+    { value: CompressorControlType.ScrewInletModulation, name: 'Screw Compressor - Inlet Modulation', adjustment: 30 },
+    { value: CompressorControlType.ScrewVariableDisplacement, name: 'Screw Compressor - Variable Displacement', adjustment: 60 },
+    { value: CompressorControlType.ScrewVariableSpeedDrives, name: 'Screw Compressor – Variable Speed Drives', adjustment: 97 },
+    { value: CompressorControlType.OilInjectedScrewLoadUnloadShort, name: 'Oil Injected Screw - Load/Unload (short cycle)', adjustment: 48 },
+    { value: CompressorControlType.OilInjectedScrewLoadUnloadLong, name: 'Oil Injected Screw - Load/Unload (2+ minutes cycle)', adjustment: 68 },
+    { value: CompressorControlType.OilFreeScrewLoadUnload, name: 'Oil Free Screw - Load/Unload', adjustment: 73 },
+    { value: CompressorControlType.ReciprocatingLoadUnload, name: 'Reciprocating Compressor - Load/Unload', adjustment: 74 },
+    { value: CompressorControlType.ReciprocatingOnOff, name: 'Reciprocating Compressor - On/Off', adjustment: 100 },
+    { value: CompressorControlType.CentrifugalBlowoff, name: 'Centrifugal Compressor – In blowoff (Venting)', adjustment: 0 },
+    { value: CompressorControlType.CentrifugalModulatingIBV, name: 'Centrifugal – Modulating (IBV) in throttle range (Non-Venting)', adjustment: 67 },
+    { value: CompressorControlType.CentrifugalModulatingIGV, name: 'Centrifugal– Modulating (IGV) in throttle range (Non-Venting)', adjustment: 86 },
+    { value: CompressorControlType.Custom, name: 'Custom', adjustment: 0 }
   ];
   compressorTypes: Array<{ value: number, display: string, specificPower: number }> = [
-    { value: 0, display: 'Reciprocating', specificPower: 0.16 },
-    { value: 1, display: 'Rotary Screw (Lubricant-Injected)', specificPower: 0.20 },
-    { value: 2, display: 'Rotary Screw (Lubricant-Free)', specificPower: 0.23 },
-    { value: 3, display: 'Centrifugal', specificPower: 0.21 },
-    { value: 4, display: 'Custom', specificPower: 0.0 }
+    { value: CompressorSpecificPowerType.Reciprocating, display: 'Reciprocating', specificPower: 0.16 },
+    { value: CompressorSpecificPowerType.RotaryScrewLubricantInjected, display: 'Rotary Screw (Lubricant-Injected)', specificPower: 0.20 },
+    { value: CompressorSpecificPowerType.RotaryScrewLubricantFree, display: 'Rotary Screw (Lubricant-Free)', specificPower: 0.23 },
+    { value: CompressorSpecificPowerType.Centrifugal, display: 'Centrifugal', specificPower: 0.21 },
+    { value: CompressorSpecificPowerType.Custom, display: 'Custom', specificPower: 0.0 }
   ];
 
   constructor(private operatingCostService: OperatingCostService,
@@ -133,21 +133,21 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   changeCompressorControl() {
     let compressorElectricityForm: FormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
     if (!this.compressorCustomControl) {
-      if (compressorElectricityForm.controls.compressorControl.value === 8) {
+      if (compressorElectricityForm.controls.compressorControl.value === CompressorControlType.Custom) {
         this.compressorCustomControl = true;
       }
       let control = this.compressorControlTypes.find(controlItem => { return controlItem.value === compressorElectricityForm.controls.compressorControl.value });
       compressorElectricityForm.patchValue({ compressorControlAdjustment: control.adjustment });
     }
-    else if (compressorElectricityForm.controls.compressorControl.value !== 8) {
+    else if (compressorElectricityForm.controls.compressorControl.value !== CompressorControlType.Custom) {
       this.compressorCustomControl = false;
       let control = this.compressorControlTypes.find(controlItem => { return controlItem.value == compressorElectricityForm.controls.compressorControl.value });
       compressorElectricityForm.patchValue({ compressorControlAdjustment: control.adjustment });
     }
     else {
       if (compressorElectricityForm.controls.compressorControlAdjustment.valid) {
-        //custom
-        this.compressorControlTypes[11].adjustment = compressorElectricityForm.controls.compressorControlAdjustment.value;
+        const customControl = this.compressorControlTypes.find(c => c.value === CompressorControlType.Custom);
+        if (customControl) customControl.adjustment = compressorElectricityForm.controls.compressorControlAdjustment.value;
       }
     }
     this.airLeakFormService.setCompressorDataValidators(this.facilityCompressorDataForm);
@@ -157,20 +157,21 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   changeCompressorType() {
     let compressorElectricityForm: FormGroup = (this.facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
     if (!this.compressorCustomSpecificPower) {
-      if (compressorElectricityForm.controls.compressorSpecificPowerControl.value === 4) {
+      if (compressorElectricityForm.controls.compressorSpecificPowerControl.value === CompressorSpecificPowerType.Custom) {
         this.compressorCustomSpecificPower = true;
       }
       let specificPower: number = this.getSpecificPower(compressorElectricityForm);
       compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
     }
-    else if (compressorElectricityForm.controls.compressorSpecificPowerControl.value !== 4) {
+    else if (compressorElectricityForm.controls.compressorSpecificPowerControl.value !== CompressorSpecificPowerType.Custom) {
       this.compressorCustomSpecificPower = false;
       let specificPower: number = this.getSpecificPower(compressorElectricityForm);
       compressorElectricityForm.patchValue({ compressorSpecificPower: specificPower });
     }
     else {
       if (compressorElectricityForm.controls.compressorSpecificPower.value) {
-        this.compressorTypes[4].specificPower = compressorElectricityForm.controls.compressorSpecificPower.value;
+        const customType = this.compressorTypes.find(t => t.value === CompressorSpecificPowerType.Custom);
+        if (customType) customType.specificPower = compressorElectricityForm.controls.compressorSpecificPower.value;
       }
     }
     this.airLeakFormService.setCompressorDataValidators(this.facilityCompressorDataForm);
@@ -217,7 +218,7 @@ export class FacilityCompressorDataFormComponent implements OnInit {
   }
 
   changeUtilityType() {
-    if (this.facilityCompressorDataForm.controls.utilityType.value === 0) {
+    if (this.facilityCompressorDataForm.controls.utilityType.value === FacilityUtilityType.CompressedAir) {
       this.facilityCompressorDataForm.controls.utilityCost.patchValue(this.settings.compressedAirCost);
     } else {
       this.facilityCompressorDataForm.controls.utilityCost.patchValue(this.settings.electricityCost);

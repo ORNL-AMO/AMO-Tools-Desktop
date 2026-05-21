@@ -71,11 +71,11 @@
         @else { <span>m<sup>3</sup>/min</span> }
       </td>
     </tr>
-    @if (output.facilityCompressorData?.utilityType === 1 && surveyService.input()?.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment) {
+    @if (output.facilityCompressorData?.utilityType === 1 && surveyService.airLeakInput()?.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment) {
       <tr>
         <td class="bold w-50">Compressor Control Adjustment</td>
         <td class="text-center w-50">
-          {{ surveyService.input()?.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment | number:'1.0-1' }}%
+          {{ surveyService.airLeakInput()?.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment | number:'1.0-1' }}%
         </td>
       </tr>
     }

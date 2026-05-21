@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AirLeakSurveyInput, AirLeakSurveyOutput, AirLeakSurveyData, AirLeakSurveyResult } from '../../../shared/models/standalone';
 import { Settings } from '../../../shared/models/settings';
 import { StandaloneService } from '../../standalone.service';
-import { ConvertAirLeakService } from './convert-air-leak.service';
+import { ConvertAirLeakService } from '../air-leak-survey/convert-air-leak.service';
 import { BehaviorSubject } from 'rxjs';
 import { AirLeakFormService } from './air-leak-form/air-leak-form.service';
 import { exampleLeakInputs, LeakMeasurementMethod } from '../compressed-air-constants';

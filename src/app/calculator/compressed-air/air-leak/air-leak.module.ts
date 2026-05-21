@@ -7,7 +7,7 @@ import { AirLeakSurveyResultsComponent } from './air-leak-results/air-leak-resul
 import { AirLeakHelpComponent } from './air-leak-help/air-leak-help.component';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
-import { ConvertAirLeakService } from './convert-air-leak.service';
+import { ConvertAirLeakService } from '../air-leak-survey/convert-air-leak.service';
 import { FacilityCompressorDataFormComponent } from './facility-compressor-data-form/facility-compressor-data-form.component';
 import { AirLeakFormComponent } from './air-leak-form/air-leak-form.component';
 import { AirLeakResultsTableComponent } from './air-leak-results-table/air-leak-results-table.component';

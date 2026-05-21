@@ -3,9 +3,9 @@ import { FacilityCompressorData, AirLeakSurveyData, OrificeMethodData, DecibelsM
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 import { Settings } from '../../../../shared/models/settings';
-import { ConvertAirLeakService } from '../convert-air-leak.service';
+import { ConvertAirLeakService } from '../../air-leak-survey/convert-air-leak.service';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { LeakMeasurementMethod } from '../../compressed-air-constants';
+import { LeakMeasurementMethod, CompressorControlType, CompressorSpecificPowerType, FacilityUtilityType } from '../../compressed-air-constants';
 
 @Injectable()
 export class AirLeakFormService {
@@ -201,14 +201,14 @@ export class AirLeakFormService {
 
   setCompressorDataValidators(facilityCompressorDataForm: FormGroup): FormGroup {
     let form: FormGroup = (facilityCompressorDataForm.get("compressorElectricityData") as FormGroup);
-    if (facilityCompressorDataForm.controls.utilityType.value === 1) {
+    if (facilityCompressorDataForm.controls.utilityType.value === FacilityUtilityType.Electric) {
       form.controls.compressorControl.setValidators([Validators.required]);
       form.controls.compressorControl.updateValueAndValidity();
-      if (form.controls.compressorControl.value === 8) {
+      if (form.controls.compressorControl.value === CompressorControlType.Custom) {
         form.controls.compressorControlAdjustment.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
         form.controls.compressorControlAdjustment.updateValueAndValidity();
       }
-      if (form.controls.compressorSpecificPowerControl.value === 4) {
+      if (form.controls.compressorSpecificPowerControl.value === CompressorSpecificPowerType.Custom) {
         form.controls.compressorSpecificPower.setValidators([Validators.required, Validators.min(0)]);
         form.controls.compressorSpecificPower.updateValueAndValidity();
       }

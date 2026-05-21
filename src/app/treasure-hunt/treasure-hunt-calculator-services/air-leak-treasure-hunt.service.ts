@@ -4,7 +4,7 @@ import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyOutput } from '../.
 import { AirLeakSurveyTreasureHunt, EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import * as _ from 'lodash';
-import { ConvertAirLeakService } from '../../calculator/compressed-air/air-leak/convert-air-leak.service';
+import { ConvertAirLeakService } from '../../calculator/compressed-air/air-leak-survey/convert-air-leak.service';
 import { AirLeakSurveyService } from '../../calculator/compressed-air/air-leak-survey/air-leak-survey.service';
 
 @Injectable()
@@ -17,12 +17,12 @@ export class AirLeakTreasureHuntService {
 
 
   initNewCalculator() {
-    this.airLeakService.input.set(undefined);
+    this.airLeakService.airLeakInput.set(undefined);
   }
 
   setCalculatorInputFromOpportunity(airLeakSurvey: AirLeakSurveyTreasureHunt) {
     let airLeakInput: AirLeakSurveyInput = _.cloneDeep(airLeakSurvey.airLeakSurveyInput)
-    this.airLeakService.input.set(airLeakInput);
+    this.airLeakService.airLeakInput.set(airLeakInput);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -39,7 +39,7 @@ export class AirLeakTreasureHuntService {
   }
 
   resetCalculatorInputs() {
-    this.airLeakService.input.set(undefined);
+    this.airLeakService.airLeakInput.set(undefined);
   }
 
 

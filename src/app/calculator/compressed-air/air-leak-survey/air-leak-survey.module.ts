@@ -7,7 +7,7 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 import { AirLeakSurveyComponent } from './air-leak-survey.component';
 import { AirLeakSurveyService } from './air-leak-survey.service';
 import { AirLeakSurveyFormService } from './air-leak-survey-form/air-leak-survey-form.service';
-import { ConvertAirLeakService } from '../air-leak/convert-air-leak.service';
+import { ConvertAirLeakService } from './convert-air-leak.service';
 
 import { SurveyFacilityCompressorDataFormComponent } from './facility-compressor-data-form/facility-compressor-data-form.component';
 import { AirLeakSurveyFormComponent } from './air-leak-survey-form/air-leak-survey-form.component';
