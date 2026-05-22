@@ -6,7 +6,6 @@ import { BagFormControls } from '../air-leak-survey-form.service';
 @Component({
   selector: 'app-survey-bag-method-form',
   templateUrl: './bag-method-form.component.html',
-  styleUrls: ['./bag-method-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

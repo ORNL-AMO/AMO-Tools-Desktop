@@ -6,7 +6,6 @@ import { OrificeFormControls } from '../air-leak-survey-form.service';
 @Component({
   selector: 'app-survey-orifice-method-form',
   templateUrl: './orifice-method-form.component.html',
-  styleUrls: ['./orifice-method-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

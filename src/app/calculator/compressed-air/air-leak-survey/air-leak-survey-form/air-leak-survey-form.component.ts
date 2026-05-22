@@ -5,7 +5,6 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { merge, Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 import { AirLeakSurveyData } from '../../../../shared/models/standalone';
 import { Settings } from '../../../../shared/models/settings';
 import { AirLeakSurveyService } from '../air-leak-survey.service';
@@ -87,7 +86,6 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
       this.orificeForm.valueChanges,
       this.decibelForm.valueChanges,
     )
-      .pipe(debounceTime(150))
       .subscribe(() => this.saveLeak());
   }
 

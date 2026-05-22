@@ -113,13 +113,12 @@ describe('AirLeakSurveyFormComponent', () => {
     expect(surveyService.currentLeakIndex()).toBe(1);
   });
 
-  it('form value changes propagate back to airLeakInput after debounce', fakeAsync(() => {
+  it('form value changes propagate back to airLeakInput', () => {
     surveyService.airLeakInput.set(makeInput([makeLeak()]));
     fixture.detectChanges(); // builds forms
 
     component.leakMetaForm.controls.name.setValue('Updated Name');
-    tick(150); // let debounceTime(150) pass
 
     expect(surveyService.airLeakInput().compressedAirLeakSurveyInputVec[0].name).toBe('Updated Name');
-  }));
+  });
 });

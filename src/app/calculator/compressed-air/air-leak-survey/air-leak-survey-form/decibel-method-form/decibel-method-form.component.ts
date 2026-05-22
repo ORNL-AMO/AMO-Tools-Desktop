@@ -6,7 +6,6 @@ import { DecibelFormControls } from '../air-leak-survey-form.service';
 @Component({
   selector: 'app-survey-decibel-method-form',
   templateUrl: './decibel-method-form.component.html',
-  styleUrls: ['./decibel-method-form.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
