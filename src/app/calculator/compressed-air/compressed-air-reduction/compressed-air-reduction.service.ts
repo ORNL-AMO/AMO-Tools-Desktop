@@ -268,12 +268,9 @@ export class CompressedAirReductionService {
       results.baselineAggregateResults.energyUse = results.baselineAggregateResults.consumption;
       results.modificationAggregateResults.energyUse = results.modificationAggregateResults.consumption;
     }
-    results.annualCostSavings = (results.baselineAggregateResults.energyCost - results.modificationAggregateResults.energyCost) * (baselineInpCpy[0].compressorElectricityData.compressorControlAdjustment / 100);
+    results.annualCostSavings = results.baselineAggregateResults.energyCost - results.modificationAggregateResults.energyCost;
     results.annualFlowRateReduction = results.baselineAggregateResults.flowRate - results.modificationAggregateResults.flowRate;
     results.annualConsumptionReduction = results.baselineAggregateResults.consumption - results.modificationAggregateResults.consumption;
-    // overwrite estimated energyUse value originally set in suite results
-    results.modificationAggregateResults.energyUse = results.baselineAggregateResults.energyUse - results.annualEnergySavings;
-    results.modificationAggregateResults.energyCost = results.baselineAggregateResults.energyCost - results.annualCostSavings;
     this.compressedAirResults.next(results);
   }
 
@@ -291,11 +288,9 @@ export class CompressedAirReductionService {
         modResult.energyUse = modResult.consumption;
       }
 
-      let controlAdjustedSavings: number = (baselineResult.energyUse - modResult.energyUse) * (input.compressorElectricityData.compressorControlAdjustment / 100);
-      modResult.energyUse = baselineResult.energyUse - controlAdjustedSavings;
+      results.annualEnergySavings += baselineResult.energyUse - modResult.energyUse;
       results.baselineResults.push(baselineResult);
       results.modificationResults.push(modResult);
-      results.annualEnergySavings += controlAdjustedSavings;
     });
 
     return results;

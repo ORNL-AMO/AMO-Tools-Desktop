@@ -41,7 +41,7 @@ export class ConvertCompressedAirReductionService {
   convertResults(results: CompressedAirReductionResult, settings: Settings) {
     if (settings.unitsOfMeasure != 'Imperial') {
       results.flowRate = this.convertUnitsService.value(results.flowRate).from('ft3').to('m3');
-      results.singleNozzeFlowRate = this.convertUnitsService.value(results.singleNozzeFlowRate).from('ft3').to('m3');
+      results.singleNozzleFlowRate = this.convertUnitsService.value(results.singleNozzleFlowRate).from('ft3').to('m3');
       results.consumption = this.convertUnitsService.value(results.consumption).from('ft3').to('m3');
     } else if (settings.unitsOfMeasure == 'Imperial') {
       results.consumption = results.consumption / 1000;
