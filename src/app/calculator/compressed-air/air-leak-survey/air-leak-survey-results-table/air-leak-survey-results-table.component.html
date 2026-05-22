@@ -1,0 +1,81 @@
+@let output = surveyService.output();
+
+@if (output.individualLeaks.length > 0) {
+<div class="mt-3">
+  <table class="table table-hover table-striped">
+    <tbody>
+      <tr class="bold text-center no-border">
+        <td>Fix
+          <div>
+            <input type="checkbox" [checked]="allSelected" (click)="toggleSelectAll()" />
+          </div>
+        </td>
+        <td class="w-25">Leak Name</td>
+        <td>
+          Flow Rate
+          (@if (settings().unitsOfMeasure !== 'Metric') { <span>scfm</span> }
+          @else { <span>m<sup>3</sup>/min</span> })
+        </td>
+        <td>
+          Air Loss
+          (@if (settings().unitsOfMeasure !== 'Metric') { <span>kscf/yr</span> }
+          @else { <span>m<sup>3</sup>/yr</span> })
+        </td>
+        @if (output.facilityCompressorData?.utilityType === 1) {
+        <td>Electricity Consumption (kWh/yr)</td>
+        }
+        <td class="w-25"></td>
+      </tr>
+
+      @for (leak of output.individualLeaks; track $index) {
+      <tr class="text-center">
+        <td class="p-3">
+          <input type="checkbox" [checked]="leak.selected" (change)="toggleSelected($index, $event)" />
+        </td>
+        <td class="p-3 col-item-br">
+          <a (click)="editLeak($index)">{{ leak.name }}</a>
+        </td>
+        <td class="p-3 col-item-br">
+          @if (leak.totalFlowRate) {
+          @if (settings().unitsOfMeasure !== 'Metric') {
+          {{ leak.totalFlowRate | number:'1.0-1' }}
+          } @else {
+          {{ leak.totalFlowRate | number:'1.3-3' }}
+          }
+          } @else {
+          --
+          }
+        </td>
+        <td class="p-3 col-item-br">
+          @if (leak.annualTotalFlowRate) {
+          {{ leak.annualTotalFlowRate | number:'1.0-1' }}
+          } @else {
+          --
+          }
+        </td>
+        @if (output.facilityCompressorData?.utilityType === 1) {
+        <td class="p-3 col-item-br">
+          @if (leak.annualTotalElectricity) {
+          {{ leak.annualTotalElectricity | number:'1.0-0' }}
+          } @else {
+          --
+          }
+        </td>
+        }
+        <td class="pt-3 px-1 col-item-br d-flex justify-content-around align-items-center">
+          <button type="button" class="btn btn-link p-1 text-primary" (click)="copyLeak($index)" title="Copy">
+            <i class="fa fa-copy fa-lg"></i>
+          </button>
+          <button type="button" class="btn btn-link p-1 text-secondary" (click)="editLeak($index)" title="Edit">
+            <i class="fa fa-pencil fa-lg"></i>
+          </button>
+          <button type="button" class="btn btn-link p-1 text-danger" (click)="deleteLeak($index)" title="Delete">
+            <i class="fa fa-trash fa-lg"></i>
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+}

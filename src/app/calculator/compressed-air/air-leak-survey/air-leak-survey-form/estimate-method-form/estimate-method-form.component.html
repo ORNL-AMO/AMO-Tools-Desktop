@@ -1,0 +1,25 @@
+<form [formGroup]="form()">
+  <div class="form-group">
+    <label for="survey-leakRateEstimate">Leak Rate Estimate</label>
+    <div class="input-group">
+      <input name="leakRateEstimate" class="form-control" type="number" step="any"
+        formControlName="leakRateEstimate" id="survey-leakRateEstimate" onfocus="this.select();"
+        (focus)="fieldFocused.emit('leakRateEstimate')">
+      @if (settings().unitsOfMeasure === 'Imperial') {
+        <span class="input-group-addon units">scfm</span>
+      } @else {
+        <span class="input-group-addon units">m<sup>3</sup>/min</span>
+      }
+      @if (form().controls.leakRateEstimate.invalid && !form().controls.leakRateEstimate.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.leakRateEstimate.errors?.['required']) {
+            <span>Value required.</span>
+          }
+          @if (form().controls.leakRateEstimate.errors?.['greaterThan']) {
+            <span>Value must be greater than 0.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+</form>

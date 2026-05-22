@@ -1,0 +1,123 @@
+<form [formGroup]="form()">
+  <div class="form-group">
+    <label for="survey-compressorAirTemp">Compressor Air Temperature</label>
+    <div class="input-group">
+      <input name="compressorAirTemp" class="form-control" type="number" step="any"
+        formControlName="compressorAirTemp" id="survey-compressorAirTemp" onfocus="this.select();"
+        (focus)="fieldFocused.emit('compressorAirTemp')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">&#8457;</span>
+      } @else {
+        <span class="input-group-addon units">&#8451;</span>
+      }
+      @if (form().controls.compressorAirTemp.invalid && !form().controls.compressorAirTemp.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.compressorAirTemp.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.compressorAirTemp.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.compressorAirTemp.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="survey-atmosphericPressure">Atmospheric Pressure</label>
+    <div class="input-group">
+      <input name="atmosphericPressure" class="form-control" type="number" step="any"
+        formControlName="atmosphericPressure" id="survey-atmosphericPressure" onfocus="this.select();"
+        (focus)="fieldFocused.emit('atmosphericPressure')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">psia</span>
+      } @else {
+        <span class="input-group-addon units">kPaa</span>
+      }
+      @if (form().controls.atmosphericPressure.invalid && !form().controls.atmosphericPressure.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.atmosphericPressure.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.atmosphericPressure.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.atmosphericPressure.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="survey-dischargeCoefficient">Discharge Coefficient</label>
+    <div class="input-group">
+      <input name="dischargeCoefficient" class="form-control" type="number" step="any"
+        formControlName="dischargeCoefficient" id="survey-dischargeCoefficient" onfocus="this.select();"
+        (focus)="fieldFocused.emit('dischargeCoefficient')">
+      @if (form().controls.dischargeCoefficient.invalid && !form().controls.dischargeCoefficient.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.dischargeCoefficient.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.dischargeCoefficient.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.dischargeCoefficient.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="survey-orificeDiameter">Orifice Diameter</label>
+    <div class="input-group">
+      <input name="orificeDiameter" class="form-control" type="number" step="any"
+        formControlName="orificeDiameter" id="survey-orificeDiameter" onfocus="this.select();"
+        (focus)="fieldFocused.emit('orificeDiameter')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">in</span>
+      } @else {
+        <span class="input-group-addon units">cm</span>
+      }
+      @if (form().controls.orificeDiameter.invalid && !form().controls.orificeDiameter.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.orificeDiameter.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.orificeDiameter.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.orificeDiameter.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="survey-supplyPressure">Supply Pressure</label>
+    <div class="input-group">
+      <input name="supplyPressure" class="form-control" type="number" step="any"
+        formControlName="supplyPressure" id="survey-supplyPressure" onfocus="this.select();"
+        (focus)="fieldFocused.emit('supplyPressure')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">psig</span>
+      } @else {
+        <span class="input-group-addon units">kPaa</span>
+      }
+      @if (form().controls.supplyPressure.invalid && !form().controls.supplyPressure.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.supplyPressure.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.supplyPressure.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.supplyPressure.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="survey-numberOfOrifices">Number of Orifices</label>
+    <div class="input-group">
+      <input name="numberOfOrifices" class="form-control" type="number" step="any"
+        formControlName="numberOfOrifices" id="survey-numberOfOrifices" onfocus="this.select();"
+        (focus)="fieldFocused.emit('numberOfOrifices')">
+      @if (form().controls.numberOfOrifices.invalid && !form().controls.numberOfOrifices.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.numberOfOrifices.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.numberOfOrifices.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.numberOfOrifices.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+</form>
