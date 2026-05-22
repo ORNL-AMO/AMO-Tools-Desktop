@@ -22,11 +22,8 @@ const DiagramResults = () => {
   const calculatedData: DiagramCalculatedData = useAppSelector((state) => state.diagram.calculatedData);
   
   const validationErrors: NodeErrors = useAppSelector((state) => state.diagram.nodeErrors);
-  const nodeErrors: NodeErrors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
-  // console.log('NEWnodeErrors', nodeErrors);
-  // console.log('OLDnodeErrors', validationErrors);
+  const nodeErrors: NodeErrors = checkDiagramNodeErrors(nodes, edges, settings);
   const isDiagramValid = getIsDiagramValid(validationErrors);
-  // console.log(isDiagramValid);
 
   setWaterUsingSystemFlows(waterUsingSystems, edges);
   const diagramResults: WaterBalanceResults = getWaterBalanceResults(waterUsingSystems, calculatedData);

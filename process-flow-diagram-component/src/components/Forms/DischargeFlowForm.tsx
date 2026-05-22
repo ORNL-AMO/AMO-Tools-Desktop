@@ -157,10 +157,12 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                                                             value={currentValue}
                                                             warning={hasWarning}
                                                             helperText={hasWarning ? String(errors.flows[index]) : ""}
-                                                            FormHelperTextProps={{
-                                                                sx: {
-                                                                    whiteSpace: 'normal',
-                                                                    maxWidth: 250,
+                                                            slotProps={{
+                                                                formHelperText: {
+                                                                    sx: {
+                                                                        whiteSpace: 'normal',
+                                                                        maxWidth: 250,
+                                                                    }
                                                                 }
                                                             }}
                                                             onChange={(event) => onFlowValueInputChange(event, edge.id, handleChange)}

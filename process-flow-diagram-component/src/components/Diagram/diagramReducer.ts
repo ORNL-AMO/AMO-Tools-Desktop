@@ -4,8 +4,8 @@ import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange,
 import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, convertFlowDiagramData, getConnectionFromEdgeId, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection } from 'process-flow-lib';
-import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue, getContrastTextColor } from './FlowUtils';
+import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection } from 'process-flow-lib';
+import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
 
@@ -124,7 +124,10 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.diagramOptions = diagramData.userDiagramOptions ? { ...diagramData.userDiagramOptions } : getDefaultUserDiagramOptions();
   state.settings = diagramData.settings ? { ...diagramData.settings } : getDefaultSettings();
   state.calculatedData = diagramData.calculatedData ? { ...diagramData.calculatedData } : { nodes: {} };
-  state.nodeErrors = diagramData.nodeErrors ? { ...diagramData.nodeErrors } : {};
+  
+  const nodeErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
+  state.nodeErrors = nodeErrors;
+
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
   state.diagramOptions.paletteColors = diagramData.userDiagramOptions?.paletteColors ?? getDefaultPaletteColors();  

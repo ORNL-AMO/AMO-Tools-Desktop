@@ -9,14 +9,13 @@ import { RootState, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
+import { NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getContrastTextColor, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
 import { Node } from '@xyflow/react';
 import TextField from '@mui/material/TextField';
 import { setDiagramNotes } from '../Diagram/diagramReducer';
 import ColorPaletteDropdown, { allPalettes } from "./ColorPaletteDropdown"
-import { getContrastTextColor } from '../Diagram/FlowUtils';
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(2),

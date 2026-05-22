@@ -137,7 +137,7 @@ const summary = getPlantSummaryResults(flowDiagramData, waterAssessment, WaterAs
 ```typescript
 import { checkDiagramNodeErrors, getIsDiagramValid } from 'process-flow-lib';
 
-const errors = checkDiagramNodeErrors(nodes, edges, calculatedData, settings);
+const errors = checkDiagramNodeErrors(nodes, edges, settings);
 const isValid = getIsDiagramValid(errors);
 ```
 
