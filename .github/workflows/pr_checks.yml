@@ -33,4 +33,4 @@ jobs:
             (cd $dir && npm ci $dir);
           done
       - name: Run unit tests
-        run: ng test --watch=false --no-progress
+        run: npm test -- --watch=false --no-progress
