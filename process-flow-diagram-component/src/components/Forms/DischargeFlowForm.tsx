@@ -358,11 +358,14 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
                 error={hasError}
                 helperText={hasError ? String(errors.totalFlow) : ""}
                 FormHelperTextProps={{ sx: { whiteSpace: 'normal'} }}
-                InputProps={{
-                    endAdornment: 
-                    <InputAdornment position="end">
-                        <FlowDisplayUnit />
-                    </InputAdornment>
+                slotProps={{
+                    formHelperText: { sx: { whiteSpace: 'normal' } },
+                    htmlInput: { onWheel: (e: React.WheelEvent<HTMLInputElement>) => (e.target as HTMLElement).blur() },
+                    input: {
+                        endAdornment: <InputAdornment position="end">
+                            <FlowDisplayUnit />
+                        </InputAdornment>
+                    }
                 }}
             />
 
