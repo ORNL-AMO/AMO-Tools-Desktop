@@ -5,11 +5,6 @@ import { ProcessCoolingResultsService } from '../../../services/process-cooling-
 import { ProcessCoolingChartsService } from '../../../services/process-cooling-charts.service';
 import { ProcessCoolingChillerOutput } from '../../../../shared/models/process-cooling-assessment';
 
-const MARKER_SHAPES: Array<string> = [
-  'star', 'star-diamond', 'hexagram', 'star-square', 'square',
-  'diamond', 'cross', 'x', 'diamond-wide', 'diamond-tall',
-];
-
 @Component({
   selector: 'app-chiller-profile-chart',
   standalone: false,
@@ -37,32 +32,7 @@ export class ChillerProfileChartComponent {
       if (!filteredChillers.length) return;
       const { traces, layout, config } = this.chartsService.buildChillerProfileChart(filteredChillers);
 
-      filteredChillers.forEach((_, i) => {
-        traces[i].marker = {
-          ...traces[i].marker,
-          size: 12,
-          symbol: MARKER_SHAPES[i % MARKER_SHAPES.length],
-        };
-      });
-
-      const haloTraces = filteredChillers.map((_, i) => ({
-        x: traces[i].x,
-        y: traces[i].y,
-        type: 'scatter',
-        mode: 'markers',
-        name: traces[i].name,
-        showlegend: false,
-        hoverinfo: 'skip',
-        marker: {
-          size: 22,
-          symbol: 'circle-open',
-          color: traces[i].marker.color,
-          line: { color: traces[i].marker.color, width: 1.5 },
-          opacity: 0.45,
-        },
-      }));
-
-      this.plotlyService.newPlot(nativeElement, [...traces, ...haloTraces], layout, config);
+      this.plotlyService.newPlot(nativeElement, traces, layout, config);
     });
   }
 }
