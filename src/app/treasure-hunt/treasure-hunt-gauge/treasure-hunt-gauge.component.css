@@ -1,0 +1,59 @@
+:host {
+	display: block;
+}
+
+.gauge-container {
+	position: relative;
+	display: block;
+	width: 100%;
+	overflow: visible;
+}
+
+
+.gauge-flex-row {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	width: 100%;
+}
+
+.error-icon {
+	position: static;
+	z-index: 100;
+	margin-left: -2rem;
+	/* align-self: flex-start; */
+	margin-top: -4.5rem;
+}
+
+@media screen and (max-width: 1024px) {
+	.gauge-flex-row {
+		gap: 0.5rem;
+	}
+	.error-icon {
+		margin-left: -1.5rem;
+		margin-top: -4.5rem;
+	}
+}
+
+@media screen and (max-width: 1024px) {
+	.error-icon {
+		right: 20rem;
+		top: 0.5rem;
+		/* Adjust as needed for best mobile alignment */
+	}
+}
+
+.fa-exclamation-circle {
+	color: #d32f2f !important;
+	font-size: 1.5rem;
+}
+
+::ng-deep .error-icon .tooltip-box {
+	min-width: 220px;
+	white-space: normal;
+	border-radius: 8px;
+	border: 1.5px solid #d32f2f;
+	background-color: #fff;
+	color: #d32f2f;
+}
