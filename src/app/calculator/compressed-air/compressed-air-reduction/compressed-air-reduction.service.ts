@@ -253,10 +253,16 @@ export class CompressedAirReductionService {
     }
     let baselineInpCpy: Array<CompressedAirReductionData> = JSON.parse(JSON.stringify(baseline));
     let modificationInpCpy: Array<CompressedAirReductionData>;
-
     results.baselineAggregateResults = this.calculate(baselineInpCpy, settings);
     if (modification) {
       modificationInpCpy = JSON.parse(JSON.stringify(modification));
+      //modification inputs set to baseline
+      modificationInpCpy.forEach((modInput, index) => {
+        if (baselineInpCpy[index]) {
+          modInput.compressorElectricityData.compressorControlAdjustment = baselineInpCpy[index].compressorElectricityData.compressorControlAdjustment;
+          modInput.compressorElectricityData.compressorSpecificPower = baselineInpCpy[index].compressorElectricityData.compressorSpecificPower;
+        }
+      });
       results.modificationAggregateResults = this.calculate(modificationInpCpy, settings);
     } else {
       results.modificationAggregateResults = results.baselineAggregateResults;
