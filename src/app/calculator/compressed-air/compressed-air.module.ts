@@ -6,6 +6,7 @@ import { BagMethodModule } from './bag-method/bag-method.module';
 import { OperatingCostModule } from './operating-cost/operating-cost.module';
 import { PipeSizingModule } from './pipe-sizing/pipe-sizing.module';
 import { PneumaticAirModule } from './pneumatic-air/pneumatic-air.module';
+import { PneumaticValveModule } from './pneumatic-valve/pneumatic-valve.module';
 import { ReceiverTankModule } from './receiver-tank/receiver-tank.module';
 import { SystemCapacityModule } from './system-capacity/system-capacity.module';
 import { CompressedAirListComponent } from './compressed-air-list/compressed-air-list.component';
@@ -28,6 +29,7 @@ import { BleedTestModule } from './bleed-test/bleed-test.module';
     OperatingCostModule,
     PipeSizingModule,
     PneumaticAirModule,
+    PneumaticValveModule,
     ReceiverTankModule,
     SystemCapacityModule,
     CompressedAirReductionModule,

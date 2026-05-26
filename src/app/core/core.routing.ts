@@ -32,6 +32,7 @@ import { BagMethodComponent } from '../calculator/compressed-air/bag-method/bag-
 import { OperatingCostComponent } from '../calculator/compressed-air/operating-cost/operating-cost.component';
 import { PipeSizingComponent } from '../calculator/compressed-air/pipe-sizing/pipe-sizing.component';
 import { PneumaticAirComponent } from '../calculator/compressed-air/pneumatic-air/pneumatic-air.component';
+import { PneumaticValveComponent } from '../calculator/compressed-air/pneumatic-valve/pneumatic-valve.component';
 import { ReceiverTankComponent } from '../calculator/compressed-air/receiver-tank/receiver-tank.component';
 import { SystemCapacityComponent } from '../calculator/compressed-air/system-capacity/system-capacity.component';
 import { FanAnalysisComponent } from '../calculator/fans/fan-analysis/fan-analysis.component';
@@ -244,6 +245,10 @@ export const coreRoutes: Routes = [
           {
             path: 'pneumatic-air',
             component: PneumaticAirComponent
+          },
+          {
+            path: 'pneumatic-valve',
+            component: PneumaticValveComponent
           },
           {
             path: 'receiver-tank-usable-air',

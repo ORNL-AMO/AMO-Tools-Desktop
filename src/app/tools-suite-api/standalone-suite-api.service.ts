@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, CombinedHeatPower, CombinedHeatPowerOutput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, OperatingCostInput, OperatingCostOutput, PipeInsulationReductionInput, PipeInsulationReductionResult, PipeSizes, PipeSizingInput, PipeSizingOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredResults, ReceiverTankMeteredStorage } from '../shared/models/standalone';
+import { AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, CombinedHeatPower, CombinedHeatPowerOutput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, OperatingCostInput, OperatingCostOutput, PipeInsulationReductionInput, PipeInsulationReductionResult, PipeSizes, PipeSizingInput, PipeSizingOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput, PneumaticValveCvInput, PneumaticValveCvOutput, PneumaticValveFlowRateInput, PneumaticValveFlowRateOutput, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredResults, ReceiverTankMeteredStorage } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 
@@ -241,19 +241,26 @@ export class StandaloneSuiteApiService {
     return results;
   }
 
-  // pneumaticValveCalculateFlowRate(input: PneumaticValveFlowRateInput): PneumaticValveFlowRateOutput {
-  //   let PneumaticValve = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticValve(input.inletPressure, input.outletPressure);
-  //   let output: PneumaticValveFlowRateOutput = PneumaticValve.calculate();
-  //   PneumaticValve.delete();
-  //   return output;
-  // }
+  pneumaticValveCalculateFlowRate(input: PneumaticValveFlowRateInput): PneumaticValveFlowRateOutput {
+    input.inletPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.inletPressure);
+    input.outletPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.outletPressure);
+    let rawOutput = this.toolsSuiteApiService.ToolsSuiteModule.calculatePneumaticValveFlowRate(input);
+    let output: PneumaticValveFlowRateOutput = {
+      flowRate: isNaN(rawOutput.flowRate) ? undefined : rawOutput.flowRate
+    };
+    return output;
+  }
 
-  // pneumaticValve(input: PneumaticValve): PneumaticValveFlowCoefficient {
-  //   let PneumaticValve = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticValve(input.inletPressure, input.outletPressure, input.flowRate);
-  //   let output: PneumaticValveFlowCoefficient = PneumaticValve.calculate();
-  //   PneumaticValve.delete();
-  //   return output;
-  // }
+  pneumaticValveCv(input: PneumaticValveCvInput): PneumaticValveCvOutput {
+    input.inletPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.inletPressure);
+    input.outletPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.outletPressure);
+    input.flowRate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.flowRate);
+    let rawOutput = this.toolsSuiteApiService.ToolsSuiteModule.calculatePneumaticValveCv(input);
+    let output: PneumaticValveCvOutput = {
+      flowCoefficient: isNaN(rawOutput.flowCoefficient) ? undefined : rawOutput.flowCoefficient
+    };
+    return output;
+  }
 
   /**
    * Calculate Bag Method for air leak or pressure reduction

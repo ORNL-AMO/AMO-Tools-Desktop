@@ -12,6 +12,7 @@ import {
   PowerFactorTriangleModeInputs,
   PowerFactorTriangleOutputs,
   ReceiverTankMeteredResults,
+  PneumaticValveFlowRateInput, PneumaticValveFlowRateOutput, PneumaticValveCvInput, PneumaticValveCvOutput,
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -257,35 +258,32 @@ export class StandaloneService {
     }
   }
 
-  // calculate flow rate
-  // pneumaticValveCalculateFlowRate(inletPressure: number, outletPressure: number, settings: Settings): number {
-  //   let inletPressureCpy: number = JSON.parse(JSON.stringify(inletPressure));
-  //   let outletPressureCpy: number = JSON.parse(JSON.stringify(outletPressure));
-  //   if (settings.unitsOfMeasure === 'Metric') {
-  //     inletPressureCpy = this.convertUnitsService.value(inletPressureCpy).from('kPa').to('psi');
-  //     outletPressureCpy = this.convertUnitsService.value(outletPressureCpy).from('kPa').to('psi');
-  //     let flowRate: number = this.standaloneSuiteApiService.pneumaticValveCalculateFlowRate({ inletPressure: inletPressureCpy, outletPressure: outletPressureCpy }).flowRate;
-  //     flowRate = this.convertUnitsService.value(flowRate).from('ft3').to('m3');
-  //     return flowRate;
-  //   } else {
-  //     return this.standaloneSuiteApiService.pneumaticValveCalculateFlowRate({ inletPressure: inletPressureCpy, outletPressure: outletPressureCpy }).flowRate;
-  //   }
-  // }
+  pneumaticValveCalculateFlowRate(input: PneumaticValveFlowRateInput, settings: Settings): PneumaticValveFlowRateOutput {
+    let inputCpy: PneumaticValveFlowRateInput = JSON.parse(JSON.stringify(input));
+    if (settings.unitsOfMeasure === 'Metric') {
+      inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from('kPa').to('psi');
+      inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from('kPa').to('psi');
+      let output: PneumaticValveFlowRateOutput = this.standaloneSuiteApiService.pneumaticValveCalculateFlowRate(inputCpy);
+      if (output.flowRate !== undefined) {
+        output.flowRate = this.convertUnitsService.value(output.flowRate).from('ft3').to('m3');
+      }
+      return output;
+    } else {
+      return this.standaloneSuiteApiService.pneumaticValveCalculateFlowRate(inputCpy);
+    }
+  }
 
-  // // calculate flow coefficient
-  // pneumaticValve(input: PneumaticValve, settings: Settings): number {
-  //   let inputCpy: PneumaticValve = JSON.parse(JSON.stringify(input));
-  //   if (settings.unitsOfMeasure === 'Metric') {
-  //     inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from('kPa').to('psi');
-  //     inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from('kPa').to('psi');
-  //     inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from('m3').to('ft3');
-  //     let flowCoefficient: number = this.standaloneSuiteApiService.pneumaticValve(inputCpy).flowCoefficient;
-  //     flowCoefficient = this.convertUnitsService.value(flowCoefficient).from('ft3').to('m3');
-  //     return flowCoefficient;
-  //   } else {
-  //     return this.standaloneSuiteApiService.pneumaticValve(inputCpy).flowCoefficient;
-  //   }
-  // }
+  pneumaticValveCv(input: PneumaticValveCvInput, settings: Settings): PneumaticValveCvOutput {
+    let inputCpy: PneumaticValveCvInput = JSON.parse(JSON.stringify(input));
+    if (settings.unitsOfMeasure === 'Metric') {
+      inputCpy.inletPressure = this.convertUnitsService.value(inputCpy.inletPressure).from('kPa').to('psi');
+      inputCpy.outletPressure = this.convertUnitsService.value(inputCpy.outletPressure).from('kPa').to('psi');
+      inputCpy.flowRate = this.convertUnitsService.value(inputCpy.flowRate).from('m3').to('ft3');
+      return this.standaloneSuiteApiService.pneumaticValveCv(inputCpy);
+    } else {
+      return this.standaloneSuiteApiService.pneumaticValveCv(inputCpy);
+    }
+  }
 
   bagMethod(input: BagMethodInput, settings: Settings): BagMethodOutput {
     let inputCpy: BagMethodInput = JSON.parse(JSON.stringify(input));
