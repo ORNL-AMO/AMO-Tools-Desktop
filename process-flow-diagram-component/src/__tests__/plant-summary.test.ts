@@ -25,7 +25,7 @@ import {
 } from '../__fixtures__/builders';
 
 // getFlowCost formula: unitCost * (flow * 1000)
-// e.g. costPerKGal=0.001, flow=100 → 0.001 * 100_000 = 100
+// e.g. costPerKGal=1, flow=100 → 1 * 100_000 = 100_000
 
 beforeEach(() => {
   vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -45,16 +45,16 @@ const blockCost = (costPerKGal: number, flow: number) => costPerKGal * flow * 10
 // Fixture: simple-linear
 // Configuration: Intake → System → Discharge
 //
-//   intake (cost=0.001/kGal, outflow=100)
+//   intake (cost=1/kGal, outflow=100)
 //     └─ e1 (100) ─► system
-//                        └─ e2 (80) ─► discharge (cost=0.002/kGal, inflow=80)
+//                        └─ e2 (80) ─► discharge (cost=2/kGal, inflow=80)
 //
 // Expected attribution fractions: intake=1.0, discharge=1.0 (single system)
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — simple-linear: Intake → System → Discharge', () => {
-  const INTAKE_COST = 0.001;
-  const DISCHARGE_COST = 0.002;
+  const INTAKE_COST = 1;
+  const DISCHARGE_COST = 2;
   const INTAKE_FLOW = 100;
   const DISCHARGE_FLOW = 80;
 
@@ -110,7 +110,7 @@ describe('getPlantSummaryResults — simple-linear: Intake → System → Discha
 // Fixture: shared-intake
 // Configuration: Intake → [System A (60%), System B (40%)]
 //
-//   intake (cost=0.001/kGal, outflow=100)
+//   intake (cost=1/kGal, outflow=100)
 //     ├─ e_a (60) ─► systemA
 //     └─ e_b (40) ─► systemB
 //
@@ -118,7 +118,7 @@ describe('getPlantSummaryResults — simple-linear: Intake → System → Discha
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — shared-intake: Intake → [System A (60%), System B (40%)]', () => {
-  const INTAKE_COST = 0.001;
+  const INTAKE_COST = 1;
   const FLOW_A = 60;
   const FLOW_B = 40;
   const TOTAL_FLOW = FLOW_A + FLOW_B;
@@ -173,8 +173,8 @@ describe('getPlantSummaryResults — shared-intake: Intake → [System A (60%), 
 // Fixture: treatment-with-loss
 // Configuration: Intake → Treatment (100 in, 80 out, losses=20) → System
 //
-//   intake (cost=0.001/kGal, outflow=100)
-//     └─ e1 (100) ─► treatment (cost=0.005/kGal, inflow=100, outflow=80)
+//   intake (cost=1/kGal, outflow=100)
+//     └─ e1 (100) ─► treatment (cost=5/kGal, inflow=100, outflow=80)
 //                        └─ e2 (80) ─► system
 //
 // Algorithm uses delivered-flow-volume basis when intake has a single
@@ -184,8 +184,8 @@ describe('getPlantSummaryResults — shared-intake: Intake → [System A (60%), 
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — treatment-with-loss: Intake → Treatment (losses) → System', () => {
-  const INTAKE_COST = 0.001;
-  const TREATMENT_COST = 0.005;
+  const INTAKE_COST = 1;
+  const TREATMENT_COST = 5;
   const INTAKE_FLOW = 100;
   const TREATMENT_INFLOW = 100;
   const TREATMENT_OUTFLOW = 80;
@@ -239,10 +239,10 @@ describe('getPlantSummaryResults — treatment-with-loss: Intake → Treatment (
 // Configuration: Intake → RO (treatmentType=6) → System A → Discharge1 (product path)
 //                                          └──────────► Discharge2 (reject path)
 //
-//   intake (cost=0.001/kGal, outflow=100)
-//     └─ e1 (100) ─► RO (cost=0.005/kGal, treatmentType=6, inflow=100, outflow=100)
+//   intake (cost=1/kGal, outflow=100)
+//     └─ e1 (100) ─► RO (cost=5/kGal, treatmentType=6, inflow=100, outflow=100)
 //                     ├─ e2 (70) ─► systemA
-//                     │               └─ e4 (70) ─► discharge1 (cost=0.001/kGal)
+//                     │               └─ e4 (70) ─► discharge1 (cost=1/kGal)
 //                     └─ e3 (30) ─► discharge2 (reject, cost=0)
 //
 // assignsystemsWithRODirectDischarge detects this configuration and stores
@@ -251,9 +251,9 @@ describe('getPlantSummaryResults — treatment-with-loss: Intake → Treatment (
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — ro-single-system: Intake → RO → [System, Discharge(reject)]', () => {
-  const INTAKE_COST = 0.001;
-  const RO_COST = 0.005;
-  const DISCHARGE1_COST = 0.001;
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
+  const DISCHARGE1_COST = 1;
   const RO_INFLOW = 100;
   const PRODUCT_FLOW = 70;
   const REJECT_FLOW = 30;
@@ -327,7 +327,7 @@ describe('getPlantSummaryResults — ro-single-system: Intake → RO → [System
 
 describe('mass-balance invariants', () => {
   it('simple-linear: sum of all system intake attributions equals intake block cost', () => {
-    const intake = makeIntakeNode('intake', 0.001);
+    const intake = makeIntakeNode('intake', 1);
     const system = makeSystemNode('system');
     const discharge = makeDischargeNode('discharge', 0);
     const nodes = [intake, system, discharge];
@@ -347,7 +347,7 @@ describe('mass-balance invariants', () => {
   });
 
   it('shared-intake: sum of all system intake attributions equals intake block cost', () => {
-    const intake = makeIntakeNode('intake', 0.001);
+    const intake = makeIntakeNode('intake', 1);
     const sysA = makeSystemNode('sysA');
     const sysB = makeSystemNode('sysB');
     const nodes = [intake, sysA, sysB];
@@ -367,7 +367,7 @@ describe('mass-balance invariants', () => {
   });
 
   it('no system receives a negative intake cost', () => {
-    const intake = makeIntakeNode('intake', 0.001);
+    const intake = makeIntakeNode('intake', 1);
     const sysA = makeSystemNode('sysA');
     const sysB = makeSystemNode('sysB');
     const nodes = [intake, sysA, sysB];
@@ -388,7 +388,7 @@ describe('mass-balance invariants', () => {
   });
 
   it('all attribution fractions are bounded between 0 and 1', () => {
-    const intake = makeIntakeNode('intake', 0.001);
+    const intake = makeIntakeNode('intake', 1);
     const sysA = makeSystemNode('sysA');
     const sysB = makeSystemNode('sysB');
     const nodes = [intake, sysA, sysB];
@@ -415,14 +415,14 @@ describe('mass-balance invariants', () => {
 // Fixture: shared-discharge
 // Configuration: [System A (60%), System B (40%)] → Discharge
 //
-//   sysA ─ e_a (60) ─► discharge (cost=0.002/kGal, inflow=100)
+//   sysA ─ e_a (60) ─► discharge (cost=2/kGal, inflow=100)
 //   sysB ─ e_b (40) ─►
 //
 // Expected: discharge block cost split proportionally by flow fraction
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — shared-discharge: [System A, System B] → Discharge', () => {
-  const DISCHARGE_COST = 0.002;
+  const DISCHARGE_COST = 2;
   const FLOW_A = 60;
   const FLOW_B = 40;
   const TOTAL_FLOW = FLOW_A + FLOW_B;
@@ -470,8 +470,8 @@ describe('getPlantSummaryResults — shared-discharge: [System A, System B] → 
 // Fixture: treatment-no-loss
 // Configuration: Intake → Treatment (no losses) → [System A (60%), System B (40%)]
 //
-//   intake (cost=0.001/kGal, outflow=100)
-//     └─ e1 (100) ─► treatment (cost=0.005/kGal, inflow=100, outflow=100)
+//   intake (cost=1/kGal, outflow=100)
+//     └─ e1 (100) ─► treatment (cost=5/kGal, inflow=100, outflow=100)
 //                     ├─ e_a (60) ─► sysA
 //                     └─ e_b (40) ─► sysB
 //
@@ -479,8 +479,8 @@ describe('getPlantSummaryResults — shared-discharge: [System A, System B] → 
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — treatment-no-loss: Intake → Treatment → [System A, System B]', () => {
-  const INTAKE_COST = 0.001;
-  const TREATMENT_COST = 0.005;
+  const INTAKE_COST = 1;
+  const TREATMENT_COST = 5;
   const INTAKE_FLOW = 100;
   const FLOW_A = 60;
   const FLOW_B = 40;
@@ -535,9 +535,9 @@ describe('getPlantSummaryResults — treatment-no-loss: Intake → Treatment →
 // Fixture: treatment-chain
 // Configuration: Intake → Treatment A (lossy) → Treatment B → System
 //
-//   intake (cost=0.001, outflow=100)
-//     └─ e1 (100) ─► treatA (cost=0.005, inflow=100, outflow=80 — losses=20)
-//                     └─ e2 (80) ─► treatB (cost=0.004, inflow=80, outflow=80)
+//   intake (cost=1, outflow=100)
+//     └─ e1 (100) ─► treatA (cost=5, inflow=100, outflow=80 — losses=20)
+//                     └─ e2 (80) ─► treatB (cost=4, inflow=80, outflow=80)
 //                                     └─ e3 (80) ─► system
 //
 // Each treatment unit independently attributes 100% of its block cost to the
@@ -547,9 +547,9 @@ describe('getPlantSummaryResults — treatment-no-loss: Intake → Treatment →
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — treatment-chain: Intake → Treatment A (lossy) → Treatment B → System', () => {
-  const INTAKE_COST = 0.001;
-  const TREAT_A_COST = 0.005;
-  const TREAT_B_COST = 0.004;
+  const INTAKE_COST = 1;
+  const TREAT_A_COST = 5;
+  const TREAT_B_COST = 4;
   const INTAKE_FLOW = 100;
   const TREAT_A_OUTFLOW = 80;
 
@@ -596,7 +596,7 @@ describe('getPlantSummaryResults — treatment-chain: Intake → Treatment A (lo
 // Fixture: wwt-discharge-only
 // Configuration: System → WWT → Discharge (WWT Pass 2 only)
 //
-//   system ─ e1 (100) ─► wwt (cost=0.003/kGal, inflow=100)
+//   system ─ e1 (100) ─► wwt (cost=3/kGal, inflow=100)
 //                          └─ e2 (100) ─► discharge (cost=0)
 //
 // No downstream reuse (Pass 1 finds no systems); all WWT cost goes upstream
@@ -604,7 +604,7 @@ describe('getPlantSummaryResults — treatment-chain: Intake → Treatment A (lo
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — wwt-discharge-only: System → WWT → Discharge', () => {
-  const WWT_COST = 0.003;
+  const WWT_COST = 3;
   const FLOW = 100;
 
   const system = makeSystemNode('system');
@@ -644,7 +644,7 @@ describe('getPlantSummaryResults — wwt-discharge-only: System → WWT → Disc
 // Fixture: wwt-reuse
 // Configuration: System A → WWT → [System B (60%), Discharge (40%)]
 //
-//   sysA ─ e1 (100) ─► wwt (cost=0.003/kGal, inflow=100, outflow=100)
+//   sysA ─ e1 (100) ─► wwt (cost=3/kGal, inflow=100, outflow=100)
 //                        ├─ e2 (60) ─► sysB
 //                        └─ e3 (40) ─► discharge (cost=0)
 //
@@ -653,7 +653,7 @@ describe('getPlantSummaryResults — wwt-discharge-only: System → WWT → Disc
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — wwt-reuse: System A → WWT → [System B (reuse), Discharge]', () => {
-  const WWT_COST = 0.003;
+  const WWT_COST = 3;
   const WWT_FLOW = 100;
   const REUSE_FLOW = 60;
   const DISCHARGE_FLOW = 40;
@@ -704,10 +704,10 @@ describe('getPlantSummaryResults — wwt-reuse: System A → WWT → [System B (
 // Fixture: reuse-chained-systems
 // Configuration: Intake → System A → System B → Discharge
 //
-//   intake (cost=0.001, outflow=100)
+//   intake (cost=1, outflow=100)
 //     └─ e1 (100) ─► sysA
 //                     └─ e2 (80) ─► sysB
-//                                    └─ e3 (80) ─► discharge (cost=0.002)
+//                                    └─ e3 (80) ─► discharge (cost=2)
 //
 // Intake attribution stops at the first system in each downstream path (sysA).
 // Discharge attribution starts at the last system in each upstream path (sysB).
@@ -715,8 +715,8 @@ describe('getPlantSummaryResults — wwt-reuse: System A → WWT → [System B (
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — reuse-chained-systems: Intake → System A → System B → Discharge', () => {
-  const INTAKE_COST = 0.001;
-  const DISCHARGE_COST = 0.002;
+  const INTAKE_COST = 1;
+  const DISCHARGE_COST = 2;
   const INTAKE_FLOW = 100;
   const REUSE_FLOW = 80;
 
@@ -768,8 +768,8 @@ describe('getPlantSummaryResults — reuse-chained-systems: Intake → System A 
 // Fixture: ro-multi-system
 // Configuration: Intake → RO → [System A (40%), System B (40%), Discharge (20%)]
 //
-//   intake (cost=0.001, outflow=100)
-//     └─ e1 (100) ─► RO (cost=0.005, treatmentType=6, inflow=100, outflow=100)
+//   intake (cost=1, outflow=100)
+//     └─ e1 (100) ─► RO (cost=5, treatmentType=6, inflow=100, outflow=100)
 //                     ├─ e_a (40) ─► sysA
 //                     ├─ e_b (40) ─► sysB
 //                     └─ e_c (20) ─► discharge (cost=0)
@@ -779,8 +779,8 @@ describe('getPlantSummaryResults — reuse-chained-systems: Intake → System A 
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — ro-multi-system: Intake → RO → [System A, System B, Discharge]', () => {
-  const INTAKE_COST = 0.001;
-  const RO_COST = 0.005;
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
   const RO_INFLOW = 100;
   const FLOW_A = 40;
   const FLOW_B = 40;
@@ -839,15 +839,15 @@ describe('getPlantSummaryResults — ro-multi-system: Intake → RO → [System 
 // Fixture: summing-node
 // Configuration: [Intake A (60), Intake B (40)] → Summing Node → System
 //
-//   intakeA (cost=0.001, outflow=60) ─► summing ─► system
-//   intakeB (cost=0.001, outflow=40) ─►
+//   intakeA (cost=1, outflow=60) ─► summing ─► system
+//   intakeB (cost=1, outflow=40) ─►
 //
 // The summing node is a pass-through: each intake independently attributes
 // 100% of its own block cost to the single downstream system.
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — summing-node: [Intake A, Intake B] → Summing → System', () => {
-  const COST_PER_KGAL = 0.001;
+  const COST_PER_KGAL = 1;
   const FLOW_A = 60;
   const FLOW_B = 40;
 
@@ -892,11 +892,11 @@ describe('getPlantSummaryResults — summing-node: [Intake A, Intake B] → Summ
 // Configuration: Intake → RO → System A → Discharge1 (product path)
 //                       → WWT → Discharge2 (reject path with treatment)
 //
-//   intake (cost=0.001, outflow=100)
-//     └─ e1 (100) ─► RO (cost=0.005, treatmentType=6, inflow=100, outflow=100)
+//   intake (cost=1, outflow=100)
+//     └─ e1 (100) ─► RO (cost=5, treatmentType=6, inflow=100, outflow=100)
 //                     ├─ e2 (70) ─► sysA
-//                     │               └─ e4 (70) ─► discharge1 (cost=0.001)
-//                     └─ e3 (30) ─► wwt (cost=0.003, inflow=30)
+//                     │               └─ e4 (70) ─► discharge1 (cost=1)
+//                     └─ e3 (30) ─► wwt (cost=3, inflow=30)
 //                                    └─ e5 (30) ─► discharge2 (cost=0)
 //
 // The RO single-system override IS detected here (exactly 2 children; the
@@ -910,10 +910,10 @@ describe('getPlantSummaryResults — summing-node: [Intake A, Intake B] → Summ
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — ro-single-system-wwt: Intake → RO → [System, WWT → Discharge]', () => {
-  const INTAKE_COST = 0.001;
-  const RO_COST = 0.005;
-  const DISCHARGE1_COST = 0.001;
-  const WWT_COST = 0.003;
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
+  const DISCHARGE1_COST = 1;
+  const WWT_COST = 3;
   const RO_INFLOW = 100;
   const PRODUCT_FLOW = 70;
   const REJECT_FLOW = 30;
@@ -973,7 +973,7 @@ describe('getPlantSummaryResults — ro-single-system-wwt: Intake → RO → [Sy
 // Fixture: adjusted-attribution
 // Configuration: Intake → System → Discharge  (same as simple-linear)
 //
-//   intake (cost=0.001, outflow=100) → system → discharge (cost=0.002, inflow=80)
+//   intake (cost=1, outflow=100) → system → discharge (cost=2, inflow=80)
 //
 // The systemAttributionMap is pre-populated with adjusted=0.75 for the
 // system→intake pair, overriding the computed 1.0 fraction.
@@ -981,8 +981,8 @@ describe('getPlantSummaryResults — ro-single-system-wwt: Intake → RO → [Sy
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — adjusted-attribution: user override replaces computed fraction', () => {
-  const INTAKE_COST = 0.001;
-  const DISCHARGE_COST = 0.002;
+  const INTAKE_COST = 1;
+  const DISCHARGE_COST = 2;
   const INTAKE_FLOW = 100;
   const DISCHARGE_FLOW = 80;
   const ADJUSTED_FRACTION = 0.75;
@@ -1036,9 +1036,9 @@ describe('getPlantSummaryResults — adjusted-attribution: user override replace
 // Fixture: diamond-treatment
 // Configuration: Intake → [Treatment A (60%), Treatment B (40%)] → System A
 //
-//   intake (cost=0.001/kGal, flow=100)
-//     ├─ e1 (60) ─► treatA (cost=0.003/kGal, inflow=60, outflow=60) ─► sysA
-//     └─ e2 (40) ─► treatB (cost=0.003/kGal, inflow=40, outflow=40) ─►
+//   intake (cost=1/kGal, flow=100)
+//     ├─ e1 (60) ─► treatA (cost=3/kGal, inflow=60, outflow=60) ─► sysA
+//     └─ e2 (40) ─► treatB (cost=3/kGal, inflow=40, outflow=40) ─►
 //
 // Two separate treatment paths converge on the same system. The de-duplication
 // guard in applySystemIntakeCosts must NOT fire here because path A
@@ -1052,8 +1052,8 @@ describe('getPlantSummaryResults — adjusted-attribution: user override replace
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — diamond-treatment: Intake → [TreatA, TreatB] → System A', () => {
-  const INTAKE_COST = 0.001;
-  const TREAT_COST = 0.003;
+  const INTAKE_COST = 1;
+  const TREAT_COST = 3;
   const INTAKE_FLOW = 100;
   const FLOW_A = 60;
   const FLOW_B = 40;
@@ -1128,13 +1128,13 @@ describe('getPlantSummaryResults — diamond-treatment: Intake → [TreatA, Trea
 // Configuration: [System A (60), System B (40)] → WWT → [System C (reuse 60), Discharge (40)]
 //
 //   sysA (60) ──►
-//                 wwt (100 in, $0.0012/kGal) ──► sysC (60, reuse)
-//   sysB (40) ──►                            └──► discharge (cost=0, 40)
+//                 wwt (100 in, $1/kGal) ──► sysC (60, reuse)
+//   sysB (40) ──►                       └──► discharge (cost=0, 40)
 //
 // This is the worked example from apply-system-waste-water-treatment-costs.md §6.
 //
 // Expected behavior per documentation:
-//   Pass 1: sysC → fraction 60/100 = 0.60, cost = $72 of $120 block cost
+//   Pass 1: sysC → fraction 60/100 = 0.60, cost = $60,000 of $100,000 block cost
 //   Pass 2, sysA → systemFlowResponsibility = 60 − 60 = 0 (all reuse offsets sysA)
 //   Pass 2, sysB → systemFlowResponsibility = 40 − 60 = −20 (KNOWN BUG: the
 //     full downstream charged portion is deducted from EACH upstream system
@@ -1148,11 +1148,11 @@ describe('getPlantSummaryResults — diamond-treatment: Intake → [TreatA, Trea
 //
 // The snapshot for sysB captures current (buggy) behavior. Update the snapshot
 // when the algorithm is corrected, and verify that sysB then receives
-// blockCost(WWT_COST, WWT_INFLOW) * 0.16 ≈ $19.20.
+// blockCost(WWT_COST, WWT_INFLOW) * 0.16 = $16,000.
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — wwt-two-upstream-with-reuse: [SysA, SysB] → WWT → [SysC, Discharge]', () => {
-  const WWT_COST = 0.0012;
+  const WWT_COST = 1;
   const WWT_INFLOW = 100;
   const FLOW_A = 60;
   const FLOW_B = 40;
@@ -1242,7 +1242,7 @@ it.todo(
 // Fixture: adjusted-attribution-discharge
 // Configuration: System A → Discharge  (minimal — no intake or treatment)
 //
-//   sysA ─ e1 (80) ─► discharge (cost=0.002/kGal, inflow=80)
+//   sysA ─ e1 (80) ─► discharge (cost=2/kGal, inflow=80)
 //
 // The systemAttributionMap is pre-populated with adjusted=0.60 for the
 // sysA→discharge pair, overriding the computed 1.0 fraction.
@@ -1250,7 +1250,7 @@ it.todo(
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — adjusted-attribution-discharge: user override on discharge node', () => {
-  const DISCHARGE_COST = 0.002;
+  const DISCHARGE_COST = 2;
   const DISCHARGE_FLOW = 80;
   const ADJUSTED_FRACTION = 0.60;
 
@@ -1303,8 +1303,8 @@ describe('getPlantSummaryResults — adjusted-attribution-discharge: user overri
 // Fixture: adjusted-attribution-treatment
 // Configuration: Intake → Treatment → System A  (same shape as treatment-no-loss)
 //
-//   intake (cost=0.001/kGal, outflow=100)
-//     └─ e1 (100) ─► treatment (cost=0.005/kGal, inflow=100, outflow=100)
+//   intake (cost=1/kGal, outflow=100)
+//     └─ e1 (100) ─► treatment (cost=5/kGal, inflow=100, outflow=100)
 //                     └─ e2 (100) ─► sysA
 //
 // The systemAttributionMap is pre-populated with adjusted=0.80 for the
@@ -1313,8 +1313,8 @@ describe('getPlantSummaryResults — adjusted-attribution-discharge: user overri
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — adjusted-attribution-treatment: user override on treatment node', () => {
-  const INTAKE_COST = 0.001;
-  const TREATMENT_COST = 0.005;
+  const INTAKE_COST = 1;
+  const TREATMENT_COST = 5;
   const FLOW = 100;
   const ADJUSTED_FRACTION = 0.80;
 
