@@ -38,10 +38,12 @@ export class StandaloneSuiteApiService {
     input.airDemand = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airDemand);
     input.allowablePressureDrop = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.allowablePressureDrop);
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
-    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank(this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTankMethod.General, input.airDemand, input.allowablePressureDrop, input.atmosphericPressure);
-    let output: number = ReceiverTank.calculateSize();
-    ReceiverTank.delete();
-    return output;
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.calculateReceiverTankGeneralSize({
+      airDemand: input.airDemand,
+      allowablePressureDrop: input.allowablePressureDrop,
+      atmosphericPressure: input.atmosphericPressure,
+    });
+    return output.tankSize;
   }
 
   receiverTankDedicatedStorage(input: ReceiverTankDedicatedStorage): number {
@@ -50,10 +52,14 @@ export class StandaloneSuiteApiService {
     input.initialTankPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.initialTankPressure);
     input.lengthOfDemand = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.lengthOfDemand);
     input.finalTankPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.finalTankPressure);
-    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank(this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTankMethod.DedicatedStorage, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure);
-    let output: number = ReceiverTank.calculateSize();
-    ReceiverTank.delete();
-    return output;
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.calculateReceiverTankDedicatedStorageSize({
+      lengthOfDemand: input.lengthOfDemand,
+      airFlowRequirement: input.airFlowRequirement,
+      atmosphericPressure: input.atmosphericPressure,
+      initialTankPressure: input.initialTankPressure,
+      finalTankPressure: input.finalTankPressure,
+    });
+    return output.tankSize;
   }
 
   receiverTankSizeBridgingCompressor(input: ReceiverTankBridgingCompressor): number {
@@ -62,10 +68,14 @@ export class StandaloneSuiteApiService {
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
     input.airDemand = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airDemand);
     input.allowablePressureDrop = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.allowablePressureDrop);
-    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank(this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTankMethod.BridgingCompressorReactionDelay, input.distanceToCompressorRoom, input.speedOfAir, input.atmosphericPressure, input.airDemand, input.allowablePressureDrop);
-    let output: number = ReceiverTank.calculateSize();
-    ReceiverTank.delete();
-    return output;
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.calculateReceiverTankBridgingSize({
+      distanceToCompressorRoom: input.distanceToCompressorRoom,
+      speedOfAir: input.speedOfAir,
+      atmosphericPressure: input.atmosphericPressure,
+      airDemandCfm: input.airDemand,
+      allowablePressureDrop: input.allowablePressureDrop,
+    });
+    return output.tankSize;
   }
 
   receiverTankSizeMeteredStorage(input: ReceiverTankMeteredStorage): ReceiverTankMeteredResults {
@@ -75,14 +85,18 @@ export class StandaloneSuiteApiService {
     input.initialTankPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.initialTankPressure);
     input.finalTankPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.finalTankPressure);
     input.meteredControl = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.meteredControl);
-    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank(this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTankMethod.MeteredStorage, input.lengthOfDemand, input.airFlowRequirement, input.atmosphericPressure, input.initialTankPressure, input.finalTankPressure, input.meteredControl);
-    let volume: number = ReceiverTank.calculateSize();
-    let refillTime: number = ReceiverTank.calculateRefillTime();
-    ReceiverTank.delete();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.calculateReceiverTankMeteredStorageSize({
+      lengthOfDemand: input.lengthOfDemand,
+      airFlowRequirement: input.airFlowRequirement,
+      atmosphericPressure: input.atmosphericPressure,
+      initialTankPressure: input.initialTankPressure,
+      finalTankPressure: input.finalTankPressure,
+      meteredFlowControl: input.meteredControl,
+    });
 
     let results: ReceiverTankMeteredResults = {
-      volume: volume,
-      refillTime: refillTime,
+      volume: output.tankSize,
+      refillTime: output.refillTime,
     }
     return results;
   }
@@ -318,12 +332,14 @@ export class StandaloneSuiteApiService {
   }
 
   usableAirCapacity(input: CalculateUsableCapacity): number {
-    let ReceiverTank = new this.toolsSuiteApiService.ToolsSuiteModule.ReceiverTank();
     input.tankSize = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.tankSize);
     input.airPressureIn = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airPressureIn);
     input.airPressureOut = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airPressureOut);
-    let output: number = ReceiverTank.calculateUsableCapacity(input.tankSize, input.airPressureIn, input.airPressureOut);
-    ReceiverTank.delete();
-    return output;
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.calculateReceiverTankUsableCapacity({
+      tankSize: input.tankSize,
+      airPressureIn: input.airPressureIn,
+      airPressureOut: input.airPressureOut,
+    });
+    return output.usableCapacity;
   }
 }
