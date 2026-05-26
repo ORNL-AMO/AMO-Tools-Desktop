@@ -80,10 +80,10 @@
   (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours"></app-compressed-air-pressure-reduction>
 
-<app-air-leak *ngIf="selectedCalc == 'air-leak-survey'" [inTreasureHunt]="true"
+<app-air-leak-survey *ngIf="selectedCalc == 'air-leak-survey'" [inTreasureHunt]="true"
 (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"
   [operatingHours]="treasureHunt.operatingHours">
-</app-air-leak>
+</app-air-leak-survey>
 
 <app-water-reduction *ngIf="selectedCalc == 'water-reduction'" [inTreasureHunt]="true"
 (emitSave)="saveOpportunity($event)" (emitCancel)="cancelTreasureHuntOpportunity()" [settings]="settings"

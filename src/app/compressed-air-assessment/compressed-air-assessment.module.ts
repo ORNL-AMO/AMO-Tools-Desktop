@@ -58,7 +58,6 @@ import { CompressedAirCalculatorsComponent } from './compressed-air-calculators/
 import { CalculatorTabsComponent } from './compressed-air-calculators/calculator-tabs/calculator-tabs.component';
 import { AirFlowConversionModule } from '../calculator/compressed-air/air-flow-conversion/air-flow-conversion.module';
 import { ReceiverTankModule } from '../calculator/compressed-air/receiver-tank/receiver-tank.module';
-import { AirLeakModule } from '../calculator/compressed-air/air-leak/air-leak.module';
 import { PipeSizingModule } from '../calculator/compressed-air/pipe-sizing/pipe-sizing.module';
 import { CompressedAirPressureReductionModule } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { AirVelocityModule } from '../calculator/compressed-air/air-velocity/air-velocity.module';
@@ -161,6 +160,7 @@ import { AddModificationModalComponent } from './assessment-tab-content/add-modi
 import { CompressorPressureMinMaxPipe } from './shared-compressor-pipes/compressor-pressure-min-max.pipe';
 import { GenericCompressorDbService } from '../shared/generic-compressor-db.service';
 import { ReplaceCompressorHelpComponent } from './assessment-tab-content/explore-opportunities/explore-opportunities-side-panel/assessment-help/replace-compressor-help/replace-compressor-help.component';
+import { AirLeakSurveyModule } from '../calculator/compressed-air/air-leak-survey/air-leak-survey.module';
 
 
 @NgModule({
@@ -273,7 +273,7 @@ import { ReplaceCompressorHelpComponent } from './assessment-tab-content/explore
     ReactiveFormsModule,
     AirFlowConversionModule,
     ReceiverTankModule,
-    AirLeakModule,
+    AirLeakSurveyModule,
     SystemCapacityModule,
     PipeSizingModule,
     CompressedAirPressureReductionModule,

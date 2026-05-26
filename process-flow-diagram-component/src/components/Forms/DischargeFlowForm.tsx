@@ -125,7 +125,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                         <TotalDischargeFlowField inView={inView} />
 
 
-                        {componentDischargeEdges.length > 0 &&
+                        {componentDischargeEdges && componentDischargeEdges.length > 0 &&
                             <Box sx={{ border: `1px solid ${theme.palette.primary.main}`, padding: '1rem', borderRadius: '8px', marginTop: '2rem', paddingTop: '2rem' }}>
                                 <ToggleDataEntryUnitButton inPercent={inPercent} disabled={disabledToggle} handleToggleDataEntryUnit={onToggleDataEntryUnit} />
 
@@ -359,19 +359,20 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
                 onChange={(event) => onTotalFlowValueInputChange(event)}
                 error={hasError}
                 helperText={hasError ? String(errors.totalFlow) : ""}
+                FormHelperTextProps={{ sx: { whiteSpace: 'normal'} }}
                 slotProps={{
                     formHelperText: { sx: { whiteSpace: 'normal' } },
                     htmlInput: { onWheel: (e: React.WheelEvent<HTMLInputElement>) => (e.target as HTMLElement).blur() },
                     input: {
                         endAdornment: <InputAdornment position="end">
                             <FlowDisplayUnit />
-                        </InputAdornment>,
-                    },
+                        </InputAdornment>
+                    }
                 }}
             />
 
             {/* This button group is being collapse-animated to smoothly hide/display it as absolute within the parent accordian. When we no longer have the parent accordian, this can be removed  */}
-            {componentDischargeEdges?.length &&
+            {componentDischargeEdges && componentDischargeEdges.length > 0 && (
             <Collapse in={inView} timeout={{ enter: 10, exit: 100 }} unmountOnExit>
                 <Box display={'flex'} justifyContent={'center'} position={'absolute'} width="100%" marginTop={'1rem'}>
                     <Box position={'relative'}
@@ -427,7 +428,7 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
                     </Box>
                 </Box>
             </Collapse>
-            }
+            )}
         </Box>
     );
 };

@@ -5,9 +5,14 @@ on:
     branches:
       - "master"
       - "develop"
+  pull_request:
   workflow_dispatch:
 
 jobs:
+  pr-checks:
+    if: github.event_name == 'pull_request' && (github.base_ref == 'develop' || github.base_ref == 'master')
+    uses: ./.github/workflows/pr_checks.yml
+
   web:
     if: github.ref_name == 'develop' || github.ref_name == 'master'
     uses: ./.github/workflows/release_web.yml
