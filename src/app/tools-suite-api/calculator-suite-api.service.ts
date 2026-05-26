@@ -462,7 +462,7 @@ export class CalculatorSuiteApiService {
       tankConductivity: inputObj.tankConductivity,
       tankTemperature: inputObj.tankTemperature,
       ambientTemperature: inputObj.ambientTemperature,
-      systemEfficiency: inputObj.systemEfficiency,
+      systemEfficiency: inputObj.systemEfficiency / 100,
       insulationThickness: inputObj.insulationThickness,
       insulationConductivity: inputObj.insulationConductivity,
       jacketEmissivity: inputObj.jacketEmissivity,
