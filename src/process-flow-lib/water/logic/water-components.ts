@@ -631,7 +631,7 @@ export const getDefaultSettings = (): DiagramSettings => {
 }
 
 export const getDefaultColorPalette = () => {
-  return ['#75a1ff', '#7f7fff', '#00bbff', '#009386', '#93e200'];
+  return ['#75a1ff', '#00bbff', '#7f7fff', '#009386', '#93e200'];
 }
 
 
