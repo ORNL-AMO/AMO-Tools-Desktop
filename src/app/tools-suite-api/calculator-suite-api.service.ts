@@ -425,63 +425,55 @@ export class CalculatorSuiteApiService {
     inputObj.insulationMaterialCoefficients.forEach(coefficient => insulationMaterialCoefficients.push_back(coefficient));
 
     inputObj.systemEfficiency = inputObj.systemEfficiency / 100;
-    let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.InsulatedPipeInput(
-      inputObj.operatingHours,
-      inputObj.pipeLength,
-      inputObj.pipeDiameter,
-      inputObj.pipeThickness,
-      inputObj.pipeTemperature,
-      inputObj.ambientTemperature,
-      inputObj.windVelocity,
-      inputObj.systemEfficiency,
-      inputObj.insulationThickness,
-      inputObj.pipeEmissivity,
-      inputObj.jacketEmissivity,
-      pipeMaterialCoefficients,
-      insulationMaterialCoefficients);
+    let wasmInput = {
+      operatingHours: inputObj.operatingHours,
+      pipeLength: inputObj.pipeLength,
+      pipeDiameter: inputObj.pipeDiameter,
+      pipeThickness: inputObj.pipeThickness,
+      pipeTemperature: inputObj.pipeTemperature,
+      ambientTemperature: inputObj.ambientTemperature,
+      windVelocity: inputObj.windVelocity,
+      systemEfficiency: inputObj.systemEfficiency,
+      insulationThickness: inputObj.insulationThickness,
+      pipeEmissivity: inputObj.pipeEmissivity,
+      jacketEmissivity: inputObj.jacketEmissivity,
+      pipeMaterialCoefficients: pipeMaterialCoefficients,
+      insulationMaterialCoefficients: insulationMaterialCoefficients
+    };
 
-    let InsulatedPipeReduction = new this.toolsSuiteApiService.ToolsSuiteModule.InsulatedPipeReduction(wasmConvertedInput);
-
-    let rawOutput = InsulatedPipeReduction.calculate();
+    let rawOutput = this.toolsSuiteApiService.ToolsSuiteModule.insulatedPipeReduction(wasmInput);
     let pipeInsulationReductionResult: PipeInsulationReductionResult = {
-      heatLength: rawOutput.getHeatLength(),
-      annualHeatLoss: rawOutput.getAnnualHeatLoss(),
+      heatLength: rawOutput.heatLossPerLength,
+      annualHeatLoss: rawOutput.annualHeatLoss,
       energyCost: undefined,
     }
-    rawOutput.delete();
-    InsulatedPipeReduction.delete();
-    wasmConvertedInput.delete();
     insulationMaterialCoefficients.delete();
     pipeMaterialCoefficients.delete();
     return pipeInsulationReductionResult;
   }
 
   tankInsulationReduction(inputObj: TankInsulationReductionInput): TankInsulationReductionResult {
-    let input = new this.toolsSuiteApiService.ToolsSuiteModule.InsulatedTankInput(
-      inputObj.operatingHours,
-      inputObj.tankHeight,
-      inputObj.tankDiameter,
-      inputObj.tankThickness,
-      inputObj.tankEmissivity,
-      inputObj.tankConductivity,
-      inputObj.tankTemperature,
-      inputObj.ambientTemperature,
-      inputObj.systemEfficiency,
-      inputObj.insulationThickness,
-      inputObj.insulationConductivity,
-      inputObj.jacketEmissivity,
-      inputObj.surfaceTemperature
-    );
-    let InsulatedTankReduction = new this.toolsSuiteApiService.ToolsSuiteModule.InsulatedTankReduction(input);
-    let rawOutput = InsulatedTankReduction.calculate();
+    let wasmInput = {
+      operatingHours: inputObj.operatingHours,
+      tankHeight: inputObj.tankHeight,
+      tankDiameter: inputObj.tankDiameter,
+      tankThickness: inputObj.tankThickness,
+      tankEmissivity: inputObj.tankEmissivity,
+      tankConductivity: inputObj.tankConductivity,
+      tankTemperature: inputObj.tankTemperature,
+      ambientTemperature: inputObj.ambientTemperature,
+      systemEfficiency: inputObj.systemEfficiency,
+      insulationThickness: inputObj.insulationThickness,
+      insulationConductivity: inputObj.insulationConductivity,
+      jacketEmissivity: inputObj.jacketEmissivity,
+      surfaceTemperature: inputObj.surfaceTemperature
+    };
+    let rawOutput = this.toolsSuiteApiService.ToolsSuiteModule.insulatedTankReduction(wasmInput);
     let tankInsulationReductionResult: TankInsulationReductionResult = {
-      heatLoss: rawOutput.getHeatLoss(),
-      annualHeatLoss: rawOutput.getAnnualHeatLoss() * 100,
+      heatLoss: rawOutput.heatLoss,
+      annualHeatLoss: rawOutput.annualHeatLoss,
       energyCost: undefined,
     }
-    rawOutput.delete();
-    InsulatedTankReduction.delete();
-    input.delete();
     return tankInsulationReductionResult;
   }
 
