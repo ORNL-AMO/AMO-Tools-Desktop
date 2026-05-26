@@ -5,8 +5,8 @@
  * behavior. Assertions use toBeCloseTo(value, 0) for dollar amounts to avoid
  * floating-point noise causing false failures.
  *
- * See .prompts/regression-testing-strategy.md for fixture definitions and
- * mass-balance invariants.
+ *  Fixture definitions and mass-balance invariants are documented inline with
+* the tests below.
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
