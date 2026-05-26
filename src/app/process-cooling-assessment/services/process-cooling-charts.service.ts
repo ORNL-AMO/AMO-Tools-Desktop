@@ -14,7 +14,7 @@ export interface PlotlyChartConfig {
 
 const MARKER_SHAPES: Array<string> = [
   'star', 'star-diamond', 'hexagram', 'star-square', 'square',
-  'diamond', 'cross', 'x', 'diamond-wide', 'diamond-tall',
+  'diamond', 'cross', 'x', 'diamond-wide', 'diamond-tall'
 ];
 const CHILLER_FILL_ALPHA = 0.07;
 const CHILLER_DASH_PATTERNS: Array<string> = ['solid', 'dash', 'dot', 'dashdot', 'longdash', 'longdashdot'];
@@ -64,7 +64,7 @@ export class ProcessCoolingChartsService {
         color: trace.marker.color,
         line: { color: trace.marker.color as string, width: 1.5 },
         opacity: 0.45,
-      },
+      }
     }));
 
     const layout = {
