@@ -17,7 +17,7 @@ const CHILLER_FILL_COLORS: Array<string> = [
   'rgba(112,48,160,0.07)',  'rgba(225,205,0,0.07)',   'rgba(48,109,190,0.07)',
   'rgba(160,49,35,0.07)',   'rgba(127,215,233,0.07)', 'rgba(222,118,45,0.07)',
   'rgba(148,138,84,0.07)',  'rgba(169,213,139,0.07)', 'rgba(255,225,102,0.07)',
-  'rgba(221,113,100,0.07)', 'rgba(63,74,125,0.07)',
+  'rgba(221,113,100,0.07)', 'rgba(63,74,125,0.07)'
 ];
 const CHILLER_DASH_PATTERNS: Array<string> = ['solid', 'dash', 'dot', 'dashdot', 'longdash', 'longdashdot'];
 
@@ -41,7 +41,7 @@ export class ProcessCoolingChartsService {
         line: { width: 2, dash, color },
         fill: 'tozeroy',
         fillcolor: fillColor,
-        hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`,
+        hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`
       };
     });
 
@@ -51,7 +51,7 @@ export class ProcessCoolingChartsService {
         range: [0, 100],
         dtick: 10,
         ticksuffix: '%',
-        automargin: true,
+        automargin: true
       },
       yaxis: {
         title: { text: `Efficiency (${efficiencyLabel})`, font: { size: 16 } },
@@ -60,7 +60,7 @@ export class ProcessCoolingChartsService {
         automargin: true,
         range: [0, 1.2],
         tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
-        tickformat: '.1f',
+        tickformat: '.1f'
       },
       margin: { t: 20, r: 20, l: 60, b: 60 },
       legend: {
@@ -70,8 +70,7 @@ export class ProcessCoolingChartsService {
         }
       },
       showlegend: true,
-      hovermode: 'closest',
-      responsive: true,
+      hovermode: 'closest'
     };
 
     const config = defaultPlotlyConfig(undefined, 'scatter');

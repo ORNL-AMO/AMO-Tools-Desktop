@@ -5,6 +5,11 @@ import { ProcessCoolingResultsService } from '../../../services/process-cooling-
 import { ProcessCoolingChartsService } from '../../../services/process-cooling-charts.service';
 import { ProcessCoolingChillerOutput } from '../../../../shared/models/process-cooling-assessment';
 
+const MARKER_SHAPES: Array<string> = [
+  'star', 'star-diamond', 'hexagram', 'star-square', 'square',
+  'diamond', 'cross', 'x', 'diamond-wide', 'diamond-tall',
+];
+
 @Component({
   selector: 'app-chiller-profile-chart',
   standalone: false,
@@ -15,21 +20,8 @@ export class ChillerProfileChartComponent {
   private plotlyService = inject(PlotlyService);
   private processCoolingResultsService = inject(ProcessCoolingResultsService);
   private chartsService = inject(ProcessCoolingChartsService);
-  plotlyMarkerShapes: Array<string> = [
-    'star',
-    'star-diamond',
-    'hexagram',
-    'star-square',
-    'square',
-    'diamond',
-    'cross',
-    'x',
-    'diamond-wide',
-    'diamond-tall'
-  ];
 
   chartRef = viewChild<ElementRef<HTMLDivElement>>('chillerProfileChart');
-
   selectedChillerId = input<string | null | undefined>();
   private baselineResults = toSignal(this.processCoolingResultsService.baselineResults$);
 
@@ -45,31 +37,20 @@ export class ChillerProfileChartComponent {
       if (!filteredChillers.length) return;
       const { traces, layout, config } = this.chartsService.buildChillerProfileChart(filteredChillers);
 
-      let currentShapeIndex = 0;
-
-      filteredChillers.forEach((chiller, i) => {
-        let currentMarkerShape = this.plotlyMarkerShapes[currentShapeIndex];
-        if (traces[i]) {
-          traces[i].marker = {
-            ...traces[i].marker,
-            size: 12,
-            symbol: currentMarkerShape,
-          };
-        }
-
-        if (currentShapeIndex === this.plotlyMarkerShapes.length - 1) {
-          currentShapeIndex = 0;
-        } else {
-          currentShapeIndex++;
-        }
+      filteredChillers.forEach((_, i) => {
+        traces[i].marker = {
+          ...traces[i].marker,
+          size: 12,
+          symbol: MARKER_SHAPES[i % MARKER_SHAPES.length],
+        };
       });
 
-      const haloTraces = filteredChillers.map((chiller, i) => ({
+      const haloTraces = filteredChillers.map((_, i) => ({
         x: traces[i].x,
         y: traces[i].y,
         type: 'scatter',
         mode: 'markers',
-        name: chiller.name,
+        name: traces[i].name,
         showlegend: false,
         hoverinfo: 'skip',
         marker: {
