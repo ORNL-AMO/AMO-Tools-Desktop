@@ -188,24 +188,24 @@ export interface PipeSizingOutput {
   pipeDiameter: number;
 }
 
-// export interface PneumaticValve {
-//   inletPressure: number;
-//   outletPressure: number;
-//   flowRate: number;
-// }
+export interface PneumaticValveFlowRateInput {
+  inletPressure: number;
+  outletPressure: number;
+}
 
-// export interface PneumaticValveFlowRateInput {
-//   inletPressure: number, 
-//   outletPressure: number
-// }
+export interface PneumaticValveFlowRateOutput {
+  flowRate: number;
+}
 
-// export interface PneumaticValveFlowRateOutput {
-//   flowRate: number
-// }
+export interface PneumaticValveCvInput {
+  inletPressure: number;
+  outletPressure: number;
+  flowRate: number;
+}
 
-// export interface PneumaticValveFlowCoefficient {
-//   flowCoefficient: number;
-// }
+export interface PneumaticValveCvOutput {
+  flowCoefficient: number;
+}
 
 export interface BagMethodInput {
   operatingTime: number;

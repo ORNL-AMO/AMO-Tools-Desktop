@@ -1,0 +1,91 @@
+<div class="tab-content">
+  <form>
+    <ng-container *ngIf="calcMode === 'flow-rate'">
+      <div class="form-section">
+        <div class="form-group">
+          <label for="frInletPressure">Inlet Pressure</label>
+          <div class="input-group">
+            <input name="frInletPressure" class="form-control" type="number" step="any"
+              [(ngModel)]="flowRateInputs.inletPressure" id="frInletPressure"
+              (input)="emitChange()" onfocus="this.select();" (focus)="changeField('inletPressure')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="frOutletPressure">Outlet Pressure</label>
+          <div class="input-group">
+            <input name="frOutletPressure" class="form-control" type="number" step="any"
+              [(ngModel)]="flowRateInputs.outletPressure" id="frOutletPressure"
+              (input)="emitChange()" onfocus="this.select();" (focus)="changeField('outletPressure')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section pt-1">
+        <div class="form-group">
+          <label class="bold">Flow Rate (Cv = 1)</label>
+          <div class="text-center small">
+            <span *ngIf="flowRateOutput && flowRateOutput.flowRate !== undefined">
+              <strong>{{flowRateOutput.flowRate | number:'1.0-2'}} </strong>
+              <strong *ngIf="settings.unitsOfMeasure != 'Metric'">scfm</strong>
+              <strong *ngIf="settings.unitsOfMeasure == 'Metric'">Nm<sup>3</sup>/min</strong>
+            </span>
+            <span *ngIf="!flowRateOutput || flowRateOutput.flowRate === undefined">
+              <strong>&mdash; &mdash;</strong>
+            </span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="calcMode === 'flow-coefficient'">
+      <div class="form-section">
+        <div class="form-group">
+          <label for="cvInletPressure">Inlet Pressure</label>
+          <div class="input-group">
+            <input name="cvInletPressure" class="form-control" type="number" step="any"
+              [(ngModel)]="cvInputs.inletPressure" id="cvInletPressure"
+              (input)="emitChange()" onfocus="this.select();" (focus)="changeField('inletPressure')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cvOutletPressure">Outlet Pressure</label>
+          <div class="input-group">
+            <input name="cvOutletPressure" class="form-control" type="number" step="any"
+              [(ngModel)]="cvInputs.outletPressure" id="cvOutletPressure"
+              (input)="emitChange()" onfocus="this.select();" (focus)="changeField('outletPressure')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cvFlowRate">Flow Rate</label>
+          <div class="input-group">
+            <input name="cvFlowRate" class="form-control" type="number" step="any"
+              [(ngModel)]="cvInputs.flowRate" id="cvFlowRate"
+              (input)="emitChange()" onfocus="this.select();" (focus)="changeField('flowRate')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">scfm</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">Nm<sup>3</sup>/min</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-section pt-1">
+        <div class="form-group">
+          <label class="bold">Flow Coefficient (Cv)</label>
+          <div class="text-center small">
+            <span *ngIf="cvOutput && cvOutput.flowCoefficient !== undefined">
+              <strong>{{cvOutput.flowCoefficient | number:'1.0-4'}}</strong>
+            </span>
+            <span *ngIf="!cvOutput || cvOutput.flowCoefficient === undefined">
+              <strong>&mdash; &mdash;</strong>
+            </span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </form>
+</div>

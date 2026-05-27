@@ -1,0 +1,136 @@
+<div #contentContainer class="calculator-container modify-conditions compressed-air standalone-calculator">
+  <div #leftPanelHeader class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div class="calc-icon-header icon-compressed-air">
+      <img src="assets/images/calculator-icons/compressed-air-icons/pneumatic-valve-flow-factor.png">
+    </div>
+    <div class="pl-2">
+      <h3>Pneumatic Valve</h3>
+    </div>
+  </div>
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('form')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Pneumatic Valve Data</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')"
+      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+
+  <div class="panel-group">
+    <div class="calculator-panel-container modification" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+      <div class="d-flex flex-column m-4">
+        <div class="tab-content">
+          <form>
+            <div class="form-section">
+              <div class="form-group">
+                <label for="calcMode">Calculation Mode</label>
+                <div class="input-group">
+                  <select name="calcMode" class="form-control" id="calcMode"
+                    [(ngModel)]="calcMode" (change)="setCalcMode(calcMode)">
+                    <option value="flow-rate">Flow Rate (Cv = 1)</option>
+                    <option value="flow-coefficient">Flow Coefficient (Cv)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <app-pneumatic-valve-form
+          [settings]="settings"
+          [calcMode]="calcMode"
+          [flowRateInputs]="flowRateInputs"
+          [flowRateOutput]="flowRateOutput"
+          [cvInputs]="cvInputs"
+          [cvOutput]="cvOutput"
+          (calculate)="calculate()"
+          (emitChangeField)="setField($event)">
+        </app-pneumatic-valve-form>
+
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
+            Reset Data
+          </button>
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+            Generate Example
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="calculator-panel-container help-panel" [ngStyle]="{'height.px': containerHeight}"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}">
+      <div class="d-flex flex-wrap tabs primary sticky-top">
+        <div class="flex-fill panel-tab-item h-100 active">
+          <a class="h-100 d-flex justify-content-center align-items-center">
+            <div>Help</div>
+          </a>
+        </div>
+      </div>
+      <div class="d-flex">
+        <div class="p-4 pt-2 d-flex flex-column help-info">
+          <h5>
+            Pneumatic Valve Help
+            <br>
+            <small class="text-muted">
+              This calculator provides two modes for sizing pneumatic valves in compressed air systems.
+              <br><br>
+              <strong>Flow Rate (Cv = 1)</strong> – Computes the theoretical air flow rate through a valve
+              with a unit flow coefficient (Cv = 1). For a valve with a known Cv, multiply the result
+              by that Cv value.
+              <br><br>
+              <strong>Flow Coefficient (Cv)</strong> – Rearranges the formula to solve for Cv when the
+              required flow rate and operating pressures are known. Select a valve whose rated Cv
+              meets or exceeds the calculated value.
+            </small>
+          </h5>
+          <hr class="my-1 hr-spacer">
+
+          <div class="my-2" *ngIf="currentField === 'inletPressure'">
+            <h6>
+              Inlet Pressure
+              <br>
+              <small class="text-muted">
+                The absolute pressure at the upstream (inlet) side of the valve.
+                <hr>
+              </small>
+            </h6>
+          </div>
+
+          <div class="my-2" *ngIf="currentField === 'outletPressure'">
+            <h6>
+              Outlet Pressure
+              <br>
+              <small class="text-muted">
+                The absolute pressure at the downstream (outlet) side of the valve.
+                <hr>
+              </small>
+            </h6>
+          </div>
+
+          <div class="my-2" *ngIf="currentField === 'flowRate'">
+            <h6>
+              Flow Rate
+              <br>
+              <small class="text-muted">
+                The measured or required air flow rate through the valve at standard conditions.
+                <hr>
+              </small>
+            </h6>
+          </div>
+
+          <div class="my-2">
+            <a class="click-link" [href]="docsLink + 'group__pneumatic__valve__calculator'" target="_blank">
+              <span class="fa fa-external-link"></span>
+              <span class="pl-1">How is the Pneumatic Valve calculated?</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -29,6 +29,7 @@ export type AnalyticsEventString = 'page_view' |
     'calculator-CA-operating-cost' |
     'calculator-CA-pipe-sizing' |
     'calculator-CA-pneumatic-air' |
+    'calculator-CA-pneumatic-valve' |
     'calculator-CA-receiver-tank' |
     'calculator-CA-system-capacity' |
 
