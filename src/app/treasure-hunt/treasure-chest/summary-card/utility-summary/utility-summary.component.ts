@@ -11,5 +11,6 @@ export class UtilitySummaryComponent {
   summaryData: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number };
   @Input()
   label: string;
-
+  @Input()
+  currency: string;
 }

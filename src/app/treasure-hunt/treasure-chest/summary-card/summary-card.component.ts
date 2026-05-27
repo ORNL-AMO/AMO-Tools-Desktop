@@ -60,6 +60,34 @@ export class SummaryCardComponent implements OnInit {
     })
   }
 
+  hasNegativeModificationCost(): boolean {
+    let hasNegativeCost = false;
+    let allModificationCosts = [
+      this.electricityData?.modificationCost,
+      this.naturalGasData?.modificationCost,
+      this.waterData?.modificationCost,
+      this.compressedAirData?.modificationCost,
+      this.steamData?.modificationCost,
+      this.wasteWaterData?.modificationCost,
+      this.otherFuelData?.modificationCost,
+      this.additionalAnnualSavings?.modificationCost
+    ];
+    if (this.opportunityCards) {
+      this.opportunityCards.forEach(card => {
+        if (card.selected) {
+          allModificationCosts.forEach(cost => {
+            if (cost != null && cost < 0) {
+              hasNegativeCost = true;
+            }
+          });
+        }
+      });
+    }
+    return hasNegativeCost;
+  }
+
+
+
   ngOnDestroy() {
     this.opportunityCardsSub.unsubscribe();
     this.sortBySub.unsubscribe();
