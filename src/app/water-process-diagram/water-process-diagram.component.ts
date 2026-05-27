@@ -175,4 +175,12 @@ export class WaterProcessDiagramComponent {
     let url: string = `/water/${this.diagram.assessmentId}`;
     this.router.navigate([url]);
   }
+
+  returnFromMobileUnavailable() {
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+    this.router.navigate(['/landing-screen']);
+  }
 }
