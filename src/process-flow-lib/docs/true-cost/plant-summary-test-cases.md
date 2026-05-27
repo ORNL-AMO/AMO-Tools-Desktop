@@ -302,7 +302,7 @@ RO TREATMENT ($5/kgal)   ← treatmentType = 6, but 3 children → no override
 
 ### 3.3 `ro-single-system-wwt`
 
-**What it tests:** An RO single-system configuration where the reject path flows through a Wastewater Treatment unit before reaching discharge. The RO override still assigns all intake and RO costs to System A. The WWT costs exhibit a **known double-attribution bug** and are captured by snapshot rather than a specific value.
+**What it tests:** An RO single-system configuration where the reject path flows through a Wastewater Treatment unit before reaching discharge. The RO override assigns all intake, RO, and product-path discharge costs to System A. The WWT cost is also attributed 100% to System A via the RO reject-path special case.
 
 ```
 INTAKE ($1/kgal)
@@ -324,11 +324,45 @@ RO TREATMENT ($5/kgal)   ← single-system override applies (2 children)
 
 **Expected attribution — System A**
 
-| Intake | RO Treatment | Discharge (product) | WWT |
+| Intake | RO Treatment | Discharge (product) | WWT (reject) |
 |---|---|---|---|
-| $100,000 (100%) | $500,000 (100%) | $70,000 (100%) | **(snapshot — see note)** |
+| $100,000 (100%) | $500,000 (100%) | $70,000 (100%) | **$90,000 (100%)** |
 
-> **Known limitation:** The WWT upstream path (`RO → WWT → Intake`) causes the WWT cost to be attributed to System A twice — once when processing the RO edge and once when processing the intake edge. The snapshot records the current (over-attributed) dollar amount. Update the snapshot when this is intentionally fixed, and verify the corrected value equals $90,000 (100% of WWT block cost, once).
+> The WWT upstream path is `[edge(RO→WWT), edge(Intake→RO)]`. The loop charges System A on the first edge and breaks; the intake edge is not re-processed. System A bears the full reject-treatment cost because it is the sole beneficiary of the RO unit.
+
+---
+
+### 3.4 `ro-system-downstream-wwt`
+
+**What it tests:** An RO single-system configuration where the **product system** (System A) sends its effluent to a WWT unit downstream, while the reject stream goes directly to discharge. This is the Configuration B variant of the RO reject-path special case.
+
+This fixture is a regression guard for a bug where the WWT upstream path had three edges (`SystemA→WWT`, `RO→SystemA`, `Intake→RO`) and the loop charged System A three times ($15,000 instead of $5,000) because it did not break after the first attribution.
+
+```
+INTAKE ($0/kgal)
+  │ 10 Mgal/yr
+  ▼
+RO TREATMENT ($0/kgal)   ← single-system override applies (2 children)
+  ├─── 5 Mgal/yr ──► SYSTEM A
+  │                      │ 5 Mgal/yr
+  │                      ▼
+  │                   WWT ($1/kgal) ──► DISCHARGE 2 ($0)   ← product effluent treatment
+  └─── 5 Mgal/yr ──► DISCHARGE 1 ($0)                     ← direct reject
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| WWT | $1/kgal | 5 Mgal/yr | **$5,000** |
+
+**Expected attribution — System A**
+
+| WWT |
+|---|
+| **$5,000 (100%)** |
+
+> System A receives 100% of the WWT cost via the RO single-system override. The loop breaks after the first edge (`SystemA→WWT`) so the two remaining upstream edges do not trigger additional charges.
 
 ---
 

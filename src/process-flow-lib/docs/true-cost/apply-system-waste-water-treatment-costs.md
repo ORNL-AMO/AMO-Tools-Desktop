@@ -58,14 +58,34 @@ The "Total downstream charged portion" is the sum of all flow amounts already at
 
 ### Pass 2 — RO Reject Path Special Case
 
-When the upstream path from a WWT node leads to an RO treatment node rather than directly to a water-using system, the normal Pass 2 stopping rule (stop at first system) does not apply — the RO node is not itself a water-using system, so the walk would otherwise terminate without finding a chargeable system.
+When the upstream path from a WWT node contains an RO treatment node (rather than leading directly to a water-using system through a conventional upstream chain), the normal Pass 2 stopping rule is augmented to identify the responsible system and prevent duplicate attributions.
 
 **Detection:** The algorithm checks `graph.systemsWithRODirectDischarge`. If the WWT node is registered as the `wasteTreatmentNode` of a single-system RO configuration, two things happen:
 
 1. **Attribution fraction is forced to 1.0** — the full WWT block cost is assigned to the water-using system that is the sole beneficiary of that RO unit (`ROWasteTreatmentOwner`).
-2. **Deduplication is bypassed** — the `visitedSystemIds` guard is skipped for this attribution because the RO system owner is not directly in the upstream walk path and would otherwise be missed.
+2. **System owner is recorded as visited and the path walk breaks** — `ROWasteTreatmentOwner.id` is pushed to `visitedSystemIds` and the edge loop exits immediately. This ensures the WWT cost is attributed exactly once, even though multiple edges in the upstream path would each satisfy the RO detection check.
 
-**Worked example:**
+This pattern covers two distinct configurations that `assignsystemsWithRODirectDischarge` can detect:
+
+**Configuration A — RO reject stream goes directly to WWT:**
+
+```
+  Intake ──► RO ──► System A ──► Discharge 1   (product path)
+                └──► WWT ──► Discharge 2        (reject treatment path)
+```
+
+WWT upstream path: `[edge(RO→WWT), edge(Intake→RO)]` — two edges. The loop charges System A on the first edge and breaks; the intake edge is never re-processed.
+
+**Configuration B — RO product system sends its effluent to WWT:**
+
+```
+  Intake ──► RO ──► System A ──► WWT ──► Discharge 2
+                └──► Discharge 1                        (direct reject)
+```
+
+WWT upstream path: `[edge(SystemA→WWT), edge(RO→SystemA), edge(Intake→RO)]` — three edges. The loop charges System A on the first edge and breaks; the RO and intake edges are never re-processed.
+
+**Worked example (Configuration A):**
 
 ```
   Intake ──► RO Unit ──► (product water, 70 Mgal/yr) ──► System A
@@ -76,8 +96,22 @@ When the upstream path from a WWT node leads to an RO treatment node rather than
 - **Pass 1 of WWT:** no downstream reuse path → downstream attributed portion = 0.
 - **Pass 2 of WWT:** upstream walk hits the RO node, not a water-using system.
   - Algorithm detects the RO node is in `systemsWithRODirectDischarge` with System A as the owner (`ROWasteTreatmentOwner`).
-  - Attribution fraction overridden to 1.0; cost assigned to System A.
+  - Attribution fraction overridden to 1.0; cost assigned to System A; loop breaks.
 - Cost to System A from WWT = 1.0 × $30,000 = **$30,000/yr**
+
+**Worked example (Configuration B):**
+
+```
+  Intake ──► RO Unit ──► (product water, 5 Mgal/yr) ──► System A ──► WWT ($1.00/kgal) ──► Discharge
+                    └──► (reject,  5 Mgal/yr) ──► Discharge
+```
+
+- WWT block cost = 5 Mgal/yr × 1,000 × $1.00/kgal = $5,000/yr
+- **Pass 1 of WWT:** no downstream reuse path → downstream attributed portion = 0.
+- **Pass 2 of WWT:** upstream walk hits System A on the first edge.
+  - System A is the `water-using-system` in the upstream path; algorithm also detects System A is the `ROWasteTreatmentOwner`.
+  - Attribution fraction overridden to 1.0; cost assigned to System A; loop breaks.
+- Cost to System A from WWT = 1.0 × $5,000 = **$5,000/yr**
 
 ---
 

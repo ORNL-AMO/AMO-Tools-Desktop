@@ -1386,7 +1386,12 @@ const applySystemWasteTreatmentCosts = (
               ROWasteTreatmentOwner = graph.nodeMap[systemId];
             }
         });
-        
+
+        // * RO owner already charged on a prior path — prevent duplicate full-cost attribution
+        if (attributeROCostsToSystem && visitedSystemIds.includes(ROWasteTreatmentOwner.id)) {
+          break;
+        }
+
         // * attribute costs to upstream water systems OR if upstream node is RO, calculate attribution by the current path but assign attribution to ROWasteTreatmentOwner
         if (currentNode.data.processComponentType === 'water-using-system' || attributeROCostsToSystem) {
           const treatmentEdge = graph.edgeMap[path[0]];
@@ -1453,13 +1458,9 @@ const applySystemWasteTreatmentCosts = (
 
           }
 
-          // * ROWasteTreatmentOwner - is a false visit outside of expected pattern for observing systems
-          if (!ROWasteTreatmentOwner) {
-
-            // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
-            visitedSystemIds.push(currentNode.id);
-            break;
-          }
+          // * the first system (or RO-associated owner) in the path is the only one responsible for the cost
+          visitedSystemIds.push(ROWasteTreatmentOwner ? ROWasteTreatmentOwner.id : currentNode.id);
+          break;
         }
       }
     });
