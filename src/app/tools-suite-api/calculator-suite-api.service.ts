@@ -158,6 +158,7 @@ export class CalculatorSuiteApiService {
       compressedAirReduction.flowMeterMethodData.meterReading = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.flowMeterMethodData.meterReading);
       compressedAirReduction.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagFillTime);
       compressedAirReduction.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagVolume);
+      compressedAirReduction.bagMethodData.numberOfUnits = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.numberOfUnits);
 
       compressedAirReduction.pressureMethodData.nozzleType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.nozzleType);
       compressedAirReduction.pressureMethodData.numberOfNozzles = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.numberOfNozzles);
@@ -167,43 +168,49 @@ export class CalculatorSuiteApiService {
       compressedAirReduction.compressorElectricityData.compressorControlAdjustment = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorControlAdjustment);
       compressedAirReduction.compressorElectricityData.compressorSpecificPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorSpecificPower);
 
-      let CompressedAirFlowMeterMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirFlowMeterMethodData(compressedAirReduction.flowMeterMethodData.meterReading);
-      // hardcoded 1 - always calculate as single unit
-      let BagMethod = new this.toolsSuiteApiService.ToolsSuiteModule.BagMethod(compressedAirReduction.bagMethodData.operatingTime, compressedAirReduction.bagMethodData.bagFillTime, compressedAirReduction.bagMethodData.bagVolume, 1);
-      let PressureMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.PressureMethodData(compressedAirReduction.pressureMethodData.nozzleType, compressedAirReduction.pressureMethodData.numberOfNozzles,
-        compressedAirReduction.pressureMethodData.supplyPressure);
-      let CompressedAirOtherMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirOtherMethodData(compressedAirReduction.otherMethodData.consumption);
-      let CompressorElectricityData = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorElectricityData(compressedAirReduction.compressorElectricityData.compressorControlAdjustment,
-        compressedAirReduction.compressorElectricityData.compressorSpecificPower);
+      const measurementMethod = this.suiteApiHelperService.getCompressedAirMeasurementMethodEnum(compressedAirReduction.measurementMethod);
+      const utilityType = this.suiteApiHelperService.getCompressedAirUtilityTypeEnum(compressedAirReduction.utilityType);
 
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirReductionInput(
-        compressedAirReduction.hoursPerYear,
-        compressedAirReduction.utilityType,
-        compressedAirReduction.utilityCost,
-        compressedAirReduction.measurementMethod,
-        CompressedAirFlowMeterMethodData, BagMethod, PressureMethodData, CompressedAirOtherMethodData, CompressorElectricityData, compressedAirReduction.units);
+      let wasmConvertedInput = {
+        hoursPerYear: compressedAirReduction.hoursPerYear,
+        utilityType: utilityType,
+        utilityCost: compressedAirReduction.utilityCost,
+        measurementMethod: measurementMethod,
+        flowMeterMethodData: {
+          meterReading: compressedAirReduction.flowMeterMethodData.meterReading
+        },
+        bagMethodData: {
+          bagFillTime: compressedAirReduction.bagMethodData.bagFillTime,
+          bagVolume: compressedAirReduction.bagMethodData.bagVolume,
+          numberOfBags: compressedAirReduction.bagMethodData.numberOfUnits
+        },
+        pressureMethodData: {
+          nozzleType: compressedAirReduction.pressureMethodData.nozzleType,
+          numberOfNozzles: compressedAirReduction.pressureMethodData.numberOfNozzles,
+          supplyPressure: compressedAirReduction.pressureMethodData.supplyPressure
+        },
+        otherMethodData: {
+          consumption: compressedAirReduction.otherMethodData.consumption
+        },
+        compressorElectricityData: {
+          compressorControlAdjustment: compressedAirReduction.compressorElectricityData.compressorControlAdjustment,
+          compressorSpecificPower: compressedAirReduction.compressorElectricityData.compressorSpecificPower
+        },
+        units: compressedAirReduction.units
+      };
+
       inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      CompressedAirFlowMeterMethodData.delete();
-      BagMethod.delete();
-      PressureMethodData.delete();
-      CompressedAirOtherMethodData.delete();
-      CompressorElectricityData.delete();
     });
 
-    let CompressedAirReductionCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirReduction(inputs);
-    let output = CompressedAirReductionCalculator.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.compressedAirReduction(inputs);
     let results: CompressedAirReductionResult = {
       energyUse: output.energyUse,
       energyCost: output.energyCost,
       flowRate: output.flowRate,
-      singleNozzeFlowRate: output.singleNozzeFlowRate,
+      singleNozzleFlowRate: output.singleNozzleFlowRate,
       consumption: output.consumption
-    }
+    };
 
-    output.delete();
-    CompressedAirReductionCalculator.delete();
     inputs.delete();
     return results;
   }
