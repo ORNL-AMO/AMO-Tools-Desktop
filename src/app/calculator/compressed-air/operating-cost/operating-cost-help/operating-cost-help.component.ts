@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-operating-cost-help',
@@ -9,6 +10,7 @@ import { Component, OnInit, Input } from '@angular/core';
 export class OperatingCostHelpComponent implements OnInit {
   @Input()
   currentField: string;
+  docsLink: string = environment.measurDocsUrl;
   constructor() { }
 
   ngOnInit() {
