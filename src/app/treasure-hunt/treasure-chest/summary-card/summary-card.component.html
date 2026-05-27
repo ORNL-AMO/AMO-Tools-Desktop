@@ -108,7 +108,12 @@
       </div>
     </div>
   </div>
-    <div class="alert-danger p-2 small">
+    <div class="alert-danger p-2 small" *ngIf="electricityData.modificationCost < 0 || 
+    naturalGasData.modificationCost < 0 || waterData.modificationCost < 0 
+    || compressedAirData.modificationCost < 0 || steamData.modificationCost < 0 || 
+    wasteWaterData.modificationCost < 0 || otherFuelData.modificationCost < 0 || 
+    additionalAnnualSavings.modificationCost < 0"
+    >
     Utility savings projects exceed current utility spending. Adjust current spending in the "Facility Basics" or adjust
     the selected savings projects.
   </div>
