@@ -35,15 +35,6 @@ export class SuiteApiHelperService {
     }
   }
 
-  getPistonTypeEnum(pistonType: number): any {
-    switch (pistonType) {
-      case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.PistonType.SingleActing;
-      case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.PistonType.DoubleActing;
-    }
-  }
-
   getLineFrequencyEnum(lineFreq: number) {
     let lineFrequency = this.toolsSuiteApiService.ToolsSuiteModule.LineFrequency.FREQ50;
     if (lineFreq == 60) {

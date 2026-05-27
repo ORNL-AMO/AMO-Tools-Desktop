@@ -11,26 +11,33 @@ export class StandaloneSuiteApiService {
   ) { }
 
   pneumaticAirRequirement(input: PneumaticAirRequirementInput): PneumaticAirRequirementOutput {
-    let pistonType = this.suiteApiHelperService.getPistonTypeEnum(input.pistonType);
-    let PneumaticAirRequirement;
     input.airPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airPressure);
     input.cyclesPerMinute = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.cyclesPerMinute);
     input.cylinderDiameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.cylinderDiameter);
     input.cylinderStroke = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.cylinderStroke);
     input.pistonRodDiameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.pistonRodDiameter);
+    let output;
     if (input.pistonType === 1) {
-      PneumaticAirRequirement = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticAirRequirement(pistonType, input.cylinderDiameter, input.cylinderStroke, input.pistonRodDiameter, input.airPressure, input.cyclesPerMinute);
+      output = this.toolsSuiteApiService.ToolsSuiteModule.calculatePneumaticAirRequirementDoubleActing({
+        cylinderDiameter: input.cylinderDiameter,
+        cylinderStroke: input.cylinderStroke,
+        pistonRodDiameter: input.pistonRodDiameter,
+        airPressure: input.airPressure,
+        cyclesPerMin: input.cyclesPerMinute,
+      });
     } else {
-      PneumaticAirRequirement = new this.toolsSuiteApiService.ToolsSuiteModule.PneumaticAirRequirement(pistonType, input.cylinderDiameter, input.cylinderStroke, input.airPressure, input.cyclesPerMinute);
+      output = this.toolsSuiteApiService.ToolsSuiteModule.calculatePneumaticAirRequirementSingleActing({
+        cylinderDiameter: input.cylinderDiameter,
+        cylinderStroke: input.cylinderStroke,
+        airPressure: input.airPressure,
+        cyclesPerMin: input.cyclesPerMinute,
+      });
     }
-    let output = PneumaticAirRequirement.calculate();
     let results: PneumaticAirRequirementOutput = {
       airRequirementPneumaticCylinder: output.airRequirementPneumaticCylinder,
       volumeAirIntakePiston: output.volumeAirIntakePiston,
       compressionRatio: output.compressionRatio,
-    }
-    output.delete();
-    PneumaticAirRequirement.delete();
+    };
     return results;
   }
 
