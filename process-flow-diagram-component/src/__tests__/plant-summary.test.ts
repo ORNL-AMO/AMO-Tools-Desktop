@@ -337,8 +337,10 @@ describe('getPlantSummaryResults — ro-single-system: Intake → RO → [System
 //   - wasteTreatmentNode for sysA is recorded as `wwt`
 //
 // The WWT upstream path is [edge_sysA_wwt, edge_RO_sysA, edge_intake_RO] —
-// three edges. Before the fix the loop did not break when ROWasteTreatmentOwner
-// was set, so sysA was charged 3× the WWT block cost ($15,000 instead of $5,000).
+// three edges. Pass 2 of applySystemWasteTreatmentCosts finds sysA on the
+// first edge (it is a water-using-system), computes fraction 5/5 = 1.0, writes
+// $5,000, then breaks. applyROSystemWasteTreatmentCosts subsequently finds an
+// existing systemAttributionMap entry for sysA→wwt and skips (idempotency guard).
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — ro-system-downstream-wwt: Intake → RO → [System → WWT → Discharge, Discharge(reject)]', () => {
@@ -378,9 +380,14 @@ describe('getPlantSummaryResults — ro-system-downstream-wwt: Intake → RO →
     {},
   );
 
-  it('charges sysA exactly once for WWT cost — not 3× (regression: upstream path had 3 edges, each previously triggered a charge)', () => {
+  it('charges sysA exactly once for WWT cost (Pass 2 finds sysA on first edge; applyROSystemWasteTreatmentCosts skips via idempotency guard)', () => {
     expect(result.trueCostOfSystems['sysA'].wasteTreatment)
       .toBeCloseTo(blockCost(WWT_COST, PRODUCT_FLOW), 0);
+  });
+
+  it('records WWT attribution fraction of 1.0 for sysA in systemAttributionMap', () => {
+    expect(result.systemAttributionMap['sysA']['wwt'].totalAttribution.default)
+      .toBeCloseTo(1.0, 6);
   });
 
   it('WWT block cost equals $1/kGal × 5 Mgal = $5,000', () => {

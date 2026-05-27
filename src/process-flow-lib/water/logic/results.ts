@@ -1378,22 +1378,8 @@ const applySystemWasteTreatmentCosts = (
           break;
         }
 
-        let attributeROCostsToSystem = false;
-        let ROWasteTreatmentOwner: Node;
-        Object.entries(graph.systemsWithRODirectDischarge).map(([systemId, { treatmentNode, intakeNode, dischargeNode, wasteTreatmentNode }]) => {
-            if (wasteTreatmentNode?.id === treatmentId) {
-              attributeROCostsToSystem = true;
-              ROWasteTreatmentOwner = graph.nodeMap[systemId];
-            }
-        });
-
-        // * RO owner already charged on a prior path — prevent duplicate full-cost attribution
-        if (attributeROCostsToSystem && visitedSystemIds.includes(ROWasteTreatmentOwner.id)) {
-          break;
-        }
-
-        // * attribute costs to upstream water systems OR if upstream node is RO, calculate attribution by the current path but assign attribution to ROWasteTreatmentOwner
-        if (currentNode.data.processComponentType === 'water-using-system' || attributeROCostsToSystem) {
+        // * attribute costs to upstream water systems
+        if (currentNode.data.processComponentType === 'water-using-system') {
           const treatmentEdge = graph.edgeMap[path[0]];
 
           const systemOutflow = treatmentEdge.data.flowValue ?? 0;
@@ -1412,12 +1398,6 @@ const applySystemWasteTreatmentCosts = (
 
           let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
 
-          // * RO system outflows to this Waste Treatment - assign Waste Treatment costs to the system associated with RO
-          if (attributeROCostsToSystem) {
-            systemAttributionFraction = 1;
-          }
-
-          currentNode = attributeROCostsToSystem ? ROWasteTreatmentOwner : currentNode;
           setSystemAttribution(
             systemAttributionMap,
             treatmentEdge,
@@ -1458,8 +1438,7 @@ const applySystemWasteTreatmentCosts = (
 
           }
 
-          // * the first system (or RO-associated owner) in the path is the only one responsible for the cost
-          visitedSystemIds.push(ROWasteTreatmentOwner ? ROWasteTreatmentOwner.id : currentNode.id);
+          visitedSystemIds.push(currentNode.id);
           break;
         }
       }
@@ -1481,7 +1460,61 @@ const applySystemWasteTreatmentCosts = (
         );
       }
     });
-    
+
+  });
+}
+
+const applyROSystemWasteTreatmentCosts = (
+  trueCostOfSystems: TrueCostOfSystems,
+  graph: NodeGraphIndex,
+  wasteTreatmentCostData: CostComponentMap,
+  systemAttributionMap: SystemAttributionMap,
+  debuggingNameMap: Record<string, string>,
+) => {
+  Object.entries(graph.systemsWithRODirectDischarge).forEach(([systemId, { wasteTreatmentNode }]) => {
+    if (!wasteTreatmentNode) return;
+
+    const wasteTreatmentId = wasteTreatmentNode.id;
+    const wwtCostData = wasteTreatmentCostData[wasteTreatmentId];
+    if (!wwtCostData) return;
+
+    const roSystemOwner = graph.nodeMap[systemId];
+
+    if (systemAttributionMap[roSystemOwner.id]?.[wasteTreatmentId] !== undefined) return;
+
+    const firstUpstreamEdgeId = wwtCostData.upstreamPathsByEdgeId?.[0]?.[0];
+    if (!firstUpstreamEdgeId) return;
+    const wasteTreatmentEdge = graph.edgeMap[firstUpstreamEdgeId];
+
+    setSystemAttribution(
+      systemAttributionMap,
+      wasteTreatmentEdge,
+      roSystemOwner.id,
+      1,
+      wasteTreatmentId,
+      'waste-water-treatment',
+      debuggingNameMap
+    );
+
+    const hasAdjustedAttribution = systemAttributionMap[roSystemOwner.id][wasteTreatmentId].totalAttribution.adjusted !== undefined;
+    if (hasAdjustedAttribution) return;
+
+    const costToSystem = wwtCostData.blockCosts.totalBlockCost;
+    trueCostOfSystems[roSystemOwner.id].wasteTreatment += costToSystem;
+
+    logAttributionAndCosts(
+      [],
+      debuggingNameMap,
+      roSystemOwner,
+      wwtCostData.upstreamPathsByEdgeId?.[0] ?? [],
+      wasteTreatmentId,
+      systemAttributionMap,
+      graph,
+      1,
+      costToSystem,
+      1,
+      wwtCostData.blockCosts.totalFlow
+    );
   });
 }
 
@@ -1782,6 +1815,13 @@ export const getPlantSummaryResults = (
     });
 
     applySystemWasteTreatmentCosts(
+      trueCostOfSystems,
+      graph,
+      wasteTreatmentCostData,
+      systemAttributionMap,
+      nodeNameMap
+    );
+    applyROSystemWasteTreatmentCosts(
       trueCostOfSystems,
       graph,
       wasteTreatmentCostData,
