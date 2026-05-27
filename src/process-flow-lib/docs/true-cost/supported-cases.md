@@ -22,7 +22,7 @@ Attribution fractions are computed against one of two denominators:
 
 **Verified cases:**
 
-| Case | Topology | `intakeHasSingleOutflow` | Chain has losses | Denominator basis | Expected result | Confidence |
+| Case | Configuration | `intakeHasSingleOutflow` | Chain has losses | Denominator basis | Expected result | Confidence |
 |------|----------|--------------------------|------------------|-------------------|-----------------|------------|
 | Direct intake to single system | Intake→SystemA | true | false — no treatment | intake-flow-volume | SystemA 100% | 100% |
 | Intake splits directly to multiple systems | Intake→{SystemA(6), SystemB(4)} | false | false — no treatment | intake-flow-volume | SystemA 60%, SystemB 40% | 100% |
@@ -36,4 +36,4 @@ Attribution fractions are computed against one of two denominators:
 | Intake splits, one branch has treatment with losses | Intake(97.06)→TreatA(10.14in/10.00out)→{SystemA(6.98), SystemB(3.02)} + other paths | **false** | true — TreatA 10.14→10.00 | **intake-flow-volume** | SystemA 7.19%, SystemB 3.11% | 100% |
 | Multiple intakes sharing downstream systems | Intake1→SystemA; Intake2→SystemA | per intake | per intake | per intake | costs accumulate additively per intake | 100% |
 | RO direct-discharge special case | Intake→RO→{SystemA, Discharge} (single system, RO outflows directly to discharge) | true | — | override | SystemA 100% (fraction forced to 1) | 100% |
-| User-adjusted attribution override | any topology with user override set on component | — | — | override | user-specified fraction replaces default | 100% |
+| User-adjusted attribution override | any configuration with user override set on component | — | — | override | user-specified fraction replaces default | 100% |
