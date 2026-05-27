@@ -47,6 +47,9 @@
                 [metricUnit]="PROCESS_COOLING_UNITS.fullLoadEfficiency.labelHTML.metric"></app-input-unit>
                 </div>
                 <app-form-control-errors [control]="form.controls.fullLoadEfficiency"></app-form-control-errors>
+                <div class="alert-warning my-1 p-2 small" *ngIf="fullLoadEfficiencyWarning">
+                  {{ fullLoadEfficiencyWarning }}
+                </div>
             </div>
             <!-- * 8117 refrigerant change hidden intentionally  -->
             <!-- <div class="form-group">

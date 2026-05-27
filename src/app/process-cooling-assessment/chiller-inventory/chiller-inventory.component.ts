@@ -89,4 +89,8 @@ export class ChillerInventoryComponent implements OnInit {
   focusField(str: string) {
     this.processCoolingUiService.focusedFieldSignal.set(str);
   }
+
+  get fullLoadEfficiencyWarning(): string | null {
+    return this.inventoryService.getFullLoadEfficiencyWarning(this.form.controls.fullLoadEfficiency.value);
+  }
 }
