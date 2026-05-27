@@ -1,100 +1,93 @@
-<div class="d-flex flex-row justify-content-end" [ngStyle]="{'height': isSidebarCollapsed? '100%' : undefined}">
-  <div class="d-flex justify-content-center p-2" (click)="collapseSidebar()">
-    <span *ngIf="isSidebarCollapsed" class="fa fa-chevron-circle-right h5 mb-0"></span>
-    <span *ngIf="!isSidebarCollapsed" class="fa fa-chevron-circle-left h5 mb-0"></span>
+<div class="d-flex flex-row justify-content-end">
+  <div class="d-flex justify-content-center p-2 sidebar-collapse-btn" (click)="collapseSidebar()">
+    @if (isSidebarCollapsed) {
+      <span class="fa fa-chevron-circle-right h5 mb-0"></span>
+    } @else {
+      <span class="fa fa-chevron-circle-left h5 mb-0"></span>
+    }
   </div>
-  <div *ngIf="isSidebarCollapsed" class="sidebar-border"></div>
 </div>
-<ng-container *ngIf="!isSidebarCollapsed">
 
-  <div class="d-flex w-100 justify-content-center mb-2">
+@if (isSidebarCollapsed) {
+  <nav class="sidebar-mini-nav">
+    <a [routerLink]="['/landing-screen']" routerLinkActive="selected" class="mini-icon" title="Home"><i class="fa fa-home"></i></a>
+    <a [routerLink]="['/calculators/calculators-list']" routerLinkActive="selected" class="mini-icon" title="Calculators"><i class="fa fa-calculator"></i></a>
+    <a [routerLink]="['/log-tool']" routerLinkActive="selected" class="mini-icon" title="Data Exploration" (click)="navigateWithSidebarOptions('/log-tool', true)"><i class="fa fa-line-chart"></i></a>
+    <a [routerLink]="['/settings']" routerLinkActive="selected" class="mini-icon" title="Settings" (click)="navigateWithSidebarOptions('/settings')"><i class="fa fa-cog"></i></a>
+    <a [routerLink]="['/data-and-backup']" routerLinkActive="selected" class="mini-icon" title="Data Storage and Backup" (click)="navigateWithSidebarOptions('/data-and-backup')"><i class="fa fa-database"></i></a>
+    <a [routerLink]="['/custom-materials']" routerLinkActive="selected" class="mini-icon" title="Custom Materials" (click)="navigateWithSidebarOptions('/custom-materials')"><i class="fa fa-cubes"></i></a>
+    <a class="mini-icon" title="Help & Info" (click)="collapseSidebar()"><i class="fa fa-question-circle"></i></a>
+    <a [routerLink]="['/privacy']" routerLinkActive="selected" class="mini-icon" title="Privacy Notice" (click)="navigateWithSidebarOptions('/privacy')"><i class="fa fa-shield"></i></a>
+  </nav>
+} @else {
+
+  <div class="d-flex w-100 justify-content-center mb-4">
     <div>
       <img routerLink="/landing-screen" src="assets/images/Logo_Color_Seal_Blue_Lettering_Horizontal.png" class="doe-logo mx-auto">
     </div>
   </div>
-  
+
   <div class="sidebar-group create-button">
     <div class="py-0 px-2">
       <div class="nav-item dropdown">
-        <button type="button" class="btn btn-primary w-100" (click)="toggleNewDropdown()">
-          <span class="dropdown-toggle">
-            Add New
-          </span>
+        <button type="button" class="btn btn-add-new w-100" (click)="toggleNewDropdown()">
+          <i class="fa fa-plus-circle"></i>
+          <span class="dropdown-toggle">Add New</span>
         </button>
-        <div class="dropdown-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
-          <div class="list-group bold">
-            <a class="list-group-item list-group-item-action" (click)="showCreateAssessment()">
-              Add New Assessment
-            </a>
-            <a class="list-group-item list-group-item-action" (click)="showCreateInventory()">
-              Add New Inventory
-            </a>
-            <a class="list-group-item list-group-item-action" (click)="showCreateDiagram()">
-              Add New Diagram
-            </a>
-            <a class="list-group-item list-group-item-action" (click)="showCreateFolder()">
-              Add New Folder
-            </a>
-          </div>
+        <div class="dropdown-menu add-new-menu p-0 w-100" [ngClass]="{'show': showNewDropdown == true}">
+          <a class="add-new-item" (click)="showCreateAssessment()"><i class="fa fa-bar-chart"></i>Assessment</a>
+          <a class="add-new-item" (click)="showCreateInventory()"><i class="fa fa-list"></i>Inventory</a>
+          <a class="add-new-item" (click)="showCreateDiagram()"><i class="fa fa-sitemap"></i>Diagram</a>
+          <a class="add-new-item" (click)="showCreateFolder()"><i class="fa fa-folder"></i>Folder</a>
         </div>
       </div>
     </div>
   </div>
-  
-  <div *ngIf="isUpdateAvailable" class="sidebar-group secondary" (click)="openUpdateModal()">
-    <span routerLinkActive="selected" class="sidebar-item">
-      <span class="fa fa-info-circle mr-1 info-icon"></span>
-      Update Available!
-    </span>
+
+  <div class="sidebar-group secondary pl-1 scroll-item">
+    <app-directory-item [directory]="rootDirectory"></app-directory-item>
   </div>
 
-  <div class="sidebar-group secondary" (click)="openVersionModal()">
-    <span routerLinkActive="selected" class="sidebar-item">
-      <i class="fa fa-info-circle info-icon mr-1"></i>
-      v{{versionNum}} Release Notes
+  <div class="sidebar-group secondary">
+    <span class="sidebar-item sidebar-item-home" [routerLink]="['/landing-screen']" routerLinkActive="selected">
+      <i class="fa fa-home home-icon"></i>Home
     </span>
+    <app-calculator-list></app-calculator-list>
+    <span class="sidebar-item sidebar-notice" [routerLink]="['/log-tool']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/log-tool', true)"><i class="fa fa-line-chart info-icon"></i>Data Exploration</span>
   </div>
   
-  <div *ngIf="showSurveyLink" class="sidebar-group secondary">
-    <span routerLinkActive="selected" class="sidebar-item" (click)="showSurvey()">
-      <span class="fa fa-info-circle mr-1 info-icon"></span>
-      MEASUR Survey
-    </span>
+  <div class="sidebar-group secondary">
+    <span [routerLink]="['/settings']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/settings')" class="sidebar-item sidebar-notice"><i class="fa fa-cog info-icon"></i>Settings</span>
+    <span [routerLink]="['/data-and-backup']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/data-and-backup')" class="sidebar-item sidebar-notice"><i class="fa fa-database info-icon"></i>Data Storage and Backup</span>
+    <span [routerLink]="['/custom-materials']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/custom-materials')" class="sidebar-item sidebar-notice"><i class="fa fa-cubes info-icon"></i>Custom Materials</span>
+    <div class="help-group"
+         (mouseenter)="onHelpEnter($event)" (mouseleave)="onHelpLeave()"
+         (focusin)="onHelpFocusIn($event)" (focusout)="onHelpFocusOut($event)"
+         (keydown.escape)="onHelpEscapeKey()">
+      <button type="button" class="sidebar-item sidebar-notice help-trigger"
+              [attr.aria-expanded]="helpFlyoutActive" aria-haspopup="true">
+        <i class="fa fa-question-circle info-icon"></i>
+        Help & Info
+        <i class="fa fa-chevron-right help-arrow"></i>
+      </button>
+      @if (helpFlyoutActive) {
+        <div class="help-flyout" [style.top.px]="helpFlyoutTop" [style.left.px]="helpFlyoutLeft" role="menu"
+             (mouseenter)="onHelpFlyoutEnter()" (mouseleave)="onHelpFlyoutLeave()">
+          <button type="button" class="sidebar-item sidebar-notice" role="menuitem" (click)="openVersionModal()">
+            <i class="fa fa-info-circle info-icon"></i>v{{versionNum}} Release Notes
+          </button>
+          @if (showSubscribeLink) {
+            <button type="button" class="sidebar-item sidebar-notice" role="menuitem" (click)="showSubscribeModal()">
+              <i class="fa fa-envelope info-icon"></i>Subscribe for MEASUR news
+            </button>
+          }
+          <a [routerLink]="['/tutorials']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/tutorials')" class="sidebar-item" role="menuitem">User Manuals</a>
+          <a [routerLink]="['/about']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/about')" class="sidebar-item" role="menuitem">About</a>
+          <a [routerLink]="['/contact']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/contact')" class="sidebar-item" role="menuitem">Feedback</a>
+          <a [routerLink]="['/acknowledgments']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/acknowledgments')" class="sidebar-item" role="menuitem">Acknowledgments</a>
+        </div>
+      }
+    </div>
+    <span [routerLink]="['/privacy']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/privacy')" class="sidebar-item sidebar-notice"><i class="fa fa-shield info-icon"></i>Privacy Notice</span>
   </div>
-
-  
-  <div *ngIf="showSubscribeLink" class="sidebar-group secondary">
-    <span routerLinkActive="selected" class="sidebar-item" (click)="showSubscribeModal()">
-      <span class="fa fa-info-circle mr-1 info-icon"></span>
-      Subscribe for MEASUR news 
-    </span>
-  </div>
-
-  <div class="sidebar-group secondary" (click)="navigateWithSidebarOptions('/landing-screen')">
-    <span class="sidebar-item" [routerLink]="['/landing-screen']" routerLinkActive="selected">Home</span>
-  </div>
-
-<div class="sidebar-group secondary pl-1 scroll-item">
-  <app-directory-item [directory]="rootDirectory"></app-directory-item>
-</div>
-
-<div class="sidebar-group secondary">
-  <span routerLinkActive="selected" class="sidebar-item" (click)="navigateWithSidebarOptions('/log-tool', true)">Data Exploration</span>
-</div>
-
-
-<div class="sidebar-group secondary">
-  <app-calculator-list></app-calculator-list>
-</div>
-
-<div class="sidebar-group secondary">
-  <span (click)="navigateWithSidebarOptions('/data-and-backup')" routerLinkActive="selected" class="sidebar-item">Data Storage and Backup</span>
-  <span (click)="navigateWithSidebarOptions('/settings')" routerLinkActive="selected" class="sidebar-item">Settings</span>
-  <span (click)="navigateWithSidebarOptions('/custom-materials')" routerLinkActive="selected" class="sidebar-item">Custom Materials</span>
-  <span (click)="navigateWithSidebarOptions('/tutorials')" routerLinkActive="selected" class="sidebar-item">User Manuals</span>
-  <span (click)="navigateWithSidebarOptions('/about')" routerLinkActive="selected" class="sidebar-item">About</span>
-  <span (click)="navigateWithSidebarOptions('/contact')" routerLinkActive="selected" class="sidebar-item">Feedback</span>
-  <span (click)="navigateWithSidebarOptions('/privacy')" routerLinkActive="selected" class="sidebar-item">Privacy Notice</span>
-  <span (click)="navigateWithSidebarOptions('/acknowledgments')" routerLinkActive="selected" class="sidebar-item">Acknowledgments</span>
-  </div>
-</ng-container>
+}

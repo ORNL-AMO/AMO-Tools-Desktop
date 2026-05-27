@@ -1,209 +1,258 @@
 <!-- place it in an alphabetical order when adding new calculator details -->
-<span [routerLink]="['/calculators/calculators-list']" class="sidebar-item">All
-  Calculators</span>
-  <!--general-->
-<div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/general-list']" collapseSidebarDirective
-    routerLinkActive="selected">General</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/unit-converter']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Unit
-      Converter</span>
-    <span [routerLink]="['/calculators/combined-heat-power']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Combined
-      Heat and Power</span>
-    <span [routerLink]="['/calculators/cash-flow']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Cash Flow</span>
-    <span [routerLink]="['/calculators/power-factor-correction']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Power
-      Factor Correction</span>
-    <span [routerLink]="['/calculators/power-factor-triangle']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Power Factor Triangle</span>
-    @if (showOperationalImpacts()) {
-      <span [routerLink]="['/calculators/co2-conversion']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">CO<sub>2</sub>
-        Conversion</span>
-    }
-    <span [routerLink]="['/calculators/electricity-reduction']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Electricity Reduction</span>
-    <span [routerLink]="['/calculators/natural-gas-reduction']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Natural
-      Gas Reduction</span>
-    <span [routerLink]="['/calculators/altitude-correction']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Altitude
-      Correction</span>
-    <span [routerLink]="['/calculators/weather-bins']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Weather Bins</span>
-  </div>
-</div>
-<!--compressed air-->
-<div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/compressed-air-list']" collapseSidebarDirective routerLinkActive="selected">Compressed
-    Air</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/compressed-air-reduction']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Compressed Air
-      Reduction</span>
-    <span [routerLink]="['/calculators/compressed-air-pressure-reduction']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Compressed Air
-      Pressure Reduction</span>
-   <span [routerLink]="['/calculators/air-leak']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Compressed Air - Leak
-      Survey</span>
-    <span [routerLink]="['/calculators/air-flow-conversion']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Actual to
-      Standard Airflow</span>
-    <span [routerLink]="['/calculators/bleed-test']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Bleed 
-      Test</span>
-    <span [routerLink]="['/calculators/bag-method']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Leak Loss
-      Estimator - Bag Method</span>
-    <span [routerLink]="['/calculators/pneumatic-air']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Pneumatic Air
-      Requirement</span>
-    <span [routerLink]="['/calculators/receiver-tank']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Receiver Tank
-      Sizing</span>
-    <span [routerLink]="['/calculators/receiver-tank-usable-air']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Usable Air Capacity</span>
-    <span [routerLink]="['/calculators/pipe-sizing']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Pipe
-      Sizing</span>
-    <span [routerLink]="['/calculators/air-velocity']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Velocity in the
-      Piping</span>
-    <span [routerLink]="['/calculators/system-capacity']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">System
-      Capacity</span>
-    <span [routerLink]="['/calculators/operating-cost']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Operation
-      Costs</span>
-  
-  </div>
-</div>
-<!--FANS-->
-<div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/fans-list']" collapseSidebarDirective routerLinkActive="selected">Fans</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/fan-system-checklist']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Fan System Optimization Checklist</span>
-    <span [routerLink]="['/calculators/fan-analysis']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Fan Traverse
-      Analysis</span>
-    <span [routerLink]="['/calculators/fan-curve']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Fan Curve</span>
-    <span [routerLink]="['/calculators/fan-efficiency']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Fan Achievable
-      Efficiency</span>
-  </div>
-</div>
-<!--lighting-->
-<div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/lighting-list']" collapseSidebarDirective routerLinkActive="selected">Lighting</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/lighting-replacement']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Lighting
-      Replacement</span>
-  </div>
-</div>
-<!--MOTORS-->
-<div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/motors-list']" collapseSidebarDirective routerLinkActive="selected">Motors</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/nema-energy-efficiency']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">NEMA
-      Energy Efficiency</span>
-    <span [routerLink]="['/calculators/motor-performance']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Motor
-      Performance</span>
-    <span [routerLink]="['/calculators/percent-load-estimation']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Percent
-      Load
-      Estimation</span>
-    <span [routerLink]="['/calculators/motor-drive']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Motor
-      Drive Comparison</span>
-    <span [routerLink]="['/calculators/replace-existing']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Replace vs
-      Rewind</span>
-    <span [routerLink]="['/calculators/full-load-amps']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Full-Load 
-      Amps</span>
-  </div>
-</div>
-<!--process cooling-->
-<div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/process-cooling-list']" collapseSidebarDirective routerLinkActive="selected">Process
-    Cooling</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/chiller-staging']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Chiller Staging</span>
-    <span [routerLink]="['/calculators/chiller-performance']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Chiller Energy Performance and Temperature Reset</span>
-    <span [routerLink]="['/calculators/cooling-tower-basin']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Cooling Tower Basin Heater Energy</span>
-    <span [routerLink]="['/calculators/cooling-tower-fan']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Cooling Tower Fan Energy</span>
-    <span [routerLink]="['/calculators/cooling-tower']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Cooling Tower Makeup Water</span>
-    <span [routerLink]="['/calculators/fan-psychrometric']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Psychrometric Calculator</span>
-  </div>
-</div>
-<!--Process heating-->
-<div  #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/process-heating-list']" collapseSidebarDirective routerLinkActive="selected">Process
-    Heating</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/pre-assessment']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Pre-Assessment
-      Screening</span>
-    <span [routerLink]="['/calculators/flue-gas']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Flue Gas Loss</span>
-    <span [routerLink]="['/calculators/charge-material']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Charge
-      Material</span>
-    <span [routerLink]="['/calculators/fixture']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Fixture Loss</span>
-    <span [routerLink]="['/calculators/wall-loss']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Wall Loss</span>
-    <span [routerLink]="['/calculators/cooling']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Cooling Loss</span>
-    <span [routerLink]="['/calculators/atmosphere']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Atmosphere Loss</span>
-    <span [routerLink]="['/calculators/opening']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Opening Loss</span>
-    <span [routerLink]="['/calculators/leakage']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Gas Leakage Loss</span>
-    <span [routerLink]="['/calculators/waste-heat']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Waste Heat for Absorption Chillers</span>
-    <span [routerLink]="['/calculators/heat-cascading']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Heat Cascading</span>
-    <span [routerLink]="['/calculators/air-heating']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Air Heating using Flue Gas</span>
-    <span [routerLink]="['/calculators/o2-enrichment']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">O<sub>2</sub>
-      Enrichment</span>
-    <span [routerLink]="['/calculators/energy-equivalency']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Energy
-      Equivalency</span>
-    <span [routerLink]="['/calculators/energy-use']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Flow and Energy
-      Used</span>
-  </div>
-</div>
-<!--pumps-->
-<div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/pumps-list']" collapseSidebarDirective routerLinkActive="selected">Pumps</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/head-tool']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Pump Head
-      Tool</span>
-    <span [routerLink]="['/calculators/specific-speed']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Specific
-      Speed</span>
-    <span [routerLink]="['/calculators/achievable-efficiency']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Pump
-      Achievable Efficiency</span>
-    <span [routerLink]="['/calculators/pump-curve']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Pump Curve</span>
-    <span [routerLink]="['/calculators/valve-energy-loss']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Valve Energy Loss</span>
-  </div>
-</div>
-<!--steam-->
-<div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/steam-list']" collapseSidebarDirective routerLinkActive="selected">Steam</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/steam-properties']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Steam
-      Properties</span>
-    <span [routerLink]="['/calculators/saturated-properties']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">Saturated Properties</span>
-    <span [routerLink]="['/calculators/steam-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Steam
-      Reduction</span>
-   <span [routerLink]="['/calculators/stack-loss']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Stack Loss</span>
-   <span [routerLink]="['/calculators/boiler']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Boiler</span>
-   <span [routerLink]="['/calculators/turbine']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Steam Turbine</span>
-   <span [routerLink]="['/calculators/pipe-insulation-reduction']" collapseSidebarDirective routerLinkActive="selected"
-   class="sidebar-item">Pipe Insulation</span>
-   <span [routerLink]="['/calculators/tank-insulation-reduction']" collapseSidebarDirective routerLinkActive="selected"
-   class="sidebar-item">Tank Insulation</span>
-   <span [routerLink]="['/calculators/boiler-blowdown-rate']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Boiler
-    Blowdown Rate</span>
-    <span [routerLink]="['/calculators/deaerator']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Deaerator</span>
-    <span [routerLink]="['/calculators/flash-tank']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Flash Tank</span>
-    <span [routerLink]="['/calculators/prv']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">PRV</span>    
-      <span [routerLink]="['/calculators/header']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Header</span>
-      <span [routerLink]="['/calculators/heat-loss']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Heat Loss</span>
-      <span [routerLink]="['/calculators/water-heating']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">
-       Vent Steam to Heat Water</span>
-     <span [routerLink]="['/calculators/condensing-economizer']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Heat Recovery From Condensing Heat Exchanger</span>
-     <span [routerLink]="['/calculators/feedwater-economizer']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Feedwater Economizer</span>
-  
-  </div>
-</div>
-<!--WASTEWATER-->
-<div #sidebarWrapper routerLinkActive="show-border" [routerLinkActiveOptions]="{exact:true}">
-  <span class="sidebar-item" [routerLink]="['/calculators/waste-water-list']" collapseSidebarDirective routerLinkActive="selected">Wastewater</span>
-  <div class="directory-item">
-    <span [routerLink]="['/calculators/o2-utilization-rate']" collapseSidebarDirective routerLinkActive="selected"
-      class="sidebar-item">O<sub>2</sub> Utilization Rate</span>
-      <span [routerLink]="['/calculators/state-point-analysis']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">State
-        Point Analysis Tool</span>
-      <span [routerLink]="['/calculators/water-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item">Water/Wastewater
-        Reduction</span>
-  </div>
+<div class="calc-main-group"
+     (mouseenter)="onMainEnter($event)" (mouseleave)="onMainLeave()"
+     (focusin)="onMainFocusIn($event)" (focusout)="onMainFocusOut($event)"
+     (keydown.escape)="onEscapeKey()">
+
+  <button type="button" class="sidebar-item sidebar-notice calc-trigger"
+          [attr.aria-expanded]="mainFlyoutActive" aria-haspopup="true">
+    <i class="fa fa-calculator info-icon"></i>Calculators<i class="fa fa-chevron-right calc-arrow"></i>
+  </button>
+
+  <!-- Level 1: category flyout -->
+  @if (mainFlyoutActive) {
+    <div class="calc-flyout calc-flyout-main"
+         [style.top.px]="mainFlyoutTop" [style.left.px]="mainFlyoutLeft"
+         role="menu"
+         (mouseenter)="onMainFlyoutEnter()" (mouseleave)="onMainFlyoutLeave()">
+
+      <a [routerLink]="['/calculators/calculators-list']" collapseSidebarDirective
+         routerLinkActive="selected" class="sidebar-item" role="menuitem">All Calculators</a>
+
+      <hr class="flyout-divider">
+
+      <!--general-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('general', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('general', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/general-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'general'" aria-haspopup="true" role="menuitem">
+          General <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+      <!--compressed air-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('compressed-air', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('compressed-air', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/compressed-air-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'compressed-air'" aria-haspopup="true" role="menuitem">
+          Compressed Air <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+      <!--fans-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('fans', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('fans', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/fans-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'fans'" aria-haspopup="true" role="menuitem">
+          Fans <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+      <!--lighting-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('lighting', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('lighting', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/lighting-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'lighting'" aria-haspopup="true" role="menuitem">
+          Lighting <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+      <!--motors-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('motors', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('motors', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/motors-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'motors'" aria-haspopup="true" role="menuitem">
+          Motors <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+      <!--process cooling-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('process-cooling', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('process-cooling', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/process-cooling-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'process-cooling'" aria-haspopup="true" role="menuitem">
+          Process Cooling <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+      <!--process heating-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('process-heating', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('process-heating', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/process-heating-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'process-heating'" aria-haspopup="true" role="menuitem">
+          Process Heating <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+      <!--pumps-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('pumps', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('pumps', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/pumps-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'pumps'" aria-haspopup="true" role="menuitem">
+          Pumps <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+      <!--steam-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('steam', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('steam', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/steam-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'steam'" aria-haspopup="true" role="menuitem">
+          Steam <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+      <!--wastewater-->
+      <div class="calc-group"
+           (mouseenter)="onCatEnter('wastewater', $event)" (mouseleave)="onCatLeave()"
+           (focusin)="onCatFocusIn('wastewater', $event)" (focusout)="onCatFocusOut($event)">
+        <a class="sidebar-item" [routerLink]="['/calculators/waste-water-list']"
+           collapseSidebarDirective routerLinkActive="selected"
+           [attr.aria-expanded]="activeCategory === 'wastewater'" aria-haspopup="true" role="menuitem">
+          Wastewater <i class="fa fa-chevron-right calc-arrow"></i>
+        </a>
+      </div>
+
+    </div>
+  }
+
+  <!-- Level 2: calculator flyout -->
+  @if (activeCategory) {
+    <div class="calc-flyout calc-flyout-cat"
+         [style.top.px]="catFlyoutTop" [style.left.px]="catFlyoutLeft"
+         role="menu"
+         (mouseenter)="onCatFlyoutEnter()" (mouseleave)="onCatFlyoutLeave()">
+
+      @if (activeCategory === 'general') {
+        <a [routerLink]="['/calculators/unit-converter']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Unit Converter</a>
+        <a [routerLink]="['/calculators/combined-heat-power']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Combined Heat and Power</a>
+        <a [routerLink]="['/calculators/cash-flow']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Cash Flow</a>
+        <a [routerLink]="['/calculators/power-factor-correction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Power Factor Correction</a>
+        <a [routerLink]="['/calculators/power-factor-triangle']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Power Factor Triangle</a>
+        @if (showOperationalImpacts()) {
+          <a [routerLink]="['/calculators/co2-conversion']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">CO<sub>2</sub> Conversion</a>
+        }
+        <a [routerLink]="['/calculators/electricity-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Electricity Reduction</a>
+        <a [routerLink]="['/calculators/natural-gas-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Natural Gas Reduction</a>
+        <a [routerLink]="['/calculators/altitude-correction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Altitude Correction</a>
+        <a [routerLink]="['/calculators/weather-bins']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Weather Bins</a>
+      }
+
+      @if (activeCategory === 'compressed-air') {
+        <a [routerLink]="['/calculators/compressed-air-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Compressed Air Reduction</a>
+        <a [routerLink]="['/calculators/compressed-air-pressure-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Compressed Air Pressure Reduction</a>
+        <a [routerLink]="['/calculators/air-leak']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Compressed Air - Leak Survey</a>
+        <a [routerLink]="['/calculators/air-flow-conversion']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Actual to Standard Airflow</a>
+        <a [routerLink]="['/calculators/bleed-test']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Bleed Test</a>
+        <a [routerLink]="['/calculators/bag-method']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Leak Loss Estimator - Bag Method</a>
+        <a [routerLink]="['/calculators/pneumatic-air']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Pneumatic Air Requirement</a>
+        <a [routerLink]="['/calculators/receiver-tank']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Receiver Tank Sizing</a>
+        <a [routerLink]="['/calculators/receiver-tank-usable-air']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Usable Air Capacity</a>
+        <a [routerLink]="['/calculators/pipe-sizing']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Pipe Sizing</a>
+        <a [routerLink]="['/calculators/air-velocity']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Velocity in the Piping</a>
+        <a [routerLink]="['/calculators/system-capacity']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">System Capacity</a>
+        <a [routerLink]="['/calculators/operating-cost']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Operation Costs</a>
+      }
+
+      @if (activeCategory === 'fans') {
+        <a [routerLink]="['/calculators/fan-system-checklist']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Fan System Optimization Checklist</a>
+        <a [routerLink]="['/calculators/fan-analysis']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Fan Traverse Analysis</a>
+        <a [routerLink]="['/calculators/fan-curve']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Fan Curve</a>
+        <a [routerLink]="['/calculators/fan-efficiency']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Fan Achievable Efficiency</a>
+      }
+
+      @if (activeCategory === 'lighting') {
+        <a [routerLink]="['/calculators/lighting-replacement']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Lighting Replacement</a>
+      }
+
+      @if (activeCategory === 'motors') {
+        <a [routerLink]="['/calculators/nema-energy-efficiency']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">NEMA Energy Efficiency</a>
+        <a [routerLink]="['/calculators/motor-performance']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Motor Performance</a>
+        <a [routerLink]="['/calculators/percent-load-estimation']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Percent Load Estimation</a>
+        <a [routerLink]="['/calculators/motor-drive']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Motor Drive Comparison</a>
+        <a [routerLink]="['/calculators/replace-existing']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Replace vs Rewind</a>
+        <a [routerLink]="['/calculators/full-load-amps']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Full-Load Amps</a>
+      }
+
+      @if (activeCategory === 'process-cooling') {
+        <a [routerLink]="['/calculators/chiller-staging']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Chiller Staging</a>
+        <a [routerLink]="['/calculators/chiller-performance']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Chiller Energy Performance and Temperature Reset</a>
+        <a [routerLink]="['/calculators/cooling-tower-basin']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Cooling Tower Basin Heater Energy</a>
+        <a [routerLink]="['/calculators/cooling-tower-fan']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Cooling Tower Fan Energy</a>
+        <a [routerLink]="['/calculators/cooling-tower']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Cooling Tower Makeup Water</a>
+        <a [routerLink]="['/calculators/fan-psychrometric']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Psychrometric Calculator</a>
+      }
+
+      @if (activeCategory === 'process-heating') {
+        <a [routerLink]="['/calculators/pre-assessment']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Pre-Assessment Screening</a>
+        <a [routerLink]="['/calculators/flue-gas']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Flue Gas Loss</a>
+        <a [routerLink]="['/calculators/charge-material']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Charge Material</a>
+        <a [routerLink]="['/calculators/fixture']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Fixture Loss</a>
+        <a [routerLink]="['/calculators/wall-loss']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Wall Loss</a>
+        <a [routerLink]="['/calculators/cooling']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Cooling Loss</a>
+        <a [routerLink]="['/calculators/atmosphere']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Atmosphere Loss</a>
+        <a [routerLink]="['/calculators/opening']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Opening Loss</a>
+        <a [routerLink]="['/calculators/leakage']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Gas Leakage Loss</a>
+        <a [routerLink]="['/calculators/waste-heat']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Waste Heat for Absorption Chillers</a>
+        <a [routerLink]="['/calculators/heat-cascading']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Heat Cascading</a>
+        <a [routerLink]="['/calculators/air-heating']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Air Heating using Flue Gas</a>
+        <a [routerLink]="['/calculators/o2-enrichment']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">O<sub>2</sub> Enrichment</a>
+        <a [routerLink]="['/calculators/energy-equivalency']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Energy Equivalency</a>
+        <a [routerLink]="['/calculators/energy-use']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Flow and Energy Used</a>
+      }
+
+      @if (activeCategory === 'pumps') {
+        <a [routerLink]="['/calculators/head-tool']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Pump Head Tool</a>
+        <a [routerLink]="['/calculators/specific-speed']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Specific Speed</a>
+        <a [routerLink]="['/calculators/achievable-efficiency']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Pump Achievable Efficiency</a>
+        <a [routerLink]="['/calculators/pump-curve']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Pump Curve</a>
+        <a [routerLink]="['/calculators/valve-energy-loss']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Valve Energy Loss</a>
+      }
+
+      @if (activeCategory === 'steam') {
+        <a [routerLink]="['/calculators/steam-properties']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Steam Properties</a>
+        <a [routerLink]="['/calculators/saturated-properties']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Saturated Properties</a>
+        <a [routerLink]="['/calculators/steam-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Steam Reduction</a>
+        <a [routerLink]="['/calculators/stack-loss']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Stack Loss</a>
+        <a [routerLink]="['/calculators/boiler']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Boiler</a>
+        <a [routerLink]="['/calculators/turbine']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Steam Turbine</a>
+        <a [routerLink]="['/calculators/pipe-insulation-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Pipe Insulation</a>
+        <a [routerLink]="['/calculators/tank-insulation-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Tank Insulation</a>
+        <a [routerLink]="['/calculators/boiler-blowdown-rate']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Boiler Blowdown Rate</a>
+        <a [routerLink]="['/calculators/deaerator']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Deaerator</a>
+        <a [routerLink]="['/calculators/flash-tank']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Flash Tank</a>
+        <a [routerLink]="['/calculators/prv']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">PRV</a>
+        <a [routerLink]="['/calculators/header']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Header</a>
+        <a [routerLink]="['/calculators/heat-loss']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Heat Loss</a>
+        <a [routerLink]="['/calculators/water-heating']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Vent Steam to Heat Water</a>
+        <a [routerLink]="['/calculators/condensing-economizer']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Heat Recovery From Condensing Heat Exchanger</a>
+        <a [routerLink]="['/calculators/feedwater-economizer']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Feedwater Economizer</a>
+      }
+
+      @if (activeCategory === 'wastewater') {
+        <a [routerLink]="['/calculators/o2-utilization-rate']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">O<sub>2</sub> Utilization Rate</a>
+        <a [routerLink]="['/calculators/state-point-analysis']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">State Point Analysis Tool</a>
+        <a [routerLink]="['/calculators/water-reduction']" collapseSidebarDirective routerLinkActive="selected" class="sidebar-item" role="menuitem">Water/Wastewater Reduction</a>
+      }
+
+    </div>
+  }
 </div>

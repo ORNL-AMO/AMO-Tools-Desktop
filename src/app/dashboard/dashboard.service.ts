@@ -22,7 +22,7 @@ export class DashboardService {
     this.updateDashboardData = new BehaviorSubject<boolean>(false);
     this.dashboardToastMessage = new BehaviorSubject<string>(undefined);
     this.createAssessment = new BehaviorSubject<boolean>(false);
-    this.sidebarX = new BehaviorSubject<number>(300);
+    this.sidebarX = new BehaviorSubject<number>(320);
     this.showCreateInventory = new BehaviorSubject<string>(undefined);
     this.showCreateDiagram = new BehaviorSubject<boolean>(false);
     this.collapseSidebar = new BehaviorSubject<boolean>(false);

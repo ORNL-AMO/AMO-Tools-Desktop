@@ -1,23 +1,37 @@
-<div [ngClass]="{'ml-0 pt-0': directory.id == 1}" >
-  <span class="sidebar-item" routerLinkActive="selected" [routerLinkActiveOptions]="{exact:true}">
-    <i class="fa" aria-hidden="true"
-      [ngClass]="{'fa-folder': directory.collapsed == true, 'fa-folder-open': !directory.collapsed}"
-      (click)="toggleDirectoryCollapse(directory)"></i>
-    <a class="ml-1" [routerLink]="['/directory-dashboard', directory.id]" (click)="navigateWithSidebarOptions('/directory-dashboard/' + directory.id)"
-      routerLinkActive="selected">{{directory.name}}</a>
-  </span>
-  <div class="directory-item"
-    *ngFor="let directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy"
-    [ngClass]="{'hidden': (directoryItem.isShown == false && directoryItem.type != 'directory') || directory.collapsed == true, 'selected-directory': directory.id == selectedDirectoryId}">
-    <app-pre-assessment-item *ngIf="directoryItem.type == 'calculator' && directoryItem.calculator.preAssessments" [directoryItem]="directoryItem">
-    </app-pre-assessment-item>
-    <app-assessment-item *ngIf="directoryItem.type == 'assessment'" [assessment]="directoryItem.assessment">
-    </app-assessment-item>
-    <app-directory-item *ngIf="directoryItem.type == 'directory'" [directory]="directoryItem.subDirectory">
-    </app-directory-item>
-    <app-inventory-item *ngIf="directoryItem.type == 'inventory'" [inventoryItem]="directoryItem.inventoryItem">
-    </app-inventory-item>
-    <app-diagram-item *ngIf="directoryItem.type == 'diagram'" [diagram]="directoryItem.diagram">
-    </app-diagram-item>
+<div [class.dir-root]="directory.id == 1">
+  <div class="dir-row">
+    <button class="dir-chevron" (click)="toggleDirectoryCollapse(directory)" type="button" [attr.aria-expanded]="!directory.collapsed">
+      <i class="fa" [class.fa-chevron-right]="directory.collapsed" [class.fa-chevron-down]="!directory.collapsed"></i>
+    </button>
+    <a class="sidebar-item dir-link"
+       [routerLink]="['/directory-dashboard', directory.id]"
+       routerLinkActive="selected"
+       (click)="navigateWithSidebarOptions('/directory-dashboard/' + directory.id)">
+      <i class="fa dir-folder-icon" [class.fa-folder]="directory.collapsed" [class.fa-folder-open]="!directory.collapsed"></i>
+      <span class="dir-label">{{directory.name}}</span>
+    </a>
+  </div>
+  <div class="dir-children" [class.dir-children-hidden]="directory.collapsed">
+    @for (directoryItem of directoryItems | directoryDashboardFilter:sortBy:filterDashboardBy; track directoryItem) {
+      <div class="directory-item"
+        [class.hidden]="directoryItem.isShown == false && directoryItem.type != 'directory'"
+        [class.selected-directory]="directory.id == selectedDirectoryId">
+        @if (directoryItem.type == 'calculator' && directoryItem.calculator.preAssessments) {
+          <app-pre-assessment-item [directoryItem]="directoryItem"></app-pre-assessment-item>
+        }
+        @if (directoryItem.type == 'assessment') {
+          <app-assessment-item [assessment]="directoryItem.assessment"></app-assessment-item>
+        }
+        @if (directoryItem.type == 'directory') {
+          <app-directory-item [directory]="directoryItem.subDirectory"></app-directory-item>
+        }
+        @if (directoryItem.type == 'inventory') {
+          <app-inventory-item [inventoryItem]="directoryItem.inventoryItem"></app-inventory-item>
+        }
+        @if (directoryItem.type == 'diagram') {
+          <app-diagram-item [diagram]="directoryItem.diagram"></app-diagram-item>
+        }
+      </div>
+    }
   </div>
 </div>

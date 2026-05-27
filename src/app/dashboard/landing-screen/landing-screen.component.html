@@ -1,191 +1,250 @@
-<div class="row justify-content-center mb-3 no-gutters">
-	<div class="col-sm-12 col-md-11">
-		<div class="d-flex flex-column">
-			<div class="p-2">
-				<app-measur>
-				</app-measur>
-			</div>
-			<p class="p-2 lead text-center mb-0 welcome-text">
-				Welcome to the most efficient way to manage and optimize your facilities' systems and equipment.
-			</p>
-		</div>
-		<hr class="my-2">
-		<p class="text-center text-help welcome-help-text">Create an assessment to model your system and find
-			opportunities
-			for efficiency or run calculations from one of our many
-			property and equipment calculators.
-			<br>Get started with one of the following options.
-			If you need help at any point along the way, click on a <a class="click-link"
-				href="https://industrialresources.ornl.gov/measur/user-guides/view-guide/MEASUR-User-Guide" target="_blank"><span class="fa fa-book"></span> User
-				Manual</a>
-			icon.
-			<br>
-			For additional tools and resources, check out ORNL's <a class="click-link"href="https://industrialresources.ornl.gov/home" target="_blank"><span class="fa fa-industry"></span> Industrial Resources</a> page. 
-		</p>
-		<div class="row">
-			<div class="col">
-				<div class="d-flex justify-content-center">
-					<div class="assessment-block top-block">
-						<div class="icon-block">
-							<div class="folder-block">
-								<span class="fa fa-folder" [routerLink]="['/directory-dashboard', 1]"></span>
-							</div>
-						</div>
-						<a [routerLink]="['/directory-dashboard', 1]" class="click-link home-link-text">View Assessments</a>
-					</div>
-					<div class="assessment-block top-block">
-						<div class="icon-block">
-							<div class="folder-block">
-								<span class="fa fa-calculator" [routerLink]="['/calculators/calculators-list']"></span>
-							</div>
-						</div>
-						<a [routerLink]="['/calculators/calculators-list']" class="click-link home-link-text">
-							Equipment Calculators</a>
-					</div>
-				</div>
-			</div>
-		</div>
-		<hr class="my-2">
-		<div class="row justify-content-center">
-			<div class="col-12">
-				<div class="d-flex flex-wrap justify-content-center">
-					<div class="assessment-block">
-						<div class="icon-block">
-							<img class="psat-image" src="assets/images/pump.png" (click)="createAssessment('Pump')">
-						</div>
-						<a (click)="createAssessment('Pump')" class="click-link home-link-text">Pump<br>
-							Assessment</a>
-					</div>
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="compressed-air">
-								<div class="compressed-air-icon">
-									<img class="ca-image" src="assets/images/ca-icon.png" (click)="createAssessment('CompressedAir')">
-								</div>
-							</div>
-						</div>
-						<a (click)="createAssessment('CompressedAir')" class="click-link home-link-text">Compressed
-							Air<br>
-							Assessment</a>
-					</div>
-					<div class="assessment-block">
-						<div class="icon-block">
-							<img class="phast-image" src="assets/images/ph.png" (click)="createAssessment('Furnace')">
-						</div>
-						<a (click)="createAssessment('Furnace')" class="click-link home-link-text">
-							Process Heating<br> Assessment</a>
-					</div>
+<div class="landing-screen">
 
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="fan-icon">
-								<img class="fan-image" src="assets/images/ico-fsat-diagram.png" (click)="createAssessment('Fan')">
-							</div>
-						</div>
-						<a (click)="createAssessment('Fan')" class="click-link home-link-text">Fan<br>
-							Assessment</a>
-					</div>
+  <!-- Header -->
+  <div class="landing-header">
+    <app-measur></app-measur>
+    <p class="landing-tagline">
+      Manage and optimize your industrial facilities' systems and equipment.
+    </p>
+  </div>
 
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="steam">
-								<img class="steam-image align-self-center" src="assets/images/ico-ssmt-diagram.png" (click)="createAssessment('Steam')">
+  <div class="landing-body">
 
-							</div>
-						</div>
-						<a (click)="createAssessment('Steam')" class="click-link home-link-text">
-							Steam<br> Assessment</a>
-					</div>
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="treasure-hunt">
-								<img class="treasure-hunt-image" src="assets/images/treasure-hunt.png" (click)="createAssessment('TreasureHunt')">
-							</div>
-						</div>
-						<a (click)="createAssessment('TreasureHunt')" class="click-link home-link-text">
-							Treasure<br> Hunt</a>
-					</div>
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="waste-water">
-								<img class="waste-water-image" src="assets/images/waste-water-icon-landing.png" (click)="createAssessment('WasteWater')">
-							</div>
-						</div>
-						<a (click)="createAssessment('WasteWater')" class="click-link home-link-text">
-							Wastewater<br> Assessment</a>
-					</div>
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="water-background">
-								<app-alert-badge [alertText]="'Beta'" [style]="{ 
-									position: 'fixed',
-    								'margin-left': '-68px',
-    								'margin-top': '-14px',
-									border: '2px solid #047334'
-									}"></app-alert-badge>
-								<img class="water-image align-self-center" src="assets/images/water-assessment-large.png" (click)="createAssessment('Water')">
-							</div>
-						</div>
-						<a (click)="createAssessment('Water')" class="click-link home-link-text">
-							Water<br> Assessment</a>
-					</div>
+    <!-- ── Top three columns ──────────────────────────────────── -->
+    <div class="top-row">
 
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="motor-inventory-background ">
-								<img class="motor-inventory-icon" src="assets/images/motor-inventory-icon.png" (click)="showCreateInventory('motorInventory')">
-							</div>
-						</div>
-						<a (click)="showCreateInventory('motorInventory')" class="click-link home-link-text">
-							Motor <br> Inventory</a>
-					</div>
+      <!-- Col 1: Quick Access -->
+      <div class="top-col">
+        <h6 class="section-label">Quick Access</h6>
+        <div class="quick-access-row">
+          <a class="quick-access-card" [routerLink]="['/directory-dashboard', 1]">
+            <div class="qa-icon qa-icon--green">
+              <span class="fa fa-folder"></span>
+            </div>
+            <div class="qa-text">
+              <div class="qa-title">View Assessments</div>
+              <div class="qa-sub">Browse your saved work</div>
+            </div>
+            <span class="fa fa-chevron-right qa-arrow"></span>
+          </a>
+          <a class="quick-access-card" [routerLink]="['/calculators/calculators-list']">
+            <div class="qa-icon qa-icon--teal">
+              <span class="fa fa-calculator"></span>
+            </div>
+            <div class="qa-text">
+              <div class="qa-title">Equipment Calculators</div>
+              <div class="qa-sub">80+ individual tools</div>
+            </div>
+            <span class="fa fa-chevron-right qa-arrow"></span>
+          </a>
+          <a class="quick-access-card" href="https://industrialresources.ornl.gov/home" target="_blank">
+            <div class="qa-icon qa-icon--gray">
+              <span class="fa fa-industry"></span>
+            </div>
+            <div class="qa-text">
+              <div class="qa-title">Industrial Resources</div>
+              <div class="qa-sub">ORNL tools and resources</div>
+            </div>
+            <span class="fa fa-external-link qa-arrow"></span>
+          </a>
+        </div>
+      </div>
 
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="pump-inventory-background ">
-								<img class="motor-inventory-icon" src="assets/images/pump-inventory-icon.png" (click)="showCreateInventory('pumpInventory')">
-							</div>
-						</div>
-						<a (click)="showCreateInventory('pumpInventory')" class="click-link home-link-text">
-							Pump <br> Inventory</a>
-					</div>
+      <!-- Col 2: Recently Opened -->
+      <div class="top-col">
+        <h6 class="section-label">Recently Opened</h6>
+        @if (recentItems.length > 0) {
+          <div class="recent-list">
+            @for (item of recentItems; track item.id) {
+              <button class="recent-card" (click)="openRecentItem(item)">
+                <div class="recent-icon" [style.background]="getItemMeta(item).gradient">
+                  <img [src]="getItemMeta(item).image" alt="">
+                </div>
+                <div class="recent-text">
+                  <div class="recent-name">{{ item.name }}</div>
+                  <div class="recent-meta">{{ getItemMeta(item).label }}&nbsp;·&nbsp;{{ formatTimeAgo(item.accessedAt) }}</div>
+                </div>
+                <span class="fa fa-chevron-right recent-arrow"></span>
+              </button>
+            }
+          </div>
+        } @else {
+          <div class="col-empty">
+            <span class="fa fa-clock-o"></span>
+            <p>Nothing opened yet</p>
+          </div>
+        }
+      </div>
 
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="compressed-air-inventory-background ">
-								<img class="motor-inventory-icon" src="assets/images/ca-inventory-icon.png" (click)="showCreateInventory('compressedAirInventory')">
-							</div>
-						</div>
-						<a (click)="showCreateInventory('compressedAirInventory')" class="click-link home-link-text">
-							Compressed Air <br> Inventory</a>
-					</div>
+      <!-- Col 3: Notifications -->
+      <div class="top-col">
+        <h6 class="section-label">Notifications</h6>
 
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="data-explorer-background">
-								<img class="data-explorer-icon" src="assets/images/data-explorer-icon.png" routerLink="/log-tool">
-							</div>
-						</div>
-						<a routerLink="/log-tool" class="click-link home-link-text">
-							Data <br> Exploration</a>
-					</div>
-					<div class="assessment-block">
-						<div class="icon-block">
-							<div class="water-background">
-								<app-alert-badge [alertText]="'Beta'" [style]="{ 
-									position: 'fixed',
-    								'margin-left': '-68px',
-    								'margin-top': '-14px',
-									border: '2px solid #047334'
-									}"></app-alert-badge>
-								<img class="water-diagram-image align-self-center" src="assets/images/water-process-diagram-large.png" (click)="createAssessment('Water')">
-							</div>
-						</div>
-						<a (click)="createDiagram('Water')" class="click-link home-link-text">
-							Water<br> Diagram</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        @if (feedItems.length === 0) {
+          <div class="feed-empty">
+            <span class="fa fa-check-circle"></span>
+            <p>You're all caught up!</p>
+          </div>
+        }
+
+        @for (item of visibleFeedItems; track item.id) {
+          <div class="feed-item" [ngClass]="'feed-item--' + item.type">
+            <div class="feed-item-header">
+              <div class="feed-item-icon">
+                <span class="fa" [ngClass]="item.icon"></span>
+              </div>
+              <div class="feed-item-title">{{ item.title }}</div>
+              <button class="feed-item-dismiss" (click)="dismissItem(item.id)" aria-label="Dismiss">
+                <span class="fa fa-times"></span>
+              </button>
+            </div>
+            <p class="feed-item-message">{{ item.message }}</p>
+            <div class="feed-item-actions">
+              @if (item.primaryActionLabel) {
+                <button class="btn btn-sm btn-primary" (click)="primaryAction(item)">
+                  {{ item.primaryActionLabel }}
+                </button>
+              }
+              @if (item.secondaryActionLabel) {
+                <button class="btn btn-sm btn-link" (click)="dismissItem(item.id)">
+                  {{ item.secondaryActionLabel }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        @if (!showAllNotifications && hiddenCount > 0) {
+          <button class="feed-show-more" (click)="toggleShowAllNotifications()">
+            <span class="fa fa-chevron-down"></span> Show {{ hiddenCount }} more
+          </button>
+        } @else if (showAllNotifications && feedItems.length > notificationsPageSize) {
+          <button class="feed-show-more feed-show-more--collapse" (click)="toggleShowAllNotifications()">
+            <span class="fa fa-chevron-up"></span> Show less
+          </button>
+        }
+      </div>
+
+    </div>
+
+    <!-- ── Assessments ─────────────────────────────────────────── -->
+    <section class="panel-section">
+      <h6 class="section-label">Create Assessment</h6>
+      <div class="item-grid">
+
+        <button class="item-card" (click)="createAssessment('Pump')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #5dade2, #2471a3)">
+            <img src="assets/images/pump.png" alt="">
+          </div>
+          <span class="item-label">Pump</span>
+        </button>
+
+        <button class="item-card" (click)="createAssessment('CompressedAir')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #d2b4de, #8e44ad)">
+            <img src="assets/images/ca-icon.png" alt="">
+          </div>
+          <span class="item-label">Compressed Air</span>
+        </button>
+
+        <button class="item-card" (click)="createAssessment('Furnace')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #f0b27a, #e67e22)">
+            <img src="assets/images/ph.png" alt="">
+          </div>
+          <span class="item-label">Process Heating</span>
+        </button>
+
+        <button class="item-card" (click)="createAssessment('Fan')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #f9e79f, #d4ac0d)">
+            <img src="assets/images/ico-fsat-diagram.png" alt="">
+          </div>
+          <span class="item-label">Fan</span>
+        </button>
+
+        <button class="item-card" (click)="createAssessment('Steam')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #fad7a0, #ca6f1e)">
+            <img src="assets/images/ico-ssmt-diagram.png" alt="">
+          </div>
+          <span class="item-label">Steam</span>
+        </button>
+
+        <button class="item-card" (click)="createAssessment('TreasureHunt')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #7f8c8d, #2c3e50)">
+            <img src="assets/images/treasure-hunt.png" alt="">
+          </div>
+          <span class="item-label">Treasure Hunt</span>
+        </button>
+
+        <button class="item-card" (click)="createAssessment('WasteWater')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #a9cce3, #2e86c1)">
+            <img src="assets/images/waste-water-icon-landing.png" alt="">
+          </div>
+          <span class="item-label">Wastewater</span>
+        </button>
+
+        <button class="item-card" (click)="createAssessment('Water')">
+          <div class="item-icon item-icon--badge" style="background: linear-gradient(160deg, #d4e2f4, #306dbe)">
+            <app-alert-badge [alertText]="'Beta'" [style]="{
+              position: 'absolute',
+              top: '-8px',
+              right: '-8px',
+              border: '2px solid #047334'
+            }"></app-alert-badge>
+            <img src="assets/images/water-assessment-large.png" alt="">
+          </div>
+          <span class="item-label">Water</span>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- Modeling Tools and Inventory -->
+    <section class="panel-section">
+      <h6 class="section-label">Modeling Tools and Inventory</h6>
+      <div class="item-grid">
+
+        <button class="item-card" (click)="createDiagram('Water')">
+          <div class="item-icon item-icon--badge" style="background: linear-gradient(160deg, #d4e2f4, #306dbe)">
+            <app-alert-badge [alertText]="'Beta'" [style]="{
+              position: 'absolute',
+              top: '-8px',
+              right: '-8px',
+              border: '2px solid #047334'
+            }"></app-alert-badge>
+            <img src="assets/images/water-process-diagram-large.png" alt="">
+          </div>
+          <span class="item-label">Water Diagram</span>
+        </button>
+
+        <a class="item-card" routerLink="/log-tool">
+          <div class="item-icon" style="background: linear-gradient(160deg, #a2d9ce, #117a65)">
+            <img src="assets/images/data-explorer-icon.png" alt="">
+          </div>
+          <span class="item-label">Data Exploration</span>
+        </a>
+
+        <button class="item-card" (click)="showCreateInventory('motorInventory')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #d5f5e3, #1e8449)">
+            <img src="assets/images/motor-inventory-icon.png" alt="">
+          </div>
+          <span class="item-label">Motor Inventory</span>
+        </button>
+
+        <button class="item-card" (click)="showCreateInventory('pumpInventory')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #aed6f1, #2471a3)">
+            <img src="assets/images/pump-inventory-icon.png" alt="">
+          </div>
+          <span class="item-label">Pump Inventory</span>
+        </button>
+
+        <button class="item-card" (click)="showCreateInventory('compressedAirInventory')">
+          <div class="item-icon" style="background: linear-gradient(160deg, #d7bde2, #7030a0)">
+            <img src="assets/images/ca-inventory-icon.png" alt="">
+          </div>
+          <span class="item-label">Compressed Air Inventory</span>
+        </button>
+
+      </div>
+    </section>
+
+  </div>
 </div>

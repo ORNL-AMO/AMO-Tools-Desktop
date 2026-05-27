@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { InventoryItem } from '../../../shared/models/inventory/inventory';
-import { Router } from '@angular/router';
 import { DashboardService } from '../../dashboard.service';
+import { InventoryType, RecentlyAccessedService } from '../../../shared/recently-accessed/recently-accessed.service';
 
 @Component({
     selector: 'app-inventory-item',
@@ -13,20 +13,21 @@ export class InventoryItemComponent implements OnInit {
   @Input()
   inventoryItem: InventoryItem;
 
-  constructor(private dashboardService: DashboardService) { }
+  constructor(private dashboardService: DashboardService, private recentlyAccessedService: RecentlyAccessedService) { }
 
   ngOnInit(): void {
   }
 
   goToInventoryItem() {
-    if (this.inventoryItem.type === 'pumpInventory') {
-      this.dashboardService.navigateWithSidebarOptions('/pump-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
-    }
-    if (this.inventoryItem.type === 'motorInventory') {
-      this.dashboardService.navigateWithSidebarOptions('/motor-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
-    }
-    if (this.inventoryItem.type === 'compressedAirInventory') {
-      this.dashboardService.navigateWithSidebarOptions('/compressed-air-inventory/' + this.inventoryItem.id, {shouldCollapse: true})
-    }
+    const type = this.inventoryItem.type as InventoryType;
+    const route = this.recentlyAccessedService.getRouteForInventory(type, this.inventoryItem.id);
+    this.recentlyAccessedService.record({
+      id: this.inventoryItem.id,
+      name: this.inventoryItem.name,
+      itemType: 'inventory',
+      inventoryType: type,
+      route
+    });
+    this.dashboardService.navigateWithSidebarOptions(route, { shouldCollapse: true });
   }
 }

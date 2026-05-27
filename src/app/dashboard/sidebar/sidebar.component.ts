@@ -1,16 +1,14 @@
-import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
-import { combineLatestWith, Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { DirectoryDashboardService } from '../directory-dashboard/directory-dashboard.service';
 import { DashboardService } from '../dashboard.service';
 import { environment } from '../../../environments/environment';
 import { ExportService } from '../../shared/import-export/export.service';
-import { ApplicationInstanceData, ApplicationInstanceDbService } from '../../indexedDb/application-instance-db.service';
-import { MeasurSurveyService } from '../../shared/measur-survey/measur-survey.service';
 import { UpdateApplicationService } from '../../shared/update-application/update-application.service';
-import { ElectronService } from '../../electron/electron.service';
 import { EmailListSubscribeService } from '../../shared/subscribe-toast/email-list-subscribe.service';
+
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
@@ -22,9 +20,7 @@ export class SidebarComponent implements OnInit {
   openModal = new EventEmitter<boolean>();
 
   versionNum: any;
-  isUpdateAvailable: boolean;
   showModal: boolean;
-  updateSub: Subscription;
   updateDashboardDataSub: Subscription;
   rootDirectory: Directory;
   selectedDirectoryId: number;
@@ -33,52 +29,37 @@ export class SidebarComponent implements OnInit {
   isSidebarCollapsed: boolean = false;
   collapseSidebarSub: Subscription;
 
-  collapsedXWidth: number = 40;
-  expandedXWidth: number = 300;
-  applicationInstanceDataSubscription: Subscription;
-  showSurveyLink: boolean;
+  collapsedXWidth: number = 48;
+  expandedXWidth: number = 350;
   showSubscribeLink: boolean;
   isEmailSubscriberSub: Subscription;
 
-  constructor(private directoryDbService: DirectoryDbService,
+  helpFlyoutActive = false;
+  helpFlyoutTop = 0;
+  helpFlyoutLeft = 0;
+  private helpHideTimer: ReturnType<typeof setTimeout> | null = null;
+
+  constructor(
+    private directoryDbService: DirectoryDbService,
     private exportService: ExportService,
     private updateApplicationService: UpdateApplicationService,
-    private measurSurveyService: MeasurSurveyService,
-    private applicationInstanceDbService: ApplicationInstanceDbService,
-    private electronService: ElectronService,
     private emailSubscribeService: EmailListSubscribeService,
-    private directoryDashboardService: DirectoryDashboardService, private dashboardService: DashboardService,
-    private cd: ChangeDetectorRef) { }
+    private directoryDashboardService: DirectoryDashboardService,
+    private dashboardService: DashboardService,
+    private cd: ChangeDetectorRef,
+    private elRef: ElementRef
+  ) { }
 
   ngOnInit() {
     this.versionNum = environment.version;
 
-    if (this.electronService.isElectron) {
-      let isUpdateAvailable: Observable<any> = this.electronService.updateAvailable
-        .pipe(
-          combineLatestWith(this.electronService.releaseData)
-        );
-
-      this.updateSub = isUpdateAvailable.subscribe(([hasUpdate, releaseData]) => {
-        this.isUpdateAvailable = hasUpdate && releaseData;
-      });
-    } else {
-      this.updateSub = this.updateApplicationService.webUpdateAvailable.subscribe(hasUpdate => {
-        this.isUpdateAvailable = hasUpdate;
-      });
-    }
-
-    this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
+    this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(_ => {
       this.rootDirectory = this.directoryDbService.getById(1);
       this.rootDirectory.collapsed = false;
     });
 
     this.selectedDirectoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(val => {
       this.selectedDirectoryId = val;
-    });
-    
-    this.applicationInstanceDataSubscription = this.applicationInstanceDbService.applicationInstanceData.subscribe((applicationData: ApplicationInstanceData) => {
-      this.showSurveyLink = !applicationData?.isSurveyDone;
     });
 
     this.isEmailSubscriberSub = this.emailSubscribeService.isSubscribed.subscribe((isSubscribed: boolean) => {
@@ -88,19 +69,78 @@ export class SidebarComponent implements OnInit {
     this.collapseSidebarSub = this.dashboardService.collapseSidebar.subscribe(shouldCollapse => {
       if (shouldCollapse !== undefined) {
         this.collapseSidebar(shouldCollapse);
-      }  
-    })
+      }
+    });
 
     this.initSidebarView();
   }
 
   ngOnDestroy() {
-    this.updateSub.unsubscribe();
     this.updateDashboardDataSub.unsubscribe();
     this.selectedDirectoryIdSub.unsubscribe();
     this.collapseSidebarSub.unsubscribe();
-    this.applicationInstanceDataSubscription.unsubscribe();
     this.isEmailSubscriberSub.unsubscribe();
+    if (this.helpHideTimer) clearTimeout(this.helpHideTimer);
+  }
+
+  onHelpEnter(event: MouseEvent) {
+    if (this.helpHideTimer) { clearTimeout(this.helpHideTimer); this.helpHideTimer = null; }
+    const el = event.currentTarget as HTMLElement;
+    const rect = el.getBoundingClientRect();
+    this.helpFlyoutTop = rect.top;
+    this.helpFlyoutLeft = rect.right;
+    this.helpFlyoutActive = true;
+    this.cd.detectChanges();
+    this.clampHelpFlyout();
+  }
+
+  private clampHelpFlyout() {
+    const flyout = this.elRef.nativeElement.querySelector('.help-flyout') as HTMLElement;
+    if (!flyout) return;
+    const pad = 8;
+    const maxTop = window.innerHeight - flyout.offsetHeight - pad;
+    if (this.helpFlyoutTop > maxTop) {
+      this.helpFlyoutTop = Math.max(pad, maxTop);
+    }
+  }
+
+  onHelpLeave() {
+    if (this.helpHideTimer) { clearTimeout(this.helpHideTimer); this.helpHideTimer = null; }
+    this.helpHideTimer = setTimeout(() => { this.helpFlyoutActive = false; }, 300);
+  }
+
+  onHelpFlyoutEnter() {
+    if (this.helpHideTimer) { clearTimeout(this.helpHideTimer); this.helpHideTimer = null; }
+  }
+
+  onHelpFlyoutLeave() {
+    if (this.helpHideTimer) { clearTimeout(this.helpHideTimer); this.helpHideTimer = null; }
+    this.helpHideTimer = setTimeout(() => { this.helpFlyoutActive = false; }, 300);
+  }
+
+  onHelpFocusIn(event: FocusEvent) {
+    if (this.helpHideTimer) { clearTimeout(this.helpHideTimer); this.helpHideTimer = null; }
+    if (this.helpFlyoutActive) return;
+    const el = event.currentTarget as HTMLElement;
+    const rect = el.getBoundingClientRect();
+    this.helpFlyoutTop = rect.top;
+    this.helpFlyoutLeft = rect.right;
+    this.helpFlyoutActive = true;
+    this.cd.detectChanges();
+    this.clampHelpFlyout();
+  }
+
+  onHelpFocusOut(event: FocusEvent) {
+    const group = event.currentTarget as HTMLElement;
+    const relatedTarget = event.relatedTarget as Node | null;
+    if (!relatedTarget || !group.contains(relatedTarget)) {
+      if (this.helpHideTimer) { clearTimeout(this.helpHideTimer); this.helpHideTimer = null; }
+      this.helpHideTimer = setTimeout(() => { this.helpFlyoutActive = false; }, 300);
+    }
+  }
+
+  onHelpEscapeKey() {
+    this.helpFlyoutActive = false;
   }
 
   downloadData() {
@@ -115,14 +155,14 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.createAssessment.next(true);
   }
 
-  showCreateInventory(){
+  showCreateInventory() {
     this.dashboardService.createAssessment.next(false);
     this.directoryDashboardService.createFolder.next(false);
     this.showNewDropdown = false;
     this.dashboardService.showCreateInventory.next('motorInventory');
   }
 
-  showCreateDiagram(){
+  showCreateDiagram() {
     this.dashboardService.createAssessment.next(false);
     this.directoryDashboardService.createFolder.next(false);
     this.dashboardService.showCreateInventory.next(undefined);
@@ -130,16 +170,11 @@ export class SidebarComponent implements OnInit {
     this.dashboardService.showCreateDiagram.next(true);
   }
 
-
-  showCreateFolder(){
+  showCreateFolder() {
     this.dashboardService.createAssessment.next(false);
     this.dashboardService.showCreateInventory.next(undefined);
     this.showNewDropdown = false;
     this.directoryDashboardService.createFolder.next(true);
-  }
-
-  showSurvey() {
-    this.measurSurveyService.showSurveyModal.next(true);
   }
 
   showSubscribeModal() {
@@ -149,15 +184,14 @@ export class SidebarComponent implements OnInit {
   initSidebarView() {
     let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
     if (totalScreenWidth < 1024) {
-      this.dashboardService.sidebarX.next(40);
+      this.dashboardService.sidebarX.next(this.collapsedXWidth);
       this.isSidebarCollapsed = true;
       this.cd.detectChanges();
-    } 
+    }
   }
 
   navigateWithSidebarOptions(url: string, shouldCollapse?: boolean) {
-    this.dashboardService.navigateWithSidebarOptions(url, {shouldCollapse: shouldCollapse})
-
+    this.dashboardService.navigateWithSidebarOptions(url, { shouldCollapse: shouldCollapse });
   }
 
   collapseSidebar(isNavigationCollapse?: boolean) {
@@ -167,31 +201,20 @@ export class SidebarComponent implements OnInit {
       this.isSidebarCollapsed = !this.isSidebarCollapsed;
     }
 
-    let totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
-    if (totalScreenWidth < 1024) {
-      this.expandedXWidth = totalScreenWidth;
-    }
-    else {
-      this.expandedXWidth = 300;
-    } 
-  
-    if (this.isSidebarCollapsed == true) {
-      this.dashboardService.sidebarX.next(this.collapsedXWidth);
-    } else {
-      this.dashboardService.sidebarX.next(this.expandedXWidth);
-    }
-    window.dispatchEvent(new Event("resize"));
-  }
+    const totalScreenWidth: number = this.dashboardService.totalScreenWidth.getValue();
+    this.expandedXWidth = totalScreenWidth < 1024 ? totalScreenWidth : 320;
 
-  openUpdateModal() {
-    this.updateApplicationService.showUpdateToast.next(true);
+    this.dashboardService.sidebarX.next(
+      this.isSidebarCollapsed ? this.collapsedXWidth : this.expandedXWidth
+    );
+    window.dispatchEvent(new Event('resize'));
   }
 
   openVersionModal() {
     this.updateApplicationService.showReleaseNotesModal.next(true);
   }
 
-  toggleNewDropdown(){
+  toggleNewDropdown() {
     this.showNewDropdown = !this.showNewDropdown;
   }
 }
