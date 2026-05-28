@@ -85,7 +85,21 @@ export class ChillerInventoryService {
     this.updateKwPerTonValidators(form, chiller.isCustomChiller);
   }
 
-    getChillerFields(formValue: Partial<ChillerInventoryItem> & { chillerCurvePoints?: ChillerCurvePoint[] }): Partial<ChillerInventoryItem> {
+  getFullLoadEfficiencyWarning(value: number): string | null {
+    if (value === null || value === undefined) {
+      return null;
+    }
+    if (value > 1.5) {
+      return 'Full Load Efficiency is usually less than 1.5 kW/ton, calculated efficiency may not be valid';
+    }
+    if (value < 0.4) {
+      return 'Full Load Efficiency must be greater than or equal to 0.4 kW/ton, calculated efficiency may not be valid';
+    }
+    return null;
+  }
+
+
+  getChillerFields(formValue: Partial<ChillerInventoryItem> & { chillerCurvePoints?: ChillerCurvePoint[] }): Partial<ChillerInventoryItem> {
     const curvePoints = formValue.chillerCurvePoints ?? [];
     const loadAtPercent = curvePoints.map(p => p.loadPercent);
     const kWPerTonAtLoad = curvePoints.map(p => p.kWPerTon);
