@@ -67,6 +67,29 @@ export class ProcessCoolingChartsService {
       }
     }));
 
+    const maxEfficiency = Math.max(...chillerOutput.flatMap(c => c.ariEfficiencyProfile.slice(1)));
+    const NUM_INTERVALS = 5;
+    let tickStep: number;
+    let yMax: number;
+    let tickformat: string;
+
+    if (maxEfficiency <= 1) {
+      yMax = parseFloat((Math.ceil(maxEfficiency * 10) / 10 + 0.02).toFixed(1));
+      tickStep = parseFloat((yMax / NUM_INTERVALS).toFixed(1));
+      tickformat = '.1f';
+    } else if (maxEfficiency <= 10) {
+      yMax = parseFloat((Math.ceil(maxEfficiency * 10) / 10 + 0.2).toFixed(1));
+      tickStep = parseFloat((yMax / NUM_INTERVALS).toFixed(1));
+      tickformat = '.1f';
+    } else if (maxEfficiency > 10) {
+      yMax = Math.ceil(maxEfficiency) + 1;
+      tickStep = yMax / NUM_INTERVALS;
+      tickformat = '.0f';
+    }
+
+    const tickvals = Array.from({ length: NUM_INTERVALS + 1 }, (_, i) => parseFloat((i * tickStep).toFixed(1)));
+    const rangeMax = tickvals[tickvals.length - 1];
+
     const layout = {
       xaxis: {
         title: { text: '% Load', font: { size: 16 } },
@@ -78,11 +101,11 @@ export class ProcessCoolingChartsService {
       yaxis: {
         title: { text: `Efficiency (${efficiencyLabel})`, font: { size: 16 } },
         rangemode: 'tozero',
-        hoverformat: '.2f',
+        hoverformat: tickformat,
         automargin: true,
-        range: [0, 1.2],
-        tickvals: [0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
-        tickformat: '.1f'
+        range: [0, rangeMax],
+        tickvals,
+        tickformat,
       },
       margin: { t: 20, r: 20, l: 60, b: 60 },
       legend: {

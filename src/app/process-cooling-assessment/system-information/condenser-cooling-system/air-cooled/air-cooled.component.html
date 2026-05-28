@@ -6,7 +6,7 @@
 </div>
 <form class="pl-3 pr-3" [formGroup]="form" #formElement>
   <div class="form-group">
-    <label for="{{controlIds.outdoorAirTemp}}">Outdoor Air Temperature</label>
+    <label for="{{controlIds.outdoorAirTemp}}">Design Outdoor Air Temperature</label>
     <div class="input-group">
       <input name="outdoorAirTemp" type="number" step="any" class="form-control" id="{{controlIds.outdoorAirTemp}}"
         formControlName="outdoorAirTemp" (focus)="focusField('outdoorAirTemp')">
