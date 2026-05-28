@@ -52,11 +52,10 @@
           <h5>
             Pneumatic Air Requirement Help
             <br>
-            <small class="text-muted"> This calculator helps in computing the quantity of air required by a specific
-              single acting or a double acting piston cylinder compressor. The design specs of the compressor are
-              entered
-              in the calculator and the
-              quantity of air needed is generated.
+            <small class="text-muted">
+              This calculator determines the volume of compressed air consumed per minute by a pneumatic cylinder.
+              Select the piston configuration (single-acting or double-acting), enter the cylinder dimensions,
+              operating pressure, and cycle rate to compute the free-air equivalent consumption.
             </small>
           </h5>
           <hr class="my-1 hr-spacer">
@@ -66,7 +65,12 @@
               Piston Type
               <br>
               <small class="text-muted">
-                Select either 'Single Acting' or 'Double Acting' depending on the type of pneumatic cylinder.
+                Select either <strong>Single Acting</strong> or <strong>Double Acting</strong> depending on the type of
+                pneumatic cylinder.
+                A single-acting cylinder uses compressed air on one side of the piston only — the return stroke is
+                driven by a spring or gravity.
+                A double-acting cylinder uses compressed air on both sides of the piston, providing powered motion in
+                both directions.
                 <hr>
               </small>
             </h6>
@@ -77,18 +81,8 @@
               Cylinder Diameter
               <br>
               <small class="text-muted">
-                Inner diameter of the cylinder.
-                <hr>
-              </small>
-            </h6>
-          </div>
-
-          <div class="my-2" *ngIf="currentField == 'airPressure'">
-            <h6>
-              Air Pressure
-              <br>
-              <small class="text-muted">
-                Pressure of the air supplied to cylinder.
+                Inner bore diameter of the cylinder. This is the inside diameter of the cylinder barrel through which
+                the piston travels.
                 <hr>
               </small>
             </h6>
@@ -99,7 +93,8 @@
               Cylinder Stroke
               <br>
               <small class="text-muted">
-                Distance that the piston can travel inside a cylinder.
+                Piston travel distance per stroke — the distance the piston moves from one end of its travel to the
+                other.
                 <hr>
               </small>
             </h6>
@@ -110,20 +105,42 @@
               Piston Rod Diameter
               <br>
               <small class="text-muted">
-                Diameter of the piston rod (required only in case of a double acting cylinder).
+                Diameter of the piston rod (required only for a double-acting cylinder).
+                The rod-side stroke has a smaller effective piston area because the piston rod occupies part of the bore
+                cross-section.
                 <hr>
               </small>
             </h6>
           </div>
+
+          <div class="my-2" *ngIf="currentField == 'airPressure'">
+            <h6>
+              Air Pressure
+              <br>
+              <small class="text-muted">
+                Operating gauge pressure at the cylinder inlet. This is the pressure of the compressed air supplied to
+                the cylinder.
+                <hr>
+              </small>
+            </h6>
+          </div>
+
           <div class="my-2" *ngIf="currentField == 'cyclesPerMinute'">
             <h6>
               Cycles Per Minute
               <br>
               <small class="text-muted">
-                Number of cycles (1 cycle is a combination of 2 strokes of a piston) by the crankshaft in a minute.
+                Number of complete cycles per minute. One complete cycle consists of the piston traveling in both
+                directions (extend and retract).
                 <hr>
               </small>
             </h6>
+          </div>
+          <div class="my-2">
+            <a class="click-link" [href]="docsLink + 'group__pneumatic__air__requirement__calculator'" target="_blank">
+              <span class="fa fa-external-link"></span>
+              <span class="pl-1">How is Pneumatic Air Requirement calculated?</span>
+            </a>
           </div>
         </div>
       </div>
