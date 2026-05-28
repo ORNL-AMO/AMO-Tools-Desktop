@@ -472,4 +472,26 @@ export class SuiteApiHelperService {
         return this.toolsSuiteApiService.ToolsSuiteModule.SteamUtilityType.Other;
     }
   }
+
+  getCompressedAirMeasurementMethodEnum(method: number) {
+    switch (method) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.FlowMeter;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.Bag;
+      case 2:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.Pressure;
+      case 3:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.Other;
+    }
+  }
+
+  getCompressedAirUtilityTypeEnum(utilityType: number) {
+    switch (utilityType) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirUtilityType.CompressedAir;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirUtilityType.Electricity;
+    }
+  }
 }

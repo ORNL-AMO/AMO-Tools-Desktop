@@ -412,7 +412,7 @@ export interface CompressedAirReductionResult {
   energyUse: number,
   energyCost: number,
   flowRate: number,
-  singleNozzeFlowRate: number,
+  singleNozzleFlowRate: number,
   consumption: number
 };
 //===== END compressed air reduction objects =====
