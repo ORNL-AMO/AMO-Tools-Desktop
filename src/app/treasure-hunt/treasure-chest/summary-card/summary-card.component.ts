@@ -36,7 +36,7 @@ export class SummaryCardComponent implements OnInit {
   carbonData: UtilityTotal;
   carbonResults: TreasureHuntCo2EmissionsResults;
   treasureHuntResults: TreasureHuntResults;
-
+  hasNegativeCost: boolean = false;
   totals: UtilityTotal;
   opportunityCardsSub: Subscription;
   sortBySub: Subscription;
@@ -58,32 +58,6 @@ export class SummaryCardComponent implements OnInit {
       this.sortCardsData = val;
       this.setSavingsData();
     })
-  }
-
-  hasNegativeModificationCost(): boolean {
-    let hasNegativeCost = false;
-    let allModificationCosts = [
-      this.electricityData?.modificationCost,
-      this.naturalGasData?.modificationCost,
-      this.waterData?.modificationCost,
-      this.compressedAirData?.modificationCost,
-      this.steamData?.modificationCost,
-      this.wasteWaterData?.modificationCost,
-      this.otherFuelData?.modificationCost,
-      this.additionalAnnualSavings?.modificationCost
-    ];
-    if (this.opportunityCards) {
-      this.opportunityCards.forEach(card => {
-        if (card.selected) {
-          allModificationCosts.forEach(cost => {
-            if (cost != null && cost < 0) {
-              hasNegativeCost = true;
-            }
-          });
-        }
-      });
-    }
-    return hasNegativeCost;
   }
 
 
@@ -130,6 +104,18 @@ export class SummaryCardComponent implements OnInit {
         baselineCost: baselineCost,
         modificationCost: baselineCost - totalCostSavings
       };
+
+      const allModificationCosts = [
+        this.electricityData?.modificationCost,
+        this.naturalGasData?.modificationCost,
+        this.waterData?.modificationCost,
+        this.compressedAirData?.modificationCost,
+        this.steamData?.modificationCost,
+        this.wasteWaterData?.modificationCost,
+        this.otherFuelData?.modificationCost,
+        this.additionalAnnualSavings?.modificationCost
+      ];
+      this.hasNegativeCost = allModificationCosts.some(cost => cost != null && cost < 0);
     }
   }
 
