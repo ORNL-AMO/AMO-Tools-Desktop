@@ -117,24 +117,21 @@ export class StandaloneSuiteApiService {
     input.efficiencyUnloaded = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.efficiencyUnloaded);
     input.costOfElectricity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.costOfElectricity);
 
-    let OperatingCost = new this.toolsSuiteApiService.ToolsSuiteModule.OperatingCost(
-      input.motorBhp,
-      input.bhpUnloaded,
-      input.annualOperatingHours,
-      input.runTimeLoaded,
-      input.efficiencyLoaded,
-      input.efficiencyUnloaded,
-      input.costOfElectricity
-    );
-    let output = OperatingCost.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.calculateOperatingCost({
+      motorBhp: input.motorBhp,
+      bhpUnloaded: input.bhpUnloaded,
+      annualOperatingHours: input.annualOperatingHours,
+      runTimeLoaded: input.runTimeLoaded,
+      efficiencyLoaded: input.efficiencyLoaded,
+      efficiencyUnloaded: input.efficiencyUnloaded,
+      costOfElectricity: input.costOfElectricity,
+    });
     let results: OperatingCostOutput = {
       runTimeUnloaded: output.runTimeUnloaded,
       costForLoaded: output.costForLoaded,
       costForUnloaded: output.costForUnloaded,
       totalAnnualCost: output.totalAnnualCost,
     }
-    output.delete();
-    OperatingCost.delete();
     return results;
   }
 
