@@ -3,7 +3,8 @@ import { ProcessCoolingAssessmentService } from '../services/process-cooling-ass
 import { map, Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
-import { MAIN_VIEW_LINKS, MainView, ProcessCoolingUiService, ViewLink } from '../services/process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { MAIN_VIEW_LINKS, MainView, ViewLink } from '../models/views';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalDialogService } from '../../shared/modal-dialog.service';

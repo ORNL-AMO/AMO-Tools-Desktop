@@ -1,5 +1,6 @@
 import { Component, inject, Injector, Signal } from '@angular/core';
-import { ASSESSMENT_VIEW_LINKS, ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { ASSESSMENT_VIEW_LINKS } from '../models/views';
 import { Modification } from '../../shared/models/process-cooling-assessment';
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { ModificationService } from '../services/modification.service';
