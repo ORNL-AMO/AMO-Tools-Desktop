@@ -1,11 +1,29 @@
 import { Injectable } from '@angular/core';
 import { ProcessCoolingChillerOutput } from '../../shared/models/process-cooling-assessment';
+import { TraceData } from '../../shared/models/plotting';
+import { graphColors } from '../../shared/graphColors';
+import { defaultPlotlyConfig } from '../../shared/helperFunctions';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 
 export interface PlotlyChartConfig {
-  traces: any[];
+  traces: TraceData[];
   layout: any;
   config: any;
+}
+
+
+const MARKER_SHAPES: Array<string> = [
+  'star', 'star-diamond', 'hexagram', 'star-square', 'square',
+  'diamond', 'cross', 'x', 'diamond-wide', 'diamond-tall'
+];
+const CHILLER_FILL_ALPHA = 0.07;
+const CHILLER_DASH_PATTERNS: Array<string> = ['solid', 'dash', 'dot', 'dashdot', 'longdash', 'longdashdot'];
+
+function hexToRgba(hex: string, alpha: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -14,19 +32,40 @@ export class ProcessCoolingChartsService {
   buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[]): PlotlyChartConfig {
     const efficiencyLabel = PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial;
 
-    const traces = chillerOutput.map((chiller) => {
+    const traces: TraceData[] = chillerOutput.map((chiller, index) => {
+      const color = graphColors[index % graphColors.length];
+      const dash = CHILLER_DASH_PATTERNS[index % CHILLER_DASH_PATTERNS.length];
+      const fillColor = hexToRgba(color, CHILLER_FILL_ALPHA);
       return {
         x: chiller.loadPercents.slice(1),
         y: chiller.ariEfficiencyProfile.slice(1),
         type: 'scatter',
         mode: 'lines+markers',
         name: chiller.name,
-        marker: { size: 8 },
-        line: {
-          width: 3, dash: 'dot',
-        },
-        hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`,
-      }});
+        marker: { size: 12, color, symbol: MARKER_SHAPES[index % MARKER_SHAPES.length], line: { color: '#ffffff', width: 1.5 } },
+        line: { width: 2, dash, color },
+        fill: 'tozeroy',
+        fillcolor: fillColor,
+        hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`
+      };
+    });
+
+    const haloTraces: TraceData[] = traces.map(trace => ({
+      x: trace.x,
+      y: trace.y,
+      type: 'scatter',
+      mode: 'markers',
+      name: trace.name,
+      showlegend: false,
+      hoverinfo: 'skip',
+      marker: {
+        size: 22,
+        symbol: 'circle-open',
+        color: trace.marker.color,
+        line: { color: trace.marker.color as string, width: 1.5 },
+        opacity: 0.45,
+      }
+    }));
 
     const maxEfficiency = Math.max(...chillerOutput.flatMap(c => c.ariEfficiencyProfile.slice(1)));
     const NUM_INTERVALS = 5;
@@ -57,7 +96,7 @@ export class ProcessCoolingChartsService {
         range: [0, 100],
         dtick: 10,
         ticksuffix: '%',
-        automargin: true,
+        automargin: true
       },
       yaxis: {
         title: { text: `Efficiency (${efficiencyLabel})`, font: { size: 16 } },
@@ -76,15 +115,11 @@ export class ProcessCoolingChartsService {
         }
       },
       showlegend: true,
-      hovermode: 'closest',
-      responsive: true,
+      hovermode: 'closest'
     };
 
-    const config = {
-      responsive: true,
-      displaylogo: false,
-    };
+    const config = defaultPlotlyConfig(undefined, 'scatter');
 
-    return { traces, layout, config };
+    return { traces: [...traces, ...haloTraces], layout, config };
   }
 }

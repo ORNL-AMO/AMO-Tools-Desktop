@@ -17,7 +17,6 @@ export class ChillerProfileChartComponent {
   private chartsService = inject(ProcessCoolingChartsService);
 
   chartRef = viewChild<ElementRef<HTMLDivElement>>('chillerProfileChart');
-
   selectedChillerId = input<string | null | undefined>();
   private baselineResults = toSignal(this.processCoolingResultsService.baselineResults$);
 
@@ -32,6 +31,7 @@ export class ChillerProfileChartComponent {
 
       if (!filteredChillers.length) return;
       const { traces, layout, config } = this.chartsService.buildChillerProfileChart(filteredChillers);
+
       this.plotlyService.newPlot(nativeElement, traces, layout, config);
     });
   }
