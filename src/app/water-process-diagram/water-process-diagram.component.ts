@@ -10,6 +10,7 @@ import { Settings } from '../shared/models/settings';
 import { Diagram } from '../shared/models/diagram';
 import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
 import { WaterDiagram } from 'process-flow-lib';
+import { WaterAssessmentService } from '../water/water-assessment.service';
 
 @Component({
   selector: 'app-water-process-diagram',
@@ -47,7 +48,8 @@ export class WaterProcessDiagramComponent {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private analyticsService: AnalyticsService) { }
+    private analyticsService: AnalyticsService,
+    private waterAssessmentService: WaterAssessmentService) { }
 
   ngOnInit() {
     // * diagram does not yet support mobile/touch for the drag and drop functions
@@ -174,5 +176,15 @@ export class WaterProcessDiagramComponent {
   goToAssessment() {
     let url: string = `/water/${this.diagram.assessmentId}`;
     this.router.navigate([url]);
+  }
+
+  returnFromMobileUnavailable() {
+    let assessmentMatch = this.router.url.match(/\/water\/(\d+)(\/|$)/);
+    if (assessmentMatch && assessmentMatch[1]) {
+      this.waterAssessmentService.mainTab.next('baseline');
+      this.router.navigate(['/water', assessmentMatch[1]]);
+      return;
+    }
+    this.router.navigate(['/landing-screen']);
   }
 }
