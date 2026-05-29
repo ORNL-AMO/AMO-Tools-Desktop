@@ -15,6 +15,9 @@ export class TreasureHuntGaugeComponent implements OnInit {
   @Input()
   chartWidth: number;
 
+  @Input()
+  showErrorIcon: boolean = false;
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     this.initChart();
