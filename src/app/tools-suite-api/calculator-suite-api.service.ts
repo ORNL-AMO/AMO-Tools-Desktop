@@ -225,97 +225,63 @@ export class CalculatorSuiteApiService {
    * @returns AirLeakSurveyResult - units described above
    */
   compressedAirLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
-    let convertedInput: Array<AirLeakSurveyData> = inputObj.compressedAirLeakSurveyInputVec.map(input => {
+    const inputs = inputObj.compressedAirLeakSurveyInputVec.map((airLeakSurvey: AirLeakSurveyData) => {
+      // make TH backwards compatible. hours are undefined in update-data service.
+      const operatingTime = airLeakSurvey.bagMethodData.operatingTime ? airLeakSurvey.bagMethodData.operatingTime : inputObj.facilityCompressorData.hoursPerYear;
 
-      // TODO all methods should not calculate if missing required props
-      input.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagFillTime);
-      input.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.bagMethodData.bagVolume);
-
-      // estimate method
-      input.estimateMethodData.leakRateEstimate = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.estimateMethodData.leakRateEstimate);
-      // orifice method
-      input.orificeMethodData.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.atmosphericPressure);
-      input.orificeMethodData.compressorAirTemp = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.compressorAirTemp);
-      input.orificeMethodData.dischargeCoefficient = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.dischargeCoefficient);
-      input.orificeMethodData.numberOfOrifices = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.numberOfOrifices);
-      input.orificeMethodData.orificeDiameter = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.orificeDiameter);
-      input.orificeMethodData.supplyPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.orificeMethodData.supplyPressure);
-
-      input.decibelsMethodData.decibelRatingA = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.decibelRatingA);
-      input.decibelsMethodData.decibelRatingB = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.decibelRatingB);
-      input.decibelsMethodData.decibels = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.decibels);
-      input.decibelsMethodData.firstFlowA = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.firstFlowA);
-      input.decibelsMethodData.firstFlowB = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.firstFlowB);
-      input.decibelsMethodData.linePressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.linePressure);
-      input.decibelsMethodData.pressureA = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.pressureA);
-      input.decibelsMethodData.pressureB = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.pressureB);
-      input.decibelsMethodData.secondFlowA = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.secondFlowA);
-      input.decibelsMethodData.secondFlowB = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.decibelsMethodData.secondFlowB);
-      return input;
-    });
-    let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirLeakSurveyInputV();
-
-    convertedInput.forEach((airLeakSurvey: AirLeakSurveyData) => {
-      let EstimateMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.EstimateMethodData(airLeakSurvey.estimateMethodData.leakRateEstimate);
-      airLeakSurvey.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagFillTime);
-      airLeakSurvey.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagVolume);
-
-      // make TH backwards compatible. hours are undefined in update-data service. There is probably a bug in TH init for air leak daa 
-      let operatingTime = airLeakSurvey.bagMethodData.operatingTime ? airLeakSurvey.bagMethodData.operatingTime : inputObj.facilityCompressorData.hoursPerYear;
-      // hardcoded 1 - always calculate as single unit
-      let BagMethodInput = {
-        operatingTime: operatingTime,
-        bagFillTime: airLeakSurvey.bagMethodData.bagFillTime,
-        bagVolume: airLeakSurvey.bagMethodData.bagVolume,
-        numberOfUnits: 1
+      return {
+        hoursPerYear: inputObj.facilityCompressorData.hoursPerYear,
+        utilityType: inputObj.facilityCompressorData.utilityType,
+        utilityCost: inputObj.facilityCompressorData.utilityCost,
+        measurementMethod: airLeakSurvey.measurementMethod,
+        estimateMethodInput: {
+          operatingTime: inputObj.facilityCompressorData.hoursPerYear,
+          leakRateEstimate: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.estimateMethodData.leakRateEstimate),
+        },
+        decibelsMethodInput: {
+          operatingTime: 0,
+          linePressure: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.linePressure),
+          decibels: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.decibels),
+          decibelRatingA: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.decibelRatingA),
+          pressureA: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.pressureA),
+          firstFlowA: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.firstFlowA),
+          secondFlowA: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.secondFlowA),
+          decibelRatingB: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.decibelRatingB),
+          pressureB: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.pressureB),
+          firstFlowB: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.firstFlowB),
+          secondFlowB: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.decibelsMethodData.secondFlowB),
+        },
+        // hardcoded numberOfUnits: 1 - always calculate as single unit
+        bagMethodInput: {
+          operatingTime: operatingTime,
+          bagFillTime: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagFillTime),
+          bagVolume: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.bagMethodData.bagVolume),
+          numberOfUnits: 1,
+        },
+        orificeMethodInput: {
+          operatingTime: 0,
+          airTemp: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.orificeMethodData.compressorAirTemp),
+          atmPressure: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.orificeMethodData.atmosphericPressure),
+          dischargeCoef: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.orificeMethodData.dischargeCoefficient),
+          diameter: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.orificeMethodData.orificeDiameter),
+          supplyPressure: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.orificeMethodData.supplyPressure),
+          numOrifices: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.orificeMethodData.numberOfOrifices),
+        },
+        compressorElectricityData: {
+          compressorControlAdjustment: inputObj.facilityCompressorData.compressorElectricityData.compressorControlAdjustment,
+          compressorSpecificPower: inputObj.facilityCompressorData.compressorElectricityData.compressorSpecificPower,
+        },
+        units: airLeakSurvey.units,
       };
-      let DecibelsMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.DecibelsMethodData(airLeakSurvey.decibelsMethodData.linePressure,
-        airLeakSurvey.decibelsMethodData.decibels, airLeakSurvey.decibelsMethodData.decibelRatingA, airLeakSurvey.decibelsMethodData.pressureA,
-        airLeakSurvey.decibelsMethodData.firstFlowA, airLeakSurvey.decibelsMethodData.secondFlowA, airLeakSurvey.decibelsMethodData.decibelRatingB,
-        airLeakSurvey.decibelsMethodData.pressureB, airLeakSurvey.decibelsMethodData.firstFlowB, airLeakSurvey.decibelsMethodData.secondFlowB);
-
-      let OrificeMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.OrificeMethodData(airLeakSurvey.orificeMethodData.compressorAirTemp,
-        airLeakSurvey.orificeMethodData.atmosphericPressure, airLeakSurvey.orificeMethodData.dischargeCoefficient,
-        airLeakSurvey.orificeMethodData.orificeDiameter, airLeakSurvey.orificeMethodData.supplyPressure, airLeakSurvey.orificeMethodData.numberOfOrifices);
-
-      let CompressorElectricityData = {
-        compressorControlAdjustment: inputObj.facilityCompressorData.compressorElectricityData.compressorControlAdjustment,
-        compressorSpecificPower: inputObj.facilityCompressorData.compressorElectricityData.compressorSpecificPower
-      }
-
-      let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirLeakSurveyInput(
-        inputObj.facilityCompressorData.hoursPerYear,
-        inputObj.facilityCompressorData.utilityType,
-        inputObj.facilityCompressorData.utilityCost,
-        airLeakSurvey.measurementMethod,
-        EstimateMethodData,
-        DecibelsMethodData,
-        BagMethodInput,
-        OrificeMethodData,
-        CompressorElectricityData,
-        airLeakSurvey.units
-      );
-      inputs.push_back(wasmConvertedInput);
-
-      wasmConvertedInput.delete();
-      EstimateMethodData.delete();
-      DecibelsMethodData.delete();
-      OrificeMethodData.delete();
     });
 
-    let CompressedAirLeakSurveyCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirLeakSurvey(inputs);
-    let output = CompressedAirLeakSurveyCalculator.calculate();
-    let results: AirLeakSurveyResult = {
+    const output = this.toolsSuiteApiService.ToolsSuiteModule.calculateCompressedAirLeakSurvey(inputs);
+    return {
       totalFlowRate: output.totalFlowRate,
       annualTotalFlowRate: output.annualTotalFlowRate,
       annualTotalElectricity: output.annualTotalElectricity,
       annualTotalElectricityCost: output.annualTotalElectricityCost,
-    }
-
-    output.delete();
-    CompressedAirLeakSurveyCalculator.delete();
-    inputs.delete();
-    return results;
+    };
   }
 
 
