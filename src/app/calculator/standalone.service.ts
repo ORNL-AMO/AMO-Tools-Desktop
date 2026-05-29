@@ -239,7 +239,7 @@ export class StandaloneService {
     let inputCpy: PipeSizingInput = JSON.parse(JSON.stringify(input));
     if (settings.unitsOfMeasure === 'Metric') {
       //metric: m3 imperial: ft3
-      inputCpy.airFlow = this.convertUnitsService.value(inputCpy.airFlow).from('m3').to('ft3');
+      inputCpy.airflow = this.convertUnitsService.value(inputCpy.airflow).from('m3').to('ft3');
       //metric: kPa imperial: psi
       inputCpy.airlinePressure = this.convertUnitsService.value(inputCpy.airlinePressure).from('kPa').to('psi');
       //metric:kpaa imperial:psia

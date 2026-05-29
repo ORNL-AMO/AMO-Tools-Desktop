@@ -56,7 +56,7 @@
           </h5>
           <hr class="my-1 hr-spacer">
 
-          <div class="my-2" *ngIf="currentField == 'airFlow'">
+          <div class="my-2" *ngIf="currentField == 'airflow'">
             <h6>
               Air Flow
               <br>
@@ -125,6 +125,13 @@
                 }
               </small>
             </h6>
+          </div>
+
+          <div class="my-2">
+            <a class="click-link" [href]="docsLink + 'html/group__pipe__sizing__calculator.html'" target="_blank">
+              <span class="fa fa-external-link"></span>
+              <span class="pl-1">How is pipe sizing calculated?</span>
+            </a>
           </div>
         </div>
       </div>
