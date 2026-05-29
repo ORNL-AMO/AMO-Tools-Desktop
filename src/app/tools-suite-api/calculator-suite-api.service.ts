@@ -263,7 +263,12 @@ export class CalculatorSuiteApiService {
       // make TH backwards compatible. hours are undefined in update-data service. There is probably a bug in TH init for air leak daa 
       let operatingTime = airLeakSurvey.bagMethodData.operatingTime ? airLeakSurvey.bagMethodData.operatingTime : inputObj.facilityCompressorData.hoursPerYear;
       // hardcoded 1 - always calculate as single unit
-      let BagMethod = new this.toolsSuiteApiService.ToolsSuiteModule.BagMethod(operatingTime, airLeakSurvey.bagMethodData.bagFillTime, airLeakSurvey.bagMethodData.bagVolume, 1);
+      let BagMethodInput = {
+        operatingTime: operatingTime,
+        bagFillTime: airLeakSurvey.bagMethodData.bagFillTime,
+        bagVolume: airLeakSurvey.bagMethodData.bagVolume,
+        numberOfUnits: 1
+      };
       let DecibelsMethodData = new this.toolsSuiteApiService.ToolsSuiteModule.DecibelsMethodData(airLeakSurvey.decibelsMethodData.linePressure,
         airLeakSurvey.decibelsMethodData.decibels, airLeakSurvey.decibelsMethodData.decibelRatingA, airLeakSurvey.decibelsMethodData.pressureA,
         airLeakSurvey.decibelsMethodData.firstFlowA, airLeakSurvey.decibelsMethodData.secondFlowA, airLeakSurvey.decibelsMethodData.decibelRatingB,
@@ -285,7 +290,7 @@ export class CalculatorSuiteApiService {
         airLeakSurvey.measurementMethod,
         EstimateMethodData,
         DecibelsMethodData,
-        BagMethod,
+        BagMethodInput,
         OrificeMethodData,
         CompressorElectricityData,
         airLeakSurvey.units
@@ -295,7 +300,6 @@ export class CalculatorSuiteApiService {
       wasmConvertedInput.delete();
       EstimateMethodData.delete();
       DecibelsMethodData.delete();
-      BagMethod.delete();
       OrificeMethodData.delete();
     });
 
