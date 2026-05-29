@@ -177,7 +177,7 @@ export interface BleedTestInput {
 }
 
 export interface PipeSizingInput {
-  airflow: number;
+  airFlow: number;
   airlinePressure: number;
   designVelocity: number;
   atmosphericPressure: number;
