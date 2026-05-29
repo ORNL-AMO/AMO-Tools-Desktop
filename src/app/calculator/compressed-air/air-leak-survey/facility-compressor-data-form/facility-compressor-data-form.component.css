@@ -24,8 +24,11 @@
 
 .group-label-wide {
   width: 100%;
-  border-bottom: #145A32 solid 2px;
+  border-bottom: var(--compressed-air) solid 2px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding: 4px 0 6px;
 }
 
 .input-group-prepend{

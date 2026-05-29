@@ -1,6 +1,6 @@
 import {
   Component, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy,
-  inject, effect, untracked, input,
+  inject, effect, untracked, input, computed,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
@@ -40,6 +40,12 @@ export class AirLeakSurveyFormComponent implements OnDestroy {
 
   readonly LeakMeasurementMethod = LeakMeasurementMethod;
   readonly measurementMethods = measurementMethods;
+
+  protected readonly currentLeakName = computed(() => {
+    const index = this.surveyService.currentLeakIndex();
+    const input = this.surveyService.airLeakInput();
+    return input?.compressedAirLeakSurveyInputVec[index]?.name ?? '';
+  });
 
   private formChangeSub: Subscription | null = null;
 
