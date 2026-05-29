@@ -273,9 +273,10 @@ export class CalculatorSuiteApiService {
         airLeakSurvey.orificeMethodData.atmosphericPressure, airLeakSurvey.orificeMethodData.dischargeCoefficient,
         airLeakSurvey.orificeMethodData.orificeDiameter, airLeakSurvey.orificeMethodData.supplyPressure, airLeakSurvey.orificeMethodData.numberOfOrifices);
 
-      // todo convert for nulls like above
-      let CompressorElectricityData = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorElectricityData(inputObj.facilityCompressorData.compressorElectricityData.compressorControlAdjustment,
-        inputObj.facilityCompressorData.compressorElectricityData.compressorSpecificPower);
+      let CompressorElectricityData = {
+        compressorControlAdjustment: inputObj.facilityCompressorData.compressorElectricityData.compressorControlAdjustment,
+        compressorSpecificPower: inputObj.facilityCompressorData.compressorElectricityData.compressorSpecificPower
+      }
 
       let wasmConvertedInput = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirLeakSurveyInput(
         inputObj.facilityCompressorData.hoursPerYear,
@@ -296,7 +297,6 @@ export class CalculatorSuiteApiService {
       DecibelsMethodData.delete();
       BagMethod.delete();
       OrificeMethodData.delete();
-      CompressorElectricityData.delete();
     });
 
     let CompressedAirLeakSurveyCalculator = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirLeakSurvey(inputs);
