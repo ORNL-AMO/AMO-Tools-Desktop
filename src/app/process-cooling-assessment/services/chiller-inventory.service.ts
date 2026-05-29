@@ -90,10 +90,10 @@ export class ChillerInventoryService {
       return null;
     }
     if (value > 1.5) {
-      return 'Full Load Efficiency is usually less than 1.5 kW/ton, calculated efficiency may not be valid';
+      return 'Full Load Efficiency is usually less than 1.5 kW/ton';
     }
     if (value < 0.4) {
-      return 'Full Load Efficiency must be greater than or equal to 0.4 kW/ton, calculated efficiency may not be valid';
+      return 'Full Load Efficiency must be greater than or equal to 0.4 kW/ton';
     }
     return null;
   }

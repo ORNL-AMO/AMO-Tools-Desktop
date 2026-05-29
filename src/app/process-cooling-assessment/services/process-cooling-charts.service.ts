@@ -73,10 +73,11 @@ export class ProcessCoolingChartsService {
     let yMax: number;
     let tickformat: string;
 
-    if (maxEfficiency <= 1) {
-      yMax = parseFloat((Math.ceil(maxEfficiency * 10) / 10 + 0.02).toFixed(1));
-      tickStep = parseFloat((yMax / NUM_INTERVALS).toFixed(1));
-      tickformat = '.1f';
+ if (maxEfficiency <= 1) {
+      yMax = parseFloat((Math.ceil(maxEfficiency * 10) / 10 + 0.02).toFixed(2));
+      tickStep = parseFloat((yMax / NUM_INTERVALS).toFixed(2));
+      if (tickStep === 0) tickStep = 0.01;
+      tickformat = '.2f';
     } else if (maxEfficiency <= 10) {
       yMax = parseFloat((Math.ceil(maxEfficiency * 10) / 10 + 0.2).toFixed(1));
       tickStep = parseFloat((yMax / NUM_INTERVALS).toFixed(1));
@@ -87,7 +88,7 @@ export class ProcessCoolingChartsService {
       tickformat = '.0f';
     }
 
-    const tickvals = Array.from({ length: NUM_INTERVALS + 1 }, (_, i) => parseFloat((i * tickStep).toFixed(1)));
+    const tickvals = Array.from({ length: NUM_INTERVALS + 1 }, (_, i) => parseFloat((i * tickStep).toFixed(tickformat === '.2f' ? 2 : tickformat === '.1f' ? 1 : 0)));
     const rangeMax = tickvals[tickvals.length - 1];
 
     const layout = {
