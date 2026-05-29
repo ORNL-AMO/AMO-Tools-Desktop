@@ -1,4 +1,4 @@
-<!--  todo optimization/cleanup - tab links have redundant li and divs which should be removed. Both wrapping element and a tag need to have routerlink directives and attributes to satisfy MEASUR legacy styling -->
+<!--  tab links have redundant li and divs which should be phased out. Both wrapping elements and <a> tag need to have routerlink directives and attributes to satisfy MEASUR global legacy styling -->
 
 <!-- LARGE VIEWPORT TABS -->
 <ul class="tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block">
@@ -59,24 +59,6 @@
         </li>
     </ul>
 </nav>
-
-
-<!--  todo why were the 2 div blocks below needed, is it still needed, try to remove wrapping div -->
-
-<!-- <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
-     @for (link of SETUP_VIEW_LINKS; track $index) {
-            @if (setupView() == link.view) {
-            <div class="nav-item" routerLinkActive="active" [routerLink]="[link.view]">
-                <a class="nav-link" routerLinkActive="active" [routerLink]="[link.view]">
-                    <span class="step-number">
-                        {{$index + 1}}
-                    </span>
-                    {{link.label}}
-                </a>
-            </div>
-            }
-        }
-</div> -->
 
 <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
     <div class="nav-item" (click)="setSmallScreenPanelTab('details')"

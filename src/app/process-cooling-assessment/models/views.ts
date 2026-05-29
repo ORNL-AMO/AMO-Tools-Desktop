@@ -88,7 +88,6 @@ export const SETUP_VIEW_LINKS: ViewLink[] = [
   },
 ]
 
-// todo get is route available via filter pipe
 export const SYSTEM_INFORMATION_VIEW_LINKS: ViewLink[] = [
   {
     view: SystemInformationView.OPERATIONS,

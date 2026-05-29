@@ -31,8 +31,7 @@ export class TowerEnergyHistogramComponent implements OnInit, OnDestroy {
         // this.renderChart();
     }
 
-
-    // todo this chart needs feedback. Line chart with different line types for hours vs energy, different colors for baseline vs modifications.
+// * 8362 - This chart is unfinished and not currently shown - a different plan has been suggested since current implementation.
     renderChart() {
         const baselineBins = this.towerSummaryUI.baselineEnergyBins;
         const binLabels = this.towerSummaryUI.binLabels || [];

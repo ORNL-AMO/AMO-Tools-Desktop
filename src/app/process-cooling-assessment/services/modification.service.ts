@@ -418,7 +418,6 @@ export class ModificationService {
         isHEXRequired: processCooling.systemInformation.towerInput.isHEXRequired,
         HEXApproachTemp: processCooling.systemInformation.towerInput.HEXApproachTemp,
       },
-      // todo below baseline equivalents
       replaceChillers: {
         currentChillerId: '',
         newChiller: {} as ChillerInventoryItem,

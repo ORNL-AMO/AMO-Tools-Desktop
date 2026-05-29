@@ -77,14 +77,9 @@
                     <span class="fa fa-chevron-right"></span></a>
             </li>
         </ul>
-
-        <!-- <div class="alert alert-info d-lg-none p-1 m-1 small">
-            This page is optimized to be viewed on a tablet-sized device or larger.
-        </div> -->
     </div>
+    <!-- END MOBILE STYLES -->
     }
-
-
 
 </div>
 
@@ -94,18 +89,8 @@
         <router-outlet></router-outlet>
     </div>
 
-    <!-- @if (showResultsPanel()) { -->
     <div class="assessment-panel-container scroll-item"
         [ngClass]="{'small-screen-tab': smallScreenPanelTab === 'details'}">
         <app-results-panel></app-results-panel>
     </div>
-    <!-- } -->
 </div>
-
-
-<!--  todo use different results componet or modify styles (see compressed air) -->
-<!-- <div class="assessment-panel-container scroll-item"
-    [ngClass]="{'small-screen-tab': smallScreenPanelTab === 'details'}">
-    <app-results-panel></app-results-panel>
-  </div>
-   -->

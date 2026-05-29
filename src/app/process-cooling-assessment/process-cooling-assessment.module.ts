@@ -40,7 +40,6 @@ import { SystemInformationFormService } from './system-information/system-inform
 import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
 import { InputUnitComponent } from '../shared/input-unit.component';
 import { OperationsComponent } from './system-information/operations/operations.component';
-import { OperatingHoursModalModule } from '../shared/operating-hours-modal/operating-hours-modal.module';
 import { ProcessCoolingAssessmentResolver } from './routing/process-cooling-assessment-resolver.resolver';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
@@ -75,11 +74,9 @@ import { ModificationService } from './services/modification.service';
 import { ModificationListComponent } from './explore-opportunities/modification-list/modification-list.component';
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
 import { AlertInfoContainerComponent } from '../shared/alert-info-container/alert-info-container.component';
-import { ConfirmActionComponent } from '../shared/confirm-action/confirm-action.component';
 import { SlidingCondenserWaterTemperatureComponent } from './explore-opportunities/sliding-condenser-water-temperature/sliding-condenser-water-temperature.component';
 import { UpgradeCoolingTowerFanComponent } from './explore-opportunities/upgrade-cooling-tower-fan/upgrade-cooling-tower-fan.component';
 import { ExploreOpportunitiesFormService } from './services/explore-opportunities-form.service';
-import { DevResultsComponent } from './report/dev-results/dev-results.component';
 import { ExecutiveSummaryResultsService } from './services/executive-summary-results.service';
 import { PumpSummaryComponent } from './report/pump-summary/pump-summary.component';
 import { PumpSummaryResultsService } from './services/pump-summary-results.service';
@@ -93,6 +90,7 @@ import { SystemProfileService } from './services/system-profile.service';
 import { FilterChillerOutputsPipe } from './pipes/filter-chiller-outputs.pipe';
 import { InstallVSDComponent } from './explore-opportunities/install-vsd/install-vsd.component';
 import { FilterChillerInventoryPipe } from './pipes/filter-chiller-inventory.pipe';
+import { FilterAvailableViewsPipe } from './pipes/available-system-information-views.pipe';
 import { InputSummaryComponent } from './report/input-summary/input-summary.component';
 import { InputSummaryService } from './services/input-summary.service';
 import { UseFreeCoolingComponent } from './explore-opportunities/use-free-cooling/use-free-cooling.component';
@@ -216,10 +214,6 @@ const ROUTES: Route[] = [
             path: ROUTE_TOKENS.towerSummary,
             component: TowerSummaryComponent,
           },
-          // {
-          //   path: ROUTE_TOKENS.graphs,
-          //   // component: GraphsComponent,
-          // },
         ]
       }
     ]
@@ -275,7 +269,6 @@ const ROUTES: Route[] = [
     ModificationListComponent,
     AssessmentResultsComponent,
     EemHelpComponent,
-    DevResultsComponent,
     PumpSummaryComponent,
     InputSummaryComponent,
     TowerSummaryComponent,
@@ -286,6 +279,7 @@ const ROUTES: Route[] = [
     FilterChillerOutputsPipe,
     InstallVSDComponent,
     FilterChillerInventoryPipe,
+    FilterAvailableViewsPipe,
     SystemInfoSummaryComponent,
     InputSummaryTableComponent,
     WeatherSummaryComponent,
@@ -318,7 +312,6 @@ const ROUTES: Route[] = [
     NgbModule,
     FormControlErrorsComponent,
     InputUnitComponent,
-    OperatingHoursModalModule,
     AlertInfoContainerComponent,
     PercentGraphModule,
     ReportTableCellPipe,

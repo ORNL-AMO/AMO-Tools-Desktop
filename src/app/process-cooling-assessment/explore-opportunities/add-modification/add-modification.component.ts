@@ -1,31 +1,26 @@
 import { Component, inject } from '@angular/core';
-import { ProcessCoolingAssessment } from '../../../shared/models/process-cooling-assessment';
-import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { ModificationService } from '../../services/modification.service';
 import { DialogRef } from '@angular/cdk/dialog';
+import { Modification } from '../../../shared/models/process-cooling-assessment';
 
 @Component({
   selector: 'app-add-modification',
   standalone: false,
   templateUrl: './add-modification.component.html',
-  styleUrl: './add-modification.component.css'
+  styleUrls: ['./add-modification.component.css']
 })
 export class AddModificationComponent {
-  private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   private modificationService = inject(ModificationService);
-  private processCoolingSignal = this.processCoolingAssessmentService.processCoolingSignal;
   private dialogRef = inject(DialogRef<AddModificationComponent>);
 
-  modificationsExists: boolean;
   newModificationName: string;
-  
+  modifications: Modification[];
+
   constructor( ) { }
 
   ngOnInit(): void {
-    // todo remove for selectedModificationId
-    let processCoolingAssessment: ProcessCoolingAssessment = this.processCoolingSignal();
-    this.newModificationName = 'Scenario ' + (processCoolingAssessment.modifications.length + 1);
-    this.modificationsExists = (processCoolingAssessment.modifications && processCoolingAssessment.modifications.length != 0);
+    this.modifications = this.modificationService.modifications();
+    this.newModificationName = 'Scenario ' + (this.modifications.length + 1);
   }
 
   close() {

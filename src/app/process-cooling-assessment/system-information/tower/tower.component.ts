@@ -59,7 +59,6 @@ export class TowerComponent {
     ).subscribe(
       (towerType) => {
         const dependentValues = this.systemInformationFormService.getTowerTypeDependentValues(towerType);
-        // todo 8173 if tower type changes to unknown we shold be settings tower size based on some coefficient and chiller cap total. 
         this.numberOfFans.setValue(dependentValues.numberOfFans, { emitEvent: false });
         this.fanSpeedType.setValue(dependentValues.fanSpeedType, { emitEvent: false });
         this.updateAssessment();

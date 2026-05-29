@@ -114,14 +114,12 @@ export class ProcessCoolingAssessmentService {
 
   updateWeeklyOperatingSchedule(weeklyOperatingSchedule: WeeklyOperatingSchedule) {
     let updatedProcessCooling = { ...this.processCooling.getValue() };
-    // todo process weekly schedule into hours on per day see form service
     updatedProcessCooling.weeklyOperatingSchedule = weeklyOperatingSchedule;
     this.setProcessCooling(updatedProcessCooling);
   }
 
   updateMonthlyOperatingSchedule(monthlyOperatingSchedule: MonthlyOperatingSchedule) {
     let updatedProcessCooling = { ...this.processCooling.getValue() };
-    // todo process monthly schedule into hours on per month
     updatedProcessCooling.monthlyOperatingSchedule = monthlyOperatingSchedule;
     this.setProcessCooling(updatedProcessCooling);
   }
@@ -206,8 +204,7 @@ export class ProcessCoolingAssessmentService {
         oldSettings.unitsOfMeasure = 'Imperial';
         assessment.processCooling = this.convertProcessCoolingService.convertProcessCooling(assessment.processCooling, oldSettings, settings);
       }
-      // todo find out why we need settings for getting compressors
-      // this.genericCompressorDbService.getAllCompressors(this.settings);
+
       this.setSettings(settings);
     }
     return Promise.resolve();

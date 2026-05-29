@@ -1,5 +1,5 @@
 
-// todo metric conversions for some of these units have not been implemented
+// todo 8506 metric conversions for some of these units have not been implemented
 export const PROCESS_COOLING_UNITS = {
   temperature: {
     imperial: 'F',
@@ -17,7 +17,7 @@ export const PROCESS_COOLING_UNITS = {
   //     metric: 'm<sup>3</sup>/kW'
   //   }
   // },
-  // todo temporary until we have definition for the above
+  // todo 8506 temporary until we have metric definition for the above
    volumeFlowRate: {
     imperial: 'gpm',
     metric: 'm3/min',
@@ -46,7 +46,7 @@ export const PROCESS_COOLING_UNITS = {
       }
     },
   },
-  // todo temporary until we have metric definition
+  // todo 8506 temporary until we have metric definition
   fullLoadEfficiency: {
     imperial: 'kw/ton',
     metric: 'kw/ton',

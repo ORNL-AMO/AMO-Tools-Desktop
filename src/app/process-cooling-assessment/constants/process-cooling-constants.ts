@@ -154,7 +154,6 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
               co2SavingsData: {
                 energyType: "electricity",
                 totalEmissionOutputRate: 430.78,
-                // todo where is this from
                 electricityUse: 6309742.4,
                 energySource: "Natural Gas",
                 fuelType: "Natural Gas",
@@ -289,8 +288,6 @@ export const getMonthsMaxDays = () => {
 
 export const LOAD_PERCENTAGES = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 export const LOAD_LABELS = ['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'];
-// todo this constant has been made elsewhere
-export const WET_BULB_BINS = ['< 35', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'];
 export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 export interface SelectOption {
   value: number | string;

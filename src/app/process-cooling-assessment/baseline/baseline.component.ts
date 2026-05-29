@@ -6,7 +6,7 @@ import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
   selector: 'app-baseline',
   standalone: false,
   templateUrl: './baseline.component.html',
-  styleUrl: './baseline.component.css',
+  styleUrls: ['./baseline.component.css'],
   host: { style: 'height: 100%; display: flex; flex-direction: column; overflow: hidden;' }
 })
 export class BaselineComponent {
@@ -23,12 +23,4 @@ export class BaselineComponent {
   showResultsPanel: Signal<boolean> = computed(() => {
     return this.setupSubView() !== this.ROUTE_TOKENS.weather && this.setupView() !== this.ROUTE_TOKENS.operatingSchedule;
   });
-
-  constructor() {
-    effect(() => {
-      // console.log('Main View:', this.mainView());
-      // console.log('Setup View:', this.setupView());
-      // console.log('Setup Sub View:', this.setupSubView());
-    });
-  }
 }

@@ -19,7 +19,6 @@ export class ExecutiveSummaryComponent {
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   copyTableString: any;
   
-  // todo needs notes
   notes: Array<{
     modificationName: string,
     note: string
