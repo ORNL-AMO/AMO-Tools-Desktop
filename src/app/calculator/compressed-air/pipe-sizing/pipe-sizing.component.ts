@@ -8,6 +8,7 @@ import {Assessment} from '../../../shared/models/assessment';
 import {Calculator} from '../../../shared/models/calculators';
 import {CalculatorDbService} from '../../../indexedDb/calculator-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
+import { environment } from '../../../../environments/environment';
 
 
 @Component({
@@ -43,6 +44,7 @@ export class PipeSizingComponent implements OnInit {
   tabSelect: string = 'results';
   saving: boolean;
   assessmentCalculator: Calculator;
+  docsLink: string = environment.measurDocsUrl;
 
   constructor(private standaloneService: StandaloneService, private pipeSizingService: PipeSizingService, private settingsDbService: SettingsDbService,
     private calculatorDbService: CalculatorDbService,

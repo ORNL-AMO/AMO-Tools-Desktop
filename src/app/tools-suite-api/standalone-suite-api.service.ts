@@ -248,14 +248,16 @@ export class StandaloneSuiteApiService {
     input.designVelocity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.designVelocity);
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
 
-    let PipeSizing = new this.toolsSuiteApiService.ToolsSuiteModule.PipeSizing(input.airFlow, input.airlinePressure, input.designVelocity, input.atmosphericPressure);
-    let output = PipeSizing.calculate();
+    let output = this.toolsSuiteApiService.ToolsSuiteModule.calculatePipeSize({
+      airflow: input.airFlow,
+      airlinePressure: input.airlinePressure,
+      designVelocity: input.designVelocity,
+      atmosphericPressure: input.atmosphericPressure
+    });
     let results: PipeSizingOutput = {
       crossSectionalArea: output.crossSectionalArea,
       pipeDiameter: output.pipeDiameter
     }
-    output.delete();
-    PipeSizing.delete();
     return results;
   }
 
