@@ -15,6 +15,7 @@ import { WaterSuiteApiService } from './water-suite-api.service';
 import { MotorDataApiService } from './motor-data-api.service';
 import { DefaultCompressorApiService } from './default-compressor-api.service';
 import { LightingSuiteApiService } from './lighting-suite-api.service';
+import { SteamLeakApiService } from './steam-leak-api.service';
 @NgModule({
   declarations: [],
   imports: [
@@ -35,7 +36,8 @@ import { LightingSuiteApiService } from './lighting-suite-api.service';
     WaterSuiteApiService,
     MotorDataApiService,
     DefaultCompressorApiService,
-    LightingSuiteApiService
+    LightingSuiteApiService,
+    SteamLeakApiService
   ]
 })
 export class ToolsSuiteApiModule { }

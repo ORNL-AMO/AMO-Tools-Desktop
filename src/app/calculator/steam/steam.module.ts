@@ -23,6 +23,7 @@ import { SaturatedPropertiesService } from './saturated-properties.service';
 import { WaterHeatingModule } from './water-heating/water-heating.module';
 import { FeedwaterEconomizerModule } from './feedwater-economizer/feedwater-economizer.module';
 import { CondensingEconomizerModule } from './condensing-economizer/condensing-economizer.module';
+import { SteamLeakSurveyModule } from './steam-leak/steam-leak-survey.module';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { CondensingEconomizerModule } from './condensing-economizer/condensing-e
     RouterModule,
     PipeInsulationReductionModule,
     TankInsulationReductionModule,
-    CondensingEconomizerModule
+    CondensingEconomizerModule,
+    SteamLeakSurveyModule,
   ],
   declarations: [
     SteamListComponent,

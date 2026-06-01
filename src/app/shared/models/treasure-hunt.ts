@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput, SteamLeakSurveyInput } from "./standalone";
 import { WallLoss } from "./phast/losses/wallLoss";
 import { FlueGas } from "./phast/losses/flueGas";
 import { EnergyData } from "./phast/losses/chargeMaterial";
@@ -381,6 +381,7 @@ export enum Treasure {
     pipeInsulation = 'pipe-insulation-reduction',
     tankInsulation = 'tank-insulation-reduction',
     airLeak = 'air-leak-survey',
+    steamLeak = 'steam-leak-survey',
     wallLoss = 'wall-loss',
     airHeating = 'air-heating',
     flueGas = 'flue-gas',
@@ -632,6 +633,11 @@ export interface WastewaterReductionTreasureHunt extends TreasureHuntOpportunity
 export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
     airLeakSurveyInput: AirLeakSurveyInput,
 }
+
+export interface SteamLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
+    steamLeakSurveyInput: SteamLeakSurveyInput,
+}
+
 
 export interface WasteHeatTreasureHunt extends TreasureHuntOpportunity {
     inputData: WasteHeatInput;
