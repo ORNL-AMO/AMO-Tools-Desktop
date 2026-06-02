@@ -3,7 +3,7 @@
         [class.justify-content-between]="inTreasureHunt()">
         <div class="d-flex pl-2 align-items-center">
         <div class="calc-icon-header icon-steam d-none d-sm-flex" [class.in-treasure-hunt]="inTreasureHunt()">
-            <img src="assets/images/calculator-icons/steam-icons/steam-leak-icon.png">
+            <!-- <img src="assets/images/calculator-icons/steam-icons/steam-leak-icon.png"> -->
         </div>
         <div class="mx-auto">
             <h3>Steam - Leak Survey</h3>
@@ -40,7 +40,11 @@
     @if (surveyService.steamLeakInput()) {
     <div class="calculator-panel-container leak-form-width modification" [class.small-screen-tab]="smallScreenTab === 'form'">
       <div class="tab-content p-3">
-        <p class="text-muted">Steam Leak Survey form will be built here.</p>
+        <div class="d-flex flex-row flex-wrap">
+            <div class="compressor-form-item pb-3">
+                <app-steam-leak-survey-form [settings]="activeSettings" />
+            </div>
+        </div>
       </div>
       <div class="w-100 justify-content-end btn-group btn-group-sm">
         <div class="btn-group btn-group-sm">

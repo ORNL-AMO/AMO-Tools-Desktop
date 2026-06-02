@@ -6,10 +6,13 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 
 import  { SteamLeakSurveyComponent } from "./steam-leak-survey.component";
 import { SteamLeakSurveyService } from './steam-leak-survey-service';
+import { SteamLeakSurveyFormComponent } from './steam-leak-survey-form/steam-leak-survey-form.component';
+import { SteamLeakSurveyFormService } from './steam-leak-survey-form/steam-leak-survey-form.service';
 
 @NgModule({
     declarations: [
         SteamLeakSurveyComponent,
+        SteamLeakSurveyFormComponent
     ],
     imports: [
         CommonModule,
@@ -21,6 +24,7 @@ import { SteamLeakSurveyService } from './steam-leak-survey-service';
     exports: [SteamLeakSurveyComponent],
     providers: [
         SteamLeakSurveyService,
+        SteamLeakSurveyFormService
     ]
 })
 export class SteamLeakSurveyModule {}
