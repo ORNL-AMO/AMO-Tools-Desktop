@@ -80,6 +80,7 @@ export type AnalyticsEventString = 'page_view' |
     'calculator-STEAM-flash-tank' |
     'calculator-STEAM-header' |
     'calculator-STEAM-heat-loss' |
+    'calculator-STEAM-leak' |
     'calculator-STEAM-pipe-insulation-reduction' |
     'calculator-STEAM-prv' |
     'calculator-STEAM-saturated-properties' |

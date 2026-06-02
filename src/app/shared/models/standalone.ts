@@ -654,6 +654,80 @@ export interface SteamReductionResult {
 //===== END steam reduction objects =====
 
 
+//====== steam leak survey objects ======
+export interface SteamLeakSurveyInput {
+  steamLeakSurveyInputVec: Array<SteamLeakSurveyData>;
+  facilitySteamLeakData: FacilitySteamLeakData;
+}
+
+export interface SteamLeakSurveyData {
+  selected: boolean;
+  name: string;
+  leakDescription: string;
+  measurementMethod: number;
+  estimateMethodData: SteamLeakEstimateMethodData;
+  estimateTurbineMethodData: SteamLeakEstimateTurbineMethodData;
+  orificeMethodData: SteamLeakOrificeMethodData;
+  plumeMethodData: SteamLeakPlumeMethodData;
+  units: number;
+}
+
+export interface FacilitySteamLeakData {
+  annualOperatingHours: number;
+  utilityType: number;
+  steamCost: number;
+  steamTemperature: number;
+  steamPressure: number;
+  feedwaterTemperature: number;
+  fuelCost: number;
+  fuelEnergyFactor: number;
+  electricityCost: number;
+  boilerEfficiency: number;
+  systemEfficiency: number;
+}
+
+export interface SteamLeakEstimateMethodData {
+  leakRate: number;
+}
+
+export interface SteamLeakEstimateTurbineMethodData {
+  turbineEfficiency: number;
+  leakRate: number;
+}
+
+export interface SteamLeakOrificeMethodData {
+  turbineEfficiency: number;
+  holeSize: number;
+  dischargeCoefficient: number;
+  atmosphericPressure: number;
+}
+
+export interface SteamLeakPlumeMethodData {
+  turbineEfficiency: number;
+  plumeLength: number;
+  ambientTemperature: number;
+}
+
+export interface SteamLeakSurveyOutput {
+  individualLeaks: Array<SteamLeakSurveyResult>;
+  baselineTotal: SteamLeakSurveyResult;
+  modificationTotal: SteamLeakSurveyResult;
+  savings: SteamLeakSurveyResult;
+  facilitySteamLeakData?: FacilitySteamLeakData;
+}
+
+export interface SteamLeakSurveyResult {
+  name?: string;
+  leakDescription?: string;
+  selected?: boolean;
+  leakRate: number;
+  steamLoss: number;
+  energyLoss: number;
+  leakCost: number;
+}
+//===== END steam leak survey objects =====
+
+
 //====== pipe insulation reduction objects ======
 export interface PipeInsulationReductionInput {
   operatingHours: number,

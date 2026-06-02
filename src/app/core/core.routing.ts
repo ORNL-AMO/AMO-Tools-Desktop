@@ -122,7 +122,7 @@ import { ValveEnergyLossComponent } from '../calculator/pumps/valve-energy-loss/
 import { compressedAirAssessmentRoutes } from '../compressed-air-assessment/routing/compressed-air.routing';
 import { CompressedAirInventoryComponent } from '../compressed-air-inventory/compressed-air-inventory.component';
 import { compressedAirInventoryRoutes } from '../compressed-air-inventory/compressed-air-inventory.routing';
-
+import { SteamLeakSurveyComponent } from '../calculator/steam/steam-leak/steam-leak-survey.component';
 export const coreRoutes: Routes = [
   {
     path: '',
@@ -260,6 +260,10 @@ export const coreRoutes: Routes = [
           {
             path: 'air-leak',
             component: AirLeakSurveyComponent
+          },
+          {
+            path: 'steam-leak',
+            component: SteamLeakSurveyComponent
           },
           {
             path: 'fan-psychrometric',
