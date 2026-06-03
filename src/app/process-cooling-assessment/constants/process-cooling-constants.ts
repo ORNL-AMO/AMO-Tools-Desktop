@@ -248,7 +248,7 @@ export const getDefaultMonthlyScheduleData = (): MonthlyOperatingSchedule => {
     return defaultSchedule;
   }
 
-export const getHoursOnMonToSun = (days: DayScheduleData[]) => {
+export const getHoursOnMonToSun = (days: DayScheduleData[]): number[] => {
    const hoursOnMonToSun = days.map(day => {
       if (day.off) {
         return 0;
@@ -261,7 +261,7 @@ export const getHoursOnMonToSun = (days: DayScheduleData[]) => {
   return hoursOnMonToSun;
 }
 
-export const getMonthsMaxDays = () => {
+export const getMonthsMaxDays = (): Array<{ name: string; days: number }> => {
   const currentYear = new Date().getFullYear();
   // * leap year condition
   const februaryDays = (currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0)) ? 29 : 28;

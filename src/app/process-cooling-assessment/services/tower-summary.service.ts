@@ -60,7 +60,7 @@ export class TowerSummaryService {
 
 
         const totalTowerEnergy = result.tower?.energy?.reduce((sum, e) => sum + e, 0) ?? null;
-        let totalTowerCost;
+        let totalTowerCost: number;
         if (totalTowerEnergy != null && result.electricityCost != null) {
             totalTowerCost = totalTowerEnergy * result.electricityCost;
         }

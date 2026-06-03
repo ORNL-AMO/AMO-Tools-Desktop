@@ -131,7 +131,7 @@ export class ProcessCoolingAssessmentService {
    * Deletes a chiller from the assessment.
    * @returns The updated inventory after deletion.
    */
-  deleteChillerFromAssessment(id: string) {
+  deleteChillerFromAssessment(id: string): ChillerInventoryItem[] {
     let updatedProcessCooling = { ...this.processCooling.getValue() };
     let itemIndex: number = updatedProcessCooling.inventory.findIndex(inventoryItem => { return inventoryItem.itemId == id });
     if (itemIndex !== -1) {
@@ -175,7 +175,7 @@ export class ProcessCoolingAssessmentService {
    * 
    * @returns A promise that resolves when initialization is complete.
    */
-  async initAssessmentSettings(assessment: Assessment) {
+  async initAssessmentSettings(assessment: Assessment): Promise<void> {
     let settings: Settings = this.settingsDbService.getByAssessmentId(assessment, true);
     if (settings) {
       this.setSettings(settings);

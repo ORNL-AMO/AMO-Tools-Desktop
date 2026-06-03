@@ -21,7 +21,7 @@ export class ChillerInventoryService {
     map((chiller: ChillerInventoryItem) => chiller ? chiller.itemId : null)
   );
 
-  get selectedChillerValue() {
+  get selectedChillerValue(): ChillerInventoryItem {
     return this.selectedChiller.getValue();
   }
   
@@ -136,7 +136,7 @@ export class ChillerInventoryService {
     }) as FormGroup<ChillerCurvePointForm>;
   }
   
-  hasValidChillers(processCoolingAssessment: ProcessCoolingAssessment) {
+  hasValidChillers(processCoolingAssessment: ProcessCoolingAssessment): boolean {
     let hasValidChillers: boolean = false;
     if (processCoolingAssessment.inventory && processCoolingAssessment.inventory.length > 0) {
       hasValidChillers = processCoolingAssessment.inventory.every(chillerInventoryItem => this.isValidChiller(chillerInventoryItem));

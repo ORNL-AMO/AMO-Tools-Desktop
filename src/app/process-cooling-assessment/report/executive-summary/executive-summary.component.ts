@@ -17,7 +17,7 @@ export class ExecutiveSummaryComponent {
   private processCoolingUiService = inject(ProcessCoolingUiService);
   
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  copyTableString: any;
+  copyTableString: string;
   
   notes: Array<{
     modificationName: string,

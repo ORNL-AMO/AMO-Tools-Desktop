@@ -121,7 +121,7 @@ export class ProcessCoolingBannerComponent {
     return !this.processCoolingUiService.canVisitView(link.view);
   }
 
-  handleCanNavigate(event: MouseEvent, link: ViewLink) {
+  handleCanNavigate(event: MouseEvent, link: ViewLink): boolean {
     if (this.isLinkDisabled(link)) {
       event.preventDefault();
       event.stopPropagation();
