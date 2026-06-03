@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, ViewChild, ElementRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { SteamService } from '../../steam.service';
+import { ThermodynamicQuantity } from '../../../../shared/models/steam/steam-inputs';
 
 @Component({
     selector: 'app-steam-properties-table',
@@ -22,6 +23,7 @@ export class SteamPropertiesTableComponent implements OnInit {
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;
+  readonly ThermodynamicQuantity = ThermodynamicQuantity;
   constructor(private steamService: SteamService) { }
 
   ngOnInit() {
