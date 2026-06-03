@@ -61,13 +61,13 @@ export class SteamService {
     }
     //enthalpy
     else if (thermodynamicQuantity === ThermodynamicQuantity.ENTHALPY) {
-      _min = Number(this.convertUnitsService.value(50).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(4074.14).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(0));
+      _min = Number(this.convertUnitsService.value(50).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(3));
+      _max = Number(this.convertUnitsService.value(5413.4).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(3));
     }
     //entropy
     else if (thermodynamicQuantity === ThermodynamicQuantity.ENTROPY) {
-      _min = Number(this.convertUnitsService.value(0).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(3.0288).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
+      _min = Number(this.convertUnitsService.value(0).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(3));
+      _max = Number(this.convertUnitsService.value(11.5857).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(3));
     }
 
     return { min: _min, max: _max };
