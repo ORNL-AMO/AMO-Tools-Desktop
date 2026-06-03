@@ -29,8 +29,8 @@
         <label for="fullLoadPressure">Full Load or cut-in pressure</label>
         <div class="input-group">
             <input name="fullLoadPressure" class="form-control" type="number" step="any"
-                [(ngModel)]="inputs.fullLoadPressure" id="fullLoadPressure" (input)="save()"
-                onfocus="this.select();" (focus)="changeField('fullLoadPressure')">
+                [(ngModel)]="inputs.fullLoadPressure" id="fullLoadPressure" (input)="save()" onfocus="this.select();"
+                (focus)="changeField('fullLoadPressure')">
             <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psig</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
         </div>
@@ -45,6 +45,16 @@
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPag</span>
         </div>
     </div>
+    <div class="form-group">
+        <label for="atmosphericPressure">Atmospheric Pressure</label>
+        <div class="input-group">
+            <input name="atmosphericPressure" [(ngModel)]="inputs.atmosphericPressure"
+                class="form-control" type="number" step="any" id="atmosphericPressure" onfocus="this.select();"
+                (focus)="changeField('atmosphericPressure')">
+            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
+        </div>
+    </div>
 </div>
 <div class="form-section bottomBorder">
     <div class="form-group">
@@ -54,19 +64,6 @@
                 <strong>{{output.pressureChange | number:'1.0-2'}} </strong>
                 <strong *ngIf="settings.unitsOfMeasure != 'Metric'">psig</strong>
                 <strong *ngIf="settings.unitsOfMeasure == 'Metric'">kPag</strong>
-            </span>
-            <span *ngIf="!output">
-                <strong>&mdash; &mdash;</strong>
-            </span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="bold">Atmospheric Pressure</label>
-        <div class="text-center small">
-            <span *ngIf="output">
-                <strong>{{inputs.atmosphericPressure | number:'1.0-2'}} </strong>
-                <strong *ngIf="settings.unitsOfMeasure != 'Metric'">psia</strong>
-                <strong *ngIf="settings.unitsOfMeasure == 'Metric'">kPaa</strong>
             </span>
             <span *ngIf="!output">
                 <strong>&mdash; &mdash;</strong>
