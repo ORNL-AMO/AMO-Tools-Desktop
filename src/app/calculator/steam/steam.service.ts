@@ -67,7 +67,7 @@ export class SteamService {
     //entropy
     else if (thermodynamicQuantity === ThermodynamicQuantity.ENTROPY) {
       _min = Number(this.convertUnitsService.value(0).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(7.2014).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
+      _max = Number(this.convertUnitsService.value(3.0288).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
     }
 
     return { min: _min, max: _max };
