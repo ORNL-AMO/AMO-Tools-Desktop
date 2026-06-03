@@ -57,7 +57,7 @@ export class CaReductionTreasureHuntService {
     results.modificationAggregateResults.energyCost = 0;
     results.modificationAggregateResults.energyUse = 0;
     results.modificationAggregateResults.flowRate = 0;
-    results.modificationAggregateResults.singleNozzeFlowRate = 0;
+    results.modificationAggregateResults.singleNozzleFlowRate = 0;
     // end 7419 patch
 
     let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {

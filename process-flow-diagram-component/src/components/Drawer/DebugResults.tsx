@@ -19,13 +19,14 @@ const DiagramResults = () => {
     
     if (isDiagramValid) {
         let plantResults: PlantResults = getPlantSummaryResults(nodes, calculatedNodeData, edges, settings.electricityCost, settings, {});
+        console.log('plantResults:', plantResults);
         trueCostOfSystems = plantResults.trueCostOfSystems;
     } else {
         console.log('errors', validationErrors);
     }
 
     return (
-        <Box sx={{ marginX: '.5rem' }}>
+        <Box>
             {isDiagramValid ?
                 <TrueCostOfSystemResultTable trueCostOfSystems={trueCostOfSystems} nodes={nodes} /> : <></>
             }

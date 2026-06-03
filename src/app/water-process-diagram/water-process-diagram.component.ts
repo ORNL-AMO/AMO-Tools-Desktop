@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Subscription, firstValueFrom } from 'rxjs';
@@ -7,9 +7,10 @@ import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Settings } from '../shared/models/settings';
-import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
+import { Diagram } from '../shared/models/diagram';
 import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
-import { WaterDiagram, ParentContainerDimensions } from 'process-flow-lib';
+import { WaterDiagram } from 'process-flow-lib';
+import { WaterAssessmentService } from '../water/water-assessment.service';
 
 @Component({
   selector: 'app-water-process-diagram',
@@ -23,8 +24,7 @@ export class WaterProcessDiagramComponent {
     this.getContainerHeight();
   }
 
-  @Input()
-  integratedDiagram: IntegratedAssessmentDiagram;
+  isIntegrated: boolean = false;
 
   @ViewChild('header', { static: false }) header: ElementRef;
   @ViewChild('content', { static: false }) content: ElementRef;
@@ -34,33 +34,29 @@ export class WaterProcessDiagramComponent {
   modalOpenSub: Subscription;
   waterDiagramSub: Subscription;
   settings: Settings;
-  
   mainTab: string;
   diagram: Diagram;
   isModalOpen: boolean;
   displayCreateAssessmentModal: boolean;
   isTouchDevice: boolean = false;
-  
-  constructor( 
+
+  constructor(
     private waterProcessDiagramService: WaterProcessDiagramService,
     private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService,
     private diagramIdbService: DiagramIdbService,
-    private settingsDbService: SettingsDbService, 
+    private settingsDbService: SettingsDbService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private analyticsService: AnalyticsService) { }
+    private cdr: ChangeDetectorRef,
+    private analyticsService: AnalyticsService,
+    private waterAssessmentService: WaterAssessmentService) { }
 
   ngOnInit() {
-     // * diagram does not yet support mobile/touch for the drag and drop functions
+    // * diagram does not yet support mobile/touch for the drag and drop functions
     this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     this.analyticsService.sendEvent('view-water-diagram');
-    if (this.integratedDiagram) {
-      this.initDiagram(this.integratedDiagram.diagramId)
-    } else {
-      this.activatedRoute.params.subscribe(params => {
-        this.initDiagram(parseInt(params['id']));
-      });
-    }
+    this.isIntegrated = this.activatedRoute.snapshot.data['integrated'] ?? false;
+    this.setupDiagram(this.activatedRoute.snapshot.data['diagram']);
     this.waterDiagramSub = this.waterProcessDiagramService.waterDiagram.subscribe(waterDiagram => {
       if (waterDiagram && this.diagram) {
         this.save(waterDiagram);
@@ -78,30 +74,23 @@ export class WaterProcessDiagramComponent {
   ngOnDestroy() {
     this.mainTabSub.unsubscribe();
     this.waterDiagramSub.unsubscribe();
-    this.modalOpenSub.unsubscribe();   
+    this.modalOpenSub.unsubscribe();
   }
 
   ngAfterViewInit() {
     this.getContainerHeight();
   }
 
-  async initDiagram(id: number) {
-    this.diagram = this.diagramIdbService.findById(id);
-    if (!this.diagram) {
-      this.createAssessmentDiagram()
-    } else {
+  setupDiagram(diagram: Diagram) {
+    this.diagram = diagram;
+    this.cdr.markForCheck();
+    if (this.diagram) {
+      this.getContainerHeight();
       this.diagram.waterDiagram.assessmentId = this.diagram.assessmentId;
-      this.updateDiagramFromAssessmentService.syncDiagramToAssessment(this.diagram, this.integratedDiagram)
+      this.updateDiagramFromAssessmentService.syncDiagramToAssessment(this.diagram, null);
       this.setSettings();
       this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
     }
-  }
-
-  createAssessmentDiagram() {
-    // todo implement fallback and messaging for disconnected/lost diagrams
-    // await this.updateAssessmentFromDiagramService.createAssesmentDiagram(this.integratedDiagram.assessment, assessment settings);
-    // todo save assessment
-    // todo this.save
   }
 
   async save(waterDiagram: WaterDiagram) {
@@ -131,16 +120,8 @@ export class WaterProcessDiagramComponent {
     let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
     this.settings = this.settingsDbService.getByDiagramId(this.diagram, true);
-    
-    // todo 6770 double check pattern 
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      // let oldSettings: Settings = JSON.parse(JSON.stringify(this.settings));
-      // oldSettings.unitsOfMeasure = 'Imperial';
-      // this.waterDiagram.water = this.conver.convertWaterAssessment(this.assessment.water, oldSettings, this.settings);
-    }
     this.waterProcessDiagramService.settings.next(this.settings);
   }
-
 
   createAssessment() {
     this.showCreateAssessmentModal();
@@ -159,7 +140,6 @@ export class WaterProcessDiagramComponent {
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
-        let parentContainerDimensions: ParentContainerDimensions;
         let contentHeight = this.content.nativeElement.clientHeight;
         let headerHeight = 0;
         let footerHeight = 0;
@@ -170,19 +150,13 @@ export class WaterProcessDiagramComponent {
           footerHeight = this.footer.nativeElement.clientHeight;
         }
         this.containerHeight = contentHeight - headerHeight - footerHeight;
-        parentContainerDimensions = {
-          height: contentHeight,
-          headerHeight: headerHeight,
-          footerHeight: footerHeight
+        if (!this.isIntegrated) {
+          this.waterProcessDiagramService.parentContainer.next({
+            height: contentHeight,
+            headerHeight: headerHeight,
+            footerHeight: footerHeight,
+          });
         }
-        if (this.integratedDiagram) {
-          parentContainerDimensions = {
-            height: this.integratedDiagram.parentDimensions.height,
-            headerHeight: this.integratedDiagram.parentDimensions.headerHeight,
-            footerHeight: this.integratedDiagram.parentDimensions.footerHeight
-          }
-        }
-        this.waterProcessDiagramService.parentContainer.next(parentContainerDimensions)
       }, 100);
     }
   }
@@ -199,11 +173,18 @@ export class WaterProcessDiagramComponent {
     }
   }
 
-
   goToAssessment() {
-      let url: string = `/water/${this.diagram.assessmentId}`;
-      this.router.navigate([url]);
+    let url: string = `/water/${this.diagram.assessmentId}`;
+    this.router.navigate([url]);
   }
 
-
+  returnFromMobileUnavailable() {
+    let assessmentMatch = this.router.url.match(/\/water\/(\d+)(\/|$)/);
+    if (assessmentMatch && assessmentMatch[1]) {
+      this.waterAssessmentService.mainTab.next('baseline');
+      this.router.navigate(['/water', assessmentMatch[1]]);
+      return;
+    }
+    this.router.navigate(['/landing-screen']);
+  }
 }

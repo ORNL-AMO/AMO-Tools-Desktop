@@ -1,4 +1,4 @@
-**Date Generated:** May 1, 2026
+**Date Generated:** May 14, 2026
 
 # Apply System Discharge Costs
 
@@ -68,6 +68,30 @@ The cap at 1.0 prevents over-attribution when a system also sends water to other
 **Step 6 — Compute cost to system:**
 
     Cost to system = Attribution fraction × Discharge total block cost
+
+### 3.2 — Single-System RO Override
+
+When a discharge node collects the reject stream from an RO unit that exclusively serves one water-using system (a "single-system RO configuration"), that system bears 100% of the discharge block cost regardless of what the standard flow-fraction formula would compute.
+
+**Why the standard formula under-attributes:** The reject stream is an unavoidable operational byproduct of the RO process — it is not water that was proportionally shared among multiple beneficiaries. Attributing discharge cost by raw flow ratio would dilute the charge below what the single benefitting system truly owes.
+
+**Attribution condition:**
+
+    graph.systemsWithRODirectDischarge[systemId]?.dischargeNode.id === dischargeId
+
+When this condition is true, the computed `systemAttributionFraction` is overridden to `1` before costs are applied.
+
+**Worked example:**
+
+```
+  Intake ──► RO Unit ──► (product water) ──► System A
+                    └──► (reject, 100 Mgal/yr) ──► Discharge ($1.00/kgal)
+```
+
+- Discharge block cost = 100 Mgal/yr × 1,000 × $1.00/kgal = $100,000/yr
+- Standard formula: attribution fraction = reject flow / total discharge inflow (would be less than 1.0 if other flows also enter the discharge)
+- **Override:** System A attribution fraction = 1.0
+- Cost to System A = 1.0 × $100,000 = **$100,000/yr**
 
 ---
 
@@ -147,3 +171,4 @@ As with intake cost attribution, a system may appear on multiple upstream paths 
 | Pump/motor energy | Attributed using same fraction as discharge cost |
 | Adjusted attribution | User-supplied fraction replaces computed default |
 | De-duplication | Identical paths from discharge to system are attributed only once |
+| Single-system RO override | When discharge is the reject-stream outlet of a single-system RO configuration, attribution fraction is forced to 1.0 |

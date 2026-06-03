@@ -1,4 +1,4 @@
-**Date Generated:** May 1, 2026
+**Date Generated:** May 14, 2026
 
 # True Cost Attribution Algorithm — Overview
 
@@ -22,6 +22,8 @@
 | **Reused water** | Water that flows from one water-using system directly into another water-using system. |
 | **Recycled water** | Water that flows from a wastewater treatment unit back into a water-using system. |
 | **In-system treatment** | Treatment equipment located entirely within a single system that treats 100% of that system's inflow. Costed separately from shared treatment nodes. |
+| **Single-system RO configuration** | An RO treatment node whose entire product water output flows to exactly one water-using system and whose reject stream flows to exactly one discharge (optionally through a waste-water-treatment node), with exactly one upstream intake. In this configuration, the system bears 100% of all associated cost components. |
+| **`systemsWithRODirectDischarge`** | A preprocessing index (keyed by system node ID) identifying all single-system RO configurations in the diagram. Consulted by all four Step 2 attribution sub-routines to apply the 100% override. |
 
 ---
 
@@ -64,6 +66,24 @@ These paths are the input to Step 2.
 
 ---
 
+### Step 1.5 — Preprocessing: Single-System RO Detection
+
+Before any cost attribution begins, the function `assignsystemsWithRODirectDischarge` scans every `water-treatment` node in the diagram and identifies those that qualify as a **single-system RO configuration**. It then stores the qualifying entries in `graph.systemsWithRODirectDischarge`, keyed by the associated water-using system's node ID.
+
+**Qualification criteria** — a `water-treatment` node qualifies when all of the following are true:
+
+1. Its `treatmentType` is `6` (Reverse Osmosis).
+2. It has exactly **two** downstream branches (product water path and reject path).
+3. The **product water path** leads to exactly one water-using system and then to exactly one discharge node, with no other systems on that branch.
+4. The **reject path** leads to exactly one discharge node with no water-using systems present — optionally passing through a single waste-water-treatment node on the way.
+5. The RO node has exactly **one** upstream water-intake node.
+
+When all criteria are met, the index entry records the intake node, the RO treatment node, the discharge node on the product water path, and (if present) the waste-water-treatment node on the reject path.
+
+**Why this preprocessing is needed:** Flow-fraction attribution methods allocate only a share of costs proportional to how much water reaches a given system. For an RO unit operating at, say, 70% recovery, a naïve fraction-based method attributes only 70% of the RO treatment cost and 70% of the upstream intake cost to the system — because 30% of the water is "lost" as reject. However, when the entire RO setup exists solely to serve that one system, the reject stream is an unavoidable operational loss rather than water serving another purpose. The system should therefore bear **100%** of all associated costs. This index is built before Step 1 so that it is available to all four Step 2 sub-routines.
+
+---
+
 ### Step 2 — Attribute Costs to Systems
 
 Four attribution sub-routines execute in order. Each walks the pre-computed paths for one class of cost component and assigns a portion of each component's block cost to the appropriate water-using system(s).
@@ -76,6 +96,8 @@ Four attribution sub-routines execute in order. Each walks the pre-computed path
 | Apply System Wastewater Treatment Costs | Wastewater Treatment | Downstream (reuse) then Upstream (discharge) | First water-using system on each path |
 
 All four sub-routines share a common allocation principle: **the system closest to the cost component bears the cost**. Systems further away (which may have already passed or will later receive water) are not double-charged.
+
+> **Single-system RO override:** All four sub-routines additionally consult `graph.systemsWithRODirectDischarge`. When the system being evaluated is identified as part of a single-system RO configuration and the cost component being processed is one of the associated nodes (intake, RO treatment, discharge, or waste-water-treatment on the reject path), the attribution fraction is overridden to **1** (100%), regardless of what the flow-fraction calculation would otherwise produce.
 
 Each sub-routine is described in its own companion document.
 
@@ -188,6 +210,16 @@ Facility Diagram (nodes + edges)
   (adjacency maps, edge maps, node maps)
           │
           ▼
+┌─────────────────────────────────────┐
+│ STEP 1.5: Preprocessing             │
+│   assignsystemsWithRODirectDischarge│
+│   Scan RO treatment nodes;          │
+│   record single-system RO entries   │
+│   in graph.systemsWithRODirect-     │
+│   Discharge (keyed by system ID)    │
+└──────────────┬──────────────────────┘
+               │ RO detection index
+               ▼
 ┌─────────────────────────────────────┐
 │ STEP 1: For each cost-component node │
 │   Block cost = unit cost × flow      │

@@ -1,0 +1,45 @@
+<form [formGroup]="form()">
+  <div class="form-group">
+    <label for="survey-bagFillTime">Bag Fill Time</label>
+    <div class="input-group">
+      <input name="bagFillTime" class="form-control" type="number" step="any"
+        formControlName="bagFillTime" id="survey-bagFillTime" onfocus="this.select();"
+        (focus)="fieldFocused.emit('bagFillTime')">
+      <span class="input-group-addon units">s</span>
+      @if (form().controls.bagFillTime.invalid && !form().controls.bagFillTime.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.bagFillTime.errors?.['required']) {
+            <span>Value required.</span>
+          }
+          @if (form().controls.bagFillTime.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.bagFillTime.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="survey-bagVolume">Bag Volume</label>
+    <div class="input-group">
+      <input name="bagVolume" class="form-control" type="number" step="any"
+        formControlName="bagVolume" id="survey-bagVolume" onfocus="this.select();"
+        (focus)="fieldFocused.emit('bagVolume')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">gal</span>
+      } @else {
+        <span class="input-group-addon units">L</span>
+      }
+      @if (form().controls.bagVolume.invalid && !form().controls.bagVolume.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.bagVolume.errors?.['required']) {
+            <span>Value required.</span>
+          }
+          @if (form().controls.bagVolume.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.bagVolume.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+</form>

@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { PneumaticAirService } from './pneumatic-air.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-pneumatic-air',
@@ -26,6 +27,8 @@ export class PneumaticAirComponent implements OnInit {
       this.resizeTabs();
     }, 100);
   }
+
+  docsLink: string = environment.measurDocsUrl;
 
   smallScreenTab: string = 'form';
   containerHeight: number;

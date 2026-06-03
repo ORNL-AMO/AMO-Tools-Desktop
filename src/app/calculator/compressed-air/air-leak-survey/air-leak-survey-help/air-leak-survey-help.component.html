@@ -1,0 +1,184 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Compressed Air - Leak Survey Help
+    <br>
+    <small class="text-muted">
+      This calculator is used to quantify the energy savings associated with reducing compressed air leaks.
+    </small>
+  </h5>
+  <div class="my-2">
+    <h6>
+      <small class="text-muted">
+        This calculator can be used to quantify the electricity saved from reducing compressed air leaks.
+        Compressed air leaks are a major source of wasted energy sometimes accounting for 20-30% of the
+        compressor's output. Compressed air leaks can contribute to the following problems:
+        <hr class="my-1">Fluctuations in system pressure
+        <hr class="my-1">Excess compressor capacity
+        <hr class="my-1">Decreased service life and increased maintenance due to unnecessary cycling and increased run time.
+        <hr class="my-1">
+      </small>
+    </h6>
+  </div>
+
+  @if (currentField() === 'hoursPerYear') {
+    <div class="my-2">
+      <h6>
+        Annual Operating Hours
+        <small class="text-muted">
+          <br>Number of annual operating hours for the equipment.<hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Minimum</th>
+              <th class="text-center">Maximum</th>
+            </tr>
+            <tr>
+              <td class="text-center">0 hrs/yr</td>
+              <td class="text-center">8760 hrs/yr</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (currentField() === 'utilityType') {
+    <div class="my-2">
+      <h6>
+        Utility Type
+        <small class="text-muted">
+          <br>Select the appropriate utility type to determine energy use and cost.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'utilityCost') {
+    <div class="my-2">
+      <h6>
+        Utility Cost
+        <small class="text-muted">
+          <br>Per unit cost of electricity or compressed air.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'measurementMethod') {
+    <div class="my-2">
+      <h6>
+        Method of Measurement
+        <small class="text-muted">
+          <br>Choose the method to be used to determine compressed air consumption.
+          <hr class="my-1">Estimate - The most high-level way to determine the leak rate is to estimate it based on visual and audible clues.
+          <hr class="my-1">Decibel Method - The decibels method is used when an Ultrasonic probe is used to scan for leaks.
+          <hr class="my-1">Bag Method – The bag method estimates air loss by counting the time it takes to fill a trash bag.
+          <hr class="my-1">Orifice Method - Estimation of air loss using the pressure at the point of use and the diameter of the orifice.
+          <hr class="my-1">
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'leakDescription') {
+    <div class="my-2">
+      <h6>
+        Leak Description
+        <small class="text-muted">
+          <br>Provide information that can be used to characterize and find the leak.
+          For example, what is leaking, where is it located, can you hear it, what's the tag number you used to identify it.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'leakRateEstimate') {
+    <div class="my-2">
+      <h6>
+        Leak Rate Estimate
+        <small class="text-muted">
+          <br>The standard criteria and associated leak rate for this method are given below. The user should use discretion in their estimate.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 d-flex justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <td class="w-25 text-center">Minimal</td>
+              <td class="w-25 text-center">Feel but can not hear in quiet environment</td>
+              <td class="w-25 text-center">0.2 CFM</td>
+            </tr>
+            <tr>
+              <td class="w-25 text-center">Small</td>
+              <td class="w-25 text-center">Feel and hear in quiet environment</td>
+              <td class="w-25 text-center">0.8 CFM</td>
+            </tr>
+            <tr>
+              <td class="w-25 text-center">Medium</td>
+              <td class="w-25 text-center">Feel and hear in moderate noise</td>
+              <td class="w-25 text-center">3.0 CFM</td>
+            </tr>
+            <tr>
+              <td class="w-25 text-center">Large</td>
+              <td class="w-25 text-center">Feel and hear in moderate noise</td>
+              <td class="w-25 text-center">5.0 CFM</td>
+            </tr>
+            <tr>
+              <td class="w-25 text-center">Severe</td>
+              <td class="w-25 text-center">Feel and hear at a great distance</td>
+              <td class="w-25 text-center">10.0 CFM</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (currentField() === 'compressorControl') {
+    <div class="my-2">
+      <h6>
+        Trim Compressor Control
+        <small class="text-muted">
+          <br>Select the control method for the trim compressor. This affects how the compressor responds to changes in demand and impacts the energy savings calculation.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'compressorControlAdjustment') {
+    <div class="my-2">
+      <h6>
+        Compressor Control Adjustment
+        <small class="text-muted">
+          <br>Percentage adjustment applied to the compressor control. A higher value means the compressor is more efficient at part-load conditions.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'compressorType') {
+    <div class="my-2">
+      <h6>
+        Compressor Type
+        <small class="text-muted">
+          <br>Select the type of air compressor. This determines the default specific power used in energy calculations.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  <div class="my-2">
+    <a class="click-link" [href]="docsLink + 'group__compressed__air__leak__survey__calculator'" target="_blank">
+      <span class="fa fa-external-link"></span>
+      <span class="pl-1">How is Compressed Air Leak Survey calculated?</span>
+    </a>
+  </div>
+</div>

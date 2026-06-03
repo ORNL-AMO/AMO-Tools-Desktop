@@ -35,15 +35,6 @@ export class SuiteApiHelperService {
     }
   }
 
-  getPistonTypeEnum(pistonType: number): any {
-    switch (pistonType) {
-      case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.PistonType.SingleActing;
-      case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.PistonType.DoubleActing;
-    }
-  }
-
   getLineFrequencyEnum(lineFreq: number) {
     let lineFrequency = this.toolsSuiteApiService.ToolsSuiteModule.LineFrequency.FREQ50;
     if (lineFreq == 60) {
@@ -574,6 +565,28 @@ export class SuiteApiHelperService {
         return this.toolsSuiteApiService.ToolsSuiteModule.SteamUtilityType.NaturalGas;
       case 2:
         return this.toolsSuiteApiService.ToolsSuiteModule.SteamUtilityType.Other;
+    }
+  }
+
+  getCompressedAirMeasurementMethodEnum(method: number) {
+    switch (method) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.FlowMeter;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.Bag;
+      case 2:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.Pressure;
+      case 3:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.Other;
+    }
+  }
+
+  getCompressedAirUtilityTypeEnum(utilityType: number) {
+    switch (utilityType) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirUtilityType.CompressedAir;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirUtilityType.Electricity;
     }
   }
 }
