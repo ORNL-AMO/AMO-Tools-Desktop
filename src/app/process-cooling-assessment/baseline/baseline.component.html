@@ -1,8 +1,6 @@
 <!-- * This component uses host component styling - see component.ts decorator -->
 
 <app-baseline-tabs></app-baseline-tabs>
-<!--  todo small-screen-tab still needed? use media query or other-->
-<!-- todo modal open here or elsewhere -->
 <div class="assessment-container tab-content">
      <div class="assessment-panel-container modification"
         [ngClass]="{
@@ -13,8 +11,7 @@
     </div>
 
     @if (showResultsPanel()) {
-    <div class="assessment-panel-container scroll-item"
-        [ngClass]="{'small-screen-tab': smallScreenPanelTab === 'details'}">
+    <div class="assessment-panel-container scroll-item">
         <app-results-panel></app-results-panel>
     </div>
     }

@@ -25,7 +25,6 @@ export const getFanType = (): SelectOption[] => {
   return [
         { value: FanType.Axial, name: 'Axial' },
         { value: FanType.Centrifugal, name: 'Centrifugal' },
-        { value: FanType.Unknown, name: 'Unknown' }
   ] as const;
 }
 
@@ -154,7 +153,6 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
               co2SavingsData: {
                 energyType: "electricity",
                 totalEmissionOutputRate: 430.78,
-                // todo where is this from
                 electricityUse: 6309742.4,
                 energySource: "Natural Gas",
                 fuelType: "Natural Gas",
@@ -250,7 +248,7 @@ export const getDefaultMonthlyScheduleData = (): MonthlyOperatingSchedule => {
     return defaultSchedule;
   }
 
-export const getHoursOnMonToSun = (days: DayScheduleData[]) => {
+export const getHoursOnMonToSun = (days: DayScheduleData[]): number[] => {
    const hoursOnMonToSun = days.map(day => {
       if (day.off) {
         return 0;
@@ -263,7 +261,7 @@ export const getHoursOnMonToSun = (days: DayScheduleData[]) => {
   return hoursOnMonToSun;
 }
 
-export const getMonthsMaxDays = () => {
+export const getMonthsMaxDays = (): Array<{ name: string; days: number }> => {
   const currentYear = new Date().getFullYear();
   // * leap year condition
   const februaryDays = (currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0)) ? 29 : 28;
@@ -289,8 +287,6 @@ export const getMonthsMaxDays = () => {
 
 export const LOAD_PERCENTAGES = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 export const LOAD_LABELS = ['0%', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'];
-// todo this constant has been made elsewhere
-export const WET_BULB_BINS = ['< 35', '10%', '20%', '30%', '40%', '50%', '60%', '70%', '80%', '90%', '100%'];
 export const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 export interface SelectOption {
   value: number | string;

@@ -1,21 +1,5 @@
-<div #wrapperElement>
+<div>
     <form class="px-3" [formGroup]="form">
-        <!-- todo annualOperatingHours currently appears unused in calculations-->
-        <!-- <div class="form-group">
-            <label for="{{controlIds.annualOperatingHours}}">Operating Hours</label>
-            <div class="input-group">
-                <span class="input-group-addon op-hour-addon units">
-                    <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
-                </span>
-                <input name="annualOperatingHours" type="number" step="10" class="form-control"
-                    formControlName="annualOperatingHours" id="{{controlIds.annualOperatingHours}}"
-                    (focus)="focusField('annualOperatingHours')">
-                <app-input-unit [defaultUnit]="'hrs/yr'"></app-input-unit>
-            </div>
-            <app-form-control-errors [control]="annualOperatingHours" [settings]="settings()"
-                [defaultUnit]="'hrs/yr'"></app-form-control-errors>
-        </div> -->
-
         <div class="form-group">
             <label for="electricityCost">Electricity Cost</label>
             <div class="input-group">
@@ -83,8 +67,3 @@
     </div>
     }
 </div>
-
-<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
-    [annualOperatingHours]="annualOperatingHours.value">
-</app-operating-hours-modal>

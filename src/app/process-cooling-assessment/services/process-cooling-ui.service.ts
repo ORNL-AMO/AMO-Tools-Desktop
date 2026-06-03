@@ -1,23 +1,29 @@
-import { inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
-import { SystemInformationFormService } from '../system-information/system-information-form.service';
 import { ROUTE_TOKENS as WEATHER_ROUTE_TOKENS } from '../../shared/modules/weather-data/models/routes';
 import { SummaryView } from './executive-summary-results.service';
 import { ProfileView } from './system-profile.service';
+import { ProcessCoolingView, SetupView, SystemInformationView, ViewLink } from '../models/views';
+export { ProcessCoolingMainTabString, ProcessCoolingSetupTabString, ProcessCoolingAssessmentTabString, ProcessCoolingView, MainView, SetupView, SystemInformationView, AssessmentView, ReportView, ViewLink, MAIN_VIEW_LINKS, SETUP_VIEW_LINKS, SYSTEM_INFORMATION_VIEW_LINKS, ASSESSMENT_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
 
 @Injectable()
 export class ProcessCoolingUiService {
   private router = inject(Router);
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
-  // todo move this service out when we revise valid handling in the assessment service
-  private systemInformationFormService = inject(SystemInformationFormService);
   private weatherContextService = inject(WEATHER_CONTEXT);
-  
+
+  private readonly isWeatherDataValidSignal = toSignal(this.processCoolingAssessmentService.isWeatherDataValid$, { initialValue: false });
+  private readonly isPumpValidSignal = toSignal(this.processCoolingAssessmentService.isPumpValid$, { initialValue: false });
+  private readonly isCondenserValidSignal = toSignal(this.processCoolingAssessmentService.isCondenserValid$, { initialValue: false });
+  private readonly isSystemInformationValidSignal = toSignal(this.processCoolingAssessmentService.isSystemInformationValid$, { initialValue: false });
+  private readonly isChillerInventoryValidSignal = toSignal(this.processCoolingAssessmentService.isChillerInventoryValid$, { initialValue: false });
+  private readonly isOperatingScheduleValidSignal = toSignal(this.processCoolingAssessmentService.isOperatingScheduleValid$, { initialValue: false });
+
   focusedFieldSignal: WritableSignal<string> = signal<string>('default');
   helpTextFieldSignal: WritableSignal<string> = signal<string>('default');
   modalOpenSignal: WritableSignal<boolean> = signal<boolean>(false);
@@ -85,57 +91,29 @@ export class ProcessCoolingUiService {
   ];
 
 
-  // todo 8129 optimization - called on every rerender. 
-  // todo this pattern should be changed or improved when we get concrete information on what is required for results calculation. memoize, or map/array of vals to Observable
-  canVisitSteppedView(steppedRouteIndex: number): boolean {
-    const processCooling = this.processCoolingAssessmentService.processCoolingSignal();
-    const settings = this.processCoolingAssessmentService.settingsSignal();
-
-    const isWeatherDataValid = this.weatherContextService.isValidWeatherData();
+  private canVisitSteppedView(steppedRouteIndex: number): boolean {
     switch (steppedRouteIndex) {
       case 0:
-        return true;
       case 1:
-        return true;
       case 2:
         return true;
       case 3:
-        const canVisitPump = isWeatherDataValid;
-        return canVisitPump;
+        return this.isWeatherDataValidSignal();
       case 4:
-        const canVisitCondenser = isWeatherDataValid && this.systemInformationFormService.isPumpValid(processCooling.systemInformation, settings);
-        return canVisitCondenser;
+        return this.isWeatherDataValidSignal() && this.isPumpValidSignal();
       case 5:
-        const canVisitTower = isWeatherDataValid && this.systemInformationFormService.isCondenserSystemInputValid(processCooling.systemInformation, settings);
-        return canVisitTower;
+        return this.isWeatherDataValidSignal() && this.isCondenserValidSignal();
       case 6:
-        const canVisitInventory = isWeatherDataValid && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings);
-        return canVisitInventory;
+        return this.isSystemInformationValidSignal();
       case 7:
-        const canVisitOperatingSchedule = isWeatherDataValid
-          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
-          && this.processCoolingAssessmentService.isChillerInventoryValid();
-        return canVisitOperatingSchedule;
+        return this.isSystemInformationValidSignal() && this.isChillerInventoryValidSignal();
       case 8:
-        const canVisitLoadSchedule = isWeatherDataValid
-          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
-          && this.processCoolingAssessmentService.isChillerInventoryValid()
-          && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
-        return canVisitLoadSchedule;
       case 9:
-        const canVisitAssessment = isWeatherDataValid
-          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
-          && this.processCoolingAssessmentService.isChillerInventoryValid()
-          && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
-        return canVisitAssessment;
       case 10:
-        const canVisitReport = isWeatherDataValid
-          && this.systemInformationFormService.isSystemInformationValid(processCooling.systemInformation, settings)
-          && this.processCoolingAssessmentService.isChillerInventoryValid()
-          && this.processCoolingAssessmentService.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule)
-        return canVisitReport;
+        return this.isSystemInformationValidSignal()
+          && this.isChillerInventoryValidSignal()
+          && this.isOperatingScheduleValidSignal();
       default:
-        // * route does not need protection (ex. baseline)
         return true;
     }
   }
@@ -194,6 +172,17 @@ export class ProcessCoolingUiService {
     { initialValue: '' }
   );
 
+  readonly currentStepIndex: Signal<number> = computed(() => {
+    const fullSubroute = this.fullSubroute();
+    return this.STEPPED_ROUTES.findIndex(route => {
+      const isWeatherRouteMatch = fullSubroute.includes(ROUTE_TOKENS.weather) && route.path.includes(ROUTE_TOKENS.weather);
+      if (isWeatherRouteMatch) return true;
+      return fullSubroute === route.path;
+    });
+  });
+
+  readonly canContinue: Signal<boolean> = computed(() => this.canVisitSteppedView(this.currentStepIndex() + 1));
+  readonly canGoBack: Signal<boolean> = computed(() => this.currentStepIndex() > 0);
 
   private getCurrentMainView(): string {
     const urlSegments = this.router.url.split('/').filter(s => s);
@@ -222,34 +211,8 @@ export class ProcessCoolingUiService {
     return `/process-cooling/${id}/${path}`;
   }
 
-  /**
-   * Get stepped index number from full subroute
-   * Ex. 'baseline/system-information/operations' => 1
-   */
-  getCurrentStepIndex(): number {
-    const fullSubroute = this.getFullSubroute();
-    return this.STEPPED_ROUTES.findIndex(route => {
-      const isWeatherRouteMatch = fullSubroute.includes(ROUTE_TOKENS.weather) && route.path.includes(ROUTE_TOKENS.weather);
-      if (isWeatherRouteMatch) {
-        return true;
-      }
-      return fullSubroute === route.path;
-    });
-  }
-
-  canContinue(): boolean {
-    const currentIndex = this.getCurrentStepIndex();
-    return this.canVisitSteppedView(currentIndex + 1);
-  }
-
-  canGoBack(): boolean {
-    return this.getCurrentStepIndex() > 0;
-  }
-
-
   continue(): void {
-    const currentIndex = this.getCurrentStepIndex();
-    const nextIndex = currentIndex + 1;
+    const nextIndex = this.currentStepIndex() + 1;
     if (this.STEPPED_ROUTES[nextIndex] && this.canContinue()) {
       const url = this.buildUrl(this.STEPPED_ROUTES[nextIndex].path);
       this.router.navigateByUrl(url);
@@ -257,8 +220,7 @@ export class ProcessCoolingUiService {
   }
 
   back(): void {
-    const currentIndex = this.getCurrentStepIndex();
-    const prevIndex = currentIndex - 1;
+    const prevIndex = this.currentStepIndex() - 1;
     if (this.STEPPED_ROUTES[prevIndex]) {
       const url = this.buildUrl(this.STEPPED_ROUTES[prevIndex].path);
       this.router.navigateByUrl(url);
@@ -292,167 +254,3 @@ export class ProcessCoolingUiService {
   }
 
 }
-
-// todo move below out to models/types folder
-export type ProcessCoolingMainTabString = 'baseline' | 'assessment' | 'diagram' | 'report' | 'calculators';
-export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-information' | 'inventory' | 'operating-schedule' | 'load-schedule';
-export type ProcessCoolingAssessmentTabString = 'explore-opportunities';
-export type ProcessCoolingView = SetupView | MainView | ReportView | AssessmentView | SystemInformationView;
-
-export enum MainView {
-  BASELINE = 'baseline',
-  ASSESSMENT = 'assessment',
-  REPORT = 'report',
-}
-
-export enum SetupView {
-  ASSESSMENT_SETTINGS = 'assessment-settings',
-  SYSTEM_INFORMATION = 'system-information',
-  INVENTORY = 'chiller-inventory',
-  OPERATING_SCHEDULE = 'operating-schedule',
-  LOAD_SCHEDULE = 'load-schedule',
-}
-
-export enum SystemInformationView {
-  OPERATIONS = 'operations',
-  WEATHER = 'weather',
-  PUMP = 'pump',
-  CONDENSER_COOLING_SYSTEM_INPUT = 'condenser-cooling-system',
-  TOWER = 'tower',
-}
-
-export enum AssessmentView {
-  EXPLORE_OPPORTUNITIES = 'explore-opportunities',
-}
-
-export enum ReportView {
-  EXECUTIVE_SUMMARY = 'executive-summary',
-  PERFORMANCE_PROFILE = 'performance-profile',
-  PUMP_SUMMARY = 'pump-summary',
-  TOWER_SUMMARY = 'tower-summary',
-  INPUT_SUMMARY = 'input-summary',
-  GRAPHS = 'graphs',
-  SYSTEM_PROFILE = "system-profile",
-  FACILITY_INFO = 'facility-info',
-}
-
-
-export interface ViewLink {
-  view: ProcessCoolingView;
-  label: string;
-  param?: string | number;
-  meta?: {
-    disabled?: boolean;
-  };
-}
-
-export const MAIN_VIEW_LINKS: ViewLink[] = [
-  {
-    view: MainView.BASELINE,
-    label: 'Baseline',
-  },
-  {
-    view: MainView.ASSESSMENT,
-    label: 'Assessment',
-  },
-  {
-    view: MainView.REPORT,
-    label: 'Report',
-  },
-];
-
-export const SETUP_VIEW_LINKS: ViewLink[] = [
-  {
-    view: SetupView.ASSESSMENT_SETTINGS,
-    label: 'Assessment Settings',
-  },
-  {
-    view: SetupView.SYSTEM_INFORMATION,
-    label: 'System Information',
-  },
-  {
-    view: SetupView.INVENTORY,
-    label: 'Chiller Inventory',
-  },
-  {
-    view: SetupView.OPERATING_SCHEDULE,
-    label: 'Operating Schedule',
-  },
-  {
-    view: SetupView.LOAD_SCHEDULE,
-    label: 'Load Schedule',
-  },
-]
-
-// todo get is route available via filter pipe
-export const SYSTEM_INFORMATION_VIEW_LINKS: ViewLink[] = [
-  {
-    view: SystemInformationView.OPERATIONS,
-    label: 'Operations',
-  },
-  {
-    view: SystemInformationView.WEATHER,
-    label: 'Weather',
-  },
-  {
-    view: SystemInformationView.PUMP,
-    label: 'Pump',
-  },
-  {
-    view: SystemInformationView.CONDENSER_COOLING_SYSTEM_INPUT,
-    label: 'Condenser Cooling'
-  },
-  {
-    view: SystemInformationView.TOWER,
-    label: 'Tower',
-  },
-
-]
-
-export const ASSESSMENT_VIEW_LINKS: ViewLink[] = [
-  {
-    view: AssessmentView.EXPLORE_OPPORTUNITIES,
-    label: 'Explore Opportunities',
-  },
-]
-
-export const REPORT_VIEW_LINKS: ViewLink[] = [
-  {
-    view: ReportView.EXECUTIVE_SUMMARY,
-    label: 'Executive Summary',
-  },
-  {
-    view: ReportView.PERFORMANCE_PROFILE,
-    label: 'Performance Profile',
-    // meta: {
-    //   disabled: true
-    // }
-  },
-  {
-    view: ReportView.SYSTEM_PROFILE,
-    label: 'System Profile',
-  },
-  {
-    view: ReportView.PUMP_SUMMARY,
-    label: 'Pump Summary',
-  },
-  {
-    view: ReportView.TOWER_SUMMARY,
-    label: 'Tower Summary',
-  },
-  {
-    view: ReportView.INPUT_SUMMARY,
-    label: 'Input Summary',
-  },
-  {
-    view: ReportView.FACILITY_INFO,
-    label: 'Facility Info',
-  },
-  {
-    view: ReportView.GRAPHS,
-    label: 'Graphs',
-    meta: {
-      disabled: true
-    }
-  },
-]

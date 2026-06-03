@@ -1,5 +1,6 @@
 import { Component, computed, effect, inject, Signal } from '@angular/core';
-import { MainView, ProcessCoolingSetupTabString, ProcessCoolingUiService, SetupView } from '../services/process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { MainView, ProcessCoolingSetupTabString, SetupView } from '../models/views';
 import { SummaryView } from '../services/executive-summary-results.service';
 import { ChillerInventoryService } from '../services/chiller-inventory.service';
 import { Observable } from 'rxjs';

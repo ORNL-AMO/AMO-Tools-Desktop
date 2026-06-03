@@ -1,7 +1,8 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
-import { ProcessCoolingUiService, REPORT_VIEW_LINKS } from '../services/process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { REPORT_VIEW_LINKS } from '../models/views';
 import { PROCESS_COOLING_SECTION_GROUPS, ProcessCoolingReportAdapter } from './process-cooling-report.adapter';
 import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 

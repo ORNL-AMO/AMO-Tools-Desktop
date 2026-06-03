@@ -79,7 +79,7 @@ export class MonthlyOperatingScheduleComponent implements OnInit {
     return this.form.get('months') as FormArray;
   }
 
-  getMonthControl(index: number) {
+  getMonthControl(index: number): FormControl {
     return this.monthsFormArray.at(index).get('days') as FormControl;
   }
 

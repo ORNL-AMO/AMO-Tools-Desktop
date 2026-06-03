@@ -1,10 +1,8 @@
 import { Component, DestroyRef, ElementRef, inject, Signal, ViewChild } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
-import { of } from "rxjs";
 import { Co2SavingsData } from "../../../calculator/utilities/co2-savings/co2-savings.service";
 import { TEMPERATURE_HTML } from "../../../shared/app-constants";
-import { OperatingHours } from "../../../shared/models/operations";
 import { ProcessCoolingAssessment } from "../../../shared/models/process-cooling-assessment";
 import { getCondenserCoolingMethods } from "../../constants/process-cooling-constants";
 import { ProcessCoolingAssessmentService } from "../../services/process-cooling-assessment.service";
@@ -16,12 +14,12 @@ import { PROCESS_COOLING_UNITS } from "../../constants/process-cooling-units";
 import { FeatureFlagService } from "../../../shared/feature-flag.service";
 
 
-// * outline changes from typical MEASUR patterns
+// * comments outline some of the pattern and state-handling changes that differ from legacy MEASUR patterns
 @Component({
   selector: 'app-operations',
   standalone: false,
   templateUrl: './operations.component.html',
-  styleUrl: './operations.component.css'
+  styleUrls: ['./operations.component.css']
 })
 export class OperationsComponent {
     // * prefer inject() syntax for DI so can expose service signals to template props. inject() is modern and more compatible with unit testing - should we need it
@@ -30,11 +28,6 @@ export class OperationsComponent {
   private systemInformationFormService = inject(SystemInformationFormService);
   private destroyRef = inject(DestroyRef);
   private featureFlagService = inject(FeatureFlagService);
-  
-  @ViewChild('wrapperElement', { static: false }) wrapperElement: ElementRef;
-  // * prefer resizeObserver over onResize - only triggers on element change, not viewport
-  // todo investigate, resize may no longer be needed with overhauled styling
-  private resizeObserver: ResizeObserver;
   
   // * use typed forms - get intellisense on properties
   form: FormGroup<OperationsForm>;
@@ -46,7 +39,6 @@ export class OperationsComponent {
   showOperatingHoursModal: boolean;
   condenserCoolingMethods = getCondenserCoolingMethods();
   controlIds: FormControlIds<OperationsForm>;
-  formWidth: number = 0;
   
   showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
@@ -61,21 +53,6 @@ export class OperationsComponent {
     this.controlIds = generateFormControlIds(this.form.controls);
 
     this.observeFormChanges();
-  }
-
-  ngAfterViewInit() {
-    this.resizeObserver = new ResizeObserver(entries => {
-        this.formWidth = entries[0].contentRect.width;
-    });
-    if (this.wrapperElement?.nativeElement) {
-      this.resizeObserver.observe(this.wrapperElement.nativeElement);
-    }
-  }
-
-  ngOnDestroy() {
-    if (this.resizeObserver && this.wrapperElement?.nativeElement) {
-      this.resizeObserver.unobserve(this.wrapperElement.nativeElement);
-    }
   }
 
   // * subscribe to form value changes instead of individual onChange handler in template
@@ -98,41 +75,8 @@ export class OperationsComponent {
     this.processCoolingAssessmentService.setDefaultWeatherZipcode();
   }
 
-  // todo move to service
-  processZipcodeChange(zipcode: number) {
-    // this.processCoolingAssessmentService.processZipcodeChange(zipcode)
-    return of(zipcode);
-  }
-
-  // todo move to service
-  // signal on service consumed in this component
-  setLocationData(zipcode: number): void {
-  }
-
   focusField(str: string) {
     this.processCoolingUiService.focusedFieldSignal.set(str);
-  }
-
-  closeOperatingHoursModal() {
-    // can remove flag when is signal
-    this.showOperatingHoursModal = false;
-    this.processCoolingUiService.modalOpenSignal.set(false);
-  }
-
-  openOperatingHoursModal() {
-    // can remove flag when is signal
-    this.showOperatingHoursModal = true;
-    this.processCoolingUiService.modalOpenSignal.set(true);
-  }
-
-  updateOperatingHours(oppHours: OperatingHours) {
-    this.annualOperatingHours.patchValue(oppHours.hoursPerYear);
-    this.closeOperatingHoursModal();
-  }
-
-  // * use getters for cleaner template - shortened obj notation, no ng if in markup, future proofing
-  get annualOperatingHours() {
-    return this.form.get('annualOperatingHours');
   }
 
   get fuelCost() {
@@ -141,10 +85,6 @@ export class OperationsComponent {
 
   get electricityCost() {
     return this.form.get('electricityCost');
-  }
-
-  get zipcode() {
-    return this.form.get('zipcode');
   }
 
   get chilledWaterSupplyTemp() {

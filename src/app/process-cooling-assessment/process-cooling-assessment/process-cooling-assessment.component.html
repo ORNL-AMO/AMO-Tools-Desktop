@@ -7,10 +7,10 @@
 
   <div #footer id="processCoolingFooter" class="footer hide-print d-none d-lg-block">
     <div class="pull-left">
-      <button class="btn btn-default" (click)="back()" [disabled]="!canGoBack">Back</button>
+      <button class="btn btn-default" (click)="back()" [disabled]="!canGoBack()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" (click)="next()" [disabled]="!canContinue">Next</button>
+      <button class="btn btn-primary" (click)="next()" [disabled]="!canContinue()">Next</button>
     </div>
   </div>
 
@@ -18,4 +18,3 @@
 
 
 <app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
-<!-- <app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal> -->

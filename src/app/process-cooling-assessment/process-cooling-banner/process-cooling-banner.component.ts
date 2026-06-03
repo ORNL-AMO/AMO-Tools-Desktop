@@ -3,7 +3,8 @@ import { ProcessCoolingAssessmentService } from '../services/process-cooling-ass
 import { map, Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
-import { MAIN_VIEW_LINKS, MainView, ProcessCoolingUiService, ViewLink } from '../services/process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { MAIN_VIEW_LINKS, MainView, ViewLink } from '../models/views';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
@@ -113,19 +114,14 @@ export class ProcessCoolingBannerComponent {
     this.processCoolingUiService.back();
   }
 
-  get canContinue(): boolean {
-    return this.processCoolingUiService.canContinue();
-  }
-
-  get canGoBack(): boolean {
-    return this.processCoolingUiService.canGoBack();
-  }
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
+  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBack;
 
   isLinkDisabled(link: ViewLink): boolean {
     return !this.processCoolingUiService.canVisitView(link.view);
   }
 
-  handleCanNavigate(event: MouseEvent, link: ViewLink) {
+  handleCanNavigate(event: MouseEvent, link: ViewLink): boolean {
     if (this.isLinkDisabled(link)) {
       event.preventDefault();
       event.stopPropagation();

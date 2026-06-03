@@ -5,11 +5,13 @@
     </button>
 </div>
 <div class="modal-body compressed-air">
-    <p class="small" *ngIf="!modificationsExists">The Explore
-        Opportunities section is a novice view to help you find and evaluate different opportunities for
-        your system.
-        Notes can be added in the right tab (NOTES), these will be added to your final report. Data will be
-        copied from your current baseline condition.</p>
+    @if (!modifications || modifications.length === 0) {
+        <p class="small">The Explore
+            Opportunities section is a novice view to help you find and evaluate different opportunities for
+            your system.
+            Notes can be added in the right tab (NOTES), these will be added to your final report. Data will be
+            copied from your current baseline condition.</p>
+        }
     <form>
         <div class="form-section">
             <div class="form-group d-flex">

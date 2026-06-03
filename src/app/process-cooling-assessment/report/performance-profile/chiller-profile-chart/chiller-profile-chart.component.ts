@@ -23,15 +23,20 @@ export class ChillerProfileChartComponent {
   constructor() {
     effect(() => {
       const nativeElement: HTMLDivElement | undefined = this.chartRef()?.nativeElement;
+      if (!nativeElement) return;
+
       const chillerOutput: ProcessCoolingChillerOutput[] | undefined = this.baselineResults()?.chiller;
       const id = this.selectedChillerId();
+      const filteredChillers: ProcessCoolingChillerOutput[] = chillerOutput?.length
+        ? (id ? chillerOutput.filter(c => c.id === id) : chillerOutput)
+        : [];
 
-      if (!nativeElement || !chillerOutput?.length) return;
-      const filteredChillers: ProcessCoolingChillerOutput[] = id ? chillerOutput.filter(c => c.id === id) : chillerOutput;
+      if (!filteredChillers.length) {
+        this.plotlyService.getPlotly().then(Plotly => Plotly.purge(nativeElement));
+        return;
+      }
 
-      if (!filteredChillers.length) return;
       const { traces, layout, config } = this.chartsService.buildChillerProfileChart(filteredChillers);
-
       this.plotlyService.newPlot(nativeElement, traces, layout, config);
     });
   }

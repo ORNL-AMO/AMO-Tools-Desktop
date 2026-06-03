@@ -1,10 +1,8 @@
-<!-- LARGE VIEWPORT TABS -->
-<!--  todo optimization/cleanup - tab links have redundant li and divs which should be removed. Both wrapping element and a tag need to have routerlink directives and attributes to satisfy MEASUR legacy styling -->
-  <!-- todo this component needs to track validity of all sub-forms and only enable next when all are valid -->
+<!--  tab links have redundant li and divs which should be phased out. Both wrapping elements and <a> tag need to have routerlink directives and attributes to satisfy MEASUR global legacy styling -->
 
+<!-- LARGE VIEWPORT TABS -->
 <ul class="tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block">
-    @for (link of SYSTEM_INFORMATION_VIEW_LINKS; track $index) {
-        @if (!isAirCooled || link.view !== ROUTE_TOKENS.tower) {
+    @for (link of SYSTEM_INFORMATION_VIEW_LINKS | availableSystemInformationViews:condenserCoolingMethod; track $index) {
         @let isActive = (setupSubView() == link.view);
         @let isDisabled = isLinkDisabled(link);
         @let isInvalid = isTabInvalid(link);
@@ -18,7 +16,6 @@
                 <span class="px-2">{{link.label}}</span>
             </a>
         </li>
-        }
     }
 </ul>
 
@@ -30,8 +27,7 @@
             <a class="nav-link small" (click)="back()">
                 <span class="fa fa-chevron-left"></span></a>
         </li>
-        @for (link of SYSTEM_INFORMATION_VIEW_LINKS; track $index) {
-            @if (!isAirCooled || link.view !== ROUTE_TOKENS.tower) {
+        @for (link of SYSTEM_INFORMATION_VIEW_LINKS | availableSystemInformationViews:condenserCoolingMethod; track $index) {
             @let isActive = (setupSubView() == link.view);
             @let isDisabled = isLinkDisabled(link);
             @let isInvalid = isTabInvalid(link);
@@ -45,7 +41,6 @@
                     <span class="px-2">{{link.label}}</span>
                 </a>
             </li>
-            }
         }
         <li class="page-item">
             <a class="nav-link small" (click)="next()">

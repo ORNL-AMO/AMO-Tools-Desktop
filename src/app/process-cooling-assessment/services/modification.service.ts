@@ -237,7 +237,7 @@ export class ModificationService {
         modificationCopy.name = modificationCopy.name + '(' + nameExists.length + ')';
       }
       modificationCopy.id = getNewIdString();
-      processCoolingAssessment.modifications.push(modificationCopy);
+      processCoolingAssessment.modifications = [...processCoolingAssessment.modifications, modificationCopy];
       this.processCoolingAssessmentService.setProcessCooling(processCoolingAssessment);
       this.setSelectedModificationId(modificationCopy.id);
     }
@@ -418,7 +418,6 @@ export class ModificationService {
         isHEXRequired: processCooling.systemInformation.towerInput.isHEXRequired,
         HEXApproachTemp: processCooling.systemInformation.towerInput.HEXApproachTemp,
       },
-      // todo below baseline equivalents
       replaceChillers: {
         currentChillerId: '',
         newChiller: {} as ChillerInventoryItem,

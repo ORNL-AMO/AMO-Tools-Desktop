@@ -335,11 +335,13 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     let validators: ValidatorFn[] = [];
     if (towerSizeMetric === TowerSizeMetric.Tons) {
       validators = [
+        Validators.required,
         Validators.min(PROCESS_COOLING_VALIDATION.towerSizeTons.min),
         Validators.max(PROCESS_COOLING_VALIDATION.towerSizeTons.max)
       ];
     } else if (towerSizeMetric === TowerSizeMetric.HP) {
       validators = [
+        Validators.required,
         Validators.min(PROCESS_COOLING_VALIDATION.towerSizeHP.min),
         Validators.max(PROCESS_COOLING_VALIDATION.towerSizeHP.max)
       ];

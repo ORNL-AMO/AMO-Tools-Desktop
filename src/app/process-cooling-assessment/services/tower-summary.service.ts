@@ -60,7 +60,7 @@ export class TowerSummaryService {
 
 
         const totalTowerEnergy = result.tower?.energy?.reduce((sum, e) => sum + e, 0) ?? null;
-        let totalTowerCost;
+        let totalTowerCost: number;
         if (totalTowerEnergy != null && result.electricityCost != null) {
             totalTowerCost = totalTowerEnergy * result.electricityCost;
         }
@@ -113,38 +113,6 @@ export class TowerSummaryService {
                 baseline: { value: baseline?.totalTowerCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } },
                 modifications: modifications?.map(mod => ({ value: mod.totalTowerCost ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } })) ?? [],
             },
-            // todo keep - group may want these results
-            //   {
-            //     ...defaultRow,
-            //     className: 'emphasis',
-            //     label: 'Energy Savings',
-            //     baseline: { value: null },
-            //     modifications: modifications?.map(mod => ({ value: mod.energySavings ?? null, decimalPipe: defaultpipeFormat })) ?? [],
-            //   },
-            //   {
-            //     ...defaultRow,
-            //     className: 'emphasis',
-            //     label: 'Percent Energy Savings',
-            //     units: '(%)',
-            //     baseline: { value: null },
-            //     modifications: modifications?.map(mod => ({ value: mod.percentEnergySavings ?? null, decimalPipe: '1.1-1' })) ?? [],
-            //   },
-            //   {
-            //     ...defaultRow,
-            //     className: 'emphasis',
-            //     label: 'Cost Savings',
-            //     units: '($)',
-            //     baseline: { value: null },
-            //     modifications: modifications?.map(mod => ({ value: mod.costSavings ?? null, currencyPipe: { code: 'USD', display: 'symbol', digitsInfo: '1.0-0' } })) ?? [],
-            //   },
-            //   {
-            //     ...defaultRow,
-            //     className: 'emphasis',
-            //     label: 'Percent Cost Savings',
-            //     units: '(%)',
-            //     baseline: { value: null },
-            //     modifications: modifications?.map(mod => ({ value: mod.percentCostSavings ?? null, decimalPipe: '1.1-1' })) ?? [],
-            //   },
         ];
 
         return totalRows;

@@ -112,7 +112,7 @@ export class ConvertProcessCoolingService {
     if (!pumpInput) return pumpInput;
     
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
-      // todo flowRate awaiting proper unit
+      // todo 8506 flowRate awaiting proper unit
       pumpInput.flowRate = new ConvertValue(pumpInput.flowRate, PROCESS_COOLING_UNITS.volumeFlowRate.metric, PROCESS_COOLING_UNITS.volumeFlowRate.imperial).convertedValue;
       pumpInput.motorSize = new ConvertValue(pumpInput.motorSize, PROCESS_COOLING_UNITS.motorPower.metric, PROCESS_COOLING_UNITS.motorPower.imperial).convertedValue;
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
@@ -140,7 +140,7 @@ export class ConvertProcessCoolingService {
     
     if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       chillerItem.capacity = new ConvertValue(chillerItem.capacity, PROCESS_COOLING_UNITS.capacity.metric, PROCESS_COOLING_UNITS.capacity.imperial).convertedValue;
-      // todo full load efficiency conversion when we have definition for units
+      // todo 8506 full load efficiency conversion when we have definition for units
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       chillerItem.capacity = new ConvertValue(chillerItem.capacity, PROCESS_COOLING_UNITS.capacity.imperial, PROCESS_COOLING_UNITS.capacity.metric).convertedValue;
     }

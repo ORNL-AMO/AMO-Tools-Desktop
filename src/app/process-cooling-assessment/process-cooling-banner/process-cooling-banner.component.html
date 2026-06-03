@@ -2,7 +2,7 @@
     <div class="d-block d-lg-none mr-0 mr-2 pl-2 h-100">
         <div class="pr-2 border-right home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
             <button type="button" class="btn chevron-btn p-0" (click)="back()"
-                [disabled]="!canGoBack">
+                [disabled]="!canGoBack()">
                 <span class="fa fa-chevron-left"></span>
             </button>
         </div>
@@ -95,7 +95,7 @@
     <div class="d-block d-lg-none ml-2 mr-0 pr-1 h-100">
         <div class="pl-2 border-left home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
             <button type="button" class="btn chevron-btn p-0" (click)="continue()"
-                [disabled]="!canContinue">
+                [disabled]="!canContinue()">
                 <span class="fa fa-chevron-right"></span>
             </button>
         </div>

@@ -1,5 +1,6 @@
 import { Component, inject, Injector, Signal } from '@angular/core';
-import { ASSESSMENT_VIEW_LINKS, ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { ASSESSMENT_VIEW_LINKS } from '../models/views';
 import { Modification } from '../../shared/models/process-cooling-assessment';
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { ModificationService } from '../services/modification.service';
@@ -47,11 +48,6 @@ export class AssessmentComponent {
     this.processCoolingUiService.back();
   }
 
-  get canContinue(): boolean {
-    return this.processCoolingUiService.canContinue();
-  }
-
-  get canGoBack(): boolean {
-    return this.processCoolingUiService.canGoBack();
-  }
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
+  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBack;
 }

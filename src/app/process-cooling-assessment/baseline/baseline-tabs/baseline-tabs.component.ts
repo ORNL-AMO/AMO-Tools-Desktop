@@ -1,5 +1,6 @@
 import { Component, DestroyRef, ElementRef, inject, Signal, ViewChild } from '@angular/core';
-import { ProcessCoolingUiService, SETUP_VIEW_LINKS, ViewLink } from '../../services/process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
+import { SETUP_VIEW_LINKS, ViewLink } from '../../models/views';
 import { ROUTE_TOKENS } from '../../constants/process-cooling-routes';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
@@ -16,7 +17,7 @@ export class BaselineTabsComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   smallScreenPanelTab: string = 'help';
-  canContinue: boolean = true;
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
 
   readonly SETUP_VIEW_LINKS = SETUP_VIEW_LINKS;
 

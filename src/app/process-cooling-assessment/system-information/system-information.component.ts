@@ -1,5 +1,6 @@
 import { Component, DestroyRef, inject, Signal } from '@angular/core';
-import { ProcessCoolingUiService, SYSTEM_INFORMATION_VIEW_LINKS, ViewLink } from '../services/process-cooling-ui.service';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { SYSTEM_INFORMATION_VIEW_LINKS, ViewLink } from '../models/views';
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { CondenserCoolingMethod } from '../../shared/models/process-cooling-assessment';
@@ -21,14 +22,12 @@ export class SystemInformationComponent {
   isModalOpen: boolean = false;
   setupSubView: Signal<string> = this.processCoolingUiService.setupSubView;
 
-  readonly ROUTE_TOKENS = ROUTE_TOKENS;
   SYSTEM_INFORMATION_VIEW_LINKS = SYSTEM_INFORMATION_VIEW_LINKS;
 
   isPumpValid: boolean = false;
   isCondenserValid: boolean = false;
   isTowerValid: boolean = false;
 
-  // todo this component needs to track validity of all sub-forms and only enable next when all are valid
   ngOnInit(): void {
     this.processCoolingService.isSystemInformationValid$.pipe(
       takeUntilDestroyed(this.destroyRef)
@@ -63,8 +62,8 @@ export class SystemInformationComponent {
     this.processCoolingUiService.back();
   }
 
-  get isAirCooled(): boolean {
-    return this.processCoolingService.condenserCoolingMethod === CondenserCoolingMethod.Air;
+  get condenserCoolingMethod(): CondenserCoolingMethod {
+    return this.processCoolingService.condenserCoolingMethod;
   }
 
   isLinkDisabled(link: ViewLink): boolean {

@@ -145,7 +145,7 @@ export class WeeklyOperatingScheduleComponent implements OnInit {
     return this.form.get('useSameSchedule') as FormControl;
   }
 
-  getDayGroup(dayIndex: number) {
+  getDayGroup(dayIndex: number): FormGroup {
     return this.daysFormArray.at(dayIndex) as FormGroup;
   }
 

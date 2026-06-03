@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable } from '@angular/core';
 import { ProcessCoolingSuiteApiService, SuiteModificationArgs } from '../../tools-suite-api/process-cooling-suite-api.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
 import { combineLatest, map, Observable } from 'rxjs';
@@ -19,12 +19,10 @@ export class ProcessCoolingResultsService {
 
   readonly baselineResults$: Observable<ProcessCoolingResults | undefined> = combineLatest([
     this.processCoolingAssessmentService.processCooling$,
-    this.processCoolingWeatherContextService.weatherContextData$
+    this.processCoolingWeatherContextService.weatherContextData$,
   ]).pipe(
-    map(([processCooling, weatherContextData]: [ProcessCoolingAssessment, WeatherContextData]) => {
-      if (!processCooling) return undefined;
-      const isValid = this.processCoolingAssessmentService.getIsBaselineValid(processCooling, weatherContextData);
-      if (!isValid) return undefined;
+    map(([processCooling]) => {
+      if (!this.processCoolingAssessmentService.isBaselineValid(processCooling)) return undefined;
       const results = this.getProcessCoolingSuiteResults(processCooling);
       results.id = String(this.processCoolingAssessmentService.assessmentValue.id);
       return results;
@@ -46,13 +44,17 @@ export class ProcessCoolingResultsService {
     })
   );
 
-  readonly modificationResults$: Observable<ProcessCoolingResults[]> = toObservable(this.modificationService.modifications).pipe(
-    map((modifications: Modification[]) => {
+  readonly modificationResults$: Observable<ProcessCoolingResults[]> = toObservable(
+    computed(() => ({
+      modifications: this.modificationService.modifications(),
+      invalidIds: this.modificationService.invalidModificationIds(),
+    }))
+  ).pipe(
+    map(({ modifications, invalidIds }) => {
       let modificationResults: ProcessCoolingResults[] = [];
       if (modifications) {
         modificationResults = modifications.map(modification => {
-          // todo we may still have race condition with invalidModificationids
-          const isValid = !this.modificationService.invalidModificationIds().includes(modification.id);
+          const isValid = !invalidIds.includes(modification.id);
           console.log(`[ProcessCoolingResultsService] modification ${modification.name} isValid:`, isValid);
           if (isValid) {
             const suiteModificationArgs: SuiteModificationArgs = {
