@@ -54,10 +54,10 @@ export class DesignDetailsCatalogComponent implements OnInit {
           this.setDisplayNoLoadPowerFM(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
           this.setDisplayNoLoadPowerUL(selectedCompressedAir.nameplateData.compressorType, selectedCompressedAir.compressedAirControlsProperties.controlType);
           this.setDisplayAverageLoadFactorAndMotorEfficiencyAtLoad(selectedCompressedAir.compressedAirControlsProperties.controlType);
+          this.setCalculatedModulatingPressureRange(selectedCompressedAir);
         } else {
           this.isFormChange = false;
         }
-        this.setCalculatedModulatingPressureRange(selectedCompressedAir);
       }
     });
     this.displayOptions = this.compressedAirInventoryService.compressedAirInventoryData.getValue().displayOptions.compressedAirDesignDetailsPropertiesOptions;

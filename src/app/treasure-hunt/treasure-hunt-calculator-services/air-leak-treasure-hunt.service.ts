@@ -1,28 +1,28 @@
 import { Injectable } from '@angular/core';
-import { AirLeakService } from '../../calculator/compressed-air/air-leak/air-leak.service';
 import { Settings } from '../../shared/models/settings';
 import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyOutput } from '../../shared/models/standalone';
 import { AirLeakSurveyTreasureHunt, EnergyUsage, OpportunitySummary, TreasureHunt, TreasureHuntOpportunityResults } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import * as _ from 'lodash';
-import { ConvertAirLeakService } from '../../calculator/compressed-air/air-leak/convert-air-leak.service';
+import { ConvertAirLeakService } from '../../calculator/compressed-air/air-leak-survey/convert-air-leak.service';
+import { AirLeakSurveyService } from '../../calculator/compressed-air/air-leak-survey/air-leak-survey.service';
 
 @Injectable()
 export class AirLeakTreasureHuntService {
 
   constructor(
-    private airLeakService: AirLeakService,
+    private airLeakService: AirLeakSurveyService,
     private convertAirLeakService: ConvertAirLeakService
     ) { }
 
 
   initNewCalculator() {
-    this.airLeakService.airLeakInput.next(undefined);
+    this.airLeakService.airLeakInput.set(undefined);
   }
 
   setCalculatorInputFromOpportunity(airLeakSurvey: AirLeakSurveyTreasureHunt) {
     let airLeakInput: AirLeakSurveyInput = _.cloneDeep(airLeakSurvey.airLeakSurveyInput)
-    this.airLeakService.airLeakInput.next(airLeakInput);
+    this.airLeakService.airLeakInput.set(airLeakInput);
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -39,7 +39,7 @@ export class AirLeakTreasureHuntService {
   }
 
   resetCalculatorInputs() {
-    this.airLeakService.airLeakInput.next(undefined);
+    this.airLeakService.airLeakInput.set(undefined);
   }
 
 

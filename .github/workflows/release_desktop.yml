@@ -278,6 +278,7 @@ jobs:
         with:
           name: MEASUR v${{ env.VERSION }}
           tag_name: v${{ env.VERSION }}
+          target_commitish: master
           draft: true # Comment out if enabling tag gating and publishing via action
           generate_release_notes: false
           files: |

@@ -155,3 +155,10 @@ export enum SteamPressureOrTemp {
     PRESSURE = 0,
     TEMPERATURE = 1
 }
+
+export enum ThermodynamicQuantity {
+    TEMPERATURE = 0,
+    ENTHALPY = 1,
+    ENTROPY = 2,
+    QUALITY = 3
+}

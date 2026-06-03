@@ -30,10 +30,10 @@
         <span *ngIf="row.quality == 1">Gas</span>
         <span *ngIf="row.quality != 1 && row.quality != 0">{{row.quality | number:'1.0-2'}}</span>
       </td>
-      <td *ngIf="row.thermodynamicQuantity == 0">Temperature</td>
-      <td *ngIf="row.thermodynamicQuantity == 1">Specific Enthalpy</td>
-      <td *ngIf="row.thermodynamicQuantity == 2">Specific Entropy</td>
-      <td *ngIf="row.thermodynamicQuantity == 3">Saturated Quality</td>
+      <td *ngIf="row.thermodynamicQuantity == ThermodynamicQuantity.TEMPERATURE">Temperature</td>
+      <td *ngIf="row.thermodynamicQuantity == ThermodynamicQuantity.ENTHALPY">Specific Enthalpy</td>
+      <td *ngIf="row.thermodynamicQuantity == ThermodynamicQuantity.ENTROPY">Specific Entropy</td>
+      <td *ngIf="row.thermodynamicQuantity == ThermodynamicQuantity.QUALITY">Saturated Quality</td>
       <td>{{row.volume | number:'1.0-4'}}</td>
       <td class="delete-row" (click)="deleteRow(i)">Delete</td>
     </tr>
