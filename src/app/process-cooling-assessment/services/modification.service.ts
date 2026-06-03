@@ -237,7 +237,7 @@ export class ModificationService {
         modificationCopy.name = modificationCopy.name + '(' + nameExists.length + ')';
       }
       modificationCopy.id = getNewIdString();
-      processCoolingAssessment.modifications.push(modificationCopy);
+      processCoolingAssessment.modifications = [...processCoolingAssessment.modifications, modificationCopy];
       this.processCoolingAssessmentService.setProcessCooling(processCoolingAssessment);
       this.setSelectedModificationId(modificationCopy.id);
     }

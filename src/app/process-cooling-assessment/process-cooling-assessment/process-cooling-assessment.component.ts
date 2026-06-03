@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Signal } from '@angular/core';
 import { AnalyticsService } from '../../shared/analytics/analytics.service';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 
@@ -28,12 +28,7 @@ export class ProcessCoolingAssessmentComponent {
     this.processCoolingUiService.back();
   }
 
-  get canContinue(): boolean {
-    return this.processCoolingUiService.canContinue();
-  }
-
-  get canGoBack(): boolean {
-    return this.processCoolingUiService.canGoBack();
-  }
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
+  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBack;
 
 }

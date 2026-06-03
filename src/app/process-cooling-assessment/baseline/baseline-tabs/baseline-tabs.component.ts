@@ -17,7 +17,7 @@ export class BaselineTabsComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   smallScreenPanelTab: string = 'help';
-  canContinue: boolean = true;
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
 
   readonly SETUP_VIEW_LINKS = SETUP_VIEW_LINKS;
 

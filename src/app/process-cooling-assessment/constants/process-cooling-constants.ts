@@ -25,7 +25,6 @@ export const getFanType = (): SelectOption[] => {
   return [
         { value: FanType.Axial, name: 'Axial' },
         { value: FanType.Centrifugal, name: 'Centrifugal' },
-        { value: FanType.Unknown, name: 'Unknown' }
   ] as const;
 }
 

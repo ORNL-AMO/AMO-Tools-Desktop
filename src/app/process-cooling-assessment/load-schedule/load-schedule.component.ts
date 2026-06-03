@@ -1,4 +1,4 @@
-import { Component, inject, WritableSignal } from '@angular/core';
+import { Component, inject, Signal } from '@angular/core';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/models/process-cooling-assessment';
 
@@ -10,7 +10,7 @@ import { ChillerInventoryItem, ProcessCoolingAssessment } from '../../shared/mod
 })
 export class LoadScheduleComponent {
   private processCoolingAssessmentService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
-  processCooling: WritableSignal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
+  processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
 
   chillerInventory: Array<ChillerInventoryItem> = this.processCooling().inventory;
 

@@ -1,4 +1,4 @@
-import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { BehaviorSubject, combineLatest, debounceTime, firstValueFrom, map, switchMap, tap } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ChillerInventoryItem, MonthlyOperatingSchedule, ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
@@ -6,16 +6,12 @@ import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
 import { getDefaultInventoryItem } from '../constants/process-cooling-constants';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
 import { SystemInformationFormService } from '../system-information/system-information-form.service';
 import { ChillerInventoryService } from './chiller-inventory.service';
 
-/**
- * Service currently uses both signals and observables for the same state. This is a prototype, 
- * we should pick one or the other when it becomes clear which fit better with existing MEASUR patterns
- */
 @Injectable()
 export class ProcessCoolingAssessmentService {
   private readonly settingsDbService = inject(SettingsDbService);
@@ -31,7 +27,7 @@ export class ProcessCoolingAssessmentService {
 
   private readonly processCooling: BehaviorSubject<ProcessCoolingAssessment> = new BehaviorSubject<ProcessCoolingAssessment>(undefined);
   readonly processCooling$ = this.processCooling.asObservable();
-  processCoolingSignal: WritableSignal<ProcessCoolingAssessment> = signal<ProcessCoolingAssessment>(undefined);
+  readonly processCoolingSignal: Signal<ProcessCoolingAssessment> = toSignal(this.processCooling$, { requireSync: true });
 
   private readonly settings: BehaviorSubject<Settings> = new BehaviorSubject<Settings>(undefined);
   readonly settings$ = this.settings.asObservable();
@@ -81,13 +77,8 @@ export class ProcessCoolingAssessmentService {
     return this.settings.getValue();
   }
 
-  // todo too many sources of truth
   setProcessCooling(processCooling: ProcessCoolingAssessment) {
-    // console.log('[ProcessCoolingService] processCooling:', processCooling);
-    // todo will have race conditions if used together (isBaselineValid$)
     this.processCooling.next(processCooling);
-    this.processCoolingSignal.set(processCooling);
-
     const updatedAssessment = { ...this.assessmentValue, processCooling };
     this.setAssessment(updatedAssessment);
   }
@@ -210,27 +201,9 @@ export class ProcessCoolingAssessmentService {
     return Promise.resolve();
   }
 
-  // todo revise all validation observables, now that we need granular checks. Use combine lateest on baseline
-  readonly isBaselineValid$ = combineLatest([
-    this.processCooling$,
-    this.processCoolingWeatherContextService.weatherContextData$
-  ]).pipe(
-    map(([processCooling, weatherContextData]: [ProcessCoolingAssessment, WeatherContextData]) => {
-      if (processCooling) {
-        return this.getIsBaselineValid(processCooling, weatherContextData);
-      }
-      return false;
-    })
+  readonly isWeatherDataValid$ = this.processCoolingWeatherContextService.weatherContextData$.pipe(
+    map(() => this.processCoolingWeatherContextService.isValidWeatherData())
   );
-
-  getIsBaselineValid(processCooling: ProcessCoolingAssessment, weatherData: WeatherContextData): boolean {
-    const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
-    const isChillerInventoryValid = this.isChillerInventoryValid();
-    const isOperatingScheduleValid = this.isOperatingScheduleValid(processCooling.weeklyOperatingSchedule, processCooling.monthlyOperatingSchedule);
-    const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
-    const isValid = isSystemInformationValid && isChillerInventoryValid && isOperatingScheduleValid && isWeatherDataValid;
-    return isValid;
-  }
 
   readonly isSystemInformationValid$ = combineLatest([
     this.processCooling$,
@@ -289,6 +262,21 @@ export class ProcessCoolingAssessmentService {
     })
   );
 
+  isBaselineValid(processCooling?: ProcessCoolingAssessment): boolean {
+    const pc = processCooling ?? this.processCooling.getValue();
+    if (!pc) return false;
+    return (
+      this.isSystemInformationValid(pc.systemInformation)
+      && this.isChillerInventoryValid()
+      && this.isOperatingScheduleValid(pc.weeklyOperatingSchedule, pc.monthlyOperatingSchedule)
+    );
+  }
+
+  readonly isBaselineValid$ = combineLatest([
+    this.processCooling$,
+    this.processCoolingWeatherContextService.weatherContextData$,
+  ]).pipe(map(([pc]) => this.isBaselineValid(pc)));
+
   readonly isLoadScheduleValid$ = this.processCooling$.pipe(
     map((processCooling: ProcessCoolingAssessment) => {
       return this.isLoadScheduleValid(processCooling.inventory);
@@ -314,8 +302,8 @@ export class ProcessCoolingAssessmentService {
   }
 
   isChillerInventoryValid(): boolean {
-    // return chillerInventory && chillerInventory.length > 0;
-    return this.inventoryService.inventoryValidState().isValid;
+    const inventory = this.processCooling.getValue()?.inventory;
+    return inventory?.length > 0 && this.inventoryService.inventoryValidState().isValid;
   }
   
   isOperatingScheduleValid(weeklyOperatingSchedule: WeeklyOperatingSchedule, monthlyOperatingSchedule: MonthlyOperatingSchedule): boolean {

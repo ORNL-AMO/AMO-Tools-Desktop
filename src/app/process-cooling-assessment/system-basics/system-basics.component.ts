@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, WritableSignal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, Signal, WritableSignal } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
@@ -26,7 +26,7 @@ export class SystemBasicsComponent {
 
   readonly assessment$: Observable<Assessment> = this.processCoolingAssessmentService.assessment$;
   readonly settings: WritableSignal<Settings> = this.processCoolingAssessmentService.settingsSignal;
-  readonly processCooling: WritableSignal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
+  readonly processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
 
   @Output('openUpdateUnitsModal')
   openUpdateUnitsModal = new EventEmitter<Settings>();

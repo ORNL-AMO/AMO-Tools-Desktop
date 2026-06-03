@@ -114,13 +114,8 @@ export class ProcessCoolingBannerComponent {
     this.processCoolingUiService.back();
   }
 
-  get canContinue(): boolean {
-    return this.processCoolingUiService.canContinue();
-  }
-
-  get canGoBack(): boolean {
-    return this.processCoolingUiService.canGoBack();
-  }
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
+  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBack;
 
   isLinkDisabled(link: ViewLink): boolean {
     return !this.processCoolingUiService.canVisitView(link.view);

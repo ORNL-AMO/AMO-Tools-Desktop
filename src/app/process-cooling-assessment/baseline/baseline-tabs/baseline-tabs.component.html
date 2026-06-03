@@ -28,9 +28,9 @@
 <nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs process-cooling-assessment flex-wrap flex-fill">
     <ul
         class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill process-cooling-assessment">
-        <li class="page-item" [class.disabled]="setupView() == 'system-basics' || !canContinue">
+        <li class="page-item" [class.disabled]="setupView() == 'system-basics' || !canContinue()">
             <a class="nav-link small" (click)="back()"
-                [class.disabled]="setupView() == 'system-basics' || !canContinue">
+                [class.disabled]="setupView() == 'system-basics' || !canContinue()">
                 <span class="fa fa-chevron-left"></span></a>
         </li>
 
@@ -53,8 +53,8 @@
                 </a>
             </li>
         }
-        <li class="page-item" [class.disabled]="!canContinue">
-            <a class="nav-link small" (click)="continue()" [class.disabled]="!canContinue">
+        <li class="page-item" [class.disabled]="!canContinue()">
+            <a class="nav-link small" (click)="continue()" [class.disabled]="!canContinue()">
                 <span class="fa fa-chevron-right"></span></a>
         </li>
     </ul>
