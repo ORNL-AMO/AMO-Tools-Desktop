@@ -360,7 +360,7 @@ export class StandaloneSuiteApiService {
 
     let output: {
       pressureChange: number,
-      capacity: number,
+      effectiveCapacity: number,
       tankSize: number,
       volumeCf: number,
     } = this.toolsSuiteApiService.ToolsSuiteModule.calculateReceiverTankCompressorCycleSize({
@@ -369,13 +369,13 @@ export class StandaloneSuiteApiService {
       compressorCapacity: input.compressorCapacity,
       loadTime: input.loadTime,
       unloadTime: input.unloadTime,
-      volumeCf: input.atmosphericPressure,
+      atmosphericPressure: input.atmosphericPressure,
     });
     return {
       pressureChange: output.pressureChange,
-      capacity: output.capacity,
-      areaStorageVolume: output.tankSize,
-      liquidStorageVolume: output.volumeCf,
+      capacity: output.effectiveCapacity,
+      areaStorageVolume: output.volumeCf,
+      liquidStorageVolume: output.tankSize,
     };
   }
 }
