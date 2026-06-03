@@ -46,7 +46,6 @@ export class ProcessCoolingAssessmentService {
             tap(allAssessments => {
               this.assessmentDbService.setAll(allAssessments);
             }),
-            // tap(() => console.log('saving assessment in db', assessment))
           );
         }
         return [];

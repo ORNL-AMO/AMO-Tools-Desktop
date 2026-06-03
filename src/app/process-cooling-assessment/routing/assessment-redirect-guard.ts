@@ -19,11 +19,9 @@ export class AssessmentRedirectGuard implements CanActivate {
         
         if (!assessment.processCooling.setupDone) {
             redirectUrlTree = this.router.createUrlTree(['/process-cooling', assessmentId, ROUTE_TOKENS.baseline]);
-            // this.router.createUrlTree(['/assessment', assessmentId, 'setup']);
         } else {
           redirectUrlTree = this.router.createUrlTree(['/process-cooling', assessmentId, ROUTE_TOKENS.baseline]);
         }
-        console.log('AssessmentRedirectGuard redirecting to:', redirectUrlTree.toString());
         return of(redirectUrlTree);
     }
 }

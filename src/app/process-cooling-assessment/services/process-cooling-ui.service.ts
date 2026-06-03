@@ -125,7 +125,6 @@ export class ProcessCoolingUiService {
       filter(event => event instanceof NavigationEnd),
       map(() => {
         const mainView = this.getCurrentMainView();
-        // console.log('mainView:', mainView);
         return mainView;
       }),
       startWith(this.getCurrentMainView())
@@ -138,7 +137,6 @@ export class ProcessCoolingUiService {
       filter(event => event instanceof NavigationEnd),
       map(() => {
         const childView = this.getCurrentChildView();
-        // console.log('childView:', childView);
         return childView;
       }),
       startWith(this.getCurrentChildView())
@@ -151,7 +149,6 @@ export class ProcessCoolingUiService {
       filter(event => event instanceof NavigationEnd),
       map(() => {
         const subView = this.getSetupSubView();
-        // console.log('subView:', subView);
         return subView;
       }),
       startWith(this.getSetupSubView())
