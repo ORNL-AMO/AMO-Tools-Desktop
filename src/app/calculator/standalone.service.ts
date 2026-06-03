@@ -11,7 +11,7 @@ import {
   PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput, SteamReductionOutput, SteamReductionResult,
   PowerFactorTriangleModeInputs,
   PowerFactorTriangleOutputs,
-  ReceiverTankMeteredResults,
+  ReceiverTankMeteredResults, SteamLeakSurveyResult, SteamLeakSurveyInput
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -350,6 +350,11 @@ export class StandaloneService {
 
   airLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
     let results: AirLeakSurveyResult = this.calculatorSuiteApiService.compressedAirLeakSurvey(inputObj);
+    return results;
+  }
+  
+  steamLeakSurvey(inputObj: SteamLeakSurveyInput): SteamLeakSurveyResult { 
+    let results: SteamLeakSurveyResult = this.calculatorSuiteApiService.steamLeakSurvey(inputObj);
     return results;
   }
 

@@ -9,7 +9,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { LeakMetaFormControls } from './steam-leak-survey-form.service';
 import { SteamLeakSurveyService } from '../steam-leak-survey-service';
 import { SteamLeakSurveyFormService } from './steam-leak-survey-form.service';
-import { SteamMeasurementMethod } from '../../../compressed-air/compressed-air-constants';
+import { SteamLeakMeasurementMethod } from '../steam-leak-constants';
 import { SteamLeakSurveyData } from '../../../../shared/models/standalone';
 @Component({
     selector: 'app-steam-leak-survey-form',
@@ -25,6 +25,8 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
     private readonly cdr = inject(ChangeDetectorRef);
     
     leakMetaForm!: FormGroup<LeakMetaFormControls>;
+
+    readonly SteamLeakMeasurementMethod = SteamLeakMeasurementMethod;
 
     private formChangeSub: Subscription | null = null;
 
@@ -62,7 +64,7 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
 
         const index = this.surveyService.currentLeakIndex();
         const existing = current.steamLeakSurveyInputVec[index];
-        const method: number = this.leakMetaForm.controls.measurementMethod.value ?? SteamMeasurementMethod.Estimate;
+        const method: number = this.leakMetaForm.controls.measurementMethod.value ?? SteamLeakMeasurementMethod.Estimate;
         const hoursPerYear = current.facilitySteamLeakData.annualOperatingHours
 
         const updatedLeak: SteamLeakSurveyData = {

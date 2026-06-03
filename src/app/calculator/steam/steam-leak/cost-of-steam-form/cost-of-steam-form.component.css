@@ -8,14 +8,15 @@
     border-bottom: 1px dashed;
 }
 
-.form-section-decibel {
-  padding-bottom: .25rem;
-  border-top: 1px dashed;
-}
-
 .btn-group {
   text-align: center;
 }
+
+.compressor-form-item {
+  flex: 1 1 350px;
+  padding: 1em;
+}
+
 
 .btn-margin-10 {
   margin: 10px 0px;

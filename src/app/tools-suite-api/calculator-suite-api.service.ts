@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
+import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs, SteamLeakSurveyInput, SteamLeakSurveyResult, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ValveEnergyLossInputs, ValveEnergyLossOutputs, ValveEnergyLossResults } from '../shared/models/calculators';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+import { SteamLeakApiService } from './steam-leak-api.service';
 
 
 @Injectable()
 export class CalculatorSuiteApiService {
 
   constructor(private suiteApiHelperService: SuiteApiHelperService,
-    private toolsSuiteApiService: ToolsSuiteApiService
+    private toolsSuiteApiService: ToolsSuiteApiService,
+    private steamLeakApiService: SteamLeakApiService
   ) { }
 
   electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResult {
@@ -423,6 +425,65 @@ export class CalculatorSuiteApiService {
     };
     inputs.delete();
     return results;
+  }
+
+  steamLeakSurvey(inputObj: SteamLeakSurveyInput): SteamLeakSurveyResult {
+    const facility = inputObj.facilitySteamLeakData;
+    const leak = inputObj.steamLeakSurveyInputVec[0];
+    if (!leak) {
+      return { leakRate: 0, steamLoss: 0, energyLoss: 0, leakCost: 0 };
+    }
+
+    const utilityTypeMap: Record<number, 'steam' | 'electric' | 'natural_gas'> = {
+      0: 'steam',
+      1: 'electric',
+      2: 'natural_gas',
+    };
+
+    const surveyInput = {
+      operatingTime: facility.annualOperatingHours,
+      steamTemp: facility.steamTemperature,
+      steamPressure: facility.steamPressure,
+      costOfElectricity: facility.electricityCost,
+      leakPressure: facility.steamPressure,
+      leakTemp: facility.steamTemperature,
+      feedwaterTemp: facility.feedwaterTemperature,
+      boilerEfficiency: facility.boilerEfficiency,
+      systemEfficiency: facility.systemEfficiency,
+      utilityType: utilityTypeMap[facility.utilityType] ?? 'electric',
+      fuelCost: facility.fuelCost,
+      fuelEnergyFactor: facility.fuelEnergyFactor,
+      steamCost: facility.steamCost,
+    };
+
+    switch (leak.measurementMethod) {
+      case 1:
+        return this.steamLeakApiService.estimateMethodTurbineCalc(
+          leak.estimateTurbineMethodData.turbineEfficiency,
+          leak.estimateTurbineMethodData.leakRate,
+          surveyInput
+        );
+      case 2:
+        return this.steamLeakApiService.orificeMethodCalc(
+          leak.orificeMethodData.turbineEfficiency,
+          leak.orificeMethodData.holeSize,
+          leak.orificeMethodData.dischargeCoefficient,
+          leak.orificeMethodData.atmosphericPressure,
+          surveyInput
+        );
+      case 3:
+        return this.steamLeakApiService.plumeMethodCalc(
+          leak.plumeMethodData.turbineEfficiency,
+          leak.plumeMethodData.plumeLength,
+          leak.plumeMethodData.ambientTemperature,
+          surveyInput
+        );
+      default:
+        return this.steamLeakApiService.estimateMethodPRVCalc(
+          leak.estimateMethodData.leakRate,
+          surveyInput
+        );
+    }
   }
 
   pipeInsulationReduction(inputObj: PipeInsulationReductionInput): PipeInsulationReductionResult {

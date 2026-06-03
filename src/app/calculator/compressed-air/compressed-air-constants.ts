@@ -338,13 +338,6 @@ export enum LeakMeasurementMethod {
     Orifice
 }
 
-export enum SteamMeasurementMethod {
-    Estimate,
-    Decibel,
-    Bag,
-    Orifice
-}
-
 export enum FacilityUtilityType {
     CompressedAir = 0,
     Electric = 1
