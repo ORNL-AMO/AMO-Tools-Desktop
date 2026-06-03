@@ -54,7 +54,6 @@ export class TreasureHuntGaugeComponent implements OnInit {
   }
 
   initChart() {
-    console.log(this.value)
     this.chart = bb.generate({
       data: {
         columns: [
