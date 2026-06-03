@@ -4,7 +4,6 @@ import { ProcessCoolingAssessmentService } from '../services/process-cooling-ass
 import { Injectable, Inject, inject } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { catchError, forkJoin, from, map, Observable, of, switchMap, take, throwError, tap } from 'rxjs';
-import { EGridService } from '../../shared/helper-services/e-grid.service';
 import { Settings } from '../../shared/models/settings';
 import { MeasurAppError } from '../../shared/errors/errors';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -31,7 +30,6 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
     private modificationService: ModificationService,
     @Inject(WEATHER_CONTEXT) private processCoolingWeatherContextService: WeatherContext,
     private inventoryService: ChillerInventoryService,
-    private egridService: EGridService,
     private localStorageService: LocalStorageService,
     private router: Router
   ) { }
@@ -80,13 +78,6 @@ export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingR
 
     const initializedModuleData$ = getAssessment$.pipe(
       switchMap(assessment => {
-        // ! only for QA testing - patch changed fields
-        assessment.processCooling.inventory.forEach(item => {
-          if (!item.loadAtPercent) item.loadAtPercent = [25, 50, 75, 100];
-          if (!item.kWPerTonAtLoad) item.kWPerTonAtLoad = [];
-        });
-
-
         this.processCoolingAssessmentService.setAssessment(assessment);
         this.processCoolingAssessmentService.setProcessCooling(assessment.processCooling);
         this.inventoryService.setDefaultSelectedChiller(assessment.processCooling.inventory);
