@@ -135,8 +135,8 @@
             {{saturatedPressure.errors?.max?.max}}
             <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.
           </span>
-          <span *ngIf="saturatedPressure.errors?.min">Value can't be less than
-            {{saturatedPressure.errors?.min?.min}}
+          <span *ngIf="saturatedPressure.errors?.greaterThan">Value must be greater than
+            {{saturatedPressure.errors?.greaterThan}}
             <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>.
           </span>
         </span>
