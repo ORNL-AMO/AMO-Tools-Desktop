@@ -1,25 +1,104 @@
-li.show-border{
-    border-left: .5px solid gray;
+.calc-main-group {
+  position: relative;
 }
 
-.hide{
-    display: none;
+.calc-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-
-li.show-border ul{
-    display: block;
+.calc-trigger .fa-calculator {
+  font-size: 14px;
+  color: var(--measur-brand);
+  flex-shrink: 0;
 }
 
-li ul{
-    display: none;
+.calc-group {
+  position: relative;
 }
 
-.directory-item{
-    display: none;
+.calc-group .sidebar-item {
+  display: flex;
+  align-items: center;
 }
 
-.show-border .directory-item{
-    display: inherit;
-    border-left: .5px solid gray;
+.calc-arrow {
+  font-size: 9px;
+  color: #bbb;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: color 0.1s ease;
+}
+
+.calc-group:hover .calc-arrow,
+.calc-main-group:hover > .calc-trigger .calc-arrow {
+  color: #888;
+}
+
+.flyout-divider {
+  margin: 4px 0;
+  border: none;
+  border-top: 1px solid #e8e8e8;
+}
+
+@keyframes flyout-enter {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Shared flyout panel styles ── */
+.calc-flyout {
+  position: fixed;
+  animation: flyout-enter 0.12s ease-out;
+  z-index: 1050;
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  border-radius: 8px;
+  box-shadow: 4px 4px 18px rgba(0, 0, 0, 0.13);
+  padding: 6px 0;
+  min-width: 240px;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.calc-flyout::-webkit-scrollbar {
+  width: 4px;
+}
+
+.calc-flyout::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.calc-flyout::-webkit-scrollbar-thumb:hover {
+  background-color: var(--measur-brand);
+}
+
+/* Level-1 (category list) is narrower than the calculator list */
+.calc-flyout-main {
+  min-width: 190px;
+}
+
+/* ── Mobile: fall back to inline ── */
+@media (max-width: 1023px) {
+  .calc-flyout {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    max-height: none;
+    overflow: visible;
+    border-left: 1.5px solid #e8e8e8;
+    margin-left: 1rem;
+  }
+
+  .calc-flyout-cat {
+    margin-left: 2rem;
+  }
 }

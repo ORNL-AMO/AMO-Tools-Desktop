@@ -1,53 +1,254 @@
-#importFileRef, #backupFile {
-    font-size: 14px;
+﻿/* -- Outer shell ------------------------------------------------ */
+.data-backup-screen {
+  max-width: 1140px;
+  margin: 32px auto;
+  padding: 0 20px 40px;
 }
 
-.custom-control-input:checked ~ .custom-control-label::before {
-    border-color: #156739;
-    background-color: #156739;
+/* -- Panel section chrome --------------------------------------- */
+.panel-section {
+  margin-bottom: 22px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  border: 1px solid #e4e4e4;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
 }
 
-.custom-switch .custom-control-label::before,
-.custom-switch .custom-control-label::after {
-    cursor: pointer !important;
+.section-label {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #555;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #d8d8d8;
 }
 
-.checkbox:hover{
-    background-color: #efefef;
-    cursor: pointer;
+.section-body {
+  padding: 4px 0;
 }
 
-.feature-action {
-    border: 2px solid #efefef;
-    font-size: 16px;
+/* -- Info banners ----------------------------------------------- */
+.info-banner {
+  background: #f0f8f4;
+  border: 1px solid #156739;
+  border-radius: 8px;
+  color: #156739;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  text-align: center;
 }
 
-label, .desc-text {
-    font-size: 16px;
+.unavailable-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f7f7f7;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  color: #888;
+  font-size: 14px;
+  padding: 14px 18px;
+}
+
+/* -- Description text ------------------------------------------- */
+.desc-text {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.section-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid #efefef;
+  margin-top: 12px;
+}
+
+/* -- Automatic backup feature row ------------------------------- */
+.feature-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  background: #fafafa;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  margin-bottom: 14px;
+}
+
+.feature-label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* -- Toggle switch ---------------------------------------------- */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #fff;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background-color: #156739;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 0 2px rgba(21, 103, 57, 0.25);
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+.slider.round {
+  border-radius: 26px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* -- Backup options --------------------------------------------- */
+.backup-options {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.option-group {
+  flex: 1;
+  min-width: 220px;
+}
+
+.option-group.disabled {
+  color: #aaa;
+  pointer-events: none;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 4px;
+}
+
+.option-desc {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.info-note {
+  font-size: 13px;
+  color: #666;
+  background: #f5f8ff;
+  border: 1px solid #c8d8f0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-top: 10px;
+}
+
+.location-text {
+  font-size: 14px;
+  color: #444;
 }
 
 .file-path {
-    font-size: 14px;
+  font-size: 13px;
+  word-break: break-all;
 }
 
-.disabled {
-    color: gray;
-    pointer-events: none;
+/* -- Create Backup button --------------------------------------- */
+.btn-add-new {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--measur-brand, #156739);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 6px rgba(21, 103, 57, 0.25);
 }
 
-.select-folder {
-    margin-bottom: 1rem;
+.btn-add-new:hover,
+.btn-add-new:focus {
+  background: #0e4f2c;
+  box-shadow: 0 3px 10px rgba(21, 103, 57, 0.35);
+  color: #fff;
 }
 
-.click-link.disabled{
-    color: gray !important;
+.btn-add-new .fa {
+  background: none;
+  border: none;
+  opacity: 1;
+  padding: 0;
+  color: #fff;
 }
 
-.jumbo {
-    font-size: 24px;
-    padding: 1.5rem;
-    font-weight: 600;
-    color: #156739 !important;
-    background-color: #fff;
-    border: 1px solid #156739 !important;
+/* -- Import row ------------------------------------------------- */
+.import-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 14px;
+  background: #fafafa;
+  border: 1px solid #e8e8e8;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+#importFileRef {
+  font-size: 14px;
+  flex: 1;
+  min-width: 0;
 }

@@ -15,6 +15,7 @@ import { WaterAssessment } from 'process-flow-lib';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { OperatingHours } from '../shared/models/operations';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { RecentlyAccessedService } from '../shared/recently-accessed/recently-accessed.service';
 
 @Injectable()
 export class AssessmentService {
@@ -26,7 +27,7 @@ export class AssessmentService {
 
   showTutorial: BehaviorSubject<string>;
   tutorialShown: boolean = false;
-  constructor(private dashboardService: DashboardService, private assessmentCo2SavingsService: AssessmentCo2SavingsService) {
+  constructor(private dashboardService: DashboardService, private assessmentCo2SavingsService: AssessmentCo2SavingsService, private recentlyAccessedService: RecentlyAccessedService) {
     this.showTutorial = new BehaviorSubject<string>(null);
   }
 
@@ -39,6 +40,16 @@ export class AssessmentService {
 
     if (subTab) {
       this.subTab = subTab;
+    }
+
+    if (assessment.id) {
+      this.recentlyAccessedService.record({
+        id: assessment.id,
+        name: assessment.name,
+        itemType: 'assessment',
+        assessmentType: assessment.type,
+        route: this.recentlyAccessedService.getRouteForAssessment(assessment.type, assessment.id)
+      });
     }
 
     let itemSegment: string;

@@ -28,6 +28,7 @@ import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service
 import { DialogRef} from '@angular/cdk/dialog';
 import { ModalDialogService } from '../shared/modal-dialog.service';
 import { FeatureFlagService } from '../shared/feature-flag.service';
+import { HomeFeedService } from '../shared/home-feed/home-feed.service';
 
 @Component({
   selector: 'app-core',
@@ -75,6 +76,9 @@ export class CoreComponent implements OnInit {
 
   appModalDialogSubscription: Subscription;
   appModalDialog: DialogRef<any, any>;
+
+  surveyFromFeedSub: Subscription;
+  subscribeFromFeedSub: Subscription;
   constructor(public electronService: ElectronService,
     private assessmentService: AssessmentService,
     private changeDetectorRef: ChangeDetectorRef,
@@ -103,6 +107,7 @@ export class CoreComponent implements OnInit {
     private toolsSuiteApiService: ToolsSuiteApiService,
     private modalDialogService: ModalDialogService,
     private featureFlagService: FeatureFlagService,
+    private homeFeedService: HomeFeedService,
   ) {
   }
 
@@ -134,24 +139,30 @@ export class CoreComponent implements OnInit {
       });
 
     this.showSurveyModalSub = this.measurSurveyService.showSurveyModal.subscribe(val => {
-      this.showSurveyModal = val;
-      if (this.showSurveyModal) {
+      if (val) {
+        this.homeFeedService.addSurveyItem();
         this.setSurveyDone();
       }
+    });
+
+    this.surveyFromFeedSub = this.homeFeedService.openSurveyModal$.subscribe(() => {
+      this.showSurveyModal = true;
     });
 
     this.showSubscribeToastSub = this.emailSubscribeService.shouldShowToast.subscribe((showSubscribeToast: boolean) => {
       if (showSubscribeToast) {
         setTimeout(() => {
-          this.showSubscribeToast = showSubscribeToast
+          this.homeFeedService.addSubscribeItem();
         }, 5000);
-      } else {
-        this.showSubscribeToast = false;
       }
     });
 
     this.subscribeModalSub = this.emailSubscribeService.showModal.subscribe((isOpen: boolean) => {
       this.showSubscribeModal = isOpen;
+    });
+
+    this.subscribeFromFeedSub = this.homeFeedService.openSubscribeModal$.subscribe(() => {
+      this.showSubscribeModal = true;
     });
 
 
@@ -237,6 +248,8 @@ export class CoreComponent implements OnInit {
     this.showShareDataModalSub.unsubscribe();
     this.toolsSuiteInitializedSub.unsubscribe();
     this.appModalDialogSubscription.unsubscribe();
+    this.surveyFromFeedSub.unsubscribe();
+    this.subscribeFromFeedSub.unsubscribe();
   }
 
   async initData() {
@@ -278,7 +291,7 @@ export class CoreComponent implements OnInit {
         let canShowToast = this.measurSurveyService.getHasToastUsageRequirements(applicationData);
         if (canShowToast && !applicationData.isSurveyToastDone && !hasMetModalRequirements) {
           setTimeout(() => {
-            this.showSurveyToast = true;
+            this.homeFeedService.addSurveyItem();
           }, 5000);
         }
       }
