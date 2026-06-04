@@ -224,7 +224,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         const plotly = await this.plotlyService.getPlotly();
         try {
           await plotly.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
-          return await plotly.toImage(div, { format: 'png', width: 1400, height: 700 });
+          return await plotly.toImage(div, { format: 'jpeg', width: 1400, height: 700 });
         } finally {
           plotly.purge(div);
           document.body.removeChild(div);
