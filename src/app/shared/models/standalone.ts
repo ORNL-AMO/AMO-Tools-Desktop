@@ -509,7 +509,8 @@ export interface CompressedAirPressureReductionData {
   pressure: number,
   proposedPressure: number,
   pressureRated: number,
-  atmosphericPressure: number
+  atmosphericPressure: number,
+  guid: string
 };
 
 export interface CompressedAirPressureReductionResults {

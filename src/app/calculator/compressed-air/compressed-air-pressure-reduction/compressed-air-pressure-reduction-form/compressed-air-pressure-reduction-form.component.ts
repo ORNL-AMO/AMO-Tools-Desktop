@@ -1,148 +1,139 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, Output, EventEmitter, viewChild, ElementRef, input, inject, Signal, computed, effect, untracked, afterRenderEffect, DestroyRef } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { CompressedAirPressureReductionData, CompressedAirPressureReductionResult } from '../../../../shared/models/standalone';
-import { UntypedFormGroup } from '@angular/forms';
+import { CompressedAirPressureReductionData, CompressedAirPressureReductionResult, CompressedAirPressureReductionResults } from '../../../../shared/models/standalone';
+import { CompressedAirPressureReductionForm } from '../compressed-air-pressure-reduction.service';
 import { CompressedAirPressureReductionService } from '../compressed-air-pressure-reduction.service';
 import { OperatingHours } from '../../../../shared/models/operations';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'app-compressed-air-pressure-reduction-form',
-    templateUrl: './compressed-air-pressure-reduction-form.component.html',
-    styleUrls: ['./compressed-air-pressure-reduction-form.component.css'],
-    standalone: false
+  selector: 'app-compressed-air-pressure-reduction-form',
+  templateUrl: './compressed-air-pressure-reduction-form.component.html',
+  styleUrls: ['./compressed-air-pressure-reduction-form.component.css'],
+  standalone: false,
+  host: { '(window:resize)': 'onResize($event)' }
 })
-export class CompressedAirPressureReductionFormComponent implements OnInit {
-  @Input()
-  index: number;
-  @Input()
-  settings: Settings;
-  @Input()
-  data: CompressedAirPressureReductionData;
-  @Input()
-  compressorPower: number;
-  @Input()
-  pressure: number;
-  @Input()
-  powerType: string;
-  @Input()
-  isBaseline: boolean;
-  @Output('emitCalculate')
-  emitCalculate = new EventEmitter<CompressedAirPressureReductionData>();
-  @Output('emitRemoveEquipment')
-  emitRemoveEquipment = new EventEmitter<number>();
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
-  @Input()
-  selected: boolean;
-  @Input()
-  pressureRated: number;
-  @Input()
-  atmosphericPressure: number;
+export class CompressedAirPressureReductionFormComponent {
+  isBaseline = input.required<boolean>();
+  index = input.required<number>();
+  settings = input.required<Settings>();
 
-  @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setOpHoursModalWidth();
-  }
+  protected compressedAirPressureReductionService: CompressedAirPressureReductionService = inject(CompressedAirPressureReductionService);
+
+  focusedPanel: Signal<'baseline' | 'modification'> = toSignal(this.compressedAirPressureReductionService.focusedPanel);
+  results: Signal<CompressedAirPressureReductionResults> = toSignal(this.compressedAirPressureReductionService.results);
+  baselineData: Signal<Array<CompressedAirPressureReductionData>> = toSignal(this.compressedAirPressureReductionService.baselineData);
+  modificationData: Signal<Array<CompressedAirPressureReductionData>> = toSignal(this.compressedAirPressureReductionService.modificationData);
+
+  idString: Signal<string> = computed(() => {
+    if (this.isBaseline()) {
+      return 'baseline_';
+    } else {
+      return 'modification_';
+    }
+  });
+  individualResults: Signal<CompressedAirPressureReductionResult> = computed(() => {
+    const isBaseline = this.isBaseline();
+    const results = this.results();
+    if (results) {
+      if (isBaseline) {
+        return results.baselineResults;
+      } else {
+        return results.modificationResults;
+      }
+    }
+  });
+  formElement = viewChild<ElementRef>('formElement');
 
   formWidth: number;
   showOperatingHoursModal: boolean;
 
-  form: UntypedFormGroup;
-  idString: string;
-  individualResults: CompressedAirPressureReductionResult;
+  form: CompressedAirPressureReductionForm;
   isEditingName: boolean = false;
 
-  constructor(private compressedAirPressureReductionService: CompressedAirPressureReductionService) { }
+  private destroyRef = inject(DestroyRef);
+  private formReset$ = new Subject<void>();
 
-  ngOnInit() {
-    if (this.isBaseline) {
-      this.idString = 'baseline_' + this.index.toString();
-    }
-    else {
-      this.idString = 'modification_' + this.index;
-    }
-    this.form = this.compressedAirPressureReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
-    if (!this.isBaseline) {
-      this.form.controls.compressorPower.disable();
-      this.form.controls.powerType.disable();
-    }
-    if (this.selected == false) {
-      this.form.disable();
-    }
-    this.calculateIndividualResult();
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.isBaseline && changes.compressorPower && !changes.compressorPower.firstChange) {
-      this.data.compressorPower = this.compressorPower;
-      this.form.controls.compressorPower.patchValue(this.data.compressorPower);
-      this.calculate();
-    }
-    if (!this.isBaseline && changes.pressure && !changes.pressure.firstChange) {
-      this.data.pressure = this.pressure;
-      this.form.controls.pressure.patchValue(this.data.pressure);
-      this.calculate();
-    }
-    if (!this.isBaseline && changes.powerType && !changes.powerType.firstChange) {
-      this.data.powerType = this.powerType;
-      this.form.controls.powerType.patchValue(this.data.powerType);
-      this.calculate();
-    }
-
-    if (!this.isBaseline && changes.atmosphericPressure && !changes.atmosphericPressure.firstChange) {
-      this.data.atmosphericPressure = this.atmosphericPressure;
-      this.form.controls.atmosphericPressure.patchValue(this.data.atmosphericPressure);
-      this.calculate();
-    }
-
-    if (!this.isBaseline && changes.pressureRated && !changes.pressureRated.firstChange) {
-      this.data.pressureRated = this.pressureRated;
-      this.form.controls.pressureRated.patchValue(this.data.pressureRated);
-      this.calculate();
-    }
-    if (changes.selected && !changes.selected.firstChange) {
-      if (this.selected == false) {
-        this.form.disable();
-      } else {
-        this.form.enable();
-        if (!this.isBaseline) {
-          this.form.controls.compressorPower.disable();
-          this.form.controls.powerType.disable();
-        }
+  constructor() {
+    // Rebuild form when isBaseline or index changes; read data without tracking full array reactivity
+    effect(() => {
+      const isBaseline = this.isBaseline();
+      const index = this.index();
+      const item = untracked(() => {
+        const data = isBaseline ? this.baselineData() : this.modificationData();
+        return data?.[index];
+      });
+      if (item) {
+        console.log('Initializing form for ' + (isBaseline ? 'baseline' : 'modification') + ' index ' + index);
+        this.formReset$.next();
+        this.form = this.compressedAirPressureReductionService.getFormFromObj(item, index, isBaseline);
+        this.form.valueChanges.pipe(
+          debounceTime(100),
+          takeUntil(this.formReset$),
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe(() => {
+          console.log('Form value changed for ' + (isBaseline ? 'baseline' : 'modification') + ' index ' + index);
+          if (this.form.valid) {
+            this.saveChanges();
+          }
+        });
       }
-    }
-  }
+    });
 
-  ngAfterViewInit() {
-    setTimeout(() => {
+    // Sync locked baseline fields into the modification form when baseline data changes
+    effect(() => {
+      if (this.isBaseline()) return;
+      const index = this.index();
+      const baselineItem = this.baselineData()?.[index];
+      if (!baselineItem) return;
+      const { compressorPower, pressure, powerType, atmosphericPressure, pressureRated } = baselineItem;
+      untracked(() => {
+        this.form?.patchValue(
+          { compressorPower, pressure, powerType: powerType ?? '', atmosphericPressure, pressureRated },
+          { emitEvent: false }
+        );
+      });
+    });
+
+    afterRenderEffect(() => {
       this.setOpHoursModalWidth();
-    }, 100)
+    });
   }
 
-  calculate() {
-    let inputData: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.getObjFromForm(this.form, this.isBaseline);
-    if (inputData.powerType === 'Measured') {
-      inputData.pressureRated = inputData.pressure;
-    } 
-    this.calculateIndividualResult();
-    this.emitCalculate.emit(inputData);
-  }
-
-  removeEquipment() {
-    this.emitRemoveEquipment.emit(this.index);
-  }
-
-  calculateIndividualResult() {
-    let inputData: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.getObjFromForm(this.form, this.isBaseline);
-    if (inputData.powerType === 'Measured') {
-      inputData.pressureRated = inputData.pressure;
-    } 
-    if(!this.isBaseline){
-      inputData.pressure = inputData.proposedPressure;
+  saveChanges() {
+    console.log('Saving changes for ' + (this.isBaseline() ? 'baseline' : 'modification') + ' index ' + this.index());
+    const isBaseline = this.isBaseline();
+    const index = this.index();
+    if (isBaseline) {
+      let baselineData = this.baselineData();
+      let obj = baselineData[index];
+      obj = this.compressedAirPressureReductionService.updateObjectFromForm(this.form, obj);
+      baselineData[index] = obj;
+      console.log('Updated baseline data:', baselineData);
+      this.compressedAirPressureReductionService.baselineData.next({...baselineData});
+    } else {
+      let modificationData = this.modificationData();
+      let obj = modificationData[index];
+      obj = this.compressedAirPressureReductionService.updateObjectFromForm(this.form, obj);
+      modificationData[index] = obj;
+      console.log('Updated modification data:', modificationData);
+      this.compressedAirPressureReductionService.modificationData.next({...modificationData});
     }
-    this.individualResults = this.compressedAirPressureReductionService.calculateIndividualEquipment(inputData, this.settings);
   }
+
+  // No reason to remove equipment unless we allow for multiple baseline/modification entries, 
+  // but leaving this here for now in case we want to add that functionality later
+  // removeBaselineEquipment() {
+  //   let modificationData = this.modificationData();
+  //   if (modificationData.length > 0) {
+  //     modificationData.splice(this.index(), 1);
+  //     this.compressedAirPressureReductionService.modificationData.next(modificationData);
+  //   }
+  //   let baselineData = this.baselineData();
+  //   baselineData.splice(this.index(), 1);
+  //   this.compressedAirPressureReductionService.baselineData.next(baselineData);
+  // }
 
   editEquipmentName() {
     this.isEditingName = true;
@@ -153,10 +144,11 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
   }
 
   focusField(str: string) {
-    this.emitChangeField.emit(str);
+    this.compressedAirPressureReductionService.focusedField.next(str);
   }
 
   focusOut() {
+    this.compressedAirPressureReductionService.focusedField.next(null);
   }
 
   closeOperatingHoursModal() {
@@ -170,13 +162,17 @@ export class CompressedAirPressureReductionFormComponent implements OnInit {
   updateOperatingHours(oppHours: OperatingHours) {
     this.compressedAirPressureReductionService.operatingHours = oppHours;
     this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
-    this.calculate();
     this.closeOperatingHoursModal();
   }
 
+  onResize(_event) {
+    this.setOpHoursModalWidth();
+  }
+
   setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
-      this.formWidth = this.formElement.nativeElement.clientWidth;
+    const el = this.formElement();
+    if (el?.nativeElement.clientWidth) {
+      this.formWidth = el.nativeElement.clientWidth;
     }
   }
 }

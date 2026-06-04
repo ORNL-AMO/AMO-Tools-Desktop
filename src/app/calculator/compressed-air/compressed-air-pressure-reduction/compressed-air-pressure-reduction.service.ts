@@ -1,19 +1,36 @@
 import { Injectable } from '@angular/core';
 import { CompressedAirPressureReductionData, CompressedAirPressureReductionResult, CompressedAirPressureReductionResults, CompressedAirPressureReductionInput } from '../../../shared/models/standalone';
 import { OperatingHours } from '../../../shared/models/operations';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { StandaloneService } from '../../standalone.service';
 import { Settings } from '../../../shared/models/settings';
 import { CompressedAirSuiteApiService } from '../../../tools-suite-api/compressed-air-suite-api.service';
+import { BehaviorSubject } from 'rxjs';
+import { getNewIdString } from '../../../shared/helperFunctions';
+
+export type CompressedAirPressureReductionForm = FormGroup<{
+  name: FormControl<string>;
+  powerType: FormControl<string>;
+  hoursPerYear: FormControl<number>;
+  electricityCost: FormControl<number>;
+  compressorPower: FormControl<number>;
+  pressure: FormControl<number>;
+  proposedPressure: FormControl<number>;
+  pressureRated: FormControl<number>;
+  atmosphericPressure: FormControl<number>;
+}>;
 
 @Injectable()
 export class CompressedAirPressureReductionService {
 
-  baselineData: Array<CompressedAirPressureReductionData>;
-  modificationData: Array<CompressedAirPressureReductionData>;
+  baselineData: BehaviorSubject<Array<CompressedAirPressureReductionData>> = new BehaviorSubject<Array<CompressedAirPressureReductionData>>([]);
+  modificationData: BehaviorSubject<Array<CompressedAirPressureReductionData>> = new BehaviorSubject<Array<CompressedAirPressureReductionData>>([]);
+  focusedPanel: BehaviorSubject<'baseline' | 'modification'> = new BehaviorSubject<'baseline' | 'modification'>('baseline');
+  results: BehaviorSubject<CompressedAirPressureReductionResults> = new BehaviorSubject<CompressedAirPressureReductionResults>(null);
+  focusedField: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   operatingHours: OperatingHours;
-  constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private compressedAirSuiteApiService: CompressedAirSuiteApiService) { }
+  constructor(private formBuilder: FormBuilder, private convertUnitsService: ConvertUnitsService, private compressedAirSuiteApiService: CompressedAirSuiteApiService) { }
 
 
   initObject(index: number, settings: Settings, isBaseline: boolean, operatingHours: OperatingHours): CompressedAirPressureReductionData {
@@ -35,15 +52,16 @@ export class CompressedAirPressureReductionService {
       pressure: 0,
       proposedPressure: 0,
       pressureRated: 0,
-      atmosphericPressure: 0
+      atmosphericPressure: 0,
+      guid: getNewIdString()
     };
     return obj;
   }
 
-  getFormFromObj(inputObj: CompressedAirPressureReductionData, index: number, isBaseline: boolean): UntypedFormGroup {
-    let form: UntypedFormGroup = this.formBuilder.group({
+  getFormFromObj(inputObj: CompressedAirPressureReductionData, index: number, isBaseline: boolean): CompressedAirPressureReductionForm {
+    const form = this.formBuilder.nonNullable.group({
       name: [inputObj.name, [Validators.required]],
-      powerType: [inputObj.powerType],
+      powerType: [inputObj.powerType ?? ''],
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       electricityCost: [inputObj.electricityCost, [Validators.required, Validators.min(0)]],
       compressorPower: [inputObj.compressorPower],
@@ -52,11 +70,10 @@ export class CompressedAirPressureReductionService {
       pressureRated: [inputObj.pressureRated],
       atmosphericPressure: [inputObj.atmosphericPressure]
     });
-    form = this.setValidators(form, isBaseline);
-    return form;
+    return this.setValidators(form, isBaseline);
   }
 
-  setValidators(form: UntypedFormGroup, isBaseline: boolean): UntypedFormGroup {
+  setValidators(form: CompressedAirPressureReductionForm, isBaseline: boolean): CompressedAirPressureReductionForm {
     if (isBaseline) {
       form.controls.compressorPower.setValidators([Validators.required, Validators.min(0)]);
       form.controls.pressure.setValidators([Validators.required, Validators.min(0)]);
@@ -71,19 +88,16 @@ export class CompressedAirPressureReductionService {
   }
 
   //may need some editing to accomodate specific functionality with proposed pressure
-  getObjFromForm(form: UntypedFormGroup, isBaseline: boolean): CompressedAirPressureReductionData {
-    let obj: CompressedAirPressureReductionData = {
-      name: form.controls.name.value,
-      powerType: form.controls.powerType.value,
-      isBaseline: isBaseline,
-      hoursPerYear: form.controls.hoursPerYear.value,
-      electricityCost: form.controls.electricityCost.value,
-      compressorPower: form.controls.compressorPower.value,
-      pressure: form.controls.pressure.value,
-      proposedPressure: form.controls.proposedPressure.value,
-      pressureRated: form.controls.pressureRated.value,
-      atmosphericPressure: form.controls.atmosphericPressure.value
-    };
+  updateObjectFromForm(form: CompressedAirPressureReductionForm, obj: CompressedAirPressureReductionData): CompressedAirPressureReductionData {
+    obj.name = form.controls.name.value;
+    obj.powerType = form.controls.powerType.value;
+    obj.hoursPerYear = form.controls.hoursPerYear.value;
+    obj.electricityCost = form.controls.electricityCost.value;
+    obj.compressorPower = form.controls.compressorPower.value;
+    obj.pressure = form.controls.pressure.value;
+    obj.proposedPressure = form.controls.proposedPressure.value;
+    obj.pressureRated = form.controls.pressureRated.value;
+    obj.atmosphericPressure = form.controls.atmosphericPressure.value;
     return obj;
   }
 
@@ -127,15 +141,15 @@ export class CompressedAirPressureReductionService {
     return results;
   }
 
-  calculateIndividualEquipment(input: CompressedAirPressureReductionData, settings: Settings) {
-    let inputArray: Array<CompressedAirPressureReductionData> = JSON.parse(JSON.stringify([input]));
-    inputArray = this.convertInputs(inputArray, settings);
-    let inputObj: CompressedAirPressureReductionInput = {
-      compressedAirPressureReductionInputVec: inputArray
-    };
-    let results: CompressedAirPressureReductionResult = this.compressedAirSuiteApiService.compressedAirPressureReduction(inputObj);
-    return results;
-  }
+  // calculateIndividualEquipment(input: CompressedAirPressureReductionData, settings: Settings) {
+  //   let inputArray: Array<CompressedAirPressureReductionData> = JSON.parse(JSON.stringify([input]));
+  //   inputArray = this.convertInputs(inputArray, settings);
+  //   let inputObj: CompressedAirPressureReductionInput = {
+  //     compressedAirPressureReductionInputVec: inputArray
+  //   };
+  //   let results: CompressedAirPressureReductionResult = this.compressedAirSuiteApiService.compressedAirPressureReduction(inputObj);
+  //   return results;
+  // }
 
   convertInputs(inputArray: Array<CompressedAirPressureReductionData>, settings: Settings): Array<CompressedAirPressureReductionData> {
     if (settings.unitsOfMeasure == 'Metric') {
@@ -178,7 +192,8 @@ export class CompressedAirPressureReductionService {
       pressure: pressure,
       proposedPressure: proposedPressure,
       pressureRated: pressureRated,
-      atmosphericPressure: atmosphericPressure
+      atmosphericPressure: atmosphericPressure,
+      guid: 'example-equipment'
     }
     return exampleData;
   }

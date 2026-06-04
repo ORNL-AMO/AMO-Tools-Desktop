@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, viewChild, ElementRef, inject, Signal, input, effect, computed } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
 import { CompressedAirPressureReductionService } from './compressed-air-pressure-reduction.service';
@@ -9,32 +9,43 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
- 
+import { toSignal } from '@angular/core/rxjs-interop';
+
 
 @Component({
-    selector: 'app-compressed-air-pressure-reduction',
-    templateUrl: './compressed-air-pressure-reduction.component.html',
-    styleUrls: ['./compressed-air-pressure-reduction.component.css'],
-    standalone: false
+  selector: 'app-compressed-air-pressure-reduction',
+  templateUrl: './compressed-air-pressure-reduction.component.html',
+  styleUrls: ['./compressed-air-pressure-reduction.component.css'],
+  standalone: false,
+  host: { '(window:resize)': 'onResize($event)' }
 })
 export class CompressedAirPressureReductionComponent implements OnInit {
-  @Input()
-  inTreasureHunt: boolean;
   @Output('emitSave')
   emitSave = new EventEmitter<CompressedAirPressureReductionTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
-  @Input()
-  settings: Settings;
-  @Input()
-  operatingHours: OperatingHours;
-  @Input()
-  assessment: Assessment;
+  inTreasureHunt: Signal<boolean> = input<boolean>(false);
+  settings = input<Settings>();
+  operatingHours: Signal<OperatingHours> = input<OperatingHours>();
+  assessment: Signal<Assessment> = input<Assessment>();
 
-  @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
-  @ViewChild('contentContainer', { static: false }) contentContainer: ElementRef;
-  @ViewChild('smallTabSelect', { static: false }) smallTabSelect: ElementRef;
-  @HostListener('window:resize', ['$event'])
+
+  private settingsDbService: SettingsDbService = inject(SettingsDbService);
+  private calculatorDbService: CalculatorDbService = inject(CalculatorDbService);
+  private compressedAirPressureReductionService: CompressedAirPressureReductionService = inject(CompressedAirPressureReductionService);
+  private analyticsService: AnalyticsService = inject(AnalyticsService);
+
+  focusedPanel: Signal<'baseline' | 'modification'> = toSignal(this.compressedAirPressureReductionService.focusedPanel);
+  baselineData: Signal<Array<CompressedAirPressureReductionData>> = toSignal(this.compressedAirPressureReductionService.baselineData);
+  modificationData: Signal<Array<CompressedAirPressureReductionData>> = toSignal(this.compressedAirPressureReductionService.modificationData);
+
+  effectiveSettings = computed(() => this.settings() ?? this.settingsDbService.globalSettings);
+
+
+  leftPanelHeader = viewChild<ElementRef>('leftPanelHeader');
+  contentContainer = viewChild<ElementRef>('contentContainer');
+  smallTabSelect = viewChild<ElementRef>('smallTabSelect');
+
   onResize(event) {
     setTimeout(() => {
       this.resizeTabs();
@@ -42,41 +53,68 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   }
 
   headerHeight: number;
-  containerHeight: number
-  currentField: string;
-  tabSelect: string = 'results';
-  baselineSelected: boolean = true;
-  modifiedSelected: boolean = false;
+  containerHeight: number;
+  tabSelect: 'results' | 'help' = 'results';
+  smallScreenTab: 'baseline' | 'modification' | 'details' = 'baseline';
 
-  modificationExists = false;
+  modificationExists: Signal<boolean> = computed(() => {
+    return this.modificationData().length > 0;
+  });
 
-  compressedAirPressureReductionResults: CompressedAirPressureReductionResults;
-  baselineData: Array<CompressedAirPressureReductionData>;
-  modificationData: Array<CompressedAirPressureReductionData>;
+  private assessmentCalculator: Calculator | undefined;
 
-  saving: boolean;
-  assessmentCalculator: Calculator;
+  constructor() {
+    //init data logic
+    effect(() => {
+      const baselineData = this.baselineData();
+      const settings = this.effectiveSettings();
+      if ((!baselineData || baselineData.length === 0) && settings) {
+        let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.initObject(0, settings, true, this.operatingHours());
+        this.compressedAirPressureReductionService.baselineData.next([tmpObj]);
+      }
+    });
 
-  smallScreenTab: string = 'baseline';
+    //save logic for assessment
+    effect(() => {
+      const baselineData = this.baselineData();
+      const modificationData = this.modificationData();
+      if (this.assessmentCalculator) {
+        this.saveAssessmentData(baselineData, modificationData);
+      }
+    });
 
-  constructor(private settingsDbService: SettingsDbService, private calculatorDbService: CalculatorDbService,   
-    private compressedAirPressureReductionService: CompressedAirPressureReductionService,
-    private analyticsService: AnalyticsService) { }
+    //calculate results
+    effect(() => {
+      const baselineData = this.baselineData();
+      const modificationData = this.modificationData();
+      const settings = this.effectiveSettings();
+      if (baselineData && settings) {
+        console.log('calculate results');
+        let results: CompressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(settings, baselineData, modificationData);
+        this.compressedAirPressureReductionService.results.next(results);
+      }
+    });
+  }
+
+  private async saveAssessmentData(
+    baselineData: Array<CompressedAirPressureReductionData>,
+    modificationData: Array<CompressedAirPressureReductionData>
+  ): Promise<void> {
+    const assessment = this.assessment();
+    if (this.assessmentCalculator && assessment) {
+      this.assessmentCalculator.compressedAirPressureReduction = { baselineData, modificationData };
+      await this.calculatorDbService.saveAssessmentCalculator(assessment, this.assessmentCalculator);
+    }
+  }
 
   ngOnInit() {
     this.analyticsService.sendEvent('calculator-CA-pressure-reduction');
     this.calculatorDbService.isSaving = false;
     if (this.settingsDbService.globalSettings.defaultPanelTab) {
-      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
+      this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab as 'results' | 'help';
     }
-    if (!this.settings) {
-      this.settings = this.settingsDbService.globalSettings;
-    }
-    if(this.assessment) {
-      this.getCalculatorForAssessment();
-    } else{
-      this.initData();
-      this.getResults();
+    if (this.assessment()) {
+      this.initCalculatorForAssessment();
     }
   }
 
@@ -87,210 +125,110 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (!this.inTreasureHunt) {
-      this.compressedAirPressureReductionService.baselineData = this.baselineData;
-      this.compressedAirPressureReductionService.modificationData = this.modificationData;
-    } else {
-      this.compressedAirPressureReductionService.baselineData = undefined;
-      this.compressedAirPressureReductionService.modificationData = undefined;
+    if (this.inTreasureHunt()) {
+      this.compressedAirPressureReductionService.baselineData.next(undefined);
+      this.compressedAirPressureReductionService.modificationData.next(undefined);
     }
   }
 
   resizeTabs() {
-    if (this.leftPanelHeader) {
-      this.containerHeight = this.contentContainer.nativeElement.offsetHeight - this.leftPanelHeader.nativeElement.offsetHeight;
-      if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
-        this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
+    const leftPanelHeader = this.leftPanelHeader();
+    const contentContainer = this.contentContainer();
+    if (leftPanelHeader) {
+      this.containerHeight = contentContainer.nativeElement.offsetHeight - leftPanelHeader.nativeElement.offsetHeight;
+      const smallTabSelect = this.smallTabSelect();
+      if (smallTabSelect?.nativeElement) {
+        this.containerHeight = this.containerHeight - smallTabSelect.nativeElement.offsetHeight;
       }
     }
   }
 
-  setTab(str: string) {
+  setTab(str: 'results' | 'help') {
     this.tabSelect = str;
   }
 
-  changeField(str: string) {
-    this.currentField = str;
-  }
-
-  initData() {
-    if (this.compressedAirPressureReductionService.baselineData) {
-      this.baselineData = this.compressedAirPressureReductionService.baselineData;
-    } else {
-      let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.initObject(0, this.settings, true, this.operatingHours);
-      this.baselineData = [tmpObj];
-    }
-    if (this.compressedAirPressureReductionService.modificationData) {
-      this.modificationData = this.compressedAirPressureReductionService.modificationData;
-      if (this.modificationData.length != 0) {
-        this.modificationExists = true;
-      }
-    }
+  setSmallScreenTab(str: 'baseline' | 'modification' | 'details') {
+    this.smallScreenTab = str;
   }
 
   addBaselineEquipment() {
-    let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.initObject(this.baselineData.length, this.settings, true, this.operatingHours);
-    this.baselineData.push(tmpObj);
-    if (this.modificationExists) {
+    let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.initObject(this.baselineData.length, this.effectiveSettings(), true, this.operatingHours());
+    let baselineData = this.baselineData();
+    baselineData.push(tmpObj);
+    this.compressedAirPressureReductionService.baselineData.next(baselineData);
+    let modificationData = this.modificationData();
+    if (modificationData.length > 0) {
       tmpObj.isBaseline = false;
-      this.modificationData.push(tmpObj);
+      modificationData.push(tmpObj);
+      this.compressedAirPressureReductionService.modificationData.next(modificationData);
     }
-    this.getResults();
-  }
-
-  removeBaselineEquipment(i: number) {
-    this.baselineData.splice(i, 1);
-    if (this.modificationExists) {
-      this.modificationData.splice(i, 1);
-      if (this.modificationData.length === 0) {
-        this.modificationExists = false;
-      }
-    }
-    this.getResults();
   }
 
   createModification() {
-    this.modificationData = JSON.parse(JSON.stringify(this.baselineData));
-    this.modificationData.forEach(modification => {
+    const baselineData = this.baselineData();
+    let modificationData = this.modificationData();
+    modificationData = JSON.parse(JSON.stringify(baselineData));
+    modificationData.forEach(modification => {
       modification.isBaseline = false;
     });
-    this.getResults();
-    this.modificationExists = true;
-    this.setModificationSelected();
+    this.compressedAirPressureReductionService.modificationData.next(modificationData);
+    this.setFocusedPanel('modification');
   }
 
-  updateBaselineData(data: CompressedAirPressureReductionData, index: number) {
-    this.updateDataArray(this.baselineData, data, index);
-    this.getResults();
-  }
-
-  updateModificationData(data: CompressedAirPressureReductionData, index: number) {
-    this.updateDataArray(this.modificationData, data, index);
-    this.getResults();
-  }
-
-  updateDataArray(dataArray: Array<CompressedAirPressureReductionData>, data: CompressedAirPressureReductionData, index: number) {
-    dataArray[index].name = data.name;
-    dataArray[index].isBaseline = data.isBaseline;
-    dataArray[index].hoursPerYear = data.hoursPerYear;
-    dataArray[index].electricityCost = data.electricityCost;
-    dataArray[index].compressorPower = data.compressorPower;
-    dataArray[index].pressure = data.pressure;
-    dataArray[index].powerType = data.powerType;
-    dataArray[index].proposedPressure = data.proposedPressure;
-    dataArray[index].atmosphericPressure = data.atmosphericPressure;
-    dataArray[index].pressureRated = data.pressureRated;
-    if (data.isBaseline && this.modificationExists) {
-      this.modificationData[index].compressorPower = data.compressorPower;
-      this.modificationData[index].pressure = data.pressure;
-      this.modificationData[index].powerType = data.powerType;
-      this.modificationData[index].pressureRated = data.pressureRated;
-      this.modificationData[index].atmosphericPressure = data.atmosphericPressure;
-    }
-  }
-
-  async getResults() {
-    this.compressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(this.settings, this.baselineData, this.modificationData);
-    if (this.assessmentCalculator) {
-      this.setAssessmentCalculatorData();
-      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
-    }
-  }
-
- async getCalculatorForAssessment() {
-    this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    if(this.assessmentCalculator) {
-      if (this.assessmentCalculator.compressedAirPressureReduction) {
-        if (this.assessmentCalculator.compressedAirPressureReduction.baselineData) {
-          this.compressedAirPressureReductionService.baselineData = this.assessmentCalculator.compressedAirPressureReduction.baselineData;
-          if (this.assessmentCalculator.compressedAirPressureReduction.modificationData) {
-            this.compressedAirPressureReductionService.modificationData = this.assessmentCalculator.compressedAirPressureReduction.modificationData;
+  async initCalculatorForAssessment() {
+    let assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment().id);
+    if (assessmentCalculator) {
+      if (assessmentCalculator.compressedAirPressureReduction) {
+        if (assessmentCalculator.compressedAirPressureReduction.baselineData) {
+          this.compressedAirPressureReductionService.baselineData.next(assessmentCalculator.compressedAirPressureReduction.baselineData);
+          if (assessmentCalculator.compressedAirPressureReduction.modificationData) {
+            this.compressedAirPressureReductionService.modificationData.next(assessmentCalculator.compressedAirPressureReduction.modificationData);
           }
         }
-        this.initData();
       } else {
-        this.setAssessmentCalculatorData();
+        assessmentCalculator.compressedAirPressureReduction = {
+          baselineData: this.baselineData(),
+          modificationData: this.modificationData()
+        };
       }
-      this.getResults();
-    }else{
-      this.assessmentCalculator = this.initNewAssessmentCalculator();
-      await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
+    } else {
+      assessmentCalculator = {
+        assessmentId: this.assessment().id,
+        compressedAirPressureReduction: {
+          baselineData: this.baselineData(),
+          modificationData: this.modificationData(),
+        }
+      };
+      await this.calculatorDbService.saveAssessmentCalculator(this.assessment(), assessmentCalculator);
     }
-  }
-
-  setAssessmentCalculatorData() {
-    this.initData();
-    this.assessmentCalculator.compressedAirPressureReduction = {
-      baselineData: this.baselineData
-    };
-    if (this.modificationData) {
-      this.assessmentCalculator.compressedAirPressureReduction.modificationData = this.modificationData;
-    }
-  }
-
-  initNewAssessmentCalculator(): Calculator {
-    let tmpCalculator: Calculator = {
-      assessmentId: this.assessment.id,
-      compressedAirPressureReduction: {
-        baselineData: this.baselineData,
-        modificationData: this.modificationData,
-      }
-    };
-    return tmpCalculator;
+    this.assessmentCalculator = assessmentCalculator;
   }
 
   btnResetData() {
-    let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.initObject(0, this.settings, true, this.operatingHours);
-    this.baselineData = [tmpObj];
-    this.modificationData = new Array<CompressedAirPressureReductionData>();
-    this.modificationExists = false;
-    this.getResults();
-
+    const settings = this.effectiveSettings();
+    let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.initObject(0, settings, true, this.operatingHours());
+    this.compressedAirPressureReductionService.baselineData.next([tmpObj]);
+    this.compressedAirPressureReductionService.modificationData.next([]);
   }
 
   generateExample() {
-    let tmpBaselineObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.generateExample(this.settings, true);
-    this.baselineData = [tmpBaselineObj];
-    this.compressedAirPressureReductionService.baselineData = this.baselineData;
-    let tmpModificationData: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.generateExample(this.settings, false);
-    this.modificationData = [tmpModificationData];
-    this.compressedAirPressureReductionService.modificationData = this.modificationData;
-    this.modificationExists = true;
-    this.baselineSelected = true;
-    this.modifiedSelected = false;
+    const settings = this.effectiveSettings();
+    let tmpBaselineObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.generateExample(settings, true);
+    this.compressedAirPressureReductionService.baselineData.next([tmpBaselineObj]);
+    let tmpModificationData: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.generateExample(settings, false);
+    this.compressedAirPressureReductionService.modificationData.next([tmpModificationData]);
+    this.setFocusedPanel('baseline')
   }
 
-  btnGenerateExample() {
-    this.generateExample();
-    this.getResults();
-  }
-  
   save() {
-    this.emitSave.emit({ baseline: this.baselineData, modification: this.modificationData, opportunityType: Treasure.compressedAirPressure });
+    this.emitSave.emit({ baseline: this.baselineData(), modification: this.modificationData(), opportunityType: Treasure.compressedAirPressure });
   }
 
   cancel() {
     this.emitCancel.emit(true);
   }
 
-  setBaselineSelected() {
-    if (this.baselineSelected == false) {
-      this.baselineSelected = true;
-    }
-  }
-
-  setModificationSelected() {
-    if (this.baselineSelected == true) {
-      this.baselineSelected = false;
-    }
-  }
-
-  setSmallScreenTab(selectedTab: string) {
-    this.smallScreenTab = selectedTab;
-    if (this.smallScreenTab === 'baseline') {
-      this.baselineSelected = true;
-    } else if (this.smallScreenTab === 'modification') {
-      this.baselineSelected = false;
-    }
+  setFocusedPanel(selectedTab: 'baseline' | 'modification') {
+    this.compressedAirPressureReductionService.focusedPanel.next(selectedTab);
   }
 }

@@ -1,3 +1,7 @@
+@let _results = results();
+@let _modificationExists = modificationExists();
+
+@if(_results){
 <table #copyTable class="table table-hover table-striped">
   <tbody>
     <tr>
@@ -7,50 +11,60 @@
     </tr>
     <tr>
       <td class="bold">Energy Use</td>
-      <td class="text-center">{{compressedAirPressureReductionResults.baselineResults.energyUse | number:'1.0-0'}}
+      <td class="text-center">{{_results.baselineResults.energyUse | number:'1.0-0'}}
         <span> kWh/yr</span>
       </td>
       <td class="text-center">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span
-          *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyUse | number:'1.0-0'}}
-          <span> kWh/yr</span>
-        </span>
+        @if(!_modificationExists) {
+        &mdash;
+        }
+        @else {
+        {{_results.modificationResults.energyUse | number:'1.0-0'}}
+        <span> kWh/yr</span>
+        }
       </td>
     </tr>
     <tr>
       <td class="bold">Energy Cost</td>
       <td class="text-center">
-        {{compressedAirPressureReductionResults.baselineResults.energyCost | currency: 'USD': 'symbol' : '1.0-0'}} /yr
+        {{_results.baselineResults.energyCost | currency: 'USD': 'symbol' : '1.0-0'}} /yr
       </td>
       <td class="text-center">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span
-          *ngIf="modificationExists">{{compressedAirPressureReductionResults.modificationResults.energyCost | currency: 'USD': 'symbol' : '1.0-0'}}
-          /yr
-        </span>
+        @if(!_modificationExists) {
+        &mdash;
+        }
+        @else {
+        {{_results.modificationResults.energyCost | currency: 'USD': 'symbol' : '1.0-0'}}
+        /yr
+        }
       </td>
     </tr>
     <tr>
       <td class="bold">Annual Energy Savings</td>
       <td class="text-center" colspan="2">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">
-          {{compressedAirPressureReductionResults.annualEnergySavings | number: '1.0-0'}}
-          <span> kWh</span>
-        </span>
+        @if(!_modificationExists) {
+        &mdash;
+        }
+        @else {
+        {{_results.annualEnergySavings | number: '1.0-0'}}
+        <span> kWh</span>
+        }
       </td>
     </tr>
     <tr>
       <td class="bold">Annual Cost Savings</td>
       <td class="text-center" colspan="2">
-        <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">
-          {{compressedAirPressureReductionResults.annualCostSavings | currency: 'USD': 'symbol' : '1.0-0'}}
-        </span>
+        @if(!_modificationExists) {
+        &mdash;
+        }
+        @else {
+        {{_results.annualCostSavings | currency: 'USD': 'symbol' : '1.0-0'}}
+        }
       </td>
     </tr>
   </tbody>
 </table>
-<app-exportable-results-table *ngIf="modificationExists" [tableString]="tableString"
-  (updateTableString)="updateTableString()"></app-exportable-results-table>
+@if(_modificationExists) {
+<app-exportable-results-table [tableString]="tableString()"></app-exportable-results-table>
+}
+}

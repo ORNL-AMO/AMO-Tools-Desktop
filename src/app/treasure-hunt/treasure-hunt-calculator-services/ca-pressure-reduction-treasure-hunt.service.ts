@@ -18,8 +18,8 @@ export class CaPressureReductionTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(compressedAirPressureReduction: CompressedAirPressureReductionTreasureHunt) {
-    this.compressedAirPressureReductionService.baselineData = _.cloneDeep(compressedAirPressureReduction.baseline);
-    this.compressedAirPressureReductionService.modificationData = _.cloneDeep(compressedAirPressureReduction.modification);
+    this.compressedAirPressureReductionService.baselineData.next(_.cloneDeep(compressedAirPressureReduction.baseline));
+    this.compressedAirPressureReductionService.modificationData.next(_.cloneDeep(compressedAirPressureReduction.modification));
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -36,8 +36,8 @@ export class CaPressureReductionTreasureHuntService {
   }
 
   resetCalculatorInputs() {
-    this.compressedAirPressureReductionService.baselineData = undefined;
-    this.compressedAirPressureReductionService.modificationData = undefined;
+    this.compressedAirPressureReductionService.baselineData.next(undefined);
+    this.compressedAirPressureReductionService.modificationData.next(undefined);
   }
 
 

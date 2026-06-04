@@ -1,3 +1,5 @@
+@let _currentField = currentField();
+
 <div class="px-2 pt-3 d-flex flex-column help-info">
   <h5>
     Compressed Air Pressure Reduction Help
@@ -25,96 +27,107 @@
     </h6>
   </div>
 
-  <div class="my-2" *ngIf="currentField == 'electricityCost'">
-    <h6>
-      Electricity Cost
-      <small class="text-muted">
-        <br>
-        Per unit cost of electricity in ($/kWh).
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'hoursPerYear'">
-    <h6>
-      Operation Hours
-      <small class="text-muted">
-        <br>
-        Number of annual operating hours for the equipment.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'powerType'">
-    <h6>
-      Power Type
-      <small class="text-muted">
-        <br>
-        Measured power - This setting allows the user to enter the data collected in the field. The user will need the
-        measured power and the current operating pressure
-        <hr class="my-1"> Rated Power - This method asks for nameplate rated power and pressure, and then will calculated the consumed power
-        using the actual measure operating pressure
-        <hr class="my-1">
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'compressorPower'">
-    <h6>
-      Compressor Power
-      <small class="text-muted">
-        <br>
-        Enter the baseline kW demand.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'pressure'">
-    <h6>
-      Pressure
-      <small class="text-muted">
-        <br>
-        Enter the baseline pressure.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'proposedPressure'">
-    <h6>
-      Proposed Pressure
-      <small class="text-muted">
-        <br>
-        Enter the proposed pressure. Keep system requirements in mind before reducing system pressure.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'ratedPressure'">
-    <h6>
-      Rated Pressure
-      <small class="text-muted">
-        <br>
-        Pressure at rated flow per CAGI data sheet or manufacturer specified design inlet pressure
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'atmosphericPressure'">
-    <h6>
-      Atmospheric Pressure
-      <small class="text-muted">
-        <br>
-        Standard atmospheric pressure is 14.7 psia.
-        <hr>
-      </small>
-    </h6>
-  </div>
+  @switch (_currentField) {
+    @case ('electricityCost') {
+      <div class="my-2">
+        <h6>
+          Electricity Cost
+          <small class="text-muted">
+            <br>
+            Per unit cost of electricity in ($/kWh).
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('hoursPerYear') {
+      <div class="my-2">
+        <h6>
+          Operation Hours
+          <small class="text-muted">
+            <br>
+            Number of annual operating hours for the equipment.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('powerType') {
+      <div class="my-2">
+        <h6>
+          Power Type
+          <small class="text-muted">
+            <br>
+            Measured power - This setting allows the user to enter the data collected in the field. The user will need the
+            measured power and the current operating pressure
+            <hr class="my-1"> Rated Power - This method asks for nameplate rated power and pressure, and then will calculated the consumed power
+            using the actual measure operating pressure
+            <hr class="my-1">
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('compressorPower') {
+      <div class="my-2">
+        <h6>
+          Compressor Power
+          <small class="text-muted">
+            <br>
+            Enter the baseline kW demand.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('pressure') {
+      <div class="my-2">
+        <h6>
+          Pressure
+          <small class="text-muted">
+            <br>
+            Enter the baseline pressure.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('proposedPressure') {
+      <div class="my-2">
+        <h6>
+          Proposed Pressure
+          <small class="text-muted">
+            <br>
+            Enter the proposed pressure. Keep system requirements in mind before reducing system pressure.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('ratedPressure') {
+      <div class="my-2">
+        <h6>
+          Rated Pressure
+          <small class="text-muted">
+            <br>
+            Pressure at rated flow per CAGI data sheet or manufacturer specified design inlet pressure
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+    @case ('atmosphericPressure') {
+      <div class="my-2">
+        <h6>
+          Atmospheric Pressure
+          <small class="text-muted">
+            <br>
+            Standard atmospheric pressure is 14.7 psia.
+            <hr>
+          </small>
+        </h6>
+      </div>
+    }
+  }
 
   <div class="my-2">
     <a class="click-link" [href]="docsLink + 'group__compressed__air__pressure__reduction__calculator'" target="_blank">
