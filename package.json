@@ -56,6 +56,8 @@
     "file-saver": "2.0.5",
     "font-awesome": "4.7.0",
     "fs-jetpack": "5.1.0",
+    "jspdf": "4.2.1",
+    "jspdf-autotable": "5.0.7",
     "lodash.foreach": "4.5.0",
     "measur-tools-suite": "1.1.4-rc.100",
     "ngx-bootstrap": "20.0.2",

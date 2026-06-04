@@ -1,0 +1,15 @@
+.missing-data {
+    background: red !important; 
+    color: white !important;
+}
+
+li.disabled, a.disabled {
+  pointer-events: none;
+  color: #999;
+}
+
+.fa.fa-exclamation-circle {
+    font-size: 1rem;
+    color: red !important;
+}
+

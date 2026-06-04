@@ -30,6 +30,8 @@
                             src="assets/images/waste-water-icon.png">
                         <img *ngIf="directoryItem.assessment.type == 'CompressedAir'" class="fsat icon-image pl-1 pr-1"
                             src="assets/images/ca-icon.png">
+                        <img *ngIf="directoryItem.assessment.type == 'ProcessCooling'" class="process-cooling icon-image pl-1 pr-1"
+                            src="assets/images/process-cooling-icon.png">
                         <img *ngIf="directoryItem.assessment.type == 'Water'" class="fsat icon-image pl-1 pr-1"
                         src="assets/images/water-assessment-small.png">
                         <a (click)="goToAssessment(directoryItem.assessment)">{{directoryItem.assessment.name}}</a>

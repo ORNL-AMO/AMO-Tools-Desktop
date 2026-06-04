@@ -1,0 +1,42 @@
+<div class="row no-gutters w-100 mh-100 scroll-item">
+    <div class="col-12">
+        <div class="row no-gutters">
+            <div class="col-12">
+                <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+                    @if (displayInventory()) {
+                        <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': selectedPanelTab == 'inventory'}">
+                            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('inventory')">
+                                <div>Inventory</div>
+                            </a>
+                        </div>
+                    }
+                    <div
+                        class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': selectedPanelTab == 'results'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('results')">
+                            <div>Results</div>
+                        </a>
+                    </div>
+                    <div class="panel-tab-item h-100 flex-fill" [ngClass]="{'active': selectedPanelTab == 'help'}">
+                        <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('help')">
+                            <div>Help</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row no-gutters">
+            <div class="col-12 pr-2 pl-2 pb-4 mt-1">
+                @if (displayInventory() && selectedPanelTab == 'inventory') {
+                    <app-inventory-table></app-inventory-table>
+                    <app-chiller-profile-chart [selectedChillerId]="selectedChillerId$ | async"></app-chiller-profile-chart>
+                }
+                @if (selectedPanelTab == 'help') {
+                    <app-help-panel></app-help-panel>
+                }
+                @if (selectedPanelTab == 'results') {
+                    <app-assessment-results></app-assessment-results>
+                }
+            </div>
+        </div>
+    </div>
+</div>

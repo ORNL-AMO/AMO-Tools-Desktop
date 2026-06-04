@@ -1,0 +1,340 @@
+import { inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { BehaviorSubject, combineLatest, debounceTime, firstValueFrom, map, switchMap, tap } from 'rxjs';
+import { Assessment } from '../../shared/models/assessment';
+import { ChillerInventoryItem, MonthlyOperatingSchedule, ProcessCoolingAssessment, ProcessCoolingDataProperty, ProcessCoolingSystemInformationProperty, SystemInformation, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
+import { Settings } from '../../shared/models/settings';
+import { SettingsDbService } from '../../indexedDb/settings-db.service';
+import { ConvertProcessCoolingService } from './convert-process-cooling.service';
+import { getDefaultInventoryItem } from '../constants/process-cooling-constants';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { WEATHER_CONTEXT, WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
+import { SystemInformationFormService } from '../system-information/system-information-form.service';
+import { ChillerInventoryService } from './chiller-inventory.service';
+
+@Injectable()
+export class ProcessCoolingAssessmentService {
+  private readonly settingsDbService = inject(SettingsDbService);
+  private readonly convertProcessCoolingService = inject(ConvertProcessCoolingService);
+  private readonly assessmentDbService = inject(AssessmentDbService);
+  private readonly processCoolingWeatherContextService = inject(WEATHER_CONTEXT);
+  private readonly inventoryService = inject(ChillerInventoryService);
+
+  private readonly systemInformationFormService = inject(SystemInformationFormService);
+  
+  private readonly assessment = new BehaviorSubject<Assessment>(undefined);
+  readonly assessment$ = this.assessment.asObservable();
+
+  private readonly processCooling: BehaviorSubject<ProcessCoolingAssessment> = new BehaviorSubject<ProcessCoolingAssessment>(undefined);
+  readonly processCooling$ = this.processCooling.asObservable();
+  readonly processCoolingSignal: Signal<ProcessCoolingAssessment> = toSignal(this.processCooling$, { requireSync: true });
+
+  private readonly settings: BehaviorSubject<Settings> = new BehaviorSubject<Settings>(undefined);
+  readonly settings$ = this.settings.asObservable();
+  settingsSignal: WritableSignal<Settings> = signal<Settings>(undefined);
+
+  constructor() {
+    // * keep DB updates in service as a side-effect of state changes (instead of top-level component)
+     this.assessment$.pipe(
+      debounceTime(300),
+      switchMap(assessment => {
+        if (assessment) {
+          return this.assessmentDbService.updateWithObservable(assessment).pipe(
+            // * getAllAssessments -> setAll workflow is only to satisfy legacy MEASUR patterns that are used for keeping items in memory. 
+            // * Satisfying this pattern fixes stale assessment data in the directories
+            switchMap(() => this.assessmentDbService.getAllAssessments()),
+            tap(allAssessments => {
+              this.assessmentDbService.setAll(allAssessments);
+            }),
+          );
+        }
+        return [];
+      }),
+      takeUntilDestroyed()
+    ).subscribe();
+
+    this.processCoolingWeatherContextService.weatherContextData$.pipe(
+      tap(weatherData => {
+        const isValidWeatherData = this.processCoolingWeatherContextService.isValidWeatherData();
+        if (isValidWeatherData) {
+          this.setProcessCoolingWeatherData(weatherData);
+        } 
+      }),
+      takeUntilDestroyed()
+    ).subscribe();
+  }
+
+  setAssessment(assessment: Assessment) {
+    this.assessment.next(assessment);
+  }
+
+  get assessmentValue(): Assessment {
+    return this.assessment.getValue();
+  }
+
+  get settingsValue(): Settings {
+    return this.settings.getValue();
+  }
+
+  setProcessCooling(processCooling: ProcessCoolingAssessment) {
+    this.processCooling.next(processCooling);
+    const updatedAssessment = { ...this.assessmentValue, processCooling };
+    this.setAssessment(updatedAssessment);
+  }
+
+  setSettings(settings: Settings) {
+    this.settings.next(settings);
+    this.settingsSignal.set(settings);
+  }
+
+  // * prefer immutability, don't mutate the current object, return new (like React patterns )
+  updateProcessCoolingProperty<K extends ProcessCoolingDataProperty>(key: K, value: ProcessCoolingAssessment[K]) {
+    if (this.processCooling.getValue()) {
+      let updatedProcessCooling = { ...this.processCooling.getValue() };
+      updatedProcessCooling[key] = value;
+      this.setProcessCooling(updatedProcessCooling);
+    }
+  }
+
+  updateSystemInformationProperty<K extends ProcessCoolingSystemInformationProperty>(key: K, value: SystemInformation[K]) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    updatedProcessCooling.systemInformation[key] = value;
+    this.setProcessCooling(updatedProcessCooling);
+  }
+
+  updateWeeklyOperatingSchedule(weeklyOperatingSchedule: WeeklyOperatingSchedule) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    updatedProcessCooling.weeklyOperatingSchedule = weeklyOperatingSchedule;
+    this.setProcessCooling(updatedProcessCooling);
+  }
+
+  updateMonthlyOperatingSchedule(monthlyOperatingSchedule: MonthlyOperatingSchedule) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    updatedProcessCooling.monthlyOperatingSchedule = monthlyOperatingSchedule;
+    this.setProcessCooling(updatedProcessCooling);
+  }
+  
+    /**
+   * Adds new default chiller
+   * @returns The new chiller.
+   */
+  addNewChillerToAssessment(): ChillerInventoryItem {
+    let newChiller: ChillerInventoryItem = getDefaultInventoryItem();
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    updatedProcessCooling.inventory.push(newChiller);
+    this.setProcessCooling(updatedProcessCooling);
+    return newChiller;
+  }
+
+  /**
+   * Deletes a chiller from the assessment.
+   * @returns The updated inventory after deletion.
+   */
+  deleteChillerFromAssessment(id: string): ChillerInventoryItem[] {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    let itemIndex: number = updatedProcessCooling.inventory.findIndex(inventoryItem => { return inventoryItem.itemId == id });
+    if (itemIndex !== -1) {
+      updatedProcessCooling.inventory.splice(itemIndex, 1);
+      this.setProcessCooling(updatedProcessCooling);
+    }
+    return updatedProcessCooling.inventory;
+  }
+
+  updateAssessmentChiller(itemId: string, fields: Partial<ChillerInventoryItem>) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    let updatedChiller: ChillerInventoryItem;
+    updatedProcessCooling.inventory = updatedProcessCooling.inventory.map(chiller => {
+      if (chiller.itemId === itemId) {
+        updatedChiller = { ...chiller, ...fields, modifiedDate: new Date() };
+        return updatedChiller;
+      }
+      return chiller;
+    });
+    if (updatedChiller && this.inventoryService.selectedChillerValue?.itemId === itemId) {
+      this.inventoryService.setSelectedChiller(updatedChiller);
+    }
+    this.inventoryService.setInventoryValidState(updatedProcessCooling.inventory);
+    this.setProcessCooling(updatedProcessCooling);
+  }
+
+  setProcessCoolingWeatherData(data: WeatherContextData) {
+    let updatedProcessCooling = { ...this.processCooling.getValue() };
+    updatedProcessCooling.weatherData = data;
+    this.setProcessCooling(updatedProcessCooling);
+  }
+
+  // * logic used in every top level assessment component
+  // todo move to assessments.service, return the new settings, if changed then handle assessment conversion in component
+    /**
+   * Initializes the settings for a given assessment.
+   * 
+   * If settings for the assessment already exist, they are loaded and set.
+   * If not, default settings are created, associated with the assessment, and persisted.
+   * If the settings use 'Metric' units, the process cooling data is converted from 'Imperial' to 'Metric'.
+   * 
+   * @returns A promise that resolves when initialization is complete.
+   */
+  async initAssessmentSettings(assessment: Assessment): Promise<void> {
+    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment, true);
+    if (settings) {
+      this.setSettings(settings);
+    } else {
+      let settings = this.settingsDbService.getByAssessmentId(assessment, false);
+      delete settings.id;
+      delete settings.directoryId;
+      settings.assessmentId = assessment.id;
+      await firstValueFrom(this.settingsDbService.addWithObservable(settings));
+      let updatedSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
+
+      this.settingsDbService.setAll(updatedSettings);
+      settings = this.settingsDbService.getByAssessmentId(assessment, true);
+
+      if (settings.unitsOfMeasure == 'Metric') {
+        let oldSettings: Settings = JSON.parse(JSON.stringify(settings));
+        oldSettings.unitsOfMeasure = 'Imperial';
+        assessment.processCooling = this.convertProcessCoolingService.convertProcessCooling(assessment.processCooling, oldSettings, settings);
+      }
+
+      this.setSettings(settings);
+    }
+    return Promise.resolve();
+  }
+
+  readonly isWeatherDataValid$ = this.processCoolingWeatherContextService.weatherContextData$.pipe(
+    map(() => this.processCoolingWeatherContextService.isValidWeatherData())
+  );
+
+  readonly isSystemInformationValid$ = combineLatest([
+    this.processCooling$,
+    this.processCoolingWeatherContextService.weatherContextData$
+  ]).pipe(
+    map(([processCooling, weatherContextData]: [ProcessCoolingAssessment, WeatherContextData]) => {
+      if (processCooling) {
+        const isSystemInformationValid = this.isSystemInformationValid(processCooling.systemInformation);
+        return isSystemInformationValid;
+      }
+      return false;
+    })
+  );
+
+  readonly isPumpValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling && processCooling.systemInformation) {
+        const isPumpValid = this.systemInformationFormService.isPumpValid(processCooling.systemInformation, this.settingsSignal());
+        return isPumpValid;
+      }
+      return false;
+    })
+  );
+
+  readonly isCondenserValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling && processCooling.systemInformation) {
+        return this.systemInformationFormService.isCondenserSystemInputValid(processCooling.systemInformation, this.settingsSignal());
+      }
+      return false;
+    })
+  );
+
+  readonly isTowerValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling && processCooling.systemInformation) {
+        return this.systemInformationFormService.isTowerValid(processCooling.systemInformation.towerInput, this.settingsSignal());
+      }
+      return false;
+    })
+  );
+
+
+  readonly isChillerInventoryValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      if (processCooling && processCooling.inventory) {
+        return this.isChillerInventoryValid();
+      }
+      return false;
+    })
+  );
+
+  readonly isOperatingScheduleValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      return this.isOperatingScheduleValid(processCooling?.weeklyOperatingSchedule, processCooling?.monthlyOperatingSchedule);
+    })
+  );
+
+  isBaselineValid(processCooling?: ProcessCoolingAssessment): boolean {
+    const pc = processCooling ?? this.processCooling.getValue();
+    if (!pc) return false;
+    return (
+      this.isSystemInformationValid(pc.systemInformation)
+      && this.isChillerInventoryValid()
+      && this.isOperatingScheduleValid(pc.weeklyOperatingSchedule, pc.monthlyOperatingSchedule)
+    );
+  }
+
+  readonly isBaselineValid$ = combineLatest([
+    this.processCooling$,
+    this.processCoolingWeatherContextService.weatherContextData$,
+  ]).pipe(map(([pc]) => this.isBaselineValid(pc)));
+
+  readonly isLoadScheduleValid$ = this.processCooling$.pipe(
+    map((processCooling: ProcessCoolingAssessment) => {
+      return this.isLoadScheduleValid(processCooling.inventory);
+    })
+  );
+
+  get isWeatherDataValid(): boolean {
+    return this.processCoolingWeatherContextService.isValidWeatherData();
+  }
+
+  get condenserCoolingMethod(): number {
+    return this.processCoolingSignal()?.systemInformation.operations.condenserCoolingMethod;
+  }
+
+  get assessmentId(): number | undefined {
+    const assessment = this.assessment.getValue();
+    return assessment ? assessment.id : undefined;
+  }
+
+  isSystemInformationValid(systemInformation: SystemInformation): boolean {
+    const isWeatherDataValid = this.processCoolingWeatherContextService.isValidWeatherData();
+    return this.systemInformationFormService.isSystemInformationValid(systemInformation, this.settingsSignal()) && isWeatherDataValid;
+  }
+
+  isChillerInventoryValid(): boolean {
+    const inventory = this.processCooling.getValue()?.inventory;
+    return inventory?.length > 0 && this.inventoryService.inventoryValidState().isValid;
+  }
+  
+  isOperatingScheduleValid(weeklyOperatingSchedule: WeeklyOperatingSchedule, monthlyOperatingSchedule: MonthlyOperatingSchedule): boolean {
+    if (weeklyOperatingSchedule && monthlyOperatingSchedule) {
+      const validWeekly = weeklyOperatingSchedule.hoursOnMonToSun && weeklyOperatingSchedule.hoursOnMonToSun.some(hour => hour > 0);
+      const validMonthly = monthlyOperatingSchedule.hoursOnPerMonth && monthlyOperatingSchedule.hoursOnPerMonth.some(hour => hour > 0);
+      return validWeekly && validMonthly;
+    }
+    return false;
+  }
+
+  isLoadScheduleValid(chillerInventory: ChillerInventoryItem[]): boolean {
+    if (chillerInventory && chillerInventory.length > 0) {
+      return chillerInventory.every(chiller => {
+        const hasByMonth = chiller.loadScheduleByMonth?.length > 0;
+        const hasAllMonths = chiller.loadScheduleAllMonths?.length > 0;
+        return hasByMonth || hasAllMonths;
+      });
+    }
+  }
+
+  setDefaultWeatherZipcode() {
+    let processCooling = { ...this.processCoolingSignal() };
+    const existingWeatherData = this.processCoolingWeatherContextService.getWeatherData();
+    if (!existingWeatherData && processCooling.systemInformation.co2SavingsData?.zipcode) {
+      const zipcode = processCooling.systemInformation.co2SavingsData.zipcode;
+        this.processCoolingWeatherContextService.setWeatherData({
+          selectedStation: undefined,
+          weatherDataPoints: [],
+          addressString: zipcode.toString(),
+        });
+    }
+  }
+
+}

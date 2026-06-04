@@ -1,0 +1,28 @@
+<div *ngIf="inventoryUIState$ | async as inventoryState" class="card p-2">
+    <div class="card-body p-0" *ngIf="inventoryState.inventory && inventoryState.inventory.length > 0">
+        <table class="table table-sm table-striped table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Compressor Type</th>
+                    <th>Install VSD</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (chillerInventoryItem of (inventoryState.inventory | filterChillerInventory: filterInventoryParams); track chillerInventoryItem.itemId) {
+                <tr [class.invalid-item]="!inventoryValidState().items[chillerInventoryItem.itemId]">
+                    <td>
+                       {{chillerInventoryItem.name}}
+                    </td>
+                    <td>{{chillerInventoryItem.chillerType | chillerCompressorType}}</td>
+                    <td>
+                        <input type="checkbox" class="pc-form-checkbox"
+                            [ngModel]="isVsdSelected(chillerInventoryItem.itemId)"
+                            (ngModelChange)="setInstallVSD(chillerInventoryItem, $event)" />
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

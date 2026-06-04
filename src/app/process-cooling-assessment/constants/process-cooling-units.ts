@@ -1,0 +1,119 @@
+
+// todo 8506 metric conversions for some of these units have not been implemented
+export const PROCESS_COOLING_UNITS = {
+  temperature: {
+    imperial: 'F',
+    metric: 'C',
+    labelHTML: {
+      imperial: '&#8457;',
+      metric: '&#8451;',
+    }
+  },
+  // volumeFlowRate: {
+  //   imperial: 'gpm/ton',
+  //   metric: 'm3/kW',
+  //   labelHTML: {
+  //     imperial: 'gpm/ton',
+  //     metric: 'm<sup>3</sup>/kW'
+  //   }
+  // },
+  // todo 8506 temporary until we have metric definition for the above
+   volumeFlowRate: {
+    imperial: 'gpm',
+    metric: 'm3/min',
+    labelHTML: {
+      imperial: 'gpm/ton',
+      metric: 'm<sup>3</sup>/min'
+    }
+  },
+  fuelCost: {
+    imperial: 'MMBtu',
+    metric: 'GJ',
+    labelHTML: {
+      imperial: '$/MMBtu',
+      metric: '$/GJ'
+    }
+  },
+  towerSize: {
+    otherTypes: {
+      tons: {
+        unit: 'tons',
+        labelHTML: 'tons'
+      },
+      hp: {
+        unit: 'hp',
+        labelHTML: 'hp'
+      }
+    },
+  },
+  // todo 8506 temporary until we have metric definition
+  fullLoadEfficiency: {
+    imperial: 'kw/ton',
+    metric: 'kw/ton',
+    labelHTML: {
+      imperial: 'kW/ton',
+      metric: 'kW/ton'
+    }
+  },
+  efficiency: {
+    imperial: 'kw/ton',
+    metric: 'kw/ton',
+    labelHTML: {
+      imperial: 'kW/RT',
+      metric: 'COP'
+    }
+  },
+  capacity: {
+    imperial: 'tons',
+    metric: 'kW',
+    labelHTML: {
+      imperial: 'tons',
+      metric: 'kW'
+    }
+  },
+  motorPower: {
+    imperial: 'hp',
+    // kW is a default guess
+    metric: 'kW',
+    labelHTML: {
+      imperial: 'hp',
+      metric: 'kW'
+    }
+  },
+  chillerPower: {
+    imperial: 'kW',
+    metric: 'kW',
+    labelHTML: {
+      imperial: 'kW',
+      metric: 'kW'
+    }
+  },
+  energy: {
+    imperial: 'kWh',
+    metric: 'kWh',
+    labelHTML: {
+      imperial: 'kWh',
+      metric: 'kWh'
+    }
+  }
+};
+
+export interface AppUnits {
+  imperial: string;
+  metric: string;
+  labelHTML: {
+    imperial: string;
+    metric: string;
+  },
+  otherTypes?: {
+    [otherType: string]: {
+      unit: string,
+      labelHTML: string
+    }
+  };
+}
+
+
+export type ProcessCoolingValidation = {
+  [unitType: string]: AppUnits;
+};

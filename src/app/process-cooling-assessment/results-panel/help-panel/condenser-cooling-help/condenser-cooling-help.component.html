@@ -1,0 +1,74 @@
+<h5>
+    {{ condenserCoolingMethod === CondenserCoolingMethod.Water ? 'Water Cooled Condenser' : 'Air Cooled Condenser' }} Help
+    <br>
+    <small class="text-muted">Enter data related to the condenser cooling system</small>
+</h5>
+<hr class="my-1 hr-spacer">
+
+<!-- Air Cooled Fields -->
+<div class="my-2" *ngIf="focusedField() == 'outdoorAirTemp'">
+    <h6>
+        Design Outdoor Air Temperature
+        <br>
+        <small class="text-muted">
+            Enter the average outdoor air temperature used for cooling. This affects condenser performance.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'airCoolingSource'">
+    <h6>
+        Air Cooling Source
+        <br>
+        <small class="text-muted">
+            Select whether the cooling air source is indoor or outdoor. This determines which temperature input is required.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'indoorTemp'">
+    <h6>
+        Average Indoor Temperature
+        <br>
+        <small class="text-muted">
+            Enter the average indoor air temperature if the air cooling source is indoor.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'followingTempDifferential'">
+    <h6>
+        Following Temperature Differential
+        <br>
+        <small class="text-muted">
+            This value is the difference between the condenser cooling water temperature achieved and the wet-bulb temperature of the air entering the cooling tower (the analysis assumes the condenser temperature achieved is equal to the cooling water temperature supplied to the chiller).  
+            The closer the condenser water temperature approaches the air wet-bulb temperature through evaporation in the cooling tower, the more efficiently the chiller will operate.  
+            Select the condenser following temperature differential from the pull-down menu.  Typical values are 7 to 10 degrees Fahrenheit, and the allowable range is 5 to 20.
+        </small>
+    </h6>
+</div>
+
+<!-- Water Cooled Fields -->
+<div class="my-2" *ngIf="focusedField() == 'isConstantCondenserWaterTemp'">
+    <h6>
+        Is Condenser Water Temp Constant
+        <br>
+        <small class="text-muted">
+            Water-cooled chilled water systems typically use a cooling tower to remove heat from the chiller condenser and reject it to the atmosphere.  
+            Towers may operate to maintain a constant condenser cooling water temperature or allow the temperature to vary with the ambient conditions.  
+            If the condenser water temperature entering the chiller is held constant, select 'Yes' from the pull-down menu.  If the condenser water temperature is allowed to vary, select 'No'.
+        </small>
+    </h6>
+</div>
+<div class="my-2" *ngIf="focusedField() == 'condenserWaterTemp'">
+    <h6>
+        Condenser Water Temperature
+        <br>
+        <small class="text-muted">
+            The condenser water temperature, or CWT, is the constant cooling water
+            temperature maintained by the cooling tower and supplied to the chiller. 
+            
+            <br><br>A typical value is 85 degrees Fahrenheit. The
+            allowable range is 65 to 90 degrees Fahrenheit.
+        </small>
+    </h6>
+</div>
+
+

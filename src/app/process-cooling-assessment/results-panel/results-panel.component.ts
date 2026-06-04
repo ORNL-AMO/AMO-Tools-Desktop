@@ -1,0 +1,62 @@
+import { Component, computed, effect, inject, Signal } from '@angular/core';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { MainView, ProcessCoolingSetupTabString, SetupView } from '../models/views';
+import { SummaryView } from '../services/executive-summary-results.service';
+import { ChillerInventoryService } from '../services/chiller-inventory.service';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-results-panel',
+  standalone: false,
+  templateUrl: './results-panel.component.html',
+  styleUrl: './results-panel.component.css'
+})
+export class ResultsPanelComponent {
+  private readonly processCoolingUIService = inject(ProcessCoolingUiService);
+  private readonly inventoryService = inject(ChillerInventoryService);
+  selectedPanelTab: PanelTab = 'help';
+
+  selectedChillerId$: Observable<string | null> = this.inventoryService.selectedChillerId$;
+
+  mainView: Signal<string> = this.processCoolingUIService.mainView;
+  setupView: Signal<string> = this.processCoolingUIService.childView;
+
+  displayInventory: Signal<boolean> = computed(() => {
+    return this.mainView() === MainView.BASELINE && (this.setupView() === SetupView.INVENTORY || this.setupView() === SetupView.LOAD_SCHEDULE);
+  });
+
+  displayResults: Signal<boolean> = computed(() => {
+    return this.mainView() === MainView.BASELINE && (this.setupView() === SetupView.INVENTORY || this.setupView() === SetupView.LOAD_SCHEDULE);
+  });
+
+  resultsSummaryView: SummaryView = 'baseline-panel';
+
+  constructor() {
+    
+    effect(() => {
+      const setupView = this.setupView();
+      if (setupView === SetupView.INVENTORY || setupView === SetupView.LOAD_SCHEDULE) {
+        this.setPanelTab('inventory');
+      } else {
+        this.setPanelTab('results');
+      }
+    });
+
+    effect(() => {
+      const mainView = this.mainView();
+      
+      if (mainView === MainView.ASSESSMENT) {
+        this.processCoolingUIService.executiveSummaryViewSignal.set('modification-panel');
+      } else {
+        this.processCoolingUIService.executiveSummaryViewSignal.set('baseline-panel');
+      }
+    });
+  }
+
+  setPanelTab(str: PanelTab) {
+    this.selectedPanelTab = str;
+  }
+}
+
+
+export type PanelTab = ProcessCoolingSetupTabString | 'help' | 'results';

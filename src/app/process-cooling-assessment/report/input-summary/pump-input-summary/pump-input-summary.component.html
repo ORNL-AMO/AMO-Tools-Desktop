@@ -1,0 +1,20 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Pump Input
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div class="card-body" *ngIf="!collapse">
+    @let inputSummaryUI = inputSummaryUI$ | async;
+    @if (inputSummaryUI) {
+      <div class="output-summary">
+        <app-input-summary-table
+          [sections]="inputSummaryUI.pumpSections"
+          [modificationNames]="inputSummaryUI.modificationNames">
+        </app-input-summary-table>
+      </div>
+    }
+    <app-exportable-results-table [tableString]="copyTableString"
+      (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+  </div>
+</div>

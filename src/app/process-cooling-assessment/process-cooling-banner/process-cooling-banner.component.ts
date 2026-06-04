@@ -1,0 +1,134 @@
+import { Component, DestroyRef, inject, Signal } from '@angular/core';
+import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
+import { map, Observable } from 'rxjs';
+import { Assessment } from '../../shared/models/assessment';
+import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
+import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
+import { MAIN_VIEW_LINKS, MainView, ViewLink } from '../models/views';
+import { DashboardService } from '../../dashboard/dashboard.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
+import { ExportItemComponent } from '../../shared/import-export/export-item/export-item.component';
+import { EmailMeasurDataItemComponent, EmailMeasurDataItemComponentDataInputs } from '../../shared/email-measur-data/email-measur-data-item/email-measur-data-item.component';
+@Component({
+  selector: 'app-process-cooling-banner',
+  standalone: false,
+  templateUrl: './process-cooling-banner.component.html',
+  styleUrl: './process-cooling-banner.component.css'
+})
+export class ProcessCoolingBannerComponent {
+  private readonly processCoolingService = inject(ProcessCoolingAssessmentService);
+  private readonly processCoolingUiService = inject(ProcessCoolingUiService);
+  private readonly dashboardService = inject(DashboardService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly modalDialogService = inject(ModalDialogService);
+  isBaselineValid: boolean = false
+  
+  readonly ROUTE_TOKENS = ROUTE_TOKENS;
+  readonly MAIN_VIEW_LINKS = MAIN_VIEW_LINKS;
+  readonly MainView = MainView; 
+  readonly assessment$: Observable<Assessment> = this.processCoolingService.assessment$;
+
+  mainView: Signal<string> = this.processCoolingUiService.mainView;
+  bannerCollapsed: boolean = true;
+
+  ngOnInit(): void {
+    this.processCoolingService.isBaselineValid$.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(val => {
+      this.isBaselineValid = val;
+    });
+  }
+
+  collapseBanner() {
+    // this.bannerCollapsed = !this.bannerCollapsed;
+    window.dispatchEvent(new Event("resize"));
+  }
+
+  navigateHome() {
+    this.dashboardService.navigateWithSidebarOptions('/landing-screen', {shouldCollapse: false});
+  }
+
+  showSecurityAndPrivacyModal() {
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+      {
+        width: '1400px',
+      },
+    );
+  }
+
+  
+
+  changeTab() {
+    // if (str == 'baseline' || str == 'diagram' || this.isBaselineValid) {
+    //   this.mainTab.set(str);
+    // }
+    // this.collapseBanner();
+  }
+
+  selectModification() {
+    // this.processCoolingUiService.showModificationListModalSignal.set(true);
+  }
+  
+  openExportModal() {
+    this.modalDialogService.openModal<ExportItemComponent, {
+      inAssessment: boolean,
+      assessment: Assessment
+    }>(
+      ExportItemComponent,
+      {
+        width: '600px',
+        data: {
+          inAssessment: true,
+          assessment: this.processCoolingService.assessmentValue
+        }
+      }
+    );
+  }
+
+  emailAssessment() {
+    const assessment = this.processCoolingService.assessmentValue;
+    this.modalDialogService.openModal<EmailMeasurDataItemComponent, EmailMeasurDataItemComponentDataInputs>(
+      EmailMeasurDataItemComponent,
+      {
+        width: '800px',
+        data: {
+          measurItemAttachment: {
+            itemType: 'assessment',
+            itemName: assessment.name,
+            itemData: assessment
+          }
+        }
+      }
+    );
+  }
+
+  
+  next() {
+    this.processCoolingUiService.continue();
+  }
+
+  back() {
+    this.processCoolingUiService.back();
+  }
+
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
+  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBack;
+
+  isLinkDisabled(link: ViewLink): boolean {
+    return !this.processCoolingUiService.canVisitView(link.view);
+  }
+
+  handleCanNavigate(event: MouseEvent, link: ViewLink): boolean {
+    if (this.isLinkDisabled(link)) {
+      event.preventDefault();
+      event.stopPropagation();
+      return false;
+    } else {
+      return true;
+    }
+  }
+}
+
