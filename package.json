@@ -59,7 +59,7 @@
     "jspdf": "4.2.1",
     "jspdf-autotable": "5.0.7",
     "lodash.foreach": "4.5.0",
-    "measur-tools-suite": "1.1.4-rc.100",
+    "measur-tools-suite": "1.1.4-rc.106",
     "ngx-bootstrap": "20.0.2",
     "ngx-indexed-db": "16.0.0",
     "ngx-webstorage": "20.0.0",

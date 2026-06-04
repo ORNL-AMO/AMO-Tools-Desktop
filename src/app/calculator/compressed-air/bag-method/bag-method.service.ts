@@ -29,8 +29,7 @@ export class BagMethodService {
     let input: BagMethodInput = {
       operatingTime: 0,
       bagFillTime: 0,
-      bagVolume: 0,
-      numberOfUnits: 1
+      bagVolume: 0
     };
     inputsArray.push(input);
     return {
@@ -49,14 +48,12 @@ export class BagMethodService {
         {
           operatingTime: 8760,
           bagFillTime: 50,
-          bagVolume: 45,
-          numberOfUnits: 1
+          bagVolume: 45
         },
         {
           operatingTime: 8760,
           bagFillTime: 360,
-          bagVolume: 60,
-          numberOfUnits: 1
+          bagVolume: 60
         }
       ]
     }

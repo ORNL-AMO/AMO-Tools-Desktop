@@ -96,14 +96,13 @@ describe('AirLeakSurveyFormService', () => {
 
   it('buildBagForm → getBagDataFromForm round-trips volume and fillTime', () => {
     const leak = service.getEmptyAirLeakData();
-    leak.bagMethodData = { operatingTime: 8760, bagVolume: 2.5, bagFillTime: 45, numberOfUnits: 3 };
+    leak.bagMethodData = { operatingTime: 8760, bagVolume: 2.5, bagFillTime: 45 };
 
     const form = service.buildBagForm(leak);
     const result = service.getBagDataFromForm(form, 8760);
 
     expect(result.bagVolume).toBe(2.5);
     expect(result.bagFillTime).toBe(45);
-    expect(result.numberOfUnits).toBe(3);
     expect(result.operatingTime).toBe(8760);
   });
 

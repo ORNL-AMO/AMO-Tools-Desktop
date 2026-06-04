@@ -110,8 +110,7 @@ export class BagMethodComponent implements OnInit {
     let input: BagMethodInput = {
       operatingTime: JSON.parse(JSON.stringify(this.inputs.operatingHours)),
       bagFillTime: 0,
-      bagVolume: 0,
-      numberOfUnits: 0
+      bagVolume: 0
     };
 
     let output: BagMethodOutput = {

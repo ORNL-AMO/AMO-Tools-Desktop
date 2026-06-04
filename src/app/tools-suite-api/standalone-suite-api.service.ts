@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, CombinedHeatPower, CombinedHeatPowerOutput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, OperatingCostInput, OperatingCostOutput, PipeInsulationReductionInput, PipeInsulationReductionResult, PipeSizes, PipeSizingInput, PipeSizingOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput, ReceiverTankBridgingCompressor, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredResults, ReceiverTankMeteredStorage } from '../shared/models/standalone';
+import { AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, BagMethodInput, BagMethodOutput, CalculateUsableCapacity, CombinedHeatPower, CombinedHeatPowerOutput, CompressedAirPressureReductionInput, CompressedAirPressureReductionResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, OperatingCostInput, OperatingCostOutput, PipeInsulationReductionInput, PipeInsulationReductionResult, PipeSizes, PipeSizingInput, PipeSizingOutput, PneumaticAirRequirementInput, PneumaticAirRequirementOutput, ReceiverTankBridgingCompressor, ReceiverTankCompressorCycle, ReceiverTankCompressorCycleOutput, ReceiverTankDedicatedStorage, ReceiverTankGeneral, ReceiverTankMeteredResults, ReceiverTankMeteredStorage } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 
@@ -286,7 +286,6 @@ export class StandaloneSuiteApiService {
       operatingTime: input.operatingTime,
       bagFillTime: input.bagFillTime,
       bagVolume: input.bagVolume,
-      numberOfUnits: input.numberOfUnits,
     });
     let output: BagMethodOutput = {
       flowRate: isNaN(rawOutput.flowRate) ? undefined : rawOutput.flowRate,
@@ -349,5 +348,34 @@ export class StandaloneSuiteApiService {
       airPressureOut: input.airPressureOut,
     });
     return output.usableCapacity;
+  }
+
+  calculateReceiverTankCompressorCycleSize(input: ReceiverTankCompressorCycle): ReceiverTankCompressorCycleOutput {
+    input.unloadPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadPressure);
+    input.fullLoadPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.fullLoadPressure);
+    input.compressorCapacity = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.compressorCapacity);
+    input.loadTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.loadTime);
+    input.unloadTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadTime);
+    input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
+
+    let output: {
+      pressureChange: number,
+      effectiveCapacity: number,
+      tankSize: number,
+      volumeCf: number,
+    } = this.toolsSuiteApiService.ToolsSuiteModule.calculateReceiverTankCompressorCycleSize({
+      unloadPressure: input.unloadPressure,
+      fullLoadPressure: input.fullLoadPressure,
+      compressorCapacity: input.compressorCapacity,
+      loadTime: input.loadTime,
+      unloadTime: input.unloadTime,
+      atmosphericPressure: input.atmosphericPressure,
+    });
+    return {
+      pressureChange: output.pressureChange,
+      capacity: output.effectiveCapacity,
+      areaStorageVolume: output.volumeCf,
+      liquidStorageVolume: output.tankSize,
+    };
   }
 }

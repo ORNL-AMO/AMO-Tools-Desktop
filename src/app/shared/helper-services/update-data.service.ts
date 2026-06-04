@@ -733,7 +733,6 @@ export class UpdateDataService {
             // }
             compressedAirReductionData.bagMethodData.bagVolume = 0;
             compressedAirReductionData.bagMethodData.bagFillTime = compressedAirReductionData.bagMethodData['fillTime'] ? compressedAirReductionData.bagMethodData['fillTime'] : 0;
-            compressedAirReductionData.bagMethodData.numberOfUnits = 1;
             compressedAirReductionData.bagMethodData.operatingTime = compressedAirReductionData.hoursPerYear;
         }
         return compressedAirReductionData;
@@ -744,7 +743,6 @@ export class UpdateDataService {
         if (airLeakSurveyData.bagMethodData && (airLeakSurveyData.bagMethodData['height'] !== undefined || airLeakSurveyData.bagMethodData['diameter'] !== undefined)) {
             airLeakSurveyData.bagMethodData.bagVolume = 0;
             airLeakSurveyData.bagMethodData.bagFillTime = airLeakSurveyData.bagMethodData['fillTime'] ? airLeakSurveyData.bagMethodData['fillTime'] : 0;
-            airLeakSurveyData.bagMethodData.numberOfUnits = 1;
             airLeakSurveyData.bagMethodData.operatingTime = facilityCompressorData.hoursPerYear;
         }
         return airLeakSurveyData;
