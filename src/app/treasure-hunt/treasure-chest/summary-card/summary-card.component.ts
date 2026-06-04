@@ -24,7 +24,7 @@ export class SummaryCardComponent implements OnInit {
 
   @Input()
   settings: Settings;
-
+  allModificationCosts: Array<number>;
   electricityData: UtilityTotal;
   naturalGasData: UtilityTotal;
   compressedAirData: UtilityTotal;
@@ -105,7 +105,7 @@ export class SummaryCardComponent implements OnInit {
         modificationCost: baselineCost - totalCostSavings
       };
 
-      const allModificationCosts = [
+      this.allModificationCosts = [
         this.electricityData?.modificationCost,
         this.naturalGasData?.modificationCost,
         this.waterData?.modificationCost,
@@ -115,7 +115,8 @@ export class SummaryCardComponent implements OnInit {
         this.otherFuelData?.modificationCost,
         this.additionalAnnualSavings?.modificationCost
       ];
-      this.hasNegativeCost = allModificationCosts.some(cost => cost != null && cost < 0);
+
+      this.hasNegativeCost = this.allModificationCosts.some(cost => cost != null && cost < 0);
     }
   }
 
