@@ -158,7 +158,6 @@ export class CalculatorSuiteApiService {
       compressedAirReduction.flowMeterMethodData.meterReading = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.flowMeterMethodData.meterReading);
       compressedAirReduction.bagMethodData.bagFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagFillTime);
       compressedAirReduction.bagMethodData.bagVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.bagVolume);
-      compressedAirReduction.bagMethodData.numberOfUnits = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.bagMethodData.numberOfUnits);
 
       compressedAirReduction.pressureMethodData.nozzleType = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.nozzleType);
       compressedAirReduction.pressureMethodData.numberOfNozzles = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.pressureMethodData.numberOfNozzles);
@@ -181,8 +180,7 @@ export class CalculatorSuiteApiService {
         },
         bagMethodData: {
           bagFillTime: compressedAirReduction.bagMethodData.bagFillTime,
-          bagVolume: compressedAirReduction.bagMethodData.bagVolume,
-          numberOfBags: compressedAirReduction.bagMethodData.numberOfUnits
+          bagVolume: compressedAirReduction.bagMethodData.bagVolume
         },
         pressureMethodData: {
           nozzleType: compressedAirReduction.pressureMethodData.nozzleType,

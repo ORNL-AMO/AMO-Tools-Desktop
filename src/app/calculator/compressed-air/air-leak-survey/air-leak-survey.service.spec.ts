@@ -289,7 +289,7 @@ function getLeak(name: string, selected: boolean): AirLeakSurveyData {
     leakDescription: `${name} description`,
     measurementMethod: LeakMeasurementMethod.Estimate,
     estimateMethodData: { leakRateEstimate: 1 },
-    bagMethodData: { operatingTime: 1, bagVolume: 1, bagFillTime: 1, numberOfUnits: 1 },
+    bagMethodData: { operatingTime: 1, bagVolume: 1, bagFillTime: 1 },
     decibelsMethodData: {
       linePressure: 1,
       decibels: 1,

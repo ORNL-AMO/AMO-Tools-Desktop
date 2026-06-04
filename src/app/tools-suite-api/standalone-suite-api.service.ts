@@ -286,7 +286,6 @@ export class StandaloneSuiteApiService {
       operatingTime: input.operatingTime,
       bagFillTime: input.bagFillTime,
       bagVolume: input.bagVolume,
-      numberOfUnits: input.numberOfUnits,
     });
     let output: BagMethodOutput = {
       flowRate: isNaN(rawOutput.flowRate) ? undefined : rawOutput.flowRate,

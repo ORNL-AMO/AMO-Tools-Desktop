@@ -18,7 +18,7 @@ function makeLeak(method: number = LeakMeasurementMethod.Estimate): AirLeakSurve
     leakDescription: 'description',
     measurementMethod: method,
     estimateMethodData: { leakRateEstimate: 0.5 },
-    bagMethodData: { operatingTime: 8760, bagVolume: 1, bagFillTime: 30, numberOfUnits: 1 },
+    bagMethodData: { operatingTime: 8760, bagVolume: 1, bagFillTime: 30 },
     decibelsMethodData: {
       linePressure: 100, decibels: 80, decibelRatingA: 1, pressureA: 1,
       firstFlowA: 1, secondFlowA: 1, decibelRatingB: 1, pressureB: 1,
