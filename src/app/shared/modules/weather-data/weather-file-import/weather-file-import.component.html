@@ -1,0 +1,165 @@
+<div class="row mb-2">
+    <div class="col-12">
+        <a class="btn btn-sm btn-outline-secondary" [routerLink]="['../stations']">
+            <span class="fa fa-arrow-left"></span> Back to Station Search
+        </a>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-12">
+        <label class="semibold form-section-label mb-2">Import Weather Data from File</label>
+        <p class="small mb-1">
+            Upload a <strong>.csv</strong>@if (xlsxEnabled) { or <strong>.xlsx</strong>} file containing hourly rows of weather data.
+            Two column sets are supported:
+        </p>
+        <div class="d-flex flex-column small">
+            <ul class="mb-1">
+                @for (schema of columnSchemas; track schema.name) {
+                <li>
+                    <strong>{{ schema.name }}</strong> — requires
+                    @for (header of schema.requiredHeaders; track header; let lastHeader = $last) {
+                        <code>{{ header }}</code>{{ !lastHeader ? ', ' : '' }}
+                    }.
+                    @if (schema.dateFormatNote) {
+                        {{ schema.dateFormatNote }}
+                    }
+                </li>
+                }
+            </ul>
+            <p class="mb-1"><strong>Any additional columns beyond the above required will be ignored</strong></p>
+            <div class="mb-0">
+                <strong>Time column</strong> — each column set above defines its own expected time column(s).
+                If no recognized time column is found, the below fallback formats are also accepted:
+                <ul class="mb-0">
+                    @for (option of timeColumnFormats; track option.label) {
+                    <li>
+                        ({{ option.label }}) {{ option.description }}
+                        @if (option.examples?.length) {
+                            (e.g.
+                            @for (ex of option.examples; track ex; let last = $last) {
+                                <code>{{ ex }}</code>{{ !last ? ', ' : '' }}
+                            })
+                        }
+                    </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="drop-zone" [class.drop-zone-active]="isDragOver" (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave()" (drop)="onDrop($event)">
+            <div class="text-center p-4">
+                <span class="fa fa-upload fa-2x text-muted mb-2 d-block"></span>
+                <p class="mb-1">Drag and drop a .csv
+                    @if (xlsxEnabled) { 
+                        or .xlsx
+                    } file here</p>
+                <p class="small text-muted mb-2">— or —</p>
+                <label for="weatherFileInput" class="btn btn-sm btn-outline-secondary mb-0">
+                    Browse Files
+                </label>
+                <input type="file" id="weatherFileInput" [attr.accept]="xlsxEnabled ? '.csv,.xlsx' : '.csv'" class="d-none"
+                    (change)="onFileChange($event)">
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (fileName) {
+<div class="row mb-2">
+    <div class="col-12">
+        <span class="small"><strong>Selected file:</strong> {{ fileName }}</span>
+    </div>
+</div>
+}
+
+@if (isProcessing) {
+<div class="row mb-3">
+    <div class="col-12 text-center">
+        <app-loading-spinner [message]="'Parsing file...'"></app-loading-spinner>
+    </div>
+</div>
+}
+
+@if (parseResult && !isProcessing) {
+@if (hasErrors) {
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="alert alert-danger p-2">
+            <strong>Validation Errors</strong>
+            <ul class="mb-0 mt-1 small">
+                @for (error of displayedErrors; track error) {
+                <li>{{ error }}</li>
+                }
+            </ul>
+            @if (additionalErrors > 0) {
+            <p class="mb-0 mt-1 small">...and {{ additionalErrors }} more error(s).</p>
+            }
+        </div>
+    </div>
+</div>
+} @else {
+<div class="row mb-2">
+    <div class="col-12">
+        <div class="alert alert-success p-2 small mb-0">
+            <strong>{{ parseResult.rowCount }}</strong> rows parsed successfully.
+            Columns detected: <code>{{ parseResult.detectedColumns.join(', ') }}</code>.
+            @if (parseResult.timeLabel) {
+            Time source: <code>{{ parseResult.timeLabel }}</code>.
+            }
+        </div>
+    </div>
+</div>
+<div class="row mb-3">
+    <div class="col-12">
+        <label class="semibold mt-2">Preview (first 5 rows)</label>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered small mb-0">
+                <thead class="small">
+                    <tr>
+                        @for (col of parseResult.detectedColumns; track col) {
+                        <th>{{ col }}</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (row of parseResult.previewRawRows; track $index) {
+                    <tr>
+                        @for (column of parseResult.detectedColumns; track column) {
+                        <td>{{ row[column] }}</td>
+                        }
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+}
+<div class="row">
+    <div class="col-12 d-flex justify-content-end align-items-center">
+        @if (parseResult && !hasErrors) {
+        <div class="d-flex align-items-center small mr-3">
+            <span class="semibold">Temperature unit:</span>
+            <div class="form-check form-check-inline mb-0 ml-2">
+                <input class="form-check-input" type="radio" name="tempUnit" id="tempUnitF"
+                    [(ngModel)]="temperatureUnit" value="F">
+                <label class="form-check-label" for="tempUnitF">°F</label>
+            </div>
+            <div class="form-check form-check-inline mb-0">
+                <input class="form-check-input" type="radio" name="tempUnit" id="tempUnitC"
+                    [(ngModel)]="temperatureUnit" value="C">
+                <label class="form-check-label" for="tempUnitC">°C <span class="text-muted">(convert to °F)</span></label>
+            </div>
+        </div>
+        }
+        <button class="btn btn-primary btn-sm" [disabled]="hasErrors" (click)="continue()">
+            Continue
+        </button>
+    </div>
+</div>
+}

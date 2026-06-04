@@ -7,7 +7,7 @@ import { WeatherBinCase, WeatherBinsInput, WeatherBinsService } from '../../util
 import { CoolingTowerBasinFormService } from './cooling-tower-basin-form.service';
 import * as _ from 'lodash';
 import { CoolingChartData } from '../../../shared/cooling-weather-chart/cooling-weather-chart.component';
-import { ChillersSuiteApiService } from '../../../tools-suite-api/chillers-suite-api.service';
+import { ChillerCalculatorSuiteApiService } from '../../../tools-suite-api/chiller-calculator-suite-api.service';
 
 @Injectable()
 export class CoolingTowerBasinService {
@@ -23,7 +23,7 @@ export class CoolingTowerBasinService {
   hasWeatherBinsData: BehaviorSubject<boolean>;
 
   constructor(private convertUnitsService: ConvertUnitsService,
-    private chillersSuiteApiService: ChillersSuiteApiService,
+    private chillersSuiteApiService: ChillerCalculatorSuiteApiService,
     private weatherBinsService: WeatherBinsService, private coolingTowerBasinFormService: CoolingTowerBasinFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.coolingTowerBasinInput = new BehaviorSubject<CoolingTowerBasinInput>(undefined);

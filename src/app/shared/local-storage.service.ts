@@ -14,7 +14,11 @@ export class LocalStorageService {
   retrieve(key: string): any {
     try {
       const value = localStorage.getItem(key);
-      return value ? JSON.parse(value) : null;
+      if (!value) { 
+        return null; 
+      } else {
+        return JSON.parse(value);
+      }
     } catch (e) {
       console.error(`Error retrieving from localStorage for key: ${key}`, e);
       return null;

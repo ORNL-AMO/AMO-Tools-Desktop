@@ -125,7 +125,7 @@ export class ConvertValue {
         // You can't go from liquid to mass, for example
         if (this.destination.measure !== this.origin.measure) {
             this.hasError = true;
-            return value;
+            throw new Error('Incompatible conversion from ' + this.destination.measure + ' and ' + this.origin.measure);
         }
 
         /**

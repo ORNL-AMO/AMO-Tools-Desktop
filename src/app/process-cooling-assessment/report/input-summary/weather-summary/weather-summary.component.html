@@ -1,0 +1,17 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Weather Data
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+  <div class="card-body" *ngIf="!collapse">
+    <div class="output-summary">
+      <app-input-summary-table
+        [sections]="sections$ | async"
+        [modificationNames]="[]">
+      </app-input-summary-table>
+    </div>
+    <app-exportable-results-table [tableString]="copyTableString"
+      (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+  </div>
+</div>

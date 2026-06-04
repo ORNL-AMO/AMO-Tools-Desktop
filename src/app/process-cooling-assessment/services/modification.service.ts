@@ -1,0 +1,468 @@
+import { computed, effect, inject, Injectable, signal, Signal, WritableSignal } from '@angular/core';
+import { ChillerInventoryItem, ExploreOppsBaseline, Modification, ModificationEEMProperty, ModificationEEMSUsed, ProcessCoolingAssessment, SystemInformation } from '../../shared/models/process-cooling-assessment';
+import { BehaviorSubject, combineLatest, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
+import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
+import { copyObject, getNewIdString } from '../../shared/helperFunctions';
+import { LocalStorageService } from '../../shared/local-storage.service';
+import { PC_SELECTED_MODIFICATION_KEY } from '../../shared/models/app';
+import { AppErrorService } from '../../shared/errors/app-error.service';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { ExploreOpportunitiesFormService } from './explore-opportunities-form.service';
+import { EEM_LABELS } from '../constants/process-cooling-constants';
+
+@Injectable()
+export class ModificationService {
+  private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private exploreOpportunitiesFormService = inject(ExploreOpportunitiesFormService);
+  private localStorageService = inject(LocalStorageService);
+  private appErrorService = inject(AppErrorService);
+  private processCoolingSignal = this.processCoolingAssessmentService.processCoolingSignal;
+
+
+  private readonly selectedModificationId = new BehaviorSubject<string>(undefined);
+  readonly selectedModificationId$: Observable<string> = this.selectedModificationId.asObservable();
+
+  modifications: Signal<Array<Modification>> = computed(() => {
+    const modifications = this.processCoolingSignal()?.modifications ?? [];
+    return modifications;
+  });
+
+  invalidModificationIds: WritableSignal<Array<string>> = signal<Array<string>>([]);
+
+  constructor() {
+    effect(() => {
+      const settings = this.processCoolingAssessmentService.settingsSignal();
+      if (settings) {
+        const invalidIds: string[] = this.modifications()
+        .filter(mod => !this.isModificationValid(mod))
+        .map(mod => mod.id);
+        this.invalidModificationIds.set(invalidIds);
+      }
+    });
+  }
+
+  readonly modificationEEMsUsedSignal: Signal<Array<ModificationEEMSUsed>> = computed(() => {
+    const modifications = this.modifications();
+    if (!modifications) {
+      return [];
+    }
+    return modifications.map((modification: Modification) => {
+      const eems: string[] = this.getModificationEEMNames(modification);
+      return { modificationId: modification.id, modificationName: modification.name, eemsUsed: eems };
+    });
+  });
+
+  readonly selectedModification$ = combineLatest([
+    this.selectedModificationId$,
+    toObservable(this.modifications)
+  ]).pipe(
+    tap(([id, modifications]) => {
+      if (id) {
+        this.localStorageService.store(PC_SELECTED_MODIFICATION_KEY, id);
+      }
+    }),
+    switchMap(([selectedModificationId, modifications]: [string, Modification[]]) => {
+      if (selectedModificationId) {
+        const selectedModification = this.getModificationById(selectedModificationId);
+        return of(selectedModification);
+      } else if (modifications && modifications.length > 0) {
+        let defaultSelectedId = this.getStorageSelectedId();
+        defaultSelectedId = defaultSelectedId ? defaultSelectedId : modifications[0].id;
+        this.setSelectedModificationId(defaultSelectedId);
+        return EMPTY;
+      } else {
+        return of(undefined);
+      }
+    }),
+  );
+
+  getStorageSelectedId(): string {
+    let userSelectedModificationId: string;
+    try {
+      userSelectedModificationId = this.localStorageService.retrieve(PC_SELECTED_MODIFICATION_KEY);
+    } catch (error) {
+      this.appErrorService.handleAppError('Error retrieving selectedModificationId from localStorage', error);
+    }
+    return userSelectedModificationId;
+  }
+
+  setSelectedModificationId(modificationId: string) {
+    this.selectedModificationId.next(modificationId);
+  }
+
+  getModificationById(modificationId: string): Modification {
+    return this.modifications().find(mod => mod.id === modificationId);
+  }
+
+  isModificationValid(modification?: Modification): boolean {
+    const selectedModificationId = this.selectedModificationId.getValue();
+    if (!selectedModificationId) {
+      return true;
+    }
+
+    modification = modification ?? this.getModificationById(selectedModificationId);
+    if (!modification) {
+      return true;
+    }
+
+    const baselineValues = this.getBaselineExploreOppsValues();
+
+    if (modification.increaseChilledWaterTemp?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getIncreaseChilledTempForm(
+        modification.increaseChilledWaterTemp.chilledWaterSupplyTemp,
+        this.processCoolingAssessmentService.settingsSignal(),
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    if (modification.decreaseCondenserWaterTemp?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getDecreaseCondenserWaterTempForm(
+        modification.decreaseCondenserWaterTemp.condenserWaterTemp,
+        this.processCoolingAssessmentService.settingsSignal(),
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    if (modification.useSlidingCondenserWaterTemp?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getSlidingCondenserWaterTempForm(
+        modification.useSlidingCondenserWaterTemp.followingTempDifferential,
+        this.processCoolingAssessmentService.settingsSignal(),
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    if (modification.applyVariableSpeedControls?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getApplyVariableSpeedControlForm(
+        modification.applyVariableSpeedControls.chilledWaterVariableFlow,
+        modification.applyVariableSpeedControls.condenserWaterVariableFlow
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    if (modification.upgradeCoolingTowerFans?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getUpgradeCoolingTowerFanForm({
+        towerType: modification.upgradeCoolingTowerFans.towerType,
+        numberOfFans: modification.upgradeCoolingTowerFans.numberOfFans,
+        fanSpeedType: modification.upgradeCoolingTowerFans.fanSpeedType
+      });
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    
+    if (modification.useFreeCooling?.useOpportunity) {
+      const form = this.exploreOpportunitiesFormService.getUseFreeCoolingForm(
+        modification.useFreeCooling,
+        this.processCoolingAssessmentService.settingsSignal()
+      );
+      if (!form.valid) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  getModificationEEMNames(modification: Modification): string[] {
+    const eems: string[] = [];
+    Object.keys(modification).forEach((key) => {
+      const propertyKey = key as ModificationEEMProperty;
+      if (modification[propertyKey]?.useOpportunity) {
+        eems.push(EEM_LABELS[propertyKey]);
+      }
+    });
+    return eems;
+  }
+
+  updateModification(modification: Modification) {
+    let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
+    const modIndex = processCoolingAssessment.modifications.findIndex(mod => mod.id === modification.id);
+    if (modIndex !== -1) {
+      processCoolingAssessment.modifications[modIndex] = { ...modification };
+      const updatedModifications = [...processCoolingAssessment.modifications];
+      const updatedProcessCooling = {
+        ...processCoolingAssessment,
+        modifications: updatedModifications
+      };
+      this.processCoolingAssessmentService.setProcessCooling(updatedProcessCooling);
+    }
+  }
+
+  updateModificationEEM<K extends ModificationEEMProperty>(EEMName: K, value: Modification[K]) {
+    const selectedModificationId: string = this.selectedModificationId.getValue();
+    const modification = this.modifications().find(mod => mod.id === selectedModificationId);
+    if (modification) {
+      modification[EEMName] = value;
+      this.updateModification(modification);
+    }
+  }
+
+  addNewModificationToAssessment(name?: string) {
+    let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
+    let modification: Modification = this.getNewModification();
+    modification.name = name ? name : modification.name;
+
+    let updatedModifications = [...processCoolingAssessment.modifications];
+    updatedModifications.push(modification);
+    processCoolingAssessment.modifications = updatedModifications;
+
+    this.processCoolingAssessmentService.setProcessCooling(processCoolingAssessment);
+    this.setSelectedModificationId(modification.id);
+  }
+
+  deleteAssessmentModification(id: string) {
+    let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
+    if (id) {
+      processCoolingAssessment.modifications = processCoolingAssessment.modifications.filter(mod => mod.id !== id);
+    }
+    this.processCoolingAssessmentService.setProcessCooling(processCoolingAssessment);
+  }
+
+  copyModification(id: string) {
+    let processCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingSignal() };
+    let modificationToCopy = this.getModificationById(id);
+    if (modificationToCopy) {
+      let modificationCopy: Modification = copyObject(modificationToCopy);
+      let nameExists = this.modifications().filter(mod => { return mod.name.includes(modificationCopy.name); });
+      if (nameExists) {
+        modificationCopy.name = modificationCopy.name + '(' + nameExists.length + ')';
+      }
+      modificationCopy.id = getNewIdString();
+      processCoolingAssessment.modifications = [...processCoolingAssessment.modifications, modificationCopy];
+      this.processCoolingAssessmentService.setProcessCooling(processCoolingAssessment);
+      this.setSelectedModificationId(modificationCopy.id);
+    }
+  }
+
+  /**
+  * Map Baseline Explore Opportunities values to a modification
+  * @param processCoolingAssessment 
+  * @param modification 
+  * @returns 
+  */
+  getNewModification(): Modification {
+    const baselineValues = this.getBaselineExploreOppsValues();
+    const modification: Modification = {
+      name: 'Modification',
+      id: getNewIdString(),
+      notes: undefined,
+      isValid: true,
+      increaseChilledWaterTemp: {
+        chilledWaterSupplyTemp: baselineValues.increaseChilledWaterTemp.chilledWaterSupplyTemp,
+        useOpportunity: false,
+      },
+      decreaseCondenserWaterTemp: {
+        condenserWaterTemp: baselineValues.decreaseCondenserWaterTemp.condenserWaterTemp,
+        useOpportunity: false,
+      },
+      useSlidingCondenserWaterTemp: {
+        followingTempDifferential: baselineValues.useSlidingCondenserWaterTemp.followingTempDifferential,
+        isConstantCondenserWaterTemp: baselineValues.useSlidingCondenserWaterTemp.isConstantCondenserWaterTemp,
+        useOpportunity: false,
+      },
+      applyVariableSpeedControls: {
+        chilledWaterVariableFlow: baselineValues.applyVariableSpeedControls.chilledWaterVariableFlow,
+        condenserWaterVariableFlow: baselineValues.applyVariableSpeedControls.condenserWaterVariableFlow,
+        useOpportunity: false,
+      },
+      replaceChillers: {
+        currentChillerId: '',
+        newChiller: undefined,
+        useOpportunity: false,
+      },
+      upgradeCoolingTowerFans: {
+        towerType: baselineValues.upgradeCoolingTowerFans.towerType,
+        fanSpeedType: baselineValues.upgradeCoolingTowerFans.fanSpeedType,
+        numberOfFans: baselineValues.upgradeCoolingTowerFans.numberOfFans,
+        useOpportunity: false,
+      },
+      useFreeCooling: {
+        usesFreeCooling: baselineValues.useFreeCooling.usesFreeCooling,
+        isHEXRequired: baselineValues.useFreeCooling.isHEXRequired,
+        HEXApproachTemp: baselineValues.useFreeCooling.HEXApproachTemp,
+        useOpportunity: false,    
+      },
+      replaceChillerRefrigerant: {
+        useOpportunity: false,
+      },
+      installVSDOnCentrifugalCompressors: {
+        chillerIds: [],
+        useOpportunity: false,
+      },
+    }
+
+    return modification;
+  }
+
+  /**
+   * Map Explore Opportunities (Modification) values to a new process cooling assessment representing the modification
+   * @param modification 
+   * @returns 
+   */
+  getModifiedProcessCoolingAssessment(modification: Modification): ProcessCoolingAssessment {
+    let modifiedProcessCoolingAssessment: ProcessCoolingAssessment = { ...this.processCoolingAssessmentService.assessmentValue.processCooling };
+    let systemInformation: SystemInformation = { ...modifiedProcessCoolingAssessment.systemInformation };
+    let chillerInventory: ChillerInventoryItem[] = [...modifiedProcessCoolingAssessment.inventory.map(item => {
+      return { ...item };
+    })];
+
+    if (modification.increaseChilledWaterTemp.useOpportunity) {
+      systemInformation.operations = {
+        ...systemInformation.operations,
+        chilledWaterSupplyTemp: modification.increaseChilledWaterTemp.chilledWaterSupplyTemp,
+      };
+    }
+
+    if (modification.decreaseCondenserWaterTemp.useOpportunity) {
+      systemInformation.waterCooledSystemInput = {
+        ...systemInformation.waterCooledSystemInput,
+        condenserWaterTemp: modification.decreaseCondenserWaterTemp.condenserWaterTemp,
+      };
+    }
+
+    if (modification.useSlidingCondenserWaterTemp.useOpportunity) {
+      systemInformation.waterCooledSystemInput = {
+        ...systemInformation.waterCooledSystemInput,
+        isConstantCondenserWaterTemp: modification.useSlidingCondenserWaterTemp.isConstantCondenserWaterTemp,
+        followingTempDifferential: modification.useSlidingCondenserWaterTemp.followingTempDifferential,
+      };
+    }
+
+    if (modification.applyVariableSpeedControls.useOpportunity) {
+      systemInformation.chilledWaterPumpInput = {
+        ...systemInformation.chilledWaterPumpInput,
+        variableFlow: modification.applyVariableSpeedControls.chilledWaterVariableFlow,
+      };
+      systemInformation.condenserWaterPumpInput = {
+        ...systemInformation.condenserWaterPumpInput,
+        variableFlow: modification.applyVariableSpeedControls.condenserWaterVariableFlow,
+      };
+
+    }
+
+    if (modification.applyVariableSpeedControls.useOpportunity) {
+      systemInformation.condenserWaterPumpInput = {
+        ...systemInformation.condenserWaterPumpInput,
+        variableFlow: modification.applyVariableSpeedControls.condenserWaterVariableFlow,
+      };
+    }
+
+    if (modification.upgradeCoolingTowerFans.useOpportunity) {
+      systemInformation.towerInput = {
+        ...systemInformation.towerInput,
+        towerType: modification.upgradeCoolingTowerFans.towerType,
+        fanSpeedType: modification.upgradeCoolingTowerFans.fanSpeedType,
+        numberOfFans: modification.upgradeCoolingTowerFans.numberOfFans,
+      };
+    }
+
+    if (modification.useFreeCooling.useOpportunity) {
+      systemInformation.towerInput = {
+        ...systemInformation.towerInput,
+        usesFreeCooling: modification.useFreeCooling.usesFreeCooling,
+        isHEXRequired: modification.useFreeCooling.isHEXRequired,
+        HEXApproachTemp: modification.useFreeCooling.HEXApproachTemp,
+      };
+    }
+
+    if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
+      const vsdChillerIds = new Set(modification.installVSDOnCentrifugalCompressors.chillerIds);
+      chillerInventory = chillerInventory.map(chiller =>
+        vsdChillerIds.has(chiller.itemId) ? { ...chiller, installVSD: true } : chiller
+      );
+    }
+
+    // * modification.replaceChillerRefrigerant isn't like the other EEMs.
+    // * this EEM will modify chiller inventory directly and use suiteModificationArgs for differing suite calculation
+
+    modifiedProcessCoolingAssessment.systemInformation = systemInformation;
+    modifiedProcessCoolingAssessment.inventory = chillerInventory;
+    modifiedProcessCoolingAssessment.name = modification.name;
+
+    return modifiedProcessCoolingAssessment;
+  }
+
+  getBaselineExploreOppsValues(): ExploreOppsBaseline {
+    const processCooling = this.processCoolingSignal();
+    let exploreOpportunitiesBaseline: ExploreOppsBaseline = {
+      increaseChilledWaterTemp: {
+        chilledWaterSupplyTemp: processCooling.systemInformation.operations.chilledWaterSupplyTemp,
+      },
+      decreaseCondenserWaterTemp: {
+        condenserWaterTemp: processCooling.systemInformation.waterCooledSystemInput?.condenserWaterTemp,
+      },
+      useSlidingCondenserWaterTemp: {
+        followingTempDifferential: processCooling.systemInformation.waterCooledSystemInput?.followingTempDifferential,
+        isConstantCondenserWaterTemp: processCooling.systemInformation.waterCooledSystemInput?.isConstantCondenserWaterTemp,
+      },
+      applyVariableSpeedControls: {
+        chilledWaterVariableFlow: processCooling.systemInformation.chilledWaterPumpInput.variableFlow,
+        condenserWaterVariableFlow: processCooling.systemInformation.condenserWaterPumpInput?.variableFlow,
+      },
+      upgradeCoolingTowerFans: {
+        towerType: processCooling.systemInformation.towerInput.towerType,
+        fanSpeedType: processCooling.systemInformation.towerInput.fanSpeedType,
+        numberOfFans: processCooling.systemInformation.towerInput.numberOfFans,
+      },
+      useFreeCooling: {
+        usesFreeCooling: processCooling.systemInformation.towerInput.usesFreeCooling,
+        isHEXRequired: processCooling.systemInformation.towerInput.isHEXRequired,
+        HEXApproachTemp: processCooling.systemInformation.towerInput.HEXApproachTemp,
+      },
+      replaceChillers: {
+        currentChillerId: '',
+        newChiller: {} as ChillerInventoryItem,
+      },
+      replaceChillerRefrigerant: {
+        useOpportunity: false,
+      },
+      installVSDOnCentrifugalCompressors: {
+        chillerIds: [],
+        useOpportunity: false,
+      },
+    }
+
+    return exploreOpportunitiesBaseline;
+  }
+
+  getEEMBadges(modification: Modification): Array<string> {
+    let badges: Array<string> = [];
+    if (modification.increaseChilledWaterTemp?.useOpportunity) {
+      badges.push(EEM_LABELS.increaseChilledWaterTemp);
+    }
+    if (modification.decreaseCondenserWaterTemp?.useOpportunity) {
+      badges.push(EEM_LABELS.decreaseCondenserWaterTemp);
+    }
+    if (modification.useSlidingCondenserWaterTemp?.useOpportunity) {
+      badges.push(EEM_LABELS.useSlidingCondenserWaterTemp);
+    }
+    if (modification.applyVariableSpeedControls?.useOpportunity) {
+      badges.push(EEM_LABELS.applyVariableSpeedControls);
+    }
+    if (modification.replaceChillers?.useOpportunity) {
+      badges.push(EEM_LABELS.replaceChillers);
+    }
+    if (modification.upgradeCoolingTowerFans?.useOpportunity) {
+      badges.push(EEM_LABELS.upgradeCoolingTowerFans);
+    }
+    if (modification.useFreeCooling?.useOpportunity) {
+      badges.push(EEM_LABELS.useFreeCooling);
+    }
+    if (modification.replaceChillerRefrigerant?.useOpportunity) {
+      badges.push(EEM_LABELS.replaceChillerRefrigerant);
+    }
+    if (modification.installVSDOnCentrifugalCompressors?.useOpportunity) {
+      badges.push(EEM_LABELS.installVSDOnCentrifugalCompressors);
+    }
+    return badges;
+  }
+}

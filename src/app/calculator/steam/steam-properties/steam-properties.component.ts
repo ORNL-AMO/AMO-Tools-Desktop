@@ -2,11 +2,11 @@ import { Component, Input, OnInit, ViewChild, ElementRef, ChangeDetectorRef, Hos
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../shared/models/settings";
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
-import { SteamPropertiesInput } from '../../../shared/models/steam/steam-inputs';
+import { SteamPropertiesInput, ThermodynamicQuantity } from '../../../shared/models/steam/steam-inputs';
 import { SteamService } from '../steam.service';
 import { SteamPropertiesOutput } from '../../../shared/models/steam/steam-outputs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
-import { LessThanValidator } from '../../../shared/validators/less-than';
+import { GreaterThanValidator } from '../../../shared/validators/greater-than';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 
 
@@ -50,6 +50,7 @@ export class SteamPropertiesComponent implements OnInit {
   ranges: { minPressure: number, maxPressure: number, minQuantityValue: number, maxQuantityValue: number };
   toggleResetData: boolean = false;
   toggleExampleData: boolean = false;
+  readonly ThermodynamicQuantity = ThermodynamicQuantity;
 
   constructor(private formBuilder: UntypedFormBuilder,
      private convertUnitsService: ConvertUnitsService, 
@@ -71,7 +72,7 @@ export class SteamPropertiesComponent implements OnInit {
       this.tabSelect = this.settingsDbService.globalSettings.defaultPanelTab;
     }
     this.steamPropertiesOutput = this.getEmptyResults();
-    this.getForm(0);
+    this.getForm(ThermodynamicQuantity.TEMPERATURE);
     this.calculate(this.steamPropertiesForm);
   }
 
@@ -91,13 +92,13 @@ export class SteamPropertiesComponent implements OnInit {
     this.ranges = this.steamService.getSteamPropertiesValidationRanges(quantityValue, this.settings);
     if (this.steamService.steamPropertiesInput) {
       this.steamPropertiesForm = this.formBuilder.group({
-        'pressure': [this.steamService.steamPropertiesInput.pressure, [Validators.required, Validators.min(this.ranges.minPressure), LessThanValidator.lessThan(this.ranges.maxPressure)]],
+        'pressure': [this.steamService.steamPropertiesInput.pressure, [Validators.required, GreaterThanValidator.greaterThan(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
         'thermodynamicQuantity': [this.steamService.steamPropertiesInput.thermodynamicQuantity, Validators.required],
         'quantityValue': [this.steamService.steamPropertiesInput.quantityValue, [Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]]
       });
     } else {
       this.steamPropertiesForm = this.formBuilder.group({
-        'pressure': ['', [Validators.required, Validators.min(this.ranges.minPressure), LessThanValidator.lessThan(this.ranges.maxPressure)]],
+        'pressure': ['', [Validators.required, GreaterThanValidator.greaterThan(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]],
         'thermodynamicQuantity': [quantityValue, Validators.required],
         'quantityValue': ['', [Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]]
       });
@@ -107,6 +108,8 @@ export class SteamPropertiesComponent implements OnInit {
   updateForm(quantityValue: number) {
     this.ranges = this.steamService.getSteamPropertiesValidationRanges(quantityValue, this.settings);
     this.steamPropertiesForm.controls.quantityValue.setValidators([Validators.required, Validators.min(this.ranges.minQuantityValue), Validators.max(this.ranges.maxQuantityValue)]);
+    this.steamPropertiesForm.controls.pressure.setValidators([Validators.required, GreaterThanValidator.greaterThan(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]);
+    this.steamPropertiesForm.controls.pressure.updateValueAndValidity();
   }
 
   setTab(str: string) {
@@ -190,12 +193,12 @@ export class SteamPropertiesComponent implements OnInit {
 
   btnResetData() {
     this.steamService.steamPropertiesInput = {
-      thermodynamicQuantity: 0,
+      thermodynamicQuantity: ThermodynamicQuantity.TEMPERATURE,
       pressure: 0,
       quantityValue: 0
     };
     this.steamPropertiesOutput = this.getEmptyResults();
-    this.getForm(0);
+    this.getForm(ThermodynamicQuantity.TEMPERATURE);
     this.calculate(this.steamPropertiesForm);
     this.toggleResetData = !this.toggleResetData;
   }
@@ -210,12 +213,12 @@ export class SteamPropertiesComponent implements OnInit {
       tmpQuantityValue = Math.round(this.convertUnitsService.value(tmpQuantityValue).from('F').to(this.settings.steamTemperatureMeasurement) * 100) / 100;
     }
     this.steamService.steamPropertiesInput = {
-      thermodynamicQuantity: 0,
+      thermodynamicQuantity: ThermodynamicQuantity.TEMPERATURE,
       pressure: tmpPressure,
       quantityValue: tmpQuantityValue,
     };
     this.steamPropertiesOutput = this.getEmptyResults();
-    this.getForm(0);
+    this.getForm(ThermodynamicQuantity.TEMPERATURE);
     this.calculate(this.steamPropertiesForm);
     this.toggleExampleData = !this.toggleExampleData;
   }

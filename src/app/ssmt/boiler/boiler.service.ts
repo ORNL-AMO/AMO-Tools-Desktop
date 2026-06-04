@@ -13,6 +13,13 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class BoilerService {
+private readonly BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG = -14.696;
+private readonly SATURATED_BOILER_PRESSURE_MAX_PSIG = 3185.415389;
+private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
+  
+  private readonly STEAM_TEMPERATURE_MIN_F = 32;
+  private readonly SUPERHEATED_STEAM_TEMPERATURE_MAX_F = 1472;
+  private readonly SATURATED_STEAM_TEMPERATURE_MAX_F = 705.1;
 
   private readonly baselineSaturatedPropertiesOutput = new BehaviorSubject<SaturatedPropertiesOutput>(undefined);
   readonly baselineSaturatedPropertiesOutput$ = this.baselineSaturatedPropertiesOutput.asObservable();
@@ -26,24 +33,24 @@ export class BoilerService {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
     
     const form = this.formBuilder.group({
-      'fuelType': [1, Validators.required],
-      'fuel': [1, Validators.required],
-      'combustionEfficiency': [85, [Validators.required, Validators.min(50), Validators.max(100)]],
-      'blowdownRate': ['', [Validators.required, Validators.min(0), Validators.max(25)]],
-      'blowdownFlashed': [false, [Validators.required]],
-      'preheatMakeupWater': [false, [Validators.required]],
-      'steamQuality': [SteamQuality.SATURATED, [Validators.required]],
-      'pressureOrTemperature': [SteamPressureOrTemp.PRESSURE, [Validators.required]],
-      'saturatedPressure': ['', [Validators.required]],
-      'steamTemperature': ['', [Validators.required, Validators.min(tmpRanges.steamTemperatureMin), Validators.max(tmpRanges.steamTemperatureMax)]],
-      'deaeratorVentRate': ['', [Validators.required, Validators.min(0), Validators.max(10)]],
-      'deaeratorPressure': ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
-      'approachTemperature': ['', [Validators.min(0.000005)]],
-      'blowdownConductivity': [''],
-      'feedwaterConductivity': ['']
+      fuelType: [1, Validators.required],
+      fuel: [1, Validators.required],
+      combustionEfficiency: [85, [Validators.required, Validators.min(50), Validators.max(100)]],
+      blowdownRate: ['', [Validators.required, Validators.min(0), Validators.max(25)]],
+      blowdownFlashed: [false, [Validators.required]],
+      preheatMakeupWater: [false, [Validators.required]],
+      steamQuality: [SteamQuality.SATURATED, [Validators.required]],
+      pressureOrTemperature: [SteamPressureOrTemp.PRESSURE, [Validators.required]],
+      saturatedPressure: ['', [Validators.required]],
+      steamTemperature: ['', [Validators.required]],
+      deaeratorVentRate: ['', [Validators.required, Validators.min(0), Validators.max(10)]],
+      deaeratorPressure: ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
+      approachTemperature: ['', [Validators.min(0.000005)]],
+      blowdownConductivity: [''],
+      feedwaterConductivity: ['']
     });
 
-    this.setSteamTemperatureValidators(form, settings);
+    this.setSaturatedBoilerPressureValidators(form, settings);
 
     return form;
   }
@@ -57,21 +64,21 @@ export class BoilerService {
     }
     
     let form: UntypedFormGroup = this.formBuilder.group({
-      'fuelType': [obj.fuelType, Validators.required],
-      'fuel': [obj.fuel, Validators.required],
-      'combustionEfficiency': [obj.combustionEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]],
-      'blowdownRate': [obj.blowdownRate, [Validators.required, Validators.min(0), Validators.max(25)]],
-      'blowdownFlashed': [obj.blowdownFlashed, [Validators.required]],
-      'preheatMakeupWater': [obj.preheatMakeupWater, [Validators.required]],
-      'steamQuality': [obj.steamQuality, [Validators.required]],
-      'pressureOrTemperature': [obj.pressureOrTemperature, [Validators.required]],
-      'saturatedPressure': [obj.saturatedPressure, [Validators.required]],
-      'steamTemperature': [obj.steamTemperature, [Validators.required]],
-      'deaeratorVentRate': [obj.deaeratorVentRate, [Validators.required, Validators.min(0), Validators.max(10)]],
-      'deaeratorPressure': [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
-      'approachTemperature': [obj.approachTemperature, approachTempValidators],
-      'blowdownConductivity': [obj.blowdownConductivity],
-      'feedwaterConductivity': [obj.feedwaterConductivity]
+      fuelType: [obj.fuelType, Validators.required],
+      fuel: [obj.fuel, Validators.required],
+      combustionEfficiency: [obj.combustionEfficiency, [Validators.required, Validators.min(50), Validators.max(100)]],
+      blowdownRate: [obj.blowdownRate, [Validators.required, Validators.min(0), Validators.max(25)]],
+      blowdownFlashed: [obj.blowdownFlashed, [Validators.required]],
+      preheatMakeupWater: [obj.preheatMakeupWater, [Validators.required]],
+      steamQuality: [obj.steamQuality, [Validators.required]],
+      pressureOrTemperature: [obj.pressureOrTemperature, [Validators.required]],
+      saturatedPressure: [obj.saturatedPressure, [Validators.required]],
+      steamTemperature: [obj.steamTemperature, [Validators.required]],
+      deaeratorVentRate: [obj.deaeratorVentRate, [Validators.required, Validators.min(0), Validators.max(10)]],
+      deaeratorPressure: [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
+      approachTemperature: [obj.approachTemperature, approachTempValidators],
+      blowdownConductivity: [obj.blowdownConductivity],
+      feedwaterConductivity: [obj.feedwaterConductivity]
     });
 
     this.setPressureAndTemperatureValidators(form, settings);
@@ -109,8 +116,8 @@ export class BoilerService {
 
     const saturatedPropertiesOutput: SaturatedPropertiesOutput = this.steamService.saturatedProperties(saturatedPropertiesInput, SteamPressureOrTemp.PRESSURE, settings);
     if (steamQualityControl.value === SteamQuality.SUPERHEATED) {
-      this.setSaturatedPressureValidators(form, settings);
-      this.setSteamTemperatureValidators(form, settings, saturatedPropertiesOutput);
+      this.setSuperheatedBoilerPressureValidators(form, settings);
+      this.setSuperheatedTemperatureValidators(form, settings, saturatedPropertiesOutput);
     } else if (steamQualityControl.value === SteamQuality.SATURATED) {
       if (isBaseline) {
         this.baselineSaturatedPropertiesOutput.next(saturatedPropertiesOutput);
@@ -119,50 +126,65 @@ export class BoilerService {
       }
 
       if (pressureOrTemperatureControl.value === SteamPressureOrTemp.PRESSURE) {
-        this.setSaturatedPressureValidators(form, settings);
+        this.setSaturatedBoilerPressureValidators(form, settings);
         steamTemperatureControl.clearValidators();
       } else if (pressureOrTemperatureControl.value === SteamPressureOrTemp.TEMPERATURE) {
-        this.setSteamTemperatureValidators(form, settings);
+        this.setSaturatedTemperatureValidators(form, settings);
         saturatedPressureControl.clearValidators();
       }
     }
   }
 
-  setSteamTemperatureValidators(form: UntypedFormGroup, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
-    // * use constant of temperature output from steam critical pressure at 3185.415 psig - per expert review
-    let temperatureMin: number = 32;
-    let temperatureMax: number = 705.1;
-    if (settings.steamTemperatureMeasurement !== 'F') {
-      temperatureMin = this.convertUnitsService.value(temperatureMin).from('F').to(settings.steamTemperatureMeasurement);
-      temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
-    }
 
-    if (form.controls.steamQuality.value === SteamQuality.SATURATED) {
-      form.controls.steamTemperature.setValidators([Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)]);
-    } else if (form.controls.steamQuality.value === SteamQuality.SUPERHEATED)  {
-      let validators = [Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)];
-
-      // * steamTemperature can't be calculated ((will be NAN)) for reference when saturatedPressure is at min
-      if (!form.get('saturatedPressure').errors?.min && !isNaN(saturatedPropertiesOutput.saturatedTemperature)) {
-        validators.push(GreaterThanValidator.greaterThan(roundVal(saturatedPropertiesOutput.saturatedTemperature, 1)));
+  setSaturatedTemperatureValidators(form: UntypedFormGroup, settings: Settings) {
+    let temperatureMin: number = this.STEAM_TEMPERATURE_MIN_F;
+    let temperatureMax: number = this.SATURATED_STEAM_TEMPERATURE_MAX_F;
+     if (settings.steamTemperatureMeasurement !== 'F') {
+        temperatureMin = this.convertUnitsService.value(temperatureMin).from('F').to(settings.steamTemperatureMeasurement);
+        temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
       }
-      form.controls.steamTemperature.setValidators(validators);
-    }
-
+      form.controls.steamTemperature.setValidators([Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)]);
     form.controls.steamTemperature.updateValueAndValidity();
   }
 
-  setSaturatedPressureValidators(form: UntypedFormGroup, settings: Settings) {
-    // * use constant steam critical pressure as 3185.415 psig - per expert review
-    let pressureMax: number = 3185.415;
-    // * -14.551 psig
-    let pressureMin: number = -14.551;
+    setSuperheatedBoilerPressureValidators(form: UntypedFormGroup, settings: Settings) {
+    let pressureExclusiveMin: number = this.BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG;
+    let pressureMax: number = this.SUPERHEATED_BOILER_PRESSURE_MAX_PSIG;
     if (settings.steamPressureMeasurement !== 'psig') {
+      pressureExclusiveMin = this.convertUnitsService.value(pressureExclusiveMin).from('psig').to(settings.steamPressureMeasurement);
       pressureMax = this.convertUnitsService.value(pressureMax).from('psig').to(settings.steamPressureMeasurement);
-      pressureMin = this.convertUnitsService.value(pressureMin).from('psig').to(settings.steamPressureMeasurement);
     }
 
-    form.controls.saturatedPressure.setValidators([Validators.required, Validators.min(pressureMin), Validators.max(pressureMax)]);
+    form.controls.saturatedPressure.setValidators([Validators.required, GreaterThanValidator.greaterThan(pressureExclusiveMin), Validators.max(pressureMax)]);
+    form.controls.saturatedPressure.updateValueAndValidity();
+  }
+
+  setSuperheatedTemperatureValidators(form: UntypedFormGroup, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
+    let temperatureMin: number = this.STEAM_TEMPERATURE_MIN_F;
+    let temperatureMax: number = this.SUPERHEATED_STEAM_TEMPERATURE_MAX_F;
+     if (settings.steamTemperatureMeasurement !== 'F') {
+        temperatureMin = this.convertUnitsService.value(temperatureMin).from('F').to(settings.steamTemperatureMeasurement);
+        temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
+      }
+      let validators = [Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)];
+
+      // * steamTemperature can't be calculated ((will be NAN)) for reference when saturatedPressure is at min
+      if (!form.get('saturatedPressure').errors?.greaterThan && !isNaN(saturatedPropertiesOutput.saturatedTemperature)) {
+        validators.push(GreaterThanValidator.greaterThan(roundVal(saturatedPropertiesOutput.saturatedTemperature, 1)));
+      }
+      form.controls.steamTemperature.setValidators(validators);
+    form.controls.steamTemperature.updateValueAndValidity();
+  }
+
+  setSaturatedBoilerPressureValidators(form: UntypedFormGroup, settings: Settings) {
+    let pressureExclusiveMin: number = this.BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG;
+    let pressureMax: number = this.SATURATED_BOILER_PRESSURE_MAX_PSIG;
+    if (settings.steamPressureMeasurement !== 'psig') {
+      pressureExclusiveMin = this.convertUnitsService.value(pressureExclusiveMin).from('psig').to(settings.steamPressureMeasurement);
+      pressureMax = this.convertUnitsService.value(pressureMax).from('psig').to(settings.steamPressureMeasurement);
+    }
+
+    form.controls.saturatedPressure.setValidators([Validators.required, GreaterThanValidator.greaterThan(pressureExclusiveMin), Validators.max(pressureMax)]);
     form.controls.saturatedPressure.updateValueAndValidity();
   }
 
@@ -239,22 +261,22 @@ export class BoilerService {
   }
 
   getRanges(settings: Settings): BoilerRanges {
-    //TODO: Use "Saturation Temp @ HP" ?
     let tmpSteamTemperatureMin: number = this.convertUnitsService.value(0).from('F').to(settings.steamTemperatureMeasurement);
     tmpSteamTemperatureMin = this.convertUnitsService.roundVal(tmpSteamTemperatureMin, 0);
     let tmpSteamTemperatureMax: number = this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement);
     tmpSteamTemperatureMax = this.convertUnitsService.roundVal(tmpSteamTemperatureMax, 0);
 
-    let tmpDeaeratorPressureMin: number = this.convertUnitsService.value(-14.5).from('psia').to(settings.steamPressureMeasurement);
-    tmpDeaeratorPressureMin = this.convertUnitsService.roundVal(tmpDeaeratorPressureMin, 0);
-    let tmpDeaeratorPressureMax: number = this.convertUnitsService.value(3185).from('psia').to(settings.steamPressureMeasurement);
-    tmpDeaeratorPressureMax = this.convertUnitsService.roundVal(tmpDeaeratorPressureMax, 0);
+    let boilerPressureExclusiveMin: number = this.convertUnitsService.value(this.BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG).from('psig').to(settings.steamPressureMeasurement);
+    boilerPressureExclusiveMin = this.convertUnitsService.roundVal(boilerPressureExclusiveMin, 0);
+    // * Starting value assumes Saturated conditions 
+    let boilerPressureMax: number = this.convertUnitsService.value(this.SATURATED_BOILER_PRESSURE_MAX_PSIG).from('psig').to(settings.steamPressureMeasurement);
+    boilerPressureMax = this.convertUnitsService.roundVal(boilerPressureMax, 0);
 
     return {
       steamTemperatureMin: tmpSteamTemperatureMin,
       steamTemperatureMax: tmpSteamTemperatureMax,
-      deaeratorPressureMin: tmpDeaeratorPressureMin,
-      deaeratorPressureMax: tmpDeaeratorPressureMax
+      deaeratorPressureMin: boilerPressureExclusiveMin,
+      deaeratorPressureMax: boilerPressureMax
     };
   }
 

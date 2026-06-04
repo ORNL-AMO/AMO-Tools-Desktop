@@ -4,8 +4,8 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { ChillerPerformanceInput, ChillerPerformanceOutput } from '../../../shared/models/chillers';
 import { OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
-import { ChillersSuiteApiService } from '../../../tools-suite-api/chillers-suite-api.service';
 import { ChillerPerformanceFormService } from './chiller-performance-form.service';
+import { ChillerCalculatorSuiteApiService } from '../../../tools-suite-api/chiller-calculator-suite-api.service';
 
 @Injectable()
 export class ChillerPerformanceService {
@@ -23,7 +23,7 @@ export class ChillerPerformanceService {
   operatingHours: OperatingHours;
 
   constructor(private convertUnitsService: ConvertUnitsService, 
-    private chillersSuiteApiService: ChillersSuiteApiService,
+    private chillersSuiteApiService: ChillerCalculatorSuiteApiService,
     private chillerPerformanceFormService: ChillerPerformanceFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);
     this.chillerPerformanceInput = new BehaviorSubject<ChillerPerformanceInput>(undefined);

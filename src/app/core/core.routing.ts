@@ -626,6 +626,11 @@ export const coreRoutes: Routes = [
     component: WaterProcessDiagramComponent,
     resolve: { diagram: diagramResolver },
   },
+  {
+    path: 'process-cooling/:assessmentId',
+    loadChildren: () => import('../process-cooling-assessment/process-cooling-assessment.module').then(m => m.ProcessCoolingAssessmentModule),
+    runGuardsAndResolvers: 'always',
+  },
   { 
     path: '**', 
     component: NotFoundComponent 

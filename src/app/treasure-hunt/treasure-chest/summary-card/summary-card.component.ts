@@ -24,7 +24,7 @@ export class SummaryCardComponent implements OnInit {
 
   @Input()
   settings: Settings;
-
+  allModificationCosts: Array<number>;
   electricityData: UtilityTotal;
   naturalGasData: UtilityTotal;
   compressedAirData: UtilityTotal;
@@ -36,7 +36,7 @@ export class SummaryCardComponent implements OnInit {
   carbonData: UtilityTotal;
   carbonResults: TreasureHuntCo2EmissionsResults;
   treasureHuntResults: TreasureHuntResults;
-
+  hasNegativeCost: boolean = false;
   totals: UtilityTotal;
   opportunityCardsSub: Subscription;
   sortBySub: Subscription;
@@ -59,6 +59,8 @@ export class SummaryCardComponent implements OnInit {
       this.setSavingsData();
     })
   }
+
+
 
   ngOnDestroy() {
     this.opportunityCardsSub.unsubscribe();
@@ -102,6 +104,19 @@ export class SummaryCardComponent implements OnInit {
         baselineCost: baselineCost,
         modificationCost: baselineCost - totalCostSavings
       };
+
+      this.allModificationCosts = [
+        this.electricityData?.modificationCost,
+        this.naturalGasData?.modificationCost,
+        this.waterData?.modificationCost,
+        this.compressedAirData?.modificationCost,
+        this.steamData?.modificationCost,
+        this.wasteWaterData?.modificationCost,
+        this.otherFuelData?.modificationCost,
+        this.additionalAnnualSavings?.modificationCost
+      ];
+
+      this.hasNegativeCost = this.allModificationCosts.some(cost => cost != null && cost < 0);
     }
   }
 

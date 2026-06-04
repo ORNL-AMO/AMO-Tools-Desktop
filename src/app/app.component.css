@@ -681,6 +681,15 @@ Reports
   padding: 9px 0 0px 30px;
 }
 
+.assessment-report.report-in-process-cooling .assessment-name,
+.assessment-report.report-in-rollup.report-in-process-cooling .assessment-name {
+  background-image: url('../assets/images/process-cooling-icon.png');
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 40px;
+  padding: 9px 0 0px 30px;
+}
+
 
 
 
