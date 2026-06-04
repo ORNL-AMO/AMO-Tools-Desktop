@@ -50,7 +50,7 @@
         <div class="input-group">
             <input name="atmosphericPressure" [(ngModel)]="inputs.atmosphericPressure"
                 class="form-control" type="number" step="any" id="atmosphericPressure" onfocus="this.select();"
-                (focus)="changeField('atmosphericPressure')">
+                (focus)="changeField('atmosphericPressure')" (input)="save()">
             <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">psia</span>
             <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">kPaa</span>
         </div>
