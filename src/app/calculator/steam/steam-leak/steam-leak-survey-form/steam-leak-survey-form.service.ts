@@ -5,7 +5,6 @@ import { OperatingHours } from '../../../../shared/models/operations';
 import {
   FacilitySteamLeakData,
   SteamLeakEstimateMethodData,
-  SteamLeakEstimateTurbineMethodData,
   SteamLeakOrificeMethodData,
   SteamLeakPlumeMethodData,
   SteamLeakSurveyData,
@@ -26,10 +25,6 @@ export interface EstimateFormControls {
   leakRate: FormControl<number | null>;
 }
 
-export interface EstimateTurbineFormControls {
-  turbineEfficiency: FormControl<number | null>;
-  leakRate: FormControl<number | null>;
-}
 
 export interface OrificeFormControls {
   turbineEfficiency: FormControl<number | null>;
@@ -78,13 +73,6 @@ export class SteamLeakSurveyFormService {
     });
   }
 
-  buildEstimateTurbineForm(leak: SteamLeakSurveyData): FormGroup<EstimateTurbineFormControls> {
-    return this.fb.group<EstimateTurbineFormControls>({
-      turbineEfficiency: new FormControl(leak.estimateTurbineMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
-      leakRate: new FormControl(leak.estimateTurbineMethodData.leakRate, [Validators.required, Validators.min(0)]),
-    });
-  }
-
   buildOrificeForm(leak: SteamLeakSurveyData): FormGroup<OrificeFormControls> {
     return this.fb.group<OrificeFormControls>({
       turbineEfficiency: new FormControl(leak.orificeMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
@@ -120,13 +108,6 @@ export class SteamLeakSurveyFormService {
 
   getEstimateDataFromForm(form: FormGroup<EstimateFormControls>): SteamLeakEstimateMethodData {
     return { leakRate: form.controls.leakRate.value ?? 0 };
-  }
-
-  getEstimateTurbineDataFromForm(form: FormGroup<EstimateTurbineFormControls>): SteamLeakEstimateTurbineMethodData {
-    return {
-      turbineEfficiency: form.controls.turbineEfficiency.value ?? 0,
-      leakRate: form.controls.leakRate.value ?? 0,
-    };
   }
 
   getOrificeDataFromForm(form: FormGroup<OrificeFormControls>): SteamLeakOrificeMethodData {

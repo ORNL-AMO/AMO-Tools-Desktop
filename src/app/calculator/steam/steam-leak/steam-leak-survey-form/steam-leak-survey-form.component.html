@@ -48,12 +48,7 @@
           [settings]="settings()"
           (fieldFocused)="setCurrentField($event)" />
       }
-      @case (SteamLeakMeasurementMethod.EstimateTurbine) {
-        <app-steam-estimate-turbine-method-form
-          [form]="estimateTurbineForm"
-          [settings]="settings()"
-          (fieldFocused)="setCurrentField($event)" />
-      }
+
       @case (SteamLeakMeasurementMethod.Orifice) {
         <app-steam-orifice-method-form
           [form]="orificeForm"
