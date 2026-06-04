@@ -74,7 +74,7 @@
       }
     </div>
     <div class="row no-gutters justify-content-center">
-      @for (let item of allModificationCosts) {
+      @for (item of allModificationCosts; track item) {
         @if(item.data.baselineCost != 0) {
           <div class="col-12 col-lg-6 pl-2 pr-2 text-center treasure-hunt-item">
             <app-utility-summary [summaryData]="item.data" [label]="item.label" [currency]="settings.currency"></app-utility-summary>
