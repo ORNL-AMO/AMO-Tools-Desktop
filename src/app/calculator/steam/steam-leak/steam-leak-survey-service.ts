@@ -29,7 +29,7 @@ export class SteamLeakSurveyService {
 
   initDefaultEmptyInputs(settings: Settings): void {
     this.steamLeakInput.set({
-      steamLeakSurveyInputVec: [this.getEmptyLeakData()],
+      steamLeakSurveyInputVec: [this.formService.getEmptySteamLeakData()],
       facilitySteamLeakData: this.getDefaultFacilityData(settings),
     });
   }
@@ -47,20 +47,6 @@ export class SteamLeakSurveyService {
     this.currentLeakIndex.set(0);
     this.initDefaultEmptyInputs(settings);
     this.resetEventsSubject.next();
-  }
-
-  private getEmptyLeakData(): SteamLeakSurveyData {
-    return {
-      selected: true,
-      name: 'Leak 1',
-      leakDescription: '',
-      measurementMethod: 0,
-      estimateMethodData: { leakRate: 0 },
-      estimateTurbineMethodData: { turbineEfficiency: 0, leakRate: 0 },
-      orificeMethodData: { turbineEfficiency: 0, holeSize: 0, dischargeCoefficient: 0.61, atmosphericPressure: 14.7 },
-      plumeMethodData: { turbineEfficiency: 0, plumeLength: 0, ambientTemperature: 70 },
-      units: 0,
-    };
   }
 
     deleteLeak(deleteIndex: number): void {
