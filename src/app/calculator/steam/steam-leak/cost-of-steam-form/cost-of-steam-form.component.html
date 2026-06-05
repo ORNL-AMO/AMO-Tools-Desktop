@@ -1,0 +1,190 @@
+<form [formGroup]="facilityForm" #formElement>
+  <label class="group-label-wide mb-2">Steam System Data</label>
+
+  <div class="form-group">
+    <label for="steam-annualOperatingHours">Annual Operating Hours</label>
+    <div class="input-group">
+      <span class="input-group-addon op-hour-addon units">
+        <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+      </span>
+      <input name="annualOperatingHours" class="form-control" type="number" step="any"
+        formControlName="annualOperatingHours" id="steam-annualOperatingHours" onfocus="this.select();"
+        (input)="save()" (focus)="changeField('annualOperatingHours')">
+      <span class="input-group-addon units">hrs/yr</span>
+      @if (facilityForm.controls.annualOperatingHours.invalid && !facilityForm.controls.annualOperatingHours.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (facilityForm.controls.annualOperatingHours.errors?.['required']) { <span>Value required.</span> }
+          @if (facilityForm.controls.annualOperatingHours.errors?.['max']) {
+            <span>Value can't be greater than {{ facilityForm.controls.annualOperatingHours.errors?.['max']?.max }}.</span>
+          }
+          @if (facilityForm.controls.annualOperatingHours.errors?.['min']) {
+            <span>Value can't be less than {{ facilityForm.controls.annualOperatingHours.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Utility Type</label>
+    <select name="utilityType" class="form-control" id="steam-utilityType"
+      formControlName="utilityType" (focus)="changeField('utilityType')" (change)="changeUtilityType()">
+      @for (option of utilityTypeOptions; track option.value) {
+        <option [ngValue]="option.value">{{ option.display }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-steamTemperature">Steam Temperature</label>
+    <div class="input-group">
+      <input name="steamTemperature" class="form-control" type="number" step="any"
+        formControlName="steamTemperature" id="steam-steamTemperature" onfocus="this.select();"
+        (input)="save()" (focus)="changeField('steamTemperature')">
+      <span class="input-group-addon units">
+        <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>°F</span> } @else { <span>°C</span> } -->
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-steamPressure">Steam Pressure</label>
+    <div class="input-group">
+      <input name="steamPressure" class="form-control" type="number" step="any"
+        formControlName="steamPressure" id="steam-steamPressure" onfocus="this.select();"
+        (input)="save()" (focus)="changeField('steamPressure')">
+      <span class="input-group-addon units">
+        <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>psi</span> } @else { <span>kPa</span> } -->
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-feedwaterTemperature">Feedwater Temperature</label>
+    <div class="input-group">
+      <input name="feedwaterTemperature" class="form-control" type="number" step="any"
+        formControlName="feedwaterTemperature" id="steam-feedwaterTemperature" onfocus="this.select();"
+        (input)="save()" (focus)="changeField('feedwaterTemperature')">
+      <span class="input-group-addon units">
+        <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>°F</span> } @else { <span>°C</span> } -->
+      </span>
+    </div>
+  </div>
+
+  @if (facilityForm.controls.utilityType.value === 0) {
+    <div class="form-group">
+      <label for="steam-steamCost">Steam Cost</label>
+      <div class="input-group">
+        <input name="steamCost" class="form-control" type="number" step="any"
+          formControlName="steamCost" id="steam-steamCost" onfocus="this.select();"
+          (input)="save()" (focus)="changeField('steamCost')">
+        <span class="input-group-addon units">
+          <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>$/klb</span> } @else { <span>$/tonne</span> } -->
+        </span>
+      </div>
+    </div>
+  }
+
+  @if (facilityForm.controls.utilityType.value === 1) {
+    <div class="form-group">
+      <label for="steam-electricityCost">Electricity Cost</label>
+      <div class="input-group">
+        <input name="electricityCost" class="form-control" type="number" step="any"
+          formControlName="electricityCost" id="steam-electricityCost" onfocus="this.select();"
+          (input)="save()" (focus)="changeField('electricityCost')">
+        <span class="input-group-addon units">$/kWh</span>
+      </div>
+    </div>
+  }
+
+  @if (facilityForm.controls.utilityType.value === 2) {
+    <div class="form-group">
+      <label for="steam-fuelCost">Fuel Cost</label>
+      <div class="input-group">
+        <input name="fuelCost" class="form-control" type="number" step="any"
+          formControlName="fuelCost" id="steam-fuelCost" onfocus="this.select();"
+          (input)="save()" (focus)="changeField('fuelCost')">
+        <span class="input-group-addon units">
+          <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>$/MMBtu</span> } @else { <span>$/GJ</span> } -->
+        </span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="steam-fuelEnergyFactor">Fuel Energy Factor</label>
+      <div class="input-group">
+        <input name="fuelEnergyFactor" class="form-control" type="number" step="any"
+          formControlName="fuelEnergyFactor" id="steam-fuelEnergyFactor" onfocus="this.select();"
+          (input)="save()" (focus)="changeField('fuelEnergyFactor')">
+      </div>
+    </div>
+  }
+
+  @if (facilityForm.controls.utilityType.value !== 0) {
+    <div class="form-group">
+      <label for="steam-boilerEfficiency">Boiler Efficiency</label>
+      <div class="input-group">
+        <input name="boilerEfficiency" class="form-control" type="number" step="any"
+          formControlName="boilerEfficiency" id="steam-boilerEfficiency" onfocus="this.select();"
+          (input)="save()" (focus)="changeField('boilerEfficiency')">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="steam-systemEfficiency">System Efficiency</label>
+      <div class="input-group">
+        <input name="systemEfficiency" class="form-control" type="number" step="any"
+          formControlName="systemEfficiency" id="steam-systemEfficiency" onfocus="this.select();"
+          (input)="save()" (focus)="changeField('systemEfficiency')">
+        <span class="input-group-addon units">%</span>
+      </div>
+    </div>
+  }
+
+  <div class="row pt-1">
+    <div class="col-6"><label class="small bold">Annual Steam Loss</label></div>
+    <div class="col-6 text-center">
+      @if (surveyService.output().baselineTotal.steamLoss) {
+        <span class="small bold">
+          {{ surveyService.output().baselineTotal.steamLoss | number:'1.0-0' }}
+          <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span> lbs/yr</span> } @else { <span> kg/yr</span> } -->
+        </span>
+      } @else {
+        <span> -- </span>
+      }
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6"><label class="small bold">Annual Energy Loss</label></div>
+    <div class="col-6 text-center">
+      @if (surveyService.output().baselineTotal.energyLoss) {
+        <span class="small bold">
+          {{ surveyService.output().baselineTotal.energyLoss | number:'1.0-0' }}
+          <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span> MMBtu/yr</span> } @else { <span> GJ/yr</span> } -->
+        </span>
+      } @else {
+        <span> -- </span>
+      }
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-6"><label class="small bold">Annual Leak Cost</label></div>
+    <div class="col-6 text-center">
+      @if (surveyService.output().baselineTotal.leakCost) {
+        <span class="small bold">{{ surveyService.output().baselineTotal.leakCost | currency:'USD':'symbol':'1.0-0' }}</span>
+      } @else {
+        <span> -- </span>
+      }
+    </div>
+  </div>
+</form>
+
+@if (showOperatingHoursModal) {
+  <app-operating-hours-modal
+    (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)"
+    [width]="formWidth"
+    [showMinutesSeconds]="true">
+  </app-operating-hours-modal>
+}
