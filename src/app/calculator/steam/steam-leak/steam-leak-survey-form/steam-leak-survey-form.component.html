@@ -1,0 +1,70 @@
+@if (leakMetaForm) {
+  <form [formGroup]="leakMetaForm">
+    <label class="group-label-wide mb-2">Leak Data</label>
+    <div class="form-group pb-1">
+      <label for="survey-name">Leak Name</label>
+      <div class="input-group">
+        <input name="name" class="form-control" type="text" step="any"
+          formControlName="name" id="survey-name" onfocus="this.select();"
+          (focus)="setCurrentField('name')">
+        @if (leakMetaForm.controls.name.invalid && !leakMetaForm.controls.name.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (leakMetaForm.controls.name.errors?.['required']) { <span>Value required.</span> }
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="form-group pb-1">
+      <label for="survey-leakDescription">Leak Description</label>
+      <div class="input-group">
+        <textarea name="leakDescription" rows="4" class="form-control" id="survey-leakDescription"
+          formControlName="leakDescription" onfocus="this.select();"
+          (focus)="setCurrentField('leakDescription')"></textarea>
+        @if (leakMetaForm.controls.leakDescription.invalid && !leakMetaForm.controls.leakDescription.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (leakMetaForm.controls.leakDescription.errors?.['required']) { <span>Value required.</span> }
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="survey-measurementMethod">Measurement Method</label>
+      <div class="input-group">
+        <select class="form-control" name="measurementMethod" id="survey-measurementMethod"
+          formControlName="measurementMethod" (focus)="setCurrentField('measurementMethod')">
+          @for (method of steamMeasurementMethods; track method.value) {
+            <option [ngValue]="method.value">{{ method.display }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    @switch (leakMetaForm.controls.measurementMethod.value) {
+      @case (SteamLeakMeasurementMethod.Estimate) {
+        <app-steam-estimate-method-form
+          [form]="estimateForm"
+          [settings]="settings()"
+          (fieldFocused)="setCurrentField($event)" />
+      }
+
+      @case (SteamLeakMeasurementMethod.Orifice) {
+        <app-steam-orifice-method-form
+          [form]="orificeForm"
+          [settings]="settings()"
+          (fieldFocused)="setCurrentField($event)" />
+      }
+      @case (SteamLeakMeasurementMethod.Plume) {
+        <app-steam-plume-method-form
+          [form]="plumeForm"
+          [settings]="settings()"
+          (fieldFocused)="setCurrentField($event)" />
+      }
+    }
+
+    <div class="d-flex w-100 justify-content-end">
+      <a class="click-link small" (click)="addLeak()">+Add Another Leak</a>
+    </div>
+  </form>
+}

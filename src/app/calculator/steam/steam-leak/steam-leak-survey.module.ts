@@ -28,6 +28,7 @@ import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-result
     exports: [SteamLeakSurveyComponent],
     providers: [
         SteamLeakSurveyService,
+        SteamLeakSurveyFormService
     ]
 })
 export class SteamLeakSurveyModule {}
