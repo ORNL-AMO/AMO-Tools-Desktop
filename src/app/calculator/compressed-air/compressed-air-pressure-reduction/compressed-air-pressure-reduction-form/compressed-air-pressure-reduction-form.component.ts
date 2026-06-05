@@ -65,7 +65,6 @@ export class CompressedAirPressureReductionFormComponent {
         return data?.[index];
       });
       if (item) {
-        console.log('Initializing form for ' + (isBaseline ? 'baseline' : 'modification') + ' index ' + index);
         this.formReset$.next();
         this.form = this.compressedAirPressureReductionService.getFormFromObj(item, index, isBaseline);
         this.form.valueChanges.pipe(
@@ -73,7 +72,6 @@ export class CompressedAirPressureReductionFormComponent {
           takeUntil(this.formReset$),
           takeUntilDestroyed(this.destroyRef)
         ).subscribe(() => {
-          console.log('Form value changed for ' + (isBaseline ? 'baseline' : 'modification') + ' index ' + index);
           if (this.form.valid) {
             this.saveChanges();
           }
@@ -102,23 +100,21 @@ export class CompressedAirPressureReductionFormComponent {
   }
 
   saveChanges() {
-    console.log('Saving changes for ' + (this.isBaseline() ? 'baseline' : 'modification') + ' index ' + this.index());
     const isBaseline = this.isBaseline();
     const index = this.index();
+    //need [...data] to trigger change detection in signals
     if (isBaseline) {
       let baselineData = this.baselineData();
       let obj = baselineData[index];
       obj = this.compressedAirPressureReductionService.updateObjectFromForm(this.form, obj);
       baselineData[index] = obj;
-      console.log('Updated baseline data:', baselineData);
-      this.compressedAirPressureReductionService.baselineData.next({...baselineData});
+      this.compressedAirPressureReductionService.baselineData.next([...baselineData]);
     } else {
       let modificationData = this.modificationData();
       let obj = modificationData[index];
       obj = this.compressedAirPressureReductionService.updateObjectFromForm(this.form, obj);
       modificationData[index] = obj;
-      console.log('Updated modification data:', modificationData);
-      this.compressedAirPressureReductionService.modificationData.next({...modificationData});
+      this.compressedAirPressureReductionService.modificationData.next([...modificationData]);
     }
   }
 

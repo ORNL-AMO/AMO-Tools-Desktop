@@ -29,7 +29,6 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   operatingHours: Signal<OperatingHours> = input<OperatingHours>();
   assessment: Signal<Assessment> = input<Assessment>();
 
-
   private settingsDbService: SettingsDbService = inject(SettingsDbService);
   private calculatorDbService: CalculatorDbService = inject(CalculatorDbService);
   private compressedAirPressureReductionService: CompressedAirPressureReductionService = inject(CompressedAirPressureReductionService);
@@ -40,7 +39,6 @@ export class CompressedAirPressureReductionComponent implements OnInit {
   modificationData: Signal<Array<CompressedAirPressureReductionData>> = toSignal(this.compressedAirPressureReductionService.modificationData);
 
   effectiveSettings = computed(() => this.settings() ?? this.settingsDbService.globalSettings);
-
 
   leftPanelHeader = viewChild<ElementRef>('leftPanelHeader');
   contentContainer = viewChild<ElementRef>('contentContainer');
@@ -89,7 +87,6 @@ export class CompressedAirPressureReductionComponent implements OnInit {
       const modificationData = this.modificationData();
       const settings = this.effectiveSettings();
       if (baselineData && settings) {
-        console.log('calculate results');
         let results: CompressedAirPressureReductionResults = this.compressedAirPressureReductionService.getResults(settings, baselineData, modificationData);
         this.compressedAirPressureReductionService.results.next(results);
       }
@@ -177,6 +174,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
 
   async initCalculatorForAssessment() {
     let assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment().id);
+    //if calc exists initialize data, if not create new calc with default data
     if (assessmentCalculator) {
       if (assessmentCalculator.compressedAirPressureReduction) {
         if (assessmentCalculator.compressedAirPressureReduction.baselineData) {
