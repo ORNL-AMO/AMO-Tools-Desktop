@@ -9,12 +9,14 @@ import { SteamLeakSurveyService } from './steam-leak-survey-service';
 import { SteamLeakSurveyFormComponent } from './steam-leak-survey-form/steam-leak-survey-form.component';
 import { SteamLeakSurveyFormService } from './steam-leak-survey-form/steam-leak-survey-form.service';
 import { CostOfSteamFormComponent } from './cost-of-steam-form/cost-of-steam-form.component';
+import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-results-table/steam-leak-survey-results-table.component';
 
 @NgModule({
     declarations: [
         SteamLeakSurveyComponent,
         SteamLeakSurveyFormComponent,
         CostOfSteamFormComponent,
+        SteamLeakSurveyResultsTableComponent
     ],
     imports: [
         CommonModule,
