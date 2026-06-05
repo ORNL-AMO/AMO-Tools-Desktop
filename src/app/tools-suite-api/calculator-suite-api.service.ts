@@ -457,13 +457,7 @@ export class CalculatorSuiteApiService {
     };
 
     switch (leak.measurementMethod) {
-      case 1:
-        return this.steamLeakApiService.estimateMethodTurbineCalc(
-          leak.estimateTurbineMethodData.turbineEfficiency,
-          leak.estimateTurbineMethodData.leakRate,
-          surveyInput
-        );
-      case 2:
+      case 1: // Orifice
         return this.steamLeakApiService.orificeMethodCalc(
           leak.orificeMethodData.turbineEfficiency,
           leak.orificeMethodData.holeSize,
@@ -471,14 +465,14 @@ export class CalculatorSuiteApiService {
           leak.orificeMethodData.atmosphericPressure,
           surveyInput
         );
-      case 3:
+      case 2: // Plume
         return this.steamLeakApiService.plumeMethodCalc(
           leak.plumeMethodData.turbineEfficiency,
           leak.plumeMethodData.plumeLength,
           leak.plumeMethodData.ambientTemperature,
           surveyInput
         );
-      default:
+      default: // Estimate (0)
         return this.steamLeakApiService.estimateMethodPRVCalc(
           leak.estimateMethodData.leakRate,
           surveyInput
