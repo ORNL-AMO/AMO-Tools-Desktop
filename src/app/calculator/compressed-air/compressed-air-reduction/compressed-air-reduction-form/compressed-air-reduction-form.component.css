@@ -21,3 +21,11 @@
     border-left: solid 1px;
     border-right: none;
   }
+
+:host-context(.disabled) .form-card,
+:host-context(.disabled) input.form-control,
+:host-context(.disabled) select.form-control,
+:host-context(.disabled) .input-group-addon {
+    background-color: #e9ecef;
+    box-shadow: none;
+}

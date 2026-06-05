@@ -371,7 +371,10 @@ export interface CompressedAirReductionData {
   pressureMethodData: PressureMethodData,
   otherMethodData: CompressedAirOtherMethodData,
   compressorElectricityData: CompressorElectricityData,
-  units: number
+  units: number,
+  // Optional fields added for signals-based refactor; not required by the calculation engine
+  isBaseline?: boolean,
+  guid?: string
 };
 
 export interface CompressedAirFlowMeterMethodData {

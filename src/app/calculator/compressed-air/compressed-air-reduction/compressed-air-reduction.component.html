@@ -1,6 +1,10 @@
+@let settings = effectiveSettings();
+@let _modificationExists = modificationExists();
+@let _focusedPanel = focusedPanel();
+
 <div class="calculator-container modify-conditions general standalone-calculator" #contentContainer>
-  <div #leftPanelHeader class="d-flex header pb-1 pt-1 bg-white align-items-center"
-    [ngClass]="{'justify-content-between': inTreasureHunt}">
+  <div class="d-flex header pb-1 pt-1 align-items-center bg-white" #leftPanelHeader
+    [ngClass]="{'justify-content-between': inTreasureHunt()}">
     <div class="d-flex pl-2 align-items-center">
       <div class="text-center d-none d-sm-flex">
         <img src="assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png"
@@ -11,7 +15,8 @@
       </div>
     </div>
 
-    <div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
+    @if (inTreasureHunt()) {
+    <div class="d-flex pr-2 pl-2">
       <div class="d-none d-lg-flex help-holder">
         <p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
           Click cancel to discard the opportunity and return to method selection.</p>
@@ -23,6 +28,7 @@
         <span class="fa fa-times"></span>
       </div>
     </div>
+    }
   </div>
 
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
@@ -42,76 +48,61 @@
 
   <div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
 
-    <!-- baseline -->
-    <div class="calculator-panel-container modification baseline" [ngClass]="{'small-screen-tab': smallScreenTab === 'baseline'}"
-      [ngStyle]="{'height.px': containerHeight}" (click)="setBaselineSelected()">
+    <!-- Baseline panel — supports multiple equipment items in a 1-1 relationship with modification -->
+    <div class="calculator-panel-container modification baseline"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'baseline', 'disabled': _focusedPanel !== 'baseline'}"
+      [ngStyle]="{'height.px': containerHeight}" (click)="setFocusedPanel('baseline')">
       <div class="header mx-2 mb-4">
         <h3>Baseline</h3>
         <a class="click-link pull-right small add-fixture" (click)="addBaselineEquipment()">+Add Equipment</a>
       </div>
+
       <div class="d-flex flex-column mx-4 mb-4">
-        <!-- app form -->
-        <div *ngFor="let data of baselineData; let i = index;">
-          <app-compressed-air-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="true"
-            (emitCalculate)="updateBaselineData($event, i)" (emitChangeField)="changeField($event)"
-            (emitRemoveEquipment)="removeBaselineEquipment($event)" [selected]="baselineSelected"
-            [utilityType]="baselineData[0].utilityType">
-          </app-compressed-air-reduction-form>
-        </div>
-        <div class="w-100 justify content-center btn-group btn-group-sm">
+        @for (data of baselineData(); track data.guid; let index = $index) {
+        <app-compressed-air-reduction-form [isBaseline]="true" [settings]="settings" [index]="index">
+        </app-compressed-air-reduction-form>
+        }
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
           <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">
             Reset Data
           </button>
-          <!-- add "Generate Example" button. Make sure to use 'btn-primary' instead of 'btn-danger' for styling. -->
-          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="generateExample()">
             Generate Example
           </button>
         </div>
       </div>
     </div>
 
-    <!-- modification -->
-    <div class="calculator-panel-container modification" [ngClass]="{'small-screen-tab': smallScreenTab === 'modification'}"
-      [ngStyle]="{'height.px': containerHeight}" (click)="setModificationSelected()">
-      <ng-container *ngIf="modificationExists">
-        <!-- modification header -->
-        <div class="header mx-2 mb-4">
-          <h3>Modification</h3>
-          <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
-        </div>
-        <!-- forms -->
-        <div class="d-flex flex-column mx-4 mb-4">
-          <div *ngFor="let data of modificationData; let i = index;">
-            <!-- app form -->
-            <app-compressed-air-reduction-form [index]="i" [settings]="settings" [data]="data" [isBaseline]="false"
-              (emitCalculate)="updateModificationData($event, i)" (emitChangeField)="changeField($event)"
-              (emitRemoveEquipment)="removeModificationEquipment($event)" [selected]="!baselineSelected"
-              [utilityType]="baselineData[0].utilityType"
-              [compressorControl]="baselineData[i].compressorElectricityData.compressorControl"
-              [compressorControlAdjustment]="baselineData[i].compressorElectricityData.compressorControlAdjustment"
-              [compressorSpecificPowerControl]="baselineData[i].compressorElectricityData.compressorSpecificPowerControl"
-              [compressorSpecificPower]="baselineData[i].compressorElectricityData.compressorSpecificPower">
-            </app-compressed-air-reduction-form>
-          </div>
-        </div>
-      </ng-container>
-      <!-- no content message -->
-      <div *ngIf="!modificationExists">
-        <div class="header mx-2">
-          <h3>Modification</h3>
-        </div>
-        <div class="p-3 no-data">
-          <h3>Once you have set up your baseline..</h3>
-          <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
-            Condition</button>
-          <p>Data will be copied from your current baseline condition.</p>
-        </div>
+    <!-- Modification panel -->
+    <div class="calculator-panel-container modification"
+      [ngClass]="{'small-screen-tab': smallScreenTab === 'modification', 'disabled': _focusedPanel !== 'modification'}"
+      [ngStyle]="{'height.px': containerHeight}" (click)="setFocusedPanel('modification')">
+
+      @if (_modificationExists) {
+      <div class="header mx-2 mb-4">
+        <h3>Modification</h3>
+        <a class="click-link pull-right small add-fixture" (click)="addModificationEquipment()">+Add Equipment</a>
       </div>
+      <div class="d-flex flex-column mx-4 mb-4">
+        @for (data of modificationData(); track data.guid; let index = $index) {
+        <app-compressed-air-reduction-form [isBaseline]="false" [settings]="settings" [index]="index">
+        </app-compressed-air-reduction-form>
+        }
+      </div>
+      } @else {
+      <div class="header mx-2">
+        <h3>Modification</h3>
+      </div>
+      <div class="p-3 no-data">
+        <h3>Once you have set up your baseline..</h3>
+        <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
+          Condition</button>
+        <p>Data will be copied from your current baseline condition.</p>
+      </div>
+      }
     </div>
 
-
-
-    <!-- help panel -->
+    <!-- Help / Results panel -->
     <div class="calculator-panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
       [ngStyle]="{'height.px': containerHeight}">
       <div class="d-flex flex-column mh-100">
@@ -129,16 +120,12 @@
         </div>
 
         <div class="p-2">
-          <!-- app results if results tab -->
-          <app-compressed-air-reduction-results *ngIf="tabSelect === 'results'" [settings]="settings"
-            [modificationExists]="modificationExists" [utilityType]="baselineData[0].utilityType">
-          </app-compressed-air-reduction-results>
-
-          <!-- app help if help tab -->
-          <app-compressed-air-reduction-help *ngIf="tabSelect === 'help'" [settings]="settings"
-            [currentField]="currentField"></app-compressed-air-reduction-help>
+          @if (tabSelect === 'results') {
+          <app-compressed-air-reduction-results [settings]="settings"></app-compressed-air-reduction-results>
+          } @else {
+          <app-compressed-air-reduction-help [settings]="settings"></app-compressed-air-reduction-help>
+          }
         </div>
-
       </div>
     </div>
 
