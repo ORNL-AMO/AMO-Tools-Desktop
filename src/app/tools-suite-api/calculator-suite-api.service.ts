@@ -425,6 +425,59 @@ export class CalculatorSuiteApiService {
     return results;
   }
 
+  steamLeakSurvey(inputObj: SteamLeakSurveyInput): SteamLeakSurveyResult {
+    const facility = inputObj.facilitySteamLeakData;
+    const leak = inputObj.steamLeakSurveyInputVec[0];
+    if (!leak) {
+      return { leakRate: 0, steamLoss: 0, energyLoss: 0, leakCost: 0 };
+    }
+
+    const utilityTypeMap: Record<number, 'steam' | 'electric' | 'natural_gas'> = {
+      0: 'steam',
+      1: 'electric',
+      2: 'natural_gas',
+    };
+
+    const surveyInput = {
+      operatingTime: facility.annualOperatingHours,
+      steamTemp: facility.steamTemperature,
+      steamPressure: facility.steamPressure,
+      costOfElectricity: facility.electricityCost,
+      leakPressure: facility.steamPressure,
+      leakTemp: facility.steamTemperature,
+      feedwaterTemp: facility.feedwaterTemperature,
+      boilerEfficiency: facility.boilerEfficiency,
+      systemEfficiency: facility.systemEfficiency,
+      utilityType: utilityTypeMap[facility.utilityType] ?? 'electric',
+      fuelCost: facility.fuelCost,
+      fuelEnergyFactor: facility.fuelEnergyFactor,
+      steamCost: facility.steamCost,
+    };
+
+    switch (leak.measurementMethod) {
+      case 1: // Orifice
+        return this.steamLeakApiService.orificeMethodCalc(
+          leak.orificeMethodData.turbineEfficiency,
+          leak.orificeMethodData.holeSize,
+          leak.orificeMethodData.dischargeCoefficient,
+          leak.orificeMethodData.atmosphericPressure,
+          surveyInput
+        );
+      case 2: // Plume
+        return this.steamLeakApiService.plumeMethodCalc(
+          leak.plumeMethodData.turbineEfficiency,
+          leak.plumeMethodData.plumeLength,
+          leak.plumeMethodData.ambientTemperature,
+          surveyInput
+        );
+      default: // Estimate (0)
+        return this.steamLeakApiService.estimateMethodPRVCalc(
+          leak.estimateMethodData.leakRate,
+          surveyInput
+        );
+    }
+  }
+
   pipeInsulationReduction(inputObj: PipeInsulationReductionInput): PipeInsulationReductionResult {
     let pipeMaterialCoefficients = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
     let insulationMaterialCoefficients = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();

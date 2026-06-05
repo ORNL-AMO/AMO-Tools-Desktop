@@ -119,23 +119,7 @@ export class SteamLeakApiService {
         }
     }
 
-    estimateMethodTurbineCalc(turbineEfficiency: number, leakRate: number, surveyInput?: Partial<SteamLeakSurveyInput>): SteamLeakSurveyResult {
-        const instance = this.createSurveyInstance(surveyInput);
-        const result = instance.estimateMethodTurbineCalc(turbineEfficiency, leakRate);
-        try {
-            return {
-                leakRate: result.leakRate,
-                steamLoss: result.steamLoss,
-                energyLoss: result.energyLoss,
-                leakCost: result.leakCost,
-            };
-        } finally {
-            result.delete();
-            instance.delete();
-        }
-    }
-
-    orificeMethodCalc(turbineEfficiency: number, holeSize: number, dischargeCoef: number, atmPressure: number, surveyInput?: Partial<SteamLeakSurveyInput>): SteamLeakSurveyResult {
+    orificeMethodCalc(turbineEfficiency: number, holeSize: number, dischargeCoef: number, atmPressure: number, surveyInput?: Partial<SteamLeakApiInput>): SteamLeakApiResult {
         const instance = this.createSurveyInstance(surveyInput);
         const result = instance.orificeMethodCalc(turbineEfficiency, holeSize, dischargeCoef, atmPressure);
         try {

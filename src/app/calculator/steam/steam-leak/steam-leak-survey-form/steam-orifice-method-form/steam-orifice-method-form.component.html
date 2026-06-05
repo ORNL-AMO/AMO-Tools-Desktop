@@ -1,0 +1,78 @@
+<form [formGroup]="form()">
+  <div class="form-group">
+    <label for="steam-turbineEfficiency-orifice">Turbine Efficiency</label>
+    <div class="input-group">
+      <input name="turbineEfficiency" class="form-control" type="number" step="any"
+        formControlName="turbineEfficiency" id="steam-turbineEfficiency-orifice" onfocus="this.select();"
+        (focus)="fieldFocused.emit('turbineEfficiency')">
+      <span class="input-group-addon units">%</span>
+      @if (form().controls.turbineEfficiency.invalid && !form().controls.turbineEfficiency.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.turbineEfficiency.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.turbineEfficiency.errors?.['max']) { <span>Value can't exceed 100.</span> }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-holeSize">Hole Size</label>
+    <div class="input-group">
+      <input name="holeSize" class="form-control" type="number" step="any"
+        formControlName="holeSize" id="steam-holeSize" onfocus="this.select();"
+        (focus)="fieldFocused.emit('holeSize')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">in</span>
+      } @else {
+        <span class="input-group-addon units">cm</span>
+      }
+      @if (form().controls.holeSize.invalid && !form().controls.holeSize.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.holeSize.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.holeSize.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.holeSize.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-dischargeCoefficient">Discharge Coefficient</label>
+    <div class="input-group">
+      <input name="dischargeCoefficient" class="form-control" type="number" step="any"
+        formControlName="dischargeCoefficient" id="steam-dischargeCoefficient" onfocus="this.select();"
+        (focus)="fieldFocused.emit('dischargeCoefficient')">
+      @if (form().controls.dischargeCoefficient.invalid && !form().controls.dischargeCoefficient.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.dischargeCoefficient.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.dischargeCoefficient.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.dischargeCoefficient.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-atmosphericPressure">Atmospheric Pressure</label>
+    <div class="input-group">
+      <input name="atmosphericPressure" class="form-control" type="number" step="any"
+        formControlName="atmosphericPressure" id="steam-atmosphericPressure" onfocus="this.select();"
+        (focus)="fieldFocused.emit('atmosphericPressure')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">psia</span>
+      } @else {
+        <span class="input-group-addon units">kPaa</span>
+      }
+      @if (form().controls.atmosphericPressure.invalid && !form().controls.atmosphericPressure.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.atmosphericPressure.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.atmosphericPressure.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.atmosphericPressure.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+</form>

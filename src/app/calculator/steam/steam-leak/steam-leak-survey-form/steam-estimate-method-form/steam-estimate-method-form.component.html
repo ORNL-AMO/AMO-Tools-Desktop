@@ -1,0 +1,23 @@
+<form [formGroup]="form()">
+  <div class="form-group">
+    <label for="steam-leakRate">Leak Rate</label>
+    <div class="input-group">
+      <input name="leakRate" class="form-control" type="number" step="any"
+        formControlName="leakRate" id="steam-leakRate" onfocus="this.select();"
+        (focus)="fieldFocused.emit('leakRate')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">lb/hr</span>
+      } @else {
+        <span class="input-group-addon units">kg/hr</span>
+      }
+      @if (form().controls.leakRate.invalid && !form().controls.leakRate.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.leakRate.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.leakRate.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.leakRate.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+</form>

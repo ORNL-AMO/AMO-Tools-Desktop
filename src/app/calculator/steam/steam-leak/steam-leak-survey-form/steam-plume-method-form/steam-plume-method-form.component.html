@@ -1,0 +1,58 @@
+<form [formGroup]="form()">
+  <div class="form-group">
+    <label for="steam-turbineEfficiency-plume">Turbine Efficiency</label>
+    <div class="input-group">
+      <input name="turbineEfficiency" class="form-control" type="number" step="any"
+        formControlName="turbineEfficiency" id="steam-turbineEfficiency-plume" onfocus="this.select();"
+        (focus)="fieldFocused.emit('turbineEfficiency')">
+      <span class="input-group-addon units">%</span>
+      @if (form().controls.turbineEfficiency.invalid && !form().controls.turbineEfficiency.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.turbineEfficiency.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.turbineEfficiency.errors?.['max']) { <span>Value can't exceed 100.</span> }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-plumeLength">Plume Length</label>
+    <div class="input-group">
+      <input name="plumeLength" class="form-control" type="number" step="any"
+        formControlName="plumeLength" id="steam-plumeLength" onfocus="this.select();"
+        (focus)="fieldFocused.emit('plumeLength')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">in</span>
+      } @else {
+        <span class="input-group-addon units">cm</span>
+      }
+      @if (form().controls.plumeLength.invalid && !form().controls.plumeLength.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.plumeLength.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.plumeLength.errors?.['min']) {
+            <span>Value can't be less than {{ form().controls.plumeLength.errors?.['min']?.min }}.</span>
+          }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-ambientTemperature">Ambient Temperature</label>
+    <div class="input-group">
+      <input name="ambientTemperature" class="form-control" type="number" step="any"
+        formControlName="ambientTemperature" id="steam-ambientTemperature" onfocus="this.select();"
+        (focus)="fieldFocused.emit('ambientTemperature')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">&#8457;</span>
+      } @else {
+        <span class="input-group-addon units">&#8451;</span>
+      }
+      @if (form().controls.ambientTemperature.invalid && !form().controls.ambientTemperature.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.ambientTemperature.errors?.['required']) { <span>Value required.</span> }
+        </span>
+      }
+    </div>
+  </div>
+</form>
