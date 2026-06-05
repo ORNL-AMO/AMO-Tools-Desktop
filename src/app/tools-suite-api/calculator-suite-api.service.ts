@@ -1,15 +1,17 @@
 import { Injectable } from '@angular/core';
-import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
+import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs, SteamLeakSurveyInput, SteamLeakSurveyResult, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ValveEnergyLossInputs, ValveEnergyLossOutputs, ValveEnergyLossResults } from '../shared/models/calculators';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+import { SteamLeakApiService } from './steam-leak-api.service';
 
 
 @Injectable()
 export class CalculatorSuiteApiService {
 
   constructor(private suiteApiHelperService: SuiteApiHelperService,
-    private toolsSuiteApiService: ToolsSuiteApiService
+    private toolsSuiteApiService: ToolsSuiteApiService,
+    private steamLeakApiService: SteamLeakApiService
   ) { }
 
   electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResult {

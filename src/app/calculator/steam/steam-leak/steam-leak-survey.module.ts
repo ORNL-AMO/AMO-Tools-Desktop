@@ -12,6 +12,8 @@ import { SteamEstimateMethodFormComponent } from './steam-leak-survey-form/steam
 
 import { SteamOrificeMethodFormComponent } from './steam-leak-survey-form/steam-orifice-method-form/steam-orifice-method-form.component';
 import { SteamPlumeMethodFormComponent } from './steam-leak-survey-form/steam-plume-method-form/steam-plume-method-form.component';
+import { CostOfSteamFormComponent } from './cost-of-steam-form/cost-of-steam-form.component';
+import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-results-table/steam-leak-survey-results-table.component';
 
 @NgModule({
     declarations: [
@@ -20,6 +22,8 @@ import { SteamPlumeMethodFormComponent } from './steam-leak-survey-form/steam-pl
         SteamEstimateMethodFormComponent,
         SteamOrificeMethodFormComponent,
         SteamPlumeMethodFormComponent
+        CostOfSteamFormComponent,
+        SteamLeakSurveyResultsTableComponent
     ],
     imports: [
         CommonModule,
@@ -31,6 +35,7 @@ import { SteamPlumeMethodFormComponent } from './steam-leak-survey-form/steam-pl
     exports: [SteamLeakSurveyComponent],
     providers: [
         SteamLeakSurveyService,
+        SteamLeakSurveyFormService
     ]
 })
 export class SteamLeakSurveyModule {}

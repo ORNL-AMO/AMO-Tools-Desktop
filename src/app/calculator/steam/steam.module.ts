@@ -47,7 +47,7 @@ import { SteamLeakSurveyModule } from './steam-leak/steam-leak-survey.module';
     PipeInsulationReductionModule,
     TankInsulationReductionModule,
     CondensingEconomizerModule,
-    SteamLeakSurveyModule,
+    SteamLeakSurveyModule
   ],
   declarations: [
     SteamListComponent,

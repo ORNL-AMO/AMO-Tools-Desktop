@@ -9,14 +9,14 @@ export interface SteamLeakUtilityTypeOption {
     key: SteamLeakUtilityTypeKey;
 }
 
-export interface SteamLeakSurveyResult {
+export interface SteamLeakApiResult {
     leakRate: number;
     steamLoss: number;
     energyLoss: number;
     leakCost: number;
 }
 
-export interface SteamLeakSurveyInput {
+export interface SteamLeakApiInput {
     operatingTime: number;
     steamTemp: number;
     steamPressure: number;
@@ -39,7 +39,7 @@ export class SteamLeakApiService {
     ) { }
 
         // Use the generic 13-arg constructor so we can support all utility types with one code path.
-    private readonly defaultSteamLeakSurveyInput: SteamLeakSurveyInput = {
+    private readonly defaultSteamLeakApiInput: SteamLeakApiInput = {
         operatingTime: 8760,
         steamTemp: 500,
         steamPressure: 300,
@@ -59,9 +59,9 @@ export class SteamLeakApiService {
      * Normalize input, map enums, and create a SteamLeakSurvey WASM instance.
      * Always delete the instance after use.
      */
-    private createSurveyInstance(input?: Partial<SteamLeakSurveyInput>) {
-        const merged: SteamLeakSurveyInput = {
-            ...this.defaultSteamLeakSurveyInput,
+    private createSurveyInstance(input?: Partial<SteamLeakApiInput>) {
+        const merged: SteamLeakApiInput = {
+            ...this.defaultSteamLeakApiInput,
             ...(input ?? {}),
         };
         const utilityType = this.getUtilityTypeEnum(merged.utilityType);
@@ -92,7 +92,7 @@ export class SteamLeakApiService {
         return utilityTypeEnum[type];
     }
 
-    getCostOfSteam(turbineEfficiency?: number, surveyInput?: Partial<SteamLeakSurveyInput>): number {
+    getCostOfSteam(turbineEfficiency?: number, surveyInput?: Partial<SteamLeakApiInput>): number {
         const instance = this.createSurveyInstance(surveyInput);
         try {
             return turbineEfficiency === undefined
@@ -103,7 +103,7 @@ export class SteamLeakApiService {
         }
     }
 
-    estimateMethodPRVCalc(leakRate: number, surveyInput?: Partial<SteamLeakSurveyInput>): SteamLeakSurveyResult {
+    estimateMethodPRVCalc(leakRate: number, surveyInput?: Partial<SteamLeakApiInput>): SteamLeakApiResult {
         const instance = this.createSurveyInstance(surveyInput);
         const result = instance.estimateMethodPRVCalc(leakRate);
         try {
@@ -135,7 +135,7 @@ export class SteamLeakApiService {
         }
     }
 
-    plumeMethodCalc(turbineEfficiency: number, plumeLength: number, ambTemp: number, surveyInput?: Partial<SteamLeakSurveyInput>): SteamLeakSurveyResult {
+    plumeMethodCalc(turbineEfficiency: number, plumeLength: number, ambTemp: number, surveyInput?: Partial<SteamLeakApiInput>): SteamLeakApiResult {
         const instance = this.createSurveyInstance(surveyInput);
         const result = instance.plumeMethodCalc(turbineEfficiency, plumeLength, ambTemp);
         try {
