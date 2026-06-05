@@ -42,6 +42,9 @@
       <div class="tab-content p-3">
         <p class="text-muted">Steam Leak Survey form will be built here.</p>
       </div>
+      <div class="m-2">
+        <app-steam-leak-survey-results-table [settings]="activeSettings" />
+      </div>
       <div class="w-100 justify-content-end btn-group btn-group-sm">
         <div class="btn-group btn-group-sm">
           <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
