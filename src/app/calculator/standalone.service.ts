@@ -12,6 +12,8 @@ import {
   PowerFactorTriangleModeInputs,
   PowerFactorTriangleOutputs,
   ReceiverTankMeteredResults,
+  ReceiverTankCompressorCycle,
+  ReceiverTankCompressorCycleOutput,
 } from '../shared/models/standalone';
 import { Settings } from '../shared/models/settings';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
@@ -53,8 +55,6 @@ export class StandaloneService {
       inputCpy.airDemand = this.convertUnitsService.value(inputCpy.airDemand).from('m3').to('ft3');
       //metric:kpa imperial:psi
       inputCpy.allowablePressureDrop = this.convertUnitsService.value(inputCpy.allowablePressureDrop).from('kPa').to('psi');
-      //metric:kpaa imperial:psia
-      inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
       let requiredStorage: number = this.standaloneSuiteApiService.receiverTankGeneral(inputCpy);
       //metric:m3 imperial:gal
       requiredStorage = this.convertUnitsService.value(requiredStorage).from('gal').to('m3');
@@ -335,6 +335,33 @@ export class StandaloneService {
     }
   }
 
+  calculateReceiverTankCompressorCycleSize(input: ReceiverTankCompressorCycle, settings: Settings): ReceiverTankCompressorCycleOutput {
+    let inputCpy: ReceiverTankCompressorCycle = JSON.parse(JSON.stringify(input));
+    if (settings.unitsOfMeasure === 'Metric') {
+      //metric: m3 imperial: ft3
+      inputCpy.compressorCapacity = this.convertUnitsService.value(inputCpy.compressorCapacity).from('m3').to('ft3');
+      //metric: kPa imperial: psi
+      inputCpy.fullLoadPressure = this.convertUnitsService.value(inputCpy.fullLoadPressure).from('kPa').to('psi');
+      //metric: kPa imperial: psi
+      inputCpy.unloadPressure = this.convertUnitsService.value(inputCpy.unloadPressure).from('kPa').to('psi');
+      //metric: kpaa imperial: psia
+      inputCpy.atmosphericPressure = this.convertUnitsService.value(inputCpy.atmosphericPressure).from('kPaa').to('psia');
+      let output: ReceiverTankCompressorCycleOutput = this.standaloneSuiteApiService.calculateReceiverTankCompressorCycleSize(inputCpy);
+      //metric: m3 imperial: ft3
+      output.capacity = this.convertUnitsService.value(output.capacity).from('ft3').to('m3');
+      //metric: m3 imperial: ft3
+      output.areaStorageVolume = this.convertUnitsService.value(output.areaStorageVolume).from('ft3').to('m3');
+      //metric: L imperial: gal
+      output.liquidStorageVolume = this.convertUnitsService.value(output.liquidStorageVolume).from('gal').to('L');
+      //metric: kPa imperial: psi
+      output.pressureChange = this.convertUnitsService.value(output.pressureChange).from('psi').to('kPa');
+      return output;
+    } else {
+      return this.standaloneSuiteApiService.calculateReceiverTankCompressorCycleSize(inputCpy);
+    }
+
+  }
+
   electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResult {
     return this.calculatorSuiteApiService.electricityReduction(inputObj);
   }
@@ -374,7 +401,7 @@ export class StandaloneService {
     return this.calculatorSuiteApiService.powerFactorTriangle(inputObj);
   }
 
-  valveEnergyLossCalc(baselineInputs: ValveEnergyLossInputs, modificationInputs: ValveEnergyLossInputs): ValveEnergyLossResults{
+  valveEnergyLossCalc(baselineInputs: ValveEnergyLossInputs, modificationInputs: ValveEnergyLossInputs): ValveEnergyLossResults {
     return this.calculatorSuiteApiService.valveEnergyLossCalc(baselineInputs, modificationInputs);
   }
 }
