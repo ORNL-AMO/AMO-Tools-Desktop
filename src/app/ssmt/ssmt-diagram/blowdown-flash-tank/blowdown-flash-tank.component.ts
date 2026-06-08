@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
+import { BoilerInput } from '../../../shared/models/steam/ssmt';
 
 @Component({
     selector: 'app-blowdown-flash-tank',
@@ -19,6 +20,8 @@ export class BlowdownFlashTankComponent implements OnInit {
   settings: Settings;
   @Input()
   numberOfHeaders: number;
+  @Input()
+  boilerInput: BoilerInput;
 
   steamPressureClasses: Array<string>;
   outletCondensateClasses: Array<string>;

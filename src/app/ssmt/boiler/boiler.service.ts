@@ -47,7 +47,8 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
       deaeratorPressure: ['', [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
       approachTemperature: ['', [Validators.min(0.000005)]],
       blowdownConductivity: [''],
-      feedwaterConductivity: ['']
+      feedwaterConductivity: [''],
+      sendBlowdownToDeaerator: [false]
     });
 
     this.setSaturatedBoilerPressureValidators(form, settings);
@@ -78,7 +79,8 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
       deaeratorPressure: [obj.deaeratorPressure, [Validators.required, Validators.min(tmpRanges.deaeratorPressureMin), Validators.max(tmpRanges.deaeratorPressureMax)]],
       approachTemperature: [obj.approachTemperature, approachTempValidators],
       blowdownConductivity: [obj.blowdownConductivity],
-      feedwaterConductivity: [obj.feedwaterConductivity]
+      feedwaterConductivity: [obj.feedwaterConductivity],
+      sendBlowdownToDeaerator: [obj.sendBlowdownToDeaerator]
     });
 
     this.setPressureAndTemperatureValidators(form, settings);
@@ -256,7 +258,8 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
       deaeratorPressure: form.controls.deaeratorPressure.value,
       approachTemperature: form.controls.approachTemperature.value,
       blowdownConductivity: form.controls.blowdownConductivity.value,
-      feedwaterConductivity: form.controls.feedwaterConductivity.value
+      feedwaterConductivity: form.controls.feedwaterConductivity.value,
+      sendBlowdownToDeaerator: form.controls.sendBlowdownToDeaerator.value
     };
   }
 

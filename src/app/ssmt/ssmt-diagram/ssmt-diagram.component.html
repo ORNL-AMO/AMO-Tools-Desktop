@@ -54,7 +54,8 @@
             </div>
             <div class="p-0 w-25">
               <!--high to medium turbine-->
-              <app-turbine-diagram *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.highToMediumTurbine.useTurbine == true"
+              <app-turbine-diagram
+                *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.highToMediumTurbine.useTurbine == true"
                 [noOutletConnection]="false" [turbine]="outputData.highPressureToMediumPressureTurbine"
                 [inletColor]="'high-pressure'" [outletColor]="'medium-pressure'" (emitSetHover)="setHover($event)"
                 [turbineType]="'highToMedium'"
@@ -63,7 +64,8 @@
             </div>
             <div class="p-0 w-25">
               <!--high to low turbine-->
-              <app-turbine-diagram *ngIf="inputData.headerInput.numberOfHeaders > 1 && inputData.turbineInput.highToLowTurbine.useTurbine == true"
+              <app-turbine-diagram
+                *ngIf="inputData.headerInput.numberOfHeaders > 1 && inputData.turbineInput.highToLowTurbine.useTurbine == true"
                 [noOutletConnection]="inputData.headerInput.numberOfHeaders == 3"
                 [turbine]="outputData.highPressureToLowPressureTurbine" [inletColor]="'high-pressure'"
                 [outletColor]="'low-pressure'" (emitSetHover)="setHover($event)" [turbineType]="'highToLow'"
@@ -128,7 +130,8 @@
             </div>
             <div class="p-0 w-25">
               <!--medium to low pressure turbine-->
-              <app-turbine-diagram *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.mediumToLowTurbine.useTurbine == true"
+              <app-turbine-diagram
+                *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.mediumToLowTurbine.useTurbine == true"
                 [noOutletConnection]="false" [turbine]="outputData.mediumPressureToLowPressureTurbine"
                 [inletColor]="'medium-pressure'" [outletColor]="'low-pressure'" (emitSetHover)="setHover($event)"
                 [turbineType]="'mediumToLow'" (emitSelectEquipment)="selectTable('mediumToLowPressureTurbine')"
@@ -178,11 +181,13 @@
           <!--dearator diagram for more than one header system-->
           <app-deaerator-diagram *ngIf="inputData.headerInput.numberOfHeaders > 1"
             [deaerator]="outputData.deaeratorOutput" [inletPressure]="'low-pressure'" (emitSetHover)="setHover($event)"
-            (emitSelectEquipment)="selectTable($event)" [settings]="settings"></app-deaerator-diagram>
+            (emitSelectEquipment)="selectTable($event)" [settings]="settings"
+            [boilerInput]="inputData.boilerInput"></app-deaerator-diagram>
           <!--deaerator diagram for one header system-->
           <app-deaerator-diagram *ngIf="inputData.headerInput.numberOfHeaders == 1"
             [deaerator]="outputData.deaeratorOutput" [inletPressure]="'high-pressure'" (emitSetHover)="setHover($event)"
-            (emitSelectEquipment)="selectTable($event)" [settings]="settings"></app-deaerator-diagram>
+            (emitSelectEquipment)="selectTable($event)" [settings]="settings"
+            [boilerInput]="inputData.boilerInput"></app-deaerator-diagram>
         </div>
         <div class="w-25 deaerator-condensate-padding">
           <app-turbine-connector *ngIf="inputData.turbineInput.condensingTurbine.useTurbine == true"
@@ -192,14 +197,20 @@
           </app-turbine-connector>
         </div>
         <div class="p-0 w-25">
+          @if(inputData.boilerInput.sendBlowdownToDeaerator == true){
+          <app-blowdown-flash-tank-connector [flashTank]="outputData.blowdownFlashTank"
+            (emitSetHover)="setHover($event)" (emitSelectEquipment)="selectTable($event)" [settings]="settings"
+            [boilerInput]="inputData.boilerInput"></app-blowdown-flash-tank-connector>
+          }@else {
           <!--diagram spacer-->
+          }
         </div>
         <div class="p-0 w-25">
           <!--blowdown flash tank-->
           <app-blowdown-flash-tank *ngIf="inputData.boilerInput.blowdownFlashed == true"
             [flashTank]="outputData.blowdownFlashTank" (emitSetHover)="setHover($event)"
             (emitSelectEquipment)="selectTable($event)" [settings]="settings"
-            [numberOfHeaders]="inputData.headerInput.numberOfHeaders">
+            [numberOfHeaders]="inputData.headerInput.numberOfHeaders" [boilerInput]="inputData.boilerInput">
           </app-blowdown-flash-tank>
         </div>
       </div>

@@ -1,0 +1,21 @@
+.to-dearator {
+    background-color: #79716B;
+}
+
+.pt-px {
+    padding-top: 18px;
+}
+
+.outlet-steam-mass-flow {
+    position: absolute;
+    color: black;
+    width: 100px;
+    right: -25px;
+    top: 20px;
+    text-align: right;
+}
+
+
+.outlet-steam-holder {
+    position: relative;
+}

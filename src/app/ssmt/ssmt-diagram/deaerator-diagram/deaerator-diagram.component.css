@@ -52,7 +52,7 @@
     position: relative;
 }
 
-.low-pressure .inlet-pressure-holder{
+.low-pressure:not(.with-flashtank) .inlet-pressure-holder{
     padding-top: 25px;
 }
 
@@ -126,4 +126,40 @@
     position: absolute;
     right: 48px;
     bottom: 20px;
+}
+
+
+.to-dearator {
+    background-color: #79716B;
+}
+
+
+.combined-tube {
+    background-color: #bcae53;
+}
+
+.low-pressure-inlet-tube {
+    height: .5rem;
+}
+
+.to-dearator-connector{
+    height: fit-content;
+}
+
+.low-pressure.with-flashtank{
+    height: 25px;
+    margin-top: -25px;
+}
+
+.combined-inlet-tube{
+    margin-bottom: 12px;
+    border-bottom-right-radius: 25px;
+}
+
+.to-dearator-connector.no-condensate-turbine{
+    width: 50px;
+}
+
+.to-dearator .hidden-chevron{
+    color: #79716B;
 }

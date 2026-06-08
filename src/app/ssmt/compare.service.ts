@@ -435,6 +435,24 @@ export class CompareService {
     }
   }
 
+  //isSendBlowdownToDeaeratorDifferent
+  isSendBlowdownToDeaeratorDifferent(baseline?: SSMT, modification?: SSMT): boolean {
+    if (!baseline) {
+      baseline = this.baselineSSMT;
+    }
+    if (!modification) {
+      modification = this.modifiedSSMT;
+    }
+    if (baseline && modification) {
+      if (baseline.boilerInput.sendBlowdownToDeaerator !== modification.boilerInput.sendBlowdownToDeaerator) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }  
 
   //HEADER
   checkHeaderDifferent(baseline?: SSMT, modification?: SSMT): boolean {
