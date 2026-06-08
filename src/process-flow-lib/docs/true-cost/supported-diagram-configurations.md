@@ -85,7 +85,7 @@ Walks downstream from each treatment node, stopping attribution at the first wat
 | `diamond-treatment` | Intake → {TreatA(60), TreatB(40)} → SysA | no (both paths) | SysA receives 100% of TreatA block cost + 100% of TreatB block cost; each treatment node is an independent cost component |
 | `ro-single-system` | Intake → RO(treatmentType=6) → {SysA, Discharge} | — | SysA 100% via RO single-system override |
 | `ro-multi-system` | Intake → RO → {SysA(40%), SysB(40%), Discharge(20%)} | — | SysA 40%, SysB 40% (no RO override — 3 children) |
-| `ro-single-system-wwt` | Intake → RO → {SysA, WWT → Discharge} | — | SysA 100% of RO block cost via RO override |
+| `ro-single-system-wwt` | Intake → RO → {SysA, WWT(reject) → Discharge} | — | SysA 100% of RO block cost (inline override); WWT block cost handled by WWT table below |
 | `adjusted-attribution-treatment` | Intake → Treatment → SysA (adjusted=0.80 on treatment) | no | SysA 80% of treatment block cost; computed default 1.0 preserved; intake unaffected |
 
 ---
@@ -106,13 +106,14 @@ All Pass 1 iterations complete across all WWT nodes before any Pass 2 iteration 
 | `wwt-discharge-only` | System → WWT → Discharge | no downstream systems — no attribution | System 100% (all WWT cost to upstream discharger) | — |
 | `wwt-reuse` | SysA → WWT → {SysB (60%), Discharge (40%)} | SysB 60% of WWT block cost | SysA 40% (remaining discharge fraction) | — |
 | `wwt-two-upstream-with-reuse` ⚠ snapshot | {SysA(60), SysB(40)} → WWT → {SysC(60, reuse), Discharge(40)} | SysC 60% | SysA 0% (60−60=0 net); SysB **negative** (40−60=−20, BUG) | Pass 2 deducts the full downstream charged portion from each upstream system independently instead of prorating. Correct: SysA 24%, SysB 16%. |
-| `ro-single-system-wwt` ⚠ snapshot | Intake → RO → {SysA, WWT(reject) → Discharge} | no downstream reuse systems | SysA 100% via RO reject WWT special case — but attributed once per upstream edge, causing double-attribution | RO reject WWT double-attribution bug. |
+| `ro-single-system-wwt` | Intake → RO → {SysA, WWT(reject) → Discharge} | no downstream reuse systems | SysA 100% of WWT block cost via `applyROSystemWasteTreatmentCosts` | — |
+| `ro-system-downstream-wwt` | Intake → RO → {SysA → WWT → Discharge, Discharge(reject)} | no downstream reuse systems | SysA 100% of WWT block cost via `applyROSystemWasteTreatmentCosts` (overrides Pass 2 flow-fraction) | — |
 
 ---
 
 ## RO Single-System Override (cross-cutting)
 
-`assignsystemsWithRODirectDischarge` identifies single-system RO configurations in preprocessing. When triggered, all four attribution sub-routines force the fraction to 1.0 for the registered system across all associated cost components (intake, RO treatment node, product-path discharge, and if present, the reject-path WWT node).
+`assignsystemsWithRODirectDischarge` identifies single-system RO configurations in preprocessing. When triggered, intake, discharge, and treatment sub-routines apply the 100% override inline for their respective cost components. The reject-path WWT override is handled by the dedicated `applyROSystemWasteTreatmentCosts` sub-routine, which runs after the standard WWT pass and assigns fraction 1.0 to the registered system for the WWT node.
 
 **Qualification criteria tested:**
 

@@ -1,4 +1,4 @@
-**Date Generated:** June 5, 2026
+**Date Generated:** June 8, 2026
 
 # True Cost Calculation — Flow Diagram Guide
 
@@ -52,9 +52,9 @@ The flow path trace answers "which systems can this node's cost possibly reach, 
 
 ## Stage 4 — Attribute Costs to Systems
 
-**What happens:** Four sub-routines run in sequence, each responsible for one type of cost component. Each sub-routine walks the pre-computed flow paths and decides what fraction of a cost component's block cost belongs to each water-using system.
+**What happens:** Five sub-routines run in sequence, each responsible for one type of cost component. Each sub-routine walks the pre-computed flow paths and decides what fraction of a cost component's block cost belongs to each water-using system.
 
-The four sub-routines are:
+The five sub-routines are:
 
 1. **Intake Costs** — walks downstream from each water intake node, stopping at the first water-using system encountered on each path. The attribution fraction uses one of two bases depending on the path:
    - *Intake-flow-volume basis* (standard case): each system's fraction = its share of the total intake outflow. Used when the intake splits to multiple downstream paths or the treatment chain has no flow losses.
@@ -70,11 +70,13 @@ The four sub-routines are:
 
 4. **Wastewater Treatment Costs** — two passes per WWT node:
    - *Pass 1 (downstream/reuse)*: walks downstream, stopping at the first water-using system receiving the recycled water. Standard flow-fraction applies.
-   - *Pass 2 (upstream/discharge)*: walks upstream, stopping at the first water-using system that sent water into the WWT. The system's flow responsibility is reduced by any portion already attributed in Pass 1. Special case: when the WWT node is registered as the waste treatment component of a single-system RO configuration (Stage 2 index), the 100% attribution is assigned directly to the RO system owner — even though the immediate upstream node is an RO treatment node (not itself a water-using system).
+   - *Pass 2 (upstream/discharge)*: walks upstream, stopping at the first `water-using-system` node encountered on each path. The system's flow responsibility is reduced by any portion already attributed in Pass 1. RO treatment nodes do not trigger a stop — if the upstream walk reaches an RO node without finding a water-using system first, no attribution is made on that path.
 
-All four sub-routines also check the single-system RO index built in Stage 2. When a system is identified as the sole beneficiary of an RO configuration and the current cost component is one of that configuration's nodes, the attribution fraction is set to 100% regardless of flow fractions.
+5. **RO Reject-Path WWT Costs** — handles WWT units that are part of a single-system RO configuration, where sub-routine 4 would find no `water-using-system` in the upstream walk (or would find one but at the wrong fraction). For each qualifying configuration in the Stage 2 index, this sub-routine assigns 100% of the WWT cost to the system that owns the RO unit. An idempotency guard prevents re-attribution if sub-routine 4 already wrote an entry for the same system-component pair.
 
-**Why we do this as four separate passes:** Each cost component type has a different "direction of responsibility." Intake costs naturally flow forward — the system that first receives the water is the one that drove the intake. Discharge costs flow backward — the system that last used the water before it leaves the facility is the one responsible for the discharge. Separating the passes makes each rule explicit and independently auditable.
+Sub-routines 1–3 check the single-system RO index inline for their respective cost component types. Sub-routine 5 is the exclusive handler for the RO WWT case.
+
+**Why we do this as five separate passes:** Each cost component type has a different "direction of responsibility." Intake costs naturally flow forward — the system that first receives the water is the one that drove the intake. Discharge costs flow backward — the system that last used the water before it leaves the facility is the one responsible for the discharge. Separating the passes makes each rule explicit and independently auditable.
 
 **Why we stop at the first system:** Charging a downstream system for an upstream cost component would mean double-counting — the upstream system already bears the cost of getting water to itself, and the downstream system would be getting charged for water infrastructure it didn't directly use. The "closest system pays" rule prevents this.
 

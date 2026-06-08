@@ -19,11 +19,11 @@
 
 The algorithm is documented as three steps with a "Step 1.5" preprocessing phase. The ordering is a hard dependency chain, not a style choice:
 
-1. **`assignsystemsWithRODirectDischarge` must run before Step 1** — it builds the index that all four Step 2 sub-routines consult for the 100% override. If you run it after block costs are computed, you still get the right index, but every sub-routine call would need to check "is the index ready yet?" Running it first removes that complexity.
+1. **`assignsystemsWithRODirectDischarge` must run before Step 1** — it builds the index that Step 2 sub-routines consult for the 100% override. If you run it after block costs are computed, you still get the right index, but every sub-routine call would need to check "is the index ready yet?" Running it first removes that complexity.
 
 2. **Step 1 (block costs + path traces) must finish before Step 2** — each sub-routine needs the precomputed block cost dollar amount and the list of DFS paths. There is no lazy evaluation; Step 2 is a direct consumer of Step 1's output.
 
-3. **Step 2's four sub-routines run in sequence, but their internal order doesn't matter for correctness** — intake, discharge, treatment, and WWT each write to separate fields on `trueCostOfSystems[systemId]`. The exception is WWT's own internal two-pass structure (see below).
+3. **Step 2's five sub-routines run in sequence, but their internal order mostly doesn't matter for correctness** — intake, discharge, treatment, WWT, and RO WWT each write to separate fields on `trueCostOfSystems[systemId]`. The one exception: `applySystemWasteTreatmentCosts` must complete before `applyROSystemWasteTreatmentCosts` runs, because the RO routine's idempotency guard reads `systemAttributionMap` entries that the standard WWT routine may have already written.
 
 4. **Step 3 must run after Step 2** — it reads the partially populated `trueCostOfSystems` entries produced by Step 2 and adds in-system treatment, heat energy, and motor energy on top.
 
@@ -46,7 +46,7 @@ graph.systemsWithRODirectDischarge[systemId]?.dischargeNode.id === dischargeId
 graph.systemsWithRODirectDischarge[systemId]?.wasteTreatmentNode?.id === wwtId
 ```
 
-**The override fires in all four sub-routines.**
+**The override fires in the intake, discharge, and treatment sub-routines inline, and in the dedicated `applyROSystemWasteTreatmentCosts` function for WWT.**
 If you add a new cost-attribution sub-routine in the future, you are responsible for implementing the RO override check in it as well. It is not applied centrally — each sub-routine applies it independently.
 
 ---
@@ -101,25 +101,6 @@ In code: the internal `downstreamTreatmentAttributionMap` (tracking which system
 - System B: 40 − (40/100 × 60) = 40 − 24 = 16 → pays for 16 units
 
 This is a documented known bug. The test in `plant-summary.test.ts` case `wwt-two-upstream-with-reuse` uses a snapshot to lock in the current (wrong) output. **When you fix this, update the snapshot and verify the corrected values match the "Correct attribution" table in `plant-summary-test-cases.md §4.3`.**
-
----
-
-## RO Reject WWT Double-Attribution Bug
-
-**Location:** `results.ts`, `applySystemWasteTreatmentCosts`, Pass 2 + RO reject path detection.
-
-**Scenario:** RO single-system configuration where the reject path passes through a WWT unit before discharge:
-
-```
-Intake → RO → (product) → System A → Discharge 1
-              → (reject) → WWT → Discharge 2
-```
-
-**Current behavior:** The WWT cost is attributed to System A twice — once when the upstream walk hits the RO node (detected via `systemsWithRODirectDischarge`, forced to 100%), and once when the walk continues past the RO node to the intake edge. The `visitedSystemIds` deduplication guard is bypassed for the RO owner case, which is necessary for the normal RO reject path to work, but this creates a second attribution opportunity.
-
-**Test:** `plant-summary.test.ts` case `ro-single-system-wwt` uses a snapshot for the WWT value precisely because the doubled attribution produces a wrong but deterministic number. The note in `plant-summary-test-cases.md §3.3` states the expected correct value is $90,000 (the WWT block cost, once).
-
-**When fixing:** verify that the deduplication bypass is scoped tightly to the case where the upstream path terminates at the RO node — do not remove the bypass entirely, as it is needed for the basic RO reject WWT path to work at all.
 
 ---
 
@@ -190,6 +171,8 @@ The override is still applied explicitly for two reasons:
 
 ## Test Coverage Notes
 
-The `plant-summary.test.ts` suite uses snapshot assertions for two known-broken cases (`ro-single-system-wwt` WWT cost, `wwt-two-upstream-with-reuse` System B cost). Snapshot tests in broken-behavior cases exist to make the fix visible — when you correct the bug, the snapshot will fail and you must update it intentionally. This is by design. Do not update snapshots without understanding what changed and verifying the new values are correct.
+The `plant-summary.test.ts` suite uses one snapshot assertion for a known-broken case (`wwt-two-upstream-with-reuse` System B cost). Snapshot tests in broken-behavior cases exist to make the fix visible — when you correct the bug, the snapshot will fail and you must update it intentionally. This is by design. Do not update snapshots without understanding what changed and verifying the new values are correct.
+
+The previously snapshot-guarded `ro-single-system-wwt` WWT value has been fixed and now asserts a concrete expected value ($90,000). The new `ro-system-downstream-wwt` test case also asserts a concrete value ($5,000). Neither needs a snapshot.
 
 The mass-balance invariant suite (`plant-summary-test-cases.md §7`) runs cross-cutting assertions (costs sum to block cost, no negatives, fractions bounded 0–1) on top of the basic configurations. Run this suite after any change to attribution logic to catch conservation-of-cost violations.

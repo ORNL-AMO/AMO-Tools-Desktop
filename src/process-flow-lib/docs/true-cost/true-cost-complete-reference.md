@@ -101,18 +101,19 @@ The flow path trace answers "which systems can this node's cost possibly reach, 
 
 ## Stage 4 — Attribute Costs to Systems
 
-**What happens:** Four sub-routines run in sequence, each responsible for one type of cost component. Each sub-routine walks the pre-computed flow paths and decides what fraction of a cost component's block cost belongs to each water-using system.
+**What happens:** Five sub-routines run in sequence, each responsible for one type of cost component. Each sub-routine walks the pre-computed flow paths and decides what fraction of a cost component's block cost belongs to each water-using system.
 
-All four sub-routines share a common allocation principle: **the system closest to the cost component bears the cost.** Systems further away are not double-charged.
+All sub-routines share a common allocation principle: **the system closest to the cost component bears the cost.** Systems further away are not double-charged.
 
-> **Single-system RO override:** All four sub-routines consult `graph.systemsWithRODirectDischarge`. When the system being evaluated is part of a single-system RO configuration and the cost component is one of that configuration's associated nodes (intake, RO treatment, discharge, or WWT on the reject path), the attribution fraction is overridden to **1 (100%)**, regardless of what the flow-fraction calculation would otherwise produce.
+> **Single-system RO override:** For intake, discharge, and treatment cost components, sub-routines consult `graph.systemsWithRODirectDischarge` inline and override the attribution fraction to **1 (100%)** when the component is part of a qualifying single-system RO configuration. For wastewater treatment on the RO reject path, a dedicated fifth sub-routine (`applyROSystemWasteTreatmentCosts`) handles the override after the standard WWT pass completes.
 
 | Sub-routine | Cost component type | Walk direction | Stopping criterion |
 |---|---|---|---|
 | Apply System Intake Costs | Water Intake | Downstream | First water-using system on each path |
 | Apply System Discharge Costs | Water Discharge | Upstream | First water-using system on each path |
 | Apply System Treatment Costs | Water Treatment | Downstream | First water-using system on each path |
-| Apply System Wastewater Treatment Costs | Wastewater Treatment | Downstream (reuse) then Upstream (discharge) | First water-using system on each path; or RO system owner when WWT is the RO reject treatment node |
+| Apply System Wastewater Treatment Costs | Wastewater Treatment | Downstream (reuse) then Upstream (discharge) | First water-using-system node on each path |
+| Apply RO System Wastewater Treatment Costs | Wastewater Treatment — RO reject path | Direct lookup of `systemsWithRODirectDischarge` | One attribution per qualifying RO configuration |
 
 ### Sub-routine detail
 

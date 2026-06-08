@@ -321,6 +321,82 @@ describe('getPlantSummaryResults — ro-single-system: Intake → RO → [System
 });
 
 // ---------------------------------------------------------------------------
+// Fixture: ro-system-downstream-wwt
+// Configuration: Intake → RO → [System A → WWT → Discharge2, Discharge1 (reject)]
+//
+//   intake (cost=1, outflow=10)
+//     └─ e1 (10) ─► RO (cost=0, treatmentType=6, inflow=10, outflow=10)
+//                    ├─ e2 (5) ─► sysA
+//                    │              └─ e4 (5) ─► wwt (cost=1/kGal, inflow=5)
+//                    │                             └─ e5 (5) ─► discharge2 (cost=0)
+//                    └─ e3 (5) ─► discharge1 (cost=0, reject)
+//
+// assignsystemsWithRODirectDischarge detects this configuration:
+//   - sysA subtree has 1 system (sysA) and 1 discharge (discharge2) via WWT
+//   - direct-reject subtree has 0 systems and 1 discharge (discharge1)
+//   - wasteTreatmentNode for sysA is recorded as `wwt`
+//
+// The WWT upstream path is [edge_sysA_wwt, edge_RO_sysA, edge_intake_RO] —
+// three edges. Pass 2 of applySystemWasteTreatmentCosts finds sysA on the
+// first edge (it is a water-using-system), computes fraction 5/5 = 1.0, writes
+// $5,000, then breaks. applyROSystemWasteTreatmentCosts subsequently finds an
+// existing systemAttributionMap entry for sysA→wwt and skips (idempotency guard).
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-system-downstream-wwt: Intake → RO → [System → WWT → Discharge, Discharge(reject)]', () => {
+  const WWT_COST = 1;
+  const RO_INFLOW = 10;
+  const PRODUCT_FLOW = 5;
+  const REJECT_FLOW = 5;
+
+  const intake = makeIntakeNode('intake', 0);
+  const ro = makeTreatmentNode('ro', 0, 6);
+  const sysA = makeSystemNode('sysA');
+  const wwt = makeWasteTreatmentNode('wwt', WWT_COST);
+  const discharge1 = makeDischargeNode('discharge1', 0);
+  const discharge2 = makeDischargeNode('discharge2', 0);
+
+  const nodes = [intake, ro, sysA, wwt, discharge1, discharge2];
+  const edges = [
+    makeEdge('intake', 'ro', RO_INFLOW),
+    makeEdge('ro', 'sysA', PRODUCT_FLOW),
+    makeEdge('ro', 'discharge1', REJECT_FLOW),
+    makeEdge('sysA', 'wwt', PRODUCT_FLOW),
+    makeEdge('wwt', 'discharge2', PRODUCT_FLOW),
+  ];
+  const calcData = makeCalcData({
+    intake:     { totalDischargeFlow: RO_INFLOW },
+    ro:         { totalSourceFlow: RO_INFLOW, totalDischargeFlow: RO_INFLOW },
+    sysA:       { totalSourceFlow: PRODUCT_FLOW, totalDischargeFlow: PRODUCT_FLOW },
+    wwt:        { totalSourceFlow: PRODUCT_FLOW, totalDischargeFlow: PRODUCT_FLOW },
+    discharge1: { totalSourceFlow: REJECT_FLOW },
+    discharge2: { totalSourceFlow: PRODUCT_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('charges sysA exactly once for WWT cost (Pass 2 finds sysA on first edge; applyROSystemWasteTreatmentCosts skips via idempotency guard)', () => {
+    expect(result.trueCostOfSystems['sysA'].wasteTreatment)
+      .toBeCloseTo(blockCost(WWT_COST, PRODUCT_FLOW), 0);
+  });
+
+  it('records WWT attribution fraction of 1.0 for sysA in systemAttributionMap', () => {
+    expect(result.systemAttributionMap['sysA']['wwt'].totalAttribution.default)
+      .toBeCloseTo(1.0, 6);
+  });
+
+  it('WWT block cost equals $1/kGal × 5 Mgal = $5,000', () => {
+    expect(result.costComponentsTotalsMap['wwt'].totalBlockCost)
+      .toBeCloseTo(blockCost(WWT_COST, PRODUCT_FLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Mass-balance invariants
 // These assertions must hold for any valid fixture regardless of configuration.
 // ---------------------------------------------------------------------------
@@ -902,11 +978,9 @@ describe('getPlantSummaryResults — summing-node: [Intake A, Intake B] → Summ
 // The RO single-system override IS detected here (exactly 2 children; the
 // wasteTreatmentNode is recorded in systemsWithRODirectDischarge).
 //
-// Known limitation: the WWT upstream path `[edge_RO_wwt, edge_intake_RO]`
-// causes the WWT cost to be attributed twice to sysA — once for the RO edge
-// and once for the intake edge, because the loop does not break when
-// ROWasteTreatmentOwner is set. This snapshot captures the current behavior;
-// update it if the double-attribution is intentionally fixed.
+// sysA bears 100% of the reject-path WWT cost. The upstream path for WWT is
+// [edge_RO_wwt, edge_intake_RO]. The loop breaks after the first edge so
+// sysA is charged exactly once — blockCost(WWT_COST, REJECT_FLOW).
 // ---------------------------------------------------------------------------
 
 describe('getPlantSummaryResults — ro-single-system-wwt: Intake → RO → [System, WWT → Discharge]', () => {
@@ -964,8 +1038,9 @@ describe('getPlantSummaryResults — ro-single-system-wwt: Intake → RO → [Sy
       .toBeCloseTo(blockCost(DISCHARGE1_COST, PRODUCT_FLOW), 0);
   });
 
-  it('matches snapshot for sysA wasteTreatment (documents known double-attribution on WWT reject path)', () => {
-    expect(result.trueCostOfSystems['sysA'].wasteTreatment).toMatchSnapshot();
+  it('assigns reject-path WWT cost to sysA exactly once via RO single-system override', () => {
+    expect(result.trueCostOfSystems['sysA'].wasteTreatment)
+      .toBeCloseTo(blockCost(WWT_COST, REJECT_FLOW), 0);
   });
 });
 

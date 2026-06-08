@@ -1,4 +1,4 @@
-**Date Generated:** May 14, 2026
+**Date Generated:** May 14, 2026 | **Last Updated:** June 8, 2026
 
 # Apply System Wastewater Treatment Costs
 
@@ -17,11 +17,18 @@ This ensures that the full WWT block cost is always accounted for, with the recy
 
 ---
 
-## 2. Two-Pass Approach
+## 2. Attribution Routines
 
-The attribution is computed in two sequential passes. **Pass 1 must complete before Pass 2 begins** because Pass 2 depends on knowing what was already attributed in Pass 1.
+WWT attribution is computed by two sequential functions called from the main `calculateTrueCost` routine:
 
-### Pass 1 — Downstream (Reuse Portion)
+1. **`applySystemWasteTreatmentCosts`** — two-pass attribution for standard upstream/downstream water-using-system paths.
+2. **`applyROSystemWasteTreatmentCosts`** — dedicated attribution for WWT units that are part of an RO reject pathway, called immediately after step 1.
+
+Step 1 must complete before step 2 so that any adjusted attribution already recorded in `systemAttributionMap` is visible to step 2's idempotency guard.
+
+---
+
+### `applySystemWasteTreatmentCosts` — Pass 1: Downstream (Reuse Portion)
 
 **Objective:** Identify water-using systems that receive recycled water from this WWT unit and charge them for their proportional share of the WWT cost.
 
@@ -38,13 +45,13 @@ The attribution is computed in two sequential passes. **Pass 1 must complete bef
 
 After each downstream attribution, the system ID and its charged flow portion are recorded in an internal tracking map.
 
-### Pass 2 — Upstream (Discharged Portion)
+### `applySystemWasteTreatmentCosts` — Pass 2: Upstream (Discharged Portion)
 
 **Objective:** Identify water-using systems that sent effluent into this WWT unit and charge them for the remaining (non-recycled) portion of the WWT cost.
 
 **Walk direction:** Upstream from the WWT node.
 
-**Stopping rule:** First water-using system encountered on each upstream path. Systems already charged in Pass 1 are excluded from Pass 2 — they have already been accounted for as downstream recipients.
+**Stopping rule:** First `water-using-system` node encountered on each upstream path. Systems already charged in Pass 1 are excluded — they have already been accounted for as downstream recipients. This pass does **not** handle RO pathways; if the upstream path leads through an RO treatment node without encountering a `water-using-system` first, no attribution is made — that case is handled by `applyROSystemWasteTreatmentCosts`.
 
 **Cost calculation:**
 
@@ -56,16 +63,41 @@ The key adjustment in Pass 2 is subtracting the flow volume already charged to d
 
 The "Total downstream charged portion" is the sum of all flow amounts already attributed to downstream systems in Pass 1.
 
-### Pass 2 — RO Reject Path Special Case
+---
 
-When the upstream path from a WWT node leads to an RO treatment node rather than directly to a water-using system, the normal Pass 2 stopping rule (stop at first system) does not apply — the RO node is not itself a water-using system, so the walk would otherwise terminate without finding a chargeable system.
+### `applyROSystemWasteTreatmentCosts` — RO Reject Path Attribution
 
-**Detection:** The algorithm checks `graph.systemsWithRODirectDischarge`. If the WWT node is registered as the `wasteTreatmentNode` of a single-system RO configuration, two things happen:
+**Objective:** Attribute the full cost of a WWT unit to the water-using system that owns the RO unit whose reject stream (directly or indirectly) feeds that WWT unit.
 
-1. **Attribution fraction is forced to 1.0** — the full WWT block cost is assigned to the water-using system that is the sole beneficiary of that RO unit (`ROWasteTreatmentOwner`).
-2. **Deduplication is bypassed** — the `visitedSystemIds` guard is skipped for this attribution because the RO system owner is not directly in the upstream walk path and would otherwise be missed.
+**Trigger:** This function iterates `graph.systemsWithRODirectDischarge`. An entry is present only when `assignsystemsWithRODirectDischarge` detected a qualifying single-system RO configuration. For each entry, if a `wasteTreatmentNode` is recorded, this function applies attribution.
 
-**Worked example:**
+**Attribution fraction:** Always `1.0` — the full WWT block cost is attributed to the system that owns the RO unit (`roSystemOwner`), regardless of flow fractions.
+
+**Idempotency guard:** Before writing, the function checks whether `systemAttributionMap[roSystemOwner.id][wasteTreatmentId]` already exists (e.g., from an adjusted attribution set in a prior pass). If so, it skips that entry.
+
+This covers two distinct configurations:
+
+**Configuration A — RO reject stream goes directly to WWT:**
+
+```
+  Intake ──► RO ──► System A ──► Discharge 1   (product path)
+                └──► WWT ──► Discharge 2        (reject treatment path)
+```
+
+Pass 2 of `applySystemWasteTreatmentCosts` walks upstream from WWT and never encounters a `water-using-system` (it hits the RO treatment node first), so no attribution is made there. `applyROSystemWasteTreatmentCosts` then directly assigns 100% of the WWT cost to System A.
+
+**Configuration B — RO product system sends its effluent to WWT:**
+
+```
+  Intake ──► RO ──► System A ──► WWT ──► Discharge 2
+                └──► Discharge 1                        (direct reject)
+```
+
+Pass 2 of `applySystemWasteTreatmentCosts` walks upstream from WWT and does encounter System A (a `water-using-system`) on the first edge, so it would normally attribute a flow-fraction share. However, because System A is also the `roSystemOwner` for this configuration, `applyROSystemWasteTreatmentCosts` overrides by assigning fraction `1.0`. The idempotency guard prevents double-attribution: once `applyROSystemWasteTreatmentCosts` writes the entry it will not re-run for the same `(roSystemOwner, wasteTreatmentId)` pair.
+
+> **Note for Configuration B:** Pass 2 of `applySystemWasteTreatmentCosts` will still attribute a flow-fraction share to System A before `applyROSystemWasteTreatmentCosts` runs. A future improvement may suppress the Pass 2 write for systems that are `roSystemOwner` candidates, but the current approach relies on `applyROSystemWasteTreatmentCosts` correcting the attribution to `1.0` on its pass.
+
+**Worked example (Configuration A):**
 
 ```
   Intake ──► RO Unit ──► (product water, 70 Mgal/yr) ──► System A
@@ -73,11 +105,23 @@ When the upstream path from a WWT node leads to an RO treatment node rather than
 ```
 
 - WWT block cost = 30 Mgal/yr × 1,000 × $1.00/kgal = $30,000/yr
-- **Pass 1 of WWT:** no downstream reuse path → downstream attributed portion = 0.
-- **Pass 2 of WWT:** upstream walk hits the RO node, not a water-using system.
-  - Algorithm detects the RO node is in `systemsWithRODirectDischarge` with System A as the owner (`ROWasteTreatmentOwner`).
-  - Attribution fraction overridden to 1.0; cost assigned to System A.
+- **Pass 1:** no downstream reuse path → downstream attributed portion = 0.
+- **Pass 2:** upstream walk hits the RO treatment node, not a `water-using-system` — no attribution made.
+- **`applyROSystemWasteTreatmentCosts`:** detects System A as `roSystemOwner` for this WWT node; assigns fraction 1.0.
 - Cost to System A from WWT = 1.0 × $30,000 = **$30,000/yr**
+
+**Worked example (Configuration B):**
+
+```
+  Intake ──► RO Unit ──► (product water, 5 Mgal/yr) ──► System A ──► WWT ($1.00/kgal) ──► Discharge
+                    └──► (reject,  5 Mgal/yr) ──► Discharge
+```
+
+- WWT block cost = 5 Mgal/yr × 1,000 × $1.00/kgal = $5,000/yr
+- **Pass 1:** no downstream reuse path → downstream attributed portion = 0.
+- **Pass 2:** upstream walk hits System A on the first edge; attributes a flow-fraction share.
+- **`applyROSystemWasteTreatmentCosts`:** detects System A as `roSystemOwner`; overwrites attribution to fraction 1.0.
+- Cost to System A from WWT = 1.0 × $5,000 = **$5,000/yr**
 
 ---
 
@@ -184,15 +228,17 @@ Suppose instead the WWT has no reuse path (all 100 Mgal/yr goes to discharge). I
 
 | Rule | Description |
 |---|---|
+| Routine 1 | `applySystemWasteTreatmentCosts` — two-pass attribution for standard water-using-system paths |
+| Routine 2 | `applyROSystemWasteTreatmentCosts` — attribution for WWT units in an RO reject pathway; called after routine 1 |
 | Walk direction — Pass 1 | Downstream from WWT unit (reuse paths) |
-| Walk direction — Pass 2 | Upstream from WWT unit (discharge paths) |
+| Walk direction — Pass 2 | Upstream from WWT unit (discharge paths); stops only at `water-using-system` nodes |
 | Stopping point — Pass 1 | First water-using system on each downstream path |
-| Stopping point — Pass 2 | First water-using system on each upstream path (excluding Pass 1 systems) |
+| Stopping point — Pass 2 | First water-using system on each upstream path (excluding Pass 1 systems); RO treatment nodes do not trigger a stop |
 | Cost basis | Full WWT block cost (unit cost × total WWT inflow) |
 | Pass 1 attribution denominator | WWT total inflow |
 | Pass 2 attribution denominator | WWT total inflow |
 | Pass 2 deduction | Total flow already charged in Pass 1 is subtracted from system flow responsibility |
 | Balance check | Sum of all Pass 1 and Pass 2 fractions should equal 1.0 for a lossless WWT unit |
 | Series WWT | Each unit in series is evaluated independently |
-| RO reject-path WWT | When WWT is on the reject path of a single-system RO configuration, 100% of WWT cost is attributed to the RO system owner regardless of flow fractions |
+| RO reject-path WWT | Handled exclusively by `applyROSystemWasteTreatmentCosts`: 100% of WWT cost is attributed to the RO system owner (`roSystemOwner`) regardless of flow fractions |
 | Adjusted attribution | User-supplied fraction replaces computed default |
