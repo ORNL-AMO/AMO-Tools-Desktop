@@ -395,7 +395,7 @@ WWT ($3/kgal)   ← 100 in, 100 out
 
 ### 4.3 `wwt-two-upstream-with-reuse`  ⚠ Known algorithm limitation
 
-**What it tests:** Two systems both feed into one WWT unit, which returns some treated water for reuse (System C) and sends the rest to discharge. This is the worked example from `apply-system-waste-water-treatment-costs.md §6`. The test documents a known algorithm bug in the Pass 2 deduction logic.
+**What it tests:** Two systems both feed into one WWT unit, which returns some treated water for reuse (System C) and sends the rest to discharge. This is the worked example from `cost-component-attribution/apply-system-waste-water-treatment-costs.md §6`. The test documents a known algorithm bug in the Pass 2 deduction logic.
 
 ```
 SYSTEM A ──── 60 Mgal/yr ───┐

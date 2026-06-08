@@ -75,10 +75,11 @@ Before any cost attribution begins, the function `assignsystemsWithRODirectDisch
 1. Its `treatmentType` is `6` (Reverse Osmosis).
 2. It has exactly **two** downstream branches (product water path and reject path).
 3. The **product water path** leads to exactly one water-using system and then to exactly one discharge node, with no other systems on that branch.
-4. The **reject path** leads to exactly one discharge node with no water-using systems present — optionally passing through a single waste-water-treatment node on the way.
-5. The RO node has exactly **one** upstream water-intake node.
+4. The **reject path** leads to exactly one discharge node with no water-using systems present.
+5. A wastewater treatment unit may appear on either the product water path or the reject path (but not both). If present, it is stored in the index so that its costs are also overridden to 100% for the owning system.
+6. The RO node has exactly **one** upstream water-intake node.
 
-When all criteria are met, the index entry records the intake node, the RO treatment node, the discharge node on the product water path, and (if present) the waste-water-treatment node on the reject path.
+When all criteria are met, the index entry records the intake node, the RO treatment node, the discharge node on the product water path, and (if present) the waste-water-treatment node from either path.
 
 **Why this preprocessing is needed:** Flow-fraction attribution methods allocate only a share of costs proportional to how much water reaches a given system. For an RO unit operating at, say, 70% recovery, a naïve fraction-based method attributes only 70% of the RO treatment cost and 70% of the upstream intake cost to the system — because 30% of the water is "lost" as reject. However, when the entire RO setup exists solely to serve that one system, the reject stream is an unavoidable operational loss rather than water serving another purpose. The system should therefore bear **100%** of all associated costs. This index is built before Step 1 so that it is available to all four Step 2 sub-routines.
 
@@ -93,7 +94,7 @@ Four attribution sub-routines execute in order. Each walks the pre-computed path
 | Apply System Intake Costs | Water Intake | Downstream | First water-using system on each path |
 | Apply System Discharge Costs | Water Discharge | Upstream | First water-using system on each path |
 | Apply System Treatment Costs | Water Treatment | Downstream | First water-using system on each path |
-| Apply System Wastewater Treatment Costs | Wastewater Treatment | Downstream (reuse) then Upstream (discharge) | First water-using system on each path |
+| Apply System Wastewater Treatment Costs | Wastewater Treatment | Downstream (reuse) then Upstream (discharge) | First water-using system on each path; or RO system owner when WWT is registered as the RO reject treatment node |
 
 All four sub-routines share a common allocation principle: **the system closest to the cost component bears the cost**. Systems further away (which may have already passed or will later receive water) are not double-charged.
 
@@ -258,9 +259,10 @@ Facility Diagram (nodes + edges)
 
 | Document | Description |
 |---|---|
-| apply-system-intake-costs.md | Detailed rules for Water Intake cost attribution |
-| apply-system-discharge-costs.md | Detailed rules for Water Discharge cost attribution |
-| apply-system-treatment-costs.md | Detailed rules for Water Treatment cost attribution |
-| apply-system-waste-water-treatment-costs.md | Detailed rules for Wastewater Treatment cost attribution |
-| cost-attribution-rules.md | Consolidated reference table of attribution rules per cost component |
-| known-limitations.md | Cases not currently handled by the algorithm |
+| true-cost-algorithm-stages.md | Plain-English walkthrough of the full calculation flow with rationale for each stage |
+| cost-component-attribution/apply-system-intake-costs.md | Detailed rules for Water Intake cost attribution |
+| cost-component-attribution/apply-system-discharge-costs.md | Detailed rules for Water Discharge cost attribution |
+| cost-component-attribution/apply-system-treatment-costs.md | Detailed rules for Water Treatment cost attribution |
+| cost-component-attribution/apply-system-waste-water-treatment-costs.md | Detailed rules for Wastewater Treatment cost attribution |
+| cost-component-attribution/cost-attribution-rules.md | Consolidated reference table of attribution rules per cost component |
+
