@@ -21,8 +21,8 @@ import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-result
         SteamLeakSurveyFormComponent,
         SteamEstimateMethodFormComponent,
         SteamOrificeMethodFormComponent,
-        SteamPlumeMethodFormComponent
         CostOfSteamFormComponent,
+        SteamPlumeMethodFormComponent,
         SteamLeakSurveyResultsTableComponent
     ],
     imports: [

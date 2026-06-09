@@ -10,6 +10,7 @@ import { EstimateFormControls } from '../steam-leak-survey-form.service';
   standalone: false,
 })
 export class SteamEstimateMethodFormComponent {
+  readonly pressureReductionMethods = input.required<Array<{ display: string; value: number }>>();
   readonly form = input.required<FormGroup<EstimateFormControls>>();
   readonly settings = input.required<Settings>();
   readonly fieldFocused = output<string>();
