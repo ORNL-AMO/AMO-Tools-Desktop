@@ -1,66 +1,75 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import {
+  Component, viewChild, ElementRef, input, inject, Signal, computed,
+  effect, untracked, afterRenderEffect, DestroyRef
+} from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { CompressedAirReductionService } from '../compressed-air-reduction.service';
-import { CompressedAirReductionResult, CompressedAirReductionData } from '../../../../shared/models/standalone';
-import { OperatingHours } from '../../../../shared/models/operations';
+import { CompressedAirReductionData, CompressedAirReductionResult, CompressedAirReductionResults } from '../../../../shared/models/standalone';
+import { CompressedAirReductionService, CompressedAirReductionForm } from '../compressed-air-reduction.service';
 import { ConvertCompressedAirReductionService } from '../convert-compressed-air-reduction.service';
-import { Subscription } from 'rxjs';
+import { OperatingHours } from '../../../../shared/models/operations';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Subject, debounceTime, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'app-compressed-air-reduction-form',
-    templateUrl: './compressed-air-reduction-form.component.html',
-    styleUrls: ['./compressed-air-reduction-form.component.css'],
-    standalone: false
+  selector: 'app-compressed-air-reduction-form',
+  templateUrl: './compressed-air-reduction-form.component.html',
+  styleUrls: ['./compressed-air-reduction-form.component.css'],
+  standalone: false,
+  host: { '(window:resize)': 'onResize($event)' }
 })
-export class CompressedAirReductionFormComponent implements OnInit {
-  @Input()
-  settings: Settings;
-  @Input()
-  data: CompressedAirReductionData;
-  @Input()
-  index: number;
-  @Input()
-  isBaseline: boolean;
-  @Output('emitCalculate')
-  emitCalculate = new EventEmitter<CompressedAirReductionData>();
-  @Output('emitRemoveEquipment')
-  emitRemoveEquipment = new EventEmitter<number>();
-  @Output('emitChangeField')
-  emitChangeField = new EventEmitter<string>();
-  @Input()
-  selected: boolean;
-  @Input()
-  utilityType: number;
-  @Input()
-  compressorControl: number;
-  @Input()
-  compressorControlAdjustment: number;
-  @Input()
-  compressorSpecificPowerControl: number;
-  @Input()
-  compressorSpecificPower: number;
+export class CompressedAirReductionFormComponent {
+  // Required signal inputs — the parent passes these and the form reads service state directly
+  isBaseline = input.required<boolean>();
+  index = input.required<number>();
+  settings = input.required<Settings>();
 
-  @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setOpHoursModalWidth();
-  }
+  protected compressedAirReductionService: CompressedAirReductionService = inject(CompressedAirReductionService);
+  private convertCompressedAirReductionService: ConvertCompressedAirReductionService = inject(ConvertCompressedAirReductionService);
+  private destroyRef = inject(DestroyRef);
+  private formReset$ = new Subject<void>();
 
+  // Reactive service state as signals for use in the template and effects
+  focusedPanel: Signal<'baseline' | 'modification'> = toSignal(this.compressedAirReductionService.focusedPanel);
+  results: Signal<CompressedAirReductionResults> = toSignal(this.compressedAirReductionService.results);
+  baselineData: Signal<Array<CompressedAirReductionData>> = toSignal(this.compressedAirReductionService.baselineData);
+  modificationData: Signal<Array<CompressedAirReductionData>> = toSignal(this.compressedAirReductionService.modificationData);
+
+  // Unique id prefix for form field labels to avoid duplicate ids when multiple forms are rendered
+  idString: Signal<string> = computed(() => this.isBaseline() ? 'baseline_' : 'modification_');
+
+  // Per-equipment result extracted from the aggregate results array for inline display in the form
+  individualResults: Signal<CompressedAirReductionResult> = computed(() => {
+    const results = this.results();
+    const index = this.index();
+    if (!results) return undefined;
+    return this.isBaseline()
+      ? results.baselineResults?.[index]
+      : results.modificationResults?.[index];
+  });
+
+  formElement = viewChild<ElementRef>('formElement');
   formWidth: number;
-  showOperatingHoursModal: boolean;
+  showOperatingHoursModal: boolean = false;
 
-  measurementOptions: Array<{ value: number, name: string }> = [
+  form: CompressedAirReductionForm;
+  isEditingName: boolean = false;
+
+  // Local state for compressor control UI — determines whether custom input fields are shown
+  compressorCustomControl: boolean = false;
+  compressorCustomSpecificPower: boolean = false;
+
+  // Lookup tables used by the template for select options
+  readonly measurementOptions = [
     { value: 0, name: 'Flow Meter' },
     { value: 1, name: 'Bag Method' },
     { value: 2, name: 'Orifice / Pressure Method' },
     { value: 3, name: 'Offsheet / Other Method' }
   ];
-  utilityTypes: Array<{ value: number, name: string }> = [
+  readonly utilityTypes = [
     { value: 0, name: 'Compressed Air' },
     { value: 1, name: 'Electricity' }
   ];
-  nozzleTypes: Array<{ value: number, name: string }> = [
+  readonly nozzleTypes = [
     { value: 0, name: '1.0 mm nozzle' },
     { value: 1, name: '1.5 mm nozzle' },
     { value: 2, name: '1/4" pipe, open' },
@@ -74,7 +83,8 @@ export class CompressedAirReductionFormComponent implements OnInit {
     { value: 10, name: '5/16" tubing' },
     { value: 11, name: 'Air Knife' }
   ];
-  compressorControls: Array<{ value: number, name: string, adjustment: number }> = [
+  // Compressor control options with associated fractional adjustment values (NREL protocol)
+  readonly compressorControls = [
     { value: 100, name: 'Screw Compressor - Inlet Modulation', adjustment: 30 },
     { value: 101, name: 'Screw Compressor - Variable Displacement', adjustment: 60 },
     { value: 102, name: 'Screw Compressor – Variable Speed Drives', adjustment: 97 },
@@ -88,7 +98,7 @@ export class CompressedAirReductionFormComponent implements OnInit {
     { value: 110, name: 'Centrifugal– Modulating (IGV) in throttle range (Non-Venting)', adjustment: 86 },
     { value: 8, name: 'Custom', adjustment: 0 }
   ];
-  compressorSpecificPowerControls: Array<{ value: number, name: string, specificPower: number }> = [
+  readonly compressorSpecificPowerControls = [
     { value: 0, name: 'Reciprocating', specificPower: 0.16 },
     { value: 1, name: 'Rotary Screw (Lubricant-Injected)', specificPower: 0.20 },
     { value: 2, name: 'Rotary Screw (Lubricant-Free)', specificPower: 0.23 },
@@ -96,123 +106,150 @@ export class CompressedAirReductionFormComponent implements OnInit {
     { value: 4, name: 'Custom', specificPower: 0.0 }
   ];
 
-  compressorCustomControl: boolean = false;
-  compressorCustomSpecificPower: boolean = false;
-  form: UntypedFormGroup;
-  idString: string;
-  individualResults: CompressedAirReductionResult;
-  compressedAirResultsSub: Subscription;
-  isEditingName: boolean = false;
-  
-  constructor(private compressedAirReductionService: CompressedAirReductionService, private convertCompressedAirReductionService: ConvertCompressedAirReductionService) { }
-
-  ngOnInit() {
-    if (this.isBaseline) {
-      this.idString = 'baseline_' + this.index.toString();
-    }
-    else {
-      this.idString = 'modification_' + this.index;
-    }
-    //previous 0.8.1 versions had nozzle type 12 with different color knife
-    if (this.data.pressureMethodData.nozzleType == 12) {
-      this.data.pressureMethodData.nozzleType = 11;
-    }
-
-    if (this.data.compressorElectricityData.compressorControl == 8) {
-      this.compressorCustomControl = true;
-    }
-    this.form = this.compressedAirReductionService.getFormFromObj(this.data, this.index, this.isBaseline);
-    if (this.selected == false) {
-      this.form.disable();
-    }
-
-    this.compressedAirResultsSub = this.compressedAirReductionService.compressedAirResults.subscribe(results => {
-      if (results) {
-        if (this.isBaseline && results.baselineResults[this.index]) {
-          this.individualResults = results.baselineResults[this.index];
-        } else if (!this.isBaseline && results.modificationResults[this.index]) {
-          this.individualResults = results.modificationResults[this.index];
+  constructor() {
+    // Rebuild the reactive form whenever the item being displayed changes (isBaseline or index).
+    // Reading the data array with untracked() avoids re-running this effect on every save.
+    effect(() => {
+      const isBaseline = this.isBaseline();
+      const index = this.index();
+      const item = untracked(() => {
+        const data = isBaseline ? this.baselineData() : this.modificationData();
+        return data?.[index];
+      });
+      if (item) {
+        // Migrate legacy nozzle type 12 (removed in older versions) to the Air Knife entry
+        if (item.pressureMethodData.nozzleType === 12) {
+          item.pressureMethodData.nozzleType = 11;
         }
+        this.compressorCustomControl = item.compressorElectricityData.compressorControl === 8;
+        this.compressorCustomSpecificPower = item.compressorElectricityData.compressorSpecificPowerControl === 4;
+
+        this.formReset$.next(); // unsubscribe the previous valueChanges pipe
+        this.form = this.compressedAirReductionService.getFormFromObj(item, index, isBaseline);
+
+        // Auto-save on valid changes with a small debounce to batch rapid keystrokes
+        this.form.valueChanges.pipe(
+          debounceTime(100),
+          takeUntil(this.formReset$),
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe(() => {
+          if (this.form.valid) {
+            this.saveChanges();
+          }
+        });
       }
+    });
+
+    // Sync locked baseline compressor fields into the modification form.
+    // Modification forms show the baseline compressor values as read-only so the user
+    // understands which compressor is being used, but the actual calculation reads from baseline.
+    effect(() => {
+      if (this.isBaseline()) return;
+      const index = this.index();
+      const baselineItem = this.baselineData()?.[index];
+      if (!baselineItem) return;
+      const { compressorControl, compressorControlAdjustment, compressorSpecificPowerControl, compressorSpecificPower } = baselineItem.compressorElectricityData;
+      // untracked() prevents this patch from triggering the valueChanges pipeline reactively
+      untracked(() => {
+        this.form?.patchValue(
+          { compressorControl, compressorControlAdjustment, compressorSpecificPowerControl, compressorSpecificPower },
+          { emitEvent: false }
+        );
+        this.compressorCustomControl = compressorControl === 8;
+        this.compressorCustomSpecificPower = compressorSpecificPowerControl === 4;
+      });
+    });
+
+    afterRenderEffect(() => {
+      this.setOpHoursModalWidth();
     });
   }
 
-  ngOnDestroy() {
-    this.compressedAirResultsSub.unsubscribe();
+  // Persist form values back into the service BehaviorSubject.
+  // Spreading [...data] creates a new array reference so Angular change detection fires.
+  saveChanges() {
+    const isBaseline = this.isBaseline();
+    const index = this.index();
+    if (isBaseline) {
+      const baselineData = this.baselineData();
+      baselineData[index] = this.compressedAirReductionService.updateObjectFromForm(this.form, baselineData[index]);
+      this.compressedAirReductionService.baselineData.next([...baselineData]);
+    } else {
+      const modificationData = this.modificationData();
+      modificationData[index] = this.compressedAirReductionService.updateObjectFromForm(this.form, modificationData[index]);
+      this.compressedAirReductionService.modificationData.next([...modificationData]);
+    }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.utilityType && !changes.utilityType.firstChange) {
-      this.form.patchValue({ utilityType: this.utilityType });
-    }
-
-    if (changes.compressorControlAdjustment && !changes.compressorControlAdjustment.firstChange) {
-      this.form.controls.compressorControlAdjustment.patchValue(this.compressorControlAdjustment);
-    }
-
-    if (changes.compressorControl && !changes.compressorControl.firstChange) {
-      this.form.controls.compressorControl.patchValue(this.compressorControl);
-      this.compressorCustomControl = (this.compressorControl == 8);
-    }
-
-    if (changes.compressorSpecificPowerControl && !changes.compressorSpecificPowerControl.firstChange) {
-      this.form.controls.compressorSpecificPowerControl.patchValue(this.compressorSpecificPowerControl);
-    }
-
-    if (changes.compressorSpecificPower && !changes.compressorSpecificPower.firstChange) {
-      this.form.controls.compressorSpecificPower.patchValue(this.compressorSpecificPower);
-    }
-
-    if (changes.selected && !changes.selected.firstChange) {
-      if (this.selected == false) {
-        this.form.disable();
-      } else {
-        this.form.enable();
-        if (this.index != 0) {
-          this.form.controls.utilityType.disable();
-        }
-        if (!this.isBaseline) {
-          this.form.controls.compressorControl.disable();
-          this.form.controls.compressorControlAdjustment.disable();
-          // Compressor type
-          this.form.controls.compressorSpecificPowerControl.disable();
-        }
+  removeEquipment() {
+    // Delegates removal to the host component which manages both arrays in sync
+    if (this.isBaseline()) {
+      this.compressedAirReductionService.baselineData.next(
+        this.baselineData().filter((_, i) => i !== this.index())
+      );
+      // Also remove the paired modification item if one exists
+      const modData = this.modificationData();
+      if (modData.length > 1 && modData[this.index()]) {
+        this.compressedAirReductionService.modificationData.next(
+          modData.filter((_, i) => i !== this.index())
+        );
       }
+    } else {
+      this.compressedAirReductionService.modificationData.next(
+        this.modificationData().filter((_, i) => i !== this.index())
+      );
     }
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.setOpHoursModalWidth();
-    }, 100)
+  // --- Measurement method / utility type change handlers ---
+  // These must update validators (which depend on the active method/type) then trigger save.
+
+  changeMeasurementMethod() {
+    this.compressedAirReductionService.setValidators(this.form);
+    if (this.form.valid) { this.saveChanges(); }
+  }
+
+  changeUtilityType() {
+    this.compressedAirReductionService.setValidators(this.form);
+    if (this.form.valid) { this.saveChanges(); }
+  }
+
+  // --- Compressor control helpers ---
+
+  changeCompressorControl() {
+    const controlValue = this.form.controls.compressorControl.value;
+    if (controlValue !== 8) {
+      // Preset control — look up the adjustment percentage and apply it
+      this.compressorCustomControl = false;
+      const control = this.compressorControls.find(c => c.value === controlValue);
+      this.form.patchValue({ compressorControlAdjustment: control?.adjustment ?? 0 });
+    } else {
+      // Custom control — show the editable adjustment input
+      this.compressorCustomControl = true;
+    }
+    this.compressedAirReductionService.setValidators(this.form);
+    if (this.form.valid) { this.saveChanges(); }
   }
 
   changeCompressorType() {
-    if (!this.compressorCustomSpecificPower) {
-      if (this.form.controls.compressorSpecificPowerControl.value == 4) {
-        this.compressorCustomSpecificPower = true;
-      }
-      let specificPower: number = this.getSpecificPower();
-      this.form.patchValue({ compressorSpecificPower: specificPower });
-    }
-    else if (this.form.controls.compressorSpecificPowerControl.value != 4) {
+    const typeValue = this.form.controls.compressorSpecificPowerControl.value;
+    if (typeValue !== 4) {
+      // Preset type — look up the specific power and apply it (with unit conversion if metric)
       this.compressorCustomSpecificPower = false;
-      let specificPower: number = this.getSpecificPower();
+      const specificPower = this.getSpecificPower();
       this.form.patchValue({ compressorSpecificPower: specificPower });
-    }
-    else {
-      if (this.form.controls.compressorSpecificPower.value) {
-        this.compressorSpecificPowerControls[4].specificPower = this.form.controls.compressorSpecificPower.value;
-      }
+    } else {
+      // Custom type — show the editable specific power input
+      this.compressorCustomSpecificPower = true;
     }
     this.compressedAirReductionService.setValidators(this.form);
-    this.calculate();
+    if (this.form.valid) { this.saveChanges(); }
   }
 
-  getSpecificPower(): number {
-    let specificPower: number = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value].specificPower;
-
-    if (this.settings.unitsOfMeasure != 'Imperial') {
+  private getSpecificPower(): number {
+    const typeControl = this.compressorSpecificPowerControls[this.form.controls.compressorSpecificPowerControl.value];
+    let specificPower = typeControl?.specificPower ?? 0;
+    if (this.settings().unitsOfMeasure !== 'Imperial') {
       specificPower = this.convertCompressedAirReductionService.convertSpecificPowerToMetric(specificPower);
       specificPower = this.convertCompressedAirReductionService.roundVal(specificPower);
     } else {
@@ -221,85 +258,34 @@ export class CompressedAirReductionFormComponent implements OnInit {
     return specificPower;
   }
 
-  changeCompressorControl() {
-    if (!this.compressorCustomControl) {
-      if (this.form.controls.compressorControl.value == 8) {
-        this.compressorCustomControl = true;
-        let control = this.compressorControls.find(controlItem => { return controlItem.value == this.form.controls.compressorControl.value });
-        this.form.patchValue({ compressorControlAdjustment: control.adjustment });
-      }
-      else {
-        let control = this.compressorControls.find(controlItem => { return controlItem.value == this.form.controls.compressorControl.value });
-        this.form.patchValue({ compressorControlAdjustment: control.adjustment });
-      }
-    }
-    else if (this.form.controls.compressorControl.value !== 8) {
-      this.compressorCustomControl = false;
-      let control = this.compressorControls.find(controlItem => { return controlItem.value == this.form.controls.compressorControl.value });
-      this.form.patchValue({ compressorControlAdjustment: control.adjustment });
-    }
-    else {
-      if (this.form.controls.compressorControlAdjustment.valid) {
-        //custom
-        this.compressorControls[11].adjustment = this.form.controls.compressorControlAdjustment.value;
-      }
-    }
-    this.compressedAirReductionService.setValidators(this.form);
-    this.calculate();
-  }
+  // --- UI helpers ---
 
-  changeUtilityType() {
-    this.compressedAirReductionService.setValidators(this.form);
-    this.calculate();
-  }
-
-  changeMeasurementMethod() {
-    this.compressedAirReductionService.setValidators(this.form);
-    this.calculate();
-  }
-
-  calculate() {
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.getObjFromForm(this.form);
-    this.emitCalculate.emit(tmpObj);
-  }
-
-  removeEquipment() {
-    this.emitRemoveEquipment.emit(this.index);
-  }
-
-  editEquipmentName() {
-    this.isEditingName = true;
-  }
-
-  doneEditingName() {
-    this.isEditingName = false;
-  }
+  editEquipmentName() { this.isEditingName = true; }
+  doneEditingName() { this.isEditingName = false; }
 
   focusField(str: string) {
-    this.emitChangeField.emit(str);
+    this.compressedAirReductionService.focusedField.next(str);
   }
 
   focusOut() {
+    this.compressedAirReductionService.focusedField.next(null);
   }
 
-  closeOperatingHoursModal() {
-    this.showOperatingHoursModal = false;
-  }
-
-  openOperatingHoursModal() {
-    this.showOperatingHoursModal = true;
-  }
+  openOperatingHoursModal() { this.showOperatingHoursModal = true; }
+  closeOperatingHoursModal() { this.showOperatingHoursModal = false; }
 
   updateOperatingHours(oppHours: OperatingHours) {
     this.compressedAirReductionService.operatingHours = oppHours;
     this.form.controls.hoursPerYear.patchValue(oppHours.hoursPerYear);
-    this.calculate();
     this.closeOperatingHoursModal();
   }
 
+  onResize(_event: unknown) { this.setOpHoursModalWidth(); }
+
   setOpHoursModalWidth() {
-    if (this.formElement.nativeElement.clientWidth) {
-      this.formWidth = this.formElement.nativeElement.clientWidth;
+    const el = this.formElement();
+    if (el?.nativeElement.clientWidth) {
+      this.formWidth = el.nativeElement.clientWidth;
     }
   }
 }

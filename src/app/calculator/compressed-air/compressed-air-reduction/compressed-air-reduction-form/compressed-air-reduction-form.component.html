@@ -1,277 +1,352 @@
 <div class="mb-4 p-2 form-card">
+  @let _isBaseline = isBaseline();
+  @let _idString = idString();
+  @let _settings = settings();
+  @let _individualResults = individualResults();
+
   <form [formGroup]="form" #formElement>
 
-    <label *ngIf="!isEditingName" class="group-label w-100 bold">
-      <span (click)="editEquipmentName(index, true)" class="fa fa-pencil pr-2 btn-edit-name"></span>
+    @if (!isEditingName) {
+    <label class="group-label w-100 bold">
+      <span (click)="editEquipmentName()" class="fa fa-pencil pr-2 btn-edit-name"></span>
       <span>{{form.controls.name.value}}</span>
-      <span *ngIf="!isBaseline || (isBaseline && index !== 0)" class="fa fa-times-circle-o pull-right large" (click)="removeEquipment(index)"></span>
+      <!-- Show remove button for all items except the first baseline item -->
+      @if (!_isBaseline || (_isBaseline && index() !== 0)) {
+      <span class="fa fa-times-circle-o pull-right large" (click)="removeEquipment()"></span>
+      }
     </label>
-    <label *ngIf="isEditingName" class="group-label w-100">
+    }
+    @if (isEditingName) {
+    <label class="group-label w-100">
       <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
-      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();" (input)="calculate()">
-      <span class="alert-danger small ml-2" *ngIf="form.controls.name.invalid && !form.controls.name.pristine">
-        <span *ngIf="form.controls.name.errors.required">Please enter a name.</span>
+      <input type="text" id="equipmentName" formControlName="name" onfocus="this.select();">
+      @if (form.controls.name.invalid && !form.controls.name.pristine) {
+      <span class="alert-danger small ml-2">
+        @if (form.controls.name.errors?.required) {
+        <span>Please enter a name.</span>
+        }
       </span>
+      }
     </label>
+    }
 
     <div class="form-section">
 
       <div class="form-group">
-        <label class="small" for="{{'hoursPerYear_'+idString}}">Annual Operating Hours</label>
+        <label class="small" for="{{'hoursPerYear_'+_idString}}">Annual Operating Hours</label>
         <div class="input-group">
           <span class="input-group-addon op-hour-addon units">
             <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
           </span>
-          <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+idString}}"
-            formControlName="hoursPerYear" type="number" (input)="calculate()" (focus)="focusField('operationHours')"
+          <input class="form-control" name="hoursPerYear" id="{{'hoursPerYear_'+_idString}}"
+            formControlName="hoursPerYear" type="number" (focus)="focusField('operationHours')"
             (blur)="focusOut()" onfocus="this.select();">
           <span class="units input-group-addon">hrs/yr</span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.hoursPerYear.invalid && !form.controls.hoursPerYear.pristine">
-          <span *ngIf="form.controls.hoursPerYear.errors.required">Value required.</span>
-          <span *ngIf="form.controls.hoursPerYear.errors.max">Value can't be greater than
-            {{form.controls.hoursPerYear.errors.max.max}}.</span>
-          <span *ngIf="form.controls.hoursPerYear.errors.min">Value can't be less than
-            {{form.controls.hoursPerYear.errors.min.min}}.</span>
+        @if (form.controls.hoursPerYear.invalid && !form.controls.hoursPerYear.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.hoursPerYear.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.hoursPerYear.errors?.max) {
+          <span>Value can't be greater than {{form.controls.hoursPerYear.errors?.max?.max}}.</span>
+          }
+          @if (form.controls.hoursPerYear.errors?.min) {
+          <span>Value can't be less than {{form.controls.hoursPerYear.errors?.min?.min}}.</span>
+          }
         </span>
+        }
       </div>
 
+      <!-- Utility type is only editable on the first baseline item; others are read-only -->
       <div class="form-group">
-        <label class="small" for="{{'utilityType_'+idString}}">Utility Type</label>
+        <label class="small" for="{{'utilityType_'+_idString}}">Utility Type</label>
         <div class="input-group">
-          <select class="form-control" name="utilityType" id="{{'utilityType_'+idString}}" formControlName="utilityType"
-            (change)="changeUtilityType()" (focus)="focusField('utilityType')" (blur)="focusOut()">
-            <option *ngFor="let type of utilityTypes" [ngValue]="type.value">{{type.name}}</option>
+          <select class="form-control" name="utilityType" id="{{'utilityType_'+_idString}}"
+            formControlName="utilityType" (change)="changeUtilityType()"
+            (focus)="focusField('utilityType')" (blur)="focusOut()">
+            @for (type of utilityTypes; track type.value) {
+            <option [ngValue]="type.value">{{type.name}}</option>
+            }
           </select>
         </div>
       </div>
 
-      <div class="form-group" *ngIf="form.controls.utilityType.value == 0">
-        <label class="small" for="{{'compressedAirCost_'+idString}}">Compressed Air Cost</label>
+      @if (form.controls.utilityType.value === 0) {
+      <div class="form-group">
+        <label class="small" for="{{'compressedAirCost_'+_idString}}">Compressed Air Cost</label>
         <div class="input-group">
-          <input class="form-control" type="number" name="compressedAirCost" id="{{'compressedAirCost_'+idString}}"
-            formControlName="compressedAirCost" (input)="calculate()" (focus)="focusField('compressedAirCost')"
-            (blur)="focusOut()">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">$/scf</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">$/m<sup>3</sup></span>
+          <input class="form-control" type="number" name="compressedAirCost" id="{{'compressedAirCost_'+_idString}}"
+            formControlName="compressedAirCost" (focus)="focusField('compressedAirCost')" (blur)="focusOut()">
+          @if (_settings.unitsOfMeasure === 'Imperial') {
+          <span class="units input-group-addon">$/scf</span>
+          } @else {
+          <span class="units input-group-addon">$/m<sup>3</sup></span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.compressedAirCost.invalid && !form.controls.compressedAirCost.pristine">
-          <span *ngIf="form.controls.compressedAirCost.errors.required">Value required.</span>
-          <span *ngIf="form.controls.compressedAirCost.errors.min">Value can't be less than
-            {{form.controls.compressedAirCost.errors.min.min}}.</span>
+        @if (form.controls.compressedAirCost.invalid && !form.controls.compressedAirCost.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.compressedAirCost.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.compressedAirCost.errors?.min) {
+          <span>Value can't be less than {{form.controls.compressedAirCost.errors?.min?.min}}.</span>
+          }
         </span>
+        }
       </div>
+      }
 
-      <div class="form-group" *ngIf="form.controls.utilityType.value == 1">
-        <label class="small" for="{{'electricityCost_'+idString}}">Electricity Cost</label>
+      @if (form.controls.utilityType.value === 1) {
+      <div class="form-group">
+        <label class="small" for="{{'electricityCost_'+_idString}}">Electricity Cost</label>
         <div class="input-group">
-          <input class="form-control" type="number" name="electricityCost" id="{{'electricityCost_'+idString}}"
-            formControlName="electricityCost" (input)="calculate()" (focus)="focusField('electricityCost')"
-            (blur)="focusOut()">
+          <input class="form-control" type="number" name="electricityCost" id="{{'electricityCost_'+_idString}}"
+            formControlName="electricityCost" (focus)="focusField('electricityCost')" (blur)="focusOut()">
           <span class="units input-group-addon">$/kWh</span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine">
-          <span *ngIf="form.controls.electricityCost.errors.required">Value required.</span>
-          <span *ngIf="form.controls.electricityCost.errors.min">Value can't be less than
-            {{form.controls.electricityCost.errors.min.min}}.</span>
+        @if (form.controls.electricityCost.invalid && !form.controls.electricityCost.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.electricityCost.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.electricityCost.errors?.min) {
+          <span>Value can't be less than {{form.controls.electricityCost.errors?.min?.min}}.</span>
+          }
         </span>
+        }
       </div>
-
-
+      }
 
       <div class="form-group">
-        <label class="small" for="{{'measurementMethod_'+idString}}">Measurement Method</label>
+        <label class="small" for="{{'measurementMethod_'+_idString}}">Measurement Method</label>
         <div class="input-group">
-          <select class="form-control" name="measurementMethod" id="{{'measurementMethod_'+idString}}"
+          <select class="form-control" name="measurementMethod" id="{{'measurementMethod_'+_idString}}"
             formControlName="measurementMethod" (change)="changeMeasurementMethod()"
             (focus)="focusField('measurementMethod')" (blur)="focusOut()">
-            <option *ngFor="let option of measurementOptions" [ngValue]="option.value">{{option.name}}</option>
+            @for (option of measurementOptions; track option.value) {
+            <option [ngValue]="option.value">{{option.name}}</option>
+            }
           </select>
         </div>
       </div>
 
     </div>
 
-    <!-- flow meter method -->
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 0">
-
+    <!-- Flow Meter Method -->
+    @if (form.controls.measurementMethod.value === 0) {
+    <div class="form-section">
       <div class="form-group">
-        <label class="small" for="{{'meterReading_'+idString}}">Meter Reading</label>
+        <label class="small" for="{{'meterReading_'+_idString}}">Meter Reading</label>
         <div class="input-group">
-          <input class="form-control" name="meterReading" id="{{'meterReading_'+idString}}"
-            formControlName="meterReading" type="number" (input)="calculate()" (focus)="focusField('meterReading')"
+          <input class="form-control" name="meterReading" id="{{'meterReading_'+_idString}}"
+            formControlName="meterReading" type="number" (focus)="focusField('meterReading')"
             (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
+          @if (_settings.unitsOfMeasure === 'Imperial') {
+          <span class="units input-group-addon">scfm</span>
+          } @else {
+          <span class="units input-group-addon">m<sup>3</sup>/min</span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.meterReading.invalid && !form.controls.meterReading.pristine">
-          <span *ngIf="form.controls.meterReading.errors.required">Value required.</span>
-          <span *ngIf="form.controls.meterReading.errors.min">Value can't be less than
-            {{form.controls.meterReading.errors.min.min}}.</span>
+        @if (form.controls.meterReading.invalid && !form.controls.meterReading.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.meterReading.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.meterReading.errors?.min) {
+          <span>Value can't be less than {{form.controls.meterReading.errors?.min?.min}}.</span>
+          }
         </span>
+        }
       </div>
-
     </div>
+    }
 
-    <!-- bag meter method -->
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
-
+    <!-- Bag Method -->
+    @if (form.controls.measurementMethod.value === 1) {
+    <div class="form-section">
       <div class="form-group">
-        <label class="small" for="{{'bagVolume_'+idString}}">Bag Volume</label>
+        <label class="small" for="{{'bagVolume_'+_idString}}">Bag Volume</label>
         <div class="input-group">
-          <input class="form-control" name="bagVolume" id="{{'bagVolume_'+idString}}" formControlName="bagVolume" type="number"
-            (input)="calculate()" (focus)="focusField('bagVolume')" (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">gal</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">L</span>
+          <input class="form-control" name="bagVolume" id="{{'bagVolume_'+_idString}}" formControlName="bagVolume"
+            type="number" (focus)="focusField('bagVolume')" (blur)="focusOut()" onfocus="this.select();">
+          @if (_settings.unitsOfMeasure === 'Imperial') {
+          <span class="units input-group-addon">gal</span>
+          } @else {
+          <span class="units input-group-addon">L</span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.bagVolume.invalid && !form.controls.bagVolume.pristine">
-          <span *ngIf="form.controls.bagVolume.errors.required">Value required.</span>
-          <span *ngIf="form.controls.bagVolume.errors.greaterThan">Value must be greater than
-            {{form.controls.bagVolume.errors.greaterThan}}.</span>
+        @if (form.controls.bagVolume.invalid && !form.controls.bagVolume.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.bagVolume.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.bagVolume.errors?.greaterThan) {
+          <span>Value must be greater than {{form.controls.bagVolume.errors?.greaterThan}}.</span>
+          }
         </span>
+        }
       </div>
 
       <div class="form-group">
-        <label class="small" for="{{'bagFillTime_'+idString}}">Bag Fill Time</label>
+        <label class="small" for="{{'bagFillTime_'+_idString}}">Bag Fill Time</label>
         <div class="input-group">
-          <input class="form-control" name="bagFillTime" id="{{'bagFillTime_'+idString}}" formControlName="bagFillTime"
-            type="number" (input)="calculate()" (focus)="focusField('bagFillTime')" (blur)="focusOut()"
-            onfocus="this.select();">
+          <input class="form-control" name="bagFillTime" id="{{'bagFillTime_'+_idString}}"
+            formControlName="bagFillTime" type="number" (focus)="focusField('bagFillTime')"
+            (blur)="focusOut()" onfocus="this.select();">
           <span class="units input-group-addon">s</span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.bagFillTime.invalid && !form.controls.bagFillTime.pristine">
-          <span *ngIf="form.controls.bagFillTime.errors.required">Value required.</span>
-          <span *ngIf="form.controls.bagFillTime.errors.greaterThan">Value must be greater than
-            {{form.controls.bagFillTime.errors.greaterThan}}.</span>
+        @if (form.controls.bagFillTime.invalid && !form.controls.bagFillTime.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.bagFillTime.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.bagFillTime.errors?.greaterThan) {
+          <span>Value must be greater than {{form.controls.bagFillTime.errors?.greaterThan}}.</span>
+          }
         </span>
+        }
       </div>
-
     </div>
+    }
 
-    <!-- orifice/pressure meter method -->
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 2">
-
+    <!-- Orifice / Pressure Method -->
+    @if (form.controls.measurementMethod.value === 2) {
+    <div class="form-section">
       <div class="form-group">
-        <label class="small" for="{{'nozzleType_'+idString}}">Nozzle Type</label>
+        <label class="small" for="{{'nozzleType_'+_idString}}">Nozzle Type</label>
         <div class="input-group">
-          <select class="form-control" name="nozzleType" id="{{'nozzleType_'+idString}}" formControlName="nozzleType"
-            (change)="calculate()" (focus)="focusField('nozzleType')" (blur)="focusOut()">
-            <option *ngFor="let nozzle of nozzleTypes" [ngValue]="nozzle.value">{{nozzle.name}}</option>
+          <select class="form-control" name="nozzleType" id="{{'nozzleType_'+_idString}}"
+            formControlName="nozzleType" (focus)="focusField('nozzleType')" (blur)="focusOut()">
+            @for (nozzle of nozzleTypes; track nozzle.value) {
+            <option [ngValue]="nozzle.value">{{nozzle.name}}</option>
+            }
           </select>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="small" for="{{'numberOfNozzles_'+idString}}">Number of Nozzles</label>
+        <label class="small" for="{{'numberOfNozzles_'+_idString}}">Number of Nozzles</label>
         <div class="input-group">
-          <input class="form-control" name="numberOfNozzles" id="{{'numberOfNozzles_'+idString}}"
-            formControlName="numberOfNozzles" type="number" (input)="calculate()"
-            (focus)="focusField('numberOfNozzles')" (blur)="focusOut()" onfocus="this.select();">
+          <input class="form-control" name="numberOfNozzles" id="{{'numberOfNozzles_'+_idString}}"
+            formControlName="numberOfNozzles" type="number" (focus)="focusField('numberOfNozzles')"
+            (blur)="focusOut()" onfocus="this.select();">
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.numberOfNozzles.invalid && !form.controls.numberOfNozzles.pristine">
-          <span *ngIf="form.controls.numberOfNozzles.errors.required">Value required.</span>
-          <span *ngIf="form.controls.numberOfNozzles.errors.min">Value can't be less than
-            {{form.controls.numberOfNozzles.errors.min.min}}.</span>
+        @if (form.controls.numberOfNozzles.invalid && !form.controls.numberOfNozzles.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.numberOfNozzles.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.numberOfNozzles.errors?.min) {
+          <span>Value can't be less than {{form.controls.numberOfNozzles.errors?.min?.min}}.</span>
+          }
         </span>
+        }
       </div>
 
       <div class="form-group">
-        <label class="small" for="{{'supplyPressure_'+idString}}">Supply Pressure</label>
+        <label class="small" for="{{'supplyPressure_'+_idString}}">Supply Pressure</label>
         <div class="input-group">
-          <input class="form-control" name="supplyPressure" id="{{'supplyPressure_'+idString}}"
-            formControlName="supplyPressure" type="number" (input)="calculate()" (focus)="focusField('supplyPressure')"
+          <input class="form-control" name="supplyPressure" id="{{'supplyPressure_'+_idString}}"
+            formControlName="supplyPressure" type="number" (focus)="focusField('supplyPressure')"
             (blur)="focusOut()" onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">barg</span>
+          @if (_settings.unitsOfMeasure === 'Imperial') {
+          <span class="units input-group-addon">psig</span>
+          } @else {
+          <span class="units input-group-addon">barg</span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.supplyPressure.invalid && !form.controls.supplyPressure.pristine">
-          <span *ngIf="form.controls.supplyPressure.errors.required">Value required.</span>
-          <span *ngIf="form.controls.supplyPressure.errors.min">Value can't be less than
-            {{form.controls.supplyPressure.errors.min.min}}.</span>
+        @if (form.controls.supplyPressure.invalid && !form.controls.supplyPressure.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.supplyPressure.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.supplyPressure.errors?.min) {
+          <span>Value can't be less than {{form.controls.supplyPressure.errors?.min?.min}}.</span>
+          }
         </span>
+        }
       </div>
 
+      <!-- Inline per-nozzle flow rate result from the calculation -->
       <div class="row">
         <div class="col-6">
           <label class="small bold">Nozzle Flow Rate</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{individualResults.singleNozzleFlowRate | number:'.0-1'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
-            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
+          <span class="small bold">{{_individualResults?.singleNozzleFlowRate | number:'.0-1'}}
+            @if (_settings.unitsOfMeasure === 'Imperial') {
+            <span>scfm</span>
+            } @else {
+            <span>m<sup>3</sup>/min</span>
+            }
           </span>
         </div>
       </div>
-
     </div>
+    }
 
-    <!-- offsheet/other method -->
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 3">
-
+    <!-- Offsheet / Other Method -->
+    @if (form.controls.measurementMethod.value === 3) {
+    <div class="form-section">
       <div class="form-group">
-        <label class="small" for="{{'consumption_'+idString}}">Consumption</label>
+        <label class="small" for="{{'consumption_'+_idString}}">Consumption</label>
         <div class="input-group">
-          <input class="form-control" name="consumption" id="{{'consumption_'+idString}}" formControlName="consumption"
-            type="number" (input)="calculate()" (focus)="focusField('consumption')" (blur)="focusOut()"
-            onfocus="this.select();">
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kscf/yr</span>
-          <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
+          <input class="form-control" name="consumption" id="{{'consumption_'+_idString}}"
+            formControlName="consumption" type="number" (focus)="focusField('consumption')"
+            (blur)="focusOut()" onfocus="this.select();">
+          @if (_settings.unitsOfMeasure === 'Imperial') {
+          <span class="units input-group-addon">kscf/yr</span>
+          } @else {
+          <span class="units input-group-addon">m<sup>3</sup>/yr</span>
+          }
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.consumption.invalid && !form.controls.consumption.pristine">
-          <span *ngIf="form.controls.consumption.errors.required">Value required.</span>
-          <span *ngIf="form.controls.consumption.errors.min">Value can't be less than
-            {{form.controls.consumption.errors.min.min}}.</span>
+        @if (form.controls.consumption.invalid && !form.controls.consumption.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.consumption.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.consumption.errors?.min) {
+          <span>Value can't be less than {{form.controls.consumption.errors?.min?.min}}.</span>
+          }
         </span>
+        }
       </div>
-
     </div>
+    }
 
-    <div [ngClass]="{'form-section': form.controls.utilityType.value == 1}" *ngIf="form.controls.measurementMethod.value != 3">
+    <!-- Flow rate and # of units — shown for all methods except offsheet -->
+    @if (form.controls.measurementMethod.value !== 3) {
+    <div [ngClass]="{'form-section': form.controls.utilityType.value === 1}">
       <div class="row">
         <div class="col-6">
           <label class="small bold">Flow Rate</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{individualResults.flowRate | number:'1.0-1'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">scfm</span>
-            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/min</span>
+          <span class="small bold">{{_individualResults?.flowRate | number:'1.0-1'}}
+            @if (_settings.unitsOfMeasure === 'Imperial') {
+            <span>scfm</span>
+            } @else {
+            <span>m<sup>3</sup>/min</span>
+            }
           </span>
         </div>
       </div>
 
-      <div class="form-group" *ngIf="form.controls.measurementMethod.value != 2">
-        <label class="small" for="{{'units_'+idString}}"># of Units</label>
-        <div class="input-group">
-          <input class="form-control" name="units" id="{{'units_'+idString}}" formControlName="units" type="number"
-            (input)="calculate()" (focus)="focusField('numberOfUnits')" (blur)="focusOut()" onfocus="this.select();">
-        </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.units.invalid && !form.controls.units.pristine">
-          <span *ngIf="form.controls.units.errors.required">Value required.</span>
-          <span *ngIf="form.controls.units.errors.min">Value can't be less than
-            {{form.controls.units.errors.min.min}}.</span>
-        </span>
-      </div>
-    </div>
-
-    <!-- electricity form -->
-    <div class="pb-1" *ngIf="form.controls.utilityType.value == 1">
+      <!-- # of units not applicable for pressure method (nozzle count already captured) -->
+      @if (form.controls.measurementMethod.value !== 2) {
       <div class="form-group">
-        <label class="small" for="{{'compressorControl_'+idString}}">Trim Compressor Control</label>
+        <label class="small" for="{{'units_'+_idString}}"># of Units</label>
         <div class="input-group">
-          <select class="form-control" name="compressorControl" id="{{'compressorControl_'+idString}}"
+          <input class="form-control" name="units" id="{{'units_'+_idString}}" formControlName="units"
+            type="number" (focus)="focusField('numberOfUnits')" (blur)="focusOut()" onfocus="this.select();">
+        </div>
+        @if (form.controls.units.invalid && !form.controls.units.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.units.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.units.errors?.min) {
+          <span>Value can't be less than {{form.controls.units.errors?.min?.min}}.</span>
+          }
+        </span>
+        }
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Compressor electricity section — only for electricity utility type -->
+    @if (form.controls.utilityType.value === 1) {
+    <div class="pb-1">
+
+      <!-- Compressor control fields are editable on baseline only; modification reads from baseline -->
+      <div class="form-group">
+        <label class="small" for="{{'compressorControl_'+_idString}}">Trim Compressor Control</label>
+        <div class="input-group">
+          <select class="form-control" name="compressorControl" id="{{'compressorControl_'+_idString}}"
             formControlName="compressorControl" (change)="changeCompressorControl()"
             (focus)="focusField('compressorControl')" (blur)="focusOut()">
-            <!-- <option *ngFor="let control of compressorControls" [ngValue]="control.value">{{control.name}}</option> -->
             <optgroup label="Screw Compressor">
               <option [ngValue]="100">Inlet Modulation</option>
               <option [ngValue]="101">Variable Displacement</option>
@@ -300,91 +375,112 @@
         </div>
       </div>
 
-      <div class="row" *ngIf="!compressorCustomControl">
+      <!-- Read-only display when a preset control is selected -->
+      @if (!compressorCustomControl) {
+      <div class="row">
         <div class="col-6">
-          <label class="small" for="compressorControlAdjustment">Compressor Control Adjustment</label>
+          <label class="small">Compressor Control Adjustment</label>
         </div>
         <div class="col-6 text-center">
-          <span class="small bold">{{form.controls.compressorControlAdjustment.value | number:'1.0-0'}} %</span>
+          <span class="small bold">{{form.getRawValue().compressorControlAdjustment | number:'1.0-0'}} %</span>
         </div>
       </div>
+      }
 
-      <div class="form-group" *ngIf="compressorCustomControl">
-        <label class="small" for="{{'compressorControlAdjustment_'+idString}}">Compressor Control Adjustment</label>
-
+      <!-- Editable when custom control (value 8) is selected -->
+      @if (compressorCustomControl) {
+      <div class="form-group">
+        <label class="small" for="{{'compressorControlAdjustment_'+_idString}}">Compressor Control Adjustment</label>
         <div class="input-group">
           <input class="form-control" name="compressorControlAdjustment"
-            id="{{'compressorControlAdjustment_'+idString}}" formControlName="compressorControlAdjustment" type="number"
-            (input)="changeCompressorControl()" (focus)="focusField('compressorControlAdjustment')" (blur)="focusOut()"
+            id="{{'compressorControlAdjustment_'+_idString}}" formControlName="compressorControlAdjustment"
+            type="number" (focus)="focusField('compressorControlAdjustment')" (blur)="focusOut()"
             onfocus="this.select();">
           <span class="units input-group-addon">%</span>
         </div>
-        <span class="alert-danger pull-right small"
-          *ngIf="form.controls.compressorControlAdjustment.invalid && !form.controls.compressorControlAdjustment.pristine">
-          <span *ngIf="form.controls.compressorControlAdjustment.errors.required">Value required.</span>
-          <span *ngIf="form.controls.compressorControlAdjustment.errors.max">Value can't be greater than
-            {{form.controls.compressorControlAdjustment.errors.max.max}}.</span>
-          <span *ngIf="form.controls.compressorControlAdjustment.errors.min">Value can't be less than
-            {{form.controls.compressorControlAdjustment.errors.min.min}}.</span>
+        @if (form.controls.compressorControlAdjustment.invalid && !form.controls.compressorControlAdjustment.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.compressorControlAdjustment.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.compressorControlAdjustment.errors?.max) {
+          <span>Value can't be greater than {{form.controls.compressorControlAdjustment.errors?.max?.max}}.</span>
+          }
+          @if (form.controls.compressorControlAdjustment.errors?.min) {
+          <span>Value can't be less than {{form.controls.compressorControlAdjustment.errors?.min?.min}}.</span>
+          }
         </span>
+        }
       </div>
+      }
 
       <div class="form-group">
-        <label class="small" for="{{'compressorSpecificPowerControl_'+idString}}">Compressor Type</label>
+        <label class="small" for="{{'compressorSpecificPowerControl_'+_idString}}">Compressor Type</label>
         <div class="input-group">
           <select class="form-control" name="compressorSpecificPowerControl"
-            id="{{'compressorSpecificPowerControl_'+idString}}" formControlName="compressorSpecificPowerControl"
+            id="{{'compressorSpecificPowerControl_'+_idString}}" formControlName="compressorSpecificPowerControl"
             (change)="changeCompressorType()" (focus)="focusField('compressorSpecificPowerControl')"
             (blur)="focusOut()">
-            <option *ngFor="let type of compressorSpecificPowerControls" [ngValue]="type.value">{{type.name}}</option>
+            @for (type of compressorSpecificPowerControls; track type.value) {
+            <option [ngValue]="type.value">{{type.name}}</option>
+            }
           </select>
         </div>
       </div>
 
-      <div *ngIf="isBaseline">
-        <div class="row" *ngIf="!compressorCustomSpecificPower">
-          <div class="col-6">
-            <label class="small" for="compressorSpecificPower">Compressor Specific Power</label>
-          </div>
-          <div class="col-6 text-center">
-            <span class="small bold">{{form.controls.compressorSpecificPower.value | number:'1.0-2'}}
-              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 scfm)</span>
-              <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
-            </span>
-          </div>
+      <!-- Specific power: editable on baseline, read-only on modification (uses baseline value) -->
+      @if (_isBaseline) {
+      @if (!compressorCustomSpecificPower) {
+      <div class="row">
+        <div class="col-6">
+          <label class="small">Compressor Specific Power</label>
         </div>
-
-        <div class="form-group" *ngIf="compressorCustomSpecificPower">
-          <label class="small" for="{{'compressorSpecificPower_'+idString}}">Compressor Specific Power</label>
-          <div class="input-group">
-            <input class="form-control" name="compressorSpecificPower" id="{{'compressorSpecificPower_'+idString}}"
-              formControlName="compressorSpecificPower" type="number" (input)="calculate()"
-              (focus)="focusField('compressorSpecificPower')" (blur)="focusOut()" onfocus="this.select();">
-            <span class="units input-group-addon" *ngIf="settings.unitsOfMeasure == 'Imperial'">kW/(100 scfm)</span>
-            <span class="units input-group-addon"
-              *ngIf="settings.unitsOfMeasure != 'Imperial'">kW/(m<sup>3</sup>/min)</span>
-          </div>
-          <span class="alert-danger pull-right small"
-            *ngIf="form.controls.compressorSpecificPower.invalid && !form.controls.compressorSpecificPower.pristine">
-            <span *ngIf="form.controls.compressorSpecificPower.errors.required">Value required.</span>
-            <span *ngIf="form.controls.compressorSpecificPower.errors.min">Value can't be less than
-              {{form.controls.compressorSpecificPower.errors.min.min}}.</span>
+        <div class="col-6 text-center">
+          <span class="small bold">{{form.controls.compressorSpecificPower.value | number:'1.0-2'}}
+            @if (_settings.unitsOfMeasure === 'Imperial') {
+            <span>kW/(100 scfm)</span>
+            } @else {
+            <span>kW/(m<sup>3</sup>/min)</span>
+            }
           </span>
         </div>
       </div>
-      <div *ngIf="!isBaseline">
-        <div class="row">
-          <div class="col-6">
-            <label class="small" for="compressorSpecificPower">Compressor Specific Power</label>
-          </div>
-          <div class="col-6 text-center">
-            <span class="small bold">Calculated using baseline
-            </span>
-          </div>
+      }
+      @if (compressorCustomSpecificPower) {
+      <div class="form-group">
+        <label class="small" for="{{'compressorSpecificPower_'+_idString}}">Compressor Specific Power</label>
+        <div class="input-group">
+          <input class="form-control" name="compressorSpecificPower" id="{{'compressorSpecificPower_'+_idString}}"
+            formControlName="compressorSpecificPower" type="number"
+            (focus)="focusField('compressorSpecificPower')" (blur)="focusOut()" onfocus="this.select();">
+          @if (_settings.unitsOfMeasure === 'Imperial') {
+          <span class="units input-group-addon">kW/(100 scfm)</span>
+          } @else {
+          <span class="units input-group-addon">kW/(m<sup>3</sup>/min)</span>
+          }
+        </div>
+        @if (form.controls.compressorSpecificPower.invalid && !form.controls.compressorSpecificPower.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form.controls.compressorSpecificPower.errors?.required) { <span>Value required.</span> }
+          @if (form.controls.compressorSpecificPower.errors?.min) {
+          <span>Value can't be less than {{form.controls.compressorSpecificPower.errors?.min?.min}}.</span>
+          }
+        </span>
+        }
+      </div>
+      }
+      } @else {
+      <!-- Modification: specific power is always inherited from baseline -->
+      <div class="row">
+        <div class="col-6">
+          <label class="small">Compressor Specific Power</label>
+        </div>
+        <div class="col-6 text-center">
+          <span class="small bold">Calculated using baseline</span>
         </div>
       </div>
+      }
 
     </div>
+    }
 
   </form>
 </div>

@@ -19,8 +19,8 @@ export class CaReductionTreasureHuntService {
   }
 
   setCalculatorInputFromOpportunity(compressedAirReduction: CompressedAirReductionTreasureHunt) {
-    this.compressedAirReductionService.baselineData = _.cloneDeep(compressedAirReduction.baseline);
-    this.compressedAirReductionService.modificationData = _.cloneDeep(compressedAirReduction.modification);
+    this.compressedAirReductionService.baselineData.next(_.cloneDeep(compressedAirReduction.baseline));
+    this.compressedAirReductionService.modificationData.next(_.cloneDeep(compressedAirReduction.modification));
   }
 
   deleteOpportunity(index: number, treasureHunt: TreasureHunt): TreasureHunt {
@@ -37,14 +37,13 @@ export class CaReductionTreasureHuntService {
   }
 
   resetCalculatorInputs() {
-    this.compressedAirReductionService.baselineData = undefined;
-    this.compressedAirReductionService.modificationData = undefined;
+    this.compressedAirReductionService.baselineData.next([]);
+    this.compressedAirReductionService.modificationData.next([]);
   }
 
 
   getTreasureHuntOpportunityResults(compressedAirReduction: CompressedAirReductionTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
-    this.compressedAirReductionService.calculateResults(settings, compressedAirReduction.baseline, compressedAirReduction.modification);
-    let results: CompressedAirReductionResults = this.compressedAirReductionService.compressedAirResults.getValue(); 
+    let results: CompressedAirReductionResults = this.compressedAirReductionService.getResults(settings, compressedAirReduction.baseline, compressedAirReduction.modification);
 
 
     // 7419 temporary patch results
