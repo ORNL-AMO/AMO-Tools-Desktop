@@ -164,17 +164,3 @@
 .ssmt-diagram .no-steam-flow .hidden-chevron{
     color: #D5D8DC;
 }
-
-
-.ssmt-diagram .to-dearator {
-    background-color: #79716B;
-}
-
-.ssmt-diagram .to-dearator .hidden-chevron {
-    color: #79716B;
-}
-
-
-.ssmt-diagram.boilerBlowdownFlashedHovered .to-dearator {
-    box-shadow: 0px 0px 10px 0px #79716B;
-}
