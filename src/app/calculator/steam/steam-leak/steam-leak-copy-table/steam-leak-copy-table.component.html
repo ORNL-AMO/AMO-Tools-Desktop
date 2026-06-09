@@ -1,0 +1,58 @@
+@let output = surveyService.output();
+
+@if (output.individualLeaks.length > 0) {
+    <div class="hidden-copy-table">
+        <table #leaksTable>
+            <tbody>
+                <tr>
+                    <td>Leak Name</td>
+                    <td>Leak Description</td>
+                    <td>Operating Hours</td>
+                    <td>Utility Type</td>
+                    <td>Utility Cost</td>
+                    <td>Compressor Control Adjustment</td>
+                    <td>Compressor Specific Power</td>
+                    <td>
+                        Flow Rate
+                        (@if (settings().unitsOfMeasure !== 'Metric') { <span>scfm</span> }
+                        @else { <span>m<sup>3</sup>/min</span> })
+                    </td>
+                    <td>
+                        Air Loss
+                        @if (settings().unitsOfMeasure !== 'Metric') { <span>kscf/yr</span> }
+                        @else { <span>m<sup>3</sup>/yr</span> }
+                    </td>
+                    <td>Electricity Consumption (kWh/yr)</td>
+                </tr>
+                @for (leak of output.individualLeaks; track $index) {
+                    <tr>
+                        <td>{{ leak.name }}</td>
+                        <td>{{ leak.leakDescription }}</td>
+                        <td>{{ output.facilityCompressorData?.hoursPerYear }}</td>
+                        <td>
+                            @if (output.facilityCompressorData?.utilityType === 1) { <span>Electric</span> }
+                            @else { <span>Compressed Air</span> }
+                        </td>
+                        <td>{{ output.facilityCompressorData?.utilityCost }}</td>
+                        <td>{{ output.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment }}</td>
+                        <td>{{ output.facilityCompressorData?.compressorElectricityData?.compressorSpecificPower }}</td>
+                        <td>{{ leak.totalFlowRate }}</td>
+                        <td>
+                            @if (leak.annualTotalFlowRate) { {{ leak.annualTotalFlowRate | number:'1.0-0' }} }
+                            @else { -- }
+                        </td>
+                        <td>
+                            @if (leak.annualTotalElectricity) { {{ leak.annualTotalElectricity | number:'1.0-0' }} }
+                            @else { -- }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <app-exportable-results-table
+        [tableString]="leaksTableString"
+        (updateTableString)="updateLeaksTableString()">
+    </app-exportable-results-table>
+}
