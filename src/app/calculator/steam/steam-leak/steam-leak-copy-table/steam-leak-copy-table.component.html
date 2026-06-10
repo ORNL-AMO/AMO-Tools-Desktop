@@ -7,42 +7,46 @@
                 <tr>
                     <td>Leak Name</td>
                     <td>Leak Description</td>
-                    <td>Operating Hours</td>
+                    <td>Annual Operating Hours</td>
                     <td>Utility Type</td>
-                    <td>Utility Cost</td>
-                    <td>Compressor Control Adjustment</td>
-                    <td>Compressor Specific Power</td>
                     <td>
-                        Flow Rate
-                        (@if (settings().unitsOfMeasure !== 'Metric') { <span>scfm</span> }
-                        @else { <span>m<sup>3</sup>/min</span> })
+                        Leak Rate
+                        @if (settings().unitsOfMeasure !== 'Metric') { <span>(lb/hr)</span> }
+                        @else { <span>(kg/hr)</span> }
                     </td>
                     <td>
-                        Air Loss
-                        @if (settings().unitsOfMeasure !== 'Metric') { <span>kscf/yr</span> }
-                        @else { <span>m<sup>3</sup>/yr</span> }
+                        Annual Steam Loss
+                        @if (settings().unitsOfMeasure !== 'Metric') { <span>(lb/yr)</span> }
+                        @else { <span>(kg/yr)</span> }
                     </td>
-                    <td>Electricity Consumption (kWh/yr)</td>
+                    <td>
+                        Annual Energy Loss
+                        @if (settings().unitsOfMeasure !== 'Metric') { <span>(MMBtu/yr)</span> }
+                        @else { <span>(GJ/yr)</span> }
+                    </td>
+                    <td>Annual Leak Cost ($)</td>
                 </tr>
                 @for (leak of output.individualLeaks; track $index) {
                     <tr>
                         <td>{{ leak.name }}</td>
                         <td>{{ leak.leakDescription }}</td>
-                        <td>{{ output.facilityCompressorData?.hoursPerYear }}</td>
+                        <td>{{ output.facilitySteamLeakData?.annualOperatingHours }}</td>
                         <td>
-                            @if (output.facilityCompressorData?.utilityType === 1) { <span>Electric</span> }
-                            @else { <span>Compressed Air</span> }
+                            @if (output.facilitySteamLeakData?.utilityType === 1) { <span>Electricity</span> }
+                            @else if (output.facilitySteamLeakData?.utilityType === 2) { <span>Fuel</span> }
+                            @else { <span>Steam</span> }
                         </td>
-                        <td>{{ output.facilityCompressorData?.utilityCost }}</td>
-                        <td>{{ output.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment }}</td>
-                        <td>{{ output.facilityCompressorData?.compressorElectricityData?.compressorSpecificPower }}</td>
-                        <td>{{ leak.totalFlowRate }}</td>
+                        <td>{{ leak.leakRate }}</td>
                         <td>
-                            @if (leak.annualTotalFlowRate) { {{ leak.annualTotalFlowRate | number:'1.0-0' }} }
+                            @if (leak.steamLoss) { {{ leak.steamLoss | number:'1.0-0' }} }
                             @else { -- }
                         </td>
                         <td>
-                            @if (leak.annualTotalElectricity) { {{ leak.annualTotalElectricity | number:'1.0-0' }} }
+                            @if (leak.energyLoss) { {{ leak.energyLoss | number:'1.0-0' }} }
+                            @else { -- }
+                        </td>
+                        <td>
+                            @if (leak.leakCost) { {{ leak.leakCost | number:'1.2-2' }} }
                             @else { -- }
                         </td>
                     </tr>
