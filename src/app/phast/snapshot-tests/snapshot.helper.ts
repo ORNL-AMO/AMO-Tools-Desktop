@@ -5,7 +5,7 @@
  * All services in the chain take only UntypedFormBuilder and/or ConvertUnitsService —
  * no IndexedDB dependencies are needed for the fuel-fired By Volume pathway.
  *
- * Usage: call buildPhastServices() in a beforeAll after WASM has been initialized.
+ * Usage: call buildPhastServices() in a beforeAll — it initializes WASM internally.
  */
 import { UntypedFormBuilder } from '@angular/forms';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';

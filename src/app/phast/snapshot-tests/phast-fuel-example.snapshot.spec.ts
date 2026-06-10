@@ -7,8 +7,8 @@
  *
  * To regenerate snapshots:
  *   1. Set GENERATE = true
- *   2. Run: ng test --include="**\/phast-fuel-example.snapshot.spec.ts" --watch=false --browsers=ChromeHeadless
- *   3. Copy the logged JSON from each "SNAPSHOT:" line into the corresponding file in ./snapshots/
+ *   2. Run: ng test --include="**\/phast-fuel-example.snapshot.spec.ts" --watch=false --browsers=ChromeHeadlessNoSandbox
+ *   3. Pipe output through generate-snapshot.py into snapshots/fuel-example.snap.json
  *   4. Set GENERATE = false and re-run to confirm green
  */
 

@@ -49,10 +49,7 @@ for spec in "$SCRIPT_DIR"/*.snapshot.spec.ts; do
       --watch=false \
       --browsers=ChromeHeadlessNoSandbox > "$ng_out" 2>&1 || true
 
-  python3 "$GENERATE_PY" < "$ng_out" > "$snap_file"
-  py_exit=$?
-
-  if [ "${py_exit}" -eq 0 ]; then
+  if python3 "$GENERATE_PY" < "$ng_out" > "$snap_file"; then
     echo "    written: $snap_file"
   else
     echo "    FAILED: $snap_name"

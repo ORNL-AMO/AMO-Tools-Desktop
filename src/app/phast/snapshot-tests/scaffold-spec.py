@@ -25,7 +25,7 @@ SPEC_TEMPLATE = """\
  *
  * To regenerate snapshots:
  *   1. Set GENERATE = true
- *   2. Run: ng test --include="**\\/__SPEC_FILENAME__" --watch=false --browsers=ChromeHeadless
+ *   2. Run: ng test --include="**\\/__SPEC_FILENAME__" --watch=false --browsers=ChromeHeadlessNoSandbox
  *   3. Pipe output through generate-snapshot.py into snapshots/__SNAP_NAME__.snap.json
  *   4. Set GENERATE = false and re-run to confirm green
  */

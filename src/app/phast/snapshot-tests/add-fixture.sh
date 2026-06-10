@@ -76,10 +76,7 @@ for spec_base in "${new_specs[@]}"; do
       --watch=false \
       --browsers=ChromeHeadlessNoSandbox > "$ng_out" 2>&1 || true
 
-  python3 "$GENERATE_PY" < "$ng_out" > "$snap_file"
-  py_exit=$?
-
-  if [ "$py_exit" -eq 0 ]; then
+  if python3 "$GENERATE_PY" < "$ng_out" > "$snap_file"; then
     echo "       written: $snap_name.snap.json"
   else
     echo "       FAILED:  $snap_name"
