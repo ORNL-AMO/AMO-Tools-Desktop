@@ -6,8 +6,11 @@ export const useMeasurToolsSuite = () => {
 
   const initializeModule = async () => {
     try {
-      const module = await measurToolsFactory.default({
-        locateFile: (path) => `/${path}`
+      // locateFile is required in the webpack-bundled context so Emscripten
+      // resolves client.wasm from the server root rather than relative to the bundle.
+      // Cast bypasses the ts_def public API which intentionally omits Emscripten options.
+      const module = await (measurToolsFactory as unknown as (opts: object) => Promise<unknown>)({
+        locateFile: (path: string) => `/${path}`
       });
       
       setToolsSuiteModule(module);

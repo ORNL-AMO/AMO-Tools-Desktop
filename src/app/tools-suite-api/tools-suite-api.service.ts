@@ -32,15 +32,7 @@ export class ToolsSuiteApiService {
         // Dynamically import the Emscripten modularized JS glue code
         const moduleFactory = await import('measur-tools-suite/bin/client.js');
         // Initialize the module, specifying where to find the WASM file
-        this.ToolsSuiteModule = await moduleFactory.default({
-            locateFile: (path: string) => {
-                if (this.electronService.isElectron) {
-                    return `${path}`
-                } else {
-                    return `/${path}`
-                }
-            }
-        });
+        this.ToolsSuiteModule = await moduleFactory.default();
         console.log('=== Tools Suite Module initialized ===');
         return;
     }
