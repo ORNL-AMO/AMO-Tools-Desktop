@@ -4,11 +4,13 @@ import { Settings } from '../../../shared/models/settings';
 import { FacilitySteamLeakData, SteamLeakSurveyData, SteamLeakSurveyInput, SteamLeakSurveyOutput, SteamLeakSurveyResult } from '../../../shared/models/standalone';
 import { copyObject } from '../../../shared/helperFunctions';
 import { StandaloneService } from '../../standalone.service';
+import { ConvertSteamLeakService } from './convert-steam-leak.service';
 import { SteamLeakSurveyFormService } from './steam-leak-survey-form/steam-leak-survey-form.service';
 @Injectable()
 export class SteamLeakSurveyService {
 
     private readonly standaloneService = inject(StandaloneService);
+    private readonly convertSteamLeakService = inject(ConvertSteamLeakService);
     private readonly formService = inject(SteamLeakSurveyFormService);
     settings: Settings;
     
@@ -29,17 +31,21 @@ export class SteamLeakSurveyService {
 
   initDefaultEmptyInputs(settings: Settings): void {
     this.steamLeakInput.set({
-      steamLeakSurveyInputVec: [this.formService.getEmptySteamLeakData()],
+      steamLeakSurveyInputVec: [this.formService.getEmptySteamLeakData(settings)],
       facilitySteamLeakData: this.getDefaultFacilityData(settings),
     });
   }
 
   generateExampleData(settings: Settings): void {
-    this.currentLeakIndex.set(0);
-    this.steamLeakInput.set({
+    let example: SteamLeakSurveyInput = {
       steamLeakSurveyInputVec: [this.getExampleLeakData()],
       facilitySteamLeakData: this.getDefaultFacilityData(settings),
-    });
+    };
+    if (settings.unitsOfMeasure !== 'Imperial') {
+      example = this.convertSteamLeakService.convertExample(example);
+    }
+    this.currentLeakIndex.set(0);
+    this.steamLeakInput.set(example);
     this.resetEventsSubject.next();
   }
 
@@ -60,7 +66,7 @@ export class SteamLeakSurveyService {
         if (this.settings) {
           this.initDefaultEmptyInputs(this.settings);
         } else {
-          const emptyLeak = this.formService.getEmptySteamLeakData();
+          const emptyLeak = this.formService.getEmptySteamLeakData(this.settings);
           this.steamLeakInput.set({ ...current, steamLeakSurveyInputVec: [emptyLeak] });
         }
         this.resetEventsSubject.next();
@@ -120,8 +126,8 @@ export class SteamLeakSurveyService {
     };
   }
 
-  private getDefaultFacilityData(_settings: Settings): FacilitySteamLeakData {
-    return {
+  private getDefaultFacilityData(settings: Settings): FacilitySteamLeakData {
+    let data: FacilitySteamLeakData = {
       annualOperatingHours: 8760,
       utilityType: 1,
       steamCost: 0,
@@ -134,12 +140,17 @@ export class SteamLeakSurveyService {
       boilerEfficiency: 80,
       systemEfficiency: 75,
     };
+    if (settings?.unitsOfMeasure === 'Metric') {
+      data = this.convertSteamLeakService.convertImperialFacilitySteamLeakData(data);
+    }
+    return data;
   }
 
     getResults(settings: Settings, input: SteamLeakSurveyInput): SteamLeakSurveyOutput {
         const inputCopy: SteamLeakSurveyInput = copyObject(input);
 
-        //WK Conversion Spot.
+        this.convertSteamLeakService.convertInputs(inputCopy.steamLeakSurveyInputVec, settings);
+        inputCopy.facilitySteamLeakData = this.convertSteamLeakService.convertFacilityInputs(inputCopy.facilitySteamLeakData, settings);
 
         const individualLeaks: Array<SteamLeakSurveyResult> = [];
         let cumulativeModifiactionResults: SteamLeakSurveyResult = emptyResult();
@@ -154,23 +165,21 @@ export class SteamLeakSurveyService {
             leakResult.leakDescription = leak.leakDescription;
             leakResult.selected = leak.selected;
 
-            //WK CONVERSION SPOT
-            // const convertedResult = 
-            //     leak.measurementMethod === LeakMeasurementMethod.
+            const convertedResult = this.convertSteamLeakService.convertResult(leakResult, settings);
 
             if (!leak?.selected) {
-                cumulativeModifiactionResults.leakRate += leakResult.leakRate;
-                cumulativeModifiactionResults.steamLoss += leakResult.steamLoss;
-                cumulativeModifiactionResults.energyLoss += leakResult.energyLoss;
-                cumulativeModifiactionResults.leakCost += leakResult.leakCost;
+                cumulativeModifiactionResults.leakRate += convertedResult.leakRate;
+                cumulativeModifiactionResults.steamLoss += convertedResult.steamLoss;
+                cumulativeModifiactionResults.energyLoss += convertedResult.energyLoss;
+                cumulativeModifiactionResults.leakCost += convertedResult.leakCost;
             }
 
-            individualLeaks.push(leakResult);
+            individualLeaks.push(convertedResult);
             return {
-                leakRate: cumulative.leakRate + leakResult.leakRate,
-                steamLoss: cumulative.steamLoss + leakResult.steamLoss,
-                energyLoss: cumulative.energyLoss + leakResult.energyLoss,
-                leakCost: cumulative.leakCost + leakResult.leakCost,
+                leakRate: cumulative.leakRate + convertedResult.leakRate,
+                steamLoss: cumulative.steamLoss + convertedResult.steamLoss,
+                energyLoss: cumulative.energyLoss + convertedResult.energyLoss,
+                leakCost: cumulative.leakCost + convertedResult.leakCost,
             };
         },
         emptyResult()

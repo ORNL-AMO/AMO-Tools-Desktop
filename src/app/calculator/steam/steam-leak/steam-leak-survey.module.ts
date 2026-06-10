@@ -6,6 +6,7 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 
 import { SteamLeakSurveyComponent } from './steam-leak-survey.component';
 import { SteamLeakSurveyService } from './steam-leak-survey-service';
+import { ConvertSteamLeakService } from './convert-steam-leak.service';
 import { SteamLeakSurveyFormComponent } from './steam-leak-survey-form/steam-leak-survey-form.component';
 import { SteamLeakSurveyFormService } from './steam-leak-survey-form/steam-leak-survey-form.service';
 import { SteamEstimateMethodFormComponent } from './steam-leak-survey-form/steam-estimate-method-form/steam-estimate-method-form.component';
@@ -21,7 +22,7 @@ import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-result
         SteamLeakSurveyFormComponent,
         SteamEstimateMethodFormComponent,
         SteamOrificeMethodFormComponent,
-        SteamPlumeMethodFormComponent
+        SteamPlumeMethodFormComponent,
         CostOfSteamFormComponent,
         SteamLeakSurveyResultsTableComponent
     ],
@@ -35,7 +36,8 @@ import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-result
     exports: [SteamLeakSurveyComponent],
     providers: [
         SteamLeakSurveyService,
-        SteamLeakSurveyFormService
+        SteamLeakSurveyFormService,
+        ConvertSteamLeakService
     ]
 })
 export class SteamLeakSurveyModule {}
