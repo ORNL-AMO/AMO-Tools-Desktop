@@ -14,8 +14,8 @@
       @if (facilityForm.controls.annualOperatingHours.invalid && !facilityForm.controls.annualOperatingHours.pristine) {
         <span class="alert-danger pull-right small">
           @if (facilityForm.controls.annualOperatingHours.errors?.['required']) { <span>Value required.</span> }
-          @if (facilityForm.controls.annualOperatingHours.errors?.['min']) { <span>Cannot be less than 0.</span> }
-          @if (facilityForm.controls.annualOperatingHours.errors?.['max']) { <span>Operating hours cannot exceed 8760 hours per year.</span> }
+          @if (facilityForm.controls.annualOperatingHours.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.annualOperatingHours.errors?.['min']?.min}}.</span> }
+          @if (facilityForm.controls.annualOperatingHours.errors?.['max']) { <span>Value can't be greater than {{ facilityForm.controls.annualOperatingHours.errors?.['max']?.max}} hrs/yr.</span> }
         </span>
       }
     </div>
@@ -43,7 +43,7 @@
       @if (facilityForm.controls.steamTemperature.invalid && !facilityForm.controls.steamTemperature.pristine) {
         <span class="alert-danger pull-right small">
           @if (facilityForm.controls.steamTemperature.errors?.['required']) { <span>Value required.</span> }
-          @if (facilityForm.controls.steamTemperature.errors?.['min']) { <span>Steam temperature must be greater than 212 &#8457; or 100 &#8451;.</span> }
+          @if (facilityForm.controls.steamTemperature.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.steamTemperature.errors?.['min']?.min}}.</span> }
         </span>
       }
     </div>
@@ -61,7 +61,7 @@
       @if (facilityForm.controls.steamPressure.invalid && !facilityForm.controls.steamPressure.pristine) {
         <span class="alert-danger pull-right small">
           @if (facilityForm.controls.steamPressure.errors?.['required']) { <span>Value required.</span> }
-          @if (facilityForm.controls.steamPressure.errors?.['greaterThan'] !== undefined) { <span>Steam pressure must be greater than atmospheric pressure.</span> }
+          @if (facilityForm.controls.steamPressure.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.steamPressure.errors?.['greaterThan'] }}.</span> }
         </span>
       }
     </div>
@@ -79,8 +79,8 @@
       @if (facilityForm.controls.feedwaterTemperature.invalid && !facilityForm.controls.feedwaterTemperature.pristine) {
         <span class="alert-danger pull-right small">
           @if (facilityForm.controls.feedwaterTemperature.errors?.['required']) { <span>Value required.</span> }
-          @if (facilityForm.controls.feedwaterTemperature.errors?.['min']) { <span>Cannot be less than 32 &#8457; or 0 &#8451;.</span> }
-          @if (facilityForm.controls.feedwaterTemperature.errors?.['max']) { <span>Feedwater temperature must be below the boiling point of water.</span> }
+          @if (facilityForm.controls.feedwaterTemperature.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.feedwaterTemperature.errors?.['min']?.min}}.</span> }
+          @if (facilityForm.controls.feedwaterTemperature.errors?.['max']) { <span>Value must be below the boiling point of water.</span> }
         </span>
       }
     </div>
@@ -99,7 +99,7 @@
         @if (facilityForm.controls.steamCost.invalid && !facilityForm.controls.steamCost.pristine) {
           <span class="alert-danger pull-right small">
             @if (facilityForm.controls.steamCost.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.steamCost.errors?.['min']) { <span>Steam cost cannot be less than zero.</span> }
+            @if (facilityForm.controls.steamCost.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.steamCost.errors?.['min']?.min}}.</span> }
           </span>
         }
       </div>
@@ -117,7 +117,7 @@
         @if (facilityForm.controls.electricityCost.invalid && !facilityForm.controls.electricityCost.pristine) {
           <span class="alert-danger pull-right small">
             @if (facilityForm.controls.electricityCost.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.electricityCost.errors?.['greaterThan'] !== undefined) { <span>Electricity cost must be greater than zero.</span> }
+            @if (facilityForm.controls.electricityCost.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.electricityCost.errors?.['greaterThan'] }}.</span> }
           </span>
         }
       </div>
@@ -137,7 +137,7 @@
         @if (facilityForm.controls.fuelCost.invalid && !facilityForm.controls.fuelCost.pristine) {
           <span class="alert-danger pull-right small">
             @if (facilityForm.controls.fuelCost.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.fuelCost.errors?.['greaterThan'] !== undefined) { <span>Fuel cost must be greater than zero.</span> }
+            @if (facilityForm.controls.fuelCost.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.fuelCost.errors?.['greaterThan'] }}.</span> }
           </span>
         }
       </div>
@@ -151,7 +151,7 @@
         @if (facilityForm.controls.fuelEnergyFactor.invalid && !facilityForm.controls.fuelEnergyFactor.pristine) {
           <span class="alert-danger pull-right small">
             @if (facilityForm.controls.fuelEnergyFactor.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.fuelEnergyFactor.errors?.['greaterThan'] !== undefined) { <span>Fuel energy factor must be greater than zero.</span> }
+            @if (facilityForm.controls.fuelEnergyFactor.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.fuelEnergyFactor.errors?.['greaterThan'] }}.</span> }
           </span>
         }
       </div>
@@ -169,8 +169,8 @@
         @if (facilityForm.controls.boilerEfficiency.invalid && !facilityForm.controls.boilerEfficiency.pristine) {
           <span class="alert-danger pull-right small">
             @if (facilityForm.controls.boilerEfficiency.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.boilerEfficiency.errors?.['min']) { <span>Must be at least 0%.</span> }
-            @if (facilityForm.controls.boilerEfficiency.errors?.['max']) { <span>Boiler efficiency must be between 0 and 100%.</span> }
+            @if (facilityForm.controls.boilerEfficiency.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.boilerEfficiency.errors?.['min']?.min}}%.</span> }
+            @if (facilityForm.controls.boilerEfficiency.errors?.['max']) { <span>Value can't be greater than {{ facilityForm.controls.boilerEfficiency.errors?.['max']?.max}}%.</span> }
           </span>
         }
       </div>
@@ -185,8 +185,8 @@
         @if (facilityForm.controls.systemEfficiency.invalid && !facilityForm.controls.systemEfficiency.pristine) {
           <span class="alert-danger pull-right small">
             @if (facilityForm.controls.systemEfficiency.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.systemEfficiency.errors?.['min']) { <span>Must be at least 0%.</span> }
-            @if (facilityForm.controls.systemEfficiency.errors?.['max']) { <span>System efficiency must be between 0 and 100%.</span> }
+            @if (facilityForm.controls.systemEfficiency.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.systemEfficiency.errors?.['min']?.min}}%.</span> }
+            @if (facilityForm.controls.systemEfficiency.errors?.['max']) { <span>Value can't be greater than {{ facilityForm.controls.systemEfficiency.errors?.['max']?.max}}%.</span> }
           </span>
         }
       </div>

@@ -13,7 +13,7 @@
       @if (form().controls.holeSize.invalid && !form().controls.holeSize.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.holeSize.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.holeSize.errors?.['greaterThan'] !== undefined) { <span>Hole size must be greater than zero.</span> }
+          @if (form().controls.holeSize.errors?.['greaterThan'] !== undefined) { <span>Value can't be less than {{ form().controls.holeSize.errors?.['greaterThan'] }}.</span> }
         </span>
       }
     </div>
@@ -28,8 +28,8 @@
       @if (form().controls.dischargeCoefficient.invalid && !form().controls.dischargeCoefficient.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.dischargeCoefficient.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.dischargeCoefficient.errors?.['min']) { <span>Must be at least 0.</span> }
-          @if (form().controls.dischargeCoefficient.errors?.['max']) { <span>Cannot exceed 1.</span> }
+          @if (form().controls.dischargeCoefficient.errors?.['min']) { <span>Value can't be less than {{ form().controls.dischargeCoefficient.errors?.['min']?.min}}.</span> }
+          @if (form().controls.dischargeCoefficient.errors?.['max']) { <span>Value can't be greater than {{ form().controls.dischargeCoefficient.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
@@ -49,8 +49,8 @@
       @if (form().controls.atmosphericPressure.invalid && !form().controls.atmosphericPressure.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.atmosphericPressure.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.atmosphericPressure.errors?.['min']) { <span>Must be at least 0 psia.</span> }
-          @if (form().controls.atmosphericPressure.errors?.['max']) { <span>Cannot exceed 20 psia.</span> }
+          @if (form().controls.atmosphericPressure.errors?.['min']) { <span>Value can't be less than {{ form().controls.atmosphericPressure.errors?.['min']?.min}}.</span> }
+          @if (form().controls.atmosphericPressure.errors?.['max']) { <span>Value can't be greater than {{ form().controls.atmosphericPressure.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
@@ -70,8 +70,8 @@
       @if (form().controls.steamPressure.invalid && !form().controls.steamPressure.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.steamPressure.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.steamPressure.errors?.['min']) { <span>Must be at least 115 psig.</span> }
-          @if (form().controls.steamPressure.errors?.['max']) { <span>Cannot exceed 415 psig.</span> }
+          @if (form().controls.steamPressure.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamPressure.errors?.['min']?.min}}.</span> }
+          @if (form().controls.steamPressure.errors?.['max']) { <span>Value can't be greater than {{ form().controls.steamPressure.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
@@ -91,7 +91,7 @@
       @if (form().controls.steamTemperature.invalid && !form().controls.steamTemperature.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.steamTemperature.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.steamTemperature.errors?.['min']) { <span>Must be greater than 212 &#8457;.</span> }
+          @if (form().controls.steamTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamTemperature.errors?.['min']?.min}}.</span> }
         </span>
       }
     </div>
@@ -118,8 +118,8 @@
         @if (form().controls.turbineEfficiency.invalid && !form().controls.turbineEfficiency.pristine) {
           <span class="alert-danger pull-right small">
             @if (form().controls.turbineEfficiency.errors?.['required']) { <span>Value required.</span> }
-            @if (form().controls.turbineEfficiency.errors?.['min']) { <span>Must be at least 0%.</span> }
-            @if (form().controls.turbineEfficiency.errors?.['max']) { <span>Cannot exceed 100%.</span> }
+            @if (form().controls.turbineEfficiency.errors?.['min']) { <span>Value can't be less than {{ form().controls.turbineEfficiency.errors?.['min']?.min}}.</span> }
+            @if (form().controls.turbineEfficiency.errors?.['max']) { <span>Value can't be greater than {{ form().controls.turbineEfficiency.errors?.['max']?.max}}.</span> }
           </span>
         }
       </div>

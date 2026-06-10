@@ -13,8 +13,8 @@
       @if (form().controls.steamPressure.invalid && !form().controls.steamPressure.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.steamPressure.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.steamPressure.errors?.['min']) { <span>Must be at least 115 psig.</span> }
-          @if (form().controls.steamPressure.errors?.['max']) { <span>Cannot exceed 415 psig.</span> }
+          @if (form().controls.steamPressure.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamPressure.errors?.['min']?.min}}.</span> }
+          @if (form().controls.steamPressure.errors?.['max']) { <span>Value can't be greater than {{ form().controls.steamPressure.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
@@ -31,10 +31,12 @@
       } @else {
         <span class="input-group-addon units">&#8451;</span>
       }
+
       @if (form().controls.steamTemperature.invalid && !form().controls.steamTemperature.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.steamTemperature.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.steamTemperature.errors?.['min']) { <span>Must be greater than 212 &#8457;.</span> }
+          @if (form().controls.steamTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamTemperature.errors?.['min']?.min}}.</span> }
+          @if (form().controls.steamTemperature.errors?.['max']) { <span>Value can't be greater than {{ form().controls.steamTemperature.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
@@ -54,8 +56,8 @@
       @if (form().controls.ambientTemperature.invalid && !form().controls.ambientTemperature.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.ambientTemperature.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.ambientTemperature.errors?.['min']) { <span>Must be at least 45 &#8457;.</span> }
-          @if (form().controls.ambientTemperature.errors?.['max']) { <span>Cannot exceed 90 &#8457;.</span> }
+          @if (form().controls.ambientTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.ambientTemperature.errors?.['min']?.min}}.</span> }
+          @if (form().controls.ambientTemperature.errors?.['max']) { <span>Value can't be greater than {{ form().controls.ambientTemperature.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
@@ -75,8 +77,8 @@
       @if (form().controls.plumeLength.invalid && !form().controls.plumeLength.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.plumeLength.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.plumeLength.errors?.['min']) { <span>Must be at least 3 ft.</span> }
-          @if (form().controls.plumeLength.errors?.['max']) { <span>Cannot exceed 12 ft.</span> }
+          @if (form().controls.plumeLength.errors?.['min']) { <span>Value can't be less than {{ form().controls.plumeLength.errors?.['min']?.min}}.</span> }
+          @if (form().controls.plumeLength.errors?.['max']) { <span>Value can't be greater than {{ form().controls.plumeLength.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
