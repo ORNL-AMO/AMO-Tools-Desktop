@@ -184,7 +184,12 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              "src/manifest.webmanifest"
+              "src/manifest.webmanifest",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/measur-tools-suite/bin/",
+                "output": "."
+              }
             ]
           }
         },
