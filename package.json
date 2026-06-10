@@ -26,6 +26,10 @@
     "electron": "electron .",
     "lint": "ng lint",
     "test": "ng test",
+    "test:phast-snapshot": "ng test --include=\"**/snapshot-tests/**/*.spec.ts\" --watch=false --browsers=ChromeHeadlessNoSandbox",
+    "test:phast-snapshot:watch": "ng test --include=\"**/snapshot-tests/**/*.spec.ts\" --browsers=ChromeHeadlessNoSandbox",
+    "snapshot:add": "bash src/app/phast/snapshot-tests/add-fixture.sh",
+    "snapshot:regenerate": "bash src/app/phast/snapshot-tests/regenerate-all.sh",
     "dist": "electron-builder",
     "build:stats": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/stats.json"
