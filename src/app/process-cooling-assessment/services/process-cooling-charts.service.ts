@@ -7,8 +7,8 @@ import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 
 export interface PlotlyChartConfig {
   traces: TraceData[];
-  layout: any;
-  config: any;
+  layout: object;
+  config: object;
 }
 
 
