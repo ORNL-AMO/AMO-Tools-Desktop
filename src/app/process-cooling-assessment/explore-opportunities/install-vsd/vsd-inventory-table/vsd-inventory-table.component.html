@@ -1,5 +1,7 @@
-<div *ngIf="inventoryUIState$ | async as inventoryState" class="card p-2">
-    <div class="card-body p-0" *ngIf="inventoryState.inventory && inventoryState.inventory.length > 0">
+@if (inventoryUIState$ | async; as inventoryState) {
+<div class="card p-2">
+    @if (inventoryState.inventory && inventoryState.inventory.length > 0) {
+    <div class="card-body p-0">
         <table class="table table-sm table-striped table-hover mb-0">
             <thead>
                 <tr>
@@ -25,4 +27,6 @@
             </tbody>
         </table>
     </div>
+    }
 </div>
+}

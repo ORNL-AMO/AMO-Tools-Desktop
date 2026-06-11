@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingResultsService } from './process-cooling-results.service';
-import { ProcessCoolingResults, ProcessCoolingAssessment, CondenserCoolingMethod, ChillerInventoryItem } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingResults, ProcessCoolingAssessment, CondenserCoolingMethod, ChillerInventoryItem, PumpInput, AirCooledSystemInput } from '../../shared/models/process-cooling-assessment';
 import { map, combineLatest } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { InputSummaryResults } from '../../shared/models/process-cooling-assessment';
@@ -224,7 +224,7 @@ export class InputSummaryService {
     }
 
     private mapToPumpSections(baseline: InputSummaryResults | null, mods: InputSummaryResults[]): InputSummarySection[] {
-        const pumpRows = (pump: any, modPumps: any[], fieldName: string): ReportTableRow[] => [
+        const pumpRows = (pump: PumpInput | null, modPumps: InputSummaryResults[], fieldName: string): ReportTableRow[] => [
             {
                 label: 'Variable Flow', units: '', className: 'default',
                 baseline: { value: pump ? (pump.variableFlow ? 'Yes' : 'No') : null },
@@ -287,7 +287,7 @@ export class InputSummaryService {
                 ]
             }];
         } else {
-            const airSource = (aci: any) => aci?.airCoolingSource === 0 ? 'Indoor' : 'Outdoor';
+            const airSource = (aci: AirCooledSystemInput) => aci.airCoolingSource === 0 ? 'Indoor' : 'Outdoor';
             return [{
                 label: 'Condenser Cooling',
                 rows: [

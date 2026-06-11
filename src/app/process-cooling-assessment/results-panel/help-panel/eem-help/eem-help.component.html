@@ -1,4 +1,4 @@
-<div class="pt-2 d-flex flex-column help-info">
+﻿<div class="pt-2 d-flex flex-column help-info">
 
     <h5>
         Energy Efficiency Measures Help
@@ -7,7 +7,8 @@
     </h5>
     <hr class="my-1 hr-spacer">
 
-    <div class="my-2" *ngIf="focusedField() == 'modificationChilledWaterTemp'">
+    @if (focusedField() == 'modificationChilledWaterTemp') {
+<div class="my-2">
         <h6>
             Chilled Water Temperature
             <br>
@@ -23,8 +24,10 @@
             </small>
         </h6>
     </div>
+}
 
-        <div class="my-2" *ngIf="focusedField() == 'modificationCondenserWaterTemp'">
+        @if (focusedField() == 'modificationCondenserWaterTemp') {
+<div class="my-2">
         <h6>
             Condenser Water Temperature
             <br>
@@ -42,4 +45,5 @@
             </small>
         </h6>
     </div>
+}
 </div>

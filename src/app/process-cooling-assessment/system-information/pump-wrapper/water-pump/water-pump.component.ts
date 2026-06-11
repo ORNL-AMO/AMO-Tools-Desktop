@@ -1,5 +1,5 @@
 
-import { Component, DestroyRef, inject, Input, Signal } from "@angular/core";
+import { Component, DestroyRef, effect, inject, input, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
 import { CoolingWaterPumpType, ProcessCoolingAssessment } from "../../../../shared/models/process-cooling-assessment";
@@ -17,15 +17,15 @@ import { PROCESS_COOLING_UNITS } from "../../../constants/process-cooling-units"
   styleUrl: './water-pump.component.css'
 })
 export class WaterPumpComponent {
-  @Input({ required: true }) pumpFormType!: CoolingWaterPumpType;
-  
+  pumpFormType = input.required<CoolingWaterPumpType>();
+
   private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   private processCoolingUiService = inject(ProcessCoolingUiService);
   private systemInformationFormService = inject(SystemInformationFormService);
   private destroyRef = inject(DestroyRef);
 
-  form: FormGroup<PumpInputForm>;
-  controlIds: FormControlIds<PumpInputForm>;
+  form!: FormGroup<PumpInputForm>;
+  controlIds!: FormControlIds<PumpInputForm>;
   formWidth: number = 0;
 
   PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
@@ -33,11 +33,13 @@ export class WaterPumpComponent {
   processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
 
-  ngOnInit(): void {
-    const pumpInput = this.processCooling().systemInformation[this.pumpFormType];
-    this.form = this.systemInformationFormService.getPumpInputForm(pumpInput, this.settings());
-    this.controlIds = generateFormControlIds(this.form.controls);
-    this.observeFormChanges();
+  constructor() {
+    effect(() => {
+      const pumpInput = this.processCooling().systemInformation[this.pumpFormType()];
+      this.form = this.systemInformationFormService.getPumpInputForm(pumpInput, this.settings());
+      this.controlIds = generateFormControlIds(this.form.controls);
+      this.observeFormChanges();
+    });
   }
 
   observeFormChanges() {
@@ -46,9 +48,9 @@ export class WaterPumpComponent {
     ).subscribe(
       (formValue) => {
         const processCooling = this.processCooling();
-        const currentPumpInput = processCooling?.systemInformation[this.pumpFormType];
+        const currentPumpInput = processCooling?.systemInformation[this.pumpFormType()];
         const pumpInput = this.systemInformationFormService.getPumpInput(formValue, currentPumpInput);
-        this.processCoolingAssessmentService.updateSystemInformationProperty(this.pumpFormType, pumpInput);
+        this.processCoolingAssessmentService.updateSystemInformationProperty(this.pumpFormType(), pumpInput);
       }
     );
   }

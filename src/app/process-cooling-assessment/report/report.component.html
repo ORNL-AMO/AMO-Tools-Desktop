@@ -1,71 +1,22 @@
-@if (inAssessment) {
-<div class="report-cover">
-    <img src="assets/images/DOE-banner-color.svg" class="doe-logo">
-    <div class="report-title">
-        <h4>Process Cooling Report:</h4>
-        <h4>{{assessment.name}}</h4>
-        <h5>{{createdDate | date:'short'}}</h5>
-    </div>
-</div>
-}
-
-<div #reportHeader class="report-header d-none d-lg-block">
-    @if (assessment && inAssessment) {
-    <div class="row">
-        <div class="col-12 p-2">
-            @for (directory of assessmentDirectories; track directory) {
-            <span class="pl-2">{{directory.name}} / {{assessment.name}}</span>
-            }
-            <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-            <app-export-button
-                class="pull-right"
-                [document]="reportDocument$"
-                [assessmentName]="assessment?.name || 'process-cooling'"
-                [sectionGroups]="sectionGroups">
-            </app-export-button>
-        </div>
-    </div>
-    }
-    @if (assessment && !inAssessment) {
-    <div class="row assessment-name">
-        <div class="col-12">
-            <h2 class="assessment-title">
-                <div class="d-flex">
-                    @for (directory of assessmentDirectories; track directory) {
-                    <span class="pl-2">{{directory.name}} /</span>
-                    }
-                </div>
-                {{assessment.name}}
-            </h2>
-        </div>
-        <div class="col-12">
-            <h2 class="date-modified">
-                <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-            </h2>
-        </div>
-    </div>
-    }
-</div>
+@if (assessment$ | async; as assessment) {
 
 <div class="report-container">
     <div class="d-none d-lg-flex">
         <ul #reportBtns class="tabs primary">
             @for (link of REPORT_VIEW_LINKS; track $index) {
-            <li routerLinkActive="active" [routerLink]="[link.view]" [ngClass]="{'disabled': link.meta?.disabled}">
-                <a [routerLink]="[link.view]" [ngClass]="{'disabled': link.meta?.disabled}">
+            <li routerLinkActive="active" [routerLink]="[link.view]" [class.disabled]="link.meta?.disabled">
+                <a [routerLink]="[link.view]" [class.disabled]="link.meta?.disabled">
                     {{link.label}}
                 </a>
             </li>
             }
         </ul>
-        @if (!inAssessment) {
         <app-export-button
             class="ml-auto align-self-center mr-2"
             [document]="reportDocument$"
-            [assessmentName]="assessment?.name || 'process-cooling'"
+            [assessmentName]="assessment.name"
             [sectionGroups]="sectionGroups">
         </app-export-button>
-        }
     </div>
 
     <!--  SMALL SCREEN STYLE -->
@@ -77,8 +28,8 @@
                 <span class="small text-uppercase">Menu</span>
             </div>
             @for (link of REPORT_VIEW_LINKS; track $index) {
-            <div routerLinkActive="active" [ngClass]="{'disabled': link.meta?.disabled}" [routerLink]="[link.view]">
-                <a [routerLink]="[link.view]" [ngClass]="{'disabled': link.meta?.disabled}">
+            <div routerLinkActive="active" [class.disabled]="link.meta?.disabled" [routerLink]="[link.view]">
+                <a [routerLink]="[link.view]" [class.disabled]="link.meta?.disabled">
                     {{link.label}}
                 </a>
             </div>
@@ -87,7 +38,7 @@
         <app-export-button
             class="mx-2 mb-2"
             [document]="reportDocument$"
-            [assessmentName]="assessment?.name || 'process-cooling'"
+            [assessmentName]="assessment.name"
             [sectionGroups]="sectionGroups">
         </app-export-button>
     </div>
@@ -98,3 +49,4 @@
         </div>
     </div>
 </div>
+}

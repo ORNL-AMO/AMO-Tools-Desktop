@@ -4,9 +4,11 @@
         <span aria-hidden="true">&times;</span>
     </button>
 </div>
-<div *ngIf="modifications()" class="modal-body process-cooling-assessment">
+@if (modifications()) {
+<div class="modal-body process-cooling-assessment">
     <div class="row">
-        <div *ngIf="selectedModificationId$ | async as selectedModificationId" class="col-lg-9 col-md-7 col-sm-12 scroll-item">
+        @if (selectedModificationId$ | async; as selectedModificationId) {
+        <div class="col-lg-9 col-md-7 col-sm-12 scroll-item">
             <ul class="list-group">
                 <li class="list-group-item title-item">
                     <div class="row">
@@ -22,15 +24,19 @@
                     </div>
                 </li>
 
-                <li class="list-group-item modification-item" *ngFor="let modification of modifications()"
-                    [ngClass]="{'active-item': selectedModificationId == modification.id}">
+                @for (modification of modifications(); track modification.id) {
+                <li class="list-group-item modification-item"
+                    [class.active-item]="selectedModificationId == modification.id">
                     <div class="row">
                         <div class="col-6 border-right">
-                            <div *ngIf="modification.id != deleteModificationId && modification.id != renameModificationId">
+                            @if (modification.id != deleteModificationId && modification.id != renameModificationId) {
+                            <div>
                                 <a class="click-link small"
                                     (click)="selectModification(modification.id)">{{modification.name}}</a>
                             </div>
-                            <div *ngIf="modification.id == renameModificationId">
+                            }
+                            @if (modification.id == renameModificationId) {
+                            <div>
                                 <div class="input-group">
                                     <input class="form-control" [(ngModel)]="renameModificationName">
                                     <span class="input-group-addon units" (click)="saveUpdates(modification)">
@@ -38,7 +44,9 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="d-flex" *ngIf="modification.id == deleteModificationId">
+                            }
+                            @if (modification.id == deleteModificationId) {
+                            <div class="d-flex">
                                 <div class="p-0 w-50 text-center small bold">
                                     Are you sure you want to delete?
                                     <br>
@@ -53,6 +61,7 @@
                                         Cancel</button>
                                 </div>
                             </div>
+                            }
                         </div>
                         <div class="col-1 border-right text-center">
                             <div class="btn-group">
@@ -60,7 +69,7 @@
                                     (click)="showDropdown(modification.id)">
                                 </button>
                                 <div class="dropdown-menu"
-                                    [ngClass]="{'shown': dropdownId === modification.id}">
+                                    [class.shown]="dropdownId === modification.id">
                                     <span class="dropdown-item" (click)="selectRename(modification)">Rename</span>
                                     <span class="dropdown-item"
                                         (click)="selectDelete(modification.id)">Delete</span>
@@ -70,14 +79,18 @@
                         </div>
                         <div class="col-5">
                             <div class="d-flex flex-wrap">
-                                <div *ngFor="let badge of getBadges(modification)" class="badge badge-primary">{{badge}}
+                                @for (badge of getBadges(modification); track badge) {
+                                <div class="badge badge-primary">{{badge}}
                                 </div>
+                                }
                             </div>
                         </div>
                     </div>
                 </li>
+                }
             </ul>
         </div>
+        }
         <div class="col-lg-3 col-md-5 col-sm-12">
             <div class="d-flex flex-column tab-content align-self-center">
                 <div class="p-2 text-center">
@@ -101,3 +114,4 @@
         </div>
     </div>
 </div>
+}
