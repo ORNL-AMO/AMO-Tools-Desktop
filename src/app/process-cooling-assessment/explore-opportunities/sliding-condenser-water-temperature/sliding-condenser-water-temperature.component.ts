@@ -87,6 +87,6 @@ export class SlidingCondenserWaterTemperatureComponent implements OnInit {
   }
 }
 
-export type SlidingCondenserWaterTempForm = {
+export interface SlidingCondenserWaterTempForm {
   followingTempDifferential: FormControl<number>;
-};
+}
