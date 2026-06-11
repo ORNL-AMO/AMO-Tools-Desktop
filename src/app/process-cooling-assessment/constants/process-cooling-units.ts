@@ -114,6 +114,6 @@ export interface AppUnits {
 }
 
 
-export type ProcessCoolingValidation = {
+export interface ProcessCoolingValidation {
   [unitType: string]: AppUnits;
-};
+}

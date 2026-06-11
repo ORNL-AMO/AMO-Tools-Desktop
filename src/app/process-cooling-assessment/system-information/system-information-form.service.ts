@@ -1,5 +1,5 @@
 // (TowerForm and methods moved into class below)
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl, ValidatorFn } from '@angular/forms';
 import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, TowerType, AirCoolingSource, TowerSizeMetric } from '../../shared/models/process-cooling-assessment';
 import { PROCESS_COOLING_VALIDATION } from '../constants/process-cooling-validation-rules';
@@ -11,7 +11,7 @@ import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 @Injectable()
 export class SystemInformationFormService {
 
-  constructor(private formBuilder: FormBuilder) { }
+  private formBuilder = inject(FormBuilder);
 
   getOperationsForm(operations: Operations, settings: Settings): FormGroup<OperationsForm> {
     let chilledWaterSupplyTempMin: number = PROCESS_COOLING_VALIDATION.chilledWaterSupplyTemp.min;
@@ -412,12 +412,9 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
   }
 
   public isCondenserSystemInputValid(systemInformationInput: SystemInformation, settings: Settings): boolean {
-    let systemInputForm: FormGroup<any>;
-    if (systemInformationInput.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
-      systemInputForm = this.getWaterCooledSystemInputForm(systemInformationInput.waterCooledSystemInput, settings);
-    } else {
-      systemInputForm = this.getAirCooledSystemInputForm(systemInformationInput.airCooledSystemInput, settings);
-    }
+    const systemInputForm = systemInformationInput.operations.condenserCoolingMethod === CondenserCoolingMethod.Water
+      ? this.getWaterCooledSystemInputForm(systemInformationInput.waterCooledSystemInput, settings)
+      : this.getAirCooledSystemInputForm(systemInformationInput.airCooledSystemInput, settings);
     return systemInputForm.valid;
   }
 }

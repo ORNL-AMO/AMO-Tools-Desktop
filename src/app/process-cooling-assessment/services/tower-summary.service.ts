@@ -188,7 +188,7 @@ export class TowerSummaryService {
 export interface TowerSummaryUI {
     modificationNames: ModificationNameCell[];
     totalRows: ReportTableRow[];
-    baselineEnergyBins?: TowerBinRow[];
+    baselineEnergyBins: TowerBinRow[];
     modificationEnergyBins?: TowerBinRow[][];
     binLabels: string[];
 }
