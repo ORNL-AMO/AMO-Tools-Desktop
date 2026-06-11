@@ -62,8 +62,8 @@
 
 <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
     <div class="nav-item" (click)="setSmallScreenPanelTab('details')"
-        [ngClass]="{'small-screen-active': smallScreenPanelTab === 'details'}">
-        <a class="nav-link" *ngIf="setupView() != 'inventory'">Help</a>
-        <a class="nav-link" *ngIf="setupView() == 'inventory'">Details</a>
+        [class.small-screen-active]="smallScreenPanelTab === 'details'">
+        @if (setupView() != 'inventory') {<a class="nav-link">Help</a>}
+        @if (setupView() == 'inventory') {<a class="nav-link">Details</a>}
     </div>
 </div>

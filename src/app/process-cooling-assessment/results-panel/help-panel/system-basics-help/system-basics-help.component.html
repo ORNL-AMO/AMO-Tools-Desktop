@@ -1,4 +1,4 @@
-<div class="pt-2 d-flex flex-column help-info">
+﻿<div class="pt-2 d-flex flex-column help-info">
     <h5>
         Baseline Help
         <br>
@@ -17,7 +17,8 @@
         </h6>
     </div>
 
-    <div class="my-2" *ngIf="focusedField() == 'utilityType'">
+    @if (focusedField() == 'utilityType') {
+    <div class="my-2">
         <h6>
             Utility Type
             <br>
@@ -27,8 +28,10 @@
             </small>
         </h6>
     </div>
+    }
 
-    <div class="my-2" *ngIf="focusedField() == 'electricityCost'">
+    @if (focusedField() == 'electricityCost') {
+    <div class="my-2">
         <h6>
             Electricity Cost
             <br>
@@ -38,8 +41,10 @@
             </small>
         </h6>
     </div>
+    }
 
-    <div class="my-2" *ngIf="focusedField() == 'equipmentNotes'">
+    @if (focusedField() == 'equipmentNotes') {
+    <div class="my-2">
         <h6>
             Equipment Notes
             <br>
@@ -49,5 +54,6 @@
             </small>
         </h6>
     </div>
+    }
 
 </div>
