@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, OnDestroy, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, OnDestroy, input, ElementRef, ViewChild } from '@angular/core';
 import { TowerBinRow, TowerSummaryUI } from '../../services/tower-summary.service';
 import { PrintOptionsMenuService } from '../../../shared/print-options-menu/print-options-menu.service';
 import { Subscription } from 'rxjs';
@@ -8,24 +8,15 @@ import { PlotlyService } from 'angular-plotly.js';
     selector: 'app-tower-energy-histogram',
     standalone: false,
     template: `
-      <div id="towerEnergyHistogram" #towerEnergyHistogram [class.print-view]="printView"></div>
+      <div id="towerEnergyHistogram" #towerEnergyHistogram></div>
   `,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TowerEnergyHistogramComponent implements OnInit, OnDestroy {
-    @Input() towerSummaryUI: TowerSummaryUI;
-    @ViewChild('towerEnergyHistogram', { static: false }) towerEnergyHistogram: ElementRef;
+export class TowerEnergyHistogramComponent {
+    towerSummaryUI = input.required<TowerSummaryUI>();
+    @ViewChild('towerEnergyHistogram', { static: false }) towerEnergyHistogram!: ElementRef;
 
     private plotlyService: PlotlyService = inject(PlotlyService);
-    private printOptionsMenuService: PrintOptionsMenuService = inject(PrintOptionsMenuService);
-    private showPrintViewSub: Subscription;
-    printView: boolean;
-
-    ngOnInit(): void {
-        this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
-            this.printView = val;
-        });
-    }
 
     ngAfterViewInit() {
         // this.renderChart();
@@ -33,8 +24,8 @@ export class TowerEnergyHistogramComponent implements OnInit, OnDestroy {
 
 // * 8362 - This chart is unfinished and not currently shown - a different plan has been suggested since current implementation.
     renderChart() {
-        const baselineBins = this.towerSummaryUI.baselineEnergyBins;
-        const binLabels = this.towerSummaryUI.binLabels || [];
+        const baselineBins = this.towerSummaryUI().baselineEnergyBins!;
+        const binLabels = this.towerSummaryUI().binLabels || [];
         const traces = [];
 
         traces.push({
@@ -45,7 +36,7 @@ export class TowerEnergyHistogramComponent implements OnInit, OnDestroy {
             marker: { color: '#007bff' }
         });
 
-        this.towerSummaryUI.modificationEnergyBins.forEach((row: TowerBinRow[], i) => {
+        this.towerSummaryUI().modificationEnergyBins?.forEach((row: TowerBinRow[], i) => {
             row.forEach((dataRow, index) => {
                 // default to energy for now, ignore hours
                 if (index === 2) {
@@ -71,15 +62,9 @@ export class TowerEnergyHistogramComponent implements OnInit, OnDestroy {
             modeBarButtonsToRemove: ['toggleHover', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d', 'zoom2d', 'lasso2d', 'pan2d', 'select2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian'],
             displaylogo: false,
             displayModeBar: true,
-            responsive: this.printView ? false : true
+            responsive: true
         };
         this.plotlyService.newPlot(this.towerEnergyHistogram.nativeElement, traces, plotLayout, configOptions);
-    }
-
-    ngOnDestroy() {
-        if (this.showPrintViewSub) {
-            this.showPrintViewSub.unsubscribe();
-        }
     }
 
 }

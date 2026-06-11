@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, input, ViewChild } from '@angular/core';
 import { InputSummarySection, ModificationNameCell } from '../../../../shared/report-builder/models/report-ui-models';
 
 @Component({
@@ -7,9 +7,9 @@ import { InputSummarySection, ModificationNameCell } from '../../../../shared/re
     standalone: false
 })
 export class InputSummaryTableComponent {
-    @Input() sections: InputSummarySection[] = [];
-    @Input() modificationNames: ModificationNameCell[] = [];
-    @ViewChild('tableEl', { static: false }) tableEl: ElementRef;
+    sections = input.required<InputSummarySection[]>();
+    modificationNames = input.required<ModificationNameCell[]>();
+    @ViewChild('tableEl', { static: false }) tableEl!: ElementRef;
 
     get numMods(): number {
         return this.modificationNames?.length ?? 0;

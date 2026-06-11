@@ -5,7 +5,8 @@
     </small>
 </h5>
 <hr class="my-1 hr-spacer">
-<div class="my-2" *ngIf="focusedField() == 'variableFlow'">
+@if (focusedField() == 'variableFlow') {
+<div class="my-2">
     <h6>
         Variable Flow
         <br>
@@ -19,8 +20,10 @@
         </small>
     </h6>
 </div>
+}
 
-<div class="my-2" *ngIf="focusedField() == 'flowRate'">
+@if (focusedField() == 'flowRate') {
+<div class="my-2">
     <h6>
         Flow Rate
         <br>
@@ -38,8 +41,10 @@
         </small>
     </h6>
 </div>
+}
 
-<div class="my-2" *ngIf="focusedField() == 'efficiency'">
+@if (focusedField() == 'efficiency') {
+<div class="my-2">
     <h6>
         Pump Efficiency
         <br>
@@ -53,8 +58,10 @@
         </small>
     </h6>
 </div>
+}
 
-<div class="my-2" *ngIf="focusedField() == 'motorSize'">
+@if (focusedField() == 'motorSize') {
+<div class="my-2">
     <h6>
         Motor Size
         <br>
@@ -67,8 +74,10 @@
         </small>
     </h6>
 </div>
+}
 
-<div class="my-2" *ngIf="focusedField() == 'motorEfficiency'">
+@if (focusedField() == 'motorEfficiency') {
+<div class="my-2">
     <h6>
         Motor Efficiency
         <br>
@@ -81,3 +90,4 @@
         </small>
     </h6>
 </div>
+}

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, Signal, WritableSignal } from '@angular/core';
+import { Component, inject, output, Signal, WritableSignal } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
@@ -28,11 +28,9 @@ export class SystemBasicsComponent {
   readonly settings: WritableSignal<Settings> = this.processCoolingAssessmentService.settingsSignal;
   readonly processCooling: Signal<ProcessCoolingAssessment> = this.processCoolingAssessmentService.processCoolingSignal;
 
-  @Output('openUpdateUnitsModal')
-  openUpdateUnitsModal = new EventEmitter<Settings>();
-  settingsForm: UntypedFormGroup;
-  oldSettings: Settings;
-  systemBasicsForm: UntypedFormGroup;
+  openUpdateUnitsModal = output<Settings>();
+  settingsForm!: UntypedFormGroup;
+  oldSettings!: Settings;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
   showUpdateUnitsModal: boolean = false;
@@ -62,7 +60,7 @@ export class SystemBasicsComponent {
     let newSettings: Settings = this.settingsService.getSettingsFromForm(this.settingsForm);
     if (newSettings.unitsOfMeasure != this.oldSettings.unitsOfMeasure) {
       let processCooling: ProcessCoolingAssessment = this.processCooling();
-      processCooling.existingDataUnits = this.oldSettings.unitsOfMeasure;
+      processCooling.existingDataUnits = this.oldSettings.unitsOfMeasure as string;
       this.processCoolingAssessmentService.setProcessCooling(processCooling);
       this.showUpdateDataReminder = true;
     }
@@ -87,7 +85,7 @@ export class SystemBasicsComponent {
     let processCooling: ProcessCoolingAssessment = this.processCooling();
     processCooling = this.convertProcessCoolingService.convertProcessCooling(processCooling, this.oldSettings, newSettings);
     this.showUpdateDataReminder = false;
-    processCooling.existingDataUnits = newSettings.unitsOfMeasure;
+    processCooling.existingDataUnits = newSettings.unitsOfMeasure as string;
     this.processCoolingAssessmentService.setProcessCooling(processCooling);
     this.oldSettings = newSettings;
   }
