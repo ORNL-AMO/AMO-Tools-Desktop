@@ -13,6 +13,7 @@ import {
 import { SteamLeakMeasurementMethod } from '../steam-leak-constants';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { roundVal } from '../../../../shared/helperFunctions';
+import { ConvertSteamLeakService } from '../convert-steam-leak.service';
 
 const HOURS_PER_YEAR = 8760;
 
@@ -126,6 +127,7 @@ export class SteamLeakSurveyFormService {
       max: roundVal(this.convertUnitsService.value(plumeLengthMaxFt).from('ft').to('m'), 2),
     };
   }
+  private readonly convertSteamLeakService = inject(ConvertSteamLeakService);
 
   buildLeakMetaForm(leak: SteamLeakSurveyData): FormGroup<LeakMetaFormControls> {
     return this.fb.group<LeakMetaFormControls>({
@@ -219,8 +221,8 @@ export class SteamLeakSurveyFormService {
     };
   }
 
-  getEmptySteamLeakData(): SteamLeakSurveyData {
-    return {
+  getEmptySteamLeakData(settings?: Settings): SteamLeakSurveyData {
+    let data: SteamLeakSurveyData = {
       leakDescription: 'New Leak Description',
       name: 'New Leak',
       selected: true,
@@ -231,5 +233,9 @@ export class SteamLeakSurveyFormService {
       plumeMethodData: { steamPressure: 115, steamTemperature: 212, ambientTemperature: 70, plumeLength: 3, pressureReductionMethod: 0, turbineEfficiency: 0 },
       units: 0,
     };
+    if (settings?.unitsOfMeasure === 'Metric') {
+      data = this.convertSteamLeakService.convertInputDataImperialToMetric(data);
+    }
+    return data;
   }
 }

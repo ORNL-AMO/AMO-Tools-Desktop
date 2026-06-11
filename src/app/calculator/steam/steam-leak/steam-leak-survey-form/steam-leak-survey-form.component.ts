@@ -82,7 +82,7 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
   addLeak(): void {
     const current = this.surveyService.steamLeakInput();
     if (!current) return;
-    const emptyLeak = this.formService.getEmptySteamLeakData();
+    const emptyLeak = this.formService.getEmptySteamLeakData(this.settings());
     const updatedLeaks = [...current.steamLeakSurveyInputVec, emptyLeak];
     this.surveyService.steamLeakInput.set({ ...current, steamLeakSurveyInputVec: updatedLeaks });
     this.surveyService.currentLeakIndex.set(updatedLeaks.length - 1);

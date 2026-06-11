@@ -6,6 +6,7 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 
 import { SteamLeakSurveyComponent } from './steam-leak-survey.component';
 import { SteamLeakSurveyService } from './steam-leak-survey-service';
+import { ConvertSteamLeakService } from './convert-steam-leak.service';
 import { SteamLeakSurveyFormComponent } from './steam-leak-survey-form/steam-leak-survey-form.component';
 import { SteamLeakSurveyFormService } from './steam-leak-survey-form/steam-leak-survey-form.service';
 import { SteamEstimateMethodFormComponent } from './steam-leak-survey-form/steam-estimate-method-form/steam-estimate-method-form.component';
@@ -15,6 +16,7 @@ import { SteamPlumeMethodFormComponent } from './steam-leak-survey-form/steam-pl
 import { CostOfSteamFormComponent } from './cost-of-steam-form/cost-of-steam-form.component';
 import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-results-table/steam-leak-survey-results-table.component';
 import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { SteamLeakCopyTableComponent } from './steam-leak-copy-table/steam-leak-copy-table.component';
 @NgModule({
     declarations: [
         SteamLeakSurveyComponent,
@@ -24,6 +26,10 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
         CostOfSteamFormComponent,
         SteamPlumeMethodFormComponent,
         SteamLeakSurveyResultsTableComponent
+        SteamPlumeMethodFormComponent,
+        CostOfSteamFormComponent,
+        SteamLeakSurveyResultsTableComponent,
+        SteamLeakCopyTableComponent,
     ],
     imports: [
         CommonModule,
@@ -36,7 +42,8 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     exports: [SteamLeakSurveyComponent],
     providers: [
         SteamLeakSurveyService,
-        SteamLeakSurveyFormService
+        SteamLeakSurveyFormService,
+        ConvertSteamLeakService
     ]
 })
 export class SteamLeakSurveyModule {}
