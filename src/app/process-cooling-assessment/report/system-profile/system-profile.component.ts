@@ -22,7 +22,7 @@ export class SystemProfileComponent {
   private destroyRef = inject(DestroyRef);
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  copyTableString: any;
+  copyTableString: string;
   
   LOAD_LABELS = LOAD_LABELS;
 

@@ -1,11 +1,12 @@
-<h5>
+﻿<h5>
     Tower Help
     <br>
     <small class="text-muted">Enter data related to the tower cooling system</small>
 </h5>
 <hr class="my-1 hr-spacer">
 
-<div class="my-2" *ngIf="focusedField() == 'usesFreeCooling'">
+@if (focusedField() == 'usesFreeCooling') {
+<div class="my-2">
     <h6>
         Uses Free Cooling
         <br>
@@ -15,7 +16,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'isHEXRequired'">
+}
+
+@if (focusedField() == 'isHEXRequired') {
+<div class="my-2">
     <h6>
         Is HEX Required
         <br>
@@ -25,7 +29,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'HEXApproachTemp'">
+}
+
+@if (focusedField() == 'HEXApproachTemp') {
+<div class="my-2">
     <h6>
         HEX Approach Temp
         <br>
@@ -35,7 +42,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'numberOfTowers'">
+}
+
+@if (focusedField() == 'numberOfTowers') {
+<div class="my-2">
     <h6>
         Number of Towers
         <br>
@@ -47,7 +57,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'towerType'">
+}
+
+@if (focusedField() == 'towerType') {
+<div class="my-2">
     <h6>
         Tower Type
         <br>
@@ -57,7 +70,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'numberOfFans'">
+}
+
+@if (focusedField() == 'numberOfFans') {
+<div class="my-2">
     <h6>
         Number of Fans
         <br>
@@ -66,7 +82,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'fanSpeedType'">
+}
+
+@if (focusedField() == 'fanSpeedType') {
+<div class="my-2">
     <h6>
         Fan Speed Type
         <br>
@@ -76,7 +95,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'towerSizeMetric'">
+}
+
+@if (focusedField() == 'towerSizeMetric') {
+<div class="my-2">
     <h6>
         Tower Size Metric
         <br>
@@ -86,7 +108,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'fanType'">
+}
+
+@if (focusedField() == 'fanType') {
+<div class="my-2">
     <h6>
         Fan Type
         <br>
@@ -98,7 +123,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'towerSize'">
+}
+
+@if (focusedField() == 'towerSize') {
+<div class="my-2">
     <h6>
         Tower Size
         <br>
@@ -114,3 +142,4 @@
         </small>
     </h6>
 </div>
+}

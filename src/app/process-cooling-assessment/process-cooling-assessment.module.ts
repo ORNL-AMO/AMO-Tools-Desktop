@@ -123,96 +123,117 @@ const ROUTES: Route[] = [
       {
         path: ROUTE_TOKENS.baseline,
         component: BaselineComponent,
+        data: { mainView: ROUTE_TOKENS.baseline },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.assessmentSettings, pathMatch: 'full' },
           {
             path: ROUTE_TOKENS.assessmentSettings,
             component: SystemBasicsComponent,
+            data: { childView: ROUTE_TOKENS.assessmentSettings, stepIndex: 0 },
           },
           {
             path: ROUTE_TOKENS.systemInformation,
             component: SystemInformationComponent,
+            data: { childView: ROUTE_TOKENS.systemInformation },
             children: [
               { path: '', redirectTo: ROUTE_TOKENS.operations, pathMatch: 'full' },
               {
                 path: ROUTE_TOKENS.operations,
                 component: OperationsComponent,
+                data: { setupSubView: ROUTE_TOKENS.operations, stepIndex: 1 },
               },
               {
                 path: ROUTE_TOKENS.weather,
-                loadChildren: () => import('../shared/modules/weather-data/weather-data.module').then(m => m.WeatherDataModule)
+                loadChildren: () => import('../shared/modules/weather-data/weather-data.module').then(m => m.WeatherDataModule),
+                data: { setupSubView: ROUTE_TOKENS.weather, stepIndex: 2 },
               },
               {
                 path: ROUTE_TOKENS.waterPump,
                 component: PumpWrapperComponent,
+                data: { setupSubView: ROUTE_TOKENS.waterPump, stepIndex: 3 },
               },
               {
                 path: ROUTE_TOKENS.condenserCoolingSystem,
-                component: CondenserCoolingSystemComponent
+                component: CondenserCoolingSystemComponent,
+                data: { setupSubView: ROUTE_TOKENS.condenserCoolingSystem, stepIndex: 4 },
               },
               {
                 path: ROUTE_TOKENS.tower,
-                component: TowerComponent
+                component: TowerComponent,
+                data: { setupSubView: ROUTE_TOKENS.tower, stepIndex: 5 },
               }
             ]
           },
           {
             path: ROUTE_TOKENS.chillerInventory,
             component: ChillerInventoryComponent,
+            data: { childView: ROUTE_TOKENS.chillerInventory, stepIndex: 6 },
           },
           {
             path: ROUTE_TOKENS.operatingSchedule,
-            component: OperatingScheduleComponent
+            component: OperatingScheduleComponent,
+            data: { childView: ROUTE_TOKENS.operatingSchedule, stepIndex: 7 },
           },
           {
             path: ROUTE_TOKENS.loadSchedule,
-            component: LoadScheduleComponent
+            component: LoadScheduleComponent,
+            data: { childView: ROUTE_TOKENS.loadSchedule, stepIndex: 8 },
           }
         ]
       },
       {
         path: ROUTE_TOKENS.assessment,
         component: AssessmentComponent,
+        data: { mainView: ROUTE_TOKENS.assessment },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.exploreOpportunities, pathMatch: 'full' },
           {
             path: ROUTE_TOKENS.exploreOpportunities,
             component: ExploreOpportunitiesComponent,
+            data: { childView: ROUTE_TOKENS.exploreOpportunities, stepIndex: 9 },
           },
         ]
       },
       {
         path: ROUTE_TOKENS.report,
         component: ReportComponent,
+        data: { mainView: ROUTE_TOKENS.report, stepIndex: 10 },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.executiveSummary, pathMatch: 'full' },
           {
             path: ROUTE_TOKENS.facilityInfo,
             component: FacilityInfoComponent,
+            data: { childView: ROUTE_TOKENS.facilityInfo },
           },
           {
             path: ROUTE_TOKENS.executiveSummary,
             component: ExecutiveSummaryComponent,
+            data: { childView: ROUTE_TOKENS.executiveSummary },
           },
           {
             path: ROUTE_TOKENS.performanceProfile,
             component: PerformanceProfileComponent,
+            data: { childView: ROUTE_TOKENS.performanceProfile },
           },
           {
             path: ROUTE_TOKENS.systemProfile,
             component: SystemProfileComponent,
+            data: { childView: ROUTE_TOKENS.systemProfile },
           },
           {
             path: ROUTE_TOKENS.pumpSummary,
             component: PumpSummaryComponent,
+            data: { childView: ROUTE_TOKENS.pumpSummary },
           },
           {
             path: ROUTE_TOKENS.inputSummary,
             component: InputSummaryComponent,
+            data: { childView: ROUTE_TOKENS.inputSummary },
           },
           {
             path: ROUTE_TOKENS.towerSummary,
             component: TowerSummaryComponent,
+            data: { childView: ROUTE_TOKENS.towerSummary },
           },
         ]
       }

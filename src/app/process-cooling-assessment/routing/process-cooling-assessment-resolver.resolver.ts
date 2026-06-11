@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
-import { Injectable, Inject, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Assessment } from '../../shared/models/assessment';
 import { catchError, forkJoin, from, map, Observable, of, switchMap, take, throwError, tap } from 'rxjs';
 import { Settings } from '../../shared/models/settings';
@@ -22,17 +22,14 @@ export interface ProcessCoolingResolverData {
 @Injectable()
 export class ProcessCoolingAssessmentResolver implements Resolve<ProcessCoolingResolverData> {
   private appErrorService = inject(AppErrorService);
-
-  constructor(
-    private assessmentDbService: AssessmentDbService,
-    private settingsDbService: SettingsDbService,
-    private processCoolingAssessmentService: ProcessCoolingAssessmentService,
-    private modificationService: ModificationService,
-    @Inject(WEATHER_CONTEXT) private processCoolingWeatherContextService: WeatherContext,
-    private inventoryService: ChillerInventoryService,
-    private localStorageService: LocalStorageService,
-    private router: Router
-  ) { }
+  private assessmentDbService = inject(AssessmentDbService);
+  private settingsDbService = inject(SettingsDbService);
+  private processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
+  private modificationService = inject(ModificationService);
+  private processCoolingWeatherContextService = inject(WEATHER_CONTEXT);
+  private inventoryService = inject(ChillerInventoryService);
+  private localStorageService = inject(LocalStorageService);
+  private router = inject(Router);
 
   resolve(route: ActivatedRouteSnapshot): Observable<ProcessCoolingResolverData> {
     const id = route.paramMap.get('assessmentId');
