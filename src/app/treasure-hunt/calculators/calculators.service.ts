@@ -34,7 +34,7 @@ import { CoolingTowerBasinTreasureHuntService } from '../treasure-hunt-calculato
 import { AssessmentOpportunityService } from '../treasure-hunt-calculator-services/assessment-opportunity.service';
 import { BoilerBlowdownRateTreasureHuntService } from '../treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 import { PowerFactorCorrectionTreasureHuntService } from '../treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
-
+import { SteamLeakTreasureHuntService } from '../treasure-hunt-calculator-services/steam-leak-treasure-hunt.service';
 @Injectable()
 export class CalculatorsService {
 
@@ -74,7 +74,8 @@ export class CalculatorsService {
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
     private assessmentOpportunityService: AssessmentOpportunityService,
     private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,
-    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService
+    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService,
+    private steamLeakTreasureHuntService: SteamLeakTreasureHuntService
     ) {
     this.selectedCalc = new BehaviorSubject<string>('none');
   }
@@ -145,6 +146,8 @@ export class CalculatorsService {
       this.boilerBlowdownRateTreasureHuntService.initNewCalculator();
     } else if (calculatorType === Treasure.powerFactorCorrection) {
       this.powerFactorCorrectionTreasureHuntService.initNewCalculator();
+    } else if (calculatorType === Treasure.steamLeak) {
+      this.steamLeakTreasureHuntService.initNewCalculator();
     }
     this.selectedCalc.next(calculatorType);
   }
@@ -323,6 +326,11 @@ export class CalculatorsService {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.powerFactorCorrection, settings);
       opportunityCardData = this.powerFactorCorrectionTreasureHuntService.getPowerFactorCorrectionCardData(opportunityCardData.powerFactorCorrection, opportunitySummary, treasureHunt.powerFactorCorrectionOpportunities.length - 1, treasureHunt.currentEnergyUsage, settings);
 
+    } else if (opportunityCardData.opportunityType === Treasure.steamLeak) {
+      opportunityCardData.steamLeakSurvey.opportunitySheet = this.updateCopyName(opportunityCardData.steamLeakSurvey.opportunitySheet);
+      this.steamLeakTreasureHuntService.saveTreasureHuntOpportunity(opportunityCardData.steamLeakSurvey, treasureHunt);
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.steamLeakSurvey, settings);
+      opportunityCardData = this.steamLeakTreasureHuntService.getSteamLeakSurveyCardData(opportunityCardData.steamLeakSurvey, opportunitySummary, settings, treasureHunt.steamLeakSurveys.length - 1, treasureHunt.currentEnergyUsage);
     }
     return opportunityCardData;
   }
@@ -390,8 +398,9 @@ export class CalculatorsService {
       this.boilerBlowdownRateTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.boilerBlowdownRate);
     } else if (opportunityCardData.opportunityType === Treasure.powerFactorCorrection) {
       this.powerFactorCorrectionTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.powerFactorCorrection);
+    } else if (opportunityCardData.opportunityType === Treasure.steamLeak) {
+      // this.steamLeakTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.steamLeakSurvey);
     }
-
     this.selectedCalc.next(opportunityCardData.opportunityType);
   }
 
@@ -561,6 +570,11 @@ export class CalculatorsService {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.powerFactorCorrection, settings);
       updatedCard = this.powerFactorCorrectionTreasureHuntService.getPowerFactorCorrectionCardData(opportunityCardData.powerFactorCorrection, opportunitySummary, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage, settings);
     
+    } else if (opportunityCardData.opportunityType === Treasure.steamLeak) {
+      opportunityCardData.steamLeakSurvey.selected = opportunityCardData.selected;
+      treasureHunt.steamLeakSurveys[opportunityCardData.opportunityIndex] = opportunityCardData.steamLeakSurvey;
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(opportunityCardData.steamLeakSurvey, settings);
+      updatedCard = this.steamLeakTreasureHuntService.getSteamLeakSurveyCardData(opportunityCardData.steamLeakSurvey, opportunitySummary, settings, opportunityCardData.opportunityIndex, treasureHunt.currentEnergyUsage);
     }
     
     this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
@@ -626,6 +640,8 @@ export class CalculatorsService {
       this.boilerBlowdownRateTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } else if (deleteOpportunity.opportunityType === Treasure.powerFactorCorrection) {
       this.powerFactorCorrectionTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
+    } else if (deleteOpportunity.opportunityType === Treasure.opportunitySheet) {
+      this.standaloneOpportunitySheetService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     }
 
     return treasureHunt;

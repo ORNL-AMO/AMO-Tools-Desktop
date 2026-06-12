@@ -31,7 +31,7 @@ export class SteamLeakSurveyService {
 
   initDefaultEmptyInputs(settings: Settings): void {
     this.steamLeakInput.set({
-      steamLeakSurveyInputVec: [this.formService.getEmptySteamLeakData(settings)],
+      steamLeakSurveyInputVec: [this.formService.getEmptySteamLeakData()],
       facilitySteamLeakData: this.getDefaultFacilityData(settings),
     });
   }
@@ -66,7 +66,7 @@ export class SteamLeakSurveyService {
         if (this.settings) {
           this.initDefaultEmptyInputs(this.settings);
         } else {
-          const emptyLeak = this.formService.getEmptySteamLeakData(this.settings);
+          const emptyLeak = this.formService.getEmptySteamLeakData();
           this.steamLeakInput.set({ ...current, steamLeakSurveyInputVec: [emptyLeak] });
         }
         this.resetEventsSubject.next();
@@ -184,7 +184,6 @@ export class SteamLeakSurveyService {
         },
         emptyResult()
         );
-        //WK Savings, potentially Incorrect math, come back and review
         const savings: SteamLeakSurveyResult = {
             leakRate: cumulativeBaselineResults.leakRate - cumulativeModifiactionResults.leakRate,
             steamLoss: cumulativeBaselineResults.steamLoss - cumulativeModifiactionResults.steamLoss,
@@ -192,7 +191,10 @@ export class SteamLeakSurveyService {
             leakCost: cumulativeBaselineResults.leakCost - cumulativeModifiactionResults.leakCost,
         };
 
-        //WK potential missing work, see air-leak-survey.service for reference
+        cumulativeModifiactionResults.steamLoss = cumulativeBaselineResults.steamLoss - savings.steamLoss;
+        cumulativeModifiactionResults.energyLoss = cumulativeBaselineResults.energyLoss - savings.energyLoss;
+        cumulativeModifiactionResults.leakCost = cumulativeBaselineResults.leakCost - savings.leakCost;
+        cumulativeModifiactionResults.leakRate = cumulativeBaselineResults.leakRate - savings.leakRate;
 
         return {
             individualLeaks,
@@ -204,8 +206,8 @@ export class SteamLeakSurveyService {
     };
 
     private isValidInput(input: SteamLeakSurveyInput): boolean {
-        if (!input.facilitySteamLeakData) return false;
-        if (!input.steamLeakSurveyInputVec || input.steamLeakSurveyInputVec.length === 0) return false;
+        if (!input?.facilitySteamLeakData || !Array.isArray(input.steamLeakSurveyInputVec)) return false;
+        if (!this.formService.buildFacilitySteamLeakForm(input.facilitySteamLeakData).valid) return false;
         return true;
     }
 
@@ -222,5 +224,5 @@ export class SteamLeakSurveyService {
 
 
 function emptyResult(): SteamLeakSurveyResult {
-    return { name: '', leakRate: 0, steamLoss: 0, energyLoss: 0, leakCost: 0 };
+    return { leakRate: 0, steamLoss: 0, energyLoss: 0, leakCost: 0 };
 }
