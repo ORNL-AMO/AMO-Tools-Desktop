@@ -48,6 +48,15 @@ export type LossView = typeof LossView[keyof typeof LossView];
 
 export type ProcessHeatingView = MainView | BaselineView | AssessmentView | ReportView | LossView;
 
+export const HeatingEquipmentConfiguration = {
+  FUEL_FIRED: 'fuel-fired',
+  ELECTROTECHNOLOGY_STANDARD: 'electrotechnology-standard',
+  ELECTROTECHNOLOGY_EAF: 'electrotechnology-eaf',
+  CUSTOM_ELECTROTECHNOLOGY: 'custom-electrotechnology',
+  STEAM: 'steam',
+} as const;
+export type HeatingEquipmentConfiguration = typeof HeatingEquipmentConfiguration[keyof typeof HeatingEquipmentConfiguration];
+
 export interface ViewLink {
   view: ProcessHeatingView;
   label: string;

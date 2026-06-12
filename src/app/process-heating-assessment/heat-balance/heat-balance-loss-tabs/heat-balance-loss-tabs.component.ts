@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
-import { HEAT_BALANCE_VIEW_LINKS, ViewLink } from '../../models/views';
+import { ViewLink } from '../../models/views';
 import { ProcessHeatingUiService } from '../../services/process-heating-ui.service';
 
 @Component({
@@ -12,13 +12,13 @@ import { ProcessHeatingUiService } from '../../services/process-heating-ui.servi
 export class HeatBalanceLossTabsComponent {
   private readonly uiService = inject(ProcessHeatingUiService);
 
-  readonly HEAT_BALANCE_VIEW_LINKS = HEAT_BALANCE_VIEW_LINKS;
+  readonly visibleHeatBalanceTabs: Signal<ViewLink[]> = this.uiService.visibleHeatBalanceTabs;
   readonly lossSubView: Signal<string> = this.uiService.lossSubView;
   readonly canContinue: Signal<boolean> = this.uiService.canContinue;
   readonly canGoBack: Signal<boolean> = this.uiService.canGoBack;
 
-  isLinkDisabled(_link: ViewLink): boolean {
-    return false; // pathway gating added in Step 2
+  isLinkDisabled(link: ViewLink): boolean {
+    return !this.uiService.canVisitView(link.view);
   }
 
   handleCanNavigate(event: MouseEvent, link: ViewLink): boolean {

@@ -8,7 +8,7 @@ The heat balance is the core data-entry section of PHAST. The user enters the ph
 
 ## Purpose
 
-A heat balance answers the question: *where does the energy go?* By accounting for every loss pathway, PHAST can tell the user what fraction of input energy actually heats the charge material (the product) versus what is wasted. This breakdown makes it possible to prioritize improvements.
+A heat balance answers the question: *where does the energy go?* By accounting for every loss heating system configuration, PHAST can tell the user what fraction of input energy actually heats the charge material (the product) versus what is wasted. This breakdown makes it possible to prioritize improvements.
 
 ---
 

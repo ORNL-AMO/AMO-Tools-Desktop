@@ -3,7 +3,7 @@
  *
  * Wires up the full PhastResultsService chain via direct instantiation (no TestBed).
  * All services in the chain take only UntypedFormBuilder and/or ConvertUnitsService —
- * no IndexedDB dependencies are needed for the fuel-fired By Volume pathway.
+ * no IndexedDB dependencies are needed for the fuel-fired By Volume heating system configuration.
  *
  * Usage: call buildPhastServices() in a beforeAll — it initializes WASM internally.
  */

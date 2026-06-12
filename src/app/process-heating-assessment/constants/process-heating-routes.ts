@@ -19,7 +19,7 @@ export const ROUTE_TOKENS = {
   inputSummary: 'input-summary',
   facilityInfo: 'facility-info',
 
-  // Loss sub-tabs (under heat-balance) — all-pathway
+  // Loss sub-tabs (under heat-balance) — all-heating system configuration
   chargeMaterial: 'charge-material',
   wallLosses: 'wall-losses',
   extendedSurface: 'extended-surface',
