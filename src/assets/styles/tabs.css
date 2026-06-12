@@ -87,6 +87,11 @@ Tabs
     border-bottom:   #3055cf groove 3px;
   }
 
+  .process-heating-assessment .tabs.primary .active a {
+    border: none;
+    border-bottom: var(--process-heating-assessment) solid 3px;
+  }
+
   .process-cooling-assessment .tabs.primary .active a {
     border: none;
     border-bottom:   var(--process-cooling-assessment) groove 3px;
@@ -215,6 +220,10 @@ Tabs
     border-bottom: #7030A0 solid 3px;
   }
 
+  .tabs.subtabs.process-heating-assessment {
+    border-bottom: var(--process-heating-assessment) solid 3px;
+  }
+
   .tabs.subtabs.process-cooling-assessment {
     border-bottom: #009885 solid 3px;
   }
@@ -266,6 +275,8 @@ Tabs
     .tabs.subtabs.compressed-air .active.missing-data .step-number,
     .tabs.subtabs.water-assessment .missing-data .step-number,
     .tabs.subtabs.water-assessment .active.missing-data .step-number,
+    .tabs.subtabs.process-heating-assessment .missing-data .step-number,
+    .tabs.subtabs.process-heating-assessment .active.missing-data .step-number,
     .tabs.subtabs.process-cooling-assessment .missing-data .step-number,
     .tabs.subtabs.process-cooling-assessment .active.missing-data .step-number,
     .tabs.subtabs.progress-tabs.pump-inventory.missing-data {
@@ -284,8 +295,10 @@ Tabs
     .tabs.subtabs.waste-water .input-error .step-number,
     .tabs.subtabs.compressed-air .active.input-error .step-number,
     .tabs.subtabs.compressed-air .input-error .step-number, 
+    .tabs.subtabs.process-heating-assessment .active.input-error .step-number,
+    .tabs.subtabs.process-heating-assessment .input-error .step-number,
     .tabs.subtabs.process-cooling-assessment .active.input-error .step-number,
-    .tabs.subtabs.process-cooling-assessment .input-error .step-number,  
+    .tabs.subtabs.process-cooling-assessment .input-error .step-number,
     .tabs.subtabs.water-assessment .active.input-error .step-number,
     .tabs.subtabs.water-assessment .input-error .step-number
     {
@@ -304,6 +317,8 @@ Tabs
     .tabs.subtabs.waste-water .success .step-number,
     .tabs.subtabs.compressed-air.active.success .step-number,
     .tabs.subtabs.compressed-air .success .step-number,
+    .tabs.subtabs.process-heating-assessment.active.success .step-number,
+    .tabs.subtabs.process-heating-assessment .success .step-number,
     .tabs.subtabs.process-cooling-assessment.active.success .step-number,
     .tabs.subtabs.process-cooling-assessment .success .step-number,
     .tabs.subtabs.water-assessment.active.success .step-number,
@@ -344,6 +359,10 @@ Tabs
 
       .tabs.subtabs.compressed-air .active .step-number {
         background: #7030A0;
+      }
+
+      .tabs.subtabs.process-heating-assessment .active .step-number {
+        background: var(--process-heating-assessment);
       }
 
       .tabs.subtabs.process-cooling-assessment .active .step-number {

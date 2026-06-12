@@ -1,0 +1,28 @@
+.process-heating-container {
+    height: 100vh;
+    background: #ececec;
+    display: flex;
+    flex-direction: column;
+}
+
+div#processHeatingFooter.footer {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+#processHeatingBanner {
+    flex: 0 0 auto;
+    z-index: 0;
+}
+
+.modal-open {
+    z-index: initial !important;
+}
+
+.btn-sm.active {
+    background-color: var(--process-heating-assessment);
+}
+
+.process-heating-assessment .assessment-panel-container::-webkit-scrollbar-thumb {
+    background-color: var(--process-heating-assessment);
+}

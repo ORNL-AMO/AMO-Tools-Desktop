@@ -1,0 +1,58 @@
+@if (baselineResults$ | async; as results) {
+  <div class="results-panel">
+    <div class="results-panel-header">Heat Balance Results</div>
+    <div class="results-panel-body">
+      <div class="result-row">
+        <span class="result-label">Charge Materials</span>
+        <span class="result-value">{{results.totalChargeMaterialLoss | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Fixtures, trays etc.</span>
+        <span class="result-value">{{results.totalFixtureLoss | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Wall Losses</span>
+        <span class="result-value">{{results.totalWallLoss | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Cooling Losses</span>
+        <span class="result-value">{{results.totalCoolingLoss | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Atmosphere Losses</span>
+        <span class="result-value">{{results.totalAtmosphereLoss | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Opening Losses</span>
+        <span class="result-value">{{results.totalOpeningLoss | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Leakage Losses</span>
+        <span class="result-value">{{results.totalLeakageLoss | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Extended Surface Losses</span>
+        <span class="result-value">{{results.totalExtSurfaceLoss | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Other Losses</span>
+        <span class="result-value">{{results.totalOtherLoss | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Flue Gas Losses</span>
+        <span class="result-value">{{results.totalFlueGas | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label">Total Available Heat Required</span>
+        <span class="result-value">{{results.totalInput | number:'1.2-2'}}</span>
+      </div>
+      <div class="result-row">
+        <span class="result-label result-label--bold">Gross Heat Input</span>
+        <span class="result-value result-value--bold">{{results.grossHeatInput | number:'1.2-2'}}</span>
+      </div>
+      <!-- TODO Step 17: add conditional rows — Aux Power Losses, Slag Losses, Available Heat (%),
+           Flue Gas System Losses, Exothermic Heat, EAF-specific rows, CO₂ Emissions —
+           gated by showResultsCats from ProcessHeatingResultsService -->
+    </div>
+  </div>
+}
