@@ -105,7 +105,7 @@ Snapshots must never be auto-updated. Regeneration requires a deliberate decisio
 3. Run `npm run test:phast-snapshot` to confirm everything is green
 4. Commit fixture, spec, and snapshot together
 
-When adding fixtures for electrotechnology, EAF, or steam assessments, check `snapshot.helper.ts` — those pathways may require material DB services to be provided (the fuel-fired By Volume path is the only one that needs no DB mocking).
+When adding fixtures for electrotechnology, EAF, or steam assessments, check `snapshot.helper.ts` — those heating system configurations may require material DB services to be provided (the fuel-fired By Volume path is the only one that needs no DB mocking).
 
 > **Why the placeholder is required:** webpack resolves all `require()` calls statically at
 > bundle time, including the `require('./snapshots/…snap.json')` inside the `else` branch.

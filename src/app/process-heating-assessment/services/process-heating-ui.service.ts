@@ -1,9 +1,10 @@
-import { computed, inject, Injectable, Signal } from '@angular/core';
+import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
-import { ProcessHeatingView, ViewLink } from '../models/views';
+import { HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink } from '../models/views';
+export { MainView, BaselineView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
 
 interface ProcessHeatingRouteData {
   mainView?: string;
@@ -46,6 +47,33 @@ export class ProcessHeatingUiService {
     { view: ROUTE_TOKENS.report,                path: `${ROUTE_TOKENS.report}` },
   ];
 
+  // HeatingEquipmentConfiguration-specific loss tab sets
+  private readonly FUEL_FIRED_ONLY = new Set<string>([ROUTE_TOKENS.flueGas, ROUTE_TOKENS.gasLeakage]);
+  private readonly ELECTRO_STANDARD_ONLY = new Set<string>([ROUTE_TOKENS.auxiliaryPower, ROUTE_TOKENS.energyInputExhaustGas]);
+  private readonly EAF_ONLY = new Set<string>([ROUTE_TOKENS.energyInput, ROUTE_TOKENS.exhaustGas, ROUTE_TOKENS.slag]);
+  private readonly STEAM_CUSTOM_ONLY = new Set<string>([ROUTE_TOKENS.heatSystemEfficiency]);
+
+  // HeatingEquipmentConfiguration and modification state — will be driven by assessment service in Step 3
+  heatingSystemConfigurationSignal: WritableSignal<HeatingEquipmentConfiguration> = signal<HeatingEquipmentConfiguration>(HeatingEquipmentConfiguration.FUEL_FIRED);
+  activeModificationIndexSignal: WritableSignal<number> = signal<number>(0);
+
+  // UI state signals
+  focusedFieldSignal: WritableSignal<string> = signal<string>('default');
+  helpTextFieldSignal: WritableSignal<string> = signal<string>('default');
+  modalOpenSignal: WritableSignal<boolean> = signal<boolean>(false);
+  showModificationListModalSignal: WritableSignal<boolean> = signal<boolean>(false);
+  showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
+  showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
+
+  // Per-step validity signals — stubbed true, wired to assessment service in Step 3
+  private readonly isSystemBasicsValidSignal: WritableSignal<boolean> = signal<boolean>(true);
+  private readonly isHeatBalanceValidSignal: WritableSignal<boolean> = signal<boolean>(true);
+
+  // Loss tabs filtered to the active HeatingSystemConfiguration
+  readonly visibleHeatBalanceTabs: Signal<ViewLink[]> = computed(() =>
+    HEAT_BALANCE_VIEW_LINKS.filter(link => this.isTabVisibleForHeatingEquipmentConfiguration(link.view))
+  );
+
   private getActiveRouteData(): ProcessHeatingRouteData {
     let snapshot = this.router.routerState.snapshot.root;
     let merged: ProcessHeatingRouteData = {};
@@ -70,8 +98,12 @@ export class ProcessHeatingUiService {
   readonly lossSubView: Signal<string> = computed(() => this.routeData().lossSubView ?? '');
   readonly currentStepIndex: Signal<number> = computed(() => this.routeData().stepIndex ?? -1);
 
-  readonly canContinue: Signal<boolean> = computed(() => this.currentStepIndex() < this.STEPPED_ROUTES.length - 1);
-  readonly canGoBack: Signal<boolean> = computed(() => this.currentStepIndex() > 0);
+  readonly canContinue: Signal<boolean> = computed(() =>
+    this.findNextVisibleStep(this.currentStepIndex() + 1, 'forward') !== -1
+  );
+  readonly canGoBack: Signal<boolean> = computed(() =>
+    this.findNextVisibleStep(this.currentStepIndex() - 1, 'back') !== -1
+  );
 
   private get assessmentId(): string {
     let snapshot = this.router.routerState.snapshot.root;
@@ -86,22 +118,44 @@ export class ProcessHeatingUiService {
     return `/process-heating/${this.assessmentId}/${path}`;
   }
 
+  private isTabVisibleForHeatingEquipmentConfiguration(view: string): boolean {
+    const heatingSystemConfiguration = this.heatingSystemConfigurationSignal();
+    if (this.FUEL_FIRED_ONLY.has(view)) return heatingSystemConfiguration === HeatingEquipmentConfiguration.FUEL_FIRED;
+    if (this.ELECTRO_STANDARD_ONLY.has(view)) return heatingSystemConfiguration === HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_STANDARD;
+    if (this.EAF_ONLY.has(view)) return heatingSystemConfiguration === HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF;
+    if (this.STEAM_CUSTOM_ONLY.has(view)) {
+      return heatingSystemConfiguration === HeatingEquipmentConfiguration.STEAM || heatingSystemConfiguration === HeatingEquipmentConfiguration.CUSTOM_ELECTROTECHNOLOGY;
+    }
+    return true;
+  }
+
+  private findNextVisibleStep(startIndex: number, direction: 'forward' | 'back'): number {
+    const step = direction === 'forward' ? 1 : -1;
+    let i = startIndex;
+    while (i >= 0 && i < this.STEPPED_ROUTES.length) {
+      if (this.isTabVisibleForHeatingEquipmentConfiguration(this.STEPPED_ROUTES[i].view)) {
+        return i;
+      }
+      i += step;
+    }
+    return -1;
+  }
+
   continue(): void {
-    const nextIndex = this.currentStepIndex() + 1;
-    if (this.STEPPED_ROUTES[nextIndex] && this.canContinue()) {
+    const nextIndex = this.findNextVisibleStep(this.currentStepIndex() + 1, 'forward');
+    if (nextIndex !== -1) {
       this.router.navigateByUrl(this.buildUrl(this.STEPPED_ROUTES[nextIndex].path));
     }
   }
 
   back(): void {
-    const prevIndex = this.currentStepIndex() - 1;
-    if (this.STEPPED_ROUTES[prevIndex]) {
+    const prevIndex = this.findNextVisibleStep(this.currentStepIndex() - 1, 'back');
+    if (prevIndex !== -1) {
       this.router.navigateByUrl(this.buildUrl(this.STEPPED_ROUTES[prevIndex].path));
     }
   }
 
-  // All views open in Step 1 — validity gates added in Step 2
-  canVisitView(_view: ProcessHeatingView): boolean {
-    return true;
+  canVisitView(view: ProcessHeatingView): boolean {
+    return this.isTabVisibleForHeatingEquipmentConfiguration(view);
   }
 }
