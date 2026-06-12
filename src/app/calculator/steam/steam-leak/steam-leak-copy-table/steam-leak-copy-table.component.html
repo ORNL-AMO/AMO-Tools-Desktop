@@ -1,0 +1,54 @@
+@let output = surveyService.output();
+
+@if (output.individualLeaks.length > 0) {
+    <div class="hidden-copy-table">
+        <table #leaksTable>
+            <tbody>
+                <tr>
+                    <td>Leak Name</td>
+                    <td>Leak Description</td>
+                    <td>
+                        Leak Rate
+                        @if (settings().unitsOfMeasure !== 'Metric') { <span>(lb/hr)</span> }
+                        @else { <span>(kg/hr)</span> }
+                    </td>
+                    <td>
+                        Annual Steam Loss
+                        @if (settings().unitsOfMeasure !== 'Metric') { <span>(lb/yr)</span> }
+                        @else { <span>(kg/yr)</span> }
+                    </td>
+                    <td>
+                        Annual Energy Loss
+                        @if (settings().unitsOfMeasure !== 'Metric') { <span>(MMBtu/yr)</span> }
+                        @else { <span>(GJ/yr)</span> }
+                    </td>
+                    <td>Annual Leak Cost ($)</td>
+                </tr>
+                @for (leak of output.individualLeaks; track $index) {
+                    <tr>
+                        <td>{{ leak.name }}</td>
+                        <td>{{ leak.leakDescription }}</td>
+                        <td>{{ leak.leakRate }}</td>
+                        <td>
+                            @if (leak.steamLoss) { {{ leak.steamLoss | number:'1.0-0' }} }
+                            @else { -- }
+                        </td>
+                        <td>
+                            @if (leak.energyLoss) { {{ leak.energyLoss | number:'1.0-0' }} }
+                            @else { -- }
+                        </td>
+                        <td>
+                            @if (leak.leakCost) { {{ leak.leakCost | number:'1.2-2' }} }
+                            @else { -- }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <app-exportable-results-table
+        [tableString]="leaksTableString"
+        (updateTableString)="updateLeaksTableString()">
+    </app-exportable-results-table>
+}
