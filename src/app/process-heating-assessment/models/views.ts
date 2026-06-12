@@ -6,7 +6,7 @@ export const MainView = {
 export type MainView = typeof MainView[keyof typeof MainView];
 
 export const BaselineView = {
-  SYSTEM_BASICS: 'system-basics',
+  ASSESSMENT_SETTINGS: 'assessment-settings',
   HEAT_BALANCE: 'heat-balance',
   AUXILIARY_EQUIPMENT: 'auxiliary-equipment',
   DESIGNED_ENERGY: 'designed-energy',
@@ -27,6 +27,7 @@ export const ReportView = {
 export type ReportView = typeof ReportView[keyof typeof ReportView];
 
 export const LossView = {
+  OPERATIONS: 'operations',
   CHARGE_MATERIAL: 'charge-material',
   WALL_LOSSES: 'wall-losses',
   EXTENDED_SURFACE: 'extended-surface',
@@ -70,7 +71,7 @@ export const MAIN_VIEW_LINKS: ViewLink[] = [
 ];
 
 export const BASELINE_VIEW_LINKS: ViewLink[] = [
-  { view: BaselineView.SYSTEM_BASICS, label: 'System Basics' },
+  { view: BaselineView.ASSESSMENT_SETTINGS, label: 'Assessment Settings' },
   { view: BaselineView.HEAT_BALANCE, label: 'Heat Balance' },
   { view: BaselineView.AUXILIARY_EQUIPMENT, label: 'Auxiliary Equipment' },
   { view: BaselineView.DESIGNED_ENERGY, label: 'Designed Energy' },
@@ -78,6 +79,7 @@ export const BASELINE_VIEW_LINKS: ViewLink[] = [
 ];
 
 export const HEAT_BALANCE_VIEW_LINKS: ViewLink[] = [
+  { view: LossView.OPERATIONS, label: 'Operations' },
   { view: LossView.CHARGE_MATERIAL, label: 'Charge Material' },
   { view: LossView.WALL_LOSSES, label: 'Wall Losses' },
   { view: LossView.EXTENDED_SURFACE, label: 'Extended Surface' },

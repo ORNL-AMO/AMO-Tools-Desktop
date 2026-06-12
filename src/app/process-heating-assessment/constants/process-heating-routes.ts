@@ -5,7 +5,8 @@ export const ROUTE_TOKENS = {
   report: 'report',
 
   // Baseline sub-tabs
-  systemBasics: 'system-basics',
+  assessmentSettings: 'assessment-settings',
+  operations: 'operations',
   heatBalance: 'heat-balance',
   auxiliaryEquipment: 'auxiliary-equipment',
   designedEnergy: 'designed-energy',
