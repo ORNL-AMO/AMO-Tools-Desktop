@@ -631,6 +631,11 @@ export const coreRoutes: Routes = [
     loadChildren: () => import('../process-cooling-assessment/process-cooling-assessment.module').then(m => m.ProcessCoolingAssessmentModule),
     runGuardsAndResolvers: 'always',
   },
+  {
+    path: 'process-heating/:assessmentId',
+    loadChildren: () => import('../process-heating-assessment/process-heating-assessment.module').then(m => m.ProcessHeatingAssessmentModule),
+    runGuardsAndResolvers: 'always',
+  },
   { 
     path: '**', 
     component: NotFoundComponent 
