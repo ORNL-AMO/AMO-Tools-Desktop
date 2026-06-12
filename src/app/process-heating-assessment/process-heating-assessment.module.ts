@@ -8,8 +8,33 @@ import { ROUTE_TOKENS } from './constants/process-heating-routes';
 import { ProcessHeatingUiService } from './services/process-heating-ui.service';
 import { ProcessHeatingAssessmentService } from './services/process-heating-assessment.service';
 import { ProcessHeatingOperationsFormService } from './services/process-heating-operations-form.service';
+import { ProcessHeatingResultsService } from './services/process-heating-results.service';
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
 import { ConvertPhastService } from '../phast/convert-phast.service';
+import { PhastService } from '../phast/phast.service';
+import { PhastResultsService } from '../phast/phast-results.service';
+import { AuxEquipmentService } from '../phast/aux-equipment/aux-equipment.service';
+import { AuxiliaryPowerLossesService } from '../phast/losses/auxiliary-power-losses/auxiliary-power-losses.service';
+import { OtherLossesService } from '../phast/losses/other-losses/other-losses.service';
+import { SlagService } from '../phast/losses/slag/slag.service';
+import { ExhaustGasService } from '../phast/losses/exhaust-gas/exhaust-gas.service';
+import { EnergyInputExhaustGasService } from '../phast/losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
+import { EnergyInputService } from '../phast/losses/energy-input/energy-input.service';
+import { Co2SavingsPhastService } from '../phast/losses/operations/co2-savings-phast/co2-savings-phast.service';
+import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
+import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
+import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
+import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
+import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
+import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
+import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
+import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
+import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
+
+import { ResultsPanelComponent } from './results-panel/results-panel.component';
+import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
+import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
 
 import { ProcessHeatingAssessmentComponent } from './process-heating-assessment/process-heating-assessment.component';
 import { ProcessHeatingBannerComponent } from './process-heating-banner/process-heating-banner.component';
@@ -218,6 +243,9 @@ const ROUTES: Route[] = [
   declarations: [
     ProcessHeatingAssessmentComponent,
     ProcessHeatingBannerComponent,
+    ResultsPanelComponent,
+    AssessmentResultsComponent,
+    HelpPanelComponent,
     BaselineComponent,
     BaselineTabsComponent,
     AssessmentComponent,
@@ -260,8 +288,31 @@ const ROUTES: Route[] = [
     ProcessHeatingUiService,
     ProcessHeatingAssessmentService,
     ProcessHeatingOperationsFormService,
+    ProcessHeatingResultsService,
     ProcessHeatingAssessmentResolver,
     ConvertPhastService,
+    // PHAST bridge — temporary delegation layer used by ProcessHeatingResultsService until
+    // each loss form is rebuilt (Steps 6–13). Remove each service as its loss form migrates.
+    PhastService,
+    PhastResultsService,
+    AuxEquipmentService,
+    AuxiliaryPowerLossesService,
+    OtherLossesService,
+    SlagService,
+    ExhaustGasService,
+    EnergyInputExhaustGasService,
+    EnergyInputService,
+    Co2SavingsPhastService,
+    AtmosphereFormService,
+    WallFormService,
+    LeakageFormService,
+    FixtureFormService,
+    OpeningFormService,
+    CoolingFormService,
+    FlueGasFormService,
+    LiquidMaterialFormService,
+    GasMaterialFormService,
+    SolidMaterialFormService,
   ]
 })
 export class ProcessHeatingAssessmentModule {}

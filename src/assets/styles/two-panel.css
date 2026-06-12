@@ -125,6 +125,9 @@
 .compressed-air .header{
     border-bottom: #7030A0 solid 2px;
 }
+.process-heating-assessment .header{
+    border-bottom: var(--process-heating-assessment) solid 2px;
+}
 .process-cooling-assessment .header{
     border-bottom: #009885 solid 2px;
 }
@@ -591,6 +594,10 @@
 
 .compressed-air .scroll-item::-webkit-scrollbar-thumb{
 	background-color: #7030A0;
+}
+
+.process-heating-assessment .scroll-item::-webkit-scrollbar-thumb{
+    background-color: var(--process-heating-assessment);
 }
 
 .process-cooling-assessment .scroll-item::-webkit-scrollbar-thumb{

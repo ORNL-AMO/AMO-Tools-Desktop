@@ -1,6 +1,13 @@
 <app-baseline-tabs></app-baseline-tabs>
 <div class="assessment-container tab-content">
-  <div class="assessment-panel-container modification">
+  <div class="assessment-panel-container modification"
+    [class.full-width-panel]="!showResultsPanel()">
     <router-outlet></router-outlet>
   </div>
+
+  @if (showResultsPanel()) {
+    <div class="assessment-panel-container scroll-item">
+      <app-process-heating-results-panel></app-process-heating-results-panel>
+    </div>
+  }
 </div>

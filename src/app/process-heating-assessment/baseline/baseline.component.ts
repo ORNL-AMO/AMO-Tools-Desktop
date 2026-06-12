@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
 import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
+import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 
 @Component({
   selector: 'app-baseline',
@@ -11,6 +12,11 @@ import { ProcessHeatingUiService } from '../services/process-heating-ui.service'
 })
 export class BaselineComponent {
   private readonly uiService = inject(ProcessHeatingUiService);
-  readonly mainView: Signal<string> = this.uiService.mainView;
-  readonly childView: Signal<string> = this.uiService.childView;
+
+  smallScreenPanelTab: string = 'help';
+  isModalOpen: boolean = false;
+  readonly ROUTE_TOKENS = ROUTE_TOKENS;
+
+  readonly showResultsPanel: Signal<boolean> = this.uiService.showResultsPanel;
 }
+  

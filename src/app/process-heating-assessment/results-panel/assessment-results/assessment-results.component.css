@@ -1,0 +1,36 @@
+.results-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+.results-panel-header {
+  font-weight: bold;
+  padding: 0.25rem 0;
+  border-bottom: 2px solid var(--process-heating-assessment);
+  margin-bottom: 0.25rem;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.1rem 0;
+  font-size: 0.85rem;
+}
+
+.result-label {
+  color: #555;
+}
+
+.result-value {
+  font-weight: 500;
+}
+
+.result-label--bold {
+  font-weight: bold;
+  color: #333;
+}
+
+.result-value--bold {
+  font-weight: bold;
+}

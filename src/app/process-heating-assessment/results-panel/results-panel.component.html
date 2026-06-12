@@ -1,0 +1,30 @@
+<div class="row no-gutters w-100 mh-100 scroll-item">
+  <div class="col-12">
+    <div class="row no-gutters">
+      <div class="col-12">
+        <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
+          <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab === 'results'">
+            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('results')">
+              <div>Results</div>
+            </a>
+          </div>
+          <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab === 'help'">
+            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('help')">
+              <div>Help</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row no-gutters">
+      <div class="col-12 pr-2 pl-2 pb-4 mt-1">
+        @if (selectedPanelTab === 'results') {
+          <app-process-heating-assessment-results></app-process-heating-assessment-results>
+        }
+        @if (selectedPanelTab === 'help') {
+          <app-process-heating-help-panel></app-process-heating-help-panel>
+        }
+      </div>
+    </div>
+  </div>
+</div>

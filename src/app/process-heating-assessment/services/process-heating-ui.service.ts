@@ -69,9 +69,9 @@ export class ProcessHeatingUiService {
   showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
 
-  // Per-step validity signals — stubbed true, wired to assessment service in Step 3
-  private readonly isAssessmentSettingsValidSignal: WritableSignal<boolean> = signal<boolean>(true);
-  private readonly isHeatBalanceValidSignal: WritableSignal<boolean> = signal<boolean>(true);
+  // Per-step validity signals — stubbed true; wired to real validation in future steps
+  readonly isAssessmentSettingsValidSignal: WritableSignal<boolean> = signal<boolean>(true);
+  readonly isHeatBalanceValidSignal: WritableSignal<boolean> = signal<boolean>(true);
 
   // Loss tabs filtered to the active HeatingSystemConfiguration
   readonly visibleHeatBalanceTabs: Signal<ViewLink[]> = computed(() =>
@@ -107,6 +107,10 @@ export class ProcessHeatingUiService {
   );
   readonly canGoBack: Signal<boolean> = computed(() =>
     this.findNextVisibleStep(this.currentStepIndex() - 1, 'back') !== -1
+  );
+
+  readonly showResultsPanel: Signal<boolean> = computed(() =>
+    this.childView() !== ROUTE_TOKENS.heatBalance
   );
 
   private get assessmentId(): string {
