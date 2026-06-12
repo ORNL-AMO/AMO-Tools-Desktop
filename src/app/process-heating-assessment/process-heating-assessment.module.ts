@@ -1,9 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
+import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
 
 import { ROUTE_TOKENS } from './constants/process-heating-routes';
 import { ProcessHeatingUiService } from './services/process-heating-ui.service';
+import { ProcessHeatingAssessmentService } from './services/process-heating-assessment.service';
+import { ProcessHeatingOperationsFormService } from './services/process-heating-operations-form.service';
+import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
+import { ConvertPhastService } from '../phast/convert-phast.service';
 
 import { ProcessHeatingAssessmentComponent } from './process-heating-assessment/process-heating-assessment.component';
 import { ProcessHeatingBannerComponent } from './process-heating-banner/process-heating-banner.component';
@@ -16,6 +22,7 @@ import { ExecutiveSummaryComponent } from './report/executive-summary/executive-
 import { InputSummaryComponent } from './report/input-summary/input-summary.component';
 import { FacilityInfoComponent } from './report/facility-info/facility-info.component';
 import { SystemBasicsComponent } from './system-basics/system-basics.component';
+import { OperationsComponent } from './operations/operations.component';
 import { HeatBalanceComponent } from './heat-balance/heat-balance.component';
 import { HeatBalanceLossTabsComponent } from './heat-balance/heat-balance-loss-tabs/heat-balance-loss-tabs.component';
 import { AuxiliaryEquipmentComponent } from './auxiliary-equipment/auxiliary-equipment.component';
@@ -43,6 +50,7 @@ const ROUTES: Route[] = [
   {
     path: '',
     component: ProcessHeatingAssessmentComponent,
+    resolve: { data: ProcessHeatingAssessmentResolver },
     children: [
       { path: '', redirectTo: ROUTE_TOKENS.baseline, pathMatch: 'full' },
       {
@@ -50,114 +58,119 @@ const ROUTES: Route[] = [
         component: BaselineComponent,
         data: { mainView: ROUTE_TOKENS.baseline },
         children: [
-          { path: '', redirectTo: ROUTE_TOKENS.systemBasics, pathMatch: 'full' },
+          { path: '', redirectTo: ROUTE_TOKENS.assessmentSettings, pathMatch: 'full' },
           {
-            path: ROUTE_TOKENS.systemBasics,
+            path: ROUTE_TOKENS.assessmentSettings,
             component: SystemBasicsComponent,
-            data: { childView: ROUTE_TOKENS.systemBasics, stepIndex: 0 },
+            data: { childView: ROUTE_TOKENS.assessmentSettings, stepIndex: 0 },
           },
           {
             path: ROUTE_TOKENS.heatBalance,
             component: HeatBalanceComponent,
             data: { childView: ROUTE_TOKENS.heatBalance },
             children: [
-              { path: '', redirectTo: ROUTE_TOKENS.chargeMaterial, pathMatch: 'full' },
+              { path: '', redirectTo: ROUTE_TOKENS.operations, pathMatch: 'full' },
+              {
+                path: ROUTE_TOKENS.operations,
+                component: OperationsComponent,
+                data: { lossSubView: ROUTE_TOKENS.operations, stepIndex: 1 },
+              },
               {
                 path: ROUTE_TOKENS.chargeMaterial,
                 component: ChargeMaterialComponent,
-                data: { lossSubView: ROUTE_TOKENS.chargeMaterial, stepIndex: 1 },
+                data: { lossSubView: ROUTE_TOKENS.chargeMaterial, stepIndex: 2 },
               },
               {
                 path: ROUTE_TOKENS.wallLosses,
                 component: WallLossesComponent,
-                data: { lossSubView: ROUTE_TOKENS.wallLosses, stepIndex: 2 },
+                data: { lossSubView: ROUTE_TOKENS.wallLosses, stepIndex: 3 },
               },
               {
                 path: ROUTE_TOKENS.extendedSurface,
                 component: ExtendedSurfaceComponent,
-                data: { lossSubView: ROUTE_TOKENS.extendedSurface, stepIndex: 3 },
+                data: { lossSubView: ROUTE_TOKENS.extendedSurface, stepIndex: 4 },
               },
               {
                 path: ROUTE_TOKENS.atmosphere,
                 component: AtmosphereComponent,
-                data: { lossSubView: ROUTE_TOKENS.atmosphere, stepIndex: 4 },
+                data: { lossSubView: ROUTE_TOKENS.atmosphere, stepIndex: 5 },
               },
               {
                 path: ROUTE_TOKENS.fixture,
                 component: FixtureComponent,
-                data: { lossSubView: ROUTE_TOKENS.fixture, stepIndex: 5 },
+                data: { lossSubView: ROUTE_TOKENS.fixture, stepIndex: 6 },
               },
               {
                 path: ROUTE_TOKENS.cooling,
                 component: CoolingComponent,
-                data: { lossSubView: ROUTE_TOKENS.cooling, stepIndex: 6 },
+                data: { lossSubView: ROUTE_TOKENS.cooling, stepIndex: 7 },
               },
               {
                 path: ROUTE_TOKENS.opening,
                 component: OpeningComponent,
-                data: { lossSubView: ROUTE_TOKENS.opening, stepIndex: 7 },
+                data: { lossSubView: ROUTE_TOKENS.opening, stepIndex: 8 },
               },
               {
                 path: ROUTE_TOKENS.other,
                 component: OtherComponent,
-                data: { lossSubView: ROUTE_TOKENS.other, stepIndex: 8 },
+                data: { lossSubView: ROUTE_TOKENS.other, stepIndex: 9 },
               },
               {
                 path: ROUTE_TOKENS.flueGas,
                 component: FlueGasComponent,
-                data: { lossSubView: ROUTE_TOKENS.flueGas, stepIndex: 9 },
+                data: { lossSubView: ROUTE_TOKENS.flueGas, stepIndex: 10 },
               },
               {
                 path: ROUTE_TOKENS.gasLeakage,
                 component: GasLeakageComponent,
-                data: { lossSubView: ROUTE_TOKENS.gasLeakage, stepIndex: 10 },
+                data: { lossSubView: ROUTE_TOKENS.gasLeakage, stepIndex: 11 },
               },
               {
                 path: ROUTE_TOKENS.auxiliaryPower,
                 component: AuxiliaryPowerComponent,
-                data: { lossSubView: ROUTE_TOKENS.auxiliaryPower, stepIndex: 11 },
+                data: { lossSubView: ROUTE_TOKENS.auxiliaryPower, stepIndex: 12 },
               },
               {
                 path: ROUTE_TOKENS.energyInputExhaustGas,
                 component: EnergyInputExhaustGasComponent,
-                data: { lossSubView: ROUTE_TOKENS.energyInputExhaustGas, stepIndex: 12 },
+                data: { lossSubView: ROUTE_TOKENS.energyInputExhaustGas, stepIndex: 13 },
               },
               {
                 path: ROUTE_TOKENS.energyInput,
                 component: EnergyInputComponent,
-                data: { lossSubView: ROUTE_TOKENS.energyInput, stepIndex: 13 },
+                data: { lossSubView: ROUTE_TOKENS.energyInput, stepIndex: 14 },
               },
               {
                 path: ROUTE_TOKENS.exhaustGas,
                 component: ExhaustGasComponent,
-                data: { lossSubView: ROUTE_TOKENS.exhaustGas, stepIndex: 14 },
+                data: { lossSubView: ROUTE_TOKENS.exhaustGas, stepIndex: 15 },
               },
               {
                 path: ROUTE_TOKENS.slag,
                 component: SlagComponent,
-                data: { lossSubView: ROUTE_TOKENS.slag, stepIndex: 15 },
+                data: { lossSubView: ROUTE_TOKENS.slag, stepIndex: 16 },
               },
               {
                 path: ROUTE_TOKENS.heatSystemEfficiency,
                 component: HeatSystemEfficiencyComponent,
-                data: { lossSubView: ROUTE_TOKENS.heatSystemEfficiency, stepIndex: 16 },
+                data: { lossSubView: ROUTE_TOKENS.heatSystemEfficiency, stepIndex: 17 },
               },
             ]
           },
           {
             path: ROUTE_TOKENS.auxiliaryEquipment,
             component: AuxiliaryEquipmentComponent,
-            data: { childView: ROUTE_TOKENS.auxiliaryEquipment, stepIndex: 17 },
+            data: { childView: ROUTE_TOKENS.auxiliaryEquipment, stepIndex: 18 },
           },
           {
             path: ROUTE_TOKENS.designedEnergy,
             component: DesignedEnergyComponent,
-            data: { childView: ROUTE_TOKENS.designedEnergy, stepIndex: 18 },
+            data: { childView: ROUTE_TOKENS.designedEnergy, stepIndex: 19 },
           },
           {
             path: ROUTE_TOKENS.meteredEnergy,
             component: MeteredEnergyComponent,
-            data: { childView: ROUTE_TOKENS.meteredEnergy, stepIndex: 19 },
+            data: { childView: ROUTE_TOKENS.meteredEnergy, stepIndex: 20 },
           },
         ]
       },
@@ -170,14 +183,14 @@ const ROUTES: Route[] = [
           {
             path: ROUTE_TOKENS.exploreOpportunities,
             component: ExploreOpportunitiesComponent,
-            data: { childView: ROUTE_TOKENS.exploreOpportunities, stepIndex: 20 },
+            data: { childView: ROUTE_TOKENS.exploreOpportunities, stepIndex: 21 },
           },
         ]
       },
       {
         path: ROUTE_TOKENS.report,
         component: ReportComponent,
-        data: { mainView: ROUTE_TOKENS.report, stepIndex: 21 },
+        data: { mainView: ROUTE_TOKENS.report, stepIndex: 22 },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.executiveSummary, pathMatch: 'full' },
           {
@@ -214,6 +227,7 @@ const ROUTES: Route[] = [
     InputSummaryComponent,
     FacilityInfoComponent,
     SystemBasicsComponent,
+    OperationsComponent,
     HeatBalanceComponent,
     HeatBalanceLossTabsComponent,
     AuxiliaryEquipmentComponent,
@@ -238,10 +252,16 @@ const ROUTES: Route[] = [
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     RouterModule.forChild(ROUTES),
+    FormControlErrorsComponent,
   ],
   providers: [
     ProcessHeatingUiService,
+    ProcessHeatingAssessmentService,
+    ProcessHeatingOperationsFormService,
+    ProcessHeatingAssessmentResolver,
+    ConvertPhastService,
   ]
 })
 export class ProcessHeatingAssessmentModule {}

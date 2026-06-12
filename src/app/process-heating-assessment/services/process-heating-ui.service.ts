@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink } from '../models/views';
+import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 export { MainView, BaselineView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
 
 interface ProcessHeatingRouteData {
@@ -16,13 +17,15 @@ interface ProcessHeatingRouteData {
 @Injectable()
 export class ProcessHeatingUiService {
   private readonly router = inject(Router);
+  private readonly processHeatingAssessmentService = inject(ProcessHeatingAssessmentService);
 
   private readonly HEAT_BALANCE_BASE = `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.heatBalance}`;
 
   private readonly STEPPED_ROUTES = [
     // index 0
-    { view: ROUTE_TOKENS.systemBasics,          path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.systemBasics}` },
-    // indices 1-16: heat balance loss tabs
+    { view: ROUTE_TOKENS.assessmentSettings,    path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.assessmentSettings}` },
+    // indices 1-17: heat balance sub-tabs (operations first, then loss tabs)
+    { view: ROUTE_TOKENS.operations,            path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.operations}` },
     { view: ROUTE_TOKENS.chargeMaterial,        path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.chargeMaterial}` },
     { view: ROUTE_TOKENS.wallLosses,            path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.wallLosses}` },
     { view: ROUTE_TOKENS.extendedSurface,       path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.extendedSurface}` },
@@ -39,7 +42,7 @@ export class ProcessHeatingUiService {
     { view: ROUTE_TOKENS.exhaustGas,            path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.exhaustGas}` },
     { view: ROUTE_TOKENS.slag,                  path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.slag}` },
     { view: ROUTE_TOKENS.heatSystemEfficiency,  path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.heatSystemEfficiency}` },
-    // indices 17-21: remaining baseline and top-level tabs
+    // indices 18-22: remaining baseline and top-level tabs
     { view: ROUTE_TOKENS.auxiliaryEquipment,    path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.auxiliaryEquipment}` },
     { view: ROUTE_TOKENS.designedEnergy,        path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.designedEnergy}` },
     { view: ROUTE_TOKENS.meteredEnergy,         path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.meteredEnergy}` },
@@ -53,8 +56,9 @@ export class ProcessHeatingUiService {
   private readonly EAF_ONLY = new Set<string>([ROUTE_TOKENS.energyInput, ROUTE_TOKENS.exhaustGas, ROUTE_TOKENS.slag]);
   private readonly STEAM_CUSTOM_ONLY = new Set<string>([ROUTE_TOKENS.heatSystemEfficiency]);
 
-  // HeatingEquipmentConfiguration and modification state — will be driven by assessment service in Step 3
-  heatingSystemConfigurationSignal: WritableSignal<HeatingEquipmentConfiguration> = signal<HeatingEquipmentConfiguration>(HeatingEquipmentConfiguration.FUEL_FIRED);
+  // Derived from assessment settings — energySourceType + furnaceType determine the active tab set
+  readonly heatingSystemConfigurationSignal: Signal<HeatingEquipmentConfiguration> =
+    this.processHeatingAssessmentService.heatingEquipmentConfiguration;
   activeModificationIndexSignal: WritableSignal<number> = signal<number>(0);
 
   // UI state signals
@@ -66,7 +70,7 @@ export class ProcessHeatingUiService {
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
 
   // Per-step validity signals — stubbed true, wired to assessment service in Step 3
-  private readonly isSystemBasicsValidSignal: WritableSignal<boolean> = signal<boolean>(true);
+  private readonly isAssessmentSettingsValidSignal: WritableSignal<boolean> = signal<boolean>(true);
   private readonly isHeatBalanceValidSignal: WritableSignal<boolean> = signal<boolean>(true);
 
   // Loss tabs filtered to the active HeatingSystemConfiguration
