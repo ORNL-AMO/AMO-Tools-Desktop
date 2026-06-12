@@ -1,0 +1,291 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Steam Leak Survey Help
+    <br>
+    <small class="text-muted">
+      This calculator is used to quantify the energy savings associated with reducing steam leaks.
+    </small>
+  </h5>
+  <div class="my-2">
+    <h6>
+      <small class="text-muted">
+        Steam is a costly utility — even small leaks result in significant losses of energy, water, and boiler chemicals over the course of a year.
+        <hr class="my-1">Steam leaks reduce system pressure, which degrades the performance and reliability of downstream steam-using equipment.
+        <hr class="my-1">Every pound of steam lost to a leak must be replaced by the boiler, increasing fuel consumption and accelerating boiler wear.
+        <hr class="my-1">
+      </small>
+    </h6>
+  </div>
+
+  @if (currentField() === 'measurementMethod') {
+    <div class="my-2">
+      <h6>
+        Measurement Method
+        <small class="text-muted">
+          <br>Select the method used to quantify the steam leak rate.
+          <hr class="my-1">
+          <strong>Estimate</strong> — Directly enter a known or estimated steam leak rate (e.g., 10 lbs/hr).
+          <hr class="my-1">
+          <strong>Orifice Method</strong> — The estimated size of the steam leak orifice and the calculator will estimate the leak rate.
+          <hr class="my-1">
+          <strong>Plume Method</strong> — The length of the visible steam plume produced by the leak and the calculator will estimate the leak rate.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'holeSize') {
+    <div class="my-2">
+      <h6>
+        Hole Size
+        <small class="text-muted">
+          <br>Estimated diameter of the orifice through which steam is leaking.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'dischargeCoefficient') {
+    <div class="my-2">
+      <h6>
+        Discharge Coefficient
+        <small class="text-muted">
+          <br>This parameter is used to capture the effect of the shape of the orifice on the leak rate.
+          <hr class="my-1">Typical values are 1.0 for a perfect hole, 0.97 for a well-rounded orifice, and 0.6 for a sharp orifice.
+          <hr>
+        </small>
+      </h6>
+      <div class="w-100 justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="text-center">Orifice Shape</th>
+              <th class="text-center">Discharge Coefficient</th>
+            </tr>
+            <tr>
+              <td class="text-center">Perfect Hole</td>
+              <td class="text-center">1.0</td>
+            </tr>
+            <tr>
+              <td class="text-center">Well-Rounded</td>
+              <td class="text-center">0.97</td>
+            </tr>
+            <tr>
+              <td class="text-center">Sharp Orifice</td>
+              <td class="text-center">0.6</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+
+  @if (currentField() === 'atmosphericPressure') {
+    <div class="my-2">
+      <h6>
+        Atmospheric Pressure
+        <small class="text-muted">
+          <br>The average atmospheric pressure at the location of the steam leak.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'steamPressure') {
+    <div class="my-2">
+      <h6>
+        Header Pressure
+        <small class="text-muted">
+          <br>Line pressure for the identified steam leak.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'steamTemperature') {
+    <div class="my-2">
+      <h6>
+        Header Temperature
+        <small class="text-muted">
+          <br>Line temperature for the identified steam leak.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'pressureReductionMethod') {
+    <div class="my-2">
+      <h6>
+        Pressure Reduction Method
+        <small class="text-muted">
+          <br>If the header for the identified leak is at a lower pressure than what is produced by the boiler, how was pressure reduced?
+          <hr class="my-1">With a Pressure Reducing Valve (PRV) or through a backpressure steam turbine? If the leak is part of the main header system, select "None".
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'leakRate') {
+    <div class="my-2">
+      <h6>
+        Leak Rate
+        <small class="text-muted">
+          <br>The estimated leak rate for the identified steam leak.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'ambientTemperature') {
+    <div class="my-2">
+      <h6>
+        Ambient Temperature
+        <small class="text-muted">
+          <br>The average air temperature near the leak at the time the plume was observed.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'plumeLength') {
+    <div class="my-2">
+      <h6>
+        Plume Length
+        <small class="text-muted">
+          <br>The estimated length of the steam plume exiting the identified leak.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'annualOperatingHours') {
+    <div class="my-2">
+      <h6>
+        Annual Operating Hours
+        <small class="text-muted">
+          <br>The number of hours the steam system is in operation per year.
+          <hr class="my-1">Use 8760 hours/year if the steam system runs year-round.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'utilityType') {
+    <div class="my-2">
+      <h6>
+        Utility Type
+        <small class="text-muted">
+          <br>How is steam produced or purchased at the site?
+          <hr class="my-1">If steam is purchased across the fence, select "Steam". If steam is generated on site, select either "Natural Gas" or "Electricity" depending on the type of boiler system.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'facilitySteamTemperature') {
+    <div class="my-2">
+      <h6>
+        Steam Temperature
+        <small class="text-muted">
+          <br>The temperature of the steam produced by the boiler system.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'facilitySteamPressure') {
+    <div class="my-2">
+      <h6>
+        Steam Pressure
+        <small class="text-muted">
+          <br>The pressure of the steam produced by the boiler system.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'electricityCost') {
+    <div class="my-2">
+      <h6>
+        Electricity Cost
+        <small class="text-muted">
+          <br>The cost of electricity for boiler operations.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'steamCost') {
+    <div class="my-2">
+      <h6>
+        Steam Cost
+        <small class="text-muted">
+          <br>Enter the unit cost of steam for this site.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'fuelCost') {
+    <div class="my-2">
+      <h6>
+        Fuel Cost
+        <small class="text-muted">
+          <br>The unit cost of fuel for the boiler system.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'fuelEnergyFactor') {
+    <div class="my-2">
+      <h6>
+        Fuel Energy Factor
+        <small class="text-muted">
+          <br>The energy content for a given volume of fuel.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'feedwaterTemperature') {
+    <div class="my-2">
+      <h6>
+        Feedwater Temperature
+        <small class="text-muted">
+          <br>The temperature of the water supplied to the boiler.<hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'boilerEfficiency') {
+    <div class="my-2">
+      <h6>
+        Boiler Efficiency
+        <small class="text-muted">
+          <br>The overall efficiency of the boiler system.
+          <hr class="my-1">Electric boilers typically have a boiler efficiency of 99–100%. Well-maintained fuel-fired boiler systems can have efficiencies greater than 80% but typically be between 70–80% efficient.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'systemEfficiency') {
+    <div class="my-2">
+      <h6>
+        System Efficiency
+        <small class="text-muted">
+          <br>The end-to-end efficiency of the steam system after it leaves the boiler. This includes heat losses from poorly insulated sections and the efficiency of heat exchangers in process equipment.
+          <hr class="my-1">If steam is purchased from offsite systems across the fence, only include efficiency losses associated with transmission and distribution of the purchased steam.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+</div>
