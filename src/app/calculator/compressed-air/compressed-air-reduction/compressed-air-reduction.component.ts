@@ -108,6 +108,7 @@ export class CompressedAirReductionComponent implements OnInit {
       this.modificationData = this.compressedAirReductionService.modificationData;
       if (this.modificationData.length != 0) {
         this.modificationExists = true;
+        this.syncModificationCountToBaseline();
       }
     }
   }
@@ -120,12 +121,15 @@ export class CompressedAirReductionComponent implements OnInit {
 
     let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.baselineData.length, this.settings, this.operatingHours, utilityType);
     this.baselineData.push(tmpObj);
+    if (this.modificationExists && this.modificationData) {
+      this.modificationData.push(JSON.parse(JSON.stringify(tmpObj)));
+    }
     this.getResults();
   }
 
   removeBaselineEquipment(i: number) {
     this.baselineData.splice(i, 1);
-    if (this.modificationData?.length > 1 && this.modificationData[i]) {
+    if (this.modificationData && this.modificationData[i]) {
       this.modificationData.splice(i, 1);
     }
 
@@ -133,7 +137,13 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   removeModificationEquipment(i: number) {
+    if (this.modificationData.length <= 1) {
+      return;
+    }
     this.modificationData.splice(i, 1);
+    if (this.baselineData[i]) {
+      this.baselineData.splice(i, 1);
+    }
     if (this.modificationData.length === 0) {
       this.modificationExists = false;
     }
@@ -148,21 +158,7 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   addModificationEquipment() {
-    let currentIndex = this.modificationData.length - 1;
-    let hasBaselineEquipment = this.baselineData[currentIndex + 1];
-    if (!hasBaselineEquipment) {
-      this.addBaselineEquipment();
-    }
-
-    let utilityType: number;
-    if (this.baselineData.length != 0) {
-      utilityType = this.baselineData[0].utilityType;
-    }
-
-    let tmpObj: CompressedAirReductionData = this.compressedAirReductionService.initObject(this.modificationData.length, this.settings, this.operatingHours, utilityType);
-    tmpObj.compressorElectricityData = this.baselineData[currentIndex].compressorElectricityData;
-    this.modificationData.push(tmpObj);
-    this.getResults();
+    this.addBaselineEquipment();
   }
 
   updateBaselineData(data: CompressedAirReductionData, index: number) {
@@ -192,7 +188,20 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   getResults() {
+    this.syncModificationCountToBaseline();
     this.compressedAirReductionService.calculateResults(this.settings, this.baselineData, this.modificationData);
+  }
+
+  syncModificationCountToBaseline() {
+    if (!this.modificationExists || !this.modificationData || !this.baselineData) {
+      return;
+    }
+    this.modificationData = this.modificationData.slice(0, this.baselineData.length);
+    this.baselineData.forEach((baselineEquipment, index) => {
+      if (!this.modificationData[index]) {
+        this.modificationData[index] = JSON.parse(JSON.stringify(baselineEquipment));
+      }
+    });
   }
 
   btnResetData() {

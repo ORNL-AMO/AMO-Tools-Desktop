@@ -252,6 +252,7 @@ export class CompressedAirReductionService {
     results.baselineAggregateResults = this.calculate(baselineInpCpy, settings);
     if (modification) {
       modificationInpCpy = JSON.parse(JSON.stringify(modification));
+      modificationInpCpy = this.syncModificationInputsToBaseline(baselineInpCpy, modificationInpCpy);
       //modification inputs set to baseline
       modificationInpCpy.forEach((modInput, index) => {
         if (baselineInpCpy[index]) {
@@ -271,9 +272,44 @@ export class CompressedAirReductionService {
       results.modificationAggregateResults.energyUse = results.modificationAggregateResults.consumption;
     }
     results.annualCostSavings = results.baselineAggregateResults.energyCost - results.modificationAggregateResults.energyCost;
-    results.annualFlowRateReduction = results.baselineAggregateResults.flowRate - results.modificationAggregateResults.flowRate;
+    results.annualFlowRateReduction = this.calculateAnnualFlowRateReduction(baselineInpCpy, modificationInpCpy, results);
     results.annualConsumptionReduction = results.baselineAggregateResults.consumption - results.modificationAggregateResults.consumption;
     this.compressedAirResults.next(results);
+  }
+
+  syncModificationInputsToBaseline(baselineInpCpy: Array<CompressedAirReductionData>, modificationInpCpy: Array<CompressedAirReductionData>) {
+    let syncedModificationInputs: Array<CompressedAirReductionData> = modificationInpCpy.slice(0, baselineInpCpy.length);
+    baselineInpCpy.forEach((baselineInput, index) => {
+      if (!syncedModificationInputs[index]) {
+        syncedModificationInputs[index] = JSON.parse(JSON.stringify(baselineInput));
+      }
+    });
+    return syncedModificationInputs;
+  }
+
+  calculateAnnualFlowRateReduction(
+    baselineInpCpy: Array<CompressedAirReductionData>,
+    modificationInpCpy: Array<CompressedAirReductionData>,
+    results: CompressedAirReductionResults
+  ) {
+    let annualFlowRateReduction: number = 0;
+    baselineInpCpy.forEach((baselineInput, index) => {
+      let baselineFlowRate: number = this.getFlowRateForReduction(baselineInput, results.baselineResults[index]);
+      let modificationInput: CompressedAirReductionData = modificationInpCpy && modificationInpCpy[index] ? modificationInpCpy[index] : baselineInput;
+      let modificationResult: CompressedAirReductionResult = results.modificationResults[index] ? results.modificationResults[index] : results.baselineResults[index];
+      let modificationFlowRate: number = this.getFlowRateForReduction(modificationInput, modificationResult);
+      annualFlowRateReduction += (baselineFlowRate - modificationFlowRate);
+    });
+    return annualFlowRateReduction;
+  }
+
+  getFlowRateForReduction(input: CompressedAirReductionData, result: CompressedAirReductionResult) {
+    if (input && input.measurementMethod == 0) {
+      let meterReading: number = input.flowMeterMethodData && input.flowMeterMethodData.meterReading != undefined ? input.flowMeterMethodData.meterReading : 0;
+      let units: number = input.units != undefined ? input.units : 1;
+      return meterReading * units;
+    }
+    return result && result.flowRate != undefined ? result.flowRate : 0;
   }
 
   buildIndividualResults(baselineInpCpy: Array<CompressedAirReductionData>, modificationInpCpy: Array<CompressedAirReductionData>, results: CompressedAirReductionResults, settings: Settings) {
