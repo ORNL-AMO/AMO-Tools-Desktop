@@ -187,13 +187,13 @@
       <div class="form-group">
         <label for="saturatedPressure">Pressure</label>
         <div name="pressure" type="number" class="small text-center bold">
-          {{saturatedPropertiesOutput?.saturatedPressure | number:'1.0-4'}}
+          {{saturatedPropertiesOutput?.saturatedPressure | number:'1.0-1'}}
           <span [innerHTML]="settings.steamPressureMeasurement | settingsLabel"></span>
         </div>
         <div class="form-group">
           <label>Temperature</label>
           <div [ngClass]="{'indicate-different': isSteamTemperatureDifferent()}" class="small text-center bold">
-            {{saturatedPropertiesOutput?.saturatedTemperature | number:'1.0-2'}}
+            {{saturatedPropertiesOutput?.saturatedTemperature | number:'1.0-1'}}
             <span [innerHTML]="settings.steamTemperatureMeasurement | settingsLabel"></span>
           </div>
         </div>
