@@ -58,6 +58,13 @@ export const HeatingEquipmentConfiguration = {
 } as const;
 export type HeatingEquipmentConfiguration = typeof HeatingEquipmentConfiguration[keyof typeof HeatingEquipmentConfiguration];
 
+export interface HeatingSystemEnergyType {
+  isFuelBased: boolean;
+  isSteam: boolean;
+  isElectro: boolean;
+  isEAF: boolean;
+}
+
 export interface ViewLink {
   view: ProcessHeatingView;
   label: string;

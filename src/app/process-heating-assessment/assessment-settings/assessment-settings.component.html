@@ -1,0 +1,44 @@
+@if (assessment$ | async; as assessment) {
+<div class="panel-container p-3">
+  <div class="header mr-2 ml-2">
+    <h3>{{ assessment.name }} Settings</h3>
+  </div>
+
+  <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()" [inPhast]="true"
+    [inTreasureHunt]="true">
+  </app-application-settings>
+  <app-phast-settings [(settingsForm)]="settingsForm" [inPhast]="true" (startSavePolling)="saveSettings()">
+  </app-phast-settings>
+
+  <form [formGroup]="metaForm" class="setup-form-group">
+    <div class="group-label w-100">Facility Information</div>
+
+    <div class="form-group">
+      <label for="facilityName">Facility Name</label>
+      <input id="facilityName" type="text" class="form-control" formControlName="facilityName"
+        placeholder="Enter facility name">
+    </div>
+
+    <div class="form-group">
+      <label for="contactName">Contact Name</label>
+      <input id="contactName" type="text" class="form-control" formControlName="contactName"
+        placeholder="Enter contact name">
+    </div>
+
+    <div class="group-label w-100">Notes</div>
+
+    <div class="form-group">
+      <label for="equipmentNotes">Equipment Notes</label>
+      <textarea id="equipmentNotes" class="form-control" rows="4" formControlName="equipmentNotes"
+        placeholder="Add additional information for your equipment"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="operatingConditions">Operating Conditions at Time of Assessment</label>
+      <textarea id="operatingConditions" class="form-control" rows="4" formControlName="operatingConditions"
+        placeholder="Add note for operating conditions (e.g. production rate, throughput, ambient temperature)">
+      </textarea>
+    </div>
+  </form>
+</div>
+}

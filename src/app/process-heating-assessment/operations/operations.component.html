@@ -1,8 +1,14 @@
 <div class="panel-container p-3">
   <form [formGroup]="form">
+
     <div class="form-group">
       <label for="hoursPerYear">Operating Hours</label>
       <div class="input-group">
+        <span class="input-group-addon units">
+          <a class="click-link" (click)="openOperatingHoursModal()">
+            <span class="fa fa-calculator"></span>
+          </a>
+        </span>
         <input name="hoursPerYear" type="number" step="10" class="form-control" id="hoursPerYear"
           formControlName="hoursPerYear">
         <span class="input-group-addon units">hrs/yr</span>
@@ -11,45 +17,136 @@
         [imperialUnit]="'hrs/yr'" [metricUnit]="'hrs/yr'"></app-form-control-errors>
     </div>
 
-    <div class="form-group">
-      <label for="fuelCost">Fuel Cost</label>
-      <div class="input-group">
-        <input name="fuelCost" type="number" step="0.1" class="form-control" id="fuelCost"
-          formControlName="fuelCost">
-        @if (settings().unitsOfMeasure === 'Imperial') {
-          <span class="input-group-addon units">$/MMBtu</span>
-        } @else {
-          <span class="input-group-addon units">$/GJ</span>
-        }
+    @if (heatingSystemConfiguration() === HC.FUEL_FIRED) {
+      <div class="form-group">
+        <label for="fuelCost">Fuel Cost</label>
+        <div class="input-group">
+          <input name="fuelCost" type="number" step="0.1" class="form-control" id="fuelCost"
+            formControlName="fuelCost">
+          @if (settings().unitsOfMeasure === 'Imperial') {
+            <span class="input-group-addon units">$/MMBtu</span>
+          } @else {
+            <span class="input-group-addon units">$/GJ</span>
+          }
+        </div>
+        <app-form-control-errors [control]="fuelCost" [settings]="settings()"
+          [imperialUnit]="'$/MMBtu'" [metricUnit]="'$/GJ'"></app-form-control-errors>
+        <a class="form-text small click-link" (click)="openOperatingCostsModal()">
+          Calculate Net Fuel Cost from Mixed Fuels
+        </a>
       </div>
-      <app-form-control-errors [control]="fuelCost" [settings]="settings()"
-        [imperialUnit]="'$/MMBtu'" [metricUnit]="'$/GJ'"></app-form-control-errors>
-    </div>
+    }
 
-    <div class="form-group">
-      <label for="steamCost">Steam Cost</label>
-      <div class="input-group">
-        <input name="steamCost" type="number" step="0.1" class="form-control" id="steamCost"
-          formControlName="steamCost">
-        @if (settings().unitsOfMeasure === 'Imperial') {
-          <span class="input-group-addon units">$/MMBtu</span>
-        } @else {
-          <span class="input-group-addon units">$/GJ</span>
-        }
+    @if (heatingSystemConfiguration() === HC.ELECTROTECHNOLOGY_EAF) {
+      <div class="form-group">
+        <label for="fuelCost">Natural Gas Cost</label>
+        <div class="input-group">
+          <input name="fuelCost" type="number" step="0.1" class="form-control" id="fuelCost"
+            formControlName="fuelCost">
+          @if (settings().unitsOfMeasure === 'Imperial') {
+            <span class="input-group-addon units">$/MMBtu</span>
+          } @else {
+            <span class="input-group-addon units">$/GJ</span>
+          }
+        </div>
+        <app-form-control-errors [control]="fuelCost" [settings]="settings()"
+          [imperialUnit]="'$/MMBtu'" [metricUnit]="'$/GJ'"></app-form-control-errors>
       </div>
-      <app-form-control-errors [control]="steamCost" [settings]="settings()"
-        [imperialUnit]="'$/MMBtu'" [metricUnit]="'$/GJ'"></app-form-control-errors>
-    </div>
 
-    <div class="form-group">
-      <label for="electricityCost">Electricity Cost</label>
-      <div class="input-group">
-        <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
-          formControlName="electricityCost">
-        <span class="input-group-addon units">$/kWh</span>
+      <div class="form-group">
+        <label for="coalCarbonCost">Coal Carbon Cost</label>
+        <div class="input-group">
+          <input name="coalCarbonCost" type="number" step="0.01" class="form-control" id="coalCarbonCost"
+            formControlName="coalCarbonCost">
+          @if (settings().unitsOfMeasure === 'Imperial') {
+            <span class="input-group-addon units">$/lb</span>
+          } @else {
+            <span class="input-group-addon units">$/kg</span>
+          }
+        </div>
+        <app-form-control-errors [control]="coalCarbonCost" [settings]="settings()"
+          [imperialUnit]="'$/lb'" [metricUnit]="'$/kg'"></app-form-control-errors>
       </div>
-      <app-form-control-errors [control]="electricityCost" [settings]="settings()"
-        [defaultUnit]="'$/kWh'"></app-form-control-errors>
-    </div>
+
+      <div class="form-group">
+        <label for="electrodeCost">Electrode Cost</label>
+        <div class="input-group">
+          <input name="electrodeCost" type="number" step="0.1" class="form-control" id="electrodeCost"
+            formControlName="electrodeCost">
+          @if (settings().unitsOfMeasure === 'Imperial') {
+            <span class="input-group-addon units">$/lb</span>
+          } @else {
+            <span class="input-group-addon units">$/kg</span>
+          }
+        </div>
+        <app-form-control-errors [control]="electrodeCost" [settings]="settings()"
+          [imperialUnit]="'$/lb'" [metricUnit]="'$/kg'"></app-form-control-errors>
+      </div>
+
+      <div class="form-group">
+        <label for="otherFuelCost">Other Fuel Cost</label>
+        <div class="input-group">
+          <input name="otherFuelCost" type="number" step="0.1" class="form-control" id="otherFuelCost"
+            formControlName="otherFuelCost">
+          @if (settings().unitsOfMeasure === 'Imperial') {
+            <span class="input-group-addon units">$/MMBtu</span>
+          } @else {
+            <span class="input-group-addon units">$/GJ</span>
+          }
+        </div>
+        <app-form-control-errors [control]="otherFuelCost" [settings]="settings()"
+          [imperialUnit]="'$/MMBtu'" [metricUnit]="'$/GJ'"></app-form-control-errors>
+      </div>
+    }
+
+    @if (heatingSystemConfiguration() === HC.STEAM) {
+      <div class="form-group">
+        <label for="steamCost">Steam Cost</label>
+        <div class="input-group">
+          <input name="steamCost" type="number" step="0.1" class="form-control" id="steamCost"
+            formControlName="steamCost">
+          @if (settings().unitsOfMeasure === 'Imperial') {
+            <span class="input-group-addon units">$/MMBtu</span>
+          } @else {
+            <span class="input-group-addon units">$/GJ</span>
+          }
+        </div>
+        <app-form-control-errors [control]="steamCost" [settings]="settings()"
+          [imperialUnit]="'$/MMBtu'" [metricUnit]="'$/GJ'"></app-form-control-errors>
+        <a class="form-text small click-link" (click)="openOperatingCostsModal()">
+          Calculate Net Steam Cost from Mixed Sources
+        </a>
+      </div>
+    }
+
+    @if (heatingSystemConfiguration() === HC.ELECTROTECHNOLOGY_STANDARD ||
+         heatingSystemConfiguration() === HC.ELECTROTECHNOLOGY_EAF ||
+         heatingSystemConfiguration() === HC.CUSTOM_ELECTROTECHNOLOGY) {
+      <div class="form-group">
+        <label for="electricityCost">Electricity Cost</label>
+        <div class="input-group">
+          <input name="electricityCost" type="number" step="0.01" class="form-control" id="electricityCost"
+            formControlName="electricityCost">
+          <span class="input-group-addon units">$/kWh</span>
+        </div>
+        <app-form-control-errors [control]="electricityCost" [settings]="settings()"
+          [defaultUnit]="'$/kWh'"></app-form-control-errors>
+        <a class="form-text small click-link" (click)="openOperatingCostsModal()">
+          Calculate Net Electricity Cost from Mixed Sources
+        </a>
+      </div>
+    }
+
   </form>
+
+  @if (co2SavingsData) {
+    <app-co2-savings-phast
+      [co2SavingsData]="co2SavingsData"
+      [settings]="settings()"
+      [isBaseline]="true"
+      [isFormDisabled]="false"
+      (emitUpdateCo2SavingsData)="updateCo2SavingsData($event)">
+    </app-co2-savings-phast>
+  }
+
 </div>

@@ -10,7 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { ExportItemComponent } from '../../shared/import-export/export-item/export-item.component';
-import { EmailMeasurDataItemComponent, EmailMeasurDataItemComponentDataInputs } from '../../shared/email-measur-data/email-measur-data-item/email-measur-data-item.component';
+import { EmailMeasurDataItemComponent } from '../../shared/email-measur-data/email-measur-data-item/email-measur-data-item.component';
 @Component({
   selector: 'app-process-cooling-banner',
   standalone: false,
@@ -51,7 +51,7 @@ export class ProcessCoolingBannerComponent {
   }
 
   showSecurityAndPrivacyModal() {
-    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+    this.modalDialogService.openModal(
       SecurityAndPrivacyItemComponent,
       {
         width: '1400px',
@@ -73,10 +73,7 @@ export class ProcessCoolingBannerComponent {
   }
   
   openExportModal() {
-    this.modalDialogService.openModal<ExportItemComponent, {
-      inAssessment: boolean,
-      assessment: Assessment
-    }>(
+    this.modalDialogService.openModal(
       ExportItemComponent,
       {
         width: '600px',
@@ -90,7 +87,7 @@ export class ProcessCoolingBannerComponent {
 
   emailAssessment() {
     const assessment = this.processCoolingService.assessmentValue;
-    this.modalDialogService.openModal<EmailMeasurDataItemComponent, EmailMeasurDataItemComponentDataInputs>(
+    this.modalDialogService.openModal(
       EmailMeasurDataItemComponent,
       {
         width: '800px',

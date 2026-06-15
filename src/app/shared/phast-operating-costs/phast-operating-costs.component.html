@@ -1,0 +1,65 @@
+<div class="tab-content">
+  <div class="d-flex header mr-2 ml-2 pb-1 pt-1 align-items-center">
+    <div class="pl-2">
+      <h3>Operating Costs - Net Costs From {{data.settings.energySourceType}}</h3>
+    </div>
+  </div>
+  <form>
+    @for (fuel of fuels; track $index; let index = $index) {
+      <div class="row align-items-end">
+        <div class="form-group col-4">
+          @if (index === 0) {
+            <label class="section-label" for="fuel">Source Name</label>
+          }
+          <div class="input-group">
+            <input name="{{index + '_name'}}" class="form-control" type="text" [(ngModel)]="fuel.name"
+              (input)="calculateMixedFuelCosts()" onfocus="this.select();">
+          </div>
+        </div>
+        <div class="form-group col-4">
+          @if (index === 0) {
+            <label class="section-label" for="fraction">Percent Used</label>
+          }
+          <div class="input-group">
+            <input name="{{index + '_usage'}}" class="form-control" type="number" step="any" [(ngModel)]="fuel.usage"
+              (input)="calculateMixedFuelCosts()" onfocus="this.select();">
+            <span class="input-group-addon units">%</span>
+          </div>
+        </div>
+        <div class="form-group col-4">
+          @if (index === 0) {
+            <label class="section-label" for="cost">Cost</label>
+          }
+          <div class="input-group">
+            <input name="{{index + '_cost'}}" class="form-control" type="number" step="any" [(ngModel)]="fuel.cost"
+              (input)="calculateMixedFuelCosts()" onfocus="this.select();">
+            @if (data.settings.energySourceType !== 'Electricity' && data.settings.unitsOfMeasure !== 'Metric') {
+              <span class="input-group-addon units">$/MMBtu</span>
+            }
+            @if (data.settings.energySourceType !== 'Electricity' && data.settings.unitsOfMeasure === 'Metric') {
+              <span class="input-group-addon units">$/GJ</span>
+            }
+            @if (data.settings.energySourceType === 'Electricity') {
+              <span class="input-group-addon units">$/kWh</span>
+            }
+            <i class="fa fa-times btn-delete-field" (click)="deleteFuel(index)"></i>
+          </div>
+        </div>
+      </div>
+    }
+    <div class="pt-1">
+      <a class="click-link pull-left small" (click)="addFuel()">Add New Source</a>
+    </div>
+    <br>
+    <div class="form-group pt-1 row justify-content-end">
+      <div class="small bold text-center">
+        <label class="bold" for="fuelCost">Total Cost:</label>
+        ${{mixedFuelCostsResult | number:'1.2-2'}}
+      </div>
+    </div>
+    <div class="w-100 justify-content-center btn-group btn-group-sm">
+      <button type="button" class="btn btn-primary pull-right btn-sm btn-form m-2" (click)="save()">Save</button>
+      <button type="button" class="btn btn-secondary pull-right btn-sm btn-form m-2" (click)="close()">Close</button>
+    </div>
+  </form>
+</div>

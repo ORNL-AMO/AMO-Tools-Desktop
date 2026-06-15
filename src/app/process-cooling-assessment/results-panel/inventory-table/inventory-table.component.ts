@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChillerInventoryItem } from '../../../shared/models/process-cooling-assessment';
 import { ChillerInventoryBaseComponent } from './chiller-inventory-base.component';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
-import { ConfirmActionComponent, ConfirmActionData } from '../../../shared/confirm-action/confirm-action.component';
+import { ConfirmActionComponent } from '../../../shared/confirm-action/confirm-action.component';
 import { FilterChillerInventoryParams } from '../../pipes/filter-chiller-inventory.pipe';
 
 @Component({
@@ -39,7 +39,7 @@ export class InventoryTableComponent extends ChillerInventoryBaseComponent {
   }
 
   openConfirmDeleteModal(item: ChillerInventoryItem) {
-    this.modalDialogService.openModal<ConfirmActionComponent, ConfirmActionData>(
+    this.modalDialogService.openModal(
       ConfirmActionComponent,
       {
         width: '600px',
