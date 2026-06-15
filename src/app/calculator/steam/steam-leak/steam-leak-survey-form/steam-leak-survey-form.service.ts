@@ -10,6 +10,7 @@ import {
   SteamLeakSurveyData,
 } from '../../../../shared/models/standalone';
 import { SteamLeakMeasurementMethod } from '../steam-leak-constants';
+import { ConvertSteamLeakService } from '../convert-steam-leak.service';
 
 const HOURS_PER_YEAR = 8760;
 
@@ -56,6 +57,7 @@ export interface FacilitySteamLeakFormControls {
 @Injectable()
 export class SteamLeakSurveyFormService {
   private readonly fb = inject(FormBuilder);
+  private readonly convertSteamLeakService = inject(ConvertSteamLeakService);
 
   buildLeakMetaForm(leak: SteamLeakSurveyData): FormGroup<LeakMetaFormControls> {
     return this.fb.group<LeakMetaFormControls>({
@@ -127,8 +129,8 @@ export class SteamLeakSurveyFormService {
     };
   }
 
-  getEmptySteamLeakData(): SteamLeakSurveyData {
-    return {
+  getEmptySteamLeakData(settings?: Settings): SteamLeakSurveyData {
+    let data: SteamLeakSurveyData = {
       leakDescription: 'New Leak Description',
       name: 'New Leak',
       selected: true,
@@ -139,5 +141,9 @@ export class SteamLeakSurveyFormService {
       plumeMethodData: { turbineEfficiency: 0, plumeLength: 0, ambientTemperature: 0 },
       units: 0,
     };
+    if (settings?.unitsOfMeasure === 'Metric') {
+      data = this.convertSteamLeakService.convertInputDataImperialToMetric(data);
+    }
+    return data;
   }
 }

@@ -6,6 +6,7 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
 
 import { SteamLeakSurveyComponent } from './steam-leak-survey.component';
 import { SteamLeakSurveyService } from './steam-leak-survey-service';
+import { ConvertSteamLeakService } from './convert-steam-leak.service';
 import { SteamLeakSurveyFormComponent } from './steam-leak-survey-form/steam-leak-survey-form.component';
 import { SteamLeakSurveyFormService } from './steam-leak-survey-form/steam-leak-survey-form.service';
 import { SteamEstimateMethodFormComponent } from './steam-leak-survey-form/steam-estimate-method-form/steam-estimate-method-form.component';
@@ -16,6 +17,7 @@ import { CostOfSteamFormComponent } from './cost-of-steam-form/cost-of-steam-for
 import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-results-table/steam-leak-survey-results-table.component';
 import { SteamLeakSurveyResultsComponent } from './steam-leak-survey-results/steam-leak-survey-results.component';
 import { SteamLeakSurveyHelpComponent } from './steam-leak-survey-help/steam-leak-survey-help.component';
+import { SteamLeakCopyTableComponent } from './steam-leak-copy-table/steam-leak-copy-table.component';
 @NgModule({
     declarations: [
         SteamLeakSurveyComponent,
@@ -27,6 +29,7 @@ import { SteamLeakSurveyHelpComponent } from './steam-leak-survey-help/steam-lea
         SteamLeakSurveyResultsTableComponent,
         SteamLeakSurveyResultsComponent,
         SteamLeakSurveyHelpComponent,
+        SteamLeakCopyTableComponent,
     ],
     imports: [
         CommonModule,
@@ -38,7 +41,8 @@ import { SteamLeakSurveyHelpComponent } from './steam-leak-survey-help/steam-lea
     exports: [SteamLeakSurveyComponent],
     providers: [
         SteamLeakSurveyService,
-        SteamLeakSurveyFormService
+        SteamLeakSurveyFormService,
+        ConvertSteamLeakService
     ]
 })
 export class SteamLeakSurveyModule {}
