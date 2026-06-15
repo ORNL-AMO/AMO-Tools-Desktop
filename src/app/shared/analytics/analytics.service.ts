@@ -124,13 +124,16 @@ export class AnalyticsService {
     }
   }
 
-  getPageWithoutId(pagePath: string) {
-    let pathWithoutId: string = pagePath.replace(/[0-9]/g, '');
-    pathWithoutId = pathWithoutId.replace(/\/$/, '');
-    if (pathWithoutId.includes('inventory')) {
-      pathWithoutId = pathWithoutId.replace('//', '/');
-    }
-    return pathWithoutId || '/';
+  getPageWithoutId(pagePath: string): string {
+    // Strip query string and fragment before any other processing
+    const withoutQuery = pagePath.split('?')[0].split('#')[0];
+    // Remove purely numeric path segments (assessment/inventory IDs like /phast/42)
+    // but preserve digits that are part of a slug (e.g. co2-conversion, o2-enrichment)
+    const segments = withoutQuery.split('/').filter(seg => !/^\d+$/.test(seg));
+    const joined = segments.join('/');
+    // Trim trailing slash but preserve bare '/'
+    const trimmed = joined.length > 1 ? joined.replace(/\/$/, '') : joined;
+    return trimmed || '/';
   }
 
   sendPageView(path: string, title: string) {

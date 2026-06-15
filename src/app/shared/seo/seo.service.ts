@@ -12,7 +12,7 @@ export interface SeoConfig {
 }
 
 const BASE_URL = 'https://measur.ornl.gov';
-const OG_IMAGE = `${BASE_URL}/assets/images/logo.png`;
+const OG_IMAGE = `${BASE_URL}/assets/icons/png/256x256.png`;
 
 @Injectable({ providedIn: 'root' })
 export class SeoService {
