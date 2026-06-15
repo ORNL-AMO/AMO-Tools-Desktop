@@ -126,11 +126,35 @@ export class AnalyticsService {
 
   getPageWithoutId(pagePath: string) {
     let pathWithoutId: string = pagePath.replace(/[0-9]/g, '');
-    pathWithoutId = pathWithoutId.replace(/\/$/, "");
+    pathWithoutId = pathWithoutId.replace(/\/$/, '');
     if (pathWithoutId.includes('inventory')) {
-      pathWithoutId = pathWithoutId.replace('//', "/");
+      pathWithoutId = pathWithoutId.replace('//', '/');
     }
-    return pathWithoutId;
+    return pathWithoutId || '/';
+  }
+
+  sendPageView(path: string, title: string) {
+    if (environment.production) {
+      if (!this.electronService.isElectron) {
+        let eventParams: EventParameters = {
+          page_path: path,
+          page_title: title,
+          measur_platform: 'measur-web',
+          measur_version: environment.version,
+          session_id: undefined
+        };
+        gtag('event', 'page_view', eventParams);
+      } else {
+        let eventParams: EventParameters = {
+          page_path: path,
+          page_title: title,
+          measur_platform: 'measur-desktop',
+          measur_version: environment.version,
+          session_id: undefined
+        };
+        this.sendAnalyticsEvent('page_view', eventParams);
+      }
+    }
   }
 
   sendEvent(eventName: AnalyticsEventString, path?: string) {
@@ -174,6 +198,7 @@ export interface GAEvent {
 
 export interface EventParameters {
   page_path?: string,
+  page_title?: string,
   measur_platform?: MeasurPlatformString,
   measur_version?: string,
   session_id: string,
