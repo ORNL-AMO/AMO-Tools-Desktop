@@ -23,6 +23,6 @@ import { Co2SavingsPhastModule } from './co2-savings-phast/co2-savings-phast.mod
   ],
   declarations: [OperationsFormComponent, OperationsComponent, OperatingCostsModalComponent],
   providers: [OperationsService, OperationsCompareService],
-  exports: [OperationsComponent]
+  exports: [OperationsComponent, OperatingCostsModalComponent]
 })
 export class OperationsModule { }

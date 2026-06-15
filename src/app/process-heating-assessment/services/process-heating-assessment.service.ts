@@ -7,9 +7,19 @@ import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ConvertPhastService } from '../../phast/convert-phast.service';
-import { HeatingEquipmentConfiguration } from '../models/views';
+import { HeatingEquipmentConfiguration, HeatingSystemEnergyType } from '../models/views';
 
 export type ProcessHeatingDataProperty = keyof PHAST;
+
+export function deriveHeatingSystemEnergyType(config: HeatingEquipmentConfiguration): HeatingSystemEnergyType {
+  const HC = HeatingEquipmentConfiguration;
+  return {
+    isFuelBased: config === HC.FUEL_FIRED || config === HC.ELECTROTECHNOLOGY_EAF,
+    isSteam: config === HC.STEAM,
+    isElectro: config === HC.ELECTROTECHNOLOGY_STANDARD || config === HC.ELECTROTECHNOLOGY_EAF || config === HC.CUSTOM_ELECTROTECHNOLOGY,
+    isEAF: config === HC.ELECTROTECHNOLOGY_EAF,
+  };
+}
 
 export function deriveHeatingEquipmentConfiguration(settings: Settings): HeatingEquipmentConfiguration {
   if (!settings) return HeatingEquipmentConfiguration.FUEL_FIRED;
@@ -41,6 +51,10 @@ export class ProcessHeatingAssessmentService {
 
   readonly heatingEquipmentConfiguration: Signal<HeatingEquipmentConfiguration> = computed(() =>
     deriveHeatingEquipmentConfiguration(this.settingsSignal())
+  );
+
+  readonly heatingSystemEnergyType: Signal<HeatingSystemEnergyType> = computed(() =>
+    deriveHeatingSystemEnergyType(this.heatingEquipmentConfiguration())
   );
 
   constructor() {

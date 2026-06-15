@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
 import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
+import { SettingsModule } from '../settings/settings.module';
+import { Co2SavingsPhastModule } from '../phast/losses/operations/co2-savings-phast/co2-savings-phast.module';
+import { OperatingHoursModule } from '../shared/operating-hours/operating-hours.module';
+import { PhastOperatingCostsModule } from '../shared/phast-operating-costs/phast-operating-costs.module';
 
 import { ROUTE_TOKENS } from './constants/process-heating-routes';
 import { ProcessHeatingUiService } from './services/process-heating-ui.service';
@@ -46,7 +50,7 @@ import { ReportComponent } from './report/report.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
 import { InputSummaryComponent } from './report/input-summary/input-summary.component';
 import { FacilityInfoComponent } from './report/facility-info/facility-info.component';
-import { SystemBasicsComponent } from './system-basics/system-basics.component';
+import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
 import { OperationsComponent } from './operations/operations.component';
 import { HeatBalanceComponent } from './heat-balance/heat-balance.component';
 import { HeatBalanceLossTabsComponent } from './heat-balance/heat-balance-loss-tabs/heat-balance-loss-tabs.component';
@@ -86,7 +90,7 @@ const ROUTES: Route[] = [
           { path: '', redirectTo: ROUTE_TOKENS.assessmentSettings, pathMatch: 'full' },
           {
             path: ROUTE_TOKENS.assessmentSettings,
-            component: SystemBasicsComponent,
+            component: AssessmentSettingsComponent,
             data: { childView: ROUTE_TOKENS.assessmentSettings, stepIndex: 0 },
           },
           {
@@ -254,7 +258,7 @@ const ROUTES: Route[] = [
     ExecutiveSummaryComponent,
     InputSummaryComponent,
     FacilityInfoComponent,
-    SystemBasicsComponent,
+    AssessmentSettingsComponent,
     OperationsComponent,
     HeatBalanceComponent,
     HeatBalanceLossTabsComponent,
@@ -280,9 +284,14 @@ const ROUTES: Route[] = [
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(ROUTES),
     FormControlErrorsComponent,
+    SettingsModule,
+    Co2SavingsPhastModule,
+    OperatingHoursModule,
+    PhastOperatingCostsModule,
   ],
   providers: [
     ProcessHeatingUiService,
