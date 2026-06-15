@@ -113,7 +113,7 @@ export class CompressedAirReductionComponent implements OnInit {
     }
   }
 
-  addBaselineEquipment() {
+  addEquipment() {
     let utilityType: number;
     if (this.baselineData.length != 0) {
       utilityType = this.baselineData[0].utilityType;
@@ -157,11 +157,7 @@ export class CompressedAirReductionComponent implements OnInit {
     this.setModificationSelected();
   }
 
-  addModificationEquipment() {
-    this.addBaselineEquipment();
-  }
-
-  updateBaselineData(data: CompressedAirReductionData, index: number) {
+updateBaselineData(data: CompressedAirReductionData, index: number) {
     this.updateDataArray(this.baselineData, data, index);
     this.getResults();
   }
@@ -188,8 +184,8 @@ export class CompressedAirReductionComponent implements OnInit {
   }
 
   getResults() {
-    this.syncModificationCountToBaseline();
-    this.compressedAirReductionService.calculateResults(this.settings, this.baselineData, this.modificationData);
+    const modification = this.modificationExists ? this.modificationData : undefined;
+    this.compressedAirReductionService.calculateResults(this.settings, this.baselineData, modification);
   }
 
   syncModificationCountToBaseline() {

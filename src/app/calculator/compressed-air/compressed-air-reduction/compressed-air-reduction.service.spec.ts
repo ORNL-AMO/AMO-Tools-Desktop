@@ -55,7 +55,7 @@ describe('CompressedAirReductionService', () => {
     expect(results.annualFlowRateReduction).toBe(0);
   });
 
-  it('keeps modification equipment count aligned with baseline for aggregate calculations', () => {
+  it('calculates aggregate results for all equipment in baseline and modification', () => {
     let inputLengths: Array<number> = [];
     spyOn(service, 'calculate').and.callFake((input: Array<CompressedAirReductionData>) => {
       inputLengths.push(input.length);
@@ -64,7 +64,7 @@ describe('CompressedAirReductionService', () => {
     spyOn(service, 'calculateIndividualEquipment').and.returnValue(emptyResult);
 
     const baseline = [getInput('Equipment #1', 20, 1), getInput('Equipment #2', 10, 1)];
-    const modification = [getInput('Equipment #1', 10, 1)];
+    const modification = [getInput('Equipment #1', 10, 1), getInput('Equipment #2', 5, 1)];
     service.calculateResults(settings, baseline, modification);
     const results = service.compressedAirResults.getValue();
 

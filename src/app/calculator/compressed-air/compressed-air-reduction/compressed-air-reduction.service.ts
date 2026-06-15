@@ -252,7 +252,6 @@ export class CompressedAirReductionService {
     results.baselineAggregateResults = this.calculate(baselineInpCpy, settings);
     if (modification) {
       modificationInpCpy = JSON.parse(JSON.stringify(modification));
-      modificationInpCpy = this.syncModificationInputsToBaseline(baselineInpCpy, modificationInpCpy);
       //modification inputs set to baseline
       modificationInpCpy.forEach((modInput, index) => {
         if (baselineInpCpy[index]) {
@@ -275,16 +274,6 @@ export class CompressedAirReductionService {
     results.annualFlowRateReduction = this.calculateAnnualFlowRateReduction(baselineInpCpy, modificationInpCpy, results);
     results.annualConsumptionReduction = results.baselineAggregateResults.consumption - results.modificationAggregateResults.consumption;
     this.compressedAirResults.next(results);
-  }
-
-  syncModificationInputsToBaseline(baselineInpCpy: Array<CompressedAirReductionData>, modificationInpCpy: Array<CompressedAirReductionData>) {
-    let syncedModificationInputs: Array<CompressedAirReductionData> = modificationInpCpy.slice(0, baselineInpCpy.length);
-    baselineInpCpy.forEach((baselineInput, index) => {
-      if (!syncedModificationInputs[index]) {
-        syncedModificationInputs[index] = JSON.parse(JSON.stringify(baselineInput));
-      }
-    });
-    return syncedModificationInputs;
   }
 
   calculateAnnualFlowRateReduction(
