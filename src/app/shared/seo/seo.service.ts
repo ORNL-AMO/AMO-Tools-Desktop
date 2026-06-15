@@ -24,7 +24,10 @@ export class SeoService {
   ) {}
 
   updateMetadata(config: SeoConfig): void {
-    const fullTitle = `${config.title} | MEASUR`;
+    // Avoid double-appending '| MEASUR' when the title already contains the brand name
+    const fullTitle = config.title.includes('MEASUR')
+      ? config.title
+      : `${config.title} | MEASUR`;
     const canonicalUrl = `${BASE_URL}${config.canonicalPath}`;
 
     this.titleService.setTitle(fullTitle);
