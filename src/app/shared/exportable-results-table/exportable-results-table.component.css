@@ -97,3 +97,9 @@
     display: flex;
     align-items: center;
 }
+
+.notification-checkmark {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
