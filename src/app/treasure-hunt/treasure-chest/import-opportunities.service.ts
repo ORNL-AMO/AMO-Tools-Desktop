@@ -110,7 +110,6 @@ export class ImportOpportunitiesService {
       if (treasureHunt.steamLeakSurveys == undefined) {
         treasureHunt.steamLeakSurveys = new Array();
       }
-      this.updateLegacyOpportunities(data.steamLeakSurveys, Treasure.steamLeak);
       treasureHunt.steamLeakSurveys = treasureHunt.steamLeakSurveys.concat(data.steamLeakSurveys);
     }
     if (data.openingLosses) {

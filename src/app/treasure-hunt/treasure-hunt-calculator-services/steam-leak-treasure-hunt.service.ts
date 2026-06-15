@@ -43,7 +43,7 @@ import * as _ from 'lodash';
         this.steamLeakService.steamLeakInput.set(undefined);
     }
 
-    getTreasureHuntOpportunityResults(steamLeakSurveyTreasureHunt: SteamLeakSurveyTreasureHunt, settings: any): TreasureHuntOpportunityResults {
+    getTreasureHuntOpportunityResults(steamLeakSurveyTreasureHunt: SteamLeakSurveyTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
         const results = this.steamLeakService.getResults(settings, steamLeakSurveyTreasureHunt.steamLeakSurveyInput);
 
         let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
