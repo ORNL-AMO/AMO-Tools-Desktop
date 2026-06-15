@@ -26,6 +26,10 @@ export class PhastOperatingCostsComponent {
   mixedFuelCostsResult: number;
   fuels: OperatingFuel[] = [{ name: 'New Source', usage: 0, cost: 0 }];
 
+  ngOnInit(): void {
+    this.calculateMixedFuelCosts();
+  }
+
   addFuel(): void {
     this.fuels.push({ name: 'New Source', usage: 0, cost: 0 });
   }

@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, Signal } from '
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { debounceTime } from 'rxjs';
-import { firstValueFrom } from 'rxjs';
+import { catchError, concatMap, debounceTime, EMPTY, firstValueFrom, from } from 'rxjs';
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -59,7 +58,13 @@ export class AssessmentSettingsComponent {
     this.metaForm.valueChanges.pipe(
       debounceTime(300),
       takeUntilDestroyed(this.destroyRef),
-    ).subscribe(() => this.saveMetaData());
+      concatMap(() => from(this.saveMetaData()).pipe(
+        catchError(err => {
+          console.error('Failed to save assessment metadata:', err);
+          return EMPTY;
+        }),
+      )),
+    ).subscribe();
   }
 
   async saveSettings(): Promise<void> {
