@@ -24,7 +24,7 @@ export class SummaryCardComponent implements OnInit {
 
   @Input()
   settings: Settings;
-  allModificationCosts: Array<number>;
+  allModificationCosts: Array<{ data: UtilityTotal; label: string; show: boolean; negative: boolean }>;
   electricityData: UtilityTotal;
   naturalGasData: UtilityTotal;
   compressedAirData: UtilityTotal;
@@ -106,17 +106,16 @@ export class SummaryCardComponent implements OnInit {
       };
 
       this.allModificationCosts = [
-        this.electricityData?.modificationCost,
-        this.naturalGasData?.modificationCost,
-        this.waterData?.modificationCost,
-        this.compressedAirData?.modificationCost,
-        this.steamData?.modificationCost,
-        this.wasteWaterData?.modificationCost,
-        this.otherFuelData?.modificationCost,
-        this.additionalAnnualSavings?.modificationCost
+        { data: this.electricityData,       label: 'Electricity',    show: this.electricityData.baselineCost !== 0,       negative: this.electricityData.modificationCost < 0 },
+        { data: this.naturalGasData,        label: 'Natural Gas',    show: this.naturalGasData.baselineCost !== 0,        negative: this.naturalGasData.modificationCost < 0 },
+        { data: this.waterData,             label: 'Water',          show: this.waterData.baselineCost !== 0,             negative: this.waterData.modificationCost < 0 },
+        { data: this.compressedAirData,     label: 'Compressed Air', show: this.compressedAirData.baselineCost !== 0,     negative: this.compressedAirData.modificationCost < 0 },
+        { data: this.steamData,             label: 'Steam',          show: this.steamData.baselineCost !== 0,             negative: this.steamData.modificationCost < 0 },
+        { data: this.wasteWaterData,        label: 'Waste Water',    show: this.wasteWaterData.baselineCost !== 0,        negative: this.wasteWaterData.modificationCost < 0 },
+        { data: this.otherFuelData,         label: 'Other Fuel',     show: this.otherFuelData.baselineCost !== 0,         negative: this.otherFuelData.modificationCost < 0 },
+        { data: this.additionalAnnualSavings, label: 'Additional',   show: this.additionalAnnualSavings.totalCostSavings !== 0, negative: this.additionalAnnualSavings.totalCostSavings < 0 },
       ];
-
-      this.hasNegativeCost = this.allModificationCosts.some(cost => cost != null && cost < 0);
+      this.hasNegativeCost = this.allModificationCosts.some(item => item.negative);
     }
   }
 
