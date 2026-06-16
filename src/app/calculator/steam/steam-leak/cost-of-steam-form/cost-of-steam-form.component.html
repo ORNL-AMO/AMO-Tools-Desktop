@@ -36,7 +36,7 @@
     <div class="input-group">
       <input name="steamTemperature" class="form-control" type="number" step="any"
         formControlName="steamTemperature" id="steam-steamTemperature" onfocus="this.select();"
-        (input)="save()" (focus)="changeField('steamTemperature')">
+        (input)="save()" (focus)="changeField('facilitySteamTemperature')">
       <span class="input-group-addon units">
         @if (settings().unitsOfMeasure === 'Imperial') { <span>°F</span> } @else { <span>°C</span> }
       </span>
@@ -54,7 +54,7 @@
     <div class="input-group">
       <input name="steamPressure" class="form-control" type="number" step="any"
         formControlName="steamPressure" id="steam-steamPressure" onfocus="this.select();"
-        (input)="save()" (focus)="changeField('steamPressure')">
+        (input)="save()" (focus)="changeField('facilitySteamPressure')">
       <span class="input-group-addon units">
         @if (settings().unitsOfMeasure === 'Imperial') { <span>psi</span> } @else { <span>kPa</span> }
       </span>
