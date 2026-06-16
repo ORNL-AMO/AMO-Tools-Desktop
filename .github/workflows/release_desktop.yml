@@ -84,18 +84,15 @@ jobs:
       - name: Setup codesigning
         env:
           APPLE_CERT_A_BASE64: ${{ secrets.APPLE_CERT_A_BASE64 }}
-          APPLE_CERT_I_BASE64: ${{ secrets.APPLE_CERT_I_BASE64 }}
           APPLE_PROV_PROF_BASE64: ${{ secrets.APPLE_PROV_PROF_BASE64 }}
           APPLE_CERT_SECRET: ${{ secrets.APPLE_CERT_SECRET }}
           APPLE_KEYCHAIN_SECRET: ${{ secrets.APPLE_KEYCHAIN_SECRET }}
         run: |
           CERT_A_PATH=$RUNNER_TEMP/app_certificate.p12
-          CERT_I_PATH=$RUNNER_TEMP/ins_certificate.p12
           PROV_PROF_PATH=$RUNNER_TEMP/embedded.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/build.keychain
 
           echo -n "$APPLE_CERT_A_BASE64" | base64 --decode -o $CERT_A_PATH
-          echo -n "$APPLE_CERT_I_BASE64" | base64 --decode -o $CERT_I_PATH
           echo -n "$APPLE_PROV_PROF_BASE64" | base64 --decode -o $PROV_PROF_PATH
 
           security -v create-keychain -p "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
@@ -104,7 +101,6 @@ jobs:
           security -v unlock-keychain -p "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
 
           security -v import $CERT_A_PATH -P "$APPLE_CERT_SECRET" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security -v import $CERT_I_PATH -P "$APPLE_CERT_SECRET" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
 
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile

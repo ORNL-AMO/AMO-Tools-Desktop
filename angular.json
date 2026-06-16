@@ -31,6 +31,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              "src/robots.txt",
+              "src/sitemap.xml",
               {
                 "glob": "**/*",
                 "input": "./node_modules/measur-tools-suite/bin/",
@@ -184,6 +186,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              "src/robots.txt",
+              "src/sitemap.xml",
               "src/manifest.webmanifest"
             ]
           }
