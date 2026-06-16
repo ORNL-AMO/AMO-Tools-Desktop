@@ -54,7 +54,7 @@ export class ImportOpportunitiesService {
       if (treasureHunt.electricityReductions == undefined) {
         treasureHunt.electricityReductions = new Array();
       }
-      this.updateLegacyOpportunities(data.electricityReductions, Treasure.electricityReduction);
+      this.updateLegacyOpportunities(data.electricityReductions, Treasure.electricityReduction, treasureHunt.existingDataUnits);
       treasureHunt.electricityReductions = treasureHunt.electricityReductions.concat(data.electricityReductions);
     }
     if (data.compressedAirReductions) {
@@ -214,9 +214,9 @@ export class ImportOpportunitiesService {
     return treasureHunt;
   }
 
-  updateLegacyOpportunities(opportunities: Array<any>, opportunityType: string) {
+  updateLegacyOpportunities(opportunities: Array<any>, opportunityType: string, settings?: string) {
     return opportunities.map(opp => {
-      if (!opp.hasOwnProperty(opportunityType)) {
+      if (!opp.hasOwnProperty('opportunityType')) {
         opp.opportunityType = opportunityType;
       }
 
@@ -228,10 +228,26 @@ export class ImportOpportunitiesService {
         this.updateCompressedAirReduction(opp);
       }
 
-        if (opportunityType == Treasure.airLeak) {
+      if (opportunityType == Treasure.airLeak) {
         this.updateAirLeak(opp);
       }
-    })
+
+      if (opportunityType == Treasure.lightingReplacement) {
+        this.updateDataService.updateLightingReplacementTreasureHunt(opp);
+      }
+
+      if (opportunityType == Treasure.heatCascading) {
+        this.updateDataService.updateHeatCascadingTreasureHunt(opp);
+      }
+
+      if (opportunityType == Treasure.powerFactorCorrection) {
+        this.updateDataService.updatePowerFactorCorrectionTreasureHunt(opp);
+      }
+
+      if (opportunityType == Treasure.electricityReduction) {
+        this.updateDataService.updateElectricityReductionTreasureHunt(opp, settings);
+      }
+    });
   }
 
   updateCompressedAirPressureFields(compressedAirPressureReductionTH: CompressedAirPressureReductionTreasureHunt) {
