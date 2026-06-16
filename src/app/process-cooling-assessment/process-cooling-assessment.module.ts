@@ -37,6 +37,7 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { ConvertProcessCoolingService } from './services/convert-process-cooling.service';
 import { ProcessCoolingResultsService } from './services/process-cooling-results.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
+import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
 import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
 import { InputUnitComponent } from '../shared/input-unit.component';
 import { OperationsComponent } from './system-information/operations/operations.component';
@@ -331,6 +332,7 @@ const ROUTES: Route[] = [
     PercentGraphModule,
     ModalModule,
     NgbModule,
+    AlertBadgeComponent,
     FormControlErrorsComponent,
     InputUnitComponent,
     AlertInfoContainerComponent,
