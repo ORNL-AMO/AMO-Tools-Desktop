@@ -117,12 +117,9 @@
 					<div class="assessment-block">
 						<div class="icon-block">
 							<div class="water-background">
-								<app-alert-badge [alertText]="'Beta'" [style]="{ 
-									position: 'fixed',
-    								'margin-left': '-68px',
-    								'margin-top': '-14px',
-									border: '2px solid #047334'
-									}"></app-alert-badge>
+								<div class="beta-badge-tile">
+									<app-alert-badge [alertText]="'Beta'"></app-alert-badge>
+								</div>
 								<img class="water-image align-self-center" src="assets/images/water-assessment-large.png" (click)="createAssessment('Water')">
 							</div>
 						</div>
@@ -132,6 +129,9 @@
 					<div class="assessment-block">
 						<div class="icon-block">
 							<div class="process-cooling-background">
+								<div class="beta-badge-tile">
+									<app-alert-badge [alertText]="'Beta'"></app-alert-badge>
+								</div>
 								<img class="process-cooling-image align-self-center" src="assets/images/process-cooling-icon.png" (click)="createAssessment('ProcessCooling')">
 							</div>
 						</div>
@@ -181,12 +181,9 @@
 					<div class="assessment-block">
 						<div class="icon-block">
 							<div class="water-background">
-								<app-alert-badge [alertText]="'Beta'" [style]="{ 
-									position: 'fixed',
-    								'margin-left': '-68px',
-    								'margin-top': '-14px',
-									border: '2px solid #047334'
-									}"></app-alert-badge>
+								<div class="beta-badge-tile">
+									<app-alert-badge [alertText]="'Beta'"></app-alert-badge>
+								</div>
 								<img class="water-diagram-image align-self-center" src="assets/images/water-process-diagram-large.png" (click)="createAssessment('Water')">
 							</div>
 						</div>
