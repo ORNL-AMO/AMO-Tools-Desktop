@@ -37,6 +37,12 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
 
   readonly SteamLeakMeasurementMethod = SteamLeakMeasurementMethod;
 
+  readonly pressureReductionMethods: Array<{ display: string; value: number }> = [
+    { display: 'None', value: 0 },
+    { display: 'Pressure Reducing Valve (PRV)', value: 1 },
+    { display: 'Steam Turbine', value: 2 },
+  ];
+
   readonly steamMeasurementMethods: Array<{ display: string; value: number }> = [
     { display: 'Estimate', value: SteamLeakMeasurementMethod.Estimate },
     { display: 'Orifice', value: SteamLeakMeasurementMethod.Orifice },
@@ -108,6 +114,12 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
     const index = this.surveyService.currentLeakIndex();
     const existing = current.steamLeakSurveyInputVec[index];
     const method: number = this.leakMetaForm.controls.measurementMethod.value ?? SteamLeakMeasurementMethod.Estimate;
+
+    const activeMethodFormValid =
+      (method === SteamLeakMeasurementMethod.Estimate && this.estimateForm.valid) ||
+      (method === SteamLeakMeasurementMethod.Orifice && this.orificeForm.valid) ||
+      (method === SteamLeakMeasurementMethod.Plume && this.plumeForm.valid);
+    if (!activeMethodFormValid) return;
 
     const updatedLeak: SteamLeakSurveyData = {
       ...existing,

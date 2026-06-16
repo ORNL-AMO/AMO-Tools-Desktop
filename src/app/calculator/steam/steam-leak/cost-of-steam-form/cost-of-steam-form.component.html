@@ -14,12 +14,8 @@
       @if (facilityForm.controls.annualOperatingHours.invalid && !facilityForm.controls.annualOperatingHours.pristine) {
         <span class="alert-danger pull-right small">
           @if (facilityForm.controls.annualOperatingHours.errors?.['required']) { <span>Value required.</span> }
-          @if (facilityForm.controls.annualOperatingHours.errors?.['max']) {
-            <span>Value can't be greater than {{ facilityForm.controls.annualOperatingHours.errors?.['max']?.max }}.</span>
-          }
-          @if (facilityForm.controls.annualOperatingHours.errors?.['min']) {
-            <span>Value can't be less than {{ facilityForm.controls.annualOperatingHours.errors?.['min']?.min }}.</span>
-          }
+          @if (facilityForm.controls.annualOperatingHours.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.annualOperatingHours.errors?.['min']?.min}}.</span> }
+          @if (facilityForm.controls.annualOperatingHours.errors?.['max']) { <span>Value can't be greater than {{ facilityForm.controls.annualOperatingHours.errors?.['max']?.max}} hrs/yr.</span> }
         </span>
       }
     </div>
@@ -42,8 +38,14 @@
         formControlName="steamTemperature" id="steam-steamTemperature" onfocus="this.select();"
         (input)="save()" (focus)="changeField('facilitySteamTemperature')">
       <span class="input-group-addon units">
-        <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>°F</span> } @else { <span>°C</span> } -->
+        @if (settings().unitsOfMeasure === 'Imperial') { <span>°F</span> } @else { <span>°C</span> }
       </span>
+      @if (facilityForm.controls.steamTemperature.invalid && !facilityForm.controls.steamTemperature.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (facilityForm.controls.steamTemperature.errors?.['required']) { <span>Value required.</span> }
+          @if (facilityForm.controls.steamTemperature.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.steamTemperature.errors?.['min']?.min}}.</span> }
+        </span>
+      }
     </div>
   </div>
 
@@ -54,8 +56,14 @@
         formControlName="steamPressure" id="steam-steamPressure" onfocus="this.select();"
         (input)="save()" (focus)="changeField('facilitySteamPressure')">
       <span class="input-group-addon units">
-        <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>psi</span> } @else { <span>kPa</span> } -->
+        @if (settings().unitsOfMeasure === 'Imperial') { <span>psi</span> } @else { <span>kPa</span> }
       </span>
+      @if (facilityForm.controls.steamPressure.invalid && !facilityForm.controls.steamPressure.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (facilityForm.controls.steamPressure.errors?.['required']) { <span>Value required.</span> }
+          @if (facilityForm.controls.steamPressure.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.steamPressure.errors?.['greaterThan'] }}.</span> }
+        </span>
+      }
     </div>
   </div>
 
@@ -66,8 +74,15 @@
         formControlName="feedwaterTemperature" id="steam-feedwaterTemperature" onfocus="this.select();"
         (input)="save()" (focus)="changeField('feedwaterTemperature')">
       <span class="input-group-addon units">
-        <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>°F</span> } @else { <span>°C</span> } -->
+        @if (settings().unitsOfMeasure === 'Imperial') { <span>°F</span> } @else { <span>°C</span> }
       </span>
+      @if (facilityForm.controls.feedwaterTemperature.invalid && !facilityForm.controls.feedwaterTemperature.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (facilityForm.controls.feedwaterTemperature.errors?.['required']) { <span>Value required.</span> }
+          @if (facilityForm.controls.feedwaterTemperature.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.feedwaterTemperature.errors?.['min']?.min}}.</span> }
+          @if (facilityForm.controls.feedwaterTemperature.errors?.['max']) { <span>Value must be below the boiling point of water.</span> }
+        </span>
+      }
     </div>
   </div>
 
@@ -81,6 +96,12 @@
         <span class="input-group-addon units">
           <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>$/klb</span> } @else { <span>$/tonne</span> } -->
         </span>
+        @if (facilityForm.controls.steamCost.invalid && !facilityForm.controls.steamCost.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (facilityForm.controls.steamCost.errors?.['required']) { <span>Value required.</span> }
+            @if (facilityForm.controls.steamCost.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.steamCost.errors?.['min']?.min}}.</span> }
+          </span>
+        }
       </div>
     </div>
   }
@@ -93,6 +114,12 @@
           formControlName="electricityCost" id="steam-electricityCost" onfocus="this.select();"
           (input)="save()" (focus)="changeField('electricityCost')">
         <span class="input-group-addon units">$/kWh</span>
+        @if (facilityForm.controls.electricityCost.invalid && !facilityForm.controls.electricityCost.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (facilityForm.controls.electricityCost.errors?.['required']) { <span>Value required.</span> }
+            @if (facilityForm.controls.electricityCost.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.electricityCost.errors?.['greaterThan'] }}.</span> }
+          </span>
+        }
       </div>
     </div>
   }
@@ -107,6 +134,12 @@
         <span class="input-group-addon units">
           <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>$/MMBtu</span> } @else { <span>$/GJ</span> } -->
         </span>
+        @if (facilityForm.controls.fuelCost.invalid && !facilityForm.controls.fuelCost.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (facilityForm.controls.fuelCost.errors?.['required']) { <span>Value required.</span> }
+            @if (facilityForm.controls.fuelCost.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.fuelCost.errors?.['greaterThan'] }}.</span> }
+          </span>
+        }
       </div>
     </div>
     <div class="form-group">
@@ -115,6 +148,12 @@
         <input name="fuelEnergyFactor" class="form-control" type="number" step="any"
           formControlName="fuelEnergyFactor" id="steam-fuelEnergyFactor" onfocus="this.select();"
           (input)="save()" (focus)="changeField('fuelEnergyFactor')">
+        @if (facilityForm.controls.fuelEnergyFactor.invalid && !facilityForm.controls.fuelEnergyFactor.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (facilityForm.controls.fuelEnergyFactor.errors?.['required']) { <span>Value required.</span> }
+            @if (facilityForm.controls.fuelEnergyFactor.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.fuelEnergyFactor.errors?.['greaterThan'] }}.</span> }
+          </span>
+        }
       </div>
     </div>
   }
@@ -127,6 +166,13 @@
           formControlName="boilerEfficiency" id="steam-boilerEfficiency" onfocus="this.select();"
           (input)="save()" (focus)="changeField('boilerEfficiency')">
         <span class="input-group-addon units">%</span>
+        @if (facilityForm.controls.boilerEfficiency.invalid && !facilityForm.controls.boilerEfficiency.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (facilityForm.controls.boilerEfficiency.errors?.['required']) { <span>Value required.</span> }
+            @if (facilityForm.controls.boilerEfficiency.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.boilerEfficiency.errors?.['min']?.min}}%.</span> }
+            @if (facilityForm.controls.boilerEfficiency.errors?.['max']) { <span>Value can't be greater than {{ facilityForm.controls.boilerEfficiency.errors?.['max']?.max}}%.</span> }
+          </span>
+        }
       </div>
     </div>
     <div class="form-group">
@@ -136,6 +182,13 @@
           formControlName="systemEfficiency" id="steam-systemEfficiency" onfocus="this.select();"
           (input)="save()" (focus)="changeField('systemEfficiency')">
         <span class="input-group-addon units">%</span>
+        @if (facilityForm.controls.systemEfficiency.invalid && !facilityForm.controls.systemEfficiency.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (facilityForm.controls.systemEfficiency.errors?.['required']) { <span>Value required.</span> }
+            @if (facilityForm.controls.systemEfficiency.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.systemEfficiency.errors?.['min']?.min}}%.</span> }
+            @if (facilityForm.controls.systemEfficiency.errors?.['max']) { <span>Value can't be greater than {{ facilityForm.controls.systemEfficiency.errors?.['max']?.max}}%.</span> }
+          </span>
+        }
       </div>
     </div>
   }

@@ -46,20 +46,23 @@
         <app-steam-estimate-method-form
           [form]="estimateForm"
           [settings]="settings()"
-          (fieldFocused)="setCurrentField($event)" />
+          (fieldFocused)="setCurrentField($event)"
+          [pressureReductionMethods]="pressureReductionMethods" />
       }
 
       @case (SteamLeakMeasurementMethod.Orifice) {
         <app-steam-orifice-method-form
           [form]="orificeForm"
           [settings]="settings()"
-          (fieldFocused)="setCurrentField($event)" />
+          (fieldFocused)="setCurrentField($event)"
+          [pressureReductionMethods]="pressureReductionMethods" />
       }
       @case (SteamLeakMeasurementMethod.Plume) {
         <app-steam-plume-method-form
           [form]="plumeForm"
           [settings]="settings()"
-          (fieldFocused)="setCurrentField($event)" />
+          (fieldFocused)="setCurrentField($event)"
+          [pressureReductionMethods]="pressureReductionMethods" />
       }
     }
 

@@ -1,37 +1,42 @@
 <form [formGroup]="form()">
   <div class="form-group">
-    <label for="steam-turbineEfficiency-plume">Turbine Efficiency</label>
+    <label for="steam-steamPressure-plume">Header Pressure</label>
     <div class="input-group">
-      <input name="turbineEfficiency" class="form-control" type="number" step="any"
-        formControlName="turbineEfficiency" id="steam-turbineEfficiency-plume" onfocus="this.select();"
-        (focus)="fieldFocused.emit('turbineEfficiency')">
-      <span class="input-group-addon units">%</span>
-      @if (form().controls.turbineEfficiency.invalid && !form().controls.turbineEfficiency.pristine) {
+      <input name="steamPressure" class="form-control" type="number" step="any"
+        formControlName="steamPressure" id="steam-steamPressure-plume" onfocus="this.select();"
+        (focus)="fieldFocused.emit('steamPressure')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">psig</span>
+      } @else {
+        <span class="input-group-addon units">kPa</span>
+      }
+      @if (form().controls.steamPressure.invalid && !form().controls.steamPressure.pristine) {
         <span class="alert-danger pull-right small">
-          @if (form().controls.turbineEfficiency.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.turbineEfficiency.errors?.['max']) { <span>Value can't exceed 100.</span> }
+          @if (form().controls.steamPressure.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.steamPressure.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamPressure.errors?.['min']?.min}}.</span> }
+          @if (form().controls.steamPressure.errors?.['max']) { <span>Value can't be greater than {{ form().controls.steamPressure.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
   </div>
 
   <div class="form-group">
-    <label for="steam-plumeLength">Plume Length</label>
+    <label for="steam-steamTemperature-plume">Header Temperature</label>
     <div class="input-group">
-      <input name="plumeLength" class="form-control" type="number" step="any"
-        formControlName="plumeLength" id="steam-plumeLength" onfocus="this.select();"
-        (focus)="fieldFocused.emit('plumeLength')">
+      <input name="steamTemperature" class="form-control" type="number" step="any"
+        formControlName="steamTemperature" id="steam-steamTemperature-plume" onfocus="this.select();"
+        (focus)="fieldFocused.emit('steamTemperature')">
       @if (settings().unitsOfMeasure !== 'Metric') {
-        <span class="input-group-addon units">in</span>
+        <span class="input-group-addon units">&#8457;</span>
       } @else {
-        <span class="input-group-addon units">cm</span>
+        <span class="input-group-addon units">&#8451;</span>
       }
-      @if (form().controls.plumeLength.invalid && !form().controls.plumeLength.pristine) {
+
+      @if (form().controls.steamTemperature.invalid && !form().controls.steamTemperature.pristine) {
         <span class="alert-danger pull-right small">
-          @if (form().controls.plumeLength.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.plumeLength.errors?.['min']) {
-            <span>Value can't be less than {{ form().controls.plumeLength.errors?.['min']?.min }}.</span>
-          }
+          @if (form().controls.steamTemperature.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.steamTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamTemperature.errors?.['min']?.min}}.</span> }
+          @if (form().controls.steamTemperature.errors?.['max']) { <span>Value can't be greater than {{ form().controls.steamTemperature.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
@@ -51,8 +56,41 @@
       @if (form().controls.ambientTemperature.invalid && !form().controls.ambientTemperature.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.ambientTemperature.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.ambientTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.ambientTemperature.errors?.['min']?.min}}.</span> }
+          @if (form().controls.ambientTemperature.errors?.['max']) { <span>Value can't be greater than {{ form().controls.ambientTemperature.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-plumeLength">Plume Length</label>
+    <div class="input-group">
+      <input name="plumeLength" class="form-control" type="number" step="any"
+        formControlName="plumeLength" id="steam-plumeLength" onfocus="this.select();"
+        (focus)="fieldFocused.emit('plumeLength')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">ft</span>
+      } @else {
+        <span class="input-group-addon units">m</span>
+      }
+      @if (form().controls.plumeLength.invalid && !form().controls.plumeLength.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.plumeLength.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.plumeLength.errors?.['min']) { <span>Value can't be less than {{ form().controls.plumeLength.errors?.['min']?.min}}.</span> }
+          @if (form().controls.plumeLength.errors?.['max']) { <span>Value can't be greater than {{ form().controls.plumeLength.errors?.['max']?.max}}.</span> }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-pressureReductionMethod-plume">Pressure Reduction Method</label>
+    <select name="pressureReductionMethod" class="form-control" id="steam-pressureReductionMethod-plume"
+      formControlName="pressureReductionMethod" (focus)="fieldFocused.emit('pressureReductionMethod')">
+      @for (option of pressureReductionMethods(); track option.value) {
+        <option [ngValue]="option.value">{{ option.display }}</option>
+      }
+    </select>
   </div>
 </form>

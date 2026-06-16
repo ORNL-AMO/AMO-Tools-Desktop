@@ -15,6 +15,7 @@ import { SteamOrificeMethodFormComponent } from './steam-leak-survey-form/steam-
 import { SteamPlumeMethodFormComponent } from './steam-leak-survey-form/steam-plume-method-form/steam-plume-method-form.component';
 import { CostOfSteamFormComponent } from './cost-of-steam-form/cost-of-steam-form.component';
 import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-results-table/steam-leak-survey-results-table.component';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
 import { SteamLeakSurveyResultsComponent } from './steam-leak-survey-results/steam-leak-survey-results.component';
 import { SteamLeakSurveyHelpComponent } from './steam-leak-survey-help/steam-leak-survey-help.component';
 import { SteamLeakCopyTableComponent } from './steam-leak-copy-table/steam-leak-copy-table.component';
@@ -24,6 +25,9 @@ import { SteamLeakCopyTableComponent } from './steam-leak-copy-table/steam-leak-
         SteamLeakSurveyFormComponent,
         SteamEstimateMethodFormComponent,
         SteamOrificeMethodFormComponent,
+        CostOfSteamFormComponent,
+        SteamPlumeMethodFormComponent,
+        SteamLeakSurveyResultsTableComponent
         SteamPlumeMethodFormComponent,
         CostOfSteamFormComponent,
         SteamLeakSurveyResultsTableComponent,
@@ -37,6 +41,7 @@ import { SteamLeakCopyTableComponent } from './steam-leak-copy-table/steam-leak-
         ReactiveFormsModule,
         OperatingHoursModalModule,
         ExportableResultsTableModule,
+        SharedPipesModule,
     ],
     exports: [SteamLeakSurveyComponent],
     providers: [

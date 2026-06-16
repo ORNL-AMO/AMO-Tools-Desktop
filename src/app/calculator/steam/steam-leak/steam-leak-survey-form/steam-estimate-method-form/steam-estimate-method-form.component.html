@@ -1,5 +1,75 @@
 <form [formGroup]="form()">
   <div class="form-group">
+    <label for="steam-steamPressure-estimate">Header Pressure</label>
+    <div class="input-group">
+      <input name="steamPressure" class="form-control" type="number" step="any"
+        formControlName="steamPressure" id="steam-steamPressure-estimate" onfocus="this.select();"
+        (focus)="fieldFocused.emit('steamPressure')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">psig</span>
+      } @else {
+        <span class="input-group-addon units">kPa</span>
+      }
+      @if (form().controls.steamPressure.invalid && !form().controls.steamPressure.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.steamPressure.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.steamPressure.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamPressure.errors?.['min']?.min}}.</span> }
+          @if (form().controls.steamPressure.errors?.['max']) { <span>Value can't be greater than {{ form().controls.steamPressure.errors?.['max']?.max}}.</span> }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-steamTemperature-estimate">Header Temperature</label>
+    <div class="input-group">
+      <input name="steamTemperature" class="form-control" type="number" step="any"
+        formControlName="steamTemperature" id="steam-steamTemperature-estimate" onfocus="this.select();"
+        (focus)="fieldFocused.emit('steamTemperature')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">&#8457;</span>
+      } @else {
+        <span class="input-group-addon units">&#8451;</span>
+      }
+      @if (form().controls.steamTemperature.invalid && !form().controls.steamTemperature.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.steamTemperature.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.steamTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamTemperature.errors?.['min']?.min }}.</span> }
+        </span>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="steam-pressureReductionMethod-estimate">Pressure Reduction Method</label>
+    <select name="pressureReductionMethod" class="form-control" id="steam-pressureReductionMethod-estimate"
+      formControlName="pressureReductionMethod" (focus)="fieldFocused.emit('pressureReductionMethod')">
+      @for (option of pressureReductionMethods(); track option.value) {
+        <option [ngValue]="option.value">{{ option.display }}</option>
+      }
+    </select>
+  </div>
+
+  @if (form().controls.pressureReductionMethod.value === 2) {
+    <div class="form-group">
+      <label for="steam-turbineEfficiency-estimate">Turbine Efficiency</label>
+      <div class="input-group">
+        <input name="turbineEfficiency" class="form-control" type="number" step="any"
+          formControlName="turbineEfficiency" id="steam-turbineEfficiency-estimate" onfocus="this.select();"
+          (focus)="fieldFocused.emit('turbineEfficiency')">
+        <span class="input-group-addon units">%</span>
+        @if (form().controls.turbineEfficiency.invalid && !form().controls.turbineEfficiency.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form().controls.turbineEfficiency.errors?.['required']) { <span>Value required.</span> }
+            @if (form().controls.turbineEfficiency.errors?.['min']) { <span>Value can't be less than {{ form().controls.turbineEfficiency.errors?.['min']?.min}}.</span> }
+            @if (form().controls.turbineEfficiency.errors?.['max']) { <span>Value can't be greater than {{ form().controls.turbineEfficiency.errors?.['max']?.max}}.</span> }
+          </span>
+        }
+      </div>
+    </div>
+  }
+
+  <div class="form-group">
     <label for="steam-leakRate">Leak Rate</label>
     <div class="input-group">
       <input name="leakRate" class="form-control" type="number" step="any"
@@ -13,11 +83,12 @@
       @if (form().controls.leakRate.invalid && !form().controls.leakRate.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.leakRate.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.leakRate.errors?.['min']) {
-            <span>Value can't be less than {{ form().controls.leakRate.errors?.['min']?.min }}.</span>
+          @if (form().controls.leakRate.errors?.['greaterThan'] !== undefined) {
+            <span>Value must be greater than {{ form().controls.leakRate.errors?.['greaterThan'] }}.</span> 
           }
         </span>
       }
     </div>
   </div>
+
 </form>

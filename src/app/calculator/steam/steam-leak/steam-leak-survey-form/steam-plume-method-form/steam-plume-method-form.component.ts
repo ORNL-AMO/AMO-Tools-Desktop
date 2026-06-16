@@ -10,6 +10,7 @@ import { PlumeFormControls } from '../steam-leak-survey-form.service';
   standalone: false,
 })
 export class SteamPlumeMethodFormComponent {
+  readonly pressureReductionMethods = input.required<Array<{ display: string; value: number }>>();
   readonly form = input.required<FormGroup<PlumeFormControls>>();
   readonly settings = input.required<Settings>();
   readonly fieldFocused = output<string>();
