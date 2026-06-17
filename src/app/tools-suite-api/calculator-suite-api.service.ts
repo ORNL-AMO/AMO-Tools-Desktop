@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs, SteamLeakSurveyInput, SteamLeakSurveyResult, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
+import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedAirReductionInput, CompressedAirReductionResult, ElectricityReductionInput, ElectricityReductionResult, NaturalGasReductionInput, NaturalGasReductionResult, PipeInsulationReductionInput, PipeInsulationReductionResult, PowerFactorTriangleModeInputs, PowerFactorTriangleOutputs, SteamLeakSurveyInput, SteamLeakSurveyResult, SteamLeakSurveyData, SteamReductionInput, SteamReductionOutput, SteamReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, WaterReductionInput, WaterReductionResult } from '../shared/models/standalone';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ValveEnergyLossInputs, ValveEnergyLossOutputs, ValveEnergyLossResults } from '../shared/models/calculators';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
@@ -438,6 +438,7 @@ export class CalculatorSuiteApiService {
       0: 'steam',
       1: 'electric',
       2: 'natural_gas',
+      3: 'natural_gas',
     };
 
     const surveyInput = {
@@ -456,29 +457,39 @@ export class CalculatorSuiteApiService {
       steamCost: facility.steamCost,
     };
 
+    let result: SteamLeakSurveyResult;
     switch (leak.measurementMethod) {
       case 1: // Orifice
-        return this.steamLeakApiService.orificeMethodCalc(
+        result = this.steamLeakApiService.orificeMethodCalc(
           leak.orificeMethodData.turbineEfficiency,
           leak.orificeMethodData.holeSize,
           leak.orificeMethodData.dischargeCoefficient,
           leak.orificeMethodData.atmosphericPressure,
           surveyInput
         );
+        break;
       case 2: // Plume
-        return this.steamLeakApiService.plumeMethodCalc(
+        result = this.steamLeakApiService.plumeMethodCalc(
           leak.plumeMethodData.turbineEfficiency,
           leak.plumeMethodData.plumeLength,
           leak.plumeMethodData.ambientTemperature,
           surveyInput
         );
+        break;
       default: // Estimate (0)
-        return this.steamLeakApiService.estimateMethodPRVCalc(
-          leak.estimateMethodData.leakRate,
-          surveyInput
-        );
+        result = leak.estimateMethodData.pressureReductionMethod === 2
+        ? this.steamLeakApiService.estimateMethodTurbineCalc(
+            leak.estimateMethodData.leakRate,
+            leak.estimateMethodData.turbineEfficiency,
+            surveyInput)
+        : this.steamLeakApiService.estimateMethodPRVCalc(
+            leak.estimateMethodData.leakRate,
+            surveyInput);
     }
-  }
+
+    return result;
+
+  }  
 
   pipeInsulationReduction(inputObj: PipeInsulationReductionInput): PipeInsulationReductionResult {
     let pipeMaterialCoefficients = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();

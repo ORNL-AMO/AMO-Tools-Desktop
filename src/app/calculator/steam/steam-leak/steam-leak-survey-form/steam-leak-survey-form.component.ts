@@ -38,9 +38,10 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
   readonly SteamLeakMeasurementMethod = SteamLeakMeasurementMethod;
 
   readonly pressureReductionMethods: Array<{ display: string; value: number }> = [
-    { display: 'None', value: 0 },
+    { display: 'Other Fuel', value: 0 },
     { display: 'Pressure Reducing Valve (PRV)', value: 1 },
     { display: 'Steam Turbine', value: 2 },
+    { display: 'Natural Gas', value: 3 },
   ];
 
   readonly steamMeasurementMethods: Array<{ display: string; value: number }> = [

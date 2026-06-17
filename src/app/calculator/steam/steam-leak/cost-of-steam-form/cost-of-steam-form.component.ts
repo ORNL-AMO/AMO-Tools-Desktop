@@ -33,6 +33,7 @@ export class CostOfSteamFormComponent implements OnInit, AfterViewInit {
     { display: 'Steam', value: 0 },
     { display: 'Electric', value: 1 },
     { display: 'Natural Gas', value: 2 },
+    { display: 'Other Fuel', value: 3}
   ];
 
   private readonly facilityData = computed(() => this.surveyService.steamLeakInput()?.facilitySteamLeakData);
