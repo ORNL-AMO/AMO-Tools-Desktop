@@ -2,7 +2,7 @@
 
 # True Cost Calculation — Flow Diagram Guide
 
-**Document Scope:** This document walks through each stage of the true cost calculation in plain English, following the same sequence as the algorithm. For each stage it explains what happens and why that ordering or approach is necessary. The companion overview document (`true-cost-algorithm-quick-reference.md`) covers inputs, outputs, and the full glossary.
+**Document Scope:** This document walks through each stage of the true cost calculation in plain English, following the same sequence as the algorithm. For each stage it explains what happens and why that ordering or approach is necessary. The companion overview document (`true-cost-complete-reference.md`) covers inputs, outputs, and the full glossary.
 
 ---
 
@@ -44,7 +44,7 @@ Systems that meet all of these criteria are recorded in a special index.
 1. **Computes the block cost** — the total annual cost of that node, calculated as unit cost ($/kgal) multiplied by the total annual flow through the node.
 2. **Traces all flow paths** from that node to the edge of the diagram using a depth-first search, recording each path as an ordered sequence of connections.
 
-**Why we do this:** The block cost answers "how much does this node cost in total per year?" before we decide how to split it across systems. We need this number first so that attribution in the next stage produces dollar amounts rather than just fractions.
+**Why we do this:** The block cost answers "how much does this node cost in total per year?" before we decide how to attribute it across systems. We need this number first so that attribution in the next stage produces dollar amounts rather than just fractions.
 
 The flow path trace answers "which systems can this node's cost possibly reach, and by what routes?" By computing these paths once and storing them, the attribution stage does not need to re-traverse the diagram for every system — it just works from the pre-computed path list.
 
@@ -160,7 +160,7 @@ Facility Diagram (nodes + edges)
 
 | Document | What it covers |
 |---|---|
-| true-cost-algorithm-quick-reference.md | Full algorithm reference with inputs, outputs, formulas, and glossary |
+| true-cost-complete-reference.md | Full algorithm reference with inputs, outputs, formulas, and glossary |
 | cost-component-attribution/apply-system-intake-costs.md | Detailed rules for how intake costs are attributed |
 | cost-component-attribution/apply-system-discharge-costs.md | Detailed rules for how discharge costs are attributed |
 | cost-component-attribution/apply-system-treatment-costs.md | Detailed rules for how treatment costs are attributed |

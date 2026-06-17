@@ -1,4 +1,4 @@
-**Date Generated:** May 14, 2026
+**Date Generated:** June 17, 2026
 
 # Apply System Treatment Costs
 
@@ -41,7 +41,7 @@ Example — Series treatment:
 
 ## 3. Flow Fraction and Cost Calculation
 
-### 3.1 Standard Case (No Losses in Treatment Unit)
+### 3.1 Case A — Standard Case (No Losses)
 
 When the treatment unit does not reduce water volume (outflow equals inflow):
 
@@ -70,7 +70,7 @@ Flow on the first edge exiting the treatment node on this path.
 
     Cost to system = Attribution fraction × Treatment total block cost
 
-### 3.2 Case with Losses in Treatment Unit
+### 3.2 Case B — Treatment Node Has Losses
 
 When the treatment unit reduces water volume (outflow < inflow — for example, an RO system with a reject stream):
 
@@ -90,7 +90,7 @@ Flow on the edge immediately upstream of the system.
 
 The key distinction: the cost basis is the block cost computed on the full inflow (which is what drives the treatment operating cost), but the downstream allocation denominator is the reduced outflow volume. This correctly reflects that a system receiving 100% of the product from a loss-generating treatment unit bears 100% of that unit's cost.
 
-### 3.3 — Single-System RO Override
+### 3.3 Case C — Single-System RO Override
 
 Even when the RO loss-adjusted formula from Section 3.2 produces a fraction less than 1 (because only a portion of the inflow reaches the system as product water), the attribution fraction is overridden to 1 when the RO unit is identified as a single-system configuration.
 
@@ -206,10 +206,10 @@ System E bears 100% of the softener cost because it receives all of the product 
 | Walk direction | Downstream from treatment unit |
 | Stopping point | First water-using system on each path |
 | Cost basis | Full treatment block cost (unit cost × total treatment inflow) |
-| Attribution denominator (no losses) | Treatment total inflow |
-| Attribution denominator (with losses) | Treatment total outflow (product water only) |
+| Attribution denominator — Case A (no losses) | Treatment total inflow |
+| Attribution denominator — Case B (with losses) | Treatment total outflow (product water only) |
 | Cap on fraction per path | Min(system inflow / path inflow, 1.0) |
 | Series treatment | Each unit in series is an independent cost center; no duplication |
 | Adjusted attribution | User-supplied fraction replaces computed default |
 | De-duplication | Identical paths from treatment node to system are attributed only once |
-| Single-system RO override | Attribution fraction forced to 1.0 when treatment node is the RO unit of a single-system configuration |
+| Single-system RO override (Case C) | Attribution fraction forced to 1.0 when treatment node is the RO unit of a single-system configuration |
