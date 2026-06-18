@@ -119,6 +119,7 @@ export class ToolsSuiteApiService {
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.flueGasMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
@@ -133,6 +134,7 @@ export class ToolsSuiteApiService {
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.gasLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
@@ -150,6 +152,7 @@ export class ToolsSuiteApiService {
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.liquidLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
@@ -172,6 +175,7 @@ export class ToolsSuiteApiService {
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.solidLiquidMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
@@ -190,6 +194,7 @@ export class ToolsSuiteApiService {
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.solidLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
@@ -207,16 +212,4 @@ export class ToolsSuiteApiService {
         suiteDefaultMaterials.delete();
         await this.wallLossesSurfaceDbService.insertDefaultMaterials(defaultMaterials);
     }
-
-    //quick test module works
-    // private testModule() {
-    //     var inletTemperature = 100.0
-    //     var outletTemperature = 1400.0;
-    //     var flowRate = 1200.0;
-    //     var correctionFactor = 1.0;
-    //     var specificHeat = 0.02;
-
-    //     let atmosphere = new this.ToolsSuiteModule.Atmosphere(inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat);
-    //     let heatLoss = atmosphere.getTotalHeat();
-    // }
 }

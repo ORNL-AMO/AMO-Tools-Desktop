@@ -422,7 +422,6 @@ export class CalculatorSuiteApiService {
       };
       inputs.push_back(wasmConvertedInput);
     });
-    this.toolsSuiteApiService.ToolsSuiteModule
 
     let output: SuiteSteamReductionOutput = this.toolsSuiteApiService.ToolsSuiteModule.steamReduction(inputs);
     let results: SteamReductionResult = {
