@@ -4,6 +4,7 @@ import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ValveEnergyLossInputs, ValveEnergyLossOutputs, ValveEnergyLossResults } from '../shared/models/calculators';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 import { SteamLeakApiService } from './steam-leak-api.service';
+import { SteamLeakMeasurementMethod, SteamLeakPressureReductionMethod, SteamLeakUtilityType } from '../calculator/steam/steam-leak/steam-leak-constants';
 
 
 @Injectable()
@@ -435,10 +436,10 @@ export class CalculatorSuiteApiService {
     }
 
     const utilityTypeMap: Record<number, 'steam' | 'electric' | 'natural_gas'> = {
-      0: 'steam',
-      1: 'electric',
-      2: 'natural_gas',
-      3: 'natural_gas',
+      [SteamLeakUtilityType.Steam]: 'steam',
+      [SteamLeakUtilityType.Electric]: 'electric',
+      [SteamLeakUtilityType.NaturalGas]: 'natural_gas',
+      [SteamLeakUtilityType.OtherFuel]: 'natural_gas',
     };
 
     const surveyInput = {
@@ -459,7 +460,7 @@ export class CalculatorSuiteApiService {
 
     let result: SteamLeakSurveyResult;
     switch (leak.measurementMethod) {
-      case 1: // Orifice
+      case SteamLeakMeasurementMethod.Orifice:
         result = this.steamLeakApiService.orificeMethodCalc(
           leak.orificeMethodData.turbineEfficiency,
           leak.orificeMethodData.holeSize,
@@ -468,7 +469,7 @@ export class CalculatorSuiteApiService {
           surveyInput
         );
         break;
-      case 2: // Plume
+      case SteamLeakMeasurementMethod.Plume:
         result = this.steamLeakApiService.plumeMethodCalc(
           leak.plumeMethodData.turbineEfficiency,
           leak.plumeMethodData.plumeLength,
@@ -476,8 +477,8 @@ export class CalculatorSuiteApiService {
           surveyInput
         );
         break;
-      default: // Estimate (0)
-        result = leak.estimateMethodData.pressureReductionMethod === 2
+      default: // Estimate
+        result = leak.estimateMethodData.pressureReductionMethod === SteamLeakPressureReductionMethod.Turbine
         ? this.steamLeakApiService.estimateMethodTurbineCalc(
             leak.estimateMethodData.leakRate,
             leak.estimateMethodData.turbineEfficiency,

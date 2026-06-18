@@ -5,6 +5,7 @@ import { TreasureHunt } from '../../shared/models/treasure-hunt';
 import { SteamLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { ConvertSteamLeakService } from '../../calculator/steam/steam-leak/convert-steam-leak.service';
+import { SteamLeakUtilityType } from '../../calculator/steam/steam-leak/steam-leak-constants';
 import { OpportunitySummary } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import { EnergyUsage } from '../../shared/models/treasure-hunt';
@@ -56,10 +57,10 @@ import * as _ from 'lodash';
 
         // facilityUtilityType: 0 = Steam, 1 = Electricity, 2 = Natural Gas
         const facilityUtilityType = steamLeakSurveyTreasureHunt.steamLeakSurveyInput.facilitySteamLeakData.utilityType;
-        if (facilityUtilityType === 1) {
+        if (facilityUtilityType === SteamLeakUtilityType.Electric) {
             treasureHuntOpportunityResults.energySavings = results.savings.energyLoss;
             treasureHuntOpportunityResults.utilityType = 'Electricity';
-        } else if (facilityUtilityType === 2) {
+        } else if (facilityUtilityType === SteamLeakUtilityType.NaturalGas) {
             treasureHuntOpportunityResults.energySavings = results.savings.energyLoss;
             treasureHuntOpportunityResults.utilityType = 'Natural Gas';
         } else {
@@ -75,10 +76,10 @@ import * as _ from 'lodash';
         let currentCosts: number;
         // utilityType: 0 = Steam, 1 = Electricity, 2 = Natural Gas
         const facilityUtilityType = steamLeakSurvey.steamLeakSurveyInput.facilitySteamLeakData.utilityType;
-        if (facilityUtilityType === 1) {
+        if (facilityUtilityType === SteamLeakUtilityType.Electric) {
             currentCosts = currentEnergyUsage.electricityCosts;
             unitStr = 'kWh';
-        } else if (facilityUtilityType === 2) {
+        } else if (facilityUtilityType === SteamLeakUtilityType.NaturalGas) {
             currentCosts = currentEnergyUsage.naturalGasCosts;
             unitStr = settings.unitsOfMeasure === 'Metric' ? 'GJ' : 'MMBtu';
         } else {

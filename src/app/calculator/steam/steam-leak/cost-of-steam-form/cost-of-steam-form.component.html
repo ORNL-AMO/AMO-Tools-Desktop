@@ -31,7 +31,7 @@
     </select>
   </div>
 
-  @if (facilityForm.controls.utilityType.value === 1) {
+  @if (facilityForm.controls.utilityType.value === SteamLeakUtilityType.Electric) {
     <div class="form-group">
       <label for="steam-electricityCost">Electricity Cost</label>
       <div class="input-group">
@@ -42,14 +42,14 @@
         @if (facilityForm.controls.electricityCost.invalid && !facilityForm.controls.electricityCost.pristine) {
           <span class="alert-danger pull-right small">
             @if (facilityForm.controls.electricityCost.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.electricityCost.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.electricityCost.errors?.['greaterThan'] }}.</span> }
+            @if (facilityForm.controls.electricityCost.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.electricityCost.errors?.['min']?.min }}.</span> }
           </span>
         }
       </div>
     </div>
   }
 
-  @if (facilityForm.controls.utilityType.value === 0) {
+  @if (facilityForm.controls.utilityType.value === SteamLeakUtilityType.Steam) {
     <div class="form-group">
       <label for="steam-steamCost">Steam Cost</label>
       <div class="input-group">
@@ -57,7 +57,7 @@
           formControlName="steamCost" id="steam-steamCost" onfocus="this.select();"
           (input)="save()" (focus)="changeField('steamCost')">
         <span class="input-group-addon units">
-          <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>$/klb</span> } @else { <span>$/tonne</span> } -->
+          @if (settings().unitsOfMeasure === 'Imperial') { <span>$/klb</span> } @else { <span>$/tonne</span> }
         </span>
         @if (facilityForm.controls.steamCost.invalid && !facilityForm.controls.steamCost.pristine) {
           <span class="alert-danger pull-right small">
@@ -69,7 +69,7 @@
     </div>
   }
 
-  @if (facilityForm.controls.utilityType.value === 2 || facilityForm.controls.utilityType.value === 3) {
+  @if (facilityForm.controls.utilityType.value === SteamLeakUtilityType.NaturalGas || facilityForm.controls.utilityType.value === SteamLeakUtilityType.OtherFuel) {
     <div class="form-group">
       <label for="steam-fuelCost">Fuel Cost</label>
       <div class="input-group">
@@ -77,12 +77,12 @@
           formControlName="fuelCost" id="steam-fuelCost" onfocus="this.select();"
           (input)="save()" (focus)="changeField('fuelCost')">
         <span class="input-group-addon units">
-          <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span>$/MMBtu</span> } @else { <span>$/GJ</span> } -->
+          @if (settings().unitsOfMeasure === 'Imperial') { <span>$/MMBtu</span> } @else { <span>$/GJ</span> }
         </span>
         @if (facilityForm.controls.fuelCost.invalid && !facilityForm.controls.fuelCost.pristine) {
           <span class="alert-danger pull-right small">
             @if (facilityForm.controls.fuelCost.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.fuelCost.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.fuelCost.errors?.['greaterThan'] }}.</span> }
+            @if (facilityForm.controls.fuelCost.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.fuelCost.errors?.['min']?.min }}.</span> }
           </span>
         }
       </div>
@@ -96,7 +96,7 @@
         @if (facilityForm.controls.fuelEnergyFactor.invalid && !facilityForm.controls.fuelEnergyFactor.pristine) {
           <span class="alert-danger pull-right small">
             @if (facilityForm.controls.fuelEnergyFactor.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.fuelEnergyFactor.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.fuelEnergyFactor.errors?.['greaterThan'] }}.</span> }
+            @if (facilityForm.controls.fuelEnergyFactor.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.fuelEnergyFactor.errors?.['min']?.min }}.</span> }
           </span>
         }
       </div>
@@ -133,7 +133,7 @@
       @if (facilityForm.controls.steamPressure.invalid && !facilityForm.controls.steamPressure.pristine) {
         <span class="alert-danger pull-right small">
           @if (facilityForm.controls.steamPressure.errors?.['required']) { <span>Value required.</span> }
-          @if (facilityForm.controls.steamPressure.errors?.['greaterThan'] !== undefined) { <span>Value must be greater than {{ facilityForm.controls.steamPressure.errors?.['greaterThan'] }}.</span> }
+          @if (facilityForm.controls.steamPressure.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.steamPressure.errors?.['min']?.min }}.</span> }
         </span>
       }
     </div>
@@ -199,7 +199,7 @@
       @if (surveyService.output().baselineTotal.steamLoss) {
         <span class="small bold">
           {{ surveyService.output().baselineTotal.steamLoss | number:'1.0-0' }}
-          <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span> lbs/yr</span> } @else { <span> kg/yr</span> } -->
+          @if (settings().unitsOfMeasure === 'Imperial') { <span> lbs/yr</span> } @else { <span> kg/yr</span> }
         </span>
       } @else {
         <span> -- </span>
@@ -213,7 +213,7 @@
       @if (surveyService.output().baselineTotal.energyLoss) {
         <span class="small bold">
           {{ surveyService.output().baselineTotal.energyLoss | number:'1.0-0' }}
-          <!-- @if (settings().unitsOfMeasure === 'Imperial') { <span> MMBtu/yr</span> } @else { <span> GJ/yr</span> } -->
+          @if (settings().unitsOfMeasure === 'Imperial') { <span> MMBtu/yr</span> } @else { <span> GJ/yr</span> }
         </span>
       } @else {
         <span> -- </span>

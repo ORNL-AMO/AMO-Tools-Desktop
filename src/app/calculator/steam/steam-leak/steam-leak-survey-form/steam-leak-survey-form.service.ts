@@ -139,32 +139,41 @@ export class SteamLeakSurveyFormService {
     });
   }
 
-  buildEstimateForm(leak: SteamLeakSurveyData): FormGroup<EstimateFormControls> {
+  buildEstimateForm(leak: SteamLeakSurveyData, maxSteamTemp?: number): FormGroup<EstimateFormControls> {
+    const steamTempValidators = maxSteamTemp !== undefined
+      ? [Validators.required, Validators.min(boilingPointOfWaterF), Validators.max(maxSteamTemp)]
+      : [Validators.required, Validators.min(boilingPointOfWaterF)];
     return this.fb.group<EstimateFormControls>({
       steamPressure: new FormControl(leak.estimateMethodData.steamPressure, [Validators.required, Validators.min(steamSystemPressureMinPsig), Validators.max(steamSystemPressureMaxPsig)]),
-      steamTemperature: new FormControl(leak.estimateMethodData.steamTemperature, [Validators.required, Validators.min(boilingPointOfWaterF)]),
+      steamTemperature: new FormControl(leak.estimateMethodData.steamTemperature, steamTempValidators),
       pressureReductionMethod: new FormControl(leak.estimateMethodData.pressureReductionMethod),
       turbineEfficiency: new FormControl(leak.estimateMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
       leakRate: new FormControl(leak.estimateMethodData.leakRate, [Validators.required, GreaterThanValidator.greaterThan(0)]),
     });
   }
 
-  buildOrificeForm(leak: SteamLeakSurveyData): FormGroup<OrificeFormControls> {
+  buildOrificeForm(leak: SteamLeakSurveyData, maxSteamTemp?: number): FormGroup<OrificeFormControls> {
+    const steamTempValidators = maxSteamTemp !== undefined
+      ? [Validators.required, Validators.min(boilingPointOfWaterF), Validators.max(maxSteamTemp)]
+      : [Validators.required, Validators.min(boilingPointOfWaterF)];
     return this.fb.group<OrificeFormControls>({
       holeSize: new FormControl(leak.orificeMethodData.holeSize, [Validators.required, GreaterThanValidator.greaterThan(0)]),
       dischargeCoefficient: new FormControl(leak.orificeMethodData.dischargeCoefficient, [Validators.required, Validators.min(0), Validators.max(1)]),
       atmosphericPressure: new FormControl(leak.orificeMethodData.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(atmosphericPressureMaxPsia)]),
       steamPressure: new FormControl(leak.orificeMethodData.steamPressure, [Validators.required, Validators.min(steamSystemPressureMinPsig), Validators.max(steamSystemPressureMaxPsig)]),
-      steamTemperature: new FormControl(leak.orificeMethodData.steamTemperature, [Validators.required, Validators.min(boilingPointOfWaterF)]),
+      steamTemperature: new FormControl(leak.orificeMethodData.steamTemperature, steamTempValidators),
       pressureReductionMethod: new FormControl(leak.orificeMethodData.pressureReductionMethod),
       turbineEfficiency: new FormControl(leak.orificeMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
     });
   }
 
-  buildPlumeForm(leak: SteamLeakSurveyData): FormGroup<PlumeFormControls> {
+  buildPlumeForm(leak: SteamLeakSurveyData, maxSteamTemp?: number): FormGroup<PlumeFormControls> {
+    const steamTempValidators = maxSteamTemp !== undefined
+      ? [Validators.required, Validators.min(boilingPointOfWaterF), Validators.max(maxSteamTemp)]
+      : [Validators.required, Validators.min(boilingPointOfWaterF)];
     return this.fb.group<PlumeFormControls>({
       steamPressure: new FormControl(leak.plumeMethodData.steamPressure, [Validators.required, Validators.min(steamSystemPressureMinPsig), Validators.max(steamSystemPressureMaxPsig)]),
-      steamTemperature: new FormControl(leak.plumeMethodData.steamTemperature, [Validators.required, Validators.min(boilingPointOfWaterF), Validators.max(plumeSteamTemperatureMaxF)]),
+      steamTemperature: new FormControl(leak.plumeMethodData.steamTemperature, steamTempValidators),
       ambientTemperature: new FormControl(leak.plumeMethodData.ambientTemperature, [Validators.required, Validators.min(ambientTemperatureMinF), Validators.max(ambientTemperatureMaxF)]),
       plumeLength: new FormControl(leak.plumeMethodData.plumeLength, [Validators.required, Validators.min(plumeLengthMinFt), Validators.max(plumeLengthMaxFt)]),
       pressureReductionMethod: new FormControl(leak.plumeMethodData.pressureReductionMethod),
@@ -178,11 +187,11 @@ export class SteamLeakSurveyFormService {
       utilityType: new FormControl(data.utilityType),
       steamCost: new FormControl(data.steamCost, [Validators.required, Validators.min(0)]),
       steamTemperature: new FormControl(data.steamTemperature, [Validators.required, Validators.min(boilingPointOfWaterF)]),
-      steamPressure: new FormControl(data.steamPressure, [Validators.required, GreaterThanValidator.greaterThan(0)]),
+      steamPressure: new FormControl(data.steamPressure, [Validators.required, Validators.min(0)]),
       feedwaterTemperature: new FormControl(data.feedwaterTemperature, [Validators.required, Validators.min(freezingPointOfWaterF), Validators.max(boilingPointOfWaterF)]),
-      fuelCost: new FormControl(data.fuelCost, [Validators.required, GreaterThanValidator.greaterThan(0)]),
-      fuelEnergyFactor: new FormControl(data.fuelEnergyFactor, [Validators.required, GreaterThanValidator.greaterThan(0)]),
-      electricityCost: new FormControl(data.electricityCost, [Validators.required, GreaterThanValidator.greaterThan(0)]),
+      fuelCost: new FormControl(data.fuelCost, [Validators.required, Validators.min(0)]),
+      fuelEnergyFactor: new FormControl(data.fuelEnergyFactor, [Validators.required, Validators.min(0)]),
+      electricityCost: new FormControl(data.electricityCost, [Validators.required, Validators.min(0)]),
       boilerEfficiency: new FormControl(data.boilerEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
       systemEfficiency: new FormControl(data.systemEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
     });

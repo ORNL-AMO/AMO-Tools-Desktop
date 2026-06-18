@@ -35,6 +35,7 @@
         <span class="alert-danger pull-right small">
           @if (form().controls.steamTemperature.errors?.['required']) { <span>Value required.</span> }
           @if (form().controls.steamTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamTemperature.errors?.['min']?.min }}.</span> }
+          @if (form().controls.steamTemperature.errors?.['max']) { <span>Value can't exceed the facility steam temperature ({{ form().controls.steamTemperature.errors?.['max']?.max }}).</span> }
         </span>
       }
     </div>
@@ -50,7 +51,7 @@
     </select>
   </div>
 
-  @if (form().controls.pressureReductionMethod.value === 2) {
+  @if (form().controls.pressureReductionMethod.value === SteamLeakPressureReductionMethod.Turbine) {
     <div class="form-group">
       <label for="steam-turbineEfficiency-estimate">Turbine Efficiency</label>
       <div class="input-group">

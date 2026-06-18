@@ -8,6 +8,7 @@ import { FacilitySteamLeakData } from '../../../../shared/models/standalone';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { SteamLeakSurveyService } from '../steam-leak-survey-service';
 import { FacilitySteamLeakFormControls, SteamLeakSurveyFormService } from '../steam-leak-survey-form/steam-leak-survey-form.service';
+import { SteamLeakUtilityType } from '../steam-leak-constants';
 
 @Component({
   selector: 'app-cost-of-steam-form',
@@ -29,11 +30,13 @@ export class CostOfSteamFormComponent implements OnInit, AfterViewInit {
 
   @ViewChild('formElement') formElement!: ElementRef;
 
+  protected readonly SteamLeakUtilityType = SteamLeakUtilityType;
+
   readonly utilityTypeOptions: Array<{ display: string; value: number }> = [
-    { display: 'Steam', value: 0 },
-    { display: 'Electric', value: 1 },
-    { display: 'Natural Gas', value: 2 },
-    { display: 'Other Fuel', value: 3}
+    { display: 'Steam', value: SteamLeakUtilityType.Steam },
+    { display: 'Electric', value: SteamLeakUtilityType.Electric },
+    { display: 'Natural Gas', value: SteamLeakUtilityType.NaturalGas },
+    { display: 'Other Fuel', value: SteamLeakUtilityType.OtherFuel },
   ];
 
   private readonly facilityData = computed(() => this.surveyService.steamLeakInput()?.facilitySteamLeakData);
