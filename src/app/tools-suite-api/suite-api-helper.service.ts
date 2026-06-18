@@ -1,12 +1,22 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+import {
+  type DoubleVector,
+  type DoubleVector2D,
+  type IntVector,
+  type LineFrequency,
+  type MotorEfficiencyClass,
+  type PowerFactorModeType,
+  type PumpStyle,
+  type RegisteredVector,
+} from 'measur-tools-suite';
 
 @Injectable()
 export class SuiteApiHelperService {
 
   constructor(private toolsSuiteApiService: ToolsSuiteApiService) { }
-  getPumpStyleEnum(pumpStyle: number): any {
+  getPumpStyleEnum(pumpStyle: number): PumpStyle {
     switch (pumpStyle) {
       case 0:
         return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.END_SUCTION_SLURRY;
@@ -35,8 +45,8 @@ export class SuiteApiHelperService {
     }
   }
 
-  getLineFrequencyEnum(lineFreq: number) {
-    let lineFrequency = this.toolsSuiteApiService.ToolsSuiteModule.LineFrequency.FREQ50;
+  getLineFrequencyEnum(lineFreq: number): LineFrequency {
+    let lineFrequency: LineFrequency = this.toolsSuiteApiService.ToolsSuiteModule.LineFrequency.FREQ50;
     if (lineFreq == 60) {
       lineFrequency = this.toolsSuiteApiService.ToolsSuiteModule.LineFrequency.FREQ60;
     }
@@ -54,7 +64,7 @@ export class SuiteApiHelperService {
     }
   }
 
-  getMotorEfficiencyEnum(motorEffVal: number): any {
+  getMotorEfficiencyEnum(motorEffVal: number): MotorEfficiencyClass {
     switch (motorEffVal) {
       case 0:
         return this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiencyClass.STANDARD;
@@ -113,7 +123,7 @@ export class SuiteApiHelperService {
     if (type == 'AIR') {
       return this.toolsSuiteApiService.ToolsSuiteModule.GasType.AIR;
     } else if (type == 'OTHER') {
-      return this.toolsSuiteApiService.ToolsSuiteModule.GasType.OTHER;
+      return this.toolsSuiteApiService.ToolsSuiteModule.GasType.OTHERGAS;
     }
   }
 
@@ -151,9 +161,9 @@ export class SuiteApiHelperService {
   getOpeningShapeEnum(openingShape: number) {
     switch (openingShape) {
       case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.OpeningShape.CIRCULAR;
+        return 0;
       case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.OpeningShape.SQUARE;
+        return 1;
     }
   }
 
@@ -338,16 +348,16 @@ export class SuiteApiHelperService {
   }
 
 
-  returnDoubleVector(doublesArray: Array<number>) {
-    let doubleVector = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
+  returnDoubleVector(doublesArray: Array<number>): DoubleVector {
+    let doubleVector: DoubleVector = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
     doublesArray.forEach(x => {
       doubleVector.push_back(x);
     });
     return doubleVector;
   }
 
-  returnIntVector(intsArray: Array<number>) {
-    let intVector = new this.toolsSuiteApiService.ToolsSuiteModule.IntVector();
+  returnIntVector(intsArray: Array<number>): IntVector {
+    let intVector: IntVector = new this.toolsSuiteApiService.ToolsSuiteModule.IntVector();
     intsArray.forEach(x => {
       intVector.push_back(x);
     });
@@ -355,12 +365,12 @@ export class SuiteApiHelperService {
   }
 
 
-  returnDoubleVector2d(doubles2dArray: Array<Array<number>>) {
-    let doubleVector2d = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector2D();
-    let doubleVectors: Array<any> = [];
-    for (let i = 0; i < doubles2dArray.length; i++) {
-      let innerArray = doubles2dArray[i];
-      let doubleVector = this.returnDoubleVector(innerArray);
+  returnDoubleVector2d(doubles2dArray: Array<Array<number>>): DoubleVector2D {
+    let doubleVector2d: DoubleVector2D = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector2D();
+    let doubleVectors: Array<DoubleVector> = [];
+    for (let i: number = 0; i < doubles2dArray.length; i++) {
+      let innerArray: Array<number> = doubles2dArray[i];
+      let doubleVector: DoubleVector = this.returnDoubleVector(innerArray);
       doubleVector2d.push_back(doubleVector);
       doubleVectors.push(doubleVector);
     }
@@ -369,11 +379,12 @@ export class SuiteApiHelperService {
   }
 
   convertNullInputsForObjectConstructor(inputObj: Object, inputField?: number | string) {
-    for (var prop in inputObj) {
-      if (inputObj.hasOwnProperty(prop) && inputObj[prop] === null || inputObj[prop] === undefined) {
-        inputObj[prop] = 0;
+    const record: { [key: string]: number | string | boolean | null | undefined } = inputObj as { [key: string]: number | string | boolean | null | undefined };
+    Object.keys(record).forEach((prop: string) => {
+      if (record[prop] === null || record[prop] === undefined) {
+        record[prop] = 0;
       }
-    }
+    });
     return inputObj;
   }
 
@@ -396,10 +407,10 @@ export class SuiteApiHelperService {
   * @param vector WASM vector to extract from
   * @returns JS number array
  */
-  extractWASMArray(vector: any): number[] {
-    if (!vector || typeof vector.size !== 'function' || typeof vector.get !== 'function') return [];
-    const arr = [];
-    for (let i = 0; i < vector.size(); i++) {
+  extractWASMArray(vector: RegisteredVector<number>): number[] {
+    if (!vector) return [];
+    const arr: number[] = [];
+    for (let i: number = 0; i < vector.size(); i++) {
       arr.push(vector.get(i));
     }
     return arr;
@@ -414,7 +425,7 @@ export class SuiteApiHelperService {
     }
   }
 
-  getPowerFactorModeEnum(mode: number): any {
+  getPowerFactorModeEnum(mode: number): PowerFactorModeType {
     switch (mode) {
       case 1:
         return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.ApparentPower_RealPower;

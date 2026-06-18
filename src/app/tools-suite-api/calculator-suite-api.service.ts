@@ -3,6 +3,45 @@ import { AirLeakSurveyData, AirLeakSurveyInput, AirLeakSurveyResult, CompressedA
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ValveEnergyLossInputs, ValveEnergyLossOutputs, ValveEnergyLossResults } from '../shared/models/calculators';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+import {
+  type CompressedAirLeakSurveyInput as SuiteCompressedAirLeakSurveyInput,
+  type CompressedAirLeakSurveyResult as SuiteCompressedAirLeakSurveyResult,
+  type CompressedAirMeasurementMethod,
+  type CompressedAirReductionInput as SuiteCompressedAirReductionInput,
+  type CompressedAirReductionInputV,
+  type CompressedAirReductionOutput,
+  type CompressedAirUtilityType,
+  type DoubleVector,
+  type ElectricityReductionInput as SuiteElectricityReductionInput,
+  type ElectricityReductionInputV,
+  type ElectricityReductionMeasurementMethod,
+  type ElectricityReductionOutput,
+  type InsulatedPipeInput,
+  type InsulatedPipeOutput,
+  type InsulatedTankInput,
+  type InsulatedTankOutput,
+  type MeasurementMethod as CompressedAirLeakSurveyMeasurementMethod,
+  type NaturalGasMeasurementMethod,
+  type NaturalGasReductionInput as SuiteNaturalGasReductionInput,
+  type NaturalGasReductionInputV,
+  type NaturalGasReductionOutput,
+  type PowerFactor as SuitePowerFactor,
+  type PowerFactorModeType,
+  type PowerFactorOutput,
+  type PumpValvePowerLoss as SuitePumpValvePowerLoss,
+  type PumpValvePowerLossOutput,
+  type SteamMeasurementMethod,
+  type SteamReductionInput as SuiteSteamReductionInput,
+  type SteamReductionInputV,
+  type SteamReductionOutput as SuiteSteamReductionOutput,
+  type SteamUtilityType,
+  type ThermodynamicQuantity,
+  type UtilityTypeCA as CompressedAirLeakSurveyUtilityType,
+  type WaterReductionInput as SuiteWaterReductionInput,
+  type WaterReductionInputV,
+  type WaterReductionMeasurementMethod,
+  type WaterReductionOutput,
+} from 'measur-tools-suite';
 
 
 @Injectable()
@@ -13,7 +52,7 @@ export class CalculatorSuiteApiService {
   ) { }
 
   electricityReduction(inputObj: ElectricityReductionInput): ElectricityReductionResult {
-    let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReductionInputV();
+    let inputs: ElectricityReductionInputV = new this.toolsSuiteApiService.ToolsSuiteModule.ElectricityReductionInputV();
     inputObj.electricityReductionInputVec.forEach(electricityReduction => {
       // TODO calc only get results if valid
       electricityReduction.electricityCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.electricityCost);
@@ -34,10 +73,10 @@ export class CalculatorSuiteApiService {
       electricityReduction.powerMeterData.power = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.powerMeterData.power);
       electricityReduction.otherMethodData.energy = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(electricityReduction.otherMethodData.energy);
 
-      const measurementMethod = this.suiteApiHelperService.getElectricityReductionMeasurementMethodEnum(electricityReduction.measurementMethod);
+      const measurementMethod: ElectricityReductionMeasurementMethod = this.suiteApiHelperService.getElectricityReductionMeasurementMethodEnum(electricityReduction.measurementMethod);
 
 
-      let wasmConvertedInput = {
+      let wasmConvertedInput: SuiteElectricityReductionInput = {
         operatingHours: electricityReduction.operatingHours,
         electricityCost: electricityReduction.electricityCost,
         measurementMethod: measurementMethod,
@@ -67,7 +106,7 @@ export class CalculatorSuiteApiService {
       inputs.push_back(wasmConvertedInput);
     });
 
-    let output = this.toolsSuiteApiService.ToolsSuiteModule.electricityReduction(inputs);
+    let output: ElectricityReductionOutput = this.toolsSuiteApiService.ToolsSuiteModule.electricityReduction(inputs);
     let results: ElectricityReductionResult = {
       energyUse: output.energyUse,
       energyCost: output.energyCost,
@@ -78,7 +117,7 @@ export class CalculatorSuiteApiService {
   }
 
   naturalGasReduction(inputObj: NaturalGasReductionInput): NaturalGasReductionResult {
-    let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasReductionInputV();
+    let inputs: NaturalGasReductionInputV = new this.toolsSuiteApiService.ToolsSuiteModule.NaturalGasReductionInputV();
 
     inputObj.naturalGasReductionInputVec.forEach(naturalGasReduction => {
       naturalGasReduction.operatingHours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.operatingHours);
@@ -100,9 +139,9 @@ export class CalculatorSuiteApiService {
       naturalGasReduction.waterMassFlowData.systemEfficiency = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.systemEfficiency);
       naturalGasReduction.waterMassFlowData.waterFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(naturalGasReduction.waterMassFlowData.waterFlow);
 
-      const measurementMethod = this.suiteApiHelperService.getNaturalGasReductionMeasurementMethodEnum(naturalGasReduction.measurementMethod);
+      const measurementMethod: NaturalGasMeasurementMethod = this.suiteApiHelperService.getNaturalGasReductionMeasurementMethodEnum(naturalGasReduction.measurementMethod);
 
-      let wasmConvertedInput = {
+      let wasmConvertedInput: SuiteNaturalGasReductionInput = {
         operatingHours: naturalGasReduction.operatingHours,
         fuelCost: naturalGasReduction.fuelCost,
         measurementMethod: measurementMethod,
@@ -136,7 +175,7 @@ export class CalculatorSuiteApiService {
       inputs.push_back(wasmConvertedInput);
     });
 
-    let output = this.toolsSuiteApiService.ToolsSuiteModule.naturalGasReduction(inputs);
+    let output: NaturalGasReductionOutput = this.toolsSuiteApiService.ToolsSuiteModule.naturalGasReduction(inputs);
     let results: NaturalGasReductionResult = {
       energyUse: output.energyUse,
       energyCost: output.energyCost,
@@ -148,7 +187,7 @@ export class CalculatorSuiteApiService {
   }
 
   compressedAirReduction(inputObj: CompressedAirReductionInput): CompressedAirReductionResult {
-    let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirReductionInputV();
+    let inputs: CompressedAirReductionInputV = new this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirReductionInputV();
 
     inputObj.compressedAirReductionInputVec.forEach(compressedAirReduction => {
       compressedAirReduction.units = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.units);
@@ -167,10 +206,10 @@ export class CalculatorSuiteApiService {
       compressedAirReduction.compressorElectricityData.compressorControlAdjustment = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorControlAdjustment);
       compressedAirReduction.compressorElectricityData.compressorSpecificPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(compressedAirReduction.compressorElectricityData.compressorSpecificPower);
 
-      const measurementMethod = this.suiteApiHelperService.getCompressedAirMeasurementMethodEnum(compressedAirReduction.measurementMethod);
-      const utilityType = this.suiteApiHelperService.getCompressedAirUtilityTypeEnum(compressedAirReduction.utilityType);
+      const measurementMethod: CompressedAirMeasurementMethod = this.suiteApiHelperService.getCompressedAirMeasurementMethodEnum(compressedAirReduction.measurementMethod);
+      const utilityType: CompressedAirUtilityType = this.suiteApiHelperService.getCompressedAirUtilityTypeEnum(compressedAirReduction.utilityType);
 
-      let wasmConvertedInput = {
+      let wasmConvertedInput: SuiteCompressedAirReductionInput = {
         hoursPerYear: compressedAirReduction.hoursPerYear,
         utilityType: utilityType,
         utilityCost: compressedAirReduction.utilityCost,
@@ -200,7 +239,7 @@ export class CalculatorSuiteApiService {
       inputs.push_back(wasmConvertedInput);
     });
 
-    let output = this.toolsSuiteApiService.ToolsSuiteModule.compressedAirReduction(inputs);
+    let output: CompressedAirReductionOutput = this.toolsSuiteApiService.ToolsSuiteModule.compressedAirReduction(inputs);
     let results: CompressedAirReductionResult = {
       energyUse: output.energyUse,
       energyCost: output.energyCost,
@@ -223,15 +262,15 @@ export class CalculatorSuiteApiService {
    * @returns AirLeakSurveyResult - units described above
    */
   compressedAirLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
-    const inputs = inputObj.compressedAirLeakSurveyInputVec.map((airLeakSurvey: AirLeakSurveyData) => {
+    const inputs: Array<SuiteCompressedAirLeakSurveyInput> = inputObj.compressedAirLeakSurveyInputVec.map((airLeakSurvey: AirLeakSurveyData) => {
       // make TH backwards compatible. hours are undefined in update-data service.
-      const operatingTime = airLeakSurvey.bagMethodData.operatingTime ? airLeakSurvey.bagMethodData.operatingTime : inputObj.facilityCompressorData.hoursPerYear;
+      const operatingTime: number = airLeakSurvey.bagMethodData.operatingTime ? airLeakSurvey.bagMethodData.operatingTime : inputObj.facilityCompressorData.hoursPerYear;
 
       return {
         hoursPerYear: inputObj.facilityCompressorData.hoursPerYear,
-        utilityType: inputObj.facilityCompressorData.utilityType,
+        utilityType: inputObj.facilityCompressorData.utilityType as CompressedAirLeakSurveyUtilityType,
         utilityCost: inputObj.facilityCompressorData.utilityCost,
-        measurementMethod: airLeakSurvey.measurementMethod,
+        measurementMethod: airLeakSurvey.measurementMethod as CompressedAirLeakSurveyMeasurementMethod,
         estimateMethodInput: {
           operatingTime: inputObj.facilityCompressorData.hoursPerYear,
           leakRateEstimate: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(airLeakSurvey.estimateMethodData.leakRateEstimate),
@@ -273,7 +312,7 @@ export class CalculatorSuiteApiService {
       };
     });
 
-    const output = this.toolsSuiteApiService.ToolsSuiteModule.calculateCompressedAirLeakSurvey(inputs);
+    const output: SuiteCompressedAirLeakSurveyResult = this.toolsSuiteApiService.ToolsSuiteModule.calculateCompressedAirLeakSurvey(inputs);
     return {
       totalFlowRate: output.totalFlowRate,
       annualTotalFlowRate: output.annualTotalFlowRate,
@@ -284,7 +323,7 @@ export class CalculatorSuiteApiService {
 
 
   waterReduction(inputObj: WaterReductionInput): WaterReductionResult {
-    let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.WaterReductionInputV();
+    let inputs: WaterReductionInputV = new this.toolsSuiteApiService.ToolsSuiteModule.WaterReductionInputV();
 
     inputObj.waterReductionInputVec.forEach(waterReduction => {
       waterReduction.waterCost = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.waterCost);
@@ -299,8 +338,8 @@ export class CalculatorSuiteApiService {
       waterReduction.bucketMethodData.bucketFillTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketFillTime);
       waterReduction.bucketMethodData.bucketVolume = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.bucketMethodData.bucketVolume);
       waterReduction.otherMethodData.consumption = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(waterReduction.otherMethodData.consumption);
-      const measurementMethod = this.suiteApiHelperService.getWaterReductionMeasurementMethodEnum(waterReduction.measurementMethod);
-      inputs.push_back({
+      const measurementMethod: WaterReductionMeasurementMethod = this.suiteApiHelperService.getWaterReductionMeasurementMethodEnum(waterReduction.measurementMethod);
+      const wasmInput: SuiteWaterReductionInput = {
         hoursPerYear: waterReduction.hoursPerYear,
         waterCost: waterReduction.waterCost,
         measurementMethod: measurementMethod,
@@ -315,10 +354,11 @@ export class CalculatorSuiteApiService {
           bucketFillTime: waterReduction.bucketMethodData.bucketFillTime
         },
         otherMethodData: { consumption: waterReduction.otherMethodData.consumption }
-      });
+      };
+      inputs.push_back(wasmInput);
     });
 
-    let output = this.toolsSuiteApiService.ToolsSuiteModule.waterReduction(inputs);
+    let output: WaterReductionOutput = this.toolsSuiteApiService.ToolsSuiteModule.waterReduction(inputs);
     let results: WaterReductionResult = {
       waterUse: output.waterUse,
       waterCost: output.waterCost,
@@ -330,14 +370,14 @@ export class CalculatorSuiteApiService {
   }
 
   steamReduction(inputObj: SteamReductionInput): SteamReductionResult {
-    let inputs = new this.toolsSuiteApiService.ToolsSuiteModule.SteamReductionInputV();
+    let inputs: SteamReductionInputV = new this.toolsSuiteApiService.ToolsSuiteModule.SteamReductionInputV();
 
     inputObj.steamReductionInputVec.forEach(steamReduction => {
-      const measurementMethod = this.suiteApiHelperService.getSteamMeasurementMethodEnum(steamReduction.measurementMethod);
-      const utilityType = this.suiteApiHelperService.getSteamUtilityTypeEnum(steamReduction.utilityType);
-      const steamVariableOption = this.suiteApiHelperService.getThermodynamicQuantityType(steamReduction.steamVariableOption);
+      const measurementMethod: SteamMeasurementMethod = this.suiteApiHelperService.getSteamMeasurementMethodEnum(steamReduction.measurementMethod);
+      const utilityType: SteamUtilityType = this.suiteApiHelperService.getSteamUtilityTypeEnum(steamReduction.utilityType);
+      const steamVariableOption: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(steamReduction.steamVariableOption);
 
-      let wasmConvertedInput = {
+      let wasmConvertedInput: SuiteSteamReductionInput = {
         hoursPerYear: steamReduction.hoursPerYear,
         utilityType: utilityType,
         utilityCost: steamReduction.utilityCost,
@@ -382,8 +422,9 @@ export class CalculatorSuiteApiService {
       };
       inputs.push_back(wasmConvertedInput);
     });
+    this.toolsSuiteApiService.ToolsSuiteModule
 
-    let output = this.toolsSuiteApiService.ToolsSuiteModule.steamReduction(inputs);
+    let output: SuiteSteamReductionOutput = this.toolsSuiteApiService.ToolsSuiteModule.steamReduction(inputs);
     let results: SteamReductionResult = {
       energyCost: output.energyCost,
       energyUse: output.energyUse,
@@ -394,13 +435,13 @@ export class CalculatorSuiteApiService {
   }
 
   pipeInsulationReduction(inputObj: PipeInsulationReductionInput): PipeInsulationReductionResult {
-    let pipeMaterialCoefficients = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
-    let insulationMaterialCoefficients = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
+    let pipeMaterialCoefficients: DoubleVector = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
+    let insulationMaterialCoefficients: DoubleVector = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector();
     inputObj.pipeMaterialCoefficients.forEach(coefficient => pipeMaterialCoefficients.push_back(coefficient));
     inputObj.insulationMaterialCoefficients.forEach(coefficient => insulationMaterialCoefficients.push_back(coefficient));
 
     inputObj.systemEfficiency = inputObj.systemEfficiency / 100;
-    let wasmInput = {
+    let wasmInput: InsulatedPipeInput = {
       operatingHours: inputObj.operatingHours,
       pipeLength: inputObj.pipeLength,
       pipeDiameter: inputObj.pipeDiameter,
@@ -416,7 +457,7 @@ export class CalculatorSuiteApiService {
       insulationMaterialCoefficients: insulationMaterialCoefficients
     };
 
-    let rawOutput = this.toolsSuiteApiService.ToolsSuiteModule.insulatedPipeReduction(wasmInput);
+    let rawOutput: InsulatedPipeOutput = this.toolsSuiteApiService.ToolsSuiteModule.insulatedPipeReduction(wasmInput);
     let pipeInsulationReductionResult: PipeInsulationReductionResult = {
       heatLength: rawOutput.heatLossPerLength,
       annualHeatLoss: rawOutput.annualHeatLoss,
@@ -428,7 +469,7 @@ export class CalculatorSuiteApiService {
   }
 
   tankInsulationReduction(inputObj: TankInsulationReductionInput): TankInsulationReductionResult {
-    let wasmInput = {
+    let wasmInput: InsulatedTankInput = {
       operatingHours: inputObj.operatingHours,
       tankHeight: inputObj.tankHeight,
       tankDiameter: inputObj.tankDiameter,
@@ -443,7 +484,7 @@ export class CalculatorSuiteApiService {
       jacketEmissivity: inputObj.jacketEmissivity,
       surfaceTemperature: inputObj.surfaceTemperature
     };
-    let rawOutput = this.toolsSuiteApiService.ToolsSuiteModule.insulatedTankReduction(wasmInput);
+    let rawOutput: InsulatedTankOutput = this.toolsSuiteApiService.ToolsSuiteModule.insulatedTankReduction(wasmInput);
     let tankInsulationReductionResult: TankInsulationReductionResult = {
       heatLoss: rawOutput.heatLoss,
       annualHeatLoss: rawOutput.annualHeatLoss,
@@ -453,13 +494,13 @@ export class CalculatorSuiteApiService {
   }
 
   powerFactorTriangle(inputObj: PowerFactorTriangleModeInputs): PowerFactorTriangleOutputs {
-    let modeEnum = this.suiteApiHelperService.getPowerFactorModeEnum(inputObj.mode);
+    let modeEnum: PowerFactorModeType = this.suiteApiHelperService.getPowerFactorModeEnum(inputObj.mode);
     inputObj.mode = modeEnum;
     inputObj.input1 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input1);
     inputObj.input2 = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.input2);
     inputObj.inputPowerFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputObj.inputPowerFactor);
-    let PowerFactor = new this.toolsSuiteApiService.ToolsSuiteModule.PowerFactor();
-    let rawOutput = PowerFactor.calculate(inputObj.mode, inputObj.input1, inputObj.input2, inputObj.inputPowerFactor);
+    let PowerFactor: SuitePowerFactor = new this.toolsSuiteApiService.ToolsSuiteModule.PowerFactor();
+    let rawOutput: PowerFactorOutput = PowerFactor.calculate(inputObj.mode, inputObj.input1, inputObj.input2, inputObj.inputPowerFactor);
     let powerFactorTriangleOutputs: PowerFactorTriangleOutputs = {
       apparentPower: rawOutput.apparentPower,
       realPower: rawOutput.realPower,
@@ -473,9 +514,9 @@ export class CalculatorSuiteApiService {
   }
 
   valveEnergyLossCalc(baselineInputs: ValveEnergyLossInputs, modificationInputs: ValveEnergyLossInputs): ValveEnergyLossResults {
-    let PumpValvePowerLoss = new this.toolsSuiteApiService.ToolsSuiteModule.PumpValvePowerLoss();
-    let baselineRawOutputs = PumpValvePowerLoss.calculate(baselineInputs.hoursOperation, baselineInputs.efficiencyPump / 100, baselineInputs.efficiencyMotor / 100, baselineInputs.SG, baselineInputs.flowRate, baselineInputs.upstreamPressure, baselineInputs.upstreamHeight, baselineInputs.downstreamPressure, baselineInputs.downstreamHeight);
-    let modificationRawOutputs = PumpValvePowerLoss.calculate(modificationInputs.hoursOperation, modificationInputs.efficiencyPump / 100, modificationInputs.efficiencyMotor / 100, modificationInputs.SG, modificationInputs.flowRate, modificationInputs.upstreamPressure, modificationInputs.upstreamHeight, modificationInputs.downstreamPressure, modificationInputs.downstreamHeight);
+    let PumpValvePowerLoss: SuitePumpValvePowerLoss = new this.toolsSuiteApiService.ToolsSuiteModule.PumpValvePowerLoss();
+    let baselineRawOutputs: PumpValvePowerLossOutput = PumpValvePowerLoss.calculate(baselineInputs.hoursOperation, baselineInputs.efficiencyPump / 100, baselineInputs.efficiencyMotor / 100, baselineInputs.SG, baselineInputs.flowRate, baselineInputs.upstreamPressure, baselineInputs.upstreamHeight, baselineInputs.downstreamPressure, baselineInputs.downstreamHeight);
+    let modificationRawOutputs: PumpValvePowerLossOutput = PumpValvePowerLoss.calculate(modificationInputs.hoursOperation, modificationInputs.efficiencyPump / 100, modificationInputs.efficiencyMotor / 100, modificationInputs.SG, modificationInputs.flowRate, modificationInputs.upstreamPressure, modificationInputs.upstreamHeight, modificationInputs.downstreamPressure, modificationInputs.downstreamHeight);
 
     let baselineOutputs: ValveEnergyLossOutputs = {
       headLoss: baselineRawOutputs.head_loss,
