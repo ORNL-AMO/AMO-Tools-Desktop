@@ -33,10 +33,10 @@ The denominator is not always the same flow value. Depending on path structure, 
 - **What to follow:** Start at the intake node; go downstream through any water treatment units.
 - **Where to stop:** At the first water using systems reached on each path. Do not continue into other users even if they later receive recycled water.
 - **How to attribute:** Attribute the intake's cost among those first users by the volume each receives from that intake. The denominator used for this attribution depends on the path structure: ***[v2]***
-  - **A — Intake splits to multiple paths:** Use the full intake outflow as the denominator for every path. Each path's systems absorb their proportional share; the remaining paths cover the rest. ***[v2]***
-  - **B — Intake feeds a single treatment chain with no losses:** Use the full intake outflow as the denominator (the chain delivers all intake volume to systems, so results are identical either way). ***[v2]***
-  - **C — Intake routes all its flow into one treatment path and that path loses volume (at any stage):** Use the treatment node's total outflow — the volume delivered to all downstream systems combined — as the denominator. Treatment may still fan out to multiple systems at the end; the denominator covers them all. This ensures 100% of intake cost is distributed, including the cost of water lost in treatment. ***[v2]***
-  - **D — Single-system RO:** When a single RO unit routes all of one intake's flow to exactly one water-using system, with the reject stream going to discharge and no other system on any path from that intake, that system is assigned 100% of the intake cost regardless of the product-water recovery fraction. The reject stream is an unavoidable operational loss, not water consumed by a different beneficiary. ***[v2]***
+  - **Case A — Intake splits to multiple paths:** Use the full intake outflow as the denominator for every path. Each path's systems absorb their proportional share; the remaining paths cover the rest. ***[v2]***
+  - **Case B — Intake feeds a single treatment chain with no losses:** Use the full intake outflow as the denominator (the chain delivers all intake volume to systems, so results are identical either way). ***[v2]***
+  - **Case C — Intake routes all its flow into one treatment path and that path loses volume (at any stage):** Use the treatment node's total outflow — the volume delivered to all downstream systems combined — as the denominator. Treatment may still fan out to multiple systems at the end; the denominator covers them all. This ensures 100% of intake cost is distributed, including the cost of water lost in treatment. ***[v2]***
+  - **Case D — Single-system RO:** When a single RO unit routes all of one intake's flow to exactly one water-using system, with the reject stream going to discharge and no other system on any path from that intake, that system is assigned 100% of the intake cost regardless of the product-water recovery fraction. The reject stream is an unavoidable operational loss, not water consumed by a different beneficiary. ***[v2]***
 - **Multi-source cap:** When a system draws from more than one intake, the fraction of any single path's flow attributed to that system is capped at 1.0. This prevents over-attribution; the system's responsibility from each intake is evaluated independently on each intake's own path iteration. ***[v2]***
 
 #### Examples
@@ -51,9 +51,9 @@ The denominator is not always the same flow value. Depending on path structure, 
 - **What to follow:** Start at the water treatment unit; go downstream (through any additional treatment) until you reach the first water-using systems.
 - **Where to stop:** At the first users consuming the treated water.
 - **How to attribute:** Attribute the treatment unit's cost across those users by the volume of treated water they receive from this unit. The block cost is calculated on the total volume entering the treatment node (inflow × unit cost). Attribution fractions are determined as follows: ***[v2]***
-  - **E — Standard (no losses):** Attribute by each system's received flow as a share of total treatment inflow. Since inflow equals outflow in the no-loss case, either may serve as the denominator.
-  - **F — Treatment has losses (outflow < inflow):** Use total treatment outflow as the denominator. This ensures all downstream systems collectively absorb 100% of the treatment cost, including the cost of water lost during treatment. The cost basis remains the full inflow block cost. ***[v2]***
-  - **G — Single-system RO:** When the treatment node is a single-system RO configuration (reject stream goes directly to discharge, exactly one downstream water-using system), assign 100% of the treatment cost to that system regardless of the product-water recovery fraction. ***[v2]***
+  - **Case E — Standard (no losses):** Attribute by each system's received flow as a share of total treatment inflow. Since inflow equals outflow in the no-loss case, either may serve as the denominator.
+  - **Case F — Treatment has losses (outflow < inflow):** Use total treatment outflow as the denominator. This ensures all downstream systems collectively absorb 100% of the treatment cost, including the cost of water lost during treatment. The cost basis remains the full inflow block cost. ***[v2]***
+  - **Case G — Single-system RO:** When the treatment node is a single-system RO configuration (reject stream goes directly to discharge, exactly one downstream water-using system), assign 100% of the treatment cost to that system regardless of the product-water recovery fraction. ***[v2]***
 - **Multi-source cap:** When a system receives treated water from more than one source, the fraction attributed from any single path is capped at 1.0. ***[v2]***
 - **Series note:** If RO → Chlorination → Process, then both RO and Chlorination each create a row, and each row goes 100% to Process. No duplication occurs because each row is its own cost component.
 
@@ -70,10 +70,10 @@ Attribution runs in two sequential passes across all WWT nodes: the downstream p
 - **What to follow:**
   - **Downstream pass (first):** From the WWT unit, follow treated water downstream until the first water-using systems receiving the recycled flow are reached. ***[v2]***
   - **Upstream pass (second):** From the WWT unit, follow contributing flow upstream until the first water-using systems that discharged into this WWT unit are reached. Systems already charged in the downstream pass are excluded from this pass. ***[v2]***
-- **H — Where to allocate:**
+- **Case H — Where to allocate:**
   - Reuse portion → allocate to the downstream user(s) who receive the treated water, by their share of the WWT unit's total inflow.
   - Discharged portion → allocate back to the upstream discharger(s) that fed the WWT unit. The discharger's flow responsibility equals its raw flow contribution to the WWT, reduced by the total flow volume already attributed to downstream reuse systems in the first pass, expressed as a fraction of the WWT unit's total inflow. ***[v2]***
-- **I — Single-system RO override:** When a WWT unit is in the reject stream path of a single-system RO configuration, 100% of the WWT cost is attributed to the system associated with that RO unit. ***[v2]***
+- **Case I — Single-system RO override:** When a WWT unit is in the reject stream path of a single-system RO configuration, 100% of the WWT cost is attributed to the system associated with that RO unit. ***[v2]***
 - **Multi-source cap:** The attribution fraction from any single path is capped at 1.0. ***[v2]***
 - **Series note:** For chains like Filter → Flotation, handle each unit separately based on that unit's own inputs and outputs. The deduction mechanism isolates each unit's discharge remainder: the flow volume charged to reuse systems in Flotation's downstream pass is deducted from the upstream discharger's responsibility in Flotation's upstream pass. ***[v2]***
 
@@ -86,8 +86,8 @@ Attribution runs in two sequential passes across all WWT nodes: the downstream p
 
 - **What to follow:** Start at the discharge node; go upstream until you hit water using systems.
 - **Where to stop:** At the first user encountered on each path (the final user causing the discharge). Do not charge upstream users whose water was reused before discharging.
-- **J — How to attribute:** Attribute the discharge cost by how much final discharge each user causes to that discharge node.
-- **K — Single-system RO override:** When the discharge node is the outlet for the reject stream of a single-system RO configuration, the system associated with that RO unit is assigned 100% of the discharge cost. ***[v2]***
+- **Case J — How to attribute:** Attribute the discharge cost by how much final discharge each user causes to that discharge node.
+- **Case K — Single-system RO override:** When the discharge node is the outlet for the reject stream of a single-system RO configuration, the system associated with that RO unit is assigned 100% of the discharge cost. ***[v2]***
 - **Multi-source cap:** When a system routes water to more than one discharge node, the fraction attributed from any single path is capped at 1.0. ***[v2]***
 
 #### Examples
