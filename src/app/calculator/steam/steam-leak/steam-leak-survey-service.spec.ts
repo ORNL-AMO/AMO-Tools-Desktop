@@ -7,6 +7,7 @@ import { SteamLeakSurveyFormService } from './steam-leak-survey-form/steam-leak-
 import { Settings } from '../../../shared/models/settings';
 import { SteamLeakSurveyData, SteamLeakSurveyInput, SteamLeakSurveyResult } from '../../../shared/models/standalone';
 import { SteamLeakMeasurementMethod, SteamLeakUtilityType } from './steam-leak-constants';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 describe('SteamLeakSurveyService', () => {
   let service: SteamLeakSurveyService;
@@ -37,6 +38,7 @@ describe('SteamLeakSurveyService', () => {
         SteamLeakSurveyFormService,
         { provide: ConvertSteamLeakService, useValue: convertSteamLeakService },
         { provide: StandaloneService, useValue: standaloneService },
+        { provide: ConvertUnitsService, useValue: jasmine.createSpyObj('ConvertUnitsService', ['value']) },
       ]
     });
 
@@ -66,7 +68,7 @@ describe('SteamLeakSurveyService', () => {
   it('returns empty output when facility form is invalid', () => {
     service.settings = settings;
     const invalid = getInput([getLeak('Leak A', true)]);
-    (invalid.facilitySteamLeakData as any).steamPressure = 0;
+    (invalid.facilitySteamLeakData as any).annualOperatingHours = null;
     service.steamLeakInput.set(invalid);
 
     const output = service.output();

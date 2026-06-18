@@ -324,6 +324,9 @@ export class OpportunitySummaryService {
     } else if (treasureHuntOpportunity.opportunityType === Treasure.powerFactorCorrection) {
       let powerFactorCorrectionTreasureHunt = treasureHuntOpportunity as PowerFactorCorrectionTreasureHunt;
       treasureHuntOpportunityResults = this.powerFactorCorrectionTreasureHuntService.getTreasureHuntOpportunityResults(powerFactorCorrectionTreasureHunt, settings);
+    } else if (treasureHuntOpportunity.opportunityType === Treasure.steamLeak) {
+      let steamLeakTreasureHunt = treasureHuntOpportunity as SteamLeakSurveyTreasureHunt;
+      treasureHuntOpportunityResults = this.steamLeakTreasureHuntService.getTreasureHuntOpportunityResults(steamLeakTreasureHunt, settings);
     }
 
     if (!treasureHuntOpportunityResults) {

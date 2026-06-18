@@ -70,14 +70,12 @@ describe('SteamLeakTreasureHuntService', () => {
     expect(results.energySavings).toBe(2000);
   });
 
-  it('maps OtherFuel utility type to "Steam" (falls through to default) and uses steamLoss for energySavings', () => {
-    // OtherFuel is not Electric or NaturalGas, so the default branch fires.
-    // This confirms OtherFuel behaves identically to Steam at the treasure-hunt level.
+  it('maps OtherFuel utility type to "Other Fuel" and uses energyLoss for energySavings', () => {
     const service = buildService(400, 50, 70);
     const results = service.getTreasureHuntOpportunityResults(buildSurvey(SteamLeakUtilityType.OtherFuel), settings);
 
-    expect(results.utilityType).toBe('Steam');
-    expect(results.energySavings).toBe(70);
+    expect(results.utilityType).toBe('Other Fuel');
+    expect(results.energySavings).toBe(50);
   });
 
   // ─── getSteamLeakSurveyCardData ───────────────────────────────────────────────
@@ -161,7 +159,33 @@ describe('SteamLeakTreasureHuntService', () => {
     expect(card.percentSavings[0].percent).toBeCloseTo(500 / 3000 * 100, 4);
   });
 
-  it('uses "GJ" and "kg" unit strings for NaturalGas and Steam utility in Metric', () => {
+  it('selects naturalGasCosts and "MMBtu" unit string for OtherFuel utility in Imperial', () => {
+    const service = buildService(400, 2500, 0);
+    const opportunitySummary = {
+      costSavings: 400,
+      totalCost: 1200,
+      payback: 3,
+      totalEnergySavings: 2500,
+      utilityType: 'Other Fuel',
+      baselineCost: 400,
+      modificationCost: 0,
+      opportunityName: 'Steam Leak Survey',
+    } as any;
+    const currentEnergyUsage = { electricityCosts: 10000, naturalGasCosts: 5000, steamCosts: 3000 } as any;
+
+    const card = service.getSteamLeakSurveyCardData(
+      buildSurvey(SteamLeakUtilityType.OtherFuel),
+      opportunitySummary,
+      settings,
+      0,
+      currentEnergyUsage
+    );
+
+    expect(card.annualEnergySavings[0].energyUnit).toBe('MMBtu');
+    expect(card.percentSavings[0].percent).toBeCloseTo(400 / 5000 * 100, 4);
+  });
+
+  it('uses "GJ" and "kg" unit strings for NaturalGas/OtherFuel and Steam utility in Metric', () => {
     const metricSettings = { unitsOfMeasure: 'Metric' } as Settings;
     const opportunitySummary = {
       costSavings: 100,
@@ -181,6 +205,12 @@ describe('SteamLeakTreasureHuntService', () => {
       buildSurvey(SteamLeakUtilityType.NaturalGas), opportunitySummary, metricSettings, 0, currentEnergyUsage
     );
     expect(ngCard.annualEnergySavings[0].energyUnit).toBe('GJ');
+
+    const otherFuelOpportunity = { ...opportunitySummary, utilityType: 'Other Fuel' } as any;
+    const otherFuelCard = service.getSteamLeakSurveyCardData(
+      buildSurvey(SteamLeakUtilityType.OtherFuel), otherFuelOpportunity, metricSettings, 0, currentEnergyUsage
+    );
+    expect(otherFuelCard.annualEnergySavings[0].energyUnit).toBe('GJ');
 
     const steamOpportunity = { ...opportunitySummary, utilityType: 'Steam' } as any;
     const steamCard = service.getSteamLeakSurveyCardData(
