@@ -931,8 +931,8 @@ const applySystemIntakeCosts = (
  * Follow: discharge node → upstream through any waste water treatment units.
  * Stop: at the first water-using system on each path; do not charge upstream users whose water was reused before discharging.
  * Attribute: attribute discharge cost among those responsible systems by discharge volume. Denominator selection:
- *   A — Standard: attribute proportionally by each system's flow fraction of the total discharge node inflow.
- *   B — Single-system RO: reject stream is an unavoidable operational loss flowing directly to discharge — assign 100%.
+ *   Case J — How to attribute: attribute proportionally by each system's flow fraction of the total discharge node inflow.
+ *   Case K — Single-system RO override: reject stream is an unavoidable operational loss flowing directly to discharge — assign 100%.
  */
 const applySystemDischargeCosts = (
   trueCostOfSystems: TrueCostOfSystems,
@@ -986,7 +986,7 @@ const applySystemDischargeCosts = (
           const systemFlowResponsibility = pathDischarge * fractionPathDischargeReceived;
           let systemAttributionFraction = (systemFlowResponsibility / dischargeData.blockCosts.totalFlow);
 
-          // * Case B — Single-system RO: reject goes to discharge — assign 100% regardless of recovery fraction.
+          // * Case K — Single-system RO override: reject goes to discharge — assign 100% regardless of recovery fraction.
           if (ROChildDischargeNode && ROChildDischargeNode.id === dischargeId) {
             systemAttributionFraction = 1;
           }
@@ -1077,10 +1077,10 @@ const applySystemDischargeCosts = (
  * Follow: water treatment node → downstream through any additional treatment until the first water-using systems.
  * Stop: at the first users consuming the treated water.
  * Attribute: attribute the treatment unit’s cost across those users by volume of treated water received. Denominator selection:
- *   A — No losses: full treatment inflow as denominator; attribute by each system’s fraction of total treatment inflow.
- *   B — Treatment node has losses: use total treatment outflow as denominator; cost basis remains the block cost (inflow),
+ *   Case E — Standard (no losses): full treatment inflow as denominator; attribute by each system’s fraction of total treatment inflow.
+ *   Case F — Treatment has losses: use total treatment outflow as denominator; cost basis remains the block cost (inflow),
  *       distributing the cost of water lost in treatment across downstream systems.
- *   C — Single-system RO: assign 100% regardless of recovery fraction; reject to discharge is an unavoidable operational loss.
+ *   Case G — Single-system RO: assign 100% regardless of recovery fraction; reject to discharge is an unavoidable operational loss.
  * Series note: If RO → Chlorination → Process, both RO and Chlorination each create a row, each going 100% to Process.
  *   No duplication occurs because each row is its own cost component.
  */
@@ -1136,24 +1136,24 @@ const applySystemTreatmentCosts = (
           let costToSystem: number;
           let fractionPathIntakeReceived: number;
 
-          // * Case B — treatment node has losses: attribute by outflow share of total treatment outflow; cost basis stays at block cost (inflow).
+          // * Case F — treatment has losses: attribute by outflow share of total treatment outflow; cost basis stays at block cost (inflow).
           if (totalTreatmentOutflow < treatmentData.blockCosts.totalFlow && totalTreatmentOutflow > 0) {
             systemFlowResponsibility = systemOutflow;
             systemAttributionFraction = systemOutflow / totalTreatmentOutflow;
 
-            // * Case C — Single-system RO: assign 100% regardless of recovery fraction.
+            // * Case G — Single-system RO: assign 100% regardless of recovery fraction.
             if (ROTreatmentNode && ROTreatmentNode.id === treatmentId) {
               systemAttributionFraction = 1;
             }
 
             costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
           } else {
-            // * Case A — no losses: attribute by each system's path inflow fraction of total treatment inflow.
+            // * Case E — standard (no losses): attribute by each system's path inflow fraction of total treatment inflow.
             fractionPathIntakeReceived = (systemOutflow / pathInflow) > 1 ? 1 : (systemOutflow / pathInflow);
             systemFlowResponsibility = pathInflow * fractionPathIntakeReceived;
             systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
 
-            // * Case C — Single-system RO: assign 100% regardless of recovery fraction.
+            // * Case G — Single-system RO: assign 100% regardless of recovery fraction.
             if (ROTreatmentNode && ROTreatmentNode.id === treatmentId) {
               systemAttributionFraction = 1;
             }
@@ -1234,11 +1234,11 @@ const applySystemTreatmentCosts = (
  *
  * Follow: WWT node in two directions — downstream to identify reuse recipients, upstream to identify source dischargers.
  * Attribute:
- *   A — Reuse portion (downstream pass): WWT output flows to water-using systems; attribute to those downstream users by volume received.
- *   B — Discharge portion (upstream pass): remaining WWT output flows to discharge; attribute back to upstream dischargers proportionally.
- *   C — Chained WWT with split attribution: deduct the downstream-attributed (reuse) portion from the upstream system’s
- *       flow responsibility before calculating the discharge fraction.
- *   D — RO-owned WWT: the system associated with the RO node absorbs 100% of WWT cost.
+ *   Case H — Where to allocate:
+ *     Reuse portion (downstream pass): WWT output flows to water-using systems; attribute to those downstream users by volume received.
+ *     Discharge portion (upstream pass): remaining WWT output flows to discharge; attribute back to upstream dischargers proportionally,
+ *       deducting the downstream-attributed (reuse) portion from the upstream system’s flow responsibility before calculating the discharge fraction.
+ *   Case I — Single-system RO override: the system associated with the RO node absorbs 100% of WWT cost.
  * Series note: For chains like Filter → Flotation, handle each unit separately based on that unit’s own outputs.
  */
 const applySystemWasteTreatmentCosts = (
@@ -1275,7 +1275,7 @@ const applySystemWasteTreatmentCosts = (
           break;
         }
 
-        // * Case A — Reuse portion: attribute WWT cost to downstream water-using systems by volume received.
+        // * Case H — Reuse portion: attribute WWT cost to downstream water-using systems by volume received.
         if (currentNode.data.processComponentType === 'water-using-system') {
           const treatmentEdge = graph.edgeMap[path[0]];
           const systemInflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
@@ -1381,7 +1381,7 @@ const applySystemWasteTreatmentCosts = (
             }
         });
         
-        // * Case B — Discharge portion: attribute back to upstream water-using systems proportionally; Case D applies when upstream path contains RO.
+        // * Case H — Discharge portion: attribute back to upstream water-using systems proportionally; Case I applies when upstream path contains RO.
         if (currentNode.data.processComponentType === 'water-using-system' || attributeROCostsToSystem) {
           const treatmentEdge = graph.edgeMap[path[0]];
 
@@ -1392,7 +1392,7 @@ const applySystemWasteTreatmentCosts = (
           const fractionPathInflowReceived = (systemOutflow / pathOutflow) > 1 ? 1 : (systemOutflow / pathOutflow);
           let systemFlowResponsibility = pathOutflow * fractionPathInflowReceived;
 
-          // * Case C — Chained WWT: deduct the downstream-attributed (reuse) portion from upstream flow responsibility before calculating discharge fraction.
+          // * Case H — Chained WWT: deduct the downstream-attributed (reuse) portion from upstream flow responsibility before calculating discharge fraction.
           if (downstreamTreatmentAttributionMap[treatmentId]) {
             // * remove recycled flow portion already attributed to downstream systems
             const totalDownstreamChargedPortion = downstreamTreatmentAttributionMap[treatmentId].reduce((total, item) => total + item.chargedPortion, 0);
@@ -1401,7 +1401,7 @@ const applySystemWasteTreatmentCosts = (
 
           let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
 
-          // * Case D — RO-owned WWT: assign 100% of WWT cost to the system associated with the RO node.
+          // * Case I — Single-system RO override: assign 100% of WWT cost to the system associated with the RO node.
           if (attributeROCostsToSystem) {
             systemAttributionFraction = 1;
           }
