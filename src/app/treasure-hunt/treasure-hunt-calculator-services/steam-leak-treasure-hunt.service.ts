@@ -5,6 +5,7 @@ import { TreasureHunt } from '../../shared/models/treasure-hunt';
 import { SteamLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
 import { Settings } from '../../shared/models/settings';
 import { ConvertSteamLeakService } from '../../calculator/steam/steam-leak/convert-steam-leak.service';
+import { SteamLeakUtilityType } from '../../calculator/steam/steam-leak/steam-leak-constants';
 import { OpportunitySummary } from '../../shared/models/treasure-hunt';
 import { OpportunityCardData } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import { EnergyUsage } from '../../shared/models/treasure-hunt';
@@ -54,17 +55,19 @@ import * as _ from 'lodash';
             utilityType: 'Steam',
         };
 
-        // facilityUtilityType: 0 = Steam, 1 = Electricity, 2 = Natural Gas
         const facilityUtilityType = steamLeakSurveyTreasureHunt.steamLeakSurveyInput.facilitySteamLeakData.utilityType;
-        if (facilityUtilityType === 1) {
-            treasureHuntOpportunityResults.energySavings = results.savings.energyLoss;
-            treasureHuntOpportunityResults.utilityType = 'Electricity';
-        } else if (facilityUtilityType === 2) {
-            treasureHuntOpportunityResults.energySavings = results.savings.energyLoss;
-            treasureHuntOpportunityResults.utilityType = 'Natural Gas';
-        } else {
+        if (facilityUtilityType === SteamLeakUtilityType.Steam) {
             treasureHuntOpportunityResults.energySavings = results.savings.steamLoss;
             treasureHuntOpportunityResults.utilityType = 'Steam';
+        } else if (facilityUtilityType === SteamLeakUtilityType.Electric) {
+            treasureHuntOpportunityResults.energySavings = results.savings.energyLoss;
+            treasureHuntOpportunityResults.utilityType = 'Electricity';
+        } else if (facilityUtilityType === SteamLeakUtilityType.NaturalGas) {
+            treasureHuntOpportunityResults.energySavings = results.savings.energyLoss;
+            treasureHuntOpportunityResults.utilityType = 'Natural Gas';
+        } else if (facilityUtilityType === SteamLeakUtilityType.OtherFuel) {
+            treasureHuntOpportunityResults.energySavings = results.savings.energyLoss;
+            treasureHuntOpportunityResults.utilityType = 'Other Fuel';
         }
 
         return treasureHuntOpportunityResults;
@@ -73,12 +76,14 @@ import * as _ from 'lodash';
     getSteamLeakSurveyCardData(steamLeakSurvey: SteamLeakSurveyTreasureHunt, opportunitySummary: OpportunitySummary, settings: Settings, index: number, currentEnergyUsage: EnergyUsage): OpportunityCardData {
         let unitStr: string;
         let currentCosts: number;
-        // utilityType: 0 = Steam, 1 = Electricity, 2 = Natural Gas
         const facilityUtilityType = steamLeakSurvey.steamLeakSurveyInput.facilitySteamLeakData.utilityType;
-        if (facilityUtilityType === 1) {
+        if (facilityUtilityType === SteamLeakUtilityType.Steam) {
+            currentCosts = currentEnergyUsage.steamCosts;
+            unitStr = settings.unitsOfMeasure === 'Metric' ? 'kg' : 'lb';
+        } else if (facilityUtilityType === SteamLeakUtilityType.Electric) {
             currentCosts = currentEnergyUsage.electricityCosts;
             unitStr = 'kWh';
-        } else if (facilityUtilityType === 2) {
+        } else if (facilityUtilityType === SteamLeakUtilityType.NaturalGas || facilityUtilityType === SteamLeakUtilityType.OtherFuel) {
             currentCosts = currentEnergyUsage.naturalGasCosts;
             unitStr = settings.unitsOfMeasure === 'Metric' ? 'GJ' : 'MMBtu';
         } else {

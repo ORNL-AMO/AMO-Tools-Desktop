@@ -27,7 +27,7 @@ import { SteamLeakCopyTableComponent } from './steam-leak-copy-table/steam-leak-
         SteamOrificeMethodFormComponent,
         CostOfSteamFormComponent,
         SteamPlumeMethodFormComponent,
-        SteamLeakSurveyResultsTableComponent
+        SteamLeakSurveyResultsTableComponent,
         SteamPlumeMethodFormComponent,
         CostOfSteamFormComponent,
         SteamLeakSurveyResultsTableComponent,

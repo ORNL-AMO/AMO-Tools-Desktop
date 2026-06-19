@@ -1,5 +1,5 @@
 import {
-  Component, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy,
+  Component, ChangeDetectorRef, OnDestroy,
   inject, effect, untracked, input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,7 +14,7 @@ import {
 } from './steam-leak-survey-form.service';
 import { SteamLeakSurveyService } from '../steam-leak-survey-service';
 import { SteamLeakSurveyFormService } from './steam-leak-survey-form.service';
-import { SteamLeakMeasurementMethod } from '../steam-leak-constants';
+import { SteamLeakMeasurementMethod, SteamLeakPressureReductionMethod } from '../steam-leak-constants';
 import { SteamLeakSurveyData } from '../../../../shared/models/standalone';
 
 @Component({
@@ -36,11 +36,12 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
   plumeForm!: FormGroup<PlumeFormControls>;
 
   readonly SteamLeakMeasurementMethod = SteamLeakMeasurementMethod;
+  readonly SteamLeakPressureReductionMethod = SteamLeakPressureReductionMethod;
 
   readonly pressureReductionMethods: Array<{ display: string; value: number }> = [
-    { display: 'None', value: 0 },
-    { display: 'Pressure Reducing Valve (PRV)', value: 1 },
-    { display: 'Steam Turbine', value: 2 },
+    { display: 'None', value: SteamLeakPressureReductionMethod.None },
+    { display: 'Pressure Reducing Valve (PRV)', value: SteamLeakPressureReductionMethod.PRV },
+    { display: 'Steam Turbine', value: SteamLeakPressureReductionMethod.Turbine },
   ];
 
   readonly steamMeasurementMethods: Array<{ display: string; value: number }> = [
@@ -58,7 +59,7 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
       if (surveyInput) {
         const leak = surveyInput.steamLeakSurveyInputVec[index];
         if (leak) {
-          this.buildForms(leak);
+          this.buildForms(leak, surveyInput.facilitySteamLeakData?.steamTemperature);
         }
       }
     });
@@ -69,7 +70,7 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
       if (surveyInput) {
         const leak = surveyInput.steamLeakSurveyInputVec[index];
         if (leak) {
-          this.buildForms(leak);
+          this.buildForms(leak, surveyInput.facilitySteamLeakData?.steamTemperature);
         }
       }
     });
@@ -88,11 +89,11 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
     this.surveyService.currentLeakIndex.set(updatedLeaks.length - 1);
   }
 
-  private buildForms(leak: SteamLeakSurveyData): void {
+  private buildForms(leak: SteamLeakSurveyData, maxSteamTemp?: number): void {
     this.leakMetaForm = this.formService.buildLeakMetaForm(leak);
-    this.estimateForm = this.formService.buildEstimateForm(leak);
-    this.orificeForm = this.formService.buildOrificeForm(leak);
-    this.plumeForm = this.formService.buildPlumeForm(leak);
+    this.estimateForm = this.formService.buildEstimateForm(leak, maxSteamTemp);
+    this.orificeForm = this.formService.buildOrificeForm(leak, maxSteamTemp);
+    this.plumeForm = this.formService.buildPlumeForm(leak, maxSteamTemp);
     this.subscribeToFormChanges();
     this.cdr.markForCheck();
   }
