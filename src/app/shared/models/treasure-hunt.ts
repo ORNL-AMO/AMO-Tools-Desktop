@@ -257,8 +257,8 @@ export const opportunities: OpportunityForFiltering[] = [
         description: 'Calculate the blowdown rate of a boiler.'
     },
     {
-        iconString: 'assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png',
-        iconClass: 'steam-reduction-icon',
+        iconString: 'assets/images/calculator-icons/compressed-air-icons/CAleak-icon.png',
+        iconClass: 'steam-calc-icon',
         imageSizeClass: 'calc-img th-calc-img-w',
         iconCalcType: 'steam',
         opportunityType: 'steam-leak-survey',

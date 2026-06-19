@@ -120,7 +120,7 @@ import * as _ from 'lodash';
             steamLeakSurvey: steamLeakSurvey,
             name: opportunitySummary.opportunityName,
             opportunitySheet: steamLeakSurvey.opportunitySheet,
-            iconString: 'assets/images/calculator-icons/utilities-icons/steam-reduction-icon.png',
+            iconString: 'assets/images/calculator-icons/compressed-air-icons/CAleak-icon.png',
             teamName: steamLeakSurvey.opportunitySheet ? steamLeakSurvey.opportunitySheet.owner : undefined,
             iconCalcType: 'steam',
             needBackground: true

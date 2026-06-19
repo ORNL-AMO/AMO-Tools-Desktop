@@ -158,7 +158,7 @@
     </div>
   </div>
 
-  <!-- @if (facilityForm.controls.utilityType.value === 1 || facilityForm.controls.utilityType.value === 2 || facilityForm.controls.utilityType.value === 3) { -->
+  @if (facilityForm.controls.utilityType.value !== SteamLeakUtilityType.Steam) {
     <div class="form-group">
       <label for="steam-boilerEfficiency">Boiler Efficiency</label>
       <div class="input-group">
@@ -191,7 +191,7 @@
         }
       </div>
     </div>
-  <!-- } -->
+  }
 
   <div class="row pt-1">
     <div class="col-6"><label class="small bold">Annual Steam Loss</label></div>
