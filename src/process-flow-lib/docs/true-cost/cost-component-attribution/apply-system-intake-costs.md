@@ -97,46 +97,6 @@ Flow on the edge immediately upstream of the system.
 
 The denominator is the treatment chain's delivered output, not the intake total. This correctly distributes 100% of intake cost among the systems receiving the treated water, including the proportional share of cost attributable to water lost in treatment.
 
-### 3.3 Case D — Single-System RO Override
-
-**What the override does:** When a water intake feeds a reverse-osmosis (RO) treatment unit that exclusively serves one water-using system — with the RO reject stream going directly to discharge (not to another system) — the beneficiary system is assigned an attribution fraction of **1.0** (100% of the intake block cost), regardless of what the standard flow-fraction formula would produce.
-
-**Why this override is needed:** An RO unit splits its feed water into a product water stream (usable output) and a reject stream (waste). Under the standard formula, the reject flow counts against the system's attribution fraction because it reduces the apparent share of intake flow that reaches the system. But the reject is an operational necessity of the RO process itself, not water consumed by a separate system. Since no other system draws from this intake → RO path, there is no other beneficiary to share the cost, and the full intake cost should fall on the one system that benefits.
-
-**Condition for the override:**
-
-    Attribution fraction = 1.0
-    when graph.systemsWithRODirectDischarge[systemId]?.intakeNode.id === intakeId
-
-This condition is true only when:
-- The current system is identified as the sole beneficiary of an RO configuration (stored in `graph.systemsWithRODirectDischarge` keyed by system node ID), and
-- The intake currently being evaluated is the same intake that feeds that RO unit.
-
-**Worked example:**
-
-```
-  Intake (100 Mgal/yr, $2.50/kgal)
-       │
-       ▼
-  RO Treatment
-       ├──► System A (product water): 70 Mgal/yr
-       └──► Discharge (reject):  30 Mgal/yr
-```
-
-Block cost of intake: 100 Mgal/yr × 1,000 × $2.50/kgal = **$250,000/yr**
-
-Standard formula (without override):
-- Attribution fraction = 70 / 100 = 0.70
-- Cost to System A = 0.70 × $250,000 = $175,000/yr
-
-RO override (single-system configuration detected):
-- Attribution fraction = **1.0**
-- Cost to System A = 1.0 × $250,000 = **$250,000/yr**
-
-The 30 Mgal/yr reject is an unavoidable consequence of RO operation, not consumption by another system. System A is the only beneficiary and bears the full intake cost.
-
----
-
 ## 4. Treatment Chain Support
 
 Chained treatment configurations (Treatment A → Treatment B → System) are fully supported. The algorithm scans all treatment nodes traversed earlier in the current path (`hasUpstreamTreatmentLoss`) to detect losses that occurred upstream of the immediate treatment node. When such a loss is found, the delivered-flow-volume basis applies using the immediate treatment node's outflow as the denominator — which for a chain equals the volume the chain ultimately delivers to downstream systems.
@@ -238,5 +198,4 @@ A system may appear on multiple downstream paths from the same intake (for examp
 | Cap on fraction per path | Min(system inflow / path inflow, 1.0) |
 | Pump/motor energy | Attributed using same fraction as intake cost |
 | Adjusted attribution | User-supplied fraction replaces computed default |
-| Single-system RO override (Case D) | When intake feeds a single-system RO configuration, attribution fraction is forced to 1.0 |
 | De-duplication | Identical paths from intake to system are attributed only once |

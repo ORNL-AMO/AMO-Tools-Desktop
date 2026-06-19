@@ -22,22 +22,7 @@ The stages must run in the order shown below. Each stage produces data that the 
 
 ---
 
-## Stage 2 — Preprocessing: Identify Single-System RO Configurations
-
-**What happens:** Before any costs are calculated, the algorithm scans every Reverse Osmosis (RO) treatment node in the diagram and checks whether it exists exclusively to serve a single water-using system. The check looks for:
-
-- The RO node has exactly one upstream water intake.
-- All of the product water (the treated output) flows to exactly one water-using system and then to exactly one discharge.
-- The reject stream flows to exactly one discharge with no water-using systems on that branch.
-- A wastewater treatment unit may appear on either the product water path or the reject path (but not both). If present, it is recorded as part of the RO configuration so that its costs are also attributed 100% to the system.
-
-Systems that meet all of these criteria are recorded in a special index.
-
-**Why we do this:** Flow-fraction attribution gives each system a share of a cost proportional to how much water actually reaches it. For an RO unit running at 70% recovery, only 70% of the water makes it through as usable product — the other 30% is rejected. If we applied the flow fraction naïvely, the system would only be charged for 70% of the RO treatment cost and 70% of the upstream intake cost. But when the entire RO setup exists only to serve that one system, the reject stream is not water serving some other purpose — it is an unavoidable operating cost of producing the product water. The system should bear 100% of all associated costs. **This index is built before any cost calculation so that every subsequent stage can consult it.**
-
----
-
-## Stage 3 — Compute Block Costs and Flow Paths
+## Stage 2 — Compute Block Costs and Flow Paths
 
 **What happens:** For each cost-component node (water intake, water discharge, water treatment, wastewater treatment), the algorithm does two things:
 
@@ -50,7 +35,7 @@ The flow path trace answers "which systems can this node's cost possibly reach, 
 
 ---
 
-## Stage 4 — Attribute Costs to Systems
+## Stage 3 — Attribute Costs to Systems
 
 **What happens:** Four sub-routines run in sequence, each responsible for one type of cost component. Each sub-routine walks the pre-computed flow paths and decides what fraction of a cost component's block cost belongs to each water-using system.
 
@@ -58,21 +43,17 @@ The four sub-routines are:
 
 1. **Intake Costs** — walks downstream from each water intake node, stopping at the first water-using system encountered on each path. The attribution fraction uses one of two bases depending on the path:
    - *Intake-flow-volume basis* (standard case): each system's fraction = its share of the total intake outflow. Used when the intake splits to multiple downstream paths or the treatment chain has no flow losses.
-   - *Delivered-flow-volume basis* (treatment-chain-with-losses case): when the intake has a single outgoing path and the treatment chain loses water (e.g., RO reject), the denominator switches to the treatment node's outflow rather than the intake's outflow. This ensures all downstream systems together absorb 100% of the intake cost, including the cost of water that was consumed in treatment. The algorithm also detects losses in earlier nodes of a chained treatment sequence so the correct basis is applied even when an intermediate node itself has no losses.
-   - *Single-system RO override*: forces the fraction to 1.0 for any intake registered in the Stage 2 index, regardless of which basis would otherwise apply.
+   - *Delivered-flow-volume basis* (treatment-chain-with-losses case): when the intake has a single outgoing path and the treatment chain loses water, the denominator switches to the treatment node's outflow rather than the intake's outflow. This ensures all downstream systems together absorb 100% of the intake cost, including the cost of water that was consumed in treatment. The algorithm also detects losses in earlier nodes of a chained treatment sequence so the correct basis is applied even when an intermediate node itself has no losses.
 
-2. **Discharge Costs** — walks upstream from each discharge node, stopping at the first water-using system encountered on each path. That system receives the cost. The single-system RO override forces fraction to 1.0 for the registered discharge.
+2. **Discharge Costs** — walks upstream from each discharge node, stopping at the first water-using system encountered on each path. That system receives the cost.
 
 3. **Treatment Costs** — walks downstream from each water treatment node, stopping at the first water-using system encountered on each path. Two attribution bases apply:
    - *Standard (no losses)*: fraction = system's share of the treatment node's total inflow.
    - *With losses* (outflow < inflow): fraction = system's share of the treatment node's total outflow, but the cost basis is still the full inflow block cost. This ensures the full treatment cost is distributed across only the water that actually makes it through.
-   - *Single-system RO override*: forces fraction to 1.0 for the registered RO treatment node.
 
 4. **Wastewater Treatment Costs** — two passes per WWT node:
    - *Pass 1 (downstream/reuse)*: walks downstream, stopping at the first water-using system receiving the recycled water. Standard flow-fraction applies.
-   - *Pass 2 (upstream/discharge)*: walks upstream, stopping at the first water-using system that sent water into the WWT. The system's flow responsibility is reduced by any portion already attributed in Pass 1. Special case: when the WWT node is registered as the waste treatment component of a single-system RO configuration (Stage 2 index), the 100% attribution is assigned directly to the RO system owner — even though the immediate upstream node is an RO treatment node (not itself a water-using system).
-
-All four sub-routines also check the single-system RO index built in Stage 2. When a system is identified as the sole beneficiary of an RO configuration and the current cost component is one of that configuration's nodes, the attribution fraction is set to 100% regardless of flow fractions.
+   - *Pass 2 (upstream/discharge)*: walks upstream, stopping at the first water-using system that sent water into the WWT. The system's flow responsibility is reduced by any portion already attributed in Pass 1.
 
 **Why we do this as four separate passes:** Each cost component type has a different "direction of responsibility." Intake costs naturally flow forward — the system that first receives the water is the one that drove the intake. Discharge costs flow backward — the system that last used the water before it leaves the facility is the one responsible for the discharge. Separating the passes makes each rule explicit and independently auditable.
 
@@ -84,7 +65,7 @@ Each pass produces two outputs:
 
 ---
 
-## Stage 5 — Finalize Per-System Results
+## Stage 4 — Finalize Per-System Results
 
 **What happens:** With all flow-based cost attribution complete, Stage 5 adds the costs that are internal to each system and then computes the final summary metrics.
 
@@ -108,9 +89,9 @@ For each water-using system:
 
 5. **Plant-level aggregation** sums all system results into facility-wide totals.
 
-**Why in-system treatment is handled here instead of in Stage 4:** The path-tracing logic in Stage 4 works by following water across the diagram from one node to the next. An in-system treatment unit has no outbound paths that lead to other systems — all of its output stays within the same system. There is nothing to trace. The cost is simply the unit cost times the flow, applied directly to the one system that owns it.
+**Why in-system treatment is handled here instead of in Stage 3:** The path-tracing logic in Stage 3 works by following water across the diagram from one node to the next. An in-system treatment unit has no outbound paths that lead to other systems — all of its output stays within the same system. There is nothing to trace. The cost is simply the unit cost times the flow, applied directly to the one system that owns it.
 
-**Why motor energy is re-calculated here:** Pump and motor entries belong to a specific system. During Stage 4, some motor energy may be partially accumulated from intake or discharge node attributions (because pumps exist at those nodes too). Stage 5 replaces that accumulated value with a clean calculation from the system's own motor entries, ensuring the system's motor energy reflects its actual equipment rather than a partial attribution from shared infrastructure.
+**Why motor energy is re-calculated here:** Pump and motor entries belong to a specific system. During Stage 3, some motor energy may be partially accumulated from intake or discharge node attributions (because pumps exist at those nodes too). Stage 5 replaces that accumulated value with a clean calculation from the system's own motor entries, ensuring the system's motor energy reflects its actual equipment rather than a partial attribution from shared infrastructure.
 
 **Why heat energy is in Stage 5 and not Stage 4:** Heat energy is not a flow-path cost. It is a consequence of what a system does to the water it already has — raising its temperature. There is no upstream or downstream cost component to attribute; the cost originates inside the system itself.
 
@@ -126,15 +107,11 @@ Facility Diagram (nodes + edges)
   (fast-lookup maps for nodes, edges, adjacency)
           │
           ▼
-  Stage 2: Identify Single-System RO Configurations
-  (record which systems bear 100% of their RO-related costs)
-          │
-          ▼
-  Stage 3: Compute Block Costs and Flow Paths
+  Stage 2: Compute Block Costs and Flow Paths
   (total annual cost per node; all reachable paths per node)
           │
           ▼
-  Stage 4: Attribute Costs to Systems (4 passes)
+  Stage 3: Attribute Costs to Systems (4 passes)
      ├─ Intake Costs    → downstream to first system
      ├─ Discharge Costs → upstream to first system
      ├─ Treatment Costs → downstream to first system
@@ -142,7 +119,7 @@ Facility Diagram (nodes + edges)
           │
           │  Partial per-system costs + audit trail
           ▼
-  Stage 5: Finalize Per-System Results
+  Stage 4: Finalize Per-System Results
      ├─ Add in-system treatment cost
      ├─ Calculate heat energy cost
      ├─ Re-calculate motor energy cost

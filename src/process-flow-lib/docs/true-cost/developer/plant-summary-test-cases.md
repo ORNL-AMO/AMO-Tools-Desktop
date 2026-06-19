@@ -17,7 +17,7 @@ Flow values are in **Mgal/yr**. Costs are in **$/kgal**. Dollar amounts are annu
 | **DISCHARGE** | Water Discharge | Effluent destination; cost attributed upstream |
 | **TREATMENT** | Water Treatment | Shared pretreatment unit; cost attributed downstream |
 | **WWT** | Wastewater Treatment | Effluent treatment; cost split between reuse recipients (Pass 1) and upstream dischargers (Pass 2) |
-| **RO** | Reverse Osmosis Treatment | Water Treatment with `treatmentType = 6`; triggers the single-system override when exactly two downstream paths exist |
+| **RO** | Reverse Osmosis Treatment | Water Treatment with `treatmentType = 6` |
 | **SUMMING** | Summing Node | Transparent pass-through; does not carry a cost |
 
 ---
@@ -235,47 +235,15 @@ INTAKE          │                                                   ├──�
 
 ## Part 3 — Reverse Osmosis Configurations
 
-### 3.1 `ro-single-system`
+### 3.1 `ro-multi-system`
 
-**What it tests:** An RO unit with exactly two downstream branches — one leading to a system (product water) and one going directly to discharge (reject/brine). The algorithm detects this pattern and applies the **RO single-system override**: all intake, RO treatment, and product-path discharge costs are attributed 100% to the single system, regardless of the actual product/reject flow split.
+**What it tests:** An RO unit with three downstream branches (two systems and one discharge). The delivered-flow-volume basis applies because the treatment node has losses (reject). Each system receives its proportional share of the product water volume.
 
 ```
 INTAKE ($1/kgal)
   │ 100 Mgal/yr
   ▼
 RO TREATMENT ($5/kgal)   ← treatmentType = 6
-  ├─── 70 Mgal/yr ──► SYSTEM A ──► DISCHARGE 1 ($1/kgal)   ← product path
-  └─── 30 Mgal/yr ──► DISCHARGE 2 ($0/kgal)                    ← reject path
-```
-
-**Node costs**
-
-| Node | Unit cost | Flow basis | Block cost |
-|---|---|---|---|
-| Intake | $1/kgal | 100 Mgal/yr | **$100,000** |
-| RO | $5/kgal | 100 Mgal/yr | **$500,000** |
-| Discharge 1 (product) | $1/kgal | 70 Mgal/yr | **$70,000** |
-| Discharge 2 (reject) | $0/kgal | 30 Mgal/yr | **$0** |
-
-**Expected attribution — System A**
-
-| Intake | RO Treatment | Discharge (product) | Total |
-|---|---|---|---|
-| $100,000 (100%) | $500,000 (100%) | $70,000 (100%) | **$670,000** |
-
-> System A bears 100% of the intake and RO cost even though it only receives 70% of the RO output. The reject stream cost (Discharge 2) is $0 because it has no unit cost; no system is charged for it.
-
----
-
-### 3.2 `ro-multi-system`
-
-**What it tests:** An RO unit with **three** downstream branches (two systems and one discharge). The single-system override requires *exactly* two children, so it does **not** apply here. Standard flow-fraction attribution is used instead.
-
-```
-INTAKE ($1/kgal)
-  │ 100 Mgal/yr
-  ▼
-RO TREATMENT ($5/kgal)   ← treatmentType = 6, but 3 children → no override
   ├─── 40 Mgal/yr ──► SYSTEM A
   ├─── 40 Mgal/yr ──► SYSTEM B
   └─── 20 Mgal/yr ──► DISCHARGE ($0/kgal)
@@ -297,38 +265,6 @@ RO TREATMENT ($5/kgal)   ← treatmentType = 6, but 3 children → no override
 | **Total** | 80% | **$80,000** | 80% | **$400** |
 
 > The 20% reject fraction is unattributed to any system (the discharge has no cost). This is correct — the reject path represents water leaving the facility, not consumed by any system.
-
----
-
-### 3.3 `ro-single-system-wwt`
-
-**What it tests:** An RO single-system configuration where the reject path flows through a Wastewater Treatment unit before reaching discharge. The RO override still assigns all intake and RO costs to System A. The WWT costs exhibit a **known double-attribution bug** and are captured by snapshot rather than a specific value.
-
-```
-INTAKE ($1/kgal)
-  │ 100 Mgal/yr
-  ▼
-RO TREATMENT ($5/kgal)   ← single-system override applies (2 children)
-  ├─── 70 Mgal/yr ──► SYSTEM A ──► DISCHARGE 1 ($1/kgal)   ← product path
-  └─── 30 Mgal/yr ──► WWT ($3/kgal) ──► DISCHARGE 2 ($0)   ← reject path with treatment
-```
-
-**Node costs**
-
-| Node | Unit cost | Flow basis | Block cost |
-|---|---|---|---|
-| Intake | $1/kgal | 100 Mgal/yr | **$100,000** |
-| RO | $5/kgal | 100 Mgal/yr | **$500,000** |
-| Discharge 1 (product) | $1/kgal | 70 Mgal/yr | **$70,000** |
-| WWT (reject) | $3/kgal | 30 Mgal/yr | **$90,000** |
-
-**Expected attribution — System A**
-
-| Intake | RO Treatment | Discharge (product) | WWT |
-|---|---|---|---|
-| $100,000 (100%) | $500,000 (100%) | $70,000 (100%) | **(snapshot — see note)** |
-
-> **Known limitation:** The WWT upstream path (`RO → WWT → Intake`) causes the WWT cost to be attributed to System A twice — once when processing the RO edge and once when processing the intake edge. The snapshot records the current (over-attributed) dollar amount. Update the snapshot when this is intentionally fixed, and verify the corrected value equals $90,000 (100% of WWT block cost, once).
 
 ---
 
