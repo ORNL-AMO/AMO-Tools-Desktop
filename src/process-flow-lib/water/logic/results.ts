@@ -734,8 +734,6 @@ const setSystemAttribution = (
  *   B — Single treatment chain, no losses: full intake outflow (lossless chain delivers all intake volume; result is identical).
  *   C — Single treatment path with losses (at any stage): treatment node’s total outflow, so 100% of intake cost is
  *       distributed including the cost of water lost in treatment.
- *   D — Single-system RO: assign 100% to that system regardless of recovery fraction; reject to discharge is an
- *       unavoidable operational loss, not a second beneficiary.
  */
 const applySystemIntakeCosts = (
   trueCostOfSystems: TrueCostOfSystems,
@@ -811,7 +809,6 @@ const applySystemIntakeCosts = (
           const intakeEdge = graph.edgeMap[path[0]];
           const systemInflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
           const pathInflow = intakeEdge.data.flowValue ?? 0;
-          const ROParentIntakeNode = graph.systemsWithRODirectDischarge[currentNode.id]?.intakeNode;
 
           let systemFlowResponsibility: number;
           let systemAttributionFraction: number;
@@ -823,11 +820,6 @@ const applySystemIntakeCosts = (
           if (intakeHasSingleOutflow && (deliveredFlowVolume < treatmentNodeInflow || hasUpstreamTreatmentLoss) && deliveredFlowVolume > 0) {
             systemFlowResponsibility = systemInflow;
             systemAttributionFraction = systemInflow / deliveredFlowVolume;
-
-            // * Case D — Single-system RO: reject stream is an unavoidable operational loss, not a second beneficiary — assign 100%.
-            if (ROParentIntakeNode && ROParentIntakeNode.id === intakeId) {
-              systemAttributionFraction = 1;
-            }
             costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
 
           } else {
@@ -838,12 +830,6 @@ const applySystemIntakeCosts = (
             fractionPathIntakeReceived = (systemInflow / pathInflow) > 1 ? 1 : (systemInflow / pathInflow);
             systemFlowResponsibility = pathInflow * fractionPathIntakeReceived;
             systemAttributionFraction = (systemFlowResponsibility / intakeData.blockCosts.totalFlow);
-
-            // * Case D — Single-system RO: reject goes to discharge — assign 100% regardless of recovery fraction.
-            if (ROParentIntakeNode && ROParentIntakeNode.id === intakeId) {
-              systemAttributionFraction = 1;
-            }
-
             costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
           }
 
@@ -932,7 +918,6 @@ const applySystemIntakeCosts = (
  * Stop: at the first water-using system on each path; do not charge upstream users whose water was reused before discharging.
  * Attribute: attribute discharge cost among those responsible systems by discharge volume. Denominator selection:
  *   Case J — How to attribute: attribute proportionally by each system's flow fraction of the total discharge node inflow.
- *   Case K — Single-system RO override: reject stream is an unavoidable operational loss flowing directly to discharge — assign 100%.
  */
 const applySystemDischargeCosts = (
   trueCostOfSystems: TrueCostOfSystems,
@@ -979,18 +964,11 @@ const applySystemDischargeCosts = (
           const dischargeEdge = graph.edgeMap[path[0]];
           const systemDischarge = dischargeEdge?.data.flowValue ?? 0;
           const pathDischarge = graph.edgeMap[edgeId].data.flowValue ?? 0;
-          const ROChildDischargeNode = graph.systemsWithRODirectDischarge[currentNode.id]?.dischargeNode;
 
           // * fractionPathDischargeReceived ternary will ignore cases where systemDischarge > pathDischarge due to flow from other discharges. We will observe other discharges on another iteration
           const fractionPathDischargeReceived = (systemDischarge / pathDischarge) > 1 ? 1 : (systemDischarge / pathDischarge);
           const systemFlowResponsibility = pathDischarge * fractionPathDischargeReceived;
           let systemAttributionFraction = (systemFlowResponsibility / dischargeData.blockCosts.totalFlow);
-
-          // * Case K — Single-system RO override: reject goes to discharge — assign 100% regardless of recovery fraction.
-          if (ROChildDischargeNode && ROChildDischargeNode.id === dischargeId) {
-            systemAttributionFraction = 1;
-          }
-
 
           setSystemAttribution(
             systemAttributionMap,
@@ -1080,9 +1058,6 @@ const applySystemDischargeCosts = (
  *   Case E — Standard (no losses): full treatment inflow as denominator; attribute by each system’s fraction of total treatment inflow.
  *   Case F — Treatment has losses: use total treatment outflow as denominator; cost basis remains the block cost (inflow),
  *       distributing the cost of water lost in treatment across downstream systems.
- *   Case G — Single-system RO: assign 100% regardless of recovery fraction; reject to discharge is an unavoidable operational loss.
- * Series note: If RO → Chlorination → Process, both RO and Chlorination each create a row, each going 100% to Process.
- *   No duplication occurs because each row is its own cost component.
  */
 const applySystemTreatmentCosts = (
   trueCostOfSystems: TrueCostOfSystems,
@@ -1129,7 +1104,6 @@ const applySystemTreatmentCosts = (
           const pathInflow = currentEdge.data.flowValue ?? 0;
           const treatmentNode = graph.nodeMap[treatmentId];
           const totalTreatmentOutflow = getNodeTotalOutflow(treatmentNode as Node<ProcessFlowPart>, calculatedData);
-          const ROTreatmentNode = graph.systemsWithRODirectDischarge[currentNode.id]?.treatmentNode;
 
           let systemFlowResponsibility: number;
           let systemAttributionFraction: number;
@@ -1140,23 +1114,12 @@ const applySystemTreatmentCosts = (
           if (totalTreatmentOutflow < treatmentData.blockCosts.totalFlow && totalTreatmentOutflow > 0) {
             systemFlowResponsibility = systemOutflow;
             systemAttributionFraction = systemOutflow / totalTreatmentOutflow;
-
-            // * Case G — Single-system RO: assign 100% regardless of recovery fraction.
-            if (ROTreatmentNode && ROTreatmentNode.id === treatmentId) {
-              systemAttributionFraction = 1;
-            }
-
             costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
           } else {
             // * Case E — standard (no losses): attribute by each system's path inflow fraction of total treatment inflow.
             fractionPathIntakeReceived = (systemOutflow / pathInflow) > 1 ? 1 : (systemOutflow / pathInflow);
             systemFlowResponsibility = pathInflow * fractionPathIntakeReceived;
             systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
-
-            // * Case G — Single-system RO: assign 100% regardless of recovery fraction.
-            if (ROTreatmentNode && ROTreatmentNode.id === treatmentId) {
-              systemAttributionFraction = 1;
-            }
             costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
           }
 
@@ -1238,8 +1201,6 @@ const applySystemTreatmentCosts = (
  *     Reuse portion (downstream pass): WWT output flows to water-using systems; attribute to those downstream users by volume received.
  *     Discharge portion (upstream pass): remaining WWT output flows to discharge; attribute back to upstream dischargers proportionally,
  *       deducting the downstream-attributed (reuse) portion from the upstream system’s flow responsibility before calculating the discharge fraction.
- *   Case I — Single-system RO override: the system associated with the RO node absorbs 100% of WWT cost.
- * Series note: For chains like Filter → Flotation, handle each unit separately based on that unit’s own outputs.
  */
 const applySystemWasteTreatmentCosts = (
   trueCostOfSystems: TrueCostOfSystems,
@@ -1372,17 +1333,8 @@ const applySystemWasteTreatmentCosts = (
           break;
         }
 
-        let attributeROCostsToSystem = false;
-        let ROWasteTreatmentOwner: Node;
-        Object.entries(graph.systemsWithRODirectDischarge).map(([systemId, { treatmentNode, intakeNode, dischargeNode, wasteTreatmentNode }]) => {
-            if (wasteTreatmentNode?.id === treatmentId) {
-              attributeROCostsToSystem = true;
-              ROWasteTreatmentOwner = graph.nodeMap[systemId];
-            }
-        });
-        
-        // * Case H — Discharge portion: attribute back to upstream water-using systems proportionally; Case I applies when upstream path contains RO.
-        if (currentNode.data.processComponentType === 'water-using-system' || attributeROCostsToSystem) {
+        // * Case H — Discharge portion: attribute back to upstream water-using systems proportionally.
+        if (currentNode.data.processComponentType === 'water-using-system') {
           const treatmentEdge = graph.edgeMap[path[0]];
 
           const systemOutflow = treatmentEdge.data.flowValue ?? 0;
@@ -1401,12 +1353,6 @@ const applySystemWasteTreatmentCosts = (
 
           let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
 
-          // * Case I — Single-system RO override: assign 100% of WWT cost to the system associated with the RO node.
-          if (attributeROCostsToSystem) {
-            systemAttributionFraction = 1;
-          }
-
-          currentNode = attributeROCostsToSystem ? ROWasteTreatmentOwner : currentNode;
           setSystemAttribution(
             systemAttributionMap,
             treatmentEdge,
@@ -1447,13 +1393,9 @@ const applySystemWasteTreatmentCosts = (
 
           }
 
-          // * ROWasteTreatmentOwner - is a false visit outside of expected pattern for observing systems
-          if (!ROWasteTreatmentOwner) {
-
-            // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
-            visitedSystemIds.push(currentNode.id);
-            break;
-          }
+          // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
+          visitedSystemIds.push(currentNode.id);
+          break;
         }
       }
     });
@@ -1477,108 +1419,6 @@ const applySystemWasteTreatmentCosts = (
     
   });
 }
-
-/**
- * Identifies RO (Reverse Osmosis, treatmentType === 6) water-treatment nodes that feed exactly
- * one water-using-system and writes them into `graph.systemsWithRODirectDischarge`.
- *
- * A treatment node qualifies when ALL of the following hold:
- *   1. `treatmentType === 6` (Reverse Osmosis).
- *   2. It has **exactly two** direct outflow edges (children in the graph).
- *   3. Among the two downstream subtrees, **both** of the following must hold simultaneously:
- *      - One subtree contains exactly one `water-using-system` whose path ends in a 'water-discharge' node, and contains **no** other `water-using-system`
- *        nodes.
- *      - The other subtree ends in a water-discharge node and does not have any `water-using-system` nodes.
- *   4. Traversing upstream from the treatment node reaches **exactly one** `water-intake` node.
- *
- * **Not supported:** RO outflow to multiple `water-using-system` nodes. If the subtree
- * contains more than one system, the treatment node will not qualify and will be skipped.
- *
- * @param waterTreatmentNodes - All `water-treatment` nodes in the diagram.
- * @param graph - The graph index; `graph.systemsWithRODirectDischarge` is initialised and
- *   populated in-place. Keyed by the system (permeate destination) node ID.
- */
-const assignsystemsWithRODirectDischarge = (
-  waterTreatmentNodes: Node<ProcessFlowPart>[],
-  graph: NodeGraphIndex,
-) => {
-  graph.systemsWithRODirectDischarge = {};
-
-  for (const treatmentNode of waterTreatmentNodes) {
-    const treatmentData = treatmentNode.data as WaterTreatment;
-    if (treatmentData.treatmentType !== 6) continue;
-
-    const childIds = graph.childMap[treatmentNode.id] || [];
-    if (childIds.length !== 2) continue;
-
-    const childPathResults = childIds.map(childId => {
-      const visited = new Set<string>();
-      const systemsFound: string[] = [];
-      const dischargesFound: string[] = [];
-      const wasteTreatmentNodesFound: string[] = [];
-
-      const traverseDown = (nodeId: string) => {
-        if (visited.has(nodeId)) return;
-        visited.add(nodeId);
-        const node = graph.nodeMap![nodeId];
-        if (!node) return;
-        const type = node.data.processComponentType;
-        if (type === 'water-discharge') {
-          dischargesFound.push(nodeId);
-        } else if (type === 'water-using-system') {
-          systemsFound.push(nodeId);
-        } else if (type === 'waste-water-treatment') {
-          wasteTreatmentNodesFound.push(nodeId);
-        }
-        for (const grandChildId of (graph.childMap[nodeId] || [])) {
-          traverseDown(grandChildId);
-        }
-      };
-
-      traverseDown(childId);
-      return { systemsFound, dischargesFound, wasteTreatmentNodesFound };
-    });
-
-    const dischargePathResult = childPathResults.find(r => r.dischargesFound.length === 1 && r.systemsFound.length === 0);
-    const systemPathResult = childPathResults.find(r => r.systemsFound.length === 1 && r.dischargesFound.length === 1);
-
-    if (!dischargePathResult || !systemPathResult) continue;
-
-    const systemNodeId = systemPathResult.systemsFound[0];
-
-    const visitedUp = new Set<string>();
-    const intakesFound: string[] = [];
-
-    const traverseUp = (nodeId: string) => {
-      if (visitedUp.has(nodeId)) return;
-      visitedUp.add(nodeId);
-      const node = graph.nodeMap![nodeId];
-      if (!node) return;
-      if (node.data.processComponentType === 'water-intake') {
-        intakesFound.push(nodeId);
-        return;
-      }
-      for (const parentId of (graph.parentMap[nodeId] || [])) {
-        traverseUp(parentId);
-      }
-    };
-
-    traverseUp(treatmentNode.id);
-
-    if (intakesFound.length !== 1) continue;
-
-
-    const wasteTreatmentNodeId = dischargePathResult.wasteTreatmentNodesFound[0] ?? systemPathResult.wasteTreatmentNodesFound[0];
-    
-    graph.systemsWithRODirectDischarge[systemNodeId] = {
-      intakeNode: graph.nodeMap![intakesFound[0]] as Node,
-      treatmentNode: treatmentNode as Node,
-      dischargeNode: graph.nodeMap![dischargePathResult.dischargesFound[0]] as Node,
-      wasteTreatmentNode: wasteTreatmentNodeId ? graph.nodeMap![wasteTreatmentNodeId] as Node : undefined,
-    };
-  }
-};
-
 
 
 /** Vocabulary
@@ -1683,9 +1523,6 @@ export const getPlantSummaryResults = (
   const dischargeNodes: Node[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-discharge');
   const waterTreatmentNodes: Node<ProcessFlowPart>[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
   const wasteTreatmentNodes: Node<ProcessFlowPart>[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment') as Node<ProcessFlowPart>[];
-
-  // * Preprocess treatment nodes that are type RO, have one outflow path that leads to a discharge (so long as a water-using-system is not in the path) and have another outflow path that goes to a single system. There should only be two outflow paths. If we find a treatment node that satisfies these conditions, update the graph systemsWithRODirectDischarge with the connected nodeData
-  assignsystemsWithRODirectDischarge(waterTreatmentNodes, graph);
 
   let intakeCostData: CostComponentMap = {};
   if (intakeNodes?.length > 0) {
