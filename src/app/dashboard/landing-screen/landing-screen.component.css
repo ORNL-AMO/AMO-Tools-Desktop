@@ -44,6 +44,14 @@
   font-size: 13px;
 }
 
+.header-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 /* ── Body ────────────────────────────────────────────────────── */
 .landing-body {
   display: block;
@@ -422,6 +430,237 @@
   border-radius: 6px;
   margin-top: 6px;
   padding: 7px 12px;
+}
+
+/* ── Getting Started banner ──────────────────────────────────── */
+.getting-started-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: linear-gradient(135deg, #f0f9f4, #e8f5ee);
+  border: 1px solid #b7dfc8;
+  border-left: 4px solid #156739;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+
+.gs-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #156739;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.gs-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.gs-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f4a28;
+  margin-bottom: 10px;
+}
+
+.gs-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.gs-steps li {
+  font-size: 14px;
+  color: #2d6a4a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gs-steps .fa {
+  font-size: 14px;
+  color: #52b07a;
+  flex-shrink: 0;
+}
+
+.gs-link {
+  color: #0f4a28;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: #52b07a;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  transition: color 0.15s ease;
+}
+
+.gs-link:hover {
+  color: #156739;
+  text-decoration-color: #156739;
+}
+
+.gs-check {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #52b07a;
+  font-size: 14px;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: color 0.15s ease, transform 0.1s ease;
+}
+
+.gs-check:hover {
+  color: #156739;
+  transform: scale(1.2);
+}
+
+.gs-dismiss {
+  background: none;
+  border: none;
+  color: #9ac9b0;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 13px;
+  flex-shrink: 0;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.gs-dismiss:hover {
+  color: #156739;
+}
+
+/* ── Pin toggle on item-cards ────────────────────────────────── */
+.item-card-wrap {
+  position: relative;
+}
+
+.pin-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: #ccc;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+  padding: 0;
+  transform: rotate(45deg);
+}
+
+.item-card-wrap:hover .pin-btn {
+  opacity: 1;
+}
+
+.pin-btn--active {
+  opacity: 1;
+  color: #156739;
+  background: #e8f5ee;
+  border-color: #b7dfc8;
+}
+
+.pin-btn:hover {
+  color: #156739;
+  background: #e8f5ee;
+  border-color: #b7dfc8;
+}
+
+/* ── Pinned column (top-row col 1) ───────────────────────────── */
+.pinned-col-grid {
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+}
+
+.pinned-col-empty {
+  padding: 32px 12px;
+}
+
+.pinned-col-hint {
+  font-size: 12px;
+  color: #ccc;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ── Calculator tab bar ──────────────────────────────────────── */
+.calc-section-header {
+  margin-bottom: 12px;
+}
+
+.calc-tab-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+  margin-top: 8px;
+}
+
+.calc-tab-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.calc-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border-radius: 20px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.calc-tab:hover {
+  background: #f5f5f5;
+  color: #333;
+  border-color: #ccc;
+}
+
+.calc-tab--active {
+  background: #156739;
+  color: #fff;
+  border-color: #156739;
+}
+
+.calc-tab--active .calc-tab-dot {
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.calc-tab-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 /* ── Responsive ──────────────────────────────────────────────── */

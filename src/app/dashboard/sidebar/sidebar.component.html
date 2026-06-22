@@ -10,6 +10,9 @@
 
 @if (isSidebarCollapsed) {
   <nav class="sidebar-mini-nav">
+    <a [routerLink]="['/landing-screen']" class="mini-logo" title="MEASUR Home">
+      <img src="assets/images/app-icon.png" alt="MEASUR">
+    </a>
     <a [routerLink]="['/landing-screen']" routerLinkActive="selected" class="mini-icon" title="Home"><i class="fa fa-home"></i></a>
     <a [routerLink]="['/calculators/calculators-list']" routerLinkActive="selected" class="mini-icon" title="Calculators"><i class="fa fa-calculator"></i></a>
     <a [routerLink]="['/log-tool']" routerLinkActive="selected" class="mini-icon" title="Data Exploration" (click)="navigateWithSidebarOptions('/log-tool', true)"><i class="fa fa-line-chart"></i></a>
@@ -27,6 +30,7 @@
     </div>
   </div>
 
+  <!-- Add New dropdown commented out — replaced by inline quick-create links below
   <div class="sidebar-group create-button">
     <div class="py-0 px-2">
       <div class="nav-item dropdown">
@@ -43,6 +47,7 @@
       </div>
     </div>
   </div>
+  -->
 
   <div class="sidebar-group secondary pl-1 scroll-item">
     <app-directory-item [directory]="rootDirectory"></app-directory-item>
@@ -52,6 +57,17 @@
     <span class="sidebar-item sidebar-item-home" [routerLink]="['/landing-screen']" routerLinkActive="selected">
       <i class="fa fa-home home-icon"></i>Home
     </span>
+    <div class="sidebar-quick-create-group">
+      <span class="sidebar-item sidebar-notice sidebar-quick-create" (click)="showCreateAssessment()">
+        <i class="fa fa-bar-chart sidebar-quick-create-icon"></i>New Assessment
+      </span>
+      <span class="sidebar-item sidebar-notice sidebar-quick-create" (click)="showCreateDiagram()">
+        <i class="fa fa-sitemap sidebar-quick-create-icon"></i>New Diagram
+      </span>
+      <span class="sidebar-item sidebar-notice sidebar-quick-create" (click)="showCreateInventory()">
+        <i class="fa fa-list sidebar-quick-create-icon"></i>New Inventory
+      </span>
+    </div>
     <app-calculator-list></app-calculator-list>
     <span class="sidebar-item sidebar-notice" [routerLink]="['/log-tool']" routerLinkActive="selected" (click)="navigateWithSidebarOptions('/log-tool', true)"><i class="fa fa-line-chart info-icon"></i>Data Exploration</span>
   </div>

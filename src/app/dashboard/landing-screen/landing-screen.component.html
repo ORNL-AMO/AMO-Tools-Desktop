@@ -6,53 +6,125 @@
     <p class="landing-tagline">
       Manage and optimize your industrial facilities' systems and equipment.
     </p>
-    <a class="user-manual-link"
-       href="https://industrialresources.ornl.gov/measur/user-guides/view-guide/MEASUR-User-Guide"
-       target="_blank">
-      <span class="fa fa-book"></span> User Manuals
-    </a>
+    <div class="header-links">
+      <a class="user-manual-link"
+         href="https://industrialresources.ornl.gov/measur/user-guides/view-guide/MEASUR-User-Guide"
+         target="_blank">
+        <span class="fa fa-book"></span> User Manuals
+      </a>
+      <a class="user-manual-link"
+         href="https://industrialresources.ornl.gov/home"
+         target="_blank">
+        <span class="fa fa-industry"></span> Industrial Resources
+        <span class="fa fa-external-link" style="font-size: 10px; opacity: 0.7;"></span>
+      </a>
+    </div>
   </div>
+
+  <!-- Getting Started Banner -->
+  @if (showGettingStarted && !allGsStepsDone) {
+    <div class="getting-started-card">
+      <div class="gs-icon">
+        <span class="fa fa-rocket"></span>
+      </div>
+      <div class="gs-content">
+        <div class="gs-title">Getting Started with MEASUR</div>
+        <ul class="gs-steps">
+          @if (!completedGsSteps.has('gs-create')) {
+            <li>
+              <button class="gs-check" (click)="completeGsStep('gs-create')" aria-label="Mark complete"><span class="fa fa-square-o"></span></button>
+              <button class="gs-link" (click)="createAssessment()">Create your first assessment</button> using the tiles below
+            </li>
+          }
+          @if (!completedGsSteps.has('gs-import')) {
+            <li>
+              <button class="gs-check" (click)="completeGsStep('gs-import')" aria-label="Mark complete"><span class="fa fa-square-o"></span></button>
+              Import existing data via <a class="gs-link" [routerLink]="['/data-and-backup']">Data Storage &amp; Backup</a>
+            </li>
+          }
+          @if (!completedGsSteps.has('gs-explore')) {
+            <li>
+              <button class="gs-check" (click)="completeGsStep('gs-explore')" aria-label="Mark complete"><span class="fa fa-square-o"></span></button>
+              <a class="gs-link" [routerLink]="['/calculators/calculators-list']">Explore 80+ individual calculators</a> for quick estimates
+            </li>
+          }
+          @if (!completedGsSteps.has('gs-pin')) {
+            <li>
+              <button class="gs-check" (click)="completeGsStep('gs-pin')" aria-label="Mark complete"><span class="fa fa-square-o"></span></button>
+              Pin your most-used module types to this dashboard
+            </li>
+          }
+        </ul>
+      </div>
+      <button class="gs-dismiss" (click)="showGettingStarted = false" aria-label="Dismiss getting started">
+        <span class="fa fa-times"></span>
+      </button>
+    </div>
+  }
 
   <div class="landing-body">
 
     <!-- ── Top three columns ──────────────────────────────────── -->
     <div class="top-row">
 
-      <!-- Col 1: Quick Access -->
+      <!-- Col 1: Pinned -->
       <div class="top-col">
-        <h6 class="section-label">Quick Access</h6>
-        <div class="quick-access-row">
-          <a class="quick-access-card" [routerLink]="['/directory-dashboard', 1]">
-            <div class="qa-icon qa-icon--green">
-              <span class="fa fa-folder"></span>
-            </div>
-            <div class="qa-text">
-              <div class="qa-title">View Assessments</div>
-              <div class="qa-sub">Browse your saved work</div>
-            </div>
-            <span class="fa fa-chevron-right qa-arrow"></span>
-          </a>
-          <a class="quick-access-card" [routerLink]="['/calculators/calculators-list']">
-            <div class="qa-icon qa-icon--teal">
-              <span class="fa fa-calculator"></span>
-            </div>
-            <div class="qa-text">
-              <div class="qa-title">Equipment Calculators</div>
-              <div class="qa-sub">80+ individual tools</div>
-            </div>
-            <span class="fa fa-chevron-right qa-arrow"></span>
-          </a>
-          <a class="quick-access-card" href="https://industrialresources.ornl.gov/home" target="_blank">
-            <div class="qa-icon qa-icon--gray">
-              <span class="fa fa-industry"></span>
-            </div>
-            <div class="qa-text">
-              <div class="qa-title">Industrial Resources</div>
-              <div class="qa-sub">ORNL tools and resources</div>
-            </div>
-            <span class="fa fa-external-link qa-arrow"></span>
-          </a>
-        </div>
+        <h6 class="section-label"><span class="fa fa-thumb-tack" style="margin-right: 4px;"></span> Pinned</h6>
+        @if (hasPinnedItems) {
+          <div class="item-grid pinned-col-grid">
+            @for (card of pinnedCards; track card.id) {
+              <div class="item-card-wrap">
+                <button class="item-card" (click)="createAssessment(card.id)">
+                  <div class="item-icon" [class.item-icon--badge]="card.badge" [style.background]="card.gradient">
+                    @if (card.badge) {
+                      <app-alert-badge [alertText]="card.badge" [style]="{ position: 'absolute', top: '-8px', right: '-8px', border: '2px solid #047334' }"></app-alert-badge>
+                    }
+                    <img [src]="card.img" alt="">
+                  </div>
+                  <span class="item-label">{{ card.label }}</span>
+                </button>
+                <button class="pin-btn pin-btn--active" (click)="togglePin(card.id)" title="Unpin">
+                  <span class="fa fa-thumb-tack"></span>
+                </button>
+              </div>
+            }
+            @for (card of pinnedCalcCards; track card.id) {
+              <div class="item-card-wrap">
+                <a class="item-card" [routerLink]="card.route">
+                  <div class="item-icon" [style.background]="getCalcGradient(card.id)">
+                    <img [src]="card.img" alt="">
+                  </div>
+                  <span class="item-label">{{ card.label }}</span>
+                </a>
+                <button class="pin-btn pin-btn--active" (click)="toggleCalcPin(card.id)" title="Unpin">
+                  <span class="fa fa-thumb-tack"></span>
+                </button>
+              </div>
+            }
+            @for (card of pinnedModelingCards; track card.id) {
+              <div class="item-card-wrap">
+                <button class="item-card" (click)="handleModelingAction(card)">
+                  <div class="item-icon" [class.item-icon--badge]="card.badge" [style.background]="card.gradient">
+                    @if (card.badge) {
+                      <app-alert-badge [alertText]="card.badge" [style]="{ position: 'absolute', top: '-8px', right: '-8px', border: '2px solid #047334' }"></app-alert-badge>
+                    }
+                    <img [src]="card.img" alt="">
+                  </div>
+                  <span class="item-label">{{ card.label }}</span>
+                </button>
+                <button class="pin-btn pin-btn--active" (click)="toggleModelingPin(card.id)" title="Unpin">
+                  <span class="fa fa-thumb-tack"></span>
+                </button>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="col-empty pinned-col-empty">
+            <span class="fa fa-thumb-tack"></span>
+            <p>Nothing pinned yet</p>
+            <p class="pinned-col-hint">Use the <span class="fa fa-thumb-tack"></span> icon on any assessment or calculator tile below to pin it here.</p>
+          </div>
+        }
       </div>
 
       <!-- Col 2: Recently Opened -->
@@ -136,69 +208,52 @@
     <section class="panel-section">
       <h6 class="section-label">Create Assessment</h6>
       <div class="item-grid">
-
-        <button class="item-card" (click)="createAssessment('Pump')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #5dade2, #2471a3)">
-            <img src="assets/images/pump.png" alt="">
+        @for (card of assessmentCards; track card.id) {
+          <div class="item-card-wrap">
+            <button class="item-card" (click)="createAssessment(card.id)">
+              <div class="item-icon" [class.item-icon--badge]="card.badge" [style.background]="card.gradient">
+                @if (card.badge) {
+                  <app-alert-badge [alertText]="card.badge" [style]="{ position: 'absolute', top: '-8px', right: '-8px', border: '2px solid #047334' }"></app-alert-badge>
+                }
+                <img [src]="card.img" alt="">
+              </div>
+              <span class="item-label">{{ card.label }}</span>
+            </button>
+            <button class="pin-btn" [class.pin-btn--active]="pinnedIds.has(card.id)" (click)="togglePin(card.id)" [title]="pinnedIds.has(card.id) ? 'Unpin' : 'Pin to dashboard'">
+              <span class="fa fa-thumb-tack"></span>
+            </button>
           </div>
-          <span class="item-label">Pump</span>
-        </button>
+        }
+      </div>
+    </section>
 
-        <button class="item-card" (click)="createAssessment('CompressedAir')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #d2b4de, #8e44ad)">
-            <img src="assets/images/ca-icon.png" alt="">
+    <!-- ── Calculators ───────────────────────────────────────────── -->
+    <section class="panel-section">
+      <div class="calc-section-header">
+        <h6 class="section-label">Calculators</h6>
+        <div class="calc-tab-bar">
+          @for (tab of calculatorTabs; track tab.id) {
+            <button class="calc-tab" [class.calc-tab--active]="activeCalculatorTab === tab.id" (click)="activeCalculatorTab = tab.id">
+              <span class="calc-tab-dot" [style.background]="tab.gradient"></span>
+              {{ tab.label }}
+            </button>
+          }
+        </div>
+      </div>
+      <div class="item-grid">
+        @for (calc of activeTab.calculators; track calc.id) {
+          <div class="item-card-wrap">
+            <a class="item-card" [routerLink]="calc.route">
+              <div class="item-icon" [style.background]="activeTab.gradient">
+                <img [src]="calc.img" alt="">
+              </div>
+              <span class="item-label">{{ calc.label }}</span>
+            </a>
+            <button class="pin-btn" [class.pin-btn--active]="pinnedCalcIds.has(calc.id)" (click)="toggleCalcPin(calc.id)" [title]="pinnedCalcIds.has(calc.id) ? 'Unpin' : 'Pin to dashboard'">
+              <span class="fa fa-thumb-tack"></span>
+            </button>
           </div>
-          <span class="item-label">Compressed Air</span>
-        </button>
-
-        <button class="item-card" (click)="createAssessment('Furnace')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #f0b27a, #e67e22)">
-            <img src="assets/images/ph.png" alt="">
-          </div>
-          <span class="item-label">Process Heating</span>
-        </button>
-
-        <button class="item-card" (click)="createAssessment('Fan')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #f9e79f, #d4ac0d)">
-            <img src="assets/images/ico-fsat-diagram.png" alt="">
-          </div>
-          <span class="item-label">Fan</span>
-        </button>
-
-        <button class="item-card" (click)="createAssessment('Steam')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #fad7a0, #ca6f1e)">
-            <img src="assets/images/ico-ssmt-diagram.png" alt="">
-          </div>
-          <span class="item-label">Steam</span>
-        </button>
-
-        <button class="item-card" (click)="createAssessment('TreasureHunt')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #7f8c8d, #2c3e50)">
-            <img src="assets/images/treasure-hunt.png" alt="">
-          </div>
-          <span class="item-label">Treasure Hunt</span>
-        </button>
-
-        <button class="item-card" (click)="createAssessment('WasteWater')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #a9cce3, #2e86c1)">
-            <img src="assets/images/waste-water-icon-landing.png" alt="">
-          </div>
-          <span class="item-label">Wastewater</span>
-        </button>
-
-        <button class="item-card" (click)="createAssessment('Water')">
-          <div class="item-icon item-icon--badge" style="background: linear-gradient(160deg, #d4e2f4, #306dbe)">
-            <app-alert-badge [alertText]="'Beta'" [style]="{
-              position: 'absolute',
-              top: '-8px',
-              right: '-8px',
-              border: '2px solid #047334'
-            }"></app-alert-badge>
-            <img src="assets/images/water-assessment-large.png" alt="">
-          </div>
-          <span class="item-label">Water</span>
-        </button>
-
+        }
       </div>
     </section>
 
@@ -206,48 +261,22 @@
     <section class="panel-section">
       <h6 class="section-label">Modeling Tools and Inventory</h6>
       <div class="item-grid">
-
-        <button class="item-card" (click)="createDiagram('Water')">
-          <div class="item-icon item-icon--badge" style="background: linear-gradient(160deg, #d4e2f4, #306dbe)">
-            <app-alert-badge [alertText]="'Beta'" [style]="{
-              position: 'absolute',
-              top: '-8px',
-              right: '-8px',
-              border: '2px solid #047334'
-            }"></app-alert-badge>
-            <img src="assets/images/water-process-diagram-large.png" alt="">
+        @for (card of modelingCards; track card.id) {
+          <div class="item-card-wrap">
+            <button class="item-card" (click)="handleModelingAction(card)">
+              <div class="item-icon" [class.item-icon--badge]="card.badge" [style.background]="card.gradient">
+                @if (card.badge) {
+                  <app-alert-badge [alertText]="card.badge" [style]="{ position: 'absolute', top: '-8px', right: '-8px', border: '2px solid #047334' }"></app-alert-badge>
+                }
+                <img [src]="card.img" alt="">
+              </div>
+              <span class="item-label">{{ card.label }}</span>
+            </button>
+            <button class="pin-btn" [class.pin-btn--active]="pinnedModelingIds.has(card.id)" (click)="toggleModelingPin(card.id)" [title]="pinnedModelingIds.has(card.id) ? 'Unpin' : 'Pin to dashboard'">
+              <span class="fa fa-thumb-tack"></span>
+            </button>
           </div>
-          <span class="item-label">Water Diagram</span>
-        </button>
-
-        <a class="item-card" routerLink="/log-tool">
-          <div class="item-icon" style="background: linear-gradient(160deg, #a2d9ce, #117a65)">
-            <img src="assets/images/data-explorer-icon.png" alt="">
-          </div>
-          <span class="item-label">Data Exploration</span>
-        </a>
-
-        <button class="item-card" (click)="showCreateInventory('motorInventory')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #d5f5e3, #1e8449)">
-            <img src="assets/images/motor-inventory-icon.png" alt="">
-          </div>
-          <span class="item-label">Motor Inventory</span>
-        </button>
-
-        <button class="item-card" (click)="showCreateInventory('pumpInventory')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #aed6f1, #2471a3)">
-            <img src="assets/images/pump-inventory-icon.png" alt="">
-          </div>
-          <span class="item-label">Pump Inventory</span>
-        </button>
-
-        <button class="item-card" (click)="showCreateInventory('compressedAirInventory')">
-          <div class="item-icon" style="background: linear-gradient(160deg, #d7bde2, #7030a0)">
-            <img src="assets/images/ca-inventory-icon.png" alt="">
-          </div>
-          <span class="item-label">Compressed Air Inventory</span>
-        </button>
-
+        }
       </div>
     </section>
 

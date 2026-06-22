@@ -19,6 +19,29 @@
   color: #888;
 }
 
+.mini-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 6px;
+  border-radius: 8px;
+  padding: 3px;
+  text-decoration: none;
+  transition: background 0.1s ease;
+}
+
+.mini-logo:hover {
+  background: rgba(21, 103, 57, 0.1);
+}
+
+.mini-logo img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
 .mini-icon {
   display: flex;
   align-items: center;
@@ -247,6 +270,33 @@ a.list-group-item.active:hover {
   font-size: 16px;
   color: var(--measur-brand);
   flex-shrink: 0;
+}
+
+/* ── Quick-create links ── */
+.sidebar-quick-create-group {
+  margin-bottom: 4px;
+}
+
+.sidebar-quick-create {
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+}
+
+.sidebar-quick-create:hover {
+  color: var(--measur-brand);
+}
+
+.sidebar-quick-create-group .sidebar-item .sidebar-quick-create-icon {
+  font-size: 13px;
+  color: var(--measur-brand);
+  flex-shrink: 0;
+  background: none;
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  opacity: 1;
 }
 
 /* ── Help & Info flyout ── */
