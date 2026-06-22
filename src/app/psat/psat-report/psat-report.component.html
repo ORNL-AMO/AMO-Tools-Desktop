@@ -14,7 +14,7 @@
         <!-- When does this show? -->
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
         <!-- Assessment view -->
-        <div *ngIf="assessment && inPsat" class="row">
+        <!-- <div *ngIf="assessment && inPsat" class="row">
             <div class="col-12 p-2">
                 <div class="d-flex justify-content-between">
                     <div class="d-flex">
@@ -24,13 +24,11 @@
                             </ng-container>
                             {{assessment.name}}
                         </div>
-                        <span class="ml-3 mt-auto date-modified">Last Modified {{assessment.modifiedDate |
-                            date:'short'}}</span>
                     </div>
                     <div></div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- Rollup view -->
         <div *ngIf="assessment && !inPsat" class="row assessment-name">
             <div class="col-12">
@@ -53,8 +51,8 @@
     <!-- End .report-header -->
 
     <div class="report-data" *ngIf="assessment.psat.setupDone && assessment.psat.valid.isValid">
-        <div class="d-none d-lg-flex">
-            <ul #reportBtns class="tabs primary hide-print flex-fill">
+        <div class="d-none d-lg-flex tabs-bar-row">
+            <ul #reportBtns class="tabs primary">
                 <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                     <a>Result Data</a>
                 </li>
@@ -71,13 +69,12 @@
                     <a>Facility Info</a>
                 </li>
             </ul>
-
             <app-export-button
-            class="ml-auto align-self-center mr-2"
-            [document]="reportDocument$"
-            [assessmentName]="assessment.name"
-            [sectionGroups]="sectionGroups">
-        </app-export-button>
+                class="ml-auto align-self-center mr-2"
+                [document]="reportDocument$"
+                [assessmentName]="assessment.name"
+                [sectionGroups]="sectionGroups">
+            </app-export-button>
         </div>
 
         <div class="d-flex d-lg-none flex-column">
