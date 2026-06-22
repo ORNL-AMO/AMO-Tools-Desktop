@@ -19,9 +19,10 @@ export class FansSuiteApiService {
     let loadEstimationMethodEnum = this.suiteApiHelperService.getLoadEstimationMethod(input.loadEstimationMethod);
     //convert from percent to fraction
     let specifiedDriveEfficiencyFraction: number = input.specifiedDriveEfficiency / 100;
+    let specifiedEfficiencyFraction: number = input.specifiedEfficiency / 100;
     input.compressibilityFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.compressibilityFactor);
     let fanInput = new this.toolsSuiteApiService.ToolsSuiteModule.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
-    let motor = new this.toolsSuiteApiService.ToolsSuiteModule.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
+    let motor = new this.toolsSuiteApiService.ToolsSuiteModule.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, specifiedEfficiencyFraction, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
     let baselineFieldData = new this.toolsSuiteApiService.ToolsSuiteModule.FieldDataBaseline(input.measuredPower, input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, loadEstimationMethodEnum, input.velocityPressure);
     let fanResult = new this.toolsSuiteApiService.ToolsSuiteModule.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
     let output = fanResult.calculateExisting(baselineFieldData);
@@ -66,12 +67,13 @@ export class FansSuiteApiService {
     //convert from percent to fraction
     let specifiedDriveEfficiencyFraction: number = input.specifiedDriveEfficiency / 100;
     let fanEfficiencyFraction: number = input.fanEfficiency / 100;
+    let specifiedEfficiencyFraction: number = input.specifiedEfficiency / 100;
 
     let fanInput = new this.toolsSuiteApiService.ToolsSuiteModule.FanInput(input.fanSpeed, input.airDensity, driveEnum, specifiedDriveEfficiencyFraction);
     // No default on new modification
     input.compressibilityFactor = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.compressibilityFactor);
     let fanFieldData = new this.toolsSuiteApiService.ToolsSuiteModule.FieldDataModified(input.measuredVoltage, input.measuredAmps, input.flowRate, input.inletPressure, input.outletPressure, input.compressibilityFactor, input.velocityPressure);
-    let motor = new this.toolsSuiteApiService.ToolsSuiteModule.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, input.specifiedEfficiency, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
+    let motor = new this.toolsSuiteApiService.ToolsSuiteModule.Motor(lineFrequencyEnum, input.motorRatedPower, input.motorRpm, efficiencyClassEnum, specifiedEfficiencyFraction, input.motorRatedVoltage, input.fullLoadAmps, input.sizeMargin);
     let fanResult = new this.toolsSuiteApiService.ToolsSuiteModule.FanResult(fanInput, motor, input.operatingHours, input.unitCost);
     let output = fanResult.calculateModified(fanFieldData, fanEfficiencyFraction);
     let results: FsatOutput = {
