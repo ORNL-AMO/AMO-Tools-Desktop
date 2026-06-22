@@ -6,10 +6,10 @@ import { Directory } from '../../shared/models/directory';
 import { SettingsService } from '../../settings/settings.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
-import { Subscription } from 'rxjs';
-import { PrintOptions } from '../../shared/models/printing';
+import { Observable, Subscription } from 'rxjs';
 import { PsatService } from '../psat.service';
+import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
+import { PsatReportAdapter, PSAT_SECTION_GROUPS } from '../new-psat-report/psat-report.adapter';
 
 @Component({
     selector: 'app-psat-report',
@@ -37,24 +37,19 @@ export class PsatReportComponent implements OnInit {
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
 
-  showPrintView: boolean = false;
-  showPrintViewSub: Subscription;
-  showPrintMenu: boolean = false;
-  showPrintMenuSub: Subscription;
-  showPrintDiv: boolean = false;
   selectAll: boolean = false;
-
 
   assessmentDirectories: Directory[];
   currentTab: string = 'results';
   createdDate: Date;
   reportContainerHeight: number;
-  printOptions: PrintOptions;
   tabsCollapsed: boolean = true;
+  reportDocument$: Observable<ReportDocument>;
+  readonly sectionGroups: ReportSectionGroup[] = PSAT_SECTION_GROUPS;
 
   constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
-    private settingsService: SettingsService, private printOptionsMenuService: PrintOptionsMenuService,
-    private psatService: PsatService) { }
+    private settingsService: SettingsService,
+    private psatService: PsatService, private reportAdapter: PsatReportAdapter) { }
 
   ngOnInit() {
     this.createdDate = new Date();
@@ -69,24 +64,9 @@ export class PsatReportComponent implements OnInit {
     if (!this.assessment.psat.modifications) {
       this.assessment.psat.modifications = new Array();
     }
-    if (!this.inRollup) {
-      this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
-        this.showPrintMenu = val;
-      });
-    }
-    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
-      this.printOptions = this.printOptionsMenuService.printOptions.getValue();
-      this.showPrintDiv = val;
-      if (val == true) {
-        //use delay to show loading before print payload starts
-        setTimeout(() => {
-          this.showPrintView = val;
-        }, 20)
-      } else {
-        this.showPrintView = val;
-      }
-    });
+
     this.setOutputs();
+    this.reportDocument$ = this.reportAdapter.buildDocument(this.assessment);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -101,12 +81,6 @@ export class PsatReportComponent implements OnInit {
     }, 100)
   }
 
-  ngOnDestroy() {
-    if (this.showPrintMenuSub) {
-      this.showPrintMenuSub.unsubscribe();
-    }
-    this.showPrintViewSub.unsubscribe();
-  }
 
   getContainerHeight() {
     if (this.reportBtns && this.reportHeader) {
@@ -145,11 +119,6 @@ export class PsatReportComponent implements OnInit {
     }
   }
   
-  print() {
-    this.printOptionsMenuService.printContext.next('psat');
-    this.printOptionsMenuService.showPrintMenu.next(true);
-    this.collapseTabs();
-  }
 
 
   setOutputs() {

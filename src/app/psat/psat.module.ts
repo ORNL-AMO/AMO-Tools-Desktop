@@ -64,6 +64,8 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
+import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
+import { PsatReportAdapter } from './new-psat-report/psat-report.adapter';
 
 
 @NgModule({
@@ -125,7 +127,8 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     ImportExportModule,
     SnackbarModule,
     ExportableResultsTableModule,
-    BannerTooltipsModule
+    BannerTooltipsModule,
+    ReportBuilderModule,
 
   ],
   providers: [
@@ -137,7 +140,8 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     MotorService,
     FieldDataService,
     DecimalPipe, 
-    PumpOperationsService
+    PumpOperationsService,
+    PsatReportAdapter
   ]
 })
 
