@@ -3,7 +3,7 @@ import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowPropert
 import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterTreatment, WaterUsingSystem, WasteWaterTreatment } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getEdgeDescription, getWaterFlowTotals } from "./water-components";
-import { NodeGraphIndex, createGraphIndex, getAllUpstreamEdgePaths, getAllDownstreamEdgePaths } from "../../graph";
+import { NodeGraphIndex, createGraphIndex, getAllUpstreamEdgePaths, getAllDownstreamEdgePaths, buildROSingleSystemIndex } from "../../graph";
 import { BlockCosts, CostComponentMap, CostComponentPathData, PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults, SystemAttributionMap, SystemTrueCostContributions, SystemTrueCostData, TrueCostOfSystems, CostComponentAttribution, PathAttribution } from "../types/results";
 
 export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[], calculatedData: DiagramCalculatedData): WaterBalanceResults => {
@@ -833,6 +833,13 @@ const applySystemIntakeCosts = (
             costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
           }
 
+          // * Case D — single-system RO: 100% of intake cost goes to the RO-owning system
+          const roEntry = graph.roSingleSystemIndex?.[currentNode.id];
+          if (roEntry && roEntry.intakeNodes.some(n => n.id === intakeId)) {
+            systemAttributionFraction = 1;
+            costToSystem = intakeData.blockCosts.totalBlockCost;
+          }
+
           setSystemAttribution(
             systemAttributionMap,
             intakeEdge,
@@ -941,6 +948,39 @@ const applySystemDischargeCosts = (
     // * outside of this rule, we still need to visit some systems twice
     let pathsAttributed: string[][] = [];
     let adjustedAttributions: SystemAttributionMap = {};
+
+    // * Case K — single-system RO reject discharge: attribute 100% to the RO-owning system
+    const roOwnerForDischarge = Object.entries(graph.roSingleSystemIndex ?? {})
+      .find(([, entry]) => entry.roRejectDischargeNode.id === dischargeId);
+
+    if (roOwnerForDischarge) {
+      const [owningSystemId] = roOwnerForDischarge;
+      const firstPath = dischargeData.upstreamPathsByEdgeId?.[0];
+      const firstEdgeId = firstPath?.[0];
+      const dischargeEdge = firstEdgeId
+        ? graph.edgeMap[firstEdgeId]
+        : { id: `synthetic-${dischargeId}`, source: dischargeId, target: dischargeId, data: {} } as Edge<CustomEdgeData>;
+
+      setSystemAttribution(
+        systemAttributionMap,
+        dischargeEdge,
+        owningSystemId,
+        1,
+        dischargeId,
+        'water-discharge',
+        debuggingNameMap
+      );
+
+      const costToSystem = dischargeData.blockCosts.totalBlockCost;
+      trueCostOfSystems[owningSystemId].discharge += costToSystem;
+      systemAnnualSummaryResultsMap[owningSystemId].dischargeWater += dischargeData.blockCosts.totalFlow ?? 0;
+
+      const dischargeNode = graph.nodeMap[dischargeId];
+      const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(dischargeNode.data as DischargeOutlet, settings.electricityCost, settings.unitsOfMeasure);
+      trueCostOfSystems[owningSystemId].systemPumpAndMotorEnergy += pumpAndMotorEnergyCost;
+
+      return;
+    }
 
     dischargeData.upstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
       // * for this path, eliminate mischarging an upstream system who provides reused water to the current system
@@ -1121,6 +1161,13 @@ const applySystemTreatmentCosts = (
             systemFlowResponsibility = pathInflow * fractionPathIntakeReceived;
             systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
             costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
+          }
+
+          // * Case G — single-system RO: 100% of treatment cost goes to the RO-owning system
+          const roEntry = graph.roSingleSystemIndex?.[currentNode.id];
+          if (roEntry && roEntry.treatmentNode.id === treatmentId) {
+            systemAttributionFraction = 1;
+            costToSystem = treatmentData.blockCosts.totalBlockCost;
           }
 
           setSystemAttribution(
@@ -1321,6 +1368,10 @@ const applySystemWasteTreatmentCosts = (
   });
 
   Object.entries(wasteTreatmentCostData).forEach(([treatmentId, treatmentData]: [string, CostComponentPathData]) => {
+    // * Case I — skip RO-owned WWT nodes; handled in applyROSystemWasteTreatmentCosts
+    const isROOwnedWWT = Object.values(graph.roSingleSystemIndex ?? {})
+      .some(entry => entry.wasteTreatmentNode?.id === treatmentId);
+    if (isROOwnedWWT) return;
 
     let visitedSystemIds: string[] = downstreamTreatmentAttributionMap[treatmentId]?.map(item => item.systemId) || [];
     let adjustedAttributions: SystemAttributionMap = {};
@@ -1421,6 +1472,45 @@ const applySystemWasteTreatmentCosts = (
 }
 
 
+const applyROSystemWasteTreatmentCosts = (
+  trueCostOfSystems: TrueCostOfSystems,
+  graph: NodeGraphIndex,
+  wasteTreatmentCostData: CostComponentMap,
+  systemAttributionMap: SystemAttributionMap,
+  debuggingNameMap: Record<string, string>,
+) => {
+  Object.entries(graph.roSingleSystemIndex ?? {}).forEach(([owningSystemId, roEntry]) => {
+    if (!roEntry.wasteTreatmentNode) return;
+
+    const wasteTreatmentId = roEntry.wasteTreatmentNode.id;
+    const wwtCostData = wasteTreatmentCostData[wasteTreatmentId];
+    if (!wwtCostData) return;
+
+    if (systemAttributionMap[owningSystemId]?.[wasteTreatmentId]) return;
+
+    const syntheticEdge = {
+      id: `ro-wwt-${wasteTreatmentId}`,
+      source: wasteTreatmentId,
+      target: owningSystemId,
+      data: {}
+    } as Edge<CustomEdgeData>;
+
+    setSystemAttribution(
+      systemAttributionMap,
+      syntheticEdge,
+      owningSystemId,
+      1,
+      wasteTreatmentId,
+      'waste-water-treatment',
+      debuggingNameMap
+    );
+
+    const costToSystem = wwtCostData.blockCosts.totalBlockCost;
+    trueCostOfSystems[owningSystemId].wasteTreatment += costToSystem;
+  });
+};
+
+
 /** Vocabulary
 * Reused - Water is considered reused if it flows from one water-using system to another. labels > 'system flow reuse'
 * Recycled - Water is considered recycled if it comes from a wastewater treatment system into a water-using system.
@@ -1455,6 +1545,7 @@ export const getPlantSummaryResults = (
 ): PlantResults => {
   // console.time('getPlantSummaryResults');
   const graph: NodeGraphIndex = createGraphIndex(nodes, edges as Edge<CustomEdgeData>[]);
+  buildROSingleSystemIndex(graph);
 
   // * STEP 1 - Set block costs and prepare results mapping
   const nodeMap: Record<string, Node<ProcessFlowPart>> = Object.fromEntries(nodes.map((n) => [n.id, n as Node<ProcessFlowPart>]));
@@ -1612,6 +1703,13 @@ export const getPlantSummaryResults = (
     });
 
     applySystemWasteTreatmentCosts(
+      trueCostOfSystems,
+      graph,
+      wasteTreatmentCostData,
+      systemAttributionMap,
+      nodeNameMap
+    );
+    applyROSystemWasteTreatmentCosts(
       trueCostOfSystems,
       graph,
       wasteTreatmentCostData,
