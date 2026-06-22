@@ -65,7 +65,7 @@ import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module'
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
-import { PsatReportAdapter } from './new-psat-report/psat-report.adapter';
+import { PsatReportAdapter } from './psat-report/psat-report.adapter';
 
 
 @NgModule({

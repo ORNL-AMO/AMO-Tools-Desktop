@@ -6,10 +6,10 @@ import { Directory } from '../../shared/models/directory';
 import { SettingsService } from '../../settings/settings.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PsatService } from '../psat.service';
 import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
-import { PsatReportAdapter, PSAT_SECTION_GROUPS } from '../new-psat-report/psat-report.adapter';
+import { PsatReportAdapter, PSAT_SECTION_GROUPS } from './psat-report.adapter';
 
 @Component({
     selector: 'app-psat-report',
@@ -36,8 +36,6 @@ export class PsatReportComponent implements OnInit {
 
   @ViewChild('reportBtns', { static: false }) reportBtns: ElementRef;
   @ViewChild('reportHeader', { static: false }) reportHeader: ElementRef;
-
-  selectAll: boolean = false;
 
   assessmentDirectories: Directory[];
   currentTab: string = 'results';
