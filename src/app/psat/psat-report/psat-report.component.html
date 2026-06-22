@@ -27,9 +27,7 @@
                         <span class="ml-3 mt-auto date-modified">Last Modified {{assessment.modifiedDate |
                             date:'short'}}</span>
                     </div>
-                    <div>
-                        <button class="mt-0 mr-3 btn btn-secondary hide-print" (click)="print()">Print</button>
-                    </div>
+                    <div></div>
                 </div>
             </div>
         </div>
@@ -86,6 +84,13 @@
                     <a>Facility Info</a>
                 </li>
             </ul>
+
+            <app-export-button
+            class="ml-auto align-self-center mr-2"
+            [document]="reportDocument$"
+            [assessmentName]="assessment.name"
+            [sectionGroups]="sectionGroups">
+        </app-export-button>
         </div>
 
         <div class="d-flex d-lg-none flex-column">
@@ -115,12 +120,14 @@
                     [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
                     <a>Facility Info</a>
                 </div>
-                <div (click)="print()" class="hide-print" [ngClass]="{'collapse': tabsCollapsed}">
-                    <a>Print</a>
-                </div>
             </div>
+            <app-export-button
+                class="mx-2 mb-2"
+                [document]="reportDocument$"
+                [assessmentName]="assessment.name"
+                [sectionGroups]="sectionGroups">
+            </app-export-button>
         </div>
-
 
         <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo' || showPrintView"
             [ngStyle]="{'height.px':reportContainerHeight}">
