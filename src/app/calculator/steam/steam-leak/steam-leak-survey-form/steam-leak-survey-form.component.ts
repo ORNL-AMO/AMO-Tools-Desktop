@@ -59,7 +59,7 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
       if (surveyInput) {
         const leak = surveyInput.steamLeakSurveyInputVec[index];
         if (leak) {
-          this.buildForms(leak, surveyInput.facilitySteamLeakData?.steamTemperature);
+          this.buildForms(leak, this.settings(), surveyInput.facilitySteamLeakData?.steamTemperature);
         }
       }
     });
@@ -70,7 +70,7 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
       if (surveyInput) {
         const leak = surveyInput.steamLeakSurveyInputVec[index];
         if (leak) {
-          this.buildForms(leak, surveyInput.facilitySteamLeakData?.steamTemperature);
+          this.buildForms(leak, this.settings(), surveyInput.facilitySteamLeakData?.steamTemperature);
         }
       }
     });
@@ -89,11 +89,11 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
     this.surveyService.currentLeakIndex.set(updatedLeaks.length - 1);
   }
 
-  private buildForms(leak: SteamLeakSurveyData, maxSteamTemp?: number): void {
+  private buildForms(leak: SteamLeakSurveyData, settings: Settings, maxSteamTemp?: number): void {
     this.leakMetaForm = this.formService.buildLeakMetaForm(leak);
-    this.estimateForm = this.formService.buildEstimateForm(leak, maxSteamTemp);
-    this.orificeForm = this.formService.buildOrificeForm(leak, maxSteamTemp);
-    this.plumeForm = this.formService.buildPlumeForm(leak, maxSteamTemp);
+    this.estimateForm = this.formService.buildEstimateForm(leak, settings, maxSteamTemp);
+    this.orificeForm = this.formService.buildOrificeForm(leak, settings, maxSteamTemp);
+    this.plumeForm = this.formService.buildPlumeForm(leak, settings, maxSteamTemp);
     this.subscribeToFormChanges();
     this.cdr.markForCheck();
   }

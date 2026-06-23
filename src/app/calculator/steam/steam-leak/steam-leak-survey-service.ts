@@ -31,7 +31,7 @@ export class SteamLeakSurveyService {
 
   initDefaultEmptyInputs(settings: Settings): void {
     this.steamLeakInput.set({
-      steamLeakSurveyInputVec: [this.formService.getEmptySteamLeakData()],
+      steamLeakSurveyInputVec: [this.formService.getEmptySteamLeakData(settings)],
       facilitySteamLeakData: this.getDefaultFacilityData(settings),
     });
   }
@@ -39,7 +39,7 @@ export class SteamLeakSurveyService {
   generateExampleData(settings: Settings): void {
     let example: SteamLeakSurveyInput = {
       steamLeakSurveyInputVec: [this.getExampleLeakData()],
-      facilitySteamLeakData: this.getDefaultFacilityData(settings),
+      facilitySteamLeakData: this.getDefaultFacilityData(null),
     };
     if (settings.unitsOfMeasure !== 'Imperial') {
       example = this.convertSteamLeakService.convertExample(example);
@@ -66,7 +66,7 @@ export class SteamLeakSurveyService {
         if (this.settings) {
           this.initDefaultEmptyInputs(this.settings);
         } else {
-          const emptyLeak = this.formService.getEmptySteamLeakData();
+          const emptyLeak = this.formService.getEmptySteamLeakData(this.settings);
           this.steamLeakInput.set({ ...current, steamLeakSurveyInputVec: [emptyLeak] });
         }
         this.resetEventsSubject.next();
@@ -126,7 +126,7 @@ export class SteamLeakSurveyService {
     };
   }
 
-  private getDefaultFacilityData(settings: Settings): FacilitySteamLeakData {
+  private getDefaultFacilityData(settings: Settings | null): FacilitySteamLeakData {
     let data: FacilitySteamLeakData = {
       annualOperatingHours: 8760,
       utilityType: 1,
@@ -207,7 +207,7 @@ export class SteamLeakSurveyService {
 
     private isValidInput(input: SteamLeakSurveyInput): boolean {
         if (!input?.facilitySteamLeakData || !Array.isArray(input.steamLeakSurveyInputVec)) return false;
-        if (!this.formService.buildFacilitySteamLeakForm(input.facilitySteamLeakData).valid) return false;
+        if (!this.formService.buildFacilitySteamLeakForm(input.facilitySteamLeakData, this.settings).valid) return false;
         return true;
     }
 

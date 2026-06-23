@@ -84,7 +84,7 @@ describe('SteamLeakSurveyFormService', () => {
     const leak = service.getEmptySteamLeakData();
     leak.estimateMethodData.steamTemperature = 450;
 
-    const form = service.buildEstimateForm(leak, 400);
+    const form = service.buildEstimateForm(leak, undefined, 400);
 
     expect(form.controls.steamTemperature.valid).toBeFalse();
   });
@@ -93,7 +93,7 @@ describe('SteamLeakSurveyFormService', () => {
     const leak = service.getEmptySteamLeakData();
     leak.estimateMethodData.steamTemperature = 400;
 
-    const form = service.buildEstimateForm(leak, 400);
+    const form = service.buildEstimateForm(leak, undefined, 400);
 
     expect(form.controls.steamTemperature.valid).toBeTrue();
   });
@@ -136,7 +136,7 @@ describe('SteamLeakSurveyFormService', () => {
     const leak = service.getEmptySteamLeakData();
     leak.orificeMethodData.steamTemperature = 450;
 
-    const form = service.buildOrificeForm(leak, 400);
+    const form = service.buildOrificeForm(leak, undefined, 400);
 
     expect(form.controls.steamTemperature.valid).toBeFalse();
   });
@@ -145,7 +145,7 @@ describe('SteamLeakSurveyFormService', () => {
     const leak = service.getEmptySteamLeakData();
     leak.orificeMethodData.steamTemperature = 400;
 
-    const form = service.buildOrificeForm(leak, 400);
+    const form = service.buildOrificeForm(leak, undefined, 400);
 
     expect(form.controls.steamTemperature.valid).toBeTrue();
   });
@@ -185,7 +185,7 @@ describe('SteamLeakSurveyFormService', () => {
     const leak = service.getEmptySteamLeakData();
     leak.plumeMethodData.steamTemperature = 450;
 
-    const form = service.buildPlumeForm(leak, 400);
+    const form = service.buildPlumeForm(leak, undefined, 400);
 
     expect(form.controls.steamTemperature.valid).toBeFalse();
     expect(form.valid).toBeFalse();
@@ -195,7 +195,7 @@ describe('SteamLeakSurveyFormService', () => {
     const leak = service.getEmptySteamLeakData();
     leak.plumeMethodData.steamTemperature = 400;
 
-    const form = service.buildPlumeForm(leak, 400);
+    const form = service.buildPlumeForm(leak, undefined, 400);
 
     expect(form.controls.steamTemperature.valid).toBeTrue();
   });
