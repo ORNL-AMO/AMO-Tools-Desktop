@@ -4,6 +4,11 @@ import { ToolsSuiteApiService } from './tools-suite-api.service';
 import {
   type DoubleVector,
   type DoubleVector2D,
+  type CompressorControl,
+  type CompressorInputBasis,
+  type CompressorLubricant,
+  type CompressorStage,
+  type CompressorType,
   type IntVector,
   type LineFrequency,
   type MotorEfficiencyClass,
@@ -278,7 +283,7 @@ export class SuiteApiHelperService {
   }
 
 
-  getCompressorTypeEnum(compressorType: number) {
+  getCompressorTypeEnum(compressorType: number): CompressorType {
     switch (compressorType) {
       case 0:
         return this.toolsSuiteApiService.ToolsSuiteModule.CompressorType.Centrifugal;
@@ -289,61 +294,61 @@ export class SuiteApiHelperService {
     }
   }
 
-  getControlTypeEnum(controlType: number) {
+  getControlTypeEnum(controlType: number): CompressorControl {
     switch (controlType) {
       case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.LoadUnload;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.LoadUnload;
       case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.ModulationUnload;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.ModulationUnload;
       case 2:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.BlowOff;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.BlowOff;
       case 3:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.ModulationWOUnload;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.ModulationWithoutUnload;
       case 4:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.StartStop;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.StartStop;
       case 5:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.VariableDisplacementUnload;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.VariableDisplacementUnload;
       case 6:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.MultiStepUnloading;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.MultiStepUnloading;
       case 7:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ControlType.VFD;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.Vfd;
     }
   }
 
-  getLubricantEnum(lubricant: number) {
+  getLubricantEnum(lubricant: number): CompressorLubricant {
     switch (lubricant) {
       case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Lubricant.Injected;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorLubricant.Injected;
       case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Lubricant.Free;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorLubricant.Free;
       case 2:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Lubricant.None;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorLubricant.None;
     }
   }
 
-  getStageEnum(stage: number) {
+  getStageEnum(stage: number): CompressorStage {
     switch (stage) {
       case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Stage.Single;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorStage.Single;
       case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Stage.Two;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorStage.Two;
       case 2:
-        return this.toolsSuiteApiService.ToolsSuiteModule.Stage.Multiple;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorStage.Multiple;
     }
   }
 
-  getComputeFromEnum(computeFrom: number) {
+  getComputeFromEnum(computeFrom: number): CompressorInputBasis {
     switch (computeFrom) {
       case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentagePower;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.PowerFraction;
       case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentageCapacity;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.CapacityFraction;
       case 2:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerMeasured;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.MeasuredPower;
       case 3:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.CapacityMeasured;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.MeasuredCapacity;
       case 4:
-        return this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerFactor;
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.Electrical;
     }
   }
 
