@@ -1,7 +1,7 @@
 import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, ReplaceCompressor, SystemInformation, SystemProfileSetup } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
-import { getEmptyProfileSummaryData, getProfileSummaryTotals } from "../../caCalculationHelpers";
+import { getEmptyProfileSummaryData } from "../../caCalculationHelpers";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
 import { CompressedAirEemSavingsResult } from "../CompressedAirEemSavingsResult";
@@ -34,13 +34,13 @@ export class ReplaceCompressorResults {
         this.profileSummary = previousProfileSummary.map(summary => {
             return new CompressedAirProfileSummary(summary, true);
         });
-        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
+        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = _compressedAirCalculationService.calculateProfileSummaryTotals(
             summaryDataInterval,
             this.profileSummary,
-            false,
             dayType,
             undefined,
-            this.adjustedCompressors);
+            this.adjustedCompressors,
+            settings);
 
         //1. Turn off old compressors..
         this.turnOffCompressors(replaceCompressor.currentCompressorMapping);
@@ -70,7 +70,7 @@ export class ReplaceCompressorResults {
             replaceCompressor.trimSelections);
         this.profileSummary = flowReallocationResults.profileSummary;
 
-        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, implementationCost, summaryDataInterval, undefined, replaceCompressor.salvageValue);
+        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, implementationCost, summaryDataInterval, undefined, replaceCompressor.salvageValue, _compressedAirCalculationService, settings);
     }
 
 

@@ -1,4 +1,6 @@
 import { CompressedAirDayType, ProfileSummary, ProfileSummaryData } from "../../../shared/models/compressed-air-assessment"
+import { Settings } from "../../../shared/models/settings";
+import { CompressedAirCalculationService } from "../../compressed-air-calculation.service";
 import { EemSavingsResults } from "../caCalculationModels"
 import * as _ from 'lodash';
 
@@ -48,19 +50,45 @@ export class CompressedAirEemSavingsResult extends CompressedAirSavingsItem {
     dayTypeId: string
     salvageValue: number
 
-    constructor(profileSummary: Array<ProfileSummary>, adjustedProfileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, costKwh: number, implementationCost: number, summaryDataInterval: number, auxiliaryPowerUsage: { cost: number, energyUse: number }, salvageValue: number) {
+    constructor(
+        profileSummary: Array<ProfileSummary>,
+        adjustedProfileSummary: Array<ProfileSummary>,
+        dayType: CompressedAirDayType,
+        costKwh: number,
+        implementationCost: number,
+        summaryDataInterval: number,
+        auxiliaryPowerUsage: { cost: number, energyUse: number },
+        salvageValue: number,
+        _compressedAirCalculationService: CompressedAirCalculationService,
+        settings: Settings
+    ) {
         super();
+        let suiteSavings = _compressedAirCalculationService.calculateProfileSavings(
+            profileSummary,
+            adjustedProfileSummary,
+            dayType,
+            costKwh,
+            implementationCost,
+            summaryDataInterval,
+            auxiliaryPowerUsage,
+            salvageValue,
+            settings
+        );
         this.baselineResults = new CompressedAirSavingsItem();
-        this.baselineResults.setEnergyAndCost(profileSummary, dayType, costKwh, summaryDataInterval, { cost: 0, energyUse: 0 });
+        this.baselineResults.cost = suiteSavings.baselineCost;
+        this.baselineResults.power = suiteSavings.baselineEnergyKwh;
         this.adjustedResults = new CompressedAirSavingsItem();
-        this.adjustedResults.setEnergyAndCost(adjustedProfileSummary, dayType, costKwh, summaryDataInterval, auxiliaryPowerUsage);
+        this.adjustedResults.cost = suiteSavings.adjustedCost;
+        this.adjustedResults.power = suiteSavings.adjustedEnergyKwh;
         this.savings = new CompressedAirSavingsItem();
-        this.savings.setSavings(this.baselineResults, this.adjustedResults);
+        this.savings.cost = suiteSavings.costSavings;
+        this.savings.power = suiteSavings.energySavingsKwh;
+        this.savings.percentSavings = suiteSavings.percentSavings;
 
         this.dayTypeId = dayType.dayTypeId;
         this.implementationCost = implementationCost;
         this.salvageValue = salvageValue;
-        this.paybackPeriod = ((this.implementationCost - this.salvageValue) / this.savings.cost) * 12;
+        this.paybackPeriod = suiteSavings.paybackMonths;
         if (this.paybackPeriod < 0) {
             this.paybackPeriod = 0;
         }

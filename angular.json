@@ -188,6 +188,11 @@
               "src/favicon.ico",
               "src/robots.txt",
               "src/sitemap.xml",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/measur-tools-suite/bin/",
+                "output": "."
+              },
               "src/manifest.webmanifest"
             ]
           }

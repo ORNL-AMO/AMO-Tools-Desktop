@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import { ExploreOpportunitiesService } from '../../../assessment-tab-content/explore-opportunities/explore-opportunities.service';
 import { getEmptyProfileSummaryData } from '../../../calculations/caCalculationHelpers';
 import { getRandomFlatColor } from '../../../../shared/helperFunctions';
+import { CompressedAirCalculationService } from '../../../compressed-air-calculation.service';
 
 @Injectable()
 export class InventoryService {
@@ -23,7 +24,8 @@ export class InventoryService {
   collapseCentrifugal: boolean = true;
   constructor(
     private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private compressedAirAssessmentService: CompressedAirAssessmentService) {
+    private compressedAirAssessmentService: CompressedAirAssessmentService,
+    private compressedAirCalculationService: CompressedAirCalculationService) {
     this.selectedCompressor = new BehaviorSubject<CompressorInventoryItemClass>(undefined);
     this.defaultCompressor = new BehaviorSubject<CompressorInventoryItemClass>(undefined);
     this.filterCompressorOptions = new BehaviorSubject<FilterCompressorOptions>(undefined);
@@ -38,7 +40,7 @@ export class InventoryService {
       let caAssessment: CompressedAirAssessment = this.compressedAirAssessmentService.compressedAirAssessment.getValue();
       let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
       defaultCompressor.performancePoints.setDefaultsOn();
-      defaultCompressor.updatePerformancePoints(caAssessment.systemInformation.atmosphericPressure, settings);
+      defaultCompressor.updatePerformancePoints(caAssessment.systemInformation.atmosphericPressure, settings, this.compressedAirCalculationService);
       this.defaultCompressor.next(defaultCompressor);
     } else {
       this.selectedCompressor.next(undefined);
@@ -293,4 +295,3 @@ export class InventoryService {
 export interface CompressorInventoryItemWarnings {
   serviceFactor?: string;
 }
-

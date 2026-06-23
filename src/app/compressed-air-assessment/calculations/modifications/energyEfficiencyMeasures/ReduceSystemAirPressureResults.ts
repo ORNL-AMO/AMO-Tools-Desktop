@@ -1,7 +1,6 @@
-import { CompressedAirDayType, PerformancePoint, ProfileSummaryTotal, ReduceRuntime, ReduceSystemAirPressure, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, ProfileSummaryTotal, ReduceRuntime, ReduceSystemAirPressure, SystemInformation } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
-import { getProfileSummaryTotals } from "../../caCalculationHelpers";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
 import { CompressedAirEemSavingsResult } from "../CompressedAirEemSavingsResult";
@@ -40,18 +39,18 @@ export class ReduceSystemAirPressureResults {
         });
         if (reduceSystemAirPressure.averageSystemPressureReduction != 0) {
             //1. Adjust compressor set points
-            this.reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure, atmosphericPressure, settings);
+            this.reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure, atmosphericPressure, settings, _compressedAirCalculationService);
             //2. Adjust profile based on new set points
-            this.profileSummary = systemPressureChangeAdjustProfile(ogCompressors, settings, adjustedCompressors, atmosphericPressure, this.profileSummary);
+            this.profileSummary = systemPressureChangeAdjustProfile(ogCompressors, settings, adjustedCompressors, atmosphericPressure, this.profileSummary, _compressedAirCalculationService);
         }
         //3. Reallocate flow based on new set points
-        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
+        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = _compressedAirCalculationService.calculateProfileSummaryTotals(
             summaryDataInterval,
             this.profileSummary,
-            false,
             dayType,
             undefined,
-            this.adjustedCompressors);
+            this.adjustedCompressors,
+            settings);
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
             previousProfileSummary,
@@ -73,10 +72,10 @@ export class ReduceSystemAirPressureResults {
         this.savings = flowReallocationResults.savings;
     }
 
-    reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings) {
+    reduceSystemAirPressureAdjustCompressors(reduceSystemAirPressure: ReduceSystemAirPressure, atmosphericPressure: number, settings: Settings, _compressedAirCalculationService: CompressedAirCalculationService) {
         this.adjustedCompressors.forEach(compressor => {
 
-            compressor.reduceSystemPressure(reduceSystemAirPressure, atmosphericPressure, settings);
+            compressor.reduceSystemPressure(reduceSystemAirPressure, atmosphericPressure, settings, _compressedAirCalculationService);
         });
     }
 }

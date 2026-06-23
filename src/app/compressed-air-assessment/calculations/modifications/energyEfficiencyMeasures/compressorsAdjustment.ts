@@ -2,17 +2,24 @@ import * as _ from 'lodash';
 import { CompressorInventoryItemClass } from '../../CompressorInventoryItemClass';
 import { Settings } from '../../../../shared/models/settings';
 import { CompressedAirProfileSummary } from '../../CompressedAirProfileSummary';
-import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
+import { CompressedAirCalculationService } from '../../../compressed-air-calculation.service';
 
 export function systemPressureChangeAdjustProfile(originalCompressors: Array<CompressorInventoryItemClass>, settings: Settings, adjustedCompressors: Array<CompressorInventoryItemClass>, atmosphericPressure: number,
-    profileSummary: Array<CompressedAirProfileSummary>
+    profileSummary: Array<CompressedAirProfileSummary>,
+    _compressedAirCalculationService: CompressedAirCalculationService
 ): Array<CompressedAirProfileSummary> {
     //reduce airflow
     profileSummary.forEach(profile => {
         let ogCompressor: CompressorInventoryItemClass = originalCompressors.find(ogCompressor => { return ogCompressor.findItem(profile.compressorId) });
         let adjustedCompressor: CompressorInventoryItemClass = adjustedCompressors.find(adjustedCompressor => { return adjustedCompressor.findItem(profile.compressorId) });
         profile.profileSummaryData.forEach(summaryData => {
-            summaryData.airflow = calculateReducedAirFlow(summaryData.airflow, adjustedCompressor.performancePoints.fullLoad.dischargePressure, atmosphericPressure, ogCompressor.performancePoints.fullLoad.dischargePressure, settings);
+            summaryData.airflow = _compressedAirCalculationService.calculatePressureReducedAirflow(
+                summaryData.airflow,
+                adjustedCompressor.performancePoints.fullLoad.dischargePressure,
+                atmosphericPressure,
+                ogCompressor.performancePoints.fullLoad.dischargePressure,
+                settings
+            );
         });
     });
     //order compressors
@@ -35,27 +42,4 @@ export function systemPressureChangeAdjustProfile(originalCompressors: Array<Com
         });
     };
     return profileSummary;
-}
-
-
-export function calculateReducedAirFlow(c_usage: number, adjustedFullLoadDischargePressure: number, p_alt: number, originalFullLoadDischargePressure: number, settings: Settings): number {
-    if (adjustedFullLoadDischargePressure == originalFullLoadDischargePressure) {
-        return c_usage;
-    } else {
-        if (settings.unitsOfMeasure == 'Imperial') {
-            let p: number = (adjustedFullLoadDischargePressure + p_alt) / (originalFullLoadDischargePressure + 14.7);
-            let reduceFlow: number = (c_usage - (c_usage - (c_usage * p)) * .6);
-            return reduceFlow;
-        } else {
-            //for metric convert values to imperial calcs and then convert back to metric
-            let c_usage_imperial: number = new ConvertValue(c_usage, 'm3/min', 'ft3/min').convertedValue;
-            let adjustedFullLoadDischargePressureImperial: number = new ConvertValue(adjustedFullLoadDischargePressure, 'barg', 'psig').convertedValue;
-            let p_alt_imperial: number = new ConvertValue(p_alt, 'kPaa', 'psia').convertedValue;
-            let ogDischargePressureImperial: number = new ConvertValue(originalFullLoadDischargePressure, 'barg', 'psig').convertedValue;
-            let p: number = (adjustedFullLoadDischargePressureImperial + p_alt_imperial) / (ogDischargePressureImperial + 14.7);
-            let reducedFlow: number = (c_usage_imperial - (c_usage_imperial - (c_usage_imperial * p)) * .6);
-            reducedFlow = new ConvertValue(reducedFlow, 'ft3/min', 'm3/min').convertedValue;
-            return reducedFlow;
-        }
-    }
 }

@@ -10,15 +10,40 @@ import {
   type CompressedAirPressureReductionInput as SuiteCompressedAirPressureReductionInput,
   type CompressedAirPressureReductionInputV,
   type CompressedAirPressureReductionOutput,
+  type AdjustCascadingSetPointResult,
+  type AutomaticSequencerSetPointResult,
+  type CascadingSetPointInput,
   type CompressorBlowOffResult,
   type CompressorControl,
   type CompressorInputBasis,
   type CompressorLubricant,
+  type CompressorPerformancePoint,
+  type CompressorPerformancePointInput,
+  type CompressorPerformancePoints,
   type CompressorPerformanceResult,
+  type CompressorProfileCompressor,
+  type CompressorProfileCompressorV,
+  type CompressorProfileOptions,
+  type CompressorProfileRow,
+  type CompressorProfileRowV,
+  type CompressorProfileSavingsInput,
+  type CompressorProfileSavingsResult,
+  type CompressorProfileTotal,
+  type CompressorProfileTotalV,
+  type CompressorRuntimeState,
+  type CompressorRuntimeStateV,
+  type CompressorTrimSelection,
+  type CompressorTrimSelectionV,
+  type ImproveEndUseEfficiencyResult,
   type CompressorType,
   type LoadUnloadCompressor,
   type ModulationWithUnloadCompressor,
   type ModulationWithoutUnloadCompressor,
+  type PressureReductionPointInput,
+  type ReceiverVolumeResult,
+  type ReduceAirLeaksResult,
+  type ReduceSystemAirPressureResult,
+  type SequencerSetPointInput,
   type StartStopCompressor,
   type VariableFrequencyDriveCompressor,
 } from 'measur-tools-suite';
@@ -78,6 +103,237 @@ export class CompressedAirSuiteApiService {
     };
     inputs.delete();
     return results;
+  }
+
+  generatePerformancePoints(input: CompressorPerformancePointInput): CompressorPerformancePoints {
+    let points: CompressorPerformancePoints = this.toolsSuiteApiService.ToolsSuiteModule.generatePerformancePoints(input);
+    return this.fillDefaultPerformancePoints(input, points);
+  }
+
+  adjustPerformancePointsForSequencer(input: SequencerSetPointInput): CompressorPerformancePoints {
+    return this.toolsSuiteApiService.ToolsSuiteModule.adjustPerformancePointsForSequencer(input);
+  }
+
+  reduceSystemPressurePerformancePoints(input: PressureReductionPointInput): CompressorPerformancePoints {
+    return this.toolsSuiteApiService.ToolsSuiteModule.reduceSystemPressurePerformancePoints(input);
+  }
+
+  adjustCascadingSetPointPerformancePoints(input: CascadingSetPointInput): CompressorPerformancePoints {
+    return this.toolsSuiteApiService.ToolsSuiteModule.adjustCascadingSetPointPerformancePoints(input);
+  }
+
+  calculateRatedSpecificPower(totalPackageInputPowerKw: number, fullLoadRatedCapacityAcfm: number): number {
+    return this.toolsSuiteApiService.ToolsSuiteModule.calculateRatedSpecificPower(totalPackageInputPowerKw, fullLoadRatedCapacityAcfm);
+  }
+
+  calculateRatedIsentropicEfficiency(ratedSpecificPower: number, fullLoadOperatingPressurePsig: number): number {
+    return this.toolsSuiteApiService.ToolsSuiteModule.calculateRatedIsentropicEfficiency(ratedSpecificPower, fullLoadOperatingPressurePsig);
+  }
+
+  calculatePressureAdjustedAirflow(capacityAcfm: number, pointPressurePsig: number, ratedPressurePsig: number, atmosphericPressurePsia: number): number {
+    return this.toolsSuiteApiService.ToolsSuiteModule.calculatePressureAdjustedAirflow(
+      capacityAcfm,
+      pointPressurePsig,
+      ratedPressurePsig,
+      atmosphericPressurePsia
+    );
+  }
+
+  calculatePressureAdjustedPower(
+    compressorType: number,
+    inletPressurePsia: number,
+    pointPressurePsig: number,
+    ratedFullLoadPressurePsig: number,
+    packagePowerKw: number,
+    atmosphericPressurePsia: number
+  ): number {
+    return this.toolsSuiteApiService.ToolsSuiteModule.calculatePressureAdjustedPower(
+      this.suiteApiHelperService.getCompressorTypeEnum(compressorType),
+      inletPressurePsia,
+      pointPressurePsig,
+      ratedFullLoadPressurePsig,
+      packagePowerKw,
+      atmosphericPressurePsia
+    );
+  }
+
+  calculateBaselineProfile(
+    compressors: Array<CompressorProfileCompressor>,
+    profileRows: Array<CompressorProfileRow>,
+    options: CompressorProfileOptions
+  ): Array<CompressorProfileRow> {
+    let compressorVector: CompressorProfileCompressorV = this.getCompressorProfileCompressorVector(compressors);
+    let rowVector: CompressorProfileRowV = this.getCompressorProfileRowVector(profileRows);
+    let resultsVector: CompressorProfileRowV;
+    try {
+      resultsVector = this.toolsSuiteApiService.ToolsSuiteModule.calculateBaselineProfile(compressorVector, rowVector, this.getCompressorProfileOptions(options));
+      return this.copyCompressorProfileRows(resultsVector);
+    } finally {
+      if (resultsVector) {
+        resultsVector.delete();
+      }
+      rowVector.delete();
+      compressorVector.delete();
+    }
+  }
+
+  calculateProfileTotals(
+    compressors: Array<CompressorProfileCompressor>,
+    profileRows: Array<CompressorProfileRow>,
+    intervalHours: number
+  ): Array<CompressorProfileTotal> {
+    let compressorVector: CompressorProfileCompressorV = this.getCompressorProfileCompressorVector(compressors);
+    let rowVector: CompressorProfileRowV = this.getCompressorProfileRowVector(profileRows);
+    let resultsVector: CompressorProfileTotalV;
+    try {
+      resultsVector = this.toolsSuiteApiService.ToolsSuiteModule.calculateProfileTotals(compressorVector, rowVector);
+      return this.copyCompressorProfileTotals(resultsVector);
+    } finally {
+      if (resultsVector) {
+        resultsVector.delete();
+      }
+      rowVector.delete();
+      compressorVector.delete();
+    }
+  }
+
+  reallocateProfileFlow(
+    compressors: Array<CompressorProfileCompressor>,
+    previousProfileRows: Array<CompressorProfileRow>,
+    demandRows: Array<CompressorProfileTotal>,
+    options: CompressorProfileOptions,
+    runtimeStates: Array<CompressorRuntimeState>,
+    trimSelections: Array<CompressorTrimSelection>
+  ): Array<CompressorProfileRow> {
+    let compressorVector: CompressorProfileCompressorV = this.getCompressorProfileCompressorVector(compressors);
+    let previousRowVector: CompressorProfileRowV = this.getCompressorProfileRowVector(previousProfileRows);
+    let demandRowVector: CompressorProfileTotalV = this.getCompressorProfileTotalVector(demandRows);
+    let runtimeStateVector: CompressorRuntimeStateV = this.getCompressorRuntimeStateVector(runtimeStates || []);
+    let trimSelectionVector: CompressorTrimSelectionV = this.getCompressorTrimSelectionVector(trimSelections || []);
+    let resultsVector: CompressorProfileRowV;
+    try {
+      resultsVector = this.toolsSuiteApiService.ToolsSuiteModule.reallocateProfileFlow(
+        compressorVector,
+        previousRowVector,
+        demandRowVector,
+        this.getCompressorProfileOptions(options),
+        runtimeStateVector,
+        trimSelectionVector
+      );
+      return this.copyCompressorProfileRows(resultsVector);
+    } finally {
+      if (resultsVector) {
+        resultsVector.delete();
+      }
+      trimSelectionVector.delete();
+      runtimeStateVector.delete();
+      demandRowVector.delete();
+      previousRowVector.delete();
+      compressorVector.delete();
+    }
+  }
+
+  calculateProfileSavings(
+    baselineRows: Array<CompressorProfileRow>,
+    adjustedRows: Array<CompressorProfileRow>,
+    input: CompressorProfileSavingsInput
+  ): CompressorProfileSavingsResult {
+    let baselineRowVector: CompressorProfileRowV = this.getCompressorProfileRowVector(baselineRows);
+    let adjustedRowVector: CompressorProfileRowV = this.getCompressorProfileRowVector(adjustedRows);
+    try {
+      return this.toolsSuiteApiService.ToolsSuiteModule.calculateProfileSavings(baselineRowVector, adjustedRowVector, input);
+    } finally {
+      adjustedRowVector.delete();
+      baselineRowVector.delete();
+    }
+  }
+
+  calculatePressureReducedAirflow(
+    useAirflowAcfm: number,
+    adjustedFullLoadPressurePsig: number,
+    altitudePressurePsia: number,
+    originalFullLoadPressurePsig: number,
+    atmosphericPressurePsia: number
+  ): number {
+    return this.toolsSuiteApiService.ToolsSuiteModule.calculatePressureReducedAirflow(
+      useAirflowAcfm,
+      adjustedFullLoadPressurePsig,
+      altitudePressurePsia,
+      originalFullLoadPressurePsig,
+      atmosphericPressurePsia
+    );
+  }
+
+  reduceAirLeaks(fullLoadAirflowAcfm: number, useAirflowAcfm: number, leakAirflowAcfm: number, leakReductionFraction: number): ReduceAirLeaksResult {
+    return this.toolsSuiteApiService.ToolsSuiteModule.reduceAirLeaks(fullLoadAirflowAcfm, useAirflowAcfm, leakAirflowAcfm, leakReductionFraction);
+  }
+
+  improveEndUseEfficiency(fullLoadAirflowAcfm: number, useAirflowAcfm: number, reducedAverageAirflowAcfm: number): ImproveEndUseEfficiencyResult {
+    return this.toolsSuiteApiService.ToolsSuiteModule.improveEndUseEfficiency(fullLoadAirflowAcfm, useAirflowAcfm, reducedAverageAirflowAcfm);
+  }
+
+  reduceSystemAirPressure(
+    fullLoadAirflowAcfm: number,
+    useAirflowAcfm: number,
+    fullLoadPressurePsig: number,
+    fullLoadPowerKw: number,
+    pressureReductionPsig: number,
+    altitudePressurePsia: number,
+    atmosphericPressurePsia: number
+  ): ReduceSystemAirPressureResult {
+    return this.toolsSuiteApiService.ToolsSuiteModule.reduceSystemAirPressure(
+      fullLoadAirflowAcfm,
+      useAirflowAcfm,
+      fullLoadPressurePsig,
+      fullLoadPowerKw,
+      pressureReductionPsig,
+      altitudePressurePsia,
+      atmosphericPressurePsia
+    );
+  }
+
+  adjustCascadingSetPoint(
+    fullLoadAirflowAcfm: number,
+    useAirflowAcfm: number,
+    fullLoadPressurePsig: number,
+    fullLoadPowerKw: number,
+    adjustedFullLoadPressurePsig: number,
+    altitudePressurePsia: number,
+    atmosphericPressurePsia: number
+  ): AdjustCascadingSetPointResult {
+    return this.toolsSuiteApiService.ToolsSuiteModule.adjustCascadingSetPoint(
+      fullLoadAirflowAcfm,
+      useAirflowAcfm,
+      fullLoadPressurePsig,
+      fullLoadPowerKw,
+      adjustedFullLoadPressurePsig,
+      altitudePressurePsia,
+      atmosphericPressurePsia
+    );
+  }
+
+  pressureReducedAirflow(
+    useAirflowAcfm: number,
+    adjustedFullLoadPressurePsig: number,
+    altitudePressurePsia: number,
+    originalFullLoadPressurePsig: number,
+    atmosphericPressurePsia: number
+  ): number {
+    return this.toolsSuiteApiService.ToolsSuiteModule.pressureReducedAirflow(
+      useAirflowAcfm,
+      adjustedFullLoadPressurePsig,
+      altitudePressurePsia,
+      originalFullLoadPressurePsig,
+      atmosphericPressurePsia
+    );
+  }
+
+  addReceiverVolume(currentReceiverVolumeFt3: number, addedReceiverVolumeFt3: number): ReceiverVolumeResult {
+    return this.toolsSuiteApiService.ToolsSuiteModule.addReceiverVolume(currentReceiverVolumeFt3, addedReceiverVolumeFt3);
+  }
+
+  automaticSequencerSetPoints(targetPressurePsig: number, variancePsig: number): AutomaticSequencerSetPointResult {
+    return this.toolsSuiteApiService.ToolsSuiteModule.automaticSequencerSetPoints(targetPressurePsig, variancePsig);
   }
 
   compressorCalc(inputData: CompressorsCalcInput): CompressorCalcResult {
@@ -430,5 +686,277 @@ export class CompressedAirSuiteApiService {
       percentagePower: suiteOutput.powerFraction,
       percentageCapacity: suiteOutput.airflowFraction
     };
+  }
+
+  private fillDefaultPerformancePoints(input: CompressorPerformancePointInput, points: CompressorPerformancePoints): CompressorPerformancePoints {
+    if (input.points.fullLoad.isDefaultPressure) {
+      points.fullLoad.dischargePressurePsig = this.roundPressure(input.nameplate.fullLoadOperatingPressurePsig);
+    }
+    if (input.points.fullLoad.isDefaultAirflow) {
+      points.fullLoad.airflowAcfm = this.roundAirflow(this.calculatePressureAdjustedAirflow(
+        input.nameplate.fullLoadRatedCapacityAcfm,
+        points.fullLoad.dischargePressurePsig,
+        input.nameplate.fullLoadOperatingPressurePsig,
+        input.atmosphericPressurePsia
+      ));
+    }
+    if (input.points.fullLoad.isDefaultPower) {
+      points.fullLoad.powerKw = this.roundPower(this.calculatePressureAdjustedPower(
+        input.nameplate.compressorType,
+        input.design.inputPressurePsia,
+        points.fullLoad.dischargePressurePsig,
+        input.nameplate.fullLoadOperatingPressurePsig,
+        input.nameplate.totalPackageInputPowerKw,
+        input.atmosphericPressurePsia
+      ));
+    }
+
+    if (this.needsMaxFullFlow(input)) {
+      if (input.points.maxFullFlow.isDefaultPressure) {
+        points.maxFullFlow.dischargePressurePsig = this.roundPressure(input.design.maxFullFlowPressurePsig);
+      }
+      if (input.points.maxFullFlow.isDefaultAirflow) {
+        points.maxFullFlow.airflowAcfm = this.roundAirflow(this.calculatePressureAdjustedAirflow(
+          points.fullLoad.airflowAcfm,
+          points.maxFullFlow.dischargePressurePsig,
+          points.fullLoad.dischargePressurePsig,
+          input.atmosphericPressurePsia
+        ));
+      }
+      if (input.points.maxFullFlow.isDefaultPower) {
+        points.maxFullFlow.powerKw = this.roundPower(this.calculatePressureAdjustedPower(
+          input.nameplate.compressorType,
+          input.design.inputPressurePsia,
+          points.maxFullFlow.dischargePressurePsig,
+          points.fullLoad.dischargePressurePsig,
+          points.fullLoad.powerKw,
+          input.atmosphericPressurePsia
+        ));
+      }
+    }
+
+    this.fillDefaultUnloadPoint(input, points);
+    this.fillDefaultVfdPoints(input, points);
+    this.fillDefaultNoLoadPoint(input, points);
+    return points;
+  }
+
+  private fillDefaultUnloadPoint(input: CompressorPerformancePointInput, points: CompressorPerformancePoints): void {
+    let control: number = this.getSuiteEnumNumber(input.controls.control);
+    let isUnloadControl: boolean = control == 1 || control == 5;
+    if (!isUnloadControl) {
+      return;
+    }
+
+    if (input.points.unloadPoint.isDefaultAirflow) {
+      points.unloadPoint.airflowAcfm = this.roundAirflow(this.toolsSuiteApiService.ToolsSuiteModule.calculateUnloadPointAirflow(
+        points.fullLoad.airflowAcfm,
+        input.controls.unloadPointCapacityPct
+      ));
+    }
+    if (input.points.unloadPoint.isDefaultPressure) {
+      points.unloadPoint.dischargePressurePsig = this.roundPressure(this.toolsSuiteApiService.ToolsSuiteModule.calculateUnloadPointDischargePressure(
+        points.maxFullFlow.dischargePressurePsig,
+        input.design.modulatingPressurePsig,
+        points.fullLoad.airflowAcfm,
+        points.unloadPoint.airflowAcfm
+      ));
+    }
+    if (input.points.unloadPoint.isDefaultPower) {
+      let unloadCapacity: number = points.fullLoad.airflowAcfm == 0
+        ? 0
+        : (points.unloadPoint.airflowAcfm / points.fullLoad.airflowAcfm) * 100;
+      let exponent: number = control == 5 ? 2 : 1;
+      points.unloadPoint.powerKw = this.toolsSuiteApiService.ToolsSuiteModule.calculateUnloadPointPower(
+        input.design.noLoadPowerFMPercent,
+        unloadCapacity,
+        exponent,
+        points.maxFullFlow.powerKw
+      );
+    }
+  }
+
+  private fillDefaultVfdPoints(input: CompressorPerformancePointInput, points: CompressorPerformancePoints): void {
+    if (this.getSuiteEnumNumber(input.controls.control) != 7) {
+      return;
+    }
+
+    if (input.points.midTurndown.isDefaultAirflow) {
+      let capacityFraction: number = input.controls.unloadPointCapacityPct / 100;
+      points.midTurndown.airflowAcfm = this.roundAirflow(((1 - capacityFraction) / 2 + capacityFraction) * points.fullLoad.airflowAcfm);
+    }
+    this.fillDefaultVfdPoint(input.points.midTurndown, points.midTurndown, points.fullLoad);
+
+    if (input.points.turndown.isDefaultAirflow) {
+      points.turndown.airflowAcfm = this.roundAirflow((input.controls.unloadPointCapacityPct / 100) * points.fullLoad.airflowAcfm);
+    }
+    this.fillDefaultVfdPoint(input.points.turndown, points.turndown, points.fullLoad);
+  }
+
+  private fillDefaultVfdPoint(inputPoint: CompressorPerformancePoint, point: CompressorPerformancePoint, fullLoadPoint: CompressorPerformancePoint): void {
+    let loadFraction: number = fullLoadPoint.airflowAcfm == 0 ? 0 : point.airflowAcfm / fullLoadPoint.airflowAcfm;
+    if (inputPoint.isDefaultPressure) {
+      point.dischargePressurePsig = this.roundPressure(fullLoadPoint.dischargePressurePsig + 6 * (1 - loadFraction));
+    }
+    if (inputPoint.isDefaultPower) {
+      point.powerKw = this.roundPower(((15 / 100) * (1 - loadFraction) + loadFraction) * fullLoadPoint.powerKw);
+    }
+  }
+
+  private fillDefaultNoLoadPoint(input: CompressorPerformancePointInput, points: CompressorPerformancePoints): void {
+    let control: number = this.getSuiteEnumNumber(input.controls.control);
+    if (input.points.noLoad.isDefaultPressure) {
+      if (this.isNoLoadPressureZero(input)) {
+        points.noLoad.dischargePressurePsig = 0;
+      } else if (control == 3) {
+        points.noLoad.dischargePressurePsig = this.roundPressure(points.fullLoad.dischargePressurePsig + input.design.modulatingPressurePsig);
+      } else {
+        points.noLoad.dischargePressurePsig = this.roundPressure(input.controls.unloadSumpPressurePsig);
+      }
+    }
+    if (input.points.noLoad.isDefaultAirflow) {
+      points.noLoad.airflowAcfm = 0;
+    }
+    if (input.points.noLoad.isDefaultPower) {
+      if (control == 3) {
+        points.noLoad.powerKw = this.roundPower(this.toolsSuiteApiService.ToolsSuiteModule.calculateNoLoadPowerWithoutUnloading(
+          input.design.noLoadPowerFMPercent,
+          points.fullLoad.powerKw
+        ));
+      } else if (control == 4) {
+        points.noLoad.powerKw = 0;
+      } else {
+        points.noLoad.powerKw = this.roundPower(this.toolsSuiteApiService.ToolsSuiteModule.calculateNoLoadPower(
+          input.design.noLoadPowerULPercent,
+          input.nameplate.totalPackageInputPowerKw,
+          input.design.designEfficiencyPct
+        ));
+      }
+    }
+  }
+
+  private needsMaxFullFlow(input: CompressorPerformancePointInput): boolean {
+    let control: number = this.getSuiteEnumNumber(input.controls.control);
+    return control == 1 || control == 5 || control == 0 || control == 4 || control == 6;
+  }
+
+  private isNoLoadPressureZero(input: CompressorPerformancePointInput): boolean {
+    let compressorType: number = this.getSuiteEnumNumber(input.nameplate.compressorType);
+    let control: number = this.getSuiteEnumNumber(input.controls.control);
+    let lubricant: number = this.getSuiteEnumNumber(input.nameplate.lubricant);
+    return compressorType == 0 || control == 4 || compressorType == 2 || lubricant == 1;
+  }
+
+  private getSuiteEnumNumber(value: any): number {
+    if (value && typeof value == 'object' && value.value != undefined) {
+      return value.value;
+    }
+    return value;
+  }
+
+  private roundPressure(value: number): number {
+    return this.roundSuiteValue(value, 1);
+  }
+
+  private roundAirflow(value: number): number {
+    return this.roundSuiteValue(value, 0);
+  }
+
+  private roundPower(value: number): number {
+    return this.roundSuiteValue(value, 1);
+  }
+
+  private roundSuiteValue(value: number, digits: number): number {
+    let scale: number = Math.pow(10, digits);
+    return Math.round(value * scale) / scale;
+  }
+
+  private getCompressorProfileOptions(options: CompressorProfileOptions): CompressorProfileOptions {
+    return {
+      ...options,
+      inputBasis: this.suiteApiHelperService.getComputeFromEnum(options.inputBasis as number),
+      controlMode: this.suiteApiHelperService.getCompressorSystemControlModeEnum(options.controlMode as number)
+    };
+  }
+
+  private getCompressorProfileCompressorVector(compressors: Array<CompressorProfileCompressor>): CompressorProfileCompressorV {
+    let compressorVector: CompressorProfileCompressorV = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorProfileCompressorV();
+    compressors.forEach((compressor: CompressorProfileCompressor) => {
+      compressorVector.push_back(compressor);
+    });
+    return compressorVector;
+  }
+
+  private getCompressorProfileRowVector(profileRows: Array<CompressorProfileRow>): CompressorProfileRowV {
+    let rowVector: CompressorProfileRowV = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorProfileRowV();
+    profileRows.forEach((profileRow: CompressorProfileRow) => {
+      rowVector.push_back(profileRow);
+    });
+    return rowVector;
+  }
+
+  private getCompressorProfileTotalVector(profileTotals: Array<CompressorProfileTotal>): CompressorProfileTotalV {
+    let totalVector: CompressorProfileTotalV = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorProfileTotalV();
+    profileTotals.forEach((profileTotal: CompressorProfileTotal) => {
+      totalVector.push_back(profileTotal);
+    });
+    return totalVector;
+  }
+
+  private getCompressorRuntimeStateVector(runtimeStates: Array<CompressorRuntimeState>): CompressorRuntimeStateV {
+    let runtimeStateVector: CompressorRuntimeStateV = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorRuntimeStateV();
+    runtimeStates.forEach((runtimeState: CompressorRuntimeState) => {
+      runtimeStateVector.push_back(runtimeState);
+    });
+    return runtimeStateVector;
+  }
+
+  private getCompressorTrimSelectionVector(trimSelections: Array<CompressorTrimSelection>): CompressorTrimSelectionV {
+    let trimSelectionVector: CompressorTrimSelectionV = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorTrimSelectionV();
+    trimSelections.forEach((trimSelection: CompressorTrimSelection) => {
+      trimSelectionVector.push_back(trimSelection);
+    });
+    return trimSelectionVector;
+  }
+
+  private copyCompressorProfileRows(rowVector: CompressorProfileRowV): Array<CompressorProfileRow> {
+    let rows: Array<CompressorProfileRow> = [];
+    for (let index: number = 0; index < rowVector.size(); index++) {
+      let row: CompressorProfileRow = rowVector.get(index);
+      rows.push({
+        compressorId: row.compressorId,
+        dayTypeId: row.dayTypeId,
+        timeIntervalHr: row.timeIntervalHr,
+        operatingOrder: row.operatingOrder,
+        powerKw: row.powerKw,
+        airflowAcfm: row.airflowAcfm,
+        powerFraction: row.powerFraction,
+        airflowFraction: row.airflowFraction,
+        systemPowerFraction: row.systemPowerFraction,
+        systemAirflowFraction: row.systemAirflowFraction,
+        powerFactor: row.powerFactor,
+        amps: row.amps,
+        volts: row.volts
+      });
+    }
+    return rows;
+  }
+
+  private copyCompressorProfileTotals(totalVector: CompressorProfileTotalV): Array<CompressorProfileTotal> {
+    let totals: Array<CompressorProfileTotal> = [];
+    for (let index: number = 0; index < totalVector.size(); index++) {
+      let total: CompressorProfileTotal = totalVector.get(index);
+      totals.push({
+        dayTypeId: total.dayTypeId,
+        timeIntervalHr: total.timeIntervalHr,
+        airflowAcfm: total.airflowAcfm,
+        powerKw: total.powerKw,
+        totalPowerKw: total.totalPowerKw,
+        airflowFraction: total.airflowFraction,
+        powerFraction: total.powerFraction,
+        auxiliaryPowerKw: total.auxiliaryPowerKw
+      });
+    }
+    return totals;
   }
 }

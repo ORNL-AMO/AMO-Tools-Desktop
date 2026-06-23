@@ -1,7 +1,6 @@
 import { CompressedAirDayType, ProfileSummaryTotal, ReduceRuntime, SystemInformation, UseAutomaticSequencer, UseAutomaticSequencerProfileSummary } from "../../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
-import { getProfileSummaryTotals } from "../../caCalculationHelpers";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
 import { CompressedAirEemSavingsResult } from "../CompressedAirEemSavingsResult";
@@ -35,14 +34,14 @@ export class UseAutomaticSequencerResults {
             return new CompressedAirProfileSummary(summary, true);
         });
         //1. Adjust compressor set points
-        this.adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(useAutomaticSequencer, systemInformation, settings, adjustedCompressors);
-        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
+        this.adjustedCompressors = this.useAutomaticSequencerAdjustCompressor(useAutomaticSequencer, systemInformation, settings, adjustedCompressors, _compressedAirCalculationService);
+        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = _compressedAirCalculationService.calculateProfileSummaryTotals(
             summaryDataInterval,
             this.profileSummary,
-            false,
             dayType,
             undefined,
-            this.adjustedCompressors);
+            this.adjustedCompressors,
+            settings);
         //2. Adjust profile based on new orders
         this.profileSummary = this.useAutomaticSequencerMapOrders(useAutomaticSequencer.profileSummary, this.profileSummary);
         //3. Reallocate flow based on new set points
@@ -64,17 +63,17 @@ export class UseAutomaticSequencerResults {
             order,
             trimSelections);
         this.profileSummary = flowReallocationResults.profileSummary;
-        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, useAutomaticSequencer.implementationCost, summaryDataInterval, auxiliaryPowerUsage, 0);
+        this.savings = new CompressedAirEemSavingsResult(previousProfileSummary, this.profileSummary, dayType, costKwh, useAutomaticSequencer.implementationCost, summaryDataInterval, auxiliaryPowerUsage, 0, _compressedAirCalculationService, settings);
     }
 
 
-    useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, systemInformation: SystemInformation, settings: Settings, adjustedCompressors: Array<CompressorInventoryItemClass>) {
+    useAutomaticSequencerAdjustCompressor(useAutomaticSequencer: UseAutomaticSequencer, systemInformation: SystemInformation, settings: Settings, adjustedCompressors: Array<CompressorInventoryItemClass>, _compressedAirCalculationService: CompressedAirCalculationService) {
         adjustedCompressors.forEach(compressor => {
             let sequencerProfile: UseAutomaticSequencerProfileSummary = useAutomaticSequencer.profileSummary.find(profileItem => {
                 return profileItem.compressorId == compressor.itemId;
             });
             compressor.compressorControls.automaticShutdown = sequencerProfile.automaticShutdownTimer;
-            compressor.adjustCompressorPerformancePointsWithSequencer(useAutomaticSequencer.targetPressure, useAutomaticSequencer.variance, systemInformation.atmosphericPressure, settings)
+            compressor.adjustCompressorPerformancePointsWithSequencer(useAutomaticSequencer.targetPressure, useAutomaticSequencer.variance, systemInformation.atmosphericPressure, settings, _compressedAirCalculationService)
         });
         return adjustedCompressors
     }

@@ -8,13 +8,15 @@ import { CompressorInventoryItemClass } from './calculations/CompressorInventory
 import { roundVal } from '../shared/helperFunctions';
 import { getEmptyProfileSummaryData } from './calculations/caCalculationHelpers';
 import { GenericCompressor } from '../shared/generic-compressor-db.service';
+import { CompressedAirCalculationService } from './compressed-air-calculation.service';
 
 @Injectable()
 export class CompressedAirDataManagementService {
 
   constructor(private compressedAirAssessmentService: CompressedAirAssessmentService,
     private inventoryService: InventoryService,
-    private systemProfileService: SystemProfileService) { }
+    private systemProfileService: SystemProfileService,
+    private compressedAirCalculationService: CompressedAirCalculationService) { }
 
 
   //update from generic compressor
@@ -202,7 +204,7 @@ export class CompressedAirDataManagementService {
     //update performance points
     if (performancePointUpdateNeeded) {
       let settings: Settings = this.compressedAirAssessmentService.settings.getValue();
-      compressorInventoryItemClass.updatePerformancePoints(compressedAirAssessment.systemInformation.atmosphericPressure, settings);
+      compressorInventoryItemClass.updatePerformancePoints(compressedAirAssessment.systemInformation.atmosphericPressure, settings, this.compressedAirCalculationService);
 
     }
     //update assessment

@@ -3,7 +3,6 @@ import { roundVal } from "../../../shared/helperFunctions";
 import { AdjustCascadingSetPoints, CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorSummary, ImproveEndUseEfficiency, Modification, ProfileSummaryTotal, ReduceAirLeaks, ReduceRuntime, ReduceSystemAirPressure, ReplaceCompressor, SystemInformation, SystemProfileSetup, UseAutomaticSequencer } from "../../../shared/models/compressed-air-assessment";
 import { Settings } from "../../../shared/models/settings";
 import { CompressedAirCalculationService } from "../../compressed-air-calculation.service";
-import { getProfileSummaryTotals } from "../caCalculationHelpers";
 import { DayTypeModificationResult } from "../caCalculationModels";
 import { CompressedAirBaselineDayTypeProfileSummary } from "../CompressedAirBaselineDayTypeProfileSummary";
 import { CompressedAirProfileSummary } from "../CompressedAirProfileSummary";
@@ -92,11 +91,11 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         //Apply target sequencer
         if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
             this.adjustedCompressors.forEach(compressor => {
-                compressor.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, compressedAirAssessment.systemInformation.atmosphericPressure, settings)
+                compressor.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, compressedAirAssessment.systemInformation.atmosphericPressure, settings, _compressedAirCalculationService)
             });
         }
         //Initial Flow Reallocation
-        this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, undefined, this.adjustedCompressors);
+        this.adjustedProfileSummaryTotals = _compressedAirCalculationService.calculateProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, this.dayType, undefined, this.adjustedCompressors, settings);
         this.setFlowReallocationResults(settings, _compressedAirCalculationService, modification.flowReallocation.implementationCost, 0);
 
         //Apply Modifications in order
@@ -106,7 +105,7 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         let reduceRuntime: ReduceRuntime;
         for (let orderIndex = 1; orderIndex <= modificationOrders.length; orderIndex++) {
             //Calculate totals for adjusted profile summary
-            this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, false, this.dayType, improveEndUseEfficiency, this.adjustedCompressors);
+            this.adjustedProfileSummaryTotals = _compressedAirCalculationService.calculateProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, this.dayType, improveEndUseEfficiency, this.adjustedCompressors, settings);
 
             //replace compressors
             if (modification.replaceCompressor.order == orderIndex) {
@@ -147,9 +146,9 @@ export class CompressedAirModifiedDayTypeProfileSummary {
             }
         }
         //Final profile totals
-        this.adjustedProfileSummaryTotals = getProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, true, this.dayType, improveEndUseEfficiency, this.adjustedCompressors);
+        this.adjustedProfileSummaryTotals = _compressedAirCalculationService.calculateProfileSummaryTotals(this.summaryDataInterval, this.adjustedProfileSummary, this.dayType, improveEndUseEfficiency, this.adjustedCompressors, settings);
         //Calculate total savings
-        this.modificationSavings = new CompressedAirEemSavingsResult(baselineDayTypeProfileSummary.profileSummary, this.adjustedProfileSummary, dayType, this.costKwh, this.modificationImplementationCost, this.summaryDataInterval, this.auxiliaryPowerUsage, this.modificationSalvageValue);
+        this.modificationSavings = new CompressedAirEemSavingsResult(baselineDayTypeProfileSummary.profileSummary, this.adjustedProfileSummary, dayType, this.costKwh, this.modificationImplementationCost, this.summaryDataInterval, this.auxiliaryPowerUsage, this.modificationSalvageValue, _compressedAirCalculationService, settings);
         //Calculate CO2 savings
         if (compressedAirAssessment.systemInformation.co2SavingsData) {
             compressedAirAssessment.systemInformation.co2SavingsData.electricityUse = this.modificationSavings.adjustedResults.power;
@@ -565,14 +564,14 @@ export class CompressedAirModifiedDayTypeProfileSummary {
         }
     }
     
-    getCompressorDayTypeSummaries(settings: Settings): Array<CompressorSummary> {
+    getCompressorDayTypeSummaries(settings: Settings, _compressedAirCalculationService: CompressedAirCalculationService): Array<CompressorSummary> {
         let compressorSummaries: Array<CompressorSummary> = new Array<CompressorSummary>();
         this.adjustedProfileSummary.forEach(profile => {
             let specificPowerAvgLoad: number = (profile.avgPower / profile.avgAirflow) * 100;
             specificPowerAvgLoad = roundVal(specificPowerAvgLoad, 4);
             let compressor: CompressorInventoryItemClass = this.adjustedCompressors.find(compressor => { return compressor.findItem(profile.compressorId) });
-            let ratedSpecificPower: number = compressor.getRatedSpecificPower();
-            let ratedIsentropicEfficiency: number = compressor.getRatedIsentropicEfficiency(settings);
+            let ratedSpecificPower: number = compressor.getRatedSpecificPower(settings, _compressedAirCalculationService);
+            let ratedIsentropicEfficiency: number = compressor.getRatedIsentropicEfficiency(settings, _compressedAirCalculationService);
             let compressorSummary: CompressorSummary = {
                 dayType: this.dayType,
                 specificPowerAvgLoad: specificPowerAvgLoad,

@@ -23,7 +23,7 @@ export class ReduceAirLeaksResults {
     ) {
         this.order = order;
         //1. Adjust totals based on air leak reduction
-        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = this.reduceAirLeaks(reduceAirLeaks, totals);
+        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = this.reduceAirLeaks(reduceAirLeaks, totals, settings, _compressedAirCalculationService);
         //2. Reallocate flow based on new totals
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
@@ -46,13 +46,26 @@ export class ReduceAirLeaksResults {
         this.savings = flowReallocationResults.savings;
     }
 
-    reduceAirLeaks(reduceAirLeaks: ReduceAirLeaks, totals: Array<ProfileSummaryTotal>): Array<ProfileSummaryTotal> {
+    reduceAirLeaks(reduceAirLeaks: ReduceAirLeaks, totals: Array<ProfileSummaryTotal>, settings: Settings, _compressedAirCalculationService: CompressedAirCalculationService): Array<ProfileSummaryTotal> {
         totals.forEach(total => {
-            total.airflow = total.airflow - (reduceAirLeaks.leakReduction / 100 * reduceAirLeaks.leakFlow);
+            total.airflow = _compressedAirCalculationService.reduceAirLeaksAirflow(
+                this.getFullLoadAirflow(total),
+                total.airflow,
+                reduceAirLeaks.leakFlow,
+                reduceAirLeaks.leakReduction,
+                settings
+            );
             if (total.airflow < 0) {
                 total.airflow = 0;
             }
         });
         return totals;
+    }
+
+    private getFullLoadAirflow(total: ProfileSummaryTotal): number {
+        if (total.percentCapacity) {
+            return total.airflow / (total.percentCapacity / 100);
+        }
+        return total.airflow;
     }
 }

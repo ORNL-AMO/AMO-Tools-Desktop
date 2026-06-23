@@ -10,6 +10,7 @@ import { CompressorInventoryItemClass } from '../../../../calculations/Compresso
 import { ExploreOpportunitiesValidationService } from '../../../../compressed-air-assessment-validation/explore-opportunities-validation.service';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { CompressedAirDataManagementService } from '../../../../compressed-air-data-management.service';
+import { CompressedAirCalculationService } from '../../../../compressed-air-calculation.service';
 
 @Component({
   selector: 'app-adjust-cascading-set-points',
@@ -37,7 +38,8 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
     private adjustCascadingSetPointsService: AdjustCascadingSetPointsService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
     private exploreOpportunitiesService: ExploreOpportunitiesService,
-    private compressedAirDataManagementService: CompressedAirDataManagementService) { }
+    private compressedAirDataManagementService: CompressedAirDataManagementService,
+    private compressedAirCalculationService: CompressedAirCalculationService) { }
 
   ngOnInit(): void {
     this.settings = this.compressedAirAssessmentService.settings.getValue();
@@ -80,7 +82,7 @@ export class AdjustCascadingSetPointsComponent implements OnInit {
         if (reduceSystemAirPressure.order != 100 && (this.adjustCascadingSetPoints.order > reduceSystemAirPressure.order)) {
           let inventoryItemsClass: Array<CompressorInventoryItemClass> = this.inventoryItems.map(item => { return new CompressorInventoryItemClass(item) });
           inventoryItemsClass.forEach(itemClass => {
-            itemClass.reduceSystemPressure(reduceSystemAirPressure, compressedAirAssessment.systemInformation.atmosphericPressure, this.settings);
+            itemClass.reduceSystemPressure(reduceSystemAirPressure, compressedAirAssessment.systemInformation.atmosphericPressure, this.settings, this.compressedAirCalculationService);
           });
           this.inventoryItems = inventoryItemsClass.map(itemClass => { return itemClass.toModel() });
         }

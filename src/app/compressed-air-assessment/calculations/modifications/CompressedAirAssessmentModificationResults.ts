@@ -28,6 +28,7 @@ export class CompressedAirAssessmentModificationResults {
 
     modification: Modification;
     baselineDemandCost: number;
+    compressedAirCalculationService: CompressedAirCalculationService;
     constructor(compressedAirAssessment: CompressedAirAssessment,
         modification: Modification,
         settings: Settings,
@@ -35,6 +36,7 @@ export class CompressedAirAssessmentModificationResults {
         _assessmentCo2SavingsService: AssessmentCo2SavingsService,
         compressedAirAssessmentBaselineResults?: CompressedAirAssessmentBaselineResults) {
         this.modification = modification;
+        this.compressedAirCalculationService = _compressedAirCalculationService;
         //Calculate baseline results if not passed in
         if (!compressedAirAssessmentBaselineResults) {
             compressedAirAssessmentBaselineResults = new CompressedAirAssessmentBaselineResults(compressedAirAssessment, settings, _compressedAirCalculationService, _assessmentCo2SavingsService);
@@ -98,7 +100,7 @@ export class CompressedAirAssessmentModificationResults {
     getCompressorSummaries(settings: Settings): Array<Array<CompressorSummary>> {
         let dayTypeCompressorSummaries: Array<Array<CompressorSummary>> = new Array<Array<CompressorSummary>>();
         this.modifiedDayTypeProfileSummaries.forEach(modifiedProfileSummary => {
-            let compressorSummaries: Array<CompressorSummary> = modifiedProfileSummary.getCompressorDayTypeSummaries(settings);
+            let compressorSummaries: Array<CompressorSummary> = modifiedProfileSummary.getCompressorDayTypeSummaries(settings, this.compressedAirCalculationService);
             dayTypeCompressorSummaries.push(compressorSummaries);
         });
         return dayTypeCompressorSummaries;

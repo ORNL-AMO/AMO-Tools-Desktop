@@ -1,8 +1,7 @@
-import { CompressedAirDayType, CompressorInventoryItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, PerformancePoint, PerformancePoints, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, SystemProfileSetup } from "../../shared/models/compressed-air-assessment";
+import { CompressedAirDayType, CompressorInventoryItem, EndUseEfficiencyReductionData, ImproveEndUseEfficiency, PerformancePoints, ProfileSummaryData, SystemProfileSetup } from "../../shared/models/compressed-air-assessment";
 import { EemSavingsResults } from "./caCalculationModels";
 import * as _ from 'lodash';
 import { CompressorInventoryItemClass } from "./CompressorInventoryItemClass";
-import { CompressedAirProfileSummary } from "./CompressedAirProfileSummary";
 
 export function getEmptyEemSavings(): EemSavingsResults {
     return {
@@ -38,52 +37,6 @@ export function getTotalPower(inventoryItems: Array<CompressorInventoryItemClass
     return _.sumBy(inventoryItems, (inventoryItem) => {
         return inventoryItem.performancePoints.fullLoad.power;
     });
-}
-
-export function getProfileSummaryTotals(selectedHourInterval: number,
-    profileSummary: Array<CompressedAirProfileSummary>,
-    isBaseline: boolean,
-    selectedDayType: CompressedAirDayType,
-    improveEndUseEfficiency: ImproveEndUseEfficiency,
-    inventoryItems: Array<CompressorInventoryItemClass>): Array<ProfileSummaryTotal> {
-    let totalSystemCapacity: number = getTotalCapacity(inventoryItems);
-    let totalFullLoadPower: number = getTotalPower(inventoryItems);
-    let allData: Array<ProfileSummaryData> = profileSummary.flatMap(summary => {
-        return summary.profileSummaryData;
-    });
-    let profileSummaryTotals: Array<ProfileSummaryTotal> = new Array();
-    for (let interval = 0; interval < 24;) {
-        let totalAirFlow: number = 0;
-        let compressorPower: number = 0;
-        allData.forEach(dataItem => {
-            if (dataItem.timeInterval == interval && dataItem.order != 0) {
-                if (isNaN(dataItem.airflow) == false) {
-                    totalAirFlow += dataItem.airflow;
-                }
-                if (isNaN(dataItem.power) == false) {
-                    compressorPower += dataItem.power;
-                }
-            }
-        });
-        //no aux power for baseline
-        let auxiliaryPower: number = 0;
-        // Get auxiliary power if not baseline
-        if (!isBaseline) {
-            auxiliaryPower = getTotalAuxiliaryPower(selectedDayType, interval, improveEndUseEfficiency);
-        }
-
-        profileSummaryTotals.push({
-            auxiliaryPower: auxiliaryPower,
-            airflow: totalAirFlow,
-            power: compressorPower,
-            totalPower: compressorPower,
-            percentCapacity: (totalAirFlow / totalSystemCapacity) * 100,
-            percentPower: (compressorPower / totalFullLoadPower) * 100,
-            timeInterval: interval
-        });
-        interval = interval + selectedHourInterval;
-    }
-    return profileSummaryTotals;
 }
 
 export function getTotalAuxiliaryPower(selectedDayType: CompressedAirDayType, interval: number, improveEndUseEfficiency?: ImproveEndUseEfficiency): number {

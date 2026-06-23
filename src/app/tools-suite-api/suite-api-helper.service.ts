@@ -8,6 +8,7 @@ import {
   type CompressorInputBasis,
   type CompressorLubricant,
   type CompressorStage,
+  type CompressorSystemControlMode,
   type CompressorType,
   type IntVector,
   type LineFrequency,
@@ -349,6 +350,26 @@ export class SuiteApiHelperService {
         return this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.MeasuredCapacity;
       case 4:
         return this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.Electrical;
+    }
+  }
+
+  getCompressorSystemControlModeEnum(controlMode: string | number): CompressorSystemControlMode {
+    switch (controlMode) {
+      case 'cascading':
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorSystemControlMode.Cascading;
+      case 'isentropicEfficiency':
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorSystemControlMode.IsentropicEfficiency;
+      case 'loadSharing':
+      case 2:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorSystemControlMode.LoadSharing;
+      case 'targetPressureSequencer':
+      case 3:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorSystemControlMode.TargetPressureSequencer;
+      case 'baseTrim':
+      case 4:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressorSystemControlMode.BaseTrim;
     }
   }
 

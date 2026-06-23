@@ -3,12 +3,13 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { CompressedAirDayType, CompressorInventoryItem, ProfileSummary, SystemInformation, SystemProfileSetup } from '../../../shared/models/compressed-air-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { CompressorInventoryItemClass } from '../../calculations/CompressorInventoryItemClass';
-import { calculateAirFlow } from '../../calculations/performancePoints/performancePointHelpers';
+import { CompressedAirCalculationService } from '../../compressed-air-calculation.service';
 
 @Injectable()
 export class SystemProfileService {
 
-  constructor(private formBuilder: UntypedFormBuilder) {
+  constructor(private formBuilder: UntypedFormBuilder,
+    private compressedAirCalculationService: CompressedAirCalculationService) {
   }
 
   getProfileSetupFormFromObj(systemProfileSetup: SystemProfileSetup, dayTypes: Array<CompressedAirDayType>): UntypedFormGroup {
@@ -105,23 +106,16 @@ export class SystemProfileService {
       let compressorClass: CompressorInventoryItemClass = new CompressorInventoryItemClass(compressor);
       if (compressor.performancePoints.fullLoad.dischargePressure == systemInformation.plantMaxPressure) {
         //calculate rated isentropic efficiency
-        let ratedIsentropicEfficiency: number = compressorClass.getRatedIsentropicEfficiency(settings);
+        let ratedIsentropicEfficiency: number = compressorClass.getRatedIsentropicEfficiency(settings, this.compressedAirCalculationService);
         //calculate adjustedCompPower & adjustedAirflow
         summary.adjustedIsentropicEfficiency = ratedIsentropicEfficiency;
       } else {
-        let adjustedPressure: number = systemInformation.plantMaxPressure;
-        let a: number = ((adjustedPressure + systemInformation.atmosphericPressure) / systemInformation.atmosphericPressure);
-        a = Math.pow(a, .2857);
-        let b: number = ((compressor.performancePoints.fullLoad.dischargePressure + 14.7) / 14.7);
-        b = Math.pow(b, .2857);
-        let adjustedCompressorPower: number = compressor.performancePoints.fullLoad.power * ((a - 1) / (b - 1));
-        let adjustedAirFlow: number = calculateAirFlow(compressor.performancePoints.fullLoad.airflow, adjustedPressure, compressor.performancePoints.fullLoad.dischargePressure, systemInformation.atmosphericPressure, settings)
-        //calculate adjustedSpecPower
-        let adjustedSpecPower: number = (adjustedCompressorPower / adjustedAirFlow) * 100;
-        //calculate adjustedIsentropicEfficiency
-        let c: number = (adjustedPressure + 14.5) / 14.5;
-        c = Math.pow(c, .2857);
-        summary.adjustedIsentropicEfficiency = ((16.52 * (c - 1)) / adjustedSpecPower) * 100;
+        summary.adjustedIsentropicEfficiency = this.compressedAirCalculationService.getAdjustedIsentropicEfficiency(
+          compressorClass,
+          systemInformation.plantMaxPressure,
+          systemInformation.atmosphericPressure,
+          settings
+        );
       }
     });
     return dayTypeSummaries;

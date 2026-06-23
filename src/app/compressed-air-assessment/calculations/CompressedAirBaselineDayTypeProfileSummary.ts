@@ -3,7 +3,7 @@ import { AssessmentCo2SavingsService } from "../../shared/assessment-co2-savings
 import { roundVal } from "../../shared/helperFunctions";
 import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, CompressorSummary, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from "../../shared/models/compressed-air-assessment";
 import { Settings } from "../../shared/models/settings";
-import { CompressedAirCalculationService, CompressorCalcResult } from "../compressed-air-calculation.service";
+import { CompressedAirCalculationService } from "../compressed-air-calculation.service";
 import { getTotalCapacity, getTotalPower } from "./caCalculationHelpers";
 import { BaselineResult, SavingsItem } from "./caCalculationModels";
 import { CompressedAirProfileSummary } from "./CompressedAirProfileSummary";
@@ -37,11 +37,11 @@ export class CompressedAirBaselineDayTypeProfileSummary {
         //Adjust perfomance points for sequencer
         if (compressedAirAssessment.systemInformation.multiCompressorSystemControls == 'targetPressureSequencer') {
             this.inventoryItems.forEach(item => {
-                item.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, compressedAirAssessment.systemInformation.atmosphericPressure, settings);
+                item.adjustCompressorPerformancePointsWithSequencer(compressedAirAssessment.systemInformation.targetPressure, compressedAirAssessment.systemInformation.variance, compressedAirAssessment.systemInformation.atmosphericPressure, settings, _compressedAirCalculationService);
             })
         }
-        this.setDayTypeSummary(_compressedAirCalculationService, settings, compressedAirAssessment.systemInformation.atmosphericPressure, compressedAirAssessment.systemInformation.totalAirStorage)
-        this.setProfileSummaryTotals(compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
+        this.setDayTypeSummary(_compressedAirCalculationService, settings, compressedAirAssessment)
+        this.setProfileSummaryTotals(compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval, _compressedAirCalculationService, settings);
         this.setSavingsItem(compressedAirAssessment.systemBasics.electricityCost, compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval);
         this.setEmissionsOutput(_assessmentCo2SavingsService, compressedAirAssessment.systemInformation.co2SavingsData, settings);
         this.setBaselineResults(compressedAirAssessment.systemProfile.systemProfileSetup.dataInterval, compressedAirAssessment.systemBasics.demandCost)
@@ -65,70 +65,19 @@ export class CompressedAirBaselineDayTypeProfileSummary {
     setDayTypeSummary(
         _compressedAirCalculationService: CompressedAirCalculationService,
         settings: Settings,
-        atmosphericPressure: number,
-        totalAirStorage: number
+        compressedAirAssessment: CompressedAirAssessment
     ) {
-        this.profileSummary = new Array();
-        this.baselineDayTypeProfileSummary.forEach(baselineSummary => {
-            let compressor: CompressorInventoryItemClass = this.getCompressor(baselineSummary.compressorId);
-            let summary: CompressedAirProfileSummary = new CompressedAirProfileSummary(baselineSummary, false);
-            baselineSummary.profileSummaryData.forEach(baselineSummaryData => {
-                let summaryData: ProfileSummaryData = {
-                    ...baselineSummaryData
-                };
-                if (summaryData.order != 0) {
-                    let computeFrom: 0 | 1 | 2 | 3 | 4;
-                    let computeFromVal: number;
-                    let powerFactorData: { amps: number, volts: number };
-                    if (this.dayType.profileDataType == 'power') {
-                        computeFrom = 2;
-                        computeFromVal = summaryData.power;
-                    } else if (this.dayType.profileDataType == 'percentCapacity') {
-                        computeFrom = 1;
-                        computeFromVal = summaryData.percentCapacity;
-                    } else if (this.dayType.profileDataType == 'airflow') {
-                        computeFrom = 3;
-                        computeFromVal = summaryData.airflow;
-                    } else if (this.dayType.profileDataType == 'percentPower') {
-                        computeFrom = 0;
-                        computeFromVal = summaryData.percentPower;
-                    } else if (this.dayType.profileDataType == 'powerFactor') {
-                        computeFrom = 4;
-                        powerFactorData = { amps: summaryData.amps, volts: summaryData.volts };
-                        computeFromVal = summaryData.powerFactor;
-                    }
-                    if (isNaN(computeFromVal) == false) {
-                        let calcResult: CompressorCalcResult = _compressedAirCalculationService.compressorsCalc(compressor, settings, computeFrom, computeFromVal, atmosphericPressure, totalAirStorage, 0, true, powerFactorData);
-                        summaryData.airflow = roundVal(calcResult.capacityCalculated, 2);
-                        summaryData.power = calcResult.powerCalculated;
-                        summaryData.percentCapacity = calcResult.percentageCapacity;
-                        summaryData.percentPower = calcResult.percentagePower;
-                        summaryData.percentSystemCapacity = (calcResult.capacityCalculated / this.totalFullLoadCapacity) * 100;
-                        summaryData.percentSystemPower = (calcResult.powerCalculated / this.totalFullLoadPower) * 100;
-                    } else {
-                        summaryData.airflow = 0;
-                        summaryData.power = 0;
-                        summaryData.percentCapacity = 0;
-                        summaryData.percentPower = 0;
-                        summaryData.percentSystemCapacity = 0;
-                        summaryData.percentSystemPower = 0;
-                    }
-                } else {
-                    summaryData.airflow = 0;
-                    summaryData.power = 0;
-                    summaryData.percentCapacity = 0;
-                    summaryData.percentPower = 0;
-                    summaryData.percentSystemCapacity = 0;
-                    summaryData.percentSystemPower = 0;
-                }
-                summary.profileSummaryData.push(summaryData);
-            });
-            summary.setAvgAirflow();
-            summary.setAvgPower();
-            summary.setAvgPercentPower();
-            summary.setAvgPercentCapacity();
-            this.profileSummary.push(summary);
-        });
+        this.profileSummary = _compressedAirCalculationService.calculateBaselineProfileSummary(
+            this.inventoryItems,
+            this.baselineDayTypeProfileSummary,
+            this.dayType,
+            settings,
+            compressedAirAssessment.systemInformation.atmosphericPressure,
+            compressedAirAssessment.systemInformation.totalAirStorage,
+            compressedAirAssessment.systemInformation.multiCompressorSystemControls,
+            0,
+            true
+        );
     }
 
     getCompressor(compressorId: string): CompressorInventoryItemClass {
@@ -138,37 +87,15 @@ export class CompressedAirBaselineDayTypeProfileSummary {
     }
 
 
-    setProfileSummaryTotals(selectedHourInterval: number) {
-        let totalSystemCapacity: number = getTotalCapacity(this.inventoryItems);
-        let totalFullLoadPower: number = getTotalPower(this.inventoryItems);
-        let allData: Array<ProfileSummaryData> = this.profileSummary.flatMap(summary => {
-            return summary.profileSummaryData;
-        });
-        this.profileSummaryTotals = new Array();
-        for (let interval = 0; interval < 24;) {
-            let totalAirFlow: number = 0;
-            let compressorPower: number = 0;
-            allData.forEach(dataItem => {
-                if (dataItem.timeInterval == interval && dataItem.order != 0) {
-                    if (isNaN(dataItem.airflow) == false) {
-                        totalAirFlow += dataItem.airflow;
-                    }
-                    if (isNaN(dataItem.power) == false) {
-                        compressorPower += dataItem.power;
-                    }
-                }
-            });
-            this.profileSummaryTotals.push({
-                auxiliaryPower: 0,
-                airflow: totalAirFlow,
-                power: compressorPower,
-                totalPower: compressorPower,
-                percentCapacity: (totalAirFlow / totalSystemCapacity) * 100,
-                percentPower: (compressorPower / totalFullLoadPower) * 100,
-                timeInterval: interval
-            });
-            interval = interval + selectedHourInterval;
-        }
+    setProfileSummaryTotals(selectedHourInterval: number, _compressedAirCalculationService: CompressedAirCalculationService, settings: Settings) {
+        this.profileSummaryTotals = _compressedAirCalculationService.calculateProfileSummaryTotals(
+            selectedHourInterval,
+            this.profileSummary,
+            this.dayType,
+            undefined,
+            this.inventoryItems,
+            settings
+        );
     }
 
     setSavingsItem(costKwh: number, selectedHourInterval: number) {
@@ -243,14 +170,14 @@ export class CompressedAirBaselineDayTypeProfileSummary {
         }
     }
 
-    getCompressorDayTypeSummaries(settings: Settings): Array<CompressorSummary> {
+    getCompressorDayTypeSummaries(settings: Settings, _compressedAirCalculationService: CompressedAirCalculationService): Array<CompressorSummary> {
         let compressorSummaries: Array<CompressorSummary> = new Array<CompressorSummary>();
         this.profileSummary.forEach(profile => {
             let specificPowerAvgLoad: number = (profile.avgPower / profile.avgAirflow) * 100;
             specificPowerAvgLoad = roundVal(specificPowerAvgLoad, 4);
             let compressor: CompressorInventoryItemClass = this.inventoryItems.find(compressor => { return compressor.findItem(profile.compressorId) });
-            let ratedSpecificPower: number = compressor.getRatedSpecificPower();
-            let ratedIsentropicEfficiency: number = compressor.getRatedIsentropicEfficiency(settings);
+            let ratedSpecificPower: number = compressor.getRatedSpecificPower(settings, _compressedAirCalculationService);
+            let ratedIsentropicEfficiency: number = compressor.getRatedIsentropicEfficiency(settings, _compressedAirCalculationService);
             let compressorSummary: CompressorSummary = {
                 dayType: this.dayType,
                 specificPowerAvgLoad: specificPowerAvgLoad,

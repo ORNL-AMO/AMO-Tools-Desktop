@@ -24,7 +24,7 @@ export class ImproveEndUseEfficiencyResults {
     ) {
         this.order = order;
         //1. Adjust totals based on end use efficiency reductions
-        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = this.adjustTotalsWithImprovedEndUseEfficiency(dayType, improveEndUseEfficiency, totals);
+        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = this.adjustTotalsWithImprovedEndUseEfficiency(dayType, improveEndUseEfficiency, totals, settings, _compressedAirCalculationService);
         //2. Calculate auxiliary power usage
         this.setAuxiliaryPowerUsage(improveEndUseEfficiency, costKwh, dayType);
         //3. Calculate implementation cost
@@ -51,18 +51,28 @@ export class ImproveEndUseEfficiencyResults {
         this.savings = flowReallocationResults.savings;
     }
 
-    adjustTotalsWithImprovedEndUseEfficiency(dayType: CompressedAirDayType, improveEndUseEfficiency: ImproveEndUseEfficiency, totals: Array<ProfileSummaryTotal>): Array<ProfileSummaryTotal> {
+    adjustTotalsWithImprovedEndUseEfficiency(dayType: CompressedAirDayType, improveEndUseEfficiency: ImproveEndUseEfficiency, totals: Array<ProfileSummaryTotal>, settings: Settings, _compressedAirCalculationService: CompressedAirCalculationService): Array<ProfileSummaryTotal> {
         totals.forEach(total => {
             improveEndUseEfficiency.endUseEfficiencyItems.forEach(item => {
                 let reductionData: EndUseEfficiencyReductionData = item.reductionData.find(rData => { return rData.dayTypeId == dayType.dayTypeId });
                 let intervalReductionData = reductionData.data.find(rData => { return rData.hourInterval == total.timeInterval });
                 if (item.reductionType == 'Fixed') {
                     if (intervalReductionData.applyReduction) {
-                        total.airflow = total.airflow - item.airflowReduction;
+                        total.airflow = _compressedAirCalculationService.improveEndUseEfficiencyAirflow(
+                            this.getFullLoadAirflow(total),
+                            total.airflow,
+                            item.airflowReduction,
+                            settings
+                        );
                     }
                 } else if (item.reductionType == 'Variable') {
                     if (intervalReductionData.reductionAmount) {
-                        total.airflow = total.airflow - intervalReductionData.reductionAmount;
+                        total.airflow = _compressedAirCalculationService.improveEndUseEfficiencyAirflow(
+                            this.getFullLoadAirflow(total),
+                            total.airflow,
+                            intervalReductionData.reductionAmount,
+                            settings
+                        );
                     }
                 }
                 if (total.airflow < 0) {
@@ -71,6 +81,13 @@ export class ImproveEndUseEfficiencyResults {
             });
         });
         return totals
+    }
+
+    private getFullLoadAirflow(total: ProfileSummaryTotal): number {
+        if (total.percentCapacity) {
+            return total.airflow / (total.percentCapacity / 100);
+        }
+        return total.airflow;
     }
 
     setAuxiliaryPowerUsage(improveEndUseEfficiency: ImproveEndUseEfficiency, electricityCost: number, dayType: CompressedAirDayType) {

@@ -3,7 +3,6 @@ import { Settings } from "../../../../shared/models/settings";
 import { CompressedAirProfileSummary } from "../../CompressedAirProfileSummary";
 import { CompressorInventoryItemClass } from "../../CompressorInventoryItemClass";
 import * as _ from 'lodash';
-import { getProfileSummaryTotals } from "../../caCalculationHelpers";
 import { FlowReallocationResults } from "./FlowReallocationResults";
 import { CompressedAirCalculationService } from "../../../compressed-air-calculation.service";
 import { systemPressureChangeAdjustProfile } from "./compressorsAdjustment";
@@ -39,17 +38,17 @@ export class AdjustCascadingSetPointsResults {
         });
 
         //1. Adjust compressor set points
-        this.adjustCascadingSetPointsAdjustCompressors(adjustCascadingSetPoints, atmosphericPressure, settings);
+        this.adjustCascadingSetPointsAdjustCompressors(adjustCascadingSetPoints, atmosphericPressure, settings, _compressedAirCalculationService);
         //2. Adjust profile based on new set points
-        this.profileSummary = systemPressureChangeAdjustProfile(originalCompressors, settings, adjustedCompressors, atmosphericPressure, this.profileSummary);
+        this.profileSummary = systemPressureChangeAdjustProfile(originalCompressors, settings, adjustedCompressors, atmosphericPressure, this.profileSummary, _compressedAirCalculationService);
         //3. Reallocate flow based on new set points
-        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = getProfileSummaryTotals(
+        let adjustedProfileSummaryTotal: Array<ProfileSummaryTotal> = _compressedAirCalculationService.calculateProfileSummaryTotals(
             summaryDataInterval,
             this.profileSummary,
-            false,
             dayType,
             undefined,
-            this.adjustedCompressors);
+            this.adjustedCompressors,
+            settings);
         let flowReallocationResults: FlowReallocationResults = new FlowReallocationResults(dayType,
             settings,
             previousProfileSummary,
@@ -71,11 +70,11 @@ export class AdjustCascadingSetPointsResults {
         this.savings = flowReallocationResults.savings;
     }
 
-    adjustCascadingSetPointsAdjustCompressors(adjustCascadingSetPoints: AdjustCascadingSetPoints, atmosphericPressure: number, settings: Settings) {
+    adjustCascadingSetPointsAdjustCompressors(adjustCascadingSetPoints: AdjustCascadingSetPoints, atmosphericPressure: number, settings: Settings, _compressedAirCalculationService: CompressedAirCalculationService) {
         adjustCascadingSetPoints.setPointData.forEach(setPointData => {
             let compressorToAdjust: CompressorInventoryItemClass = _.find(this.adjustedCompressors, (compressor) => { return compressor.itemId == setPointData.compressorId; });
             if (compressorToAdjust) {
-                compressorToAdjust.adjustCascadingSetPoints(adjustCascadingSetPoints, atmosphericPressure, settings);
+                compressorToAdjust.adjustCascadingSetPoints(adjustCascadingSetPoints, atmosphericPressure, settings, _compressedAirCalculationService);
             }
         });
     }
