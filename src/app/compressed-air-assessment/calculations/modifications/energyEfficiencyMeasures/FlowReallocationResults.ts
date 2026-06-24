@@ -56,7 +56,6 @@ export class FlowReallocationResults {
         reduceRuntime: ReduceRuntime,
         _compressedAirCalculationService: CompressedAirCalculationService,
         trimSelections: Array<{ dayTypeId: string, compressorId: string }>) {
-
         this.profileSummary = _compressedAirCalculationService.reallocateProfileSummary(
             dayType,
             previousProfileSummary,

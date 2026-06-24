@@ -111,6 +111,7 @@ interface SuiteProfileCompressor {
   performancePoints: SuitePerformancePoints;
   blowdownTimeSec: number;
   unloadSumpPressurePsig: number;
+  unloadPointCapacityPct: number;
   noLoadPowerFractionForModulation: number;
   modulatingPressurePsig: number;
 }
@@ -670,6 +671,7 @@ export class CompressedAirCalculationService {
         performancePoints: this.getPerformancePointsForSuite(suiteCompressor.performancePoints),
         blowdownTimeSec: this.getNumberOrZero(suiteCompressor.designDetails.blowdownTime),
         unloadSumpPressurePsig: this.getNumberOrZero(suiteCompressor.compressorControls.unloadSumpPressure),
+        unloadPointCapacityPct: this.getNumberOrZero(suiteCompressor.compressorControls.unloadPointCapacity),
         noLoadPowerFractionForModulation: this.getNumberOrZero(suiteCompressor.designDetails.noLoadPowerFM) / 100,
         modulatingPressurePsig: this.getNumberOrZero(suiteCompressor.designDetails.modulatingPressureRange)
       };

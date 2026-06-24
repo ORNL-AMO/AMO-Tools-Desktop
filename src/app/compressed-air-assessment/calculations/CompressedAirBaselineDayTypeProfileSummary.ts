@@ -76,7 +76,7 @@ export class CompressedAirBaselineDayTypeProfileSummary {
             compressedAirAssessment.systemInformation.totalAirStorage,
             compressedAirAssessment.systemInformation.multiCompressorSystemControls,
             0,
-            true
+            false
         );
     }
 

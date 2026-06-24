@@ -106,20 +106,29 @@ export class CompressedAirSuiteApiService {
   }
 
   generatePerformancePoints(input: CompressorPerformancePointInput): CompressorPerformancePoints {
-    let points: CompressorPerformancePoints = this.toolsSuiteApiService.ToolsSuiteModule.generatePerformancePoints(input);
+    let points: CompressorPerformancePoints = this.toolsSuiteApiService.ToolsSuiteModule.generatePerformancePoints(this.getCompressorPerformancePointInput(input));
     return this.fillDefaultPerformancePoints(input, points);
   }
 
   adjustPerformancePointsForSequencer(input: SequencerSetPointInput): CompressorPerformancePoints {
-    return this.toolsSuiteApiService.ToolsSuiteModule.adjustPerformancePointsForSequencer(input);
+    return this.toolsSuiteApiService.ToolsSuiteModule.adjustPerformancePointsForSequencer({
+      ...input,
+      compressor: this.getCompressorPerformancePointInput(input.compressor)
+    });
   }
 
   reduceSystemPressurePerformancePoints(input: PressureReductionPointInput): CompressorPerformancePoints {
-    return this.toolsSuiteApiService.ToolsSuiteModule.reduceSystemPressurePerformancePoints(input);
+    return this.toolsSuiteApiService.ToolsSuiteModule.reduceSystemPressurePerformancePoints({
+      ...input,
+      compressor: this.getCompressorPerformancePointInput(input.compressor)
+    });
   }
 
   adjustCascadingSetPointPerformancePoints(input: CascadingSetPointInput): CompressorPerformancePoints {
-    return this.toolsSuiteApiService.ToolsSuiteModule.adjustCascadingSetPointPerformancePoints(input);
+    return this.toolsSuiteApiService.ToolsSuiteModule.adjustCascadingSetPointPerformancePoints({
+      ...input,
+      compressor: this.getCompressorPerformancePointInput(input.compressor)
+    });
   }
 
   calculateRatedSpecificPower(totalPackageInputPowerKw: number, fullLoadRatedCapacityAcfm: number): number {
@@ -686,6 +695,22 @@ export class CompressedAirSuiteApiService {
       capacityCalculated: suiteOutput.airflowAcfm,
       percentagePower: suiteOutput.powerFraction,
       percentageCapacity: suiteOutput.airflowFraction
+    };
+  }
+
+  private getCompressorPerformancePointInput(input: CompressorPerformancePointInput): CompressorPerformancePointInput {
+    return {
+      ...input,
+      nameplate: {
+        ...input.nameplate,
+        compressorType: this.suiteApiHelperService.getCompressorTypeEnum(this.getSuiteEnumNumber(input.nameplate.compressorType)),
+        stage: this.suiteApiHelperService.getStageEnum(this.getSuiteEnumNumber(input.nameplate.stage)),
+        lubricant: this.suiteApiHelperService.getLubricantEnum(this.getSuiteEnumNumber(input.nameplate.lubricant))
+      },
+      controls: {
+        ...input.controls,
+        control: this.suiteApiHelperService.getControlTypeEnum(this.getSuiteEnumNumber(input.controls.control))
+      }
     };
   }
 

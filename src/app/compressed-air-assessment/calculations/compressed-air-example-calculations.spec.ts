@@ -1,7 +1,7 @@
 import examplesData from '../../../assets/example-data/ExamplesData.json';
 import { UntypedFormBuilder } from '@angular/forms';
 import { Assessment } from '../../shared/models/assessment';
-import { CompressedAirAssessment, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal } from '../../shared/models/compressed-air-assessment';
+import { CompressedAirAssessment, CompressedAirDayType, CompressorInventoryItem, Modification, ProfileSummary, ProfileSummaryData, ProfileSummaryTotal, SystemInformation } from '../../shared/models/compressed-air-assessment';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentCo2SavingsService } from '../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
@@ -16,6 +16,9 @@ import { InventoryFormService } from '../baseline-tab-content/inventory-setup/in
 import { PerformancePointsFormService } from '../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 import { CompressedAirAssessmentBaselineResults } from './CompressedAirAssessmentBaselineResults';
 import { CompressedAirAssessmentModificationResults } from './modifications/CompressedAirAssessmentModificationResults';
+import { FlowReallocationResults } from './modifications/energyEfficiencyMeasures/FlowReallocationResults';
+import { CompressorInventoryItemClass } from './CompressorInventoryItemClass';
+import { CompressedAirProfileSummary } from './CompressedAirProfileSummary';
 import { type CompressorProfileCompressor, type CompressorProfileOptions, type CompressorProfileRow } from 'measur-tools-suite';
 
 describe('compressed air example calculation classes', () => {
@@ -142,6 +145,23 @@ describe('compressed air example calculation classes', () => {
     expect(suiteRows[0].systemAirflowFraction).toBeCloseTo(1, 3);
   });
 
+  it('reduces system pressure performance points without suite enum binding errors', () => {
+    let performancePoints = compressedAirCalculationService.reduceSystemPressurePerformancePoints(
+      getSingleCompressor(),
+      5,
+      14.7,
+      {
+        unitsOfMeasure: 'Imperial',
+        emissionsUnit: 'Metric'
+      }
+    );
+
+    expectFiniteResult(performancePoints.fullLoad.dischargePressure);
+    expectFiniteResult(performancePoints.fullLoad.airflow);
+    expectFiniteResult(performancePoints.fullLoad.power);
+    expect(performancePoints.fullLoad.dischargePressure).toBeLessThan(100);
+  });
+
   it('calculates the two-compressor 24hr measured-power baseline profile through the suite wrapper', () => {
     let suiteRows: Array<CompressorProfileRow> = compressedAirSuiteApiService.calculateBaselineProfile(
       [getLoggedSuiteCompressor(), getLoggedLoadUnloadSuiteCompressor()],
@@ -225,6 +245,37 @@ describe('compressed air example calculation classes', () => {
       let compressorSummaries = modificationResults.getCompressorSummaries(settings);
       expect(compressorSummaries.length).toEqual(compressedAirAssessment.compressedAirDayTypes.length);
     });
+  });
+
+  it('reallocates base-trim flow for the logged interval 11 payload', () => {
+    let input = getBaseTrimFlowReallocationInput();
+
+    let result = new FlowReallocationResults(
+      input.dayType,
+      input.settings,
+      input.previousProfileSummary,
+      input.adjustedCompressors,
+      input.additionalReceiverVolume,
+      input.totals,
+      input.atmosphericPressure,
+      input.totalAirStorage,
+      input.systemInformation,
+      undefined,
+      compressedAirCalculationService,
+      0.066,
+      0,
+      1,
+      { cost: 0, energyUse: 0 },
+      1,
+      input.trimSelections
+    );
+    let trimSummary = result.profileSummary.find(summary => summary.compressorId == 'p8p62x1d2');
+    let interval = trimSummary.profileSummaryData.find(data => data.timeInterval == 11);
+
+    expect(interval.power).toBeCloseTo(65.52, 2);
+    expect(interval.airflow).toBeCloseTo(332.01, 2);
+    expect(interval.percentCapacity).toBeCloseTo(97.08, 2);
+    expect(interval.percentPower).toBeCloseTo(97.93, 2);
   });
 
   it('runs the example assessment after metric conversion without error', () => {
@@ -467,6 +518,7 @@ describe('compressed air example calculation classes', () => {
       },
       blowdownTimeSec: 40,
       unloadSumpPressurePsig: 15,
+      unloadPointCapacityPct: 50,
       noLoadPowerFractionForModulation: 0.65,
       modulatingPressurePsig: 5
     };
@@ -544,6 +596,7 @@ describe('compressed air example calculation classes', () => {
       },
       blowdownTimeSec: 40,
       unloadSumpPressurePsig: 15,
+      unloadPointCapacityPct: 100,
       noLoadPowerFractionForModulation: 0,
       modulatingPressurePsig: 0
     };
@@ -576,6 +629,246 @@ describe('compressed air example calculation classes', () => {
       totalAirStorageFt3: 200.52093668342548,
       additionalReceiverVolumeFt3: 0,
       canShutdown: true
+    };
+  }
+
+  function getBaseTrimFlowReallocationInput(): {
+    dayType: CompressedAirDayType,
+    settings: Settings,
+    previousProfileSummary: Array<CompressedAirProfileSummary>,
+    adjustedCompressors: Array<CompressorInventoryItemClass>,
+    additionalReceiverVolume: number,
+    totals: Array<ProfileSummaryTotal>,
+    atmosphericPressure: number,
+    totalAirStorage: number,
+    systemInformation: SystemInformation,
+    trimSelections: Array<{ dayTypeId: string, compressorId: string }>
+  } {
+    let dayType: CompressedAirDayType = {
+      dayTypeId: 'hvb0u7041',
+      name: 'Weekday',
+      numberOfDays: 255,
+      profileDataType: 'powerFactor',
+      hasValidData: true
+    };
+    let trimSelections: Array<{ dayTypeId: string, compressorId: string }> = [
+      { dayTypeId: 'hvb0u7041', compressorId: 'p8p62x1d2' },
+      { dayTypeId: 'cpb33ydkl', compressorId: 'p8p62x1d2' }
+    ];
+
+    return {
+      dayType: dayType,
+      settings: {
+        unitsOfMeasure: 'Imperial',
+        emissionsUnit: 'Metric'
+      },
+      previousProfileSummary: getBaseTrimPreviousProfileSummary(),
+      adjustedCompressors: getBaseTrimCompressors().map(compressor => new CompressorInventoryItemClass(compressor)),
+      additionalReceiverVolume: 0,
+      totals: [{
+        auxiliaryPower: 0,
+        airflow: 677.1060361264512,
+        power: 153.3360384,
+        totalPower: 153.3360384,
+        percentCapacity: 63.162876504333134,
+        percentPower: 78.83600946015424,
+        timeInterval: 11
+      }],
+      atmosphericPressure: 14.7,
+      totalAirStorage: 5000,
+      systemInformation: {
+        systemElevation: null,
+        totalAirStorage: 5000,
+        isSequencerUsed: false,
+        targetPressure: null,
+        variance: null,
+        atmosphericPressure: 14.7,
+        atmosphericPressureKnown: true,
+        plantMaxPressure: null,
+        multiCompressorSystemControls: 'baseTrim',
+        trimSelections: trimSelections
+      },
+      trimSelections: trimSelections
+    };
+  }
+
+  function getBaseTrimPreviousProfileSummary(): Array<CompressedAirProfileSummary> {
+    let summaries: Array<ProfileSummary> = [
+      {
+        fullLoadPressure: 100,
+        fullLoadCapacity: 365,
+        compressorId: 'diagqi3k4',
+        dayTypeId: 'hvb0u7041',
+        profileSummaryData: [{
+          power: 55.6928064,
+          airflow: 306.35737908679505,
+          percentCapacity: 83.93352851693015,
+          timeInterval: 11,
+          percentPower: 87.2928,
+          percentSystemCapacity: 28.578113720783122,
+          percentSystemPower: 28.633833624678662,
+          order: 2,
+          powerFactor: 0.87,
+          amps: 77,
+          volts: 480
+        }]
+      },
+      {
+        fullLoadPressure: 100,
+        fullLoadCapacity: 365,
+        compressorId: '3qo7b7u3w',
+        dayTypeId: 'hvb0u7041',
+        profileSummaryData: [{
+          power: 40.5038592,
+          airflow: 94.72798042877727,
+          percentCapacity: 25.952871350349938,
+          timeInterval: 11,
+          percentPower: 63.485672727272735,
+          percentSystemCapacity: 8.836565338505341,
+          percentSystemPower: 20.824606272493572,
+          order: 3,
+          powerFactor: 0.87,
+          amps: 56,
+          volts: 480
+        }]
+      },
+      {
+        fullLoadPressure: 115,
+        fullLoadCapacity: 342,
+        compressorId: 'p8p62x1d2',
+        dayTypeId: 'hvb0u7041',
+        profileSummaryData: [{
+          power: 57.139372800000004,
+          airflow: 276.0206766108788,
+          percentCapacity: 80.70780017861954,
+          timeInterval: 11,
+          percentPower: 85.41012376681614,
+          percentSystemCapacity: 25.748197445044664,
+          percentSystemPower: 29.37756956298201,
+          order: 1,
+          powerFactor: 0.87,
+          amps: 79,
+          volts: 480
+        }]
+      }
+    ];
+    return summaries.map(summary => new CompressedAirProfileSummary(summary, true));
+  }
+
+  function getBaseTrimCompressors(): Array<CompressorInventoryItem> {
+    return [
+      getBaseTrimVariableDisplacementCompressor('diagqi3k4', '#16A085', 15, 109),
+      getBaseTrimVariableDisplacementCompressor('3qo7b7u3w', '#A04000', 16.7, 110),
+      {
+        itemId: 'p8p62x1d2',
+        name: 'New Compressor',
+        description: '',
+        color: '#5B2C6F',
+        nameplateData: {
+          compressorType: 1,
+          motorPower: 75,
+          fullLoadOperatingPressure: 115,
+          fullLoadRatedCapacity: 342.3,
+          ratedLoadPower: null,
+          ploytropicCompressorExponent: 1.4,
+          fullLoadAmps: 92.5,
+          totalPackageInputPower: 66.9
+        },
+        compressorControls: {
+          controlType: 11,
+          unloadPointCapacity: 20,
+          numberOfUnloadSteps: 2,
+          automaticShutdown: false,
+          unloadSumpPressure: 15
+        },
+        designDetails: {
+          blowdownTime: 40,
+          modulatingPressureRange: 20,
+          inputPressure: 14.5,
+          designEfficiency: 91.7,
+          serviceFactor: 1.15,
+          noLoadPowerFM: 65,
+          noLoadPowerUL: 5,
+          maxFullFlowPressure: 115
+        },
+        performancePoints: {
+          fullLoad: getPoint(115, 342, 66.9),
+          maxFullFlow: getPoint(0, 0, 0),
+          midTurndown: getPoint(117.4, 205, 45),
+          turndown: getPoint(119.1, 109, 25.9),
+          unloadPoint: getPoint(0, 0, 0),
+          noLoad: getPoint(15, 0, 4.6),
+          blowoff: getPoint(0, 0, 0)
+        },
+        centrifugalSpecifics: {
+          surgeAirflow: null,
+          maxFullLoadPressure: null,
+          maxFullLoadCapacity: null,
+          minFullLoadPressure: null,
+          minFullLoadCapacity: null
+        },
+        isReplacementCompressor: false,
+        modifiedDate: new Date('2025-01-14T15:24:31.420Z')
+      }
+    ];
+  }
+
+  function getBaseTrimVariableDisplacementCompressor(
+    itemId: string,
+    color: string,
+    modulatingPressureRange: number,
+    unloadPointPressure: number
+  ): CompressorInventoryItem {
+    return {
+      itemId: itemId,
+      name: '#1 QSI 370i',
+      description: '',
+      color: color,
+      nameplateData: {
+        compressorType: 1,
+        motorPower: 75,
+        fullLoadOperatingPressure: 100,
+        fullLoadRatedCapacity: 365,
+        ratedLoadPower: null,
+        ploytropicCompressorExponent: 1.4,
+        fullLoadAmps: 88.2,
+        totalPackageInputPower: 63.8
+      },
+      compressorControls: {
+        controlType: 3,
+        unloadPointCapacity: 40,
+        numberOfUnloadSteps: 2,
+        automaticShutdown: true,
+        unloadSumpPressure: 15
+      },
+      designDetails: {
+        blowdownTime: 40,
+        modulatingPressureRange: modulatingPressureRange,
+        inputPressure: 14.5,
+        designEfficiency: 91.7,
+        serviceFactor: 1.15,
+        noLoadPowerFM: 57,
+        noLoadPowerUL: 16,
+        maxFullFlowPressure: 100
+      },
+      performancePoints: {
+        fullLoad: getPoint(100, 365, 63.8),
+        maxFullFlow: getPoint(100, 365, 63.8),
+        midTurndown: getPoint(0, 0, 0),
+        turndown: getPoint(0, 0, 0),
+        unloadPoint: getPoint(unloadPointPressure, 182, 45),
+        noLoad: getPoint(15, 0, 35),
+        blowoff: getPoint(0, 0, 0)
+      },
+      centrifugalSpecifics: {
+        surgeAirflow: null,
+        maxFullLoadPressure: null,
+        maxFullLoadCapacity: null,
+        minFullLoadPressure: null,
+        minFullLoadCapacity: null
+      },
+      isReplacementCompressor: false,
+      modifiedDate: new Date('2025-01-14T15:19:08.913Z')
     };
   }
 

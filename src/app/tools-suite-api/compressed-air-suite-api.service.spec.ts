@@ -276,6 +276,7 @@ function modulationCompressor(compressorId: string, airflowAcfm: number, fullPow
     },
     blowdownTimeSec: 0.003,
     unloadSumpPressurePsig: 15,
+    unloadPointCapacityPct: 0,
     noLoadPowerFractionForModulation: 0.7,
     modulatingPressurePsig: 5
   };
