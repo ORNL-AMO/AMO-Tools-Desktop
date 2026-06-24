@@ -1,0 +1,220 @@
+<form [formGroup]="form()">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds.materialId}}">Name of Material</label>
+      <select class="form-control" id="{{controlIds.materialId}}" formControlName="materialId"
+        (change)="setProperties()" [class.invalid]="form().controls.materialId.invalid">
+        @for (material of materialTypes(); track material.id) {
+          <option [ngValue]="material.id">{{material.substance}}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.materialSpecificHeatOfSolidMaterial}}">Average Specific Heat of Solid</label>
+      <div class="input-group" [class.invalid]="form().controls.materialSpecificHeatOfSolidMaterial.invalid">
+        <input type="number" step="0.1" class="form-control"
+          id="{{controlIds.materialSpecificHeatOfSolidMaterial}}"
+          formControlName="materialSpecificHeatOfSolidMaterial"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="Btu/(lb-°F)" metricUnit="kJ/(kg-°C)"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.materialSpecificHeatOfSolidMaterial" [settings]="settings()"
+        imperialUnit="Btu/(lb-°F)" metricUnit="kJ/(kg-°C)">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.materialLatentHeatOfFusion}}">Latent Heat of Fusion</label>
+      <div class="input-group" [class.invalid]="form().controls.materialLatentHeatOfFusion.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds.materialLatentHeatOfFusion}}" formControlName="materialLatentHeatOfFusion"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="Btu/lb" metricUnit="kJ/kg"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.materialLatentHeatOfFusion" [settings]="settings()"
+        imperialUnit="Btu/lb" metricUnit="kJ/kg">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.materialHeatOfLiquid}}">Average Specific Heat of Molten Material</label>
+      <div class="input-group" [class.invalid]="form().controls.materialHeatOfLiquid.invalid">
+        <input type="number" step="0.1" class="form-control"
+          id="{{controlIds.materialHeatOfLiquid}}" formControlName="materialHeatOfLiquid"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="Btu/(lb-°F)" metricUnit="kJ/(kg-°C)"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.materialHeatOfLiquid" [settings]="settings()"
+        imperialUnit="Btu/(lb-°F)" metricUnit="kJ/(kg-°C)">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.materialMeltingPoint}}">Melting Point</label>
+      <div class="input-group" [class.invalid]="form().controls.materialMeltingPoint.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds.materialMeltingPoint}}" formControlName="materialMeltingPoint"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial" [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.materialMeltingPoint" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds.feedRate}}">Charge Feed Rate (Wet)</label>
+      <div class="input-group" [class.invalid]="form().controls.feedRate.invalid">
+        <input type="number" step="100" class="form-control"
+          id="{{controlIds.feedRate}}" formControlName="feedRate"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="lb/hr" metricUnit="kg/hr"></app-input-unit>
+      </div>
+      @if (form().controls.feedRate.invalid && !form().controls.feedRate.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.feedRate.errors?.['required']) { Value Required }
+          @if (form().controls.feedRate.errors?.['greaterThan'] == 0) { Value must be greater than 0. }
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.initialTemperature}}">Charge Inlet Temperature</label>
+      <div class="input-group" [class.invalid]="form().controls.initialTemperature.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds.initialTemperature}}" formControlName="initialTemperature"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial" [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+      </div>
+      @if (form().controls.initialTemperature.invalid && !form().controls.initialTemperature.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.initialTemperature.errors?.['required']) { Value Required }
+          @if (form().controls.initialTemperature.errors?.['max']) {
+            Value can't be greater than Charge Outlet Temperature
+            ({{form().controls.initialTemperature.errors?.['max'].max}}
+            @if (settings().unitsOfMeasure == 'Imperial') { &#8457; } @else { &#8451; }).
+          }
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.chargeMaterialDischargeTemperature}}">Charge Outlet Temperature</label>
+      <div class="input-group" [class.error]="warnings().dischargeTempWarning !== null" [class.invalid]="form().controls.chargeMaterialDischargeTemperature.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds.chargeMaterialDischargeTemperature}}" formControlName="chargeMaterialDischargeTemperature"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial" [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.chargeMaterialDischargeTemperature" [settings]="settings()">
+      </app-form-control-errors>
+      @if (warnings().dischargeTempWarning !== null) {
+        <span class="alert-warning pull-right small">{{warnings().dischargeTempWarning}}</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.waterContentAsCharged}}">Water Content (Charged)</label>
+      <div class="input-group" [class.invalid]="form().controls.waterContentAsCharged.invalid">
+        <input type="number" step="any" class="form-control"
+          id="{{controlIds.waterContentAsCharged}}" formControlName="waterContentAsCharged"
+          onfocus="this.select();">
+        <app-input-unit defaultUnit="%"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.waterContentAsCharged" [settings]="settings()"
+        defaultUnit="%">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.waterContentAsDischarged}}">Water Content (Discharged)</label>
+      <div class="input-group" [class.invalid]="form().controls.waterContentAsDischarged.invalid">
+        <input type="number" step="any" class="form-control"
+          id="{{controlIds.waterContentAsDischarged}}" formControlName="waterContentAsDischarged"
+          onfocus="this.select();">
+        <app-input-unit defaultUnit="%"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.waterContentAsDischarged" [settings]="settings()"
+        defaultUnit="%">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.waterVaporDischargeTemperature}}">Water Vapor Discharge Temperature</label>
+      <div class="input-group" [class.invalid]="form().controls.waterVaporDischargeTemperature.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds.waterVaporDischargeTemperature}}" formControlName="waterVaporDischargeTemperature"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" [imperialUnit]="TEMPERATURE_HTML.imperial" [metricUnit]="TEMPERATURE_HTML.metric"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.waterVaporDischargeTemperature" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.percentChargeMelted}}">Charge Melted</label>
+      <div class="input-group" [class.error]="warnings().dischargeTempWarning !== null" [class.invalid]="form().controls.percentChargeMelted.invalid">
+        <input type="number" step="any" class="form-control"
+          id="{{controlIds.percentChargeMelted}}" formControlName="percentChargeMelted"
+          onfocus="this.select();">
+        <app-input-unit defaultUnit="%"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.percentChargeMelted" [settings]="settings()"
+        defaultUnit="%">
+      </app-form-control-errors>
+      @if (warnings().dischargeTempWarning !== null) {
+        <span class="alert-warning pull-right small">{{warnings().dischargeTempWarning}}</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.percentChargeReacted}}">Charge Reacted</label>
+      <div class="input-group" [class.invalid]="form().controls.percentChargeReacted.invalid">
+        <input type="number" step="any" class="form-control"
+          id="{{controlIds.percentChargeReacted}}" formControlName="percentChargeReacted"
+          onfocus="this.select();">
+        <app-input-unit defaultUnit="%"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.percentChargeReacted" [settings]="settings()"
+        defaultUnit="%">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.heatOfReaction}}">Heat of Reaction</label>
+      <div class="input-group" [class.invalid]="form().controls.heatOfReaction.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds.heatOfReaction}}" formControlName="heatOfReaction"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="Btu/lb" metricUnit="kJ/kg"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.heatOfReaction" [settings]="settings()"
+        imperialUnit="Btu/lb" metricUnit="kJ/kg">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.endothermicOrExothermic}}">Type of Reaction (Exothermic/Endothermic)</label>
+      <select class="form-control" id="{{controlIds.endothermicOrExothermic}}"
+        formControlName="endothermicOrExothermic"
+        [class.invalid]="form().controls.endothermicOrExothermic.invalid">
+        <option>Endothermic</option>
+        <option>Exothermic</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.additionalHeatRequired}}">Additional Heat Required</label>
+      <div class="input-group" [class.invalid]="form().controls.additionalHeatRequired.invalid">
+        <input type="number" step="any" class="form-control"
+          id="{{controlIds.additionalHeatRequired}}" formControlName="additionalHeatRequired"
+          onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="Btu/hr" metricUnit="kJ/hr"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.additionalHeatRequired" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+  </div>
+</form>

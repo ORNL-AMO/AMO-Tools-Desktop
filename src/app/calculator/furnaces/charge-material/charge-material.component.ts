@@ -3,7 +3,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
-import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, ChargeMaterialType } from '../../../shared/models/phast/losses/chargeMaterial';
 import { Settings } from '../../../shared/models/settings';
 import { ChargeMaterialService } from './charge-material.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
@@ -135,7 +135,7 @@ export class ChargeMaterialComponent implements OnInit {
     this.tabSelect = str;
   }
 
-  changeMaterialType(index: number, materialType: string) {
+  changeMaterialType(index: number, materialType: ChargeMaterialType) {
     if (this.modificationData && this.modificationData.length > 0) {
       this.modificationData[index].chargeMaterialType = materialType;
       this.chargeMaterialService.modificationData.next(this.modificationData);
