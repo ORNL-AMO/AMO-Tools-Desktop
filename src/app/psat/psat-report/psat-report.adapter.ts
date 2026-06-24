@@ -1,27 +1,46 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, LOCALE_ID } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { Observable, of } from 'rxjs';
+import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
 import { formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
-import { PairedKeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { ChartSection, PairedKeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { FacilityInfo, Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Modification, PSAT, PsatInputs, PsatOutputs } from '../../shared/models/psat';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
+import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
   { key: 'results', label: 'Result Data', description: 'Baseline and modification results comparison' },
+  { key: 'graphs', label: 'Energy Distribution', description: 'Pie and bar charts of energy distribution by loss category' },
+  { key: 'sankey', label: 'Sankey Diagrams', description: 'Energy flow sankey diagrams' },
   { key: 'inputData', label: 'Input Summary', description: 'Summary of user input data' },
 ];
+
+interface PsatGraphData {
+  name: string;
+  energyInput: number;
+  motorLoss: number;
+  driveLoss: number;
+  pumpLoss: number;
+  usefulOutput: number;
+}
 
 @Injectable()
 export class PsatReportAdapter implements ReportDataAdapter {
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly psatService = inject(PsatService);
+  private readonly plotlyService = inject(PlotlyService);
+  private readonly convertUnitsService = inject(ConvertUnitsService);
+  // DecimalPipe is constructed directly so no provider entry is needed
+  private readonly decimalPipe = new DecimalPipe(inject(LOCALE_ID) as string);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [0, 114, 178];
+  private static readonly PIE_COLORS = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'];
 
   buildDocument(assessment: Assessment): Observable<ReportDocument> {
     const settings = this.settingsDbService.getByAssessmentId(assessment);
@@ -39,6 +58,8 @@ export class PsatReportAdapter implements ReportDataAdapter {
       sections: [
         ...this.buildFacilityInfoSections(settings),
         ...this.buildResultsSections(psat, settings, modNames),
+        ...this.buildReportGraphsSections(psat, settings),
+        ...this.buildSankeySections(psat, settings),
         ...this.buildInputSummarySections(psat, settings, modNames),
       ],
     });
@@ -98,6 +119,293 @@ export class PsatReportAdapter implements ReportDataAdapter {
     return [generalAndLocation, contacts];
   }
 
+  // ─── Report Graphs ────────────────────────────────────────────────────────
+
+  private buildReportGraphsSections(psat: PSAT, settings: Settings): ChartSection[] {
+    const allData = this.collectGraphData(psat, settings);
+    if (allData.length === 0) return [];
+
+    const pieLabels = ['Motor Losses', 'Drive Losses', 'Pump Losses', 'Useful Output'];
+    const barLabels = ['Energy Input', 'Motor Losses', 'Drive Losses', 'Pump Losses', 'Useful Output'];
+    const colors = PsatReportAdapter.PIE_COLORS;
+    const plotly = this.plotlyService;
+
+    const sections: ChartSection[] = [];
+
+    sections.push({
+      type: 'chart',
+      title: 'Energy Distribution',
+      group: 'graphs',
+      pageBreakBefore: true,
+      imageDataProvider: async () => {
+        const count = Math.min(allData.length, 3);
+        const colWidth = 1 / count;
+
+        const traces = allData.slice(0, count).map((d, i) => ({
+          values: [d.motorLoss, d.driveLoss, d.pumpLoss, d.usefulOutput],
+          labels: pieLabels,
+          type: 'pie',
+          name: d.name,
+          title: { text: d.name, font: { size: 14 } },
+          domain: { x: [i * colWidth, (i + 1) * colWidth], y: [0, 0.85] },
+          marker: { colors },
+          textinfo: 'label+percent',
+          direction: 'clockwise',
+          rotation: 90,
+          hovertemplate: '%{value:.2f} kW<extra></extra>',
+        }));
+
+        const layout = {
+          showlegend: false,
+          margin: { t: 60, b: 20, l: 20, r: 20 },
+          paper_bgcolor: 'white',
+        };
+
+        const div = document.createElement('div');
+        div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
+        document.body.appendChild(div);
+        const p = await plotly.getPlotly();
+        try {
+          await p.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
+          return await p.toImage(div, { format: 'jpeg', width: 1400, height: 700 });
+        } finally {
+          p.purge(div);
+          document.body.removeChild(div);
+        }
+      },
+    });
+
+    if (allData.length > 1) {
+      sections.push({
+        type: 'chart',
+        title: 'Power Comparison',
+        group: 'graphs',
+        imageDataProvider: async () => {
+          const traces = allData.map(d => ({
+            x: barLabels,
+            y: [d.energyInput, d.motorLoss, d.driveLoss, d.pumpLoss, d.usefulOutput],
+            name: d.name,
+            type: 'bar',
+            text: [d.energyInput, d.motorLoss, d.driveLoss, d.pumpLoss, d.usefulOutput]
+              .map(v => v.toFixed(2)),
+            textposition: 'auto',
+            hovertemplate: 'Power: %{y:.3r} kW<extra></extra>',
+          }));
+
+          const layout = {
+            barmode: 'group',
+            showlegend: true,
+            legend: { orientation: 'h' },
+            font: { size: 14 },
+            yaxis: {
+              title: { text: 'Power (kW)', font: { family: 'Roboto', size: 14 } },
+              hoverformat: '.3r',
+            },
+            margin: { t: 30, b: 80, l: 80, r: 30 },
+            paper_bgcolor: 'white',
+          };
+
+          const div = document.createElement('div');
+          div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
+          document.body.appendChild(div);
+          const p = await plotly.getPlotly();
+          try {
+            await p.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
+            return await p.toImage(div, { format: 'jpeg', width: 1400, height: 700 });
+          } finally {
+            p.purge(div);
+            document.body.removeChild(div);
+          }
+        },
+      });
+    }
+
+    return sections;
+  }
+
+  private collectGraphData(psat: PSAT, settings: Settings): PsatGraphData[] {
+    const toKw = (v: number) =>
+      settings.powerMeasurement === 'hp'
+        ? this.convertUnitsService.value(v).from('hp').to('kW')
+        : v;
+
+    const fromOutputs = (outputs: PsatOutputs, name: string): PsatGraphData | null => {
+      if (!outputs) return null;
+      const motorShaftKw = toKw(outputs.motor_shaft_power);
+      const moverShaftKw = toKw(outputs.mover_shaft_power);
+      const motorLoss = outputs.motor_power * (1 - outputs.motor_efficiency / 100);
+      const driveLoss = motorShaftKw - moverShaftKw;
+      const pumpLoss = (outputs.motor_power - motorLoss - driveLoss) * (1 - outputs.pump_efficiency / 100);
+      const usefulOutput = outputs.motor_power - (motorLoss + driveLoss + pumpLoss);
+      return { name, energyInput: outputs.motor_power, motorLoss, driveLoss, pumpLoss, usefulOutput };
+    };
+
+    const result: PsatGraphData[] = [];
+    const baseline = fromOutputs(psat.outputs, psat.name ?? 'Baseline');
+    if (baseline) result.push(baseline);
+
+    psat.modifications?.forEach(m => {
+      if (m.psat?.valid?.isValid && m.psat.outputs) {
+        const mod = fromOutputs(m.psat.outputs, m.psat.name ?? 'Modification');
+        if (mod) result.push(mod);
+      }
+    });
+
+    return result;
+  }
+
+  // ─── Sankey ────────────────────────────────────────────────────────
+
+  private buildSankeySections(psat: PSAT, settings: Settings): ChartSection[] {
+    const sections: ChartSection[] = [];
+    const plotly = this.plotlyService;
+
+    const buildSection = (outputs: PsatOutputs, title: string, pageBreakBefore: boolean): ChartSection => ({
+      type: 'chart',
+      title,
+      group: 'sankey',
+      pageBreakBefore,
+      imageDataProvider: async () => {
+        // Compute losses from outputs (mirrors PsatSankeyComponent.calcLosses)
+        let motorShaftPower: number, moverShaftPower: number;
+        if (settings.powerMeasurement === 'hp') {
+          motorShaftPower = this.convertUnitsService.value(outputs.motor_shaft_power).from('hp').to('kW');
+          moverShaftPower = this.convertUnitsService.value(outputs.mover_shaft_power).from('hp').to('kW');
+        } else {
+          motorShaftPower = outputs.motor_shaft_power;
+          moverShaftPower = outputs.mover_shaft_power;
+        }
+        const motor = outputs.motor_power * (1 - outputs.motor_efficiency / 100);
+        const drive = motorShaftPower - moverShaftPower;
+        const pump = (outputs.motor_power - motor - drive) * (1 - outputs.pump_efficiency / 100);
+        const hasDrive = drive > 0;
+
+        const connectingNodes = hasDrive ? [0, 1, 2, 5] : [0, 1, 2];
+        const motorConnector = outputs.motor_power - motor;
+        const driveConnector = hasDrive ? motorConnector - drive : 0;
+        const useful = hasDrive ? driveConnector - pump : motorConnector - pump;
+
+        const nodeStartColor = 'rgba(38, 138, 222, .9)';
+        const nodeArrowColor = 'rgba(144, 192, 232, .9)';
+        const gradientStart  = 'rgb(38, 138, 222)';
+        const gradientEnd    = 'rgb(144, 192, 232)';
+
+        const ip = outputs.motor_power;
+        const lbl = (name: string, kw: number, pct: number) =>
+          `${name} ${this.decimalPipe.transform(kw, '1.0-0')} kW/hr (${this.decimalPipe.transform(pct, '1.1-1')}%)`;
+
+        const nodes: Array<{ id: string; name: string; value: number; x: number; y: number; nodeColor: string }> = [
+          { id: 'originConnector', name: lbl('Energy Input',  ip,    100),                  value: 100,                       x: .1,  y: .6,  nodeColor: nodeStartColor },
+          { id: 'inputConnector',  name: '',                                                value: 0,                         x: .4,  y: .6,  nodeColor: nodeStartColor },
+          { id: 'motorConnector',  name: '',                                                value: (motorConnector / ip) * 100, x: .5,  y: .6,  nodeColor: nodeStartColor },
+          { id: 'motorLosses',     name: lbl('Motor Losses',  motor, (motor / ip) * 100),  value: (motor / ip) * 100,        x: .5,  y: .10, nodeColor: nodeArrowColor  },
+        ];
+
+        if (hasDrive) {
+          nodes.push(
+            { id: 'driveLosses',   name: lbl('Drive Losses',  drive, (drive / ip) * 100),  value: (drive / ip) * 100,        x: .6,  y: .25, nodeColor: nodeArrowColor  },
+            { id: 'driveConnector',name: '',                                                value: (driveConnector / ip) * 100, x: .7,  y: .6,  nodeColor: nodeStartColor },
+          );
+        }
+        nodes.push(
+          { id: 'pumpLosses',    name: lbl('Pump Losses',   pump,  (pump  / ip) * 100),  value: (pump  / ip) * 100,        x: .8,  y: .15, nodeColor: nodeArrowColor  },
+          { id: 'usefulOutput',  name: lbl('Useful Output', useful,(useful / ip) * 100),  value: (useful / ip) * 100,       x: .85, y: .65, nodeColor: nodeArrowColor  },
+        );
+
+        const links = [
+          { source: 0, target: 1 }, { source: 0, target: 2 },
+          { source: 1, target: 2 }, { source: 1, target: 3 },
+          ...(hasDrive
+            ? [{ source: 2, target: 4 }, { source: 2, target: 5 }, { source: 5, target: 6 }, { source: 5, target: 7 }]
+            : [{ source: 2, target: 4 }, { source: 2, target: 5 }]),
+        ];
+
+        const sankeyData = {
+          type: 'sankey', orientation: 'h', valuesuffix: '%', arrangement: 'freeform',
+          textfont: { color: 'rgba(0,0,0)', size: 14 },
+          ids: nodes.map(n => n.id),
+          node: {
+            pad: 50,
+            line: { color: nodeStartColor, width: 0 },
+            label: nodes.map(n => n.name),
+            x: nodes.map(n => n.x),
+            y: nodes.map(n => n.y),
+            color: nodes.map(n => n.nodeColor),
+          },
+          link: {
+            value:  nodes.map(n => n.value),
+            source: links.map(l => l.source),
+            target: links.map(l => l.target),
+            color:  links.map(() => nodeStartColor),
+            hoverinfo: 'none',
+            line: { color: nodeStartColor, width: 0 },
+          },
+        };
+
+        const layout = {
+          autosize: true,
+          font: { color: '#ffffff', size: 14 },
+          margin: { l: 50, t: 100, pad: 300 },
+          paper_bgcolor: 'white',
+        };
+
+        const container = document.createElement('div');
+        container.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
+        document.body.appendChild(container);
+        const chartDiv = document.createElement('div');
+        chartDiv.style.cssText = 'width:100%;height:100%';
+        container.appendChild(chartDiv);
+
+        const p = await plotly.getPlotly();
+        try {
+          await p.newPlot(chartDiv, [sankeyData], layout, { displaylogo: false, displayModeBar: false, responsive: false });
+
+          // Add link gradient (mirrors FsatSankeyComponent.addGradientElement)
+          const mainSVG = container.querySelector('.main-svg');
+          const svgDefs = container.querySelector('defs');
+          if (mainSVG && svgDefs) {
+            svgDefs.innerHTML = `<linearGradient id="psatLinkGradient">
+              <stop offset="10%" stop-color="${gradientStart}" />
+              <stop offset="100%" stop-color="${gradientEnd}" />
+            </linearGradient>`;
+            mainSVG.appendChild(svgDefs);
+          }
+
+          // Apply arrow shape to non-connector nodes (mirrors FsatSankeyComponent.buildSvgArrows)
+          const rects = container.querySelectorAll('.node-rect');
+          for (let i = 0; i < rects.length; i++) {
+            if (!connectingNodes.includes(i)) {
+              const rect = rects[i] as SVGRectElement;
+              const h = parseFloat(rect.getAttribute('height'));
+              const y = parseFloat(rect.getAttribute('y'));
+              rect.setAttribute('y', `${y - h / 2.75}`);
+              rect.setAttribute('style',
+                `width:${h}px;height:${h * 1.75}px;clip-path:polygon(100% 50%,0 0,0 100%);` +
+                `stroke-width:0.5;stroke:rgb(255,255,255);stroke-opacity:0.5;` +
+                `fill:${gradientEnd};fill-opacity:0.9;`);
+            }
+          }
+
+          return await p.toImage(chartDiv, { format: 'jpeg', width: 1400, height: 700 });
+        } finally {
+          p.purge(chartDiv);
+          document.body.removeChild(container);
+        }
+      },
+    });
+
+    if (psat.outputs) {
+      sections.push(buildSection(psat.outputs, psat.name ?? 'Baseline', true));
+    }
+    psat.modifications?.forEach(m => {
+      if (m.psat?.valid?.isValid && m.psat.outputs) {
+        sections.push(buildSection(m.psat.outputs, m.psat.name ?? 'Modification', false));
+      }
+    });
+
+    return sections;
+  }
+
   // ─── Result Data ──────────────────────────────────────────────────────────
 
   private buildResultsSections(psat: PSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {
@@ -105,56 +413,72 @@ export class PsatReportAdapter implements ReportDataAdapter {
     const out = psat.outputs;
     const mods = psat.modifications ?? [];
 
-    const n = (value: number | undefined, dec = 0) => value != null ? formatNumber(value, dec) : '—';
+    const fmtNum = (value: number | undefined, dec = 0) =>
+      value != null ? formatNumber(value, dec) : '—';
 
-    const modOut = (fn: (o: PsatOutputs) => number | undefined, dec = 0) =>
-      mods.map(m => n(fn(m.psat?.outputs ?? {}), dec));
+    const modColumns = (key: keyof PsatOutputs, dec = 0) =>
+      mods.map(m => fmtNum(m.psat?.outputs?.[key] as number | undefined, dec));
+
+    // load_factor is stored as 0–1; scale to percentage for display
+    const loadedPct = (o: PsatOutputs | undefined) => o?.load_factor != null ? o.load_factor * 100 : undefined;
+
+    const modPercentSavings = mods.map(m =>
+      m.psat?.outputs?.percent_annual_savings != null
+        ? fmtNum(m.psat.outputs.percent_annual_savings, 0) + ' %' : '—'
+    );
+
+    const modEnergySavings = mods.map(m =>
+      m.psat?.inputs?.whatIfScenario
+        ? fmtNum((out?.annual_energy ?? 0) - (m.psat?.outputs?.annual_energy ?? 0), 0) : '—'
+    );
+
+    const modCostSavings = mods.map(m =>
+      m.psat?.inputs?.whatIfScenario
+        ? fmtNum((out?.annual_cost ?? 0) - (m.psat?.outputs?.annual_cost ?? 0), 0) : '—'
+    );
+
+    const modLoadedPct = mods.map(m => fmtNum(loadedPct(m.psat?.outputs), 1));
+    const modImplementationCosts = mods.map(m => fmtNum(m.psat?.inputs?.implementationCosts, 0));
+    const modPayback = mods.map(m => this.calcPayback(out, m));
 
     const rows: string[][] = [
+      // pump & motor performance
       ['Percent Savings (%)',
-        '—',
-        ...mods.map(m => m.psat?.outputs?.percent_annual_savings != null
-          ? n(m.psat.outputs.percent_annual_savings, 0) + ' %' : '—')],
+        '—', ...modPercentSavings],
       [`Pump Efficiency (%)`,
-        n(out?.pump_efficiency, 1), ...modOut(o => o.pump_efficiency, 1)],
+        fmtNum(out?.pump_efficiency, 1), ...modColumns('pump_efficiency', 1)],
       [`Motor Rated Power (${settings.powerMeasurement})`,
-        n(out?.motor_rated_power, 0), ...modOut(o => o.motor_rated_power, 0)],
+        fmtNum(out?.motor_rated_power, 0), ...modColumns('motor_rated_power', 0)],
       [`Motor Shaft Power (${settings.powerMeasurement})`,
-        n(out?.motor_shaft_power, 1), ...modOut(o => o.motor_shaft_power, 1)],
+        fmtNum(out?.motor_shaft_power, 1), ...modColumns('motor_shaft_power', 1)],
       [`Pump Shaft Power (${settings.powerMeasurement})`,
-        n(out?.mover_shaft_power, 1), ...modOut(o => o.mover_shaft_power, 1)],
+        fmtNum(out?.mover_shaft_power, 1), ...modColumns('mover_shaft_power', 1)],
       ['Motor Efficiency (%)',
-        n(out?.motor_efficiency, 1), ...modOut(o => o.motor_efficiency, 1)],
+        fmtNum(out?.motor_efficiency, 1), ...modColumns('motor_efficiency', 1)],
       ['Motor Power Factor (%)',
-        n(out?.motor_power_factor, 1), ...modOut(o => o.motor_power_factor, 1)],
+        fmtNum(out?.motor_power_factor, 1), ...modColumns('motor_power_factor', 1)],
       ['Percent Loaded (%)',
-        n(out?.load_factor != null ? out.load_factor * 100 : undefined, 1),
-        ...mods.map(m => n(m.psat?.outputs?.load_factor != null ? m.psat.outputs.load_factor * 100 : undefined, 1))],
+        fmtNum(loadedPct(out), 1), ...modLoadedPct],
       ['Drive Efficiency (%)',
-        n(out?.drive_efficiency, 1), ...modOut(o => o.drive_efficiency, 1)],
+        fmtNum(out?.drive_efficiency, 1), ...modColumns('drive_efficiency', 1)],
       ['Motor Current (amps)',
-        n(out?.motor_current, 0), ...modOut(o => o.motor_current, 0)],
+        fmtNum(out?.motor_current, 0), ...modColumns('motor_current', 0)],
       ['Motor Power (kW)',
-        n(out?.motor_power, 1), ...modOut(o => o.motor_power, 1)],
-      // ── callout rows (emphasized) ──
+        fmtNum(out?.motor_power, 1), ...modColumns('motor_power', 1)],
+      // annual energy & cost callouts — rows 11–14 are emphasized in the rendered report
       ['Annual Energy (MWh)',
-        n(out?.annual_energy, 0), ...modOut(o => o.annual_energy, 0)],
+        fmtNum(out?.annual_energy, 0), ...modColumns('annual_energy', 0)],
       ['Annual Energy Savings (MWh)',
-        '—',
-        ...mods.map(m => m.psat?.inputs?.whatIfScenario
-          ? n((out?.annual_energy ?? 0) - (m.psat?.outputs?.annual_energy ?? 0), 0) : '—')],
+        '—', ...modEnergySavings],
       [`Annual Cost (${settings.currency})`,
-        n(out?.annual_cost, 0), ...modOut(o => o.annual_cost, 0)],
+        fmtNum(out?.annual_cost, 0), ...modColumns('annual_cost', 0)],
       [`Annual Savings (${settings.currency})`,
-        '—',
-        ...mods.map(m => m.psat?.inputs?.whatIfScenario
-          ? n((out?.annual_cost ?? 0) - (m.psat?.outputs?.annual_cost ?? 0), 0) : '—')],
+        '—', ...modCostSavings],
+      // cost summary
       ['Implementation Cost',
-        '—',
-        ...mods.map(m => n(m.psat?.inputs?.implementationCosts, 0))],
+        '—', ...modImplementationCosts],
       ['Payback Period (months)',
-        '—',
-        ...mods.map(m => this.calcPayback(out, m))],
+        '—', ...modPayback],
     ];
 
     return [{
@@ -183,7 +507,12 @@ export class PsatReportAdapter implements ReportDataAdapter {
     const inputs = psat.inputs;
     const mods = psat.modifications ?? [];
 
-    const row = (label: string, baseVal: any, modFn: (i: PsatInputs) => any, fmt?: (v: any) => string): string[] => {
+    const row = <T extends string | number | null | undefined>(
+      label: string,
+      baseVal: T,
+      modFn: (i: PsatInputs | undefined) => T,
+      fmt?: (v: T) => string
+    ): string[] => {
       const f = fmt ?? (v => v != null ? String(v) : '—');
       return [label, f(baseVal), ...mods.map(m => f(modFn(m.psat?.inputs)))];
     };
