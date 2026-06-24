@@ -397,6 +397,7 @@ export class CompressedAirCalculationService {
     additionalReceiverVolume: number = 0,
     canShutdown: boolean = true
   ): Array<CompressedAirProfileSummary> {
+    
     let compressors: Array<SuiteProfileCompressor> = this.getSuiteProfileCompressors(inventoryItems, settings);
     let profileRows: Array<SuiteProfileRow> = this.getSuiteRowsFromProfileSummaries(baselineProfileSummary, settings);
     let options: SuiteProfileOptions = this.getSuiteProfileOptions(
@@ -453,12 +454,16 @@ export class CompressedAirCalculationService {
     let previousRows: Array<SuiteProfileRow> = this.getSuiteRowsFromProfileSummaries(previousProfileSummary, settings);
     let demandRows: Array<SuiteProfileTotal> = this.getSuiteTotalsFromProfileTotals(totals, dayType.dayTypeId, settings);
     let runtimeStates: Array<SuiteRuntimeState> = this.getSuiteRuntimeStates(reduceRuntime);
-    let suiteTrimSelections: Array<SuiteTrimSelection> = (trimSelections || []).map((selection: { dayTypeId: string, compressorId: string }) => {
-      return {
-        dayTypeId: selection.dayTypeId,
-        compressorId: selection.compressorId
-      };
-    });
+    let suiteTrimSelections: Array<SuiteTrimSelection> = (trimSelections || [])
+      .filter((selection: { dayTypeId: string, compressorId: string }) => {
+        return Boolean(selection?.dayTypeId && selection?.compressorId);
+      })
+      .map((selection: { dayTypeId: string, compressorId: string }) => {
+        return {
+          dayTypeId: selection.dayTypeId,
+          compressorId: selection.compressorId
+        };
+      });
     let options: SuiteProfileOptions = this.getSuiteProfileOptions(
       dayType.dayTypeId,
       3,
@@ -686,7 +691,7 @@ export class CompressedAirCalculationService {
       timeIntervalHr: data.timeInterval,
       operatingOrder: data.order || 0,
       powerKw: this.getNumberOrZero(data.power),
-      airflowAcfm: this.getAirflowForSuite(data.airflow, settings),
+      airflowAcfm: this.getAirflowForSuite(this.getNumberOrZero(data.airflow), settings),
       powerFraction: this.getNumberOrZero(data.percentPower) / 100,
       airflowFraction: this.getNumberOrZero(data.percentCapacity) / 100,
       systemPowerFraction: this.getNumberOrZero(data.percentSystemPower) / 100,
@@ -1016,7 +1021,7 @@ export class CompressedAirCalculationService {
       unloadSumpPressure: compressor.compressorControls.unloadSumpPressure || 0,
       noLoadPowerFM: compressor.designDetails.noLoadPowerFM / 100,
       noLoadDischargePressure: compressor.performancePoints.noLoad.dischargePressure,
-      
+
       turndownAirflow: compressor.performancePoints.turndown?.airflow,
       turndownDischargePressure: compressor.performancePoints.turndown?.dischargePressure,
       turndownPower: compressor.performancePoints.turndown?.power,

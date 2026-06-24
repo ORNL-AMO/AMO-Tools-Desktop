@@ -166,7 +166,8 @@ export class CompressedAirSuiteApiService {
     let rowVector: CompressorProfileRowV = this.getCompressorProfileRowVector(profileRows);
     let resultsVector: CompressorProfileRowV;
     try {
-      resultsVector = this.toolsSuiteApiService.ToolsSuiteModule.calculateBaselineProfile(compressorVector, rowVector, this.getCompressorProfileOptions(options));
+      const _options = this.getCompressorProfileOptions(options);
+      resultsVector = this.toolsSuiteApiService.ToolsSuiteModule.calculateBaselineProfile(compressorVector, rowVector, _options);
       return this.copyCompressorProfileRows(resultsVector);
     } finally {
       if (resultsVector) {
@@ -882,9 +883,19 @@ export class CompressedAirSuiteApiService {
   private getCompressorProfileCompressorVector(compressors: Array<CompressorProfileCompressor>): CompressorProfileCompressorV {
     let compressorVector: CompressorProfileCompressorV = new this.toolsSuiteApiService.ToolsSuiteModule.CompressorProfileCompressorV();
     compressors.forEach((compressor: CompressorProfileCompressor) => {
-      compressorVector.push_back(compressor);
+      compressorVector.push_back(this.getCompressorProfileCompressor(compressor));
     });
     return compressorVector;
+  }
+
+  private getCompressorProfileCompressor(compressor: CompressorProfileCompressor): CompressorProfileCompressor {
+    return {
+      ...compressor,
+      compressorType: this.suiteApiHelperService.getCompressorTypeEnum(this.getSuiteEnumNumber(compressor.compressorType)),
+      control: this.suiteApiHelperService.getControlTypeEnum(this.getSuiteEnumNumber(compressor.control)),
+      stage: this.suiteApiHelperService.getStageEnum(this.getSuiteEnumNumber(compressor.stage)),
+      lubricant: this.suiteApiHelperService.getLubricantEnum(this.getSuiteEnumNumber(compressor.lubricant))
+    };
   }
 
   private getCompressorProfileRowVector(profileRows: Array<CompressorProfileRow>): CompressorProfileRowV {
