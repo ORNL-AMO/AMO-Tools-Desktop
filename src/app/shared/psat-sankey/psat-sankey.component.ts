@@ -155,7 +155,7 @@ export class PsatSankeyComponent implements OnInit {
     }
   }
 
-  sankey(results: PsatOutputs) {
+  async sankey(results: PsatOutputs): Promise<void> {
     const links: Array<{ source: number, target: number }> = [];
     let nodes: Array<SankeyNode> = [];
 
@@ -256,10 +256,9 @@ export class PsatSankeyComponent implements OnInit {
       };
     }
 
-    this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config)).then(() => {
-      this.addGradientElement();
-      this.buildSvgArrows();
-    });
+    await this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config));
+    this.addGradientElement();
+    this.buildSvgArrows();
   }
 
   calcLosses(results) {

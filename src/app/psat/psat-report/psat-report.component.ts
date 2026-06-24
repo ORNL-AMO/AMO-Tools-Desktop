@@ -122,6 +122,7 @@ export class PsatReportComponent implements OnInit {
   setOutputs() {
     this.assessment.psat.outputs = this.getResults(this.assessment.psat, this.settings, true);
     this.assessment.psat.outputs.percent_annual_savings = 0;
+    
     this.assessment.psat.modifications.forEach(modification => {
       modification.psat.outputs = this.getResults(modification.psat, this.settings, false);
       modification.psat.outputs.percent_annual_savings = this.getSavingsPercentage(this.assessment.psat, modification.psat);
@@ -143,8 +144,9 @@ export class PsatReportComponent implements OnInit {
   }
 
   getSavingsPercentage(baseline: PSAT, modification: PSAT): number {
-    let tmpSavingsPercent: number = Number(Math.round(((((baseline.outputs.annual_cost - modification.outputs.annual_cost) * 100) / baseline.outputs.annual_cost) * 100) / 100).toFixed(0));
-    return tmpSavingsPercent;
+    const costSavings = baseline.outputs.annual_cost - modification.outputs.annual_cost;
+    const savingsPercent = Math.round((costSavings / baseline.outputs.annual_cost) * 100);
+    return savingsPercent;
   }
 
   collapseTabs() {
