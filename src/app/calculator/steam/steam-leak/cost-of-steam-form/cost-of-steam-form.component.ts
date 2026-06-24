@@ -44,7 +44,7 @@ export class CostOfSteamFormComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     const input = this.surveyService.steamLeakInput();
     if (input) {
-      this.facilityForm = this.formService.buildFacilitySteamLeakForm(input.facilitySteamLeakData);
+      this.facilityForm = this.formService.buildFacilitySteamLeakForm(input.facilitySteamLeakData, this.settings());
     }
   }
 

@@ -90,7 +90,7 @@ describe('SteamLeakTreasureHuntService', () => {
       utilityType: 'Electricity',
       baselineCost: 200,
       modificationCost: 0,
-      opportunityName: 'Steam Leak Survey',
+      opportunityName: 'Steam - Leak Survey',
     } as any;
     const currentEnergyUsage = { electricityCosts: 10000, naturalGasCosts: 5000, steamCosts: 3000 } as any;
 
@@ -117,7 +117,7 @@ describe('SteamLeakTreasureHuntService', () => {
       utilityType: 'Natural Gas',
       baselineCost: 300,
       modificationCost: 0,
-      opportunityName: 'Steam Leak Survey',
+      opportunityName: 'Steam - Leak Survey',
     } as any;
     const currentEnergyUsage = { electricityCosts: 10000, naturalGasCosts: 5000, steamCosts: 3000 } as any;
 
@@ -143,7 +143,7 @@ describe('SteamLeakTreasureHuntService', () => {
       utilityType: 'Steam',
       baselineCost: 500,
       modificationCost: 0,
-      opportunityName: 'Steam Leak Survey',
+      opportunityName: 'Steam - Leak Survey',
     } as any;
     const currentEnergyUsage = { electricityCosts: 10000, naturalGasCosts: 5000, steamCosts: 3000 } as any;
 
@@ -169,7 +169,7 @@ describe('SteamLeakTreasureHuntService', () => {
       utilityType: 'Other Fuel',
       baselineCost: 400,
       modificationCost: 0,
-      opportunityName: 'Steam Leak Survey',
+      opportunityName: 'Steam - Leak Survey',
     } as any;
     const currentEnergyUsage = { electricityCosts: 10000, naturalGasCosts: 5000, steamCosts: 3000 } as any;
 
@@ -195,7 +195,7 @@ describe('SteamLeakTreasureHuntService', () => {
       utilityType: 'Natural Gas',
       baselineCost: 100,
       modificationCost: 0,
-      opportunityName: 'Steam Leak Survey',
+      opportunityName: 'Steam - Leak Survey',
     } as any;
     const currentEnergyUsage = { electricityCosts: 10000, naturalGasCosts: 5000, steamCosts: 3000 } as any;
 

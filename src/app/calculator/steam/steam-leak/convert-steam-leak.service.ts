@@ -32,6 +32,14 @@ export class ConvertSteamLeakService {
       facilityData.steamTemperature = this.convertUnitsService.value(facilityData.steamTemperature).from('C').to('F');
       facilityData.steamPressure = this.convertUnitsService.value(facilityData.steamPressure).from('kPaa').to('psia');
       facilityData.feedwaterTemperature = this.convertUnitsService.value(facilityData.feedwaterTemperature).from('C').to('F');
+      // Suite expects $/lb; UI input is $/tonne (1 tonne = 2204.62 lb)
+      facilityData.steamCost = facilityData.steamCost / 2204.62;
+      // Suite expects $/MMBtu; UI input is $/GJ (1 MMBtu = 1.05506 GJ)
+      facilityData.fuelCost = facilityData.fuelCost * 1.05506;
+    } else {
+      // Suite expects $/lb; UI input is $/klb
+      facilityData.steamCost = facilityData.steamCost / 1000;
+      // Suite expects $/MMBtu; Imperial UI input is already $/MMBtu — no conversion needed
     }
     return facilityData;
   }
@@ -40,8 +48,8 @@ export class ConvertSteamLeakService {
   convertResult(result: SteamLeakSurveyResult, settings: Settings): SteamLeakSurveyResult {
     if (settings.unitsOfMeasure === 'Metric') {
       result.leakRate = this.convertUnitsService.value(result.leakRate).from('lb').to('kg');
-      result.steamLoss = this.convertUnitsService.value(result.steamLoss).from('Btu').to('kJ');
-      result.energyLoss = this.convertUnitsService.value(result.energyLoss).from('Btu').to('kJ');
+      result.steamLoss = this.convertUnitsService.value(result.steamLoss).from('lb').to('kg');
+      result.energyLoss = this.convertUnitsService.value(result.energyLoss).from('MMBtu').to('GJ');
     }
     return result;
   }
@@ -106,6 +114,12 @@ export class ConvertSteamLeakService {
     inputData.steamPressure = roundVal(inputData.steamPressure);
     inputData.feedwaterTemperature = this.convertUnitsService.value(inputData.feedwaterTemperature).from('F').to('C');
     inputData.feedwaterTemperature = roundVal(inputData.feedwaterTemperature);
+    // steamCost: $/klb → $/tonne (1 tonne = 2.20462 klb)
+    inputData.steamCost = inputData.steamCost * 2.20462;
+    inputData.steamCost = roundVal(inputData.steamCost);
+    // fuelCost: $/MMBtu → $/GJ (1 MMBtu = 1.05506 GJ)
+    inputData.fuelCost = inputData.fuelCost / 1.05506;
+    inputData.fuelCost = roundVal(inputData.fuelCost);
     return inputData;
   }
 
@@ -116,6 +130,12 @@ export class ConvertSteamLeakService {
     inputData.steamPressure = roundVal(inputData.steamPressure);
     inputData.feedwaterTemperature = this.convertUnitsService.value(inputData.feedwaterTemperature).from('C').to('F');
     inputData.feedwaterTemperature = roundVal(inputData.feedwaterTemperature);
+    // steamCost: $/tonne → $/klb (1 tonne = 2.20462 klb)
+    inputData.steamCost = inputData.steamCost / 2.20462;
+    inputData.steamCost = roundVal(inputData.steamCost);
+    // fuelCost: $/GJ → $/MMBtu (1 MMBtu = 1.05506 GJ)
+    inputData.fuelCost = inputData.fuelCost * 1.05506;
+    inputData.fuelCost = roundVal(inputData.fuelCost);
     return inputData;
   }
 

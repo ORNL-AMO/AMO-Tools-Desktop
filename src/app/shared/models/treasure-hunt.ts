@@ -263,7 +263,7 @@ export const opportunities: OpportunityForFiltering[] = [
         iconCalcType: 'steam',
         opportunityType: 'steam-leak-survey',
         utilityType: ['All', 'Steam', 'Natural Gas', 'Other Fuel'],
-        name: 'Steam Leak Survey',
+        name: 'Steam - Leak Survey',
         description: 'Quantify the energy savings associated with reducing steam leaks.'
     },
     {

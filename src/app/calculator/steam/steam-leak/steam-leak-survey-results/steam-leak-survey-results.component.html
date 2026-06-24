@@ -29,7 +29,7 @@
             <td class="bold w-50">Annual Leak Cost</td>
             <td class="text-center w-50">
                 @if (output.baselineTotal.leakCost) {
-                    <span class="small bold">{{ output.baselineTotal.leakCost | currency:'USD':'symbol':'1.0-0' }}</span>
+                    <span class="bold w-50">{{ output.baselineTotal.leakCost | currency:'USD':'symbol':'1.0-0' }}</span>
                 } @else {
                     <span> -- </span>
                 }
@@ -67,7 +67,7 @@
             <td class="bold w-50">Annual Leak Cost</td>
             <td class="text-center w-50">
                 @if (output.modificationTotal.leakCost) {
-                    <span class="small bold">{{ output.modificationTotal.leakCost | currency:'USD':'symbol':'1.0-0' }}</span>
+                    <span class="bold w-50">{{ output.modificationTotal.leakCost | currency:'USD':'symbol':'1.0-0' }}</span>
                 } @else {
                     <span> -- </span>
                 }
@@ -105,7 +105,7 @@
             <td class="bold w-50">Annual Leak Cost</td>
             <td class="text-center w-50">
                 @if (output.savings.leakCost) {
-                    <span class="small bold">{{ output.savings.leakCost | currency:'USD':'symbol':'1.0-0' }}</span>
+                    <span class="bold w-50">{{ output.savings.leakCost | currency:'USD':'symbol':'1.0-0' }}</span>
                 } @else {
                     <span> -- </span>
                 }
