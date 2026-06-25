@@ -8,7 +8,7 @@
             <td class="text-center w-50">
                 @if (output.baselineTotal.steamLoss) {
                     {{ output.baselineTotal.steamLoss | number:'1.0-0' }}
-                    @if (settings().unitsOfMeasure === 'Imperial') { <span> lbs/yr</span> } @else { <span> kg/yr</span> }
+                    @if (settings().unitsOfMeasure === 'Imperial') { <span> klb/yr</span> } @else { <span> tonne/yr</span> }
                 } @else {
                     <span> -- </span>
                 }
@@ -46,7 +46,7 @@
             <td class="text-center w-50">
                 @if (output.modificationTotal.steamLoss) {
                     {{ output.modificationTotal.steamLoss | number:'1.0-0' }}
-                    @if (settings().unitsOfMeasure === 'Imperial') { <span> lbs/yr</span> } @else { <span> kg/yr</span> }
+                    @if (settings().unitsOfMeasure === 'Imperial') { <span> klb/yr</span> } @else { <span> tonne/yr</span> }
                 } @else {
                     <span> -- </span>
                 }
@@ -84,7 +84,7 @@
             <td class="text-center w-50">
                 @if (output.savings.steamLoss) {
                     {{ output.savings.steamLoss | number:'1.0-0' }}
-                    @if (settings().unitsOfMeasure === 'Imperial') { <span> lbs/yr</span> } @else { <span> kg/yr</span> }
+                    @if (settings().unitsOfMeasure === 'Imperial') { <span> klb/yr</span> } @else { <span> tonne/yr</span> }
                 } @else {
                     <span> -- </span>
                 }

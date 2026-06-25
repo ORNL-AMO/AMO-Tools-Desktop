@@ -20,7 +20,7 @@ export class ConvertSteamLeakService {
         inputArray[i].orificeMethodData.holeSize = this.convertUnitsService.value(inputArray[i].orificeMethodData.holeSize).from('cm').to('in');
         inputArray[i].orificeMethodData.atmosphericPressure = this.convertUnitsService.value(inputArray[i].orificeMethodData.atmosphericPressure).from('kPaa').to('psia');
 
-        inputArray[i].plumeMethodData.plumeLength = this.convertUnitsService.value(inputArray[i].plumeMethodData.plumeLength).from('cm').to('in');
+        inputArray[i].plumeMethodData.plumeLength = this.convertUnitsService.value(inputArray[i].plumeMethodData.plumeLength).from('m').to('ft');
         inputArray[i].plumeMethodData.ambientTemperature = this.convertUnitsService.value(inputArray[i].plumeMethodData.ambientTemperature).from('C').to('F');
       }
     }
@@ -55,41 +55,41 @@ export class ConvertSteamLeakService {
   }
 
   convertInputDataImperialToMetric(inputData: SteamLeakSurveyData): SteamLeakSurveyData {
-    inputData.estimateMethodData.leakRate = this.convertUnitsService.value(inputData.estimateMethodData.leakRate).from('lb').to('kg');
-    inputData.estimateMethodData.leakRate = roundVal(inputData.estimateMethodData.leakRate);
+    inputData.estimateMethodData.steamPressure = roundVal(this.convertUnitsService.value(inputData.estimateMethodData.steamPressure).from('psig').to('kPag'), 0);
+    inputData.estimateMethodData.steamTemperature = roundVal(this.convertUnitsService.value(inputData.estimateMethodData.steamTemperature).from('F').to('C'), 1);
+    inputData.estimateMethodData.leakRate = roundVal(this.convertUnitsService.value(inputData.estimateMethodData.leakRate).from('lb').to('kg'));
 
-    inputData.estimateTurbineMethodData.leakRate = this.convertUnitsService.value(inputData.estimateTurbineMethodData.leakRate).from('lb').to('kg');
-    inputData.estimateTurbineMethodData.leakRate = roundVal(inputData.estimateTurbineMethodData.leakRate);
+    inputData.estimateTurbineMethodData.leakRate = roundVal(this.convertUnitsService.value(inputData.estimateTurbineMethodData.leakRate).from('lb').to('kg'));
 
-    inputData.orificeMethodData.holeSize = this.convertUnitsService.value(inputData.orificeMethodData.holeSize).from('in').to('cm');
-    inputData.orificeMethodData.holeSize = roundVal(inputData.orificeMethodData.holeSize);
-    inputData.orificeMethodData.atmosphericPressure = this.convertUnitsService.value(inputData.orificeMethodData.atmosphericPressure).from('psia').to('kPaa');
-    inputData.orificeMethodData.atmosphericPressure = roundVal(inputData.orificeMethodData.atmosphericPressure);
+    inputData.orificeMethodData.steamPressure = roundVal(this.convertUnitsService.value(inputData.orificeMethodData.steamPressure).from('psig').to('kPag'), 0);
+    inputData.orificeMethodData.steamTemperature = roundVal(this.convertUnitsService.value(inputData.orificeMethodData.steamTemperature).from('F').to('C'), 1);
+    inputData.orificeMethodData.holeSize = roundVal(this.convertUnitsService.value(inputData.orificeMethodData.holeSize).from('in').to('cm'));
+    inputData.orificeMethodData.atmosphericPressure = roundVal(this.convertUnitsService.value(inputData.orificeMethodData.atmosphericPressure).from('psia').to('kPaa'));
 
-    inputData.plumeMethodData.plumeLength = this.convertUnitsService.value(inputData.plumeMethodData.plumeLength).from('in').to('cm');
-    inputData.plumeMethodData.plumeLength = roundVal(inputData.plumeMethodData.plumeLength);
-    inputData.plumeMethodData.ambientTemperature = this.convertUnitsService.value(inputData.plumeMethodData.ambientTemperature).from('F').to('C');
-    inputData.plumeMethodData.ambientTemperature = roundVal(inputData.plumeMethodData.ambientTemperature);
+    inputData.plumeMethodData.steamPressure = roundVal(this.convertUnitsService.value(inputData.plumeMethodData.steamPressure).from('psig').to('kPag'), 0);
+    inputData.plumeMethodData.steamTemperature = roundVal(this.convertUnitsService.value(inputData.plumeMethodData.steamTemperature).from('F').to('C'), 1);
+    inputData.plumeMethodData.plumeLength = roundVal(this.convertUnitsService.value(inputData.plumeMethodData.plumeLength).from('ft').to('m'), 4);
+    inputData.plumeMethodData.ambientTemperature = roundVal(this.convertUnitsService.value(inputData.plumeMethodData.ambientTemperature).from('F').to('C'));
 
     return inputData;
   }
 
   convertInputDataMetricToImperial(inputData: SteamLeakSurveyData): SteamLeakSurveyData {
-    inputData.estimateMethodData.leakRate = this.convertUnitsService.value(inputData.estimateMethodData.leakRate).from('kg').to('lb');
-    inputData.estimateMethodData.leakRate = roundVal(inputData.estimateMethodData.leakRate);
+    inputData.estimateMethodData.steamPressure = roundVal(this.convertUnitsService.value(inputData.estimateMethodData.steamPressure).from('kPag').to('psig'), 0);
+    inputData.estimateMethodData.steamTemperature = roundVal(this.convertUnitsService.value(inputData.estimateMethodData.steamTemperature).from('C').to('F'), 1);
+    inputData.estimateMethodData.leakRate = roundVal(this.convertUnitsService.value(inputData.estimateMethodData.leakRate).from('kg').to('lb'));
 
-    inputData.estimateTurbineMethodData.leakRate = this.convertUnitsService.value(inputData.estimateTurbineMethodData.leakRate).from('kg').to('lb');
-    inputData.estimateTurbineMethodData.leakRate = roundVal(inputData.estimateTurbineMethodData.leakRate);
+    inputData.estimateTurbineMethodData.leakRate = roundVal(this.convertUnitsService.value(inputData.estimateTurbineMethodData.leakRate).from('kg').to('lb'));
 
-    inputData.orificeMethodData.holeSize = this.convertUnitsService.value(inputData.orificeMethodData.holeSize).from('cm').to('in');
-    inputData.orificeMethodData.holeSize = roundVal(inputData.orificeMethodData.holeSize);
-    inputData.orificeMethodData.atmosphericPressure = this.convertUnitsService.value(inputData.orificeMethodData.atmosphericPressure).from('kPaa').to('psia');
-    inputData.orificeMethodData.atmosphericPressure = roundVal(inputData.orificeMethodData.atmosphericPressure);
+    inputData.orificeMethodData.steamPressure = roundVal(this.convertUnitsService.value(inputData.orificeMethodData.steamPressure).from('kPag').to('psig'), 0);
+    inputData.orificeMethodData.steamTemperature = roundVal(this.convertUnitsService.value(inputData.orificeMethodData.steamTemperature).from('C').to('F'), 1);
+    inputData.orificeMethodData.holeSize = roundVal(this.convertUnitsService.value(inputData.orificeMethodData.holeSize).from('cm').to('in'));
+    inputData.orificeMethodData.atmosphericPressure = roundVal(this.convertUnitsService.value(inputData.orificeMethodData.atmosphericPressure).from('kPaa').to('psia'));
 
-    inputData.plumeMethodData.plumeLength = this.convertUnitsService.value(inputData.plumeMethodData.plumeLength).from('cm').to('in');
-    inputData.plumeMethodData.plumeLength = roundVal(inputData.plumeMethodData.plumeLength);
-    inputData.plumeMethodData.ambientTemperature = this.convertUnitsService.value(inputData.plumeMethodData.ambientTemperature).from('C').to('F');
-    inputData.plumeMethodData.ambientTemperature = roundVal(inputData.plumeMethodData.ambientTemperature);
+    inputData.plumeMethodData.steamPressure = roundVal(this.convertUnitsService.value(inputData.plumeMethodData.steamPressure).from('kPag').to('psig'), 0);
+    inputData.plumeMethodData.steamTemperature = roundVal(this.convertUnitsService.value(inputData.plumeMethodData.steamTemperature).from('C').to('F'), 1);
+    inputData.plumeMethodData.plumeLength = roundVal(this.convertUnitsService.value(inputData.plumeMethodData.plumeLength).from('m').to('ft'), 2);
+    inputData.plumeMethodData.ambientTemperature = roundVal(this.convertUnitsService.value(inputData.plumeMethodData.ambientTemperature).from('C').to('F'));
 
     return inputData;
   }

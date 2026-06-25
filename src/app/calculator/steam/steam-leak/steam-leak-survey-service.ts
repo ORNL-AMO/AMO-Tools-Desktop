@@ -19,6 +19,7 @@ export class SteamLeakSurveyService {
     readonly currentField = signal<string>('default');
     private readonly resetEventsSubject = new Subject<void>();
     readonly resetEvents = this.resetEventsSubject.asObservable();
+    lastUnitsOfMeasure: string | undefined;
 
 
     readonly output = computed<SteamLeakSurveyOutput>(() => {
@@ -144,6 +145,27 @@ export class SteamLeakSurveyService {
       data = this.convertSteamLeakService.convertImperialFacilitySteamLeakData(data);
     }
     return data;
+  }
+
+  convertSurveyInput(oldUnits: string, newSettings: Settings): void {
+    const current = this.steamLeakInput();
+    if (!current) return;
+    const fakeOldSettings = { unitsOfMeasure: oldUnits } as Settings;
+    const convertedLeaks = current.steamLeakSurveyInputVec.map(leak => {
+      const copy: SteamLeakSurveyData = copyObject(leak);
+      if (oldUnits === 'Imperial' && newSettings.unitsOfMeasure === 'Metric') {
+        return this.convertSteamLeakService.convertInputDataImperialToMetric(copy);
+      } else if (oldUnits === 'Metric' && newSettings.unitsOfMeasure === 'Imperial') {
+        return this.convertSteamLeakService.convertInputDataMetricToImperial(copy);
+      }
+      return copy;
+    });
+    const convertedFacility = this.convertSteamLeakService.convertFacilitySteamLeakData(
+      copyObject(current.facilitySteamLeakData),
+      fakeOldSettings,
+      newSettings,
+    );
+    this.steamLeakInput.set({ steamLeakSurveyInputVec: convertedLeaks, facilitySteamLeakData: convertedFacility });
   }
 
     getResults(settings: Settings, input: SteamLeakSurveyInput): SteamLeakSurveyOutput {

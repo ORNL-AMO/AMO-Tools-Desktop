@@ -199,7 +199,7 @@
       @if (surveyService.output().baselineTotal.steamLoss) {
         <span class="small bold">
           {{ surveyService.output().baselineTotal.steamLoss | number:'1.0-0' }}
-          @if (settings().unitsOfMeasure === 'Imperial') { <span> lbs/yr</span> } @else { <span> kg/yr</span> }
+          @if (settings().unitsOfMeasure === 'Imperial') { <span> klb/yr</span> } @else { <span> tonne/yr</span> }
         </span>
       } @else {
         <span> -- </span>
