@@ -53,7 +53,13 @@ export class SteamLeakSurveyComponent implements OnInit, OnDestroy {
 
     if (!this.surveyService.steamLeakInput()) {
       this.surveyService.initDefaultEmptyInputs(this.activeSettings);
+    } else if (
+      this.surveyService.lastUnitsOfMeasure &&
+      this.surveyService.lastUnitsOfMeasure !== this.activeSettings.unitsOfMeasure
+    ) {
+      this.surveyService.convertSurveyInput(this.surveyService.lastUnitsOfMeasure, this.activeSettings);
     }
+    this.surveyService.lastUnitsOfMeasure = this.activeSettings.unitsOfMeasure;
 
     const assessment = this.assessment();
     if (assessment) {
