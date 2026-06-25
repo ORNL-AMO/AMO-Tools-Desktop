@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { ChargeMaterial, LiquidChargeMaterial } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, LiquidChargeMaterial, ThermicReactionType } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class LiquidMaterialFormService {
 
   getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): UntypedFormGroup {
     let reactionType = 'Endothermic';
-    if (chargeMaterial.liquidChargeMaterial.thermicReactionType !== 0) {
+    if (chargeMaterial.liquidChargeMaterial.thermicReactionType === ThermicReactionType.Exothermic) {
       reactionType = 'Exothermic';
     }
     let formGroup = this.formBuilder.group({
@@ -68,7 +68,7 @@ export class LiquidMaterialFormService {
   }
 
   buildLiquidChargeMaterial(liquidForm: UntypedFormGroup): ChargeMaterial {
-    let reactionType = 0;
+    let reactionType: ThermicReactionType = 0;
     if (liquidForm.controls.endothermicOrExothermic.value === 'Exothermic') {
       reactionType = 1;
     }

@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
 import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
+import { InputUnitComponent } from '../shared/input-unit.component';
 import { SettingsModule } from '../settings/settings.module';
 import { Co2SavingsPhastModule } from '../phast/losses/operations/co2-savings-phast/co2-savings-phast.module';
 import { OperatingHoursModule } from '../shared/operating-hours/operating-hours.module';
 import { PhastOperatingCostsModule } from '../shared/phast-operating-costs/phast-operating-costs.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 import { ROUTE_TOKENS } from './constants/process-heating-routes';
 import { ProcessHeatingUiService } from './services/process-heating-ui.service';
@@ -32,9 +34,6 @@ import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.
 import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
 import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
 import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
-import { LiquidMaterialFormService } from '../calculator/furnaces/charge-material/liquid-material-form/liquid-material-form.service';
-import { GasMaterialFormService } from '../calculator/furnaces/charge-material/gas-material-form/gas-material-form.service';
-import { SolidMaterialFormService } from '../calculator/furnaces/charge-material/solid-material-form/solid-material-form.service';
 
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
@@ -59,6 +58,9 @@ import { DesignedEnergyComponent } from './designed-energy/designed-energy.compo
 import { MeteredEnergyComponent } from './metered-energy/metered-energy.component';
 
 import { ChargeMaterialComponent } from './heat-balance/losses/charge-material/charge-material.component';
+import { ChargeMaterialSolidFormComponent } from './heat-balance/losses/charge-material/solid-form/charge-material-solid-form.component';
+import { ChargeMaterialLiquidFormComponent } from './heat-balance/losses/charge-material/liquid-form/charge-material-liquid-form.component';
+import { ChargeMaterialGasFormComponent } from './heat-balance/losses/charge-material/gas-form/charge-material-gas-form.component';
 import { WallLossesComponent } from './heat-balance/losses/wall-losses/wall-losses.component';
 import { ExtendedSurfaceComponent } from './heat-balance/losses/extended-surface/extended-surface.component';
 import { AtmosphereComponent } from './heat-balance/losses/atmosphere/atmosphere.component';
@@ -266,6 +268,9 @@ const ROUTES: Route[] = [
     DesignedEnergyComponent,
     MeteredEnergyComponent,
     ChargeMaterialComponent,
+    ChargeMaterialSolidFormComponent,
+    ChargeMaterialLiquidFormComponent,
+    ChargeMaterialGasFormComponent,
     WallLossesComponent,
     ExtendedSurfaceComponent,
     AtmosphereComponent,
@@ -288,10 +293,12 @@ const ROUTES: Route[] = [
     ReactiveFormsModule,
     RouterModule.forChild(ROUTES),
     FormControlErrorsComponent,
+    InputUnitComponent,
     SettingsModule,
     Co2SavingsPhastModule,
     OperatingHoursModule,
     PhastOperatingCostsModule,
+    SharedPipesModule,
   ],
   providers: [
     ProcessHeatingUiService,
@@ -319,9 +326,6 @@ const ROUTES: Route[] = [
     OpeningFormService,
     CoolingFormService,
     FlueGasFormService,
-    LiquidMaterialFormService,
-    GasMaterialFormService,
-    SolidMaterialFormService,
   ]
 })
 export class ProcessHeatingAssessmentModule {}

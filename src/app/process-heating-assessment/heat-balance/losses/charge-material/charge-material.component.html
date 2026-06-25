@@ -1,4 +1,112 @@
 <div class="panel-container p-3">
-  <h5>Charge Material</h5>
-  <p class="text-muted">Multi-entry loss form — implemented in Step 6.</p>
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <h5 class="mb-0">Charge Material</h5>
+    <button class="btn btn-primary btn-sm" (click)="service.add()">+ Add Material</button>
+  </div>
+
+  @if (service.materials().length === 0) {
+    <div class="no-data text-center p-4">
+      <p class="text-muted">No charge materials. Click <strong>Add Material</strong> to begin.</p>
+    </div>
+  }
+
+  @for (item of service.materials(); track $index; let idx = $index) {
+    <div class="card mb-3">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2 flex-grow-1">
+          <button class="btn btn-sm btn-link p-0 text-dark" (click)="service.toggleCollapse(idx)">
+            @if (item.collapse) { <span class="fa fa-chevron-right"></span> } @else { <span class="fa fa-chevron-down"></span> }
+          </button>
+          <input type="text" class="form-control form-control-sm flex-grow-1"
+            [value]="item.name"
+            (input)="service.setName(idx, $event.target['value'])">
+        </div>
+        <button class="btn btn-sm btn-link text-danger" (click)="service.remove(idx)" title="Remove material"><span class="fa fa-times"></span></button>
+      </div>
+
+      @if (!item.collapse) {
+        <div class="card-body">
+          <div class="form-group mb-3">
+            <label class="small">Select Type</label>
+            <select class="form-control" (change)="service.switchType(idx, $event.target['value'])">
+              <option [value]="ChargeMaterialType.Solid" [selected]="item.type === ChargeMaterialType.Solid">Solid</option>
+              <option [value]="ChargeMaterialType.Liquid" [selected]="item.type === ChargeMaterialType.Liquid">Liquid</option>
+              <option [value]="ChargeMaterialType.Gas" [selected]="item.type === ChargeMaterialType.Gas">Gas</option>
+            </select>
+          </div>
+
+          @switch (item.type) {
+            @case (ChargeMaterialType.Solid) {
+              <app-charge-material-solid-form
+                [index]="idx"
+                [settings]="settings()">
+              </app-charge-material-solid-form>
+            }
+            @case (ChargeMaterialType.Liquid) {
+              <app-charge-material-liquid-form
+                [index]="idx"
+                [settings]="settings()">
+              </app-charge-material-liquid-form>
+            }
+            @case (ChargeMaterialType.Gas) {
+              <app-charge-material-gas-form
+                [index]="idx"
+                [settings]="settings()">
+              </app-charge-material-gas-form>
+            }
+          }
+
+          <div class="loss-results mt-3">
+            <div class="d-flex justify-content-between small">
+              <span class="font-weight-bold">{{item.name}} Heat Required</span>
+              <span>
+                @if (item.netHeatLoss != null) {
+                  {{item.netHeatLoss | sigFigs: 6}} {{resultsUnit}}
+                } @else {
+                  &mdash;&mdash;
+                }
+              </span>
+            </div>
+            <div class="d-flex justify-content-between small">
+              <span class="font-weight-bold">{{item.name}} Reaction Heat</span>
+              <span>
+                @if (item.endoExoHeat != null) {
+                  {{item.endoExoHeat | sigFigs: 6}} {{resultsUnit}}
+                } @else {
+                  &mdash;&mdash;
+                }
+              </span>
+            </div>
+            <div class="d-flex justify-content-between small">
+              <span class="font-weight-bold">{{item.name}} Total Heat Required</span>
+              <span>
+                @if (item.heatRequired != null) {
+                  {{item.heatRequired | sigFigs: 6}} {{resultsUnit}}
+                } @else {
+                  &mdash;&mdash;
+                }
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (service.materials().length > 0) {
+    <div class="loss-total mt-3 p-2 border-top">
+      <div class="d-flex justify-content-between small font-weight-bold">
+        <span>All Materials Heat Required</span>
+        <span>{{service.totals().netHeatLoss | sigFigs: 6}} {{resultsUnit}}</span>
+      </div>
+      <div class="d-flex justify-content-between small font-weight-bold">
+        <span>All Materials Reaction Heat</span>
+        <span>{{service.totals().endoExoHeat | sigFigs: 6}} {{resultsUnit}}</span>
+      </div>
+      <div class="d-flex justify-content-between small font-weight-bold">
+        <span>All Materials Total Heat Required</span>
+        <span>{{service.totals().heatRequired | sigFigs: 6}} {{resultsUnit}}</span>
+      </div>
+    </div>
+  }
 </div>

@@ -1,6 +1,21 @@
 
+export const ThermicReactionType = {
+  Endothermic: 0,
+  Exothermic: 1,
+} as const;
+
+export type ThermicReactionType = typeof ThermicReactionType[keyof typeof ThermicReactionType];
+
+export const ChargeMaterialType = {
+  Gas: 'Gas',
+  Liquid: 'Liquid',
+  Solid: 'Solid',
+} as const;
+
+export type ChargeMaterialType = typeof ChargeMaterialType[keyof typeof ChargeMaterialType];
+
 export interface ChargeMaterial {
-  chargeMaterialType?: string;
+  chargeMaterialType?: ChargeMaterialType;
   gasChargeMaterial?: GasChargeMaterial;
   liquidChargeMaterial?: LiquidChargeMaterial;
   solidChargeMaterial?: SolidChargeMaterial;
@@ -10,7 +25,7 @@ export interface ChargeMaterial {
 //Gas uses "feedRate"
 export interface GasChargeMaterial {
   materialId?: number;
-  thermicReactionType?: number;
+  thermicReactionType?: ThermicReactionType;
   specificHeatGas?: number;
   feedRate?: number;
   chargeFeedRate?: number;
@@ -28,7 +43,7 @@ export interface GasChargeMaterial {
 //Liquid and Solid uses "chargeFeedRate"
 export interface LiquidChargeMaterial {
   materialId?: number;
-  thermicReactionType?: number;
+  thermicReactionType?: ThermicReactionType;
   specificHeatLiquid?: number;
   vaporizingTemperature?: number;
   latentHeat?: number;
@@ -47,7 +62,7 @@ export interface LiquidChargeMaterial {
 }
 export interface SolidChargeMaterial {
   materialId?: number;
-  thermicReactionType?: number;
+  thermicReactionType?: ThermicReactionType;
   specificHeatSolid?: number;
   latentHeat?: number;
   specificHeatLiquid?: number;
