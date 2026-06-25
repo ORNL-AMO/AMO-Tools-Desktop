@@ -1,4 +1,58 @@
 <div class="panel-container p-3">
-  <h5>Extended Surface</h5>
-  <p class="text-muted">Multi-entry loss form — implemented in Step 7.</p>
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <h5 class="mb-0">Extended Surface Losses</h5>
+    <button class="btn btn-primary btn-sm" (click)="service.add()">+ Add Loss</button>
+  </div>
+
+  @if (service.surfaces().length === 0) {
+    <div class="no-data text-center p-4">
+      <p class="text-muted">No extended surface losses. Click <strong>Add Loss</strong> to begin.</p>
+    </div>
+  }
+
+  @for (item of service.surfaces(); track $index; let idx = $index) {
+    <div class="card mb-3">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2 flex-grow-1">
+          <button class="btn btn-sm btn-link p-0 text-dark" (click)="service.toggleCollapse(idx)">
+            @if (item.collapse) { <span class="fa fa-chevron-right"></span> } @else { <span class="fa fa-chevron-down"></span> }
+          </button>
+          <input type="text" class="form-control form-control-sm flex-grow-1"
+            [value]="item.name"
+            (input)="service.setName(idx, $event.target['value'])">
+        </div>
+        <button class="btn btn-sm btn-link text-danger" (click)="service.remove(idx)" title="Remove loss">
+          <span class="fa fa-times"></span>
+        </button>
+      </div>
+
+      @if (!item.collapse) {
+        <div class="card-body">
+          <app-extended-surface-form [index]="idx" [settings]="settings()"></app-extended-surface-form>
+
+          <div class="loss-results mt-3">
+            <div class="d-flex justify-content-between small">
+              <span class="font-weight-bold">{{item.name}} Heat Loss</span>
+              <span>
+                @if (item.heatLoss != null) {
+                  {{item.heatLoss | sigFigs: 6}} {{resultsUnit}}
+                } @else {
+                  &mdash;&mdash;
+                }
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (service.surfaces().length > 0) {
+    <div class="loss-total mt-3 p-2 border-top">
+      <div class="d-flex justify-content-between small font-weight-bold">
+        <span>Total Extended Surface Heat Loss</span>
+        <span>{{service.total() | sigFigs: 6}} {{resultsUnit}}</span>
+      </div>
+    </div>
+  }
 </div>

@@ -1,0 +1,94 @@
+<form [formGroup]="form()">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds.avgSurfaceTemp}}">Average Surface Temperature</label>
+      <div class="input-group" [class.invalid]="form().controls.avgSurfaceTemp.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds.avgSurfaceTemp}}" formControlName="avgSurfaceTemp" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+      </div>
+      @if (form().controls.avgSurfaceTemp.invalid && !form().controls.avgSurfaceTemp.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.avgSurfaceTemp.errors?.['required']) { Value Required }
+          @if (form().controls.avgSurfaceTemp.errors?.['min']) {
+            Value can't be less than Ambient Temperature
+            ({{form().controls.avgSurfaceTemp.errors?.['min'].min}}
+            @if (settings().unitsOfMeasure === 'Imperial') { &#8457; } @else { &#8451; }).
+          }
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.ambientTemp}}">Ambient Temperature</label>
+      <div class="input-group" [class.invalid]="form().controls.ambientTemp.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds.ambientTemp}}" formControlName="ambientTemp" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.ambientTemp" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.windVelocity}}">Wind Velocity</label>
+      <div class="input-group" [class.invalid]="form().controls.windVelocity.invalid">
+        <input type="number" step="1" min="0" class="form-control"
+          id="{{controlIds.windVelocity}}" formControlName="windVelocity" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="mph" metricUnit="km/hr"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.windVelocity" [settings]="settings()"
+        imperialUnit="mph" metricUnit="km/hr">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.surfaceShape}}">Surface Shape / Orientation</label>
+      <select class="form-control" id="{{controlIds.surfaceShape}}" formControlName="surfaceShape"
+        [class.invalid]="form().controls.surfaceShape.invalid"
+        (change)="setConditionFactor()">
+        <option [ngValue]="null" disabled>Select a surface…</option>
+        @for (option of surfaceOptions(); track option.id) {
+          <option [ngValue]="option.id">{{option.surface}}</option>
+        }
+      </select>
+      <app-form-control-errors [control]="form().controls.surfaceShape" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small">Surface Shape / Orientation Factor</label>
+      <div class="text-center small">{{form().controls.conditionFactor.value}}</div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.surfaceEmissivity}}">Surface Emissivity</label>
+      <input type="number" step="0.1" min="0" max="1" class="form-control"
+        id="{{controlIds.surfaceEmissivity}}" formControlName="surfaceEmissivity" onfocus="this.select();"
+        [class.invalid]="form().controls.surfaceEmissivity.invalid">
+      <app-form-control-errors [control]="form().controls.surfaceEmissivity" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.surfaceArea}}">Total Outside Surface Area</label>
+      <div class="input-group" [class.invalid]="form().controls.surfaceArea.invalid">
+        <input type="number" step="10" min="0" class="form-control"
+          id="{{controlIds.surfaceArea}}" formControlName="surfaceArea" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="ft&sup2;" metricUnit="m&sup2;"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.surfaceArea" [settings]="settings()"
+        imperialUnit="ft²" metricUnit="m²">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds.correctionFactor}}">Correction Factor</label>
+      <input type="number" step="0.1" class="form-control"
+        id="{{controlIds.correctionFactor}}" formControlName="correctionFactor" onfocus="this.select();"
+        [class.invalid]="form().controls.correctionFactor.invalid">
+      <app-form-control-errors [control]="form().controls.correctionFactor" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+  </div>
+</form>

@@ -62,7 +62,9 @@ import { ChargeMaterialSolidFormComponent } from './heat-balance/losses/charge-m
 import { ChargeMaterialLiquidFormComponent } from './heat-balance/losses/charge-material/liquid-form/charge-material-liquid-form.component';
 import { ChargeMaterialGasFormComponent } from './heat-balance/losses/charge-material/gas-form/charge-material-gas-form.component';
 import { WallLossesComponent } from './heat-balance/losses/wall-losses/wall-losses.component';
+import { WallLossesFormComponent } from './heat-balance/losses/wall-losses/wall-losses-form.component';
 import { ExtendedSurfaceComponent } from './heat-balance/losses/extended-surface/extended-surface.component';
+import { ExtendedSurfaceFormComponent } from './heat-balance/losses/extended-surface/extended-surface-form.component';
 import { AtmosphereComponent } from './heat-balance/losses/atmosphere/atmosphere.component';
 import { FixtureComponent } from './heat-balance/losses/fixture/fixture.component';
 import { CoolingComponent } from './heat-balance/losses/cooling/cooling.component';
@@ -272,7 +274,9 @@ const ROUTES: Route[] = [
     ChargeMaterialLiquidFormComponent,
     ChargeMaterialGasFormComponent,
     WallLossesComponent,
+    WallLossesFormComponent,
     ExtendedSurfaceComponent,
+    ExtendedSurfaceFormComponent,
     AtmosphereComponent,
     FixtureComponent,
     CoolingComponent,
