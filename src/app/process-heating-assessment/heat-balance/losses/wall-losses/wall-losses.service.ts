@@ -1,4 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { take } from 'rxjs';
+import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
 import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
 import { WallLossesSurface } from '../../../../shared/models/materials';
 import { PhastService } from '../../../../phast/phast.service';
@@ -17,6 +19,7 @@ export class WallLossesService {
   private readonly phastService = inject(PhastService);
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly formService = inject(WallLossesFormService);
+  private readonly wallSurfaceDbService = inject(WallLossesSurfaceDbService);
 
   readonly losses = signal<WallLossItem[]>([]);
   readonly surfaceOptions = signal<WallLossesSurface[]>([]);
@@ -28,6 +31,9 @@ export class WallLossesService {
     const items = wallLosses.map((loss, idx) => this.buildItem(loss, idx + 1));
     items.forEach(item => this.calculateItemResult(item));
     this.losses.set(items);
+    this.wallSurfaceDbService.getAllWithObservable()
+      .pipe(take(1))
+      .subscribe(surfaces => this.surfaceOptions.set(surfaces));
   }
 
   updateItem(idx: number): void {

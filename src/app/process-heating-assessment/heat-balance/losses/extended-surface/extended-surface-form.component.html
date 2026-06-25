@@ -33,10 +33,10 @@
       @if (form().controls.ambientTemp.invalid && !form().controls.ambientTemp.pristine) {
         <span class="alert-danger pull-right small">
           @if (form().controls.ambientTemp.errors?.['required']) { Value Required }
-          @if (form().controls.ambientTemp.value > form().controls.avgSurfaceTemp.value) {
-            Ambient Temperature is greater than Surface Temperature
-          }
         </span>
+      }
+      @if (!form().controls.ambientTemp.pristine && form().controls.ambientTemp.value > form().controls.avgSurfaceTemp.value) {
+        <span class="alert-danger pull-right small">Ambient Temperature is greater than Surface Temperature</span>
       }
     </div>
 

@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { take } from 'rxjs';
 import { generateFormControlIds, FormControlIds } from '../../../../shared/helperFunctions';
-import { WallLossesSurface } from '../../../../shared/models/materials';
 import { Settings } from '../../../../shared/models/settings';
-import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
 import { WallLossForm, WallLossesFormService } from './wall-losses-form.service';
 import { WallLossesService } from './wall-losses.service';
 
@@ -20,7 +17,6 @@ export class WallLossesFormComponent implements OnInit {
 
   private readonly formService = inject(WallLossesFormService);
   private readonly wallLossesService = inject(WallLossesService);
-  private readonly wallSurfaceDbService = inject(WallLossesSurfaceDbService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly surfaceOptions = computed(() => this.wallLossesService.surfaceOptions());
@@ -29,12 +25,6 @@ export class WallLossesFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.controlIds = generateFormControlIds(this.form().controls);
-
-    this.wallSurfaceDbService.getAllWithObservable()
-      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
-      .subscribe(surfaces => {
-        this.wallLossesService.surfaceOptions.set(surfaces);
-      });
 
     this.form().controls.ambientTemp.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -50,6 +40,7 @@ export class WallLossesFormComponent implements OnInit {
     const surface = this.surfaceOptions().find(s => s.id === shapeId);
     if (surface) {
       this.form().controls.conditionFactor.setValue(surface.conditionFactor, { emitEvent: false });
+      this.wallLossesService.updateItem(this.index());
     }
   }
 }
