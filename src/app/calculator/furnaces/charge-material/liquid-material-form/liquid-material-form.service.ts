@@ -33,7 +33,7 @@ export class LiquidMaterialFormService {
 
   getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): UntypedFormGroup {
     let reactionType = 'Endothermic';
-    if (chargeMaterial.liquidChargeMaterial.thermicReactionType !== 0) {
+    if (chargeMaterial.liquidChargeMaterial.thermicReactionType === ThermicReactionType.Exothermic) {
       reactionType = 'Exothermic';
     }
     let formGroup = this.formBuilder.group({

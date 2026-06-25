@@ -13,7 +13,7 @@ export type GasMaterialForm = FormGroup<{
   specificHeatOfVapor: FormControl<number | null>;
   gasReacted: FormControl<number | null>;
   heatOfReaction: FormControl<number | null>;
-  endothermicOrExothermic: FormControl<string | null>;
+  endothermicOrExothermic: FormControl<ThermicReactionType | null>;
   additionalHeatRequired: FormControl<number | null>;
   name: FormControl<string | null>;
 }>;
@@ -33,7 +33,7 @@ export class GasMaterialFormService {
       specificHeatOfVapor: new FormControl<number | null>(0, [Validators.required, Validators.min(0)]),
       gasReacted: new FormControl<number | null>(0, [Validators.required, Validators.min(0), Validators.max(100)]),
       heatOfReaction: new FormControl<number | null>(0, [Validators.required, Validators.min(0)]),
-      endothermicOrExothermic: new FormControl<string | null>('Endothermic', Validators.required),
+      endothermicOrExothermic: new FormControl<ThermicReactionType | null>(ThermicReactionType.Endothermic, Validators.required),
       additionalHeatRequired: new FormControl<number | null>(0, Validators.required),
       name: new FormControl<string | null>(`Material #${lossNumber}`, Validators.required),
     }) as GasMaterialForm;
@@ -41,7 +41,6 @@ export class GasMaterialFormService {
 
   getGasChargeMaterialForm(chargeMaterial: ChargeMaterial): GasMaterialForm {
     const gas = chargeMaterial.gasChargeMaterial;
-    const reactionTypeLabel = gas.thermicReactionType !== ThermicReactionType.Endothermic ? 'Exothermic' : 'Endothermic';
     const formGroup = this.formBuilder.group({
       materialId: new FormControl<number | null>(gas.materialId ?? null, Validators.required),
       materialSpecificHeat: new FormControl<number | null>(gas.specificHeatGas ?? null, [Validators.required, Validators.min(0)]),
@@ -52,7 +51,7 @@ export class GasMaterialFormService {
       specificHeatOfVapor: new FormControl<number | null>(gas.specificHeatVapor ?? 0, [Validators.required, Validators.min(0)]),
       gasReacted: new FormControl<number | null>(gas.percentReacted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]),
       heatOfReaction: new FormControl<number | null>(gas.reactionHeat ?? 0, [Validators.required, Validators.min(0)]),
-      endothermicOrExothermic: new FormControl<string | null>(reactionTypeLabel, Validators.required),
+      endothermicOrExothermic: new FormControl<ThermicReactionType | null>(gas.thermicReactionType ?? ThermicReactionType.Endothermic, Validators.required),
       additionalHeatRequired: new FormControl<number | null>(gas.additionalHeat ?? 0, Validators.required),
       name: new FormControl<string | null>(chargeMaterial.name ?? null, Validators.required),
     }) as GasMaterialForm;
@@ -71,13 +70,12 @@ export class GasMaterialFormService {
 
   buildGasChargeMaterial(gasForm: GasMaterialForm): ChargeMaterial {
     const value = gasForm.getRawValue();
-    const thermicReactionType = value.endothermicOrExothermic === 'Exothermic' ? ThermicReactionType.Exothermic : ThermicReactionType.Endothermic;
     return {
       name: value.name ?? undefined,
       chargeMaterialType: ChargeMaterialType.Gas,
       gasChargeMaterial: {
         materialId: value.materialId ?? undefined,
-        thermicReactionType: thermicReactionType,
+        thermicReactionType: value.endothermicOrExothermic ?? undefined,
         specificHeatGas: value.materialSpecificHeat ?? undefined,
         feedRate: value.feedRate ?? undefined,
         percentVapor: value.vaporInGas ?? undefined,

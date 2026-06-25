@@ -9,6 +9,7 @@ import { TEMPERATURE_HTML } from '../../../../../shared/app-constants';
 import { SolidLoadMaterialDbService } from '../../../../../indexedDb/solid-load-material-db.service';
 import { ConvertValue } from '../../../../../shared/convert-units/ConvertValue';
 import { ChargeMaterialService } from '../charge-material.service';
+import { ThermicReactionType } from '../../../../../shared/models/phast/losses/chargeMaterial';
 
 @Component({
   selector: 'app-charge-material-solid-form',
@@ -28,6 +29,7 @@ export class ChargeMaterialSolidFormComponent implements OnInit {
   readonly materialTypes = signal<SolidLoadChargeMaterial[]>([]);
   readonly warnings = signal<SolidMaterialWarnings>({ dischargeTempWarning: null });
   readonly TEMPERATURE_HTML = TEMPERATURE_HTML;
+  readonly ThermicReactionType = ThermicReactionType;
 
   readonly form = computed(() => this.chargeMaterialService.materials()[this.index()].form as SolidMaterialForm);
   controlIds: FormControlIds<SolidMaterialForm['controls']>;

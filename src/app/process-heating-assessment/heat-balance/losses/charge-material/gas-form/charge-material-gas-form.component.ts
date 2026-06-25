@@ -9,6 +9,7 @@ import { TEMPERATURE_HTML } from '../../../../../shared/app-constants';
 import { GasLoadMaterialDbService } from '../../../../../indexedDb/gas-load-material-db.service';
 import { ConvertValue } from '../../../../../shared/convert-units/ConvertValue';
 import { ChargeMaterialService } from '../charge-material.service';
+import { ThermicReactionType } from '../../../../../shared/models/phast/losses/chargeMaterial';
 
 @Component({
   selector: 'app-charge-material-gas-form',
@@ -27,6 +28,7 @@ export class ChargeMaterialGasFormComponent implements OnInit {
 
   readonly materialTypes = signal<GasLoadChargeMaterial[]>([]);
   readonly TEMPERATURE_HTML = TEMPERATURE_HTML;
+  readonly ThermicReactionType = ThermicReactionType;
 
   readonly form = computed(() => this.chargeMaterialService.materials()[this.index()].form as GasMaterialForm);
   controlIds: FormControlIds<GasMaterialForm['controls']>;
@@ -35,7 +37,12 @@ export class ChargeMaterialGasFormComponent implements OnInit {
     this.controlIds = generateFormControlIds(this.form().controls);
     this.gasLoadMaterialDbService.getAllWithObservable()
       .pipe(take(1), takeUntilDestroyed(this.destroyRef))
-      .subscribe(materials => this.materialTypes.set(materials));
+      .subscribe(materials => {
+        this.materialTypes.set(materials);
+        if (this.form().controls['materialId'].value && this.form().controls['materialSpecificHeat'].value === null) {
+          this.setProperties();
+        }
+      });
 
     this.form().controls['dischargeTemperature'].valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))

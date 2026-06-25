@@ -130,8 +130,8 @@
       <select class="form-control" id="{{controlIds.endothermicOrExothermic}}"
         formControlName="endothermicOrExothermic"
         [class.invalid]="form().controls.endothermicOrExothermic.invalid">
-        <option>Endothermic</option>
-        <option>Exothermic</option>
+        <option [value]="ThermicReactionType.Endothermic">Endothermic</option>
+        <option [value]="ThermicReactionType.Exothermic">Exothermic</option>
       </select>
     </div>
 

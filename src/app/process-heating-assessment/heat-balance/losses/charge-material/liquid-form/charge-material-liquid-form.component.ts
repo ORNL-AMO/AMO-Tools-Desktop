@@ -9,6 +9,7 @@ import { TEMPERATURE_HTML } from '../../../../../shared/app-constants';
 import { LiquidLoadMaterialDbService } from '../../../../../indexedDb/liquid-load-material-db.service';
 import { ConvertValue } from '../../../../../shared/convert-units/ConvertValue';
 import { ChargeMaterialService } from '../charge-material.service';
+import { ThermicReactionType } from '../../../../../shared/models/phast/losses/chargeMaterial';
 
 @Component({
   selector: 'app-charge-material-liquid-form',
@@ -28,6 +29,7 @@ export class ChargeMaterialLiquidFormComponent implements OnInit {
   readonly materialTypes = signal<LiquidLoadChargeMaterial[]>([]);
   readonly warnings = signal<LiquidMaterialWarnings>({ dischargeTempWarning: null, inletOverVaporizingWarning: null, outletOverVaporizingWarning: null });
   readonly TEMPERATURE_HTML = TEMPERATURE_HTML;
+  readonly ThermicReactionType = ThermicReactionType;
 
   readonly form = computed(() => this.chargeMaterialService.materials()[this.index()].form as LiquidMaterialForm);
   controlIds: FormControlIds<LiquidMaterialForm['controls']>;
@@ -62,15 +64,18 @@ export class ChargeMaterialLiquidFormComponent implements OnInit {
       let latentHeat = selected.latentHeat;
       let specificHeatLiquid = selected.specificHeatLiquid;
       let specificHeatVapor = selected.specificHeatVapor;
+      let vaporizingTemperature = selected.vaporizationTemperature;
       if (this.settings().unitsOfMeasure === 'Metric') {
         latentHeat = new ConvertValue(latentHeat, 'btuLb', 'kJkg').convertedValue;
         specificHeatLiquid = new ConvertValue(specificHeatLiquid, 'btulbF', 'kJkgC').convertedValue;
         specificHeatVapor = new ConvertValue(specificHeatVapor, 'btulbF', 'kJkgC').convertedValue;
+        vaporizingTemperature = new ConvertValue(vaporizingTemperature, 'F', 'C').convertedValue;
       }
       this.form().patchValue({
         materialLatentHeat: roundVal(latentHeat, 4),
         materialSpecificHeatLiquid: roundVal(specificHeatLiquid, 4),
         materialSpecificHeatVapor: roundVal(specificHeatVapor, 4),
+        materialVaporizingTemperature: roundVal(vaporizingTemperature, 4),
       });
     }
   }

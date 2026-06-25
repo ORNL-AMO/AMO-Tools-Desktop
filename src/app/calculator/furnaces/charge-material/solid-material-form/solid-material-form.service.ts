@@ -36,7 +36,7 @@ export class SolidMaterialFormService {
 
   getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial, inAssessment: boolean = true): UntypedFormGroup {
     let reactionType = 'Endothermic';
-    if (chargeMaterial.solidChargeMaterial.thermicReactionType !== 0) {
+    if (chargeMaterial.solidChargeMaterial.thermicReactionType === ThermicReactionType.Exothermic) {
       reactionType = 'Exothermic';
     }
     //FUEL FIRED SOLID

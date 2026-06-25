@@ -18,7 +18,7 @@ export type SolidMaterialForm = FormGroup<{
   percentChargeMelted: FormControl<number | null>;
   percentChargeReacted: FormControl<number | null>;
   heatOfReaction: FormControl<number | null>;
-  endothermicOrExothermic: FormControl<string | null>;
+  endothermicOrExothermic: FormControl<ThermicReactionType | null>;
   additionalHeatRequired: FormControl<number | null>;
   name: FormControl<string | null>;
 }>;
@@ -43,7 +43,7 @@ export class SolidMaterialFormService {
       percentChargeMelted: new FormControl<number | null>(0, [Validators.required, Validators.min(0), Validators.max(100)]),
       percentChargeReacted: new FormControl<number | null>(0, [Validators.required, Validators.min(0), Validators.max(100)]),
       heatOfReaction: new FormControl<number | null>(0, [Validators.required, Validators.min(0)]),
-      endothermicOrExothermic: new FormControl<string | null>('Endothermic', Validators.required),
+      endothermicOrExothermic: new FormControl<ThermicReactionType | null>(ThermicReactionType.Endothermic, Validators.required),
       additionalHeatRequired: new FormControl<number | null>(0, Validators.required),
       name: new FormControl<string | null>(`Material #${lossNumber}`, Validators.required),
     }) as SolidMaterialForm;
@@ -51,7 +51,6 @@ export class SolidMaterialFormService {
 
   getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial): SolidMaterialForm {
     const solid = chargeMaterial.solidChargeMaterial;
-    const reactionTypeLabel = solid.thermicReactionType !== ThermicReactionType.Endothermic ? 'Exothermic' : 'Endothermic';
     const formGroup = this.formBuilder.group({
       materialId: new FormControl<number | null>(solid.materialId ?? null, Validators.required),
       materialSpecificHeatOfSolidMaterial: new FormControl<number | null>(solid.specificHeatSolid ?? null, [Validators.required, Validators.min(0)]),
@@ -67,7 +66,7 @@ export class SolidMaterialFormService {
       percentChargeMelted: new FormControl<number | null>(solid.chargeMelted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]),
       percentChargeReacted: new FormControl<number | null>(solid.chargeReacted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]),
       heatOfReaction: new FormControl<number | null>(solid.reactionHeat ?? 0, [Validators.required, Validators.min(0)]),
-      endothermicOrExothermic: new FormControl<string | null>(reactionTypeLabel, Validators.required),
+      endothermicOrExothermic: new FormControl<ThermicReactionType | null>(solid.thermicReactionType ?? ThermicReactionType.Endothermic, Validators.required),
       additionalHeatRequired: new FormControl<number | null>(solid.additionalHeat ?? 0, Validators.required),
       name: new FormControl<string | null>(chargeMaterial.name ?? null, Validators.required),
     }) as SolidMaterialForm;
@@ -86,13 +85,12 @@ export class SolidMaterialFormService {
 
   buildSolidChargeMaterial(solidForm: SolidMaterialForm): ChargeMaterial {
     const value = solidForm.getRawValue();
-    const thermicReactionType = value.endothermicOrExothermic === 'Exothermic' ? ThermicReactionType.Exothermic : ThermicReactionType.Endothermic;
     return {
       name: value.name ?? undefined,
       chargeMaterialType: ChargeMaterialType.Solid,
       solidChargeMaterial: {
         materialId: value.materialId ?? undefined,
-        thermicReactionType: thermicReactionType,
+        thermicReactionType: value.endothermicOrExothermic ?? undefined,
         specificHeatSolid: value.materialSpecificHeatOfSolidMaterial ?? undefined,
         latentHeat: value.materialLatentHeatOfFusion ?? undefined,
         specificHeatLiquid: value.materialHeatOfLiquid ?? undefined,
