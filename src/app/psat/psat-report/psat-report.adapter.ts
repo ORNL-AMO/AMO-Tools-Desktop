@@ -12,7 +12,7 @@ import { Modification, PSAT, PsatInputs, PsatOutputs } from '../../shared/models
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { PsatChartsService } from '../services/psat-charts.service';
+import { PsatChartsService, PsatChartConfig } from '../services/psat-charts.service';
 
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -113,7 +113,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
 
   // ─── Report Graphs ────────────────────────────────────────────────────────
 
-  private async renderPlotlyChart(chart: { traces: any[]; layout: any }): Promise<string> {
+  private async renderPlotlyChart(chart: PsatChartConfig): Promise<string> {
     const { traces, layout } = chart;
     const div = document.createElement('div');
     div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';

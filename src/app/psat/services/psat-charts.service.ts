@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { TraceData } from '../../shared/models/plotting';
 
 export interface PsatGraphData {
   name: string;
@@ -10,6 +11,11 @@ export interface PsatGraphData {
   driveLoss: number;
   pumpLoss: number;
   usefulOutput: number;
+}
+
+export interface PsatChartConfig {
+  traces: TraceData[];
+  layout: object;
 }
 
 const PIE_LABELS = ['Motor Losses', 'Drive Losses', 'Pump Losses', 'Useful Output'];
@@ -50,7 +56,7 @@ export class PsatChartsService {
     return result;
   }
 
-  buildEnergyDistributionChart(baseline: PsatGraphData, modification: PsatGraphData): { traces: any[]; layout: any } {
+  buildEnergyDistributionChart(baseline: PsatGraphData, modification: PsatGraphData): PsatChartConfig {
     return {
       traces: [baseline, modification].map((d, i) => ({
         values: [d.motorLoss, d.driveLoss, d.pumpLoss, d.usefulOutput],
@@ -67,7 +73,7 @@ export class PsatChartsService {
     };
   }
 
-  buildPowerComparisonChart(baseline: PsatGraphData, modification: PsatGraphData): { traces: any[]; layout: any } {
+  buildPowerComparisonChart(baseline: PsatGraphData, modification: PsatGraphData): PsatChartConfig {
     return {
       traces: [baseline, modification].map(d => ({
         x: BAR_LABELS,
