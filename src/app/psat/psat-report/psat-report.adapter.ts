@@ -12,6 +12,7 @@ import { Modification, PSAT, PsatInputs, PsatOutputs } from '../../shared/models
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { PsatChartsService } from '../services/psat-charts.service';
 
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -21,26 +22,17 @@ export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'inputData', label: 'Input Summary', description: 'Summary of user input data' },
 ];
 
-interface PsatGraphData {
-  name: string;
-  energyInput: number;
-  motorLoss: number;
-  driveLoss: number;
-  pumpLoss: number;
-  usefulOutput: number;
-}
-
 @Injectable()
 export class PsatReportAdapter implements ReportDataAdapter {
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly psatService = inject(PsatService);
   private readonly plotlyService = inject(PlotlyService);
   private readonly convertUnitsService = inject(ConvertUnitsService);
+  private readonly psatChartsService = inject(PsatChartsService);
   // DecimalPipe is constructed directly so no provider entry is needed
   private readonly decimalPipe = new DecimalPipe(inject(LOCALE_ID) as string);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [0, 114, 178];
-  private static readonly PIE_COLORS = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'];
 
   buildDocument(assessment: Assessment): Observable<ReportDocument> {
     const settings = this.settingsDbService.getByAssessmentId(assessment);
@@ -121,137 +113,46 @@ export class PsatReportAdapter implements ReportDataAdapter {
 
   // ─── Report Graphs ────────────────────────────────────────────────────────
 
+  private async renderPlotlyChart(chart: { traces: any[]; layout: any }): Promise<string> {
+    const { traces, layout } = chart;
+    const div = document.createElement('div');
+    div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
+    document.body.appendChild(div);
+    const p = await this.plotlyService.getPlotly();
+    try {
+      await p.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
+      return await p.toImage(div, { format: 'jpeg', width: 1400, height: 700 });
+    } finally {
+      p.purge(div);
+      document.body.removeChild(div);
+    }
+  }
+
   private buildReportGraphsSections(psat: PSAT, settings: Settings): ChartSection[] {
-    const allData = this.collectGraphData(psat, settings);
-    if (allData.length === 0) return [];
+    const allData = this.psatChartsService.collectGraphData(psat, settings);
+    if (allData.length < 2) return [];
 
-    const pieLabels = ['Motor Losses', 'Drive Losses', 'Pump Losses', 'Useful Output'];
-    const barLabels = ['Energy Input', 'Motor Losses', 'Drive Losses', 'Pump Losses', 'Useful Output'];
-    const colors = PsatReportAdapter.PIE_COLORS;
-    const plotly = this.plotlyService;
-
+    const baseline = allData[0];
     const sections: ChartSection[] = [];
 
-    sections.push({
-      type: 'chart',
-      title: 'Energy Distribution',
-      group: 'graphs',
-      pageBreakBefore: true,
-      imageDataProvider: async () => {
-        const count = Math.min(allData.length, 3);
-        const colWidth = 1 / count;
-
-        const traces = allData.slice(0, count).map((d, i) => ({
-          values: [d.motorLoss, d.driveLoss, d.pumpLoss, d.usefulOutput],
-          labels: pieLabels,
-          type: 'pie',
-          name: d.name,
-          title: { text: d.name, font: { size: 14 } },
-          domain: { x: [i * colWidth, (i + 1) * colWidth], y: [0, 0.85] },
-          marker: { colors },
-          textinfo: 'label+percent',
-          direction: 'clockwise',
-          rotation: 90,
-          hovertemplate: '%{value:.2f} kW<extra></extra>',
-        }));
-
-        const layout = {
-          showlegend: false,
-          margin: { t: 60, b: 20, l: 20, r: 20 },
-          paper_bgcolor: 'white',
-        };
-
-        const div = document.createElement('div');
-        div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
-        document.body.appendChild(div);
-        const p = await plotly.getPlotly();
-        try {
-          await p.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
-          return await p.toImage(div, { format: 'jpeg', width: 1400, height: 700 });
-        } finally {
-          p.purge(div);
-          document.body.removeChild(div);
-        }
-      },
-    });
-
-    if (allData.length > 1) {
+    for (let i = 1; i < allData.length; i++) {
+      const mod = allData[i];
       sections.push({
         type: 'chart',
-        title: 'Power Comparison',
+        title: `Energy Distribution — ${mod.name}`,
         group: 'graphs',
-        imageDataProvider: async () => {
-          const traces = allData.map(d => ({
-            x: barLabels,
-            y: [d.energyInput, d.motorLoss, d.driveLoss, d.pumpLoss, d.usefulOutput],
-            name: d.name,
-            type: 'bar',
-            text: [d.energyInput, d.motorLoss, d.driveLoss, d.pumpLoss, d.usefulOutput]
-              .map(v => v.toFixed(2)),
-            textposition: 'auto',
-            hovertemplate: 'Power: %{y:.3r} kW<extra></extra>',
-          }));
-
-          const layout = {
-            barmode: 'group',
-            showlegend: true,
-            legend: { orientation: 'h' },
-            font: { size: 14 },
-            yaxis: {
-              title: { text: 'Power (kW)', font: { family: 'Roboto', size: 14 } },
-              hoverformat: '.3r',
-            },
-            margin: { t: 30, b: 80, l: 80, r: 30 },
-            paper_bgcolor: 'white',
-          };
-
-          const div = document.createElement('div');
-          div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
-          document.body.appendChild(div);
-          const p = await plotly.getPlotly();
-          try {
-            await p.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
-            return await p.toImage(div, { format: 'jpeg', width: 1400, height: 700 });
-          } finally {
-            p.purge(div);
-            document.body.removeChild(div);
-          }
-        },
+        pageBreakBefore: i === 1,
+        imageDataProvider: () => this.renderPlotlyChart(this.psatChartsService.buildEnergyDistributionChart(baseline, mod)),
+      });
+      sections.push({
+        type: 'chart',
+        title: `Power Comparison — ${mod.name}`,
+        group: 'graphs',
+        imageDataProvider: () => this.renderPlotlyChart(this.psatChartsService.buildPowerComparisonChart(baseline, mod)),
       });
     }
 
     return sections;
-  }
-
-  private collectGraphData(psat: PSAT, settings: Settings): PsatGraphData[] {
-    const toKw = (v: number) =>
-      settings.powerMeasurement === 'hp'
-        ? this.convertUnitsService.value(v).from('hp').to('kW')
-        : v;
-
-    const fromOutputs = (outputs: PsatOutputs, name: string): PsatGraphData | null => {
-      if (!outputs) return null;
-      const motorShaftKw = toKw(outputs.motor_shaft_power);
-      const moverShaftKw = toKw(outputs.mover_shaft_power);
-      const motorLoss = outputs.motor_power * (1 - outputs.motor_efficiency / 100);
-      const driveLoss = motorShaftKw - moverShaftKw;
-      const pumpLoss = (outputs.motor_power - motorLoss - driveLoss) * (1 - outputs.pump_efficiency / 100);
-      const usefulOutput = outputs.motor_power - (motorLoss + driveLoss + pumpLoss);
-      return { name, energyInput: outputs.motor_power, motorLoss, driveLoss, pumpLoss, usefulOutput };
-    };
-
-    const result: PsatGraphData[] = [];
-    const baseline = fromOutputs(psat.outputs, psat.name ?? 'Baseline');
-    if (baseline) result.push(baseline);
-
-    psat.modifications?.forEach(m => {
-      if (m.psat?.valid?.isValid && m.psat.outputs) {
-        const mod = fromOutputs(m.psat.outputs, m.psat.name ?? 'Modification');
-        if (mod) result.push(mod);
-      }
-    });
-
-    return result;
   }
 
   // ─── Sankey ────────────────────────────────────────────────────────
@@ -378,6 +279,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
               const rect = rects[i] as SVGRectElement;
               const h = parseFloat(rect.getAttribute('height'));
               const y = parseFloat(rect.getAttribute('y'));
+              if (isNaN(h) || isNaN(y) || h === 0) continue;
               rect.setAttribute('y', `${y - h / 2.75}`);
               rect.setAttribute('style',
                 `width:${h}px;height:${h * 1.75}px;clip-path:polygon(100% 50%,0 0,0 100%);` +
