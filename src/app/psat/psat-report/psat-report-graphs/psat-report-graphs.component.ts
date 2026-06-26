@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, inject, OnInit, Input } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { PSAT, PsatOutputs, Modification } from '../../../shared/models/psat';
 import { PsatChartsService } from '../../services/psat-charts.service';
@@ -44,7 +44,7 @@ export class PsatReportGraphsComponent implements OnInit {
   };
   barChartYAxisLabel: string;
 
-  constructor(private steamChartsService: PsatChartsService) { }
+  private readonly psatChartsService = inject(PsatChartsService);
 
   ngOnInit() {
     this.setAllChartData();
@@ -66,7 +66,7 @@ export class PsatReportGraphsComponent implements OnInit {
   }
 
   addChartData(outputs: PsatOutputs, name: string, modification?: Modification) {
-    const d = this.steamChartsService.computeOutputGraphData(outputs, this.settings);
+    const d = this.psatChartsService.computeOutputGraphData(outputs, this.settings);
     this.allChartData.push({
       name,
       valuesAndLabels: [
@@ -83,7 +83,7 @@ export class PsatReportGraphsComponent implements OnInit {
   }
 
   getValueArray(outputs: PsatOutputs): Array<number> {
-    const d = this.steamChartsService.computeOutputGraphData(outputs, this.settings);
+    const d = this.psatChartsService.computeOutputGraphData(outputs, this.settings);
     return [d.motorLoss, d.driveLoss, d.pumpLoss, d.usefulOutput];
   }
 }
