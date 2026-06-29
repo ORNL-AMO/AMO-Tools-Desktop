@@ -7,7 +7,7 @@ import { FlowCalculations } from "./phast/flowCalculations";
 import { FanEfficiencyInputs } from "../../calculator/fans/fan-efficiency/fan-efficiency.service";
 import { Fan203Inputs, FanMotor } from "./fans";
 import { SystemAndEquipmentCurveData } from "./system-and-equipment-curve";
-import { AirLeakSurveyInput, AirSystemCapacityInput, CompressedAirPressureReductionData, SteamLeakSurveyInput } from "./standalone";
+import { AirLeakSurveyInput, AirSystemCapacityInput, CompressedAirPressureReductionData, SteamLeakSurveyInput, DryerOperatingCostInput } from "./standalone";
 import { AirFlowConversionInput } from "./compressed-air/compressed-air";
 import { ReceiverTankInputs } from "../../calculator/compressed-air/receiver-tank/receiver-tank.service";
 
@@ -52,6 +52,7 @@ export interface Calculator {
     systemAndEquipmentCurveData?: SystemAndEquipmentCurveData,
     bleedTestInputs?: BleedTestInputs;
     valveEnergyLossInputs?: ValveEnergyLossInputs;
+    dryerOperatingCostInput?: DryerOperatingCostInput;
 }
 
 export interface HeadToolSuction {
