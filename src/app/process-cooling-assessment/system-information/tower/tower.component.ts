@@ -66,7 +66,7 @@ export class TowerComponent {
     );
   }
 
-    observeTowerSizeChange() {
+  observeTowerSizeChange() {
     this.towerSizeMetric.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(
