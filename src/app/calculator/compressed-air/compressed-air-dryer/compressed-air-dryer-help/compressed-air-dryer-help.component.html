@@ -1,0 +1,168 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+  <h5>Compressed Air Dryer Operating Cost Help</h5>
+  <div class="my-2">
+    <h6>
+      <small class="text-muted">
+        This calculator estimates the annual operating cost of a compressed air dryer based on the dryer type,
+        operating conditions, schedule, and utility rates. Supported dryer types include heatless, heated externally,
+        blower purge, heat-of-compression, and refrigerated designs.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'dryerType'">
+    <h6>
+      Dryer Type
+      <small class="text-muted">
+        <br>
+        Select the regenerative or refrigerated dryer technology installed in the system. The dryer type determines
+        which additional parameters (heater power, purge rate, DDC%) are required for the calculation.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'flowRate'">
+    <h6>
+      Flow Rate
+      <small class="text-muted">
+        <br>
+        The rated inlet flow rate of the dryer in standard cubic feet per minute (SCFM). Valid range: 1–50,000 SCFM.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'pressure'">
+    <h6>
+      Inlet Pressure
+      <small class="text-muted">
+        <br>
+        The operating inlet pressure of the dryer. Valid range: 25–150 psig.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'temperature'">
+    <h6>
+      Inlet Temperature
+      <small class="text-muted">
+        <br>
+        The temperature of compressed air entering the dryer. Valid range: 50–120 &deg;F.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'operatingHoursPerDay'">
+    <h6>
+      Hours Per Day
+      <small class="text-muted">
+        <br>
+        The number of hours per day the dryer operates. Valid range: 1–24 hrs/day.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'operatingDaysPerWeek'">
+    <h6>
+      Days Per Week
+      <small class="text-muted">
+        <br>
+        The number of days per week the dryer operates. Valid range: 1–7 days/week.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'operatingWeeksPerYear'">
+    <h6>
+      Weeks Per Year
+      <small class="text-muted">
+        <br>
+        The number of weeks per year the dryer operates. Valid range: 1–52 weeks/year.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'costOfElectricity'">
+    <h6>
+      Cost of Electricity
+      <small class="text-muted">
+        <br>
+        Per-unit cost of electricity in $/kWh. Valid range: $0.01–$0.20/kWh.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'costOfCompressedAir'">
+    <h6>
+      Cost of Compressed Air
+      <small class="text-muted">
+        <br>
+        Cost of compressed air lost through purging in $/kSCF. Valid range: $0.20–$0.50/kSCF.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'costOfCoolingWater'">
+    <h6>
+      Cost of Cooling Water
+      <small class="text-muted">
+        <br>
+        Cost of cooling water used by refrigerated dryers in $/kGal. Valid range: $0.25–$10.00/kGal.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'heaterPower'">
+    <h6>
+      Heater Power
+      <small class="text-muted">
+        <br>
+        Rated power of the electric heater used in heated-externally or heat-of-compression dryers, in kW.
+        Valid range: 0–1,000 kW.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'heatingHoursPerDay'">
+    <h6>
+      Heating Hours Per Day
+      <small class="text-muted">
+        <br>
+        The number of hours per day the heater is active. Valid range: 0–24 hrs/day.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'purgeRate'">
+    <h6>
+      Purge Rate
+      <small class="text-muted">
+        <br>
+        The percentage of dried air used to purge the off-line desiccant bed. Valid range: 0–100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'designDDCPercentage'">
+    <h6>
+      Design DDC
+      <small class="text-muted">
+        <br>
+        Design demand-dependent control percentage for refrigerated dryers. Valid range: 0–100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>
