@@ -51,7 +51,10 @@ export interface Calculator {
     systemAndEquipmentCurveData?: SystemAndEquipmentCurveData,
     bleedTestInputs?: BleedTestInputs;
     valveEnergyLossInputs?: ValveEnergyLossInputs;
-    dryerOperatingCostInput?: DryerOperatingCostInput;
+    dryerOperatingCost?: {
+        baseline: DryerOperatingCostInput,
+        modification?: DryerOperatingCostInput;
+    };
 }
 
 export interface HeadToolSuction {
