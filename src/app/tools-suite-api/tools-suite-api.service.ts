@@ -11,6 +11,7 @@ import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
 import { ElectronService } from '../electron/electron.service';
+import createModule from 'measur-tools-suite';
 
 @Injectable({
     providedIn: 'root'
@@ -27,12 +28,9 @@ export class ToolsSuiteApiService {
         private wallLossesSurfaceDbService: WallLossesSurfaceDbService,
         private electronService: ElectronService
     ) { }
-
-    async initializeModule(): Promise<any> {
-        // Dynamically import the Emscripten modularized JS glue code
-        const moduleFactory = await import('measur-tools-suite/bin/client.js');
-        // Initialize the module, specifying where to find the WASM file
-        this.ToolsSuiteModule = await moduleFactory.default({
+    
+        async initializeModule(): Promise<void> {
+        this.ToolsSuiteModule = await createModule({
             locateFile: (path: string) => {
                 if (this.electronService.isElectron) {
                     return `${path}`
