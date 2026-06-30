@@ -106,6 +106,11 @@ export class SteamLeakApiService {
     estimateMethodPRVCalc(leakRate: number, surveyInput?: Partial<SteamLeakApiInput>): SteamLeakApiResult {
         const instance = this.createSurveyInstance(surveyInput);
         const result = instance.estimateMethodPRVCalc(leakRate);
+        console.log('estimateMethodPRVCalc leakRate', result.leakRate);
+        console.log('estimateMethodPRVCalc steamLoss', result.steamLoss);
+        console.log('estimateMethodPRVCalc energyLoss', result.energyLoss);
+        console.log('estimateMethodPRVCalc leakCost', result.leakCost);
+        console.log('estimateMethodPRVCalc steamUnitCost', result.steamUnitCost);
         try {
             return {
                 leakRate: result.leakRate,
@@ -122,6 +127,11 @@ export class SteamLeakApiService {
     estimateMethodTurbineCalc(leakRate: number, turbineEfficiency: number, surveyInput?: Partial<SteamLeakApiInput>): SteamLeakApiResult {
         const instance = this.createSurveyInstance(surveyInput);
         const result = instance.estimateMethodTurbineCalc(leakRate, turbineEfficiency);
+        console.log('estimateMethodTurbineCalc leakRate', result.leakRate);
+        console.log('estimateMethodTurbineCalc steamLoss', result.steamLoss);
+        console.log('estimateMethodTurbineCalc energyLoss', result.energyLoss);
+        console.log('estimateMethodTurbineCalc leakCost', result.leakCost);
+        console.log('estimateMethodTurbineCalc steamUnitCost', result.steamUnitCost);
         try {
             return {
                 leakRate: result.leakRate,
@@ -138,6 +148,11 @@ export class SteamLeakApiService {
     orificeMethodCalc(turbineEfficiency: number, holeSize: number, dischargeCoef: number, atmPressure: number, surveyInput?: Partial<SteamLeakApiInput>): SteamLeakApiResult {
         const instance = this.createSurveyInstance(surveyInput);
         const result = instance.orificeMethodCalc(turbineEfficiency, holeSize, dischargeCoef, atmPressure);
+        console.log('orificeMethodCalc leakRate', result.leakRate);
+        console.log('orificeMethodCalc steamLoss', result.steamLoss);
+        console.log('orificeMethodCalc energyLoss', result.energyLoss);
+        console.log('orificeMethodCalc leakCost', result.leakCost);
+        console.log('orificeMethodCalc steamUnitCost', result.steamUnitCost);
         try {
             return {
                 leakRate: result.leakRate,
@@ -154,6 +169,11 @@ export class SteamLeakApiService {
     plumeMethodCalc(turbineEfficiency: number, plumeLength: number, ambTemp: number, surveyInput?: Partial<SteamLeakApiInput>): SteamLeakApiResult {
         const instance = this.createSurveyInstance(surveyInput);
         const result = instance.plumeMethodCalc(turbineEfficiency, plumeLength, ambTemp);
+        console.log('plumeMethodCalc leakRate', result.leakRate);
+        console.log('plumeMethodCalc steamLoss', result.steamLoss);
+        console.log('plumeMethodCalc energyLoss', result.energyLoss);
+        console.log('plumeMethodCalc leakCost', result.leakCost);
+        console.log('plumeMethodCalc steamUnitCost', result.steamUnitCost);
         try {
             return {
                 leakRate: result.leakRate,
