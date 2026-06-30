@@ -122,6 +122,7 @@ import { ValveEnergyLossComponent } from '../calculator/pumps/valve-energy-loss/
 import { compressedAirAssessmentRoutes } from '../compressed-air-assessment/routing/compressed-air.routing';
 import { CompressedAirInventoryComponent } from '../compressed-air-inventory/compressed-air-inventory.component';
 import { compressedAirInventoryRoutes } from '../compressed-air-inventory/compressed-air-inventory.routing';
+import { CompressedAirDryerComponent } from '../calculator/compressed-air/compressed-air-dryer/compressed-air-dryer.component';
 
 export const coreRoutes: Routes = [
   {
@@ -232,6 +233,10 @@ export const coreRoutes: Routes = [
           {
             path: 'bleed-test',
             component: BleedTestComponent
+          },
+          {
+            path: 'compressed-air-dryer',
+            component: CompressedAirDryerComponent
           },
           {
             path: 'operating-cost',
