@@ -146,7 +146,6 @@ export class PsatReportAdapter implements ReportDataAdapter {
     return sections;
   }
 
-
   private buildSankeySections(psat: PSAT, settings: Settings): ChartSection[] {
     const sections: ChartSection[] = [];
 
@@ -174,7 +173,6 @@ export class PsatReportAdapter implements ReportDataAdapter {
 
     return sections;
   }
-
 
   private buildResultsSections(psat: PSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {
     const headers = ['', 'Baseline', ...modNames];

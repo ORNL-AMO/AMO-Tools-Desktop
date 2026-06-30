@@ -14,7 +14,7 @@ export interface SankeyLayout {
 }
 
 export interface PsatSankeyChartData {
-  sankeyData: object;
+  sankeyData: Record<string, unknown>;
   layout: SankeyLayout;
   connectingNodes: number[];
 }
@@ -211,11 +211,14 @@ export class PsatChartsService {
       stop2.setAttribute('stop-color', gradientEndColor);
       gradient.appendChild(stop1);
       gradient.appendChild(stop2);
+      svgDefs.querySelector('#psatLinkGradient')?.remove();
       svgDefs.appendChild(gradient);
     }
 
     const linkPaths = container.querySelectorAll('.sankey-link');
     for (let i = 0; i < linkPaths.length; i++) {
+      // * hardcoded isGradientLink 2–3 are connector-throughput flows (inputConnector→motorConnector, inputConnector→motorLosses).
+      // * Last two are pump losses and useful output
       const isGradientLink = i === 2 || i === 3 || i >= linkPaths.length - 2;
       const el = linkPaths[i] as SVGElement;
       el.style.fill = isGradientLink ? 'url(#psatLinkGradient)' : gradientStartColor;
@@ -228,8 +231,9 @@ export class PsatChartsService {
         const rect = rects[i] as SVGRectElement;
         const h = Number(rect.getAttribute('height'));
         const y = Number(rect.getAttribute('y'));
+        if (!h || isNaN(y)) continue;
         const x = Number(rect.getAttribute('x') ?? '0');
-        
+
         const arrowY = y - h / 2.75;
         const arrowH = h * 1.75;
         const arrowW = h;
