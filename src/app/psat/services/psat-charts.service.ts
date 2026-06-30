@@ -190,7 +190,7 @@ export class PsatChartsService {
       },
     };
 
-    const layout: SankeyLayout = { autosize: true, margin: { l: 50, t: 100, pad: 300 } };
+    const layout: SankeyLayout = { autosize: true, margin: { l: 50, t: 100 } };
     return { sankeyData, layout, connectingNodes };
   }
 
@@ -256,10 +256,10 @@ export class PsatChartsService {
   async renderSankeyAsImage(outputs: PsatOutputs, settings: Settings, labelStyle = 'both'): Promise<string> {
     const { sankeyData, layout, connectingNodes } = this.buildSankeyChartData(outputs, settings, labelStyle);
     layout.paper_bgcolor = 'white';
-    layout.margin = { l: 50, t: 100, r: 120, pad: 300 };
+    layout.margin = { l: 0, t: 60, r: 0 };
 
     const container = document.createElement('div');
-    container.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
+    container.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:400px';
     document.body.appendChild(container);
 
     const plotly = await this.plotlyService.getPlotly();
@@ -272,9 +272,9 @@ export class PsatChartsService {
       const svgEl = container.querySelector('.main-svg') as SVGSVGElement | null;
       if (!svgEl) throw new Error('PSAT sankey: .main-svg not found after render');
       svgEl.setAttribute('width', '1400');
-      svgEl.setAttribute('height', '700');
+      svgEl.setAttribute('height', '400');
       const svgString = new XMLSerializer().serializeToString(svgEl);
-      return await this.svgToJpeg(svgString, 1400, 700);
+      return await this.svgToJpeg(svgString, 1400, 400);
     } finally {
       plotly.purge(container);
       document.body.removeChild(container);
