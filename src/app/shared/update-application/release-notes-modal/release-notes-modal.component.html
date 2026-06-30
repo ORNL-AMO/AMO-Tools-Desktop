@@ -43,62 +43,72 @@
           </ul>
 
           <label class="header-label">Here are the details of what's new in version {{versionNum}}:</label>
-          <label>Steam</label>
-          <ul>
-            <li>Enhanced: Improved validation regarding steam thermodynamic properties</li>
-          </ul>
 
-          <label>Calculators</label>
-          <ul>
-            <li>Enhanced: Steam Properties Calculator - Improved validation regarding steam thermodynamic properties</li>
-            <li>Enhanced: Saturated Properties Calculator - Improved validation regarding steam thermodynamic properties</li>
-          </ul>
-         
-
-          <!--  Include prev version -->
-          <label class="header-label">Here are the details of what's new in version 1.7.4:</label>
           <label>Application</label>
           <ul>
-            <li>Enhanced: Standardize data visualization button menu across application</li>
+            <li><b>Added:</b> Add SEO features, including: sitemap, meta tags, twitter tags</li>
+            <li><b>Fixed:</b> Fix checkmark icon visibility on copy table clipboard notification</li>
+            <li><b>Fixed:</b> Show full toast notification width on mobile screens</li>
           </ul>
 
-          <label>Calculators</label>
           <ul>
-            <li>Added: CA Reduction, Steam Reduction, NG Reduction, Elec. Reduction and Water Reduction linked algorithm documentation</li>
+            <li><b>Added:</b> CA Reduction documentation added</li>
+            <li><b>Added:</b> Pneumatic Air Requirement Suite documentation added</li>
+            <li><b>Added:</b> Receiver Tank Suite documentation added</li>
+            <li><b>Added:</b> CA Operating Cost Suite documentation added</li>
+            <li><b>Added:</b> Pipe Sizing Calculator Suite documentation added</li>
+            <li><b>Added:</b> Bag Method documentation added</li>
+            <li><b>Enhanced:</b> Update CA Leak Survey to fit new suite calculations</li>
+            <li><b>Enhanced:</b> Improve Compressed Air - Leak Survey UX depicting selected leak to users</li>
+            <li><b>Enhanced:</b> Improve Receiver Tank calculator cycle time calculation</li>
+            <li><b>Fixed:</b> CA Inventory error on "Set Data from Existing Compressor"</li>
+            <li><b>Fixed:</b> Display Compressed Air Assessment EEM results with 0 savings</li>
           </ul>
-          
-          <label>Inventories</label>
-          <ul>
-            <li>Enhanced: Display visible properties form as a sub tab of Catalog</li>
-          </ul>
-          <label>Process Heating</label>
-          <ul>
-            <li>Fixed: PHAST Flue Gas and Flue Gas calculator custom solid/liquid fuels unit conversion no longer needed</li>
-          </ul>
+
           <label>Steam</label>
           <ul>
-            <li>Added: lb/hr to Steam Mass Flow unit options</li>
-            <li>Fixed: Pipe Insulation Calculator allows editing modification utility cost</li>
-            <li>Fixed: SSMT assessment results panel adjusted to display modification name</li>
+            <li><b>Added:</b> Insulated Pipe/Tank Suite documentation added</li>
+            <li><b>Fixed:</b> Fix missing SSMT Boiler steam pressure conversion</li>
+            <li><b>Fixed:</b> Steam modeler and SSMT Boiler validation updated</li>
           </ul>
+
           <label>Treasure Hunt</label>
           <ul>
-            <li>Fixed: Assessment Opportunity waste water energy use not read in correctly</li>
+            <li><b>Enhanced:</b> Improve presentation and clarity of Treasure Hunt cost savings errors</li>
+            <li><b>Enhanced:</b> Fix Treasure Hunt gauge threshold for 0-1% values</li>
+            <li><b>Fixed:</b> Update legacy Treasure Hunt opportunities for backwards compatibility</li>
+            <li><b>Fixed:</b> Fix Electricity Reduction documentation link</li>
+            <li><b>Fixed:</b> Show annual cost savings in Waste Heat for Absorption Chillers results panel</li>
+            <li><b>Fixed:</b> Enforce 1:1 baseline and modification instances and resolve flow rate reduction calculation</li>
           </ul>
+
           <label>Water</label>
           <ul>
-            <li>Added: Color palette selection for diagram nodes</li>
-            <li>Enhanced: Add modal close button for Adjust Cost Attribution table</li>
-            <li>Enhanced: Support True Cost attribution for RO systems which have a single outflow directly to discharge</li>
-            <li>Enhanced: Support True Cost attribution for Water Treatment chains which have split outflows and/or losses at the treatment stage</li>
-            <li>Enhanced: Update diagram dropdown select menus for visual continuity</li>
-            <li>Enhanced: Ignore scroll wheel input when user is actively editing diagram form fields</li>
-            <li>Fixed: Allow diagram copy and move functionality in directory menus</li>
-            <li>Fixed: True Cost attribution for intake cost under various diagram configurations</li>
-            <li>Fixed: Diagram flow validations now present to user on diagram open</li>
-            <li>Fixed: Source Water Intake results not presenting for components with adjusted attribution</li>
-            <li>Fixed: Diagram input field changes are stale when making a return trip from Diagram to directory dashboard, then back to diagram</li>
-            <li>Fixed: True Cost of Systems report errors on invalid diagram containing nodes with no connected edges</li>
+            <li><b>Added:</b> Add mobile return action to Water Diagram unavailable display message</li>
+            <li><b>Fixed:</b> Remove Known Loss Outflow trailing 0 from Data Drawer Forms</li>
+          </ul>
+
+          <label>Process Cooling</label>
+          <ul>
+            <li><b>New Feature:</b> A new module for conducting an energy assessment for a process cooling system</li>
+            <li><b>New Feature:</b> Enter data regarding pump, condenser, towers, and chillers</li>
+            <li><b>New Feature:</b> Pull in TMY weather data based on zip code</li>
+            <li><b>New Feature:</b> Specify operating and load schedules</li>
+            <li><b>New Feature:</b> Conduct "What-if" scenarios for key energy use parameters</li>
+            <li><b>New Feature:</b> Tables and graphs to understand energy use in system and performance of equipment</li>
+            <li><b>Coming Soon:</b> Dashboard and rollup support</li>
+          </ul>
+
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.7.5:</label>
+          <label>Steam</label>
+          <ul>
+            <li><b>Enhanced:</b> Improved validation regarding steam thermodynamic properties</li>
+          </ul>
+          <label>Calculators</label>
+          <ul>
+            <li><b>Enhanced:</b> Steam Properties Calculator - Improved validation regarding steam thermodynamic properties</li>
+            <li><b>Enhanced:</b> Saturated Properties Calculator - Improved validation regarding steam thermodynamic properties</li>
           </ul>
 
           <div class="modal-footer p-2 d-flex flex-row justify-content-end">
