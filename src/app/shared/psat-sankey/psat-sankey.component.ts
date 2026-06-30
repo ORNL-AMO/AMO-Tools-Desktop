@@ -5,6 +5,7 @@ import {
   SimpleChanges,
   ViewChild,
   ElementRef,
+  inject,
   ChangeDetectionStrategy,
 } from "@angular/core";
 import { PSAT, PsatOutputs, PsatInputs, PsatValid } from "../models/psat";
@@ -21,6 +22,10 @@ import { PsatChartsService } from "../../psat/services/psat-charts.service";
     standalone: false
 })
 export class PsatSankeyComponent implements OnInit {
+  private readonly psatService = inject(PsatService);
+  private readonly plotlyService = inject(PlotlyService);
+  private readonly psatChartsService = inject(PsatChartsService);
+
   @Input()
   psat: PSAT;
   @Input()
@@ -43,15 +48,7 @@ export class PsatSankeyComponent implements OnInit {
 
   selectedResults: PsatOutputs;
   selectedInputs: PsatInputs;
-  // todo this should be replaced with psat.valid or whatever state is fresh
-  validLosses: boolean = true;
-
-  constructor(
-    private psatService: PsatService,
-    private _dom: ElementRef,
-    private plotlyService: PlotlyService,
-    private psatChartsService: PsatChartsService
-  ) { }
+  validLosses = true;
 
   ngOnInit() {
     this.getChartData();
@@ -148,6 +145,6 @@ export class PsatSankeyComponent implements OnInit {
       : { modeBarButtonsToRemove: ['select2d', 'lasso2d', 'hoverClosestCartesian', 'hoverCompareCartesian'], responsive: true };
 
     await this.plotlyService.newPlot(this.ngChart.nativeElement, [sankeyData], layout, defaultPlotlyConfig(config));
-    this.psatChartsService.applyGradientAndArrows(this._dom.nativeElement, connectingNodes);
+    this.psatChartsService.applyGradientAndArrows(this.ngChart.nativeElement, connectingNodes);
   }
 }
