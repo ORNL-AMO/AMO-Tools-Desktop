@@ -15,6 +15,8 @@ import { ChillerCalculatorSuiteApiService } from './chiller-calculator-suite-api
 import { MotorDataApiService } from './motor-data-api.service';
 import { DefaultCompressorApiService } from './default-compressor-api.service';
 import { LightingSuiteApiService } from './lighting-suite-api.service';
+import { ToolsSuiteApiService } from './tools-suite-api.service';
+import { FanAffinityLawApiService } from './fan-affinity-law-api.service';
 @NgModule({
   declarations: [],
   imports: [
@@ -35,7 +37,9 @@ import { LightingSuiteApiService } from './lighting-suite-api.service';
     WaterSuiteApiService,
     MotorDataApiService,
     DefaultCompressorApiService,
-    LightingSuiteApiService
+    LightingSuiteApiService,
+    ToolsSuiteApiService,
+    FanAffinityLawApiService
   ]
 })
 export class ToolsSuiteApiModule { }

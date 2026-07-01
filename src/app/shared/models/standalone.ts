@@ -772,3 +772,25 @@ export interface PowerFactorTriangleOutputs {
 
 //==== END Power Factor Triangle objects =====
 
+
+//====== fan affinity law objects ======
+export interface FanAffinityLawsInput {
+  electricityCost: number;
+  driveEfficiency: number;
+  motorEfficiency: number;
+  flowPercentBaseline: number;
+  operatingHours: number;
+  motorPower: number;
+  ratedFlow: number;
+  motorControlTypeCurrent: number;
+  motorControlTypeNew: number;
+  flowMode: number;
+  desiredFlowRate: number;
+}
+
+export interface FanAffinityLawsOutput {
+  annualEnergyBaseline: number;
+  annualEnergyNew: number;
+  annualCostSavings: number;
+}
+//===== END fan affinity law objects =====
