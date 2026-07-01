@@ -16,14 +16,20 @@ Include assessment or calculator location, field names, context details to reach
 **Describe MEASUR UI**
 Outline UI ideas, refer to an existing MEASUR pattern, or Dev's choice
 
+---
 **Who should verify**
 
----
-### Optional
 **Feature requested by**
+
+ **Release Notes**
+ Include the release note description following below formats
+ ```
+    - Added: ...
+    - Enhanced: ...
+    - Fixed: ...
+```
+
 
 **Sample Inputs and Results**
 Include input testing values and expected results
 
-**Future Integrations**
-Future connections to existing MEASUR features, VERIFI, JUSTIFI, etc
