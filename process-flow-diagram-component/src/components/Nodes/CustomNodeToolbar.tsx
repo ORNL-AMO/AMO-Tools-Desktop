@@ -5,7 +5,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { Button, ButtonGroup, useTheme } from "@mui/material";
 import { useAppSelector } from "../../hooks/state";
 import { ProcessFlowPart, WaterUsingSystem, getNodeEstimatedUnknownLosses } from 'process-flow-lib';
-import { selectTotalSourceFlow, selectNodeErrors, selectTotalDischargeFlow } from '../Diagram/store';
+import { selectTotalSourceFlow, selectDiagramFlowErrors, selectTotalDischargeFlow } from '../Diagram/store';
 import { getNodeHasErrorLevel } from 'process-flow-lib/water/logic/validation';
 
 const CustomNodeToolbar = ({ onEdit, nodeData, selected }: NodeToolbarProps) => {
@@ -20,7 +20,7 @@ const CustomNodeToolbar = ({ onEdit, nodeData, selected }: NodeToolbarProps) => 
 
     const backgroundColor = theme.palette.background.paper;
     const totalSourceFlow = useAppSelector(state => selectTotalSourceFlow(state, nodeData.diagramNodeId));
-    const nodeError = useAppSelector(state => selectNodeErrors(state)[nodeData.diagramNodeId]);
+    const nodeError = useAppSelector(state => selectDiagramFlowErrors(state)[nodeData.diagramNodeId]);
     const totalDischargeFlow = useAppSelector(state => selectTotalDischargeFlow(state, nodeData.diagramNodeId));
 
     let totalUnknownLoss = getNodeEstimatedUnknownLosses(nodeData as WaterUsingSystem, totalSourceFlow, totalDischargeFlow);

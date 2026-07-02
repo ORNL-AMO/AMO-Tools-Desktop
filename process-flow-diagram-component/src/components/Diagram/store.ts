@@ -1,9 +1,31 @@
 import { configureStore, createListenerMiddleware, createSelector, isAnyOf } from '@reduxjs/toolkit'
-import diagramReducer, { addNode, saveDiagramState } from './diagramReducer'
+import diagramReducer, { addNode, diagramSlice, DiagramActionType, recomputeNodeErrors, RECOMPUTES_DIAGRAM_ERRORS, saveDiagramState } from './diagramReducer'
 import { Edge, getConnectedEdges, Node } from '@xyflow/react';
 import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
 import { createGraphIndex, CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
 
+/**
+ * Builds the `isAnyOf` matcher for the "recompute diagram errors" listener below,
+ * from the `true` entries in `RECOMPUTES_DIAGRAM_ERRORS` — so the matcher can never
+ * drift out of sync with that map.
+ *
+ * This has to be a function called lazily on first use, not a plain module-level
+ * constant. `store.ts` and `diagramReducer.ts` import from each other indirectly
+ * (through component files each also imports), forming a circular import. If this
+ * matcher were built at module-load time, `diagramSlice.actions` could still be
+ * `undefined` depending on which module finishes loading first. Calling this function
+ * later, after everything has finished loading, sidesteps that ordering problem.
+ */
+let structuralDiagramActionMatcherCache: ReturnType<typeof isAnyOf> | undefined;
+export function getStructuralDiagramActionMatcher() {
+  if (!structuralDiagramActionMatcherCache) {
+    const structuralActions = Object.entries(RECOMPUTES_DIAGRAM_ERRORS)
+      .filter(([, isStructural]) => isStructural)
+      .map(([actionName]) => diagramSlice.actions[actionName as DiagramActionType]);
+    structuralDiagramActionMatcherCache = isAnyOf(...structuralActions);
+  }
+  return structuralDiagramActionMatcherCache;
+}
 
 export function configureAppStore(waterDiagram: WaterDiagram) {
   const store = configureStore({
@@ -21,7 +43,7 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
         selectedDataId: undefined,
         focusedEdgeId: undefined,
         calculatedData: {nodes: {}},
-        nodeErrors: {},
+        diagramFlowErrors: {},
         recentEdgeColors: [],
         recentNodeColors: [],
         diagramParentDimensions: {
@@ -40,6 +62,7 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
       }
     },
     middleware: (getDefaultMiddleware) => {
+      // todo this listener prototyped, not wired up
       const listenerMiddleware = createListenerMiddleware();
       listenerMiddleware.startListening({
         matcher: isAnyOf(addNode),
@@ -47,7 +70,16 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
           dispatch(saveDiagramState());
         },
       });
-  
+
+      listenerMiddleware.startListening({
+        matcher: getStructuralDiagramActionMatcher(),
+        effect: async (_, listenerApi) => {
+          listenerApi.cancelActiveListeners();
+          await listenerApi.delay(150);
+          listenerApi.dispatch(recomputeNodeErrors());
+        },
+      });
+
       return getDefaultMiddleware().prepend(listenerMiddleware.middleware);
     },
   });
@@ -78,14 +110,14 @@ export type AppDispatch = AppStore['dispatch']
 // * may also use globalized selectors
 export const selectEdges = (state: RootState) => state.diagram.edges as Edge<CustomEdgeData>[];
 export const selectNodes = (state: RootState) => state.diagram.nodes;
-export const selectNodeErrors = (state: RootState) => state.diagram.nodeErrors;
+export const selectDiagramFlowErrors = (state: RootState) => state.diagram.diagramFlowErrors;
 export const selectisDataDrawerOpen = (state: RootState) => state.diagram.isDataDrawerOpen;
 export const selectIsModalOpen = (state: RootState) => state.diagram.isModalOpen;
 export const selectHasAssessment = (state: RootState) => state.diagram.assessmentId !== undefined;
 export const selectCurrentNode = (state: RootState) => state.diagram.nodes.find((node: Node<ProcessFlowPart>) => node.id === state.diagram.selectedDataId) as Node<ProcessFlowPart>;
 export const selectCalculatedData = (state: RootState) => state.diagram.calculatedData;
 export const selectNodeValidation = (state: RootState) => {
-  return state.diagram.nodeErrors[state.diagram.selectedDataId]
+  return state.diagram.diagramFlowErrors[state.diagram.selectedDataId]
 };
 
 export const selectNodeCalculatedFlowData = (state: RootState, nodeId: string): NodeFlowData => {
@@ -106,10 +138,6 @@ export const selectCurrentDataId = (state: RootState, selectedId?: string) => {
 //   (nodes) => [...nodes]
 // );
 
-// export const selectNodeErrorsMemo = createSelector(
-//   [selectNodeErrors],
-//   (nodeErrors) => ({ ...nodeErrors })
-// );
 
 export const selectedDataColor = createSelector(selectNodes, selectEdges, selectCurrentDataId,
   (nodes: Node<ProcessFlowPart>[], edges: Edge<CustomEdgeData>[], selectedDataId: string) => {

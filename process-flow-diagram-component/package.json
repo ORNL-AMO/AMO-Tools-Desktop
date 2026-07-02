@@ -1,7 +1,7 @@
 {
   "name": "process-flow-diagram-component",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "scripts": {
     "dev": "webpack build --config ./standalone-build.config.js --mode=development --watch",
     "build": "webpack build --config ./webpack.config.js",

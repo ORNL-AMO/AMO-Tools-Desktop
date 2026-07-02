@@ -8,7 +8,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { memo, useState } from "react";
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
-import { getHasErrorLevel, getHasFlowError, getHasTotalFlowError, NodeErrors, NodeFlowTypeErrors, ProcessFlowPart } from "process-flow-lib";
+import { getHasErrorLevel, getHasFlowError, getHasTotalFlowError, DiagramFlowErrors, ComponentFlowErrors, ProcessFlowPart } from "process-flow-lib";
 
 const ValidationWindow = (props: ValidationWindowProps) => {
   const dispatch = useAppDispatch();
@@ -87,7 +87,7 @@ const ValidationWindow = (props: ValidationWindowProps) => {
               sx={{ flexGrow: 1, maxHeight: "inherit" }}
             >
               <Stack spacing={1} sx={{ p: ".5rem .25rem", overflowY: "auto", maxHeight: "calc(440px - 60px)" }}>
-                  {Object.entries(errors).map(([key, errors]: [string, NodeFlowTypeErrors]) => {
+                  {Object.entries(errors).map(([key, errors]: [string, ComponentFlowErrors]) => {
                     const node: Node<ProcessFlowPart> = nodes.find((n) => n.id === key) as Node<ProcessFlowPart>;
                     if (node) {
                       const name = node.data.name || "Unnamed Component";
@@ -157,7 +157,7 @@ const ValidationWindow = (props: ValidationWindowProps) => {
 
 export default memo(ValidationWindow);
 export interface ValidationWindowProps extends React.HTMLAttributes<HTMLDivElement> {
-  errors: NodeErrors;
+  errors: DiagramFlowErrors;
   nodes: Node[];
   openLocation: ValidationWindowLocation;
 }

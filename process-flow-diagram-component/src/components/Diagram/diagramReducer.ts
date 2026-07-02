@@ -2,9 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
-import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection } from 'process-flow-lib';
+import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowDiagramData, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
@@ -49,7 +48,7 @@ export interface DiagramState {
   recentNodeColors: string[],
   recentEdgeColors: string[],
   diagramParentDimensions: ParentContainerDimensions,
-  nodeErrors: NodeErrors,
+  diagramFlowErrors: DiagramFlowErrors,
   focusedEdgeId: string,
   isDialogOpen: boolean,
   assessmentId: number,
@@ -73,7 +72,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     selectedDataId: undefined,
     focusedEdgeId: undefined,
     calculatedData: { nodes: {} },
-    nodeErrors: {},
+    diagramFlowErrors: {},
     recentEdgeColors: getDefaultColorPalette(),
     recentNodeColors: getDefaultColorPalette(),
     diagramParentDimensions: {
@@ -125,8 +124,8 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.settings = diagramData.settings ? { ...diagramData.settings } : getDefaultSettings();
   state.calculatedData = diagramData.calculatedData ? { ...diagramData.calculatedData } : { nodes: {} };
   
-  const nodeErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
-  state.nodeErrors = nodeErrors;
+  const diagramFlowErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
+  state.diagramFlowErrors = diagramFlowErrors;
 
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
@@ -257,25 +256,9 @@ const distributeTotalDischargeFlowReducer = (state: DiagramState, action: Payloa
   populateConnectedOutflowTotalsAndFlows(state, componentDischargeEdges);
 }
 
-const nodeErrorsChangeReducer = (state: DiagramState, action: PayloadAction<{ flowType: FlowType, errors: FormikErrors<{ totalFlow: string | number; flows: (string | number)[] }> }>) => {
-  const { flowType, errors } = action.payload;
-  const level = errors.totalFlow ? 'error' : errors.flows?.length > 0 ? 'warning' : undefined;
-  const flowErrors: FlowErrors = {
-    // todo ts compiler confusion - reading FormikErrors flows as string | string[]
-    flows: errors.flows as (string | number)[] ?? undefined,
-    totalFlow: errors.totalFlow ?? undefined,
-    level: level
-  }
-
-  const errorsExist = Object.entries(flowErrors).some(([, value]) => value !== undefined);
-  if (errorsExist) {
-    setFlowErrors(state, flowType, flowErrors);
-  } else if (state.nodeErrors[state.selectedDataId]) {
-    removeFlowErrors(state, flowType);
-  }
-
-  // todo set validation based on connected edges that now have calculated flow values
-}
+const recomputeNodeErrorsReducer = (state: DiagramState) => {
+  state.diagramFlowErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
+};
 
 const applyEstimatedFlowResultsReducer = (state: DiagramState, action: PayloadAction<EstimatedFlowResults>) => {
   const { totalSourceFlow, totalDischargeFlow, knownLosses, waterInProduct } = action.payload;
@@ -328,7 +311,7 @@ const deleteNodeReducer = (state: DiagramState, action: PayloadAction<string>) =
   state.nodes = state.nodes.filter((nd) => nd.id !== state.selectedDataId);
   state.edges = state.edges.filter((edge) => edge.source !== state.selectedDataId && edge.target !== state.selectedDataId);
   state.isDataDrawerOpen = !state.isDataDrawerOpen;
-  delete state.nodeErrors[state.selectedDataId];
+  delete state.diagramFlowErrors[state.selectedDataId];
   state.selectedDataId = action.payload ? action.payload : undefined;
 };
 
@@ -340,7 +323,7 @@ const keyboardDeleteNodeReducer = (state: DiagramState, action: PayloadAction<No
   if (node.selected) {
     state.selectedDataId = undefined;
   }
-  delete state.nodeErrors[node.id];
+  delete state.diagramFlowErrors[node.id];
 };
 
 const updateNodeHandlesReducer = (state: DiagramState, action: PayloadAction<Handles>) => {
@@ -622,6 +605,7 @@ export const diagramSlice = createSlice({
   initialState: getDefaultDiagramData(),
   reducers: {
     resetDiagram: resetDiagramReducer,
+    recomputeNodeErrors: recomputeNodeErrorsReducer,
     diagramInitialized: diagramInitializedReducer,
     nodesChange: nodesChangeReducer,
     addNode: addNodeReducer,
@@ -629,7 +613,6 @@ export const diagramSlice = createSlice({
     updateNodeHandles: updateNodeHandlesReducer,
     sourceFlowValueChange: sourceFlowValueChangeReducer,
     totalFlowChange: totalFlowChangeReducer,
-    nodeErrorsChange: nodeErrorsChangeReducer,
     validationWindowOpenChange: validationWindowOpenChangeReducer,
     deleteNode: deleteNodeReducer,
     setNodeName: setNodeNameReducer,
@@ -671,6 +654,7 @@ export const diagramSlice = createSlice({
 
 export const {
   nodesChange,
+  recomputeNodeErrors,
   edgesChange,
   edgesUpdate,
   connectEdge,
@@ -688,7 +672,6 @@ export const {
   dischargeFlowValueChange,
   distributeTotalSourceFlow,
   distributeTotalDischargeFlow,
-  nodeErrorsChange,
   validationWindowOpenChange,
   updateNodeHandles,
   deleteEdge,
@@ -718,6 +701,71 @@ export const {
 } = diagramSlice.actions
 export default diagramSlice.reducer
 
+export type DiagramActionType = keyof typeof diagramSlice.actions;
+
+/**
+ * true = this action must trigger a `diagramFlowErrors` recompute (it changes nodes/edges/
+ * settings.flowDecimalPrecision). New reducer → this object won't compile until you add it here.
+ * `store.ts`'s recompute-listener matcher is derived from the `true` entries — get one wrong and
+ * errors either go stale or recompute fires on high-frequency events like drag.
+ */
+
+export const RECOMPUTES_DIAGRAM_ERRORS: Record<DiagramActionType, boolean> = {
+  // self-referential / already-handled inline — matching these would be redundant or circular
+  recomputeNodeErrors: false, // this *is* the recompute action
+  diagramInitialized: false, // recomputes inline in diagramInitializedReducer
+  resetDiagram: false, // resets diagramFlowErrors to {} directly via getDefaultDiagramData
+
+  // cosmetic — position/selection/viewport/styling, never read by checkDiagramNodeErrors
+  nodesChange: false, // drag/select/dimension events fire at pointer-move frequency; node deletion is separately covered by keyboardDeleteNode
+  setNodeName: false,
+  setNodeStyle: false,
+  setNodeColor: false,
+  setEdgeStrokeColor: false,
+  focusedEdgeChange: false,
+  defaultEdgeTypeChange: false, // edge.type/diagramOptions.edgeType are rendering-only
+  customEdgeTypeChange: false,
+  diagramOptionsChange: false,
+  showMarkerEndArrows: false,
+  toggleDrawer: false,
+  setDialogOpen: false,
+  modalOpenChange: false,
+  conductivityUnitChange: false, // settings field unrelated to flow validation
+  electricityCostChange: false, // settings field unrelated to flow validation
+  diagramAlertChange: false,
+  toggleMenuDrawer: false,
+  setDiagramNotes: false,
+  setPaletteColors: false, // node background color only
+  validationWindowOpenChange: false,
+
+  // structural — change validation inputs, must trigger recompute
+  addNode: true,
+  addNodes: true,
+  updateNodeHandles: true,
+  sourceFlowValueChange: true,
+  totalFlowChange: true,
+  deleteNode: true,
+  nodeDataPropertyChange: true,
+  edgesChange: true, // generic onEdgesChange handler — also carries edge *removal* via keyboard/selection, there is no separate keyboardDeleteEdge action
+  edgesUpdate: true, // wholesale edge replace from onReconnect — changes source/target
+  connectEdge: true,
+  deleteEdge: true,
+  keyboardDeleteNode: true,
+  unitsOfMeasureChange: true, // converts flow values across nodes/edges
+  flowDecimalPrecisionChange: true,
+  distributeTotalSourceFlow: true,
+  dischargeFlowValueChange: true,
+  distributeTotalDischargeFlow: true,
+  applyEstimatedFlowResults: true,
+  edgesChangeFromPropagation: true,
+  sumTotalFlowChange: true,
+
+  // don't mutate validation inputs themselves, but force a recompute so errors are guaranteed
+  // fresh the moment a node's forms become visible (insurance against any other stale path)
+  openDrawerWithSelected: true,
+  selectedIdChange: true,
+};
+
 export interface UserOptionsPayload<K extends keyof UserDiagramOptions> { optionsProp: K, updatedValue: UserDiagramOptions[K], updateDependencies?: OptionsDependentState[] };
 export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K] };
 export interface NodeTreatmentDataPayload<K extends keyof WaterTreatment> { optionsProp: K, updatedValue: WaterTreatment[K] };
@@ -739,12 +787,12 @@ export const saveDiagramState = createAsyncThunk(
   'diagram/save',
   async (_, { getState }) => {
     const diagramState = getState() as DiagramState;
-    const { name, nodes, edges, nodeErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors } = diagramState;
+    const { name, nodes, edges, diagramFlowErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors } = diagramState;
     const userDiagramOptions = diagramOptions;
     const updatedDiagramData: FlowDiagramData = {
       name: name,
       nodes: nodes,
-      nodeErrors: nodeErrors,
+      diagramFlowErrors: diagramFlowErrors,
       edges: edges,
       settings,
       userDiagramOptions,
@@ -762,23 +810,6 @@ export const saveDiagramState = createAsyncThunk(
 
 
 // helpers
-const setFlowErrors = (state: DiagramState, flowType: FlowType, errors: FlowErrors) => {
-  if (state.nodeErrors[state.selectedDataId]) {
-    state.nodeErrors[state.selectedDataId][flowType] = errors;
-  } else {
-    state.nodeErrors[state.selectedDataId] = {
-      [flowType]: errors
-    }
-  }
-}
-
-const removeFlowErrors = (state: DiagramState, flowType: FlowType) => {
-  delete state.nodeErrors[state.selectedDataId][flowType];
-  if (Object.entries(state.nodeErrors[state.selectedDataId]).every(([, value]) => value === undefined)) {
-    delete state.nodeErrors[state.selectedDataId];
-  }
-}
-
 const getIsActiveTargetEdge = (updatedNode: Node, handleSet: Handles[keyof Handles], edgeId: string): boolean => {
   const { source, target, sourceHandle, targetHandle } = getConnectionFromEdgeId(edgeId);
   const isTargetConnection = target === updatedNode.id;
@@ -842,6 +873,7 @@ const populateConnectedOutflowTotalsAndFlows = (state: DiagramState, dischargeEd
 const upgradeDiagram = (diagramData: FlowDiagramData) => {
   upgradeNodeData(diagramData);
   upgradeEdgeData(diagramData);
+  migrateFlowDiagramFieldNames(diagramData);
 
   diagramData.meta.upgrades.push({
     fromVersion: diagramData.meta.version,

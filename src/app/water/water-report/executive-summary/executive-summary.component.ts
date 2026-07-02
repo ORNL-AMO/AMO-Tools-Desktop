@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
-import { ExecutiveSummaryResults, getIsDiagramValid, NodeErrors } from 'process-flow-lib';
+import { ExecutiveSummaryResults, getIsDiagramValid, DiagramFlowErrors } from 'process-flow-lib';
 import { Diagram } from '../../../shared/models/diagram';
 import { UpdateDiagramFromAssessmentService } from '../../../water-process-diagram/update-diagram-from-assessment.service';
 
@@ -43,13 +43,8 @@ export class ExecutiveSummaryComponent {
 
   ngOnInit(): void {
     let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(this.assessment);
-    // let nodeErrors: NodeErrors = checkDiagramNodeErrors(
-    //   diagram.waterDiagram.flowDiagramData.nodes,
-    //   diagram.waterDiagram.flowDiagramData.edges,
-    //   diagram.waterDiagram.flowDiagramData.calculatedData,
-    //   diagram.waterDiagram.flowDiagramData.settings);
-    let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
-    this.isDiagramValid = getIsDiagramValid(nodeErrors);
+    let diagramFlowErrors: DiagramFlowErrors = diagram.waterDiagram.flowDiagramData.diagramFlowErrors;
+    this.isDiagramValid = getIsDiagramValid(diagramFlowErrors);
     if (this.isDiagramValid) {
       this.baselineResults = this.waterAssessmentResultsService.getExecutiveSummaryReport(this.assessment, this.settings);
     } else {

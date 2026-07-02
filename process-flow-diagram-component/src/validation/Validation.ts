@@ -1,12 +1,6 @@
 import { Edge } from "@xyflow/react";
-import { DiagramSettings, validateKnownLosses, validateTotalFlowValue } from "process-flow-lib";
+import { CustomEdgeData, DiagramSettings, FlowType, validateFlowSection, WaterProcessComponentType } from "process-flow-lib";
 import * as Yup from 'yup';
-
-const TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR = `Total Source Flow must be greater than 0`;
-const TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR = `Total Discharge Flow must be greater than 0`;
-const TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Total Discharge Flow must be greater than or equal to 0`;
-const CONNECTED_FLOW_GREATER_THAN_ERROR = `Flow must be greater than 0`;
-const CONNECTED_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR = `Flow must be greater than or equal to 0`;
 
 const getSystemNumberFieldValidation = (fieldLabel: string) => Yup.number()
     .nullable()
@@ -37,84 +31,40 @@ export const getEstimateSystemValidationSchema = (
     );
 };
 
+/**
+ * Thin adapter over `validateFlowSection` — the shared rule set also used by
+ * `checkDiagramNodeErrors`. This schema only maps its result onto Yup field
+ * errors for form display; it no longer encodes any validation rules itself.
+ */
 export const getDefaultFlowValidationSchema = (
     flowLabel: 'Source' | 'Discharge',
     connectedEdges: Edge[],
     totalCalculatedFlow: number,
     unaccountedFlow: number,
     settings: DiagramSettings,
+    componentType: WaterProcessComponentType,
     sumUserKnownLosses?: number,
-    isWaterUsingSystem?: boolean
 ): Yup.ObjectSchema<FlowForm> => {
-    let totalFlowError = TOTAL_SOURCE_FLOW_GREATER_THAN_ERROR;
-    if (flowLabel === 'Discharge' && isWaterUsingSystem) {
-        totalFlowError = TOTAL_DISCHARGE_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR;
-    } else if (flowLabel === 'Discharge') {
-        totalFlowError = TOTAL_DISCHARGE_FLOW_GREATER_THAN_ERROR;
-    } 
-
-    const unit = settings.unitsOfMeasure === 'Imperial'? 'Mgal' : 'm<sup>3</sup>';
-
-    const getTotalFlowMinError = (value: number | null, path: string, createError: any) => {
-        if (value === null || value === undefined) return true;
-
-        let invalidMessage = totalFlowError;
-        let isValid: boolean = value > 0;
-        if (flowLabel === 'Discharge' && isWaterUsingSystem) {
-            isValid = value >= 0;
-        }
-
-        if (!isValid) {
-            return createError({
-                path,
-                message: invalidMessage,
-            });
-        }
-        return true;
-    };
-
-    const getConnectedFlowMinError = (value: number | null, path: string, createError: any) => {
-        if (value === null || value === undefined) return true;
-
-        let invalidMessage: string = CONNECTED_FLOW_GREATER_THAN_ERROR;
-        let isValid: boolean = value > 0;
-        if (flowLabel === 'Discharge' && isWaterUsingSystem) {
-            invalidMessage = CONNECTED_FLOW_GREATER_THAN_OR_EQUAL_TO_ZERO_ERROR;
-            isValid = value >= 0;
-        }
-
-        if (!isValid) {
-            return createError({
-                path,
-                message: invalidMessage,
-            });
-        }
-        return true;
-    };
+    const flowDirection: FlowType = flowLabel === 'Source' ? 'source' : 'discharge';
 
     let totalFlowSchema = Yup.number()
         .nullable()
         .test(
-            'total-flow-min',
-            totalFlowError,
+            'total-flow-error',
+            '',
             function (value) {
                 const { path, createError } = this;
-                return getTotalFlowMinError(value, path, createError);
-            }
-        )
-        .test(
-            'sum-differs',
-            'Total Flow must be equal to the sum of individual flows',
-            function (value) {
-                const { path, createError } = this;
-                const flowDifference = Math.abs(totalCalculatedFlow - value);
-                const unallocated = Number((flowDifference).toFixed(settings.flowDecimalPrecision));
-                const isValid = validateTotalFlowValue(connectedEdges, totalCalculatedFlow, unaccountedFlow, value, settings.flowDecimalPrecision);
-                if (!isValid) {
-                    return createError({
-                        path,
-                        message: `Total ${flowLabel} Flow must be equal to the sum of individual flows. There is unallocated flow of ${unallocated} ${unit}.`,
-                    });
+                const { totalFlowError } = validateFlowSection({
+                    totalFlow: value,
+                    edges: connectedEdges as Edge<CustomEdgeData>[],
+                    calculatedTotal: totalCalculatedFlow,
+                    unaccountedFlow,
+                    componentType,
+                    flowDirection,
+                    precision: settings.flowDecimalPrecision,
+                });
+                if (totalFlowError) {
+                    return createError({ path, message: totalFlowError });
                 }
                 return true;
             }
@@ -125,10 +75,23 @@ export const getDefaultFlowValidationSchema = (
         .nullable()
         .test(
             'flow-min',
-            'Flow must be greater than 0',
+            '',
             function (value) {
                 const { path, createError } = this;
-                return getConnectedFlowMinError(value, path, createError);
+                if (value === null || value === undefined) return true;
+                const { edgeErrors } = validateFlowSection({
+                    totalFlow: null,
+                    edges: [{ data: { flowValue: value } } as Edge<CustomEdgeData>],
+                    calculatedTotal: 0,
+                    unaccountedFlow: undefined,
+                    componentType,
+                    flowDirection,
+                    precision: settings.flowDecimalPrecision,
+                });
+                if (edgeErrors[0]) {
+                    return createError({ path, message: edgeErrors[0] });
+                }
+                return true;
             }
         )
     )
@@ -141,12 +104,24 @@ export const getDefaultFlowValidationSchema = (
     const knownLossesSchema = Yup.number()
         .nullable()
         .test('known-losses-differs',
-            (d) => {
-                return `Known Losses should equal the sum of all Known Loss flows (${sumUserKnownLosses})`
-            },
-            (value) => {
-                const isValid = validateKnownLosses(sumUserKnownLosses, value);
-                return isValid;
+            '',
+            function (value) {
+                const { path, createError } = this;
+                const { knownLossesError } = validateFlowSection({
+                    totalFlow: null,
+                    edges: [],
+                    calculatedTotal: 0,
+                    unaccountedFlow: undefined,
+                    componentType,
+                    flowDirection,
+                    precision: settings.flowDecimalPrecision,
+                    sumKnownLossEdges: sumUserKnownLosses,
+                    userKnownLosses: value,
+                });
+                if (knownLossesError) {
+                    return createError({ path, message: knownLossesError });
+                }
+                return true;
             },
         );
 

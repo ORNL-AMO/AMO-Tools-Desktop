@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
-import { NodeErrors, PlantSystemSummaryResults } from 'process-flow-lib';
+import { DiagramFlowErrors, PlantSystemSummaryResults } from 'process-flow-lib';
 import { WaterAssessmentResultsService } from '../../water-assessment-results.service';
 import { Observable, Subscription } from 'rxjs';
 
@@ -19,7 +19,7 @@ export class SystemSummaryReportComponent {
   @Input()
   settings: Settings;
 
-  errors: NodeErrors;
+  errors: DiagramFlowErrors;
   notes: Array<{
     modificationName: string,
     note: string

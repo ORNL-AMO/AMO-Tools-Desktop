@@ -1,5 +1,5 @@
 import { List, TextField, InputAdornment, ListItem, Button, useTheme, Box, Typography, Collapse } from "@mui/material";
-import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getKnownLossComponentTotals, getNodeFlowTotals } from "../Diagram/FlowUtils";
+import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getNodeFlowTotals } from "../Diagram/FlowUtils";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
@@ -13,12 +13,11 @@ import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectCurrentNode, selectNodes, selectNodeTargetEdges, selectTotalDischargeFlow } from "../Diagram/store";
 import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
 import { FieldArray, Form, Formik, useFormikContext } from "formik";
-import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import { ObjectSchema } from "yup";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { blue } from "@mui/material/colors";
-import { CustomEdgeData } from "process-flow-lib";
+import { CustomEdgeData, getKnownLossComponentTotals, ProcessFlowPart } from "process-flow-lib";
 import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
 import { useFlowService } from "../../services/FlowService";
 import CallMergeIcon from '@mui/icons-material/CallMerge';
@@ -97,9 +96,8 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
 
     // todo 7339 - don't validate when flows dont exist
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, nodes, selectedDataId);
-    const totalKnownLosses = getKnownLossComponentTotals(componentDischargeEdges, nodes, selectedDataId);
-    const isWaterUsingSystem = selectedNode.data.processComponentType === 'water-using-system';
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, selectedNode.data.userEnteredData.intakeUnaccounted, settings, totalKnownLosses, isWaterUsingSystem);
+    const totalKnownLosses = getKnownLossComponentTotals(componentDischargeEdges, nodes as Node<ProcessFlowPart>[], selectedDataId);
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, selectedNode.data.userEnteredData.intakeUnaccounted, settings, selectedNode.data.processComponentType, totalKnownLosses);
 
     return (
         <Formik
@@ -120,7 +118,6 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
 
                 return (
                     <Form>
-                        <UpdateNodeErrors flowType={'discharge'} errors={errors} />
                         <DistributeTotalFlowField componentEdges={componentDischargeEdges} setFieldValue={setFieldValue} />
                         <TotalDischargeFlowField inView={inView} />
 
