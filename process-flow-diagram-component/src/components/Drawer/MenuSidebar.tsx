@@ -9,7 +9,7 @@ import { RootState, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getContrastTextColor, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
+import { DiagramFlowErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getContrastTextColor, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
 import { Node } from '@xyflow/react';
@@ -48,9 +48,9 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const electricityUnitCost = useAppSelector((state: RootState) => state.diagram.settings.electricityCost);
   const conductivityUnit = useAppSelector((state: RootState) => state.diagram.settings.conductivityUnit);
   const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
-  const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
+  const diagramFlowErrors: DiagramFlowErrors = useAppSelector((state: RootState) => state.diagram.diagramFlowErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
-  const isDiagramValid = getIsDiagramValid(nodeErrors);
+  const isDiagramValid = getIsDiagramValid(diagramFlowErrors);
 
   const [selectedTab, setSelectedTab] = useState(0);
   const processFlowParts: ProcessFlowPart[] = [...processFlowDiagramParts];
@@ -105,7 +105,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
             {!isDiagramValid && validationWindowLocation === 'alerts-tab'? 
               <Tab sx={{ fontSize: '.70rem' }} label={
                 <Box display={'block'}>
-                  <Badge badgeContent={Boolean(nodeErrors)? Object.keys(nodeErrors).length : 0} color="error" sx={{ paddingRight: '.25rem' }}>
+                  <Badge badgeContent={Boolean(diagramFlowErrors)? Object.keys(diagramFlowErrors).length : 0} color="error" sx={{ paddingRight: '.25rem' }}>
                         <NotificationsIcon sx={{ width: '.75em', color: selectedTab === 4 ? `${theme.palette.primary.main} !important` : 'inherit' }} />
                       </Badge>
                 <Typography variant="subtitle1" component={'span'} sx={{fontSize: '.70rem', marginLeft: '.5rem', color: selectedTab === 4? `${theme.palette.primary.main} !important` : '#inherit'}}>Alerts</Typography>
@@ -452,7 +452,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         <TabPanel value={selectedTab} index={4}>
           <Box sx={{height: '100%', whiteSpace: "normal", padding: '.5rem' }}>
                 {!isDiagramValid && validationWindowLocation === 'alerts-tab' &&
-                  <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} />
+                  <ValidationWindow nodes={nodes} errors={diagramFlowErrors} openLocation={validationWindowLocation} />
                 }
           </Box>
         </TabPanel>

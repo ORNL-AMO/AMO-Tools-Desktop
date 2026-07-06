@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
+import { Diagram } from '../models/diagram';
+import { FlowDiagramData, migrateFlowDiagramFieldNames } from 'process-flow-lib';
 import { SSMT } from '../models/steam/ssmt';
 import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
@@ -36,7 +38,33 @@ export class UpdateDataService {
             return this.updateWasteWater(assessment);
         } else if (assessment.type === 'CompressedAir') {
             return this.updateCompressedAir(assessment);
+        } else if (assessment.type === 'Water') {
+            return this.updateWater(assessment);
         }
+    }
+
+    /**
+     * No legacy fields to migrate on `assessment.water` itself — the diagram-side
+     * rename lives in `updateWaterDiagram()` below. This just advances `appVersion`
+     * so `AssessmentDbService`'s version check stops re-running every startup.
+     */
+    updateWater(assessment: Assessment): Assessment {
+        assessment.appVersion = environment.version;
+        return assessment;
+    }
+
+    /**
+     * Applies the shared `process-flow-lib` field migrations to a saved diagram's
+     * `flowDiagramData`, also used by the React diagram's upgrade path. Runs from
+     * AssessmentDbService.getAllAssessments() at app startup, before any Angular
+     * service reads the field.
+     */
+    updateWaterDiagram(diagram: Diagram): Diagram {
+        const flowDiagramData: FlowDiagramData = diagram.waterDiagram?.flowDiagramData;
+        if (flowDiagramData) {
+            migrateFlowDiagramFieldNames(flowDiagramData);
+        }
+        return diagram;
     }
 
     updateWasteWater(assessment: Assessment): Assessment {

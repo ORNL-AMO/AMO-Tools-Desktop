@@ -94,7 +94,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     meta?: DiagramMetaData,
     nodes: Node[],
     edges: Edge[],
-    nodeErrors: NodeErrors,
+    diagramFlowErrors: DiagramFlowErrors,
     userDiagramOptions: UserDiagramOptions,
     settings: DiagramSettings,
     calculatedData: DiagramCalculatedData,
@@ -114,17 +114,18 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     upgradeDate: string,
   };
   
-  export type NodeErrors = Record<string, NodeFlowTypeErrors>; 
-  
-  export type NodeFlowTypeErrors = {
+  export type DiagramFlowErrors = Record<string, ComponentFlowErrors>;
+
+  export type ComponentFlowErrors = {
     source?: FlowErrors,
     discharge?: FlowErrors
   }
   
-  export type FlowErrors = { 
-    totalFlow?: string | number; 
-    flows?: (string | number)[], 
-    level: ValidationLevel, 
+  export type FlowErrors = {
+    totalFlow?: string | number;
+    flows?: (string | number)[],
+    knownLosses?: string,
+    level: ValidationLevel | undefined,
   }
   export type ValidationLevel = 'error' | 'warning'
   export type FlowType = 'source' | 'discharge';

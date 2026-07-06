@@ -13,7 +13,6 @@ import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectCalculatedNodeData, selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
 import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
-import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
 import { ObjectSchema } from "yup";
@@ -62,7 +61,7 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
     }
 
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentSourceEdges, nodes, selectedDataId);
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Source', componentSourceEdges, totalCalculatedSourceFlow, selectedNode.data.userEnteredData.dischargeUnaccounted, settings);
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Source', componentSourceEdges, totalCalculatedSourceFlow, selectedNode.data.userEnteredData.dischargeUnaccounted, settings, selectedNode.data.processComponentType);
 
     return (
         <Formik
@@ -81,7 +80,6 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
 
                 return (
                     <Form>
-                        <UpdateNodeErrors flowType={'source'} errors={errors} />
                         <DistributeTotalFlowField componentEdges={componentSourceEdges} setFieldValue={setFieldValue} />
 
                         <TotalSourceFlowField inView={inView} />

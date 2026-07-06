@@ -71,7 +71,7 @@ Every diagram node has a `processComponentType` discriminant. The union `WaterPr
 {
   nodes: DiagramNode[];      // @xyflow/react nodes wrapping ProcessFlowPart data
   edges: Edge[];             // @xyflow/react edges with CustomEdgeData
-  errors: NodeErrors;        // validation output, keyed by node ID
+  diagramFlowErrors: DiagramFlowErrors; // validation output, keyed by node ID
   settings: DiagramSettings; // flow precision, units, costs, conductivity units
   diagramOptions: UserDiagramOptions; // display preferences
   calculatedData: DiagramCalculatedData; // flow totals keyed by node ID

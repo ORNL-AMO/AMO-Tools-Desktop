@@ -25,7 +25,7 @@ import { Provider } from 'react-redux';
 import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected, selectedIdChange } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
-import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
+import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, DiagramFlowErrors, getIsDiagramValid } from 'process-flow-lib';
 import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
@@ -73,11 +73,11 @@ const Diagram = (props: DiagramProps) => {
   const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.diagram.diagramAlert);
   const isMenuDrawerOpen = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
 
-  const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
+  const diagramFlowErrors: DiagramFlowErrors = useAppSelector((state: RootState) => state.diagram.diagramFlowErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
 
   const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
-  const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
+  const isDiagramValid = useMemo(() => getIsDiagramValid(diagramFlowErrors), [diagramFlowErrors]);
 
   useEffect(() => {
     if (reactFlowInstance && props.height) {
@@ -104,7 +104,7 @@ const Diagram = (props: DiagramProps) => {
       const updatedDiagramData: FlowDiagramData = {
         name: props.processDiagram.flowDiagramData.name,
         nodes: nodes,
-        nodeErrors: nodeErrors,
+        diagramFlowErrors: diagramFlowErrors,
         edges: debouncedEdges,
         settings,
         userDiagramOptions,
@@ -116,7 +116,7 @@ const Diagram = (props: DiagramProps) => {
       formatDataForMEASUR(updatedDiagramData);
       props.saveFlowDiagramData(updatedDiagramData);
     }
-  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings, debouncedDiagramNotes, paletteColors]);
+  }, [debouncedNodes, debouncedEdges, diagramFlowErrors, userDiagramOptions, settings, debouncedDiagramNotes, paletteColors]);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -170,7 +170,7 @@ const Diagram = (props: DiagramProps) => {
 
       {!isDiagramValid && validationWindowLocation === 'diagram' &&
       // * XY Flow Styles needed for Drawer operation no longer constrain canvas width. We need to explicitly style controls or they are hidden
-        <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} 
+        <ValidationWindow nodes={nodes} errors={diagramFlowErrors} openLocation={validationWindowLocation}
         style={{
                 left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
                 transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
