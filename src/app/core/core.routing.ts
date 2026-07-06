@@ -36,6 +36,7 @@ import { ReceiverTankComponent } from '../calculator/compressed-air/receiver-tan
 import { SystemCapacityComponent } from '../calculator/compressed-air/system-capacity/system-capacity.component';
 import { FanAnalysisComponent } from '../calculator/fans/fan-analysis/fan-analysis.component';
 import { FanEfficiencyComponent } from '../calculator/fans/fan-efficiency/fan-efficiency.component';
+import { FanAffinityLawComponent } from '../calculator/fans/fan-affinity-law/fan-affinity-law.component';
 import { SystemAndEquipmentCurveComponent } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.component';
 import { CashFlowComponent } from '../calculator/utilities/cash-flow/cash-flow.component';
 import { Co2SavingsComponent } from '../calculator/utilities/co2-savings/co2-savings.component';
@@ -276,6 +277,10 @@ export const coreRoutes: Routes = [
           {
             path: 'fan-efficiency',
             component: FanEfficiencyComponent
+          },
+          {
+            path: 'fan-affinity-law',
+            component: FanAffinityLawComponent
           },
           {
             path: 'fan-curve',
