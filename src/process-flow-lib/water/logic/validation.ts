@@ -8,13 +8,18 @@ export const getIsDiagramValid = (diagramFlowErrors: DiagramFlowErrors): boolean
 /**
    * Check accuracy of calculated or stateful total flow against each other
    * @param calculatedValue retrived from getNodeFlowTotals()
-   * @param userEnteredTotalFlow componentData.userEnteredData.totalSourceFlow or componentData.userEnteredData.totalSourceFlow 
+   * @param userEnteredTotalFlow componentData.userEnteredData.totalSourceFlow or componentData.userEnteredData.totalSourceFlow
+   *
+   * Only runs the comparison once every connected edge has a flow value entered.
+   * `calculatedTotalFlow` sums missing edge values as 0 (see `checkDiagramNodeErrors`),
+   * so a total flow entered before its edges are filled in would otherwise always
+   * "mismatch" against that artificial 0 rather than reflect a real discrepancy.
    */
-export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFlow: number, unaccountedFlow: number, userEnteredTotalFlow: number, precision: number): boolean => {
-    const shouldValidate: boolean = connectedEdges.length > 0 && calculatedTotalFlow !== null && calculatedTotalFlow !== undefined && userEnteredTotalFlow !== null && userEnteredTotalFlow !== undefined;
+export const validateTotalFlowValue = (connectedEdges: Edge<CustomEdgeData>[], calculatedTotalFlow: number, unaccountedFlow: number, userEnteredTotalFlow: number, precision: number): boolean => {
+    const allEdgesHaveFlowValues: boolean = connectedEdges.every((edge) => edge.data?.flowValue !== null && edge.data?.flowValue !== undefined);
+    const shouldValidate: boolean = connectedEdges.length > 0 && allEdgesHaveFlowValues && calculatedTotalFlow !== null && calculatedTotalFlow !== undefined && userEnteredTotalFlow !== null && userEnteredTotalFlow !== undefined;
     // *If a user entered value exists, check that our calculated total does not differ with component saved value (useEnteredValue)\
     if (shouldValidate) {
-        // console.log(`## validate totalFlow computed: ${calculatedTotalFlow} vs userEntered: ${userEnteredTotalFlow}`);
         const calculatedTotalFlowToPrecision: number = Number(calculatedTotalFlow?.toFixed(precision));
         const userEnteredFlowToPrecision: number = Number(userEnteredTotalFlow?.toFixed(precision));
         if (userEnteredFlowToPrecision !== undefined && userEnteredFlowToPrecision !== null

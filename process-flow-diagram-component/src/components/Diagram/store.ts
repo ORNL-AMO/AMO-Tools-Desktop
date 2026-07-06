@@ -62,7 +62,8 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
       }
     },
     middleware: (getDefaultMiddleware) => {
-      // todo this listener prototyped, not wired up
+      // todo 7364 - listener is registered below, but saveDiagramState itself is a stub:
+      // todo its actual MEASUR save call is commented out, so this doesn't persist anything yet
       const listenerMiddleware = createListenerMiddleware();
       listenerMiddleware.startListening({
         matcher: isAnyOf(addNode),

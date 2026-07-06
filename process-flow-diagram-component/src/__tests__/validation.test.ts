@@ -133,6 +133,27 @@ describe('validateFlowSection — total flow mismatch', () => {
     );
     expect(result.totalFlowError).toBeUndefined();
   });
+
+  it('does not flag a mismatch when a connected edge has no flow value entered yet', () => {
+    const edges = [{ ...makeEdge('a', 'b', 0), data: { ...makeEdge('a', 'b', 0).data, flowValue: undefined } }];
+    // calculatedTotal defaults the un-entered edge to 0, but the total flow field
+    // is entered — that's incomplete data entry, not a real mismatch.
+    const result = validateFlowSection(
+      baseInput({ totalFlow: 100, edges, calculatedTotal: 0, flowDirection: 'discharge' }),
+    );
+    expect(result.totalFlowError).toBeUndefined();
+  });
+
+  it('does not flag a mismatch when only some connected edges have flow values entered', () => {
+    const edges = [
+      makeEdge('a', 'b', 60),
+      { ...makeEdge('c', 'b', 0), data: { ...makeEdge('c', 'b', 0).data, flowValue: undefined } },
+    ];
+    const result = validateFlowSection(
+      baseInput({ totalFlow: 100, edges, calculatedTotal: 60, flowDirection: 'discharge' }),
+    );
+    expect(result.totalFlowError).toBeUndefined();
+  });
 });
 
 // ---------------------------------------------------------------------------

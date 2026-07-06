@@ -125,7 +125,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     totalFlow?: string | number;
     flows?: (string | number)[],
     knownLosses?: string,
-    level: ValidationLevel,
+    level: ValidationLevel | undefined,
   }
   export type ValidationLevel = 'error' | 'warning'
   export type FlowType = 'source' | 'discharge';
