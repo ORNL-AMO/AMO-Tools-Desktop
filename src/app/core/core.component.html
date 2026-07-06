@@ -1,11 +1,11 @@
 <div *ngIf="idbStarted"
     [ngClass]="{'modal-open': showSecurityAndPrivacyModal == true || showEmailMeasurDataModal == true}">
-    <div *ngIf="!hideTutorial" class="opening-tutorial">
+    <!-- <div *ngIf="!hideTutorial" class="opening-tutorial">
         <app-opening-tutorial *ngIf="tutorialType == 'landing-screen'" (closeTutorial)="closeTutorial()">
         </app-opening-tutorial>
         <app-dashboard-tutorial *ngIf="tutorialType == 'dashboard-tutorial'" (closeTutorial)="closeTutorial()"
             [inTutorials]="inTutorialsView"></app-dashboard-tutorial>
-    </div>
+    </div> -->
     <ng-template [ngIf]="toolsSuiteInitialized" [ngIfElse]="loading">
         <router-outlet></router-outlet>
     </ng-template>
