@@ -180,7 +180,7 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
             },
             waterCooledSystemInput: {
               isConstantCondenserWaterTemp: true, 
-              condenserWaterTemp: 0, 
+              condenserWaterTemp: 85, 
               followingTempDifferential: 0, 
             },
              towerInput: {
