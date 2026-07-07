@@ -1205,6 +1205,174 @@ describe('getPlantSummaryResults — split-path-treatment-loss: Intake → [Trea
 });
 
 // ---------------------------------------------------------------------------
+// Fixture: mid-chain-branching
+// Configuration: Intake → [ChemTreat2 → [CoolingTower, UVFiltration → Boiler], SysB (direct)]
+//
+//   cityWater (cost=1/kGal, outflow=177.2)
+//     ├─ e1 (49.2) ─► chemTreat2 (cost=2/kGal, inflow=49.2, outflow=37 — losses=12.2)
+//     │                 ├─ e2 (25) ─► coolingTower
+//     │                 └─ e3 (12) ─► uvFiltration (cost=4/kGal, inflow=12, outflow=6 — losses=6)
+//     │                                  └─ e4 (6) ─► boiler
+//     └─ e5 (128) ─► sysB (direct)
+//
+// Regression test for the mid-chain, mixed-depth branching gap analyzed in
+// .prompts/true-cost/mid-chain-branching-attribution-gap.md. ChemTreat2 forks
+// into branches of different depth — CoolingTower is one hop away, Boiler is
+// two hops away through UVFiltration — and both treatment nodes lose volume,
+// so this fixture also covers "losses at both levels" in the same path.
+// Before the path-walk fix, CoolingTower and Boiler's fractions summed to
+// 46.53% against a true path share of 27.77% (a double-count); the path-walk
+// product of local branch ratios must recover the correct 27.77%.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — mid-chain-branching: Intake → [ChemTreat2 → [CoolingTower, UVFiltration → Boiler], SysB]', () => {
+  const INTAKE_COST = 1;
+  const CHEMTREAT2_COST = 2;
+  const UV_COST = 4;
+  const PATH_INFLOW = 49.2;
+  const CHEMTREAT2_OUTFLOW_CT = 25;
+  const CHEMTREAT2_OUTFLOW_UV = 12;
+  const CHEMTREAT2_OUTFLOW = CHEMTREAT2_OUTFLOW_CT + CHEMTREAT2_OUTFLOW_UV;
+  const UV_OUTFLOW = 6;
+  const SYSB_FLOW = 128;
+  const TOTAL_INTAKE_FLOW = PATH_INFLOW + SYSB_FLOW;
+
+  const cityWater = makeIntakeNode('cityWater', INTAKE_COST);
+  const chemTreat2 = makeTreatmentNode('chemTreat2', CHEMTREAT2_COST);
+  const uvFiltration = makeTreatmentNode('uvFiltration', UV_COST);
+  const coolingTower = makeSystemNode('coolingTower');
+  const boiler = makeSystemNode('boiler');
+  const sysB = makeSystemNode('sysB');
+
+  const nodes = [cityWater, chemTreat2, uvFiltration, coolingTower, boiler, sysB];
+  const edges = [
+    makeEdge('cityWater', 'chemTreat2', PATH_INFLOW),
+    makeEdge('chemTreat2', 'coolingTower', CHEMTREAT2_OUTFLOW_CT),
+    makeEdge('chemTreat2', 'uvFiltration', CHEMTREAT2_OUTFLOW_UV),
+    makeEdge('uvFiltration', 'boiler', UV_OUTFLOW),
+    makeEdge('cityWater', 'sysB', SYSB_FLOW),
+  ];
+  const calcData = makeCalcData({
+    cityWater: { totalDischargeFlow: TOTAL_INTAKE_FLOW },
+    chemTreat2: { totalSourceFlow: PATH_INFLOW, totalDischargeFlow: CHEMTREAT2_OUTFLOW },
+    uvFiltration: { totalSourceFlow: CHEMTREAT2_OUTFLOW_UV, totalDischargeFlow: UV_OUTFLOW },
+    coolingTower: { totalSourceFlow: CHEMTREAT2_OUTFLOW_CT },
+    boiler: { totalSourceFlow: UV_OUTFLOW },
+    sysB: { totalSourceFlow: SYSB_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('attributes CoolingTower its branch share of ChemTreat2 outflow (25/37) of the path inflow', () => {
+    const expected = blockCost(INTAKE_COST, TOTAL_INTAKE_FLOW)
+      * (PATH_INFLOW * (CHEMTREAT2_OUTFLOW_CT / CHEMTREAT2_OUTFLOW) / TOTAL_INTAKE_FLOW);
+    expect(result.trueCostOfSystems['coolingTower'].intake).toBeCloseTo(expected, 0);
+  });
+
+  it('attributes Boiler the product of both branch ratios (12/37 at ChemTreat2, 6/6 at UVFiltration), not the full path', () => {
+    const expected = blockCost(INTAKE_COST, TOTAL_INTAKE_FLOW)
+      * (PATH_INFLOW * (CHEMTREAT2_OUTFLOW_UV / CHEMTREAT2_OUTFLOW) * (UV_OUTFLOW / UV_OUTFLOW) / TOTAL_INTAKE_FLOW);
+    expect(result.trueCostOfSystems['boiler'].intake).toBeCloseTo(expected, 0);
+  });
+
+  it('attributes SysB its direct share of intake (128/177.2)', () => {
+    const expected = blockCost(INTAKE_COST, TOTAL_INTAKE_FLOW) * (SYSB_FLOW / TOTAL_INTAKE_FLOW);
+    expect(result.trueCostOfSystems['sysB'].intake).toBeCloseTo(expected, 0);
+  });
+
+  it('CoolingTower + Boiler fractions sum to the true path share (49.2/177.2), not a double-count', () => {
+    const coolingTowerFraction = result.systemAttributionMap['coolingTower']['cityWater'].totalAttribution.default;
+    const boilerFraction = result.systemAttributionMap['boiler']['cityWater'].totalAttribution.default;
+    expect(coolingTowerFraction + boilerFraction).toBeCloseTo(PATH_INFLOW / TOTAL_INTAKE_FLOW, 6);
+  });
+
+  it('mass balance — attributed intake costs across all three systems sum to total intake block cost', () => {
+    const total = result.trueCostOfSystems['coolingTower'].intake
+      + result.trueCostOfSystems['boiler'].intake
+      + result.trueCostOfSystems['sysB'].intake;
+    expect(total).toBeCloseTo(blockCost(INTAKE_COST, TOTAL_INTAKE_FLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: treatment-based-merge-node
+// Configuration: [IntakeA, IntakeB] → Treatment → System
+//
+//   intakeA (cost=1/kGal, outflow=60) ──┐
+//                                        ├─► treatment (cost=3/kGal, inflow=100, outflow=100) ─► system
+//   intakeB (cost=1/kGal, outflow=40) ──┘
+//
+// A single water-treatment node fed by two independent intakes, each walking
+// its own path to the same sole downstream system. Unlike the summing-node
+// fixture (which merges through a non-treatment 'summing-node' component),
+// this exercises the treatment-source branch-ratio calculation in
+// applySystemIntakeCosts for each intake's path independently. Since
+// treatment has no losses and only one child, localRatio = 100/100 = 1.0 for
+// both paths, so each intake attributes 100% of its own block cost to the
+// sole system — no fixture previously covered a water-treatment merge node.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — treatment-based-merge-node: [IntakeA, IntakeB] → Treatment → System', () => {
+  const INTAKE_COST = 1;
+  const TREATMENT_COST = 3;
+  const FLOW_A = 60;
+  const FLOW_B = 40;
+  const TREATMENT_FLOW = FLOW_A + FLOW_B;
+
+  const intakeA = makeIntakeNode('intakeA', INTAKE_COST);
+  const intakeB = makeIntakeNode('intakeB', INTAKE_COST);
+  const treatment = makeTreatmentNode('treatment', TREATMENT_COST);
+  const system = makeSystemNode('system');
+
+  const nodes = [intakeA, intakeB, treatment, system];
+  const edges = [
+    makeEdge('intakeA', 'treatment', FLOW_A),
+    makeEdge('intakeB', 'treatment', FLOW_B),
+    makeEdge('treatment', 'system', TREATMENT_FLOW),
+  ];
+  const calcData = makeCalcData({
+    intakeA: { totalDischargeFlow: FLOW_A },
+    intakeB: { totalDischargeFlow: FLOW_B },
+    treatment: { totalSourceFlow: TREATMENT_FLOW, totalDischargeFlow: TREATMENT_FLOW },
+    system: { totalSourceFlow: TREATMENT_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('attributes 100% of Intake A block cost to the sole downstream system', () => {
+    expect(result.trueCostOfSystems['system'].intake)
+      .toBeGreaterThanOrEqual(blockCost(INTAKE_COST, FLOW_A) - 0.5);
+    expect(result.systemAttributionMap['system']['intakeA'].totalAttribution.default)
+      .toBeCloseTo(1.0, 6);
+  });
+
+  it('attributes 100% of Intake B block cost to the sole downstream system', () => {
+    expect(result.systemAttributionMap['system']['intakeB'].totalAttribution.default)
+      .toBeCloseTo(1.0, 6);
+  });
+
+  it('system receives the combined block cost of both intakes through the treatment merge', () => {
+    const expected = blockCost(INTAKE_COST, FLOW_A) + blockCost(INTAKE_COST, FLOW_B);
+    expect(result.trueCostOfSystems['system'].intake).toBeCloseTo(expected, 0);
+  });
+
+  it('attributes 100% of treatment block cost to the sole downstream system', () => {
+    expect(result.trueCostOfSystems['system'].treatment)
+      .toBeCloseTo(blockCost(TREATMENT_COST, TREATMENT_FLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Fixture: wwt-two-upstream-with-reuse
 // Configuration: [System A (60), System B (40)] → WWT → [System C (reuse 60), Discharge (40)]
 //

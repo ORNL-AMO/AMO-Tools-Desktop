@@ -39,65 +39,43 @@ Example — Branching path:
 
 ## 3. Flow Fraction and Cost Calculation
 
-### 3.1 Cases A and B — Standard (Intake-Flow-Volume Basis)
+### 3.1 Branch-Ratio Product Rule
 
-Cases A and B use the same formula and denominator (total intake outflow), triggered by different conditions:
-
-- **Case A — Intake splits to multiple paths:** Each path's systems absorb their proportional share of the full intake outflow; other paths cover the remainder.
-- **Case B — Single treatment chain, no losses:** A lossless chain delivers all intake volume downstream, so the denominator equals the intake outflow — identical to Case A.
-
-When either condition holds:
+A single rule computes the attribution fraction for every path shape — direct intake splits, lossless treatment chains, lossy treatment chains, and treatment nodes that fork mid-chain into branches of different depth. It replaces the three-case denominator switch (formerly Cases A, B, and C) that this document described in earlier versions, which could not correctly attribute a treatment node that forks mid-chain into branches of different depth (see §8b below for the worked example that exposed the gap).
 
 **Step 1 — Determine path inflow:**  
 The flow value on the first edge leaving the intake node for this path.
 
-**Step 2 — Determine system inflow from this path:**  
-The flow value on the last edge in the path, immediately upstream of the system being evaluated.
+**Step 2 — Walk the path and compute the branch fraction:**  
+For every edge in the path from the intake to the system, check whether that edge's source node is a water-treatment node. If so, compute that edge's **local branch ratio**:
 
-**Step 3 — Compute fraction of path flow received:**
+    localRatio = edge flow / treatment node's total outflow (to all of its children)
 
-    Fraction of path flow received = min(System inflow / Path inflow, 1.0)
+A treatment node with a single child and no losses always produces `localRatio = 1.0` — its full outflow goes down the one path that exists, so it is invisible to the calculation. A node that splits into multiple children divides its outflow among them, so each child's edge gets a `localRatio` less than 1.0. A node that loses volume (outflow < inflow) still produces `localRatio = 1.0` for its sole child — the loss is absorbed through `pathInflow`, not through this ratio (see Core Rule 3 below).
 
-The cap at 1.0 prevents over-attribution when a system also receives water from other sources on other paths; those other sources will be evaluated in their own path iterations.
+Multiply every `localRatio` found in the path together to get the **branch fraction**:
 
-**Step 4 — Compute flow responsibility:**
+    branchFraction = Π(localRatio for every treatment-source edge in the path)
 
-    System flow responsibility = Path inflow × Fraction of path flow received
+If no treatment node appears in the path, or every treatment node in the path has a single lossless child, `branchFraction = 1.0`.
 
-**Step 5 — Compute attribution fraction:**
+**Step 3 — Compute flow responsibility:**
+
+    System flow responsibility = Path inflow × branchFraction
+
+**Step 4 — Compute attribution fraction:**
 
     Attribution fraction = System flow responsibility / Intake block cost total flow
 
-**Step 6 — Compute cost to system:**
+No cap is applied — the product of ratios in Step 2 cannot exceed 1.0 given valid flow data, so the attribution fraction is bounded automatically. (A prior version of this formula applied `min(systemInflow / pathInflow, 1.0)` as an explicit safeguard; that cap is no longer necessary because the formula no longer reads `systemInflow` — the last edge's flow into the system — at all. It uses only `pathInflow` and the path-wide product of branch ratios.)
+
+**Step 5 — Compute cost to system:**
 
     Cost to system = Attribution fraction × Intake total block cost
 
-### 3.2 Case C — Delivered-Flow-Volume Basis (Treatment Chain with Losses)
+**Core Rule 3 (losses don't shrink attributed percentage):** When a treatment node loses volume, the downstream system on that branch is still responsible for the full pre-loss flow that entered the branch, not the smaller post-loss volume it actually received. The formula enforces this by never dividing by anything that shrinks when a node loses water with a single child — `pathInflow` is fixed at the intake edge, and a single-child node's `localRatio` is always 1.0 regardless of how much volume it lost. If that same lossy node also splits into multiple children, each child's branch absorbs its own proportional share of the total (pre-loss) contribution — see the mid-chain-branching worked example in §8b.
 
-When water passes through a treatment chain and volume is lost somewhere in that chain, the attribution fraction denominator switches from the full intake outflow to the **delivered flow volume** — the outflow of the immediate treatment node upstream of the system. This ensures that all downstream systems collectively absorb 100% of the intake cost, including the cost of water lost in treatment.
-
-**Conditions — both must hold:**
-
-1. **`intakeHasSingleOutflow`:** The intake node has exactly one outgoing child. When the intake splits to multiple paths, systems on each branch are attributed using the intake-flow-volume basis regardless of treatment losses; the other paths cover their portion of the intake cost.
-2. **Treatment chain has losses:** Either the immediate upstream treatment node has losses (`deliveredFlowVolume < treatmentNodeInflow`), or any treatment node traversed earlier in the same path has losses (`hasUpstreamTreatmentLoss`). The upstream scan supports chained configurations where Treatment A loses water but Treatment B (the immediate treatment source) is balanced.
-
-**Step 1 — Determine delivered flow volume:**  
-Total outflow of the treatment node immediately upstream of the system (`deliveredFlowVolume`). For a chained configuration (Treatment A → Treatment B → System), this is Treatment B's total outflow — the volume actually delivered to downstream systems. Defaults to zero when no treatment node is upstream of the system; the delivered-flow-volume basis conditions then cannot be met, so those paths are handled by the standard case.
-
-**Step 2 — Determine system inflow from this path:**  
-Flow on the edge immediately upstream of the system.
-
-**Step 3 — Compute attribution fraction (delivered-flow-volume basis):**
-
-    Attribution fraction = System inflow / deliveredFlowVolume
-
-**Step 4 — Compute cost to system (cost basis is the full intake block cost):**
-
-    Cost to system = Attribution fraction × Intake total block cost
-
-The denominator is the treatment chain's delivered output, not the intake total. This correctly distributes 100% of intake cost among the systems receiving the treated water, including the proportional share of cost attributable to water lost in treatment.
-
-### 3.3 Case D — Single-System RO Override
+### 3.2 single-system-ro — Single-System RO Override
 
 **What the override does:** When a water intake feeds a reverse-osmosis (RO) treatment unit that exclusively serves one water-using system — with the RO reject stream going directly to discharge (not to another system) — the beneficiary system is assigned an attribution fraction of **1.0** (100% of the intake block cost), regardless of what the standard flow-fraction formula would produce.
 
@@ -137,11 +115,11 @@ The 30 Mgal/yr reject is an unavoidable consequence of RO operation, not consump
 
 ---
 
-## 4. Treatment Chain Support
+## 4. Treatment Chain and Mid-Chain Branch Support
 
-Chained treatment configurations (Treatment A → Treatment B → System) are fully supported. The algorithm scans all treatment nodes traversed earlier in the current path (`hasUpstreamTreatmentLoss`) to detect losses that occurred upstream of the immediate treatment node. When such a loss is found, the delivered-flow-volume basis applies using the immediate treatment node's outflow as the denominator — which for a chain equals the volume the chain ultimately delivers to downstream systems.
+Chained treatment configurations (Treatment A → Treatment B → System) and mid-chain branching configurations (a treatment node whose children reach systems at different depths — one immediately, another through a further treatment node) are both handled by the same branch-ratio product walk described in §3.1. There is no separate detection step for "is this a chain" or "did an earlier node lose volume" — every treatment-source edge in the path contributes its `localRatio` to the product regardless of where it sits in the chain or whether it is the immediate upstream node.
 
-**Example — Treatment A with losses, Treatment B balanced:**
+**Example — Treatment A with losses, Treatment B balanced (linear chain):**
 
 ```
   Intake (10 Mgal) ──► Treatment A (10 in / 8 out) ──► Treatment B (8 in / 8 out)
@@ -149,10 +127,13 @@ Chained treatment configurations (Treatment A → Treatment B → System) are fu
                                                               └──► System D: 3 Mgal
 ```
 
-- `deliveredFlowVolume` = Treatment B outflow = 8 Mgal
-- System C attribution fraction = 5 / 8 = 62.5%
-- System D attribution fraction = 3 / 8 = 37.5%
+- Treatment A has a single child (Treatment B), so its `localRatio` = 8/8 = 1.0 (the loss is absorbed through `pathInflow`, not this ratio).
+- Treatment B splits: System C's `localRatio` = 5/8 = 0.625; System D's `localRatio` = 3/8 = 0.375.
+- System C attribution fraction = 10 × (1.0 × 0.625) / 10 = 62.5%
+- System D attribution fraction = 10 × (1.0 × 0.375) / 10 = 37.5%
 - Total: 100% of intake cost distributed ✓
+
+**Example — mid-chain branch to systems at different depths:** see §8b below. This is the configuration a per-immediate-node-only formula gets wrong (a double-count), because the node right next to the system cannot see that it was itself just one branch of an earlier split.
 
 ---
 
@@ -209,20 +190,63 @@ A system may appear on multiple downstream paths from the same intake (for examp
 
 **Path 1 — Intake → Treatment → System A:**
 - Path inflow = 100 Mgal/yr (first edge from intake)
-- System A inflow from this path = 60 Mgal/yr
-- Fraction of path flow received = 60/100 = 0.60
+- Treatment's total outflow = 100 Mgal/yr; edge into System A = 60 Mgal/yr, so `localRatio` = 60/100 = 0.60
+- branchFraction = 0.60
 - System flow responsibility = 100 × 0.60 = 60 Mgal/yr
 - Attribution fraction = 60 / 100 = 0.60
 - Cost to System A = 0.60 × $250,000 = **$150,000/yr**
 
 **Path 2 — Intake → Treatment → System B:**
 - Path inflow = 100 Mgal/yr
-- System B inflow from this path = 40 Mgal/yr
-- Fraction of path flow received = 40/100 = 0.40
+- Edge into System B = 40 Mgal/yr, so `localRatio` = 40/100 = 0.40
+- branchFraction = 0.40
 - Attribution fraction = 40 / 100 = 0.40
 - Cost to System B = 0.40 × $250,000 = **$100,000/yr**
 
 **Check:** $150,000 + $100,000 = $250,000 = Total intake block cost ✓
+
+---
+
+## 8b. Worked Example — Mid-Chain Branch to Mixed-Depth Systems
+
+**Scenario:** An intake splits to multiple paths; one of those paths runs through a treatment node (Chemical Treatment 2) that itself forks into branches of different depth — Cooling Tower is one hop away, Boiler is two hops away through a second treatment node (UV Filtration). Both treatment nodes lose volume.
+
+```
+  City Water (177.2 Mgal/yr total; 49.2 down this path, $1,000/Mgal)
+       │
+       ▼
+  Chemical Treatment 2      ← receives 49.2, outputs 37 (loses 12.2)
+       │             │
+      (25)          (12)
+       │             │
+       ▼             ▼
+  Cooling Tower   UV Filtration   ← receives 12, outputs 6 (loses 6)
+                        │
+                       (6)
+                        ▼
+                      Boiler
+```
+
+**Block cost of intake:** 177.2 Mgal/yr × $1,000/Mgal = $177,200/yr
+
+**Cooling Tower — path: [intake→ChemTreat2 (49.2), ChemTreat2→CoolingTower (25)]:**
+- Path inflow = 49.2 Mgal/yr
+- ChemTreat2 total outflow = 37; `localRatio` = 25/37 = 0.6757
+- branchFraction = 0.6757
+- System flow responsibility = 49.2 × 0.6757 = 33.24 Mgal/yr
+- Attribution fraction = 33.24 / 177.2 = 18.76%
+- Cost to Cooling Tower = 0.1876 × $177,200 = **$33,243/yr**
+
+**Boiler — path: [intake→ChemTreat2 (49.2), ChemTreat2→UVFiltration (12), UVFiltration→Boiler (6)]:**
+- Path inflow = 49.2 Mgal/yr
+- At ChemTreat2: `localRatio` = 12/37 = 0.3243
+- At UV Filtration: total outflow = 6 (its only child); `localRatio` = 6/6 = 1.0 — UV Filtration's own loss (12 in, 6 out) does not shrink this ratio, because it has a single child; the loss is absorbed through `pathInflow`, same as §4's linear-chain example
+- branchFraction = 0.3243 × 1.0 = 0.3243
+- System flow responsibility = 49.2 × 0.3243 = 15.96 Mgal/yr
+- Attribution fraction = 15.96 / 177.2 = 9.00%
+- Cost to Boiler = 0.0900 × $177,200 = **$15,957/yr**
+
+**Check:** $33,243 + $15,957 = $49,200/yr, exactly this path's true share of the intake block cost (49.2/177.2 × $177,200 = $49,200) — confirming no double-count. A formula that only looked at the treatment node immediately upstream of each system (the pre-existing behavior this replaced) attributed Cooling Tower and Boiler 46.53% combined against a true path share of 27.77%.
 
 ---
 
@@ -233,10 +257,9 @@ A system may appear on multiple downstream paths from the same intake (for examp
 | Walk direction | Downstream from intake |
 | Stopping point | First water-using system on each path |
 | Cost basis | Full intake block cost (unit cost × total intake outflow) |
-| Attribution denominator — Cases A/B (intake-flow-volume basis) | Total intake outflow. Case A: intake splits to multiple paths. Case B: single treatment chain, no losses (lossless chain delivers all intake volume; result is identical). |
-| Attribution denominator — Case C (delivered-flow-volume basis) | Immediate treatment node total outflow (`deliveredFlowVolume`). Single outgoing path AND treatment losses exist anywhere in the chain (including upstream nodes). |
-| Cap on fraction per path | Min(system inflow / path inflow, 1.0) |
+| Attribution denominator — branch-ratio product rule | Path inflow × branchFraction, where branchFraction is the product of every treatment-source edge's `localRatio` (that edge's flow ÷ its source treatment node's total outflow) across the whole path. Covers direct intake splits, lossless chains, lossy chains, and mid-chain forks to systems at different depths with one formula. |
+| Cap on fraction per path | None needed — the branch-ratio product cannot exceed 1.0 given valid flow data. |
 | Pump/motor energy | Attributed using same fraction as intake cost |
 | Adjusted attribution | User-supplied fraction replaces computed default |
-| Single-system RO override (Case D) | When intake feeds a single-system RO configuration, attribution fraction is forced to 1.0 |
+| single-system-ro override | When intake feeds a single-system RO configuration, attribution fraction is forced to 1.0 |
 | De-duplication | Identical paths from intake to system are attributed only once |

@@ -41,7 +41,7 @@ Example — Branching path (two systems discharging to one outlet):
 
 ## 3. Flow Fraction and Cost Calculation
 
-### 3.1 Case A — Standard Case
+### 3.1 proportional-discharge — Standard Case
 
 The discharge cost allocation mirrors the intake cost allocation method, but applied in the upstream direction.
 
@@ -69,7 +69,7 @@ The cap at 1.0 prevents over-attribution when a system also sends water to other
 
     Cost to system = Attribution fraction × Discharge total block cost
 
-### 3.2 Case B — Single-System RO Override
+### 3.2 single-system-ro — Single-System RO Override
 
 When a discharge node collects the reject stream from an RO unit that exclusively serves one water-using system (a "single-system RO configuration"), that system bears 100% of the discharge block cost regardless of what the standard flow-fraction formula would compute.
 
@@ -171,4 +171,4 @@ As with intake cost attribution, a system may appear on multiple upstream paths 
 | Pump/motor energy | Attributed using same fraction as discharge cost |
 | Adjusted attribution | User-supplied fraction replaces computed default |
 | De-duplication | Identical paths from discharge to system are attributed only once |
-| Single-system RO override (Case B) | When discharge is the reject-stream outlet of a single-system RO configuration, attribution fraction is forced to 1.0 |
+| single-system-ro override | When discharge is the reject-stream outlet of a single-system RO configuration, attribution fraction is forced to 1.0 |

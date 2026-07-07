@@ -165,13 +165,13 @@ SYSTEM
 |---|---|---|
 | $100,000 (100%) | $500,000 (100%) | **$600,000** |
 
-> **Why the system gets 100% despite receiving only 80 units:** When there is a single outflow path from the intake and treatment losses exist, the algorithm uses the treatment node's *outflow* as the attribution denominator. The system receives all 80 units of outflow, so its fraction is 80/80 = 1.0. The intake block cost is based on the original 100 units drawn from the source.
+> **Why the system gets 100% despite receiving only 80 units:** The treatment node has a single child, so its branch ratio is 80/80 = 1.0 regardless of its own loss — the 20-unit loss is absorbed through the 100-unit path inflow, not through this ratio. Attribution fraction = (100 × 1.0) / 100 = 1.0. The intake block cost is based on the original 100 units drawn from the source.
 
 ---
 
 ### 2.3 `treatment-chain`
 
-**What it tests:** Two treatment units in series where the first is lossy (100 in → 80 out). Each treatment unit independently accumulates 100% attribution to the single downstream system. The intake detects the upstream loss via `hasUpstreamTreatmentLoss` and also applies the delivered-flow-volume basis.
+**What it tests:** Two treatment units in series where the first is lossy (100 in → 80 out). Each treatment unit independently accumulates 100% attribution to the single downstream system. For the intake attribution, both Treatment A and Treatment B contribute a branch ratio of 1.0 to the product (each has a single child), so Treatment A's loss is absorbed through path inflow rather than reducing the system's fraction.
 
 ```
 INTAKE ($1/kgal)
@@ -200,7 +200,7 @@ SYSTEM
 |---|---|---|
 | $100,000 (100%) | $820,000 (100% of each) | **$920,000** |
 
-> Treatment B is lossless on its own, but Treatment A's upstream losses are detected when computing the intake's attribution path. The entire chain uses the delivered-flow basis for the intake.
+> Treatment B is lossless on its own, but Treatment A's loss doesn't need separate detection — the branch-ratio walk multiplies in every treatment-source edge's ratio along the path regardless of depth, so Treatment A's 1.0 ratio (single child) and Treatment B's 1.0 ratio (single child) both contribute, and the 100-unit path inflow (not the reduced 80-unit outflow) remains the basis.
 
 ---
 
@@ -230,6 +230,71 @@ INTAKE          │                                                   ├──�
 | $100,000 (100%) | $300,000 (100% of each) | **$400,000** |
 
 > The key regression this guards: if the de-duplication logic incorrectly matched the two paths, Treatment B's attribution would be silently suppressed and the system would receive only $280,000 instead of $400,000.
+
+---
+
+### 2.5 `split-path-treatment-loss`
+
+**What it tests:** An intake that splits to two paths, where one path routes through a treatment unit that loses half its volume before reaching System A. The other path reaches System B directly with no treatment. System A's intake share is based on what entered the treatment (60/100 = 60%), not what it actually received after the loss (30/100 = 30%) — losses must not shrink the attributed percentage (Core Rule 3).
+
+```
+              ┌─── 60 Mgal/yr ──► TREATMENT ($5/kgal, 60 in / 30 out) ──► SYSTEM A
+INTAKE        │
+($1/kgal) │
+  100 Mgal/yr └─── 40 Mgal/yr ──────────────────────────────────────────► SYSTEM B
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| Intake | $1/kgal | 100 Mgal/yr | **$100,000** |
+| Treatment | $5/kgal | 60 Mgal/yr in | **$300,000** |
+
+**Expected attribution**
+
+| System | Intake share | Intake $ | Treatment $ |
+|---|---|---|---|
+| System A | 60 / 100 = 60% (pre-loss path inflow) | **$60,000** | **$300,000** (100% — sole downstream system) |
+| System B | 40 / 100 = 40% | **$40,000** | — |
+| **Total** | 100% | **$100,000** ✓ | |
+
+> System A's intake attribution uses the treatment's branch ratio (30/30 = 1.0, since it has a single child) multiplied by the 60 Mgal/yr path inflow — not the 30 Mgal/yr it actually received. The 30 Mgal/yr lost in treatment is still paid for by System A, the sole beneficiary of that branch. This is the fixture added to close the gap noted in `intake-attribution-delivered-flow-volume-refactor.md`: an intake that splits to multiple paths where one branch contains a lossy treatment chain.
+
+---
+
+### 2.6 `mid-chain-branching`
+
+**What it tests:** An intake that splits to two paths; one of those paths routes through a treatment node (Chemical Treatment 2) that itself forks into branches of *different depth* — Cooling Tower is one hop away, Boiler is two hops away through a second treatment node (UV Filtration). Both treatment nodes lose volume. This is the regression fixture for the mid-chain-branching gap: a formula that only looks at the treatment node immediately upstream of each system cannot see that UV Filtration itself was only one branch of Chemical Treatment 2's output, and double-counts Cooling Tower's and Boiler's shares.
+
+```
+CITY WATER ($1/kgal)
+  │ 177.2 Mgal/yr total
+  ├─── 49.2 Mgal/yr ──► CHEMICAL TREATMENT 2 ($2/kgal, 49.2 in / 37 out — loses 12.2)
+  │                          ├─── 25 Mgal/yr ──► COOLING TOWER
+  │                          └─── 12 Mgal/yr ──► UV FILTRATION ($4/kgal, 12 in / 6 out — loses 6)
+  │                                                    └─── 6 Mgal/yr ──► BOILER
+  └─── 128 Mgal/yr ─────────────────────────────────────────────────────► SYSTEM B
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| City Water | $1/kgal | 177.2 Mgal/yr | **$177,200** |
+| Chemical Treatment 2 | $2/kgal | 49.2 Mgal/yr in | **$98,400** |
+| UV Filtration | $4/kgal | 12 Mgal/yr in | **$48,000** |
+
+**Expected attribution — intake**
+
+| System | Branch ratio(s) | Intake share | Intake $ |
+|---|---|---|---|
+| Cooling Tower | 25/37 = 0.6757 | 49.2 × 0.6757 / 177.2 = 18.76% | **$33,243** |
+| Boiler | (12/37) × (6/6) = 0.3243 | 49.2 × 0.3243 / 177.2 = 9.00% | **$15,957** |
+| System B | — (direct path) | 128 / 177.2 = 72.23% | **$128,000** |
+| **Total** | | 100% | **$177,200** ✓ |
+
+> Cooling Tower + Boiler sum to 27.76% — exactly the path's true share of the intake (49.2/177.2). A formula limited to the treatment node immediately upstream of each system (the pre-existing behavior this replaced) summed these two systems to 46.53% instead — a double-count, since Boiler's old fraction alone (27.77%) already equaled the full path's true share, before Cooling Tower's fair share was added on top. UV Filtration's own loss (12 in / 6 out) does not reduce Boiler's branch ratio, because UV Filtration has a single child — the loss is absorbed through path inflow, the same rule verified in `split-path-treatment-loss` §2.5.
 
 ---
 
@@ -460,7 +525,35 @@ INTAKE B ($1/kgal, 40 Mgal/yr) ──►
 
 ---
 
-### 5.2 `reuse-chained-systems`
+### 5.2 `treatment-based-merge-node`
+
+**What it tests:** The same two-intakes-into-one-node merge pattern as `summing-node` §5.1, but the merge point is a `water-treatment` node instead of a transparent `summing-node` type. This exercises the branch-ratio `localRatio` calculation for each intake's path independently, rather than skipping it (a `summing-node` is not a `water-treatment` type, so it never triggers the branch-ratio walk at all).
+
+```
+INTAKE A ($1/kgal, 60 Mgal/yr) ──┐
+                                   ├─► TREATMENT ($3/kgal, 100 in / 100 out) ──► SYSTEM
+INTAKE B ($1/kgal, 40 Mgal/yr) ──┘
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| Intake A | $1/kgal | 60 Mgal/yr | **$60,000** |
+| Intake B | $1/kgal | 40 Mgal/yr | **$40,000** |
+| Treatment | $3/kgal | 100 Mgal/yr in | **$300,000** |
+
+**Expected attribution — System**
+
+| Intake A | Intake B | Treatment | Total |
+|---|---|---|---|
+| $60,000 (100%) | $40,000 (100%) | $300,000 (100%) | **$400,000** |
+
+> Each intake's path independently reaches Treatment, whose single outgoing edge (to System, carrying its full 100 Mgal/yr outflow) gives a branch ratio of 1.0 regardless of which intake's path is being evaluated — so each intake attributes 100% of its own block cost to the sole downstream system, the same outcome `summing-node` produces through a non-treatment merge point.
+
+---
+
+### 5.3 `reuse-chained-systems`
 
 **What it tests:** Water flows from an intake through System A, which passes (reuses) some of its water to System B, which then discharges. The algorithm stops the intake walk at the *first* system it reaches (System A) and stops the discharge walk at the *first* system upstream of the discharge (System B). Neither system sees both cost types.
 

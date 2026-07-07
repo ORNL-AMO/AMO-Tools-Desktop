@@ -28,30 +28,29 @@ Walks downstream from each intake node, stopping attribution at the first water-
 
 **Denominator selection:**
 
-Attribution fractions are computed against one of two denominators:
+A single formula computes every path's attribution fraction — there is no case split on intake shape or treatment losses. Walk every edge in the path from intake to system; for each edge whose source is a water-treatment node, compute `localRatio = edge flow / treatment node's total outflow`. The product of every `localRatio` found in the path (`branchFraction`) multiplied by the path's inflow gives the system's flow responsibility:
 
-- **Delivered-flow-volume basis** (`deliveredFlowVolume` — the immediate treatment node's total outflow): used when the treatment chain is the sole gateway through which all intake flow reaches downstream systems. Ensures 100% of intake cost is distributed even when water is lost in treatment.
-- **Intake-flow-volume basis** (`intakeData.blockCosts.totalFlow` — the intake's total outflow): used when the intake splits to multiple paths, or when no treatment losses exist. Each system receives its proportional share of the full intake volume; other paths cover the remainder.
+    Attribution fraction = (Path inflow × branchFraction) / intakeData.blockCosts.totalFlow
 
-**Conditions for delivered-flow-volume basis** (both must hold):
-
-1. `intakeHasSingleOutflow` — the intake node has exactly one outgoing child, meaning all intake flow enters a single treatment chain.
-2. A treatment loss exists somewhere in the chain — either the immediate upstream treatment node (`deliveredFlowVolume < treatmentNodeInflow`) or any treatment node traversed earlier in the path (`hasUpstreamTreatmentLoss`).
+A treatment node with a single lossless child contributes `localRatio = 1.0`, so a direct intake split or a lossless chain reduces to the same result the intake-flow-volume basis produced under the older two-denominator switch. A treatment node with losses still contributes `localRatio = 1.0` to its sole child (the loss is absorbed through path inflow, not this ratio); a treatment node that splits divides its outflow among its children by their share. This one formula replaced the former `deliveredFlowVolume` / `intakeHasSingleOutflow` / `hasUpstreamTreatmentLoss` two-denominator switch, which could not correctly attribute a treatment node that forks mid-chain into branches of different depth (see the `mid-chain-branching` fixture below).
 
 **Verified cases (test fixture → behavior):**
 
-| Test fixture | Configuration | `intakeHasSingleOutflow` | Chain has losses | Denominator basis | Expected result |
-|---|---|---|---|---|---|
-| `simple-linear` | Intake → System → Discharge | true | false — no treatment | intake-flow-volume | System 100% |
-| `shared-intake` | Intake → {SystemA (60), SystemB (40)} | false | false — no treatment | intake-flow-volume | SystemA 60%, SystemB 40% |
-| `treatment-with-loss` | Intake(100) → Treatment(100in/80out) → System | true | true | delivered-flow-volume | System 100% (80/80) |
-| `treatment-no-loss` | Intake(100) → Treatment(100in/100out) → {SystemA(60), SystemB(40)} | true | false | intake-flow-volume | SystemA 60%, SystemB 40% |
-| `treatment-chain` | Intake(100) → TreatA(100in/80out) → TreatB(80in/80out) → System | true | true — TreatA in path | delivered-flow-volume | System 100% |
-| `diamond-treatment` | Intake(100) → {TreatA(60) → SysA, TreatB(40) → SysA} | false | false | intake-flow-volume | SysA 60%+40% = 100% accumulated across both paths |
-| `ro-single-system` | Intake → RO(treatmentType=6) → {SysA, Discharge(reject)} | true | — | RO override | SysA 100% (fraction forced to 1.0) |
-| `ro-multi-system` | Intake → RO → {SysA(40), SysB(40), Discharge(20)} | false | — | intake-flow-volume (no override — 3 children) | SysA 40%, SysB 40% |
-| `summing-node` | {IntakeA(60), IntakeB(40)} → Summing → System | true per intake | false | intake-flow-volume | System 100% of each intake's block cost (accumulated) |
-| `adjusted-attribution` | Intake → System (adjusted=0.75 on intake) | — | — | override | System 75% of intake block cost |
+| Test fixture | Configuration | Treatment nodes in path | Expected result |
+|---|---|---|---|
+| `simple-linear` | Intake → System → Discharge | none | System 100% |
+| `shared-intake` | Intake → {SystemA (60), SystemB (40)} | none | SystemA 60%, SystemB 40% |
+| `treatment-with-loss` | Intake(100) → Treatment(100in/80out) → System | Treatment (single child, lossy) | System 100% (`localRatio` = 80/80 = 1.0) |
+| `treatment-no-loss` | Intake(100) → Treatment(100in/100out) → {SystemA(60), SystemB(40)} | Treatment (splits, lossless) | SystemA 60%, SystemB 40% |
+| `treatment-chain` | Intake(100) → TreatA(100in/80out) → TreatB(80in/80out) → System | TreatA (single child, lossy), TreatB (single child, lossless) | System 100% (both `localRatio` = 1.0) |
+| `diamond-treatment` | Intake(100) → {TreatA(60) → SysA, TreatB(40) → SysA} | TreatA, TreatB (each single child) | SysA 60%+40% = 100% accumulated across both paths |
+| `split-path-treatment-loss` | Intake(100) → {Treatment(60in/30out) → SysA, SysB(40) direct} | Treatment (single child, lossy) on SysA's path only | SysA 60% (pre-loss path inflow, not the post-loss 30), SysB 40% |
+| `mid-chain-branching` | CityWater(177.2 total; 49.2 down this path) → ChemTreat2(37 out) → {CoolingTower(25), UVFiltration(12in/6out) → Boiler} | ChemTreat2 (splits, lossy), UVFiltration (single child, lossy) on Boiler's path | CoolingTower 18.76%, Boiler 9.00% — sum 27.76% matches the true path share; the pre-existing per-immediate-node-only formula summed these to 46.53% (a double-count) |
+| `treatment-based-merge-node` | {IntakeA(60), IntakeB(40)} → Treatment(100in/100out) → System | Treatment (single child, lossless), fed by two intakes | System 100% of each intake's own block cost (accumulated) — analogous to `summing-node` but through a water-treatment node instead of a transparent summing node |
+| `ro-single-system` | Intake → RO(treatmentType=6) → {SysA, Discharge(reject)} | RO (single-system override) | SysA 100% (fraction forced to 1.0) |
+| `ro-multi-system` | Intake → RO → {SysA(40), SysB(40), Discharge(20)} | RO (splits, no override — 3 children) | SysA 40%, SysB 40% |
+| `summing-node` | {IntakeA(60), IntakeB(40)} → Summing → System | none (summing node is not a water-treatment type) | System 100% of each intake's block cost (accumulated) |
+| `adjusted-attribution` | Intake → System (adjusted=0.75 on intake) | — | System 75% of intake block cost |
 
 ---
 
@@ -144,8 +143,10 @@ A pre-populated `SystemAttributionMap` entry with a non-null `adjusted` fraction
 | Test fixture | Configuration | Behavior |
 |---|---|---|
 | `summing-node` | {IntakeA, IntakeB} → Summing Node → System | Summing node is a transparent pass-through. Each intake attributes 100% of its own block cost to the downstream system independently; costs accumulate additively. |
+| `treatment-based-merge-node` | {IntakeA, IntakeB} → Treatment → System | Same merge pattern as `summing-node`, but through a `water-treatment` node instead of a transparent `summing-node` type — exercises the branch-ratio `localRatio` calculation for each intake's path independently rather than skipping it. Each intake still attributes 100% of its own block cost. |
 | `reuse-chained-systems` | Intake → SysA → SysB → Discharge | Intake attribution stops at SysA (first system downstream). Discharge attribution stops at SysB (first system upstream). Systems do not receive costs from components they did not directly interact with. |
 | `diamond-treatment` | Intake → {TreatA, TreatB} → SysA | De-duplication is edge-based, not node-based. Both paths are distinct (different first edges), so each attributes independently to SysA. Fractions accumulate correctly to 1.0. |
+| `mid-chain-branching` | CityWater → ChemTreat2 → {CoolingTower, UVFiltration → Boiler} | ChemTreat2 forks into branches of different depth, and both ChemTreat2 and UVFiltration lose volume. The branch-ratio product walk attributes CoolingTower and Boiler correctly regardless of depth; a formula limited to the treatment node immediately upstream of each system double-counts this configuration. |
 
 ---
 

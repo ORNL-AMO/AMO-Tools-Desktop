@@ -51,28 +51,21 @@ If you add a new cost-attribution sub-routine in the future, you are responsible
 
 ---
 
-## The Delivered-Flow-Volume Basis — When It Activates and Why
+## The Branch-Ratio Product Walk — What Replaced the Two-Denominator Switch
 
-For intake cost attribution there are two possible denominators. The switch between them is controlled by two boolean flags that must *both* be true:
+`applySystemIntakeCosts` used to switch between two denominators (full intake outflow vs. the immediate upstream treatment node's outflow) based on two boolean flags, `intakeHasSingleOutflow` and `hasUpstreamTreatmentLoss`. Both flags, along with `deliveredFlowVolume`, `treatmentNodeInflow`, and `pathReceivedBasis`, were removed and replaced by a single path-walk formula. If you are reading old commit history, code comments, or documentation that references those names, they describe the pre-replacement implementation.
 
-- `intakeHasSingleOutflow` — the intake has exactly one child node
-- Treatment losses exist somewhere in the chain — either the immediate upstream treatment node (`deliveredFlowVolume < treatmentNodeInflow`) OR any earlier node in the path (`hasUpstreamTreatmentLoss`)
+**Why the two-flag switch broke:** `deliveredFlowVolume` was always the outflow of the treatment node *immediately* upstream of the system being evaluated — one hop back. `hasUpstreamTreatmentLoss` scanned earlier nodes in the path for *losses* (`outflow < inflow`), but never asked whether an earlier node *split* its outflow across multiple children. So if Chemical Treatment 2 forked into Cooling Tower (one hop from the system) and, on the other branch, UV Filtration → Boiler (two hops from the system), Boiler's attribution only ever looked at UV Filtration's own inflow/outflow — it had no way to know UV Filtration itself only received a fraction of Chemical Treatment 2's output. The result was Cooling Tower and Boiler's fractions summing to more than the path's true share: a double-count, not an undercount.
 
-**Why both conditions are required:**
+**The replacement:** walk every edge in the path from intake to system. For each edge whose source is a water-treatment node, compute `localRatio = edge flow / treatment node's total outflow`, and take the product of every `localRatio` in the path (`branchFraction`). This is correct for any number of treatment nodes at any depth, because it never depends on which node happens to be "immediately upstream" — every fork in the path contributes its own factor to the product, however many hops away from the system it sits.
 
-If the intake splits to multiple paths, each path's systems can only ever receive a fraction of the intake's total outflow. Using the treatment's outflow as the denominator would over-attribute on each branch. The delivered-flow-volume basis only makes sense when all intake flow passes through a single treatment chain.
-
-If the treatment chain has no losses, the treatment outflow equals the intake outflow, so both denominators produce the same result. Using the intake-flow-volume basis in that case is simply the cheaper operation.
-
-**The `hasUpstreamTreatmentLoss` flag is what makes chained treatment work correctly.**
-
-Without it, consider this chain:
+**Chained treatment, restated in the new terms:**
 
 ```
 Intake (100) → Treatment A (100 in / 80 out) → Treatment B (80 in / 80 out) → Systems
 ```
 
-When the path evaluation reaches the point of computing the intake attribution for systems downstream of Treatment B, the "immediate upstream treatment node" is Treatment B — which has no losses. Without the upstream loss flag, the algorithm would incorrectly use the intake-flow-volume basis (denominator = 100), leaving 20 units of cost unattributed. The flag causes it to use the delivered-flow-volume basis (denominator = Treatment B's outflow = 80), which distributes 100% of the intake cost.
+Treatment A has a single child (Treatment B), so its `localRatio` = 80/80 = 1.0 regardless of its own loss — the loss is absorbed through `pathInflow`, not this ratio. Treatment B then splits among the downstream systems by its own outflow. The product of both ratios reduces to exactly what `deliveredFlowVolume` (Treatment B's outflow) used to produce as a denominator on its own — but without needing a flag to detect that Treatment A's loss happened "further upstream." The old two-flag switch and the new product formula agree on every existing fixture; they only diverge on the mid-chain-fork case, where the product formula is correct and the old switch was not.
 
 ---
 
