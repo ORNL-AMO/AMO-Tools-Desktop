@@ -1124,6 +1124,87 @@ describe('getPlantSummaryResults — diamond-treatment: Intake → [TreatA, Trea
 });
 
 // ---------------------------------------------------------------------------
+// Fixture: split-path-treatment-loss
+// Configuration: Intake → [Treatment (lossy) → System A, System B (direct)]
+//
+//   intake (cost=1/kGal, outflow=100)
+//     ├─ e1 (60) ─► treatment (cost=5/kGal, inflow=60, outflow=30 — losses=30)
+//     │                └─ e2 (30) ─► sysA
+//     └─ e3 (40) ─► sysB
+//
+// Case A (intake splits into multiple paths) with a within-path treatment loss
+// on one of those paths. sysA is the sole system downstream of the lossy
+// treatment node, so it must absorb the cost of the water treatment lost —
+// its intake share is based on what entered the treatment (60/100 = 60%),
+// not what it actually received after the loss (30/100 = 30%). Losses must
+// not shrink the attributed percentage (Core Rule 3).
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — split-path-treatment-loss: Intake → [Treatment (lossy) → SysA, SysB]', () => {
+  const INTAKE_COST = 1;
+  const TREATMENT_COST = 5;
+  const PATH_A_INTAKE_FLOW = 60;
+  const TREATMENT_OUTFLOW = 30;
+  const PATH_B_FLOW = 40;
+  const TOTAL_INTAKE_FLOW = PATH_A_INTAKE_FLOW + PATH_B_FLOW;
+
+  const intake = makeIntakeNode('intake', INTAKE_COST);
+  const treatment = makeTreatmentNode('treatment', TREATMENT_COST);
+  const sysA = makeSystemNode('sysA');
+  const sysB = makeSystemNode('sysB');
+
+  const nodes = [intake, treatment, sysA, sysB];
+  const edges = [
+    makeEdge('intake', 'treatment', PATH_A_INTAKE_FLOW),
+    makeEdge('treatment', 'sysA', TREATMENT_OUTFLOW),
+    makeEdge('intake', 'sysB', PATH_B_FLOW),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: TOTAL_INTAKE_FLOW },
+    treatment: { totalSourceFlow: PATH_A_INTAKE_FLOW, totalDischargeFlow: TREATMENT_OUTFLOW },
+    sysA: { totalSourceFlow: TREATMENT_OUTFLOW },
+    sysB: { totalSourceFlow: PATH_B_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('attributes 60% of intake block cost to sysA (pre-loss path inflow, not post-loss received flow)', () => {
+    const expected = blockCost(INTAKE_COST, TOTAL_INTAKE_FLOW) * (PATH_A_INTAKE_FLOW / TOTAL_INTAKE_FLOW);
+    expect(result.trueCostOfSystems['sysA'].intake).toBeCloseTo(expected, 0);
+  });
+
+  it('attributes 40% of intake block cost to sysB', () => {
+    const expected = blockCost(INTAKE_COST, TOTAL_INTAKE_FLOW) * (PATH_B_FLOW / TOTAL_INTAKE_FLOW);
+    expect(result.trueCostOfSystems['sysB'].intake).toBeCloseTo(expected, 0);
+  });
+
+  it('records intake attribution fraction of 0.6 for sysA, not 0.3', () => {
+    expect(result.systemAttributionMap['sysA']['intake'].totalAttribution.default)
+      .toBeCloseTo(PATH_A_INTAKE_FLOW / TOTAL_INTAKE_FLOW, 6);
+  });
+
+  it('records intake attribution fraction of 0.4 for sysB', () => {
+    expect(result.systemAttributionMap['sysB']['intake'].totalAttribution.default)
+      .toBeCloseTo(PATH_B_FLOW / TOTAL_INTAKE_FLOW, 6);
+  });
+
+  it('attributes 100% of treatment block cost to sysA (sole downstream system)', () => {
+    expect(result.trueCostOfSystems['sysA'].treatment)
+      .toBeCloseTo(blockCost(TREATMENT_COST, PATH_A_INTAKE_FLOW), 0);
+  });
+
+  it('mass balance — attributed intake costs sum to total intake block cost', () => {
+    const total = result.trueCostOfSystems['sysA'].intake + result.trueCostOfSystems['sysB'].intake;
+    expect(total).toBeCloseTo(blockCost(INTAKE_COST, TOTAL_INTAKE_FLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Fixture: wwt-two-upstream-with-reuse
 // Configuration: [System A (60), System B (40)] → WWT → [System C (reuse 60), Discharge (40)]
 //

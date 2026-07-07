@@ -834,8 +834,12 @@ const applySystemIntakeCosts = (
             // * Case A — Intake splits to multiple paths: each path's systems absorb their proportional share of full intake outflow.
             // * Case B — Single treatment chain, no losses: full intake outflow is the denominator (lossless chain delivers all intake volume).
 
+            // * Prorate by the treatment's delivered outflow, not raw path inflow, so upstream treatment losses are
+            // * absorbed by the downstream system rather than shrinking its attributed percentage (Core Rule 3).
+            const pathReceivedBasis = (hasTreatmentSource && deliveredFlowVolume > 0) ? deliveredFlowVolume : pathInflow;
+
             // * fractionPathIntakeReceived ternary will ignore cases where systemIntake > pathIntake due to flow from other intakes. We will observe other intakes on another iteration
-            fractionPathIntakeReceived = (systemInflow / pathInflow) > 1 ? 1 : (systemInflow / pathInflow);
+            fractionPathIntakeReceived = (systemInflow / pathReceivedBasis) > 1 ? 1 : (systemInflow / pathReceivedBasis);
             systemFlowResponsibility = pathInflow * fractionPathIntakeReceived;
             systemAttributionFraction = (systemFlowResponsibility / intakeData.blockCosts.totalFlow);
 
