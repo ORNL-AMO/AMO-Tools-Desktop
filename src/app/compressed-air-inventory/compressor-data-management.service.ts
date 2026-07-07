@@ -81,7 +81,7 @@ export class CompressorDataManagementService {
     selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultAirFlow = true;
     selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultPower = true;
     selectedCompressor.compressedAirPerformancePointsProperties.unloadPoint.isDefaultPressure = true;
-    this.updateCatalogFromDependentCompressorItem(selectedCompressor, true)
+    this.updateCatalogFromDependentCompressorItem(selectedCompressor, true);
   }
 
   updateCatalogFromDependentCompressorItem(selectedCompressor: CompressedAirItem, performancePointUpdateNeeded: boolean) {

@@ -1,0 +1,35 @@
+name: PR Checks
+
+on:
+  workflow_call:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+      - name: Get Node version
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
+      - name: Node setup
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ env.BUILD_NODE_VER }}
+      - name: Cache dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+      - name: Install dependencies
+        run: |
+          find . -name "package-lock.json" -not -path "*/node_modules/*" -not -path "*/dist/*" -exec dirname {} \; | sort -u |
+          while read dir; do
+            echo "Installing dependencies for: $dir"
+            (cd $dir && npm ci $dir);
+          done
+      - name: Run unit tests
+        run: npm test -- --watch=false --no-progress
+      - name: Run process-flow-diagram-component unit tests
+        run: cd process-flow-diagram-component && npm test

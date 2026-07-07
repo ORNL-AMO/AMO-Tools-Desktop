@@ -38,9 +38,12 @@
     (onClose)="hideCreateAssessmentModal()"></app-create-assessment-modal>
 }
 
-<div class="d-flex d-lg-none" [class.d-none]="isTouchDevice">
+<div class="d-flex d-lg-none flex-column align-items-start">
   <span class="alert-warning pull-right small">
     Water Diagram is unavailable to view on your current device.
     Please export the assessment and upload to a desktop or a device with a larger screen size.
   </span>
+  <div class="w-100 px-3 mt-2">
+    <button class="btn btn-default w-100" type="button" (click)="returnFromMobileUnavailable()">Back</button>
+  </div>
 </div>

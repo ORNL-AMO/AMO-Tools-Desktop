@@ -1,0 +1,56 @@
+<div class="export-wrapper">
+  <div class="button-wrapper">
+    <button
+      class="btn btn-secondary btn-sm export-btn"
+      (click)="onButtonClick()">
+      <span class="fa fa-bar-chart mr-1"></span>
+      Export Reports
+    </button>
+  </div>
+
+  @if (isPanelOpen()) {
+    <div class="export-panel card border-primary shadow-sm">
+      <div class="card-body">
+        <div class="sections-grid">
+          @for (group of sectionGroups(); track group.key) {
+            <label class="section-check-item">
+              <input
+                class="section-checkbox"
+                type="checkbox"
+                [checked]="checkedGroups()[group.key]"
+                (change)="toggleGroup(group.key)">
+              <div class="section-check-text">
+                <span class="section-label">{{ group.label }}</span>
+                <span class="section-desc text-muted">{{ group.description }}</span>
+              </div>
+            </label>
+          }
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <button
+            class="btn btn-outline-secondary flex-fill"
+            [disabled]="isExporting() || !hasAnyGroupSelected()"
+            (click)="onExportSelected()">
+            @if (isExporting()) {
+              <span class="fa fa-spinner fa-spin mr-1"></span>
+            } @else {
+              <span class="fa fa-file-pdf-o mr-1"></span>
+            }
+            {{ isExporting() ? 'Generating...' : 'Export Selections (PDF)' }}
+          </button>
+          <button
+            class="btn btn-primary flex-fill"
+            [disabled]="isExporting()"
+            (click)="onExport()">
+            @if (isExporting()) {
+              <span class="fa fa-spinner fa-spin mr-1"></span>
+            } @else {
+              <span class="fa fa-file-pdf-o mr-1"></span>
+            }
+            {{ isExporting() ? 'Generating...' : 'Export All (PDF)' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

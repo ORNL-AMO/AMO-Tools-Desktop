@@ -3,8 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 import { ChillerStagingInput, ChillerStagingOutput } from '../../../shared/models/chillers';
 import { Settings } from '../../../shared/models/settings';
-import { ChillersSuiteApiService } from '../../../tools-suite-api/chillers-suite-api.service';
 import { ChillerStagingFormService } from './chiller-staging-form.service';
+import { ChillerCalculatorSuiteApiService } from '../../../tools-suite-api/chiller-calculator-suite-api.service';
 
 
 @Injectable()
@@ -17,7 +17,7 @@ export class ChillerStagingService {
   currentField: BehaviorSubject<string>;
 
   constructor(
-    private chillersSuiteApiService: ChillersSuiteApiService,
+    private chillersSuiteApiService: ChillerCalculatorSuiteApiService,
     private convertUnitsService: ConvertUnitsService,
     private chillerStagingFormService: ChillerStagingFormService) { 
     this.resetData = new BehaviorSubject<boolean>(undefined);

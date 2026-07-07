@@ -1,0 +1,27 @@
+User-agent: *
+Allow: /
+
+# Disallow assessment routes (require user setup — not meaningful without context)
+Disallow: /phast/
+Disallow: /psat/
+Disallow: /fsat/
+Disallow: /ssmt/
+Disallow: /treasure-hunt/
+Disallow: /compressed-air/
+Disallow: /report-rollup
+Disallow: /log-tool
+Disallow: /motor-inventory/
+Disallow: /pump-inventory/
+Disallow: /waste-water/
+Disallow: /compressed-air-inventory/
+Disallow: /water/
+Disallow: /process-flow-diagram/
+Disallow: /process-cooling/
+Disallow: /directory-dashboard/
+
+# Disallow utility/config routes
+Disallow: /data-and-backup
+Disallow: /settings
+Disallow: /custom-materials
+
+Sitemap: https://measur.ornl.gov/sitemap.xml

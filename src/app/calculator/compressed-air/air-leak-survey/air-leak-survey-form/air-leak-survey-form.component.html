@@ -1,0 +1,74 @@
+@if (leakMetaForm) {
+  <form [formGroup]="leakMetaForm">
+    <label class="group-label-wide mb-2">Leak Data
+      <a class="click-link" (click)="addLeak()">+Add Another Leak</a>
+    </label>
+    <div class="form-group pb-1">
+      <label for="survey-name">Leak Name</label>
+      <div class="input-group">
+        <input name="name" class="form-control" type="text" step="any"
+          formControlName="name" id="survey-name" onfocus="this.select();"
+          (focus)="setCurrentField('name')">
+        @if (leakMetaForm.controls.name.invalid && !leakMetaForm.controls.name.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (leakMetaForm.controls.name.errors?.['required']) { <span>Value required.</span> }
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="form-group pb-1">
+      <label for="survey-leakDescription">Leak Description</label>
+      <div class="input-group">
+        <textarea name="leakDescription" rows="4" class="form-control" id="survey-leakDescription"
+          formControlName="leakDescription" onfocus="this.select();"
+          (focus)="setCurrentField('leakDescription')"></textarea>
+        @if (leakMetaForm.controls.leakDescription.invalid && !leakMetaForm.controls.leakDescription.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (leakMetaForm.controls.leakDescription.errors?.['required']) { <span>Value required.</span> }
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="survey-measurementMethod">Measurement Method</label>
+      <div class="input-group">
+        <select class="form-control" name="measurementMethod" id="survey-measurementMethod"
+          formControlName="measurementMethod" (focus)="setCurrentField('measurementMethod')">
+          @for (method of measurementMethods; track method.value) {
+            <option [ngValue]="method.value">{{ method.display }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    @switch (leakMetaForm.controls.measurementMethod.value) {
+      @case (LeakMeasurementMethod.Estimate) {
+        <app-survey-estimate-method-form
+          [form]="estimateForm"
+          [settings]="settings()"
+          (fieldFocused)="setCurrentField($event)" />
+      }
+      @case (LeakMeasurementMethod.Bag) {
+        <app-survey-bag-method-form
+          [form]="bagForm"
+          [settings]="settings()"
+          (fieldFocused)="setCurrentField($event)" />
+      }
+      @case (LeakMeasurementMethod.Orifice) {
+        <app-survey-orifice-method-form
+          [form]="orificeForm"
+          [settings]="settings()"
+          (fieldFocused)="setCurrentField($event)" />
+      }
+      @case (LeakMeasurementMethod.Decibel) {
+        <app-survey-decibel-method-form
+          [form]="decibelForm"
+          [settings]="settings()"
+          (fieldFocused)="setCurrentField($event)" />
+      }
+    }
+
+  </form>
+}

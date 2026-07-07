@@ -1,0 +1,93 @@
+<h5>
+    Pump Help
+    <br>
+    <small class="text-muted">Enter data related to the pump
+    </small>
+</h5>
+<hr class="my-1 hr-spacer">
+@if (focusedField() == 'variableFlow') {
+<div class="my-2">
+    <h6>
+        Variable Flow
+        <br>
+        <small class="text-muted">
+            Some chillers are designed to operate with variable chilled and/or
+            condenser water flow rates. At reduced load conditions, the pump flow rate may be reduced to
+            save energy. Select “Yes” from the pull-down menu if the pump flow varies with chiller load,
+            and select “No” if the pump flow rate is constant under all loading conditions. Most applications
+            operate with constant pump flow.
+            <hr>
+        </small>
+    </h6>
+</div>
+}
+
+@if (focusedField() == 'flowRate') {
+<div class="my-2">
+    <h6>
+        Flow Rate
+        <br>
+        <small class="text-muted">
+            The pump flow rate is generally specified as a function of the chiller
+            capacity in tons. For constant flow systems, this value specifies the pump flow rate under all
+            conditions. For variable flow systems, this value specifies the pump flow rate coinciding with
+            full chiller load. Even in variable flow systems, however, the pump flow rate generally remains
+            at 50% of the rated flow or above. 
+            
+            <br><br>Typical values are 2.4 gpm per ton for chilled water pumps and 3.0 gpm per ton for
+            condenser water pumps. The allowable range for chilled water pumps is 1.6 to 3.0, and the range
+            for condenser water pumps is 2.0 to 4.0.
+            <hr>
+        </small>
+    </h6>
+</div>
+}
+
+@if (focusedField() == 'efficiency') {
+<div class="my-2">
+    <h6>
+        Pump Efficiency
+        <br>
+        <small class="text-muted">
+            The energy consumed in a given pump application is a function of the
+            efficiency of the pump in converting mechanical energy into hydraulic energy as a percentage.
+
+            <br><br>In a properly designed system,
+            the typical value is 88%. The allowable range is 70 to 95.
+            <hr>
+        </small>
+    </h6>
+</div>
+}
+
+@if (focusedField() == 'motorSize') {
+<div class="my-2">
+    <h6>
+        Motor Size
+        <br>
+        <small class="text-muted">
+            The pump motor size can be specified or declared to be unknown. If the size
+            is specified, that information will be used to calculate pump energy use.
+            Otherwise, typical system parameters, including the other input data will be used for that
+            purpose. If there are multiple pumps running simultaneously, input their combined horsepower.
+            <hr>
+        </small>
+    </h6>
+</div>
+}
+
+@if (focusedField() == 'motorEfficiency') {
+<div class="my-2">
+    <h6>
+        Motor Efficiency
+        <br>
+        <small class="text-muted">
+            The energy consumed in a given pump application is a function of the
+            efficiency of the motor in converting electric energy into mechanical energy as a percentage. 
+
+            <br><br>In a properly designed system, the typical value is 94%. The allowable range is 80 to 95.
+            <hr>
+        </small>
+    </h6>
+</div>
+}

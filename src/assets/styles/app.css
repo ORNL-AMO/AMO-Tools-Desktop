@@ -7,6 +7,10 @@
     margin: auto;
 }
 
+.app-modal-dialog .modal-header h3 {
+    font-size: 1.25rem;
+}
+
 .cdk-overlay-dark-backdrop {
     background-color: rgba(0, 0, 0, 0.6);
 }

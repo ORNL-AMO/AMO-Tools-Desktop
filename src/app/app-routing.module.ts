@@ -15,6 +15,7 @@ const appRoutes: Routes = [
 
 const routerOptions: ExtraOptions = {
   anchorScrolling: 'enabled',
+  // enableTracing: true,
   onSameUrlNavigation: 'reload',
   scrollPositionRestoration: 'enabled',
 };

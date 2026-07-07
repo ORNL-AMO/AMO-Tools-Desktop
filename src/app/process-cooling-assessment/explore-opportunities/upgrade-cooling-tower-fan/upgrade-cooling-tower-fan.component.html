@@ -1,0 +1,56 @@
+<div>
+    <label class="group-label" for="useUpgradeCoolingTower">
+        <input class="pc-checkbox" type="checkbox" 
+            id="useUpgradeCoolingTower" 
+            (focus)="focusField('useUpgradeCoolingTower')" 
+            (change)="setUseOpportunity()"
+            [(ngModel)]="useOpportunity" />
+        <span class="ml-2">
+            {{ EEM_LABELS.upgradeCoolingTowerFans }}
+        </span>
+    </label>
+</div>
+
+
+@if(useOpportunity && form) {
+<form [formGroup]="form" class="p-0">
+    <div class="row no-gutters mt-3">
+        <div class="col-6 pr-2">
+            <div class="form-group">
+                <label for="baselineTowerType">
+                    Current Tower Type
+                </label>
+                <div class="input-group">
+                    <input type="text" id="baselineTowerType" class="form-control" [value]="baselineTowerType" readonly
+                        disabled>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 pl-2">
+            <div class="form-group">
+                <label for="modificationTowerType">
+                    Proposed Tower Type
+                </label>
+                <select class="form-control" id="modificationTowerType" formControlName="towerType"
+                    (focus)="focusField('towerType')">
+                    @for (towerTypeObj of towerTypes; track towerTypeObj.value) {
+                    <option [ngValue]="towerTypeObj.value">{{ towerTypeObj.name }}</option>
+                    }
+                </select>
+            </div>
+
+                @if (towerType.value === TowerType.VariableSpeed) {
+                <div class="form-group">
+                    <label for="modificationNumberOfFans">Number of Fans</label>
+                    <select class="form-control" id="modificationNumberOfFans" formControlName="numberOfFans"
+                        (focus)="focusField('numberOfFans')">
+                        <option [ngValue]="1">1</option>
+                        <option [ngValue]="2">2</option>
+                        <option [ngValue]="3">3</option>
+                    </select>
+                </div>
+                }
+        </div>
+    </div>
+</form>
+}

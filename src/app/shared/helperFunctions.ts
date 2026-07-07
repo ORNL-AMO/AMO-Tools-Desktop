@@ -36,6 +36,22 @@ export function getNameDateString(currentDate: Date) {
 }
 
 
+export type FormControlIds<T> = {
+  [K in keyof T]: string;
+};
+
+
+export const generateFormControlIds = <T extends Record<string, any>>(obj: T): FormControlIds<T> => {
+  const result = {} as FormControlIds<T>;
+  const idString = getNewIdString();
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      result[key] = `${idString}_${key}`;
+    }
+  }
+  return result;
+}
+
 export const getGraphColors = (): Array<string> => {
     return [...graphColors];
 };

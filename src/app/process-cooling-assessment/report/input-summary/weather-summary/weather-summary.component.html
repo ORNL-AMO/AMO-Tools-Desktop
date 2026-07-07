@@ -1,0 +1,19 @@
+<div class="card summary-card">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Weather Data
+      <span class="pull-right fa hide-print" [class.fa-chevron-up]="collapse" [class.fa-chevron-down]="!collapse"></span>
+    </h5>
+  </div>
+  @if (!collapse) {
+  <div class="card-body">
+    <div class="output-summary">
+      <app-input-summary-table
+        [sections]="sections$ | async"
+        [modificationNames]="[]">
+      </app-input-summary-table>
+    </div>
+    <app-exportable-results-table [tableString]="copyTableString"
+      (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+  </div>
+  }
+</div>

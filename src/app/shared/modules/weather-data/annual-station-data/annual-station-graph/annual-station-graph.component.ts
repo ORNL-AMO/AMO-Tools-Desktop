@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, inject, NgZone } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { WeatherDataPoint } from '../../../../weather-api.service';
 import { defaultPlotlyConfig } from '../../../../../shared/helperFunctions';
@@ -10,12 +10,16 @@ import { defaultPlotlyConfig } from '../../../../../shared/helperFunctions';
 })
 export class AnnualStationGraphComponent {
     private readonly plotlyService: PlotlyService = inject(PlotlyService);
+    private readonly ngZone = inject(NgZone);
+
+    isDrawingChart: boolean = true;
+    
     @ViewChild('annualDataChart', { static: false }) annualDataChart: ElementRef;
     @Input()
     set annualHourlyWeather(value: Array<WeatherDataPoint>) {
         this._annualHourlyWeather = value;
         if (this._annualHourlyWeather && this.annualDataChart) {
-            this.drawChart();
+            this.renderWithoutUIBlocking();
         }
     }
     get annualHourlyWeather(): Array<WeatherDataPoint> {
@@ -24,7 +28,17 @@ export class AnnualStationGraphComponent {
     private _annualHourlyWeather: Array<WeatherDataPoint>;
 
     ngAfterViewInit() {
-        this.drawChart();
+        this.renderWithoutUIBlocking();
+    }
+
+    renderWithoutUIBlocking() {
+        // * Run outside NG to ignore change detection on plotly processes. Use timeout to allow render of parents components. Otherwise lift the chart processing up to a higher component and pass processed data down
+        this.ngZone.runOutsideAngular(() => {
+            setTimeout(() => {
+                this.drawChart();
+                this.isDrawingChart = false;
+            }, 0);
+        });
     }
 
     drawChart() {
@@ -35,7 +49,7 @@ export class AnnualStationGraphComponent {
                     x: this.annualHourlyWeather.map(data => new Date(data.time)),
                     y: this.annualHourlyWeather.map(data => { return data.dry_bulb_temp }),
                     type: 'scatter',
-                    mode: 'lines+markers',
+                    mode: 'lines',
                     name: 'Dry Bulb Temp',
                     // yaxis: 'y',
                     marker: {
@@ -46,7 +60,7 @@ export class AnnualStationGraphComponent {
                     x: this.annualHourlyWeather.map(data => new Date(data.time)),
                     y: this.annualHourlyWeather.map(data => { return data.wet_bulb_temp }),
                     type: 'scatter',
-                    mode: 'lines+markers',
+                    mode: 'lines',
                     name: 'Wet Bulb Temp',
                     // yaxis: 'y',
                     marker: {
@@ -71,6 +85,8 @@ export class AnnualStationGraphComponent {
                 xaxis: {
                     automargin: true,
                     autorange: true,
+                    // * NOTE: Month-only ticks are for TMY3 data; for actual year data, remove this.
+                    tickformat: '%b',
                 },
                 yaxis: {
                     title: {

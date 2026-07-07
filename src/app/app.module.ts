@@ -7,7 +7,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { environment } from '../environments/environment';
 import { ServiceWorkerModule, SwUpdate } from '@angular/service-worker';
 import { MeasurErrorHandler } from './shared/errors/MeasurErrorHandler';
-import { MeasurAppError } from './shared/errors/errors';
 import { AppErrorModule } from './shared/errors/app-error.module';
 import { ElectronService } from './electron/electron.service';
 import { BrowserStorageAvailable, BrowserStorageService } from './shared/browser-storage.service';

@@ -211,7 +211,6 @@ export interface BagMethodInput {
   operatingTime: number;
   bagFillTime: number;
   bagVolume: number;
-  numberOfUnits: number;
 }
 
 export interface BagMethodOutput {
@@ -412,7 +411,7 @@ export interface CompressedAirReductionResult {
   energyUse: number,
   energyCost: number,
   flowRate: number,
-  singleNozzeFlowRate: number,
+  singleNozzleFlowRate: number,
   consumption: number
 };
 //===== END compressed air reduction objects =====

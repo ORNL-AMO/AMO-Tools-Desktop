@@ -73,7 +73,7 @@ import { TurbineComponent } from '../calculator/steam/turbine/turbine.component'
 import { TankInsulationReductionComponent } from '../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.component';
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
 import { WeatherBinsComponent } from '../calculator/utilities/weather-bins/weather-bins.component';
-import { AirLeakComponent } from '../calculator/compressed-air/air-leak/air-leak.component';
+import { AirLeakSurveyComponent } from '../calculator/compressed-air/air-leak-survey/air-leak-survey.component';
 import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
 import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
 import { SteamReductionComponent } from '../calculator/steam/steam-reduction/steam-reduction.component';
@@ -259,7 +259,7 @@ export const coreRoutes: Routes = [
           },
           {
             path: 'air-leak',
-            component: AirLeakComponent
+            component: AirLeakSurveyComponent
           },
           {
             path: 'fan-psychrometric',
@@ -625,6 +625,11 @@ export const coreRoutes: Routes = [
     path: 'process-flow-diagram/:id',
     component: WaterProcessDiagramComponent,
     resolve: { diagram: diagramResolver },
+  },
+  {
+    path: 'process-cooling/:assessmentId',
+    loadChildren: () => import('../process-cooling-assessment/process-cooling-assessment.module').then(m => m.ProcessCoolingAssessmentModule),
+    runGuardsAndResolvers: 'always',
   },
   { 
     path: '**', 

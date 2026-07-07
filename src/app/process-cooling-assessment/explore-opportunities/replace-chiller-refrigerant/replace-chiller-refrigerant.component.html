@@ -1,0 +1,19 @@
+<div>
+    <label class="group-label" for="useReplaceChillerRefrigerant">
+        <input class="pc-checkbox" type="checkbox"
+            id="useReplaceChillerRefrigerant"
+            (focus)="focusField('useReplaceChillerRefrigerant')"
+            (change)="setUseOpportunity()"
+            [(ngModel)]="useOpportunity" />
+        <span class="ml-2">
+            {{ EEM_LABELS.replaceChillerRefrigerant }}
+        </span>
+    </label>
+</div>
+
+@if(useOpportunity) {
+    <div class="alert alert-info my-2 w-100 small">
+        Select a proposed refrigerant for each chiller below.
+    </div>
+    <app-refrigerant-inventory-table class="w-100" [useOpportunity]="useOpportunity"></app-refrigerant-inventory-table>
+}

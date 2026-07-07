@@ -6,6 +6,7 @@ import { OperatingHours } from '../../../shared/models/operations';
 import { BagMethodService } from './bag-method.service';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-bag-method',
@@ -42,6 +43,7 @@ export class BagMethodComponent implements OnInit {
   showOperatingHoursModal: boolean = false;
   currentField: string = 'default';
   formWidth: number;
+  docsLink: string = environment.measurDocsUrl;
   constructor(private standaloneService: StandaloneService, private bagMethodService: BagMethodService, private settingsDbService: SettingsDbService,
     private analyticsService: AnalyticsService) { }
 
@@ -108,8 +110,7 @@ export class BagMethodComponent implements OnInit {
     let input: BagMethodInput = {
       operatingTime: JSON.parse(JSON.stringify(this.inputs.operatingHours)),
       bagFillTime: 0,
-      bagVolume: 0,
-      numberOfUnits: 0
+      bagVolume: 0
     };
 
     let output: BagMethodOutput = {

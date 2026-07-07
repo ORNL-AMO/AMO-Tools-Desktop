@@ -31,6 +31,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              "src/robots.txt",
+              "src/sitemap.xml",
               {
                 "glob": "**/*",
                 "input": "./node_modules/measur-tools-suite/bin/",
@@ -70,6 +72,7 @@
               "src/assets/styles/explore-opps.css",
               "src/assets/styles/pagination.css",
               "src/assets/styles/welcome-screen.css",
+              "src/assets/styles/process-cooling-assessment-shared.css",
               "src/assets/styles/compressed-air.css"
             ],
             "scripts": [
@@ -183,6 +186,8 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
+              "src/robots.txt",
+              "src/sitemap.xml",
               "src/manifest.webmanifest"
             ]
           }

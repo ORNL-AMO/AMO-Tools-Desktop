@@ -24,7 +24,6 @@ import { CompressedAirReductionModule } from '../../calculator/compressed-air/co
 import { CompressedAirPressureReductionModule } from '../../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.module';
 import { SteamReductionModule } from '../../calculator/steam/steam-reduction/steam-reduction.module';
 import { TankInsulationReductionModule } from '../../calculator/steam/tank-insulation-reduction/tank-insulation-reduction.module';
-import { AirLeakModule } from '../../calculator/compressed-air/air-leak/air-leak.module';
 import { WallModule } from '../../calculator/furnaces/wall/wall.module';
 import { FlueGasModule } from '../../calculator/furnaces/flue-gas/flue-gas.module';
 import { LeakageModule } from '../../calculator/furnaces/leakage/leakage.module';
@@ -43,6 +42,7 @@ import { AssessmentIntegrationModule } from '../../shared/assessment-integration
 import { BoilerBlowdownRateModule } from '../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.module';
 import { AssessmentOpportunityHelpComponent } from './assessment-opportunity/assessment-opportunity-help/assessment-opportunity-help.component';
 import { PowerFactorCorrectionModule } from '../../calculator/utilities/power-factor-correction/power-factor-correction.module';
+import { AirLeakSurveyModule } from '../../calculator/compressed-air/air-leak-survey/air-leak-survey.module';
 
 @NgModule({
   declarations: [
@@ -75,7 +75,7 @@ import { PowerFactorCorrectionModule } from '../../calculator/utilities/power-fa
     WasteHeatModule,
     AirHeatingModule,
     LeakageModule,
-    AirLeakModule,
+    AirLeakSurveyModule,
     OpeningModule,
     WallModule,
     FlueGasModule,

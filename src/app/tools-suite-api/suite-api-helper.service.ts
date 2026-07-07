@@ -35,15 +35,6 @@ export class SuiteApiHelperService {
     }
   }
 
-  getPistonTypeEnum(pistonType: number): any {
-    switch (pistonType) {
-      case 0:
-        return this.toolsSuiteApiService.ToolsSuiteModule.PistonType.SingleActing;
-      case 1:
-        return this.toolsSuiteApiService.ToolsSuiteModule.PistonType.DoubleActing;
-    }
-  }
-
   getLineFrequencyEnum(lineFreq: number) {
     let lineFrequency = this.toolsSuiteApiService.ToolsSuiteModule.LineFrequency.FREQ50;
     if (lineFreq == 60) {
@@ -355,6 +346,28 @@ export class SuiteApiHelperService {
     return doubleVector;
   }
 
+  returnIntVector(intsArray: Array<number>) {
+    let intVector = new this.toolsSuiteApiService.ToolsSuiteModule.IntVector();
+    intsArray.forEach(x => {
+      intVector.push_back(x);
+    });
+    return intVector;
+  }
+
+
+  returnDoubleVector2d(doubles2dArray: Array<Array<number>>) {
+    let doubleVector2d = new this.toolsSuiteApiService.ToolsSuiteModule.DoubleVector2D();
+    let doubleVectors: Array<any> = [];
+    for (let i = 0; i < doubles2dArray.length; i++) {
+      let innerArray = doubles2dArray[i];
+      let doubleVector = this.returnDoubleVector(innerArray);
+      doubleVector2d.push_back(doubleVector);
+      doubleVectors.push(doubleVector);
+    }
+    doubleVectors.forEach(vector => vector.delete());
+    return doubleVector2d;
+  }
+
   convertNullInputsForObjectConstructor(inputObj: Object, inputField?: number | string) {
     for (var prop in inputObj) {
       if (inputObj.hasOwnProperty(prop) && inputObj[prop] === null || inputObj[prop] === undefined) {
@@ -376,6 +389,20 @@ export class SuiteApiHelperService {
       validInput = Number(inputValue);
     }
     return validInput;
+  }
+
+   /**
+  * Get JS array from WASM vector
+  * @param vector WASM vector to extract from
+  * @returns JS number array
+ */
+  extractWASMArray(vector: any): number[] {
+    if (!vector || typeof vector.size !== 'function' || typeof vector.get !== 'function') return [];
+    const arr = [];
+    for (let i = 0; i < vector.size(); i++) {
+      arr.push(vector.get(i));
+    }
+    return arr;
   }
 
   getSteamCondition(steamCondition: number) {
@@ -409,6 +436,74 @@ export class SuiteApiHelperService {
         return this.toolsSuiteApiService.ToolsSuiteModule.PowerFactorModeType.ReactivePower_PowerFactor;
     }
   }
+
+  getProcessCoolingFanTypeEnum(fanType: number | string) {
+    if (fanType === 0 || fanType === 'AxialFan') return this.toolsSuiteApiService.ToolsSuiteModule.CellFanType.AxialFan;
+    if (fanType === 1 || fanType === 'CentrifugalFan') return this.toolsSuiteApiService.ToolsSuiteModule.CellFanType.CentrifugalFan;
+  }
+
+  getProcessCoolingRefrigerantTypeEnum(type: number | string) {
+    switch (type) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_11;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_123;
+      case 2:
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_12;
+      case 3:
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_134a;
+      case 4:
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_22;
+      case 5:
+        return this.toolsSuiteApiService.ToolsSuiteModule.RefrigerantType.R_717;
+    }
+  }
+  
+  getProcessCoolingCoolingAirSourceEnum(loc: number | string) {
+    if (loc === 0 || loc === 'Inside') return this.toolsSuiteApiService.ToolsSuiteModule.ACSourceLocation.Inside;
+    if (loc === 1 || loc === 'Outside') return this.toolsSuiteApiService.ToolsSuiteModule.ACSourceLocation.Outside;
+  }
+
+  getProcessCoolingCoolingSystemTypeEnum(type: number | string) {
+    if (type === 0 || type === 'Water') return this.toolsSuiteApiService.ToolsSuiteModule.CoolingSystemType.Water;
+    if (type === 1 || type === 'Air') return this.toolsSuiteApiService.ToolsSuiteModule.CoolingSystemType.Air;
+  }
+
+  getProcessCoolingTowerSizedByEnum(val: number | string) {
+    if (val === 0 || val === 'Tonnage') return this.toolsSuiteApiService.ToolsSuiteModule.TowerSizedBy.Tonnage;
+    if (val === 1 || val === 'Fan_HP') return this.toolsSuiteApiService.ToolsSuiteModule.TowerSizedBy.Fan_HP;
+    if (val === 2 || val === 'Unknown') return this.toolsSuiteApiService.ToolsSuiteModule.TowerSizedBy.Unknown;
+  }
+
+  
+  /**
+   * Returns the corresponding `ChillerCompressorType` enum value from the provided type.
+   *
+   * @param type - The compressor type, either as a numeric code or a string label.
+   *   - `0` or `'Centrifugal'` returns `ChillerCompressorType.Centrifugal`
+   *   - `1` or `'Screw'` returns `ChillerCompressorType.Screw`
+   *   - `2` or `'Reciprocating'` returns `ChillerCompressorType.Reciprocating`
+   *
+   * @remarks
+   * In the CWSAT, the value `1` represents the "RECIPROCATING" compressor type.
+   * In the suite API, RECIPROCATING is value `2`. Use "Screw" or `1` for HELICAL ROTARY
+   * until the suite API is updated to reflect this distinction.
+   */
+  getProcessCoolingChillerCompressorTypeEnum(type: number | string) {
+    if (type === 0 || type === 'Centrifugal') return this.toolsSuiteApiService.ToolsSuiteModule.ChillerCompressorType.Centrifugal;
+    // This is actually HELICAL ROTARY in the old app but is referenced as 'Screw' in the suite
+    if (type === 1 || type === 'Screw') return this.toolsSuiteApiService.ToolsSuiteModule.ChillerCompressorType.Screw;
+    if (type === 2 || type === 'Reciprocating') return this.toolsSuiteApiService.ToolsSuiteModule.ChillerCompressorType.Reciprocating;
+  }
+
+  getProcessCoolingFanMotorSpeedTypeEnum(type: number | string) {
+    if (type === 0 || type === 'One') return this.toolsSuiteApiService.ToolsSuiteModule.FanMotorSpeedType.One;
+    if (type === 1 || type === 'Two') return this.toolsSuiteApiService.ToolsSuiteModule.FanMotorSpeedType.Two;
+    if (type === 2 || type === 'Variable') return this.toolsSuiteApiService.ToolsSuiteModule.FanMotorSpeedType.Variable;
+  }
+
+
+
 
   getWaterReductionMeasurementMethodEnum(method: number) {
     switch (method) {
@@ -470,6 +565,28 @@ export class SuiteApiHelperService {
         return this.toolsSuiteApiService.ToolsSuiteModule.SteamUtilityType.NaturalGas;
       case 2:
         return this.toolsSuiteApiService.ToolsSuiteModule.SteamUtilityType.Other;
+    }
+  }
+
+  getCompressedAirMeasurementMethodEnum(method: number) {
+    switch (method) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.FlowMeter;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.Bag;
+      case 2:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.Pressure;
+      case 3:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirMeasurementMethod.Other;
+    }
+  }
+
+  getCompressedAirUtilityTypeEnum(utilityType: number) {
+    switch (utilityType) {
+      case 0:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirUtilityType.CompressedAir;
+      case 1:
+        return this.toolsSuiteApiService.ToolsSuiteModule.CompressedAirUtilityType.Electricity;
     }
   }
 }

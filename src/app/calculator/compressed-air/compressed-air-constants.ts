@@ -198,7 +198,6 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
       operatingTime: 8760,
       bagVolume: .6817,
       bagFillTime: 12,
-      numberOfUnits: 1
     },
     decibelsMethodData: {
       linePressure: 0,
@@ -233,8 +232,7 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
    bagMethodData: {
       operatingTime: 0,
       bagVolume: 0,
-      bagFillTime: 0,
-      numberOfUnits: 0
+      bagFillTime: 0
     },
     decibelsMethodData: {
       linePressure: 0,
@@ -267,7 +265,6 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
       operatingTime: 0,
       bagVolume: 0,
       bagFillTime: 0,
-      numberOfUnits: 0
     },
     estimateMethodData: {
       leakRateEstimate: 0
@@ -304,8 +301,7 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
     bagMethodData: {
       operatingTime: 0,
       bagVolume: 0,
-      bagFillTime: 0,
-      numberOfUnits: 0
+      bagFillTime: 0
     },
     decibelsMethodData: {
       linePressure: 130,
@@ -336,6 +332,34 @@ export enum LeakMeasurementMethod {
     Decibel,
     Bag,
     Orifice
+}
+
+export enum FacilityUtilityType {
+    CompressedAir = 0,
+    Electric = 1
+}
+
+export enum CompressorControlType {
+    ScrewInletModulation = 100,
+    ScrewVariableDisplacement = 101,
+    ScrewVariableSpeedDrives = 102,
+    OilInjectedScrewLoadUnloadShort = 103,
+    OilInjectedScrewLoadUnloadLong = 104,
+    OilFreeScrewLoadUnload = 105,
+    ReciprocatingLoadUnload = 106,
+    ReciprocatingOnOff = 107,
+    CentrifugalBlowoff = 108,
+    CentrifugalModulatingIBV = 109,
+    CentrifugalModulatingIGV = 110,
+    Custom = 8
+}
+
+export enum CompressorSpecificPowerType {
+    Reciprocating = 0,
+    RotaryScrewLubricantInjected = 1,
+    RotaryScrewLubricantFree = 2,
+    Centrifugal = 3,
+    Custom = 4
 }
 
 export const measurementMethods: Array<{ display: string, value: number }> = [

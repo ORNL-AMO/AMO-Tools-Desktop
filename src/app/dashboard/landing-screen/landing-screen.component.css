@@ -31,6 +31,12 @@
 	height:70px;
 }
 
+.process-cooling-image {
+	width:70px;
+	height:60px;
+}
+
+
 .water-diagram-image {
 	width:60px;
 	height:50px;
@@ -111,8 +117,18 @@ img.treasure-hunt-image {
 
 
 .motor-inventory-icon{
-    width: 60px;
-    height: 50px;
+    width: 55px;
+    height: 65px;
+}
+
+.ca-inventory-icon{
+    width: 55px;
+    height: 65px;
+}
+
+.pump-inventory-icon{
+    width: 75px;
+    height: 75px;
 }
 
 
@@ -121,9 +137,9 @@ img.treasure-hunt-image {
     border-radius: 12px;
     padding: 3px;
     box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
-	width: 80px;
-	height: 70px;
-    padding-top: 10px;
+	width: 90px;
+	height: 80px;
+    padding-top: 5px;
     padding-left: 3px;
 }
 
@@ -132,9 +148,9 @@ img.treasure-hunt-image {
     border-radius: 12px;
     padding: 3px;
     box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
-	width: 80px;
-	height: 70px;
-    padding-top: 10px;
+	width: 90px;
+	height: 80px;
+    padding-top: 2px;
     padding-left: 3px;
 }
 
@@ -143,9 +159,9 @@ img.treasure-hunt-image {
     border-radius: 12px;
     padding: 3px;
     box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
-	width: 80px;
-	height: 70px;
-    padding-top: 10px;
+	width: 90px;
+	height: 80px;
+    padding-top: 5px;
     padding-left: 3px;
 }
 
@@ -181,7 +197,26 @@ img.treasure-hunt-image {
     box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
 	width: 80px;
 	height: 70px;
+    position: relative;
 }
+
+
+.process-cooling-background{
+    background-image: linear-gradient(#D4E2F4, #009885);
+    border-radius: 12px;
+    padding: 3px;
+    box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
+	width: 88px;
+	height: 70px;
+    position: relative;
+}
+
+.beta-badge-tile {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+}
+
 
 
 .assessment-block{

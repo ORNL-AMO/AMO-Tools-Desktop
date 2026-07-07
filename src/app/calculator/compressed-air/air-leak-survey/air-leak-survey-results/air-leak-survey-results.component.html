@@ -1,0 +1,102 @@
+@let output = surveyService.output();
+
+<label class="group-label">Baseline Results</label>
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Consumption</td>
+      <td class="text-center w-50">
+        {{ output.baselineTotal.totalFlowRate | number:'1.0-1' }}
+        @if (settings().unitsOfMeasure !== 'Metric') { <span>scfm</span> }
+        @else { <span>m<sup>3</sup>/min</span> }
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Compressed Air Use</td>
+      <td class="text-center w-50">
+        {{ output.baselineTotal.annualTotalFlowRate | number:'1.0-1' }}
+        @if (settings().unitsOfMeasure !== 'Metric') { <span>kscf</span> }
+        @else { <span>m<sup>3</sup></span> }
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Energy Use</td>
+      <td class="text-center w-50">{{ output.baselineTotal.annualTotalElectricity | number:'1.0-0' }} kWh/yr</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Cost</td>
+      <td class="text-center w-50">{{ output.baselineTotal.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<label class="group-label">Modification Summary</label>
+<table class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Consumption</td>
+      <td class="text-center w-50">
+        {{ output.modificationTotal.totalFlowRate | number:'1.0-1' }}
+        @if (settings().unitsOfMeasure !== 'Metric') { <span>scfm</span> }
+        @else { <span>m<sup>3</sup>/min</span> }
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Compressed Air Use</td>
+      <td class="text-center w-50">
+        {{ output.modificationTotal.annualTotalFlowRate | number:'1.0-1' }}
+        @if (settings().unitsOfMeasure !== 'Metric') { <span>kscf</span> }
+        @else { <span>m<sup>3</sup></span> }
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Energy Use</td>
+      <td class="text-center w-50">{{ output.modificationTotal.annualTotalElectricity | number:'1.0-0' }} kWh/yr</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Cost</td>
+      <td class="text-center w-50">{{ output.modificationTotal.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<label class="group-label">Savings</label>
+<table #savingsTable class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Consumption</td>
+      <td class="text-center w-50">
+        {{ output.savings.totalFlowRate | number:'1.0-1' }}
+        @if (settings().unitsOfMeasure !== 'Metric') { <span>scfm</span> }
+        @else { <span>m<sup>3</sup>/min</span> }
+      </td>
+    </tr>
+    @if (output.facilityCompressorData?.utilityType === 1 && surveyService.airLeakInput()?.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment) {
+      <tr>
+        <td class="bold w-50">Compressor Control Adjustment</td>
+        <td class="text-center w-50">
+          {{ surveyService.airLeakInput()?.facilityCompressorData?.compressorElectricityData?.compressorControlAdjustment | number:'1.0-1' }}%
+        </td>
+      </tr>
+    }
+    <tr>
+      <td class="bold w-50">Compressed Air Use</td>
+      <td class="text-center w-50">
+        {{ output.savings.annualTotalFlowRate | number:'1.0-1' }}
+        @if (settings().unitsOfMeasure !== 'Metric') { <span>kscf</span> }
+        @else { <span>m<sup>3</sup></span> }
+      </td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Energy Use</td>
+      <td class="text-center w-50">{{ output.savings.annualTotalElectricity | number:'1.0-0' }} kWh/yr</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Annual Cost</td>
+      <td class="text-center w-50">{{ output.savings.annualTotalElectricityCost | currency:'USD':'symbol':'1.0-0' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<app-exportable-results-table [tableString]="tableString" (updateTableString)="updateTableString()">
+</app-exportable-results-table>

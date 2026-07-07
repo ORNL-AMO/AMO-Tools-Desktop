@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, ElementRef, ViewChild, HostListener, SimpleChanges } from '@angular/core';
-import bb, {gauge} from "billboard.js";
+import bb, { gauge } from "billboard.js";
 
 @Component({
-    selector: 'app-treasure-hunt-gauge',
-    templateUrl: './treasure-hunt-gauge.component.html',
-    styleUrls: ['./treasure-hunt-gauge.component.css'],
-    standalone: false
+  selector: 'app-treasure-hunt-gauge',
+  templateUrl: './treasure-hunt-gauge.component.html',
+  styleUrls: ['./treasure-hunt-gauge.component.css'],
+  standalone: false
 })
 export class TreasureHuntGaugeComponent implements OnInit {
   @Input()
@@ -14,6 +14,9 @@ export class TreasureHuntGaugeComponent implements OnInit {
   chartHeight: number;
   @Input()
   chartWidth: number;
+
+  @Input()
+  showErrorIcon: boolean = false;
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -29,7 +32,7 @@ export class TreasureHuntGaugeComponent implements OnInit {
     setTimeout(() => {
       this.initChart();
     }, 100);
-    
+
   }
 
   ngOnDestroy() { }
@@ -54,16 +57,22 @@ export class TreasureHuntGaugeComponent implements OnInit {
   }
 
   initChart() {
-        this.chart = bb.generate({
+    this.chart = bb.generate({
       data: {
         columns: [
-      ["data", this.value]
+          ["data", this.value]
         ],
         type: gauge(),
       },
       gauge: {
         label: {
-          extents: function() { return ""; }
+          extents: function () { return ""; },
+          format: function (value) {
+            if (value > 0 && value < 1) {
+              return value.toFixed(2) + "%";
+            }
+            return value.toFixed(1) + "%";
+          }
         }
       },
       color: {
