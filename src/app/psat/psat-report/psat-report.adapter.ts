@@ -1,5 +1,4 @@
-import { inject, Injectable, LOCALE_ID } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
@@ -11,7 +10,6 @@ import { Assessment } from '../../shared/models/assessment';
 import { Modification, PSAT, PsatInputs, PsatOutputs } from '../../shared/models/psat';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { PsatChartsService, PsatChartConfig } from '../services/psat-charts.service';
 
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
@@ -27,10 +25,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly psatService = inject(PsatService);
   private readonly plotlyService = inject(PlotlyService);
-  private readonly convertUnitsService = inject(ConvertUnitsService);
   private readonly psatChartsService = inject(PsatChartsService);
-  // DecimalPipe is constructed directly so no provider entry is needed
-  private readonly decimalPipe = new DecimalPipe(inject(LOCALE_ID) as string);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [0, 114, 178];
 
@@ -56,8 +51,6 @@ export class PsatReportAdapter implements ReportDataAdapter {
       ],
     });
   }
-
-  // ─── Facility Info ────────────────────────────────────────────────────────
 
   private buildFacilityInfoSections(settings: Settings): PairedKeyValueSection[] {
     const facilityInfo: FacilityInfo = settings?.facilityInfo;
@@ -111,8 +104,6 @@ export class PsatReportAdapter implements ReportDataAdapter {
     return [generalAndLocation, contacts];
   }
 
-  // ─── Report Graphs ────────────────────────────────────────────────────────
-
   private async renderPlotlyChart(chart: PsatChartConfig): Promise<string> {
     const { traces, layout } = chart;
     const div = document.createElement('div');
@@ -155,160 +146,33 @@ export class PsatReportAdapter implements ReportDataAdapter {
     return sections;
   }
 
-  // ─── Sankey ────────────────────────────────────────────────────────
-
   private buildSankeySections(psat: PSAT, settings: Settings): ChartSection[] {
     const sections: ChartSection[] = [];
-    const plotly = this.plotlyService;
-
-    const buildSection = (outputs: PsatOutputs, title: string, pageBreakBefore: boolean): ChartSection => ({
-      type: 'chart',
-      title,
-      group: 'sankey',
-      pageBreakBefore,
-      imageDataProvider: async () => {
-        // Compute losses from outputs (mirrors PsatSankeyComponent.calcLosses)
-        let motorShaftPower: number, moverShaftPower: number;
-        if (settings.powerMeasurement === 'hp') {
-          motorShaftPower = this.convertUnitsService.value(outputs.motor_shaft_power).from('hp').to('kW');
-          moverShaftPower = this.convertUnitsService.value(outputs.mover_shaft_power).from('hp').to('kW');
-        } else {
-          motorShaftPower = outputs.motor_shaft_power;
-          moverShaftPower = outputs.mover_shaft_power;
-        }
-        const motor = outputs.motor_power * (1 - outputs.motor_efficiency / 100);
-        const drive = motorShaftPower - moverShaftPower;
-        const pump = (outputs.motor_power - motor - drive) * (1 - outputs.pump_efficiency / 100);
-        const hasDrive = drive > 0;
-
-        const connectingNodes = hasDrive ? [0, 1, 2, 5] : [0, 1, 2];
-        const motorConnector = outputs.motor_power - motor;
-        const driveConnector = hasDrive ? motorConnector - drive : 0;
-        const useful = hasDrive ? driveConnector - pump : motorConnector - pump;
-
-        const nodeStartColor = 'rgba(38, 138, 222, .9)';
-        const nodeArrowColor = 'rgba(144, 192, 232, .9)';
-        const gradientStart  = 'rgb(38, 138, 222)';
-        const gradientEnd    = 'rgb(144, 192, 232)';
-
-        const ip = outputs.motor_power;
-        const lbl = (name: string, kw: number, pct: number) =>
-          `${name} ${this.decimalPipe.transform(kw, '1.0-0')} kW/hr (${this.decimalPipe.transform(pct, '1.1-1')}%)`;
-
-        const nodes: Array<{ id: string; name: string; value: number; x: number; y: number; nodeColor: string }> = [
-          { id: 'originConnector', name: lbl('Energy Input',  ip,    100),                  value: 100,                       x: .1,  y: .6,  nodeColor: nodeStartColor },
-          { id: 'inputConnector',  name: '',                                                value: 0,                         x: .4,  y: .6,  nodeColor: nodeStartColor },
-          { id: 'motorConnector',  name: '',                                                value: (motorConnector / ip) * 100, x: .5,  y: .6,  nodeColor: nodeStartColor },
-          { id: 'motorLosses',     name: lbl('Motor Losses',  motor, (motor / ip) * 100),  value: (motor / ip) * 100,        x: .5,  y: .10, nodeColor: nodeArrowColor  },
-        ];
-
-        if (hasDrive) {
-          nodes.push(
-            { id: 'driveLosses',   name: lbl('Drive Losses',  drive, (drive / ip) * 100),  value: (drive / ip) * 100,        x: .6,  y: .25, nodeColor: nodeArrowColor  },
-            { id: 'driveConnector',name: '',                                                value: (driveConnector / ip) * 100, x: .7,  y: .6,  nodeColor: nodeStartColor },
-          );
-        }
-        nodes.push(
-          { id: 'pumpLosses',    name: lbl('Pump Losses',   pump,  (pump  / ip) * 100),  value: (pump  / ip) * 100,        x: .8,  y: .15, nodeColor: nodeArrowColor  },
-          { id: 'usefulOutput',  name: lbl('Useful Output', useful,(useful / ip) * 100),  value: (useful / ip) * 100,       x: .85, y: .65, nodeColor: nodeArrowColor  },
-        );
-
-        const links = [
-          { source: 0, target: 1 }, { source: 0, target: 2 },
-          { source: 1, target: 2 }, { source: 1, target: 3 },
-          ...(hasDrive
-            ? [{ source: 2, target: 4 }, { source: 2, target: 5 }, { source: 5, target: 6 }, { source: 5, target: 7 }]
-            : [{ source: 2, target: 4 }, { source: 2, target: 5 }]),
-        ];
-
-        const sankeyData = {
-          type: 'sankey', orientation: 'h', valuesuffix: '%', arrangement: 'freeform',
-          textfont: { color: 'rgba(0,0,0)', size: 14 },
-          ids: nodes.map(n => n.id),
-          node: {
-            pad: 50,
-            line: { color: nodeStartColor, width: 0 },
-            label: nodes.map(n => n.name),
-            x: nodes.map(n => n.x),
-            y: nodes.map(n => n.y),
-            color: nodes.map(n => n.nodeColor),
-          },
-          link: {
-            value:  nodes.map(n => n.value),
-            source: links.map(l => l.source),
-            target: links.map(l => l.target),
-            color:  links.map(() => nodeStartColor),
-            hoverinfo: 'none',
-            line: { color: nodeStartColor, width: 0 },
-          },
-        };
-
-        const layout = {
-          autosize: true,
-          font: { color: '#ffffff', size: 14 },
-          margin: { l: 50, t: 100, pad: 300 },
-          paper_bgcolor: 'white',
-        };
-
-        const container = document.createElement('div');
-        container.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
-        document.body.appendChild(container);
-        const chartDiv = document.createElement('div');
-        chartDiv.style.cssText = 'width:100%;height:100%';
-        container.appendChild(chartDiv);
-
-        const p = await plotly.getPlotly();
-        try {
-          await p.newPlot(chartDiv, [sankeyData], layout, { displaylogo: false, displayModeBar: false, responsive: false });
-
-          // Add link gradient (mirrors FsatSankeyComponent.addGradientElement)
-          const mainSVG = container.querySelector('.main-svg');
-          const svgDefs = container.querySelector('defs');
-          if (mainSVG && svgDefs) {
-            svgDefs.innerHTML = `<linearGradient id="psatLinkGradient">
-              <stop offset="10%" stop-color="${gradientStart}" />
-              <stop offset="100%" stop-color="${gradientEnd}" />
-            </linearGradient>`;
-            mainSVG.appendChild(svgDefs);
-          }
-
-          // Apply arrow shape to non-connector nodes (mirrors FsatSankeyComponent.buildSvgArrows)
-          const rects = container.querySelectorAll('.node-rect');
-          for (let i = 0; i < rects.length; i++) {
-            if (!connectingNodes.includes(i)) {
-              const rect = rects[i] as SVGRectElement;
-              const h = parseFloat(rect.getAttribute('height'));
-              const y = parseFloat(rect.getAttribute('y'));
-              if (isNaN(h) || isNaN(y) || h === 0) continue;
-              rect.setAttribute('y', `${y - h / 2.75}`);
-              rect.setAttribute('style',
-                `width:${h}px;height:${h * 1.75}px;clip-path:polygon(100% 50%,0 0,0 100%);` +
-                `stroke-width:0.5;stroke:rgb(255,255,255);stroke-opacity:0.5;` +
-                `fill:${gradientEnd};fill-opacity:0.9;`);
-            }
-          }
-
-          return await p.toImage(chartDiv, { format: 'jpeg', width: 1400, height: 700 });
-        } finally {
-          p.purge(chartDiv);
-          document.body.removeChild(container);
-        }
-      },
-    });
 
     if (psat.outputs) {
-      sections.push(buildSection(psat.outputs, psat.name ?? 'Baseline', true));
+      sections.push({
+        type: 'chart',
+        title: psat.name ?? 'Baseline',
+        group: 'sankey',
+        pageBreakBefore: true,
+        imageDataProvider: () => this.psatChartsService.renderSankeyAsImage(psat.outputs, settings),
+      });
     }
+
     psat.modifications?.forEach(m => {
       if (m.psat?.valid?.isValid && m.psat.outputs) {
-        sections.push(buildSection(m.psat.outputs, m.psat.name ?? 'Modification', false));
+        sections.push({
+          type: 'chart',
+          title: m.psat.name ?? 'Modification',
+          group: 'sankey',
+          pageBreakBefore: false,
+          imageDataProvider: () => this.psatChartsService.renderSankeyAsImage(m.psat.outputs, settings),
+        });
       }
     });
 
     return sections;
   }
-
-  // ─── Result Data ──────────────────────────────────────────────────────────
 
   private buildResultsSections(psat: PSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {
     const headers = ['', 'Baseline', ...modNames];
@@ -401,8 +265,6 @@ export class PsatReportAdapter implements ReportDataAdapter {
     if (savings <= 0) return '—';
     return formatNumber((implCost / savings) * 12, 1);
   }
-
-  // ─── Input Summary ────────────────────────────────────────────────────────
 
   private buildInputSummarySections(psat: PSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {
     const headers = ['', 'Baseline', ...modNames];
