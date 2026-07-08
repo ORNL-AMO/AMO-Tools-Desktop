@@ -1,0 +1,184 @@
+<div class="px-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Fan Affinity Laws Help
+    <br>
+  </h5>
+  <div class="my-2">
+    <h6>
+      <small class="text-muted">
+        This calculator uses the fan affinity laws to estimate the change in energy use and cost when a fan's
+        flow rate is changed, either by adjusting motor speed control or by resizing the fan.
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'hoursOperation'">
+    <h6>
+      Operating Hours
+      <small class="text-muted">
+        <br>
+        Number of hours the fan system is on for in a year. 8760 if it runs year-round.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'efficiencyMotor'">
+    <h6>
+      Motor Efficiency
+      <small class="text-muted">
+        <br>
+        The electrical efficiency of the motor driving the fan. If the motor hasn't been through rewind, this is
+        the efficiency listed on the nameplate. 95% can be used as a default if unknown. Value should range from
+        1 &ndash; 100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'powerMotor'">
+    <h6>
+      Motor Power
+      <small class="text-muted">
+        <br>
+        The nameplate power of the motor, or the maximum deliverable mechanical power of the motor. Values often
+        displayed in horsepower or kilowatts.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'efficiencyDrive'">
+    <h6>
+      Drive Efficiency
+      <small class="text-muted">
+        <br>
+        The mechanical efficiency of the motive connection between the fan and motor. V-belt pulleys are common
+        and typically possess 95% efficiency. Values should range from 1 &ndash; 100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'ratedFlow'">
+    <h6>
+      Rated Flow
+      <small class="text-muted">
+        <br>
+        The maximum volume of flow the system has been designed for. If unknown, best captured via air velocity
+        measurement shortly upstream of the fan multiplied by the swept fan area or duct cross-section area.
+        Value cannot be equal to or less than 0.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'actualFlow'">
+    <h6>
+      Actual Flow
+      <small class="text-muted">
+        <br>
+        The total flow delivered to the end-use from the fan after avoidable losses such as from dampers are
+        taken into account. Can be assumed equal to Rated Flow if unknown. Value cannot be equal to or less than
+        0.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'motorControlTypeCurrent'">
+    <h6>
+      Current Motor Control
+      <small class="text-muted">
+        <br>
+        The control method used to determine motor behavior regarding flow. Most commonly, motors are simply
+        controlled via an on/off switch of some kind; however, some are already equipped with speed control
+        systems.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'motorControlTypeNew'">
+    <h6>
+      New Motor Control
+      <small class="text-muted">
+        <br>
+        The control method used to determine motor behavior regarding flow to be used in the new configuration.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'flowMode'">
+    <h6>
+      Desired Flow Mode
+      <small class="text-muted">
+        <br>
+        Selection between expressing the flow required of the new configuration as either a volume flow or as a
+        percentage of rated flow.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'desiredFlowVolume'">
+    <h6>
+      Desired Flow Rate (CFM)
+      <small class="text-muted">
+        <br>
+        Volumetric flow required of the new configuration. Value cannot be equal to or less than 0.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'desiredFlowPercent'">
+    <h6>
+      Desired Flow Rate (%)
+      <small class="text-muted">
+        <br>
+        Flow required of the new configuration expressed as a percentage. Value should range from 1 &ndash; 100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'diameterFan'">
+    <h6>
+      Fan Diameter
+      <small class="text-muted">
+        <br>
+        Diameter of the circle swept by the fan at its blade tips. Value cannot be equal to or less than 0.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'changeFanSize'">
+    <h6>
+      Change Fan Size
+      <small class="text-muted">
+        <br>
+        Optional dropdown for use of a different size fan impeller. Typically, this will remain the same between
+        configurations and so "No" is expected. In some cases, a smaller fan impeller can be the most cost
+        appropriate option despite limited savings. Advanced users may find larger fan impellers in combination
+        with speed control to be a potential aggressive energy efficiency measure; however, care must be taken by
+        the user to not load the motor beyond what it can sustain.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField == 'diameterFanNew'">
+    <h6>
+      New Fan Diameter
+      <small class="text-muted">
+        <br>
+        Diameter of the circle swept by the fan at its blade tips in the new configuration. Must be greater than
+        the current Fan Diameter.
+        <hr>
+      </small>
+    </h6>
+  </div>
+</div>
