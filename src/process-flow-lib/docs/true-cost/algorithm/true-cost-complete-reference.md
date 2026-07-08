@@ -23,6 +23,8 @@ The five stages must run in the order shown below. Each stage produces data that
 | **Water-using system** | A production or utility system that consumes water (e.g., Cooling Tower, Boiler, Process Use). The entity to which costs are ultimately attributed. |
 | **Attribution fraction** | The share (0 to 1) of a cost component's block cost assigned to a given system. All fractions across all systems for one component should sum to 1.0. |
 | **Adjusted attribution** | A user-supplied override fraction that replaces the computed default attribution for a specific system–component pair. |
+| **Intake-flow-volume basis** | Attribution denominator is the full intake outflow. Used when the intake splits to multiple paths, or when the treatment chain has no losses. |
+| **Delivered-flow-volume basis** | Attribution denominator is the treatment chain's total outflow — the volume actually delivered to downstream systems. Used when the intake has a single outgoing path AND the treatment chain has losses (at the immediate treatment node or any earlier node in the path). Ensures 100% of intake cost is distributed, including the cost of water lost in treatment. |
 | **Direct cost** | Intake costs + discharge costs attributed to a system. |
 | **True cost** | Direct costs + all indirect costs (treatment, wastewater treatment, motor energy, heat energy) attributed to a system. |
 | **Downstream** | In the direction of water flow — toward discharge. |
@@ -93,7 +95,7 @@ When all criteria are met, the index entry records the intake node, the RO treat
 | Water Treatment | Inflow (water entering the treatment unit) | Block cost = ($/kgal) × (inflow × 1,000) |
 | Wastewater Treatment | Inflow (water entering the WWT unit) | Block cost = ($/kgal) × (inflow × 1,000) |
 
-**Why:** The block cost answers "how much does this node cost in total per year?" before we decide how to split it across systems. We need this number first so that attribution in the next stage produces dollar amounts rather than just fractions.
+**Why:** The block cost answers "how much does this node cost in total per year?" before we decide how to attribute it across systems. We need this number first so that attribution in the next stage produces dollar amounts rather than just fractions.
 
 The flow path trace answers "which systems can this node's cost possibly reach, and by what routes?" Computing these paths once and storing them means Stage 4 does not need to re-traverse the diagram for every system — it works from the pre-computed path list.
 
@@ -313,7 +315,6 @@ Facility Diagram (nodes + edges)
 
 | Document | What it covers |
 |---|---|
-| true-cost-algorithm-quick-reference.md | Concise algorithm reference: inputs, outputs, formulas, and glossary |
 | true-cost-algorithm-stages.md | Plain-English stage-by-stage walkthrough with rationale |
 | cost-component-attribution/apply-system-intake-costs.md | Detailed rules for Water Intake cost attribution |
 | cost-component-attribution/apply-system-discharge-costs.md | Detailed rules for Water Discharge cost attribution |
