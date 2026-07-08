@@ -15,7 +15,7 @@ import { RouterModule } from '@angular/router';
 import { CalculatorsListComponent } from './calculators-list/calculators-list.component';
 import { ProcessCoolingModule } from './process-cooling/process-cooling.module';
 import { WasteWaterModule } from './waste-water/waste-water.module';
-
+import { FanAffinityLawModule } from './fans/fan-affinity-law/fan-affinity-law.module';
 @NgModule({
   declarations: [
     CalculatorComponent,
@@ -36,7 +36,8 @@ import { WasteWaterModule } from './waste-water/waste-water.module';
     FansModule,
     LightingModule,
     RouterModule,
-    WasteWaterModule
+    WasteWaterModule,
+    FanAffinityLawModule
   ],
   providers: [
     StandaloneService

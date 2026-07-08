@@ -34,6 +34,7 @@ export type AnalyticsEventString = 'page_view' |
     'calculator-CA-system-capacity' |
 
     'calculator-FAN-analysis' |
+    'calculator-FAN-affinity-law' |
     'calculator-FAN-efficiency' |
     'calculator-FAN-system-checklist' |
 

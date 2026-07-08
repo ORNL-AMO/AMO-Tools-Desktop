@@ -332,6 +332,12 @@ export const routeSeoMetadata: Record<string, SeoConfig> = {
     canonicalPath: '/calculators/fan-psychrometric',
     keywords: `${SHARED_KEYWORDS}, psychrometric calculator, air density calculator, humidity enthalpy calculator, fan air properties`,
   },
+  '/calculators/fan-affinity-law': {
+    title: 'Fan Affinity Law Calculator',
+    description: 'Analyze the effects of changes in fan speed, impeller diameter, and other parameters on fan performance using the fan affinity laws.',
+    canonicalPath: '/calculators/fan-affinity-law',
+    keywords: `${SHARED_KEYWORDS}, fan affinity law calculator, fan performance analysis, fan speed vs flow, impeller sizing`,
+  },
 
   // ── Lighting Calculators ─────────────────────────────────────────────────
   '/calculators/lighting-replacement': {

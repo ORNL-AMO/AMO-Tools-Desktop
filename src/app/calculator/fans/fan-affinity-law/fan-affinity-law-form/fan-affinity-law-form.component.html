@@ -1,0 +1,264 @@
+<div class="mb-4 p-2 form-card">
+  <form [formGroup]="fanAffinityLawForm">
+
+    <ng-container *ngIf="isBaseline">
+      <div class="form-section">
+        <div class="form-group">
+          <label class="small" for="hoursOperation">Operating Hours</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="hoursOperation" id="hoursOperation"
+              formControlName="hoursOperation" (input)="emitCalculate()" (focus)="focusField('hoursOperation')"
+              onfocus="this.select();">
+            <span class="units input-group-addon">hr</span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.hoursOperation.invalid && !fanAffinityLawForm.controls.hoursOperation.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.max">Value can't be greater than
+              {{fanAffinityLawForm.controls.hoursOperation.errors.max.max}}.</span>
+            <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.hoursOperation.errors.greaterThan}}.</span>
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="electricalRate">Electricity Cost</label>
+          <div class="input-group">
+            <input class="form-control" type="number" step="0.01" name="electricalRate" id="electricalRate"
+              formControlName="electricalRate" (input)="emitCalculate()" (focus)="focusField('electricalRate')"
+              onfocus="this.select();">
+            <span class="units input-group-addon">$/kWh</span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.electricalRate.invalid && !fanAffinityLawForm.controls.electricalRate.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.electricalRate.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.electricalRate.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.electricalRate.errors.greaterThan}}.</span>
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="powerMotor">Motor Power</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="powerMotor" id="powerMotor" formControlName="powerMotor"
+              (input)="emitCalculate()" (focus)="focusField('powerMotor')" onfocus="this.select();">
+            <span class="input-group-addon units">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+            </span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.powerMotor.invalid && !fanAffinityLawForm.controls.powerMotor.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.powerMotor.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.powerMotor.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.powerMotor.errors.greaterThan}}.</span>
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="efficiencyMotor">Motor Efficiency</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="efficiencyMotor" id="efficiencyMotor"
+              formControlName="efficiencyMotor" (input)="emitCalculate()" (focus)="focusField('efficiencyMotor')"
+              onfocus="this.select();">
+            <span class="units input-group-addon">%</span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.efficiencyMotor.invalid && !fanAffinityLawForm.controls.efficiencyMotor.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.max">Value can't be greater than
+              {{fanAffinityLawForm.controls.efficiencyMotor.errors.max.max}}.</span>
+            <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.efficiencyMotor.errors.greaterThan}}.</span>
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="efficiencyDrive">Drive Efficiency</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="efficiencyDrive" id="efficiencyDrive"
+              formControlName="efficiencyDrive" (input)="emitCalculate()" (focus)="focusField('efficiencyDrive')"
+              onfocus="this.select();">
+            <span class="units input-group-addon">%</span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.efficiencyDrive.invalid && !fanAffinityLawForm.controls.efficiencyDrive.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.max">Value can't be greater than
+              {{fanAffinityLawForm.controls.efficiencyDrive.errors.max.max}}.</span>
+            <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.efficiencyDrive.errors.greaterThan}}.</span>
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="ratedFlow">Rated Flow</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="ratedFlow" id="ratedFlow" formControlName="ratedFlow"
+              (input)="emitCalculate()" (focus)="focusField('ratedFlow')" onfocus="this.select();">
+            <span class="input-group-addon units">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">CFM</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/s</span>
+            </span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.ratedFlow.invalid && !fanAffinityLawForm.controls.ratedFlow.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.ratedFlow.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.ratedFlow.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.ratedFlow.errors.greaterThan}}.</span>
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label class="small" for="motorControlTypeCurrent">Current Motor Control</label>
+          <div class="input-group">
+            <select class="form-control" name="motorControlTypeCurrent" id="motorControlTypeCurrent"
+              formControlName="motorControlTypeCurrent" (change)="onCurrentControlChange()"
+              (focus)="focusField('motorControlTypeCurrent')">
+              <option *ngFor="let option of currentMotorControlOptions" [ngValue]="option.value">{{option.display}}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="fanAffinityLawForm.controls.motorControlTypeCurrent.value !== 0">
+          <label class="small" for="actualFlow">Actual Flow</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="actualFlow" id="actualFlow" formControlName="actualFlow"
+              (input)="emitCalculate()" (focus)="focusField('actualFlow')" onfocus="this.select();">
+            <span class="input-group-addon units">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">CFM</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/s</span>
+            </span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.actualFlow.invalid && !fanAffinityLawForm.controls.actualFlow.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.actualFlow.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.actualFlow.errors.greaterThan}}.</span>
+          </span>
+        </div>
+        <p class="small text-muted" *ngIf="fanAffinityLawForm.controls.motorControlTypeCurrent.value === 0">
+          Actual Flow doesn't apply to On/Off control &mdash; an On/Off fan always draws full rated power while running.
+        </p>
+
+        <div class="form-group">
+          <label class="small" for="diameterFan">Fan Diameter</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="diameterFan" id="diameterFan" formControlName="diameterFan"
+              (input)="refreshValidators()" (focus)="focusField('diameterFan')" onfocus="this.select();">
+            <span class="input-group-addon units">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Imperial'">cm</span>
+            </span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.diameterFan.invalid && !fanAffinityLawForm.controls.diameterFan.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.diameterFan.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.diameterFan.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.diameterFan.errors.greaterThan}}.</span>
+          </span>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!isBaseline">
+      <div class="form-section">
+        <div class="form-group">
+          <label class="small" for="motorControlTypeNew">New Motor Control</label>
+          <div class="input-group">
+            <select class="form-control" name="motorControlTypeNew" id="motorControlTypeNew"
+              formControlName="motorControlTypeNew" (change)="emitCalculate()"
+              (focus)="focusField('motorControlTypeNew')">
+              <option *ngFor="let option of newMotorControlOptions" [ngValue]="option.value">{{option.display}}</option>
+            </select>
+          </div>
+        </div>
+
+        <ng-container *ngIf="fanAffinityLawForm.controls.motorControlTypeNew.value !== 3">
+          <div class="form-group">
+            <label class="small" for="flowMode">Desired Flow Mode</label>
+            <div class="input-group">
+              <select class="form-control" name="flowMode" id="flowMode" formControlName="flowMode"
+                (change)="emitCalculate()" (focus)="focusField('flowMode')">
+                <option *ngFor="let option of flowModeOptions" [ngValue]="option.value">{{option.display}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="fanAffinityLawForm.controls.flowMode.value === 1">
+            <label class="small" for="desiredFlowVolume">Desired Flow Rate</label>
+            <div class="input-group">
+              <input class="form-control" type="number" name="desiredFlowVolume" id="desiredFlowVolume"
+                formControlName="desiredFlowVolume" (input)="emitCalculate()" (focus)="focusField('desiredFlowVolume')"
+                onfocus="this.select();">
+              <span class="input-group-addon units">
+                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">CFM</span>
+                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/s</span>
+              </span>
+            </div>
+            <span class="alert-danger pull-right small"
+              *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.invalid && !fanAffinityLawForm.controls.desiredFlowVolume.pristine">
+              <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.required">Value required.</span>
+              <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.min">Value can't be less than
+                {{fanAffinityLawForm.controls.desiredFlowVolume.errors.min.min}}.</span>
+            </span>
+          </div>
+
+          <div class="form-group" *ngIf="fanAffinityLawForm.controls.flowMode.value !== 1">
+            <label class="small" for="desiredFlowPercent">Desired Flow Rate</label>
+            <div class="input-group">
+              <input class="form-control" type="number" name="desiredFlowPercent" id="desiredFlowPercent"
+                formControlName="desiredFlowPercent" (input)="emitCalculate()" (focus)="focusField('desiredFlowPercent')"
+                onfocus="this.select();">
+              <span class="units input-group-addon">%</span>
+            </div>
+            <span class="alert-danger pull-right small"
+              *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.invalid && !fanAffinityLawForm.controls.desiredFlowPercent.pristine">
+              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.required">Value required.</span>
+              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.max">Value can't be greater than
+                {{fanAffinityLawForm.controls.desiredFlowPercent.errors.max.max}}.</span>
+              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.min">Value can't be less than
+                {{fanAffinityLawForm.controls.desiredFlowPercent.errors.min.min}}.</span>
+            </span>
+          </div>
+        </ng-container>
+
+        <div class="form-group">
+          <label class="small" for="changeFanSize">Change Fan Size</label>
+          <div class="input-group">
+            <select class="form-control" name="changeFanSize" id="changeFanSize" formControlName="changeFanSize"
+              (change)="refreshValidators()" (focus)="focusField('changeFanSize')">
+              <option [ngValue]="false">No</option>
+              <option [ngValue]="true">Yes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="fanAffinityLawForm.controls.changeFanSize.value">
+          <label class="small" for="diameterFanNew">New Fan Diameter</label>
+          <div class="input-group">
+            <input class="form-control" type="number" name="diameterFanNew" id="diameterFanNew"
+              formControlName="diameterFanNew" (input)="emitCalculate()" (focus)="focusField('diameterFanNew')"
+              onfocus="this.select();">
+            <span class="input-group-addon units">
+              <span *ngIf="settings.unitsOfMeasure == 'Imperial'">in</span>
+              <span *ngIf="settings.unitsOfMeasure != 'Imperial'">cm</span>
+            </span>
+          </div>
+          <span class="alert-danger pull-right small"
+            *ngIf="fanAffinityLawForm.controls.diameterFanNew.invalid && !fanAffinityLawForm.controls.diameterFanNew.pristine">
+            <span *ngIf="fanAffinityLawForm.controls.diameterFanNew.errors.required">Value required.</span>
+            <span *ngIf="fanAffinityLawForm.controls.diameterFanNew.errors.greaterThan != null">Value must be greater than
+              {{fanAffinityLawForm.controls.diameterFanNew.errors.greaterThan}}.</span>
+          </span>
+        </div>
+
+        <p class="small text-muted"
+          *ngIf="fanAffinityLawForm.controls.motorControlTypeNew.value === 3 && !fanAffinityLawForm.controls.changeFanSize.value">
+          With New Motor Control set to N/A and no fan size change, nothing is being modified &mdash; results will show no savings.
+        </p>
+      </div>
+    </ng-container>
+
+  </form>
+</div>
