@@ -1,7 +1,7 @@
 // (TowerForm and methods moved into class below)
 import { inject, Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl, ValidatorFn } from '@angular/forms';
-import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, TowerType, AirCoolingSource, TowerSizeMetric } from '../../shared/models/process-cooling-assessment';
+import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, TowerType, AirCoolingSource, TowerSizeMetric, FanType } from '../../shared/models/process-cooling-assessment';
 import { PROCESS_COOLING_VALIDATION } from '../constants/process-cooling-validation-rules';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 import { Settings } from '../../shared/models/settings';
@@ -310,6 +310,7 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
       ]],
       fanSpeedType: [input.fanSpeedType],
       towerSizeMetric: [input.towerSizeMetric],
+      isFanTypeKnown: [input.isFanTypeKnown ?? true],
       fanType: [input.fanType],
       towerSize: [input.towerSize, towerSizeValidators],
     });
@@ -362,6 +363,7 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     return {
       ...currentInput,
       ...formValue,
+      fanType: formValue.isFanTypeKnown ? formValue.fanType : FanType.Axial,
     };
   }
 
@@ -437,6 +439,7 @@ export interface TowerForm {
   numberOfFans: FormControl<number>;
   fanSpeedType: FormControl<number>;
   towerSizeMetric: FormControl<number>;
+  isFanTypeKnown: FormControl<boolean>;
   fanType: FormControl<number>;
   towerSize: FormControl<number>;
 }

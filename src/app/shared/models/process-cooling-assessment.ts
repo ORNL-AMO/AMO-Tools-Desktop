@@ -333,6 +333,7 @@ export interface WaterCooledSystemInput {
      * @property numberOfFans - numFanPerTower_Cells integer, # Cells (1, 2, 3)
      * @property fanSpeedType Enumeration FanMotorSpeedType
      * @property towerSizeMetric - towerSizing Enumeration TowerSizedBy, sized by tonnage or fan hp
+     * @property isFanTypeKnown boolean
      * @property fanType - towerCellFanType Enumeration CellFanType
      * @property towerSize - (redundant fields) cellFanHP double, units hp, 1 -100 hp
      * @property towerSize - (redundant fields) tonnage double, units ton, 20 - 3000
@@ -340,15 +341,16 @@ export interface WaterCooledSystemInput {
 export interface TowerInput {
     usesFreeCooling: boolean;
     isHEXRequired: boolean;
-    HEXApproachTemp: number;  
+    HEXApproachTemp: number;
     numberOfTowers: number;
     towerType: number;
-    // * set by towerType choice - number of cells/fans 
+    // * set by towerType choice - number of cells/fans
     // * - unless variable, then user sets this value
-    numberOfFans: number; 
+    numberOfFans: number;
     fanSpeedType: number; // * set by towerType choice - 1 = Two Speed, 2 = Variable Speed
-    towerSizeMetric: number; 
-    fanType: number; 
+    towerSizeMetric: number;
+    isFanTypeKnown: boolean;
+    fanType: number;
     towerSize: number;
 }
 

@@ -186,11 +186,12 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
              towerInput: {
               usesFreeCooling: true,
               isHEXRequired: false,
-              HEXApproachTemp: 0, 
+              HEXApproachTemp: 0,
               numberOfTowers: 1,
               numberOfFans: 1,
               fanSpeedType: 0,
               towerSizeMetric: 0,
+              isFanTypeKnown: true,
               fanType: 0,
               towerSize: 78,
               towerType: TowerType.OneCellOneSpeed
