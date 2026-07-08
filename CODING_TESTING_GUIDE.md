@@ -1,9 +1,9 @@
-# MEASUR Coding Test Guide
+# MEASUR Coding Testing Guide
 
-This guide describes ideal practices for testing components across MEASUR. It is intended as a template for understanding what to prioritize when describing a testing block for a component set. The goal is for coverage of user action progressions through the forms, testing failure points where problems or niche entries can cause issues for them.
+This guide describes ideal practices for testing components across MEASUR. It is intended as a template for understanding what to prioritize when describing a testing block for a component set. The goal is to cover user action progressions through the forms, testing failure points where problems or niche entries can cause issues for users.
 
 ## Usage Examples
-For details on existing patterns and isage examples, contributors may reference code first in the `process-cooling-assessment` module.
+For details on existing patterns and usage examples, contributors may first reference the code in the `process-cooling-assessment` module.
 
 ## General Principles
 
