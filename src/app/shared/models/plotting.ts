@@ -92,8 +92,9 @@ export interface AxisObj {
 }
 
 export interface TraceData {
-    x: Array<number | string>,
-    y: Array<number | string>,
+    // x/y are required for scatter/bar/line traces; optional for pie/sankey traces
+    x?: Array<number | string>,
+    y?: Array<number | string>,
     type: string,
     name?: string,
     id?: string,
@@ -102,8 +103,8 @@ export interface TraceData {
     hovertemplate?: string,
     textposition?: string,
     customdata?: Array<number | string>,
-    xaxis?: any,
-    yaxis?: any,
+    xaxis?: string,
+    yaxis?: string,
     fill?: string,
     fillcolor?: string,
     mode?: string,
@@ -115,6 +116,7 @@ export interface TraceData {
     text?: string[],
     marker?: {
         color?: string | Array<string>,
+        colors?: Array<string>,
         opacity?: number,
         line?: {
             color: string,
@@ -137,7 +139,15 @@ export interface TraceData {
         dash?: string,
         smoothing?: number
         width?: number
-    }
+    },
+    // Pie chart fields
+    values?: Array<number>,
+    labels?: Array<string>,
+    domain?: { x: [number, number]; y: [number, number] },
+    direction?: string,
+    rotation?: number,
+    textinfo?: string,
+    title?: { text: string; font?: { size?: number } },
 }
 
 export interface TraceCoordinates {
