@@ -118,11 +118,8 @@ export class SystemInformationFormService {
         Validators.min(PROCESS_COOLING_VALIDATION.efficiency.min),
         Validators.max(PROCESS_COOLING_VALIDATION.efficiency.max)
       ]],
-      motorSize: [pumpInput.motorSize, [
-        Validators.required,
-        Validators.min(PROCESS_COOLING_VALIDATION.motorSize.min),
-        Validators.max(PROCESS_COOLING_VALIDATION.motorSize.max)
-      ]],
+      isMotorSizeKnown: [pumpInput.isMotorSizeKnown ?? true],
+      motorSize: [pumpInput.motorSize, this.getMotorSizeValidators(pumpInput.isMotorSizeKnown ?? true)],
       motorEfficiency: [pumpInput.motorEfficiency, [
         Validators.required,
         Validators.min(PROCESS_COOLING_VALIDATION.motorEfficiency.min),
@@ -135,7 +132,19 @@ export class SystemInformationFormService {
     return {
       ...currentPumpInput,
       ...formValue,
+      motorSize: formValue.isMotorSizeKnown ? formValue.motorSize : 0,
     };
+  }
+
+  getMotorSizeValidators(isMotorSizeKnown: boolean): ValidatorFn[] {
+    if (!isMotorSizeKnown) {
+      return [];
+    }
+    return [
+      Validators.required,
+      Validators.min(PROCESS_COOLING_VALIDATION.motorSize.min),
+      Validators.max(PROCESS_COOLING_VALIDATION.motorSize.max)
+    ];
   }
 
   getAirCooledSystemInputForm(input: AirCooledSystemInput, settings: Settings): FormGroup<AirCooledSystemInputForm> {
@@ -446,6 +455,7 @@ export interface PumpInputForm {
   variableFlow: FormControl<boolean>;
   flowRate: FormControl<number>;
   efficiency: FormControl<number>;
+  isMotorSizeKnown: FormControl<boolean>;
   motorSize: FormControl<number>;
   motorEfficiency: FormControl<number>;
 }

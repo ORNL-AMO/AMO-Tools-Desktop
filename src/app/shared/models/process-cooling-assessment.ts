@@ -361,13 +361,15 @@ export interface TowerInput {
      * @property variableFlow boolean
      * @property flowRate double, units gpm/ton
      * @property efficiency double, percentage as fraction
+     * @property isMotorSizeKnown boolean
      * @property motorSize double, units hp
      * @property motorEfficiency double, percentage as fraction
      */
 export interface PumpInput {
     variableFlow: boolean;
     flowRate: number;
-    efficiency: number; 
+    efficiency: number;
+    isMotorSizeKnown: boolean;
     motorSize: number;
     motorEfficiency: number;
 }

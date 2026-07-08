@@ -60,6 +60,19 @@
 </div>
 }
 
+@if (focusedField() == 'isMotorSizeKnown') {
+<div class="my-2">
+    <h6>
+        Is Motor Size Known?
+        <br>
+        <small class="text-muted">
+            If motor size is not known, the pumping energy will be calculated based on chiller capacity and the chilled water and condenser water flow rates, instead.  
+            <hr>
+        </small>
+    </h6>
+</div>
+}
+
 @if (focusedField() == 'motorSize') {
 <div class="my-2">
     <h6>

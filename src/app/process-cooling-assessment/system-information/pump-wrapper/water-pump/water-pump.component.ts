@@ -39,6 +39,7 @@ export class WaterPumpComponent {
       this.form = this.systemInformationFormService.getPumpInputForm(pumpInput, this.settings());
       this.controlIds = generateFormControlIds(this.form.controls);
       this.observeFormChanges();
+      this.observeIsMotorSizeKnownChanges();
     });
   }
 
@@ -51,6 +52,20 @@ export class WaterPumpComponent {
         const currentPumpInput = processCooling?.systemInformation[this.pumpFormType()];
         const pumpInput = this.systemInformationFormService.getPumpInput(formValue, currentPumpInput);
         this.processCoolingAssessmentService.updateSystemInformationProperty(this.pumpFormType(), pumpInput);
+      }
+    );
+  }
+
+  observeIsMotorSizeKnownChanges() {
+    this.isMotorSizeKnown.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (isKnown) => {
+        this.motorSize.setValidators(this.systemInformationFormService.getMotorSizeValidators(isKnown));
+        if (!isKnown) {
+          this.motorSize.setValue(0);
+        }
+        this.motorSize.updateValueAndValidity();
       }
     );
   }
@@ -69,6 +84,10 @@ export class WaterPumpComponent {
 
   get efficiency() {
     return this.form.get('efficiency');
+  }
+
+  get isMotorSizeKnown() {
+    return this.form.get('isMotorSizeKnown');
   }
 
   get motorSize() {
