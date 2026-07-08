@@ -7,34 +7,27 @@ import { SystemInformationFormService, TowerForm } from '../system-information-f
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
 import { TowerInput, TowerType, TowerSizeMetric } from '../../../shared/models/process-cooling-assessment';
 import { Settings } from '../../../shared/models/settings';
-
-const MOCK_TOWER_INPUT: TowerInput = {
-  usesFreeCooling: false,
-  isHEXRequired: false,
-  HEXApproachTemp: 0,
-  numberOfTowers: 1,
-  towerType: 0,
-  numberOfFans: 1,
-  fanSpeedType: 0,
-  towerSizeMetric: 0,
-  fanType: 0,
-  towerSize: 1000,
-};
+import { getDefaultProcessCoolingAssessment } from '../../constants/process-cooling-constants';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', powerMeasurement: 'kW' } as Settings;
 
+const MOCK_TOWER_INPUT: TowerInput = {
+  ...getDefaultProcessCoolingAssessment(MOCK_SETTINGS).systemInformation.towerInput,
+  usesFreeCooling: false, // start collapsed so the hidden-state template tests exercise the initial branch
+};
+
 function makeTowerForm(): FormGroup<TowerForm> {
   return new FormGroup<TowerForm>({
-    usesFreeCooling: new FormControl<boolean>(false, { nonNullable: true }),
-    isHEXRequired: new FormControl<boolean>(false, { nonNullable: true }),
-    HEXApproachTemp: new FormControl<number>(0, { nonNullable: true }),
-    numberOfTowers: new FormControl<number>(1, { nonNullable: true }),
-    towerType: new FormControl<number | null>(0),
-    numberOfFans: new FormControl<number>(1, { nonNullable: true }),
-    fanSpeedType: new FormControl<number>(0, { nonNullable: true }),
-    towerSizeMetric: new FormControl<number>(0, { nonNullable: true }),
-    fanType: new FormControl<number>(0, { nonNullable: true }),
-    towerSize: new FormControl<number>(1000, { nonNullable: true }),
+    usesFreeCooling: new FormControl<boolean>(MOCK_TOWER_INPUT.usesFreeCooling, { nonNullable: true }),
+    isHEXRequired: new FormControl<boolean>(MOCK_TOWER_INPUT.isHEXRequired, { nonNullable: true }),
+    HEXApproachTemp: new FormControl<number>(MOCK_TOWER_INPUT.HEXApproachTemp, { nonNullable: true }),
+    numberOfTowers: new FormControl<number>(MOCK_TOWER_INPUT.numberOfTowers, { nonNullable: true }),
+    towerType: new FormControl<number | null>(MOCK_TOWER_INPUT.towerType),
+    numberOfFans: new FormControl<number>(MOCK_TOWER_INPUT.numberOfFans, { nonNullable: true }),
+    fanSpeedType: new FormControl<number>(MOCK_TOWER_INPUT.fanSpeedType, { nonNullable: true }),
+    towerSizeMetric: new FormControl<number>(MOCK_TOWER_INPUT.towerSizeMetric, { nonNullable: true }),
+    fanType: new FormControl<number>(MOCK_TOWER_INPUT.fanType, { nonNullable: true }),
+    towerSize: new FormControl<number>(MOCK_TOWER_INPUT.towerSize, { nonNullable: true }),
   });
 }
 
