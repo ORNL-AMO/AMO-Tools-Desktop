@@ -1,0 +1,32 @@
+<table #copyTable class="table table-hover table-striped">
+  <tbody>
+    <tr>
+      <td></td>
+      <td class="bold text-center">Current</td>
+      <td class="bold text-center">New</td>
+    </tr>
+    <tr>
+      <td class="bold">Annual Energy Use</td>
+      <td class="text-center">{{fanAffinityLawResults?.annualEnergyBaseline | number:'1.0-0'}}
+        <span> kWh/yr</span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span *ngIf="modificationExists">{{fanAffinityLawResults?.annualEnergyNew | number:'1.0-0'}}
+          <span> kWh/yr</span>
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <td class="bold">Annual Cost Savings</td>
+      <td class="text-center" colspan="2">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span *ngIf="modificationExists">
+          {{fanAffinityLawResults?.annualCostSavings | currency: 'USD': 'symbol' : '1.0-0'}}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<app-exportable-results-table *ngIf="modificationExists" [tableString]="tableString"
+  (updateTableString)="updateTableString()"></app-exportable-results-table>

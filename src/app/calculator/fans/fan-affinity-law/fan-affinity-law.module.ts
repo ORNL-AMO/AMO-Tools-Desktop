@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FanAffinityLawComponent } from './fan-affinity-law.component';
 import { FanAffinityLawFormComponent } from './fan-affinity-law-form/fan-affinity-law-form.component';
 import { FanAffinityLawHelpComponent } from './fan-affinity-law-help/fan-affinity-law-help.component';
+import { FanAffinityLawResultsComponent } from './fan-affinity-law-results/fan-affinity-law-results.component';
 import { FanAffinityLawService } from './fan-affinity-law.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 
@@ -11,7 +12,8 @@ import { ExportableResultsTableModule } from '../../../shared/exportable-results
   declarations: [
     FanAffinityLawComponent,
     FanAffinityLawFormComponent,
-    FanAffinityLawHelpComponent
+    FanAffinityLawHelpComponent,
+    FanAffinityLawResultsComponent
   ],
   imports: [
     CommonModule,
