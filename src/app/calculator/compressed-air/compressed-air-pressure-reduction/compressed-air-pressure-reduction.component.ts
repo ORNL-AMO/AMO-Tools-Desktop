@@ -126,7 +126,7 @@ export class CompressedAirPressureReductionComponent implements OnInit {
         this.modificationExists = true;
       }
     }
-  }
+  }                                                                                                                                                                                                                                                                                           
 
   addBaselineEquipment() {
     let tmpObj: CompressedAirPressureReductionData = this.compressedAirPressureReductionService.initObject(this.baselineData.length, this.settings, true, this.operatingHours);

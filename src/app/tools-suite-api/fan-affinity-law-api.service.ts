@@ -29,18 +29,22 @@ export class FanAffinityLawApiService {
   }
 
   private buildInstance(inputData: FanAffinityLawsInput): any {
+    const desiredFlowRate: number = (inputData.flowMode === 1) ? inputData.desiredFlowVolume : inputData.desiredFlowPercent;
+    // clamped defensively: the wasm constructor throws if flowPercentBaseline is outside 0-100,
+    // which actualFlow > ratedFlow would otherwise trigger
+    const flowPercentBaseline: number = Math.min(100, Math.max(0, (inputData.actualFlow / inputData.ratedFlow) * 100));
     const wasmInput = {
-      electricityCost: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.electricityCost),
-      driveEfficiency: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.driveEfficiency),
-      motorEfficiency: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.motorEfficiency),
-      flowPercentBaseline: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.flowPercentBaseline),
-      operatingHours: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.operatingHours),
-      motorPower: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.motorPower),
+      electricityCost: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.electricalRate),
+      driveEfficiency: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.efficiencyDrive),
+      motorEfficiency: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.efficiencyMotor),
+      flowPercentBaseline: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(flowPercentBaseline),
+      operatingHours: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.hoursOperation),
+      motorPower: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerMotor),
       ratedFlow: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.ratedFlow),
       motorControlTypeCurrent: this.getMotorControlTypeEnum(inputData.motorControlTypeCurrent),
       motorControlTypeNew: this.getMotorControlTypeEnum(inputData.motorControlTypeNew),
       flowMode: this.getFlowModeEnum(inputData.flowMode),
-      desiredFlowRate: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.desiredFlowRate),
+      desiredFlowRate: this.suiteApiHelperService.convertNullInputValueForObjectConstructor(desiredFlowRate),
     };
     return new this.toolsSuiteApiService.ToolsSuiteModule.FanAffinityLaws(wasmInput);
   }
