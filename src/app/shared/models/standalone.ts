@@ -792,9 +792,41 @@ export interface FanAffinityLawsInput {
   efficiencyDrive: number;
 }
 
+export type FanAffinityLawsScenario = 'vsd' | 'twoSpeed' | 'changeFanSize' | 'vsdChangeFanSize' | 'twoSpeedChangeFanSize' | 'none';
+
 export interface FanAffinityLawsOutput {
   annualEnergyBaseline: number;
   annualEnergyNew: number;
   annualCostSavings: number;
+  scenario?: FanAffinityLawsScenario;
+  ratedFlow?: number;
+  baselinePower?: number;
+  baselineFlowPercent?: number;
+  baselineTimeAbove50Percent?: number;
+  baselineTimeAt0Percent?: number;
+  baselineTimeAt50Percent?: number;
+  desiredFlowPercent?: number;
+  desiredFlowVolume?: number;
+  timeAbove50Percent?: number;
+  timeAt0Percent?: number;
+  timeAt50Percent?: number;
+  fanDiameterRatio?: number;
+  newFanRatedFlow?: number;
+  newFlowPercent?: number;
+  newPower?: number;
 }
 //===== END fan affinity law objects =====
+
+
+    // <tr>
+    //   <td class="bold">Annual Energy Use</td>
+    //   <td class="text-center">{{fanAffinityLawResults?.annualEnergyBaseline | number:'1.0-0'}}
+    //     <span> kWh/yr</span>
+    //   </td>
+    //   <td class="text-center">
+    //     <span *ngIf="!modificationExists">&mdash;</span>
+    //     <span *ngIf="modificationExists">{{fanAffinityLawResults?.annualEnergyNew | number:'1.0-0'}}
+    //       <span> kWh/yr</span>
+    //     </span>
+    //   </td>
+    // </tr>

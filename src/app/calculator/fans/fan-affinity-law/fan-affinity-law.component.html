@@ -21,12 +21,8 @@
   </div>
 
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
-    <div class="nav-item" (click)="setSmallScreenTab('baseline')" [ngClass]="{'small-screen-active': smallScreenTab === 'baseline'}">
-      <a class="nav-link">Current</a>
-    </div>
-    <div class="nav-item" (click)="setSmallScreenTab('modification')"
-      [ngClass]="{'small-screen-active': smallScreenTab === 'modification'}">
-      <a class="nav-link">New</a>
+    <div class="nav-item" (click)="setSmallScreenTab('form')" [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+      <a class="nav-link">Fan Affinity Data</a>
     </div>
     <div class="nav-item" (click)="setSmallScreenTab('details')" [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
       <a class="nav-link">Details</a>
@@ -34,53 +30,177 @@
   </div>
 
   <div class="panel-group" [ngStyle]="{'height.px': containerHeight}">
-    <div class="calculator-panel-container modification baseline" [ngClass]="{'small-screen-tab': smallScreenTab === 'baseline'}"
-      [ngStyle]="{'height.px': containerHeight}" (click)="setBaselineSelected()">
-      <div class="header mx-2 mb-4">
-        <h3>Baseline</h3>
-      </div>
+    <div class="calculator-panel-container modification" [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}"
+      [ngStyle]="{'height.px': containerHeight}">
+      <div class="d-flex flex-column m-2">
 
-      <div class="d-flex flex-column mx-4 mb-4">
-        <app-fan-affinity-law-form [fanAffinityLawForm]="fanAffinityLawForm" [settings]="settings" [isBaseline]="true"
-          (emitChange)="changeField($event)" (calculate)="getResults()"></app-fan-affinity-law-form>
+        <!-- Characteristics -->
+        <div class="d-block d-lg-flex flex-direction-column">
+          <div class="col-12 mb-4">
+            <form [formGroup]="fanAffinityLawForm">
+              <label class="group-label my-1">
+                Characteristics
+              </label>
 
-        <div class="w-100 justify content-center btn-group btn-group-sm">
-          <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active" (click)="btnResetData()">
-            Reset Data
-          </button>
-          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
-            Generate Example
-          </button>
+              <div class="d-block d-lg-flex">
+                <div class="col-12 col-lg-6">
+                  <div class="form-group">
+                    <label class="small" for="hoursOperation">Operating Hours</label>
+                    <div class="input-group">
+                      <input class="form-control" type="number" name="hoursOperation" id="hoursOperation"
+                        formControlName="hoursOperation" (input)="getResults()" (focus)="changeField('hoursOperation')"
+                        onfocus="this.select();">
+                      <span class="units input-group-addon">hr</span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                      *ngIf="fanAffinityLawForm.controls.hoursOperation.invalid && !fanAffinityLawForm.controls.hoursOperation.pristine">
+                      <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.required">Value required.</span>
+                      <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.max">Value can't be greater than
+                        {{fanAffinityLawForm.controls.hoursOperation.errors.max.max}}.</span>
+                      <span *ngIf="fanAffinityLawForm.controls.hoursOperation.errors.greaterThan != null">Value must be greater than
+                        {{fanAffinityLawForm.controls.hoursOperation.errors.greaterThan}}.</span>
+                    </span>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="small" for="electricalRate">Electricity Cost</label>
+                    <div class="input-group">
+                      <input class="form-control" type="number" step="0.01" name="electricalRate" id="electricalRate"
+                        formControlName="electricalRate" (input)="getResults()" (focus)="changeField('electricalRate')"
+                        onfocus="this.select();">
+                      <span class="units input-group-addon">$/kWh</span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                      *ngIf="fanAffinityLawForm.controls.electricalRate.invalid && !fanAffinityLawForm.controls.electricalRate.pristine">
+                      <span *ngIf="fanAffinityLawForm.controls.electricalRate.errors.required">Value required.</span>
+                      <span *ngIf="fanAffinityLawForm.controls.electricalRate.errors.greaterThan != null">Value must be greater than
+                        {{fanAffinityLawForm.controls.electricalRate.errors.greaterThan}}.</span>
+                    </span>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="small" for="changeFanSize">Change Fan Size</label>
+                    <div class="input-group">
+                      <select class="form-control" name="changeFanSize" id="changeFanSize" formControlName="changeFanSize"
+                        (change)="refreshValidators()" (focus)="changeField('changeFanSize')">
+                        <option [ngValue]="false">No</option>
+                        <option [ngValue]="true">Yes</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-lg-6">
+                  <div class="form-group">
+                    <label class="small" for="powerMotor">Motor Power</label>
+                    <div class="input-group">
+                      <input class="form-control" type="number" name="powerMotor" id="powerMotor" formControlName="powerMotor"
+                        (input)="getResults()" (focus)="changeField('powerMotor')" onfocus="this.select();">
+                      <span class="input-group-addon units">
+                        <span *ngIf="settings.unitsOfMeasure == 'Imperial'">hp</span>
+                        <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kW</span>
+                      </span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                      *ngIf="fanAffinityLawForm.controls.powerMotor.invalid && !fanAffinityLawForm.controls.powerMotor.pristine">
+                      <span *ngIf="fanAffinityLawForm.controls.powerMotor.errors.required">Value required.</span>
+                      <span *ngIf="fanAffinityLawForm.controls.powerMotor.errors.greaterThan != null">Value must be greater than
+                        {{fanAffinityLawForm.controls.powerMotor.errors.greaterThan}}.</span>
+                    </span>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="small" for="efficiencyMotor">Motor Efficiency</label>
+                    <div class="input-group">
+                      <input class="form-control" type="number" name="efficiencyMotor" id="efficiencyMotor"
+                        formControlName="efficiencyMotor" (input)="getResults()" (focus)="changeField('efficiencyMotor')"
+                        onfocus="this.select();">
+                      <span class="units input-group-addon">%</span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                      *ngIf="fanAffinityLawForm.controls.efficiencyMotor.invalid && !fanAffinityLawForm.controls.efficiencyMotor.pristine">
+                      <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.required">Value required.</span>
+                      <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.max">Value can't be greater than
+                        {{fanAffinityLawForm.controls.efficiencyMotor.errors.max.max}}.</span>
+                      <span *ngIf="fanAffinityLawForm.controls.efficiencyMotor.errors.greaterThan != null">Value must be greater than
+                        {{fanAffinityLawForm.controls.efficiencyMotor.errors.greaterThan}}.</span>
+                    </span>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="small" for="efficiencyDrive">Drive Efficiency</label>
+                    <div class="input-group">
+                      <input class="form-control" type="number" name="efficiencyDrive" id="efficiencyDrive"
+                        formControlName="efficiencyDrive" (input)="getResults()" (focus)="changeField('efficiencyDrive')"
+                        onfocus="this.select();">
+                      <span class="units input-group-addon">%</span>
+                    </div>
+                    <span class="alert-danger pull-right small"
+                      *ngIf="fanAffinityLawForm.controls.efficiencyDrive.invalid && !fanAffinityLawForm.controls.efficiencyDrive.pristine">
+                      <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.required">Value required.</span>
+                      <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.max">Value can't be greater than
+                        {{fanAffinityLawForm.controls.efficiencyDrive.errors.max.max}}.</span>
+                      <span *ngIf="fanAffinityLawForm.controls.efficiencyDrive.errors.greaterThan != null">Value must be greater than
+                        {{fanAffinityLawForm.controls.efficiencyDrive.errors.greaterThan}}.</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
+
+        <div class="w-100 header mx-2 mb-4">
+          <h3>Baseline &amp; Modification</h3>
+        </div>
+
+        <div class="d-block d-lg-flex w-100">
+
+          <!-- Baseline -->
+          <div class="col-12 col-lg-6 mb-4">
+            <label class="group-label my-1">
+              Baseline
+            </label>
+            <app-fan-affinity-law-form [fanAffinityLawForm]="fanAffinityLawForm" [settings]="settings" [isBaseline]="true"
+              (emitChange)="changeField($event)" (calculate)="getResults()"></app-fan-affinity-law-form>
+
+            <div class="w-100 justify content-center btn-group btn-group-sm">
+              <button type="button" class="btn btn-danger pull-right btn-sm btn-margin-10 active" (click)="btnResetData()">
+                Reset Data
+              </button>
+              <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">
+                Generate Example
+              </button>
+            </div>
+          </div>
+
+          <!-- Modification -->
+          <div class="col-12 col-lg-6 mb-4">
+            <ng-container *ngIf="modificationExists">
+              <label class="group-label my-1">
+                Modification
+              </label>
+              <app-fan-affinity-law-form [fanAffinityLawForm]="fanAffinityLawForm" [settings]="settings" [isBaseline]="false"
+                (emitChange)="changeField($event)" (calculate)="getResults()"></app-fan-affinity-law-form>
+            </ng-container>
+
+            <div *ngIf="!modificationExists">
+              <label class="group-label my-1">
+                Modification
+              </label>
+              <div class="p-3 no-data">
+                <h3>Once you have set up your baseline..</h3>
+                <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
+                  Condition</button>
+                <p>Set the new/modified conditions to compare against your current baseline.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
     </div>
-
-    <div class="calculator-panel-container modification" [ngClass]="{'small-screen-tab': smallScreenTab === 'modification'}"
-      [ngStyle]="{'height.px': containerHeight}" (click)="setModificationSelected()">
-      <ng-container *ngIf="modificationExists">
-        <div class="header mx-2 mb-4">
-          <h3>Modification</h3>
-        </div>
-
-        <div class="d-flex flex-column mx-4 mb-4">
-          <app-fan-affinity-law-form [fanAffinityLawForm]="fanAffinityLawForm" [settings]="settings" [isBaseline]="false"
-            (emitChange)="changeField($event)" (calculate)="getResults()"></app-fan-affinity-law-form>
-        </div>
-      </ng-container>
-
-      <div *ngIf="!modificationExists">
-        <div class="header mx-2">
-          <h3>Modification</h3>
-        </div>
-        <div class="p-3 no-data">
-          <h3>Once you have set up your baseline..</h3>
-          <button type="button" class="btn btn-primary active" (click)="createModification()">Add Modified
-            Condition</button>
-          <p>Set the new/modified conditions to compare against your current baseline.</p>
-        </div>
-      </div>
-    </div>
-
 
     <!-- help panel -->
     <div class="calculator-panel-container help-panel" [ngClass]="{'small-screen-tab': smallScreenTab === 'details'}"
@@ -108,7 +228,6 @@
 
       </div>
     </div>
-
 
   </div>
 
