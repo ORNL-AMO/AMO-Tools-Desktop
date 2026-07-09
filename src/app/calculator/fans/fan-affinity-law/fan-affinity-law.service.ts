@@ -114,11 +114,113 @@ export class FanAffinityLawService {
     } else {
       results = this.fanAffinityLawApiService.calculate(inputsCpy);
     }
+    Object.assign(results, this.getIntermediateValues(inputsCpy, settings));
     if (!modificationExists) {
       results.annualEnergyNew = results.annualEnergyBaseline;
       results.annualCostSavings = 0;
     }
     return results;
+  }
+
+  // Mirrors FanAffinityLaws::compute() in MEASUR-Tools-Suite (bindings-wasm/motorDriven/fans/fan_affinity_laws.cpp),
+  // which only returns the 3 aggregate Output fields. These intermediates are recomputed here purely for display
+  // in the results table since the wasm module doesn't expose them.
+  getIntermediateValues(inputs: FanAffinityLawsInput, settings: Settings): Partial<FanAffinityLawsOutput> {
+    const motorEfficiency: number = inputs.efficiencyMotor / 100;
+    const driveEfficiency: number = inputs.efficiencyDrive / 100;
+    const baselinePower: number = inputs.powerMotor / motorEfficiency / driveEfficiency;
+    const baselineFlowPercent: number = Math.min(100, Math.max(0, (inputs.actualFlow / inputs.ratedFlow) * 100));
+
+    let desiredFlowPercent: number;
+    let desiredFlowVolume: number;
+    if (inputs.flowMode === 1) {
+      desiredFlowVolume = inputs.desiredFlowVolume;
+      desiredFlowPercent = (inputs.desiredFlowVolume / inputs.ratedFlow) * 100;
+    } else {
+      desiredFlowPercent = inputs.desiredFlowPercent;
+      desiredFlowVolume = (inputs.desiredFlowPercent / 100) * inputs.ratedFlow;
+    }
+
+    const ratedFlow: number = this.convertFlowForDisplay(inputs.ratedFlow, settings);
+    const values: Partial<FanAffinityLawsOutput> = { ratedFlow, baselinePower, baselineFlowPercent };
+
+    if (inputs.motorControlTypeCurrent === 1) {
+      // Current Motor Control is Two-Speed, so the baseline power also runs on the same duty-cycle
+      // assumption as a new Two-Speed selection (see FanAffinityLaws::compute() powerCurrent branch).
+      const baselineTimeFactor = this.get50PercentTimeFactor(baselineFlowPercent / 100);
+      values.baselineTimeAbove50Percent = baselineTimeFactor.timeAbove50Percent * 100;
+      values.baselineTimeAt0Percent = baselineTimeFactor.timeAt0Percent * 100;
+      values.baselineTimeAt50Percent = baselineTimeFactor.timeAt50Percent * 100;
+    }
+
+    if (!inputs.changeFanSize && inputs.motorControlTypeNew === 2) {
+      // VSD
+      values.scenario = 'vsd';
+      values.desiredFlowPercent = desiredFlowPercent;
+      values.desiredFlowVolume = this.convertFlowForDisplay(desiredFlowVolume, settings);
+      values.newPower = baselinePower * Math.pow(desiredFlowPercent / 100, 3);
+    } else if (inputs.motorControlTypeNew === 1) {
+      // Two-Speed
+      const timeFactor = this.get50PercentTimeFactor(desiredFlowPercent / 100);
+      values.scenario = 'twoSpeed';
+      values.desiredFlowPercent = desiredFlowPercent;
+      values.desiredFlowVolume = this.convertFlowForDisplay(desiredFlowVolume, settings);
+      values.timeAbove50Percent = timeFactor.timeAbove50Percent * 100;
+      values.timeAt0Percent = timeFactor.timeAt0Percent * 100;
+      values.timeAt50Percent = timeFactor.timeAt50Percent * 100;
+      values.newPower = baselinePower * timeFactor.factor;
+    } else if (inputs.changeFanSize && inputs.motorControlTypeNew === 3) {
+      // Change Fan Size only
+      const fanDiameterRatio: number = inputs.diameterFanNew / inputs.diameterFan;
+      const newFanFlow: number = inputs.ratedFlow * Math.pow(fanDiameterRatio, 3);
+      values.scenario = 'changeFanSize';
+      values.fanDiameterRatio = fanDiameterRatio * 100;
+      values.newFlowPercent = (newFanFlow / inputs.ratedFlow) * 100;
+      values.newPower = baselinePower * Math.pow(fanDiameterRatio, 5);
+    } else if (inputs.changeFanSize && inputs.motorControlTypeNew === 2) {
+      // VSD + Change Fan Size
+      const fanDiameterRatio: number = inputs.diameterFanNew / inputs.diameterFan;
+      const newFanRatedFlow: number = inputs.ratedFlow * Math.pow(fanDiameterRatio, 3);
+      const newFlowPercent: number = desiredFlowVolume / newFanRatedFlow;
+      values.scenario = 'vsdChangeFanSize';
+      values.desiredFlowPercent = desiredFlowPercent;
+      values.desiredFlowVolume = this.convertFlowForDisplay(desiredFlowVolume, settings);
+      values.fanDiameterRatio = fanDiameterRatio * 100;
+      values.newFanRatedFlow = this.convertFlowForDisplay(newFanRatedFlow, settings);
+      values.newFlowPercent = newFlowPercent * 100;
+      values.newPower = baselinePower * Math.pow(newFlowPercent, 3) * Math.pow(fanDiameterRatio, 5);
+    } else if (inputs.changeFanSize && inputs.motorControlTypeNew === 1) {
+      // Two-Speed + Change Fan Size
+      const fanDiameterRatio: number = inputs.diameterFanNew / inputs.diameterFan;
+      const newFanRatedFlow: number = inputs.ratedFlow * Math.pow(fanDiameterRatio, 3);
+      const timeFactor = this.get50PercentTimeFactor(desiredFlowPercent / 100);
+      values.scenario = 'twoSpeedChangeFanSize';
+      values.desiredFlowPercent = desiredFlowPercent;
+      values.desiredFlowVolume = this.convertFlowForDisplay(desiredFlowVolume, settings);
+      values.fanDiameterRatio = fanDiameterRatio * 100;
+      values.newFanRatedFlow = this.convertFlowForDisplay(newFanRatedFlow, settings);
+      values.newFlowPercent = (desiredFlowVolume / newFanRatedFlow) * 100;
+      values.newPower = baselinePower * timeFactor.factor * Math.pow(fanDiameterRatio, 5);
+    } else {
+      values.scenario = 'none';
+    }
+
+    return values;
+  }
+
+  private get50PercentTimeFactor(flowPercent: number): { timeAbove50Percent: number, timeAt0Percent: number, timeAt50Percent: number, factor: number } {
+    const timeAbove50Percent: number = Math.max(0, (flowPercent - 0.5) / 0.5);
+    const timeAt0Percent: number = Math.max(0, (0.5 - flowPercent) / 0.5);
+    const timeAt50Percent: number = 1 - timeAbove50Percent - timeAt0Percent;
+    return { timeAbove50Percent, timeAt0Percent, timeAt50Percent, factor: timeAbove50Percent + timeAt50Percent * 0.125 };
+  }
+
+  // flow intermediates are computed in calculation units (ft3/min); convert back to m3/s for metric display
+  private convertFlowForDisplay(cfmValue: number, settings: Settings): number {
+    if (settings.unitsOfMeasure === 'Imperial') {
+      return cfmValue;
+    }
+    return this.convertUnitsService.value(cfmValue).from('ft3/min').to('m3/s');
   }
 
   // form/display values are stored in the current settings unit system; the wasm calculation

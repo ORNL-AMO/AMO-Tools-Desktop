@@ -61,11 +61,4 @@ export class FanAffinityLawFormComponent implements OnInit {
     this.emitCalculate();
   }
 
-  // New Fan Diameter must exceed the baseline Fan Diameter; that threshold moves whenever
-  // Fan Diameter changes, and the validator itself is only (re)applied when Change Fan Size
-  // is toggled, so both need to refresh validators before emitting.
-  refreshValidators() {
-    this.fanAffinityLawService.setValidators(this.fanAffinityLawForm);
-    this.emitCalculate();
-  }
 }

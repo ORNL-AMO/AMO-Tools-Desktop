@@ -6,6 +6,106 @@
       <td class="bold text-center">New</td>
     </tr>
     <tr>
+      <td>Power</td>
+      <td class="text-center">{{fanAffinityLawResults?.baselinePower | number:'1.2-2'}}
+        <span> kW</span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span *ngIf="modificationExists">{{fanAffinityLawResults?.newPower | number:'1.2-2'}}</span>
+        <span> kW</span>
+      </td>
+    </tr>
+    <tr>
+      <td>Flow Percent</td>
+      <td class="text-center">{{fanAffinityLawResults?.baselineFlowPercent | number:'1.1-1'}}
+        <span> %</span>
+      </td>
+       <td class="text-center">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span *ngIf="modificationExists">{{fanAffinityLawResults?.desiredFlowPercent | number:'1.1-1'}}
+        <span> %</span>
+        </span>
+      </td>
+    </tr>
+    <tr *ngIf="showField('desiredFlow')">
+      <td>Desired Flow Volume</td>
+      <td class="text-center">{{fanAffinityLawResults?.ratedFlow | number:'1.1-1'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> CFM</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> m<sup>3</sup>/s</span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span *ngIf="modificationExists">{{fanAffinityLawResults?.desiredFlowVolume | number:'1.0-0'}}</span>
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> CFM</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> m<sup>3</sup>/s</span>
+      </td>
+    </tr>
+    <tr *ngIf="showTimeFactors()">
+      <td>Time Above 50 Percent</td>
+      <td class="text-center">
+        <span *ngIf="fanAffinityLawResults?.baselineTimeAbove50Percent === undefined">&mdash;</span>
+        <span *ngIf="fanAffinityLawResults?.baselineTimeAbove50Percent !== undefined">{{fanAffinityLawResults?.baselineTimeAbove50Percent | number:'1.1-1'}}
+          <span> %</span>
+        </span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists || fanAffinityLawResults?.timeAbove50Percent === undefined">&mdash;</span>
+        <span *ngIf="modificationExists && fanAffinityLawResults?.timeAbove50Percent !== undefined">{{fanAffinityLawResults?.timeAbove50Percent | number:'1.1-1'}}
+          <span> %</span>
+        </span>
+      </td>
+    </tr>
+    <tr *ngIf="showTimeFactors()">
+      <td>Time At 0 Percent</td>
+      <td class="text-center">
+        <span *ngIf="fanAffinityLawResults?.baselineTimeAt0Percent === undefined">&mdash;</span>
+        <span *ngIf="fanAffinityLawResults?.baselineTimeAt0Percent !== undefined">{{fanAffinityLawResults?.baselineTimeAt0Percent | number:'1.1-1'}}
+          <span> %</span>
+        </span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists || fanAffinityLawResults?.timeAt0Percent === undefined">&mdash;</span>
+        <span *ngIf="modificationExists && fanAffinityLawResults?.timeAt0Percent !== undefined">{{fanAffinityLawResults?.timeAt0Percent | number:'1.1-1'}}
+          <span> %</span>
+        </span>
+      </td>
+    </tr>
+    <tr *ngIf="showTimeFactors()">
+      <td>Time At 50 Percent</td>
+      <td class="text-center">
+        <span *ngIf="fanAffinityLawResults?.baselineTimeAt50Percent === undefined">&mdash;</span>
+        <span *ngIf="fanAffinityLawResults?.baselineTimeAt50Percent !== undefined">{{fanAffinityLawResults?.baselineTimeAt50Percent | number:'1.1-1'}}
+          <span> %</span>
+        </span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists || fanAffinityLawResults?.timeAt50Percent === undefined">&mdash;</span>
+        <span *ngIf="modificationExists && fanAffinityLawResults?.timeAt50Percent !== undefined">{{fanAffinityLawResults?.timeAt50Percent | number:'1.1-1'}}
+          <span> %</span>
+        </span>
+      </td>
+    </tr>
+    <tr *ngIf="showField('fanDiameterRatio')">
+      <td>Fan Diameter Ratio</td>
+      <td class="text-center" colspan="2">{{fanAffinityLawResults?.fanDiameterRatio | number:'1.2-2'}}
+        <span> %</span>
+      </td>
+    </tr>
+    <tr *ngIf="showField('newFanRatedFlow')">
+      <td>New Fan Rated Flow</td>
+      <td class="text-center" colspan="2">{{fanAffinityLawResults?.newFanRatedFlow | number:'1.0-3'}}
+        <span *ngIf="settings.unitsOfMeasure == 'Imperial'"> CFM</span>
+        <span *ngIf="settings.unitsOfMeasure != 'Imperial'"> m<sup>3</sup>/s</span>
+      </td>
+    </tr>
+    <tr *ngIf="showField('newFlowPercent')">
+      <td>New Flow Percent</td>
+      <td class="text-center" colspan="2">{{fanAffinityLawResults?.newFlowPercent | number:'1.1-1'}}
+        <span> %</span>
+      </td>
+    </tr>
+    <tr class="bold">
       <td class="bold">Annual Energy Use</td>
       <td class="text-center">{{fanAffinityLawResults?.annualEnergyBaseline | number:'1.0-0'}}
         <span> kWh/yr</span>
@@ -17,7 +117,7 @@
         </span>
       </td>
     </tr>
-    <tr>
+    <tr class="bold">
       <td class="bold">Annual Cost Savings</td>
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
