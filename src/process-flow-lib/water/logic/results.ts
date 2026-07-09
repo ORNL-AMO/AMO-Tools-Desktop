@@ -1056,10 +1056,12 @@ const applySystemDischargeCosts = (
  *
  * Follow: water treatment node → downstream through any additional treatment until the first water-using systems.
  * Stop: at the first users consuming the treated water.
- * Attribute: attribute the treatment unit’s cost across those users by volume of treated water received. Denominator selection:
- *   no-losses (formerly Case E) — standard: full treatment inflow as denominator; attribute by each system’s fraction of total treatment inflow.
- *   with-losses (formerly Case F) — use total treatment outflow as denominator; cost basis remains the block cost (inflow),
- *       distributing the cost of water lost in treatment across downstream systems.
+ * Attribute: walk every edge in the path from the treatment node to the system and take the product of each further
+ *   treatment-source edge's local branch ratio (getTreatmentEdgeRatio) to get branchFraction. Multiplying branchFraction
+ *   by the first edge's flow (what this node sent down that branch) gives the system's flow responsibility; dividing by
+ *   the treatment node's total outflow gives the attribution fraction. This one formula replaces the former no-losses
+ *   (Case E) / with-losses (Case F) branch split — the two denominators (total inflow vs. total outflow) are identical
+ *   whenever the node has no loss, so the split never added distinct behavior.
  *   single-system-ro (formerly Case G) — assign 100% regardless of recovery fraction; reject to discharge is an unavoidable operational loss.
  * Series note: If RO → Chlorination → Process, both RO and Chlorination each create a row, each going 100% to Process.
  *   No duplication occurs because each row is its own cost component.
@@ -1105,40 +1107,28 @@ const applySystemTreatmentCosts = (
           }
 
           const currentEdge = graph.edgeMap[edgeId];
-          const systemOutflow = graph.edgeMap[edgeId].data.flowValue ?? 0;
-          const pathInflow = currentEdge.data.flowValue ?? 0;
           const treatmentNode = graph.nodeMap[treatmentId];
           const totalTreatmentOutflow = getNodeTotalOutflow(treatmentNode as Node<ProcessFlowPart>, calculatedData);
           const ROTreatmentNode = graph.systemsWithRODirectDischarge[currentNode.id]?.treatmentNode;
 
-          let systemFlowResponsibility: number;
-          let systemAttributionFraction: number;
-          let costToSystem: number;
-          let fractionPathIntakeReceived: number;
+          // * branchFraction: product of localRatio across any further treatment nodes in the path (see doc comment on applySystemTreatmentCosts above).
+          const currentEdgeIdx = path.indexOf(edgeId);
+          const pathToSystemEdges = path.slice(0, currentEdgeIdx + 1);
+          const firstEdgeFlow = graph.edgeMap[path[0]].data.flowValue ?? 0;
+          const branchFraction = pathToSystemEdges
+            .slice(1)
+            .map(pathEdgeId => getTreatmentEdgeRatio(pathEdgeId, graph, calculatedData))
+            .reduce((product, ratio) => product * ratio, 1);
 
-          // * with-losses: attribute by outflow share of total treatment outflow; cost basis stays at block cost (inflow).
-          if (totalTreatmentOutflow < treatmentData.blockCosts.totalFlow && totalTreatmentOutflow > 0) {
-            systemFlowResponsibility = systemOutflow;
-            systemAttributionFraction = systemOutflow / totalTreatmentOutflow;
+          const systemFlowResponsibility = firstEdgeFlow * branchFraction;
+          let systemAttributionFraction = totalTreatmentOutflow > 0 ? systemFlowResponsibility / totalTreatmentOutflow : 0;
 
-            // * single-system-ro: assign 100% regardless of recovery fraction.
-            if (ROTreatmentNode && ROTreatmentNode.id === treatmentId) {
-              systemAttributionFraction = 1;
-            }
-
-            costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
-          } else {
-            // * no-losses (standard): attribute by each system's path inflow fraction of total treatment inflow.
-            fractionPathIntakeReceived = (systemOutflow / pathInflow) > 1 ? 1 : (systemOutflow / pathInflow);
-            systemFlowResponsibility = pathInflow * fractionPathIntakeReceived;
-            systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
-
-            // * single-system-ro: assign 100% regardless of recovery fraction.
-            if (ROTreatmentNode && ROTreatmentNode.id === treatmentId) {
-              systemAttributionFraction = 1;
-            }
-            costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
+          // * single-system-ro: assign 100% regardless of recovery fraction.
+          if (ROTreatmentNode && ROTreatmentNode.id === treatmentId) {
+            systemAttributionFraction = 1;
           }
+
+          const costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
 
           setSystemAttribution(
             systemAttributionMap,
@@ -1171,7 +1161,7 @@ const applySystemTreatmentCosts = (
               graph,
               systemAttributionFraction,
               costToSystem,
-              fractionPathIntakeReceived,
+              branchFraction,
               systemFlowResponsibility
             );
 

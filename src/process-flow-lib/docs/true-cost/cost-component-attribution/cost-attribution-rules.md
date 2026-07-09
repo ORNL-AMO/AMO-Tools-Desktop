@@ -73,8 +73,7 @@ Before any attribution occurs, the total annual cost (block cost) for each cost-
 | **Which systems are eligible?** | Systems that receive treated water — directly or through additional treatment units in series — from this treatment unit. Only the first system on each downstream path is charged. |
 | **Walk direction** | Downstream from the treatment node. |
 | **Stopping criterion** | First water-using system on each path. Intermediate treatment units in series are passed through; each is its own independent cost center. |
-| **Attribution fraction — no-losses** | (System inflow from path) / (Total treatment inflow). Capped at 1.0 per path. |
-| **Attribution fraction — with-losses** | (System inflow) / (Total treatment outflow). Uses treatment block cost (based on inflow) as cost basis. |
+| **Attribution fraction — branch-ratio product rule** | Walk every edge in the path after the first one; for each whose source is a water-treatment node, take that edge's flow divided by that node's total outflow (`localRatio`, 1.0 for a lossless single-child node). `branchFraction` = the product of every `localRatio` after the first edge. Attribution fraction = (first edge's flow × `branchFraction`) / (this treatment node's own total outflow). Naturally bounded to [0, 1] — no explicit cap needed. Covers unbranched chains where a later node has its own loss, and mid-chain forks to systems at different depths, with one formula. Uses treatment block cost (based on inflow) as cost basis. |
 | **single-system-ro override** | Attribution fraction forced to 1.0 when treatment node is the RO unit of a single-system configuration. |
 | **Cost to system** | Attribution fraction × Treatment total block cost. |
 | **Series treatment** | Each unit in a series is attributed independently. No duplication. A system receiving water through three units in series will accumulate three separate treatment cost charges. |

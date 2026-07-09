@@ -296,6 +296,51 @@ CITY WATER ($1/kgal)
 
 > Cooling Tower + Boiler sum to 27.76% — exactly the path's true share of the intake (49.2/177.2). A formula limited to the treatment node immediately upstream of each system (the pre-existing behavior this replaced) summed these two systems to 46.53% instead — a double-count, since Boiler's old fraction alone (27.77%) already equaled the full path's true share, before Cooling Tower's fair share was added on top. UV Filtration's own loss (12 in / 6 out) does not reduce Boiler's branch ratio, because UV Filtration has a single child — the loss is absorbed through path inflow, the same rule verified in `split-path-treatment-loss` §2.5.
 
+**Expected attribution — treatment (Chemical Treatment 2)**
+
+| System | Branch ratio(s) | Treatment share | Treatment $ |
+|---|---|---|---|
+| Cooling Tower | 25/37 = 0.6757 | 67.57% | **$66,486** |
+| Boiler | (12/37) × (6/6) = 0.3243 | 32.43% | **$31,914** |
+| **Total** | | 100% | **$98,400** ✓ |
+
+> Reading only the edge closest to the system (UV Filtration → Boiler, 6 Mgal/yr) instead of the edge Chemical Treatment 2 actually sent down that branch (12 Mgal/yr) would have produced a Boiler fraction of 6/37 = 16.22% (\$15,957) — undercounting Chemical Treatment 2's own cost by \$15,957 and leaving Cooling Tower + Boiler summing to only 83.79% instead of 100%. UV Filtration's own treatment cost (\$48,000) is a separate row, attributed 100% to Boiler independently (single downstream system, single edge).
+
+---
+
+### 2.7 `treatment-chain-downstream-loss`
+
+**What it tests:** Two treatment units in series where the *first* has no loss of its own, but the *second* does. There is no branching anywhere in this diagram. This is the regression fixture for the treatment-cost mid-chain gap in its simplest, unbranched form: Treatment A's own attribution must not be undercounted by a later, unrelated loss in Treatment B.
+
+```
+INTAKE ($1/kgal)
+  │ 100 Mgal/yr
+  ▼
+TREATMENT A ($5/kgal)   ← 100 in, 100 out (lossless)
+  │ 100 Mgal/yr
+  ▼
+TREATMENT B ($4/kgal)   ← 100 in, 70 out (30 Mgal/yr lost)
+  │ 70 Mgal/yr
+  ▼
+SYSTEM
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| Intake | $1/kgal | 100 Mgal/yr | **$100,000** |
+| Treatment A | $5/kgal | 100 Mgal/yr in | **$500,000** |
+| Treatment B | $4/kgal | 100 Mgal/yr in | **$400,000** |
+
+**Expected attribution — System**
+
+| Treatment A | Treatment B | Total |
+|---|---|---|
+| $500,000 (100%) | $400,000 (100%) | **$900,000** |
+
+> Treatment A's own attribution reads the first edge of its path (Treatment A → Treatment B, 100 Mgal/yr) rather than the edge closest to the system (Treatment B → System, 70 Mgal/yr). Treatment B's branch ratio to its sole child is 70/70 = 1.0 regardless of its own loss, so branchFraction = 1.0 and Treatment A's fraction = 100/100 = 100%. Reading the last edge instead would have produced 70/100 = 70%, silently undercounting Treatment A's cost by $150,000 — even though nothing in this diagram branches. See `mid-chain-branching` §2.6 for the version of this gap that also involves a fork.
+
 ---
 
 ## Part 3 — Reverse Osmosis Configurations

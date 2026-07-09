@@ -21,9 +21,9 @@ The denominator is not always the same flow value. Depending on path structure, 
 - **Path** — the sequence of edges walked from a cost component's node to a water-using system, following that cost component type's "What to follow" / "Where to stop" rule.
 - **Block cost** — the total dollar cost of a cost component's line item, calculated from the volume of water entering that component and its unit cost (inflow × unit cost). This is the amount distributed across systems via attribution fractions.
 - **Local branch ratio (localRatio)** — for a single edge in a path whose source is a water-treatment node, that edge's flow divided by the treatment node's total outflow to all of its children. 1.0 when the node has a single child and no losses, or when the edge's source is not a water-treatment node.
-- **Branch fraction (branchFraction)** — the product of every localRatio along a path from an intake to a water-using system: `branchFraction = Π(localRatio for each treatment-source edge in the path)`.
-- **Path inflow (pathInflow)** — the flow value of the first edge in a path (the intake's own outflow on that path).
-- **Flow responsibility** — the volume of flow a system, or (in WWT's upstream pass) an upstream discharger, is charged for on a given path. Computed differently by cost-component type: for Intake, `systemFlowResponsibility = pathInflow × branchFraction`; for WWT's upstream pass, a discharger's flow responsibility is its raw contribution to the WWT unit minus the flow volume already attributed to downstream reuse systems.
+- **Branch fraction (branchFraction)** — the product of every localRatio found in a path. For Intake Cost Components, this is the product across the *entire* path — the intake itself is never a treatment node, so there is no risk of double-counting. For Water Treatment Cost Components, this is the product across every edge *after* the first one — the first edge leaves the cost component's own node, and that node's own split is exactly the fraction being computed, so it is excluded from the product rather than folded into it.
+- **Path inflow (pathInflow)** — for Intake Cost Components: the flow value of the first edge in a path (the intake's own outflow on that path).
+- **Flow responsibility** — the volume of flow a system, or (in WWT's upstream pass) an upstream discharger, is charged for on a given path. Computed differently by cost-component type: for Intake, `systemFlowResponsibility = pathInflow × branchFraction`; for Water Treatment, `systemFlowResponsibility = (first edge's flow) × branchFraction`; for WWT's upstream pass, a discharger's flow responsibility is its raw contribution to the WWT unit minus the flow volume already attributed to downstream reuse systems.
 
 ---
 
@@ -33,7 +33,7 @@ The denominator is not always the same flow value. Depending on path structure, 
 
 2. To determine water using systems associated with cost components: trace flows upstream or downstream. Use outlet flow when tracing downstream. If there are branching flows, the cost will be split accordingly weighted by flow.
 
-3. Losses: During tracing (upstream or downstream), there could be losses in intermediate systems — e.g., when tracing intake source costs to the individual water using systems, water treatment steps in between can have losses. This should not affect the percentage ratios. (See Intake rule — How to attribute, the with-losses-path case, for the specific denominator rule that enforces this.)
+3. Losses: During tracing (upstream or downstream), there could be losses in intermediate systems — e.g., when tracing intake source costs to the individual water using systems, water treatment steps in between can have losses. This should not affect the percentage ratios. (See Intake rule — How to attribute, the with-losses-path case, and Water Treatment rule — How to attribute, the chained-downstream-loss case, for the specific denominator rules that enforce this.)
 
 ---
 
@@ -71,11 +71,20 @@ The denominator is not always the same flow value. Depending on path structure, 
 
 - **What to follow:** Start at the water treatment unit; go downstream (through any additional treatment) until you reach the first water-using systems.
 - **Where to stop:** At the first users consuming the treated water.
-- **How to attribute:** Attribute the treatment unit's cost across those users by the volume of treated water they receive from this unit. The block cost is calculated on the total volume entering the treatment node (inflow × unit cost). Attribution fractions are determined as follows: ***[v2]***
-  - **no-losses** (formerly Case E): Attribute by each system's received flow as a share of total treatment inflow. Since inflow equals outflow in the no-loss case, either may serve as the denominator.
-  - **with-losses** (formerly Case F, outflow < inflow): Use total treatment outflow as the denominator. This ensures all downstream systems collectively absorb 100% of the treatment cost, including the cost of water lost during treatment. The cost basis remains the full inflow block cost. ***[v2]***
-  - **single-system-ro** (formerly Case G): When the treatment node is a single-system RO configuration (reject stream goes directly to discharge, exactly one downstream water-using system), assign 100% of the treatment cost to that system regardless of the product-water recovery fraction. ***[v2]***
-- **Multi-source cap:** When a system receives treated water from more than one source, the fraction attributed from any single path is capped at 1.0. ***[v2]***
+- **How to attribute:** Attribute the treatment unit's cost across those users by the volume of treated water they receive from this unit. The block cost is calculated on the total volume entering the treatment node (inflow × unit cost). Walk every edge in the path after the first one and take the product of each further treatment-source edge's localRatio to get branchFraction. Multiplying branchFraction by the first edge's flow gives the system's flow responsibility (see [Definitions](#definitions)): ***[v3]***
+
+  ```
+  branchFraction = Π(localRatio for each treatment-source edge after the first one in the path)
+  systemFlowResponsibility = (first edge's flow) × branchFraction
+  attribution fraction = systemFlowResponsibility / this treatment node's total outflow
+  ```
+
+  This single rule covers every path shape below, replacing the former no-losses / with-losses denominator switch (formerly Cases E and F) — the two denominators were already numerically identical whenever this treatment node itself had no loss, so the switch never added distinct behavior for valid data: ***[v3]***
+  - **no-losses** (formerly Case E): this treatment node has no loss of its own (outflow equals inflow); a further treatment node later in the path contributes its own localRatio to branchFraction exactly as in the with-losses case below.
+  - **with-losses** (formerly Case F, outflow < inflow): this treatment node's own loss narrows the denominator (its own total outflow) rather than the numerator; a further, lossy treatment node later in the path still contributes a ratio of 1.0 to its sole child, so that later loss is absorbed by the eventual system rather than shrinking this node's own attributed percentage.
+  - **chained-downstream-loss** (new in v3, not covered by either former case): a treatment node with no loss of its own, whose path to the system passes through a further, lossy treatment node, still attributes 100% of its own cost correctly — reading only the edge closest to the system would have silently absorbed that later node's loss into this node's fraction. ***[v3]***
+- **single-system-ro** (formerly Case G) — categorical override, applied after the branch-ratio rule computes its base fraction: When the treatment node is a single-system RO configuration (reject stream goes directly to discharge, exactly one downstream water-using system), assign 100% of the treatment cost to that system regardless of the product-water recovery fraction. ***[v2]***
+- **Multi-source cap:** No explicit cap is needed on the branch-ratio product — it cannot exceed 1.0 given valid flow data, so a system's share of any single path is bounded automatically. When a system receives treated water from more than one source, each source's path is still evaluated independently. ***[v3]***
 - **Series note:** If RO → Chlorination → Process, then both RO and Chlorination each create a row, and each row goes 100% to Process. No duplication occurs because each row is its own cost component.
 
 #### Examples
@@ -83,6 +92,8 @@ The denominator is not always the same flow value. Depending on path structure, 
 - **no-losses:** RO → Process (5 MGY) and RO → CT (2 MGY). RO row = Process 71.4% (5/7), CT 28.6% (2/7).
 - **with-losses:** RO (10 MGY in / 8 MGY out, 2 MGY internal loss) → Process (5 MGY) + CT (3 MGY). Block cost calculated on 10 MGY inflow. RO row = Process 62.5% (5/8), CT 37.5% (3/8). Total = 100%. ***[v2]***
 - **single-system-ro:** RO (10 MGY in / 7 MGY product → Process / 3 MGY reject → Discharge). Block cost on 10 MGY inflow. RO row = Process 100%. ***[v2]***
+- **chained-downstream-loss:** TreatA (100 in / 100 out, lossless) → TreatB (100 in / 70 out, loses 30) → System. TreatA row = System 100% (first edge's flow 100 × branchFraction 1.0, since TreatB's localRatio to its sole child is 1.0), not 70% (the post-loss edge into System). TreatB row = System 100% independently. ***[v3]***
+- **mid-chain-fork, branch to mixed-depth systems:** Chemical Treatment 2 (49.2 in / 37 out) → [Cooling Tower (25), UV Filtration (12 in / 6 out) → Boiler]. Cooling Tower's branch ratio is 25/37 = 67.57%. Boiler's branch ratio is (12/37) × (6/6) = 12/37 = 32.43%, using the 12 MGY Chemical Treatment 2 actually sent down that branch, not the 6 MGY that survives UV Filtration's own loss. Sum = 100% of Chemical Treatment 2's own block cost — not the 83.79% (67.57% + 16.22%) a formula that reads only the edge closest to the system would produce. ***[v3]***
 
 ### 3. Wastewater Treatment (WWT) Cost Components (e.g., Filtration, Flotation, pH)
 

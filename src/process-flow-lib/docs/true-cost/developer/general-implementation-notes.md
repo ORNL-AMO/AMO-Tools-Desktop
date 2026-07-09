@@ -67,6 +67,8 @@ Intake (100) → Treatment A (100 in / 80 out) → Treatment B (80 in / 80 out) 
 
 Treatment A has a single child (Treatment B), so its `localRatio` = 80/80 = 1.0 regardless of its own loss — the loss is absorbed through `pathInflow`, not this ratio. Treatment B then splits among the downstream systems by its own outflow. The product of both ratios reduces to exactly what `deliveredFlowVolume` (Treatment B's outflow) used to produce as a denominator on its own — but without needing a flag to detect that Treatment A's loss happened "further upstream." The old two-flag switch and the new product formula agree on every existing fixture; they only diverge on the mid-chain-fork case, where the product formula is correct and the old switch was not.
 
+**The same class of bug existed in `applySystemTreatmentCosts`, fixed separately.** That sub-routine attributes each treatment unit's *own* cost, not the intake's, but it read `systemOutflow`/`pathInflow` from the edge closest to the system (the last edge in the path) instead of the edge the cost component itself sent downstream (the first edge). This was correct for a single hop but wrong whenever a *further* treatment node sat between the cost component and the system and had its own loss — even without any branching at all. The fix reuses `getTreatmentEdgeRatio` (the same helper `applySystemIntakeCosts` uses) to compute `branchFraction` across every treatment-source edge *after* the first one, then multiplies by the first edge's flow. This also let the old `with-losses`/`no-losses` `if`/`else` split collapse into one formula — the two denominators (treatment node's own outflow vs. its own inflow) were already numerically identical whenever the node had no loss of its own, so the split was never doing distinct work.
+
 ---
 
 ## WWT Two-Pass: Pass 1 Must Complete Before Pass 2 Begins
@@ -169,15 +171,15 @@ The diamond treatment test case (`plant-summary-test-cases.md §2.4`) is specifi
 
 ---
 
-## RO Override — Why It Must Fire Even When the Loss Formula Already Gives 1.0
+## RO Override — Why It Must Fire Even When the Branch-Ratio Formula Already Gives 1.0
 
-The treatment cost sub-routine (`applySystemTreatmentCosts`) has a loss-adjusted formula that, for an RO unit where a single system receives 100% of the product water, naturally produces an attribution fraction of `70/70 = 1.0`. In that scenario, the override doesn't change the math.
+The treatment cost sub-routine (`applySystemTreatmentCosts`) has a branch-ratio formula that, for an RO unit where a single system receives 100% of the product water, naturally produces an attribution fraction of `70/70 = 1.0`. In that scenario, the override doesn't change the math.
 
 The override is still applied explicitly for two reasons:
 
-1. **The no-loss branch:** If the RO node is somehow configured with zero reject (outflow = inflow), the standard formula runs on the `outflow ≥ inflow` branch and the denominator is the inflow. The fraction would be `system inflow / treatment inflow`, which equals 1.0 only if the system receives all of the output. The override guarantees 1.0 regardless.
+1. **Zero-reject configuration:** If the RO node is somehow configured with zero reject (outflow = inflow), the branch-ratio formula's denominator is the treatment node's own total outflow, which now equals its inflow. The fraction would be `systemFlowResponsibility / total outflow`, which equals 1.0 only if the system receives all of the output. The override guarantees 1.0 regardless of how the upstream flow data is configured.
 
-2. **Defensive correctness:** Future changes to the path evaluation or loss detection logic should not accidentally cause the fraction to drop below 1.0 for a single-system RO configuration. The explicit override is the authoritative source of truth for this case.
+2. **Defensive correctness:** Future changes to the path evaluation logic should not accidentally cause the fraction to drop below 1.0 for a single-system RO configuration. The explicit override is the authoritative source of truth for this case.
 
 ---
 

@@ -593,6 +593,68 @@ describe('getPlantSummaryResults — treatment-chain: Intake → Treatment A (lo
 });
 
 // ---------------------------------------------------------------------------
+// Fixture: treatment-chain-downstream-loss
+// Configuration: Intake → Treatment A (lossless) → Treatment B (lossy) → System
+//
+//   intake (100) ─► treatA (cost=5/kGal, 100 in / 100 out, no loss)
+//                       └─► treatB (cost=4/kGal, 100 in / 70 out, loses 30) ─► system (70)
+//
+// Isolates the treatment-cost mid-chain gap from branching entirely: Treatment
+// A's own cost row has no loss, but the system it attributes to is reached
+// through a second, lossy treatment node. Before the fix, Treatment A's
+// attribution read the edge closest to the system (70) instead of the edge it
+// actually sent downstream (100), undercounting its cost to 70% instead of
+// 100%. See .prompts/true-cost/treatment-attribution-mid-chain-branching-gap.md.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — treatment-chain-downstream-loss: Intake → TreatA (lossless) → TreatB (lossy) → System', () => {
+  const INTAKE_COST = 1;
+  const TREAT_A_COST = 5;
+  const TREAT_B_COST = 4;
+  const INTAKE_FLOW = 100;
+  const TREAT_A_OUTFLOW = 100;
+  const TREAT_B_OUTFLOW = 70;
+
+  const intake = makeIntakeNode('intake', INTAKE_COST);
+  const treatA = makeTreatmentNode('treatA', TREAT_A_COST);
+  const treatB = makeTreatmentNode('treatB', TREAT_B_COST);
+  const system = makeSystemNode('system');
+
+  const nodes = [intake, treatA, treatB, system];
+  const edges = [
+    makeEdge('intake', 'treatA', INTAKE_FLOW),
+    makeEdge('treatA', 'treatB', TREAT_A_OUTFLOW),
+    makeEdge('treatB', 'system', TREAT_B_OUTFLOW),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: INTAKE_FLOW },
+    treatA: { totalSourceFlow: INTAKE_FLOW, totalDischargeFlow: TREAT_A_OUTFLOW },
+    treatB: { totalSourceFlow: TREAT_A_OUTFLOW, totalDischargeFlow: TREAT_B_OUTFLOW },
+    system: { totalSourceFlow: TREAT_B_OUTFLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it("attributes 100% of Treatment A's block cost to the system, not 70% (Treatment B's downstream loss must not shrink Treatment A's own fraction)", () => {
+    expect(result.systemAttributionMap['system']['treatA'].totalAttribution.default).toBeCloseTo(1.0, 6);
+  });
+
+  it("attributes 100% of Treatment B's block cost to the system (sole downstream system, unaffected by the fix)", () => {
+    expect(result.systemAttributionMap['system']['treatB'].totalAttribution.default).toBeCloseTo(1.0, 6);
+  });
+
+  it('mass balance — total treatment cost to the system equals the sum of both treatment units\' block costs', () => {
+    expect(result.trueCostOfSystems['system'].treatment)
+      .toBeCloseTo(blockCost(TREAT_A_COST, INTAKE_FLOW) + blockCost(TREAT_B_COST, TREAT_A_OUTFLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Fixture: wwt-discharge-only
 // Configuration: System → WWT → Discharge (WWT Pass 2 only)
 //
@@ -1296,6 +1358,33 @@ describe('getPlantSummaryResults — mid-chain-branching: Intake → [ChemTreat2
       + result.trueCostOfSystems['boiler'].intake
       + result.trueCostOfSystems['sysB'].intake;
     expect(total).toBeCloseTo(blockCost(INTAKE_COST, TOTAL_INTAKE_FLOW), 0);
+  });
+
+  it('attributes ChemTreat2 treatment cost to CoolingTower by its direct branch share (25/37), unaffected by the fix', () => {
+    const expected = blockCost(CHEMTREAT2_COST, PATH_INFLOW) * (CHEMTREAT2_OUTFLOW_CT / CHEMTREAT2_OUTFLOW);
+    expect(result.trueCostOfSystems['coolingTower'].treatment).toBeCloseTo(expected, 0);
+  });
+
+  it('attributes ChemTreat2 treatment cost to Boiler using the pre-UV-loss branch flow (12/37), not the post-loss edge (6/37)', () => {
+    const boilerChemTreat2Fraction = result.systemAttributionMap['boiler']['chemTreat2'].totalAttribution.default;
+    expect(boilerChemTreat2Fraction).toBeCloseTo(CHEMTREAT2_OUTFLOW_UV / CHEMTREAT2_OUTFLOW, 6);
+  });
+
+  it('mass balance — ChemTreat2 treatment cost attributed to CoolingTower and Boiler sums to its own block cost', () => {
+    const coolingTowerFraction = result.systemAttributionMap['coolingTower']['chemTreat2'].totalAttribution.default;
+    const boilerChemTreat2Fraction = result.systemAttributionMap['boiler']['chemTreat2'].totalAttribution.default;
+    const total = (coolingTowerFraction + boilerChemTreat2Fraction) * blockCost(CHEMTREAT2_COST, PATH_INFLOW);
+    expect(total).toBeCloseTo(blockCost(CHEMTREAT2_COST, PATH_INFLOW), 0);
+  });
+
+  it('records 100% attribution fraction for UVFiltration → Boiler (sole downstream system, single edge)', () => {
+    expect(result.systemAttributionMap['boiler']['uvFiltration'].totalAttribution.default).toBeCloseTo(1.0, 6);
+  });
+
+  it("Boiler's total treatment cost equals its ChemTreat2 branch share plus 100% of UVFiltration's block cost", () => {
+    const expected = blockCost(CHEMTREAT2_COST, PATH_INFLOW) * (CHEMTREAT2_OUTFLOW_UV / CHEMTREAT2_OUTFLOW)
+      + blockCost(UV_COST, CHEMTREAT2_OUTFLOW_UV);
+    expect(result.trueCostOfSystems['boiler'].treatment).toBeCloseTo(expected, 0);
   });
 });
 

@@ -63,9 +63,7 @@ The four sub-routines are:
 
 2. **Discharge Costs** — walks upstream from each discharge node, stopping at the first water-using system encountered on each path. That system receives the cost. The single-system RO override forces fraction to 1.0 for the registered discharge.
 
-3. **Treatment Costs** — walks downstream from each water treatment node, stopping at the first water-using system encountered on each path. Two attribution bases apply:
-   - *Standard (no losses)*: fraction = system's share of the treatment node's total inflow.
-   - *With losses* (outflow < inflow): fraction = system's share of the treatment node's total outflow, but the cost basis is still the full inflow block cost. This ensures the full treatment cost is distributed across only the water that actually makes it through.
+3. **Treatment Costs** — walks downstream from each water treatment node, passing through any further treatment nodes, and stops at the first water-using system encountered on each path. Each system's fraction is its share of the treatment node's total outflow, where "share" accounts for every further treatment node the path passes through on the way to the system — not just the value of the very last edge before the system. This lets a further treatment node's own loss or fork be absorbed correctly without shrinking (or double-shrinking) this node's own attributed fraction.
    - *Single-system RO override*: forces fraction to 1.0 for the registered RO treatment node.
 
 4. **Wastewater Treatment Costs** — two passes per WWT node:
