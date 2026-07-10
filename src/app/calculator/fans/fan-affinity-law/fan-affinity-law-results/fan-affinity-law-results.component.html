@@ -42,21 +42,6 @@
       </td>
     </tr>
     <tr *ngIf="showTimeFactors()">
-      <td>Time Above 50 Percent</td>
-      <td class="text-center">
-        <span *ngIf="fanAffinityLawResults?.baselineTimeAbove50Percent === undefined">&mdash;</span>
-        <span *ngIf="fanAffinityLawResults?.baselineTimeAbove50Percent !== undefined">{{fanAffinityLawResults?.baselineTimeAbove50Percent | number:'1.1-1'}}
-          <span> %</span>
-        </span>
-      </td>
-      <td class="text-center">
-        <span *ngIf="!modificationExists || fanAffinityLawResults?.timeAbove50Percent === undefined">&mdash;</span>
-        <span *ngIf="modificationExists && fanAffinityLawResults?.timeAbove50Percent !== undefined">{{fanAffinityLawResults?.timeAbove50Percent | number:'1.1-1'}}
-          <span> %</span>
-        </span>
-      </td>
-    </tr>
-    <tr *ngIf="showTimeFactors()">
       <td>Time At 0 Percent</td>
       <td class="text-center">
         <span *ngIf="fanAffinityLawResults?.baselineTimeAt0Percent === undefined">&mdash;</span>
@@ -82,6 +67,21 @@
       <td class="text-center">
         <span *ngIf="!modificationExists || fanAffinityLawResults?.timeAt50Percent === undefined">&mdash;</span>
         <span *ngIf="modificationExists && fanAffinityLawResults?.timeAt50Percent !== undefined">{{fanAffinityLawResults?.timeAt50Percent | number:'1.1-1'}}
+          <span> %</span>
+        </span>
+      </td>
+    </tr>
+    <tr *ngIf="showTimeFactors()">
+      <td>Time Above 50 Percent</td>
+      <td class="text-center">
+        <span *ngIf="fanAffinityLawResults?.baselineTimeAbove50Percent === undefined">&mdash;</span>
+        <span *ngIf="fanAffinityLawResults?.baselineTimeAbove50Percent !== undefined">{{fanAffinityLawResults?.baselineTimeAbove50Percent | number:'1.1-1'}}
+          <span> %</span>
+        </span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists || fanAffinityLawResults?.timeAbove50Percent === undefined">&mdash;</span>
+        <span *ngIf="modificationExists && fanAffinityLawResults?.timeAbove50Percent !== undefined">{{fanAffinityLawResults?.timeAbove50Percent | number:'1.1-1'}}
           <span> %</span>
         </span>
       </td>
