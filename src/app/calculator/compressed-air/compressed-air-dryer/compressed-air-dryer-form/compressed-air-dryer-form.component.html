@@ -3,74 +3,171 @@
 
     <div class="form-section">
       <div class="form-group">
-        <label class="small" for="purgeRate">Purge Rate</label>
-        <div class="input-group">
-          <input class="form-control" type="number" id="purgeRate" formControlName="purgeRate"
-            (input)="onFormChange()" (focus)="focusField('purgeRate')" onfocus="this.select();">
-          <span class="units input-group-addon">%</span>
-        </div>
-        <span class="alert-danger pull-right small" *ngIf="form.controls.purgeRate.invalid && !form.controls.purgeRate.pristine">
-          <span *ngIf="form.controls.purgeRate.errors.min">Value can't be less than {{form.controls.purgeRate.errors.min.min}}.</span>
-          <span *ngIf="form.controls.purgeRate.errors.max">Value can't be greater than {{form.controls.purgeRate.errors.max.max}}.</span>
-        </span>
-      </div>
-
-      <div class="form-group">
-        <label class="small">Purge</label>
-        <div class="input-group">
-          <input class="form-control" type="text" [value]="purgeScfm | number:'1.2-2'" readonly>
-          <span class="units input-group-addon">SCFM</span>
-        </div>
+        <label class="small" for="dryerType">Dryer Type</label>
+        <select class="form-control" id="dryerType" formControlName="dryerType"
+          (change)="onFormChange()" (focus)="focusField('dryerType')">
+          <option [ngValue]="dryerType.Heatless">Heatless</option>
+          <option [ngValue]="dryerType.HeatedExternally">Heated Externally</option>
+          <option [ngValue]="dryerType.BlowerPurgeWithSweep">Blower Purge (With Sweep)</option>
+          <option [ngValue]="dryerType.BlowerPurgeWithoutSweep">Blower Purge (Without Sweep)</option>
+          <option [ngValue]="dryerType.HeatOfCompressionHC">Heat of Compression (HC)</option>
+          <option [ngValue]="dryerType.HeatOfCompressionSP">Heat of Compression (SP)</option>
+          <option [ngValue]="dryerType.Refrigerated">Refrigerated</option>
+        </select>
       </div>
     </div>
 
     <div class="form-section">
       <div class="form-group">
-        <label class="small" for="heaterPower">Heater Power</label>
+        <label class="small" for="flowRate">Flow Rate</label>
         <div class="input-group">
-          <input class="form-control" type="number" id="heaterPower" formControlName="heaterPower"
-            (input)="onFormChange()" (focus)="focusField('heaterPower')" onfocus="this.select();">
-          <span class="units input-group-addon">kW</span>
+          <input class="form-control" type="number" id="flowRate" formControlName="flowRate"
+            (input)="onFormChange()" (focus)="focusField('flowRate')" onfocus="this.select();">
+          <span class="units input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">SCFM</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m3/min</span>
+          </span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="form.controls.heaterPower.invalid && !form.controls.heaterPower.pristine">
-          <span *ngIf="form.controls.heaterPower.errors.min">Value can't be less than {{form.controls.heaterPower.errors.min.min}}.</span>
-          <span *ngIf="form.controls.heaterPower.errors.max">Value can't be greater than {{form.controls.heaterPower.errors.max.max}}.</span>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.flowRate.invalid && !form.controls.flowRate.pristine">
+          <span *ngIf="form.controls.flowRate.errors.required">Value required.</span>
+          <span *ngIf="form.controls.flowRate.errors.min">Value can't be less than {{form.controls.flowRate.errors.min.min}}.</span>
+          <span *ngIf="form.controls.flowRate.errors.max">Value can't be greater than {{form.controls.flowRate.errors.max.max}}.</span>
         </span>
       </div>
 
       <div class="form-group">
-        <label class="small" for="heatingHoursPerDay">Hrs Heating Per 24 Hours</label>
+        <label class="small" for="pressure">Pressure</label>
         <div class="input-group">
-          <input class="form-control" type="number" id="heatingHoursPerDay" formControlName="heatingHoursPerDay"
-            (input)="onFormChange()" (focus)="focusField('heatingHoursPerDay')" onfocus="this.select();">
+          <input class="form-control" type="number" id="pressure" formControlName="pressure"
+            (input)="onFormChange()" (focus)="focusField('pressure')" onfocus="this.select();">
+          <span class="units input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">psig</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">barg</span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.pressure.invalid && !form.controls.pressure.pristine">
+          <span *ngIf="form.controls.pressure.errors.required">Value required.</span>
+          <span *ngIf="form.controls.pressure.errors.min">Value can't be less than {{form.controls.pressure.errors.min.min}}.</span>
+          <span *ngIf="form.controls.pressure.errors.max">Value can't be greater than {{form.controls.pressure.errors.max.max}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="temperature">Temperature</label>
+        <div class="input-group">
+          <input class="form-control" type="number" id="temperature" formControlName="temperature"
+            (input)="onFormChange()" (focus)="focusField('temperature')" onfocus="this.select();">
+          <span class="units input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">F</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">C</span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.temperature.invalid && !form.controls.temperature.pristine">
+          <span *ngIf="form.controls.temperature.errors.required">Value required.</span>
+          <span *ngIf="form.controls.temperature.errors.min">Value can't be less than {{form.controls.temperature.errors.min.min}}.</span>
+          <span *ngIf="form.controls.temperature.errors.max">Value can't be greater than {{form.controls.temperature.errors.max.max}}.</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-group">
+        <label class="small" for="operatingHoursPerDay">Operating Hours Per Day</label>
+        <div class="input-group">
+          <input class="form-control" type="number" id="operatingHoursPerDay" formControlName="operatingHoursPerDay"
+            (input)="onFormChange()" (focus)="focusField('operatingHoursPerDay')" onfocus="this.select();">
           <span class="units input-group-addon">hrs/day</span>
         </div>
-        <span class="alert-danger pull-right small" *ngIf="form.controls.heatingHoursPerDay.invalid && !form.controls.heatingHoursPerDay.pristine">
-          <span *ngIf="form.controls.heatingHoursPerDay.errors.min">Value can't be less than {{form.controls.heatingHoursPerDay.errors.min.min}}.</span>
-          <span *ngIf="form.controls.heatingHoursPerDay.errors.max">Value can't be greater than {{form.controls.heatingHoursPerDay.errors.max.max}}.</span>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.operatingHoursPerDay.invalid && !form.controls.operatingHoursPerDay.pristine">
+          <span *ngIf="form.controls.operatingHoursPerDay.errors.required">Value required.</span>
+          <span *ngIf="form.controls.operatingHoursPerDay.errors.min">Value can't be less than {{form.controls.operatingHoursPerDay.errors.min.min}}.</span>
+          <span *ngIf="form.controls.operatingHoursPerDay.errors.max">Value can't be greater than {{form.controls.operatingHoursPerDay.errors.max.max}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="operatingDaysPerWeek">Operating Days Per Week</label>
+        <div class="input-group">
+          <input class="form-control" type="number" id="operatingDaysPerWeek" formControlName="operatingDaysPerWeek"
+            (input)="onFormChange()" (focus)="focusField('operatingDaysPerWeek')" onfocus="this.select();">
+          <span class="units input-group-addon">days/wk</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.operatingDaysPerWeek.invalid && !form.controls.operatingDaysPerWeek.pristine">
+          <span *ngIf="form.controls.operatingDaysPerWeek.errors.required">Value required.</span>
+          <span *ngIf="form.controls.operatingDaysPerWeek.errors.min">Value can't be less than {{form.controls.operatingDaysPerWeek.errors.min.min}}.</span>
+          <span *ngIf="form.controls.operatingDaysPerWeek.errors.max">Value can't be greater than {{form.controls.operatingDaysPerWeek.errors.max.max}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="operatingWeeksPerYear">Operating Weeks Per Year</label>
+        <div class="input-group">
+          <input class="form-control" type="number" id="operatingWeeksPerYear" formControlName="operatingWeeksPerYear"
+            (input)="onFormChange()" (focus)="focusField('operatingWeeksPerYear')" onfocus="this.select();">
+          <span class="units input-group-addon">wks/yr</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.operatingWeeksPerYear.invalid && !form.controls.operatingWeeksPerYear.pristine">
+          <span *ngIf="form.controls.operatingWeeksPerYear.errors.required">Value required.</span>
+          <span *ngIf="form.controls.operatingWeeksPerYear.errors.min">Value can't be less than {{form.controls.operatingWeeksPerYear.errors.min.min}}.</span>
+          <span *ngIf="form.controls.operatingWeeksPerYear.errors.max">Value can't be greater than {{form.controls.operatingWeeksPerYear.errors.max.max}}.</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <label class="group-label w-100 bold">Cost of Utilities</label>
+
+      <div class="form-group">
+        <label class="small" for="costOfElectricity">Electricity</label>
+        <div class="input-group">
+          <span class="units input-group-addon">$</span>
+          <input class="form-control" type="number" id="costOfElectricity" formControlName="costOfElectricity"
+            (input)="onFormChange()" (focus)="focusField('costOfElectricity')" onfocus="this.select();">
+          <span class="units input-group-addon">/kWh</span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.costOfElectricity.invalid && !form.controls.costOfElectricity.pristine">
+          <span *ngIf="form.controls.costOfElectricity.errors.required">Value required.</span>
+          <span *ngIf="form.controls.costOfElectricity.errors.min">Value can't be less than {{form.controls.costOfElectricity.errors.min.min}}.</span>
+          <span *ngIf="form.controls.costOfElectricity.errors.max">Value can't be greater than {{form.controls.costOfElectricity.errors.max.max}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="costOfCompressedAir">Compressed Air</label>
+        <div class="input-group">
+          <span class="units input-group-addon">$</span>
+          <input class="form-control" type="number" id="costOfCompressedAir" formControlName="costOfCompressedAir"
+            (input)="onFormChange()" (focus)="focusField('costOfCompressedAir')" onfocus="this.select();">
+          <span class="units input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/1000 SCF</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">/1000 m3</span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.costOfCompressedAir.invalid && !form.controls.costOfCompressedAir.pristine">
+          <span *ngIf="form.controls.costOfCompressedAir.errors.required">Value required.</span>
+          <span *ngIf="form.controls.costOfCompressedAir.errors.min">Value can't be less than {{form.controls.costOfCompressedAir.errors.min.min}}.</span>
+          <span *ngIf="form.controls.costOfCompressedAir.errors.max">Value can't be greater than {{form.controls.costOfCompressedAir.errors.max.max}}.</span>
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label class="small" for="costOfCoolingWater">Cooling Water</label>
+        <div class="input-group">
+          <span class="units input-group-addon">$</span>
+          <input class="form-control" type="number" id="costOfCoolingWater" formControlName="costOfCoolingWater"
+            (input)="onFormChange()" (focus)="focusField('costOfCoolingWater')" onfocus="this.select();">
+          <span class="units input-group-addon">
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/1000 gal</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">/1000 L</span>
+          </span>
+        </div>
+        <span class="alert-danger pull-right small" *ngIf="form.controls.costOfCoolingWater.invalid && !form.controls.costOfCoolingWater.pristine">
+          <span *ngIf="form.controls.costOfCoolingWater.errors.required">Value required.</span>
+          <span *ngIf="form.controls.costOfCoolingWater.errors.min">Value can't be less than {{form.controls.costOfCoolingWater.errors.min.min}}.</span>
+          <span *ngIf="form.controls.costOfCoolingWater.errors.max">Value can't be greater than {{form.controls.costOfCoolingWater.errors.max.max}}.</span>
         </span>
       </div>
     </div>
 
   </form>
-
-  <div class="form-section" *ngIf="dryerOutput">
-    <div class="form-group">
-      <label class="small">Water Removed</label>
-      <div class="input-group">
-        <input class="form-control" type="text" [value]="dryerOutput.waterRemoved | number:'1.2-2'" readonly>
-        <span class="units input-group-addon">PPH</span>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="small">Total Cost Per Year</label>
-      <div class="input-group">
-        <span class="units input-group-addon">$</span>
-        <input class="form-control" type="text" [value]="dryerOutput.totalCostPerYear | number:'1.2-2'" readonly>
-        <span class="units input-group-addon">/yr</span>
-      </div>
-    </div>
-  </div>
-
 </div>

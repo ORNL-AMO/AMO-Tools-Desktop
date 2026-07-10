@@ -121,46 +121,14 @@
     </h6>
   </div>
 
-  <div class="my-2" *ngIf="currentField === 'heaterPower'">
+  <div class="my-2">
     <h6>
-      Heater Power
+      Heater Power, Heating Hours, Purge Rate &amp; Design DDC
       <small class="text-muted">
         <br>
-        Rated power of the electric heater used in heated-externally or heat-of-compression dryers, in kW.
-        Valid range: 0–1,000 kW.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField === 'heatingHoursPerDay'">
-    <h6>
-      Heating Hours Per Day
-      <small class="text-muted">
-        <br>
-        The number of hours per day the heater is active. Valid range: 0–24 hrs/day.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField === 'purgeRate'">
-    <h6>
-      Purge Rate
-      <small class="text-muted">
-        <br>
-        The percentage of dried air used to purge the off-line desiccant bed. Valid range: 0–100%.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField === 'designDDCPercentage'">
-    <h6>
-      Design DDC
-      <small class="text-muted">
-        <br>
-        Design demand-dependent control percentage for refrigerated dryers. Valid range: 0–100%.
+        These values are not entered directly. The engine auto-calculates them from the selected dryer type
+        and operating conditions, then reports the resulting heater power, heating hours per day, purge rate,
+        and design DDC percentage in the Results tab.
         <hr>
       </small>
     </h6>

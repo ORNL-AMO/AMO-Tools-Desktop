@@ -7,7 +7,7 @@
         <img src="assets/images/calculator-icons/utilities-icons/compressed-air-pressure-reduction-icon.png">
       </div>
       <div class="mx-auto">
-        <h3>Compressed Air Dryer Operating Cost</h3>
+        <h3>Compressed Air Dryer</h3>
       </div>
     </div>
 
@@ -54,7 +54,6 @@
         <app-compressed-air-dryer-form
           [form]="baselineForm"
           [settings]="settings"
-          [dryerOutput]="baselineOutput"
           (calculate)="getResults()"
           (changeField)="changeField($event)">
         </app-compressed-air-dryer-form>
@@ -84,7 +83,6 @@
           <app-compressed-air-dryer-form
             [form]="modificationForm"
             [settings]="settings"
-            [dryerOutput]="modificationOutput"
             (calculate)="getResults()"
             (changeField)="changeField($event)">
           </app-compressed-air-dryer-form>

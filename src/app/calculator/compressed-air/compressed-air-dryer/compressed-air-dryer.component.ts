@@ -95,22 +95,26 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
   }
 
   initData(): void {
+    this.compressedAirDryerService.convertStoredInputsForUnitChange(this.settings);
+
     this.baselineInput = this.compressedAirDryerService.baselineInput ?? this.compressedAirDryerService.initObject(this.settings);
-    this.baselineForm = this.compressedAirDryerService.getFormFromObj(this.baselineInput);
+    this.baselineForm = this.compressedAirDryerService.getFormFromObj(this.baselineInput, this.settings);
 
     if (this.compressedAirDryerService.modificationInput) {
       this.modificationInput = this.compressedAirDryerService.modificationInput;
-      this.modificationForm = this.compressedAirDryerService.getFormFromObj(this.modificationInput);
+      this.modificationForm = this.compressedAirDryerService.getFormFromObj(this.modificationInput, this.settings);
       this.modificationExists = true;
     }
+
+    this.compressedAirDryerService.lastUnitsOfMeasure = this.settings.unitsOfMeasure;
   }
 
   getResults(): void {
     this.baselineInput = this.compressedAirDryerService.getObjFromForm(this.baselineForm);
-    this.baselineOutput = this.compressedAirDryerService.calculate(this.baselineInput);
+    this.baselineOutput = this.compressedAirDryerService.calculate(this.baselineInput, this.settings);
     if (this.modificationExists) {
       this.modificationInput = this.compressedAirDryerService.getObjFromForm(this.modificationForm);
-      this.modificationOutput = this.compressedAirDryerService.calculate(this.modificationInput);
+      this.modificationOutput = this.compressedAirDryerService.calculate(this.modificationInput, this.settings);
     }
     if (this.assessmentCalculator) {
       this.setAssessmentCalculatorData();
@@ -120,7 +124,7 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
 
   createModification(): void {
     this.modificationInput = JSON.parse(JSON.stringify(this.baselineInput));
-    this.modificationForm = this.compressedAirDryerService.getFormFromObj(this.modificationInput);
+    this.modificationForm = this.compressedAirDryerService.getFormFromObj(this.modificationInput, this.settings);
     this.modificationExists = true;
     this.baselineSelected = false;
     this.getResults();
@@ -169,10 +173,10 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
 
   btnGenerateExample(): void {
     this.baselineInput = this.compressedAirDryerService.generateExample(this.settings);
-    this.baselineForm = this.compressedAirDryerService.getFormFromObj(this.baselineInput);
+    this.baselineForm = this.compressedAirDryerService.getFormFromObj(this.baselineInput, this.settings);
     if (this.modificationExists) {
       this.modificationInput = this.compressedAirDryerService.generateExample(this.settings);
-      this.modificationForm = this.compressedAirDryerService.getFormFromObj(this.modificationInput);
+      this.modificationForm = this.compressedAirDryerService.getFormFromObj(this.modificationInput, this.settings);
     }
     this.getResults();
   }
