@@ -6,6 +6,7 @@ import { CompressedAirDryerFormComponent } from './compressed-air-dryer-form/com
 import { CompressedAirDryerResultsComponent } from './compressed-air-dryer-results/compressed-air-dryer-results.component';
 import { CompressedAirDryerHelpComponent } from './compressed-air-dryer-help/compressed-air-dryer-help.component';
 import { CompressedAirDryerService } from './compressed-air-dryer.service';
+import { ConvertCompressedAirDryerService } from './convert-compressed-air-dryer.service';
 import { CompressedAirDryersSuiteApiService } from '../../../tools-suite-api/compressed-air-dryer-suite-api.service';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
@@ -25,6 +26,7 @@ import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal
   ],
   providers: [
     CompressedAirDryerService,
+    ConvertCompressedAirDryerService,
     CompressedAirDryersSuiteApiService,
   ],
   exports: [

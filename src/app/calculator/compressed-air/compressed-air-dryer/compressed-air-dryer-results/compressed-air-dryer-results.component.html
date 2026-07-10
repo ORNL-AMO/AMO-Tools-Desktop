@@ -10,12 +10,68 @@
       <tr>
         <td class="group-label bold">Water Removed</td>
         <td class="text-center">
-          {{baselineOutput.waterRemoved | number:'1.2-2'}} <span>PPH</span>
+          {{baselineOutput.waterRemoved | number:'1.2-2'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">PPH</span>
+          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/hr</span>
         </td>
         <td class="text-center">
           <span *ngIf="!modificationExists">&mdash;</span>
           <span *ngIf="modificationExists && modificationOutput">
-            {{modificationOutput.waterRemoved | number:'1.2-2'}} <span>PPH</span>
+            {{modificationOutput.waterRemoved | number:'1.2-2'}}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">PPH</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/hr</span>
+          </span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="group-label bold">Heater Power</td>
+        <td class="text-center">
+          {{baselineOutput.heaterPower | number:'1.2-2'}} <span>kW</span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists && modificationOutput">
+            {{modificationOutput.heaterPower | number:'1.2-2'}} <span>kW</span>
+          </span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="group-label bold">Heating Hours Per Day</td>
+        <td class="text-center">
+          {{baselineOutput.heatingHoursPerDay | number:'1.2-2'}} <span>hrs/day</span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists && modificationOutput">
+            {{modificationOutput.heatingHoursPerDay | number:'1.2-2'}} <span>hrs/day</span>
+          </span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="group-label bold">Purge Rate</td>
+        <td class="text-center">
+          {{baselineOutput.purgeRate | number:'1.2-2'}} <span>%</span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists && modificationOutput">
+            {{modificationOutput.purgeRate | number:'1.2-2'}} <span>%</span>
+          </span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="group-label bold">Design DDC</td>
+        <td class="text-center">
+          {{baselineOutput.designDDCPercentage | number:'1.2-2'}} <span>%</span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists && modificationOutput">
+            {{modificationOutput.designDDCPercentage | number:'1.2-2'}} <span>%</span>
           </span>
         </td>
       </tr>
