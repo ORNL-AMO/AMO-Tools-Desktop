@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
-import { DryerOperatingCostOutput } from '../../../../shared/models/standalone';
+import { DryerType } from '../../../../shared/models/standalone';
 
 @Component({
   selector: 'app-compressed-air-dryer-form',
@@ -12,15 +12,10 @@ import { DryerOperatingCostOutput } from '../../../../shared/models/standalone';
 export class CompressedAirDryerFormComponent {
   @Input() form: UntypedFormGroup;
   @Input() settings: Settings;
-  @Input() dryerOutput: DryerOperatingCostOutput;
   @Output() calculate = new EventEmitter<boolean>();
   @Output() changeField = new EventEmitter<string>();
 
-  get purgeScfm(): number {
-    const purgeRate = +(this.form?.controls?.purgeRate?.value ?? 0);
-    const flowRate = +(this.form?.controls?.flowRate?.value ?? 0);
-    return (purgeRate / 100) * flowRate;
-  }
+  dryerType = DryerType;
 
   onFormChange(): void {
     this.calculate.emit(true);
