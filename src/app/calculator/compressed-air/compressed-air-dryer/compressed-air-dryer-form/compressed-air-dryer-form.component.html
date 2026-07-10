@@ -120,10 +120,9 @@
       <div class="form-group">
         <label class="small" for="costOfElectricity">Electricity</label>
         <div class="input-group">
-          <span class="units input-group-addon">$</span>
           <input class="form-control" type="number" id="costOfElectricity" formControlName="costOfElectricity"
             (input)="onFormChange()" (focus)="focusField('costOfElectricity')" onfocus="this.select();">
-          <span class="units input-group-addon">/kWh</span>
+          <span class="units input-group-addon">$/kWh</span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="form.controls.costOfElectricity.invalid && !form.controls.costOfElectricity.pristine">
           <span *ngIf="form.controls.costOfElectricity.errors.required">Value required.</span>
@@ -135,12 +134,11 @@
       <div class="form-group">
         <label class="small" for="costOfCompressedAir">Compressed Air</label>
         <div class="input-group">
-          <span class="units input-group-addon">$</span>
           <input class="form-control" type="number" id="costOfCompressedAir" formControlName="costOfCompressedAir"
             (input)="onFormChange()" (focus)="focusField('costOfCompressedAir')" onfocus="this.select();">
           <span class="units input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/1000 SCF</span>
-            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">/1000 m3</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/1000 SCF</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">$/1000 m3</span>
           </span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="form.controls.costOfCompressedAir.invalid && !form.controls.costOfCompressedAir.pristine">
@@ -153,12 +151,11 @@
       <div class="form-group">
         <label class="small" for="costOfCoolingWater">Cooling Water</label>
         <div class="input-group">
-          <span class="units input-group-addon">$</span>
           <input class="form-control" type="number" id="costOfCoolingWater" formControlName="costOfCoolingWater"
             (input)="onFormChange()" (focus)="focusField('costOfCoolingWater')" onfocus="this.select();">
           <span class="units input-group-addon">
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">/1000 gal</span>
-            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">/1000 L</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">$/1000 gal</span>
+            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">$/1000 L</span>
           </span>
         </div>
         <span class="alert-danger pull-right small" *ngIf="form.controls.costOfCoolingWater.invalid && !form.controls.costOfCoolingWater.pristine">
