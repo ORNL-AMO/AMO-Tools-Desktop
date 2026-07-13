@@ -110,6 +110,18 @@
 </div>
 }
 
+@if (focusedField() == 'isFanTypeKnown') {
+<div class="my-2">
+    <h6>
+        Is Fan Type Known
+        <br>
+        <small class="text-muted">
+            If the type of fan is not known, the application will default to an axial fan for results calculation.
+        </small>
+    </h6>
+</div>
+}
+
 @if (focusedField() == 'fanType') {
 <div class="my-2">
     <h6>
@@ -119,7 +131,7 @@
             The type of fan used in the tower cells. This may refer to blade design, drive type, or manufacturer
             specification.
 
-            <br><br>The fan type can be specified as axial, centrifugal, or unknown.
+            <br><br>The fan type can be specified as axial or centrifugal.
         </small>
     </h6>
 </div>
