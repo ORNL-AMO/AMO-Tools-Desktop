@@ -89,50 +89,45 @@
 
         <ng-container *ngIf="fanAffinityLawForm.controls.motorControlTypeNew.value !== 3">
           <div class="form-group">
-            <label class="small" for="flowMode">Flow Mode</label>
-            <div class="input-group">
-              <select class="form-control" name="flowMode" id="flowMode" formControlName="flowMode"
-                (change)="emitCalculate()" (focus)="focusField('flowMode')">
-                <option *ngFor="let option of flowModeOptions" [ngValue]="option.value">{{option.display}}</option>
-              </select>
-            </div>
-          </div>
+            <label class="small">Flow Rate
+              <a class="click-link small form-text" (click)="showHideFlowRate()" *ngIf="fanAffinityLawForm.controls.flowMode.value === 1">Enter as Percent</a>
+              <a class="click-link small form-text" (click)="showHideFlowRate()" *ngIf="fanAffinityLawForm.controls.flowMode.value !== 1">Enter as Flow Volume</a>
+            </label>
 
-          <div class="form-group" *ngIf="fanAffinityLawForm.controls.flowMode.value === 1">
-            <label class="small" for="desiredFlowVolume">Flow Rate</label>
-            <div class="input-group">
-              <input class="form-control" type="number" name="desiredFlowVolume" id="desiredFlowVolume"
-                formControlName="desiredFlowVolume" (input)="emitCalculate()" (focus)="focusField('desiredFlowVolume')"
-                onfocus="this.select();">
-              <span class="input-group-addon units">
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">CFM</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/s</span>
+            <ng-container *ngIf="fanAffinityLawForm.controls.flowMode.value !== 1">
+              <div class="input-group">
+                <input class="form-control" type="number" name="desiredFlowPercent" id="desiredFlowPercent"
+                  formControlName="desiredFlowPercent" (input)="emitCalculate()" (focus)="focusField('desiredFlowPercent')"
+                  onfocus="this.select();">
+                <span class="units input-group-addon">%</span>
+              </div>
+              <span class="alert-danger pull-right small"
+                *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.invalid && !fanAffinityLawForm.controls.desiredFlowPercent.pristine">
+                <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.required">Value required.</span>
+                <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.max">Value can't be greater than
+                  {{fanAffinityLawForm.controls.desiredFlowPercent.errors.max.max}}.</span>
+                <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.min">Value can't be less than
+                  {{fanAffinityLawForm.controls.desiredFlowPercent.errors.min.min}}.</span>
               </span>
-            </div>
-            <span class="alert-danger pull-right small"
-              *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.invalid && !fanAffinityLawForm.controls.desiredFlowVolume.pristine">
-              <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.required">Value required.</span>
-              <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.min">Value can't be less than
-                {{fanAffinityLawForm.controls.desiredFlowVolume.errors.min.min}}.</span>
-            </span>
-          </div>
+            </ng-container>
 
-          <div class="form-group" *ngIf="fanAffinityLawForm.controls.flowMode.value !== 1">
-            <label class="small" for="desiredFlowPercent">Flow Rate</label>
-            <div class="input-group">
-              <input class="form-control" type="number" name="desiredFlowPercent" id="desiredFlowPercent"
-                formControlName="desiredFlowPercent" (input)="emitCalculate()" (focus)="focusField('desiredFlowPercent')"
-                onfocus="this.select();">
-              <span class="units input-group-addon">%</span>
-            </div>
-            <span class="alert-danger pull-right small"
-              *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.invalid && !fanAffinityLawForm.controls.desiredFlowPercent.pristine">
-              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.required">Value required.</span>
-              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.max">Value can't be greater than
-                {{fanAffinityLawForm.controls.desiredFlowPercent.errors.max.max}}.</span>
-              <span *ngIf="fanAffinityLawForm.controls.desiredFlowPercent.errors.min">Value can't be less than
-                {{fanAffinityLawForm.controls.desiredFlowPercent.errors.min.min}}.</span>
-            </span>
+            <ng-container *ngIf="fanAffinityLawForm.controls.flowMode.value === 1">
+              <div class="input-group">
+                <input class="form-control" type="number" name="desiredFlowVolume" id="desiredFlowVolume"
+                  formControlName="desiredFlowVolume" (input)="emitCalculate()" (focus)="focusField('desiredFlowVolume')"
+                  onfocus="this.select();">
+                <span class="input-group-addon units">
+                  <span *ngIf="settings.unitsOfMeasure == 'Imperial'">CFM</span>
+                  <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/s</span>
+                </span>
+              </div>
+              <span class="alert-danger pull-right small"
+                *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.invalid && !fanAffinityLawForm.controls.desiredFlowVolume.pristine">
+                <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.required">Value required.</span>
+                <span *ngIf="fanAffinityLawForm.controls.desiredFlowVolume.errors.min">Value can't be less than
+                  {{fanAffinityLawForm.controls.desiredFlowVolume.errors.min.min}}.</span>
+              </span>
+            </ng-container>
           </div>
         </ng-container>
 

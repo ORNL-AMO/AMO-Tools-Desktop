@@ -61,4 +61,13 @@ export class FanAffinityLawFormComponent implements OnInit {
     this.emitCalculate();
   }
 
+  showHideFlowRate() {
+    if(this.fanAffinityLawForm.controls.flowMode.value !== 1) {
+      this.fanAffinityLawForm.controls.flowMode.patchValue(1);
+    } else if (this.fanAffinityLawForm.controls.flowMode.value !== 0) {
+      this.fanAffinityLawForm.controls.flowMode.patchValue(0);
+    }
+    this.emitCalculate();
+  }
+
 }
