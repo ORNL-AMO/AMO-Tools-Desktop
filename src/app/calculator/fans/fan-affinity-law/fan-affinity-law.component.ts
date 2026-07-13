@@ -8,6 +8,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
+import { FanAffinityLawTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
     selector: 'app-fan-affinity-law',
@@ -19,7 +20,7 @@ export class FanAffinityLawComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<FanAffinityLawsInput>();
+  emitSave = new EventEmitter<FanAffinityLawTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
   @Input()
@@ -174,7 +175,10 @@ export class FanAffinityLawComponent implements OnInit {
   }
 
   save() {
-    this.emitSave.emit(this.fanAffinityLawService.getObjFromForm(this.fanAffinityLawForm));
+    this.emitSave.emit({
+      inputData: this.fanAffinityLawService.getObjFromForm(this.fanAffinityLawForm),
+      opportunityType: Treasure.fanAffinityLaw,
+    });
   }
 
   cancel() {
