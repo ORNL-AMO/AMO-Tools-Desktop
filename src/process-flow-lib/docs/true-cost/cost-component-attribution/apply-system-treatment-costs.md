@@ -77,31 +77,6 @@ No cap is applied — the product of ratios in Step 2 cannot exceed 1.0 given va
 
 The cost basis is the block cost computed on the full inflow (what drives the treatment operating cost); the downstream allocation denominator is this node's own total outflow. This correctly reflects that a system receiving 100% of this node's product bears 100% of its cost, even when the path to that system passes through a further treatment node with its own split or loss.
 
-### 3.2 single-system-ro — Single-System RO Override
-
-Even when the branch-ratio formula from §3.1 produces a fraction less than 1 (because only a portion of the inflow reaches the system as product water), the attribution fraction is overridden to 1 when the RO unit is identified as a single-system configuration.
-
-**Rationale:** The reject stream is an operational byproduct, not water consumed by another beneficiary. Because there is exactly one downstream system on the product water path, that system bears 100% of the treatment block cost.
-
-**Attribution condition:**
-
-    graph.systemsWithRODirectDischarge[systemId]?.treatmentNode.id === treatmentId
-
-When this condition is true, `systemAttributionFraction` is set to `1` after the branch-ratio formula runs.
-
-**Worked example:**
-
-```
-  RO Unit (inflow: 100 Mgal/yr, $5.00/kgal)
-       ├──► (product water, 70 Mgal/yr) ──► System A
-       └──► (reject,  30 Mgal/yr) ──► Discharge
-```
-
-- Block cost = 100 Mgal/yr × 1,000 × $5.00/kgal = $500,000/yr
-- Branch-ratio formula: attribution fraction = 70 / 70 = 1.0 (already 100% when System A is the sole product water recipient)
-- **Override:** guarantees attribution fraction = 1.0 even in configurations where the branch-ratio formula alone would produce less than 1.0
-- Cost to System A = 1.0 × $500,000 = **$500,000/yr**
-
 ---
 
 ## 4. Treatment Chain and Mid-Chain Branch Support
@@ -277,4 +252,3 @@ Reading only the edge closest to the system (70 Mgal/yr, Treatment B's post-loss
 | Series treatment | Each unit in series is an independent cost center; no duplication |
 | Adjusted attribution | User-supplied fraction replaces computed default |
 | De-duplication | Identical paths from treatment node to system are attributed only once |
-| single-system-ro override | Attribution fraction forced to 1.0 when treatment node is the RO unit of a single-system configuration |

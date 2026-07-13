@@ -75,44 +75,6 @@ No cap is applied — the product of ratios in Step 2 cannot exceed 1.0 given va
 
 **Core Rule 3 (losses don't shrink attributed percentage):** When a treatment node loses volume, the downstream system on that branch is still responsible for the full pre-loss flow that entered the branch, not the smaller post-loss volume it actually received. The formula enforces this by never dividing by anything that shrinks when a node loses water with a single child — `pathInflow` is fixed at the intake edge, and a single-child node's `localRatio` is always 1.0 regardless of how much volume it lost. If that same lossy node also splits into multiple children, each child's branch absorbs its own proportional share of the total (pre-loss) contribution — see the mid-chain-branching worked example in §8b.
 
-### 3.2 single-system-ro — Single-System RO Override
-
-**What the override does:** When a water intake feeds a reverse-osmosis (RO) treatment unit that exclusively serves one water-using system — with the RO reject stream going directly to discharge (not to another system) — the beneficiary system is assigned an attribution fraction of **1.0** (100% of the intake block cost), regardless of what the standard flow-fraction formula would produce.
-
-**Why this override is needed:** An RO unit splits its feed water into a product water stream (usable output) and a reject stream (waste). Under the standard formula, the reject flow counts against the system's attribution fraction because it reduces the apparent share of intake flow that reaches the system. But the reject is an operational necessity of the RO process itself, not water consumed by a separate system. Since no other system draws from this intake → RO path, there is no other beneficiary to share the cost, and the full intake cost should fall on the one system that benefits.
-
-**Condition for the override:**
-
-    Attribution fraction = 1.0
-    when graph.systemsWithRODirectDischarge[systemId]?.intakeNode.id === intakeId
-
-This condition is true only when:
-- The current system is identified as the sole beneficiary of an RO configuration (stored in `graph.systemsWithRODirectDischarge` keyed by system node ID), and
-- The intake currently being evaluated is the same intake that feeds that RO unit.
-
-**Worked example:**
-
-```
-  Intake (100 Mgal/yr, $2.50/kgal)
-       │
-       ▼
-  RO Treatment
-       ├──► System A (product water): 70 Mgal/yr
-       └──► Discharge (reject):  30 Mgal/yr
-```
-
-Block cost of intake: 100 Mgal/yr × 1,000 × $2.50/kgal = **$250,000/yr**
-
-Standard formula (without override):
-- Attribution fraction = 70 / 100 = 0.70
-- Cost to System A = 0.70 × $250,000 = $175,000/yr
-
-RO override (single-system configuration detected):
-- Attribution fraction = **1.0**
-- Cost to System A = 1.0 × $250,000 = **$250,000/yr**
-
-The 30 Mgal/yr reject is an unavoidable consequence of RO operation, not consumption by another system. System A is the only beneficiary and bears the full intake cost.
-
 ---
 
 ## 4. Treatment Chain and Mid-Chain Branch Support
@@ -261,5 +223,4 @@ A system may appear on multiple downstream paths from the same intake (for examp
 | Cap on fraction per path | None needed — the branch-ratio product cannot exceed 1.0 given valid flow data. |
 | Pump/motor energy | Attributed using same fraction as intake cost |
 | Adjusted attribution | User-supplied fraction replaces computed default |
-| single-system-ro override | When intake feeds a single-system RO configuration, attribution fraction is forced to 1.0 |
 | De-duplication | Identical paths from intake to system are attributed only once |

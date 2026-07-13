@@ -17,7 +17,6 @@ Flow values are in **Mgal/yr**. Costs are in **$/kgal**. Dollar amounts are annu
 | **DISCHARGE** | Water Discharge | Effluent destination; cost attributed upstream |
 | **TREATMENT** | Water Treatment | Shared pretreatment unit; cost attributed downstream |
 | **WWT** | Wastewater Treatment | Effluent treatment; cost split between reuse recipients (Pass 1) and upstream dischargers (Pass 2) |
-| **RO** | Reverse Osmosis Treatment | Water Treatment with `treatmentType = 6`; triggers the single-system override when exactly two downstream paths exist |
 | **SUMMING** | Summing Node | Transparent pass-through; does not carry a cost |
 
 ---
@@ -343,108 +342,9 @@ SYSTEM
 
 ---
 
-## Part 3 — Reverse Osmosis Configurations
+## Part 3 — Wastewater Treatment Configurations
 
-### 3.1 `ro-single-system`
-
-**What it tests:** An RO unit with exactly two downstream branches — one leading to a system (product water) and one going directly to discharge (reject/brine). The algorithm detects this pattern and applies the **RO single-system override**: all intake, RO treatment, and product-path discharge costs are attributed 100% to the single system, regardless of the actual product/reject flow split.
-
-```
-INTAKE ($1/kgal)
-  │ 100 Mgal/yr
-  ▼
-RO TREATMENT ($5/kgal)   ← treatmentType = 6
-  ├─── 70 Mgal/yr ──► SYSTEM A ──► DISCHARGE 1 ($1/kgal)   ← product path
-  └─── 30 Mgal/yr ──► DISCHARGE 2 ($0/kgal)                    ← reject path
-```
-
-**Node costs**
-
-| Node | Unit cost | Flow basis | Block cost |
-|---|---|---|---|
-| Intake | $1/kgal | 100 Mgal/yr | **$100,000** |
-| RO | $5/kgal | 100 Mgal/yr | **$500,000** |
-| Discharge 1 (product) | $1/kgal | 70 Mgal/yr | **$70,000** |
-| Discharge 2 (reject) | $0/kgal | 30 Mgal/yr | **$0** |
-
-**Expected attribution — System A**
-
-| Intake | RO Treatment | Discharge (product) | Total |
-|---|---|---|---|
-| $100,000 (100%) | $500,000 (100%) | $70,000 (100%) | **$670,000** |
-
-> System A bears 100% of the intake and RO cost even though it only receives 70% of the RO output. The reject stream cost (Discharge 2) is $0 because it has no unit cost; no system is charged for it.
-
----
-
-### 3.2 `ro-multi-system`
-
-**What it tests:** An RO unit with **three** downstream branches (two systems and one discharge). The single-system override requires *exactly* two children, so it does **not** apply here. Standard flow-fraction attribution is used instead.
-
-```
-INTAKE ($1/kgal)
-  │ 100 Mgal/yr
-  ▼
-RO TREATMENT ($5/kgal)   ← treatmentType = 6, but 3 children → no override
-  ├─── 40 Mgal/yr ──► SYSTEM A
-  ├─── 40 Mgal/yr ──► SYSTEM B
-  └─── 20 Mgal/yr ──► DISCHARGE ($0/kgal)
-```
-
-**Node costs**
-
-| Node | Unit cost | Flow basis | Block cost |
-|---|---|---|---|
-| Intake | $1/kgal | 100 Mgal/yr | **$100,000** |
-| RO | $5/kgal | 100 Mgal/yr | **$500,000** |
-
-**Expected attribution**
-
-| System | Intake share | Intake $ | RO Treatment share | RO $ |
-|---|---|---|---|---|
-| System A | 40 / 100 = 40% | **$40,000** | 40% | **$200,000** |
-| System B | 40 / 100 = 40% | **$40,000** | 40% | **$200,000** |
-| **Total** | 80% | **$80,000** | 80% | **$400** |
-
-> The 20% reject fraction is unattributed to any system (the discharge has no cost). This is correct — the reject path represents water leaving the facility, not consumed by any system.
-
----
-
-### 3.3 `ro-single-system-wwt`
-
-**What it tests:** An RO single-system configuration where the reject path flows through a Wastewater Treatment unit before reaching discharge. The RO override still assigns all intake and RO costs to System A. The WWT costs exhibit a **known double-attribution bug** and are captured by snapshot rather than a specific value.
-
-```
-INTAKE ($1/kgal)
-  │ 100 Mgal/yr
-  ▼
-RO TREATMENT ($5/kgal)   ← single-system override applies (2 children)
-  ├─── 70 Mgal/yr ──► SYSTEM A ──► DISCHARGE 1 ($1/kgal)   ← product path
-  └─── 30 Mgal/yr ──► WWT ($3/kgal) ──► DISCHARGE 2 ($0)   ← reject path with treatment
-```
-
-**Node costs**
-
-| Node | Unit cost | Flow basis | Block cost |
-|---|---|---|---|
-| Intake | $1/kgal | 100 Mgal/yr | **$100,000** |
-| RO | $5/kgal | 100 Mgal/yr | **$500,000** |
-| Discharge 1 (product) | $1/kgal | 70 Mgal/yr | **$70,000** |
-| WWT (reject) | $3/kgal | 30 Mgal/yr | **$90,000** |
-
-**Expected attribution — System A**
-
-| Intake | RO Treatment | Discharge (product) | WWT |
-|---|---|---|---|
-| $100,000 (100%) | $500,000 (100%) | $70,000 (100%) | **(snapshot — see note)** |
-
-> **Known limitation:** The WWT upstream path (`RO → WWT → Intake`) causes the WWT cost to be attributed to System A twice — once when processing the RO edge and once when processing the intake edge. The snapshot records the current (over-attributed) dollar amount. Update the snapshot when this is intentionally fixed, and verify the corrected value equals $90,000 (100% of WWT block cost, once).
-
----
-
-## Part 4 — Wastewater Treatment Configurations
-
-### 4.1 `wwt-discharge-only`
+### 3.1 `wwt-discharge-only`
 
 **What it tests:** A system that sends all its effluent to a WWT unit, which then discharges everything (no reuse output). Pass 1 finds no downstream systems, so it charges nothing. Pass 2 walks upstream from the WWT and attributes 100% of the WWT cost to the single upstream system.
 
@@ -472,7 +372,7 @@ DISCHARGE ($0/kgal)
 
 ---
 
-### 4.2 `wwt-reuse`
+### 3.2 `wwt-reuse`
 
 **What it tests:** A WWT unit that returns some treated water for reuse and sends the rest to discharge. The cost splits between the reuse recipient (Pass 1, downstream) and the original upstream discharger (Pass 2, upstream). The two passes together account for 100% of the WWT block cost.
 
@@ -503,7 +403,7 @@ WWT ($3/kgal)   ← 100 in, 100 out
 
 ---
 
-### 4.3 `wwt-two-upstream-with-reuse`  ⚠ Known algorithm limitation
+### 3.3 `wwt-two-upstream-with-reuse`  ⚠ Known algorithm limitation
 
 **What it tests:** Two systems both feed into one WWT unit, which returns some treated water for reuse (System C) and sends the rest to discharge. This is the worked example from `cost-component-attribution/apply-system-waste-water-treatment-costs.md §6`. The test documents a known algorithm bug in the Pass 2 deduction logic.
 
@@ -541,9 +441,9 @@ SYSTEM B ──── 40 Mgal/yr ───┘       ├─── 60 Mgal/yr ─�
 
 ---
 
-## Part 5 — Multi-Source and Reuse Configurations
+## Part 4 — Multi-Source and Reuse Configurations
 
-### 5.1 `summing-node`
+### 4.1 `summing-node`
 
 **What it tests:** Two intakes of different volumes combine through a summing node before reaching a single system. The summing node is transparent — it is not a cost component and does not interrupt attribution. Each intake independently contributes its full block cost to the downstream system.
 
@@ -570,9 +470,9 @@ INTAKE B ($1/kgal, 40 Mgal/yr) ──►
 
 ---
 
-### 5.2 `treatment-based-merge-node`
+### 4.2 `treatment-based-merge-node`
 
-**What it tests:** The same two-intakes-into-one-node merge pattern as `summing-node` §5.1, but the merge point is a `water-treatment` node instead of a transparent `summing-node` type. This exercises the branch-ratio `localRatio` calculation for each intake's path independently, rather than skipping it (a `summing-node` is not a `water-treatment` type, so it never triggers the branch-ratio walk at all).
+**What it tests:** The same two-intakes-into-one-node merge pattern as `summing-node` §4.1, but the merge point is a `water-treatment` node instead of a transparent `summing-node` type. This exercises the branch-ratio `localRatio` calculation for each intake's path independently, rather than skipping it (a `summing-node` is not a `water-treatment` type, so it never triggers the branch-ratio walk at all).
 
 ```
 INTAKE A ($1/kgal, 60 Mgal/yr) ──┐
@@ -598,7 +498,7 @@ INTAKE B ($1/kgal, 40 Mgal/yr) ──┘
 
 ---
 
-### 5.3 `reuse-chained-systems`
+### 4.3 `reuse-chained-systems`
 
 **What it tests:** Water flows from an intake through System A, which passes (reuses) some of its water to System B, which then discharges. The algorithm stops the intake walk at the *first* system it reaches (System A) and stops the discharge walk at the *first* system upstream of the discharge (System B). Neither system sees both cost types.
 
@@ -633,11 +533,11 @@ DISCHARGE ($2/kgal)
 
 ---
 
-## Part 6 — User Attribution Overrides
+## Part 5 — User Attribution Overrides
 
 All three override fixtures use the same approach: a `systemAttributionMap` is pre-populated with an `adjusted` fraction for a specific system–component pair before the algorithm runs. The algorithm still computes and records the default fraction (for the audit trail) but uses the override for the cost calculation.
 
-### 6.1 `adjusted-attribution` (intake override)
+### 5.1 `adjusted-attribution` (intake override)
 
 **What it tests:** A user has manually set the intake attribution fraction to 0.75 for the single system, even though the computed default is 1.0. The discharge has no override and is computed normally.
 
@@ -660,7 +560,7 @@ DISCHARGE ($2/kgal)   ← no override
 
 ---
 
-### 6.2 `adjusted-attribution-discharge` (discharge override)
+### 5.2 `adjusted-attribution-discharge` (discharge override)
 
 **What it tests:** A user has manually set the discharge attribution fraction to 0.60 for System A.
 
@@ -679,7 +579,7 @@ DISCHARGE ($2/kgal)   ← discharge override on System A: 0.60
 
 ---
 
-### 6.3 `adjusted-attribution-treatment` (treatment override)
+### 5.3 `adjusted-attribution-treatment` (treatment override)
 
 **What it tests:** A user has manually set the treatment attribution fraction to 0.80 for System A. The intake has no override and is computed normally at 1.0.
 
@@ -702,7 +602,7 @@ SYSTEM A   ← intake computed normally; treatment overridden
 
 ---
 
-## Part 7 — Mass-Balance Invariants
+## Part 6 — Mass-Balance Invariants
 
 The mass-balance suite does not introduce new configurations. It re-runs the `simple-linear` and `shared-intake` configurations with additional cross-cutting assertions that must hold for *any* valid diagram.
 
@@ -714,7 +614,7 @@ The mass-balance suite does not introduce new configurations. It re-runs the `si
 
 ---
 
-## Part 8 — Pending / Not Yet Implemented
+## Part 7 — Pending / Not Yet Implemented
 
 ### `wwt-recycled-back-to-same-system` *(pending)*
 

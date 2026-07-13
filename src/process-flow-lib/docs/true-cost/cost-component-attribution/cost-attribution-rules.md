@@ -42,7 +42,6 @@ Before any attribution occurs, the total annual cost (block cost) for each cost-
 | **Walk direction** | Downstream from the intake node. |
 | **Stopping criterion** | First water-using system on each path. |
 | **Attribution fraction — branch-ratio product rule** | Walk every edge in the path from intake to system; for each edge whose source is a water-treatment node, take that edge's flow divided by the treatment node's total outflow (`localRatio`, 1.0 for a lossless single-child node). `branchFraction` = the product of every `localRatio` in the path. Attribution fraction = (path inflow × `branchFraction`) / (total intake outflow). Naturally bounded to [0, 1] — no explicit cap needed. Covers direct splits, lossless chains, lossy chains, and mid-chain forks to systems at different depths with one formula. |
-| **single-system-ro override** | Attribution fraction forced to 1.0 when intake feeds a single-system RO configuration. |
 | **Cost to system** | Attribution fraction × Intake total block cost. |
 | **Pump/motor energy** | Also attributed to the system using the same attribution fraction. |
 | **Systems excluded** | Systems further downstream that receive water only as reuse from the first-charged system. |
@@ -58,7 +57,6 @@ Before any attribution occurs, the total annual cost (block cost) for each cost-
 | **Walk direction** | Upstream from the discharge node. |
 | **Stopping criterion** | First water-using system on each upstream path. |
 | **Attribution fraction — proportional-discharge** | (System discharge contribution to path) / (Total discharge inflow). Capped at 1.0 per path. |
-| **single-system-ro override** | Attribution fraction forced to 1.0 when discharge is the reject-stream outlet of a single-system RO configuration. |
 | **Cost to system** | Attribution fraction × Discharge total block cost. |
 | **Pump/motor energy** | Also attributed to the system using the same attribution fraction. |
 | **Systems excluded** | Systems further upstream that reused their water before it reached this discharge point. |
@@ -74,7 +72,6 @@ Before any attribution occurs, the total annual cost (block cost) for each cost-
 | **Walk direction** | Downstream from the treatment node. |
 | **Stopping criterion** | First water-using system on each path. Intermediate treatment units in series are passed through; each is its own independent cost center. |
 | **Attribution fraction — branch-ratio product rule** | Walk every edge in the path after the first one; for each whose source is a water-treatment node, take that edge's flow divided by that node's total outflow (`localRatio`, 1.0 for a lossless single-child node). `branchFraction` = the product of every `localRatio` after the first edge. Attribution fraction = (first edge's flow × `branchFraction`) / (this treatment node's own total outflow). Naturally bounded to [0, 1] — no explicit cap needed. Covers unbranched chains where a later node has its own loss, and mid-chain forks to systems at different depths, with one formula. Uses treatment block cost (based on inflow) as cost basis. |
-| **single-system-ro override** | Attribution fraction forced to 1.0 when treatment node is the RO unit of a single-system configuration. |
 | **Cost to system** | Attribution fraction × Treatment total block cost. |
 | **Series treatment** | Each unit in a series is attributed independently. No duplication. A system receiving water through three units in series will accumulate three separate treatment cost charges. |
 | **In-system treatment** | Treatment units located entirely within a single system are not evaluated by this sub-routine. They are costed separately in Step 3 using the full system inflow as the flow basis. |
@@ -94,7 +91,6 @@ Before any attribution occurs, the total annual cost (block cost) for each cost-
 | **Attribution fraction — reuse-and-discharge-split, Pass 1** | (System recycled inflow) / (Total WWT inflow). Capped at 1.0 per path. |
 | **Attribution fraction — reuse-and-discharge-split, Pass 2** | (System upstream outflow) / (Total WWT inflow). |
 | **Attribution fraction — reuse-and-discharge-split, chained deduction** | (System upstream outflow − Total Pass 1 charged portion) / (Total WWT inflow). Applied when the WWT unit has both downstream reuse and upstream dischargers. |
-| **single-system-ro-owned WWT** | When WWT is on the reject path of a single-system RO configuration, attribution fraction is forced to 1.0 for the RO system owner. |
 | **Cost to system** | Attribution fraction × WWT total block cost (applies to all cases). |
 | **Balance check** | Sum of all Pass 1 and Pass 2 fractions should equal 1.0 for a lossless WWT unit. |
 | **Adjusted attribution** | User-supplied override fraction replaces computed default for the specified system–WWT pair. Applies independently to each pass. |
