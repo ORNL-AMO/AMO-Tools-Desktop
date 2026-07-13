@@ -17,13 +17,17 @@ export class ProcessCoolingResultsService {
   private readonly suiteApi = inject(ProcessCoolingSuiteApiService);
   private readonly convertProcessCoolingService = inject(ConvertProcessCoolingService);
 
+  // * TEMPORARY DEBUG - remove before merging. Accumulates suite-level inputs/outputs grouped by baseline vs modification.
+  private readonly debugSuiteInputs: { baseline?: any; modifications: Record<string, any> } = { modifications: {} };
+  private readonly debugSuiteOutputs: { baseline?: any; modifications: Record<string, any> } = { modifications: {} };
+
   readonly baselineResults$: Observable<ProcessCoolingResults | undefined> = combineLatest([
     this.processCoolingAssessmentService.processCooling$,
     this.processCoolingWeatherContextService.weatherContextData$,
   ]).pipe(
     map(([processCooling]) => {
       if (!this.processCoolingAssessmentService.isBaselineValid(processCooling)) return undefined;
-      const results = this.getProcessCoolingSuiteResults(processCooling);
+      const results = this.getProcessCoolingSuiteResults(processCooling, undefined, { group: 'baseline' });
       results.id = String(this.processCoolingAssessmentService.assessmentValue.id);
       return results;
     })
@@ -35,7 +39,7 @@ export class ProcessCoolingResultsService {
       const isValid = !this.modificationService.invalidModificationIds().includes(modification.id);
       if (modification && isValid) {
         const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(modification);
-        results = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment);
+        results = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment, undefined, { group: 'modification', id: modification.id });
         results.id = modification.id;
       }
       return results;
@@ -58,7 +62,7 @@ export class ProcessCoolingResultsService {
               changeRefrig: modification.replaceChillerRefrigerant?.useOpportunity ?? false
             };
             const modifiedProcessCoolingAssessment = this.modificationService.getModifiedProcessCoolingAssessment(modification);
-            let results: ProcessCoolingResults = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment, suiteModificationArgs);
+            let results: ProcessCoolingResults = this.getProcessCoolingSuiteResults(modifiedProcessCoolingAssessment, suiteModificationArgs, { group: 'modification', id: modification.id });
             results.id = modification.id;
             return results;
           } else {
@@ -77,7 +81,7 @@ export class ProcessCoolingResultsService {
    * @param processCoolingAssessment 
    * @returns Baseline or Modification results
    */
-  getProcessCoolingSuiteResults(processCoolingAssessment: ProcessCoolingAssessment, suiteModificationArgs?: SuiteModificationArgs): ProcessCoolingResults {
+  getProcessCoolingSuiteResults(processCoolingAssessment: ProcessCoolingAssessment, suiteModificationArgs?: SuiteModificationArgs, debugContext?: { group: 'baseline' | 'modification'; id?: string }): ProcessCoolingResults {
     let results: ProcessCoolingResults;
     const weatherData: WeatherContextData = this.processCoolingWeatherContextService.getWeatherData();
     const isValidWeatherData: boolean = this.processCoolingWeatherContextService.isValidWeatherData();
@@ -89,7 +93,36 @@ export class ProcessCoolingResultsService {
         results = this.suiteApi.getAirCooledResults(processCoolingAssessment, convertedWeatherDataInput, suiteModificationArgs);
       }
     }
+    if (debugContext) {
+      this.recordSuiteDebugData(debugContext, processCoolingAssessment, suiteModificationArgs, results);
+    }
     return results;
+  }
+
+  // * TEMPORARY DEBUG - remove before merging. Stores and prints suite-level inputs/outputs grouped by baseline vs modification.
+  private recordSuiteDebugData(
+    debugContext: { group: 'baseline' | 'modification'; id?: string },
+    processCoolingAssessment: ProcessCoolingAssessment,
+    suiteModificationArgs: SuiteModificationArgs | undefined,
+    results: ProcessCoolingResults
+  ): void {
+    const { weatherData, ...assessmentWithoutWeatherData } = processCoolingAssessment;
+    const inputEntry = {
+      assessment: assessmentWithoutWeatherData,
+      suiteModificationArgs: suiteModificationArgs ?? null,
+    };
+    const outputEntry = results;
+
+    if (debugContext.group === 'baseline') {
+      this.debugSuiteInputs.baseline = inputEntry;
+      this.debugSuiteOutputs.baseline = outputEntry;
+    } else {
+      this.debugSuiteInputs.modifications[debugContext.id] = inputEntry;
+      this.debugSuiteOutputs.modifications[debugContext.id] = outputEntry;
+    }
+
+    // console.log('[DEBUG] Suite Inputs (baseline vs modifications)', this.debugSuiteInputs);
+    // console.log('[DEBUG] Suite Outputs (baseline vs modifications)', this.debugSuiteOutputs);
   }
 
   getResultModificationNames(modificationResults: ProcessCoolingResults[] | null): ModificationNameCell[] {

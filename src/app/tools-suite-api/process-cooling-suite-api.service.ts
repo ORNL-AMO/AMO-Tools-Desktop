@@ -242,6 +242,18 @@ export class ProcessCoolingSuiteApiService {
         const suiteLoadAtPercent = this.suiteApiHelperService.returnDoubleVector(input.loadAtPercent);
         const suiteKWPerTonAtLoad = this.suiteApiHelperService.returnDoubleVector(input.kWPerTonAtLoad);
 
+        console.log('[DEBUG] Custom Chiller Inputs:', {
+          chillerType: input.chillerType,
+          capacity: input.capacity,
+          isFullLoadEfficiencyKnown: input.isFullLoadEfficiencyKnown,
+          fullLoadEfficiency: input.fullLoadEfficiency,
+          age: input.age,
+          installVSD: input.installVSD,
+          useARIloadScheduleByMonthchedule: input.useARIloadScheduleByMonthchedule,
+          chillerMonthlyLoading,
+          loadAtPercent: input.loadAtPercent,
+          kWPerTonAtLoad: input.kWPerTonAtLoad
+        });
         chiller = this._createChillerInputWithCustomCurve(
           this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
           input.capacity,
@@ -255,6 +267,17 @@ export class ProcessCoolingSuiteApiService {
           suiteKWPerTonAtLoad
         );
       }else {
+        // todo log all inputs going into standard chiller as one object
+        console.log('[DEBUG] Standard Chiller Inputs:', {
+          chillerType: input.chillerType,
+          capacity: input.capacity,
+          isFullLoadEfficiencyKnown: input.isFullLoadEfficiencyKnown,
+          fullLoadEfficiency: input.fullLoadEfficiency,
+          age: input.age,
+          installVSD: input.installVSD,
+          useARIloadScheduleByMonthchedule: input.useARIloadScheduleByMonthchedule,
+          chillerMonthlyLoading
+        });
         chiller = this._createChillerInput(
           this.suiteApiHelperService.getProcessCoolingChillerCompressorTypeEnum(input.chillerType),
           input.capacity,
@@ -392,6 +415,15 @@ export class ProcessCoolingSuiteApiService {
    */
   private _createWaterCooledSystemInput(input: WaterCooledSystemInput, operations: Operations, condenserPumpInput: PumpInput, towerInput: TowerInput): any {
 
+    console.log('[DEBUG] WaterCooledSystemInput Inputs:');
+    console.log('chilledWaterSupplyTemp:', operations.chilledWaterSupplyTemp);
+    console.log('usesFreeCooling:', towerInput.usesFreeCooling);
+    console.log('HEXApproachTemp:', towerInput.HEXApproachTemp);
+    console.log('isConstantCondenserWaterTemp:', input.isConstantCondenserWaterTemp);
+    console.log('condenserWaterTemp:', input.condenserWaterTemp);
+    console.log('variableFlow:', condenserPumpInput.variableFlow);
+    console.log('flowRate:', condenserPumpInput.flowRate);
+    console.log('followingTempDifferential:', input.followingTempDifferential);
       return new this.toolsSuiteApiService.ToolsSuiteModule.WaterCooledSystemInput(
         operations.chilledWaterSupplyTemp,
         towerInput.usesFreeCooling,
