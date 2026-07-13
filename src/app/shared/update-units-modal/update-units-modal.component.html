@@ -15,24 +15,34 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div *ngIf="!showSuccessMessage" class="card-block p-5">
-          <span class="h5 bold">
-            Units of measure have changed.
-          </span> 
-          <br><br>
-          For accurate results, assessment data should be updated to reflect these changes.
-        </div>
-        <div *ngIf="showSuccessMessage" class="card-block p-5 alert-success">
-          <div class="h5 bold text-center">
-            Data updated successfully!
-          </div> 
-        </div>
+        @if (!showSuccessMessage) {
+          <div class="card-block p-5">
+            <span class="h5 bold">
+              Units of measure have changed.
+            </span>
+            <br><br>
+            For accurate results, assessment data should be updated to reflect these changes.
+          </div>
+        }
+        @if (showSuccessMessage) {
+          <div class="card-block p-5 alert-success">
+            <div class="h5 bold text-center">
+              Data updated successfully!
+            </div>
+          </div>
+        }
         <div class="card-footer p-3 text-right">
           <button class="btn" (click)="closeModal()">
-            <span *ngIf="showSuccessMessage">Dismiss</span>
-            <span *ngIf="!showSuccessMessage">Continue without update</span>
+            @if (showSuccessMessage) {
+              <span>Dismiss</span>
+            }
+            @if (!showSuccessMessage) {
+              <span>Continue without update</span>
+            }
           </button>
-          <button *ngIf="!showSuccessMessage" class="btn btn-primary ml-2" (click)="updateData()">Update Data</button>
+          @if (!showSuccessMessage) {
+            <button class="btn btn-primary ml-2" (click)="updateData()">Update Data</button>
+          }
         </div>
       </div>
     </div>

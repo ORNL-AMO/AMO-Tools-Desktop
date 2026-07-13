@@ -1,56 +1,72 @@
 <div bsModal #importModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="modal-header" *ngIf="!importInProgress">
-                <h4 class="mb-0">Choose .json or .gz File to be Imported</h4>
-                <button class="close pull-right" aria-label="Close" (click)="hideImportModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="inputModalTitleHelp" class="mb-0 text-muted text-help">
-                    Assessments will be imported into working directory
-                </p>
-                <div class="row" *ngIf="!importInProgress">
-                    <div class="col-12 form-group">
-                        <input type="file" class="form-control-file" (change)="setImportFile($event)"
-                            accept=".json, .gz">
-                        <ng-container *ngIf="fileImportStatus">
-                            <div class="alert alert-danger small p-3"
-                            *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-TOOLS-DESKTOP-OPPORTUNITIES'">
-                            Invalid File Destination - This is a Treasure Hunt opportunites file and must be imported from within a Treasure Hunt.</div>
-                            <div class="alert alert-danger small p-3"
-                            *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'MEASUR-BACKUP'">
-                            Invalid File Destination - This is a MEASUR backup file and should be imported by visiting Data Storage and Backup.</div>
-                            <div class="alert alert-danger small p-3"
-                            *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-LOG-TOOL-DATA'">
-                            Invalid File Destination - This is a Data Explorer export file and should be imported by visiting Data Explorer.</div>
-                            <div class="alert alert-danger small p-3"
-                            *ngIf="fileImportStatus.isValid == false && fileImportStatus.fileType === 'UNKNOWN'">Invalid File Type - This file is not recognized by MEASUR</div>
-                        </ng-container>
-                    </div>
-                </div>
-
-                <div class="row justify-content-center" *ngIf="importInProgress">
-                    <div class="col-md-10">
-                        <div class="main-content text-center">
-                            <div class="spinner">
-                                <div class="bounce1"></div>
-                                <div class="bounce2"></div>
-                                <div class="bounce3"></div>
-                            </div>
-                            <h1>Importing Data...</h1>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer" *ngIf="!importInProgress">
-                <button [disabled]="!fileImportStatus || fileImportStatus.isValid == false"
-                    class="btn btn-primary pull-right" (click)="importFile()">Import</button>
-                <button class="btn btn-secondary pull-left" (click)="hideImportModal()">Cancel</button>
-            </div>
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      @if (!importInProgress) {
+        <div class="modal-header">
+          <h4 class="mb-0">Choose .json or .gz File to be Imported</h4>
+          <button class="close pull-right" aria-label="Close" (click)="hideImportModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+      }
+      <div class="modal-body">
+        <p id="inputModalTitleHelp" class="mb-0 text-muted text-help">
+          Assessments will be imported into working directory
+        </p>
+        @if (!importInProgress) {
+          <div class="row">
+            <div class="col-12 form-group">
+              <input type="file" class="form-control-file" (change)="setImportFile($event)"
+                accept=".json, .gz">
+              @if (fileImportStatus) {
+                @if (fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-TOOLS-DESKTOP-OPPORTUNITIES') {
+                  <div class="alert alert-danger small p-3"
+                    >
+                  Invalid File Destination - This is a Treasure Hunt opportunites file and must be imported from within a Treasure Hunt.</div>
+                }
+                @if (fileImportStatus.isValid == false && fileImportStatus.fileType === 'MEASUR-BACKUP') {
+                  <div class="alert alert-danger small p-3"
+                    >
+                  Invalid File Destination - This is a MEASUR backup file and should be imported by visiting Data Storage and Backup.</div>
+                }
+                @if (fileImportStatus.isValid == false && fileImportStatus.fileType === 'AMO-LOG-TOOL-DATA') {
+                  <div class="alert alert-danger small p-3"
+                    >
+                  Invalid File Destination - This is a Data Explorer export file and should be imported by visiting Data Explorer.</div>
+                }
+                @if (fileImportStatus.isValid == false && fileImportStatus.fileType === 'UNKNOWN') {
+                  <div class="alert alert-danger small p-3"
+                  >Invalid File Type - This file is not recognized by MEASUR</div>
+                }
+              }
+            </div>
+          </div>
+        }
+
+        @if (importInProgress) {
+          <div class="row justify-content-center">
+            <div class="col-md-10">
+              <div class="main-content text-center">
+                <div class="spinner">
+                  <div class="bounce1"></div>
+                  <div class="bounce2"></div>
+                  <div class="bounce3"></div>
+                </div>
+                <h1>Importing Data...</h1>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (!importInProgress) {
+        <div class="modal-footer">
+          <button [disabled]="!fileImportStatus || fileImportStatus.isValid == false"
+          class="btn btn-primary pull-right" (click)="importFile()">Import</button>
+          <button class="btn btn-secondary pull-left" (click)="hideImportModal()">Cancel</button>
+        </div>
+      }
     </div>
+  </div>
 </div>
