@@ -129,8 +129,13 @@
 </app-boiler-blowdown-rate>
 
 <app-power-factor-correction *ngIf="selectedCalc == 'power-factor-correction'" [inTreasureHunt]="true"
-(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)">  
+(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)">
 </app-power-factor-correction>
+
+<app-compressed-air-dryer *ngIf="selectedCalc == 'compressed-air-dryer'" [inTreasureHunt]="true"
+(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+[settings]="settings">
+</app-compressed-air-dryer>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

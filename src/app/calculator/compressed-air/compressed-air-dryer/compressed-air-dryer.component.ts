@@ -13,6 +13,7 @@ import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
 import { CompressedAirDryerService } from './compressed-air-dryer.service';
+import { CompressedAirDryerTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
   selector: 'app-compressed-air-dryer',
@@ -25,7 +26,7 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
   @Input() settings: Settings;
   @Input() operatingHours: OperatingHours;
   @Input() assessment: Assessment;
-  @Output('emitSave') emitSave = new EventEmitter<DryerOperatingCostInput>();
+  @Output('emitSave') emitSave = new EventEmitter<CompressedAirDryerTreasureHunt>();
   @Output('emitCancel') emitCancel = new EventEmitter<boolean>();
 
   @ViewChild('leftPanelHeader', { static: false }) leftPanelHeader: ElementRef;
@@ -211,7 +212,11 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
   }
 
   save(): void {
-    this.emitSave.emit(this.baselineInput);
+    this.emitSave.emit({
+      baseline: this.baselineInput,
+      modification: this.modificationExists ? this.modificationInput : undefined,
+      opportunityType: Treasure.compressedAirDryer,
+    });
   }
 
   cancel(): void {
