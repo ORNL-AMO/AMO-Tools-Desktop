@@ -3,7 +3,7 @@ import { CustomEdgeData, DiagramCalculatedData, DiagramSettings, NodeFlowPropert
 import { BoilerWater, BoilerWaterResults, CoolingTower, CoolingTowerResults, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, HeatEnergy, IntakeSource, KitchenRestroom, KitchenRestroomResults, Landscaping, LandscapingResults, MotorEnergy, ProcessUse, ProcessUseResults, SystemBalanceResults, WaterBalanceResults, WaterProcessComponent, WaterSystemFlowsTotals, WaterSystemTypeEnum, WaterTreatment, WaterUsingSystem, WasteWaterTreatment } from "../types/water-components";
 import { convertAnnualFlow, convertNullInputValueForObjectConstructor } from "./utils";
 import { getEdgeDescription, getWaterFlowTotals } from "./water-components";
-import { NodeGraphIndex, createGraphIndex, getAllUpstreamEdgePaths, getAllDownstreamEdgePaths } from "../../graph";
+import { NodeGraphIndex, RoRejectConfiguration, createGraphIndex, getAllUpstreamEdgePaths, getAllDownstreamEdgePaths } from "../../graph";
 import { BlockCosts, CostComponentMap, CostComponentPathData, PlantResults, PlantSystemSummaryResults, SystemAnnualSummaryResults, SystemAttributionMap, SystemTrueCostContributions, SystemTrueCostData, TrueCostOfSystems, CostComponentAttribution, PathAttribution } from "../types/results";
 
 export const getWaterBalanceResults = (waterUsingSystems: WaterUsingSystem[], calculatedData: DiagramCalculatedData): WaterBalanceResults => {
@@ -737,11 +737,67 @@ const getTreatmentEdgeRatio = (
   if (pathEdgeSource?.data.processComponentType !== 'water-treatment') {
     return 1;
   }
-  const treatmentOutflow = getNodeTotalOutflow(pathEdgeSource as Node<ProcessFlowPart>, calculatedData);
+
+  // * ro-reject-redirect: exclude the reject edge from the outflow denominator at a qualifying RO node.
+  // * the reject edge never leads to a water-using system, so it must not absorb any branch-fraction share.
+  const roConfig = graph.roRejectConfigurations?.[pathEdgeSource.id];
+  const treatmentOutflow = roConfig
+    ? roConfig.productOutflow
+    : getNodeTotalOutflow(pathEdgeSource as Node<ProcessFlowPart>, calculatedData);
+
   if (treatmentOutflow <= 0) {
     return 1;
   }
   return (pathEdge.data.flowValue ?? 0) / treatmentOutflow;
+}
+
+/**
+ * For a qualifying RO node, each product-recipient system's share of the RO's product-only outflow.
+ * Reuses the same downstream walk and branch-ratio math as applySystemTreatmentCosts so Sections 2-4
+ * of the true-cost algorithm doc (Water Treatment, WWT, Discharge Cost Components) cannot compute a
+ * different split for the same RO node.
+ */
+const getRoProductFlowShareRatios = (
+  roNodeId: string,
+  roConfig: RoRejectConfiguration,
+  graph: NodeGraphIndex,
+  calculatedData: DiagramCalculatedData,
+): Record<string, number> => {
+  const productPaths = getAllDownstreamEdgePaths(roNodeId, graph)
+    .filter(path => path[0] !== roConfig.rejectEdgeId);
+
+  const shares: Record<string, number> = {};
+  // * a product-recipient system that is not a leaf produces one downstream path per system-side
+  // * branch (e.g. two of the system's own discharges) - dedupe by the shared path-to-system so
+  // * its productShare is only counted once, not once per branch.
+  const countedPathsToSystem = new Set<string>();
+  productPaths.forEach(path => {
+    const firstEdgeFlow = graph.edgeMap[path[0]].data.flowValue ?? 0;
+    let branchFraction = 1;
+    for (let i = 0; i < path.length; i++) {
+      const edgeId = path[i];
+      if (i > 0) {
+        // * skip path[0] (the RO's own edge, already captured in firstEdgeFlow); accumulate each
+        // * downstream treatment node's branch ratio incrementally while walking the path.
+        branchFraction *= getTreatmentEdgeRatio(edgeId, graph, calculatedData);
+      }
+
+      const currentNode = graph.nodeMap[graph.edgeMap[edgeId].target];
+      if (currentNode.data.processComponentType === 'water-using-system') {
+        const pathToSystemKey = path.slice(0, i + 1).join('|');
+        if (countedPathsToSystem.has(pathToSystemKey)) {
+          break;
+        }
+        countedPathsToSystem.add(pathToSystemKey);
+
+        const systemFlowResponsibility = firstEdgeFlow * branchFraction;
+        const pathProductShareRatio = roConfig.productOutflow > 0 ? systemFlowResponsibility / roConfig.productOutflow : 0;
+        shares[currentNode.id] = (shares[currentNode.id] ?? 0) + pathProductShareRatio;
+        break;
+      }
+    }
+  });
+  return shares;
 }
 
 /**
@@ -912,7 +968,9 @@ const applySystemDischargeCosts = (
   dischargeCostData: CostComponentMap,
   systemAttributionMap: SystemAttributionMap,
   settings: DiagramSettings,
+  calculatedData: DiagramCalculatedData,
   debuggingNameMap: Record<string, string>,
+  roProductFlowShareCache: Map<string, Record<string, number>>,
 ) => {
   Object.entries(dischargeCostData).forEach(([dischargeId, dischargeData]: [string, CostComponentPathData]) => {
     // * reset defaults that will be aggregated
@@ -937,7 +995,14 @@ const applySystemDischargeCosts = (
           break;
         }
 
-        if (currentNode.data.processComponentType === 'water-using-system') {
+        // * ro-reject-redirect: the reject-path discharge's upstream walk reaches the RO node, not a
+        // * water-using system - redirect this contribution's flow-responsibility to the RO's product recipients.
+        const roRejectConfig = currentNode.data.processComponentType === 'water-treatment'
+          ? graph.roRejectConfigurations?.[currentNode.id]
+          : undefined;
+        const isRoRejectContribution = roRejectConfig?.rejectDischargeNode?.id === dischargeId;
+
+        if (currentNode.data.processComponentType === 'water-using-system' || isRoRejectContribution) {
           let pathToSystem: string[] = [...path].slice(0, path.indexOf(edgeId) + 1);
           const isPathAttributed = pathsAttributed.find((attributedPath: string[]) => {
             return pathToSystem.every((edgeId: string, idx: number) => edgeId === attributedPath[idx]);
@@ -954,56 +1019,101 @@ const applySystemDischargeCosts = (
           // * fractionPathDischargeReceived ternary will ignore cases where systemDischarge > pathDischarge due to flow from other discharges. We will observe other discharges on another iteration
           const fractionPathDischargeReceived = (systemDischarge / pathDischarge) > 1 ? 1 : (systemDischarge / pathDischarge);
           const systemFlowResponsibility = pathDischarge * fractionPathDischargeReceived;
-          let systemAttributionFraction = (systemFlowResponsibility / dischargeData.blockCosts.totalFlow);
+          const contributorAttributionFraction = (systemFlowResponsibility / dischargeData.blockCosts.totalFlow);
 
-          setSystemAttribution(
-            systemAttributionMap,
-            dischargeEdge,
-            currentNode.id,
-            systemAttributionFraction,
-            dischargeId,
-            'water-discharge',
-            debuggingNameMap
-          );
-          const hasAdjustedAttribution = systemAttributionMap[currentNode.id][dischargeId].totalAttribution.adjusted !== undefined;
-
-          if (hasAdjustedAttribution) {
-            if (adjustedAttributions[currentNode.id] === undefined) {
-              adjustedAttributions[currentNode.id] = {};
+          if (isRoRejectContribution && roRejectConfig) {
+            // * ro-reject-redirect: split this contribution across the RO's product recipients, not the RO node itself.
+            let productOutflowBranchShares = roProductFlowShareCache.get(currentNode.id);
+            if (!productOutflowBranchShares) {
+              productOutflowBranchShares = getRoProductFlowShareRatios(currentNode.id, roRejectConfig, graph, calculatedData);
+              roProductFlowShareCache.set(currentNode.id, productOutflowBranchShares);
             }
-            adjustedAttributions[currentNode.id][dischargeId] = systemAttributionMap[currentNode.id][dischargeId];
+            Object.entries(productOutflowBranchShares).forEach(([systemId, share]) => {
+              const systemAttributionFraction = contributorAttributionFraction * share;
+              const systemFlowShare = systemFlowResponsibility * share;
 
+              setSystemAttribution(
+                systemAttributionMap,
+                dischargeEdge,
+                systemId,
+                systemAttributionFraction,
+                dischargeId,
+                'water-discharge',
+                debuggingNameMap
+              );
+              const hasAdjustedAttribution = systemAttributionMap[systemId][dischargeId].totalAttribution.adjusted !== undefined;
+
+              if (hasAdjustedAttribution) {
+                if (adjustedAttributions[systemId] === undefined) {
+                  adjustedAttributions[systemId] = {};
+                }
+                adjustedAttributions[systemId][dischargeId] = systemAttributionMap[systemId][dischargeId];
+              } else {
+                const costToSystem = systemAttributionFraction * dischargeData.blockCosts.totalBlockCost;
+                trueCostOfSystems[systemId].discharge += costToSystem;
+                systemAnnualSummaryResultsMap[systemId].dischargeWater += systemFlowShare;
+
+                const dischargeNode = graph.nodeMap[dischargeId];
+                const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(dischargeNode.data as DischargeOutlet, settings.electricityCost, settings.unitsOfMeasure);
+                const energyCost = pumpAndMotorEnergyCost * systemAttributionFraction;
+                trueCostOfSystems[systemId].systemPumpAndMotorEnergy += energyCost;
+              }
+            });
+
+            // * mark the RO node itself (not its receiving systems) as visited: a product-receiving system may
+            // * separately have its own direct upstream path into this same discharge (Supported Configuration 6)
+            visitedSystemIds.push(currentNode.id);
           } else {
-            // * if we have adjusted attribution, costs must be set for total attribution of system to component 
-            // * i.e (at a higher level than current scope where we are visiting an edge/path attribution)
-
-            let costToSystem = systemAttributionFraction * dischargeData.blockCosts.totalBlockCost;
-
-             logAttributionAndCosts(
-              [],
-              debuggingNameMap,
-              currentNode,
-              path,
-              dischargeId,
+            setSystemAttribution(
               systemAttributionMap,
-              graph,
-              systemAttributionFraction,
-              costToSystem,
-              fractionPathDischargeReceived,
-              systemFlowResponsibility
+              dischargeEdge,
+              currentNode.id,
+              contributorAttributionFraction,
+              dischargeId,
+              'water-discharge',
+              debuggingNameMap
             );
+            const hasAdjustedAttribution = systemAttributionMap[currentNode.id][dischargeId].totalAttribution.adjusted !== undefined;
 
-            trueCostOfSystems[currentNode.id].discharge += costToSystem;
-            systemAnnualSummaryResultsMap[currentNode.id].dischargeWater += systemFlowResponsibility;
+            if (hasAdjustedAttribution) {
+              if (adjustedAttributions[currentNode.id] === undefined) {
+                adjustedAttributions[currentNode.id] = {};
+              }
+              adjustedAttributions[currentNode.id][dischargeId] = systemAttributionMap[currentNode.id][dischargeId];
 
-            const dischargeNode = graph.nodeMap[dischargeId];
-            const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(dischargeNode.data as DischargeOutlet, settings.electricityCost, settings.unitsOfMeasure);
-            const energyCost = pumpAndMotorEnergyCost * systemAttributionFraction;
-            trueCostOfSystems[currentNode.id].systemPumpAndMotorEnergy += energyCost;
+            } else {
+              // * if we have adjusted attribution, costs must be set for total attribution of system to component
+              // * i.e (at a higher level than current scope where we are visiting an edge/path attribution)
+
+              let costToSystem = contributorAttributionFraction * dischargeData.blockCosts.totalBlockCost;
+
+               logAttributionAndCosts(
+                [],
+                debuggingNameMap,
+                currentNode,
+                path,
+                dischargeId,
+                systemAttributionMap,
+                graph,
+                contributorAttributionFraction,
+                costToSystem,
+                fractionPathDischargeReceived,
+                systemFlowResponsibility
+              );
+
+              trueCostOfSystems[currentNode.id].discharge += costToSystem;
+              systemAnnualSummaryResultsMap[currentNode.id].dischargeWater += systemFlowResponsibility;
+
+              const dischargeNode = graph.nodeMap[dischargeId];
+              const pumpAndMotorEnergyCost = getPumpAndMotorEnergyContribution(dischargeNode.data as DischargeOutlet, settings.electricityCost, settings.unitsOfMeasure);
+              const energyCost = pumpAndMotorEnergyCost * contributorAttributionFraction;
+              trueCostOfSystems[currentNode.id].systemPumpAndMotorEnergy += energyCost;
+            }
+
+            // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
+            visitedSystemIds.push(currentNode.id);
           }
 
-          // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
-          visitedSystemIds.push(currentNode.id);
           pathsAttributed.push(pathToSystem);
           break;
         }
@@ -1091,7 +1201,11 @@ const applySystemTreatmentCosts = (
 
           const currentEdge = graph.edgeMap[edgeId];
           const treatmentNode = graph.nodeMap[treatmentId];
-          const totalTreatmentOutflow = getNodeTotalOutflow(treatmentNode as Node<ProcessFlowPart>, calculatedData);
+          // * ro-reject-redirect: RO's own block cost is split only across its product recipients.
+          const roConfig = graph.roRejectConfigurations?.[treatmentId];
+          const totalTreatmentOutflow = roConfig
+            ? roConfig.productOutflow
+            : getNodeTotalOutflow(treatmentNode as Node<ProcessFlowPart>, calculatedData);
 
           // * branchFraction: product of localRatio across any further treatment nodes in the path (see doc comment on applySystemTreatmentCosts above).
           const currentEdgeIdx = path.indexOf(edgeId);
@@ -1192,7 +1306,9 @@ const applySystemWasteTreatmentCosts = (
   graph: NodeGraphIndex,
   wasteTreatmentCostData: CostComponentMap,
   systemAttributionMap: SystemAttributionMap,
+  calculatedData: DiagramCalculatedData,
   debuggingNameMap: Record<string, string>,
+  roProductFlowShareCache: Map<string, Record<string, number>>,
 ) => {
   // * used to deduct flow responsibility from upstream WWT systems
   let downstreamTreatmentAttributionMap: Record<string, {
@@ -1318,8 +1434,15 @@ const applySystemWasteTreatmentCosts = (
           break;
         }
 
+        // * ro-reject-redirect: the reject branch's upstream walk reaches the RO node, not a water-using
+        // * system - redirect this contribution's flow-responsibility to the RO's product recipients.
+        const roRejectConfig = currentNode.data.processComponentType === 'water-treatment'
+          ? graph.roRejectConfigurations?.[currentNode.id]
+          : undefined;
+        const isRoRejectContribution = roRejectConfig?.rejectWasteTreatmentNode?.id === treatmentId;
+
         // * reuse-and-discharge-split, discharge portion: attribute back to upstream water-using systems proportionally.
-        if (currentNode.data.processComponentType === 'water-using-system') {
+        if (currentNode.data.processComponentType === 'water-using-system' || isRoRejectContribution) {
           const treatmentEdge = graph.edgeMap[path[0]];
 
           const systemOutflow = treatmentEdge.data.flowValue ?? 0;
@@ -1336,50 +1459,88 @@ const applySystemWasteTreatmentCosts = (
             systemFlowResponsibility = systemFlowResponsibility - totalDownstreamChargedPortion;
           }
 
-          let systemAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
+          const contributorAttributionFraction = (systemFlowResponsibility / treatmentData.blockCosts.totalFlow);
 
-          setSystemAttribution(
-            systemAttributionMap,
-            treatmentEdge,
-            currentNode.id,
-            systemAttributionFraction,
-            treatmentId,
-            'waste-water-treatment',
-            debuggingNameMap
-          );
-          const hasAdjustedAttribution = systemAttributionMap[currentNode.id][treatmentId].totalAttribution.adjusted !== undefined;
-
-          if (hasAdjustedAttribution) {
-            if (adjustedAttributions[currentNode.id] === undefined) {
-              adjustedAttributions[currentNode.id] = {};
+          if (isRoRejectContribution && roRejectConfig) {
+            // * ro-reject-redirect: split this contribution across the RO's product recipients, not the RO node itself.
+            let productOutflowBranchShares = roProductFlowShareCache.get(currentNode.id);
+            if (!productOutflowBranchShares) {
+              productOutflowBranchShares = getRoProductFlowShareRatios(currentNode.id, roRejectConfig, graph, calculatedData);
+              roProductFlowShareCache.set(currentNode.id, productOutflowBranchShares);
             }
-            adjustedAttributions[currentNode.id][treatmentId] = systemAttributionMap[currentNode.id][treatmentId];
+            Object.entries(productOutflowBranchShares).forEach(([systemId, share]) => {
+              const systemAttributionFraction = contributorAttributionFraction * share;
 
+              setSystemAttribution(
+                systemAttributionMap,
+                treatmentEdge,
+                systemId,
+                systemAttributionFraction,
+                treatmentId,
+                'waste-water-treatment',
+                debuggingNameMap
+              );
+              const hasAdjustedAttribution = systemAttributionMap[systemId][treatmentId].totalAttribution.adjusted !== undefined;
+
+              if (hasAdjustedAttribution) {
+                if (adjustedAttributions[systemId] === undefined) {
+                  adjustedAttributions[systemId] = {};
+                }
+                adjustedAttributions[systemId][treatmentId] = systemAttributionMap[systemId][treatmentId];
+              } else {
+                const costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
+                trueCostOfSystems[systemId].wasteTreatment += costToSystem;
+              }
+            });
+
+            // * mark the RO node itself (not its recipients) as visited: a product-recipient system may
+            // * separately have its own direct upstream path into this same WWT (Supported Configuration 6)
+            visitedSystemIds.push(currentNode.id);
           } else {
-            // * if we have adjusted attribution, costs must be set for total attribution of system to component 
-            // * i.e (at a higher level than current scope where we are visiting an edge/path attribution)
-
-            const costToSystem = systemAttributionFraction * treatmentData.blockCosts.totalBlockCost;
-            trueCostOfSystems[currentNode.id].wasteTreatment += costToSystem;
-
-            logAttributionAndCosts(
-              [],
-              debuggingNameMap,
-              currentNode,
-              path,
-              treatmentId,
+            setSystemAttribution(
               systemAttributionMap,
-              graph,
-              systemAttributionFraction,
-              costToSystem,
-              fractionPathInflowReceived,
-              systemFlowResponsibility
+              treatmentEdge,
+              currentNode.id,
+              contributorAttributionFraction,
+              treatmentId,
+              'waste-water-treatment',
+              debuggingNameMap
             );
+            const hasAdjustedAttribution = systemAttributionMap[currentNode.id][treatmentId].totalAttribution.adjusted !== undefined;
 
+            if (hasAdjustedAttribution) {
+              if (adjustedAttributions[currentNode.id] === undefined) {
+                adjustedAttributions[currentNode.id] = {};
+              }
+              adjustedAttributions[currentNode.id][treatmentId] = systemAttributionMap[currentNode.id][treatmentId];
+
+            } else {
+              // * if we have adjusted attribution, costs must be set for total attribution of system to component
+              // * i.e (at a higher level than current scope where we are visiting an edge/path attribution)
+
+              const costToSystem = contributorAttributionFraction * treatmentData.blockCosts.totalBlockCost;
+              trueCostOfSystems[currentNode.id].wasteTreatment += costToSystem;
+
+              logAttributionAndCosts(
+                [],
+                debuggingNameMap,
+                currentNode,
+                path,
+                treatmentId,
+                systemAttributionMap,
+                graph,
+                contributorAttributionFraction,
+                costToSystem,
+                fractionPathInflowReceived,
+                systemFlowResponsibility
+              );
+
+            }
+
+            // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
+            visitedSystemIds.push(currentNode.id);
           }
 
-          // * the first system in the path is the only one responsible for the cost, no need to visit further downstream systems
-          visitedSystemIds.push(currentNode.id);
           break;
         }
       }
@@ -1402,6 +1563,168 @@ const applySystemWasteTreatmentCosts = (
       }
     });
     
+  });
+}
+
+type RoChildBranchClassification =
+  | { outflowType: 'product' }
+  | { outflowType: 'reject', dischargeNode: Node, wasteTreatmentNode?: Node }
+  | { outflowType: 'unknown' };
+
+/**
+ * Classifies a single direct child branch of a candidate RO node as 'product' (reaches a water-using
+ * system), 'reject' (a linear discharge-only path with at most one WWT immediately before discharge and
+ * no water-using system), or 'unknown' (neither shape - disqualifies the RO node from ro-reject-redirect).
+ */
+const classifyRoChildBranch = (childId: string, graph: NodeGraphIndex): RoChildBranchClassification => {
+  const visited = new Set<string>();
+  const nodesInSubtree: Node[] = [];
+  const stack: string[] = [childId];
+
+  while (stack.length > 0) {
+    const currentId = stack.pop() as string;
+    if (visited.has(currentId)) {
+      continue;
+    }
+    visited.add(currentId);
+
+    const node = graph.nodeMap[currentId];
+    if (node) {
+      nodesInSubtree.push(node);
+    }
+    (graph.childMap[currentId] || []).forEach(childId => stack.push(childId));
+  }
+
+  const hasWaterUsingSystem = nodesInSubtree.some(node => node.data.processComponentType === 'water-using-system');
+  if (hasWaterUsingSystem) {
+    return { outflowType: 'product' };
+  }
+
+  const dischargeNodes = nodesInSubtree.filter(node => node.data.processComponentType === 'water-discharge');
+  const wasteTreatmentNodes = nodesInSubtree.filter(node => node.data.processComponentType === 'waste-water-treatment');
+
+  if (dischargeNodes.length !== 1 || wasteTreatmentNodes.length > 1) {
+    return { outflowType: 'unknown' };
+  }
+
+  if (wasteTreatmentNodes.length === 1) {
+    const wasteTreatmentNode = wasteTreatmentNodes[0];
+    const wasteTreatmentImmediatelyPrecedesDischarge = (graph.childMap[wasteTreatmentNode.id] || []).includes(dischargeNodes[0].id);
+    if (!wasteTreatmentImmediatelyPrecedesDischarge) {
+      return { outflowType: 'unknown' };
+    }
+    return { outflowType: 'reject', dischargeNode: dischargeNodes[0], wasteTreatmentNode };
+  }
+
+  return { outflowType: 'reject', dischargeNode: dischargeNodes[0] };
+}
+
+/**
+ * Preprocessing (ro-reject-redirect - Step 1.5): identifies every water-treatment node that qualifies as
+ * a Reverse Osmosis (treatmentType 6) reject-redirect configuration and records the diagram configuration needed by
+ * Sections 1-4 of the true-cost algorithm doc (getTreatmentEdgeRatio, applySystemTreatmentCosts,
+ * applySystemWasteTreatmentCosts, applySystemDischargeCosts) to redirect the reject branch's cost share
+ * to the RO's product recipients.
+ *
+ * Qualification (see ro-specification.md):
+ *   1. treatmentType === 6.
+ *   2. Exactly one direct child edge classifies as the reject branch; every other direct child edge
+ *      classifies as a product branch. Zero or more than one reject branch, or any branch that is
+ *      neither product nor reject, disqualifies the node (falls back to standard attribution).
+ *   3. Each product branch reaches a water-using-system node (see classifyRoChildBranch).
+ *   4. The reject branch's subtree has no water-using-system node, exactly one water-discharge node,
+ *      and at most one waste-water-treatment node immediately preceding that discharge
+ *      (see classifyRoChildBranch).
+ *   5. Traversing upstream from the RO node reaches exactly one water-intake node.
+ */
+const assignRoRejectConfigurations = (
+  waterTreatmentNodes: Node<ProcessFlowPart>[],
+  graph: NodeGraphIndex,
+): void => {
+  waterTreatmentNodes.forEach(roNode => {
+    // * criterion 1: treatment type must be Reverse Osmosis.
+    if (roNode.data.treatmentType !== 6) {
+      return;
+    }
+
+    // * criterion 2 precondition: need at least a reject branch and one product branch.
+    const childIds = graph.childMap[roNode.id] || [];
+    if (childIds.length < 2) {
+      return;
+    }
+
+    const childEdgeLookups = childIds
+      .map(childId => (graph.edgesByNode[roNode.id] || []).find(edge => edge.source === roNode.id && edge.target === childId));
+
+    if (childEdgeLookups.some(edge => edge === undefined)) {
+      return;
+    }
+
+    const childEdges = childEdgeLookups as Edge<CustomEdgeData>[];
+
+    let rejectEdge: Edge<CustomEdgeData> | undefined;
+    let rejectDischargeNode: Node | undefined;
+    let rejectWasteTreatmentNode: Node | undefined;
+    let productOutflow = 0;
+    let isDisqualified = false;
+
+    for (const childEdge of childEdges) {
+      const classification = classifyRoChildBranch(childEdge.target, graph);
+
+      if (classification.outflowType === 'product') {
+        // * criterion 3: branch reaches a water-using system - counts toward product-only outflow.
+        productOutflow += childEdge.data.flowValue ?? 0;
+      } else if (classification.outflowType === 'reject') {
+        if (rejectEdge) {
+          // * more than one reject branch found - ambiguous, criterion 2 fails.
+          isDisqualified = true;
+          break;
+        }
+        // * criterion 4: branch is a discharge-only path - record it as the reject branch.
+        rejectEdge = childEdge;
+        rejectDischargeNode = classification.dischargeNode;
+        rejectWasteTreatmentNode = classification.wasteTreatmentNode;
+      } else {
+        // * criteria 3/4 fail: branch is neither product nor reject shape - disqualify the node.
+        isDisqualified = true;
+        break;
+      }
+    }
+
+    if (isDisqualified || !rejectEdge || !rejectDischargeNode) {
+      return;
+    }
+
+    // * criterion 5: traversing upstream from the RO node must reach exactly one water-intake node.
+    const upstreamPaths = getAllUpstreamEdgePaths(roNode.id, graph);
+    const upstreamIntakeNodeIds = new Set<string>();
+    upstreamPaths.forEach(path => {
+      if (path.length === 0) {
+        return;
+      }
+      const lastEdgeId = path[path.length - 1];
+      const terminalNodeId = graph.edgeMap[lastEdgeId].source;
+      const terminalNode = graph.nodeMap[terminalNodeId];
+      if (terminalNode?.data.processComponentType === 'water-intake') {
+        upstreamIntakeNodeIds.add(terminalNode.id);
+      }
+    });
+
+    if (upstreamIntakeNodeIds.size !== 1) {
+      return;
+    }
+
+    if (!graph.roRejectConfigurations) {
+      graph.roRejectConfigurations = {};
+    }
+
+    graph.roRejectConfigurations[roNode.id] = {
+      intakeNode: graph.nodeMap[[...upstreamIntakeNodeIds][0]],
+      rejectDischargeNode,
+      rejectWasteTreatmentNode,
+      rejectEdgeId: rejectEdge.id,
+      productOutflow,
+    };
   });
 }
 
@@ -1508,6 +1831,12 @@ export const getPlantSummaryResults = (
   const waterTreatmentNodes: Node<ProcessFlowPart>[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'water-treatment') as Node<ProcessFlowPart>[];
   const wasteTreatmentNodes: Node<ProcessFlowPart>[] = nodes.filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment') as Node<ProcessFlowPart>[];
 
+  assignRoRejectConfigurations(waterTreatmentNodes, graph);
+
+  // * shared across applySystemDischargeCosts and applySystemWasteTreatmentCosts - a qualifying RO node's
+  // * product flow shares are the same regardless of which cost component is redirecting through them.
+  const roProductFlowShareCache: Map<string, Record<string, number>> = new Map();
+
   let intakeCostData: CostComponentMap = {};
   if (intakeNodes?.length > 0) {
     intakeNodes.forEach((node: Node<ProcessFlowPart>) => {
@@ -1553,7 +1882,9 @@ export const getPlantSummaryResults = (
       dischargeCostData,
       systemAttributionMap,
       settings,
-      nodeNameMap
+      calculatedData,
+      nodeNameMap,
+      roProductFlowShareCache
     );
   }
 
@@ -1600,7 +1931,9 @@ export const getPlantSummaryResults = (
       graph,
       wasteTreatmentCostData,
       systemAttributionMap,
-      nodeNameMap
+      calculatedData,
+      nodeNameMap,
+      roProductFlowShareCache
     );
   }
 

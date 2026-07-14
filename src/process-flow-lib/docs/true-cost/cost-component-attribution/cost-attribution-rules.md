@@ -97,6 +97,17 @@ Before any attribution occurs, the total annual cost (block cost) for each cost-
 
 ---
 
+### 3.5 Reverse Osmosis (RO) Configuration Override
+
+| Rule | Specification |
+|---|---|
+| **When it applies** | The treatment node's `treatmentType` is Reverse Osmosis (`6`), with a qualifying reject-redirect configuration. See [ro-specification.md](../algorithm/ro-specification.md) for the full qualification criteria. |
+| **What it overrides** | Intake (3.1), Water Treatment (3.3), Wastewater Treatment (3.4, reject-path WWT only), and Water Discharge (3.2, reject-path discharge only) attribution for a qualifying RO node's reject branch. |
+| **Attribution fraction — ro-reject-redirect** | Each product-recipient system receives `productShare × component block cost`, where `productShare` is that system's share of the RO node's product-only outflow (the reject branch is excluded from this denominator). |
+| **Non-qualifying configurations** | Fall back to the standard rules in 3.1-3.4, unchanged. |
+
+---
+
 ## 4. Additional Cost Categories (Step 3 Only)
 
 The following cost categories are computed in Step 3 (finalization) and are not part of the Step 2 graph-walk attribution. They are assigned directly to each system without a flow-proportional walk.

@@ -14,7 +14,15 @@ export interface NodeGraphIndex {
   edgesByNode: Record<string, Edge<CustomEdgeData>[]>;
   // nodeId, node
   nodeMap?: Record<string, Node>;
-  systemsWithRODirectDischarge?: Record<string, { intakeNode: Node, treatmentNode: Node, dischargeNode: Node, wasteTreatmentNode?: Node }>;
+  roRejectConfigurations?: Record<string, RoRejectConfiguration>;
+}
+
+export interface RoRejectConfiguration {
+  intakeNode: Node;
+  rejectDischargeNode: Node;
+  rejectWasteTreatmentNode?: Node;
+  rejectEdgeId: string;
+  productOutflow: number;
 }
 
 export const createGraphIndex = (nodes: Node[], edges: Edge<CustomEdgeData>[]) => {

@@ -53,6 +53,8 @@ The four sub-routines are:
    - *Pass 1 (downstream/reuse)*: walks downstream, stopping at the first water-using system receiving the recycled water. Standard flow-fraction applies.
    - *Pass 2 (upstream/discharge)*: walks upstream, stopping at the first water-using system that sent water into the WWT. The system's flow responsibility is reduced by any portion already attributed in Pass 1.
 
+**RO configuration override:** When a water-treatment node qualifies as a Reverse Osmosis reject-redirect configuration, the **ro-reject-redirect** rule overrides the four sub-routines above for that node's reject branch — its share of intake, treatment, WWT, and discharge cost is redirected to the RO's product-recipient system(s) instead of being left permanently unattributed. See `ro-specification.md` for qualification criteria and worked examples.
+
 **Why we do this as four separate passes:** Each cost component type has a different "direction of responsibility." Intake costs naturally flow forward — the system that first receives the water is the one that drove the intake. Discharge costs flow backward — the system that last used the water before it leaves the facility is the one responsible for the discharge. Separating the passes makes each rule explicit and independently auditable.
 
 **Why we stop at the first system:** Charging a downstream system for an upstream cost component would mean double-counting — the upstream system already bears the cost of getting water to itself, and the downstream system would be getting charged for water infrastructure it didn't directly use. The "closest system pays" rule prevents this.

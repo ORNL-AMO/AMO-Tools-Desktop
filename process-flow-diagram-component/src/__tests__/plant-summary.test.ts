@@ -1471,3 +1471,822 @@ describe('getPlantSummaryResults — adjusted-attribution-treatment: user overri
       .toBeCloseTo(blockCost(INTAKE_COST, FLOW), 0);
   });
 });
+
+// ---------------------------------------------------------------------------
+// ro-reject-redirect fixtures
+// See .prompts/true-cost/algorithm-coverage/ro-specification.md
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Fixture: ro-single-system
+// Configuration: Intake → RO → [System A (product), Discharge-Reject]
+//
+//   intake (cost=1/kGal, outflow=10)
+//     └─ e1 (10) ─► ro (cost=5/kGal, treatmentType=6, inflow=10, outflow=10)
+//                     ├─ e2 (7) ─► sysA               (product)
+//                     └─ e3 (3) ─► dischargeReject (cost=0.5/kGal)   (reject)
+//
+// productOutflow = 7 (RO's total outflow minus the reject edge). Since System A is the
+// only product recipient, productShare = 1.0 - the single-system case is just the
+// degenerate case of the general share formula, not a separate code path.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-single-system: Intake → RO → [System A (product), Discharge (reject)]', () => {
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
+  const DISCHARGE_REJECT_COST = 0.5;
+  const INTAKE_FLOW = 10;
+  const PRODUCT_FLOW = 7;
+  const REJECT_FLOW = 3;
+
+  const intake = makeIntakeNode('intake', INTAKE_COST);
+  const ro = makeTreatmentNode('ro', RO_COST, 6);
+  const sysA = makeSystemNode('sysA');
+  const dischargeReject = makeDischargeNode('dischargeReject', DISCHARGE_REJECT_COST);
+
+  const nodes = [intake, ro, sysA, dischargeReject];
+  const edges = [
+    makeEdge('intake', 'ro', INTAKE_FLOW),
+    makeEdge('ro', 'sysA', PRODUCT_FLOW),
+    makeEdge('ro', 'dischargeReject', REJECT_FLOW),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: INTAKE_FLOW },
+    ro: { totalSourceFlow: INTAKE_FLOW, totalDischargeFlow: INTAKE_FLOW },
+    sysA: { totalSourceFlow: PRODUCT_FLOW },
+    dischargeReject: { totalSourceFlow: REJECT_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('attributes 100% of intake block cost to System A (the reject share is folded in)', () => {
+    expect(result.trueCostOfSystems['sysA'].intake)
+      .toBeCloseTo(blockCost(INTAKE_COST, INTAKE_FLOW), 0);
+  });
+
+  it('attributes 100% of RO treatment block cost to System A', () => {
+    expect(result.trueCostOfSystems['sysA'].treatment)
+      .toBeCloseTo(blockCost(RO_COST, INTAKE_FLOW), 0);
+  });
+
+  it('attributes 100% of the reject discharge block cost to System A', () => {
+    expect(result.trueCostOfSystems['sysA'].discharge)
+      .toBeCloseTo(blockCost(DISCHARGE_REJECT_COST, REJECT_FLOW), 0);
+  });
+
+  it('records intake, treatment, and discharge attribution fractions of 1.0', () => {
+    expect(result.systemAttributionMap['sysA']['intake'].totalAttribution.default).toBeCloseTo(1.0, 6);
+    expect(result.systemAttributionMap['sysA']['ro'].totalAttribution.default).toBeCloseTo(1.0, 6);
+    expect(result.systemAttributionMap['sysA']['dischargeReject'].totalAttribution.default).toBeCloseTo(1.0, 6);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: ro-multi-system-product-fork
+// Configuration: Intake → RO ──┬─ System A (5), ├─ System B (2), └─ Discharge (3, reject)
+//
+// productOutflow = 5 + 2 = 7. System A's productShare = 5/7, System B's = 2/7 - these
+// sum to 100%, not 5/10 + 2/10 = 70%, confirming the denominator fix (Section 1 & 2).
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-multi-system-product-fork: RO product path forks to two systems', () => {
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
+  const INTAKE_FLOW = 10;
+  const FLOW_A = 5;
+  const FLOW_B = 2;
+  const REJECT_FLOW = 3;
+
+  const intake = makeIntakeNode('intake', INTAKE_COST);
+  const ro = makeTreatmentNode('ro', RO_COST, 6);
+  const sysA = makeSystemNode('sysA');
+  const sysB = makeSystemNode('sysB');
+  const dischargeReject = makeDischargeNode('dischargeReject', 0);
+
+  const nodes = [intake, ro, sysA, sysB, dischargeReject];
+  const edges = [
+    makeEdge('intake', 'ro', INTAKE_FLOW),
+    makeEdge('ro', 'sysA', FLOW_A),
+    makeEdge('ro', 'sysB', FLOW_B),
+    makeEdge('ro', 'dischargeReject', REJECT_FLOW),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: INTAKE_FLOW },
+    ro: { totalSourceFlow: INTAKE_FLOW, totalDischargeFlow: INTAKE_FLOW },
+    sysA: { totalSourceFlow: FLOW_A },
+    sysB: { totalSourceFlow: FLOW_B },
+    dischargeReject: { totalSourceFlow: REJECT_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  const productOutflow = FLOW_A + FLOW_B;
+
+  it('attributes intake block cost to System A and System B by productShare (5/7, 2/7)', () => {
+    expect(result.trueCostOfSystems['sysA'].intake)
+      .toBeCloseTo(blockCost(INTAKE_COST, INTAKE_FLOW) * (FLOW_A / productOutflow), 0);
+    expect(result.trueCostOfSystems['sysB'].intake)
+      .toBeCloseTo(blockCost(INTAKE_COST, INTAKE_FLOW) * (FLOW_B / productOutflow), 0);
+  });
+
+  it('attributes RO treatment block cost to System A and System B by productShare (5/7, 2/7)', () => {
+    expect(result.trueCostOfSystems['sysA'].treatment)
+      .toBeCloseTo(blockCost(RO_COST, INTAKE_FLOW) * (FLOW_A / productOutflow), 0);
+    expect(result.trueCostOfSystems['sysB'].treatment)
+      .toBeCloseTo(blockCost(RO_COST, INTAKE_FLOW) * (FLOW_B / productOutflow), 0);
+  });
+
+  it('intake and treatment attribution fractions across product systems sum to 1.0 (not 0.7)', () => {
+    const intakeFractionSum = result.systemAttributionMap['sysA']['intake'].totalAttribution.default
+      + result.systemAttributionMap['sysB']['intake'].totalAttribution.default;
+    const treatmentFractionSum = result.systemAttributionMap['sysA']['ro'].totalAttribution.default
+      + result.systemAttributionMap['sysB']['ro'].totalAttribution.default;
+
+    expect(intakeFractionSum).toBeCloseTo(1.0, 6);
+    expect(treatmentFractionSum).toBeCloseTo(1.0, 6);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: ro-product-system-branches-downstream
+// Configuration: Intake → RO ──┬─ System A (product, 5) ──┬─ Discharge A1 (3)
+//                              │                           └─ Discharge A2 (2)
+//                              ├─ System B (product, 2)
+//                              └─ (reject, 3) → Discharge-Reject
+//
+// System A (a product recipient) is NOT a leaf - it forks to two of its own discharges.
+// getRoProductFlowShareRatios stops its downstream walk at the first water-using-system
+// node on each path (see results.ts), so it must record System A's productShare (5/7)
+// exactly once, not once per downstream path through it (which would double it to 10/7).
+// This also confirms the reject-path discharge cost, redirected to System A and System B
+// by productShare, is not inflated by System A's branching, and that System A's own
+// downstream discharges (A1, A2) remain fully and separately attributed to System A.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-product-system-branches-downstream: product-recipient system is not a leaf', () => {
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
+  const DISCHARGE_REJECT_COST = 0.5;
+  const DISCHARGE_A1_COST = 1;
+  const DISCHARGE_A2_COST = 1;
+
+  const INTAKE_FLOW = 10;
+  const FLOW_A = 5;
+  const FLOW_B = 2;
+  const REJECT_FLOW = 3;
+  const FLOW_A1 = 3;
+  const FLOW_A2 = 2;
+
+  const intake = makeIntakeNode('intake', INTAKE_COST);
+  const ro = makeTreatmentNode('ro', RO_COST, 6);
+  const sysA = makeSystemNode('sysA');
+  const sysB = makeSystemNode('sysB');
+  const dischargeReject = makeDischargeNode('dischargeReject', DISCHARGE_REJECT_COST);
+  const dischargeA1 = makeDischargeNode('dischargeA1', DISCHARGE_A1_COST);
+  const dischargeA2 = makeDischargeNode('dischargeA2', DISCHARGE_A2_COST);
+
+  const nodes = [intake, ro, sysA, sysB, dischargeReject, dischargeA1, dischargeA2];
+  const edges = [
+    makeEdge('intake', 'ro', INTAKE_FLOW),
+    makeEdge('ro', 'sysA', FLOW_A),
+    makeEdge('ro', 'sysB', FLOW_B),
+    makeEdge('ro', 'dischargeReject', REJECT_FLOW),
+    makeEdge('sysA', 'dischargeA1', FLOW_A1),
+    makeEdge('sysA', 'dischargeA2', FLOW_A2),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: INTAKE_FLOW },
+    ro: { totalSourceFlow: INTAKE_FLOW, totalDischargeFlow: INTAKE_FLOW },
+    sysA: { totalSourceFlow: FLOW_A, totalDischargeFlow: FLOW_A },
+    sysB: { totalSourceFlow: FLOW_B },
+    dischargeReject: { totalSourceFlow: REJECT_FLOW },
+    dischargeA1: { totalSourceFlow: FLOW_A1 },
+    dischargeA2: { totalSourceFlow: FLOW_A2 },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  const productOutflow = FLOW_A + FLOW_B; // 7
+  const dischargeRejectBlockCost = blockCost(DISCHARGE_REJECT_COST, REJECT_FLOW);
+
+  it('records System A\'s productShare once (5/7), not once per downstream discharge branch', () => {
+    expect(result.systemAttributionMap['sysA']['ro'].totalAttribution.default).toBeCloseTo(FLOW_A / productOutflow, 6);
+    expect(result.systemAttributionMap['sysA']['intake'].totalAttribution.default).toBeCloseTo(FLOW_A / productOutflow, 6);
+  });
+
+  it('intake and treatment attribution fractions across product systems still sum to 1.0', () => {
+    const intakeFractionSum = result.systemAttributionMap['sysA']['intake'].totalAttribution.default
+      + result.systemAttributionMap['sysB']['intake'].totalAttribution.default;
+    const treatmentFractionSum = result.systemAttributionMap['sysA']['ro'].totalAttribution.default
+      + result.systemAttributionMap['sysB']['ro'].totalAttribution.default;
+
+    expect(intakeFractionSum).toBeCloseTo(1.0, 6);
+    expect(treatmentFractionSum).toBeCloseTo(1.0, 6);
+  });
+
+  it('redirects the reject discharge cost to System A and B by productShare, summing to exactly 100% (not 200%)', () => {
+    const sysAShare = result.systemAttributionMap['sysA']['dischargeReject'].totalAttribution.default;
+    const sysBShare = result.systemAttributionMap['sysB']['dischargeReject'].totalAttribution.default;
+
+    expect(sysAShare).toBeCloseTo(FLOW_A / productOutflow, 6);
+    expect(sysBShare).toBeCloseTo(FLOW_B / productOutflow, 6);
+    expect(sysAShare + sysBShare).toBeCloseTo(1.0, 6);
+    expect((sysAShare + sysBShare) * dischargeRejectBlockCost).toBeCloseTo(dischargeRejectBlockCost, 0);
+  });
+
+  it('attributes System A\'s own downstream discharges (A1, A2) fully and separately to System A', () => {
+    expect(result.systemAttributionMap['sysA']['dischargeA1'].totalAttribution.default).toBeCloseTo(1.0, 6);
+    expect(result.systemAttributionMap['sysA']['dischargeA2'].totalAttribution.default).toBeCloseTo(1.0, 6);
+    expect(result.trueCostOfSystems['sysA'].discharge).toBeCloseTo(
+      blockCost(DISCHARGE_A1_COST, FLOW_A1) + blockCost(DISCHARGE_A2_COST, FLOW_A2)
+        + dischargeRejectBlockCost * (FLOW_A / productOutflow),
+      0
+    );
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: ro-reject-wwt-exclusive
+// Configuration: Intake → RO ──┬─ System A (product, 7)
+//                              └─ (reject, 3) → WWT (exclusive) → Discharge-Reject
+//
+// No other contributor feeds the WWT. Asserts the WWT's full block cost is attributed
+// to System A exactly once - the loop-control bug from ro-wwt-overallocation.md
+// (charging once per edge/path instead of once per system) must not resurface.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-reject-wwt-exclusive: reject path through a dedicated WWT', () => {
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
+  const WWT_COST = 3;
+  const INTAKE_FLOW = 10;
+  const PRODUCT_FLOW = 7;
+  const REJECT_FLOW = 3;
+
+  const intake = makeIntakeNode('intake', INTAKE_COST);
+  const ro = makeTreatmentNode('ro', RO_COST, 6);
+  const sysA = makeSystemNode('sysA');
+  const wwt = makeWasteTreatmentNode('wwt', WWT_COST);
+  const dischargeReject = makeDischargeNode('dischargeReject', 0);
+
+  const nodes = [intake, ro, sysA, wwt, dischargeReject];
+  const edges = [
+    makeEdge('intake', 'ro', INTAKE_FLOW),
+    makeEdge('ro', 'sysA', PRODUCT_FLOW),
+    makeEdge('ro', 'wwt', REJECT_FLOW),
+    makeEdge('wwt', 'dischargeReject', REJECT_FLOW),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: INTAKE_FLOW },
+    ro: { totalSourceFlow: INTAKE_FLOW, totalDischargeFlow: INTAKE_FLOW },
+    sysA: { totalSourceFlow: PRODUCT_FLOW },
+    wwt: { totalSourceFlow: REJECT_FLOW, totalDischargeFlow: REJECT_FLOW },
+    dischargeReject: { totalSourceFlow: REJECT_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('attributes 100% of the exclusive WWT block cost to System A, exactly once', () => {
+    expect(result.trueCostOfSystems['sysA'].wasteTreatment)
+      .toBeCloseTo(blockCost(WWT_COST, REJECT_FLOW), 0);
+  });
+
+  it('attributes 100% of the reject discharge block cost to System A', () => {
+    expect(result.trueCostOfSystems['sysA'].discharge)
+      .toBeCloseTo(blockCost(0, REJECT_FLOW), 0);
+  });
+
+  it('records a WWT attribution fraction of 1.0 for System A', () => {
+    expect(result.systemAttributionMap['sysA']['wwt'].totalAttribution.default).toBeCloseTo(1.0, 6);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: ro-reject-wwt-shared
+// Full worked example from ro-specification.md ("Full Worked Example — Multiple
+// Product Systems, Shared Reject WWT"):
+//
+//   City Water (10 MGY, $1/kGal) → RO ($5/kGal)
+//                                    ├─ (product, 5) → Process A → Discharge-A ($1/kGal)
+//                                    ├─ (product, 2) → Process B → Discharge-B ($1/kGal)
+//                                    └─ (reject,  3) ──┐
+//                                                        ▼
+//                       System C's wastewater (4) ──► WWT ($3/kGal) ──► Discharge-Shared ($0.50/kGal)
+//
+// Asserts System C's attribution is exactly its own share (4/7), unaffected by the RO's
+// presence - the failure mode in ro-shared-wwt-overallocation.md - and the RO's own
+// 3/7 share is split across Process A and Process B by productShare (5/7, 2/7).
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-reject-wwt-shared: reject-path WWT shared with an independent system', () => {
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
+  const WWT_COST = 3;
+  const DISCHARGE_AB_COST = 1;
+  const DISCHARGE_SHARED_COST = 0.5;
+
+  const INTAKE_FLOW = 10;
+  const FLOW_A = 5;
+  const FLOW_B = 2;
+  const REJECT_FLOW = 3;
+  const SYS_C_FLOW = 4;
+  const WWT_INFLOW = REJECT_FLOW + SYS_C_FLOW; // 7
+
+  const intake = makeIntakeNode('intake', INTAKE_COST);
+  const ro = makeTreatmentNode('ro', RO_COST, 6);
+  const sysA = makeSystemNode('sysA');
+  const sysB = makeSystemNode('sysB');
+  const sysC = makeSystemNode('sysC');
+  const wwt = makeWasteTreatmentNode('wwt', WWT_COST);
+  const dischargeA = makeDischargeNode('dischargeA', DISCHARGE_AB_COST);
+  const dischargeB = makeDischargeNode('dischargeB', DISCHARGE_AB_COST);
+  const dischargeShared = makeDischargeNode('dischargeShared', DISCHARGE_SHARED_COST);
+
+  const nodes = [intake, ro, sysA, sysB, sysC, wwt, dischargeA, dischargeB, dischargeShared];
+  const edges = [
+    makeEdge('intake', 'ro', INTAKE_FLOW),
+    makeEdge('ro', 'sysA', FLOW_A),
+    makeEdge('ro', 'sysB', FLOW_B),
+    makeEdge('ro', 'wwt', REJECT_FLOW),
+    makeEdge('sysC', 'wwt', SYS_C_FLOW),
+    makeEdge('sysA', 'dischargeA', FLOW_A),
+    makeEdge('sysB', 'dischargeB', FLOW_B),
+    makeEdge('wwt', 'dischargeShared', WWT_INFLOW),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: INTAKE_FLOW },
+    ro: { totalSourceFlow: INTAKE_FLOW, totalDischargeFlow: INTAKE_FLOW },
+    sysA: { totalSourceFlow: FLOW_A, totalDischargeFlow: FLOW_A },
+    sysB: { totalSourceFlow: FLOW_B, totalDischargeFlow: FLOW_B },
+    sysC: { totalDischargeFlow: SYS_C_FLOW },
+    wwt: { totalSourceFlow: WWT_INFLOW, totalDischargeFlow: WWT_INFLOW },
+    dischargeA: { totalSourceFlow: FLOW_A },
+    dischargeB: { totalSourceFlow: FLOW_B },
+    dischargeShared: { totalSourceFlow: WWT_INFLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  const wwtBlockCost = blockCost(WWT_COST, WWT_INFLOW); // $21,000
+  const dischargeSharedBlockCost = blockCost(DISCHARGE_SHARED_COST, WWT_INFLOW); // $3,500
+
+  it('attributes System C its own WWT share (4/7) directly, unaffected by the RO', () => {
+    expect(result.trueCostOfSystems['sysC'].wasteTreatment)
+      .toBeCloseTo(wwtBlockCost * (SYS_C_FLOW / WWT_INFLOW), 0); // $12,000
+  });
+
+  it('redirects the RO reject share of WWT cost (3/7) to Process A and B by productShare', () => {
+    const roShare = REJECT_FLOW / WWT_INFLOW;
+    expect(result.trueCostOfSystems['sysA'].wasteTreatment)
+      .toBeCloseTo(wwtBlockCost * roShare * (FLOW_A / (FLOW_A + FLOW_B)), 0); // $6,429
+    expect(result.trueCostOfSystems['sysB'].wasteTreatment)
+      .toBeCloseTo(wwtBlockCost * roShare * (FLOW_B / (FLOW_A + FLOW_B)), 0); // $2,571
+  });
+
+  it('attributes System C its own Discharge-Shared share (4/7) directly', () => {
+    expect(result.trueCostOfSystems['sysC'].discharge)
+      .toBeCloseTo(dischargeSharedBlockCost * (SYS_C_FLOW / WWT_INFLOW), 0); // $2,000
+  });
+
+  it('redirects the RO reject share of Discharge-Shared cost (3/7) to Process A and B by productShare', () => {
+    // * trueCostOfSystems.discharge aggregates every discharge component for a system (System A also
+    // * carries its own Discharge-A cost), so isolate the dischargeShared component via the attribution map.
+    const roShare = REJECT_FLOW / WWT_INFLOW;
+    const sysAShare = result.systemAttributionMap['sysA']['dischargeShared'].totalAttribution.default;
+    const sysBShare = result.systemAttributionMap['sysB']['dischargeShared'].totalAttribution.default;
+    expect(sysAShare * dischargeSharedBlockCost)
+      .toBeCloseTo(dischargeSharedBlockCost * roShare * (FLOW_A / (FLOW_A + FLOW_B)), 0); // $1,071
+    expect(sysBShare * dischargeSharedBlockCost)
+      .toBeCloseTo(dischargeSharedBlockCost * roShare * (FLOW_B / (FLOW_A + FLOW_B)), 0); // $429
+  });
+
+  it('WWT cost sums to exactly its block cost across all three systems (no over/under-allocation)', () => {
+    const totalWasteTreatment = result.trueCostOfSystems['sysA'].wasteTreatment
+      + result.trueCostOfSystems['sysB'].wasteTreatment
+      + result.trueCostOfSystems['sysC'].wasteTreatment;
+    expect(totalWasteTreatment).toBeCloseTo(wwtBlockCost, 0);
+  });
+
+  it('Discharge-Shared cost sums to exactly its block cost across all three systems', () => {
+    const sysAShare = result.systemAttributionMap['sysA']['dischargeShared'].totalAttribution.default;
+    const sysBShare = result.systemAttributionMap['sysB']['dischargeShared'].totalAttribution.default;
+    const sysCShare = result.systemAttributionMap['sysC']['dischargeShared'].totalAttribution.default;
+    const totalDischargeShared = (sysAShare + sysBShare + sysCShare) * dischargeSharedBlockCost;
+    expect(totalDischargeShared).toBeCloseTo(dischargeSharedBlockCost, 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: ro-product-path-wwt (Supported Configuration 5)
+// Configuration: Intake → RO ──┬─ (product, 7) → sysA → WWT (own post-use wastewater, 6) → dischargeProduct
+//                               └─ (reject, 3) → dischargeReject (direct, no WWT)
+//
+// The WWT sits AFTER sysA (treats sysA's own post-use wastewater), not between RO and sysA.
+// It is not registered as the RO's reject-path WWT (that's dischargeReject, which has none),
+// so it is attributed entirely by the standard reuse-and-discharge-split rule - the upstream
+// walk from the WWT reaches sysA directly, with no ro-reject-redirect involved at all.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-product-path-wwt: WWT on the product path, after System(s)', () => {
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
+  const WWT_COST = 3;
+  const DISCHARGE_PRODUCT_COST = 1;
+  const DISCHARGE_REJECT_COST = 0.5;
+
+  const INTAKE_FLOW = 10;
+  const PRODUCT_FLOW = 7;
+  const REJECT_FLOW = 3;
+  const SYS_A_TO_WWT_FLOW = 6; // sysA's own post-use outflow (1 MGY consumed/lost in-system)
+
+  const intake = makeIntakeNode('intake', INTAKE_COST);
+  const ro = makeTreatmentNode('ro', RO_COST, 6);
+  const sysA = makeSystemNode('sysA');
+  const wwt = makeWasteTreatmentNode('wwt', WWT_COST);
+  const dischargeProduct = makeDischargeNode('dischargeProduct', DISCHARGE_PRODUCT_COST);
+  const dischargeReject = makeDischargeNode('dischargeReject', DISCHARGE_REJECT_COST);
+
+  const nodes = [intake, ro, sysA, wwt, dischargeProduct, dischargeReject];
+  const edges = [
+    makeEdge('intake', 'ro', INTAKE_FLOW),
+    makeEdge('ro', 'sysA', PRODUCT_FLOW),
+    makeEdge('ro', 'dischargeReject', REJECT_FLOW),
+    makeEdge('sysA', 'wwt', SYS_A_TO_WWT_FLOW),
+    makeEdge('wwt', 'dischargeProduct', SYS_A_TO_WWT_FLOW),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: INTAKE_FLOW },
+    ro: { totalSourceFlow: INTAKE_FLOW, totalDischargeFlow: INTAKE_FLOW },
+    sysA: { totalSourceFlow: PRODUCT_FLOW, totalDischargeFlow: SYS_A_TO_WWT_FLOW },
+    wwt: { totalSourceFlow: SYS_A_TO_WWT_FLOW, totalDischargeFlow: SYS_A_TO_WWT_FLOW },
+    dischargeProduct: { totalSourceFlow: SYS_A_TO_WWT_FLOW },
+    dischargeReject: { totalSourceFlow: REJECT_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('attributes 100% of intake and RO treatment block cost to System A', () => {
+    expect(result.trueCostOfSystems['sysA'].intake).toBeCloseTo(blockCost(INTAKE_COST, INTAKE_FLOW), 0);
+    expect(result.trueCostOfSystems['sysA'].treatment).toBeCloseTo(blockCost(RO_COST, INTAKE_FLOW), 0);
+  });
+
+  it('attributes 100% of the reject discharge block cost to System A via ro-reject-redirect', () => {
+    expect(result.trueCostOfSystems['sysA'].discharge)
+      .toBeCloseTo(blockCost(DISCHARGE_REJECT_COST, REJECT_FLOW) + blockCost(DISCHARGE_PRODUCT_COST, SYS_A_TO_WWT_FLOW), 0);
+  });
+
+  it('attributes 100% of the product-path WWT block cost to System A via standard reuse-and-discharge-split (no redirect)', () => {
+    expect(result.trueCostOfSystems['sysA'].wasteTreatment)
+      .toBeCloseTo(blockCost(WWT_COST, SYS_A_TO_WWT_FLOW), 0);
+    expect(result.systemAttributionMap['sysA']['wwt'].totalAttribution.default).toBeCloseTo(1.0, 6);
+  });
+
+  it('attributes 100% of the WWT-downstream discharge to System A', () => {
+    expect(result.systemAttributionMap['sysA']['dischargeProduct'].totalAttribution.default).toBeCloseTo(1.0, 6);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: ro-shared-wwt-same-system (Supported Configuration 6)
+// Configuration: Intake → RO ──┬─ (product, 7) → sysA ──► wwt (shared)
+//                               └─ (reject,  3) ──────────► wwt (same, direct from RO)
+//                                                              └─► dischargeShared
+//
+// sysA's own post-use wastewater (6) and the RO's reject (3) feed the SAME wwt node.
+// wwt's total inflow (9) is attributed via TWO independent rules that happen to land on
+// the same system: sysA's own share (6/9) via standard reuse-and-discharge-split, and the
+// RO's reject share (3/9) via ro-reject-redirect (split by productShare, here 1.0 since
+// sysA is the sole product recipient) - together summing to 100%, not via a single
+// ro-reject-redirect attribution of the whole WWT cost.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-shared-wwt-same-system: reject-path WWT shared with the RO\'s own product recipient', () => {
+  const INTAKE_COST = 1;
+  const RO_COST = 5;
+  const WWT_COST = 3;
+  const DISCHARGE_SHARED_COST = 0.5;
+
+  const INTAKE_FLOW = 10;
+  const PRODUCT_FLOW = 7;
+  const REJECT_FLOW = 3;
+  const SYS_A_TO_WWT_FLOW = 6;
+  const WWT_INFLOW = REJECT_FLOW + SYS_A_TO_WWT_FLOW; // 9
+
+  const intake = makeIntakeNode('intake', INTAKE_COST);
+  const ro = makeTreatmentNode('ro', RO_COST, 6);
+  const sysA = makeSystemNode('sysA');
+  const wwt = makeWasteTreatmentNode('wwt', WWT_COST);
+  const dischargeShared = makeDischargeNode('dischargeShared', DISCHARGE_SHARED_COST);
+
+  const nodes = [intake, ro, sysA, wwt, dischargeShared];
+  const edges = [
+    makeEdge('intake', 'ro', INTAKE_FLOW),
+    makeEdge('ro', 'sysA', PRODUCT_FLOW),
+    makeEdge('ro', 'wwt', REJECT_FLOW),
+    makeEdge('sysA', 'wwt', SYS_A_TO_WWT_FLOW),
+    makeEdge('wwt', 'dischargeShared', WWT_INFLOW),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: INTAKE_FLOW },
+    ro: { totalSourceFlow: INTAKE_FLOW, totalDischargeFlow: INTAKE_FLOW },
+    sysA: { totalSourceFlow: PRODUCT_FLOW, totalDischargeFlow: SYS_A_TO_WWT_FLOW },
+    wwt: { totalSourceFlow: WWT_INFLOW, totalDischargeFlow: WWT_INFLOW },
+    dischargeShared: { totalSourceFlow: WWT_INFLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  const wwtBlockCost = blockCost(WWT_COST, WWT_INFLOW);
+  const dischargeSharedBlockCost = blockCost(DISCHARGE_SHARED_COST, WWT_INFLOW);
+
+  it('attributes System A its own WWT share (6/9) via standard reuse-and-discharge-split', () => {
+    // * this alone (before the redirect share is added) should be less than the full block cost
+    expect(result.systemAttributionMap['sysA']['wwt'].componentPathAttribution.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('combines System A\'s own share and the redirected RO reject share to exactly 100% of WWT cost', () => {
+    expect(result.trueCostOfSystems['sysA'].wasteTreatment).toBeCloseTo(wwtBlockCost, 0);
+    expect(result.systemAttributionMap['sysA']['wwt'].totalAttribution.default).toBeCloseTo(1.0, 6);
+  });
+
+  it('combines System A\'s own share and the redirected RO reject share to exactly 100% of the shared discharge cost', () => {
+    expect(result.trueCostOfSystems['sysA'].discharge).toBeCloseTo(dischargeSharedBlockCost, 0);
+    expect(result.systemAttributionMap['sysA']['dischargeShared'].totalAttribution.default).toBeCloseTo(1.0, 6);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: ro-non-qualifying-multiple-intakes
+// Configuration: [Intake1, Intake2] → RO → [System A (product, 7), Discharge (3, reject)]
+//
+// RO is fed by two upstream intakes, so criterion 5 (single upstream intake) fails.
+// No override applies - System A's treatment/intake attribution is computed under the
+// standard rule, using RO's full outflow (10) as the denominator, giving System A only
+// 70% (7/10) rather than the 100% ro-reject-redirect would assign.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-non-qualifying-multiple-intakes: RO fed by two intakes', () => {
+  const RO_COST = 5;
+  const FLOW_INTAKE1 = 6;
+  const FLOW_INTAKE2 = 4;
+  const PRODUCT_FLOW = 7;
+  const REJECT_FLOW = 3;
+
+  const intake1 = makeIntakeNode('intake1', 1);
+  const intake2 = makeIntakeNode('intake2', 1);
+  const ro = makeTreatmentNode('ro', RO_COST, 6);
+  const sysA = makeSystemNode('sysA');
+  const dischargeReject = makeDischargeNode('dischargeReject', 0);
+
+  const nodes = [intake1, intake2, ro, sysA, dischargeReject];
+  const edges = [
+    makeEdge('intake1', 'ro', FLOW_INTAKE1),
+    makeEdge('intake2', 'ro', FLOW_INTAKE2),
+    makeEdge('ro', 'sysA', PRODUCT_FLOW),
+    makeEdge('ro', 'dischargeReject', REJECT_FLOW),
+  ];
+  const calcData = makeCalcData({
+    intake1: { totalDischargeFlow: FLOW_INTAKE1 },
+    intake2: { totalDischargeFlow: FLOW_INTAKE2 },
+    ro: { totalSourceFlow: FLOW_INTAKE1 + FLOW_INTAKE2, totalDischargeFlow: FLOW_INTAKE1 + FLOW_INTAKE2 },
+    sysA: { totalSourceFlow: PRODUCT_FLOW },
+    dischargeReject: { totalSourceFlow: REJECT_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('does not apply the ro-reject-redirect override (treatment fraction is 0.7, not 1.0)', () => {
+    expect(result.systemAttributionMap['sysA']['ro'].totalAttribution.default).toBeCloseTo(0.7, 6);
+  });
+
+  it('each intake attributes System A its standard proportional share (0.7), not 1.0', () => {
+    expect(result.systemAttributionMap['sysA']['intake1'].totalAttribution.default).toBeCloseTo(0.7, 6);
+    expect(result.systemAttributionMap['sysA']['intake2'].totalAttribution.default).toBeCloseTo(0.7, 6);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: ro-non-qualifying-two-reject-branches
+// Configuration: RO ──┬─ System A (product, 4)
+//                     ├─ Discharge-Reject1 (3)
+//                     └─ Discharge-Reject2 (3)
+//
+// Two child edges both classify as reject branches (criterion 2 requires exactly one).
+// Asserts qualification is skipped rather than throwing or silently picking one - System
+// A's treatment fraction is computed under the standard rule (4/10 = 0.4), not 1.0.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — ro-non-qualifying-two-reject-branches: RO with two reject branches', () => {
+  const RO_COST = 5;
+  const INTAKE_FLOW = 10;
+  const PRODUCT_FLOW = 4;
+  const REJECT_FLOW_1 = 3;
+  const REJECT_FLOW_2 = 3;
+
+  const intake = makeIntakeNode('intake', 1);
+  const ro = makeTreatmentNode('ro', RO_COST, 6);
+  const sysA = makeSystemNode('sysA');
+  const dischargeReject1 = makeDischargeNode('dischargeReject1', 0);
+  const dischargeReject2 = makeDischargeNode('dischargeReject2', 0);
+
+  const nodes = [intake, ro, sysA, dischargeReject1, dischargeReject2];
+  const edges = [
+    makeEdge('intake', 'ro', INTAKE_FLOW),
+    makeEdge('ro', 'sysA', PRODUCT_FLOW),
+    makeEdge('ro', 'dischargeReject1', REJECT_FLOW_1),
+    makeEdge('ro', 'dischargeReject2', REJECT_FLOW_2),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: INTAKE_FLOW },
+    ro: { totalSourceFlow: INTAKE_FLOW, totalDischargeFlow: INTAKE_FLOW },
+    sysA: { totalSourceFlow: PRODUCT_FLOW },
+    dischargeReject1: { totalSourceFlow: REJECT_FLOW_1 },
+    dischargeReject2: { totalSourceFlow: REJECT_FLOW_2 },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('does not throw and does not qualify for ro-reject-redirect', () => {
+    expect(result.systemAttributionMap['sysA']['ro'].totalAttribution.default).toBeCloseTo(0.4, 6);
+  });
+
+  it('attributes System A only its standard proportional share of RO treatment cost', () => {
+    expect(result.trueCostOfSystems['sysA'].treatment)
+      .toBeCloseTo(blockCost(RO_COST, INTAKE_FLOW) * (PRODUCT_FLOW / INTAKE_FLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Mass-balance invariants — RO configurations
+// Re-runs the sum-equals-block-cost / no-negative-cost / fraction-bounded invariants
+// (see 'mass-balance invariants' above) against the ro-multi-system-product-fork and
+// ro-reject-wwt-shared fixtures.
+// ---------------------------------------------------------------------------
+
+describe('mass-balance invariants — RO configurations', () => {
+  const buildMultiSystemForkResult = () => {
+    const intake = makeIntakeNode('intake', 1);
+    const ro = makeTreatmentNode('ro', 5, 6);
+    const sysA = makeSystemNode('sysA');
+    const sysB = makeSystemNode('sysB');
+    const dischargeReject = makeDischargeNode('dischargeReject', 0);
+
+    const nodes = [intake, ro, sysA, sysB, dischargeReject];
+    const edges = [
+      makeEdge('intake', 'ro', 10),
+      makeEdge('ro', 'sysA', 5),
+      makeEdge('ro', 'sysB', 2),
+      makeEdge('ro', 'dischargeReject', 3),
+    ];
+    const calcData = makeCalcData({
+      intake: { totalDischargeFlow: 10 },
+      ro: { totalSourceFlow: 10, totalDischargeFlow: 10 },
+      sysA: { totalSourceFlow: 5 },
+      sysB: { totalSourceFlow: 2 },
+      dischargeReject: { totalSourceFlow: 3 },
+    });
+
+    return getPlantSummaryResults(nodes, calcData, edges, 0.066, defaultSettings(), {});
+  };
+
+  const buildSharedWwtResult = () => {
+    const intake = makeIntakeNode('intake', 1);
+    const ro = makeTreatmentNode('ro', 5, 6);
+    const sysA = makeSystemNode('sysA');
+    const sysB = makeSystemNode('sysB');
+    const sysC = makeSystemNode('sysC');
+    const wwt = makeWasteTreatmentNode('wwt', 3);
+    const dischargeA = makeDischargeNode('dischargeA', 1);
+    const dischargeB = makeDischargeNode('dischargeB', 1);
+    const dischargeShared = makeDischargeNode('dischargeShared', 0.5);
+
+    const nodes = [intake, ro, sysA, sysB, sysC, wwt, dischargeA, dischargeB, dischargeShared];
+    const edges = [
+      makeEdge('intake', 'ro', 10),
+      makeEdge('ro', 'sysA', 5),
+      makeEdge('ro', 'sysB', 2),
+      makeEdge('ro', 'wwt', 3),
+      makeEdge('sysC', 'wwt', 4),
+      makeEdge('sysA', 'dischargeA', 5),
+      makeEdge('sysB', 'dischargeB', 2),
+      makeEdge('wwt', 'dischargeShared', 7),
+    ];
+    const calcData = makeCalcData({
+      intake: { totalDischargeFlow: 10 },
+      ro: { totalSourceFlow: 10, totalDischargeFlow: 10 },
+      sysA: { totalSourceFlow: 5, totalDischargeFlow: 5 },
+      sysB: { totalSourceFlow: 2, totalDischargeFlow: 2 },
+      sysC: { totalDischargeFlow: 4 },
+      wwt: { totalSourceFlow: 7, totalDischargeFlow: 7 },
+      dischargeA: { totalSourceFlow: 5 },
+      dischargeB: { totalSourceFlow: 2 },
+      dischargeShared: { totalSourceFlow: 7 },
+    });
+
+    return getPlantSummaryResults(nodes, calcData, edges, 0.066, defaultSettings(), {});
+  };
+
+  it('ro-multi-system-product-fork: sum of all system intake attributions equals intake block cost', () => {
+    const result = buildMultiSystemForkResult();
+    const intakeBlockCost = result.costComponentsTotalsMap['intake'].totalBlockCost;
+    const totalAttributed = Object.values(result.trueCostOfSystems).reduce((sum, s) => sum + s.intake, 0);
+    expect(totalAttributed).toBeCloseTo(intakeBlockCost, 0);
+  });
+
+  it('ro-multi-system-product-fork: sum of all system treatment attributions equals RO block cost', () => {
+    const result = buildMultiSystemForkResult();
+    const roBlockCost = result.costComponentsTotalsMap['ro'].totalBlockCost;
+    const totalAttributed = Object.values(result.trueCostOfSystems).reduce((sum, s) => sum + s.treatment, 0);
+    expect(totalAttributed).toBeCloseTo(roBlockCost, 0);
+  });
+
+  it('ro-reject-wwt-shared: sum of all system wasteTreatment attributions equals WWT block cost', () => {
+    const result = buildSharedWwtResult();
+    const wwtBlockCost = result.costComponentsTotalsMap['wwt'].totalBlockCost;
+    const totalAttributed = Object.values(result.trueCostOfSystems).reduce((sum, s) => sum + s.wasteTreatment, 0);
+    expect(totalAttributed).toBeCloseTo(wwtBlockCost, 0);
+  });
+
+  it('ro-reject-wwt-shared: sum of all system discharge attributions equals total discharge block cost', () => {
+    const result = buildSharedWwtResult();
+    const totalDischargeBlockCost = result.costComponentsTotalsMap['dischargeA'].totalBlockCost
+      + result.costComponentsTotalsMap['dischargeB'].totalBlockCost
+      + result.costComponentsTotalsMap['dischargeShared'].totalBlockCost;
+    const totalAttributed = Object.values(result.trueCostOfSystems).reduce((sum, s) => sum + s.discharge, 0);
+    expect(totalAttributed).toBeCloseTo(totalDischargeBlockCost, 0);
+  });
+
+  it('no RO-configuration system receives a negative cost in any component', () => {
+    const forkResult = buildMultiSystemForkResult();
+    const sharedResult = buildSharedWwtResult();
+
+    for (const result of [forkResult, sharedResult]) {
+      for (const contributions of Object.values(result.trueCostOfSystems)) {
+        expect(contributions.intake).toBeGreaterThanOrEqual(0);
+        expect(contributions.discharge).toBeGreaterThanOrEqual(0);
+        expect(contributions.treatment).toBeGreaterThanOrEqual(0);
+        expect(contributions.wasteTreatment).toBeGreaterThanOrEqual(0);
+      }
+    }
+  });
+
+  it('no RO-configuration attribution fraction exceeds 1.0', () => {
+    const forkResult = buildMultiSystemForkResult();
+    const sharedResult = buildSharedWwtResult();
+
+    for (const result of [forkResult, sharedResult]) {
+      for (const systemMap of Object.values(result.systemAttributionMap)) {
+        for (const attribution of Object.values(systemMap)) {
+          const fraction = attribution.totalAttribution.default;
+          expect(fraction).toBeGreaterThanOrEqual(0);
+          expect(fraction).toBeLessThanOrEqual(1.0 + 1e-9);
+        }
+      }
+    }
+  });
+});

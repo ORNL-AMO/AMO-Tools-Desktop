@@ -119,6 +119,12 @@ Attribution runs in two sequential passes across all WWT nodes: the downstream p
 
 - **proportional-discharge:** CT HVAC sends 7 MGY to Municipal Sewer; Wash Bay sends 3 MGY. "Municipal Sewer fee" row = CT HVAC 70%, Wash Bay 30%.
 
+### 5. Reverse Osmosis (RO) Configuration Override ***[v3]***
+
+When a water-treatment node qualifies as a Reverse Osmosis reject-redirect configuration (`treatmentType === 6`, exactly one reject branch, no water-using system on the reject path, and a single upstream intake), the rule **ro-reject-redirect** overrides Sections 1-4 above wherever that configuration is detected: the reject branch's share of intake, treatment, WWT, and discharge cost is redirected to the RO's product-recipient system(s) instead of being left permanently unattributed. Non-qualifying RO nodes fall back to Sections 1-4 unchanged.
+
+This section is intentionally a summary. [ro-specification.md](ro-specification.md) is the full specification for this rule: it holds the complete qualification criteria, the attribution formula, every supported diagram configuration, the non-qualifying configurations table, and all worked examples. Consult it directly rather than expecting that detail to be duplicated here.
+
 ---
 
 ## Recycled and Reused Water
