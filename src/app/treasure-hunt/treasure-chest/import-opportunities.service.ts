@@ -211,6 +211,13 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.powerFactorCorrectionOpportunities, Treasure.powerFactorCorrection);
       treasureHunt.powerFactorCorrectionOpportunities = treasureHunt.powerFactorCorrectionOpportunities.concat(data.powerFactorCorrectionOpportunities);
     }
+    if (data.compressedAirDryerOpportunities) {
+      if (treasureHunt.compressedAirDryerOpportunities == undefined) {
+        treasureHunt.compressedAirDryerOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.compressedAirDryerOpportunities, Treasure.compressedAirDryer);
+      treasureHunt.compressedAirDryerOpportunities = treasureHunt.compressedAirDryerOpportunities.concat(data.compressedAirDryerOpportunities);
+    }
     return treasureHunt;
   }
 
