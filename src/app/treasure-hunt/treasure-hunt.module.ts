@@ -61,6 +61,7 @@ import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 import { PowerFactorCorrectionTreasureHuntService } from './treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
+import { CompressedAirDryerTreasureHuntService } from './treasure-hunt-calculator-services/compressed-air-dryer-treasure-hunt.service';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { ExportOpportunitiesService } from './treasure-chest/export-opportunities.service';
 import { SteamLeakTreasureHuntService } from './treasure-hunt-calculator-services/steam-leak-treasure-hunt.service';
@@ -134,6 +135,7 @@ import { SteamLeakTreasureHuntService } from './treasure-hunt-calculator-service
     BoilerBlowdownRateTreasureHuntService,
     PowerFactorCorrectionTreasureHuntService,
     SteamLeakTreasureHuntService,
+    CompressedAirDryerTreasureHuntService,
     ExportOpportunitiesService
   ]
 })
