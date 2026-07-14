@@ -28,6 +28,7 @@ import { CoolingTowerFanTreasureHuntService } from './treasure-hunt-calculator-s
 import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator-services/cooling-tower-basin-treasure-hunt.service';
 import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 import { SteamLeakTreasureHuntService } from './treasure-hunt-calculator-services/steam-leak-treasure-hunt.service';
+import { CompressedAirDryerTreasureHuntService } from './treasure-hunt-calculator-services/compressed-air-dryer-treasure-hunt.service';
 
 @Injectable()
 export class ConvertInputDataService {
@@ -57,7 +58,8 @@ export class ConvertInputDataService {
     private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
     private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,
-    private steamLeakTreasureHuntService: SteamLeakTreasureHuntService
+    private steamLeakTreasureHuntService: SteamLeakTreasureHuntService,
+    private compressedAirDryerTreasureHuntService: CompressedAirDryerTreasureHuntService
     ) { }
 
   convertTreasureHuntInputData(treasureHunt: TreasureHunt, oldSettings: Settings, newSettings: Settings): TreasureHunt {
@@ -141,6 +143,9 @@ export class ConvertInputDataService {
     }
     if (treasureHunt.boilerBlowdownRateOpportunities != undefined) {
       treasureHunt.boilerBlowdownRateOpportunities = this.boilerBlowdownRateTreasureHuntService.convertBoilerBlowdownRates(treasureHunt.boilerBlowdownRateOpportunities, oldSettings, newSettings);
+    }
+    if (treasureHunt.compressedAirDryerOpportunities != undefined) {
+      treasureHunt.compressedAirDryerOpportunities = this.compressedAirDryerTreasureHuntService.convertCompressedAirDryerOpportunities(treasureHunt.compressedAirDryerOpportunities, oldSettings, newSettings);
     }
     if (treasureHunt.currentEnergyUsage != undefined) {
       treasureHunt.currentEnergyUsage = this.convertCurrentEnergyUsage(treasureHunt.currentEnergyUsage, oldSettings, newSettings);
