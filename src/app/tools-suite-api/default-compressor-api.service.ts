@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 import { GenericCompressor } from '../shared/generic-compressor-db.service';
+import { type CompressorsData, type CompressorsDataV, type DefaultData } from 'measur-tools-suite';
 @Injectable({
     providedIn: 'root'
 })
@@ -10,11 +11,11 @@ export class DefaultCompressorApiService {
         private toolsSuiteApiService: ToolsSuiteApiService,
     ) { }
 
-    getGenericCompressors() {
-        let DefaultDataInstance = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
+    getGenericCompressors(): Array<GenericCompressor> {
+        let DefaultDataInstance: DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
         let defaultCompressors: Array<GenericCompressor> = [];
 
-        let wasmCompressors = DefaultDataInstance.getCompressorType1Data();
+        let wasmCompressors: CompressorsDataV = DefaultDataInstance.getCompressorType1Data();
         this.buildDefaultCompressorList(wasmCompressors, defaultCompressors);
 
         wasmCompressors = DefaultDataInstance.getCompressorType1_GT100kWData();
@@ -39,17 +40,17 @@ export class DefaultCompressorApiService {
         return defaultCompressors;
     }
 
-    buildDefaultCompressorList(wasmCompressors, defaultCompressors: Array<GenericCompressor>) {
-        for (let i = 0; i < wasmCompressors.size(); i++) {
-            let wasmClass = wasmCompressors.get(i);
+    buildDefaultCompressorList(wasmCompressors: CompressorsDataV, defaultCompressors: Array<GenericCompressor>): void {
+        for (let i: number = 0; i < wasmCompressors.size(); i++) {
+            let wasmClass: CompressorsData = wasmCompressors.get(i);
             let genericCompressor: GenericCompressor = this.getGenericCompressorFromWASM(wasmClass);
             defaultCompressors.push(genericCompressor);
             wasmClass.delete();
         }
     }
 
-    getGenericCompressorFromWASM(suiteDbCompressorPointer): GenericCompressor {
-        let GenericCompressor = {
+    getGenericCompressorFromWASM(suiteDbCompressorPointer: CompressorsData): GenericCompressor {
+        let GenericCompressor: GenericCompressor = {
             BlowdownTime: suiteDbCompressorPointer.blowdownTime(),
             DesignInPressure: suiteDbCompressorPointer.designInPressure(),
             DesignInTemp: suiteDbCompressorPointer.designInTemp(),
