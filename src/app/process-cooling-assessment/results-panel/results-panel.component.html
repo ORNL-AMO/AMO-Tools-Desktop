@@ -28,7 +28,7 @@
             <div class="col-12 pr-2 pl-2 pb-4 mt-1">
                 @if (displayInventory() && selectedPanelTab == 'inventory') {
                     <app-inventory-table></app-inventory-table>
-                    <app-chiller-profile-chart [selectedChillerId]="selectedChillerId$ | async"></app-chiller-profile-chart>
+                    <app-chiller-profile-chart [selectedChillerId]="selectedChillerId$ | async" [context]="'inventory'"></app-chiller-profile-chart>
                 }
                 @if (selectedPanelTab == 'help') {
                     <app-help-panel></app-help-panel>

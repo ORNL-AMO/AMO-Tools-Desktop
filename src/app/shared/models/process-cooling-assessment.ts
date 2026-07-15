@@ -5,9 +5,10 @@ import { WeatherContextData } from "../modules/weather-data/weather-context.toke
 export interface ProcessCoolingChillerOutput {
     id: string;
     name: string;
-    efficiency: number[];
-    ariEfficiencyProfile: number[]; 
+    ariEfficiencyProfileFactored: number[];
+    ariEfficiencyProfile: number[];
     loadPercents: number[];
+    efficiency: number[];
     hours: number[];
     power: number[];
     energy: number[];

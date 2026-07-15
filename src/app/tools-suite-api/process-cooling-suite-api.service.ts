@@ -481,6 +481,7 @@ export class ProcessCoolingSuiteApiService {
     const numChillers = chillerOutputInstance.efficiency.size();
 
     for (let i = 0; i < numChillers; i++) {
+      const efficiency = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.efficiency.get(i));
       const hours = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i));
       const energy = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i));
       const power = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i));
@@ -493,20 +494,21 @@ export class ProcessCoolingSuiteApiService {
       }
       const suiteCurveLoadPercents = this.suiteApiHelperService.returnDoubleVector(curveLoadPercents);
 
-      // * used for table data
-      const efficiencyAtLoadWasm = processCoolingInstance.getChillerEnergyEfficiency(i, loadPercents);
-      const efficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(efficiencyAtLoadWasm);
+      // * used to visualize factored performance curve
+      const curveEfficiencyAtLoadWasmFactored = processCoolingInstance.getChillerARIEnergyEfficiency(i, suiteCurveLoadPercents, true);
+      const curveEfficiencyAtLoadFactored = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasmFactored);
 
       // * used to visualize performance curve
-      const curveEfficiencyAtLoadWasm = processCoolingInstance.getChillerEnergyEfficiency(i, suiteCurveLoadPercents);
+      const curveEfficiencyAtLoadWasm = processCoolingInstance.getChillerARIEnergyEfficiency(i, suiteCurveLoadPercents, false);
       const curveEfficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasm);
 
       const chillerResult = {
         id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
         name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
-        efficiency: efficiencyAtLoad,
+        ariEfficiencyProfileFactored: curveEfficiencyAtLoadFactored,
         ariEfficiencyProfile: curveEfficiencyAtLoad,
         loadPercents: curveLoadPercents,
+        efficiency: efficiency,
         hours: hours,
         power: power,
         energy: energy,
@@ -516,7 +518,7 @@ export class ProcessCoolingSuiteApiService {
       chillerOutput.push(chillerResult);
       suiteCurveLoadPercents.delete();
       loadPercents.delete();
-      efficiencyAtLoadWasm.delete();
+      curveEfficiencyAtLoadWasmFactored.delete();
       curveEfficiencyAtLoadWasm.delete();
     }
 
