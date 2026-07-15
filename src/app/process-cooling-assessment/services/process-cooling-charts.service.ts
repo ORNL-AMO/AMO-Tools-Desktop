@@ -29,7 +29,7 @@ function hexToRgba(hex: string, alpha: number): string {
 @Injectable({ providedIn: 'root' })
 export class ProcessCoolingChartsService {
 
-  buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[]): PlotlyChartConfig {
+  buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[], showFactoredProfile = false): PlotlyChartConfig {
     const efficiencyLabel = PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial;
 
     const traces: TraceData[] = chillerOutput.map((chiller, index) => {
@@ -50,7 +50,21 @@ export class ProcessCoolingChartsService {
       };
     });
 
-    const haloTraces: TraceData[] = traces.map(trace => ({
+    const factoredTraces: TraceData[] = showFactoredProfile ? chillerOutput.map((chiller, index) => {
+      const color = graphColors[index % graphColors.length];
+      return {
+        x: chiller.loadPercents.slice(1),
+        y: chiller.ariEfficiencyProfileFactored.slice(1),
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: `${chiller.name} (Factored)`,
+        marker: { size: 8, color, symbol: MARKER_SHAPES[index % MARKER_SHAPES.length], line: { color: '#ffffff', width: 1 } },
+        line: { width: 2, dash: 'dot', color },
+        hovertemplate: `${chiller.name} (Factored)<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`
+      };
+    }) : [];
+
+    const haloTraces: TraceData[] = [...traces, ...factoredTraces].map(trace => ({
       x: trace.x,
       y: trace.y,
       type: 'scatter',
@@ -67,7 +81,10 @@ export class ProcessCoolingChartsService {
       }
     }));
 
-    const maxEfficiency = Math.max(...chillerOutput.flatMap(c => c.ariEfficiencyProfile.slice(1)));
+    const maxEfficiency = Math.max(
+      ...chillerOutput.flatMap(c => c.ariEfficiencyProfile.slice(1)),
+      ...(showFactoredProfile ? chillerOutput.flatMap(c => c.ariEfficiencyProfileFactored.slice(1)) : [])
+    );
     const NUM_INTERVALS = 5;
     let tickStep: number;
     let yMax: number;
@@ -121,6 +138,6 @@ export class ProcessCoolingChartsService {
 
     const config = defaultPlotlyConfig(undefined, 'scatter');
 
-    return { traces: [...traces, ...haloTraces], layout, config };
+    return { traces: [...traces, ...factoredTraces, ...haloTraces], layout, config };
   }
 }
