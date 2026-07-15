@@ -1,16 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
-import { ChartSection, PairedKeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
-import { FacilityInfo, Settings } from '../../shared/models/settings';
+import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
 import { Modification, PSAT, PsatInputs, PsatOutputs } from '../../shared/models/psat';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import { PsatChartsService, PsatChartConfig } from '../services/psat-charts.service';
+import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
 
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -24,8 +24,8 @@ export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
 export class PsatReportAdapter implements ReportDataAdapter {
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly psatService = inject(PsatService);
-  private readonly plotlyService = inject(PlotlyService);
   private readonly psatChartsService = inject(PsatChartsService);
+  private readonly chartRenderService = inject(ReportChartRenderService);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [0, 114, 178];
 
@@ -43,7 +43,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
     return of({
       meta,
       sections: [
-        ...this.buildFacilityInfoSections(settings),
+        ...buildFacilityInfoSections(settings?.facilityInfo, 'facilityInfo'),
         ...this.buildResultsSections(psat, settings, modNames),
         ...this.buildReportGraphsSections(psat, settings),
         ...this.buildSankeySections(psat, settings),
@@ -52,71 +52,8 @@ export class PsatReportAdapter implements ReportDataAdapter {
     });
   }
 
-  private buildFacilityInfoSections(settings: Settings): PairedKeyValueSection[] {
-    const facilityInfo: FacilityInfo = settings?.facilityInfo;
-    if (!facilityInfo) return [];
-
-    const generalAndLocation: PairedKeyValueSection = {
-      type: 'paired-key-value',
-      title: 'Facility Info',
-      group: 'facilityInfo',
-      left: {
-        headerLabel: 'General',
-        rows: [
-          { label: 'Company Name', value: facilityInfo.companyName ?? '' },
-          { label: 'Facility Name', value: facilityInfo.facilityName ?? '' },
-          { label: 'Assessment Date', value: facilityInfo.date ?? '' },
-        ],
-      },
-      right: {
-        headerLabel: 'Location',
-        rows: [
-          { label: 'Street', value: facilityInfo.address?.street ?? '' },
-          { label: 'City', value: facilityInfo.address?.city ?? '' },
-          { label: 'State', value: facilityInfo.address?.state ?? '' },
-          { label: 'Zip', value: facilityInfo.address?.zip ?? '' },
-          { label: 'Country', value: facilityInfo.address?.country ?? '' },
-        ],
-      },
-    };
-
-    const contacts: PairedKeyValueSection = {
-      type: 'paired-key-value',
-      group: 'facilityInfo',
-      left: {
-        headerLabel: 'Facility Contact',
-        rows: [
-          { label: 'Name', value: facilityInfo.facilityContact?.contactName ?? '' },
-          { label: 'Phone', value: String(facilityInfo.facilityContact?.phoneNumber ?? '') },
-          { label: 'Email', value: facilityInfo.facilityContact?.email ?? '' },
-        ],
-      },
-      right: {
-        headerLabel: 'Assessment Contact',
-        rows: [
-          { label: 'Name', value: facilityInfo.assessmentContact?.contactName ?? '' },
-          { label: 'Phone', value: String(facilityInfo.assessmentContact?.phoneNumber ?? '') },
-          { label: 'Email', value: facilityInfo.assessmentContact?.email ?? '' },
-        ],
-      },
-    };
-
-    return [generalAndLocation, contacts];
-  }
-
-  private async renderPlotlyChart(chart: PsatChartConfig): Promise<string> {
-    const { traces, layout } = chart;
-    const div = document.createElement('div');
-    div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
-    document.body.appendChild(div);
-    const p = await this.plotlyService.getPlotly();
-    try {
-      await p.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
-      return await p.toImage(div, { format: 'jpeg', width: 1400, height: 700 });
-    } finally {
-      p.purge(div);
-      document.body.removeChild(div);
-    }
+  private renderPlotlyChart(chart: PsatChartConfig): Promise<string> {
+    return this.chartRenderService.renderChartToImage(chart.traces, chart.layout);
   }
 
   private buildReportGraphsSections(psat: PSAT, settings: Settings): ChartSection[] {
@@ -321,12 +258,8 @@ export class PsatReportAdapter implements ReportDataAdapter {
 
     const allRows: string[][] = [];
     const subGroupHeaderIndices: number[] = [];
-
-    const addGroup = (label: string, groupRows: string[][]) => {
-      subGroupHeaderIndices.push(allRows.length);
-      allRows.push([label, ...Array(headers.length - 1).fill('')]);
-      allRows.push(...groupRows);
-    };
+    const addGroup = (label: string, groupRows: string[][]) =>
+      appendSubGroup(allRows, subGroupHeaderIndices, headers.length, label, groupRows);
 
     addGroup('Operations', operationsRows);
     addGroup('Pump & Fluid', pumpFluidRows);

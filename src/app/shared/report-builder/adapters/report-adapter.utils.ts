@@ -1,4 +1,6 @@
 import { ReportColumnCell } from '../models/report-ui-models';
+import { PairedKeyValueSection } from '../models/report-section.model';
+import { FacilityInfo } from '../../models/settings';
 
 /** Appends decoded units to the label when present. Both sides are decoded. */
 export function labelWithUnits(label: string, units: string | undefined): string {
@@ -60,4 +62,75 @@ export function formatCell(cell: ReportColumnCell): string {
   }
 
   return num.toLocaleString('en-US');
+}
+
+/**
+ * Builds the standard "Facility Info" paired-key-value sections (General/Location,
+ * Facility Contact/Assessment Contact) shared across every module's report adapter.
+ */
+export function buildFacilityInfoSections(facilityInfo: FacilityInfo | undefined, groupKey: string): PairedKeyValueSection[] {
+  if (!facilityInfo) return [];
+
+  const generalAndLocation: PairedKeyValueSection = {
+    type: 'paired-key-value',
+    title: 'Facility Info',
+    group: groupKey,
+    left: {
+      headerLabel: 'General',
+      rows: [
+        { label: 'Company Name', value: facilityInfo.companyName ?? '' },
+        { label: 'Facility Name', value: facilityInfo.facilityName ?? '' },
+        { label: 'Assessment Date', value: facilityInfo.date ?? '' },
+      ],
+    },
+    right: {
+      headerLabel: 'Location',
+      rows: [
+        { label: 'Street', value: facilityInfo.address?.street ?? '' },
+        { label: 'City', value: facilityInfo.address?.city ?? '' },
+        { label: 'State', value: facilityInfo.address?.state ?? '' },
+        { label: 'Zip', value: facilityInfo.address?.zip ?? '' },
+        { label: 'Country', value: facilityInfo.address?.country ?? '' },
+      ],
+    },
+  };
+
+  const contacts: PairedKeyValueSection = {
+    type: 'paired-key-value',
+    group: groupKey,
+    left: {
+      headerLabel: 'Facility Contact',
+      rows: [
+        { label: 'Name', value: facilityInfo.facilityContact?.contactName ?? '' },
+        { label: 'Phone', value: String(facilityInfo.facilityContact?.phoneNumber ?? '') },
+        { label: 'Email', value: facilityInfo.facilityContact?.email ?? '' },
+      ],
+    },
+    right: {
+      headerLabel: 'Assessment Contact',
+      rows: [
+        { label: 'Name', value: facilityInfo.assessmentContact?.contactName ?? '' },
+        { label: 'Phone', value: String(facilityInfo.assessmentContact?.phoneNumber ?? '') },
+        { label: 'Email', value: facilityInfo.assessmentContact?.email ?? '' },
+      ],
+    },
+  };
+
+  return [generalAndLocation, contacts];
+}
+
+/**
+ * Appends a labeled sub-group header row (spanning all columns) followed by its data rows,
+ * and records the header's index in `subGroupHeaderIndices` for bold/accent rendering in the PDF.
+ */
+export function appendSubGroup(
+  rows: string[][],
+  subGroupHeaderIndices: number[],
+  columnCount: number,
+  label: string,
+  groupRows: string[][]
+): void {
+  subGroupHeaderIndices.push(rows.length);
+  rows.push([label, ...Array(columnCount - 1).fill('')]);
+  rows.push(...groupRows);
 }

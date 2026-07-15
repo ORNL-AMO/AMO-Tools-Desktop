@@ -29,28 +29,8 @@
     .date-modified {
         font-size: 18px;
     }
-    
+
     .print-height{
         height: 100% !important;
     }
-}
-
-.print-div{
-    z-index: 100;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-}
-
-.print-col{
-    background-color:#CCD1D1;
-    text-align: center;
-}
-
-.print-col h4{
-    padding-top: 20px;
-}
-
-.fa-print{
-    font-size: 150px;
 }
