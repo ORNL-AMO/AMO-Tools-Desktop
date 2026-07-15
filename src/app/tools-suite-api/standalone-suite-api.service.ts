@@ -3,9 +3,7 @@ import { AirSystemCapacityInput, AirSystemCapacityOutput, AirVelocityInput, BagM
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 import {
-  type AirSystemCapacity,
   type AirSystemCapacityOutput as SuiteAirSystemCapacityOutput,
-  type AirVelocity,
   type BagMethodResult,
   type CHP,
   type CHPOption,
@@ -159,7 +157,7 @@ export class StandaloneSuiteApiService {
     });
     let receiverCapacitiesInput: DoubleVector = this.suiteApiHelperService.returnDoubleVector(receiverCapacities);
 
-    let PipeData: PipeData = new this.toolsSuiteApiService.ToolsSuiteModule.PipeData(
+    let pipeData: PipeData = new this.toolsSuiteApiService.ToolsSuiteModule.PipeData(
       input.oneHalf,
       input.threeFourths,
       input.one,
@@ -182,8 +180,10 @@ export class StandaloneSuiteApiService {
       input.twentyFour,
     );
 
-    let AirSystemCapacity: AirSystemCapacity = new this.toolsSuiteApiService.ToolsSuiteModule.AirSystemCapacity(PipeData, receiverCapacitiesInput);
-    let rawOutput: SuiteAirSystemCapacityOutput = AirSystemCapacity.calculate();
+    let rawOutput: SuiteAirSystemCapacityOutput = this.toolsSuiteApiService.ToolsSuiteModule.calculateAirSystemCapacity({
+      pipeLengths: pipeData,
+      receivers: receiverCapacitiesInput,
+    });
 
 
     let receiverCapacitiesOutput: Array<number> = [];
@@ -197,7 +197,6 @@ export class StandaloneSuiteApiService {
       totalPipeVolume: rawOutput.totalPipeVolume,
       totalReceiverVolume: rawOutput.totalReceiverVolume,
       totalCapacityOfCompressedAirSystem: rawOutput.totalCapacityOfCompressedAirSystem,
-      leakRate: undefined,
       oneHalf: rawOutput.pipeLengths.oneHalf,
       threeFourths: rawOutput.pipeLengths.threeFourths,
       one: rawOutput.pipeLengths.one,
@@ -220,9 +219,9 @@ export class StandaloneSuiteApiService {
       twentyFour: rawOutput.pipeLengths.twentyFour,
     }
 
-    rawOutput.delete();
-    PipeData.delete();
-    AirSystemCapacity.delete();
+    rawOutput.receiverCapacities.delete();
+    rawOutput.pipeLengths.delete();
+    pipeData.delete();
     receiverCapacitiesInput.delete();
     return output;
   }
@@ -231,8 +230,11 @@ export class StandaloneSuiteApiService {
     input.airFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airFlow);
     input.pipePressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.pipePressure);
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
-    let AirVelocity: AirVelocity = new this.toolsSuiteApiService.ToolsSuiteModule.AirVelocity(input.airFlow, input.pipePressure, input.atmosphericPressure);
-    let output: PipeData = AirVelocity.calculate();
+    let output: PipeData = this.toolsSuiteApiService.ToolsSuiteModule.calculateAirVelocity({
+      airFlow: input.airFlow,
+      pipePressure: input.pipePressure,
+      atmosphericPressure: input.atmosphericPressure,
+    });
     let results: PipeSizes = {
       oneHalf: output.oneHalf,
       threeFourths: output.threeFourths,
@@ -256,7 +258,6 @@ export class StandaloneSuiteApiService {
       twentyFour: output.twentyFour,
     }
     output.delete();
-    AirVelocity.delete();
     return results;
   }
 
