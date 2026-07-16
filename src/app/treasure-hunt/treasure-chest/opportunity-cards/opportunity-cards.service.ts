@@ -34,6 +34,7 @@ import { CoolingTowerBasinTreasureHuntService } from '../../treasure-hunt-calcul
 import { AssessmentOpportunityService } from '../../treasure-hunt-calculator-services/assessment-opportunity.service';
 import { BoilerBlowdownRateTreasureHuntService } from '../../treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 import { PowerFactorCorrectionTreasureHuntService } from '../../treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
+import { AssessmentIntegrationService } from '../../../shared/assessment-integration/assessment-integration.service';
 
 @Injectable()
 export class OpportunityCardsService {
@@ -71,8 +72,9 @@ export class OpportunityCardsService {
     private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
     private assessmentOpportunityService: AssessmentOpportunityService,
-    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,    
-    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService
+    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,
+    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService,
+    private assessmentIntegrationService: AssessmentIntegrationService
   ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
@@ -158,6 +160,30 @@ export class OpportunityCardsService {
     });
 
     return opportunityCardsData;
+  }
+
+  async checkAssessmentOpportunityStaleness(cards: OpportunityCardData[], settings: Settings): Promise<void> {
+    for (const card of cards) {
+      if (card.opportunityType !== Treasure.assessmentOpportunity || !card.assessmentOpportunity?.existingIntegrationData) {
+        continue;
+      }
+      const existingData = card.assessmentOpportunity.existingIntegrationData;
+      const integratedAssessment = await this.assessmentIntegrationService.setIntegratedAssessment(
+        existingData.assessmentId, existingData.assessmentType, settings
+      );
+      if (!integratedAssessment?.assessment || !integratedAssessment.energyOptions || !existingData.energyOptions) {
+        continue;
+      }
+      if (existingData.energyOptions.modifications?.length > 0) {
+        card.hasStaleAssessmentData = this.assessmentIntegrationService.checkHasUpdatedEnergyData(
+          existingData.energyOptions, integratedAssessment.energyOptions
+        );
+      } else {
+        card.hasStaleAssessmentData = this.assessmentIntegrationService.checkisOptionDifferent(
+          existingData.energyOptions.baseline, integratedAssessment.energyOptions.baseline
+        );
+      }
+    }
   }
 
   //lightingReplacement;
@@ -867,6 +893,7 @@ export interface OpportunityCardData {
   powerFactorCorrection?: PowerFactorCorrectionTreasureHunt;
   iconCalcType?: string;
   needBackground?: boolean;
+  hasStaleAssessmentData?: boolean;
 }
 
 export interface PercentEnergySavings {
