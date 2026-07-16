@@ -1,4 +1,3 @@
-import measurToolsFactory from 'measur-tools-suite/bin/client.js';
 import { useEffect, useState } from 'react';
 
 export const useMeasurToolsSuite = () => {
@@ -6,10 +5,11 @@ export const useMeasurToolsSuite = () => {
 
   const initializeModule = async () => {
     try {
+      const measurToolsFactory = await import('measur-tools-suite/bin/client.js');
       const module = await measurToolsFactory.default({
         locateFile: (path) => `/${path}`
       });
-      
+
       setToolsSuiteModule(module);
     } catch (error) {
       console.error('Failed to initialize Tools Suite Module:', error);
