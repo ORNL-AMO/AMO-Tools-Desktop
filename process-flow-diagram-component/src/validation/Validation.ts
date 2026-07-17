@@ -142,10 +142,11 @@ export const getDefaultFlowValidationSchema = (
         .nullable()
         .test('known-losses-differs',
             (d) => {
-                return `Known Losses should equal the sum of all Known Loss flows (${sumUserKnownLosses})`
+                const sumUserKnownLossesToPrecision = Number(sumUserKnownLosses.toFixed(settings.flowDecimalPrecision));
+                return `Known Losses should equal the sum of all Known Loss flows (${sumUserKnownLossesToPrecision})`
             },
             (value) => {
-                const isValid = validateKnownLosses(sumUserKnownLosses, value);
+                const isValid = validateKnownLosses(sumUserKnownLosses, value, settings.flowDecimalPrecision);
                 return isValid;
             },
         );

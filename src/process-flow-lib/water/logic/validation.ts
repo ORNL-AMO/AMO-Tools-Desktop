@@ -20,11 +20,12 @@ export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFl
         if (userEnteredFlowToPrecision !== undefined && userEnteredFlowToPrecision !== null
             && userEnteredFlowToPrecision !== calculatedTotalFlowToPrecision) {
             if (unaccountedFlow !== undefined && unaccountedFlow !== null) {
+                const unaccountedFlowToPrecision = Number(unaccountedFlow.toFixed(precision));
                 let adjustedFlowToPrecision;
                 if (calculatedTotalFlowToPrecision < userEnteredFlowToPrecision) {
-                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision - unaccountedFlow).toFixed(precision));
+                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision - unaccountedFlowToPrecision).toFixed(precision));
                 } else {
-                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision + unaccountedFlow).toFixed(precision));
+                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision + unaccountedFlowToPrecision).toFixed(precision));
                 }
                 const isAdjustedValid = adjustedFlowToPrecision === calculatedTotalFlowToPrecision;
                 return isAdjustedValid;
@@ -40,10 +41,14 @@ export const validateTotalFlowValue = (connectedEdges: Edge[], calculatedTotalFl
    * @param sumKnownLosses sum of user placed Known Loss components on diagram (Known Loss Flows)
    * @param userEnteredKnownLoss 
    */
-export const validateKnownLosses = (sumKnownLosses: number, userEnteredKnownLoss: number) => {
+export const validateKnownLosses = (sumKnownLosses: number, userEnteredKnownLoss: number, precision: number) => {
     if (sumKnownLosses > 0) {
-        if (userEnteredKnownLoss !== undefined && userEnteredKnownLoss !== null && userEnteredKnownLoss !== sumKnownLosses) {
-            return false;
+        if (userEnteredKnownLoss !== undefined && userEnteredKnownLoss !== null) {
+            const sumKnownLossesToPrecision = Number(sumKnownLosses.toFixed(precision));
+            const userEnteredKnownLossToPrecision = Number(userEnteredKnownLoss.toFixed(precision));
+            if (userEnteredKnownLossToPrecision !== sumKnownLossesToPrecision) {
+                return false;
+            }
         }
     }
     return true;
