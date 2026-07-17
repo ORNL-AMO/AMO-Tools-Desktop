@@ -44,38 +44,37 @@ export class DefaultCompressorApiService {
             let wasmClass = wasmCompressors.get(i);
             let genericCompressor: GenericCompressor = this.getGenericCompressorFromWASM(wasmClass);
             defaultCompressors.push(genericCompressor);
-            wasmClass.delete();
         }
     }
 
     getGenericCompressorFromWASM(suiteDbCompressorPointer): GenericCompressor {
         let GenericCompressor = {
-            BlowdownTime: suiteDbCompressorPointer.blowdownTime(),
-            DesignInPressure: suiteDbCompressorPointer.designInPressure(),
-            DesignInTemp: suiteDbCompressorPointer.designInTemp(),
-            DesignSurgeFlow: suiteDbCompressorPointer.designSurgeFlow(),
-            HP: suiteDbCompressorPointer.hp(),
-            IDCompType: suiteDbCompressorPointer.idCompType(),
-            IDControlType: suiteDbCompressorPointer.idControlType(),
-            MaxFullFlowPressure: suiteDbCompressorPointer.maxFullFlowPressure(),
-            MaxPressSurgeFlow: suiteDbCompressorPointer.maxPressSurgeFlow(),
-            MaxSurgePressure: suiteDbCompressorPointer.maxSurgePressure(),
-            MinPressStonewallFlow: suiteDbCompressorPointer.minPressStonewallFlow(),
-            MinStonewallPressure: suiteDbCompressorPointer.minStonewallPressure(),
-            MinULSumpPressure: suiteDbCompressorPointer.minULSumpPressure(),
-            Model: suiteDbCompressorPointer.model(),
-            ModulatingPressRange: suiteDbCompressorPointer.modulatingPressRange(),
-            NoLoadPowerFM: suiteDbCompressorPointer.noLoadPowerFM(),
-            NoLoadPowerUL: suiteDbCompressorPointer.noLoadPowerUL(),
-            PowerFLBHP: suiteDbCompressorPointer.powerFLBHP(),
-            RatedCapacity: suiteDbCompressorPointer.ratedCapacity(),
-            RatedPressure: suiteDbCompressorPointer.ratedPressure(),
-            SpecPackagePower: suiteDbCompressorPointer.specPackagePower(),
-            TotPackageInputPower: suiteDbCompressorPointer.totPackageInputPower(),
-            UnloadPoint: suiteDbCompressorPointer.unloadPoint(),
-            UnloadSteps: suiteDbCompressorPointer.unloadSteps(),
-            AmpsFL: suiteDbCompressorPointer.ampsFL(),
-            EffFL: suiteDbCompressorPointer.effFL()
+            BlowdownTime: suiteDbCompressorPointer.blowdownTimeSec,
+            DesignInPressure: suiteDbCompressorPointer.designInletPressurePsia,
+            DesignInTemp: suiteDbCompressorPointer.designInletTemperatureF,
+            DesignSurgeFlow: suiteDbCompressorPointer.designSurgeFlowAcfm,
+            HP: suiteDbCompressorPointer.horsepower,
+            IDCompType: suiteDbCompressorPointer.compressorTypeId,
+            IDControlType: suiteDbCompressorPointer.controlTypeId,
+            MaxFullFlowPressure: suiteDbCompressorPointer.maxFullFlowPressurePsig,
+            MaxPressSurgeFlow: suiteDbCompressorPointer.maxSurgePressureFlowAcfm,
+            MaxSurgePressure: suiteDbCompressorPointer.maxSurgePressurePsig,
+            MinPressStonewallFlow: suiteDbCompressorPointer.minStonewallPressureFlowAcfm,
+            MinStonewallPressure: suiteDbCompressorPointer.minStonewallPressurePsig,
+            MinULSumpPressure: suiteDbCompressorPointer.minUnloadSumpPressurePsig,
+            Model: suiteDbCompressorPointer.model,
+            ModulatingPressRange: suiteDbCompressorPointer.modulatingPressureRangePsig,
+            NoLoadPowerFM: suiteDbCompressorPointer.noLoadPowerFullyModulating,
+            NoLoadPowerUL: suiteDbCompressorPointer.noLoadPowerUnload,
+            PowerFLBHP: suiteDbCompressorPointer.fullLoadBhpPowerKw,
+            RatedCapacity: suiteDbCompressorPointer.ratedCapacityAcfm,
+            RatedPressure: suiteDbCompressorPointer.ratedPressurePsig,
+            SpecPackagePower: suiteDbCompressorPointer.specificPackagePower,
+            TotPackageInputPower: suiteDbCompressorPointer.totalPackageInputPowerKw,
+            UnloadPoint: suiteDbCompressorPointer.unloadPointPercent,
+            UnloadSteps: suiteDbCompressorPointer.unloadSteps,
+            AmpsFL: suiteDbCompressorPointer.fullLoadAmps,
+            EffFL: suiteDbCompressorPointer.fullLoadEfficiencyPercent
         };
 
 

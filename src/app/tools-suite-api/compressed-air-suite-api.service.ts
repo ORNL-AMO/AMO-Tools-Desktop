@@ -48,48 +48,48 @@ export class CompressedAirSuiteApiService {
     let instance;
     inputData.controlType = this.suiteApiHelperService.getControlTypeEnum(inputData.controlType);
     inputData.compressorType = this.suiteApiHelperService.getCompressorTypeEnum(inputData.compressorType);
-    inputData.lubricantType = this.suiteApiHelperService.getLubricantEnum(inputData.lubricantType);
-    inputData.stageType = this.suiteApiHelperService.getStageEnum(inputData.stageType);
-    inputData.computeFrom = this.suiteApiHelperService.getComputeFromEnum(inputData.computeFrom);
+    inputData.lubricantType = this.suiteApiHelperService.getCompressorLubricantEnum(inputData.lubricantType);
+    inputData.stageType = this.suiteApiHelperService.getCompressorStageEnum(inputData.stageType);
+    inputData.computeFrom = this.suiteApiHelperService.getCompressorInputBasisEnum(inputData.computeFrom);
 
-    if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.LoadUnload) {
+    if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.LoadUnload) {
       instance = this.compressorsCalcLoadUnload(inputData);
-    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.ModulationWOUnload) {
+    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.ModulationWithoutUnload) {
       instance = this.compressorsCalcModulationWOUnload(inputData);
-    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.ModulationUnload) {
+    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.ModulationUnload) {
       instance = this.compressorsCalcModulationWithUnload(inputData);
-    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.VariableDisplacementUnload) {
+    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.VariableDisplacementUnload) {
       instance = this.compressorsCalcVariableDisplacement(inputData);
-    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.MultiStepUnloading) {
+    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.MultiStepUnloading) {
       instance = this.compressorsCalcMultiStepUnloading(inputData);
-    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.StartStop) {
+    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.StartStop) {
       instance = this.compressorsCalcStartStop(inputData);
-    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.VFD) {
+    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.Vfd) {
       instance = this.compressorsCalcVFD(inputData);
     }
 
     let suiteOutput;
-    if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentagePower) {
-      suiteOutput = instance.calculateFromPerkW(inputData.computeFromVal);
+    if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.PowerFraction) {
+      suiteOutput = instance.calculateFromPowerFraction(inputData.computeFromVal);
     }
-    else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentageCapacity) {
-      suiteOutput = instance.calculateFromPerC(inputData.computeFromVal);
+    else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.CapacityFraction) {
+      suiteOutput = instance.calculateFromCapacityFraction(inputData.computeFromVal);
     }
-    else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerMeasured) {
-      suiteOutput = instance.calculateFromkWMeasured(inputData.computeFromVal);
+    else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.MeasuredPower) {
+      suiteOutput = instance.calculateFromMeasuredPower(inputData.computeFromVal);
     }
-    else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.CapacityMeasured) {
-      suiteOutput = instance.calculateFromCMeasured(inputData.computeFromVal);
+    else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.MeasuredCapacity) {
+      suiteOutput = instance.calculateFromMeasuredCapacity(inputData.computeFromVal);
     }
-    else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerFactor) {
-      suiteOutput = instance.calculateFromVIPFMeasured(inputData.computeFromVal, inputData.computeFromPFVoltage, inputData.computeFromPFAmps);
+    else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.PowerFactor) {
+      suiteOutput = instance.calculateFromElectrical(inputData.computeFromVal, inputData.computeFromPFVoltage, inputData.computeFromPFAmps);
     }
 
     let results: CompressorCalcResult = {
-      powerCalculated: suiteOutput.kW_Calc,
-      capacityCalculated: suiteOutput.C_Calc,
-      percentagePower: suiteOutput.PerkW,
-      percentageCapacity: suiteOutput.C_Per
+      powerCalculated: suiteOutput.powerKw,
+      capacityCalculated: suiteOutput.airflowAcfm,
+      percentagePower: suiteOutput.powerFraction,
+      percentageCapacity: suiteOutput.airflowFraction
     };
     suiteOutput.delete();
     instance.delete();
@@ -100,7 +100,7 @@ export class CompressedAirSuiteApiService {
     let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoad);
     let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad);
     let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtNoLoad);
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressors_ModulationWOUnload(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.ModulationWithoutUnloadCompressor(
       powerAtFullLoad,
       capacityAtFullLoad,
       powerAtNoLoad
@@ -112,7 +112,7 @@ export class CompressedAirSuiteApiService {
     let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad);
     let powerMaxPercentage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerMaxPercentage);
     let powerAtFullLoadPercentage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoadPercentage);
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressors_StartStop(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.StartStopCompressor(
       powerAtFullLoad,
       capacityAtFullLoad,
       powerMaxPercentage,
@@ -128,7 +128,7 @@ export class CompressedAirSuiteApiService {
     let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad);
     let midTurndownAirflow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.midTurndownAirflow);
     let turndownAirflow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.turndownAirflow);
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressor_VFD(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.VariableFrequencyDriveCompressor(
       powerAtFullLoad,
       midTurndownPower,
       turndownPower,
@@ -157,7 +157,7 @@ export class CompressedAirSuiteApiService {
     let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadSumpPressure);
     let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.noLoadPowerFM);
 
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressors_LoadUnload(powerAtFullLoad,
+    return new this.toolsSuiteApiService.ToolsSuiteModule.LoadUnloadCompressor(powerAtFullLoad,
       capacityAtFullLoad,
       receiverVolume,
       powerMax,
@@ -196,7 +196,7 @@ export class CompressedAirSuiteApiService {
     let pressureAtUnload = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.pressureAtUnload);
     let capacityAtUnload = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtUnload);
 
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressors_ModulationWithUnload(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.ModulationWithUnloadCompressor(
       powerAtFullLoad,
       capacityAtFullLoad,
       receiverVolume,
@@ -233,7 +233,7 @@ export class CompressedAirSuiteApiService {
     let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadSumpPressure)
     let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.noLoadPowerFM)
 
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressors_ModulationWithUnload(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.ModulationWithUnloadCompressorModulationWithUnloadCompressor(
       powerAtFullLoad,
       capacityAtFullLoad,
       receiverVolume,
@@ -272,7 +272,7 @@ export class CompressedAirSuiteApiService {
     let blowdownTime = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.blowdownTime);
     let unloadSumpPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.unloadSumpPressure);
     let noLoadPowerFM = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.noLoadPowerFM);
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressors_LoadUnload(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.LoadUnloadCompressor(
       powerAtFullLoad,
       capacityAtFullLoad,
       receiverVolume,
@@ -296,62 +296,62 @@ export class CompressedAirSuiteApiService {
   compressorCalcCentrifugal(inputData: CentrifugalInput): CompressorCalcResult {
     inputData.controlType = this.suiteApiHelperService.getControlTypeEnum(inputData.controlType);
     inputData.compressorType = this.suiteApiHelperService.getCompressorTypeEnum(inputData.compressorType);
-    // inputData.lubricantType = this.suiteApiHelperService.getLubricantEnum(inputData.lubricantType);
-    // inputData.stageType = this.suiteApiHelperService.getStageEnum(inputData.stageType);
-    inputData.computeFrom = this.suiteApiHelperService.getComputeFromEnum(inputData.computeFrom);
+    // inputData.lubricantType = this.suiteApiHelperService.getCompressorLubricantEnum(inputData.lubricantType);
+    // inputData.stageType = this.suiteApiHelperService.getCompressorStageEnum(inputData.stageType);
+    inputData.computeFrom = this.suiteApiHelperService.getCompressorInputBasisEnum(inputData.computeFrom);
 
     let instance;
-    if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.LoadUnload) {
+    if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.LoadUnload) {
       instance = this.compressorsCalcCentrifugalLoadUnload(inputData)
     }
-    else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.ModulationUnload) {
+    else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.ModulationUnload) {
       instance = this.compressorsCalcCentrifugalModulationUnload(inputData);
-    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.BlowOff) {
+    } else if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.BlowOff) {
       instance = this.compressorsCalcCentrifugalBlowoff(inputData);
     }
 
     //TODO: Blowoff results added
     let suiteOutput;
-    if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.ControlType.BlowOff) {
-      if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentagePower) {
-        suiteOutput = instance.calculateFromPerkW_BlowOff(inputData.computeFromVal, inputData.percentageBlowOff);
+    if (inputData.controlType == this.toolsSuiteApiService.ToolsSuiteModule.CompressorControl.BlowOff) {
+      if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.PowerFraction) {
+        suiteOutput = instance.calculateFromPowerFraction(inputData.computeFromVal, inputData.percentageBlowOff);
       }
-      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentageCapacity) {
-        suiteOutput = instance.calculateFromPerC_BlowOff(inputData.computeFromVal);
+      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.CapacityFraction) {
+        suiteOutput = instance.calculateFromCapacityFraction(inputData.computeFromVal, inputData.percentageBlowOff);
       }
-      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerMeasured) {
-        suiteOutput = instance.calculateFromkWMeasured_BlowOff(inputData.computeFromVal, inputData.percentageBlowOff);
+      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.MeasuredPower) {
+        suiteOutput = instance.calculateFromMeasuredPower(inputData.computeFromVal, inputData.percentageBlowOff);
       }
-      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.CapacityMeasured) {
-        suiteOutput = instance.calculateFromCMeasured_BlowOff(inputData.computeFromVal);
+      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.MeasuredCapacity) {
+        suiteOutput = instance.calculateFromMeasuredCapacity(inputData.computeFromVal);
       }
-      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerFactor) {
-        suiteOutput = instance.calculateFromVIPFMeasured_BlowOff(inputData.computeFromVal, inputData.computeFromPFVoltage, inputData.computeFromPFAmps, inputData.percentageBlowOff);
+      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.PowerFactor) {
+        suiteOutput = instance.calculateFromElectrical(inputData.computeFromVal, inputData.computeFromPFVoltage, inputData.computeFromPFAmps, inputData.percentageBlowOff);
       }
     }
     else {
-      if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentagePower) {
-        suiteOutput = instance.calculateFromPerkW(inputData.computeFromVal);
+      if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.PowerFraction) {
+        suiteOutput = instance.calculateFromPowerFraction(inputData.computeFromVal);
       }
-      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PercentageCapacity) {
-        suiteOutput = instance.calculateFromPerC(inputData.computeFromVal);
+      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.CapacityFraction) {
+        suiteOutput = instance.calculateFromCapacityFraction(inputData.computeFromVal);
       }
-      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerMeasured) {
-        suiteOutput = instance.calculateFromkWMeasured(inputData.computeFromVal);
+      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.MeasuredPower) {
+        suiteOutput = instance.calculateFromMeasuredPower(inputData.computeFromVal);
       }
-      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.CapacityMeasured) {
-        suiteOutput = instance.calculateFromCMeasured(inputData.computeFromVal);
+      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.MeasuredCapacity) {
+        suiteOutput = instance.calculateFromMeasuredCapacity(inputData.computeFromVal);
       }
-      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.ComputeFrom.PowerFactor) {
-        suiteOutput = instance.calculateFromVIPFMeasured(inputData.computeFromVal, inputData.computeFromPFVoltage, inputData.computeFromPFAmps);
+      else if (inputData.computeFrom == this.toolsSuiteApiService.ToolsSuiteModule.CompressorInputBasis.PowerFactor) {
+        suiteOutput = instance.calculateFromElectrical(inputData.computeFromVal, inputData.computeFromPFVoltage, inputData.computeFromPFAmps);
       }
     }
 
     let results: CompressorCalcResult = {
-      powerCalculated: suiteOutput.kW_Calc,
-      capacityCalculated: suiteOutput.C_Calc,
-      percentagePower: suiteOutput.PerkW,
-      percentageCapacity: suiteOutput.C_Per
+      powerCalculated: suiteOutput.powerKw,
+      capacityCalculated: suiteOutput.airflowAcfm,
+      percentagePower: suiteOutput.powerFraction,
+      percentageCapacity: suiteOutput.airflowFraction
     };
     suiteOutput.delete();
     instance.delete();
@@ -363,7 +363,7 @@ export class CompressedAirSuiteApiService {
     let powerAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtFullLoad);
     let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.capacityAtFullLoad);
     let powerAtNoLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtNoLoad);
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressors_Centrifugal_LoadUnload(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.CentrifugalLoadUnloadCompressor(
       powerAtFullLoad,
       capacityAtFullLoad,
       powerAtNoLoad
@@ -377,7 +377,7 @@ export class CompressedAirSuiteApiService {
     let capacityAtMaxFullFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.capacityAtMaxFullFlow)
     let powerAtUnload = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtUnload)
     let capacityAtUnload = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.capacityAtUnload)
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressors_Centrifugal_ModulationUnload(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.CentrifugalModulationUnloadCompressor(
       powerAtFullLoad,
       capacityAtFullLoad,
       powerAtNoLoad,
@@ -392,7 +392,7 @@ export class CompressedAirSuiteApiService {
     let capacityAtFullLoad = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.capacityAtFullLoad)
     let powerAtBlowOff = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.powerAtBlowOff)
     let surgeFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.surgeFlow)
-    return new this.toolsSuiteApiService.ToolsSuiteModule.Compressors_Centrifugal_BlowOff(
+    return new this.toolsSuiteApiService.ToolsSuiteModule.CentrifugalBlowOffCompressor(
       powerAtFullLoad,
       capacityAtFullLoad,
       powerAtBlowOff,

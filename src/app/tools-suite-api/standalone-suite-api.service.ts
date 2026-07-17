@@ -164,47 +164,46 @@ export class StandaloneSuiteApiService {
       input.twentyFour,
     );
 
-    let AirSystemCapacity = new this.toolsSuiteApiService.ToolsSuiteModule.AirSystemCapacity(PipeData, receiverCapacitiesInput);
-    let rawOutput = AirSystemCapacity.calculate();
-
+    let airSystemCapacityInput = new this.toolsSuiteApiService.ToolsSuiteModule.AirSystemCapacityInput(PipeData, receiverCapacitiesInput);
+    let airSystemCapacityOutput = this.toolsSuiteApiService.ToolsSuiteModule.calculateAirSystemCapacity(airSystemCapacityInput);
 
     let receiverCapacitiesOutput: Array<number> = [];
-    for (let i = 0; i < rawOutput.receiverCapacities.size(); ++i) {
-      let output = rawOutput.receiverCapacities.get(i);
+    for (let i = 0; i < airSystemCapacityOutput.receiverCapacities.size(); ++i) {
+      let output = airSystemCapacityOutput.receiverCapacities.get(i);
       receiverCapacitiesOutput.push(output);
     }
 
     let output: AirSystemCapacityOutput = {
       receiverCapacities: receiverCapacitiesOutput,
-      totalPipeVolume: rawOutput.totalPipeVolume,
-      totalReceiverVolume: rawOutput.totalReceiverVolume,
-      totalCapacityOfCompressedAirSystem: rawOutput.totalCapacityOfCompressedAirSystem,
-      leakRate: rawOutput.leakRate,
-      oneHalf: rawOutput.pipeLengths.oneHalf,
-      threeFourths: rawOutput.pipeLengths.threeFourths,
-      one: rawOutput.pipeLengths.one,
-      oneAndOneFourth: rawOutput.pipeLengths.oneAndOneFourth,
-      oneAndOneHalf: rawOutput.pipeLengths.oneAndOneHalf,
-      two: rawOutput.pipeLengths.two,
-      twoAndOneHalf: rawOutput.pipeLengths.twoAndOneHalf,
-      three: rawOutput.pipeLengths.three,
-      threeAndOneHalf: rawOutput.pipeLengths.threeAndOneHalf,
-      four: rawOutput.pipeLengths.four,
-      five: rawOutput.pipeLengths.five,
-      six: rawOutput.pipeLengths.six,
-      eight: rawOutput.pipeLengths.eight,
-      ten: rawOutput.pipeLengths.ten,
-      twelve: rawOutput.pipeLengths.twelve,
-      fourteen: rawOutput.pipeLengths.fourteen,
-      sixteen: rawOutput.pipeLengths.sixteen,
-      eighteen: rawOutput.pipeLengths.eighteen,
-      twenty: rawOutput.pipeLengths.twenty,
-      twentyFour: rawOutput.pipeLengths.twentyFour,
+      totalPipeVolume: airSystemCapacityOutput.totalPipeVolume,
+      totalReceiverVolume: airSystemCapacityOutput.totalReceiverVolume,
+      totalCapacityOfCompressedAirSystem: airSystemCapacityOutput.totalCapacityOfCompressedAirSystem,
+      leakRate: airSystemCapacityOutput.leakRate,
+      oneHalf: airSystemCapacityOutput.pipeLengths.oneHalf,
+      threeFourths: airSystemCapacityOutput.pipeLengths.threeFourths,
+      one: airSystemCapacityOutput.pipeLengths.one,
+      oneAndOneFourth: airSystemCapacityOutput.pipeLengths.oneAndOneFourth,
+      oneAndOneHalf: airSystemCapacityOutput.pipeLengths.oneAndOneHalf,
+      two: airSystemCapacityOutput.pipeLengths.two,
+      twoAndOneHalf: airSystemCapacityOutput.pipeLengths.twoAndOneHalf,
+      three: airSystemCapacityOutput.pipeLengths.three,
+      threeAndOneHalf: airSystemCapacityOutput.pipeLengths.threeAndOneHalf,
+      four: airSystemCapacityOutput.pipeLengths.four,
+      five: airSystemCapacityOutput.pipeLengths.five,
+      six: airSystemCapacityOutput.pipeLengths.six,
+      eight: airSystemCapacityOutput.pipeLengths.eight,
+      ten: airSystemCapacityOutput.pipeLengths.ten,
+      twelve: airSystemCapacityOutput.pipeLengths.twelve,
+      fourteen: airSystemCapacityOutput.pipeLengths.fourteen,
+      sixteen: airSystemCapacityOutput.pipeLengths.sixteen,
+      eighteen: airSystemCapacityOutput.pipeLengths.eighteen,
+      twenty: airSystemCapacityOutput.pipeLengths.twenty,
+      twentyFour: airSystemCapacityOutput.pipeLengths.twentyFour,
     }
 
-    rawOutput.delete();
+    airSystemCapacityOutput.delete();
     PipeData.delete();
-    AirSystemCapacity.delete();
+    airSystemCapacityOutput.delete();
     receiverCapacitiesInput.delete();
     return output;
   }
@@ -213,32 +212,35 @@ export class StandaloneSuiteApiService {
     input.airFlow = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.airFlow);
     input.pipePressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.pipePressure);
     input.atmosphericPressure = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.atmosphericPressure);
-    let AirVelocity = new this.toolsSuiteApiService.ToolsSuiteModule.AirVelocity(input.airFlow, input.pipePressure, input.atmosphericPressure);
-    let output = AirVelocity.calculate();
+
+    let airVelocityInput = this.toolsSuiteApiService.ToolsSuiteModule.AirVelocityInput(input.airFlow, input.pipePressure, input.atmosphericPressure);
+    let airVelocityOutput = this.toolsSuiteApiService.ToolsSuiteModule.calculateAirVelocity(airVelocityInput);
+
     let results: PipeSizes = {
-      oneHalf: output.oneHalf,
-      threeFourths: output.threeFourths,
-      one: output.one,
-      oneAndOneFourth: output.oneAndOneFourth,
-      oneAndOneHalf: output.oneAndOneHalf,
-      two: output.two,
-      twoAndOneHalf: output.twoAndOneHalf,
-      three: output.three,
-      threeAndOneHalf: output.threeAndOneHalf,
-      four: output.four,
-      five: output.five,
-      six: output.six,
-      eight: output.eight,
-      ten: output.ten,
-      twelve: output.twelve,
-      fourteen: output.fourteen,
-      sixteen: output.sixteen,
-      eighteen: output.eighteen,
-      twenty: output.twenty,
-      twentyFour: output.twentyFour,
+      oneHalf: airVelocityOutput.oneHalf,
+      threeFourths: airVelocityOutput.threeFourths,
+      one: airVelocityOutput.one,
+      oneAndOneFourth: airVelocityOutput.oneAndOneFourth,
+      oneAndOneHalf: airVelocityOutput.oneAndOneHalf,
+      two: airVelocityOutput.two,
+      twoAndOneHalf: airVelocityOutput.twoAndOneHalf,
+      three: airVelocityOutput.three,
+      threeAndOneHalf: airVelocityOutput.threeAndOneHalf,
+      four: airVelocityOutput.four,
+      five: airVelocityOutput.five,
+      six: airVelocityOutput.six,
+      eight: airVelocityOutput.eight,
+      ten: airVelocityOutput.ten,
+      twelve: airVelocityOutput.twelve,
+      fourteen: airVelocityOutput.fourteen,
+      sixteen: airVelocityOutput.sixteen,
+      eighteen: airVelocityOutput.eighteen,
+      twenty: airVelocityOutput.twenty,
+      twentyFour: airVelocityOutput.twentyFour,
     }
-    output.delete();
-    AirVelocity.delete();
+    airVelocityOutput.delete();
+    airVelocityInput.delete();
+
     return results;
   }
 
