@@ -22,8 +22,9 @@ const CustomNodeToolbar = ({ onEdit, nodeData, selected }: NodeToolbarProps) => 
     const totalSourceFlow = useAppSelector(state => selectTotalSourceFlow(state, nodeData.diagramNodeId));
     const nodeError = useAppSelector(state => selectNodeErrors(state)[nodeData.diagramNodeId]);
     const totalDischargeFlow = useAppSelector(state => selectTotalDischargeFlow(state, nodeData.diagramNodeId));
+    const flowDecimalPrecision = useAppSelector(state => state.diagram.settings.flowDecimalPrecision);
 
-    let totalUnknownLoss = getNodeEstimatedUnknownLosses(nodeData as WaterUsingSystem, totalSourceFlow, totalDischargeFlow);
+    let totalUnknownLoss = Number(getNodeEstimatedUnknownLosses(nodeData as WaterUsingSystem, totalSourceFlow, totalDischargeFlow).toFixed(flowDecimalPrecision));
 
     const isWaterSystemComponentType = [
         'water-using-system',

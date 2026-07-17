@@ -59,15 +59,15 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         componentData = componentData as WaterTreatment;
         defaultSelectedTreatmentType = componentData.treatmentType !== undefined ? Number(componentData.treatmentType) : 0;
         treatmentTypeOptions = waterTreatmentTypeOptions;
-        totalUnknownLoss = getNodeEstimatedUnknownLosses(componentData as WaterTreatment, totalSourceFlow, totalDischargeFlow);   
+        totalUnknownLoss = Number(getNodeEstimatedUnknownLosses(componentData as WaterTreatment, totalSourceFlow, totalDischargeFlow).toFixed(settings.flowDecimalPrecision));
     } else if (isWasteWaterTreatment) {
         componentData = componentData as WasteWaterTreatment;
         defaultSelectedTreatmentType = componentData.treatmentType !== undefined ? Number(componentData.treatmentType) : 0;
         treatmentTypeOptions = wasteWaterTreatmentTypeOptions;
-        totalUnknownLoss = getNodeEstimatedUnknownLosses(componentData as WasteWaterTreatment, totalSourceFlow, totalDischargeFlow);   
+        totalUnknownLoss = Number(getNodeEstimatedUnknownLosses(componentData as WasteWaterTreatment, totalSourceFlow, totalDischargeFlow).toFixed(settings.flowDecimalPrecision));
     } else if (isWaterUsingSystem) {
         const waterSystem = componentData as WaterUsingSystem;
-        totalUnknownLoss = getNodeEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
+        totalUnknownLoss = Number(getNodeEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow).toFixed(settings.flowDecimalPrecision));
     }
 
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
