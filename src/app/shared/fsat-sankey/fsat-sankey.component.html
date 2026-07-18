@@ -1,20 +1,40 @@
-<div class="alert-danger small m-3" *ngIf="!validLosses && fsat.valid.isValid">
+@if (!validLosses && fsat.valid.isValid) {
+  <div class="alert-danger small m-3">
     <span>
-        Cannot generate
-        <span *ngIf="isBaseline">System</span>
-        <span *ngIf="!isBaseline">Modification</span>
-        Sankey: 
-        <br>
+      Cannot generate
+      @if (isBaseline) {
+        <span>System</span>
+      }
+      @if (!isBaseline) {
+        <span>Modification</span>
+      }
+      Sankey:
+      <br>
         Fan or Motor efficiency is greater than 100%
-    </span>
-</div>
-<div class="alert-danger small m-3" *ngIf="!fsat.valid.isValid">
-    <span *ngIf="isBaseline">Invalid Baseline</span>
-    <span *ngIf="!isBaseline">Invalid Modification</span>
-    <br>
-    <span *ngIf="!fsat.valid.fluidValid">Errors found in Fluid<br></span>
-    <span *ngIf="!fsat.valid.fieldDataValid">Errors found in Field Data<br></span>
-    <span *ngIf="!fsat.valid.fanValid">Errors found in Fan Setup<br></span>
-    <span *ngIf="!fsat.valid.motorValid">Errors found in Motor<br></span>
-</div>
-<div [ngClass]="{'chart-hide': !fsat.valid.isValid || !validLosses,'chart-show': fsat.valid.isValid && validLosses}" #ngChart></div>
+      </span>
+    </div>
+  }
+  @if (!fsat.valid.isValid) {
+    <div class="alert-danger small m-3">
+      @if (isBaseline) {
+        <span>Invalid Baseline</span>
+      }
+      @if (!isBaseline) {
+        <span>Invalid Modification</span>
+      }
+      <br>
+        @if (!fsat.valid.fluidValid) {
+          <span>Errors found in Fluid<br></span>
+        }
+        @if (!fsat.valid.fieldDataValid) {
+          <span>Errors found in Field Data<br></span>
+        }
+        @if (!fsat.valid.fanValid) {
+          <span>Errors found in Fan Setup<br></span>
+        }
+        @if (!fsat.valid.motorValid) {
+          <span>Errors found in Motor<br></span>
+        }
+      </div>
+    }
+    <div [ngClass]="{'chart-hide': !fsat.valid.isValid || !validLosses,'chart-show': fsat.valid.isValid && validLosses}" #ngChart></div>

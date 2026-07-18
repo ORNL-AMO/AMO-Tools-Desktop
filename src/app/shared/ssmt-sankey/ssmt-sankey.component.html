@@ -1,33 +1,42 @@
-<div class="alert-danger small m-3" *ngIf="results && results.outputData && results.outputData.hasSteamModelerError">
+@if (results && results.outputData && results.outputData.hasSteamModelerError) {
+  <div class="alert-danger small m-3">
     <span>
-        Cannot Generate Sankey: 
-        <br>
+      Cannot Generate Sankey:
+      <br>
         Please check Input values
-    </span>
-</div>
-<ng-container *ngIf="results && results.outputData && !results.outputData.hasSteamModelerError">
+      </span>
+    </div>
+  }
+  @if (results && results.outputData && !results.outputData.hasSteamModelerError) {
     <div #ngChart></div>
     <div class="d-flex small mt-2 ml-5">
-        <span class="bold mr-2">* Other Losses include:</span>
-        High Pressure Header,
-        Medium Pressure Header,
-        Low Pressure Header,
-        Condensate,
-        Deaerator Vent,
-        Condensate Flash Tank 
-        <ng-container *ngIf="hasLowPressureVentLoss">,</ng-container>
-        <ng-container *ngIf="hasLowPressureVentLoss"> Low Pressure Vent</ng-container>
+      <span class="bold mr-2">* Other Losses include:</span>
+      High Pressure Header,
+      Medium Pressure Header,
+      Low Pressure Header,
+      Condensate,
+      Deaerator Vent,
+      Condensate Flash Tank
+      @if (hasLowPressureVentLoss) {
+        ,
+      }
+      @if (hasLowPressureVentLoss) {
+        Low Pressure Vent
+      }
     </div>
-    
-    <div *ngIf="minLosses.length > 0" class="ml-5">
+    @if (minLosses.length > 0) {
+      <div class="ml-5">
         <div class="mt-4">
-            <label class="group-label bold mb-2">Negligible Losses (not shown)</label>
-            <table class="small w-25 ml-3">
-                <tr *ngFor="let loss of minLosses">
-                    <td>{{ loss.name}}</td>
-                    <td>{{ loss.text}}</td>
-                </tr>
-            </table>
+          <label class="group-label bold mb-2">Negligible Losses (not shown)</label>
+          <table class="small w-25 ml-3">
+            @for (loss of minLosses; track loss) {
+              <tr>
+                <td>{{ loss.name}}</td>
+                <td>{{ loss.text}}</td>
+              </tr>
+            }
+          </table>
         </div>
-    </div>
-</ng-container>
+      </div>
+    }
+  }

@@ -1,122 +1,168 @@
 <div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
-     [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-lg export-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Data to be exported</h3>
-                <button class="close" aria-label="Close" (click)="hideExportModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body pb-0">
-                <div class="export-content scroll-item">
-                    <ul>
-                        <li *ngIf="exportDisplayData.calculators.length != 0">
-                            <span class="bold">Pre-Assessments</span>
-                            <ul>
-                                <li *ngFor="let calculator of exportDisplayData.calculators">
-                                    <span class="fa fa-pie-chart"></span>
-                                    {{calculator.name}}
-                                </li>
-                            </ul>
-                        </li>
-                        <li *ngIf="exportDisplayData.assessments.length != 0">
-                            <span class="bold">Assessments</span>
-                            <ul>
-                                <li *ngFor="let assessmentItem of exportDisplayData.assessments">
-                                    <div class="d-flex align-items-center"
+  [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg export-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Data to be exported</h3>
+        <button class="close" aria-label="Close" (click)="hideExportModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body pb-0">
+        <div class="export-content scroll-item">
+          <ul>
+            @if (exportDisplayData.calculators.length != 0) {
+              <li>
+                <span class="bold">Pre-Assessments</span>
+                <ul>
+                  @for (calculator of exportDisplayData.calculators; track calculator) {
+                    <li>
+                      <span class="fa fa-pie-chart"></span>
+                      {{calculator.name}}
+                    </li>
+                  }
+                </ul>
+              </li>
+            }
+            @if (exportDisplayData.assessments.length != 0) {
+              <li>
+                <span class="bold">Assessments</span>
+                <ul>
+                  @for (assessmentItem of exportDisplayData.assessments; track assessmentItem) {
+                    <li>
+                      <div class="d-flex align-items-center"
                                         [ngClass]="{ 'phast' : assessmentItem.assessment.type == 'PHAST', 'psat': assessmentItem.assessment.type == 'PSAT', 'fsat': assessmentItem.assessment.type == 'FSAT',
                                              'treasure-hunt': assessmentItem.assessment.type == 'TreasureHunt', 'ssmt': assessmentItem.assessment.type == 'SSMT', 'water': assessmentItem.assessment.type == 'Water',
                                              'compressedAir': assessmentItem.assessment.type == 'CompressedAir', 'wasteWater': assessmentItem.assessment.type == 'WasteWater'}">
-                                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                                            <img *ngIf="assessmentItem.assessment.type == 'PSAT'" class="icon"
-                                                src="assets/images/pump-icon.png">
-                                            <img *ngIf="assessmentItem.assessment.type == 'PHAST'" class="icon"
-                                                src="assets/images/ico-phast-diagram.png">
-                                            <img *ngIf="assessmentItem.assessment.type == 'FSAT'" class="icon"
-                                                src="assets/images/ico-fsat-diagram.png">
-                                            <img *ngIf="assessmentItem.assessment.type == 'SSMT'" class="icon"
-                                                src="assets/images/ico-ssmt-diagram.png">
-                                            <img *ngIf="assessmentItem.assessment.type == 'TreasureHunt'" class="icon"
-                                                src="assets/images/treasure-hunt.png">
-                                            <img *ngIf="assessmentItem.assessment.type == 'CompressedAir'" class="icon"
-                                                src="assets/images/ca-icon.png">
-                                            <img *ngIf="assessmentItem.assessment.type == 'WasteWater'" class="icon"
-                                                src="assets/images/waste-water-icon.png">
-                                            <img *ngIf="assessmentItem.assessment.type == 'Water'" class="icon"
+                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                          @if (assessmentItem.assessment.type == 'PSAT') {
+                            <img class="icon"
+                              src="assets/images/pump-icon.png">
+                            }
+                            @if (assessmentItem.assessment.type == 'PHAST') {
+                              <img class="icon"
+                                src="assets/images/ico-phast-diagram.png">
+                              }
+                              @if (assessmentItem.assessment.type == 'FSAT') {
+                                <img class="icon"
+                                  src="assets/images/ico-fsat-diagram.png">
+                                }
+                                @if (assessmentItem.assessment.type == 'SSMT') {
+                                  <img class="icon"
+                                    src="assets/images/ico-ssmt-diagram.png">
+                                  }
+                                  @if (assessmentItem.assessment.type == 'TreasureHunt') {
+                                    <img class="icon"
+                                      src="assets/images/treasure-hunt.png">
+                                    }
+                                    @if (assessmentItem.assessment.type == 'CompressedAir') {
+                                      <img class="icon"
+                                        src="assets/images/ca-icon.png">
+                                      }
+                                      @if (assessmentItem.assessment.type == 'WasteWater') {
+                                        <img class="icon"
+                                          src="assets/images/waste-water-icon.png">
+                                        }
+                                        @if (assessmentItem.assessment.type == 'Water') {
+                                          <img class="icon"
                                             src="assets/images/water-assessment-small.png">
+                                          }
                                         </span>
                                         <span class="p-1">
-                                            {{assessmentItem.assessment.name}}
+                                          {{assessmentItem.assessment.name}}
                                         </span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li *ngIf="exportDisplayData.diagrams.length != 0">
-                            <span class="bold">Diagrams</span>
-                            <ul>
-                                <li *ngFor="let diagramExport of exportDisplayData.diagrams">
-                                    <div class="d-flex align-items-center"
+                                      </div>
+                                    </li>
+                                  }
+                                </ul>
+                              </li>
+                            }
+                            @if (exportDisplayData.diagrams.length != 0) {
+                              <li>
+                                <span class="bold">Diagrams</span>
+                                <ul>
+                                  @for (diagramExport of exportDisplayData.diagrams; track diagramExport) {
+                                    <li>
+                                      <div class="d-flex align-items-center"
                                         [ngClass]="{ 'water' : diagramExport.diagram.water}">
-                                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                                            <img class="icon" src="assets/images/water-process-diagram-small.png">
-                                        </span>
-                                        <span class="p-1">
-                                            {{diagramExport.diagram.name}}
-                                        </span>
+                                      <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                                        <img class="icon" src="assets/images/water-process-diagram-small.png">
+                                      </span>
+                                      <span class="p-1">
+                                        {{diagramExport.diagram.name}}
+                                      </span>
                                     </div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li *ngIf="exportDisplayData.inventories.length != 0">
-                            <span class="bold">Inventories</span>
-                            <ul>
-                                <li *ngFor="let inventory of exportDisplayData.inventories">
+                                  </li>
+                                }
+                              </ul>
+                            </li>
+                          }
+                          @if (exportDisplayData.inventories.length != 0) {
+                            <li>
+                              <span class="bold">Inventories</span>
+                              <ul>
+                                @for (inventory of exportDisplayData.inventories; track inventory) {
+                                  <li>
                                     <div class="d-flex align-items-center">
-                                        <span class="p-1 d-flex align-items-center justify-content-center icon-image">
-                                            <img *ngIf="inventory.inventoryItem.type == 'pumpInventory'" class="icon"
-                                                src="assets/images/pump-inventory-icon.png">
-                                            <img *ngIf="inventory.inventoryItem.type == 'motorInventory'" class="icon"
-                                                src="assets/images/motor-inventory-icon.png">
-                                        </span>
-                                        <span class="p-1">
+                                      <span class="p-1 d-flex align-items-center justify-content-center icon-image">
+                                        @if (inventory.inventoryItem.type == 'pumpInventory') {
+                                          <img class="icon"
+                                            src="assets/images/pump-inventory-icon.png">
+                                          }
+                                          @if (inventory.inventoryItem.type == 'motorInventory') {
+                                            <img class="icon"
+                                              src="assets/images/motor-inventory-icon.png">
+                                            }
+                                          </span>
+                                          <span class="p-1">
                                             {{inventory.inventoryItem.name}}
-                                        </span>
-                                    </div>
+                                          </span>
+                                        </div>
+                                      </li>
+                                    }
+                                  </ul>
                                 </li>
-                            </ul>
-                        </li>
-                        <li *ngIf="exportDisplayData.directories.length != 0">
-                            <span class="bold">Directories</span>
-                            <ul>
-                                <li *ngFor="let dir of exportDisplayData.directories">
-                                    <span class="fa fa-folder p-1"></span>{{dir.directory.name}}
+                              }
+                              @if (exportDisplayData.directories.length != 0) {
+                                <li>
+                                  <span class="bold">Directories</span>
+                                  <ul>
+                                    @for (dir of exportDisplayData.directories; track dir) {
+                                      <li>
+                                        <span class="fa fa-folder p-1"></span>{{dir.directory.name}}
+                                      </li>
+                                    }
+                                  </ul>
                                 </li>
+                              }
+
                             </ul>
-                        </li>
+                          </div>
+                        </div>
+                        <div class="modal-footer d-flex">
+                          @if (!canExportJson) {
+                            <div class="export-modal-left">
+                              <p class="text-center small danger export-text">Exporting to a zipped file - this may take some time
+                              depending on the size of your data.</p>
+                            </div>
+                          }
+                          <div class="d-flex export-modal-right">
+                            <button class="btn btn-secondary mr-2" (click)="hideExportModal()">Cancel</button>
 
-                    </ul>
-                </div>
-            </div>
-            <div class="modal-footer d-flex">
-                <div *ngIf="!canExportJson" class="export-modal-left">
-                    <p class="text-center small danger export-text">Exporting to a zipped file - this may take some time
-                        depending on the size of your data.</p>
-                </div>
-                <div class="d-flex export-modal-right">
-                    <button class="btn btn-secondary mr-2" (click)="hideExportModal()">Cancel</button>
-
-                    <div class="form-group d-flex">
-                        <label for="exportName"> Name your file:&nbsp;</label>
-                        <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
+                            <div class="form-group d-flex">
+                              <label for="exportName"> Name your file:&nbsp;</label>
+                              <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
+                            </div>
+                            @if (canExportJson) {
+                              <button class="btn btn-primary ml-2" (click)="buildExportJSON()">Export
+                              </button>
+                            }
+                            @if (!canExportJson) {
+                              <button class="btn btn-primary ml-2" (click)="buildExportZip()">Export
+                              </button>
+                            }
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    <button class="btn btn-primary ml-2" *ngIf="canExportJson" (click)="buildExportJSON()">Export
-                    </button>
-                    <button class="btn btn-primary ml-2" *ngIf="!canExportJson" (click)="buildExportZip()">Export
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                  </div>

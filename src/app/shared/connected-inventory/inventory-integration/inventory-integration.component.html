@@ -1,87 +1,122 @@
 <div #integrationContainer class="integration-container">
-    <!-- * Display in the connected relationship owner -->
-    <div (click)="focusField('connected-item')" *ngIf="connectedInventoryData.isConnected" class="p-2 px-3">
+  <!-- * Display in the connected relationship owner -->
+  @if (connectedInventoryData.isConnected) {
+    <div (click)="focusField('connected-item')" class="p-2 px-3">
+      <div class="d-flex flex-row">
+        <label class="w-50">
+          @if (connectedInventoryData.connectedItem.inventoryType === 'motor') {
+            <span class="integration-label">Connected Motor
+            Item</span>
+          }
+          @if (connectedInventoryData.connectedItem.inventoryType === 'pump') {
+            <span class="integration-label">Connected Pump
+            Item</span>
+          }
+          @if (connectedInventoryData.connectedItem.inventoryType === 'compressed-air') {
+            <span class="integration-label">Connected Compressed Air
+            Item</span>
+          }
+        </label>
+        <div class="w-50 input-group justify-content-between">
+          <div>
+            <a class="click-link connected-inventory p-1"
+              (click)="goToConnectedItem(connectedInventoryData.connectedItem)">
+              <span>{{connectedInventoryData.connectedItem.name}}</span>
+            </a>
+          </div>
+          @if (allowChanges) {
+            <button class="btn btn-outline-danger p-1 px-2" (click)="disconnectInventory()">
+              <span class="fa fa-times pl-0 pr-2"></span>Disconnect
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- * Display in the connected relationship owned/child inventory -->
+  @if (connectedItems && connectedItems.length > 0) {
+    @for (item of connectedItems; track item) {
+      <div (click)="focusField('connected-owner-inventory')" class="p-2 px-3">
         <div class="d-flex flex-row">
-            <label class="w-50">
-                    <span *ngIf="connectedInventoryData.connectedItem.inventoryType === 'motor'" class="integration-label">Connected Motor
-                        Item</span>
-                    <span *ngIf="connectedInventoryData.connectedItem.inventoryType === 'pump'" class="integration-label">Connected Pump
-                        Item</span>
-                    <span *ngIf="connectedInventoryData.connectedItem.inventoryType === 'compressed-air'" class="integration-label">Connected Compressed Air
-                        Item</span>
-            </label>
-            <div class="w-50 input-group justify-content-between">
-                <div>
-                    <a class="click-link connected-inventory p-1"
-                        (click)="goToConnectedItem(connectedInventoryData.connectedItem)">
-                        <span>{{connectedInventoryData.connectedItem.name}}</span>
-                    </a>
-                </div>
-                <button *ngIf="allowChanges" class="btn btn-outline-danger p-1 px-2" (click)="disconnectInventory()">
-                    <span class="fa fa-times pl-0 pr-2"></span>Disconnect
-                </button>
+          <label class="w-50">
+            @if (item.inventoryType === 'pump' && !item.assessmentName) {
+              <span class="integration-label">Connected Pump Item</span>
+            }
+            @if (item.inventoryType === 'motor' && !item.assessmentName) {
+              <span class="integration-label">Connected Motor Item</span>
+            }
+            @if (item.inventoryType === 'compressed-air' && !item.assessmentName) {
+              <span class="integration-label">Connected Compressed Air Item</span>
+            }
+            @if (item.assessmentName) {
+              <span class="integration-label">Connected Pump Assessment</span>
+            }
+          </label>
+          <div class="w-50 input-group justify-content-between">
+            <div>
+              <a class="click-link connected-inventory p-1" (click)="goToConnectedItem(item)">
+                @if (item.inventoryType === 'pump' || item.inventoryType === 'compressed-air') {
+                  <span>{{item.name}}</span>
+                }
+                @if (item.assessmentName) {
+                  <span>{{item.assessmentName}}</span>
+                }
+              </a>
             </div>
+          </div>
         </div>
-    </div>
-
-    <!-- * Display in the connected relationship owned/child inventory -->
-    <ng-container *ngIf="connectedItems && connectedItems.length > 0">
-        <div *ngFor="let item of connectedItems" (click)="focusField('connected-owner-inventory')" class="p-2 px-3">
-            <div class="d-flex flex-row">
-                <label class="w-50">
-                    <span *ngIf="item.inventoryType === 'pump' && !item.assessmentName" class="integration-label">Connected Pump Item</span>
-                    <span *ngIf="item.inventoryType === 'motor' && !item.assessmentName" class="integration-label">Connected Motor Item</span>
-                    <span *ngIf="item.inventoryType === 'compressed-air' && !item.assessmentName" class="integration-label">Connected Compressed Air Item</span>
-                    <span *ngIf="item.assessmentName" class="integration-label">Connected Pump Assessment</span>
-                </label>
-                <div class="w-50 input-group justify-content-between">
-                    <div>
-                        <a class="click-link connected-inventory p-1" (click)="goToConnectedItem(item)">
-                            <span *ngIf="item.inventoryType === 'pump' || item.inventoryType === 'compressed-air'">{{item.name}}</span>
-                            <span *ngIf="item.assessmentName">{{item.assessmentName}}</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </ng-container>
+      </div>
+    }
+  }
 
 
+  @if (allowChanges && !connectedInventoryData.isConnected && selectOptions && selectOptions.inventoryOptions) {
     <form (click)="focusField('select-item')"
-        *ngIf="allowChanges && !connectedInventoryData.isConnected && selectOptions && selectOptions.inventoryOptions"
-        [formGroup]="inventoryIntegrationForm">
-        <label class="integration-label" (click)="toggleCollapse()" [ngClass]="{'collapsed': isCollapsed}">
-            <span *ngIf="isCollapsed" class="fa fa-chevron-right"></span>
-            <span *ngIf="!isCollapsed" class="fa fa-chevron-down"></span>
-            {{selectOptions.label}}</label>
-    
-        <ng-container *ngIf="!isCollapsed">
-            <div class="form-group">
-                <label for="selectedInventoryId">Select Inventory</label>
-                <select formControlName="selectedInventoryId" class="form-control" id="selectedInventoryId"
-                    (change)="setCatalogItemOptionsFromInventory()">
-                    <option *ngFor="let inventoryOption of selectOptions.inventoryOptions" [ngValue]="inventoryOption.id">
-                        {{inventoryOption.display}}</option>
-                </select>
-            </div>
-    
-            <div class="form-group">
-                <label for="selectedCatalogItem">Select {{selectOptions.itemName}} Item</label>
-                <select class="form-control" name="selectedCatalogItem" id="selectedCatalogItem"
-                    formControlName="selectedCatalogItem" (change)="setSelectedCatalogItem()">
-                    <option selected [ngValue]="null">Select {{selectOptions.itemName}} Item</option>
-                    <optgroup *ngFor="let option of selectOptions.catalogItemOptions" label="{{option.department}}">
-                        <option *ngFor="let item of option.catalog" [ngValue]="item">{{item.name}}</option>
-                    </optgroup>
-                </select>
-            </div>
-        </ng-container>
-    </form>
-
-    <div *ngIf="inPsat && !allowChanges && !connectedInventoryData.isConnected" class="integration-status alert-secondary small">
-        <div class="text-center mx-auto w-75 message">
-            Visit Baseline to connect an existing inventory
+      [formGroup]="inventoryIntegrationForm">
+      <label class="integration-label" (click)="toggleCollapse()" [ngClass]="{'collapsed': isCollapsed}">
+        @if (isCollapsed) {
+          <span class="fa fa-chevron-right"></span>
+        }
+        @if (!isCollapsed) {
+          <span class="fa fa-chevron-down"></span>
+        }
+      {{selectOptions.label}}</label>
+      @if (!isCollapsed) {
+        <div class="form-group">
+          <label for="selectedInventoryId">Select Inventory</label>
+          <select formControlName="selectedInventoryId" class="form-control" id="selectedInventoryId"
+            (change)="setCatalogItemOptionsFromInventory()">
+            @for (inventoryOption of selectOptions.inventoryOptions; track inventoryOption) {
+              <option [ngValue]="inventoryOption.id">
+              {{inventoryOption.display}}</option>
+            }
+          </select>
         </div>
+        <div class="form-group">
+          <label for="selectedCatalogItem">Select {{selectOptions.itemName}} Item</label>
+          <select class="form-control" name="selectedCatalogItem" id="selectedCatalogItem"
+            formControlName="selectedCatalogItem" (change)="setSelectedCatalogItem()">
+            <option selected [ngValue]="null">Select {{selectOptions.itemName}} Item</option>
+            @for (option of selectOptions.catalogItemOptions; track option) {
+              <optgroup label="{{option.department}}">
+                @for (item of option.catalog; track item) {
+                  <option [ngValue]="item">{{item.name}}</option>
+                }
+              </optgroup>
+            }
+          </select>
+        </div>
+      }
+    </form>
+  }
+
+  @if (inPsat && !allowChanges && !connectedInventoryData.isConnected) {
+    <div class="integration-status alert-secondary small">
+      <div class="text-center mx-auto w-75 message">
+        Visit Baseline to connect an existing inventory
+      </div>
     </div>
+  }
 
 </div>

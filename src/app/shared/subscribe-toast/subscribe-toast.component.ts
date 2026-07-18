@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { CommonModule } from '@angular/common';
+
 import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -8,7 +8,7 @@ import { EmailListSubscribeService } from './email-list-subscribe.service';
 @Component({
   selector: 'app-subscribe-toast',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [RouterModule, FormsModule],
   templateUrl: './subscribe-toast.component.html',
   styleUrl: './subscribe-toast.component.css',
   animations: [

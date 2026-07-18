@@ -1,19 +1,39 @@
-<div class="alert-danger small m-3" *ngIf="!validLosses && validPsat.isValid">
-    <span *ngIf="!validLosses">
+@if (!validLosses && validPsat.isValid) {
+  <div class="alert-danger small m-3">
+    @if (!validLosses) {
+      <span>
         Cannot generate
-        <span *ngIf="isBaseline">System</span>
-        <span *ngIf="!isBaseline">Modification</span>
-        Sankey: 
+        @if (isBaseline) {
+          <span>System</span>
+        }
+        @if (!isBaseline) {
+          <span>Modification</span>
+        }
+        Sankey:
         <br>
-        Pump or Motor efficiency is greater than 100%
-    </span>
-</div>
-<div class="alert-danger small m-3" *ngIf="!validPsat.isValid">
-    <span *ngIf="isBaseline">Invalid Baseline</span>
-    <span *ngIf="!isBaseline">Invalid Modification</span>
-    <br>
-    <span *ngIf="!validPsat.pumpFluidValid">Errors found in Pump Fluid Data<br></span>
-    <span *ngIf="!validPsat.motorValid">Errors found in Motor Data<br></span>
-    <span *ngIf="!validPsat.fieldDataValid">Errors found in Field Data<br></span>
-</div>
-<div [ngClass]="{'chart-hide': !validPsat.isValid || !validLosses, 'chart-show': validPsat.isValid && validLosses}" #ngChart id="sankeyChart"></div>
+          Pump or Motor efficiency is greater than 100%
+        </span>
+      }
+    </div>
+  }
+  @if (!validPsat.isValid) {
+    <div class="alert-danger small m-3">
+      @if (isBaseline) {
+        <span>Invalid Baseline</span>
+      }
+      @if (!isBaseline) {
+        <span>Invalid Modification</span>
+      }
+      <br>
+        @if (!validPsat.pumpFluidValid) {
+          <span>Errors found in Pump Fluid Data<br></span>
+        }
+        @if (!validPsat.motorValid) {
+          <span>Errors found in Motor Data<br></span>
+        }
+        @if (!validPsat.fieldDataValid) {
+          <span>Errors found in Field Data<br></span>
+        }
+      </div>
+    }
+    <div [ngClass]="{'chart-hide': !validPsat.isValid || !validLosses, 'chart-show': validPsat.isValid && validLosses}" #ngChart id="sankeyChart"></div>

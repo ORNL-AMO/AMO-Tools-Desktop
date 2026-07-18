@@ -1,270 +1,314 @@
 <div bsModal #printMenuModal="bs-modal" class="modal fade hide-print" tabindex="-1" role="dialog"
-    aria-labelledby="printMenuLabelModal" aria-hidden="true" [config]="{backdrop: 'static'}">
-    <div class="modal-dialog modal-md hide-print">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Print Report</h3>
-                <button class="close" (click)="closePrintModal()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12">
-                        <p>
-                            Select all report items you would like to include in your printed report.
-                        </p>
-                    </div>
-                </div>
-                <div class="row toggle-btn" (click)="togglePrint('selectAll')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.selectAll"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bold-bottom-divider">
-                        Select All
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" *ngIf="showPsatReportOptions && showRollupReportOptions"
-                    (click)="togglePrint('psatRollup')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printPsatRollup"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Pump Rollup Summary
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" *ngIf="showCompressedAirOptions && showRollupReportOptions"
-                    (click)="togglePrint('compressedAirRollup')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printCompressedAirRollup">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Compressed Air Rollup Summary
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" *ngIf="showPhastReportOptions && showRollupReportOptions"
-                    (click)="togglePrint('phastRollup')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printPhastRollup"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Process Heating Rollup Summary
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" *ngIf="showFsatReportOptions && showRollupReportOptions"
-                    (click)="togglePrint('fsatRollup')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printFsatRollup"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Fan Rollup Summary
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" *ngIf="showSsmtReportOptions && showRollupReportOptions"
-                    (click)="togglePrint('ssmtRollup')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printSsmtRollup"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Steam Rollup Summary
-                    </div>
-                </div>
-                <div class="row toggle-btn pad-top-10" *ngIf="showTHReportOptions && showRollupReportOptions"
-                    (click)="togglePrint('treasureHuntRollup')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printTreasureHuntRollup">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Treasure Hunt Rollup Summary
-                    </div>
-                </div>
-                <!-- <div class="row toggle-btn pad-top-10" *ngIf="showWaterOptions && showRollupReportOptions">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printWaterRollup">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bold-bottom-divider">
-                        Water Rollup Summary
-                    </div>
-                </div> -->
-                <div class="row toggle-btn pad-top-10" *ngIf="showWasteWaterOptions && showRollupReportOptions"
-                    (click)="togglePrint('printWasteWaterRollup')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printWasteWaterRollup">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bold-bottom-divider">
-                        Wastewater Rollup Summary
-                    </div>
-                </div>
-
-                <div *ngIf="showPhastReportOptions || showSsmtReportOptions || showTHReportOptions || showCompressedAirOptions || showWaterOptions"
-                    class="row toggle-btn pad-top-10" (click)="togglePrint('executiveSummary')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printExecutiveSummary"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Executive Summary
-                    </div>
-                </div>
-
-                <div *ngIf="showWaterOptions"
-                    class="row toggle-btn pad-top-10" (click)="togglePrint('printWaterSystemSummary')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printWaterSystemSummary"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        System Annual Summary
-                    </div>
-                </div>
-
-                <div *ngIf="showWaterOptions"
-                    class="row toggle-btn pad-top-10" (click)="togglePrint('printWaterSystemCostReport')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printWaterSystemCostReport"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        True Cost of Systems
-                    </div>
-                </div>
-
-                <div *ngIf="showSsmtReportOptions || showPhastReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('energySummary')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printEnergySummary"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8"
-                        [ngClass]="{'bold-bottom-divider' : !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions}">
-                        Energy Summary
-                    </div>
-                </div>
-
-                <div *ngIf="showFsatReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('detailedResults')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printDetailedResults"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8"
-                        [ngClass]="{'bold-bottom-divider' : (showFsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions}">
-                        Detailed Results
-                    </div>
-                </div>
-
-                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showWasteWaterOptions"
-                    class="row toggle-btn pad-top-10" (click)="togglePrint('results')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printResults"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Result Data
-                    </div>
-                </div>
-
-                <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportGraphs')" *ngIf="!showWaterOptions">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportGraphs"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Report Graphs
-                    </div>
-                </div>
-
-                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions"
-                    class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportSankey"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8"
-                        [ngClass]="{'bold-bottom-divider' : (showPsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions || showFsatReportOptions || showCompressedAirOptions}">
-                        Report Sankey
-                    </div>
-                </div>
-
-                <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('reportDiagram')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportDiagram"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8"
-                        [ngClass]="{'bold-bottom-divider' : showSsmtReportOptions && !showRollupReportOptions, 'bottom-divider' : showRollupReportOptions}">
-                        Report Diagram
-                    </div>
-                </div>
-
-                <div *ngIf="showSsmtReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('lossesSummary')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printLossesSummary"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Losses Summary
-                    </div>
-                </div>
-
-                <!-- treasure hunt specific options -->
-                <div *ngIf="showTHReportOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('opportunitySummary')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportOpportunitySummary">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Opportunity Summary
-                    </div>
-                </div>
-
-                <div *ngIf="showTHReportOptions || showCompressedAirOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('opportunityPayback')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printReportOpportunityPayback">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Opportunity Payback Details
-                    </div>
-                </div>
-                <!-- end treasure hunt specific options -->
-
-                <div *ngIf="showCompressedAirOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('performanceProfiles')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printPerformanceProfiles">
-                        </app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bottom-divider">
-                        Performance Profiles
-                    </div>
-                </div>
-
-                <div *ngIf="showCompressedAirOptions" class="row toggle-btn pad-top-10"
-                    (click)="togglePrint('systemProfiles')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printSystemProfiles"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8 bold-bottom-divider">
-                        System Profiles
-                    </div>
-                </div>
-
-                <div *ngIf="showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions || showWasteWaterOptions || showCompressedAirOptions"
-                    class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
-                    <div class="col-2">
-                        <app-animated-checkmark [active]="printOptions.printInputData"></app-animated-checkmark>
-                    </div>
-                    <div class="col-8">
-                        Input Summary
-                    </div>
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-primary" (click)="setPrintView()"
-                    data-dismiss="modal">Print</button>
-                <button type="button" class="btn btn-default btn-secondary" (click)="closePrintModal()"
-                    data-dismiss="modal">Cancel</button>
-            </div>
+  aria-labelledby="printMenuLabelModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-md hide-print">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Print Report</h3>
+        <button class="close" (click)="closePrintModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <p>
+              Select all report items you would like to include in your printed report.
+            </p>
+          </div>
         </div>
+        <div class="row toggle-btn" (click)="togglePrint('selectAll')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.selectAll"></app-animated-checkmark>
+          </div>
+          <div class="col-8 bold-bottom-divider">
+            Select All
+          </div>
+        </div>
+        @if (showPsatReportOptions && showRollupReportOptions) {
+          <div class="row toggle-btn pad-top-10"
+            (click)="togglePrint('psatRollup')">
+            <div class="col-2">
+              <app-animated-checkmark [active]="printOptions.printPsatRollup"></app-animated-checkmark>
+            </div>
+            <div class="col-8 bottom-divider">
+              Pump Rollup Summary
+            </div>
+          </div>
+        }
+        @if (showCompressedAirOptions && showRollupReportOptions) {
+          <div class="row toggle-btn pad-top-10"
+            (click)="togglePrint('compressedAirRollup')">
+            <div class="col-2">
+              <app-animated-checkmark [active]="printOptions.printCompressedAirRollup">
+              </app-animated-checkmark>
+            </div>
+            <div class="col-8 bottom-divider">
+              Compressed Air Rollup Summary
+            </div>
+          </div>
+        }
+        @if (showPhastReportOptions && showRollupReportOptions) {
+          <div class="row toggle-btn pad-top-10"
+            (click)="togglePrint('phastRollup')">
+            <div class="col-2">
+              <app-animated-checkmark [active]="printOptions.printPhastRollup"></app-animated-checkmark>
+            </div>
+            <div class="col-8 bottom-divider">
+              Process Heating Rollup Summary
+            </div>
+          </div>
+        }
+        @if (showFsatReportOptions && showRollupReportOptions) {
+          <div class="row toggle-btn pad-top-10"
+            (click)="togglePrint('fsatRollup')">
+            <div class="col-2">
+              <app-animated-checkmark [active]="printOptions.printFsatRollup"></app-animated-checkmark>
+            </div>
+            <div class="col-8 bottom-divider">
+              Fan Rollup Summary
+            </div>
+          </div>
+        }
+        @if (showSsmtReportOptions && showRollupReportOptions) {
+          <div class="row toggle-btn pad-top-10"
+            (click)="togglePrint('ssmtRollup')">
+            <div class="col-2">
+              <app-animated-checkmark [active]="printOptions.printSsmtRollup"></app-animated-checkmark>
+            </div>
+            <div class="col-8 bottom-divider">
+              Steam Rollup Summary
+            </div>
+          </div>
+        }
+        @if (showTHReportOptions && showRollupReportOptions) {
+          <div class="row toggle-btn pad-top-10"
+            (click)="togglePrint('treasureHuntRollup')">
+            <div class="col-2">
+              <app-animated-checkmark [active]="printOptions.printTreasureHuntRollup">
+              </app-animated-checkmark>
+            </div>
+            <div class="col-8 bottom-divider">
+              Treasure Hunt Rollup Summary
+            </div>
+          </div>
+        }
+        <!-- <div class="row toggle-btn pad-top-10" *ngIf="showWaterOptions && showRollupReportOptions">
+        <div class="col-2">
+          <app-animated-checkmark [active]="printOptions.printWaterRollup">
+          </app-animated-checkmark>
+        </div>
+        <div class="col-8 bold-bottom-divider">
+          Water Rollup Summary
+        </div>
+      </div> -->
+      @if (showWasteWaterOptions && showRollupReportOptions) {
+        <div class="row toggle-btn pad-top-10"
+          (click)="togglePrint('printWasteWaterRollup')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printWasteWaterRollup">
+            </app-animated-checkmark>
+          </div>
+          <div class="col-8 bold-bottom-divider">
+            Wastewater Rollup Summary
+          </div>
+        </div>
+      }
+
+      @if (showPhastReportOptions || showSsmtReportOptions || showTHReportOptions || showCompressedAirOptions || showWaterOptions) {
+        <div
+          class="row toggle-btn pad-top-10" (click)="togglePrint('executiveSummary')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printExecutiveSummary"></app-animated-checkmark>
+          </div>
+          <div class="col-8 bottom-divider">
+            Executive Summary
+          </div>
+        </div>
+      }
+
+      @if (showWaterOptions) {
+        <div
+          class="row toggle-btn pad-top-10" (click)="togglePrint('printWaterSystemSummary')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printWaterSystemSummary"></app-animated-checkmark>
+          </div>
+          <div class="col-8 bottom-divider">
+            System Annual Summary
+          </div>
+        </div>
+      }
+
+      @if (showWaterOptions) {
+        <div
+          class="row toggle-btn pad-top-10" (click)="togglePrint('printWaterSystemCostReport')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printWaterSystemCostReport"></app-animated-checkmark>
+          </div>
+          <div class="col-8 bottom-divider">
+            True Cost of Systems
+          </div>
+        </div>
+      }
+
+      @if (showSsmtReportOptions || showPhastReportOptions) {
+        <div class="row toggle-btn pad-top-10"
+          (click)="togglePrint('energySummary')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printEnergySummary"></app-animated-checkmark>
+          </div>
+          <div class="col-8"
+            [ngClass]="{'bold-bottom-divider' : !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions}">
+            Energy Summary
+          </div>
+        </div>
+      }
+
+      @if (showFsatReportOptions) {
+        <div class="row toggle-btn pad-top-10"
+          (click)="togglePrint('detailedResults')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printDetailedResults"></app-animated-checkmark>
+          </div>
+          <div class="col-8"
+            [ngClass]="{'bold-bottom-divider' : (showFsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions}">
+            Detailed Results
+          </div>
+        </div>
+      }
+
+      @if (showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showWasteWaterOptions) {
+        <div
+          class="row toggle-btn pad-top-10" (click)="togglePrint('results')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printResults"></app-animated-checkmark>
+          </div>
+          <div class="col-8 bottom-divider">
+            Result Data
+          </div>
+        </div>
+      }
+
+      @if (!showWaterOptions) {
+        <div class="row toggle-btn pad-top-10" (click)="togglePrint('reportGraphs')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printReportGraphs"></app-animated-checkmark>
+          </div>
+          <div class="col-8 bottom-divider">
+            Report Graphs
+          </div>
+        </div>
+      }
+
+      @if (showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions) {
+        <div
+          class="row toggle-btn pad-top-10" (click)="togglePrint('reportSankey')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printReportSankey"></app-animated-checkmark>
+          </div>
+          <div class="col-8"
+            [ngClass]="{'bold-bottom-divider' : (showPsatReportOptions) && !showPhastReportOptions && !showSsmtReportOptions, 'bottom-divider' : showSsmtReportOptions || showPhastReportOptions || showFsatReportOptions || showCompressedAirOptions}">
+            Report Sankey
+          </div>
+        </div>
+      }
+
+      @if (showSsmtReportOptions) {
+        <div class="row toggle-btn pad-top-10"
+          (click)="togglePrint('reportDiagram')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printReportDiagram"></app-animated-checkmark>
+          </div>
+          <div class="col-8"
+            [ngClass]="{'bold-bottom-divider' : showSsmtReportOptions && !showRollupReportOptions, 'bottom-divider' : showRollupReportOptions}">
+            Report Diagram
+          </div>
+        </div>
+      }
+
+      @if (showSsmtReportOptions) {
+        <div class="row toggle-btn pad-top-10"
+          (click)="togglePrint('lossesSummary')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printLossesSummary"></app-animated-checkmark>
+          </div>
+          <div class="col-8 bottom-divider">
+            Losses Summary
+          </div>
+        </div>
+      }
+
+      <!-- treasure hunt specific options -->
+      @if (showTHReportOptions) {
+        <div class="row toggle-btn pad-top-10"
+          (click)="togglePrint('opportunitySummary')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printReportOpportunitySummary">
+            </app-animated-checkmark>
+          </div>
+          <div class="col-8 bottom-divider">
+            Opportunity Summary
+          </div>
+        </div>
+      }
+
+      @if (showTHReportOptions || showCompressedAirOptions) {
+        <div class="row toggle-btn pad-top-10"
+          (click)="togglePrint('opportunityPayback')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printReportOpportunityPayback">
+            </app-animated-checkmark>
+          </div>
+          <div class="col-8 bottom-divider">
+            Opportunity Payback Details
+          </div>
+        </div>
+      }
+      <!-- end treasure hunt specific options -->
+
+      @if (showCompressedAirOptions) {
+        <div class="row toggle-btn pad-top-10"
+          (click)="togglePrint('performanceProfiles')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printPerformanceProfiles">
+            </app-animated-checkmark>
+          </div>
+          <div class="col-8 bottom-divider">
+            Performance Profiles
+          </div>
+        </div>
+      }
+
+      @if (showCompressedAirOptions) {
+        <div class="row toggle-btn pad-top-10"
+          (click)="togglePrint('systemProfiles')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printSystemProfiles"></app-animated-checkmark>
+          </div>
+          <div class="col-8 bold-bottom-divider">
+            System Profiles
+          </div>
+        </div>
+      }
+
+      @if (showPsatReportOptions || showFsatReportOptions || showPhastReportOptions || showSsmtReportOptions || showWasteWaterOptions || showCompressedAirOptions) {
+        <div
+          class="row toggle-btn pad-top-10" (click)="togglePrint('inputData')">
+          <div class="col-2">
+            <app-animated-checkmark [active]="printOptions.printInputData"></app-animated-checkmark>
+          </div>
+          <div class="col-8">
+            Input Summary
+          </div>
+        </div>
+      }
+
     </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default btn-primary" (click)="setPrintView()"
+      data-dismiss="modal">Print</button>
+      <button type="button" class="btn btn-default btn-secondary" (click)="closePrintModal()"
+      data-dismiss="modal">Cancel</button>
+    </div>
+  </div>
+</div>
 </div>

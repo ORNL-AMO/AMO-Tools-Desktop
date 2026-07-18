@@ -1,6 +1,5 @@
-<ng-container *ngIf="emailSentStatus !== 'success'">
+@if (emailSentStatus !== 'success') {
   <form [formGroup]="emailDataForm" class="mb-4 px-2">
-
     <div class="form-group d-flex flex-column w-100 mb-3">
       <label class="bold mr-2 w-25" for="emailSender">Sender Email</label>
       <div class="input-group">
@@ -8,13 +7,16 @@
           id="emailSender" />
       </div>
       <div class="input-group">
-        <span class="alert-danger w-100 pull-right small py-1 px-2"
-          *ngIf="emailDataForm.controls.emailSender.invalid && !emailDataForm.controls.emailSender.pristine">
-          <span *ngIf="emailDataForm.controls.emailSender.errors.email">Must be a valid email address</span>
-        </span>
+        @if (emailDataForm.controls.emailSender.invalid && !emailDataForm.controls.emailSender.pristine) {
+          <span class="alert-danger w-100 pull-right small py-1 px-2"
+            >
+            @if (emailDataForm.controls.emailSender.errors.email) {
+              <span>Must be a valid email address</span>
+            }
+          </span>
+        }
       </div>
     </div>
-    
     <div class="form-group d-flex flex-column w-100 mb-3">
       <label class="bold mr-2 w-25" for="emailTo">To Email</label>
       <div class="input-group">
@@ -22,88 +24,107 @@
       </div>
       <small class="form-text text-muted">Separate multiple email addresses with commas (ex. user1&#64;example.com, admin&#64;example.com)</small>
       <div class="input-group">
-        <span class="alert-danger w-100 pull-right small py-1 px-2"
-          *ngIf="emailDataForm.controls.emailTo.invalid && !emailDataForm.controls.emailTo.pristine">
-          <span *ngIf="emailDataForm.controls.emailTo.errors.required">Email is required</span>
-          <span *ngIf="emailDataForm.controls.emailTo.errors.invalidEmails">One or more emails are invalid</span>
-        </span>
+        @if (emailDataForm.controls.emailTo.invalid && !emailDataForm.controls.emailTo.pristine) {
+          <span class="alert-danger w-100 pull-right small py-1 px-2"
+            >
+            @if (emailDataForm.controls.emailTo.errors.required) {
+              <span>Email is required</span>
+            }
+            @if (emailDataForm.controls.emailTo.errors.invalidEmails) {
+              <span>One or more emails are invalid</span>
+            }
+          </span>
+        }
       </div>
     </div>
-
     <div class="form-group d-flex flex-column w-100 mb-3">
       <label class="bold mr-2 w-25" for="emailAttachmentName">Attachment Name</label>
       <div class="input-group">
         <input type="text" formControlName="emailAttachmentName" class="form-control" (input)="save()" id="emailAttachmentName" />
       </div>
       <div class="input-group">
-        <span class="alert-danger w-100 pull-right small py-1 px-2"
-          *ngIf="emailAttachmentName.invalid">
-          <span *ngIf="emailAttachmentName.errors.required">Attachment name is required</span>
-          <span *ngIf="emailAttachmentName.errors.invalidCharacters">
-            Only letters, numbers, dot (.), underscore (_), and hyphen (-) are allowed in the attachment name
+        @if (emailAttachmentName.invalid) {
+          <span class="alert-danger w-100 pull-right small py-1 px-2"
+            >
+            @if (emailAttachmentName.errors.required) {
+              <span>Attachment name is required</span>
+            }
+            @if (emailAttachmentName.errors.invalidCharacters) {
+              <span>
+                Only letters, numbers, dot (.), underscore (_), and hyphen (-) are allowed in the attachment name
+              </span>
+            }
           </span>
-        </span>
+        }
       </div>
     </div>
-
   </form>
-</ng-container>
+}
 
-  <div *ngIf="emailSentStatus === 'success'" class="alert-success small mx-2 px-3 py-2">
+@if (emailSentStatus === 'success') {
+  <div class="alert-success small mx-2 px-3 py-2">
     An email has been sent to <span class="bold">{{emailDataForm.controls.emailTo.value}}</span>. If the email is not received, please check the spam folder.
   </div>
-  
-  <div *ngIf="emailSentStatus === 'error'" class="alert-danger small mx-2 px-3 py-2">
+}
+
+@if (emailSentStatus === 'error') {
+  <div class="alert-danger small mx-2 px-3 py-2">
     <span>An error has occured. Please verify your network connection and try again.</span>
   </div>
-  
-  <div *ngIf="emailSentStatus === 'content-too-large'" class="alert-danger small mx-2 px-3 py-2">
+}
+
+@if (emailSentStatus === 'content-too-large') {
+  <div class="alert-danger small mx-2 px-3 py-2">
     <span>This item is too large to send as an email attachment. Please try sharing using the export feature.</span>
   </div>
+}
 
-  <ng-container *ngIf="emailSentStatus === 'sending'">
-    <div class="spinner-overlay align-items-center w-100 text-center">
-      <div class="spinner mt-2 w-100">
-          <div class="bounce1"></div>
-          <div class="bounce2"></div>
-          <div class="bounce3"></div>
-      </div>
-      <div class="importing-text w-100">Sending Email...</div>
+@if (emailSentStatus === 'sending') {
+  <div class="spinner-overlay align-items-center w-100 text-center">
+    <div class="spinner mt-2 w-100">
+      <div class="bounce1"></div>
+      <div class="bounce2"></div>
+      <div class="bounce3"></div>
+    </div>
+    <div class="importing-text w-100">Sending Email...</div>
   </div>
-  </ng-container>
+}
 
-<ng-container *ngIf="!['success', 'sending'].includes(emailSentStatus)">
+@if (!['success', 'sending'].includes(emailSentStatus)) {
   <div class="alert-info small mx-2 px-3 py-2">
     Emails are delivered from the address <span class="bold">no-reply-measur&#64;ornl.gov</span>.
     <br> <span class="font-italic">Sender Email</span> will be included in the email body
   </div>
-
   <div class="card m-2">
-      <div class="card-header preview" (click)="togglePreview()">
+    <div class="card-header preview" (click)="togglePreview()">
       Email Preview
-      <span class="pull-right" *ngIf="!showPreview"><i class="fa fa-chevron-up"></i></span>
-    <span class="pull-right" *ngIf="showPreview"><i class="fa fa-chevron-down"></i></span>
+      @if (!showPreview) {
+        <span class="pull-right"><i class="fa fa-chevron-up"></i></span>
+      }
+      @if (showPreview) {
+        <span class="pull-right"><i class="fa fa-chevron-down"></i></span>
+      }
     </div>
-    <div class="card-body small" *ngIf="showPreview">
-      <p>
-        This email contains an attachment of exported data from the MEASUR application, generated by
-        {{emailSender}}.
-      </p>
-      <hr>
-      <span class="h6">More Information</span>
-
-      <div>
-        Manufacturing Energy Assessment Software for Utility Reduction (MEASUR)
-        <br>
-        <a target="_blank" href="https://www.energy.gov/eere/iedo/measur"
-          alt="https://www.energy.gov/eere/iedo/measur">https://www.energy.gov/eere/iedo/measur</a>
-      </div>
-
-      <div>
-        MEASUR on the web:
-        <br>
-        <a target="_blank" href="https://measur.ornl.gov" alt="https://measur.ornl.gov">https://measur.ornl.gov</a>
-      </div>
-    </div>
-  </div>
-</ng-container>
+    @if (showPreview) {
+      <div class="card-body small">
+        <p>
+          This email contains an attachment of exported data from the MEASUR application, generated by
+          {{emailSender}}.
+        </p>
+        <hr>
+          <span class="h6">More Information</span>
+          <div>
+            Manufacturing Energy Assessment Software for Utility Reduction (MEASUR)
+            <br>
+              <a target="_blank" href="https://www.energy.gov/eere/iedo/measur"
+              alt="https://www.energy.gov/eere/iedo/measur">https://www.energy.gov/eere/iedo/measur</a>
+            </div>
+            <div>
+              MEASUR on the web:
+              <br>
+                <a target="_blank" href="https://measur.ornl.gov" alt="https://measur.ornl.gov">https://measur.ornl.gov</a>
+              </div>
+            </div>
+          }
+        </div>
+      }

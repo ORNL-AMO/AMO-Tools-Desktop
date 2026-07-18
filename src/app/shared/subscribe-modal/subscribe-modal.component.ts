@@ -2,13 +2,13 @@ import { Component, ViewChild } from '@angular/core';
 import { ModalDirective, ModalModule } from 'ngx-bootstrap/modal';
 import { EmailListSubscribeService } from '../subscribe-toast/email-list-subscribe.service';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-subscribe-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalModule, RouterModule],
+  imports: [FormsModule, ModalModule, RouterModule],
   templateUrl: './subscribe-modal.component.html',
   styleUrl: './subscribe-modal.component.css'
 })
