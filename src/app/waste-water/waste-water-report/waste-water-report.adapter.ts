@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { appendSubGroup, buildFacilityInfoSections, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, createSummaryRowBuilder, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
@@ -15,6 +15,7 @@ import { aeratorTypes } from '../waste-water-defaults';
 import { graphColors } from '../../shared/graphColors';
 import { TraceData } from '../../shared/models/plotting';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
+import { getWasteWaterPaybackPeriod } from './waste-water-report.utils';
 
 export const WASTE_WATER_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -54,7 +55,7 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
     const modNames = wasteWater.modifications?.map(m => m.name ?? '') ?? [];
 
     const meta: ReportMeta = {
-      title: assessment?.name ?? 'Wastewater Efficiency Report',
+      title: assessment.name,
       date: new Date().toISOString(),
       moduleColor: WasteWaterReportAdapter.ACCENT_COLOR,
     };
@@ -191,11 +192,7 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
   }
 
   private calcPayback(baseline: WasteWaterResults, mod: WasteWaterData): string {
-    const implCost = mod.operations?.implementationCosts;
-    if (!implCost) return '0';
-    const savings = (baseline?.AeCost ?? 0) - (mod.outputs?.AeCost ?? 0);
-    if (savings <= 1) return formatNumber(0, 1);
-    return formatNumber((implCost / savings) * 12, 1);
+    return formatNumber(getWasteWaterPaybackPeriod(baseline, mod), 1);
   }
 
   private buildInputSummarySections(wasteWater: WasteWater, settings: Settings, modNames: string[]): SummaryTableSection[] {
@@ -205,15 +202,7 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
     const u = this.units(settings);
     const showCO2 = this.featureFlagService.showOperationalImpacts();
 
-    const row = <T extends string | number | boolean | null | undefined>(
-      label: string,
-      baseVal: T,
-      modFn: (d: WasteWaterData) => T,
-      fmt?: (v: T) => string
-    ): string[] => {
-      const f = fmt ?? (v => v != null ? String(v) : '—');
-      return [label, f(baseVal), ...mods.map(m => f(modFn(m)))];
-    };
+    const row = createSummaryRowBuilder(mods);
 
     const operationsRows: string[][] = [
       row('Operating Months', baseline.operations?.operatingMonths, m => m.operations?.operatingMonths),

@@ -1,16 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { appendSubGroup, buildFacilityInfoSections, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, createSummaryRowBuilder, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
-import { Modification, PSAT, PsatInputs, PsatOutputs } from '../../shared/models/psat';
+import { Modification, PSAT, PsatOutputs } from '../../shared/models/psat';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import { PsatChartsService, PsatChartConfig } from '../services/psat-charts.service';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
+import { getPsatPaybackPeriod } from './psat-report.utils';
 
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -196,11 +197,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
   }
 
   private calcPayback(baselineOut: PsatOutputs, mod: Modification): string {
-    const implCost = mod.psat?.inputs?.implementationCosts;
-    if (!implCost) return '0';
-    const savings = (baselineOut?.annual_cost ?? 0) - (mod.psat?.outputs?.annual_cost ?? 0);
-    if (savings <= 0) return '—';
-    return formatNumber((implCost / savings) * 12, 1);
+    return formatNumber(getPsatPaybackPeriod(baselineOut?.annual_cost, mod.psat?.outputs?.annual_cost, mod.psat?.inputs?.implementationCosts), 1);
   }
 
   private buildInputSummarySections(psat: PSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {
@@ -208,52 +205,44 @@ export class PsatReportAdapter implements ReportDataAdapter {
     const inputs = psat.inputs;
     const mods = psat.modifications ?? [];
 
-    const row = <T extends string | number | null | undefined>(
-      label: string,
-      baseVal: T,
-      modFn: (i: PsatInputs | undefined) => T,
-      fmt?: (v: T) => string
-    ): string[] => {
-      const f = fmt ?? (v => v != null ? String(v) : '—');
-      return [label, f(baseVal), ...mods.map(m => f(modFn(m.psat?.inputs)))];
-    };
+    const row = createSummaryRowBuilder(mods);
 
     const operationsRows: string[][] = [
-      row('Operating Hours', inputs.operating_hours, i => i?.operating_hours),
-      row(`Cost (${settings.currency}/kWh)`, inputs.cost_kw_hour, i => i?.cost_kw_hour,
+      row('Operating Hours', inputs.operating_hours, m => m.psat?.inputs?.operating_hours),
+      row(`Cost (${settings.currency}/kWh)`, inputs.cost_kw_hour, m => m.psat?.inputs?.cost_kw_hour,
         v => v != null ? formatNumber(v, 4) : '—'),
     ];
 
     const pumpFluidRows: string[][] = [
-      row('Pump Type', inputs.pump_style, i => i?.pump_style,
+      row('Pump Type', inputs.pump_style, m => m.psat?.inputs?.pump_style,
         v => this.psatService.getPumpStyleFromEnum(v)),
-      row('Speed (rpm)', inputs.pump_rated_speed, i => i?.pump_rated_speed),
-      row('Drive', inputs.drive, i => i?.drive,
+      row('Speed (rpm)', inputs.pump_rated_speed, m => m.psat?.inputs?.pump_rated_speed),
+      row('Drive', inputs.drive, m => m.psat?.inputs?.drive,
         v => this.psatService.getDriveFromEnum(v)),
-      row('Fluid Type', inputs.fluidType, i => i?.fluidType),
-      row(`Fluid Temperature (${settings.temperatureMeasurement})`, inputs.fluidTemperature, i => i?.fluidTemperature),
-      row('Specific Gravity', inputs.specific_gravity, i => i?.specific_gravity),
-      row('Stages', inputs.stages, i => i?.stages),
+      row('Fluid Type', inputs.fluidType, m => m.psat?.inputs?.fluidType),
+      row(`Fluid Temperature (${settings.temperatureMeasurement})`, inputs.fluidTemperature, m => m.psat?.inputs?.fluidTemperature),
+      row('Specific Gravity', inputs.specific_gravity, m => m.psat?.inputs?.specific_gravity),
+      row('Stages', inputs.stages, m => m.psat?.inputs?.stages),
     ];
 
     const motorRows: string[][] = [
-      row('Line Frequency (Hz)', inputs.line_frequency, i => i?.line_frequency),
-      row(`Motor Rated Power (${settings.powerMeasurement})`, inputs.motor_rated_power, i => i?.motor_rated_power),
-      row('Speed (rpm)', inputs.motor_rated_speed, i => i?.motor_rated_speed),
-      row('Efficiency Class', inputs.efficiency_class, i => i?.efficiency_class,
+      row('Line Frequency (Hz)', inputs.line_frequency, m => m.psat?.inputs?.line_frequency),
+      row(`Motor Rated Power (${settings.powerMeasurement})`, inputs.motor_rated_power, m => m.psat?.inputs?.motor_rated_power),
+      row('Speed (rpm)', inputs.motor_rated_speed, m => m.psat?.inputs?.motor_rated_speed),
+      row('Efficiency Class', inputs.efficiency_class, m => m.psat?.inputs?.efficiency_class,
         v => this.psatService.getEfficiencyClassFromEnum(v)),
-      row('Voltage (V)', inputs.motor_rated_voltage, i => i?.motor_rated_voltage),
-      row('Full-Load Amps (A)', inputs.motor_rated_fla, i => i?.motor_rated_fla,
+      row('Voltage (V)', inputs.motor_rated_voltage, m => m.psat?.inputs?.motor_rated_voltage),
+      row('Full-Load Amps (A)', inputs.motor_rated_fla, m => m.psat?.inputs?.motor_rated_fla,
         v => v != null ? formatNumber(v, 0) : '—'),
     ];
 
     const fieldDataRows: string[][] = [
-      row(`Flow Rate (${settings.flowMeasurement})`, inputs.flow_rate, i => i?.flow_rate),
-      row(`Head (${settings.distanceMeasurement})`, inputs.head, i => i?.head),
-      row('Load Estimation Method', inputs.load_estimation_method, i => i?.load_estimation_method,
+      row(`Flow Rate (${settings.flowMeasurement})`, inputs.flow_rate, m => m.psat?.inputs?.flow_rate),
+      row(`Head (${settings.distanceMeasurement})`, inputs.head, m => m.psat?.inputs?.head),
+      row('Load Estimation Method', inputs.load_estimation_method, m => m.psat?.inputs?.load_estimation_method,
         v => this.psatService.getLoadEstimationFromEnum(v)),
-      row('Motor Field Voltage (V)', inputs.motor_field_voltage, i => i?.motor_field_voltage),
-      row('Kinematic Viscosity (cST)', inputs.kinematic_viscosity, i => i?.kinematic_viscosity),
+      row('Motor Field Voltage (V)', inputs.motor_field_voltage, m => m.psat?.inputs?.motor_field_voltage),
+      row('Kinematic Viscosity (cST)', inputs.kinematic_viscosity, m => m.psat?.inputs?.kinematic_viscosity),
     ];
 
     const allRows: string[][] = [];

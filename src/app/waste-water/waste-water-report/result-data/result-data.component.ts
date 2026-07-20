@@ -4,6 +4,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
+import { getWasteWaterPaybackPeriod } from '../waste-water-report.utils';
 
 @Component({
     selector: 'app-result-data',
@@ -45,24 +46,8 @@ export class ResultDataComponent implements OnInit {
     }
   }
 
-  getPaybackPeriod(modification: WasteWaterData) {
-    let result = 0;
-    let annualCostSavings = this.getDiff(this.wasteWater.baselineData.outputs.AeCost, modification.outputs.AeCost);
-    if (isNaN(annualCostSavings) == false) {
-      if (annualCostSavings > 1) {
-        result = (modification.operations.implementationCosts / annualCostSavings) * 12;
-      }
-    }
-    return result;
-  }
-
-  getDiff(num1: number, num2: number) {
-    let diff = num1 - num2;
-    if ((diff < .005) && (diff > -.005)) {
-      return null;
-    } else {
-      return diff;
-    }
+  getPaybackPeriod(modification: WasteWaterData): number {
+    return getWasteWaterPaybackPeriod(this.wasteWater.baselineData.outputs, modification);
   }
 
 
