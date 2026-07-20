@@ -15,17 +15,7 @@
     font-size: 12px;
 }
 
-.mt-auto{
-    margin-top: auto !important;
-    margin-bottom: 0;
-}
-
 @media print {
-    .print-break-before {
-        break-before: always;
-        page-break-inside: avoid;
-    }
-
     .date-modified {
         font-size: 18px;
     }

@@ -120,6 +120,23 @@ export function buildFacilityInfoSections(facilityInfo: FacilityInfo | undefined
 }
 
 /**
+ * Creates a `row` builder for baseline-vs-modifications summary tables: given a label, baseline
+ * value, and a per-modification accessor, produces a `[label, baseline, ...modifications]` row.
+ * Values are stringified with `fmt` (default: `String(v)` or '—' when null/undefined).
+ */
+export function createSummaryRowBuilder<M>(mods: M[]) {
+  return function row<T extends string | number | boolean | null | undefined>(
+    label: string,
+    baseVal: T,
+    modFn: (mod: M) => T,
+    fmt?: (v: T) => string
+  ): string[] {
+    const f = fmt ?? ((v: T) => v != null ? String(v) : '—');
+    return [label, f(baseVal), ...mods.map(m => f(modFn(m)))];
+  };
+}
+
+/**
  * Appends a labeled sub-group header row (spanning all columns) followed by its data rows,
  * and records the header's index in `subGroupHeaderIndices` for bold/accent rendering in the PDF.
  */

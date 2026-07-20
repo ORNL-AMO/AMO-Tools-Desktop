@@ -38,7 +38,7 @@
     <div class="report-data"
         *ngIf="assessment.wasteWater.setupDone && assessment.wasteWater.baselineData.valid.isValid">
 
-        <div class="d-none d-lg-flex tabs-bar-row">
+        <div class="d-none d-lg-flex  hide-print">
             <ul #reportBtns class="tabs primary">
                 <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
                     <a>Result Data</a>
