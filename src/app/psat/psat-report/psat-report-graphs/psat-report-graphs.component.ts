@@ -82,8 +82,4 @@ export class PsatReportGraphsComponent implements OnInit {
     });
   }
 
-  getValueArray(outputs: PsatOutputs): Array<number> {
-    const d = this.psatChartsService.computeOutputGraphData(outputs, this.settings);
-    return [d.motorLoss, d.driveLoss, d.pumpLoss, d.usefulOutput];
-  }
 }

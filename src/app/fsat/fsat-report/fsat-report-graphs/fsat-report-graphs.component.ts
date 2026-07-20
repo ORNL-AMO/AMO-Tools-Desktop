@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, inject, OnInit, Input } from '@angular/core';
 import { FSAT, FsatOutput, Modification, FsatValid } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
-import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
+import { FsatChartsService } from '../../services/fsat-charts.service';
 @Component({
     selector: 'app-fsat-report-graphs',
     templateUrl: './fsat-report-graphs.component.html',
@@ -44,7 +44,8 @@ export class FsatReportGraphsComponent implements OnInit {
     valid: FsatValid
   };
   barChartYAxisLabel: string;
-  constructor(private convertUnitsService: ConvertUnitsService) { }
+
+  private readonly fsatChartsService = inject(FsatChartsService);
 
   ngOnInit() {
     this.setAllChartData();
@@ -64,62 +65,20 @@ export class FsatReportGraphsComponent implements OnInit {
   }
 
   addChartData(results: FsatOutput, name: string, isValid: FsatValid, modification?: Modification) {
-    let baselineChartData: FsatGraphData = this.getGraphData(results);
-    let barChartLabels: Array<string> = ['Energy Input', 'Motor Losses', 'Drive Losses', 'Fan Losses', 'Useful Output'];
-    let barChartValues: Array<number> = [baselineChartData.energyInput, baselineChartData.motorLoss, baselineChartData.driveLoss, baselineChartData.fanLoss, baselineChartData.usefulOutput];
+    const data = this.fsatChartsService.computeOutputGraphData(results, this.settings);
     this.allChartData.push({
-      name: name,
-      valuesAndLabels : [
-        {
-          value: baselineChartData.motorLoss,
-          label: 'Motor Losses'
-        },
-        {
-          value: baselineChartData.driveLoss,
-          label: 'Drive Losses'
-        },
-        {
-          value: baselineChartData.fanLoss,
-          label: 'Fan Losses'
-        },
-        {
-          value: baselineChartData.usefulOutput,
-          label:  'Useful Output'
-        },
+      name,
+      valuesAndLabels: [
+        { value: data.motorLoss, label: 'Motor Losses' },
+        { value: data.driveLoss, label: 'Drive Losses' },
+        { value: data.fanLoss, label: 'Fan Losses' },
+        { value: data.usefulOutput, label: 'Useful Output' },
       ],
-      barChartLabels: barChartLabels,
-      barChartValues: barChartValues,
-      modification: modification,
-      valid: isValid
-    })
+      barChartLabels: ['Energy Input', 'Motor Losses', 'Drive Losses', 'Fan Losses', 'Useful Output'],
+      barChartValues: [data.energyInput, data.motorLoss, data.driveLoss, data.fanLoss, data.usefulOutput],
+      modification,
+      valid: isValid,
+    });
   }
 
-  getValueArray(data: FsatGraphData): Array<number> {
-    return [data.motorLoss, data.driveLoss, data.fanLoss, data.usefulOutput];
-  }
-
-
-  getGraphData(results: FsatOutput): FsatGraphData {
-    let motorShaftPower: number = results.motorShaftPower;
-    let fanShaftPower: number = results.fanShaftPower;
-    if (this.settings.powerMeasurement === 'hp') {
-      motorShaftPower = this.convertUnitsService.value(results.motorShaftPower).from('hp').to('kW');
-      fanShaftPower = this.convertUnitsService.value(results.fanShaftPower).from("hp").to('kW');
-    }
-    let energyInput = results.motorPower;
-    let motorLoss = results.motorPower * (1 - (results.motorEfficiency / 100));
-    let driveLoss = motorShaftPower - fanShaftPower;
-    let fanLoss = (results.motorPower - motorLoss - driveLoss) * (1 - (results.fanEfficiency / 100));
-    let usefulOutput = results.motorPower - (motorLoss + driveLoss + fanLoss);
-    return { energyInput: energyInput, motorLoss: motorLoss, fanLoss: fanLoss, driveLoss: driveLoss, usefulOutput: usefulOutput };
-  }
-}
-
-
-export interface FsatGraphData {
-  energyInput: number,
-  motorLoss: number,
-  fanLoss: number,
-  driveLoss: number,
-  usefulOutput: number
 }
