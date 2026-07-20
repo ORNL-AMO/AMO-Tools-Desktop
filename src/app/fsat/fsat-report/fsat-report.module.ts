@@ -12,7 +12,6 @@ import { BaseGasDensitySummaryComponent } from './input-summary/base-gas-density
 import { FsatSankeyModule } from '../../shared/fsat-sankey/fsat-sankey.module';
 import { FsatReportSankeyComponent } from './fsat-report-sankey/fsat-report-sankey.component';
 import { FsatReportGraphsPrintComponent } from './fsat-report-graphs/fsat-report-graphs-print/fsat-report-graphs-print.component';
-import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
@@ -22,6 +21,8 @@ import { TraverseResultsComponent } from './detailed-results/traverse-results/tr
 import { FanOperationsSummaryComponent } from './input-summary/fan-operations-summary/fan-operations-summary.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
+import { ReportBuilderModule } from '../../shared/report-builder/report-builder.module';
+import { FsatReportAdapter } from './fsat-report.adapter';
 
 
 @NgModule({
@@ -31,14 +32,17 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     ReactiveFormsModule,
     FsatSankeyModule,
     ModalModule,
-    PrintOptionsMenuModule,
     FacilityInfoSummaryModule,
     PercentGraphModule,
     PieChartModule,
     SharedPipesModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    ReportBuilderModule
   ],
   declarations: [FsatReportComponent, FsatReportGraphsComponent, InputSummaryComponent, ResultsSummaryComponent, FieldDataSummaryComponent, FanMotorSummaryComponent, FanSetupSummaryComponent, BaseGasDensitySummaryComponent, FsatReportSankeyComponent, FsatReportGraphsPrintComponent, DetailedResultsComponent, TraverseResultsComponent, FanOperationsSummaryComponent],
-  exports: [FsatReportComponent]
+  exports: [FsatReportComponent],
+  providers: [
+    FsatReportAdapter
+  ]
 })
 export class FsatReportModule { }
