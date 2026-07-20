@@ -5,6 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { FSAT } from '../../../shared/models/fans';
 import { CompareService } from '../../compare.service';
 import { FsatReportRollupService } from '../../../report-rollup/fsat-report-rollup.service';
+import { getFsatPaybackPeriod } from '../fsat-report.utils';
 
 @Component({
     selector: 'app-results-summary',
@@ -130,24 +131,8 @@ export class ResultsSummaryComponent implements OnInit {
     return modificationScenario;
   }
 
-  getPaybackPeriod(modification: FSAT) {
-    let result = 0;
-    let annualCostSavings = this.getDiff(this.fsat.outputs.annualCost, modification.outputs.annualCost);
-    if (isNaN(annualCostSavings) == false) {
-      if (annualCostSavings > 1) {
-        result = (modification.implementationCosts / annualCostSavings) * 12;
-      }
-    }
-    return result;
-  }
-
-  getDiff(num1: number, num2: number) {
-    let diff = num1 - num2;
-    if ((diff < .005) && (diff > -.005)) {
-      return null;
-    } else {
-      return diff;
-    }
+  getPaybackPeriod(modification: FSAT): number {
+    return getFsatPaybackPeriod(this.fsat.outputs.annualCost, modification.outputs.annualCost, modification.implementationCosts);
   }
 
   updateCopyTableString() {
