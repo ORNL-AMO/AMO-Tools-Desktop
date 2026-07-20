@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { appendSubGroup, buildFacilityInfoSections, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, createSummaryRowBuilder, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
@@ -14,6 +13,8 @@ import { ConvertUnitsService } from '../../shared/convert-units/convert-units.se
 import { FanTypes, Drives } from '../fanOptions';
 import { motorEfficiencyConstants } from '../../psat/psatConstants';
 import { getFsatPaybackPeriod } from './fsat-report.utils';
+import { TraceData } from '../../shared/models/plotting';
+import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
 
 export const FSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -35,7 +36,7 @@ export class FsatReportAdapter implements ReportDataAdapter {
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly featureFlagService = inject(FeatureFlagService);
   private readonly convertUnitsService = inject(ConvertUnitsService);
-  private readonly plotlyService = inject(PlotlyService);
+  private readonly chartRenderService = inject(ReportChartRenderService);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [48, 109, 190]; // #306DBE
 
@@ -118,10 +119,15 @@ export class FsatReportAdapter implements ReportDataAdapter {
       [`Annual Cost (${settings.currency})`, fmt(out?.annualCost, 0), ...modCols('annualCost', 0)],
       [`Annual Savings (${settings.currency})`, '—', ...modAnnualSavings],
       ['Implementation Cost', '—', ...mods.map(m => m.fsat?.implementationCosts ? fmt(m.fsat.implementationCosts, 0) : '—')],
-      ['Payback Period (months)', '—', ...mods.map(m => out && m.fsat ? formatNumber(getFsatPaybackPeriod(out, m.fsat), 1) : '—')],
+      ['Payback Period (months)', '—', ...mods.map(m => this.calcPayback(out, m))],
     );
 
-    const energyStartIndex = rows.findIndex(r => r[0] === 'Annual Energy (MWh)');
+    const emphasisRowsIndices = this.findRowIndices(rows, [
+      'Annual Energy (MWh)',
+      'Annual Energy Savings (MWh)',
+      `Annual Cost (${settings.currency})`,
+      `Annual Savings (${settings.currency})`,
+    ]);
 
     return [{
       type: 'summary-table',
@@ -129,11 +135,18 @@ export class FsatReportAdapter implements ReportDataAdapter {
       group: 'results',
       headers,
       rows,
-      emphasisRowsIndices: energyStartIndex >= 0
-        ? [energyStartIndex, energyStartIndex + 1, energyStartIndex + 2, energyStartIndex + 3]
-        : [],
+      emphasisRowsIndices,
       pageBreakBefore: true,
     }];
+  }
+
+  private findRowIndices(rows: string[][], labels: string[]): number[] {
+    return labels.map(label => rows.findIndex(r => r[0] === label)).filter(i => i !== -1);
+  }
+
+  private calcPayback(baselineOutputs: FsatOutput | undefined, mod: Modification): string {
+    if (!baselineOutputs || !mod.fsat) return '—';
+    return formatNumber(getFsatPaybackPeriod(baselineOutputs, mod.fsat), 1);
   }
 
   private buildGraphSections(fsat: FSAT, settings: Settings): ChartSection[] {
@@ -189,7 +202,7 @@ export class FsatReportAdapter implements ReportDataAdapter {
     };
   }
 
-  private async renderPieChart(
+  private renderPieChart(
     baseline: FsatGraphData,
     mod: FsatGraphData,
     baselineName: string,
@@ -221,10 +234,10 @@ export class FsatReportAdapter implements ReportDataAdapter {
       legend: { orientation: 'h' },
       margin: { t: 40, b: 80, l: 20, r: 20 },
     };
-    return this.renderChart(traces, layout);
+    return this.chartRenderService.renderChartToImage(traces as unknown as TraceData[], layout);
   }
 
-  private async renderBarChart(
+  private renderBarChart(
     baseline: FsatGraphData,
     mod: FsatGraphData,
     baselineName: string,
@@ -242,136 +255,105 @@ export class FsatReportAdapter implements ReportDataAdapter {
       yaxis: { title: 'Power (kW)' },
       margin: { t: 40, b: 80, l: 60, r: 20 },
     };
-    return this.renderChart(traces, layout);
-  }
-
-  private async renderChart(traces: object[], layout: object): Promise<string> {
-    const width = 1400;
-    const height = 700;
-    const div = document.createElement('div');
-    div.style.cssText = `position:absolute;left:-9999px;top:-9999px;width:${width}px;height:${height}px`;
-    document.body.appendChild(div);
-    const p = await this.plotlyService.getPlotly();
-    try {
-      await p.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
-      return await p.toImage(div, { format: 'jpeg', width, height });
-    } finally {
-      p.purge(div);
-      document.body.removeChild(div);
-    }
+    return this.chartRenderService.renderChartToImage(traces as unknown as TraceData[], layout);
   }
 
   private buildInputSummarySections(fsat: FSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {
     const headers = ['', 'Baseline', ...modNames];
     const mods = fsat.modifications ?? [];
+    const row = createSummaryRowBuilder(mods);
+
+    // Operations
+    const opsRows: string[][] = [
+      row('Operating Hours', fsat.fsatOperations?.operatingHours, m => m.fsat?.fsatOperations?.operatingHours),
+      row('Cost ($/kWh)', fsat.fsatOperations?.cost, m => m.fsat?.fsatOperations?.cost,
+        v => v != null ? formatNumber(v as number, 4) : '—'),
+    ];
+    if (this.featureFlagService.showOperationalImpacts()) {
+      opsRows.push(
+        row('Total Emission Output Rate (kg CO2/MWh)',
+          fsat.fsatOperations?.cO2SavingsData?.totalEmissionOutputRate,
+          m => m.fsat?.fsatOperations?.cO2SavingsData?.totalEmissionOutputRate,
+          v => v != null ? formatNumber(v as number, 2) : '—')
+      );
+    }
+
+    // Fluid (Base Gas Density)
+    const fluidRows: string[][] = [
+      row(`Barometric Pressure (${settings.fanBarometricPressure ?? 'psia'})`,
+        fsat.baseGasDensity?.barometricPressure, m => m.fsat?.baseGasDensity?.barometricPressure),
+      row('Specific Heat Ratio',
+        fsat.baseGasDensity?.specificHeatRatio, m => m.fsat?.baseGasDensity?.specificHeatRatio),
+      row('Gas Type',
+        fsat.baseGasDensity?.gasType, m => m.fsat?.baseGasDensity?.gasType),
+      row('Method to Establish Gas Density',
+        fsat.baseGasDensity?.inputType, m => m.fsat?.baseGasDensity?.inputType,
+        v => this.formatInputType(v as string | undefined)),
+      row(`Dry Bulb Temperature (${settings.unitsOfMeasure === 'Imperial' ? '°F' : '°C'})`,
+        fsat.baseGasDensity?.dryBulbTemp, m => m.fsat?.baseGasDensity?.dryBulbTemp),
+    ];
+
+    // Fan Setup
+    const fanRows: string[][] = [
+      row('Fan Type',
+        fsat.fanSetup?.fanType, m => m.fsat?.fanSetup?.fanType,
+        v => this.getFanTypeDisplay(v as number | undefined)),
+      row('Fan Speed (rpm)',
+        fsat.fanSetup?.fanSpeed, m => m.fsat?.fanSetup?.fanSpeed),
+      row('Drive',
+        fsat.fanSetup?.drive, m => m.fsat?.fanSetup?.drive,
+        v => this.getDriveTypeDisplay(v as number | undefined)),
+      row('Fan Efficiency (%)',
+        fsat.fanSetup?.fanEfficiency, m => m.fsat?.fanSetup?.fanEfficiency,
+        v => v != null ? formatNumber(v as number, 2) : '—'),
+    ];
+
+    // Motor
+    const motorRows: string[][] = [
+      row('Line Frequency (Hz)',
+        fsat.fanMotor?.lineFrequency, m => m.fsat?.fanMotor?.lineFrequency),
+      row(`Motor Rated Power (${settings.fanPowerMeasurement})`,
+        fsat.fanMotor?.motorRatedPower, m => m.fsat?.fanMotor?.motorRatedPower),
+      row('Motor RPM (rpm)',
+        fsat.fanMotor?.motorRpm, m => m.fsat?.fanMotor?.motorRpm),
+      row('Efficiency Class',
+        fsat.fanMotor?.efficiencyClass, m => m.fsat?.fanMotor?.efficiencyClass,
+        v => this.getEfficiencyClassDisplay(v as number | undefined)),
+      row('Motor Rated Voltage (V)',
+        fsat.fanMotor?.motorRatedVoltage, m => m.fsat?.fanMotor?.motorRatedVoltage),
+      row('Full Load Amps (A)',
+        fsat.fanMotor?.fullLoadAmps, m => m.fsat?.fanMotor?.fullLoadAmps,
+        v => v != null ? formatNumber(v as number, 0) : '—'),
+    ];
+
+    // Field Data
+    const fieldRows: string[][] = [
+      row(`Flow Rate (${settings.fanFlowRate ?? 'acfm'})`,
+        fsat.fieldData?.flowRate, m => m.fsat?.fieldData?.flowRate),
+      row(`Inlet Pressure (${settings.fanPressureMeasurement ?? 'inH2O'})`,
+        fsat.fieldData?.inletPressure, m => m.fsat?.fieldData?.inletPressure),
+      row(`Outlet Pressure (${settings.fanPressureMeasurement ?? 'inH2O'})`,
+        fsat.fieldData?.outletPressure, m => m.fsat?.fieldData?.outletPressure),
+      row('Load Estimated Method',
+        fsat.fieldData?.loadEstimatedMethod, m => m.fsat?.fieldData?.loadEstimatedMethod,
+        v => this.formatLoadMethod(v as number | undefined)),
+      row('Motor Power/Current',
+        fsat.fieldData?.motorPower, m => m.fsat?.fieldData?.motorPower),
+      row('Compressibility Factor',
+        fsat.fieldData?.compressibilityFactor, m => m.fsat?.fieldData?.compressibilityFactor),
+      row('Measured Voltage (V)',
+        fsat.fieldData?.measuredVoltage, m => m.fsat?.fieldData?.measuredVoltage),
+    ];
 
     const allRows: string[][] = [];
     const subGroupHeaderIndices: number[] = [];
     const addGroup = (label: string, groupRows: string[][]) =>
       appendSubGroup(allRows, subGroupHeaderIndices, headers.length, label, groupRows);
 
-    // Operations
-    const opsRows: string[][] = [
-      ['Operating Hours', String(fsat.fsatOperations?.operatingHours ?? '—'),
-        ...mods.map(m => String(m.fsat?.fsatOperations?.operatingHours ?? '—'))],
-      ['Cost ($/kWh)', fsat.fsatOperations?.cost != null ? formatNumber(fsat.fsatOperations.cost, 4) : '—',
-        ...mods.map(m => m.fsat?.fsatOperations?.cost != null ? formatNumber(m.fsat.fsatOperations.cost, 4) : '—')],
-    ];
-    if (this.featureFlagService.showOperationalImpacts()) {
-      opsRows.push(
-        ['Total Emission Output Rate (kg CO2/MWh)',
-          fsat.fsatOperations?.cO2SavingsData?.totalEmissionOutputRate != null
-            ? formatNumber(fsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate, 2) : '—',
-          ...mods.map(m => m.fsat?.fsatOperations?.cO2SavingsData?.totalEmissionOutputRate != null
-            ? formatNumber(m.fsat.fsatOperations.cO2SavingsData.totalEmissionOutputRate, 2) : '—')]
-      );
-    }
     addGroup('Operations', opsRows);
-
-    // Fluid (Base Gas Density)
-    const fluidRows: string[][] = [
-      [`Barometric Pressure (${settings.fanBarometricPressure ?? 'psia'})`,
-        String(fsat.baseGasDensity?.barometricPressure ?? '—'),
-        ...mods.map(m => String(m.fsat?.baseGasDensity?.barometricPressure ?? '—'))],
-      ['Specific Heat Ratio',
-        String(fsat.baseGasDensity?.specificHeatRatio ?? '—'),
-        ...mods.map(m => String(m.fsat?.baseGasDensity?.specificHeatRatio ?? '—'))],
-      ['Gas Type',
-        fsat.baseGasDensity?.gasType ?? '—',
-        ...mods.map(m => m.fsat?.baseGasDensity?.gasType ?? '—')],
-      ['Method to Establish Gas Density',
-        this.formatInputType(fsat.baseGasDensity?.inputType),
-        ...mods.map(m => this.formatInputType(m.fsat?.baseGasDensity?.inputType))],
-      [`Dry Bulb Temperature (${settings.unitsOfMeasure === 'Imperial' ? '°F' : '°C'})`,
-        String(fsat.baseGasDensity?.dryBulbTemp ?? '—'),
-        ...mods.map(m => String(m.fsat?.baseGasDensity?.dryBulbTemp ?? '—'))],
-    ];
     addGroup('Fluid', fluidRows);
-
-    // Fan Setup
-    const fanRows: string[][] = [
-      ['Fan Type',
-        this.getFanTypeDisplay(fsat.fanSetup?.fanType),
-        ...mods.map(m => this.getFanTypeDisplay(m.fsat?.fanSetup?.fanType))],
-      ['Fan Speed (rpm)',
-        String(fsat.fanSetup?.fanSpeed ?? '—'),
-        ...mods.map(m => String(m.fsat?.fanSetup?.fanSpeed ?? '—'))],
-      ['Drive',
-        this.getDriveTypeDisplay(fsat.fanSetup?.drive),
-        ...mods.map(m => this.getDriveTypeDisplay(m.fsat?.fanSetup?.drive))],
-      ['Fan Efficiency (%)',
-        fsat.fanSetup?.fanEfficiency != null ? formatNumber(fsat.fanSetup.fanEfficiency, 2) : '—',
-        ...mods.map(m => m.fsat?.fanSetup?.fanEfficiency != null ? formatNumber(m.fsat.fanSetup.fanEfficiency, 2) : '—')],
-    ];
     addGroup('Fan Setup', fanRows);
-
-    // Motor
-    const motorRows: string[][] = [
-      ['Line Frequency (Hz)',
-        String(fsat.fanMotor?.lineFrequency ?? '—'),
-        ...mods.map(m => String(m.fsat?.fanMotor?.lineFrequency ?? '—'))],
-      [`Motor Rated Power (${settings.fanPowerMeasurement})`,
-        String(fsat.fanMotor?.motorRatedPower ?? '—'),
-        ...mods.map(m => String(m.fsat?.fanMotor?.motorRatedPower ?? '—'))],
-      ['Motor RPM (rpm)',
-        String(fsat.fanMotor?.motorRpm ?? '—'),
-        ...mods.map(m => String(m.fsat?.fanMotor?.motorRpm ?? '—'))],
-      ['Efficiency Class',
-        this.getEfficiencyClassDisplay(fsat.fanMotor?.efficiencyClass),
-        ...mods.map(m => this.getEfficiencyClassDisplay(m.fsat?.fanMotor?.efficiencyClass))],
-      ['Motor Rated Voltage (V)',
-        String(fsat.fanMotor?.motorRatedVoltage ?? '—'),
-        ...mods.map(m => String(m.fsat?.fanMotor?.motorRatedVoltage ?? '—'))],
-      ['Full Load Amps (A)',
-        fsat.fanMotor?.fullLoadAmps != null ? formatNumber(fsat.fanMotor.fullLoadAmps, 0) : '—',
-        ...mods.map(m => m.fsat?.fanMotor?.fullLoadAmps != null ? formatNumber(m.fsat.fanMotor.fullLoadAmps, 0) : '—')],
-    ];
     addGroup('Motor', motorRows);
-
-    // Field Data
-    const fieldRows: string[][] = [
-      [`Flow Rate (${settings.fanFlowRate ?? 'acfm'})`,
-        String(fsat.fieldData?.flowRate ?? '—'),
-        ...mods.map(m => String(m.fsat?.fieldData?.flowRate ?? '—'))],
-      [`Inlet Pressure (${settings.fanPressureMeasurement ?? 'inH2O'})`,
-        String(fsat.fieldData?.inletPressure ?? '—'),
-        ...mods.map(m => String(m.fsat?.fieldData?.inletPressure ?? '—'))],
-      [`Outlet Pressure (${settings.fanPressureMeasurement ?? 'inH2O'})`,
-        String(fsat.fieldData?.outletPressure ?? '—'),
-        ...mods.map(m => String(m.fsat?.fieldData?.outletPressure ?? '—'))],
-      ['Load Estimated Method',
-        this.formatLoadMethod(fsat.fieldData?.loadEstimatedMethod),
-        ...mods.map(m => this.formatLoadMethod(m.fsat?.fieldData?.loadEstimatedMethod))],
-      ['Motor Power/Current',
-        String(fsat.fieldData?.motorPower ?? '—'),
-        ...mods.map(m => String(m.fsat?.fieldData?.motorPower ?? '—'))],
-      ['Compressibility Factor',
-        String(fsat.fieldData?.compressibilityFactor ?? '—'),
-        ...mods.map(m => String(m.fsat?.fieldData?.compressibilityFactor ?? '—'))],
-      ['Measured Voltage (V)',
-        String(fsat.fieldData?.measuredVoltage ?? '—'),
-        ...mods.map(m => String(m.fsat?.fieldData?.measuredVoltage ?? '—'))],
-    ];
     addGroup('Field Data', fieldRows);
 
     return [{
