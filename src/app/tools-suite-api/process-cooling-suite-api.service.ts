@@ -483,11 +483,11 @@ export class ProcessCoolingSuiteApiService {
       const suiteCurveLoadPercents: DoubleVector = this.suiteApiHelperService.returnDoubleVector(curveLoadPercents);
 
       // * used for table data
-      const efficiencyAtLoadWasm: DoubleVector = processCoolingInstance.getChillerEnergyEfficiency(i, loadPercents);
+      const efficiencyAtLoadWasm: DoubleVector = processCoolingInstance.getChillerARIEnergyEfficiency(i, loadPercents, true);
       const efficiencyAtLoad: Array<number> = this.suiteApiHelperService.extractWASMArray(efficiencyAtLoadWasm);
 
       // * used to visualize performance curve
-      const curveEfficiencyAtLoadWasm: DoubleVector = processCoolingInstance.getChillerEnergyEfficiency(i, suiteCurveLoadPercents);
+      const curveEfficiencyAtLoadWasm: DoubleVector = processCoolingInstance.getChillerARIEnergyEfficiency(i, suiteCurveLoadPercents, false);
       const curveEfficiencyAtLoad: Array<number> = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasm);
 
       const chillerResult: ProcessCoolingChillerOutput = {
