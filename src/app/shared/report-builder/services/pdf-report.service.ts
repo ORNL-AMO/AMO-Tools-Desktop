@@ -257,7 +257,9 @@ export class PdfReportService extends BaseReportService {
         halign: 'center',
       },
       styles: { fontSize: BODY_FONT_SIZE, cellPadding: 2, overflow: 'linebreak', halign: 'center' },
-      columnStyles: { 0: { halign: 'left' } },
+      // Wide tables (e.g. compressed-air's hour-per-column System Profiles) otherwise squeeze the label
+      // column down to near-nothing since autoTable distributes width evenly across every column.
+      columnStyles: { 0: { halign: 'left', minCellWidth: 32 } },
       rowPageBreak: 'avoid',
       didParseCell: (data) => {
         if (data.section !== 'body') return;
@@ -282,13 +284,11 @@ export class PdfReportService extends BaseReportService {
    */
   private async renderChart(pdf: jsPDF, section: ChartSection, cursorY: number): Promise<number> {
     let imageData: string | null = null;
-    let imageAspectRatio: number = 2;
+    const imageAspectRatio: number = section.aspectRatio ?? 2;
 
     if (section.imageDataProvider) {
       try {
         imageData = await section.imageDataProvider();
-        // Plotly.toImage returns a data URL; derive aspect from a known fixed ratio (1400×700)
-        imageAspectRatio = 2; // width / height
       } catch {
         // fall through to altData
         // todo display section with a message "Chart image failed to generate" and a warning icon

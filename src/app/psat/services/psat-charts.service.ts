@@ -5,6 +5,7 @@ import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { TraceData } from '../../shared/models/plotting';
+import { svgToJpeg } from '../../shared/report-builder/adapters/report-adapter.utils';
 
 export interface SankeyLayout {
   autosize: boolean;
@@ -274,35 +275,10 @@ export class PsatChartsService {
       svgEl.setAttribute('width', '1400');
       svgEl.setAttribute('height', '400');
       const svgString = new XMLSerializer().serializeToString(svgEl);
-      return await this.svgToJpeg(svgString, 1400, 400);
+      return await svgToJpeg(svgString, 1400, 400);
     } finally {
       plotly.purge(container);
       document.body.removeChild(container);
     }
-  }
-
-  private svgToJpeg(svgString: string, width: number, height: number): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const img = new Image();
-      img.onload = () => {
-        URL.revokeObjectURL(url);
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) { reject(new Error('Canvas 2D context unavailable')); return; }
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, width, height);
-        ctx.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL('image/jpeg', 0.92));
-      };
-      img.onerror = () => {
-        URL.revokeObjectURL(url);
-        reject(new Error('Failed to load serialized SVG as image'));
-      };
-      img.src = url;
-    });
   }
 }
