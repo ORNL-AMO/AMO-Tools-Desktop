@@ -371,25 +371,25 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     let dependentValues: { numberOfFans: number; fanSpeedType: number; } = { numberOfFans: 1, fanSpeedType: 1 };
     switch (towerType) {
       case TowerType.OneCellOneSpeed:
-        dependentValues = { numberOfFans: 1, fanSpeedType: 1 };
+        dependentValues = { numberOfFans: 1, fanSpeedType: 0 };
         break;
       case TowerType.OneCellTwoSpeed:
-        dependentValues = { numberOfFans: 1, fanSpeedType: 2 };
+        dependentValues = { numberOfFans: 1, fanSpeedType: 1 };
         break;
       case TowerType.TwoCellOneSpeed:
-        dependentValues = { numberOfFans: 2, fanSpeedType: 1 };
+        dependentValues = { numberOfFans: 2, fanSpeedType: 0 };
         break;
       case TowerType.TwoCellTwoSpeed:
-        dependentValues = { numberOfFans: 2, fanSpeedType: 2 };
+        dependentValues = { numberOfFans: 2, fanSpeedType: 1 };
         break;
       case TowerType.ThreeCellOneSpeed:
-        dependentValues = { numberOfFans: 3, fanSpeedType: 1 };
+        dependentValues = { numberOfFans: 3, fanSpeedType: 0 };
         break;
       case TowerType.ThreeCellTwoSpeed:
-        dependentValues = { numberOfFans: 3, fanSpeedType: 2 };
+        dependentValues = { numberOfFans: 3, fanSpeedType: 1 };
         break;
       case TowerType.VariableSpeed:
-        dependentValues = { numberOfFans: 1, fanSpeedType: 0 };
+        dependentValues = { numberOfFans: 1, fanSpeedType: 2 };
         break;
       default:
         dependentValues = { numberOfFans: 1, fanSpeedType: 0 };

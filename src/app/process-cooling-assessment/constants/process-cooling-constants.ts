@@ -243,8 +243,8 @@ export const getDefaultMonthlyScheduleData = (): MonthlyOperatingSchedule => {
         { off: false, start: 8, end: 17, allDay: false },
         { off: false, start: 8, end: 17, allDay: false },
         { off: false, start: 8, end: 17, allDay: false },
-        { off: true, start: 8, end: 17, allDay: false },
-        { off: true, start: 8, end: 17, allDay: false }
+        { off: true, start: 0, end: 0, allDay: false },
+        { off: true, start: 0, end: 0, allDay: false }
       ],
     }
     defaultSchedule.hoursOnMonToSun = getHoursOnMonToSun(defaultSchedule.days);

@@ -17,7 +17,6 @@ export class ProcessCoolingResultsService {
   private readonly suiteApi = inject(ProcessCoolingSuiteApiService);
   private readonly convertProcessCoolingService = inject(ConvertProcessCoolingService);
 
-  // * TEMPORARY DEBUG - remove before merging. Accumulates suite-level inputs/outputs grouped by baseline vs modification.
   private readonly debugSuiteInputs: { baseline?: any; modifications: Record<string, any> } = { modifications: {} };
   private readonly debugSuiteOutputs: { baseline?: any; modifications: Record<string, any> } = { modifications: {} };
 
@@ -99,7 +98,6 @@ export class ProcessCoolingResultsService {
     return results;
   }
 
-  // * TEMPORARY DEBUG - remove before merging. Stores and prints suite-level inputs/outputs grouped by baseline vs modification.
   private recordSuiteDebugData(
     debugContext: { group: 'baseline' | 'modification'; id?: string },
     processCoolingAssessment: ProcessCoolingAssessment,

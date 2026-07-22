@@ -57,10 +57,10 @@ export class ProcessCoolingChartsService {
         y: chiller.ariEfficiencyProfileFactored.slice(1),
         type: 'scatter',
         mode: 'lines+markers',
-        name: `${chiller.name} (Factored)`,
+        name: `${chiller.name} (Adjusted)`,
         marker: { size: 8, color, symbol: MARKER_SHAPES[index % MARKER_SHAPES.length], line: { color: '#ffffff', width: 1 } },
         line: { width: 2, dash: 'dot', color },
-        hovertemplate: `${chiller.name} (Factored)<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`
+        hovertemplate: `${chiller.name} (Adjusted)<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`
       };
     }) : [];
 
