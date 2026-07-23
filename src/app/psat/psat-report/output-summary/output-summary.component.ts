@@ -5,6 +5,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { CompareService } from '../../compare.service';
 import { PsatReportRollupService } from '../../../report-rollup/psat-report-rollup.service';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
+import { getPsatPaybackPeriod } from '../psat-report.utils';
 
 @Component({
     selector: 'app-output-summary',
@@ -87,15 +88,8 @@ export class OutputSummaryComponent implements OnInit {
     }
   }
 
-  getPaybackPeriod(modification: PSAT) {
-    let result = 0;
-    let annualCostSavings = this.getDiff(this.psat.outputs.annual_cost, modification.outputs.annual_cost);
-    if (isNaN(annualCostSavings) == false) {
-      if (annualCostSavings > 1) {
-        result = (modification.inputs.implementationCosts / annualCostSavings) * 12;
-      }
-    }
-    return result;
+  getPaybackPeriod(modification: PSAT): number {
+    return getPsatPaybackPeriod(this.psat.outputs.annual_cost, modification.outputs.annual_cost, modification.inputs.implementationCosts);
   }
 
   buildSummaryNotes(psat: PSAT): Array<SummaryNote>{

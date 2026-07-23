@@ -1,11 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { combineLatest, firstValueFrom, map, Observable } from 'rxjs';
-import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { decodeHtmlEntities, formatCell, formatNumber, labelWithUnits } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, decodeHtmlEntities, formatCell, formatNumber, labelWithUnits } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
-import { ChartSection, KeyValueSection, PairedKeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
-import { FacilityInfo } from '../../shared/models/settings';
+import { ChartSection, KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from '../services/executive-summary-results.service';
 import { PumpSummaryResultsService, PumpSummaryUI } from '../services/pump-summary-results.service';
 import { TowerBinRow, TowerSummaryService, TowerSummaryUI } from '../services/tower-summary.service';
@@ -19,6 +17,7 @@ import { Assessment } from '../../shared/models/assessment';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { InputSummaryService, InputSummaryUI } from '../services/input-summary.service';
+import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
 
 export const PROCESS_COOLING_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: ROUTE_TOKENS.facilityInfo, label: 'Facility Info', description: 'Facility and contact information' },
@@ -38,7 +37,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
   private readonly systemProfileService = inject(SystemProfileService);
   private readonly resultsService = inject(ProcessCoolingResultsService);
   private readonly chartsService = inject(ProcessCoolingChartsService);
-  private readonly plotlyService = inject(PlotlyService);
+  private readonly chartRenderService = inject(ReportChartRenderService);
   private readonly inputSummaryService = inject(InputSummaryService);
   private readonly processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
 
@@ -61,7 +60,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
       map(([execSummary, pumpSummary, towerSummary, systemProfile, inputSummary]): ReportDocument => ({
         meta: moduleMeta,
         sections: [
-          ...this.buildFacilityInfoSections(),
+          ...buildFacilityInfoSections(this.processCoolingAssessmentService.settingsSignal()?.facilityInfo, ROUTE_TOKENS.facilityInfo),
           ...this.buildExecutiveSummarySections(execSummary),
           ...this.buildSystemProfileSections(systemProfile),
           ...this.buildPerformanceProfileSections(),
@@ -71,60 +70,6 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         ],
       }))
     );
-  }
-
-  private buildFacilityInfoSections(): PairedKeyValueSection[] {
-    const facilityInfo: FacilityInfo = this.processCoolingAssessmentService.settingsSignal()?.facilityInfo;
-    if (!facilityInfo) {
-      return [];
-    }
-
-    const generalAndLocation: PairedKeyValueSection = {
-      type: 'paired-key-value',
-      title: 'Facility Info',
-      group: ROUTE_TOKENS.facilityInfo,
-      left: {
-        headerLabel: 'General',
-        rows: [
-          { label: 'Company Name', value: facilityInfo.companyName ?? '' },
-          { label: 'Facility Name', value: facilityInfo.facilityName ?? '' },
-          { label: 'Assessment Date', value: facilityInfo.date ?? '' },
-        ],
-      },
-      right: {
-        headerLabel: 'Location',
-        rows: [
-          { label: 'Street', value: facilityInfo.address?.street ?? '' },
-          { label: 'City', value: facilityInfo.address?.city ?? '' },
-          { label: 'State', value: facilityInfo.address?.state ?? '' },
-          { label: 'Zip', value: facilityInfo.address?.zip ?? '' },
-          { label: 'Country', value: facilityInfo.address?.country ?? '' },
-        ],
-      },
-    };
-
-    const contacts: PairedKeyValueSection = {
-      type: 'paired-key-value',
-      group: ROUTE_TOKENS.facilityInfo,
-      left: {
-        headerLabel: 'Facility Contact',
-        rows: [
-          { label: 'Name', value: facilityInfo.facilityContact?.contactName ?? '' },
-          { label: 'Phone', value: String(facilityInfo.facilityContact?.phoneNumber ?? '') },
-          { label: 'Email', value: facilityInfo.facilityContact?.email ?? '' },
-        ],
-      },
-      right: {
-        headerLabel: 'Assessment Contact',
-        rows: [
-          { label: 'Name', value: facilityInfo.assessmentContact?.contactName ?? '' },
-          { label: 'Phone', value: String(facilityInfo.assessmentContact?.phoneNumber ?? '') },
-          { label: 'Email', value: facilityInfo.assessmentContact?.email ?? '' },
-        ],
-      },
-    };
-
-    return [generalAndLocation, contacts];
   }
 
   private buildExecutiveSummarySections(ui: ExecutiveSummaryUI): SummaryTableSection[] {
@@ -165,28 +110,27 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
       const emptyLoadCells = Array(LOAD_LABELS.length + 1).fill('');
 
       for (const chiller of result.chillerOutputs) {
-        subGroupHeaderIndices.push(rows.length);
-        rows.push([chiller.name, ...emptyLoadCells]);
-
-        rows.push([
-          `Performance (${efficiencyLabel})`,
-          ...chiller.efficiency.map(v => formatNumber(v, 3)),
-          '',
-        ]);
-        rows.push([
-          'Hours',
-          ...chiller.hours.map(v => formatNumber(v, 0)),
-          formatNumber(chiller.totalHours, 0),
-        ]);
-        rows.push([
-          `Power (${powerLabel})`,
-          ...chiller.power.map(v => formatNumber(v, 1)),
-          '',
-        ]);
-        rows.push([
-          `Energy (${energyLabel})`,
-          ...chiller.energy.map(v => formatNumber(v, 0)),
-          formatNumber(chiller.totalEnergy, 0),
+        appendSubGroup(rows, subGroupHeaderIndices, emptyLoadCells.length + 1, chiller.name, [
+          [
+            `Performance (${efficiencyLabel})`,
+            ...chiller.efficiency.map(v => formatNumber(v, 3)),
+            '',
+          ],
+          [
+            'Hours',
+            ...chiller.hours.map(v => formatNumber(v, 0)),
+            formatNumber(chiller.totalHours, 0),
+          ],
+          [
+            `Power (${powerLabel})`,
+            ...chiller.power.map(v => formatNumber(v, 1)),
+            '',
+          ],
+          [
+            `Energy (${energyLabel})`,
+            ...chiller.energy.map(v => formatNumber(v, 0)),
+            formatNumber(chiller.totalEnergy, 0),
+          ],
         ]);
       }
 
@@ -216,19 +160,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         if (!results?.chiller?.length) throw new Error('No chiller results available');
 
         const { traces, layout } = this.chartsService.buildChillerProfileChart(results.chiller);
-
-        const div = document.createElement('div');
-        div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
-        document.body.appendChild(div);
-
-        const plotly = await this.plotlyService.getPlotly();
-        try {
-          await plotly.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
-          return await plotly.toImage(div, { format: 'jpeg', width: 1400, height: 700 });
-        } finally {
-          plotly.purge(div);
-          document.body.removeChild(div);
-        }
+        return this.chartRenderService.renderChartToImage(traces, layout);
       },
     };
 
@@ -362,9 +294,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
 
       for (const sub of subSections) {
         if (!sub.rows?.length) continue;
-        subGroupHeaderIndices.push(rows.length);
-        rows.push([sub.label, ...Array(headers.length - 1).fill('')]);
-        rows.push(...sub.rows.map(row => this.resultRowToStrings(row)));
+        appendSubGroup(rows, subGroupHeaderIndices, headers.length, sub.label, sub.rows.map(row => this.resultRowToStrings(row)));
       }
 
       if (rows.length) {

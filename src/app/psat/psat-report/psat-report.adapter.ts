@@ -1,16 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { PlotlyService } from 'angular-plotly.js';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, createSummaryRowBuilder, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
-import { ChartSection, PairedKeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
-import { FacilityInfo, Settings } from '../../shared/models/settings';
+import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
-import { Modification, PSAT, PsatInputs, PsatOutputs } from '../../shared/models/psat';
+import { Modification, PSAT, PsatOutputs } from '../../shared/models/psat';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import { PsatChartsService, PsatChartConfig } from '../services/psat-charts.service';
+import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
+import { getPsatPaybackPeriod } from './psat-report.utils';
 
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -24,8 +25,8 @@ export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
 export class PsatReportAdapter implements ReportDataAdapter {
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly psatService = inject(PsatService);
-  private readonly plotlyService = inject(PlotlyService);
   private readonly psatChartsService = inject(PsatChartsService);
+  private readonly chartRenderService = inject(ReportChartRenderService);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [0, 114, 178];
 
@@ -43,7 +44,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
     return of({
       meta,
       sections: [
-        ...this.buildFacilityInfoSections(settings),
+        ...buildFacilityInfoSections(settings?.facilityInfo, 'facilityInfo'),
         ...this.buildResultsSections(psat, settings, modNames),
         ...this.buildReportGraphsSections(psat, settings),
         ...this.buildSankeySections(psat, settings),
@@ -52,71 +53,8 @@ export class PsatReportAdapter implements ReportDataAdapter {
     });
   }
 
-  private buildFacilityInfoSections(settings: Settings): PairedKeyValueSection[] {
-    const facilityInfo: FacilityInfo = settings?.facilityInfo;
-    if (!facilityInfo) return [];
-
-    const generalAndLocation: PairedKeyValueSection = {
-      type: 'paired-key-value',
-      title: 'Facility Info',
-      group: 'facilityInfo',
-      left: {
-        headerLabel: 'General',
-        rows: [
-          { label: 'Company Name', value: facilityInfo.companyName ?? '' },
-          { label: 'Facility Name', value: facilityInfo.facilityName ?? '' },
-          { label: 'Assessment Date', value: facilityInfo.date ?? '' },
-        ],
-      },
-      right: {
-        headerLabel: 'Location',
-        rows: [
-          { label: 'Street', value: facilityInfo.address?.street ?? '' },
-          { label: 'City', value: facilityInfo.address?.city ?? '' },
-          { label: 'State', value: facilityInfo.address?.state ?? '' },
-          { label: 'Zip', value: facilityInfo.address?.zip ?? '' },
-          { label: 'Country', value: facilityInfo.address?.country ?? '' },
-        ],
-      },
-    };
-
-    const contacts: PairedKeyValueSection = {
-      type: 'paired-key-value',
-      group: 'facilityInfo',
-      left: {
-        headerLabel: 'Facility Contact',
-        rows: [
-          { label: 'Name', value: facilityInfo.facilityContact?.contactName ?? '' },
-          { label: 'Phone', value: String(facilityInfo.facilityContact?.phoneNumber ?? '') },
-          { label: 'Email', value: facilityInfo.facilityContact?.email ?? '' },
-        ],
-      },
-      right: {
-        headerLabel: 'Assessment Contact',
-        rows: [
-          { label: 'Name', value: facilityInfo.assessmentContact?.contactName ?? '' },
-          { label: 'Phone', value: String(facilityInfo.assessmentContact?.phoneNumber ?? '') },
-          { label: 'Email', value: facilityInfo.assessmentContact?.email ?? '' },
-        ],
-      },
-    };
-
-    return [generalAndLocation, contacts];
-  }
-
-  private async renderPlotlyChart(chart: PsatChartConfig): Promise<string> {
-    const { traces, layout } = chart;
-    const div = document.createElement('div');
-    div.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:700px';
-    document.body.appendChild(div);
-    const p = await this.plotlyService.getPlotly();
-    try {
-      await p.newPlot(div, traces, layout, { staticPlot: true, displaylogo: false });
-      return await p.toImage(div, { format: 'jpeg', width: 1400, height: 700 });
-    } finally {
-      p.purge(div);
-      document.body.removeChild(div);
-    }
+  private renderPlotlyChart(chart: PsatChartConfig): Promise<string> {
+    return this.chartRenderService.renderChartToImage(chart.traces, chart.layout);
   }
 
   private buildReportGraphsSections(psat: PSAT, settings: Settings): ChartSection[] {
@@ -259,11 +197,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
   }
 
   private calcPayback(baselineOut: PsatOutputs, mod: Modification): string {
-    const implCost = mod.psat?.inputs?.implementationCosts;
-    if (!implCost) return '0';
-    const savings = (baselineOut?.annual_cost ?? 0) - (mod.psat?.outputs?.annual_cost ?? 0);
-    if (savings <= 0) return '—';
-    return formatNumber((implCost / savings) * 12, 1);
+    return formatNumber(getPsatPaybackPeriod(baselineOut?.annual_cost, mod.psat?.outputs?.annual_cost, mod.psat?.inputs?.implementationCosts), 1);
   }
 
   private buildInputSummarySections(psat: PSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {
@@ -271,62 +205,50 @@ export class PsatReportAdapter implements ReportDataAdapter {
     const inputs = psat.inputs;
     const mods = psat.modifications ?? [];
 
-    const row = <T extends string | number | null | undefined>(
-      label: string,
-      baseVal: T,
-      modFn: (i: PsatInputs | undefined) => T,
-      fmt?: (v: T) => string
-    ): string[] => {
-      const f = fmt ?? (v => v != null ? String(v) : '—');
-      return [label, f(baseVal), ...mods.map(m => f(modFn(m.psat?.inputs)))];
-    };
+    const row = createSummaryRowBuilder(mods);
 
     const operationsRows: string[][] = [
-      row('Operating Hours', inputs.operating_hours, i => i?.operating_hours),
-      row(`Cost (${settings.currency}/kWh)`, inputs.cost_kw_hour, i => i?.cost_kw_hour,
+      row('Operating Hours', inputs.operating_hours, m => m.psat?.inputs?.operating_hours),
+      row(`Cost (${settings.currency}/kWh)`, inputs.cost_kw_hour, m => m.psat?.inputs?.cost_kw_hour,
         v => v != null ? formatNumber(v, 4) : '—'),
     ];
 
     const pumpFluidRows: string[][] = [
-      row('Pump Type', inputs.pump_style, i => i?.pump_style,
+      row('Pump Type', inputs.pump_style, m => m.psat?.inputs?.pump_style,
         v => this.psatService.getPumpStyleFromEnum(v)),
-      row('Speed (rpm)', inputs.pump_rated_speed, i => i?.pump_rated_speed),
-      row('Drive', inputs.drive, i => i?.drive,
+      row('Speed (rpm)', inputs.pump_rated_speed, m => m.psat?.inputs?.pump_rated_speed),
+      row('Drive', inputs.drive, m => m.psat?.inputs?.drive,
         v => this.psatService.getDriveFromEnum(v)),
-      row('Fluid Type', inputs.fluidType, i => i?.fluidType),
-      row(`Fluid Temperature (${settings.temperatureMeasurement})`, inputs.fluidTemperature, i => i?.fluidTemperature),
-      row('Specific Gravity', inputs.specific_gravity, i => i?.specific_gravity),
-      row('Stages', inputs.stages, i => i?.stages),
+      row('Fluid Type', inputs.fluidType, m => m.psat?.inputs?.fluidType),
+      row(`Fluid Temperature (${settings.temperatureMeasurement})`, inputs.fluidTemperature, m => m.psat?.inputs?.fluidTemperature),
+      row('Specific Gravity', inputs.specific_gravity, m => m.psat?.inputs?.specific_gravity),
+      row('Stages', inputs.stages, m => m.psat?.inputs?.stages),
     ];
 
     const motorRows: string[][] = [
-      row('Line Frequency (Hz)', inputs.line_frequency, i => i?.line_frequency),
-      row(`Motor Rated Power (${settings.powerMeasurement})`, inputs.motor_rated_power, i => i?.motor_rated_power),
-      row('Speed (rpm)', inputs.motor_rated_speed, i => i?.motor_rated_speed),
-      row('Efficiency Class', inputs.efficiency_class, i => i?.efficiency_class,
+      row('Line Frequency (Hz)', inputs.line_frequency, m => m.psat?.inputs?.line_frequency),
+      row(`Motor Rated Power (${settings.powerMeasurement})`, inputs.motor_rated_power, m => m.psat?.inputs?.motor_rated_power),
+      row('Speed (rpm)', inputs.motor_rated_speed, m => m.psat?.inputs?.motor_rated_speed),
+      row('Efficiency Class', inputs.efficiency_class, m => m.psat?.inputs?.efficiency_class,
         v => this.psatService.getEfficiencyClassFromEnum(v)),
-      row('Voltage (V)', inputs.motor_rated_voltage, i => i?.motor_rated_voltage),
-      row('Full-Load Amps (A)', inputs.motor_rated_fla, i => i?.motor_rated_fla,
+      row('Voltage (V)', inputs.motor_rated_voltage, m => m.psat?.inputs?.motor_rated_voltage),
+      row('Full-Load Amps (A)', inputs.motor_rated_fla, m => m.psat?.inputs?.motor_rated_fla,
         v => v != null ? formatNumber(v, 0) : '—'),
     ];
 
     const fieldDataRows: string[][] = [
-      row(`Flow Rate (${settings.flowMeasurement})`, inputs.flow_rate, i => i?.flow_rate),
-      row(`Head (${settings.distanceMeasurement})`, inputs.head, i => i?.head),
-      row('Load Estimation Method', inputs.load_estimation_method, i => i?.load_estimation_method,
+      row(`Flow Rate (${settings.flowMeasurement})`, inputs.flow_rate, m => m.psat?.inputs?.flow_rate),
+      row(`Head (${settings.distanceMeasurement})`, inputs.head, m => m.psat?.inputs?.head),
+      row('Load Estimation Method', inputs.load_estimation_method, m => m.psat?.inputs?.load_estimation_method,
         v => this.psatService.getLoadEstimationFromEnum(v)),
-      row('Motor Field Voltage (V)', inputs.motor_field_voltage, i => i?.motor_field_voltage),
-      row('Kinematic Viscosity (cST)', inputs.kinematic_viscosity, i => i?.kinematic_viscosity),
+      row('Motor Field Voltage (V)', inputs.motor_field_voltage, m => m.psat?.inputs?.motor_field_voltage),
+      row('Kinematic Viscosity (cST)', inputs.kinematic_viscosity, m => m.psat?.inputs?.kinematic_viscosity),
     ];
 
     const allRows: string[][] = [];
     const subGroupHeaderIndices: number[] = [];
-
-    const addGroup = (label: string, groupRows: string[][]) => {
-      subGroupHeaderIndices.push(allRows.length);
-      allRows.push([label, ...Array(headers.length - 1).fill('')]);
-      allRows.push(...groupRows);
-    };
+    const addGroup = (label: string, groupRows: string[][]) =>
+      appendSubGroup(allRows, subGroupHeaderIndices, headers.length, label, groupRows);
 
     addGroup('Operations', operationsRows);
     addGroup('Pump & Fluid', pumpFluidRows);
