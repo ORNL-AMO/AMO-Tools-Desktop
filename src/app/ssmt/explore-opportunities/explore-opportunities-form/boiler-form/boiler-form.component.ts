@@ -198,7 +198,7 @@ export class BoilerFormComponent implements OnInit {
   }
 
   initFuel() {
-    if (this.co2SavingsDifferent.fuelType || this.co2SavingsDifferent.fuelType || this.co2SavingsDifferent.totalFuelEmissionOutputRate) {
+    if (this.showOperationalImpacts() && (this.co2SavingsDifferent.fuelType || this.co2SavingsDifferent.totalFuelEmissionOutputRate)) {
       this.showFuelType = true;
     } else {
       this.showFuelType = false;
