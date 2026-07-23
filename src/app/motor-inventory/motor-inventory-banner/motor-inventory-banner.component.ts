@@ -4,7 +4,8 @@ import { MotorInventoryService } from '../motor-inventory.service';
 import { MotorCatalogService } from '../motor-inventory-setup/motor-catalog/motor-catalog.service';
 import { MotorInventoryData } from '../motor-inventory';
 import { InventoryItem } from '../../shared/models/inventory/inventory';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import _ from 'lodash';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
@@ -34,7 +35,7 @@ export class MotorInventoryBannerComponent implements OnInit {
   showMotorProperties: BehaviorSubject<boolean>;
   constructor(private motorInventoryService: MotorInventoryService, 
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private motorCatalogService: MotorCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService ) { }
+    private dashboardService: DashboardService, private motorCatalogService: MotorCatalogService, private modalDialogService: ModalDialogService ) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
@@ -67,8 +68,9 @@ export class MotorInventoryBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+    );
   }
 
   ngOnDestroy() {

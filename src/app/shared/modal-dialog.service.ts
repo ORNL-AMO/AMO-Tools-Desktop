@@ -49,12 +49,11 @@ export class ModalDialogService {
     config?: DialogConfig<D>,
     injector?: Injector
   ): DialogRef<T, any> {
-    // todo we should use a default flexible width with override passed in
-
     const dialogRef = this.dialog.open<T, D>(component, {
       panelClass: 'app-modal-dialog',
       hasBackdrop: true,
       disableClose: false,
+      width: '50vw',
       injector: injector,
       ...config,
       data: config?.data

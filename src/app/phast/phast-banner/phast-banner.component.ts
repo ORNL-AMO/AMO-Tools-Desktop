@@ -3,7 +3,8 @@ import { Assessment } from '../../shared/models/assessment';
 import { PhastService } from '../phast.service';
 import { Settings } from '../../shared/models/settings';
 import { Subscription } from 'rxjs';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
@@ -24,7 +25,7 @@ export class PhastBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   constructor(private phastService: PhastService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private dashboardService: DashboardService, private modalDialogService: ModalDialogService,
     private coreService: CoreService) { }
 
   ngOnInit() {
@@ -42,8 +43,9 @@ export class PhastBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+    );
   }
 
   changeTab(str: string) {

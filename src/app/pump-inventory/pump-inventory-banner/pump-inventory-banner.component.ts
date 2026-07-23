@@ -5,7 +5,8 @@ import { PumpCatalogService } from '../pump-inventory-setup/pump-catalog/pump-ca
 import { PumpInventoryData } from '../pump-inventory';
 import { PumpInventoryService } from '../pump-inventory.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import _ from 'lodash';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
@@ -40,7 +41,7 @@ export class PumpInventoryBannerComponent implements OnInit {
   constructor(private pumpInventoryService: PumpInventoryService, 
     private emailMeasurDataService: EmailMeasurDataService,
     private integrationStateService: IntegrationStateService, 
-    private pumpCatalogService: PumpCatalogService, private securityAndPrivacyService: SecurityAndPrivacyService, 
+    private pumpCatalogService: PumpCatalogService, private modalDialogService: ModalDialogService,
     private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
@@ -121,8 +122,9 @@ export class PumpInventoryBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+    );
   }
 
   collapseBanner() {

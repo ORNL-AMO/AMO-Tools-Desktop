@@ -3,7 +3,8 @@ import { Subscription } from 'rxjs';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { Assessment } from '../../shared/models/assessment';
 import { WasteWaterData } from '../../shared/models/waste-water';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { WasteWaterService } from '../waste-water.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
@@ -31,7 +32,7 @@ export class WasteWaterBannerComponent implements OnInit {
 
   constructor(private wasteWaterService: WasteWaterService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService, private securityAndPrivacyService: SecurityAndPrivacyService,
+    private dashboardService: DashboardService, private modalDialogService: ModalDialogService,
     private coreService: CoreService) { }
 
   ngOnInit(): void {
@@ -62,8 +63,9 @@ export class WasteWaterBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+    );
   }
 
   navigateHome() {

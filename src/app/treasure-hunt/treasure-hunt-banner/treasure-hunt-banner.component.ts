@@ -3,7 +3,8 @@ import { Assessment } from '../../shared/models/assessment';
 import { TreasureHuntService } from '../treasure-hunt.service';
 import { Subscription } from 'rxjs';
 import { CalculatorsService } from '../calculators/calculators.service';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
@@ -29,7 +30,7 @@ export class TreasureHuntBannerComponent implements OnInit {
   constructor(private treasureHuntService: TreasureHuntService, 
     private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, private calculatorsService: CalculatorsService, 
-    private securityAndPrivacyService: SecurityAndPrivacyService, private coreService: CoreService) { }
+    private modalDialogService: ModalDialogService, private coreService: CoreService) { }
 
   ngOnInit() {
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
@@ -56,8 +57,9 @@ export class TreasureHuntBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+    );
   }
 
 
