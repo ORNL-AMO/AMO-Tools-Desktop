@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import _ from 'lodash';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { WaterProcessDiagramService } from '../water-process-diagram.service';
@@ -21,8 +22,8 @@ export class WaterDiagramBannerComponent {
   mainTabSub: Subscription;
   bannerCollapsed: boolean = true;
 
-    constructor(private waterProcessService: WaterProcessDiagramService, 
-      private securityAndPrivacyService: SecurityAndPrivacyService, 
+    constructor(private waterProcessService: WaterProcessDiagramService,
+      private modalDialogService: ModalDialogService,
       private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
@@ -42,8 +43,9 @@ export class WaterDiagramBannerComponent {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+    );
   }
 
   collapseBanner() {

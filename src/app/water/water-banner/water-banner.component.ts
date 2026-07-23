@@ -3,7 +3,8 @@ import { Subscription } from 'rxjs';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { Assessment } from '../../shared/models/assessment';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { Modification, WaterAssessment } from 'process-flow-lib';
 
@@ -30,7 +31,7 @@ export class WaterBannerComponent {
   bannerCollapsed: boolean = true;
   constructor(private waterAssessmentService: WaterAssessmentService,
     private emailMeasurDataService: EmailMeasurDataService,
-    private dashboardService: DashboardService,  private securityAndPrivacyService: SecurityAndPrivacyService) { }
+    private dashboardService: DashboardService,  private modalDialogService: ModalDialogService) { }
 
   ngOnInit(): void {
     this.mainTabSub = this.waterAssessmentService.mainTab.subscribe(val => {
@@ -90,8 +91,9 @@ export class WaterBannerComponent {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+    );
   }
 
   changeTab(str: string) {

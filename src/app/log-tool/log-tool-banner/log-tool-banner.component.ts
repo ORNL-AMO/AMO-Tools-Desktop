@@ -3,7 +3,8 @@ import { LogToolService } from '../log-tool.service';
 import { Subscription } from 'rxjs';
 import { LogToolDataService } from '../log-tool-data.service';
 import { ExplorerData } from '../log-tool-models';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { LogToolDbService } from '../log-tool-db.service';
 
@@ -21,7 +22,7 @@ export class LogToolBannerComponent implements OnInit {
   constructor(private logToolService: LogToolService, 
     private emailMeasurDataService: EmailMeasurDataService,
     private logToolDbService: LogToolDbService,
-    private logToolDataService: LogToolDataService, private securityAndPrivacyService: SecurityAndPrivacyService) { }
+    private logToolDataService: LogToolDataService, private modalDialogService: ModalDialogService) { }
 
   ngOnInit() {
     this.explorerDataSub = this.logToolDataService.explorerData.subscribe(data => {
@@ -38,8 +39,9 @@ export class LogToolBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+    );
   }
 
   collapseBanner() {

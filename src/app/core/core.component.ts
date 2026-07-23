@@ -8,7 +8,6 @@ import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
-import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService } from '../electron/electron.service';
 import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
 import { AppErrorService } from '../shared/errors/app-error.service';
@@ -52,8 +51,6 @@ export class CoreComponent implements OnInit {
   showEmailMeasurDataModal: boolean;
   showImportBackupModalSubscription: Subscription;
   showImportBackupModal: boolean;
-  showSecurityAndPrivacyModalSub: Subscription;
-  showSecurityAndPrivacyModal: boolean;
   showSurveyModalSub: Subscription;
   showSurveyModal: boolean;
   showSurveyToast: boolean;
@@ -85,7 +82,6 @@ export class CoreComponent implements OnInit {
     private calculatorDbService: CalculatorDbService,
     private coreService: CoreService,
     private router: Router,
-    private securityAndPrivacyService: SecurityAndPrivacyService,
     private emailMeasurDataService: EmailMeasurDataService,
     private appErrorService: AppErrorService,
     private automaticBackupService: AutomaticBackupService,
@@ -192,10 +188,6 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    this.showSecurityAndPrivacyModalSub = this.securityAndPrivacyService.showSecurityAndPrivacyModal.subscribe(showSecurityAndPrivacyModal => {
-      this.showSecurityAndPrivacyModal = showSecurityAndPrivacyModal;
-    });
-
     this.showEmailMeasurDataModalSub = this.emailMeasurDataService.showEmailMeasurDataModal.subscribe(showModal => {
       this.showEmailMeasurDataModal = showModal;
     });
@@ -225,7 +217,6 @@ export class CoreComponent implements OnInit {
       }
     }
     this.openingTutorialSub.unsubscribe();
-    this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.showReleaseNotesModalSub.unsubscribe();
     this.showEmailMeasurDataModalSub.unsubscribe();
     this.showImportBackupModalSubscription.unsubscribe();
@@ -344,11 +335,6 @@ export class CoreComponent implements OnInit {
   closeTutorial() {
     this.assessmentService.tutorialShown = true;
     this.hideTutorial = true;
-  }
-
-  closeNoticeModal(isClosedEvent?: boolean) {
-    this.securityAndPrivacyService.modalOpen.next(false)
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(false);
   }
 
   closeEmailModal(isClosedEvent?: boolean) {

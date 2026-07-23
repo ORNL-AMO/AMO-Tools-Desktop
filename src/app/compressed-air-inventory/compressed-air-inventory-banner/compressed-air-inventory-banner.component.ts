@@ -3,7 +3,8 @@ import { InventoryItem } from '../../shared/models/inventory/inventory';
 import { Subscription } from 'rxjs';
 import { CompressedAirInventoryData } from '../compressed-air-inventory';
 import { CompressedAirInventoryService } from '../compressed-air-inventory.service';
-import { SecurityAndPrivacyService } from '../../shared/security-and-privacy/security-and-privacy.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
@@ -37,9 +38,9 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   bannerCollapsed: boolean = true;
   isSelected: boolean = false;
 
-  constructor(private compressedAirInventoryService: CompressedAirInventoryService, 
-    private securityAndPrivacyService: SecurityAndPrivacyService, 
-    private emailMeasurDataService: EmailMeasurDataService, 
+  constructor(private compressedAirInventoryService: CompressedAirInventoryService,
+    private modalDialogService: ModalDialogService,
+    private emailMeasurDataService: EmailMeasurDataService,
     private dashboardService: DashboardService, 
     private compressedAirCatalogService: CompressedAirCatalogService,
     private integrationStateService: IntegrationStateService) { }
@@ -117,8 +118,9 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   showSecurityAndPrivacyModal() {
-    this.securityAndPrivacyService.modalOpen.next(true);
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(true);
+    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+      SecurityAndPrivacyItemComponent,
+    );
   }
 
   collapseBanner() {
