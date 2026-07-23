@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { appendSubGroup, buildFacilityInfoSections, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, formatNumber, renderPlotlyChart } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
@@ -19,7 +19,7 @@ import { CompressedAirAssessmentBaselineResults } from '../calculations/Compress
 import { CompressedAirAssessmentModificationResults } from '../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirCombinedDayTypeResults } from '../calculations/modifications/CompressedAirCombinedDayTypeResults';
 import { BaselineResults, DayTypeModificationResult, EemSavingsResults } from '../calculations/caCalculationModels';
-import { CompressedAirChartsService, CompressedAirChartConfig } from '../services/compressed-air-charts.service';
+import { CompressedAirChartsService } from '../services/compressed-air-charts.service';
 import { COMPRESSED_AIR_EEMS, EemDescriptor, eemSavings } from '../services/compressed-air-eems';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
 import { InventoryFormService } from '../baseline-tab-content/inventory-setup/inventory/inventory-form.service';
@@ -306,7 +306,7 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
         title: `${variant.name} Inventory Performance Profile`,
         group: 'performanceProfile',
         pageBreakBefore: i === 0,
-        imageDataProvider: () => this.renderPlotlyChart(chart),
+        imageDataProvider: () => renderPlotlyChart(this.chartRenderService, chart),
       });
 
       const centrifugalCompressors = variant.compressorItems.filter(c => c.nameplateData.compressorType === 6 && c.compressorControls.controlType != null);
@@ -316,7 +316,7 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
           type: 'chart',
           title: `${variant.name} Centrifugal Compressor Curves`,
           group: 'performanceProfile',
-          imageDataProvider: () => this.renderPlotlyChart(centrifugalChart),
+          imageDataProvider: () => renderPlotlyChart(this.chartRenderService, centrifugalChart),
         });
       }
 
@@ -511,29 +511,26 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     const costChart = this.compressedAirChartsService.buildCostSavingsChart(assessmentResults, combinedDayTypeResults);
     sections.push({
       type: 'chart', title: 'Cost Savings — All Day Types Combined', group: 'graphs', pageBreakBefore: true,
-      imageDataProvider: () => this.renderPlotlyChart(costChart),
+      imageDataProvider: () => renderPlotlyChart(this.chartRenderService, costChart),
     });
 
     const energyChart = this.compressedAirChartsService.buildEnergySavingsChart(assessmentResults, combinedDayTypeResults);
     sections.push({
       type: 'chart', title: 'Energy Savings — All Day Types Combined', group: 'graphs',
-      imageDataProvider: () => this.renderPlotlyChart(energyChart),
+      imageDataProvider: () => renderPlotlyChart(this.chartRenderService, energyChart),
     });
 
     compressedAirAssessment.compressedAirDayTypes.forEach((dayType, i) => {
       const airflowChart = this.compressedAirChartsService.buildAirflowSavingsChart(dayType, baselineResults, assessmentResults, settings);
       sections.push({
         type: 'chart', title: `Airflow Savings — ${dayType.name}`, group: 'graphs', pageBreakBefore: i === 0,
-        imageDataProvider: () => this.renderPlotlyChart(airflowChart),
+        imageDataProvider: () => renderPlotlyChart(this.chartRenderService, airflowChart),
       });
     });
 
     return sections;
   }
 
-  private renderPlotlyChart(chart: CompressedAirChartConfig): Promise<string> {
-    return this.chartRenderService.renderChartToImage(chart.traces as never, chart.layout);
-  }
 
   // ---------------------------------------------------------------------------------
   // Input Summary

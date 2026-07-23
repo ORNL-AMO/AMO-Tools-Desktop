@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { appendSubGroup, buildFacilityInfoSections, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, formatNumber, renderPlotlyChart } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
@@ -20,8 +20,8 @@ import { CompareService } from '../compare.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { getSsmtPaybackPeriod } from './ssmt-report.utils';
-import { SsmtChartsService, SsmtChartConfig } from './ssmt-charts.service';
+import { getSsmtPaybackPeriod } from '../../shared/payback-period.utils';
+import { SsmtChartsService } from './ssmt-charts.service';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
 
 interface BaselineBundle {
@@ -438,11 +438,11 @@ export class SsmtReportAdapter implements ReportDataAdapter {
       return [
         {
           type: 'chart', title: 'Baseline', group: 'graphs', pageBreakBefore: true,
-          imageDataProvider: () => this.renderPlotlyChart(this.ssmtChartsService.buildBaselineOnlyPieChart(ssmt, settings)),
+          imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.ssmtChartsService.buildBaselineOnlyPieChart(ssmt, settings)),
         },
         {
           type: 'chart', title: 'Baseline Energy Usage', group: 'graphs',
-          imageDataProvider: () => this.renderPlotlyChart(this.ssmtChartsService.buildScenarioWaterfallChart(baseline.losses, null, 'Baseline', null, settings, xAxisRange)),
+          imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.ssmtChartsService.buildScenarioWaterfallChart(baseline.losses, null, 'Baseline', null, settings, xAxisRange)),
         },
       ];
     }
@@ -452,19 +452,15 @@ export class SsmtReportAdapter implements ReportDataAdapter {
       const modName = m.modification.ssmt.name;
       sections.push({
         type: 'chart', title: `Scenario: ${modName}`, group: 'graphs', pageBreakBefore: true,
-        imageDataProvider: () => this.renderPlotlyChart(this.ssmtChartsService.buildScenarioPieChart(ssmt, m.modification.ssmt, 'Baseline', modName, settings)),
+        imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.ssmtChartsService.buildScenarioPieChart(ssmt, m.modification.ssmt, 'Baseline', modName, settings)),
       });
       sections.push({
         type: 'chart', title: `Baseline vs. ${modName} Energy Usage`, group: 'graphs',
-        imageDataProvider: () => this.renderPlotlyChart(this.ssmtChartsService.buildScenarioWaterfallChart(baseline.losses, m.losses, 'Baseline', modName, settings, xAxisRange)),
+        imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.ssmtChartsService.buildScenarioWaterfallChart(baseline.losses, m.losses, 'Baseline', modName, settings, xAxisRange)),
       });
     });
 
     return sections;
-  }
-
-  private renderPlotlyChart(chart: SsmtChartConfig): Promise<string> {
-    return this.chartRenderService.renderChartToImage(chart.traces as never, chart.layout);
   }
 
   // ---------------------------------------------------------------------------------

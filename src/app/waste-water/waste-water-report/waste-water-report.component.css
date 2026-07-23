@@ -14,13 +14,3 @@
     color: #999;
     font-size: 12px;
 }
-
-@media print {
-    .date-modified {
-        font-size: 18px;
-    }
-
-    .print-height{
-        height: 100% !important;
-    }
-}

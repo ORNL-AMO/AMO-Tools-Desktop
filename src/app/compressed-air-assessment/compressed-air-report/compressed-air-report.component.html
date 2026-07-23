@@ -122,24 +122,24 @@
             </app-export-button>
         </div>
 
-        <div class="results scroll-item print-height page-break-before"
+        <div class="results scroll-item"
             *ngIf="currentTab == 'facilityInfo'" [ngStyle]="{'height.px':reportContainerHeight}">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
-        <div class="input-data results scroll-item print-height page-break-before"
+        <div class="input-data results scroll-item"
             *ngIf="currentTab == 'inputData'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-input-summary [compressedAirAssessment]="assessment.compressedAirAssessment" [settings]="settings">
             </app-input-summary>
         </div>
-        <div class="results scroll-item print-height page-break-before"
+        <div class="results scroll-item"
             *ngIf="currentTab == 'executiveSummary'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-executive-summary [baselineResults]="baselineResults" [combinedDayTypeResults]="combinedDayTypeResults"
                 [modifications]="assessment.compressedAirAssessment.modifications" [inRollup]="inRollup"
                 [assessment]="assessment" [settings]="settings"></app-executive-summary>
         </div>
-        <div class="results scroll-item print-height page-break-before"
+        <div class="results scroll-item"
             *ngIf="currentTab == 'reportGraphs'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-report-graphs [assessmentResults]="assessmentResults" [combinedDayTypeResults]="combinedDayTypeResults"
@@ -147,13 +147,13 @@
                 [baselineResults]="baselineResults" [settings]="settings">
             </app-report-graphs>
         </div>
-        <div class="results scroll-item print-height page-break-before"
+        <div class="results scroll-item"
             *ngIf="currentTab == 'reportSankey'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-compressed-air-sankey [inReport]="true" [compressedAirAssessment]="assessment.compressedAirAssessment">
             </app-compressed-air-sankey>
         </div>
-        <div class="print-height page-break-before results scroll-item"
+        <div class="results scroll-item"
             *ngIf="currentTab == 'systemProfiles'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-profiles
@@ -162,12 +162,12 @@
                 [assessmentResults]="assessmentResults" [settings]="settings">
             </app-system-profiles>
         </div>
-        <div class="results scroll-item print-height page-break-before"
+        <div class="results scroll-item"
             *ngIf="currentTab == 'paybackPeriod'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-payback-period [combinedDayTypeResults]="combinedDayTypeResults"></app-payback-period>
         </div>
-        <div class="results scroll-item print-height page-break-before"
+        <div class="results scroll-item"
             *ngIf="currentTab == 'performanceProfile'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-performance-profiles [inReport]="true"

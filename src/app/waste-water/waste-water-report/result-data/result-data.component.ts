@@ -4,7 +4,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
-import { getWasteWaterPaybackPeriod } from '../waste-water-report.utils';
+import { getWasteWaterPaybackPeriod } from '../../../shared/payback-period.utils';
 
 @Component({
     selector: 'app-result-data',

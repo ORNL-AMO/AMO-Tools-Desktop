@@ -93,23 +93,23 @@
             </app-export-button>
         </div>
 
-        <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo'"
+        <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
         </div>
-        <div class="input-data results scroll-item print-height"
+        <div class="input-data results scroll-item"
             *ngIf="currentTab == 'inputData'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-input-data [wasteWater]="assessment.wasteWater" [settings]="settings">
             </app-input-data>
         </div>
-        <div class="results scroll-item print-height"
+        <div class="results scroll-item"
             *ngIf="currentTab == 'results'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-result-data [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
             </app-result-data>
         </div>
-        <div class="results print-height scroll-item"
+        <div class="results scroll-item"
             *ngIf="currentTab == 'reportGraphs'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-energy-analysis [settings]="settings"></app-energy-analysis>

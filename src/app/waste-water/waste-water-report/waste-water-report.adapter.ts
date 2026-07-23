@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { appendSubGroup, buildFacilityInfoSections, createSummaryRowBuilder, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, buildSummaryRow, findRowIndices, formatNumber, renderPlotlyChart } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
@@ -15,7 +15,7 @@ import { aeratorTypes } from '../waste-water-defaults';
 import { graphColors } from '../../shared/graphColors';
 import { TraceData } from '../../shared/models/plotting';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
-import { getWasteWaterPaybackPeriod } from './waste-water-report.utils';
+import { getWasteWaterPaybackPeriod } from '../../shared/payback-period.utils';
 
 export const WASTE_WATER_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -168,7 +168,7 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
 
     addGroup('Aerator', aeratorRows);
 
-    const emphasisRowsIndices = this.findRowIndices(rows, [
+    const emphasisRowsIndices = findRowIndices(rows, [
       'Aeration Energy Use (MWh/yr)',
       'Energy Savings (MWh/yr)',
       `Aeration Cost (${settings.currency}/yr)`,
@@ -202,30 +202,29 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
     const u = this.units(settings);
     const showCO2 = this.featureFlagService.showOperationalImpacts();
 
-    const row = createSummaryRowBuilder(mods);
 
     const operationsRows: string[][] = [
-      row('Operating Months', baseline.operations?.operatingMonths, m => m.operations?.operatingMonths),
+      buildSummaryRow(mods, 'Operating Months', baseline.operations?.operatingMonths, m => m.operations?.operatingMonths),
     ];
     if (showCO2) {
       operationsRows.push(
-        row('Total Emission Output Rate (kg CO2/MWh)', baseline.co2SavingsData?.totalEmissionOutputRate, m => m.co2SavingsData?.totalEmissionOutputRate)
+        buildSummaryRow(mods, 'Total Emission Output Rate (kg CO2/MWh)', baseline.co2SavingsData?.totalEmissionOutputRate, m => m.co2SavingsData?.totalEmissionOutputRate)
       );
     }
 
     const activatedSludgeRows: string[][] = [
-      row('Temperature (C)', baseline.activatedSludgeData?.Temperature, m => m.activatedSludgeData?.Temperature),
-      row('Influent CBOD5 (So) (mg/L)', baseline.activatedSludgeData?.So, m => m.activatedSludgeData?.So),
-      row(`Volume (${u.volume})`, baseline.activatedSludgeData?.Volume, m => m.activatedSludgeData?.Volume),
-      row(`Flow Rate (${u.flow})`, baseline.activatedSludgeData?.FlowRate, m => m.activatedSludgeData?.FlowRate),
-      row('Inert VSS (mg/L)', baseline.activatedSludgeData?.InertVSS, m => m.activatedSludgeData?.InertVSS),
-      row('Oxidizable N (mg/L)', baseline.activatedSludgeData?.OxidizableN, m => m.activatedSludgeData?.OxidizableN),
-      row('VSS/TSS Ratio of Biomass', baseline.activatedSludgeData?.Biomass, m => m.activatedSludgeData?.Biomass),
-      row('Influent TSS (mg/L)', baseline.activatedSludgeData?.InfluentTSS, m => m.activatedSludgeData?.InfluentTSS),
-      row('Inert Inorganic TSS (mg/L)', baseline.activatedSludgeData?.InertInOrgTSS, m => m.activatedSludgeData?.InertInOrgTSS),
-      row('Effluent TSS (mg/L)', baseline.activatedSludgeData?.EffluentTSS, m => m.activatedSludgeData?.EffluentTSS),
-      row('RAS TSS (mg/L)', baseline.activatedSludgeData?.RASTSS, m => m.activatedSludgeData?.RASTSS),
-      row('Plant Control Point', baseline.activatedSludgeData?.CalculateGivenSRT, m => m.activatedSludgeData?.CalculateGivenSRT,
+      buildSummaryRow(mods, 'Temperature (C)', baseline.activatedSludgeData?.Temperature, m => m.activatedSludgeData?.Temperature),
+      buildSummaryRow(mods, 'Influent CBOD5 (So) (mg/L)', baseline.activatedSludgeData?.So, m => m.activatedSludgeData?.So),
+      buildSummaryRow(mods, `Volume (${u.volume})`, baseline.activatedSludgeData?.Volume, m => m.activatedSludgeData?.Volume),
+      buildSummaryRow(mods, `Flow Rate (${u.flow})`, baseline.activatedSludgeData?.FlowRate, m => m.activatedSludgeData?.FlowRate),
+      buildSummaryRow(mods, 'Inert VSS (mg/L)', baseline.activatedSludgeData?.InertVSS, m => m.activatedSludgeData?.InertVSS),
+      buildSummaryRow(mods, 'Oxidizable N (mg/L)', baseline.activatedSludgeData?.OxidizableN, m => m.activatedSludgeData?.OxidizableN),
+      buildSummaryRow(mods, 'VSS/TSS Ratio of Biomass', baseline.activatedSludgeData?.Biomass, m => m.activatedSludgeData?.Biomass),
+      buildSummaryRow(mods, 'Influent TSS (mg/L)', baseline.activatedSludgeData?.InfluentTSS, m => m.activatedSludgeData?.InfluentTSS),
+      buildSummaryRow(mods, 'Inert Inorganic TSS (mg/L)', baseline.activatedSludgeData?.InertInOrgTSS, m => m.activatedSludgeData?.InertInOrgTSS),
+      buildSummaryRow(mods, 'Effluent TSS (mg/L)', baseline.activatedSludgeData?.EffluentTSS, m => m.activatedSludgeData?.EffluentTSS),
+      buildSummaryRow(mods, 'RAS TSS (mg/L)', baseline.activatedSludgeData?.RASTSS, m => m.activatedSludgeData?.RASTSS),
+      buildSummaryRow(mods, 'Plant Control Point', baseline.activatedSludgeData?.CalculateGivenSRT, m => m.activatedSludgeData?.CalculateGivenSRT,
         v => v ? 'SRT Days' : 'MLSS'),
       [
         'MLSS (mg/L)',
@@ -237,28 +236,28 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
         baseline.activatedSludgeData?.CalculateGivenSRT ? (baseline.activatedSludgeData?.DefinedSRT != null ? String(baseline.activatedSludgeData.DefinedSRT) : '—') : '—',
         ...mods.map(m => m.activatedSludgeData?.CalculateGivenSRT ? (m.activatedSludgeData?.DefinedSRT != null ? String(m.activatedSludgeData.DefinedSRT) : '—') : '—'),
       ],
-      row('Cell Debris Biomass Fraction (fd) (mg VSS/mg)', baseline.activatedSludgeData?.FractionBiomass, m => m.activatedSludgeData?.FractionBiomass),
-      row('Biomass Yield Constant (Y) (mg VSS/mg)', baseline.activatedSludgeData?.BiomassYeild, m => m.activatedSludgeData?.BiomassYeild),
-      row('Half-saturation Constant (Ks) (mg/L BOD)', baseline.activatedSludgeData?.HalfSaturation, m => m.activatedSludgeData?.HalfSaturation),
-      row('Endogenous Decay Coefficient (Kd) (1/day)', baseline.activatedSludgeData?.MicrobialDecay, m => m.activatedSludgeData?.MicrobialDecay),
-      row('Max. Specific Substrate Utilization Rate (k) (1/day)', baseline.activatedSludgeData?.MaxUtilizationRate, m => m.activatedSludgeData?.MaxUtilizationRate),
+      buildSummaryRow(mods, 'Cell Debris Biomass Fraction (fd) (mg VSS/mg)', baseline.activatedSludgeData?.FractionBiomass, m => m.activatedSludgeData?.FractionBiomass),
+      buildSummaryRow(mods, 'Biomass Yield Constant (Y) (mg VSS/mg)', baseline.activatedSludgeData?.BiomassYeild, m => m.activatedSludgeData?.BiomassYeild),
+      buildSummaryRow(mods, 'Half-saturation Constant (Ks) (mg/L BOD)', baseline.activatedSludgeData?.HalfSaturation, m => m.activatedSludgeData?.HalfSaturation),
+      buildSummaryRow(mods, 'Endogenous Decay Coefficient (Kd) (1/day)', baseline.activatedSludgeData?.MicrobialDecay, m => m.activatedSludgeData?.MicrobialDecay),
+      buildSummaryRow(mods, 'Max. Specific Substrate Utilization Rate (k) (1/day)', baseline.activatedSludgeData?.MaxUtilizationRate, m => m.activatedSludgeData?.MaxUtilizationRate),
     ];
 
     const aeratorRows: string[][] = [
-      row('Operating Dissolved O2 (DO) (mg/L)', baseline.aeratorPerformanceData?.OperatingDO, m => m.aeratorPerformanceData?.OperatingDO),
-      row('O2 Transfer Coefficient Ratio (alpha)', baseline.aeratorPerformanceData?.Alpha, m => m.aeratorPerformanceData?.Alpha),
-      row('Saturation DO Concentration Ratio (beta)', baseline.aeratorPerformanceData?.Beta, m => m.aeratorPerformanceData?.Beta),
-      row('Aerator/Blower', baseline.aeratorPerformanceData?.Aerator, m => m.aeratorPerformanceData?.Aerator),
-      row(`Standard O2 Transfer Rate (SOTR) (${u.sotr})`, baseline.aeratorPerformanceData?.SOTR, m => m.aeratorPerformanceData?.SOTR),
-      row(`Aeration Operating Power (${u.power})`, baseline.aeratorPerformanceData?.Aeration, m => m.aeratorPerformanceData?.Aeration),
-      row(`Site Elevation (${u.distance})`, baseline.aeratorPerformanceData?.Elevation, m => m.aeratorPerformanceData?.Elevation),
-      row('Aerator/Blower Operating Time (hr/day)', baseline.aeratorPerformanceData?.OperatingTime, m => m.aeratorPerformanceData?.OperatingTime),
-      row('Type of Aerator/Blower', baseline.aeratorPerformanceData?.TypeAerators, m => m.aeratorPerformanceData?.TypeAerators,
+      buildSummaryRow(mods, 'Operating Dissolved O2 (DO) (mg/L)', baseline.aeratorPerformanceData?.OperatingDO, m => m.aeratorPerformanceData?.OperatingDO),
+      buildSummaryRow(mods, 'O2 Transfer Coefficient Ratio (alpha)', baseline.aeratorPerformanceData?.Alpha, m => m.aeratorPerformanceData?.Alpha),
+      buildSummaryRow(mods, 'Saturation DO Concentration Ratio (beta)', baseline.aeratorPerformanceData?.Beta, m => m.aeratorPerformanceData?.Beta),
+      buildSummaryRow(mods, 'Aerator/Blower', baseline.aeratorPerformanceData?.Aerator, m => m.aeratorPerformanceData?.Aerator),
+      buildSummaryRow(mods, `Standard O2 Transfer Rate (SOTR) (${u.sotr})`, baseline.aeratorPerformanceData?.SOTR, m => m.aeratorPerformanceData?.SOTR),
+      buildSummaryRow(mods, `Aeration Operating Power (${u.power})`, baseline.aeratorPerformanceData?.Aeration, m => m.aeratorPerformanceData?.Aeration),
+      buildSummaryRow(mods, `Site Elevation (${u.distance})`, baseline.aeratorPerformanceData?.Elevation, m => m.aeratorPerformanceData?.Elevation),
+      buildSummaryRow(mods, 'Aerator/Blower Operating Time (hr/day)', baseline.aeratorPerformanceData?.OperatingTime, m => m.aeratorPerformanceData?.OperatingTime),
+      buildSummaryRow(mods, 'Type of Aerator/Blower', baseline.aeratorPerformanceData?.TypeAerators, m => m.aeratorPerformanceData?.TypeAerators,
         v => this.getAeratorTypeDisplay(v as number)),
-      row('Aerator/Blower Speed (%)', baseline.aeratorPerformanceData?.Speed, m => m.aeratorPerformanceData?.Speed),
-      row('Electricity Cost ($/kWh)', baseline.operations?.EnergyCostUnit, m => m.operations?.EnergyCostUnit,
+      buildSummaryRow(mods, 'Aerator/Blower Speed (%)', baseline.aeratorPerformanceData?.Speed, m => m.aeratorPerformanceData?.Speed),
+      buildSummaryRow(mods, 'Electricity Cost ($/kWh)', baseline.operations?.EnergyCostUnit, m => m.operations?.EnergyCostUnit,
         v => v != null ? formatNumber(v as number, 4) : '—'),
-      row('Anoxic zone with returned mixed liquor?', baseline.aeratorPerformanceData?.AnoxicZoneCondition, m => m.aeratorPerformanceData?.AnoxicZoneCondition,
+      buildSummaryRow(mods, 'Anoxic zone with returned mixed liquor?', baseline.aeratorPerformanceData?.AnoxicZoneCondition, m => m.aeratorPerformanceData?.AnoxicZoneCondition,
         v => v ? 'Yes' : 'No'),
     ];
 

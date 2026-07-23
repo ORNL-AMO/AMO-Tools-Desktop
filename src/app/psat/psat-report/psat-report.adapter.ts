@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { appendSubGroup, buildFacilityInfoSections, createSummaryRowBuilder, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, buildSummaryRow, formatNumber, renderPlotlyChart } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
@@ -9,9 +9,9 @@ import { Assessment } from '../../shared/models/assessment';
 import { Modification, PSAT, PsatOutputs } from '../../shared/models/psat';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
-import { PsatChartsService, PsatChartConfig } from '../services/psat-charts.service';
+import { PsatChartsService } from '../services/psat-charts.service';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
-import { getPsatPaybackPeriod } from './psat-report.utils';
+import { getModulePaybackPeriod } from '../../shared/payback-period.utils';
 
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -53,10 +53,6 @@ export class PsatReportAdapter implements ReportDataAdapter {
     });
   }
 
-  private renderPlotlyChart(chart: PsatChartConfig): Promise<string> {
-    return this.chartRenderService.renderChartToImage(chart.traces, chart.layout);
-  }
-
   private buildReportGraphsSections(psat: PSAT, settings: Settings): ChartSection[] {
     const allData = this.psatChartsService.collectGraphData(psat, settings);
     if (allData.length < 2) return [];
@@ -71,13 +67,13 @@ export class PsatReportAdapter implements ReportDataAdapter {
         title: `Energy Distribution — ${mod.name}`,
         group: 'graphs',
         pageBreakBefore: i === 1,
-        imageDataProvider: () => this.renderPlotlyChart(this.psatChartsService.buildEnergyDistributionChart(baseline, mod)),
+        imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.psatChartsService.buildEnergyDistributionChart(baseline, mod)),
       });
       sections.push({
         type: 'chart',
         title: `Power Comparison — ${mod.name}`,
         group: 'graphs',
-        imageDataProvider: () => this.renderPlotlyChart(this.psatChartsService.buildPowerComparisonChart(baseline, mod)),
+        imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.psatChartsService.buildPowerComparisonChart(baseline, mod)),
       });
     }
 
@@ -197,7 +193,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
   }
 
   private calcPayback(baselineOut: PsatOutputs, mod: Modification): string {
-    return formatNumber(getPsatPaybackPeriod(baselineOut?.annual_cost, mod.psat?.outputs?.annual_cost, mod.psat?.inputs?.implementationCosts), 1);
+    return formatNumber(getModulePaybackPeriod(baselineOut?.annual_cost, mod.psat?.outputs?.annual_cost, mod.psat?.inputs?.implementationCosts), 1);
   }
 
   private buildInputSummarySections(psat: PSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {
@@ -205,44 +201,43 @@ export class PsatReportAdapter implements ReportDataAdapter {
     const inputs = psat.inputs;
     const mods = psat.modifications ?? [];
 
-    const row = createSummaryRowBuilder(mods);
 
     const operationsRows: string[][] = [
-      row('Operating Hours', inputs.operating_hours, m => m.psat?.inputs?.operating_hours),
-      row(`Cost (${settings.currency}/kWh)`, inputs.cost_kw_hour, m => m.psat?.inputs?.cost_kw_hour,
+      buildSummaryRow(mods, 'Operating Hours', inputs.operating_hours, m => m.psat?.inputs?.operating_hours),
+      buildSummaryRow(mods, `Cost (${settings.currency}/kWh)`, inputs.cost_kw_hour, m => m.psat?.inputs?.cost_kw_hour,
         v => v != null ? formatNumber(v, 4) : '—'),
     ];
 
     const pumpFluidRows: string[][] = [
-      row('Pump Type', inputs.pump_style, m => m.psat?.inputs?.pump_style,
+      buildSummaryRow(mods, 'Pump Type', inputs.pump_style, m => m.psat?.inputs?.pump_style,
         v => this.psatService.getPumpStyleFromEnum(v)),
-      row('Speed (rpm)', inputs.pump_rated_speed, m => m.psat?.inputs?.pump_rated_speed),
-      row('Drive', inputs.drive, m => m.psat?.inputs?.drive,
+      buildSummaryRow(mods, 'Speed (rpm)', inputs.pump_rated_speed, m => m.psat?.inputs?.pump_rated_speed),
+      buildSummaryRow(mods, 'Drive', inputs.drive, m => m.psat?.inputs?.drive,
         v => this.psatService.getDriveFromEnum(v)),
-      row('Fluid Type', inputs.fluidType, m => m.psat?.inputs?.fluidType),
-      row(`Fluid Temperature (${settings.temperatureMeasurement})`, inputs.fluidTemperature, m => m.psat?.inputs?.fluidTemperature),
-      row('Specific Gravity', inputs.specific_gravity, m => m.psat?.inputs?.specific_gravity),
-      row('Stages', inputs.stages, m => m.psat?.inputs?.stages),
+      buildSummaryRow(mods, 'Fluid Type', inputs.fluidType, m => m.psat?.inputs?.fluidType),
+      buildSummaryRow(mods, `Fluid Temperature (${settings.temperatureMeasurement})`, inputs.fluidTemperature, m => m.psat?.inputs?.fluidTemperature),
+      buildSummaryRow(mods, 'Specific Gravity', inputs.specific_gravity, m => m.psat?.inputs?.specific_gravity),
+      buildSummaryRow(mods, 'Stages', inputs.stages, m => m.psat?.inputs?.stages),
     ];
 
     const motorRows: string[][] = [
-      row('Line Frequency (Hz)', inputs.line_frequency, m => m.psat?.inputs?.line_frequency),
-      row(`Motor Rated Power (${settings.powerMeasurement})`, inputs.motor_rated_power, m => m.psat?.inputs?.motor_rated_power),
-      row('Speed (rpm)', inputs.motor_rated_speed, m => m.psat?.inputs?.motor_rated_speed),
-      row('Efficiency Class', inputs.efficiency_class, m => m.psat?.inputs?.efficiency_class,
+      buildSummaryRow(mods, 'Line Frequency (Hz)', inputs.line_frequency, m => m.psat?.inputs?.line_frequency),
+      buildSummaryRow(mods, `Motor Rated Power (${settings.powerMeasurement})`, inputs.motor_rated_power, m => m.psat?.inputs?.motor_rated_power),
+      buildSummaryRow(mods, 'Speed (rpm)', inputs.motor_rated_speed, m => m.psat?.inputs?.motor_rated_speed),
+      buildSummaryRow(mods, 'Efficiency Class', inputs.efficiency_class, m => m.psat?.inputs?.efficiency_class,
         v => this.psatService.getEfficiencyClassFromEnum(v)),
-      row('Voltage (V)', inputs.motor_rated_voltage, m => m.psat?.inputs?.motor_rated_voltage),
-      row('Full-Load Amps (A)', inputs.motor_rated_fla, m => m.psat?.inputs?.motor_rated_fla,
+      buildSummaryRow(mods, 'Voltage (V)', inputs.motor_rated_voltage, m => m.psat?.inputs?.motor_rated_voltage),
+      buildSummaryRow(mods, 'Full-Load Amps (A)', inputs.motor_rated_fla, m => m.psat?.inputs?.motor_rated_fla,
         v => v != null ? formatNumber(v, 0) : '—'),
     ];
 
     const fieldDataRows: string[][] = [
-      row(`Flow Rate (${settings.flowMeasurement})`, inputs.flow_rate, m => m.psat?.inputs?.flow_rate),
-      row(`Head (${settings.distanceMeasurement})`, inputs.head, m => m.psat?.inputs?.head),
-      row('Load Estimation Method', inputs.load_estimation_method, m => m.psat?.inputs?.load_estimation_method,
+      buildSummaryRow(mods, `Flow Rate (${settings.flowMeasurement})`, inputs.flow_rate, m => m.psat?.inputs?.flow_rate),
+      buildSummaryRow(mods, `Head (${settings.distanceMeasurement})`, inputs.head, m => m.psat?.inputs?.head),
+      buildSummaryRow(mods, 'Load Estimation Method', inputs.load_estimation_method, m => m.psat?.inputs?.load_estimation_method,
         v => this.psatService.getLoadEstimationFromEnum(v)),
-      row('Motor Field Voltage (V)', inputs.motor_field_voltage, m => m.psat?.inputs?.motor_field_voltage),
-      row('Kinematic Viscosity (cST)', inputs.kinematic_viscosity, m => m.psat?.inputs?.kinematic_viscosity),
+      buildSummaryRow(mods, 'Motor Field Voltage (V)', inputs.motor_field_voltage, m => m.psat?.inputs?.motor_field_voltage),
+      buildSummaryRow(mods, 'Kinematic Viscosity (cST)', inputs.kinematic_viscosity, m => m.psat?.inputs?.kinematic_viscosity),
     ];
 
     const allRows: string[][] = [];

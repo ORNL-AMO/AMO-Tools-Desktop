@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { appendSubGroup, buildFacilityInfoSections, createSummaryRowBuilder, formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, buildSummaryRow, findRowIndices, formatNumber, renderPlotlyChart } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
@@ -13,7 +13,7 @@ import { FsatChartsService } from '../services/fsat-charts.service';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
 import { FanTypes, Drives } from '../fanOptions';
 import { motorEfficiencyConstants } from '../../psat/psatConstants';
-import { getFsatPaybackPeriod } from './fsat-report.utils';
+import { getModulePaybackPeriod } from '../../shared/payback-period.utils';
 
 export const FSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -55,10 +55,6 @@ export class FsatReportAdapter implements ReportDataAdapter {
         ...this.buildInputSummarySections(fsat, settings, modNames),
       ],
     });
-  }
-
-  private renderPlotlyChart(chart: { traces: unknown[]; layout: object }): Promise<string> {
-    return this.chartRenderService.renderChartToImage(chart.traces as never, chart.layout);
   }
 
   private buildResultsSections(fsat: FSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {
@@ -118,7 +114,7 @@ export class FsatReportAdapter implements ReportDataAdapter {
       ['Payback Period (months)', '—', ...modPayback],
     );
 
-    const emphasisRowsIndices = this.findRowIndices(rows, [
+    const emphasisRowsIndices = findRowIndices(rows, [
       'Annual Energy (MWh)',
       'Annual Energy Savings (MWh)',
       `Annual Cost (${settings.currency})`,
@@ -136,12 +132,8 @@ export class FsatReportAdapter implements ReportDataAdapter {
     }];
   }
 
-  private findRowIndices(rows: string[][], labels: string[]): number[] {
-    return labels.map(label => rows.findIndex(r => r[0] === label)).filter(i => i !== -1);
-  }
-
   private calcPayback(baselineOut: FsatOutput, mod: Modification): string {
-    return formatNumber(getFsatPaybackPeriod(baselineOut?.annualCost, mod.fsat?.outputs?.annualCost, mod.fsat?.implementationCosts), 1);
+    return formatNumber(getModulePaybackPeriod(baselineOut?.annualCost, mod.fsat?.outputs?.annualCost, mod.fsat?.implementationCosts), 1);
   }
 
   private buildReportGraphsSections(fsat: FSAT, settings: Settings): ChartSection[] {
@@ -158,13 +150,13 @@ export class FsatReportAdapter implements ReportDataAdapter {
         title: `Energy Distribution — ${mod.name}`,
         group: 'graphs',
         pageBreakBefore: i === 1,
-        imageDataProvider: () => this.renderPlotlyChart(this.fsatChartsService.buildEnergyDistributionChart(baseline, mod)),
+        imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.fsatChartsService.buildEnergyDistributionChart(baseline, mod)),
       });
       sections.push({
         type: 'chart',
         title: `Power Comparison — ${mod.name}`,
         group: 'graphs',
-        imageDataProvider: () => this.renderPlotlyChart(this.fsatChartsService.buildPowerComparisonChart(baseline, mod)),
+        imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.fsatChartsService.buildPowerComparisonChart(baseline, mod)),
       });
     }
 
@@ -195,7 +187,6 @@ export class FsatReportAdapter implements ReportDataAdapter {
 
     const headers = ['', 'Baseline', ...modNames];
     const mods = fsat.modifications ?? [];
-    const row = createSummaryRowBuilder(mods);
     const psychro = (f: FSAT | undefined) => f?.outputs?.psychrometricResults;
     const fmt = (value: number | undefined, dec: number) => value != null ? formatNumber(value, dec) : '—';
 
@@ -203,26 +194,26 @@ export class FsatReportAdapter implements ReportDataAdapter {
     const specificVolumeUnit = settings.unitsOfMeasure === 'Metric' ? 'm3/kg' : 'ft3/lb';
 
     const rows: string[][] = [
-      row(`Dry Bulb (${settings.fanTemperatureMeasurement})`,
+      buildSummaryRow(mods, `Dry Bulb (${settings.fanTemperatureMeasurement})`,
         fmt(psychro(fsat)?.dryBulbTemp, 4), m => fmt(psychro(m.fsat)?.dryBulbTemp, 4)),
-      row('Relative Humidity (%)', fmt(psychro(fsat)?.relativeHumidity, 1), m => fmt(psychro(m.fsat)?.relativeHumidity, 1)),
-      row(`Wet Bulb (${settings.fanTemperatureMeasurement})`,
+      buildSummaryRow(mods, 'Relative Humidity (%)', fmt(psychro(fsat)?.relativeHumidity, 1), m => fmt(psychro(m.fsat)?.relativeHumidity, 1)),
+      buildSummaryRow(mods, `Wet Bulb (${settings.fanTemperatureMeasurement})`,
         fmt(psychro(fsat)?.wetBulbTemp, 1), m => fmt(psychro(m.fsat)?.wetBulbTemp, 1)),
-      row(`Dew Point (${settings.fanTemperatureMeasurement})`,
+      buildSummaryRow(mods, `Dew Point (${settings.fanTemperatureMeasurement})`,
         fmt(psychro(fsat)?.dewPoint, 1), m => fmt(psychro(m.fsat)?.dewPoint, 1)),
-      row(`Enthalpy (${enthalpyUnit})`, fmt(psychro(fsat)?.enthalpy, 1), m => fmt(psychro(m.fsat)?.enthalpy, 1)),
-      row(`Air Density (${settings.densityMeasurement})`,
+      buildSummaryRow(mods, `Enthalpy (${enthalpyUnit})`, fmt(psychro(fsat)?.enthalpy, 1), m => fmt(psychro(m.fsat)?.enthalpy, 1)),
+      buildSummaryRow(mods, `Air Density (${settings.densityMeasurement})`,
         fmt(psychro(fsat)?.gasDensity, 4), m => fmt(psychro(m.fsat)?.gasDensity, 4)),
-      row(`Specific Volume (${specificVolumeUnit})`, fmt(psychro(fsat)?.specificVolume, 2), m => fmt(psychro(m.fsat)?.specificVolume, 2)),
-      row(`Barometric Pressure (${settings.fanPressureMeasurement})`,
+      buildSummaryRow(mods, `Specific Volume (${specificVolumeUnit})`, fmt(psychro(fsat)?.specificVolume, 2), m => fmt(psychro(m.fsat)?.specificVolume, 2)),
+      buildSummaryRow(mods, `Barometric Pressure (${settings.fanPressureMeasurement})`,
         fmt(psychro(fsat)?.barometricPressure, 3), m => fmt(psychro(m.fsat)?.barometricPressure, 3)),
-      row(`Saturation Pressure (${settings.fanBarometricPressure})`,
+      buildSummaryRow(mods, `Saturation Pressure (${settings.fanBarometricPressure})`,
         fmt(psychro(fsat)?.saturationPressure, 3), m => fmt(psychro(m.fsat)?.saturationPressure, 3)),
-      row('Saturation Humidity Ratio', fmt(psychro(fsat)?.saturatedHumidity, 3), m => fmt(psychro(m.fsat)?.saturatedHumidity, 3)),
-      row(`Absolute Pressure (${settings.fanPressureMeasurement})`,
+      buildSummaryRow(mods, 'Saturation Humidity Ratio', fmt(psychro(fsat)?.saturatedHumidity, 3), m => fmt(psychro(m.fsat)?.saturatedHumidity, 3)),
+      buildSummaryRow(mods, `Absolute Pressure (${settings.fanPressureMeasurement})`,
         fmt(psychro(fsat)?.absolutePressure, 2), m => fmt(psychro(m.fsat)?.absolutePressure, 2)),
-      row('Degree of Saturation', fmt(psychro(fsat)?.saturationDegree, 3), m => fmt(psychro(m.fsat)?.saturationDegree, 3)),
-      row('Humidity Ratio', fmt(psychro(fsat)?.humidityRatio, 4), m => fmt(psychro(m.fsat)?.humidityRatio, 4)),
+      buildSummaryRow(mods, 'Degree of Saturation', fmt(psychro(fsat)?.saturationDegree, 3), m => fmt(psychro(m.fsat)?.saturationDegree, 3)),
+      buildSummaryRow(mods, 'Humidity Ratio', fmt(psychro(fsat)?.humidityRatio, 4), m => fmt(psychro(m.fsat)?.humidityRatio, 4)),
     ];
 
     return {
@@ -329,74 +320,73 @@ export class FsatReportAdapter implements ReportDataAdapter {
     const mods = fsat.modifications ?? [];
     const showCO2 = this.featureFlagService.showOperationalImpacts();
 
-    const row = createSummaryRowBuilder(mods);
 
     const operationsRows: string[][] = [
-      row('Operating Hours', fsat.fsatOperations?.operatingHours, m => m.fsat?.fsatOperations?.operatingHours),
-      row(`Cost (${settings.currency}/kWh)`, fsat.fsatOperations?.cost, m => m.fsat?.fsatOperations?.cost,
+      buildSummaryRow(mods, 'Operating Hours', fsat.fsatOperations?.operatingHours, m => m.fsat?.fsatOperations?.operatingHours),
+      buildSummaryRow(mods, `Cost (${settings.currency}/kWh)`, fsat.fsatOperations?.cost, m => m.fsat?.fsatOperations?.cost,
         v => v != null ? formatNumber(v, 0) : '—'),
     ];
     if (showCO2) {
       operationsRows.push(
-        row('Total Emission Output Rate (kg CO2/MWh)', fsat.fsatOperations?.cO2SavingsData?.totalEmissionOutputRate,
+        buildSummaryRow(mods, 'Total Emission Output Rate (kg CO2/MWh)', fsat.fsatOperations?.cO2SavingsData?.totalEmissionOutputRate,
           m => m.fsat?.fsatOperations?.cO2SavingsData?.totalEmissionOutputRate)
       );
     }
 
     const fieldData = fsat.fieldData;
     const fieldDataRows: string[][] = [
-      row(`Flow Rate (${settings.fanFlowRate})`, fieldData?.flowRate, m => m.fsat?.fieldData?.flowRate),
-      row(`Inlet Pressure (${settings.fanPressureMeasurement})`, fieldData?.inletPressure, m => m.fsat?.fieldData?.inletPressure),
-      row(`Outlet Pressure (${settings.fanPressureMeasurement})`, fieldData?.outletPressure, m => m.fsat?.fieldData?.outletPressure),
-      row('Load Estimated Method', fieldData?.loadEstimatedMethod, m => m.fsat?.fieldData?.loadEstimatedMethod,
+      buildSummaryRow(mods, `Flow Rate (${settings.fanFlowRate})`, fieldData?.flowRate, m => m.fsat?.fieldData?.flowRate),
+      buildSummaryRow(mods, `Inlet Pressure (${settings.fanPressureMeasurement})`, fieldData?.inletPressure, m => m.fsat?.fieldData?.inletPressure),
+      buildSummaryRow(mods, `Outlet Pressure (${settings.fanPressureMeasurement})`, fieldData?.outletPressure, m => m.fsat?.fieldData?.outletPressure),
+      buildSummaryRow(mods, 'Load Estimated Method', fieldData?.loadEstimatedMethod, m => m.fsat?.fieldData?.loadEstimatedMethod,
         v => v === 0 ? 'Power' : v === 1 ? 'Current' : '—'),
-      row('Compressibility Factor', fieldData?.compressibilityFactor, m => m.fsat?.fieldData?.compressibilityFactor),
-      row('Measured Voltage (V)', fieldData?.measuredVoltage, m => m.fsat?.fieldData?.measuredVoltage),
+      buildSummaryRow(mods, 'Compressibility Factor', fieldData?.compressibilityFactor, m => m.fsat?.fieldData?.compressibilityFactor),
+      buildSummaryRow(mods, 'Measured Voltage (V)', fieldData?.measuredVoltage, m => m.fsat?.fieldData?.measuredVoltage),
     ];
 
     const fanMotor = fsat.fanMotor;
     const motorRows: string[][] = [
-      row('Line Frequency (Hz)', fanMotor?.lineFrequency, m => m.fsat?.fanMotor?.lineFrequency),
-      row(`Motor Rated Power (${settings.fanPowerMeasurement})`, fanMotor?.motorRatedPower, m => m.fsat?.fanMotor?.motorRatedPower),
-      row('Motor RPM (rpm)', fanMotor?.motorRpm, m => m.fsat?.fanMotor?.motorRpm),
-      row('Efficiency Class', fanMotor?.efficiencyClass, m => m.fsat?.fanMotor?.efficiencyClass,
+      buildSummaryRow(mods, 'Line Frequency (Hz)', fanMotor?.lineFrequency, m => m.fsat?.fanMotor?.lineFrequency),
+      buildSummaryRow(mods, `Motor Rated Power (${settings.fanPowerMeasurement})`, fanMotor?.motorRatedPower, m => m.fsat?.fanMotor?.motorRatedPower),
+      buildSummaryRow(mods, 'Motor RPM (rpm)', fanMotor?.motorRpm, m => m.fsat?.fanMotor?.motorRpm),
+      buildSummaryRow(mods, 'Efficiency Class', fanMotor?.efficiencyClass, m => m.fsat?.fanMotor?.efficiencyClass,
         v => this.getEfficiencyClassDisplay(v as number)),
-      row('Specified Efficiency (%)', this.getSpecifiedEfficiencyDisplay(fanMotor), m => this.getSpecifiedEfficiencyDisplay(m.fsat?.fanMotor)),
-      row('Motor Rated Voltage (V)', fanMotor?.motorRatedVoltage, m => m.fsat?.fanMotor?.motorRatedVoltage),
-      row('Full Load Amps (A)', fanMotor?.fullLoadAmps, m => m.fsat?.fanMotor?.fullLoadAmps,
+      buildSummaryRow(mods, 'Specified Efficiency (%)', this.getSpecifiedEfficiencyDisplay(fanMotor), m => this.getSpecifiedEfficiencyDisplay(m.fsat?.fanMotor)),
+      buildSummaryRow(mods, 'Motor Rated Voltage (V)', fanMotor?.motorRatedVoltage, m => m.fsat?.fanMotor?.motorRatedVoltage),
+      buildSummaryRow(mods, 'Full Load Amps (A)', fanMotor?.fullLoadAmps, m => m.fsat?.fanMotor?.fullLoadAmps,
         v => v != null ? formatNumber(v, 0) : '—'),
     ];
 
     const fanSetup = fsat.fanSetup;
     const fanRows: string[][] = [
-      row('Fan Type', fanSetup?.fanType, m => m.fsat?.fanSetup?.fanType,
+      buildSummaryRow(mods, 'Fan Type', fanSetup?.fanType, m => m.fsat?.fanSetup?.fanType,
         v => this.getFanTypeDisplay(v as number)),
-      row('Fan Speed (rpm)', fanSetup?.fanSpeed, m => m.fsat?.fanSetup?.fanSpeed),
-      row('Drive', fanSetup?.drive, m => m.fsat?.fanSetup?.drive,
+      buildSummaryRow(mods, 'Fan Speed (rpm)', fanSetup?.fanSpeed, m => m.fsat?.fanSetup?.fanSpeed),
+      buildSummaryRow(mods, 'Drive', fanSetup?.drive, m => m.fsat?.fanSetup?.drive,
         v => this.getDriveDisplay(v as number)),
-      row('Drive Efficiency (%)', this.getDriveEfficiencyDisplay(fanSetup), m => this.getDriveEfficiencyDisplay(m.fsat?.fanSetup)),
-      row('Fan Efficiency (%)', fanSetup?.fanEfficiency, m => m.fsat?.fanSetup?.fanEfficiency,
+      buildSummaryRow(mods, 'Drive Efficiency (%)', this.getDriveEfficiencyDisplay(fanSetup), m => this.getDriveEfficiencyDisplay(m.fsat?.fanSetup)),
+      buildSummaryRow(mods, 'Fan Efficiency (%)', fanSetup?.fanEfficiency, m => m.fsat?.fanSetup?.fanEfficiency,
         v => v != null ? formatNumber(v, 2) : '—'),
     ];
 
     const baseGasDensity = fsat.baseGasDensity;
     const fluidRows: string[][] = [
-      row(`Barometric Pressure (${settings.fanBarometricPressure})`, baseGasDensity?.barometricPressure, m => m.fsat?.baseGasDensity?.barometricPressure),
-      row('Specific Heat Ratio', baseGasDensity?.specificHeatRatio, m => m.fsat?.baseGasDensity?.specificHeatRatio),
-      row('Gas Type', baseGasDensity?.gasType, m => m.fsat?.baseGasDensity?.gasType),
-      row('Method to Establish Gas Density', baseGasDensity?.inputType, m => m.fsat?.baseGasDensity?.inputType,
+      buildSummaryRow(mods, `Barometric Pressure (${settings.fanBarometricPressure})`, baseGasDensity?.barometricPressure, m => m.fsat?.baseGasDensity?.barometricPressure),
+      buildSummaryRow(mods, 'Specific Heat Ratio', baseGasDensity?.specificHeatRatio, m => m.fsat?.baseGasDensity?.specificHeatRatio),
+      buildSummaryRow(mods, 'Gas Type', baseGasDensity?.gasType, m => m.fsat?.baseGasDensity?.gasType),
+      buildSummaryRow(mods, 'Method to Establish Gas Density', baseGasDensity?.inputType, m => m.fsat?.baseGasDensity?.inputType,
         v => this.getGasDensityInputTypeDisplay(v as string)),
-      row(`Dry Bulb Temperature (${settings.unitsOfMeasure === 'Imperial' ? 'F' : 'C'})`,
+      buildSummaryRow(mods, `Dry Bulb Temperature (${settings.unitsOfMeasure === 'Imperial' ? 'F' : 'C'})`,
         this.getGasDensityFieldDisplay(baseGasDensity, 'dryBulbTemp'), m => this.getGasDensityFieldDisplay(m.fsat?.baseGasDensity, 'dryBulbTemp')),
-      row(`Static Pressure (${settings.fanPressureMeasurement})`,
+      buildSummaryRow(mods, `Static Pressure (${settings.fanPressureMeasurement})`,
         this.getGasDensityFieldDisplay(baseGasDensity, 'staticPressure'), m => this.getGasDensityFieldDisplay(m.fsat?.baseGasDensity, 'staticPressure')),
-      row(`Wet Bulb Temperature (${settings.fanTemperatureMeasurement})`,
+      buildSummaryRow(mods, `Wet Bulb Temperature (${settings.fanTemperatureMeasurement})`,
         this.getGasDensityFieldDisplay(baseGasDensity, 'wetBulbTemp'), m => this.getGasDensityFieldDisplay(m.fsat?.baseGasDensity, 'wetBulbTemp')),
-      row('Relative Humidity (%)',
+      buildSummaryRow(mods, 'Relative Humidity (%)',
         this.getGasDensityFieldDisplay(baseGasDensity, 'relativeHumidity'), m => this.getGasDensityFieldDisplay(m.fsat?.baseGasDensity, 'relativeHumidity')),
-      row(`Gas Dew Point (${settings.fanTemperatureMeasurement})`,
+      buildSummaryRow(mods, `Gas Dew Point (${settings.fanTemperatureMeasurement})`,
         this.getGasDensityFieldDisplay(baseGasDensity, 'dewPoint'), m => this.getGasDensityFieldDisplay(m.fsat?.baseGasDensity, 'dewPoint')),
-      row(`Gas Density (${settings.densityMeasurement})`, baseGasDensity?.gasDensity, m => m.fsat?.baseGasDensity?.gasDensity),
+      buildSummaryRow(mods, `Gas Density (${settings.densityMeasurement})`, baseGasDensity?.gasDensity, m => m.fsat?.baseGasDensity?.gasDensity),
     ];
 
     const allRows: string[][] = [];

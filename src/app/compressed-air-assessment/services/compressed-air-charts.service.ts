@@ -14,7 +14,7 @@ import { CompressorInventoryValidationService } from '../compressed-air-assessme
 import { CompressedAirSankeyResults, PowerSankeyService } from '../compressed-air-sankey/power-sankey/power-sankey.service';
 import { AirFlowSankeyResults, AirflowSankeyService } from '../compressed-air-sankey/airflow-sankey/airflow-sankey.service';
 import { AirPropertiesCsvService } from '../../shared/helper-services/air-properties-csv.service';
-import { formatNumber, svgToJpeg } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { formatNumber, renderSankeyToImage } from '../../shared/report-builder/adapters/report-adapter.utils';
 
 export interface CompressedAirChartConfig {
   traces: Array<Record<string, unknown>>;
@@ -386,8 +386,9 @@ export class CompressedAirChartsService {
     if (sankeyResults.warnings.CFMWarning) return null;
 
     const { sankeyData, layout, connectingNodes } = this.buildPowerSankeyChartData(sankeyResults);
-    return this.renderSankeyImage(sankeyData, layout, container =>
-      this.applyPowerSankeyGradientAndArrows(container, connectingNodes, sankeyResults.kWInSystem),
+    return renderSankeyToImage(
+      this.plotlyService, sankeyData, layout,
+      container => this.applyPowerSankeyGradientAndArrows(container, connectingNodes, sankeyResults.kWInSystem),
       CompressedAirChartsService.POWER_SANKEY_SIZE.width, CompressedAirChartsService.POWER_SANKEY_SIZE.height);
   }
 
@@ -465,8 +466,9 @@ export class CompressedAirChartsService {
     const { sankeyData, layout, connectingNodes, gradientLinkPaths } = this.buildAirflowSankeyChartData(
       airFlowSankeyResults, compressedAirAssessment.endUseData.dayTypeAirFlowTotals, units,
     );
-    return this.renderSankeyImage(sankeyData, layout, container =>
-      this.applyAirflowSankeyGradientAndArrows(container, gradientLinkPaths, connectingNodes, dayTypeLeakRate, !!airFlowSankeyResults.unaccountedEnergyData),
+    return renderSankeyToImage(
+      this.plotlyService, sankeyData, layout,
+      container => this.applyAirflowSankeyGradientAndArrows(container, gradientLinkPaths, connectingNodes, dayTypeLeakRate, !!airFlowSankeyResults.unaccountedEnergyData),
       CompressedAirChartsService.AIRFLOW_SANKEY_SIZE.width, CompressedAirChartsService.AIRFLOW_SANKEY_SIZE.height);
   }
 
@@ -671,27 +673,4 @@ export class CompressedAirChartsService {
     };
   }
 
-  private async renderSankeyImage(
-    sankeyData: Record<string, unknown>, layout: Record<string, unknown>, applyPatches: (container: Element) => void, width = 1400, height = 500,
-  ): Promise<string> {
-    const container = document.createElement('div');
-    container.style.cssText = `position:absolute;left:-9999px;top:-9999px;width:${width}px;height:${height}px`;
-    document.body.appendChild(container);
-
-    const plotly = await this.plotlyService.getPlotly();
-    try {
-      await plotly.newPlot(container, [sankeyData], layout, { displaylogo: false, displayModeBar: false, responsive: false });
-      applyPatches(container);
-
-      const svgEl = container.querySelector('.main-svg') as SVGSVGElement | null;
-      if (!svgEl) throw new Error('Compressed air sankey: .main-svg not found after render');
-      svgEl.setAttribute('width', String(width));
-      svgEl.setAttribute('height', String(height));
-      const svgString = new XMLSerializer().serializeToString(svgEl);
-      return await svgToJpeg(svgString, width, height);
-    } finally {
-      plotly.purge(container);
-      document.body.removeChild(container);
-    }
-  }
 }

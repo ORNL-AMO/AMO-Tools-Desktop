@@ -3,7 +3,7 @@ import { PlotlyService } from 'angular-plotly.js';
 import { Settings } from '../../shared/models/settings';
 import { SSMT } from '../../shared/models/steam/ssmt';
 import { SSMTLosses, SSMTOutput } from '../../shared/models/steam/steam-outputs';
-import { formatNumber } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { formatNumber, renderSankeyToImage } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportGraphsService } from './report-graphs/report-graphs.service';
 import { graphColors } from '../../shared/graphColors';
 
@@ -425,51 +425,10 @@ export class SsmtChartsService {
     const units = settings.steamEnergyMeasurement;
     const { sankeyData, layout, connectingNodes, redLinkPaths, blueLinkPaths, orangeLinkPaths } = this.buildSankeyChartData(losses, units, labelStyle);
 
-    const width = 1400;
-    const height = 500;
-    const container = document.createElement('div');
-    container.style.cssText = `position:absolute;left:-9999px;top:-9999px;width:${width}px;height:${height}px`;
-    document.body.appendChild(container);
-
-    const plotly = await this.plotlyService.getPlotly();
-    try {
-      await plotly.newPlot(container, [sankeyData], layout, { displaylogo: false, displayModeBar: false, responsive: false });
-      this.applyGradientAndArrows(container, connectingNodes, redLinkPaths, blueLinkPaths, orangeLinkPaths);
-
-      const svgEl = container.querySelector('.main-svg') as SVGSVGElement | null;
-      if (!svgEl) throw new Error('SSMT sankey: .main-svg not found after render');
-      svgEl.setAttribute('width', String(width));
-      svgEl.setAttribute('height', String(height));
-      const svgString = new XMLSerializer().serializeToString(svgEl);
-      return await this.svgToJpeg(svgString, width, height);
-    } finally {
-      plotly.purge(container);
-      document.body.removeChild(container);
-    }
-  }
-
-  private svgToJpeg(svgString: string, width: number, height: number): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const img = new Image();
-      img.onload = () => {
-        URL.revokeObjectURL(url);
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) { reject(new Error('Canvas 2D context unavailable')); return; }
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, width, height);
-        ctx.drawImage(img, 0, 0, width, height);
-        resolve(canvas.toDataURL('image/jpeg', 0.92));
-      };
-      img.onerror = () => {
-        URL.revokeObjectURL(url);
-        reject(new Error('Failed to load serialized SVG as image'));
-      };
-      img.src = url;
-    });
+    return renderSankeyToImage(
+      this.plotlyService, sankeyData, layout,
+      container => this.applyGradientAndArrows(container, connectingNodes, redLinkPaths, blueLinkPaths, orangeLinkPaths),
+      1400, 500,
+    );
   }
 }

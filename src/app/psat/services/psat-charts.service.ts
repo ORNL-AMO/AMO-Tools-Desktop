@@ -5,7 +5,7 @@ import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { TraceData } from '../../shared/models/plotting';
-import { svgToJpeg } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { renderSankeyToImage } from '../../shared/report-builder/adapters/report-adapter.utils';
 
 export interface SankeyLayout {
   autosize: boolean;
@@ -259,26 +259,10 @@ export class PsatChartsService {
     layout.paper_bgcolor = 'white';
     layout.margin = { l: 0, t: 60, r: 0 };
 
-    const container = document.createElement('div');
-    container.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1400px;height:400px';
-    document.body.appendChild(container);
-
-    const plotly = await this.plotlyService.getPlotly();
-    try {
-      await plotly.newPlot(container, [sankeyData], layout, { displaylogo: false, displayModeBar: false, responsive: false });
-      this.applyGradientAndArrows(container, connectingNodes);
-
-      // * Sankey charts only: we serialize the already-modified SVG and render to canvas directly.
-      // * Cannot use Plotly.toImage on our sankeys which have custom SVGs, because toImage only clones the graph from the data and layout params. Dom elements are not visible.
-      const svgEl = container.querySelector('.main-svg') as SVGSVGElement | null;
-      if (!svgEl) throw new Error('PSAT sankey: .main-svg not found after render');
-      svgEl.setAttribute('width', '1400');
-      svgEl.setAttribute('height', '400');
-      const svgString = new XMLSerializer().serializeToString(svgEl);
-      return await svgToJpeg(svgString, 1400, 400);
-    } finally {
-      plotly.purge(container);
-      document.body.removeChild(container);
-    }
+    return renderSankeyToImage(
+      this.plotlyService, sankeyData, layout,
+      container => this.applyGradientAndArrows(container, connectingNodes),
+      1400, 400,
+    );
   }
 }

@@ -19,13 +19,3 @@
     margin-top: auto !important;
     margin-bottom: 0;
 }
-
-@media print {
-    .date-modified {
-        font-size: 18px;
-    }
-
-    .print-height{
-        height: 100% !important;
-    }
-}
