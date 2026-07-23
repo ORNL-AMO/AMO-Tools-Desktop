@@ -262,6 +262,8 @@ export class CoreComponent implements OnInit {
   }
 
   async setSurveyToastVisibility(applicationData: ApplicationInstanceData) {
+    // Issue #8725: MEASUR survey disabled
+    return;
     if (!applicationData.isSurveyDone) {
       if (applicationData.doSurveyReminder) {
         setTimeout(() => {
