@@ -1572,9 +1572,10 @@ type RoChildBranchClassification =
   | { outflowType: 'unknown' };
 
 /**
- * Classifies a single direct child branch of a candidate RO node as 'product' (reaches a water-using
- * system), 'reject' (a linear discharge-only path with at most one WWT immediately before discharge and
- * no water-using system), or 'unknown' (neither shape - disqualifies the RO node from ro-reject-redirect).
+ * Classifies a single direct child branch of a candidate RO node as 'product' (subtree reaches a
+ * water-using system), 'reject' (subtree has no water-using system, exactly one water-discharge node,
+ * and at most one waste-water-treatment node immediately preceding that discharge), or 'unknown'
+ * (neither shape - disqualifies the RO node from ro-reject-redirect).
  */
 const classifyRoChildBranch = (childId: string, graph: NodeGraphIndex): RoChildBranchClassification => {
   const visited = new Set<string>();
