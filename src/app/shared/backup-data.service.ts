@@ -15,7 +15,8 @@ import { LiquidLoadMaterialDbService } from '../indexedDb/liquid-load-material-d
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.service';
 import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
-import { AtmosphereSpecificHeat, FlueGasMaterial, GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, SuiteDbMotor, SuiteDbPump, WallLossesSurface } from './models/materials';
+import { LightingFixtureServiceDbService } from '../indexedDb/lighting-fixture-db.service';
+import { AtmosphereSpecificHeat, FlueGasMaterial, GasLoadChargeMaterial, LightingFixtureMaterial, LiquidLoadChargeMaterial, SolidLiquidFlueGasMaterial, SolidLoadChargeMaterial, SuiteDbMotor, SuiteDbPump, WallLossesSurface } from './models/materials';
 import { ApplicationInstanceDbService } from '../indexedDb/application-instance-db.service';
 import { Settings } from './models/settings';
 import { firstValueFrom } from 'rxjs';
@@ -41,6 +42,7 @@ export class BackupDataService {
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private diagramDbService: DiagramIdbService,
     private atmosphereDbService: AtmosphereDbService,
+    private lightingFixtureServiceDbService: LightingFixtureServiceDbService,
   ) { }
 
 
@@ -117,6 +119,7 @@ export class BackupDataService {
     backupFile.wallLossesSurfaces = await firstValueFrom(this.wallLossesSurfaceDbService.getAllCustomMaterials());
     backupFile.flueGasMaterials = this.flueGasMaterialDbService.getAllCustomMaterials();
     backupFile.solidLiquidFlueGasMaterials = this.solidLiquidMaterialDbService.getAllCustomMaterials();
+    backupFile.lightingFixtureMaterials = await firstValueFrom(this.lightingFixtureServiceDbService.getAllCustomMaterials());
   }
   
   async downloadBackupFile() {
@@ -149,5 +152,6 @@ export interface MeasurBackupFile {
   solidLoadChargeMaterials?: SolidLoadChargeMaterial[],
   atmosphereSpecificHeats?: AtmosphereSpecificHeat[],
   wallLossesSurfaces?: WallLossesSurface[],
+  lightingFixtureMaterials?: LightingFixtureMaterial[],
 }
 
