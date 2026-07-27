@@ -28,30 +28,27 @@ Walks downstream from each intake node, stopping attribution at the first water-
 
 **Denominator selection:**
 
-Attribution fractions are computed against one of two denominators:
+A single formula computes every path's attribution fraction — there is no case split on intake shape or treatment losses. Walk every edge in the path from intake to system; for each edge whose source is a water-treatment node, compute `localRatio = edge flow / treatment node's total outflow`. The product of every `localRatio` found in the path (`branchFraction`) multiplied by the path's inflow gives the system's flow responsibility:
 
-- **Delivered-flow-volume basis** (`deliveredFlowVolume` — the immediate treatment node's total outflow): used when the treatment chain is the sole gateway through which all intake flow reaches downstream systems. Ensures 100% of intake cost is distributed even when water is lost in treatment.
-- **Intake-flow-volume basis** (`intakeData.blockCosts.totalFlow` — the intake's total outflow): used when the intake splits to multiple paths, or when no treatment losses exist. Each system receives its proportional share of the full intake volume; other paths cover the remainder.
+    Attribution fraction = (Path inflow × branchFraction) / intakeData.blockCosts.totalFlow
 
-**Conditions for delivered-flow-volume basis** (both must hold):
-
-1. `intakeHasSingleOutflow` — the intake node has exactly one outgoing child, meaning all intake flow enters a single treatment chain.
-2. A treatment loss exists somewhere in the chain — either the immediate upstream treatment node (`deliveredFlowVolume < treatmentNodeInflow`) or any treatment node traversed earlier in the path (`hasUpstreamTreatmentLoss`).
+A treatment node with a single lossless child contributes `localRatio = 1.0`, so a direct intake split or a lossless chain reduces to the same result the intake-flow-volume basis produced under the older two-denominator switch. A treatment node with losses still contributes `localRatio = 1.0` to its sole child (the loss is absorbed through path inflow, not this ratio); a treatment node that splits divides its outflow among its children by their share. This one formula replaced the former `deliveredFlowVolume` / `intakeHasSingleOutflow` / `hasUpstreamTreatmentLoss` two-denominator switch, which could not correctly attribute a treatment node that forks mid-chain into branches of different depth (see the `mid-chain-branching` fixture below).
 
 **Verified cases (test fixture → behavior):**
 
-| Test fixture | Configuration | `intakeHasSingleOutflow` | Chain has losses | Denominator basis | Expected result |
-|---|---|---|---|---|---|
-| `simple-linear` | Intake → System → Discharge | true | false — no treatment | intake-flow-volume | System 100% |
-| `shared-intake` | Intake → {SystemA (60), SystemB (40)} | false | false — no treatment | intake-flow-volume | SystemA 60%, SystemB 40% |
-| `treatment-with-loss` | Intake(100) → Treatment(100in/80out) → System | true | true | delivered-flow-volume | System 100% (80/80) |
-| `treatment-no-loss` | Intake(100) → Treatment(100in/100out) → {SystemA(60), SystemB(40)} | true | false | intake-flow-volume | SystemA 60%, SystemB 40% |
-| `treatment-chain` | Intake(100) → TreatA(100in/80out) → TreatB(80in/80out) → System | true | true — TreatA in path | delivered-flow-volume | System 100% |
-| `diamond-treatment` | Intake(100) → {TreatA(60) → SysA, TreatB(40) → SysA} | false | false | intake-flow-volume | SysA 60%+40% = 100% accumulated across both paths |
-| `ro-single-system` | Intake → RO(treatmentType=6) → {SysA, Discharge(reject)} | true | — | RO override | SysA 100% (fraction forced to 1.0) |
-| `ro-multi-system` | Intake → RO → {SysA(40), SysB(40), Discharge(20)} | false | — | intake-flow-volume (no override — 3 children) | SysA 40%, SysB 40% |
-| `summing-node` | {IntakeA(60), IntakeB(40)} → Summing → System | true per intake | false | intake-flow-volume | System 100% of each intake's block cost (accumulated) |
-| `adjusted-attribution` | Intake → System (adjusted=0.75 on intake) | — | — | override | System 75% of intake block cost |
+| Test fixture | Configuration | Treatment nodes in path | Expected result |
+|---|---|---|---|
+| `simple-linear` | Intake → System → Discharge | none | System 100% |
+| `shared-intake` | Intake → {SystemA (60), SystemB (40)} | none | SystemA 60%, SystemB 40% |
+| `treatment-with-loss` | Intake(100) → Treatment(100in/80out) → System | Treatment (single child, lossy) | System 100% (`localRatio` = 80/80 = 1.0) |
+| `treatment-no-loss` | Intake(100) → Treatment(100in/100out) → {SystemA(60), SystemB(40)} | Treatment (splits, lossless) | SystemA 60%, SystemB 40% |
+| `treatment-chain` | Intake(100) → TreatA(100in/80out) → TreatB(80in/80out) → System | TreatA (single child, lossy), TreatB (single child, lossless) | System 100% (both `localRatio` = 1.0) |
+| `diamond-treatment` | Intake(100) → {TreatA(60) → SysA, TreatB(40) → SysA} | TreatA, TreatB (each single child) | SysA 60%+40% = 100% accumulated across both paths |
+| `split-path-treatment-loss` | Intake(100) → {Treatment(60in/30out) → SysA, SysB(40) direct} | Treatment (single child, lossy) on SysA's path only | SysA 60% (pre-loss path inflow, not the post-loss 30), SysB 40% |
+| `mid-chain-branching` | CityWater(177.2 total; 49.2 down this path) → ChemTreat2(37 out) → {CoolingTower(25), UVFiltration(12in/6out) → Boiler} | ChemTreat2 (splits, lossy), UVFiltration (single child, lossy) on Boiler's path | CoolingTower 18.76%, Boiler 9.00% — sum 27.76% matches the true path share; the pre-existing per-immediate-node-only formula summed these to 46.53% (a double-count) |
+| `treatment-based-merge-node` | {IntakeA(60), IntakeB(40)} → Treatment(100in/100out) → System | Treatment (single child, lossless), fed by two intakes | System 100% of each intake's own block cost (accumulated) — analogous to `summing-node` but through a water-treatment node instead of a transparent summing node |
+| `summing-node` | {IntakeA(60), IntakeB(40)} → Summing → System | none (summing node is not a water-treatment type) | System 100% of each intake's block cost (accumulated) |
+| `adjusted-attribution` | Intake → System (adjusted=0.75 on intake) | — | System 75% of intake block cost |
 
 ---
 
@@ -66,26 +63,32 @@ Walks upstream from each discharge node, stopping attribution at the first water
 | `simple-linear` | Intake → System → Discharge | System 100% of discharge block cost |
 | `shared-discharge` | {SysA(60), SysB(40)} → Discharge | SysA 60%, SysB 40%, costs sum to discharge block cost |
 | `reuse-chained-systems` | Intake → SysA → SysB → Discharge | SysB 100%; SysA receives zero discharge cost (not the closest system) |
-| `ro-single-system` | SysA → Discharge1 (product path); Discharge2 (reject, cost=0) | SysA 100% of Discharge1 via RO override; Discharge2 cost is zero (no upstream system on reject path) |
 | `adjusted-attribution-discharge` | SysA → Discharge (adjusted=0.60 on discharge) | SysA 60% of discharge block cost; computed default 1.0 preserved in attribution map |
 
 ---
 
 ## `applySystemTreatmentCosts` — `water-treatment`
 
-Walks downstream from each treatment node, stopping attribution at the first water-using system on each path. Block cost uses the treatment node's inflow as the cost basis; the attribution fraction uses outflow when losses exist.
+Walks downstream from each treatment node, stopping attribution at the first water-using system on each path. Block cost uses the treatment node's own inflow as the cost basis.
+
+**Denominator selection:**
+
+A single formula computes every path's attribution fraction — there is no case split on whether this treatment node itself has a loss. Walk every edge in the path *after the first one*; for each whose source is a water-treatment node, compute `localRatio = edge flow / that node's total outflow`. The product of every such `localRatio` (`branchFraction`) multiplied by the first edge's flow (what this node sent down that branch) gives the system's flow responsibility:
+
+    Attribution fraction = (First edge's flow × branchFraction) / this treatment node's own total outflow
+
+A further treatment node with a single lossless child contributes `localRatio = 1.0`. A further treatment node that loses volume still contributes `localRatio = 1.0` to its sole child — the loss is absorbed through the first edge's flow, not this ratio, so it never shrinks this treatment node's own attributed fraction. This one formula replaced the former no-losses / with-losses `if`/`else` split, whose two denominators (this node's own inflow vs. outflow) were already numerically identical whenever this node itself had no loss — the split never produced different results for valid data. It also replaced a bug where the code read the flow of the edge *closest to the system* instead of the edge this node itself sent downstream, which silently absorbed a later treatment node's loss into this node's fraction (see the `treatment-chain-downstream-loss` and `mid-chain-branching` fixtures below).
 
 **Verified cases:**
 
 | Test fixture | Configuration | Losses | Expected result |
 |---|---|---|---|
-| `treatment-with-loss` | Intake → Treatment(100in/80out) → System | yes | System 100% of treatment block cost (inflow basis); fraction = 80/80 = 1.0 after loss adjustment |
+| `treatment-with-loss` | Intake → Treatment(100in/80out) → System | yes | System 100% of treatment block cost (inflow basis); fraction = 80/80 = 1.0 |
 | `treatment-no-loss` | Intake → Treatment(100in/100out) → {SysA(60), SysB(40)} | no | SysA 60%, SysB 40%; costs sum to treatment block cost |
 | `treatment-chain` | Intake → TreatA(100in/80out) → TreatB(80in/80out) → System | TreatA yes, TreatB no | System 100% of TreatA block cost + 100% of TreatB block cost (each node attributed independently) |
+| `treatment-chain-downstream-loss` | Intake → TreatA(100in/100out) → TreatB(100in/70out) → System | TreatA no, TreatB yes | System 100% of TreatA block cost (`branchFraction` = 1.0 via TreatB's `localRatio` = 70/70, not the buggy 70% from reading TreatB's post-loss edge) + 100% of TreatB block cost independently |
 | `diamond-treatment` | Intake → {TreatA(60), TreatB(40)} → SysA | no (both paths) | SysA receives 100% of TreatA block cost + 100% of TreatB block cost; each treatment node is an independent cost component |
-| `ro-single-system` | Intake → RO(treatmentType=6) → {SysA, Discharge} | — | SysA 100% via RO single-system override |
-| `ro-multi-system` | Intake → RO → {SysA(40%), SysB(40%), Discharge(20%)} | — | SysA 40%, SysB 40% (no RO override — 3 children) |
-| `ro-single-system-wwt` | Intake → RO → {SysA, WWT → Discharge} | — | SysA 100% of RO block cost via RO override |
+| `mid-chain-branching` | ChemTreat2(49.2in/37out) → {CoolingTower(25), UVFiltration(12in/6out) → Boiler} | ChemTreat2 yes, UVFiltration yes | ChemTreat2 row: CoolingTower 67.57%, Boiler 32.43% (sum 100% of ChemTreat2's own block cost — not the buggy 83.79% from reading Boiler's post-UV-loss edge). UVFiltration row: Boiler 100% independently. |
 | `adjusted-attribution-treatment` | Intake → Treatment → SysA (adjusted=0.80 on treatment) | no | SysA 80% of treatment block cost; computed default 1.0 preserved; intake unaffected |
 
 ---
@@ -106,24 +109,6 @@ All Pass 1 iterations complete across all WWT nodes before any Pass 2 iteration 
 | `wwt-discharge-only` | System → WWT → Discharge | no downstream systems — no attribution | System 100% (all WWT cost to upstream discharger) | — |
 | `wwt-reuse` | SysA → WWT → {SysB (60%), Discharge (40%)} | SysB 60% of WWT block cost | SysA 40% (remaining discharge fraction) | — |
 | `wwt-two-upstream-with-reuse` ⚠ snapshot | {SysA(60), SysB(40)} → WWT → {SysC(60, reuse), Discharge(40)} | SysC 60% | SysA 0% (60−60=0 net); SysB **negative** (40−60=−20, BUG) | Pass 2 deducts the full downstream charged portion from each upstream system independently instead of prorating. Correct: SysA 24%, SysB 16%. |
-| `ro-single-system-wwt` ⚠ snapshot | Intake → RO → {SysA, WWT(reject) → Discharge} | no downstream reuse systems | SysA 100% via RO reject WWT special case — but attributed once per upstream edge, causing double-attribution | RO reject WWT double-attribution bug. |
-
----
-
-## RO Single-System Override (cross-cutting)
-
-`assignsystemsWithRODirectDischarge` identifies single-system RO configurations in preprocessing. When triggered, all four attribution sub-routines force the fraction to 1.0 for the registered system across all associated cost components (intake, RO treatment node, product-path discharge, and if present, the reject-path WWT node).
-
-**Qualification criteria tested:**
-
-| Criterion | Verified by fixture |
-|---|---|
-| `treatmentType === 6` (Reverse Osmosis) | `ro-single-system`, `ro-single-system-wwt` |
-| Exactly 2 downstream branches | `ro-single-system` (product + reject) |
-| Product path leads to exactly 1 system then 1 discharge | `ro-single-system`, `ro-single-system-wwt` |
-| Reject path leads to exactly 1 discharge, no systems | `ro-single-system` |
-| WWT on reject path is recorded and overridden | `ro-single-system-wwt` |
-| 3+ children → override does NOT apply | `ro-multi-system` |
 
 ---
 
@@ -144,8 +129,10 @@ A pre-populated `SystemAttributionMap` entry with a non-null `adjusted` fraction
 | Test fixture | Configuration | Behavior |
 |---|---|---|
 | `summing-node` | {IntakeA, IntakeB} → Summing Node → System | Summing node is a transparent pass-through. Each intake attributes 100% of its own block cost to the downstream system independently; costs accumulate additively. |
+| `treatment-based-merge-node` | {IntakeA, IntakeB} → Treatment → System | Same merge pattern as `summing-node`, but through a `water-treatment` node instead of a transparent `summing-node` type — exercises the branch-ratio `localRatio` calculation for each intake's path independently rather than skipping it. Each intake still attributes 100% of its own block cost. |
 | `reuse-chained-systems` | Intake → SysA → SysB → Discharge | Intake attribution stops at SysA (first system downstream). Discharge attribution stops at SysB (first system upstream). Systems do not receive costs from components they did not directly interact with. |
 | `diamond-treatment` | Intake → {TreatA, TreatB} → SysA | De-duplication is edge-based, not node-based. Both paths are distinct (different first edges), so each attributes independently to SysA. Fractions accumulate correctly to 1.0. |
+| `mid-chain-branching` | CityWater → ChemTreat2 → {CoolingTower, UVFiltration → Boiler} | ChemTreat2 forks into branches of different depth, and both ChemTreat2 and UVFiltration lose volume. The branch-ratio product walk attributes CoolingTower and Boiler correctly regardless of depth, both for CityWater's intake cost (double-counted by the pre-fix formula) and for ChemTreat2's own treatment cost (under-counted by the pre-fix formula, since it read the edge closest to the system instead of the edge ChemTreat2 itself sent downstream). |
 
 ---
 

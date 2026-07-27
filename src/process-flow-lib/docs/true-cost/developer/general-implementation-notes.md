@@ -17,62 +17,33 @@
 
 ## Why the Steps Must Run in This Exact Order
 
-The algorithm is documented as three steps with a "Step 1.5" preprocessing phase. The ordering is a hard dependency chain, not a style choice:
+The algorithm is documented as three steps. The ordering is a hard dependency chain, not a style choice:
 
-1. **`assignsystemsWithRODirectDischarge` must run before Step 1** — it builds the index that all four Step 2 sub-routines consult for the 100% override. If you run it after block costs are computed, you still get the right index, but every sub-routine call would need to check "is the index ready yet?" Running it first removes that complexity.
+1. **Step 1 (block costs + path traces) must finish before Step 2** — each sub-routine needs the precomputed block cost dollar amount and the list of DFS paths. There is no lazy evaluation; Step 2 is a direct consumer of Step 1's output.
 
-2. **Step 1 (block costs + path traces) must finish before Step 2** — each sub-routine needs the precomputed block cost dollar amount and the list of DFS paths. There is no lazy evaluation; Step 2 is a direct consumer of Step 1's output.
+2. **Step 2's four sub-routines run in sequence, but their internal order doesn't matter for correctness** — intake, discharge, treatment, and WWT each write to separate fields on `trueCostOfSystems[systemId]`. The exception is WWT's own internal two-pass structure (see below).
 
-3. **Step 2's four sub-routines run in sequence, but their internal order doesn't matter for correctness** — intake, discharge, treatment, and WWT each write to separate fields on `trueCostOfSystems[systemId]`. The exception is WWT's own internal two-pass structure (see below).
-
-4. **Step 3 must run after Step 2** — it reads the partially populated `trueCostOfSystems` entries produced by Step 2 and adds in-system treatment, heat energy, and motor energy on top.
+3. **Step 3 must run after Step 2** — it reads the partially populated `trueCostOfSystems` entries produced by Step 2 and adds in-system treatment, heat energy, and motor energy on top.
 
 ---
 
-## The `systemsWithRODirectDischarge` Index — Context and Caution
+## The Branch-Ratio Product Walk — What Replaced the Two-Denominator Switch
 
-This preprocessing index (`graph.systemsWithRODirectDischarge`) is the mechanism behind the single-system RO 100% override. A few things to know:
+`applySystemIntakeCosts` used to switch between two denominators (full intake outflow vs. the immediate upstream treatment node's outflow) based on two boolean flags, `intakeHasSingleOutflow` and `hasUpstreamTreatmentLoss`. Both flags, along with `deliveredFlowVolume`, `treatmentNodeInflow`, and `pathReceivedBasis`, were removed and replaced by a single path-walk formula. If you are reading old commit history, code comments, or documentation that references those names, they describe the pre-replacement implementation.
 
-**Why 100% and not the flow fraction?**
-An RO unit splits its feed water into product water and a reject stream. The reject is not water consumed by another beneficiary — it is operational waste that the system cannot avoid producing. Attributing costs by raw flow fraction would charge the system only for the product water share (e.g., 70% at 70% recovery), leaving 30% of intake and treatment costs unattributed. Since no other system uses this intake→RO path, the full cost has nowhere else to go. The 100% override corrects this.
+**Why the two-flag switch broke:** `deliveredFlowVolume` was always the outflow of the treatment node *immediately* upstream of the system being evaluated — one hop back. `hasUpstreamTreatmentLoss` scanned earlier nodes in the path for *losses* (`outflow < inflow`), but never asked whether an earlier node *split* its outflow across multiple children. So if Chemical Treatment 2 forked into Cooling Tower (one hop from the system) and, on the other branch, UV Filtration → Boiler (two hops from the system), Boiler's attribution only ever looked at UV Filtration's own inflow/outflow — it had no way to know UV Filtration itself only received a fraction of Chemical Treatment 2's output. The result was Cooling Tower and Boiler's fractions summing to more than the path's true share: a double-count, not an undercount.
 
-**The index is keyed by water-using system node ID, not by RO node ID.**
-When you are inside a sub-routine and want to check if the current cost component is part of a single-system RO configuration, you look up the *system* in the index and then compare the stored node IDs (intake, treatment, discharge, wasteTreatmentNode) against the current component ID. The check pattern is:
+**The replacement:** walk every edge in the path from intake to system. For each edge whose source is a water-treatment node, compute `localRatio = edge flow / treatment node's total outflow`, and take the product of every `localRatio` in the path (`branchFraction`). This is correct for any number of treatment nodes at any depth, because it never depends on which node happens to be "immediately upstream" — every fork in the path contributes its own factor to the product, however many hops away from the system it sits.
 
-```ts
-graph.systemsWithRODirectDischarge[systemId]?.intakeNode.id === intakeId
-graph.systemsWithRODirectDischarge[systemId]?.treatmentNode.id === treatmentId
-graph.systemsWithRODirectDischarge[systemId]?.dischargeNode.id === dischargeId
-graph.systemsWithRODirectDischarge[systemId]?.wasteTreatmentNode?.id === wwtId
-```
-
-**The override fires in all four sub-routines.**
-If you add a new cost-attribution sub-routine in the future, you are responsible for implementing the RO override check in it as well. It is not applied centrally — each sub-routine applies it independently.
-
----
-
-## The Delivered-Flow-Volume Basis — When It Activates and Why
-
-For intake cost attribution there are two possible denominators. The switch between them is controlled by two boolean flags that must *both* be true:
-
-- `intakeHasSingleOutflow` — the intake has exactly one child node
-- Treatment losses exist somewhere in the chain — either the immediate upstream treatment node (`deliveredFlowVolume < treatmentNodeInflow`) OR any earlier node in the path (`hasUpstreamTreatmentLoss`)
-
-**Why both conditions are required:**
-
-If the intake splits to multiple paths, each path's systems can only ever receive a fraction of the intake's total outflow. Using the treatment's outflow as the denominator would over-attribute on each branch. The delivered-flow-volume basis only makes sense when all intake flow passes through a single treatment chain.
-
-If the treatment chain has no losses, the treatment outflow equals the intake outflow, so both denominators produce the same result. Using the intake-flow-volume basis in that case is simply the cheaper operation.
-
-**The `hasUpstreamTreatmentLoss` flag is what makes chained treatment work correctly.**
-
-Without it, consider this chain:
+**Chained treatment, restated in the new terms:**
 
 ```
 Intake (100) → Treatment A (100 in / 80 out) → Treatment B (80 in / 80 out) → Systems
 ```
 
-When the path evaluation reaches the point of computing the intake attribution for systems downstream of Treatment B, the "immediate upstream treatment node" is Treatment B — which has no losses. Without the upstream loss flag, the algorithm would incorrectly use the intake-flow-volume basis (denominator = 100), leaving 20 units of cost unattributed. The flag causes it to use the delivered-flow-volume basis (denominator = Treatment B's outflow = 80), which distributes 100% of the intake cost.
+Treatment A has a single child (Treatment B), so its `localRatio` = 80/80 = 1.0 regardless of its own loss — the loss is absorbed through `pathInflow`, not this ratio. Treatment B then splits among the downstream systems by its own outflow. The product of both ratios reduces to exactly what `deliveredFlowVolume` (Treatment B's outflow) used to produce as a denominator on its own — but without needing a flag to detect that Treatment A's loss happened "further upstream." The old two-flag switch and the new product formula agree on every existing fixture; they only diverge on the mid-chain-fork case, where the product formula is correct and the old switch was not.
+
+**The same class of bug existed in `applySystemTreatmentCosts`, fixed separately.** That sub-routine attributes each treatment unit's *own* cost, not the intake's, but it read `systemOutflow`/`pathInflow` from the edge closest to the system (the last edge in the path) instead of the edge the cost component itself sent downstream (the first edge). This was correct for a single hop but wrong whenever a *further* treatment node sat between the cost component and the system and had its own loss — even without any branching at all. The fix reuses `getTreatmentEdgeRatio` (the same helper `applySystemIntakeCosts` uses) to compute `branchFraction` across every treatment-source edge *after* the first one, then multiplies by the first edge's flow. This also let the old `with-losses`/`no-losses` `if`/`else` split collapse into one formula — the two denominators (treatment node's own outflow vs. its own inflow) were already numerically identical whenever the node had no loss of its own, so the split was never doing distinct work.
 
 ---
 
@@ -100,26 +71,7 @@ In code: the internal `downstreamTreatmentAttributionMap` (tracking which system
 - System A: 60 − (60/100 × 60) = 60 − 36 = 24 → pays for 24 units
 - System B: 40 − (40/100 × 60) = 40 − 24 = 16 → pays for 16 units
 
-This is a documented known bug. The test in `plant-summary.test.ts` case `wwt-two-upstream-with-reuse` uses a snapshot to lock in the current (wrong) output. **When you fix this, update the snapshot and verify the corrected values match the "Correct attribution" table in `plant-summary-test-cases.md §4.3`.**
-
----
-
-## RO Reject WWT Double-Attribution Bug
-
-**Location:** `results.ts`, `applySystemWasteTreatmentCosts`, Pass 2 + RO reject path detection.
-
-**Scenario:** RO single-system configuration where the reject path passes through a WWT unit before discharge:
-
-```
-Intake → RO → (product) → System A → Discharge 1
-              → (reject) → WWT → Discharge 2
-```
-
-**Current behavior:** The WWT cost is attributed to System A twice — once when the upstream walk hits the RO node (detected via `systemsWithRODirectDischarge`, forced to 100%), and once when the walk continues past the RO node to the intake edge. The `visitedSystemIds` deduplication guard is bypassed for the RO owner case, which is necessary for the normal RO reject path to work, but this creates a second attribution opportunity.
-
-**Test:** `plant-summary.test.ts` case `ro-single-system-wwt` uses a snapshot for the WWT value precisely because the doubled attribution produces a wrong but deterministic number. The note in `plant-summary-test-cases.md §3.3` states the expected correct value is $90,000 (the WWT block cost, once).
-
-**When fixing:** verify that the deduplication bypass is scoped tightly to the case where the upstream path terminates at the RO node — do not remove the bypass entirely, as it is needed for the basic RO reject WWT path to work at all.
+This is a documented known bug. The test in `plant-summary.test.ts` case `wwt-two-upstream-with-reuse` uses a snapshot to lock in the current (wrong) output. **When you fix this, update the snapshot and verify the corrected values match the "Correct attribution" table in `plant-summary-test-cases.md §3.3`.**
 
 ---
 
@@ -159,7 +111,7 @@ The source comment on this function advises starting fresh rather than patching.
 
 The DFS traversal functions have no cycle detection. A directed cycle in the diagram (e.g., a system whose effluent is recycled back to itself via a WWT unit) will cause infinite recursion and a stack overflow.
 
-The test case `wwt-recycled-back-to-same-system` in `plant-summary-test-cases.md §8` is blocked entirely because of this. Any diagram configuration that closes a cycle will be unsafe until cycle detection is added to the traversal functions.
+The test case `wwt-recycled-back-to-same-system` in `plant-summary-test-cases.md §7` is blocked entirely because of this. Any diagram configuration that closes a cycle will be unsafe until cycle detection is added to the traversal functions.
 
 **When adding cycle detection:** the traversal needs to track visited edges (not just visited nodes), because a valid diagram can have two different paths passing through the same node without forming a cycle. A node-visited guard would incorrectly prune valid paths.
 
@@ -176,20 +128,8 @@ The diamond treatment test case (`plant-summary-test-cases.md §2.4`) is specifi
 
 ---
 
-## RO Override — Why It Must Fire Even When the Loss Formula Already Gives 1.0
-
-The treatment cost sub-routine (`applySystemTreatmentCosts`) has a loss-adjusted formula that, for an RO unit where a single system receives 100% of the product water, naturally produces an attribution fraction of `70/70 = 1.0`. In that scenario, the override doesn't change the math.
-
-The override is still applied explicitly for two reasons:
-
-1. **The no-loss branch:** If the RO node is somehow configured with zero reject (outflow = inflow), the standard formula runs on the `outflow ≥ inflow` branch and the denominator is the inflow. The fraction would be `system inflow / treatment inflow`, which equals 1.0 only if the system receives all of the output. The override guarantees 1.0 regardless.
-
-2. **Defensive correctness:** Future changes to the path evaluation or loss detection logic should not accidentally cause the fraction to drop below 1.0 for a single-system RO configuration. The explicit override is the authoritative source of truth for this case.
-
----
-
 ## Test Coverage Notes
 
-The `plant-summary.test.ts` suite uses snapshot assertions for two known-broken cases (`ro-single-system-wwt` WWT cost, `wwt-two-upstream-with-reuse` System B cost). Snapshot tests in broken-behavior cases exist to make the fix visible — when you correct the bug, the snapshot will fail and you must update it intentionally. This is by design. Do not update snapshots without understanding what changed and verifying the new values are correct.
+The `plant-summary.test.ts` suite uses a snapshot assertion for a known-broken case (`wwt-two-upstream-with-reuse` System B cost). Snapshot tests in broken-behavior cases exist to make the fix visible — when you correct the bug, the snapshot will fail and you must update it intentionally. This is by design. Do not update snapshots without understanding what changed and verifying the new values are correct.
 
-The mass-balance invariant suite (`plant-summary-test-cases.md §7`) runs cross-cutting assertions (costs sum to block cost, no negatives, fractions bounded 0–1) on top of the basic configurations. Run this suite after any change to attribution logic to catch conservation-of-cost violations.
+The mass-balance invariant suite (`plant-summary-test-cases.md §6`) runs cross-cutting assertions (costs sum to block cost, no negatives, fractions bounded 0–1) on top of the basic configurations. Run this suite after any change to attribution logic to catch conservation-of-cost violations.
