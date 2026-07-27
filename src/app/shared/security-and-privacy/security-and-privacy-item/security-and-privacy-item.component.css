@@ -1,3 +1,27 @@
 .privacy-modal-right {
   margin-left: auto;
 }
+
+ /* * !important overrides the inline pane width ModalDialogService applies via CDK's DialogConfig.width */
+.security-privacy-modal-dialog {
+  width: 50vw !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .security-privacy-modal-dialog {
+    width: 85vw !important;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .security-privacy-modal-dialog {
+    width: 100vw !important;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+}
