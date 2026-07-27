@@ -24,6 +24,7 @@ import { CORE_DATA_WARNING, SECONDARY_DATA_WARNING, SnackbarService } from '../s
 import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browser-storage.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { LightingFixtureServiceDbService } from '../indexedDb/lighting-fixture-db.service';
 import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 import { DialogRef} from '@angular/cdk/dialog';
 import { ModalDialogService } from '../shared/modal-dialog.service';
@@ -100,6 +101,7 @@ export class CoreComponent implements OnInit {
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private lightingFixtureServiceDbService: LightingFixtureServiceDbService,
     private toolsSuiteApiService: ToolsSuiteApiService,
     private modalDialogService: ModalDialogService,
     private featureFlagService: FeatureFlagService,
@@ -258,6 +260,7 @@ export class CoreComponent implements OnInit {
       //data initialized in createDefaultProcessHeatingMaterials on startup
       await this.solidLiquidMaterialDbService.setAllMaterialsFromDb();
       await this.flueGasMaterialDbService.setAllMaterialsFromDb();
+      await this.lightingFixtureServiceDbService.setAllMaterialsFromDb();
     }
   }
 

@@ -1,23 +1,21 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges, HostListener, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef, SimpleChanges, HostListener, ChangeDetectorRef } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { LightingReplacementData } from '../../../../shared/models/lighting';
 import { UntypedFormGroup } from '@angular/forms';
 import { LightingReplacementService } from '../lighting-replacement.service';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { LightingFixtureData } from '../../../../tools-suite-api/lighting-suite-api.service';
-import { LightingSuiteApiService } from '../../../../tools-suite-api/lighting-suite-api.service';
 import { LightingFixtureCategory } from '../../../../tools-suite-api/lighting-suite-api.service';
 import { LightingFixtureMaterial } from '../../../../shared/models/materials';
 import { Settings } from '../../../../shared/models/settings';
-import { LightingFixtureServiceDbService } from '../../../../indexedDb/lighting-fixture-db.service';
-import { firstValueFrom } from 'rxjs';
+import { Subscription } from 'rxjs';
 @Component({
     selector: 'app-lighting-replacement-form',
     templateUrl: './lighting-replacement-form.component.html',
     styleUrls: ['./lighting-replacement-form.component.css'],
     standalone: false
 })
-export class LightingReplacementFormComponent implements OnInit {
+export class LightingReplacementFormComponent implements OnInit, OnDestroy {
   @Input()
   data: LightingReplacementData;
   @Output('emitCalculate')
@@ -50,7 +48,6 @@ export class LightingReplacementFormComponent implements OnInit {
   isEditingName: boolean = false;
   existingMaterial: LightingFixtureMaterial;
   showModal: boolean = false;
-  hasDeletedCustomMaterial: boolean = false
   editExistingMaterial: boolean;
   form: UntypedFormGroup;
 
@@ -68,11 +65,12 @@ export class LightingReplacementFormComponent implements OnInit {
   indicateLumenDegradationFactorDiff: boolean = false;
   indicateFixtureTypeDiff: boolean = false;
 
-  constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef,
-    private lightingSuiteApiService: LightingSuiteApiService, private lightingFixtureServiceDbService: LightingFixtureServiceDbService) {}
+  customFixturesSub: Subscription;
+
+  constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
+    this.lightingFixtureCategories = this.lightingReplacementService.getLightingFixtureCategories();
     this.displayDetails = this.lightingReplacementService.showAdditionalDetails;
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;
@@ -89,7 +87,7 @@ export class LightingReplacementFormComponent implements OnInit {
       this.form.disable();
     }
 
-    this.loadCustomFixtures().then(() => {
+    this.customFixturesSub = this.lightingReplacementService.customFixturesUpdated.subscribe(() => {
       if (this.form.controls.category.value === 0) {
         this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => fixtureCategory.category === 0).fixturesData;
         this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
@@ -98,26 +96,8 @@ export class LightingReplacementFormComponent implements OnInit {
     });
   }
 
-  async loadCustomFixtures(): Promise<Array<LightingFixtureData>> {
-    let customMaterials: Array<LightingFixtureMaterial> = await firstValueFrom(this.lightingFixtureServiceDbService.getAllCustomMaterials());
-    let customFixturesData: Array<LightingFixtureData> = customMaterials.map(material => this.toLightingFixtureData(material));
-    let customCategory: LightingFixtureCategory = this.lightingFixtureCategories.find(fixtureCategory => fixtureCategory.category === 0);
-    customCategory.fixturesData = customFixturesData;
-    return customFixturesData;
-  }
-
-  toLightingFixtureData(material: LightingFixtureMaterial): LightingFixtureData {
-    return {
-      category: material.category,
-      type: material.type && material.type.trim() !== '' ? material.type : material.name,
-      lampsPerFixture: material.lampsPerFixture,
-      wattsPerLamp: material.wattsPerLamp,
-      lumensPerLamp: material.lumensPerLamp,
-      lampLife: material.lampLife,
-      coefficientOfUtilization: material.coefficientOfUtilization,
-      ballastFactor: material.ballastFactor,
-      lumenDegradationFactor: material.lumenDegradationFactor
-    };
+  ngOnDestroy() {
+    this.customFixturesSub?.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -257,9 +237,8 @@ export class LightingReplacementFormComponent implements OnInit {
     this.materialModal.show();
   }
 
-  async hideMaterialModal(event?: LightingFixtureMaterial) {
+  hideMaterialModal(event?: LightingFixtureMaterial) {
     if (event) {
-      await this.loadCustomFixtures();
       this.form.controls.category.setValue(0);
       this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => fixtureCategory.category === 0).fixturesData;
       this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
@@ -267,12 +246,7 @@ export class LightingReplacementFormComponent implements OnInit {
       this.setProperties();
     }
     this.showModal = false;
-    this.dismissMessage();
     this.materialModal.hide();
-  }
-
-  dismissMessage() {
-    this.hasDeletedCustomMaterial = false;
   }
 
   setNotDiff() {

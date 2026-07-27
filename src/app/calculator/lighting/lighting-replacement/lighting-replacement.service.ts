@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import * as _ from 'lodash';
 import { LightingReplacementResults, LightingReplacementData, LightingReplacementResult } from '../../../shared/models/lighting';
 import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { LightingFixtureData } from '../../../tools-suite-api/lighting-suite-api.service';
-import { BehaviorSubject } from 'rxjs';
+import { LightingFixtureCategory, LightingFixtureData, LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite-api.service';
+import { LightingFixtureServiceDbService } from '../../../indexedDb/lighting-fixture-db.service';
+import { LightingFixtureMaterial } from '../../../shared/models/materials';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 @Injectable()
-export class LightingReplacementService {
+export class LightingReplacementService implements OnDestroy {
 
   baselineData: Array<LightingReplacementData>;
   modificationData: Array<LightingReplacementData>;
@@ -17,8 +19,55 @@ export class LightingReplacementService {
   selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
   showAdditionalDetails: boolean = false;
 
-  constructor(private fb: UntypedFormBuilder) {
+  lightingFixtureCategories: Array<LightingFixtureCategory>;
+
+  customFixturesUpdated: Subject<void> = new Subject<void>();
+  private customFixturesSub: Subscription;
+  private latestCustomMaterials: Array<LightingFixtureMaterial>;
+
+  constructor(private fb: UntypedFormBuilder, private lightingSuiteApiService: LightingSuiteApiService,
+    private lightingFixtureServiceDbService: LightingFixtureServiceDbService) {
     this.selectedFixtureTypes = new BehaviorSubject(undefined);
+    this.customFixturesSub = this.lightingFixtureServiceDbService.dbLightingFixtureMaterials.subscribe(materials => {
+      this.latestCustomMaterials = materials;
+      if (this.lightingFixtureCategories) {
+        this.applyCustomFixtures(materials);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.customFixturesSub?.unsubscribe();
+  }
+
+  getLightingFixtureCategories(): Array<LightingFixtureCategory> {
+    if (!this.lightingFixtureCategories) {
+      this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
+      if (this.latestCustomMaterials) {
+        this.applyCustomFixtures(this.latestCustomMaterials);
+      }
+    }
+    return this.lightingFixtureCategories;
+  }
+
+  applyCustomFixtures(materials: Array<LightingFixtureMaterial>) {
+    let customCategory: LightingFixtureCategory = this.lightingFixtureCategories.find(fixtureCategory => fixtureCategory.category === 0);
+    customCategory.fixturesData = materials.filter(material => !material.isDefault).map(material => this.toLightingFixtureData(material));
+    this.customFixturesUpdated.next();
+  }
+
+  toLightingFixtureData(material: LightingFixtureMaterial): LightingFixtureData {
+    return {
+      category: material.category,
+      type: material.type && material.type.trim() !== '' ? material.type : material.name,
+      lampsPerFixture: material.lampsPerFixture,
+      wattsPerLamp: material.wattsPerLamp,
+      lumensPerLamp: material.lumensPerLamp,
+      lampLife: material.lampLife,
+      coefficientOfUtilization: material.coefficientOfUtilization,
+      ballastFactor: material.ballastFactor,
+      lumenDegradationFactor: material.lumenDegradationFactor
+    };
   }
 
   initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {
