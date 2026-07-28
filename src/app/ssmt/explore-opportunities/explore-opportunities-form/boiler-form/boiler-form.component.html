@@ -61,12 +61,13 @@
   </li>
 </div>
 
+  @if (showOperationalImpacts()) {
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
       <label for="modifyFuelType" class="steam-check-label">
         <input type="checkbox" id="modifyFuelType" (focus)="focusField('fuel')" (change)="toggleFuelData()"
           [(ngModel)]="showFuelType" />
-        Change Fuel Type
+        Change Fuel Type (only impacts emissions)
       </label>
     </div>
   </li>
@@ -152,6 +153,7 @@
     </li>
   }
 </div>
+  } <!-- end @if (showOperationalImpacts()) for Change Fuel Type -->
 
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
