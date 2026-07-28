@@ -1,9 +1,59 @@
 import { Injectable } from '@angular/core';
 import { HeaderNotHighestPressure, HeaderWithHighestPressure, SSMTInputs } from '../shared/models/steam/ssmt';
 import { BoilerInput, DeaeratorInput, FlashTankInput, HeaderInput, HeaderInputObj, HeatLossInput, PrvInput, SaturatedPropertiesInput, SteamPropertiesInput, TurbineInput } from '../shared/models/steam/steam-inputs';
-import { SteamPropertiesOutput, SaturatedPropertiesOutput, BoilerOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, PrvOutput, TurbineOutput, SSMTOutput, SSMTOperationsOutput, ProcessSteamUsage } from '../shared/models/steam/steam-outputs';
+import { SteamPropertiesOutput, SaturatedPropertiesOutput, BoilerOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, PrvOutput, TurbineOutput, SSMTOutput, SSMTOperationsOutput, ProcessSteamUsage, HeatExchangerOutput as AppHeatExchangerOutput } from '../shared/models/steam/steam-outputs';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+import {
+  type Boiler as SuiteBoiler,
+  type BoilerInput as SuiteBoilerInput,
+  type CondensingTurbine as SuiteCondensingTurbine,
+  type Deaerator as SuiteDeaerator,
+  type EnergyAndCostCalculationsDomain,
+  type FlashTank as SuiteFlashTank,
+  type FluidProperties,
+  type Header as SuiteHeader,
+  type HeaderInput as SuiteHeaderInput,
+  type HeaderNotHighestPressure as SuiteHeaderNotHighestPressure,
+  type HeaderWithHighestPressure as SuiteHeaderWithHighestPressure,
+  type HeatExchangerOutput as SuiteHeatExchangerOutput,
+  type HeatLoss as SuiteHeatLoss,
+  type HighPressureHeaderCalculationsDomain,
+  type Inlet,
+  type LowPressureFlashedSteamIntoHeaderCalculatorDomain,
+  type LowPressureHeaderCalculationsDomain,
+  type MakeupWaterAndCondensateHeaderCalculationsDomain,
+  type MakeupWaterVolumeFlowCalculationsDomain,
+  type MediumPressureHeaderCalculationsDomain,
+  type OperationsInput as SuiteOperationsInput,
+  type PowerBalanceCheckerCalculationsDomain,
+  type PressureTurbine as SuitePressureTurbine,
+  type PrvCastDesuperheating,
+  type PrvWithDesuperheating,
+  type PrvWithoutDesuperheating,
+  type ProcessSteamUsage as SuiteProcessSteamUsage,
+  type ProcessSteamUsageCalculationsDomain,
+  type ReturnCondensateCalculationsDomain,
+  type SaturatedPressure,
+  type SaturatedProperties,
+  type SaturatedPropertiesOutput as SuiteSaturatedPropertiesOutput,
+  type SaturatedTemperature,
+  type Solve,
+  type SteamModeler,
+  type SteamModelerInput,
+  type SteamModelerOutput,
+  type SteamProperties,
+  type SteamPropertiesOutput as SuiteSteamPropertiesOutput,
+  type ThermodynamicQuantity,
+  type Turbine as SuiteTurbine,
+  type TurbineInput as SuiteTurbineInput,
+  type TurbineProperty,
+} from 'measur-tools-suite';
+
+type SuiteSteamPropertiesLike = (SuiteSteamPropertiesOutput | FluidProperties) & {
+  massFlow?: number;
+  energyFlow?: number;
+};
 
 @Injectable()
 export class SteamSuiteApiService {
@@ -13,13 +63,13 @@ export class SteamSuiteApiService {
   ) { }
 
   steamProperties(input: SteamPropertiesInput): SteamPropertiesOutput {
-    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
-    let SteamProperties = new this.toolsSuiteApiService.ToolsSuiteModule.SteamProperties(
+    let thermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let SteamProperties: SteamProperties = new this.toolsSuiteApiService.ToolsSuiteModule.SteamProperties(
       input.pressure,
       thermodynamicQuantityType,
       input.quantityValue
     );
-    let output = SteamProperties.calculate();
+    let output: SuiteSteamPropertiesOutput = SteamProperties.calculate();
     let results: SteamPropertiesOutput = {
       pressure: output.pressure,
       temperature: output.temperature,
@@ -27,8 +77,8 @@ export class SteamSuiteApiService {
       specificEntropy: output.specificEntropy,
       quality: output.quality,
       specificVolume: output.specificVolume,
-      massFlow: output.massFlow,
-      energyFlow: output.energyFlow,
+      massFlow: undefined,
+      energyFlow: undefined,
     }
     SteamProperties.delete();
     output.delete();
@@ -37,10 +87,10 @@ export class SteamSuiteApiService {
 
   saturatedPropertiesGivenPressure(saturatedPropertiesInput: SaturatedPropertiesInput): SaturatedPropertiesOutput {
 
-    let SaturatedTemperature = new this.toolsSuiteApiService.ToolsSuiteModule.SaturatedTemperature(saturatedPropertiesInput.saturatedPressure);
-    let temperature = SaturatedTemperature.calculate();
-    let SaturatedProperties = new this.toolsSuiteApiService.ToolsSuiteModule.SaturatedProperties(saturatedPropertiesInput.saturatedPressure, temperature);
-    let saturatedPropertiesOutput = SaturatedProperties.calculate();
+    let SaturatedTemperature: SaturatedTemperature = new this.toolsSuiteApiService.ToolsSuiteModule.SaturatedTemperature(saturatedPropertiesInput.saturatedPressure);
+    let temperature: number = SaturatedTemperature.calculate();
+    let SaturatedProperties: SaturatedProperties = new this.toolsSuiteApiService.ToolsSuiteModule.SaturatedProperties(saturatedPropertiesInput.saturatedPressure, temperature);
+    let saturatedPropertiesOutput: SuiteSaturatedPropertiesOutput = SaturatedProperties.calculate();
     let results: SaturatedPropertiesOutput = {
       saturatedPressure: saturatedPropertiesOutput.saturatedPressure,
       saturatedTemperature: saturatedPropertiesOutput.saturatedTemperature,
@@ -62,10 +112,10 @@ export class SteamSuiteApiService {
 
   saturatedPropertiesGivenTemperature(saturatedPropertiesInput: SaturatedPropertiesInput): SaturatedPropertiesOutput {
 
-    let SaturatedPressure = new this.toolsSuiteApiService.ToolsSuiteModule.SaturatedPressure(saturatedPropertiesInput.saturatedTemperature);
-    let pressure = SaturatedPressure.calculate();
-    let SaturatedProperties = new this.toolsSuiteApiService.ToolsSuiteModule.SaturatedProperties(pressure, saturatedPropertiesInput.saturatedTemperature);
-    let saturatedPropertiesOutput = SaturatedProperties.calculate();
+    let SaturatedPressure: SaturatedPressure = new this.toolsSuiteApiService.ToolsSuiteModule.SaturatedPressure(saturatedPropertiesInput.saturatedTemperature);
+    let pressure: number = SaturatedPressure.calculate();
+    let SaturatedProperties: SaturatedProperties = new this.toolsSuiteApiService.ToolsSuiteModule.SaturatedProperties(pressure, saturatedPropertiesInput.saturatedTemperature);
+    let saturatedPropertiesOutput: SuiteSaturatedPropertiesOutput = SaturatedProperties.calculate();
     let results: SaturatedPropertiesOutput = {
       saturatedPressure: saturatedPropertiesOutput.saturatedPressure,
       saturatedTemperature: saturatedPropertiesOutput.saturatedTemperature,
@@ -87,9 +137,9 @@ export class SteamSuiteApiService {
 
 
   boiler(input: BoilerInput): BoilerOutput {
-    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let thermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
 
-    let Boiler = new this.toolsSuiteApiService.ToolsSuiteModule.Boiler(
+    let Boiler: SuiteBoiler = new this.toolsSuiteApiService.ToolsSuiteModule.Boiler(
       input.deaeratorPressure,
       input.combustionEfficiency,
       input.blowdownRate,
@@ -99,18 +149,18 @@ export class SteamSuiteApiService {
       input.steamMassFlow
     );
 
-    let output = this.getBoilerOutput(Boiler);
+    let output: BoilerOutput = this.getBoilerOutput(Boiler);
 
     Boiler.delete();
     return output;
   }
 
   deaerator(input: DeaeratorInput): DeaeratorOutput {
-    let waterThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.waterThermodynamicQuantity)
-    let steamThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.steamThermodynamicQuantity)
+    let waterThermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.waterThermodynamicQuantity)
+    let steamThermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.steamThermodynamicQuantity)
 
 
-    let Deaerator = new this.toolsSuiteApiService.ToolsSuiteModule.Deaerator(
+    let Deaerator: SuiteDeaerator = new this.toolsSuiteApiService.ToolsSuiteModule.Deaerator(
       input.deaeratorPressure,
       input.ventRate,
       input.feedwaterMassFlow,
@@ -128,9 +178,9 @@ export class SteamSuiteApiService {
   }
 
   flashTank(input: FlashTankInput): FlashTankOutput {
-    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let thermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
 
-    let FlashTank = new this.toolsSuiteApiService.ToolsSuiteModule.FlashTank(
+    let FlashTank: SuiteFlashTank = new this.toolsSuiteApiService.ToolsSuiteModule.FlashTank(
       input.inletWaterPressure,
       thermodynamicQuantityType,
       input.quantityValue,
@@ -144,27 +194,31 @@ export class SteamSuiteApiService {
   }
 
   header(input: HeaderInput): HeaderOutput {
-    let inletVector = this.getInletVector(input.inlets);
+    let inletArray: Array<Inlet> = this.getInletArray(input.inlets);
 
-    let Header = new this.toolsSuiteApiService.ToolsSuiteModule.Header(input.headerPressure, inletVector);
-    let HeaderProps = Header.getHeaderProperties();
-    HeaderProps.energyFlow = Header.getInletEnergyFlow();
-    HeaderProps.massFlow = Header.getInletMassFlow();
-    let Inlets = Header.getInlets();
+    let Header: SuiteHeader = new this.toolsSuiteApiService.ToolsSuiteModule.Header(input.headerPressure, inletArray);
+    let HeaderProps: SuiteSteamPropertiesOutput = Header.getHeaderProperties();
+    let headerProperties: SteamPropertiesOutput = this.getSteamPropertiesOutput(HeaderProps);
+    headerProperties.energyFlow = Header.getInletEnergyFlow();
+    headerProperties.massFlow = Header.getInletMassFlow();
+    let Inlets: Array<Inlet> = Header.getInlets();
     let allInletProperties: Array<SteamPropertiesOutput> = new Array();
-    for (let i = 0; i < Inlets.size(); i++) {
-      let inlet = Inlets.get(i);
-      let inletProperties = inlet.getInletProperties();
-      inletProperties.energyFlow = inlet.getInletEnergyFlow();
-      inletProperties.massFlow = inlet.getMassFlow();
+    for (let i: number = 0; i < Inlets.length; i++) {
+      let inlet: Inlet = Inlets[i];
+      let inletProperties: SuiteSteamPropertiesOutput = inlet.getInletProperties();
+      let inletOutput: SteamPropertiesOutput = this.getSteamPropertiesOutput(inletProperties);
+      inletOutput.energyFlow = inlet.getInletEnergyFlow();
+      inletOutput.massFlow = inlet.getMassFlow();
 
-      allInletProperties.push(this.getSteamPropertiesOutput(inletProperties));
+      allInletProperties.push(inletOutput);
       inletProperties.delete();
-      inlet.delete();
+      if (!inletArray.includes(inlet)) {
+        inlet.delete();
+      }
     }
 
     let output: HeaderOutput = {
-      header: this.getSteamPropertiesOutput(HeaderProps),
+      header: headerProperties,
       inlet1: allInletProperties[0],
       inlet2: allInletProperties[1],
       inlet3: allInletProperties[2],
@@ -177,26 +231,23 @@ export class SteamSuiteApiService {
     }
     HeaderProps.delete();
     Header.delete();
-    for (let i = 0; i < inletVector.size(); i++) {
-      let inlet = inletVector.get(i);
-      inlet.delete();
-    }
+    inletArray.forEach(inlet => inlet.delete());
 
     return output;
   }
 
   heatLoss(input: HeatLossInput): HeatLossOutput {
-    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let thermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
 
-    let HeatLoss = new this.toolsSuiteApiService.ToolsSuiteModule.HeatLoss(
+    let HeatLoss: SuiteHeatLoss = new this.toolsSuiteApiService.ToolsSuiteModule.HeatLoss(
       input.inletPressure,
       thermodynamicQuantityType,
       input.quantityValue,
       input.inletMassFlow,
       input.percentHeatLoss
     );
-    let inletProperties = HeatLoss.getInletProperties();
-    let outletProperties = HeatLoss.getOutletProperties();
+    let inletProperties: FluidProperties = HeatLoss.getInletProperties();
+    let outletProperties: FluidProperties = HeatLoss.getOutletProperties();
     let heatLossOutput: HeatLossOutput = {
       heatLoss: HeatLoss.getHeatLoss(),
       inletEnergyFlow: inletProperties.energyFlow,
@@ -223,9 +274,9 @@ export class SteamSuiteApiService {
 
   // inletMassFlow - should be set from inputs?
   prvWithoutDesuperheating(input: PrvInput): PrvOutput {
-    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
+    let thermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity)
 
-    let prvWithoutDesuperheating = new this.toolsSuiteApiService.ToolsSuiteModule.PrvWithoutDesuperheating(
+    let prvWithoutDesuperheating: PrvWithoutDesuperheating = new this.toolsSuiteApiService.ToolsSuiteModule.PrvWithoutDesuperheating(
       input.inletPressure,
       thermodynamicQuantityType,
       input.quantityValue,
@@ -241,10 +292,10 @@ export class SteamSuiteApiService {
 
   // inletMassFlow - should be set from inputs?
   prvWithDesuperheating(input: PrvInput): PrvOutput {
-    let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity);
-    let feedwaterThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.feedwaterThermodynamicQuantity);
+    let thermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.thermodynamicQuantity);
+    let feedwaterThermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.feedwaterThermodynamicQuantity);
 
-    let prvWithDesuperheating = new this.toolsSuiteApiService.ToolsSuiteModule.PrvWithDesuperheating(
+    let prvWithDesuperheating: PrvWithDesuperheating = new this.toolsSuiteApiService.ToolsSuiteModule.PrvWithDesuperheating(
       input.inletPressure,
       thermodynamicQuantityType,
       input.quantityValue,
@@ -263,11 +314,11 @@ export class SteamSuiteApiService {
   }
 
   turbine(input: TurbineInput): TurbineOutput {
-    let solveForMethod = this.suiteApiHelperService.getSolveForMethod(input.solveFor)
-    let inletThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.inletQuantity);
-    let turbineProperty = this.suiteApiHelperService.getTurbineProperty(input.turbineProperty);
+    let solveForMethod: Solve = this.suiteApiHelperService.getSolveForMethod(input.solveFor)
+    let inletThermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.inletQuantity);
+    let turbineProperty: TurbineProperty = this.suiteApiHelperService.getTurbineProperty(input.turbineProperty);
 
-    let Turbine;
+    let Turbine: SuiteTurbine;
     if (input.solveFor == 0) {
       Turbine = new this.toolsSuiteApiService.ToolsSuiteModule.Turbine(
         solveForMethod,
@@ -281,7 +332,7 @@ export class SteamSuiteApiService {
         input.outletSteamPressure
       );
     } else {
-      let outletThermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(input.outletQuantity);
+      let outletThermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(input.outletQuantity);
       Turbine = new this.toolsSuiteApiService.ToolsSuiteModule.Turbine(
         solveForMethod,
         input.inletPressure,
@@ -307,7 +358,7 @@ export class SteamSuiteApiService {
 
 
     this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.boilerInput);
-    let boilerInputObj = new this.toolsSuiteApiService.ToolsSuiteModule.BoilerInput(
+    let boilerInputObj: SuiteBoilerInput = new this.toolsSuiteApiService.ToolsSuiteModule.BoilerInput(
       inputData.boilerInput.fuelType,
       inputData.boilerInput.fuel,
       inputData.boilerInput.combustionEfficiency,
@@ -321,7 +372,7 @@ export class SteamSuiteApiService {
     );
 
 
-    let highPressureHeaderObj;
+    let highPressureHeaderObj: SuiteHeaderWithHighestPressure;
     if (inputData.headerInput.highPressureHeader) {
       this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.highPressureHeader);
       highPressureHeaderObj = this.getHighPressureHeaderObject(inputData.headerInput.highPressureHeader);
@@ -330,7 +381,7 @@ export class SteamSuiteApiService {
       highPressureHeaderObj = this.getHighPressureHeaderObject(inputData.headerInput.highPressure);
     }
 
-    let operationsInputObj = new this.toolsSuiteApiService.ToolsSuiteModule.OperationsInput(
+    let operationsInputObj: SuiteOperationsInput = new this.toolsSuiteApiService.ToolsSuiteModule.OperationsInput(
       inputData.operationsInput.sitePowerImport,
       inputData.operationsInput.makeUpWaterTemperature,
       inputData.operationsInput.operatingHoursPerYear,
@@ -345,7 +396,7 @@ export class SteamSuiteApiService {
     inputData.turbineInput.mediumToLowTurbine.operationType = this.suiteApiHelperService.getPressureTurbineOperation(inputData.turbineInput.mediumToLowTurbine.operationType);
 
 
-    let mediumPressureHeaderObj = null;
+    let mediumPressureHeaderObj: SuiteHeaderNotHighestPressure = null;
     if (inputData.headerInput.mediumPressureHeader !== null && inputData.headerInput.mediumPressureHeader !== undefined) {
       this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.mediumPressureHeader);
       mediumPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.mediumPressureHeader);
@@ -353,7 +404,7 @@ export class SteamSuiteApiService {
       this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.mediumPressure);
       mediumPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.mediumPressure);
     }
-    let lowPressureHeaderObj = null;
+    let lowPressureHeaderObj: SuiteHeaderNotHighestPressure = null;
     if (inputData.headerInput.lowPressureHeader !== null && inputData.headerInput.lowPressureHeader !== undefined) {
       this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.headerInput.lowPressureHeader);
       lowPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.lowPressureHeader);
@@ -362,7 +413,7 @@ export class SteamSuiteApiService {
       lowPressureHeaderObj = this.getNotHighPressureHeaderObject(inputData.headerInput.lowPressure);
     }
 
-    let headerInputObj = new this.toolsSuiteApiService.ToolsSuiteModule.HeaderInput(highPressureHeaderObj, mediumPressureHeaderObj, lowPressureHeaderObj);
+    let headerInputObj: SuiteHeaderInput = new this.toolsSuiteApiService.ToolsSuiteModule.HeaderInput(highPressureHeaderObj, mediumPressureHeaderObj, lowPressureHeaderObj);
     if (mediumPressureHeaderObj) {
       mediumPressureHeaderObj.delete();
     }
@@ -371,7 +422,7 @@ export class SteamSuiteApiService {
     }
 
     this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.turbineInput.condensingTurbine);
-    let condensingTurbineObj = new this.toolsSuiteApiService.ToolsSuiteModule.CondensingTurbine(
+    let condensingTurbineObj: SuiteCondensingTurbine = new this.toolsSuiteApiService.ToolsSuiteModule.CondensingTurbine(
       inputData.turbineInput.condensingTurbine.isentropicEfficiency,
       inputData.turbineInput.condensingTurbine.generationEfficiency,
       inputData.turbineInput.condensingTurbine.condenserPressure,
@@ -380,7 +431,7 @@ export class SteamSuiteApiService {
       inputData.turbineInput.condensingTurbine.useTurbine
     );
     this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.turbineInput.highToLowTurbine);
-    let highToLowTurbineObj = new this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbine(
+    let highToLowTurbineObj: SuitePressureTurbine = new this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbine(
       inputData.turbineInput.highToLowTurbine.isentropicEfficiency,
       inputData.turbineInput.highToLowTurbine.generationEfficiency,
       inputData.turbineInput.highToLowTurbine.operationType,
@@ -389,7 +440,7 @@ export class SteamSuiteApiService {
       inputData.turbineInput.highToLowTurbine.useTurbine
     );
     this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.turbineInput.highToMediumTurbine);
-    let highToMediumTurbineObj = new this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbine(
+    let highToMediumTurbineObj: SuitePressureTurbine = new this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbine(
       inputData.turbineInput.highToMediumTurbine.isentropicEfficiency,
       inputData.turbineInput.highToMediumTurbine.generationEfficiency,
       inputData.turbineInput.highToMediumTurbine.operationType,
@@ -398,7 +449,7 @@ export class SteamSuiteApiService {
       inputData.turbineInput.highToMediumTurbine.useTurbine
     );
     this.suiteApiHelperService.convertNullInputsForObjectConstructor(inputData.turbineInput.mediumToLowTurbine);
-    let mediumToLowTurbineObj = new this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbine(
+    let mediumToLowTurbineObj: SuitePressureTurbine = new this.toolsSuiteApiService.ToolsSuiteModule.PressureTurbine(
       inputData.turbineInput.mediumToLowTurbine.isentropicEfficiency,
       inputData.turbineInput.mediumToLowTurbine.generationEfficiency,
       inputData.turbineInput.mediumToLowTurbine.operationType,
@@ -407,14 +458,14 @@ export class SteamSuiteApiService {
       inputData.turbineInput.mediumToLowTurbine.useTurbine
     );
 
-    let turbineInputObj = new this.toolsSuiteApiService.ToolsSuiteModule.TurbineInput(
+    let turbineInputObj: SuiteTurbineInput = new this.toolsSuiteApiService.ToolsSuiteModule.TurbineInput(
       condensingTurbineObj,
       highToLowTurbineObj,
       highToMediumTurbineObj,
       mediumToLowTurbineObj
     );
 
-    let steamModelerInput = new this.toolsSuiteApiService.ToolsSuiteModule.SteamModelerInput(
+    let steamModelerInput: SteamModelerInput = new this.toolsSuiteApiService.ToolsSuiteModule.SteamModelerInput(
       inputData.isBaselineCalc,
       inputData.baselinePowerDemand,
       boilerInputObj,
@@ -423,8 +474,8 @@ export class SteamSuiteApiService {
       turbineInputObj
     );
 
-    let modeler = new this.toolsSuiteApiService.ToolsSuiteModule.SteamModeler();
-    let wasmOutput = modeler.model(steamModelerInput);
+    let modeler: SteamModeler = new this.toolsSuiteApiService.ToolsSuiteModule.SteamModeler();
+    let wasmOutput: SteamModelerOutput = modeler.model(steamModelerInput);
     ssmtOutput = this.getSSMTOutputFromWASMOutput(wasmOutput);
 
     wasmOutput.delete();
@@ -443,7 +494,7 @@ export class SteamSuiteApiService {
     return ssmtOutput;
   }
 
-  getSSMTOutputFromWASMOutput(wasmOutput): SSMTOutput {
+  getSSMTOutputFromWASMOutput(wasmOutput: SteamModelerOutput): SSMTOutput {
     let ssmtOutput: SSMTOutput = {
       boilerOutput: undefined,
       highPressureHeaderSteam: undefined,
@@ -494,30 +545,30 @@ export class SteamSuiteApiService {
       operationsOutput: undefined,
     }
 
-    let boiler = wasmOutput.boiler;
+    let boiler: SuiteBoiler = wasmOutput.boiler;
     ssmtOutput.boilerOutput = this.getBoilerOutput(boiler);
     boiler.delete();
 
 
-    let highPressureHeaderCalculationsDomain = wasmOutput.highPressureHeaderCalculationsDomain;
-    let highPressureHeaderOutput = highPressureHeaderCalculationsDomain.highPressureHeaderOutput;
+    let highPressureHeaderCalculationsDomain: HighPressureHeaderCalculationsDomain = wasmOutput.highPressureHeaderCalculationsDomain;
+    let highPressureHeaderOutput: FluidProperties = highPressureHeaderCalculationsDomain.highPressureHeaderOutput;
     ssmtOutput.highPressureHeaderSteam = this.getSteamPropertiesOutput(highPressureHeaderOutput);
     highPressureHeaderOutput.delete();
 
 
-    let blowdownFlashTank = wasmOutput.blowdownFlashTank;
+    let blowdownFlashTank: SuiteFlashTank = wasmOutput.blowdownFlashTank;
     ssmtOutput.blowdownFlashTank = this.getFlashTankOutput(blowdownFlashTank);
     if (blowdownFlashTank) {
       blowdownFlashTank.delete();
     }
 
-    let deaerator = wasmOutput.deaerator;
+    let deaerator: SuiteDeaerator = wasmOutput.deaerator;
     ssmtOutput.deaeratorOutput = this.getDeaeratorOutput(deaerator);
     deaerator.delete();
 
-    let powerBalanceCheckerCalculationsDomain = wasmOutput.powerBalanceCheckerCalculationsDomain;
+    let powerBalanceCheckerCalculationsDomain: PowerBalanceCheckerCalculationsDomain = wasmOutput.powerBalanceCheckerCalculationsDomain;
     if (powerBalanceCheckerCalculationsDomain) {
-      let lowPressureVentedSteam = powerBalanceCheckerCalculationsDomain.lowPressureVentedSteam;
+      let lowPressureVentedSteam: FluidProperties = powerBalanceCheckerCalculationsDomain.lowPressureVentedSteam;
       ssmtOutput.lowPressureVentedSteam = this.getSteamPropertiesOutput(lowPressureVentedSteam);
       if (lowPressureVentedSteam) {
         lowPressureVentedSteam.delete();
@@ -526,56 +577,55 @@ export class SteamSuiteApiService {
     }
 
     if (highPressureHeaderCalculationsDomain) {
-      let highPressureHeaderHeatLoss = highPressureHeaderCalculationsDomain.highPressureHeaderHeatLoss;
+      let highPressureHeaderHeatLoss: SuiteHeatLoss = highPressureHeaderCalculationsDomain.highPressureHeaderHeatLoss;
       ssmtOutput.highPressureSteamHeatLoss = this.getHeatLoss(highPressureHeaderHeatLoss);
       if (highPressureHeaderHeatLoss) {
         highPressureHeaderHeatLoss.delete();
       }
 
-      let highToLowPressureTurbine = highPressureHeaderCalculationsDomain.highToLowPressureTurbine;
+      let highToLowPressureTurbine: SuiteTurbine = highPressureHeaderCalculationsDomain.highToLowPressureTurbine;
       ssmtOutput.highPressureToLowPressureTurbine = this.getTurbineOutput(highToLowPressureTurbine);
       if (highToLowPressureTurbine) {
         highToLowPressureTurbine.delete();
       }
 
-      let highToLowPressureTurbineIdeal = highPressureHeaderCalculationsDomain.highToLowPressureTurbineIdeal;
+      let highToLowPressureTurbineIdeal: SuiteTurbine = highPressureHeaderCalculationsDomain.highToLowPressureTurbineIdeal;
       ssmtOutput.highPressureToLowPressureTurbineIdeal = this.getTurbineOutput(highToLowPressureTurbineIdeal);
       if (highToLowPressureTurbineIdeal) {
         highToLowPressureTurbineIdeal.delete();
       }
 
-      let highToMediumPressureTurbine = highPressureHeaderCalculationsDomain.highToMediumPressureTurbine;
+      let highToMediumPressureTurbine: SuiteTurbine = highPressureHeaderCalculationsDomain.highToMediumPressureTurbine;
       ssmtOutput.highPressureToMediumPressureTurbine = this.getTurbineOutput(highToMediumPressureTurbine);
       if (highToMediumPressureTurbine) {
         highToMediumPressureTurbine.delete();
       }
 
-      // Typo 'Idle' on backend
-      let highToMediumPressureTurbineIdle = highPressureHeaderCalculationsDomain.highToMediumPressureTurbineIdle;
-      ssmtOutput.highPressureToMediumPressureTurbineIdeal = this.getTurbineOutput(highToMediumPressureTurbineIdle);
-      if (highToMediumPressureTurbineIdle) {
-        highToMediumPressureTurbineIdle.delete();
+      let highToMediumPressureTurbineIdeal: SuiteTurbine = highPressureHeaderCalculationsDomain.highToMediumPressureTurbineIdeal;
+      ssmtOutput.highPressureToMediumPressureTurbineIdeal = this.getTurbineOutput(highToMediumPressureTurbineIdeal);
+      if (highToMediumPressureTurbineIdeal) {
+        highToMediumPressureTurbineIdeal.delete();
       }
 
-      let highPressureCondensateFlashTank = highPressureHeaderCalculationsDomain.highPressureCondensateFlashTank
+      let highPressureCondensateFlashTank: SuiteFlashTank = highPressureHeaderCalculationsDomain.highPressureCondensateFlashTank
       ssmtOutput.highPressureCondensateFlashTank = this.getFlashTankOutput(highPressureCondensateFlashTank);
       if (highPressureCondensateFlashTank) {
         highPressureCondensateFlashTank.delete();
       }
 
-      let highPressureCondensate = highPressureHeaderCalculationsDomain.highPressureCondensate;
+      let highPressureCondensate: FluidProperties = highPressureHeaderCalculationsDomain.highPressureCondensate;
       ssmtOutput.highPressureCondensate = this.getSteamPropertiesOutput(highPressureCondensate);
       if (highPressureCondensate) {
         highPressureCondensate.delete();
       }
 
-      let condensingTurbine = highPressureHeaderCalculationsDomain.condensingTurbine;
+      let condensingTurbine: SuiteTurbine = highPressureHeaderCalculationsDomain.condensingTurbine;
       ssmtOutput.condensingTurbine = this.getTurbineOutput(condensingTurbine);
       if (condensingTurbine) {
         condensingTurbine.delete();
       }
 
-      let condensingTurbineIdeal = highPressureHeaderCalculationsDomain.condensingTurbineIdeal;
+      let condensingTurbineIdeal: SuiteTurbine = highPressureHeaderCalculationsDomain.condensingTurbineIdeal;
       ssmtOutput.condensingTurbineIdeal = this.getTurbineOutput(condensingTurbineIdeal);
       if (condensingTurbineIdeal) {
         condensingTurbineIdeal.delete();
@@ -585,35 +635,35 @@ export class SteamSuiteApiService {
     }
 
 
-    let lowPressureHeaderCalculationsDomain = wasmOutput.lowPressureHeaderCalculationsDomain;
+    let lowPressureHeaderCalculationsDomain: LowPressureHeaderCalculationsDomain = wasmOutput.lowPressureHeaderCalculationsDomain;
     if (lowPressureHeaderCalculationsDomain) {
-      let lowPressureHeaderOutput = lowPressureHeaderCalculationsDomain.lowPressureHeaderOutput;
+      let lowPressureHeaderOutput: FluidProperties = lowPressureHeaderCalculationsDomain.lowPressureHeaderOutput;
       ssmtOutput.lowPressureHeaderSteam = this.getSteamPropertiesOutput(lowPressureHeaderOutput);
       if (lowPressureHeaderOutput) {
         lowPressureHeaderOutput.delete();
       }
 
-      let lowPressureHeaderHeatLoss = lowPressureHeaderCalculationsDomain.lowPressureHeaderHeatLoss;
+      let lowPressureHeaderHeatLoss: SuiteHeatLoss = lowPressureHeaderCalculationsDomain.lowPressureHeaderHeatLoss;
       ssmtOutput.lowPressureSteamHeatLoss = this.getHeatLoss(lowPressureHeaderHeatLoss);
       if (lowPressureHeaderHeatLoss) {
         lowPressureHeaderHeatLoss.delete();
       }
 
-      let lowPressurePrv = lowPressureHeaderCalculationsDomain.lowPressurePrv;
+      let lowPressurePrv: PrvWithoutDesuperheating = lowPressureHeaderCalculationsDomain.lowPressurePrv;
       ssmtOutput.mediumPressureToLowPressurePrv = this.getPRVOutput(lowPressurePrv, false);
       if (lowPressurePrv) {
         lowPressurePrv.delete();
       }
 
-      let lowPressureCondensate = lowPressureHeaderCalculationsDomain.lowPressureCondensate;
+      let lowPressureCondensate: FluidProperties = lowPressureHeaderCalculationsDomain.lowPressureCondensate;
       ssmtOutput.lowPressureCondensate = this.getSteamPropertiesOutput(lowPressureCondensate);
       if (lowPressureCondensate) {
         lowPressureCondensate.delete();
       }
 
-      let lowPressureFlashedSteamIntoHeaderCalculatorDomain = lowPressureHeaderCalculationsDomain.lowPressureFlashedSteamIntoHeaderCalculatorDomain;
+      let lowPressureFlashedSteamIntoHeaderCalculatorDomain: LowPressureFlashedSteamIntoHeaderCalculatorDomain = lowPressureHeaderCalculationsDomain.lowPressureFlashedSteamIntoHeaderCalculatorDomain;
       if (lowPressureFlashedSteamIntoHeaderCalculatorDomain) {
-        let mediumPressureCondensateFlashTank = lowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank;
+        let mediumPressureCondensateFlashTank: SuiteFlashTank = lowPressureFlashedSteamIntoHeaderCalculatorDomain.mediumPressureCondensateFlashTank;
         ssmtOutput.mediumPressureCondensateFlashTank = this.getFlashTankOutput(mediumPressureCondensateFlashTank);
         if (mediumPressureCondensateFlashTank) {
           mediumPressureCondensateFlashTank.delete();
@@ -625,39 +675,39 @@ export class SteamSuiteApiService {
       lowPressureHeaderCalculationsDomain.delete();
     }
 
-    let mediumPressureHeaderCalculationsDomain = wasmOutput.mediumPressureHeaderCalculationsDomain;
+    let mediumPressureHeaderCalculationsDomain: MediumPressureHeaderCalculationsDomain = wasmOutput.mediumPressureHeaderCalculationsDomain;
     if (mediumPressureHeaderCalculationsDomain) {
-      let highToMediumPressurePrv = mediumPressureHeaderCalculationsDomain.highToMediumPressurePrv;
+      let highToMediumPressurePrv: PrvWithoutDesuperheating = mediumPressureHeaderCalculationsDomain.highToMediumPressurePrv;
       ssmtOutput.highPressureToMediumPressurePrv = this.getPRVOutput(highToMediumPressurePrv, false);
       if (highToMediumPressurePrv) {
         highToMediumPressurePrv.delete();
       }
 
-      let mediumToLowPressureTurbine = mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbine
+      let mediumToLowPressureTurbine: SuiteTurbine = mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbine
       ssmtOutput.mediumPressureToLowPressureTurbine = this.getTurbineOutput(mediumToLowPressureTurbine);
       if (mediumToLowPressureTurbine) {
         mediumToLowPressureTurbine.delete();
       }
 
-      let mediumToLowPressureTurbineIdeal = mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbineIdeal;
+      let mediumToLowPressureTurbineIdeal: SuiteTurbine = mediumPressureHeaderCalculationsDomain.mediumToLowPressureTurbineIdeal;
       ssmtOutput.mediumPressureToLowPressureTurbineIdeal = this.getTurbineOutput(mediumToLowPressureTurbineIdeal);
       if (mediumToLowPressureTurbineIdeal) {
         mediumToLowPressureTurbineIdeal.delete();
       }
 
-      let mediumPressureHeaderOutput = mediumPressureHeaderCalculationsDomain.mediumPressureHeaderOutput
+      let mediumPressureHeaderOutput: FluidProperties = mediumPressureHeaderCalculationsDomain.mediumPressureHeaderOutput
       ssmtOutput.mediumPressureHeaderSteam = this.getSteamPropertiesOutput(mediumPressureHeaderOutput);
       if (mediumPressureHeaderOutput) {
         mediumPressureHeaderOutput.delete();
       }
 
-      let mediumPressureHeaderHeatLoss = mediumPressureHeaderCalculationsDomain.mediumPressureHeaderHeatLoss;
+      let mediumPressureHeaderHeatLoss: SuiteHeatLoss = mediumPressureHeaderCalculationsDomain.mediumPressureHeaderHeatLoss;
       ssmtOutput.mediumPressureSteamHeatLoss = this.getHeatLoss(mediumPressureHeaderHeatLoss);
       if (mediumPressureHeaderHeatLoss) {
         mediumPressureHeaderHeatLoss.delete();
       }
 
-      let mediumPressureCondensate = mediumPressureHeaderCalculationsDomain.mediumPressureCondensate;
+      let mediumPressureCondensate: FluidProperties = mediumPressureHeaderCalculationsDomain.mediumPressureCondensate;
       ssmtOutput.mediumPressureCondensate = this.getSteamPropertiesOutput(mediumPressureCondensate);
       if (mediumPressureCondensate) {
         mediumPressureCondensate.delete();
@@ -670,7 +720,7 @@ export class SteamSuiteApiService {
 
     let operationsOutput: SSMTOperationsOutput;
 
-    let energyAndCostCalculationsDomain = wasmOutput.energyAndCostCalculationsDomain;
+    let energyAndCostCalculationsDomain: EnergyAndCostCalculationsDomain = wasmOutput.energyAndCostCalculationsDomain;
     if (!energyAndCostCalculationsDomain) {
       operationsOutput = {
         powerGenerated: undefined,
@@ -700,24 +750,24 @@ export class SteamSuiteApiService {
       energyAndCostCalculationsDomain.delete();
     }
 
-    let makeupWaterAndCondensateHeaderCalculationsDomain = wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain;
+    let makeupWaterAndCondensateHeaderCalculationsDomain: MakeupWaterAndCondensateHeaderCalculationsDomain = wasmOutput.makeupWaterAndCondensateHeaderCalculationsDomain;
     if (makeupWaterAndCondensateHeaderCalculationsDomain) {
-      let combinedCondensate = makeupWaterAndCondensateHeaderCalculationsDomain.combinedCondensate;
+      let combinedCondensate: FluidProperties = makeupWaterAndCondensateHeaderCalculationsDomain.combinedCondensate;
       ssmtOutput.combinedCondensate = this.getSteamPropertiesOutput(combinedCondensate);
       if (combinedCondensate) {
         combinedCondensate.delete();
       }
 
-      let returnCondensate = makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensate;
+      let returnCondensate: FluidProperties = makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensate;
       ssmtOutput.returnCondensate = this.getSteamPropertiesOutput(returnCondensate);
       if (returnCondensate) {
         returnCondensate.delete();
       }
 
-      let returnCondensateCalculationsDomain = makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensateCalculationsDomain;
+      let returnCondensateCalculationsDomain: ReturnCondensateCalculationsDomain = makeupWaterAndCondensateHeaderCalculationsDomain.returnCondensateCalculationsDomain;
 
       if (returnCondensateCalculationsDomain) {
-        let condensateFlashTank = returnCondensateCalculationsDomain.condensateFlashTank;
+        let condensateFlashTank: SuiteFlashTank = returnCondensateCalculationsDomain.condensateFlashTank;
         ssmtOutput.condensateFlashTank = this.getFlashTankOutput(condensateFlashTank);
         if (condensateFlashTank) {
           condensateFlashTank.delete();
@@ -725,25 +775,25 @@ export class SteamSuiteApiService {
         returnCondensateCalculationsDomain.delete();
       }
 
-      let makeupWater = makeupWaterAndCondensateHeaderCalculationsDomain.makeupWater;
+      let makeupWater: FluidProperties = makeupWaterAndCondensateHeaderCalculationsDomain.makeupWater;
       ssmtOutput.makeupWater = this.getSteamPropertiesOutput(makeupWater);
       if (makeupWater) {
         makeupWater.delete();
       }
 
-      let makeupWaterAndCondensateHeaderOutput = makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput;
+      let makeupWaterAndCondensateHeaderOutput: FluidProperties = makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterAndCondensateHeaderOutput;
       ssmtOutput.makeupWaterAndCondensate = this.getSteamPropertiesOutput(makeupWaterAndCondensateHeaderOutput);
       if (makeupWaterAndCondensateHeaderOutput) {
         makeupWaterAndCondensateHeaderOutput.delete();
       }
 
-      let heatExchangerOutput = makeupWaterAndCondensateHeaderCalculationsDomain.heatExchangerOutput;
+      let heatExchangerOutput: SuiteHeatExchangerOutput = makeupWaterAndCondensateHeaderCalculationsDomain.heatExchangerOutput;
       ssmtOutput.heatExchanger = this.getHeatExchangerOutput(heatExchangerOutput);
       if (heatExchangerOutput) {
         heatExchangerOutput.delete();
       }
 
-      let makeupWaterVolumeFlowCalculationsDomain = makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain
+      let makeupWaterVolumeFlowCalculationsDomain: MakeupWaterVolumeFlowCalculationsDomain = makeupWaterAndCondensateHeaderCalculationsDomain.makeupWaterVolumeFlowCalculationsDomain
       if (makeupWaterVolumeFlowCalculationsDomain) {
         operationsOutput.makeupWaterVolumeFlow = makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlow;
         operationsOutput.makeupWaterVolumeFlowAnnual = makeupWaterVolumeFlowCalculationsDomain.makeupWaterVolumeFlowAnnual;
@@ -754,21 +804,21 @@ export class SteamSuiteApiService {
     }
 
     ssmtOutput.operationsOutput = operationsOutput;
-    let processSteamUsageCalculationsDomain = wasmOutput.processSteamUsageCalculationsDomain;
+    let processSteamUsageCalculationsDomain: ProcessSteamUsageCalculationsDomain = wasmOutput.processSteamUsageCalculationsDomain;
     if (processSteamUsageCalculationsDomain) {
-      let highPressureProcessSteamUsage = processSteamUsageCalculationsDomain.highPressureProcessSteamUsage
+      let highPressureProcessSteamUsage: SuiteProcessSteamUsage = processSteamUsageCalculationsDomain.highPressureProcessSteamUsage
       ssmtOutput.highPressureProcessSteamUsage = this.getProcessSteamUsage(highPressureProcessSteamUsage);
       if (highPressureProcessSteamUsage) {
         highPressureProcessSteamUsage.delete();
       }
 
-      let mediumPressureProcessUsagePtr = processSteamUsageCalculationsDomain.mediumPressureProcessUsagePtr;
+      let mediumPressureProcessUsagePtr: SuiteProcessSteamUsage = processSteamUsageCalculationsDomain.mediumPressureProcessUsagePtr;
       ssmtOutput.mediumPressureProcessSteamUsage = this.getProcessSteamUsage(mediumPressureProcessUsagePtr);
       if (mediumPressureProcessUsagePtr) {
         mediumPressureProcessUsagePtr.delete();
       }
 
-      let lowPressureProcessUsagePtr = processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr;
+      let lowPressureProcessUsagePtr: SuiteProcessSteamUsage = processSteamUsageCalculationsDomain.lowPressureProcessUsagePtr;
       ssmtOutput.lowPressureProcessSteamUsage = this.getProcessSteamUsage(lowPressureProcessUsagePtr);
       if (lowPressureProcessUsagePtr) {
         lowPressureProcessUsagePtr.delete();
@@ -778,7 +828,7 @@ export class SteamSuiteApiService {
     return ssmtOutput;
   }
 
-  getSteamPropertiesOutput(properties): SteamPropertiesOutput {
+  getSteamPropertiesOutput(properties: SuiteSteamPropertiesLike): SteamPropertiesOutput {
     if (properties) {
       return {
         pressure: properties.pressure,
@@ -804,7 +854,7 @@ export class SteamSuiteApiService {
     }
   }
 
-  getProcessSteamUsage(processUsage): ProcessSteamUsage {
+  getProcessSteamUsage(processUsage: SuiteProcessSteamUsage): ProcessSteamUsage {
     if (processUsage) {
       return {
         pressure: processUsage.pressure,
@@ -824,7 +874,7 @@ export class SteamSuiteApiService {
     }
   }
 
-  getHeatExchangerOutput(heatExchanger) {
+  getHeatExchangerOutput(heatExchanger: SuiteHeatExchangerOutput): AppHeatExchangerOutput {
     if (heatExchanger) {
       return {
         hotOutletMassFlow: heatExchanger.hotOutlet.massFlow,
@@ -832,7 +882,7 @@ export class SteamSuiteApiService {
         hotOutletTemperature: heatExchanger.hotOutlet.temperature,
         hotOutletPressure: heatExchanger.hotOutlet.pressure,
         hotOutletQuality: heatExchanger.hotOutlet.quality,
-        hotOutletVolume: heatExchanger.hotOutlet.volume,
+        hotOutletVolume: heatExchanger.hotOutlet.specificVolume,
         hotOutletDensity: heatExchanger.hotOutlet.density,
         hotOutletSpecificEnthalpy: heatExchanger.hotOutlet.specificEnthalpy,
         hotOutletSpecificEntropy: heatExchanger.hotOutlet.specificEntropy,
@@ -841,7 +891,7 @@ export class SteamSuiteApiService {
         coldOutletTemperature: heatExchanger.coldOutlet.temperature,
         coldOutletPressure: heatExchanger.coldOutlet.pressure,
         coldOutletQuality: heatExchanger.coldOutlet.quality,
-        coldOutletVolume: heatExchanger.coldOutlet.volume,
+        coldOutletVolume: heatExchanger.coldOutlet.specificVolume,
         coldOutletDensity: heatExchanger.coldOutlet.density,
         coldOutletSpecificEnthalpy: heatExchanger.coldOutlet.specificEnthalpy,
         coldOutletSpecificEntropy: heatExchanger.coldOutlet.specificEntropy,
@@ -870,7 +920,7 @@ export class SteamSuiteApiService {
     }
   }
 
-  getTurbineOutput(Turbine): TurbineOutput {
+  getTurbineOutput(Turbine: SuiteTurbine): TurbineOutput {
     let turbineOutput: TurbineOutput = {
       energyOut: undefined,
       generatorEfficiency: undefined,
@@ -899,13 +949,13 @@ export class SteamSuiteApiService {
       powerOut: undefined,
     };
     if (Turbine) {
-      let inletProperties = Turbine.getInletProperties();
-      let outletProperties = Turbine.getOutletProperties();
-      let massFlow = Turbine.getMassFlow();
-      let isentropicEfficiency = Turbine.getIsentropicEfficiency();
-      let energyOut = Turbine.getEnergyOut();
-      let powerOut = Turbine.getPowerOut();
-      let generatorEfficiency = Turbine.getGeneratorEfficiency();
+      let inletProperties: SuiteSteamPropertiesOutput = Turbine.getInletProperties();
+      let outletProperties: SuiteSteamPropertiesOutput = Turbine.getOutletProperties();
+      let massFlow: number = Turbine.getMassFlow();
+      let isentropicEfficiency: number = Turbine.getIsentropicEfficiency();
+      let energyOut: number = Turbine.getEnergyOut();
+      let powerOut: number = Turbine.getPowerOut();
+      let generatorEfficiency: number = Turbine.getGeneratorEfficiency();
 
       turbineOutput = {
         energyOut: energyOut,
@@ -940,7 +990,7 @@ export class SteamSuiteApiService {
   }
 
 
-  getHighPressureHeaderObject(header: HeaderWithHighestPressure) {
+  getHighPressureHeaderObject(header: HeaderWithHighestPressure): SuiteHeaderWithHighestPressure {
     return new this.toolsSuiteApiService.ToolsSuiteModule.HeaderWithHighestPressure(
       header.pressure,
       header.processSteamUsage,
@@ -951,7 +1001,7 @@ export class SteamSuiteApiService {
     );
   }
 
-  getNotHighPressureHeaderObject(header: HeaderNotHighestPressure) {
+  getNotHighPressureHeaderObject(header: HeaderNotHighestPressure): SuiteHeaderNotHighestPressure {
     if (!header.processSteamUsage) {
       // Adding property for modification where user has not selected calculated from baseline
       header.processSteamUsage = 0;
@@ -968,7 +1018,7 @@ export class SteamSuiteApiService {
   }
 
 
-  getHeatLoss(headerHeatLoss) {
+  getHeatLoss(headerHeatLoss: SuiteHeatLoss): HeatLossOutput {
     let heatLossOutput: HeatLossOutput = {
       heatLoss: undefined,
       inletEnergyFlow: undefined,
@@ -987,26 +1037,26 @@ export class SteamSuiteApiService {
       outletTemperature: undefined,
     };
     if (headerHeatLoss) {
-      let heatLoss = headerHeatLoss.getHeatLoss();
-      let inletProperties = headerHeatLoss.getInletProperties();
-      let outletProperties = headerHeatLoss.getOutletProperties();
+      let heatLoss: number = headerHeatLoss.getHeatLoss();
+      let inletProperties: FluidProperties = headerHeatLoss.getInletProperties();
+      let outletProperties: FluidProperties = headerHeatLoss.getOutletProperties();
 
       heatLossOutput = {
         heatLoss: heatLoss,
-        inletEnergyFlow: inletProperties.inletEnergyFlow,
-        inletMassFlow: inletProperties.inletMassFlow,
-        inletPressure: inletProperties.inletPressure,
-        inletQuality: inletProperties.inletQuality,
-        inletSpecificEnthalpy: inletProperties.inletSpecificEnthalpy,
-        inletSpecificEntropy: inletProperties.inletSpecificEntropy,
-        inletTemperature: inletProperties.inletTemperature,
-        outletEnergyFlow: outletProperties.outletEnergyFlow,
-        outletMassFlow: outletProperties.outletMassFlow,
-        outletPressure: outletProperties.outletPressure,
-        outletQuality: outletProperties.outletQuality,
-        outletSpecificEnthalpy: outletProperties.outletSpecificEnthalpy,
-        outletSpecificEntropy: outletProperties.outletSpecificEntropy,
-        outletTemperature: outletProperties.outletTemperature,
+        inletEnergyFlow: inletProperties.energyFlow,
+        inletMassFlow: inletProperties.massFlow,
+        inletPressure: inletProperties.pressure,
+        inletQuality: inletProperties.quality,
+        inletSpecificEnthalpy: inletProperties.specificEnthalpy,
+        inletSpecificEntropy: inletProperties.specificEntropy,
+        inletTemperature: inletProperties.temperature,
+        outletEnergyFlow: outletProperties.energyFlow,
+        outletMassFlow: outletProperties.massFlow,
+        outletPressure: outletProperties.pressure,
+        outletQuality: outletProperties.quality,
+        outletSpecificEnthalpy: outletProperties.specificEnthalpy,
+        outletSpecificEntropy: outletProperties.specificEntropy,
+        outletTemperature: outletProperties.temperature,
       }
       inletProperties.delete();
       outletProperties.delete();
@@ -1014,7 +1064,7 @@ export class SteamSuiteApiService {
     return heatLossOutput;
   }
 
-  getPRVOutput(prv, inCalculator: boolean): PrvOutput {
+  getPRVOutput(prv: PrvWithoutDesuperheating | PrvWithDesuperheating, inCalculator: boolean): PrvOutput {
     let prvOutput: PrvOutput = {
       feedwaterEnergyFlow: undefined,
       feedwaterMassFlow: undefined,
@@ -1042,7 +1092,7 @@ export class SteamSuiteApiService {
       outletTemperature: undefined,
     };
     if (prv) {
-      let inletProperties = prv.getInletProperties();
+      let inletProperties: SuiteSteamPropertiesOutput = prv.getInletProperties();
       prvOutput.inletEnergyFlow = prv.getInletEnergyFlow();
       prvOutput.inletMassFlow = prv.getInletMassFlow();
       prvOutput.inletPressure = inletProperties.pressure;
@@ -1054,7 +1104,7 @@ export class SteamSuiteApiService {
 
       inletProperties.delete();
 
-      let outletProperties = prv.getOutletProperties();
+      let outletProperties: SuiteSteamPropertiesOutput = prv.getOutletProperties();
 
       prvOutput.outletEnergyFlow = prv.getOutletEnergyFlow();
       prvOutput.outletMassFlow = prv.getOutletMassFlow();
@@ -1068,10 +1118,10 @@ export class SteamSuiteApiService {
       outletProperties.delete();
 
       if (prv.isWithDesuperheating() && !inCalculator) {
-        let castDesuperheating = new this.toolsSuiteApiService.ToolsSuiteModule.PrvCastDesuperheating();
-        let prvWith = castDesuperheating.Cast(prv);
+        let castDesuperheating: PrvCastDesuperheating = new this.toolsSuiteApiService.ToolsSuiteModule.PrvCastDesuperheating();
+        let prvWith: PrvWithDesuperheating = castDesuperheating.Cast(prv);
         if (prvWith != null) {
-          let feedwaterProperties = prvWith.getFeedwaterProperties();
+          let feedwaterProperties: SuiteSteamPropertiesOutput = prvWith.getFeedwaterProperties();
           prvOutput.feedwaterEnergyFlow = prvWith.getFeedwaterEnergyFlow();
           prvOutput.feedwaterMassFlow = prvWith.getFeedwaterMassFlow();
           prvOutput.feedwaterPressure = feedwaterProperties.pressure;
@@ -1086,9 +1136,10 @@ export class SteamSuiteApiService {
         }
         castDesuperheating.delete();
       }else if(prv.isWithDesuperheating() && inCalculator){
-        let feedwaterProperties = prv.getFeedwaterProperties();
-        prvOutput.feedwaterEnergyFlow = prv.getFeedwaterEnergyFlow();
-        prvOutput.feedwaterMassFlow = prv.getFeedwaterMassFlow();
+        const prvWithDesuperheating: PrvWithDesuperheating = prv as PrvWithDesuperheating;
+        let feedwaterProperties: SuiteSteamPropertiesOutput = prvWithDesuperheating.getFeedwaterProperties();
+        prvOutput.feedwaterEnergyFlow = prvWithDesuperheating.getFeedwaterEnergyFlow();
+        prvOutput.feedwaterMassFlow = prvWithDesuperheating.getFeedwaterMassFlow();
         prvOutput.feedwaterPressure = feedwaterProperties.pressure;
         prvOutput.feedwaterQuality = feedwaterProperties.quality;
         prvOutput.feedwaterVolume = feedwaterProperties.specificVolume;
@@ -1104,13 +1155,13 @@ export class SteamSuiteApiService {
     return prvOutput;
   }
 
-  getFlashTankOutput(blowdownFlashTank) {
+  getFlashTankOutput(blowdownFlashTank: SuiteFlashTank): FlashTankOutput {
     let flashTankOutput: FlashTankOutput;
     if (blowdownFlashTank) {
 
-      let waterProperties = blowdownFlashTank.getInletWaterProperties();
-      let outletGasProperties = blowdownFlashTank.getOutletGasSaturatedProperties();
-      let outletLiquidProperties = blowdownFlashTank.getOutletLiquidSaturatedProperties();
+      let waterProperties: FluidProperties = blowdownFlashTank.getInletWaterProperties();
+      let outletGasProperties: FluidProperties = blowdownFlashTank.getOutletGasSaturatedProperties();
+      let outletLiquidProperties: FluidProperties = blowdownFlashTank.getOutletLiquidSaturatedProperties();
 
       flashTankOutput = {
         inletWaterEnergyFlow: waterProperties.energyFlow,
@@ -1147,17 +1198,17 @@ export class SteamSuiteApiService {
     return flashTankOutput;
   }
 
-  getBoilerOutput(boiler) {
+  getBoilerOutput(boiler: SuiteBoiler): BoilerOutput {
     let output: BoilerOutput;
     if (boiler) {
-      let boilerSteamProperties = boiler.getSteamProperties();
-      let boilerBlowdownProperties = boiler.getBlowdownProperties();
-      let boilerFeedwaterProperties = boiler.getFeedwaterProperties();
+      let boilerSteamProperties: FluidProperties = boiler.getSteamProperties();
+      let boilerBlowdownProperties: FluidProperties = boiler.getBlowdownProperties();
+      let boilerFeedwaterProperties: FluidProperties = boiler.getFeedwaterProperties();
 
-      let boilerEnergy = boiler.getBoilerEnergy();
-      let fuelEnergy = boiler.getFuelEnergy();
-      let blowdownRate = boiler.getBlowdownRate();
-      let combustionEfficiency = boiler.getCombustionEfficiency();
+      let boilerEnergy: number = boiler.getBoilerEnergy();
+      let fuelEnergy: number = boiler.getFuelEnergy();
+      let blowdownRate: number = boiler.getBlowdownRate();
+      let combustionEfficiency: number = boiler.getCombustionEfficiency();
 
       output = {
         steamPressure: boilerSteamProperties.pressure,
@@ -1199,11 +1250,11 @@ export class SteamSuiteApiService {
     return output
   }
 
-  getDeaeratorOutput(deaerator) {
-    let inletWaterProperties = deaerator.getInletWaterProperties();
-    let inletSteamProperties = deaerator.getInletSteamProperties();
-    let feedwaterProperties = deaerator.getFeedwaterProperties();
-    let ventedSteamProperties = deaerator.getVentedSteamProperties();
+  getDeaeratorOutput(deaerator: SuiteDeaerator): DeaeratorOutput {
+    let inletWaterProperties: FluidProperties = deaerator.getInletWaterProperties();
+    let inletSteamProperties: FluidProperties = deaerator.getInletSteamProperties();
+    let feedwaterProperties: FluidProperties = deaerator.getFeedwaterProperties();
+    let ventedSteamProperties: FluidProperties = deaerator.getVentedSteamProperties();
 
     let output: DeaeratorOutput = {
       feedwaterEnergyFlow: feedwaterProperties.energyFlow,
@@ -1252,19 +1303,19 @@ export class SteamSuiteApiService {
   }
 
 
-  getInletVector(inletsArray: Array<HeaderInputObj>) {
-    let inletVector = new this.toolsSuiteApiService.ToolsSuiteModule.InletVector();
+  getInletArray(inletsArray: Array<HeaderInputObj>): Array<Inlet> {
+    let inletArray: Array<Inlet> = [];
     inletsArray.forEach(inlet => {
-      let thermodynamicQuantityType = this.suiteApiHelperService.getThermodynamicQuantityType(inlet.thermodynamicQuantity);
-      let inletPointer = new this.toolsSuiteApiService.ToolsSuiteModule.Inlet(
+      let thermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(inlet.thermodynamicQuantity);
+      let inletPointer: Inlet = new this.toolsSuiteApiService.ToolsSuiteModule.Inlet(
         inlet.pressure,
         thermodynamicQuantityType,
         inlet.quantityValue,
         inlet.massFlow
       );
-      inletVector.push_back(inletPointer);
+      inletArray.push(inletPointer);
     });
 
-    return inletVector;
+    return inletArray;
   }
 }

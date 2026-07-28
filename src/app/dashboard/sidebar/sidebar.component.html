@@ -55,7 +55,8 @@
     </span>
   </div>
   
-  <div *ngIf="showSurveyLink" class="sidebar-group secondary">
+  <!-- Issue #8725: MEASUR survey disabled -->
+  <div *ngIf="false" class="sidebar-group secondary">
     <span routerLinkActive="selected" class="sidebar-item" (click)="showSurvey()">
       <span class="fa fa-info-circle mr-1 info-icon"></span>
       MEASUR Survey
