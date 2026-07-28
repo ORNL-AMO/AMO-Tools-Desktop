@@ -1,6 +1,6 @@
 
 import { getNewIdString } from "../../shared/helperFunctions";
-import { ChillerInventoryItem, CompressorChillerTypeEnum, CondenserCoolingMethod, DayScheduleData, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, RefrigerantType, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../../shared/models/process-cooling-assessment";
+import { ChillerInventoryItem, CompressorChillerTypeEnum, CondenserCoolingMethod, DayScheduleData, FanSpeedType, FanType, MonthlyOperatingSchedule, ProcessCoolingAssessment, RefrigerantType, TowerSizeMetric, TowerType, WeeklyOperatingSchedule } from "../../shared/models/process-cooling-assessment";
 import { Settings } from "../../shared/models/settings";
 
 export const DAY_LABELS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -38,6 +38,27 @@ export const getTowerTypes = (): SelectOption[] => {
         { value: TowerType.ThreeCellTwoSpeed, name: TowerTypes[TowerType.ThreeCellTwoSpeed] },
         { value: TowerType.VariableSpeed, name: TowerTypes[TowerType.VariableSpeed] },
     ] as const;
+};
+
+export const getTowerTypeDependentValues = (towerType: number): { numberOfFans: number; fanSpeedType: FanSpeedType; } => {
+    switch (towerType) {
+        case TowerType.OneCellOneSpeed:
+            return { numberOfFans: 1, fanSpeedType: FanSpeedType.OneSpeed };
+        case TowerType.OneCellTwoSpeed:
+            return { numberOfFans: 1, fanSpeedType: FanSpeedType.TwoSpeed };
+        case TowerType.TwoCellOneSpeed:
+            return { numberOfFans: 2, fanSpeedType: FanSpeedType.OneSpeed };
+        case TowerType.TwoCellTwoSpeed:
+            return { numberOfFans: 2, fanSpeedType: FanSpeedType.TwoSpeed };
+        case TowerType.ThreeCellOneSpeed:
+            return { numberOfFans: 3, fanSpeedType: FanSpeedType.OneSpeed };
+        case TowerType.ThreeCellTwoSpeed:
+            return { numberOfFans: 3, fanSpeedType: FanSpeedType.TwoSpeed };
+        case TowerType.VariableSpeed:
+            return { numberOfFans: 1, fanSpeedType: FanSpeedType.Variable };
+        default:
+            return { numberOfFans: 1, fanSpeedType: FanSpeedType.OneSpeed };
+    }
 };
 
 export const getRefrigerantTypes = (): SelectOption[] => {
