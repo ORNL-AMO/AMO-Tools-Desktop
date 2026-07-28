@@ -186,11 +186,12 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
              towerInput: {
               usesFreeCooling: true,
               isHEXRequired: false,
-              HEXApproachTemp: 0, 
+              HEXApproachTemp: 0,
               numberOfTowers: 1,
               numberOfFans: 1,
               fanSpeedType: 0,
               towerSizeMetric: 0,
+              isFanTypeKnown: true,
               fanType: 0,
               towerSize: 78,
               towerType: TowerType.OneCellOneSpeed
@@ -199,6 +200,7 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
               variableFlow: true,
               flowRate: 2.4,
               efficiency: 75,
+              isMotorSizeKnown: true,
               motorSize: 0,
               motorEfficiency: 85,
             },
@@ -206,6 +208,7 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
               variableFlow: true,
               flowRate: 3,
               efficiency: 75,
+              isMotorSizeKnown: true,
               motorSize: 0,
               motorEfficiency: 85,
             },
@@ -240,8 +243,8 @@ export const getDefaultMonthlyScheduleData = (): MonthlyOperatingSchedule => {
         { off: false, start: 8, end: 17, allDay: false },
         { off: false, start: 8, end: 17, allDay: false },
         { off: false, start: 8, end: 17, allDay: false },
-        { off: true, start: 8, end: 17, allDay: false },
-        { off: true, start: 8, end: 17, allDay: false }
+        { off: true, start: 0, end: 0, allDay: false },
+        { off: true, start: 0, end: 0, allDay: false }
       ],
     }
     defaultSchedule.hoursOnMonToSun = getHoursOnMonToSun(defaultSchedule.days);

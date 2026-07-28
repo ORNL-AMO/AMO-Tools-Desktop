@@ -344,8 +344,8 @@ export class ProcessCoolingSuiteApiService {
     // wetBulbHourlyTempVector = this.suiteApiHelperService.returnDoubleVector(wetbulbValues);
 
 
-    const startHoursWeekly: Array<number> = processCoolingAssessment.weeklyOperatingSchedule.days.map(day => day.start);
-    const stopHoursWeekly: Array<number> = processCoolingAssessment.weeklyOperatingSchedule.days.map(day => day.end);
+    const startHoursWeekly = processCoolingAssessment.weeklyOperatingSchedule.days.map(day => day.off ? 0 : (day.allDay ? 0 : day.start));
+    const stopHoursWeekly = processCoolingAssessment.weeklyOperatingSchedule.days.map(day => day.off ? 0 : (day.allDay ? 24 : day.end));
 
     const startHoursVector: IntVector = this.suiteApiHelperService.returnIntVector(startHoursWeekly);
     const stopHoursVector: IntVector = this.suiteApiHelperService.returnIntVector(stopHoursWeekly);
@@ -439,12 +439,6 @@ export class ProcessCoolingSuiteApiService {
    */
   private _createAirCooledSystemInput(input: AirCooledSystemInput, operations: Operations): SuiteAirCooledSystemInput {
     const ACSource: ACSourceLocation = this.suiteApiHelperService.getProcessCoolingCoolingAirSourceEnum(input.airCoolingSource);
-    // console.log('AirCooledSystemInput Inputs:');
-    // console.log('chilledWaterSupplyTemp:', operations.chilledWaterSupplyTemp);
-    // console.log('outdoorAirTemp (Outdoor Air Design Temp):', input.outdoorAirTemp);
-    // console.log('ACSource (Cooling Air Source):', ACSource);
-    // console.log('indoorTemp (Average Indoor Temp):', input.indoorTemp);
-    // console.log('followingTempDifferential:', input.followingTempDifferential);
 
     return new this.toolsSuiteApiService.ToolsSuiteModule.AirCooledSystemInput(
       operations.chilledWaterSupplyTemp,
@@ -469,7 +463,8 @@ export class ProcessCoolingSuiteApiService {
     const chillerOutput: ProcessCoolingChillerOutput[] = [];
     const numChillers: number = chillerOutputInstance.efficiency.size();
 
-    for (let i: number = 0; i < numChillers; i++) {
+      for (let i: number = 0; i < numChillers; i++) {
+      const efficiency = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.efficiency.get(i));
       const hours: Array<number> = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.hours.get(i));
       const energy: Array<number> = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.energy.get(i));
       const power: Array<number> = this.suiteApiHelperService.extractWASMArray(chillerOutputInstance.power.get(i));
@@ -482,20 +477,21 @@ export class ProcessCoolingSuiteApiService {
       }
       const suiteCurveLoadPercents: DoubleVector = this.suiteApiHelperService.returnDoubleVector(curveLoadPercents);
 
-      // * used for table data
-      const efficiencyAtLoadWasm: DoubleVector = processCoolingInstance.getChillerARIEnergyEfficiency(i, loadPercents, true);
-      const efficiencyAtLoad: Array<number> = this.suiteApiHelperService.extractWASMArray(efficiencyAtLoadWasm);
+      // * used to visualize factored performance curve
+      const curveEfficiencyAtLoadWasmFactored = processCoolingInstance.getChillerARIEnergyEfficiency(i, suiteCurveLoadPercents, true);
+      const curveEfficiencyAtLoadFactored = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasmFactored);
 
       // * used to visualize performance curve
-      const curveEfficiencyAtLoadWasm: DoubleVector = processCoolingInstance.getChillerARIEnergyEfficiency(i, suiteCurveLoadPercents, false);
-      const curveEfficiencyAtLoad: Array<number> = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasm);
+      const curveEfficiencyAtLoadWasm = processCoolingInstance.getChillerARIEnergyEfficiency(i, suiteCurveLoadPercents, false);
+      const curveEfficiencyAtLoad = this.suiteApiHelperService.extractWASMArray(curveEfficiencyAtLoadWasm);
 
       const chillerResult: ProcessCoolingChillerOutput = {
         id: this.chillerInputResultMap[i]?.id ?? `chiller-${i + 1}`,
         name: this.chillerInputResultMap[i]?.name ?? `Chiller ${i + 1}`,
-        efficiency: efficiencyAtLoad,
+        ariEfficiencyProfileFactored: curveEfficiencyAtLoadFactored,
         ariEfficiencyProfile: curveEfficiencyAtLoad,
         loadPercents: curveLoadPercents,
+        efficiency: efficiency,
         hours: hours,
         power: power,
         energy: energy,
@@ -505,7 +501,7 @@ export class ProcessCoolingSuiteApiService {
       chillerOutput.push(chillerResult);
       suiteCurveLoadPercents.delete();
       loadPercents.delete();
-      efficiencyAtLoadWasm.delete();
+      curveEfficiencyAtLoadWasmFactored.delete();
       curveEfficiencyAtLoadWasm.delete();
     }
 
@@ -732,8 +728,8 @@ export class ProcessCoolingSuiteApiService {
       fanSpeedTypeEnum,
       towerSizingEnum,
       towerCellFanTypeEnum,
-      input.towerSize,
-      input.towerSize
+      input.towerSize, // hp
+      input.towerSize // tonnage
     );
   }
 

@@ -1,7 +1,7 @@
 import { Component, DestroyRef, inject, Signal } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
-import { ProcessCoolingAssessment, TowerInput, TowerSizeMetric, TowerType } from "../../../shared/models/process-cooling-assessment";
+import { FanType, ProcessCoolingAssessment, TowerInput, TowerSizeMetric, TowerType } from "../../../shared/models/process-cooling-assessment";
 import { ProcessCoolingAssessmentService } from "../../services/process-cooling-assessment.service";
 import { TowerForm, SystemInformationFormService } from "../system-information-form.service";
 import { Settings } from "../../../shared/models/settings";
@@ -45,6 +45,7 @@ export class TowerComponent {
     this.observeTowerTypeChange();
     this.observeTowerSizeChange();
     this.observeIsHEXRequiredChange();
+    this.observeIsFanTypeKnownChange();
   }
 
   observeFormChanges() {
@@ -91,6 +92,19 @@ export class TowerComponent {
     );
   }
 
+  observeIsFanTypeKnownChange() {
+    this.isFanTypeKnown.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(
+      (isKnown) => {
+        if (!isKnown) {
+          this.fanType.setValue(FanType.Axial, { emitEvent: false });
+        }
+        this.updateAssessment();
+      }
+    );
+  }
+
   updateAssessment() {
     let systemInformation = this.processCooling().systemInformation;
     const towerInput = this.systemInformationFormService.getTowerInput(this.form.getRawValue(), systemInformation.towerInput);
@@ -109,6 +123,7 @@ export class TowerComponent {
   get numberOfFans() { return this.form.get('numberOfFans'); }
   get fanSpeedType() { return this.form.get('fanSpeedType'); }
   get towerSizeMetric() { return this.form.get('towerSizeMetric'); }
+  get isFanTypeKnown() { return this.form.get('isFanTypeKnown'); }
   get fanType() { return this.form.get('fanType'); }
   get towerSize() { return this.form.get('towerSize'); }
 
