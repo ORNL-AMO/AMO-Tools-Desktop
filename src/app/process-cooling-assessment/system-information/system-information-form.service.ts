@@ -1,7 +1,7 @@
 // (TowerForm and methods moved into class below)
 import { inject, Injectable } from '@angular/core';
 import { FormGroup, Validators, FormBuilder, FormControl, ValidatorFn } from '@angular/forms';
-import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, AirCoolingSource, TowerSizeMetric, FanType } from '../../shared/models/process-cooling-assessment';
+import { Operations, PumpInput, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, CondenserCoolingMethod, SystemInformation, AirCoolingSource, TowerSizeMetric, FanType, FanSpeedType } from '../../shared/models/process-cooling-assessment';
 import { PROCESS_COOLING_VALIDATION } from '../constants/process-cooling-validation-rules';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 import { Settings } from '../../shared/models/settings';
@@ -368,7 +368,7 @@ getWaterCooledFollowingTempDifferentialValidators(settings: Settings): Validator
     };
   }
 
-  public getTowerTypeDependentValues(towerType: number): { numberOfFans: number; fanSpeedType: number; } {
+  public getTowerTypeDependentValues(towerType: number): { numberOfFans: number; fanSpeedType: FanSpeedType; } {
     return getTowerTypeDependentValues(towerType);
   }
 

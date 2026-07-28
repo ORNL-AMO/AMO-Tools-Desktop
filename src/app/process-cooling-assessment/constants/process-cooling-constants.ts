@@ -40,7 +40,7 @@ export const getTowerTypes = (): SelectOption[] => {
     ] as const;
 };
 
-export const getTowerTypeDependentValues = (towerType: number): { numberOfFans: number; fanSpeedType: number; } => {
+export const getTowerTypeDependentValues = (towerType: number): { numberOfFans: number; fanSpeedType: FanSpeedType; } => {
     switch (towerType) {
         case TowerType.OneCellOneSpeed:
             return { numberOfFans: 1, fanSpeedType: FanSpeedType.OneSpeed };

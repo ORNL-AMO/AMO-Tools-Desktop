@@ -73,6 +73,30 @@ describe('UpdateDataService.updateProcessCooling', () => {
 
       expect(updated.processCooling.systemInformation.towerInput.fanSpeedType).toBe(1);
     });
+
+    it('does not touch fanSpeedType when towerType is undefined', () => {
+      const assessment = buildAssessment({
+        systemInformation: {
+          towerInput: { towerType: undefined, fanSpeedType: 1 } as any
+        } as any
+      });
+
+      const updated = service.updateAssessmentVersion(assessment);
+
+      expect(updated.processCooling.systemInformation.towerInput.fanSpeedType).toBe(1);
+    });
+
+    it('does not touch fanSpeedType when towerType is null', () => {
+      const assessment = buildAssessment({
+        systemInformation: {
+          towerInput: { towerType: null, fanSpeedType: 1 } as any
+        } as any
+      });
+
+      const updated = service.updateAssessmentVersion(assessment);
+
+      expect(updated.processCooling.systemInformation.towerInput.fanSpeedType).toBe(1);
+    });
   });
 
   describe('modifications[].upgradeCoolingTowerFans.fanSpeedType', () => {
@@ -93,7 +117,7 @@ describe('UpdateDataService.updateProcessCooling', () => {
       expect(updated.processCooling.modifications[1].upgradeCoolingTowerFans.fanSpeedType).toBe(2);
     });
 
-    it('does not throw when a modification has no towerType set', () => {
+    it('does not throw and leaves fanSpeedType untouched when a modification has no towerType set', () => {
       const assessment = buildAssessment({
         systemInformation: {
           towerInput: { towerType: TowerType.OneCellOneSpeed, fanSpeedType: 1 } as any
@@ -105,6 +129,21 @@ describe('UpdateDataService.updateProcessCooling', () => {
 
       expect(() => service.updateAssessmentVersion(assessment)).not.toThrow();
       expect(assessment.processCooling.modifications[0].upgradeCoolingTowerFans.fanSpeedType).toBeUndefined();
+    });
+
+    it('leaves fanSpeedType untouched when a modification towerType is null', () => {
+      const assessment = buildAssessment({
+        systemInformation: {
+          towerInput: { towerType: TowerType.OneCellOneSpeed, fanSpeedType: 1 } as any
+        } as any,
+        modifications: [
+          { upgradeCoolingTowerFans: { towerType: null, fanSpeedType: 1 } } as any,
+        ]
+      });
+
+      const updated = service.updateAssessmentVersion(assessment);
+
+      expect(updated.processCooling.modifications[0].upgradeCoolingTowerFans.fanSpeedType).toBe(1);
     });
   });
 

@@ -53,12 +53,12 @@ export class UpdateDataService {
     }
 
     updateTowerFanSpeedType(processCooling: ProcessCoolingAssessment): ProcessCoolingAssessment {
-        if (processCooling.systemInformation?.towerInput) {
+        if (processCooling.systemInformation?.towerInput && processCooling.systemInformation.towerInput.towerType != null) {
             processCooling.systemInformation.towerInput.fanSpeedType = getTowerTypeDependentValues(processCooling.systemInformation.towerInput.towerType).fanSpeedType;
         }
         if (processCooling.modifications) {
             processCooling.modifications.forEach(mod => {
-                if (mod.upgradeCoolingTowerFans && mod.upgradeCoolingTowerFans.towerType !== undefined) {
+                if (mod.upgradeCoolingTowerFans && mod.upgradeCoolingTowerFans.towerType != null) {
                     mod.upgradeCoolingTowerFans.fanSpeedType = getTowerTypeDependentValues(mod.upgradeCoolingTowerFans.towerType).fanSpeedType;
                 }
             });
