@@ -26,6 +26,7 @@ function makeTowerForm(): FormGroup<TowerForm> {
     numberOfFans: new FormControl<number>(MOCK_TOWER_INPUT.numberOfFans, { nonNullable: true }),
     fanSpeedType: new FormControl<number>(MOCK_TOWER_INPUT.fanSpeedType, { nonNullable: true }),
     towerSizeMetric: new FormControl<number>(MOCK_TOWER_INPUT.towerSizeMetric, { nonNullable: true }),
+    isFanTypeKnown: new FormControl<boolean>(MOCK_TOWER_INPUT.isFanTypeKnown, { nonNullable: true }),
     fanType: new FormControl<number>(MOCK_TOWER_INPUT.fanType, { nonNullable: true }),
     towerSize: new FormControl<number>(MOCK_TOWER_INPUT.towerSize, { nonNullable: true }),
   });
