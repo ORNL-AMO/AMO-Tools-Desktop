@@ -4,7 +4,8 @@ import { Settings } from '../../../shared/models/settings';
 import { OpportunityCardsService, OpportunityCardData } from './opportunity-cards.service';
 import { CalculatorsService } from '../../calculators/calculators.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
-import { Subscription } from 'rxjs';
+import { from, Subscription } from 'rxjs';
+import { concatMap, filter } from 'rxjs/operators';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
 import { SortCardsData } from './sort-cards-by.pipe';
@@ -40,15 +41,17 @@ export class OpportunityCardsComponent implements OnInit {
     private assessmentIntegrationService: AssessmentIntegrationService) { }
 
   ngOnInit() {
-    this.updateOpportunityCardsSub = this.opportunityCardsService.updateOpportunityCards.subscribe(async val => {
-      if (val == true) {
+    this.updateOpportunityCardsSub = this.opportunityCardsService.updateOpportunityCards.pipe(
+      filter(val => val === true),
+      concatMap(() => {
         this.treasureHunt = this.treasureHuntService.treasureHunt.getValue();
         this.opportunityCardList = this.opportunityCardsService.getOpportunityCardsData(this.treasureHunt, this.settings);
-        await this.opportunityCardsService.checkAssessmentOpportunityStaleness(this.opportunityCardList, this.settings);
-        this.opportunityCardList = Array.from(this.opportunityCardList);
-        this.opportunityCardsService.opportunityCards.next(this.opportunityCardList);
-        this.opportunityCardsService.updateOpportunityCards.next(false);
-      }
+        return from(this.opportunityCardsService.checkAssessmentOpportunityStaleness(this.opportunityCardList, this.settings));
+      })
+    ).subscribe(() => {
+      this.opportunityCardList = Array.from(this.opportunityCardList);
+      this.opportunityCardsService.opportunityCards.next(this.opportunityCardList);
+      this.opportunityCardsService.updateOpportunityCards.next(false);
     });
     this.updatedOpportunityCardSub = this.opportunityCardsService.updatedOpportunityCard.subscribe(updatedOpportunityCard => {
       if (updatedOpportunityCard) {
@@ -209,6 +212,7 @@ export class OpportunityCardsComponent implements OnInit {
       return;
     }
     existingData.energyOptions.baseline = integratedAssessment.energyOptions.baseline;
+    cardData.assessmentOpportunity.baselineEnergyUseItems = integratedAssessment.baselineEnergyUseItems;
     if (integratedAssessment.hasModifications && existingData.energyOptions.modifications?.length > 0) {
       integratedAssessment.energyOptions.modifications.forEach(modification => {
         const existingMod = existingData.energyOptions.modifications.find(
@@ -221,6 +225,12 @@ export class OpportunityCardsComponent implements OnInit {
           existingMod.name = modification.name;
         }
       });
+      const selectedModification = integratedAssessment.modificationEnergyUseItems?.find(
+        item => item.modificationId === existingData.selectedModificationId
+      );
+      if (selectedModification) {
+        cardData.assessmentOpportunity.modificationEnergyUseItems = selectedModification.energies;
+      }
     }
     cardData.hasStaleAssessmentData = false;
     this.opportunityCardList = Array.from(this.opportunityCardList);
