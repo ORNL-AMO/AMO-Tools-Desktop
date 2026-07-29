@@ -42,11 +42,12 @@ export const validateTotalFlowValue = (connectedEdges: Edge<CustomEdgeData>[], c
 };
 
 /**
-   * Users can enter total known losses as input, or construct them from diagram components. Ensure they match
+   * Users can enter total known losses as input, or construct them from diagram components. Ensure they match.
    * @param sumKnownLosses sum of user placed Known Loss components on diagram (Known Loss Flows)
-   * @param userEnteredKnownLoss 
+   * @param userEnteredKnownLoss user-entered known loss value; may be null or undefined (no validation performed)
+   * @param precision decimal places to round to before comparing (default: 2)
    */
-export const validateKnownLosses = (sumKnownLosses: number, userEnteredKnownLoss: number, precision: number) => {
+export const validateKnownLosses = (sumKnownLosses: number, userEnteredKnownLoss: number | null | undefined, precision: number) => {
     if (sumKnownLosses > 0) {
         if (userEnteredKnownLoss !== undefined && userEnteredKnownLoss !== null) {
             const sumKnownLossesToPrecision = Number(sumKnownLosses.toFixed(precision));
