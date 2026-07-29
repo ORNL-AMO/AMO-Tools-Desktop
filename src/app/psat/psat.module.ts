@@ -53,6 +53,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
+import { SankeySharedModule } from '../shared/sankey/sankey-shared.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { PumpOperationsComponent } from './pump-operations/pump-operations.component';
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
@@ -121,6 +122,7 @@ import { PsatReportAdapter } from './psat-report/psat-report.adapter';
     UnitConverterModule,
     SystemAndEquipmentCurveModule,
     PsatSankeyModule,
+    SankeySharedModule,
     UpdateUnitsModalModule,
     AssessmentCo2SavingsModule,
     ConnectedInventoryModule,    

@@ -3,6 +3,7 @@ import { PHAST, ExecutiveSummary } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { ExecutiveSummaryService } from '../executive-summary.service';
+import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
 
 @Component({
     selector: 'app-report-sankey',
@@ -29,12 +30,10 @@ export class ReportSankeyComponent implements OnInit {
 
   energySavingsUnit: string;
 
-  modification: PHAST;
-  modifications: Array<ExecutiveSummary>;
   assessmentName: string;
-  phastOptions: Array<any>;
-  phast1: {name, phast};
-  phast2: {name, phast};
+  phastOptions: Array<SankeyScenarioOption>;
+  phast1: PHAST;
+  phast2: PHAST;
   modExists: boolean = false;
   constructor(private executiveSummaryService: ExecutiveSummaryService) { }
 
@@ -43,19 +42,28 @@ export class ReportSankeyComponent implements OnInit {
     this.assessmentName = this.assessment.name.replace(/\s/g, '');
     this.assessmentName = this.assessmentName.replace('(', '');
     this.assessmentName = this.assessmentName.replace(')', '');
-    this.phastOptions = new Array<any>();
-    this.phastOptions.push({name: 'Baseline', phast: this.phast});
-    this.phast1 = this.phastOptions[0];
-    if (this.phast.modifications) {
+    this.phastOptions = [{ name: 'Baseline', value: this.phast }];
+    this.phast1 = this.phast;
+    if (this.phast.modifications?.length) {
       this.modExists = true;
       this.phast.modifications.forEach(mod => {
-        this.phastOptions.push({name: mod.phast.name, phast: mod.phast});
+        this.phastOptions.push({ name: mod.phast.name, value: mod.phast });
       });
-      this.phast2 = this.phastOptions[1];
     }
+    this.phast2 = this.phast.modifications?.[0]?.phast ?? this.phast;
 
     this.energySavingsUnit = this.settings.energyResultUnit + "/yr";
     this.getPhast1Savings();
+    this.getPhast2Savings();
+  }
+
+  onPhast1Change(phast: PHAST) {
+    this.phast1 = phast;
+    this.getPhast1Savings();
+  }
+
+  onPhast2Change(phast: PHAST) {
+    this.phast2 = phast;
     this.getPhast2Savings();
   }
 
@@ -63,15 +71,8 @@ export class ReportSankeyComponent implements OnInit {
     if (!this.phast1) {
       return;
     }
-
-    let isMod;
-    if (this.phast1.name === this.phast.name) {
-      isMod = false;
-    }
-    else {
-      isMod = true;
-    }
-    let tmpSummary = this.executiveSummaryService.getSummary(this.phast1.phast, isMod, this.settings, this.phastOptions[0].phast, this.baseline);
+    let isMod = this.phast1.name !== this.phast.name;
+    let tmpSummary = this.executiveSummaryService.getSummary(this.phast1, isMod, this.settings, this.phast, this.baseline);
     this.phast1CostSavings = tmpSummary.annualCostSavings;
     this.phast1EnergySavings = tmpSummary.annualEnergySavings;
   }
@@ -80,14 +81,8 @@ export class ReportSankeyComponent implements OnInit {
     if (!this.phast2) {
       return;
     }
-    let isMod;
-    if (this.phast2.name === this.phast.name) {
-      isMod = false;
-    }
-    else {
-      isMod = true;
-    }
-    let tmpSummary = this.executiveSummaryService.getSummary(this.phast2.phast, isMod, this.settings, this.phastOptions[0].phast, this.baseline);
+    let isMod = this.phast2.name !== this.phast.name;
+    let tmpSummary = this.executiveSummaryService.getSummary(this.phast2, isMod, this.settings, this.phast, this.baseline);
     this.phast2CostSavings = tmpSummary.annualCostSavings;
     this.phast2EnergySavings = tmpSummary.annualEnergySavings;
   }

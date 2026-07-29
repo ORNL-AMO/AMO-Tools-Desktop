@@ -1,101 +1,15 @@
 <div class="output-summary">
   <div class="d-flex flex-column">
-    <div class="d-flex" [ngClass]="{'flex-column': showPrint}">
-      <div class="d-flex flex-column w-25 align-items-center justify-content-center">
-        <select
-          name="phastSelect"
-          class="form-control w-100 mx-auto"
-          id="phastSelect"
-          (change)="getPhast1Savings()"
-          [(ngModel)]="phast1"
-        >
-          <option *ngFor="let phast of phastOptions" [ngValue]="phast">{{
-            phast.name
-          }}</option>
-        </select>
-        <table class="table-savings">
-          <tr>
-            <td class="td-title">Energy Savings:</td>
-            <td
-              class="td-value"
-              [ngClass]="{
-                'negative-savings': phast1EnergySavings < 0,
-                'positive-savings': phast1EnergySavings > 0
-              }"
-            >
-              {{ phast1EnergySavings | number: "1.0-2" }} {{ energySavingsUnit }}
-            </td>
-          </tr>
-          <tr>
-            <td class="td-title">Cost Savings:</td>
-            <td
-              class="td-value"
-              [ngClass]="{
-                'negative-savings': phast1CostSavings < 0,
-                'positive-savings': phast1CostSavings > 0
-              }"
-            >
-              {{ phast1CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="w-75 m-3">
-        <app-phast-sankey
-        [phast]="phast1.phast"
-        [settings]="settings"
-      ></app-phast-sankey>
-      </div>
-    </div>
+    <app-sankey-scenario-picker [options]="phastOptions" [selected]="phast1" (selectedChange)="onPhast1Change($event)"
+      [costSavings]="phast1CostSavings" [energySavings]="phast1EnergySavings" [energySavingsUnit]="energySavingsUnit"
+      [stackVertically]="showPrint">
+      <app-phast-sankey [phast]="phast1" [settings]="settings"></app-phast-sankey>
+    </app-sankey-scenario-picker>
     <hr>
-    <div class="d-flex" *ngIf="phast2">
-      <div class="d-flex flex-column w-25 align-items-center justify-content-center">
-        <select
-          name="modSelect"
-          class="form-control w-100 mx-auto"
-          id="modSelect"
-          (change)="getPhast2Savings()"
-          [(ngModel)]="phast2"
-        >
-          <option *ngFor="let phast of phastOptions" [ngValue]="phast">{{
-            phast.name
-          }}</option>
-        </select>
-        <table class="table-savings">
-          <tr>
-            <td class="td-title">Energy Savings:</td>
-            <td
-              class="td-value"
-              [ngClass]="{
-                'negative-savings': phast2EnergySavings < 0,
-                'positive-savings': phast2EnergySavings > 0
-              }"
-            >
-              {{ phast2EnergySavings | number: "1.0-2" }} {{ energySavingsUnit }}
-            </td>
-          </tr>
-          <tr>
-            <td class="td-title">Cost Savings:</td>
-            <td
-              class="td-value"
-              [ngClass]="{
-                'negative-savings': phast2CostSavings < 0,
-                'positive-savings': phast2CostSavings > 0
-              }"
-            >
-              {{ phast2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr
-            </td>
-          </tr>
-        </table>
-      </div>
-      <div class="w-75 m-3">
-        <app-phast-sankey
-        [phast]="phast2.phast"
-        [settings]="settings"
-        [printView]="false"
-      ></app-phast-sankey>
-      </div>
-
-    </div>
+    <app-sankey-scenario-picker [options]="phastOptions" [selected]="phast2"
+      (selectedChange)="onPhast2Change($event)" [costSavings]="phast2CostSavings"
+      [energySavings]="phast2EnergySavings" [energySavingsUnit]="energySavingsUnit" [stackVertically]="showPrint">
+      <app-phast-sankey [phast]="phast2" [settings]="settings"></app-phast-sankey>
+    </app-sankey-scenario-picker>
   </div>
 </div>
