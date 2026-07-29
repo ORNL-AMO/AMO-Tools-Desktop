@@ -60,7 +60,11 @@ export const makeSystemNode = (id: string): Node =>
     }),
   } as Node);
 
-export const makeDischargeNode = (id: string, costPerKGal = 0): Node =>
+export const makeDischargeNode = (
+  id: string,
+  costPerKGal = 0,
+  userEnteredData: Record<string, unknown> = {},
+): Node =>
   ({
     id,
     type: 'water-discharge',
@@ -68,6 +72,7 @@ export const makeDischargeNode = (id: string, costPerKGal = 0): Node =>
     data: basePart(id, 'water-discharge', costPerKGal, {
       disableOutflowConnections: true,
       addedMotorEnergy: [],
+      userEnteredData,
     }),
   } as Node);
 

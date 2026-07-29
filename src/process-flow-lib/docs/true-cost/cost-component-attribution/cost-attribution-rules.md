@@ -56,7 +56,7 @@ Before any attribution occurs, the total annual cost (block cost) for each cost-
 | **Which systems are eligible?** | The system immediately upstream of the discharge — the final user that directly causes the discharge. Systems further upstream whose water was reused by an intermediate system are excluded. |
 | **Walk direction** | Upstream from the discharge node. |
 | **Stopping criterion** | First water-using system on each upstream path. |
-| **Attribution fraction — proportional-discharge** | (System discharge contribution to path) / (Total discharge inflow). Capped at 1.0 per path. |
+| **Attribution fraction — proportional-discharge** | (System discharge contribution to path) / (Total discharge inflow minus any unaccounted flow the discharge reports). Capped at 1.0 per path. |
 | **Cost to system** | Attribution fraction × Discharge total block cost. |
 | **Pump/motor energy** | Also attributed to the system using the same attribution fraction. |
 | **Systems excluded** | Systems further upstream that reused their water before it reached this discharge point. |

@@ -1,8 +1,8 @@
-# True Cost Algorithm — Version 3.1
+# True Cost Algorithm — Version 3.2
 
 This document updates [algorithm-v2.md](algorithm-v2.md) to match the algorithm as actually implemented in the MEASUR Water Diagram. Each section either expands the original rule or adds rules that the implementation enforces but that v2 did not state.
 
-Content tagged ***[v3.1]*** adds the unaccounted-flow attribution rule (issue-8741) — an unrelated fix layered on top of the RO-configuration work tagged ***[v3]***, not a continuation of it.
+Content tagged ***[v3.1]*** adds the unaccounted-flow attribution rule for intake nodes (issue-8741) — an unrelated fix layered on top of the RO-configuration work tagged ***[v3]***, not a continuation of it. Content tagged ***[v3.2]*** adds the discharge-side counterpart of that same rule (issue-8741) — `dischargeUnaccounted` was a real, user-facing field that had never been wired into discharge attribution at all, not a regression of the v3.1 fix.
 
 
 ---
@@ -38,6 +38,8 @@ The denominator is not always the same flow value. Depending on path structure, 
 3. Losses: During tracing (upstream or downstream), there could be losses in intermediate systems — e.g., when tracing intake source costs to the individual water using systems, water treatment steps in between can have losses. This should not affect the percentage ratios. (See Intake rule — How to attribute, the with-losses-path case, and Water Treatment rule — How to attribute, the chained-downstream-loss case, for the specific denominator rules that enforce this.)
 
 4. Unaccounted flow ***[v3.1]***: An intake node may report a portion of its outflow as unaccounted (unmetered loss, e.g. leakage) via a dedicated user-entered field. That flow has no downstream edge, so it can never appear in any system's flow responsibility. To satisfy Core Rule 1, the intake's attribution denominator excludes unaccounted flow — `attributableFlow = totalFlow − unaccountedFlow` — while the block cost (the dollar amount being distributed) still uses the full outflow, unaccounted flow included. This spreads the unaccounted flow's cost pro-rata across the systems that received traceable flow instead of leaving it unattributed. See Intake rule — How to attribute, the unaccounted-flow case.
+
+   A discharge node has the mirror-image field, `dischargeUnaccounted` ***[v3.2]*** (e.g. stormwater or groundwater infiltration entering the discharge point with no traceable upstream system). That flow has no upstream edge, so the same exclusion applies on the inflow side: `attributableFlow = totalFlow − dischargeUnaccounted`, with the block cost still based on the full inflow. See Discharge rule — How to attribute, the unaccounted-flow case.
 
 ---
 
@@ -121,10 +123,12 @@ Attribution runs in two sequential passes across all WWT nodes: the downstream p
 - **Where to stop:** At the first user encountered on each path (the final user causing the discharge). Do not charge upstream users whose water was reused before discharging.
 - **proportional-discharge** (formerly Case J) — how to attribute: Attribute the discharge cost by how much final discharge each user causes to that discharge node.
 - **Multi-source cap:** When a system routes water to more than one discharge node, the fraction attributed from any single path is capped at 1.0. ***[v2]***
+- **unaccounted-flow** ***[v3.2]***: a discharge node's `dischargeUnaccounted` field (e.g. stormwater/infiltration with no traceable upstream system) has no upstream edge, so it never contributes to any system's flow responsibility. The attribution denominator excludes it — `attributableFlow = totalFlow − dischargeUnaccounted` — while the block cost stays based on the full inflow. This mirrors the intake-side unaccounted-flow rule (Core Rule 4), applied to the inflow side of a discharge node instead of the outflow side of an intake node.
 
 #### Examples
 
 - **proportional-discharge:** CT HVAC sends 7 MGY to Municipal Sewer; Wash Bay sends 3 MGY. "Municipal Sewer fee" row = CT HVAC 70%, Wash Bay 30%.
+- **unaccounted-flow, independent upstream systems:** Discharge (entered inflow 100 gpm, 10 gpm reported unaccounted) receives 60 gpm from System A and 30 gpm from System B, a total of 90 gpm of traceable flow. `attributableFlow` = 100 − 10 = 90. System A and System B share 100% of the discharge's block cost (still based on the full 100 gpm) by their share of the 90 gpm `attributableFlow` — System A 66.7% (60/90), System B 33.3% (30/90) — not 100 gpm, which would leave 10/100 = 10% of the cost unattributed. ***[v3.2]***
 
 ### 5. Reverse Osmosis (RO) Configuration Override ***[v3]***
 

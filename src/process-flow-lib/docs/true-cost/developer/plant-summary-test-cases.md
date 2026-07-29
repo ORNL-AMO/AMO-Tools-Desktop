@@ -137,6 +137,36 @@ SYSTEM B ──── 40 Mgal/yr ───┘
 
 ---
 
+### 1.3b `discharge-unaccounted-flow`
+
+**What it tests:** Regression fixture for issue-8741 (discharge-side counterpart of `intake-unaccounted-flow`, §1.2b). A discharge reports 10 Mgal/yr of unaccounted inflow (e.g. stormwater/infiltration with no traceable upstream system) alongside its entered inflow of 100 Mgal/yr, fed by two systems totaling 90 Mgal/yr. Unaccounted flow has no upstream edge, so dividing the block cost by the raw entered flow (100) instead of the routed flow (90) previously left 10% of the discharge's cost unattributed.
+
+```
+SYSTEM A ──── 60 Mgal/yr ───┐
+                              ├──► DISCHARGE ($2/kgal, entered 100, unaccounted 10)
+SYSTEM B ──── 30 Mgal/yr ───┘
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| Discharge | $2/kgal | 100 Mgal/yr entered (unaccounted included) | **$200,000** |
+
+`attributableFlow` = 100 − 10 = 90 Mgal/yr — the denominator used for attribution, not for the block cost above.
+
+**Expected attribution**
+
+| System | Discharge share (of attributableFlow) | Discharge $ |
+|---|---|---|
+| System A | 60 / 90 = 66.7% | **$133,333** |
+| System B | 30 / 90 = 33.3% | **$66,667** |
+| **Total** | 100% | **$200,000** ✓ |
+
+Without the `attributableFlow` denominator, the same two systems would only sum to 60/100 + 30/100 = 90%, leaving $20,000 (the unaccounted flow's share of the block cost) permanently unattributed.
+
+---
+
 ## Part 2 — Water Treatment Configurations
 
 ### 2.1 `treatment-no-loss`

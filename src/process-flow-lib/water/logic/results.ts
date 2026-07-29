@@ -637,11 +637,17 @@ const getInflowBlockCosts = (
   const costPerKGal = node.data.cost ?? 0;
   const costOfInflow = getFlowCost(costPerKGal, inflow, unitsOfMeasure);
 
+  // * unaccounted flow only applies to discharge nodes; treatment/waste-treatment nodes never set dischargeUnaccounted, so attributableFlow
+  // * equals totalFlow for them. Mirrors intakeUnaccounted handling in getOutflowBlockCosts.
+  const unaccountedFlow = node.data.userEnteredData?.dischargeUnaccounted ?? 0;
+  const attributableFlow = inflow - unaccountedFlow;
+
   const blockCosts: BlockCosts = {
     name: node.data.name,
     processComponentType: node.data.processComponentType,
     totalBlockCost: costOfInflow,
     totalFlow: inflow,
+    attributableFlow: attributableFlow,
   };
 
   return blockCosts;
@@ -997,6 +1003,10 @@ const applySystemDischargeCosts = (
     let pathsAttributed: string[][] = [];
     let adjustedAttributions: SystemAttributionMap = {};
 
+    // * deliberately attributableFlow, not totalFlow: totalFlow (used for totalBlockCost) includes unaccounted
+    // * flow, which has no upstream edge and would otherwise leave systemAttributionFraction short of 100%.
+    const attributableDischargeInflow = dischargeData.blockCosts.attributableFlow ?? dischargeData.blockCosts.totalFlow;
+
     dischargeData.upstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
       // * for this path, eliminate mischarging an upstream system who provides reused water to the current system
       let visitedSystemIds: string[] = [];
@@ -1030,7 +1040,7 @@ const applySystemDischargeCosts = (
           // * fractionPathDischargeReceived ternary will ignore cases where systemDischarge > pathDischarge due to flow from other discharges. We will observe other discharges on another iteration
           const fractionPathDischargeReceived = (systemDischarge / pathDischarge) > 1 ? 1 : (systemDischarge / pathDischarge);
           const systemFlowResponsibility = pathDischarge * fractionPathDischargeReceived;
-          const contributorAttributionFraction = (systemFlowResponsibility / dischargeData.blockCosts.totalFlow);
+          const contributorAttributionFraction = (systemFlowResponsibility / attributableDischargeInflow);
 
           if (isRoRejectContribution && roRejectConfig) {
             // * ro-reject-redirect: split this contribution across the RO's product recipients, not the RO node itself.
