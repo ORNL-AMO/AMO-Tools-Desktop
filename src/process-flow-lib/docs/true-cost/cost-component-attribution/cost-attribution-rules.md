@@ -56,7 +56,7 @@ Before any attribution occurs, the total annual cost (block cost) for each cost-
 | **Which systems are eligible?** | The system immediately upstream of the discharge — the final user that directly causes the discharge. Systems further upstream whose water was reused by an intermediate system are excluded. |
 | **Walk direction** | Upstream from the discharge node. |
 | **Stopping criterion** | First water-using system on each upstream path. |
-| **Attribution fraction — proportional-discharge** | (System discharge contribution to path) / (Total discharge inflow minus any unaccounted flow the discharge reports). Capped at 1.0 per path. |
+| **Attribution fraction — branch-ratio product rule** | Walk every edge in the path from discharge to system; for each edge whose target is a waste-water-treatment node, take that edge's flow divided by the treatment node's total inflow (`localRatio`, 1.0 for a single-contributor node regardless of loss). `branchFraction` = the product of every `localRatio` in the path. Attribution fraction = (discharge-adjacent flow × `branchFraction`) / (total discharge inflow minus any unaccounted flow the discharge reports). Naturally bounded to [0, 1] — no explicit cap needed. Covers direct shared discharges, single-contributor lossy chains, merge nodes with multiple contributors, and unaccounted flow with one formula. |
 | **Cost to system** | Attribution fraction × Discharge total block cost. |
 | **Pump/motor energy** | Also attributed to the system using the same attribution fraction. |
 | **Systems excluded** | Systems further upstream that reused their water before it reached this discharge point. |

@@ -41,39 +41,74 @@ Example — Branching path (two systems discharging to one outlet):
 
 ## 3. Flow Fraction and Cost Calculation
 
-### 3.1 proportional-discharge — Standard Case
+### 3.1 Branch-Ratio Product Rule
 
-The discharge cost allocation mirrors the intake cost allocation method, but applied in the upstream direction.
+The discharge cost allocation mirrors the intake cost allocation method's branch-ratio product
+rule (see *Apply System Intake Costs* §3.1), but applied in the upstream direction and keyed to
+each waste-water-treatment merge node's total **inflow** instead of a water-treatment node's total
+outflow.
 
-**Step 1 — Determine path discharge flow:**  
-The flow value on the first edge leaving the discharge node in the upstream direction (i.e., the edge entering the discharge).
+**Step 1 — Determine the discharge-adjacent flow:**  
+The flow value on the first edge leaving the discharge node in the upstream direction (i.e., the
+edge entering the discharge). This is the actual volume that reaches the discharge along this
+path.
 
-**Step 2 — Determine system discharge contribution to this path:**  
-The flow value on the last edge in the upstream path, immediately downstream of the system being evaluated.
+**Step 2 — Walk the path and compute the branch fraction:**  
+For every edge in the path from the discharge to the system (excluding the discharge-adjacent
+edge itself), check whether that edge's *target* is a waste-water-treatment node. If so, compute
+that edge's **local branch ratio**:
 
-**Step 3 — Compute fraction of path discharge caused by this system:**
+    localRatio = edge flow / waste-water-treatment node's total inflow (from all of its contributors)
 
-    Fraction of path discharge = min(Path first-edge flow / System edge flow, 1.0)
+A waste-water-treatment node with a single upstream contributor always produces `localRatio =
+1.0` — its full inflow comes down the one path that exists, so it is invisible to the
+calculation, whether or not that node loses volume. A node that merges more than one upstream
+contributor divides its total inflow among them, so each contributor's edge gets a `localRatio`
+less than 1.0 — this is what correctly apportions volume lost at a shared merge point across the
+systems that fed it, instead of crediting each one independently for the full downstream flow.
 
-The cap at 1.0 prevents over-attribution when a system also sends water to other discharge points; those will be evaluated in their own separate path iterations.
+Multiply every `localRatio` found in the path together to get the **branch fraction**:
 
-**Step 4 — Compute system flow responsibility:**
+    branchFraction = Π(localRatio for every waste-water-treatment-target edge in the path)
 
-    System flow responsibility = System edge flow × Fraction of path discharge
+If no waste-water-treatment node appears in the path (a direct system → discharge edge), or every
+waste-water-treatment node in the path has a single contributor, `branchFraction = 1.0`.
 
-**Step 5 — Compute attribution fraction:**
+**Step 3 — Compute system flow responsibility:**
+
+    System flow responsibility = Discharge-adjacent flow × branchFraction
+
+**Step 4 — Compute attribution fraction:**
 
     Attribution fraction = System flow responsibility / Discharge block cost attributable flow
 
 `Attributable flow` is the discharge's total inflow minus any unaccounted flow the discharge
-reports (see Core Rule below) — it is not the same value used for the discharge's block cost,
+reports (see Core Rule 4 below) — it is not the same value used for the discharge's block cost,
 which stays based on the full inflow.
 
-**Step 6 — Compute cost to system:**
+No cap is applied — the product of ratios in Step 2 cannot exceed 1.0 given valid flow data, so
+the attribution fraction is bounded automatically. (A prior version of this formula applied
+`min(systemEdgeFlow / dischargeAdjacentFlow, 1.0)` — comparing only the two endpoint edges — as an
+explicit safeguard; that formula never inspected any edge *between* the two endpoints, so it was
+blind to loss or merging at any waste-water-treatment node along the way. It over-attributed
+whenever more than one system converged through a shared, lossy waste-water-treatment node before
+reaching the discharge — see Core Rule 3 and the worked example in §7c.)
+
+**Step 5 — Compute cost to system:**
 
     Cost to system = Attribution fraction × Discharge total block cost
 
-**Core Rule (unaccounted flow doesn't go unattributed):** A discharge node may report a portion
+**Core Rule 3 (merge-node losses don't cause over-attribution):** When more than one system's
+flow converges through a shared waste-water-treatment node that loses volume, each contributing
+system is responsible only for its proportional share of the merge node's total inflow — not its
+own full raw outflow independently compared against the (smaller) post-loss volume reaching the
+discharge. The branch-ratio product rule enforces this because each merge node's `localRatio` is
+keyed to that node's total inflow across *all* its contributors, so the contributors' shares
+always sum to the node's actual downstream volume rather than double- or over-counting it. This
+mirrors Core Rule 3 in *Apply System Intake Costs* ("losses during tracing should not affect the
+percentage ratios"), applied to the upstream/fan-in side instead of the downstream/fan-out side.
+
+**Core Rule 4 (unaccounted flow doesn't go unattributed):** A discharge node may report a portion
 of its inflow as unaccounted (e.g. stormwater or groundwater infiltration entering the discharge
 point directly, with no traceable upstream system) via a dedicated user-entered field. That flow
 has no upstream edge, so it never contributes to any system's flow responsibility. If the
@@ -136,16 +171,14 @@ As with intake cost attribution, a system may appear on multiple upstream paths 
 110 Mgal/yr × 1,000 × $1.80/kgal = $198,000/yr
 
 **Path 1 — Discharge → System A (upstream):**
-- First-edge discharge flow = 70 Mgal/yr (edge from System A to discharge)
-- System A's edge flow = 70 Mgal/yr
-- Fraction = min(70/70, 1.0) = 1.0
+- Discharge-adjacent flow = 70 Mgal/yr (edge from System A to discharge; no waste-water-treatment
+  node in the path, so `branchFraction` = 1.0)
 - System flow responsibility = 70 × 1.0 = 70 Mgal/yr
 - Attribution fraction = 70 / 110 = 0.636
 - Cost to System A = 0.636 × $198,000 = **$125,925/yr**
 
 **Path 2 — Discharge → System B (upstream):**
-- First-edge flow = 40 Mgal/yr
-- System B's edge flow = 40 Mgal/yr
+- Discharge-adjacent flow = 40 Mgal/yr, `branchFraction` = 1.0
 - Attribution fraction = 40 / 110 = 0.364
 - Cost to System B = 0.364 × $198,000 = **$72,075/yr**
 
@@ -186,6 +219,44 @@ Core Rule 1.
 
 ---
 
+## 7c. Worked Example — Merge-Node Loss
+
+**Scenario:** Two systems both discharge into a shared waste-water-treatment unit that loses
+volume before reaching the discharge.
+
+```
+  System A (60 Mgal/yr) ──┐
+                            ├──► WWT ($1/kgal, 100 in / 80 out, loses 20) ──► Discharge (80 in)
+  System B (40 Mgal/yr) ──┘
+```
+
+**Block cost of discharge:** 80 Mgal/yr × 1,000 × $1/kgal = **$80,000/yr**.
+
+**Path 1 — Discharge → WWT → System A (upstream):**
+- Discharge-adjacent flow = 80 Mgal/yr (edge from WWT to discharge)
+- `localRatio` at WWT = System A's edge flow (60) / WWT's total inflow (100) = 0.60
+- `branchFraction` = 0.60
+- System flow responsibility = 80 × 0.60 = 48 Mgal/yr
+- Attribution fraction = 48 / 80 = 0.60
+- Cost to System A = 0.60 × $80,000 = **$48,000/yr**
+
+**Path 2 — Discharge → WWT → System B (upstream):**
+- `localRatio` at WWT = 40 / 100 = 0.40
+- System flow responsibility = 80 × 0.40 = 32 Mgal/yr
+- Attribution fraction = 32 / 80 = 0.40
+- Cost to System B = 0.40 × $80,000 = **$32,000/yr**
+
+**Check:** $48,000 + $32,000 = $80,000 = Total discharge block cost ✓
+
+**Check — what goes wrong without this rule:** The prior cap-based formula compared the
+discharge-adjacent flow (80) against each system's own edge flow independently: System A =
+min(80/60, 1.0) × 60 = 60, giving 60/80 = 75%; System B = min(80/40, 1.0) × 40 = 40, giving
+40/80 = 50%. Sum = 125% ($100,000 attributed against an $80,000 block cost), because neither
+calculation ever learned that WWT's other contributor existed or that WWT lost 20 Mgal/yr — each
+system was independently credited as if its own full raw outflow reached the discharge.
+
+---
+
 ## 8. Summary of Attribution Rules
 
 | Rule | Description |
@@ -193,17 +264,10 @@ Core Rule 1.
 | Walk direction | Upstream from discharge |
 | Stopping point | First water-using system on each path |
 | Cost basis | Full discharge block cost (unit cost × total discharge inflow, unaccounted flow included) |
-| Attribution denominator | System flow responsibility ÷ `attributableFlow` (total discharge inflow minus any unaccounted flow) |
-| Cap on fraction per path | Min(path first-edge flow / system edge flow, 1.0) |
+| Attribution denominator — branch-ratio product rule | Discharge-adjacent flow × `branchFraction`, where `branchFraction` is the product of every waste-water-treatment-target edge's `localRatio` (that edge's flow ÷ its target waste-water-treatment node's total inflow) across the whole path, divided by `attributableFlow` (total discharge inflow minus any unaccounted flow). Covers direct shared discharges, single-contributor waste-water-treatment chains (with or without loss), merge nodes with multiple contributors, and unaccounted flow with one formula. |
+| Cap on fraction per path | None needed — the branch-ratio product cannot exceed 1.0 given valid flow data. |
 | Pump/motor energy | Attributed using same fraction as discharge cost |
 | Adjusted attribution | User-supplied fraction replaces computed default |
 | De-duplication | Identical paths from discharge to system are attributed only once |
 | Unaccounted flow | Excluded from the attribution denominator (not the block cost) so its cost is spread pro-rata across systems that sent traceable flow, instead of going unattributed |
-
-**Known limitation (out of scope for the unaccounted-flow fix above):** when multiple systems'
-flows converge through a shared waste-water-treatment node before reaching the discharge (e.g.
-three systems feeding one WWTP whose output is smaller than their combined input), the
-cap-based `Fraction of path discharge` in §3.1 Step 3 over-attributes flow responsibility,
-because it compares the discharge-adjacent edge against each contributing system's own edge
-independently rather than apportioning by each contributor's share of the merge node's total
-inflow. This is a separate defect from unaccounted flow and is tracked independently.
+| Merge-node losses | Excluded from over-attributing any single contributor by keying each merge node's `localRatio` to its total inflow across all contributors, instead of comparing only the two endpoint edges of a path |

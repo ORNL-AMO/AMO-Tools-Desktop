@@ -167,6 +167,36 @@ Without the `attributableFlow` denominator, the same two systems would only sum 
 
 ---
 
+### 1.3c `discharge-merge-loss`
+
+**What it tests:** Regression fixture for issue-8741. Two systems converge through a shared, lossy waste-water-treatment node (100 Mgal/yr in, 80 Mgal/yr out) before reaching a discharge. The pre-fix formula compared the discharge-adjacent edge (80) against each system's own raw outflow independently (capped at 1.0), crediting System A with `min(80/60,1)×60 = 60` and System B with `min(80/40,1)×40 = 40` — summing to 100 Mgal/yr of "responsibility" against an 80 Mgal/yr discharge, i.e. 125% of the block cost. The fix apportions each system's share of the WWT node's total inflow (60/100, 40/100) and multiplies by the discharge-adjacent flow (80), so the shares sum to exactly 80.
+
+```
+SYSTEM A ──── 60 Mgal/yr ───┐
+                              ├──► WWT ($1/kgal, 100 in / 80 out, loses 20) ──► DISCHARGE (80 in)
+SYSTEM B ──── 40 Mgal/yr ───┘
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| Discharge | $1/kgal | 80 Mgal/yr in | **$80,000** |
+
+**Expected attribution**
+
+| System | `localRatio` at WWT | Discharge share | Discharge $ |
+|---|---|---|---|
+| System A | 60/100 = 0.60 | 60% | **$48,000** |
+| System B | 40/100 = 0.40 | 40% | **$32,000** |
+| **Total** | | 100% | **$80,000** ✓ |
+
+Without the branch-ratio fix, the same two systems would sum to 75% + 50% = 125% ($100,000
+attributed against an $80,000 block cost) — an over-attribution masked by neither system's
+individual fraction looking obviously wrong on its own.
+
+---
+
 ## Part 2 — Water Treatment Configurations
 
 ### 2.1 `treatment-no-loss`

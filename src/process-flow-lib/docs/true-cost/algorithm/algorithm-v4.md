@@ -1,6 +1,6 @@
-# True Cost Algorithm — Version 3
+# True Cost Algorithm — Version 4
 
-This document updates [algorithm-v2.md](algorithm-v2.md) to match the algorithm as actually implemented in the MEASUR Water Diagram. Each section either expands the original rule or adds rules that the implementation enforces but that v2 did not state.
+This document updates [algorithm-v3.md](algorithm-v3.md) to match the algorithm as actually implemented in the MEASUR Water Diagram. Each section either expands the original rule or adds rules that the implementation enforces but that v3 did not state.
 
 
 ---
@@ -20,7 +20,7 @@ The denominator is not always the same flow value. Depending on path structure, 
 
 - **Path** — the sequence of edges walked from a cost component's node to a water-using system, following that cost component type's "What to follow" / "Where to stop" rule.
 - **Block cost** — the total dollar cost of a cost component's line item, calculated from the volume of water entering that component and its unit cost (inflow × unit cost). This is the amount distributed across systems via attribution fractions.
-- **Local branch ratio (localRatio)** — for a single edge in a path whose source is a water-treatment node, that edge's flow divided by the treatment node's total outflow to all of its children. 1.0 when the node has a single child and no losses, or when the edge's source is not a water-treatment node.
+- **Local branch ratio (localRatio)** — for a single edge in a path whose source is a water-treatment node, that edge's flow divided by the treatment node's total outflow to all of its children. 1.0 when the node has a single child and no losses, or when the edge's source is not a water-treatment node. ***[v4]*** For the merge-in case — an edge whose *target* (rather than source) is a waste-water-treatment node — the mirror-image rule applies instead: `localRatio` is that edge's flow divided by the treatment node's total *inflow* from all of its contributors. 1.0 when the node has a single contributor, regardless of whether that node loses volume.
 - **Branch fraction (branchFraction)** — the product of every localRatio found in a path. For Intake Cost Components, this is the product across the *entire* path — the intake itself is never a treatment node, so there is no risk of double-counting. For Water Treatment Cost Components, this is the product across every edge *after* the first one — the first edge leaves the cost component's own node, and that node's own split is exactly the fraction being computed, so it is excluded from the product rather than folded into it.
 - **Path inflow (pathInflow)** — for Intake Cost Components: the flow value of the first edge in a path (the intake's own outflow on that path).
 - **Flow responsibility** — the volume of flow a system, or (in WWT's upstream pass) an upstream discharger, is charged for on a given path. Computed differently by cost-component type: for Intake, `systemFlowResponsibility = pathInflow × branchFraction`; for Water Treatment, `systemFlowResponsibility = (first edge's flow) × branchFraction`; for WWT's upstream pass, a discharger's flow responsibility is its raw contribution to the WWT unit minus the flow volume already attributed to downstream reuse systems.
@@ -35,6 +35,12 @@ The denominator is not always the same flow value. Depending on path structure, 
 
 3. Losses: During tracing (upstream or downstream), there could be losses in intermediate systems — e.g., when tracing intake source costs to the individual water using systems, water treatment steps in between can have losses. This should not affect the percentage ratios. (See Intake rule — How to attribute, the with-losses-path case, and Water Treatment rule — How to attribute, the chained-downstream-loss case, for the specific denominator rules that enforce this.)
 
+   Discharge's upstream walk ***[v4]*** applies the merge-in mirror of this rule: when more than one system's flow converges through a shared waste-water-treatment node that loses volume, each contributor's flow responsibility is its proportional share of that node's total inflow, not its own raw outflow compared independently against the (smaller) post-loss volume reaching the discharge — see Discharge rule — How to attribute, the merge-node-loss case.
+
+4. Unaccounted flow ***[v4]***: An intake node may report a portion of its outflow as unaccounted (unmetered loss, e.g. leakage) via a dedicated user-entered field. That flow has no downstream edge, so it can never appear in any system's flow responsibility. To satisfy Core Rule 1, the intake's attribution denominator excludes unaccounted flow — `attributableFlow = totalFlow − unaccountedFlow` — while the block cost (the dollar amount being distributed) still uses the full outflow, unaccounted flow included. This spreads the unaccounted flow's cost proportionally across the systems that received traceable flow instead of leaving it unattributed. See Intake rule — How to attribute, the unaccounted-flow case.
+
+   A discharge node has the mirror-image field, `dischargeUnaccounted` ***[v4]***. That flow has no upstream edge, so the same exclusion applies on the inflow side: `attributableFlow = totalFlow − dischargeUnaccounted`, with the block cost still based on the full inflow. See Discharge rule — How to attribute, the unaccounted-flow case.
+
 ---
 
 ## Cost Attribution
@@ -48,13 +54,15 @@ The denominator is not always the same flow value. Depending on path structure, 
   ```
   branchFraction = Π(localRatio for each treatment-source edge in the path)
   systemFlowResponsibility = pathInflow × branchFraction
-  attribution fraction = systemFlowResponsibility / intake's total outflow
+  attributableFlow = intake's total outflow − intake's unaccounted flow (0 if none reported)
+  attribution fraction = systemFlowResponsibility / attributableFlow
   ```
 
   This single rule covers every path shape below: ***[v3]***
   - **no-losses-path** (intake splits to multiple paths, or a single lossless treatment chain — formerly Cases A and B): no treatment node in the path, or a treatment node with a single lossless child, contributes a ratio of 1.0 — a direct intake split reduces to "each system absorbs its share of the intake's own path outflow." A treatment node that splits into multiple children (with no losses) divides that path's contribution among those branches by their share of its total outflow.
   - **with-losses-path** (single treatment path with losses — formerly Case C): a treatment node that loses volume (outflow < inflow) still contributes a ratio of 1.0 to its sole child, so the downstream system on that branch absorbs the cost of the lost water rather than the lost water shrinking its attributed percentage (Core Rule 3) — now also correct when that same lossy node splits into multiple children (each branch absorbs its own proportional share of the loss through the same ratio) or when the loss and a fork sit at different nodes in the chain.
   - **mid-chain-fork** (new in v3, not covered by any former case): because the product walks every treatment node in the path, a treatment node that forks mid-chain into branches of different depth — one branch reaching a system immediately, another passing through a further treatment node first — is attributed correctly instead of double-counted. ***[v3]***
+  - **unaccounted-flow** (new in v4, Core Rule 4): unaccounted flow (e.g. leakage, unmetered loss) reported on the intake has no downstream edge, so it never contributes to any `systemFlowResponsibility`. Excluding it from the denominator (`attributableFlow`) lets the systems that did receive traceable flow absorb its share of the block cost instead of it going unattributed. The block cost itself is unaffected — it is still based on the intake's full outflow. ***[v4]***
 - **Multi-source cap:** No explicit cap is needed on the branch-ratio product — it cannot exceed 1.0 given valid flow data, so a system's share of any single path is bounded automatically. When a system draws from more than one intake, each intake's path is still evaluated independently, and each intake attributes based on its own outflow and its own block cost. ***[v3]***
 
 #### Examples
@@ -64,6 +72,7 @@ The denominator is not always the same flow value. Depending on path structure, 
 - **with-losses-path, single chain:** City Water (10 MGY) → RO (10 in / 8 out) → Process (5 MGY) + Boiler (3 MGY). City Water row = Process 62.5% (5/8), Boiler 37.5% (3/8). Total = 100%.
 - **with-losses-path, in-path treatment loss on a split intake:** City Water (177.2 MGY total) → Chemical Treatment (49.2 in / 25 out, feeding only Cooling Tower) is one of several paths from City Water. Cooling Tower's fraction is 49.2/177.2 = 27.76% (the full 49.2 routed down this path), not 25/177.2 = 14.1% (the post-loss received volume).
 - **mid-chain-fork, branch to mixed-depth systems:** City Water (177.2 MGY total; 49.2 down this path) → Chemical Treatment 2 (49.2 in / 37 out) → [Cooling Tower (25), UV Filtration (12 in / 6 out) → Boiler]. Cooling Tower's branch ratio at Chemical Treatment 2 is 25/37; its fraction is 49.2 × 25/37 / 177.2 = 18.76%. Boiler's branch ratio is (12/37) × (6/6) = 12/37; its fraction is 49.2 × 12/37 / 177.2 = 9.00%. Sum = 27.76%, exactly the path's true share of the intake — not the 46.53% a formula that only looks one hop upstream would produce. ***[v3]***
+- **unaccounted-flow, split intake:** Lake Water (entered outflow 202.2 gpm, 12 gpm reported unaccounted) splits to Filtration (170.2 gpm) and CIP (20 gpm), a total of 190.2 gpm of traceable flow. `attributableFlow` = 202.2 − 12 = 190.2. Systems downstream of Filtration and CIP share 100% of Lake Water's block cost (which is still based on the full 202.2 gpm) by their share of the 190.2 gpm `attributableFlow` — not 202.2 gpm, which would leave 12/202.2 = 5.9% of the cost unattributed. ***[v4]***
 
 ### 2. Water Treatment Cost Components (e.g., RO, CT Chlorination)
 
@@ -112,12 +121,26 @@ Attribution runs in two sequential passes across all WWT nodes: the downstream p
 
 - **What to follow:** Start at the discharge node; go upstream until you hit water using systems.
 - **Where to stop:** At the first user encountered on each path (the final user causing the discharge). Do not charge upstream users whose water was reused before discharging.
-- **proportional-discharge** (formerly Case J) — how to attribute: Attribute the discharge cost by how much final discharge each user causes to that discharge node.
-- **Multi-source cap:** When a system routes water to more than one discharge node, the fraction attributed from any single path is capped at 1.0. ***[v2]***
+- **How to attribute:** Attribute the discharge's cost among those first-encountered users by the volume each is responsible for reaching the discharge. Walk every edge in the path from the discharge to the system and take the product of each waste-water-treatment-target edge's localRatio (merge-in mirror of the intake side's branch-out `localRatio`) to get `branchFraction`. Multiplying `branchFraction` by the discharge-adjacent flow gives the system's flow responsibility: ***[v4]***
+
+  ```
+  branchFraction = Π(localRatio for each waste-water-treatment-target edge in the path)
+  systemFlowResponsibility = dischargeAdjacentFlow × branchFraction
+  attributableFlow = discharge's total inflow − discharge's unaccounted flow (0 if none reported)
+  attribution fraction = systemFlowResponsibility / attributableFlow
+  ```
+
+  This single rule covers every path shape below: ***[v4]***
+  - **proportional-discharge** (formerly Case J) — direct shared discharge, or a single-contributor waste-water-treatment chain: no waste-water-treatment node in the path, or one with a single contributor, contributes a ratio of 1.0 — a direct shared discharge reduces to "each system absorbs its own contribution," whether or not an intermediate node loses volume.
+  - **merge-node-loss** (new in v4, Core Rule 3): when more than one system converges through a shared, lossy waste-water-treatment node before reaching the discharge, each contributor's `localRatio` is its own edge divided by that node's total inflow across *all* contributors — so their shares always sum to the node's actual downstream volume instead of each being credited independently against the (smaller) post-loss flow. ***[v4]***
+  - **unaccounted-flow** (Core Rule 4): a discharge node's `dischargeUnaccounted` field (e.g. stormwater/infiltration with no traceable upstream system) has no upstream edge, so it never contributes to any `systemFlowResponsibility`. Excluding it from the denominator (`attributableFlow`) lets the systems that did send traceable flow absorb its share of the block cost instead of it going unattributed. The block cost itself is unaffected — it is still based on the discharge's full inflow. ***[v4]***
+- **No cap needed:** the branch-ratio product cannot exceed 1.0 given valid flow data, so a system's share of any single path is bounded automatically. (A prior version applied `min(dischargeAdjacentFlow / systemEdgeFlow, 1.0)` as an explicit safeguard, comparing only the two endpoint edges of a path; that formula was blind to any waste-water-treatment node's loss or merging in between, which is what caused the merge-node-loss defect above. ***[v4]***) When a system routes water to more than one discharge node, each discharge's path is still evaluated independently.
 
 #### Examples
 
 - **proportional-discharge:** CT HVAC sends 7 MGY to Municipal Sewer; Wash Bay sends 3 MGY. "Municipal Sewer fee" row = CT HVAC 70%, Wash Bay 30%.
+- **merge-node-loss, shared lossy WWT:** System A (60 Mgal/yr) and System B (40 Mgal/yr) both feed a WWT unit (100 in / 80 out, loses 20) that discharges to a shared outfall. System A's `localRatio` at the WWT is 60/100 = 0.60; System B's is 40/100 = 0.40. Attribution fractions: System A 60% (of the 80 Mgal/yr discharge-adjacent flow), System B 40%. Total = 100%, not the 125% (75% + 50%) a formula that compares only the discharge-adjacent edge against each system's own raw edge independently would produce. ***[v4]***
+- **unaccounted-flow, independent upstream systems:** Discharge (entered inflow 100 gpm, 10 gpm reported unaccounted) receives 60 gpm from System A and 30 gpm from System B, a total of 90 gpm of traceable flow. `attributableFlow` = 100 − 10 = 90. System A and System B share 100% of the discharge's block cost (still based on the full 100 gpm) by their share of the 90 gpm `attributableFlow` — System A 66.7% (60/90), System B 33.3% (30/90) — not 100 gpm, which would leave 10/100 = 10% of the cost unattributed. ***[v4]***
 
 ### 5. Reverse Osmosis (RO) Configuration Override ***[v3]***
 
