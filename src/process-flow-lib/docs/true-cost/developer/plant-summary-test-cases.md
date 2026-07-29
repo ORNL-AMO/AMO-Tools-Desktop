@@ -79,6 +79,38 @@ INTAKE        │
 
 ---
 
+### 1.2b `intake-unaccounted-flow`
+
+**What it tests:** Regression fixture for issue-8741. An intake reports 10 Mgal/yr of unaccounted flow (e.g. leakage) alongside its entered outflow of 100 Mgal/yr, and splits the remaining 90 Mgal/yr across two systems. Unaccounted flow has no downstream edge, so dividing the block cost by the raw entered flow (100) instead of the routed flow (90) previously left 10% of the intake's cost unattributed.
+
+```
+              ┌─── 60 Mgal/yr ──► SYSTEM A
+INTAKE        │
+($2/kgal,     │
+ entered 100, └─── 30 Mgal/yr ──► SYSTEM B
+ unaccounted 10)
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| Intake | $2/kgal | 100 Mgal/yr entered (unaccounted included) | **$200,000** |
+
+`attributableFlow` = 100 − 10 = 90 Mgal/yr — the denominator used for attribution, not for the block cost above.
+
+**Expected attribution**
+
+| System | Intake share (of attributableFlow) | Intake $ |
+|---|---|---|
+| System A | 60 / 90 = 66.7% | **$133,333** |
+| System B | 30 / 90 = 33.3% | **$66,667** |
+| **Total** | 100% | **$200,000** ✓ |
+
+Without the `attributableFlow` denominator, the same two systems would only sum to 60/100 + 30/100 = 90%, leaving $20,000 (the unaccounted flow's share of the block cost) permanently unattributed.
+
+---
+
 ### 1.3 `shared-discharge`
 
 **What it tests:** Two systems draining to one discharge point. The discharge cost splits by each system's contribution to total discharge flow.

@@ -661,11 +661,18 @@ const getOutflowBlockCosts = (
   const costPerKGal = node.data.cost ?? 0;
   const costOfOutflow = getFlowCost(costPerKGal, outflow, unitsOfMeasure);
 
+  // * unaccounted flow (e.g. leaks, unmetered loss) has no downstream edge to attribute through; attribution should
+  // * be divided over the routed flow so its share of the block cost is spread across the known systems instead of
+  // * being left unattributed, while totalBlockCost/totalFlow still reflect the full withdrawal.
+  const unaccountedFlow = node.data.userEnteredData?.intakeUnaccounted ?? 0;
+  const attributableFlow = outflow - unaccountedFlow;
+
   const blockCosts: BlockCosts = {
     name: node.data.name,
     processComponentType: node.data.processComponentType,
     totalBlockCost: costOfOutflow,
     totalFlow: outflow,
+    attributableFlow: attributableFlow,
   };
 
   return blockCosts;
@@ -841,6 +848,10 @@ const applySystemIntakeCosts = (
     let pathsAttributed: string[][] = [];
     let adjustedAttributions: SystemAttributionMap = {};
 
+    // * deliberately attributableFlow, not totalFlow: totalFlow (used for totalBlockCost) includes unaccounted
+    // * flow, which has no downstream edge and would otherwise leave systemAttributionFraction short of 100%.
+    const attributableIntakeOutflow = intakeData.blockCosts.attributableFlow ?? intakeData.blockCosts.totalFlow;
+
     intakeData.downstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
        // * for this path, eliminate mischarging an upstream system who provides reused water to the current system
       let visitedSystemIds: string[] = [];
@@ -871,7 +882,7 @@ const applySystemIntakeCosts = (
           const pathInflow = intakeEdge.data.flowValue ?? 0;
 
           const systemFlowResponsibility = pathInflow * branchFraction;
-          let systemAttributionFraction = systemFlowResponsibility / intakeData.blockCosts.totalFlow;
+          let systemAttributionFraction = systemFlowResponsibility / attributableIntakeOutflow;
 
           const costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
 

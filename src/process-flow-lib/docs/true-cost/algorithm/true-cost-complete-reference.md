@@ -97,7 +97,7 @@ All four sub-routines share a common allocation principle: **the system closest 
 
 **1. Intake Costs** — walks downstream from each water intake node, stopping at the first water-using system encountered on each path. The attribution fraction uses one of two bases depending on the path:
 
-- *Intake-flow-volume basis* (standard case): each system's fraction = its share of the total intake outflow. Used when the intake splits to multiple downstream paths or the treatment chain has no flow losses.
+- *Intake-flow-volume basis* (standard case): each system's fraction = its share of the total intake outflow. Used when the intake splits to multiple downstream paths or the treatment chain has no flow losses. If the intake reports unaccounted flow (unmetered loss with no downstream edge, e.g. leakage), that flow is excluded from the denominator so its share of the cost is spread pro-rata across the receiving systems instead of going unattributed; the intake's block cost still reflects the full outflow, unaccounted flow included.
 - *Delivered-flow-volume basis* (treatment-chain-with-losses case): when the intake has a single outgoing path and the treatment chain loses water, the denominator switches to the treatment node's outflow rather than the intake's outflow. This ensures all downstream systems together absorb 100% of the intake cost, including the cost of water consumed in treatment. The algorithm also detects losses in earlier nodes of a chained treatment sequence so the correct basis is applied even when an intermediate node itself has no losses.
 
 **2. Discharge Costs** — walks upstream from each discharge node, stopping at the first water-using system encountered on each path. That system receives the cost.

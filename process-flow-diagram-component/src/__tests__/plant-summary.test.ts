@@ -170,6 +170,80 @@ describe('getPlantSummaryResults — shared-intake: Intake → [System A (60%), 
 });
 
 // ---------------------------------------------------------------------------
+// Fixture: intake-unaccounted-flow
+// Configuration: Intake (entered totalDischargeFlow=100, intakeUnaccounted=10) → [System A (60), System B (30)]
+//
+//   intake (cost=2/kGal, entered totalDischargeFlow=100, intakeUnaccounted=10)
+//     ├─ e_a (60) ─► systemA
+//     └─ e_b (30) ─► systemB
+//
+// Regression fixture: unaccounted flow has no downstream edge. Dividing the block cost by the
+// raw entered flow (100) instead of the routed flow (60+30=90) previously left 10% of the
+// intake's cost unattributed. attributableFlow (100-10=90) is now used as the attribution
+// denominator, so the two systems' fractions sum to 100% while totalBlockCost still reflects
+// the full 100-unit withdrawal.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — intake-unaccounted-flow: unaccounted flow spread across systems, not dropped', () => {
+  const INTAKE_COST = 2;
+  const ENTERED_DISCHARGE_FLOW = 100;
+  const INTAKE_UNACCOUNTED = 10;
+  const FLOW_A = 60;
+  const FLOW_B = 30;
+  const ROUTED_FLOW = FLOW_A + FLOW_B; // 90 - what actually reaches a system
+
+  const intake = makeIntakeNode('intake', INTAKE_COST, {
+    totalDischargeFlow: ENTERED_DISCHARGE_FLOW,
+    intakeUnaccounted: INTAKE_UNACCOUNTED,
+  });
+  const systemA = makeSystemNode('sysA');
+  const systemB = makeSystemNode('sysB');
+
+  const nodes = [intake, systemA, systemB];
+  const edges = [
+    makeEdge('intake', 'sysA', FLOW_A),
+    makeEdge('intake', 'sysB', FLOW_B),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: ROUTED_FLOW },
+    sysA: { totalSourceFlow: FLOW_A },
+    sysB: { totalSourceFlow: FLOW_B },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('intake block cost is based on the full entered flow, unaccounted included', () => {
+    expect(result.costComponentsTotalsMap['intake'].totalBlockCost)
+      .toBeCloseTo(blockCost(INTAKE_COST, ENTERED_DISCHARGE_FLOW), 0);
+  });
+
+  it('attribution fractions sum to 100%, not 90%', () => {
+    const total = result.systemAttributionMap['sysA']['intake'].totalAttribution.default
+      + result.systemAttributionMap['sysB']['intake'].totalAttribution.default;
+    expect(total).toBeCloseTo(1.0, 6);
+  });
+
+  it('unaccounted flow cost is spread pro-rata, not dropped (mass balance)', () => {
+    const totalAttributed = result.trueCostOfSystems['sysA'].intake
+      + result.trueCostOfSystems['sysB'].intake;
+    expect(totalAttributed).toBeCloseTo(blockCost(INTAKE_COST, ENTERED_DISCHARGE_FLOW), 0);
+  });
+
+  it('splits the full block cost between System A and System B by routed flow share', () => {
+    const fullCost = blockCost(INTAKE_COST, ENTERED_DISCHARGE_FLOW);
+    expect(result.trueCostOfSystems['sysA'].intake)
+      .toBeCloseTo(fullCost * (FLOW_A / ROUTED_FLOW), 0);
+    expect(result.trueCostOfSystems['sysB'].intake)
+      .toBeCloseTo(fullCost * (FLOW_B / ROUTED_FLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Fixture: treatment-with-loss
 // Configuration: Intake → Treatment (100 in, 80 out, losses=20) → System
 //

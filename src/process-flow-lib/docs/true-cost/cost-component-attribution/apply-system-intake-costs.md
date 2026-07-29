@@ -65,7 +65,9 @@ If no treatment node appears in the path, or every treatment node in the path ha
 
 **Step 4 — Compute attribution fraction:**
 
-    Attribution fraction = System flow responsibility / Intake block cost total flow
+    Attribution fraction = System flow responsibility / Intake block cost attributable flow
+
+`Attributable flow` is the intake's total outflow minus any unaccounted flow the intake reports (see Core Rule 4 below) — it is not the same value used for the intake's block cost, which stays based on the full outflow.
 
 No cap is applied — the product of ratios in Step 2 cannot exceed 1.0 given valid flow data, so the attribution fraction is bounded automatically. (A prior version of this formula applied `min(systemInflow / pathInflow, 1.0)` as an explicit safeguard; that cap is no longer necessary because the formula no longer reads `systemInflow` — the last edge's flow into the system — at all. It uses only `pathInflow` and the path-wide product of branch ratios.)
 
@@ -74,6 +76,8 @@ No cap is applied — the product of ratios in Step 2 cannot exceed 1.0 given va
     Cost to system = Attribution fraction × Intake total block cost
 
 **Core Rule 3 (losses don't shrink attributed percentage):** When a treatment node loses volume, the downstream system on that branch is still responsible for the full pre-loss flow that entered the branch, not the smaller post-loss volume it actually received. The formula enforces this by never dividing by anything that shrinks when a node loses water with a single child — `pathInflow` is fixed at the intake edge, and a single-child node's `localRatio` is always 1.0 regardless of how much volume it lost. If that same lossy node also splits into multiple children, each child's branch absorbs its own proportional share of the total (pre-loss) contribution — see the mid-chain-branching worked example in §8b.
+
+**Core Rule 4 (unaccounted flow doesn't go unattributed):** An intake node may report a portion of its outflow as unaccounted (e.g. leakage, unmetered loss) via a dedicated user-entered field. That flow has no downstream edge, so it never contributes to any system's flow responsibility. If the attribution denominator used the full outflow (including unaccounted flow), every system's fraction would come up short by exactly the unaccounted flow's share, and the total attribution would fall short of 100% — see the worked example in §8c. The formula avoids this by dividing by `attributableFlow` (total outflow minus unaccounted flow) instead: the unaccounted flow's share of the block cost is spread pro-rata across the systems that did receive traceable flow, rather than left unattributed. The block cost itself is unaffected — it is still based on the full outflow, since the intake still incurred that cost regardless of where the water went.
 
 ---
 
@@ -212,15 +216,38 @@ A system may appear on multiple downstream paths from the same intake (for examp
 
 ---
 
+## 8c. Worked Example — Unaccounted Flow
+
+**Scenario:** An intake reports 12 gpm of unaccounted flow (e.g. leakage) alongside its entered outflow, and splits the remainder across two downstream paths with no treatment losses.
+
+```
+  Lake Water (entered outflow 202.2 gpm, cost $2/kgal, 12 gpm unaccounted)
+       ├──► Filtration ──► ... : 170.2 gpm
+       └──► CIP: 20 gpm
+```
+
+**Block cost of intake:** 202.2 gpm × 1,000 × $2/kgal = **$404,400/yr** — based on the full entered outflow; the unaccounted 12 gpm was still withdrawn and still costs money.
+
+**attributableFlow** = 202.2 − 12 = **190.2 gpm** — the routed total (170.2 + 20 = 190.2) that actually has a downstream edge.
+
+Using `attributableFlow` as the denominator for every downstream system's attribution fraction (Step 4), the systems reached through Filtration and CIP collectively absorb:
+
+    190.2 / 190.2 = 100% of the $404,400 block cost
+
+**Check — what goes wrong without this rule:** If the denominator were the full outflow (202.2 gpm) instead, the same systems would only ever sum to 190.2 / 202.2 = 94.07%, leaving 12/202.2 = 5.93% of the $404,400 block cost ($23,982/yr) permanently unattributed to any system — a violation of Core Rule 1.
+
+---
+
 ## 9. Summary of Attribution Rules
 
 | Rule | Description |
 |---|---|
 | Walk direction | Downstream from intake |
 | Stopping point | First water-using system on each path |
-| Cost basis | Full intake block cost (unit cost × total intake outflow) |
-| Attribution denominator — branch-ratio product rule | Path inflow × branchFraction, where branchFraction is the product of every treatment-source edge's `localRatio` (that edge's flow ÷ its source treatment node's total outflow) across the whole path. Covers direct intake splits, lossless chains, lossy chains, and mid-chain forks to systems at different depths with one formula. |
+| Cost basis | Full intake block cost (unit cost × total intake outflow, unaccounted flow included) |
+| Attribution denominator — branch-ratio product rule | Path inflow × branchFraction, where branchFraction is the product of every treatment-source edge's `localRatio` (that edge's flow ÷ its source treatment node's total outflow) across the whole path, divided by `attributableFlow` (total intake outflow minus any unaccounted flow). Covers direct intake splits, lossless chains, lossy chains, mid-chain forks to systems at different depths, and unaccounted flow with one formula. |
 | Cap on fraction per path | None needed — the branch-ratio product cannot exceed 1.0 given valid flow data. |
 | Pump/motor energy | Attributed using same fraction as intake cost |
 | Adjusted attribution | User-supplied fraction replaces computed default |
 | De-duplication | Identical paths from intake to system are attributed only once |
+| Unaccounted flow | Excluded from the attribution denominator (not the block cost) so its cost is spread pro-rata across systems that received traceable flow, instead of going unattributed |
