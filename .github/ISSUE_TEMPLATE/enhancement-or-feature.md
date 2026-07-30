@@ -19,7 +19,9 @@ Outline UI ideas, refer to an existing MEASUR pattern, or Dev's choice
 ---
 **Who should verify**
 
-**Feature requested by**
+ - [ ] Engineering
+ - [ ] QA
+ - [ ] Dev
 
  **Release Notes**
  Include the release note description following below formats
@@ -28,8 +30,3 @@ Outline UI ideas, refer to an existing MEASUR pattern, or Dev's choice
     - Enhanced: ...
     - Fixed: ...
 ```
-
-
-**Sample Inputs and Results**
-Include input testing values and expected results
-

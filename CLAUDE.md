@@ -1,0 +1,42 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Precedence
+
+When sources conflict, apply this order (highest to lowest):
+
+1. Direct instructions from the user in the current conversation
+2. Claude's own persisted memory for this project (prior feedback and corrections)
+3. The coding style guide imported below
+4. `AGENTS.md` (imported below)
+
+`AGENTS.md` covers repo orientation, architecture, and workflow (what to do, where things live, how to verify changes). The style guide covers how to write the code. If the two disagree on style or pattern, the style guide wins.
+
+## Coding Style
+
+@CODING_STYLE_GUIDE.MD
+
+## Repo Orientation
+
+@AGENTS.md
+
+## Commands
+
+Both this repo and `process-flow-diagram-component/` need dependencies installed for a working build: `npm run install-packages` (or `npm install` in each directory).
+
+### Development
+
+- `npm run start`: serve the web build with live reload. Preferred over Electron for most feature work (faster reloads).
+- `npm run build-watch` plus `npm run electron`: build for Electron with hot-reload, then launch the desktop shell.
+
+### Production builds
+
+- `npm run build-prod-desktop` then `npm run dist`: desktop installer, output lands in `output/`.
+- `npm run build-prod-web`: web distribution build.
+
+### Tests
+
+- `npm test`: Angular/Karma suite (ChromeHeadless).
+- Single spec: `ng test --include='**/path/to/file.spec.ts'`
+- Process-flow package (from `process-flow-diagram-component/`): `npm run test` (Vitest), `npm run test:typecheck`.
