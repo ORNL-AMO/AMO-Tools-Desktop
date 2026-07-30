@@ -10,23 +10,11 @@
       <h5>{{settings.createdDate| date:'short'}}</h5>
     </div>
 
-    <!-- <p class="report-notes">{{reportNotes}}</p> -->
   </div>
 
   <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': !inRollup}">
     <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
 
-    <!-- Assessment view -->
-    <div *ngIf="assessment && !inRollup" class="row">
-      <div class="col-12 p-2">
-        <div class="d-flex justify-content-between">
-          <div>
-            <app-export-button [document]="reportDocument$" [assessmentName]="assessment.name" [sectionGroups]="sectionGroups">
-            </app-export-button>
-          </div>
-        </div>
-      </div>
-    </div>
     <!-- Rollup view -->
     <div *ngIf="assessment && inRollup" class="row assessment-name">
       <div class="col-12">
@@ -51,7 +39,7 @@
 
   <div class="report-data" *ngIf="assessment.ssmt.setupDone">
 
-    <div class="d-none d-lg-flex">
+    <div class="d-none d-lg-flex tabs-bar-row">
       <ul #reportBtns class="tabs primary hide-print">
         <li (click)="setTab('executiveSummary')" [ngClass]="{'active': currentTab == 'executiveSummary'}">
           <a>Executive Summary</a>
@@ -77,10 +65,13 @@
         <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
           <a>Facility Info</a>
         </li>
-        <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
-          <a>Sankey</a>
-        </li>
       </ul>
+      <app-export-button
+        class="ml-auto align-self-center mr-2"
+        [document]="reportDocument$"
+        [assessmentName]="assessment.name"
+        [sectionGroups]="sectionGroups">
+      </app-export-button>
     </div>
 
     <div class="d-flex d-lg-none flex-column">
