@@ -122,14 +122,7 @@ export const getDefaultFlowValidationSchema = (
                     return createError({ path, message: knownLossesError });
                 }
                 return true;
-            (d) => {
-                const sumUserKnownLossesToPrecision = Number(sumUserKnownLosses.toFixed(settings.flowDecimalPrecision));
-                return `Known Losses should equal the sum of all Known Loss flows (${sumUserKnownLossesToPrecision})`
-            },
-            (value) => {
-                const isValid = validateKnownLosses(sumUserKnownLosses, value, settings.flowDecimalPrecision);
-                return isValid;
-            },
+            }
         );
 
     const validationSchema = sumUserKnownLosses ? {

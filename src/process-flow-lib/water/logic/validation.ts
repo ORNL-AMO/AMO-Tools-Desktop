@@ -177,9 +177,10 @@ export const validateFlowSection = (input: FlowValidationInput): FlowValidationR
 
     let knownLossesError: string | undefined;
     if (sumKnownLossEdges !== undefined && sumKnownLossEdges > 0) {
-        const isKnownLossesValid: boolean = validateKnownLosses(sumKnownLossEdges, userKnownLosses);
+        const isKnownLossesValid: boolean = validateKnownLosses(sumKnownLossEdges, userKnownLosses, precision);
         if (!isKnownLossesValid) {
-            knownLossesError = `Known Losses should equal the sum of all Known Loss flows (${sumKnownLossEdges})`;
+            const sumKnownLossEdgesToPrecision: number = Number(sumKnownLossEdges.toFixed(precision));
+            knownLossesError = `Known Losses should equal the sum of all Known Loss flows (${sumKnownLossEdgesToPrecision})`;
         }
     }
 
