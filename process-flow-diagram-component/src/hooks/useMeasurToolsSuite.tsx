@@ -6,7 +6,7 @@ export const useMeasurToolsSuite = () => {
 
   const initializeModule = async () => {
     try {
-      const module = await measurToolsFactory.default({
+      const module = await measurToolsFactory({
         locateFile: (path) => `/${path}`
       });
       
