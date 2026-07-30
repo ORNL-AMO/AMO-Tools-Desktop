@@ -11,12 +11,29 @@ import { SolidLoadMaterialDbService } from '../indexedDb/solid-load-material-db.
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { WallLossesSurfaceDbService } from '../indexedDb/wall-losses-surface-db.service';
 import { ElectronService } from '../electron/electron.service';
+import createModule, {
+    type AtmosphereGasType,
+    type AtmosphereGasTypeV,
+    type GasFlueGasMaterial as SuiteGasFlueGasMaterial,
+    type GasFlueGasMaterialV,
+    type GasLoadChargeMaterial as SuiteGasLoadChargeMaterial,
+    type GasLoadChargeMaterialV,
+    type LiquidLoadChargeMaterial as SuiteLiquidLoadChargeMaterial,
+    type LiquidLoadChargeMaterialV,
+    type MeasurToolsSuite,
+    type SolidLiquidFlueGasMaterial as SuiteSolidLiquidFlueGasMaterial,
+    type SolidLiquidFlueGasMaterialV,
+    type SolidLoadChargeMaterial as SuiteSolidLoadChargeMaterial,
+    type SolidLoadChargeMaterialV,
+    type WallType,
+    type WallTypeV,
+} from 'measur-tools-suite';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ToolsSuiteApiService {
-    ToolsSuiteModule: any = null;
+    ToolsSuiteModule: MeasurToolsSuite = null;
     constructor(private settingsDbService: SettingsDbService,
         private atmosphereDbService: AtmosphereDbService,
         private flueGasMaterialDbService: FlueGasMaterialDbService,
@@ -28,11 +45,8 @@ export class ToolsSuiteApiService {
         private electronService: ElectronService
     ) { }
 
-    async initializeModule(): Promise<any> {
-        // Dynamically import the Emscripten modularized JS glue code
-        const moduleFactory = await import('measur-tools-suite/bin/client.js');
-        // Initialize the module, specifying where to find the WASM file
-        this.ToolsSuiteModule = await moduleFactory.default({
+    async initializeModule(): Promise<void> {
+        this.ToolsSuiteModule = await createModule({
             locateFile: (path: string) => {
                 if (this.electronService.isElectron) {
                     return `${path}`
@@ -45,7 +59,7 @@ export class ToolsSuiteApiService {
         return;
     }
 
-    async initializeDefaultDbData() {
+    async initializeDefaultDbData(): Promise<void> {
         let globalSettings: Settings = this.settingsDbService.globalSettings;
         // suiteDbItemsInitialized - flag is just continuing to support current app init logic - settings doesn't really need to be coupled to init logic. 
         if (!globalSettings.suiteDbItemsInitialized) {
@@ -65,11 +79,11 @@ export class ToolsSuiteApiService {
         }
     }
 
-    private async insertAtmosphereData() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultGasTypes();
+    private async insertAtmosphereData(): Promise<void> {
+        let suiteDefaultMaterials: AtmosphereGasTypeV = this.ToolsSuiteModule.getDefaultGasTypes();
         let defaultMaterials: Array<AtmosphereSpecificHeat> = [];
-        for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-            let wasmClass = suiteDefaultMaterials.get(i);
+        for (let i: number = 0; i < suiteDefaultMaterials.size(); i++) {
+            let wasmClass: AtmosphereGasType = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
                 substance: wasmClass.gasDescription,
                 specificHeat: wasmClass.specificHeat,
@@ -80,12 +94,12 @@ export class ToolsSuiteApiService {
         await firstValueFrom(this.atmosphereDbService.insertDefaultMaterials(defaultMaterials));
     }
 
-    private async insertFlueGasMaterials() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultGasFlueGasMaterials();
+    private async insertFlueGasMaterials(): Promise<void> {
+        let suiteDefaultMaterials: GasFlueGasMaterialV = this.ToolsSuiteModule.getDefaultGasFlueGasMaterials();
         let defaultMaterials: Array<FlueGasMaterial> = [];
-        for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
+        for (let i: number = 0; i < suiteDefaultMaterials.size(); i++) {
             //GasComposition
-            let material = suiteDefaultMaterials.get(i);
+            let material: SuiteGasFlueGasMaterial = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
                 substance: material.substance,
                 C2H6: material.C2H6,
@@ -105,28 +119,30 @@ export class ToolsSuiteApiService {
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.flueGasMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertGasLoadMaterials() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultGasLoadChargeMaterials();
+    private async insertGasLoadMaterials(): Promise<void> {
+        let suiteDefaultMaterials: GasLoadChargeMaterialV = this.ToolsSuiteModule.getDefaultGasLoadChargeMaterials();
         let defaultMaterials: Array<GasLoadChargeMaterial> = [];
-        for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-            let material = suiteDefaultMaterials.get(i);
+        for (let i: number = 0; i < suiteDefaultMaterials.size(); i++) {
+            let material: SuiteGasLoadChargeMaterial = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
                 specificHeatVapor: material.specificHeatVapor,
                 substance: material.substance,
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.gasLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertLiquidLoadMaterials() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultLiquidLoadChargeMaterials();
+    private async insertLiquidLoadMaterials(): Promise<void> {
+        let suiteDefaultMaterials: LiquidLoadChargeMaterialV = this.ToolsSuiteModule.getDefaultLiquidLoadChargeMaterials();
         let defaultMaterials: Array<LiquidLoadChargeMaterial> = [];
-        for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-            let material = suiteDefaultMaterials.get(i);
+        for (let i: number = 0; i < suiteDefaultMaterials.size(); i++) {
+            let material: SuiteLiquidLoadChargeMaterial = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
                 latentHeat: material.latentHeat,
                 specificHeatLiquid: material.specificHeat,
@@ -136,15 +152,16 @@ export class ToolsSuiteApiService {
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.liquidLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertSolidLiquidFlueGasMaterials() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultSolidLiquidFlueGasMaterials();
+    private async insertSolidLiquidFlueGasMaterials(): Promise<void> {
+        let suiteDefaultMaterials: SolidLiquidFlueGasMaterialV = this.ToolsSuiteModule.getDefaultSolidLiquidFlueGasMaterials();
         let defaultMaterials: Array<SolidLiquidFlueGasMaterial> = [];
-        for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
+        for (let i: number = 0; i < suiteDefaultMaterials.size(); i++) {
             //GasComposition
-            let material = suiteDefaultMaterials.get(i);
+            let material: SuiteSolidLiquidFlueGasMaterial = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
                 substance: material.substance,
                 carbon: material.carbon,
@@ -158,15 +175,16 @@ export class ToolsSuiteApiService {
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.solidLiquidMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertSolidLoadMaterials() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultSolidLoadChargeMaterials();
+    private async insertSolidLoadMaterials(): Promise<void> {
+        let suiteDefaultMaterials: SolidLoadChargeMaterialV = this.ToolsSuiteModule.getDefaultSolidLoadChargeMaterials();
 
         let defaultMaterials: Array<SolidLoadChargeMaterial> = [];
-        for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-            let material = suiteDefaultMaterials.get(i);
+        for (let i: number = 0; i < suiteDefaultMaterials.size(); i++) {
+            let material: SuiteSolidLoadChargeMaterial = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
                 latentHeat: material.latentHeat,
                 meltingPoint: material.meltingPoint,
@@ -176,14 +194,15 @@ export class ToolsSuiteApiService {
                 isDefault: true
             });
         }
+        suiteDefaultMaterials.delete();
         await this.solidLoadMaterialDbService.insertDefaultMaterials(defaultMaterials);
     }
 
-    private async insertWallLossSurfaces() {
-        let suiteDefaultMaterials = this.ToolsSuiteModule.getDefaultWallTypes();
+    private async insertWallLossSurfaces(): Promise<void> {
+        let suiteDefaultMaterials: WallTypeV = this.ToolsSuiteModule.getDefaultWallTypes();
         let defaultMaterials: Array<WallLossesSurface> = [];
-        for (let i = 0; i < suiteDefaultMaterials.size(); i++) {
-            let shapeFactor = suiteDefaultMaterials.get(i);
+        for (let i: number = 0; i < suiteDefaultMaterials.size(); i++) {
+            let shapeFactor: WallType = suiteDefaultMaterials.get(i);
             defaultMaterials.push({
                 surface: shapeFactor.wallDescription,
                 conditionFactor: shapeFactor.shapeFactor,
@@ -193,16 +212,4 @@ export class ToolsSuiteApiService {
         suiteDefaultMaterials.delete();
         await this.wallLossesSurfaceDbService.insertDefaultMaterials(defaultMaterials);
     }
-
-    //quick test module works
-    // private testModule() {
-    //     var inletTemperature = 100.0
-    //     var outletTemperature = 1400.0;
-    //     var flowRate = 1200.0;
-    //     var correctionFactor = 1.0;
-    //     var specificHeat = 0.02;
-
-    //     let atmosphere = new this.ToolsSuiteModule.Atmosphere(inletTemperature, outletTemperature, flowRate, correctionFactor, specificHeat);
-    //     let heatLoss = atmosphere.getTotalHeat();
-    // }
 }

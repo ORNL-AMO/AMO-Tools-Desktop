@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 import { WasteWaterResults, WasteWaterTreatmentInputData } from '../shared/models/waste-water';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+import { type CalculationsTable, type CalculationsTableV, type WasteWater_Treatment, type WasteWater_TreatmentOutput, type WasteWater_TreatmentOutputWithoutTable } from 'measur-tools-suite';
+
+type WasteWaterTreatmentSuiteOutput = (WasteWater_TreatmentOutput | WasteWater_TreatmentOutputWithoutTable) & {
+  AeEnergyAnnual?: number;
+  costSavings?: number;
+  energySavings?: number;
+  percentCostSavings?: number;
+};
 
 @Injectable()
 export class WasteWaterSuiteApiService {
@@ -10,7 +18,7 @@ export class WasteWaterSuiteApiService {
   wasteWaterTreatment(inputData: WasteWaterTreatmentInputData, hasGivenSRT: boolean = false): WasteWaterResults{
     // null on new assessment?
     inputData.DefinedSRT = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(inputData.DefinedSRT);
-    let WasteWaterTreatmentInstance = new this.toolsSuiteApiService.ToolsSuiteModule.WasteWater_Treatment(
+    let WasteWaterTreatmentInstance: WasteWater_Treatment = new this.toolsSuiteApiService.ToolsSuiteModule.WasteWater_Treatment(
       inputData.Temperature,
       inputData.So,
       inputData.Volume,
@@ -43,7 +51,7 @@ export class WasteWaterSuiteApiService {
       inputData.DefinedSRT
     );
     let wasteWaterTreatmentResults: WasteWaterResults;
-    let wasteWaterTreatmentOutput;
+    let wasteWaterTreatmentOutput: WasteWaterTreatmentSuiteOutput;
     
     if (hasGivenSRT) {
       wasteWaterTreatmentOutput = WasteWaterTreatmentInstance.calculateGivenSRT();
@@ -52,7 +60,7 @@ export class WasteWaterSuiteApiService {
     }
 
     wasteWaterTreatmentResults = this.getWasteWaterResultsFromOutputObject(wasteWaterTreatmentOutput);
-    if (wasteWaterTreatmentOutput.calculationsTable) {
+    if ('calculationsTable' in wasteWaterTreatmentOutput && wasteWaterTreatmentOutput.calculationsTable) {
       wasteWaterTreatmentResults.calculationsTable = this.getConvertedCalculationsTableArray(wasteWaterTreatmentOutput.calculationsTable);
       wasteWaterTreatmentOutput.calculationsTable.delete();
     }
@@ -61,24 +69,21 @@ export class WasteWaterSuiteApiService {
     return wasteWaterTreatmentResults;
   }
 
-  getConvertedCalculationsTableArray(resultArray: any): Array<Array<number>> {
+  getConvertedCalculationsTableArray(resultArray: CalculationsTableV): Array<Array<number>> {
     let convertedCalculationsTable: Array<Array<number>> = [];
-    for (let i = 0; i < resultArray.size(); ++i) {
-      let tempArray = resultArray.get(i).getArray();
+    for (let i: number = 0; i < resultArray.size(); ++i) {
+      let calculationRow: CalculationsTable = resultArray.get(i);
+      let tempArray: Array<number> = calculationRow.getArray();
       if (tempArray) {
-        let calcTable: Array<number> = [];
-        for(let j = 0; j < tempArray.size(); j++){
-          calcTable.push(tempArray.get(j));
-        }
-        convertedCalculationsTable.push(calcTable);
+        convertedCalculationsTable.push(tempArray);
       }
-      tempArray.delete();
+      calculationRow.delete();
       
     }
     return convertedCalculationsTable;
   }
 
-  getWasteWaterResultsFromOutputObject(output) {
+  getWasteWaterResultsFromOutputObject(output: WasteWaterTreatmentSuiteOutput): WasteWaterResults {
     let wasteWaterResults: WasteWaterResults = {
       co2EmissionsOutput: undefined,
       co2EmissionsSavings: undefined,
