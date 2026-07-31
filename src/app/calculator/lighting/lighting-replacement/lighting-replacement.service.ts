@@ -7,7 +7,7 @@ import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms
 import { LightingFixtureCategory, LightingFixtureData, LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite-api.service';
 import { LightingFixtureServiceDbService } from '../../../indexedDb/lighting-fixture-db.service';
 import { LightingFixtureMaterial } from '../../../shared/models/materials';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 @Injectable()
 export class LightingReplacementService implements OnDestroy {
 
@@ -19,20 +19,19 @@ export class LightingReplacementService implements OnDestroy {
   selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
   showAdditionalDetails: boolean = false;
 
-  lightingFixtureCategories: Array<LightingFixtureCategory>;
+  lightingFixtureCategories$: BehaviorSubject<Array<LightingFixtureCategory>>;
 
-  customFixturesUpdated: Subject<void> = new Subject<void>();
   private customFixturesSub: Subscription;
   private latestCustomMaterials: Array<LightingFixtureMaterial>;
 
   constructor(private fb: UntypedFormBuilder, private lightingSuiteApiService: LightingSuiteApiService,
     private lightingFixtureServiceDbService: LightingFixtureServiceDbService) {
     this.selectedFixtureTypes = new BehaviorSubject(undefined);
+    this.lightingFixtureCategories$ = new BehaviorSubject(undefined);
+
     this.customFixturesSub = this.lightingFixtureServiceDbService.dbLightingFixtureMaterials.subscribe(materials => {
       this.latestCustomMaterials = materials;
-      if (this.lightingFixtureCategories) {
-        this.applyCustomFixtures(materials);
-      }
+      this.applyCustomFixtures();
     });
   }
 
@@ -40,20 +39,21 @@ export class LightingReplacementService implements OnDestroy {
     this.customFixturesSub?.unsubscribe();
   }
 
-  getLightingFixtureCategories(): Array<LightingFixtureCategory> {
-    if (!this.lightingFixtureCategories) {
-      this.lightingFixtureCategories = this.lightingSuiteApiService.getLightingSystems();
-      if (this.latestCustomMaterials) {
-        this.applyCustomFixtures(this.latestCustomMaterials);
-      }
+  loadLightingFixtureCategories() {
+    if (!this.lightingFixtureCategories$.value) {
+      this.lightingFixtureCategories$.next(this.lightingSuiteApiService.getLightingSystems());
+      this.applyCustomFixtures();
     }
-    return this.lightingFixtureCategories;
   }
 
-  applyCustomFixtures(materials: Array<LightingFixtureMaterial>) {
-    let customCategory: LightingFixtureCategory = this.lightingFixtureCategories.find(fixtureCategory => fixtureCategory.category === 0);
-    customCategory.fixturesData = materials.filter(material => !material.isDefault).map(material => this.toLightingFixtureData(material));
-    this.customFixturesUpdated.next();
+  applyCustomFixtures() {
+    let categories = this.lightingFixtureCategories$.value;
+    if (!categories || !this.latestCustomMaterials) {
+      return;
+    }
+    let customCategory: LightingFixtureCategory = categories.find(fixtureCategory => fixtureCategory.category === 0);
+    customCategory.fixturesData = this.latestCustomMaterials.filter(material => !material.isDefault).map(material => this.toLightingFixtureData(material));
+    this.lightingFixtureCategories$.next(categories);
   }
 
   toLightingFixtureData(material: LightingFixtureMaterial): LightingFixtureData {

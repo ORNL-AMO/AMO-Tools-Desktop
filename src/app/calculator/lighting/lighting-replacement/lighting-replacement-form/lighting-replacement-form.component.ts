@@ -65,12 +65,11 @@ export class LightingReplacementFormComponent implements OnInit, OnDestroy {
   indicateLumenDegradationFactorDiff: boolean = false;
   indicateFixtureTypeDiff: boolean = false;
 
-  customFixturesSub: Subscription;
+  lightingFixtureCategoriesSub: Subscription;
 
   constructor(private lightingReplacementService: LightingReplacementService, private cd: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.lightingFixtureCategories = this.lightingReplacementService.getLightingFixtureCategories();
     this.displayDetails = this.lightingReplacementService.showAdditionalDetails;
     if (this.isBaseline) {
       this.idString = 'baseline_' + this.index;
@@ -80,24 +79,23 @@ export class LightingReplacementFormComponent implements OnInit, OnDestroy {
     }
 
     this.form = this.lightingReplacementService.getFormFromObj(this.data);
-    this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => { return fixtureCategory.category == this.form.controls.category.value }).fixturesData;
-    this.computeFixtureDiff();
-    this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
+    this.lightingReplacementService.loadLightingFixtureCategories();
+    this.lightingFixtureCategoriesSub = this.lightingReplacementService.lightingFixtureCategories$.subscribe(categories => {
+      if (!categories) {
+        return;
+      }
+      this.lightingFixtureCategories = categories;
+      this.fixtureTypes = categories.find(fixtureCategory => fixtureCategory.category == this.form.controls.category.value).fixturesData;
+      this.checkSelectFixtureDiff();
+      this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
+    });
     if (this.selected == false) {
       this.form.disable();
     }
-
-    this.customFixturesSub = this.lightingReplacementService.customFixturesUpdated.subscribe(() => {
-      if (this.form.controls.category.value === 0) {
-        this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => fixtureCategory.category === 0).fixturesData;
-        this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
-        this.checkSelectFixtureDiff();
-      }
-    });
   }
 
   ngOnDestroy() {
-    this.customFixturesSub?.unsubscribe();
+    this.lightingFixtureCategoriesSub?.unsubscribe();
   }
 
   ngOnChanges(changes: SimpleChanges) {
