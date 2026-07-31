@@ -94,7 +94,7 @@
           <div *ngFor="let data of modificationData; let index = index;">
             <app-lighting-replacement-form [data]="data" [index]="index" [isBaseline]="false"
               (emitCalculate)="updateModificationData($event, index)" (emitFocusField)="focusField($event)"
-              (emitRemoveFixture)="removeModificationFixture($event)" [selected]="!baselineSelected", [settings]="settings">
+              (emitRemoveFixture)="removeModificationFixture($event)" [selected]="!baselineSelected" [settings]="settings">
             </app-lighting-replacement-form>
           </div>
         </div>

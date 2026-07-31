@@ -124,7 +124,7 @@ export class LightingReplacementService implements OnDestroy {
       totalLighting: 0,
       electricityUse: 0,
       //added for #2381
-      lampLife: form.controls.lumensPerLamp.value,
+      lampLife: form.controls.lampLife.value,
       ballastFactor: form.controls.ballastFactor.value,
       lumenDegradationFactor: form.controls.lumenDegradationFactor.value,
       coefficientOfUtilization: form.controls.coefficientOfUtilization.value,

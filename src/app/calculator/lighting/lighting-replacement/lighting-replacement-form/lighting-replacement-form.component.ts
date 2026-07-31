@@ -237,12 +237,12 @@ export class LightingReplacementFormComponent implements OnInit, OnDestroy {
     this.materialModal.show();
   }
 
-  hideMaterialModal(event?: LightingFixtureMaterial) {
-    if (event) {
+  hideMaterialModal(result?: LightingFixtureMaterial) {
+    if (result) {
       this.form.controls.category.setValue(0);
       this.fixtureTypes = this.lightingFixtureCategories.find(fixtureCategory => fixtureCategory.category === 0).fixturesData;
       this.lightingReplacementService.selectedFixtureTypes.next(this.fixtureTypes);
-      this.form.controls.type.setValue(event.type && event.type.trim() !== '' ? event.type : event.name);
+      this.form.controls.type.setValue(result.type && result.type.trim() !== '' ? result.type : result.name);
       this.setProperties();
     }
     this.showModal = false;
