@@ -72,11 +72,16 @@
       <h6>
         Method of Measurement
         <small class="text-muted">
-          <br>Choose the method to be used to determine compressed air consumption.
-          <hr class="my-1">Estimate - The most high-level way to determine the leak rate is to estimate it based on visual and audible clues.
-          <hr class="my-1">Decibel Method - The decibels method is used when an Ultrasonic probe is used to scan for leaks.
-          <hr class="my-1">Bag Method – The bag method estimates air loss by counting the time it takes to fill a trash bag.
-          <hr class="my-1">Orifice Method - Estimation of air loss using the pressure at the point of use and the diameter of the orifice.
+          <br>
+          Choose the method to be used to determine compressed air consumption.
+          <hr class="my-1">Estimate - The most high-level way to determine the leak rate is to estimate it based on the
+          visual and audible clues.
+          <hr class="my-1">Decibel Method - The decibels method is used when an Ultrasonic probe is used to scan for
+          leaks. Use the dB vs CFM chart that comes along with the specific leak detector to estimate loss.
+          <hr class="my-1">Bag Method – The bag method estimates air loss by counting the time it takes to fill a trash
+          bag.
+          <hr class="my-1">Orifice Method - Estimation of air loss using the pressure at the point of use and the diameter
+          of the orifice. The user must know the air pressure at the point of use for this to be accurate.
           <hr class="my-1">
         </small>
       </h6>
@@ -144,7 +149,8 @@
       <h6>
         Line Pressure
         <small class="text-muted">
-          <br>The pressure of the compressed air line at the location of the leak.
+          <br>
+          The pressure that is delivered at the leak site by the distribution piping.
           <hr>
         </small>
       </h6>
@@ -156,7 +162,8 @@
       <h6>
         Leak Decibels
         <small class="text-muted">
-          <br>The decibel reading measured by the ultrasonic probe at the leak location. This value is used together with the Estimated Free Air Flow Table to interpolate the leak flow rate.
+          <br>
+          Audible volume of the leak read by the leak detector (in decibels).
           <hr>
         </small>
       </h6>
@@ -166,9 +173,12 @@
   @if (currentField() === 'pressureA' || currentField() === 'pressureB') {
     <div class="my-2">
       <h6>
-        Pressure (Interpolation Table)
+        Pressures
         <small class="text-muted">
-          <br>Known line pressure values used as column headers in the Estimated Free Air Flow interpolation table. The leak flow rate is interpolated between these two pressures based on the measured line pressure.
+          <br>
+          This calculator works by using linear interpolation when the measurement lies between two points in the leak detector
+          manual. A table with ranges of line pressures and leak volume can be found in the leak detector's user manual. Enter
+          values from the table for the line pressure below and above the system.
           <hr>
         </small>
       </h6>
@@ -178,9 +188,12 @@
   @if (currentField() === 'decibelRatingA' || currentField() === 'decibelRatingB') {
     <div class="my-2">
       <h6>
-        Decibel Rating (Interpolation Table)
+        Decibel Ratings
         <small class="text-muted">
-          <br>Known decibel values used as row entries in the Estimated Free Air Flow interpolation table. The measured leak decibel reading is interpolated between these two rows to estimate the flow rate.
+          <br>
+          This calculator works by using linear interpolation when the measurement lies between two points in the leak detector
+          manual. A table with ranges of line pressures and leak volume can be found in the leak detector's user manual. Enter
+          values from the table for the decibel reading below and above what was found by the leak detector.
           <hr>
         </small>
       </h6>
@@ -190,9 +203,12 @@
   @if (currentField() === 'firstFlowA' || currentField() === 'secondFlowA' || currentField() === 'firstFlowB' || currentField() === 'secondFlowB') {
     <div class="my-2">
       <h6>
-        Flow Rate (Interpolation Table)
+        Air Flows
         <small class="text-muted">
-          <br>Known free air flow rates corresponding to a given decibel rating and line pressure in the interpolation table. These values are used to interpolate the leak rate based on the measured decibels and line pressure.
+          <br>
+          This calculator works by using linear interpolation when the measurement lies between two points in the leak detector
+          manual. A table with ranges of line pressures and leak volume can be found in the leak detector's user manual. Enter
+          values from the table for the air flow for the decibel ratings and pressures above and below those for the system.
           <hr>
         </small>
       </h6>
@@ -202,9 +218,10 @@
   @if (currentField() === 'bagFillTime') {
     <div class="my-2">
       <h6>
-        Bag Fill Time
+        Bag Fill Time (seconds)
         <small class="text-muted">
-          <br>The time in seconds required to fill the bag with air from the leak. A shorter fill time indicates a larger leak.
+          <br>
+          The number of seconds it takes to fill the bag.
           <hr>
         </small>
       </h6>
@@ -216,7 +233,8 @@
       <h6>
         Bag Volume
         <small class="text-muted">
-          <br>The volume of the bag used to capture air from the leak. The bag volume and fill time together are used to calculate the leak flow rate.
+          <br>
+          The volume of the bag used to capture leaking air.
           <hr>
         </small>
       </h6>
@@ -228,7 +246,9 @@
       <h6>
         Compressor Air Temperature
         <small class="text-muted">
-          <br>The temperature of the compressed air at the orifice. This value is used in the orifice flow rate calculation.
+          <br>
+          Compressed air temperature is usually between 200 and 300 ℉. Use an estimated value if the exact temperature is
+          not known.
           <hr>
         </small>
       </h6>
@@ -240,7 +260,8 @@
       <h6>
         Atmospheric Pressure
         <small class="text-muted">
-          <br>The ambient atmospheric pressure at the location of the leak. This value is used to determine the pressure ratio and the resulting orifice flow rate.
+          <br>
+          Standard atmospheric pressure is 14.7 psia.
           <hr>
         </small>
       </h6>
@@ -252,8 +273,12 @@
       <h6>
         Discharge Coefficient
         <small class="text-muted">
-          <br>A dimensionless factor that accounts for flow contraction and friction through the orifice. A value of 1.0 represents an ideal orifice; typical values are between 0.6 and 1.0.
-          <hr>
+          <br>
+          This is used to capture the effect of the shape of the outlet on air loss.
+          Typical values:
+          <hr class="my-1">100% coefficient of flow (un-adjusted for orifice geometry): 1
+          <hr class="my-1">Well-rounded orifices: 0.97
+          <hr class="my-1">Sharp orifices: 0.61
         </small>
       </h6>
     </div>
@@ -264,7 +289,8 @@
       <h6>
         Orifice Diameter
         <small class="text-muted">
-          <br>The diameter of the leak orifice (hole). Larger orifice diameters result in higher air flow rates and greater energy losses.
+          <br>
+          Enter the diameter of orifice in inches.
           <hr>
         </small>
       </h6>
@@ -276,7 +302,8 @@
       <h6>
         Supply Pressure
         <small class="text-muted">
-          <br>The gauge pressure of the compressed air supply at the point of the orifice. This is used together with atmospheric pressure to calculate the leak flow rate.
+          <br>
+          Enter the supply pressure to the orifice in psi.
           <hr>
         </small>
       </h6>
@@ -288,7 +315,8 @@
       <h6>
         Number of Orifices
         <small class="text-muted">
-          <br>The number of leak orifices present. The total leak rate is multiplied by this value to account for multiple leaks of the same size at the same location.
+          <br>
+          Enter the number of orifices.
           <hr>
         </small>
       </h6>
@@ -300,10 +328,76 @@
       <h6>
         Trim Compressor Control
         <small class="text-muted">
-          <br>Select the control method for the trim compressor. This affects how the compressor responds to changes in demand and impacts the energy savings calculation.
+          <br>
+          Select your compressor control type from the dropdown list. Different compressor control strategies
+          react differently to reduced air demand and it is important to take this into consideration when
+          estimating the energy reduction by reducing the demand. This value is applied to the electricity savings, not to the electricity consumption itself.
+          <hr>
+          Values for associated fraction of average power are based off the
+          <a href="https://docs.nrel.gov/docs/fy21osti/77820.pdf" target="_blank">NREL Compressed Air Evaluation
+            Protocol</a>
+          <hr>
+          IBV - Inlet Butterfly Value<br>
+          IGV - Inlet Guide Vanes
+          <hr>
+          Each CCAF value represents the slope of the performance curve when operating within the 40% to 80% capacity range as this is a common operating range for a trim compressor.
           <hr>
         </small>
       </h6>
+      <div class="w-100 d-flex justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Compressor Control</th>
+              <th class="w-50 text-center">Control Adjustment(% of Average Power)</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Screw Compressor - Inlet Modulation</td>
+              <td class="w-50 text-center">30%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Screw Compressor - Variable Displacement</td>
+              <td class="w-50 text-center">60%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Screw Compressor – Variable Speed Drives</td>
+              <td class="w-50 text-center">97%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Oil Injected Screw - Load/Unload (short cycle)</td>
+              <td class="w-50 text-center">48%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Oil Injected Screw - Load/Unload (2+ minutes cycle)</td>
+              <td class="w-50 text-center">68%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Oil Free Screw - Load/Unload</td>
+              <td class="w-50 text-center">73%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Reciprocating Compressor - Load/Unload</td>
+              <td class="w-50 text-center">74%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Reciprocating Compressor - On/Off</td>
+              <td class="w-50 text-center">100%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Centrifugal Compressor – In blowoff (Venting)</td>
+              <td class="w-50 text-center">0%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Centrifugal – Modulating (IBV) in throttle range (Non-Venting)</td>
+              <td class="w-50 text-center">67%</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Centrifugal– Modulating (IGV) in throttle range (Non-Venting)</td>
+              <td class="w-50 text-center">86%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   }
 
@@ -324,10 +418,50 @@
       <h6>
         Compressor Type
         <small class="text-muted">
-          <br>Select the type of air compressor. This determines the default specific power used in energy calculations.
+          <br>
+          Select a compressor type from the dropdown list. To find the savings in terms of energy (kWh) we need
+          to know the electricity consumed by the compressor to produce unit compressed air (specific power of
+          the compressor).
+          These values can be found from previous compressed air studies or from the CAGI
+          data sheets for the specific compressor found online.
+          In a multi-compressor system the energy savings associated with reduced air demand are usually only
+          seen at the trim compressor, hence the "Specific Power" and the "Control-Type Adjustment Factor" are
+          to be specified by the trim compressor.
+          <hr class="my-1">
+          <b>Note:</b> It is recommended that the Specific Power of the compressor is defined by the user for most
+          accurate results.
+          <hr class="my-1">
+          <b>Note:</b> These values are only valid for compressors operating at full load. Please check data sheets for more
+          appropriate numbers if not at full load
           <hr>
         </small>
       </h6>
+      <div class="w-100 d-flex justify-content-center">
+        <table class="table table-hover table-striped">
+          <tbody>
+            <tr>
+              <th class="w-50 text-center">Compressor</th>
+              <th class="w-50 text-center">Typical Specific Power (kW/100 scfm)</th>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Reciprocating</td>
+              <td class="w-50 text-center">16</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Rotary Screw (Lubricant-Injected)</td>
+              <td class="w-50 text-center">20</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Rotary Screw (Lubricant-Free)</td>
+              <td class="w-50 text-center">23</td>
+            </tr>
+            <tr>
+              <td class="w-50 text-center">Centrifugal</td>
+              <td class="w-50 text-center">21</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   }
 
