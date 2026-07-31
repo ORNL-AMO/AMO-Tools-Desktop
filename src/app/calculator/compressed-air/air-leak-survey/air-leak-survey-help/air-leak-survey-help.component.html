@@ -139,6 +139,162 @@
     </div>
   }
 
+  @if (currentField() === 'linePressure') {
+    <div class="my-2">
+      <h6>
+        Line Pressure
+        <small class="text-muted">
+          <br>The pressure of the compressed air line at the location of the leak.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'leakDecibels') {
+    <div class="my-2">
+      <h6>
+        Leak Decibels
+        <small class="text-muted">
+          <br>The decibel reading measured by the ultrasonic probe at the leak location. This value is used together with the Estimated Free Air Flow Table to interpolate the leak flow rate.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'pressureA' || currentField() === 'pressureB') {
+    <div class="my-2">
+      <h6>
+        Pressure (Interpolation Table)
+        <small class="text-muted">
+          <br>Known line pressure values used as column headers in the Estimated Free Air Flow interpolation table. The leak flow rate is interpolated between these two pressures based on the measured line pressure.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'decibelRatingA' || currentField() === 'decibelRatingB') {
+    <div class="my-2">
+      <h6>
+        Decibel Rating (Interpolation Table)
+        <small class="text-muted">
+          <br>Known decibel values used as row entries in the Estimated Free Air Flow interpolation table. The measured leak decibel reading is interpolated between these two rows to estimate the flow rate.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'firstFlowA' || currentField() === 'secondFlowA' || currentField() === 'firstFlowB' || currentField() === 'secondFlowB') {
+    <div class="my-2">
+      <h6>
+        Flow Rate (Interpolation Table)
+        <small class="text-muted">
+          <br>Known free air flow rates corresponding to a given decibel rating and line pressure in the interpolation table. These values are used to interpolate the leak rate based on the measured decibels and line pressure.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'bagFillTime') {
+    <div class="my-2">
+      <h6>
+        Bag Fill Time
+        <small class="text-muted">
+          <br>The time in seconds required to fill the bag with air from the leak. A shorter fill time indicates a larger leak.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'bagVolume') {
+    <div class="my-2">
+      <h6>
+        Bag Volume
+        <small class="text-muted">
+          <br>The volume of the bag used to capture air from the leak. The bag volume and fill time together are used to calculate the leak flow rate.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'compressorAirTemp') {
+    <div class="my-2">
+      <h6>
+        Compressor Air Temperature
+        <small class="text-muted">
+          <br>The temperature of the compressed air at the orifice. This value is used in the orifice flow rate calculation.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'atmosphericPressure') {
+    <div class="my-2">
+      <h6>
+        Atmospheric Pressure
+        <small class="text-muted">
+          <br>The ambient atmospheric pressure at the location of the leak. This value is used to determine the pressure ratio and the resulting orifice flow rate.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'dischargeCoefficient') {
+    <div class="my-2">
+      <h6>
+        Discharge Coefficient
+        <small class="text-muted">
+          <br>A dimensionless factor that accounts for flow contraction and friction through the orifice. A value of 1.0 represents an ideal orifice; typical values are between 0.6 and 1.0.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'orificeDiameter') {
+    <div class="my-2">
+      <h6>
+        Orifice Diameter
+        <small class="text-muted">
+          <br>The diameter of the leak orifice (hole). Larger orifice diameters result in higher air flow rates and greater energy losses.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'supplyPressure') {
+    <div class="my-2">
+      <h6>
+        Supply Pressure
+        <small class="text-muted">
+          <br>The gauge pressure of the compressed air supply at the point of the orifice. This is used together with atmospheric pressure to calculate the leak flow rate.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField() === 'numberOfOrifices') {
+    <div class="my-2">
+      <h6>
+        Number of Orifices
+        <small class="text-muted">
+          <br>The number of leak orifices present. The total leak rate is multiplied by this value to account for multiple leaks of the same size at the same location.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
   @if (currentField() === 'compressorControl') {
     <div class="my-2">
       <h6>
