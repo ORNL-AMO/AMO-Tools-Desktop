@@ -10,10 +10,11 @@
       </div>
     </div>
 
-    <div class="card-header bold">
+    <!-- Issue #8725: MEASUR survey disabled -->
+    <div *ngIf="false" class="card-header bold">
       Feedback
     </div>
-    <div class="card">
+    <div *ngIf="false" class="card">
       <div class="card-body">
         <app-experience-survey></app-experience-survey>
       </div>

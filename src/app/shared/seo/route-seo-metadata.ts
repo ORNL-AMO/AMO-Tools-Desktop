@@ -26,9 +26,9 @@ export const routeSeoMetadata: Record<string, SeoConfig> = {
   },
   '/about': {
     title: 'About MEASUR',
-    description: 'Learn about MEASUR — the Manufacturing Energy Assessment Software for Utility Reduction — developed by the DOE\'s Advanced Manufacturing Office at Oak Ridge National Laboratory.',
+    description: 'Learn about MEASUR — the Manufacturing Energy Assessment Software for Utility Reduction — developed by the DOE\'s Industrial Technologies Office at Oak Ridge National Laboratory.',
     canonicalPath: '/about',
-    keywords: `${SHARED_KEYWORDS}, Advanced Manufacturing Office, DOE AMO, ORNL, energy software`,
+    keywords: `${SHARED_KEYWORDS}, Industrial Technologies Office, DOE ITO, ORNL, energy software`,
   },
   '/tutorials': {
     title: 'Tutorials',

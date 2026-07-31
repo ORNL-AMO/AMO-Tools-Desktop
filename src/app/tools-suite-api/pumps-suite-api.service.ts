@@ -4,6 +4,31 @@ import { HeadToolResults } from '../shared/models/calculators';
 import { PsatInputs, PsatOutputs } from '../shared/models/psat';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+import {
+  type Drive,
+  type EstimateFLA,
+  type HeadTool,
+  type HeadToolOutput,
+  type HeadToolSuctionTank,
+  type LineFrequency,
+  type LoadEstimationMethod,
+  type Motor,
+  type MotorCurrent,
+  type MotorEfficiency as SuiteMotorEfficiency,
+  type MotorEfficiencyClass,
+  type MotorPerformance,
+  type MotorPerformanceOutput,
+  type MotorPowerFactor,
+  type PumpEfficiency as SuitePumpEfficiency,
+  type PumpEfficiencyResults,
+  type PumpFieldData,
+  type PumpResult,
+  type PumpResultInput,
+  type PumpResults,
+  type PumpStyle,
+  type SpecificSpeed,
+  type OptimalSpecificSpeedCorrection,
+} from 'measur-tools-suite';
 
 @Injectable()
 export class PumpsSuiteApiService {
@@ -14,8 +39,8 @@ export class PumpsSuiteApiService {
 
   //results
   resultsExisting(psatInput: PsatInputs): PsatOutputs {
-    let psatWasmModule = this.getPsatModuleFromInputs(psatInput);
-    let calculatedResults = psatWasmModule.calculateExisting();
+    let psatWasmModule: PumpResult = this.getPsatModuleFromInputs(psatInput);
+    let calculatedResults: PumpResults = psatWasmModule.calculateExisting();
     let output: PsatOutputs = {
       pump_efficiency: calculatedResults.pump_efficiency,
       motor_rated_power: calculatedResults.motor_rated_power,
@@ -31,8 +56,8 @@ export class PumpsSuiteApiService {
       annual_cost: calculatedResults.annual_cost,
       annual_savings_potential: psatWasmModule.getAnnualSavingsPotential() * 1000,
       optimization_rating: psatWasmModule.getOptimizationRating(),
-      percent_annual_savings: calculatedResults.percent_annual_savings,
-      co2EmissionsOutput: calculatedResults.co2EmissionsOutput,
+      percent_annual_savings: undefined,
+      co2EmissionsOutput: undefined,
     }
 
     calculatedResults.delete();
@@ -42,8 +67,8 @@ export class PumpsSuiteApiService {
   }
 
   resultsModified(psatInput: PsatInputs): PsatOutputs {
-    let psatWasmModule = this.getPsatModuleFromInputs(psatInput);
-    let calculatedResults = psatWasmModule.calculateModified();
+    let psatWasmModule: PumpResult = this.getPsatModuleFromInputs(psatInput);
+    let calculatedResults: PumpResults = psatWasmModule.calculateModified();
     let output: PsatOutputs = {
       pump_efficiency: calculatedResults.pump_efficiency,
       motor_rated_power: calculatedResults.motor_rated_power,
@@ -59,8 +84,8 @@ export class PumpsSuiteApiService {
       annual_cost: calculatedResults.annual_cost,
       annual_savings_potential: psatWasmModule.getAnnualSavingsPotential() * 1000,
       optimization_rating: psatWasmModule.getOptimizationRating(),
-      percent_annual_savings: calculatedResults.percent_annual_savings,
-      co2EmissionsOutput: calculatedResults.co2EmissionsOutput,
+      percent_annual_savings: undefined,
+      co2EmissionsOutput: undefined,
     }
     calculatedResults.delete();
     psatWasmModule.delete();
@@ -77,39 +102,39 @@ export class PumpsSuiteApiService {
     return calculatedResults;
   }
 
-  getPsatModuleFromInputs(psatInput: PsatInputs) {
-    let pumpStyle = this.suiteApiHelperService.getPumpStyleEnum(psatInput.pump_style);
-    let pumpEfficiency = psatInput.pump_specified / 100;
-    let rpm = psatInput.motor_rated_speed;
-    let drive = this.suiteApiHelperService.getDriveEnum(psatInput.drive);
-    let kviscosity = psatInput.kinematic_viscosity;
-    let specificGravity = psatInput.specific_gravity;
-    let stageCount = psatInput.stages;
-    let speed = this.suiteApiHelperService.getFixedSpeedEnum(psatInput.fixed_speed);
-    let specifiedDriveEfficiency = psatInput.specifiedDriveEfficiency / 100;
-    let pumpInput = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResultInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency);
+  getPsatModuleFromInputs(psatInput: PsatInputs): PumpResult {
+    let pumpStyle: PumpStyle = this.suiteApiHelperService.getPumpStyleEnum(psatInput.pump_style);
+    let pumpEfficiency: number = psatInput.pump_specified / 100;
+    let rpm: number = psatInput.motor_rated_speed;
+    let drive: Drive = this.suiteApiHelperService.getDriveEnum(psatInput.drive);
+    let kviscosity: number = psatInput.kinematic_viscosity;
+    let specificGravity: number = psatInput.specific_gravity;
+    let stageCount: number = psatInput.stages;
+    let speed: SpecificSpeed = this.suiteApiHelperService.getFixedSpeedEnum(psatInput.fixed_speed);
+    let specifiedDriveEfficiency: number = psatInput.specifiedDriveEfficiency / 100;
+    let pumpInput: PumpResultInput = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResultInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency);
     //motor
-    let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(psatInput.line_frequency);
-    let motorRatedPower = psatInput.motor_rated_power;
-    let motorRpm = psatInput.motor_rated_speed;
-    let efficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(psatInput.efficiency_class);
-    let specifiedMotorEfficiency = psatInput.efficiency / 100;
-    let motorRatedVoltage = psatInput.motor_rated_voltage;
-    let fullLoadAmps = psatInput.motor_rated_fla;
+    let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(psatInput.line_frequency);
+    let motorRatedPower: number = psatInput.motor_rated_power;
+    let motorRpm: number = psatInput.motor_rated_speed;
+    let efficiencyClass: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(psatInput.efficiency_class);
+    let specifiedMotorEfficiency: number = psatInput.efficiency / 100;
+    let motorRatedVoltage: number = psatInput.motor_rated_voltage;
+    let fullLoadAmps: number = psatInput.motor_rated_fla;
     // TODO New assessment, no margin. What should default margin be. Applied on backend?
-    let sizeMargin = psatInput.margin ? psatInput.margin : 0;
-    let motor = new this.toolsSuiteApiService.ToolsSuiteModule.Motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedMotorEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
+    let sizeMargin: number = psatInput.margin ? psatInput.margin : 0;
+    let motor: Motor = new this.toolsSuiteApiService.ToolsSuiteModule.Motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedMotorEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
 
-    let flowRate = psatInput.flow_rate;
-    let head = psatInput.head;
-    let loadEstimationMethod = this.suiteApiHelperService.getLoadEstimationMethod(psatInput.load_estimation_method);
-    let motorPower = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_power);
-    let motorAmps = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_current);
-    let voltage = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_voltage);
-    let operating_hours = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.operating_hours);
-    let cost_kw_hour = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.cost_kw_hour);
-    let fieldData = new this.toolsSuiteApiService.ToolsSuiteModule.PumpFieldData(flowRate, head, loadEstimationMethod, motorPower, motorAmps, voltage);
-    let psat = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResult(pumpInput, motor, fieldData, operating_hours, cost_kw_hour);
+    let flowRate: number = psatInput.flow_rate;
+    let head: number = psatInput.head;
+    let loadEstimationMethod: LoadEstimationMethod = this.suiteApiHelperService.getLoadEstimationMethod(psatInput.load_estimation_method);
+    let motorPower: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_power);
+    let motorAmps: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_current);
+    let voltage: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_voltage);
+    let operating_hours: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.operating_hours);
+    let cost_kw_hour: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.cost_kw_hour);
+    let fieldData: PumpFieldData = new this.toolsSuiteApiService.ToolsSuiteModule.PumpFieldData(flowRate, head, loadEstimationMethod, motorPower, motorAmps, voltage);
+    let psat: PumpResult = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResult(pumpInput, motor, fieldData, operating_hours, cost_kw_hour);
     fieldData.delete();
     motor.delete();
     pumpInput.delete();
@@ -118,8 +143,8 @@ export class PumpsSuiteApiService {
 
   //calculators
   headToolSuctionTank(specificGravity: number, flowRate: number, suctionPipeDiameter: number, suctionTankGasOverPressure: number, suctionTankFluidSurfaceElevation: number, suctionLineLossCoefficients: number, dischargePipeDiameter: number, dischargeGaugePressure: number, dischargeGaugeElevation: number, dischargeLineLossCoefficients: number): HeadToolResults {
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.HeadToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure, suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
-    let headToolSuctionTankResults = instance.calculate();
+    let instance: HeadToolSuctionTank = new this.toolsSuiteApiService.ToolsSuiteModule.HeadToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure, suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
+    let headToolSuctionTankResults: HeadToolOutput = instance.calculate();
     let results: HeadToolResults = {
       differentialElevationHead: headToolSuctionTankResults.differentialElevationHead,
       differentialPressureHead: headToolSuctionTankResults.differentialPressureHead,
@@ -134,8 +159,8 @@ export class PumpsSuiteApiService {
   }
 
   headTool(specificGravity: number, flowRate: number, suctionPipeDiameter: number, suctionGaugePressure: number, suctionGaugeElevation: number, suctionLineLossCoefficients: number, dischargePipeDiameter: number, dischargeGaugePressure: number, dischargeGaugeElevation: number, dischargeLineLossCoefficients: number): HeadToolResults {
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.HeadTool(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure, suctionGaugeElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
-    let headToolResults = instance.calculate();
+    let instance: HeadTool = new this.toolsSuiteApiService.ToolsSuiteModule.HeadTool(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure, suctionGaugeElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
+    let headToolResults: HeadToolOutput = instance.calculate();
     let results: HeadToolResults = {
       differentialElevationHead: headToolResults.differentialElevationHead,
       differentialPressureHead: headToolResults.differentialPressureHead,
@@ -150,8 +175,8 @@ export class PumpsSuiteApiService {
   }
 
   achievableEfficiency(pumpStyle: number, specificSpeed: number): number {
-    let pumpStyleEnum = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.OptimalSpecificSpeedCorrection(pumpStyleEnum, specificSpeed);
+    let pumpStyleEnum: PumpStyle = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
+    let instance: OptimalSpecificSpeedCorrection = new this.toolsSuiteApiService.ToolsSuiteModule.OptimalSpecificSpeedCorrection(pumpStyleEnum, specificSpeed);
     let results: number = instance.calculate() * 100;
     instance.delete();
     return results;
@@ -164,9 +189,9 @@ export class PumpsSuiteApiService {
       stageCount: number,
       head: number,
       pumpEfficiencyInput: number): { average: number, max: number } {
-    let pumpStyleEnum = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.PumpEfficiency(pumpStyleEnum, pumpEfficiencyInput, rpm, kinematicViscosity, stageCount, flowRate, head);
-    let pumpEfficiency = instance.calculate();
+    let pumpStyleEnum: PumpStyle = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
+    let instance: SuitePumpEfficiency = new this.toolsSuiteApiService.ToolsSuiteModule.PumpEfficiency(pumpStyleEnum, pumpEfficiencyInput, rpm, kinematicViscosity, stageCount, flowRate, head);
+    let pumpEfficiency: PumpEfficiencyResults = instance.calculate();
     let results: { average: number, max: number } = {
       average: pumpEfficiency.average,
       max: pumpEfficiency.max
@@ -177,20 +202,20 @@ export class PumpsSuiteApiService {
   }
 
   estimateFla(motorRatedPower: number, motorRPM: number, frequency: number, efficiencyClass: number, efficiencyPercent: number, motorVoltage: number): number {
-    let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(frequency);
-    let motorEfficiencyEnum = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let efficiency = efficiencyPercent / 100;
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.EstimateFLA(motorRatedPower, motorRPM, lineFrequency, motorEfficiencyEnum, efficiency, motorVoltage);
+    let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(frequency);
+    let motorEfficiencyEnum: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
+    let efficiency: number = efficiencyPercent / 100;
+    let instance: EstimateFLA = new this.toolsSuiteApiService.ToolsSuiteModule.EstimateFLA(motorRatedPower, motorRPM, lineFrequency, motorEfficiencyEnum, efficiency, motorVoltage);
     let estimatedFLA: number = instance.getEstimatedFLA();
     instance.delete();
     return estimatedFLA;
   }
 
   motorPerformance(lineFreq: number, efficiencyClass: number, motorRatedPower: number, motorRPM: number, specifiedEfficiency: number, motorRatedVoltage: number, fullLoadAmps: number, loadFactor: number): MotorPerformanceResults {
-    let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
-    let motorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.MotorPerformance(lineFrequency, motorRPM, motorEfficiencyClass, motorRatedPower, specifiedEfficiency, loadFactor, motorRatedVoltage, fullLoadAmps);
-    let tmpResults = instance.calculate();
+    let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
+    let motorEfficiencyClass: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
+    let instance: MotorPerformance = new this.toolsSuiteApiService.ToolsSuiteModule.MotorPerformance(lineFrequency, motorRPM, motorEfficiencyClass, motorRatedPower, specifiedEfficiency, loadFactor, motorRatedVoltage, fullLoadAmps);
+    let tmpResults: MotorPerformanceOutput = instance.calculate();
     let results: MotorPerformanceResults = {
       efficiency: tmpResults.efficiency,
       current: tmpResults.current,
@@ -203,9 +228,9 @@ export class PumpsSuiteApiService {
   }
 
   nema(lineFreq: number, motorRPM: number, efficiencyClass: number, efficiency: number, motorRatedPower: number): number {
-    let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
-    let efficiencyClassEnum = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiency(lineFrequency, motorRPM, efficiencyClassEnum, motorRatedPower);
+    let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
+    let efficiencyClassEnum: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
+    let instance: SuiteMotorEfficiency = new this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiency(lineFrequency, motorRPM, efficiencyClassEnum, motorRatedPower);
     //loadFactor hard coded to 1 for nema
     let loadFactor: number = 1;
     let motorEfficiency: number = instance.calculate(loadFactor, efficiency / 100) * 100;
@@ -221,11 +246,11 @@ export class PumpsSuiteApiService {
  * @returns {number} motorEfficiency (as percent)
  */
   motorEfficiency(lineFreq: number, motorRPM: number, efficiencyClass: number, efficiencyPercent: number, motorRatedPower: number, loadFactorPercent: number): number {
-    let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
-    let efficiencyClassEnum = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiency(lineFrequency, motorRPM, efficiencyClassEnum, motorRatedPower);
+    let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
+    let efficiencyClassEnum: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
+    let instance: SuiteMotorEfficiency = new this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiency(lineFrequency, motorRPM, efficiencyClassEnum, motorRatedPower);
     
-    let efficiency = efficiencyPercent / 100;
+    let efficiency: number = efficiencyPercent / 100;
     // * if efficiency class 0,1,2 (Standard, EE, Prem), efficiency input is not used and result is returned in decimal
     let motorEfficiency: number = instance.calculate(loadFactorPercent / 100, efficiency);
     motorEfficiency = motorEfficiency * 100;
@@ -243,7 +268,7 @@ export class PumpsSuiteApiService {
  */
   motorPowerFactor(motorRatedPower: number, loadFactorPercent: number, motorCurrent: number, motorEfficiencyPercent: number, ratedVoltage: number): number {
     // * will be incorrect if incorrect estimated efficiency values are generated
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.MotorPowerFactor(motorRatedPower, loadFactorPercent / 100, motorCurrent, motorEfficiencyPercent / 100, ratedVoltage);
+    let instance: MotorPowerFactor = new this.toolsSuiteApiService.ToolsSuiteModule.MotorPowerFactor(motorRatedPower, loadFactorPercent / 100, motorCurrent, motorEfficiencyPercent / 100, ratedVoltage);
     let powerFactor: number = instance.calculate();
     powerFactor = powerFactor* 100;
     instance.delete();
@@ -259,9 +284,9 @@ export class PumpsSuiteApiService {
  * @returns {number} motorCurrent in amps
  */
   motorCurrent(motorRatedPower: number, motorRPM: number, lineFreq: number, efficiencyClass: number, specifiedEfficiencyPercent: number, loadFactorPercent: number, ratedVoltage: number, fullLoadAmps: number): number {
-    let lineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
-    let efficiencyClassEnum = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let instance = new this.toolsSuiteApiService.ToolsSuiteModule.MotorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClassEnum, specifiedEfficiencyPercent, loadFactorPercent / 100, ratedVoltage);
+    let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
+    let efficiencyClassEnum: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
+    let instance: MotorCurrent = new this.toolsSuiteApiService.ToolsSuiteModule.MotorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClassEnum, specifiedEfficiencyPercent, loadFactorPercent / 100, ratedVoltage);
     let motorCurrent: number = instance.calculateCurrent(fullLoadAmps);
     instance.delete();
     return motorCurrent;

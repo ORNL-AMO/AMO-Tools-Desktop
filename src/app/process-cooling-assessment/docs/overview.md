@@ -80,7 +80,7 @@ This `getAllAssessments → setAll` round-trip is a legacy pattern required to k
 
 ## `hoursOnMonToSun` Is Stored, Not Computed
 
-`WeeklyOperatingSchedule` has a `days` array (7 `DayScheduleData` entries) and a `hoursOnMonToSun` array (7 derived numbers). The hours array is what the Suite API actually uses. It is computed by `getHoursOnMonToSun(days)` but **stored on the object** — it is not recalculated at read time.
+`WeeklyOperatingSchedule` has a `days` array (7 `DayScheduleData` entries) and a `hoursOnMonToSun` array (7 derived numbers). `hoursOnMonToSun` is used for display purposes only. The Suite API (`process-cooling-suite-api.service.ts`) re-derives operating hours directly from `days`, mapping each day's `off`/`allDay`/`start`/`end` to a start/stop pair before sending it to the WASM `getSysOpAnnualHours` call, so `off` days are sent as zero-duration (`start === end === 0`). `hoursOnMonToSun` is computed by `getHoursOnMonToSun(days)` but **stored on the object**, it is not recalculated at read time.
 
 If you update `days` values without also calling `getHoursOnMonToSun()` and storing the result, the saved schedule will be stale. Always call both together. The `WeeklyOperatingScheduleComponent` handles this, but if you're writing test fixtures or migration code that constructs schedule objects directly, you need to set both fields.
 

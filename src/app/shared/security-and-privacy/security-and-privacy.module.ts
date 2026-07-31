@@ -1,27 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SecurityAndPrivacyComponent } from './security-and-privacy.component';
-import { SecurityAndPrivacyModalComponent } from './security-and-privacy-modal/security-and-privacy-modal.component';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { SecurityAndPrivacyService } from './security-and-privacy.service';
+import { SecurityAndPrivacyItemComponent } from './security-and-privacy-item/security-and-privacy-item.component';
 
 
 
 @NgModule({
   declarations: [
-    SecurityAndPrivacyComponent,
-    SecurityAndPrivacyModalComponent
+    SecurityAndPrivacyItemComponent
   ],
   imports: [
-    CommonModule,
-    ModalModule
+    CommonModule
   ],
   exports: [
-    SecurityAndPrivacyComponent,
-    SecurityAndPrivacyModalComponent
-  ],
-  providers: [
-    SecurityAndPrivacyService
+    SecurityAndPrivacyItemComponent
   ]
 })
 export class SecurityAndPrivacyModule { }
