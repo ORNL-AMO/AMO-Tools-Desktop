@@ -1,6 +1,6 @@
 import { CustomNodeStyleMap } from "../constants";
 import { Connection, Edge, MarkerType, Node } from "@xyflow/react";
-import { DiagramSettings, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
+import { DiagramSettings, getDefaultFlowConfidence, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
 import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { getNewIdString } from "./utils";
 import { NodeGraphIndex } from "../../graph";
@@ -85,6 +85,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
     },
     disableInflowConnections: true,
     createdByAssessment: false,
+    flowConfidence: getDefaultFlowConfidence(),
     handles: getDefaultHandles('water-intake')
   },
   {
@@ -100,6 +101,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
       totalSourceFlow: undefined
     },
     createdByAssessment: false,
+    flowConfidence: getDefaultFlowConfidence(),
     handles: getDefaultHandles()
   },
   {
@@ -114,6 +116,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
       totalSourceFlow: undefined
     },
     createdByAssessment: false,
+    flowConfidence: getDefaultFlowConfidence(),
     handles: getDefaultHandles('water-discharge')
   },
   {
@@ -129,6 +132,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
       totalSourceFlow: undefined
     },
     createdByAssessment: false,
+    flowConfidence: getDefaultFlowConfidence(),
     handles: getDefaultHandles()
   },
   {
@@ -142,6 +146,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
       totalSourceFlow: undefined
     },
     createdByAssessment: false,
+    flowConfidence: getDefaultFlowConfidence(),
     handles: getDefaultHandles()
   },
   {
@@ -155,6 +160,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
       totalSourceFlow: undefined
     },
     createdByAssessment: false,
+    flowConfidence: getDefaultFlowConfidence(),
     handles: getDefaultHandles()
   },
   {
@@ -168,6 +174,7 @@ export const processFlowDiagramParts: ProcessFlowPart[] = [
       totalSourceFlow: undefined
     },
     createdByAssessment: false,
+    flowConfidence: getDefaultFlowConfidence(),
     handles: {
       inflowHandles: {
         a: true,
@@ -272,6 +279,7 @@ export const getNewProcessComponent = (processComponentType: WaterProcessCompone
     diagramNodeId: getNewNodeId(),
     modifiedDate: new Date(),
     handles: { ...diagramComponent.handles },
+    flowConfidence: getDefaultFlowConfidence(),
   };
 
   if (newProcessComponent.processComponentType === 'water-intake' || newProcessComponent.processComponentType === 'water-discharge') {
@@ -553,6 +561,8 @@ export const getEdgeFromConnection = (
   connectedParams.data = {
     flowValue: null,
     edgeDescription: getEdgeDescription(connectedParams),
+    confidence: 'estimated',
+    hasManualColorOverride: false,
   }
 
   if (connectedParams.style === undefined) {
@@ -617,6 +627,11 @@ export const getDefaultUserDiagramOptions = (): UserDiagramOptions => {
     showFlowLabels: true,
     flowLabelSize: 1,
     animated: false,
+    colorEdgesByConfidence: false,
+    // * explicit (rather than omitted) so the key exists even before a custom color is picked -
+    // * diagramOptionsChangeReducer requires the key to already be present to accept an update
+    estimatedFlowColor: undefined,
+    meteredFlowColor: undefined,
   }
 }
 

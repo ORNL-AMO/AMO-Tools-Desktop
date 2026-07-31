@@ -7,13 +7,15 @@ import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 import { RootState } from '../Diagram/store';
 import { CustomEdgeData } from 'process-flow-lib';
+import FlowConfidenceIcon, { useFlowConfidenceColor, getFlowConfidenceLabel } from './FlowConfidenceIcon';
 
-const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale }: { transform: string; selected: boolean, flowValue: number | string, scale: number }) => {
+const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale, confidence }: { transform: string; selected: boolean, flowValue: number | string, scale: number, confidence: CustomEdgeData['confidence'] }) => {
+  const getColor = useFlowConfidenceColor();
   let adjustedTransform = transform + ` scale(${scale})`;
   let style: CSSProperties = {
     position: 'absolute',
     background: '#fff',
-    border: 'solid 1px #3055cf',
+    border: `${confidence === 'metered' ? 'solid' : 'dashed'} 2px ${getColor(confidence)}`,
     padding: 8,
     borderRadius: 8,
     fontSize: 18,
@@ -33,10 +35,16 @@ const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale }: { transfo
 
   return (
        <div style={style} className={"nodrag nopan"}>
-        <>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
           <FlowValueDisplay flowValue={flowValue}/>
           <FlowDisplayUnit/>
-        </>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
+          <FlowConfidenceIcon confidence={confidence} sx={{ fontSize: 14 }} />
+          <span style={{ fontSize: 10, fontWeight: 400, color: getColor(confidence) }}>
+            {getFlowConfidenceLabel(confidence)}
+          </span>
+        </div>
        </div>
   );
 }
@@ -44,6 +52,7 @@ const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale }: { transfo
 
 export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   const dispatch = useAppDispatch();
+  const getColor = useFlowConfidenceColor();
   const sourceX = props.sourceX;
   const sourceY = props.sourceY;
   const sourcePosition = props.sourcePosition;
@@ -53,6 +62,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
 
   const showFlowLabels = useAppSelector((state: RootState) => state.diagram.diagramOptions.showFlowLabels);
   const flowLabelSize = useAppSelector((state: RootState) => state.diagram.diagramOptions.flowLabelSize);
+  const colorEdgesByConfidence = useAppSelector((state: RootState) => state.diagram.diagramOptions.colorEdgesByConfidence) === true;
   // const focusedEdgeId = useAppSelector((state: RootState) => state.diagram.focusedEdgeId);
 
   let [edgePath, labelX, labelY] = getBezierPath({
@@ -75,11 +85,12 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
   const renderBaseEdgeComponent = (props: DiagramEdgeProps, edgePath: string) => {
     const customStyle = {
       ...props.style,
+      stroke: (customEdgeData.hasManualColorOverride || !colorEdgesByConfidence) ? props.style?.stroke : getColor(customEdgeData.confidence),
     }
     // if (focusedEdgeId === props.id) {
     //   customStyle.stroke = '#007bff';
     //   customStyle.strokeWidth = String(Number(customStyle.strokeWidth) * 2);
-    // } 
+    // }
     switch (props.baseEdgeComponent) {
       case BezierEdge:
         return <BezierEdge {...props} style={customStyle} />
@@ -90,7 +101,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
       case SmoothStepEdge:
         return <SmoothStepEdge {...props} style={customStyle} />
       default:
-        return <BaseEdge {...props} path={edgePath} style={{ ...props.style }} />
+        return <BaseEdge {...props} path={edgePath} style={customStyle} />
     }
   }
 
@@ -130,6 +141,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
             selected={props.selected}
             scale={flowLabelSize !== undefined? flowLabelSize : 1}
             flowValue={customEdgeData.flowValue}
+            confidence={customEdgeData.confidence}
             />
         }
         </Fragment>

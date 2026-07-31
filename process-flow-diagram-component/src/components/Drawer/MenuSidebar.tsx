@@ -16,6 +16,9 @@ import { Node } from '@xyflow/react';
 import TextField from '@mui/material/TextField';
 import { setDiagramNotes } from '../Diagram/diagramReducer';
 import ColorPaletteDropdown, { allPalettes } from "./ColorPaletteDropdown"
+import ColorPicker from "./ColorPicker"
+import SmallTooltip from "../StyledMUI/SmallTooltip"
+import RestartAltIcon from '@mui/icons-material/RestartAlt'
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(2),
@@ -42,7 +45,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const minimapVisible = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
   const controlsVisible = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
   const directionalArrowsVisible = useAppSelector((state: RootState) => state.diagram.diagramOptions.directionalArrowsVisible);
-  
+  const colorEdgesByConfidence = useAppSelector((state: RootState) => state.diagram.diagramOptions.colorEdgesByConfidence);
+  const estimatedFlowColor = useAppSelector((state: RootState) => state.diagram.diagramOptions.estimatedFlowColor);
+  const meteredFlowColor = useAppSelector((state: RootState) => state.diagram.diagramOptions.meteredFlowColor);
+
   const flowDecimalPrecision = useAppSelector((state: RootState) => state.diagram.settings.flowDecimalPrecision);
   const unitsOfMeasure = useAppSelector((state: RootState) => state.diagram.settings.unitsOfMeasure);
   const electricityUnitCost = useAppSelector((state: RootState) => state.diagram.settings.electricityCost);
@@ -83,6 +89,22 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const handleElectricityCostChange = (event: any) => {
           const updatedValue = event.target.value === "" ? null : Number(event.target.value);
           dispatch(electricityCostChange(updatedValue));
+  };
+
+  const handleEstimatedFlowColorChange = (color: string) => {
+    dispatch(diagramOptionsChange({ optionsProp: 'estimatedFlowColor', updatedValue: color }));
+  };
+
+  const handleMeteredFlowColorChange = (color: string) => {
+    dispatch(diagramOptionsChange({ optionsProp: 'meteredFlowColor', updatedValue: color }));
+  };
+
+  const handleResetEstimatedFlowColor = () => {
+    dispatch(diagramOptionsChange({ optionsProp: 'estimatedFlowColor', updatedValue: undefined }));
+  };
+
+  const handleResetMeteredFlowColor = () => {
+    dispatch(diagramOptionsChange({ optionsProp: 'meteredFlowColor', updatedValue: undefined }));
   };
 
   const summingNode = processFlowParts.pop();
@@ -327,6 +349,67 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   ))}
                 </Select>
               </FormControl>
+            </Box>
+
+            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
+              <Typography variant="body2" sx={{ fontWeight: 500, marginBottom: '.5rem' }}>Flow Confidence Colors</Typography>
+              <Box className={'sidebar-option-container checkbox'} sx={{ marginBottom: '.5rem' }}>
+                <label htmlFor="color-edges-by-confidence" className="diagram-checkbox-label">
+                  <input
+                    type="checkbox"
+                    id={"color-edges-by-confidence"}
+                    checked={colorEdgesByConfidence === true}
+                    className={'diagram-checkbox'}
+                    style={{ marginRight: '.5rem' }}
+                    onChange={(e) => handleGenericCheckboxChange(e, 'colorEdgesByConfidence')}
+                  />
+                  <span>Color Edges by Estimated/Metered State</span>
+                </label>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <ColorPicker
+                  label={'Estimated Color'}
+                  color={estimatedFlowColor || theme.palette.warning.main}
+                  setParentColor={handleEstimatedFlowColorChange}
+                  showRecent={false}
+                />
+                <SmallTooltip title="Reset to Default"
+                  slotProps={{
+                    popper: {
+                      disablePortal: true,
+                    }
+                  }}>
+                  <span>
+                    <Button variant="outlined" aria-label="reset estimated color"
+                      disabled={!estimatedFlowColor}
+                      size="small" sx={{ ml: 1 }} onClick={handleResetEstimatedFlowColor}>
+                      <RestartAltIcon fontSize="small" />
+                    </Button>
+                  </span>
+                </SmallTooltip>
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <ColorPicker
+                  label={'Metered Color'}
+                  color={meteredFlowColor || theme.palette.success.main}
+                  setParentColor={handleMeteredFlowColorChange}
+                  showRecent={false}
+                />
+                <SmallTooltip title="Reset to Default"
+                  slotProps={{
+                    popper: {
+                      disablePortal: true,
+                    }
+                  }}>
+                  <span>
+                    <Button variant="outlined" aria-label="reset metered color"
+                      disabled={!meteredFlowColor}
+                      size="small" sx={{ ml: 1 }} onClick={handleResetMeteredFlowColor}>
+                      <RestartAltIcon fontSize="small" />
+                    </Button>
+                  </span>
+                </SmallTooltip>
+              </Box>
             </Box>
 
               <Box className={'sidebar-option-container'}>

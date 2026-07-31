@@ -1,22 +1,32 @@
 import { Box, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import { Edge } from '@xyflow/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
 import ColorPicker from './ColorPicker';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { customEdgeTypeChange, setEdgeStrokeColor } from '../Diagram/diagramReducer';
 import { CustomEdgeData } from 'process-flow-lib';
+import { useFlowConfidenceColor } from '../Edges/FlowConfidenceIcon';
 export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
   const dispatch = useAppDispatch();
+  const getFlowConfidenceColorValue = useFlowConfidenceColor();
   const recentEdgeColors = useAppSelector((state) => state.diagram.recentEdgeColors);
-  const edgeType: string = useAppSelector((state) => state.diagram.diagramOptions.edgeType); 
-  
-  const [edgeColor, setEdgeColor] = useState(edge.style.stroke);
+  const edgeType: string = useAppSelector((state) => state.diagram.diagramOptions.edgeType);
+  const colorEdgesByConfidence = useAppSelector((state) => state.diagram.diagramOptions.colorEdgesByConfidence) === true;
+
+  // * shows the color actually on screen - the confidence auto-color unless the user has manually overridden it or turned off "Color Edges by Confidence"
+  const displayedEdgeColor = (edge.data.hasManualColorOverride || !colorEdgesByConfidence) ? edge.style.stroke : getFlowConfidenceColorValue(edge.data.confidence);
+  const [edgeColor, setEdgeColor] = useState(displayedEdgeColor);
   const [recentColors, setRecentColors] = useState(recentEdgeColors);
-  const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);  
+  const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     dispatch(setEdgeStrokeColor({color: debouncedEdgeColor, recentColors}));
   }, [debouncedEdgeColor]);
 

@@ -6,6 +6,7 @@ import type {
   DiagramCalculatedData,
   DiagramSettings,
 } from 'process-flow-lib';
+import { getDefaultFlowConfidence } from 'process-flow-lib';
 
 // ---------------------------------------------------------------------------
 // Node factories — produce the smallest valid Node<ProcessFlowPart> for each
@@ -29,6 +30,7 @@ const basePart = (
     diagramNodeId: id,
     handles: {},
     userEnteredData: {},
+    flowConfidence: getDefaultFlowConfidence(),
     ...extra,
   } as ProcessFlowPart);
 
@@ -114,6 +116,7 @@ export const makeEdge = (
     flowValue,
     hasOwnEdgeType: '',
     edgeDescription: `edge-desc__${source}-${target}`,
+    confidence: 'estimated',
   },
 });
 
