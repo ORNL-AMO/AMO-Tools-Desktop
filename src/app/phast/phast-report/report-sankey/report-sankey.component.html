@@ -1,15 +1,11 @@
 <div class="output-summary">
   <div class="d-flex flex-column">
-    <app-sankey-scenario-picker [options]="phastOptions" [selected]="phast1" (selectedChange)="onPhast1Change($event)"
-      [costSavings]="phast1CostSavings" [energySavings]="phast1EnergySavings" [energySavingsUnit]="energySavingsUnit"
-      [stackVertically]="showPrint">
-      <app-phast-sankey [phast]="phast1" [settings]="settings"></app-phast-sankey>
-    </app-sankey-scenario-picker>
-    <hr>
-    <app-sankey-scenario-picker [options]="phastOptions" [selected]="phast2"
-      (selectedChange)="onPhast2Change($event)" [costSavings]="phast2CostSavings"
-      [energySavings]="phast2EnergySavings" [energySavingsUnit]="energySavingsUnit" [stackVertically]="showPrint">
-      <app-phast-sankey [phast]="phast2" [settings]="settings"></app-phast-sankey>
-    </app-sankey-scenario-picker>
+    @for (phast of phasts; track phast.name) {
+      <app-sankey-scenario-picker [options]="phastOptions" [selected]="phast" (selectedChange)="setPhast($event)"
+        [costSavings]="phastCostSavings" [energySavings]="phastEnergySavings" [energySavingsUnit]="energySavingsUnit"
+        [stackVertically]="showPrint">
+        <app-phast-sankey [phast]="phast" [settings]="settings"></app-phast-sankey>
+      </app-sankey-scenario-picker>
+    }
   </div>
 </div>

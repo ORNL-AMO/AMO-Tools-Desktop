@@ -1,15 +1,11 @@
 <div class="output-summary">
     <div class="d-flex flex-column">
-        <app-sankey-scenario-picker [options]="ssmtOptions" [selected]="ssmt1" (selectedChange)="onSsmt1Change($event)"
-            [costSavings]="ssmt1CostSavings">
-            <app-ssmt-sankey [ssmt]="ssmt1" [assessment]="assessment" [settings]="settings"
-                [isBaseline]="ssmt1Baseline"></app-ssmt-sankey>
-        </app-sankey-scenario-picker>
-        <hr>
-        <app-sankey-scenario-picker [options]="ssmtOptions" [selected]="ssmt2"
-            (selectedChange)="onSsmt2Change($event)" [costSavings]="ssmt2CostSavings">
-            <app-ssmt-sankey [ssmt]="ssmt2" [assessment]="assessment" [settings]="settings"
-                [isBaseline]="ssmt2Baseline"></app-ssmt-sankey>
-        </app-sankey-scenario-picker>
+        @for (ssmt of ssmts; track ssmt.name) {
+          <app-sankey-scenario-picker [options]="ssmtOptions" [selected]="ssmt" (selectedChange)="setSsmt($event)"
+              [costSavings]="ssmtCostSavings">
+              <app-ssmt-sankey [ssmt]="ssmt" [assessment]="assessment" [settings]="settings"
+                  [isBaseline]="ssmtBaseline"></app-ssmt-sankey>
+          </app-sankey-scenario-picker>
+        }
     </div>
 </div>

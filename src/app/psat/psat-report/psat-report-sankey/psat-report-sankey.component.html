@@ -1,13 +1,10 @@
 <div class="output-summary">
   <div class="d-flex flex-column">
-    <app-sankey-scenario-picker [options]="psatOptions" [selected]="psat1" (selectedChange)="onPsat1Change($event)"
-      [costSavings]="psat1CostSavings">
-      <app-psat-sankey [psat]="psat1" [settings]="settings" [isBaseline]="psat1Baseline"></app-psat-sankey>
-    </app-sankey-scenario-picker>
-    <hr>
-    <app-sankey-scenario-picker [options]="psatOptions" [selected]="psat2"
-      (selectedChange)="onPsat2Change($event)" [costSavings]="psat2CostSavings">
-      <app-psat-sankey [psat]="psat2" [settings]="settings" [isBaseline]="psat2Baseline"></app-psat-sankey>
-    </app-sankey-scenario-picker>
+    @for (psat of psats; track psat.name) {
+      <app-sankey-scenario-picker [options]="psatOptions" [selected]="psat"
+        (selectedChange)="setPsat($event)" [costSavings]="psatCostSavings">
+        <app-psat-sankey [psat]="psat" [settings]="settings" [isBaseline]="psatBaseline"></app-psat-sankey>
+      </app-sankey-scenario-picker>
+    }
   </div>
 </div>

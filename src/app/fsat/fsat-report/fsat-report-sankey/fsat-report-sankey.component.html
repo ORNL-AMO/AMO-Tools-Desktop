@@ -1,13 +1,10 @@
 <div class="output-summary">
   <div class="d-flex flex-column">
-    <app-sankey-scenario-picker [options]="fsatOptions" [selected]="fsat1" (selectedChange)="onFsat1Change($event)"
-      [costSavings]="fsat1CostSavings">
-      <app-fsat-sankey [fsat]="fsat1" [settings]="settings" [isBaseline]="fsat1Baseline"></app-fsat-sankey>
-    </app-sankey-scenario-picker>
-    <hr>
-    <app-sankey-scenario-picker [options]="fsatOptions" [selected]="fsat2"
-      (selectedChange)="onFsat2Change($event)" [costSavings]="fsat2CostSavings">
-      <app-fsat-sankey [fsat]="fsat2" [settings]="settings" [isBaseline]="fsat2Baseline"></app-fsat-sankey>
-    </app-sankey-scenario-picker>
+    @for (fsat of fsats; track fsat.name) {
+      <app-sankey-scenario-picker [options]="fsatOptions" [selected]="fsat"
+        (selectedChange)="setFsat($event)" [costSavings]="fsatCostSavings">
+        <app-fsat-sankey [fsat]="fsat" [settings]="settings" [isBaseline]="fsatBaseline"></app-fsat-sankey>
+      </app-sankey-scenario-picker>
+    }
   </div>
 </div>

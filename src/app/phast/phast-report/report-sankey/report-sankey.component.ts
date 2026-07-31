@@ -23,17 +23,14 @@ export class ReportSankeyComponent implements OnInit {
 
   baseline: ExecutiveSummary;
 
-  phast1CostSavings: number = 0;
-  phast1EnergySavings: number = 0;
-  phast2CostSavings: number = 0;
-  phast2EnergySavings: number = 0;
+  phastCostSavings: number = 0;
+  phastEnergySavings: number = 0;
 
   energySavingsUnit: string;
 
   assessmentName: string;
   phastOptions: Array<SankeyScenarioOption>;
-  phast1: PHAST;
-  phast2: PHAST;
+  phasts: Array<PHAST>;
   modExists: boolean = false;
   constructor(private executiveSummaryService: ExecutiveSummaryService) { }
 
@@ -42,48 +39,17 @@ export class ReportSankeyComponent implements OnInit {
     this.assessmentName = this.assessment.name.replace(/\s/g, '');
     this.assessmentName = this.assessmentName.replace('(', '');
     this.assessmentName = this.assessmentName.replace(')', '');
-    this.phastOptions = [{ name: 'Baseline', value: this.phast }];
-    this.phast1 = this.phast;
-    if (this.phast.modifications?.length) {
-      this.modExists = true;
-      this.phast.modifications.forEach(mod => {
-        this.phastOptions.push({ name: mod.phast.name, value: mod.phast });
-      });
-    }
-    this.phast2 = this.phast.modifications?.[0]?.phast ?? this.phast;
+    this.modExists = !!this.phast.modifications?.length;
+    this.phasts = [this.phast, ...(this.phast.modifications ?? []).map(mod => mod.phast)];
+    this.phastOptions = this.phasts.map(phast => ({ name: phast.name, value: phast }));
 
     this.energySavingsUnit = this.settings.energyResultUnit + "/yr";
-    this.getPhast1Savings();
-    this.getPhast2Savings();
   }
 
-  onPhast1Change(phast: PHAST) {
-    this.phast1 = phast;
-    this.getPhast1Savings();
-  }
-
-  onPhast2Change(phast: PHAST) {
-    this.phast2 = phast;
-    this.getPhast2Savings();
-  }
-
-  getPhast1Savings() {
-    if (!this.phast1) {
-      return;
-    }
-    let isMod = this.phast1.name !== this.phast.name;
-    let tmpSummary = this.executiveSummaryService.getSummary(this.phast1, isMod, this.settings, this.phast, this.baseline);
-    this.phast1CostSavings = tmpSummary.annualCostSavings;
-    this.phast1EnergySavings = tmpSummary.annualEnergySavings;
-  }
-
-  getPhast2Savings() {
-    if (!this.phast2) {
-      return;
-    }
-    let isMod = this.phast2.name !== this.phast.name;
-    let tmpSummary = this.executiveSummaryService.getSummary(this.phast2, isMod, this.settings, this.phast, this.baseline);
-    this.phast2CostSavings = tmpSummary.annualCostSavings;
-    this.phast2EnergySavings = tmpSummary.annualEnergySavings;
+  setPhast(selectedPhast: PHAST) {
+    let isMod = selectedPhast.name !== this.phast.name;
+    let tmpSummary = this.executiveSummaryService.getSummary(selectedPhast, isMod, this.settings, this.phast, this.baseline);
+    this.phastCostSavings = tmpSummary.annualCostSavings;
+    this.phastEnergySavings = tmpSummary.annualEnergySavings;
   }
 }

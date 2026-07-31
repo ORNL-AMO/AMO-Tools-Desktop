@@ -22,47 +22,20 @@ baselineOutput: SSMTOutput;
 modificationOutputs: Array<{ name: string, outputData: SSMTOutput, valid: SsmtValid }>;
 
   ssmtOptions: Array<SankeyScenarioOption>;
-  ssmt1CostSavings: number;
-  ssmt2CostSavings: number;
-  ssmt1: SSMT;
-  ssmt2: SSMT;
-  ssmt1Baseline: boolean = true;
-  ssmt2Baseline: boolean = false;
+  ssmtCostSavings: number;
+  ssmtBaseline: boolean = true;
+  ssmts: Array<SSMT>;
   constructor() { }
 
   ngOnInit() {
-    this.ssmtOptions = [{ name: 'Baseline', value: this.assessment.ssmt }];
-    this.assessment.ssmt.modifications?.forEach(modification => {
-      this.ssmtOptions.push({ name: modification.ssmt.name, value: modification.ssmt });
-    });
-
-    this.ssmt1 = this.assessment.ssmt;
-    this.setSsmt1();
-    this.ssmt2 = this.assessment.ssmt.modifications?.[0]?.ssmt ?? this.assessment.ssmt;
-    this.setSsmt2();
+    this.ssmts = [this.assessment.ssmt, ...(this.assessment.ssmt.modifications ?? []).map(modification => modification.ssmt)];
+    this.ssmtOptions = this.ssmts.map(ssmt => ({ name: ssmt.name, value: ssmt }));
   }
 
-  onSsmt1Change(ssmt: SSMT) {
-    this.ssmt1 = ssmt;
-    this.setSsmt1();
-  }
-
-  onSsmt2Change(ssmt: SSMT) {
-    this.ssmt2 = ssmt;
-    this.setSsmt2();
-  }
-
-  setSsmt1() {
-    this.ssmt1Baseline = this.assessment.ssmt.name == this.ssmt1.name;
-    let selectedSSMTCost: number = this.getSelectedSSMTCost(this.ssmt1.name);
-    this.ssmt1CostSavings = selectedSSMTCost != null ? this.baselineOutput.operationsOutput.totalOperatingCost - selectedSSMTCost : undefined;
-
-  }
-
-  setSsmt2() {
-    this.ssmt2Baseline = this.assessment.ssmt.name == this.ssmt2.name;
-    let selectedSSMTCost: number = this.getSelectedSSMTCost(this.ssmt2.name);
-    this.ssmt2CostSavings = selectedSSMTCost != null ? this.baselineOutput.operationsOutput.totalOperatingCost - selectedSSMTCost : undefined;
+  setSsmt(selectedSsmt: SSMT) {
+    this.ssmtBaseline = this.assessment.ssmt.name == selectedSsmt.name;
+    let selectedSSMTCost: number = this.getSelectedSSMTCost(selectedSsmt.name);
+    this.ssmtCostSavings = selectedSSMTCost != null ? this.baselineOutput.operationsOutput.totalOperatingCost - selectedSSMTCost : undefined;
   }
 
   getSelectedSSMTCost(selectedName: string): number {
