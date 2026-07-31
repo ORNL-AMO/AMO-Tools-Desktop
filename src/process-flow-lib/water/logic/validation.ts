@@ -25,8 +25,8 @@ export const validateTotalFlowValue = (connectedEdges: Edge<CustomEdgeData>[], c
         if (userEnteredFlowToPrecision !== undefined && userEnteredFlowToPrecision !== null
             && userEnteredFlowToPrecision !== calculatedTotalFlowToPrecision) {
             if (unaccountedFlow !== undefined && unaccountedFlow !== null) {
-                const unaccountedFlowToPrecision = Number(unaccountedFlow.toFixed(precision));
-                let adjustedFlowToPrecision;
+                const unaccountedFlowToPrecision: number = Number(unaccountedFlow.toFixed(precision));
+                let adjustedFlowToPrecision: number;
                 if (calculatedTotalFlowToPrecision < userEnteredFlowToPrecision) {
                     adjustedFlowToPrecision = Number((userEnteredFlowToPrecision - unaccountedFlowToPrecision).toFixed(precision));
                 } else {
