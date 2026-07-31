@@ -122,7 +122,7 @@ export const getDefaultFlowValidationSchema = (
                     return createError({ path, message: knownLossesError });
                 }
                 return true;
-            },
+            }
         );
 
     const validationSchema = sumUserKnownLosses ? {

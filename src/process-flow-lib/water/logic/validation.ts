@@ -25,11 +25,12 @@ export const validateTotalFlowValue = (connectedEdges: Edge<CustomEdgeData>[], c
         if (userEnteredFlowToPrecision !== undefined && userEnteredFlowToPrecision !== null
             && userEnteredFlowToPrecision !== calculatedTotalFlowToPrecision) {
             if (unaccountedFlow !== undefined && unaccountedFlow !== null) {
+                const unaccountedFlowToPrecision: number = Number(unaccountedFlow.toFixed(precision));
                 let adjustedFlowToPrecision: number;
                 if (calculatedTotalFlowToPrecision < userEnteredFlowToPrecision) {
-                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision - unaccountedFlow).toFixed(precision));
+                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision - unaccountedFlowToPrecision).toFixed(precision));
                 } else {
-                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision + unaccountedFlow).toFixed(precision));
+                    adjustedFlowToPrecision = Number((userEnteredFlowToPrecision + unaccountedFlowToPrecision).toFixed(precision));
                 }
                 const isAdjustedValid: boolean = adjustedFlowToPrecision === calculatedTotalFlowToPrecision;
                 return isAdjustedValid;
@@ -41,14 +42,19 @@ export const validateTotalFlowValue = (connectedEdges: Edge<CustomEdgeData>[], c
 };
 
 /**
-   * Users can enter total known losses as input, or construct them from diagram components. Ensure they match
+   * Users can enter total known losses as input, or construct them from diagram components. Ensure they match.
    * @param sumKnownLosses sum of user placed Known Loss components on diagram (Known Loss Flows)
-   * @param userEnteredKnownLoss 
+   * @param userEnteredKnownLoss user-entered known loss value; may be null or undefined (no validation performed)
+   * @param precision decimal places to round to before comparing (default: 2)
    */
-export const validateKnownLosses = (sumKnownLosses: number, userEnteredKnownLoss: number): boolean => {
+export const validateKnownLosses = (sumKnownLosses: number, userEnteredKnownLoss: number | null | undefined, precision: number) => {
     if (sumKnownLosses > 0) {
-        if (userEnteredKnownLoss !== undefined && userEnteredKnownLoss !== null && userEnteredKnownLoss !== sumKnownLosses) {
-            return false;
+        if (userEnteredKnownLoss !== undefined && userEnteredKnownLoss !== null) {
+            const sumKnownLossesToPrecision = Number(sumKnownLosses.toFixed(precision));
+            const userEnteredKnownLossToPrecision = Number(userEnteredKnownLoss.toFixed(precision));
+            if (userEnteredKnownLossToPrecision !== sumKnownLossesToPrecision) {
+                return false;
+            }
         }
     }
     return true;
@@ -171,9 +177,10 @@ export const validateFlowSection = (input: FlowValidationInput): FlowValidationR
 
     let knownLossesError: string | undefined;
     if (sumKnownLossEdges !== undefined && sumKnownLossEdges > 0) {
-        const isKnownLossesValid: boolean = validateKnownLosses(sumKnownLossEdges, userKnownLosses);
+        const isKnownLossesValid: boolean = validateKnownLosses(sumKnownLossEdges, userKnownLosses, precision);
         if (!isKnownLossesValid) {
-            knownLossesError = `Known Losses should equal the sum of all Known Loss flows (${sumKnownLossEdges})`;
+            const sumKnownLossEdgesToPrecision: number = Number(sumKnownLossEdges.toFixed(precision));
+            knownLossesError = `Known Losses should equal the sum of all Known Loss flows (${sumKnownLossEdgesToPrecision})`;
         }
     }
 
