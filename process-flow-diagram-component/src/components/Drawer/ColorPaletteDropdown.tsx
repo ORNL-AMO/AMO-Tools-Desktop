@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { getContrastTextColor } from 'process-flow-lib';
+import { FormControl, InputLabel, ListSubheader, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 interface ColorPaletteDropdownProps {
   selected: number;
@@ -22,157 +20,75 @@ export const colorblindPalettes = [
 ];
 export const allPalettes = [...mainPalettes, ...colorblindPalettes];
 
-
-const ColorRow: React.FC<{ colors: string[]; style?: React.CSSProperties }> = ({ colors, style }) => (
-  <div style={{ display: 'flex', gap: 8, margin: '8px 0', ...style }}>
-    {colors.map((color, idx) => {
-      const textColor = getContrastTextColor(color);
-      return (
-        <div
-          key={color + idx}
-          style={{
-            width: 36,
-            height: 36,
-            borderRadius: 6,
-            background: color,
-            border: '1px solid #ccc',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: textColor,
-            fontWeight: 600,
-            fontSize: 14
-          }}
-        >
-        </div>
-      );
-    })}
+const ColorRow = ({ colors, swatchHeight = 36, style }: { colors: string[]; swatchHeight?: number; style?: React.CSSProperties }) => (
+  <div style={{ display: 'flex', gap: 8, width: '100%', ...style }}>
+    {colors.map((color, idx) => (
+      <div
+        key={color + idx}
+        style={{
+          flex: 1,
+          minWidth: 0,
+          height: swatchHeight,
+          borderRadius: 6,
+          background: color,
+          border: '1px solid #ccc',
+        }}
+      />
+    ))}
   </div>
 );
 
+const ColorPaletteDropdown = ({ selected, onChange }: ColorPaletteDropdownProps) => {
+  const selectedIdx = selected >= 0 && selected < allPalettes.length ? selected : 0;
 
-const ColorPaletteDropdown: React.FC<ColorPaletteDropdownProps> = ({ selected, onChange }) => {
-  const [open, setOpen] = useState(false);
   return (
-    <div style={{ margin: '0 0 24px 0', position: 'relative' }}>
-      <label style={{ display: 'block' }}>Set Water Component Colors</label>
-      <div
-        role="button"
-        tabIndex={0}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          cursor: 'pointer',
-          border: '2px solid #1976d2',
-          borderRadius: 8,
-          padding: 2,
-          background: '#f5faff',
-          minWidth: 210,
-          boxShadow: open ? '0 2px 8px rgba(0,0,0,0.15)' : undefined,
+    <FormControl fullWidth size="small">
+      <InputLabel id="componentColors-label">Component Colors</InputLabel>
+      <Select
+        labelId="componentColors-label"
+        id="componentColors"
+        name="componentColors"
+        size="small"
+        label="Component Colors"
+        value={selectedIdx}
+        onChange={(event: SelectChangeEvent<number>) => onChange(Number(event.target.value))}
+        renderValue={(value) => <ColorRow colors={allPalettes[value] ?? allPalettes[0]} swatchHeight={18} style={{ margin: 0 }} />}
+        MenuProps={{
+          disablePortal: true,
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left',
+          },
+          transformOrigin: {
+            vertical: 'top',
+            horizontal: 'left',
+          },
+          slotProps: {
+            paper: {
+              style: { minWidth: 260 },
+            },
+          },
         }}
-        onClick={() => setOpen((prev) => !prev)}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            setOpen((prev) => !prev);
-          }
-        }}
-        title="Select color palette"
-        >  <ColorRow colors={allPalettes[selected] ?? allPalettes[0]} style={{ margin: 0 }} />
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ display: 'inline', verticalAlign: 'middle', marginLeft: 8 }}
-        >
-          {open ? (
-            <path d="M5 13l5-5 5 5" stroke="#1976d2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          ) : (
-            <path d="M5 7l5 5 5-5" stroke="#1976d2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          )}
-        </svg>
-      </div>
-      {open && (
-        <ClickAwayListener onClickAway={() => setOpen(false)}>
-          <div
-            style={{
-              position: 'absolute',
-              zIndex: 10,
-              background: '#fff',
-              border: '1px solid #ccc',
-              borderRadius: 8,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-              marginTop: 8,
-              left: 0,
-              minWidth: 210,
-              padding: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-            }}
-          >
-            {allPalettes.map((palette, i) => {
-              if (i === mainPalettes.length) {
-                return [
-                  <div key="cb-header" style={{ fontSize: 13, color: '#000', fontWeight: 600, padding: '4px 0 2px 0', borderBottom: '1px solid #eee', margin: '4px 0 2px 0' }}>
-                    Colorblind Accessible Palettes
-                  </div>,
-                  <div
-                    key={i}
-                    onClick={() => {
-                      onChange(i);
-                      setOpen(false);
-                    }}
-                    style={{
-                      cursor: 'pointer',
-                      border: selected === i ? '2px solid #1976d2' : '2px solid transparent',
-                      borderRadius: 8,
-                      padding: 2,
-                      background: selected === i ? '#f5faff' : 'transparent',
-                      display: 'flex',
-                      alignItems: 'center',
-                      transition: 'border 0.2s, box-shadow 0.2s',
-                    }}
-                    title={`Select colorblind palette ${i - mainPalettes.length + 1}`}
-                  >
-                    <ColorRow colors={palette} style={{ margin: 0 }} />
-                  </div>
-                ];
-              }
-              return (
-                <div
-                  key={i}
-                  onClick={() => {
-                    onChange(i);
-                    setOpen(false);
-                  }}
-                  style={{
-                    cursor: 'pointer',
-                    border: selected === i ? '2px solid #1976d2' : '2px solid transparent',
-                    borderRadius: 8,
-                    padding: 2,
-                    background: selected === i ? '#f5faff' : 'transparent',
-                    display: 'flex',
-                    alignItems: 'center',
-                    transition: 'border 0.2s, box-shadow 0.2s',
-                  }}
-                  title={`Select color palette ${i + 1}`}
-                >
-                  <ColorRow colors={palette} style={{ margin: 0 }} />
-                </div>
-              );
-            })}
-          </div>
-        </ClickAwayListener>
-      )}
-    </div>
+      >
+        {mainPalettes.map((palette, i) => (
+          <MenuItem key={`palette_${i}`} value={i} title={`Select color palette ${i + 1}`}>
+            <ColorRow colors={palette} style={{ margin: '4px 0' }} />
+          </MenuItem>
+        ))}
+        <ListSubheader sx={{ pointerEvents: 'none', lineHeight: 2, fontSize: '.75rem', fontWeight: 600 }}>
+          Colorblind Accessible Palettes
+        </ListSubheader>
+        {colorblindPalettes.map((palette, i) => {
+          const idx = i + mainPalettes.length;
+          return (
+            <MenuItem key={`palette_${idx}`} value={idx} title={`Select colorblind palette ${i + 1}`}>
+              <ColorRow colors={palette} style={{ margin: '4px 0' }} />
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
   );
 };
 
 export default ColorPaletteDropdown;
-
-        

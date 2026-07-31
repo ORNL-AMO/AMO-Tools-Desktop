@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const ColorPicker = (props: ColorPickerProps) => {
-    const { color, recentColors, setParentColor, label, showRecent } = props;
+    const { color, recentColors, setParentColor, label, showRecent, compact } = props;
     const [selectedColor, setSelectedColor] = useState(color);
     const recentColorsLimit = 5;
 
@@ -20,11 +20,11 @@ const ColorPicker = (props: ColorPickerProps) => {
         setParentColor(color);
         setSelectedColor(color);
     }
-    
+
     return (
         <>
-            <div className={'picker-wrapper'}>
-                <div className={'picker'}>
+            <div className={'picker-wrapper'} style={compact ? { width: 'auto', alignItems: 'flex-start' } : undefined}>
+                <div className={'picker'} style={compact ? { width: 'auto', justifyContent: 'flex-start', gap: '.5rem', padding: '4px 0' } : undefined}>
                     <label>{label}</label>
                     <input type="color" id="color"
                         name="color"
@@ -32,7 +32,7 @@ const ColorPicker = (props: ColorPickerProps) => {
                         value={color}
                         onChange={(event) => setSelectedColor(event.target.value)}
                         onBlur={handleSetColor}
-                        style={{marginLeft: '16px'}}
+                        style={compact ? { width: 64, height: 32, marginLeft: 0 } : { marginLeft: '16px' }}
                         />
                 </div>
                 {showRecent && recentColors && recentColors.length > 0 &&
@@ -60,10 +60,11 @@ const ColorPicker = (props: ColorPickerProps) => {
 
 export default ColorPicker;
 
-export interface ColorPickerProps { 
-    color: string, 
-    setParentColor: (selectedColor: string, recentColors?: string[]) => void, 
+export interface ColorPickerProps {
+    color: string,
+    setParentColor: (selectedColor: string, recentColors?: string[]) => void,
     recentColors?: string[],
-    label: string, 
-    showRecent: boolean 
+    label: string,
+    showRecent: boolean,
+    compact?: boolean,
 }

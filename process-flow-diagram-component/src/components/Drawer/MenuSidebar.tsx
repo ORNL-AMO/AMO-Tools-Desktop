@@ -1,5 +1,5 @@
 import React, { ChangeEvent, memo, useState } from 'react';
-import { Badge, Box, Button, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Badge, Box, Button, Divider, Grid, InputAdornment, List, ListItem, ListItemText, Paper, styled, Tab, Tabs, Typography, useTheme, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
@@ -28,6 +28,15 @@ const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   },
   color: theme.palette.text.secondary,
 }));
+
+const sectionLabelSx = {
+  display: 'block',
+  fontSize: '.7rem',
+  lineHeight: 1.4,
+  letterSpacing: '.06em',
+  textTransform: 'uppercase',
+  marginBottom: '.5rem',
+};
 
 const MenuSidebar = memo((props: MenuSidebarProps) => {
   const theme = useTheme();
@@ -203,44 +212,95 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
         <TabPanel value={selectedTab} index={2} style={{ paddingTop: 0 }}>
           <Box paddingX={'.5rem'} paddingTop={0}>
             <div className="sidebar-options">
-            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0} sx={{paddingTop: 0, marginTop: 0}}>
-              <ColorPaletteDropdown
-                selected={selectedPaletteIdx}
-                onChange={(paletteIdx) => {
-                  dispatch(setPaletteColors(allPalettes[paletteIdx]));
-                }}
-              />
-              <FormControl fullWidth size="small" sx={{ paddingTop: 0 }}>
-                <InputLabel id="unitsOfMeasure-label">Units of Measure</InputLabel>
-                <Select
-                  labelId="unitsOfMeasure-label"
-                  id="unitsOfMeasure"
-                  name="unitsOfMeasure"
-                  size="small"
-                  label="Units of Measure"
-                  value={unitsOfMeasure}
-                  onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}
-                  disabled={hasAssessment}
-                  sx={{ minWidth: 120 }}
-                  MenuProps={{
-                    disablePortal: true,
-                    anchorOrigin: {
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    },
-                    transformOrigin: {
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }
-                  }}
-                >
-                  <MenuItem key={'imperial'} value={'Imperial'}>Imperial</MenuItem>
-                  <MenuItem key={'metric'} value={'Metric'}>Metric</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+            <Box className={'sidebar-option-container'} paddingX={'.5rem'} paddingY={0} sx={{ marginTop: '1.5rem' }}>
+              <Typography variant="caption" sx={sectionLabelSx}>Units & Precision</Typography>
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: '.75rem', rowGap: '.5rem' }}>
+                <FormControl fullWidth size="small">
+                  <InputLabel id="unitsOfMeasure-label">Units of Measure</InputLabel>
+                  <Select
+                    labelId="unitsOfMeasure-label"
+                    id="unitsOfMeasure"
+                    name="unitsOfMeasure"
+                    size="small"
+                    label="Units of Measure"
+                    value={unitsOfMeasure}
+                    onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}
+                    disabled={hasAssessment}
+                    MenuProps={{
+                      disablePortal: true,
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }
+                    }}
+                  >
+                    <MenuItem key={'imperial'} value={'Imperial'}>Imperial</MenuItem>
+                    <MenuItem key={'metric'} value={'Metric'}>Metric</MenuItem>
+                  </Select>
+                </FormControl>
 
-              <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
+                <FormControl fullWidth size="small">
+                  <InputLabel id="flowDecimalPrecision-label">Decimal Precision</InputLabel>
+                  <Select
+                    labelId="flowDecimalPrecision-label"
+                    id="flowDecimalPrecision"
+                    name="flowDecimalPrecision"
+                    size="small"
+                    label="Flow Decimal Precision"
+                    value={flowDecimalPrecision}
+                    onChange={(e) => dispatch(flowDecimalPrecisionChange(String(e.target.value)))}
+                    MenuProps={{
+                      disablePortal: true,
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }
+                    }}
+                  >
+                    {flowDecimalPrecisionOptions.map((option) => (
+                      <MenuItem key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth size="small">
+                  <InputLabel id="conductivityUnit-label">Conductivity Unit</InputLabel>
+                  <Select
+                    labelId="conductivityUnit-label"
+                    id="conductivityUnit"
+                    name="conductivityUnit"
+                    size="small"
+                    label="Conductivity Unit"
+                    value={conductivityUnit}
+                    onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}
+                    MenuProps={{
+                      disablePortal: true,
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }
+                    }}
+                  >
+                    {conductivityUnitOptions.map((option) => (
+                      <MenuItem key={`conductivityUnit_${option.value}`} value={option.value}>{option.display}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <Box sx={{ marginTop: '.5rem' }}>
                 <InputField
                   name={'electricityCost'}
                   id={'electricityCost'}
@@ -257,162 +317,51 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   }}
                 />
               </Box>
-                
-            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
-              <FormControl fullWidth size="small">
-                <InputLabel id="flowDecimalPrecision-label">Decimal Precision</InputLabel>
-                <Select
-                  labelId="flowDecimalPrecision-label"
-                  id="flowDecimalPrecision"
-                  name="flowDecimalPrecision"
-                  size="small"
-                  label="Flow Decimal Precision"
-                  value={flowDecimalPrecision}
-                  onChange={(e) => dispatch(flowDecimalPrecisionChange(String(e.target.value)))}
-                  sx={{ minWidth: 120 }}
-                  MenuProps={{
-                    disablePortal: true,
-                    anchorOrigin: {
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    },
-                    transformOrigin: {
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }
-                  }}
-                >
-                  {flowDecimalPrecisionOptions.map((option) => (
-                    <MenuItem key={`flowDecimalPrecision_${option.value}`} value={option.value}>{option.display}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
             </Box>
 
-            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
-              <FormControl fullWidth size="small">
-                <InputLabel id="conductivityUnit-label">Conductivity Unit</InputLabel>
-                <Select
-                  labelId="conductivityUnit-label"
-                  id="conductivityUnit"
-                  name="conductivityUnit"
-                  size="small"
-                  label="Conductivity Unit"
-                  value={conductivityUnit}
-                  onChange={(e) => dispatch(conductivityUnitChange(e.target.value))}
-                  sx={{ minWidth: 120 }}
-                  MenuProps={{
-                    disablePortal: true,
-                    anchorOrigin: {
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    },
-                    transformOrigin: {
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }
-                  }}
-                >
-                  {conductivityUnitOptions.map((option) => (
-                    <MenuItem key={`conductivityUnit_${option.value}`} value={option.value}>{option.display}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+            <Divider sx={{ marginY: '.75rem' }} />
 
-            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
-              <FormControl fullWidth size="small">
-                <InputLabel id="edgeType-label">Default Line Type</InputLabel>
-                <Select
-                  labelId="edgeType-label"
-                  id="edgeType"
-                  name="edgeType"
-                  size="small"
-                  label="Edge Type"
-                  value={edgeType}
-                  onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}
-                  sx={{ minWidth: 120 }}
-                  MenuProps={{
-                    disablePortal: true,
-                    anchorOrigin: {
-                      vertical: 'bottom',
-                      horizontal: 'left',
-                    },
-                    transformOrigin: {
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }
-                  }}
-                >
-                  {edgeTypeOptions.map((option: SelectListOption) => (
-                    <MenuItem key={option.value} value={option.value}>{option.display}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+            <Box className={'sidebar-option-container'} paddingX={'.5rem'} paddingY={0} sx={{ marginTop: '.25rem' }}>
+              <Typography variant="caption" sx={sectionLabelSx}>Diagram Appearance</Typography>
 
-            <Box className={'sidebar-option-container'} padding={'.5rem'} paddingTop={0}>
-              <Typography variant="body2" sx={{ fontWeight: 500, marginBottom: '.5rem' }}>Flow Confidence Colors</Typography>
-              <Box className={'sidebar-option-container checkbox'} sx={{ marginBottom: '.5rem' }}>
-                <label htmlFor="color-edges-by-confidence" className="diagram-checkbox-label">
-                  <input
-                    type="checkbox"
-                    id={"color-edges-by-confidence"}
-                    checked={colorEdgesByConfidence === true}
-                    className={'diagram-checkbox'}
-                    style={{ marginRight: '.5rem' }}
-                    onChange={(e) => handleGenericCheckboxChange(e, 'colorEdgesByConfidence')}
-                  />
-                  <span>Color Edges by Estimated/Metered State</span>
-                </label>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <ColorPicker
-                  label={'Estimated Color'}
-                  color={estimatedFlowColor || theme.palette.warning.main}
-                  setParentColor={handleEstimatedFlowColorChange}
-                  showRecent={false}
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: '.75rem' }}>
+                <ColorPaletteDropdown
+                  selected={selectedPaletteIdx}
+                  onChange={(paletteIdx) => {
+                    dispatch(setPaletteColors(allPalettes[paletteIdx]));
+                  }}
                 />
-                <SmallTooltip title="Reset to Default"
-                  slotProps={{
-                    popper: {
-                      disablePortal: true,
-                    }
-                  }}>
-                  <span>
-                    <Button variant="outlined" aria-label="reset estimated color"
-                      disabled={!estimatedFlowColor}
-                      size="small" sx={{ ml: 1 }} onClick={handleResetEstimatedFlowColor}>
-                      <RestartAltIcon fontSize="small" />
-                    </Button>
-                  </span>
-                </SmallTooltip>
-              </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <ColorPicker
-                  label={'Metered Color'}
-                  color={meteredFlowColor || theme.palette.success.main}
-                  setParentColor={handleMeteredFlowColorChange}
-                  showRecent={false}
-                />
-                <SmallTooltip title="Reset to Default"
-                  slotProps={{
-                    popper: {
-                      disablePortal: true,
-                    }
-                  }}>
-                  <span>
-                    <Button variant="outlined" aria-label="reset metered color"
-                      disabled={!meteredFlowColor}
-                      size="small" sx={{ ml: 1 }} onClick={handleResetMeteredFlowColor}>
-                      <RestartAltIcon fontSize="small" />
-                    </Button>
-                  </span>
-                </SmallTooltip>
-              </Box>
-            </Box>
 
-              <Box className={'sidebar-option-container'}>
+                <FormControl fullWidth size="small">
+                  <InputLabel id="edgeType-label">Default Line Type</InputLabel>
+                  <Select
+                    labelId="edgeType-label"
+                    id="edgeType"
+                    name="edgeType"
+                    size="small"
+                    label="Edge Type"
+                    value={edgeType}
+                    onChange={(e) => dispatch(defaultEdgeTypeChange(e.target.value))}
+                    MenuProps={{
+                      disablePortal: true,
+                      anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      },
+                      transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }
+                    }}
+                  >
+                    {edgeTypeOptions.map((option: SelectListOption) => (
+                      <MenuItem key={option.value} value={option.value}>{option.display}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <Box className={'sidebar-option-container'} sx={{ marginTop: '.5rem' }}>
                 <label htmlFor={'strokeWidth'} >Line Thickness</label>
                 <ContinuousSlider
                   size='small'
@@ -435,8 +384,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   value={flowLabelSize} />
               </Box>
 
-              <div style={{ margin: '1rem 0', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly' }}>
-                <Box className={'sidebar-option-container checkbox'} display={'flex'} flexDirection={'column'} sx={{ fontSize: '.75rem', marginTop: '1rem' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', marginTop: '.5rem' }}>
+                <Box className={'sidebar-option-container checkbox'} sx={{ fontSize: '.75rem' }}>
                   <label htmlFor="show-flow-values" className="diagram-checkbox-label">
                     <input
                       type="checkbox"
@@ -505,7 +454,75 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     <span>Show Controls</span>
                   </label>
                 </Box>
-              </div>
+              </Box>
+            </Box>
+
+            <Divider sx={{ marginY: '.75rem' }} />
+
+            <Box className={'sidebar-option-container'} paddingX={'.5rem'} paddingY={0} sx={{ marginTop: '.25rem' }}>
+              <Typography variant="caption" sx={sectionLabelSx}>Flow Confidence Colors</Typography>
+              <Box className={'sidebar-option-container checkbox'} sx={{ marginBottom: '.35rem' }}>
+                <label htmlFor="color-edges-by-confidence" className="diagram-checkbox-label">
+                  <input
+                    type="checkbox"
+                    id={"color-edges-by-confidence"}
+                    checked={colorEdgesByConfidence === true}
+                    className={'diagram-checkbox'}
+                    style={{ marginRight: '.5rem' }}
+                    onChange={(e) => handleGenericCheckboxChange(e, 'colorEdgesByConfidence')}
+                  />
+                  <span>Color Edges by Estimated/Metered State</span>
+                </label>
+              </Box>
+              <Box sx={{ display: 'flex', gap: '1rem' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+                  <ColorPicker
+                    compact
+                    label={'Estimated'}
+                    color={estimatedFlowColor || theme.palette.warning.main}
+                    setParentColor={handleEstimatedFlowColorChange}
+                    showRecent={false}
+                  />
+                  <SmallTooltip title="Reset to Default"
+                    slotProps={{
+                      popper: {
+                        disablePortal: true,
+                      }
+                    }}>
+                    <span>
+                      <Button variant="outlined" aria-label="reset estimated color"
+                        disabled={!estimatedFlowColor}
+                        size="small" sx={{ ml: 1 }} onClick={handleResetEstimatedFlowColor}>
+                        <RestartAltIcon fontSize="small" />
+                      </Button>
+                    </span>
+                  </SmallTooltip>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+                  <ColorPicker
+                    compact
+                    label={'Metered'}
+                    color={meteredFlowColor || theme.palette.success.main}
+                    setParentColor={handleMeteredFlowColorChange}
+                    showRecent={false}
+                  />
+                  <SmallTooltip title="Reset to Default"
+                    slotProps={{
+                      popper: {
+                        disablePortal: true,
+                      }
+                    }}>
+                    <span>
+                      <Button variant="outlined" aria-label="reset metered color"
+                        disabled={!meteredFlowColor}
+                        size="small" sx={{ ml: 1 }} onClick={handleResetMeteredFlowColor}>
+                        <RestartAltIcon fontSize="small" />
+                      </Button>
+                    </span>
+                  </SmallTooltip>
+                </Box>
+              </Box>
+            </Box>
 
             </div>
           </Box>
