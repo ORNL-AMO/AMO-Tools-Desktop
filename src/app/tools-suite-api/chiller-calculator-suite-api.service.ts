@@ -13,6 +13,7 @@ import {
   type CoolingTowerWaterConservationData,
   type FanControlSpeedType,
   type PowerEnergyConsumptionOutput,
+  type RegisteredVector,
   type StagingPowerConsumptionOutput,
 } from 'measur-tools-suite';
 
@@ -186,14 +187,8 @@ export class ChillerCalculatorSuiteApiService {
       input.modLoadList
     );
 
-    let baselinePowerList: Array<number> = [];
-    let modPowerList: Array<number> = [];
-    for (let i: number = 0; i < rawOutput.baselinePowerList.length; ++i) {
-      baselinePowerList.push(rawOutput.baselinePowerList[i]);
-    }
-    for (let i: number = 0; i < rawOutput.modPowerList.length; ++i) {
-      modPowerList.push(rawOutput.modPowerList[i]);
-    }
+    let baselinePowerList: Array<number> = this.suiteApiHelperService.extractWASMArray(rawOutput.baselinePowerList as unknown as RegisteredVector<number>);
+    let modPowerList: Array<number> = this.suiteApiHelperService.extractWASMArray(rawOutput.modPowerList as unknown as RegisteredVector<number>);
 
     let output: ChillerStagingOutput = {
       baselineTotalPower: rawOutput.baselineTotalPower,

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { WasteWaterResults, WasteWaterTreatmentInputData } from '../shared/models/waste-water';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
-import { type CalculationsTable, type CalculationsTableV, type WasteWater_Treatment, type WasteWater_TreatmentOutput, type WasteWater_TreatmentOutputWithoutTable } from 'measur-tools-suite';
+import { type CalculationsTable, type CalculationsTableV, type RegisteredVector, type WasteWater_Treatment, type WasteWater_TreatmentOutput, type WasteWater_TreatmentOutputWithoutTable } from 'measur-tools-suite';
 
 type WasteWaterTreatmentSuiteOutput = (WasteWater_TreatmentOutput | WasteWater_TreatmentOutputWithoutTable) & {
   AeEnergyAnnual?: number;
@@ -73,7 +73,7 @@ export class WasteWaterSuiteApiService {
     let convertedCalculationsTable: Array<Array<number>> = [];
     for (let i: number = 0; i < resultArray.size(); ++i) {
       let calculationRow: CalculationsTable = resultArray.get(i);
-      let tempArray: Array<number> = calculationRow.getArray();
+      let tempArray: Array<number> = this.suiteApiHelperService.extractWASMArray(calculationRow.getArray() as unknown as RegisteredVector<number>);
       if (tempArray) {
         convertedCalculationsTable.push(tempArray);
       }

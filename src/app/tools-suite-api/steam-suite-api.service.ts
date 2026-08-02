@@ -33,6 +33,7 @@ import {
   type PrvWithoutDesuperheating,
   type ProcessSteamUsage as SuiteProcessSteamUsage,
   type ProcessSteamUsageCalculationsDomain,
+  type RegisteredVector,
   type ReturnCondensateCalculationsDomain,
   type SaturatedPressure,
   type SaturatedProperties,
@@ -201,10 +202,10 @@ export class SteamSuiteApiService {
     let headerProperties: SteamPropertiesOutput = this.getSteamPropertiesOutput(HeaderProps);
     headerProperties.energyFlow = Header.getInletEnergyFlow();
     headerProperties.massFlow = Header.getInletMassFlow();
-    let Inlets: Array<Inlet> = Header.getInlets();
+    let Inlets: RegisteredVector<Inlet> = Header.getInlets() as unknown as RegisteredVector<Inlet>;
     let allInletProperties: Array<SteamPropertiesOutput> = new Array();
-    for (let i: number = 0; i < Inlets.length; i++) {
-      let inlet: Inlet = Inlets[i];
+    for (let i: number = 0; i < Inlets.size(); i++) {
+      let inlet: Inlet = Inlets.get(i);
       let inletProperties: SuiteSteamPropertiesOutput = inlet.getInletProperties();
       let inletOutput: SteamPropertiesOutput = this.getSteamPropertiesOutput(inletProperties);
       inletOutput.energyFlow = inlet.getInletEnergyFlow();
