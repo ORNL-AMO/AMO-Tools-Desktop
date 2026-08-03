@@ -1,13 +1,13 @@
-<div class="d-flex" [ngClass]="{'flex-column': stackVertically}">
+<div class="d-flex" [class]="{'flex-column': stackVertically}">
     <div class="d-flex flex-column w-25 align-items-center justify-content-center">
         <select class="form-control mx-auto" [ngModel]="selected" (ngModelChange)="onSelectionChange($event)">
             <option *ngFor="let option of options" [ngValue]="option.value">{{option.name}}</option>
         </select>
-        <div *ngIf="energySavings != null" class="p-2" [ngClass]="{
+        <div *ngIf="energySavings != null" class="p-2" [class]="{
             'negative-savings': energySavings < 0,
             'positive-savings': energySavings > 0
         }">Energy Savings: {{ energySavings | number: '1.0-2' }} {{energySavingsUnit}}</div>
-        <div *ngIf="costSavings != null" class="p-2" [ngClass]="{
+        <div *ngIf="costSavings != null" class="p-2" [class]="{
             'negative-savings': costSavings < 0,
             'positive-savings': costSavings > 0
         }">Cost Savings: {{ costSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
