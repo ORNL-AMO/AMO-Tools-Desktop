@@ -8,15 +8,16 @@ import FlowConnectionText from "../Drawer/FlowConnectionText";
 import InputField from "../StyledMUI/InputField";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { distributeTotalSourceFlow, sourceFlowValueChange, totalFlowChange, nodeDataPropertyChange, sumTotalFlowChange } from "../Diagram/diagramReducer";
+import { distributeTotalSourceFlow, sourceFlowValueChange, totalFlowChange, nodeDataPropertyChange, sumTotalFlowChange, setEdgeFlowConfidence, setNodeFlowConfidence } from "../Diagram/diagramReducer";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import { selectCalculatedNodeData, selectCurrentNode, selectNodes, selectNodeSourceEdges, selectTotalSourceFlow } from "../Diagram/store";
 import { Formik, Form, FieldArray, useFormikContext } from 'formik';
 import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
+import FlowConfidenceToggle from "./FlowConfidenceToggle";
 import { ObjectSchema } from "yup";
-import { CustomEdgeData, NodeFlowData } from "process-flow-lib";
+import { CustomEdgeData, FlowConfidence, NodeFlowData } from "process-flow-lib";
 import CallMergeIcon from '@mui/icons-material/CallMerge';
 
 /**
@@ -60,6 +61,10 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
         setInPercent(!inPercent);
     }
 
+    const onEdgeFlowConfidenceChange = (edgeId: string, confidence: FlowConfidence) => {
+        dispatch(setEdgeFlowConfidence({ edgeId, confidence }));
+    }
+
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentSourceEdges, nodes, selectedDataId);
     const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Source', componentSourceEdges, totalCalculatedSourceFlow, selectedNode.data.userEnteredData.dischargeUnaccounted, settings, selectedNode.data.processComponentType);
 
@@ -100,9 +105,13 @@ const SourceFlowForm = (props: SourceFlowFormProps) => {
                                             }
                                             return (
                                                 <ListItem
-                                                    sx={{ display: 'flex', flexDirection: 'column', width: '100%', marginBottom: '.5rem' }}
+                                                    sx={{ display: 'flex', alignItems: 'center', width: '100%', marginBottom: '.5rem' }}
                                                     key={edge.id}
                                                     disablePadding>
+                                                    <FlowConfidenceToggle
+                                                        confidence={edge.data.confidence}
+                                                        onChange={(confidence) => onEdgeFlowConfidenceChange(edge.id, confidence)}
+                                                    />
                                                     <InputField
                                                         disabled={disabledPercentDataEntryFields}
                                                         label={<FlowConnectionText source={source} target={target} />}
@@ -202,6 +211,7 @@ const TotalSourceFlowField = (props: TotalSourceFlowFieldProps) => {
     const totalSourceFlow = useAppSelector(selectTotalSourceFlow);
     const calculatedData: NodeFlowData = useAppSelector(selectCalculatedNodeData);
     const componentSourceEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeSourceEdges) as Edge<CustomEdgeData>[];
+    const selectedNode = useAppSelector(selectCurrentNode);
 
     // const [fieldState, setFieldState] = useState<{ focused: boolean, touched: boolean }>({ focused: undefined, touched: undefined });
 
@@ -219,6 +229,10 @@ const TotalSourceFlowField = (props: TotalSourceFlowFieldProps) => {
         dispatch(sumTotalFlowChange({ flowProperty: 'totalSourceFlow', relatedEdges: componentSourceEdges }));
     }
 
+    const onTotalSourceFlowConfidenceChange = (confidence: FlowConfidence) => {
+        dispatch(setNodeFlowConfidence({ nodeId: selectedNode.id, flowProperty: 'totalSourceFlow', confidence }));
+    }
+
     React.useEffect(() => {
         setFieldValue('totalFlow', totalSourceFlow, true);
     }, [totalSourceFlow, errors, values]);
@@ -227,26 +241,33 @@ const TotalSourceFlowField = (props: TotalSourceFlowFieldProps) => {
 
     return (
         <Box>
-                <TextField
-                    label={'Total Flow'}
-                    id={'totalFlow'}
-                    type={'number'}
-                    size="small"
-                    value={values.totalFlow ?? ''}
-                    fullWidth
-                    onChange={(event) => onTotalFlowValueInputChange(event)}
-                    error={hasError}
-                    helperText={hasError ? String(errors.totalFlow) : ""}
-                    slotProps={{
-                        formHelperText: { sx: { whiteSpace: 'normal' } },
-                        htmlInput: { onWheel: (e: React.WheelEvent<HTMLInputElement>) => (e.target as HTMLElement).blur() },
-                        input: {
-                            endAdornment: <InputAdornment position="end">
-                                <FlowDisplayUnit />
-                            </InputAdornment>,
-                        },
-                    }}
-                />
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <FlowConfidenceToggle
+                        confidence={selectedNode.data.flowConfidence.totalSourceFlow}
+                        onChange={onTotalSourceFlowConfidenceChange}
+                        sx={{ ml: 1 }}
+                    />
+                    <TextField
+                        label={'Total Flow'}
+                        id={'totalFlow'}
+                        type={'number'}
+                        size="small"
+                        value={values.totalFlow ?? ''}
+                        fullWidth
+                        onChange={(event) => onTotalFlowValueInputChange(event)}
+                        error={hasError}
+                        helperText={hasError ? String(errors.totalFlow) : ""}
+                        slotProps={{
+                            formHelperText: { sx: { whiteSpace: 'normal' } },
+                            htmlInput: { onWheel: (e: React.WheelEvent<HTMLInputElement>) => (e.target as HTMLElement).blur() },
+                            input: {
+                                endAdornment: <InputAdornment position="end">
+                                    <FlowDisplayUnit />
+                                </InputAdornment>,
+                            },
+                        }}
+                    />
+                </Box>
 
 
             {/* This button group is being collapse-animated to smoothly hide/display it as absolute within the parent accordian. When we no longer have the parent accordian, this can be removed  */}

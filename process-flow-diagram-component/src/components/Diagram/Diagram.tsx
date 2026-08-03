@@ -6,6 +6,7 @@ import {
   MiniMap,
   Controls,
   Background,
+  Panel,
   ReactFlowProvider,
   OnConnect,
   type Node,
@@ -32,6 +33,7 @@ import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawe
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 import { FlowServiceProvider } from '../../services/FlowService';
 import ResultsPanel from './ResultsPanel';
+import FlowConfidenceLegend from './FlowConfidenceLegend';
 
 
 export interface DiagramProps {
@@ -219,12 +221,23 @@ const Diagram = (props: DiagramProps) => {
             }
             {controlsVisible &&
             // * XY Flow  Styles needed for Drawer operation no longer constrain canvas width. We need to explicitly style controls or they are hidden
-            <Controls
-              style={{
-                left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
-                transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            />
+            <>
+              <Controls
+                style={{
+                  left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
+                  transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              />
+              <Panel position="bottom-left"
+                style={{
+                  // * clears the Controls panel's width (~34px) plus its own margin
+                  left: (isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx) + 50,
+                  transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                <FlowConfidenceLegend />
+              </Panel>
+            </>
             }
             <Background />
           </ReactFlow>

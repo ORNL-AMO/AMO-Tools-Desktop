@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 import { GenericCompressor } from '../shared/generic-compressor-db.service';
+import { type CompressorCatalogRecord, type CompressorCatalogRecordV, type DefaultData } from 'measur-tools-suite';
 @Injectable({
     providedIn: 'root'
 })
@@ -10,11 +11,11 @@ export class DefaultCompressorApiService {
         private toolsSuiteApiService: ToolsSuiteApiService,
     ) { }
 
-    getGenericCompressors() {
-        let DefaultDataInstance = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
+    getGenericCompressors(): Array<GenericCompressor> {
+        let DefaultDataInstance: DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
         let defaultCompressors: Array<GenericCompressor> = [];
 
-        let wasmCompressors = DefaultDataInstance.getCompressorType1Data();
+        let wasmCompressors: CompressorCatalogRecordV = DefaultDataInstance.getCompressorType1Data();
         this.buildDefaultCompressorList(wasmCompressors, defaultCompressors);
 
         wasmCompressors = DefaultDataInstance.getCompressorType1_GT100kWData();
@@ -39,43 +40,43 @@ export class DefaultCompressorApiService {
         return defaultCompressors;
     }
 
-    buildDefaultCompressorList(wasmCompressors, defaultCompressors: Array<GenericCompressor>) {
-        for (let i = 0; i < wasmCompressors.size(); i++) {
-            let wasmClass = wasmCompressors.get(i);
+    buildDefaultCompressorList(wasmCompressors: CompressorCatalogRecordV, defaultCompressors: Array<GenericCompressor>): void {
+        for (let i: number = 0; i < wasmCompressors.size(); i++) {
+            let wasmClass: CompressorCatalogRecord = wasmCompressors.get(i);
             let genericCompressor: GenericCompressor = this.getGenericCompressorFromWASM(wasmClass);
             defaultCompressors.push(genericCompressor);
-            wasmClass.delete();
         }
+        wasmCompressors.delete();
     }
 
-    getGenericCompressorFromWASM(suiteDbCompressorPointer): GenericCompressor {
-        let GenericCompressor = {
-            BlowdownTime: suiteDbCompressorPointer.blowdownTime(),
-            DesignInPressure: suiteDbCompressorPointer.designInPressure(),
-            DesignInTemp: suiteDbCompressorPointer.designInTemp(),
-            DesignSurgeFlow: suiteDbCompressorPointer.designSurgeFlow(),
-            HP: suiteDbCompressorPointer.hp(),
-            IDCompType: suiteDbCompressorPointer.idCompType(),
-            IDControlType: suiteDbCompressorPointer.idControlType(),
-            MaxFullFlowPressure: suiteDbCompressorPointer.maxFullFlowPressure(),
-            MaxPressSurgeFlow: suiteDbCompressorPointer.maxPressSurgeFlow(),
-            MaxSurgePressure: suiteDbCompressorPointer.maxSurgePressure(),
-            MinPressStonewallFlow: suiteDbCompressorPointer.minPressStonewallFlow(),
-            MinStonewallPressure: suiteDbCompressorPointer.minStonewallPressure(),
-            MinULSumpPressure: suiteDbCompressorPointer.minULSumpPressure(),
-            Model: suiteDbCompressorPointer.model(),
-            ModulatingPressRange: suiteDbCompressorPointer.modulatingPressRange(),
-            NoLoadPowerFM: suiteDbCompressorPointer.noLoadPowerFM(),
-            NoLoadPowerUL: suiteDbCompressorPointer.noLoadPowerUL(),
-            PowerFLBHP: suiteDbCompressorPointer.powerFLBHP(),
-            RatedCapacity: suiteDbCompressorPointer.ratedCapacity(),
-            RatedPressure: suiteDbCompressorPointer.ratedPressure(),
-            SpecPackagePower: suiteDbCompressorPointer.specPackagePower(),
-            TotPackageInputPower: suiteDbCompressorPointer.totPackageInputPower(),
-            UnloadPoint: suiteDbCompressorPointer.unloadPoint(),
-            UnloadSteps: suiteDbCompressorPointer.unloadSteps(),
-            AmpsFL: suiteDbCompressorPointer.ampsFL(),
-            EffFL: suiteDbCompressorPointer.effFL()
+    getGenericCompressorFromWASM(suiteDbCompressorPointer: CompressorCatalogRecord): GenericCompressor {
+        let GenericCompressor: GenericCompressor = {
+            BlowdownTime: suiteDbCompressorPointer.blowdownTimeSec,
+            DesignInPressure: suiteDbCompressorPointer.designInletPressurePsia,
+            DesignInTemp: suiteDbCompressorPointer.designInletTemperatureF,
+            DesignSurgeFlow: suiteDbCompressorPointer.designSurgeFlowAcfm,
+            HP: suiteDbCompressorPointer.horsepower,
+            IDCompType: suiteDbCompressorPointer.compressorTypeId,
+            IDControlType: suiteDbCompressorPointer.controlTypeId,
+            MaxFullFlowPressure: suiteDbCompressorPointer.maxFullFlowPressurePsig,
+            MaxPressSurgeFlow: suiteDbCompressorPointer.maxSurgePressureFlowAcfm,
+            MaxSurgePressure: suiteDbCompressorPointer.maxSurgePressurePsig,
+            MinPressStonewallFlow: suiteDbCompressorPointer.minStonewallPressureFlowAcfm,
+            MinStonewallPressure: suiteDbCompressorPointer.minStonewallPressurePsig,
+            MinULSumpPressure: suiteDbCompressorPointer.minUnloadSumpPressurePsig,
+            Model: suiteDbCompressorPointer.model,
+            ModulatingPressRange: suiteDbCompressorPointer.modulatingPressureRangePsig,
+            NoLoadPowerFM: suiteDbCompressorPointer.noLoadPowerFullyModulating,
+            NoLoadPowerUL: suiteDbCompressorPointer.noLoadPowerUnload,
+            PowerFLBHP: suiteDbCompressorPointer.fullLoadBhpPowerKw,
+            RatedCapacity: suiteDbCompressorPointer.ratedCapacityAcfm,
+            RatedPressure: suiteDbCompressorPointer.ratedPressurePsig,
+            SpecPackagePower: suiteDbCompressorPointer.specificPackagePower,
+            TotPackageInputPower: suiteDbCompressorPointer.totalPackageInputPowerKw,
+            UnloadPoint: suiteDbCompressorPointer.unloadPointPercent,
+            UnloadSteps: suiteDbCompressorPointer.unloadSteps,
+            AmpsFL: suiteDbCompressorPointer.fullLoadAmps,
+            EffFL: suiteDbCompressorPointer.fullLoadEfficiencyPercent
         };
 
 
