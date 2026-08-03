@@ -5,7 +5,7 @@ import { TowerComponent } from './tower.component';
 import { ProcessCoolingAssessmentService } from '../../services/process-cooling-assessment.service';
 import { SystemInformationFormService, TowerForm } from '../system-information-form.service';
 import { ProcessCoolingUiService } from '../../services/process-cooling-ui.service';
-import { TowerInput, TowerType, TowerSizeMetric } from '../../../shared/models/process-cooling-assessment';
+import { FanType, TowerInput, TowerType, TowerSizeMetric } from '../../../shared/models/process-cooling-assessment';
 import { Settings } from '../../../shared/models/settings';
 import { getDefaultProcessCoolingAssessment } from '../../constants/process-cooling-constants';
 
@@ -37,6 +37,7 @@ describe('TowerComponent', () => {
   let fixture: ComponentFixture<TowerComponent>;
   let assessmentServiceSpy: jasmine.SpyObj<ProcessCoolingAssessmentService>;
   let formServiceSpy: jasmine.SpyObj<SystemInformationFormService>;
+  let uiServiceSpy: jasmine.SpyObj<ProcessCoolingUiService>;
   let mockForm: FormGroup<TowerForm>;
 
   const mockAssessment = {
@@ -64,11 +65,13 @@ describe('TowerComponent', () => {
     ]);
     formServiceSpy.getTowerForm.and.returnValue(mockForm);
     formServiceSpy.getTowerTypeDependentValues.and.returnValue({ numberOfFans: 2, fanSpeedType: 1 });
-    formServiceSpy.getTowerSizeValidators.and.returnValue([]);
+    formServiceSpy.getTowerSizeValidators.and.callFake(
+      (towerSizeMetric: TowerSizeMetric) => towerSizeMetric === TowerSizeMetric.Unknown ? [] : [Validators.required]
+    );
     formServiceSpy.getHexApproachTempValidators.and.returnValue([Validators.required]);
     formServiceSpy.getTowerInput.and.returnValue({ ...MOCK_TOWER_INPUT });
 
-    const uiServiceSpy = jasmine.createSpyObj(
+    uiServiceSpy = jasmine.createSpyObj(
       'ProcessCoolingUiService',
       [],
       { focusedFieldSignal: signal('') }
@@ -108,6 +111,20 @@ describe('TowerComponent', () => {
     });
   });
 
+  describe('observeFormChanges', () => {
+    it('passes the raw form value and current towerInput to getTowerInput, then updates the assessment', () => {
+      assessmentServiceSpy.updateSystemInformationProperty.calls.reset();
+
+      component.numberOfTowers.setValue(5);
+
+      expect(formServiceSpy.getTowerInput).toHaveBeenCalledWith(
+        { ...MOCK_TOWER_INPUT, numberOfTowers: 5 },
+        MOCK_TOWER_INPUT
+      );
+      expect(assessmentServiceSpy.updateSystemInformationProperty).toHaveBeenCalledWith('towerInput', { ...MOCK_TOWER_INPUT });
+    });
+  });
+
   describe('observeTowerTypeChange', () => {
     it('sets numberOfFans and fanSpeedType from dependent values when towerType changes', () => {
       component.towerType.setValue(1);
@@ -130,9 +147,37 @@ describe('TowerComponent', () => {
   });
 
   describe('observeTowerSizeChange', () => {
-    it('requests updated validators from form service when towerSizeMetric changes', () => {
-      component.towerSizeMetric.setValue(1);
-      expect(formServiceSpy.getTowerSizeValidators).toHaveBeenCalledWith(1);
+    it('applies validators returned by the form service when towerSizeMetric changes to a known metric', () => {
+      component.towerSizeMetric.setValue(TowerSizeMetric.Tons);
+      expect(formServiceSpy.getTowerSizeValidators).toHaveBeenCalledWith(TowerSizeMetric.Tons);
+      expect(component.towerSize.hasValidator(Validators.required)).toBeTrue();
+    });
+
+    it('clears validators from towerSize when towerSizeMetric becomes Unknown', () => {
+      component.towerSizeMetric.setValue(TowerSizeMetric.Tons);
+      component.towerSizeMetric.setValue(TowerSizeMetric.Unknown);
+      expect(component.towerSize.validator).toBeNull();
+    });
+  });
+
+  describe('observeIsFanTypeKnownChange', () => {
+    it('resets fanType to Axial when isFanTypeKnown becomes false', () => {
+      component.fanType.setValue(FanType.Centrifugal, { emitEvent: false });
+      component.isFanTypeKnown.setValue(false);
+      expect(component.fanType.value).toBe(FanType.Axial);
+    });
+
+    it('leaves fanType unchanged when isFanTypeKnown becomes true', () => {
+      component.fanType.setValue(FanType.Centrifugal, { emitEvent: false });
+      component.isFanTypeKnown.setValue(true);
+      expect(component.fanType.value).toBe(FanType.Centrifugal);
+    });
+  });
+
+  describe('focusField', () => {
+    it('sets focusedFieldSignal on the ui service to the given field name', () => {
+      component.focusField('towerSize');
+      expect(uiServiceSpy.focusedFieldSignal()).toBe('towerSize');
     });
   });
 
