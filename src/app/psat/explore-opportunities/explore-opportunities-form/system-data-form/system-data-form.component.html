@@ -1,196 +1,273 @@
-<div *ngIf="!isVFD" class="checkbox">
+@if (!isVFD) {
+  <div class="checkbox">
     <label class="group-label" for="modifyFlowRate">
-        <input type="checkbox" id="modifyFlowRate" value="true" (focus)="focusField('flowRate')"
-            [disabled]="currentModification.psat.inputs.whatIfScenario == false"
-            (change)="toggleFlowRate()" [(ngModel)]="currentModification.exploreOppsShowFlowRate.hasOpportunity" /> {{ currentModification.exploreOppsShowFlowRate.display}}
-    </label>
-</div>
-<li *ngIf="!isVFD && currentModification.exploreOppsShowFlowRate.hasOpportunity" class="explore-opps-item">
-    <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
+      <input type="checkbox" id="modifyFlowRate" value="true" (focus)="focusField('flowRate')"
+        [disabled]="currentModification.psat.inputs.whatIfScenario == false"
+        (change)="toggleFlowRate()" [(ngModel)]="currentModification.exploreOppsShowFlowRate.hasOpportunity" /> {{ currentModification.exploreOppsShowFlowRate.display}}
+      </label>
+    </div>
+  }
+  @if (!isVFD && currentModification.exploreOppsShowFlowRate.hasOpportunity) {
+    <li class="explore-opps-item">
+      <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup"
-            [ngClass]="{'invalid': baselineFieldDataForm.controls.flowRate.invalid, 'error': baselineWarnings.flowError !== null}">
-                <label for="baselineFlowRate" class="baseline-value-label">Baseline Flow Rate</label>
-                <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.flowRate.value | number: '1.0-0' }}
-                    <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
-                </div>
-
-            <span class="alert-danger pull-right small"
-                *ngIf="baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine">
-                <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.required">Value Required</span>
-                <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.max">Value can't be greater than
-                    {{baselineFieldDataForm.controls.flowRate.errors.max.max}} <span
-                        [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
-                <span *ngIf="baselineFieldDataForm.controls.flowRate.errors.min">Value can't be less than
-                    {{baselineFieldDataForm.controls.flowRate.errors.min.min}} <span
-                        [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
-            </span>
-            <span class="alert-warning pull-right small"
-                *ngIf="baselineWarnings.flowError !== null && !baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine">{{baselineWarnings.flowError}}</span>
-
+          [ngClass]="{'invalid': baselineFieldDataForm.controls.flowRate.invalid, 'error': baselineWarnings.flowError !== null}">
+        <label for="baselineFlowRate" class="baseline-value-label">Baseline Flow Rate</label>
+        <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.flowRate.value | number: '1.0-0' }}
+          <span [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
         </div>
+        @if (baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (baselineFieldDataForm.controls.flowRate.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (baselineFieldDataForm.controls.flowRate.errors.max) {
+              <span>Value can't be greater than
+                {{baselineFieldDataForm.controls.flowRate.errors.max.max}} <span
+              [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
+            }
+            @if (baselineFieldDataForm.controls.flowRate.errors.min) {
+              <span>Value can't be less than
+                {{baselineFieldDataForm.controls.flowRate.errors.min.min}} <span
+              [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
+            }
+          </span>
+        }
+        @if (baselineWarnings.flowError !== null && !baselineFieldDataForm.controls.flowRate.invalid && !baselineFieldDataForm.controls.flowRate.pristine) {
+          <span class="alert-warning pull-right small"
+          >{{baselineWarnings.flowError}}</span>
+        }
+      </div>
     </form>
     <form [formGroup]="modificationFieldDataForm" class="explore-opps-form">
-        <div class="form-group explore-opps-formgroup"
-            [ngClass]="{'invalid': modificationFieldDataForm.controls.flowRate.invalid, 'error': modificationWarnings.flowError !== null}">
-            <label for="modificationFlowRate" class="mod-value-label">Modification Flow Rate</label>
-            <div class="input-group mod-max-width">
-                <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate"
-                    class="form-control" (focus)="focusField('flowRate')" formControlName="flowRate"
-                    (input)="calculate()" />
-                <span class="input-group-addon units" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
-            </div>
-            <span class="alert-danger pull-right small"
-                *ngIf="modificationFieldDataForm.controls.flowRate.invalid && !modificationFieldDataForm.controls.flowRate.pristine">
-                <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.required">Value Required</span>
-                <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.max">Value can't be greater than
-                    {{modificationFieldDataForm.controls.flowRate.errors.max.max}} <span
-                        [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
-                <span *ngIf="modificationFieldDataForm.controls.flowRate.errors.min">Value can't be less than
-                    {{modificationFieldDataForm.controls.flowRate.errors.min.min}} <span
-                        [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
-            </span>
-            <span class="alert-warning pull-right small"
-                *ngIf="modificationWarnings.flowError !== null && !modificationFieldDataForm.controls.flowRate.invalid && !modificationFieldDataForm.controls.flowRate.pristine">{{modificationWarnings.flowError}}</span>
+      <div class="form-group explore-opps-formgroup"
+        [ngClass]="{'invalid': modificationFieldDataForm.controls.flowRate.invalid, 'error': modificationWarnings.flowError !== null}">
+        <label for="modificationFlowRate" class="mod-value-label">Modification Flow Rate</label>
+        <div class="input-group mod-max-width">
+          <input name="modificationFlowRate" type="number" step="any" id="modificationFlowRate"
+            class="form-control" (focus)="focusField('flowRate')" formControlName="flowRate"
+            (input)="calculate()" />
+          <span class="input-group-addon units" [innerHTML]="settings.flowMeasurement | settingsLabel"></span>
         </div>
+        @if (modificationFieldDataForm.controls.flowRate.invalid && !modificationFieldDataForm.controls.flowRate.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (modificationFieldDataForm.controls.flowRate.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (modificationFieldDataForm.controls.flowRate.errors.max) {
+              <span>Value can't be greater than
+                {{modificationFieldDataForm.controls.flowRate.errors.max.max}} <span
+              [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
+            }
+            @if (modificationFieldDataForm.controls.flowRate.errors.min) {
+              <span>Value can't be less than
+                {{modificationFieldDataForm.controls.flowRate.errors.min.min}} <span
+              [innerHTML]="settings.flowMeasurement | settingsLabel"></span>.</span>
+            }
+          </span>
+        }
+        @if (modificationWarnings.flowError !== null && !modificationFieldDataForm.controls.flowRate.invalid && !modificationFieldDataForm.controls.flowRate.pristine) {
+          <span class="alert-warning pull-right small"
+          >{{modificationWarnings.flowError}}</span>
+        }
+      </div>
     </form>
-</li>
-<div *ngIf="!isVFD" class="checkbox">
+  </li>
+}
+@if (!isVFD) {
+  <div class="checkbox">
     <label class="group-label" for="modifyHead">
-        <input type="checkbox" id="modifyHead" value="true" (focus)="focusField('head')" (change)="toggleHead()"
-            [(ngModel)]="currentModification.exploreOppsShowHead.hasOpportunity"
-            [disabled]="currentModification.psat.inputs.whatIfScenario == false" /> {{ currentModification.exploreOppsShowHead.display}}
-    </label>
-</div>
+      <input type="checkbox" id="modifyHead" value="true" (focus)="focusField('head')" (change)="toggleHead()"
+        [(ngModel)]="currentModification.exploreOppsShowHead.hasOpportunity"
+        [disabled]="currentModification.psat.inputs.whatIfScenario == false" /> {{ currentModification.exploreOppsShowHead.display}}
+      </label>
+    </div>
+  }
 
-<li *ngIf="!isVFD && currentModification.exploreOppsShowHead.hasOpportunity" class="explore-opps-item">
-    <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
+  @if (!isVFD && currentModification.exploreOppsShowHead.hasOpportunity) {
+    <li class="explore-opps-item">
+      <form [formGroup]="baselineFieldDataForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineFieldDataForm.controls.head.invalid}">
-            <label for="baselineHead" class="baseline-value-label">Baseline Head</label>
-            <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.head.value | number: '1.0-0' }}
-                <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
-            </div>
+          <label for="baselineHead" class="baseline-value-label">Baseline Head</label>
+          <div class="text-muted baseline-value-input">{{ baselineFieldDataForm.controls.head.value | number: '1.0-0' }}
+            <span [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
+          </div>
+          @if (baselineFieldDataForm.controls.head.invalid && !baselineFieldDataForm.controls.head.pristine) {
             <span class="alert-danger pull-right small"
-                *ngIf="baselineFieldDataForm.controls.head.invalid && !baselineFieldDataForm.controls.head.pristine">
-                <span *ngIf="baselineFieldDataForm.controls.head.errors.required">Value Required</span>
-                <span *ngIf="baselineFieldDataForm.controls.head.errors.max">Value can't be greater than
-                    {{baselineFieldDataForm.controls.head.errors.max.max}} <span
-                        [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
-                <span *ngIf="baselineFieldDataForm.controls.head.errors.min">Value can't be less than
-                    {{baselineFieldDataForm.controls.head.errors.min.min}} <span
-                        [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
-            </span>
-        </div>
+              >
+            @if (baselineFieldDataForm.controls.head.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (baselineFieldDataForm.controls.head.errors.max) {
+              <span>Value can't be greater than
+                {{baselineFieldDataForm.controls.head.errors.max.max}} <span
+              [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
+            }
+            @if (baselineFieldDataForm.controls.head.errors.min) {
+              <span>Value can't be less than
+                {{baselineFieldDataForm.controls.head.errors.min.min}} <span
+              [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
+            }
+          </span>
+        }
+      </div>
     </form>
     <form [formGroup]="modificationFieldDataForm" class="explore-opps-form">
-        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationFieldDataForm.controls.head.invalid}">
-            <label for="modificationHead" class="mod-value-label">Modification Head
-            </label>
-            <div class="input-group mod-max-width">
-                <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control"
-                (focus)="focusField('head')" (input)="calculate()" formControlName="head" />
-                <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
-            </div>
-            <a class="form-text small click-link" (click)="showHeadToolModal()">Calculate
-                Head</a>
-            <span class="alert-danger pull-right small"
-                *ngIf="modificationFieldDataForm.controls.head.invalid && !modificationFieldDataForm.controls.head.pristine">
-                <span *ngIf="modificationFieldDataForm.controls.head.errors.required">Value Required</span>
-                <span *ngIf="modificationFieldDataForm.controls.head.errors.max">Value can't be greater than
-                    {{modificationFieldDataForm.controls.head.errors.max.max}} <span
-                        [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
-                <span *ngIf="modificationFieldDataForm.controls.head.errors.min">Value can't be less than
-                    {{modificationFieldDataForm.controls.head.errors.min.min}} <span
-                        [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
-            </span>
+      <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationFieldDataForm.controls.head.invalid}">
+        <label for="modificationHead" class="mod-value-label">Modification Head
+        </label>
+        <div class="input-group mod-max-width">
+          <input name="modificationHead" type="number" step="any" id="modificationHead" class="form-control"
+            (focus)="focusField('head')" (input)="calculate()" formControlName="head" />
+          <span class="input-group-addon units" [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>
         </div>
+        <a class="form-text small click-link" (click)="showHeadToolModal()">Calculate
+        Head</a>
+        @if (modificationFieldDataForm.controls.head.invalid && !modificationFieldDataForm.controls.head.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (modificationFieldDataForm.controls.head.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (modificationFieldDataForm.controls.head.errors.max) {
+              <span>Value can't be greater than
+                {{modificationFieldDataForm.controls.head.errors.max.max}} <span
+              [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
+            }
+            @if (modificationFieldDataForm.controls.head.errors.min) {
+              <span>Value can't be less than
+                {{modificationFieldDataForm.controls.head.errors.min.min}} <span
+              [innerHTML]="settings.distanceMeasurement | settingsLabel"></span>.</span>
+            }
+          </span>
+        }
+      </div>
     </form>
-</li>
+  </li>
+}
 <div class="checkbox" #formElement>
-    <label class="group-label" for="general">
-        <input type="checkbox" id="general" value="true" (focus)="focusField('systemData')"
-            (change)="toggleSystemData()" [(ngModel)]="currentModification.exploreOppsShowSystemData.hasOpportunity"
-            [disabled]="currentModification.psat.inputs.whatIfScenario == false" /> {{currentModification.exploreOppsShowSystemData.display}}
+  <label class="group-label" for="general">
+    <input type="checkbox" id="general" value="true" (focus)="focusField('systemData')"
+      (change)="toggleSystemData()" [(ngModel)]="currentModification.exploreOppsShowSystemData.hasOpportunity"
+      [disabled]="currentModification.psat.inputs.whatIfScenario == false" /> {{currentModification.exploreOppsShowSystemData.display}}
     </label>
-</div>
+  </div>
 
-<li *ngIf="currentModification.exploreOppsShowSystemData.hasOpportunity" class="explore-opps-item">
-    <form [formGroup]="baselineOperationsForm" class="explore-opps-form">
+  @if (currentModification.exploreOppsShowSystemData.hasOpportunity) {
+    <li class="explore-opps-item">
+      <form [formGroup]="baselineOperationsForm" class="explore-opps-form">
         <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineOperationsForm.controls.costKwHr.invalid}">
-            <label for="baselineCost" class="baseline-value-label">Baseline Cost</label>
-            <div class="text-muted baseline-value-input">{{ baselineOperationsForm.controls.costKwHr.value }} $/kWh</div>
-          
-
+          <label for="baselineCost" class="baseline-value-label">Baseline Cost</label>
+          <div class="text-muted baseline-value-input">{{ baselineOperationsForm.controls.costKwHr.value }} $/kWh</div>
+          @if (baselineOperationsForm.controls.costKwHr.invalid && !baselineOperationsForm.controls.costKwHr.pristine) {
             <span class="alert-danger pull-right small"
-                *ngIf="baselineOperationsForm.controls.costKwHr.invalid && !baselineOperationsForm.controls.costKwHr.pristine">
-                <span *ngIf="baselineOperationsForm.controls.costKwHr.errors.required">Value Required</span>
-                <span *ngIf="baselineOperationsForm.controls.costKwHr.errors.max">Value can't be greater than
-                    {{baselineOperationsForm.controls.costKwHr.errors.max.max}} $/kWh.</span>
-                <span *ngIf="baselineOperationsForm.controls.costKwHr.errors.min">Value can't be less than
-                    {{baselineOperationsForm.controls.costKwHr.errors.min.min}} $/kWh.</span>
-            </span>
-        </div>
+              >
+            @if (baselineOperationsForm.controls.costKwHr.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (baselineOperationsForm.controls.costKwHr.errors.max) {
+              <span>Value can't be greater than
+              {{baselineOperationsForm.controls.costKwHr.errors.max.max}} $/kWh.</span>
+            }
+            @if (baselineOperationsForm.controls.costKwHr.errors.min) {
+              <span>Value can't be less than
+              {{baselineOperationsForm.controls.costKwHr.errors.min.min}} $/kWh.</span>
+            }
+          </span>
+        }
+      </div>
     </form>
     <form [formGroup]="modificationOperationsForm" class="explore-opps-form">
-        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationOperationsForm.controls.costKwHr.invalid}">
-            <label for="modificationCost" class="mod-value-label">Modification Cost</label>
-            <div class="input-group mod-max-width">
-                <input name="modificationCost" type="number" step="0.01" min="0" id="modificationCost"
-                    class="form-control" (focus)="focusField('modifyCost')" formControlName="costKwHr"
-                    (input)="calculate()" />
-                <span class="input-group-addon units">$/kWh</span>
-            </div>
-            <span class="alert-danger pull-right small"
-                *ngIf="modificationOperationsForm.controls.costKwHr.invalid && !modificationOperationsForm.controls.costKwHr.pristine">
-                <span *ngIf="modificationOperationsForm.controls.costKwHr.errors.required">Value Required</span>
-                <span *ngIf="modificationOperationsForm.controls.costKwHr.errors.max">Value can't be greater than
-                    {{modificationOperationsForm.controls.costKwHr.errors.max.max}} $/kWh.</span>
-                <span *ngIf="modificationOperationsForm.controls.costKwHr.errors.min">Value can't be less than
-                    {{modificationOperationsForm.controls.costKwHr.errors.min.min}} $/kWh.</span>
-            </span>
+      <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationOperationsForm.controls.costKwHr.invalid}">
+        <label for="modificationCost" class="mod-value-label">Modification Cost</label>
+        <div class="input-group mod-max-width">
+          <input name="modificationCost" type="number" step="0.01" min="0" id="modificationCost"
+            class="form-control" (focus)="focusField('modifyCost')" formControlName="costKwHr"
+            (input)="calculate()" />
+          <span class="input-group-addon units">$/kWh</span>
         </div>
+        @if (modificationOperationsForm.controls.costKwHr.invalid && !modificationOperationsForm.controls.costKwHr.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (modificationOperationsForm.controls.costKwHr.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (modificationOperationsForm.controls.costKwHr.errors.max) {
+              <span>Value can't be greater than
+              {{modificationOperationsForm.controls.costKwHr.errors.max.max}} $/kWh.</span>
+            }
+            @if (modificationOperationsForm.controls.costKwHr.errors.min) {
+              <span>Value can't be less than
+              {{modificationOperationsForm.controls.costKwHr.errors.min.min}} $/kWh.</span>
+            }
+          </span>
+        }
+      </div>
     </form>
-</li>
-<li *ngIf="currentModification.exploreOppsShowSystemData.hasOpportunity" class="explore-opps-item">
+  </li>
+}
+@if (currentModification.exploreOppsShowSystemData.hasOpportunity) {
+  <li class="explore-opps-item">
     <form [formGroup]="baselineOperationsForm" class="explore-opps-form">
-        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineOperationsForm.controls.operatingHours.invalid}">
-            <label for="baselineCost" class="baseline-value-label">Baseline Operating Hours</label>
-            <div class="text-muted baseline-value-input">{{ baselineOperationsForm.controls.operatingHours.value | number: '1.0-0'}} hrs/yr</div>
-            
-            <span class="alert-danger pull-right small"
-                *ngIf="baselineOperationsForm.controls.operatingHours.invalid && !baselineOperationsForm.controls.operatingHours.pristine">
-                <span *ngIf="baselineOperationsForm.controls.operatingHours.errors.required">Value Required</span>
-                <span *ngIf="baselineOperationsForm.controls.operatingHours.errors.max">Value can't be greater than
-                    {{baselineOperationsForm.controls.operatingHours.errors.max.max}}.</span>
-                <span *ngIf="baselineOperationsForm.controls.operatingHours.errors.min">Value can't be less than
-                    {{baselineOperationsForm.controls.operatingHours.errors.min.min}}.</span>
-            </span>
-        </div>
+      <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': baselineOperationsForm.controls.operatingHours.invalid}">
+        <label for="baselineCost" class="baseline-value-label">Baseline Operating Hours</label>
+        <div class="text-muted baseline-value-input">{{ baselineOperationsForm.controls.operatingHours.value | number: '1.0-0'}} hrs/yr</div>
+        @if (baselineOperationsForm.controls.operatingHours.invalid && !baselineOperationsForm.controls.operatingHours.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (baselineOperationsForm.controls.operatingHours.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (baselineOperationsForm.controls.operatingHours.errors.max) {
+              <span>Value can't be greater than
+              {{baselineOperationsForm.controls.operatingHours.errors.max.max}}.</span>
+            }
+            @if (baselineOperationsForm.controls.operatingHours.errors.min) {
+              <span>Value can't be less than
+              {{baselineOperationsForm.controls.operatingHours.errors.min.min}}.</span>
+            }
+          </span>
+        }
+      </div>
     </form>
     <form [formGroup]="modificationOperationsForm" class="explore-opps-form">
-        <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationOperationsForm.controls.operatingHours.invalid}">
-            <label for="modificationOperatingHours" class="mod-value-label">Modification Operating Hours</label>
-            <div class="input-group w-100 mod-max-width">
-                <span class="input-group-addon op-hour-addon units">
-                    <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
-                </span>
-                <input name="modificationOperatingHours" type="number" step="1" min="0" max="8760"
-                    id="modificationOperatingHours" class="form-control" (focus)="focusField('operatingHours')"
-                    (input)="calculate()" formControlName="operatingHours" />
-                <span class="input-group-addon units">hrs/yr</span>
-            </div>
-            <span class="alert-danger pull-right small"
-                *ngIf="modificationOperationsForm.controls.operatingHours.invalid && !modificationOperationsForm.controls.operatingHours.pristine">
-                <span *ngIf="modificationOperationsForm.controls.operatingHours.errors.required">Value Required</span>
-                <span *ngIf="modificationOperationsForm.controls.operatingHours.errors.max">Value can't be greater than
-                    {{modificationOperationsForm.controls.operatingHours.errors.max.max}}.</span>
-                <span *ngIf="modificationOperationsForm.controls.operatingHours.errors.min">Value can't be less than
-                    {{modificationOperationsForm.controls.operatingHours.errors.min.min}}.</span>
-            </span>
+      <div class="form-group explore-opps-formgroup" [ngClass]="{'invalid': modificationOperationsForm.controls.operatingHours.invalid}">
+        <label for="modificationOperatingHours" class="mod-value-label">Modification Operating Hours</label>
+        <div class="input-group w-100 mod-max-width">
+          <span class="input-group-addon op-hour-addon units">
+            <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+          </span>
+          <input name="modificationOperatingHours" type="number" step="1" min="0" max="8760"
+            id="modificationOperatingHours" class="form-control" (focus)="focusField('operatingHours')"
+            (input)="calculate()" formControlName="operatingHours" />
+          <span class="input-group-addon units">hrs/yr</span>
         </div>
+        @if (modificationOperationsForm.controls.operatingHours.invalid && !modificationOperationsForm.controls.operatingHours.pristine) {
+          <span class="alert-danger pull-right small"
+            >
+            @if (modificationOperationsForm.controls.operatingHours.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (modificationOperationsForm.controls.operatingHours.errors.max) {
+              <span>Value can't be greater than
+              {{modificationOperationsForm.controls.operatingHours.errors.max.max}}.</span>
+            }
+            @if (modificationOperationsForm.controls.operatingHours.errors.min) {
+              <span>Value can't be less than
+              {{modificationOperationsForm.controls.operatingHours.errors.min.min}}.</span>
+            }
+          </span>
+        }
+      </div>
     </form>
-</li>
+  </li>
+}
 
-<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
+@if (showOperatingHoursModal) {
+  <app-operating-hours-modal (emitClose)="closeOperatingHoursModal()"
     (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
     [operatingHours]="modificationPsat.operatingHours">
-</app-operating-hours-modal>
+  </app-operating-hours-modal>
+}
