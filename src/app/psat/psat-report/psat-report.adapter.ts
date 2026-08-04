@@ -89,6 +89,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
         title: psat.name ?? 'Baseline',
         group: 'sankey',
         pageBreakBefore: true,
+        aspectRatio: 1400 / 400,
         imageDataProvider: () => this.psatChartsService.renderSankeyAsImage(psat.outputs, settings),
       });
     }
@@ -100,6 +101,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
           title: m.psat.name ?? 'Modification',
           group: 'sankey',
           pageBreakBefore: false,
+          aspectRatio: 1400 / 400,
           imageDataProvider: () => this.psatChartsService.renderSankeyAsImage(m.psat.outputs, settings),
         });
       }

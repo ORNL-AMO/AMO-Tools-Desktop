@@ -296,6 +296,7 @@ export class FsatReportAdapter implements ReportDataAdapter {
         title: fsat.name ?? 'Baseline',
         group: 'sankey',
         pageBreakBefore: true,
+        aspectRatio: 1400 / 400,
         imageDataProvider: () => this.fsatChartsService.renderSankeyAsImage(fsat.outputs, settings),
       });
     }
@@ -307,6 +308,7 @@ export class FsatReportAdapter implements ReportDataAdapter {
           title: m.fsat.name ?? 'Modification',
           group: 'sankey',
           pageBreakBefore: false,
+          aspectRatio: 1400 / 400,
           imageDataProvider: () => this.fsatChartsService.renderSankeyAsImage(m.fsat.outputs, settings),
         });
       }
@@ -340,6 +342,7 @@ export class FsatReportAdapter implements ReportDataAdapter {
       buildSummaryRow(mods, `Outlet Pressure (${settings.fanPressureMeasurement})`, fieldData?.outletPressure, m => m.fsat?.fieldData?.outletPressure),
       buildSummaryRow(mods, 'Load Estimated Method', fieldData?.loadEstimatedMethod, m => m.fsat?.fieldData?.loadEstimatedMethod,
         v => v === 0 ? 'Power' : v === 1 ? 'Current' : '—'),
+      buildSummaryRow(mods, fieldData?.loadEstimatedMethod === 1 ? 'Motor Current (A)' : 'Motor Power (kW)', fieldData?.motorPower, () => undefined),
       buildSummaryRow(mods, 'Compressibility Factor', fieldData?.compressibilityFactor, m => m.fsat?.fieldData?.compressibilityFactor),
       buildSummaryRow(mods, 'Measured Voltage (V)', fieldData?.measuredVoltage, m => m.fsat?.fieldData?.measuredVoltage),
     ];

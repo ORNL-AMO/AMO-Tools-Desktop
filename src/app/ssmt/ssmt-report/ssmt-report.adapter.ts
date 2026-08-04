@@ -298,8 +298,7 @@ export class SsmtReportAdapter implements ReportDataAdapter {
     }
     if (showCO2) {
       rows.push(
-        [`CO2 Emissions (${emissionsUnit})`, fmt(baseline.outputData.co2EmissionsOutput?.fuelEmissionOutput, 2),
-          ...modBundles.map(m => fmt(this.validCell(m, o => o.co2EmissionsOutput?.fuelEmissionOutput), 2))],
+        [`CO2 Emissions (${emissionsUnit})`, '—', ...modBundles.map(() => '—')],
         ['Emissions From Fuel', fmt(baseline.outputData.co2EmissionsOutput?.fuelEmissionOutput, 2),
           ...modBundles.map(m => fmt(this.validCell(m, o => o.co2EmissionsOutput?.fuelEmissionOutput), 2))],
         ['Emissions From Selling Electricity', fmt(baseline.outputData.co2EmissionsOutput?.electricityEmissionsFromSelling, 2),
@@ -474,6 +473,7 @@ export class SsmtReportAdapter implements ReportDataAdapter {
       title: 'Baseline Steam System Sankey',
       group: 'sankey',
       pageBreakBefore: true,
+      aspectRatio: 1400 / 500,
       imageDataProvider: async () => {
         const image = await this.ssmtChartsService.renderSankeyAsImage(baseline.losses, baseline.outputData, settings);
         if (!image) throw new Error('Baseline Sankey unavailable — steam modeler error');
@@ -487,6 +487,7 @@ export class SsmtReportAdapter implements ReportDataAdapter {
         type: 'chart',
         title: `${m.modification.ssmt.name} Steam System Sankey`,
         group: 'sankey',
+        aspectRatio: 1400 / 500,
         imageDataProvider: async () => {
           const image = await this.ssmtChartsService.renderSankeyAsImage(m.losses, m.outputData, settings);
           if (!image) throw new Error(`${m.modification.ssmt.name} Sankey unavailable — steam modeler error`);
@@ -644,9 +645,9 @@ export class SsmtReportAdapter implements ReportDataAdapter {
       inputData.turbineInput[key].useTurbine === true;
 
     const showCondensingTurbine = hasTurbine(baseline.inputData, 'condensingTurbine') || modBundles.some(m => hasTurbine(m.inputData, 'condensingTurbine'));
-    const showHighToLowTurbine = numberOfHeaders > 1 && (hasTurbine(baseline.inputData, 'highToLowTurbine') || modBundles.some(m => m.inputData.headerInput.numberOfHeaders > 1 && hasTurbine(m.inputData, 'highToLowTurbine')));
-    const showHighToMediumTurbine = numberOfHeaders === 3 && (hasTurbine(baseline.inputData, 'highToMediumTurbine') || modBundles.some(m => m.inputData.headerInput.numberOfHeaders === 3 && hasTurbine(m.inputData, 'highToMediumTurbine')));
-    const showMediumToLowTurbine = numberOfHeaders === 3 && (hasTurbine(baseline.inputData, 'mediumToLowTurbine') || modBundles.some(m => m.inputData.headerInput.numberOfHeaders === 3 && hasTurbine(m.inputData, 'mediumToLowTurbine')));
+    const showHighToLowTurbine = (numberOfHeaders > 1 && hasTurbine(baseline.inputData, 'highToLowTurbine')) || modBundles.some(m => m.inputData.headerInput.numberOfHeaders > 1 && hasTurbine(m.inputData, 'highToLowTurbine'));
+    const showHighToMediumTurbine = (numberOfHeaders === 3 && hasTurbine(baseline.inputData, 'highToMediumTurbine')) || modBundles.some(m => m.inputData.headerInput.numberOfHeaders === 3 && hasTurbine(m.inputData, 'highToMediumTurbine'));
+    const showMediumToLowTurbine = (numberOfHeaders === 3 && hasTurbine(baseline.inputData, 'mediumToLowTurbine')) || modBundles.some(m => m.inputData.headerInput.numberOfHeaders === 3 && hasTurbine(m.inputData, 'mediumToLowTurbine'));
 
     const sections: SummaryTableSection[] = [];
     if (showCondensingTurbine) sections.push(this.buildTurbineLevelSection('Condensing Turbine', 'condensingTurbine', baseline, modBundles, settings));
