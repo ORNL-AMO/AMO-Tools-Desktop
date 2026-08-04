@@ -11,6 +11,7 @@ import {
   type CoolingTowerMakeupWaterCalculatorOutput,
   type CoolingTowerOperatingConditionsData,
   type CoolingTowerWaterConservationData,
+  type DoubleVector,
   type FanControlSpeedType,
   type PowerEnergyConsumptionOutput,
   type RegisteredVector,
@@ -173,6 +174,8 @@ export class ChillerCalculatorSuiteApiService {
     let condenserCoolingType: CondenserCoolingType = this.suiteApiHelperService.getCoolingTowerCondenserCoolingType(input.condenserCoolingType)
     let compressorConfigType: CompressorConfigType = this.suiteApiHelperService.getCoolingTowerCompressorConfigType(input.compressorConfigType)
 
+    let baselineLoadVector: DoubleVector = this.suiteApiHelperService.returnDoubleVector(input.baselineLoadList);
+    let modLoadVector: DoubleVector = this.suiteApiHelperService.returnDoubleVector(input.modLoadList);
     let rawOutput: StagingPowerConsumptionOutput = this.toolsSuiteApiService.ToolsSuiteModule.ChillerStagingEfficiency(
       chillerType,
       condenserCoolingType,
@@ -183,9 +186,11 @@ export class ChillerCalculatorSuiteApiService {
       input.operatingHours,
       input.waterSupplyTemp,
       input.waterEnteringTemp,
-      input.baselineLoadList,
-      input.modLoadList
+      baselineLoadVector as unknown as number[],
+      modLoadVector as unknown as number[]
     );
+    baselineLoadVector.delete();
+    modLoadVector.delete();
 
     let baselinePowerList: Array<number> = this.suiteApiHelperService.extractWASMArray(rawOutput.baselinePowerList as unknown as RegisteredVector<number>);
     let modPowerList: Array<number> = this.suiteApiHelperService.extractWASMArray(rawOutput.modPowerList as unknown as RegisteredVector<number>);
