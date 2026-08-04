@@ -11,6 +11,7 @@ import {
   type CoolingTowerMakeupWaterCalculatorOutput,
   type CoolingTowerOperatingConditionsData,
   type CoolingTowerWaterConservationData,
+  type DoubleVector,
   type FanControlSpeedType,
   type PowerEnergyConsumptionOutput,
   type StagingPowerConsumptionOutput,
@@ -172,43 +173,52 @@ export class ChillerCalculatorSuiteApiService {
     let condenserCoolingType: CondenserCoolingType = this.suiteApiHelperService.getCoolingTowerCondenserCoolingType(input.condenserCoolingType)
     let compressorConfigType: CompressorConfigType = this.suiteApiHelperService.getCoolingTowerCompressorConfigType(input.compressorConfigType)
 
-    let rawOutput: StagingPowerConsumptionOutput = this.toolsSuiteApiService.ToolsSuiteModule.ChillerStagingEfficiency(
-      chillerType,
-      condenserCoolingType,
-      compressorConfigType,
-      input.ariCapacity,
-      input.ariEfficiency,
-      input.maxCapacityRatio,
-      input.operatingHours,
-      input.waterSupplyTemp,
-      input.waterEnteringTemp,
-      input.baselineLoadList,
-      input.modLoadList
-    );
+    const baselineLoadVector: DoubleVector = this.suiteApiHelperService.returnDoubleVector(input.baselineLoadList);
+    let modLoadVector: DoubleVector | undefined;
+    let rawOutput: StagingPowerConsumptionOutput | undefined;
+    let baselinePowerVector: DoubleVector | undefined;
+    let modPowerVector: DoubleVector | undefined;
 
-    let baselinePowerList: Array<number> = [];
-    let modPowerList: Array<number> = [];
-    for (let i: number = 0; i < rawOutput.baselinePowerList.length; ++i) {
-      baselinePowerList.push(rawOutput.baselinePowerList[i]);
-    }
-    for (let i: number = 0; i < rawOutput.modPowerList.length; ++i) {
-      modPowerList.push(rawOutput.modPowerList[i]);
-    }
+    try {
+      modLoadVector = this.suiteApiHelperService.returnDoubleVector(input.modLoadList);
+      rawOutput = this.toolsSuiteApiService.ToolsSuiteModule.ChillerStagingEfficiency(
+        chillerType,
+        condenserCoolingType,
+        compressorConfigType,
+        input.ariCapacity,
+        input.ariEfficiency,
+        input.maxCapacityRatio,
+        input.operatingHours,
+        input.waterSupplyTemp,
+        input.waterEnteringTemp,
+        baselineLoadVector,
+        modLoadVector
+      );
 
-    let output: ChillerStagingOutput = {
-      baselineTotalPower: rawOutput.baselineTotalPower,
-      baselineTotalEnergy: rawOutput.baselineTotalEnergy,
-      modTotalPower: rawOutput.modTotalPower,
-      modTotalEnergy: rawOutput.modTotalEnergy,
-      savingsEnergy: rawOutput.savingsEnergy,
-      baselinePowerList: baselinePowerList,
-      modPowerList: modPowerList,
-      costSavings: undefined,
-      baselineCost: undefined,
-      modificationCost: undefined
+      baselinePowerVector = rawOutput.baselinePowerList;
+      modPowerVector = rawOutput.modPowerList;
+      const baselinePowerList: Array<number> = this.suiteApiHelperService.extractWASMArray(baselinePowerVector);
+      const modPowerList: Array<number> = this.suiteApiHelperService.extractWASMArray(modPowerVector);
+
+      return {
+        baselineTotalPower: rawOutput.baselineTotalPower,
+        baselineTotalEnergy: rawOutput.baselineTotalEnergy,
+        modTotalPower: rawOutput.modTotalPower,
+        modTotalEnergy: rawOutput.modTotalEnergy,
+        savingsEnergy: rawOutput.savingsEnergy,
+        baselinePowerList: baselinePowerList,
+        modPowerList: modPowerList,
+        costSavings: undefined,
+        baselineCost: undefined,
+        modificationCost: undefined
+      };
+    } finally {
+      baselinePowerVector?.delete();
+      modPowerVector?.delete();
+      rawOutput?.delete();
+      baselineLoadVector.delete();
+      modLoadVector?.delete();
     }
-    rawOutput.delete();
-    return output;
   }
 
 }
