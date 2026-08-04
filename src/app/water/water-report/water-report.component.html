@@ -74,6 +74,8 @@
                     <a>True Cost of Systems</a>
                 </li>
             </ul>
+            <app-export-button class="ml-auto align-self-center mr-2" [document]="reportDocument$"
+                [assessmentName]="assessment.name" [sectionGroups]="sectionGroups"></app-export-button>
         </div>
 
         <div class="d-flex d-lg-none flex-column">
@@ -99,6 +101,8 @@
                     <a>Print</a>
                 </div>
             </div>
+            <app-export-button class="mx-2 mb-2" [document]="reportDocument$" [assessmentName]="assessment.name"
+                [sectionGroups]="sectionGroups"></app-export-button>
         </div>
 
         <div class="results scroll-item print-height page-break-before"
