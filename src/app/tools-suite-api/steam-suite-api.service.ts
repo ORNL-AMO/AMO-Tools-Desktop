@@ -20,6 +20,7 @@ import {
   type HeatLoss as SuiteHeatLoss,
   type HighPressureHeaderCalculationsDomain,
   type Inlet,
+  type InletVector,
   type LowPressureFlashedSteamIntoHeaderCalculatorDomain,
   type LowPressureHeaderCalculationsDomain,
   type MakeupWaterAndCondensateHeaderCalculationsDomain,
@@ -194,46 +195,53 @@ export class SteamSuiteApiService {
   }
 
   header(input: HeaderInput): HeaderOutput {
-    let inletArray: Array<Inlet> = this.getInletArray(input.inlets);
+    const inletVector: InletVector = this.getInletVector(input.inlets);
+    let header: SuiteHeader | undefined;
+    let headerPropertiesOutput: SuiteSteamPropertiesOutput | undefined;
+    let returnedInlets: InletVector | undefined;
 
-    let Header: SuiteHeader = new this.toolsSuiteApiService.ToolsSuiteModule.Header(input.headerPressure, inletArray);
-    let HeaderProps: SuiteSteamPropertiesOutput = Header.getHeaderProperties();
-    let headerProperties: SteamPropertiesOutput = this.getSteamPropertiesOutput(HeaderProps);
-    headerProperties.energyFlow = Header.getInletEnergyFlow();
-    headerProperties.massFlow = Header.getInletMassFlow();
-    let Inlets: Array<Inlet> = Header.getInlets();
-    let allInletProperties: Array<SteamPropertiesOutput> = new Array();
-    for (let i: number = 0; i < Inlets.length; i++) {
-      let inlet: Inlet = Inlets[i];
-      let inletProperties: SuiteSteamPropertiesOutput = inlet.getInletProperties();
-      let inletOutput: SteamPropertiesOutput = this.getSteamPropertiesOutput(inletProperties);
-      inletOutput.energyFlow = inlet.getInletEnergyFlow();
-      inletOutput.massFlow = inlet.getMassFlow();
+    try {
+      header = new this.toolsSuiteApiService.ToolsSuiteModule.Header(input.headerPressure, inletVector);
+      headerPropertiesOutput = header.getHeaderProperties();
+      const headerProperties: SteamPropertiesOutput = this.getSteamPropertiesOutput(headerPropertiesOutput);
+      headerProperties.energyFlow = header.getInletEnergyFlow();
+      headerProperties.massFlow = header.getInletMassFlow();
 
-      allInletProperties.push(inletOutput);
-      inletProperties.delete();
-      if (!inletArray.includes(inlet)) {
-        inlet.delete();
+      returnedInlets = header.getInlets();
+      const allInletProperties: Array<SteamPropertiesOutput> = [];
+      for (let i: number = 0; i < returnedInlets.size(); i++) {
+        const inlet: Inlet = returnedInlets.get(i);
+        let inletProperties: SuiteSteamPropertiesOutput | undefined;
+        try {
+          inletProperties = inlet.getInletProperties();
+          const inletOutput: SteamPropertiesOutput = this.getSteamPropertiesOutput(inletProperties);
+          inletOutput.energyFlow = inlet.getInletEnergyFlow();
+          inletOutput.massFlow = inlet.getMassFlow();
+          allInletProperties.push(inletOutput);
+        } finally {
+          inletProperties?.delete();
+          inlet.delete();
+        }
       }
-    }
 
-    let output: HeaderOutput = {
-      header: headerProperties,
-      inlet1: allInletProperties[0],
-      inlet2: allInletProperties[1],
-      inlet3: allInletProperties[2],
-      inlet4: allInletProperties[3],
-      inlet5: allInletProperties[4],
-      inlet6: allInletProperties[5],
-      inlet7: allInletProperties[6],
-      inlet8: allInletProperties[7],
-      inlet9: allInletProperties[8],
+      return {
+        header: headerProperties,
+        inlet1: allInletProperties[0],
+        inlet2: allInletProperties[1],
+        inlet3: allInletProperties[2],
+        inlet4: allInletProperties[3],
+        inlet5: allInletProperties[4],
+        inlet6: allInletProperties[5],
+        inlet7: allInletProperties[6],
+        inlet8: allInletProperties[7],
+        inlet9: allInletProperties[8],
+      };
+    } finally {
+      returnedInlets?.delete();
+      headerPropertiesOutput?.delete();
+      header?.delete();
+      inletVector.delete();
     }
-    HeaderProps.delete();
-    Header.delete();
-    inletArray.forEach(inlet => inlet.delete());
-
-    return output;
   }
 
   heatLoss(input: HeatLossInput): HeatLossOutput {
@@ -1303,19 +1311,27 @@ export class SteamSuiteApiService {
   }
 
 
-  getInletArray(inletsArray: Array<HeaderInputObj>): Array<Inlet> {
-    let inletArray: Array<Inlet> = [];
-    inletsArray.forEach(inlet => {
-      let thermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(inlet.thermodynamicQuantity);
-      let inletPointer: Inlet = new this.toolsSuiteApiService.ToolsSuiteModule.Inlet(
-        inlet.pressure,
-        thermodynamicQuantityType,
-        inlet.quantityValue,
-        inlet.massFlow
-      );
-      inletArray.push(inletPointer);
-    });
-
-    return inletArray;
+  getInletVector(inletsArray: Array<HeaderInputObj>): InletVector {
+    const inletVector: InletVector = new this.toolsSuiteApiService.ToolsSuiteModule.InletVector();
+    try {
+      inletsArray.forEach((inlet: HeaderInputObj) => {
+        const thermodynamicQuantityType: ThermodynamicQuantity = this.suiteApiHelperService.getThermodynamicQuantityType(inlet.thermodynamicQuantity);
+        const inletPointer: Inlet = new this.toolsSuiteApiService.ToolsSuiteModule.Inlet(
+          inlet.pressure,
+          thermodynamicQuantityType,
+          inlet.quantityValue,
+          inlet.massFlow
+        );
+        try {
+          inletVector.push_back(inletPointer);
+        } finally {
+          inletPointer.delete();
+        }
+      });
+      return inletVector;
+    } catch (error) {
+      inletVector.delete();
+      throw error;
+    }
   }
 }
