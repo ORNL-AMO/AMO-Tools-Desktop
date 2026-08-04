@@ -25,8 +25,10 @@ import { ReportChartRenderService } from '../../shared/report-builder/services/r
 import { InventoryFormService } from '../baseline-tab-content/inventory-setup/inventory/inventory-form.service';
 import { PerformancePointsFormService } from '../baseline-tab-content/inventory-setup/inventory/performance-points/performance-points-form.service';
 import { GenericCompressorDbService } from '../../shared/generic-compressor-db.service';
+import { ExploreOpportunitiesValidationService } from '../compressed-air-assessment-validation/explore-opportunities-validation.service';
+import { CompressedAirModificationValid } from '../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 
-type CombinedDayTypeResult = { modification: Modification; combinedResults: DayTypeModificationResult };
+type CombinedDayTypeResult = { modification: Modification; combinedResults: DayTypeModificationResult; validation: CompressedAirModificationValid };
 
 export const COMPRESSED_AIR_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -50,6 +52,7 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
   private readonly inventoryFormService = inject(InventoryFormService);
   private readonly performancePointsFormService = inject(PerformancePointsFormService);
   private readonly genericCompressorDbService = inject(GenericCompressorDbService);
+  private readonly exploreOpportunitiesValidationService = inject(ExploreOpportunitiesValidationService);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [112, 48, 160]; // #7030A0
 
@@ -66,7 +69,8 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
       const results = new CompressedAirAssessmentModificationResults(compressedAirAssessment, modification, settings, this.compressedAirCalculationService, this.assessmentCo2SavingsService, baselineResultsCalc);
       assessmentResults.push(results);
       const combined = new CompressedAirCombinedDayTypeResults(results).getDayTypeModificationResult();
-      combinedDayTypeResults.push({ modification, combinedResults: combined });
+      const validation = this.exploreOpportunitiesValidationService.setModificationValid(modification, baselineResults, baselineResultsCalc.baselineDayTypeProfileSummaries, compressedAirAssessment, settings, results);
+      combinedDayTypeResults.push({ modification, combinedResults: combined, validation });
     });
 
     const meta: ReportMeta = {
@@ -101,7 +105,8 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     const showCO2 = this.featureFlagService.showOperationalImpacts();
     const emissionsUnit = settings.emissionsUnit === 'Imperial' ? 'ton CO2' : 'tonne CO2';
     const airflowUnit = settings.unitsOfMeasure === 'Imperial' ? 'acfm' : 'm3/min';
-    const fmt = (v: number | undefined, dec = 0) => v ? formatNumber(v, dec) : '—';
+    const fmt = (v: number | undefined, dec = 0) => v != null ? formatNumber(v, dec) : '—';
+    const fmtMod = (r: CombinedDayTypeResult, v: number | undefined, dec = 0) => r.validation.isValid ? fmt(v, dec) : '—';
 
     const isEemDisplayed = (eem: EemDescriptor): boolean => {
       if (eem.modificationKey === 'flowReallocation') return combinedDayTypeResults.some(r => r.combinedResults.flowReallocationSavings.savings.power != 0);
@@ -113,56 +118,56 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     const displaySalvageValue = combinedDayTypeResults.some(r => r.combinedResults.allSavingsResults.salvageValue != 0);
 
     const rows: string[][] = [
-      ['Percent Savings (%)', '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.allSavingsResults.savings.percentSavings, 0) + ' %')],
+      ['Percent Savings (%)', '—', ...combinedDayTypeResults.map(r => r.validation.isValid ? fmt(r.combinedResults.allSavingsResults.savings.percentSavings, 0) + ' %' : '—')],
     ];
 
     COMPRESSED_AIR_EEMS.forEach(eem => {
       if (isEemDisplayed(eem)) {
-        rows.push([`${eem.label} Savings (kWh)`, '—', ...combinedDayTypeResults.map(r => fmt(eemSavings(r.combinedResults, eem.savingsKey).savings.power, 0))]);
+        rows.push([`${eem.label} Savings (kWh)`, '—', ...combinedDayTypeResults.map(r => fmtMod(r, eemSavings(r.combinedResults, eem.savingsKey).savings.power, 0))]);
       }
     });
     if (displayAuxiliaryPower) {
-      rows.push(['Auxiliary Power Energy Use (kWh)', '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.auxiliaryPowerUsage.energyUse, 0))]);
+      rows.push(['Auxiliary Power Energy Use (kWh)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.auxiliaryPowerUsage.energyUse, 0))]);
     }
 
     rows.push(
-      ['Peak Demand (kW)', fmt(baselineResults.total.peakDemand, 2), ...combinedDayTypeResults.map(r => fmt(r.combinedResults.peakDemand, 2))],
-      [`Peak Airflow (${airflowUnit})`, fmt(baselineResults.total.maxAirFlow, 2), ...combinedDayTypeResults.map(r => fmt(r.combinedResults.maxAirFlow, 2))],
-      ['Annual Energy Used (kWh)', fmt(baselineResults.total.energyUse, 0), ...combinedDayTypeResults.map(r => fmt(r.combinedResults.allSavingsResults.adjustedResults.power, 0))],
+      ['Peak Demand (kW)', fmt(baselineResults.total.peakDemand, 2), ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.peakDemand, 2))],
+      [`Peak Airflow (${airflowUnit})`, fmt(baselineResults.total.maxAirFlow, 2), ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.maxAirFlow, 2))],
+      ['Annual Energy Used (kWh)', fmt(baselineResults.total.energyUse, 0), ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.allSavingsResults.adjustedResults.power, 0))],
     );
     if (showCO2) {
-      rows.push([`Annual Emission Output Rate (${emissionsUnit})`, fmt(baselineResults.total.annualEmissionOutput, 0), ...combinedDayTypeResults.map(r => fmt(r.combinedResults.annualEmissionOutput, 0))]);
+      rows.push([`Annual Emission Output Rate (${emissionsUnit})`, fmt(baselineResults.total.annualEmissionOutput, 0), ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.annualEmissionOutput, 0))]);
     }
     rows.push(
-      ['Peak Demand Savings (kW)', '—', ...combinedDayTypeResults.map(r => fmt(baselineResults.total.peakDemand - r.combinedResults.peakDemand, 2))],
-      ['Annual Energy Savings (kWh)', '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.allSavingsResults.savings.power, 0))],
+      ['Peak Demand Savings (kW)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, baselineResults.total.peakDemand - r.combinedResults.peakDemand, 2))],
+      ['Annual Energy Savings (kWh)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.allSavingsResults.savings.power, 0))],
     );
     if (showCO2) {
-      rows.push([`Annual Emission Savings (${emissionsUnit})`, '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings, 0))]);
+      rows.push([`Annual Emission Savings (${emissionsUnit})`, '—', ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.allSavingsResults.savings.annualEmissionOutputSavings, 0))]);
     }
 
     const costRows: string[][] = [];
     COMPRESSED_AIR_EEMS.forEach(eem => {
       if (isEemDisplayed(eem)) {
-        costRows.push([`${eem.label} Savings ($)`, '—', ...combinedDayTypeResults.map(r => fmt(eemSavings(r.combinedResults, eem.savingsKey).savings.cost, 0))]);
+        costRows.push([`${eem.label} Savings ($)`, '—', ...combinedDayTypeResults.map(r => fmtMod(r, eemSavings(r.combinedResults, eem.savingsKey).savings.cost, 0))]);
       }
     });
     if (displayAuxiliaryPower) {
-      costRows.push(['Auxiliary Power Cost ($)', '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.auxiliaryPowerUsage.cost * -1, 0))]);
+      costRows.push(['Auxiliary Power Cost ($)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.auxiliaryPowerUsage.cost * -1, 0))]);
     }
     costRows.push(
-      ['Peak Demand Cost ($)', fmt(baselineResults.total.demandCost, 2), ...combinedDayTypeResults.map(r => fmt(r.combinedResults.peakDemandCost, 2))],
-      ['Energy Cost ($)', fmt(baselineResults.total.cost, 0), ...combinedDayTypeResults.map(r => fmt(r.combinedResults.allSavingsResults.adjustedResults.cost, 0))],
-      ['Operating Cost ($)', fmt(baselineResults.total.totalAnnualOperatingCost, 0), ...combinedDayTypeResults.map(r => fmt(r.combinedResults.totalAnnualOperatingCost, 0))],
-      ['Peak Demand Cost Savings ($)', '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.peakDemandCostSavings, 2))],
-      ['Energy Cost Savings ($)', '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.allSavingsResults.savings.cost, 0))],
-      ['Cost Savings ($)', '—', ...combinedDayTypeResults.map(r => fmt(baselineResults.total.totalAnnualOperatingCost - r.combinedResults.totalAnnualOperatingCost, 0))],
-      ['Implementation Costs ($)', '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.allSavingsResults.implementationCost, 0))],
+      ['Peak Demand Cost ($)', fmt(baselineResults.total.demandCost, 2), ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.peakDemandCost, 2))],
+      ['Energy Cost ($)', fmt(baselineResults.total.cost, 0), ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.allSavingsResults.adjustedResults.cost, 0))],
+      ['Operating Cost ($)', fmt(baselineResults.total.totalAnnualOperatingCost, 0), ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.totalAnnualOperatingCost, 0))],
+      ['Peak Demand Cost Savings ($)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.peakDemandCostSavings, 2))],
+      ['Energy Cost Savings ($)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.allSavingsResults.savings.cost, 0))],
+      ['Cost Savings ($)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, baselineResults.total.totalAnnualOperatingCost - r.combinedResults.totalAnnualOperatingCost, 0))],
+      ['Implementation Costs ($)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.allSavingsResults.implementationCost, 0))],
     );
     if (displaySalvageValue) {
-      costRows.push(['Salvage Value ($)', '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.allSavingsResults.salvageValue, 0))]);
+      costRows.push(['Salvage Value ($)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.allSavingsResults.salvageValue, 0))]);
     }
-    costRows.push(['Simple Payback Period (months)', '—', ...combinedDayTypeResults.map(r => fmt(r.combinedResults.allSavingsResults.paybackPeriod, 2))]);
+    costRows.push(['Simple Payback Period (months)', '—', ...combinedDayTypeResults.map(r => fmtMod(r, r.combinedResults.allSavingsResults.paybackPeriod, 2))]);
 
     const allRows: string[][] = [...rows];
     const subGroupHeaderIndices: number[] = [];

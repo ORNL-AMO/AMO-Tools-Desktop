@@ -345,7 +345,7 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
       paper_bgcolor: 'white',
     };
 
-    return this.renderPlotlyChart({ traces: item.traces as unknown as TraceData[], layout });
+    return renderPlotlyChart(this.chartRenderService, { traces: item.traces as unknown as TraceData[], layout });
   }
 
   private async renderEnergyBarChart(
@@ -378,10 +378,6 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
       paper_bgcolor: 'white',
     };
 
-    return this.renderPlotlyChart({ traces, layout });
-  }
-
-  private renderPlotlyChart(chart: { traces: TraceData[]; layout: object }): Promise<string> {
-    return this.chartRenderService.renderChartToImage(chart.traces, chart.layout);
+    return renderPlotlyChart(this.chartRenderService, { traces, layout });
   }
 }
