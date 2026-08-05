@@ -10,6 +10,7 @@ import { FanMotorSummaryComponent } from './input-summary/fan-motor-summary/fan-
 import { FanSetupSummaryComponent } from './input-summary/fan-setup-summary/fan-setup-summary.component';
 import { BaseGasDensitySummaryComponent } from './input-summary/base-gas-density-summary/base-gas-density-summary.component';
 import { FsatSankeyModule } from '../../shared/fsat-sankey/fsat-sankey.module';
+import { SankeySharedModule } from '../../shared/sankey/sankey-shared.module';
 import { FsatReportSankeyComponent } from './fsat-report-sankey/fsat-report-sankey.component';
 import { FsatReportGraphsPrintComponent } from './fsat-report-graphs/fsat-report-graphs-print/fsat-report-graphs-print.component';
 import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
@@ -30,6 +31,7 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     FormsModule,
     ReactiveFormsModule,
     FsatSankeyModule,
+    SankeySharedModule,
     ModalModule,
     PrintOptionsMenuModule,
     FacilityInfoSummaryModule,

@@ -88,7 +88,7 @@
     <nav class="navbar fsat">
       <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
         <div class="tab-content pl-2 pr-2">
-          <div class="form-group" *ngIf="fsatOptions.length > 1">
+          <div class="form-group">
             <select name="fsatSelect" class="form-control mt-0 mx-auto w-100" id="fsatSelect" [(ngModel)]="selectedSankeyFsatOption">
               <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{fsat.name}}</option>
             </select>

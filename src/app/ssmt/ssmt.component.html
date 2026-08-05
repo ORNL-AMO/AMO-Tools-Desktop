@@ -93,7 +93,7 @@
     <nav class="navbar ssmt">
       <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
         <div class="tab-content pl-2 pr-2">
-          <div class="form-group" *ngIf="ssmtOptions.length > 1">
+          <div class="form-group">
             <select name="ssmtSelect" class="form-control mx-auto w-100" id="ssmtSelect" [(ngModel)]="selectedSSMT">
               <option *ngFor="let ssmt of ssmtOptions" [ngValue]="ssmt">{{ssmt.name}}</option>
             </select>
