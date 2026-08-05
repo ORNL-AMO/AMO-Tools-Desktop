@@ -4,6 +4,12 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
 
+export interface PsatSankeyScenario {
+  scenario: PSAT;
+  costSavings: number;
+  isBaseline: boolean;
+}
+
 @Component({
     selector: 'app-psat-report-sankey',
     templateUrl: './psat-report-sankey.component.html',
@@ -17,19 +23,23 @@ export class PsatReportSankeyComponent implements OnInit {
   assessment: Assessment;
 
   psatOptions: Array<SankeyScenarioOption>;
-  psatCostSavings: number;
-  psatBaseline: boolean = true;
-  psats: Array<PSAT>;
+  sankeyScenarios: Array<PsatSankeyScenario>;
   constructor() { }
 
   ngOnInit() {
-    this.psats = [this.assessment.psat, ...(this.assessment.psat.modifications ?? []).map(modification => modification.psat)];
-    this.psatOptions = this.psats.map(psat => ({ name: psat.name, value: psat }));
+    const psats = [this.assessment.psat, ...(this.assessment.psat.modifications ?? []).map(modification => modification.psat)];
+    this.psatOptions = psats.map(psat => ({ name: psat.name, value: psat }));
+    this.sankeyScenarios = psats.map(psat => ({ scenario: psat, costSavings: this.getCostSavings(psat), isBaseline: psat === this.assessment.psat }));
   }
 
-  setPsat(selectedPsat: PSAT) {
-    this.psatBaseline = this.assessment.psat.name == selectedPsat.name;
-    this.psatCostSavings = (this.assessment.psat.outputs && selectedPsat.valid?.isValid && selectedPsat.outputs)
+  setPsat(sankeyScenario: PsatSankeyScenario, selectedPsat: PSAT) {
+    sankeyScenario.scenario = selectedPsat;
+    sankeyScenario.isBaseline = selectedPsat === this.assessment.psat;
+    sankeyScenario.costSavings = this.getCostSavings(selectedPsat);
+  }
+
+  getCostSavings(selectedPsat: PSAT): number {
+    return (this.assessment.psat.outputs && selectedPsat.valid?.isValid && selectedPsat.outputs)
       ? this.assessment.psat.outputs.annual_cost - selectedPsat.outputs.annual_cost : undefined;
   }
 }

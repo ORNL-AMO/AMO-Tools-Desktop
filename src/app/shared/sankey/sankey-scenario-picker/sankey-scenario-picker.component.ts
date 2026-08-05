@@ -15,7 +15,7 @@ export class SankeyScenarioPickerComponent {
   @Input()
   options: Array<SankeyScenarioOption>;
   @Input()
-  selected: boolean;
+  selected: any;
   @Output()
   selectedChange = new EventEmitter<any>();
 

@@ -1,9 +1,9 @@
 <div class="output-summary">
   <div class="d-flex flex-column">
-    @for (fsat of fsats; track fsat.name) {
-      <app-sankey-scenario-picker [options]="fsatOptions" [selected]="fsat"
-        (selectedChange)="setFsat($event)" [costSavings]="fsatCostSavings">
-        <app-fsat-sankey [fsat]="fsat" [settings]="settings" [isBaseline]="fsatBaseline"></app-fsat-sankey>
+    @for (sankeyScenario of sankeyScenarios; track sankeyScenario) {
+      <app-sankey-scenario-picker [options]="fsatOptions" [selected]="sankeyScenario.scenario"
+        (selectedChange)="setFsat(sankeyScenario, $event)" [costSavings]="sankeyScenario.costSavings">
+        <app-fsat-sankey [fsat]="sankeyScenario.scenario" [settings]="settings" [isBaseline]="sankeyScenario.isBaseline"></app-fsat-sankey>
       </app-sankey-scenario-picker>
     }
   </div>

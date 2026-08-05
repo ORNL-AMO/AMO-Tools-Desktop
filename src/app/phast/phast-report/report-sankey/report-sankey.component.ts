@@ -5,6 +5,12 @@ import { Assessment } from '../../../shared/models/assessment';
 import { ExecutiveSummaryService } from '../executive-summary.service';
 import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
 
+export interface PhastSankeyScenario {
+  scenario: PHAST;
+  costSavings: number;
+  energySavings: number;
+}
+
 @Component({
     selector: 'app-report-sankey',
     templateUrl: './report-sankey.component.html',
@@ -23,14 +29,11 @@ export class ReportSankeyComponent implements OnInit {
 
   baseline: ExecutiveSummary;
 
-  phastCostSavings: number = 0;
-  phastEnergySavings: number = 0;
-
   energySavingsUnit: string;
 
   assessmentName: string;
   phastOptions: Array<SankeyScenarioOption>;
-  phasts: Array<PHAST>;
+  sankeyScenarios: Array<PhastSankeyScenario> = [];
   modExists: boolean = false;
   constructor(private executiveSummaryService: ExecutiveSummaryService) { }
 
@@ -40,16 +43,26 @@ export class ReportSankeyComponent implements OnInit {
     this.assessmentName = this.assessmentName.replace('(', '');
     this.assessmentName = this.assessmentName.replace(')', '');
     this.modExists = !!this.phast.modifications?.length;
-    this.phasts = [this.phast, ...(this.phast.modifications ?? []).map(mod => mod.phast)];
-    this.phastOptions = this.phasts.map(phast => ({ name: phast.name, value: phast }));
+    const phasts = [this.phast, ...(this.phast.modifications ?? []).map(mod => mod.phast!)];
+    this.phastOptions = phasts.map(phast => ({ name: phast.name, value: phast }));
+    this.sankeyScenarios = phasts.map(phast => {
+      const { costSavings, energySavings } = this.getSavings(phast);
+      return { scenario: phast, costSavings, energySavings };
+    });
 
     this.energySavingsUnit = this.settings.energyResultUnit + "/yr";
   }
 
-  setPhast(selectedPhast: PHAST) {
-    let isMod = selectedPhast.name !== this.phast.name;
+  setPhast(sankeyScenario: PhastSankeyScenario, selectedPhast: PHAST) {
+    sankeyScenario.scenario = selectedPhast;
+    const { costSavings, energySavings } = this.getSavings(selectedPhast);
+    sankeyScenario.costSavings = costSavings;
+    sankeyScenario.energySavings = energySavings;
+  }
+
+  getSavings(selectedPhast: PHAST): { costSavings: number, energySavings: number } {
+    let isMod = selectedPhast !== this.phast;
     let tmpSummary = this.executiveSummaryService.getSummary(selectedPhast, isMod, this.settings, this.phast, this.baseline);
-    this.phastCostSavings = tmpSummary.annualCostSavings;
-    this.phastEnergySavings = tmpSummary.annualEnergySavings;
+    return { costSavings: tmpSummary.annualCostSavings ?? 0, energySavings: tmpSummary.annualEnergySavings ?? 0 };
   }
 }

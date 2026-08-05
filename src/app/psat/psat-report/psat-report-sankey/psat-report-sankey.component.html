@@ -1,9 +1,9 @@
 <div class="output-summary">
   <div class="d-flex flex-column">
-    @for (psat of psats; track psat.name) {
-      <app-sankey-scenario-picker [options]="psatOptions" [selected]="psat"
-        (selectedChange)="setPsat($event)" [costSavings]="psatCostSavings">
-        <app-psat-sankey [psat]="psat" [settings]="settings" [isBaseline]="psatBaseline"></app-psat-sankey>
+    @for (sankeyScenario of sankeyScenarios; track sankeyScenario) {
+      <app-sankey-scenario-picker [options]="psatOptions" [selected]="sankeyScenario.scenario"
+        (selectedChange)="setPsat(sankeyScenario, $event)" [costSavings]="sankeyScenario.costSavings">
+        <app-psat-sankey [psat]="sankeyScenario.scenario" [settings]="settings" [isBaseline]="sankeyScenario.isBaseline"></app-psat-sankey>
       </app-sankey-scenario-picker>
     }
   </div>

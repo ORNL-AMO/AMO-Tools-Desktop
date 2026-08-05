@@ -1,10 +1,10 @@
 <div class="output-summary">
     <div class="d-flex flex-column">
-        @for (ssmt of ssmts; track ssmt.name) {
-          <app-sankey-scenario-picker [options]="ssmtOptions" [selected]="ssmt" (selectedChange)="setSsmt($event)"
-              [costSavings]="ssmtCostSavings">
-              <app-ssmt-sankey [ssmt]="ssmt" [assessment]="assessment" [settings]="settings"
-                  [isBaseline]="ssmtBaseline"></app-ssmt-sankey>
+        @for (sankeyScenario of sankeyScenarios; track sankeyScenario) {
+          <app-sankey-scenario-picker [options]="ssmtOptions" [selected]="sankeyScenario.scenario" (selectedChange)="setSsmt(sankeyScenario, $event)"
+              [costSavings]="sankeyScenario.costSavings">
+              <app-ssmt-sankey [ssmt]="sankeyScenario.scenario" [assessment]="assessment" [settings]="settings"
+                  [isBaseline]="sankeyScenario.isBaseline"></app-ssmt-sankey>
           </app-sankey-scenario-picker>
         }
     </div>

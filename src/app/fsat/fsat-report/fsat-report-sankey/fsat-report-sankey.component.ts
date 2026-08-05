@@ -4,6 +4,12 @@ import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
 
+export interface FsatSankeyScenario {
+  scenario: FSAT;
+  costSavings: number;
+  isBaseline: boolean;
+}
+
 @Component({
     selector: 'app-fsat-report-sankey',
     templateUrl: './fsat-report-sankey.component.html',
@@ -17,19 +23,23 @@ export class FsatReportSankeyComponent implements OnInit {
   assessment: Assessment;
 
   fsatOptions: Array<SankeyScenarioOption>;
-  fsatCostSavings: number;
-  fsatBaseline: boolean = true;
-  fsats: Array<FSAT>;
+  sankeyScenarios: Array<FsatSankeyScenario>;
   constructor() { }
 
   ngOnInit() {
-    this.fsats = [this.assessment.fsat, ...(this.assessment.fsat.modifications ?? []).map(modification => modification.fsat)];
-    this.fsatOptions = this.fsats.map(fsat => ({ name: fsat.name, value: fsat }));
+    const fsats = [this.assessment.fsat, ...(this.assessment.fsat.modifications ?? []).map(modification => modification.fsat)];
+    this.fsatOptions = fsats.map(fsat => ({ name: fsat.name, value: fsat }));
+    this.sankeyScenarios = fsats.map(fsat => ({ scenario: fsat, costSavings: this.getCostSavings(fsat), isBaseline: fsat === this.assessment.fsat }));
   }
 
-  setFsat(selectedFsat: FSAT) {
-    this.fsatBaseline = this.assessment.fsat.name == selectedFsat.name;
-    this.fsatCostSavings = (this.assessment.fsat.outputs && selectedFsat.valid?.isValid && selectedFsat.outputs)
+  setFsat(sankeyScenario: FsatSankeyScenario, selectedFsat: FSAT) {
+    sankeyScenario.scenario = selectedFsat;
+    sankeyScenario.isBaseline = selectedFsat === this.assessment.fsat;
+    sankeyScenario.costSavings = this.getCostSavings(selectedFsat);
+  }
+
+  getCostSavings(selectedFsat: FSAT): number {
+    return (this.assessment.fsat.outputs && selectedFsat.valid?.isValid && selectedFsat.outputs)
       ? this.assessment.fsat.outputs.annualCost - selectedFsat.outputs.annualCost : undefined;
   }
 }
