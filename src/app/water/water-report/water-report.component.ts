@@ -1,5 +1,5 @@
 import { Component, DestroyRef, ElementRef, inject, Input, SimpleChanges, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
@@ -10,6 +10,8 @@ import { Settings } from '../../shared/models/settings';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { WaterAssessmentResultsService } from '../water-assessment-results.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { WaterReportAdapter, WATER_SECTION_GROUPS } from './water-report.adapter';
+import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 
 @Component({
   selector: 'app-water-report',
@@ -24,6 +26,7 @@ export class WaterReportComponent {
   private readonly settingsDbService = inject(SettingsDbService);
   private readonly printOptionsMenuService = inject(PrintOptionsMenuService);
   private readonly directoryDbService = inject(DirectoryDbService);
+  private readonly reportAdapter = inject(WaterReportAdapter);
 
 
  @Input()
@@ -56,9 +59,13 @@ export class WaterReportComponent {
   systemTrueCostReportSubscription: Subscription;
   isDiagramValid$ = this.waterAssessmentService.isDiagramValid$;
 
+  reportDocument$: Observable<ReportDocument>;
+  readonly sectionGroups: ReportSectionGroup[] = WATER_SECTION_GROUPS;
+
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     this.createdDate = new Date();
+    this.reportDocument$ = this.reportAdapter.buildDocument(this.assessment);
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
