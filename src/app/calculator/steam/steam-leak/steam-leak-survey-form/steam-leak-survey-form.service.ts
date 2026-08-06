@@ -37,8 +37,8 @@ export interface LeakMetaFormControls {
 }
 
 export interface EstimateFormControls {
-  steamPressure: FormControl<number | null>;
-  steamTemperature: FormControl<number | null>;
+  leakPressure: FormControl<number | null>;
+  leakTemperature: FormControl<number | null>;
   pressureReductionMethod: FormControl<number | null>;
   turbineEfficiency: FormControl<number | null>;
   leakRate: FormControl<number | null>;
@@ -48,15 +48,15 @@ export interface OrificeFormControls {
   holeSize: FormControl<number | null>;
   dischargeCoefficient: FormControl<number | null>;
   atmosphericPressure: FormControl<number | null>;
-  steamPressure: FormControl<number | null>;
-  steamTemperature: FormControl<number | null>;
+  leakPressure: FormControl<number | null>;
+  leakTemperature: FormControl<number | null>;
   pressureReductionMethod: FormControl<number | null>;
   turbineEfficiency: FormControl<number | null>;
 }
 
 export interface PlumeFormControls {
-  steamPressure: FormControl<number | null>;
-  steamTemperature: FormControl<number | null>;
+  leakPressure: FormControl<number | null>;
+  leakTemperature: FormControl<number | null>;
   ambientTemperature: FormControl<number | null>;
   plumeLength: FormControl<number | null>;
   pressureReductionMethod: FormControl<number | null>;
@@ -146,8 +146,8 @@ export class SteamLeakSurveyFormService {
       ? [Validators.required, Validators.min(steamTempMin), Validators.max(maxSteamTemp)]
       : [Validators.required, Validators.min(steamTempMin)];
     return this.fb.group<EstimateFormControls>({
-      steamPressure: new FormControl(leak.estimateMethodData.steamPressure, [Validators.required, Validators.min(steamPressureMin), Validators.max(steamPressureMax)]),
-      steamTemperature: new FormControl(leak.estimateMethodData.steamTemperature, steamTempValidators),
+      leakPressure: new FormControl(leak.estimateMethodData.leakPressure, [Validators.required, Validators.min(steamPressureMin), Validators.max(steamPressureMax)]),
+      leakTemperature: new FormControl(leak.estimateMethodData.leakTemperature, steamTempValidators),
       pressureReductionMethod: new FormControl(leak.estimateMethodData.pressureReductionMethod),
       turbineEfficiency: new FormControl(leak.estimateMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
       leakRate: new FormControl(leak.estimateMethodData.leakRate, [Validators.required, GreaterThanValidator.greaterThan(0)]),
@@ -164,8 +164,8 @@ export class SteamLeakSurveyFormService {
       holeSize: new FormControl(leak.orificeMethodData.holeSize, [Validators.required, GreaterThanValidator.greaterThan(0)]),
       dischargeCoefficient: new FormControl(leak.orificeMethodData.dischargeCoefficient, [Validators.required, Validators.min(0), Validators.max(1)]),
       atmosphericPressure: new FormControl(leak.orificeMethodData.atmosphericPressure, [Validators.required, Validators.min(0), Validators.max(atmosphericPressureMax)]),
-      steamPressure: new FormControl(leak.orificeMethodData.steamPressure, [Validators.required, Validators.min(steamPressureMin), Validators.max(steamPressureMax)]),
-      steamTemperature: new FormControl(leak.orificeMethodData.steamTemperature, steamTempValidators),
+      leakPressure: new FormControl(leak.orificeMethodData.leakPressure, [Validators.required, Validators.min(steamPressureMin), Validators.max(steamPressureMax)]),
+      leakTemperature: new FormControl(leak.orificeMethodData.leakTemperature, steamTempValidators),
       pressureReductionMethod: new FormControl(leak.orificeMethodData.pressureReductionMethod),
       turbineEfficiency: new FormControl(leak.orificeMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
     });
@@ -179,8 +179,8 @@ export class SteamLeakSurveyFormService {
       ? [Validators.required, Validators.min(steamTempMin), Validators.max(maxSteamTemp)]
       : [Validators.required, Validators.min(steamTempMin)];
     return this.fb.group<PlumeFormControls>({
-      steamPressure: new FormControl(leak.plumeMethodData.steamPressure, [Validators.required, Validators.min(steamPressureMin), Validators.max(steamPressureMax)]),
-      steamTemperature: new FormControl(leak.plumeMethodData.steamTemperature, steamTempValidators),
+      leakPressure: new FormControl(leak.plumeMethodData.leakPressure, [Validators.required, Validators.min(steamPressureMin), Validators.max(steamPressureMax)]),
+      leakTemperature: new FormControl(leak.plumeMethodData.leakTemperature, steamTempValidators),
       ambientTemperature: new FormControl(leak.plumeMethodData.ambientTemperature, [Validators.required, Validators.min(ambientTempMin), Validators.max(ambientTempMax)]),
       plumeLength: new FormControl(leak.plumeMethodData.plumeLength, [Validators.required, Validators.min(plumeLengthMin), Validators.max(plumeLengthMax)]),
       pressureReductionMethod: new FormControl(leak.plumeMethodData.pressureReductionMethod),
@@ -207,8 +207,8 @@ export class SteamLeakSurveyFormService {
 
   getEstimateDataFromForm(form: FormGroup<EstimateFormControls>): SteamLeakEstimateMethodData {
     return {
-      steamPressure: form.controls.steamPressure.value ?? 0,
-      steamTemperature: form.controls.steamTemperature.value ?? 0,
+      leakPressure: form.controls.leakPressure.value ?? 0,
+      leakTemperature: form.controls.leakTemperature.value ?? 0,
       pressureReductionMethod: form.controls.pressureReductionMethod.value ?? 0,
       turbineEfficiency: form.controls.turbineEfficiency.value ?? 0,
       leakRate: form.controls.leakRate.value ?? 0,
@@ -220,8 +220,8 @@ export class SteamLeakSurveyFormService {
       holeSize: form.controls.holeSize.value ?? 0,
       dischargeCoefficient: form.controls.dischargeCoefficient.value ?? 0,
       atmosphericPressure: form.controls.atmosphericPressure.value ?? 0,
-      steamPressure: form.controls.steamPressure.value ?? 0,
-      steamTemperature: form.controls.steamTemperature.value ?? 0,
+      leakPressure: form.controls.leakPressure.value ?? 0,
+      leakTemperature: form.controls.leakTemperature.value ?? 0,
       pressureReductionMethod: form.controls.pressureReductionMethod.value ?? 0,
       turbineEfficiency: form.controls.turbineEfficiency.value ?? 0,
     };
@@ -229,8 +229,8 @@ export class SteamLeakSurveyFormService {
 
   getPlumeDataFromForm(form: FormGroup<PlumeFormControls>): SteamLeakPlumeMethodData {
     return {
-      steamPressure: form.controls.steamPressure.value ?? 0,
-      steamTemperature: form.controls.steamTemperature.value ?? 0,
+      leakPressure: form.controls.leakPressure.value ?? 0,
+      leakTemperature: form.controls.leakTemperature.value ?? 0,
       ambientTemperature: form.controls.ambientTemperature.value ?? 0,
       plumeLength: form.controls.plumeLength.value ?? 0,
       pressureReductionMethod: form.controls.pressureReductionMethod.value ?? 0,
@@ -244,10 +244,10 @@ export class SteamLeakSurveyFormService {
       name: 'New Leak',
       selected: true,
       measurementMethod: SteamLeakMeasurementMethod.Estimate,
-      estimateMethodData: { steamPressure: 115, steamTemperature: 212, pressureReductionMethod: 0, turbineEfficiency: 0, leakRate: 1 },
+      estimateMethodData: { leakPressure: 115, leakTemperature: 212, pressureReductionMethod: 0, turbineEfficiency: 0, leakRate: 1 },
       estimateTurbineMethodData: { turbineEfficiency: 0, leakRate: 0 },
-      orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, steamPressure: 115, steamTemperature: 212, pressureReductionMethod: 0, turbineEfficiency: 0 },
-      plumeMethodData: { steamPressure: 115, steamTemperature: 212, ambientTemperature: 70, plumeLength: 3, pressureReductionMethod: 0, turbineEfficiency: 0 },
+      orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, leakPressure: 115, leakTemperature: 212, pressureReductionMethod: 0, turbineEfficiency: 0 },
+      plumeMethodData: { leakPressure: 115, leakTemperature: 212, ambientTemperature: 70, plumeLength: 3, pressureReductionMethod: 0, turbineEfficiency: 0 },
       units: 0,
     };
     if (settings?.unitsOfMeasure === 'Metric') {

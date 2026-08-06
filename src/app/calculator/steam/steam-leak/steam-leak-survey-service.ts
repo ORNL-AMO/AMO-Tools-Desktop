@@ -119,10 +119,10 @@ export class SteamLeakSurveyService {
       name: 'Example Leak',
       leakDescription: 'Example steam trap leak',
       measurementMethod: 0,
-      estimateMethodData: { steamPressure: 300, steamTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80, leakRate: 100 },
+      estimateMethodData: { leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80, leakRate: 100 },
       estimateTurbineMethodData: { turbineEfficiency: 80, leakRate: 100 },
-      orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, steamPressure: 300, steamTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80 },
-      plumeMethodData: { steamPressure: 300, steamTemperature: 400, ambientTemperature: 70, plumeLength: 6, pressureReductionMethod: 0, turbineEfficiency: 0 },
+      orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80 },
+      plumeMethodData: { leakPressure: 300, leakTemperature: 400, ambientTemperature: 70, plumeLength: 6, pressureReductionMethod: 0, turbineEfficiency: 0 },
       units: 0,
     };
   }

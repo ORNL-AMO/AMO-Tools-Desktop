@@ -687,8 +687,8 @@ export interface FacilitySteamLeakData {
 }
 
 export interface SteamLeakEstimateMethodData {
-  steamPressure: number;
-  steamTemperature: number;
+  leakPressure: number;
+  leakTemperature: number;
   pressureReductionMethod: number;
   turbineEfficiency: number;
   leakRate: number;
@@ -703,15 +703,15 @@ export interface SteamLeakOrificeMethodData {
   holeSize: number;
   dischargeCoefficient: number;
   atmosphericPressure: number;
-  steamPressure: number;
-  steamTemperature: number;
+  leakPressure: number;
+  leakTemperature: number;
   pressureReductionMethod: number;
   turbineEfficiency: number;
 }
 
 export interface SteamLeakPlumeMethodData {
-  steamPressure: number;
-  steamTemperature: number;
+  leakPressure: number;
+  leakTemperature: number;
   ambientTemperature: number;
   plumeLength: number;
   pressureReductionMethod: number;

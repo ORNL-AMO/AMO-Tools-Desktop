@@ -66,45 +66,45 @@ describe('SteamLeakSurveyFormService', () => {
     expect(result.leakRate).toBe(75);
   });
 
-  it('buildEstimateForm → getEstimateDataFromForm round-trips steamPressure and turbineEfficiency', () => {
+  it('buildEstimateForm → getEstimateDataFromForm round-trips leakPressure and turbineEfficiency', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.estimateMethodData.steamPressure = 200;
+    leak.estimateMethodData.leakPressure = 200;
     leak.estimateMethodData.turbineEfficiency = 80;
 
     const form = service.buildEstimateForm(leak);
     const result = service.getEstimateDataFromForm(form);
 
-    expect(result.steamPressure).toBe(200);
+    expect(result.leakPressure).toBe(200);
     expect(result.turbineEfficiency).toBe(80);
   });
 
   // ─── Estimate method maxSteamTemp parameter ──────────────────────────────────
 
-  it('buildEstimateForm marks steamTemperature invalid when it exceeds the provided maxSteamTemp', () => {
+  it('buildEstimateForm marks leakTemperature invalid when it exceeds the provided maxSteamTemp', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.estimateMethodData.steamTemperature = 450;
+    leak.estimateMethodData.leakTemperature = 450;
 
     const form = service.buildEstimateForm(leak, undefined, 400);
 
-    expect(form.controls.steamTemperature.valid).toBeFalse();
+    expect(form.controls.leakTemperature.valid).toBeFalse();
   });
 
-  it('buildEstimateForm accepts steamTemperature at the maxSteamTemp boundary', () => {
+  it('buildEstimateForm accepts leakTemperature at the maxSteamTemp boundary', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.estimateMethodData.steamTemperature = 400;
+    leak.estimateMethodData.leakTemperature = 400;
 
     const form = service.buildEstimateForm(leak, undefined, 400);
 
-    expect(form.controls.steamTemperature.valid).toBeTrue();
+    expect(form.controls.leakTemperature.valid).toBeTrue();
   });
 
   it('buildEstimateForm has no upper temperature bound when maxSteamTemp is not provided', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.estimateMethodData.steamTemperature = 600;
+    leak.estimateMethodData.leakTemperature = 600;
 
     const form = service.buildEstimateForm(leak);
 
-    expect(form.controls.steamTemperature.valid).toBeTrue();
+    expect(form.controls.leakTemperature.valid).toBeTrue();
   });
 
   it('buildOrificeForm → getOrificeDataFromForm round-trips all fields', () => {
@@ -113,8 +113,8 @@ describe('SteamLeakSurveyFormService', () => {
       holeSize: 0.5,
       dischargeCoefficient: 0.61,
       atmosphericPressure: 14.7,
-      steamPressure: 200,
-      steamTemperature: 350,
+      leakPressure: 200,
+      leakTemperature: 350,
       pressureReductionMethod: 0,
       turbineEfficiency: 80,
     };
@@ -125,45 +125,45 @@ describe('SteamLeakSurveyFormService', () => {
     expect(result.holeSize).toBe(0.5);
     expect(result.dischargeCoefficient).toBe(0.61);
     expect(result.atmosphericPressure).toBe(14.7);
-    expect(result.steamPressure).toBe(200);
-    expect(result.steamTemperature).toBe(350);
+    expect(result.leakPressure).toBe(200);
+    expect(result.leakTemperature).toBe(350);
     expect(result.turbineEfficiency).toBe(80);
   });
 
   // ─── Orifice method maxSteamTemp parameter ───────────────────────────────────
 
-  it('buildOrificeForm marks steamTemperature invalid when it exceeds the provided maxSteamTemp', () => {
+  it('buildOrificeForm marks leakTemperature invalid when it exceeds the provided maxSteamTemp', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.orificeMethodData.steamTemperature = 450;
+    leak.orificeMethodData.leakTemperature = 450;
 
     const form = service.buildOrificeForm(leak, undefined, 400);
 
-    expect(form.controls.steamTemperature.valid).toBeFalse();
+    expect(form.controls.leakTemperature.valid).toBeFalse();
   });
 
-  it('buildOrificeForm accepts steamTemperature at the maxSteamTemp boundary', () => {
+  it('buildOrificeForm accepts leakTemperature at the maxSteamTemp boundary', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.orificeMethodData.steamTemperature = 400;
+    leak.orificeMethodData.leakTemperature = 400;
 
     const form = service.buildOrificeForm(leak, undefined, 400);
 
-    expect(form.controls.steamTemperature.valid).toBeTrue();
+    expect(form.controls.leakTemperature.valid).toBeTrue();
   });
 
   it('buildOrificeForm has no upper temperature bound when maxSteamTemp is not provided', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.orificeMethodData.steamTemperature = 600;
+    leak.orificeMethodData.leakTemperature = 600;
 
     const form = service.buildOrificeForm(leak);
 
-    expect(form.controls.steamTemperature.valid).toBeTrue();
+    expect(form.controls.leakTemperature.valid).toBeTrue();
   });
 
   it('buildPlumeForm → getPlumeDataFromForm round-trips all fields', () => {
     const leak = service.getEmptySteamLeakData();
     leak.plumeMethodData = {
-      steamPressure: 200,
-      steamTemperature: 350,
+      leakPressure: 200,
+      leakTemperature: 350,
       ambientTemperature: 72,
       plumeLength: 6,
       pressureReductionMethod: 0,
@@ -173,40 +173,40 @@ describe('SteamLeakSurveyFormService', () => {
     const form = service.buildPlumeForm(leak);
     const result = service.getPlumeDataFromForm(form);
 
-    expect(result.steamPressure).toBe(200);
-    expect(result.steamTemperature).toBe(350);
+    expect(result.leakPressure).toBe(200);
+    expect(result.leakTemperature).toBe(350);
     expect(result.ambientTemperature).toBe(72);
     expect(result.plumeLength).toBe(6);
   });
 
   // ─── Plume method maxSteamTemp parameter ─────────────────────────────────────
 
-  it('buildPlumeForm marks steamTemperature invalid when it exceeds the provided maxSteamTemp', () => {
+  it('buildPlumeForm marks leakTemperature invalid when it exceeds the provided maxSteamTemp', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.plumeMethodData.steamTemperature = 450;
+    leak.plumeMethodData.leakTemperature = 450;
 
     const form = service.buildPlumeForm(leak, undefined, 400);
 
-    expect(form.controls.steamTemperature.valid).toBeFalse();
+    expect(form.controls.leakTemperature.valid).toBeFalse();
     expect(form.valid).toBeFalse();
   });
 
-  it('buildPlumeForm accepts steamTemperature at the maxSteamTemp boundary', () => {
+  it('buildPlumeForm accepts leakTemperature at the maxSteamTemp boundary', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.plumeMethodData.steamTemperature = 400;
+    leak.plumeMethodData.leakTemperature = 400;
 
     const form = service.buildPlumeForm(leak, undefined, 400);
 
-    expect(form.controls.steamTemperature.valid).toBeTrue();
+    expect(form.controls.leakTemperature.valid).toBeTrue();
   });
 
   it('buildPlumeForm has no upper temperature bound when maxSteamTemp is not provided', () => {
     const leak = service.getEmptySteamLeakData();
-    leak.plumeMethodData.steamTemperature = 600;
+    leak.plumeMethodData.leakTemperature = 600;
 
     const form = service.buildPlumeForm(leak);
 
-    expect(form.controls.steamTemperature.valid).toBeTrue();
+    expect(form.controls.leakTemperature.valid).toBeTrue();
   });
 
   // ─── buildFacilitySteamLeakForm ───────────────────────────────────────────────

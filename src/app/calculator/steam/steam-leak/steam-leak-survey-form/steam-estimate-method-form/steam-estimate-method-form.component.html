@@ -1,41 +1,41 @@
 <form [formGroup]="form()">
   <div class="form-group">
-    <label for="steam-steamPressure-estimate">Header Pressure</label>
+    <label for="steam-leakPressure-estimate">Header Pressure</label>
     <div class="input-group">
-      <input name="steamPressure" class="form-control" type="number" step="any"
-        formControlName="steamPressure" id="steam-steamPressure-estimate" onfocus="this.select();"
-        (focus)="fieldFocused.emit('steamPressure')">
+      <input name="leakPressure" class="form-control" type="number" step="any"
+        formControlName="leakPressure" id="steam-leakPressure-estimate" onfocus="this.select();"
+        (focus)="fieldFocused.emit('leakPressure')">
       @if (settings().unitsOfMeasure !== 'Metric') {
         <span class="input-group-addon units">psig</span>
       } @else {
         <span class="input-group-addon units">kPa</span>
       }
-      @if (form().controls.steamPressure.invalid && !form().controls.steamPressure.pristine) {
+      @if (form().controls.leakPressure.invalid && !form().controls.leakPressure.pristine) {
         <span class="alert-danger pull-right small">
-          @if (form().controls.steamPressure.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.steamPressure.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamPressure.errors?.['min']?.min}}.</span> }
-          @if (form().controls.steamPressure.errors?.['max']) { <span>Value can't be greater than {{ form().controls.steamPressure.errors?.['max']?.max}}.</span> }
+          @if (form().controls.leakPressure.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.leakPressure.errors?.['min']) { <span>Value can't be less than {{ form().controls.leakPressure.errors?.['min']?.min}}.</span> }
+          @if (form().controls.leakPressure.errors?.['max']) { <span>Value can't be greater than {{ form().controls.leakPressure.errors?.['max']?.max}}.</span> }
         </span>
       }
     </div>
   </div>
 
   <div class="form-group">
-    <label for="steam-steamTemperature-estimate">Header Temperature</label>
+    <label for="steam-leakTemperature-estimate">Header Temperature</label>
     <div class="input-group">
-      <input name="steamTemperature" class="form-control" type="number" step="any"
-        formControlName="steamTemperature" id="steam-steamTemperature-estimate" onfocus="this.select();"
-        (focus)="fieldFocused.emit('steamTemperature')">
+      <input name="leakTemperature" class="form-control" type="number" step="any"
+        formControlName="leakTemperature" id="steam-leakTemperature-estimate" onfocus="this.select();"
+        (focus)="fieldFocused.emit('leakTemperature')">
       @if (settings().unitsOfMeasure !== 'Metric') {
         <span class="input-group-addon units">&#8457;</span>
       } @else {
         <span class="input-group-addon units">&#8451;</span>
       }
-      @if (form().controls.steamTemperature.invalid && !form().controls.steamTemperature.pristine) {
+      @if (form().controls.leakTemperature.invalid && !form().controls.leakTemperature.pristine) {
         <span class="alert-danger pull-right small">
-          @if (form().controls.steamTemperature.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.steamTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.steamTemperature.errors?.['min']?.min }}.</span> }
-          @if (form().controls.steamTemperature.errors?.['max']) { <span>Value can't exceed the facility steam temperature ({{ form().controls.steamTemperature.errors?.['max']?.max }}).</span> }
+          @if (form().controls.leakTemperature.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.leakTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.leakTemperature.errors?.['min']?.min }}.</span> }
+          @if (form().controls.leakTemperature.errors?.['max']) { <span>Value can't exceed the facility steam temperature ({{ form().controls.leakTemperature.errors?.['max']?.max }}).</span> }
         </span>
       }
     </div>
