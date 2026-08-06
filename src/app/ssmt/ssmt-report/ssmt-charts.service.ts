@@ -4,6 +4,7 @@ import { Settings } from '../../shared/models/settings';
 import { SSMT } from '../../shared/models/steam/ssmt';
 import { SSMTLosses, SSMTOutput } from '../../shared/models/steam/steam-outputs';
 import { formatNumber, renderSankeyToImage } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { CHART_LABEL_FONT_SIZE, CHART_TITLE_FONT_SIZE } from '../../shared/report-builder/adapters/report-chart-style.constants';
 import { ReportGraphsService } from './report-graphs/report-graphs.service';
 import { graphColors } from '../../shared/graphColors';
 
@@ -118,7 +119,7 @@ export class SsmtChartsService {
 
     return {
       traces,
-      layout: { font: { size: 14 }, showlegend: false, margin: { t: 30, b: 10, l: 20, r: 20 }, annotations },
+      layout: { font: { size: CHART_LABEL_FONT_SIZE }, showlegend: false, margin: { t: 30, b: 10, l: 20, r: 20 }, annotations },
     };
   }
 
@@ -140,7 +141,7 @@ export class SsmtChartsService {
     const traces: Record<string, unknown>[] = [];
     const annotations: Record<string, unknown>[] = [];
     const layout: Record<string, unknown> = {
-      barmode: 'stack', showlegend: false, font: { size: 12 },
+      barmode: 'stack', showlegend: false, font: { size: CHART_TITLE_FONT_SIZE },
       grid: { rows: rows.length, columns: 1, pattern: 'independent', roworder: 'top to bottom' },
       margin: { t: 30, b: 40, r: 50, l: 150 }, clickmode: 'none', dragmode: false,
     };

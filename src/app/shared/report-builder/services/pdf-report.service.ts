@@ -24,8 +24,8 @@ const CONTENT_WIDTH_MM = PAGE_WIDTH_MM - PAGE_MARGIN_MM * 2;
 /** Vertical gap added after each rendered section */
 const SECTION_GAP_MM = 8;
 
-const SECTION_HEADING_FONT_SIZE = 11;
-const BODY_FONT_SIZE = 9;
+const SECTION_HEADING_FONT_SIZE = 14;
+const BODY_FONT_SIZE = 10;
 
 @Injectable({ providedIn: 'root' })
 export class PdfReportService extends BaseReportService {

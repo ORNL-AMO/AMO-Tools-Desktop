@@ -140,7 +140,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         headers: ['', ...LOAD_LABELS, 'Total'],
         rows,
         subGroupHeaderIndices,
-        pageBreakBefore: true,
+        pageBreakBefore: sections.length === 0,
         group: ROUTE_TOKENS.systemProfile,
       };
       sections.push(section);

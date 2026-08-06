@@ -15,6 +15,7 @@ import { CompressedAirSankeyResults, PowerSankeyService } from '../compressed-ai
 import { AirFlowSankeyResults, AirflowSankeyService } from '../compressed-air-sankey/airflow-sankey/airflow-sankey.service';
 import { AirPropertiesCsvService } from '../../shared/helper-services/air-properties-csv.service';
 import { formatNumber, renderSankeyToImage } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { CHART_TITLE_FONT_SIZE } from '../../shared/report-builder/adapters/report-chart-style.constants';
 
 export interface CompressedAirChartConfig {
   traces: Array<Record<string, unknown>>;
@@ -198,8 +199,8 @@ export class CompressedAirChartsService {
     return {
       traces,
       layout: {
-        xaxis: { range: [0, 105], ticksuffix: '%', title: { text: 'Airflow (% Capacity)', font: { size: 16 } }, automargin: true },
-        yaxis: { range: [0, 105], ticksuffix: '%', title: { text: 'Power (% Full Load)', font: { size: 16 } }, hoverformat: ',.2f' },
+        xaxis: { range: [0, 105], ticksuffix: '%', title: { text: 'Airflow (% Capacity)', font: { size: CHART_TITLE_FONT_SIZE } }, automargin: true },
+        yaxis: { range: [0, 105], ticksuffix: '%', title: { text: 'Power (% Full Load)', font: { size: CHART_TITLE_FONT_SIZE } }, hoverformat: ',.2f' },
         margin: { t: 20, r: 20 },
         legend: { orientation: 'h', y: 1.5 },
       },
@@ -350,8 +351,8 @@ export class CompressedAirChartsService {
     return {
       traces,
       layout: {
-        xaxis: { title: { text: `Airflow (${airflowUnit})`, font: { size: 16 } }, automargin: true },
-        yaxis: { title: { text: `Pressure (${pressureUnit})`, font: { size: 16 } }, hoverformat: ',.2f' },
+        xaxis: { title: { text: `Airflow (${airflowUnit})`, font: { size: CHART_TITLE_FONT_SIZE } }, automargin: true },
+        yaxis: { title: { text: `Pressure (${pressureUnit})`, font: { size: CHART_TITLE_FONT_SIZE } }, hoverformat: ',.2f' },
         margin: { t: 20, r: 20 },
         showlegend: true,
         legend: { orientation: 'h', y: 1.5 },

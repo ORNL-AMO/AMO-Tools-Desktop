@@ -4,6 +4,7 @@ import { TraceData } from '../../shared/models/plotting';
 import { graphColors } from '../../shared/graphColors';
 import { defaultPlotlyConfig } from '../../shared/helperFunctions';
 import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { CHART_TITLE_FONT_SIZE } from '../../shared/report-builder/adapters/report-chart-style.constants';
 
 export interface PlotlyChartConfig {
   traces: TraceData[];
@@ -93,14 +94,14 @@ export class ProcessCoolingChartsService {
 
     const layout = {
       xaxis: {
-        title: { text: '% Load', font: { size: 16 } },
+        title: { text: '% Load', font: { size: CHART_TITLE_FONT_SIZE } },
         range: [0, 100],
         dtick: 10,
         ticksuffix: '%',
         automargin: true
       },
       yaxis: {
-        title: { text: `Efficiency (${efficiencyLabel})`, font: { size: 16 } },
+        title: { text: `Efficiency (${efficiencyLabel})`, font: { size: CHART_TITLE_FONT_SIZE } },
         rangemode: 'tozero',
         hoverformat: tickformat,
         automargin: true,
@@ -112,7 +113,7 @@ export class ProcessCoolingChartsService {
       legend: {
         orientation: 'h', y: 1.15,
         font: {
-          size: 14
+          size: CHART_TITLE_FONT_SIZE
         }
       },
       showlegend: true,

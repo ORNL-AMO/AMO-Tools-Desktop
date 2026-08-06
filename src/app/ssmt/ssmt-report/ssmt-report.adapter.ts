@@ -510,6 +510,9 @@ export class SsmtReportAdapter implements ReportDataAdapter {
       ...this.buildHeaderSections(baseline, modBundles, settings),
       ...this.buildTurbineSections(baseline, modBundles, settings),
     ];
+    // Each sub-builder defaults pageBreakBefore to true so it reads correctly on its own — only the
+    // group's actual first section should force a page break, so strip it from the rest here.
+    sections.forEach((section, i) => { if (i > 0) section.pageBreakBefore = false; });
     return sections;
   }
 

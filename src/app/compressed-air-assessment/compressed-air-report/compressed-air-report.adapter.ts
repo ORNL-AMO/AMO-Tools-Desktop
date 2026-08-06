@@ -225,7 +225,7 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
       return row;
     };
 
-    return combinedDayTypeResults.map(r => {
+    return combinedDayTypeResults.map((r, i) => {
       const rows: string[][] = [
         eemRow('Flow Reallocation', r.combinedResults.flowReallocationSavings, { alwaysShowPayback: true }),
         eemRow('Replace Compressors', r.combinedResults.replaceCompressorsSavings, { salvageValue: r.combinedResults.replaceCompressorsSavings.salvageValue, alwaysShowPayback: true }),
@@ -264,7 +264,7 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
         headers,
         rows,
         emphasisRowsIndices: [rows.length - 1],
-        pageBreakBefore: true,
+        pageBreakBefore: i === 0,
       };
     });
   }
@@ -349,6 +349,7 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
       type: 'summary-table',
       title: `${variantName} Compressor Summary`,
       group: 'performanceProfile',
+      pageBreakBefore: true,
       headers,
       rows,
     };
@@ -525,10 +526,10 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
       imageDataProvider: () => renderPlotlyChart(this.chartRenderService, energyChart),
     });
 
-    compressedAirAssessment.compressedAirDayTypes.forEach((dayType, i) => {
+    compressedAirAssessment.compressedAirDayTypes.forEach(dayType => {
       const airflowChart = this.compressedAirChartsService.buildAirflowSavingsChart(dayType, baselineResults, assessmentResults, settings);
       sections.push({
-        type: 'chart', title: `Airflow Savings — ${dayType.name}`, group: 'graphs', pageBreakBefore: i === 0,
+        type: 'chart', title: `Airflow Savings — ${dayType.name}`, group: 'graphs',
         imageDataProvider: () => renderPlotlyChart(this.chartRenderService, airflowChart),
       });
     });
@@ -550,6 +551,9 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     const endUseSection = this.buildEndUseSection(compressedAirAssessment, settings);
     if (endUseSection) sections.push(endUseSection);
 
+    // Each sub-builder defaults pageBreakBefore to true so it reads correctly on its own — only the
+    // group's actual first section should force a page break, so strip it from the rest here.
+    sections.forEach((section, i) => { if (i > 0) section.pageBreakBefore = false; });
     return sections;
   }
 

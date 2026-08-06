@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
 import { appendSubGroup, buildFacilityInfoSections, buildSummaryRow, findRowIndices, formatNumber, renderPlotlyChart } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { CHART_TITLE_FONT_SIZE } from '../../shared/report-builder/adapters/report-chart-style.constants';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
@@ -315,7 +316,7 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
       type: 'chart',
       title: 'Energy Usage',
       group: 'graphs',
-      pageBreakBefore: true,
+      pageBreakBefore: analysisGraphItems.length === 0,
       imageDataProvider: () => this.renderEnergyBarChart('energyUse', baseline, modificationsResultsArr, settings),
     });
     sections.push({
@@ -338,7 +339,7 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
       title: { text: item.title },
       showlegend: true,
       legend: { orientation: 'h' },
-      font: { size: 12 },
+      font: { size: CHART_TITLE_FONT_SIZE },
       yaxis: { title: { text: unitSuffix } },
       xaxis: { title: { text: xTitle } },
       margin: { t: 60, b: 60, l: 60, r: 30 },
@@ -373,6 +374,7 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
 
     const layout = {
       title: { text: isCost ? 'Energy Cost' : 'Energy Usage' },
+      font: { size: CHART_TITLE_FONT_SIZE },
       yaxis: { title: { text: isCost ? `${settings.currency}/yr` : 'MWh/yr' } },
       margin: { t: 60, b: 60, l: 70, r: 30 },
       paper_bgcolor: 'white',

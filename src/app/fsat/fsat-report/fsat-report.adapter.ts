@@ -176,7 +176,10 @@ export class FsatReportAdapter implements ReportDataAdapter {
 
     variants.forEach(v => {
       const planeSection = this.buildPlaneDataSection(v.fsat, v.name, settings);
-      if (planeSection) sections.push(planeSection);
+      if (planeSection) {
+        if (sections.length > 0) planeSection.pageBreakBefore = false;
+        sections.push(planeSection);
+      }
     });
 
     return sections;

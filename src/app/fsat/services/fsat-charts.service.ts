@@ -7,6 +7,9 @@ import { Settings } from '../../shared/models/settings';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { TraceData } from '../../shared/models/plotting';
 import { renderSankeyToImage } from '../../shared/report-builder/adapters/report-adapter.utils';
+import {
+  CHART_LABEL_FONT_SIZE, CHART_TITLE_FONT_FAMILY, CHART_TITLE_FONT_SIZE, getSideBySidePieDomain, SIDE_BY_SIDE_PIE_MARGIN,
+} from '../../shared/report-builder/adapters/report-chart-style.constants';
 
 export interface SankeyLayout {
   autosize: boolean;
@@ -82,14 +85,15 @@ export class FsatChartsService {
         values: [d.motorLoss, d.driveLoss, d.fanLoss, d.usefulOutput],
         labels: PIE_LABELS,
         type: 'pie', name: d.name,
-        title: { text: d.name, font: { size: 14 } },
-        domain: { x: [i === 0 ? 0 : 0.52, i === 0 ? 0.48 : 1], y: [0.05, 0.95] },
+        title: { text: d.name, font: { size: CHART_TITLE_FONT_SIZE } },
+        domain: getSideBySidePieDomain(i),
         marker: { colors: PIE_COLORS },
         textinfo: 'label+percent',
+        textfont: { size: CHART_LABEL_FONT_SIZE },
         direction: 'clockwise', rotation: 90,
         hovertemplate: '%{value:.2f} kW<extra></extra>',
       })),
-      layout: { showlegend: false, margin: { t: 60, b: 20, l: 20, r: 20 }, paper_bgcolor: 'white' },
+      layout: { showlegend: false, margin: SIDE_BY_SIDE_PIE_MARGIN, paper_bgcolor: 'white' },
     };
   }
 
@@ -105,8 +109,8 @@ export class FsatChartsService {
       })),
       layout: {
         barmode: 'group', showlegend: true,
-        legend: { orientation: 'h' }, font: { size: 14 },
-        yaxis: { title: { text: 'Power (kW)', font: { family: 'Roboto', size: 14 } }, hoverformat: '.3r' },
+        legend: { orientation: 'h' }, font: { size: CHART_TITLE_FONT_SIZE },
+        yaxis: { title: { text: 'Power (kW)', font: { family: CHART_TITLE_FONT_FAMILY, size: CHART_TITLE_FONT_SIZE } }, hoverformat: '.3r' },
         margin: { t: 30, b: 80, l: 80, r: 30 }, paper_bgcolor: 'white',
       },
     };
@@ -170,7 +174,7 @@ export class FsatChartsService {
       orientation: 'h',
       valuesuffix: '%',
       arrangement: 'freeform',
-      textfont: { color: 'rgba(0, 0, 0)', size: 14 },
+      textfont: { color: 'rgba(0, 0, 0)', size: 18 },
       ids: nodes.map(n => n.id),
       node: {
         pad: 50,
@@ -181,7 +185,7 @@ export class FsatChartsService {
         color: nodes.map(n => n.nodeColor),
         customdata: nodes.map(n => `${this.decimalPipe.transform(n.loss, '1.0-0')} kW`),
         hovertemplate: '%{customdata}',
-        hoverlabel: { font: { size: 14, color: 'rgba(255, 255, 255)' }, align: 'auto' },
+        hoverlabel: { font: { size: 18, color: 'rgba(255, 255, 255)' }, align: 'auto' },
       },
       link: {
         value: nodes.map(n => n.value),
