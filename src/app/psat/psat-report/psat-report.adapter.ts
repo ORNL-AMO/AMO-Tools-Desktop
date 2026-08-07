@@ -6,12 +6,11 @@ import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/rep
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
-import { Modification, PSAT, PsatOutputs } from '../../shared/models/psat';
+import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { PsatService } from '../psat.service';
 import { PsatChartsService } from '../services/psat-charts.service';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
-import { getModulePaybackPeriod } from '../../shared/payback-period.utils';
 
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -141,7 +140,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
 
     const modLoadedPct = mods.map(m => fmtNum(loadedPct(m.psat?.outputs), 1));
     const modImplementationCosts = mods.map(m => fmtNum(m.psat?.inputs?.implementationCosts, 0));
-    const modPayback = mods.map(m => this.calcPayback(out, m));
+    const modPayback = mods.map(m => fmtNum(m.psat?.outputs?.paybackPeriod, 1));
 
     const rows: string[][] = [
       // pump & motor performance
@@ -192,10 +191,6 @@ export class PsatReportAdapter implements ReportDataAdapter {
       emphasisRowsIndices: [11, 12, 13, 14],
       pageBreakBefore: true,
     }];
-  }
-
-  private calcPayback(baselineOut: PsatOutputs, mod: Modification): string {
-    return formatNumber(getModulePaybackPeriod(baselineOut?.annual_cost, mod.psat?.outputs?.annual_cost, mod.psat?.inputs?.implementationCosts), 1);
   }
 
   private buildInputSummarySections(psat: PSAT, settings: Settings, modNames: string[]): SummaryTableSection[] {

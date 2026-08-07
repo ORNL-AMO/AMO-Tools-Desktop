@@ -7,7 +7,7 @@ import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/rep
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
-import { WasteWater, WasteWaterData, WasteWaterResults } from '../../shared/models/waste-water';
+import { WasteWater, WasteWaterResults } from '../../shared/models/waste-water';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FeatureFlagService } from '../../shared/feature-flag.service';
 import { AnalysisGraphItem, WasteWaterAnalysisService } from '../waste-water-analysis/waste-water-analysis.service';
@@ -16,7 +16,6 @@ import { aeratorTypes } from '../waste-water-defaults';
 import { graphColors } from '../../shared/graphColors';
 import { TraceData } from '../../shared/models/plotting';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
-import { getWasteWaterPaybackPeriod } from '../../shared/payback-period.utils';
 
 export const WASTE_WATER_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -164,7 +163,7 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
       [`Aeration Cost (${settings.currency}/yr)`, fmt(baseline?.AeCost, 0), ...modCols('AeCost', 0)],
       [`Cost Savings (${settings.currency}/yr)`, '—', ...mods.map(m => fmt(m.outputs?.costSavings, 0))],
       ['Implementation Cost', '—', ...mods.map(m => fmt(m.operations?.implementationCosts, 0))],
-      ['Payback Period (months)', '—', ...mods.map(m => this.calcPayback(baseline, m))],
+      ['Payback Period (months)', '—', ...mods.map(m => fmt(m.outputs?.paybackPeriod, 1))],
     );
 
     addGroup('Aerator', aeratorRows);
@@ -186,14 +185,6 @@ export class WasteWaterReportAdapter implements ReportDataAdapter {
       emphasisRowsIndices,
       pageBreakBefore: true,
     }];
-  }
-
-  private findRowIndices(rows: string[][], labels: string[]): number[] {
-    return labels.map(label => rows.findIndex(r => r[0] === label)).filter(i => i !== -1);
-  }
-
-  private calcPayback(baseline: WasteWaterResults, mod: WasteWaterData): string {
-    return formatNumber(getWasteWaterPaybackPeriod(baseline, mod), 1);
   }
 
   private buildInputSummarySections(wasteWater: WasteWater, settings: Settings, modNames: string[]): SummaryTableSection[] {

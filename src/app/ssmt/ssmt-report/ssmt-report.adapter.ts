@@ -20,7 +20,6 @@ import { CompareService } from '../compare.service';
 import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../../indexedDb/flue-gas-material-db.service';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
-import { getSsmtPaybackPeriod } from '../../shared/payback-period.utils';
 import { SsmtChartsService } from './ssmt-charts.service';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
 
@@ -90,11 +89,6 @@ export class SsmtReportAdapter implements ReportDataAdapter {
     });
   }
 
-  // ---------------------------------------------------------------------------------
-  // Calculation pipeline — mirrors ssmt-report.component.ts's ngOnInit exactly, since the
-  // adapter only receives the Assessment and can't read that component's own fields.
-  // ---------------------------------------------------------------------------------
-
   private computeBaseline(ssmt: SSMT, settings: Settings): BaselineBundle {
     ssmt.valid = this.ssmtService.checkValid(ssmt, settings);
     const resultData = this.ssmtService.calculateBaselineModel(ssmt, settings);
@@ -113,6 +107,8 @@ export class SsmtReportAdapter implements ReportDataAdapter {
         return { modification, outputData: undefined, inputData: resultData.inputData, losses: undefined, valid: modification.ssmt.valid };
       }
       const outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData, settings, baselineOutput);
+      outputData.paybackPeriod = this.ssmtService.getPaybackPeriod(
+        outputData.operationsOutput.totalOperatingCost, baselineOutput.operationsOutput.totalOperatingCost, modification.ssmt.operatingCosts?.implementationCosts);
       modification.ssmt.outputData = outputData;
       const losses = this.calculateLossesService.calculateLosses(outputData, resultData.inputData, settings, modification.ssmt);
       return { modification, outputData, inputData: resultData.inputData, losses, valid: modification.ssmt.valid };
@@ -129,18 +125,9 @@ export class SsmtReportAdapter implements ReportDataAdapter {
     return outputData;
   }
 
-  /**
-   * Mirrors SettingsLabelPipe.transform, minus the Angular pipe wrapper — except for temperature
-   * units, where the pipe's ℉/℃/K ligature symbols (Unicode 2100-214F block) fall outside jsPDF's
-   * core-font WinAnsi/Latin-1 charset and corrupt the whole cell's text run when embedded. PSAT's
-   * adapter sidesteps this entirely by interpolating the raw unit code with no symbol
-   * (`Fluid Temperature (F)`); matching that here instead of trying to render the symbol.
-   */
   private steamUnitLabel(value: string | undefined, per?: string): string {
     if (!value) return '';
     if (value === 'F' || value === 'C' || value === 'K') return value;
-    // "H₂O" (mm/m H2O pressure units) is the only other non-WinAnsi character across all unit
-    // definitions — normalize the subscript back to a plain "2" for the same reason as above.
     let display = this.convertUnitsService.getUnit(value).unit.name.display.replace('(', '').replace(')', '').replace(/₂/g, '2');
     if (per && value !== 'kWh') display += per;
     return display;
@@ -149,10 +136,6 @@ export class SsmtReportAdapter implements ReportDataAdapter {
   private validCell<T>(m: ModBundle, selector: (o: SSMTOutput) => T): T | undefined {
     return (m.valid.isValid && m.outputData?.boilerOutput) ? selector(m.outputData) : undefined;
   }
-
-  // ---------------------------------------------------------------------------------
-  // Executive Summary
-  // ---------------------------------------------------------------------------------
 
   private buildExecutiveSummarySections(ssmt: SSMT, baseline: BaselineBundle, modBundles: ModBundle[], settings: Settings): SummaryTableSection[] {
     if (modBundles.length === 0) return [];
@@ -195,12 +178,7 @@ export class SsmtReportAdapter implements ReportDataAdapter {
         return val != null ? fmt(baselineCost - val) : '—';
       })],
       ['Implementation Cost', '—', ...modBundles.map(m => fmt(m.modification.ssmt.operatingCosts?.implementationCosts))],
-      ['Simple Payback Period (months)', '—', ...modBundles.map(m => {
-        const implementationCost = m.modification.ssmt.operatingCosts?.implementationCosts;
-        if (!implementationCost) return '—';
-        const modCost = this.validCell(m, o => o.operationsOutput.totalOperatingCost);
-        return modCost != null ? fmt(getSsmtPaybackPeriod(modCost, baselineCost, implementationCost)) : '—';
-      })],
+      ['Simple Payback Period (months)', '—', ...modBundles.map(m => fmt(this.validCell(m, o => o.paybackPeriod)))],
       ['Selected Energy Projects', '—', ...modBundles.map(m => this.getSelectedEnergyProjects(m.modification))],
       ['Modifications', '—', ...modBundles.map(m => {
         const list = this.getModificationsMadeList(ssmt, m.modification.ssmt);
@@ -242,10 +220,6 @@ export class SsmtReportAdapter implements ReportDataAdapter {
     if (this.compareService.checkTurbinesDifferent(baselineSsmt, modifiedSsmt)) list.push('Turbine');
     return list;
   }
-
-  // ---------------------------------------------------------------------------------
-  // Energy Summary
-  // ---------------------------------------------------------------------------------
 
   private buildEnergySummarySections(ssmt: SSMT, baseline: BaselineBundle, modBundles: ModBundle[], settings: Settings): SummaryTableSection[] {
     if (modBundles.length === 0) return [];
@@ -317,10 +291,6 @@ export class SsmtReportAdapter implements ReportDataAdapter {
       pageBreakBefore: true,
     }];
   }
-
-  // ---------------------------------------------------------------------------------
-  // Losses
-  // ---------------------------------------------------------------------------------
 
   private buildLossesSections(ssmt: SSMT, baseline: BaselineBundle, modBundles: ModBundle[], settings: Settings): SummaryTableSection[] {
     if (modBundles.length === 0) return [];
@@ -413,19 +383,6 @@ export class SsmtReportAdapter implements ReportDataAdapter {
     }];
   }
 
-  // ---------------------------------------------------------------------------------
-  // Report Graphs
-  // ---------------------------------------------------------------------------------
-
-  /**
-   * Ported from the legacy print system's ReportGraphsPrintComponent layout: one "Scenario: {mod}"
-   * page per valid modification, pairing Baseline's Process Usage/Generation pies against that
-   * modification's (2x2 grid), plus a separate page stacking Baseline's Energy Usage waterfall
-   * above the modification's. Falls back to the print component's zero-modification layout
-   * (Process Usage next to Generation, single waterfall) when there are no valid modifications.
-   * xAxisRange mirrors ReportGraphsComponent.setWaterfallXAxis(): shared across every waterfall so
-   * they're visually comparable, not independently scaled per variant.
-   */
   private buildReportGraphsSections(ssmt: SSMT, baseline: BaselineBundle, modBundles: ModBundle[], settings: Settings): ChartSection[] {
     const validMods = modBundles.filter((m): m is ModBundle & { losses: SSMTLosses; outputData: SSMTOutput } => m.valid.isValid && !!m.losses && !!m.outputData);
     const xAxisRange = Math.max(
@@ -462,11 +419,7 @@ export class SsmtReportAdapter implements ReportDataAdapter {
     return sections;
   }
 
-  // ---------------------------------------------------------------------------------
-  // Report Sankey
-  // ---------------------------------------------------------------------------------
 
-  /** Baseline + one per valid modification — invalid modifications have no losses/outputData to build a sankey from. */
   private buildSankeySections(baseline: BaselineBundle, modBundles: ModBundle[], settings: Settings): ChartSection[] {
     const sections: ChartSection[] = [{
       type: 'chart',
@@ -499,10 +452,6 @@ export class SsmtReportAdapter implements ReportDataAdapter {
     return sections;
   }
 
-  // ---------------------------------------------------------------------------------
-  // Input Summary
-  // ---------------------------------------------------------------------------------
-
   private buildInputSummarySections(baseline: BaselineBundle, modBundles: ModBundle[], settings: Settings): SummaryTableSection[] {
     const sections: SummaryTableSection[] = [
       this.buildOperationsSection(baseline, modBundles, settings),
@@ -510,8 +459,6 @@ export class SsmtReportAdapter implements ReportDataAdapter {
       ...this.buildHeaderSections(baseline, modBundles, settings),
       ...this.buildTurbineSections(baseline, modBundles, settings),
     ];
-    // Each sub-builder defaults pageBreakBefore to true so it reads correctly on its own — only the
-    // group's actual first section should force a page break, so strip it from the rest here.
     sections.forEach((section, i) => { if (i > 0) section.pageBreakBefore = false; });
     return sections;
   }

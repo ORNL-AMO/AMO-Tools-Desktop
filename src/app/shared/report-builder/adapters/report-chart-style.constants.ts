@@ -1,8 +1,5 @@
 /**
- * Shared Plotly text styling for charts rendered into exported PDF reports (pie, bar, and sankey
- * traces built by each module's report-adapter/charts-service). Single source of truth — change a
- * value here to restyle every module's report charts at once, instead of hunting down each
- * module's own hardcoded `font: { size: N }`.
+ * Shared Plotly text styling for charts.
  */
 
 /** "Chrome" tier: axis titles, legends, pie-group titles, and any chart-wide `layout.font` fallback. */

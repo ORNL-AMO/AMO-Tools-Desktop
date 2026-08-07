@@ -72,6 +72,8 @@ export class SsmtReportComponent implements OnInit {
               let resultData: { inputData: SSMTInputs, outputData: SSMTOutput } = this.ssmtService.calculateModificationModel(modification.ssmt, this.settings, this.baselineOutput);
               if (modification.ssmt.valid.isValid) {
                 resultData.outputData = this.calculateResultsWithMarginalCosts(modification.ssmt, resultData.outputData, this.baselineOutput);
+                resultData.outputData.paybackPeriod = this.ssmtService.getPaybackPeriod(
+                  resultData.outputData.operationsOutput.totalOperatingCost, this.baselineOutput.operationsOutput.totalOperatingCost, modification.ssmt.operatingCosts?.implementationCosts);
                 modification.ssmt.outputData = resultData.outputData;
                 this.modificationOutputs.push({ name: modification.ssmt.name, outputData: resultData.outputData, valid: modification.ssmt.valid });
                 this.modificationInputData.push({ name: modification.ssmt.name, inputData: resultData.inputData, valid: modification.ssmt.valid });

@@ -14,11 +14,7 @@ export interface EemDescriptor {
 /**
  * Canonical list of the 9 compressed-air EEMs (energy efficiency measures), each with its
  * `DayTypeModificationResult` savings field and its `Modification` "is this EEM active" field.
- * Shared across chart building, Payback Details, and Executive Summary — each section applies
- * its own gating rule (they genuinely differ: charts/executive-summary gate the last 7 on
- * `modification[modificationKey].order != 100`, payback details gates on `savings.cost` truthy,
- * and Flow Reallocation/Replace Compressors are gated differently again per section) so this
- * list only centralizes the label/key pairing, not the gating logic itself.
+ * Shared across chart building, Payback Details, and Executive Summary.
  */
 export const COMPRESSED_AIR_EEMS: EemDescriptor[] = [
   { label: 'Flow Reallocation', savingsKey: 'flowReallocationSavings', modificationKey: 'flowReallocation' },

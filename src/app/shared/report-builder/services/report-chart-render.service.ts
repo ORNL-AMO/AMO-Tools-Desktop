@@ -7,11 +7,6 @@ export interface ReportChartRenderOptions {
   height?: number;
 }
 
-/**
- * Renders a Plotly chart off-screen and rasterizes it to a JPEG data URL, for embedding
- * in generated PDF reports. Shared across every module's report adapter (PSAT, waste water,
- * process cooling, ...) so the off-screen DOM lifecycle only exists in one place.
- */
 @Injectable({ providedIn: 'root' })
 export class ReportChartRenderService {
   private readonly plotlyService = inject(PlotlyService);

@@ -39,32 +39,11 @@ interface SsmtSankeyChartData {
   blueLinkPaths: number[];
   orangeLinkPaths: number[];
 }
-
-/**
- * Ported from shared/ssmt-sankey/ssmt-sankey.component.ts — that component recomputes the whole
- * baseline/modification model itself to get losses/outputData; this service instead takes the
- * already-computed SSMTLosses/SSMTOutput from SsmtReportAdapter's BaselineBundle/ModBundle.
- * providedIn: 'root' — no module-scoped dependencies (unlike compressed air's chart service).
- */
 @Injectable({ providedIn: 'root' })
 export class SsmtChartsService {
   private readonly plotlyService = inject(PlotlyService);
   private readonly reportGraphsService = inject(ReportGraphsService);
 
-  // ---------------------------------------------------------------------------------
-  // Report Graphs (process usage / power generation pie charts, energy waterfall)
-  //
-  // Ported from the legacy print system's ReportGraphsPrintComponent, which laid out each
-  // modification as a "Scenario: {name}" page — Baseline's Process Usage/Generation pies in a
-  // left column next to that modification's pies in a right column, then Baseline's Energy Usage
-  // waterfall stacked above that modification's waterfall. The new PDF renderer places one image
-  // per section (always full width, always stacked vertically) rather than a CSS column layout,
-  // so each "page" here is built as a single composite Plotly figure (multiple pies on one figure
-  // via domain positioning; two waterfalls on one figure via a 2-row grid) instead of separate
-  // side-by-side images.
-  // ---------------------------------------------------------------------------------
-
-  /** No modifications: Process Usage pie next to Generation pie (matches the print component's zero-modification fallback). */
   buildBaselineOnlyPieChart(ssmt: SSMT, settings: Settings): SsmtChartConfig {
     const processData = this.reportGraphsService.getProcessUsageValuesAndLabels(ssmt);
     const genData = this.reportGraphsService.getGenerationValuesAndLabels(ssmt);
@@ -74,7 +53,6 @@ export class SsmtChartsService {
     ]);
   }
 
-  /** Has a modification: 2x2 grid — baseline/mod Process Usage on top, baseline/mod Generation below. */
   buildScenarioPieChart(baselineSsmt: SSMT, modSsmt: SSMT, baselineLabel: string, modLabel: string, settings: Settings): SsmtChartConfig {
     const processUnit = `${settings.steamEnergyMeasurement}/hr`;
     const powerUnit = settings.steamPowerMeasurement;
@@ -123,12 +101,6 @@ export class SsmtChartsService {
     };
   }
 
-  /**
-   * Ported from SsmtWaterfallComponent.createChart(), stacked into rows of one figure when a
-   * modification is present (rows = [baseline, modification]) instead of two separate images.
-   * xAxisRange is shared across every waterfall in the report (max fuelEnergy+makeupWaterEnergy
-   * across baseline + all valid mods), matching ReportGraphsComponent.setWaterfallXAxis().
-   */
   buildScenarioWaterfallChart(
     baselineLosses: SSMTLosses, modLosses: SSMTLosses | null,
     baselineLabel: string, modLabel: string | null,
@@ -175,17 +147,12 @@ export class SsmtChartsService {
     return { traces, layout };
   }
 
-  // ---------------------------------------------------------------------------------
-  // Report Sankey
-  // ---------------------------------------------------------------------------------
-
   private getSankeyLabel(name: string, loss: number, value: number, units: string, labelStyle: string): string {
     if (labelStyle === 'both') return `${name} ${formatNumber(loss)} ${units}/hr (${formatNumber(value, 1, 1)}%)`;
     if (labelStyle === 'energy') return `${name} ${formatNumber(loss)} ${units}/hr`;
     return `${name} ${formatNumber(value, 1, 1)}%`;
   }
 
-  /** Literal port of SsmtSankeyComponent.buildNodes()/buildLinks(). */
   private buildSankeyChartData(losses: SSMTLosses, units: string, labelStyle = 'both'): SsmtSankeyChartData {
     const redLinkPaths: number[] = [];
     const blueLinkPaths: number[] = [];
@@ -201,9 +168,6 @@ export class SsmtChartsService {
       + losses.highToMediumTurbineUsefulEnergy + losses.mediumToLowTurbineUsefulEnergy;
     const processUsage = losses.highPressureProcessUsage + losses.mediumPressureProcessUsage + losses.lowPressureProcessUsage;
     const unreturnedCondensate = losses.lowPressureProcessLoss + losses.highPressureProcessLoss + losses.mediumPressureProcessLoss;
-    // NOTE: the source component has `otherLosses + this.losses.lowPressureVentLoss;` here — a no-op
-    // expression statement (missing `=`), so lowPressureVentLoss is never actually added. Ported
-    // verbatim (bug and all) to match the on-screen sankey's real, shipped behavior.
     const otherLosses = losses.highPressureHeader + losses.mediumPressureHeader + losses.lowPressureHeader
       + losses.condensateLosses + losses.deaeratorVentLoss + losses.condensateFlashTankLoss;
 
@@ -316,7 +280,6 @@ export class SsmtChartsService {
       blueLinkPaths.push(currentSourceIndex);
       currentSourceIndex++;
 
-      // No label displays for circular flows - dummy node/link, matches the source component.
       nodes.push({ id: 'returnedCondensateLabel', name: '', value: returnedCondensateValue, x: .4, y: .9, source: currentSourceIndex, target: [1], isConnector: true, nodeColor: BLUE });
       blueLinkPaths.push(currentSourceIndex);
       currentSourceIndex++;
@@ -360,7 +323,6 @@ export class SsmtChartsService {
     return { sankeyData, layout, connectingNodes, redLinkPaths, blueLinkPaths, orangeLinkPaths };
   }
 
-  /** Port of addGradientElement() + setGradient() + buildSvgArrows(), off-DOM (no Renderer2/ElementRef host). */
   private applyGradientAndArrows(
     container: Element, connectingNodes: number[], redLinkPaths: number[], blueLinkPaths: number[], orangeLinkPaths: number[],
   ): void {
@@ -419,7 +381,6 @@ export class SsmtChartsService {
     });
   }
 
-  /** Returns null (mirrors the on-screen `!hasSteamModelerError` guard) if the sankey can't be built. */
   async renderSankeyAsImage(losses: SSMTLosses | undefined, outputData: SSMTOutput | undefined, settings: Settings, labelStyle = 'both'): Promise<string | null> {
     if (!losses || !outputData || outputData.hasSteamModelerError) return null;
 

@@ -6,14 +6,13 @@ import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/rep
 import { ChartSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
-import { BaseGasDensity, FanMotor, FanSetup, FSAT, FsatOutput, Modification, Plane, PlaneResult } from '../../shared/models/fans';
+import { BaseGasDensity, FanMotor, FanSetup, FSAT, FsatOutput, Plane, PlaneResult } from '../../shared/models/fans';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { FeatureFlagService } from '../../shared/feature-flag.service';
 import { FsatChartsService } from '../services/fsat-charts.service';
 import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
 import { FanTypes, Drives } from '../fanOptions';
 import { motorEfficiencyConstants } from '../../psat/psatConstants';
-import { getModulePaybackPeriod } from '../../shared/payback-period.utils';
 
 export const FSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
@@ -79,7 +78,7 @@ export class FsatReportAdapter implements ReportDataAdapter {
       m.fsat?.whatIfScenario ? fmt((out?.co2EmissionsOutput ?? 0) - (m.fsat?.outputs?.co2EmissionsOutput ?? 0), 2) : '—'
     );
     const modImplementationCosts = mods.map(m => fmt(m.fsat?.implementationCosts, 0));
-    const modPayback = mods.map(m => this.calcPayback(out, m));
+    const modPayback = mods.map(m => fmt(m.fsat?.outputs?.paybackPeriod, 1));
 
     const rows: string[][] = [
       ['Percent Savings (%)', '—', ...modPercentSavings],
@@ -130,10 +129,6 @@ export class FsatReportAdapter implements ReportDataAdapter {
       emphasisRowsIndices,
       pageBreakBefore: true,
     }];
-  }
-
-  private calcPayback(baselineOut: FsatOutput, mod: Modification): string {
-    return formatNumber(getModulePaybackPeriod(baselineOut?.annualCost, mod.fsat?.outputs?.annualCost, mod.fsat?.implementationCosts), 1);
   }
 
   private buildReportGraphsSections(fsat: FSAT, settings: Settings): ChartSection[] {
@@ -229,7 +224,6 @@ export class FsatReportAdapter implements ReportDataAdapter {
     };
   }
 
-  /** Ported from traverse-results.component.html — only present when Method 2 (pitot traverse) plane data was used. */
   private buildPlaneDataSection(fsat: FSAT, variantName: string, settings: Settings): SummaryTableSection | null {
     const planeResults = fsat.outputs?.planeResults;
     const planeInputs = fsat.fan203InputsForPlaneResults;
@@ -447,7 +441,6 @@ export class FsatReportAdapter implements ReportDataAdapter {
     return fanSetup?.drive === 4 && fanSetup?.specifiedDriveEfficiency != null ? formatNumber(fanSetup.specifiedDriveEfficiency, 2) : '—';
   }
 
-  /** Base gas density fields are only meaningful for certain `inputType` selections — mirrors base-gas-density-summary.component.html. */
   private getGasDensityFieldDisplay(baseGasDensity: BaseGasDensity | undefined, field: 'dryBulbTemp' | 'staticPressure' | 'wetBulbTemp' | 'relativeHumidity' | 'dewPoint'): string {
     const gatingInputType: Record<typeof field, string | null> = {
       dryBulbTemp: 'custom', staticPressure: 'custom',

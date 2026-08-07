@@ -41,11 +41,8 @@ const UNLOADING_CONTROL_TYPES = [2, 3, 4, 5, 8, 10];
 const PLOTLY_MARKER_SHAPES = ['star', 'star-diamond', 'hexagram', 'star-square', 'square', 'diamond', 'cross', 'x', 'diamond-wide', 'diamond-tall'];
 
 /**
- * Not providedIn: 'root' — buildPerformanceProfileChart/buildCentrifugalGraphChart depend on
- * CompressedAirCalculationService/CompressorInventoryValidationService, which are only provided
- * within the compressed-air feature module tree, not at the app root. This service is provided
- * in CompressedAirReportModule alongside CompressedAirReportAdapter so both resolve in the same
- * injector scope.
+ * Not providedIn: 'root' This service is provided in CompressedAirReportModule 
+ * alongside CompressedAirReportAdapter so both resolve in the same injector scope.
  */
 @Injectable()
 export class CompressedAirChartsService {

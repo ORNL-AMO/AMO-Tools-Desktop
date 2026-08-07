@@ -4,7 +4,6 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
 import { WasteWater, WasteWaterData } from '../../../shared/models/waste-water';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
-import { getWasteWaterPaybackPeriod } from '../../../shared/payback-period.utils';
 
 @Component({
     selector: 'app-result-data',
@@ -47,7 +46,7 @@ export class ResultDataComponent implements OnInit {
   }
 
   getPaybackPeriod(modification: WasteWaterData): number {
-    return getWasteWaterPaybackPeriod(this.wasteWater.baselineData.outputs, modification);
+    return modification.outputs?.paybackPeriod ?? 0;
   }
 
 

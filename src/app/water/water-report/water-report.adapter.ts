@@ -81,10 +81,6 @@ export class WaterReportAdapter implements ReportDataAdapter {
     });
   }
 
-  // ---------------------------------------------------------------------------------
-  // Executive Summary
-  // ---------------------------------------------------------------------------------
-
   private buildExecutiveSummarySections(results: ExecutiveSummaryResults, water: WaterAssessment, settings: Settings): SummaryTableSection[] {
     const fmt = (v: number | undefined, dec = 2) => v != null ? formatNumber(v, dec) : '—';
     const isImperial = settings.unitsOfMeasure === 'Imperial';
@@ -118,10 +114,6 @@ export class WaterReportAdapter implements ReportDataAdapter {
 
     return [useSummary, trueCostSummary];
   }
-
-  // ---------------------------------------------------------------------------------
-  // System Annual Summary
-  // ---------------------------------------------------------------------------------
 
   private buildSystemSummarySections(plantSummary: PlantSystemSummaryResults, settings: Settings): (SummaryTableSection | ChartSection)[] {
     if (!plantSummary || plantSummary.allSystemResults.length === 0) return [];
@@ -231,10 +223,6 @@ export class WaterReportAdapter implements ReportDataAdapter {
 
     return { traces, layout };
   }
-
-  // ---------------------------------------------------------------------------------
-  // True Cost of Systems
-  // ---------------------------------------------------------------------------------
 
   private buildSystemTrueCostSections(report: SystemTrueCostData[], settings: Settings): (SummaryTableSection | ChartSection | TextSection)[] {
     if (report.length === 0) return [];

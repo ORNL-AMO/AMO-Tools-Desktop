@@ -94,10 +94,6 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     });
   }
 
-  // ---------------------------------------------------------------------------------
-  // Executive Summary
-  // ---------------------------------------------------------------------------------
-
   private buildExecutiveSummarySections(baselineResults: BaselineResults, combinedDayTypeResults: CombinedDayTypeResult[], settings: Settings): SummaryTableSection[] {
     if (combinedDayTypeResults.length === 0) return [];
 
@@ -206,9 +202,6 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     return projects.length ? projects.join(', ') : '—';
   }
 
-  // ---------------------------------------------------------------------------------
-  // Payback Details
-  // ---------------------------------------------------------------------------------
 
   private buildPaybackDetailsSections(combinedDayTypeResults: CombinedDayTypeResult[]): SummaryTableSection[] {
     if (combinedDayTypeResults.length === 0) return [];
@@ -269,9 +262,6 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     });
   }
 
-  // ---------------------------------------------------------------------------------
-  // Performance Profiles
-  // ---------------------------------------------------------------------------------
 
   private buildPerformanceProfileSections(
     compressedAirAssessment: CompressedAirAssessment,
@@ -355,21 +345,11 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     };
   }
 
-  /** Mirrors compressor-summary-table.component.html's three-way display: No Flow (non-finite), formatted number, or '—'. */
   private formatCompressorSummaryValue(value: number): string {
     if (!value) return '—';
     return isFinite(value) ? formatNumber(value, 2) : 'No Flow';
   }
 
-  // ---------------------------------------------------------------------------------
-  // Report Sankey
-  // ---------------------------------------------------------------------------------
-
-  /**
-   * Baseline-only, single day type (endUseData.endUseDayTypeSetup.selectedDayTypeId) — mirrors
-   * PowerSankeyComponent/AirflowSankeyComponent, which only ever render one day type at a time,
-   * unlike System Profiles' baseline-vs-modification-per-day-type breakdown.
-   */
   private buildSankeySections(compressedAirAssessment: CompressedAirAssessment, baselineResultsCalc: CompressedAirAssessmentBaselineResults, settings: Settings): ChartSection[] {
     if (!compressedAirAssessment.setupDone) return [];
 
@@ -409,10 +389,6 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
 
     return sections;
   }
-
-  // ---------------------------------------------------------------------------------
-  // System Profiles
-  // ---------------------------------------------------------------------------------
 
   private buildSystemProfilesSections(
     compressedAirAssessment: CompressedAirAssessment,
@@ -503,10 +479,6 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     return `${whole}:00`;
   }
 
-  // ---------------------------------------------------------------------------------
-  // Report Graphs
-  // ---------------------------------------------------------------------------------
-
   private buildReportGraphsSections(
     compressedAirAssessment: CompressedAirAssessment, baselineResults: BaselineResults,
     assessmentResults: CompressedAirAssessmentModificationResults[], combinedDayTypeResults: CombinedDayTypeResult[], settings: Settings,
@@ -537,11 +509,6 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     return sections;
   }
 
-
-  // ---------------------------------------------------------------------------------
-  // Input Summary
-  // ---------------------------------------------------------------------------------
-
   private buildInputSummarySections(compressedAirAssessment: CompressedAirAssessment, settings: Settings): SummaryTableSection[] {
     const sections: SummaryTableSection[] = [this.buildSystemInfoSection(compressedAirAssessment.systemInformation, settings)];
 
@@ -551,8 +518,6 @@ export class CompressedAirReportAdapter implements ReportDataAdapter {
     const endUseSection = this.buildEndUseSection(compressedAirAssessment, settings);
     if (endUseSection) sections.push(endUseSection);
 
-    // Each sub-builder defaults pageBreakBefore to true so it reads correctly on its own — only the
-    // group's actual first section should force a page break, so strip it from the rest here.
     sections.forEach((section, i) => { if (i > 0) section.pageBreakBefore = false; });
     return sections;
   }

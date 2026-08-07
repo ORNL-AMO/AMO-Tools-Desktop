@@ -5,7 +5,6 @@ import { Settings } from '../../../shared/models/settings';
 import { FSAT } from '../../../shared/models/fans';
 import { CompareService } from '../../compare.service';
 import { FsatReportRollupService } from '../../../report-rollup/fsat-report-rollup.service';
-import { getModulePaybackPeriod } from '../../../shared/payback-period.utils';
 
 @Component({
     selector: 'app-results-summary',
@@ -132,7 +131,7 @@ export class ResultsSummaryComponent implements OnInit {
   }
 
   getPaybackPeriod(modification: FSAT): number {
-    return getModulePaybackPeriod(this.fsat.outputs.annualCost, modification.outputs.annualCost, modification.implementationCosts);
+    return modification.outputs?.paybackPeriod ?? 0;
   }
 
   updateCopyTableString() {

@@ -132,7 +132,7 @@ export class FsatReportComponent implements OnInit {
         modification.fsat.outputs.percentSavings = this.fsatService.getSavingsPercentage(this.assessment.fsat.outputs.annualCost, modification.fsat.outputs.annualCost);
         modification.fsat.outputs.energySavings = this.assessment.fsat.outputs.annualEnergy - modification.fsat.outputs.annualEnergy;
         modification.fsat.outputs.annualSavings = this.assessment.fsat.outputs.annualCost - modification.fsat.outputs.annualCost;
-
+        modification.fsat.outputs.paybackPeriod = this.fsatService.getPaybackPeriod(modification.fsat.outputs.annualSavings, modification.fsat.implementationCosts);
       }
     }
     );

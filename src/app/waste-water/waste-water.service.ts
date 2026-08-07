@@ -115,9 +115,17 @@ export class WasteWaterService {
         
       }
       wasteWaterResults = this.convertWasteWaterService.convertResultsCosts(wasteWaterResults, settings);
+      if (baselineResults != undefined) {
+        wasteWaterResults.paybackPeriod = this.getPaybackPeriod(wasteWaterResults.costSavings, operations.implementationCosts);
+      }
       return wasteWaterResults;
     }
     return this.getEmptyResults();
+  }
+
+  getPaybackPeriod(annualCostSavings: number, implementationCosts: number): number {
+    if (!implementationCosts || (annualCostSavings ?? 0) <= 1) return 0;
+    return (implementationCosts / annualCostSavings) * 12;
   }
 
   setCo2SavingsEmissionsResult(co2SavingsData: Co2SavingsData, wasteWaterResults: WasteWaterResults, settings: Settings): WasteWaterResults {

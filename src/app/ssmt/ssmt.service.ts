@@ -384,6 +384,11 @@ export class SsmtService {
     return ((adjustedTotalOC - totalOC) + (powerGenOC - adjustedPowerGenOC)) / 100;
   }
 
+  getPaybackPeriod(modCost: number, baselineCost: number, implementationCost: number): number {
+    if (!implementationCost) return 0;
+    const paybackMonths = (implementationCost / (baselineCost - modCost)) * 12 * 1000;
+    return isNaN(paybackMonths) ? 0 : paybackMonths;
+  }
 
   checkValid(ssmt: SSMT, settings: Settings): SsmtValid {
     let isBoilerValid: boolean = this.boilerService.isBoilerValid(ssmt.boilerInput, settings);
