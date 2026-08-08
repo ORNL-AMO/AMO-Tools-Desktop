@@ -55,6 +55,7 @@ export class WaterReportAdapter implements ReportDataAdapter {
             type: 'text',
             title: 'Executive Summary',
             group: 'executiveSummary',
+            pageBreakBefore: true,
             content: 'Diagram flow data contains errors. Visit the diagram to fix issues and ensure entered flow values are valid.',
           } as TextSection,
         ],
@@ -90,6 +91,7 @@ export class WaterReportAdapter implements ReportDataAdapter {
       type: 'summary-table',
       title: 'Plant Annual Water Use and Cost Summary',
       group: 'executiveSummary',
+      pageBreakBefore: true,
       headers: ['', 'Baseline'],
       rows: [
         [`Intake (${isImperial ? 'Mgal' : 'm3'})`, fmt(results.totalSourceWaterIntake)],
@@ -139,6 +141,7 @@ export class WaterReportAdapter implements ReportDataAdapter {
       type: 'summary-table',
       title: 'System Annual Water Use and Cost Summary',
       group: 'systemSummary',
+      pageBreakBefore: true,
       headers: ['System', `Source Water Intake (${flowUnit})`, 'Direct Cost ($/yr)', `Direct Cost (${perUnitCostUnit})`,
         'True Cost ($/yr)', `True Cost (${perUnitCostUnit})`, 'True Cost/Direct Cost'],
       rows,
@@ -149,7 +152,6 @@ export class WaterReportAdapter implements ReportDataAdapter {
       type: 'chart',
       title: 'System Intake Volume',
       group: 'systemSummary',
-      pageBreakBefore: true,
       imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.buildIntakeFlowChart(plantSummary, settings)),
     };
 
@@ -234,6 +236,7 @@ export class WaterReportAdapter implements ReportDataAdapter {
       type: 'summary-table',
       title: 'True Cost of Water by System',
       group: 'systemTrueCost',
+      pageBreakBefore: true,
       headers: ['System', 'Municipal Water Intake ($)', 'Municipal Wastewater Discharge ($)', 'Third-party Disposal ($)',
         'Water Treatment ($)', 'Wastewater Treatment ($)', 'Pump and Motor Energy ($)', 'Heat Energy ($)', 'Total ($)'],
       rows: report.map(system => [system.label, ...system.connectionCostByType.map(cell)]),
@@ -255,7 +258,6 @@ export class WaterReportAdapter implements ReportDataAdapter {
       type: 'chart',
       title: 'True Cost of Water Systems',
       group: 'systemTrueCost',
-      pageBreakBefore: true,
       imageDataProvider: () => renderPlotlyChart(this.chartRenderService, this.buildTrueCostBarChart(report, settings)),
     });
 
