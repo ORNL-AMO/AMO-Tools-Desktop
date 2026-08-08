@@ -1,13 +1,11 @@
 import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
 import { CompressedAirDayType, Modification, ProfileSummary, ProfileSummaryTotal } from '../../shared/models/compressed-air-assessment';
 import { Directory } from '../../shared/models/directory';
-import { PrintOptions } from '../../shared/models/printing';
 import { Settings } from '../../shared/models/settings';
-import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { CompressedAirAssessmentService } from '../compressed-air-assessment.service';
 import { CompressedAirAssessmentBaselineResults } from '../calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../compressed-air-calculation.service';
@@ -19,6 +17,8 @@ import { ExploreOpportunitiesValidationService } from '../compressed-air-assessm
 import { CompressedAirModificationValid } from '../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 import { ActivatedRoute } from '@angular/router';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
+import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
+import { CompressedAirReportAdapter, COMPRESSED_AIR_SECTION_GROUPS } from './compressed-air-report.adapter';
 
 @Component({
   selector: 'app-compressed-air-report',
@@ -43,30 +43,27 @@ export class CompressedAirReportComponent implements OnInit {
 
   createdDate: Date;
   assessmentDirectories: Directory[];
-  currentTab: "executiveSummary" | "systemProfiles" | "reportGraphs" | "reportSankey" | "inputData" | "facilityInfo" | "paybackPeriod" = 'executiveSummary';
+  currentTab: "executiveSummary" | "systemProfiles" | "reportGraphs" | "reportSankey" | "inputData" | "facilityInfo" | "paybackPeriod" | "performanceProfile" = 'executiveSummary';
   reportContainerHeight: number;
   settings: Settings;
-  showPrintMenu: boolean;
-  showPrintMenuSub: Subscription;
-  showPrintViewSub: Subscription;
-  showPrintView: boolean;
-  showPrintDiv: boolean;
-  printOptions: PrintOptions;
 
   baselineResults: BaselineResults;
   assessmentResults: Array<CompressedAirAssessmentModificationResults>;
   combinedDayTypeResults: Array<{ modification: Modification, combinedResults: DayTypeModificationResult, validation: CompressedAirModificationValid }>;
   baselineProfileSummaries: Array<{ profileSummary: Array<ProfileSummary>, dayType: CompressedAirDayType, profileSummaryTotals: Array<ProfileSummaryTotal> }>;
   tabsCollapsed: boolean = true;
+  reportDocument$: Observable<ReportDocument>;
+  readonly sectionGroups: ReportSectionGroup[] = COMPRESSED_AIR_SECTION_GROUPS;
 
   compressedAirAssessmentBaselineResults: CompressedAirAssessmentBaselineResults;
-  constructor(private settingsDbService: SettingsDbService, private printOptionsMenuService: PrintOptionsMenuService, private directoryDbService: DirectoryDbService,
+  constructor(private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private exploreOpportunitiesValidationService: ExploreOpportunitiesValidationService,
     private compressedAirAssessmentService: CompressedAirAssessmentService,
     private compressedAirCalculationService: CompressedAirCalculationService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,
     private activatedRoute: ActivatedRoute,
-    private assessmentDbService: AssessmentDbService) { }
+    private assessmentDbService: AssessmentDbService,
+    private reportAdapter: CompressedAirReportAdapter) { }
 
   ngOnInit(): void {
     if (!this.assessment) {
@@ -98,32 +95,12 @@ export class CompressedAirReportComponent implements OnInit {
       });
     });
 
-    if (!this.inRollup) {
-      this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
-        this.showPrintMenu = val;
-      });
-    } else {
+    if (this.inRollup || this.quickReport) {
       this.compressedAirAssessmentService.compressedAirAssessment.next(this.assessment.compressedAirAssessment);
       this.compressedAirAssessmentService.settings.next(this.settings);
     }
 
-    if (this.quickReport) {
-      this.compressedAirAssessmentService.compressedAirAssessment.next(this.assessment.compressedAirAssessment);
-      this.compressedAirAssessmentService.settings.next(this.settings);
-    }
-
-    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
-      this.printOptions = this.printOptionsMenuService.printOptions.getValue();
-      this.showPrintDiv = val;
-      if (val == true) {
-        //use delay to show loading before print payload starts
-        setTimeout(() => {
-          this.showPrintView = val;
-        }, 20)
-      } else {
-        this.showPrintView = val;
-      }
-    });
+    this.reportDocument$ = this.reportAdapter.buildDocument(this.assessment);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -138,11 +115,6 @@ export class CompressedAirReportComponent implements OnInit {
     }, 100);
   }
 
-  ngOnDestroy() {
-    if (this.showPrintMenuSub) this.showPrintMenuSub.unsubscribe();
-    this.showPrintViewSub.unsubscribe();
-  }
-
   getDirectoryList(id: number) {
     if (id && id !== 1) {
       let results = this.directoryDbService.getById(id);
@@ -153,7 +125,7 @@ export class CompressedAirReportComponent implements OnInit {
     }
   }
 
-  setTab(str: "executiveSummary" | "systemProfiles" | "reportGraphs" | "reportSankey" | "inputData" | "facilityInfo" | "paybackPeriod") {
+  setTab(str: "executiveSummary" | "systemProfiles" | "reportGraphs" | "reportSankey" | "inputData" | "facilityInfo" | "paybackPeriod" | "performanceProfile") {
     this.currentTab = str;
     this.collapseTabs();
   }
@@ -164,12 +136,6 @@ export class CompressedAirReportComponent implements OnInit {
       let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
       this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 2;
     }
-  }
-
-  print() {
-    this.printOptionsMenuService.printContext.next('compressedAir');
-    this.printOptionsMenuService.showPrintMenu.next(true);
-    this.collapseTabs();
   }
 
   collapseTabs() {

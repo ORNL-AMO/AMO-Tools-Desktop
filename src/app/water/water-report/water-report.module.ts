@@ -15,6 +15,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TrueCostEditableTableComponent } from './true-cost-editable-table/true-cost-editable-table.component';
 import { TrueCostReportService } from '../services/true-cost-report.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReportBuilderModule } from '../../shared/report-builder/report-builder.module';
+import { WaterReportAdapter } from './water-report.adapter';
 
 @NgModule({
   declarations: [
@@ -36,12 +38,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AlertInfoContainerComponent,
     ExportableResultsTableModule,
     NgbModule,
+    ReportBuilderModule,
   ],
   exports: [
     WaterReportComponent,
   ],
   providers: [
     TrueCostReportService,
+    WaterReportAdapter,
   ],
 })
 export class WaterReportModule { }
