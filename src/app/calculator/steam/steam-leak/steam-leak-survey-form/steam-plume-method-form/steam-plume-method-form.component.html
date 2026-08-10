@@ -93,4 +93,23 @@
       }
     </select>
   </div>
+
+  @if (form().controls.pressureReductionMethod.value === SteamLeakPressureReductionMethod.Turbine) {
+    <div class="form-group">
+      <label for="steam-turbineEfficiency-plume">Turbine Efficiency</label>
+      <div class="input-group">
+        <input name="turbineEfficiency" class="form-control" type="number" step="any"
+          formControlName="turbineEfficiency" id="steam-turbineEfficiency-plume" onfocus="this.select();"
+          (focus)="fieldFocused.emit('turbineEfficiency')">
+        <span class="input-group-addon units">%</span>
+        @if (form().controls.turbineEfficiency.invalid && !form().controls.turbineEfficiency.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form().controls.turbineEfficiency.errors?.['required']) { <span>Value required.</span> }
+            @if (form().controls.turbineEfficiency.errors?.['min']) { <span>Value can't be less than {{ form().controls.turbineEfficiency.errors?.['min']?.min}}.</span> }
+            @if (form().controls.turbineEfficiency.errors?.['max']) { <span>Value can't be greater than {{ form().controls.turbineEfficiency.errors?.['max']?.max}}.</span> }
+          </span>
+        }
+      </div>
+    </div>
+  }
 </form>

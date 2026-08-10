@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, input, output } from '@angular/core
 import { FormGroup } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
 import { PlumeFormControls } from '../steam-leak-survey-form.service';
+import { SteamLeakPressureReductionMethod } from '../../steam-leak-constants';
 
 @Component({
   selector: 'app-steam-plume-method-form',
@@ -14,4 +15,6 @@ export class SteamPlumeMethodFormComponent {
   readonly form = input.required<FormGroup<PlumeFormControls>>();
   readonly settings = input.required<Settings>();
   readonly fieldFocused = output<string>();
+
+  protected readonly SteamLeakPressureReductionMethod = SteamLeakPressureReductionMethod;
 }

@@ -184,7 +184,7 @@ export class SteamLeakSurveyFormService {
       ambientTemperature: new FormControl(leak.plumeMethodData.ambientTemperature, [Validators.required, Validators.min(ambientTempMin), Validators.max(ambientTempMax)]),
       plumeLength: new FormControl(leak.plumeMethodData.plumeLength, [Validators.required, Validators.min(plumeLengthMin), Validators.max(plumeLengthMax)]),
       pressureReductionMethod: new FormControl(leak.plumeMethodData.pressureReductionMethod),
-      turbineEfficiency: new FormControl(leak.plumeMethodData.turbineEfficiency, [Validators.min(0), Validators.max(100)]),
+      turbineEfficiency: new FormControl(leak.plumeMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
     });
   }
 
@@ -234,7 +234,7 @@ export class SteamLeakSurveyFormService {
       ambientTemperature: form.controls.ambientTemperature.value ?? 0,
       plumeLength: form.controls.plumeLength.value ?? 0,
       pressureReductionMethod: form.controls.pressureReductionMethod.value ?? 0,
-      turbineEfficiency: form.controls.turbineEfficiency.value ?? 0, // Plume method does not use turbine efficiency but is needed for API compatibility
+      turbineEfficiency: form.controls.turbineEfficiency.value ?? 0,
     };
   }
 
