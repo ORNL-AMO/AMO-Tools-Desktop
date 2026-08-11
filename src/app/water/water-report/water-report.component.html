@@ -15,17 +15,6 @@
     <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inAssessment}">
         <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
 
-        <!-- Assessment view -->
-        <div *ngIf="assessment && inAssessment" class="row">
-            <div class="col-12 p-2">
-                <span class="pl-2" *ngFor="let directory of assessmentDirectories">
-                    {{directory.name}} / {{assessment.name}}
-                </span>
-                <span class="ml-3 date-modified">Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-                <button class="mt-0 btn btn-secondary pull-right hide-print" (click)="print()">Print</button>
-            </div>
-        </div>
-
         <!-- Rollup view -->
         <div *ngIf="assessment && !inAssessment" class="row assessment-name">
             <div class="col-12">
@@ -47,23 +36,13 @@
         </div>
     </div>
 
-    <div *ngIf="showPrintDiv && !inRollup" class="hide-print print-div row justify-content-center">
-        <div class="col-12 print-col">
-            <h4>Building Print View</h4>
-            <h5>One Moment Please</h5>
-            <span class="fa fa-print"></span>
-            <div class="spinner">
-                <div class="bounce1"></div>
-                <div class="bounce2"></div>
-                <div class="bounce3"></div>
-            </div>
-        </div>
-    </div>
-
     @if (isDiagramValid$ | async; as isDiagramValid) {
     <div class="report-data">
         <div class="d-none d-lg-flex">
             <ul #reportBtns class="tabs primary hide-print">
+                <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+                    <a>Facility Info</a>
+                </li>
                 <li (click)="setTab('executiveSummary')" [ngClass]="{'active': currentTab == 'executiveSummary'}">
                     <a>Executive Summary</a>
                 </li>
@@ -85,6 +64,10 @@
                     <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
                     <span class="small text-uppercase">Menu</span>
                 </div>
+                <div (click)="setTab('facilityInfo')"
+                    [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
+                    <a>Facility Info</a>
+                </div>
                 <div (click)="setTab('executiveSummary')"
                     [ngClass]="{'active': currentTab == 'executiveSummary', 'collapse': tabsCollapsed}">
                     <a>Executive Summary</a>
@@ -97,27 +80,25 @@
                     [ngClass]="{'active': currentTab == 'systemTrueCost', 'collapse': tabsCollapsed}">
                     <a>True Cost of Systems</a>
                 </div>
-                <div (click)="print()" class="hide-print" [ngClass]="{'collapse': tabsCollapsed}">
-                    <a>Print</a>
-                </div>
             </div>
             <app-export-button class="mx-2 mb-2" [document]="reportDocument$" [assessmentName]="assessment.name"
                 [sectionGroups]="sectionGroups"></app-export-button>
         </div>
 
-        <div class="results scroll-item print-height page-break-before"
-            *ngIf="(currentTab == 'executiveSummary' && !showPrintView) || (showPrintView && printOptions.printExecutiveSummary)"
+        <div class="results scroll-item" *ngIf="currentTab == 'facilityInfo'"
+            [ngStyle]="{'height.px':reportContainerHeight}">
+            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+        </div>
+        <div class="results scroll-item" *ngIf="currentTab == 'executiveSummary'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-executive-summary [inRollup]="inRollup" [assessment]="assessment"
                 [settings]="settings"></app-executive-summary>
         </div>
-        <div class="results scroll-item print-height page-break-before"
-            *ngIf="(currentTab == 'systemSummary' && !showPrintView) || (showPrintView && printOptions.printWaterSystemSummary)"
+        <div class="results scroll-item" *ngIf="currentTab == 'systemSummary'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-summary-report [inRollup]="inRollup" [settings]="settings"></app-system-summary-report>
         </div>
-        <div class="results scroll-item print-height page-break-before"
-            *ngIf="(currentTab == 'systemTrueCost' && !showPrintView) || (showPrintView && printOptions.printWaterSystemCostReport)"
+        <div class="results scroll-item" *ngIf="currentTab == 'systemTrueCost'"
             [ngStyle]="{'height.px':reportContainerHeight}">
             <app-system-true-cost-report [inRollup]="inRollup" [assessment]="assessment"
                 [settings]="settings"></app-system-true-cost-report>
@@ -131,5 +112,3 @@
     }
 
 </div>
-
-<app-print-options-menu *ngIf="showPrintMenu"></app-print-options-menu>

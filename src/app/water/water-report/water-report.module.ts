@@ -5,7 +5,7 @@ import { WaterReportComponent } from './water-report.component';
 import { SystemSummaryReportComponent } from './system-summary-report/system-summary-report.component';
 import { ExecutiveSummaryComponent } from './executive-summary/executive-summary.component';
 import { SystemTrueCostReportComponent } from './system-true-cost-report/system-true-cost-report.component';
-import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
+import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { AlertInfoContainerComponent } from '../../shared/alert-info-container/alert-info-container.component';
 import { StackedBarIntakeCostsComponent } from './stacked-bar-intake-costs/stacked-bar-intake-costs.component';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
@@ -34,7 +34,7 @@ import { WaterReportAdapter } from './water-report.adapter';
     SharedPipesModule,
     ReactiveFormsModule,
     FormsModule,
-    PrintOptionsMenuModule,
+    FacilityInfoSummaryModule,
     AlertInfoContainerComponent,
     ExportableResultsTableModule,
     NgbModule,

@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
 import { buildFacilityInfoSections, formatNumber, renderPlotlyChart } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { CHART_TITLE_FONT_SIZE } from '../../shared/report-builder/adapters/report-chart-style.constants';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { ChartSection, SummaryTableSection, TextSection } from '../../shared/report-builder/models/report-section.model';
 import { Settings } from '../../shared/models/settings';
@@ -185,10 +186,11 @@ export class WaterReportAdapter implements ReportDataAdapter {
     const layout = {
       barmode: 'stack',
       title: { text: `System Intake Volume (${units})` },
+      font: { size: CHART_TITLE_FONT_SIZE },
       margin: { l: 60, r: 30, t: 60, b: 40 },
       showlegend: true,
-      xaxis: { title: { text: '' } },
-      yaxis: { title: { text: `Total Intake Volume (${units})` } },
+      xaxis: { title: { text: '' }, automargin: true },
+      yaxis: { title: { text: `Total Intake Volume (${units})`, standoff: 20 }, automargin: true },
       paper_bgcolor: 'white',
     };
 
@@ -216,10 +218,11 @@ export class WaterReportAdapter implements ReportDataAdapter {
     const layout = {
       barmode: 'stack',
       title: { text: 'System: Direct Costs vs. True Costs (USD)' },
+      font: { size: CHART_TITLE_FONT_SIZE },
       margin: { l: 60, r: 110, t: 60, b: 40 },
       legend: { orientation: 'v', x: 1.02, y: 1, xanchor: 'left', yanchor: 'top' },
-      xaxis: { title: { text: '' } },
-      yaxis: { title: { text: 'Cost (USD)' }, tickprefix: '$' },
+      xaxis: { title: { text: '' }, automargin: true },
+      yaxis: { title: { text: 'Cost (USD)', standoff: 20 }, tickprefix: '$', automargin: true },
       paper_bgcolor: 'white',
     };
 
@@ -286,8 +289,9 @@ export class WaterReportAdapter implements ReportDataAdapter {
     const layout = {
       title: { text: 'True Cost of Water Systems' },
       barmode: 'stack',
+      font: { size: CHART_TITLE_FONT_SIZE },
       margin: { l: 140, r: 150, t: 60, b: 50 },
-      xaxis: { title: { text: 'Cost per Year' }, tickformat: '$,.0f' },
+      xaxis: { title: { text: 'Cost per Year', standoff: 20 }, tickformat: '$,.0f', automargin: true },
       yaxis: { title: { text: '' }, automargin: true },
       legend: { orientation: 'v', x: 1.02, y: 1, xanchor: 'left', yanchor: 'top' },
       colorway: colors,
