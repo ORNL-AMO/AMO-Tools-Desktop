@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 
-import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
-
 export const useMeasurToolsSuite = () => {
   const [toolsSuiteModule, setToolsSuiteModule] = useState<MeasurToolsSuite | null>(null);
 

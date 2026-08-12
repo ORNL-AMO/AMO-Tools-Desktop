@@ -85,7 +85,7 @@ export class SteamLeakApiService {
 
     getUtilityTypeEnum(type: SteamLeakUtilityTypeKey): number {
         const module = this.toolsSuiteApiService.ToolsSuiteModule;
-        const utilityTypeEnum = module?.UtilityType ?? module?.SteamLeakSurvey?.UtilityType;
+        const utilityTypeEnum = module?.UtilityType ?? module?.UtilityType;
         if (!utilityTypeEnum) {
             throw new Error('Steam leak UtilityType enum is not available. Ensure ToolsSuiteApiService.initializeModule() has completed.');
         }
