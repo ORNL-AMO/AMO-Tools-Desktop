@@ -39,7 +39,7 @@ export class SteamLeakSurveyService {
 
   generateExampleData(settings: Settings): void {
     let example: SteamLeakSurveyInput = {
-      steamLeakSurveyInputVec: [this.getExampleLeakData()],
+      steamLeakSurveyInputVec: [this.getExampleLeakData(settings)],
       facilitySteamLeakData: this.getDefaultFacilityData(null),
     };
     if (settings.unitsOfMeasure !== 'Imperial') {
@@ -113,16 +113,17 @@ export class SteamLeakSurveyService {
       this.steamLeakInput.set({ ...current, steamLeakSurveyInputVec: updatedLeaks });
     }
 
-  private getExampleLeakData(): SteamLeakSurveyData {
+  private getExampleLeakData(settings?: Settings): SteamLeakSurveyData {
+    const costOfElectricity = settings?.electricityCost ?? 0;
     return {
       selected: true,
       name: 'Example Leak',
       leakDescription: 'Example steam trap leak',
       measurementMethod: 0,
-      estimateMethodData: { leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80, leakRate: 100 },
+      estimateMethodData: { leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80, leakRate: 100, costOfElectricity },
       estimateTurbineMethodData: { turbineEfficiency: 80, leakRate: 100 },
-      orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80 },
-      plumeMethodData: { leakPressure: 300, leakTemperature: 400, ambientTemperature: 70, plumeLength: 6, pressureReductionMethod: 0, turbineEfficiency: 0 },
+      orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80, costOfElectricity },
+      plumeMethodData: { leakPressure: 300, leakTemperature: 400, ambientTemperature: 70, plumeLength: 6, pressureReductionMethod: 0, turbineEfficiency: 0, costOfElectricity },
       units: 0,
     };
   }
@@ -136,7 +137,6 @@ export class SteamLeakSurveyService {
       steamPressure: 300,
       feedwaterTemperature: 70,
       fuelCost: 15.5,
-      fuelEnergyFactor: 1.038,
       electricityCost: 0.1,
       boilerEfficiency: 80,
       systemEfficiency: 75,

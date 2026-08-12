@@ -256,7 +256,6 @@ function getInput(leaks: Array<SteamLeakSurveyData>): SteamLeakSurveyInput {
       steamPressure: 300,
       feedwaterTemperature: 70,
       fuelCost: 15.5,
-      fuelEnergyFactor: 1.038,
       electricityCost: 0.1,
       boilerEfficiency: 80,
       systemEfficiency: 75,
@@ -270,10 +269,10 @@ function getLeak(name: string, selected: boolean): SteamLeakSurveyData {
     name,
     leakDescription: `${name} description`,
     measurementMethod: SteamLeakMeasurementMethod.Estimate,
-    estimateMethodData: { leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80, leakRate: 100 },
+    estimateMethodData: { leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80, leakRate: 100, costOfElectricity: 0.1 },
     estimateTurbineMethodData: { turbineEfficiency: 80, leakRate: 100 },
-    orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80 },
-    plumeMethodData: { leakPressure: 300, leakTemperature: 400, ambientTemperature: 70, plumeLength: 6, pressureReductionMethod: 0, turbineEfficiency: 0 },
+    orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, leakPressure: 300, leakTemperature: 500, pressureReductionMethod: 0, turbineEfficiency: 80, costOfElectricity: 0.1 },
+    plumeMethodData: { leakPressure: 300, leakTemperature: 400, ambientTemperature: 70, plumeLength: 6, pressureReductionMethod: 0, turbineEfficiency: 0, costOfElectricity: 0.1 },
     units: 0,
   };
 }

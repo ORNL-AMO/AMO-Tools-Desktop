@@ -19,7 +19,6 @@ describe('SteamLeakTreasureHuntService', () => {
         steamPressure: 300,
         feedwaterTemperature: 70,
         fuelCost: 15.5,
-        fuelEnergyFactor: 1.038,
         electricityCost: 0.1,
         boilerEfficiency: 80,
         systemEfficiency: 75,

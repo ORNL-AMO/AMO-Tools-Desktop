@@ -87,20 +87,6 @@
         }
       </div>
     </div>
-    <div class="form-group">
-      <label for="steam-fuelEnergyFactor">Fuel Energy Factor</label>
-      <div class="input-group">
-        <input name="fuelEnergyFactor" class="form-control" type="number" step="any"
-          formControlName="fuelEnergyFactor" id="steam-fuelEnergyFactor" onfocus="this.select();"
-          (input)="save()" (focus)="changeField('fuelEnergyFactor')">
-        @if (facilityForm.controls.fuelEnergyFactor.invalid && !facilityForm.controls.fuelEnergyFactor.pristine) {
-          <span class="alert-danger pull-right small">
-            @if (facilityForm.controls.fuelEnergyFactor.errors?.['required']) { <span>Value required.</span> }
-            @if (facilityForm.controls.fuelEnergyFactor.errors?.['min']) { <span>Value can't be less than {{ facilityForm.controls.fuelEnergyFactor.errors?.['min']?.min }}.</span> }
-          </span>
-        }
-      </div>
-    </div>
   }
 
   <div class="form-group">

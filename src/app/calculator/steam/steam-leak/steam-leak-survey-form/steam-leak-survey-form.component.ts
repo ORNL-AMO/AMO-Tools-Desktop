@@ -1,9 +1,9 @@
 import {
   Component, ChangeDetectorRef, OnDestroy,
-  inject, effect, untracked, input,
+  inject, effect, untracked, input, computed,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { merge, Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import {
@@ -14,7 +14,7 @@ import {
 } from './steam-leak-survey-form.service';
 import { SteamLeakSurveyService } from '../steam-leak-survey-service';
 import { SteamLeakSurveyFormService } from './steam-leak-survey-form.service';
-import { SteamLeakMeasurementMethod, SteamLeakPressureReductionMethod } from '../steam-leak-constants';
+import { SteamLeakMeasurementMethod, SteamLeakPressureReductionMethod, SteamLeakUtilityType } from '../steam-leak-constants';
 import { SteamLeakSurveyData } from '../../../../shared/models/standalone';
 
 @Component({
@@ -37,6 +37,8 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
 
   readonly SteamLeakMeasurementMethod = SteamLeakMeasurementMethod;
   readonly SteamLeakPressureReductionMethod = SteamLeakPressureReductionMethod;
+
+  readonly utilityType = computed(() => this.surveyService.steamLeakInput()?.facilitySteamLeakData.utilityType);
 
   readonly pressureReductionMethods: Array<{ display: string; value: number }> = [
     { display: 'None', value: SteamLeakPressureReductionMethod.None },
@@ -106,6 +108,25 @@ export class SteamLeakSurveyFormComponent implements OnDestroy {
       this.orificeForm.valueChanges,
       this.plumeForm.valueChanges,
     ).subscribe(() => this.saveLeak());
+
+    this.formChangeSub.add(this.estimateForm.controls.pressureReductionMethod.valueChanges.subscribe(value =>
+      this.fillHeaderConditionsFromFacility(this.estimateForm.controls.leakTemperature, this.estimateForm.controls.leakPressure, value)));
+    this.formChangeSub.add(this.orificeForm.controls.pressureReductionMethod.valueChanges.subscribe(value =>
+      this.fillHeaderConditionsFromFacility(this.orificeForm.controls.leakTemperature, this.orificeForm.controls.leakPressure, value)));
+    this.formChangeSub.add(this.plumeForm.controls.pressureReductionMethod.valueChanges.subscribe(value =>
+      this.fillHeaderConditionsFromFacility(this.plumeForm.controls.leakTemperature, this.plumeForm.controls.leakPressure, value)));
+  }
+
+  private fillHeaderConditionsFromFacility(
+    leakTemperature: FormControl<number | null>,
+    leakPressure: FormControl<number | null>,
+    pressureReductionMethodValue: number | null,
+  ): void {
+    if (pressureReductionMethodValue !== SteamLeakPressureReductionMethod.None) return;
+    const facility = this.surveyService.steamLeakInput()?.facilitySteamLeakData;
+    if (!facility) return;
+    leakTemperature.setValue(facility.steamTemperature);
+    leakPressure.setValue(facility.steamPressure);
   }
 
   saveLeak(): void {

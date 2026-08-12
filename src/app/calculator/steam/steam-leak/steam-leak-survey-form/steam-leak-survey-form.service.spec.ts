@@ -117,6 +117,7 @@ describe('SteamLeakSurveyFormService', () => {
       leakTemperature: 350,
       pressureReductionMethod: 0,
       turbineEfficiency: 80,
+      costOfElectricity: 0.1,
     };
 
     const form = service.buildOrificeForm(leak);
@@ -168,6 +169,7 @@ describe('SteamLeakSurveyFormService', () => {
       plumeLength: 6,
       pressureReductionMethod: 0,
       turbineEfficiency: 0,
+      costOfElectricity: 0.1,
     };
 
     const form = service.buildPlumeForm(leak);
@@ -271,15 +273,6 @@ describe('SteamLeakSurveyFormService', () => {
     expect(form.controls.fuelCost.valid).toBeFalse();
   });
 
-  it('buildFacilitySteamLeakForm accepts fuelEnergyFactor of zero', () => {
-    const form = service.buildFacilitySteamLeakForm({ ...validFacilityData(), fuelEnergyFactor: 0 });
-    expect(form.controls.fuelEnergyFactor.valid).toBeTrue();
-  });
-
-  it('buildFacilitySteamLeakForm is invalid when fuelEnergyFactor is negative', () => {
-    const form = service.buildFacilitySteamLeakForm({ ...validFacilityData(), fuelEnergyFactor: -1 });
-    expect(form.controls.fuelEnergyFactor.valid).toBeFalse();
-  });
 });
 
 function validFacilityData() {
@@ -291,7 +284,6 @@ function validFacilityData() {
     steamPressure: 300,
     feedwaterTemperature: 70,
     fuelCost: 15.5,
-    fuelEnergyFactor: 1.038,
     electricityCost: 0.1,
     boilerEfficiency: 80,
     systemEfficiency: 75,

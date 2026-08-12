@@ -680,7 +680,6 @@ export interface FacilitySteamLeakData {
   steamPressure: number;
   feedwaterTemperature: number;
   fuelCost: number;
-  fuelEnergyFactor: number;
   electricityCost: number;
   boilerEfficiency: number;
   systemEfficiency: number;
@@ -692,6 +691,7 @@ export interface SteamLeakEstimateMethodData {
   pressureReductionMethod: number;
   turbineEfficiency: number;
   leakRate: number;
+  costOfElectricity: number;
 }
 
 export interface SteamLeakEstimateTurbineMethodData {
@@ -707,6 +707,7 @@ export interface SteamLeakOrificeMethodData {
   leakTemperature: number;
   pressureReductionMethod: number;
   turbineEfficiency: number;
+  costOfElectricity: number;
 }
 
 export interface SteamLeakPlumeMethodData {
@@ -716,6 +717,7 @@ export interface SteamLeakPlumeMethodData {
   plumeLength: number;
   pressureReductionMethod: number;
   turbineEfficiency: number;
+  costOfElectricity: number;
 }
 
 export interface SteamLeakSurveyOutput {

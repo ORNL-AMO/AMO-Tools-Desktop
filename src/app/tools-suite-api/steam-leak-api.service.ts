@@ -107,12 +107,6 @@ export class SteamLeakApiService {
         const instance = this.createSurveyInstance(surveyInput);
         try {
             const result = instance.estimateMethodPRVCalc(leakRate);
-            console.log('steamSpecificEnthalpy', result.steamSpecificEnthalpy, 'isentropicEnthalpy', result.isentropicEnthalpy);
-            console.log('estimateMethodPRVCalc leakRate', result.leakRate);
-            console.log('estimateMethodPRVCalc steamLoss', result.steamLoss);
-            console.log('estimateMethodPRVCalc energyLoss', result.energyLoss);
-            console.log('estimateMethodPRVCalc leakCost', result.leakCost);
-            console.log('estimateMethodPRVCalc steamUnitCost', result.steamUnitCost);
             try {
                 return {
                     leakRate: result.leakRate,
@@ -132,12 +126,6 @@ export class SteamLeakApiService {
         const instance = this.createSurveyInstance(surveyInput);
         try {
             const result = instance.estimateMethodTurbineCalc(turbineEfficiency, leakRate);
-            console.log('steamSpecificEnthalpy', result.steamSpecificEnthalpy, 'isentropicEnthalpy', result.isentropicEnthalpy);
-            console.log('estimateMethodTurbineCalc leakRate', result.leakRate);
-            console.log('estimateMethodTurbineCalc steamLoss', result.steamLoss);
-            console.log('estimateMethodTurbineCalc energyLoss', result.energyLoss);
-            console.log('estimateMethodTurbineCalc leakCost', result.leakCost);
-            console.log('estimateMethodTurbineCalc steamUnitCost', result.steamUnitCost);
             try {
                 return {
                     leakRate: result.leakRate,
@@ -157,12 +145,6 @@ export class SteamLeakApiService {
         const instance = this.createSurveyInstance(surveyInput);
         try {
             const result = instance.orificeMethodCalc(turbineEfficiency, holeSize, dischargeCoef, atmPressure);
-            console.log('steamSpecificEnthalpy', result.steamSpecificEnthalpy, 'isentropicEnthalpy', result.isentropicEnthalpy);
-            console.log('orificeMethodCalc leakRate', result.leakRate);
-            console.log('orificeMethodCalc steamLoss', result.steamLoss);
-            console.log('orificeMethodCalc energyLoss', result.energyLoss);
-            console.log('orificeMethodCalc leakCost', result.leakCost);
-            console.log('orificeMethodCalc steamUnitCost', result.steamUnitCost);
             try {
                 return {
                     leakRate: result.leakRate,
@@ -182,12 +164,6 @@ export class SteamLeakApiService {
         const instance = this.createSurveyInstance(surveyInput);
         try {
             const result = instance.plumeMethodCalc(turbineEfficiency, plumeLength, ambTemp);
-            console.log('steamSpecificEnthalpy', result.steamSpecificEnthalpy, 'isentropicEnthalpy', result.isentropicEnthalpy);
-            console.log('plumeMethodCalc leakRate', result.leakRate);
-            console.log('plumeMethodCalc steamLoss', result.steamLoss);
-            console.log('plumeMethodCalc energyLoss', result.energyLoss);
-            console.log('plumeMethodCalc leakCost', result.leakCost);
-            console.log('plumeMethodCalc steamUnitCost', result.steamUnitCost);
             try {
                 return {
                     leakRate: result.leakRate,

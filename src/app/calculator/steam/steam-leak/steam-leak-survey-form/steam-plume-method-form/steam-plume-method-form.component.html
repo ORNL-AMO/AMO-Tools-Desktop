@@ -1,4 +1,28 @@
 <form [formGroup]="form()">
+
+  <div class="form-group">
+    <label for="steam-leakTemperature-plume">Header Temperature</label>
+    <div class="input-group">
+      <input name="leakTemperature" class="form-control" type="number" step="any"
+        formControlName="leakTemperature" id="steam-leakTemperature-plume" onfocus="this.select();"
+        (focus)="fieldFocused.emit('leakTemperature')">
+      @if (settings().unitsOfMeasure !== 'Metric') {
+        <span class="input-group-addon units">&#8457;</span>
+      } @else {
+        <span class="input-group-addon units">&#8451;</span>
+      }
+
+      @if (form().controls.leakTemperature.invalid && !form().controls.leakTemperature.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.leakTemperature.errors?.['required']) { <span>Value required.</span> }
+          @if (form().controls.leakTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.leakTemperature.errors?.['min']?.min}}.</span> }
+          @if (form().controls.leakTemperature.errors?.['max']) { <span>Value can't exceed the facility steam temperature ({{ form().controls.leakTemperature.errors?.['max']?.max }}).</span> }
+        </span>
+      }
+    </div>
+  </div>
+
+
   <div class="form-group">
     <label for="steam-leakPressure-plume">Header Pressure</label>
     <div class="input-group">
@@ -20,27 +44,7 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <label for="steam-leakTemperature-plume">Header Temperature</label>
-    <div class="input-group">
-      <input name="leakTemperature" class="form-control" type="number" step="any"
-        formControlName="leakTemperature" id="steam-leakTemperature-plume" onfocus="this.select();"
-        (focus)="fieldFocused.emit('leakTemperature')">
-      @if (settings().unitsOfMeasure !== 'Metric') {
-        <span class="input-group-addon units">&#8457;</span>
-      } @else {
-        <span class="input-group-addon units">&#8451;</span>
-      }
 
-      @if (form().controls.leakTemperature.invalid && !form().controls.leakTemperature.pristine) {
-        <span class="alert-danger pull-right small">
-          @if (form().controls.leakTemperature.errors?.['required']) { <span>Value required.</span> }
-          @if (form().controls.leakTemperature.errors?.['min']) { <span>Value can't be less than {{ form().controls.leakTemperature.errors?.['min']?.min}}.</span> }
-          @if (form().controls.leakTemperature.errors?.['max']) { <span>Value can't be greater than {{ form().controls.leakTemperature.errors?.['max']?.max}}.</span> }
-        </span>
-      }
-    </div>
-  </div>
 
   <div class="form-group">
     <label for="steam-ambientTemperature">Ambient Temperature</label>
@@ -107,6 +111,24 @@
             @if (form().controls.turbineEfficiency.errors?.['required']) { <span>Value required.</span> }
             @if (form().controls.turbineEfficiency.errors?.['min']) { <span>Value can't be less than {{ form().controls.turbineEfficiency.errors?.['min']?.min}}.</span> }
             @if (form().controls.turbineEfficiency.errors?.['max']) { <span>Value can't be greater than {{ form().controls.turbineEfficiency.errors?.['max']?.max}}.</span> }
+          </span>
+        }
+      </div>
+    </div>
+  }
+
+  @if (utilityType() !== SteamLeakUtilityType.Electric) {
+    <div class="form-group">
+      <label for="steam-costOfElectricity-plume">Cost of Electricity</label>
+      <div class="input-group">
+        <input name="costOfElectricity" class="form-control" type="number" step="any"
+          formControlName="costOfElectricity" id="steam-costOfElectricity-plume" onfocus="this.select();"
+          (focus)="fieldFocused.emit('costOfElectricity')">
+        <span class="input-group-addon units">$/kWh</span>
+        @if (form().controls.costOfElectricity.invalid && !form().controls.costOfElectricity.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (form().controls.costOfElectricity.errors?.['required']) { <span>Value required.</span> }
+            @if (form().controls.costOfElectricity.errors?.['min']) { <span>Value can't be less than {{ form().controls.costOfElectricity.errors?.['min']?.min }}.</span> }
           </span>
         }
       </div>

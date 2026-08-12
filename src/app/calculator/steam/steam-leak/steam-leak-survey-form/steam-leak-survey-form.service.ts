@@ -42,6 +42,7 @@ export interface EstimateFormControls {
   pressureReductionMethod: FormControl<number | null>;
   turbineEfficiency: FormControl<number | null>;
   leakRate: FormControl<number | null>;
+  costOfElectricity: FormControl<number | null>;
 }
 
 export interface OrificeFormControls {
@@ -52,6 +53,7 @@ export interface OrificeFormControls {
   leakTemperature: FormControl<number | null>;
   pressureReductionMethod: FormControl<number | null>;
   turbineEfficiency: FormControl<number | null>;
+  costOfElectricity: FormControl<number | null>;
 }
 
 export interface PlumeFormControls {
@@ -61,6 +63,7 @@ export interface PlumeFormControls {
   plumeLength: FormControl<number | null>;
   pressureReductionMethod: FormControl<number | null>;
   turbineEfficiency: FormControl<number | null>;
+  costOfElectricity: FormControl<number | null>;
 }
 
 export interface FacilitySteamLeakFormControls {
@@ -71,7 +74,6 @@ export interface FacilitySteamLeakFormControls {
   steamPressure: FormControl<number | null>;
   feedwaterTemperature: FormControl<number | null>;
   fuelCost: FormControl<number | null>;
-  fuelEnergyFactor: FormControl<number | null>;
   electricityCost: FormControl<number | null>;
   boilerEfficiency: FormControl<number | null>;
   systemEfficiency: FormControl<number | null>;
@@ -151,6 +153,7 @@ export class SteamLeakSurveyFormService {
       pressureReductionMethod: new FormControl(leak.estimateMethodData.pressureReductionMethod),
       turbineEfficiency: new FormControl(leak.estimateMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
       leakRate: new FormControl(leak.estimateMethodData.leakRate, [Validators.required, GreaterThanValidator.greaterThan(0)]),
+      costOfElectricity: new FormControl(leak.estimateMethodData.costOfElectricity, [Validators.required, Validators.min(0)]),
     });
   }
 
@@ -168,6 +171,7 @@ export class SteamLeakSurveyFormService {
       leakTemperature: new FormControl(leak.orificeMethodData.leakTemperature, steamTempValidators),
       pressureReductionMethod: new FormControl(leak.orificeMethodData.pressureReductionMethod),
       turbineEfficiency: new FormControl(leak.orificeMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
+      costOfElectricity: new FormControl(leak.orificeMethodData.costOfElectricity, [Validators.required, Validators.min(0)]),
     });
   }
 
@@ -185,6 +189,7 @@ export class SteamLeakSurveyFormService {
       plumeLength: new FormControl(leak.plumeMethodData.plumeLength, [Validators.required, Validators.min(plumeLengthMin), Validators.max(plumeLengthMax)]),
       pressureReductionMethod: new FormControl(leak.plumeMethodData.pressureReductionMethod),
       turbineEfficiency: new FormControl(leak.plumeMethodData.turbineEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
+      costOfElectricity: new FormControl(leak.plumeMethodData.costOfElectricity, [Validators.required, Validators.min(0)]),
     });
   }
 
@@ -198,7 +203,6 @@ export class SteamLeakSurveyFormService {
       steamPressure: new FormControl(data.steamPressure, [Validators.required, Validators.min(0)]),
       feedwaterTemperature: new FormControl(data.feedwaterTemperature, [Validators.required, Validators.min(tempLimits.feedwaterTempMin), Validators.max(tempLimits.feedwaterTempMax)]),
       fuelCost: new FormControl(data.fuelCost, [Validators.required, Validators.min(0)]),
-      fuelEnergyFactor: new FormControl(data.fuelEnergyFactor, [Validators.required, Validators.min(0)]),
       electricityCost: new FormControl(data.electricityCost, [Validators.required, Validators.min(0)]),
       boilerEfficiency: new FormControl(data.boilerEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
       systemEfficiency: new FormControl(data.systemEfficiency, [Validators.required, Validators.min(0), Validators.max(100)]),
@@ -212,6 +216,7 @@ export class SteamLeakSurveyFormService {
       pressureReductionMethod: form.controls.pressureReductionMethod.value ?? 0,
       turbineEfficiency: form.controls.turbineEfficiency.value ?? 0,
       leakRate: form.controls.leakRate.value ?? 0,
+      costOfElectricity: form.controls.costOfElectricity.value ?? 0,
     };
   }
 
@@ -224,6 +229,7 @@ export class SteamLeakSurveyFormService {
       leakTemperature: form.controls.leakTemperature.value ?? 0,
       pressureReductionMethod: form.controls.pressureReductionMethod.value ?? 0,
       turbineEfficiency: form.controls.turbineEfficiency.value ?? 0,
+      costOfElectricity: form.controls.costOfElectricity.value ?? 0,
     };
   }
 
@@ -235,19 +241,21 @@ export class SteamLeakSurveyFormService {
       plumeLength: form.controls.plumeLength.value ?? 0,
       pressureReductionMethod: form.controls.pressureReductionMethod.value ?? 0,
       turbineEfficiency: form.controls.turbineEfficiency.value ?? 0,
+      costOfElectricity: form.controls.costOfElectricity.value ?? 0,
     };
   }
 
   getEmptySteamLeakData(settings?: Settings): SteamLeakSurveyData {
+    const costOfElectricity = settings?.electricityCost ?? 0;
     let data: SteamLeakSurveyData = {
       leakDescription: 'New Leak Description',
       name: 'New Leak',
       selected: true,
       measurementMethod: SteamLeakMeasurementMethod.Estimate,
-      estimateMethodData: { leakPressure: 115, leakTemperature: 212, pressureReductionMethod: 0, turbineEfficiency: 0, leakRate: 1 },
+      estimateMethodData: { leakPressure: 115, leakTemperature: 212, pressureReductionMethod: 0, turbineEfficiency: 0, leakRate: 1, costOfElectricity },
       estimateTurbineMethodData: { turbineEfficiency: 0, leakRate: 0 },
-      orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, leakPressure: 115, leakTemperature: 212, pressureReductionMethod: 0, turbineEfficiency: 0 },
-      plumeMethodData: { leakPressure: 115, leakTemperature: 212, ambientTemperature: 70, plumeLength: 3, pressureReductionMethod: 0, turbineEfficiency: 0 },
+      orificeMethodData: { holeSize: 0.25, dischargeCoefficient: 0.61, atmosphericPressure: 14.7, leakPressure: 115, leakTemperature: 212, pressureReductionMethod: 0, turbineEfficiency: 0, costOfElectricity },
+      plumeMethodData: { leakPressure: 115, leakTemperature: 212, ambientTemperature: 70, plumeLength: 3, pressureReductionMethod: 0, turbineEfficiency: 0, costOfElectricity },
       units: 0,
     };
     if (settings?.unitsOfMeasure === 'Metric') {

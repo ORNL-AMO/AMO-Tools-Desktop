@@ -46,6 +46,7 @@
         <app-steam-estimate-method-form
           [form]="estimateForm"
           [settings]="settings()"
+          [utilityType]="utilityType()"
           (fieldFocused)="setCurrentField($event)"
           [pressureReductionMethods]="pressureReductionMethods" />
       }
@@ -54,6 +55,7 @@
         <app-steam-orifice-method-form
           [form]="orificeForm"
           [settings]="settings()"
+          [utilityType]="utilityType()"
           (fieldFocused)="setCurrentField($event)"
           [pressureReductionMethods]="pressureReductionMethods" />
       }
@@ -61,6 +63,7 @@
         <app-steam-plume-method-form
           [form]="plumeForm"
           [settings]="settings()"
+          [utilityType]="utilityType()"
           (fieldFocused)="setCurrentField($event)"
           [pressureReductionMethods]="pressureReductionMethods" />
       }

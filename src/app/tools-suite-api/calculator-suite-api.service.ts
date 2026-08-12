@@ -442,17 +442,18 @@ export class CalculatorSuiteApiService {
       [SteamLeakUtilityType.OtherFuel]: 'natural_gas',
     };
 
+    const isElectricUtility = facility.utilityType === SteamLeakUtilityType.Electric;
+
     const baseSurveyInput = {
       operatingTime: facility.annualOperatingHours,
       steamTemp: facility.steamTemperature,
       steamPressure: facility.steamPressure,
-      costOfElectricity: facility.electricityCost,
       feedwaterTemp: facility.feedwaterTemperature,
       boilerEfficiency: facility.boilerEfficiency,
       systemEfficiency: facility.systemEfficiency,
       utilityType: utilityTypeMap[facility.utilityType] ?? 'electric',
       fuelCost: facility.fuelCost,
-      fuelEnergyFactor: facility.fuelEnergyFactor,
+      fuelEnergyFactor: 1,
       steamCost: facility.steamCost,
     };
 
@@ -466,6 +467,7 @@ export class CalculatorSuiteApiService {
           leak.orificeMethodData.atmosphericPressure,
           {
             ...baseSurveyInput,
+            costOfElectricity: isElectricUtility ? facility.electricityCost : leak.orificeMethodData.costOfElectricity,
             leakPressure: leak.orificeMethodData.leakPressure,
             leakTemp: leak.orificeMethodData.leakTemperature,
           }
@@ -478,6 +480,7 @@ export class CalculatorSuiteApiService {
           leak.plumeMethodData.ambientTemperature,
           {
             ...baseSurveyInput,
+            costOfElectricity: isElectricUtility ? facility.electricityCost : leak.plumeMethodData.costOfElectricity,
             leakPressure: leak.plumeMethodData.leakPressure,
             leakTemp: leak.plumeMethodData.leakTemperature,
           }
@@ -486,6 +489,7 @@ export class CalculatorSuiteApiService {
       default: { // Estimate
         const estimateSurveyInput = {
           ...baseSurveyInput,
+          costOfElectricity: isElectricUtility ? facility.electricityCost : leak.estimateMethodData.costOfElectricity,
           leakPressure: leak.estimateMethodData.leakPressure,
           leakTemp: leak.estimateMethodData.leakTemperature,
         };
