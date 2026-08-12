@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 
 import createModule, { type MeasurToolsSuite } from 'measur-tools-suite';
 

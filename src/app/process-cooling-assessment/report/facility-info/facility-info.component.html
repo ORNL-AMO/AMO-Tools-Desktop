@@ -1,0 +1,80 @@
+<div class="output-summary p-3">
+  <h4 class="show-print print-section-header">Facility Info</h4>
+
+  @if (facilityInfo()) {
+  <table class="table table-hover">
+    <tbody>
+      <tr class="section-title-header">
+        <td colspan="2">General</td>
+      </tr>
+      <tr>
+        <td>Company Name</td>
+        <td>{{facilityInfo().companyName}}</td>
+      </tr>
+      <tr>
+        <td>Facility Name</td>
+        <td>{{facilityInfo().facilityName}}</td>
+      </tr>
+      <tr>
+        <td>Assessment Date</td>
+        <td>{{facilityInfo().date}}</td>
+      </tr>
+      <tr class="section-title-header">
+        <td colspan="2">Facility Location</td>
+      </tr>
+      <tr>
+        <td>Street</td>
+        <td>{{facilityInfo().address?.street}}</td>
+      </tr>
+      <tr>
+        <td>City</td>
+        <td>{{facilityInfo().address?.city}}</td>
+      </tr>
+      <tr>
+        <td>State</td>
+        <td>{{facilityInfo().address?.state}}</td>
+      </tr>
+      <tr>
+        <td>Zip</td>
+        <td>{{facilityInfo().address?.zip}}</td>
+      </tr>
+      <tr>
+        <td>Country</td>
+        <td>{{facilityInfo().address?.country}}</td>
+      </tr>
+
+      <tr class="section-title-header">
+        <td colspan="2">Facility Contact</td>
+      </tr>
+      <tr>
+        <td>Name</td>
+        <td>{{facilityInfo().facilityContact?.contactName}}</td>
+      </tr>
+      <tr>
+        <td>Phone</td>
+        <td>{{facilityInfo().facilityContact?.phoneNumber}}</td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{facilityInfo().facilityContact?.email}}</td>
+      </tr>
+
+      <tr class="section-title-header">
+        <td colspan="2">Assessment Contact</td>
+      </tr>
+      <tr>
+        <td>Name</td>
+        <td>{{facilityInfo().assessmentContact?.contactName}}</td>
+      </tr>
+      <tr>
+        <td>Phone</td>
+        <td>{{facilityInfo().assessmentContact?.phoneNumber}}</td>
+      </tr>
+      <tr>
+        <td>Email</td>
+        <td>{{facilityInfo().assessmentContact?.email}}</td>
+      </tr>
+    </tbody>
+  </table>
+  }
+</div>

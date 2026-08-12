@@ -12,6 +12,8 @@ import { environment } from '../../environments/environment';
 
 import { DashboardService } from './dashboard.service';
 import { WaterAssessment } from 'process-flow-lib';
+import { ProcessCoolingAssessment } from '../shared/models/process-cooling-assessment';
+import { getDefaultProcessCoolingAssessment } from '../process-cooling-assessment/constants/process-cooling-constants';
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { OperatingHours } from '../shared/models/operations';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
@@ -85,6 +87,11 @@ export class AssessmentService {
       }
       this.dashboardService.navigateWithSidebarOptions(url, { shouldCollapse: true })
       return
+    } else if (assessment.type == 'ProcessCooling') {
+      if (assessment.processCooling.setupDone && !mainTab && !assessment.isExample) {
+        this.startingTab = 'assessment';
+      }
+      itemSegment = '/process-cooling/';
     } else if (assessment.type == 'Water') {
       // todo check setupDone or validation
       if (assessment.water && !mainTab && !assessment.isExample) {
@@ -515,6 +522,10 @@ export class AssessmentService {
         profileDataType: "percentCapacity"
       }]
     }
+  }
+
+  getNewProcessCoolingAssessment(settings: Settings): ProcessCoolingAssessment {
+    return getDefaultProcessCoolingAssessment(settings);
   }
 
 }

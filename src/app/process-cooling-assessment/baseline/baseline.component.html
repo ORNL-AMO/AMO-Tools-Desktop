@@ -1,0 +1,18 @@
+<!-- * This component uses host component styling - see component.ts decorator -->
+
+<app-baseline-tabs></app-baseline-tabs>
+<div class="assessment-container tab-content">
+     <div class="assessment-panel-container modification"
+        [class]="{
+            'modal-open': isModalOpen == true,
+            'full-width-panel': !showResultsPanel()
+        }">
+        <router-outlet></router-outlet>
+    </div>
+
+    @if (showResultsPanel()) {
+    <div class="assessment-panel-container scroll-item">
+        <app-results-panel></app-results-panel>
+    </div>
+    }
+</div>

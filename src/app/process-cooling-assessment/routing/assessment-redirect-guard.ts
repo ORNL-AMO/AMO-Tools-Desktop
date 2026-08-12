@@ -1,0 +1,27 @@
+import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from "@angular/router";
+import { Observable, of } from "rxjs";
+import { AssessmentDbService } from "../../indexedDb/assessment-db.service";
+import { Assessment } from "../../shared/models/assessment";
+import { Injectable } from "@angular/core";
+import { ROUTE_TOKENS } from "../constants/process-cooling-routes";
+
+@Injectable()
+export class AssessmentRedirectGuard implements CanActivate {
+  constructor(
+    private router: Router,
+    private assessmentDbService: AssessmentDbService
+  ) {}
+
+    canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
+        const assessmentId = Number(route.params['assessmentId']);
+        let assessment: Assessment = this.assessmentDbService.findById(assessmentId);
+        let redirectUrlTree: UrlTree;
+        
+        if (!assessment.processCooling.setupDone) {
+            redirectUrlTree = this.router.createUrlTree(['/process-cooling', assessmentId, ROUTE_TOKENS.baseline]);
+        } else {
+          redirectUrlTree = this.router.createUrlTree(['/process-cooling', assessmentId, ROUTE_TOKENS.baseline]);
+        }
+        return of(redirectUrlTree);
+    }
+}

@@ -6,6 +6,7 @@ import { TreasureHunt } from './treasure-hunt';
 import { WasteWater } from './waste-water';
 import { CompressedAirAssessment } from './compressed-air-assessment';
 import { WaterAssessment } from 'process-flow-lib';
+import { ProcessCoolingAssessment } from './process-cooling-assessment';
 
 export interface Assessment {
   id?: number,
@@ -19,6 +20,7 @@ export interface Assessment {
   wasteWater?: WasteWater,
   water?: WaterAssessment,
   compressedAirAssessment?: CompressedAirAssessment,
+  processCooling?: ProcessCoolingAssessment
   createdDate?: Date,
   modifiedDate?: Date,
   type: AssessmentType;
@@ -28,4 +30,4 @@ export interface Assessment {
   isExample?: boolean;
 }
 
-export type AssessmentType = 'PSAT' | 'PHAST' | 'FSAT' | 'SSMT' | 'TreasureHunt' | 'WasteWater' | 'Water' | 'CompressedAir';
+export type AssessmentType = 'PSAT' | 'PHAST' | 'FSAT' | 'SSMT' | 'TreasureHunt' | 'WasteWater' | 'Water' | 'CompressedAir' | 'ProcessCooling';

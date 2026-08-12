@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-air-leak-survey-help',
@@ -10,4 +11,5 @@ import { Settings } from '../../../../shared/models/settings';
 export class AirLeakSurveyHelpComponent {
   readonly currentField = input<string>('default');
   readonly settings = input.required<Settings>();
+  docsLink: string = environment.measurDocsUrl;
 }

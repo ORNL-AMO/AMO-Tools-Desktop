@@ -1,0 +1,69 @@
+<!--  tab links have redundant li and divs which should be phased out. Both wrapping elements and <a> tag need to have routerlink directives and attributes to satisfy MEASUR global legacy styling -->
+
+<!-- LARGE VIEWPORT TABS -->
+<ul class="tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block">
+    @for (link of SETUP_VIEW_LINKS; track $index) {
+        @let isActive = setupView() == link.view;
+        @let isDisabled = isLinkDisabled(link);
+        @let isInvalid = isTabInvalid(link);
+
+    <li routerLinkActive="active" [routerLink]="[link.view]" 
+        [class.disabled]="isDisabled"
+        [class.missing-data]="isInvalid"
+        (click)="handleCanNavigate($event, link)">
+        <a routerLinkActive="active" [routerLink]="[link.view]" 
+            [class.disabled]="isDisabled"
+            [class.missing-data]="isInvalid"
+            (click)="handleCanNavigate($event, link)">
+            <span class="step-number">
+                {{$index + 1}}
+            </span>
+            {{link.label}}
+        </a>
+    </li>
+    }
+</ul>
+
+<!-- SMALL SCREEN TABS -->
+<nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs process-cooling-assessment flex-wrap flex-fill">
+    <ul
+        class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill process-cooling-assessment">
+        <li class="page-item" [class.disabled]="setupView() == 'system-basics' || !canContinue()">
+            <a class="nav-link small" (click)="back()"
+                [class.disabled]="setupView() == 'system-basics' || !canContinue()">
+                <span class="fa fa-chevron-left"></span></a>
+        </li>
+
+        @for (link of SETUP_VIEW_LINKS; track $index) {
+            @let isActive = setupView() == link.view;
+            @let isDisabled = isLinkDisabled(link);
+            @let isInvalid = isTabInvalid(link);
+            <li class="page-item" routerLinkActive="active" 
+                [class.disabled]="isDisabled"
+                [class.invalid]="isInvalid"
+                (click)="handleCanNavigate($event, link)" [routerLink]="[link.view]">
+                <a class="nav-link small" routerLinkActive="active" [routerLink]="[link.view]" 
+                [class.disabled]="isDisabled"
+                [class.invalid]="isInvalid"
+                (click)="handleCanNavigate($event, link)">
+                    <span class="step-number">
+                        {{$index + 1}}
+                    </span>
+                    {{link.label}}
+                </a>
+            </li>
+        }
+        <li class="page-item" [class.disabled]="!canContinue()">
+            <a class="nav-link small" (click)="continue()" [class.disabled]="!canContinue()">
+                <span class="fa fa-chevron-right"></span></a>
+        </li>
+    </ul>
+</nav>
+
+<div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenPanelTab('details')"
+        [class.small-screen-active]="smallScreenPanelTab === 'details'">
+        @if (setupView() != 'inventory') {<a class="nav-link">Help</a>}
+        @if (setupView() == 'inventory') {<a class="nav-link">Details</a>}
+    </div>
+</div>

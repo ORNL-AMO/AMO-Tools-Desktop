@@ -1,6 +1,8 @@
 @if (leakMetaForm) {
   <form [formGroup]="leakMetaForm">
-    <label class="group-label-wide mb-2">Leak Data</label>
+    <label class="group-label-wide mb-2">Leak Data
+      <a class="click-link" (click)="addLeak()">+Add Another Leak</a>
+    </label>
     <div class="form-group pb-1">
       <label for="survey-name">Leak Name</label>
       <div class="input-group">
@@ -68,8 +70,5 @@
       }
     }
 
-    <div class="d-flex w-100 justify-content-end">
-      <a class="click-link small" (click)="addLeak()">+Add Another Leak</a>
-    </div>
   </form>
 }

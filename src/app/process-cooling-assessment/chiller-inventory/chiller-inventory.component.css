@@ -1,0 +1,16 @@
+.btn .btn-primary {
+    background-color: var(--process-cooling-assessment);
+}
+
+.group-label {
+    font-size: 16px;
+    text-transform: none;
+    letter-spacing: 1px;
+    padding-top: 6.5px;
+    padding-bottom: 6.5px;
+}
+
+.group-label:hover {
+    cursor: pointer;
+    background-color: lightgray;
+}

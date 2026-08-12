@@ -132,6 +132,7 @@ export class CreateAssessmentModalComponent {
   }
 
   async createAssessment() {
+    // todo should we be using settings to get co2savingsData for these assessments?
     if (this.newAssessmentForm.valid) {
       this.assessmentService.startingTab = 'baseline';
       if (this.newAssessmentForm.controls.assessmentType.value === 'Pump') {
@@ -212,6 +213,14 @@ export class CreateAssessmentModalComponent {
           queryParams = { connectedInventory: true };
         }
         this.finishAndNavigate(createdAssessment, '/compressed-air/' + createdAssessment.id);
+      } else if (this.newAssessmentForm.controls.assessmentType.value == 'ProcessCooling') {
+        this.analyticsService.sendEvent('create-assessment', undefined);
+        let tmpAssessment = this.assessmentService.getNewAssessment('ProcessCooling');
+        tmpAssessment.name = this.newAssessmentForm.controls.assessmentName.value;
+        tmpAssessment.directoryId = this.newAssessmentForm.controls.directoryId.value;
+        tmpAssessment.processCooling = this.assessmentService.getNewProcessCoolingAssessment(this.settings);
+        let createdAssessment: Assessment = await firstValueFrom(this.assessmentDbService.addWithObservable(tmpAssessment));
+        this.finishAndNavigate(createdAssessment, '/process-cooling/' + createdAssessment.id);
       } else if (this.newAssessmentForm.controls.assessmentType.value == 'Water') {
         this.analyticsService.sendEvent('create-assessment', undefined);
         let tmpAssessment = this.assessmentService.getNewAssessment('Water');

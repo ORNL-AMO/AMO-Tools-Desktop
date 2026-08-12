@@ -39,6 +39,7 @@ import { PumpInventoryCardComponent } from './directory-items/inventory-item/pum
 import { CompressedAirInventoryCardComponent } from './directory-items/inventory-item/compressed-air-inventory-card/compressed-air-inventory-card.component';
 import { WaterSummaryCardComponent } from './directory-items/assessment-item/water-summary-card/water-summary-card.component';
 import { DiagramItemComponent } from './directory-items/diagram-item/diagram-item.component';
+import { ProcessCoolingSummaryCardComponent } from './directory-items/assessment-item/process-cooling-summary-card/process-cooling-summary-card.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { DiagramItemComponent } from './directory-items/diagram-item/diagram-ite
     MotorInventoryCardComponent,
     WasteWaterSummaryCardComponent,
     CompressedAirAssessmentCardComponent,
+    ProcessCoolingSummaryCardComponent,
     PumpInventoryCardComponent,
     CompressedAirInventoryCardComponent,
     WaterSummaryCardComponent,

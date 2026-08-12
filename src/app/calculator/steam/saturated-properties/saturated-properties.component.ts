@@ -200,16 +200,18 @@ export class SaturatedPropertiesComponent implements OnInit {
   }
 
   getRanges(): { minTemp: number, maxTemp: number, minPressure: number, maxPressure: number } {
-    let minTemp: number, maxTemp: number;
-    if (this.settings.steamTemperatureMeasurement === 'F') {
-      minTemp = 32;
-      maxTemp = 705.1;
-    } else {
-      minTemp = 0;
-      maxTemp = 373.9;
+    let minTemp: number = this.steamService.STEAM_TEMPERATURE_MIN_F;
+    let maxTemp: number = this.steamService.SATURATED_STEAM_TEMPERATURE_MAX_F;
+    if (this.settings.steamTemperatureMeasurement !== 'F') {
+      minTemp = this.convertUnitsService.value(minTemp).from('F').to(this.settings.steamTemperatureMeasurement);
+      maxTemp = this.convertUnitsService.value(maxTemp).from('F').to(this.settings.steamTemperatureMeasurement);
     }
-    let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
-    let maxPressure: number = Number(this.convertUnitsService.value(22064).from('kPaa').to(this.settings.steamPressureMeasurement).toFixed(3));
+    let minPressure: number = this.steamService.BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG;
+    let maxPressure: number = this.steamService.SATURATED_BOILER_PRESSURE_MAX_PSIG;
+    if (this.settings.steamPressureMeasurement !== 'psig') {
+      minPressure = this.convertUnitsService.value(minPressure).from('psig').to(this.settings.steamPressureMeasurement);
+      maxPressure = this.convertUnitsService.value(maxPressure).from('psig').to(this.settings.steamPressureMeasurement);
+    }
     return { minTemp: minTemp, maxTemp: maxTemp, minPressure: minPressure, maxPressure: maxPressure };
   }
 

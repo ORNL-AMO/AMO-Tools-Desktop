@@ -10,6 +10,22 @@ For details on existing patterns and usage examples, contributors may reference 
 - **Type Safety:** Always use TypeScript types and interfaces. Avoid `any`; use `unknown` if uncertain.
 - **Readability:** Use descriptive variable and function names. Prefer clarity over brevity.
 
+## Types
+
+Let TypeScript inference work for you. Annotate where it adds information a reader couldn't get from the code itself; skip it when the type is already expressed in the initializer or signature.
+
+**Must have:**
+- Return types on public methods when the return is non-trivial (e.g., `getMonthControl(index: number): FormControl`, `deleteChiller(id: string): ChillerInventoryItem[]`)
+- Class properties declared without an initializer (e.g., `form: FormGroup<OperationsForm>`)
+- Concrete type in place of `any` — use `unknown` if the type is genuinely unknown
+
+**Optional / skip:**
+- Local variables with a clear initializer — `const label = 'Baseline'` already tells you the type
+- `inject()` calls — the generic is self-documenting (`inject(MyService)` returns `MyService`)
+- Properties initialized from a literal — `isCollapsed = false` is unambiguously `boolean`
+- `void` return types — TypeScript infers these; the annotation adds no signal
+- Lambda parameters in array methods (`map`, `filter`, `forEach`, `reduce`, etc.) — TypeScript infers the parameter type from the array's element type through contextual typing, so `inventory.forEach((chiller: ChillerInventoryItem) => ...)` is redundant when `inventory` is already typed
+
 ## Commenting
 - Comment to explain *why* something is done, not *what* (if the code can't be made self-explanatory through descriptive naming).
 - Comment static numbers/constants with their meaning and units.

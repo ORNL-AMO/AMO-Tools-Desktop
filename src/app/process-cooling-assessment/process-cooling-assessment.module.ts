@@ -1,0 +1,365 @@
+import { TowerEnergyHistogramComponent } from './report/tower-energy-histogram/tower-energy-histogram.component';
+import { ApplyVariableSpeedControlComponent } from './explore-opportunities/apply-variable-speed-control/apply-variable-speed-control.component';
+import { EemHelpComponent } from './results-panel/help-panel/eem-help/eem-help.component';
+import { NgModule } from '@angular/core';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { ProcessCoolingAssessmentComponent } from './process-cooling-assessment/process-cooling-assessment.component';
+import { Route, RouterModule } from '@angular/router';
+import { ProcessCoolingAssessmentService } from './services/process-cooling-assessment.service';
+import { ProcessCoolingUiService } from './services/process-cooling-ui.service';
+import { ProcessCoolingBannerComponent } from './process-cooling-banner/process-cooling-banner.component';
+import { AssessmentRedirectGuard } from './routing/assessment-redirect-guard';
+import { SystemBasicsComponent } from './system-basics/system-basics.component';
+import { SystemInformationComponent } from './system-information/system-information.component';
+import { ChillerInventoryComponent } from './chiller-inventory/chiller-inventory.component';
+import { ReportComponent } from './report/report.component';
+import { AssessmentComponent } from './assessment/assessment.component';
+import { BaselineComponent } from './baseline/baseline.component';
+import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
+import { IncreaseChilledTemperatureComponent } from './explore-opportunities/increase-chilled-temperature/increase-chilled-temperature.component';
+import { DecreaseCondenserWaterTempComponent } from './explore-opportunities/decrease-condenser-water-temp/decrease-condenser-water-temp.component';
+import { ResultsPanelComponent } from './results-panel/results-panel.component';
+import { BaselineTabsComponent } from './baseline/baseline-tabs/baseline-tabs.component';
+import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
+import { FacilityInfoComponent } from './report/facility-info/facility-info.component';
+import { SettingsModule } from '../settings/settings.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { AssessmentCo2SavingsModule } from '../shared/assessment-co2-savings/assessment-co2-savings.module';
+import { Co2HelpTextModule } from '../shared/co2-help-text/co2-help-text.module';
+import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
+import { ImportExportModule } from '../shared/import-export/import-export.module';
+import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
+import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
+import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
+import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
+import { ConvertProcessCoolingService } from './services/convert-process-cooling.service';
+import { ProcessCoolingResultsService } from './services/process-cooling-results.service';
+import { SystemInformationFormService } from './system-information/system-information-form.service';
+import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
+import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
+import { InputUnitComponent } from '../shared/input-unit.component';
+import { OperationsComponent } from './system-information/operations/operations.component';
+import { ProcessCoolingAssessmentResolver } from './routing/process-cooling-assessment-resolver.resolver';
+import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
+import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
+import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
+import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
+import { InventoryHelpComponent } from './results-panel/help-panel/inventory-help/inventory-help.component';
+import { WaterPumpComponent } from './system-information/pump-wrapper/water-pump/water-pump.component';
+import { PumpWrapperComponent } from './system-information/pump-wrapper/pump-wrapper.component';
+import { WaterPumpHelpComponent } from './results-panel/help-panel/water-pump-help/water-pump-help.component';
+import { OperationsHelpComponent } from './results-panel/help-panel/operations-help/operations-help.component';
+import { AirCooledComponent } from './system-information/condenser-cooling-system/air-cooled/air-cooled.component';
+import { WaterCooledComponent } from './system-information/condenser-cooling-system/water-cooled/water-cooled.component';
+import { CondenserCoolingSystemComponent } from './system-information/condenser-cooling-system/condenser-cooling-system.component';
+import { CondenserCoolingHelpComponent } from './results-panel/help-panel/condenser-cooling-help/condenser-cooling-help.component';
+import { TowerComponent } from './system-information/tower/tower.component';
+import { TowerHelpComponent } from './results-panel/help-panel/tower-help/tower-help.component';
+import { LoadScheduleComponent } from './load-schedule/load-schedule.component';
+
+import { ChillerLoadScheduleComponent } from './chiller-load-schedule/chiller-load-schedule.component';
+import { WeatherComponent } from './weather/weather.component';
+import { ChillerInventoryService } from './services/chiller-inventory.service';
+import { ChillerLoadScheduleService } from './services/chiller-load-schedule.service';
+import { ChillerCompressorTypePipe } from './pipes/chiller-compressor-type.pipe';
+import { WEATHER_CONTEXT } from '../shared/modules/weather-data/weather-context.token';
+import { ProcessCoolingWeatherContextService } from './process-cooling-weather-context.service';
+import { MonthlyOperatingScheduleService } from './services/monthly-operating-schedule.service';
+import { OperatingScheduleComponent } from './operating-schedule/operating-schedule.component';
+import { WeeklyOperatingScheduleComponent } from './operating-schedule/weekly-operating-schedule/weekly-operating-schedule.component';
+import { MonthlyOperatingScheduleComponent } from './operating-schedule/monthly-operating-schedule/monthly-operating-schedule.component';
+import { AddModificationComponent } from './explore-opportunities/add-modification/add-modification.component';
+import { ModificationService } from './services/modification.service';
+import { ModificationListComponent } from './explore-opportunities/modification-list/modification-list.component';
+import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
+import { AlertInfoContainerComponent } from '../shared/alert-info-container/alert-info-container.component';
+import { SlidingCondenserWaterTemperatureComponent } from './explore-opportunities/sliding-condenser-water-temperature/sliding-condenser-water-temperature.component';
+import { UpgradeCoolingTowerFanComponent } from './explore-opportunities/upgrade-cooling-tower-fan/upgrade-cooling-tower-fan.component';
+import { ExploreOpportunitiesFormService } from './services/explore-opportunities-form.service';
+import { ExecutiveSummaryResultsService } from './services/executive-summary-results.service';
+import { PumpSummaryComponent } from './report/pump-summary/pump-summary.component';
+import { PumpSummaryResultsService } from './services/pump-summary-results.service';
+import { TowerSummaryService } from './services/tower-summary.service';
+import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
+import { TowerSummaryComponent } from './report/tower-summary/tower-summary.component';
+import { PerformanceProfileComponent } from './report/performance-profile/performance-profile.component';
+import { ChillerProfileChartComponent } from './report/performance-profile/chiller-profile-chart/chiller-profile-chart.component';
+import { SystemProfileComponent } from './report/system-profile/system-profile.component';
+import { SystemProfileService } from './services/system-profile.service';
+import { FilterChillerOutputsPipe } from './pipes/filter-chiller-outputs.pipe';
+import { InstallVSDComponent } from './explore-opportunities/install-vsd/install-vsd.component';
+import { FilterChillerInventoryPipe } from './pipes/filter-chiller-inventory.pipe';
+import { FilterAvailableViewsPipe } from './pipes/available-system-information-views.pipe';
+import { InputSummaryComponent } from './report/input-summary/input-summary.component';
+import { InputSummaryService } from './services/input-summary.service';
+import { UseFreeCoolingComponent } from './explore-opportunities/use-free-cooling/use-free-cooling.component';
+import { ReplaceChillerRefrigerantComponent } from './explore-opportunities/replace-chiller-refrigerant/replace-chiller-refrigerant.component';
+import { RefrigerantTypePipe } from './pipes/refrigerant-type.pipe';
+import { VsdInventoryTableComponent } from './explore-opportunities/install-vsd/vsd-inventory-table/vsd-inventory-table.component';
+import { RefrigerantInventoryTableComponent } from './explore-opportunities/replace-chiller-refrigerant/refrigerant-inventory-table/refrigerant-inventory-table.component';
+import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
+import { ProcessCoolingReportAdapter } from './report/process-cooling-report.adapter';
+
+import { SystemInfoSummaryComponent } from './report/input-summary/system-info-summary/system-info-summary.component';
+import { InputSummaryTableComponent } from './report/input-summary/input-summary-table/input-summary-table.component';
+import { WeatherSummaryComponent } from './report/input-summary/weather-summary/weather-summary.component';
+import { PumpInputSummaryComponent } from './report/input-summary/pump-input-summary/pump-input-summary.component';
+import { CondenserInputSummaryComponent } from './report/input-summary/condenser-input-summary/condenser-input-summary.component';
+import { TowerInputSummaryComponent } from './report/input-summary/tower-input-summary/tower-input-summary.component';
+import { InventoryInputSummaryComponent } from './report/input-summary/inventory-input-summary/inventory-input-summary.component';
+
+import { ROUTE_TOKENS } from './constants/process-cooling-routes';
+
+const ROUTES: Route[] = [
+  {
+    path: '',
+    component: ProcessCoolingAssessmentComponent,
+    resolve: {
+      processCoolingData: ProcessCoolingAssessmentResolver
+    },
+    children: [
+      { path: '', redirectTo: ROUTE_TOKENS.baseline, pathMatch: 'full' },
+      {
+        path: ROUTE_TOKENS.baseline,
+        component: BaselineComponent,
+        data: { mainView: ROUTE_TOKENS.baseline },
+        children: [
+          { path: '', redirectTo: ROUTE_TOKENS.assessmentSettings, pathMatch: 'full' },
+          {
+            path: ROUTE_TOKENS.assessmentSettings,
+            component: SystemBasicsComponent,
+            data: { childView: ROUTE_TOKENS.assessmentSettings, stepIndex: 0 },
+          },
+          {
+            path: ROUTE_TOKENS.systemInformation,
+            component: SystemInformationComponent,
+            data: { childView: ROUTE_TOKENS.systemInformation },
+            children: [
+              { path: '', redirectTo: ROUTE_TOKENS.operations, pathMatch: 'full' },
+              {
+                path: ROUTE_TOKENS.operations,
+                component: OperationsComponent,
+                data: { setupSubView: ROUTE_TOKENS.operations, stepIndex: 1 },
+              },
+              {
+                path: ROUTE_TOKENS.weather,
+                loadChildren: () => import('../shared/modules/weather-data/weather-data.module').then(m => m.WeatherDataModule),
+                data: { setupSubView: ROUTE_TOKENS.weather, stepIndex: 2 },
+              },
+              {
+                path: ROUTE_TOKENS.waterPump,
+                component: PumpWrapperComponent,
+                data: { setupSubView: ROUTE_TOKENS.waterPump, stepIndex: 3 },
+              },
+              {
+                path: ROUTE_TOKENS.condenserCoolingSystem,
+                component: CondenserCoolingSystemComponent,
+                data: { setupSubView: ROUTE_TOKENS.condenserCoolingSystem, stepIndex: 4 },
+              },
+              {
+                path: ROUTE_TOKENS.tower,
+                component: TowerComponent,
+                data: { setupSubView: ROUTE_TOKENS.tower, stepIndex: 5 },
+              }
+            ]
+          },
+          {
+            path: ROUTE_TOKENS.chillerInventory,
+            component: ChillerInventoryComponent,
+            data: { childView: ROUTE_TOKENS.chillerInventory, stepIndex: 6 },
+          },
+          {
+            path: ROUTE_TOKENS.operatingSchedule,
+            component: OperatingScheduleComponent,
+            data: { childView: ROUTE_TOKENS.operatingSchedule, stepIndex: 7 },
+          },
+          {
+            path: ROUTE_TOKENS.loadSchedule,
+            component: LoadScheduleComponent,
+            data: { childView: ROUTE_TOKENS.loadSchedule, stepIndex: 8 },
+          }
+        ]
+      },
+      {
+        path: ROUTE_TOKENS.assessment,
+        component: AssessmentComponent,
+        data: { mainView: ROUTE_TOKENS.assessment },
+        children: [
+          { path: '', redirectTo: ROUTE_TOKENS.exploreOpportunities, pathMatch: 'full' },
+          {
+            path: ROUTE_TOKENS.exploreOpportunities,
+            component: ExploreOpportunitiesComponent,
+            data: { childView: ROUTE_TOKENS.exploreOpportunities, stepIndex: 9 },
+          },
+        ]
+      },
+      {
+        path: ROUTE_TOKENS.report,
+        component: ReportComponent,
+        data: { mainView: ROUTE_TOKENS.report, stepIndex: 10 },
+        children: [
+          { path: '', redirectTo: ROUTE_TOKENS.executiveSummary, pathMatch: 'full' },
+          {
+            path: ROUTE_TOKENS.facilityInfo,
+            component: FacilityInfoComponent,
+            data: { childView: ROUTE_TOKENS.facilityInfo },
+          },
+          {
+            path: ROUTE_TOKENS.executiveSummary,
+            component: ExecutiveSummaryComponent,
+            data: { childView: ROUTE_TOKENS.executiveSummary },
+          },
+          {
+            path: ROUTE_TOKENS.performanceProfile,
+            component: PerformanceProfileComponent,
+            data: { childView: ROUTE_TOKENS.performanceProfile },
+          },
+          {
+            path: ROUTE_TOKENS.systemProfile,
+            component: SystemProfileComponent,
+            data: { childView: ROUTE_TOKENS.systemProfile },
+          },
+          {
+            path: ROUTE_TOKENS.pumpSummary,
+            component: PumpSummaryComponent,
+            data: { childView: ROUTE_TOKENS.pumpSummary },
+          },
+          {
+            path: ROUTE_TOKENS.inputSummary,
+            component: InputSummaryComponent,
+            data: { childView: ROUTE_TOKENS.inputSummary },
+          },
+          {
+            path: ROUTE_TOKENS.towerSummary,
+            component: TowerSummaryComponent,
+            data: { childView: ROUTE_TOKENS.towerSummary },
+          },
+        ]
+      }
+    ]
+  }
+];
+
+
+@NgModule({
+  declarations: [
+    ProcessCoolingAssessmentComponent,
+    ProcessCoolingBannerComponent,
+    OperationsComponent,
+    SystemBasicsComponent,
+    SystemInformationComponent,
+    ChillerInventoryComponent,
+    AssessmentComponent,
+    ReportComponent,
+    ExploreOpportunitiesComponent,
+    IncreaseChilledTemperatureComponent,
+    ApplyVariableSpeedControlComponent,
+    DecreaseCondenserWaterTempComponent,
+    SlidingCondenserWaterTemperatureComponent,
+    UpgradeCoolingTowerFanComponent,
+    BaselineComponent,
+    ResultsPanelComponent,
+    BaselineTabsComponent,
+    HelpPanelComponent,
+    SystemBasicsHelpComponent,
+    SystemInformationHelpComponent,
+    InventoryHelpComponent,
+    InventoryTableComponent,
+    WaterPumpComponent,
+    PumpWrapperComponent,
+    WaterPumpHelpComponent,
+    OperationsHelpComponent,
+    ExecutiveSummaryComponent,
+    FacilityInfoComponent,
+    AirCooledComponent,
+    WaterCooledComponent,
+    CondenserCoolingSystemComponent,
+    CondenserCoolingHelpComponent,
+    TowerComponent,
+    TowerHelpComponent,
+    LoadScheduleComponent,
+    ChillerLoadScheduleComponent,
+    WeatherComponent,
+    ChillerCompressorTypePipe,
+    RefrigerantTypePipe,
+    OperatingScheduleComponent,
+    WeeklyOperatingScheduleComponent,
+    MonthlyOperatingScheduleComponent,
+    AddModificationComponent,
+    ModificationListComponent,
+    AssessmentResultsComponent,
+    EemHelpComponent,
+    PumpSummaryComponent,
+    InputSummaryComponent,
+    TowerSummaryComponent,
+    TowerEnergyHistogramComponent,
+    PerformanceProfileComponent,
+    ChillerProfileChartComponent,
+    SystemProfileComponent,
+    FilterChillerOutputsPipe,
+    InstallVSDComponent,
+    FilterChillerInventoryPipe,
+    FilterAvailableViewsPipe,
+    SystemInfoSummaryComponent,
+    InputSummaryTableComponent,
+    WeatherSummaryComponent,
+    PumpInputSummaryComponent,
+    CondenserInputSummaryComponent,
+    TowerInputSummaryComponent,
+    InventoryInputSummaryComponent,
+    UseFreeCoolingComponent,
+    ReplaceChillerRefrigerantComponent,
+    VsdInventoryTableComponent,
+    RefrigerantInventoryTableComponent
+  ],
+  imports: [
+    RouterModule.forChild(ROUTES),
+    CommonModule,
+    AsyncPipe,
+    RouterModule,
+    SettingsModule,
+    ReactiveFormsModule,
+    FormsModule,
+    TabsTooltipModule,
+    UpdateUnitsModalModule,
+    SharedPipesModule,
+    ExportableResultsTableModule,
+    AssessmentCo2SavingsModule,
+    Co2HelpTextModule,
+    ImportExportModule,
+    PercentGraphModule,
+    ModalModule,
+    NgbModule,
+    AlertBadgeComponent,
+    FormControlErrorsComponent,
+    InputUnitComponent,
+    AlertInfoContainerComponent,
+    PercentGraphModule,
+    ReportTableCellPipe,
+    ReportBuilderModule
+  ],
+  providers: [
+    ProcessCoolingAssessmentService,
+    ProcessCoolingUiService,
+    ProcessCoolingResultsService,
+    SystemInformationFormService,
+    ConvertProcessCoolingService,
+    AssessmentRedirectGuard,
+    ProcessCoolingAssessmentResolver,
+    ChillerInventoryService,
+    ChillerLoadScheduleService,
+    MonthlyOperatingScheduleService,
+    ModificationService,
+    ExploreOpportunitiesFormService,
+    ExecutiveSummaryResultsService,
+    PumpSummaryResultsService,
+    TowerSummaryService,
+    SystemProfileService,
+    InputSummaryService,
+    ProcessCoolingReportAdapter,
+    { provide: WEATHER_CONTEXT, useClass: ProcessCoolingWeatherContextService }
+  ]
+})
+export class ProcessCoolingAssessmentModule { }

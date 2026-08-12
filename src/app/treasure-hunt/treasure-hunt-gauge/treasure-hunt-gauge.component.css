@@ -1,0 +1,33 @@
+:host {
+	display: block;
+}
+
+.gauge-container {
+	position: relative;
+	display: block;
+	width: 100%;
+	overflow: visible;
+}
+
+
+.gauge-flex-row {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	width: 100%;
+}
+
+.error-icon {
+	position: static;
+	z-index: 100;
+	margin-left: -2rem;
+	/* align-self: flex-start; */
+	margin-top: -4.5rem;
+}
+
+
+.fa-exclamation-circle {
+	color: #d32f2f !important;
+	font-size: 1.5rem;
+}

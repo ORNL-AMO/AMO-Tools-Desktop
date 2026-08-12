@@ -27,7 +27,6 @@ export class CompressedAirReductionService {
     let defaultBagMethodObj: BagMethodInput = {
       bagVolume: 3.92,
       operatingTime: 0,
-      numberOfUnits: 1,
       bagFillTime: 80
     };
     let defaultPressureMethodObj: PressureMethodData = {
@@ -95,7 +94,6 @@ export class CompressedAirReductionService {
           operatingTime: 0,
           bagVolume: 0,
           bagFillTime: 0,
-          numberOfUnits: 1
       },
       pressureMethodData: {
         nozzleType: 0,
@@ -133,7 +131,6 @@ export class CompressedAirReductionService {
       bagVolume: [inputObj.bagMethodData.bagVolume],
       bagFillTime: [inputObj.bagMethodData.bagFillTime],
       operatingTime: [inputObj.bagMethodData.operatingTime],
-      numberOfUnits: [inputObj.bagMethodData.numberOfUnits],
 
       // orifice/pressure method data
       nozzleType: [inputObj.pressureMethodData.nozzleType],
@@ -205,8 +202,7 @@ export class CompressedAirReductionService {
     let bagMethodObj: BagMethodInput = {
       bagVolume: form.controls.bagVolume.value,
       bagFillTime: form.controls.bagFillTime.value,
-      operatingTime: form.controls.hoursPerYear.value,
-      numberOfUnits: form.controls.numberOfUnits.value
+      operatingTime: form.controls.hoursPerYear.value
     };
     let pressureMethodObj: PressureMethodData = {
       nozzleType: form.controls.nozzleType.value,
@@ -275,9 +271,34 @@ export class CompressedAirReductionService {
       results.modificationAggregateResults.energyUse = results.modificationAggregateResults.consumption;
     }
     results.annualCostSavings = results.baselineAggregateResults.energyCost - results.modificationAggregateResults.energyCost;
-    results.annualFlowRateReduction = results.baselineAggregateResults.flowRate - results.modificationAggregateResults.flowRate;
+    results.annualFlowRateReduction = this.calculateAnnualFlowRateReduction(baselineInpCpy, modificationInpCpy, results);
     results.annualConsumptionReduction = results.baselineAggregateResults.consumption - results.modificationAggregateResults.consumption;
     this.compressedAirResults.next(results);
+  }
+
+  calculateAnnualFlowRateReduction(
+    baselineInpCpy: Array<CompressedAirReductionData>,
+    modificationInpCpy: Array<CompressedAirReductionData>,
+    results: CompressedAirReductionResults
+  ) {
+    let annualFlowRateReduction: number = 0;
+    baselineInpCpy.forEach((baselineInput, index) => {
+      let baselineFlowRate: number = this.getFlowRateForReduction(baselineInput, results.baselineResults[index]);
+      let modificationInput: CompressedAirReductionData = modificationInpCpy && modificationInpCpy[index] ? modificationInpCpy[index] : baselineInput;
+      let modificationResult: CompressedAirReductionResult = results.modificationResults[index] ? results.modificationResults[index] : results.baselineResults[index];
+      let modificationFlowRate: number = this.getFlowRateForReduction(modificationInput, modificationResult);
+      annualFlowRateReduction += (baselineFlowRate - modificationFlowRate);
+    });
+    return annualFlowRateReduction;
+  }
+
+  getFlowRateForReduction(input: CompressedAirReductionData, result: CompressedAirReductionResult) {
+    if (input && input.measurementMethod == 0) {
+      let meterReading: number = input.flowMeterMethodData && input.flowMeterMethodData.meterReading != undefined ? input.flowMeterMethodData.meterReading : 0;
+      let units: number = input.units != undefined ? input.units : 1;
+      return meterReading * units;
+    }
+    return result && result.flowRate != undefined ? result.flowRate : 0;
   }
 
   buildIndividualResults(baselineInpCpy: Array<CompressedAirReductionData>, modificationInpCpy: Array<CompressedAirReductionData>, results: CompressedAirReductionResults, settings: Settings) {

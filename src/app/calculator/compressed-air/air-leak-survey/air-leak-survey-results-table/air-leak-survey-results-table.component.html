@@ -2,7 +2,7 @@
 
 @if (output.individualLeaks.length > 0) {
 <div class="mt-3">
-  <table class="table table-hover table-striped">
+  <table class="table table-hover">
     <tbody>
       <tr class="bold text-center no-border">
         <td>Fix
@@ -28,7 +28,7 @@
       </tr>
 
       @for (leak of output.individualLeaks; track $index) {
-      <tr class="text-center">
+      <tr class="text-center" [class.active-leak]="surveyService.currentLeakIndex() === $index">
         <td class="p-3">
           <input type="checkbox" [checked]="leak.selected" (change)="toggleSelected($index, $event)" />
         </td>
@@ -62,14 +62,14 @@
           }
         </td>
         }
-        <td class="pt-3 px-1 col-item-br d-flex justify-content-around align-items-center">
-          <button type="button" class="btn btn-link p-1 text-primary" (click)="copyLeak($index)" title="Copy">
+        <td class="col-item-br action-cell">
+          <button type="button" class="btn btn-link text-primary" (click)="copyLeak($index)" title="Copy">
             <i class="fa fa-copy fa-lg"></i>
           </button>
-          <button type="button" class="btn btn-link p-1 text-secondary" (click)="editLeak($index)" title="Edit">
+          <button type="button" class="btn btn-link text-secondary" (click)="editLeak($index)" title="Edit">
             <i class="fa fa-pencil fa-lg"></i>
           </button>
-          <button type="button" class="btn btn-link p-1 text-danger" (click)="deleteLeak($index)" title="Delete">
+          <button type="button" class="btn btn-link text-danger" (click)="deleteLeak($index)" title="Delete">
             <i class="fa fa-trash fa-lg"></i>
           </button>
         </td>

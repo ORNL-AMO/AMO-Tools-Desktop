@@ -198,7 +198,6 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
       operatingTime: 8760,
       bagVolume: .6817,
       bagFillTime: 12,
-      numberOfUnits: 1
     },
     decibelsMethodData: {
       linePressure: 0,
@@ -233,8 +232,7 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
    bagMethodData: {
       operatingTime: 0,
       bagVolume: 0,
-      bagFillTime: 0,
-      numberOfUnits: 0
+      bagFillTime: 0
     },
     decibelsMethodData: {
       linePressure: 0,
@@ -267,7 +265,6 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
       operatingTime: 0,
       bagVolume: 0,
       bagFillTime: 0,
-      numberOfUnits: 0
     },
     estimateMethodData: {
       leakRateEstimate: 0
@@ -304,8 +301,7 @@ export const exampleLeakInputs: Array<AirLeakSurveyData> = [
     bagMethodData: {
       operatingTime: 0,
       bagVolume: 0,
-      bagFillTime: 0,
-      numberOfUnits: 0
+      bagFillTime: 0
     },
     decibelsMethodData: {
       linePressure: 130,

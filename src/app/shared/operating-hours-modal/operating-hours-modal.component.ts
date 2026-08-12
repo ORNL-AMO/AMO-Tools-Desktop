@@ -10,11 +10,10 @@ import { UntypedFormGroup, AbstractControl } from '@angular/forms';
     styleUrls: ['./operating-hours-modal.component.css'],
     animations: [
         trigger('modal', [
-            state('show', style({
-                top: '50px'
-            })),
-            transition('hide => show', animate('.5s ease-in')),
-            transition('show => hide', animate('.5s ease-out'))
+            state('show', style({ top: '50px' })),
+            state('hide', style({ top: '-300px' })),
+            transition('hide => show', animate('500ms ease-in')),
+            transition('show => hide', animate('500ms ease-out'))
         ])
     ],
     standalone: false

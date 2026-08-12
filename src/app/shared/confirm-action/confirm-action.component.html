@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h3>{{data.modalTitle}}</h3>
+    <button class="close" (click)="close(false)">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body process-cooling-assessment">
+    <p>
+        {{data.confirmMessage}}
+    </p>
+       <div class="modal-footer p-2">
+        <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close(false)">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm " (click)="close(true)">
+            {{data.actionName ? data.actionName : 'Delete'}}
+        </button>
+    </div>
+</div>

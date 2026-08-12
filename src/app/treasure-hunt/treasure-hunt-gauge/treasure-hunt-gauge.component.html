@@ -1,1 +1,6 @@
-<div class="d-flex justify-content-center" #tHuntChart></div>
+<div class="gauge-container">
+	<div class="gauge-flex-row">
+		<div class="d-flex justify-content-center" #tHuntChart></div>
+		<span *ngIf="showErrorIcon" class="fa fa-exclamation-circle error-icon"></span>
+	</div>
+</div>

@@ -12,6 +12,15 @@
     box-shadow: 0 6px 6px rgba(0, 0, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.4);
 }
 
+@media (max-width: 600px) {
+    .card.card-toast-notification {
+        width: calc(100vw - 20px);
+        right: 0;
+        left: 0;
+        margin: 10px auto;
+    }
+}
+
 .alert-info.measur-info {
     background: rgb(111, 113, 116);
     color: #fff;

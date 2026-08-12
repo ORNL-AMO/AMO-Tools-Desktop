@@ -1,7 +1,7 @@
 .known-row-parent {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 2rem;
 }
 
@@ -11,8 +11,9 @@
 
 .saturated-conditional-column {
   display: flex;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
 }
 
 .saturated-conditional-input-group {

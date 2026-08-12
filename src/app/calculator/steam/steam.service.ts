@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SaturatedPropertiesInput, SteamPropertiesInput, BoilerInput, DeaeratorInput, FlashTankInput, HeaderInput, HeatLossInput, TurbineInput, PrvInput, HeatExchangerInput, SteamPressureOrTemp } from "../../shared/models/steam/steam-inputs";
+import { SaturatedPropertiesInput, SteamPropertiesInput, BoilerInput, DeaeratorInput, FlashTankInput, HeaderInput, HeatLossInput, TurbineInput, PrvInput, HeatExchangerInput, SteamPressureOrTemp, ThermodynamicQuantity } from "../../shared/models/steam/steam-inputs";
 import { ConvertUnitsService } from "../../shared/convert-units/convert-units.service";
 import { Settings } from "../../shared/models/settings";
 import { BoilerOutput, SaturatedPropertiesOutput, SteamPropertiesOutput, DeaeratorOutput, FlashTankOutput, HeaderOutput, HeatLossOutput, TurbineOutput, PrvOutput, HeatExchangerOutput, SSMTOutput, SSMTLosses } from '../../shared/models/steam/steam-outputs';
@@ -11,6 +11,13 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SteamService {
+  readonly BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG = -14.696;
+  readonly SATURATED_BOILER_PRESSURE_MAX_PSIG = 3185.415389;
+  readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
+
+  readonly STEAM_TEMPERATURE_MIN_F = 32;
+  readonly SATURATED_STEAM_TEMPERATURE_MAX_F = 705.1;
+  readonly SUPERHEATED_STEAM_TEMPERATURE_MAX_F = 1472;
 
   saturatedPropertiesInputs: {
     inputs: SaturatedPropertiesInput,
@@ -21,16 +28,21 @@ export class SteamService {
   steamPropertiesInput: SteamPropertiesInput;
   saturatedPropertiesData: Array<{ pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number }>;
   steamPropertiesData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>;
-  constructor(private convertUnitsService: ConvertUnitsService, 
-    private steamSuiteApiService: SteamSuiteApiService, 
+  constructor(private convertUnitsService: ConvertUnitsService,
+    private steamSuiteApiService: SteamSuiteApiService,
     private convertSteamService: ConvertSteamService) {
     this.steamModelerError = new BehaviorSubject<string>(undefined);
-   }
+  }
 
-  getSteamPropertiesValidationRanges(quantityValue: number, settings: Settings): SteamPropertiesValidationRanges  {
+  getSteamPropertiesValidationRanges(quantityValue: number, settings: Settings): SteamPropertiesValidationRanges {
     let quantityRanges: { min: number, max: number } = this.getQuantityRange(settings, quantityValue);
-    let minPressure: number = Number(this.convertUnitsService.value(1).from('kPaa').to(settings.steamPressureMeasurement).toFixed(3));
-    let maxPressure: number = Number(this.convertUnitsService.value(100).from('MPaa').to(settings.steamPressureMeasurement).toFixed(3));
+    let minPressure: number = Number(this.convertUnitsService.value(this.BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG).from('psig').to(settings.steamPressureMeasurement).toFixed(3));
+    let maxPressure: number;
+    if (quantityValue === ThermodynamicQuantity.QUALITY) {
+      maxPressure = Number(this.convertUnitsService.value(this.SATURATED_BOILER_PRESSURE_MAX_PSIG).from('psig').to(settings.steamPressureMeasurement).toFixed(3));
+    } else {
+      maxPressure = Number(this.convertUnitsService.value(100).from('MPaa').to(settings.steamPressureMeasurement).toFixed(3));
+    }
     return {
       minQuantityValue: quantityRanges.min,
       maxQuantityValue: quantityRanges.max,
@@ -43,20 +55,21 @@ export class SteamService {
     let _min: number = 0;
     let _max: number = 1;
     //temp
-    if (thermodynamicQuantity === 0) {
+    if (thermodynamicQuantity === ThermodynamicQuantity.TEMPERATURE) {
       _min = Number(this.convertUnitsService.value(32).from('F').to(settings.steamTemperatureMeasurement).toFixed(3));
       _max = Number(this.convertUnitsService.value(1472).from('F').to(settings.steamTemperatureMeasurement).toFixed(3));
     }
     //enthalpy
-    else if (thermodynamicQuantity === 1) {
-      _min = Number(this.convertUnitsService.value(50).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(3700).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(0));
+    else if (thermodynamicQuantity === ThermodynamicQuantity.ENTHALPY) {
+      _min = Number(this.convertUnitsService.value(50).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(3));
+      _max = Number(this.convertUnitsService.value(5413.4).from('kJkg').to(settings.steamSpecificEnthalpyMeasurement).toFixed(3));
     }
     //entropy
-    else if (thermodynamicQuantity === 2) {
-      _min = Number(this.convertUnitsService.value(0).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
-      _max = Number(this.convertUnitsService.value(6.52).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(0));
+    else if (thermodynamicQuantity === ThermodynamicQuantity.ENTROPY) {
+      _min = Number(this.convertUnitsService.value(0).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(3));
+      _max = Number(this.convertUnitsService.value(11.5857).from('kJkgK').to(settings.steamSpecificEntropyMeasurement).toFixed(3));
     }
+
     return { min: _min, max: _max };
   }
 
@@ -84,12 +97,16 @@ export class SteamService {
     let inputCpy = JSON.parse(JSON.stringify(saturatedPropertiesInput));
     //convert input and call suite to calcluate results depending on input for calculator
     let output: SaturatedPropertiesOutput;
+    //ISSUE 8340: when Pressure round UP to 1 decimal place
+    //when temperature round down to 1 decimal place
     if (pressureOrTemperature === SteamPressureOrTemp.PRESSURE) {
       inputCpy.saturatedPressure = this.convertSteamService.convertSteamPressureInput(inputCpy.saturatedPressure, settings);
       output = this.steamSuiteApiService.saturatedPropertiesGivenPressure(inputCpy);
+      output.saturatedTemperature = Math.ceil(output.saturatedTemperature * 10) / 10;
     } else if (pressureOrTemperature === SteamPressureOrTemp.TEMPERATURE) {
       inputCpy.saturatedTemperature = this.convertSteamService.convertSteamTemperatureInput(inputCpy.saturatedTemperature, settings);
       output = this.steamSuiteApiService.saturatedPropertiesGivenTemperature(inputCpy);
+      output.saturatedPressure = Math.floor(output.saturatedPressure * 10) / 10;
     }
     //convert results and return
     output = this.convertSteamService.convertSaturatedPropertiesOutput(output, settings);
@@ -385,7 +402,7 @@ export class SteamService {
       operationsOutput: undefined,
       co2EmissionsOutput: undefined,
     }
-    
+
   }
 
   getEmptyLosses(): SSMTLosses {
@@ -427,6 +444,6 @@ export class SteamService {
       totalOtherLosses: undefined,
       returnedSteamAndCondensate: undefined,
     }
-    
+
   }
 }

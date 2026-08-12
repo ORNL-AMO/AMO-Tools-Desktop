@@ -53,3 +53,29 @@ tbody{
 .no-border {
   border: none !important;
 }
+
+tr.active-leak > td {
+  background-color: rgba(112, 48, 160, 0.08) !important;
+}
+
+tr.active-leak > td:first-child {
+  border-left: 5px solid var(--compressed-air);
+}
+
+.action-cell {
+  text-align: center;
+  vertical-align: middle !important;
+}
+
+.action-cell .btn {
+  all: unset;
+  cursor: pointer;
+  padding: 0 16px;
+}
+
+.action-cell i {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+  font-size: 1.1rem;
+}

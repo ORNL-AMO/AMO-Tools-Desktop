@@ -30,7 +30,6 @@ export interface EstimateFormControls {
 }
 
 export interface BagFormControls {
-  numberOfUnits: FormControl<number | null>;
   bagVolume: FormControl<number | null>;
   bagFillTime: FormControl<number | null>;
 }
@@ -97,7 +96,6 @@ export class AirLeakSurveyFormService {
 
   buildBagForm(leak: AirLeakSurveyData): FormGroup<BagFormControls> {
     return this.fb.group<BagFormControls>({
-      numberOfUnits: new FormControl(leak.bagMethodData.numberOfUnits),
       bagVolume: new FormControl(leak.bagMethodData.bagVolume, [Validators.required, Validators.min(0)]),
       bagFillTime: new FormControl(leak.bagMethodData.bagFillTime, [Validators.required, Validators.min(0)]),
     });
@@ -139,7 +137,6 @@ export class AirLeakSurveyFormService {
       operatingTime: hoursPerYear,
       bagFillTime: form.controls.bagFillTime.value ?? 0,
       bagVolume: form.controls.bagVolume.value ?? 0,
-      numberOfUnits: form.controls.numberOfUnits.value ?? 1,
     };
   }
 
@@ -210,7 +207,7 @@ export class AirLeakSurveyFormService {
       selected: true,
       measurementMethod: LeakMeasurementMethod.Estimate,
       estimateMethodData: { leakRateEstimate: 0.1 },
-      bagMethodData: { operatingTime: 0, bagVolume: 0, bagFillTime: 0, numberOfUnits: 1 },
+      bagMethodData: { operatingTime: 0, bagVolume: 0, bagFillTime: 0 },
       decibelsMethodData: {
         linePressure: 0, decibels: 0, decibelRatingA: 0, pressureA: 0,
         firstFlowA: 0, secondFlowA: 0, decibelRatingB: 0, pressureB: 0,

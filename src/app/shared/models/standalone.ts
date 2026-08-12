@@ -211,7 +211,6 @@ export interface BagMethodInput {
   operatingTime: number;
   bagFillTime: number;
   bagVolume: number;
-  numberOfUnits: number;
 }
 
 export interface BagMethodOutput {

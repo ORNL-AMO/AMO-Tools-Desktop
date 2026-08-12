@@ -12,7 +12,7 @@
 
 <div class="clipboard-notification hide-print" [ngClass]="{'show-notification': showNotification }">
   <div class="checkmark-container">
-    <app-animated-checkmark [active]="activateCheckmark"></app-animated-checkmark>
+    <i class="fa notification-checkmark" [ngClass]="{'fa-square-o': !activateCheckmark, 'fa-check-square-o': activateCheckmark}"></i>
   </div>
   <div class="text-container">
     <span class="clipboard-notification-text">

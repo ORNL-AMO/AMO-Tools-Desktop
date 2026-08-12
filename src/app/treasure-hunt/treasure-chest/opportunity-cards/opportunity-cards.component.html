@@ -28,44 +28,50 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-lg-4 col-item-br opportunity-name pl-3 pr-1">
-          <div class="d-flex h-100 justify-content-center align-items-center">
-            <table class="table table-borderless mb-0">
-              <tbody>
-                <tr class="no-border-top" [ngClass]="{ active: sortByVal.sortBy == 'teamName'}">
-                  <td class="w-75">
-                    Owner/Lead/Team
-                  </td>
-                  <td class="w-25">
-                    <span *ngIf="cardData.teamName">{{cardData.teamName}}</span>
-                    <span *ngIf="!cardData.teamName">&mdash;</span>
-                  </td>
-                </tr>
-                <tr [ngClass]="{ active: sortByVal.sortBy == 'annualCostSavings'}">
-                  <td class="w-75">Annual Savings ({{settings.currency}})</td>
-                  <td class="w-25">
-                    <span *ngIf="cardData.annualCostSavings">{{cardData.annualCostSavings | number:"1.0-0"}}</span>
-                    <span *ngIf="!cardData.annualCostSavings">&mdash;</span>
-                  </td>
-                </tr>
-                <tr [ngClass]="{active: sortByVal.sortBy == 'implementationCost'}">
-                  <td class="w-75">Implementation Cost ({{settings.currency}})</td>
-                  <td class="w-25">
-                    <span *ngIf="cardData.implementationCost">{{cardData.implementationCost | number:"1.0-0"}}</span>
-                    <span *ngIf="!cardData.implementationCost">&mdash;</span>
-                  </td>
-                </tr>
-                <tr [ngClass]="{ active: sortByVal.sortBy == 'paybackPeriod' }">
-                  <td class="w-75">
-                    Payback Period
-                  </td>
-                  <td class="w-25">
-                    <span *ngIf="cardData.paybackPeriod">{{cardData.paybackPeriod | number:"1.2-2"}}</span>
-                    <span *ngIf="!cardData.paybackPeriod">&mdash;</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="col-12 col-lg-4 col-item-br opportunity-name p-0">
+          <div class="d-flex flex-column h-100">
+            <div class="d-flex flex-grow-1 justify-content-center align-items-center pl-3 pr-1">
+              <table class="table table-borderless mb-0">
+                <tbody>
+                  <tr class="no-border-top" [ngClass]="{ active: sortByVal.sortBy == 'teamName'}">
+                    <td class="w-75">
+                      Owner/Lead/Team
+                    </td>
+                    <td class="w-25">
+                      <span *ngIf="cardData.teamName">{{cardData.teamName}}</span>
+                      <span *ngIf="!cardData.teamName">&mdash;</span>
+                    </td>
+                  </tr>
+                  <tr [ngClass]="{ active: sortByVal.sortBy == 'annualCostSavings'}">
+                    <td class="w-75">Annual Savings ({{settings.currency}})</td>
+                    <td class="w-25">
+                      <span *ngIf="cardData.annualCostSavings">{{cardData.annualCostSavings | number:"1.0-0"}}</span>
+                      <span *ngIf="!cardData.annualCostSavings">&mdash;</span>
+                    </td>
+                  </tr>
+                  <tr [ngClass]="{active: sortByVal.sortBy == 'implementationCost'}">
+                    <td class="w-75">Implementation Cost ({{settings.currency}})</td>
+                    <td class="w-25">
+                      <span *ngIf="cardData.implementationCost">{{cardData.implementationCost | number:"1.0-0"}}</span>
+                      <span *ngIf="!cardData.implementationCost">&mdash;</span>
+                    </td>
+                  </tr>
+                  <tr [ngClass]="{ active: sortByVal.sortBy == 'paybackPeriod' }">
+                    <td class="w-75">
+                      Payback Period
+                    </td>
+                    <td class="w-25">
+                      <span *ngIf="cardData.paybackPeriod">{{cardData.paybackPeriod | number:"1.2-2"}}</span>
+                      <span *ngIf="!cardData.paybackPeriod">&mdash;</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="cardData.hasStaleAssessmentData" class="alert-warning text-center py-1 mb-0">
+              <i class="fa fa-exclamation-triangle"></i> Assessment data has changed
+              <button class="btn btn-sm btn-warning ml-2" (click)="syncAssessmentOpportunity(cardData)">Sync</button>
+            </div>
           </div>
         </div>
         <div class="col-12 col-lg-3 col-item-br">

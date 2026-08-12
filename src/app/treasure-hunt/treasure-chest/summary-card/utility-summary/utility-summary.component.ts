@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'app-utility-summary',
@@ -6,14 +6,11 @@ import { Component, OnInit, Input } from '@angular/core';
     styleUrls: ['./utility-summary.component.css'],
     standalone: false
 })
-export class UtilitySummaryComponent implements OnInit {
+export class UtilitySummaryComponent {
   @Input()
   summaryData: { totalPercentSavings: number, totalCostSavings: number, baselineCost: number, modificationCost: number };
   @Input()
   label: string;
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  @Input()
+  currency: string;
 }

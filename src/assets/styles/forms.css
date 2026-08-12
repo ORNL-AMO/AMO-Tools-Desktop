@@ -24,6 +24,12 @@
     padding-bottom: 0px;
 }
 
+.input-group-addon.op-hour-addon.units {
+    border-left: solid 1px;
+    border-right: none;
+
+}
+
 input[type="checkbox"]:hover {
   cursor: pointer;
 }

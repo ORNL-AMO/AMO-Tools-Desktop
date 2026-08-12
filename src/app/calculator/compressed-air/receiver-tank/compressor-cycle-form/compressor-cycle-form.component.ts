@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { ReceiverTankCompressorCycle, ReceiverTankCompressorCycleOutput } from '../../../../shared/models/standalone';
 import { ReceiverTankService } from '../receiver-tank.service';
+import { StandaloneService } from '../../../standalone.service';
 
 @Component({
     selector: 'app-compressor-cycle-form',
@@ -19,7 +20,9 @@ export class CompressorCycleFormComponent implements OnInit {
   output: ReceiverTankCompressorCycleOutput;
   setFormSub: Subscription;
 
-  constructor(private receiverTankService: ReceiverTankService) { }
+  constructor(private receiverTankService: ReceiverTankService,
+      private standaloneService: StandaloneService
+  ) { }
 
   ngOnInit() {
     this.setFormSub = this.receiverTankService.setForm.subscribe(val => {
@@ -49,26 +52,7 @@ export class CompressorCycleFormComponent implements OnInit {
   }
 
   calculate(): ReceiverTankCompressorCycleOutput {
-    let input: ReceiverTankCompressorCycle = this.inputs;
-    let pressureChange: number = input.unloadPressure - input.fullLoadPressure;
-    let capacity: number = ((input.loadTime / (input.loadTime + input.unloadTime)) * input.compressorCapacity);
-    let areaStorageVolume: number = (capacity * input.unloadTime / 60) / (pressureChange / input.atmosphericPressure);
-    let liquidStorageVolume: number;
-    if (this.settings.unitsOfMeasure == 'Metric') {
-      liquidStorageVolume = areaStorageVolume * 1000;
-    } else {
-      liquidStorageVolume = areaStorageVolume * 7.48052;
-    }
-    if(pressureChange != 0){
-      return {
-        pressureChange: pressureChange,
-        capacity: capacity,
-        areaStorageVolume: areaStorageVolume,
-        liquidStorageVolume: liquidStorageVolume
-      }
-    } else {
-      return undefined;
-    }
+    return this.standaloneService.calculateReceiverTankCompressorCycleSize(this.inputs, this.settings);
   }
 
 }

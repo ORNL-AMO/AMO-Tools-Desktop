@@ -1,0 +1,24 @@
+.pc-checkbox {
+  width: 1em;
+  height: 1em;
+  min-width: 1em;
+  min-height: 1em;
+  vertical-align: middle;
+}
+
+.pc-form-checkbox {
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+  vertical-align: middle;
+}
+
+.eem-disabled {
+	background-color: #e3e3e3;
+	pointer-events: none;
+}
+
+.eem-disabled span {
+	color: rgba(0, 0, 0, 0.38);
+}

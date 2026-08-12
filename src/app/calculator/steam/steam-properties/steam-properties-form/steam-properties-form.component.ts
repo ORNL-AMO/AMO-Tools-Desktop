@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { UntypedFormGroup } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
+import { ThermodynamicQuantity } from '../../../../shared/models/steam/steam-inputs';
 import { SteamPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
 
 @Component({
@@ -23,6 +24,8 @@ export class SteamPropertiesFormComponent implements OnInit {
   @Output('emitQuantityChange')
   emitQuantityChange = new EventEmitter<number>();
 
+
+  readonly ThermodynamicQuantity = ThermodynamicQuantity;
 
   constructor() {
   }
@@ -62,16 +65,16 @@ export class SteamPropertiesFormComponent implements OnInit {
 
   getOptionDisplayUnit(quantity: number) {
     let displayUnit: string;
-    if (quantity === 0) {
+    if (quantity === ThermodynamicQuantity.TEMPERATURE) {
       displayUnit = this.settings.steamTemperatureMeasurement;
       return displayUnit;
-    } else if (quantity === 1) {
+    } else if (quantity === ThermodynamicQuantity.ENTHALPY) {
       displayUnit = this.settings.steamSpecificEnthalpyMeasurement;
       return displayUnit;
-    } else if (quantity === 2) {
+    } else if (quantity === ThermodynamicQuantity.ENTROPY) {
       displayUnit = this.settings.steamSpecificEntropyMeasurement;
       return displayUnit;
-    } else if (quantity === 3) {
+    } else if (quantity === ThermodynamicQuantity.QUALITY) {
       return displayUnit;
     }
   }

@@ -31,3 +31,5 @@ jobs:
           done
       - name: Run unit tests
         run: npm test -- --watch=false --no-progress
+      - name: Run process-flow-diagram-component unit tests
+        run: cd process-flow-diagram-component && npm test

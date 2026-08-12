@@ -96,7 +96,7 @@ import { ShareDataModalModule } from '../shared/share-data-modal/share-data-moda
     SubscribeToastComponent,
     SubscribeModalComponent,
     ExportToJustifiModalModule,
-    ShareDataModalModule
+    ShareDataModalModule,
   ],
   providers: [
     AssessmentService,

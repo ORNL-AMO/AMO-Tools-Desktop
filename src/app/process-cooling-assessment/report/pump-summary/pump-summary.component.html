@@ -1,0 +1,109 @@
+<div class="output-summary p-3">
+	<h4 class="show-print print-section-header">Pump Summary</h4>
+
+	@let pumpSummaryUI = pumpSummaryUI$ | async;
+
+	@if (pumpSummaryUI) {
+	@let columnWidth = 100 /(pumpSummaryUI.modificationNames.length+2);
+	<table #pumpingEnergyTable class="table table-hover mb-4">
+		<thead>
+			<tr>
+				<th [style.width.%]="columnWidth"></th>
+				<th [style.width.%]="columnWidth">Baseline</th>
+				@for (modificationName of pumpSummaryUI.modificationNames; track $index) {
+				<th [style.width.%]="columnWidth">
+					{{modificationName.name}}
+				</th>
+				}
+			</tr>
+		</thead>
+		<tbody>
+			@if (invalidModificationIds() && invalidModificationIds().length > 0) {
+				<tr>
+					<td></td>
+					<td></td>
+					@for (modification of pumpSummaryUI.modificationNames; track $index; let modIndex = $index) {
+					@let isValidModification = !invalidModificationIds()?.includes(modification.id);
+				
+					@if(!isValidModification) {
+					<td>
+						<span class="alert-danger">
+							Modification Invalid:<br>
+							<span>Errors found in Explore Opportunities<br></span>
+						</span>
+					</td>
+					}
+					}
+				</tr>
+			}
+			<tr class="section-header">
+				<td colspan="{{pumpSummaryUI.modificationNames.length + 2}}">Chiller Pumping Energy</td>
+			</tr>
+			@for (row of pumpSummaryUI.chillerPumpingEnergy; track row; let i = $index) {
+			<tr [class]="row.className">
+				<td>
+					<span [innerHTML]="row.label"></span>
+					@if(row.units) {
+					<span class="pl-1" [innerHTML]="row.units"></span>
+					}
+				</td>
+				<td>{{ row.baseline | reportTableCell }}</td>
+				@for (modResult of row.modifications; track modResult) {
+				<td>{{ modResult | reportTableCell }}</td>
+				}
+			</tr>
+			}
+
+			<tr class="section-header">
+				<td colspan="{{pumpSummaryUI.modificationNames.length + 2}}">Condenser Pumping Energy</td>
+			</tr>
+			@for (row of pumpSummaryUI.condenserPumpingEnergy; track row; let i = $index) {
+			<tr [class]="row.className">
+				<td>
+					<span [innerHTML]="row.label"></span>
+					@if(row.units) {
+					<span class="pl-1" [innerHTML]="row.units"></span>
+					}
+				</td>
+				<td>
+					{{ row.baseline | reportTableCell }}
+				</td>
+				@for (modResult of row.modifications; track $index) {
+				<td>
+					{{ modResult | reportTableCell }}
+				</td>
+				}
+			</tr>
+			}
+		</tbody>
+	</table>
+	<app-exportable-results-table [tableString]="pumpingEnergyTableString"
+	(updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+
+	<table #totalsTable class="table table-hover mt-3">
+		<tbody>
+			@for (row of pumpSummaryUI.summaryRows; track row.label) {
+			<tr [class]="row.className">
+				<td [style.width.%]="columnWidth">
+					<span [innerHTML]="row.label"></span>
+					@if(row.units) {
+					<span class="pl-1" [innerHTML]="row.units"></span>
+					}
+				</td>
+				<td [style.width.%]="columnWidth">
+					{{ row.baseline | reportTableCell }}
+				</td>
+				@for (modResult of row.modifications; track $index) {
+				<td [style.width.%]="columnWidth">
+					{{ modResult | reportTableCell }}
+				</td>
+				}
+			</tr>
+			}
+		</tbody>
+	</table>
+	}
+</div>
+
+<app-exportable-results-table [tableString]="totalsTableString"
+	(updateTableString)="updateCopyTableString()"></app-exportable-results-table>

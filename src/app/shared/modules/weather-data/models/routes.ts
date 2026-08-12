@@ -1,0 +1,23 @@
+import { WeatherDataComponent } from "../weather-data.component";
+import { WeatherStationsComponent } from "../weather-stations/weather-stations.component";
+import { AnnualStationDataComponent } from "../annual-station-data/annual-station-data.component";
+import { WeatherFileImportComponent } from "../weather-file-import/weather-file-import.component";
+import { Route } from '@angular/router';
+import { ROUTE_TOKENS } from './route-tokens';
+export { ROUTE_TOKENS } from './route-tokens';
+
+const WEATHER_ROUTES: Route[] = [
+  {
+    path: "",
+    component: WeatherDataComponent,
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: ROUTE_TOKENS.stations },
+      { path: ROUTE_TOKENS.stations, component: WeatherStationsComponent },
+      { path: ROUTE_TOKENS.annualStation, component: AnnualStationDataComponent },
+      { path: ROUTE_TOKENS.fileImport, component: WeatherFileImportComponent },
+    ]
+  }
+];
+
+
+export default WEATHER_ROUTES;

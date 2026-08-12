@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef } fro
 import { UntypedFormGroup, Validators } from "@angular/forms";
 import { Settings } from "../../../../shared/models/settings";
 import { SaturatedPropertiesOutput } from "../../../../shared/models/steam/steam-outputs";
+import { SteamPressureOrTemp } from "../../../../shared/models/steam/steam-inputs";
 
 @Component({
     selector: 'app-saturated-properties-form',
@@ -10,6 +11,7 @@ import { SaturatedPropertiesOutput } from "../../../../shared/models/steam/steam
     standalone: false
 })
 export class SaturatedPropertiesFormComponent implements OnInit {
+  SteamPressureOrTemp = SteamPressureOrTemp;
   @Input()
   saturatedPropertiesForm: UntypedFormGroup;
   @Input()
@@ -31,11 +33,11 @@ export class SaturatedPropertiesFormComponent implements OnInit {
   }
 
   setValidators() {
-    if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === 0) {
+    if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === SteamPressureOrTemp.PRESSURE) {
       this.saturatedPropertiesForm.controls.saturatedPressure.setValidators([Validators.required, Validators.min(this.ranges.minPressure), Validators.max(this.ranges.maxPressure)]);
       this.saturatedPropertiesForm.controls.saturatedTemperature.clearValidators();
       this.saturatedPropertiesForm.controls.saturatedTemperature.reset(this.saturatedPropertiesForm.controls.saturatedTemperature.value);
-    }else if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === 1) {
+    }else if (this.saturatedPropertiesForm.controls.pressureOrTemperature.value === SteamPressureOrTemp.TEMPERATURE) {
       this.saturatedPropertiesForm.controls.saturatedTemperature.setValidators([Validators.required, Validators.min(this.ranges.minTemp), Validators.max(this.ranges.maxTemp)]);
       this.saturatedPropertiesForm.controls.saturatedPressure.clearValidators();
       this.saturatedPropertiesForm.controls.saturatedPressure.reset(this.saturatedPropertiesForm.controls.saturatedPressure.value);
@@ -66,12 +68,12 @@ export class SaturatedPropertiesFormComponent implements OnInit {
     this.emitChangeField.emit(str);
   }
 
-  getOptionDisplayUnit(quantity: number) {
+  getOptionDisplayUnit(quantity: SteamPressureOrTemp) {
     let displayUnit: string;
-    if (quantity === 0) {
+    if (quantity === SteamPressureOrTemp.PRESSURE) {
       displayUnit = this.settings.pressureMeasurement;
       return displayUnit;
-    } else if (quantity === 1) {
+    } else if (quantity === SteamPressureOrTemp.TEMPERATURE) {
       displayUnit = this.settings.temperatureMeasurement;
       return displayUnit;
     }

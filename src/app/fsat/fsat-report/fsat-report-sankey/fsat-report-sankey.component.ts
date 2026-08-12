@@ -2,6 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FSAT } from '../../../shared/models/fans';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
+import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
+
+export interface FsatSankeyScenario {
+  scenario: FSAT;
+  costSavings: number;
+  isBaseline: boolean;
+}
 
 @Component({
     selector: 'app-fsat-report-sankey',
@@ -15,39 +22,24 @@ export class FsatReportSankeyComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  fsat1CostSavings: number;
-  fsat2CostSavings: number;
-  fsat1: FSAT;
-  fsat2: FSAT;
-  fsat1Baseline: boolean = true;
-  fsat2Baseline: boolean = false;
+  fsatOptions: Array<SankeyScenarioOption>;
+  sankeyScenarios: Array<FsatSankeyScenario>;
   constructor() { }
 
   ngOnInit() {
-    this.fsat1 = this.assessment.fsat;
-    this.setFsat1Savings();
-    if (this.assessment.fsat.modifications.length != 0) {
-      this.fsat2 = this.assessment.fsat.modifications[0].fsat;
-      this.setFsat2Savings();
-    }
+    const fsats = [this.assessment.fsat, ...(this.assessment.fsat.modifications ?? []).map(modification => modification.fsat)];
+    this.fsatOptions = fsats.map(fsat => ({ name: fsat.name, value: fsat }));
+    this.sankeyScenarios = fsats.map(fsat => ({ scenario: fsat, costSavings: this.getCostSavings(fsat), isBaseline: fsat === this.assessment.fsat }));
   }
 
-  setFsat1Savings() {
-    this.fsat1CostSavings = this.assessment.fsat.outputs.annualCost - this.fsat1.outputs.annualCost;
+  setFsat(sankeyScenario: FsatSankeyScenario, selectedFsat: FSAT) {
+    sankeyScenario.scenario = selectedFsat;
+    sankeyScenario.isBaseline = selectedFsat === this.assessment.fsat;
+    sankeyScenario.costSavings = this.getCostSavings(selectedFsat);
   }
 
-  setFsat2Savings() {
-    this.fsat2CostSavings = this.assessment.fsat.outputs.annualCost - this.fsat2.outputs.annualCost;
+  getCostSavings(selectedFsat: FSAT): number {
+    return (this.assessment.fsat.outputs && selectedFsat.valid?.isValid && selectedFsat.outputs)
+      ? this.assessment.fsat.outputs.annualCost - selectedFsat.outputs.annualCost : undefined;
   }
-
-  setFsat1() {
-    this.fsat1Baseline = this.assessment.fsat.name == this.fsat1.name? true : false
-    this.fsat1CostSavings = this.assessment.fsat.outputs.annualCost - this.fsat1.outputs.annualCost;
-  }
-
-  setFsat2() {
-    this.fsat2Baseline = this.assessment.fsat.name == this.fsat2.name? true : false
-    this.fsat2CostSavings = this.assessment.fsat.outputs.annualCost - this.fsat2.outputs.annualCost;
-  }
-
 }

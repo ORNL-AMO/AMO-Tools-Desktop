@@ -41,6 +41,7 @@
 
       <div class="form-group">
         <label for="{{'category_'+idString}}">Fixture Category
+            <a id="materialHelp" class="form-text small click-link" (click)="showMaterialModal(false)">Add Custom Fixture</a>
         </label>
         <select name="type" class="form-control" id="{{'category_'+idString}}" formControlName="category"
           (change)="setCategory()" (focus)="focusField('category')">
@@ -49,7 +50,7 @@
         </select>
       </div>
 
-      <div class="form-group" *ngIf="form.controls.category.value != 0">
+      <div class="form-group" *ngIf="fixtureTypes && fixtureTypes.length > 0">
         <label for="{{'type_'+idString}}">Fixture type
         </label>
         <select name="type" class="form-control" id="{{'type_'+idString}}" formControlName="type"
@@ -60,7 +61,7 @@
         </select>
       </div>
 
-      <div class="form-group help-text" *ngIf="form.controls.category.value != 0 && form.controls.lampLife.value">
+      <div class="form-group help-text" *ngIf="fixtureTypes && fixtureTypes.length > 0 && form.controls.lampLife.value">
         <label>Lamp Life
         </label>
         <div class="input-group">
@@ -192,6 +193,17 @@
 
     </div>
   </form>
+</div>
+<div bsModal #materialModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="materialModalLabel"
+  aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div>
+        <app-lighting-fixtures-material *ngIf="showModal" (closeModal)="hideMaterialModal($event)" (hideModal)="hideMaterialModal($event)"
+          [settings]="settings" [editExistingMaterial]="editExistingMaterial" [existingMaterial]="existingMaterial"></app-lighting-fixtures-material>
+      </div>
+    </div>
+  </div>
 </div>
 
 
