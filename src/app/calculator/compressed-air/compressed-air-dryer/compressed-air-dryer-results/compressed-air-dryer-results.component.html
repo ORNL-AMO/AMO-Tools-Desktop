@@ -25,7 +25,20 @@
       </tr>
 
       <tr>
-        <td class="group-label bold">Heater Power</td>
+        <td class="group-label bold">Purge Rate</td>
+        <td class="text-center">
+          {{baselineOutput.purgeRate | number:'1.2-2'}} <span>%</span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists && modificationOutput">
+            {{modificationOutput.purgeRate | number:'1.2-2'}} <span>%</span>
+          </span>
+        </td>
+      </tr>
+
+      <tr>
+        <td class="group-label bold">Heater</td>
         <td class="text-center">
           {{baselineOutput.heaterPower | number:'1.2-2'}} <span>kW</span>
         </td>
@@ -46,19 +59,6 @@
           <span *ngIf="!modificationExists">&mdash;</span>
           <span *ngIf="modificationExists && modificationOutput">
             {{modificationOutput.heatingHoursPerDay | number:'1.2-2'}} <span>hrs/day</span>
-          </span>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="group-label bold">Purge Rate</td>
-        <td class="text-center">
-          {{baselineOutput.purgeRate | number:'1.2-2'}} <span>%</span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="!modificationExists">&mdash;</span>
-          <span *ngIf="modificationExists && modificationOutput">
-            {{modificationOutput.purgeRate | number:'1.2-2'}} <span>%</span>
           </span>
         </td>
       </tr>
