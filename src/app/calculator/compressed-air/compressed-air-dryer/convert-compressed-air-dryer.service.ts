@@ -53,7 +53,13 @@ export class ConvertCompressedAirDryerService {
     costOfElectricity: { min: number, max: number },
     costOfCompressedAir: { min: number, max: number },
     costOfCoolingWater: { min: number, max: number },
+    heaterPower: { min: number, max: number },
+    heatingHoursPerDay: { min: number, max: number },
+    purgeRate: { min: number, max: number },
   } {
+    const heaterPower = { min: 0, max: 1000 };
+    const heatingHoursPerDay = { min: 0, max: 24 };
+    const purgeRate = { min: 0, max: 100 };
     if (settings.unitsOfMeasure === 'Imperial') {
       return {
         flowRate: { min: 1, max: 50000 },
@@ -62,6 +68,9 @@ export class ConvertCompressedAirDryerService {
         costOfElectricity: { min: 0.01, max: 0.20 },
         costOfCompressedAir: { min: 0.20, max: 0.50 },
         costOfCoolingWater: { min: 0.25, max: 10.00 },
+        heaterPower,
+        heatingHoursPerDay,
+        purgeRate,
       };
     }
     const imperialOverride: Settings = { ...settings, unitsOfMeasure: 'Imperial' };
@@ -87,6 +96,9 @@ export class ConvertCompressedAirDryerService {
         min: this.roundVal(this.convertUnitsService.convertDollarsPerGalAndLiter(0.25, imperialOverride, settings)),
         max: this.roundVal(this.convertUnitsService.convertDollarsPerGalAndLiter(10.00, imperialOverride, settings)),
       },
+      heaterPower,
+      heatingHoursPerDay,
+      purgeRate,
     };
   }
 

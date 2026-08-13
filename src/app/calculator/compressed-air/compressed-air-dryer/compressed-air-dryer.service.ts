@@ -70,6 +70,9 @@ export class CompressedAirDryerService {
       costOfElectricity:    [inputObj.costOfElectricity, [Validators.required, Validators.min(ranges.costOfElectricity.min), Validators.max(ranges.costOfElectricity.max)]],
       costOfCompressedAir:  [inputObj.costOfCompressedAir, [Validators.required, Validators.min(ranges.costOfCompressedAir.min), Validators.max(ranges.costOfCompressedAir.max)]],
       costOfCoolingWater:   [inputObj.costOfCoolingWater, [Validators.required, Validators.min(ranges.costOfCoolingWater.min), Validators.max(ranges.costOfCoolingWater.max)]],
+      heaterPower:          [inputObj.heaterPower, [Validators.required, Validators.min(ranges.heaterPower.min), Validators.max(ranges.heaterPower.max)]],
+      heatingHoursPerDay:   [inputObj.heatingHoursPerDay, [Validators.required, Validators.min(ranges.heatingHoursPerDay.min), Validators.max(ranges.heatingHoursPerDay.max)]],
+      purgeRate:            [inputObj.purgeRate, [Validators.required, Validators.min(ranges.purgeRate.min), Validators.max(ranges.purgeRate.max)]],
     });
   }
 
@@ -85,11 +88,11 @@ export class CompressedAirDryerService {
       costOfElectricity:    form.controls.costOfElectricity.value,
       costOfCompressedAir:  form.controls.costOfCompressedAir.value,
       costOfCoolingWater:   form.controls.costOfCoolingWater.value,
-      // heaterPower, heatingHoursPerDay, purgeRate, and designDDCPercentage are always
-      // left at 0 so the engine auto-calculates them per dryerType; results-only, not user inputs.
-      heaterPower:          0,
-      heatingHoursPerDay:   0,
-      purgeRate:            0,
+      heaterPower:          form.controls.heaterPower.value,
+      heatingHoursPerDay:   form.controls.heatingHoursPerDay.value,
+      purgeRate:            form.controls.purgeRate.value,
+      // designDDCPercentage is always left at 0 so the engine auto-calculates it per
+      // dryerType; results-only, not a user input.
       designDDCPercentage:  0,
     };
   }
