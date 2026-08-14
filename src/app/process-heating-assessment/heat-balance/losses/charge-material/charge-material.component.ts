@@ -21,8 +21,6 @@ import { SolidMaterialFormService } from './solid-form/solid-material-form.servi
   ],
 })
 export class ChargeMaterialComponent implements OnInit {
-  // 'baseline' or a modification id — see rebuild guide §8. Only 'baseline' is routed to today;
-  // the modification-editing side-by-side view is Step 15 work.
   readonly source = input<AssessmentScenario>('baseline');
 
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);

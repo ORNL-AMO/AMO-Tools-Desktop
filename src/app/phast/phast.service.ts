@@ -722,9 +722,6 @@ export class PhastService {
     return this.computeChargeMaterialResults(losses, settings, isCheckingSetup).sum;
   }
 
-  // Per-item breakdown alongside the aggregate sum, computed in the same pass so each material's
-  // WASM binding only runs once per call (see computeChargeMaterialResults). Position-aligned with
-  // `losses` — an invalid entry gets `{}` rather than being omitted, to keep indices matched.
   getChargeMaterialResults(losses: ChargeMaterial[], settings: Settings): { sum: number, results: ChargeMaterialResult[] } {
     return this.computeChargeMaterialResults(losses, settings, false);
   }

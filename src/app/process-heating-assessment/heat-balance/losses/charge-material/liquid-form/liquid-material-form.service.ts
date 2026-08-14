@@ -91,9 +91,6 @@ export class LiquidMaterialFormService {
   checkLiquidWarnings(liquid: LiquidChargeMaterial): LiquidMaterialWarnings {
     if (!liquid || liquid.vaporizingTemperature == null) return EMPTY_WARNINGS;
     const { dischargeTemperature, initialTemperature, vaporizingTemperature, percentVaporized } = liquid;
-    // Compare the raw field, not a `?? 0`-normalized copy: a genuinely missing percentVaporized
-    // (e.g. an older saved record) should not trip these warnings, matching the pre-rewrite
-    // behavior where comparisons against `undefined` were always false.
     return {
       dischargeAboveVaporizingNoVaporPercent: (dischargeTemperature > vaporizingTemperature && percentVaporized === 0)
         ? `The Charge Outlet Temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.`
