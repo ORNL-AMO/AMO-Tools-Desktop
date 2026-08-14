@@ -11,6 +11,8 @@ import { HeatingEquipmentConfiguration, HeatingSystemEnergyType } from '../model
 
 export type ProcessHeatingDataProperty = keyof PHAST;
 
+export type AssessmentScenario = 'baseline' | string;
+
 export function deriveHeatingSystemEnergyType(config: HeatingEquipmentConfiguration): HeatingSystemEnergyType {
   const HC = HeatingEquipmentConfiguration;
   return {
@@ -102,6 +104,28 @@ export class ProcessHeatingAssessmentService {
     if (current) {
       this.setProcessHeating({ ...current, [key]: value });
     }
+  }
+
+  updateModificationProperty<K extends ProcessHeatingDataProperty>(modificationId: string, key: K, value: PHAST[K]): void {
+    const current = this.processHeating.getValue();
+    const modIndex = current?.modifications?.findIndex(mod => mod.id === modificationId) ?? -1;
+    if (modIndex === -1) {
+      return;
+    }
+    const modifications = [...current.modifications];
+    modifications[modIndex] = { ...modifications[modIndex], phast: { ...modifications[modIndex].phast, [key]: value } };
+    this.setProcessHeating({ ...current, modifications });
+  }
+
+  scenarioPhast(scenario: AssessmentScenario): PHAST | undefined {
+    return this.resolveScenarioPhast(this.processHeatingSignal(), scenario);
+  }
+
+  private resolveScenarioPhast(phast: PHAST | undefined, scenario: AssessmentScenario): PHAST | undefined {
+    if (scenario === 'baseline') {
+      return phast;
+    }
+    return phast?.modifications?.find(mod => mod.id === scenario)?.phast;
   }
 
   async initAssessmentSettings(assessment: Assessment): Promise<void> {

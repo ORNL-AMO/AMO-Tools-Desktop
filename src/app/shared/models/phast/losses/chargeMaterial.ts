@@ -15,6 +15,7 @@ export const ChargeMaterialType = {
 export type ChargeMaterialType = typeof ChargeMaterialType[keyof typeof ChargeMaterialType];
 
 export interface ChargeMaterial {
+  id?: string;
   chargeMaterialType?: ChargeMaterialType;
   gasChargeMaterial?: GasChargeMaterial;
   liquidChargeMaterial?: LiquidChargeMaterial;

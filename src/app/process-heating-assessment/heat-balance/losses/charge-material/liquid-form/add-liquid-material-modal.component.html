@@ -1,0 +1,48 @@
+<div class="modal-header">
+  <h4 class="modal-title">Add New Liquid Material</h4>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-group">
+      <label for="substance">Material Name</label>
+      <input type="text" class="form-control" id="substance" formControlName="substance">
+      <app-form-control-errors [control]="form.controls.substance" [settings]="settings"></app-form-control-errors>
+    </div>
+    <div class="form-group">
+      <label for="specificHeatLiquid">Specific Heat of Liquid</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="specificHeatLiquid" formControlName="specificHeatLiquid">
+        <app-input-unit [settings]="settings" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form.controls.specificHeatLiquid" [settings]="settings"></app-form-control-errors>
+    </div>
+    <div class="form-group">
+      <label for="specificHeatVapor">Specific Heat of Vapor</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="specificHeatVapor" formControlName="specificHeatVapor">
+        <app-input-unit [settings]="settings" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form.controls.specificHeatVapor" [settings]="settings"></app-form-control-errors>
+    </div>
+    <div class="form-group">
+      <label for="latentHeat">Latent Heat of Vaporization</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="latentHeat" formControlName="latentHeat">
+        <app-input-unit [settings]="settings" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form.controls.latentHeat" [settings]="settings"></app-form-control-errors>
+    </div>
+    <div class="form-group">
+      <label for="vaporizationTemperature">Vaporizing Temperature</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="vaporizationTemperature" formControlName="vaporizationTemperature">
+        <app-input-unit [settings]="settings" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form.controls.vaporizationTemperature" [settings]="settings"></app-form-control-errors>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-white" (click)="close()">Cancel</button>
+  <button type="button" class="btn btn-primary" [disabled]="form.invalid" (click)="save()">Save</button>
+</div>

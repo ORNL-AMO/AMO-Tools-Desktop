@@ -6,7 +6,7 @@ import { ExhaustGasEAF } from '../shared/models/phast/losses/exhaustGasEAF';
 import { Losses, PhastResults } from '../shared/models/phast/phast';
 import { FixtureLoss } from '../shared/models/phast/losses/fixtureLoss';
 import { GasCoolingLoss, LiquidCoolingLoss, CoolingLoss } from '../shared/models/phast/losses/coolingLoss';
-import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
+import { GasChargeMaterial, LiquidChargeMaterial, SolidChargeMaterial, ChargeMaterial, ChargeMaterialResult, LoadChargeMaterial } from '../shared/models/phast/losses/chargeMaterial';
 import { OpeningLoss, CircularOpeningLoss, QuadOpeningLoss } from '../shared/models/phast/losses/openingLoss';
 import { WallLoss } from '../shared/models/phast/losses/wallLoss';
 import { LeakageLoss } from '../shared/models/phast/losses/leakageLoss';
@@ -719,32 +719,49 @@ export class PhastService {
   }
 
   sumChargeMaterials(losses: ChargeMaterial[], settings: Settings, isCheckingSetup: boolean): number {
+    return this.computeChargeMaterialResults(losses, settings, isCheckingSetup).sum;
+  }
+
+  // Per-item breakdown alongside the aggregate sum, computed in the same pass so each material's
+  // WASM binding only runs once per call (see computeChargeMaterialResults). Position-aligned with
+  // `losses` — an invalid entry gets `{}` rather than being omitted, to keep indices matched.
+  getChargeMaterialResults(losses: ChargeMaterial[], settings: Settings): { sum: number, results: ChargeMaterialResult[] } {
+    return this.computeChargeMaterialResults(losses, settings, false);
+  }
+
+  private computeChargeMaterialResults(losses: ChargeMaterial[], settings: Settings, isCheckingSetup: boolean): { sum: number, results: ChargeMaterialResult[] } {
     let sum = 0;
+    const results: ChargeMaterialResult[] = [];
     losses.forEach(loss => {
+      let loadResult: LoadChargeMaterial | undefined;
+      let isValid = false;
       if (loss.chargeMaterialType === 'Gas') {
-        let tmpForm = this.gasMaterialFormService.getGasChargeMaterialForm(loss);
-        if ( isCheckingSetup && tmpForm.status === 'VALID') {
-          sum += 1;
-        } else if (tmpForm.status === 'VALID') {
-          sum += this.gasLoadChargeMaterial(loss.gasChargeMaterial, settings).bindingResult;
+        isValid = this.gasMaterialFormService.getGasChargeMaterialForm(loss).status === 'VALID';
+        if (isValid && !isCheckingSetup) {
+          loadResult = this.gasLoadChargeMaterial(loss.gasChargeMaterial, settings);
         }
       } else if (loss.chargeMaterialType === 'Solid') {
-        let tmpForm = this.solidMaterialFormService.getSolidChargeMaterialForm(loss);
-        if (isCheckingSetup && tmpForm.status === 'VALID') {
-          sum += 1;
-        } else if (tmpForm.status === 'VALID') {
-          sum += this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings).bindingResult;
+        isValid = this.solidMaterialFormService.getSolidChargeMaterialForm(loss).status === 'VALID';
+        if (isValid && !isCheckingSetup) {
+          loadResult = this.solidLoadChargeMaterial(loss.solidChargeMaterial, settings);
         }
       } else if (loss.chargeMaterialType === 'Liquid') {
-        let tmpForm = this.liquidMaterialFormService.getLiquidChargeMaterialForm(loss);
-        if (isCheckingSetup && tmpForm.status === 'VALID') {
-          sum += 1;
-        } else if (tmpForm.status === 'VALID') {
-          sum += this.liquidLoadChargeMaterial(loss.liquidChargeMaterial, settings).bindingResult;
+        isValid = this.liquidMaterialFormService.getLiquidChargeMaterialForm(loss).status === 'VALID';
+        if (isValid && !isCheckingSetup) {
+          loadResult = this.liquidLoadChargeMaterial(loss.liquidChargeMaterial, settings);
         }
       }
+
+      if (isCheckingSetup && isValid) {
+        sum += 1;
+      } else if (loadResult) {
+        sum += loadResult.bindingResult;
+      }
+      results.push(loadResult
+        ? { heatRequired: loadResult.grossHeatLoss, netHeatLoss: loadResult.netHeatLoss, endoExoHeat: loadResult.endoExoHeat }
+        : {});
     });
-    return sum;
+    return { sum, results };
   }
 
   sumCoolingLosses(losses: CoolingLoss[], settings: Settings): number {
