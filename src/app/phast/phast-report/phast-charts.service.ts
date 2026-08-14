@@ -399,7 +399,7 @@ export class PhastChartsService {
   async renderSankeyAsImage(phast: PHAST, settings: Settings, labelStyle = 'both'): Promise<string> {
     const results = this.sankeyService.getFuelTotals(phast, settings);
     const exothermicHeat = this.sankeyService.getExothermicHeat();
-    const fuelEnergy = this.sankeyService.getFuelEnergy();
+    const fuelEnergy = this.sankeyService.getFuelEnergy() ?? this.sankeyService.getChemicalEnergy();
     const electricalEnergy = this.sankeyService.getElectricalEnergy();
 
     const { sankeyData, layout, connectingNodes, orangeLinkPaths } =

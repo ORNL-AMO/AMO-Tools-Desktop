@@ -168,8 +168,10 @@ export class SsmtChartsService {
       + losses.highToMediumTurbineUsefulEnergy + losses.mediumToLowTurbineUsefulEnergy;
     const processUsage = losses.highPressureProcessUsage + losses.mediumPressureProcessUsage + losses.lowPressureProcessUsage;
     const unreturnedCondensate = losses.lowPressureProcessLoss + losses.highPressureProcessLoss + losses.mediumPressureProcessLoss;
+    const hasLowPressureVentLoss = !isNaN(losses.lowPressureVentLoss);
     const otherLosses = losses.highPressureHeader + losses.mediumPressureHeader + losses.lowPressureHeader
-      + losses.condensateLosses + losses.deaeratorVentLoss + losses.condensateFlashTankLoss;
+      + losses.condensateLosses + losses.deaeratorVentLoss + losses.condensateFlashTankLoss
+      + (hasLowPressureVentLoss ? losses.lowPressureVentLoss : 0);
 
     let returnedCondensate = 0;
     let returnedCondensateValue = 0;
