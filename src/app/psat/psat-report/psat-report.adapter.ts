@@ -15,7 +15,7 @@ import { ReportChartRenderService } from '../../shared/report-builder/services/r
 export const PSAT_SECTION_GROUPS: ReportSectionGroup[] = [
   { key: 'facilityInfo', label: 'Facility Info', description: 'Facility and contact information' },
   { key: 'results', label: 'Result Data', description: 'Baseline and modification results comparison' },
-  { key: 'graphs', label: 'Energy Distribution', description: 'Pie and bar charts of energy distribution by loss category' },
+  { key: 'graphs', label: 'Report Graphs', description: 'Pie and bar charts of energy distribution by loss category' },
   { key: 'sankey', label: 'Sankey Diagrams', description: 'Energy flow sankey diagrams' },
   { key: 'inputData', label: 'Input Summary', description: 'Summary of user input data' },
 ];

@@ -8,7 +8,6 @@ import { CalculatorDbService } from '../indexedDb/calculator-db.service';
 import { CoreService } from './core.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
-import { SecurityAndPrivacyService } from '../shared/security-and-privacy/security-and-privacy.service';
 import { ElectronService } from '../electron/electron.service';
 import { EmailMeasurDataService } from '../shared/email-measur-data/email-measur-data.service';
 import { AppErrorService } from '../shared/errors/app-error.service';
@@ -24,6 +23,7 @@ import { CORE_DATA_WARNING, SECONDARY_DATA_WARNING, SnackbarService } from '../s
 import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browser-storage.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { LightingFixtureServiceDbService } from '../indexedDb/lighting-fixture-db.service';
 import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 import { DialogRef} from '@angular/cdk/dialog';
 import { ModalDialogService } from '../shared/modal-dialog.service';
@@ -52,8 +52,6 @@ export class CoreComponent implements OnInit {
   showEmailMeasurDataModal: boolean;
   showImportBackupModalSubscription: Subscription;
   showImportBackupModal: boolean;
-  showSecurityAndPrivacyModalSub: Subscription;
-  showSecurityAndPrivacyModal: boolean;
   showSurveyModalSub: Subscription;
   showSurveyModal: boolean;
   showSurveyToast: boolean;
@@ -85,7 +83,6 @@ export class CoreComponent implements OnInit {
     private calculatorDbService: CalculatorDbService,
     private coreService: CoreService,
     private router: Router,
-    private securityAndPrivacyService: SecurityAndPrivacyService,
     private emailMeasurDataService: EmailMeasurDataService,
     private appErrorService: AppErrorService,
     private automaticBackupService: AutomaticBackupService,
@@ -100,6 +97,7 @@ export class CoreComponent implements OnInit {
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private lightingFixtureServiceDbService: LightingFixtureServiceDbService,
     private toolsSuiteApiService: ToolsSuiteApiService,
     private modalDialogService: ModalDialogService,
     private featureFlagService: FeatureFlagService,
@@ -192,10 +190,6 @@ export class CoreComponent implements OnInit {
       }
     });
 
-    this.showSecurityAndPrivacyModalSub = this.securityAndPrivacyService.showSecurityAndPrivacyModal.subscribe(showSecurityAndPrivacyModal => {
-      this.showSecurityAndPrivacyModal = showSecurityAndPrivacyModal;
-    });
-
     this.showEmailMeasurDataModalSub = this.emailMeasurDataService.showEmailMeasurDataModal.subscribe(showModal => {
       this.showEmailMeasurDataModal = showModal;
     });
@@ -225,7 +219,6 @@ export class CoreComponent implements OnInit {
       }
     }
     this.openingTutorialSub.unsubscribe();
-    this.showSecurityAndPrivacyModalSub.unsubscribe();
     this.showReleaseNotesModalSub.unsubscribe();
     this.showEmailMeasurDataModalSub.unsubscribe();
     this.showImportBackupModalSubscription.unsubscribe();
@@ -258,6 +251,7 @@ export class CoreComponent implements OnInit {
       //data initialized in createDefaultProcessHeatingMaterials on startup
       await this.solidLiquidMaterialDbService.setAllMaterialsFromDb();
       await this.flueGasMaterialDbService.setAllMaterialsFromDb();
+      await this.lightingFixtureServiceDbService.setAllMaterialsFromDb();
     }
   }
 
@@ -344,11 +338,6 @@ export class CoreComponent implements OnInit {
   closeTutorial() {
     this.assessmentService.tutorialShown = true;
     this.hideTutorial = true;
-  }
-
-  closeNoticeModal(isClosedEvent?: boolean) {
-    this.securityAndPrivacyService.modalOpen.next(false)
-    this.securityAndPrivacyService.showSecurityAndPrivacyModal.next(false);
   }
 
   closeEmailModal(isClosedEvent?: boolean) {

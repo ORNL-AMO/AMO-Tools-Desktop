@@ -5,7 +5,7 @@ import { WaterAssessmentResultsService } from '../../water-assessment-results.se
 import * as _ from 'lodash';
 import { sortTrueCostReport, SystemTrueCostData } from 'process-flow-lib';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
-import { TrueCostEditableTableComponent, TrueCostEditableTableDataInputs } from '../true-cost-editable-table/true-cost-editable-table.component';
+import { TrueCostEditableTableComponent } from '../true-cost-editable-table/true-cost-editable-table.component';
 import { map, Observable } from 'rxjs';
 
 @Component({
@@ -54,7 +54,7 @@ export class SystemTrueCostReportComponent {
   }
 
   openTrueCostEditableTableModal() {
-    this.modalDialogService.openModal<TrueCostEditableTableComponent, TrueCostEditableTableDataInputs>(
+    this.modalDialogService.openModal(
       TrueCostEditableTableComponent,
       {
         minWidth: '900px',

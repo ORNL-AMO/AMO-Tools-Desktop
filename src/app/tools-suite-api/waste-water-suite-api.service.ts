@@ -2,7 +2,14 @@ import { Injectable } from '@angular/core';
 import { WasteWaterResults, WasteWaterTreatmentInputData } from '../shared/models/waste-water';
 import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
-import { type CalculationsTable, type CalculationsTableV, type WasteWater_Treatment, type WasteWater_TreatmentOutput, type WasteWater_TreatmentOutputWithoutTable } from 'measur-tools-suite';
+import {
+  type CalculationsTable,
+  type CalculationsTableV,
+  type DoubleVector,
+  type WasteWater_Treatment,
+  type WasteWater_TreatmentOutput,
+  type WasteWater_TreatmentOutputWithoutTable
+} from 'measur-tools-suite';
 
 type WasteWaterTreatmentSuiteOutput = (WasteWater_TreatmentOutput | WasteWater_TreatmentOutputWithoutTable) & {
   AeEnergyAnnual?: number;
@@ -50,35 +57,43 @@ export class WasteWaterSuiteApiService {
       inputData.EnergyCostUnit,
       inputData.DefinedSRT
     );
-    let wasteWaterTreatmentResults: WasteWaterResults;
-    let wasteWaterTreatmentOutput: WasteWaterTreatmentSuiteOutput;
-    
-    if (hasGivenSRT) {
-      wasteWaterTreatmentOutput = WasteWaterTreatmentInstance.calculateGivenSRT();
-    } else {
-      wasteWaterTreatmentOutput = WasteWaterTreatmentInstance.calculate();
-    }
+    let wasteWaterTreatmentOutput: WasteWaterTreatmentSuiteOutput | undefined;
+    let calculationsTable: CalculationsTableV | undefined;
 
-    wasteWaterTreatmentResults = this.getWasteWaterResultsFromOutputObject(wasteWaterTreatmentOutput);
-    if ('calculationsTable' in wasteWaterTreatmentOutput && wasteWaterTreatmentOutput.calculationsTable) {
-      wasteWaterTreatmentResults.calculationsTable = this.getConvertedCalculationsTableArray(wasteWaterTreatmentOutput.calculationsTable);
-      wasteWaterTreatmentOutput.calculationsTable.delete();
+    try {
+      if (hasGivenSRT) {
+        wasteWaterTreatmentOutput = WasteWaterTreatmentInstance.calculateGivenSRT();
+      } else {
+        wasteWaterTreatmentOutput = WasteWaterTreatmentInstance.calculate();
+      }
+
+      const wasteWaterTreatmentResults: WasteWaterResults = this.getWasteWaterResultsFromOutputObject(wasteWaterTreatmentOutput);
+      if ('calculationsTable' in wasteWaterTreatmentOutput) {
+        calculationsTable = wasteWaterTreatmentOutput.calculationsTable;
+        if (calculationsTable) {
+          wasteWaterTreatmentResults.calculationsTable = this.getConvertedCalculationsTableArray(calculationsTable);
+        }
+      }
+      return wasteWaterTreatmentResults;
+    } finally {
+      calculationsTable?.delete();
+      wasteWaterTreatmentOutput?.delete();
+      WasteWaterTreatmentInstance.delete();
     }
-    WasteWaterTreatmentInstance.delete();
-    wasteWaterTreatmentOutput.delete();
-    return wasteWaterTreatmentResults;
   }
 
   getConvertedCalculationsTableArray(resultArray: CalculationsTableV): Array<Array<number>> {
-    let convertedCalculationsTable: Array<Array<number>> = [];
+    const convertedCalculationsTable: Array<Array<number>> = [];
     for (let i: number = 0; i < resultArray.size(); ++i) {
-      let calculationRow: CalculationsTable = resultArray.get(i);
-      let tempArray: Array<number> = calculationRow.getArray();
-      if (tempArray) {
-        convertedCalculationsTable.push(tempArray);
+      const calculationRow: CalculationsTable = resultArray.get(i);
+      let rowVector: DoubleVector | undefined;
+      try {
+        rowVector = calculationRow.getArray();
+        convertedCalculationsTable.push(this.suiteApiHelperService.extractWASMArray(rowVector));
+      } finally {
+        rowVector?.delete();
+        calculationRow.delete();
       }
-      calculationRow.delete();
-      
     }
     return convertedCalculationsTable;
   }

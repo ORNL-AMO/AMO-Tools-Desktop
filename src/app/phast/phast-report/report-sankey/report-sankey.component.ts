@@ -3,6 +3,13 @@ import { PHAST, ExecutiveSummary } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Assessment } from '../../../shared/models/assessment';
 import { ExecutiveSummaryService } from '../executive-summary.service';
+import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
+
+export interface PhastSankeyScenario {
+  scenario: PHAST;
+  costSavings: number;
+  energySavings: number;
+}
 
 @Component({
     selector: 'app-report-sankey',
@@ -20,19 +27,11 @@ export class ReportSankeyComponent implements OnInit {
 
   baseline: ExecutiveSummary;
 
-  phast1CostSavings: number = 0;
-  phast1EnergySavings: number = 0;
-  phast2CostSavings: number = 0;
-  phast2EnergySavings: number = 0;
-
   energySavingsUnit: string;
 
-  modification: PHAST;
-  modifications: Array<ExecutiveSummary>;
   assessmentName: string;
-  phastOptions: Array<any>;
-  phast1: {name, phast};
-  phast2: {name, phast};
+  phastOptions: Array<SankeyScenarioOption>;
+  sankeyScenarios: Array<PhastSankeyScenario> = [];
   modExists: boolean = false;
   constructor(private executiveSummaryService: ExecutiveSummaryService) { }
 
@@ -41,52 +40,27 @@ export class ReportSankeyComponent implements OnInit {
     this.assessmentName = this.assessment.name.replace(/\s/g, '');
     this.assessmentName = this.assessmentName.replace('(', '');
     this.assessmentName = this.assessmentName.replace(')', '');
-    this.phastOptions = new Array<any>();
-    this.phastOptions.push({name: 'Baseline', phast: this.phast});
-    this.phast1 = this.phastOptions[0];
-    if (this.phast.modifications) {
-      this.modExists = true;
-      this.phast.modifications.forEach(mod => {
-        this.phastOptions.push({name: mod.phast.name, phast: mod.phast});
-      });
-      this.phast2 = this.phastOptions[1];
-    }
+    this.modExists = !!this.phast.modifications?.length;
+    const phasts = [this.phast, ...(this.phast.modifications ?? []).map(mod => mod.phast!)];
+    this.phastOptions = phasts.map(phast => ({ name: phast.name, value: phast }));
+    this.sankeyScenarios = phasts.map(phast => {
+      const { costSavings, energySavings } = this.getSavings(phast);
+      return { scenario: phast, costSavings, energySavings };
+    });
 
     this.energySavingsUnit = this.settings.energyResultUnit + "/yr";
-    this.getPhast1Savings();
-    this.getPhast2Savings();
   }
 
-  getPhast1Savings() {
-    if (!this.phast1) {
-      return;
-    }
-
-    let isMod;
-    if (this.phast1.name === this.phast.name) {
-      isMod = false;
-    }
-    else {
-      isMod = true;
-    }
-    let tmpSummary = this.executiveSummaryService.getSummary(this.phast1.phast, isMod, this.settings, this.phastOptions[0].phast, this.baseline);
-    this.phast1CostSavings = tmpSummary.annualCostSavings;
-    this.phast1EnergySavings = tmpSummary.annualEnergySavings;
+  setPhast(sankeyScenario: PhastSankeyScenario, selectedPhast: PHAST) {
+    sankeyScenario.scenario = selectedPhast;
+    const { costSavings, energySavings } = this.getSavings(selectedPhast);
+    sankeyScenario.costSavings = costSavings;
+    sankeyScenario.energySavings = energySavings;
   }
 
-  getPhast2Savings() {
-    if (!this.phast2) {
-      return;
-    }
-    let isMod;
-    if (this.phast2.name === this.phast.name) {
-      isMod = false;
-    }
-    else {
-      isMod = true;
-    }
-    let tmpSummary = this.executiveSummaryService.getSummary(this.phast2.phast, isMod, this.settings, this.phastOptions[0].phast, this.baseline);
-    this.phast2CostSavings = tmpSummary.annualCostSavings;
-    this.phast2EnergySavings = tmpSummary.annualEnergySavings;
+  getSavings(selectedPhast: PHAST): { costSavings: number, energySavings: number } {
+    let isMod = selectedPhast !== this.phast;
+    let tmpSummary = this.executiveSummaryService.getSummary(selectedPhast, isMod, this.settings, this.phast, this.baseline);
+    return { costSavings: tmpSummary.annualCostSavings ?? 0, energySavings: tmpSummary.annualEnergySavings ?? 0 };
   }
 }
