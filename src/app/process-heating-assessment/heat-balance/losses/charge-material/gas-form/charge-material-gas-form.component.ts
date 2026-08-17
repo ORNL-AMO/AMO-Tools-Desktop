@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, Injector, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { take } from 'rxjs';
-import { generateFormControlIds, FormControlIds, roundVal } from '../../../../../shared/helperFunctions';
-import { GasLoadChargeMaterial } from '../../../../../shared/models/materials';
 import { Settings } from '../../../../../shared/models/settings';
-import { GasMaterialForm, GasMaterialFormService } from './gas-material-form.service';
-import { TEMPERATURE_HTML } from '../../../../../shared/app-constants';
+import { GasLoadChargeMaterial } from '../../../../../shared/models/materials';
 import { GasLoadMaterialDbService } from '../../../../../indexedDb/gas-load-material-db.service';
-import { ConvertValue } from '../../../../../shared/convert-units/ConvertValue';
-import { ChargeMaterialService } from '../charge-material.service';
-import { ThermicReactionType } from '../../../../../shared/models/phast/losses/chargeMaterial';
+import { ModalDialogService } from '../../../../../shared/modal-dialog.service';
+import { convertDbValue, convertForSave, formValueDiffersFromMaterial } from '../charge-material-db-material.util';
+import { MaterialSelector } from '../material-selector';
+import { GasMaterialForm, GasMaterialFormService } from './gas-material-form.service';
+import { AddGasMaterialModalComponent } from './add-gas-material-modal.component';
+import { UnitConversion } from '../../../../models/unit-conversion';
+import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 
 @Component({
   selector: 'app-charge-material-gas-form',
@@ -18,51 +18,45 @@ import { ThermicReactionType } from '../../../../../shared/models/phast/losses/c
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChargeMaterialGasFormComponent implements OnInit {
-  readonly index = input.required<number>();
+  readonly form = input.required<GasMaterialForm>();
   readonly settings = input.required<Settings>();
+  readonly instanceId = input.required<string>();
 
   private readonly formService = inject(GasMaterialFormService);
-  private readonly chargeMaterialService = inject(ChargeMaterialService);
-  private readonly gasLoadMaterialDbService = inject(GasLoadMaterialDbService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly materialTypes = signal<GasLoadChargeMaterial[]>([]);
-  readonly TEMPERATURE_HTML = TEMPERATURE_HTML;
-  readonly ThermicReactionType = ThermicReactionType;
-
-  readonly form = computed(() => this.chargeMaterialService.materials()[this.index()].form as GasMaterialForm);
-  controlIds: FormControlIds<GasMaterialForm['controls']>;
+  readonly UNITS = CHARGE_MATERIAL_UNITS;
+  readonly materialSelector = new MaterialSelector<GasLoadChargeMaterial, GasMaterialForm>({
+    form: this.form,
+    settings: this.settings,
+    dbService: inject(GasLoadMaterialDbService),
+    destroyRef: this.destroyRef,
+    modalDialogService: inject(ModalDialogService),
+    injector: inject(Injector),
+    modalComponent: AddGasMaterialModalComponent,
+    setProperties: (material, form, settings) => form.patchValue({
+      specificHeatOfGas: convertDbValue(material.specificHeatVapor, CHARGE_MATERIAL_UNITS.specificHeat, settings),
+    }),
+    buildRecoveryProperties: (v, settings) => ({
+      specificHeatVapor: convertForSave(v.specificHeatOfGas, CHARGE_MATERIAL_UNITS.specificHeat, settings),
+    }),
+  });
 
   ngOnInit(): void {
-    this.controlIds = generateFormControlIds(this.form().controls);
-    this.gasLoadMaterialDbService.getAllWithObservable()
-      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
-      .subscribe(materials => {
-        this.materialTypes.set(materials);
-        if (this.form().controls['materialId'].value && this.form().controls['materialSpecificHeat'].value === null) {
-          this.setProperties();
-        }
-      });
+    this.materialSelector.loadMaterials(materials => {
+      const materialId = this.form().controls.materialId.value;
+      const material = materials.find(m => m.id === materialId);
+      if (material && this.form().controls.specificHeatOfGas.value == null) {
+        this.materialSelector.applyMaterial(material);
+      }
+    });
 
-    this.form().controls['dischargeTemperature'].valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.formService.setInitialTempValidator(this.form()));
-
-    this.form().valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.chargeMaterialService.updateItem(this.index()));
+    this.form().controls.chargeMaterialDischargeTemperature.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => this.formService.setInitialTempValidator(this.form()));
   }
 
-  setProperties(): void {
-    const selectedMaterial = this.materialTypes().find(mat => mat.id === this.form().controls['materialId'].value);
-    if (selectedMaterial) {
-      let specificHeatVapor = selectedMaterial.specificHeatVapor;
-      if (this.settings().unitsOfMeasure === 'Metric') {
-        specificHeatVapor = new ConvertValue(specificHeatVapor, 'btulbF', 'kJkgC').convertedValue;
-      }
-      this.form().patchValue({
-        materialSpecificHeat: roundVal(specificHeatVapor, 4),
-      });
-    }
+  differs(formValue: number, dbValue: number | undefined, unit: UnitConversion): boolean {
+    return formValueDiffersFromMaterial(formValue, dbValue, unit, this.settings());
   }
 }

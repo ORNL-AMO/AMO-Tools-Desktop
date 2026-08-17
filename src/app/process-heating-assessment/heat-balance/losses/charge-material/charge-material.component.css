@@ -1,0 +1,16 @@
+.charge-material-name {
+  max-width: 260px;
+}
+
+.charge-material-type-select {
+  max-width: 140px;
+}
+
+.charge-material-totals {
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 1rem;
+}
+
+.charge-material-summary {
+  color: #495057;
+}

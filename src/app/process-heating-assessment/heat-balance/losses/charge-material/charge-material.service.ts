@@ -1,189 +1,202 @@
-import { computed, inject, Injectable, Signal, signal } from '@angular/core';
-import { ChargeMaterial, ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
-import { Settings } from '../../../../shared/models/settings';
-import { PhastService } from '../../../../phast/phast.service';
-import { SolidMaterialFormService, SolidMaterialForm } from './solid-form/solid-material-form.service';
-import { LiquidMaterialFormService, LiquidMaterialForm } from './liquid-form/liquid-material-form.service';
-import { GasMaterialFormService, GasMaterialForm } from './gas-form/gas-material-form.service';
-import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { Observable } from 'rxjs';
+import { getNewIdString } from '../../../../shared/helperFunctions';
+import { ChargeMaterial, ChargeMaterialResult, ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
+import { EntityListStore } from '../entity-list-store';
+import { GasMaterialForm, GasMaterialFormService } from './gas-form/gas-material-form.service';
+import { LiquidMaterialForm, LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
+import { SolidMaterialForm, SolidMaterialFormService } from './solid-form/solid-material-form.service';
 
-export interface ChargeMaterialItem {
+interface ChargeMaterialItemBase {
+  id: string;
   name: string;
-  type: ChargeMaterialType;
-  form: SolidMaterialForm | LiquidMaterialForm | GasMaterialForm;
-  collapse: boolean;
-  heatRequired: number | null;
-  netHeatLoss: number | null;
-  endoExoHeat: number | null;
 }
+
+export interface SolidChargeMaterialItem extends ChargeMaterialItemBase {
+  type: typeof ChargeMaterialType.Solid;
+  form: SolidMaterialForm;
+}
+
+export interface LiquidChargeMaterialItem extends ChargeMaterialItemBase {
+  type: typeof ChargeMaterialType.Liquid;
+  form: LiquidMaterialForm;
+}
+
+export interface GasChargeMaterialItem extends ChargeMaterialItemBase {
+  type: typeof ChargeMaterialType.Gas;
+  form: GasMaterialForm;
+}
+
+export type ChargeMaterialItem = SolidChargeMaterialItem | LiquidChargeMaterialItem | GasChargeMaterialItem;
+
+export interface ChargeMaterialTotals {
+  heatRequired: number;
+  netHeatLoss: number;
+  endoExoHeat: number;
+}
+
+const EMPTY_TOTALS: ChargeMaterialTotals = { heatRequired: 0, netHeatLoss: 0, endoExoHeat: 0 };
 
 @Injectable()
 export class ChargeMaterialService {
-  private readonly phastService = inject(PhastService);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
+  private readonly resultsService = inject(ProcessHeatingResultsService);
   private readonly solidFormService = inject(SolidMaterialFormService);
   private readonly liquidFormService = inject(LiquidMaterialFormService);
   private readonly gasFormService = inject(GasMaterialFormService);
 
-  readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
+  private scenario: AssessmentScenario = 'baseline';
+  private readonly store = new EntityListStore<ChargeMaterialItem>();
 
-  readonly materials = signal<ChargeMaterialItem[]>([]);
-  readonly totals = computed(() => ({
-    heatRequired: this.materials().reduce((sum, material) => sum + (material.heatRequired ?? 0), 0),
-    netHeatLoss: this.materials().reduce((sum, material) => sum + (material.netHeatLoss ?? 0), 0),
-    endoExoHeat: this.materials().reduce((sum, material) => sum + (material.endoExoHeat ?? 0), 0),
-  }));
+  // Caches a switched-away-from type's last known values per entry so switching back restores
+  // them
+  private readonly typeCache = new Map<string, Partial<Record<ChargeMaterialType, ChargeMaterial>>>();
 
-  initialize(chargeMaterials: ChargeMaterial[]): void {
-    const items = chargeMaterials.map((mat, idx) => this.buildItem(mat, idx + 1));
-    items.forEach(item => this.calculateItemResults(item));
-    this.materials.set(items);
-  }
+  readonly materials = this.store.all;
+  readonly collapsedIds = signal<ReadonlySet<string>>(new Set());
 
-  updateItem(idx: number): void {
+  private readonly baselineResults = toSignal(this.resultsService.baselineResults$, { initialValue: undefined });
+  private readonly modificationResults = toSignal(this.resultsService.modificationResults$, { initialValue: [] });
+
+  readonly isMaterialAdditionLocked = computed(() => (this.assessmentService.processHeatingSignal()?.modifications?.length ?? 0) > 0);
+
+  readonly results = computed(() => {
     const items = this.materials();
-    const item = { ...items[idx] };
-    this.calculateItemResults(item);
-    const updated = items.map((m, i) => i === idx ? item : m);
-    this.materials.set(updated);
-    this.saveLosses(updated);
+    const chargeMaterialResults = this.currentResults();
+    const resultsMap = new Map<string, ChargeMaterialResult | undefined>();
+    items.forEach((item, index) => resultsMap.set(item.id, chargeMaterialResults?.[index]));
+    return resultsMap;
+  });
+
+  readonly materialResultTotals = computed<ChargeMaterialTotals>(() => {
+    const results = this.results();
+    let totals: ChargeMaterialTotals = { ...EMPTY_TOTALS };
+    for (const result of results.values()) {
+      if (result) {
+        totals = {
+          heatRequired: totals.heatRequired + (result.heatRequired ?? 0),
+          netHeatLoss: totals.netHeatLoss + (result.netHeatLoss ?? 0),
+          endoExoHeat: totals.endoExoHeat + (result.endoExoHeat ?? 0),
+        };
+      }
+    }
+    return totals;
+  });
+
+  private currentResults(): ChargeMaterialResult[] | undefined {
+    if (this.scenario === 'baseline') {
+      return this.baselineResults()?.chargeMaterialResults;
+    }
+    return this.modificationResults().find(m => m.id === this.scenario)?.results?.chargeMaterialResults;
   }
 
-  setName(idx: number, name: string): void {
-    const updated = this.materials().map((m, i) => i === idx ? { ...m, name } : m);
-    this.materials.set(updated);
-    this.saveLosses(updated);
+  initialize(scenario: AssessmentScenario = 'baseline'): void {
+    this.scenario = scenario;
+    this.typeCache.clear();
+
+    const chargeMaterials = this.assessmentService.scenarioPhast(scenario)?.losses?.chargeMaterials ?? [];
+    const items = chargeMaterials.map((material, index) => this.buildItem(this.ensureId(material), index));
+    this.store.load(items);
   }
 
-  toggleCollapse(idx: number): void {
-    const updated = this.materials().map((m, i) => i === idx ? { ...m, collapse: !m.collapse } : m);
-    this.materials.set(updated);
+  toggleCollapse(id: string): void {
+    const next = new Set(this.collapsedIds());
+    next.has(id) ? next.delete(id) : next.add(id);
+    this.collapsedIds.set(next);
   }
 
   add(): void {
-    const idx = this.materials().length;
-    const newItem: ChargeMaterialItem = {
-      name: `Material #${idx + 1}`,
-      type: ChargeMaterialType.Solid,
-      form: this.solidFormService.initSolidForm(idx + 1),
-      collapse: false,
-      heatRequired: 0,
-      netHeatLoss: 0,
-      endoExoHeat: 0,
-    };
-    const updated = [...this.materials(), newItem];
-    this.materials.set(updated);
-    this.saveLosses(updated);
+    if (this.isMaterialAdditionLocked()) return;
+    const id = getNewIdString();
+    const name = `Material #${this.store.all().length + 1}`;
+    const item = this.createItem({ chargeMaterialType: ChargeMaterialType.Solid, name }, id, this.store.all().length);
+    this.observeItem(item);
+    this.store.add(item);
+    this.saveLosses();
   }
 
-  remove(idx: number): void {
-    const updated = this.materials().filter((_, i) => i !== idx);
-    this.materials.set(updated);
-    this.saveLosses(updated);
+  remove(id: string): void {
+    if (this.isMaterialAdditionLocked()) return;
+    this.typeCache.delete(id);
+    this.store.remove(id);
+    this.saveLosses();
   }
 
-  switchType(idx: number, type: ChargeMaterialType): void {
-    const items = this.materials();
-    const current = items[idx];
-    const lossNumber = idx + 1;
-    let form: SolidMaterialForm | LiquidMaterialForm | GasMaterialForm;
-
-    if (type === ChargeMaterialType.Solid) {
-      form = this.solidFormService.initSolidForm(lossNumber);
-    } else if (type === ChargeMaterialType.Liquid) {
-      form = this.liquidFormService.initLiquidForm(lossNumber);
-    } else {
-      form = this.gasFormService.initGasForm(lossNumber);
-    }
-
-    const updated = items.map((m, i) =>
-      i === idx ? { ...current, type, form, heatRequired: 0, netHeatLoss: 0, endoExoHeat: 0 } : m
-    );
-    this.materials.set(updated);
-    this.saveLosses(updated);
+  setName(id: string, name: string): void {
+    this.store.update(id, { name });
+    this.saveLosses();
   }
 
-  private buildItem(material: ChargeMaterial, lossIdx: number): ChargeMaterialItem {
-    const name = material.name ?? `Material #${lossIdx}`;
-    if (material.chargeMaterialType === ChargeMaterialType.Gas) {
-      return {
-        name,
-        type: ChargeMaterialType.Gas,
-        form: this.gasFormService.getGasChargeMaterialForm(material),
-        collapse: false,
-        heatRequired: material.gasChargeMaterial?.heatRequired ?? 0,
-        netHeatLoss: material.gasChargeMaterial?.netHeatLoss ?? 0,
-        endoExoHeat: material.gasChargeMaterial?.endoExoHeat ?? 0,
-      };
-    }
-    if (material.chargeMaterialType === ChargeMaterialType.Liquid) {
-      return {
-        name,
-        type: ChargeMaterialType.Liquid,
-        form: this.liquidFormService.getLiquidChargeMaterialForm(material),
-        collapse: false,
-        heatRequired: material.liquidChargeMaterial?.heatRequired ?? 0,
-        netHeatLoss: material.liquidChargeMaterial?.netHeatLoss ?? 0,
-        endoExoHeat: material.liquidChargeMaterial?.endoExoHeat ?? 0,
-      };
-    }
-    return {
-      name,
-      type: ChargeMaterialType.Solid,
-      form: this.solidFormService.getSolidChargeMaterialForm(material),
-      collapse: false,
-      heatRequired: material.solidChargeMaterial?.heatRequired ?? 0,
-      netHeatLoss: material.solidChargeMaterial?.netHeatLoss ?? 0,
-      endoExoHeat: material.solidChargeMaterial?.endoExoHeat ?? 0,
-    };
+  switchType(id: string, type: ChargeMaterialType): void {
+    const current = this.store.get(id);
+    if (!current || current.type === type) return;
+
+    const cacheForItem: Partial<Record<ChargeMaterialType, ChargeMaterial>> = this.typeCache.get(id) ?? {};
+    cacheForItem[current.type] = this.buildChargeMaterial(current);
+    this.typeCache.set(id, cacheForItem);
+
+    const seedMaterial = cacheForItem[type] ?? { chargeMaterialType: type };
+    const nextItem = this.createItem({ ...seedMaterial, chargeMaterialType: type, name: current.name }, id, 0);
+    this.observeItem(nextItem);
+    this.store.set(id, nextItem);
+    this.saveLosses();
   }
 
-  private calculateItemResults(item: ChargeMaterialItem): void {
-    const settings = this.settings();
-    if (item.type === ChargeMaterialType.Solid && item.form.valid) {
-      const chargeMaterial = this.solidFormService.buildSolidChargeMaterial(item.form as SolidMaterialForm);
-      const result = this.phastService.solidLoadChargeMaterial(chargeMaterial.solidChargeMaterial!, settings);
-      item.heatRequired = result.grossHeatLoss;
-      item.netHeatLoss = result.netHeatLoss;
-      item.endoExoHeat = result.endoExoHeat;
-    } else if (item.type === ChargeMaterialType.Liquid && item.form.valid) {
-      const chargeMaterial = this.liquidFormService.buildLiquidChargeMaterial(item.form as LiquidMaterialForm);
-      const result = this.phastService.liquidLoadChargeMaterial(chargeMaterial.liquidChargeMaterial!, settings);
-      item.heatRequired = result.grossHeatLoss;
-      item.netHeatLoss = result.netHeatLoss;
-      item.endoExoHeat = result.endoExoHeat;
-    } else if (item.type === ChargeMaterialType.Gas && item.form.valid) {
-      const chargeMaterial = this.gasFormService.buildGasChargeMaterial(item.form as GasMaterialForm);
-      const result = this.phastService.gasLoadChargeMaterial(chargeMaterial.gasChargeMaterial!, settings);
-      item.heatRequired = result.grossHeatLoss;
-      item.netHeatLoss = result.netHeatLoss;
-      item.endoExoHeat = result.endoExoHeat;
-    } else {
-      item.heatRequired = null;
-      item.netHeatLoss = null;
-      item.endoExoHeat = null;
+  private ensureId(material: ChargeMaterial): ChargeMaterial & { id: string } {
+    return material.id ? (material as ChargeMaterial & { id: string }) : { ...material, id: getNewIdString() };
+  }
+
+  private buildItem(chargeMaterial: ChargeMaterial & { id: string }, fallbackIndex: number): ChargeMaterialItem {
+    const item = this.createItem(chargeMaterial, chargeMaterial.id, fallbackIndex);
+    this.observeItem(item);
+    return item;
+  }
+
+  private createItem(chargeMaterial: ChargeMaterial, id: string, fallbackIndex: number): ChargeMaterialItem {
+    const name = chargeMaterial.name ?? `Material #${fallbackIndex + 1}`;
+    switch (chargeMaterial.chargeMaterialType) {
+      case ChargeMaterialType.Liquid:
+        return { id, name, type: ChargeMaterialType.Liquid, form: this.liquidFormService.getLiquidChargeMaterialForm(chargeMaterial) };
+      case ChargeMaterialType.Gas:
+        return { id, name, type: ChargeMaterialType.Gas, form: this.gasFormService.getGasChargeMaterialForm(chargeMaterial) };
+      case ChargeMaterialType.Solid:
+      default:
+        return { id, name, type: ChargeMaterialType.Solid, form: this.solidFormService.getSolidChargeMaterialForm(chargeMaterial) };
     }
   }
 
-  private saveLosses(items: ChargeMaterialItem[]): void {
-    const chargeMaterials: ChargeMaterial[] = items.map(item => {
-      let chargeMaterial: ChargeMaterial;
-      if (item.type === ChargeMaterialType.Solid) {
-        chargeMaterial = this.solidFormService.buildSolidChargeMaterial(item.form as SolidMaterialForm);
-        chargeMaterial.name = item.name;
-        if (chargeMaterial.solidChargeMaterial) chargeMaterial.solidChargeMaterial.heatRequired = item.heatRequired ?? undefined;
-      } else if (item.type === ChargeMaterialType.Liquid) {
-        chargeMaterial = this.liquidFormService.buildLiquidChargeMaterial(item.form as LiquidMaterialForm);
-        chargeMaterial.name = item.name;
-        if (chargeMaterial.liquidChargeMaterial) chargeMaterial.liquidChargeMaterial.heatRequired = item.heatRequired ?? undefined;
-      } else {
-        chargeMaterial = this.gasFormService.buildGasChargeMaterial(item.form as GasMaterialForm);
-        chargeMaterial.name = item.name;
-        if (chargeMaterial.gasChargeMaterial) chargeMaterial.gasChargeMaterial.heatRequired = item.heatRequired ?? undefined;
-      }
-      return chargeMaterial;
+  private observeItem(item: ChargeMaterialItem): void {
+    const valueChanges: Observable<unknown> = item.form.valueChanges;
+    valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.saveLosses();
     });
-    const current = this.assessmentService.processHeatingSignal();
-    this.assessmentService.updateProcessHeatingProperty('losses', { ...current.losses, chargeMaterials });
+  }
+
+  private buildChargeMaterial(item: ChargeMaterialItem): ChargeMaterial {
+    switch (item.type) {
+      case ChargeMaterialType.Solid: return this.solidFormService.buildSolidChargeMaterial(item.form);
+      case ChargeMaterialType.Liquid: return this.liquidFormService.buildLiquidChargeMaterial(item.form);
+      case ChargeMaterialType.Gas: return this.gasFormService.buildGasChargeMaterial(item.form);
+    }
+  }
+
+  private saveLosses(): void {
+    const chargeMaterials = this.store.all().map(item => ({ ...this.buildChargeMaterial(item), name: item.name, id: item.id }));
+
+    if (this.scenario === 'baseline') {
+      const current = this.assessmentService.processHeatingSignal();
+      this.assessmentService.updateProcessHeatingProperty('losses', { ...current?.losses, chargeMaterials });
+    } else {
+      const current = this.assessmentService.processHeatingSignal();
+      const modification = current?.modifications?.find(mod => mod.id === this.scenario);
+      this.assessmentService.updateModificationProperty(this.scenario, 'losses', {
+        ...modification?.phast?.losses,
+        chargeMaterials,
+      });
+    }
   }
 }

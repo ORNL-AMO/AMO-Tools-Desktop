@@ -1,91 +1,72 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ChargeMaterial, ChargeMaterialType, ThermicReactionType } from '../../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../../shared/validators/greater-than';
+import {
+  ChargeMaterial,
+  ChargeMaterialType,
+  GasChargeMaterial,
+  ThermicReactionType,
+} from '../../../../../shared/models/phast/losses/chargeMaterial';
+import { applyInitialTempMaxValidator } from '../charge-material-form.util';
 
 export type GasMaterialForm = FormGroup<{
   materialId: FormControl<number | null>;
-  materialSpecificHeat: FormControl<number | null>;
+  specificHeatOfGas: FormControl<number | null>;
   feedRate: FormControl<number | null>;
-  vaporInGas: FormControl<number | null>;
+  percentVaporInGasMixture: FormControl<number | null>;
   initialTemperature: FormControl<number | null>;
-  dischargeTemperature: FormControl<number | null>;
+  chargeMaterialDischargeTemperature: FormControl<number | null>;
   specificHeatOfVapor: FormControl<number | null>;
-  gasReacted: FormControl<number | null>;
+  percentChargeReacted: FormControl<number | null>;
   heatOfReaction: FormControl<number | null>;
   endothermicOrExothermic: FormControl<ThermicReactionType | null>;
   additionalHeatRequired: FormControl<number | null>;
-  name: FormControl<string | null>;
 }>;
 
 @Injectable()
 export class GasMaterialFormService {
   private readonly formBuilder = inject(FormBuilder);
 
-  initGasForm(lossNumber: number = 1): GasMaterialForm {
-    return this.formBuilder.group({
-      materialId: new FormControl<number | null>(1, Validators.required),
-      materialSpecificHeat: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-      feedRate: new FormControl<number | null>(null, [Validators.required, GreaterThanValidator.greaterThan(0)]),
-      vaporInGas: new FormControl<number | null>(0, [Validators.required, Validators.min(0), Validators.max(100)]),
-      initialTemperature: new FormControl<number | null>(null, Validators.required),
-      dischargeTemperature: new FormControl<number | null>(null, Validators.required),
-      specificHeatOfVapor: new FormControl<number | null>(0, [Validators.required, Validators.min(0)]),
-      gasReacted: new FormControl<number | null>(0, [Validators.required, Validators.min(0), Validators.max(100)]),
-      heatOfReaction: new FormControl<number | null>(0, [Validators.required, Validators.min(0)]),
-      endothermicOrExothermic: new FormControl<ThermicReactionType | null>(ThermicReactionType.Endothermic, Validators.required),
-      additionalHeatRequired: new FormControl<number | null>(0, Validators.required),
-      name: new FormControl<string | null>(`Material #${lossNumber}`, Validators.required),
-    }) as GasMaterialForm;
-  }
-
   getGasChargeMaterialForm(chargeMaterial: ChargeMaterial): GasMaterialForm {
-    const gas = chargeMaterial.gasChargeMaterial;
-    const formGroup = this.formBuilder.group({
-      materialId: new FormControl<number | null>(gas.materialId ?? null, Validators.required),
-      materialSpecificHeat: new FormControl<number | null>(gas.specificHeatGas ?? null, [Validators.required, Validators.min(0)]),
-      feedRate: new FormControl<number | null>(gas.feedRate ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]),
-      vaporInGas: new FormControl<number | null>(gas.percentVapor ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]),
-      initialTemperature: new FormControl<number | null>(gas.initialTemperature ?? null, Validators.required),
-      dischargeTemperature: new FormControl<number | null>(gas.dischargeTemperature ?? null, Validators.required),
-      specificHeatOfVapor: new FormControl<number | null>(gas.specificHeatVapor ?? 0, [Validators.required, Validators.min(0)]),
-      gasReacted: new FormControl<number | null>(gas.percentReacted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]),
-      heatOfReaction: new FormControl<number | null>(gas.reactionHeat ?? 0, [Validators.required, Validators.min(0)]),
-      endothermicOrExothermic: new FormControl<ThermicReactionType | null>(gas.thermicReactionType ?? ThermicReactionType.Endothermic, Validators.required),
-      additionalHeatRequired: new FormControl<number | null>(gas.additionalHeat ?? 0, Validators.required),
-      name: new FormControl<string | null>(chargeMaterial.name ?? null, Validators.required),
-    }) as GasMaterialForm;
-    return this.setInitialTempValidator(formGroup);
+    const gas = chargeMaterial.gasChargeMaterial ?? {};
+    const form: GasMaterialForm = this.formBuilder.group({
+      materialId: [gas.materialId ?? 1, Validators.required],
+      specificHeatOfGas: [gas.specificHeatGas ?? null, [Validators.required, Validators.min(0)]],
+      feedRate: [gas.feedRate ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      percentVaporInGasMixture: [gas.percentVapor ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      initialTemperature: [gas.initialTemperature ?? null, Validators.required],
+      chargeMaterialDischargeTemperature: [gas.dischargeTemperature ?? null, Validators.required],
+      specificHeatOfVapor: [gas.specificHeatVapor ?? 0, [Validators.required, Validators.min(0)]],
+      percentChargeReacted: [gas.percentReacted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      heatOfReaction: [gas.reactionHeat ?? 0, [Validators.required, Validators.min(0)]],
+      endothermicOrExothermic: [gas.thermicReactionType ?? ThermicReactionType.Endothermic, Validators.required],
+      additionalHeatRequired: [gas.additionalHeat ?? 0, Validators.required],
+    });
+    return this.setInitialTempValidator(form);
   }
 
-  setInitialTempValidator(formGroup: GasMaterialForm): GasMaterialForm {
-    const dischargeTemperature = formGroup.controls.dischargeTemperature.value;
-    if (dischargeTemperature !== null) {
-      formGroup.controls.initialTemperature.setValidators([Validators.required, Validators.max(dischargeTemperature)]);
-      formGroup.controls.initialTemperature.markAsDirty();
-      formGroup.controls.initialTemperature.updateValueAndValidity({ emitEvent: false });
-    }
-    return formGroup;
+  setInitialTempValidator(form: GasMaterialForm): GasMaterialForm {
+    applyInitialTempMaxValidator(form.controls.initialTemperature, form.controls.chargeMaterialDischargeTemperature.value);
+    return form;
   }
 
-  buildGasChargeMaterial(gasForm: GasMaterialForm): ChargeMaterial {
-    const value = gasForm.getRawValue();
-    return {
-      name: value.name ?? undefined,
-      chargeMaterialType: ChargeMaterialType.Gas,
-      gasChargeMaterial: {
-        materialId: value.materialId ?? undefined,
-        thermicReactionType: value.endothermicOrExothermic ?? undefined,
-        specificHeatGas: value.materialSpecificHeat ?? undefined,
-        feedRate: value.feedRate ?? undefined,
-        percentVapor: value.vaporInGas ?? undefined,
-        initialTemperature: value.initialTemperature ?? undefined,
-        dischargeTemperature: value.dischargeTemperature ?? undefined,
-        specificHeatVapor: value.specificHeatOfVapor ?? undefined,
-        percentReacted: value.gasReacted ?? undefined,
-        reactionHeat: value.heatOfReaction ?? undefined,
-        additionalHeat: value.additionalHeatRequired ?? undefined,
-      },
+  buildGasChargeMaterial(form: GasMaterialForm): ChargeMaterial {
+    const v = form.getRawValue();
+    const gasChargeMaterial: GasChargeMaterial = {
+      materialId: v.materialId,
+      specificHeatGas: v.specificHeatOfGas,
+      feedRate: v.feedRate,
+      percentVapor: v.percentVaporInGasMixture,
+      initialTemperature: v.initialTemperature,
+      dischargeTemperature: v.chargeMaterialDischargeTemperature,
+      specificHeatVapor: v.specificHeatOfVapor,
+      percentReacted: v.percentChargeReacted,
+      reactionHeat: v.heatOfReaction,
+      thermicReactionType: v.endothermicOrExothermic,
+      additionalHeat: v.additionalHeatRequired,
     };
+    return { chargeMaterialType: ChargeMaterialType.Gas, gasChargeMaterial };
   }
+
+  // No warnings for gas — intentional, see spec §4.3.
 }

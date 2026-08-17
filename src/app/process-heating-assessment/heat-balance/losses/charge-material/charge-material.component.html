@@ -1,112 +1,99 @@
-<div class="panel-container p-3">
-  <div class="d-flex align-items-center justify-content-between mb-2">
-    <h5 class="mb-0">Charge Material</h5>
-    <button class="btn btn-primary btn-sm" (click)="service.add()">+ Add Material</button>
-  </div>
+@let materials = chargeMaterialService.materials();
+@let results = chargeMaterialService.results();
+@let materialResultTotals = chargeMaterialService.materialResultTotals();
+@let isMaterialAdditionLocked = chargeMaterialService.isMaterialAdditionLocked();
+@let unit = resultsUnit();
 
-  @if (service.materials().length === 0) {
-    <div class="no-data text-center p-4">
-      <p class="text-muted">No charge materials. Click <strong>Add Material</strong> to begin.</p>
+<div class="panel-container p-3">
+  <h4>Charge Material</h4>
+
+  @if (materials.length > 0) {
+    <div class="charge-material-totals d-flex flex-wrap">
+      <div class="p-2"><strong>Heat Required (net):</strong> {{ materialResultTotals.netHeatLoss | number: '1.0-2' }} {{ unit }}</div>
+      <div class="p-2"><strong>Reaction Heat (Endo/Exo):</strong> {{ materialResultTotals.endoExoHeat | number: '1.0-2' }} {{ unit }}</div>
+      <div class="p-2"><strong>Total Heat Required (gross):</strong> {{ materialResultTotals.heatRequired | number: '1.0-2' }} {{ unit }}</div>
     </div>
   }
 
-  @for (item of service.materials(); track $index; let idx = $index) {
-    <div class="card mb-3">
-      <div class="card-header d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-2 flex-grow-1">
-          <button class="btn btn-sm btn-link p-0 text-dark" (click)="service.toggleCollapse(idx)">
-            @if (item.collapse) { <span class="fa fa-chevron-right"></span> } @else { <span class="fa fa-chevron-down"></span> }
+  @for (item of materials; track item.id) {
+    @let itemResult = results.get(item.id);
+    <div class="card charge-material-card mb-3">
+      <div class="card-header d-flex align-items-center flex-wrap">
+        <button
+          type="button"
+          class="btn btn-link p-0 mr-2"
+          [attr.aria-label]="isCollapsed(item) ? 'Expand material' : 'Collapse material'"
+          (click)="toggleCollapse(item)"
+        >
+          <span class="fa" [class.fa-chevron-right]="isCollapsed(item)" [class.fa-chevron-down]="!isCollapsed(item)"></span>
+        </button>
+        <input
+          #nameInput
+          type="text"
+          class="form-control charge-material-name mr-2"
+          [value]="item.name"
+          (change)="onNameChange(item, nameInput.value)"
+        />
+        <select
+          #typeSelect
+          class="form-control charge-material-type-select mr-2"
+          [value]="item.type"
+          (change)="onTypeChange(item, typeSelect.value)"
+        >
+          <option [value]="CMT.Solid">Solid</option>
+          <option [value]="CMT.Liquid">Liquid</option>
+          <option [value]="CMT.Gas">Gas</option>
+        </select>
+        @if (!isMaterialAdditionLocked) {
+          <button type="button" class="btn btn-link text-danger ml-auto" (click)="removeMaterial(item)">
+            <span class="fa fa-trash"></span> Remove
           </button>
-          <input type="text" class="form-control form-control-sm flex-grow-1"
-            [value]="item.name"
-            (input)="service.setName(idx, $event.target['value'])">
-        </div>
-        <button class="btn btn-sm btn-link text-danger" (click)="service.remove(idx)" title="Remove material"><span class="fa fa-times"></span></button>
+        }
       </div>
 
-      @if (!item.collapse) {
-        <div class="card-body">
-          <div class="form-group mb-3">
-            <label class="small">Select Type</label>
-            <select class="form-control" (change)="service.switchType(idx, $event.target['value'])">
-              <option [value]="ChargeMaterialType.Solid" [selected]="item.type === ChargeMaterialType.Solid">Solid</option>
-              <option [value]="ChargeMaterialType.Liquid" [selected]="item.type === ChargeMaterialType.Liquid">Liquid</option>
-              <option [value]="ChargeMaterialType.Gas" [selected]="item.type === ChargeMaterialType.Gas">Gas</option>
-            </select>
+      @if (isCollapsed(item)) {
+        <div class="card-body charge-material-summary d-flex flex-wrap">
+          <div class="p-2">
+            <strong>Heat Required: </strong>
+            {{ itemResult?.heatRequired != null ? (itemResult.heatRequired | number: '1.0-2') + ' ' + unit : '——' }}
           </div>
-
+          <div class="p-2">
+            <strong>Net Heat Loss: </strong>
+            {{ itemResult?.netHeatLoss != null ? (itemResult.netHeatLoss | number: '1.0-2') + ' ' + unit : '——' }}
+          </div>
+          <div class="p-2">
+            <strong>Endo/Exo Heat: </strong>
+            {{ itemResult?.endoExoHeat != null ? (itemResult.endoExoHeat | number: '1.0-2') + ' ' + unit : '——' }}
+          </div>
+        </div>
+      } @else {
+        <div class="card-body">
           @switch (item.type) {
-            @case (ChargeMaterialType.Solid) {
-              <app-charge-material-solid-form
-                [index]="idx"
-                [settings]="settings()">
-              </app-charge-material-solid-form>
+            @case (CMT.Solid) {
+              <app-charge-material-solid-form [form]="item.form" [settings]="settings()" [instanceId]="item.id"></app-charge-material-solid-form>
             }
-            @case (ChargeMaterialType.Liquid) {
-              <app-charge-material-liquid-form
-                [index]="idx"
-                [settings]="settings()">
-              </app-charge-material-liquid-form>
+            @case (CMT.Liquid) {
+              <app-charge-material-liquid-form [form]="item.form" [settings]="settings()" [instanceId]="item.id"></app-charge-material-liquid-form>
             }
-            @case (ChargeMaterialType.Gas) {
-              <app-charge-material-gas-form
-                [index]="idx"
-                [settings]="settings()">
-              </app-charge-material-gas-form>
+            @case (CMT.Gas) {
+              <app-charge-material-gas-form [form]="item.form" [settings]="settings()" [instanceId]="item.id"></app-charge-material-gas-form>
             }
           }
-
-          <div class="loss-results mt-3">
-            <div class="d-flex justify-content-between small">
-              <span class="font-weight-bold">{{item.name}} Heat Required</span>
-              <span>
-                @if (item.netHeatLoss != null) {
-                  {{item.netHeatLoss | sigFigs: 6}} {{resultsUnit}}
-                } @else {
-                  &mdash;&mdash;
-                }
-              </span>
-            </div>
-            <div class="d-flex justify-content-between small">
-              <span class="font-weight-bold">{{item.name}} Reaction Heat</span>
-              <span>
-                @if (item.endoExoHeat != null) {
-                  {{item.endoExoHeat | sigFigs: 6}} {{resultsUnit}}
-                } @else {
-                  &mdash;&mdash;
-                }
-              </span>
-            </div>
-            <div class="d-flex justify-content-between small">
-              <span class="font-weight-bold">{{item.name}} Total Heat Required</span>
-              <span>
-                @if (item.heatRequired != null) {
-                  {{item.heatRequired | sigFigs: 6}} {{resultsUnit}}
-                } @else {
-                  &mdash;&mdash;
-                }
-              </span>
-            </div>
-          </div>
         </div>
       }
     </div>
   }
 
-  @if (service.materials().length > 0) {
-    <div class="loss-total mt-3 p-2 border-top">
-      <div class="d-flex justify-content-between small font-weight-bold">
-        <span>All Materials Heat Required</span>
-        <span>{{service.totals().netHeatLoss | sigFigs: 6}} {{resultsUnit}}</span>
-      </div>
-      <div class="d-flex justify-content-between small font-weight-bold">
-        <span>All Materials Reaction Heat</span>
-        <span>{{service.totals().endoExoHeat | sigFigs: 6}} {{resultsUnit}}</span>
-      </div>
-      <div class="d-flex justify-content-between small font-weight-bold">
-        <span>All Materials Total Heat Required</span>
-        <span>{{service.totals().heatRequired | sigFigs: 6}} {{resultsUnit}}</span>
-      </div>
+  @if (materials.length === 0 && isMaterialAdditionLocked) {
+    <div class="alert alert-info">
+      Charge materials cannot be added while a modification exists — delete your current modifications and return to baseline to edit the charge material list.
     </div>
+  } @else if (materials.length === 0) {
+    <div class="p-3 no-data">
+      <p>No charge materials have been added yet.</p>
+      <button type="button" class="btn btn-primary" (click)="addMaterial()">Add Material</button>
+    </div>
+  } @else if (!isMaterialAdditionLocked) {
+    <button type="button" class="btn btn-primary" (click)="addMaterial()">Add Material</button>
   }
 </div>

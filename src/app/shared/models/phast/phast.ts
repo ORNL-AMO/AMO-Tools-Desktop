@@ -1,4 +1,4 @@
-import { ChargeMaterial } from './losses/chargeMaterial';
+import { ChargeMaterial, ChargeMaterialResult } from './losses/chargeMaterial';
 import { WallLoss } from './losses/wallLoss';
 import { AtmosphereLoss } from './losses/atmosphereLoss';
 import { OtherLoss } from './losses/otherLoss';
@@ -110,6 +110,7 @@ export interface Notes {
 export interface PhastResults {
   totalInput: number;
   totalChargeMaterialLoss: number;
+  chargeMaterialResults?: ChargeMaterialResult[];
   totalWallLoss: number;
   totalOtherLoss: number;
   totalOpeningLoss: number;

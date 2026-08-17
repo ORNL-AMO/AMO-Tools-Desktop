@@ -1,0 +1,48 @@
+<div class="modal-header">
+  <h4 class="modal-title">Add New Solid Material</h4>
+</div>
+<div class="modal-body">
+  <form [formGroup]="form">
+    <div class="form-group">
+      <label for="substance">Material Name</label>
+      <input type="text" class="form-control" id="substance" formControlName="substance">
+      <app-form-control-errors [control]="form.controls.substance" [settings]="settings"></app-form-control-errors>
+    </div>
+    <div class="form-group">
+      <label for="specificHeatSolid">Average Specific Heat of Solid</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="specificHeatSolid" formControlName="specificHeatSolid">
+        <app-input-unit [settings]="settings" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form.controls.specificHeatSolid" [settings]="settings"></app-form-control-errors>
+    </div>
+    <div class="form-group">
+      <label for="specificHeatLiquid">Average Specific Heat of Molten Material</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="specificHeatLiquid" formControlName="specificHeatLiquid">
+        <app-input-unit [settings]="settings" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form.controls.specificHeatLiquid" [settings]="settings"></app-form-control-errors>
+    </div>
+    <div class="form-group">
+      <label for="latentHeat">Latent Heat of Fusion</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="latentHeat" formControlName="latentHeat">
+        <app-input-unit [settings]="settings" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form.controls.latentHeat" [settings]="settings"></app-form-control-errors>
+    </div>
+    <div class="form-group">
+      <label for="meltingPoint">Melting Point</label>
+      <div class="input-group">
+        <input type="number" class="form-control" id="meltingPoint" formControlName="meltingPoint">
+        <app-input-unit [settings]="settings" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form.controls.meltingPoint" [settings]="settings"></app-form-control-errors>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-white" (click)="close()">Cancel</button>
+  <button type="button" class="btn btn-primary" [disabled]="form.invalid" (click)="save()">Save</button>
+</div>

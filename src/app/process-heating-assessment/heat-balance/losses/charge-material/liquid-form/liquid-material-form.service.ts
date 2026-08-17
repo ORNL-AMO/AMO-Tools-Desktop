@@ -1,137 +1,109 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ChargeMaterial, ChargeMaterialType, LiquidChargeMaterial, ThermicReactionType } from '../../../../../shared/models/phast/losses/chargeMaterial';
 import { GreaterThanValidator } from '../../../../../shared/validators/greater-than';
+import {
+  ChargeMaterial,
+  ChargeMaterialType,
+  LiquidChargeMaterial,
+  ThermicReactionType,
+} from '../../../../../shared/models/phast/losses/chargeMaterial';
+import { applyInitialTempMaxValidator } from '../charge-material-form.util';
 
 export type LiquidMaterialForm = FormGroup<{
   materialId: FormControl<number | null>;
-  materialSpecificHeatLiquid: FormControl<number | null>;
-  materialVaporizingTemperature: FormControl<number | null>;
-  materialLatentHeat: FormControl<number | null>;
-  materialSpecificHeatVapor: FormControl<number | null>;
+  specificHeatOfLiquid: FormControl<number | null>;
+  vaporizingTemperature: FormControl<number | null>;
+  latentHeatOfVaporization: FormControl<number | null>;
+  specificHeatOfVapor: FormControl<number | null>;
   feedRate: FormControl<number | null>;
   initialTemperature: FormControl<number | null>;
-  dischargeTemperature: FormControl<number | null>;
-  liquidVaporized: FormControl<number | null>;
-  liquidReacted: FormControl<number | null>;
+  chargeMaterialDischargeTemperature: FormControl<number | null>;
+  percentChargeVaporized: FormControl<number | null>;
+  percentChargeReacted: FormControl<number | null>;
   heatOfReaction: FormControl<number | null>;
   endothermicOrExothermic: FormControl<ThermicReactionType | null>;
   additionalHeatRequired: FormControl<number | null>;
-  name: FormControl<string | null>;
 }>;
+
+export interface LiquidMaterialWarnings {
+  dischargeAboveVaporizingNoVaporPercent: string | null;
+  dischargeBelowVaporizingWithVaporPercent: string | null;
+  initialAboveVaporizingNoVaporPercent: string | null;
+  dischargeAboveVaporizingNoVaporPercentAlt: string | null;
+}
+
+export const EMPTY_WARNINGS: LiquidMaterialWarnings = {
+  dischargeAboveVaporizingNoVaporPercent: null,
+  dischargeBelowVaporizingWithVaporPercent: null,
+  initialAboveVaporizingNoVaporPercent: null,
+  dischargeAboveVaporizingNoVaporPercentAlt: null,
+};
 
 @Injectable()
 export class LiquidMaterialFormService {
   private readonly formBuilder = inject(FormBuilder);
 
-  initLiquidForm(lossNumber: number = 1): LiquidMaterialForm {
-    return this.formBuilder.group({
-      materialId: new FormControl<number | null>(1, Validators.required),
-      materialSpecificHeatLiquid: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-      materialVaporizingTemperature: new FormControl<number | null>(null, Validators.required),
-      materialLatentHeat: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-      materialSpecificHeatVapor: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-      feedRate: new FormControl<number | null>(null, [Validators.required, GreaterThanValidator.greaterThan(0)]),
-      initialTemperature: new FormControl<number | null>(null, Validators.required),
-      dischargeTemperature: new FormControl<number | null>(null, Validators.required),
-      liquidVaporized: new FormControl<number | null>(0, [Validators.required, Validators.min(0), Validators.max(100)]),
-      liquidReacted: new FormControl<number | null>(0, [Validators.required, Validators.min(0), Validators.max(100)]),
-      heatOfReaction: new FormControl<number | null>(0, [Validators.required, Validators.min(0)]),
-      endothermicOrExothermic: new FormControl<ThermicReactionType | null>(ThermicReactionType.Endothermic, Validators.required),
-      additionalHeatRequired: new FormControl<number | null>(0, Validators.required),
-      name: new FormControl<string | null>(`Material #${lossNumber}`, Validators.required),
-    }) as LiquidMaterialForm;
-  }
-
   getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial): LiquidMaterialForm {
-    const liquid = chargeMaterial.liquidChargeMaterial;
-    const formGroup = this.formBuilder.group({
-      materialId: new FormControl<number | null>(liquid.materialId ?? null, Validators.required),
-      materialSpecificHeatLiquid: new FormControl<number | null>(liquid.specificHeatLiquid ?? null, [Validators.required, Validators.min(0)]),
-      materialVaporizingTemperature: new FormControl<number | null>(liquid.vaporizingTemperature ?? null, Validators.required),
-      materialLatentHeat: new FormControl<number | null>(liquid.latentHeat ?? null, [Validators.required, Validators.min(0)]),
-      materialSpecificHeatVapor: new FormControl<number | null>(liquid.specificHeatVapor ?? null, [Validators.required, Validators.min(0)]),
-      feedRate: new FormControl<number | null>(liquid.chargeFeedRate ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]),
-      initialTemperature: new FormControl<number | null>(liquid.initialTemperature ?? null, Validators.required),
-      dischargeTemperature: new FormControl<number | null>(liquid.dischargeTemperature ?? null, Validators.required),
-      liquidVaporized: new FormControl<number | null>(liquid.percentVaporized ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]),
-      liquidReacted: new FormControl<number | null>(liquid.percentReacted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]),
-      heatOfReaction: new FormControl<number | null>(liquid.reactionHeat ?? 0, [Validators.required, Validators.min(0)]),
-      endothermicOrExothermic: new FormControl<ThermicReactionType | null>(liquid.thermicReactionType ?? ThermicReactionType.Endothermic, Validators.required),
-      additionalHeatRequired: new FormControl<number | null>(liquid.additionalHeat ?? 0, Validators.required),
-      name: new FormControl<string | null>(chargeMaterial.name ?? null, Validators.required),
-    }) as LiquidMaterialForm;
-    return this.setInitialTempValidator(formGroup);
+    const liquid = chargeMaterial.liquidChargeMaterial ?? {};
+    const form: LiquidMaterialForm = this.formBuilder.group({
+      materialId: [liquid.materialId ?? 1, Validators.required],
+      specificHeatOfLiquid: [liquid.specificHeatLiquid ?? null, [Validators.required, Validators.min(0)]],
+      vaporizingTemperature: [liquid.vaporizingTemperature ?? null, Validators.required],
+      latentHeatOfVaporization: [liquid.latentHeat ?? null, [Validators.required, Validators.min(0)]],
+      specificHeatOfVapor: [liquid.specificHeatVapor ?? null, [Validators.required, Validators.min(0)]],
+      feedRate: [liquid.chargeFeedRate ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]],
+      initialTemperature: [liquid.initialTemperature ?? null, Validators.required],
+      chargeMaterialDischargeTemperature: [liquid.dischargeTemperature ?? null, Validators.required],
+      percentChargeVaporized: [liquid.percentVaporized ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      percentChargeReacted: [liquid.percentReacted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      heatOfReaction: [liquid.reactionHeat ?? 0, [Validators.required, Validators.min(0)]],
+      endothermicOrExothermic: [liquid.thermicReactionType ?? ThermicReactionType.Endothermic, Validators.required],
+      additionalHeatRequired: [liquid.additionalHeat ?? 0, Validators.required],
+    });
+    return this.setInitialTempValidator(form);
   }
 
-  setInitialTempValidator(formGroup: LiquidMaterialForm): LiquidMaterialForm {
-    const dischargeTemperature = formGroup.controls.dischargeTemperature.value;
-    if (dischargeTemperature !== null) {
-      formGroup.controls.initialTemperature.setValidators([Validators.required, Validators.max(dischargeTemperature)]);
-      formGroup.controls.initialTemperature.markAsDirty();
-      formGroup.controls.initialTemperature.updateValueAndValidity({ emitEvent: false });
-    }
-    return formGroup;
+  setInitialTempValidator(form: LiquidMaterialForm): LiquidMaterialForm {
+    applyInitialTempMaxValidator(form.controls.initialTemperature, form.controls.chargeMaterialDischargeTemperature.value);
+    return form;
   }
 
-  buildLiquidChargeMaterial(liquidForm: LiquidMaterialForm): ChargeMaterial {
-    const value = liquidForm.getRawValue();
+  buildLiquidChargeMaterial(form: LiquidMaterialForm): ChargeMaterial {
+    const v = form.getRawValue();
+    const liquidChargeMaterial: LiquidChargeMaterial = {
+      materialId: v.materialId,
+      specificHeatLiquid: v.specificHeatOfLiquid,
+      vaporizingTemperature: v.vaporizingTemperature,
+      latentHeat: v.latentHeatOfVaporization,
+      specificHeatVapor: v.specificHeatOfVapor,
+      chargeFeedRate: v.feedRate,
+      initialTemperature: v.initialTemperature,
+      dischargeTemperature: v.chargeMaterialDischargeTemperature,
+      percentVaporized: v.percentChargeVaporized,
+      percentReacted: v.percentChargeReacted,
+      reactionHeat: v.heatOfReaction,
+      thermicReactionType: v.endothermicOrExothermic,
+      additionalHeat: v.additionalHeatRequired,
+    };
+    return { chargeMaterialType: ChargeMaterialType.Liquid, liquidChargeMaterial };
+  }
+
+  checkLiquidWarnings(liquid: LiquidChargeMaterial): LiquidMaterialWarnings {
+    if (!liquid || liquid.vaporizingTemperature == null) return EMPTY_WARNINGS;
+    const { dischargeTemperature, initialTemperature, vaporizingTemperature, percentVaporized } = liquid;
     return {
-      name: value.name ?? undefined,
-      chargeMaterialType: ChargeMaterialType.Liquid,
-      liquidChargeMaterial: {
-        materialId: value.materialId ?? undefined,
-        thermicReactionType: value.endothermicOrExothermic ?? undefined,
-        specificHeatLiquid: value.materialSpecificHeatLiquid ?? undefined,
-        vaporizingTemperature: value.materialVaporizingTemperature ?? undefined,
-        latentHeat: value.materialLatentHeat ?? undefined,
-        specificHeatVapor: value.materialSpecificHeatVapor ?? undefined,
-        chargeFeedRate: value.feedRate ?? undefined,
-        initialTemperature: value.initialTemperature ?? undefined,
-        dischargeTemperature: value.dischargeTemperature ?? undefined,
-        percentVaporized: value.liquidVaporized ?? undefined,
-        percentReacted: value.liquidReacted ?? undefined,
-        reactionHeat: value.heatOfReaction ?? undefined,
-        additionalHeat: value.additionalHeatRequired ?? undefined,
-      },
+      dischargeAboveVaporizingNoVaporPercent: (dischargeTemperature > vaporizingTemperature && percentVaporized === 0)
+        ? `The Charge Outlet Temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.`
+        : null,
+      dischargeBelowVaporizingWithVaporPercent: (dischargeTemperature < vaporizingTemperature && percentVaporized > 0)
+        ? `The Charge Outlet Temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.`
+        : null,
+      initialAboveVaporizingNoVaporPercent: (initialTemperature > vaporizingTemperature && percentVaporized <= 0)
+        ? `The Charge Inlet Temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.`
+        : null,
+      dischargeAboveVaporizingNoVaporPercentAlt: (dischargeTemperature > vaporizingTemperature && percentVaporized <= 0)
+        ? `The Charge Outlet Temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.`
+        : null,
     };
   }
-
-  checkLiquidWarnings(material: LiquidChargeMaterial): LiquidMaterialWarnings {
-    return {
-      dischargeTempWarning: this.checkDischargeTemp(material),
-      inletOverVaporizingWarning: this.checkInletOverVaporizing(material),
-      outletOverVaporizingWarning: this.checkOutletOverVaporizing(material),
-    };
-  }
-
-  checkDischargeTemp(material: LiquidChargeMaterial): string | null {
-    if (material.dischargeTemperature > material.vaporizingTemperature && material.percentVaporized === 0) {
-      return 'The Charge Outlet Temperature is higher than the Vaporizing Temperature, please enter proper percentage for charge vaporized.';
-    }
-    if (material.dischargeTemperature < material.vaporizingTemperature && material.percentVaporized > 0) {
-      return 'The Charge Outlet Temperature is lower than the vaporizing temperature, the percentage for charge liquid vaporized should be 0%.';
-    }
-    return null;
-  }
-
-  checkInletOverVaporizing(material: LiquidChargeMaterial): string | null {
-    if (material.initialTemperature > material.vaporizingTemperature && material.percentVaporized <= 0) {
-      return 'The Charge Inlet Temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.';
-    }
-    return null;
-  }
-
-  checkOutletOverVaporizing(material: LiquidChargeMaterial): string | null {
-    if (material.dischargeTemperature > material.vaporizingTemperature && material.percentVaporized <= 0) {
-      return 'The Charge Outlet Temperature is higher than the vaporization point, please enter proper percentage for charge vaporized.';
-    }
-    return null;
-  }
-}
-
-export interface LiquidMaterialWarnings {
-  dischargeTempWarning: string | null;
-  inletOverVaporizingWarning: string | null;
-  outletOverVaporizingWarning: string | null;
 }
