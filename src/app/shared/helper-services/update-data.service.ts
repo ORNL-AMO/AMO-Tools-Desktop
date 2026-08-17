@@ -14,6 +14,8 @@ import { getNewIdString } from '../helperFunctions';
 import { Calculator } from '../models/calculators';
 import { SteamPressureOrTemp, SteamQuality } from '../models/steam/steam-inputs';
 import { AdjustedOrActual, BilledForDemand, MonthyInputs } from '../../calculator/utilities/power-factor-correction/power-factor-correction.service';
+import { ProcessCoolingAssessment } from '../models/process-cooling-assessment';
+import { getTowerTypeDependentValues } from '../../process-cooling-assessment/constants/process-cooling-constants';
 
 @Injectable()
 export class UpdateDataService {
@@ -36,7 +38,32 @@ export class UpdateDataService {
             return this.updateWasteWater(assessment);
         } else if (assessment.type === 'CompressedAir') {
             return this.updateCompressedAir(assessment);
+        } else if (assessment.type === 'ProcessCooling') {
+            return this.updateProcessCooling(assessment);
         }
+    }
+
+
+    updateProcessCooling(assessment: Assessment): Assessment {
+        assessment.appVersion = environment.version;
+        if (assessment.processCooling) {
+            assessment.processCooling = this.updateTowerFanSpeedType(assessment.processCooling);
+        }
+        return assessment;
+    }
+
+    updateTowerFanSpeedType(processCooling: ProcessCoolingAssessment): ProcessCoolingAssessment {
+        if (processCooling.systemInformation?.towerInput && processCooling.systemInformation.towerInput.towerType != null) {
+            processCooling.systemInformation.towerInput.fanSpeedType = getTowerTypeDependentValues(processCooling.systemInformation.towerInput.towerType).fanSpeedType;
+        }
+        if (processCooling.modifications) {
+            processCooling.modifications.forEach(mod => {
+                if (mod.upgradeCoolingTowerFans && mod.upgradeCoolingTowerFans.towerType != null) {
+                    mod.upgradeCoolingTowerFans.fanSpeedType = getTowerTypeDependentValues(mod.upgradeCoolingTowerFans.towerType).fanSpeedType;
+                }
+            });
+        }
+        return processCooling;
     }
 
     updateWasteWater(assessment: Assessment): Assessment {

@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, viewChild, ElementRef } from '@angular/core';
+import { Component, effect, inject, input, signal, viewChild, ElementRef } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PlotlyService } from 'angular-plotly.js';
 import { ProcessCoolingResultsService } from '../../../services/process-cooling-results.service';
@@ -18,6 +18,8 @@ export class ChillerProfileChartComponent {
 
   chartRef = viewChild<ElementRef<HTMLDivElement>>('chillerProfileChart');
   selectedChillerId = input<string | null | undefined>();
+  context = input<'inventory' | 'report'>('report');
+  showFactored = signal<boolean>(false);
   private baselineResults = toSignal(this.processCoolingResultsService.baselineResults$);
 
   constructor() {
@@ -36,9 +38,14 @@ export class ChillerProfileChartComponent {
         return;
       }
 
-      const { traces, layout, config } = this.chartsService.buildChillerProfileChart(filteredChillers);
+      const showFactoredProfile = this.context() === 'inventory' && this.showFactored();
+      const { traces, layout, config } = this.chartsService.buildChillerProfileChart(filteredChillers, showFactoredProfile);
       this.plotlyService.newPlot(nativeElement, traces, layout, config);
     });
+  }
+
+  onShowFactoredChange(event: Event): void {
+    this.showFactored.set((event.target as HTMLInputElement).checked);
   }
 }
 

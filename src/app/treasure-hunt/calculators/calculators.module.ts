@@ -43,6 +43,7 @@ import { BoilerBlowdownRateModule } from '../../calculator/steam/boiler-blowdown
 import { AssessmentOpportunityHelpComponent } from './assessment-opportunity/assessment-opportunity-help/assessment-opportunity-help.component';
 import { PowerFactorCorrectionModule } from '../../calculator/utilities/power-factor-correction/power-factor-correction.module';
 import { AirLeakSurveyModule } from '../../calculator/compressed-air/air-leak-survey/air-leak-survey.module';
+import { SteamLeakSurveyModule } from '../../calculator/steam/steam-leak/steam-leak-survey.module';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import { AirLeakSurveyModule } from '../../calculator/compressed-air/air-leak-su
     CoolingTowerBasinModule,
     AssessmentIntegrationModule,
     BoilerBlowdownRateModule,
-    PowerFactorCorrectionModule
+    PowerFactorCorrectionModule,
+    SteamLeakSurveyModule
   ],
   providers: [
     CalculatorsService,

@@ -53,9 +53,7 @@ export class ProcessCoolingBannerComponent {
   showSecurityAndPrivacyModal() {
     this.modalDialogService.openModal(
       SecurityAndPrivacyItemComponent,
-      {
-        width: '1400px',
-      },
+      SecurityAndPrivacyItemComponent.getDialogConfig()
     );
   }
 

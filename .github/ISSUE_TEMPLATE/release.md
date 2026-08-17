@@ -9,6 +9,10 @@ labels: 'Epic'
 
 ## Release Checklist
 - [ ] Requires a suite release
+- [ ] Previous patch releases have been synced to `develop`
+
+**Delivery Date**
+Do we have a requested delivery date? If so, how flexible is the deadline?
 
 **Overview and Notes**
 Context related to release, dependencies, blockers, etc

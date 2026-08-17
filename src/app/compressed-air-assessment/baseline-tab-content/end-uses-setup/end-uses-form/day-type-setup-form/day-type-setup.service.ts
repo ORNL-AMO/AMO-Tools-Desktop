@@ -10,16 +10,24 @@ export class DayTypeSetupService {
   endUseDayTypeSetup: BehaviorSubject<EndUseDayTypeSetup>;
   dayTypeSetupWarnings: DayTypeSetupWarnings;
 
-  constructor(private formBuilder: UntypedFormBuilder) { 
+  constructor(private formBuilder: UntypedFormBuilder) {
     this.endUseDayTypeSetup = new BehaviorSubject<EndUseDayTypeSetup>(undefined);
   }
 
   getDayTypeSetupFormFromObj(endUseDayTypeSetup: EndUseDayTypeSetup, dayTypeAirflowTotals: DayTypeAirflowTotals): UntypedFormGroup {
     let dayTypeLeakRate = endUseDayTypeSetup.dayTypeLeakRates.find(leakRate => leakRate.dayTypeId === endUseDayTypeSetup.selectedDayTypeId);
-    let form: UntypedFormGroup = this.formBuilder.group({
-      selectedDayTypeId: [endUseDayTypeSetup.selectedDayTypeId],
-      dayTypeLeakRate: [dayTypeLeakRate.dayTypeLeakRate],
-    });
+    let form: UntypedFormGroup;
+    if (dayTypeLeakRate) {
+      form = this.formBuilder.group({
+        selectedDayTypeId: [endUseDayTypeSetup.selectedDayTypeId],
+        dayTypeLeakRate: [dayTypeLeakRate.dayTypeLeakRate],
+      });
+    } else {
+      form = this.formBuilder.group({
+        selectedDayTypeId: [endUseDayTypeSetup.selectedDayTypeId],
+        dayTypeLeakRate: [0],
+      });
+    }
     form = this.setDayTypeLeakRateValidation(form, dayTypeAirflowTotals);
     form = this.markFormDirtyToDisplayValidation(form);
     return form;
@@ -30,8 +38,8 @@ export class DayTypeSetupService {
     let dayTypeLeakRate: number = form.controls.dayTypeLeakRate.value;
     endUseDayTypeSetup.dayTypeLeakRates.map(currentDaytypeLeakRate => {
       if (currentDaytypeLeakRate.dayTypeId === endUseDayTypeSetup.selectedDayTypeId) {
-          currentDaytypeLeakRate.dayTypeLeakRate = dayTypeLeakRate;
-      } 
+        currentDaytypeLeakRate.dayTypeLeakRate = dayTypeLeakRate;
+      }
     });
 
     return endUseDayTypeSetup;
@@ -43,7 +51,7 @@ export class DayTypeSetupService {
     form.controls.dayTypeLeakRate.setValidators(dayTypeLeakRateValidators);
     form.controls.dayTypeLeakRate.updateValueAndValidity();
     return form;
- }
+  }
 
   markFormDirtyToDisplayValidation(form: UntypedFormGroup) {
     for (let key in form.controls) {
@@ -70,9 +78,9 @@ export class DayTypeSetupService {
         let halfAirflowTotal: number = roundVal(dayTypeAirFlowTotals.totalDayTypeAverageAirflow / 2, 0);
         if (selectedLeakRate.dayTypeLeakRate !== undefined && selectedLeakRate.dayTypeLeakRate === halfAirflowTotal) {
           warning = `Leak rate is usually less than half of the System Profile average airflow for this day type. (${halfAirflowTotal})`;
-        } 
+        }
       }
-    } 
+    }
     return warning;
   }
 

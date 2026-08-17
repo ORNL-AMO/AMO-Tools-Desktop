@@ -28,13 +28,13 @@ export class SteamService {
   steamPropertiesInput: SteamPropertiesInput;
   saturatedPropertiesData: Array<{ pressure: number, temperature: number, satLiquidEnthalpy: number, evapEnthalpy: number, satGasEnthalpy: number, satLiquidEntropy: number, evapEntropy: number, satGasEntropy: number, satLiquidVolume: number, evapVolume: number, satGasVolume: number }>;
   steamPropertiesData: Array<{ pressure: number, thermodynamicQuantity: number, temperature: number, enthalpy: number, entropy: number, volume: number, quality: number }>;
-  constructor(private convertUnitsService: ConvertUnitsService, 
-    private steamSuiteApiService: SteamSuiteApiService, 
+  constructor(private convertUnitsService: ConvertUnitsService,
+    private steamSuiteApiService: SteamSuiteApiService,
     private convertSteamService: ConvertSteamService) {
     this.steamModelerError = new BehaviorSubject<string>(undefined);
-   }
+  }
 
-  getSteamPropertiesValidationRanges(quantityValue: number, settings: Settings): SteamPropertiesValidationRanges  {
+  getSteamPropertiesValidationRanges(quantityValue: number, settings: Settings): SteamPropertiesValidationRanges {
     let quantityRanges: { min: number, max: number } = this.getQuantityRange(settings, quantityValue);
     let minPressure: number = Number(this.convertUnitsService.value(this.BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG).from('psig').to(settings.steamPressureMeasurement).toFixed(3));
     let maxPressure: number;
@@ -97,12 +97,16 @@ export class SteamService {
     let inputCpy = JSON.parse(JSON.stringify(saturatedPropertiesInput));
     //convert input and call suite to calcluate results depending on input for calculator
     let output: SaturatedPropertiesOutput;
+    //ISSUE 8340: when Pressure round UP to 1 decimal place
+    //when temperature round down to 1 decimal place
     if (pressureOrTemperature === SteamPressureOrTemp.PRESSURE) {
       inputCpy.saturatedPressure = this.convertSteamService.convertSteamPressureInput(inputCpy.saturatedPressure, settings);
       output = this.steamSuiteApiService.saturatedPropertiesGivenPressure(inputCpy);
+      output.saturatedTemperature = Math.ceil(output.saturatedTemperature * 10) / 10;
     } else if (pressureOrTemperature === SteamPressureOrTemp.TEMPERATURE) {
       inputCpy.saturatedTemperature = this.convertSteamService.convertSteamTemperatureInput(inputCpy.saturatedTemperature, settings);
       output = this.steamSuiteApiService.saturatedPropertiesGivenTemperature(inputCpy);
+      output.saturatedPressure = Math.floor(output.saturatedPressure * 10) / 10;
     }
     //convert results and return
     output = this.convertSteamService.convertSaturatedPropertiesOutput(output, settings);
@@ -398,7 +402,7 @@ export class SteamService {
       operationsOutput: undefined,
       co2EmissionsOutput: undefined,
     }
-    
+
   }
 
   getEmptyLosses(): SSMTLosses {
@@ -440,6 +444,6 @@ export class SteamService {
       totalOtherLosses: undefined,
       returnedSteamAndCondensate: undefined,
     }
-    
+
   }
 }

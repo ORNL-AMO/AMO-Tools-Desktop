@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
+import { type DefaultData, type LightingData, type LightingDataV } from 'measur-tools-suite';
 
 @Injectable({
     providedIn: 'root'
@@ -12,9 +13,9 @@ export class LightingSuiteApiService {
         private toolsSuiteApiService: ToolsSuiteApiService,
     ) { }
 
-    getLightingSystems() {
-        let defaultDataInstance = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
-        let lightingFixtureData = defaultDataInstance.getLightingData();
+    getLightingSystems(): Array<LightingFixtureCategory> {
+        let defaultDataInstance: DefaultData = new this.toolsSuiteApiService.ToolsSuiteModule.DefaultData();
+        let lightingFixtureData: LightingDataV = defaultDataInstance.getLightingData();
 
         this.lightingFixtureCategories = [            {
                 category: 0,
@@ -78,12 +79,12 @@ export class LightingSuiteApiService {
         return this.lightingFixtureCategories;
     }   
 
-    buildLightingList(wasmLightingSystems, lightingFixtureCategories: Array<LightingFixtureCategory> ) {
-        for (let i = 0; i < wasmLightingSystems.size(); i++) {
-            let wasmClass = wasmLightingSystems.get(i);
+    buildLightingList(wasmLightingSystems: LightingDataV, lightingFixtureCategories: Array<LightingFixtureCategory> ): void {
+        for (let i: number = 0; i < wasmLightingSystems.size(); i++) {
+            let wasmClass: LightingData = wasmLightingSystems.get(i);
 
             let lightingSystem: LightingFixtureData = this.getLightingSystemFromWASM(wasmClass);
-            let category = lightingFixtureCategories.find(system => system.label === lightingSystem.category);
+            let category: LightingFixtureCategory = lightingFixtureCategories.find(system => system.label === lightingSystem.category);
             if (category) {
                 category.fixturesData.push(lightingSystem);
             } else {
@@ -93,7 +94,7 @@ export class LightingSuiteApiService {
         }
     }
 
-    getLightingSystemFromWASM(suiteDbLightingPointer): LightingFixtureData {
+    getLightingSystemFromWASM(suiteDbLightingPointer: LightingData): LightingFixtureData {
         let lightingSystem: LightingFixtureData = {
             category: suiteDbLightingPointer.category(),
             type: suiteDbLightingPointer.type(),

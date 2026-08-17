@@ -202,6 +202,8 @@ export class ConvertProcessCoolingService {
     if (!results) return results;
   }
 
+  // * Suite API always expects Fahrenheit. weatherDataPoints are stored in F for Imperial settings
+  // * (as returned by the weather API) and C for Metric settings (converted on fetch), so only Metric needs conversion here.
   convertWeatherDataForSuiteApi(weatherData: WeatherContextData, settings: Settings): WeatherContextData {
     if (settings.unitsOfMeasure !== 'Imperial') {
       const convertedWeatherDataPoints = weatherData.weatherDataPoints.map((dataPoint: WeatherDataPoint) => {
