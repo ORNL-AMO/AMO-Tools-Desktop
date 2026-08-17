@@ -5,7 +5,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { LiquidLoadChargeMaterial } from '../../../../../shared/models/materials';
 import { LiquidLoadMaterialDbService } from '../../../../../indexedDb/liquid-load-material-db.service';
 import { ModalDialogService } from '../../../../../shared/modal-dialog.service';
-import { convertDbValue, formValueDiffersFromMaterial } from '../charge-material-db-material.util';
+import { convertDbValue, convertForSave, formValueDiffersFromMaterial } from '../charge-material-db-material.util';
 import { MaterialSelector } from '../material-selector';
 import { EMPTY_WARNINGS, LiquidMaterialForm, LiquidMaterialFormService, LiquidMaterialWarnings } from './liquid-material-form.service';
 import { AddLiquidMaterialModalComponent } from './add-liquid-material-modal.component';
@@ -21,6 +21,7 @@ import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 export class ChargeMaterialLiquidFormComponent implements OnInit {
   readonly form = input.required<LiquidMaterialForm>();
   readonly settings = input.required<Settings>();
+  readonly instanceId = input.required<string>();
 
   private readonly formService = inject(LiquidMaterialFormService);
   private readonly destroyRef = inject(DestroyRef);
@@ -41,11 +42,11 @@ export class ChargeMaterialLiquidFormComponent implements OnInit {
       latentHeatOfVaporization: convertDbValue(material.latentHeat, CHARGE_MATERIAL_UNITS.latentHeat, settings),
       vaporizingTemperature: convertDbValue(material.vaporizationTemperature, CHARGE_MATERIAL_UNITS.temperature, settings),
     }),
-    buildRecoveryProperties: v => ({
-      specificHeatLiquid: v.specificHeatOfLiquid,
-      specificHeatVapor: v.specificHeatOfVapor,
-      latentHeat: v.latentHeatOfVaporization,
-      vaporizationTemperature: v.vaporizingTemperature,
+    buildRecoveryProperties: (v, settings) => ({
+      specificHeatLiquid: convertForSave(v.specificHeatOfLiquid, CHARGE_MATERIAL_UNITS.specificHeat, settings),
+      specificHeatVapor: convertForSave(v.specificHeatOfVapor, CHARGE_MATERIAL_UNITS.specificHeat, settings),
+      latentHeat: convertForSave(v.latentHeatOfVaporization, CHARGE_MATERIAL_UNITS.latentHeat, settings),
+      vaporizationTemperature: convertForSave(v.vaporizingTemperature, CHARGE_MATERIAL_UNITS.temperature, settings),
     }),
   });
 

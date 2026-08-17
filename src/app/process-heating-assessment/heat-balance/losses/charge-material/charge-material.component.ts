@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, Signal } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
@@ -28,6 +28,11 @@ export class ChargeMaterialComponent implements OnInit {
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
   readonly CMT = ChargeMaterialType;
+
+  readonly resultsUnit: Signal<string> = computed(() => {
+    const energyResultUnit = this.settings().energyResultUnit;
+    return energyResultUnit === 'kWh' ? 'kW' : `${energyResultUnit}/hr`;
+  });
 
   ngOnInit(): void {
     this.chargeMaterialService.initialize(this.source());

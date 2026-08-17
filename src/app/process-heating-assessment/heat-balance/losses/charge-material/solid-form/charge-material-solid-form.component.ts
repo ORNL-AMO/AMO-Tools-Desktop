@@ -5,7 +5,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { SolidLoadChargeMaterial } from '../../../../../shared/models/materials';
 import { SolidLoadMaterialDbService } from '../../../../../indexedDb/solid-load-material-db.service';
 import { ModalDialogService } from '../../../../../shared/modal-dialog.service';
-import { convertDbValue, formValueDiffersFromMaterial } from '../charge-material-db-material.util';
+import { convertDbValue, convertForSave, formValueDiffersFromMaterial } from '../charge-material-db-material.util';
 import { MaterialSelector } from '../material-selector';
 import { EMPTY_WARNINGS, SolidMaterialForm, SolidMaterialFormService, SolidMaterialWarnings } from './solid-material-form.service';
 import { AddSolidMaterialModalComponent } from './add-solid-material-modal.component';
@@ -21,6 +21,7 @@ import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 export class ChargeMaterialSolidFormComponent implements OnInit {
   readonly form = input.required<SolidMaterialForm>();
   readonly settings = input.required<Settings>();
+  readonly instanceId = input.required<string>();
 
   private readonly formService = inject(SolidMaterialFormService);
   private readonly destroyRef = inject(DestroyRef);
@@ -41,11 +42,11 @@ export class ChargeMaterialSolidFormComponent implements OnInit {
       materialHeatOfLiquid: convertDbValue(material.specificHeatLiquid, CHARGE_MATERIAL_UNITS.specificHeat, settings),
       materialMeltingPoint: convertDbValue(material.meltingPoint, CHARGE_MATERIAL_UNITS.temperature, settings),
     }),
-    buildRecoveryProperties: v => ({
-      specificHeatSolid: v.materialSpecificHeatOfSolidMaterial,
-      latentHeat: v.materialLatentHeatOfFusion,
-      specificHeatLiquid: v.materialHeatOfLiquid,
-      meltingPoint: v.materialMeltingPoint,
+    buildRecoveryProperties: (v, settings) => ({
+      specificHeatSolid: convertForSave(v.materialSpecificHeatOfSolidMaterial, CHARGE_MATERIAL_UNITS.specificHeat, settings),
+      latentHeat: convertForSave(v.materialLatentHeatOfFusion, CHARGE_MATERIAL_UNITS.latentHeat, settings),
+      specificHeatLiquid: convertForSave(v.materialHeatOfLiquid, CHARGE_MATERIAL_UNITS.specificHeat, settings),
+      meltingPoint: convertForSave(v.materialMeltingPoint, CHARGE_MATERIAL_UNITS.temperature, settings),
     }),
   });
 

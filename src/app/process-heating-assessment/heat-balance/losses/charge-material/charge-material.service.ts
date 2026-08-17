@@ -53,7 +53,7 @@ export class ChargeMaterialService {
   private readonly store = new EntityListStore<ChargeMaterialItem>();
 
   // Caches a switched-away-from type's last known values per entry so switching back restores
-  // them, per spec §3 ("does not discard previously entered data for the other two types").
+  // them
   private readonly typeCache = new Map<string, Partial<Record<ChargeMaterialType, ChargeMaterial>>>();
 
   readonly materials = this.store.all;

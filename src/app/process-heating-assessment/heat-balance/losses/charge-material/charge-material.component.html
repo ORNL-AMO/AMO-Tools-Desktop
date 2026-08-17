@@ -2,15 +2,16 @@
 @let results = chargeMaterialService.results();
 @let materialResultTotals = chargeMaterialService.materialResultTotals();
 @let isMaterialAdditionLocked = chargeMaterialService.isMaterialAdditionLocked();
+@let unit = resultsUnit();
 
 <div class="panel-container p-3">
   <h4>Charge Material</h4>
 
   @if (materials.length > 0) {
     <div class="charge-material-totals d-flex flex-wrap">
-      <div class="p-2"><strong>Heat Required (net):</strong> {{ materialResultTotals.netHeatLoss | number: '1.0-2' }}</div>
-      <div class="p-2"><strong>Reaction Heat (Endo/Exo):</strong> {{ materialResultTotals.endoExoHeat | number: '1.0-2' }}</div>
-      <div class="p-2"><strong>Total Heat Required (gross):</strong> {{ materialResultTotals.heatRequired | number: '1.0-2' }}</div>
+      <div class="p-2"><strong>Heat Required (net):</strong> {{ materialResultTotals.netHeatLoss | number: '1.0-2' }} {{ unit }}</div>
+      <div class="p-2"><strong>Reaction Heat (Endo/Exo):</strong> {{ materialResultTotals.endoExoHeat | number: '1.0-2' }} {{ unit }}</div>
+      <div class="p-2"><strong>Total Heat Required (gross):</strong> {{ materialResultTotals.heatRequired | number: '1.0-2' }} {{ unit }}</div>
     </div>
   }
 
@@ -18,7 +19,12 @@
     @let itemResult = results.get(item.id);
     <div class="card charge-material-card mb-3">
       <div class="card-header d-flex align-items-center flex-wrap">
-        <button type="button" class="btn btn-link p-0 mr-2" (click)="toggleCollapse(item)">
+        <button
+          type="button"
+          class="btn btn-link p-0 mr-2"
+          [attr.aria-label]="isCollapsed(item) ? 'Expand material' : 'Collapse material'"
+          (click)="toggleCollapse(item)"
+        >
           <span class="fa" [class.fa-chevron-right]="isCollapsed(item)" [class.fa-chevron-down]="!isCollapsed(item)"></span>
         </button>
         <input
@@ -49,28 +55,28 @@
         <div class="card-body charge-material-summary d-flex flex-wrap">
           <div class="p-2">
             <strong>Heat Required: </strong>
-            {{ itemResult?.heatRequired != null ? (itemResult.heatRequired | number: '1.0-2') : '——' }}
+            {{ itemResult?.heatRequired != null ? (itemResult.heatRequired | number: '1.0-2') + ' ' + unit : '——' }}
           </div>
           <div class="p-2">
             <strong>Net Heat Loss: </strong>
-            {{ itemResult?.netHeatLoss != null ? (itemResult.netHeatLoss | number: '1.0-2') : '——' }}
+            {{ itemResult?.netHeatLoss != null ? (itemResult.netHeatLoss | number: '1.0-2') + ' ' + unit : '——' }}
           </div>
           <div class="p-2">
             <strong>Endo/Exo Heat: </strong>
-            {{ itemResult?.endoExoHeat != null ? (itemResult.endoExoHeat | number: '1.0-2') : '——' }}
+            {{ itemResult?.endoExoHeat != null ? (itemResult.endoExoHeat | number: '1.0-2') + ' ' + unit : '——' }}
           </div>
         </div>
       } @else {
         <div class="card-body">
           @switch (item.type) {
             @case (CMT.Solid) {
-              <app-charge-material-solid-form [form]="item.form" [settings]="settings()"></app-charge-material-solid-form>
+              <app-charge-material-solid-form [form]="item.form" [settings]="settings()" [instanceId]="item.id"></app-charge-material-solid-form>
             }
             @case (CMT.Liquid) {
-              <app-charge-material-liquid-form [form]="item.form" [settings]="settings()"></app-charge-material-liquid-form>
+              <app-charge-material-liquid-form [form]="item.form" [settings]="settings()" [instanceId]="item.id"></app-charge-material-liquid-form>
             }
             @case (CMT.Gas) {
-              <app-charge-material-gas-form [form]="item.form" [settings]="settings()"></app-charge-material-gas-form>
+              <app-charge-material-gas-form [form]="item.form" [settings]="settings()" [instanceId]="item.id"></app-charge-material-gas-form>
             }
           }
         </div>

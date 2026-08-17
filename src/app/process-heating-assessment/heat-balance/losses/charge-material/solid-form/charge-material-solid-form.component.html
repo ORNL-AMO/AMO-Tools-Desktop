@@ -11,21 +11,21 @@
 
 <form [formGroup]="form()">
   <div class="form-group">
-    <label for="materialId">Name of Material</label>
-    <select class="form-control" id="materialId" formControlName="materialId"
+    <label for="materialId_{{ instanceId() }}">Name of Material</label>
+    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId"
       (change)="materialSelector.onMaterialSelected(f.materialId.value)">
       @for (material of materialSelector.materialTypes(); track material.id) {
         <option [ngValue]="material.id">{{ material.substance }}</option>
       }
     </select>
-    <a class="form-text small click-link" (click)="materialSelector.openAddMaterialModal()">Add New...</a>
+    <button type="button" class="btn btn-link p-0 form-text small" (click)="materialSelector.openAddMaterialModal()">Add New...</button>
     <app-form-control-errors [control]="f.materialId" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
-    <label for="materialSpecificHeatOfSolidMaterial">Average Specific Heat of Solid</label>
+    <label for="materialSpecificHeatOfSolidMaterial_{{ instanceId() }}">Average Specific Heat of Solid</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="materialSpecificHeatOfSolidMaterial" formControlName="materialSpecificHeatOfSolidMaterial">
+      <input type="number" class="form-control" id="materialSpecificHeatOfSolidMaterial_{{ instanceId() }}" formControlName="materialSpecificHeatOfSolidMaterial">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
     @if (differs(f.materialSpecificHeatOfSolidMaterial.value, materialSelector.selectedMaterial?.specificHeatSolid, UNITS.specificHeat)) {
@@ -35,9 +35,9 @@
   </div>
 
   <div class="form-group">
-    <label for="materialLatentHeatOfFusion">Latent Heat of Fusion</label>
+    <label for="materialLatentHeatOfFusion_{{ instanceId() }}">Latent Heat of Fusion</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="materialLatentHeatOfFusion" formControlName="materialLatentHeatOfFusion">
+      <input type="number" class="form-control" id="materialLatentHeatOfFusion_{{ instanceId() }}" formControlName="materialLatentHeatOfFusion">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
     @if (differs(f.materialLatentHeatOfFusion.value, materialSelector.selectedMaterial?.latentHeat, UNITS.latentHeat)) {
@@ -47,9 +47,9 @@
   </div>
 
   <div class="form-group">
-    <label for="materialHeatOfLiquid">Average Specific Heat of Molten Material</label>
+    <label for="materialHeatOfLiquid_{{ instanceId() }}">Average Specific Heat of Molten Material</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="materialHeatOfLiquid" formControlName="materialHeatOfLiquid">
+      <input type="number" class="form-control" id="materialHeatOfLiquid_{{ instanceId() }}" formControlName="materialHeatOfLiquid">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
     @if (differs(f.materialHeatOfLiquid.value, materialSelector.selectedMaterial?.specificHeatLiquid, UNITS.specificHeat)) {
@@ -59,9 +59,9 @@
   </div>
 
   <div class="form-group">
-    <label for="materialMeltingPoint">Melting Point</label>
+    <label for="materialMeltingPoint_{{ instanceId() }}">Melting Point</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="materialMeltingPoint" formControlName="materialMeltingPoint">
+      <input type="number" class="form-control" id="materialMeltingPoint_{{ instanceId() }}" formControlName="materialMeltingPoint">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
     @if (differs(f.materialMeltingPoint.value, materialSelector.selectedMaterial?.meltingPoint, UNITS.temperature)) {
@@ -71,9 +71,9 @@
   </div>
 
   <div class="form-group">
-    <label for="feedRate">Charge Feed Rate (Wet)</label>
+    <label for="feedRate_{{ instanceId() }}">Charge Feed Rate (Wet)</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="feedRate" formControlName="feedRate">
+      <input type="number" class="form-control" id="feedRate_{{ instanceId() }}" formControlName="feedRate">
       <app-input-unit [settings]="settings()" [imperialUnit]="'lb/hr'" [metricUnit]="'kg/hr'"></app-input-unit>
     </div>
     @if (f.feedRate.invalid && (f.feedRate.dirty || f.feedRate.touched)) {
@@ -85,27 +85,27 @@
   </div>
 
   <div class="form-group">
-    <label for="waterContentAsCharged">Water Content (Charged)</label>
+    <label for="waterContentAsCharged_{{ instanceId() }}">Water Content (Charged)</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="waterContentAsCharged" formControlName="waterContentAsCharged">
+      <input type="number" class="form-control" id="waterContentAsCharged_{{ instanceId() }}" formControlName="waterContentAsCharged">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.waterContentAsCharged" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
-    <label for="waterContentAsDischarged">Water Content (Discharged)</label>
+    <label for="waterContentAsDischarged_{{ instanceId() }}">Water Content (Discharged)</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="waterContentAsDischarged" formControlName="waterContentAsDischarged">
+      <input type="number" class="form-control" id="waterContentAsDischarged_{{ instanceId() }}" formControlName="waterContentAsDischarged">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.waterContentAsDischarged" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
-    <label for="initialTemperature">Charge Inlet Temperature</label>
+    <label for="initialTemperature_{{ instanceId() }}">Charge Inlet Temperature</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="initialTemperature" formControlName="initialTemperature">
+      <input type="number" class="form-control" id="initialTemperature_{{ instanceId() }}" formControlName="initialTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
     @if (f.initialTemperature.invalid && (f.initialTemperature.dirty || f.initialTemperature.touched)) {
@@ -119,9 +119,9 @@
   </div>
 
   <div class="form-group">
-    <label for="chargeMaterialDischargeTemperature">Charge Outlet Temperature</label>
+    <label for="chargeMaterialDischargeTemperature_{{ instanceId() }}">Charge Outlet Temperature</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="chargeMaterialDischargeTemperature" formControlName="chargeMaterialDischargeTemperature">
+      <input type="number" class="form-control" id="chargeMaterialDischargeTemperature_{{ instanceId() }}" formControlName="chargeMaterialDischargeTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.chargeMaterialDischargeTemperature" [settings]="settings()"></app-form-control-errors>
@@ -134,36 +134,36 @@
   </div>
 
   <div class="form-group">
-    <label for="waterVaporDischargeTemperature">Water Vapor Discharge Temperature</label>
+    <label for="waterVaporDischargeTemperature_{{ instanceId() }}">Water Vapor Discharge Temperature</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="waterVaporDischargeTemperature" formControlName="waterVaporDischargeTemperature">
+      <input type="number" class="form-control" id="waterVaporDischargeTemperature_{{ instanceId() }}" formControlName="waterVaporDischargeTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.waterVaporDischargeTemperature" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
-    <label for="percentChargeMelted">Charge Melted</label>
+    <label for="percentChargeMelted_{{ instanceId() }}">Charge Melted</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="percentChargeMelted" formControlName="percentChargeMelted">
+      <input type="number" class="form-control" id="percentChargeMelted_{{ instanceId() }}" formControlName="percentChargeMelted">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.percentChargeMelted" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
-    <label for="percentChargeReacted">Charge Reacted</label>
+    <label for="percentChargeReacted_{{ instanceId() }}">Charge Reacted</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="percentChargeReacted" formControlName="percentChargeReacted">
+      <input type="number" class="form-control" id="percentChargeReacted_{{ instanceId() }}" formControlName="percentChargeReacted">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.percentChargeReacted" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
-    <label for="heatOfReaction">Heat of Reaction</label>
+    <label for="heatOfReaction_{{ instanceId() }}">Heat of Reaction</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="heatOfReaction" formControlName="heatOfReaction">
+      <input type="number" class="form-control" id="heatOfReaction_{{ instanceId() }}" formControlName="heatOfReaction">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.heatOfReaction" [settings]="settings()"></app-form-control-errors>
@@ -171,17 +171,17 @@
   </div>
 
   <div class="form-group">
-    <label for="endothermicOrExothermic">Type of Reaction</label>
-    <select class="form-control" id="endothermicOrExothermic" formControlName="endothermicOrExothermic">
-      <option [value]="0">Endothermic</option>
-      <option [value]="1">Exothermic</option>
+    <label for="endothermicOrExothermic_{{ instanceId() }}">Type of Reaction</label>
+    <select class="form-control" id="endothermicOrExothermic_{{ instanceId() }}" formControlName="endothermicOrExothermic">
+      <option [ngValue]="0">Endothermic</option>
+      <option [ngValue]="1">Exothermic</option>
     </select>
   </div>
 
   <div class="form-group">
-    <label for="additionalHeatRequired">Additional Heat Required</label>
+    <label for="additionalHeatRequired_{{ instanceId() }}">Additional Heat Required</label>
     <div class="input-group">
-      <input type="number" class="form-control" id="additionalHeatRequired" formControlName="additionalHeatRequired">
+      <input type="number" class="form-control" id="additionalHeatRequired_{{ instanceId() }}" formControlName="additionalHeatRequired">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/hr'" [metricUnit]="'kJ/hr'"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.additionalHeatRequired" [settings]="settings()"></app-form-control-errors>

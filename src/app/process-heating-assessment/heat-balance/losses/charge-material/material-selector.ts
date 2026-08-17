@@ -25,8 +25,8 @@ export interface MaterialSelectorConfig<TMaterial extends Material, TForm extend
   modalComponent: ComponentType<unknown>;
   /** Patches the form's numeric fields from a selected/DB material. */
   setProperties: (material: TMaterial, form: TForm, settings: Settings) => void;
-  /** Builds the DB properties (sans id/substance/isDefault) from the current form raw value, to recover a deleted material. */
-  buildRecoveryProperties: (rawFormValue: ReturnType<TForm['getRawValue']>) => Omit<TMaterial, 'id' | 'substance' | 'isDefault'>;
+  /** Builds the DB properties (sans id/substance/isDefault) from the current form raw value, to recover a deleted material. Values must be converted to the DB's Imperial units. */
+  buildRecoveryProperties: (rawFormValue: ReturnType<TForm['getRawValue']>, settings: Settings) => Omit<TMaterial, 'id' | 'substance' | 'isDefault'>;
 }
 
 /**
@@ -65,7 +65,7 @@ export class MaterialSelector<TMaterial extends Material, TForm extends FormGrou
     const materialId = this.missingMaterialId();
     if (materialId == null) return;
     const rawValue = this.config.form().getRawValue();
-    const record = rebuildDeletedMaterialRecord<TMaterial>(materialId, this.config.buildRecoveryProperties(rawValue));
+    const record = rebuildDeletedMaterialRecord<TMaterial>(materialId, this.config.buildRecoveryProperties(rawValue, this.config.settings()));
     this.config.dbService.addWithObservable(record).pipe(take(1), takeUntilDestroyed(this.config.destroyRef)).subscribe(inserted => {
       this.materialTypes.set([...this.materialTypes(), inserted]);
       this.config.form().patchValue({ materialId: inserted.id });

@@ -4,7 +4,7 @@ import { Settings } from '../../../../../shared/models/settings';
 import { GasLoadChargeMaterial } from '../../../../../shared/models/materials';
 import { GasLoadMaterialDbService } from '../../../../../indexedDb/gas-load-material-db.service';
 import { ModalDialogService } from '../../../../../shared/modal-dialog.service';
-import { convertDbValue, formValueDiffersFromMaterial } from '../charge-material-db-material.util';
+import { convertDbValue, convertForSave, formValueDiffersFromMaterial } from '../charge-material-db-material.util';
 import { MaterialSelector } from '../material-selector';
 import { GasMaterialForm, GasMaterialFormService } from './gas-material-form.service';
 import { AddGasMaterialModalComponent } from './add-gas-material-modal.component';
@@ -20,6 +20,7 @@ import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 export class ChargeMaterialGasFormComponent implements OnInit {
   readonly form = input.required<GasMaterialForm>();
   readonly settings = input.required<Settings>();
+  readonly instanceId = input.required<string>();
 
   private readonly formService = inject(GasMaterialFormService);
   private readonly destroyRef = inject(DestroyRef);
@@ -36,7 +37,9 @@ export class ChargeMaterialGasFormComponent implements OnInit {
     setProperties: (material, form, settings) => form.patchValue({
       specificHeatOfGas: convertDbValue(material.specificHeatVapor, CHARGE_MATERIAL_UNITS.specificHeat, settings),
     }),
-    buildRecoveryProperties: v => ({ specificHeatVapor: v.specificHeatOfGas }),
+    buildRecoveryProperties: (v, settings) => ({
+      specificHeatVapor: convertForSave(v.specificHeatOfGas, CHARGE_MATERIAL_UNITS.specificHeat, settings),
+    }),
   });
 
   ngOnInit(): void {
