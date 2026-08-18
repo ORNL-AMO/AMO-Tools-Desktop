@@ -1,7 +1,15 @@
+@if (dialogRef) {
+  <div class="d-flex justify-content-end">
+    <button class="close" aria-label="Close" (click)="hidePrivacyModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+}
 <p>
   We collect no personal information about you without your knowledge when you visit this site, although you may choose
   to provide this information to us in specific instances.
-  However, we do collect and store certain information automatically:
+  However, when you browse, read pages in, or download information from the ORNL Sites, we collect and store certain technical information, including 
+  information obtained from cookies, which are a small text file that is placed on your computer or browser when you access the ORNL Sites. This information includes:
 </p>
 <ul>
   <li>The Internet Protocol (IP) address of the domain from which you access the Internet (e.g., 123.456.789.012),
@@ -25,8 +33,10 @@
     target="_blank">https://www.ornl.gov/ornl/contact-us/Security--Privacy-Notice</a>
 </p>
 
-<div class="d-flex">
-  <div class="d-flex privacy-modal-right">
-    <button class="btn btn-secondary mr-2" (click)="hidePrivacyModal()">Cancel</button>
+@if (dialogRef) {
+  <div class="d-flex">
+    <div class="d-flex privacy-modal-right">
+      <button class="btn btn-secondary mr-2" (click)="hidePrivacyModal()">Cancel</button>
+    </div>
   </div>
-</div>
+}

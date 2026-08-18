@@ -13,10 +13,10 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class BoilerService {
-private readonly BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG = -14.696;
-private readonly SATURATED_BOILER_PRESSURE_MAX_PSIG = 3185.415389;
-private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
-  
+  private readonly BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG = -14.696;
+  private readonly SATURATED_BOILER_PRESSURE_MAX_PSIG = 3185.415389;
+  private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
+
   private readonly STEAM_TEMPERATURE_MIN_F = 32;
   private readonly SUPERHEATED_STEAM_TEMPERATURE_MAX_F = 1472;
   private readonly SATURATED_STEAM_TEMPERATURE_MAX_F = 705.1;
@@ -31,7 +31,7 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
 
   initEmptyForm(settings: Settings) {
     let tmpRanges: BoilerRanges = this.getRanges(settings);
-    
+
     const form = this.formBuilder.group({
       fuelType: [1, Validators.required],
       fuel: [1, Validators.required],
@@ -62,7 +62,7 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
     if (obj.preheatMakeupWater) {
       approachTempValidators = [Validators.min(0.000005), Validators.required];
     }
-    
+
     let form: UntypedFormGroup = this.formBuilder.group({
       fuelType: [obj.fuelType, Validators.required],
       fuel: [obj.fuel, Validators.required],
@@ -139,15 +139,15 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
   setSaturatedTemperatureValidators(form: UntypedFormGroup, settings: Settings) {
     let temperatureMin: number = this.STEAM_TEMPERATURE_MIN_F;
     let temperatureMax: number = this.SATURATED_STEAM_TEMPERATURE_MAX_F;
-     if (settings.steamTemperatureMeasurement !== 'F') {
-        temperatureMin = this.convertUnitsService.value(temperatureMin).from('F').to(settings.steamTemperatureMeasurement);
-        temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
-      }
-      form.controls.steamTemperature.setValidators([Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)]);
+    if (settings.steamTemperatureMeasurement !== 'F') {
+      temperatureMin = this.convertUnitsService.value(temperatureMin).from('F').to(settings.steamTemperatureMeasurement);
+      temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
+    }
+    form.controls.steamTemperature.setValidators([Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)]);
     form.controls.steamTemperature.updateValueAndValidity();
   }
 
-    setSuperheatedBoilerPressureValidators(form: UntypedFormGroup, settings: Settings) {
+  setSuperheatedBoilerPressureValidators(form: UntypedFormGroup, settings: Settings) {
     let pressureExclusiveMin: number = this.BOILER_PRESSURE_EXCLUSIVE_MIN_PSIG;
     let pressureMax: number = this.SUPERHEATED_BOILER_PRESSURE_MAX_PSIG;
     if (settings.steamPressureMeasurement !== 'psig') {
@@ -162,17 +162,17 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
   setSuperheatedTemperatureValidators(form: UntypedFormGroup, settings: Settings, saturatedPropertiesOutput?: SaturatedPropertiesOutput) {
     let temperatureMin: number = this.STEAM_TEMPERATURE_MIN_F;
     let temperatureMax: number = this.SUPERHEATED_STEAM_TEMPERATURE_MAX_F;
-     if (settings.steamTemperatureMeasurement !== 'F') {
-        temperatureMin = this.convertUnitsService.value(temperatureMin).from('F').to(settings.steamTemperatureMeasurement);
-        temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
-      }
-      let validators = [Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)];
+    if (settings.steamTemperatureMeasurement !== 'F') {
+      temperatureMin = this.convertUnitsService.value(temperatureMin).from('F').to(settings.steamTemperatureMeasurement);
+      temperatureMax = this.convertUnitsService.value(temperatureMax).from('F').to(settings.steamTemperatureMeasurement);
+    }
+    let validators = [Validators.required, Validators.min(temperatureMin), Validators.max(temperatureMax)];
 
-      // * steamTemperature can't be calculated ((will be NAN)) for reference when saturatedPressure is at min
-      if (!form.get('saturatedPressure').errors?.greaterThan && !isNaN(saturatedPropertiesOutput.saturatedTemperature)) {
-        validators.push(GreaterThanValidator.greaterThan(roundVal(saturatedPropertiesOutput.saturatedTemperature, 1)));
-      }
-      form.controls.steamTemperature.setValidators(validators);
+    // * steamTemperature can't be calculated ((will be NAN)) for reference when saturatedPressure is at min
+    if (!form.get('saturatedPressure').errors?.greaterThan && !isNaN(saturatedPropertiesOutput.saturatedTemperature)) {
+      validators.push(GreaterThanValidator.greaterThan(roundVal(saturatedPropertiesOutput.saturatedTemperature, 1)));
+    }
+    form.controls.steamTemperature.setValidators(validators);
     form.controls.steamTemperature.updateValueAndValidity();
   }
 
@@ -188,12 +188,12 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
     form.controls.saturatedPressure.updateValueAndValidity();
   }
 
-   /**
-  * Updates related SSMT fields on separate forms
- * 
- * Header pressure should be set from either the user entered boiler pressure, or the output pressure from saturated properties using boiler fields as input. 
- * boiler temperature will be shown as a result on the highest pressure header form
- */
+  /**
+ * Updates related SSMT fields on separate forms
+* 
+* Header pressure should be set from either the user entered boiler pressure, or the output pressure from saturated properties using boiler fields as input. 
+* boiler temperature will be shown as a result on the highest pressure header form
+*/
   setBoilerRelatedSSMTFields(boilerInput: BoilerInput, ssmt: SSMT, settings: Settings, isBaseline: boolean) {
     let saturatedPropertiesOutput: SaturatedPropertiesOutput;
     if (boilerInput.steamQuality === SteamQuality.SATURATED) {
@@ -203,14 +203,17 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
       };
 
       saturatedPropertiesOutput = this.steamService.saturatedProperties(input, boilerInput.pressureOrTemperature, settings);
+      //ISSUE 8340: when Pressure round UP to 1 decimal place
+      //when temperature round down to 1 decimal place
+      //rounding done in steamService.saturatedProperties
       if (boilerInput.pressureOrTemperature === SteamPressureOrTemp.PRESSURE) {
-        boilerInput.steamTemperature = roundVal(saturatedPropertiesOutput.saturatedTemperature, 0);
+        boilerInput.steamTemperature = saturatedPropertiesOutput.saturatedTemperature;
       } else {
+        //round down
         boilerInput.saturatedPressure = saturatedPropertiesOutput.saturatedPressure;
       }
-
       if (ssmt.headerInput && ssmt.headerInput.highPressureHeader) {
-        ssmt.headerInput.highPressureHeader.pressure = saturatedPropertiesOutput.saturatedPressure;
+        ssmt.headerInput.highPressureHeader.pressure = boilerInput.saturatedPressure;
       }
     } else {
       if (ssmt.headerInput && ssmt.headerInput.highPressureHeader) {
@@ -319,7 +322,7 @@ private readonly SUPERHEATED_BOILER_PRESSURE_MAX_PSIG = 14489.072078;
           pressure = ssmt.headerInput.lowPressure.pressure;
         }
       }
-      
+
       if (pressure) {
         saturatedTemperature = this.steamService.saturatedProperties({ saturatedPressure: pressure }, 0, settings).saturatedTemperature;
         saturatedTemperature = this.convertUnitsService.roundVal(saturatedTemperature, 0);

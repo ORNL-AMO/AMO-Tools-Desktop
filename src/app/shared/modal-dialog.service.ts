@@ -55,6 +55,7 @@ export class ModalDialogService {
       panelClass: 'app-modal-dialog',
       hasBackdrop: true,
       disableClose: false,
+      width: '50vw',
       injector: injector,
       ...config,
       data: config?.data

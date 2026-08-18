@@ -53,6 +53,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { UnitConverterModule } from '../calculator/utilities/unit-converter/unit-converter.module';
 import { SystemAndEquipmentCurveModule } from '../calculator/system-and-equipment-curve/system-and-equipment-curve.module';
 import { PsatSankeyModule } from '../shared/psat-sankey/psat-sankey.module';
+import { SankeySharedModule } from '../shared/sankey/sankey-shared.module';
 import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-units-modal.module';
 import { PumpOperationsComponent } from './pump-operations/pump-operations.component';
 import { PumpOperationsService } from './pump-operations/pump-operations.service';
@@ -64,6 +65,8 @@ import { ImportExportModule } from '../shared/import-export/import-export.module
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
+import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
+import { PsatReportAdapter } from './psat-report/psat-report.adapter';
 
 
 @NgModule({
@@ -119,13 +122,15 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     UnitConverterModule,
     SystemAndEquipmentCurveModule,
     PsatSankeyModule,
+    SankeySharedModule,
     UpdateUnitsModalModule,
     AssessmentCo2SavingsModule,
     ConnectedInventoryModule,    
     ImportExportModule,
     SnackbarModule,
     ExportableResultsTableModule,
-    BannerTooltipsModule
+    BannerTooltipsModule,
+    ReportBuilderModule,
 
   ],
   providers: [
@@ -137,7 +142,8 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     MotorService,
     FieldDataService,
     DecimalPipe, 
-    PumpOperationsService
+    PumpOperationsService,
+    PsatReportAdapter
   ]
 })
 
