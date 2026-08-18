@@ -13,22 +13,13 @@ export type ExtendedSurfaceForm = FormGroup<{
 export class ExtendedSurfaceFormService {
   private readonly fb = inject(FormBuilder);
 
-  initExtendedSurfaceForm(): ExtendedSurfaceForm {
+  getExtendedSurfaceForm(extSurface: ExtendedSurface = {}): ExtendedSurfaceForm {
     return this.fb.group({
-      surfaceArea: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-      avgSurfaceTemp: new FormControl<number | null>(null, Validators.required),
-      ambientTemp: new FormControl<number | null>(null, Validators.required),
-      surfaceEmissivity: new FormControl<number | null>(0.9, [Validators.required, Validators.min(0), Validators.max(1)]),
-    }) as ExtendedSurfaceForm;
-  }
-
-  getExtendedSurfaceForm(extSurface: ExtendedSurface): ExtendedSurfaceForm {
-    return this.fb.group({
-      surfaceArea: new FormControl<number | null>(extSurface.surfaceArea ?? null, [Validators.required, Validators.min(0)]),
-      avgSurfaceTemp: new FormControl<number | null>(extSurface.surfaceTemperature ?? null, Validators.required),
-      ambientTemp: new FormControl<number | null>(extSurface.ambientTemperature ?? null, Validators.required),
-      surfaceEmissivity: new FormControl<number | null>(extSurface.surfaceEmissivity ?? 0.9, [Validators.required, Validators.min(0), Validators.max(1)]),
-    }) as ExtendedSurfaceForm;
+      surfaceArea: [extSurface.surfaceArea ?? null, [Validators.required, Validators.min(0)]],
+      avgSurfaceTemp: [extSurface.surfaceTemperature ?? null, Validators.required],
+      ambientTemp: [extSurface.ambientTemperature ?? null, Validators.required],
+      surfaceEmissivity: [extSurface.surfaceEmissivity ?? 0.9, [Validators.required, Validators.min(0), Validators.max(1)]],
+    });
   }
 
   buildExtendedSurface(form: ExtendedSurfaceForm): ExtendedSurface {

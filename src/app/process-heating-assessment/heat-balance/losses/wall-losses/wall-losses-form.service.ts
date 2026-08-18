@@ -17,30 +17,17 @@ export type WallLossForm = FormGroup<{
 export class WallLossesFormService {
   private readonly fb = inject(FormBuilder);
 
-  initWallLossForm(lossNumber: number = 1): WallLossForm {
-    return this.fb.group({
-      surfaceArea: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-      avgSurfaceTemp: new FormControl<number | null>(null, Validators.required),
-      ambientTemp: new FormControl<number | null>(null, Validators.required),
-      windVelocity: new FormControl<number | null>(0, [Validators.required, Validators.min(0)]),
-      surfaceShape: new FormControl<number | null>(null, Validators.required),
-      conditionFactor: new FormControl<number | null>(1.394, Validators.required),
-      surfaceEmissivity: new FormControl<number | null>(0.9, [Validators.required, Validators.min(0), Validators.max(1)]),
-      correctionFactor: new FormControl<number | null>(1.0, Validators.required),
-    }) as WallLossForm;
-  }
-
-  getWallLossForm(wallLoss: WallLoss): WallLossForm {
-    const form = this.fb.group({
-      surfaceArea: new FormControl<number | null>(wallLoss.surfaceArea ?? null, [Validators.required, Validators.min(0)]),
-      avgSurfaceTemp: new FormControl<number | null>(wallLoss.surfaceTemperature ?? null, Validators.required),
-      ambientTemp: new FormControl<number | null>(wallLoss.ambientTemperature ?? null, Validators.required),
-      windVelocity: new FormControl<number | null>(wallLoss.windVelocity ?? 0, [Validators.required, Validators.min(0)]),
-      surfaceShape: new FormControl<number | null>(wallLoss.surfaceShape ?? null, Validators.required),
-      conditionFactor: new FormControl<number | null>(wallLoss.conditionFactor ?? 1.394, Validators.required),
-      surfaceEmissivity: new FormControl<number | null>(wallLoss.surfaceEmissivity ?? 0.9, [Validators.required, Validators.min(0), Validators.max(1)]),
-      correctionFactor: new FormControl<number | null>(wallLoss.correctionFactor ?? 1.0, Validators.required),
-    }) as WallLossForm;
+  getWallLossForm(wallLoss: WallLoss = {}): WallLossForm {
+    const form: WallLossForm = this.fb.group({
+      surfaceArea: [wallLoss.surfaceArea ?? null, [Validators.required, Validators.min(0)]],
+      avgSurfaceTemp: [wallLoss.surfaceTemperature ?? null, Validators.required],
+      ambientTemp: [wallLoss.ambientTemperature ?? null, Validators.required],
+      windVelocity: [wallLoss.windVelocity ?? 0, [Validators.required, Validators.min(0)]],
+      surfaceShape: [wallLoss.surfaceShape ?? null, Validators.required],
+      conditionFactor: [wallLoss.conditionFactor ?? 1.394, Validators.required],
+      surfaceEmissivity: [wallLoss.surfaceEmissivity ?? 0.9, [Validators.required, Validators.min(0), Validators.max(1)]],
+      correctionFactor: [wallLoss.correctionFactor ?? 1.0, Validators.required],
+    });
     return this.setSurfaceTempValidator(form);
   }
 

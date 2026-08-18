@@ -13,6 +13,15 @@ When sources conflict, apply this order (highest to lowest):
 
 `AGENTS.md` covers repo orientation, architecture, and workflow (what to do, where things live, how to verify changes). The style guide covers how to write the code. If the two disagree on style or pattern, the style guide wins.
 
+## Commenting
+
+Default to no comment. Only add one when the *why* is non-obvious: a hidden constraint, a subtle
+invariant, a workaround for a specific bug, or behavior that would surprise a reader. Never comment
+*what* the code does — descriptive naming should already make that clear; if removing the comment
+wouldn't confuse a future reader, don't write it. Don't reference the current task, fix, ticket, or
+caller (e.g. "added for the X flow", "fix for #123") — that belongs in the commit message or PR
+description and rots as the codebase evolves.
+
 ## Coding Style
 
 @CODING_STYLE_GUIDE.MD

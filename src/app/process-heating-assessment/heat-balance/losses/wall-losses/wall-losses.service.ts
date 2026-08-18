@@ -58,12 +58,7 @@ export class WallLossesService {
 
   add(): void {
     const idx = this.losses().length;
-    const newItem: WallLossItem = {
-      name: `Loss #${idx + 1}`,
-      form: this.formService.initWallLossForm(idx + 1),
-      collapse: false,
-      heatLoss: null,
-    };
+    const newItem = this.buildItem({}, idx + 1);
     const updated = [...this.losses(), newItem];
     this.losses.set(updated);
     this.saveLosses(updated);
