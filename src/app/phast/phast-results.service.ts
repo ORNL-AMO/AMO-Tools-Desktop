@@ -140,9 +140,7 @@ export class PhastResultsService {
       results.totalExtSurfaceLoss = this.phastService.sumExtendedSurface(phast.losses.extendedSurfaces, settings);
     }
     if (this.checkLoss(phast.losses.chargeMaterials)) {
-      const chargeMaterialResults = this.phastService.getChargeMaterialResults(phast.losses.chargeMaterials, settings);
-      results.totalChargeMaterialLoss = chargeMaterialResults.sum;
-      results.chargeMaterialResults = chargeMaterialResults.results;
+      results.totalChargeMaterialLoss = this.phastService.sumChargeMaterials(phast.losses.chargeMaterials, settings, undefined);
     }
     if (resultCats.showAuxPower && this.checkLoss(phast.losses.auxiliaryPowerLosses)) {
       results.totalAuxPower = this.phastService.sumAuxilaryPowerLosses(phast.losses.auxiliaryPowerLosses);

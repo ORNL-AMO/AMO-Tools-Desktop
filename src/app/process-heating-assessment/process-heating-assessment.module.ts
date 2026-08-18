@@ -17,23 +17,8 @@ import { ProcessHeatingOperationsFormService } from './services/process-heating-
 import { ProcessHeatingResultsService } from './services/process-heating-results.service';
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
 import { ConvertPhastService } from '../phast/convert-phast.service';
-import { PhastService } from '../phast/phast.service';
 import { PhastResultsService } from '../phast/phast-results.service';
-import { AuxEquipmentService } from '../phast/aux-equipment/aux-equipment.service';
-import { AuxiliaryPowerLossesService } from '../phast/losses/auxiliary-power-losses/auxiliary-power-losses.service';
-import { OtherLossesService } from '../phast/losses/other-losses/other-losses.service';
-import { SlagService } from '../phast/losses/slag/slag.service';
-import { ExhaustGasService } from '../phast/losses/exhaust-gas/exhaust-gas.service';
-import { EnergyInputExhaustGasService } from '../phast/losses/energy-input-exhaust-gas-losses/energy-input-exhaust-gas.service';
-import { EnergyInputService } from '../phast/losses/energy-input/energy-input.service';
 import { Co2SavingsPhastService } from '../phast/losses/operations/co2-savings-phast/co2-savings-phast.service';
-import { AtmosphereFormService } from '../calculator/furnaces/atmosphere/atmosphere-form.service';
-import { WallFormService } from '../calculator/furnaces/wall/wall-form.service';
-import { LeakageFormService } from '../calculator/furnaces/leakage/leakage-form.service';
-import { FixtureFormService } from '../calculator/furnaces/fixture/fixture-form.service';
-import { OpeningFormService } from '../calculator/furnaces/opening/opening-form.service';
-import { CoolingFormService } from '../calculator/furnaces/cooling/cooling-form.service';
-import { FlueGasFormService } from '../calculator/furnaces/flue-gas/flue-gas-form.service';
 
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
@@ -317,25 +302,12 @@ const ROUTES: Route[] = [
     ProcessHeatingResultsService,
     ProcessHeatingAssessmentResolver,
     ConvertPhastService,
-    // PHAST bridge — temporary delegation layer used by ProcessHeatingResultsService until
-    // each loss form is rebuilt (Steps 6–13). Remove each service as its loss form migrates.
-    PhastService,
+    // PhastResultsService remains a temporary bridge for loss types not yet rebuilt (Steps 7, 9–13).
+    // It must only be read from — never edited to expose new fields for this module. As each loss
+    // type gets its own local result service (see charge-material-results.service.ts), it stops
+    // reading that field from here.
     PhastResultsService,
-    AuxEquipmentService,
-    AuxiliaryPowerLossesService,
-    OtherLossesService,
-    SlagService,
-    ExhaustGasService,
-    EnergyInputExhaustGasService,
-    EnergyInputService,
     Co2SavingsPhastService,
-    AtmosphereFormService,
-    WallFormService,
-    LeakageFormService,
-    FixtureFormService,
-    OpeningFormService,
-    CoolingFormService,
-    FlueGasFormService,
   ]
 })
 export class ProcessHeatingAssessmentModule {}

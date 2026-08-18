@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
+import { ExtendedSurface } from '../../../models/extended-surface';
 
 export type ExtendedSurfaceForm = FormGroup<{
   surfaceArea: FormControl<number | null>;

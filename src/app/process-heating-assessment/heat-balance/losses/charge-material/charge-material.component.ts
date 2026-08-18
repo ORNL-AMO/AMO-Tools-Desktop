@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, Signal } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterialType } from '../../../models/charge-material';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ChargeMaterialItem, ChargeMaterialService } from './charge-material.service';
+import { ChargeMaterialResultsService } from './charge-material-results.service';
 import { GasMaterialFormService } from './gas-form/gas-material-form.service';
 import { LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
 import { SolidMaterialFormService } from './solid-form/solid-material-form.service';
@@ -15,6 +16,7 @@ import { SolidMaterialFormService } from './solid-form/solid-material-form.servi
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     ChargeMaterialService,
+    ChargeMaterialResultsService,
     SolidMaterialFormService,
     LiquidMaterialFormService,
     GasMaterialFormService,

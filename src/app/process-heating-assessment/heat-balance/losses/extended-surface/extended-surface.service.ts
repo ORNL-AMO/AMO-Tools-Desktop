@@ -1,8 +1,8 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { ExtendedSurface } from '../../../../shared/models/phast/losses/extendedSurface';
-import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
-import { PhastService } from '../../../../phast/phast.service';
+import { ExtendedSurface } from '../../../models/extended-surface';
+import { WallLoss } from '../../../models/wall-loss';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { WallLossCalculationService } from '../wall-losses/wall-loss-calculation.service';
 import { ExtendedSurfaceForm, ExtendedSurfaceFormService } from './extended-surface-form.service';
 
 export interface ExtendedSurfaceItem {
@@ -14,7 +14,7 @@ export interface ExtendedSurfaceItem {
 
 @Injectable()
 export class ExtendedSurfaceService {
-  private readonly phastService = inject(PhastService);
+  private readonly wallLossCalculationService = inject(WallLossCalculationService);
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly formService = inject(ExtendedSurfaceFormService);
 
@@ -91,7 +91,7 @@ export class ExtendedSurfaceService {
         conditionFactor: 1,
       };
       const settings = this.assessmentService.settingsSignal();
-      const result = this.phastService.wallLosses(asWallLoss, settings);
+      const result = this.wallLossCalculationService.calculate(asWallLoss, settings);
       item.heatLoss = isNaN(result) ? null : result;
     } else {
       item.heatLoss = null;

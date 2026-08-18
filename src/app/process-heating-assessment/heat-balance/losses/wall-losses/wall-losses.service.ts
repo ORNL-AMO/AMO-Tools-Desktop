@@ -1,10 +1,10 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { take } from 'rxjs';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
-import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
+import { WallLoss } from '../../../models/wall-loss';
 import { WallLossesSurface } from '../../../../shared/models/materials';
-import { PhastService } from '../../../../phast/phast.service';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { WallLossCalculationService } from './wall-loss-calculation.service';
 import { WallLossForm, WallLossesFormService } from './wall-losses-form.service';
 
 export interface WallLossItem {
@@ -16,7 +16,7 @@ export interface WallLossItem {
 
 @Injectable()
 export class WallLossesService {
-  private readonly phastService = inject(PhastService);
+  private readonly wallLossCalculationService = inject(WallLossCalculationService);
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly formService = inject(WallLossesFormService);
   private readonly wallSurfaceDbService = inject(WallLossesSurfaceDbService);
@@ -88,7 +88,7 @@ export class WallLossesService {
     if (item.form.valid) {
       const wallLoss = this.formService.buildWallLoss(item.form);
       const settings = this.assessmentService.settingsSignal();
-      item.heatLoss = this.phastService.wallLosses(wallLoss, settings);
+      item.heatLoss = this.wallLossCalculationService.calculate(wallLoss, settings);
     } else {
       item.heatLoss = null;
     }
