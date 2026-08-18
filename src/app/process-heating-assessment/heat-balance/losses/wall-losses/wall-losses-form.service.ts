@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { WallLoss } from '../../../../shared/models/phast/losses/wallLoss';
+import { WallLoss } from '../../../models/wall-loss';
 
 export type WallLossForm = FormGroup<{
   surfaceArea: FormControl<number | null>;

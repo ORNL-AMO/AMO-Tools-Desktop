@@ -6,7 +6,7 @@ import {
   ChargeMaterialType,
   SolidChargeMaterial,
   ThermicReactionType,
-} from '../../../../../shared/models/phast/losses/chargeMaterial';
+} from '../../../../models/charge-material';
 import { applyInitialTempMaxValidator } from '../charge-material-form.util';
 
 export type SolidMaterialForm = FormGroup<{

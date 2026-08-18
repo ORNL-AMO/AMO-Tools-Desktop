@@ -3,6 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ExtendedSurfaceService } from './extended-surface.service';
 import { ExtendedSurfaceFormService } from './extended-surface-form.service';
+import { WallLossCalculationService } from '../wall-losses/wall-loss-calculation.service';
 
 @Component({
   selector: 'app-extended-surface',
@@ -10,7 +11,7 @@ import { ExtendedSurfaceFormService } from './extended-surface-form.service';
   templateUrl: './extended-surface.component.html',
   styleUrl: './extended-surface.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [ExtendedSurfaceService, ExtendedSurfaceFormService],
+  providers: [ExtendedSurfaceService, ExtendedSurfaceFormService, WallLossCalculationService],
 })
 export class ExtendedSurfaceComponent implements OnInit {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);

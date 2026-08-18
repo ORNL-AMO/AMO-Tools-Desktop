@@ -1,10 +1,10 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { getNewIdString } from '../../../../shared/helperFunctions';
-import { ChargeMaterial, ChargeMaterialResult, ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, ChargeMaterialResult, ChargeMaterialType } from '../../../models/charge-material';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
-import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
+import { ChargeMaterialResultsService } from './charge-material-results.service';
 import { EntityListStore } from '../entity-list-store';
 import { GasMaterialForm, GasMaterialFormService } from './gas-form/gas-material-form.service';
 import { LiquidMaterialForm, LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
@@ -44,7 +44,7 @@ const EMPTY_TOTALS: ChargeMaterialTotals = { heatRequired: 0, netHeatLoss: 0, en
 export class ChargeMaterialService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
-  private readonly resultsService = inject(ProcessHeatingResultsService);
+  private readonly chargeMaterialResultsService = inject(ChargeMaterialResultsService);
   private readonly solidFormService = inject(SolidMaterialFormService);
   private readonly liquidFormService = inject(LiquidMaterialFormService);
   private readonly gasFormService = inject(GasMaterialFormService);
@@ -59,16 +59,17 @@ export class ChargeMaterialService {
   readonly materials = this.store.all;
   readonly collapsedIds = signal<ReadonlySet<string>>(new Set());
 
-  private readonly baselineResults = toSignal(this.resultsService.baselineResults$, { initialValue: undefined });
-  private readonly modificationResults = toSignal(this.resultsService.modificationResults$, { initialValue: [] });
-
   readonly isMaterialAdditionLocked = computed(() => (this.assessmentService.processHeatingSignal()?.modifications?.length ?? 0) > 0);
 
   readonly results = computed(() => {
     const items = this.materials();
-    const chargeMaterialResults = this.currentResults();
+    const settings = this.assessmentService.settingsSignal();
+    const chargeMaterialResults = this.chargeMaterialResultsService.getResults(
+      items.map(item => ({ material: this.buildChargeMaterial(item), valid: item.form.valid })),
+      settings,
+    );
     const resultsMap = new Map<string, ChargeMaterialResult | undefined>();
-    items.forEach((item, index) => resultsMap.set(item.id, chargeMaterialResults?.[index]));
+    items.forEach((item, index) => resultsMap.set(item.id, chargeMaterialResults[index]));
     return resultsMap;
   });
 
@@ -86,13 +87,6 @@ export class ChargeMaterialService {
     }
     return totals;
   });
-
-  private currentResults(): ChargeMaterialResult[] | undefined {
-    if (this.scenario === 'baseline') {
-      return this.baselineResults()?.chargeMaterialResults;
-    }
-    return this.modificationResults().find(m => m.id === this.scenario)?.results?.chargeMaterialResults;
-  }
 
   initialize(scenario: AssessmentScenario = 'baseline'): void {
     this.scenario = scenario;
