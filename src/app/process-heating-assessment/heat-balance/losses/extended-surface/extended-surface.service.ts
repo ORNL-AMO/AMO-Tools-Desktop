@@ -51,12 +51,7 @@ export class ExtendedSurfaceService {
 
   add(): void {
     const idx = this.surfaces().length;
-    const newItem: ExtendedSurfaceItem = {
-      name: `Loss #${idx + 1}`,
-      form: this.formService.initExtendedSurfaceForm(),
-      collapse: false,
-      heatLoss: null,
-    };
+    const newItem = this.buildItem({}, idx + 1);
     const updated = [...this.surfaces(), newItem];
     this.surfaces.set(updated);
     this.saveSurfaces(updated);
