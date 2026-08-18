@@ -15,6 +15,8 @@ The AMO-Tools-Desktop and MEASUR-Tools-Suite projects are maintained by the same
 - `docs/architecture/data-persistence.md`: IndexedDB, default data, backups, and saved assessment data.
 - `docs/architecture/build-and-runtime.md`: Angular, Electron, process-flow component, and WASM build/runtime concerns.
 - `docs/adr/0001-suite-api-boundary.md`: decision record for keeping suite calls behind `src/app/tools-suite-api/`.
+- `docs/testing/component-testing-guide.md`: enforceable standard for `*.component.spec.ts` files — mandatory/disregard coverage, mocking and `TestBed` conventions. Read before writing or reviewing a component spec.
+- `docs/testing/component-spec-llm-plan.md`: step-by-step procedure for generating a component spec file; the machine-actionable companion to the guide above. Follow this when actually writing a spec.
 - `src/app/tools-suite-api/AGENTS.md`: detailed guidance for suite wrapper services, typings, Emscripten object cleanup, and suite migration work.
 - `process-flow-diagram-component/AGENTS.md`: guidance for the React process-flow package.
 
