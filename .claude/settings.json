@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run install-packages)",
+      "Bash(npm run start)",
+      "Bash(npm run build-watch)",
+      "Bash(npm run build)",
+      "Bash(npm run build-prod-desktop)",
+      "Bash(npm run build-prod-web)",
+      "Bash(npm test)",
+      "Bash(ng test --include=*)",
+      "Bash(npx tsc -p src/tsconfig.app.json --noEmit)",
+      "Bash(cd process-flow-diagram-component && npm run test)",
+      "Bash(cd process-flow-diagram-component && npm run test:typecheck)",
+      "Bash(npm run test)",
+      "Bash(npm run test:typecheck)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)"
+    ]
+  }
+}
