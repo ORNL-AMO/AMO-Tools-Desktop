@@ -5,7 +5,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { DashboardService } from '../../dashboard.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { Directory } from '../../../shared/models/directory';
-import { Settings, FacilityInfo } from '../../../shared/models/settings';
+import { Settings, FacilityInfo, Contact } from '../../../shared/models/settings';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { PsatService } from '../../../psat/psat.service';
 import * as _ from 'lodash';
@@ -29,6 +29,9 @@ import { BaselineResults } from '../../../compressed-air-assessment/calculations
 import { CompressedAirAssessmentBaselineResults } from '../../../compressed-air-assessment/calculations/CompressedAirAssessmentBaselineResults';
 import { CompressedAirCalculationService } from '../../../compressed-air-assessment/compressed-air-calculation.service';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { ContactDbService, SavedContact } from '../../../indexedDb/contact-db.service';
+import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
+import { EditContactModalData } from '../../../shared/edit-contact-modal/editContactModalData';
 
 @Component({
   selector: 'app-directory-summary',
@@ -55,24 +58,34 @@ export class DirectorySummaryComponent implements OnInit {
   updateDashboardDataSub: Subscription;
   directoryIdSub: Subscription;
   counter: any;
+  savedContacts: Array<SavedContact>;
+  selectedContact: SavedContact;
+  showConfirmDeleteContactModal: boolean = false;
+  confirmDeleteContactData: ConfirmDeleteData;
+  showEditContactModal: boolean = false;
+  editContactModalData: EditContactModalData;
   constructor(private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private dashboardService: DashboardService, private settingsDbService: SettingsDbService, private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
     private ssmtService: SsmtService, private settingsService: SettingsService,
     private wasteWaterService: WasteWaterService,
     private compressedAirCalculationService: CompressedAirCalculationService,
-    private assessmentCo2SavingsService: AssessmentCo2SavingsService
+    private assessmentCo2SavingsService: AssessmentCo2SavingsService,
+    private contactDbService: ContactDbService
   ) { }
 
   ngOnInit() {
     this.directoryIdSub = this.directoryDashboardService.selectedDirectoryId.subscribe(idVal => {
       this.directory = this.directoryDbService.getById(idVal);
       this.directorySettings = this.settingsDbService.getByDirectoryId(idVal);
+      this.savedContacts = this.contactDbService.allContacts;
       this.calculateSummary();
     })
 
     this.updateDashboardDataSub = this.dashboardService.updateDashboardData.subscribe(val => {
       this.directory = this.directoryDbService.getById(this.directory.id);
+      this.directorySettings = this.settingsDbService.getByDirectoryId(this.directory.id);
+      this.savedContacts = this.contactDbService.allContacts;
       this.calculateSummary();
     });
   }
@@ -80,6 +93,49 @@ export class DirectorySummaryComponent implements OnInit {
   ngOnDestroy() {
     this.updateDashboardDataSub.unsubscribe();
     this.directoryIdSub.unsubscribe();
+  }
+
+  selectContact(contact: SavedContact) {
+    this.selectedContact = (this.selectedContact?.id === contact.id) ? undefined : contact;
+  }
+
+  openConfirmDeleteContactModal() {
+    if (!this.selectedContact) return;
+    this.confirmDeleteContactData = {
+      modalTitle: 'Delete Contact',
+      confirmMessage: `Are you sure you want to delete '${this.selectedContact.contactName}'?`
+    };
+    this.showConfirmDeleteContactModal = true;
+  }
+
+  async onConfirmDeleteContactClose(shouldDelete: boolean) {
+    if (shouldDelete) {
+      await firstValueFrom(this.contactDbService.deleteByIdWithObservable(this.selectedContact.id));
+      await this.contactDbService.setAll();
+      this.savedContacts = this.contactDbService.allContacts;
+      this.selectedContact = undefined;
+    }
+    this.showConfirmDeleteContactModal = false;
+  }
+
+  showEditContactInfoModal() {
+    if (!this.selectedContact) return;
+    this.editContactModalData = {
+      modalTitle: 'Edit Contact Info',
+      contact: this.selectedContact
+    };
+    this.showEditContactModal = true;
+  }
+
+  async onEditContactClose(contact: Contact) {
+    if (contact) {
+      let updatedContact: SavedContact = { ...contact, id: this.selectedContact.id };
+      await firstValueFrom(this.contactDbService.updateWithObservable(updatedContact));
+      await this.contactDbService.setAll();
+      this.savedContacts = this.contactDbService.allContacts;
+      this.selectedContact = updatedContact;
+    }
+    this.showEditContactModal = false;
   }
 
   calculateSummary() {

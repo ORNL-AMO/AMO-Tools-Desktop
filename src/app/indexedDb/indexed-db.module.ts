@@ -21,6 +21,7 @@ import { WeatherDataIdbService } from './weather-data-idb.service';
 import { DiagramIdbService } from './diagram-idb.service';
 import { ApplicationInstanceDbService } from './application-instance-db.service';
 import {LightingFixtureServiceDbService} from './lighting-fixture-db.service';
+import { ContactDbService } from './contact-db.service';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import {LightingFixtureServiceDbService} from './lighting-fixture-db.service';
     WeatherDataIdbService,
     DiagramIdbService,
     ApplicationInstanceDbService,
-    LightingFixtureServiceDbService
+    LightingFixtureServiceDbService,
+    ContactDbService
   ]
 })
 export class IndexedDbModule { }

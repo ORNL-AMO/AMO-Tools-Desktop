@@ -1,0 +1,62 @@
+import { Injectable } from '@angular/core';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
+import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { Contact } from '../shared/models/settings';
+import { ContactStoreMeta } from './dbConfig';
+
+export interface SavedContact extends Contact {
+  id?: number;
+}
+
+@Injectable()
+export class ContactDbService {
+  storeName: string = ContactStoreMeta.store;
+  allContacts: Array<SavedContact> = [];
+  dbContacts: BehaviorSubject<Array<SavedContact>>;
+
+  constructor(private dbService: NgxIndexedDBService) {
+    this.dbContacts = new BehaviorSubject<Array<SavedContact>>([]);
+  }
+
+  async setAll(contacts?: Array<SavedContact>) {
+    this.allContacts = contacts ?? await firstValueFrom(this.getAllContacts());
+    this.dbContacts.next(this.allContacts);
+  }
+
+  getAllContacts(): Observable<Array<SavedContact>> {
+    return this.dbService.getAll(this.storeName);
+  }
+
+  addWithObservable(contact: SavedContact): Observable<SavedContact> {
+    return this.dbService.add(this.storeName, contact);
+  }
+
+  deleteByIdWithObservable(contactId: number): Observable<any> {
+    return this.dbService.delete(this.storeName, contactId);
+  }
+
+  updateWithObservable(contact: SavedContact): Observable<SavedContact> {
+    return this.dbService.update(this.storeName, contact);
+  }
+
+  // Same name, phone, and email - used both to dedupe on save and to find which settings
+  // records (facility/assessment contact) a given saved contact is currently used on.
+  contactsMatch(a: Contact, b: Contact): boolean {
+    const aName = a?.contactName?.trim().toLowerCase() ?? '';
+    const bName = b?.contactName?.trim().toLowerCase() ?? '';
+    if (!aName || aName !== bName) return false;
+    return (a.phoneNumber ?? null) === (b.phoneNumber ?? null) &&
+      (a.email?.trim().toLowerCase() ?? '') === (b.email?.trim().toLowerCase() ?? '');
+  }
+
+  // Saves the contact only if no existing saved contact matches it - called from
+  // FacilityInfoComponent.save() so the picker builds up distinct contacts over time without
+  // accumulating duplicates every time the same contact is re-saved.
+  async saveIfNew(contact: Contact): Promise<void> {
+    if (!contact?.contactName?.trim()) return;
+    if (this.allContacts.some(existing => this.contactsMatch(existing, contact))) return;
+
+    await firstValueFrom(this.addWithObservable({ ...contact }));
+    await this.setAll();
+  }
+}

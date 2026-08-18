@@ -55,3 +55,11 @@ td, a{
 	width: .3em;
   height: .3rem;
 }
+
+.selectable-row{
+  cursor: pointer;
+}
+
+.selected-item{
+  border: 2px solid;
+}

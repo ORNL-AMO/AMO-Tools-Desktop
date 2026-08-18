@@ -1,0 +1,35 @@
+<div bsModal #editContactModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="editContactModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header p-2">
+                    <span class="card-header-text">
+                        {{editContactData.modalTitle}}
+                    </span>
+                    <button class="close" aria-label="Close" (click)="close(false)">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="card-block p-4" [formGroup]="contactForm">
+                    <div class="form-group">
+                        <label class="small" for="editContactName">Name</label>
+                        <input type="text" id="editContactName" class="form-control" formControlName="contactName" />
+                    </div>
+                    <div class="form-group">
+                        <label class="small" for="editContactPhoneNumber">Phone Number</label>
+                        <input type="number" id="editContactPhoneNumber" class="form-control" formControlName="phoneNumber" />
+                    </div>
+                    <div class="form-group">
+                        <label class="small" for="editContactEmail">Email</label>
+                        <input type="email" id="editContactEmail" class="form-control" formControlName="email" />
+                    </div>
+                </div>
+                <div class="modal-footer p-2">
+                    <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close(false)">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" (click)="close(true)">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
