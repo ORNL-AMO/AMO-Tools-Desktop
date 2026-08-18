@@ -10,7 +10,7 @@ on:
 
 jobs:
   pr-checks:
-    if: github.event_name == 'pull_request' && (github.base_ref == 'develop' || github.base_ref == 'master')
+    if: github.event_name == 'pull_request' && (github.base_ref == 'develop' || github.base_ref == 'master' || startsWith(github.base_ref, 'epic-'))
     uses: ./.github/workflows/pr_checks.yml
 
   web:
