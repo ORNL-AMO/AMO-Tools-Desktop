@@ -106,9 +106,7 @@ export class FacilityInfoComponent implements OnInit {
       assessmentContact,
       date: this.facilityForm.controls.date.value
     };
-    // Awaited so the contact is committed and the picker's cache refreshed before close.emit()
-    // triggers the parent's own settings save + dashboard refresh signal - otherwise the two
-    // saves race and the dashboard can refresh before the new contact is actually cached.
+
     await this.contactDbService.saveIfNew(facilityContact);
     await this.contactDbService.saveIfNew(assessmentContact);
     this.close.emit(true);

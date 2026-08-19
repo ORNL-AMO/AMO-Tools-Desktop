@@ -39,29 +39,28 @@ export class ContactDbService {
     return this.dbService.update(this.storeName, contact);
   }
 
-  contactsMatch(a: Contact, b: Contact): boolean {
-    const aEmail = a?.email?.trim().toLowerCase() ?? '';
-    const bEmail = b?.email?.trim().toLowerCase() ?? '';
+  contactsMatch(existing: Contact, newContact: Contact): boolean {
+    const existingEmail = existing.email?.trim().toLowerCase() ?? '';
+    const newEmail = newContact.email?.trim().toLowerCase() ?? '';
 
-    // If both records have an email, treat email as the stable identifier to prevent duplicates.
-    if (aEmail && bEmail) {
-      return aEmail === bEmail;
+    if (existingEmail && newEmail) {
+      return existingEmail === newEmail;
     }
 
-    const aName = a?.contactName?.trim().toLowerCase() ?? '';
-    const bName = b?.contactName?.trim().toLowerCase() ?? '';
-    if (!aName && !bName && !aEmail && !bEmail) return false;
+    const existingName = existing.contactName?.trim().toLowerCase() ?? '';
+    const newName = newContact.contactName?.trim().toLowerCase() ?? '';
+    if (!existingName && !newName && !existingEmail && !newEmail) return false;
 
-    return aName === bName &&
-      (a?.phoneNumber ?? null) === (b?.phoneNumber ?? null) &&
-      aEmail === bEmail;
+    return existingName === newName &&
+      (existing.phoneNumber ?? null) === (newContact.phoneNumber ?? null) &&
+      existingEmail === newEmail;
   }
 
-  async saveIfNew(contact: Contact): Promise<void> {
-    if (!contact?.contactName?.trim() && !contact?.email?.trim()) return;
-    if (this.allContacts.some(existing => this.contactsMatch(existing, contact))) return;
+  async saveIfNew(newContact: Contact): Promise<void> {
+    if (!newContact?.contactName?.trim() && !newContact?.email?.trim()) return;
+    if (this.allContacts.some(existing => this.contactsMatch(existing, newContact))) return;
 
-    await firstValueFrom(this.addWithObservable({ ...contact }));
+    await firstValueFrom(this.addWithObservable({ ...newContact }));
     await this.setAll();
   }
 }

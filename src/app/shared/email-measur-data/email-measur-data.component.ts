@@ -69,7 +69,6 @@ export class EmailMeasurDataComponent {
   }
 
   onContactSelected() {
-    // Leave a trailing ", " so the field is ready for the next address to be typed.
     const emailToControl = this.emailDataForm.controls.emailTo;
     const value: string = (emailToControl.value ?? '').replace(/[,\s]+$/, '');
     emailToControl.setValue(value + ', ');
