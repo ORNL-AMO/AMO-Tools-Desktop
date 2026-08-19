@@ -53,7 +53,7 @@ export class EmailMeasurDataService {
       }
 
       this.measurEmailData = {
-        emailTo: measurEmailForm.controls.emailTo.value,
+        emailTo: measurEmailForm.controls.emailTo.value?.replace(/[,\s]+$/, ''),
         emailSender: measurEmailForm.controls.emailSender.value,
         fileName: measurEmailForm.controls.emailAttachmentName.value,
         attachment: attachmentExportData,

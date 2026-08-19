@@ -39,21 +39,19 @@ export class ContactDbService {
     return this.dbService.update(this.storeName, contact);
   }
 
-  // Same name, phone, and email - used both to dedupe on save and to find which settings
-  // records (facility/assessment contact) a given saved contact is currently used on.
   contactsMatch(a: Contact, b: Contact): boolean {
     const aName = a?.contactName?.trim().toLowerCase() ?? '';
     const bName = b?.contactName?.trim().toLowerCase() ?? '';
-    if (!aName || aName !== bName) return false;
-    return (a.phoneNumber ?? null) === (b.phoneNumber ?? null) &&
-      (a.email?.trim().toLowerCase() ?? '') === (b.email?.trim().toLowerCase() ?? '');
+    const aEmail = a?.email?.trim().toLowerCase() ?? '';
+    const bEmail = b?.email?.trim().toLowerCase() ?? '';
+    if (!aName && !bName && !aEmail && !bEmail) return false;
+    return aName === bName &&
+      (a?.phoneNumber ?? null) === (b?.phoneNumber ?? null) &&
+      aEmail === bEmail;
   }
 
-  // Saves the contact only if no existing saved contact matches it - called from
-  // FacilityInfoComponent.save() so the picker builds up distinct contacts over time without
-  // accumulating duplicates every time the same contact is re-saved.
   async saveIfNew(contact: Contact): Promise<void> {
-    if (!contact?.contactName?.trim()) return;
+    if (!contact?.contactName?.trim() && !contact?.email?.trim()) return;
     if (this.allContacts.some(existing => this.contactsMatch(existing, contact))) return;
 
     await firstValueFrom(this.addWithObservable({ ...contact }));
