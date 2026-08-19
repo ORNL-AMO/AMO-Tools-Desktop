@@ -14,7 +14,7 @@ export class EditContactModalComponent implements OnInit, AfterViewInit {
   @Input()
   editContactData: EditContactModalData;
   @Output('emitContact')
-  emitContact = new EventEmitter<Contact>();
+  emitContact = new EventEmitter<Contact | undefined>();
   @ViewChild('editContactModal', { static: false }) public editContactModal: ModalDirective;
 
   contactForm: UntypedFormGroup;
