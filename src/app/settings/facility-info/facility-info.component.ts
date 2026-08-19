@@ -115,6 +115,15 @@ export class FacilityInfoComponent implements OnInit {
   }
 
   useSavedContact(prefix: 'facility' | 'assessment', contactId: string) {
+    if (!contactId) {
+      this.facilityForm.patchValue({
+        [`${prefix}ContactName`]: '',
+        [`${prefix}PhoneNumber`]: '',
+        [`${prefix}Email`]: '',
+      });
+      return;
+    }
+
     let contact: SavedContact = this.savedContacts.find(saved => saved.id === Number(contactId));
     if (!contact) return;
     this.facilityForm.patchValue({
