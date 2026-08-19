@@ -40,11 +40,18 @@ export class ContactDbService {
   }
 
   contactsMatch(a: Contact, b: Contact): boolean {
-    const aName = a?.contactName?.trim().toLowerCase() ?? '';
-    const bName = b?.contactName?.trim().toLowerCase() ?? '';
     const aEmail = a?.email?.trim().toLowerCase() ?? '';
     const bEmail = b?.email?.trim().toLowerCase() ?? '';
+
+    // If both records have an email, treat email as the stable identifier to prevent duplicates.
+    if (aEmail && bEmail) {
+      return aEmail === bEmail;
+    }
+
+    const aName = a?.contactName?.trim().toLowerCase() ?? '';
+    const bName = b?.contactName?.trim().toLowerCase() ?? '';
     if (!aName && !bName && !aEmail && !bEmail) return false;
+
     return aName === bName &&
       (a?.phoneNumber ?? null) === (b?.phoneNumber ?? null) &&
       aEmail === bEmail;
