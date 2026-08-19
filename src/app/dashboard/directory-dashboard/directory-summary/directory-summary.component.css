@@ -63,3 +63,23 @@ td, a{
 .selected-item{
   border: 2px solid;
 }
+
+.contact-list-scroll{
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.contact-list-scroll table tr:first-child td{
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+.contact-list-scroll::-webkit-scrollbar-thumb{
+	background-color: #156739;
+}
+
+.contact-list-scroll::-webkit-scrollbar{
+	background-color: #9da19f;
+	width: .3em;
+}
