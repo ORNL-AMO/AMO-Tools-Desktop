@@ -5,11 +5,11 @@ import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange, setPaletteColors, getPaletteColorForType } from '../Diagram/diagramReducer';
-import { RootState, selectHasAssessment, selectNodes } from '../Diagram/store';
+import { RootState, selectEdges, selectCalculatedData, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getContrastTextColor, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
+import { ConvertValueFn, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, convertFlowDiagramData, getContrastTextColor, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
 import { Node } from '@xyflow/react';
@@ -45,6 +45,8 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   
   const flowDecimalPrecision = useAppSelector((state: RootState) => state.diagram.settings.flowDecimalPrecision);
   const unitsOfMeasure = useAppSelector((state: RootState) => state.diagram.settings.unitsOfMeasure);
+  const edges = useAppSelector(selectEdges);
+  const calculatedData = useAppSelector(selectCalculatedData);
   const electricityUnitCost = useAppSelector((state: RootState) => state.diagram.settings.electricityCost);
   const conductivityUnit = useAppSelector((state: RootState) => state.diagram.settings.conductivityUnit);
   const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
@@ -197,7 +199,12 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   size="small"
                   label="Units of Measure"
                   value={unitsOfMeasure}
-                  onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}
+                  onChange={(e) => {
+                    const newUnits = e.target.value;
+                    const convertedDiagramData = { nodes, edges, calculatedData };
+                    convertFlowDiagramData(convertedDiagramData, newUnits, props.convertValueFn);
+                    dispatch(unitsOfMeasureChange({ newUnits, ...convertedDiagramData }));
+                  }}
                   disabled={hasAssessment}
                   sx={{ minWidth: 120 }}
                   MenuProps={{
@@ -492,6 +499,7 @@ export default MenuSidebar;
 
 export interface MenuSidebarProps {
   shadowRootRef: any;
+  convertValueFn?: ConvertValueFn;
 }
 
 

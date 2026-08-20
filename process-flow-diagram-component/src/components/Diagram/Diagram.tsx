@@ -25,7 +25,7 @@ import { Provider } from 'react-redux';
 import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected, selectedIdChange } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
-import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
+import { ConvertValueFn, ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
 import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
@@ -40,6 +40,7 @@ export interface DiagramProps {
   parentContainer: ParentContainerDimensions,
   processDiagram?: WaterDiagram;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
+  convertValueFn?: ConvertValueFn;
 }
 
 
@@ -236,7 +237,7 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-          <MenuSidebar shadowRootRef={props.shadowRoot}/>
+          <MenuSidebar shadowRootRef={props.shadowRoot} convertValueFn={props.convertValueFn}/>
           </SharedDrawer>
         )}
 
