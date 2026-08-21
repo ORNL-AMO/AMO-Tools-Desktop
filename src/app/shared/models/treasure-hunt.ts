@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput, FanAffinityLawsInput } from "./standalone";
 import { WallLoss } from "./phast/losses/wallLoss";
 import { FlueGas } from "./phast/losses/flueGas";
 import { EnergyData } from "./phast/losses/chargeMaterial";
@@ -53,8 +53,9 @@ export interface TreasureHunt {
     chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
     coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
     coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
-    boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;    
+    boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
     powerFactorCorrectionOpportunities?: Array<PowerFactorCorrectionTreasureHunt>;
+    fanAffinityLawOpportunities?: Array<FanAffinityLawTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
     existingDataUnits?: string;
@@ -364,6 +365,16 @@ export const opportunities: OpportunityForFiltering[] = [
         utilityType: ['All', 'Mixed'],
         name: 'Assessment Opportunity',
         description: 'Create a Treasure Hunt Opportunity from an existing assessment. Baseline and Modification Utility use will be used to calculate savings.'
+    },
+    {
+        iconString: 'assets/images/calculator-icons/process-cooling-icons/psychrometric-icon.png',
+        iconClass: 'fan-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'fan',
+        opportunityType: 'fan-affinity-law',
+        utilityType: ['All', 'Electricity'],
+        name: 'Fan Affinity Law',
+        description: 'This calculator estimates energy and cost savings from changes in fan speed control or impeller diameter.'
     }
 ];
 
@@ -398,7 +409,8 @@ export enum Treasure {
     coolingTowerBasin = 'cooling-tower-basin',
     assessmentOpportunity ='assessment-opportunity',
     boilerBlowdownRate = 'boiler-blowdown-rate',
-    powerFactorCorrection = 'power-factor-correction'
+    powerFactorCorrection = 'power-factor-correction',
+    fanAffinityLaw = 'fan-affinity-law'
 }
 
 export interface FilterOption {
@@ -713,6 +725,12 @@ export interface PowerFactorCorrectionTreasureHunt extends TreasureHuntOpportuni
     selected?: boolean;
 }
 
+export interface FanAffinityLawTreasureHunt extends TreasureHuntOpportunity {
+    inputData: FanAffinityLawsInput;
+    opportunitySheet?: OpportunitySheet;
+    selected?: boolean;
+}
+
 
 
 export interface EnergySourceData {
@@ -941,4 +959,5 @@ export interface ImportExportOpportunities {
     coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
     boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
     powerFactorCorrectionOpportunities?: Array<PowerFactorCorrectionTreasureHunt>;
+    fanAffinityLawOpportunities?: Array<FanAffinityLawTreasureHunt>;
 }

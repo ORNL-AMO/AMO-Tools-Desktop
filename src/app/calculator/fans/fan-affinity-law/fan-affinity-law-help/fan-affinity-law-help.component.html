@@ -88,7 +88,7 @@
 
   <div class="my-2" *ngIf="currentField == 'motorControlTypeCurrent'">
     <h6>
-      Current Motor Control
+      Motor Control
       <small class="text-muted">
         <br>
         The control method used to determine motor behavior regarding flow. Most commonly, motors are simply
@@ -101,7 +101,7 @@
 
   <div class="my-2" *ngIf="currentField == 'motorControlTypeNew'">
     <h6>
-      New Motor Control
+      Motor Control
       <small class="text-muted">
         <br>
         The control method used to determine motor behavior regarding flow to be used in the new configuration.
@@ -112,7 +112,7 @@
 
   <div class="my-2" *ngIf="currentField == 'flowMode'">
     <h6>
-      Desired Flow Mode
+      Flow Mode
       <small class="text-muted">
         <br>
         Selection between expressing the flow required of the new configuration as either a volume flow or as a
@@ -124,7 +124,7 @@
 
   <div class="my-2" *ngIf="currentField == 'desiredFlowVolume'">
     <h6>
-      Desired Flow Rate (CFM)
+      Flow Rate (CFM)
       <small class="text-muted">
         <br>
         Volumetric flow required of the new configuration. Value cannot be equal to or less than 0.
@@ -135,7 +135,7 @@
 
   <div class="my-2" *ngIf="currentField == 'desiredFlowPercent'">
     <h6>
-      Desired Flow Rate (%)
+      Flow Rate (%)
       <small class="text-muted">
         <br>
         Flow required of the new configuration expressed as a percentage. Value should range from 1 &ndash; 100%.
@@ -172,11 +172,11 @@
 
   <div class="my-2" *ngIf="currentField == 'diameterFanNew'">
     <h6>
-      New Fan Diameter
+      Fan Diameter
       <small class="text-muted">
         <br>
         Diameter of the circle swept by the fan at its blade tips in the new configuration. Must be greater than
-        the current Fan Diameter.
+        the Baseline Fan Diameter.
         <hr>
       </small>
     </h6>

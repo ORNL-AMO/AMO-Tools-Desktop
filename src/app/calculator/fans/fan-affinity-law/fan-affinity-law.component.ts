@@ -8,6 +8,7 @@ import { Assessment } from '../../../shared/models/assessment';
 import { Calculator } from '../../../shared/models/calculators';
 import { CalculatorDbService } from '../../../indexedDb/calculator-db.service';
 import { AnalyticsService } from '../../../shared/analytics/analytics.service';
+import { FanAffinityLawTreasureHunt, Treasure } from '../../../shared/models/treasure-hunt';
 
 @Component({
     selector: 'app-fan-affinity-law',
@@ -19,7 +20,7 @@ export class FanAffinityLawComponent implements OnInit {
   @Input()
   inTreasureHunt: boolean;
   @Output('emitSave')
-  emitSave = new EventEmitter<FanAffinityLawsInput>();
+  emitSave = new EventEmitter<FanAffinityLawTreasureHunt>();
   @Output('emitCancel')
   emitCancel = new EventEmitter<boolean>();
   @Input()
@@ -45,7 +46,7 @@ export class FanAffinityLawComponent implements OnInit {
   modifiedSelected: boolean = false;
   modificationExists: boolean = false;
 
-  smallScreenTab: string = 'baseline';
+  smallScreenTab: string = 'form';
 
   fanAffinityLawForm: UntypedFormGroup;
   fanAffinityLawResults: FanAffinityLawsOutput;
@@ -165,8 +166,19 @@ export class FanAffinityLawComponent implements OnInit {
     this.setModificationSelected();
   }
 
+    // New Fan Diameter must exceed the baseline Fan Diameter; that threshold moves whenever
+  // Fan Diameter changes, and the validator itself is only (re)applied when Change Fan Size
+  // is toggled, so both need to refresh validators before recalculating.
+  refreshValidators() {
+    this.fanAffinityLawService.setValidators(this.fanAffinityLawForm);
+    this.getResults();
+  }
+
   save() {
-    this.emitSave.emit(this.fanAffinityLawService.getObjFromForm(this.fanAffinityLawForm));
+    this.emitSave.emit({
+      inputData: this.fanAffinityLawService.getObjFromForm(this.fanAffinityLawForm),
+      opportunityType: Treasure.fanAffinityLaw,
+    });
   }
 
   cancel() {
@@ -189,10 +201,5 @@ export class FanAffinityLawComponent implements OnInit {
 
   setSmallScreenTab(selectedTab: string) {
     this.smallScreenTab = selectedTab;
-    if (this.smallScreenTab === 'baseline') {
-      this.setBaselineSelected();
-    } else if (this.smallScreenTab === 'modification') {
-      this.setModificationSelected();
-    }
   }
 }

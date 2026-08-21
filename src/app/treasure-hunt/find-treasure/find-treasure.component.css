@@ -84,7 +84,7 @@ a:not([href]):not([tabindex]){
     margin-right: auto;
 }
 
-.steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon, .process-cooling-calc-icon, .utility-calc-icon {
+.steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon, .process-cooling-calc-icon, .utility-calc-icon, .fan-calc-icon {
     border-radius: 50%;
     height: 81px;
     width: 81px;
@@ -92,6 +92,10 @@ a:not([href]):not([tabindex]){
 
 .utility-calc-icon{
     background-image: linear-gradient(to bottom right, #ffffff, #145A32);
+}
+
+.fan-calc-icon{
+    background-image: linear-gradient(to bottom right, #ffffff, #FFE400);
 }
 
 .steam-calc-icon{
@@ -161,7 +165,7 @@ a:not([href]):not([tabindex]){
         margin-right: auto;
     }
     
-    .steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon, .process-cooling-calc-icon, .utility-calc-icon {
+    .steam-calc-icon, .ca-calc-icon, .ph-calc-icon, .lighting-calc-icon, .motor-calc-icon, .process-cooling-calc-icon, .utility-calc-icon, .fan-calc-icon {
         border-radius: 50%;
         height: 36px;
         width: 36px;

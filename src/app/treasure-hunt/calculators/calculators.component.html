@@ -129,8 +129,13 @@
 </app-boiler-blowdown-rate>
 
 <app-power-factor-correction *ngIf="selectedCalc == 'power-factor-correction'" [inTreasureHunt]="true"
-(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)">  
+(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)">
 </app-power-factor-correction>
+
+<app-fan-affinity-law *ngIf="selectedCalc == 'fan-affinity-law'" [inTreasureHunt]="true"
+(emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
+[settings]="settings">
+</app-fan-affinity-law>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
   aria-labelledby="saveCalcModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">

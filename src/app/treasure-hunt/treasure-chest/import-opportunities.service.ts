@@ -211,6 +211,13 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.powerFactorCorrectionOpportunities, Treasure.powerFactorCorrection);
       treasureHunt.powerFactorCorrectionOpportunities = treasureHunt.powerFactorCorrectionOpportunities.concat(data.powerFactorCorrectionOpportunities);
     }
+    if (data.fanAffinityLawOpportunities) {
+      if (treasureHunt.fanAffinityLawOpportunities == undefined) {
+        treasureHunt.fanAffinityLawOpportunities = new Array();
+      }
+      this.updateLegacyOpportunities(data.fanAffinityLawOpportunities, Treasure.fanAffinityLaw);
+      treasureHunt.fanAffinityLawOpportunities = treasureHunt.fanAffinityLawOpportunities.concat(data.fanAffinityLawOpportunities);
+    }
     return treasureHunt;
   }
 

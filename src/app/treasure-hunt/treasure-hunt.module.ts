@@ -61,6 +61,7 @@ import { CoolingTowerBasinTreasureHuntService } from './treasure-hunt-calculator
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculator-services/boiler-blowdown-rate-treasure-hunt.service';
 import { PowerFactorCorrectionTreasureHuntService } from './treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
+import { FanAffinityLawTreasureHuntService } from './treasure-hunt-calculator-services/fan-affinity-law-treasure-hunt.service';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { ExportOpportunitiesService } from './treasure-chest/export-opportunities.service';
 
@@ -133,6 +134,7 @@ import { ExportOpportunitiesService } from './treasure-chest/export-opportunitie
     CoolingTowerBasinTreasureHuntService,
     BoilerBlowdownRateTreasureHuntService,
     PowerFactorCorrectionTreasureHuntService,
+    FanAffinityLawTreasureHuntService,
     ExportOpportunitiesService
   ]
 })

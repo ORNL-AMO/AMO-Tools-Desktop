@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { AirHeatingTreasureHunt, AirLeakSurveyTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt, ChillerPerformanceTreasureHunt, ChillerStagingTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, CoolingTowerBasinTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ElectricityReductionTreasureHunt, FlueGasTreasureHunt, HeatCascadingTreasureHunt, LeakageLossTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpeningLossTreasureHunt, OpportunitySheet, OpportunitySummary, PipeInsulationReductionTreasureHunt, PowerFactorCorrectionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WallLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { AirHeatingTreasureHunt, AirLeakSurveyTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt, ChillerPerformanceTreasureHunt, ChillerStagingTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, CoolingTowerBasinTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ElectricityReductionTreasureHunt, FanAffinityLawTreasureHunt, FlueGasTreasureHunt, HeatCascadingTreasureHunt, LeakageLossTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpeningLossTreasureHunt, OpportunitySheet, OpportunitySummary, PipeInsulationReductionTreasureHunt, PowerFactorCorrectionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WallLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
 import { CalculatorsService } from '../calculators/calculators.service';
 import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import { OpportunitySummaryService } from '../treasure-hunt-report/opportunity-summary.service';
@@ -34,6 +34,7 @@ import { CoolingTowerBasinTreasureHuntService } from './cooling-tower-basin-trea
 import { AssessmentOpportunityService } from './assessment-opportunity.service';
 import { BoilerBlowdownRateTreasureHuntService } from './boiler-blowdown-rate-treasure-hunt.service';
 import { PowerFactorCorrectionTreasureHuntService } from './power-factor-correction-treasure-hunt.service';
+import { FanAffinityLawTreasureHuntService } from './fan-affinity-law-treasure-hunt.service';
 
 @Injectable()
 export class TreasureHuntOpportunityService {
@@ -70,8 +71,9 @@ export class TreasureHuntOpportunityService {
     private chillerPerformanceTreasureHuntService: ChillerPerformanceTreasureHuntService,
     private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
-    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,   
-    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService
+    private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,
+    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService,
+    private fanAffinityLawTreasureHuntService: FanAffinityLawTreasureHuntService
   ) { }
 
   saveTreasureHuntOpportunity(currentOpportunity: TreasureHuntOpportunity, selectedCalc: string, customOpportunity: OpportunitySheet | AssessmentOpportunity) {
@@ -163,6 +165,9 @@ export class TreasureHuntOpportunityService {
     } else if (selectedCalc === Treasure.powerFactorCorrection) {
       let powerFactorCorrection = currentOpportunity as PowerFactorCorrectionTreasureHunt;
       treasureHunt = this.powerFactorCorrectionTreasureHuntService.saveTreasureHuntOpportunity(powerFactorCorrection, treasureHunt);
+    } else if (selectedCalc === Treasure.fanAffinityLaw) {
+      let fanAffinityLaw = currentOpportunity as FanAffinityLawTreasureHunt;
+      treasureHunt = this.fanAffinityLawTreasureHuntService.saveTreasureHuntOpportunity(fanAffinityLaw, treasureHunt);
     }
 
     this.treasureHuntService.treasureHunt.next(treasureHunt);
@@ -229,6 +234,8 @@ export class TreasureHuntOpportunityService {
       this.boilerBlowdownRateTreasureHuntService.resetCalculatorInputs();
     } else if (selectedCalc == Treasure.powerFactorCorrection) {
       this.powerFactorCorrectionTreasureHuntService.resetCalculatorInputs();
+    } else if (selectedCalc == Treasure.fanAffinityLaw) {
+      this.fanAffinityLawTreasureHuntService.resetCalculatorInputs();
     }
 
     this.calculatorsService.itemIndex = undefined;
@@ -413,9 +420,15 @@ export class TreasureHuntOpportunityService {
       treasureHunt.powerFactorCorrectionOpportunities[this.calculatorsService.itemIndex] = powerFactorCorrectionOpportunity;
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(powerFactorCorrectionOpportunity, settings);
       updatedCard = this.powerFactorCorrectionTreasureHuntService.getPowerFactorCorrectionCardData(powerFactorCorrectionOpportunity, opportunitySummary, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
-    
+
+    } else if (selectedCalc === Treasure.fanAffinityLaw) {
+      let fanAffinityLawOpportunity = currentOpportunity as FanAffinityLawTreasureHunt;
+      treasureHunt.fanAffinityLawOpportunities[this.calculatorsService.itemIndex] = fanAffinityLawOpportunity;
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(fanAffinityLawOpportunity, settings);
+      updatedCard = this.fanAffinityLawTreasureHuntService.getFanAffinityLawCardData(fanAffinityLawOpportunity, opportunitySummary, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
+
     }
-    
+
     this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);
     this.treasureHuntService.treasureHunt.next(treasureHunt);
   }
