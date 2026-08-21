@@ -796,5 +796,7 @@ export interface FanAffinityLawsOutput {
   annualEnergyBaseline: number;
   annualEnergyNew: number;
   annualCostSavings: number;
+  currentPower: number;
+  newPower: number;
 }
 //===== END fan affinity law objects =====

@@ -6,6 +6,18 @@
       <td class="bold text-center">New</td>
     </tr>
     <tr>
+      <td class="bold">Electrical Power</td>
+      <td class="text-center">{{fanAffinityLawResults?.currentPower | number:'1.0-2'}}
+        <span> kW</span>
+      </td>
+      <td class="text-center">
+        <span *ngIf="!modificationExists">&mdash;</span>
+        <span *ngIf="modificationExists">{{fanAffinityLawResults?.newPower | number:'1.0-2'}}
+          <span> kW</span>
+        </span>
+      </td>
+    </tr>
+    <tr>
       <td class="bold">Annual Energy Use</td>
       <td class="text-center">{{fanAffinityLawResults?.annualEnergyBaseline | number:'1.0-0'}}
         <span> kWh/yr</span>

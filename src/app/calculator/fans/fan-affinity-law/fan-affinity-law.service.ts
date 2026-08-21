@@ -114,9 +114,12 @@ export class FanAffinityLawService {
     } else {
       results = this.fanAffinityLawApiService.calculate(inputsCpy);
     }
+    results.currentPower = inputsCpy.hoursOperation > 0 ? results.annualEnergyBaseline / inputsCpy.hoursOperation : 0;
+    results.newPower = inputsCpy.hoursOperation > 0 ? results.annualEnergyNew / inputsCpy.hoursOperation : 0;
     if (!modificationExists) {
       results.annualEnergyNew = results.annualEnergyBaseline;
       results.annualCostSavings = 0;
+      results.newPower = results.currentPower;
     }
     return results;
   }

@@ -117,7 +117,7 @@ export class FanAffinityLawComponent implements OnInit {
     if (this.fanAffinityLawForm.valid) {
       this.fanAffinityLawResults = this.fanAffinityLawService.getResults(inputs, this.settings, this.modificationExists);
     } else {
-      this.fanAffinityLawResults = { annualEnergyBaseline: 0, annualEnergyNew: 0, annualCostSavings: 0 };
+      this.fanAffinityLawResults = { annualEnergyBaseline: 0, annualEnergyNew: 0, annualCostSavings: 0, currentPower: 0, newPower: 0 };
     }
     if (this.assessmentCalculator) {
       this.assessmentCalculator.affinityLawInputs = inputs;
