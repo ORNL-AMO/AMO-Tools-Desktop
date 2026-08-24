@@ -33,17 +33,6 @@
           </span>
         </div>
 
-        <div class="form-group">
-          <label class="small" for="motorControlTypeCurrent">Motor Control</label>
-          <div class="input-group">
-            <select class="form-control" name="motorControlTypeCurrent" id="motorControlTypeCurrent"
-              formControlName="motorControlTypeCurrent" (change)="onCurrentControlChange()"
-              (focus)="focusField('motorControlTypeCurrent')">
-              <option *ngFor="let option of currentMotorControlOptions" [ngValue]="option.value">{{option.display}}</option>
-            </select>
-          </div>
-        </div>
-
         <div class="form-group" *ngIf="fanAffinityLawForm.controls.motorControlTypeCurrent.value !== 0">
           <label class="small" for="actualFlow">Actual Flow</label>
           <div class="input-group">
@@ -88,7 +77,6 @@
     <ng-container *ngIf="!isBaseline">
       <div class="form-section">
         <div class="form-group">
-          <label class="small" for="motorControlTypeNew">Motor Control</label>
           <label class="small" for="motorControlTypeNew">Motor Control</label>
           <div class="input-group">
             <select class="form-control" name="motorControlTypeNew" id="motorControlTypeNew"
@@ -149,7 +137,6 @@
         </ng-container>
 
         <div class="form-group" *ngIf="fanAffinityLawForm.controls.changeFanSize.value">
-          <label class="small" for="diameterFanNew">Fan Diameter</label>
           <label class="small" for="diameterFanNew">Fan Diameter</label>
           <div class="input-group">
             <input class="form-control" type="number" name="diameterFanNew" id="diameterFanNew"

@@ -114,10 +114,11 @@ export class FanAffinityLawService {
     } else {
       results = this.fanAffinityLawApiService.calculate(inputsCpy);
     }
+    Object.assign(results, this.getIntermediateValues(inputsCpy, settings));
     if (!modificationExists) {
       results.annualEnergyNew = results.annualEnergyBaseline;
       results.annualCostSavings = 0;
-      results.newPower = results.currentPower;
+      results.newPower = results.baselinePower;
     }
     return results;
   }
@@ -159,7 +160,7 @@ export class FanAffinityLawService {
       values.desiredFlowPercent = desiredFlowPercent;
       values.desiredFlowVolume = this.convertFlowForDisplay(desiredFlowVolume, settings);
       values.newPower = baselinePower * Math.pow(desiredFlowPercent / 100, 3);
-    } else if (inputs.motorControlTypeNew === 1) {
+    } else if (!inputs.changeFanSize && inputs.motorControlTypeNew === 1) {
       // Two-Speed
       const timeFactor = this.get50PercentTimeFactor(desiredFlowPercent / 100);
       values.scenario = 'twoSpeed';
@@ -202,7 +203,9 @@ export class FanAffinityLawService {
       values.newFlowPercent = (desiredFlowVolume / newFanRatedFlow) * 100;
       values.newPower = baselinePower * timeFactor.factor * Math.pow(fanDiameterRatio, 5);
     } else {
+      // Nothing is being modified (New Motor Control is N/A and no fan size change), so New mirrors Current.
       values.scenario = 'none';
+      values.newPower = baselinePower;
     }
 
     return values;

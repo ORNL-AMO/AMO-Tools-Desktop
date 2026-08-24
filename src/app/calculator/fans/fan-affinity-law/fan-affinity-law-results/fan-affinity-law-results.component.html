@@ -23,7 +23,7 @@
       </td>
        <td class="text-center">
         <span *ngIf="!modificationExists">&mdash;</span>
-        <span *ngIf="modificationExists">{{fanAffinityLawResults?.desiredFlowPercent | number:'1.1-1'}}
+        <span *ngIf="modificationExists">{{flowPercentNew() | number:'1.1-1'}}
         <span> %</span>
         </span>
       </td>

@@ -54,8 +54,6 @@ export class FanAffinityLawApiService {
       annualEnergyBaseline: suiteOutput.annualEnergyBaseline,
       annualEnergyNew: suiteOutput.annualEnergyNew,
       annualCostSavings: suiteOutput.annualCostSavings,
-      currentPower: 0,
-      newPower: 0,
     };
   }
 

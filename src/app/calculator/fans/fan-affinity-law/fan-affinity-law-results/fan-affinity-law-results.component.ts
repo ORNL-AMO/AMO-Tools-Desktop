@@ -59,4 +59,14 @@ export class FanAffinityLawResultsComponent implements OnInit {
     return this.fanAffinityLawResults?.baselineTimeAbove50Percent !== undefined || this.showField('timeFactors');
   }
 
+  // desiredFlowPercent is only set for scenarios with a direct flow target (VSD/Two-Speed); a
+  // Change-Fan-Size-only modification has no such target, so its result is newFlowPercent instead,
+  // and when nothing is being modified ('none') New mirrors Current — same fallback order used for
+  // newPower in FanAffinityLawService.getIntermediateValues().
+  flowPercentNew(): number {
+    return this.fanAffinityLawResults?.desiredFlowPercent
+      ?? this.fanAffinityLawResults?.newFlowPercent
+      ?? this.fanAffinityLawResults?.baselineFlowPercent;
+  }
+
 }
