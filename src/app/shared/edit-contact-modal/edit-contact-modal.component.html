@@ -12,13 +12,19 @@
     <div class="form-group">
         <label class="small" for="editContactPhoneNumber">Phone Number</label>
         <input type="number" id="editContactPhoneNumber" class="form-control" formControlName="phoneNumber" />
+        @if (contactForm.controls.phoneNumber.invalid && !contactForm.controls.phoneNumber.pristine) {
+        <span class="alert-danger w-100 small py-1 px-2 d-block">Please enter a valid phone number</span>
+        }
     </div>
     <div class="form-group">
         <label class="small" for="editContactEmail">Email</label>
         <input type="email" id="editContactEmail" class="form-control" formControlName="email" />
+        @if (contactForm.controls.email.invalid && !contactForm.controls.email.pristine) {
+        <span class="alert-danger w-100 small py-1 px-2 d-block">Please enter a valid email address</span>
+        }
     </div>
 </div>
 <div class="modal-footer p-2">
     <button type="button" class="btn btn-secondary btn-sm mr-2" (click)="close(false)">Cancel</button>
-    <button type="button" class="btn btn-primary btn-sm" (click)="close(true)">Save</button>
+    <button type="button" class="btn btn-primary btn-sm" [disabled]="contactForm.invalid" (click)="close(true)">Save</button>
 </div>

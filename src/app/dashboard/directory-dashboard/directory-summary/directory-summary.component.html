@@ -82,6 +82,7 @@
                     </div>
                     <a class="pull-right click-link p-2" [class.disabled-link]="!selectedContact" (click)="openConfirmDeleteContactModal()">Delete Contact</a>
                     <a class="pull-right click-link p-2" [class.disabled-link]="!selectedContact" (click)="showEditContactInfoModal()">Edit Info</a>
+                    <a class="pull-right click-link p-2" (click)="showAddContactModal()">Add Contact</a>
                 </div>
                 <div class="p-0">
                     <label class="group-label">{{directory.name}} Settings</label>

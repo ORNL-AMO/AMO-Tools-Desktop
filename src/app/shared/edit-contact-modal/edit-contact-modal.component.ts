@@ -1,8 +1,9 @@
 import { Component, Inject, inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Contact } from '../models/settings';
 import { EditContactModalData } from './editContactModalData';
+import { PhoneNumberValidator } from '../validators/phone-number';
 
 @Component({
     selector: 'app-edit-contact-modal',
@@ -18,13 +19,16 @@ export class EditContactModalComponent {
   constructor(@Inject(DIALOG_DATA) public editContactData: EditContactModalData) {
     this.contactForm = this.formBuilder.group({
       contactName: [this.editContactData.contact?.contactName],
-      phoneNumber: [this.editContactData.contact?.phoneNumber],
-      email: [this.editContactData.contact?.email],
+      phoneNumber: [this.editContactData.contact?.phoneNumber, [PhoneNumberValidator.phoneNumber()]],
+      email: [this.editContactData.contact?.email, [Validators.email]],
     });
   }
 
   close(shouldSave: boolean) {
     if (shouldSave) {
+      if (this.contactForm.invalid) {
+        return;
+      }
       this.dialogRef.close({
         contactName: this.contactForm.controls.contactName.value,
         phoneNumber: this.contactForm.controls.phoneNumber.value,

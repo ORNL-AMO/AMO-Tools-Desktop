@@ -119,6 +119,28 @@ export class DirectorySummaryComponent implements OnInit {
     this.showConfirmDeleteContactModal = false;
   }
 
+  showAddContactModal() {
+    let editContactModalData: EditContactModalData = {
+      modalTitle: 'Add Contact',
+    };
+    this.modalDialogService.openModal<Contact, EditContactModalData, EditContactModalComponent>(
+      EditContactModalComponent,
+      {
+        width: '500px',
+        data: editContactModalData,
+      },
+    ).closed.subscribe((contact) => {
+      this.onAddContactClose(contact);
+    });
+  }
+
+  async onAddContactClose(contact: Contact) {
+    if (contact) {
+      await this.contactDbService.saveIfNew(contact);
+      this.savedContacts = this.contactDbService.allContacts;
+    }
+  }
+
   showEditContactInfoModal() {
     if (!this.selectedContact) return;
     let editContactModalData: EditContactModalData = {

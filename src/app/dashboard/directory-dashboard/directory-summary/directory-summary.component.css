@@ -60,6 +60,10 @@ td, a{
   cursor: pointer;
 }
 
+.selectable-row:hover{
+  background: #efefef;
+}
+
 .selected-item{
   border: 2px solid;
 }
