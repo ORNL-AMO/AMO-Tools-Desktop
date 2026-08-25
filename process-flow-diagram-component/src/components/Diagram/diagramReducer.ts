@@ -4,7 +4,7 @@ import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange,
 import { CSSProperties } from 'react';
 import { FormikErrors } from 'formik';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection } from 'process-flow-lib';
+import { ComponentManageDataTabs, ConvertValueFn, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramSettings, FlowDiagramData, FlowErrors, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeErrors, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
@@ -498,18 +498,20 @@ const setPaletteColorsReducer = (state: DiagramState, action: PayloadAction<stri
 
 export interface UnitsOfMeasureChangePayload {
   newUnits: string;
-  nodes: Node[];
-  edges: Edge[];
-  calculatedData: DiagramCalculatedData;
+  convertValueFn?: ConvertValueFn;
 }
 
-// Conversion happens in MenuSidebar's onChange (using the injected ConvertValueFn) before
-// dispatch - keeps functions out of Redux state/actions.
+// convertValueFn is passed through the action but never stored in state - it's only used
+// here to convert the current nodes/edges/calculatedData to the newly selected units.
 const unitsOfMeasureChangeReducer = (state: DiagramState, action: PayloadAction<UnitsOfMeasureChangePayload>) => {
-  state.settings.unitsOfMeasure = action.payload.newUnits;
-  state.nodes = action.payload.nodes as Node[];
-  state.edges = action.payload.edges as Edge[];
-  state.calculatedData = action.payload.calculatedData;
+  const { newUnits, convertValueFn } = action.payload;
+  const convertedDiagramData = { nodes: state.nodes as Node[], edges: state.edges as Edge[], calculatedData: state.calculatedData };
+  convertFlowDiagramData(convertedDiagramData, newUnits, convertValueFn);
+
+  state.settings.unitsOfMeasure = newUnits;
+  state.nodes = convertedDiagramData.nodes;
+  state.edges = convertedDiagramData.edges;
+  state.calculatedData = convertedDiagramData.calculatedData;
 };
 
 const flowDecimalPrecisionChangeReducer = (state: DiagramState, action: PayloadAction<string>) => {
