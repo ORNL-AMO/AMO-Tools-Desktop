@@ -103,7 +103,6 @@ import { PsatReportAdapter } from './psat-report/psat-report.adapter';
     FormsModule,
     ReactiveFormsModule,
     ModalModule.forRoot(),
-    TypeaheadModule.forRoot(),
     SettingsModule,
     HelpPanelModule,
     SpecificSpeedModule,

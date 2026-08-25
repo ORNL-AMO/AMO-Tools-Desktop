@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, AfterViewInit, Output, ViewChild } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Contact } from '../models/settings';
 import { EditContactModalData } from './editContactModalData';
 
@@ -10,18 +10,12 @@ import { EditContactModalData } from './editContactModalData';
     styleUrls: ['./edit-contact-modal.component.css'],
     standalone: false
 })
-export class EditContactModalComponent implements OnInit, AfterViewInit {
-  @Input()
-  editContactData: EditContactModalData;
-  @Output('emitContact')
-  emitContact = new EventEmitter<Contact | undefined>();
-  @ViewChild('editContactModal', { static: false }) public editContactModal: ModalDirective;
-
+export class EditContactModalComponent {
+  private formBuilder = inject(UntypedFormBuilder);
+  dialogRef = inject<DialogRef<Contact>>(DialogRef<Contact>);
   contactForm: UntypedFormGroup;
 
-  constructor(private formBuilder: UntypedFormBuilder) { }
-
-  ngOnInit() {
+  constructor(@Inject(DIALOG_DATA) public editContactData: EditContactModalData) {
     this.contactForm = this.formBuilder.group({
       contactName: [this.editContactData.contact?.contactName],
       phoneNumber: [this.editContactData.contact?.phoneNumber],
@@ -29,20 +23,15 @@ export class EditContactModalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    this.editContactModal.show();
-  }
-
   close(shouldSave: boolean) {
-    this.editContactModal.hide();
     if (shouldSave) {
-      this.emitContact.emit({
+      this.dialogRef.close({
         contactName: this.contactForm.controls.contactName.value,
         phoneNumber: this.contactForm.controls.phoneNumber.value,
         email: this.contactForm.controls.email.value,
       });
     } else {
-      this.emitContact.emit(undefined);
+      this.dialogRef.close();
     }
   }
 }

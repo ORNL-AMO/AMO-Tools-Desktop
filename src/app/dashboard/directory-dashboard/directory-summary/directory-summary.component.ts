@@ -32,6 +32,8 @@ import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savi
 import { ContactDbService, SavedContact } from '../../../indexedDb/contact-db.service';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { EditContactModalData } from '../../../shared/edit-contact-modal/editContactModalData';
+import { EditContactModalComponent } from '../../../shared/edit-contact-modal/edit-contact-modal.component';
+import { ModalDialogService } from '../../../shared/modal-dialog.service';
 
 @Component({
   selector: 'app-directory-summary',
@@ -62,8 +64,6 @@ export class DirectorySummaryComponent implements OnInit {
   selectedContact: SavedContact;
   showConfirmDeleteContactModal: boolean = false;
   confirmDeleteContactData: ConfirmDeleteData;
-  showEditContactModal: boolean = false;
-  editContactModalData: EditContactModalData;
   constructor(private directoryDashboardService: DirectoryDashboardService, private directoryDbService: DirectoryDbService,
     private dashboardService: DashboardService, private settingsDbService: SettingsDbService, private psatService: PsatService,
     private executiveSummaryService: ExecutiveSummaryService, private convertUnitsService: ConvertUnitsService, private fsatService: FsatService,
@@ -71,7 +71,8 @@ export class DirectorySummaryComponent implements OnInit {
     private wasteWaterService: WasteWaterService,
     private compressedAirCalculationService: CompressedAirCalculationService,
     private assessmentCo2SavingsService: AssessmentCo2SavingsService,
-    private contactDbService: ContactDbService
+    private contactDbService: ContactDbService,
+    private modalDialogService: ModalDialogService
   ) { }
 
   ngOnInit() {
@@ -120,11 +121,19 @@ export class DirectorySummaryComponent implements OnInit {
 
   showEditContactInfoModal() {
     if (!this.selectedContact) return;
-    this.editContactModalData = {
+    let editContactModalData: EditContactModalData = {
       modalTitle: 'Edit Contact Info',
       contact: this.selectedContact
     };
-    this.showEditContactModal = true;
+    this.modalDialogService.openModal<Contact, EditContactModalData, EditContactModalComponent>(
+      EditContactModalComponent,
+      {
+        width: '500px',
+        data: editContactModalData,
+      },
+    ).closed.subscribe((contact) => {
+      this.onEditContactClose(contact);
+    });
   }
 
   async onEditContactClose(contact: Contact) {
@@ -135,7 +144,6 @@ export class DirectorySummaryComponent implements OnInit {
       this.savedContacts = this.contactDbService.allContacts;
       this.selectedContact = updatedContact;
     }
-    this.showEditContactModal = false;
   }
 
   calculateSummary() {

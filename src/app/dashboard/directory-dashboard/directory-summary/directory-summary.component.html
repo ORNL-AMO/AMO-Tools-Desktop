@@ -69,13 +69,15 @@
                                 <td class="bold">Phone</td>
                                 <td class="bold">Email</td>
                             </tr>
-                            <tr *ngFor="let contact of savedContacts" class="selectable-row"
+                            @for(contact of savedContacts; track contact.id) {
+                            <tr class="selectable-row"
                                 [ngClass]="{'selected-item': selectedContact?.id === contact.id}"
                                 (click)="selectContact(contact)">
                                 <td>{{contact.contactName}}</td>
                                 <td>{{contact.phoneNumber | phone}}</td>
                                 <td>{{contact.email}}</td>
                             </tr>
+                            }
                         </table>
                     </div>
                     <a class="pull-right click-link p-2" [class.disabled-link]="!selectedContact" (click)="openConfirmDeleteContactModal()">Delete Contact</a>
@@ -134,9 +136,6 @@
         </div>
     </div>
 </div>
-
-<app-edit-contact-modal *ngIf="showEditContactModal" [editContactData]="editContactModalData"
-    (emitContact)="onEditContactClose($event)"></app-edit-contact-modal>
 
 <app-confirm-delete-modal *ngIf="showConfirmDeleteContactModal" [confirmDeleteData]="confirmDeleteContactData"
     (emitShouldDelete)="onConfirmDeleteContactClose($event)"></app-confirm-delete-modal>

@@ -53,7 +53,7 @@ export class EmailMeasurDataService {
       }
 
       this.measurEmailData = {
-        emailTo: measurEmailForm.controls.emailTo.value?.replace(/[,\s]+$/, ''),
+        emailTo: measurEmailForm.controls.emailTo.value?.replace(/[,\s]+$/, ''), // adds a comma and space after each autofilled email.
         emailSender: measurEmailForm.controls.emailSender.value,
         fileName: measurEmailForm.controls.emailAttachmentName.value,
         attachment: attachmentExportData,
