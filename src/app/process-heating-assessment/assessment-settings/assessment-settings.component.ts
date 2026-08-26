@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, concatMap, debounceTime, EMPTY, firstValueFrom, from } from 'rxjs';
-import { PHAST } from '../../shared/models/phast/phast';
+import { PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';

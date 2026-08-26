@@ -1,4 +1,4 @@
-import { PHAST } from '../../shared/models/phast/phast';
+import { PHAST } from '../models/phast';
 import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
 import { getEffectivePhast } from './scenario-merge.util';
 

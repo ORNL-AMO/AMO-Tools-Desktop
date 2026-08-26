@@ -1,4 +1,4 @@
-import { Losses, PHAST } from '../../shared/models/phast/phast';
+import { Losses, PHAST } from '../models/phast';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
 import { ProcessHeatingModification } from '../models/modification';
 

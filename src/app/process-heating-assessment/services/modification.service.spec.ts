@@ -1,6 +1,6 @@
 import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { PHAST } from '../../shared/models/phast/phast';
+import { PHAST } from '../models/phast';
 import { ScenarioOverrides, ProcessHeatingModification } from '../models/modification';
 import { ModificationService } from './modification.service';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';

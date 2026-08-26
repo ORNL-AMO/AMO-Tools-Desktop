@@ -2,7 +2,7 @@ import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@a
 import { BehaviorSubject, debounceTime, firstValueFrom, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Assessment } from '../../shared/models/assessment';
-import { PHAST } from '../../shared/models/phast/phast';
+import { PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';

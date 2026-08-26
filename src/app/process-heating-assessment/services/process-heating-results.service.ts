@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { PHAST, PhastResults } from '../../shared/models/phast/phast';
+import { PHAST, PhastResults } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { PhastResultsService } from '../../phast/phast-results.service';
 

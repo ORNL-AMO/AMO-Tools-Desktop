@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { getNewIdString } from '../../shared/helperFunctions';
-import { Modification } from '../../shared/models/phast/phast';
+import { Modification } from '../models/phast';
 import { ProcessHeatingModification } from '../models/modification';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';

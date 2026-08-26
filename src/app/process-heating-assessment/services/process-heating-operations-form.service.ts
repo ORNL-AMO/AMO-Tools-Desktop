@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { PHAST } from '../../shared/models/phast/phast';
+import { PHAST } from '../models/phast';
 import { HeatingEquipmentConfiguration } from '../models/views';
 import { deriveHeatingSystemEnergyType } from './process-heating-assessment.service';
 

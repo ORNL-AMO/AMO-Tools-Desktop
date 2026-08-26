@@ -1,4 +1,4 @@
-import { Modification, PHAST } from '../../shared/models/phast/phast';
+import { Modification, PHAST } from './phast';
 
 // The set of fields a modification is allowed to override on baseline. Excludes `modifications`
 // and `selectedModificationId`: a modification's own overrides never carry a nested modification list
