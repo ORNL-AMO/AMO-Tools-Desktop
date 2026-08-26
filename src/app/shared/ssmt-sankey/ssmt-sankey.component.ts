@@ -61,30 +61,41 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     ) { }
 
   ngOnInit(){
-    if (this.ssmt.setupDone) {
+    if (this.canCalculateSankey()) {
       this.getLosses();
       this.initSankeySetup();
+    } else if (!this.isBaseline) {
+      this.results = undefined;
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ssmt && !changes.ssmt.firstChange) {
-      if (this.ssmt.setupDone) {
+      if (this.canCalculateSankey()) {
         this.getLosses();
         this.initSankeySetup();
         this.renderSankey();
+      } else if (!this.isBaseline) {
+        this.results = undefined;
       }
     }
     if (changes.labelStyle && !changes.labelStyle.firstChange) {
-      if (this.ssmt.setupDone) {
+      if (this.canCalculateSankey()) {
         this.initSankeySetup();
         this.renderSankey();
       }
     }
   }
-  
   ngAfterViewInit() {
     this.renderSankey();
+  }
+
+  canCalculateSankey(): boolean {
+    if (this.isBaseline) {
+      return this.ssmt.setupDone;
+    }
+    this.ssmt.valid = this.ssmtService.checkValid(this.ssmt, this.settings);
+    return this.ssmt.valid.isValid;
   }
 
   getLosses() {

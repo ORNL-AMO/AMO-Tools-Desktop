@@ -5,13 +5,13 @@
     <div #header class="w-100 hide-print sticky-top" id="psatBanner">
       <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
       @if (mainTab == 'assessment' || mainTab == 'calculators' || mainTab == 'baseline') {
-        <div class="hide-print" id="psatTabs"
-          >
+        <div class="hide-print" id="psatTabs">
           <app-psat-tabs [settings]="settings" [psat]="_psat"></app-psat-tabs>
         </div>
       }
     </div>
     <!--end header-->
+
     @if (mainTab == 'baseline') {
       <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
         <div class="nav-item" (click)="setSmallScreenTab('form')"
@@ -43,6 +43,7 @@
         </div>
       </div>
     }
+
     <!--baseline-->
     @if (mainTab == 'baseline') {
       <div class="assessment-container tab-content">
@@ -51,7 +52,7 @@
           @if (stepTab == 'baseline') {
             <app-system-basics [settings]="settings" [assessmentPsat]="assessment.psat" [assessment]="assessment" (updateSettings)="getSettings($event)"
               (updateAssessment)="savePsat($event)" (openModal)="modalOpen()" (closeModal)="modalClose()"
-            (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
+              (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
             @if (!hasConnectedMotorItem) {
               <app-integrate-pump-inventory
                 [(assessment)]="assessment"
@@ -64,34 +65,34 @@
           }
           @if (stepTab == 'operations') {
             <app-pump-operations [(psat)]="_psat" (saved)="save()" [selected]="true"
-            [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
+              [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-pump-operations>
           }
           @if (stepTab == 'pump-fluid') {
             <app-pump-fluid [(psat)]="_psat" (saved)="save()" [selected]="true"
-            [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
+              [settings]="settings" [baseline]="true" [inSetup]="true"></app-pump-fluid>
           }
           @if (stepTab == 'motor') {
             <app-motor [(assessment)]="assessment" [(psat)]="_psat" (saved)="save()" [selected]="true" [settings]="settings"
-            [baseline]="true" [inSetup]="true"></app-motor>
+              [baseline]="true" [inSetup]="true"></app-motor>
           }
           @if (stepTab == 'field-data') {
             <app-field-data [(psat)]="_psat" (saved)="save()" [selected]="true"
-            [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
+              [settings]="settings" [baseline]="true" [inSetup]="true" [assessment]="assessment"></app-field-data>
           }
         </div>
         <div class="assessment-panel-container scroll-item" [ngStyle]="{'height.px': containerHeight}"
           [ngClass]="{'pl-0': stepTab == 'field-data', 'small-screen-tab': smallScreenTab === 'details'}">
           <app-help-panel [psat]="_psat" [settings]="settings" [modificationIndex]="modificationIndex"
             [currentTab]="stepTab" [inSetup]="true" [containerHeight]="containerHeight"
-          [showResults]="stepTab == 'field-data'"></app-help-panel>
+            [showResults]="stepTab == 'field-data'"></app-help-panel>
         </div>
       </div>
     }
     <!--End baseline-->
+
     <!--assessment tab-->
     @if (mainTab == 'assessment' && !modificationModalOpen && (currentTab == 'explore-opportunities' || currentTab == 'modify-conditions')) {
-      <div class="assessment-tab-container tab-content"
-        [ngStyle]="{'height.px': containerHeight}">
+      <div class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
         <!--Explore opportunities-->
         @if (currentTab == 'explore-opportunities') {
           <app-explore-opportunities [assessment]="assessment"
@@ -103,33 +104,34 @@
         @if (currentTab == 'modify-conditions') {
           <app-modify-conditions [assessment]="assessment" [settings]="settings"
             [(psat)]="_psat" (saved)="save()" [modificationIndex]="modificationIndex"
-          [modificationExists]="modificationExists" [containerHeight]="containerHeight"></app-modify-conditions>
+            [modificationExists]="modificationExists" [containerHeight]="containerHeight"></app-modify-conditions>
         }
       </div>
     }
     <!--end assessment-->
+
     <!--calculators tab-->
     @if (mainTab == 'calculators') {
       <div class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
         @if (calcTab == 'achievable-efficiency') {
           <app-achievable-efficiency [inPsat]="true" [settings]="settings"
-          [psat]="_psat"></app-achievable-efficiency>
+            [psat]="_psat"></app-achievable-efficiency>
         }
         @if (calcTab == 'motor-performance') {
           <app-motor-performance [inAssessment]="true" [assessment]="assessment"
-          [psat]="_psat" [settings]="settings"></app-motor-performance>
+            [psat]="_psat" [settings]="settings"></app-motor-performance>
         }
         @if (calcTab == 'nema-energy-efficiency') {
           <app-nema-energy-efficiency [inAssessment]="true"
-          [assessment]="assessment" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
+            [assessment]="assessment" [psat]="_psat" [settings]="settings"></app-nema-energy-efficiency>
         }
         @if (calcTab == 'specific-speed') {
           <app-specific-speed [settings]="settings" [inAssessment]="true"
-          [assessment]="assessment" [psat]="_psat"></app-specific-speed>
+            [assessment]="assessment" [psat]="_psat"></app-specific-speed>
         }
         @if (calcTab == 'pump-curve') {
           <app-system-and-equipment-curve [settings]="settings" [equipmentType]="'pump'"
-          [assessment]="assessment"></app-system-and-equipment-curve>
+            [assessment]="assessment"></app-system-and-equipment-curve>
         }
         @if (calcTab == 'convert-units') {
           <app-unit-converter [inAssessment]="true"></app-unit-converter>
@@ -137,58 +139,59 @@
       </div>
     }
     <!--end calculators-->
+
     <!--Diagram-->
-    @if (mainTab =='diagram') {
+    @if (mainTab == 'diagram') {
       <div class="assessment-tab-container tab-content">
         <app-psat-diagram [psat]="_psat" [settings]="settings"></app-psat-diagram>
       </div>
     }
     <!--end diagram-->
+
     <!-- sankey -->
     <!--TODO: Move sankey selecting logic to sankey component-->
     @if (mainTab == 'sankey') {
-      <div class="mx-auto d-flex flex-column scroll-item w-100"
-        [ngStyle]="{'height.px': containerHeight}">
+      <div class="mx-auto d-flex flex-column scroll-item w-100" [ngStyle]="{'height.px': containerHeight}">
         <nav class="navbar phast">
           @if (showSankeyLabelOptions) {
             <div class="d-flex justify-content-start align-items-center w-100 flex-wrap">
               <div class="tab-content pl-2 pr-2">
-                @if (psatOptionsLength > 1) {
-                  <div class="form-group">
-                    <select name="psatSelect" class="form-control mx-auto mt-0 w-100" id="psatSelect" [(ngModel)]="psat1">
-                      @for (psat of psatOptions; track psat) {
-                        <option [ngValue]="psat">{{psat.name}}</option>
-                      }
-                    </select>
-                  </div>
-                }
+                <div class="form-group">
+                  <select name="psatSelect" class="form-control mx-auto mt-0 w-100" id="psatSelect" [(ngModel)]="psat1">
+                    @for (psat of psatOptions; track $index) {
+                      <option [ngValue]="psat">{{psat.name}}</option>
+                    }
+                  </select>
+                </div>
               </div>
               <div class="btn-group btn-group-sm align-self-center">
                 <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
-                [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+                  [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
                 <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
-                [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
+                  [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
                 <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
-                [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+                  [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
               </div>
             </div>
           }
         </nav>
         <div class="sankey-padding w-100">
           <app-psat-sankey [psat]="psat1.psat" [labelStyle]="sankeyLabelStyle" [appBackground]="true" [settings]="settings"
-          [isBaseline]="psat1.psat.name == 'Baseline'"></app-psat-sankey>
+            [isBaseline]="psat1.psat.name == 'Baseline'"></app-psat-sankey>
         </div>
       </div>
     }
     <!--end sankey-->
+
     <!--report-->
     @if (mainTab == 'report') {
       <div class="assessment-tab-container report-container mx-0">
         <app-psat-report [settings]="settings" [assessment]="assessment" [inPsat]="true" (closeReport)="closeReport()"
-        [containerHeight]="containerHeight"></app-psat-report>
+          [containerHeight]="containerHeight"></app-psat-report>
       </div>
     }
     <!--end report-->
+
     <!--footer-->
     @if (mainTab == 'baseline' || mainTab == 'assessment') {
       <div #footer id="psatFooter" class="footer hide-print d-none d-lg-block">
@@ -218,8 +221,7 @@
 <!--change/manage modify conditions modals-->
 @if (_psat && _psat.modifications) {
   <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-    aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"
-    >
+    aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
     <div class="modal-dialog modal-lg list-modal modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
@@ -231,7 +233,7 @@
         <div class="modal-body">
           @if (modListOpen) {
             <app-modification-list [psat]="_psat" (save)="save()" [settings]="settings"
-            [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
+              [modificationIndex]="modificationIndex" (close)="closeSelectModification()"></app-modification-list>
           }
         </div>
       </div>
@@ -255,7 +257,7 @@
         <div class="modal-body">
           @if (showAdd) {
             <app-add-modification [psat]="_psat" [modifications]="_psat.modifications"
-            (save)="saveNewMod($event)" [settings]="settings"></app-add-modification>
+              (save)="saveNewMod($event)" [settings]="settings"></app-add-modification>
           }
         </div>
       </div>
@@ -266,9 +268,8 @@
 
 @if (showUpdateUnitsModal) {
   <app-update-units-modal (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'psat'"
-  (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+    (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
 }
-
 
 @if (showWelcomeScreen) {
   <app-welcome-screen (emitClose)="closeWelcomeScreen()"></app-welcome-screen>

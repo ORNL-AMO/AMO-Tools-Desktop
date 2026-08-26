@@ -13,12 +13,11 @@ function makeValid(overrides: Partial<PsatValid> = {}): PsatValid {
   return { isValid: true, pumpFluidValid: true, motorValid: true, fieldDataValid: true, ...overrides };
 }
 
-function makePsat(name: string, annualCost: number, validOverrides: Partial<PsatValid> = {}, modifications: Modification[] = []): PSAT {
+function makePsat(name: string, annualCost: number, validOverrides: Partial<PsatValid> = {}): PSAT {
   return {
     name,
     outputs: { annual_cost: annualCost },
     valid: makeValid(validOverrides),
-    modifications,
   } as PSAT;
 }
 
@@ -53,148 +52,192 @@ describe('PsatReportSankeyComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('sets psat1 to the assessment baseline and marks it as the baseline selection', () => {
+    it('builds a single scenario for the baseline when there are no modifications', () => {
       const baseline = makePsat('Baseline', 1000);
       component.assessment = makeAssessment(baseline);
       fixture.detectChanges();
 
-      expect(component.psat1).toBe(baseline);
-      expect(component.psat1Baseline).toBeTrue();
-      expect(component.psat1CostSavings).toBe(0);
+      expect(component.psatOptions).toEqual([{ name: 'Baseline', value: baseline }]);
+      expect(component.sankeyScenarios).toEqual([{ scenario: baseline, costSavings: 0, isBaseline: true }]);
     });
 
-    it('does not set psat2 when there are no modifications', () => {
-      component.assessment = makeAssessment(makePsat('Baseline', 1000));
+    it('treats a missing modifications array as no modifications', () => {
+      const baseline = makePsat('Baseline', 1000);
+      baseline.modifications = undefined;
+      component.assessment = makeAssessment(baseline);
       fixture.detectChanges();
 
-      expect(component.psat2).toBeUndefined();
+      expect(component.psatOptions.length).toBe(1);
+      expect(component.sankeyScenarios.length).toBe(1);
     });
 
-    it('sets psat2 to the first valid modification and computes its cost savings', () => {
+    it('adds a scenario and option for each modification, in order', () => {
+      const baseline = makePsat('Baseline', 1000);
+      const modA = makePsat('Mod A', 800);
+      const modB = makePsat('Mod B', 900);
+      baseline.modifications = [makeModification(modA, 'mod-1'), makeModification(modB, 'mod-2')];
+      component.assessment = makeAssessment(baseline);
+      fixture.detectChanges();
+
+      expect(component.psatOptions).toEqual([
+        { name: 'Baseline', value: baseline },
+        { name: 'Mod A', value: modA },
+        { name: 'Mod B', value: modB },
+      ]);
+      expect(component.sankeyScenarios.map(s => s.scenario)).toEqual([baseline, modA, modB]);
+    });
+
+    it('marks only the assessment baseline psat as the baseline scenario', () => {
       const baseline = makePsat('Baseline', 1000);
       const modPsat = makePsat('Mod A', 800);
       baseline.modifications = [makeModification(modPsat)];
       component.assessment = makeAssessment(baseline);
       fixture.detectChanges();
 
-      expect(component.psat2).toBe(modPsat);
-      expect(component.psat2Baseline).toBeFalse();
-      expect(component.psat2CostSavings).toBe(200);
+      expect(component.sankeyScenarios[0].isBaseline).toBeTrue();
+      expect(component.sankeyScenarios[1].isBaseline).toBeFalse();
     });
 
-    it('skips invalid modifications when selecting the first valid one for psat2', () => {
+    it('computes cost savings for a valid modification relative to the baseline', () => {
+      const baseline = makePsat('Baseline', 1000);
+      const modPsat = makePsat('Mod A', 800);
+      baseline.modifications = [makeModification(modPsat)];
+      component.assessment = makeAssessment(baseline);
+      fixture.detectChanges();
+
+      expect(component.sankeyScenarios[1].costSavings).toBe(200);
+    });
+
+    it('includes invalid modifications as their own scenario with undefined cost savings', () => {
       const baseline = makePsat('Baseline', 1000);
       const invalidMod = makePsat('Invalid Mod', 900, { isValid: false });
-      const validMod = makePsat('Valid Mod', 700);
-      baseline.modifications = [makeModification(invalidMod, 'mod-1'), makeModification(validMod, 'mod-2')];
+      baseline.modifications = [makeModification(invalidMod)];
       component.assessment = makeAssessment(baseline);
       fixture.detectChanges();
 
-      expect(component.psat2).toBe(validMod);
+      expect(component.sankeyScenarios.length).toBe(2);
+      expect(component.sankeyScenarios[1].scenario).toBe(invalidMod);
+      expect(component.sankeyScenarios[1].costSavings).toBeUndefined();
     });
   });
 
-  describe('setPsat1', () => {
-    it('marks psat1 as the baseline when its name matches the assessment baseline name', () => {
-      const baseline = makePsat('Baseline', 1000);
-      component.assessment = makeAssessment(baseline);
-      fixture.detectChanges();
-
-      component.psat1 = makePsat('Baseline', 1000);
-      component.setPsat1();
-
-      expect(component.psat1Baseline).toBeTrue();
-      expect(component.psat1CostSavings).toBe(0);
-    });
-
-    it('marks psat1 as not the baseline and computes cost savings when a different psat is selected', () => {
-      const baseline = makePsat('Baseline', 1000);
-      component.assessment = makeAssessment(baseline);
-      fixture.detectChanges();
-
-      component.psat1 = makePsat('Mod A', 850);
-      component.setPsat1();
-
-      expect(component.psat1Baseline).toBeFalse();
-      expect(component.psat1CostSavings).toBe(150);
-    });
-  });
-
-  describe('setPsat2', () => {
-    it('marks psat2 as not the baseline and computes cost savings when a modification is selected', () => {
-      const baseline = makePsat('Baseline', 1000);
-      component.assessment = makeAssessment(baseline);
-      fixture.detectChanges();
-
-      component.psat2 = makePsat('Mod B', 600);
-      component.setPsat2();
-
-      expect(component.psat2Baseline).toBeFalse();
-      expect(component.psat2CostSavings).toBe(400);
-    });
-
-    it('marks psat2 as the baseline when the baseline itself is selected', () => {
-      const baseline = makePsat('Baseline', 1000);
-      component.assessment = makeAssessment(baseline);
-      fixture.detectChanges();
-
-      component.psat2 = baseline;
-      component.setPsat2();
-
-      expect(component.psat2Baseline).toBeTrue();
-      expect(component.psat2CostSavings).toBe(0);
-    });
-  });
-
-  describe('template visibility', () => {
-    it('shows the cost savings text for psat1 when it is valid', () => {
+  describe('getCostSavings', () => {
+    it('returns the annual cost difference from the baseline when the selected psat is valid', () => {
       component.assessment = makeAssessment(makePsat('Baseline', 1000));
       fixture.detectChanges();
-      expect(fixture.nativeElement.textContent).toContain('Cost Savings');
+
+      expect(component.getCostSavings(makePsat('Mod A', 850))).toBe(150);
     });
 
-    it('hides the cost savings text for psat1 when it is invalid', () => {
-      component.assessment = makeAssessment(makePsat('Baseline', 1000, { isValid: false }));
-      fixture.detectChanges();
-      expect(fixture.nativeElement.textContent).not.toContain('Cost Savings');
-    });
-
-    it('hides the entire second sankey row when there is no psat2', () => {
+    it('returns undefined when the selected psat is invalid', () => {
       component.assessment = makeAssessment(makePsat('Baseline', 1000));
       fixture.detectChanges();
-      expect(fixture.nativeElement.querySelector('#psatSelect2')).toBeNull();
+
+      expect(component.getCostSavings(makePsat('Invalid Mod', 850, { isValid: false }))).toBeUndefined();
     });
 
-    it('shows the second sankey row when psat2 is set', () => {
-      const baseline = makePsat('Baseline', 1000);
-      baseline.modifications = [makeModification(makePsat('Mod A', 800))];
-      component.assessment = makeAssessment(baseline);
+    it('returns undefined when the selected psat has no outputs', () => {
+      component.assessment = makeAssessment(makePsat('Baseline', 1000));
       fixture.detectChanges();
-      expect(fixture.nativeElement.querySelector('#psatSelect2')).not.toBeNull();
+
+      const noOutputsPsat = makePsat('No Outputs', 850);
+      noOutputsPsat.outputs = undefined;
+      expect(component.getCostSavings(noOutputsPsat)).toBeUndefined();
     });
 
-    it('shows the cost savings text for psat2 when it is valid', () => {
+    it('returns undefined when the assessment baseline has no outputs', () => {
       const baseline = makePsat('Baseline', 1000);
-      baseline.modifications = [makeModification(makePsat('Mod A', 800))];
-      component.assessment = makeAssessment(baseline);
-      fixture.detectChanges();
-      const secondRow = fixture.nativeElement.querySelector('#psatSelect2').closest('.d-flex');
-      expect(secondRow.textContent).toContain('Cost Savings');
-    });
-
-    it('hides the cost savings text for psat2 when it is invalid', () => {
-      const baseline = makePsat('Baseline', 1000);
-      const invalidMod = makePsat('Invalid Mod', 900, { isValid: false });
-      const validMod = makePsat('Valid Mod', 700);
-      baseline.modifications = [makeModification(invalidMod, 'mod-1'), makeModification(validMod, 'mod-2')];
+      baseline.outputs = undefined;
       component.assessment = makeAssessment(baseline);
       fixture.detectChanges();
 
-      component.psat2 = invalidMod;
+      expect(component.getCostSavings(makePsat('Mod A', 850))).toBeUndefined();
+    });
+  });
+
+  describe('setPsat', () => {
+    it('updates the scenario, baseline flag, and cost savings to the newly selected psat', () => {
+      const baseline = makePsat('Baseline', 1000);
+      const modA = makePsat('Mod A', 800);
+      baseline.modifications = [makeModification(modA)];
+      component.assessment = makeAssessment(baseline);
       fixture.detectChanges();
 
-      const secondRow = fixture.nativeElement.querySelector('#psatSelect2').closest('.d-flex');
-      expect(secondRow.textContent).not.toContain('Cost Savings');
+      const scenario = component.sankeyScenarios[0];
+      const modB = makePsat('Mod B', 600);
+      component.setPsat(scenario, modB);
+
+      expect(scenario.scenario).toBe(modB);
+      expect(scenario.isBaseline).toBeFalse();
+      expect(scenario.costSavings).toBe(400);
+    });
+
+    it('marks the scenario as the baseline when the baseline itself is selected', () => {
+      const baseline = makePsat('Baseline', 1000);
+      const modA = makePsat('Mod A', 800);
+      baseline.modifications = [makeModification(modA)];
+      component.assessment = makeAssessment(baseline);
+      fixture.detectChanges();
+
+      const scenario = component.sankeyScenarios[1];
+      component.setPsat(scenario, baseline);
+
+      expect(scenario.isBaseline).toBeTrue();
+      expect(scenario.costSavings).toBe(0);
+    });
+
+    it('sets cost savings to undefined when the newly selected psat is invalid', () => {
+      const baseline = makePsat('Baseline', 1000);
+      component.assessment = makeAssessment(baseline);
+      fixture.detectChanges();
+
+      const scenario = component.sankeyScenarios[0];
+      component.setPsat(scenario, makePsat('Invalid Mod', 900, { isValid: false }));
+
+      expect(scenario.costSavings).toBeUndefined();
+    });
+  });
+
+  describe('template', () => {
+    it('renders one scenario picker per sankey scenario', () => {
+      const baseline = makePsat('Baseline', 1000);
+      baseline.modifications = [makeModification(makePsat('Mod A', 800)), makeModification(makePsat('Mod B', 900))];
+      component.assessment = makeAssessment(baseline);
+      fixture.detectChanges();
+
+      const pickers = fixture.nativeElement.querySelectorAll('app-sankey-scenario-picker');
+      expect(pickers.length).toBe(3);
+    });
+
+    it('passes the shared psatOptions and per-scenario selection and cost savings to each picker', () => {
+      const baseline = makePsat('Baseline', 1000);
+      const modPsat = makePsat('Mod A', 800);
+      baseline.modifications = [makeModification(modPsat)];
+      component.assessment = makeAssessment(baseline);
+      fixture.detectChanges();
+
+      const pickers = fixture.nativeElement.querySelectorAll('app-sankey-scenario-picker');
+      expect(pickers[0].options).toBe(component.psatOptions);
+      expect(pickers[0].selected).toBe(baseline);
+      expect(pickers[0].costSavings).toBe(0);
+      expect(pickers[1].selected).toBe(modPsat);
+      expect(pickers[1].costSavings).toBe(200);
+    });
+
+    it('projects an app-psat-sankey per scenario with the scenario psat, settings, and baseline flag', () => {
+      const baseline = makePsat('Baseline', 1000);
+      const modPsat = makePsat('Mod A', 800);
+      baseline.modifications = [makeModification(modPsat)];
+      component.assessment = makeAssessment(baseline);
+      fixture.detectChanges();
+
+      const sankeys = fixture.nativeElement.querySelectorAll('app-psat-sankey');
+      expect(sankeys.length).toBe(2);
+      expect(sankeys[0].psat).toBe(baseline);
+      expect(sankeys[0].settings).toBe(MOCK_SETTINGS);
+      expect(sankeys[0].isBaseline).toBeTrue();
+      expect(sankeys[1].psat).toBe(modPsat);
+      expect(sankeys[1].isBaseline).toBeFalse();
     });
   });
 });

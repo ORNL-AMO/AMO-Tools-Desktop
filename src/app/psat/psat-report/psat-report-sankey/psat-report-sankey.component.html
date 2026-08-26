@@ -1,57 +1,10 @@
 <div class="output-summary">
   <div class="d-flex flex-column">
-    <div class="d-flex">
-      <div class="d-flex flex-column w-25 align-items-center justify-content-center">
-        <select name="psatSelect" class="form-control mx-auto" id="psatSelect" (change)="setPsat1()"
-          [(ngModel)]="psat1">
-          <option [ngValue]="assessment.psat">Baseline</option>
-          @for (modification of assessment.psat.modifications; track modification) {
-            <option [ngValue]="modification.psat">
-            {{modification.psat.name}}</option>
-          }
-        </select>
-        @if (psat1.valid.isValid) {
-<div class="p-2" [ngClass]="{
-          'negative-savings': psat1CostSavings < 0,
-          'positive-savings': psat1CostSavings > 0
-        }">Cost Savings: {{ psat1CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
-        }
-      </div>
-      <div class="w-75 m-3">
-        <app-psat-sankey
-          [psat]="psat1"
-          [settings]="settings"
-          [isBaseline]="psat1Baseline"
-        ></app-psat-sankey>
-      </div>
-    </div>
-    <hr>
-      @if (psat2) {
-        <div class="d-flex">
-          <div class="d-flex flex-column w-25 align-items-center justify-content-center">
-            <select name="psatSelect" class="form-control mx-auto" id="psatSelect2" (change)="setPsat2()"
-              [(ngModel)]="psat2">
-              <option [ngValue]="assessment.psat">Baseline</option>
-              @for (modification of assessment.psat.modifications; track modification) {
-                <option [ngValue]="modification.psat">
-                {{modification.psat.name}}</option>
-              }
-            </select>
-            @if (psat2.valid.isValid) {
-<div class="p-2" [ngClass]="{
-          'negative-savings': psat2CostSavings < 0,
-          'positive-savings': psat2CostSavings > 0
-        }">Cost Savings: {{ psat2CostSavings | currency: "USD":"symbol":"1.0-0" }}/yr</div>
-            }
-          </div>
-          <div class="w-75 m-3">
-            <app-psat-sankey
-              [psat]="psat2"
-              [settings]="settings"
-              [isBaseline]="psat2Baseline"
-            ></app-psat-sankey>
-          </div>
-        </div>
-      }
-    </div>
+    @for (sankeyScenario of sankeyScenarios; track sankeyScenario) {
+      <app-sankey-scenario-picker [options]="psatOptions" [selected]="sankeyScenario.scenario"
+        (selectedChange)="setPsat(sankeyScenario, $event)" [costSavings]="sankeyScenario.costSavings">
+        <app-psat-sankey [psat]="sankeyScenario.scenario" [settings]="settings" [isBaseline]="sankeyScenario.isBaseline"></app-psat-sankey>
+      </app-sankey-scenario-picker>
+    }
   </div>
+</div>
