@@ -106,6 +106,12 @@ export class ImportOpportunitiesService {
       this.updateLegacyOpportunities(data.airLeakSurveys, Treasure.airLeak);
       treasureHunt.airLeakSurveys = treasureHunt.airLeakSurveys.concat(data.airLeakSurveys);
     }
+    if (data.steamLeakSurveys) {
+      if (treasureHunt.steamLeakSurveys == undefined) {
+        treasureHunt.steamLeakSurveys = new Array();
+      }
+      treasureHunt.steamLeakSurveys = treasureHunt.steamLeakSurveys.concat(data.steamLeakSurveys);
+    }
     if (data.openingLosses) {
       if (treasureHunt.openingLosses == undefined) {
         treasureHunt.openingLosses = new Array();

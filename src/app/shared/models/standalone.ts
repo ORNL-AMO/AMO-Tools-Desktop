@@ -653,6 +653,92 @@ export interface SteamReductionResult {
 //===== END steam reduction objects =====
 
 
+//====== steam leak survey objects ======
+export interface SteamLeakSurveyInput {
+  steamLeakSurveyInputVec: Array<SteamLeakSurveyData>;
+  facilitySteamLeakData: FacilitySteamLeakData;
+}
+
+export interface SteamLeakSurveyData {
+  selected: boolean;
+  name: string;
+  leakDescription: string;
+  measurementMethod: number;
+  estimateMethodData: SteamLeakEstimateMethodData;
+  estimateTurbineMethodData: SteamLeakEstimateTurbineMethodData;
+  orificeMethodData: SteamLeakOrificeMethodData;
+  plumeMethodData: SteamLeakPlumeMethodData;
+  units: number;
+}
+
+export interface FacilitySteamLeakData {
+  annualOperatingHours: number;
+  utilityType: number;
+  steamCost: number;
+  steamTemperature: number;
+  steamPressure: number;
+  feedwaterTemperature: number;
+  fuelCost: number;
+  electricityCost: number;
+  boilerEfficiency: number;
+  systemEfficiency: number;
+}
+
+export interface SteamLeakEstimateMethodData {
+  leakPressure: number;
+  leakTemperature: number;
+  pressureReductionMethod: number;
+  turbineEfficiency: number;
+  leakRate: number;
+  costOfElectricity: number;
+}
+
+export interface SteamLeakEstimateTurbineMethodData {
+  turbineEfficiency: number;
+  leakRate: number;
+}
+
+export interface SteamLeakOrificeMethodData {
+  holeSize: number;
+  dischargeCoefficient: number;
+  atmosphericPressure: number;
+  leakPressure: number;
+  leakTemperature: number;
+  pressureReductionMethod: number;
+  turbineEfficiency: number;
+  costOfElectricity: number;
+}
+
+export interface SteamLeakPlumeMethodData {
+  leakPressure: number;
+  leakTemperature: number;
+  ambientTemperature: number;
+  plumeLength: number;
+  pressureReductionMethod: number;
+  turbineEfficiency: number;
+  costOfElectricity: number;
+}
+
+export interface SteamLeakSurveyOutput {
+  individualLeaks: Array<SteamLeakSurveyResult>;
+  baselineTotal: SteamLeakSurveyResult;
+  modificationTotal: SteamLeakSurveyResult;
+  savings: SteamLeakSurveyResult;
+  facilitySteamLeakData?: FacilitySteamLeakData;
+}
+
+export interface SteamLeakSurveyResult {
+  name?: string;
+  leakDescription?: string;
+  selected?: boolean;
+  leakRate: number;
+  steamLoss: number;
+  energyLoss: number;
+  leakCost: number;
+}
+//===== END steam leak survey objects =====
+
+
 //====== pipe insulation reduction objects ======
 export interface PipeInsulationReductionInput {
   operatingHours: number,
