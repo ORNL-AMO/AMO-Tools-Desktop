@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { catchError, forkJoin, from, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
+import { PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -64,7 +65,10 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
     return getAssessment$.pipe(
       switchMap(assessment => {
         this.processHeatingAssessmentService.setAssessment(assessment);
-        this.processHeatingAssessmentService.setProcessHeating(assessment.phast);
+        // Module load-time entry point: `assessment.phast` is still typed against the shared,
+        // legacy-owned PHAST shape at this boundary. Everything past this point uses the module's
+        // own local PHAST type.
+        this.processHeatingAssessmentService.setProcessHeating(assessment.phast as unknown as PHAST);
 
         return from(this.processHeatingAssessmentService.initAssessmentSettings(assessment)).pipe(
           switchMap(() =>

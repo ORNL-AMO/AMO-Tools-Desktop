@@ -2,6 +2,7 @@ import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@a
 import { BehaviorSubject, debounceTime, firstValueFrom, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Assessment } from '../../shared/models/assessment';
+import { PHAST as SharedPHAST } from '../../shared/models/phast/phast';
 import { PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
@@ -93,7 +94,9 @@ export class ProcessHeatingAssessmentService {
 
   setProcessHeating(phast: PHAST): void {
     this.processHeating.next(phast);
-    this.setAssessment({ ...this.assessmentValue, phast });
+    // Writing back into `Assessment.phast`, which is still typed against the shared, legacy-owned
+    // PHAST shape.
+    this.setAssessment({ ...this.assessmentValue, phast: phast as unknown as SharedPHAST });
   }
 
   setSettings(settings: Settings): void {

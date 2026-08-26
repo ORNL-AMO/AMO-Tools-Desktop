@@ -6,7 +6,7 @@ import { Modification, PHAST } from './phast';
 export type ScenarioOverrides = Partial<Omit<PHAST, 'modifications' | 'selectedModificationId'>>;
 
 // Extends the legacy `Modification` interface only for its non-`phast` fields (id, notes, the
-// exploreOppsShowX curation flags). `scenarioOverrides` replaces `phast`: a modification stores only the
+// exploreOpportunities curation flags). `scenarioOverrides` replaces `phast`: a modification stores only the
 // fields it overrides, not a full clone of the assessment.
 export interface ProcessHeatingModification extends Modification {
   scenarioOverrides?: ScenarioOverrides;

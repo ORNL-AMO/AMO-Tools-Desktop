@@ -64,26 +64,35 @@ export interface Losses {
   energyInputExhaustGasLoss?: EnergyInputExhaustGasLoss[];
 }
 
+// Per-category "explore opportunities" UI/suggestion state, keyed by category rather than one flat
+// field per category. This is presentation state for the Explore Opportunities screen only: it must
+// never gate whether a `scenarioOverrides` diff is honored (see `scenario-merge.util.ts`), since a
+// diff can also come from Expert View, which has nothing to do with this flag.
+export const ExploreOpportunityCategory = {
+  FlueGas: 'flueGas',
+  AirTemp: 'airTemp',
+  Material: 'material',
+  AllTimeOpen: 'allTimeOpen',
+  Opening: 'opening',
+  AllEmissivity: 'allEmissivity',
+  Cooling: 'cooling',
+  Atmosphere: 'atmosphere',
+  Operations: 'operations',
+  Leakage: 'leakage',
+  Slag: 'slag',
+  EfficiencyData: 'efficiencyData',
+  Wall: 'wall',
+  AllTemp: 'allTemp',
+  Fixtures: 'fixtures',
+} as const;
+
+export type ExploreOpportunityCategory = typeof ExploreOpportunityCategory[keyof typeof ExploreOpportunityCategory];
+
 export interface Modification {
   phast?: PHAST;
   id: string;
   notes?: Notes;
-  exploreOpportunities?: boolean;
-  exploreOppsShowFlueGas?: SavingsOpportunity;
-  exploreOppsShowAirTemp?: SavingsOpportunity;
-  exploreOppsShowMaterial?: SavingsOpportunity;
-  exploreOppsShowAllTimeOpen?: SavingsOpportunity;
-  exploreOppsShowOpening?: SavingsOpportunity;
-  exploreOppsShowAllEmissivity?: SavingsOpportunity;
-  exploreOppsShowCooling?: SavingsOpportunity;
-  exploreOppsShowAtmosphere?: SavingsOpportunity;
-  exploreOppsShowOperations?: SavingsOpportunity;
-  exploreOppsShowLeakage?: SavingsOpportunity;
-  exploreOppsShowSlag?: SavingsOpportunity;
-  exploreOppsShowEfficiencyData?: SavingsOpportunity;
-  exploreOppsShowWall?: SavingsOpportunity;
-  exploreOppsShowAllTemp?: SavingsOpportunity;
-  exploreOppsShowFixtures?: SavingsOpportunity;
+  exploreOpportunities?: Partial<Record<ExploreOpportunityCategory, SavingsOpportunity>>;
 }
 
 export interface Notes {

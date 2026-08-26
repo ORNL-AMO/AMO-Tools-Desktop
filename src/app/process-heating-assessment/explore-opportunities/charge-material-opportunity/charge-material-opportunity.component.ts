@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ChargeMaterial, ChargeMaterialType } from '../../models/charge-material';
+import { ExploreOpportunityCategory } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 
@@ -54,7 +55,7 @@ export class ChargeMaterialOpportunityComponent {
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
 
   readonly useOpportunity: Signal<boolean> = computed(() =>
-    this.modificationService.selectedModification()?.exploreOppsShowMaterial?.hasOpportunity ?? false
+    this.modificationService.selectedModification()?.exploreOpportunities?.[ExploreOpportunityCategory.Material]?.hasOpportunity ?? false
   );
 
 
@@ -82,7 +83,7 @@ export class ChargeMaterialOpportunityComponent {
     if (!modificationId) {
       return;
     }
-    this.modificationService.setExploreOpportunityFlag(modificationId, 'exploreOppsShowMaterial', {
+    this.modificationService.setExploreOpportunityFlag(modificationId, ExploreOpportunityCategory.Material, {
       hasOpportunity,
       display: OPPORTUNITY_DISPLAY_NAME,
     });

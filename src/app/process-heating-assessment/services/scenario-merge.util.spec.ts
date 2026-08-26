@@ -12,8 +12,8 @@ describe('getEffectivePhast', () => {
     },
   };
 
-  function buildModification(scenarioOverrides: ScenarioOverrides | undefined, exploreOppsShowMaterial?: { hasOpportunity: boolean; display: string }): ProcessHeatingModification {
-    return { id: 'mod-1', scenarioOverrides, exploreOppsShowMaterial };
+  function buildModification(scenarioOverrides: ScenarioOverrides | undefined): ProcessHeatingModification {
+    return { id: 'mod-1', scenarioOverrides };
   }
 
   it('returns baseline unchanged when there is no diff', () => {
@@ -31,12 +31,9 @@ describe('getEffectivePhast', () => {
     expect(effectivePhast.name).toBe('Baseline');
   });
 
-  it('overrides only the loss type present in the diff, leaving other loss types as baseline, when the opportunity is checked', () => {
+  it('overrides only the loss type present in the diff, leaving other loss types as baseline', () => {
     const modifiedChargeMaterials = [{ id: 'material-1', name: 'Steel (preheated)', chargeMaterialType: 'Solid' } as never];
-    const modification = buildModification(
-      { losses: { chargeMaterials: modifiedChargeMaterials } },
-      { hasOpportunity: true, display: 'Preheat Charge Material' }
-    );
+    const modification = buildModification({ losses: { chargeMaterials: modifiedChargeMaterials } });
 
     const effectivePhast = getEffectivePhast(baseline, modification);
 
@@ -44,24 +41,13 @@ describe('getEffectivePhast', () => {
     expect(effectivePhast.losses.wallLosses).toBe(baseline.losses.wallLosses);
   });
 
-  it('falls back to baseline charge materials when the diff has an override but the opportunity is unchecked', () => {
-    const modifiedChargeMaterials = [{ id: 'material-1', name: 'Steel (preheated)', chargeMaterialType: 'Solid' } as never];
-    const modification = buildModification(
-      { losses: { chargeMaterials: modifiedChargeMaterials } },
-      { hasOpportunity: false, display: 'Preheat Charge Material' }
-    );
-
-    const effectivePhast = getEffectivePhast(baseline, modification);
-
-    expect(effectivePhast.losses.chargeMaterials).toBe(baseline.losses.chargeMaterials);
-  });
-
-  it('falls back to baseline charge materials when the diff has an override but the opportunity flag is missing entirely', () => {
+  it('applies the loss-type diff even when the modification has no Explore Opportunities flags set', () => {
     const modifiedChargeMaterials = [{ id: 'material-1', name: 'Steel (preheated)', chargeMaterialType: 'Solid' } as never];
     const modification = buildModification({ losses: { chargeMaterials: modifiedChargeMaterials } });
+    modification.exploreOpportunities = undefined;
 
     const effectivePhast = getEffectivePhast(baseline, modification);
 
-    expect(effectivePhast.losses.chargeMaterials).toBe(baseline.losses.chargeMaterials);
+    expect(effectivePhast.losses.chargeMaterials).toBe(modifiedChargeMaterials);
   });
 });
