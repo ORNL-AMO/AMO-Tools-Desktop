@@ -41,15 +41,17 @@ export class ModalDialogService {
   }
 
   /**
-   * Opens modal at core.component 
+   * Opens modal at core.component
    * @param injector - required if modal has services or other injections provided at the module level
    */
-  openModal<T, D>(
-    component: ComponentType<T>,
+  openModal<R = unknown, D = unknown, C = unknown>(
+    component: ComponentType<C>,
     config?: DialogConfig<D>,
     injector?: Injector
-  ): DialogRef<T, any> {
-    const dialogRef = this.dialog.open<T, D>(component, {
+  ): DialogRef<R, C> {
+    // todo we should use a default flexible width with override passed in
+
+    const dialogRef = this.dialog.open<R, D, C>(component, {
       panelClass: 'app-modal-dialog',
       hasBackdrop: true,
       disableClose: false,
@@ -59,7 +61,7 @@ export class ModalDialogService {
       data: config?.data
     });
 
-    this.currentModalRef.next(dialogRef as DialogRef<any, any>);
+    this.currentModalRef.next(dialogRef as DialogRef<unknown, unknown>);
 
     dialogRef.closed.subscribe((result) => {
       this.closedResult.next(result);

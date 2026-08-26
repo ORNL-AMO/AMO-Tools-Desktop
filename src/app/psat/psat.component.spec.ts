@@ -985,12 +985,14 @@ describe('PsatComponent', () => {
         expect(fixture.nativeElement.querySelector('.btn-group')).not.toBeNull();
       });
 
-      it('hides the psat select dropdown when there is only one psat option', () => {
+      it('shows the psat select dropdown with a single option when there is only one psat option', () => {
         fixture.detectChanges();
         psatTabServiceSpy.mainTab.next('sankey');
         component.showSankeyLabelOptions = true;
         fixture.detectChanges();
-        expect(fixture.nativeElement.querySelector('#psatSelect')).toBeNull();
+        const select = fixture.nativeElement.querySelector('#psatSelect');
+        expect(select).not.toBeNull();
+        expect(select.querySelectorAll('option').length).toBe(1);
       });
 
       it('shows the psat select dropdown with one option per psatOptions entry when there is more than one', () => {
