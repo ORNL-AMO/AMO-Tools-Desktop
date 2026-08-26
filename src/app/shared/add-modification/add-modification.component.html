@@ -1,0 +1,22 @@
+<div class="modal-header">
+  <h3>Add New Scenario</h3>
+  <button class="close" (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" [class]="data.themeClass">
+  @if (description) {
+    <p class="small">{{ description }}</p>
+  }
+  <form>
+    <div class="form-section">
+      <div class="form-group d-flex">
+        <label class="w-50">Scenario Name</label>
+        <input name="newModificationName" type="text" class="form-control w-50" [(ngModel)]="newModificationName">
+      </div>
+    </div>
+  </form>
+  <hr>
+  <button class="btn btn-primary pull-right" [style.background-color]="'var(--' + data.themeClass + ')'"
+    (click)="createModification()" [disabled]="!newModificationName">Create</button>
+</div>

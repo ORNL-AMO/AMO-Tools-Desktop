@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, Signal, untracked } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { ChargeMaterialType } from '../../../models/charge-material';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
@@ -22,8 +22,8 @@ import { SolidMaterialFormService } from './solid-form/solid-material-form.servi
     GasMaterialFormService,
   ],
 })
-export class ChargeMaterialComponent implements OnInit {
-  readonly source = input<AssessmentScenario>('baseline');
+export class ChargeMaterialComponent {
+  readonly scenario = input<AssessmentScenario>('baseline');
 
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   readonly chargeMaterialService = inject(ChargeMaterialService);
@@ -36,8 +36,16 @@ export class ChargeMaterialComponent implements OnInit {
     return energyResultUnit === 'kWh' ? 'kW' : `${energyResultUnit}/hr`;
   });
 
-  ngOnInit(): void {
-    this.chargeMaterialService.initialize(this.source());
+  // Re-initializes whenever `scenario` changes, not just on first render — needed for screens like
+  // Expert View where this component could stay mounted while the user switches which
+  // modification is selected. initialize() itself reads processHeatingSignal (via scenarioPhast),
+  // so its call must be untracked — otherwise this effect would also rerun on every PHAST edit,
+  // not just a scenario() change.
+  constructor() {
+    effect(() => {
+      const scenario = this.scenario();
+      untracked(() => this.chargeMaterialService.initialize(scenario));
+    });
   }
 
   isCollapsed(item: ChargeMaterialItem): boolean {

@@ -16,6 +16,7 @@ export type BaselineView = typeof BaselineView[keyof typeof BaselineView];
 
 export const AssessmentView = {
   EXPLORE_OPPORTUNITIES: 'explore-opportunities',
+  EXPERT_VIEW: 'expert-view',
 } as const;
 export type AssessmentView = typeof AssessmentView[keyof typeof AssessmentView];
 
@@ -103,6 +104,11 @@ export const HEAT_BALANCE_VIEW_LINKS: ViewLink[] = [
   { view: LossView.EXHAUST_GAS, label: 'Exhaust Gas' },
   { view: LossView.SLAG, label: 'Slag' },
   { view: LossView.HEAT_SYSTEM_EFFICIENCY, label: 'Heat System Efficiency' },
+];
+
+export const ASSESSMENT_VIEW_LINKS: ViewLink[] = [
+  { view: AssessmentView.EXPLORE_OPPORTUNITIES, label: 'Explore Opportunities' },
+  { view: AssessmentView.EXPERT_VIEW, label: 'Expert View' },
 ];
 
 export const REPORT_VIEW_LINKS: ViewLink[] = [

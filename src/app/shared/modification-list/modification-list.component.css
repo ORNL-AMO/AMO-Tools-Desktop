@@ -1,0 +1,90 @@
+/* --scenario-theme is set inline on the modal-body from data.themeClass (e.g. 'var(--process-heating-assessment)')
+   so this stylesheet stays theme-agnostic rather than hardcoding one module's CSS custom property. */
+.list-group-item.modification-item.active-item {
+  border-left: solid 8px var(--scenario-theme);
+  border-right: solid 8px var(--scenario-theme);
+  border-bottom: solid 2px var(--scenario-theme);
+  border-top: solid 2px var(--scenario-theme);
+  background-color: white;
+  font-weight: bold;
+}
+.list-group-item.modification-item {
+  background-color: #EAECEE;
+}
+
+.dropdown-menu.shown {
+  display: grid;
+  padding: 0px;
+}
+
+.dropdown-item {
+  padding: .25rem;
+  font-size: small;
+}
+
+.badge-primary {
+  margin-left: 0.1rem;
+  margin-right: .1rem;
+  margin-top: .1rem;
+}
+
+.title-item {
+  border-bottom: solid black 2px;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+
+.btn-primary {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  white-space: normal;
+  background-color: var(--scenario-theme);
+}
+
+.btn-group .btn {
+  padding: 6px;
+  padding-left: 3px;
+  color: white;
+  font-size: small;
+}
+
+.btn-primary:focus {
+  box-shadow: 0 0 0 0.2rem white
+}
+
+.input-group-addon.units {
+  color: white;
+  background-color: #145A32;
+}
+
+.input-group-addon.units:hover {
+  cursor: pointer;
+  background-color: #82E0AA;
+}
+
+.btn-danger,
+.btn-default {
+  padding: 4px;
+}
+
+.red {
+  color: red;
+}
+
+.dropdown-item:hover {
+  cursor: pointer;
+  background-color: #99A3A4;
+  border-color: var(--scenario-theme);
+}
+
+.dropdown-menu {
+  min-width: 5rem;
+  bottom: 0;
+  left: 110%;
+  top: inherit;
+}
+
+.scroll-item {
+  max-height: 75vh;
+}

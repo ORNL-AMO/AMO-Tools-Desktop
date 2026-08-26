@@ -19,7 +19,7 @@
     <div class="row no-gutters">
       <div class="col-12 pr-2 pl-2 pb-4 mt-1">
         @if (selectedPanelTab === 'results') {
-          <app-process-heating-assessment-results></app-process-heating-assessment-results>
+          <app-process-heating-assessment-results [scenario]="scenario()"></app-process-heating-assessment-results>
         }
         @if (selectedPanelTab === 'help') {
           <app-process-heating-help-panel></app-process-heating-help-panel>

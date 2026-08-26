@@ -1,4 +1,23 @@
 <div class="panel-container p-3">
-  <h4>Explore Opportunities</h4>
-  <p class="text-muted">Modification management — implemented in Step 15.</p>
+  @if (selectedModification(); as modification) {
+    <div class="form-group d-flex">
+      <label class="w-25" for="modificationName">Modification Name</label>
+      <input
+        name="modificationName"
+        id="modificationName"
+        type="text"
+        class="form-control w-75"
+        [value]="modificationName(modification)"
+        (change)="renameModification(modification, $any($event.target).value)"
+      />
+    </div>
+    <hr>
+    <app-charge-material-opportunity></app-charge-material-opportunity>
+  } @else {
+    <div class="no-data text-center">
+      <h2 class="h6">Explore energy efficiency opportunities to increase the efficiency and effectiveness of your system.</h2>
+      <p class="mt-2 small text-muted">Opportunities will be modeled starting from your baseline conditions.</p>
+      <button type="button" class="btn btn-primary" (click)="addModification()">Explore Opportunities</button>
+    </div>
+  }
 </div>

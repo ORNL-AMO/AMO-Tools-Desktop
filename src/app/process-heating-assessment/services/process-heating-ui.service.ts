@@ -59,7 +59,8 @@ export class ProcessHeatingUiService {
   // Derived from assessment settings — energySourceType + furnaceType determine the active tab set
   readonly heatingSystemConfigurationSignal: Signal<HeatingEquipmentConfiguration> =
     this.processHeatingAssessmentService.heatingEquipmentConfiguration;
-  activeModificationIndexSignal: WritableSignal<number> = signal<number>(0);
+    
+  activeModificationIdSignal: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
 
   // UI state signals
   focusedFieldSignal: WritableSignal<string> = signal<string>('default');

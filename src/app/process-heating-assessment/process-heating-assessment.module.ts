@@ -13,6 +13,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 import { ROUTE_TOKENS } from './constants/process-heating-routes';
 import { ProcessHeatingUiService } from './services/process-heating-ui.service';
 import { ProcessHeatingAssessmentService } from './services/process-heating-assessment.service';
+import { ModificationService } from './services/modification.service';
 import { ProcessHeatingOperationsFormService } from './services/process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './services/process-heating-results.service';
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
@@ -29,7 +30,11 @@ import { ProcessHeatingBannerComponent } from './process-heating-banner/process-
 import { BaselineComponent } from './baseline/baseline.component';
 import { BaselineTabsComponent } from './baseline/baseline-tabs/baseline-tabs.component';
 import { AssessmentComponent } from './assessment/assessment.component';
+import { AddModificationComponent } from '../shared/add-modification/add-modification.component';
+import { ModificationListComponent } from '../shared/modification-list/modification-list.component';
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
+import { ChargeMaterialOpportunityComponent } from './explore-opportunities/charge-material-opportunity/charge-material-opportunity.component';
+import { ExpertViewComponent } from './expert-view/expert-view.component';
 import { ReportComponent } from './report/report.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
 import { InputSummaryComponent } from './report/input-summary/input-summary.component';
@@ -206,6 +211,11 @@ const ROUTES: Route[] = [
             component: ExploreOpportunitiesComponent,
             data: { childView: ROUTE_TOKENS.exploreOpportunities, stepIndex: 21 },
           },
+          {
+            path: ROUTE_TOKENS.expertView,
+            component: ExpertViewComponent,
+            data: { childView: ROUTE_TOKENS.expertView, stepIndex: 21 },
+          },
         ]
       },
       {
@@ -246,6 +256,8 @@ const ROUTES: Route[] = [
     BaselineTabsComponent,
     AssessmentComponent,
     ExploreOpportunitiesComponent,
+    ChargeMaterialOpportunityComponent,
+    ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
     InputSummaryComponent,
@@ -294,10 +306,13 @@ const ROUTES: Route[] = [
     OperatingHoursModule,
     PhastOperatingCostsModule,
     SharedPipesModule,
+    AddModificationComponent,
+    ModificationListComponent,
   ],
   providers: [
     ProcessHeatingUiService,
     ProcessHeatingAssessmentService,
+    ModificationService,
     ProcessHeatingOperationsFormService,
     ProcessHeatingResultsService,
     ProcessHeatingAssessmentResolver,

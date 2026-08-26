@@ -8,6 +8,8 @@ import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { ConvertPhastService } from '../../phast/convert-phast.service';
 import { HeatingEquipmentConfiguration, HeatingSystemEnergyType } from '../models/views';
+import { ScenarioOverrides, ProcessHeatingModification } from '../models/modification';
+import { getEffectivePhast } from './scenario-merge.util';
 
 export type ProcessHeatingDataProperty = keyof PHAST;
 
@@ -106,26 +108,30 @@ export class ProcessHeatingAssessmentService {
     }
   }
 
-  updateModificationProperty<K extends ProcessHeatingDataProperty>(modificationId: string, key: K, value: PHAST[K]): void {
+  updateModificationProperty<K extends keyof ScenarioOverrides>(modificationId: string, key: K, value: ScenarioOverrides[K]): void {
     const current = this.processHeating.getValue();
-    const modIndex = current?.modifications?.findIndex(mod => mod.id === modificationId) ?? -1;
+    const modifications = current?.modifications as ProcessHeatingModification[] | undefined;
+    const modIndex = modifications?.findIndex(mod => mod.id === modificationId) ?? -1;
     if (modIndex === -1) {
       return;
     }
-    const modifications = [...current.modifications];
-    modifications[modIndex] = { ...modifications[modIndex], phast: { ...modifications[modIndex].phast, [key]: value } };
-    this.setProcessHeating({ ...current, modifications });
+    const updatedModifications = [...modifications];
+    const existingOverrides = updatedModifications[modIndex].scenarioOverrides;
+    updatedModifications[modIndex] = { ...updatedModifications[modIndex], scenarioOverrides: { ...existingOverrides, [key]: value } };
+    this.setProcessHeating({ ...current, modifications: updatedModifications });
   }
 
   scenarioPhast(scenario: AssessmentScenario): PHAST | undefined {
-    return this.resolveScenarioPhast(this.processHeatingSignal(), scenario);
-  }
-
-  private resolveScenarioPhast(phast: PHAST | undefined, scenario: AssessmentScenario): PHAST | undefined {
+    const baseline = this.processHeatingSignal();
     if (scenario === 'baseline') {
-      return phast;
+      return baseline;
     }
-    return phast?.modifications?.find(mod => mod.id === scenario)?.phast;
+    const modifications = baseline?.modifications as ProcessHeatingModification[] | undefined;
+    const modification = modifications?.find(mod => mod.id === scenario);
+    if (!modification || !baseline) {
+      return undefined;
+    }
+    return getEffectivePhast(baseline, modification);
   }
 
   async initAssessmentSettings(assessment: Assessment): Promise<void> {

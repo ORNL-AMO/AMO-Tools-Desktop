@@ -1,0 +1,79 @@
+<div class="navbar assessment-bar">
+  <!-- LARGE VIEWPORT NAV -->
+  <div class="d-none d-lg-flex align-items-center flex-fill">
+    <ul class="h-100 tabs subtabs progress-tabs process-heating-assessment d-none d-lg-block p-2">
+      @for (link of ASSESSMENT_VIEW_LINKS; track $index) {
+        <li routerLinkActive="active" [routerLink]="[link.view]">
+          <a routerLinkActive="active" [routerLink]="[link.view]">{{ link.label }}</a>
+        </li>
+      }
+    </ul>
+    <div class="d-flex align-items-center tabs subtabs process-heating-assessment ml-auto" [class.br-color-white]="selectedModification()">
+      @if (selectedModification(); as modification) {
+        <div class="mod-name active border-right">
+          <a>{{ modificationName(modification) }}
+            <br>
+            <span class="help-text">Selected Scenario</span>
+          </a>
+        </div>
+      } @else {
+        <div class="mod-name border-right">
+          <a>&mdash; &mdash;
+            <br>
+            <span class="help-text">Selected Scenario</span>
+          </a>
+        </div>
+      }
+      <div class="pl-2 pr-2">
+        <button class="btn btn-primary" (click)="selectScenario()" [disabled]="!selectedModification()">View / Add Scenarios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SMALL SCREEN NAV -->
+  <div class="d-lg-none d-flex flex-column flex-fill">
+    <div class="d-flex d-lg-none flex-fill align-items-center justify-content-center tabs subtabs process-heating-assessment" [class.br-color-white]="selectedModification()">
+      @if (selectedModification(); as modification) {
+        <div class="mod-name active border-right flex-fill">
+          <a>{{ modificationName(modification) }}
+            <br>
+            <span class="help-text">Selected Scenario</span>
+          </a>
+        </div>
+      } @else {
+        <div class="mod-name border-right flex-fill">
+          <a>&mdash; &mdash;
+            <br>
+            <span class="help-text">Selected Scenario</span>
+          </a>
+        </div>
+      }
+      <div class="pl-2 pr-2 flex-fill">
+        <button class="btn btn-primary" (click)="selectScenario()" [disabled]="!selectedModification()">View / Add Scenarios</button>
+      </div>
+    </div>
+
+    <ul class="pagination d-flex d-lg-none justify-content-between tabs subtabs progress-tabs flex-fill process-heating-assessment">
+      <li class="page-item" [class.disabled]="!canGoBack()">
+        <a class="nav-link small" (click)="back()"><span class="fa fa-chevron-left"></span></a>
+      </li>
+      @for (link of ASSESSMENT_VIEW_LINKS; track $index) {
+        <li class="page-item" routerLinkActive="active" [routerLink]="[link.view]">
+          <a class="nav-link small" routerLinkActive="active" [routerLink]="[link.view]">{{ link.label }}</a>
+        </li>
+      }
+      <li class="page-item" [class.disabled]="!canContinue()">
+        <a class="nav-link small" (click)="next()"><span class="fa fa-chevron-right"></span></a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="assessment-container tab-content">
+  <div class="assessment-panel-container modification">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="assessment-panel-container scroll-item">
+    <app-process-heating-results-panel [scenario]="resultsScenario()"></app-process-heating-results-panel>
+  </div>
+</div>

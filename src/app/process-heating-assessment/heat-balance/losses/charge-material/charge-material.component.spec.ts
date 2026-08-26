@@ -95,9 +95,9 @@ describe('ChargeMaterialComponent', () => {
       expect(chargeMaterialServiceSpy.initialize).toHaveBeenCalledWith('baseline');
     });
 
-    it('initializes the charge material service with a modification scenario from the source input', () => {
+    it('initializes the charge material service with a modification scenario from the scenario input', () => {
       const modFixture = TestBed.createComponent(ChargeMaterialComponent);
-      modFixture.componentRef.setInput('source', 'mod-1');
+      modFixture.componentRef.setInput('scenario', 'mod-1');
       modFixture.detectChanges();
 
       expect(chargeMaterialServiceSpy.initialize).toHaveBeenCalledWith('mod-1');

@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+}
+
+.expert-view-container {
+  height: 100%;
+}
+
+.expert-view-panel {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid #ddd;
+}
+
+.expert-view-panel:last-child {
+  border-right: none;
+}
+
+.expert-view-panel-header {
+  flex: 0 0 auto;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  border-bottom: var(--process-heating-assessment) solid 2px;
+}
+
+.expert-view-panel-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
