@@ -25,6 +25,8 @@
     "build-dev-web": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=production && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --base-href / --configuration development-web",
     "electron": "electron .",
     "lint": "ng lint",
+    "check:phast-drift": "node scripts/check-phast-shape-drift.js",
+    "pretest": "npm run check:phast-drift",
     "test": "ng test",
     "test:phast-snapshot": "ng test --include=\"**/snapshot-tests/**/*.spec.ts\" --watch=false --browsers=ChromeHeadlessNoSandbox",
     "test:phast-snapshot:watch": "ng test --include=\"**/snapshot-tests/**/*.spec.ts\" --browsers=ChromeHeadlessNoSandbox",

@@ -87,6 +87,36 @@ export class ChargeMaterialOpportunityComponent {
       hasOpportunity,
       display: OPPORTUNITY_DISPLAY_NAME,
     });
+
+    // The merge no longer gates a loss-type diff on this flag (see scenario-merge.util.ts), so
+    // deselecting the opportunity has to actively put the preheated temperatures back to baseline
+    // itself: otherwise they'd keep applying even with the opportunity off.
+    if (!hasOpportunity) {
+      this.resetInitialTemperaturesToBaseline(modificationId);
+    }
+  }
+
+  private resetInitialTemperaturesToBaseline(modificationId: string): void {
+    const modification = this.modificationService.selectedModification();
+    if (!modification) {
+      return;
+    }
+
+    const baselineMaterials = this.assessmentService.scenarioPhast('baseline')?.losses?.chargeMaterials ?? [];
+    const effectiveMaterials = this.assessmentService.scenarioPhast(modificationId)?.losses?.chargeMaterials ?? [];
+
+    // Reset only the initial temperature on each material back to baseline's value; any other
+    // override already on these materials (e.g. entered separately in Expert View) is left as is.
+    const resetChargeMaterials = effectiveMaterials.map(material => {
+      const baselineMaterial = baselineMaterials.find(candidate => candidate.id === material.id);
+      const baselineInitialTemperature = readInitialTemperature(baselineMaterial);
+      return baselineInitialTemperature === undefined ? material : withInitialTemperature(material, baselineInitialTemperature);
+    });
+
+    this.assessmentService.updateModificationProperty(modificationId, 'losses', {
+      ...modification.scenarioOverrides?.losses,
+      chargeMaterials: resetChargeMaterials,
+    });
   }
 
   setModificationInitialTemperature(materialId: string, initialTemperature: number): void {

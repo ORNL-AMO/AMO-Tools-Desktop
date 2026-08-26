@@ -89,7 +89,6 @@ export const ExploreOpportunityCategory = {
 export type ExploreOpportunityCategory = typeof ExploreOpportunityCategory[keyof typeof ExploreOpportunityCategory];
 
 export interface Modification {
-  phast?: PHAST;
   id: string;
   notes?: Notes;
   exploreOpportunities?: Partial<Record<ExploreOpportunityCategory, SavingsOpportunity>>;

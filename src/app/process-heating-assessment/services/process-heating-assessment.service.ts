@@ -111,10 +111,17 @@ export class ProcessHeatingAssessmentService {
     }
   }
 
+  // `PHAST.modifications` is declared as the base `Modification[]`, but every modification this
+  // module stores is a `ProcessHeatingModification` (it has `scenarioOverrides`). Centralizing the
+  // cast here keeps it in one place instead of copy-pasted at each read site.
+  getModifications(phast: PHAST | undefined): ProcessHeatingModification[] {
+    return (phast?.modifications ?? []) as ProcessHeatingModification[];
+  }
+
   updateModificationProperty<K extends keyof ScenarioOverrides>(modificationId: string, key: K, value: ScenarioOverrides[K]): void {
     const current = this.processHeating.getValue();
-    const modifications = current?.modifications as ProcessHeatingModification[] | undefined;
-    const modIndex = modifications?.findIndex(mod => mod.id === modificationId) ?? -1;
+    const modifications = this.getModifications(current);
+    const modIndex = modifications.findIndex(mod => mod.id === modificationId);
     if (modIndex === -1) {
       return;
     }
@@ -129,8 +136,7 @@ export class ProcessHeatingAssessmentService {
     if (scenario === 'baseline') {
       return baseline;
     }
-    const modifications = baseline?.modifications as ProcessHeatingModification[] | undefined;
-    const modification = modifications?.find(mod => mod.id === scenario);
+    const modification = this.getModifications(baseline).find(mod => mod.id === scenario);
     if (!modification || !baseline) {
       return undefined;
     }
