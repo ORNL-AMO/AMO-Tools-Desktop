@@ -197,6 +197,13 @@ export class ModificationService {
     }
   }
 
+  renameModification(id: string, name: string): void {
+    const modification = this.getModificationById(id);
+    if (modification) {
+      this.updateModification({ ...modification, name });
+    }
+  }
+
   updateModificationEEM<K extends ModificationEEMProperty>(EEMName: K, value: Modification[K]) {
     const selectedModificationId: string = this.selectedModificationId.getValue();
     const modification = this.modifications().find(mod => mod.id === selectedModificationId);

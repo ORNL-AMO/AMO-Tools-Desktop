@@ -99,6 +99,10 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     background-color: #009885;
 }
 
+.process-heating-assessment .btn-primary {
+    background-color: var(--process-heating-assessment);
+}
+
 .water-assessment .btn-primary {
     background-color: #3055cf;
 }

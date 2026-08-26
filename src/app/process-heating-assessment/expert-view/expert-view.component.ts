@@ -5,13 +5,13 @@ import { getModificationName, ProcessHeatingModification } from '../models/modif
 import { AddModificationComponent, DEFAULT_DESCRIPTION } from '../../shared/add-modification/add-modification.component';
 
 @Component({
-  selector: 'app-explore-opportunities',
+  selector: 'app-expert-view',
   standalone: false,
-  templateUrl: './explore-opportunities.component.html',
-  styleUrl: './explore-opportunities.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './expert-view.component.html',
+  styleUrl: './expert-view.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ExploreOpportunitiesComponent {
+export class ExpertViewComponent {
   private readonly modalDialogService = inject(ModalDialogService);
   private readonly injector = inject(Injector);
   private readonly modificationService = inject(ModificationService);
@@ -20,11 +20,6 @@ export class ExploreOpportunitiesComponent {
 
   modificationName(modification: ProcessHeatingModification): string {
     return getModificationName(modification);
-  }
-
-  renameModification(modification: ProcessHeatingModification, name: string): void {
-    if (!name.trim()) return;
-    this.modificationService.renameModification(modification.id, name);
   }
 
   addModification(): void {

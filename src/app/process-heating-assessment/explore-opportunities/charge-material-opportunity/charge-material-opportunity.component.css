@@ -1,0 +1,15 @@
+/* Scoped to this component (Angular view encapsulation) rather than the global explore-opps.css —
+   a prior attempt to hoist .group-label into the global stylesheet broke unrelated labels
+   app-wide. process-cooling's own EEM components keep this same rule locally for the same reason. */
+.group-label {
+  font-size: 16px;
+  text-transform: none;
+  letter-spacing: 1px;
+  padding-top: 6.5px;
+  padding-bottom: 6.5px;
+}
+
+.group-label:hover {
+  cursor: pointer;
+  background-color: lightgray;
+}

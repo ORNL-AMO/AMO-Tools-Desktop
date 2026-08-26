@@ -1,0 +1,23 @@
+.assessment-container {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.assessment-panel-container {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.assessment-panel-container.modification {
+  width: 66.6667%;
+}
+
+.assessment-panel-container.scroll-item {
+  width: 33.3333%;
+}

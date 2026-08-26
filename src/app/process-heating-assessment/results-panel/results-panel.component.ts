@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { AssessmentScenario } from '../services/process-heating-assessment.service';
 
 type PanelTab = 'results' | 'help';
 
@@ -10,6 +11,8 @@ type PanelTab = 'results' | 'help';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResultsPanelComponent {
+
+  readonly scenario = input<AssessmentScenario>('baseline');
 
   selectedPanelTab: PanelTab = 'results';
 

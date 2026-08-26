@@ -14,6 +14,7 @@ export const ROUTE_TOKENS = {
 
   // Assessment sub-tabs
   exploreOpportunities: 'explore-opportunities',
+  expertView: 'expert-view',
 
   // Report sub-tabs
   executiveSummary: 'executive-summary',

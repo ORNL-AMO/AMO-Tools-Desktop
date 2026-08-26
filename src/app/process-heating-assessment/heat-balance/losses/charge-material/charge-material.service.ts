@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { getNewIdString } from '../../../../shared/helperFunctions';
 import { ChargeMaterial, ChargeMaterialResult, ChargeMaterialType } from '../../../models/charge-material';
+import { ProcessHeatingModification } from '../../../models/modification';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ChargeMaterialResultsService } from './charge-material-results.service';
 import { EntityListStore } from '../entity-list-store';
@@ -185,10 +186,11 @@ export class ChargeMaterialService {
       const current = this.assessmentService.processHeatingSignal();
       this.assessmentService.updateProcessHeatingProperty('losses', { ...current?.losses, chargeMaterials });
     } else {
-      const current = this.assessmentService.processHeatingSignal();
-      const modification = current?.modifications?.find(mod => mod.id === this.scenario);
+      const modifications = this.assessmentService.processHeatingSignal()?.modifications as ProcessHeatingModification[] | undefined;
+      const modification = modifications?.find(mod => mod.id === this.scenario);
+      const existingOverrideLosses = modification?.scenarioOverrides?.losses;
       this.assessmentService.updateModificationProperty(this.scenario, 'losses', {
-        ...modification?.phast?.losses,
+        ...existingOverrideLosses,
         chargeMaterials,
       });
     }

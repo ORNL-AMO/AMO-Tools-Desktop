@@ -1,7 +1,7 @@
 import { Component, inject, Injector } from '@angular/core';
 import { CondenserCoolingMethod, Modification } from '../../shared/models/process-cooling-assessment';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
-import { AddModificationComponent } from './add-modification/add-modification.component';
+import { AddModificationComponent, DEFAULT_DESCRIPTION } from '../../shared/add-modification/add-modification.component';
 import { ModificationService } from '../services/modification.service';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { Observable } from 'rxjs';
@@ -26,11 +26,17 @@ export class ExploreOpportunitiesComponent {
   }
 
   addModification() {
+    const modificationCount = this.modificationService.modifications().length;
     this.modalService.openModal(
-      AddModificationComponent, 
+      AddModificationComponent,
       {
         width: '800px',
-        data: undefined,
+        data: {
+          themeClass: 'process-cooling-assessment',
+          description: modificationCount === 0 ? DEFAULT_DESCRIPTION : '',
+          defaultName: `Scenario ${modificationCount + 1}`,
+          onCreate: (name: string) => this.modificationService.addNewModificationToAssessment(name),
+        },
       },
       // * injector required for providing services inside the global (core) module
       this.injector

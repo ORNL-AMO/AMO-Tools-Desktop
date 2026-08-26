@@ -70,9 +70,9 @@ import { MonthlyOperatingScheduleService } from './services/monthly-operating-sc
 import { OperatingScheduleComponent } from './operating-schedule/operating-schedule.component';
 import { WeeklyOperatingScheduleComponent } from './operating-schedule/weekly-operating-schedule/weekly-operating-schedule.component';
 import { MonthlyOperatingScheduleComponent } from './operating-schedule/monthly-operating-schedule/monthly-operating-schedule.component';
-import { AddModificationComponent } from './explore-opportunities/add-modification/add-modification.component';
+import { AddModificationComponent } from '../shared/add-modification/add-modification.component';
 import { ModificationService } from './services/modification.service';
-import { ModificationListComponent } from './explore-opportunities/modification-list/modification-list.component';
+import { ModificationListComponent } from '../shared/modification-list/modification-list.component';
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
 import { AlertInfoContainerComponent } from '../shared/alert-info-container/alert-info-container.component';
 import { SlidingCondenserWaterTemperatureComponent } from './explore-opportunities/sliding-condenser-water-temperature/sliding-condenser-water-temperature.component';
@@ -287,8 +287,6 @@ const ROUTES: Route[] = [
     OperatingScheduleComponent,
     WeeklyOperatingScheduleComponent,
     MonthlyOperatingScheduleComponent,
-    AddModificationComponent,
-    ModificationListComponent,
     AssessmentResultsComponent,
     EemHelpComponent,
     PumpSummaryComponent,
@@ -338,7 +336,9 @@ const ROUTES: Route[] = [
     AlertInfoContainerComponent,
     PercentGraphModule,
     ReportTableCellPipe,
-    ReportBuilderModule
+    ReportBuilderModule,
+    AddModificationComponent,
+    ModificationListComponent
   ],
   providers: [
     ProcessCoolingAssessmentService,

@@ -1,0 +1,22 @@
+@if (selectedModification(); as modification) {
+  <div class="expert-view-container d-flex">
+    <div class="expert-view-panel">
+      <div class="expert-view-panel-header">Baseline</div>
+      <div class="expert-view-panel-content">
+        <app-charge-material [scenario]="'baseline'"></app-charge-material>
+      </div>
+    </div>
+    <div class="expert-view-panel">
+      <div class="expert-view-panel-header">{{ modificationName(modification) }}</div>
+      <div class="expert-view-panel-content">
+        <app-charge-material [scenario]="modification.id"></app-charge-material>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="no-data panel-container p-3 text-center">
+    <h2 class="h6">Expert View lets you edit any field directly, side by side with your baseline conditions.</h2>
+    <p class="mt-2 small text-muted">Create a scenario to get started.</p>
+    <button type="button" class="btn btn-primary" (click)="addModification()">Create a Modification</button>
+  </div>
+}

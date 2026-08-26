@@ -1,0 +1,105 @@
+<div class="modal-header">
+  <h3>{{ title }}</h3>
+  <button class="close" (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body" [class]="data.themeClass" [style.--scenario-theme]="'var(--' + data.themeClass + ')'">
+  <div class="row">
+    <div class="col-lg-9 col-md-7 col-sm-12 scroll-item">
+      <ul class="list-group">
+        <li class="list-group-item title-item">
+          <div class="row">
+            <div [class.col-9]="!data.showBadges" [class.col-6]="data.showBadges">
+              <span class="bold">Name</span>
+            </div>
+            @if (data.showBadges) {
+              <div class="col-1"></div>
+              <div class="col-5">
+                <span class="bold">Modifications</span>
+              </div>
+            }
+          </div>
+        </li>
+        @for (item of items(); track item.id) {
+          <li class="list-group-item modification-item" [class.active-item]="selectedItemId() === item.id">
+            <div class="row">
+              <div [class.col-9]="!data.showBadges" [class.col-6]="data.showBadges">
+                @if (item.id !== deleteItemId && item.id !== renameItemId) {
+                  <a class="click-link small" (click)="selectItem(item.id)">{{ item.name }}</a>
+                }
+                @if (item.id === renameItemId) {
+                  <div class="input-group">
+                    <input class="form-control" [(ngModel)]="renameItemName">
+                    <span
+                      class="input-group-addon units"
+                      [class.disabled]="!renameItemName.trim()"
+                      (click)="saveRename(item)"
+                    >
+                      <span class="fa fa-check"></span>
+                    </span>
+                  </div>
+                }
+                @if (item.id === deleteItemId) {
+                  <div class="d-flex">
+                    <div class="p-0 text-center small bold">
+                      Are you sure you want to delete?
+                      <br>
+                      <span class="small red">This cannot be undone.</span>
+                    </div>
+                    <div class="p-0 align-self-center small text-center">
+                      <button class="btn btn-danger" (click)="confirmDelete()">
+                        <span class="fa fa-trash pr-1"></span>Delete
+                      </button>
+                    </div>
+                    <div class="p-0 align-self-center text-center small">
+                      <button class="btn btn-default" (click)="cancelDelete()">Cancel</button>
+                    </div>
+                  </div>
+                }
+              </div>
+              <div [class.col-3]="!data.showBadges" [class.col-1]="data.showBadges" class="text-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary dropdown-toggle" (click)="showDropdown(item.id)"></button>
+                  <div class="dropdown-menu" [class.shown]="dropdownId === item.id">
+                    <span class="dropdown-item" (click)="selectRename(item)">Rename</span>
+                    <span class="dropdown-item" (click)="selectDelete(item.id)">Delete</span>
+                    <span class="dropdown-item" (click)="createCopy(item)">Create Copy</span>
+                  </div>
+                </div>
+              </div>
+              @if (data.showBadges) {
+                <div class="col-5">
+                  <div class="d-flex flex-wrap">
+                    @for (badge of item.badges; track badge) {
+                      <div class="badge badge-primary">{{ badge }}</div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+    <div class="col-lg-3 col-md-5 col-sm-12">
+      <div class="d-flex flex-column tab-content align-self-center">
+        <div class="p-2 text-center">
+          <p>{{ addNewDescription }}
+            <span class="small text-help">Please use a unique name.</span>
+          </p>
+        </div>
+        <form>
+          <div class="form-section">
+            <div class="form-group">
+              <input name="newItemName" class="form-control w-100" type="text" placeholder="New Scenario Name" [(ngModel)]="newItemName">
+            </div>
+          </div>
+        </form>
+        <div class="p-2 text-center">
+          <button class="btn btn-primary" (click)="addNewItem()" [disabled]="!newItemName">Add New Scenario</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
