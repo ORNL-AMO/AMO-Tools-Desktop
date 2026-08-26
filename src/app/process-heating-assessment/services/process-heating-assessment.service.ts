@@ -131,7 +131,7 @@ export class ProcessHeatingAssessmentService {
     if (!modification || !baseline) {
       return undefined;
     }
-    return getEffectivePhast(baseline, modification.scenarioOverrides);
+    return getEffectivePhast(baseline, modification);
   }
 
   async initAssessmentSettings(assessment: Assessment): Promise<void> {
