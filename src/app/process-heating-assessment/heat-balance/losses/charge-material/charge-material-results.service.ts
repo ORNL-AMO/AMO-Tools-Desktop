@@ -8,7 +8,7 @@ import {
   LiquidChargeMaterial,
   SolidChargeMaterial,
   ThermicReactionType,
-} from '../../../models/charge-material';
+} from '../../../../shared/models/phast/losses/chargeMaterial';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 
 export interface ChargeMaterialResultEntry {

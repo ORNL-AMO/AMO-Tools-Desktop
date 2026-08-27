@@ -2,8 +2,7 @@ import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { getNewIdString } from '../../../../shared/helperFunctions';
-import { ChargeMaterial, ChargeMaterialResult, ChargeMaterialType } from '../../../models/charge-material';
-import { ProcessHeatingModification } from '../../../models/modification';
+import { ChargeMaterial, ChargeMaterialResult, ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ChargeMaterialResultsService } from './charge-material-results.service';
 import { EntityListStore } from '../entity-list-store';
@@ -186,8 +185,7 @@ export class ChargeMaterialService {
       const current = this.assessmentService.processHeatingSignal();
       this.assessmentService.updateProcessHeatingProperty('losses', { ...current?.losses, chargeMaterials });
     } else {
-      const modifications = this.assessmentService.processHeatingSignal()?.modifications as ProcessHeatingModification[] | undefined;
-      const modification = modifications?.find(mod => mod.id === this.scenario);
+      const modification = this.assessmentService.getModifications(this.assessmentService.processHeatingSignal()).find(mod => mod.id === this.scenario);
       const existingOverrideLosses = modification?.scenarioOverrides?.losses;
       this.assessmentService.updateModificationProperty(this.scenario, 'losses', {
         ...existingOverrideLosses,

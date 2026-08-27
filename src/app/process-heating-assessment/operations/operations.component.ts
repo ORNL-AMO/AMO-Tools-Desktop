@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { DialogRef } from '@angular/cdk/dialog';
 import { OperatingHours } from '../../shared/models/operations';
-import { PHAST, PhastCo2SavingsData } from '../../shared/models/phast/phast';
+import { PHAST, PhastCo2SavingsData } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { Co2SavingsPhastService } from '../../phast/losses/operations/co2-savings-phast/co2-savings-phast.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';

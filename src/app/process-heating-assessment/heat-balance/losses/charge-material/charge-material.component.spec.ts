@@ -3,7 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ChargeMaterialComponent } from './charge-material.component';
 import { ChargeMaterialItem, ChargeMaterialService, GasChargeMaterialItem, LiquidChargeMaterialItem, SolidChargeMaterialItem } from './charge-material.service';
-import { ChargeMaterialType } from '../../../models/charge-material';
+import { ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
 import { SolidMaterialFormService } from './solid-form/solid-material-form.service';

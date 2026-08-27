@@ -1,7 +1,8 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { getNewIdString } from '../../shared/helperFunctions';
-import { Modification } from '../../shared/models/phast/phast';
+import { ExploreOpportunityCategory } from '../models/phast';
 import { ProcessHeatingModification } from '../models/modification';
+import { SavingsOpportunity } from '../../shared/models/explore-opps';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
 
@@ -64,9 +65,11 @@ export class ModificationService {
     this.assessmentService.updateModificationProperty(id, 'name', name);
   }
 
-  setExploreOpportunityFlag<K extends keyof Modification>(id: string, key: K, value: Modification[K]): void {
+  setExploreOpportunityFlag(id: string, category: ExploreOpportunityCategory, value: SavingsOpportunity): void {
     const updated = this.modifications().map(modification =>
-      modification.id === id ? { ...modification, [key]: value } : modification
+      modification.id === id
+        ? { ...modification, exploreOpportunityFlags: { ...modification.exploreOpportunityFlags, [category]: value } }
+        : modification
     );
     this.writeModifications(updated);
   }
