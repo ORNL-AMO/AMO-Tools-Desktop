@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { BehaviorSubject } from 'rxjs';
 import { PhastService } from '../../../phast/phast.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -203,6 +204,23 @@ export class ChargeMaterialService {
     let currentModificationData: Array<ChargeMaterial> = this.modificationData.getValue();
     if (currentModificationData) {
       currentModificationData.splice(i, 1);
+      this.modificationData.next(currentModificationData);
+    }
+  }
+
+  reorderLoss(previousIndex: number, currentIndex: number) {
+    let currentBaselineData: Array<ChargeMaterial> = this.baselineData.getValue();
+    let collapseMapping = this.collapseMapping.getValue();
+    let collapseArray: Array<boolean> = currentBaselineData.map((material, index) => collapseMapping[index]);
+
+    moveItemInArray(currentBaselineData, previousIndex, currentIndex);
+    moveItemInArray(collapseArray, previousIndex, currentIndex);
+    this.baselineData.next(currentBaselineData);
+    this.collapseMapping.next({ ...collapseArray });
+
+    let currentModificationData: Array<ChargeMaterial> = this.modificationData.getValue();
+    if (currentModificationData && currentModificationData.length) {
+      moveItemInArray(currentModificationData, previousIndex, currentIndex);
       this.modificationData.next(currentModificationData);
     }
   }

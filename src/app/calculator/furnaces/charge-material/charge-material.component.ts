@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Subscription } from 'rxjs';
 import { SettingsDbService } from '../../../indexedDb/settings-db.service';
 import { OperatingHours } from '../../../shared/models/operations';
@@ -53,7 +54,7 @@ export class ChargeMaterialComponent implements OnInit {
   modificationExists = false;
   smallScreenTab: string = 'baseline';
 
-  constructor(private settingsDbService: SettingsDbService, 
+  constructor(private settingsDbService: SettingsDbService,
               private chargeMaterialService: ChargeMaterialService,
               private analyticsService: AnalyticsService) { }
 
@@ -123,6 +124,12 @@ export class ChargeMaterialComponent implements OnInit {
   addLoss() {
     let hoursPerYear = this.inTreasureHunt? this.operatingHours.hoursPerYear : undefined;
     this.chargeMaterialService.addLoss(hoursPerYear, this.modificationExists);
+  }
+
+  drop(event: CdkDragDrop<Array<ChargeMaterial>>) {
+    if (event.previousIndex !== event.currentIndex) {
+      this.chargeMaterialService.reorderLoss(event.previousIndex, event.currentIndex);
+    }
   }
 
   createModification() {

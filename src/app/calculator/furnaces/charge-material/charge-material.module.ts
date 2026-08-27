@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ChargeMaterialHelpComponent } from './charge-material-help/charge-material-help.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -45,7 +47,9 @@ import { MaterialNameFormComponent } from './material-name-form/material-name-fo
     SharedPipesModule,
     FlueGasModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    DragDropModule,
+    ScrollingModule
   ],
   exports: [
     ChargeMaterialComponent

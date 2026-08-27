@@ -17,7 +17,7 @@
 
   <div class="assessment-panel-group" [ngStyle]="{'height.px': containerHeight}">
 
-    <div class="modification baseline assessment-content-panel p-3" (click)="togglePanel(baselineSelected)"
+    <div class="modification baseline assessment-content-panel p-3" cdkScrollable (click)="togglePanel(baselineSelected)"
       [ngClass]="{'disabled': baselineSelected == false, 'modal-open': isModalOpen == true, 'assessment-small-screen-tab': smallScreenTab === 'baseline'}"
       [ngStyle]="{'height.px': containerHeight}">
       <div class="header ml-2 mr-2">

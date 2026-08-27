@@ -531,5 +531,30 @@ a:not([href]):not([tabindex]).disabled-link:hover {
         display: none;
     }
   }
+
+  /* Shared cdkDrag/cdkDropList reorder styling - used by any draggable loss/material list */
+  .drag-handle {
+      cursor: grab;
+      display: inline-flex;
+      align-items: center;
+      margin-right: 8px;
+      color: #999;
+  }
+
+  .cdk-drag-preview {
+      box-shadow: 0 4px 20px 0 grey;
+  }
+
+  .cdk-drag-placeholder {
+      opacity: 0.3;
+  }
+
+  .cdk-drag-animating {
+      transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .cdk-drop-list-dragging .cdk-drag:not(.cdk-drag-placeholder) {
+      transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+  }
   
   

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ModalModule } from 'ngx-bootstrap/modal';
 
 import { WallLossesModule } from './wall-losses/wall-losses.module';
@@ -56,6 +57,7 @@ import { Co2HelpTextModule } from '../../shared/co2-help-text/co2-help-text.modu
   imports: [
     CommonModule,
     FormsModule,
+    ScrollingModule,
     ModalModule,
     WallLossesModule,
     SlagModule,

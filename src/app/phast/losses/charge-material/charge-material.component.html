@@ -10,10 +10,14 @@
   <h4>To add Charge Material you will need to delete your current modifications and return to baseline.</h4>
 </div>
 
-<div class="card-form d-flex flex-column" *ngFor="let material of _chargeMaterial; let lossIndex = index">
+<div cdkDropList (cdkDropListDropped)="drop($event)">
+<div class="card-form d-flex flex-column" *ngFor="let material of _chargeMaterial; let lossIndex = index"
+  cdkDrag [cdkDragDisabled]="!isBaseline || !inSetup || lossesLocked">
   <div *ngIf="material.chargeMaterialType == 'Solid'">
     <form class="name-input-form" [formGroup]="material.solidForm">
       <div class="input-group">
+        <span *ngIf="isBaseline && inSetup && !lossesLocked" class="fa fa-bars drag-handle" cdkDragHandle
+          title="Drag to reorder"></span>
         <span class="input-group-addon units left" (click)="collapseLoss(material)">
           <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
           <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
@@ -33,6 +37,8 @@
   <div *ngIf="material.chargeMaterialType == 'Gas'">
     <form class="name-input-form" [formGroup]="material.gasForm">
       <div class="input-group">
+        <span *ngIf="isBaseline && inSetup && !lossesLocked" class="fa fa-bars drag-handle" cdkDragHandle
+          title="Drag to reorder"></span>
         <span class="input-group-addon units left" (click)="collapseLoss(material)">
           <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
           <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
@@ -52,6 +58,8 @@
   <div *ngIf="material.chargeMaterialType == 'Liquid'">
     <form class="name-input-form" [formGroup]="material.liquidForm">
       <div class="input-group">
+        <span *ngIf="isBaseline && inSetup && !lossesLocked" class="fa fa-bars drag-handle" cdkDragHandle
+          title="Drag to reorder"></span>
         <span class="input-group-addon units left" (click)="collapseLoss(material)">
           <span *ngIf="material.collapse" class="fa fa-caret-down"></span>
           <span *ngIf="!material.collapse" class="fa fa-caret-up"></span>
@@ -149,6 +157,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 <div class="d-flex flex-column loss-total" *ngIf="total">
   <div class="d-flex">

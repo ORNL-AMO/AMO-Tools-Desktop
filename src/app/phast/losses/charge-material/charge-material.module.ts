@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ChargeMaterialCompareService } from './charge-material-compare.service';
 import { ChargeMaterialComponent } from "./charge-material.component";
@@ -17,7 +18,8 @@ import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.mod
     ReactiveFormsModule,
     ModalModule,
     SuiteDbModule,
-    SharedPipesModule
+    SharedPipesModule,
+    DragDropModule
   ],
   declarations: [
     ChargeMaterialComponent,

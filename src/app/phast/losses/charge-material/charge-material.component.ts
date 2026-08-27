@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import * as _ from 'lodash';
 import { PhastService } from '../../phast.service';
 import { Losses } from '../../../shared/models/phast/phast';
@@ -165,6 +166,13 @@ export class ChargeMaterialComponent implements OnInit {
     this._chargeMaterial.splice(lossIndex, 1);
     this.saveLosses();
     this.total = this.getTotal();
+  }
+
+  drop(event: CdkDragDrop<Array<ChargeMaterialObj>>) {
+    if (event.previousIndex !== event.currentIndex) {
+      moveItemInArray(this._chargeMaterial, event.previousIndex, event.currentIndex);
+      this.saveLosses();
+    }
   }
 
   collapseLoss(loss: ChargeMaterialObj) {
