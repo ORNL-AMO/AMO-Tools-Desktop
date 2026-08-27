@@ -13,10 +13,6 @@ When sources conflict, apply this order (highest to lowest):
 
 `AGENTS.md` covers repo orientation, architecture, and workflow (what to do, where things live, how to verify changes). The style guide covers how to write the code. If the two disagree on style or pattern, the style guide wins.
 
-## Coding Style
-
-@CODING_STYLE_GUIDE.MD
-
 ## Repo Orientation
 
 @AGENTS.md
@@ -37,6 +33,5 @@ Both this repo and `process-flow-diagram-component/` need dependencies installed
 
 ### Tests
 
-- `npm test`: Angular/Karma suite (ChromeHeadless).
-- Single spec: `ng test --include='**/path/to/file.spec.ts'`
-- Process-flow package (from `process-flow-diagram-component/`): `npm run test` (Vitest), `npm run test:typecheck`.
+See `AGENTS.md` → Verification for test and typecheck commands.
+
