@@ -91,7 +91,11 @@ export type ExploreOpportunityCategory = typeof ExploreOpportunityCategory[keyof
 export interface Modification {
   id: string;
   notes?: Notes;
-  exploreOpportunities?: Partial<Record<ExploreOpportunityCategory, SavingsOpportunity>>;
+  // Named distinctly from legacy's `Modification.exploreOpportunities` (a boolean) and its 15
+  // `exploreOppsShowX` fields (shared/models/phast/phast.ts): legacy's own Explore Opportunities
+  // screen still reads/writes those fields directly, so this module's per-category map can't share
+  // the key without corrupting legacy's data on save.
+  exploreOpportunityFlags?: Partial<Record<ExploreOpportunityCategory, SavingsOpportunity>>;
 }
 
 export interface Notes {

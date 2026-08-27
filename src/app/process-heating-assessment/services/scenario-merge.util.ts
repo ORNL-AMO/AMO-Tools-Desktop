@@ -1,5 +1,12 @@
 import { Losses, PHAST } from '../models/phast';
-import { ProcessHeatingModification } from '../models/modification';
+import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
+
+// Plain value comparison, not a reference check: these are already IndexedDB-persisted JSON
+// (no Date, Map, or function values), so stringify-compare is consistent with how the rest of
+// the codebase already clones assessment data (JSON.parse(JSON.stringify(...))).
+function deepEqual(a: unknown, b: unknown): boolean {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
 
 // Combines a modification's overrides with baseline to produce the PHAST object that modification
 // should actually be evaluated against. Two levels only, both plain object spreads:
@@ -29,4 +36,38 @@ export function getEffectivePhast(baseline: PHAST, modification: ProcessHeatingM
     ...diff,
     losses: effectiveLosses,
   };
+}
+
+// Structural inverse of getEffectivePhast(), at the same two-level granularity: top-level PHAST
+// fields are compared wholesale, `losses` is compared one level deeper (per loss-type array, never
+// per array item). Used to migrate `scenarioOverrides` for modifications written by legacy, whose
+// edits live in a full `phast` clone rather than a diff.
+export function computeScenarioOverrides(modificationPhast: PHAST | undefined, baseline: PHAST): ScenarioOverrides {
+  if (!modificationPhast) {
+    return {};
+  }
+
+  const overrides: ScenarioOverrides = {};
+  for (const key of Object.keys(modificationPhast) as (keyof PHAST)[]) {
+    if (key === 'losses' || key === 'modifications' || key === 'selectedModificationId') {
+      continue;
+    }
+    if (!deepEqual(modificationPhast[key], baseline[key])) {
+      (overrides as Record<string, unknown>)[key] = modificationPhast[key];
+    }
+  }
+
+  if (modificationPhast.losses) {
+    const lossesOverride: Losses = {};
+    for (const lossKey of Object.keys(modificationPhast.losses) as (keyof Losses)[]) {
+      if (!deepEqual(modificationPhast.losses[lossKey], baseline.losses?.[lossKey])) {
+        (lossesOverride as Record<string, unknown>)[lossKey] = modificationPhast.losses[lossKey];
+      }
+    }
+    if (Object.keys(lossesOverride).length > 0) {
+      overrides.losses = lossesOverride;
+    }
+  }
+
+  return overrides;
 }

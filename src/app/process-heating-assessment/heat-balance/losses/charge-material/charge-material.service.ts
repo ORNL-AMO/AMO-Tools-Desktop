@@ -2,7 +2,7 @@ import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { getNewIdString } from '../../../../shared/helperFunctions';
-import { ChargeMaterial, ChargeMaterialResult, ChargeMaterialType } from '../../../models/charge-material';
+import { ChargeMaterial, ChargeMaterialResult, ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ChargeMaterialResultsService } from './charge-material-results.service';
 import { EntityListStore } from '../entity-list-store';

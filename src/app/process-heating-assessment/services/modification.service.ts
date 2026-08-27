@@ -68,7 +68,7 @@ export class ModificationService {
   setExploreOpportunityFlag(id: string, category: ExploreOpportunityCategory, value: SavingsOpportunity): void {
     const updated = this.modifications().map(modification =>
       modification.id === id
-        ? { ...modification, exploreOpportunities: { ...modification.exploreOpportunities, [category]: value } }
+        ? { ...modification, exploreOpportunityFlags: { ...modification.exploreOpportunityFlags, [category]: value } }
         : modification
     );
     this.writeModifications(updated);

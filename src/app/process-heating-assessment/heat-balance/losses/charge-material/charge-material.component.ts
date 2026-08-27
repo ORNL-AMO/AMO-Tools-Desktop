@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, effect, inject, input, Signal, untracked } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { ChargeMaterialType } from '../../../models/charge-material';
+import { ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ChargeMaterialItem, ChargeMaterialService } from './charge-material.service';
 import { ChargeMaterialResultsService } from './charge-material-results.service';
