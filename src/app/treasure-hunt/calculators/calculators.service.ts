@@ -399,7 +399,7 @@ export class CalculatorsService {
     } else if (opportunityCardData.opportunityType === Treasure.powerFactorCorrection) {
       this.powerFactorCorrectionTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.powerFactorCorrection);
     } else if (opportunityCardData.opportunityType === Treasure.steamLeak) {
-      // this.steamLeakTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.steamLeakSurvey);
+      this.steamLeakTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.steamLeakSurvey);
     }
     this.selectedCalc.next(opportunityCardData.opportunityType);
   }
@@ -584,6 +584,8 @@ export class CalculatorsService {
   deleteOpportunity(deleteOpportunity: OpportunityCardData, treasureHunt: TreasureHunt): TreasureHunt {
     if (deleteOpportunity.opportunityType === Treasure.airLeak) {
       treasureHunt = this.airLeakTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt);
+    } else if (deleteOpportunity.opportunityType === Treasure.steamLeak) {
+      treasureHunt = this.steamLeakTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt);
     } else if (deleteOpportunity.opportunityType === Treasure.tankInsulation) {
       this.tankInsulationTreasureHuntService.deleteOpportunity(deleteOpportunity.opportunityIndex, treasureHunt)
     } else if (deleteOpportunity.opportunityType === Treasure.opportunitySheet) {
