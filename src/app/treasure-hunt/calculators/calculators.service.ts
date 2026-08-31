@@ -399,7 +399,7 @@ export class CalculatorsService {
     } else if (opportunityCardData.opportunityType === Treasure.powerFactorCorrection) {
       this.powerFactorCorrectionTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.powerFactorCorrection);
     } else if (opportunityCardData.opportunityType === Treasure.steamLeak) {
-      // this.steamLeakTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.steamLeakSurvey);
+      this.steamLeakTreasureHuntService.setCalculatorInputFromOpportunity(opportunityCardData.steamLeakSurvey);
     }
     this.selectedCalc.next(opportunityCardData.opportunityType);
   }
