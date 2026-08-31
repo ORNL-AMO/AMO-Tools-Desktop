@@ -73,7 +73,7 @@ export class PdfReportService extends BaseReportService {
 
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(18);
-    pdf.setTextColor(...this.moduleColor);
+    pdf.setTextColor(0, 0, 0);
     pdf.text(meta.title, PAGE_MARGIN_MM, cursorY);
     cursorY += 8;
 
