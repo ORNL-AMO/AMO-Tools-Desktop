@@ -385,7 +385,8 @@ export class SsmtService {
   }
 
   getPaybackPeriod(modCost: number, baselineCost: number, implementationCost: number): number {
-    if (!implementationCost) return 0;
+    if (!implementationCost || (baselineCost - modCost) <= 0) return 0;
+    // baselineCost/modCost are in thousands of dollars, implementationCost is in dollars — * 1000 aligns units before dividing
     const paybackMonths = (implementationCost / (baselineCost - modCost)) * 12 * 1000;
     return isNaN(paybackMonths) ? 0 : paybackMonths;
   }

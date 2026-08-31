@@ -355,7 +355,7 @@ export class FsatService {
   }
 
   getPaybackPeriod(annualCostSavings: number, implementationCosts: number): number {
-    if (!implementationCosts || (annualCostSavings ?? 0) <= 1) return 0;
+    if (!implementationCosts || (annualCostSavings ?? 0) <= 0) return 0;
     return (implementationCosts / annualCostSavings) * 12;
   }
 

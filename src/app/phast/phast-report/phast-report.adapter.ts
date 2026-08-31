@@ -181,9 +181,11 @@ export class PhastReportAdapter implements ReportDataAdapter {
       })],
     );
 
+    const emphasisRowsIndices = findRowIndices(rows, [`Energy Used (${timeUnit})`, `Energy Savings (${timeUnit})`]);
+
     const sections: (SummaryTableSection | TextSection)[] = [{
       type: 'summary-table', title: 'Executive Summary', group: 'executiveSummary',
-      headers, rows, emphasisRowsIndices: showCO2 ? [6, 7] : [4, 5], pageBreakBefore: true,
+      headers, rows, emphasisRowsIndices, pageBreakBefore: true,
     }];
 
     if (isEAF) {
