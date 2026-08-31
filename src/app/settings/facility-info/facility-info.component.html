@@ -22,13 +22,17 @@
   <div class="row">
     <div class="col-lg-6 col-md-6 col-sm-12 form-section">
       <label class="group-label">Facility Contact Info</label>
-      <div class="form-group" *ngIf="savedContacts?.length">
-        <label class="small" for="savedFacilityContact">Use Saved Contact</label>
-        <select class="form-control" id="savedFacilityContact" (change)="useSavedContact('facility', $event.target.value)">
-          <option value="">-- New Contact --</option>
-          <option *ngFor="let contact of savedContacts" [value]="contact.id">{{contact.contactName}}</option>
-        </select>
-      </div>
+      @if (savedContacts?.length) {
+        <div class="form-group">
+          <label class="small" for="savedFacilityContact">Use Saved Contact</label>
+          <select class="form-control" id="savedFacilityContact" (change)="useSavedContact('facility', $event.target.value)">
+            <option value="">-- New Contact --</option>
+            @for (contact of savedContacts; track contact.id) {
+              <option [value]="contact.id">{{contact.contactName}}</option>
+            }
+          </select>
+        </div>
+      }
       <div class="form-group">
         <label class="small" for="facilityContactName">Name</label>
         <input type="text" id="facilityContactName" name="facilityContactName" class="form-control" formControlName="facilityContactName"
@@ -46,13 +50,17 @@
     </div>
     <div class="col-lg-6 col-md-6 col-sm-12 form-section">
       <label class="group-label">Assessment Contact Info</label>
-      <div class="form-group" *ngIf="savedContacts?.length">
-        <label class="small" for="savedAssessmentContact">Use Saved Contact</label>
-        <select class="form-control" id="savedAssessmentContact" (change)="useSavedContact('assessment', $event.target.value)">
-          <option value="">-- New Contact --</option>
-          <option *ngFor="let contact of savedContacts" [value]="contact.id">{{contact.contactName}}</option>
-        </select>
-      </div>
+      @if (savedContacts?.length) {
+        <div class="form-group">
+          <label class="small" for="savedAssessmentContact">Use Saved Contact</label>
+          <select class="form-control" id="savedAssessmentContact" (change)="useSavedContact('assessment', $event.target.value)">
+            <option value="">-- New Contact --</option>
+            @for (contact of savedContacts; track contact.id) {
+              <option [value]="contact.id">{{contact.contactName}}</option>
+            }
+          </select>
+        </div>
+      }
       <div class="form-group">
         <label class="small" for="assessmentContactName">Name</label>
         <input type="text" id="assessmentContactName" name="assessmentContactName" class="form-control" formControlName="assessmentContactName"

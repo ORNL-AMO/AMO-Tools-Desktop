@@ -20,6 +20,7 @@ export class EmailMeasurDataComponent {
   emailSender: string = 'MEASUR user';
   emailSentStatus: EmailSentStatus;
   emailSentStatusSubscription: Subscription;
+  emailToValueChangesSubscription: Subscription;
 
   contactSearchDataSource: Observable<Array<SavedContact>>;
   currentEmailToken: string = '';
@@ -47,11 +48,12 @@ export class EmailMeasurDataComponent {
       observer.next(this.emailDataForm.controls.emailTo.value);
     }).pipe(mergeMap((value: string) => this.searchContacts(this.getLastToken(value))));
 
-    this.emailDataForm.controls.emailTo.valueChanges.subscribe((value: string) => this.onEmailToChange(value));
+    this.emailToValueChangesSubscription = this.emailDataForm.controls.emailTo.valueChanges.subscribe((value: string) => this.onEmailToChange(value));
   }
 
   ngOnDestroy() {
     this.emailSentStatusSubscription.unsubscribe();
+    this.emailToValueChangesSubscription.unsubscribe();
     this.emailMeasurDataService.emailSentStatus.next(undefined);
     clearTimeout(this.contactAddedBannerTimeout);
   }

@@ -59,6 +59,7 @@ export class DirectorySummaryComponent implements OnInit {
   settingsForm: UntypedFormGroup;
   updateDashboardDataSub: Subscription;
   directoryIdSub: Subscription;
+  contactModalSub: Subscription;
   counter: any;
   savedContacts: Array<SavedContact>;
   selectedContact: SavedContact;
@@ -94,6 +95,7 @@ export class DirectorySummaryComponent implements OnInit {
   ngOnDestroy() {
     this.updateDashboardDataSub.unsubscribe();
     this.directoryIdSub.unsubscribe();
+    this.contactModalSub?.unsubscribe();
   }
 
   selectContact(contact: SavedContact) {
@@ -119,19 +121,22 @@ export class DirectorySummaryComponent implements OnInit {
     this.showConfirmDeleteContactModal = false;
   }
 
-  showAddContactModal() {
-    let editContactModalData: EditContactModalData = {
-      modalTitle: 'Add Contact',
-    };
-    this.modalDialogService.openModal<Contact, EditContactModalData, EditContactModalComponent>(
+  openContactModal(editContactModalData: EditContactModalData, onClose: (contact: Contact) => void) {
+    this.contactModalSub?.unsubscribe();
+    this.contactModalSub = this.modalDialogService.openModal<Contact, EditContactModalData, EditContactModalComponent>(
       EditContactModalComponent,
       {
         width: '500px',
         data: editContactModalData,
       },
-    ).closed.subscribe((contact) => {
-      this.onAddContactClose(contact);
-    });
+    ).closed.subscribe(onClose);
+  }
+
+  showAddContactModal() {
+    let editContactModalData: EditContactModalData = {
+      modalTitle: 'Add Contact',
+    };
+    this.openContactModal(editContactModalData, (contact) => this.onAddContactClose(contact));
   }
 
   async onAddContactClose(contact: Contact) {
@@ -147,15 +152,7 @@ export class DirectorySummaryComponent implements OnInit {
       modalTitle: 'Edit Contact Info',
       contact: this.selectedContact
     };
-    this.modalDialogService.openModal<Contact, EditContactModalData, EditContactModalComponent>(
-      EditContactModalComponent,
-      {
-        width: '500px',
-        data: editContactModalData,
-      },
-    ).closed.subscribe((contact) => {
-      this.onEditContactClose(contact);
-    });
+    this.openContactModal(editContactModalData, (contact) => this.onEditContactClose(contact));
   }
 
   async onEditContactClose(contact: Contact) {
