@@ -23,12 +23,17 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     handles: Handles,
     disableInflowConnections?: boolean,
     disableOutflowConnections?: boolean,
+    flowConfidence: Record<NodeFlowProperty, FlowConfidence>,
   }
-  
+
+  export type FlowConfidence = 'estimated' | 'metered';
+
   export interface CustomEdgeData extends Record<string, unknown> {
     flowValue: number,
     hasOwnEdgeType: string,
     edgeDescription: string,
+    confidence: FlowConfidence,
+    hasManualColorOverride?: boolean,
   }
   
   // * patches v11 -> v12 typing changes
@@ -50,6 +55,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     handles?: Handles,
     disableInflowConnections?: boolean,
     disableOutflowConnections?: boolean,
+    flowConfidence?: Record<NodeFlowProperty, FlowConfidence>,
   }, 'processFlowPart'>;
   
   export interface HandleOption {
@@ -140,6 +146,13 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     flowLabelSize: number,
     animated: boolean,
     paletteColors?: string[],
+    // * undefined is treated as false (off) so pre-existing saved diagrams don't need a migration
+    colorEdgesByConfidence?: boolean,
+    estimatedFlowColor?: string,
+    meteredFlowColor?: string,
+    // * master switch for the whole Estimated/Metered feature - undefined is treated as true (on)
+    // * so pre-existing saved diagrams keep showing it without a migration
+    flowConfidenceEnabled?: boolean,
   }
   
   
@@ -164,7 +177,12 @@ export interface ProcessFlowPart extends Record<string, unknown> {
 
   
 export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'totalDischargeFlow'>;
-  
+
+  export const getDefaultFlowConfidence = (): Record<NodeFlowProperty, FlowConfidence> => ({
+    totalSourceFlow: 'estimated',
+    totalDischargeFlow: 'estimated',
+  });
+
   export interface DiagramCalculatedData {
     nodes: {
       [nodeId: string]: NodeFlowData

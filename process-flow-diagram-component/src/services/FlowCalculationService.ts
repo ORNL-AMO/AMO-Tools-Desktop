@@ -17,6 +17,7 @@ export class FlowCalculationService {
     this.store.dispatch(diagramSlice.actions.edgesChangeFromPropagation({
       flowUpdates,
       startingNodeId: nodeId,
+      initialEdgeId: edge.id,
     }));
 
   }
