@@ -40,6 +40,7 @@ import { PrvModule } from '../calculator/steam/prv/prv.module';
 import { TurbineModule } from '../calculator/steam/turbine/turbine.module';
 import { HeaderModule } from '../calculator/steam/header/header.module';
 import { DeaeratorModule } from '../calculator/steam/deaerator/deaerator.module';
+import { SteamLeakSurveyModule } from '../calculator/steam/steam-leak/steam-leak-survey.module';
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { BlowdownRateModalModule } from './blowdown-rate-modal/blowdown-rate-modal.module';
 import { TabsTooltipModule } from '../shared/tabs-tooltip/tabs-tooltip.module';
@@ -72,6 +73,7 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     FlashTankModule,
     PrvModule,
     DeaeratorModule,
+    SteamLeakSurveyModule,
     HeaderModule,
     TurbineModule,
     BlowdownRateModalModule,
