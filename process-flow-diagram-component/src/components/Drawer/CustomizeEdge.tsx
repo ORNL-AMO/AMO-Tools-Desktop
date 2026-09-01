@@ -1,28 +1,55 @@
 import { Box, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import { Edge } from '@xyflow/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useUserEventDebounce from '../../hooks/useUserEventDebounce';
 import ColorPicker from './ColorPicker';
+import ResetColorButton from './ResetColorButton';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { customEdgeTypeChange, setEdgeStrokeColor } from '../Diagram/diagramReducer';
-import { CustomEdgeData } from 'process-flow-lib';
+import { CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR } from 'process-flow-lib';
+import { useFlowConfidenceColor, resolveEdgeStrokeColor } from '../Edges/FlowConfidenceIcon';
+import { selectColorEdgesByConfidence } from '../Diagram/store';
+
 export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
   const dispatch = useAppDispatch();
+  const getFlowConfidenceColorValue = useFlowConfidenceColor();
   const recentEdgeColors = useAppSelector((state) => state.diagram.recentEdgeColors);
-  const edgeType: string = useAppSelector((state) => state.diagram.diagramOptions.edgeType); 
-  
-  const [edgeColor, setEdgeColor] = useState(edge.style.stroke);
+  const edgeType: string = useAppSelector((state) => state.diagram.diagramOptions.edgeType);
+  const colorEdgesByConfidence = useAppSelector(selectColorEdgesByConfidence);
+
+  // * shows the color actually on screen - the confidence auto-color unless the user has manually overridden it or turned off "Color Edges by Confidence"
+  const displayedEdgeColor = resolveEdgeStrokeColor(edge.data, edge.style.stroke, colorEdgesByConfidence, getFlowConfidenceColorValue);
+  const [edgeColor, setEdgeColor] = useState(displayedEdgeColor);
   const [recentColors, setRecentColors] = useState(recentEdgeColors);
-  const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);  
+  const debouncedEdgeColor = useUserEventDebounce<string>(edgeColor, 50);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    // * already matches redux state (e.g. this fired from a reset dispatched synchronously below) - nothing to dispatch
+    if (debouncedEdgeColor === displayedEdgeColor) {
+      return;
+    }
     dispatch(setEdgeStrokeColor({color: debouncedEdgeColor, recentColors}));
   }, [debouncedEdgeColor]);
+
+  useEffect(() => {
+    setEdgeColor(displayedEdgeColor);
+  }, [displayedEdgeColor]);
 
   const handleEdgeStrokeChange = (color: string, recentColors?: string[]) => {
     setEdgeColor(color);
     setRecentColors(recentColors);
+  }
+
+  const handleResetEdgeStrokeColor = () => {
+    const resetColor = colorEdgesByConfidence ? getFlowConfidenceColorValue(edge.data.confidence) : DEFAULT_EDGE_STROKE_COLOR;
+    setEdgeColor(resetColor);
+    dispatch(setEdgeStrokeColor({ color: resetColor, isReset: true }));
   }
 
   const getCurrentEdgeType = (): string => {
@@ -71,11 +98,18 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
 
           <Box sx={{fontSize: '.75rem'}}>
             <ColorPicker
-              label={'Pick Line Color'} 
+              label={'Pick Line Color'}
               color={edgeColor}
               recentColors={recentEdgeColors}
               setParentColor={handleEdgeStrokeChange}
               showRecent={true}
+              actions={
+                <ResetColorButton
+                  label="line"
+                  disabled={!edge.data.hasManualColorOverride}
+                  onClick={handleResetEdgeStrokeColor}
+                />
+              }
               />
           </Box>
     </Box>

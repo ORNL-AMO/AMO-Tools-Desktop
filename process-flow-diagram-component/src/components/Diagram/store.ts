@@ -115,6 +115,8 @@ export const selectDiagramFlowErrors = (state: RootState) => state.diagram.diagr
 export const selectisDataDrawerOpen = (state: RootState) => state.diagram.isDataDrawerOpen;
 export const selectIsModalOpen = (state: RootState) => state.diagram.isModalOpen;
 export const selectHasAssessment = (state: RootState) => state.diagram.assessmentId !== undefined;
+export const selectFlowConfidenceEnabled = (state: RootState) => state.diagram.diagramOptions.flowConfidenceEnabled !== false;
+export const selectColorEdgesByConfidence = (state: RootState) => selectFlowConfidenceEnabled(state) && state.diagram.diagramOptions.colorEdgesByConfidence === true;
 export const selectCurrentNode = (state: RootState) => state.diagram.nodes.find((node: Node<ProcessFlowPart>) => node.id === state.diagram.selectedDataId) as Node<ProcessFlowPart>;
 export const selectCalculatedData = (state: RootState) => state.diagram.calculatedData;
 export const selectNodeValidation = (state: RootState) => {

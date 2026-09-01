@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowDiagramData, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
+import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
@@ -123,13 +123,19 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.diagramOptions = diagramData.userDiagramOptions ? { ...diagramData.userDiagramOptions } : getDefaultUserDiagramOptions();
   state.settings = diagramData.settings ? { ...diagramData.settings } : getDefaultSettings();
   state.calculatedData = diagramData.calculatedData ? { ...diagramData.calculatedData } : { nodes: {} };
-  
   const diagramFlowErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
   state.diagramFlowErrors = diagramFlowErrors;
 
   state.recentNodeColors = diagramData.recentNodeColors.length !== 0 ? { ...diagramData.recentNodeColors } : getDefaultColorPalette();
   state.recentEdgeColors = diagramData.recentEdgeColors.length !== 0 ? { ...diagramData.recentEdgeColors } : getDefaultColorPalette();
-  state.diagramOptions.paletteColors = diagramData.userDiagramOptions?.paletteColors ?? getDefaultPaletteColors();  
+  state.diagramOptions.paletteColors = diagramData.userDiagramOptions?.paletteColors ?? getDefaultPaletteColors();
+  // * these fields are newer than most saved diagrams' userDiagramOptions - explicit assignment (even to
+  // * undefined) ensures the key exists on state.diagramOptions, since diagramOptionsChangeReducer's
+  // * `optionsProp in state.diagramOptions` guard requires the key to already be present, not just typed optional
+  state.diagramOptions.colorEdgesByConfidence = diagramData.userDiagramOptions?.colorEdgesByConfidence ?? false;
+  state.diagramOptions.estimatedFlowColor = diagramData.userDiagramOptions?.estimatedFlowColor;
+  state.diagramOptions.meteredFlowColor = diagramData.userDiagramOptions?.meteredFlowColor;
+  state.diagramOptions.flowConfidenceEnabled = diagramData.userDiagramOptions?.flowConfidenceEnabled ?? true;
   state.isDataDrawerOpen = false;
   state.isMenuDrawerOpen = state.isMenuDrawerOpen ?? true;
   state.focusedEdgeId = undefined;
@@ -290,6 +296,18 @@ const nodeDataPropertyChangeReducer = <K extends keyof ProcessFlowPart, T extend
   }
 }
 
+/**
+ * Sets estimated/metered confidence on a node's total flow value (source or discharge). Only ever set
+ * explicitly by the user via the drawer toggle - a value stays Metered through any later recalculation
+ * (distribute/sum/apply-estimate) until the user toggles it back. Exception: edgesChangeFromPropagation
+ * sets a node's relevant total to match the seed edge's confidence when one of its edges is populated
+ * by propagation.
+ */
+const setNodeFlowConfidenceReducer = (state: DiagramState, action: PayloadAction<{ nodeId: string, flowProperty: NodeFlowProperty, confidence: FlowConfidence }>) => {
+  const updateNode: Node<ProcessFlowPart> = state.nodes.find((node: Node<ProcessFlowPart>) => node.id === action.payload.nodeId) as Node<ProcessFlowPart>;
+  updateNode.data.flowConfidence[action.payload.flowProperty] = action.payload.confidence;
+}
+
 const setNodeColorReducer = (state: DiagramState, action: PayloadAction<{ color: string, recentColors?: string[] }>) => {
   const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart>;
   updateNode.style.backgroundColor = action.payload.color;
@@ -390,17 +408,45 @@ const edgesUpdateReducer = (state: DiagramState, action: PayloadAction<Edge[]>) 
  * @
  */
 const edgesChangeFromPropagationReducer = (state: DiagramState, action: PayloadAction<{
-  flowUpdates: Record<string, number>, 
-  startingNodeId: string
+  flowUpdates: Record<string, number>,
+  startingNodeId: string,
+  initialEdgeId: string
 }>) => {
-  const {flowUpdates, startingNodeId} = action.payload;
+  const {flowUpdates, startingNodeId, initialEdgeId} = action.payload;
+  // * downstream edges inherit the seed edge's own confidence, whatever it is (metered or estimated) -
+  // * only the seed edge itself keeps its exact prior confidence untouched
+  const seedEdge = state.edges.find(edge => edge.id === initialEdgeId) as Edge<CustomEdgeData>;
+  const seedConfidence: FlowConfidence = seedEdge.data.confidence;
+  const affectedNodeIds = new Set<string>();
   const updatedEdges: Edge<CustomEdgeData>[] = state.edges.map((edge) => {
     const newFlow = flowUpdates[edge.id];
     if (newFlow !== undefined) {
       edge.data.flowValue = newFlow;
+      if (edge.id !== initialEdgeId) {
+        edge.data.confidence = seedConfidence;
+      }
+      affectedNodeIds.add(edge.source);
+      affectedNodeIds.add(edge.target);
     }
     return edge;
   }) as Edge<CustomEdgeData>[];
+
+  // * a node's total confidence is 'metered' only when every one of its connected edges (not just
+  // * the ones touched by this propagation batch) is metered, otherwise 'estimated'
+  affectedNodeIds.forEach((nodeId) => {
+    const node = state.nodes.find(n => n.id === nodeId) as Node<ProcessFlowPart> | undefined;
+    if (!node) {
+      return;
+    }
+    const outgoingEdges = getNodeTargetEdges(updatedEdges, nodeId);
+    if (outgoingEdges.length) {
+      node.data.flowConfidence.totalDischargeFlow = outgoingEdges.every(edge => edge.data.confidence === 'metered') ? 'metered' : 'estimated';
+    }
+    const incomingEdges = getNodeSourceEdges(updatedEdges, nodeId);
+    if (incomingEdges.length) {
+      node.data.flowConfidence.totalSourceFlow = incomingEdges.every(edge => edge.data.confidence === 'metered') ? 'metered' : 'estimated';
+    }
+  });
 
    if (flowUpdates) {
     const sourceNode = state.nodes.find(node => node.id === startingNodeId);
@@ -450,13 +496,25 @@ const customEdgeTypeChangeReducer = (state: DiagramState, action: PayloadAction<
   updatedEdge.data.hasOwnEdgeType = action.payload;
 };
 
-const setEdgeStrokeColorReducer = (state: DiagramState, action: PayloadAction<{ color: string, recentColors?: string[] }>) => {
+const setEdgeStrokeColorReducer = (state: DiagramState, action: PayloadAction<{ color: string, recentColors?: string[], isReset?: boolean }>) => {
   const updatedEdge = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === state.selectedDataId);
   updatedEdge.style.stroke = action.payload.color;
+  updatedEdge.data.hasManualColorOverride = !action.payload.isReset;
 
   if (action.payload.recentColors) {
     state.recentEdgeColors = action.payload.recentColors;
   }
+}
+
+/**
+ * Sets estimated/metered confidence on a single edge's flow value. Only ever set explicitly by the
+ * user via the drawer toggle - a value stays Metered through any later recalculation (distribute/sum)
+ * until the user toggles it back. Exception: edgesChangeFromPropagation sets a downstream edge to match
+ * the seed edge's confidence when propagation overwrites its flow value.
+ */
+const setEdgeFlowConfidenceReducer = (state: DiagramState, action: PayloadAction<{ edgeId: string, confidence: FlowConfidence }>) => {
+  const updatedEdge = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === action.payload.edgeId);
+  updatedEdge.data.confidence = action.payload.confidence;
 }
 
 const setDiagramNotesReducer = (state: DiagramState, action: PayloadAction<string>) => {
@@ -619,9 +677,11 @@ export const diagramSlice = createSlice({
     nodeDataPropertyChange: nodeDataPropertyChangeReducer,
     setNodeStyle: setNodeStyleReducer,
     setNodeColor: setNodeColorReducer,
+    setNodeFlowConfidence: setNodeFlowConfidenceReducer,
     edgesChange: edgesChangeReducer,
     edgesUpdate: edgesUpdateReducer,
     setEdgeStrokeColor: setEdgeStrokeColorReducer,
+    setEdgeFlowConfidence: setEdgeFlowConfidenceReducer,
     connectEdge: connectEdgeReducer,
     deleteEdge: deleteEdgeReducer,
     keyboardDeleteNode: keyboardDeleteNodeReducer,
@@ -679,7 +739,9 @@ export const {
   defaultEdgeTypeChange,
   customEdgeTypeChange,
   setNodeColor,
+  setNodeFlowConfidence,
   setEdgeStrokeColor,
+  setEdgeFlowConfidence,
   resetDiagram,
   diagramOptionsChange,
   unitsOfMeasureChange,
@@ -721,7 +783,9 @@ export const RECOMPUTES_DIAGRAM_ERRORS: Record<DiagramActionType, boolean> = {
   setNodeName: false,
   setNodeStyle: false,
   setNodeColor: false,
+  setNodeFlowConfidence: false, // cosmetic annotation, doesn't affect flow totals or validation
   setEdgeStrokeColor: false,
+  setEdgeFlowConfidence: false, // cosmetic annotation, doesn't affect flow totals or validation
   focusedEdgeChange: false,
   defaultEdgeTypeChange: false, // edge.type/diagramOptions.edgeType are rendering-only
   customEdgeTypeChange: false,
@@ -890,6 +954,7 @@ const upgradeDiagram = (diagramData: FlowDiagramData) => {
 const upgradeNodeData = (diagramData: FlowDiagramData) => {
   diagramData.nodes.map((node: Node<ProcessFlowPart>) => {
     upgradeHandles(node.data);
+    upgradeFlowConfidence(node.data);
     return node;
   });
 }
@@ -902,7 +967,17 @@ const upgradeEdgeData = (diagramData: FlowDiagramData) => {
 }
 
 /**
- * Update node data handles to include 4 additional inflow and outflow handles. 
+ * Stamp default estimated/metered confidence onto node total flow values for diagrams saved before
+ * this feature shipped.
+ */
+const upgradeFlowConfidence = (nodeData: ProcessFlowPart) => {
+  if (!nodeData.flowConfidence) {
+    nodeData.flowConfidence = getDefaultFlowConfidence();
+  }
+}
+
+/**
+ * Update node data handles to include 4 additional inflow and outflow handles.
  * Version 0.1.0 Adds e,f,g,h for inflow and i,j,k,l for outflow, removes unused handles for water-intake and water-discharge nodes
  */
 const upgradeHandles = (nodeData: ProcessFlowPart) => {
@@ -955,9 +1030,20 @@ export const upgradeEdgeDescription = (edge: Edge<CustomEdgeData>) => {
     edge.data = {
       flowValue: null,
       hasOwnEdgeType: null,
-      edgeDescription: getEdgeDescription(edge)
+      edgeDescription: getEdgeDescription(edge),
+      confidence: 'estimated',
+      hasManualColorOverride: false,
     };
-  } else if (!edge.data.edgeDescription) {
+    return;
+  }
+
+  if (!edge.data.edgeDescription) {
     edge.data.edgeDescription = getEdgeDescription(edge);
+  }
+  if (edge.data.confidence === undefined) {
+    edge.data.confidence = 'estimated';
+  }
+  if (edge.data.hasManualColorOverride === undefined) {
+    edge.data.hasManualColorOverride = false;
   }
 }

@@ -6,6 +6,7 @@ import {
   MiniMap,
   Controls,
   Background,
+  Panel,
   ReactFlowProvider,
   OnConnect,
   type Node,
@@ -20,7 +21,7 @@ import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { AppStore, configureAppStore, RootState, selectEdges, selectNodes } from './store';
+import { AppStore, configureAppStore, RootState, selectEdges, selectFlowConfidenceEnabled, selectNodes } from './store';
 import { Provider } from 'react-redux';
 import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected, selectedIdChange } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
@@ -32,6 +33,7 @@ import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawe
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 import { FlowServiceProvider } from '../../services/FlowService';
 import ResultsPanel from './ResultsPanel';
+import FlowConfidenceLegend from './FlowConfidenceLegend';
 
 
 export interface DiagramProps {
@@ -64,6 +66,7 @@ const Diagram = (props: DiagramProps) => {
   const animated: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.animated);
   const minimapVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
   const controlsVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
+  const flowConfidenceEnabled: boolean = useAppSelector(selectFlowConfidenceEnabled);
   const defaultEdgeType: string = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
   const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
@@ -219,12 +222,23 @@ const Diagram = (props: DiagramProps) => {
             }
             {controlsVisible &&
             // * XY Flow  Styles needed for Drawer operation no longer constrain canvas width. We need to explicitly style controls or they are hidden
-            <Controls
-              style={{
-                left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
-                transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            />
+              <Controls
+                style={{
+                  left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
+                  transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              />
+            }
+            {flowConfidenceEnabled &&
+              <Panel position="bottom-left"
+                style={{
+                  // * clears the Controls panel's width (~34px) plus its own margin, only when Controls is shown
+                  left: (isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx) + (controlsVisible ? 50 : 0),
+                  transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                <FlowConfidenceLegend />
+              </Panel>
             }
             <Background />
           </ReactFlow>
