@@ -486,7 +486,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                         style={{ marginRight: '.5rem' }}
                         onChange={(e) => handleGenericCheckboxChange(e, 'colorEdgesByConfidence')}
                       />
-                      <span>Color Edges by Estimated/Metered State</span>
+                      <span>Color Lines by Estimated/Metered State</span>
                     </label>
                   </Box>
                   <Box sx={{ display: 'flex', gap: '1rem' }}>

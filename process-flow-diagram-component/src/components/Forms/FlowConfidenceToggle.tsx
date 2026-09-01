@@ -29,7 +29,7 @@ const FlowConfidenceToggle = (props: FlowConfidenceToggleProps) => {
             <span>
                 <Button
                     variant="outlined"
-                    aria-label="flow confidence"
+                    aria-label={`Flow confidence: ${getFlowConfidenceLabel(confidence)}. Mark as ${getFlowConfidenceLabel(nextConfidence)}`}
                     disabled={disabled}
                     size="small"
                     sx={[{ mr: 1, padding: '2px 6px', minWidth: 0 }, ...(Array.isArray(sx) ? sx : [sx])]}

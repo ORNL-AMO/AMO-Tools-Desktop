@@ -123,7 +123,7 @@ export class UpdateDiagramFromAssessmentService {
         const incoming: WaterProcessComponent = assessmentComponents[existingComponentIndex];
         node.data = {
           ...incoming,
-          flowConfidence: incoming.flowConfidence ?? node.data.flowConfidence ?? getDefaultFlowConfidence(),
+          flowConfidence: node.data.flowConfidence ?? incoming.flowConfidence ?? getDefaultFlowConfidence(),
         };
         return node;
       }

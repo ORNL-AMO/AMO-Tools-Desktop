@@ -47,9 +47,8 @@ export default function CustomizeEdge({ edge }: CustomizeEdgeProps) {
   }
 
   const handleResetEdgeStrokeColor = () => {
-    const resetColor = colorEdgesByConfidence ? getFlowConfidenceColorValue(edge.data.confidence) : DEFAULT_EDGE_STROKE_COLOR;
-    setEdgeColor(resetColor);
-    dispatch(setEdgeStrokeColor({ color: resetColor, isReset: true }));
+    setEdgeColor(colorEdgesByConfidence ? getFlowConfidenceColorValue(edge.data.confidence) : DEFAULT_EDGE_STROKE_COLOR);
+    dispatch(setEdgeStrokeColor({ color: DEFAULT_EDGE_STROKE_COLOR, isReset: true }));
   }
 
   const getCurrentEdgeType = (): string => {

@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
+import { ComponentManageDataTabs, CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramAlertMessages, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
 import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
 import { DiagramAlertState } from './DiagramAlert';
@@ -1032,7 +1032,7 @@ export const upgradeEdgeDescription = (edge: Edge<CustomEdgeData>) => {
       hasOwnEdgeType: null,
       edgeDescription: getEdgeDescription(edge),
       confidence: 'estimated',
-      hasManualColorOverride: false,
+      hasManualColorOverride: hasNonDefaultStroke(edge),
     };
     return;
   }
@@ -1044,6 +1044,16 @@ export const upgradeEdgeDescription = (edge: Edge<CustomEdgeData>) => {
     edge.data.confidence = 'estimated';
   }
   if (edge.data.hasManualColorOverride === undefined) {
-    edge.data.hasManualColorOverride = false;
+    edge.data.hasManualColorOverride = hasNonDefaultStroke(edge);
   }
+}
+
+/**
+ * A legacy edge (saved before manual color overrides were tracked) has a user-selected stroke
+ * if its saved color differs from the old default, since every edge used that default unless
+ * a user picked a different color.
+ */
+const hasNonDefaultStroke = (edge: Edge<CustomEdgeData>): boolean => {
+  const stroke = edge.style?.stroke;
+  return stroke !== undefined && stroke !== DEFAULT_EDGE_STROKE_COLOR;
 }

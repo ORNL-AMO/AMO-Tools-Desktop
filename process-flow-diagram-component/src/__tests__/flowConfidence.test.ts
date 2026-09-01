@@ -210,6 +210,75 @@ describe('flow confidence migration', () => {
     expect(result.edges[0].data.hasManualColorOverride).toBe(false);
     expect((result.nodes[0].data as any).flowConfidence).toEqual({ totalSourceFlow: 'estimated', totalDischargeFlow: 'estimated' });
   });
+
+  it('infers hasManualColorOverride from a saved stroke that differs from the old default, rather than defaulting to false', () => {
+    const legacyNode = {
+      id: 'intake',
+      type: 'water-intake',
+      position: { x: 0, y: 0 },
+      data: {
+        name: 'intake',
+        processComponentType: 'water-intake',
+        className: 'water-intake',
+        cost: 0,
+        isValid: true,
+        createdByAssessment: false,
+        diagramNodeId: 'intake',
+        handles: {},
+        userEnteredData: {},
+      },
+    } as any;
+
+    const customColorEdge = {
+      id: 'xy-edge__intakee-systema',
+      source: 'intake',
+      target: 'system',
+      sourceHandle: 'e',
+      targetHandle: 'a',
+      style: { stroke: '#ff0000' },
+      data: {
+        flowValue: 10,
+        hasOwnEdgeType: '',
+        edgeDescription: 'intake-system',
+      },
+    } as any;
+
+    const defaultColorEdge = {
+      id: 'xy-edge__intakef-systemb',
+      source: 'intake',
+      target: 'system',
+      sourceHandle: 'f',
+      targetHandle: 'b',
+      style: { stroke: '#6c757d' },
+      data: {
+        flowValue: 10,
+        hasOwnEdgeType: '',
+        edgeDescription: 'intake-system-2',
+      },
+    } as any;
+
+    const legacyDiagramData = {
+      name: 'legacy diagram',
+      nodes: [legacyNode],
+      edges: [customColorEdge, defaultColorEdge],
+      diagramFlowErrors: {},
+      userDiagramOptions: getDefaultUserDiagramOptions(),
+      settings: getDefaultSettings(),
+      calculatedData: { nodes: {} },
+      recentNodeColors: [],
+      recentEdgeColors: [],
+    } as any;
+
+    const state = getDefaultDiagramData();
+    const result = diagramSlice.reducer(state, diagramInitialized({
+      diagramData: legacyDiagramData,
+      parentContainer: { height: 100, headerHeight: 0, footerHeight: 0 },
+      assessmentId: undefined,
+    }));
+
+    expect(result.edges.find((e) => e.id === customColorEdge.id).data.hasManualColorOverride).toBe(true);
+    expect(result.edges.find((e) => e.id === defaultColorEdge.id).data.hasManualColorOverride).toBe(false);
+  });
 });
 
 describe('edge coloring options (colorEdgesByConfidence / estimatedFlowColor / meteredFlowColor)', () => {
