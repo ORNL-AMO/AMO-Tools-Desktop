@@ -614,6 +614,17 @@ export const getHeatEnergyCost = (systemHeatEnergy: HeatEnergy, energyUnitCost: 
 
 
 /**
+ * User-entered unaccounted-flow values (intakeUnaccounted/dischargeUnaccounted) are unvalidated
+ * input - guard against them producing a negative or non-finite attribution denominator
+ * downstream (e.g. unaccountedFlow greater than totalFlow, or NaN/Infinity).
+ */
+const clampAttributableFlow = (totalFlow: number, unaccountedFlow: number): number => {
+  const attributableFlow = totalFlow - unaccountedFlow;
+  return Number.isFinite(attributableFlow) ? Math.max(0, attributableFlow) : 0;
+}
+
+
+/**
  * Sets the block costs for inflow cost components, i.e. water treatment and waste water treatment nodes, discharge outlet nodes.
  * 
  * Block costs represent the total cost center for each non-system node/component. 
@@ -637,11 +648,17 @@ const getInflowBlockCosts = (
   const costPerKGal = node.data.cost ?? 0;
   const costOfInflow = getFlowCost(costPerKGal, inflow, unitsOfMeasure);
 
+  // * unaccounted flow only applies to discharge nodes; treatment/waste-treatment nodes never set dischargeUnaccounted, so attributableFlow
+  // * equals totalFlow for them. Mirrors intakeUnaccounted handling in getOutflowBlockCosts.
+  const unaccountedFlow = node.data.userEnteredData?.dischargeUnaccounted ?? 0;
+  const attributableFlow = clampAttributableFlow(inflow, unaccountedFlow);
+
   const blockCosts: BlockCosts = {
     name: node.data.name,
     processComponentType: node.data.processComponentType,
     totalBlockCost: costOfInflow,
     totalFlow: inflow,
+    attributableFlow: attributableFlow,
   };
 
   return blockCosts;
@@ -661,11 +678,18 @@ const getOutflowBlockCosts = (
   const costPerKGal = node.data.cost ?? 0;
   const costOfOutflow = getFlowCost(costPerKGal, outflow, unitsOfMeasure);
 
+  // * unaccounted flow (e.g. leaks, unmetered loss) has no downstream edge to attribute through; attribution should
+  // * be divided over the routed flow so its share of the block cost is spread across the known systems instead of
+  // * being left unattributed, while totalBlockCost/totalFlow still reflect the full withdrawal.
+  const unaccountedFlow = node.data.userEnteredData?.intakeUnaccounted ?? 0;
+  const attributableFlow = clampAttributableFlow(outflow, unaccountedFlow);
+
   const blockCosts: BlockCosts = {
     name: node.data.name,
     processComponentType: node.data.processComponentType,
     totalBlockCost: costOfOutflow,
     totalFlow: outflow,
+    attributableFlow: attributableFlow,
   };
 
   return blockCosts;
@@ -749,6 +773,34 @@ const getTreatmentEdgeRatio = (
     return 1;
   }
   return (pathEdge.data.flowValue ?? 0) / treatmentOutflow;
+}
+
+/**
+ * Local branch ratio contributed by a single path edge toward a system's branchFraction, walking
+ * upstream from a discharge (or waste-water-treatment) node. Mirrors getTreatmentEdgeRatio's
+ * downstream analog, but for fan-in instead of fan-out: getTreatmentEdgeRatio divides by a
+ * water-treatment node's total OUTFLOW (multiple downstream branches sharing one node's output);
+ * this divides by a waste-water-treatment node's total INFLOW (multiple upstream systems' flows
+ * merging into one node before it discharges), since several systems can converge through a
+ * shared, lossy waste-water-treatment node before reaching a discharge. Edges whose target is not
+ * a waste-water-treatment node pass through as 1.0.
+ */
+const getWasteTreatmentMergeRatio = (
+  pathEdgeId: string,
+  graph: NodeGraphIndex,
+  calculatedData: DiagramCalculatedData,
+): number => {
+  const pathEdge = graph.edgeMap[pathEdgeId];
+  const pathEdgeTarget = graph.nodeMap[pathEdge.target];
+  if (pathEdgeTarget?.data.processComponentType !== 'waste-water-treatment') {
+    return 1;
+  }
+
+  const wasteTreatmentInflow = getNodeTotalInflow(pathEdgeTarget as Node<ProcessFlowPart>, calculatedData);
+  if (wasteTreatmentInflow <= 0) {
+    return 1;
+  }
+  return (pathEdge.data.flowValue ?? 0) / wasteTreatmentInflow;
 }
 
 /**
@@ -841,6 +893,10 @@ const applySystemIntakeCosts = (
     let pathsAttributed: string[][] = [];
     let adjustedAttributions: SystemAttributionMap = {};
 
+    // * deliberately attributableFlow, not totalFlow: totalFlow (used for totalBlockCost) includes unaccounted
+    // * flow, which has no downstream edge and would otherwise leave systemAttributionFraction short of 100%.
+    const attributableIntakeOutflow = intakeData.blockCosts.attributableFlow ?? intakeData.blockCosts.totalFlow;
+
     intakeData.downstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
        // * for this path, eliminate mischarging an upstream system who provides reused water to the current system
       let visitedSystemIds: string[] = [];
@@ -871,7 +927,7 @@ const applySystemIntakeCosts = (
           const pathInflow = intakeEdge.data.flowValue ?? 0;
 
           const systemFlowResponsibility = pathInflow * branchFraction;
-          let systemAttributionFraction = systemFlowResponsibility / intakeData.blockCosts.totalFlow;
+          let systemAttributionFraction = systemFlowResponsibility / attributableIntakeOutflow;
 
           const costToSystem = systemAttributionFraction * intakeData.blockCosts.totalBlockCost;
 
@@ -986,6 +1042,10 @@ const applySystemDischargeCosts = (
     let pathsAttributed: string[][] = [];
     let adjustedAttributions: SystemAttributionMap = {};
 
+    // * deliberately attributableFlow, not totalFlow: totalFlow (used for totalBlockCost) includes unaccounted
+    // * flow, which has no upstream edge and would otherwise leave systemAttributionFraction short of 100%.
+    const attributableDischargeInflow = dischargeData.blockCosts.attributableFlow ?? dischargeData.blockCosts.totalFlow;
+
     dischargeData.upstreamPathsByEdgeId?.forEach((path: string[], index: number) => {
       // * for this path, eliminate mischarging an upstream system who provides reused water to the current system
       let visitedSystemIds: string[] = [];
@@ -1013,13 +1073,18 @@ const applySystemDischargeCosts = (
           }
 
           const dischargeEdge = graph.edgeMap[path[0]];
-          const systemDischarge = dischargeEdge?.data.flowValue ?? 0;
-          const pathDischarge = graph.edgeMap[edgeId].data.flowValue ?? 0;
+          const firstEdgeFlow = dischargeEdge?.data.flowValue ?? 0;
 
-          // * fractionPathDischargeReceived ternary will ignore cases where systemDischarge > pathDischarge due to flow from other discharges. We will observe other discharges on another iteration
-          const fractionPathDischargeReceived = (systemDischarge / pathDischarge) > 1 ? 1 : (systemDischarge / pathDischarge);
-          const systemFlowResponsibility = pathDischarge * fractionPathDischargeReceived;
-          const contributorAttributionFraction = (systemFlowResponsibility / dischargeData.blockCosts.totalFlow);
+          // * branchFraction: product of localRatio across any waste-water-treatment merge nodes in the path (when multiple systems' flows 
+          // * converge through a shared, lossy WWT node before reaching the discharge) like applySystemIntakeCosts's branch-ratio product, this cannot exceed 1.0 given
+          // * valid flow data, since each ratio is itself bounded to [0, 1].
+          const branchFraction = pathToSystem
+            .slice(1)
+            .map((pathEdgeId: string): number => getWasteTreatmentMergeRatio(pathEdgeId, graph, calculatedData))
+            .reduce((product, ratio) => product * ratio, 1);
+
+          const systemFlowResponsibility = firstEdgeFlow * branchFraction;
+          const contributorAttributionFraction = (systemFlowResponsibility / attributableDischargeInflow);
 
           if (isRoRejectContribution && roRejectConfig) {
             // * ro-reject-redirect: split this contribution across the RO's product recipients, not the RO node itself.
@@ -1097,7 +1162,7 @@ const applySystemDischargeCosts = (
                 graph,
                 contributorAttributionFraction,
                 costToSystem,
-                fractionPathDischargeReceived,
+                branchFraction,
                 systemFlowResponsibility
               );
 

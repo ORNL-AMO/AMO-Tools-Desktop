@@ -79,6 +79,38 @@ INTAKE        │
 
 ---
 
+### 1.2b `intake-unaccounted-flow`
+
+**What it tests:** Regression fixture for issue-8741. An intake reports 10 Mgal/yr of unaccounted flow (e.g. leakage) alongside its entered outflow of 100 Mgal/yr, and splits the remaining 90 Mgal/yr across two systems. Unaccounted flow has no downstream edge, so dividing the block cost by the raw entered flow (100) instead of the routed flow (90) previously left 10% of the intake's cost unattributed.
+
+```
+              ┌─── 60 Mgal/yr ──► SYSTEM A
+INTAKE        │
+($2/kgal,     │
+ entered 100, └─── 30 Mgal/yr ──► SYSTEM B
+ unaccounted 10)
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| Intake | $2/kgal | 100 Mgal/yr entered (unaccounted included) | **$200,000** |
+
+`attributableFlow` = 100 − 10 = 90 Mgal/yr — the denominator used for attribution, not for the block cost above.
+
+**Expected attribution**
+
+| System | Intake share (of attributableFlow) | Intake $ |
+|---|---|---|
+| System A | 60 / 90 = 66.7% | **$133,333** |
+| System B | 30 / 90 = 33.3% | **$66,667** |
+| **Total** | 100% | **$200,000** ✓ |
+
+Without the `attributableFlow` denominator, the same two systems would only sum to 60/100 + 30/100 = 90%, leaving $20,000 (the unaccounted flow's share of the block cost) permanently unattributed.
+
+---
+
 ### 1.3 `shared-discharge`
 
 **What it tests:** Two systems draining to one discharge point. The discharge cost splits by each system's contribution to total discharge flow.
@@ -102,6 +134,66 @@ SYSTEM B ──── 40 Mgal/yr ───┘
 | System A | 60 / 100 = 60% | **$120,000** |
 | System B | 40 / 100 = 40% | **$80,000** |
 | **Total** | 100% | **$200,000** ✓ |
+
+---
+
+### 1.3b `discharge-unaccounted-flow`
+
+**What it tests:** Regression fixture for issue-8741 (discharge-side counterpart of `intake-unaccounted-flow`, §1.2b). A discharge reports 10 Mgal/yr of unaccounted inflow (e.g. stormwater/infiltration with no traceable upstream system) alongside its entered inflow of 100 Mgal/yr, fed by two systems totaling 90 Mgal/yr. Unaccounted flow has no upstream edge, so dividing the block cost by the raw entered flow (100) instead of the routed flow (90) previously left 10% of the discharge's cost unattributed.
+
+```
+SYSTEM A ──── 60 Mgal/yr ───┐
+                              ├──► DISCHARGE ($2/kgal, entered 100, unaccounted 10)
+SYSTEM B ──── 30 Mgal/yr ───┘
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| Discharge | $2/kgal | 100 Mgal/yr entered (unaccounted included) | **$200,000** |
+
+`attributableFlow` = 100 − 10 = 90 Mgal/yr — the denominator used for attribution, not for the block cost above.
+
+**Expected attribution**
+
+| System | Discharge share (of attributableFlow) | Discharge $ |
+|---|---|---|
+| System A | 60 / 90 = 66.7% | **$133,333** |
+| System B | 30 / 90 = 33.3% | **$66,667** |
+| **Total** | 100% | **$200,000** ✓ |
+
+Without the `attributableFlow` denominator, the same two systems would only sum to 60/100 + 30/100 = 90%, leaving $20,000 (the unaccounted flow's share of the block cost) permanently unattributed.
+
+---
+
+### 1.3c `discharge-merge-loss`
+
+**What it tests:** Regression fixture for issue-8741. Two systems converge through a shared, lossy waste-water-treatment node (100 Mgal/yr in, 80 Mgal/yr out) before reaching a discharge. The pre-fix formula compared the discharge-adjacent edge (80) against each system's own raw outflow independently (capped at 1.0), crediting System A with `min(80/60,1)×60 = 60` and System B with `min(80/40,1)×40 = 40` — summing to 100 Mgal/yr of "responsibility" against an 80 Mgal/yr discharge, i.e. 125% of the block cost. The fix apportions each system's share of the WWT node's total inflow (60/100, 40/100) and multiplies by the discharge-adjacent flow (80), so the shares sum to exactly 80.
+
+```
+SYSTEM A ──── 60 Mgal/yr ───┐
+                              ├──► WWT ($1/kgal, 100 in / 80 out, loses 20) ──► DISCHARGE (80 in)
+SYSTEM B ──── 40 Mgal/yr ───┘
+```
+
+**Node costs**
+
+| Node | Unit cost | Flow basis | Block cost |
+|---|---|---|---|
+| Discharge | $1/kgal | 80 Mgal/yr in | **$80,000** |
+
+**Expected attribution**
+
+| System | `localRatio` at WWT | Discharge share | Discharge $ |
+|---|---|---|---|
+| System A | 60/100 = 0.60 | 60% | **$48,000** |
+| System B | 40/100 = 0.40 | 40% | **$32,000** |
+| **Total** | | 100% | **$80,000** ✓ |
+
+Without the branch-ratio fix, the same two systems would sum to 75% + 50% = 125% ($100,000
+attributed against an $80,000 block cost) — an over-attribution masked by neither system's
+individual fraction looking obviously wrong on its own.
 
 ---
 

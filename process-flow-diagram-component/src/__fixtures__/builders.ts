@@ -32,7 +32,11 @@ const basePart = (
     ...extra,
   } as ProcessFlowPart);
 
-export const makeIntakeNode = (id: string, costPerKGal = 0): Node =>
+export const makeIntakeNode = (
+  id: string,
+  costPerKGal = 0,
+  userEnteredData: Record<string, unknown> = {},
+): Node =>
   ({
     id,
     type: 'water-intake',
@@ -40,6 +44,7 @@ export const makeIntakeNode = (id: string, costPerKGal = 0): Node =>
     data: basePart(id, 'water-intake', costPerKGal, {
       disableInflowConnections: true,
       addedMotorEnergy: [],
+      userEnteredData,
     }),
   } as Node);
 
@@ -55,7 +60,11 @@ export const makeSystemNode = (id: string): Node =>
     }),
   } as Node);
 
-export const makeDischargeNode = (id: string, costPerKGal = 0): Node =>
+export const makeDischargeNode = (
+  id: string,
+  costPerKGal = 0,
+  userEnteredData: Record<string, unknown> = {},
+): Node =>
   ({
     id,
     type: 'water-discharge',
@@ -63,6 +72,7 @@ export const makeDischargeNode = (id: string, costPerKGal = 0): Node =>
     data: basePart(id, 'water-discharge', costPerKGal, {
       disableOutflowConnections: true,
       addedMotorEnergy: [],
+      userEnteredData,
     }),
   } as Node);
 

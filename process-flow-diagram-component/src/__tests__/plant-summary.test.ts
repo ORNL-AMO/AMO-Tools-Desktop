@@ -170,6 +170,80 @@ describe('getPlantSummaryResults — shared-intake: Intake → [System A (60%), 
 });
 
 // ---------------------------------------------------------------------------
+// Fixture: intake-unaccounted-flow
+// Configuration: Intake (entered totalDischargeFlow=100, intakeUnaccounted=10) → [System A (60), System B (30)]
+//
+//   intake (cost=2/kGal, entered totalDischargeFlow=100, intakeUnaccounted=10)
+//     ├─ e_a (60) ─► systemA
+//     └─ e_b (30) ─► systemB
+//
+// Regression fixture: unaccounted flow has no downstream edge. Dividing the block cost by the
+// raw entered flow (100) instead of the routed flow (60+30=90) previously left 10% of the
+// intake's cost unattributed. attributableFlow (100-10=90) is now used as the attribution
+// denominator, so the two systems' fractions sum to 100% while totalBlockCost still reflects
+// the full 100-unit withdrawal.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — intake-unaccounted-flow: unaccounted flow spread across systems, not dropped', () => {
+  const INTAKE_COST = 2;
+  const ENTERED_DISCHARGE_FLOW = 100;
+  const INTAKE_UNACCOUNTED = 10;
+  const FLOW_A = 60;
+  const FLOW_B = 30;
+  const ROUTED_FLOW = FLOW_A + FLOW_B; // 90 - what actually reaches a system
+
+  const intake = makeIntakeNode('intake', INTAKE_COST, {
+    totalDischargeFlow: ENTERED_DISCHARGE_FLOW,
+    intakeUnaccounted: INTAKE_UNACCOUNTED,
+  });
+  const systemA = makeSystemNode('sysA');
+  const systemB = makeSystemNode('sysB');
+
+  const nodes = [intake, systemA, systemB];
+  const edges = [
+    makeEdge('intake', 'sysA', FLOW_A),
+    makeEdge('intake', 'sysB', FLOW_B),
+  ];
+  const calcData = makeCalcData({
+    intake: { totalDischargeFlow: ROUTED_FLOW },
+    sysA: { totalSourceFlow: FLOW_A },
+    sysB: { totalSourceFlow: FLOW_B },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('intake block cost is based on the full entered flow, unaccounted included', () => {
+    expect(result.costComponentsTotalsMap['intake'].totalBlockCost)
+      .toBeCloseTo(blockCost(INTAKE_COST, ENTERED_DISCHARGE_FLOW), 0);
+  });
+
+  it('attribution fractions sum to 100%, not 90%', () => {
+    const total = result.systemAttributionMap['sysA']['intake'].totalAttribution.default
+      + result.systemAttributionMap['sysB']['intake'].totalAttribution.default;
+    expect(total).toBeCloseTo(1.0, 6);
+  });
+
+  it('unaccounted flow cost is spread pro-rata, not dropped (mass balance)', () => {
+    const totalAttributed = result.trueCostOfSystems['sysA'].intake
+      + result.trueCostOfSystems['sysB'].intake;
+    expect(totalAttributed).toBeCloseTo(blockCost(INTAKE_COST, ENTERED_DISCHARGE_FLOW), 0);
+  });
+
+  it('splits the full block cost between System A and System B by routed flow share', () => {
+    const fullCost = blockCost(INTAKE_COST, ENTERED_DISCHARGE_FLOW);
+    expect(result.trueCostOfSystems['sysA'].intake)
+      .toBeCloseTo(fullCost * (FLOW_A / ROUTED_FLOW), 0);
+    expect(result.trueCostOfSystems['sysB'].intake)
+      .toBeCloseTo(fullCost * (FLOW_B / ROUTED_FLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Fixture: treatment-with-loss
 // Configuration: Intake → Treatment (100 in, 80 out, losses=20) → System
 //
@@ -377,6 +451,201 @@ describe('getPlantSummaryResults — shared-discharge: [System A, System B] → 
     const total = result.trueCostOfSystems['sysA'].discharge
       + result.trueCostOfSystems['sysB'].discharge;
     expect(total).toBeCloseTo(blockCost(DISCHARGE_COST, TOTAL_FLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: discharge-unaccounted-flow
+// Configuration: [System A (60), System B (30)] → Discharge (entered totalSourceFlow=100, dischargeUnaccounted=10)
+//
+//   sysA ─ e_a (60) ─►
+//   sysB ─ e_b (30) ─► discharge (cost=2/kGal, entered totalSourceFlow=100, dischargeUnaccounted=10)
+//
+// Regression fixture: unaccounted flow has no upstream edge. Dividing the block cost by the
+// raw entered flow (100) instead of the routed flow (60+30=90) previously left 10% of the
+// discharge's cost unattributed. attributableFlow (100-10=90) is now used as the attribution
+// denominator, so the two systems' fractions sum to 100% while totalBlockCost still reflects
+// the full 100-unit inflow. Mirrors the intake-unaccounted-flow fixture above.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — discharge-unaccounted-flow: unaccounted flow spread across systems, not dropped', () => {
+  const DISCHARGE_COST = 2;
+  const ENTERED_SOURCE_FLOW = 100;
+  const DISCHARGE_UNACCOUNTED = 10;
+  const FLOW_A = 60;
+  const FLOW_B = 30;
+  const ROUTED_FLOW = FLOW_A + FLOW_B; // 90 - what actually arrives from a system
+
+  const sysA = makeSystemNode('sysA');
+  const sysB = makeSystemNode('sysB');
+  const discharge = makeDischargeNode('discharge', DISCHARGE_COST, {
+    totalSourceFlow: ENTERED_SOURCE_FLOW,
+    dischargeUnaccounted: DISCHARGE_UNACCOUNTED,
+  });
+
+  const nodes = [sysA, sysB, discharge];
+  const edges = [
+    makeEdge('sysA', 'discharge', FLOW_A),
+    makeEdge('sysB', 'discharge', FLOW_B),
+  ];
+  const calcData = makeCalcData({
+    sysA: { totalDischargeFlow: FLOW_A },
+    sysB: { totalDischargeFlow: FLOW_B },
+    discharge: { totalSourceFlow: ROUTED_FLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('discharge block cost is based on the full entered flow, unaccounted included', () => {
+    expect(result.costComponentsTotalsMap['discharge'].totalBlockCost)
+      .toBeCloseTo(blockCost(DISCHARGE_COST, ENTERED_SOURCE_FLOW), 0);
+  });
+
+  it('attribution fractions sum to 100%, not 90%', () => {
+    const total = result.systemAttributionMap['sysA']['discharge'].totalAttribution.default
+      + result.systemAttributionMap['sysB']['discharge'].totalAttribution.default;
+    expect(total).toBeCloseTo(1.0, 6);
+  });
+
+  it('unaccounted flow cost is spread pro-rata, not dropped (mass balance)', () => {
+    const totalAttributed = result.trueCostOfSystems['sysA'].discharge
+      + result.trueCostOfSystems['sysB'].discharge;
+    expect(totalAttributed).toBeCloseTo(blockCost(DISCHARGE_COST, ENTERED_SOURCE_FLOW), 0);
+  });
+
+  it('splits the full block cost between System A and System B by routed flow share', () => {
+    const fullCost = blockCost(DISCHARGE_COST, ENTERED_SOURCE_FLOW);
+    expect(result.trueCostOfSystems['sysA'].discharge)
+      .toBeCloseTo(fullCost * (FLOW_A / ROUTED_FLOW), 0);
+    expect(result.trueCostOfSystems['sysB'].discharge)
+      .toBeCloseTo(fullCost * (FLOW_B / ROUTED_FLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: discharge-merge-loss
+// Configuration: [System A (60), System B (40)] → shared lossy WWT (100 in, 80 out) → Discharge
+//
+//   sysA ─ e_a (60) ─┐
+//                     ├──► wwt ($1/kgal, 100 in / 80 out, loses 20) ──► discharge (80 in)
+//   sysB ─ e_b (40) ─┘
+//
+// Regression fixture: two systems converge through a shared, lossy waste-water-treatment node
+// before reaching the discharge. Comparing the discharge-adjacent edge (80) against each system's
+// own raw outflow independently (the pre-fix cap-based formula) previously over-attributed:
+// SysA = min(80/60,1)*60/80 = 75%, SysB = min(80/40,1)*40/80 = 50%, summing to 125%. The
+// branch-ratio fix apportions each system's share of the WWT's inflow (60/100, 40/100) and
+// multiplies by the discharge-adjacent edge (80), so the fractions sum to exactly 100%.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — discharge-merge-loss: [System A, System B] → lossy WWT → Discharge', () => {
+  const WWT_COST = 1;
+  const DISCHARGE_COST = 1;
+  const FLOW_A = 60;
+  const FLOW_B = 40;
+  const WWT_INFLOW = FLOW_A + FLOW_B; // 100
+  const WWT_OUTFLOW = 80; // loses 20
+
+  const sysA = makeSystemNode('sysA');
+  const sysB = makeSystemNode('sysB');
+  const wwt = makeWasteTreatmentNode('wwt', WWT_COST);
+  const discharge = makeDischargeNode('discharge', DISCHARGE_COST);
+
+  const nodes = [sysA, sysB, wwt, discharge];
+  const edges = [
+    makeEdge('sysA', 'wwt', FLOW_A),
+    makeEdge('sysB', 'wwt', FLOW_B),
+    makeEdge('wwt', 'discharge', WWT_OUTFLOW),
+  ];
+  const calcData = makeCalcData({
+    sysA: { totalDischargeFlow: FLOW_A },
+    sysB: { totalDischargeFlow: FLOW_B },
+    wwt: { totalSourceFlow: WWT_INFLOW, totalDischargeFlow: WWT_OUTFLOW },
+    discharge: { totalSourceFlow: WWT_OUTFLOW },
+  });
+
+  const result = getPlantSummaryResults(
+    nodes, calcData, edges,
+    defaultSettings().electricityCost,
+    defaultSettings(),
+    {},
+  );
+
+  it('attributes System A its share of the WWT inflow (60/100), not its raw-outflow cap ratio (75%)', () => {
+    const expected = blockCost(DISCHARGE_COST, WWT_OUTFLOW) * (FLOW_A / WWT_INFLOW);
+    expect(result.trueCostOfSystems['sysA'].discharge).toBeCloseTo(expected, 0);
+  });
+
+  it('attributes System B its share of the WWT inflow (40/100), not its raw-outflow cap ratio (50%)', () => {
+    const expected = blockCost(DISCHARGE_COST, WWT_OUTFLOW) * (FLOW_B / WWT_INFLOW);
+    expect(result.trueCostOfSystems['sysB'].discharge).toBeCloseTo(expected, 0);
+  });
+
+  it('discharge attribution fractions sum to 100%, not 125%', () => {
+    const total = result.systemAttributionMap['sysA']['discharge'].totalAttribution.default
+      + result.systemAttributionMap['sysB']['discharge'].totalAttribution.default;
+    expect(total).toBeCloseTo(1.0, 6);
+  });
+
+  it('attributed discharge costs sum to the discharge block cost (mass balance)', () => {
+    const total = result.trueCostOfSystems['sysA'].discharge + result.trueCostOfSystems['sysB'].discharge;
+    expect(total).toBeCloseTo(blockCost(DISCHARGE_COST, WWT_OUTFLOW), 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Fixture: attributable-flow-clamping
+// Regression fixture: intakeUnaccounted/dischargeUnaccounted are unvalidated user input and can
+// exceed the node's total flow (or be non-finite). attributableFlow must clamp to a non-negative
+// finite value instead of propagating a negative or NaN denominator into attribution fractions.
+// ---------------------------------------------------------------------------
+
+describe('getPlantSummaryResults — attributable-flow-clamping: unaccounted flow exceeds total flow', () => {
+  it('clamps intake attributableFlow to 0, not negative, when intakeUnaccounted exceeds totalDischargeFlow', () => {
+    const intake = makeIntakeNode('intake', 2, {
+      totalDischargeFlow: 50,
+      intakeUnaccounted: 100,
+    });
+    const result = getPlantSummaryResults(
+      [intake], makeCalcData({}), [],
+      defaultSettings().electricityCost,
+      defaultSettings(),
+      {},
+    );
+    expect(result.costComponentsTotalsMap['intake'].attributableFlow).toBe(0);
+  });
+
+  it('clamps discharge attributableFlow to 0, not negative, when dischargeUnaccounted exceeds totalSourceFlow', () => {
+    const discharge = makeDischargeNode('discharge', 1, {
+      totalSourceFlow: 50,
+      dischargeUnaccounted: 100,
+    });
+    const result = getPlantSummaryResults(
+      [discharge], makeCalcData({}), [],
+      defaultSettings().electricityCost,
+      defaultSettings(),
+      {},
+    );
+    expect(result.costComponentsTotalsMap['discharge'].attributableFlow).toBe(0);
+  });
+
+  it('clamps intake attributableFlow to 0, not NaN, when intakeUnaccounted is not a finite number', () => {
+    const intake = makeIntakeNode('intake', 2, {
+      totalDischargeFlow: 50,
+      intakeUnaccounted: NaN,
+    });
+    const result = getPlantSummaryResults(
+      [intake], makeCalcData({}), [],
+      defaultSettings().electricityCost,
+      defaultSettings(),
+      {},
+    );
+    expect(result.costComponentsTotalsMap['intake'].attributableFlow).toBe(0);
   });
 });
 
