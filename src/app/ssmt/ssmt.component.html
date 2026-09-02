@@ -79,6 +79,8 @@
     <app-saturated-properties-calculator *ngIf="calcTab == 'saturated-properties'" [settings]="settings">
     </app-saturated-properties-calculator>
     <app-stack-loss-calculator *ngIf="calcTab == 'stack-loss'" [settings]="settings"></app-stack-loss-calculator>
+    <app-steam-leak-survey *ngIf="calcTab == 'steam-leak'" [settings]="settings" [assessment]="assessment">
+    </app-steam-leak-survey>
     <app-heat-loss-calculator *ngIf="calcTab == 'heat-loss'" [settings]="settings"></app-heat-loss-calculator>
     <app-boiler-calculator *ngIf="calcTab == 'boiler'" [settings]="settings" ></app-boiler-calculator>
     <app-flash-tank-calculator *ngIf="calcTab == 'flash-tank'" [settings]="settings"></app-flash-tank-calculator>
