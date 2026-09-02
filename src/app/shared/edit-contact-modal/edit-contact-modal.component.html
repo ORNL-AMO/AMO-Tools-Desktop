@@ -12,9 +12,6 @@
     <div class="form-group">
         <label class="small" for="editContactPhoneNumber">Phone Number</label>
         <input type="number" id="editContactPhoneNumber" class="form-control" formControlName="phoneNumber" />
-        @if (contactForm.controls.phoneNumber.invalid && !contactForm.controls.phoneNumber.pristine) {
-        <span class="alert-danger w-100 small py-1 px-2 d-block">Please enter a valid phone number</span>
-        }
     </div>
     <div class="form-group">
         <label class="small" for="editContactEmail">Email</label>

@@ -3,7 +3,6 @@ import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { Contact } from '../models/settings';
 import { EditContactModalData } from './editContactModalData';
-import { PhoneNumberValidator } from '../validators/phone-number';
 
 @Component({
     selector: 'app-edit-contact-modal',
@@ -19,7 +18,7 @@ export class EditContactModalComponent {
   constructor(@Inject(DIALOG_DATA) public editContactData: EditContactModalData) {
     this.contactForm = this.formBuilder.group({
       contactName: [this.editContactData.contact?.contactName],
-      phoneNumber: [this.editContactData.contact?.phoneNumber, [PhoneNumberValidator.phoneNumber()]],
+      phoneNumber: [this.editContactData.contact?.phoneNumber],
       email: [this.editContactData.contact?.email, [Validators.email]],
     });
   }

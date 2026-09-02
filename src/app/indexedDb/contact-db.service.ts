@@ -57,7 +57,7 @@ export class ContactDbService {
   }
 
   async saveIfNew(newContact: Contact): Promise<void> {
-    if (!newContact?.contactName?.trim() && !newContact?.email?.trim()) return;
+    if (!newContact?.contactName?.trim() && !newContact?.email?.trim() && !newContact?.phoneNumber) return;
     if (this.allContacts.some(existing => this.contactsMatch(existing, newContact))) return;
 
     await firstValueFrom(this.addWithObservable({ ...newContact }));
