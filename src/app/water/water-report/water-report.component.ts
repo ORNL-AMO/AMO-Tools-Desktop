@@ -1,15 +1,15 @@
 import { Component, DestroyRef, ElementRef, inject, Input, SimpleChanges, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { Assessment } from '../../shared/models/assessment';
 import { Directory } from '../../shared/models/directory';
-import { PrintOptions } from '../../shared/models/printing';
-import { PrintOptionsMenuService } from '../../shared/print-options-menu/print-options-menu.service';
 import { Settings } from '../../shared/models/settings';
 import { WaterAssessmentService } from '../water-assessment.service';
 import { WaterAssessmentResultsService } from '../water-assessment-results.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { WaterReportAdapter, WATER_SECTION_GROUPS } from './water-report.adapter';
+import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 
 @Component({
   selector: 'app-water-report',
@@ -22,8 +22,8 @@ export class WaterReportComponent {
   private readonly waterAssessmentResultsService = inject(WaterAssessmentResultsService);
   private readonly waterAssessmentService = inject(WaterAssessmentService);
   private readonly settingsDbService = inject(SettingsDbService);
-  private readonly printOptionsMenuService = inject(PrintOptionsMenuService);
   private readonly directoryDbService = inject(DirectoryDbService);
+  private readonly reportAdapter = inject(WaterReportAdapter);
 
 
  @Input()
@@ -45,20 +45,17 @@ export class WaterReportComponent {
   currentTab: WaterReportTab = 'executiveSummary';
   reportContainerHeight: number;
   settings: Settings;
-  showPrintMenu: boolean;
-  showPrintMenuSub: Subscription;
-  showPrintViewSub: Subscription;
-  showPrintView: boolean;
-  showPrintDiv: boolean;
-  printOptions: PrintOptions;
 
   tabsCollapsed: boolean = true;
-  systemTrueCostReportSubscription: Subscription;
   isDiagramValid$ = this.waterAssessmentService.isDiagramValid$;
+
+  reportDocument$: Observable<ReportDocument>;
+  readonly sectionGroups: ReportSectionGroup[] = WATER_SECTION_GROUPS;
 
   ngOnInit(): void {
     this.settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
     this.createdDate = new Date();
+    this.reportDocument$ = this.reportAdapter.buildDocument(this.assessment);
     if (this.assessment) {
       this.assessmentDirectories = new Array();
       this.getDirectoryList(this.assessment.directoryId);
@@ -72,32 +69,10 @@ export class WaterReportComponent {
       });
     }
 
-    if (!this.inRollup) {
-      this.showPrintMenuSub = this.printOptionsMenuService.showPrintMenu.subscribe(val => {
-        this.showPrintMenu = val;
-      });
-    } else {
+    if (this.inRollup || this.quickReport) {
       this.waterAssessmentService.waterAssessment.next(this.assessment.water);
       this.waterAssessmentService.settings.next(this.settings);
     }
-
-    if (this.quickReport) {
-      this.waterAssessmentService.waterAssessment.next(this.assessment.water);
-      this.waterAssessmentService.settings.next(this.settings);
-    }
-
-    this.showPrintViewSub = this.printOptionsMenuService.showPrintView.subscribe(val => {
-      this.printOptions = this.printOptionsMenuService.printOptions.getValue();
-      this.showPrintDiv = val;
-      if (val == true) {
-        //use delay to show loading before print payload starts
-        setTimeout(() => {
-          this.showPrintView = val;
-        }, 20)
-      } else {
-        this.showPrintView = val;
-      }
-    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -110,13 +85,6 @@ export class WaterReportComponent {
     setTimeout(() => {
       this.getContainerHeight();
     }, 100);
-  }
-
-  ngOnDestroy() {
-    if (this.showPrintMenuSub) {
-      this.showPrintMenuSub.unsubscribe();
-    }
-    this.showPrintViewSub.unsubscribe();
   }
 
   getDirectoryList(id: number) {
@@ -142,15 +110,9 @@ export class WaterReportComponent {
     }
   }
 
-  print() {
-    this.printOptionsMenuService.printContext.next('water');
-    this.printOptionsMenuService.showPrintMenu.next(true);
-    this.collapseTabs();
-  }
-
   collapseTabs() {
     this.tabsCollapsed = !this.tabsCollapsed;
   }
 }
 
-export type WaterReportTab = "executiveSummary" | "systemSummary" | "systemTrueCost"
+export type WaterReportTab = "facilityInfo" | "executiveSummary" | "systemSummary" | "systemTrueCost"
