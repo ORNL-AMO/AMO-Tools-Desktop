@@ -7,7 +7,8 @@ import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/Acco
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import FlowValueDisplay from "../Diagram/FlowValueDisplay";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { modalOpenChange, nodeDataPropertyChange } from "../Diagram/diagramReducer";
+import { nodeDataPropertyChange } from "../Diagram/diagramReducer";
+import { modalOpenChange } from "../Diagram/uiSlice";
 import SourceFlowForm from "./SourceFlowForm";
 import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
 import DischargeFlowForm from "./DischargeFlowForm";

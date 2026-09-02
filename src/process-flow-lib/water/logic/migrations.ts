@@ -1,4 +1,4 @@
-import { FlowDiagramData } from "../types/diagram";
+import { DiagramFlowErrors, FlowDiagramData } from "../types/diagram";
 
 /**
  * Renames the legacy `nodeErrors` field (saved by pre-rename versions of the
@@ -8,7 +8,7 @@ import { FlowDiagramData } from "../types/diagram";
  * to be made once.
  */
 export const migrateFlowDiagramFieldNames = (flowDiagramData: FlowDiagramData): void => {
-    const flowDiagramDataNew: any = flowDiagramData;
+    const flowDiagramDataNew = flowDiagramData as FlowDiagramData & { nodeErrors?: DiagramFlowErrors };
     if (flowDiagramDataNew.nodeErrors !== undefined) {
         flowDiagramDataNew.diagramFlowErrors = flowDiagramDataNew.nodeErrors;
         delete flowDiagramDataNew.nodeErrors;

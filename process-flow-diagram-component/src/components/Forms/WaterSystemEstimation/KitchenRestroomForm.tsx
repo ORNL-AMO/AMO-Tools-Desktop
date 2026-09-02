@@ -6,7 +6,7 @@ import { RootState } from '../../Diagram/store';
 import { EstimateSystemContext, EstimateSystemState, WaterAssessmentModuleConsumer } from './EstimateWaterSystem';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
+import { applyEstimatedFlowResults } from '../../Diagram/diagramReducer';
 import { KitchenRestroomResults, KitchenRestroom, calculateKitchenRestroomResults, convertAnnualFlowResult } from 'process-flow-lib';
 import { TwoCellResultRow, TwoCellResultTable } from '../../StyledMUI/ResultTables';
 import FormActionGroupButtons from '../FormActionGroupButtons';

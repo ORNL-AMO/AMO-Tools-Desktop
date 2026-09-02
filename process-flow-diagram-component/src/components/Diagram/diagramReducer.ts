@@ -2,10 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
-import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramAlertMessages, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, ManageDataTab, NodeFlowProperty, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
+import { CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, NodeFlowProperty, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
 import { createNewNode, formatDataForMEASUR } from './FlowUtils';
-import { DiagramAlertState } from './DiagramAlert';
 import {
   totalFlowChangeReducer,
   sumTotalFlowChangeReducer,
@@ -16,9 +14,6 @@ import {
   applyEstimatedFlowResultsReducer,
   edgesChangeFromPropagationReducer,
 } from './flowCalculationReducers';
-// * re-exported so components dispatch every flow-related action (including this thunk) from one
-// * place, even though its implementation lives in flowCalculationReducers.ts
-export { propagateFlowFromNode } from './flowCalculationReducers';
 
 import packageJson from '../../../package.json';
 const CURRENT_DIAGRAM_VERSION: string = packageJson.version;
@@ -52,22 +47,14 @@ export interface DiagramState {
   composedNodeData: ProcessFlowPart[];
   settings: DiagramSettings,
   diagramOptions: UserDiagramOptions,
-  isDataDrawerOpen: boolean,
-  isMenuDrawerOpen: boolean,
-  // * Selected node or edge 
+  // * Selected node or edge
   selectedDataId: string,
   calculatedData: DiagramCalculatedData,
   recentNodeColors: string[],
   recentEdgeColors: string[],
   diagramParentDimensions: ParentContainerDimensions,
   diagramFlowErrors: DiagramFlowErrors,
-  focusedEdgeId: string,
-  isDialogOpen: boolean,
   assessmentId: number,
-  validationWindowLocation: ValidationWindowLocation,
-  isModalOpen: boolean,
-  manageDataTabs: ManageDataTab[],
-  diagramAlert: DiagramAlertState,
   diagramNotes: string,
 }
 
@@ -79,10 +66,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     composedNodeData: [],
     settings: getDefaultSettings(),
     diagramOptions: { ...getDefaultUserDiagramOptions(), paletteColors: getDefaultPaletteColors() },
-    isDataDrawerOpen: false,
-    isMenuDrawerOpen: true,
     selectedDataId: undefined,
-    focusedEdgeId: undefined,
     calculatedData: { nodes: {} },
     diagramFlowErrors: {},
     recentEdgeColors: getDefaultColorPalette(),
@@ -92,14 +76,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
       headerHeight: currentState?.diagramParentDimensions?.headerHeight,
       footerHeight: currentState?.diagramParentDimensions?.footerHeight
     },
-    isDialogOpen: false,
     assessmentId: undefined,
-    validationWindowLocation: 'diagram',
-    isModalOpen: false,
-    manageDataTabs: [],
-    diagramAlert: {
-      open: false,
-    },
     diagramNotes: '',
   }
 }
@@ -148,13 +125,8 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.diagramOptions.estimatedFlowColor = diagramData.userDiagramOptions?.estimatedFlowColor;
   state.diagramOptions.meteredFlowColor = diagramData.userDiagramOptions?.meteredFlowColor;
   state.diagramOptions.flowConfidenceEnabled = diagramData.userDiagramOptions?.flowConfidenceEnabled ?? true;
-  state.isDataDrawerOpen = false;
-  state.isMenuDrawerOpen = state.isMenuDrawerOpen ?? true;
-  state.focusedEdgeId = undefined;
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
-  state.isDialogOpen = false;
-  state.validationWindowLocation = 'diagram';
   state.assessmentId = assessmentId
 }
 
@@ -162,10 +134,6 @@ const resetDiagramReducer = (state: DiagramState) => {
   const diagramState = getDefaultDiagramData(state);
   return diagramState;
 };
-
-const setDialogOpenReducer = (state: DiagramState) => {
-  state.isDialogOpen = !state.isDialogOpen;
-}
 
 const nodesChangeReducer = (state: DiagramState, action: PayloadAction<NodeChange[]>) => {
   const updatedNodes: Node[] = applyNodeChanges(action.payload, state.nodes) as Node[];
@@ -192,10 +160,6 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: W
 const recomputeNodeErrorsReducer = (state: DiagramState) => {
   state.diagramFlowErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
 };
-
-const validationWindowOpenChangeReducer = (state: DiagramState, action: PayloadAction<ValidationWindowLocation>) => {
-  state.validationWindowLocation = action.payload;
-}
 
 const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) => {
   const updateNode = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId);
@@ -242,7 +206,6 @@ const setNodeStyleReducer = (state: DiagramState, action: PayloadAction<CSSPrope
 const deleteNodeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   state.nodes = state.nodes.filter((nd) => nd.id !== state.selectedDataId);
   state.edges = state.edges.filter((edge) => edge.source !== state.selectedDataId && edge.target !== state.selectedDataId);
-  state.isDataDrawerOpen = !state.isDataDrawerOpen;
   delete state.diagramFlowErrors[state.selectedDataId];
   state.selectedDataId = action.payload ? action.payload : undefined;
 };
@@ -284,26 +247,6 @@ const connectEdgeReducer = (state: DiagramState, action: PayloadAction<Connectio
   const connectedParams = action.payload;
   const newEdge: Edge = getEdgeFromConnection(connectedParams, state.diagramOptions);
   const updatedEdges: Edge[] = addEdge(newEdge, state.edges);
-  let connectedToSameTarget = 0;
-  let connectedToSameSource = 0;
-  updatedEdges.forEach((edge: Edge) => {
-    if (edge.target === newEdge.target && edge.targetHandle === newEdge.targetHandle) {
-      connectedToSameTarget++;
-    }
-    if (edge.source === newEdge.source && edge.sourceHandle === newEdge.sourceHandle) {
-      connectedToSameSource++;
-    }
-  });
-
-  if (connectedToSameTarget > 2 || connectedToSameSource > 2) {
-    state.diagramAlert = {
-      open: true,
-      alertMessage: DiagramAlertMessages.EdgeConnectionLimit,
-      alertSeverity: 'warning',
-      dismissMS: 6000
-    };
-  }
-  
 
   state.edges = updatedEdges;
 };
@@ -320,13 +263,7 @@ const edgesUpdateReducer = (state: DiagramState, action: PayloadAction<Edge[]>) 
 const deleteEdgeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   state.edges = state.edges.filter((edg) => edg.id !== action.payload);
 
-  state.isDataDrawerOpen = !state.isDataDrawerOpen;
   state.selectedDataId = action.payload ? action.payload : undefined;
-}
-
-const focusedEdgeChangeReducer = (state: DiagramState, action: PayloadAction<{ edgeId: string }>) => {
-  const { edgeId } = action.payload;
-  state.focusedEdgeId = edgeId;
 }
 
 const defaultEdgeTypeChangeReducer = (state: DiagramState, action: PayloadAction<string>) => {
@@ -476,41 +413,9 @@ const showMarkerEndArrowsReducer = (state: DiagramState, action: PayloadAction<b
   });
 }
 
-const toggleDrawerReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  state.isDataDrawerOpen = !state.isDataDrawerOpen;
-};
-
-const toggleMenuDrawerReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  state.isMenuDrawerOpen = !state.isMenuDrawerOpen;
-};
-
-const openDrawerWithSelectedReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  if (!state.isDataDrawerOpen) {
-    state.isDataDrawerOpen = true;
-  }
-  setSelectedId(state, action);
-};
-
 const selectedIdChangeReducer = (state: DiagramState, action?: PayloadAction<string>) => {
-  setSelectedId(state, action);
-};
-
-const setSelectedId = (state: DiagramState, action: PayloadAction<string>) => {
   state.selectedDataId = action.payload ? action.payload : undefined;
-  const componentTabs = ComponentManageDataTabs[state.nodes.find((n: Node<ProcessFlowPart>) => n.id === action.payload)?.data.processComponentType as WaterProcessComponentType];
-  if (componentTabs) {
-    // * is component, not edge
-    state.manageDataTabs = componentTabs;
-  }
 };
-
-const modalOpenChangeReducer = (state: DiagramState, action: PayloadAction<boolean>) => {
-  state.isModalOpen = action.payload;
-}
-
-const diagramAlertChangeReducer = (state: DiagramState, action: PayloadAction<DiagramAlertState>) => {
-  state.diagramAlert = action.payload;
-}
 
 export const diagramSlice = createSlice({
   name: 'diagram',
@@ -525,7 +430,6 @@ export const diagramSlice = createSlice({
     updateNodeHandles: updateNodeHandlesReducer,
     sourceFlowValueChange: sourceFlowValueChangeReducer,
     totalFlowChange: totalFlowChangeReducer,
-    validationWindowOpenChange: validationWindowOpenChangeReducer,
     deleteNode: deleteNodeReducer,
     setNodeName: setNodeNameReducer,
     nodeDataPropertyChange: nodeDataPropertyChangeReducer,
@@ -539,7 +443,6 @@ export const diagramSlice = createSlice({
     connectEdge: connectEdgeReducer,
     deleteEdge: deleteEdgeReducer,
     keyboardDeleteNode: keyboardDeleteNodeReducer,
-    focusedEdgeChange: focusedEdgeChangeReducer,
     defaultEdgeTypeChange: defaultEdgeTypeChangeReducer,
     customEdgeTypeChange: customEdgeTypeChangeReducer,
     diagramOptionsChange: diagramOptionsChangeReducer,
@@ -549,16 +452,10 @@ export const diagramSlice = createSlice({
     distributeTotalSourceFlow: distributeTotalSourceFlowReducer,
     dischargeFlowValueChange: dischargeFlowValueChangeReducer,
     distributeTotalDischargeFlow: distributeTotalDischargeFlowReducer,
-    toggleDrawer: toggleDrawerReducer,
-    setDialogOpen: setDialogOpenReducer,
     conductivityUnitChange: conductivityUnitChangeReducer,
     electricityCostChange: electricityCostChangeReducer,
-    modalOpenChange: modalOpenChangeReducer,
     applyEstimatedFlowResults: applyEstimatedFlowResultsReducer,
-    openDrawerWithSelected: openDrawerWithSelectedReducer,
     selectedIdChange: selectedIdChangeReducer,
-    diagramAlertChange: diagramAlertChangeReducer,
-    toggleMenuDrawer: toggleMenuDrawerReducer,
     edgesChangeFromPropagation: edgesChangeFromPropagationReducer,
     sumTotalFlowChange: sumTotalFlowChangeReducer,
     setDiagramNotes: setDiagramNotesReducer,
@@ -586,10 +483,8 @@ export const {
   dischargeFlowValueChange,
   distributeTotalSourceFlow,
   distributeTotalDischargeFlow,
-  validationWindowOpenChange,
   updateNodeHandles,
   deleteEdge,
-  focusedEdgeChange,
   defaultEdgeTypeChange,
   customEdgeTypeChange,
   setNodeColor,
@@ -602,15 +497,9 @@ export const {
   flowDecimalPrecisionChange,
   applyEstimatedFlowResults,
   showMarkerEndArrows,
-  toggleDrawer,
-  setDialogOpen,
-  modalOpenChange,
   conductivityUnitChange,
   electricityCostChange,
-  openDrawerWithSelected,
   selectedIdChange,
-  diagramAlertChange,
-  toggleMenuDrawer,
   edgesChangeFromPropagation,
   setDiagramNotes,
   setPaletteColors,
@@ -640,21 +529,14 @@ export const RECOMPUTES_DIAGRAM_ERRORS: Record<DiagramActionType, boolean> = {
   setNodeFlowConfidence: false, // cosmetic annotation, doesn't affect flow totals or validation
   setEdgeStrokeColor: false,
   setEdgeFlowConfidence: false, // cosmetic annotation, doesn't affect flow totals or validation
-  focusedEdgeChange: false,
   defaultEdgeTypeChange: false, // edge.type/diagramOptions.edgeType are rendering-only
   customEdgeTypeChange: false,
   diagramOptionsChange: false,
   showMarkerEndArrows: false,
-  toggleDrawer: false,
-  setDialogOpen: false,
-  modalOpenChange: false,
   conductivityUnitChange: false, // settings field unrelated to flow validation
   electricityCostChange: false, // settings field unrelated to flow validation
-  diagramAlertChange: false,
-  toggleMenuDrawer: false,
   setDiagramNotes: false,
   setPaletteColors: false, // node background color only
-  validationWindowOpenChange: false,
 
   // structural — change validation inputs, must trigger recompute
   addNode: true,
@@ -680,7 +562,6 @@ export const RECOMPUTES_DIAGRAM_ERRORS: Record<DiagramActionType, boolean> = {
 
   // don't mutate validation inputs themselves, but force a recompute so errors are guaranteed
   // fresh the moment a node's forms become visible (insurance against any other stale path)
-  openDrawerWithSelected: true,
   selectedIdChange: true,
 };
 

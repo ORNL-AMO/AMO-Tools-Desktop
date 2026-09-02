@@ -23,7 +23,8 @@ import WarningDialog from './WarningDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { AppStore, configureAppStore, RootState, selectEdges, selectFlowConfidenceEnabled, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected, selectedIdChange } from './diagramReducer';
+import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange } from './diagramReducer';
+import { openDrawerWithSelected, selectComponent } from './diagramThunks';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
 import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, DiagramFlowErrors, getIsDiagramValid } from 'process-flow-lib';
@@ -54,7 +55,7 @@ const Diagram = (props: DiagramProps) => {
   const diagramNotes = useAppSelector((state: RootState) => state.diagram.diagramNotes);
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
+  const isDialogOpen = useAppSelector((state: RootState) => state.ui.isDialogOpen);
   const edges: Edge[] = useAppSelector(selectEdges);
   const userDiagramOptions: UserDiagramOptions = useAppSelector((state: RootState) => state.diagram.diagramOptions);
   const settings: DiagramSettings = useAppSelector((state: RootState) => state.diagram.settings);
@@ -67,13 +68,13 @@ const Diagram = (props: DiagramProps) => {
   const controlsVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
   const flowConfidenceEnabled: boolean = useAppSelector(selectFlowConfidenceEnabled);
   const defaultEdgeType: string = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
-  const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
+  const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.ui.validationWindowLocation);
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
   const diagramParentDimensions = props.parentContainer;
-  const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.diagram.diagramAlert);
-  const isMenuDrawerOpen = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
+  const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.ui.diagramAlert);
+  const isMenuDrawerOpen = useAppSelector((state) => state.ui.isMenuDrawerOpen);
 
   const diagramFlowErrors: DiagramFlowErrors = useAppSelector((state: RootState) => state.diagram.diagramFlowErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
@@ -204,7 +205,7 @@ const Diagram = (props: DiagramProps) => {
             }}
             defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
             connectionLineType={ConnectionLineType.Bezier}
-            onNodeClick={(_, node) => dispatch(selectedIdChange(node.id))}
+            onNodeClick={(_, node) => dispatch(selectComponent(node.id))}
             onEdgeClick={(_, edge) => dispatch(openDrawerWithSelected(edge.id))}
             onDrop={onDrop}
             onBeforeDelete={onBeforeDelete}

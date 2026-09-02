@@ -1,4 +1,4 @@
-import type { Dispatch, PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { Edge, Node } from '@xyflow/react';
 import {
   CustomEdgeData,
@@ -6,20 +6,15 @@ import {
   MAX_FLOW_DECIMALS,
   NodeFlowProperty,
   ProcessFlowPart,
-  calculateFlowPropagation,
   getNodeFlowTotals,
 } from 'process-flow-lib';
 import { getNodeSourceEdges, getNodeTargetEdges, setCalculatedNodeDataProperty, formatDecimalPlaces, formatNumberValue } from './FlowUtils';
 import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
-// * diagramReducer.ts imports these reducers back, forming a circular import. Safe here because
-// * `diagramSlice` is only dereferenced inside propagateFlowFromNode's returned function, which
-// * doesn't run until a component dispatches it - long after both modules finish loading. Same
-// * deferred-access pattern store.ts's getStructuralDiagramActionMatcher() relies on for the same reason.
-import { diagramSlice, type DiagramState } from './diagramReducer';
+import type { DiagramState } from './diagramReducer';
 
 /**
  * All state changes for "a flow value gets calculated or populated from a user event" (see
- * flow-propagation-requirements.md items A-I): direct edge/total edits, evenly distributing a
+ * flow-calculation-requirements.md items A-I): direct edge/total edits, evenly distributing a
  * total across edges, summing edges into a total, the water-system estimation dialog, and the
  * "set all flow values to end of path" cascade. Kept in one module so understanding this concept
  * doesn't require reading the rest of diagramReducer.ts's node/edge CRUD, coloring, and UI-drawer
@@ -121,7 +116,6 @@ export const applyEstimatedFlowResultsReducer = (state: DiagramState, action: Pa
     updateNode.data.userEnteredData.totalKnownLosses = Number(formatNumberValue(knownLosses, 3));
     updateNode.data.userEnteredData.waterInProduct = Number(formatNumberValue(waterInProduct, 3));
   }
-  state.isModalOpen = false;
 }
 
 /**
@@ -133,7 +127,7 @@ export const edgesChangeFromPropagationReducer = (state: DiagramState, action: P
   startingNodeId: string,
   initialEdgeId: string
 }>) => {
-  const { flowUpdates, startingNodeId, initialEdgeId } = action.payload;
+  const { flowUpdates, initialEdgeId } = action.payload;
   // * downstream edges inherit the seed edge's own confidence, whatever it is (metered or estimated) -
   // * only the seed edge itself keeps its exact prior confidence untouched
   const seedEdge = state.edges.find(edge => edge.id === initialEdgeId) as Edge<CustomEdgeData>;
@@ -179,18 +173,6 @@ export const edgesChangeFromPropagationReducer = (state: DiagramState, action: P
     setCalculatedNodeDataProperty(state.calculatedData, nodeId, 'totalDischargeFlow', totalCalculatedDischargeFlow);
   });
 
-  if (flowUpdates) {
-    const sourceNode = state.nodes.find(node => node.id === startingNodeId);
-    const initialValue: number = Object.entries(flowUpdates)[0][1];
-
-    state.diagramAlert = {
-      open: true,
-      alertMessage: `Successfully set all path flows from ${sourceNode?.data.name || sourceNode.id} (${initialValue} Mgal) to end of path`,
-      alertSeverity: 'success',
-      dismissMS: 10000
-    };
-  }
-
   state.edges = updatedEdges;
 };
 
@@ -221,26 +203,3 @@ const populateConnectedOutflowTotalsAndFlows = (state: DiagramState, dischargeEd
     }
   });
 }
-
-/**
- * "Set all flow values to end of path" - reads current edges from the store, runs the pure DFS
- * split (calculateFlowPropagation, process-flow-lib), then dispatches the result as a plain action.
- * A plain thunk, not createAsyncThunk, since this is synchronous, in-store-state work, not an async
- * operation - matches RTK's own guidance on when each is appropriate.
- *
- * `diagramSlice` is imported from diagramReducer.ts, which imports this file's reducers - a circular
- * import. That's safe here only because `diagramSlice` is dereferenced inside the returned function,
- * which doesn't run until a component dispatches this thunk, long after both modules finish loading -
- * the same deferred-access pattern store.ts's getStructuralDiagramActionMatcher() already relies on
- * for the same reason.
- */
-export const propagateFlowFromNode = (nodeId: string, edge: Edge<CustomEdgeData>) =>
-  (dispatch: Dispatch, getState: () => { diagram: DiagramState }) => {
-    const edges = getState().diagram.edges as Edge<CustomEdgeData>[];
-    const flowUpdates = calculateFlowPropagation(nodeId, edge, edges);
-    dispatch(diagramSlice.actions.edgesChangeFromPropagation({
-      flowUpdates,
-      startingNodeId: nodeId,
-      initialEdgeId: edge.id,
-    }));
-  };
