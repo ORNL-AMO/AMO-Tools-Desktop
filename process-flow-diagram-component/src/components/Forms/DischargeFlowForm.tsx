@@ -1,12 +1,13 @@
 import { List, TextField, InputAdornment, ListItem, Button, useTheme, Box, Typography, Collapse } from "@mui/material";
-import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getNodeFlowTotals } from "../Diagram/FlowUtils";
+import { getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent } from "../Diagram/FlowUtils";
+import { getEdgeSourceAndTarget, getNodeFlowTotals } from "process-flow-lib";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
 import React, { useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
-import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, nodeDataPropertyChange, sumTotalFlowChange, totalFlowChange, setEdgeFlowConfidence, setNodeFlowConfidence } from "../Diagram/diagramReducer";
+import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, nodeDataPropertyChange, sumTotalFlowChange, totalFlowChange, setEdgeFlowConfidence, setNodeFlowConfidence, propagateFlowFromNode } from "../Diagram/diagramReducer";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
@@ -20,7 +21,6 @@ import FlowConfidenceToggle from "./FlowConfidenceToggle";
 import { blue } from "@mui/material/colors";
 import { CustomEdgeData, FlowConfidence, getKnownLossComponentTotals, ProcessFlowPart } from "process-flow-lib";
 import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
-import { useFlowService } from "../../services/FlowService";
 import CallMergeIcon from '@mui/icons-material/CallMerge';
 
 
@@ -33,7 +33,6 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     const { inView } = props;
     const theme = useTheme();
     const dispatch = useAppDispatch();
-    const flowService = useFlowService();
 
     const nodes: Node[] = useAppSelector(selectNodes);
     const componentDischargeEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeTargetEdges) as Edge<CustomEdgeData>[];
@@ -96,7 +95,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
      * Populate form currentValue through all flows to end of path
      */
     const onPropogateFlow = (edge: Edge<CustomEdgeData>) => {
-        flowService.propagateFlowFromNode(selectedNode.id, edge);
+        dispatch(propagateFlowFromNode(selectedNode.id, edge));
     }
 
 

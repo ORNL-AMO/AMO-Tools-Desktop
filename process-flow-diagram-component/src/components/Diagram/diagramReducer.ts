@@ -3,10 +3,22 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
 import { ValidationWindowLocation } from './ValidationWindow';
-import { ComponentManageDataTabs, CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramAlertMessages, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, MAX_FLOW_DECIMALS, ManageDataTab, NodeFlowData, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
-import { createNewNode, getNodeSourceEdges, getNodeFlowTotals, setCalculatedNodeDataProperty, getNodeTargetEdges, formatDecimalPlaces, formatDataForMEASUR, formatNumberValue } from './FlowUtils';
-import { EstimatedFlowResults } from '../Forms/WaterSystemEstimation/SystemEstimationFormUtils';
+import { ComponentManageDataTabs, CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramAlertMessages, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, ManageDataTab, NodeFlowProperty, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
+import { createNewNode, formatDataForMEASUR } from './FlowUtils';
 import { DiagramAlertState } from './DiagramAlert';
+import {
+  totalFlowChangeReducer,
+  sumTotalFlowChangeReducer,
+  sourceFlowValueChangeReducer,
+  distributeTotalSourceFlowReducer,
+  dischargeFlowValueChangeReducer,
+  distributeTotalDischargeFlowReducer,
+  applyEstimatedFlowResultsReducer,
+  edgesChangeFromPropagationReducer,
+} from './flowCalculationReducers';
+// * re-exported so components dispatch every flow-related action (including this thunk) from one
+// * place, even though its implementation lives in flowCalculationReducers.ts
+export { propagateFlowFromNode } from './flowCalculationReducers';
 
 import packageJson from '../../../package.json';
 const CURRENT_DIAGRAM_VERSION: string = packageJson.version;
@@ -177,107 +189,9 @@ const addNodeReducer = (state: DiagramState, action: PayloadAction<{ nodeType: W
   state.nodes.push(newNode);
 };
 
-const totalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flowProperty: NodeFlowProperty, totalFlow: number }>) => {
-  const { flowProperty, totalFlow } = action.payload;
-  const updateNode: Node<ProcessFlowPart> = state.nodes.find((node: Node<ProcessFlowPart>) => state.selectedDataId === node.id) as Node<ProcessFlowPart>;
-  updateNode.data.userEnteredData[flowProperty] = totalFlow;
-}
-
-const sumTotalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flowProperty: NodeFlowProperty, relatedEdges: Edge<CustomEdgeData>[] }>) => {
-  const { flowProperty, relatedEdges } = action.payload;
-  const updateNode: Node<ProcessFlowPart> = state.nodes.find((node: Node<ProcessFlowPart>) => state.selectedDataId === node.id) as Node<ProcessFlowPart>;
-  const currentTotalFlow = updateNode.data.userEnteredData[flowProperty];
-  
-  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(relatedEdges, state.nodes, state.selectedDataId);
-  const sumAllFlows = flowProperty === 'totalSourceFlow' ? totalCalculatedSourceFlow : totalCalculatedDischargeFlow;
-  updateNode.data.userEnteredData[flowProperty] = sumAllFlows ?? currentTotalFlow;
-}
-
-/**
- * Updates a node source edge flow value, updates the calculated node total flow, and propogates changes to connected inflow nodes and edges.
- */
-const sourceFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{ sourceEdgeId: string, flowValue: number }>) => {
-  const { sourceEdgeId, flowValue } = action.payload;
-  const sourceEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === sourceEdgeId) as Edge<CustomEdgeData>;
-  sourceEdge.data.flowValue = flowValue;
-
-  const sourceEdges: Edge<CustomEdgeData>[] = getNodeSourceEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
-  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(sourceEdges, state.nodes, state.selectedDataId);
-  
-  setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalSourceFlow', totalCalculatedSourceFlow);
-  populateConnectedInflowTotalsAndFlows(state, sourceEdges);
-}
-
-/**
- * Distributes a total flow value evenly across all source edges of the selected node. Propogates changes to connected inflow nodes and edges.
- */
-const distributeTotalSourceFlowReducer = (state: DiagramState, action: PayloadAction<number>) => {
-  const totalFlowValue = action.payload;
-  const componentSourceEdges: Edge<CustomEdgeData>[] = getNodeSourceEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
-  const componentSourceEdgeIds: string[] = componentSourceEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
-
-  let dividedTotalFlow = totalFlowValue / componentSourceEdges.length;
-  dividedTotalFlow = Number(formatDecimalPlaces(dividedTotalFlow, MAX_FLOW_DECIMALS));
-  state.edges = state.edges.map((edge: Edge<CustomEdgeData>) => {
-    if (componentSourceEdgeIds.includes(edge.id)) {
-      edge.data.flowValue = dividedTotalFlow;
-    }
-    return edge;
-  });
-  populateConnectedInflowTotalsAndFlows(state, componentSourceEdges);
-}
-
-/**
- * Updates a node discharge edge flow value, updates the calculated node total flow, and propogates changes to connected outflow nodes and edges.
- */
-const dischargeFlowValueChangeReducer = (state: DiagramState, action: PayloadAction<{ dischargeEdgeId: string, flowValue: number }>) => {
-  const { dischargeEdgeId, flowValue } = action.payload;
-  const dischargeEdge: Edge<CustomEdgeData> = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === dischargeEdgeId) as Edge<CustomEdgeData>;
-  dischargeEdge.data.flowValue = flowValue;
-
-  const dischargeEdges: Edge<CustomEdgeData>[] = getNodeTargetEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
-  const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(dischargeEdges, state.nodes, state.selectedDataId);
-
-  setCalculatedNodeDataProperty(state.calculatedData, state.selectedDataId, 'totalDischargeFlow', totalCalculatedDischargeFlow);
-  populateConnectedOutflowTotalsAndFlows(state, dischargeEdges);
-}
-
-/**
- * Distributes a total flow value evenly across all discharge edges of the selected node. Propogates changes to connected outflow nodes and edges.
- */
-const distributeTotalDischargeFlowReducer = (state: DiagramState, action: PayloadAction<number>) => {
-  const totalFlowValue = action.payload;
-  const componentDischargeEdges: Edge<CustomEdgeData>[] = getNodeTargetEdges(state.edges, state.selectedDataId) as Edge<CustomEdgeData>[];
-  const componentDischargeEdgesIds = componentDischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.id);
-
-  let dividedTotalFlow = totalFlowValue / componentDischargeEdges.length;
-  dividedTotalFlow = Number(formatDecimalPlaces(dividedTotalFlow, MAX_FLOW_DECIMALS));
-  state.edges = state.edges.map((edge: Edge<CustomEdgeData>) => {
-    if (componentDischargeEdgesIds.includes(edge.id)) {
-      edge.data.flowValue = dividedTotalFlow;
-    }
-    return edge;
-  });
-
-  populateConnectedOutflowTotalsAndFlows(state, componentDischargeEdges);
-}
-
 const recomputeNodeErrorsReducer = (state: DiagramState) => {
   state.diagramFlowErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
 };
-
-const applyEstimatedFlowResultsReducer = (state: DiagramState, action: PayloadAction<EstimatedFlowResults>) => {
-  const { totalSourceFlow, totalDischargeFlow, knownLosses, waterInProduct } = action.payload;
-  const updateNode = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart | undefined>;
-  if (updateNode) {
-    // * NAN not serializable, causing maximum call stack exceeded - should fix in estimate components once validation/precision is known
-    updateNode.data.userEnteredData.totalSourceFlow = Number(formatNumberValue(totalSourceFlow, 3));
-    updateNode.data.userEnteredData.totalDischargeFlow = Number(formatNumberValue(totalDischargeFlow, 3));
-    updateNode.data.userEnteredData.totalKnownLosses = Number(formatNumberValue(knownLosses, 3));
-    updateNode.data.userEnteredData.waterInProduct = Number(formatNumberValue(waterInProduct, 3));
-  }
-  state.isModalOpen = false;
-}
 
 const validationWindowOpenChangeReducer = (state: DiagramState, action: PayloadAction<ValidationWindowLocation>) => {
   state.validationWindowLocation = action.payload;
@@ -401,66 +315,6 @@ const edgesChangeReducer = (state: DiagramState, action: PayloadAction<EdgeChang
 
 const edgesUpdateReducer = (state: DiagramState, action: PayloadAction<Edge[]>) => {
   state.edges = action.payload;
-};
-
-/**
- * @param action  Map of edgeId to flow value>
- * @
- */
-const edgesChangeFromPropagationReducer = (state: DiagramState, action: PayloadAction<{
-  flowUpdates: Record<string, number>,
-  startingNodeId: string,
-  initialEdgeId: string
-}>) => {
-  const {flowUpdates, startingNodeId, initialEdgeId} = action.payload;
-  // * downstream edges inherit the seed edge's own confidence, whatever it is (metered or estimated) -
-  // * only the seed edge itself keeps its exact prior confidence untouched
-  const seedEdge = state.edges.find(edge => edge.id === initialEdgeId) as Edge<CustomEdgeData>;
-  const seedConfidence: FlowConfidence = seedEdge.data.confidence;
-  const affectedNodeIds = new Set<string>();
-  const updatedEdges: Edge<CustomEdgeData>[] = state.edges.map((edge) => {
-    const newFlow = flowUpdates[edge.id];
-    if (newFlow !== undefined) {
-      edge.data.flowValue = newFlow;
-      if (edge.id !== initialEdgeId) {
-        edge.data.confidence = seedConfidence;
-      }
-      affectedNodeIds.add(edge.source);
-      affectedNodeIds.add(edge.target);
-    }
-    return edge;
-  }) as Edge<CustomEdgeData>[];
-
-  // * a node's total confidence is 'metered' only when every one of its connected edges (not just
-  // * the ones touched by this propagation batch) is metered, otherwise 'estimated'
-  affectedNodeIds.forEach((nodeId) => {
-    const node = state.nodes.find(n => n.id === nodeId) as Node<ProcessFlowPart> | undefined;
-    if (!node) {
-      return;
-    }
-    const outgoingEdges = getNodeTargetEdges(updatedEdges, nodeId);
-    if (outgoingEdges.length) {
-      node.data.flowConfidence.totalDischargeFlow = outgoingEdges.every(edge => edge.data.confidence === 'metered') ? 'metered' : 'estimated';
-    }
-    const incomingEdges = getNodeSourceEdges(updatedEdges, nodeId);
-    if (incomingEdges.length) {
-      node.data.flowConfidence.totalSourceFlow = incomingEdges.every(edge => edge.data.confidence === 'metered') ? 'metered' : 'estimated';
-    }
-  });
-
-   if (flowUpdates) {
-    const sourceNode = state.nodes.find(node => node.id === startingNodeId);
-    const initialValue: number = Object.entries(flowUpdates)[0][1];
-
-    state.diagramAlert = {
-      open: true,
-      alertMessage: `Successfully set all path flows from ${sourceNode?.data.name || sourceNode.id} (${initialValue} Mgal) to end of path`,
-      alertSeverity: 'success',
-      dismissMS: 10000
-    };
-  }
-
-  state.edges = updatedEdges;
 };
 
 const deleteEdgeReducer = (state: DiagramState, action: PayloadAction<string>) => {
@@ -839,8 +693,6 @@ export interface NodeTreatmentDataPayload<K extends keyof WaterTreatment> { opti
  */
 export interface EstimatedSystemPayload<K extends keyof WaterSystemResults> { systemResultProp: K, updatedValue: WaterSystemResults[K] };
 export type OptionsDependentState = 'updateEdges' | 'updateEdgeProperties';
-export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'totalDischargeFlow'>;
-export type FlowType = 'source' | 'discharge';
 
 
 // todo 7364 - migrate save event to thunk
@@ -897,38 +749,6 @@ const getAreHandlesEqual = (handleSet: Handles[keyof Handles], updatedHandleSet:
   const isEqual = [...keys].every(key => handleSet[key] === updatedHandleSet[key]);
   return isEqual;
 }
-
-/**
- * update calculated total flow values for inflow connected nodes
- */
-const populateConnectedInflowTotalsAndFlows = (state: DiagramState, sourceEdges: Edge<CustomEdgeData>[]) => {
-  const sourceNodeIds: string[] = sourceEdges.map((edge: Edge<CustomEdgeData>) => edge.source);
-  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
-    if (sourceNodeIds.includes(node.id)) {
-      const nodeDischargeEdges = getNodeTargetEdges(state.edges, node.id);
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeDischargeEdges, state.nodes, node.id);
-      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalDischargeFlow', totalCalculatedDischargeFlow);
-    }
-  });
-}
-
-
-/**
- * update calculated total flow values for outflow connected nodes
- */
-const populateConnectedOutflowTotalsAndFlows = (state: DiagramState, dischargeEdges: Edge<CustomEdgeData>[]) => {
-  const dischargeNodeIds: string[] = dischargeEdges.map((edge: Edge<CustomEdgeData>) => edge.target);
-  state.nodes.forEach((node: Node<ProcessFlowPart>) => {
-    if (dischargeNodeIds.includes(node.id)) {
-      const nodeSourceEdges = getNodeSourceEdges(state.edges, node.id);
-      const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(nodeSourceEdges, state.nodes, node.id);
-      setCalculatedNodeDataProperty(state.calculatedData, node.id, 'totalSourceFlow', totalCalculatedSourceFlow);
-    }
-  });
-}
-
-
-
 
 
 /**

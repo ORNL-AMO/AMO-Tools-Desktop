@@ -31,7 +31,6 @@ import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
-import { FlowServiceProvider } from '../../services/FlowService';
 import ResultsPanel from './ResultsPanel';
 import FlowConfidenceLegend from './FlowConfidenceLegend';
 
@@ -281,9 +280,7 @@ export default (props: DiagramProps) => {
   }
   return (
     <Provider store={storeRef.current}>
-      <FlowServiceProvider>
-        <Diagram {...props} />
-      </FlowServiceProvider>
+      <Diagram {...props} />
     </Provider>
   );
 }

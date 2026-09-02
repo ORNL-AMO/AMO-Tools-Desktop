@@ -1,7 +1,7 @@
 import { configureStore, createListenerMiddleware, createSelector, isAnyOf } from '@reduxjs/toolkit'
 import diagramReducer, { addNode, diagramSlice, DiagramActionType, recomputeNodeErrors, RECOMPUTES_DIAGRAM_ERRORS, saveDiagramState } from './diagramReducer'
-import { Edge, getConnectedEdges, Node } from '@xyflow/react';
-import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
+import { Edge, Node } from '@xyflow/react';
+import { getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
 import { createGraphIndex, CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
 
 /**
@@ -230,21 +230,3 @@ export const selectWasteTreatmentNodes = createSelector(
       .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment')
   }
 );
-
-
-// todo use FlowUtils helper instead when possible, this may be more expensive than passing in state to utils
-export const selectNodeFlowTotals = (state: RootState, node: Node<ProcessFlowPart>) => {
-  const connectedEdges = getConnectedEdges([node], state.diagram.edges);
-  let totalCalculatedSourceFlow = 0;
-  let totalCalculatedDischargeFlow = 0;
-  connectedEdges.map((edge: Edge<CustomEdgeData>) => {
-    const { source, target } = getEdgeSourceAndTarget(edge, state.diagram.nodes);
-    if (node.id === target.diagramNodeId) {
-      totalCalculatedSourceFlow += edge.data.flowValue;
-    } else if (node.id === source.diagramNodeId) {
-      totalCalculatedDischargeFlow += edge.data.flowValue;
-    }
-  });
-
-  return { totalCalculatedSourceFlow, totalCalculatedDischargeFlow };
-}

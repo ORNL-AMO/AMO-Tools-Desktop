@@ -1,7 +1,8 @@
 
 import React, { useState } from "react";
 import { List, TextField, InputAdornment, ListItem, Button, Box, useTheme, Fade, Collapse } from "@mui/material";
-import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getNodeFlowTotals } from "../Diagram/FlowUtils";
+import { getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent } from "../Diagram/FlowUtils";
+import { getEdgeSourceAndTarget, getNodeFlowTotals } from "process-flow-lib";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 import FlowConnectionText from "../Drawer/FlowConnectionText";
