@@ -19,3 +19,7 @@ td, th{
   input.form-control.ng-invalid{
     border: red solid 2px;
   }
+
+  input.form-control.ng-invalid.negative-allowed{
+    border: 1px solid #ced4da;
+  }
