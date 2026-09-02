@@ -48,7 +48,12 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
         },
       });
   
-      return getDefaultMiddleware().prepend(listenerMiddleware.middleware);
+      return getDefaultMiddleware({
+        // convertValueFn is transient (never stored in state); meta.arg/meta.baseQueryMeta are RTK's own defaults, restated here since this option replaces rather than merges with them.
+        serializableCheck: {
+          ignoredActionPaths: ['meta.arg', 'meta.baseQueryMeta', 'payload.convertValueFn'],
+        },
+      }).prepend(listenerMiddleware.middleware);
     },
   });
 
