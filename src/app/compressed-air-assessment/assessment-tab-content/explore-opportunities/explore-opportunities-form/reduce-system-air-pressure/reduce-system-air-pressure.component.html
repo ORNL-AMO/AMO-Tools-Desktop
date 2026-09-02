@@ -62,7 +62,7 @@
                         }
                         @if (form.controls.averageSystemPressureReduction.errors.max) {
                             <span>
-                                Value can't be greater than the minumum pressure in the system
+                                Value can't be greater than the minimum pressure in the system
                                 ({{form.controls.averageSystemPressureReduction.errors.max.max | number: '1.0-1'}}
                                 @if (settings.unitsOfMeasure == 'Imperial') {
                                     <span>psig</span>
