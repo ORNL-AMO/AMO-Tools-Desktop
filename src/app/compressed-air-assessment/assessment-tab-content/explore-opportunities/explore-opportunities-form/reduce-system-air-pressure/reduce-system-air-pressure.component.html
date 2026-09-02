@@ -5,7 +5,7 @@
             <span class="supply-demand">
                 Supply
             </span>
-            @if (form.invalid && form.controls.order.value != 100) {
+            @if ((form.controls.implementationCost.invalid || hasPressureReductionBlockingError) && form.controls.order.value != 100) {
                 <span>
                     <span class="fa fa-exclamation-circle"></span>
                 </span>
@@ -41,8 +41,7 @@
                 }
             </div>
 
-            <div class="form-group"
-                [ngClass]="{'invalid': form.controls.averageSystemPressureReduction.errors?.required || form.controls.averageSystemPressureReduction.errors?.max}">
+            <div class="form-group" [ngClass]="{'invalid': hasPressureReductionBlockingError}">
                 <label for="averageSystemPressureReduction">Average System Pressure Reduction</label>
                 <div class="input-group">
                     <input type="number" class="form-control" formControlName="averageSystemPressureReduction"
@@ -55,7 +54,7 @@
                         <span class="units input-group-addon">barg</span>
                     }
                 </div>
-                @if ((form.controls.averageSystemPressureReduction.errors?.required || form.controls.averageSystemPressureReduction.errors?.max) && !form.controls.averageSystemPressureReduction.pristine) {
+                @if (hasPressureReductionBlockingError && !form.controls.averageSystemPressureReduction.pristine) {
                     <span class="alert-danger pull-right small">
                         @if (form.controls.averageSystemPressureReduction.errors.required) {
                             <span>Value Required</span>

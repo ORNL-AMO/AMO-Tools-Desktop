@@ -42,6 +42,11 @@ export class ReduceSystemAirPressureComponent implements OnInit {
     this.selectedModificationIdSub.unsubscribe();
   }
 
+  get hasPressureReductionBlockingError(): boolean {
+    const errors = this.form?.controls.averageSystemPressureReduction.errors;
+    return !!(errors?.required || errors?.max);
+  }
+
   helpTextField(str: string) {
     this.compressedAirAssessmentService.helpTextField.next(str);
     this.compressedAirAssessmentService.focusedField.next('reduceAirSystemAirPressure');
