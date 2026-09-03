@@ -4,7 +4,7 @@ import BezierDiagramEdge from "../Edges/BezierDiagramEdge";
 import StraightDiagramEdge from "../Edges/StraightDiagramEdge";
 import StepDiagramEdge from "../Edges/StepDiagramEdge";
 import SmoothStepDiagramEdge from "../Edges/SmoothStepDiagramEdge";
-import { CustomEdgeData, DiagramCalculatedData, getNewProcessComponent, getNewNode, WaterProcessComponentType, UserDiagramOptions, ProcessFlowPart, getNewNodeId, FlowDiagramData, NodeFlowData, MAX_FLOW_DECIMALS, getEdgeSourceAndTarget, NodeFlowProperty } from "process-flow-lib";
+import { CustomEdgeData, DiagramCalculatedData, getNewProcessComponent, getNewNode, WaterProcessComponentType, UserDiagramOptions, ProcessFlowPart, getNewNodeId, FlowDiagramData, NodeFlowData, MAX_FLOW_DECIMALS, getEdgeSourceAndTarget, NodeFlowProperty, FlowConfidence, getDefaultFlowTotalTouched } from "process-flow-lib";
 
 export const getRandomCoordinates = (height: number, width: number): { x: number, y: number } => {
   const screenWidth = window.innerWidth;
@@ -55,15 +55,17 @@ const setNodeFallbackPosition = (reactFlowInstance: ReactFlowInstance, node: Nod
 
 export const getHasSources = (connectedEdges: Edge[], nodes: Node[], selectedNode: Node) => {
     return connectedEdges.some((edge: Edge) => {
-        const { source, target } = getEdgeSourceAndTarget(edge, nodes);
-        return selectedNode.id === target.diagramNodeId;
+        const { target } = getEdgeSourceAndTarget(edge, nodes);
+        // * target is undefined for a dangling edge left pointing at a since-deleted node
+        return target !== undefined && selectedNode.id === target.diagramNodeId;
     });
 }
 
 export const getHasTargets = (connectedEdges: Edge[], nodes: Node[], selectedNode: Node) => {
     return connectedEdges.some((edge: Edge) => {
-         const { source, target } = getEdgeSourceAndTarget(edge, nodes);
-         return selectedNode.id === source.diagramNodeId;
+         const { source } = getEdgeSourceAndTarget(edge, nodes);
+         // * source is undefined for a dangling edge left pointing at a since-deleted node
+         return source !== undefined && selectedNode.id === source.diagramNodeId;
      });
 }
 
@@ -208,6 +210,86 @@ export const formatDataForMEASUR = (diagramData: FlowDiagramData): FlowDiagramDa
 
 export const getNodeSourceEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.target === nodeId);
 export const getNodeTargetEdges = (edges: Edge[], nodeId: string) => edges.filter((edge) => edge.source === nodeId);
+
+/**
+ * Lazily initializes a node's flowTotalTouched map and returns it, so callers that need to
+ * write into it don't each repeat the same undefined check.
+ */
+export const ensureFlowTotalTouched = (data: ProcessFlowPart): Record<NodeFlowProperty, boolean> => {
+  if (!data.flowTotalTouched) {
+    data.flowTotalTouched = getDefaultFlowTotalTouched();
+  }
+  return data.flowTotalTouched;
+};
+
+/**
+ * A node's SOLE connected edge on a side mirrors its confidence onto that side's total,
+ * unless the total has been independently touched by the user (explicit toggle or direct
+ * value entry).
+ */
+export const mirrorSingleEdgeConfidenceToTotal = (
+  node: Node<ProcessFlowPart>,
+  flowProperty: NodeFlowProperty,
+  edge: Edge<CustomEdgeData>
+): void => {
+  if (!node.data.flowTotalTouched?.[flowProperty]) {
+    node.data.flowConfidence[flowProperty] = edge.data.confidence;
+  }
+};
+
+/**
+ * Editing a 'calculated' edge's value downgrades it to 'estimated' (edges already
+ * estimated/metered are left alone). Mirrors the downgrade to the node's total for that side
+ * too, unless the total has been independently touched.
+ */
+export const downgradeCalculatedEdgeOnManualEdit = (
+  edge: Edge<CustomEdgeData>,
+  node: Node<ProcessFlowPart> | undefined,
+  flowProperty: NodeFlowProperty
+): void => {
+  if (edge.data.confidence !== 'calculated') {
+    return;
+  }
+  edge.data.confidence = 'estimated';
+  if (node && !node.data.flowTotalTouched?.[flowProperty]) {
+    node.data.flowConfidence[flowProperty] = 'estimated';
+  }
+};
+
+// * least-confident to most-confident: a touched total that's now stale needs to fall back to
+// * the bottom of this scale, and an untouched total's confidence is the least-confident value
+// * among all its arrows.
+const FLOW_CONFIDENCE_RANK: Record<FlowConfidence, number> = { estimated: 0, calculated: 1, metered: 2 };
+
+/**
+ * An untouched total's confidence is the least-confident state among every arrow feeding that
+ * side - a cascade's seed arrow keeps its own real confidence, every other arrow it writes
+ * becomes 'calculated', and any arrow the cascade didn't touch at all keeps its own real
+ * confidence too. A single-edge side is just the trivial one-arrow case of this same rule.
+ */
+export const getLeastConfidentFlowConfidence = (edges: Edge<CustomEdgeData>[]): FlowConfidence => {
+  if (edges.length === 0) {
+    return 'estimated';
+  }
+  return edges.reduce<FlowConfidence>(
+    (worst, edge) => FLOW_CONFIDENCE_RANK[edge.data.confidence] < FLOW_CONFIDENCE_RANK[worst] ? edge.data.confidence : worst,
+    'metered'
+  );
+};
+
+/**
+ * A touched total represents a specific number the user vouched for directly. Any edit to any
+ * arrow on that side - a manual edit or a cascade - means that vouched-for number no longer
+ * reflects what's actually there, so it voids back to 'estimated' and stops counting as touched.
+ * No-op if the total isn't touched.
+ */
+export const voidTouchedTotalOnEdit = (node: Node<ProcessFlowPart> | undefined, flowProperty: NodeFlowProperty): void => {
+  if (!node?.data.flowTotalTouched?.[flowProperty]) {
+    return;
+  }
+  node.data.flowConfidence[flowProperty] = 'estimated';
+  node.data.flowTotalTouched[flowProperty] = false;
+};
 
 /**
  * Retrieve user input total flow, otherwise calculated total flow
