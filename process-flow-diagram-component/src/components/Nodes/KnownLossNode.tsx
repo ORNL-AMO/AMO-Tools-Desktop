@@ -3,7 +3,7 @@ import { CSSProperties } from "react";
 import { Typography } from "@mui/material";
 import CustomHandle from "./CustomHandle";
 import { useAppDispatch } from "../../hooks/state";
-import { openDrawerWithSelected } from "../Diagram/diagramReducer";
+import { openDrawerWithSelected } from "../Diagram/diagramThunks";
 import { DiagramNode, ProcessFlowPart } from "process-flow-lib";
 import React from "react";
 import CustomNodeToolbar from "./CustomNodeToolbar";

@@ -1,5 +1,6 @@
 import { Edge, Node } from "@xyflow/react";
 import { ComponentFlowErrors, CustomEdgeData, DiagramFlowErrors, DiagramSettings, FlowErrors, FlowType, ProcessFlowPart, ValidationLevel, WaterProcessComponentType } from "../types/diagram";
+import { getNodeFlowTotals } from "./flow-totals";
 
 export const getIsDiagramValid = (diagramFlowErrors: DiagramFlowErrors): boolean => {
     return !diagramFlowErrors || Object.keys(diagramFlowErrors).length === 0;
@@ -220,9 +221,10 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], settings
     nodes.forEach((nd: Node<ProcessFlowPart>) => {
         const componentSourceEdges: Edge[] = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.target === nd.data.diagramNodeId);
         const componentDischargeEdges: Edge[] = allEdges.filter((edge: Edge<CustomEdgeData>) => edge.source === nd.data.diagramNodeId);
+        const { totalCalculatedSourceFlow: calculatedSourceFlow, totalCalculatedDischargeFlow: calculatedDischargeFlow } =
+            getNodeFlowTotals([...componentSourceEdges, ...componentDischargeEdges], nodes as Node<ProcessFlowPart>[], nd.data.diagramNodeId);
 
         // * Source errors
-        const calculatedSourceFlow: number = componentSourceEdges.reduce((sum: number, e: Edge<CustomEdgeData>) => sum + (e.data?.flowValue ?? 0), 0);
         const sourceResult: FlowValidationResult = validateFlowSection({
             totalFlow: nd.data.userEnteredData.totalSourceFlow,
             edges: componentSourceEdges as Edge<CustomEdgeData>[],
@@ -246,7 +248,6 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], settings
         }
 
         // * Discharge errors
-        const calculatedDischargeFlow: number = componentDischargeEdges.reduce((sum: number, e: Edge<CustomEdgeData>) => sum + (e.data?.flowValue ?? 0), 0);
         const sumKnownLossEdges: number = getKnownLossComponentTotals(componentDischargeEdges as Edge<CustomEdgeData>[], nodes as Node<ProcessFlowPart>[], nd.data.diagramNodeId);
         const dischargeResult: FlowValidationResult = validateFlowSection({
             totalFlow: nd.data.userEnteredData.totalDischargeFlow,

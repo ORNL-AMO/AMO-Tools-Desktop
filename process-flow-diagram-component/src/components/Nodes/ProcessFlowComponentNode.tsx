@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Position, NodeProps } from '@xyflow/react';
 import { Typography } from '@mui/material';
 import CustomHandle from './CustomHandle';
-import { openDrawerWithSelected } from '../Diagram/diagramReducer';
+import { openDrawerWithSelected } from '../Diagram/diagramThunks';
 import { useAppDispatch } from '../../hooks/state';
 import WaterDropIcon from '@mui/icons-material/WaterDrop';
 import { DiagramNode, ProcessFlowPart } from 'process-flow-lib';

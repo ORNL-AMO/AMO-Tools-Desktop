@@ -6,7 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useAppDispatch } from '../../hooks/state';
-import { resetDiagram, setDialogOpen } from './diagramReducer';
+import { resetDiagram } from './diagramReducer';
+import { setDialogOpen } from './uiSlice';
 
 const WarningDialog = (props: WarningDialogProps) => {
   const dispatch = useAppDispatch();

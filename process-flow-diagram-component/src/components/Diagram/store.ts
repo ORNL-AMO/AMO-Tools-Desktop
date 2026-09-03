@@ -1,8 +1,9 @@
 import { configureStore, createListenerMiddleware, createSelector, isAnyOf } from '@reduxjs/toolkit'
-import diagramReducer, { addNode, diagramSlice, DiagramActionType, recomputeNodeErrors, RECOMPUTES_DIAGRAM_ERRORS, saveDiagramState } from './diagramReducer'
-import { Edge, getConnectedEdges, Node } from '@xyflow/react';
-import { getEdgeSourceAndTarget, getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
-import { createGraphIndex, CustomEdgeData, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
+import diagramReducer, { addNode, connectEdge, diagramSlice, DiagramActionType, edgesChangeFromPropagation, recomputeNodeErrors, RECOMPUTES_DIAGRAM_ERRORS, saveDiagramState } from './diagramReducer'
+import uiReducer, { diagramAlertChange } from './uiSlice';
+import { Edge, Node } from '@xyflow/react';
+import { getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
+import { createGraphIndex, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
 
 /**
  * Builds the `isAnyOf` matcher for the "recompute diagram errors" listener below,
@@ -29,7 +30,7 @@ export function getStructuralDiagramActionMatcher() {
 
 export function configureAppStore(waterDiagram: WaterDiagram) {
   const store = configureStore({
-    reducer: { diagram: diagramReducer },
+    reducer: { diagram: diagramReducer, ui: uiReducer },
     preloadedState: {
       // diagram: getResetData(),
       diagram: {
@@ -39,9 +40,7 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
         composedNodeData: [],
         settings: {},
         diagramOptions: {},
-        isDataDrawerOpen: false,
         selectedDataId: undefined,
-        focusedEdgeId: undefined,
         calculatedData: {nodes: {}},
         diagramFlowErrors: {},
         recentEdgeColors: [],
@@ -51,13 +50,7 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
           headerHeight: undefined,
           footerHeight: undefined
         },
-        isDialogOpen: false,
         assessmentId: undefined,
-        validationWindowLocation: 'diagram',
-        isModalOpen: false,
-        diagramAlert: {
-          open: false,
-        },
         diagramNotes: waterDiagram.flowDiagramData.diagramNotes
       }
     },
@@ -78,6 +71,55 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
           listenerApi.cancelActiveListeners();
           await listenerApi.delay(150);
           listenerApi.dispatch(recomputeNodeErrors());
+        },
+      });
+
+      // * the edge-connection-limit warning depends on the resulting edge list (state.diagram.edges),
+      // * which a plain ui-slice reducer/extraReducer can't read (only its own state + the action) -
+      // * moved here from connectEdgeReducer, which used to write diagramAlert directly
+      listenerMiddleware.startListening({
+        actionCreator: connectEdge,
+        effect: async (action, listenerApi) => {
+          const { source, sourceHandle, target, targetHandle } = action.payload;
+          const edges = (listenerApi.getState() as { diagram: { edges: Edge<CustomEdgeData>[] } }).diagram.edges;
+          let connectedToSameTarget = 0;
+          let connectedToSameSource = 0;
+          edges.forEach((edge) => {
+            if (edge.target === target && edge.targetHandle === targetHandle) {
+              connectedToSameTarget++;
+            }
+            if (edge.source === source && edge.sourceHandle === sourceHandle) {
+              connectedToSameSource++;
+            }
+          });
+          if (connectedToSameTarget > 2 || connectedToSameSource > 2) {
+            listenerApi.dispatch(diagramAlertChange({
+              open: true,
+              alertMessage: DiagramAlertMessages.EdgeConnectionLimit,
+              alertSeverity: 'warning',
+              dismissMS: 6000,
+            }));
+          }
+        },
+      });
+
+      // * the cascade's success banner needs the target node's display name (state.diagram.nodes),
+      // * same reasoning as above - moved here from edgesChangeFromPropagationReducer
+      listenerMiddleware.startListening({
+        actionCreator: edgesChangeFromPropagation,
+        effect: async (action, listenerApi) => {
+          const { flowUpdates, startingNodeId } = action.payload;
+          if (flowUpdates) {
+            const nodes = (listenerApi.getState() as { diagram: { nodes: Node<ProcessFlowPart>[] } }).diagram.nodes;
+            const sourceNode = nodes.find((node) => node.id === startingNodeId);
+            const initialValue: number = Object.entries(flowUpdates)[0][1];
+            listenerApi.dispatch(diagramAlertChange({
+              open: true,
+              alertMessage: `Successfully set all path flows from ${sourceNode?.data.name || sourceNode.id} (${initialValue} Mgal) to end of path`,
+              alertSeverity: 'success',
+              dismissMS: 10000,
+            }));
+          }
         },
       });
 
@@ -112,8 +154,7 @@ export type AppDispatch = AppStore['dispatch']
 export const selectEdges = (state: RootState) => state.diagram.edges as Edge<CustomEdgeData>[];
 export const selectNodes = (state: RootState) => state.diagram.nodes;
 export const selectDiagramFlowErrors = (state: RootState) => state.diagram.diagramFlowErrors;
-export const selectisDataDrawerOpen = (state: RootState) => state.diagram.isDataDrawerOpen;
-export const selectIsModalOpen = (state: RootState) => state.diagram.isModalOpen;
+export const selectIsModalOpen = (state: RootState) => state.ui.isModalOpen;
 export const selectHasAssessment = (state: RootState) => state.diagram.assessmentId !== undefined;
 export const selectFlowConfidenceEnabled = (state: RootState) => state.diagram.diagramOptions.flowConfidenceEnabled !== false;
 export const selectColorEdgesByConfidence = (state: RootState) => selectFlowConfidenceEnabled(state) && state.diagram.diagramOptions.colorEdgesByConfidence === true;
@@ -230,21 +271,3 @@ export const selectWasteTreatmentNodes = createSelector(
       .filter((node: Node<ProcessFlowPart>) => node.data.processComponentType === 'waste-water-treatment')
   }
 );
-
-
-// todo use FlowUtils helper instead when possible, this may be more expensive than passing in state to utils
-export const selectNodeFlowTotals = (state: RootState, node: Node<ProcessFlowPart>) => {
-  const connectedEdges = getConnectedEdges([node], state.diagram.edges);
-  let totalCalculatedSourceFlow = 0;
-  let totalCalculatedDischargeFlow = 0;
-  connectedEdges.map((edge: Edge<CustomEdgeData>) => {
-    const { source, target } = getEdgeSourceAndTarget(edge, state.diagram.nodes);
-    if (node.id === target.diagramNodeId) {
-      totalCalculatedSourceFlow += edge.data.flowValue;
-    } else if (node.id === source.diagramNodeId) {
-      totalCalculatedDischargeFlow += edge.data.flowValue;
-    }
-  });
-
-  return { totalCalculatedSourceFlow, totalCalculatedDischargeFlow };
-}

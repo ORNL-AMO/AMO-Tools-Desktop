@@ -10,5 +10,7 @@ export * from './water/logic/utils';
 export * from './water/logic/water-components';
 export * from './water/logic/validation';
 export * from './water/logic/migrations';
+export * from './water/logic/flow-totals';
+export * from './water/logic/flow-propagation';
 
 export * from './graph';

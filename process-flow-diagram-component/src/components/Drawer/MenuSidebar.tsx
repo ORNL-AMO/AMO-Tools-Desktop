@@ -4,7 +4,8 @@ import ContinuousSlider from './ContinuousSlider';
 import DownloadButton from './DownloadButton';
 import TabPanel from './TabPanel';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, setDialogOpen, showMarkerEndArrows, unitsOfMeasureChange, setPaletteColors, getPaletteColorForType } from '../Diagram/diagramReducer';
+import { conductivityUnitChange, defaultEdgeTypeChange, diagramOptionsChange, electricityCostChange, flowDecimalPrecisionChange, OptionsDependentState, showMarkerEndArrows, unitsOfMeasureChange, setPaletteColors, getPaletteColorForType } from '../Diagram/diagramReducer';
+import { setDialogOpen } from '../Diagram/uiSlice';
 import { RootState, selectFlowConfidenceEnabled, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
@@ -62,7 +63,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const unitsOfMeasure = useAppSelector((state: RootState) => state.diagram.settings.unitsOfMeasure);
   const electricityUnitCost = useAppSelector((state: RootState) => state.diagram.settings.electricityCost);
   const conductivityUnit = useAppSelector((state: RootState) => state.diagram.settings.conductivityUnit);
-  const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
+  const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.ui.validationWindowLocation);
   const diagramFlowErrors: DiagramFlowErrors = useAppSelector((state: RootState) => state.diagram.diagramFlowErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
   const isDiagramValid = getIsDiagramValid(diagramFlowErrors);

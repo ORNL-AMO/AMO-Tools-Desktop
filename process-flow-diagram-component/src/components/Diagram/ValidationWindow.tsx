@@ -1,7 +1,8 @@
 import { Paper, Typography, Stack, Alert, Button, Box, Collapse } from "@mui/material";
 import { useAppDispatch } from "../../hooks/state";
 import { Node } from '@xyflow/react';
-import { openDrawerWithSelected, validationWindowOpenChange } from "./diagramReducer";
+import { validationWindowOpenChange } from "./uiSlice";
+import { openDrawerWithSelected } from "./diagramThunks";
 import InvalidIcon from "../../validation/InvalidIcon";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';

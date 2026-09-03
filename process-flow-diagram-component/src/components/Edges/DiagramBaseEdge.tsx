@@ -4,7 +4,6 @@ import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { openDrawerWithSelected } from '../Diagram/diagramReducer';
 import { RootState, selectColorEdgesByConfidence, selectFlowConfidenceEnabled } from '../Diagram/store';
 import { CustomEdgeData } from 'process-flow-lib';
 import FlowConfidenceIcon, { useFlowConfidenceColor, getFlowConfidenceLabel, resolveEdgeStrokeColor } from './FlowConfidenceIcon';
