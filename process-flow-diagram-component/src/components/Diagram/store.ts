@@ -158,6 +158,7 @@ export const selectIsModalOpen = (state: RootState) => state.ui.isModalOpen;
 export const selectHasAssessment = (state: RootState) => state.diagram.assessmentId !== undefined;
 export const selectFlowConfidenceEnabled = (state: RootState) => state.diagram.diagramOptions.flowConfidenceEnabled !== false;
 export const selectColorEdgesByConfidence = (state: RootState) => selectFlowConfidenceEnabled(state) && state.diagram.diagramOptions.colorEdgesByConfidence === true;
+export const selectShowFlowConfidenceOnLabel = (state: RootState) => selectFlowConfidenceEnabled(state) && state.diagram.diagramOptions.showFlowConfidenceOnLabel !== false;
 export const selectCurrentNode = (state: RootState) => state.diagram.nodes.find((node: Node<ProcessFlowPart>) => node.id === state.diagram.selectedDataId) as Node<ProcessFlowPart>;
 export const selectCalculatedData = (state: RootState) => state.diagram.calculatedData;
 export const selectNodeValidation = (state: RootState) => {

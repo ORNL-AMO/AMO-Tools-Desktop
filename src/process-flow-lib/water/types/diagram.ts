@@ -24,9 +24,10 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     disableInflowConnections?: boolean,
     disableOutflowConnections?: boolean,
     flowConfidence: Record<NodeFlowProperty, FlowConfidence>,
+    flowTotalTouched: Record<NodeFlowProperty, boolean>,
   }
 
-  export type FlowConfidence = 'estimated' | 'metered';
+  export type FlowConfidence = 'estimated' | 'metered' | 'calculated';
 
   export interface CustomEdgeData extends Record<string, unknown> {
     flowValue: number,
@@ -56,6 +57,7 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     disableInflowConnections?: boolean,
     disableOutflowConnections?: boolean,
     flowConfidence?: Record<NodeFlowProperty, FlowConfidence>,
+    flowTotalTouched?: Record<NodeFlowProperty, boolean>,
   }, 'processFlowPart'>;
   
   export interface HandleOption {
@@ -148,8 +150,11 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     paletteColors?: string[],
     // * undefined is treated as false (off) so pre-existing saved diagrams don't need a migration
     colorEdgesByConfidence?: boolean,
+    // * undefined is treated as true (on) so pre-existing saved diagrams keep showing it without a migration
+    showFlowConfidenceOnLabel?: boolean,
     estimatedFlowColor?: string,
     meteredFlowColor?: string,
+    calculatedFlowColor?: string,
     // * master switch for the whole Estimated/Metered feature - undefined is treated as true (on)
     // * so pre-existing saved diagrams keep showing it without a migration
     flowConfidenceEnabled?: boolean,
@@ -181,6 +186,11 @@ export type NodeFlowProperty = keyof Pick<NodeFlowData, 'totalSourceFlow' | 'tot
   export const getDefaultFlowConfidence = (): Record<NodeFlowProperty, FlowConfidence> => ({
     totalSourceFlow: 'estimated',
     totalDischargeFlow: 'estimated',
+  });
+
+  export const getDefaultFlowTotalTouched = (): Record<NodeFlowProperty, boolean> => ({
+    totalSourceFlow: false,
+    totalDischargeFlow: false,
   });
 
   export interface DiagramCalculatedData {

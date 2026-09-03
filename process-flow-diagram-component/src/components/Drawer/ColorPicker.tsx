@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 
 const ColorPicker = (props: ColorPickerProps) => {
-    const { color, recentColors, setParentColor, label, showRecent, compact, actions } = props;
+    const { color, recentColors, setParentColor, label, showRecent, compact, actions, hideLabel } = props;
     const [selectedColor, setSelectedColor] = useState(color);
     const recentColorsLimit = 5;
     // replaces whitespace runs in label with '-' so multi-word labels produce a valid id
@@ -31,15 +31,16 @@ const ColorPicker = (props: ColorPickerProps) => {
         <>
             <div className={'picker-wrapper'} style={compact ? { width: 'auto', alignItems: 'flex-start' } : undefined}>
                 <div className={'picker'} style={compact ? { width: 'auto', justifyContent: 'flex-start', gap: '.5rem', padding: '4px 0' } : undefined}>
-                    <label htmlFor={inputId}>{label}</label>
+                    {!hideLabel && <label htmlFor={inputId}>{label}</label>}
                     <div style={{ display: 'flex', alignItems: 'center', gap: actions ? '.5rem' : 0 }}>
                         <input type="color" id={inputId}
                             name={inputId}
                             className={'color-input'}
+                            aria-label={hideLabel ? label : undefined}
                             value={color}
                             onChange={(event) => setSelectedColor(event.target.value)}
                             onBlur={handleSetColor}
-                            style={compact ? { width: 64, height: 32, marginLeft: 0 } : { marginLeft: '16px' }}
+                            style={compact ? { width: 120, height: 32, marginLeft: 0 } : { marginLeft: '16px' }}
                             />
                         {actions}
                     </div>
@@ -76,5 +77,6 @@ export interface ColorPickerProps {
     label: string,
     showRecent: boolean,
     compact?: boolean,
+    hideLabel?: boolean,
     actions?: ReactNode,
 }

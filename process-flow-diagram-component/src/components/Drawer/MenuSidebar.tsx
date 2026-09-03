@@ -55,9 +55,11 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
   const controlsVisible = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
   const directionalArrowsVisible = useAppSelector((state: RootState) => state.diagram.diagramOptions.directionalArrowsVisible);
   const colorEdgesByConfidence = useAppSelector((state: RootState) => state.diagram.diagramOptions.colorEdgesByConfidence);
+  const showFlowConfidenceOnLabel = useAppSelector((state: RootState) => state.diagram.diagramOptions.showFlowConfidenceOnLabel);
   const flowConfidenceEnabled = useAppSelector(selectFlowConfidenceEnabled);
   const estimatedFlowColor = useAppSelector((state: RootState) => state.diagram.diagramOptions.estimatedFlowColor);
   const meteredFlowColor = useAppSelector((state: RootState) => state.diagram.diagramOptions.meteredFlowColor);
+  const calculatedFlowColor = useAppSelector((state: RootState) => state.diagram.diagramOptions.calculatedFlowColor);
 
   const flowDecimalPrecision = useAppSelector((state: RootState) => state.diagram.settings.flowDecimalPrecision);
   const unitsOfMeasure = useAppSelector((state: RootState) => state.diagram.settings.unitsOfMeasure);
@@ -115,6 +117,14 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
 
   const handleResetMeteredFlowColor = () => {
     dispatch(diagramOptionsChange({ optionsProp: 'meteredFlowColor', updatedValue: undefined }));
+  };
+
+  const handleCalculatedFlowColorChange = (color: string) => {
+    dispatch(diagramOptionsChange({ optionsProp: 'calculatedFlowColor', updatedValue: color }));
+  };
+
+  const handleResetCalculatedFlowColor = () => {
+    dispatch(diagramOptionsChange({ optionsProp: 'calculatedFlowColor', updatedValue: undefined }));
   };
 
   const summingNode = processFlowParts.pop();
@@ -490,10 +500,26 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                       <span>Color Lines by Estimated/Metered State</span>
                     </label>
                   </Box>
-                  <Box sx={{ display: 'flex', gap: '1rem' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+
+                  <Box className={'sidebar-option-container checkbox'} sx={{ marginBottom: '.35rem' }}>
+                    <label htmlFor="show-flow-confidence-on-label" className="diagram-checkbox-label">
+                      <input
+                        type="checkbox"
+                        id={"show-flow-confidence-on-label"}
+                        checked={showFlowConfidenceOnLabel !== false}
+                        className={'diagram-checkbox'}
+                        style={{ marginRight: '.5rem' }}
+                        onChange={(e) => handleGenericCheckboxChange(e, 'showFlowConfidenceOnLabel')}
+                      />
+                      <span>Show Confidence State on Flow Label</span>
+                    </label>
+                  </Box>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: '1rem', rowGap: '.5rem', alignItems: 'center' }}>
+                    <Typography variant="caption">Estimated</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <ColorPicker
                         compact
+                        hideLabel
                         label={'Estimated'}
                         color={estimatedFlowColor || theme.palette.warning.main}
                         setParentColor={handleEstimatedFlowColorChange}
@@ -505,9 +531,12 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                         onClick={handleResetEstimatedFlowColor}
                       />
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
+
+                    <Typography variant="caption">Metered</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <ColorPicker
                         compact
+                        hideLabel
                         label={'Metered'}
                         color={meteredFlowColor || theme.palette.success.main}
                         setParentColor={handleMeteredFlowColorChange}
@@ -517,6 +546,23 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                         label="metered"
                         disabled={!meteredFlowColor}
                         onClick={handleResetMeteredFlowColor}
+                      />
+                    </Box>
+
+                    <Typography variant="caption">Calculated</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <ColorPicker
+                        compact
+                        hideLabel
+                        label={'Calculated'}
+                        color={calculatedFlowColor || theme.palette.info.main}
+                        setParentColor={handleCalculatedFlowColorChange}
+                        showRecent={false}
+                      />
+                      <ResetColorButton
+                        label="calculated"
+                        disabled={!calculatedFlowColor}
+                        onClick={handleResetCalculatedFlowColor}
                       />
                     </Box>
                   </Box>

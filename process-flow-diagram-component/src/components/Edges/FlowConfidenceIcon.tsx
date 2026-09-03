@@ -1,5 +1,6 @@
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import FunctionsIcon from '@mui/icons-material/Functions';
 import { useTheme } from '@mui/material';
 import { CSSProperties, JSX } from 'react';
 import { CustomEdgeData, FlowConfidence } from 'process-flow-lib';
@@ -8,23 +9,35 @@ import { RootState } from '../Diagram/store';
 
 /**
  * Resolves the color for a confidence state, honoring the user's custom
- * Estimated/Metered colors from the Options tab (`UserDiagramOptions.estimatedFlowColor` /
- * `meteredFlowColor`) and falling back to the theme's warning/success colors when unset.
+ * Estimated/Metered/Calculated colors from the Options tab (`UserDiagramOptions.estimatedFlowColor` /
+ * `meteredFlowColor` / `calculatedFlowColor`) and falling back to the theme's warning/success/info
+ * colors when unset.
  */
 export const useFlowConfidenceColor = () => {
   const theme = useTheme();
   const estimatedFlowColor = useAppSelector((state: RootState) => state.diagram.diagramOptions.estimatedFlowColor);
   const meteredFlowColor = useAppSelector((state: RootState) => state.diagram.diagramOptions.meteredFlowColor);
+  const calculatedFlowColor = useAppSelector((state: RootState) => state.diagram.diagramOptions.calculatedFlowColor);
 
   return (confidence: FlowConfidence): string => {
-    return confidence === 'metered'
-      ? (meteredFlowColor || theme.palette.success.main)
-      : (estimatedFlowColor || theme.palette.warning.main);
+    if (confidence === 'metered') {
+      return meteredFlowColor || theme.palette.success.main;
+    }
+    if (confidence === 'calculated') {
+      return calculatedFlowColor || theme.palette.info.main;
+    }
+    return estimatedFlowColor || theme.palette.warning.main;
   };
 }
 
 export const getFlowConfidenceLabel = (confidence: FlowConfidence): string => {
-  return confidence === 'metered' ? 'Metered' : 'Estimated';
+  if (confidence === 'metered') {
+    return 'Metered';
+  }
+  if (confidence === 'calculated') {
+    return 'Calculated';
+  }
+  return 'Estimated';
 }
 
 /**
@@ -46,7 +59,13 @@ const FlowConfidenceIcon = ({ confidence, color, sx }: { confidence: FlowConfide
     color,
     ...sx
   }
-  return confidence === 'metered' ? <LockIcon style={style} /> : <LockOpenIcon style={style} />
+  if (confidence === 'metered') {
+    return <LockIcon style={style} />
+  }
+  if (confidence === 'calculated') {
+    return <FunctionsIcon style={style} />
+  }
+  return <LockOpenIcon style={style} />
 }
 
 export default FlowConfidenceIcon;
