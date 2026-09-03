@@ -5,16 +5,20 @@ import { diagramSlice, type DiagramState } from './diagramReducer';
 import { uiSlice } from './uiSlice';
 
 /**
- * Thunks that read current store state before dispatching a plain action. Kept separate from
- * diagramReducer.ts/flowCalculationReducers.ts/uiSlice.ts so those slice files can be imported here
- * without a circular import.
+ * Thunks for cross-slice derived state or state-dependent calculation input - cases where a reducer
+ * needs to read current store state (not just its action payload) before dispatching, e.g. deriving
+ * uiSlice state from diagramSlice state, or feeding current edges into a calculation. Not for
+ * dispatching multiple actions together, which needs no thunk.
+ *
+ * Kept in this separate file because these thunks need actions from both diagramSlice and uiSlice;
+ * uiSlice.ts already imports from diagramReducer.ts, so putting them in diagramReducer.ts would
+ * create a diagramReducer.ts <-> uiSlice.ts cycle.
  */
 
 /**
- * "Set all flow values to end of path" - reads current edges from the store, runs the pure DFS
- * split (calculateFlowPropagation, process-flow-lib), then dispatches the result as a plain action.
- * A plain thunk, not createAsyncThunk, since this is synchronous, in-store-state work, not an async
- * operation - matches RTK's own guidance on when each is appropriate.
+ * Backs the "Set all flow values to the end of path" button (DischargeFlowForm.tsx). Reads current
+ * edges from the store, runs the pure DFS split (calculateFlowPropagation, process-flow-lib), then
+ * dispatches the result as a plain action.
  */
 export const propagateFlowFromNode = (nodeId: string, edge: Edge<CustomEdgeData>) =>
   (dispatch: Dispatch, getState: () => { diagram: DiagramState }) => {
@@ -28,9 +32,9 @@ export const propagateFlowFromNode = (nodeId: string, edge: Edge<CustomEdgeData>
   };
 
 /**
- * A thunk because `manageDataTabs` (ui slice) is derived from the selected node's
- * `processComponentType` (diagram slice) - a plain reducer can't read across slices. Both actions
- * dispatch synchronously so selection and tabs update in the same render.
+ * `id` is also called with edge ids (see Diagram.tsx onEdgeClick). Edges aren't in `nodes`, so `node`
+ * is undefined and `tabs` lookup fails - the `if (tabs)` guard leaves `manageDataTabs` at whatever it
+ * was from the last node selection rather than clearing it.
  */
 const selectComponentAndTabs = (id: string, dispatch: Dispatch, getState: () => { diagram: DiagramState }) => {
   dispatch(diagramSlice.actions.selectedIdChange(id));

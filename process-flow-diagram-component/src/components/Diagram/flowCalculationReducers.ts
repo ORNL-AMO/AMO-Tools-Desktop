@@ -14,11 +14,7 @@ import type { DiagramState } from './diagramReducer';
 
 /**
  * All state changes for "a flow value gets calculated or populated from a user event" (see
- * flow-calculation-requirements.md items A-I): direct edge/total edits, evenly distributing a
- * total across edges, summing edges into a total, the water-system estimation dialog, and the
- * "set all flow values to end of path" cascade. Kept in one module so understanding this concept
- * doesn't require reading the rest of diagramReducer.ts's node/edge CRUD, coloring, and UI-drawer
- * reducers.
+ * flow-calculation-requirements.md items A-I)
  */
 
 export const totalFlowChangeReducer = (state: DiagramState, action: PayloadAction<{ flowProperty: NodeFlowProperty, totalFlow: number }>) => {
