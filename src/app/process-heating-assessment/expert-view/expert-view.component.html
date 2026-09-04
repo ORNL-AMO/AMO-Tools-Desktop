@@ -4,12 +4,16 @@
       <div class="expert-view-panel-header">Baseline</div>
       <div class="expert-view-panel-content">
         <app-charge-material [scenario]="'baseline'"></app-charge-material>
+        <app-wall-losses [scenario]="'baseline'"></app-wall-losses>
+        <app-extended-surface [scenario]="'baseline'"></app-extended-surface>
       </div>
     </div>
     <div class="expert-view-panel">
       <div class="expert-view-panel-header">{{ modificationName(modification) }}</div>
       <div class="expert-view-panel-content">
         <app-charge-material [scenario]="modification.id"></app-charge-material>
+        <app-wall-losses [scenario]="modification.id"></app-wall-losses>
+        <app-extended-surface [scenario]="modification.id"></app-extended-surface>
       </div>
     </div>
   </div>

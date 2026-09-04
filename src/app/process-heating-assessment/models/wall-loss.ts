@@ -1,4 +1,5 @@
 export interface WallLoss {
+  id?: string;
   name?: string;
   surfaceArea?: number;
   ambientTemperature?: number;

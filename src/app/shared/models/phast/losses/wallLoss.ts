@@ -10,7 +10,7 @@ export interface WallLoss {
   correctionFactor?: number;
   heatLoss?: number;
   availableHeat?: number;
-  id?: any;
+  id?: string;
   fuelCost?: number;
   hoursPerYear?: number;
   energySourceType?: string;

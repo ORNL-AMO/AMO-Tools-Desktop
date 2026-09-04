@@ -10,25 +10,25 @@
     </div>
   }
 
-  @for (item of service.losses(); track $index; let idx = $index) {
+  @for (item of service.losses(); track item.id) {
     <div class="card mb-3">
       <div class="card-header d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-2 flex-grow-1">
-          <button class="btn btn-sm btn-link p-0 text-dark" (click)="service.toggleCollapse(idx)">
+          <button class="btn btn-sm btn-link p-0 text-dark" (click)="service.toggleCollapse(item.id)">
             @if (item.collapse) { <span class="fa fa-chevron-right"></span> } @else { <span class="fa fa-chevron-down"></span> }
           </button>
           <input type="text" class="form-control form-control-sm flex-grow-1"
             [value]="item.name"
-            (input)="service.setName(idx, $event.target['value'])">
+            (input)="service.setName(item.id, $event.target['value'])">
         </div>
-        <button class="btn btn-sm btn-link text-danger" (click)="service.remove(idx)" title="Remove loss">
+        <button class="btn btn-sm btn-link text-danger" (click)="service.remove(item.id)" title="Remove loss">
           <span class="fa fa-times"></span>
         </button>
       </div>
 
       @if (!item.collapse) {
         <div class="card-body">
-          <app-wall-losses-form [index]="idx" [settings]="settings()"></app-wall-losses-form>
+          <app-wall-losses-form [item]="item" [settings]="settings()"></app-wall-losses-form>
 
           <div class="loss-results mt-3">
             <div class="d-flex justify-content-between small">

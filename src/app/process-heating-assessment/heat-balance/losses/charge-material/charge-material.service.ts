@@ -5,7 +5,7 @@ import { getNewIdString } from '../../../../shared/helperFunctions';
 import { ChargeMaterial, ChargeMaterialResult, ChargeMaterialType } from '../../../../shared/models/phast/losses/chargeMaterial';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ChargeMaterialResultsService } from './charge-material-results.service';
-import { EntityListStore } from '../entity-list-store';
+import { LossItemsStore } from '../loss-items-store';
 import { GasMaterialForm, GasMaterialFormService } from './gas-form/gas-material-form.service';
 import { LiquidMaterialForm, LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
 import { SolidMaterialForm, SolidMaterialFormService } from './solid-form/solid-material-form.service';
@@ -50,7 +50,7 @@ export class ChargeMaterialService {
   private readonly gasFormService = inject(GasMaterialFormService);
 
   private scenario: AssessmentScenario = 'baseline';
-  private readonly store = new EntityListStore<ChargeMaterialItem>();
+  private readonly store = new LossItemsStore<ChargeMaterialItem>();
 
   // Caches a switched-away-from type's last known values per entry so switching back restores
   // them
