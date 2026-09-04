@@ -61,6 +61,30 @@
                     </table>
                 </div>
                 <div class="p-0">
+                    <label class="group-label">Contact List</label>
+                    <div class="contact-list-scroll">
+                        <table class="table">
+                            <tr>
+                                <td class="bold">Name</td>
+                                <td class="bold">Phone</td>
+                                <td class="bold">Email</td>
+                            </tr>
+                            @for(contact of savedContacts; track contact.id) {
+                            <tr class="selectable-row"
+                                [ngClass]="{'selected-item': selectedContact?.id === contact.id}"
+                                (click)="selectContact(contact)">
+                                <td>{{contact.contactName}}</td>
+                                <td>{{contact.phoneNumber | phone}}</td>
+                                <td>{{contact.email}}</td>
+                            </tr>
+                            }
+                        </table>
+                    </div>
+                    <a class="pull-right click-link p-2" [class.disabled-link]="!selectedContact" (click)="openConfirmDeleteContactModal()">Delete Contact</a>
+                    <a class="pull-right click-link p-2" [class.disabled-link]="!selectedContact" (click)="showEditContactInfoModal()">Edit Info</a>
+                    <a class="pull-right click-link p-2" (click)="showAddContactModal()">Add Contact</a>
+                </div>
+                <div class="p-0">
                     <label class="group-label">{{directory.name}} Settings</label>
                     <table class="table">
                         <tr>
@@ -113,3 +137,6 @@
         </div>
     </div>
 </div>
+
+<app-confirm-delete-modal *ngIf="showConfirmDeleteContactModal" [confirmDeleteData]="confirmDeleteContactData"
+    (emitShouldDelete)="onConfirmDeleteContactClose($event)"></app-confirm-delete-modal>

@@ -24,8 +24,6 @@ export class ReportSankeyComponent implements OnInit {
   settings: Settings;
   @Input()
   assessment: Assessment;
-  @Input()
-  showPrint: boolean;
 
   baseline: ExecutiveSummary;
 

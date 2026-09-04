@@ -80,6 +80,7 @@ export interface PsatOutputs {
   optimization_rating?: number;
   percent_annual_savings?: number;
   co2EmissionsOutput?: number;
+  paybackPeriod?: number;
 }
 
 export interface PsatOutputsExistingOptimal {
