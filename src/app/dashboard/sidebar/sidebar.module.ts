@@ -13,7 +13,6 @@ import { DiagramItemComponent } from './diagram-item/diagram-item.component';
 import { UpdateApplicationModule } from '../../shared/update-application/update-application.module';
 import { EmailListSubscribeService } from '../../shared/subscribe-toast/email-list-subscribe.service';
 import { CollapseSidebarDirective } from './calculator-list/collapse-sidebar-directive/collapse-sidebar-directive';
-import { AlertBadgeComponent } from '../../shared/alert-badge/alert-badge.component';
 @NgModule({
   declarations: [
     SidebarComponent,
@@ -30,8 +29,7 @@ import { AlertBadgeComponent } from '../../shared/alert-badge/alert-badge.compon
     ModalModule,
     DashboardPipeModule,
     UpdateApplicationModule,
-    CollapseSidebarDirective,
-    AlertBadgeComponent
+    CollapseSidebarDirective
   ],
   exports: [
     SidebarComponent

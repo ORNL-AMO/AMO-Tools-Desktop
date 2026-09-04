@@ -1,0 +1,13 @@
+<div class="modal-header">
+  <h3>Open Process Heating Assessment</h3>
+  <button class="close" (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p class="small">This assessment can be opened in the classic Process Heating (PHAST) view, or the new Process Heating experience, currently in beta.</p>
+  <div class="d-flex justify-content-between mt-3">
+    <button class="btn btn-outline-secondary" (click)="select('phast')">Continue in Classic View</button>
+    <button class="btn btn-primary" (click)="select('process-heating')">Try New Experience (Beta)</button>
+  </div>
+</div>

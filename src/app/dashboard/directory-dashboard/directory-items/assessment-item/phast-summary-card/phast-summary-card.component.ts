@@ -51,6 +51,10 @@ export class PhastSummaryCardComponent implements OnInit {
         this.assessmentService.goToAssessment(assessment, str, str2);
     }
 
+    openInProcessHeatingAssessment(assessment: Assessment) {
+        this.assessmentService.goToAssessment(assessment, 'baseline', undefined, 'process-heating');
+    }
+
     showReportModal() {
         this.showReport = true;
         this.reportModal.show();
