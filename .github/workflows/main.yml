@@ -14,10 +14,10 @@ jobs:
     uses: ./.github/workflows/pr_checks.yml
 
   web:
-    if: github.ref_name == 'develop' || github.ref_name == 'master'
+    if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
     uses: ./.github/workflows/release_web.yml
 
   desktop:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     uses: ./.github/workflows/release_desktop.yml
     secrets: inherit

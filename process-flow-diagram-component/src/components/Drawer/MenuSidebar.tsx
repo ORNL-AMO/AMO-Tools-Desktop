@@ -9,7 +9,7 @@ import { RootState, selectHasAssessment, selectNodes } from '../Diagram/store';
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getContrastTextColor, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
+import { ConvertValueFn, NodeErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getContrastTextColor, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
 import { Node } from '@xyflow/react';
@@ -197,7 +197,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                   size="small"
                   label="Units of Measure"
                   value={unitsOfMeasure}
-                  onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}
+                  onChange={(e) => {
+                    const newUnits = e.target.value;
+                    dispatch(unitsOfMeasureChange({ newUnits, convertValueFn: props.convertValueFn }));
+                  }}
                   disabled={hasAssessment}
                   sx={{ minWidth: 120 }}
                   MenuProps={{
@@ -492,6 +495,7 @@ export default MenuSidebar;
 
 export interface MenuSidebarProps {
   shadowRootRef: any;
+  convertValueFn?: ConvertValueFn;
 }
 
 

@@ -27,7 +27,11 @@
 .vscode/extensions.json
 
 .prompts/
-.claude/
+.claude/settings.local.json
+.claude/worktrees/
+.claude/skills/
+.claude/recommendations/
+.claude/specs/
 
 # misc
 /docker

@@ -7,10 +7,11 @@ import { InputDataComponent } from './input-data/input-data.component';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { SrtGraphsComponent } from './srt-graphs/srt-graphs.component';
 import { WasteWaterAnalysisModule } from '../waste-water-analysis/waste-water-analysis.module';
-import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
 import { FormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
 import { ExportableResultsTableModule } from '../../shared/exportable-results-table/exportable-results-table.module';
+import { ReportBuilderModule } from '../../shared/report-builder/report-builder.module';
+import { WasteWaterReportAdapter } from './waste-water-report.adapter';
 
 
 @NgModule({
@@ -20,13 +21,16 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     FacilityInfoSummaryModule,
     PercentGraphModule,
     WasteWaterAnalysisModule,
-    PrintOptionsMenuModule,
     FormsModule,
     SharedPipesModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    ReportBuilderModule
   ],
   exports: [
     WasteWaterReportComponent
+  ],
+  providers: [
+    WasteWaterReportAdapter
   ]
 })
 export class WasteWaterReportModule { }

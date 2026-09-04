@@ -46,6 +46,13 @@ Both this repo and `process-flow-diagram-component/` need dependencies installed
 
 ### Tests
 
+See `AGENTS.md` → Verification for test and typecheck commands.
+
 - `npm test`: Angular/Karma suite (ChromeHeadless).
 - Single spec: `ng test --include='**/path/to/file.spec.ts'`
 - Process-flow package (from `process-flow-diagram-component/`): `npm run test` (Vitest), `npm run test:typecheck`.
+
+## Pull Requests
+
+- Title: `Issue <number> - <description mimicking the issue title>`, e.g. `Issue 8645 - Populate Total Outflow field under specific conditions`.
+- Body: the repo's PR template (`.github/pull_request_template.md`) verbatim, followed by the issue reference on its own line at the end, e.g. `#8645` (no quotes).

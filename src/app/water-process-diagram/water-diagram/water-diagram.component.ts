@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { WaterProcessDiagramService } from '../water-process-diagram.service';
-import { WaterDiagram, ProcessFlowParentState } from 'process-flow-lib';
+import { WaterDiagram, ProcessFlowParentState, ConvertValueFn } from 'process-flow-lib';
+import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 
 @Component({
   selector: 'app-water-diagram',
@@ -14,6 +15,7 @@ export class WaterDiagramComponent {
   waterDiagram: WaterDiagram;
   processFlowParentState: ProcessFlowParentState;
   processFlowDiagramDataSub: Subscription;
+  convertValueFn: ConvertValueFn = (value, from, to) => new ConvertValue(value, from, to).convertedValue;
   constructor(private waterProcessDiagramService: WaterProcessDiagramService) {}
 
   ngOnInit() {

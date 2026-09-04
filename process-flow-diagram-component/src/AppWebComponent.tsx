@@ -2,20 +2,22 @@ import { Root, createRoot } from 'react-dom/client';
 import App from './App';
 import { CacheProvider } from '@emotion/react';
 import createCache, { EmotionCache } from "@emotion/cache";
-import { ProcessFlowParentState, FlowDiagramData, ProcessFlowDiagramState } from 'process-flow-lib';
+import { ProcessFlowParentState, FlowDiagramData, ProcessFlowDiagramState, ConvertValueFn } from 'process-flow-lib';
 
 class AppWebComponent extends HTMLElement {
   mountPoint!: HTMLDivElement;
   appRef!: Root;
   name!: string;
-  static observedAttributes = ['parentstate']; 
-  // * NOTE: 
+  static observedAttributes = ['parentstate'];
+  // * NOTE:
   // * 1. shadowRoot is typically a scoped variable only used for attaching shadow and setting mount point
   // * it was changed to be a class property here so it could be passed to DownloadImage, which requires a dom ref.
   // * 2. Due to this change, events must now be dispatched from shadowRoot, instead of 'this' (AppWebComponent)
   shadowRoot;
   // * make MUI library styles available too shadowDom
   MUIStylesCache: EmotionCache;
+  // * plain JS property, not an observed attribute like parentstate - functions can't be stringified
+  private _convertValueFn?: ConvertValueFn;
 
   renderDiagramComponent(parentState: ProcessFlowParentState) {
     if (parentState && parentState.parentContainer) {
@@ -26,9 +28,21 @@ class AppWebComponent extends HTMLElement {
             processDiagram={parentState.waterDiagram}
             shadowRoot={this.shadowRoot}
             saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
+            convertValueFn={this._convertValueFn}
             />
         </CacheProvider>
         )
+    }
+  }
+
+  get convertValueFn(): ConvertValueFn | undefined {
+    return this._convertValueFn;
+  }
+
+  set convertValueFn(fn: ConvertValueFn | undefined) {
+    this._convertValueFn = fn;
+    if (this.appRef && this.parentstate) {
+      this.renderDiagramComponent(this.parentstate);
     }
   }
 

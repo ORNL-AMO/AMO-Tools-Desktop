@@ -9,9 +9,9 @@ import { ReportGraphsComponent } from './report-graphs/report-graphs.component';
 import { ReportSankeyComponent } from './report-sankey/report-sankey.component';
 import { PhastReportService } from './phast-report.service';
 import { ExecutiveSummaryService } from './executive-summary.service';
+import { PhastReportAdapter } from './phast-report.adapter';
 import { PhastInputSummaryModule } from './phast-input-summary/phast-input-summary.module';
-import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
-import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
+import { ReportBuilderModule } from '../../shared/report-builder/report-builder.module';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
@@ -27,7 +27,7 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     CommonModule,
     FormsModule,
     PhastInputSummaryModule,
-    PrintOptionsMenuModule,
+    ReportBuilderModule,
     FacilityInfoSummaryModule,
     PercentGraphModule,
     PieChartModule,
@@ -39,15 +39,14 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     ExportableResultsTableModule
   ],
   declarations: [
-    PhastReportComponent, 
-    EnergyUsedComponent, 
-    ExecutiveSummaryComponent, 
-    ResultsDataComponent, 
-    ReportGraphsComponent, 
-    ReportSankeyComponent, 
-    ReportGraphsPrintComponent, 
+    PhastReportComponent,
+    EnergyUsedComponent,
+    ExecutiveSummaryComponent,
+    ResultsDataComponent,
+    ReportGraphsComponent,
+    ReportSankeyComponent,
   ],
   exports: [PhastReportComponent, ResultsDataComponent],
-  providers: [PhastReportService, ExecutiveSummaryService]
+  providers: [PhastReportService, ExecutiveSummaryService, PhastReportAdapter]
 })
 export class PhastReportModule { }

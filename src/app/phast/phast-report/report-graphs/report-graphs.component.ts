@@ -16,12 +16,6 @@ export class ReportGraphsComponent implements OnInit {
   phast: PHAST;
   @Input()
   inPhast: boolean;
-  @Input()
-  showPrint: boolean;
-  @Input()
-  printSankey: boolean;
-  @Input()
-  printGraphs: boolean;
 
   hasDeliverInput: boolean = true;
 

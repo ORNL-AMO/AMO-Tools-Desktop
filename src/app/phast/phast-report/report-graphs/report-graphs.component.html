@@ -1,4 +1,4 @@
-<div class="d-flex flex-wrap" *ngIf="!showPrint">
+<div class="d-flex flex-wrap">
   <div class="d-flex col-12 col-lg-6 flex-column">
     <div class="pl-2 pr-2">
       <select name="selectedBaselineData" class="form-control mx-auto" id="selectedBaselineData"
@@ -40,9 +40,4 @@
       [yAxisLabel]="barChartYAxisLabel" [yValueUnit]="lossUnit" [hoverLabel]="'Heat Loss'">
     </app-plotly-bar-chart>
   </div>
-</div>
-
-<div *ngIf="showPrint">
-  <app-report-graphs-print [allChartData]="allChartData" [settings]="settings" [printSankey]="printSankey"
-    [printGraphs]="printGraphs" [barChartYAxisLabel]="barChartYAxisLabel" [phast]="phast"></app-report-graphs-print>
 </div>
