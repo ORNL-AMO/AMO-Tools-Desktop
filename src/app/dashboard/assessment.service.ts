@@ -32,7 +32,7 @@ export class AssessmentService {
     this.showTutorial = new BehaviorSubject<string>(null);
   }
 
-  goToAssessment(assessment: Assessment, mainTab?: string, subTab?: string) {
+  goToAssessment(assessment: Assessment, mainTab?: string, subTab?: string, phastModuleOverride?: 'phast' | 'process-heating') {
     if (mainTab) {
       this.startingTab = mainTab;
     } else {
@@ -53,7 +53,7 @@ export class AssessmentService {
       if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
         this.startingTab = 'assessment';
       }
-      itemSegment = '/phast/';
+      itemSegment = phastModuleOverride === 'process-heating' ? '/process-heating/' : '/phast/';
     } else if (assessment.type === 'FSAT') {
       if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'assessment';

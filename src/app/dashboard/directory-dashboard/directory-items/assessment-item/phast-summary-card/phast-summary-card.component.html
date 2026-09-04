@@ -86,6 +86,11 @@
             <a (click)="showReportModal()">Quick Report</a>
         </td>
     </tr>
+    <tr>
+        <td colspan="2">
+            <a (click)="openInProcessHeatingAssessment(assessment)">Open in Process Heating (Beta)</a>
+        </td>
+    </tr>
 </table>
 <div class="no-card-data" *ngIf="!setupDone">
     <p style="font-size:small">This assessment is incomplete. Complete assessment to view results.</p>
