@@ -1,11 +1,16 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, DestroyRef, inject, Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getNewIdString } from '../../../../shared/helperFunctions';
 import { ExtendedSurface } from '../../../models/extended-surface';
 import { WallLoss } from '../../../models/wall-loss';
-import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { LossItemsStore } from '../loss-items-store';
 import { WallLossCalculationService } from '../wall-losses/wall-loss-calculation.service';
 import { ExtendedSurfaceForm, ExtendedSurfaceFormService } from './extended-surface-form.service';
 
 export interface ExtendedSurfaceItem {
+  id: string;
   name: string;
   form: ExtendedSurfaceForm;
   collapse: boolean;
@@ -14,62 +19,78 @@ export interface ExtendedSurfaceItem {
 
 @Injectable()
 export class ExtendedSurfaceService {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly wallLossCalculationService = inject(WallLossCalculationService);
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly formService = inject(ExtendedSurfaceFormService);
 
-  readonly surfaces = signal<ExtendedSurfaceItem[]>([]);
+  private scenario: AssessmentScenario = 'baseline';
+  private readonly store = new LossItemsStore<ExtendedSurfaceItem>();
+
+  readonly surfaces = this.store.all;
   readonly total = computed(() =>
     this.surfaces().reduce((sum, item) => sum + (item.heatLoss ?? 0), 0)
   );
 
-  initialize(extendedSurfaces: ExtendedSurface[]): void {
-    const items = extendedSurfaces.map((surface, idx) => this.buildItem(surface, idx + 1));
-    items.forEach(item => this.calculateItemResult(item));
-    this.surfaces.set(items);
+  initialize(extendedSurfaces: ExtendedSurface[], scenario: AssessmentScenario = 'baseline'): void {
+    this.scenario = scenario;
+    const items = extendedSurfaces.map((surface, idx) => this.buildItem(this.ensureId(surface), idx + 1));
+    this.store.load(items);
   }
 
-  updateItem(idx: number): void {
-    const items = this.surfaces();
-    const item = { ...items[idx] };
-    this.calculateItemResult(item);
-    const updated = items.map((surface, i) => i === idx ? item : surface);
-    this.surfaces.set(updated);
-    this.saveSurfaces(updated);
+  updateItem(id: string): void {
+    const item = this.store.get(id);
+    if (!item) return;
+    const updated = { ...item };
+    this.calculateItemResult(updated);
+    this.store.set(id, updated);
+    this.saveSurfaces();
   }
 
-  setName(idx: number, name: string): void {
-    const updated = this.surfaces().map((surface, i) => i === idx ? { ...surface, name } : surface);
-    this.surfaces.set(updated);
-    this.saveSurfaces(updated);
+  setName(id: string, name: string): void {
+    this.store.update(id, { name });
+    this.saveSurfaces();
   }
 
-  toggleCollapse(idx: number): void {
-    const updated = this.surfaces().map((surface, i) => i === idx ? { ...surface, collapse: !surface.collapse } : surface);
-    this.surfaces.set(updated);
+  toggleCollapse(id: string): void {
+    const item = this.store.get(id);
+    if (item) this.store.update(id, { collapse: !item.collapse });
   }
 
   add(): void {
-    const idx = this.surfaces().length;
-    const newItem = this.buildItem({}, idx + 1);
-    const updated = [...this.surfaces(), newItem];
-    this.surfaces.set(updated);
-    this.saveSurfaces(updated);
+    const id = getNewIdString();
+    const item = this.buildItem({ id }, this.store.all().length + 1);
+    this.store.add(item);
+    this.saveSurfaces();
   }
 
-  remove(idx: number): void {
-    const updated = this.surfaces().filter((_, i) => i !== idx);
-    this.surfaces.set(updated);
-    this.saveSurfaces(updated);
+  remove(id: string): void {
+    this.store.remove(id);
+    this.saveSurfaces();
   }
 
-  private buildItem(surface: ExtendedSurface, lossIdx: number): ExtendedSurfaceItem {
-    return {
-      name: surface.name ?? `Loss #${lossIdx}`,
+  private ensureId(surface: ExtendedSurface): ExtendedSurface & { id: string } {
+    return surface.id ? (surface as ExtendedSurface & { id: string }) : { ...surface, id: getNewIdString() };
+  }
+
+  private buildItem(surface: ExtendedSurface & { id: string }, fallbackIdx: number): ExtendedSurfaceItem {
+    const item: ExtendedSurfaceItem = {
+      id: surface.id,
+      name: surface.name ?? `Loss #${fallbackIdx}`,
       form: this.formService.getExtendedSurfaceForm(surface),
       collapse: false,
       heatLoss: surface.heatLoss ?? null,
     };
+    this.calculateItemResult(item);
+    this.observeItem(item);
+    return item;
+  }
+
+  private observeItem(item: ExtendedSurfaceItem): void {
+    const valueChanges: Observable<unknown> = item.form.valueChanges;
+    valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.updateItem(item.id);
+    });
   }
 
   private calculateItemResult(item: ExtendedSurfaceItem): void {
@@ -93,14 +114,25 @@ export class ExtendedSurfaceService {
     }
   }
 
-  private saveSurfaces(items: ExtendedSurfaceItem[]): void {
-    const extendedSurfaces: ExtendedSurface[] = items.map(item => {
+  private saveSurfaces(): void {
+    const extendedSurfaces: ExtendedSurface[] = this.store.all().map(item => {
       const surface = this.formService.buildExtendedSurface(item.form);
+      surface.id = item.id;
       surface.name = item.name;
       surface.heatLoss = item.heatLoss ?? undefined;
       return surface;
     });
-    const current = this.assessmentService.processHeatingSignal();
-    this.assessmentService.updateProcessHeatingProperty('losses', { ...current.losses, extendedSurfaces });
+
+    if (this.scenario === 'baseline') {
+      const current = this.assessmentService.processHeatingSignal();
+      this.assessmentService.updateProcessHeatingProperty('losses', { ...current?.losses, extendedSurfaces });
+    } else {
+      const modification = this.assessmentService.getModifications(this.assessmentService.processHeatingSignal())
+        .find(mod => mod.id === this.scenario);
+      this.assessmentService.updateModificationProperty(this.scenario, 'losses', {
+        ...modification?.scenarioOverrides?.losses,
+        extendedSurfaces,
+      });
+    }
   }
 }

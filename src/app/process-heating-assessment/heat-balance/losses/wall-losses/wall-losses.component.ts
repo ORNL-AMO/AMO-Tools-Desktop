@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, Signal, untracked } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
-import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { WallLossesService } from './wall-losses.service';
 import { WallLossesFormService } from './wall-losses-form.service';
 import { WallLossCalculationService } from './wall-loss-calculation.service';
@@ -13,7 +13,9 @@ import { WallLossCalculationService } from './wall-loss-calculation.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [WallLossesService, WallLossesFormService, WallLossCalculationService],
 })
-export class WallLossesComponent implements OnInit {
+export class WallLossesComponent {
+  readonly scenario = input<AssessmentScenario>('baseline');
+
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   protected readonly service = inject(WallLossesService);
 
@@ -24,8 +26,13 @@ export class WallLossesComponent implements OnInit {
     return unit === 'kWh' ? 'kW' : `${unit}/hr`;
   }
 
-  ngOnInit(): void {
-    const wallLosses = this.assessmentService.processHeatingSignal()?.losses?.wallLosses ?? [];
-    this.service.initialize(wallLosses);
+  constructor() {
+    effect(() => {
+      const scenario = this.scenario();
+      untracked(() => {
+        const wallLosses = this.assessmentService.scenarioPhast(scenario)?.losses?.wallLosses ?? [];
+        this.service.initialize(wallLosses, scenario);
+      });
+    });
   }
 }

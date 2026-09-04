@@ -6,7 +6,12 @@
 @let panelPrefix = scenario();
 
 <div class="panel-container p-3">
-  <h4>Charge Material</h4>
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <h4 class="mb-0">Charge Material</h4>
+    @if (!isMaterialAdditionLocked) {
+      <button type="button" class="btn btn-primary btn-sm" (click)="addMaterial()">+ Add Material</button>
+    }
+  </div>
 
   @if (materials.length > 0) {
     <div class="charge-material-totals d-flex flex-wrap">
@@ -92,9 +97,6 @@
   } @else if (materials.length === 0) {
     <div class="p-3 no-data">
       <p>No charge materials have been added yet.</p>
-      <button type="button" class="btn btn-primary" (click)="addMaterial()">Add Material</button>
     </div>
-  } @else if (!isMaterialAdditionLocked) {
-    <button type="button" class="btn btn-primary" (click)="addMaterial()">Add Material</button>
   }
 </div>

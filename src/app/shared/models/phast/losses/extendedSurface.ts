@@ -1,4 +1,5 @@
 export interface ExtendedSurface {
+  id?: string;
   surfaceArea?: number;
   ambientTemperature?: number;
   surfaceTemperature?: number;

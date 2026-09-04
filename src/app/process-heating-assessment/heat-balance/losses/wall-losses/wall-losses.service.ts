@@ -1,13 +1,17 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
-import { take } from 'rxjs';
+import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { Observable, take } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { getNewIdString } from '../../../../shared/helperFunctions';
 import { WallLossesSurfaceDbService } from '../../../../indexedDb/wall-losses-surface-db.service';
 import { WallLoss } from '../../../models/wall-loss';
 import { WallLossesSurface } from '../../../../shared/models/materials';
-import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { LossItemsStore } from '../loss-items-store';
 import { WallLossCalculationService } from './wall-loss-calculation.service';
 import { WallLossForm, WallLossesFormService } from './wall-losses-form.service';
 
 export interface WallLossItem {
+  id: string;
   name: string;
   form: WallLossForm;
   collapse: boolean;
@@ -16,67 +20,83 @@ export interface WallLossItem {
 
 @Injectable()
 export class WallLossesService {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly wallLossCalculationService = inject(WallLossCalculationService);
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly formService = inject(WallLossesFormService);
   private readonly wallSurfaceDbService = inject(WallLossesSurfaceDbService);
 
-  readonly losses = signal<WallLossItem[]>([]);
+  private scenario: AssessmentScenario = 'baseline';
+  private readonly store = new LossItemsStore<WallLossItem>();
+
+  readonly losses = this.store.all;
   readonly surfaceOptions = signal<WallLossesSurface[]>([]);
   readonly total = computed(() =>
     this.losses().reduce((sum, item) => sum + (item.heatLoss ?? 0), 0)
   );
 
-  initialize(wallLosses: WallLoss[]): void {
-    const items = wallLosses.map((loss, idx) => this.buildItem(loss, idx + 1));
-    items.forEach(item => this.calculateItemResult(item));
-    this.losses.set(items);
+  initialize(wallLosses: WallLoss[], scenario: AssessmentScenario = 'baseline'): void {
+    this.scenario = scenario;
+    const items = wallLosses.map((loss, idx) => this.buildItem(this.ensureId(loss), idx + 1));
+    this.store.load(items);
     this.wallSurfaceDbService.getAllWithObservable()
       .pipe(take(1))
       .subscribe(surfaces => this.surfaceOptions.set(surfaces));
   }
 
-  updateItem(idx: number): void {
-    const items = this.losses();
-    const item = { ...items[idx] };
-    this.calculateItemResult(item);
-    const updated = items.map((loss, i) => i === idx ? item : loss);
-    this.losses.set(updated);
-    this.saveLosses(updated);
+  updateItem(id: string): void {
+    const item = this.store.get(id);
+    if (!item) return;
+    const updated = { ...item };
+    this.calculateItemResult(updated);
+    this.store.set(id, updated);
+    this.saveLosses();
   }
 
-  setName(idx: number, name: string): void {
-    const updated = this.losses().map((loss, i) => i === idx ? { ...loss, name } : loss);
-    this.losses.set(updated);
-    this.saveLosses(updated);
+  setName(id: string, name: string): void {
+    this.store.update(id, { name });
+    this.saveLosses();
   }
 
-  toggleCollapse(idx: number): void {
-    const updated = this.losses().map((loss, i) => i === idx ? { ...loss, collapse: !loss.collapse } : loss);
-    this.losses.set(updated);
+  toggleCollapse(id: string): void {
+    const item = this.store.get(id);
+    if (item) this.store.update(id, { collapse: !item.collapse });
   }
 
   add(): void {
-    const idx = this.losses().length;
-    const newItem = this.buildItem({}, idx + 1);
-    const updated = [...this.losses(), newItem];
-    this.losses.set(updated);
-    this.saveLosses(updated);
+    const id = getNewIdString();
+    const item = this.buildItem({ id }, this.store.all().length + 1);
+    this.store.add(item);
+    this.saveLosses();
   }
 
-  remove(idx: number): void {
-    const updated = this.losses().filter((_, i) => i !== idx);
-    this.losses.set(updated);
-    this.saveLosses(updated);
+  remove(id: string): void {
+    this.store.remove(id);
+    this.saveLosses();
   }
 
-  private buildItem(loss: WallLoss, lossIdx: number): WallLossItem {
-    return {
-      name: loss.name ?? `Loss #${lossIdx}`,
+  private ensureId(loss: WallLoss): WallLoss & { id: string } {
+    return loss.id ? (loss as WallLoss & { id: string }) : { ...loss, id: getNewIdString() };
+  }
+
+  private buildItem(loss: WallLoss & { id: string }, fallbackIdx: number): WallLossItem {
+    const item: WallLossItem = {
+      id: loss.id,
+      name: loss.name ?? `Loss #${fallbackIdx}`,
       form: this.formService.getWallLossForm(loss),
       collapse: false,
       heatLoss: loss.heatLoss ?? null,
     };
+    this.calculateItemResult(item);
+    this.observeItem(item);
+    return item;
+  }
+
+  private observeItem(item: WallLossItem): void {
+    const valueChanges: Observable<unknown> = item.form.valueChanges;
+    valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.updateItem(item.id);
+    });
   }
 
   private calculateItemResult(item: WallLossItem): void {
@@ -89,14 +109,25 @@ export class WallLossesService {
     }
   }
 
-  private saveLosses(items: WallLossItem[]): void {
-    const wallLosses: WallLoss[] = items.map(item => {
+  private saveLosses(): void {
+    const wallLosses: WallLoss[] = this.store.all().map(item => {
       const loss = this.formService.buildWallLoss(item.form);
+      loss.id = item.id;
       loss.name = item.name;
       loss.heatLoss = item.heatLoss ?? undefined;
       return loss;
     });
-    const current = this.assessmentService.processHeatingSignal();
-    this.assessmentService.updateProcessHeatingProperty('losses', { ...current.losses, wallLosses });
+
+    if (this.scenario === 'baseline') {
+      const current = this.assessmentService.processHeatingSignal();
+      this.assessmentService.updateProcessHeatingProperty('losses', { ...current?.losses, wallLosses });
+    } else {
+      const modification = this.assessmentService.getModifications(this.assessmentService.processHeatingSignal())
+        .find(mod => mod.id === this.scenario);
+      this.assessmentService.updateModificationProperty(this.scenario, 'losses', {
+        ...modification?.scenarioOverrides?.losses,
+        wallLosses,
+      });
+    }
   }
 }
