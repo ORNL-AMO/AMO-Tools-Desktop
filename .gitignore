@@ -32,6 +32,7 @@
 .claude/skills/
 .claude/recommendations/
 .claude/specs/
+.claude/feature-notes/
 
 # misc
 /docker

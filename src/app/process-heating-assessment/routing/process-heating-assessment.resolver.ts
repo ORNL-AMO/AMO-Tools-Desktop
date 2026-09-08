@@ -10,7 +10,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AppErrorService } from '../../shared/errors/app-error.service';
 import { MeasurAppError } from '../../shared/errors/errors';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
-import { computeScenarioOverrides } from '../services/scenario-merge.util';
+import { computeScenarioOverrides, ensureLossIdsForPhast } from '../services/scenario-merge.util';
 
 export interface ProcessHeatingResolverData {
   assessment: Assessment;
@@ -91,9 +91,8 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
               exploreOpportunityFlags: computeMigratedExploreOpportunityFlags(legacyModification),
             };
         });
-        this.processHeatingAssessmentService.setProcessHeating(
-          migratedModifications ? { ...processHeating, modifications: migratedModifications } : processHeating
-        );
+        const migratedPhast = migratedModifications ? { ...processHeating, modifications: migratedModifications } : processHeating;
+        this.processHeatingAssessmentService.setProcessHeating(ensureLossIdsForPhast(migratedPhast));
 
         return from(this.processHeatingAssessmentService.initAssessmentSettings(assessment)).pipe(
           switchMap(() =>

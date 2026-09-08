@@ -1,0 +1,51 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowWall">
+    <input
+      type="checkbox"
+      id="exploreOppsShowWall"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    Reduce Wall Surface Temperature
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  <ul>
+    @for (comparison of surfaceTemperatureComparisons(); track comparison.id) {
+      <li class="explore-opps-header">
+        <span class="explore-opps-title text-muted">Baseline</span>
+        <span class="explore-opps-title text-muted">{{ comparison.name }}</span>
+      </li>
+      <li class="explore-opps-item mb-2">
+        <form class="explore-opps-form">
+          <div class="text-center">
+            <label class="baseline-value-label">Surface Temperature</label>
+            <div class="text-muted text-center baseline-value-input">
+              {{ comparison.baselineSurfaceTemperature }}
+              @if (settings().unitsOfMeasure === 'Imperial') { <span>&#8457;</span> }
+              @if (settings().unitsOfMeasure === 'Metric') { <span>&#8451;</span> }
+            </div>
+          </div>
+        </form>
+
+        <form class="explore-opps-form">
+          <div class="form-group explore-opps-formgroup">
+            <label for="{{ 'modificationSurfaceTemperature_' + comparison.id }}" class="mod-value-label">Surface Temperature</label>
+            <div class="input-group mod-max-width">
+              <input
+                type="number"
+                step="any"
+                class="form-control"
+                id="{{ 'modificationSurfaceTemperature_' + comparison.id }}"
+                [value]="comparison.modificationSurfaceTemperature"
+                (change)="setModificationSurfaceTemperature(comparison.id, $any($event.target).valueAsNumber)"
+              />
+              <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
+            </div>
+          </div>
+        </form>
+      </li>
+    }
+  </ul>
+}

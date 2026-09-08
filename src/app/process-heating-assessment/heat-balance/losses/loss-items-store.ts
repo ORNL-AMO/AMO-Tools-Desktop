@@ -4,7 +4,13 @@ export interface EntityWithId {
   id: string;
 }
 
-export class EntityListStore<T extends EntityWithId> {
+/**
+ * Signal-based, id-keyed list store for a loss type's entries (charge materials, wall losses,
+ * extended surfaces, ...). Keeps insertion order separate from the keyed map so items can be
+ * patched/replaced by id without disturbing list order or forcing a full-array rebuild + form
+ * teardown on every edit.
+ */
+export class LossItemsStore<T extends EntityWithId> {
   private readonly order = signal<string[]>([]);
   private readonly entities = signal<ReadonlyMap<string, T>>(new Map());
 

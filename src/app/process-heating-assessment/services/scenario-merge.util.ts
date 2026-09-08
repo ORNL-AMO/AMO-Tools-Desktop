@@ -1,4 +1,5 @@
 import { isEqual } from 'lodash';
+import { getNewIdString } from '../../shared/helperFunctions';
 import { Losses, PHAST } from '../models/phast';
 import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
 
@@ -64,4 +65,69 @@ export function computeScenarioOverrides(modificationPhast: PHAST | undefined, b
   }
 
   return overrides;
+}
+
+type WithId = { id?: string };
+
+// wallLosses/extendedSurfaces have always shipped with an optional `id` (unlike chargeMaterials,
+// which requires one), so assessments predating the per-item Explore Opportunities comparison can
+// have entries with no id at all. Backfills one, preserving the array reference when every item
+// already has one so idempotency checks elsewhere (`scenarioOverrides === existing`) still hold.
+function ensureLossIds<T extends WithId>(items: T[] | undefined): T[] | undefined {
+  if (!items || items.every(item => item.id)) {
+    return items;
+  }
+  return items.map(item => (item.id ? item : { ...item, id: getNewIdString() }));
+}
+
+// A modification's wallLosses/extendedSurfaces override, when present, is a full-array replacement
+// representing the same physical losses in the same order as baseline (see getEffectivePhast()) —
+// true in particular for legacy migrations, which clone the array in place rather than reordering
+// it. Backfilling ids here independently of baseline would break the by-id lookups every consumer
+// (Explore Opportunities comparisons, per-item updates) relies on, so align by position instead.
+function alignOverrideLossIds<T extends WithId>(baselineItems: T[] | undefined, overrideItems: T[] | undefined): T[] | undefined {
+  if (!overrideItems || overrideItems.every(item => item.id)) {
+    return overrideItems;
+  }
+  return overrideItems.map((item, index) => (item.id ? item : { ...item, id: baselineItems?.[index]?.id ?? getNewIdString() }));
+}
+
+// Backfills missing ids on baseline's wallLosses/extendedSurfaces, then aligns any modification
+// override for those loss types onto the same ids by position. Must run after scenarioOverrides
+// migration (computeScenarioOverrides), not before: diffing a legacy modification's un-id'd clone
+// against an already-backfilled baseline would flag `id` alone as a spurious override. Idempotent:
+// returns the same `phast` reference when nothing needed backfilling.
+export function ensureLossIdsForPhast(phast: PHAST): PHAST {
+  const wallLosses = ensureLossIds(phast.losses?.wallLosses);
+  const extendedSurfaces = ensureLossIds(phast.losses?.extendedSurfaces);
+  const baselineChanged = wallLosses !== phast.losses?.wallLosses || extendedSurfaces !== phast.losses?.extendedSurfaces;
+
+  const existingModifications = phast.modifications as ProcessHeatingModification[] | undefined;
+  let modificationsChanged = false;
+  const modifications = existingModifications?.map(modification => {
+    const overrideLosses = modification.scenarioOverrides?.losses;
+    const overrideWallLosses = alignOverrideLossIds(wallLosses, overrideLosses?.wallLosses);
+    const overrideExtendedSurfaces = alignOverrideLossIds(extendedSurfaces, overrideLosses?.extendedSurfaces);
+    if (overrideWallLosses === overrideLosses?.wallLosses && overrideExtendedSurfaces === overrideLosses?.extendedSurfaces) {
+      return modification;
+    }
+    modificationsChanged = true;
+    return {
+      ...modification,
+      scenarioOverrides: {
+        ...modification.scenarioOverrides,
+        losses: { ...overrideLosses, wallLosses: overrideWallLosses, extendedSurfaces: overrideExtendedSurfaces },
+      },
+    };
+  });
+
+  if (!baselineChanged && !modificationsChanged) {
+    return phast;
+  }
+
+  return {
+    ...phast,
+    losses: baselineChanged ? { ...phast.losses, wallLosses, extendedSurfaces } : phast.losses,
+    modifications: modificationsChanged ? modifications : phast.modifications,
+  };
 }
