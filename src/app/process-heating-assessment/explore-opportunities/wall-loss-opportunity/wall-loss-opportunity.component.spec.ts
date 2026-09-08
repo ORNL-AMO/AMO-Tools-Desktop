@@ -110,4 +110,18 @@ describe('WallLossOpportunityComponent', () => {
     expect(effectiveLoss.surfaceTemperature).toBe(400);
     expect(effectiveLoss.windVelocity).toBe(10);
   });
+
+  it('hides the temperature editor when the opportunity is not selected', () => {
+    expect(component.useOpportunity()).toBe(false);
+
+    expect(fixture.nativeElement.querySelector('ul')).toBeNull();
+  });
+
+  it('renders the temperature editor when the opportunity is selected', () => {
+    component.toggleOpportunity(true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('ul')).not.toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('.explore-opps-item').length).toBe(1);
+  });
 });

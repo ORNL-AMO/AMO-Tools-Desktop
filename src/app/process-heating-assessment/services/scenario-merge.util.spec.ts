@@ -1,6 +1,6 @@
 import { PHAST } from '../models/phast';
 import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
-import { computeScenarioOverrides, getEffectivePhast } from './scenario-merge.util';
+import { computeScenarioOverrides, ensureLossIdsForPhast, getEffectivePhast } from './scenario-merge.util';
 
 describe('getEffectivePhast', () => {
   const baseline: PHAST = {
@@ -114,5 +114,75 @@ describe('computeScenarioOverrides', () => {
     const effectivePhast = getEffectivePhast(baseline, modification);
 
     expect(effectivePhast).toEqual(legacyModificationPhast);
+  });
+});
+
+describe('ensureLossIdsForPhast', () => {
+  it('backfills a missing id on a baseline wall loss', () => {
+    const phast: PHAST = { losses: { wallLosses: [{ surfaceArea: 100 } as never] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.wallLosses[0].id).toBeTruthy();
+  });
+
+  it('backfills a missing id on a baseline extended surface', () => {
+    const phast: PHAST = { losses: { extendedSurfaces: [{ surfaceArea: 50 } as never] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.extendedSurfaces[0].id).toBeTruthy();
+  });
+
+  it('assigns distinct ids to multiple id-less wall losses instead of leaving them all undefined', () => {
+    const phast: PHAST = {
+      losses: { wallLosses: [{ surfaceArea: 100 } as never, { surfaceArea: 200 } as never] },
+    };
+
+    const migrated = ensureLossIdsForPhast(phast);
+    const [first, second] = migrated.losses.wallLosses;
+
+    expect(first.id).toBeTruthy();
+    expect(second.id).toBeTruthy();
+    expect(first.id).not.toBe(second.id);
+  });
+
+  it('aligns a legacy modification override to baseline ids by position instead of leaving it id-less', () => {
+    const modification: ProcessHeatingModification = {
+      id: 'mod-1',
+      scenarioOverrides: { losses: { wallLosses: [{ surfaceArea: 100 }, { surfaceArea: 999 }] as never } },
+    };
+    const phast: PHAST = {
+      losses: { wallLosses: [{ surfaceArea: 100 } as never, { surfaceArea: 200 } as never] },
+      modifications: [modification],
+    };
+
+    const migrated = ensureLossIdsForPhast(phast);
+    const migratedModification = migrated.modifications[0] as unknown as ProcessHeatingModification;
+    const [baselineFirst, baselineSecond] = migrated.losses.wallLosses;
+    const [overrideFirst, overrideSecond] = migratedModification.scenarioOverrides.losses.wallLosses;
+
+    expect(overrideFirst.id).toBe(baselineFirst.id);
+    expect(overrideSecond.id).toBe(baselineSecond.id);
+  });
+
+  it('leaves ids already present untouched', () => {
+    const phast: PHAST = { losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 100 } as never] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.wallLosses[0].id).toBe('wall-1');
+  });
+
+  it('returns the same phast reference when nothing needs backfilling', () => {
+    const modification: ProcessHeatingModification = { id: 'mod-1', scenarioOverrides: { systemEfficiency: 90 } };
+    const phast: PHAST = {
+      losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 100 } as never] },
+      modifications: [modification],
+    };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated).toBe(phast);
   });
 });
