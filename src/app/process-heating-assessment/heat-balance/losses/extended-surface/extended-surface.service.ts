@@ -32,8 +32,9 @@ export class ExtendedSurfaceService {
     this.surfaces().reduce((sum, item) => sum + (item.heatLoss ?? 0), 0)
   );
 
-  initialize(extendedSurfaces: ExtendedSurface[], scenario: AssessmentScenario = 'baseline'): void {
+  initialize(scenario: AssessmentScenario = 'baseline'): void {
     this.scenario = scenario;
+    const extendedSurfaces = this.assessmentService.scenarioPhast(scenario)?.losses?.extendedSurfaces ?? [];
     const items = extendedSurfaces.map((surface, idx) => this.buildItem(this.ensureId(surface), idx + 1));
     this.store.load(items);
   }

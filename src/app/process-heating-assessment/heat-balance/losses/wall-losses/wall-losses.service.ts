@@ -35,8 +35,9 @@ export class WallLossesService {
     this.losses().reduce((sum, item) => sum + (item.heatLoss ?? 0), 0)
   );
 
-  initialize(wallLosses: WallLoss[], scenario: AssessmentScenario = 'baseline'): void {
+  initialize(scenario: AssessmentScenario = 'baseline'): void {
     this.scenario = scenario;
+    const wallLosses = this.assessmentService.scenarioPhast(scenario)?.losses?.wallLosses ?? [];
     const items = wallLosses.map((loss, idx) => this.buildItem(this.ensureId(loss), idx + 1));
     this.store.load(items);
     this.wallSurfaceDbService.getAllWithObservable()

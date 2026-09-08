@@ -26,13 +26,15 @@ export class ExtendedSurfaceComponent {
     return unit === 'kWh' ? 'kW' : `${unit}/hr`;
   }
 
+  // Re-initializes whenever `scenario` changes, not just on first render — needed for screens like
+  // Expert View where this component could stay mounted while the user switches which
+  // modification is selected. initialize() itself reads processHeatingSignal (via scenarioPhast),
+  // so its call must be untracked — otherwise this effect would also rerun on every PHAST edit,
+  // not just a scenario() change.
   constructor() {
     effect(() => {
       const scenario = this.scenario();
-      untracked(() => {
-        const extendedSurfaces = this.assessmentService.scenarioPhast(scenario)?.losses?.extendedSurfaces ?? [];
-        this.service.initialize(extendedSurfaces, scenario);
-      });
+      untracked(() => this.service.initialize(scenario));
     });
   }
 }
