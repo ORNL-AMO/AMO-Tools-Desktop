@@ -1,5 +1,5 @@
 import { Node, Edge } from "@xyflow/react";
-import { WaterTreatment } from "./water-components";
+import { HeatEnergy, MotorEnergy, WaterTreatment } from "./water-components";
 
 /**
 * Respresents a diagram node. is extended by types which hold assessment data
@@ -16,6 +16,8 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     className: ProcessFlowPartStyleClass,
     isValid: boolean,
     inSystemTreatment?: WaterTreatment[],
+    heatEnergy?: HeatEnergy,
+    addedMotorEnergy?: MotorEnergy[],
     createdByAssessment: boolean,
     // * id for diagram targetting/sourcing
     diagramNodeId?: string,
@@ -204,4 +206,3 @@ export interface ProcessFlowParentState {
     assessmentId?: number,
     flowDiagramData: FlowDiagramData
   }
-  
