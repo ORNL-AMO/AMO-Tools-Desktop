@@ -259,9 +259,7 @@ export class CalculatorSuiteApiService {
   /**
    * Calculate Air Leak Survey results
    * 
-   * Bag Method: totalFlowRate is in scfm, annualTotalFlowRate is in kscf, energy in mWh
-   * 
-   * All Other methods: totalFlowRate is in scfm, annualTotalFlowRate in scf, energy in kWh
+   * All methods: totalFlowRate is in scfm, annualTotalFlowRate in scf, energy in kWh
    * @returns AirLeakSurveyResult - units described above
    */
   compressedAirLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
