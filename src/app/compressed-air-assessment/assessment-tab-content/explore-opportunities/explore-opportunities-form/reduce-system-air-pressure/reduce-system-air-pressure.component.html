@@ -5,7 +5,7 @@
             <span class="supply-demand">
                 Supply
             </span>
-            @if ((form.controls.implementationCost.invalid || hasPressureReductionBlockingError) && form.controls.order.value != 100) {
+            @if (form.invalid && form.controls.order.value != 100) {
                 <span>
                     <span class="fa fa-exclamation-circle"></span>
                 </span>
@@ -41,7 +41,7 @@
                 }
             </div>
 
-            <div class="form-group" [ngClass]="{'invalid': hasPressureReductionBlockingError}">
+            <div class="form-group" [ngClass]="{'invalid': form.controls.averageSystemPressureReduction.invalid}">
                 <label for="averageSystemPressureReduction">Average System Pressure Reduction</label>
                 <div class="input-group">
                     <input type="number" class="form-control" formControlName="averageSystemPressureReduction"
@@ -54,7 +54,7 @@
                         <span class="units input-group-addon">barg</span>
                     }
                 </div>
-                @if (hasPressureReductionBlockingError && !form.controls.averageSystemPressureReduction.pristine) {
+                @if (form.controls.averageSystemPressureReduction.invalid && !form.controls.averageSystemPressureReduction.pristine) {
                     <span class="alert-danger pull-right small">
                         @if (form.controls.averageSystemPressureReduction.errors.required) {
                             <span>Value Required</span>
@@ -73,7 +73,7 @@
                         }
                     </span>
                 }
-                @if (form.controls.averageSystemPressureReduction.errors?.min && !form.controls.averageSystemPressureReduction.pristine) {
+                @if (form.controls.averageSystemPressureReduction.value < 0 && !form.controls.averageSystemPressureReduction.pristine) {
                     <span class="alert-warning pull-right small">
                         Value should be greater than zero to achieve savings.
                     </span>
