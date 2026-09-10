@@ -12,7 +12,7 @@ export class ReduceSystemAirPressureService {
   getFormFromObj(reduceSystemAirPressure: ReduceSystemAirPressure, inventoryItems: Array<CompressorInventoryItem>): UntypedFormGroup {
     let pressureMinMax: { min: number, max: number } = getPressureMinMax(inventoryItems);
     let form: UntypedFormGroup = this.formBuilder.group({
-      averageSystemPressureReduction: [reduceSystemAirPressure.averageSystemPressureReduction, [Validators.min(0), Validators.required, Validators.max(pressureMinMax.min)]],
+      averageSystemPressureReduction: [reduceSystemAirPressure.averageSystemPressureReduction, [Validators.required, Validators.max(pressureMinMax.min)]],
       implementationCost: [reduceSystemAirPressure.implementationCost, Validators.min(0)],
       order: [reduceSystemAirPressure.order]
     });
