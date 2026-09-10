@@ -43,8 +43,10 @@ export const pumpTypesConstant: Array<{ value: number, display: string }> = [
         value: 10,
         display: 'Large End Suction',
     },
-    // When user selects below they need a way to provide the optimal efficiency
-    // 'Specified Optimal Efficiency'
+    {
+        value: 12,
+        display: 'Positive Displacement',
+    }
 ];
 
 export const driveConstants: Array<{ value: number, display: string, enumVal?: any }> = [

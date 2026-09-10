@@ -58,6 +58,12 @@ export class PumpEquipmentCatalogComponent implements OnInit {
     this.pumpInventoryService.updatePumpItem(selectedPump);
   }
 
+  changePumpType() {
+    this.form = this.pumpEquipmentCatalogService.updateDesignDifferentialPressureValidators(this.form);
+    this.save();
+    this.pumpCatalogService.pumpTypeChanged.next(this.form.controls.pumpType.value);
+  }
+
   focusField(str: string) {
     this.pumpInventoryService.focusedDataGroup.next('pump-equipment');
     this.pumpInventoryService.focusedField.next(str);

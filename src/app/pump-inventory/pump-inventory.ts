@@ -102,8 +102,9 @@ export interface PumpProperties {
   ratedSpeed: number, 
   impellerDiameter: number, 
   minFlowSize: number, 
-  pumpSize: number, 
+  pumpSize: number,
   designHead: number,
+  designDifferentialPressure: number,
   designFlow: number,
   designEfficiency: number,
 }
@@ -124,8 +125,9 @@ export interface PumpPropertiesOptions {
   ratedSpeed: boolean, 
   impellerDiameter: boolean, 
   minFlowSize: boolean, 
-  pumpSize: boolean, 
+  pumpSize: boolean,
   designHead: boolean,
+  designDifferentialPressure: boolean,
   designFlow: boolean,
   designEfficiency: boolean,
 }

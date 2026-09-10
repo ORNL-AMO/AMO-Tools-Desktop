@@ -23165,6 +23165,7 @@
                                                 "minFlowSize": 33,
                                                 "pumpSize": 33,
                                                 "designHead": 33,
+                                                "designDifferentialPressure": 33,
                                                 "designFlow": 33,
                                                 "designEfficiency": 65
                                             },
@@ -23237,6 +23238,7 @@
                                                 "minFlowSize": 33,
                                                 "pumpSize": 33,
                                                 "designHead": 33,
+                                                "designDifferentialPressure": 33,
                                                 "designFlow": 33,
                                                 "designEfficiency": 85
                                             },
@@ -23317,6 +23319,7 @@
                                                 "minFlowSize": 33,
                                                 "pumpSize": 33,
                                                 "designHead": 33,
+                                                "designDifferentialPressure": 33,
                                                 "designFlow": 33,
                                                 "designEfficiency": 33
                                             },
@@ -23389,6 +23392,7 @@
                                                 "minFlowSize": 33,
                                                 "pumpSize": 33,
                                                 "designHead": 33,
+                                                "designDifferentialPressure": 33,
                                                 "designFlow": 33,
                                                 "designEfficiency": 66
                                             },
@@ -23449,6 +23453,7 @@
                                     "minFlowSize": false,
                                     "pumpSize": false,
                                     "designHead": false,
+                                    "designDifferentialPressure": false,
                                     "designFlow": false,
                                     "designEfficiency": false
                                 },
@@ -95660,6 +95665,7 @@
                                         "minFlowSize": 33,
                                         "pumpSize": 33,
                                         "designHead": 33,
+                                        "designDifferentialPressure": 33,
                                         "designFlow": 33,
                                         "designEfficiency": 65
                                     },
@@ -95732,6 +95738,7 @@
                                         "minFlowSize": 33,
                                         "pumpSize": 33,
                                         "designHead": 33,
+                                        "designDifferentialPressure": 33,
                                         "designFlow": 33,
                                         "designEfficiency": 85
                                     },
@@ -95812,6 +95819,7 @@
                                         "minFlowSize": 33,
                                         "pumpSize": 33,
                                         "designHead": 33,
+                                        "designDifferentialPressure": 33,
                                         "designFlow": 33,
                                         "designEfficiency": 33
                                     },
@@ -95884,6 +95892,7 @@
                                         "minFlowSize": 33,
                                         "pumpSize": 33,
                                         "designHead": 33,
+                                        "designDifferentialPressure": 33,
                                         "designFlow": 33,
                                         "designEfficiency": 66
                                     },
@@ -95944,6 +95953,7 @@
                             "minFlowSize": false,
                             "pumpSize": false,
                             "designHead": false,
+                            "designDifferentialPressure": false,
                             "designFlow": false,
                             "designEfficiency": false
                         },

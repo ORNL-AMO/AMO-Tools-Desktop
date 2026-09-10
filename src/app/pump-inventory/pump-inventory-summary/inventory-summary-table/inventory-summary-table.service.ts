@@ -113,6 +113,9 @@ export class InventorySummaryTableService {
     if (pumpPropertiesOptions.designHead) {
       pumpData.push({ value: pumpProperties.designHead, fieldStr: 'designHead', unit: units.designHead });
     }
+    if (pumpPropertiesOptions.designDifferentialPressure) {
+      pumpData.push({ value: pumpProperties.designDifferentialPressure, fieldStr: 'designDifferentialPressure', unit: units.designDifferentialPressure });
+    }
     if (pumpPropertiesOptions.designFlow) {
       pumpData.push({ value: pumpProperties.designFlow, fieldStr: 'designFlow', unit: units.designFlow });
     }
