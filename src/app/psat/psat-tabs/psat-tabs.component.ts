@@ -88,6 +88,8 @@ export class PsatTabsComponent implements OnInit {
     this.calcSub.unsubscribe();
     this.mainSub.unsubscribe();
     this.modSubscription.unsubscribe();
+    this.getResultsSub.unsubscribe();
+    this.stepTabSub.unsubscribe();
   }
 
   changeTab(str: string) {
@@ -187,10 +189,10 @@ export class PsatTabsComponent implements OnInit {
     let motorInvalid: boolean = this.checkMotorInvalid();
     let isMod: boolean;
     if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
-      isMod = false;
+      isMod = true;
     }
     else {
-      isMod = true;
+      isMod = false;
     }
     let motorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, isMod);
     let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(motorWarnings);

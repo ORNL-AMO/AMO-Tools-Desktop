@@ -137,7 +137,7 @@ export class ModificationListComponent implements OnInit {
     if (psat) {
       this.newModificationName = psat.name;
       let testName = _.filter(this.psat.modifications, (mod) => { return mod.psat.name.includes(this.newModificationName) });
-      if (testName) {
+      if (testName.length > 1) {
         this.newModificationName = this.newModificationName + '(' + testName.length + ')';
       }
     }
