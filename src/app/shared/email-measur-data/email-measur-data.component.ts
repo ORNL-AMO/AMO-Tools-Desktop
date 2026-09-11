@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, FormControl } from '@angular/forms';
 import { EmailMeasurDataService, EmailSentStatus } from './email-measur-data.service';
-import { Observable, Subscription, mergeMap, of } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ContactDbService, SavedContact } from '../../indexedDb/contact-db.service';
 @Component({
     selector: 'app-email-measur-data',
@@ -22,7 +22,6 @@ export class EmailMeasurDataComponent {
   emailSentStatusSubscription: Subscription;
   emailToValueChangesSubscription: Subscription;
 
-  contactSearchDataSource: Observable<Array<SavedContact>>;
   currentEmailToken: string = '';
   canAddCurrentEmailAsContact: boolean = false;
   showContactAddedBanner: boolean = false;
@@ -31,22 +30,24 @@ export class EmailMeasurDataComponent {
   constructor(private fb: FormBuilder, private emailMeasurDataService: EmailMeasurDataService, private contactDbService: ContactDbService) { }
 
   ngOnInit() {
+    const primaryContact: SavedContact = this.contactDbService.allContacts.find(contact => contact.isPrimary);
+    const recipientEmails: string = this.contactDbService.allContacts
+      .filter(contact => !contact.isPrimary && contact.email)
+      .map(contact => contact.email)
+      .join(', ');
     this.emailDataForm = this.fb.group({
-      emailTo: ['', [Validators.required, this.multipleEmailsValidator()]],
-      emailSender: ['', [Validators.email]],
+      emailTo: [recipientEmails, [Validators.required, this.multipleEmailsValidator()]],
+      emailSender: [primaryContact?.email ?? '', [Validators.email]],
       emailAttachmentName: [
         this.emailMeasurDataService.measurItemAttachment.itemName,
         [Validators.required, this.invalidCharactersValidator()]
       ]
     });
+    this.save();
 
     this.emailSentStatusSubscription = this.emailMeasurDataService.emailSentStatus.subscribe(sentStatus => {
       this.emailSentStatus = sentStatus;
     });
-
-    this.contactSearchDataSource = new Observable((observer: any) => {
-      observer.next(this.emailDataForm.controls.emailTo.value);
-    }).pipe(mergeMap((value: string) => this.searchContacts(this.getLastToken(value))));
 
     this.emailToValueChangesSubscription = this.emailDataForm.controls.emailTo.valueChanges.subscribe((value: string) => this.onEmailToChange(value));
   }
@@ -61,20 +62,6 @@ export class EmailMeasurDataComponent {
   getLastToken(value: string): string {
     const tokens = (value ?? '').split(',');
     return tokens[tokens.length - 1].trim();
-  }
-
-  searchContacts(token: string): Observable<Array<SavedContact>> {
-    if (!token) return of([]);
-    const search = token.toLowerCase();
-    return of(this.contactDbService.allContacts.filter(contact =>
-      contact.contactName?.toLowerCase().includes(search) || contact.email?.toLowerCase().includes(search)));
-  }
-
-  onContactSelected() {
-    const emailToControl = this.emailDataForm.controls.emailTo;
-    const value: string = (emailToControl.value ?? '').replace(/[,\s]+$/, '');
-    emailToControl.setValue(value + ', ');
-    this.save();
   }
 
   onEmailToChange(value: string) {
