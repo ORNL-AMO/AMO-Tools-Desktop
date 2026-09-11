@@ -62,6 +62,23 @@ describe('PSAT bug fixes', () => {
 
       expect(component.psat.modifications[2].psat.name).toBe('Scenario 1(2)');
     });
+
+    it('does not count partial-name matches when deriving copy suffixes', () => {
+      const component = buildComponent();
+      const sourcePsat = { name: 'Scenario 1', inputs: { co2SavingsData: { userEnteredBaselineEmissions: 4 } } } as any;
+      component.psat = {
+        inputs: {},
+        modifications: [
+          { psat: sourcePsat, id: 'mod-1', notes: { fieldDataNotes: '', motorNotes: '', pumpFluidNotes: '', systemBasicsNotes: '' } },
+          { psat: { name: 'Scenario 10', inputs: { co2SavingsData: { userEnteredBaselineEmissions: 4 } } }, id: 'mod-2', notes: { fieldDataNotes: '', motorNotes: '', pumpFluidNotes: '', systemBasicsNotes: '' } },
+          { psat: { name: 'Scenario 1(1)', inputs: { co2SavingsData: { userEnteredBaselineEmissions: 4 } } }, id: 'mod-3', notes: { fieldDataNotes: '', motorNotes: '', pumpFluidNotes: '', systemBasicsNotes: '' } }
+        ]
+      } as any;
+
+      component.addNewModification(sourcePsat);
+
+      expect(component.psat.modifications[3].psat.name).toBe('Scenario 1(2)');
+    });
   });
 
   describe('PsatTabsComponent', () => {
