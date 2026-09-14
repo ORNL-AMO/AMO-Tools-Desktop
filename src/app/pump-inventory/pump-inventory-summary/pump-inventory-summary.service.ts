@@ -114,9 +114,6 @@ export class PumpInventorySummaryService {
     if (pumpPropertiesOptions.designHead) {
       fields.push({display: 'Design Head', value: 'designHead', group: 'pumpEquipment', unit: units.designHead});
     }
-    if (pumpPropertiesOptions.designDifferentialPressure) {
-      fields.push({display: 'Design Differential Pressure', value: 'designDifferentialPressure', group: 'pumpEquipment', unit: units.designDifferentialPressure});
-    }
     if (pumpPropertiesOptions.designFlow) {
       fields.push({display: 'Design Flow', value: 'designFlow', group: 'pumpEquipment', unit: designFlowUnits});
     }
@@ -294,7 +291,6 @@ export const PumpSummaryUnitsImperial = {
       minFlowSize: 'gpm',
       pumpSize: 'ft',
       designHead: 'ft',
-      designDifferentialPressure: 'psi',
       designFlow: 'gpm',
       designEfficiency: '%',
   },
@@ -338,7 +334,6 @@ export const PumpSummaryUnitsMetric = {
       minFlowSize: 'm<sup>3</sup>/min',
       pumpSize: 'm',
       designHead: 'm',
-      designDifferentialPressure: 'Pa',
       designFlow: 'm<sup>3</sup>/h',
       designEfficiency: '%',
   },

@@ -59,7 +59,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   }
 
   changePumpType() {
-    this.form = this.pumpEquipmentCatalogService.updateDesignDifferentialPressureValidators(this.form);
+    this.form = this.pumpEquipmentCatalogService.updateDesignHeadValidators(this.form);
     this.save();
     this.pumpCatalogService.pumpTypeChanged.next(this.form.controls.pumpType.value);
   }

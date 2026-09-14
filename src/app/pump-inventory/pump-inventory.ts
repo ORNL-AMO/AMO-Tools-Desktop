@@ -104,7 +104,6 @@ export interface PumpProperties {
   minFlowSize: number, 
   pumpSize: number,
   designHead: number,
-  designDifferentialPressure: number,
   designFlow: number,
   designEfficiency: number,
 }
@@ -127,7 +126,6 @@ export interface PumpPropertiesOptions {
   minFlowSize: boolean, 
   pumpSize: boolean,
   designHead: boolean,
-  designDifferentialPressure: boolean,
   designFlow: boolean,
   designEfficiency: boolean,
 }

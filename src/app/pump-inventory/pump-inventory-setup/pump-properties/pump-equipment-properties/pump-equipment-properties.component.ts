@@ -47,7 +47,6 @@ export class PumpEquipmentPropertiesComponent implements OnInit {
     this.pumpPropertiesOptions.minFlowSize = this.pumpPropertiesOptions.displayPumpProperties; 
     this.pumpPropertiesOptions.pumpSize = this.pumpPropertiesOptions.displayPumpProperties; 
     this.pumpPropertiesOptions.designHead = this.pumpPropertiesOptions.displayPumpProperties;
-    this.pumpPropertiesOptions.designDifferentialPressure = this.pumpPropertiesOptions.displayPumpProperties;
     this.pumpPropertiesOptions.designFlow = this.pumpPropertiesOptions.displayPumpProperties;
     this.pumpPropertiesOptions.designEfficiency = this.pumpPropertiesOptions.displayPumpProperties;
     this.save();
@@ -71,7 +70,6 @@ export class PumpEquipmentPropertiesComponent implements OnInit {
       this.pumpPropertiesOptions.minFlowSize ||
       this.pumpPropertiesOptions.pumpSize ||
       this.pumpPropertiesOptions.designHead ||
-      this.pumpPropertiesOptions.designDifferentialPressure ||
       this.pumpPropertiesOptions.designFlow ||
       this.pumpPropertiesOptions.designEfficiency 
     );

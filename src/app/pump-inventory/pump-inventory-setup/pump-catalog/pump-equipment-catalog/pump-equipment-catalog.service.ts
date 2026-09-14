@@ -8,7 +8,7 @@ export class PumpEquipmentCatalogService {
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromPumpEquipmentProperties(pumpEquipmentProperties: PumpProperties): FormGroup {
-    let designDifferentialPressureValidators: Array<ValidatorFn> = this.getDesignDifferentialPressureValidators(pumpEquipmentProperties.pumpType);
+    let designHeadValidators: Array<ValidatorFn> = this.getDesignHeadValidators(pumpEquipmentProperties.pumpType);
     let form: UntypedFormGroup = this.formBuilder.group({
       pumpType: [pumpEquipmentProperties.pumpType],
       shaftOrientation: [pumpEquipmentProperties.shaftOrientation],
@@ -25,8 +25,7 @@ export class PumpEquipmentCatalogService {
       impellerDiameter: [pumpEquipmentProperties.impellerDiameter],
       minFlowSize: [pumpEquipmentProperties.minFlowSize],
       pumpSize: [pumpEquipmentProperties.pumpSize],
-      designHead: [pumpEquipmentProperties.designHead],
-      designDifferentialPressure: [pumpEquipmentProperties.designDifferentialPressure, designDifferentialPressureValidators],
+      designHead: [pumpEquipmentProperties.designHead, designHeadValidators],
       designFlow: [pumpEquipmentProperties.designFlow],
       designEfficiency: [pumpEquipmentProperties.designEfficiency],
      });
@@ -36,7 +35,7 @@ export class PumpEquipmentCatalogService {
     return form;
   }
 
-  getDesignDifferentialPressureValidators(pumpType: number): Array<ValidatorFn> {
+  getDesignHeadValidators(pumpType: number): Array<ValidatorFn> {
     if (pumpType == 12) {
       return [Validators.required, Validators.min(0)];
     } else {
@@ -44,10 +43,10 @@ export class PumpEquipmentCatalogService {
     }
   }
 
-  updateDesignDifferentialPressureValidators(form: FormGroup): FormGroup {
-    let designDifferentialPressureValidators: Array<ValidatorFn> = this.getDesignDifferentialPressureValidators(form.controls.pumpType.value);
-    form.controls.designDifferentialPressure.setValidators(designDifferentialPressureValidators);
-    form.controls.designDifferentialPressure.updateValueAndValidity();
+  updateDesignHeadValidators(form: FormGroup): FormGroup {
+    let designHeadValidators: Array<ValidatorFn> = this.getDesignHeadValidators(form.controls.pumpType.value);
+    form.controls.designHead.setValidators(designHeadValidators);
+    form.controls.designHead.updateValueAndValidity();
     return form;
   }
 
@@ -68,7 +67,6 @@ export class PumpEquipmentCatalogService {
     pumpEquipmentProperties.minFlowSize = form.controls.minFlowSize.value; 
     pumpEquipmentProperties.pumpSize = form.controls.pumpSize.value; 
     pumpEquipmentProperties.designHead = form.controls.designHead.value;
-    pumpEquipmentProperties.designDifferentialPressure = form.controls.designDifferentialPressure.value;
     pumpEquipmentProperties.designFlow = form.controls.designFlow.value;
     pumpEquipmentProperties.designEfficiency = form.controls.designEfficiency.value;
 

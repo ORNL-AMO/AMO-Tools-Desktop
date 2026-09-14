@@ -61,8 +61,11 @@ export class ConvertPumpInventoryService {
       pumpEquipment.startingTorque = this.convertUnitsService.value(pumpEquipment.startingTorque).from('Nm').to('lbft');
       pumpEquipment.impellerDiameter = this.convertUnitsService.value(pumpEquipment.impellerDiameter).from('m').to('in');
       pumpEquipment.pumpSize = this.convertUnitsService.value(pumpEquipment.pumpSize).from('m').to('ft');
-      pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('m').to('ft');
-      pumpEquipment.designDifferentialPressure = this.convertUnitsService.value(pumpEquipment.designDifferentialPressure).from('Pa').to('psi');
+      if (pumpEquipment.pumpType == 12) {
+        pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('Pa').to('psi');
+      } else {
+        pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('m').to('ft');
+      }
 
       pumpEquipment.minFlowSize = this.convertUnitsService.value(pumpEquipment.minFlowSize).from('m3/min').to('gpm');
       pumpEquipment.designFlow = this.convertUnitsService.value(pumpEquipment.designFlow).from('m3/h').to('gpm');
@@ -76,8 +79,11 @@ export class ConvertPumpInventoryService {
       pumpEquipment.startingTorque = this.convertUnitsService.value(pumpEquipment.startingTorque).from('lbft').to('Nm');
       pumpEquipment.impellerDiameter = this.convertUnitsService.value(pumpEquipment.impellerDiameter).from('in').to('m');
       pumpEquipment.pumpSize = this.convertUnitsService.value(pumpEquipment.pumpSize).from('ft').to('m');
-      pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('ft').to('m');
-      pumpEquipment.designDifferentialPressure = this.convertUnitsService.value(pumpEquipment.designDifferentialPressure).from('psi').to('Pa');
+      if (pumpEquipment.pumpType == 12) {
+        pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('psi').to('Pa');
+      } else {
+        pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('ft').to('m');
+      }
 
       pumpEquipment.minFlowSize = this.convertUnitsService.value(pumpEquipment.minFlowSize).from('gpm').to('m3/min');
       pumpEquipment.designFlow = this.convertUnitsService.value(pumpEquipment.designFlow).from('gpm').to('m3/h');
@@ -92,7 +98,6 @@ export class ConvertPumpInventoryService {
     pumpEquipment.impellerDiameter = this.convertUnitsService.roundVal(pumpEquipment.impellerDiameter, 2)
     pumpEquipment.pumpSize = this.convertUnitsService.roundVal(pumpEquipment.pumpSize, 2)
     pumpEquipment.designHead = this.convertUnitsService.roundVal(pumpEquipment.designHead, 2)
-    pumpEquipment.designDifferentialPressure = this.convertUnitsService.roundVal(pumpEquipment.designDifferentialPressure, 2)
     pumpEquipment.minFlowSize = this.convertUnitsService.roundVal(pumpEquipment.minFlowSize, 2)
     pumpEquipment.designFlow = this.convertUnitsService.roundVal(pumpEquipment.designFlow, 2)
     
