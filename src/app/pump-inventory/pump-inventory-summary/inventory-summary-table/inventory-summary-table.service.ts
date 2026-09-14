@@ -111,7 +111,8 @@ export class InventorySummaryTableService {
       pumpData.push({ value: pumpProperties.pumpSize, fieldStr: 'pumpSize', unit: units.pumpSize });
     } 
     if (pumpPropertiesOptions.designHead) {
-      pumpData.push({ value: pumpProperties.designHead, fieldStr: 'designHead', unit: units.designHead });
+      let designHeadUnit = pumpProperties.pumpType == 12 ? (settings.unitsOfMeasure === 'Imperial' ? 'psi' : 'Pa') : units.designHead;
+      pumpData.push({ value: pumpProperties.designHead, fieldStr: 'designHead', unit: designHeadUnit });
     }
     if (pumpPropertiesOptions.designFlow) {
       pumpData.push({ value: pumpProperties.designFlow, fieldStr: 'designFlow', unit: units.designFlow });

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { PumpInventoryFieldWarnings, PumpInventoryMotorWarnings, PumpItem } from '../../pump-inventory';
 import { PumpInventoryService } from '../../pump-inventory.service';
 import { PsatWarningService } from '../../../psat/psat-warning.service';
@@ -11,11 +11,13 @@ export class PumpCatalogService {
   selectedDepartmentId: BehaviorSubject<string>;
   selectedPumpItem: BehaviorSubject<PumpItem>;
   showPumpProperties: BehaviorSubject<boolean>;
+  pumpTypeChanged: Subject<number>;
   constructor(private pumpInventoryService: PumpInventoryService, private psatWarningService: PsatWarningService, private convertUnitsService: ConvertUnitsService
     ) {
     this.selectedDepartmentId = new BehaviorSubject<string>(undefined);
     this.selectedPumpItem = new BehaviorSubject<PumpItem>(undefined);
     this.showPumpProperties = new BehaviorSubject<boolean>(false);
+    this.pumpTypeChanged = new Subject<number>();
   }
 
   getUpdatedSelectedPumpItem(): PumpItem {

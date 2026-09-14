@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { PumpProperties } from '../../../pump-inventory';
 import { WholeNumberValidator } from '../../../../shared/validators/whole-number';
 @Injectable()
@@ -8,6 +8,7 @@ export class PumpEquipmentCatalogService {
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromPumpEquipmentProperties(pumpEquipmentProperties: PumpProperties): FormGroup {
+    let designHeadValidators: Array<ValidatorFn> = this.getDesignHeadValidators(pumpEquipmentProperties.pumpType);
     let form: UntypedFormGroup = this.formBuilder.group({
       pumpType: [pumpEquipmentProperties.pumpType],
       shaftOrientation: [pumpEquipmentProperties.shaftOrientation],
@@ -24,13 +25,28 @@ export class PumpEquipmentCatalogService {
       impellerDiameter: [pumpEquipmentProperties.impellerDiameter],
       minFlowSize: [pumpEquipmentProperties.minFlowSize],
       pumpSize: [pumpEquipmentProperties.pumpSize],
-      designHead: [pumpEquipmentProperties.designHead],
+      designHead: [pumpEquipmentProperties.designHead, designHeadValidators],
       designFlow: [pumpEquipmentProperties.designFlow],
       designEfficiency: [pumpEquipmentProperties.designEfficiency],
      });
      for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
+    return form;
+  }
+
+  getDesignHeadValidators(pumpType: number): Array<ValidatorFn> {
+    if (pumpType == 12) {
+      return [Validators.required, Validators.min(0)];
+    } else {
+      return [];
+    }
+  }
+
+  updateDesignHeadValidators(form: FormGroup): FormGroup {
+    let designHeadValidators: Array<ValidatorFn> = this.getDesignHeadValidators(form.controls.pumpType.value);
+    form.controls.designHead.setValidators(designHeadValidators);
+    form.controls.designHead.updateValueAndValidity();
     return form;
   }
 

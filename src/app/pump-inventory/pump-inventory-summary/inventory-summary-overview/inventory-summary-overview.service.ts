@@ -9,6 +9,7 @@ import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savi
 import { PsatService } from '../../../psat/psat.service';
 import { PsatInputs, PsatOutputs } from '../../../shared/models/psat';
 import { ConvertPumpInventoryService } from '../../convert-pump-inventory.service';
+import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 declare var psatAddon: any;
 
@@ -17,7 +18,8 @@ export class InventorySummaryOverviewService {
 
   inventorySummary: BehaviorSubject<InventorySummary>;
   constructor(private pumpInventoryService: PumpInventoryService, private convertPumpInventoryService: ConvertPumpInventoryService,
-    private psatService: PsatService, private assessmentCo2SavingsService: AssessmentCo2SavingsService) {
+    private psatService: PsatService, private assessmentCo2SavingsService: AssessmentCo2SavingsService,
+    private convertUnitsService: ConvertUnitsService) {
     this.inventorySummary = new BehaviorSubject<InventorySummary>({
       totalEnergyUse: 0,
       totalEnergyCost: 0,
@@ -107,11 +109,16 @@ export class InventorySummaryOverviewService {
       emissionsOutput: 0,
     };
     if (this.pumpInventoryService.isPumpValid(pumpItem)) {
+      let differentialPressurePsi: number = pumpItem.pumpEquipment.designHead;
+      if (settings.unitsOfMeasure == 'Metric') {
+        differentialPressurePsi = this.convertUnitsService.value(differentialPressurePsi).from('Pa').to('psi');
+      }
       let psatInputs: PsatInputs = {
         pump_style: pumpItem.pumpEquipment.pumpType,
         pump_specified: pumpItem.fieldMeasurements.efficiency ? pumpItem.fieldMeasurements.efficiency : null,
         pump_rated_speed: pumpItem.pumpEquipment.ratedSpeed,
         drive: pumpItem.systemProperties.driveType,
+        differentialPressure: differentialPressurePsi,
         kinematic_viscosity: 1.107,
         specific_gravity: 1.002,
         stages: pumpItem.pumpEquipment.numStages,

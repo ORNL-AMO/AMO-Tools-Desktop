@@ -61,7 +61,11 @@ export class ConvertPumpInventoryService {
       pumpEquipment.startingTorque = this.convertUnitsService.value(pumpEquipment.startingTorque).from('Nm').to('lbft');
       pumpEquipment.impellerDiameter = this.convertUnitsService.value(pumpEquipment.impellerDiameter).from('m').to('in');
       pumpEquipment.pumpSize = this.convertUnitsService.value(pumpEquipment.pumpSize).from('m').to('ft');
-      pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('m').to('ft');
+      if (pumpEquipment.pumpType == 12) {
+        pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('Pa').to('psi');
+      } else {
+        pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('m').to('ft');
+      }
 
       pumpEquipment.minFlowSize = this.convertUnitsService.value(pumpEquipment.minFlowSize).from('m3/min').to('gpm');
       pumpEquipment.designFlow = this.convertUnitsService.value(pumpEquipment.designFlow).from('m3/h').to('gpm');
@@ -75,7 +79,11 @@ export class ConvertPumpInventoryService {
       pumpEquipment.startingTorque = this.convertUnitsService.value(pumpEquipment.startingTorque).from('lbft').to('Nm');
       pumpEquipment.impellerDiameter = this.convertUnitsService.value(pumpEquipment.impellerDiameter).from('in').to('m');
       pumpEquipment.pumpSize = this.convertUnitsService.value(pumpEquipment.pumpSize).from('ft').to('m');
-      pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('ft').to('m');
+      if (pumpEquipment.pumpType == 12) {
+        pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('psi').to('Pa');
+      } else {
+        pumpEquipment.designHead = this.convertUnitsService.value(pumpEquipment.designHead).from('ft').to('m');
+      }
 
       pumpEquipment.minFlowSize = this.convertUnitsService.value(pumpEquipment.minFlowSize).from('gpm').to('m3/min');
       pumpEquipment.designFlow = this.convertUnitsService.value(pumpEquipment.designFlow).from('gpm').to('m3/h');

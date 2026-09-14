@@ -97,7 +97,7 @@ export class PumpInventoryService {
 
   isPumpValid(pump: PumpItem): ValidPump {
     let pumpMotorForm: UntypedFormGroup = this.motorCatalogService.getFormFromPumpMotor(pump.pumpMotor);
-    let fieldMeasurementsForm: UntypedFormGroup = this.fieldCatalogService.getFormFromFieldMeasurements(pump.fieldMeasurements);
+    let fieldMeasurementsForm: UntypedFormGroup = this.fieldCatalogService.getFormFromFieldMeasurements(pump.fieldMeasurements, pump.pumpEquipment.pumpType);
     let equipmentForm: UntypedFormGroup = this.pumpEquipmentService.getFormFromPumpEquipmentProperties(pump.pumpEquipment);
     return {
       isValid: pumpMotorForm.valid && fieldMeasurementsForm.valid && equipmentForm.valid,
@@ -185,7 +185,7 @@ export class PumpInventoryService {
         ratedSpeed: undefined, 
         impellerDiameter: undefined, 
         minFlowSize: undefined, 
-        pumpSize: undefined, 
+        pumpSize: undefined,
         designHead: undefined,
         designFlow: undefined,
         designEfficiency: undefined,
@@ -245,7 +245,7 @@ export class PumpInventoryService {
         ratedSpeed: false, 
         impellerDiameter: false, 
         minFlowSize: false, 
-        pumpSize: false, 
+        pumpSize: false,
         designHead: false,
         designFlow: false,
         designEfficiency: false,
