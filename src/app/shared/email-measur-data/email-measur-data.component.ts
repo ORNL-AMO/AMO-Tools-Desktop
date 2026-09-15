@@ -30,7 +30,7 @@ export class EmailMeasurDataComponent {
   constructor(private fb: FormBuilder, private emailMeasurDataService: EmailMeasurDataService, private contactDbService: ContactDbService) { }
 
   ngOnInit() {
-    const primaryContact: SavedContact = this.contactDbService.allContacts.find(contact => contact.isPrimary);
+    const primaryContact: SavedContact = this.contactDbService.primaryContact;
     const recipientEmails: string = this.contactDbService.allContacts
       .filter(contact => !contact.isPrimary && contact.email)
       .map(contact => contact.email)

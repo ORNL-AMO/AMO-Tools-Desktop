@@ -37,7 +37,7 @@ export class FacilityInfoComponent implements OnInit {
         facilityEmail: [''],
         assessmentContactName: [''],
         assessmentPhoneNumber: [''],
-        assessmentEmail: [''],
+        assessmentEmail: [this.getDefaultSenderEmail()],
         date: [date]
       });
     }
@@ -74,7 +74,7 @@ export class FacilityInfoComponent implements OnInit {
         facilityEmail: [facilityContactInfo.email],
         assessmentContactName: [assessmentContact.contactName],
         assessmentPhoneNumber: [assessmentContact.phoneNumber],
-        assessmentEmail: [assessmentContact.email],
+        assessmentEmail: [assessmentContact.email || this.getDefaultSenderEmail()],
         date: [this.settings.facilityInfo.date]
       });
     }
@@ -129,6 +129,10 @@ export class FacilityInfoComponent implements OnInit {
       [`${prefix}PhoneNumber`]: contact.phoneNumber,
       [`${prefix}Email`]: contact.email,
     });
+  }
+
+  getDefaultSenderEmail(): string {
+    return this.contactDbService.primaryContact?.email ?? '';
   }
 
   getEmptyContact(): Contact {
