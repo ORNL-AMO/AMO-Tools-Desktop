@@ -115,7 +115,7 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
             const initialValue: number = Object.entries(flowUpdates)[0][1];
             listenerApi.dispatch(diagramAlertChange({
               open: true,
-              alertMessage: `Successfully set all path flows from ${sourceNode?.data.name || sourceNode.id} (${initialValue} Mgal) to end of path`,
+              alertMessage: `Successfully cascaded value from ${sourceNode?.data.name || sourceNode.id} (${initialValue} Mgal) to downstream flows`,
               alertSeverity: 'success',
               dismissMS: 10000,
             }));

@@ -93,7 +93,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     }
 
     /**
-     * Populate form currentValue through all flows to end of path
+     * Cascade form currentValue to downstream flows
      */
     const onPropogateFlow = (edge: Edge<CustomEdgeData>) => {
         dispatch(propagateFlowFromNode(selectedNode.id, edge));
@@ -188,7 +188,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                                                                 </InputAdornment>,
                                                             }}
                                                         />
-                                                        <SmallTooltip title={`Set all flow values to the end of path`}
+                                                        <SmallTooltip title={`Cascade value to downstream flows`}
                                                             slotProps={{
                                                                 popper: {
                                                                     disablePortal: true,
