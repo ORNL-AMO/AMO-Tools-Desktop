@@ -15,7 +15,7 @@ import DischargeFlowForm from "./DischargeFlowForm";
 import InvalidIcon from "../../validation/InvalidIcon";
 import SelectTreatmentType from "./SelectTreatmentType";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
-import CalculateIcon from '@mui/icons-material/Calculate';
+import 'font-awesome/css/font-awesome.css';
 import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterTreatment, wasteWaterTreatmentTypeOptions, CustomEdgeData, waterUsingSystemTypeOptions, WaterUsingSystem, getNodeEstimatedUnknownLosses, hasValidSourceForm, hasValidDischargeForm } from "process-flow-lib";
 import InputField from "../StyledMUI/InputField";
 
@@ -161,7 +161,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                                     minWidth: 0
                                 }}
                                 variant="outlined">
-                                <CalculateIcon />
+                                <i className="fa fa-calculator" />
                             </Button>
                         </span>
                     </SmallTooltip>

@@ -521,7 +521,7 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                         compact
                         hideLabel
                         label={'Estimated'}
-                        color={estimatedFlowColor || theme.palette.warning.main}
+                        color={estimatedFlowColor || theme.palette.info.main}
                         setParentColor={handleEstimatedFlowColorChange}
                         showRecent={false}
                       />
@@ -549,18 +549,18 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                       />
                     </Box>
 
-                    <Typography variant="caption">Calculated</Typography>
+                    <Typography variant="caption">Cascaded</Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <ColorPicker
                         compact
                         hideLabel
-                        label={'Calculated'}
-                        color={calculatedFlowColor || theme.palette.info.main}
+                        label={'Cascaded'}
+                        color={calculatedFlowColor || theme.palette.warning.main}
                         setParentColor={handleCalculatedFlowColorChange}
                         showRecent={false}
                       />
                       <ResetColorButton
-                        label="calculated"
+                        label="cascaded"
                         disabled={!calculatedFlowColor}
                         onClick={handleResetCalculatedFlowColor}
                       />

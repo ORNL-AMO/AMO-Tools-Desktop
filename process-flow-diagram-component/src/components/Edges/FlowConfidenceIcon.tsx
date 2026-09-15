@@ -1,6 +1,6 @@
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
-import FunctionsIcon from '@mui/icons-material/Functions';
+import CalculateIcon from '@mui/icons-material/Calculate';
 import { useTheme } from '@mui/material';
 import { CSSProperties, JSX } from 'react';
 import { CustomEdgeData, FlowConfidence } from 'process-flow-lib';
@@ -9,8 +9,8 @@ import { RootState } from '../Diagram/store';
 
 /**
  * Resolves the color for a confidence state, honoring the user's custom
- * Estimated/Metered/Calculated colors from the Options tab (`UserDiagramOptions.estimatedFlowColor` /
- * `meteredFlowColor` / `calculatedFlowColor`) and falling back to the theme's warning/success/info
+ * Estimated/Metered/Cascaded colors from the Options tab (`UserDiagramOptions.estimatedFlowColor` /
+ * `meteredFlowColor` / `calculatedFlowColor`) and falling back to the theme's info/success/warning
  * colors when unset.
  */
 export const useFlowConfidenceColor = () => {
@@ -24,9 +24,9 @@ export const useFlowConfidenceColor = () => {
       return meteredFlowColor || theme.palette.success.main;
     }
     if (confidence === 'calculated') {
-      return calculatedFlowColor || theme.palette.info.main;
+      return calculatedFlowColor || theme.palette.warning.main;
     }
-    return estimatedFlowColor || theme.palette.warning.main;
+    return estimatedFlowColor || theme.palette.info.main;
   };
 }
 
@@ -35,7 +35,7 @@ export const getFlowConfidenceLabel = (confidence: FlowConfidence): string => {
     return 'Metered';
   }
   if (confidence === 'calculated') {
-    return 'Calculated';
+    return 'Cascaded';
   }
   return 'Estimated';
 }
@@ -63,7 +63,7 @@ const FlowConfidenceIcon = ({ confidence, color, sx }: { confidence: FlowConfide
     return <LockIcon style={style} />
   }
   if (confidence === 'calculated') {
-    return <FunctionsIcon style={style} />
+    return <CalculateIcon style={style} />
   }
   return <LockOpenIcon style={style} />
 }
