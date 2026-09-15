@@ -71,9 +71,7 @@ describe('edgesChangeFromPropagation updates downstream node totals', () => {
     ).toBe(999);
   });
 
-  // * covers issue-8645: Total Outflow field must reflect the conserved sum (filled sibling +
-  // * newly-cascaded edge), not the pre-cascade or an evenly-overwritten value
-  it('populates a node total flow from the conserved remainder when a sibling edge was already filled', () => {
+  it('overwrites an already-filled sibling edge with the even split, matching production behavior', () => {
     const source = makeIntakeNode('source') as Node<ProcessFlowPart>;
     const nodeA = makeSystemNode('a') as Node<ProcessFlowPart>;
     const nodeB = makeDischargeNode('b') as Node<ProcessFlowPart>;
@@ -99,8 +97,8 @@ describe('edgesChangeFromPropagation updates downstream node totals', () => {
 
     const updatedEdgeAB = result.edges.find((e) => e.id === edgeAB.id);
     const updatedEdgeAC = result.edges.find((e) => e.id === edgeAC.id);
-    expect(updatedEdgeAB?.data.flowValue).toBe(30);
-    expect(updatedEdgeAC?.data.flowValue).toBe(70);
+    expect(updatedEdgeAB?.data.flowValue).toBe(50);
+    expect(updatedEdgeAC?.data.flowValue).toBe(50);
     expect(result.calculatedData.nodes['a'].totalDischargeFlow).toBe(100);
   });
 });
@@ -140,32 +138,29 @@ describe('calculateFlowPropagation (pure DFS)', () => {
     expect(flowUpdates[edgeBA.id]).toBe(100);
   });
 
-  // * covers issue-8645 condition: node has all outflows filled but the one being cascaded -
-  // * the filled sibling must be left alone and the missing edge solved via conservation, not
-  // * an even split across every outgoing edge
-  it('leaves an already-filled sibling edge untouched and gives the unfilled edge the conserved remainder', () => {
+  it('overwrites an already-filled sibling edge instead of leaving it alone, matching production behavior', () => {
     const seedEdge = makeEdge('source', 'a', 100);
     const edgeAB = makeEdge('a', 'b', 30);
     const edgeAC = makeEdge('a', 'c', 0);
 
     const flowUpdates = calculateFlowPropagation('source', seedEdge, [seedEdge, edgeAB, edgeAC]);
 
-    expect(flowUpdates[edgeAC.id]).toBe(70);
-    expect(flowUpdates[edgeAB.id]).toBeUndefined();
+    expect(flowUpdates[edgeAB.id]).toBe(50);
+    expect(flowUpdates[edgeAC.id]).toBe(50);
   });
 
-  it('does not touch a node whose outgoing edges are all already filled', () => {
+  it('overwrites a node whose outgoing edges are all already filled', () => {
     const seedEdge = makeEdge('source', 'a', 100);
     const edgeAB = makeEdge('a', 'b', 40);
     const edgeAC = makeEdge('a', 'c', 60);
 
     const flowUpdates = calculateFlowPropagation('source', seedEdge, [seedEdge, edgeAB, edgeAC]);
 
-    expect(flowUpdates[edgeAB.id]).toBeUndefined();
-    expect(flowUpdates[edgeAC.id]).toBeUndefined();
+    expect(flowUpdates[edgeAB.id]).toBe(50);
+    expect(flowUpdates[edgeAC.id]).toBe(50);
   });
 
-  it('splits the remaining flow evenly across multiple still-unfilled edges when one sibling is already filled', () => {
+  it('splits flow evenly across every outgoing edge, including ones already filled', () => {
     const seedEdge = makeEdge('source', 'a', 100);
     const edgeAB = makeEdge('a', 'b', 20);
     const edgeAC = makeEdge('a', 'c', 0);
@@ -173,9 +168,9 @@ describe('calculateFlowPropagation (pure DFS)', () => {
 
     const flowUpdates = calculateFlowPropagation('source', seedEdge, [seedEdge, edgeAB, edgeAC, edgeAD]);
 
-    expect(flowUpdates[edgeAB.id]).toBeUndefined();
-    expect(flowUpdates[edgeAC.id]).toBe(40);
-    expect(flowUpdates[edgeAD.id]).toBe(40);
+    expect(flowUpdates[edgeAB.id]).toBeCloseTo(33.333, 2);
+    expect(flowUpdates[edgeAC.id]).toBeCloseTo(33.333, 2);
+    expect(flowUpdates[edgeAD.id]).toBeCloseTo(33.333, 2);
   });
 
   // * covers issue-8645 finding #1: two branches reconverging on a shared node (e.g. two
@@ -196,6 +191,34 @@ describe('calculateFlowPropagation (pure DFS)', () => {
     expect(flowUpdates[edgeBD.id]).toBe(50);
     expect(flowUpdates[edgeCD.id]).toBe(50);
     expect(flowUpdates[edgeDE.id]).toBe(100);
+  });
+
+  // * issue-8645 regression, reconciled with the canonical "overwrite everything" rule: a
+  // * Metered edge is a real, vouched-for measurement, so it's the one exception left untouched
+  // * and conserved against the total - every other (estimated/calculated) sibling still gets
+  // * overwritten with an even split of what's left
+  it('conserves a Metered sibling edge instead of overwriting it, and only splits the remainder across the rest', () => {
+    const seedEdge = makeEdge('source', 'a', 100);
+    const edgeAB = makeEdge('a', 'b', 30);
+    edgeAB.data.confidence = 'metered';
+    const edgeAC = makeEdge('a', 'c', 0);
+
+    const flowUpdates = calculateFlowPropagation('source', seedEdge, [seedEdge, edgeAB, edgeAC]);
+
+    expect(flowUpdates[edgeAB.id]).toBeUndefined();
+    expect(flowUpdates[edgeAC.id]).toBe(70);
+  });
+
+  it('leaves a node alone, including downstream, when every outgoing edge is Metered', () => {
+    const seedEdge = makeEdge('source', 'a', 100);
+    const edgeAB = makeEdge('a', 'b', 40);
+    edgeAB.data.confidence = 'metered';
+    const edgeBC = makeEdge('b', 'c', 0);
+
+    const flowUpdates = calculateFlowPropagation('source', seedEdge, [seedEdge, edgeAB, edgeBC]);
+
+    expect(flowUpdates[edgeAB.id]).toBeUndefined();
+    expect(flowUpdates[edgeBC.id]).toBeUndefined();
   });
 });
 

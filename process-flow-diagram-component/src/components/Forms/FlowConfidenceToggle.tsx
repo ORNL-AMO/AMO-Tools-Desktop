@@ -7,8 +7,8 @@ import SmallTooltip from "../StyledMUI/SmallTooltip";
  * Single-button toggle for annotating a flow value as Estimated (unconfident) or Metered (confident).
  * Shows only the current state's icon; clicking flips to the other state. Confidence only ever
  * changes via this explicit click - the app never reverts a Metered value back to Estimated on
- * recalculation, except when flow propagation overwrites a downstream edge's value, which then
- * inherits the seed edge's confidence.
+ * recalculation. A third state, Calculated, is set only by flow propagation (never by this toggle) -
+ * clicking a Calculated value's toggle always moves it to Metered next, same as clicking Estimated.
  */
 const FlowConfidenceToggle = (props: FlowConfidenceToggleProps) => {
     const { confidence, onChange, disabled, sx } = props;

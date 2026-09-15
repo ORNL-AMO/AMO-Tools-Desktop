@@ -4,18 +4,18 @@ import EditDataDrawerButton from '../Drawer/EditDataDrawerButton';
 import FlowValueDisplay from '../Diagram/FlowValueDisplay';
 import FlowDisplayUnit from '../Diagram/FlowDisplayUnit';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { RootState, selectColorEdgesByConfidence, selectFlowConfidenceEnabled } from '../Diagram/store';
+import { RootState, selectColorEdgesByConfidence, selectShowFlowConfidenceOnLabel } from '../Diagram/store';
 import { CustomEdgeData } from 'process-flow-lib';
 import FlowConfidenceIcon, { useFlowConfidenceColor, getFlowConfidenceLabel, resolveEdgeStrokeColor } from './FlowConfidenceIcon';
 
 const DEFAULT_FLOW_LABEL_BORDER = 'solid 1px #3055cf';
 
-const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale, confidence, color, flowConfidenceEnabled }: { transform: string; selected: boolean, flowValue: number | string, scale: number, confidence: CustomEdgeData['confidence'], color: string, flowConfidenceEnabled: boolean }) => {
+const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale, confidence, color, showFlowConfidenceOnLabel }: { transform: string; selected: boolean, flowValue: number | string, scale: number, confidence: CustomEdgeData['confidence'], color: string, showFlowConfidenceOnLabel: boolean }) => {
   let adjustedTransform = transform + ` scale(${scale})`;
   let style: CSSProperties = {
     position: 'absolute',
     background: '#fff',
-    border: flowConfidenceEnabled ? `${confidence === 'metered' ? 'solid' : 'dashed'} 2px ${color}` : DEFAULT_FLOW_LABEL_BORDER,
+    border: showFlowConfidenceOnLabel ? `${confidence === 'metered' ? 'solid' : confidence === 'calculated' ? 'dotted' : 'dashed'} 2px ${color}` : DEFAULT_FLOW_LABEL_BORDER,
     padding: 8,
     borderRadius: 8,
     fontSize: 18,
@@ -39,7 +39,7 @@ const EdgeFlowValueLabel = ({ transform, selected, flowValue, scale, confidence,
           <FlowValueDisplay flowValue={flowValue}/>
           <FlowDisplayUnit/>
         </div>
-        {flowConfidenceEnabled &&
+        {showFlowConfidenceOnLabel &&
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
             <FlowConfidenceIcon confidence={confidence} color={color} sx={{ fontSize: 14 }} />
             <span style={{ fontSize: 10, fontWeight: 400, color }}>
@@ -64,7 +64,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
 
   const showFlowLabels = useAppSelector((state: RootState) => state.diagram.diagramOptions.showFlowLabels);
   const flowLabelSize = useAppSelector((state: RootState) => state.diagram.diagramOptions.flowLabelSize);
-  const flowConfidenceEnabled = useAppSelector(selectFlowConfidenceEnabled);
+  const showFlowConfidenceOnLabel = useAppSelector(selectShowFlowConfidenceOnLabel);
   const colorEdgesByConfidence = useAppSelector(selectColorEdgesByConfidence);
   // const focusedEdgeId = useAppSelector((state: RootState) => state.diagram.focusedEdgeId);
 
@@ -147,7 +147,7 @@ export default function DiagramBaseEdge(props: DiagramEdgeProps) {
             flowValue={customEdgeData.flowValue}
             confidence={customEdgeData.confidence}
             color={getColor(customEdgeData.confidence)}
-            flowConfidenceEnabled={flowConfidenceEnabled}
+            showFlowConfidenceOnLabel={showFlowConfidenceOnLabel}
             />
         }
         </Fragment>

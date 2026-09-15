@@ -1,19 +1,19 @@
 import { Edge } from "@xyflow/react";
 import { CustomEdgeData } from "../types/diagram";
 
-// * an edge with no real value yet - matches the "unset" definition DischargeFlowForm.tsx
-// * already uses to gate its propagate button (0 counts as unset, not a real recorded flow)
-const isFlowUnset = (flowValue: number | null | undefined): boolean =>
-  flowValue === null || flowValue === undefined || flowValue === 0;
+// * a Metered edge is a real, user-vouched-for measurement - the cascade conserves it rather
+// * than overwriting it like every other (estimated/calculated) edge
+const isMetered = (edge: Edge<CustomEdgeData>): boolean => edge.data.confidence === 'metered';
 
 /**
  * "Set all flow values to end of path" - starting from `edge`, splits its flow value across
- * each downstream node's outgoing edges, recursing to the ends of the graph. Edges that already
- * carry a real flow value are left untouched; only the remaining flow (total minus whatever the
- * already-filled siblings account for) is split across the edges still unset at that node. A
- * node whose outgoing edges are all already filled is left alone entirely. Two branches that
- * reconverge on a shared downstream node (e.g. two systems feeding one shared treatment node)
- * have their flows summed at that node rather than the later branch overwriting the earlier one.
+ * each downstream node's outgoing edges, recursing to the ends of the graph. Every outgoing edge
+ * is overwritten with an even split of that node's inflow, EXCEPT an edge the user has explicitly
+ * locked to Metered - that edge (and the path past it) is left untouched, and its value is
+ * conserved against the total so the remaining edges only split what's left. A node whose
+ * outgoing edges are all Metered is left alone entirely. Two branches that reconverge on a
+ * shared downstream node (e.g. two systems feeding one shared treatment node) have their flows
+ * summed at that node rather than the later branch overwriting the earlier one.
  * @returns map of edgeId -> new flow value for every edge the cascade touched
  */
 export const calculateFlowPropagation = (
@@ -34,7 +34,8 @@ export const calculateFlowPropagation = (
     pathNodes.add(nodeId);
 
     // On the first call, the seed edge is the one the user clicked propagate on - it always
-    // carries the flow forward regardless of its own value, it's not a sibling to weigh against
+    // carries the flow forward regardless of its own value or confidence, it's not a sibling to
+    // weigh against
     if (initialEdge) {
       flowUpdates[initialEdge.id] = flow;
       traverse(initialEdge.target, flow);
@@ -56,20 +57,19 @@ export const calculateFlowPropagation = (
       return;
     }
 
-    const unsetEdges = outgoingEdges.filter(edge => isFlowUnset(edge.data.flowValue));
-    const setEdges = outgoingEdges.filter(edge => !isFlowUnset(edge.data.flowValue));
+    const meteredEdges = outgoingEdges.filter(isMetered);
+    const splitEdges = outgoingEdges.filter(edge => !isMetered(edge));
 
-    if (unsetEdges.length === 0) {
-      // every outgoing edge already has a real value - nothing for this cascade to populate here
+    if (splitEdges.length === 0) {
+      // every outgoing edge is a locked measurement - nothing for this cascade to overwrite here
       pathNodes.delete(nodeId);
       return;
     }
 
-    const sumOfSetEdges = setEdges.reduce((sum, edge) => sum + (edge.data.flowValue ?? 0), 0);
-    const remainingFlow = totalInflow - sumOfSetEdges;
-    const flowPerEdge = remainingFlow / unsetEdges.length;
+    const meteredFlow = meteredEdges.reduce((sum, edge) => sum + (edge.data.flowValue ?? 0), 0);
+    const flowPerEdge = (totalInflow - meteredFlow) / splitEdges.length;
 
-    unsetEdges.forEach(edge => {
+    splitEdges.forEach(edge => {
       flowUpdates[edge.id] = flowPerEdge;
       // continue propagation from next node
       traverse(edge.target, flowPerEdge);

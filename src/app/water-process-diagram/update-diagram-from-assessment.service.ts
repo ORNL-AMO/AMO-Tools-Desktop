@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import * as _ from 'lodash';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, DiagramWaterSystemFlows, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges, WaterSystemFlowsTotals, WaterUsingSystem, getDefaultFlowConfidence } from 'process-flow-lib';
+import { WaterAssessment, WaterDiagram, WaterProcessComponent, WaterProcessComponentType, ProcessFlowPart, getNewNode, DiagramWaterSystemFlows, UserDiagramOptions, getEdgeFromConnection, EdgeFlowData, getAssessmentWaterSystemFlowEdges, WaterSystemFlowsTotals, WaterUsingSystem, getDefaultFlowConfidence, getDefaultFlowTotalTouched } from 'process-flow-lib';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { Diagram, IntegratedAssessmentDiagram } from '../shared/models/diagram';
 import { Assessment } from '../shared/models/assessment';
@@ -124,6 +124,7 @@ export class UpdateDiagramFromAssessmentService {
         node.data = {
           ...incoming,
           flowConfidence: node.data.flowConfidence ?? incoming.flowConfidence ?? getDefaultFlowConfidence(),
+          flowTotalTouched: node.data.flowTotalTouched ?? incoming.flowTotalTouched ?? getDefaultFlowTotalTouched(),
         };
         return node;
       }
