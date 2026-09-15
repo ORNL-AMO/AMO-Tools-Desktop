@@ -12,6 +12,7 @@ import { deleteNode } from "../Diagram/diagramReducer";
 import InSystemTreatmentForm from "../Forms/InSystemTreatmentForm";
 import { ProcessFlowPart } from 'process-flow-lib';
 import ComponentNameHeader from './ComponentNameHeader';
+import NodeEnergy from './NodeEnergy';
 
 
 const ManageComponent = (props: ManageComponentProps) => {
@@ -19,6 +20,7 @@ const ManageComponent = (props: ManageComponentProps) => {
     const { selectedNode } = props;
     const componentTabs = useAppSelector(state => state.diagram.manageDataTabs);
     const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
+    const hasEnergyTab = isWaterUsingSystem || props.selectedNode.type === 'waterIntake' || props.selectedNode.type === 'waterDischarge';
     const [selectedTab, setSelectedTab] = useState(0);
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -60,7 +62,15 @@ const ManageComponent = (props: ManageComponentProps) => {
                         </TabPanel>
                     }
 
-                    <TabPanel value={selectedTab} index={isWaterUsingSystem ? 2 : 1}>
+                    {hasEnergyTab &&
+                        <TabPanel value={selectedTab} index={isWaterUsingSystem ? 2 : 1}>
+                            <Box>
+                                <NodeEnergy node={selectedNode} showHeatEnergy={isWaterUsingSystem}></NodeEnergy>
+                            </Box>
+                        </TabPanel>
+                    }
+
+                    <TabPanel value={selectedTab} index={isWaterUsingSystem ? 3 : (hasEnergyTab ? 2 : 1)}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingX: 2 }}>
                             <ComponentHandles node={selectedNode}></ComponentHandles>
                             <CustomizeNode node={selectedNode}></CustomizeNode>
