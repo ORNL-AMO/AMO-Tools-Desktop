@@ -139,12 +139,12 @@ export class SystemBasicsComponent implements OnDestroy {
 
   showSettingsModal() {
     this.openModal.emit(true);
-    this.settingsModal.show();
+    this.settingsModal?.show();
   }
 
   hideSettingsModal() {
     this.closeModal.emit(true);
-    this.settingsModal.hide();
+    this.settingsModal?.hide();
   }
 
   startSavePolling() {
