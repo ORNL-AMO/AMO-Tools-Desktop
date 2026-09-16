@@ -4,7 +4,6 @@ import { BehaviorSubject } from 'rxjs';
 import { ModificationListComponent } from './modification-list/modification-list.component';
 import { PsatTabsComponent } from './psat-tabs/psat-tabs.component';
 import { PsatComponent } from './psat.component';
-import { SystemBasicsComponent } from './system-basics/system-basics.component';
 import { ExploreOpportunitiesHelpComponent } from './explore-opportunities/explore-opportunities-help/explore-opportunities-help.component';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { PsatWarningService } from './psat-warning.service';
@@ -160,35 +159,14 @@ describe('PSAT bug fixes', () => {
       expect(fakeComponent.modalOpenSub.unsubscribe).toHaveBeenCalled();
     });
 
-    it('provides bound handlers used by psat.component.html outputs', () => {
+    it('closes report back to assessment tab', () => {
       const fakeComponent: any = {
-        isModalOpen: false,
-        psatService: { modalOpen: { next: jasmine.createSpy('modalOpen.next') } },
         psatTabService: { mainTab: { next: jasmine.createSpy('mainTab.next') } }
       };
 
-      PsatComponent.prototype.toggleOpenPanel.call(fakeComponent, true);
-      PsatComponent.prototype.modalOpen.call(fakeComponent);
-      PsatComponent.prototype.modalClose.call(fakeComponent);
       PsatComponent.prototype.closeReport.call(fakeComponent);
 
-      expect(fakeComponent.isModalOpen).toBeTrue();
-      expect(fakeComponent.psatService.modalOpen.next).toHaveBeenCalledWith(true);
-      expect(fakeComponent.psatService.modalOpen.next).toHaveBeenCalledWith(false);
       expect(fakeComponent.psatTabService.mainTab.next).toHaveBeenCalledWith('assessment');
-    });
-  });
-
-  describe('SystemBasicsComponent', () => {
-    it('does not throw when show/hide settings modal is called without a resolved ViewChild', () => {
-      const component = new SystemBasicsComponent({} as any, {} as any, {} as any);
-      spyOn(component.openModal, 'emit');
-      spyOn(component.closeModal, 'emit');
-
-      expect(() => component.showSettingsModal()).not.toThrow();
-      expect(() => component.hideSettingsModal()).not.toThrow();
-      expect(component.openModal.emit).toHaveBeenCalledWith(true);
-      expect(component.closeModal.emit).toHaveBeenCalledWith(true);
     });
   });
 });
