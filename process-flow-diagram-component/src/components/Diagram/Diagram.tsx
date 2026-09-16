@@ -41,6 +41,7 @@ export interface DiagramProps {
   height?: number,
   parentContainer: ParentContainerDimensions,
   processDiagram?: WaterDiagram;
+  appVersion?: string;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
 }
 
@@ -53,6 +54,7 @@ const Diagram = (props: DiagramProps) => {
     }
   })
   const diagramNotes = useAppSelector((state: RootState) => state.diagram.diagramNotes);
+  const meta = useAppSelector((state: RootState) => state.diagram.meta);
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const isDialogOpen = useAppSelector((state: RootState) => state.ui.isDialogOpen);
@@ -87,7 +89,8 @@ const Diagram = (props: DiagramProps) => {
       const parentState = {
         diagramData: props.processDiagram?.flowDiagramData,
         parentContainer: props.parentContainer,
-        assessmentId: props.processDiagram.assessmentId
+        assessmentId: props.processDiagram.assessmentId,
+        appVersion: props.appVersion
       }
       dispatch(diagramInitialized(parentState));
 
@@ -106,6 +109,7 @@ const Diagram = (props: DiagramProps) => {
     if (assessmentCreatedNodes.length === 0) {
       const updatedDiagramData: FlowDiagramData = {
         name: props.processDiagram.flowDiagramData.name,
+        meta,
         nodes: nodes,
         diagramFlowErrors: diagramFlowErrors,
         edges: debouncedEdges,

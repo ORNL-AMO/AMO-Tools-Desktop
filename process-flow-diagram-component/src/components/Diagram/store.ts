@@ -3,7 +3,7 @@ import diagramReducer, { addNode, connectEdge, diagramSlice, DiagramActionType, 
 import uiReducer, { diagramAlertChange } from './uiSlice';
 import { Edge, Node } from '@xyflow/react';
 import { getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
-import { createGraphIndex, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
+import { createGraphIndex, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramMetaData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
 
 /**
  * Builds the `isAnyOf` matcher for the "recompute diagram errors" listener below,
@@ -29,12 +29,14 @@ export function getStructuralDiagramActionMatcher() {
 }
 
 export function configureAppStore(waterDiagram: WaterDiagram) {
+  const preloadedMeta: DiagramMetaData = waterDiagram.flowDiagramData.meta ?? { version: '0.0.0', upgrades: [] };
   const store = configureStore({
     reducer: { diagram: diagramReducer, ui: uiReducer },
     preloadedState: {
       // diagram: getResetData(),
       diagram: {
         name: waterDiagram.flowDiagramData.name,
+        meta: preloadedMeta,
         nodes: [],
         edges: [],
         composedNodeData: [],

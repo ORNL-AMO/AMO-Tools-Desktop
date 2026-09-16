@@ -24,6 +24,7 @@ class AppWebComponent extends HTMLElement {
           <App parentContainer={parentState.parentContainer}
             context={parentState.context}
             processDiagram={parentState.waterDiagram}
+            appVersion={parentState.appVersion}
             shadowRoot={this.shadowRoot}
             saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
             />

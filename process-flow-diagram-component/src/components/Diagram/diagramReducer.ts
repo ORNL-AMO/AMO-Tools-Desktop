@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
-import { CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, NodeFlowProperty, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
+import { CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramCalculatedData, DiagramFlowErrors, DiagramMetaData, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, NodeFlowProperty, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
 import { createNewNode, ensureFlowTotalTouched, formatDataForMEASUR, getNodeSourceEdges, getNodeTargetEdges, mirrorSingleEdgeConfidenceToTotal } from './FlowUtils';
 import {
   totalFlowChangeReducer,
@@ -41,6 +41,7 @@ export const getPaletteColorForType = (type: WaterProcessComponentType, paletteC
 
 export interface DiagramState {
   name: string,
+  meta: DiagramMetaData,
   nodes: Node[];
   edges: Edge[];
   // * Owned or managed by another node. Does not display in the diagram
@@ -61,6 +62,7 @@ export interface DiagramState {
 export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState => {
   return {
     name: undefined,
+    meta: { version: CURRENT_DIAGRAM_VERSION, upgrades: [] },
     nodes: [],
     edges: [],
     composedNodeData: [],
@@ -89,20 +91,21 @@ export const getStoreSerializedDate = (dateObject: Date): string => {
 /**
  * Sets initialized state on process-flow-diagram-component's parent first render
  */
-const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number }>) => {
-  const { diagramData, parentContainer, assessmentId } = action.payload;
+const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ diagramData: FlowDiagramData, parentContainer: ParentContainerDimensions, assessmentId: number, appVersion?: string }>) => {
+  const { diagramData, parentContainer, assessmentId, appVersion } = action.payload;
 
   if (diagramData.meta === undefined) {
     diagramData.meta = {
       version: '0.0.0',
       upgrades: [],
-    } 
+    }
   }
 
   if (diagramData.meta.version !== CURRENT_DIAGRAM_VERSION) {
-    upgradeDiagram(diagramData);
+    upgradeDiagram(diagramData, appVersion);
   }
 
+  state.meta = diagramData.meta;
   state.nodes = diagramData.nodes.filter((node: Node<ProcessFlowPart>) => {
     if (node.position) {
       return node;
@@ -663,15 +666,18 @@ const getAreHandlesEqual = (handleSet: Handles[keyof Handles], updatedHandleSet:
 /**
  * Apply upgrades to outdated diagram versions, such as: adding new properties, default data, and patches to avoid runtime errors
  */
-const upgradeDiagram = (diagramData: FlowDiagramData) => {
+const upgradeDiagram = (diagramData: FlowDiagramData, appVersion?: string) => {
+  const fromVersion = diagramData.meta.version;
+
   upgradeNodeData(diagramData);
   upgradeEdgeData(diagramData);
   migrateFlowDiagramFieldNames(diagramData);
 
   diagramData.meta.upgrades.push({
-    fromVersion: diagramData.meta.version,
+    fromVersion,
     toVersion: CURRENT_DIAGRAM_VERSION,
     upgradeDate: getStoreSerializedDate(new Date()),
+    appVersion,
   });
   diagramData.meta.version = CURRENT_DIAGRAM_VERSION;
 }
