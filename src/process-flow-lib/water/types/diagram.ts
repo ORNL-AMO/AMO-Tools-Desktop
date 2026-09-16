@@ -120,6 +120,8 @@ export interface ProcessFlowPart extends Record<string, unknown> {
     fromVersion: string,
     toVersion: string,
     upgradeDate: string,
+    // * AMO-Tools-Desktop app version (root package.json) that performed the upgrade, distinct from fromVersion/toVersion
+    appVersion?: string,
   };
   
   export type DiagramFlowErrors = Record<string, ComponentFlowErrors>;
@@ -215,6 +217,7 @@ export interface ProcessFlowParentState {
       footerHeight: number;
     };
     waterDiagram?: WaterDiagram;
+    appVersion?: string;
   }
   
   export interface ParentContainerDimensions {
