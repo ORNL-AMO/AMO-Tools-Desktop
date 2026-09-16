@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
 import { CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramCalculatedData, DiagramFlowErrors, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, NodeFlowProperty, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
-import { createNewNode, formatDataForMEASUR } from './FlowUtils';
+import { createNewNode, ensureFlowTotalTouched, formatDataForMEASUR, getNodeSourceEdges, getNodeTargetEdges, mirrorSingleEdgeConfidenceToTotal } from './FlowUtils';
 import {
   totalFlowChangeReducer,
   sumTotalFlowChangeReducer,
@@ -124,7 +124,9 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.diagramOptions.colorEdgesByConfidence = diagramData.userDiagramOptions?.colorEdgesByConfidence ?? false;
   state.diagramOptions.estimatedFlowColor = diagramData.userDiagramOptions?.estimatedFlowColor;
   state.diagramOptions.meteredFlowColor = diagramData.userDiagramOptions?.meteredFlowColor;
+  state.diagramOptions.calculatedFlowColor = diagramData.userDiagramOptions?.calculatedFlowColor;
   state.diagramOptions.flowConfidenceEnabled = diagramData.userDiagramOptions?.flowConfidenceEnabled ?? true;
+  state.diagramOptions.showFlowConfidenceOnLabel = diagramData.userDiagramOptions?.showFlowConfidenceOnLabel ?? true;
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
   state.assessmentId = assessmentId
@@ -135,9 +137,24 @@ const resetDiagramReducer = (state: DiagramState) => {
   return diagramState;
 };
 
+/**
+ * Removes a node's dangling edges (edges left pointing at a since-deleted node crash the
+ * flow-edit drawer, see FlowConnectionText) and its flow errors. Shared by every node-removal
+ * path so a future one can't reintroduce a dangling edge by skipping this cleanup.
+ */
+const removeNodeAndEdges = (state: DiagramState, nodeId: string) => {
+  state.edges = state.edges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId);
+  delete state.diagramFlowErrors[nodeId];
+};
+
 const nodesChangeReducer = (state: DiagramState, action: PayloadAction<NodeChange[]>) => {
   const updatedNodes: Node[] = applyNodeChanges(action.payload, state.nodes) as Node[];
   state.nodes = updatedNodes;
+  action.payload.forEach((change) => {
+    if (change.type === 'remove') {
+      removeNodeAndEdges(state, change.id);
+    }
+  });
 };
 const addNodesReducer = (state: DiagramState, action: PayloadAction<Node[]>) => {
   state.nodes = state.nodes.concat(action.payload);
@@ -175,15 +192,16 @@ const nodeDataPropertyChangeReducer = <K extends keyof ProcessFlowPart, T extend
 }
 
 /**
- * Sets estimated/metered confidence on a node's total flow value (source or discharge). Only ever set
- * explicitly by the user via the drawer toggle - a value stays Metered through any later recalculation
- * (distribute/sum/apply-estimate) until the user toggles it back. Exception: edgesChangeFromPropagation
- * sets a node's relevant total to match the seed edge's confidence when one of its edges is populated
- * by propagation.
+ * Sets estimated/metered/calculated confidence on a node's total flow value (source or discharge).
+ * Marks the total as "touched" - once touched, edgesChangeFromPropagation's single-edge mirroring
+ * and the calculated-edge-downgrade mirroring in flowCalculationReducers will no longer override
+ * this total's confidence (its unconditional many-edge cascade override still can, and clears
+ * touched again since the total becomes system-derived).
  */
 const setNodeFlowConfidenceReducer = (state: DiagramState, action: PayloadAction<{ nodeId: string, flowProperty: NodeFlowProperty, confidence: FlowConfidence }>) => {
   const updateNode: Node<ProcessFlowPart> = state.nodes.find((node: Node<ProcessFlowPart>) => node.id === action.payload.nodeId) as Node<ProcessFlowPart>;
   updateNode.data.flowConfidence[action.payload.flowProperty] = action.payload.confidence;
+  ensureFlowTotalTouched(updateNode.data)[action.payload.flowProperty] = true;
 }
 
 const setNodeColorReducer = (state: DiagramState, action: PayloadAction<{ color: string, recentColors?: string[] }>) => {
@@ -205,8 +223,7 @@ const setNodeStyleReducer = (state: DiagramState, action: PayloadAction<CSSPrope
  */
 const deleteNodeReducer = (state: DiagramState, action: PayloadAction<string>) => {
   state.nodes = state.nodes.filter((nd) => nd.id !== state.selectedDataId);
-  state.edges = state.edges.filter((edge) => edge.source !== state.selectedDataId && edge.target !== state.selectedDataId);
-  delete state.diagramFlowErrors[state.selectedDataId];
+  removeNodeAndEdges(state, state.selectedDataId);
   state.selectedDataId = action.payload ? action.payload : undefined;
 };
 
@@ -218,7 +235,7 @@ const keyboardDeleteNodeReducer = (state: DiagramState, action: PayloadAction<No
   if (node.selected) {
     state.selectedDataId = undefined;
   }
-  delete state.diagramFlowErrors[node.id];
+  removeNodeAndEdges(state, node.id);
 };
 
 const updateNodeHandlesReducer = (state: DiagramState, action: PayloadAction<Handles>) => {
@@ -298,14 +315,25 @@ const setEdgeStrokeColorReducer = (state: DiagramState, action: PayloadAction<{ 
 }
 
 /**
- * Sets estimated/metered confidence on a single edge's flow value. Only ever set explicitly by the
- * user via the drawer toggle - a value stays Metered through any later recalculation (distribute/sum)
- * until the user toggles it back. Exception: edgesChangeFromPropagation sets a downstream edge to match
- * the seed edge's confidence when propagation overwrites its flow value.
+ * Sets estimated/metered confidence on a single edge's flow value (never 'calculated' - that state
+ * is only ever set by edgesChangeFromPropagation). Only ever set explicitly by the user via the
+ * drawer toggle - a value stays Metered through any later recalculation (distribute/sum) until the
+ * user toggles it back. When this edge is the only edge on its node's source/discharge side, that
+ * side's total mirrors the new confidence too (in either direction), unless the total was already
+ * independently touched by the user.
  */
 const setEdgeFlowConfidenceReducer = (state: DiagramState, action: PayloadAction<{ edgeId: string, confidence: FlowConfidence }>) => {
-  const updatedEdge = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === action.payload.edgeId);
+  const updatedEdge = state.edges.find((edge: Edge<CustomEdgeData>) => edge.id === action.payload.edgeId) as Edge<CustomEdgeData>;
   updatedEdge.data.confidence = action.payload.confidence;
+
+  const sourceNode = state.nodes.find((node: Node<ProcessFlowPart>) => node.id === updatedEdge.source) as Node<ProcessFlowPart> | undefined;
+  if (sourceNode && getNodeTargetEdges(state.edges, sourceNode.id).length === 1) {
+    mirrorSingleEdgeConfidenceToTotal(sourceNode, 'totalDischargeFlow', updatedEdge);
+  }
+  const targetNode = state.nodes.find((node: Node<ProcessFlowPart>) => node.id === updatedEdge.target) as Node<ProcessFlowPart> | undefined;
+  if (targetNode && getNodeSourceEdges(state.edges, targetNode.id).length === 1) {
+    mirrorSingleEdgeConfidenceToTotal(targetNode, 'totalSourceFlow', updatedEdge);
+  }
 }
 
 const setDiagramNotesReducer = (state: DiagramState, action: PayloadAction<string>) => {
@@ -668,13 +696,14 @@ const upgradeEdgeData = (diagramData: FlowDiagramData) => {
 }
 
 /**
- * Stamp default estimated/metered confidence onto node total flow values for diagrams saved before
- * this feature shipped.
+ * Stamp default estimated/metered confidence and untouched flowTotalTouched onto node total flow
+ * values for diagrams saved before this feature (or the later 'calculated' state) shipped.
  */
 const upgradeFlowConfidence = (nodeData: ProcessFlowPart) => {
   if (!nodeData.flowConfidence) {
     nodeData.flowConfidence = getDefaultFlowConfidence();
   }
+  ensureFlowTotalTouched(nodeData);
 }
 
 /**

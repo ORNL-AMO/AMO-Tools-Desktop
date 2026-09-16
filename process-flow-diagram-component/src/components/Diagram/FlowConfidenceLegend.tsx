@@ -23,6 +23,10 @@ const FlowConfidenceLegend = () => {
         <span style={{ color: getColor('estimated') }}>{getFlowConfidenceLabel('estimated')}</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+        <FlowConfidenceIcon confidence="calculated" color={getColor('calculated')} sx={{ fontSize: 27 }} />
+        <span style={{ color: getColor('calculated') }}>{getFlowConfidenceLabel('calculated')}</span>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
         <FlowConfidenceIcon confidence="metered" color={getColor('metered')} sx={{ fontSize: 27 }} />
         <span style={{ color: getColor('metered') }}>{getFlowConfidenceLabel('metered')}</span>
       </div>

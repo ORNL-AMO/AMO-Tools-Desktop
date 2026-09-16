@@ -6,7 +6,7 @@ import type {
   DiagramCalculatedData,
   DiagramSettings,
 } from 'process-flow-lib';
-import { getDefaultFlowConfidence } from 'process-flow-lib';
+import { getDefaultFlowConfidence, getDefaultFlowTotalTouched } from 'process-flow-lib';
 
 // ---------------------------------------------------------------------------
 // Node factories — produce the smallest valid Node<ProcessFlowPart> for each
@@ -31,6 +31,7 @@ const basePart = (
     handles: {},
     userEnteredData: {},
     flowConfidence: getDefaultFlowConfidence(),
+    flowTotalTouched: getDefaultFlowTotalTouched(),
     ...extra,
   } as ProcessFlowPart);
 

@@ -16,7 +16,7 @@ import { uiSlice } from './uiSlice';
  */
 
 /**
- * Backs the "Set all flow values to the end of path" button (DischargeFlowForm.tsx). Reads current
+ * Backs the "Cascade value to downstream flows" button (DischargeFlowForm.tsx). Reads current
  * edges from the store, runs the pure DFS split (calculateFlowPropagation, process-flow-lib), then
  * dispatches the result as a plain action.
  */

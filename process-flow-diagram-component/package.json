@@ -20,6 +20,7 @@
     "@mui/material": "7.3.9",
     "@reduxjs/toolkit": "2.11.2",
     "@xyflow/react": "12.10.2",
+    "font-awesome": "4.7.0",
     "formik": "2.4.9",
     "html-to-image": "1.11.13",
     "measur-tools-suite": "1.2.1",
