@@ -43,6 +43,47 @@
 
           <label class="header-label">Here are the details of what's new in version {{versionNum}}:</label>
 
+          <label>Water</label>
+          <ul>
+            <li><b>Fixed:</b> True cost result support for diagram configurations containing multi-component losses and unaccounted flows</li>
+            <li><b>Fixed:</b> Intake and treatment cost attribution for configurations with chained/forked treatment losses (RO with misallocated wastewater treatment, treatment loss intake attribution)</li>
+            <li><b>Fixed:</b> Diagram flow validation reworked to remove false-positive errors and add missing checks (total-flow mismatch, known losses, discharge flow)</li>
+            <li><b>Fixed:</b> Diagram flow validation now checks against the flow decimal precision set in diagram options instead of full unrounded values</li>
+            <li><b>Enhanced:</b> Cascading flows now populates a downstream component's Total Outflow field when the cascade fills its last remaining flow</li>
+            <li><b>Added:</b> Flow value confidence states (Estimated, Metered, Calculated) with icon, color, and border indicators on diagram arrows and flow labels</li>
+            <li><b>Enhanced:</b> Water Reports upgraded to the new Export Report UI and report builder module</li>
+          </ul>
+          <label>Wastewater</label>
+          <ul>
+            <li><b>Enhanced:</b> Wastewater Reports upgraded to the new Export Report UI and report builder module</li>
+          </ul>
+          <label>Fans</label>
+          <ul>
+            <li><b>Enhanced:</b> FSAT/Fans Reports upgraded to the new Export Report UI and report builder module</li>
+          </ul>
+          <label>Compressed Air</label>
+          <ul>
+            <li><b>Enhanced:</b> Compressed Air Reports upgraded to the new Export Report UI and report builder module</li>
+            <li><b>Fixed:</b> Bag-method leak survey electricity and cost results no longer scaled 1000x, now use the same conversion path as other leak survey methods</li>
+          </ul>
+          <label>Steam</label>
+          <ul>
+            <li><b>Enhanced:</b> SSMT/Steam Reports upgraded to the new Export Report UI and report builder module</li>
+          </ul>
+          <label>Process Heating</label>
+          <ul>
+            <li><b>Enhanced:</b> Process Heating Reports upgraded to the new Export Report UI and report builder module</li>
+            <li><b>Fixed:</b> Sidebar name for the Orifice Meter Flow calculator</li>
+          </ul>
+          <label>Application</label>
+          <ul>
+            <li><b>Added:</b> Contact list on the Assessment Dashboard for storing sender/recipient contacts used when emailing files, with type-ahead when entering an email</li>
+            <li><b>Added:</b> Default Sender Email setting on the contact list to auto-populate the Assessor Email in Facility Info</li>
+          </ul>
+
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.8.5:</label>
+
           <label>Steam</label>
           <ul>
             <li><b>Enhanced:</b> Added Steam Leak calculator to assessment calculators tab</li>
