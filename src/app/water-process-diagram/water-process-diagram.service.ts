@@ -35,7 +35,7 @@ export class WaterProcessDiagramService {
         name: 'Water Process Diagram',
         nodes: [],
         edges: [],
-        nodeErrors: {},
+        diagramFlowErrors: {},
         userDiagramOptions: getDefaultUserDiagramOptions(),
         settings: {
           electricityCost: settings.electricityCost,
