@@ -140,7 +140,8 @@ export class ModificationListComponent implements OnInit {
       const matchingNames = _.filter(this.psat.modifications, (mod) => { return copyNamePattern.test(mod.psat.name); });
       if (matchingNames.length > 1) {
         const highestSuffix = _.max(matchingNames.map(mod => {
-          const suffixMatch = mod.psat.name.match(/\\((\\d+)\\)$/);
+          // matches a trailing "(N)" copy suffix, e.g. "Scenario 1(2)" -> "2"
+          const suffixMatch = mod.psat.name.match(/\((\d+)\)$/);
           return suffixMatch ? Number(suffixMatch[1]) : 0;
         })) || 0;
         this.newModificationName = this.newModificationName + '(' + (highestSuffix + 1) + ')';
