@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { ProcessFlowDiagramService } from './process-flow-diagram.service';
 import { Subscription } from 'rxjs';
-import { ProcessFlowDiagramState, ProcessFlowParentState } from 'process-flow-lib';
+import { ConvertValueFn, ProcessFlowDiagramState, ProcessFlowParentState } from 'process-flow-lib';
 
 @Component({
     selector: 'app-process-flow-diagram-wrapper',
@@ -14,6 +14,8 @@ export class ProcessFlowDiagramWrapperComponent {
     processFlowDiagramDataSub: Subscription;
     @Input()
     processFlowParentState: ProcessFlowParentState;
+    @Input()
+    convertValueFn?: ConvertValueFn;
 
     constructor(private processFlowDiagramService: ProcessFlowDiagramService) { }
 
@@ -25,6 +27,7 @@ export class ProcessFlowDiagramWrapperComponent {
         if (this.processFlowDiagramElement) {
             // console.log('SET DIAGRAM FROM MEASUR updateDiagramParentState flowDiagramData', JSON.parse(JSON.stringify(this.processFlowParentState.waterDiagram.flowDiagramData)));
             this.processFlowDiagramElement.nativeElement.parentstate = this.processFlowParentState;
+            this.processFlowDiagramElement.nativeElement.convertValueFn = this.convertValueFn;
         }
     }
 

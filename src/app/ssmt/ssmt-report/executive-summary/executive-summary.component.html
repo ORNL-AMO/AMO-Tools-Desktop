@@ -252,12 +252,7 @@
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           <span *ngIf="modification.ssmt.operatingCosts.implementationCosts">
             {{
-              getPayback(
-                modificationOutputs[index].outputData.operationsOutput
-                  .totalOperatingCost,
-                baselineOutput.operationsOutput.totalOperatingCost,
-                modification.ssmt.operatingCosts.implementationCosts
-              ) | number: "1.0-0"
+              modificationOutputs[index].outputData.paybackPeriod | number: "1.0-0"
             }}
           </span>
           <span *ngIf="!modification.ssmt.operatingCosts.implementationCosts">&mdash;</span>
