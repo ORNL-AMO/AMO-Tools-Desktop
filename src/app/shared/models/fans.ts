@@ -380,6 +380,7 @@ export interface FsatOutput {
   percentSavings?: number;
   energySavings?: number;
   annualSavings?: number;
+  paybackPeriod?: number;
   planeResults?: PlaneResults;
   psychrometricResults?: PsychrometricResults;
   co2EmissionsOutput: number;

@@ -5,7 +5,7 @@ import { WeatherApiService, WeatherDataPoint, WeatherDataResponse, WeatherStatio
 import { firstValueFrom } from 'rxjs';
 import { ModalDialogService } from '../../../modal-dialog.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ConfirmActionComponent, ConfirmActionData } from '../../../confirm-action/confirm-action.component';
+import { ConfirmActionComponent } from '../../../confirm-action/confirm-action.component';
 
 @Component({
   selector: 'app-annual-station-data',
@@ -118,7 +118,7 @@ export class AnnualStationDataComponent {
 
   selectNewDataset() {
     if (this.selectedDataset) {
-      this.modalDialogService.openModal<ConfirmActionComponent, ConfirmActionData>(
+      this.modalDialogService.openModal(
         ConfirmActionComponent,
         {
           width: '800px',

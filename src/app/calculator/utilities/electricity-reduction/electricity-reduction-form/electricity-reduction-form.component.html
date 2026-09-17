@@ -66,7 +66,7 @@
     </div>
 
     <!-- Multimeter Reading Form Section -->
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 0">
+    <div class="form-section no-bottom-border" *ngIf="form.controls.measurementMethod.value == 0">
 
       <div class="row pt-1">
         <div class="col-6">
@@ -141,7 +141,7 @@
 
     </div>
 
-    <div class="form-section" *ngIf="form.controls.measurementMethod.value == 1">
+    <div class="form-section no-bottom-border" *ngIf="form.controls.measurementMethod.value == 1">
 
       <div class="form-group">
         <label class="small" for="{{'ratedMotorPower_'+idString}}">
@@ -244,7 +244,7 @@
       *ngIf="form.controls.measurementMethod.value != 2 && form.controls.measurementMethod.value != 3">
       <div class="row">
         <div class="col-6">
-          <label class="small bold" for="power">Power</label>
+          <label class="small bold">Equipment Power</label>
         </div>
         <div class="col-6 text-center">
           <span class="small bold">{{individualResults.power | number:'1.0-0'}} kW</span>
@@ -255,7 +255,7 @@
 
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 2">
       <div class="form-group">
-        <label class="small" for="{{'power_'+idString}}">Power</label>
+        <label class="small" for="{{'power_'+idString}}">Equipment Power</label>
         <div class="input-group">
           <input class="form-control" name="power" id="{{'power_'+idString}}" formControlName="power" type="number"
             (input)="calculate()" (focus)="focusField('power')" (blur)="focusOut()" onfocus="this.select();">

@@ -27,13 +27,12 @@ import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesU
 import { openDrawerWithSelected, selectComponent } from './diagramThunks';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
-import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, DiagramFlowErrors, getIsDiagramValid } from 'process-flow-lib';
 import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
-import ResultsPanel from './ResultsPanel';
 import FlowConfidenceLegend from './FlowConfidenceLegend';
+import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ConvertValueFn, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, DiagramFlowErrors, getIsDiagramValid } from 'process-flow-lib';
 
 
 export interface DiagramProps {
@@ -43,6 +42,7 @@ export interface DiagramProps {
   processDiagram?: WaterDiagram;
   appVersion?: string;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
+  convertValueFn?: ConvertValueFn;
 }
 
 
@@ -254,7 +254,7 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-          <MenuSidebar shadowRootRef={props.shadowRoot}/>
+          <MenuSidebar shadowRootRef={props.shadowRoot} convertValueFn={props.convertValueFn}/>
           </SharedDrawer>
         )}
 

@@ -30,7 +30,7 @@ export class AssessmentComponent {
   assessmentView: Signal<string> = this.processCoolingUiService.childView;
 
   selectModification() {
-    this.modalDialogService.openModal<ModificationListComponent, undefined>(
+    this.modalDialogService.openModal(
       ModificationListComponent, 
       {
         width: '1200px', 

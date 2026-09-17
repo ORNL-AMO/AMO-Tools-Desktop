@@ -407,11 +407,12 @@ export class SuiteApiHelperService {
     return validInput;
   }
 
-   /**
-  * Get JS array from WASM vector
-  * @param vector WASM vector to extract from
-  * @returns JS number array
- */
+  /**
+   * Get a JS array from a WASM vector without taking ownership of the vector.
+   * The caller remains responsible for deleting the vector handle.
+   * @param vector WASM vector to extract from
+   * @returns JS number array
+   */
   extractWASMArray(vector: RegisteredVector<number>): number[] {
     if (!vector) return [];
     const arr: number[] = [];

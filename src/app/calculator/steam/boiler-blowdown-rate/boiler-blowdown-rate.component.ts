@@ -112,7 +112,7 @@ export class BoilerBlowdownRateComponent implements OnInit {
 
   createModification() {
     let baselineInputs: BoilerBlowdownRateInputs = this.boilerBlowdownRateService.baselineInputs.getValue();
-    this.boilerBlowdownRateService.modificationInputs.next(baselineInputs);
+    this.boilerBlowdownRateService.modificationInputs.next(JSON.parse(JSON.stringify(baselineInputs)));
     this.setModificationSelected();
   }
 

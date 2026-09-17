@@ -93,7 +93,7 @@ export class WaterBannerComponent {
   showSecurityAndPrivacyModal() {
     // Collapse banner to prevent it from reopening the modal on mobile when dismissed
     this.bannerCollapsed = true;
-    this.modalDialogService.openModal<SecurityAndPrivacyItemComponent, undefined>(
+    this.modalDialogService.openModal(
       SecurityAndPrivacyItemComponent,
       SecurityAndPrivacyItemComponent.getDialogConfig()
     );

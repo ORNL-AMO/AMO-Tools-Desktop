@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   build:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -57,7 +57,7 @@ jobs:
       BUILD_VERSION: ${{ steps.output.outputs.BUILD_VERSION }}
 
   bundle_macos:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: macos-14
     needs: [build]
     steps:
@@ -106,6 +106,9 @@ jobs:
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile
       - name: Bundle
         run: npm run dist -- --mac --universal --publish never
+      - name: Verify
+        run: |
+          codesign --verify --deep --strict --verbose=2 output/mac-universal/MEASUR.app
       - name: Notarize
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -130,7 +133,7 @@ jobs:
           retention-days: 1
 
   bundle_win:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: windows-2025
     needs: [build]
     steps:
@@ -178,7 +181,7 @@ jobs:
           retention-days: 1
 
   bundle_linux:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: ubuntu-24.04
     needs: [build]
     steps:
@@ -217,7 +220,7 @@ jobs:
           retention-days: 1
 
   sign_win:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: [self-hosted, cs]
     needs: [bundle_win]
     steps:
@@ -256,7 +259,7 @@ jobs:
         run: rm -rf ./output
 
   release:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: ubuntu-22.04
     needs: [build, bundle_macos, bundle_linux, sign_win]
     env:

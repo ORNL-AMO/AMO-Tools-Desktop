@@ -10,7 +10,6 @@ import { RootState, selectFlowConfidenceEnabled, selectHasAssessment, selectNode
 import { edgeTypeOptions, SelectListOption } from '../Diagram/FlowTypes';
 import ValidationWindow, { ValidationWindowLocation } from '../Diagram/ValidationWindow';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { DiagramFlowErrors, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, flowDecimalPrecisionOptions, conductivityUnitOptions, getContrastTextColor, getIsDiagramValid, WaterProcessComponentType } from 'process-flow-lib';
 import DiagramResults from './DiagramResults';
 import InputField from '../StyledMUI/InputField';
 import { Node } from '@xyflow/react';
@@ -19,6 +18,7 @@ import { setDiagramNotes } from '../Diagram/diagramReducer';
 import ColorPaletteDropdown, { allPalettes } from "./ColorPaletteDropdown"
 import ColorPicker from "./ColorPicker"
 import ResetColorButton from "./ResetColorButton"
+import { DiagramFlowErrors, getIsDiagramValid, ProcessFlowPart, processFlowDiagramParts, UserDiagramOptions, WaterProcessComponentType, getContrastTextColor, flowDecimalPrecisionOptions, conductivityUnitOptions, ConvertValueFn } from 'process-flow-lib';
 const WaterComponent = styled(Paper)(({ theme, ...props }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(2),
@@ -235,7 +235,10 @@ const MenuSidebar = memo((props: MenuSidebarProps) => {
                     size="small"
                     label="Units of Measure"
                     value={unitsOfMeasure}
-                    onChange={(e) => dispatch(unitsOfMeasureChange(e.target.value))}
+                    onChange={(e) => {
+                      const newUnits = e.target.value;
+                      dispatch(unitsOfMeasureChange({ newUnits, convertValueFn: props.convertValueFn }));
+                    }}
                     disabled={hasAssessment}
                     MenuProps={{
                       disablePortal: true,
@@ -638,6 +641,7 @@ export default MenuSidebar;
 
 export interface MenuSidebarProps {
   shadowRootRef: any;
+  convertValueFn?: ConvertValueFn;
 }
 
 

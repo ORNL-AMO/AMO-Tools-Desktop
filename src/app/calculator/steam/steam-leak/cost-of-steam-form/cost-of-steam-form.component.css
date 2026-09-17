@@ -1,0 +1,34 @@
+.input-group-addon.units.op-hour-addon{
+    border-left: solid 1px;
+    border-right: none;
+}
+
+.form-section {
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed;
+}
+
+.btn-group {
+  text-align: center;
+}
+
+.compressor-form-item {
+  flex: 1 1 350px;
+  padding: 1em;
+}
+
+
+.btn-margin-10 {
+  margin: 10px 0px;
+}
+
+.group-label-wide {
+  width: 100%;
+  border-bottom: #145A32 solid 2px;
+  font-weight: bold;
+}
+
+.input-group-prepend{
+  align-items: center;
+  padding-right: 5px;
+}

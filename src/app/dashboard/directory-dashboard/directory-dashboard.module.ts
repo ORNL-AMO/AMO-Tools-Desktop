@@ -16,6 +16,8 @@ import { TreasureHuntReportModule } from '../../treasure-hunt/treasure-hunt-repo
 import { SsmtReportModule } from '../../ssmt/ssmt-report/ssmt-report.module';
 import { PhastReportModule } from '../../phast/phast-report/phast-report.module';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { ConfirmDeleteModalModule } from '../../shared/confirm-delete-modal/confirm-delete-modal.module';
+import { EditContactModalModule } from '../../shared/edit-contact-modal/edit-contact-modal.module';
 import { DirectoryDashboardService } from './directory-dashboard.service';
 import { DeleteItemsModalComponent } from './delete-items-modal/delete-items-modal.component';
 import { DirectorySummaryComponent } from './directory-summary/directory-summary.component';
@@ -81,6 +83,8 @@ import { ProcessCoolingSummaryCardComponent } from './directory-items/assessment
     SsmtReportModule,
     PhastReportModule,
     SharedPipesModule,
+    ConfirmDeleteModalModule,
+    EditContactModalModule,
     SettingsModule,
     PreAssessmentModule,
     DashboardPipeModule,

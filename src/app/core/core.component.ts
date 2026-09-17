@@ -23,10 +23,12 @@ import { CORE_DATA_WARNING, SECONDARY_DATA_WARNING, SnackbarService } from '../s
 import { BrowserStorageAvailable, BrowserStorageService } from '../shared/browser-storage.service';
 import { SolidLiquidMaterialDbService } from '../indexedDb/solid-liquid-material-db.service';
 import { FlueGasMaterialDbService } from '../indexedDb/flue-gas-material-db.service';
+import { LightingFixtureServiceDbService } from '../indexedDb/lighting-fixture-db.service';
 import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service';
 import { DialogRef} from '@angular/cdk/dialog';
 import { ModalDialogService } from '../shared/modal-dialog.service';
 import { FeatureFlagService } from '../shared/feature-flag.service';
+import { ContactDbService } from '../indexedDb/contact-db.service';
 
 @Component({
   selector: 'app-core',
@@ -96,9 +98,11 @@ export class CoreComponent implements OnInit {
     private exportToJustifiTemplateService: ExportToJustifiTemplateService,
     private solidLiquidMaterialDbService: SolidLiquidMaterialDbService,
     private flueGasMaterialDbService: FlueGasMaterialDbService,
+    private lightingFixtureServiceDbService: LightingFixtureServiceDbService,
     private toolsSuiteApiService: ToolsSuiteApiService,
     private modalDialogService: ModalDialogService,
     private featureFlagService: FeatureFlagService,
+    private contactDbService: ContactDbService,
   ) {
   }
 
@@ -249,6 +253,7 @@ export class CoreComponent implements OnInit {
       //data initialized in createDefaultProcessHeatingMaterials on startup
       await this.solidLiquidMaterialDbService.setAllMaterialsFromDb();
       await this.flueGasMaterialDbService.setAllMaterialsFromDb();
+      await this.lightingFixtureServiceDbService.setAllMaterialsFromDb();
     }
   }
 
@@ -293,6 +298,7 @@ export class CoreComponent implements OnInit {
           this.diagramIdbService.setAll(initializedData.diagrams);
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
+          this.contactDbService.setAll(initializedData.contacts);
           this.idbStarted = true;
           this.initializeDefaultDbData();
           this.changeDetectorRef.detectChanges();

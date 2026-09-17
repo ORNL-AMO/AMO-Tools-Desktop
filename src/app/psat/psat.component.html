@@ -105,7 +105,7 @@
     <nav class="navbar phast">
       <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
         <div class="tab-content pl-2 pr-2">
-          <div class="form-group" *ngIf="psatOptionsLength > 1">
+          <div class="form-group">
             <select name="psatSelect" class="form-control mx-auto mt-0 w-100" id="psatSelect" [(ngModel)]="psat1">
               <option *ngFor="let psat of psatOptions" [ngValue]="psat">{{psat.name}}</option>
             </select>

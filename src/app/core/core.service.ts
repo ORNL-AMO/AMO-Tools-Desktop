@@ -12,6 +12,7 @@ import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { ApplicationInstanceDbService, ApplicationInstanceData } from '../indexedDb/application-instance-db.service';
 import { ImportService } from '../shared/import-export/import.service';
 import { ImportExportData } from '../shared/import-export/importExportModel';
+import { ContactDbService } from '../indexedDb/contact-db.service';
 @Injectable()
 export class CoreService {
 
@@ -26,6 +27,7 @@ export class CoreService {
     private diagramIdbService: DiagramIdbService,
     private applicationDataService: ApplicationInstanceDbService,
     private directoryDbService: DirectoryDbService,
+    private contactDbService: ContactDbService,
     private importService: ImportService) {
     this.showShareDataModal = new BehaviorSubject<boolean>(false);
     this.initializedToolsSuiteModule = new BehaviorSubject<boolean>(false);
@@ -50,6 +52,7 @@ export class CoreService {
       settings: this.settingsDbService.getAllSettings(),
       calculators: this.calculatorDbService.getAllCalculators(),
       inventoryItems: this.inventoryDbService.getAllInventory(),
+      contacts: this.contactDbService.getAllContacts(),
     };
     return forkJoin(initializedAppData);
   }

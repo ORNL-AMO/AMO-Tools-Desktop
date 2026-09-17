@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { applyEdgeChanges, applyNodeChanges, Edge, EdgeChange, Node, NodeChange, Connection, addEdge, MarkerType } from '@xyflow/react';
 import { CSSProperties } from 'react';
-import { CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramCalculatedData, DiagramFlowErrors, DiagramMetaData, DiagramSettings, FlowConfidence, FlowDiagramData, getDefaultFlowConfidence, Handles, NodeFlowProperty, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, checkDiagramNodeErrors, convertFlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, migrateFlowDiagramFieldNames } from 'process-flow-lib';
-import { createNewNode, ensureFlowTotalTouched, formatDataForMEASUR, getNodeSourceEdges, getNodeTargetEdges, mirrorSingleEdgeConfidenceToTotal } from './FlowUtils';
 import {
   totalFlowChangeReducer,
   sumTotalFlowChangeReducer,
@@ -14,6 +12,8 @@ import {
   applyEstimatedFlowResultsReducer,
   edgesChangeFromPropagationReducer,
 } from './flowCalculationReducers';
+import { WaterProcessComponentType, DiagramMetaData, ProcessFlowPart, DiagramSettings, UserDiagramOptions, DiagramCalculatedData, ParentContainerDimensions, DiagramFlowErrors, getDefaultUserDiagramOptions, getDefaultColorPalette, FlowDiagramData, CustomEdgeData, checkDiagramNodeErrors, getContrastTextColor, WaterTreatment, NodeFlowProperty, FlowConfidence, Handles, getEdgeFromConnection, ConvertValueFn, convertFlowDiagramData, WaterSystemResults, getConnectionFromEdgeId, migrateFlowDiagramFieldNames, getDefaultFlowConfidence, ProcessFlowNodeType, getEdgeDescription, DEFAULT_EDGE_STROKE_COLOR, getDefaultSettings } from 'process-flow-lib';
+import { createNewNode, ensureFlowTotalTouched, getNodeTargetEdges, mirrorSingleEdgeConfidenceToTotal, getNodeSourceEdges, formatDataForMEASUR } from './FlowUtils';
 
 import packageJson from '../../../package.json';
 const CURRENT_DIAGRAM_VERSION: string = packageJson.version;
@@ -359,16 +359,21 @@ const setPaletteColorsReducer = (state: DiagramState, action: PayloadAction<stri
   });
 };
 
-const unitsOfMeasureChangeReducer = (state: DiagramState, action: PayloadAction<string>) => {
-  const convertedDiagramData = {
-    nodes: state.nodes,
-    edges: state.edges,
-    calculatedData: state.calculatedData
-  }
-  convertFlowDiagramData(convertedDiagramData, action.payload);
-  state.settings.unitsOfMeasure = action.payload;
-  state.nodes = convertedDiagramData.nodes as Node[];
-  state.edges = convertedDiagramData.edges as Edge[];
+export interface UnitsOfMeasureChangePayload {
+  newUnits: string;
+  convertValueFn?: ConvertValueFn;
+}
+
+// convertValueFn is passed through the action but never stored in state - it's only used
+// here to convert the current nodes/edges/calculatedData to the newly selected units.
+const unitsOfMeasureChangeReducer = (state: DiagramState, action: PayloadAction<UnitsOfMeasureChangePayload>) => {
+  const { newUnits, convertValueFn } = action.payload;
+  const convertedDiagramData = { nodes: state.nodes as Node[], edges: state.edges as Edge[], calculatedData: state.calculatedData };
+  convertFlowDiagramData(convertedDiagramData, newUnits, convertValueFn);
+
+  state.settings.unitsOfMeasure = newUnits;
+  state.nodes = convertedDiagramData.nodes;
+  state.edges = convertedDiagramData.edges;
   state.calculatedData = convertedDiagramData.calculatedData;
 };
 

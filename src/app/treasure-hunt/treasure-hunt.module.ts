@@ -63,7 +63,7 @@ import { BoilerBlowdownRateTreasureHuntService } from './treasure-hunt-calculato
 import { PowerFactorCorrectionTreasureHuntService } from './treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { ExportOpportunitiesService } from './treasure-chest/export-opportunities.service';
-
+import { SteamLeakTreasureHuntService } from './treasure-hunt-calculator-services/steam-leak-treasure-hunt.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -133,6 +133,7 @@ import { ExportOpportunitiesService } from './treasure-chest/export-opportunitie
     CoolingTowerBasinTreasureHuntService,
     BoilerBlowdownRateTreasureHuntService,
     PowerFactorCorrectionTreasureHuntService,
+    SteamLeakTreasureHuntService,
     ExportOpportunitiesService
   ]
 })

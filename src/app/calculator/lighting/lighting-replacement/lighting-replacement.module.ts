@@ -8,14 +8,17 @@ import { LightingReplacementResultsComponent } from './lighting-replacement-resu
 import { LightingReplacementHelpComponent } from './lighting-replacement-help/lighting-replacement-help.component';
 import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
 import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { SuiteDbModule } from '../../../suiteDb/suiteDb.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     ExportableResultsTableModule,
-    OperatingHoursModalModule
+    OperatingHoursModalModule,
+    ModalModule,
+    SuiteDbModule
   ],
   declarations: [LightingReplacementComponent, LightingReplacementFormComponent, LightingReplacementResultsComponent, LightingReplacementHelpComponent],
   exports: [LightingReplacementComponent],
