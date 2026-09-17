@@ -400,18 +400,6 @@ export class PsatComponent implements OnInit {
     this.save();
   }
 
-  toggleOpenPanel(isOpen: boolean) {
-    this.isModalOpen = isOpen;
-  }
-
-  modalOpen() {
-    this.psatService.modalOpen.next(true);
-  }
-
-  modalClose() {
-    this.psatService.modalOpen.next(false);
-  }
-
   goToReport() {
     this.psatTabService.mainTab.next('report');
   }
