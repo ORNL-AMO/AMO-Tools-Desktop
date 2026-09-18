@@ -60,10 +60,10 @@ export class ChargeMaterialOpportunityComponent {
 
 
   readonly materialTemperatureComparisons: Signal<ChargeMaterialTemperatureComparison[]> = computed(() => {
-    const baselineMaterials = this.assessmentService.scenarioPhast('baseline')?.losses?.chargeMaterials ?? [];
+    const baselineMaterials = this.assessmentService.lossSignal('baseline', 'chargeMaterials') ?? [];
     const modificationId = this.modificationService.selectedModificationId();
     const modificationMaterials = modificationId
-      ? this.assessmentService.scenarioPhast(modificationId)?.losses?.chargeMaterials ?? []
+      ? this.assessmentService.lossSignal(modificationId, 'chargeMaterials') ?? []
       : [];
 
     return baselineMaterials.map(baselineMaterial => {
@@ -102,8 +102,8 @@ export class ChargeMaterialOpportunityComponent {
       return;
     }
 
-    const baselineMaterials = this.assessmentService.scenarioPhast('baseline')?.losses?.chargeMaterials ?? [];
-    const effectiveMaterials = this.assessmentService.scenarioPhast(modificationId)?.losses?.chargeMaterials ?? [];
+    const baselineMaterials = this.assessmentService.lossSignal('baseline', 'chargeMaterials') ?? [];
+    const effectiveMaterials = this.assessmentService.lossSignal(modificationId, 'chargeMaterials') ?? [];
 
     // Reset only the initial temperature on each material back to baseline's value; any other
     // override already on these materials (e.g. entered separately in Expert View) is left as is.
@@ -132,7 +132,7 @@ export class ChargeMaterialOpportunityComponent {
     // Start from this modification's own currently-effective materials (baseline merged with
     // whatever it already overrides), not raw baseline — otherwise editing one material's
     // temperature would silently discard any override already set on another material.
-    const effectiveMaterials = this.assessmentService.scenarioPhast(modification.id)?.losses?.chargeMaterials ?? [];
+    const effectiveMaterials = this.assessmentService.lossSignal(modification.id, 'chargeMaterials') ?? [];
     const updatedChargeMaterials = effectiveMaterials.map(material =>
       material.id === materialId ? withInitialTemperature(material, initialTemperature) : material
     );

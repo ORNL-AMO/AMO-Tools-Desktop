@@ -64,6 +64,13 @@ export interface Losses {
   energyInputExhaustGasLoss?: EnergyInputExhaustGasLoss[];
 }
 
+// Keys of Losses, kept in sync manually — TypeScript can't derive a runtime array from an interface.
+export const LOSS_KEYS: (keyof Losses)[] = [
+  'chargeMaterials', 'wallLosses', 'atmosphereLosses', 'fixtureLosses', 'openingLosses',
+  'coolingLosses', 'flueGasLosses', 'otherLosses', 'leakageLosses', 'extendedSurfaces',
+  'slagLosses', 'auxiliaryPowerLosses', 'energyInputEAF', 'exhaustGasEAF', 'energyInputExhaustGasLoss',
+];
+
 // Per-category "explore opportunities" UI/suggestion state, keyed by category rather than one flat
 // field per category. This is presentation state for the Explore Opportunities screen only: it must
 // never gate whether a `scenarioOverrides` diff is honored (see `scenario-merge.util.ts`), since a
@@ -84,7 +91,6 @@ export const ExploreOpportunityCategory = {
   Wall: 'wall',
   AllTemp: 'allTemp',
   Fixtures: 'fixtures',
-  ExtendedSurface: 'extendedSurface',
 } as const;
 
 export type ExploreOpportunityCategory = typeof ExploreOpportunityCategory[keyof typeof ExploreOpportunityCategory];

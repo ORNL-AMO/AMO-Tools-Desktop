@@ -68,11 +68,6 @@ describe('computeMigratedExploreOpportunityFlags', () => {
 
     const flags = computeMigratedExploreOpportunityFlags(legacyModification);
 
-    // ExtendedSurface has no legacy exploreOppsShowX counterpart (legacy PHAST never had a
-    // dedicated extended-surface opportunity toggle), so it's excluded from the "all categories
-    // covered" check on purpose.
-    const categoriesWithLegacyFields = Object.values(ExploreOpportunityCategory)
-      .filter(category => category !== ExploreOpportunityCategory.ExtendedSurface);
-    expect(Object.keys(flags).sort()).toEqual(categoriesWithLegacyFields.sort());
+    expect(Object.keys(flags).sort()).toEqual(Object.values(ExploreOpportunityCategory).sort());
   });
 });

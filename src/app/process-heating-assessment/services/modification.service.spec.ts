@@ -60,6 +60,30 @@ describe('ModificationService', () => {
     expect(service.modifications().find((modification: ProcessHeatingModification) => modification.id === secondId)?.scenarioOverrides?.name).toBe('Scenario 2');
   });
 
+  it('freezes a fresh modification\'s calc fields to baseline at creation, unaffected by later baseline edits', () => {
+    const assessmentService = TestBed.inject(ProcessHeatingAssessmentService) as unknown as FakeProcessHeatingAssessmentService;
+    assessmentService.processHeatingSignal.set({
+      name: 'Baseline',
+      modifications: [],
+      systemEfficiency: 80,
+      losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 100 } as never] },
+    });
+
+    const id = service.addModification();
+    const frozenOverrides = service.selectedModification()?.scenarioOverrides;
+
+    assessmentService.processHeatingSignal.set({
+      ...assessmentService.processHeatingSignal(),
+      systemEfficiency: 95,
+      losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 999 } as never] },
+    });
+
+    const modification = service.modifications().find((m: ProcessHeatingModification) => m.id === id);
+    expect(modification?.scenarioOverrides?.systemEfficiency).toBe(80);
+    expect(modification?.scenarioOverrides?.losses?.wallLosses).toEqual(frozenOverrides?.losses?.wallLosses);
+    expect(modification?.scenarioOverrides?.losses?.wallLosses?.[0].surfaceArea).toBe(100);
+  });
+
   it('falls back to selecting the first modification when nothing is explicitly selected', () => {
     const firstId = service.addModification('First');
     service.addModification('Second');

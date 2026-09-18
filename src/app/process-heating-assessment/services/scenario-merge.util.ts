@@ -1,6 +1,6 @@
-import { isEqual } from 'lodash';
+import { cloneDeep, isEqual } from 'lodash';
 import { getNewIdString } from '../../shared/helperFunctions';
-import { Losses, PHAST } from '../models/phast';
+import { LOSS_KEYS, Losses, PHAST } from '../models/phast';
 import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
 
 // Combines a modification's overrides with baseline to produce the PHAST object that modification
@@ -15,6 +15,9 @@ import { ProcessHeatingModification, ScenarioOverrides } from '../models/modific
 // granularity this needs. A loss-type diff applies whenever it's present, regardless of any
 // Explore Opportunities flag on the modification: that flag is presentation state for one screen,
 // not a precondition for whether a saved edit (from that screen or from Expert View) takes effect.
+// The live-baseline fallback below never fires for the 5 calc-relevant fields in practice, since
+// every modification (fresh or migrated) always carries them via getBaselineSnapshot(); it
+// stays as a safety net for non-calc fields and any future PHAST field.
 export function getEffectivePhast(baseline: PHAST, modification: ProcessHeatingModification | undefined): PHAST {
   const diff = modification?.scenarioOverrides;
   if (!diff) {
@@ -33,18 +36,52 @@ export function getEffectivePhast(baseline: PHAST, modification: ProcessHeatingM
   };
 }
 
+// Materializes every loss key as an explicit own-property (even `undefined`) rather than only the
+// keys `losses` happens to have. A key that's absent from `losses` (never saved yet) would otherwise
+// stay absent from the snapshot too, and getEffectivePhast()'s spread only overrides keys diff.losses
+// actually owns — so an absent key silently falls through to baseline's live value the first time
+// that loss type is saved there, unfreezing a snapshot that was supposed to be frozen for good.
+function fullLossSnapshot(losses: Losses | undefined): Losses {
+  const snapshot = {} as Losses;
+  for (const key of LOSS_KEYS) {
+    snapshot[key] = cloneDeep(losses?.[key]) as never;
+  }
+  return snapshot;
+}
+
+/**
+ * Deep-clones the 5 calc-relevant fields off `source` so a modification stops
+ * live-tracking baseline for them once created. All 5 keys are always included, even
+ * as `undefined`, so {@link getEffectivePhast}'s live-baseline fallback never fires
+ * for them.
+ */
+export function getBaselineSnapshot(source: PHAST | undefined): Pick<ScenarioOverrides,
+  'losses' | 'operatingCosts' | 'operatingHours' | 'systemEfficiency' | 'co2SavingsData'> {
+  return {
+    losses: fullLossSnapshot(source?.losses),
+    operatingCosts: cloneDeep(source?.operatingCosts),
+    operatingHours: cloneDeep(source?.operatingHours),
+    systemEfficiency: source?.systemEfficiency,
+    co2SavingsData: cloneDeep(source?.co2SavingsData),
+  };
+}
+
 // Structural inverse of getEffectivePhast(), at the same two-level granularity: top-level PHAST
 // fields are compared wholesale, `losses` is compared one level deeper (per loss-type array, never
 // per array item). Used to migrate `scenarioOverrides` for modifications written by legacy, whose
-// edits live in a full `phast` clone rather than a diff.
-export function computeScenarioOverrides(modificationPhast: PHAST | undefined, baseline: PHAST): ScenarioOverrides {
+// edits live in a full `phast` clone rather than a diff. The 5 calc-relevant fields are captured
+// unconditionally from `modificationPhast` rather than diffed against baseline: diffing would only
+// freeze a legacy modification's untouched field if baseline had already drifted by migration time,
+// otherwise it would silently start live-tracking baseline going forward.
+export function deriveScenarioOverridesFromLegacyModification(modificationPhast: PHAST | undefined, baseline: PHAST): ScenarioOverrides {
   if (!modificationPhast) {
     return {};
   }
 
   const overrides: ScenarioOverrides = {};
   for (const key of Object.keys(modificationPhast) as (keyof PHAST)[]) {
-    if (key === 'losses' || key === 'modifications' || key === 'selectedModificationId') {
+    if (key === 'losses' || key === 'modifications' || key === 'selectedModificationId'
+      || key === 'operatingCosts' || key === 'operatingHours' || key === 'systemEfficiency' || key === 'co2SavingsData') {
       continue;
     }
     if (!isEqual(modificationPhast[key], baseline[key])) {
@@ -52,19 +89,7 @@ export function computeScenarioOverrides(modificationPhast: PHAST | undefined, b
     }
   }
 
-  if (modificationPhast.losses) {
-    const lossesOverride: Losses = {};
-    for (const lossKey of Object.keys(modificationPhast.losses) as (keyof Losses)[]) {
-      if (!isEqual(modificationPhast.losses[lossKey], baseline.losses?.[lossKey])) {
-        (lossesOverride as Record<string, unknown>)[lossKey] = modificationPhast.losses[lossKey];
-      }
-    }
-    if (Object.keys(lossesOverride).length > 0) {
-      overrides.losses = lossesOverride;
-    }
-  }
-
-  return overrides;
+  return { ...overrides, ...getBaselineSnapshot(modificationPhast) };
 }
 
 type WithId = { id?: string };
@@ -94,7 +119,7 @@ function alignOverrideLossIds<T extends WithId>(baselineItems: T[] | undefined, 
 
 // Backfills missing ids on baseline's wallLosses/extendedSurfaces, then aligns any modification
 // override for those loss types onto the same ids by position. Must run after scenarioOverrides
-// migration (computeScenarioOverrides), not before: diffing a legacy modification's un-id'd clone
+// migration (deriveScenarioOverridesFromLegacyModification), not before: diffing a legacy modification's un-id'd clone
 // against an already-backfilled baseline would flag `id` alone as a spurious override. Idempotent:
 // returns the same `phast` reference when nothing needed backfilling.
 export function ensureLossIdsForPhast(phast: PHAST): PHAST {

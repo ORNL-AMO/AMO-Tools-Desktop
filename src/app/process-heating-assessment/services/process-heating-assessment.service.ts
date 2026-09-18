@@ -1,9 +1,10 @@
 import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { isEqual } from 'lodash';
 import { BehaviorSubject, debounceTime, firstValueFrom, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Assessment } from '../../shared/models/assessment';
 import { PHAST as SharedPHAST } from '../../shared/models/phast/phast';
-import { PHAST } from '../models/phast';
+import { Losses, PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
@@ -141,6 +142,28 @@ export class ProcessHeatingAssessmentService {
       return undefined;
     }
     return getEffectivePhast(baseline, modification);
+  }
+
+  private readonly lossSignalCache = new Map<string, Signal<unknown>>();
+
+  lossSignal<K extends keyof Losses>(scenario: AssessmentScenario, lossKey: K): Losses[K] {
+    const cacheKey = `${scenario}:${lossKey}`;
+    let cached = this.lossSignalCache.get(cacheKey);
+    if (!cached) {
+      cached = computed(() => this.scenarioPhast(scenario)?.losses?.[lossKey], { equal: isEqual });
+      this.lossSignalCache.set(cacheKey, cached);
+    }
+    return cached() as Losses[K];
+  }
+
+  updateLossesProperty<K extends keyof Losses>(scenario: AssessmentScenario, lossKey: K, value: Losses[K]): void {
+    if (scenario === 'baseline') {
+      const current = this.processHeating.getValue();
+      this.updateProcessHeatingProperty('losses', { ...current?.losses, [lossKey]: value });
+      return;
+    }
+    const modification = this.getModifications(this.processHeating.getValue()).find(mod => mod.id === scenario);
+    this.updateModificationProperty(scenario, 'losses', { ...modification?.scenarioOverrides?.losses, [lossKey]: value });
   }
 
   async initAssessmentSettings(assessment: Assessment): Promise<void> {

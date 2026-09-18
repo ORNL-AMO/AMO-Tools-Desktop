@@ -1,6 +1,6 @@
-import { PHAST } from '../models/phast';
+import { LOSS_KEYS, PHAST } from '../models/phast';
 import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
-import { computeScenarioOverrides, ensureLossIdsForPhast, getEffectivePhast } from './scenario-merge.util';
+import { deriveScenarioOverridesFromLegacyModification, ensureLossIdsForPhast, getBaselineSnapshot, getEffectivePhast } from './scenario-merge.util';
 
 describe('getEffectivePhast', () => {
   const baseline: PHAST = {
@@ -50,9 +50,19 @@ describe('getEffectivePhast', () => {
 
     expect(effectivePhast.losses.chargeMaterials).toBe(modifiedChargeMaterials);
   });
+
+  it('stays frozen for a loss type that did not exist on baseline at snapshot time, even after baseline adds it', () => {
+    let mutableBaseline: PHAST = { name: 'Baseline', losses: {} };
+    const modification = buildModification({ losses: getBaselineSnapshot(mutableBaseline).losses });
+
+    mutableBaseline = { ...mutableBaseline, losses: { ...mutableBaseline.losses, wallLosses: [{ id: 'wall-1', surfaceArea: 100 } as never] } };
+    const effectivePhast = getEffectivePhast(mutableBaseline, modification);
+
+    expect(effectivePhast.losses.wallLosses).toBeUndefined();
+  });
 });
 
-describe('computeScenarioOverrides', () => {
+describe('deriveScenarioOverridesFromLegacyModification', () => {
   const baseline: PHAST = {
     name: 'Baseline',
     systemEfficiency: 80,
@@ -62,45 +72,48 @@ describe('computeScenarioOverrides', () => {
     },
   };
 
-  it('captures a changed top-level scalar field, omitting unchanged top-level fields', () => {
-    const modificationPhast: PHAST = { ...baseline, systemEfficiency: 90 };
+  it('captures a changed top-level scalar field, omitting unchanged non-calc top-level fields', () => {
+    const modificationPhast: PHAST = { ...baseline, equipmentNotes: 'Preheated' };
 
-    const overrides = computeScenarioOverrides(modificationPhast, baseline);
+    const overrides = deriveScenarioOverridesFromLegacyModification(modificationPhast, baseline);
 
-    expect(overrides.systemEfficiency).toBe(90);
+    expect(overrides.equipmentNotes).toBe('Preheated');
     expect(overrides.name).toBeUndefined();
     expect('name' in overrides).toBe(false);
   });
 
-  it('captures only the loss type that changed, omitting untouched loss types entirely', () => {
+  it('captures every loss type unconditionally, not just the one that changed', () => {
     const modifiedChargeMaterials = [{ id: 'material-1', name: 'Steel (preheated)', chargeMaterialType: 'Solid' } as never];
     const modificationPhast: PHAST = {
       ...baseline,
       losses: { ...baseline.losses, chargeMaterials: modifiedChargeMaterials },
     };
 
-    const overrides = computeScenarioOverrides(modificationPhast, baseline);
+    const overrides = deriveScenarioOverridesFromLegacyModification(modificationPhast, baseline);
 
     expect(overrides.losses.chargeMaterials).toEqual(modifiedChargeMaterials);
-    expect(overrides.losses.wallLosses).toBeUndefined();
-    expect('wallLosses' in overrides.losses).toBe(false);
+    expect(overrides.losses.wallLosses).toEqual(baseline.losses.wallLosses);
   });
 
-  it('returns an empty object when the modification is identical to baseline in every field', () => {
+  it('always captures calc-relevant fields even when identical to baseline', () => {
     const modificationPhast: PHAST = JSON.parse(JSON.stringify(baseline));
 
-    const overrides = computeScenarioOverrides(modificationPhast, baseline);
+    const overrides = deriveScenarioOverridesFromLegacyModification(modificationPhast, baseline);
 
-    expect(overrides).toEqual({});
+    expect(overrides.losses.chargeMaterials).toEqual(baseline.losses.chargeMaterials);
+    expect(overrides.losses.wallLosses).toEqual(baseline.losses.wallLosses);
+    expect(Object.keys(overrides.losses).length).toBe(LOSS_KEYS.length);
+    expect(overrides.systemEfficiency).toBe(baseline.systemEfficiency);
+    expect('name' in overrides).toBe(false);
   });
 
   it('returns an empty object when the modification has no phast clone at all', () => {
-    const overrides = computeScenarioOverrides(undefined, baseline);
+    const overrides = deriveScenarioOverridesFromLegacyModification(undefined, baseline);
 
     expect(overrides).toEqual({});
   });
 
-  it('round-trips: getEffectivePhast(baseline, { scenarioOverrides: computeScenarioOverrides(modification.phast, baseline) }) reproduces the legacy modification phast', () => {
+  it('round-trips: getEffectivePhast(baseline, { scenarioOverrides: deriveScenarioOverridesFromLegacyModification(modification.phast, baseline) }) reproduces the legacy modification phast', () => {
     const modifiedChargeMaterials = [{ id: 'material-1', name: 'Steel (preheated)', chargeMaterialType: 'Solid' } as never];
     const legacyModificationPhast: PHAST = {
       ...baseline,
@@ -109,11 +122,13 @@ describe('computeScenarioOverrides', () => {
       losses: { ...baseline.losses, chargeMaterials: modifiedChargeMaterials },
     };
 
-    const scenarioOverrides: ScenarioOverrides = computeScenarioOverrides(legacyModificationPhast, baseline);
+    const scenarioOverrides: ScenarioOverrides = deriveScenarioOverridesFromLegacyModification(legacyModificationPhast, baseline);
     const modification: ProcessHeatingModification = { id: 'mod-1', scenarioOverrides };
     const effectivePhast = getEffectivePhast(baseline, modification);
 
-    expect(effectivePhast).toEqual(legacyModificationPhast);
+    expect(effectivePhast.name).toBe(legacyModificationPhast.name);
+    expect(effectivePhast.systemEfficiency).toBe(legacyModificationPhast.systemEfficiency);
+    expect(effectivePhast.losses.chargeMaterials).toEqual(legacyModificationPhast.losses.chargeMaterials);
   });
 });
 

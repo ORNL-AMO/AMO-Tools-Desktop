@@ -119,16 +119,6 @@ export class WallLossesService {
       return loss;
     });
 
-    if (this.scenario === 'baseline') {
-      const current = this.assessmentService.processHeatingSignal();
-      this.assessmentService.updateProcessHeatingProperty('losses', { ...current?.losses, wallLosses });
-    } else {
-      const modification = this.assessmentService.getModifications(this.assessmentService.processHeatingSignal())
-        .find(mod => mod.id === this.scenario);
-      this.assessmentService.updateModificationProperty(this.scenario, 'losses', {
-        ...modification?.scenarioOverrides?.losses,
-        wallLosses,
-      });
-    }
+    this.assessmentService.updateLossesProperty(this.scenario, 'wallLosses', wallLosses);
   }
 }
