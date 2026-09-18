@@ -112,7 +112,13 @@ export class PumpsSuiteApiService {
     let stageCount: number = psatInput.stages;
     let speed: SpecificSpeed = this.suiteApiHelperService.getFixedSpeedEnum(psatInput.fixed_speed);
     let specifiedDriveEfficiency: number = psatInput.specifiedDriveEfficiency / 100;
-    let pumpInput: PumpResultInput = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResultInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency);
+    let pumpInput: PumpResultInput;
+    if (psatInput.pump_style === 12) {
+      let differentialPressurePsi: number = psatInput.differentialPressure;
+      pumpInput = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResultInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency, differentialPressurePsi);
+    } else {
+      pumpInput = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResultInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency);
+    }
     //motor
     let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(psatInput.line_frequency);
     let motorRatedPower: number = psatInput.motor_rated_power;

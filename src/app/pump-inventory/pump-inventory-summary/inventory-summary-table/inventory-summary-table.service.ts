@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { FieldMeasurements, FieldMeasurementsOptions, FluidProperties, FluidPropertiesOptions, NameplateData, NameplateDataOptions, PumpInventoryData, PumpItem, PumpMotorProperties, PumpMotorPropertiesOptions, PumpProperties, PumpPropertiesOptions, PumpPropertyDisplayOptions, PumpStatus, PumpStatusOptions, SystemProperties, SystemPropertiesOptions } from '../../pump-inventory';
 import { PumpInventorySummaryService, PumpSummaryUnitsImperial, PumpSummaryUnitsMetric } from '../pump-inventory-summary.service';
+import { isPositiveDisplacementPump } from '../../../psat/psatConstants';
 
 @Injectable()
 export class InventorySummaryTableService {
@@ -111,7 +112,9 @@ export class InventorySummaryTableService {
       pumpData.push({ value: pumpProperties.pumpSize, fieldStr: 'pumpSize', unit: units.pumpSize });
     } 
     if (pumpPropertiesOptions.designHead) {
-      pumpData.push({ value: pumpProperties.designHead, fieldStr: 'designHead', unit: units.designHead });
+      let isPositiveDisplacement = isPositiveDisplacementPump(pumpProperties.pumpType);
+      pumpData.push({ value: isPositiveDisplacement ? undefined : pumpProperties.designHead, fieldStr: 'designHead', unit: units.designHead });
+      pumpData.push({ value: isPositiveDisplacement ? pumpProperties.designDifferentialPressure : undefined, fieldStr: 'designDifferentialPressure', unit: units.designDifferentialPressure });
     }
     if (pumpPropertiesOptions.designFlow) {
       pumpData.push({ value: pumpProperties.designFlow, fieldStr: 'designFlow', unit: units.designFlow });
