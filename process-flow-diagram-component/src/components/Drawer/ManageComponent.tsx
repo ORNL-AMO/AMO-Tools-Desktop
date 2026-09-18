@@ -18,7 +18,7 @@ import NodeEnergy from './NodeEnergy';
 const ManageComponent = (props: ManageComponentProps) => {
     const dispatch = useAppDispatch();
     const { selectedNode } = props;
-    const componentTabs = useAppSelector(state => state.diagram.manageDataTabs);
+    const componentTabs = useAppSelector(state => state.ui.manageDataTabs);
     const isWaterUsingSystem = props.selectedNode.type === 'waterUsingSystem';
     const hasEnergyTab = isWaterUsingSystem || props.selectedNode.type === 'waterIntake' || props.selectedNode.type === 'waterDischarge';
     const [selectedTab, setSelectedTab] = useState(0);
