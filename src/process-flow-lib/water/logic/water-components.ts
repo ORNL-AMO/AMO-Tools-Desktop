@@ -1,5 +1,7 @@
 import { CustomNodeStyleMap } from "../constants";
 import { Connection, Edge, MarkerType, Node } from "@xyflow/react";
+import { DiagramSettings, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
+import { HeatEnergy, MotorEnergy, ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { DiagramSettings, getDefaultFlowConfidence, getDefaultFlowTotalTouched, Handles, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType } from "../types/diagram";
 import { ConnectedFlowType, DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, IntakeSource, WasteWaterTreatment, WaterProcessComponent, WaterSystemFlowsTotals, WaterTreatment, WaterUsingSystem } from "../types/water-components";
 import { getNewIdString } from "./utils";
@@ -223,8 +225,12 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
       index: 0
     },
     {
-        label: 'Customize',
+        label: 'Energy',
         index: 1
+      },
+    {
+        label: 'Customize',
+        index: 2
       }
   ],
   "water-discharge": [
@@ -233,8 +239,12 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
       index: 0
     },
     {
-        label: 'Customize',
+        label: 'Energy',
         index: 1
+      },
+    {
+        label: 'Customize',
+        index: 2
       }
   ],
   "water-using-system":
@@ -248,8 +258,12 @@ export const ComponentManageDataTabs: Record<WaterProcessComponentType, ManageDa
         index: 1
       },
       {
-        label: 'Customize',
+        label: 'Energy',
         index: 2
+      },
+      {
+        label: 'Customize',
+        index: 3
       }
     ],
   "summing-node": defaultTabs,
@@ -673,6 +687,27 @@ export const getComponentTypeLabel = (processComponentType: ProcessFlowNodeType)
     'summing-node': 'Summing Connector'
   };
   return componentTypeLabels[processComponentType] || processComponentType;
+}
+
+export const getDefaultHeatEnergy = (): HeatEnergy => {
+  return {
+    incomingTemp: undefined,
+    outgoingTemp: undefined,
+    heaterEfficiency: undefined,
+    heatingFuelType: 0,
+    wasteWaterDischarge: undefined,
+  }
+}
+
+export const getDefaultMotorEnergy = (lastIndex: number): MotorEnergy => {
+  return {
+    name: `Pump Energy ${lastIndex + 1}`,
+    numberUnits: 1,
+    hoursPerYear: 8760,
+    loadFactor: undefined,
+    ratedPower: undefined,
+    systemEfficiency: undefined,
+  };
 }
 
 
