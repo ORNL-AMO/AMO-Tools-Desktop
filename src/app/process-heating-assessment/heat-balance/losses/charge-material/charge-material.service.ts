@@ -180,17 +180,6 @@ export class ChargeMaterialService {
 
   private saveLosses(): void {
     const chargeMaterials = this.store.all().map(item => ({ ...this.buildChargeMaterial(item), name: item.name, id: item.id }));
-
-    if (this.scenario === 'baseline') {
-      const current = this.assessmentService.processHeatingSignal();
-      this.assessmentService.updateProcessHeatingProperty('losses', { ...current?.losses, chargeMaterials });
-    } else {
-      const modification = this.assessmentService.getModifications(this.assessmentService.processHeatingSignal()).find(mod => mod.id === this.scenario);
-      const existingOverrideLosses = modification?.scenarioOverrides?.losses;
-      this.assessmentService.updateModificationProperty(this.scenario, 'losses', {
-        ...existingOverrideLosses,
-        chargeMaterials,
-      });
-    }
+    this.assessmentService.updateLossesProperty(this.scenario, 'chargeMaterials', chargeMaterials);
   }
 }

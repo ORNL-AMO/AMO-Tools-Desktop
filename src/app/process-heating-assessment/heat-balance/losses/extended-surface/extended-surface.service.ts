@@ -124,16 +124,6 @@ export class ExtendedSurfaceService {
       return surface;
     });
 
-    if (this.scenario === 'baseline') {
-      const current = this.assessmentService.processHeatingSignal();
-      this.assessmentService.updateProcessHeatingProperty('losses', { ...current?.losses, extendedSurfaces });
-    } else {
-      const modification = this.assessmentService.getModifications(this.assessmentService.processHeatingSignal())
-        .find(mod => mod.id === this.scenario);
-      this.assessmentService.updateModificationProperty(this.scenario, 'losses', {
-        ...modification?.scenarioOverrides?.losses,
-        extendedSurfaces,
-      });
-    }
+    this.assessmentService.updateLossesProperty(this.scenario, 'extendedSurfaces', extendedSurfaces);
   }
 }

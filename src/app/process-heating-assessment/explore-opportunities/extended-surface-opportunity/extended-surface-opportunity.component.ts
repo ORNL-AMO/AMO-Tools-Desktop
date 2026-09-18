@@ -31,10 +31,10 @@ export class ExtendedSurfaceOpportunityComponent {
   );
 
   readonly surfaceTemperatureComparisons: Signal<ExtendedSurfaceTemperatureComparison[]> = computed(() => {
-    const baselineSurfaces = this.assessmentService.scenarioPhast('baseline')?.losses?.extendedSurfaces ?? [];
+    const baselineSurfaces = this.assessmentService.lossSignal('baseline', 'extendedSurfaces') ?? [];
     const modificationId = this.modificationService.selectedModificationId();
     const modificationSurfaces = modificationId
-      ? this.assessmentService.scenarioPhast(modificationId)?.losses?.extendedSurfaces ?? []
+      ? this.assessmentService.lossSignal(modificationId, 'extendedSurfaces') ?? []
       : [];
 
     return baselineSurfaces.map(baselineSurface => {
@@ -69,8 +69,8 @@ export class ExtendedSurfaceOpportunityComponent {
       return;
     }
 
-    const baselineSurfaces = this.assessmentService.scenarioPhast('baseline')?.losses?.extendedSurfaces ?? [];
-    const effectiveSurfaces = this.assessmentService.scenarioPhast(modificationId)?.losses?.extendedSurfaces ?? [];
+    const baselineSurfaces = this.assessmentService.lossSignal('baseline', 'extendedSurfaces') ?? [];
+    const effectiveSurfaces = this.assessmentService.lossSignal(modificationId, 'extendedSurfaces') ?? [];
 
     // Reset only the surface temperature on each entry back to baseline's value; any other override
     // already on these entries (e.g. entered separately in Expert View) is left as is.
@@ -95,7 +95,7 @@ export class ExtendedSurfaceOpportunityComponent {
       return;
     }
 
-    const effectiveSurfaces = this.assessmentService.scenarioPhast(modification.id)?.losses?.extendedSurfaces ?? [];
+    const effectiveSurfaces = this.assessmentService.lossSignal(modification.id, 'extendedSurfaces') ?? [];
     const updatedExtendedSurfaces = effectiveSurfaces.map(surface =>
       surface.id === surfaceId ? { ...surface, surfaceTemperature } : surface
     );

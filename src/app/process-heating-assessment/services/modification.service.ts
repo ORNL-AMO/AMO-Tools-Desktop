@@ -1,10 +1,11 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { getNewIdString } from '../../shared/helperFunctions';
 import { ExploreOpportunityCategory } from '../models/phast';
-import { ProcessHeatingModification } from '../models/modification';
+import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
+import { getBaselineSnapshot } from './scenario-merge.util';
 
 @Injectable()
 export class ModificationService {
@@ -36,7 +37,12 @@ export class ModificationService {
     const modifications = this.modifications();
     const id = getNewIdString();
     const modificationName = name ?? this.defaultModificationName();
-    const modification: ProcessHeatingModification = { id, scenarioOverrides: { name: modificationName } };
+    const baseline = this.assessmentService.processHeatingSignal();
+    const scenarioOverrides: ScenarioOverrides = { name: modificationName, ...getBaselineSnapshot(baseline) };
+    if (scenarioOverrides.co2SavingsData) {
+      scenarioOverrides.co2SavingsData.userEnteredModificationEmissions = baseline.co2SavingsData?.userEnteredBaselineEmissions;
+    }
+    const modification: ProcessHeatingModification = { id, scenarioOverrides };
     this.writeModifications([...modifications, modification]);
     this.selectModification(id);
     return id;

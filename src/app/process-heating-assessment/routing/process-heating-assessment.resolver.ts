@@ -10,7 +10,7 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { AppErrorService } from '../../shared/errors/app-error.service';
 import { MeasurAppError } from '../../shared/errors/errors';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
-import { computeScenarioOverrides, ensureLossIdsForPhast } from '../services/scenario-merge.util';
+import { deriveScenarioOverridesFromLegacyModification, ensureLossIdsForPhast } from '../services/scenario-merge.util';
 
 export interface ProcessHeatingResolverData {
   assessment: Assessment;
@@ -87,7 +87,7 @@ export class ProcessHeatingAssessmentResolver implements Resolve<ProcessHeatingR
             ? modification
             : {
               ...modification,
-              scenarioOverrides: computeScenarioOverrides(legacyModification.phast, processHeating),
+              scenarioOverrides: deriveScenarioOverridesFromLegacyModification(legacyModification.phast, processHeating),
               exploreOpportunityFlags: computeMigratedExploreOpportunityFlags(legacyModification),
             };
         });

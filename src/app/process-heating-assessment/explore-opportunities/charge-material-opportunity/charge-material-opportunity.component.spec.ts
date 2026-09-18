@@ -51,6 +51,10 @@ class FakeProcessHeatingAssessmentService {
     const modification = modifications.find(candidate => candidate.id === scenario);
     return modification ? getEffectivePhast(baseline, modification) : undefined;
   }
+
+  lossSignal(scenario: string, lossKey: keyof PHAST['losses']) {
+    return this.scenarioPhast(scenario)?.losses?.[lossKey];
+  }
 }
 
 class FakeProcessHeatingUiService {

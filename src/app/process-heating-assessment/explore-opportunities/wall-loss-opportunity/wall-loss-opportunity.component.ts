@@ -31,10 +31,10 @@ export class WallLossOpportunityComponent {
   );
 
   readonly surfaceTemperatureComparisons: Signal<WallLossSurfaceTemperatureComparison[]> = computed(() => {
-    const baselineLosses = this.assessmentService.scenarioPhast('baseline')?.losses?.wallLosses ?? [];
+    const baselineLosses = this.assessmentService.lossSignal('baseline', 'wallLosses') ?? [];
     const modificationId = this.modificationService.selectedModificationId();
     const modificationLosses = modificationId
-      ? this.assessmentService.scenarioPhast(modificationId)?.losses?.wallLosses ?? []
+      ? this.assessmentService.lossSignal(modificationId, 'wallLosses') ?? []
       : [];
 
     return baselineLosses.map(baselineLoss => {
@@ -70,8 +70,8 @@ export class WallLossOpportunityComponent {
       return;
     }
 
-    const baselineLosses = this.assessmentService.scenarioPhast('baseline')?.losses?.wallLosses ?? [];
-    const effectiveLosses = this.assessmentService.scenarioPhast(modificationId)?.losses?.wallLosses ?? [];
+    const baselineLosses = this.assessmentService.lossSignal('baseline', 'wallLosses') ?? [];
+    const effectiveLosses = this.assessmentService.lossSignal(modificationId, 'wallLosses') ?? [];
 
     // Reset only the surface temperature on each loss back to baseline's value; any other override
     // already on these losses (e.g. entered separately in Expert View) is left as is.
@@ -96,7 +96,7 @@ export class WallLossOpportunityComponent {
       return;
     }
 
-    const effectiveLosses = this.assessmentService.scenarioPhast(modification.id)?.losses?.wallLosses ?? [];
+    const effectiveLosses = this.assessmentService.lossSignal(modification.id, 'wallLosses') ?? [];
     const updatedWallLosses = effectiveLosses.map(loss =>
       loss.id === lossId ? { ...loss, surfaceTemperature } : loss
     );
