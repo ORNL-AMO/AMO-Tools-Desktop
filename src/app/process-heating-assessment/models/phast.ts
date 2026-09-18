@@ -84,7 +84,6 @@ export const ExploreOpportunityCategory = {
   Wall: 'wall',
   AllTemp: 'allTemp',
   Fixtures: 'fixtures',
-  ExtendedSurface: 'extendedSurface',
 } as const;
 
 export type ExploreOpportunityCategory = typeof ExploreOpportunityCategory[keyof typeof ExploreOpportunityCategory];

@@ -11,7 +11,8 @@ export interface WallLossSurfaceTemperatureComparison {
   modificationSurfaceTemperature: number | undefined;
 }
 
-const OPPORTUNITY_DISPLAY_NAME = 'Reduce Wall Surface Temperature';
+
+const OPPORTUNITY_DISPLAY_NAME = 'Add / Improve Wall Insulation';
 
 @Component({
   selector: 'app-wall-loss-opportunity',
