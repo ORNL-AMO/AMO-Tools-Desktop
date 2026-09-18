@@ -7,14 +7,15 @@ import { Accordion, AccordionDetails, AccordionSummary } from "../StyledMUI/Acco
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
 import FlowValueDisplay from "../Diagram/FlowValueDisplay";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
-import { modalOpenChange, nodeDataPropertyChange } from "../Diagram/diagramReducer";
+import { nodeDataPropertyChange } from "../Diagram/diagramReducer";
+import { modalOpenChange } from "../Diagram/uiSlice";
 import SourceFlowForm from "./SourceFlowForm";
 import { selectNodes, selectNodeValidation, selectTotalDischargeFlow, selectTotalSourceFlow } from "../Diagram/store";
 import DischargeFlowForm from "./DischargeFlowForm";
 import InvalidIcon from "../../validation/InvalidIcon";
 import SelectTreatmentType from "./SelectTreatmentType";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
-import CalculateIcon from '@mui/icons-material/Calculate';
+import 'font-awesome/css/font-awesome.css';
 import { ProcessFlowPart, WaterTreatment, waterTreatmentTypeOptions, WasteWaterTreatment, wasteWaterTreatmentTypeOptions, CustomEdgeData, waterUsingSystemTypeOptions, WaterUsingSystem, getNodeEstimatedUnknownLosses, hasValidSourceForm, hasValidDischargeForm } from "process-flow-lib";
 import InputField from "../StyledMUI/InputField";
 
@@ -59,15 +60,15 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
         componentData = componentData as WaterTreatment;
         defaultSelectedTreatmentType = componentData.treatmentType !== undefined ? Number(componentData.treatmentType) : 0;
         treatmentTypeOptions = waterTreatmentTypeOptions;
-        totalUnknownLoss = getNodeEstimatedUnknownLosses(componentData as WaterTreatment, totalSourceFlow, totalDischargeFlow);   
+        totalUnknownLoss = Number(getNodeEstimatedUnknownLosses(componentData as WaterTreatment, totalSourceFlow, totalDischargeFlow).toFixed(settings.flowDecimalPrecision));
     } else if (isWasteWaterTreatment) {
         componentData = componentData as WasteWaterTreatment;
         defaultSelectedTreatmentType = componentData.treatmentType !== undefined ? Number(componentData.treatmentType) : 0;
         treatmentTypeOptions = wasteWaterTreatmentTypeOptions;
-        totalUnknownLoss = getNodeEstimatedUnknownLosses(componentData as WasteWaterTreatment, totalSourceFlow, totalDischargeFlow);   
+        totalUnknownLoss = Number(getNodeEstimatedUnknownLosses(componentData as WasteWaterTreatment, totalSourceFlow, totalDischargeFlow).toFixed(settings.flowDecimalPrecision));
     } else if (isWaterUsingSystem) {
         const waterSystem = componentData as WaterUsingSystem;
-        totalUnknownLoss = getNodeEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow);
+        totalUnknownLoss = Number(getNodeEstimatedUnknownLosses(waterSystem, totalSourceFlow, totalDischargeFlow).toFixed(settings.flowDecimalPrecision));
     }
 
     const handleAccordianChange = (newExpanded: boolean, setExpanded: (newExpanded: boolean) => void) => {
@@ -160,7 +161,7 @@ const ComponentDataForm = (props: ComponentDataFormProps) => {
                                     minWidth: 0
                                 }}
                                 variant="outlined">
-                                <CalculateIcon />
+                                <i className="fa fa-calculator" />
                             </Button>
                         </span>
                     </SmallTooltip>

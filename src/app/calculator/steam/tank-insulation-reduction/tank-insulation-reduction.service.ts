@@ -291,10 +291,12 @@ export class TankInsulationReductionService {
   }
 
   convertResults(results: TankInsulationReductionResult, settings: Settings): TankInsulationReductionResult {
-    if (results.energySourceType != 2 && settings.unitsOfMeasure != 'Imperial') {
-      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('MMBtu').to('GJ');
-    } else if (results.energySourceType == 2) {
-      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('MMBtu').to('kWh');
+    if (results.energySourceType == 2) {
+      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Btu').to('kWh');
+    } else if (settings.unitsOfMeasure != 'Imperial') {
+      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Btu').to('GJ');
+    } else {
+      results.annualHeatLoss = this.convertUnitsService.value(results.annualHeatLoss).from('Btu').to('MMBtu');
     }
     if( results.heatedOrChilled == 1){
       results.annualHeatLoss = results.annualHeatLoss * (-1);
