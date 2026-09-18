@@ -1,5 +1,5 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
-import { ConnectedInventoryData, ConnectedItem } from "../shared/connected-inventory/integrations";
+import { ConnectedItem } from "../shared/connected-inventory/integrations";
 import { OperatingHours } from "../shared/models/operations";
 
 export interface PumpInventoryData {
@@ -104,6 +104,7 @@ export interface PumpProperties {
   minFlowSize: number, 
   pumpSize: number,
   designHead: number,
+  designDifferentialPressure: number,
   designFlow: number,
   designEfficiency: number,
 }

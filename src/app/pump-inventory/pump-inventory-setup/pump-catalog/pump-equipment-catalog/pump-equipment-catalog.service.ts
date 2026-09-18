@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { PumpProperties } from '../../../pump-inventory';
 import { WholeNumberValidator } from '../../../../shared/validators/whole-number';
+import { isPositiveDisplacementPump } from '../../../../psat/psatConstants';
 @Injectable()
 export class PumpEquipmentCatalogService {
 
   constructor(private formBuilder: FormBuilder) { }
 
   getFormFromPumpEquipmentProperties(pumpEquipmentProperties: PumpProperties): FormGroup {
-    let designHeadValidators: Array<ValidatorFn> = this.getDesignHeadValidators(pumpEquipmentProperties.pumpType);
+    let designDifferentialPressureValidators: Array<ValidatorFn> = this.getDesignDifferentialPressureValidators(pumpEquipmentProperties.pumpType);
     let form: UntypedFormGroup = this.formBuilder.group({
       pumpType: [pumpEquipmentProperties.pumpType],
       shaftOrientation: [pumpEquipmentProperties.shaftOrientation],
@@ -25,7 +26,8 @@ export class PumpEquipmentCatalogService {
       impellerDiameter: [pumpEquipmentProperties.impellerDiameter],
       minFlowSize: [pumpEquipmentProperties.minFlowSize],
       pumpSize: [pumpEquipmentProperties.pumpSize],
-      designHead: [pumpEquipmentProperties.designHead, designHeadValidators],
+      designHead: [pumpEquipmentProperties.designHead],
+      designDifferentialPressure: [pumpEquipmentProperties.designDifferentialPressure, designDifferentialPressureValidators],
       designFlow: [pumpEquipmentProperties.designFlow],
       designEfficiency: [pumpEquipmentProperties.designEfficiency],
      });
@@ -35,18 +37,18 @@ export class PumpEquipmentCatalogService {
     return form;
   }
 
-  getDesignHeadValidators(pumpType: number): Array<ValidatorFn> {
-    if (pumpType == 12) {
+  getDesignDifferentialPressureValidators(pumpType: number): Array<ValidatorFn> {
+    if (isPositiveDisplacementPump(pumpType)) {
       return [Validators.required, Validators.min(0)];
     } else {
       return [];
     }
   }
 
-  updateDesignHeadValidators(form: FormGroup): FormGroup {
-    let designHeadValidators: Array<ValidatorFn> = this.getDesignHeadValidators(form.controls.pumpType.value);
-    form.controls.designHead.setValidators(designHeadValidators);
-    form.controls.designHead.updateValueAndValidity();
+  updateDesignDifferentialPressureValidators(form: FormGroup): FormGroup {
+    let designDifferentialPressureValidators: Array<ValidatorFn> = this.getDesignDifferentialPressureValidators(form.controls.pumpType.value);
+    form.controls.designDifferentialPressure.setValidators(designDifferentialPressureValidators);
+    form.controls.designDifferentialPressure.updateValueAndValidity();
     return form;
   }
 
@@ -65,8 +67,14 @@ export class PumpEquipmentCatalogService {
     pumpEquipmentProperties.ratedSpeed = form.controls.ratedSpeed.value; 
     pumpEquipmentProperties.impellerDiameter = form.controls.impellerDiameter.value; 
     pumpEquipmentProperties.minFlowSize = form.controls.minFlowSize.value; 
-    pumpEquipmentProperties.pumpSize = form.controls.pumpSize.value; 
-    pumpEquipmentProperties.designHead = form.controls.designHead.value;
+    pumpEquipmentProperties.pumpSize = form.controls.pumpSize.value;
+    if (isPositiveDisplacementPump(pumpEquipmentProperties.pumpType)) {
+      pumpEquipmentProperties.designHead = null;
+      pumpEquipmentProperties.designDifferentialPressure = form.controls.designDifferentialPressure.value;
+    } else {
+      pumpEquipmentProperties.designHead = form.controls.designHead.value;
+      pumpEquipmentProperties.designDifferentialPressure = null;
+    }
     pumpEquipmentProperties.designFlow = form.controls.designFlow.value;
     pumpEquipmentProperties.designEfficiency = form.controls.designEfficiency.value;
 

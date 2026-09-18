@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, UntypedFormGroup, Validators} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { pumpTypesConstant } from '../../../../psat/psatConstants';
+import { inventoryPumpTypesConstant, isPositiveDisplacementPump } from '../../../../psat/psatConstants';
 import { Settings } from '../../../../shared/models/settings';
 import { PumpItem, PumpPropertiesOptions } from '../../../pump-inventory';
 import { PumpInventoryService, pumpInventoryShaftOrientations, pumpInventoryShaftSealTypes } from '../../../pump-inventory.service';
@@ -35,7 +35,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   ngOnInit(): void {
     this.shaftOrientations = pumpInventoryShaftOrientations;
     this.shaftSealTypes = pumpInventoryShaftSealTypes;
-    this.pumpTypes = pumpTypesConstant;
+    this.pumpTypes = inventoryPumpTypesConstant;
     this.settingsSub = this.pumpInventoryService.settings.subscribe(val => {
       this.settings = val;
     });
@@ -52,6 +52,10 @@ export class PumpEquipmentCatalogComponent implements OnInit {
     this.settingsSub.unsubscribe();
   }
 
+  get isPositiveDisplacement(): boolean {
+    return isPositiveDisplacementPump(this.form.controls.pumpType.value);
+  }
+
   save() {
     let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
     selectedPump.pumpEquipment = this.pumpEquipmentCatalogService.updatePumpEquipmentPropertiesFromForm(this.form, selectedPump.pumpEquipment);
@@ -59,7 +63,12 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   }
 
   changePumpType() {
-    this.form = this.pumpEquipmentCatalogService.updateDesignHeadValidators(this.form);
+    this.form = this.pumpEquipmentCatalogService.updateDesignDifferentialPressureValidators(this.form);
+    if (this.isPositiveDisplacement) {
+      this.form.controls.designHead.reset(null);
+    } else {
+      this.form.controls.designDifferentialPressure.reset(null);
+    }
     this.save();
     this.pumpCatalogService.pumpTypeChanged.next(this.form.controls.pumpType.value);
   }

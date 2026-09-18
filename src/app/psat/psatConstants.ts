@@ -43,8 +43,19 @@ export const pumpTypesConstant: Array<{ value: number, display: string }> = [
         value: 10,
         display: 'Large End Suction',
     },
+];
+
+export const positiveDisplacementPumpType: number = 12;
+
+export function isPositiveDisplacementPump(pumpType: number): boolean {
+    return pumpType === positiveDisplacementPumpType;
+}
+
+// Positive Displacement is inventory-facing only (no differentialPressure input exists in standalone PSAT or the pump calculators).
+export const inventoryPumpTypesConstant: Array<{ value: number, display: string }> = [
+    ...pumpTypesConstant,
     {
-        value: 12,
+        value: positiveDisplacementPumpType,
         display: 'Positive Displacement',
     }
 ];

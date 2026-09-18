@@ -246,40 +246,53 @@
     }
 
     @if (displayOptions.designHead) {
-    <div class="form-group" [ngClass]="{'invalid': form.controls.designHead.invalid}">
-        @if (form.controls.pumpType.value == 12) {
-        <label for="designHead">Design Differential Pressure</label>
-        } @else {
-        <label for="designHead">Design Head</label>
-        }
-        <div class="input-group">
-            <input type="number" class="form-control" (focus)="focusField('designHead')" (input)="save()"
-                formControlName="designHead" id="designHead">
-            @if (form.controls.pumpType.value == 12) {
+        @if (isPositiveDisplacement) {
+        <div class="form-group" [ngClass]="{'invalid': form.controls.designDifferentialPressure.invalid}">
+            <label for="designDifferentialPressure">Design Differential Pressure</label>
+            <div class="input-group">
+                <input type="number" class="form-control" (focus)="focusField('designDifferentialPressure')" (input)="save()"
+                    formControlName="designDifferentialPressure" id="designDifferentialPressure">
                 @if (settings.unitsOfMeasure == 'Imperial') {
                 <span class="input-group-addon units">psi</span>
                 } @else {
                 <span class="input-group-addon units">Pa</span>
                 }
-            } @else {
+            </div>
+            @if (form.controls.designDifferentialPressure.invalid && !form.controls.designDifferentialPressure.pristine) {
+            <span class="alert-danger pull-right small">
+                @if (form.controls.designDifferentialPressure.errors.required) {
+                <span>Value Required</span>
+                }
+                @if (form.controls.designDifferentialPressure.errors.min) {
+                <span>Value can't be less than {{form.controls.designDifferentialPressure.errors.min.min}}.</span>
+                }
+            </span>
+            }
+        </div>
+        } @else {
+        <div class="form-group" [ngClass]="{'invalid': form.controls.designHead.invalid}">
+            <label for="designHead">Design Head</label>
+            <div class="input-group">
+                <input type="number" class="form-control" (focus)="focusField('designHead')" (input)="save()"
+                    formControlName="designHead" id="designHead">
                 @if (settings.unitsOfMeasure == 'Imperial') {
                 <span class="input-group-addon units">ft</span>
                 } @else {
                 <span class="input-group-addon units">m</span>
                 }
+            </div>
+            @if (form.controls.designHead.invalid && !form.controls.designHead.pristine) {
+            <span class="alert-danger pull-right small">
+                @if (form.controls.designHead.errors.required) {
+                <span>Value Required</span>
+                }
+                @if (form.controls.designHead.errors.min) {
+                <span>Value can't be less than {{form.controls.designHead.errors.min.min}}.</span>
+                }
+            </span>
             }
         </div>
-        @if (form.controls.designHead.invalid && !form.controls.designHead.pristine) {
-        <span class="alert-danger pull-right small">
-            @if (form.controls.designHead.errors.required) {
-            <span>Value Required</span>
-            }
-            @if (form.controls.designHead.errors.min) {
-            <span>Value can't be less than {{form.controls.designHead.errors.min.min}}.</span>
-            }
-        </span>
         }
-    </div>
     }
 
     @if (displayOptions.designFlow) {

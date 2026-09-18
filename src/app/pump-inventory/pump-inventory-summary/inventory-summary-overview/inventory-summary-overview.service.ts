@@ -8,7 +8,6 @@ import { Co2SavingsData } from '../../../calculator/utilities/co2-savings/co2-sa
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { PsatService } from '../../../psat/psat.service';
 import { PsatInputs, PsatOutputs } from '../../../shared/models/psat';
-import { ConvertPumpInventoryService } from '../../convert-pump-inventory.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
 
 declare var psatAddon: any;
@@ -17,7 +16,7 @@ declare var psatAddon: any;
 export class InventorySummaryOverviewService {
 
   inventorySummary: BehaviorSubject<InventorySummary>;
-  constructor(private pumpInventoryService: PumpInventoryService, private convertPumpInventoryService: ConvertPumpInventoryService,
+  constructor(private pumpInventoryService: PumpInventoryService,
     private psatService: PsatService, private assessmentCo2SavingsService: AssessmentCo2SavingsService,
     private convertUnitsService: ConvertUnitsService) {
     this.inventorySummary = new BehaviorSubject<InventorySummary>({
@@ -109,7 +108,7 @@ export class InventorySummaryOverviewService {
       emissionsOutput: 0,
     };
     if (this.pumpInventoryService.isPumpValid(pumpItem)) {
-      let differentialPressurePsi: number = pumpItem.pumpEquipment.designHead;
+      let differentialPressurePsi: number = pumpItem.pumpEquipment.designDifferentialPressure;
       if (settings.unitsOfMeasure == 'Metric') {
         differentialPressurePsi = this.convertUnitsService.value(differentialPressurePsi).from('Pa').to('psi');
       }

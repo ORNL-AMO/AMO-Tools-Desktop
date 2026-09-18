@@ -187,6 +187,7 @@ export class PumpInventoryService {
         minFlowSize: undefined, 
         pumpSize: undefined,
         designHead: undefined,
+        designDifferentialPressure: undefined,
         designFlow: undefined,
         designEfficiency: undefined,
       },
