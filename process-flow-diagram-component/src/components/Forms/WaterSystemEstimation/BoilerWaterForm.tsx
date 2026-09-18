@@ -7,7 +7,7 @@ import { EstimateSystemContext, EstimateSystemState, WaterAssessmentModuleConsum
 import HoursPerYearInputField from './HoursPerYearInputField';
 import { getEstimateSystemValidationSchema, WaterSystemFormMapping } from '../../../validation/Validation';
 import { adaptEstimatedFlowResults, EstimatedFlowResults, getDefaultResultRows, getEstimatedFlowResultRows, getInitialValuesFromForm } from './SystemEstimationFormUtils';
-import { applyEstimatedFlowResults, modalOpenChange } from '../../Diagram/diagramReducer';
+import { applyEstimatedFlowResults } from '../../Diagram/diagramReducer';
 import { BoilerWaterResults, BoilerWater, calculateBoilerWaterResults, convertAnnualFlowResult } from 'process-flow-lib';
 import { TwoCellResultRow, TwoCellResultTable } from '../../StyledMUI/ResultTables';
 import FormActionGroupButtons from '../FormActionGroupButtons';

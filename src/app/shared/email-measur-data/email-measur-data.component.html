@@ -21,10 +21,7 @@
     <div class="form-group d-flex flex-column w-100 mb-3">
       <label class="bold mr-2 w-25" for="emailTo">To Email</label>
       <div class="input-group">
-        <input type="text" formControlName="emailTo" class="form-control" (input)="save()" id="emailTo"
-          [typeahead]="contactSearchDataSource" [typeaheadAsync]="true" [typeaheadOptionField]="'email'"
-          [typeaheadMultipleSearch]="true" [typeaheadMultipleSearchDelimiters]="','" [typeaheadMinLength]="0"
-          [typeaheadItemTemplate]="contactItemTemplate" (typeaheadOnSelect)="onContactSelected()" />
+        <input type="text" formControlName="emailTo" class="form-control" (input)="save()" id="emailTo" />
       </div>
       <small class="form-text text-muted">Separate multiple email addresses with commas (ex. user1&#64;example.com, admin&#64;example.com)</small>
       <div class="input-group">
@@ -50,10 +47,6 @@
         </div>
       }
     </div>
-
-    <ng-template #contactItemTemplate let-model="item">
-      <span>{{model.contactName}}@if (model.contactName) {<span> &mdash; </span>}{{model.email}}</span>
-    </ng-template>
 
     <div class="form-group d-flex flex-column w-100 mb-3">
       <label class="bold mr-2 w-25" for="emailAttachmentName">Attachment Name</label>

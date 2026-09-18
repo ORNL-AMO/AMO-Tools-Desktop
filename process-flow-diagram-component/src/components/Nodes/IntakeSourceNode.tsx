@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { DiagramNode, NodeFlowData, ProcessFlowPart } from 'process-flow-lib';
 import { selectNodeCalculatedFlowData } from '../Diagram/store';
 import CustomNodeToolbar from './CustomNodeToolbar';
-import { openDrawerWithSelected } from '../Diagram/diagramReducer';
+import { openDrawerWithSelected } from '../Diagram/diagramThunks';
 
 const IntakeSourceNode = ({ data, id, selected }: NodeProps<DiagramNode>) => {
   const dispatch = useAppDispatch();
