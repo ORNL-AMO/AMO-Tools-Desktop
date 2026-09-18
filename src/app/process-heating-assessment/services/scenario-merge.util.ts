@@ -1,6 +1,6 @@
 import { cloneDeep, isEqual } from 'lodash';
 import { getNewIdString } from '../../shared/helperFunctions';
-import { Losses, PHAST } from '../models/phast';
+import { LOSS_KEYS, Losses, PHAST } from '../models/phast';
 import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
 
 // Combines a modification's overrides with baseline to produce the PHAST object that modification
@@ -36,6 +36,19 @@ export function getEffectivePhast(baseline: PHAST, modification: ProcessHeatingM
   };
 }
 
+// Materializes every loss key as an explicit own-property (even `undefined`) rather than only the
+// keys `losses` happens to have. A key that's absent from `losses` (never saved yet) would otherwise
+// stay absent from the snapshot too, and getEffectivePhast()'s spread only overrides keys diff.losses
+// actually owns — so an absent key silently falls through to baseline's live value the first time
+// that loss type is saved there, unfreezing a snapshot that was supposed to be frozen for good.
+function fullLossSnapshot(losses: Losses | undefined): Losses {
+  const snapshot = {} as Losses;
+  for (const key of LOSS_KEYS) {
+    snapshot[key] = cloneDeep(losses?.[key]) as never;
+  }
+  return snapshot;
+}
+
 /**
  * Deep-clones the 5 calc-relevant fields off `source` so a modification stops
  * live-tracking baseline for them once created. All 5 keys are always included, even
@@ -45,7 +58,7 @@ export function getEffectivePhast(baseline: PHAST, modification: ProcessHeatingM
 export function getBaselineSnapshot(source: PHAST | undefined): Pick<ScenarioOverrides,
   'losses' | 'operatingCosts' | 'operatingHours' | 'systemEfficiency' | 'co2SavingsData'> {
   return {
-    losses: cloneDeep(source?.losses),
+    losses: fullLossSnapshot(source?.losses),
     operatingCosts: cloneDeep(source?.operatingCosts),
     operatingHours: cloneDeep(source?.operatingHours),
     systemEfficiency: source?.systemEfficiency,

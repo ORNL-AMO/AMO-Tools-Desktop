@@ -1,6 +1,6 @@
-import { PHAST } from '../models/phast';
+import { LOSS_KEYS, PHAST } from '../models/phast';
 import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
-import { deriveScenarioOverridesFromLegacyModification, ensureLossIdsForPhast, getEffectivePhast } from './scenario-merge.util';
+import { deriveScenarioOverridesFromLegacyModification, ensureLossIdsForPhast, getBaselineSnapshot, getEffectivePhast } from './scenario-merge.util';
 
 describe('getEffectivePhast', () => {
   const baseline: PHAST = {
@@ -50,6 +50,16 @@ describe('getEffectivePhast', () => {
 
     expect(effectivePhast.losses.chargeMaterials).toBe(modifiedChargeMaterials);
   });
+
+  it('stays frozen for a loss type that did not exist on baseline at snapshot time, even after baseline adds it', () => {
+    let mutableBaseline: PHAST = { name: 'Baseline', losses: {} };
+    const modification = buildModification({ losses: getBaselineSnapshot(mutableBaseline).losses });
+
+    mutableBaseline = { ...mutableBaseline, losses: { ...mutableBaseline.losses, wallLosses: [{ id: 'wall-1', surfaceArea: 100 } as never] } };
+    const effectivePhast = getEffectivePhast(mutableBaseline, modification);
+
+    expect(effectivePhast.losses.wallLosses).toBeUndefined();
+  });
 });
 
 describe('deriveScenarioOverridesFromLegacyModification', () => {
@@ -90,7 +100,9 @@ describe('deriveScenarioOverridesFromLegacyModification', () => {
 
     const overrides = deriveScenarioOverridesFromLegacyModification(modificationPhast, baseline);
 
-    expect(overrides.losses).toEqual(baseline.losses);
+    expect(overrides.losses.chargeMaterials).toEqual(baseline.losses.chargeMaterials);
+    expect(overrides.losses.wallLosses).toEqual(baseline.losses.wallLosses);
+    expect(Object.keys(overrides.losses).length).toBe(LOSS_KEYS.length);
     expect(overrides.systemEfficiency).toBe(baseline.systemEfficiency);
     expect('name' in overrides).toBe(false);
   });
