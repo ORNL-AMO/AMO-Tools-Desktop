@@ -14,6 +14,10 @@ export class ContactDbService {
   allContacts: Array<SavedContact> = [];
   dbContacts: BehaviorSubject<Array<SavedContact>>;
 
+  get primaryContact(): SavedContact {
+    return this.allContacts.find(contact => contact.isPrimary);
+  }
+
   constructor(private dbService: NgxIndexedDBService) {
     this.dbContacts = new BehaviorSubject<Array<SavedContact>>([]);
   }

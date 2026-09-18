@@ -2,7 +2,7 @@
 <div #content class="psat-container psat d-flex flex-column" *ngIf="assessment && settings">
   <!--header-->
   <div #header class="w-100 hide-print sticky-top" id="psatBanner">
-    <app-psat-banner (togglePanel)="toggleOpenPanel($event)" [assessment]="assessment"></app-psat-banner>
+    <app-psat-banner [assessment]="assessment"></app-psat-banner>
     <div class="hide-print" id="psatTabs"
       *ngIf="mainTab == 'assessment' || mainTab == 'calculators' || mainTab == 'baseline'">
       <app-psat-tabs [settings]="settings" [psat]="_psat"></app-psat-tabs>
@@ -32,7 +32,7 @@
       [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
       <ng-container *ngIf="stepTab == 'baseline'">
         <app-system-basics [settings]="settings" [assessmentPsat]="assessment.psat" [assessment]="assessment" (updateSettings)="getSettings($event)"
-          (updateAssessment)="savePsat($event)" (openModal)="modalOpen()" (closeModal)="modalClose()"
+          (updateAssessment)="savePsat($event)"
           (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
         <app-integrate-pump-inventory *ngIf="!hasConnectedMotorItem"
           [(assessment)]="assessment" 

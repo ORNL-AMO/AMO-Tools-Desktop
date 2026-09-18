@@ -5,7 +5,6 @@ import { SteamLeakSurveyService } from '../steam-leak-survey-service';
 @Component({
     selector: 'app-steam-leak-copy-table',
     templateUrl: './steam-leak-copy-table.component.html',
-    styleUrls: ['./steam-leak-copy-table.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false,
 })

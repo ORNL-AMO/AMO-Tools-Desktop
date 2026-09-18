@@ -21,6 +21,13 @@
                             <div>Help</div>
                         </a>
                     </div>
+                    @if (displayNotes()) {
+                        <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab == 'notes'">
+                            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('notes')">
+                                <div>Notes</div>
+                            </a>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -35,6 +42,9 @@
                 }
                 @if (selectedPanelTab == 'results') {
                     <app-assessment-results></app-assessment-results>
+                }
+                @if (displayNotes() && selectedPanelTab == 'notes') {
+                    <app-assessment-notes></app-assessment-notes>
                 }
             </div>
         </div>

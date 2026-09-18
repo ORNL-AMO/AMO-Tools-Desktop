@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 import { useAppDispatch } from "../../hooks/state";
-import { toggleDrawer } from "../Diagram/diagramReducer";
+import { toggleDrawer } from "../Diagram/uiSlice";
 
 const DrawerToggleButton = ({side, toggleSidebarDrawer}: { side: string, toggleSidebarDrawer?: () => void }) => {
     const dispatch = useAppDispatch();

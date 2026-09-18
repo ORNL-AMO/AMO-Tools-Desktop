@@ -1,26 +1,27 @@
 import { List, TextField, InputAdornment, ListItem, Button, useTheme, Box, Typography, Collapse } from "@mui/material";
-import { getEdgeSourceAndTarget, getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent, getKnownLossComponentTotals, getNodeFlowTotals } from "../Diagram/FlowUtils";
+import { getFlowDisplayValues, getFlowValueFromPercent, getFlowValuePercent } from "../Diagram/FlowUtils";
+import { getEdgeSourceAndTarget, getNodeFlowTotals } from "process-flow-lib";
 import { Edge, Node } from "@xyflow/react";
 import CallSplitOutlinedIcon from '@mui/icons-material/CallSplitOutlined';
 
 import React, { useState } from "react";
 import FlowConnectionText from "../Drawer/FlowConnectionText";
 import SmallTooltip from "../StyledMUI/SmallTooltip";
-import { dischargeFlowValueChange, distributeTotalDischargeFlow, focusedEdgeChange, nodeDataPropertyChange, sumTotalFlowChange, totalFlowChange } from "../Diagram/diagramReducer";
+import { dischargeFlowValueChange, distributeTotalDischargeFlow, nodeDataPropertyChange, sumTotalFlowChange, totalFlowChange, setEdgeFlowConfidence, setNodeFlowConfidence } from "../Diagram/diagramReducer";
+import { propagateFlowFromNode } from "../Diagram/diagramThunks";
 import { useAppDispatch, useAppSelector } from "../../hooks/state";
 import InputField from "../StyledMUI/InputField";
 import FlowDisplayUnit from "../Diagram/FlowDisplayUnit";
-import { selectCurrentNode, selectNodes, selectNodeTargetEdges, selectTotalDischargeFlow } from "../Diagram/store";
+import { selectCurrentNode, selectFlowConfidenceEnabled, selectNodes, selectNodeTargetEdges, selectTotalDischargeFlow } from "../Diagram/store";
 import { FlowForm, getDefaultFlowValidationSchema } from "../../validation/Validation";
 import { FieldArray, Form, Formik, useFormikContext } from "formik";
-import UpdateNodeErrors from "./UpdateNodeErrors";
 import DistributeTotalFlowField from "./DistributeTotalFlowField";
 import { ObjectSchema } from "yup";
 import ToggleDataEntryUnitButton from "./ToggleDataEntryUnitButton";
+import FlowConfidenceToggle from "./FlowConfidenceToggle";
 import { blue } from "@mui/material/colors";
-import { CustomEdgeData } from "process-flow-lib";
+import { CustomEdgeData, FlowConfidence, getKnownLossComponentTotals, ProcessFlowPart } from "process-flow-lib";
 import AirlineStopsIcon from '@mui/icons-material/AirlineStops';
-import { useFlowService } from "../../services/FlowService";
 import CallMergeIcon from '@mui/icons-material/CallMerge';
 
 
@@ -33,7 +34,6 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     const { inView } = props;
     const theme = useTheme();
     const dispatch = useAppDispatch();
-    const flowService = useFlowService();
 
     const nodes: Node[] = useAppSelector(selectNodes);
     const componentDischargeEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeTargetEdges) as Edge<CustomEdgeData>[];
@@ -41,6 +41,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
     const [inPercent, setInPercent] = useState<boolean>(false);
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
     const selectedNode = useAppSelector(selectCurrentNode);
+    const flowConfidenceEnabled = useAppSelector(selectFlowConfidenceEnabled);
     const settings = useAppSelector((state) => state.diagram.settings);
     const isIntakeSource = selectedNode.type === 'waterIntake';
 
@@ -87,19 +88,22 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
         setInPercent(!inPercent);
     }
 
+    const onEdgeFlowConfidenceChange = (edgeId: string, confidence: FlowConfidence) => {
+        dispatch(setEdgeFlowConfidence({ edgeId, confidence }));
+    }
+
     /**
-     * Populate form currentValue through all flows to end of path
+     * Cascade form currentValue to downstream flows
      */
     const onPropogateFlow = (edge: Edge<CustomEdgeData>) => {
-        flowService.propagateFlowFromNode(selectedNode.id, edge);
+        dispatch(propagateFlowFromNode(selectedNode.id, edge));
     }
 
 
     // todo 7339 - don't validate when flows dont exist
     const { totalCalculatedSourceFlow, totalCalculatedDischargeFlow } = getNodeFlowTotals(componentDischargeEdges, nodes, selectedDataId);
-    const totalKnownLosses = getKnownLossComponentTotals(componentDischargeEdges, nodes, selectedDataId);
-    const isWaterUsingSystem = selectedNode.data.processComponentType === 'water-using-system';
-    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, selectedNode.data.userEnteredData.intakeUnaccounted, settings, totalKnownLosses, isWaterUsingSystem);
+    const totalKnownLosses = getKnownLossComponentTotals(componentDischargeEdges, nodes as Node<ProcessFlowPart>[], selectedDataId);
+    const validationSchema: ObjectSchema<FlowForm> = getDefaultFlowValidationSchema('Discharge', componentDischargeEdges, totalCalculatedDischargeFlow, selectedNode.data.userEnteredData.intakeUnaccounted, settings, selectedNode.data.processComponentType, totalKnownLosses);
 
     return (
         <Formik
@@ -120,7 +124,6 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
 
                 return (
                     <Form>
-                        <UpdateNodeErrors flowType={'discharge'} errors={errors} />
                         <DistributeTotalFlowField componentEdges={componentDischargeEdges} setFieldValue={setFieldValue} />
                         <TotalDischargeFlowField inView={inView} />
 
@@ -147,6 +150,12 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                                                         sx={{ display: 'flex', alignItems: 'center', width: '100%', marginBottom: '.5rem' }}
                                                         key={edge.id}
                                                         disablePadding>
+                                                        {flowConfidenceEnabled &&
+                                                            <FlowConfidenceToggle
+                                                                confidence={edge.data.confidence}
+                                                                onChange={(confidence) => onEdgeFlowConfidenceChange(edge.id, confidence)}
+                                                            />
+                                                        }
                                                         <InputField
                                                             disabled={disabledPercentDataEntryFields}
                                                             label={<FlowConnectionText source={source} target={target} />}
@@ -179,7 +188,7 @@ const DischargeFlowForm = (props: DischargeFlowFormProps) => {
                                                                 </InputAdornment>,
                                                             }}
                                                         />
-                                                        <SmallTooltip title={`Set all flow values to the end of path`}
+                                                        <SmallTooltip title={`Cascade value to downstream flows`}
                                                             slotProps={{
                                                                 popper: {
                                                                     disablePortal: true,
@@ -326,6 +335,8 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
     const dispatch = useAppDispatch();
     const totalDischargeFlow = useAppSelector(selectTotalDischargeFlow);
     const componentDischargeEdges: Edge<CustomEdgeData>[] = useAppSelector(selectNodeTargetEdges) as Edge<CustomEdgeData>[];
+    const selectedNode = useAppSelector(selectCurrentNode);
+    const flowConfidenceEnabled = useAppSelector(selectFlowConfidenceEnabled);
 
     const onTotalFlowValueInputChange = (event: React.ChangeEvent<any>) => {
         handleChange(event);
@@ -341,6 +352,10 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
         dispatch(sumTotalFlowChange({ flowProperty: 'totalDischargeFlow', relatedEdges: componentDischargeEdges }));
     }
 
+    const onTotalDischargeFlowConfidenceChange = (confidence: FlowConfidence) => {
+        dispatch(setNodeFlowConfidence({ nodeId: selectedNode.id, flowProperty: 'totalDischargeFlow', confidence }));
+    }
+
     React.useEffect(() => {
         setFieldValue('totalFlow', totalDischargeFlow, true);
     }, [totalDischargeFlow, errors, values]);
@@ -349,27 +364,36 @@ const TotalDischargeFlowField = (props: TotalDischargeFlowFieldProps) => {
     return (
         <Box>
 
-            <TextField
-                label={'Total Flow'}
-                id={'totalFlow'}
-                type={'number'}
-                size="small"
-                value={values.totalFlow ?? ''}
-                fullWidth
-                onChange={(event) => onTotalFlowValueInputChange(event)}
-                error={hasError}
-                helperText={hasError ? String(errors.totalFlow) : ""}
-                FormHelperTextProps={{ sx: { whiteSpace: 'normal'} }}
-                slotProps={{
-                    formHelperText: { sx: { whiteSpace: 'normal' } },
-                    htmlInput: { onWheel: (e: React.WheelEvent<HTMLInputElement>) => (e.target as HTMLElement).blur() },
-                    input: {
-                        endAdornment: <InputAdornment position="end">
-                            <FlowDisplayUnit />
-                        </InputAdornment>
-                    }
-                }}
-            />
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                {flowConfidenceEnabled &&
+                    <FlowConfidenceToggle
+                        confidence={selectedNode.data.flowConfidence.totalDischargeFlow}
+                        onChange={onTotalDischargeFlowConfidenceChange}
+                        sx={{ ml: 1 }}
+                    />
+                }
+                <TextField
+                    label={'Total Flow'}
+                    id={'totalFlow'}
+                    type={'number'}
+                    size="small"
+                    value={values.totalFlow ?? ''}
+                    fullWidth
+                    onChange={(event) => onTotalFlowValueInputChange(event)}
+                    error={hasError}
+                    helperText={hasError ? String(errors.totalFlow) : ""}
+                    FormHelperTextProps={{ sx: { whiteSpace: 'normal'} }}
+                    slotProps={{
+                        formHelperText: { sx: { whiteSpace: 'normal' } },
+                        htmlInput: { onWheel: (e: React.WheelEvent<HTMLInputElement>) => (e.target as HTMLElement).blur() },
+                        input: {
+                            endAdornment: <InputAdornment position="end">
+                                <FlowDisplayUnit />
+                            </InputAdornment>
+                        }
+                    }}
+                />
+            </Box>
 
             {/* This button group is being collapse-animated to smoothly hide/display it as absolute within the parent accordian. When we no longer have the parent accordian, this can be removed  */}
             {componentDischargeEdges && componentDischargeEdges.length > 0 && (
