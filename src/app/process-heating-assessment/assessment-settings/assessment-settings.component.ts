@@ -44,29 +44,39 @@ export class AssessmentSettingsComponent {
   settingsForm!: UntypedFormGroup;
   metaForm!: FormGroup<AssessmentSettingsMetaForm>;
 
+  // Reference to the exact Settings object this component's own save last wrote back into
+  // settings(); used to skip rebuilding settingsForm on its own write instead of diffing
+  // content (several SettingsService fields fall back `value || default`, which would
+  // silently overwrite a legitimately entered 0).
+  private lastWrittenSettings: Settings | null = null;
+
   constructor() {
+    const settings = this.settings();
+    this.settingsForm = this.settingsService.getFormFromSettings(settings);
+    this.metaForm = this.fb.group({
+      facilityName: [settings?.facilityInfo?.facilityName ?? ''],
+      contactName: [settings?.facilityInfo?.facilityContact?.contactName ?? ''],
+      equipmentNotes: [this.processHeating()?.equipmentNotes ?? ''],
+      operatingConditions: [this.processHeating()?.operatingHours?.operatingConditions ?? ''],
+    }) as FormGroup<AssessmentSettingsMetaForm>;
+
+    this.metaForm.valueChanges.pipe(
+      debounceTime(300),
+      takeUntilDestroyed(this.destroyRef),
+      concatMap(() => from(this.saveMetaData()).pipe(
+        catchError(err => {
+          console.error('Failed to save assessment metadata:', err);
+          return EMPTY;
+        }),
+      )),
+    ).subscribe();
+
     effect(() => {
-      const phast = this.processHeating();
       const settings = this.settings();
+      if (settings === this.lastWrittenSettings) {
+        return;
+      }
       this.settingsForm = this.settingsService.getFormFromSettings(settings);
-
-      this.metaForm = this.fb.group({
-        facilityName: [settings?.facilityInfo?.facilityName ?? ''],
-        contactName: [settings?.facilityInfo?.facilityContact?.contactName ?? ''],
-        equipmentNotes: [phast?.equipmentNotes ?? ''],
-        operatingConditions: [phast?.operatingHours?.operatingConditions ?? ''],
-      }) as FormGroup<AssessmentSettingsMetaForm>;
-
-      this.metaForm.valueChanges.pipe(
-        debounceTime(300),
-        takeUntilDestroyed(this.destroyRef),
-        concatMap(() => from(this.saveMetaData()).pipe(
-          catchError(err => {
-            console.error('Failed to save assessment metadata:', err);
-            return EMPTY;
-          }),
-        )),
-      ).subscribe();
     });
   }
 
@@ -80,6 +90,7 @@ export class AssessmentSettingsComponent {
     await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
     const allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(allSettings);
+    this.lastWrittenSettings = newSettings;
     this.assessmentService.setSettings(newSettings);
   }
 
@@ -102,6 +113,7 @@ export class AssessmentSettingsComponent {
     await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
     const allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(allSettings);
+    this.lastWrittenSettings = newSettings;
     this.assessmentService.setSettings(newSettings);
 
     const phast = this.processHeating();

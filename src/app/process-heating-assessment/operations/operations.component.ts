@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, Injector, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, Injector, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { DialogRef } from '@angular/cdk/dialog';
@@ -37,19 +37,21 @@ export class OperationsComponent {
   readonly HC = HeatingEquipmentConfiguration;
 
   form: FormGroup<OperationsForm>;
-  co2SavingsData: PhastCo2SavingsData;
+
+  readonly co2SavingsData: Signal<PhastCo2SavingsData> = computed(() =>
+    this.processHeating().co2SavingsData
+      ?? this.co2Service.getCo2SavingsDataFromSettingsObject(this.settings()),
+  );
 
   constructor() {
-    effect(() => {
-      const phast = this.processHeating();
-      const settings = this.settings();
-      this.form = this.formService.getForm(phast, this.heatingSystemConfiguration());
-      this.co2SavingsData = phast.co2SavingsData
-        ?? this.co2Service.getCo2SavingsDataFromSettingsObject(settings);
+    this.form = this.formService.getForm(this.processHeating(), this.heatingSystemConfiguration());
 
-      this.form.valueChanges.pipe(
-        takeUntilDestroyed(this.destroyRef),
-      ).subscribe(() => this.saveFormData());
+    this.form.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe(() => this.saveFormData());
+
+    effect(() => {
+      this.formService.applyConfigValidators(this.form, this.heatingSystemConfiguration());
     });
   }
 
@@ -73,7 +75,6 @@ export class OperationsComponent {
   }
 
   updateCo2SavingsData(co2SavingsData: PhastCo2SavingsData): void {
-    this.co2SavingsData = co2SavingsData;
     this.assessmentService.updateProcessHeatingProperty('co2SavingsData', co2SavingsData);
   }
 
