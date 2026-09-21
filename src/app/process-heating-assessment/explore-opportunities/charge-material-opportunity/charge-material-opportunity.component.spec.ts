@@ -89,18 +89,18 @@ describe('ChargeMaterialOpportunityComponent', () => {
 
   it('resets the material initial temperature back to baseline when the opportunity is deselected', () => {
     component.toggleOpportunity(true);
-    component.setModificationInitialTemperature('material-1', 200);
-    expect(component.materialTemperatureComparisons()[0].modificationInitialTemperature).toBe(200);
+    component.setModificationValue('material-1', 200);
+    expect(component.comparisons()[0].modificationValue).toBe(200);
 
     component.toggleOpportunity(false);
 
     expect(component.useOpportunity()).toBe(false);
-    expect(component.materialTemperatureComparisons()[0].modificationInitialTemperature).toBe(70);
+    expect(component.comparisons()[0].modificationValue).toBe(70);
   });
 
   it('leaves other overridden fields on the material untouched when resetting its temperature', () => {
     component.toggleOpportunity(true);
-    component.setModificationInitialTemperature('material-1', 200);
+    component.setModificationValue('material-1', 200);
 
     const modificationId = modificationService.selectedModificationId();
     const modification = modificationService.selectedModification();

@@ -84,18 +84,18 @@ describe('WallLossOpportunityComponent', () => {
 
   it('resets the wall surface temperature back to baseline when the opportunity is deselected', () => {
     component.toggleOpportunity(true);
-    component.setModificationSurfaceTemperature('wall-1', 200);
-    expect(component.surfaceTemperatureComparisons()[0].modificationSurfaceTemperature).toBe(200);
+    component.setModificationValue('wall-1', 200);
+    expect(component.comparisons()[0].modificationValue).toBe(200);
 
     component.toggleOpportunity(false);
 
     expect(component.useOpportunity()).toBe(false);
-    expect(component.surfaceTemperatureComparisons()[0].modificationSurfaceTemperature).toBe(400);
+    expect(component.comparisons()[0].modificationValue).toBe(400);
   });
 
   it('leaves other overridden fields on the wall loss untouched when resetting its temperature', () => {
     component.toggleOpportunity(true);
-    component.setModificationSurfaceTemperature('wall-1', 200);
+    component.setModificationValue('wall-1', 200);
 
     const modificationId = modificationService.selectedModificationId();
     const modification = modificationService.selectedModification();
