@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { PumpInventoryData, PumpInventoryFieldWarnings, PumpInventoryMotorWarnings, PumpItem } from '../../pump-inventory';
+import { PumpInventoryFieldWarnings, PumpInventoryMotorWarnings, PumpItem } from '../../pump-inventory';
 import { PumpInventoryService } from '../../pump-inventory.service';
 import { PsatWarningService } from '../../../psat/psat-warning.service';
 import { Settings } from '../../../shared/models/settings';
@@ -17,9 +17,7 @@ export class PumpCatalogService {
     this.selectedDepartmentId = new BehaviorSubject<string>(undefined);
     this.selectedPumpItem = new BehaviorSubject<PumpItem>(undefined);
     this.showPumpProperties = new BehaviorSubject<boolean>(false);
-    let pumpInventoryData: PumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
-    let initialPumpType: number = pumpInventoryData?.departments?.[0]?.catalog?.[0]?.pumpEquipment?.pumpType;
-    this.pumpTypeChanged = new BehaviorSubject<number>(initialPumpType);
+    this.pumpTypeChanged = new BehaviorSubject<number>(undefined);
   }
 
   getUpdatedSelectedPumpItem(): PumpItem {

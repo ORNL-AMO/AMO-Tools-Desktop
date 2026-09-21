@@ -22,7 +22,6 @@ export class FieldDataService {
         motorAmpsValidators = [Validators.required]
       }
     }
-    // Positive displacement pumps (inventory-only) are sized from designDifferentialPressure, not head.
     let headValidators: Array<ValidatorFn> = isPositiveDisplacementPump(psatInputs.pump_style)
       ? [Validators.min(0.1)]
       : [Validators.required, Validators.min(0.1)];

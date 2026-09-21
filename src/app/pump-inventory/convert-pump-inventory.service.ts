@@ -119,8 +119,6 @@ export class ConvertPumpInventoryService {
     return pumpSystem;
   }
 
-  // Preserve deliberate null/undefined values (e.g. inapplicable fields cleared on pump-type switch)
-  // instead of letting them convert to 0/NaN.
   private convertVal(val: number, from: string, to: string): number {
     if (val === null || val === undefined) {
       return val;

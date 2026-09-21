@@ -63,7 +63,7 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
       }
     });
     this.pumpTypeChangedSub = this.pumpCatalogService.pumpTypeChanged.subscribe(pumpType => {
-      if (this.form) {
+      if (this.form && pumpType !== undefined) {
         this.form = this.fieldMeasurementsCatalogService.updateOperatingHeadValidators(this.form, pumpType);
       }
     });
