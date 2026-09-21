@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, Injector, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, Injector, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { DialogRef } from '@angular/cdk/dialog';
@@ -39,15 +39,18 @@ export class OperationsComponent {
   form: FormGroup<OperationsForm>;
   co2SavingsData: PhastCo2SavingsData;
 
-  ngOnInit(): void {
-    const phast = this.processHeating();
-    this.form = this.formService.getForm(phast, this.heatingSystemConfiguration());
-    this.co2SavingsData = phast.co2SavingsData
-      ?? this.co2Service.getCo2SavingsDataFromSettingsObject(this.settings());
+  constructor() {
+    effect(() => {
+      const phast = this.processHeating();
+      const settings = this.settings();
+      this.form = this.formService.getForm(phast, this.heatingSystemConfiguration());
+      this.co2SavingsData = phast.co2SavingsData
+        ?? this.co2Service.getCo2SavingsDataFromSettingsObject(settings);
 
-    this.form.valueChanges.pipe(
-      takeUntilDestroyed(this.destroyRef),
-    ).subscribe(() => this.saveFormData());
+      this.form.valueChanges.pipe(
+        takeUntilDestroyed(this.destroyRef),
+      ).subscribe(() => this.saveFormData());
+    });
   }
 
   private saveFormData(): void {

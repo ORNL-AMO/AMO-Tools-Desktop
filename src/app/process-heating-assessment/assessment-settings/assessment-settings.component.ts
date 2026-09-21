@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, Signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -44,27 +44,30 @@ export class AssessmentSettingsComponent {
   settingsForm!: UntypedFormGroup;
   metaForm!: FormGroup<AssessmentSettingsMetaForm>;
 
-  ngOnInit(): void {
-    const phast = this.processHeating();
-    this.settingsForm = this.settingsService.getFormFromSettings(this.settings());
+  constructor() {
+    effect(() => {
+      const phast = this.processHeating();
+      const settings = this.settings();
+      this.settingsForm = this.settingsService.getFormFromSettings(settings);
 
-    this.metaForm = this.fb.group({
-      facilityName: [this.settings()?.facilityInfo?.facilityName ?? ''],
-      contactName: [this.settings()?.facilityInfo?.facilityContact?.contactName ?? ''],
-      equipmentNotes: [phast?.equipmentNotes ?? ''],
-      operatingConditions: [phast?.operatingHours?.operatingConditions ?? ''],
-    }) as FormGroup<AssessmentSettingsMetaForm>;
+      this.metaForm = this.fb.group({
+        facilityName: [settings?.facilityInfo?.facilityName ?? ''],
+        contactName: [settings?.facilityInfo?.facilityContact?.contactName ?? ''],
+        equipmentNotes: [phast?.equipmentNotes ?? ''],
+        operatingConditions: [phast?.operatingHours?.operatingConditions ?? ''],
+      }) as FormGroup<AssessmentSettingsMetaForm>;
 
-    this.metaForm.valueChanges.pipe(
-      debounceTime(300),
-      takeUntilDestroyed(this.destroyRef),
-      concatMap(() => from(this.saveMetaData()).pipe(
-        catchError(err => {
-          console.error('Failed to save assessment metadata:', err);
-          return EMPTY;
-        }),
-      )),
-    ).subscribe();
+      this.metaForm.valueChanges.pipe(
+        debounceTime(300),
+        takeUntilDestroyed(this.destroyRef),
+        concatMap(() => from(this.saveMetaData()).pipe(
+          catchError(err => {
+            console.error('Failed to save assessment metadata:', err);
+            return EMPTY;
+          }),
+        )),
+      ).subscribe();
+    });
   }
 
   async saveSettings(): Promise<void> {

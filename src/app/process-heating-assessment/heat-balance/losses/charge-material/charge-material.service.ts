@@ -92,7 +92,7 @@ export class ChargeMaterialService {
     this.scenario = scenario;
     this.typeCache.clear();
 
-    const chargeMaterials = this.assessmentService.scenarioPhast(scenario)?.losses?.chargeMaterials ?? [];
+    const chargeMaterials = this.assessmentService.lossSignal(scenario, 'chargeMaterials') ?? [];
     const items = chargeMaterials.map((material, index) => this.buildItem(this.ensureId(material), index));
     this.store.load(items);
   }

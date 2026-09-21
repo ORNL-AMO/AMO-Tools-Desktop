@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input, Signal, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, Signal } from '@angular/core';
 import { Settings } from '../../../../shared/models/settings';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { reinitOnScenarioChange } from '../reinit-on-scenario-change';
 import { WallLossesService } from './wall-losses.service';
 import { WallLossesFormService } from './wall-losses-form.service';
 import { WallLossCalculationService } from './wall-loss-calculation.service';
@@ -26,15 +27,7 @@ export class WallLossesComponent {
     return unit === 'kWh' ? 'kW' : `${unit}/hr`;
   }
 
-  // Re-initializes whenever `scenario` changes, not just on first render — needed for screens like
-  // Expert View where this component could stay mounted while the user switches which
-  // modification is selected. initialize() itself reads processHeatingSignal (via scenarioPhast),
-  // so its call must be untracked — otherwise this effect would also rerun on every PHAST edit,
-  // not just a scenario() change.
   constructor() {
-    effect(() => {
-      const scenario = this.scenario();
-      untracked(() => this.service.initialize(scenario));
-    });
+    reinitOnScenarioChange(this.scenario, scenario => this.service.initialize(scenario));
   }
 }

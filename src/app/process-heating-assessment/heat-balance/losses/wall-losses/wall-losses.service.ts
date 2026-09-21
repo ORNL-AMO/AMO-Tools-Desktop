@@ -37,7 +37,7 @@ export class WallLossesService {
 
   initialize(scenario: AssessmentScenario = 'baseline'): void {
     this.scenario = scenario;
-    const wallLosses = this.assessmentService.scenarioPhast(scenario)?.losses?.wallLosses ?? [];
+    const wallLosses = this.assessmentService.lossSignal(scenario, 'wallLosses') ?? [];
     const items = wallLosses.map((loss, idx) => this.buildItem(this.ensureId(loss), idx + 1));
     this.store.load(items);
     this.wallSurfaceDbService.getAllWithObservable()

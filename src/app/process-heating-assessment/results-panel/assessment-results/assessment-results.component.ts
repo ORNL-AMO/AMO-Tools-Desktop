@@ -17,7 +17,7 @@ export class AssessmentResultsComponent {
   readonly scenario = input<AssessmentScenario>('baseline');
 
   readonly results: Signal<PhastResults | undefined> = computed(() =>
-    this.resultsService.getResults(this.assessmentService.scenarioPhast(this.scenario()), this.assessmentService.settingsSignal())
+    this.resultsService.getResults(this.assessmentService.scenarioPhastSignal(this.scenario()), this.assessmentService.settingsSignal())
   );
 
   constructor() {

@@ -12,6 +12,7 @@ import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 import { ROUTE_TOKENS } from './constants/process-heating-routes';
 import { ProcessHeatingUiService } from './services/process-heating-ui.service';
+import { TabNavHelper } from './services/tab-nav-helper.service';
 import { ProcessHeatingAssessmentService } from './services/process-heating-assessment.service';
 import { ModificationService } from './services/modification.service';
 import { ProcessHeatingOperationsFormService } from './services/process-heating-operations-form.service';
@@ -313,6 +314,7 @@ const ROUTES: Route[] = [
   ],
   providers: [
     ProcessHeatingUiService,
+    TabNavHelper,
     ProcessHeatingAssessmentService,
     ModificationService,
     ProcessHeatingOperationsFormService,

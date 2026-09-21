@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { generateFormControlIds, FormControlIds } from '../../../../shared/helperFunctions';
+import { generateFormControlIds } from '../../../../shared/helperFunctions';
 import { Settings } from '../../../../shared/models/settings';
 import { WallLossForm, WallLossesFormService } from './wall-losses-form.service';
 import { WallLossItem, WallLossesService } from './wall-losses.service';
@@ -21,11 +21,9 @@ export class WallLossesFormComponent implements OnInit {
 
   readonly surfaceOptions = computed(() => this.wallLossesService.surfaceOptions());
   readonly form = computed(() => this.item().form as WallLossForm);
-  controlIds: FormControlIds<WallLossForm['controls']>;
+  readonly controlIds = computed(() => generateFormControlIds(this.form().controls));
 
   ngOnInit(): void {
-    this.controlIds = generateFormControlIds(this.form().controls);
-
     this.form().controls.ambientTemp.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.formService.setSurfaceTempValidator(this.form()));
