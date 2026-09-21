@@ -11,7 +11,9 @@ import { PhastOperatingCostsModule } from '../shared/phast-operating-costs/phast
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
 
 import { ROUTE_TOKENS } from './constants/process-heating-routes';
+import { deriveSteppedRoutes, STEPPED_ROUTES } from './routing/stepped-routes';
 import { ProcessHeatingUiService } from './services/process-heating-ui.service';
+import { TabNavHelper } from './services/tab-nav-helper.service';
 import { ProcessHeatingAssessmentService } from './services/process-heating-assessment.service';
 import { ModificationService } from './services/modification.service';
 import { ProcessHeatingOperationsFormService } from './services/process-heating-operations-form.service';
@@ -73,7 +75,7 @@ import { ExhaustGasComponent } from './heat-balance/losses/exhaust-gas/exhaust-g
 import { SlagComponent } from './heat-balance/losses/slag/slag.component';
 import { HeatSystemEfficiencyComponent } from './heat-balance/losses/heat-system-efficiency/heat-system-efficiency.component';
 
-const ROUTES: Route[] = [
+export const ROUTES: Route[] = [
   {
     path: '',
     component: ProcessHeatingAssessmentComponent,
@@ -204,18 +206,18 @@ const ROUTES: Route[] = [
       {
         path: ROUTE_TOKENS.assessment,
         component: AssessmentComponent,
-        data: { mainView: ROUTE_TOKENS.assessment },
+        data: { mainView: ROUTE_TOKENS.assessment, stepIndex: 21 },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.exploreOpportunities, pathMatch: 'full' },
           {
             path: ROUTE_TOKENS.exploreOpportunities,
             component: ExploreOpportunitiesComponent,
-            data: { childView: ROUTE_TOKENS.exploreOpportunities, stepIndex: 21 },
+            data: { childView: ROUTE_TOKENS.exploreOpportunities },
           },
           {
             path: ROUTE_TOKENS.expertView,
             component: ExpertViewComponent,
-            data: { childView: ROUTE_TOKENS.expertView, stepIndex: 21 },
+            data: { childView: ROUTE_TOKENS.expertView },
           },
         ]
       },
@@ -312,7 +314,9 @@ const ROUTES: Route[] = [
     ModificationListComponent,
   ],
   providers: [
+    { provide: STEPPED_ROUTES, useValue: deriveSteppedRoutes(ROUTES) },
     ProcessHeatingUiService,
+    TabNavHelper,
     ProcessHeatingAssessmentService,
     ModificationService,
     ProcessHeatingOperationsFormService,

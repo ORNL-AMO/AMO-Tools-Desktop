@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, Signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -44,15 +44,20 @@ export class AssessmentSettingsComponent {
   settingsForm!: UntypedFormGroup;
   metaForm!: FormGroup<AssessmentSettingsMetaForm>;
 
-  ngOnInit(): void {
-    const phast = this.processHeating();
-    this.settingsForm = this.settingsService.getFormFromSettings(this.settings());
+  // Reference to the exact Settings object this component's own save last wrote back into
+  // settings(); used to skip rebuilding settingsForm on its own write instead of diffing
+  // content (several SettingsService fields fall back `value || default`, which would
+  // silently overwrite a legitimately entered 0).
+  private lastWrittenSettings: Settings | null = null;
 
+  constructor() {
+    const settings = this.settings();
+    this.settingsForm = this.settingsService.getFormFromSettings(settings);
     this.metaForm = this.fb.group({
-      facilityName: [this.settings()?.facilityInfo?.facilityName ?? ''],
-      contactName: [this.settings()?.facilityInfo?.facilityContact?.contactName ?? ''],
-      equipmentNotes: [phast?.equipmentNotes ?? ''],
-      operatingConditions: [phast?.operatingHours?.operatingConditions ?? ''],
+      facilityName: [settings?.facilityInfo?.facilityName ?? ''],
+      contactName: [settings?.facilityInfo?.facilityContact?.contactName ?? ''],
+      equipmentNotes: [this.processHeating()?.equipmentNotes ?? ''],
+      operatingConditions: [this.processHeating()?.operatingHours?.operatingConditions ?? ''],
     }) as FormGroup<AssessmentSettingsMetaForm>;
 
     this.metaForm.valueChanges.pipe(
@@ -65,6 +70,14 @@ export class AssessmentSettingsComponent {
         }),
       )),
     ).subscribe();
+
+    effect(() => {
+      const settings = this.settings();
+      if (settings === this.lastWrittenSettings) {
+        return;
+      }
+      this.settingsForm = this.settingsService.getFormFromSettings(settings);
+    });
   }
 
   async saveSettings(): Promise<void> {
@@ -77,6 +90,7 @@ export class AssessmentSettingsComponent {
     await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
     const allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(allSettings);
+    this.lastWrittenSettings = newSettings;
     this.assessmentService.setSettings(newSettings);
   }
 
@@ -99,6 +113,7 @@ export class AssessmentSettingsComponent {
     await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
     const allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(allSettings);
+    this.lastWrittenSettings = newSettings;
     this.assessmentService.setSettings(newSettings);
 
     const phast = this.processHeating();

@@ -19,19 +19,37 @@ export class ProcessHeatingOperationsFormService {
   private readonly formBuilder = inject(FormBuilder);
 
   getForm(phast: PHAST, config?: HeatingEquipmentConfiguration): FormGroup<OperationsForm> {
-    const { isFuelBased, isSteam, isElectro, isEAF } = deriveHeatingSystemEnergyType(config);
-
     const costs = phast.operatingCosts;
+
+    const form = this.formBuilder.group({
+      hoursPerYear:    [phast.operatingHours?.hoursPerYear ?? null, [Validators.required, Validators.min(0), Validators.max(8760)]],
+      fuelCost:        [costs?.fuelCost        ?? null],
+      steamCost:       [costs?.steamCost       ?? null],
+      electricityCost: [costs?.electricityCost ?? null],
+      coalCarbonCost:  [costs?.coalCarbonCost  ?? null],
+      electrodeCost:   [costs?.electrodeCost   ?? null],
+      otherFuelCost:   [costs?.otherFuelCost   ?? null],
+    });
+    this.applyConfigValidators(form, config);
+    return form;
+  }
+
+  applyConfigValidators(form: FormGroup<OperationsForm>, config?: HeatingEquipmentConfiguration): void {
+    const { isFuelBased, isSteam, isElectro, isEAF } = deriveHeatingSystemEnergyType(config);
     const requiredMin = [Validators.required, Validators.min(0)];
 
-    return this.formBuilder.group({
-      hoursPerYear:    [phast.operatingHours?.hoursPerYear ?? null, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      fuelCost:        [costs?.fuelCost        ?? null, isFuelBased ? requiredMin : []],
-      steamCost:       [costs?.steamCost       ?? null, isSteam     ? requiredMin : []],
-      electricityCost: [costs?.electricityCost ?? null, isElectro   ? requiredMin : []],
-      coalCarbonCost:  [costs?.coalCarbonCost  ?? null, isEAF       ? requiredMin : []],
-      electrodeCost:   [costs?.electrodeCost   ?? null, isEAF       ? requiredMin : []],
-      otherFuelCost:   [costs?.otherFuelCost   ?? null, isEAF       ? requiredMin : []],
-    });
+    form.controls.fuelCost.setValidators(isFuelBased ? requiredMin : []);
+    form.controls.steamCost.setValidators(isSteam ? requiredMin : []);
+    form.controls.electricityCost.setValidators(isElectro ? requiredMin : []);
+    form.controls.coalCarbonCost.setValidators(isEAF ? requiredMin : []);
+    form.controls.electrodeCost.setValidators(isEAF ? requiredMin : []);
+    form.controls.otherFuelCost.setValidators(isEAF ? requiredMin : []);
+
+    form.controls.fuelCost.updateValueAndValidity({ emitEvent: false });
+    form.controls.steamCost.updateValueAndValidity({ emitEvent: false });
+    form.controls.electricityCost.updateValueAndValidity({ emitEvent: false });
+    form.controls.coalCarbonCost.updateValueAndValidity({ emitEvent: false });
+    form.controls.electrodeCost.updateValueAndValidity({ emitEvent: false });
+    form.controls.otherFuelCost.updateValueAndValidity({ emitEvent: false });
   }
 }

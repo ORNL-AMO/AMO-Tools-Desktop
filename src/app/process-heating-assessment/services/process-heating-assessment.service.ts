@@ -156,6 +156,21 @@ export class ProcessHeatingAssessmentService {
     return cached() as Losses[K];
   }
 
+  private readonly scenarioPhastSignalCache = new Map<AssessmentScenario, Signal<PHAST | undefined>>();
+
+  /**
+   * Equality-cached whole-tree read for consumers needing more than one loss key, who can't
+   * narrow to `lossSignal()`.
+   */
+  scenarioPhastSignal(scenario: AssessmentScenario): PHAST | undefined {
+    let cached = this.scenarioPhastSignalCache.get(scenario);
+    if (!cached) {
+      cached = computed(() => this.scenarioPhast(scenario), { equal: isEqual });
+      this.scenarioPhastSignalCache.set(scenario, cached);
+    }
+    return cached();
+  }
+
   updateLossesProperty<K extends keyof Losses>(scenario: AssessmentScenario, lossKey: K, value: Losses[K]): void {
     if (scenario === 'baseline') {
       const current = this.processHeating.getValue();

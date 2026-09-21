@@ -1,16 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
+import { WallLoss } from '../../models/wall-loss';
 import { ExploreOpportunityCategory } from '../../models/phast';
-import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-
-export interface WallLossSurfaceTemperatureComparison {
-  id: string;
-  name: string;
-  baselineSurfaceTemperature: number | undefined;
-  modificationSurfaceTemperature: number | undefined;
-}
-
+import { createOpportunityComparisonState } from '../explore-opportunity-comparison';
 
 const OPPORTUNITY_DISPLAY_NAME = 'Add / Improve Wall Insulation';
 
@@ -23,88 +16,25 @@ const OPPORTUNITY_DISPLAY_NAME = 'Add / Improve Wall Insulation';
 })
 export class WallLossOpportunityComponent {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
-  private readonly modificationService = inject(ModificationService);
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
 
-  readonly useOpportunity: Signal<boolean> = computed(() =>
-    this.modificationService.selectedModification()?.exploreOpportunityFlags?.[ExploreOpportunityCategory.Wall]?.hasOpportunity ?? false
-  );
-
-  readonly surfaceTemperatureComparisons: Signal<WallLossSurfaceTemperatureComparison[]> = computed(() => {
-    const baselineLosses = this.assessmentService.lossSignal('baseline', 'wallLosses') ?? [];
-    const modificationId = this.modificationService.selectedModificationId();
-    const modificationLosses = modificationId
-      ? this.assessmentService.lossSignal(modificationId, 'wallLosses') ?? []
-      : [];
-
-    return baselineLosses.map(baselineLoss => {
-      const modificationLoss = modificationLosses.find(loss => loss.id === baselineLoss.id);
-      return {
-        id: baselineLoss.id,
-        name: baselineLoss.name,
-        baselineSurfaceTemperature: baselineLoss.surfaceTemperature,
-        modificationSurfaceTemperature: modificationLoss?.surfaceTemperature ?? baselineLoss.surfaceTemperature,
-      };
-    });
+  private readonly state = createOpportunityComparisonState({
+    lossKey: 'wallLosses',
+    category: ExploreOpportunityCategory.Wall,
+    displayName: OPPORTUNITY_DISPLAY_NAME,
+    getValue: (loss: WallLoss) => loss.surfaceTemperature,
+    withValue: (loss: WallLoss, surfaceTemperature: number) => ({ ...loss, surfaceTemperature }),
   });
 
+  readonly useOpportunity = this.state.useOpportunity;
+  readonly comparisons = this.state.comparisons;
+
   toggleOpportunity(hasOpportunity: boolean): void {
-    const modificationId = this.modificationService.selectedModificationId();
-    if (!modificationId) {
-      return;
-    }
-    this.modificationService.setExploreOpportunityFlag(modificationId, ExploreOpportunityCategory.Wall, {
-      hasOpportunity,
-      display: OPPORTUNITY_DISPLAY_NAME,
-    });
-
-
-    if (!hasOpportunity) {
-      this.resetSurfaceTemperaturesToBaseline(modificationId);
-    }
+    this.state.toggleOpportunity(hasOpportunity);
   }
 
-  private resetSurfaceTemperaturesToBaseline(modificationId: string): void {
-    const modification = this.modificationService.selectedModification();
-    if (!modification) {
-      return;
-    }
-
-    const baselineLosses = this.assessmentService.lossSignal('baseline', 'wallLosses') ?? [];
-    const effectiveLosses = this.assessmentService.lossSignal(modificationId, 'wallLosses') ?? [];
-
-    // Reset only the surface temperature on each loss back to baseline's value; any other override
-    // already on these losses (e.g. entered separately in Expert View) is left as is.
-    const resetWallLosses = effectiveLosses.map(loss => {
-      const baselineLoss = baselineLosses.find(candidate => candidate.id === loss.id);
-      return baselineLoss?.surfaceTemperature === undefined ? loss : { ...loss, surfaceTemperature: baselineLoss.surfaceTemperature };
-    });
-
-    this.assessmentService.updateModificationProperty(modificationId, 'losses', {
-      ...modification.scenarioOverrides?.losses,
-      wallLosses: resetWallLosses,
-    });
-  }
-
-  setModificationSurfaceTemperature(lossId: string, surfaceTemperature: number): void {
-    if (Number.isNaN(surfaceTemperature)) {
-      return;
-    }
-
-    const modification = this.modificationService.selectedModification();
-    if (!modification) {
-      return;
-    }
-
-    const effectiveLosses = this.assessmentService.lossSignal(modification.id, 'wallLosses') ?? [];
-    const updatedWallLosses = effectiveLosses.map(loss =>
-      loss.id === lossId ? { ...loss, surfaceTemperature } : loss
-    );
-
-    this.assessmentService.updateModificationProperty(modification.id, 'losses', {
-      ...modification.scenarioOverrides?.losses,
-      wallLosses: updatedWallLosses,
-    });
+  setModificationValue(lossId: string, surfaceTemperature: number): void {
+    this.state.setModificationValue(lossId, surfaceTemperature);
   }
 }

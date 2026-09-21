@@ -4,51 +4,16 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink } from '../models/views';
+import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 export { MainView, BaselineView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
-
-interface ProcessHeatingRouteData {
-  mainView?: string;
-  childView?: string;
-  lossSubView?: string;
-  stepIndex?: number;
-}
 
 @Injectable()
 export class ProcessHeatingUiService {
   private readonly router = inject(Router);
   private readonly processHeatingAssessmentService = inject(ProcessHeatingAssessmentService);
 
-  private readonly HEAT_BALANCE_BASE = `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.heatBalance}`;
-
-  private readonly STEPPED_ROUTES = [
-    // index 0
-    { view: ROUTE_TOKENS.assessmentSettings,    path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.assessmentSettings}` },
-    // indices 1-17: heat balance sub-tabs (operations first, then loss tabs)
-    { view: ROUTE_TOKENS.operations,            path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.operations}` },
-    { view: ROUTE_TOKENS.chargeMaterial,        path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.chargeMaterial}` },
-    { view: ROUTE_TOKENS.wallLosses,            path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.wallLosses}` },
-    { view: ROUTE_TOKENS.extendedSurface,       path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.extendedSurface}` },
-    { view: ROUTE_TOKENS.atmosphere,            path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.atmosphere}` },
-    { view: ROUTE_TOKENS.fixture,               path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.fixture}` },
-    { view: ROUTE_TOKENS.cooling,               path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.cooling}` },
-    { view: ROUTE_TOKENS.opening,               path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.opening}` },
-    { view: ROUTE_TOKENS.other,                 path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.other}` },
-    { view: ROUTE_TOKENS.flueGas,               path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.flueGas}` },
-    { view: ROUTE_TOKENS.gasLeakage,            path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.gasLeakage}` },
-    { view: ROUTE_TOKENS.auxiliaryPower,        path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.auxiliaryPower}` },
-    { view: ROUTE_TOKENS.energyInputExhaustGas, path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.energyInputExhaustGas}` },
-    { view: ROUTE_TOKENS.energyInput,           path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.energyInput}` },
-    { view: ROUTE_TOKENS.exhaustGas,            path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.exhaustGas}` },
-    { view: ROUTE_TOKENS.slag,                  path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.slag}` },
-    { view: ROUTE_TOKENS.heatSystemEfficiency,  path: `${this.HEAT_BALANCE_BASE}/${ROUTE_TOKENS.heatSystemEfficiency}` },
-    // indices 18-22: remaining baseline and top-level tabs
-    { view: ROUTE_TOKENS.auxiliaryEquipment,    path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.auxiliaryEquipment}` },
-    { view: ROUTE_TOKENS.designedEnergy,        path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.designedEnergy}` },
-    { view: ROUTE_TOKENS.meteredEnergy,         path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.meteredEnergy}` },
-    { view: ROUTE_TOKENS.assessment,            path: `${ROUTE_TOKENS.assessment}/${ROUTE_TOKENS.exploreOpportunities}` },
-    { view: ROUTE_TOKENS.report,                path: `${ROUTE_TOKENS.report}` },
-  ];
+  private readonly STEPPED_ROUTES = inject(STEPPED_ROUTES);
 
   // HeatingEquipmentConfiguration-specific loss tab sets
   private readonly FUEL_FIRED_ONLY = new Set<string>([ROUTE_TOKENS.flueGas, ROUTE_TOKENS.gasLeakage]);

@@ -5,6 +5,7 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { MAIN_VIEW_LINKS, ViewLink } from '../models/views';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
+import { TabNavHelper } from '../services/tab-nav-helper.service';
 
 @Component({
   selector: 'app-process-heating-banner',
@@ -17,6 +18,7 @@ export class ProcessHeatingBannerComponent {
   private readonly uiService = inject(ProcessHeatingUiService);
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly dashboardService = inject(DashboardService);
+  private readonly tabNavHelper = inject(TabNavHelper);
 
   readonly MAIN_VIEW_LINKS = MAIN_VIEW_LINKS;
   readonly assessment$: Observable<Assessment> = this.assessmentService.assessment$;
@@ -35,16 +37,11 @@ export class ProcessHeatingBannerComponent {
   }
 
   isLinkDisabled(link: ViewLink): boolean {
-    return !this.uiService.canVisitView(link.view);
+    return this.tabNavHelper.isLinkDisabled(link);
   }
 
   handleCanNavigate(event: MouseEvent, link: ViewLink): boolean {
-    if (this.isLinkDisabled(link)) {
-      event.preventDefault();
-      event.stopPropagation();
-      return false;
-    }
-    return true;
+    return this.tabNavHelper.handleCanNavigate(event, link);
   }
 
   next() { this.uiService.continue(); }

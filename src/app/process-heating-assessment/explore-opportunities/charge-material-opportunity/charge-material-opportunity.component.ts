@@ -1,23 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ChargeMaterial, ChargeMaterialType } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ExploreOpportunityCategory } from '../../models/phast';
-import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-
-export interface ChargeMaterialTemperatureComparison {
-  id: string;
-  name: string;
-  baselineInitialTemperature: number | undefined;
-  modificationInitialTemperature: number | undefined;
-}
+import { createOpportunityComparisonState } from '../explore-opportunity-comparison';
 
 const OPPORTUNITY_DISPLAY_NAME = 'Preheat Charge Material';
 
-function readInitialTemperature(material: ChargeMaterial | undefined): number | undefined {
-  if (!material) {
-    return undefined;
-  }
+function readInitialTemperature(material: ChargeMaterial): number | undefined {
   switch (material.chargeMaterialType) {
     case ChargeMaterialType.Liquid:
       return material.liquidChargeMaterial?.initialTemperature;
@@ -50,96 +40,25 @@ function withInitialTemperature(material: ChargeMaterial, initialTemperature: nu
 })
 export class ChargeMaterialOpportunityComponent {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
-  private readonly modificationService = inject(ModificationService);
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
 
-  readonly useOpportunity: Signal<boolean> = computed(() =>
-    this.modificationService.selectedModification()?.exploreOpportunityFlags?.[ExploreOpportunityCategory.Material]?.hasOpportunity ?? false
-  );
-
-
-  readonly materialTemperatureComparisons: Signal<ChargeMaterialTemperatureComparison[]> = computed(() => {
-    const baselineMaterials = this.assessmentService.lossSignal('baseline', 'chargeMaterials') ?? [];
-    const modificationId = this.modificationService.selectedModificationId();
-    const modificationMaterials = modificationId
-      ? this.assessmentService.lossSignal(modificationId, 'chargeMaterials') ?? []
-      : [];
-
-    return baselineMaterials.map(baselineMaterial => {
-      const modificationMaterial = modificationMaterials.find(material => material.id === baselineMaterial.id);
-      return {
-        id: baselineMaterial.id,
-        name: baselineMaterial.name,
-        baselineInitialTemperature: readInitialTemperature(baselineMaterial),
-        modificationInitialTemperature: readInitialTemperature(modificationMaterial) ?? readInitialTemperature(baselineMaterial),
-      };
-    });
+  private readonly state = createOpportunityComparisonState({
+    lossKey: 'chargeMaterials',
+    category: ExploreOpportunityCategory.Material,
+    displayName: OPPORTUNITY_DISPLAY_NAME,
+    getValue: readInitialTemperature,
+    withValue: withInitialTemperature,
   });
 
+  readonly useOpportunity = this.state.useOpportunity;
+  readonly comparisons = this.state.comparisons;
 
   toggleOpportunity(hasOpportunity: boolean): void {
-    const modificationId = this.modificationService.selectedModificationId();
-    if (!modificationId) {
-      return;
-    }
-    this.modificationService.setExploreOpportunityFlag(modificationId, ExploreOpportunityCategory.Material, {
-      hasOpportunity,
-      display: OPPORTUNITY_DISPLAY_NAME,
-    });
-
-    // The merge no longer gates a loss-type diff on this flag (see scenario-merge.util.ts), so
-    // deselecting the opportunity has to actively put the preheated temperatures back to baseline
-    // itself: otherwise they'd keep applying even with the opportunity off.
-    if (!hasOpportunity) {
-      this.resetInitialTemperaturesToBaseline(modificationId);
-    }
+    this.state.toggleOpportunity(hasOpportunity);
   }
 
-  private resetInitialTemperaturesToBaseline(modificationId: string): void {
-    const modification = this.modificationService.selectedModification();
-    if (!modification) {
-      return;
-    }
-
-    const baselineMaterials = this.assessmentService.lossSignal('baseline', 'chargeMaterials') ?? [];
-    const effectiveMaterials = this.assessmentService.lossSignal(modificationId, 'chargeMaterials') ?? [];
-
-    // Reset only the initial temperature on each material back to baseline's value; any other
-    // override already on these materials (e.g. entered separately in Expert View) is left as is.
-    const resetChargeMaterials = effectiveMaterials.map(material => {
-      const baselineMaterial = baselineMaterials.find(candidate => candidate.id === material.id);
-      const baselineInitialTemperature = readInitialTemperature(baselineMaterial);
-      return baselineInitialTemperature === undefined ? material : withInitialTemperature(material, baselineInitialTemperature);
-    });
-
-    this.assessmentService.updateModificationProperty(modificationId, 'losses', {
-      ...modification.scenarioOverrides?.losses,
-      chargeMaterials: resetChargeMaterials,
-    });
-  }
-
-  setModificationInitialTemperature(materialId: string, initialTemperature: number): void {
-    if (Number.isNaN(initialTemperature)) {
-      return;
-    }
-
-    const modification = this.modificationService.selectedModification();
-    if (!modification) {
-      return;
-    }
-
-    // Start from this modification's own currently-effective materials (baseline merged with
-    // whatever it already overrides), not raw baseline — otherwise editing one material's
-    // temperature would silently discard any override already set on another material.
-    const effectiveMaterials = this.assessmentService.lossSignal(modification.id, 'chargeMaterials') ?? [];
-    const updatedChargeMaterials = effectiveMaterials.map(material =>
-      material.id === materialId ? withInitialTemperature(material, initialTemperature) : material
-    );
-
-    this.assessmentService.updateModificationProperty(modification.id, 'losses', {
-      ...modification.scenarioOverrides?.losses,
-      chargeMaterials: updatedChargeMaterials,
-    });
+  setModificationValue(materialId: string, initialTemperature: number): void {
+    this.state.setModificationValue(materialId, initialTemperature);
   }
 }

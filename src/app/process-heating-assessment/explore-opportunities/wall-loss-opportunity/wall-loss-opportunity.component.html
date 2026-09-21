@@ -12,7 +12,7 @@
 
 @if (useOpportunity()) {
   <ul>
-    @for (comparison of surfaceTemperatureComparisons(); track comparison.id) {
+    @for (comparison of comparisons(); track comparison.id) {
       <li class="explore-opps-header">
         <span class="explore-opps-title text-muted">Baseline</span>
         <span class="explore-opps-title text-muted">{{ comparison.name }}</span>
@@ -22,7 +22,7 @@
           <div class="text-center">
             <label class="baseline-value-label">Surface Temperature</label>
             <div class="text-muted text-center baseline-value-input">
-              {{ comparison.baselineSurfaceTemperature }}
+              {{ comparison.baselineValue }}
               @if (settings().unitsOfMeasure === 'Imperial') { <span>&#8457;</span> }
               @if (settings().unitsOfMeasure === 'Metric') { <span>&#8451;</span> }
             </div>
@@ -38,8 +38,8 @@
                 step="any"
                 class="form-control"
                 id="{{ 'modificationSurfaceTemperature_' + comparison.id }}"
-                [value]="comparison.modificationSurfaceTemperature"
-                (change)="setModificationSurfaceTemperature(comparison.id, $any($event.target).valueAsNumber)"
+                [value]="comparison.modificationValue"
+                (change)="setModificationValue(comparison.id, $any($event.target).valueAsNumber)"
               />
               <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
             </div>
