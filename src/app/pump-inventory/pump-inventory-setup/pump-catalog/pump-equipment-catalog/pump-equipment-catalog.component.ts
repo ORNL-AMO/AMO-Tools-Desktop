@@ -28,6 +28,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   pumpTypes: Array<{value: number, display: string}>;
   shaftOrientations: Array<{value: number, display: string}>;
   shaftSealTypes: Array<{value: number, display: string}>;
+  pumpTypeChangeBlockedMsg: string;
 
   constructor(private pumpCatalogService: PumpCatalogService, private pumpInventoryService: PumpInventoryService,
     private pumpEquipmentCatalogService: PumpEquipmentCatalogService) { }
@@ -42,6 +43,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
         this.form = this.pumpEquipmentCatalogService.getFormFromPumpEquipmentProperties(selectedPump.pumpEquipment);
+        this.pumpTypeChangeBlockedMsg = undefined;
       }
     });
     this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.pumpPropertiesOptions;
@@ -63,6 +65,16 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   }
 
   changePumpType() {
+    let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
+    let hasConnectedAssessments: boolean = selectedPump.connectedAssessments && selectedPump.connectedAssessments.length !== 0;
+    if (this.isPositiveDisplacement && hasConnectedAssessments) {
+      // selectedPump.pumpEquipment.pumpType still holds the pre-change value until save() runs.
+      this.form.controls.pumpType.setValue(selectedPump.pumpEquipment.pumpType, { emitEvent: false });
+      this.pumpTypeChangeBlockedMsg = `${selectedPump.name} is connected to a PSAT assessment and cannot be changed to Positive Displacement. Remove the connection first.`;
+      return;
+    }
+    this.pumpTypeChangeBlockedMsg = undefined;
+
     this.form = this.pumpEquipmentCatalogService.updateDesignDifferentialPressureValidators(this.form);
     if (this.isPositiveDisplacement) {
       this.form.controls.designHead.reset(null);

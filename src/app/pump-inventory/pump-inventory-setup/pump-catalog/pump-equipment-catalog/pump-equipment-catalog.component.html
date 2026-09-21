@@ -19,6 +19,9 @@
             <option [ngValue]="pumpType.value">{{pumpType.display}}</option>
             }
         </select>
+        @if (pumpTypeChangeBlockedMsg) {
+        <span class="alert-danger pull-right small">{{pumpTypeChangeBlockedMsg}}</span>
+        }
     </div>
     }
 
