@@ -139,9 +139,9 @@
 
   </form>
 
-  @if (co2SavingsData()) {
+  @if (co2SavingsData) {
     <app-co2-savings-phast
-      [co2SavingsData]="co2SavingsData()"
+      [co2SavingsData]="co2SavingsData"
       [settings]="settings()"
       [isBaseline]="true"
       [isFormDisabled]="false"
