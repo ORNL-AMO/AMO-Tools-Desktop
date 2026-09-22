@@ -94,8 +94,11 @@ export function deriveScenarioOverridesFromLegacyModification(modificationPhast:
 
 type WithId = { id?: string };
 
-// wallLosses/extendedSurfaces have always shipped with an optional `id` (unlike chargeMaterials,
-// which requires one), so assessments predating the per-item Explore Opportunities comparison can
+/** Loss types matched between baseline and modification by item id. */
+const ID_MATCHED_LOSS_KEYS = ['wallLosses', 'extendedSurfaces', 'atmosphereLosses'] as const satisfies readonly (keyof Losses)[];
+
+// These loss types have always shipped with an optional `id` (unlike chargeMaterials, which
+// requires one), so assessments predating the per-item Explore Opportunities comparison can
 // have entries with no id at all. Backfills one, preserving the array reference when every item
 // already has one so idempotency checks elsewhere (`scenarioOverrides === existing`) still hold.
 function ensureLossIds<T extends WithId>(items: T[] | undefined): T[] | undefined {
@@ -105,7 +108,7 @@ function ensureLossIds<T extends WithId>(items: T[] | undefined): T[] | undefine
   return items.map(item => (item.id ? item : { ...item, id: getNewIdString() }));
 }
 
-// A modification's wallLosses/extendedSurfaces override, when present, is a full-array replacement
+// A modification's override for one of these loss types, when present, is a full-array replacement
 // representing the same physical losses in the same order as baseline (see getEffectivePhast()) —
 // true in particular for legacy migrations, which clone the array in place rather than reordering
 // it. Backfilling ids here independently of baseline would break the by-id lookups every consumer
@@ -117,32 +120,42 @@ function alignOverrideLossIds<T extends WithId>(baselineItems: T[] | undefined, 
   return overrideItems.map((item, index) => (item.id ? item : { ...item, id: baselineItems?.[index]?.id ?? getNewIdString() }));
 }
 
-// Backfills missing ids on baseline's wallLosses/extendedSurfaces, then aligns any modification
-// override for those loss types onto the same ids by position. Must run after scenarioOverrides
-// migration (deriveScenarioOverridesFromLegacyModification), not before: diffing a legacy modification's un-id'd clone
+// Backfills missing ids on baseline's id-matched loss types, then aligns any modification override
+// for those loss types onto the same ids by position. Must run after scenarioOverrides migration
+// (deriveScenarioOverridesFromLegacyModification), not before: diffing a legacy modification's un-id'd clone
 // against an already-backfilled baseline would flag `id` alone as a spurious override. Idempotent:
 // returns the same `phast` reference when nothing needed backfilling.
 export function ensureLossIdsForPhast(phast: PHAST): PHAST {
-  const wallLosses = ensureLossIds(phast.losses?.wallLosses);
-  const extendedSurfaces = ensureLossIds(phast.losses?.extendedSurfaces);
-  const baselineChanged = wallLosses !== phast.losses?.wallLosses || extendedSurfaces !== phast.losses?.extendedSurfaces;
+  const baselineLosses: Losses = { ...phast.losses };
+  let baselineChanged = false;
+  for (const key of ID_MATCHED_LOSS_KEYS) {
+    const backfilled = ensureLossIds<WithId>(phast.losses?.[key]);
+    if (backfilled !== phast.losses?.[key]) {
+      baselineLosses[key] = backfilled as never;
+      baselineChanged = true;
+    }
+  }
 
   const existingModifications = phast.modifications as ProcessHeatingModification[] | undefined;
   let modificationsChanged = false;
   const modifications = existingModifications?.map(modification => {
     const overrideLosses = modification.scenarioOverrides?.losses;
-    const overrideWallLosses = alignOverrideLossIds(wallLosses, overrideLosses?.wallLosses);
-    const overrideExtendedSurfaces = alignOverrideLossIds(extendedSurfaces, overrideLosses?.extendedSurfaces);
-    if (overrideWallLosses === overrideLosses?.wallLosses && overrideExtendedSurfaces === overrideLosses?.extendedSurfaces) {
+    const alignedLosses: Losses = { ...overrideLosses };
+    let overrideChanged = false;
+    for (const key of ID_MATCHED_LOSS_KEYS) {
+      const aligned = alignOverrideLossIds<WithId>(baselineLosses[key], overrideLosses?.[key]);
+      if (aligned !== overrideLosses?.[key]) {
+        alignedLosses[key] = aligned as never;
+        overrideChanged = true;
+      }
+    }
+    if (!overrideChanged) {
       return modification;
     }
     modificationsChanged = true;
     return {
       ...modification,
-      scenarioOverrides: {
-        ...modification.scenarioOverrides,
-        losses: { ...overrideLosses, wallLosses: overrideWallLosses, extendedSurfaces: overrideExtendedSurfaces },
-      },
+      scenarioOverrides: { ...modification.scenarioOverrides, losses: alignedLosses },
     };
   });
 
@@ -152,7 +165,7 @@ export function ensureLossIdsForPhast(phast: PHAST): PHAST {
 
   return {
     ...phast,
-    losses: baselineChanged ? { ...phast.losses, wallLosses, extendedSurfaces } : phast.losses,
+    losses: baselineChanged ? baselineLosses : phast.losses,
     modifications: modificationsChanged ? modifications : phast.modifications,
   };
 }

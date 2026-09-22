@@ -37,6 +37,7 @@ import { ModificationListComponent } from '../shared/modification-list/modificat
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { ChargeMaterialOpportunityComponent } from './explore-opportunities/charge-material-opportunity/charge-material-opportunity.component';
 import { WallLossOpportunityComponent } from './explore-opportunities/wall-loss-opportunity/wall-loss-opportunity.component';
+import { AtmosphereOpportunityComponent } from './explore-opportunities/atmosphere-opportunity/atmosphere-opportunity.component';
 import { ExpertViewComponent } from './expert-view/expert-view.component';
 import { ReportComponent } from './report/report.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
@@ -263,6 +264,7 @@ export const ROUTES: Route[] = [
     ExploreOpportunitiesComponent,
     ChargeMaterialOpportunityComponent,
     WallLossOpportunityComponent,
+    AtmosphereOpportunityComponent,
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,

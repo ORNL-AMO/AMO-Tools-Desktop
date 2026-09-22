@@ -14,6 +14,9 @@
     <hr>
     <app-charge-material-opportunity></app-charge-material-opportunity>
     <app-wall-loss-opportunity></app-wall-loss-opportunity>
+    @if (hasAtmosphereLosses()) {
+      <app-atmosphere-opportunity></app-atmosphere-opportunity>
+    }
   } @else {
     <div class="no-data text-center">
       <h2 class="h6">Explore energy efficiency opportunities to increase the efficiency and effectiveness of your system.</h2>

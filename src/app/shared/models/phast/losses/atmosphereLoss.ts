@@ -1,4 +1,5 @@
 export interface AtmosphereLoss {
+    id?: string;
     atmosphereGas?: number;
     specificHeat?: number;
     inletTemperature?: number;
