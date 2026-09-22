@@ -50,11 +50,16 @@ export class ProcessHeatingUiService {
 
   // Service-held so the selection survives leaving and returning to Expert View. Falls back to the
   // first tab when a configuration change hides the selected one.
-  readonly selectedExpertViewTab = linkedSignal<ViewLink[], ProcessHeatingView | undefined>({
+  private readonly _selectedExpertViewTab = linkedSignal<ViewLink[], ProcessHeatingView | undefined>({
     source: this.visibleExpertViewTabs,
     computation: (tabs, previous) =>
       tabs.some(link => link.view === previous?.value) ? previous.value : tabs[0]?.view,
   });
+  readonly selectedExpertViewTab: Signal<ProcessHeatingView | undefined> = this._selectedExpertViewTab.asReadonly();
+
+  selectExpertViewTab(view: ProcessHeatingView): void {
+    this._selectedExpertViewTab.set(view);
+  }
 
   private getActiveRouteData(): ProcessHeatingRouteData {
     let snapshot = this.router.routerState.snapshot.root;

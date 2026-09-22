@@ -12,8 +12,12 @@
       />
     </div>
     <hr>
-    <app-charge-material-opportunity></app-charge-material-opportunity>
-    <app-wall-loss-opportunity></app-wall-loss-opportunity>
+    @if (hasChargeMaterials()) {
+      <app-charge-material-opportunity></app-charge-material-opportunity>
+    }
+    @if (hasWallLosses()) {
+      <app-wall-loss-opportunity></app-wall-loss-opportunity>
+    }
     @if (hasAtmosphereLosses()) {
       <app-atmosphere-opportunity></app-atmosphere-opportunity>
     }

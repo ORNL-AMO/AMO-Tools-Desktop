@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, Injector, Signal 
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { Losses } from '../models/phast';
 import { getModificationName, ProcessHeatingModification } from '../models/modification';
 import { AddModificationComponent, DEFAULT_DESCRIPTION } from '../../shared/add-modification/add-modification.component';
 
@@ -20,7 +21,13 @@ export class ExploreOpportunitiesComponent {
 
   readonly selectedModification: Signal<ProcessHeatingModification | undefined> = this.modificationService.selectedModification;
 
-  readonly hasAtmosphereLosses = computed(() => (this.assessmentService.lossSignal('baseline', 'atmosphereLosses')?.length ?? 0) > 0);
+  readonly hasChargeMaterials = computed(() => this.hasBaselineLosses('chargeMaterials'));
+  readonly hasWallLosses = computed(() => this.hasBaselineLosses('wallLosses'));
+  readonly hasAtmosphereLosses = computed(() => this.hasBaselineLosses('atmosphereLosses'));
+
+  private hasBaselineLosses(lossKey: keyof Losses): boolean {
+    return (this.assessmentService.lossSignal('baseline', lossKey)?.length ?? 0) > 0;
+  }
 
   modificationName(modification: ProcessHeatingModification): string {
     return getModificationName(modification);

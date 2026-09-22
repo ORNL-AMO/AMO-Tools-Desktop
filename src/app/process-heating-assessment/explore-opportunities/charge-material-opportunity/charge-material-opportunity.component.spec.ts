@@ -1,12 +1,10 @@
-import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Settings } from '../../../shared/models/settings';
 import { PHAST } from '../../models/phast';
-import { ScenarioOverrides, ProcessHeatingModification } from '../../models/modification';
-import { getEffectivePhast } from '../../services/scenario-merge.util';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingUiService } from '../../services/process-heating-ui.service';
+import { FakeProcessHeatingAssessmentService, FakeProcessHeatingUiService } from '../opportunity-test-fakes';
 import { ChargeMaterialOpportunityComponent } from './charge-material-opportunity.component';
 
 const BASELINE: PHAST = {
@@ -17,49 +15,18 @@ const BASELINE: PHAST = {
         id: 'material-1',
         name: 'Steel',
         chargeMaterialType: 'Solid',
-        solidChargeMaterial: { initialTemperature: 70, specificHeatSolid: 0.12 },
+        solidChargeMaterial: { initialTemperature: 70, dischargeTemperature: 2000, specificHeatSolid: 0.12 },
+      } as never,
+      {
+        id: 'material-2',
+        name: 'Water',
+        chargeMaterialType: 'Liquid',
+        liquidChargeMaterial: { initialTemperature: 60, dischargeTemperature: 200 },
       } as never,
     ],
   },
   modifications: [],
 };
-
-class FakeProcessHeatingAssessmentService {
-  readonly processHeatingSignal: WritableSignal<PHAST> = signal<PHAST>(BASELINE);
-  readonly settingsSignal: WritableSignal<Settings> = signal<Settings>({ unitsOfMeasure: 'Imperial' } as Settings);
-
-  updateProcessHeatingProperty<K extends keyof PHAST>(key: K, value: PHAST[K]): void {
-    this.processHeatingSignal.set({ ...this.processHeatingSignal(), [key]: value });
-  }
-
-  updateModificationProperty<K extends keyof ScenarioOverrides>(modificationId: string, key: K, value: ScenarioOverrides[K]): void {
-    const current = this.processHeatingSignal();
-    const modifications = (current.modifications ?? []) as ProcessHeatingModification[];
-    const index = modifications.findIndex(modification => modification.id === modificationId);
-    if (index === -1) return;
-    const updated = [...modifications];
-    updated[index] = { ...updated[index], scenarioOverrides: { ...updated[index].scenarioOverrides, [key]: value } };
-    this.processHeatingSignal.set({ ...current, modifications: updated });
-  }
-
-  scenarioPhast(scenario: string): PHAST | undefined {
-    const baseline = this.processHeatingSignal();
-    if (scenario === 'baseline') {
-      return baseline;
-    }
-    const modifications = (baseline.modifications ?? []) as ProcessHeatingModification[];
-    const modification = modifications.find(candidate => candidate.id === scenario);
-    return modification ? getEffectivePhast(baseline, modification) : undefined;
-  }
-
-  lossSignal(scenario: string, lossKey: keyof PHAST['losses']) {
-    return this.scenarioPhast(scenario)?.losses?.[lossKey];
-  }
-}
-
-class FakeProcessHeatingUiService {
-  activeModificationIdSignal: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
-}
 
 describe('ChargeMaterialOpportunityComponent', () => {
   let fixture: ComponentFixture<ChargeMaterialOpportunityComponent>;
@@ -72,7 +39,7 @@ describe('ChargeMaterialOpportunityComponent', () => {
       declarations: [ChargeMaterialOpportunityComponent],
       providers: [
         ModificationService,
-        { provide: ProcessHeatingAssessmentService, useClass: FakeProcessHeatingAssessmentService },
+        { provide: ProcessHeatingAssessmentService, useValue: new FakeProcessHeatingAssessmentService(BASELINE) },
         { provide: ProcessHeatingUiService, useClass: FakeProcessHeatingUiService },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -90,12 +57,12 @@ describe('ChargeMaterialOpportunityComponent', () => {
   it('resets the material initial temperature back to baseline when the opportunity is deselected', () => {
     component.toggleOpportunity(true);
     component.setModificationValue('material-1', 200);
-    expect(component.comparisons()[0].modificationValue).toBe(200);
+    expect(component.comparisons()[0].modification.initialTemperature).toBe(200);
 
     component.toggleOpportunity(false);
 
     expect(component.useOpportunity()).toBe(false);
-    expect(component.comparisons()[0].modificationValue).toBe(70);
+    expect(component.comparisons()[0].modification.initialTemperature).toBe(70);
   });
 
   it('leaves other overridden fields on the material untouched when resetting its temperature', () => {
@@ -122,5 +89,50 @@ describe('ChargeMaterialOpportunityComponent', () => {
       };
     expect(effectiveMaterial.solidChargeMaterial.initialTemperature).toBe(70);
     expect(effectiveMaterial.solidChargeMaterial.specificHeatSolid).toBe(0.5);
+  });
+
+  it('renders a Modify Initial Temperature checkbox per material, collapsed until checked', () => {
+    component.toggleOpportunity(true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Modify Initial Temperature');
+    expect(component.isExpanded('material-1')).toBe(false);
+    expect(fixture.nativeElement.querySelector('.explore-opps-header')).toBeNull();
+
+    component.toggleSection('material-1', true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.explore-opps-header')).not.toBeNull();
+  });
+
+  it('resets the initial temperature when the material section is closed', () => {
+    component.toggleOpportunity(true);
+    component.toggleSection('material-1', true);
+    component.setModificationValue('material-1', 200);
+
+    component.toggleSection('material-1', false);
+
+    expect(component.comparisons()[0].modification.initialTemperature).toBe(70);
+  });
+
+  it('reads and writes the initial temperature of the material type in use', () => {
+    component.setModificationValue('material-2', 90);
+
+    const comparison = component.comparisons()[1];
+    expect(comparison.baseline.initialTemperature).toBe(60);
+    expect(comparison.modification.initialTemperature).toBe(90);
+    expect(comparison.modificationItem.liquidChargeMaterial.initialTemperature).toBe(90);
+  });
+
+  it('warns when the modification inlet temperature exceeds the outlet temperature', () => {
+    component.toggleOpportunity(true);
+    component.toggleSection('material-2', true);
+    component.setModificationValue('material-2', 250);
+    fixture.detectChanges();
+
+    expect(component.comparisons()[1].modificationWarning)
+      .toBe('Charge Inlet Temperature (250) cannot be greater than Charge Outlet Temperature (200)');
+    expect(fixture.nativeElement.textContent).toContain('cannot be greater than Charge Outlet Temperature');
+    expect(component.comparisons()[1].baselineWarning).toBeNull();
   });
 });

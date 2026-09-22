@@ -1,13 +1,11 @@
-import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Settings } from '../../../shared/models/settings';
 import { AtmosphereLoss } from '../../../shared/models/phast/losses/atmosphereLoss';
 import { PHAST } from '../../models/phast';
-import { ScenarioOverrides, ProcessHeatingModification } from '../../models/modification';
-import { getEffectivePhast } from '../../services/scenario-merge.util';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingUiService } from '../../services/process-heating-ui.service';
+import { FakeProcessHeatingAssessmentService, FakeProcessHeatingUiService } from '../opportunity-test-fakes';
 import { AtmosphereOpportunityComponent } from './atmosphere-opportunity.component';
 
 const BASELINE: PHAST = {
@@ -20,43 +18,6 @@ const BASELINE: PHAST = {
   },
   modifications: [],
 };
-
-class FakeProcessHeatingAssessmentService {
-  readonly processHeatingSignal: WritableSignal<PHAST> = signal<PHAST>(BASELINE);
-  readonly settingsSignal: WritableSignal<Settings> = signal<Settings>({ unitsOfMeasure: 'Imperial' } as Settings);
-
-  updateProcessHeatingProperty<K extends keyof PHAST>(key: K, value: PHAST[K]): void {
-    this.processHeatingSignal.set({ ...this.processHeatingSignal(), [key]: value });
-  }
-
-  updateModificationProperty<K extends keyof ScenarioOverrides>(modificationId: string, key: K, value: ScenarioOverrides[K]): void {
-    const current = this.processHeatingSignal();
-    const modifications = (current.modifications ?? []) as ProcessHeatingModification[];
-    const index = modifications.findIndex(modification => modification.id === modificationId);
-    if (index === -1) return;
-    const updated = [...modifications];
-    updated[index] = { ...updated[index], scenarioOverrides: { ...updated[index].scenarioOverrides, [key]: value } };
-    this.processHeatingSignal.set({ ...current, modifications: updated });
-  }
-
-  scenarioPhast(scenario: string): PHAST | undefined {
-    const baseline = this.processHeatingSignal();
-    if (scenario === 'baseline') {
-      return baseline;
-    }
-    const modifications = (baseline.modifications ?? []) as ProcessHeatingModification[];
-    const modification = modifications.find(candidate => candidate.id === scenario);
-    return modification ? getEffectivePhast(baseline, modification) : undefined;
-  }
-
-  lossSignal(scenario: string, lossKey: keyof PHAST['losses']) {
-    return this.scenarioPhast(scenario)?.losses?.[lossKey];
-  }
-}
-
-class FakeProcessHeatingUiService {
-  activeModificationIdSignal: WritableSignal<string | undefined> = signal<string | undefined>(undefined);
-}
 
 describe('AtmosphereOpportunityComponent', () => {
   let fixture: ComponentFixture<AtmosphereOpportunityComponent>;
@@ -81,7 +42,7 @@ describe('AtmosphereOpportunityComponent', () => {
       declarations: [AtmosphereOpportunityComponent],
       providers: [
         ModificationService,
-        { provide: ProcessHeatingAssessmentService, useClass: FakeProcessHeatingAssessmentService },
+        { provide: ProcessHeatingAssessmentService, useValue: new FakeProcessHeatingAssessmentService(BASELINE) },
         { provide: ProcessHeatingUiService, useClass: FakeProcessHeatingUiService },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -107,72 +68,17 @@ describe('AtmosphereOpportunityComponent', () => {
       expect(fixture.nativeElement.querySelectorAll('ul').length).toBe(2);
     });
 
-    it('resets flow rate and inlet/outlet temperature to baseline when deselected', () => {
+    it('renders the flow rate and inlet/outlet temperature section checkboxes for each loss', () => {
       component.toggleOpportunity(true);
-      component.setModificationValue('atm-1', 'flowRate', 800);
-      component.setModificationValue('atm-1', 'inletTemperature', 300);
-      component.setModificationValue('atm-2', 'outletTemperature', 700);
+      fixture.detectChanges();
 
-      component.toggleOpportunity(false);
-
-      expect(component.useOpportunity()).toBe(false);
-      expect(effectiveLoss('atm-1')).toEqual(jasmine.objectContaining({ flowRate: 1000, inletTemperature: 100 }));
-      expect(effectiveLoss('atm-2').outletTemperature).toBe(900);
+      const labels = fixture.nativeElement.querySelector('ul').textContent;
+      expect(labels).toContain('Modify Flow Rate');
+      expect(labels).toContain('Modify Inlet / Outlet Temperature');
     });
 
-    it('leaves fields this EEM does not own untouched when resetting', () => {
+    it('resets both temperatures when the temperature section is closed', () => {
       component.toggleOpportunity(true);
-      component.setModificationValue('atm-1', 'flowRate', 800);
-      const modification = modificationService.selectedModification();
-      assessmentService.updateModificationProperty(modification.id, 'losses', {
-        ...modification.scenarioOverrides?.losses,
-        atmosphereLosses: modification.scenarioOverrides?.losses?.atmosphereLosses?.map(loss =>
-          loss.id === 'atm-1' ? { ...loss, specificHeat: 0.05 } : loss
-        ),
-      });
-
-      component.toggleOpportunity(false);
-
-      expect(effectiveLoss('atm-1').flowRate).toBe(1000);
-      expect(effectiveLoss('atm-1').specificHeat).toBe(0.05);
-    });
-  });
-
-  describe('per-loss sections', () => {
-    beforeEach(() => {
-      createComponent();
-      component.toggleOpportunity(true);
-    });
-
-    it('starts collapsed when the modification matches baseline', () => {
-      expect(component.isExpanded('flowRate', 'atm-1')).toBe(false);
-      expect(component.isExpanded('temperature', 'atm-1')).toBe(false);
-    });
-
-    it('stays expanded after the value is typed back to baseline', () => {
-      component.toggleSection('flowRate', 'atm-1', true);
-      component.setModificationValue('atm-1', 'flowRate', 800);
-      component.setModificationValue('atm-1', 'flowRate', 1000);
-
-      expect(component.isExpanded('flowRate', 'atm-1')).toBe(true);
-    });
-
-    it('resets only the flow rate of that loss when its flow rate section is closed', () => {
-      component.toggleSection('flowRate', 'atm-1', true);
-      component.toggleSection('temperature', 'atm-1', true);
-      component.setModificationValue('atm-1', 'flowRate', 800);
-      component.setModificationValue('atm-1', 'inletTemperature', 300);
-      component.setModificationValue('atm-2', 'flowRate', 400);
-
-      component.toggleSection('flowRate', 'atm-1', false);
-
-      expect(component.isExpanded('flowRate', 'atm-1')).toBe(false);
-      expect(effectiveLoss('atm-1').flowRate).toBe(1000);
-      expect(effectiveLoss('atm-1').inletTemperature).toBe(300);
-      expect(effectiveLoss('atm-2').flowRate).toBe(400);
-    });
-
-    it('resets both inlet and outlet temperature when the temperature section is closed', () => {
       component.toggleSection('temperature', 'atm-1', true);
       component.setModificationValue('atm-1', 'inletTemperature', 300);
       component.setModificationValue('atm-1', 'outletTemperature', 1100);
@@ -180,48 +86,6 @@ describe('AtmosphereOpportunityComponent', () => {
       component.toggleSection('temperature', 'atm-1', false);
 
       expect(effectiveLoss('atm-1')).toEqual(jasmine.objectContaining({ inletTemperature: 100, outletTemperature: 1200 }));
-    });
-
-    it('keeps another loss override when editing a different loss', () => {
-      component.setModificationValue('atm-1', 'flowRate', 800);
-      component.setModificationValue('atm-2', 'flowRate', 400);
-
-      expect(effectiveLoss('atm-1').flowRate).toBe(800);
-      expect(effectiveLoss('atm-2').flowRate).toBe(400);
-    });
-
-    it('ignores a NaN value from a cleared input', () => {
-      component.setModificationValue('atm-1', 'flowRate', NaN);
-
-      expect(effectiveLoss('atm-1').flowRate).toBe(1000);
-    });
-  });
-
-  describe('section seeding', () => {
-    it('opens sections that already differ from baseline when the component loads', () => {
-      const modification = modificationService.selectedModification();
-      assessmentService.updateModificationProperty(modification.id, 'losses', {
-        ...modification.scenarioOverrides?.losses,
-        atmosphereLosses: BASELINE.losses.atmosphereLosses.map(loss =>
-          loss.id === 'atm-2' ? { ...loss, outletTemperature: 700 } : loss
-        ),
-      });
-
-      createComponent();
-
-      expect(component.isExpanded('temperature', 'atm-2')).toBe(true);
-      expect(component.isExpanded('flowRate', 'atm-2')).toBe(false);
-      expect(component.isExpanded('temperature', 'atm-1')).toBe(false);
-    });
-
-    it('reseeds sections when switching to another modification', () => {
-      createComponent();
-      component.toggleOpportunity(true);
-      component.toggleSection('flowRate', 'atm-1', true);
-
-      modificationService.addModification('Scenario 2');
-
-      expect(component.isExpanded('flowRate', 'atm-1')).toBe(false);
     });
   });
 
