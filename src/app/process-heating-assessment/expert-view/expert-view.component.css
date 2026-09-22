@@ -1,12 +1,22 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
   height: 100%;
 }
 
+.tabs {
+  flex: 0 0 auto;
+}
+
+.tabs li {
+  cursor: pointer;
+}
+
 .expert-view-container {
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .expert-view-panel {

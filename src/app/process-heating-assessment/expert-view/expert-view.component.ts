@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, inject, Injector, Signal } from '@a
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { ModificationService } from '../services/modification.service';
 import { getModificationName, ProcessHeatingModification } from '../models/modification';
+import { LossView, ProcessHeatingView, ViewLink } from '../models/views';
+import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
 import { AddModificationComponent, DEFAULT_DESCRIPTION } from '../../shared/add-modification/add-modification.component';
 
 @Component({
@@ -15,8 +17,16 @@ export class ExpertViewComponent {
   private readonly modalDialogService = inject(ModalDialogService);
   private readonly injector = inject(Injector);
   private readonly modificationService = inject(ModificationService);
+  private readonly uiService = inject(ProcessHeatingUiService);
 
+  readonly LossView = LossView;
   readonly selectedModification: Signal<ProcessHeatingModification | undefined> = this.modificationService.selectedModification;
+  readonly tabs: Signal<ViewLink[]> = this.uiService.visibleExpertViewTabs;
+  readonly selectedTab: Signal<ProcessHeatingView | undefined> = this.uiService.selectedExpertViewTab;
+
+  selectTab(view: ProcessHeatingView): void {
+    this.uiService.selectedExpertViewTab.set(view);
+  }
 
   modificationName(modification: ProcessHeatingModification): string {
     return getModificationName(modification);
