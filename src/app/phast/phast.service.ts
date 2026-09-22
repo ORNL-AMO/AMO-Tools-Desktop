@@ -808,7 +808,8 @@ export class PhastService {
         windVelocity: 5,
         surfaceEmissivity: loss.surfaceEmissivity,
         conditionFactor: 1,
-        correctionFactor: 1
+        correctionFactor: 1,
+        name: loss.name
       };
       let tmpForm = this.wallFormService.getWallLossForm(tmpWallLoss);
       if (tmpForm.status === 'VALID') {
