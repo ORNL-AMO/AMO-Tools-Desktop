@@ -62,6 +62,8 @@ import { WallLossesFormComponent } from './heat-balance/losses/wall-losses/wall-
 import { ExtendedSurfaceComponent } from './heat-balance/losses/extended-surface/extended-surface.component';
 import { ExtendedSurfaceFormComponent } from './heat-balance/losses/extended-surface/extended-surface-form.component';
 import { AtmosphereComponent } from './heat-balance/losses/atmosphere/atmosphere.component';
+import { AtmosphereFormComponent } from './heat-balance/losses/atmosphere/atmosphere-form.component';
+import { AddAtmosphereMaterialModalComponent } from './heat-balance/losses/atmosphere/add-atmosphere-material-modal.component';
 import { FixtureComponent } from './heat-balance/losses/fixture/fixture.component';
 import { CoolingComponent } from './heat-balance/losses/cooling/cooling.component';
 import { OpeningComponent } from './heat-balance/losses/opening/opening.component';
@@ -285,6 +287,8 @@ export const ROUTES: Route[] = [
     ExtendedSurfaceComponent,
     ExtendedSurfaceFormComponent,
     AtmosphereComponent,
+    AtmosphereFormComponent,
+    AddAtmosphereMaterialModalComponent,
     FixtureComponent,
     CoolingComponent,
     OpeningComponent,
