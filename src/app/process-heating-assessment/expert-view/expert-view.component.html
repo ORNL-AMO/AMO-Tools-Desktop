@@ -1,19 +1,22 @@
 @if (selectedModification(); as modification) {
+  <ul class="tabs subtabs process-heating-assessment">
+    @for (link of tabs(); track link.view) {
+      <li [class.active]="link.view === selectedTab()" (click)="selectTab(link.view)">
+        <a>{{ link.label }}</a>
+      </li>
+    }
+  </ul>
   <div class="expert-view-container d-flex">
     <div class="expert-view-panel">
       <div class="expert-view-panel-header">Baseline</div>
       <div class="expert-view-panel-content">
-        <app-charge-material [scenario]="'baseline'"></app-charge-material>
-        <app-wall-losses [scenario]="'baseline'"></app-wall-losses>
-        <app-extended-surface [scenario]="'baseline'"></app-extended-surface>
+        <ng-container *ngTemplateOutlet="lossForm; context: { $implicit: 'baseline' }"></ng-container>
       </div>
     </div>
     <div class="expert-view-panel">
       <div class="expert-view-panel-header">{{ modificationName(modification) }}</div>
       <div class="expert-view-panel-content">
-        <app-charge-material [scenario]="modification.id"></app-charge-material>
-        <app-wall-losses [scenario]="modification.id"></app-wall-losses>
-        <app-extended-surface [scenario]="modification.id"></app-extended-surface>
+        <ng-container *ngTemplateOutlet="lossForm; context: { $implicit: modification.id }"></ng-container>
       </div>
     </div>
   </div>
@@ -24,3 +27,11 @@
     <button type="button" class="btn btn-primary" (click)="addModification()">Create a Modification</button>
   </div>
 }
+
+<ng-template #lossForm let-scenario>
+  @switch (selectedTab()) {
+    @case (LossView.CHARGE_MATERIAL) { <app-charge-material [scenario]="scenario"></app-charge-material> }
+    @case (LossView.WALL_LOSSES) { <app-wall-losses [scenario]="scenario"></app-wall-losses> }
+    @case (LossView.EXTENDED_SURFACE) { <app-extended-surface [scenario]="scenario"></app-extended-surface> }
+  }
+</ng-template>

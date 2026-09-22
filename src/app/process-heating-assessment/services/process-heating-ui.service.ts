@@ -1,9 +1,9 @@
-import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
+import { computed, inject, Injectable, linkedSignal, Signal, signal, WritableSignal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
-import { HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink } from '../models/views';
+import { EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 export { MainView, BaselineView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
@@ -43,6 +43,18 @@ export class ProcessHeatingUiService {
   readonly visibleHeatBalanceTabs: Signal<ViewLink[]> = computed(() =>
     HEAT_BALANCE_VIEW_LINKS.filter(link => this.isTabVisibleForHeatingEquipmentConfiguration(link.view))
   );
+
+  readonly visibleExpertViewTabs: Signal<ViewLink[]> = computed(() =>
+    this.visibleHeatBalanceTabs().filter(link => EXPERT_VIEW_LOSS_VIEWS.has(link.view))
+  );
+
+  // Service-held so the selection survives leaving and returning to Expert View. Falls back to the
+  // first tab when a configuration change hides the selected one.
+  readonly selectedExpertViewTab = linkedSignal<ViewLink[], ProcessHeatingView | undefined>({
+    source: this.visibleExpertViewTabs,
+    computation: (tabs, previous) =>
+      tabs.some(link => link.view === previous?.value) ? previous.value : tabs[0]?.view,
+  });
 
   private getActiveRouteData(): ProcessHeatingRouteData {
     let snapshot = this.router.routerState.snapshot.root;
