@@ -1,4 +1,5 @@
 export interface FixtureLoss {
+    id?: string;
     specificHeat?: number;
     feedRate?: number;
     initialTemperature?: number;

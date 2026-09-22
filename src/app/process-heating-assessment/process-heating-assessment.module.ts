@@ -66,6 +66,7 @@ import { AtmosphereComponent } from './heat-balance/losses/atmosphere/atmosphere
 import { AtmosphereFormComponent } from './heat-balance/losses/atmosphere/atmosphere-form.component';
 import { AddAtmosphereMaterialModalComponent } from './heat-balance/losses/atmosphere/add-atmosphere-material-modal.component';
 import { FixtureComponent } from './heat-balance/losses/fixture/fixture.component';
+import { FixtureFormComponent } from './heat-balance/losses/fixture/fixture-form.component';
 import { CoolingComponent } from './heat-balance/losses/cooling/cooling.component';
 import { OpeningComponent } from './heat-balance/losses/opening/opening.component';
 import { OtherComponent } from './heat-balance/losses/other/other.component';
@@ -292,6 +293,7 @@ export const ROUTES: Route[] = [
     AtmosphereFormComponent,
     AddAtmosphereMaterialModalComponent,
     FixtureComponent,
+    FixtureFormComponent,
     CoolingComponent,
     OpeningComponent,
     OtherComponent,

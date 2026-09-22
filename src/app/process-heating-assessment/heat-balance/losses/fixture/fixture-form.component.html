@@ -1,0 +1,75 @@
+@let f = form().controls;
+
+@if (materialSelector.missingMaterialId() !== null) {
+  <div class="alert alert-warning">
+    This entry references a material that no longer exists in the Process Heating Materials Database.
+    <button type="button" class="btn btn-link p-0 ml-1" (click)="materialSelector.restoreDeletedMaterial()">Restore it</button>
+    or
+    <button type="button" class="btn btn-link p-0 ml-1" (click)="materialSelector.dismissMissingMaterial()">dismiss and continue with the stored values</button>.
+  </div>
+}
+
+<form [formGroup]="form()">
+  <div class="form-group">
+    <label for="materialId_{{ instanceId() }}">Material Name</label>
+    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId"
+      (change)="materialSelector.onMaterialSelected(f.materialId.value)">
+      @for (material of materialSelector.materialTypes(); track material.id) {
+        <option [ngValue]="material.id">{{ material.substance }}</option>
+      }
+    </select>
+    <button type="button" class="btn btn-link p-0 form-text small" (click)="materialSelector.openAddMaterialModal()">Add New...</button>
+    <app-form-control-errors [control]="f.materialId" [settings]="settings()"></app-form-control-errors>
+  </div>
+
+  <div class="form-group">
+    <label for="specificHeat_{{ instanceId() }}">Average Specific Heat of Material</label>
+    <div class="input-group" [class.invalid]="f.specificHeat.invalid">
+      <input type="number" step="0.1" min="0" class="form-control" id="specificHeat_{{ instanceId() }}" formControlName="specificHeat" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="Btu/(lb-&#8457;)" metricUnit="kJ/(kg-&#8451;)"></app-input-unit>
+    </div>
+    @if (differs(f.specificHeat.value, materialSelector.selectedMaterial?.specificHeatSolid)) {
+      <span class="text-warning small">Differs from database</span>
+    }
+    <app-form-control-errors [control]="f.specificHeat" [settings]="settings()"></app-form-control-errors>
+  </div>
+
+  <div class="form-group">
+    <label for="feedRate_{{ instanceId() }}">Fixture Feed Rate</label>
+    <div class="input-group" [class.invalid]="f.feedRate.invalid">
+      <input type="number" step="100" min="0" class="form-control" id="feedRate_{{ instanceId() }}" formControlName="feedRate" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="lb/hr" metricUnit="kg/hr"></app-input-unit>
+    </div>
+    @if (f.feedRate.invalid && (f.feedRate.dirty || f.feedRate.touched)) {
+      <div class="text-danger small">
+        @if (f.feedRate.errors?.required) { <div>Value Required</div> }
+        @if (f.feedRate.errors?.greaterThan !== undefined) { <div>Value must be greater than {{ f.feedRate.errors.greaterThan }}.</div> }
+      </div>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="initialTemp_{{ instanceId() }}">Inlet Temperature</label>
+    <div class="input-group" [class.invalid]="f.initialTemp.invalid">
+      <input type="number" step="10" class="form-control" id="initialTemp_{{ instanceId() }}" formControlName="initialTemp" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.initialTemp" [settings]="settings()"></app-form-control-errors>
+  </div>
+
+  <div class="form-group">
+    <label for="finalTemp_{{ instanceId() }}">Outlet Temperature</label>
+    <div class="input-group" [class.invalid]="f.finalTemp.invalid">
+      <input type="number" step="10" class="form-control" id="finalTemp_{{ instanceId() }}" formControlName="finalTemp" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.finalTemp" [settings]="settings()"></app-form-control-errors>
+  </div>
+
+  <div class="form-group">
+    <label for="correctionFactor_{{ instanceId() }}">Correction Factor</label>
+    <input type="number" step="any" class="form-control" id="correctionFactor_{{ instanceId() }}" formControlName="correctionFactor" onfocus="this.select();"
+      [class.invalid]="f.correctionFactor.invalid">
+    <app-form-control-errors [control]="f.correctionFactor" [settings]="settings()"></app-form-control-errors>
+  </div>
+</form>
