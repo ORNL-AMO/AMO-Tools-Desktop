@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, Injector, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, Injector, Signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { DialogRef } from '@angular/cdk/dialog';
@@ -38,10 +38,8 @@ export class OperationsComponent {
 
   form: FormGroup<OperationsForm>;
 
-  readonly co2SavingsData: Signal<PhastCo2SavingsData> = computed(() =>
-    this.processHeating().co2SavingsData
-      ?? this.co2Service.getCo2SavingsDataFromSettingsObject(this.settings()),
-  );
+  readonly co2SavingsData: PhastCo2SavingsData =
+    this.processHeating().co2SavingsData ?? this.co2Service.getCo2SavingsDataFromSettingsObject(this.settings());
 
   constructor() {
     this.form = this.formService.getForm(this.processHeating(), this.heatingSystemConfiguration());
