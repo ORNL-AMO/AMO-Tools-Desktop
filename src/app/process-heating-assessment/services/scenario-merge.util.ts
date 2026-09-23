@@ -95,7 +95,7 @@ export function deriveScenarioOverridesFromLegacyModification(modificationPhast:
 type WithId = { id?: string };
 
 /** Loss types matched between baseline and modification by item id. */
-const ID_MATCHED_LOSS_KEYS = ['wallLosses', 'extendedSurfaces', 'atmosphereLosses', 'fixtureLosses'] as const satisfies readonly (keyof Losses)[];
+const ID_MATCHED_LOSS_KEYS = ['wallLosses', 'extendedSurfaces', 'atmosphereLosses', 'fixtureLosses', 'coolingLosses'] as const satisfies readonly (keyof Losses)[];
 
 // These loss types have always shipped with an optional `id` (unlike chargeMaterials, which
 // requires one), so assessments predating the per-item Explore Opportunities comparison can

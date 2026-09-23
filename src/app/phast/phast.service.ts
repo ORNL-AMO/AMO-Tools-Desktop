@@ -748,6 +748,8 @@ export class PhastService {
   }
 
   sumCoolingLosses(losses: CoolingLoss[], settings: Settings): number {
+    // Known bug: only 'Gas' and 'Liquid' types are summed, so 'Other Gas' / 'Other Liquid' cooling
+    // losses add 0 to results even though the cooling form shows their heat loss.
     let sum = 0;
     losses.forEach(loss => {
       if (loss.coolingLossType === 'Gas') {

@@ -82,6 +82,17 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
     this.saveLosses();
   }
 
+  /** Swaps an entry's form for one of a different shape (e.g. a cooling loss switching gas ↔ liquid). */
+  protected replaceForm(id: string, form: TForm): void {
+    const item = this.store.get(id);
+    if (!item) return;
+    const updated = { ...item, form };
+    this.calculateItemResult(updated);
+    this.store.set(id, updated);
+    this.observeItem(updated);
+    this.saveLosses();
+  }
+
   private ensureId(loss: TLoss): TLoss & EntityWithId {
     return loss.id ? (loss as TLoss & EntityWithId) : { ...loss, id: getNewIdString() };
   }

@@ -1,0 +1,71 @@
+@let f = form().controls;
+
+<form [formGroup]="form()">
+  <div class="form-group">
+    <label for="coolingMedium_{{ instanceId() }}">Name of Cooling Medium</label>
+    <input type="text" class="form-control" id="coolingMedium_{{ instanceId() }}" formControlName="coolingMedium" onfocus="this.select();">
+  </div>
+
+  <div class="form-group">
+    <label for="specificHeat_{{ instanceId() }}">Average Specific Heat of Gas</label>
+    <div class="input-group" [class.invalid]="f.specificHeat.invalid">
+      <input type="number" step="any" class="form-control" id="specificHeat_{{ instanceId() }}" formControlName="specificHeat" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="Btu/(lb-&#8457;)" metricUnit="kJ/(kg-&#8451;)"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.specificHeat" [settings]="settings()"></app-form-control-errors>
+    @if (warnings()?.specificHeatWarning) {
+      <span class="alert-warning pull-right small">{{ warnings().specificHeatWarning }}</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="gasDensity_{{ instanceId() }}">Density</label>
+    <div class="input-group" [class.invalid]="f.gasDensity.invalid">
+      <input type="number" step="any" class="form-control" id="gasDensity_{{ instanceId() }}" formControlName="gasDensity" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="lb/scf" metricUnit="kg/Nm&sup3;"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.gasDensity" [settings]="settings()"></app-form-control-errors>
+    @if (warnings()?.densityWarning) {
+      <span class="alert-warning pull-right small">{{ warnings().densityWarning }}</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="flowRate_{{ instanceId() }}">Gas Flow</label>
+    <div class="input-group" [class.invalid]="f.flowRate.invalid">
+      <input type="number" step="any" class="form-control" id="flowRate_{{ instanceId() }}" formControlName="flowRate" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="scfm" metricUnit="Nm&sup3;/min"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.flowRate" [settings]="settings()"></app-form-control-errors>
+    @if (warnings()?.flowRateWarning) {
+      <span class="alert-warning pull-right small">{{ warnings().flowRateWarning }}</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="inletTemp_{{ instanceId() }}">Inlet Temperature</label>
+    <div class="input-group" [class.invalid]="f.inletTemp.invalid">
+      <input type="number" step="10" class="form-control" id="inletTemp_{{ instanceId() }}" formControlName="inletTemp" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.inletTemp" [settings]="settings()"></app-form-control-errors>
+    @if (warnings()?.temperatureWarning) {
+      <span class="alert-warning pull-right small">{{ warnings().temperatureWarning }}</span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="outletTemp_{{ instanceId() }}">Outlet Temperature</label>
+    <div class="input-group" [class.invalid]="f.outletTemp.invalid">
+      <input type="number" step="10" class="form-control" id="outletTemp_{{ instanceId() }}" formControlName="outletTemp" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.outletTemp" [settings]="settings()"></app-form-control-errors>
+  </div>
+
+  <div class="form-group">
+    <label for="correctionFactor_{{ instanceId() }}">Correction Factor</label>
+    <input type="number" step="any" class="form-control" id="correctionFactor_{{ instanceId() }}" formControlName="correctionFactor" onfocus="this.select();" [class.invalid]="f.correctionFactor.invalid">
+    <app-form-control-errors [control]="f.correctionFactor" [settings]="settings()"></app-form-control-errors>
+  </div>
+</form>

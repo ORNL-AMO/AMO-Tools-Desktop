@@ -70,6 +70,8 @@ import { AddAtmosphereMaterialModalComponent } from './heat-balance/losses/atmos
 import { FixtureComponent } from './heat-balance/losses/fixture/fixture.component';
 import { FixtureFormComponent } from './heat-balance/losses/fixture/fixture-form.component';
 import { CoolingComponent } from './heat-balance/losses/cooling/cooling.component';
+import { GasCoolingFormComponent } from './heat-balance/losses/cooling/gas-cooling-form.component';
+import { LiquidCoolingFormComponent } from './heat-balance/losses/cooling/liquid-cooling-form.component';
 import { OpeningComponent } from './heat-balance/losses/opening/opening.component';
 import { OtherComponent } from './heat-balance/losses/other/other.component';
 import { FlueGasComponent } from './heat-balance/losses/flue-gas/flue-gas.component';
@@ -299,6 +301,8 @@ export const ROUTES: Route[] = [
     FixtureComponent,
     FixtureFormComponent,
     CoolingComponent,
+    GasCoolingFormComponent,
+    LiquidCoolingFormComponent,
     OpeningComponent,
     OtherComponent,
     FlueGasComponent,
