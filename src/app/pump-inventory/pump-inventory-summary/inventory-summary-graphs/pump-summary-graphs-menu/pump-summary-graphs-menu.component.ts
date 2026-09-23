@@ -51,13 +51,14 @@ export class PumpSummaryGraphsMenuComponent {
     this.groups = new Array();
     let settings: Settings = this.pumpInventoryService.settings.getValue();
     let pumpInventoryData: PumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
+    let pumps = this.pumpInventorySummaryService.getAllPumps(pumpInventoryData);
     this.groups.push({
       options: this.pumpInventorySummaryService.getNameplateDataFields(pumpInventoryData.displayOptions.nameplateDataOptions, settings),
       groupLabel: 'Nameplate Data',
       showGroup: true
     });
     this.groups.push({
-      options: this.pumpInventorySummaryService.getPumpPropertiesFields(pumpInventoryData.displayOptions.pumpPropertiesOptions, settings),
+      options: this.pumpInventorySummaryService.getPumpPropertiesFields(pumpInventoryData.displayOptions.pumpPropertiesOptions, settings, pumps),
       groupLabel: 'Pump',
       showGroup: false
     });

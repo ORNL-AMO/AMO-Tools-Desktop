@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { Settings } from '../../shared/models/settings';
 import { FieldMeasurementsOptions, FluidPropertiesOptions, NameplateDataOptions, PumpInventoryData, PumpItem, PumpMotorPropertiesOptions, PumpPropertiesOptions, PumpPropertyDisplayOptions, PumpStatusOptions, SystemPropertiesOptions } from '../pump-inventory';
 import { SettingsLabelPipe } from '../../shared/shared-pipes/settings-label.pipe';
+import { isPositiveDisplacementPump } from '../../psat/psatConstants';
 
 
 @Injectable()
@@ -18,7 +19,7 @@ export class PumpInventorySummaryService {
   }
 
 
-  getFields(displayOptions: PumpPropertyDisplayOptions, settings: Settings): Array<PumpField> {
+  getFields(displayOptions: PumpPropertyDisplayOptions, settings: Settings, pumps: Array<PumpItem>): Array<PumpField> {
     let fields: Array<PumpField> = [{
       display: 'Name',
       value: 'name',
@@ -31,7 +32,7 @@ export class PumpInventorySummaryService {
     //nameplate
     let nameplateFields: Array<PumpField> = this.getNameplateDataFields(displayOptions.nameplateDataOptions, settings);
     fields = fields.concat(nameplateFields);
-    let pumpPropertiesFields: Array<PumpField> = this.getPumpPropertiesFields(displayOptions.pumpPropertiesOptions, settings);
+    let pumpPropertiesFields: Array<PumpField> = this.getPumpPropertiesFields(displayOptions.pumpPropertiesOptions, settings, pumps);
     fields = fields.concat(pumpPropertiesFields);
     let fluidPropertiesFields: Array<PumpField> = this.getFluidPropertiesFields(displayOptions.fluidPropertiesOptions, settings);
     fields = fields.concat(fluidPropertiesFields);
@@ -60,9 +61,9 @@ export class PumpInventorySummaryService {
     return fields;
   }
 
-  getPumpPropertiesFields(pumpPropertiesOptions: PumpPropertiesOptions, settings: Settings): Array<PumpField> {
+  getPumpPropertiesFields(pumpPropertiesOptions: PumpPropertiesOptions, settings: Settings, pumps: Array<PumpItem>): Array<PumpField> {
 
-    let units = settings.unitsOfMeasure === 'Imperial'? PumpSummaryUnitsImperial.pumpEquipment : PumpSummaryUnitsMetric.pumpEquipment; 
+    let units = settings.unitsOfMeasure === 'Imperial'? PumpSummaryUnitsImperial.pumpEquipment : PumpSummaryUnitsMetric.pumpEquipment;
     let designFlowUnits = this.settingsLabelPipe.transform(settings.fanFlowRate);
     let fields: Array<PumpField> = [];
     
@@ -113,7 +114,10 @@ export class PumpInventorySummaryService {
     } 
     if (pumpPropertiesOptions.designHead) {
       fields.push({display: 'Design Head', value: 'designHead', group: 'pumpEquipment', unit: units.designHead});
-      fields.push({display: 'Design Differential Pressure', value: 'designDifferentialPressure', group: 'pumpEquipment', unit: units.designDifferentialPressure});
+      let hasPositiveDisplacementPump: boolean = pumps.some(pump => isPositiveDisplacementPump(pump.pumpEquipment.pumpType));
+      if (hasPositiveDisplacementPump) {
+        fields.push({display: 'Design Differential Pressure', value: 'designDifferentialPressure', group: 'pumpEquipment', unit: units.designDifferentialPressure});
+      }
     }
     if (pumpPropertiesOptions.designFlow) {
       fields.push({display: 'Design Flow', value: 'designFlow', group: 'pumpEquipment', unit: designFlowUnits});

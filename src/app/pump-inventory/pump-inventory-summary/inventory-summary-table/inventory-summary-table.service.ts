@@ -12,7 +12,8 @@ export class InventorySummaryTableService {
   getInventorySummaryData(pumpInventoryData: PumpInventoryData, settings: Settings): InventorySummaryData {
     let pumpData: Array<Array<SummaryPumpData>> = new Array();
     // let fields: Array<PumpField>;
-    let fields: Array<PumpField> = this.pumpInventorySummaryService.getFields(pumpInventoryData.displayOptions, settings);
+    let pumps: Array<PumpItem> = this.pumpInventorySummaryService.getAllPumps(pumpInventoryData);
+    let fields: Array<PumpField> = this.pumpInventorySummaryService.getFields(pumpInventoryData.displayOptions, settings, pumps);
     pumpInventoryData.departments.forEach(department => {
       department.catalog.forEach(pumpItem => {
         let pumpItemData = this.getPumpData(pumpItem, department.name, pumpInventoryData.displayOptions, settings);
