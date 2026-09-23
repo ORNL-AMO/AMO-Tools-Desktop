@@ -68,7 +68,7 @@ export class DefaultCompressorApiService {
             ModulatingPressRange: suiteDbCompressorPointer.modulatingPressureRangePsig,
             NoLoadPowerFM: suiteDbCompressorPointer.noLoadPowerFullyModulating,
             NoLoadPowerUL: suiteDbCompressorPointer.noLoadPowerUnload,
-            PowerFLBHP: suiteDbCompressorPointer.fullLoadBhpPowerKw,
+            PowerFLBHP: suiteDbCompressorPointer.fullLoadBrakeHorsepower,
             RatedCapacity: suiteDbCompressorPointer.ratedCapacityAcfm,
             RatedPressure: suiteDbCompressorPointer.ratedPressurePsig,
             SpecPackagePower: suiteDbCompressorPointer.specificPackagePower,

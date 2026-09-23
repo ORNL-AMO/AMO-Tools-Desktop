@@ -131,11 +131,13 @@ export class CompressedAirSuiteApiService {
     let capacityAtFullLoad: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.capacityAtFullLoad);
     let powerMaxPercentage: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerMaxPercentage);
     let powerAtFullLoadPercentage: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(input.powerAtFullLoadPercentage);
+    let compressorType: CompressorType = input.compressorType as CompressorType;
     return new this.toolsSuiteApiService.ToolsSuiteModule.StartStopCompressor(
       powerAtFullLoad,
       capacityAtFullLoad,
       powerMaxPercentage,
-      powerAtFullLoadPercentage
+      powerAtFullLoadPercentage,
+      compressorType
     );
   }
 
