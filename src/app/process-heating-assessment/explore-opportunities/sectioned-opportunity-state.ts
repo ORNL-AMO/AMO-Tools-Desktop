@@ -17,7 +17,7 @@ type ComparableLossKey = {
 
 export interface OpportunityFieldAccessor<TItem> {
   get(item: TItem): number | undefined;
-  set(item: TItem, value: number): TItem;
+  set(item: TItem, value: number | undefined): TItem;
 }
 
 export interface SectionedOpportunityConfig<K extends ComparableLossKey, TField extends string, TSection extends string> {
@@ -137,7 +137,7 @@ export function createSectionedOpportunityState<K extends ComparableLossKey, TFi
       }
       return fields.reduce((reset, field) => {
         const baselineValue = config.fields[field].get(baselineItem);
-        return baselineValue === undefined ? reset : config.fields[field].set(reset, baselineValue);
+        return config.fields[field].set(reset, baselineValue);
       }, item);
     });
   }

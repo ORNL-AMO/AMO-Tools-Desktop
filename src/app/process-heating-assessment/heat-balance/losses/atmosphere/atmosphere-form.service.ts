@@ -42,11 +42,11 @@ export class AtmosphereFormService {
 
   setOutletTempValidator(form: AtmosphereForm): AtmosphereForm {
     const inletTemp = form.controls.inletTemp.value;
-    if (inletTemp !== null) {
-      form.controls.outletTemp.setValidators([Validators.required, Validators.min(inletTemp)]);
-      form.controls.outletTemp.markAsDirty();
-      form.controls.outletTemp.updateValueAndValidity({ emitEvent: false });
-    }
+    form.controls.outletTemp.setValidators(
+      inletTemp !== null ? [Validators.required, Validators.min(inletTemp)] : [Validators.required]
+    );
+    form.controls.outletTemp.markAsDirty();
+    form.controls.outletTemp.updateValueAndValidity({ emitEvent: false });
     return form;
   }
 }

@@ -80,15 +80,28 @@ export class FixtureMaterialsHandlingOpportunityComponent {
     this.state.setModificationValue(lossId, 'materialName', materialId);
   }
 
-  private withMaterial(loss: FixtureLoss, materialName: number): FixtureLoss {
+  /**
+   * Also copies `latentHeat`/`meltingPoint`/`specificHeatLiquid` — hidden fields not shown in this
+   * form, but read back if the selected material is later deleted, so they can't be left stale from
+   * whatever material was previously selected. Matches the recovery fields the main Fixture form's
+   * material selector copies (`heat-balance/losses/fixture/fixture-form.component.ts`).
+   */
+  private withMaterial(loss: FixtureLoss, materialName: number | undefined): FixtureLoss {
+    if (materialName === undefined) {
+      return { ...loss, materialName: undefined, specificHeat: undefined, latentHeat: undefined, meltingPoint: undefined, specificHeatLiquid: undefined };
+    }
     const material = this.materials().find(candidate => candidate.id === materialName);
     if (!material) {
       return { ...loss, materialName };
     }
+    const settings = this.settings();
     return {
       ...loss,
       materialName,
-      specificHeat: convertDbValue(material.specificHeatSolid, CHARGE_MATERIAL_UNITS.specificHeat, this.settings()),
+      specificHeat: convertDbValue(material.specificHeatSolid, CHARGE_MATERIAL_UNITS.specificHeat, settings),
+      latentHeat: convertDbValue(material.latentHeat, CHARGE_MATERIAL_UNITS.latentHeat, settings),
+      meltingPoint: convertDbValue(material.meltingPoint, CHARGE_MATERIAL_UNITS.temperature, settings),
+      specificHeatLiquid: convertDbValue(material.specificHeatLiquid, CHARGE_MATERIAL_UNITS.specificHeat, settings),
     };
   }
 

@@ -13,6 +13,10 @@ describe('cooling warnings', () => {
     expect(getLiquidCoolingWarnings({ density: -1 }).densityWarning).toBe('Density must be equal or greater than 0');
   });
 
+  it('flags a negative liquid flow rate with the liquid message', () => {
+    expect(getLiquidCoolingWarnings({ flowRate: -1 }).flowRateWarning).toBe('Liquid Flow must be equal or greater than 0');
+  });
+
   it('warns when inlet temperature exceeds outlet temperature', () => {
     expect(getGasCoolingWarnings({ initialTemperature: 200, outletTemperature: 100 }).temperatureWarning)
       .toBe('Inlet temperature is greater than outlet temperature');

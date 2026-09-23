@@ -20,7 +20,7 @@ function readInitialTemperature(material: ChargeMaterial): number | undefined {
   }
 }
 
-function withInitialTemperature(material: ChargeMaterial, initialTemperature: number): ChargeMaterial {
+function withInitialTemperature(material: ChargeMaterial, initialTemperature: number | undefined): ChargeMaterial {
   switch (material.chargeMaterialType) {
     case ChargeMaterialType.Liquid:
       return { ...material, liquidChargeMaterial: { ...material.liquidChargeMaterial, initialTemperature } };

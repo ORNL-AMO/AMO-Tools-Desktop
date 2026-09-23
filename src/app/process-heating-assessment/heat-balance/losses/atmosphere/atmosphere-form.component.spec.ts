@@ -115,6 +115,16 @@ describe('AtmosphereFormComponent', () => {
 
       expect(component.form().controls.outletTemp.invalid).toBeTrue();
     });
+
+    it('clears the stale minimum-temperature validator once the inlet temperature is cleared', () => {
+      setInputsAndInit();
+      component.form().controls.inletTemp.setValue(1200);
+      expect(component.form().controls.outletTemp.invalid).toBeTrue();
+
+      component.form().controls.inletTemp.setValue(null);
+
+      expect(component.form().controls.outletTemp.invalid).toBeFalse();
+    });
   });
 
   describe('materialSelector user actions', () => {

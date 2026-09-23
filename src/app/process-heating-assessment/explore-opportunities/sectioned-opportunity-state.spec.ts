@@ -207,3 +207,60 @@ describe('createSectionedOpportunityState', () => {
     });
   });
 });
+
+describe('createSectionedOpportunityState — resetting an undefined baseline field', () => {
+  const BASELINE_WITH_GAP: PHAST = {
+    name: 'Baseline',
+    losses: {
+      atmosphereLosses: [
+        { id: 'atm-1', name: 'Atmosphere 1', flowRate: 1000, inletTemperature: 100, specificHeat: 0.02 },
+      ],
+    },
+    modifications: [],
+  };
+
+  let state: SectionedOpportunityState<'atmosphereLosses', Field, Section>;
+  let modificationService: ModificationService;
+  let assessmentService: FakeProcessHeatingAssessmentService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        ModificationService,
+        { provide: ProcessHeatingAssessmentService, useValue: new FakeProcessHeatingAssessmentService(BASELINE_WITH_GAP) },
+        { provide: ProcessHeatingUiService, useClass: FakeProcessHeatingUiService },
+      ],
+    });
+
+    modificationService = TestBed.inject(ModificationService);
+    assessmentService = TestBed.inject(ProcessHeatingAssessmentService) as unknown as FakeProcessHeatingAssessmentService;
+    modificationService.addModification('Scenario 1');
+
+    state = TestBed.runInInjectionContext(() => createSectionedOpportunityState<'atmosphereLosses', Field, Section>({
+      lossKey: 'atmosphereLosses',
+      category: ExploreOpportunityCategory.Atmosphere,
+      displayName: 'Optimize Furnace Atmosphere Makeup System',
+      fields: {
+        flowRate: directField<AtmosphereLoss, 'flowRate'>('flowRate'),
+        inletTemperature: directField<AtmosphereLoss, 'inletTemperature'>('inletTemperature'),
+        outletTemperature: directField<AtmosphereLoss, 'outletTemperature'>('outletTemperature'),
+      },
+      sections: { flowRate: ['flowRate'], temperature: ['inletTemperature', 'outletTemperature'] },
+    }));
+  });
+
+  function effectiveLoss(): AtmosphereLoss | undefined {
+    return assessmentService
+      .scenarioPhast(modificationService.selectedModificationId())
+      ?.losses?.atmosphereLosses?.find(loss => loss.id === 'atm-1');
+  }
+
+  it('clears a modification override back to undefined when the baseline never had a value', () => {
+    state.toggleSection('temperature', 'atm-1', true);
+    state.setModificationValue('atm-1', 'outletTemperature', 900);
+
+    state.toggleSection('temperature', 'atm-1', false);
+
+    expect(effectiveLoss().outletTemperature).toBeUndefined();
+  });
+});

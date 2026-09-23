@@ -78,13 +78,21 @@ describe('FixtureMaterialsHandlingOpportunityComponent', () => {
     expect(effectiveLoss()).toEqual(jasmine.objectContaining({ materialName: 2, specificHeat: 0.25 }));
   });
 
-  it('restores both material and specific heat when the material section is closed', () => {
+  it('copies the hidden material recovery fields when the modification material changes', () => {
+    component.setMaterial('fix-1', 2);
+
+    expect(effectiveLoss()).toEqual(jasmine.objectContaining({ latentHeat: 170, meltingPoint: 1220, specificHeatLiquid: 0.26 }));
+  });
+
+  it('restores material, specific heat, and the hidden recovery fields when the material section is closed', () => {
     component.toggleSection('material', 'fix-1', true);
     component.setMaterial('fix-1', 2);
 
     component.toggleSection('material', 'fix-1', false);
 
-    expect(effectiveLoss()).toEqual(jasmine.objectContaining({ materialName: 1, specificHeat: 0.12 }));
+    expect(effectiveLoss()).toEqual(jasmine.objectContaining({
+      materialName: 1, specificHeat: 0.12, latentHeat: 120, meltingPoint: 2800, specificHeatLiquid: 0.18,
+    }));
   });
 
   it('resets only the feed rate when the feed rate section is closed', () => {
