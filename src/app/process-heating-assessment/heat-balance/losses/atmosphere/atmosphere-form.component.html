@@ -1,0 +1,89 @@
+@let f = form().controls;
+
+@if (materialSelector.missingMaterialId() !== null) {
+  <div class="alert alert-warning">
+    This entry references a material that no longer exists in the Process Heating Materials Database.
+    <button type="button" class="btn btn-link p-0 ml-1" (click)="materialSelector.restoreDeletedMaterial()">Restore it</button>
+    or
+    <button type="button" class="btn btn-link p-0 ml-1" (click)="materialSelector.dismissMissingMaterial()">dismiss and continue with the stored values</button>.
+  </div>
+}
+
+<form [formGroup]="form()">
+  <div class="form-group">
+    <label for="materialId_{{ instanceId() }}">Atmosphere Gas</label>
+    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId"
+      (change)="materialSelector.onMaterialSelected(f.materialId.value)">
+      @for (material of materialSelector.materialTypes(); track material.id) {
+        <option [ngValue]="material.id">{{ material.substance }}</option>
+      }
+    </select>
+    <button type="button" class="btn btn-link p-0 form-text small" (click)="materialSelector.openAddMaterialModal()">Add New...</button>
+    <app-form-control-errors [control]="f.materialId" [settings]="settings()"></app-form-control-errors>
+  </div>
+
+  <div class="form-group">
+    <label for="specificHeat_{{ instanceId() }}">Average Specific Heat of Gas</label>
+    <div class="input-group" [class.invalid]="f.specificHeat.invalid">
+      <input type="number" step="0.01" class="form-control" id="specificHeat_{{ instanceId() }}" formControlName="specificHeat" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(scf-&#8457;)'" [metricUnit]="'kJ/(Nm&sup3;-&#8451;)'"></app-input-unit>
+    </div>
+    @if (differs(f.specificHeat.value, materialSelector.selectedMaterial?.specificHeat)) {
+      <span class="text-warning small">Differs from database</span>
+    }
+    @if (f.specificHeat.invalid && !f.specificHeat.pristine) {
+      <div class="text-danger small">
+        @if (f.specificHeat.errors?.required) { <div>Value Required</div> }
+        @if (f.specificHeat.errors?.greaterThan !== undefined) { <div>Value must be greater than {{ f.specificHeat.errors.greaterThan }}.</div> }
+      </div>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="inletTemp_{{ instanceId() }}">Inlet Temperature</label>
+    <div class="input-group" [class.invalid]="f.inletTemp.invalid">
+      <input type="number" step="10" class="form-control" id="inletTemp_{{ instanceId() }}" formControlName="inletTemp" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.inletTemp" [settings]="settings()"></app-form-control-errors>
+  </div>
+
+  <div class="form-group">
+    <label for="outletTemp_{{ instanceId() }}">Outlet Temperature</label>
+    <div class="input-group" [class.invalid]="f.outletTemp.invalid">
+      <input type="number" step="10" class="form-control" id="outletTemp_{{ instanceId() }}" formControlName="outletTemp" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+    </div>
+    @if (f.outletTemp.invalid && !f.outletTemp.pristine) {
+      <span class="alert-danger pull-right small">
+        @if (f.outletTemp.errors?.required) { Value Required }
+        @if (f.outletTemp.errors?.min) {
+          Value can't be less than Inlet Temperature
+          ({{f.outletTemp.errors?.min.min}}
+          @if (settings().unitsOfMeasure === 'Imperial') { &#8457; } @else { &#8451; }).
+        }
+      </span>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="flowRate_{{ instanceId() }}">Flow Rate</label>
+    <div class="input-group" [class.invalid]="f.flowRate.invalid">
+      <input type="number" step="100" min="0" class="form-control" id="flowRate_{{ instanceId() }}" formControlName="flowRate" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="ft&sup3;/hr" metricUnit="m&sup3;/hr"></app-input-unit>
+    </div>
+    @if (f.flowRate.invalid && (f.flowRate.dirty || f.flowRate.touched)) {
+      <div class="text-danger small">
+        @if (f.flowRate.errors?.required) { <div>Value Required</div> }
+        @if (f.flowRate.errors?.greaterThan !== undefined) { <div>Value must be greater than {{ f.flowRate.errors.greaterThan }}.</div> }
+      </div>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="correctionFactor_{{ instanceId() }}">Correction Factor</label>
+    <input type="number" step="0.1" class="form-control" id="correctionFactor_{{ instanceId() }}" formControlName="correctionFactor" onfocus="this.select();"
+      [class.invalid]="f.correctionFactor.invalid">
+    <app-form-control-errors [control]="f.correctionFactor" [settings]="settings()"></app-form-control-errors>
+  </div>
+</form>

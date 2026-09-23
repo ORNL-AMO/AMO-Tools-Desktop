@@ -149,6 +149,49 @@ describe('ensureLossIdsForPhast', () => {
     expect(migrated.losses.extendedSurfaces[0].id).toBeTruthy();
   });
 
+  it('backfills a missing id on a baseline atmosphere loss', () => {
+    const phast: PHAST = { losses: { atmosphereLosses: [{ flowRate: 1000 }] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.atmosphereLosses[0].id).toBeTruthy();
+  });
+
+  it('aligns a legacy modification atmosphere override to baseline ids by position', () => {
+    const modification: ProcessHeatingModification = {
+      id: 'mod-1',
+      scenarioOverrides: { losses: { atmosphereLosses: [{ flowRate: 1000 }, { flowRate: 500 }] } },
+    };
+    const phast: PHAST = {
+      losses: { atmosphereLosses: [{ flowRate: 1000 }, { flowRate: 2000 }] },
+      modifications: [modification],
+    };
+
+    const migrated = ensureLossIdsForPhast(phast);
+    const migratedModification = migrated.modifications[0] as unknown as ProcessHeatingModification;
+    const [baselineFirst, baselineSecond] = migrated.losses.atmosphereLosses;
+    const [overrideFirst, overrideSecond] = migratedModification.scenarioOverrides.losses.atmosphereLosses;
+
+    expect(overrideFirst.id).toBe(baselineFirst.id);
+    expect(overrideSecond.id).toBe(baselineSecond.id);
+  });
+
+  it('backfills a missing id on a baseline fixture loss', () => {
+    const phast: PHAST = { losses: { fixtureLosses: [{ feedRate: 500 }] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.fixtureLosses[0].id).toBeTruthy();
+  });
+
+  it('backfills a missing id on a baseline cooling loss', () => {
+    const phast: PHAST = { losses: { coolingLosses: [{ coolingLossType: 'Gas', gasCoolingLoss: { flowRate: 100 } }] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.coolingLosses[0].id).toBeTruthy();
+  });
+
   it('assigns distinct ids to multiple id-less wall losses instead of leaving them all undefined', () => {
     const phast: PHAST = {
       losses: { wallLosses: [{ surfaceArea: 100 } as never, { surfaceArea: 200 } as never] },

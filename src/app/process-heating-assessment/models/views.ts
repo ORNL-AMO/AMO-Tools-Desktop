@@ -111,6 +111,9 @@ export const EXPERT_VIEW_LOSS_VIEWS: ReadonlySet<ProcessHeatingView> = new Set<L
   LossView.CHARGE_MATERIAL,
   LossView.WALL_LOSSES,
   LossView.EXTENDED_SURFACE,
+  LossView.ATMOSPHERE,
+  LossView.FIXTURE,
+  LossView.COOLING,
 ]);
 
 export const ASSESSMENT_VIEW_LINKS: ViewLink[] = [

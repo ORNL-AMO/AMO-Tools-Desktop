@@ -37,6 +37,10 @@ import { ModificationListComponent } from '../shared/modification-list/modificat
 import { ExploreOpportunitiesComponent } from './explore-opportunities/explore-opportunities.component';
 import { ChargeMaterialOpportunityComponent } from './explore-opportunities/charge-material-opportunity/charge-material-opportunity.component';
 import { WallLossOpportunityComponent } from './explore-opportunities/wall-loss-opportunity/wall-loss-opportunity.component';
+import { AtmosphereOpportunityComponent } from './explore-opportunities/atmosphere-opportunity/atmosphere-opportunity.component';
+import { FixtureMaterialsHandlingOpportunityComponent } from './explore-opportunities/fixture-materials-handling-opportunity/fixture-materials-handling-opportunity.component';
+import { FixtureCoolingOpportunityComponent } from './explore-opportunities/fixture-cooling-opportunity/fixture-cooling-opportunity.component';
+import { CoolingOpportunityComponent } from './explore-opportunities/cooling-opportunity/cooling-opportunity.component';
 import { ExpertViewComponent } from './expert-view/expert-view.component';
 import { ReportComponent } from './report/report.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
@@ -62,8 +66,13 @@ import { WallLossesFormComponent } from './heat-balance/losses/wall-losses/wall-
 import { ExtendedSurfaceComponent } from './heat-balance/losses/extended-surface/extended-surface.component';
 import { ExtendedSurfaceFormComponent } from './heat-balance/losses/extended-surface/extended-surface-form.component';
 import { AtmosphereComponent } from './heat-balance/losses/atmosphere/atmosphere.component';
+import { AtmosphereFormComponent } from './heat-balance/losses/atmosphere/atmosphere-form.component';
+import { AddAtmosphereMaterialModalComponent } from './heat-balance/losses/atmosphere/add-atmosphere-material-modal.component';
 import { FixtureComponent } from './heat-balance/losses/fixture/fixture.component';
+import { FixtureFormComponent } from './heat-balance/losses/fixture/fixture-form.component';
 import { CoolingComponent } from './heat-balance/losses/cooling/cooling.component';
+import { GasCoolingFormComponent } from './heat-balance/losses/cooling/gas-cooling-form.component';
+import { LiquidCoolingFormComponent } from './heat-balance/losses/cooling/liquid-cooling-form.component';
 import { OpeningComponent } from './heat-balance/losses/opening/opening.component';
 import { OtherComponent } from './heat-balance/losses/other/other.component';
 import { FlueGasComponent } from './heat-balance/losses/flue-gas/flue-gas.component';
@@ -261,6 +270,10 @@ export const ROUTES: Route[] = [
     ExploreOpportunitiesComponent,
     ChargeMaterialOpportunityComponent,
     WallLossOpportunityComponent,
+    AtmosphereOpportunityComponent,
+    FixtureMaterialsHandlingOpportunityComponent,
+    FixtureCoolingOpportunityComponent,
+    CoolingOpportunityComponent,
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
@@ -285,8 +298,13 @@ export const ROUTES: Route[] = [
     ExtendedSurfaceComponent,
     ExtendedSurfaceFormComponent,
     AtmosphereComponent,
+    AtmosphereFormComponent,
+    AddAtmosphereMaterialModalComponent,
     FixtureComponent,
+    FixtureFormComponent,
     CoolingComponent,
+    GasCoolingFormComponent,
+    LiquidCoolingFormComponent,
     OpeningComponent,
     OtherComponent,
     FlueGasComponent,

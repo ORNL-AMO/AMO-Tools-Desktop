@@ -20,6 +20,10 @@ class FakeModificationService {
 class FakeProcessHeatingUiService {
   readonly visibleExpertViewTabs = signal<ViewLink[]>(EXPERT_VIEW_TABS);
   readonly selectedExpertViewTab: WritableSignal<ProcessHeatingView | undefined> = signal<ProcessHeatingView | undefined>(LossView.CHARGE_MATERIAL);
+
+  selectExpertViewTab(view: ProcessHeatingView): void {
+    this.selectedExpertViewTab.set(view);
+  }
 }
 
 describe('ExpertViewComponent', () => {

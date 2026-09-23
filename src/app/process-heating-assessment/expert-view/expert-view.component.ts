@@ -25,7 +25,7 @@ export class ExpertViewComponent {
   readonly selectedTab: Signal<ProcessHeatingView | undefined> = this.uiService.selectedExpertViewTab;
 
   selectTab(view: ProcessHeatingView): void {
-    this.uiService.selectedExpertViewTab.set(view);
+    this.uiService.selectExpertViewTab(view);
   }
 
   modificationName(modification: ProcessHeatingModification): string {

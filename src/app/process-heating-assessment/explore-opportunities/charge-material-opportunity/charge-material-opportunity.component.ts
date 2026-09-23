@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
 import { Settings } from '../../../shared/models/settings';
 import { ChargeMaterial, ChargeMaterialType } from '../../../shared/models/phast/losses/chargeMaterial';
 import { ExploreOpportunityCategory } from '../../models/phast';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
-import { createOpportunityComparisonState } from '../explore-opportunity-comparison';
+import { getChargeMaterialInitialTemperatureWarning } from '../../heat-balance/losses/charge-material/charge-material-warnings';
+import { createSectionedOpportunityState } from '../sectioned-opportunity-state';
 
 const OPPORTUNITY_DISPLAY_NAME = 'Preheat Charge Material';
 
@@ -19,7 +20,7 @@ function readInitialTemperature(material: ChargeMaterial): number | undefined {
   }
 }
 
-function withInitialTemperature(material: ChargeMaterial, initialTemperature: number): ChargeMaterial {
+function withInitialTemperature(material: ChargeMaterial, initialTemperature: number | undefined): ChargeMaterial {
   switch (material.chargeMaterialType) {
     case ChargeMaterialType.Liquid:
       return { ...material, liquidChargeMaterial: { ...material.liquidChargeMaterial, initialTemperature } };
@@ -43,22 +44,39 @@ export class ChargeMaterialOpportunityComponent {
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
 
-  private readonly state = createOpportunityComparisonState({
+  private readonly state = createSectionedOpportunityState<'chargeMaterials', 'initialTemperature', 'initialTemperature'>({
     lossKey: 'chargeMaterials',
     category: ExploreOpportunityCategory.Material,
     displayName: OPPORTUNITY_DISPLAY_NAME,
-    getValue: readInitialTemperature,
-    withValue: withInitialTemperature,
+    fields: {
+      initialTemperature: { get: readInitialTemperature, set: withInitialTemperature },
+    },
+    sections: {
+      initialTemperature: ['initialTemperature'],
+    },
   });
 
   readonly useOpportunity = this.state.useOpportunity;
-  readonly comparisons = this.state.comparisons;
+
+  readonly comparisons = computed(() => this.state.comparisons().map(comparison => ({
+    ...comparison,
+    baselineWarning: getChargeMaterialInitialTemperatureWarning(comparison.baselineItem),
+    modificationWarning: getChargeMaterialInitialTemperatureWarning(comparison.modificationItem),
+  })));
+
+  isExpanded(materialId: string): boolean {
+    return this.state.isExpanded('initialTemperature', materialId);
+  }
 
   toggleOpportunity(hasOpportunity: boolean): void {
     this.state.toggleOpportunity(hasOpportunity);
   }
 
+  toggleSection(materialId: string, show: boolean): void {
+    this.state.toggleSection('initialTemperature', materialId, show);
+  }
+
   setModificationValue(materialId: string, initialTemperature: number): void {
-    this.state.setModificationValue(materialId, initialTemperature);
+    this.state.setModificationValue(materialId, 'initialTemperature', initialTemperature);
   }
 }

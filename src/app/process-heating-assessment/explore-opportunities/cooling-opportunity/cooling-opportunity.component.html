@@ -1,0 +1,169 @@
+@let imperial = settings().unitsOfMeasure === 'Imperial';
+
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowCooling">
+    <input
+      type="checkbox"
+      id="exploreOppsShowCooling"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    Optimize or Improve Furnace Cooling System
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  @for (comparison of comparisons(); track comparison.id) {
+    <ul>
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifyCoolingFlowRate_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifyCoolingFlowRate_' + comparison.id }}"
+              [checked]="isExpanded('flowRate', comparison.id)"
+              (change)="toggleSection('flowRate', comparison.id, $any($event.target).checked)"
+            />
+            Modify Flow Rate
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded('flowRate', comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Flow Rate</label>
+              <div class="text-muted text-center baseline-value-input">
+                {{ comparison.baseline.flowRate }}
+                <app-input-unit
+                  [settings]="settings()"
+                  [imperialUnit]="comparison.baselineIsGas ? 'scfm' : 'gal/min'"
+                  [metricUnit]="comparison.baselineIsGas ? 'Nm&sup3;/min' : 'L/min'"
+                ></app-input-unit>
+              </div>
+              @if (comparison.baselineWarnings.flowRateWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.flowRateWarning }}</span>
+              }
+            </div>
+          </form>
+
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationCoolingFlowRate_' + comparison.id }}" class="mod-value-label">Flow Rate</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="{{ 'modificationCoolingFlowRate_' + comparison.id }}"
+                  [value]="comparison.modification.flowRate"
+                  (change)="setModificationValue(comparison.id, 'flowRate', $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit
+                  [settings]="settings()"
+                  [imperialUnit]="comparison.modificationIsGas ? 'scfm' : 'gal/min'"
+                  [metricUnit]="comparison.modificationIsGas ? 'Nm&sup3;/min' : 'L/min'"
+                ></app-input-unit>
+              </div>
+              @if (comparison.modificationWarnings.flowRateWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.flowRateWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+      }
+
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifyCoolingTemperature_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifyCoolingTemperature_' + comparison.id }}"
+              [checked]="isExpanded('temperature', comparison.id)"
+              (change)="toggleSection('temperature', comparison.id, $any($event.target).checked)"
+            />
+            Modify Temperature
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded('temperature', comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Inlet Temperature</label>
+              <div class="text-muted text-center baseline-value-input">
+                {{ comparison.baseline.initialTemperature }}
+                @if (imperial) { <span>&#8457;</span> } @else { <span>&#8451;</span> }
+              </div>
+            </div>
+          </form>
+
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationCoolingInletTemperature_' + comparison.id }}" class="mod-value-label">Inlet Temperature</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="{{ 'modificationCoolingInletTemperature_' + comparison.id }}"
+                  [value]="comparison.modification.initialTemperature"
+                  (change)="setModificationValue(comparison.id, 'initialTemperature', $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+              </div>
+            </div>
+          </form>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Outlet Temperature</label>
+              <div class="text-muted text-center baseline-value-input">
+                {{ comparison.baseline.outletTemperature }}
+                @if (imperial) { <span>&#8457;</span> } @else { <span>&#8451;</span> }
+              </div>
+              @if (comparison.baselineWarnings.temperatureWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.temperatureWarning }}</span>
+              }
+            </div>
+          </form>
+
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationCoolingOutletTemperature_' + comparison.id }}" class="mod-value-label">Outlet Temperature</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="{{ 'modificationCoolingOutletTemperature_' + comparison.id }}"
+                  [value]="comparison.modification.outletTemperature"
+                  (change)="setModificationValue(comparison.id, 'outletTemperature', $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+              </div>
+              @if (comparison.modificationWarnings.temperatureWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.temperatureWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+      }
+    </ul>
+  }
+}
