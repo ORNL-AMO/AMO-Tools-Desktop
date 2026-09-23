@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
-import { CoolingFormService, LiquidCoolingForm } from './cooling-form.service';
+import { LiquidCoolingForm } from './cooling-form.service';
 import { CoolingLossWarnings, getLiquidCoolingWarnings } from './cooling-warnings';
 
 @Component({
@@ -16,14 +16,20 @@ export class LiquidCoolingFormComponent implements OnInit {
   readonly settings = input.required<Settings>();
   readonly instanceId = input.required<string>();
 
-  private readonly formService = inject(CoolingFormService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly warnings = signal<CoolingLossWarnings | null>(null);
 
   ngOnInit(): void {
     this.form().valueChanges.pipe(startWith(null), takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.warnings.set(getLiquidCoolingWarnings(this.formService.buildCoolingLoss(this.form()).liquidCoolingLoss));
+      const v = this.form().getRawValue();
+      this.warnings.set(getLiquidCoolingWarnings({
+        specificHeat: v.specificHeat ?? undefined,
+        density: v.density ?? undefined,
+        flowRate: v.flowRate ?? undefined,
+        initialTemperature: v.inletTemp ?? undefined,
+        outletTemperature: v.outletTemp ?? undefined,
+      }));
     });
   }
 }

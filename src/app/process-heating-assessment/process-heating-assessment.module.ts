@@ -40,6 +40,7 @@ import { WallLossOpportunityComponent } from './explore-opportunities/wall-loss-
 import { AtmosphereOpportunityComponent } from './explore-opportunities/atmosphere-opportunity/atmosphere-opportunity.component';
 import { FixtureMaterialsHandlingOpportunityComponent } from './explore-opportunities/fixture-materials-handling-opportunity/fixture-materials-handling-opportunity.component';
 import { FixtureCoolingOpportunityComponent } from './explore-opportunities/fixture-cooling-opportunity/fixture-cooling-opportunity.component';
+import { CoolingOpportunityComponent } from './explore-opportunities/cooling-opportunity/cooling-opportunity.component';
 import { ExpertViewComponent } from './expert-view/expert-view.component';
 import { ReportComponent } from './report/report.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
@@ -272,6 +273,7 @@ export const ROUTES: Route[] = [
     AtmosphereOpportunityComponent,
     FixtureMaterialsHandlingOpportunityComponent,
     FixtureCoolingOpportunityComponent,
+    CoolingOpportunityComponent,
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,

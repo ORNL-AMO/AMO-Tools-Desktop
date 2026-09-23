@@ -25,6 +25,9 @@
       <app-fixture-materials-handling-opportunity></app-fixture-materials-handling-opportunity>
       <app-fixture-cooling-opportunity></app-fixture-cooling-opportunity>
     }
+    @if (hasCoolingLosses()) {
+      <app-cooling-opportunity></app-cooling-opportunity>
+    }
   } @else {
     <div class="no-data text-center">
       <h2 class="h6">Explore energy efficiency opportunities to increase the efficiency and effectiveness of your system.</h2>

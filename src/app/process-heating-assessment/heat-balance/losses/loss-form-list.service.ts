@@ -1,5 +1,5 @@
 import { computed, DestroyRef, inject, Signal } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { getNewIdString } from '../../../shared/helperFunctions';
@@ -33,6 +33,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
 
   protected scenario: AssessmentScenario = 'baseline';
   private readonly store = new LossItemsStore<LossFormItem<TForm>>();
+  private readonly subscriptions = new Map<string, Subscription>();
 
   readonly items: Signal<LossFormItem<TForm>[]> = this.store.all;
   readonly total: Signal<number> = computed(() =>
@@ -78,6 +79,8 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
   }
 
   remove(id: string): void {
+    this.subscriptions.get(id)?.unsubscribe();
+    this.subscriptions.delete(id);
     this.store.remove(id);
     this.saveLosses();
   }
@@ -111,10 +114,12 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
   }
 
   private observeItem(item: LossFormItem<TForm>): void {
+    this.subscriptions.get(item.id)?.unsubscribe();
     const valueChanges: Observable<unknown> = item.form.valueChanges;
-    valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+    const subscription = valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.updateItem(item.id);
     });
+    this.subscriptions.set(item.id, subscription);
   }
 
   private calculateItemResult(item: LossFormItem<TForm>): void {

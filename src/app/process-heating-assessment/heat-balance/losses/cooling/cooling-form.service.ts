@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
+import { CoolingLoss, GasCoolingLoss } from '../../../../shared/models/phast/losses/coolingLoss';
 import { Settings } from '../../../../shared/models/settings';
 
 /** Saved `coolingLossType` values; Air and Water are stored as 'Gas' and 'Liquid'. */
@@ -47,8 +47,18 @@ export function isGasMedium(medium: CoolingMedium | string | undefined): medium 
   return medium === CoolingMedium.Air || medium === CoolingMedium.OtherGas;
 }
 
+export function isLiquidMedium(medium: CoolingMedium | string | undefined): medium is LiquidCoolingMedium {
+  return medium === CoolingMedium.Water || medium === CoolingMedium.OtherLiquid;
+}
+
 export function isGasCoolingForm(form: CoolingForm): form is GasCoolingForm {
   return isGasMedium(form.controls.coolingLossType.value);
+}
+
+/** Gas stores its outlet under both `finalTemperature` (what the calculation reads) and
+ * `outletTemperature` (what the warnings check reads) — every writer keeps them mirrored via this. */
+export function gasOutletTemperatureFields(value: number | undefined): Pick<GasCoolingLoss, 'finalTemperature' | 'outletTemperature'> {
+  return { finalTemperature: value, outletTemperature: value };
 }
 
 @Injectable()
@@ -58,7 +68,7 @@ export class CoolingFormService {
   /** Unrecognized or missing types load as Air, legacy's default for a new cooling loss. */
   getCoolingForm(loss: CoolingLoss = {}, settings: Settings): CoolingForm {
     const medium = loss.coolingLossType;
-    if (medium === CoolingMedium.Water || medium === CoolingMedium.OtherLiquid) {
+    if (isLiquidMedium(medium)) {
       return this.getLiquidCoolingForm(loss, medium, settings);
     }
     return this.getGasCoolingForm(loss, isGasMedium(medium) ? medium : CoolingMedium.Air, settings);
@@ -105,9 +115,7 @@ export class CoolingFormService {
           gasDensity: v.gasDensity ?? undefined,
           flowRate: v.flowRate ?? undefined,
           initialTemperature: v.inletTemp ?? undefined,
-          // Legacy saves the gas outlet under both names; the suite reads finalTemperature.
-          finalTemperature: v.outletTemp ?? undefined,
-          outletTemperature: v.outletTemp ?? undefined,
+          ...gasOutletTemperatureFields(v.outletTemp ?? undefined),
           correctionFactor: v.correctionFactor ?? undefined,
         },
       };
