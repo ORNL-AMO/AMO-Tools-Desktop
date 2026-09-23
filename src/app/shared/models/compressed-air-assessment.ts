@@ -308,7 +308,7 @@ export interface SystemProfile {
 export interface SystemProfileSetup {
     dayTypeId: string,
     numberOfHours: number,
-    dataInterval: 1 | 24,
+    dataInterval: .25 | .5 | 1 | 24,
     profileDataType: ProfileDataType
 }
 
