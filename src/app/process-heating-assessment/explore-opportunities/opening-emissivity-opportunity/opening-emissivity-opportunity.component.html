@@ -1,0 +1,70 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowAllEmissivity">
+    <input
+      type="checkbox"
+      id="exploreOppsShowAllEmissivity"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    Install Curtains or Radiation Shields to Reduce Opening Losses
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  @for (comparison of comparisons(); track comparison.id) {
+    <ul>
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifyEmissivity_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifyEmissivity_' + comparison.id }}"
+              [checked]="isExpanded(comparison.id)"
+              (change)="toggleSection(comparison.id, $any($event.target).checked)"
+            />
+            Modify Emissivity
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded(comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Emissivity</label>
+              <div class="text-muted text-center baseline-value-input">{{ comparison.baseline.emissivity }}</div>
+              @if (comparison.baselineWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarning }}</span>
+              }
+            </div>
+          </form>
+
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationEmissivity_' + comparison.id }}" class="mod-value-label">Emissivity</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="{{ 'modificationEmissivity_' + comparison.id }}"
+                  [value]="comparison.modification.emissivity"
+                  (change)="setModificationValue(comparison.id, $any($event.target).valueAsNumber)"
+                />
+              </div>
+              @if (comparison.modificationWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+      }
+    </ul>
+  }
+}

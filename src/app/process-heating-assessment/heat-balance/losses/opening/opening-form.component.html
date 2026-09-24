@@ -1,0 +1,119 @@
+<form [formGroup]="form()">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds().openingType}}">Opening Shape</label>
+      <select class="form-control" id="{{controlIds().openingType}}" formControlName="openingType"
+        [class.invalid]="form().controls.openingType.invalid">
+        <option value="Round">Round</option>
+        <option value="Rectangular (or Square)">Rectangular (or Square)</option>
+      </select>
+      <app-form-control-errors [control]="form().controls.openingType" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().numberOfOpenings}}">Number of Openings</label>
+      <input type="number" step="1" min="0" class="form-control"
+        id="{{controlIds().numberOfOpenings}}" formControlName="numberOfOpenings" onfocus="this.select();"
+        [class.invalid]="form().controls.numberOfOpenings.invalid">
+      <app-form-control-errors [control]="form().controls.numberOfOpenings" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().thickness}}">Furnace Wall Thickness</label>
+      <div class="input-group" [class.invalid]="form().controls.thickness.invalid">
+        <input type="number" step="1" min="0" class="form-control"
+          id="{{controlIds().thickness}}" formControlName="thickness" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="in" metricUnit="mm"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.thickness" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().lengthOfOpening}}">
+        @if (isRound()) { Diameter of Opening } @else { Length of Opening }
+      </label>
+      <div class="input-group" [class.invalid]="form().controls.lengthOfOpening.invalid">
+        <input type="number" step="1" min="0" class="form-control"
+          id="{{controlIds().lengthOfOpening}}" formControlName="lengthOfOpening" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="in" metricUnit="mm"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.lengthOfOpening" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    @if (!isRound()) {
+      <div class="form-group">
+        <label class="small" for="{{controlIds().heightOfOpening}}">Height of Opening</label>
+        <div class="input-group" [class.invalid]="form().controls.heightOfOpening.invalid">
+          <input type="number" step="1" min="0" class="form-control"
+            id="{{controlIds().heightOfOpening}}" formControlName="heightOfOpening" onfocus="this.select();">
+          <app-input-unit [settings]="settings()" imperialUnit="in" metricUnit="mm"></app-input-unit>
+        </div>
+        <app-form-control-errors [control]="form().controls.heightOfOpening" [settings]="settings()">
+        </app-form-control-errors>
+      </div>
+    }
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().viewFactor}}">View Factor</label>
+      <input type="number" step="0.01" min="0" class="form-control"
+        id="{{controlIds().viewFactor}}" formControlName="viewFactor" onfocus="this.select();"
+        [class.invalid]="form().controls.viewFactor.invalid">
+      <app-form-control-errors [control]="form().controls.viewFactor" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().insideTemperature}}">Average Inside Temperature</label>
+      <div class="input-group" [class.invalid]="form().controls.insideTemperature.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds().insideTemperature}}" formControlName="insideTemperature" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.insideTemperature" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().ambientTemperature}}">Ambient Temperature</label>
+      <div class="input-group" [class.invalid]="form().controls.ambientTemperature.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds().ambientTemperature}}" formControlName="ambientTemperature" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+      </div>
+      @if (form().controls.ambientTemperature.invalid && !form().controls.ambientTemperature.pristine) {
+        <span class="alert-danger pull-right small">
+          @if (form().controls.ambientTemperature.errors?.['required']) { Value Required }
+          @if (form().controls.ambientTemperature.errors?.['max']) {
+            Value can't be greater than Average Inside Temperature
+            ({{form().controls.ambientTemperature.errors?.['max'].max}}
+            @if (settings().unitsOfMeasure === 'Imperial') { &#8457; } @else { &#8451; }).
+          }
+        </span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().emissivity}}">Emissivity of the Source</label>
+      <input type="number" step="0.1" min="0" max="1" class="form-control"
+        id="{{controlIds().emissivity}}" formControlName="emissivity" onfocus="this.select();"
+        [class.invalid]="form().controls.emissivity.invalid">
+      <app-form-control-errors [control]="form().controls.emissivity" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().percentTimeOpen}}">Time Open</label>
+      <div class="input-group" [class.invalid]="form().controls.percentTimeOpen.invalid">
+        <input type="number" step="1" min="0" max="100" class="form-control"
+          id="{{controlIds().percentTimeOpen}}" formControlName="percentTimeOpen" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="%" metricUnit="%"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.percentTimeOpen" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+  </div>
+</form>

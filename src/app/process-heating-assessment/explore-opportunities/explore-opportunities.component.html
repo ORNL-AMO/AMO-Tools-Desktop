@@ -28,6 +28,11 @@
     @if (hasCoolingLosses()) {
       <app-cooling-opportunity></app-cooling-opportunity>
     }
+    @if (hasOpeningLosses()) {
+      <app-opening-size-opportunity></app-opening-size-opportunity>
+      <app-opening-emissivity-opportunity></app-opening-emissivity-opportunity>
+      <app-opening-time-open-opportunity></app-opening-time-open-opportunity>
+    }
   } @else {
     <div class="no-data text-center">
       <h2 class="h6">Explore energy efficiency opportunities to increase the efficiency and effectiveness of your system.</h2>

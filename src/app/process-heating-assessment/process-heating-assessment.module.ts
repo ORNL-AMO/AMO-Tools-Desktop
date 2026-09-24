@@ -41,6 +41,9 @@ import { AtmosphereOpportunityComponent } from './explore-opportunities/atmosphe
 import { FixtureMaterialsHandlingOpportunityComponent } from './explore-opportunities/fixture-materials-handling-opportunity/fixture-materials-handling-opportunity.component';
 import { FixtureCoolingOpportunityComponent } from './explore-opportunities/fixture-cooling-opportunity/fixture-cooling-opportunity.component';
 import { CoolingOpportunityComponent } from './explore-opportunities/cooling-opportunity/cooling-opportunity.component';
+import { OpeningSizeOpportunityComponent } from './explore-opportunities/opening-size-opportunity/opening-size-opportunity.component';
+import { OpeningEmissivityOpportunityComponent } from './explore-opportunities/opening-emissivity-opportunity/opening-emissivity-opportunity.component';
+import { OpeningTimeOpenOpportunityComponent } from './explore-opportunities/opening-time-open-opportunity/opening-time-open-opportunity.component';
 import { ExpertViewComponent } from './expert-view/expert-view.component';
 import { ReportComponent } from './report/report.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
@@ -74,6 +77,7 @@ import { CoolingComponent } from './heat-balance/losses/cooling/cooling.componen
 import { GasCoolingFormComponent } from './heat-balance/losses/cooling/gas-cooling-form.component';
 import { LiquidCoolingFormComponent } from './heat-balance/losses/cooling/liquid-cooling-form.component';
 import { OpeningComponent } from './heat-balance/losses/opening/opening.component';
+import { OpeningFormComponent } from './heat-balance/losses/opening/opening-form.component';
 import { OtherComponent } from './heat-balance/losses/other/other.component';
 import { FlueGasComponent } from './heat-balance/losses/flue-gas/flue-gas.component';
 import { GasLeakageComponent } from './heat-balance/losses/gas-leakage/gas-leakage.component';
@@ -274,6 +278,9 @@ export const ROUTES: Route[] = [
     FixtureMaterialsHandlingOpportunityComponent,
     FixtureCoolingOpportunityComponent,
     CoolingOpportunityComponent,
+    OpeningSizeOpportunityComponent,
+    OpeningEmissivityOpportunityComponent,
+    OpeningTimeOpenOpportunityComponent,
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
@@ -306,6 +313,7 @@ export const ROUTES: Route[] = [
     GasCoolingFormComponent,
     LiquidCoolingFormComponent,
     OpeningComponent,
+    OpeningFormComponent,
     OtherComponent,
     FlueGasComponent,
     GasLeakageComponent,

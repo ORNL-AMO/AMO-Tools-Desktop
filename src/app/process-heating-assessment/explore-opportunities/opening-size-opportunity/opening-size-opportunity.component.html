@@ -1,0 +1,231 @@
+@let imperial = settings().unitsOfMeasure === 'Imperial';
+
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowOpening">
+    <input
+      type="checkbox"
+      id="exploreOppsShowOpening"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    Minimize Opening Size or Install Tunnel-like Extensions
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  @for (comparison of comparisons(); track comparison.id) {
+    @let isRound = comparison.baselineItem.openingType === 'Round';
+    <ul>
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifyOpeningSize_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifyOpeningSize_' + comparison.id }}"
+              [checked]="isExpanded('size', comparison.id)"
+              (change)="toggleSection('size', comparison.id, $any($event.target).checked)"
+            />
+            Modify Opening Size
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded('size', comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Number of Openings</label>
+              <div class="text-muted text-center baseline-value-input">{{ comparison.baseline.numberOfOpenings }}</div>
+              @if (comparison.baselineWarnings.numOpeningsWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.numOpeningsWarning }}</span>
+              }
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationOpeningNumberOfOpenings_' + comparison.id }}" class="mod-value-label">Number of Openings</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="1"
+                  class="form-control"
+                  id="{{ 'modificationOpeningNumberOfOpenings_' + comparison.id }}"
+                  [value]="comparison.modification.numberOfOpenings"
+                  (change)="setModificationValue(comparison.id, 'numberOfOpenings', $any($event.target).valueAsNumber)"
+                />
+              </div>
+              @if (comparison.modificationWarnings.numOpeningsWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.numOpeningsWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Furnace Wall Thickness</label>
+              <div class="text-muted text-center baseline-value-input">
+                {{ comparison.baseline.thickness }}
+                @if (imperial) { <span>in</span> } @else { <span>mm</span> }
+              </div>
+              @if (comparison.baselineWarnings.thicknessWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.thicknessWarning }}</span>
+              }
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationOpeningThickness_' + comparison.id }}" class="mod-value-label">Furnace Wall Thickness</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="{{ 'modificationOpeningThickness_' + comparison.id }}"
+                  [value]="comparison.modification.thickness"
+                  (change)="setModificationValue(comparison.id, 'thickness', $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit [settings]="settings()" imperialUnit="in" metricUnit="mm"></app-input-unit>
+              </div>
+              @if (comparison.modificationWarnings.thicknessWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.thicknessWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">@if (isRound) { Diameter of Opening } @else { Length of Opening }</label>
+              <div class="text-muted text-center baseline-value-input">
+                {{ comparison.baseline.lengthOfOpening }}
+                @if (imperial) { <span>in</span> } @else { <span>mm</span> }
+              </div>
+              @if (comparison.baselineWarnings.lengthWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.lengthWarning }}</span>
+              }
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationOpeningLength_' + comparison.id }}" class="mod-value-label">
+                @if (isRound) { Diameter of Opening } @else { Length of Opening }
+              </label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="{{ 'modificationOpeningLength_' + comparison.id }}"
+                  [value]="comparison.modification.lengthOfOpening"
+                  (change)="setModificationValue(comparison.id, 'lengthOfOpening', $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit [settings]="settings()" imperialUnit="in" metricUnit="mm"></app-input-unit>
+              </div>
+              @if (comparison.modificationWarnings.lengthWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.lengthWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+
+        @if (!isRound) {
+          <li class="explore-opps-item mb-2">
+            <form class="explore-opps-form">
+              <div class="text-center">
+                <label class="baseline-value-label">Height of Opening</label>
+                <div class="text-muted text-center baseline-value-input">
+                  {{ comparison.baseline.heightOfOpening }}
+                  @if (imperial) { <span>in</span> } @else { <span>mm</span> }
+                </div>
+                @if (comparison.baselineWarnings.heightWarning) {
+                  <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.heightWarning }}</span>
+                }
+              </div>
+            </form>
+            <form class="explore-opps-form">
+              <div class="form-group explore-opps-formgroup">
+                <label for="{{ 'modificationOpeningHeight_' + comparison.id }}" class="mod-value-label">Height of Opening</label>
+                <div class="input-group mod-max-width">
+                  <input
+                    type="number"
+                    step="any"
+                    class="form-control"
+                    id="{{ 'modificationOpeningHeight_' + comparison.id }}"
+                    [value]="comparison.modification.heightOfOpening"
+                    (change)="setModificationValue(comparison.id, 'heightOfOpening', $any($event.target).valueAsNumber)"
+                  />
+                  <app-input-unit [settings]="settings()" imperialUnit="in" metricUnit="mm"></app-input-unit>
+                </div>
+                @if (comparison.modificationWarnings.heightWarning) {
+                  <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.heightWarning }}</span>
+                }
+              </div>
+            </form>
+          </li>
+        }
+      }
+
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifyOpeningViewFactor_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifyOpeningViewFactor_' + comparison.id }}"
+              [checked]="isExpanded('viewFactor', comparison.id)"
+              (change)="toggleSection('viewFactor', comparison.id, $any($event.target).checked)"
+            />
+            Modify View Factor
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded('viewFactor', comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">View Factor</label>
+              <div class="text-muted text-center baseline-value-input">{{ comparison.baseline.viewFactor }}</div>
+              @if (comparison.baselineWarnings.viewFactorWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.viewFactorWarning }}</span>
+              }
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationOpeningViewFactor_' + comparison.id }}" class="mod-value-label">View Factor</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="{{ 'modificationOpeningViewFactor_' + comparison.id }}"
+                  [value]="comparison.modification.viewFactor"
+                  (change)="setModificationValue(comparison.id, 'viewFactor', $any($event.target).valueAsNumber)"
+                />
+              </div>
+              @if (comparison.modificationWarnings.viewFactorWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.viewFactorWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+      }
+    </ul>
+  }
+}
