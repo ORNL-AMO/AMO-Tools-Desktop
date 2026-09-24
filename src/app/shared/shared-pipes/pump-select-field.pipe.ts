@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { fluidTypes, motorEfficiencyConstants, priorityTypes, pumpTypesConstant, statusTypes } from '../../psat/psatConstants';
+import { inventoryPumpTypesConstant, motorEfficiencyConstants, priorityTypes, statusTypes } from '../../psat/psatConstants';
 import { pumpInventoryDriveConstants, pumpInventoryShaftOrientations, pumpInventoryShaftSealTypes } from '../../pump-inventory/pump-inventory.service';
 
 
@@ -17,7 +17,7 @@ export class PumpSelectFieldPipe implements PipeTransform {
       motorConstant = pumpInventoryDriveConstants.find(constant => { return constant.value == value });
 
     } else if (fieldName === 'pumpType') {
-      motorConstant = pumpTypesConstant.find(constant => { return constant.value == value });
+      motorConstant = inventoryPumpTypesConstant.find(constant => { return constant.value == value });
 
     } else if (fieldName === 'shaftOrientation') {
       motorConstant = pumpInventoryShaftOrientations.find(constant => { return constant.value == value });

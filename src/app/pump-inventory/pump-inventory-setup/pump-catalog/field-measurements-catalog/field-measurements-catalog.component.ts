@@ -19,9 +19,10 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
 
   settingsSub: Subscription;
   settings: Settings;
-  
+
   form: FormGroup;
   selectedPumpItemSub: Subscription;
+  pumpTypeChangedSub: Subscription;
   displayOptions: FieldMeasurementsOptions;
   displayForm: boolean = true;
   formWidth: number;
@@ -57,8 +58,13 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
     this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.fieldMeasurementOptions;
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
-        this.form = this.fieldMeasurementsCatalogService.getFormFromFieldMeasurements(selectedPump.fieldMeasurements);
+        this.form = this.fieldMeasurementsCatalogService.getFormFromFieldMeasurements(selectedPump.fieldMeasurements, selectedPump.pumpEquipment.pumpType);
         this.fieldDataWarnings = this.pumpCatalogService.checkFieldWarnings(selectedPump, this.settings);
+      }
+    });
+    this.pumpTypeChangedSub = this.pumpCatalogService.pumpTypeChanged.subscribe(pumpType => {
+      if (this.form && pumpType !== undefined) {
+        this.form = this.fieldMeasurementsCatalogService.updateOperatingHeadValidators(this.form, pumpType);
       }
     });
   }
@@ -66,6 +72,7 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
   ngOnDestroy() {
     this.selectedPumpItemSub.unsubscribe();
     this.settingsSub.unsubscribe();
+    this.pumpTypeChangedSub.unsubscribe();
   }
 
   save() {

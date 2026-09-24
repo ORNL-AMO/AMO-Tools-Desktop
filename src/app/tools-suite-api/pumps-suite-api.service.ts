@@ -112,7 +112,13 @@ export class PumpsSuiteApiService {
     let stageCount: number = psatInput.stages;
     let speed: SpecificSpeed = this.suiteApiHelperService.getFixedSpeedEnum(psatInput.fixed_speed);
     let specifiedDriveEfficiency: number = psatInput.specifiedDriveEfficiency / 100;
-    let pumpInput: PumpResultInput = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResultInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency);
+    let pumpInput: PumpResultInput;
+    if (psatInput.pump_style === 12) {
+      let differentialPressurePsi: number = psatInput.differentialPressure;
+      pumpInput = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResultInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency, differentialPressurePsi);
+    } else {
+      pumpInput = new this.toolsSuiteApiService.ToolsSuiteModule.PumpResultInput(pumpStyle, pumpEfficiency, rpm, drive, kviscosity, specificGravity, stageCount, speed, specifiedDriveEfficiency);
+    }
     //motor
     let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(psatInput.line_frequency);
     let motorRatedPower: number = psatInput.motor_rated_power;
@@ -126,7 +132,7 @@ export class PumpsSuiteApiService {
     let motor: Motor = new this.toolsSuiteApiService.ToolsSuiteModule.Motor(lineFrequency, motorRatedPower, motorRpm, efficiencyClass, specifiedMotorEfficiency, motorRatedVoltage, fullLoadAmps, sizeMargin);
 
     let flowRate: number = psatInput.flow_rate;
-    let head: number = psatInput.head;
+    let head: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.head);
     let loadEstimationMethod: LoadEstimationMethod = this.suiteApiHelperService.getLoadEstimationMethod(psatInput.load_estimation_method);
     let motorPower: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_power);
     let motorAmps: number = this.suiteApiHelperService.convertNullInputValueForObjectConstructor(psatInput.motor_field_current);
