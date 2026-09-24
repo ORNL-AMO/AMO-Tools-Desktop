@@ -79,6 +79,7 @@ import { LiquidCoolingFormComponent } from './heat-balance/losses/cooling/liquid
 import { OpeningComponent } from './heat-balance/losses/opening/opening.component';
 import { OpeningFormComponent } from './heat-balance/losses/opening/opening-form.component';
 import { OtherComponent } from './heat-balance/losses/other/other.component';
+import { OtherFormComponent } from './heat-balance/losses/other/other-form.component';
 import { FlueGasComponent } from './heat-balance/losses/flue-gas/flue-gas.component';
 import { GasLeakageComponent } from './heat-balance/losses/gas-leakage/gas-leakage.component';
 import { AuxiliaryPowerComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power.component';
@@ -315,6 +316,7 @@ export const ROUTES: Route[] = [
     OpeningComponent,
     OpeningFormComponent,
     OtherComponent,
+    OtherFormComponent,
     FlueGasComponent,
     GasLeakageComponent,
     AuxiliaryPowerComponent,

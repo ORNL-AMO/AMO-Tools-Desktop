@@ -1,0 +1,23 @@
+<form [formGroup]="form()">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds().description}}">Loss Description</label>
+      <input type="text" class="form-control"
+        id="{{controlIds().description}}" formControlName="description"
+        [class.invalid]="form().controls.description.invalid">
+      <app-form-control-errors [control]="form().controls.description" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().heatLoss}}">Heat Loss</label>
+      <div class="input-group" [class.invalid]="form().controls.heatLoss.invalid">
+        <input type="number" step="any" class="form-control"
+          id="{{controlIds().heatLoss}}" formControlName="heatLoss" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" [defaultUnit]="resultsUnit"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.heatLoss" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+  </div>
+</form>
