@@ -10,7 +10,7 @@
     </div>
   }
 
-  @for (item of service.losses(); track item.id) {
+  @for (item of service.losses(); track scenario() + '_' + item.id) {
     <div class="card mb-3">
       <div class="card-header d-flex align-items-center justify-content-between">
         <div class="d-flex align-items-center gap-2 flex-grow-1">

@@ -1,4 +1,5 @@
 export interface OpeningLoss {
+    id?: string;
     numberOfOpenings?: number;
     emissivity?: number;
     thickness?: number;

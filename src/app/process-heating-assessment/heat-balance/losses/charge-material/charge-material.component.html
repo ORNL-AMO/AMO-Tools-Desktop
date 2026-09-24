@@ -21,7 +21,7 @@
     </div>
   }
 
-  @for (item of materials; track item.id) {
+  @for (item of materials; track scenario() + '_' + item.id) {
     @let itemResult = results.get(item.id);
     <div class="card charge-material-card mb-3">
       <div class="card-header d-flex align-items-center flex-wrap">
