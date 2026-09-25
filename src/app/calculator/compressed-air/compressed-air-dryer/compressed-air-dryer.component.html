@@ -11,18 +11,20 @@
       </div>
     </div>
 
-    <div class="d-flex pr-2 pl-2" *ngIf="inTreasureHunt">
-      <div class="d-none d-lg-flex help-holder">
-        <p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
+    @if (inTreasureHunt) {
+      <div class="d-flex pr-2 pl-2">
+        <div class="d-none d-lg-flex help-holder">
+          <p class="help-text treasure-hunt-help">Click the save icon to add the treasure to your chest!
           Click cancel to discard the opportunity and return to method selection.</p>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
+          <span class="fa fa-save"></span>
+        </div>
+        <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
+          <span class="fa fa-times"></span>
+        </div>
       </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="save()">
-        <span class="fa fa-save"></span>
-      </div>
-      <div class="pl-2 pr-2 border-right border-left action-item" (click)="cancel()">
-        <span class="fa fa-times"></span>
-      </div>
-    </div>
+    }
   </div>
 
   <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
@@ -77,7 +79,7 @@
       [ngStyle]="{'height.px': containerHeight}"
       (click)="setModificationSelected()">
 
-      <ng-container *ngIf="modificationExists">
+      @if (modificationExists) {
         <div class="header mx-2 mb-4">
           <h3>Modification</h3>
         </div>
@@ -91,20 +93,20 @@
             (changeField)="changeField($event)">
           </app-compressed-air-dryer-form>
         </div>
-      </ng-container>
-
-      <div *ngIf="!modificationExists">
-        <div class="header mx-2">
-          <h3>Modification</h3>
+      } @else {
+        <div>
+          <div class="header mx-2">
+            <h3>Modification</h3>
+          </div>
+          <div class="p-3 no-data">
+            <h3>Once you have set up your baseline..</h3>
+            <button type="button" class="btn btn-primary active" (click)="createModification()">
+              Add Modified Condition
+            </button>
+            <p>Data will be copied from your current baseline condition.</p>
+          </div>
         </div>
-        <div class="p-3 no-data">
-          <h3>Once you have set up your baseline..</h3>
-          <button type="button" class="btn btn-primary active" (click)="createModification()">
-            Add Modified Condition
-          </button>
-          <p>Data will be copied from your current baseline condition.</p>
-        </div>
-      </div>
+      }
     </div>
 
     <!-- help / results panel -->
@@ -126,17 +128,21 @@
         </div>
 
         <div class="p-2">
-          <app-compressed-air-dryer-results *ngIf="tabSelect === 'results'"
-            [baselineInput]="baselineInput"
-            [modificationInput]="modificationInput"
-            [baselineOutput]="baselineOutput"
-            [modificationOutput]="modificationOutput"
-            [modificationExists]="modificationExists"
-            [settings]="settings">
-          </app-compressed-air-dryer-results>
-          <app-compressed-air-dryer-help *ngIf="tabSelect === 'help'"
-            [currentField]="currentField">
-          </app-compressed-air-dryer-help>
+          @if (tabSelect === 'results') {
+            <app-compressed-air-dryer-results
+              [baselineInput]="baselineInput"
+              [modificationInput]="modificationInput"
+              [baselineOutput]="baselineOutput"
+              [modificationOutput]="modificationOutput"
+              [modificationExists]="modificationExists"
+              [settings]="settings">
+            </app-compressed-air-dryer-results>
+          }
+          @if (tabSelect === 'help') {
+            <app-compressed-air-dryer-help
+              [currentField]="currentField">
+            </app-compressed-air-dryer-help>
+          }
         </div>
       </div>
     </div>
