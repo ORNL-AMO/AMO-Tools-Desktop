@@ -7,83 +7,32 @@
         <td class="bold text-center">Modification</td>
       </tr>
 
-      <tr>
-        <td class="group-label bold">Water Removed</td>
-        <td class="text-center">
-          {{baselineOutput.waterRemoved | number:'1.2-2'}}
-          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">PPH</span>
-          <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/hr</span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="!modificationExists">&mdash;</span>
-          <span *ngIf="modificationExists && modificationOutput">
-            {{modificationOutput.waterRemoved | number:'1.2-2'}}
-            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">PPH</span>
-            <span *ngIf="settings.unitsOfMeasure != 'Imperial'">kg/hr</span>
-          </span>
-        </td>
-      </tr>
+      <ng-container *ngFor="let row of rows">
+        <tr *ngIf="isRowShown(row)">
+          <td class="group-label bold">{{row.label}}</td>
+          <td class="text-center">
+            <span *ngIf="!appliesTo(row, baselineInput)">&mdash;</span>
+            <span *ngIf="appliesTo(row, baselineInput)">
+              {{baselineOutput[row.field] | number:'1.2-2'}} {{getUnit(row)}}
+            </span>
+          </td>
+          <td class="text-center">
+            <span *ngIf="!modificationOutput || !appliesTo(row, modificationInput)">&mdash;</span>
+            <span *ngIf="modificationOutput && appliesTo(row, modificationInput)">
+              {{modificationOutput[row.field] | number:'1.2-2'}} {{getUnit(row)}}
+            </span>
+          </td>
+        </tr>
+      </ng-container>
 
       <tr>
-        <td class="group-label bold">Purge Rate</td>
-        <td class="text-center">
-          {{baselineOutput.purgeRate | number:'1.2-2'}} <span>%</span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="!modificationExists">&mdash;</span>
-          <span *ngIf="modificationExists && modificationOutput">
-            {{modificationOutput.purgeRate | number:'1.2-2'}} <span>%</span>
-          </span>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="group-label bold">Heater</td>
-        <td class="text-center">
-          {{baselineOutput.heaterPower | number:'1.2-2'}} <span>kW</span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="!modificationExists">&mdash;</span>
-          <span *ngIf="modificationExists && modificationOutput">
-            {{modificationOutput.heaterPower | number:'1.2-2'}} <span>kW</span>
-          </span>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="group-label bold">Heating Hours Per Day</td>
-        <td class="text-center">
-          {{baselineOutput.heatingHoursPerDay | number:'1.2-2'}} <span>hrs/day</span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="!modificationExists">&mdash;</span>
-          <span *ngIf="modificationExists && modificationOutput">
-            {{modificationOutput.heatingHoursPerDay | number:'1.2-2'}} <span>hrs/day</span>
-          </span>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="group-label bold">Design DDC</td>
-        <td class="text-center">
-          {{baselineOutput.designDDCPercentage | number:'1.2-2'}} <span>%</span>
-        </td>
-        <td class="text-center">
-          <span *ngIf="!modificationExists">&mdash;</span>
-          <span *ngIf="modificationExists && modificationOutput">
-            {{modificationOutput.designDDCPercentage | number:'1.2-2'}} <span>%</span>
-          </span>
-        </td>
-      </tr>
-
-      <tr>
-        <td class="group-label bold">Total Cost Per Year</td>
+        <td class="group-label bold">Total Annual Cost</td>
         <td class="text-center">
           {{baselineOutput.totalCostPerYear | currency:'USD':'symbol':'1.2-2'}}
         </td>
         <td class="text-center">
-          <span *ngIf="!modificationExists">&mdash;</span>
-          <span *ngIf="modificationExists && modificationOutput">
+          <span *ngIf="!modificationOutput">&mdash;</span>
+          <span *ngIf="modificationOutput">
             {{modificationOutput.totalCostPerYear | currency:'USD':'symbol':'1.2-2'}}
           </span>
         </td>
@@ -92,8 +41,8 @@
       <tr>
         <td class="group-label bold">Annual Cost Savings</td>
         <td class="text-center" colspan="2">
-          <span *ngIf="!modificationExists">&mdash;</span>
-          <span *ngIf="modificationExists && modificationOutput">
+          <span *ngIf="!modificationOutput">&mdash;</span>
+          <span *ngIf="modificationOutput">
             {{annualCostSavings | currency:'USD':'symbol':'1.2-2'}}
           </span>
         </td>
@@ -104,6 +53,6 @@
 
 <ng-template #noResults>
   <div class="p-3 text-center text-muted">
-    <p>No results yet. Fill in the form to calculate dryer operating cost.</p>
+    <p>No results yet. Complete the baseline form with valid values to calculate dryer operating cost.</p>
   </div>
 </ng-template>

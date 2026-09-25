@@ -54,6 +54,8 @@
         <app-compressed-air-dryer-form
           [form]="baselineForm"
           [settings]="settings"
+          [operatingHours]="operatingHours"
+          idString="baseline"
           (calculate)="getResults()"
           (changeField)="changeField($event)">
         </app-compressed-air-dryer-form>
@@ -83,6 +85,8 @@
           <app-compressed-air-dryer-form
             [form]="modificationForm"
             [settings]="settings"
+            [operatingHours]="operatingHours"
+            idString="modification"
             (calculate)="getResults()"
             (changeField)="changeField($event)">
           </app-compressed-air-dryer-form>
@@ -123,6 +127,8 @@
 
         <div class="p-2">
           <app-compressed-air-dryer-results *ngIf="tabSelect === 'results'"
+            [baselineInput]="baselineInput"
+            [modificationInput]="modificationInput"
             [baselineOutput]="baselineOutput"
             [modificationOutput]="modificationOutput"
             [modificationExists]="modificationExists"

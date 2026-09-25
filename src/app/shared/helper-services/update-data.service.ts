@@ -3,10 +3,10 @@ import { Assessment } from '../models/assessment';
 import { Diagram } from '../models/diagram';
 import { FlowDiagramData, migrateFlowDiagramFieldNames } from 'process-flow-lib';
 import { SSMT } from '../models/steam/ssmt';
-import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure } from '../models/treasure-hunt';
+import { AirLeakSurveyTreasureHunt, CompressedAirDryerTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
-import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData, FacilityCompressorData } from '../models/standalone';
+import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, DryerOperatingCostInput, DryerType, ElectricityReductionData, FacilityCompressorData } from '../models/standalone';
 import { PSAT } from '../models/psat';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
@@ -18,6 +18,7 @@ import { SteamPressureOrTemp, SteamQuality } from '../models/steam/steam-inputs'
 import { AdjustedOrActual, BilledForDemand, MonthyInputs } from '../../calculator/utilities/power-factor-correction/power-factor-correction.service';
 import { ProcessCoolingAssessment } from '../models/process-cooling-assessment';
 import { getTowerTypeDependentValues } from '../../process-cooling-assessment/constants/process-cooling-constants';
+import { getDryerTypeDefaults } from '../../calculator/compressed-air/compressed-air-dryer/compressed-air-dryer-type-config';
 
 @Injectable()
 export class UpdateDataService {
@@ -280,6 +281,13 @@ export class UpdateDataService {
             if (assessmentCalculators.airSystemCapacityInputs && assessmentCalculators.airSystemCapacityInputs.leakRateInput) {
                 if (assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime) {
                     assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime = assessmentCalculators.airSystemCapacityInputs.leakRateInput.dischargeTime / 60;
+                }
+            }
+
+            if (assessmentCalculators.dryerOperatingCost) {
+                assessmentCalculators.dryerOperatingCost.baseline = this.updateDryerOperatingCostInput(assessmentCalculators.dryerOperatingCost.baseline);
+                if (assessmentCalculators.dryerOperatingCost.modification) {
+                    assessmentCalculators.dryerOperatingCost.modification = this.updateDryerOperatingCostInput(assessmentCalculators.dryerOperatingCost.modification);
                 }
             }
 
@@ -660,9 +668,55 @@ export class UpdateDataService {
                     opportunity.opportunityType = Treasure.powerFactorCorrection;
                 });
             }
+            if (assessment.treasureHunt.compressedAirDryerOpportunities) {
+                assessment.treasureHunt.compressedAirDryerOpportunities.forEach(opportunity => {
+                    this.updateCompressedAirDryerTreasureHunt(opportunity);
+                    opportunity.opportunityType = Treasure.compressedAirDryer;
+                });
+            }
 
         }
         return assessment;
+    }
+
+    updateCompressedAirDryerTreasureHunt(compressedAirDryerTreasureHunt: CompressedAirDryerTreasureHunt): CompressedAirDryerTreasureHunt {
+        if (compressedAirDryerTreasureHunt.baseline) {
+            compressedAirDryerTreasureHunt.baseline = this.updateDryerOperatingCostInput(compressedAirDryerTreasureHunt.baseline);
+        }
+        if (compressedAirDryerTreasureHunt.modification) {
+            compressedAirDryerTreasureHunt.modification = this.updateDryerOperatingCostInput(compressedAirDryerTreasureHunt.modification);
+        }
+        return compressedAirDryerTreasureHunt;
+    }
+
+    /**
+     * Migrates legacy dryer inputs to the V2 Suite schema: type-specific assumptions are reset to the
+     * V2 type defaults with percentage purge mode, and legacy schedule fields are dropped.
+     * Inputs already in the V2 schema are returned unchanged.
+     */
+    updateDryerOperatingCostInput(input: DryerOperatingCostInput): DryerOperatingCostInput {
+        const legacyInput = input as DryerOperatingCostInput & { operatingHoursPerDay?: number, operatingDaysPerWeek?: number, operatingWeeksPerYear?: number };
+        const isLegacy = legacyInput.operatingHoursPerDay !== undefined || legacyInput.operatingDaysPerWeek !== undefined
+            || legacyInput.operatingWeeksPerYear !== undefined || legacyInput.purgeInputMode === undefined;
+        if (!isLegacy) {
+            return input;
+        }
+        const schedule = [legacyInput.operatingHoursPerDay, legacyInput.operatingDaysPerWeek, legacyInput.operatingWeeksPerYear];
+        const annualOperatingHours = schedule.every(value => Number.isFinite(value))
+            ? schedule[0] * schedule[1] * schedule[2]
+            : legacyInput.annualOperatingHours;
+        const dryerType: DryerType = legacyInput.dryerType ?? DryerType.Heatless;
+        return {
+            dryerType,
+            annualOperatingHours,
+            flowRate: legacyInput.flowRate,
+            pressure: legacyInput.pressure,
+            temperature: legacyInput.temperature,
+            costOfElectricity: legacyInput.costOfElectricity,
+            costOfCompressedAir: legacyInput.costOfCompressedAir,
+            costOfCoolingWater: legacyInput.costOfCoolingWater,
+            ...getDryerTypeDefaults(dryerType),
+        };
     }
 
     /**

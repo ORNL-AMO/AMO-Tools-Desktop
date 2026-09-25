@@ -98,7 +98,7 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
   initData(): void {
     this.compressedAirDryerService.convertStoredInputsForUnitChange(this.settings);
 
-    this.baselineInput = this.compressedAirDryerService.baselineInput ?? this.compressedAirDryerService.initObject(this.settings);
+    this.baselineInput = this.compressedAirDryerService.baselineInput ?? this.compressedAirDryerService.initObject(this.settings, this.operatingHours);
     this.baselineForm = this.compressedAirDryerService.getFormFromObj(this.baselineInput, this.settings);
 
     if (this.compressedAirDryerService.modificationInput) {
@@ -110,12 +110,13 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
     this.compressedAirDryerService.lastUnitsOfMeasure = this.settings.unitsOfMeasure;
   }
 
+  // Inputs are always captured for saving, but the Suite is only called for valid forms.
   getResults(): void {
     this.baselineInput = this.compressedAirDryerService.getObjFromForm(this.baselineForm);
-    this.baselineOutput = this.compressedAirDryerService.calculate(this.baselineInput, this.settings);
+    this.baselineOutput = this.baselineForm.valid ? this.compressedAirDryerService.calculate(this.baselineInput, this.settings) : undefined;
     if (this.modificationExists) {
       this.modificationInput = this.compressedAirDryerService.getObjFromForm(this.modificationForm);
-      this.modificationOutput = this.compressedAirDryerService.calculate(this.modificationInput, this.settings);
+      this.modificationOutput = this.modificationForm.valid ? this.compressedAirDryerService.calculate(this.modificationInput, this.settings) : undefined;
     }
     if (this.assessmentCalculator) {
       this.setAssessmentCalculatorData();

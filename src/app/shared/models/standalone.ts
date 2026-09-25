@@ -870,21 +870,28 @@ export enum DryerType {
   Refrigerated = 6,
 }
 
+export enum PurgeInputMode {
+  PercentOfDryerCapacity = 0,
+  DirectFlow = 1,
+}
+
 export interface DryerOperatingCostInput {
   dryerType: DryerType;
   flowRate: number;
   pressure: number;
   temperature: number;
-  operatingHoursPerDay: number;
-  operatingDaysPerWeek: number;
-  operatingWeeksPerYear: number;
+  annualOperatingHours: number;
   costOfElectricity: number;
   costOfCompressedAir: number;
   costOfCoolingWater: number;
   heaterPower: number;
   heatingHoursPerDay: number;
   purgeRate: number;
+  purgeFlowRate: number;
   designDDCPercentage: number;
+  regenerationCycleLength: number;
+  motorPower: number;
+  purgeInputMode: PurgeInputMode;
 }
 
 export interface DryerOperatingCostOutput {
@@ -894,6 +901,11 @@ export interface DryerOperatingCostOutput {
   heatingHoursPerDay: number;
   purgeRate: number;
   designDDCPercentage: number;
+  purgeFlowRate: number;
+  motorPower: number;
+  regenerationCycleLength: number;
+  // UI-derived from waterRemoved; not returned by the Suite.
+  waterRemovedVolume?: number;
 }
 //===== END Dryer Operating Cost objects =====
 
