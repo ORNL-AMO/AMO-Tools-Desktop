@@ -139,7 +139,7 @@
 
 <app-compressed-air-dryer *ngIf="selectedCalc == 'compressed-air-dryer'" [inTreasureHunt]="true"
 (emitCancel)="cancelTreasureHuntOpportunity()" (emitSave)="saveOpportunity($event)"
-[settings]="settings">
+[settings]="settings" [operatingHours]="treasureHunt.operatingHours">
 </app-compressed-air-dryer>
 
 <div bsModal #saveCalcModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"

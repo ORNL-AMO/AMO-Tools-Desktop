@@ -3,6 +3,9 @@ import { ConvertUnitsService } from '../../../shared/convert-units/convert-units
 import { DryerOperatingCostInput, DryerOperatingCostOutput } from '../../../shared/models/standalone';
 import { Settings } from '../../../shared/models/settings';
 
+// Density of water, lb/gal, used to express water removed as a volume.
+const WATER_DENSITY_LB_PER_GAL = 8.345;
+
 @Injectable()
 export class ConvertCompressedAirDryerService {
 
@@ -17,8 +20,12 @@ export class ConvertCompressedAirDryerService {
     const newSettings = { unitsOfMeasure: newUnitsOfMeasure } as Settings;
     const oldFlowUnit = oldUnitsOfMeasure === 'Imperial' ? 'ft3/min' : 'm3/min';
     const newFlowUnit = newUnitsOfMeasure === 'Imperial' ? 'ft3/min' : 'm3/min';
+    const oldPowerUnit = oldUnitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
+    const newPowerUnit = newUnitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
     let copy: DryerOperatingCostInput = { ...input };
     copy.flowRate = this.roundVal(this.convertUnitsService.convertValue(copy.flowRate, oldFlowUnit, newFlowUnit));
+    copy.purgeFlowRate = this.roundVal(this.convertUnitsService.convertValue(copy.purgeFlowRate, oldFlowUnit, newFlowUnit));
+    copy.motorPower = this.roundVal(this.convertUnitsService.convertValue(copy.motorPower, oldPowerUnit, newPowerUnit));
     copy.pressure = this.roundVal(this.convertUnitsService.convertPsigAndBargValue(copy.pressure, oldSettings, newSettings));
     copy.temperature = this.roundVal(this.convertUnitsService.convertTemperatureValue(copy.temperature, oldSettings, newSettings));
     copy.costOfCompressedAir = this.roundVal(this.convertUnitsService.convertDollarsPerFt3AndM3(copy.costOfCompressedAir, oldSettings, newSettings));
@@ -37,11 +44,17 @@ export class ConvertCompressedAirDryerService {
     return this.convertStoredInput(input, 'Imperial', settings.unitsOfMeasure);
   }
 
-  // Imperial calculation output -> Metric, for display when the app is in Metric mode.
-  convertOutputToMetric(output: DryerOperatingCostOutput, settings: Settings): DryerOperatingCostOutput {
-    if (settings.unitsOfMeasure === 'Imperial' || !output) return output;
+  // Imperial calculation output -> display units. Water removed volume is derived in gal/hr from the
+  // Suite's lb/hr before any Metric conversion, so both unit systems use the same density.
+  convertOutputForDisplay(output: DryerOperatingCostOutput, settings: Settings): DryerOperatingCostOutput {
+    if (!output) return output;
     let copy: DryerOperatingCostOutput = { ...output };
+    copy.waterRemovedVolume = copy.waterRemoved / WATER_DENSITY_LB_PER_GAL;
+    if (settings.unitsOfMeasure === 'Imperial') return copy;
+    copy.waterRemovedVolume = this.convertUnitsService.convertValue(copy.waterRemovedVolume, 'gal', 'L');
     copy.waterRemoved = this.convertUnitsService.convertLbAndKgValue(copy.waterRemoved, { ...settings, unitsOfMeasure: 'Imperial' }, settings);
+    copy.purgeFlowRate = this.convertUnitsService.convertValue(copy.purgeFlowRate, 'ft3/min', 'm3/min');
+    copy.motorPower = this.convertUnitsService.convertValue(copy.motorPower, 'hp', 'kW');
     return copy;
   }
 
@@ -56,6 +69,8 @@ export class ConvertCompressedAirDryerService {
     heaterPower: { min: number, max: number },
     heatingHoursPerDay: { min: number, max: number },
     purgeRate: { min: number, max: number },
+    purgeFlowRate: { min: number, max: number },
+    motorPower: { min: number, max: number },
   } {
     const heaterPower = { min: 0, max: 1000 };
     const heatingHoursPerDay = { min: 0, max: 24 };
@@ -71,6 +86,8 @@ export class ConvertCompressedAirDryerService {
         heaterPower,
         heatingHoursPerDay,
         purgeRate,
+        purgeFlowRate: { min: 0, max: 50000 },
+        motorPower: { min: 0, max: 1000 },
       };
     }
     const imperialOverride: Settings = { ...settings, unitsOfMeasure: 'Imperial' };
@@ -99,6 +116,14 @@ export class ConvertCompressedAirDryerService {
       heaterPower,
       heatingHoursPerDay,
       purgeRate,
+      purgeFlowRate: {
+        min: 0,
+        max: this.roundVal(this.convertUnitsService.convertValue(50000, 'ft3/min', 'm3/min')),
+      },
+      motorPower: {
+        min: 0,
+        max: this.roundVal(this.convertUnitsService.convertValue(1000, 'hp', 'kW')),
+      },
     };
   }
 

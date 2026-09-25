@@ -16,7 +16,16 @@
       <small class="text-muted">
         <br>
         Select the regenerative or refrigerated dryer technology installed in the system. The dryer type determines
-        which additional parameters (heater power, purge rate, DDC%) are required for the calculation.
+        which inputs apply; changing the type resets them to that type's defaults and keeps operating conditions and utility costs.
+        <ul class="mt-2 mb-0 pl-3">
+          <li><b>Heatless:</b> purge, DDC, and cycle length.</li>
+          <li><b>Heated Externally:</b> purge, heater (automatic/manual), heating hours, DDC, and cycle length.</li>
+          <li><b>Blower Purge (With Sweep):</b> purge, heater and motor (automatic/manual), heating hours, DDC, and cycle length.</li>
+          <li><b>Blower Purge (Without Sweep):</b> heater and motor (automatic/manual), heating hours, DDC, and cycle length. No purge air.</li>
+          <li><b>Heat of Compression (HC):</b> purge, heating hours, DDC, and cycle length. Heater load is always calculated.</li>
+          <li><b>Heat of Compression (SP):</b> DDC and cycle length.</li>
+          <li><b>Refrigerated:</b> motor (automatic/manual) and cooling water rate.</li>
+        </ul>
         <hr>
       </small>
     </h6>
@@ -55,34 +64,12 @@
     </h6>
   </div>
 
-  <div class="my-2" *ngIf="currentField === 'operatingHoursPerDay'">
+  <div class="my-2" *ngIf="currentField === 'annualOperatingHours'">
     <h6>
-      Hours Per Day
+      Annual Operating Hours
       <small class="text-muted">
         <br>
-        The number of hours per day the dryer operates. Valid range: 1–24 hrs/day.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField === 'operatingDaysPerWeek'">
-    <h6>
-      Days Per Week
-      <small class="text-muted">
-        <br>
-        The number of days per week the dryer operates. Valid range: 1–7 days/week.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField === 'operatingWeeksPerYear'">
-    <h6>
-      Weeks Per Year
-      <small class="text-muted">
-        <br>
-        The number of weeks per year the dryer operates. Valid range: 1–52 weeks/year.
+        The number of hours per year the dryer operates. Enter it directly or use the calculator button to build it from hours, days, and weeks. Valid range: 0–8760 hrs/yr.
         <hr>
       </small>
     </h6>
@@ -115,7 +102,121 @@
       Cost of Cooling Water
       <small class="text-muted">
         <br>
-        Cost of cooling water used by refrigerated dryers in $/kGal. Valid range: $0.25–$10.00/kGal.
+        Cost of cooling water in $/1000 gal ($/1000 L in metric). Shown only for refrigerated dryers. Valid range: $0.25–$10.00/1000 gal.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'purgeInputMode'">
+    <h6>
+      Purge Input
+      <small class="text-muted">
+        <br>
+        Choose how purge air is entered. <b>Percent of Dryer Capacity</b> enters purge as a percentage of the dryer's rated
+        capacity; <b>Direct Flow</b> enters the purge airflow itself in SCFM (m3/min in metric). Only the selected value is used,
+        and the results report both the resolved purge flow and the equivalent purge rate.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'purgeRate'">
+    <h6>
+      Purge Rate
+      <small class="text-muted">
+        <br>
+        Purge airflow as a percentage of dryer capacity. Defaults depend on the dryer type. Valid range: 0–100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'purgeFlowRate'">
+    <h6>
+      Purge Flow
+      <small class="text-muted">
+        <br>
+        Purge airflow entered directly, in SCFM (m3/min in metric). Must be greater than 0.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'heaterMode'">
+    <h6>
+      Heater Sizing
+      <small class="text-muted">
+        <br>
+        <b>Automatic</b> sizes the regeneration heater from the dryer type and operating conditions.
+        <b>Manual</b> uses a known heater power from the nameplate or measurement. The heater load used is shown in the results.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'heaterPower'">
+    <h6>
+      Heater Power
+      <small class="text-muted">
+        <br>
+        Known regeneration heater power, in kW. Must be greater than 0 and no more than 1000 kW.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'heatingHoursPerDay'">
+    <h6>
+      Hrs Heating Per 24 Hours
+      <small class="text-muted">
+        <br>
+        Hours per 24-hour period the heater operates. Valid range: 0–24 hrs.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'motorMode'">
+    <h6>
+      Motor Sizing
+      <small class="text-muted">
+        <br>
+        <b>Automatic</b> sizes the blower or refrigeration motor from the dryer type and operating conditions.
+        <b>Manual</b> uses a known motor size from the nameplate. The motor power used is shown in the results.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'motorPower'">
+    <h6>
+      Motor Power
+      <small class="text-muted">
+        <br>
+        Known motor size, in hp (kW in metric). Must be greater than 0.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'designDDCPercentage'">
+    <h6>
+      Design DDC
+      <small class="text-muted">
+        <br>
+        Design desiccant capacity, as a percentage. Defaults depend on the dryer type. Must be greater than 0 and no more than 100%.
+        <hr>
+      </small>
+    </h6>
+  </div>
+
+  <div class="my-2" *ngIf="currentField === 'regenerationCycleLength'">
+    <h6>
+      Regeneration Half-Cycle Length
+      <small class="text-muted">
+        <br>
+        Length of one regeneration half-cycle, in hours. Defaults depend on the dryer type. Must be greater than 0 and no more than 24 hrs.
         <hr>
       </small>
     </h6>
@@ -123,12 +224,12 @@
 
   <div class="my-2">
     <h6>
-      Heater Power, Heating Hours, Purge Rate &amp; Design DDC
+      Results
       <small class="text-muted">
         <br>
-        These values are not entered directly. The engine auto-calculates them from the selected dryer type
-        and operating conditions, then reports the resulting heater power, heating hours per day, purge rate,
-        and design DDC percentage in the Results tab.
+        <b>Water Removed</b> is reported in pounds per hour (PPH, lb/hr) and as a volume in gal/hr (kg/hr and L/hr in metric),
+        using a water density of 8.345 lb/gal. Rows that do not apply to the selected dryer types are hidden, and a dash marks
+        a value that does not apply to one side of the comparison.
         <hr>
       </small>
     </h6>
