@@ -7,13 +7,7 @@
         <label class="small" for="{{'dryerType_' + idString}}">Dryer Type</label>
         <select class="form-control" id="{{'dryerType_' + idString}}" formControlName="dryerType"
           (change)="changeDryerType()" (focus)="focusField('dryerType')">
-          <option [ngValue]="dryerType.Heatless">Heatless</option>
-          <option [ngValue]="dryerType.HeatedExternally">Heated Externally</option>
-          <option [ngValue]="dryerType.BlowerPurgeWithSweep">Blower Purge (With Sweep)</option>
-          <option [ngValue]="dryerType.BlowerPurgeWithoutSweep">Blower Purge (Without Sweep)</option>
-          <option [ngValue]="dryerType.HeatOfCompressionHC">Heat of Compression (HC)</option>
-          <option [ngValue]="dryerType.HeatOfCompressionSP">Heat of Compression (SP)</option>
-          <option [ngValue]="dryerType.Refrigerated">Refrigerated</option>
+          <option *ngFor="let option of dryerTypeOptions" [ngValue]="option.value">{{option.label}}</option>
         </select>
       </div>
 
@@ -163,7 +157,7 @@
         </div>
         <span class="alert-danger pull-right small" *ngIf="form.controls.purgeRate.invalid && !form.controls.purgeRate.pristine">
           <span *ngIf="form.controls.purgeRate.errors.required">Value required.</span>
-          <span *ngIf="form.controls.purgeRate.errors.min">Value can't be less than {{form.controls.purgeRate.errors.min.min}}.</span>
+          <span *ngIf="form.controls.purgeRate.errors.greaterThan != undefined">Value must be greater than {{form.controls.purgeRate.errors.greaterThan}}.</span>
           <span *ngIf="form.controls.purgeRate.errors.max">Value can't be greater than {{form.controls.purgeRate.errors.max.max}}.</span>
         </span>
       </div>

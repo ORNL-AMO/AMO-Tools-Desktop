@@ -74,7 +74,7 @@ export class CompressedAirDryerService {
       costOfCompressedAir:     [inputObj.costOfCompressedAir, [Validators.required, Validators.min(ranges.costOfCompressedAir.min), Validators.max(ranges.costOfCompressedAir.max)]],
       costOfCoolingWater:      [inputObj.costOfCoolingWater, [Validators.required, Validators.min(ranges.costOfCoolingWater.min), Validators.max(ranges.costOfCoolingWater.max)]],
       purgeInputMode:          [inputObj.purgeInputMode ?? PurgeInputMode.PercentOfDryerCapacity, [Validators.required]],
-      purgeRate:               [inputObj.purgeRate, [Validators.required, Validators.min(ranges.purgeRate.min), Validators.max(ranges.purgeRate.max)]],
+      purgeRate:               [inputObj.purgeRate, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(ranges.purgeRate.max)]],
       purgeFlowRate:           [inputObj.purgeFlowRate, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(ranges.purgeFlowRate.max)]],
       // Heater/motor modes are form-only: the Suite treats a zero power as "size automatically".
       heaterMode:              [inputObj.heaterPower > 0 ? 'manual' : 'auto'],
@@ -150,9 +150,27 @@ export class CompressedAirDryerService {
   }
 
   calculate(input: DryerOperatingCostInput, settings: Settings): DryerOperatingCostOutput {
+    if (!input || !this.getFormFromObj(input, settings).valid) {
+      return this.getEmptyOutput();
+    }
     const imperialInput = this.convertCompressedAirDryerService.convertInputsToImperial(input, settings);
     const output = this.compressedAirDryersSuiteApiService.dryerOperatingCost(imperialInput);
     return this.convertCompressedAirDryerService.convertOutputForDisplay(output, settings);
+  }
+
+  getEmptyOutput(): DryerOperatingCostOutput {
+    return {
+      waterRemoved: 0,
+      waterRemovedVolume: 0,
+      totalCostPerYear: 0,
+      heaterPower: 0,
+      heatingHoursPerDay: 0,
+      purgeRate: 0,
+      designDDCPercentage: 0,
+      purgeFlowRate: 0,
+      motorPower: 0,
+      regenerationCycleLength: 0,
+    };
   }
 
   // Converts already-entered baseline/modification data in place when the global

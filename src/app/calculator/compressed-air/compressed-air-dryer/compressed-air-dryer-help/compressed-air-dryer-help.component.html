@@ -18,13 +18,7 @@
         Select the regenerative or refrigerated dryer technology installed in the system. The dryer type determines
         which inputs apply; changing the type resets them to that type's defaults and keeps operating conditions and utility costs.
         <ul class="mt-2 mb-0 pl-3">
-          <li><b>Heatless:</b> purge, DDC, and cycle length.</li>
-          <li><b>Heated Externally:</b> purge, heater (automatic/manual), heating hours, DDC, and cycle length.</li>
-          <li><b>Blower Purge (With Sweep):</b> purge, heater and motor (automatic/manual), heating hours, DDC, and cycle length.</li>
-          <li><b>Blower Purge (Without Sweep):</b> heater and motor (automatic/manual), heating hours, DDC, and cycle length. No purge air.</li>
-          <li><b>Heat of Compression (HC):</b> purge, heating hours, DDC, and cycle length. Heater load is always calculated.</li>
-          <li><b>Heat of Compression (SP):</b> DDC and cycle length.</li>
-          <li><b>Refrigerated:</b> motor (automatic/manual) and cooling water rate.</li>
+          <li *ngFor="let type of dryerTypeHelp"><b>{{type.label}}:</b> {{type.applicability}}.</li>
         </ul>
         <hr>
       </small>
@@ -126,7 +120,7 @@
       Purge Rate
       <small class="text-muted">
         <br>
-        Purge airflow as a percentage of dryer capacity. Defaults depend on the dryer type. Valid range: 0–100%.
+        Purge airflow as a percentage of dryer capacity. Defaults depend on the dryer type. Must be greater than 0 and no more than 100%.
         <hr>
       </small>
     </h6>
@@ -217,19 +211,6 @@
       <small class="text-muted">
         <br>
         Length of one regeneration half-cycle, in hours. Defaults depend on the dryer type. Must be greater than 0 and no more than 24 hrs.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2">
-    <h6>
-      Results
-      <small class="text-muted">
-        <br>
-        <b>Water Removed</b> is reported in pounds per hour (PPH, lb/hr) and as a volume in gal/hr (kg/hr and L/hr in metric),
-        using a water density of 8.345 lb/gal. Rows that do not apply to the selected dryer types are hidden, and a dash marks
-        a value that does not apply to one side of the comparison.
         <hr>
       </small>
     </h6>

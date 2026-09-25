@@ -110,13 +110,12 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
     this.compressedAirDryerService.lastUnitsOfMeasure = this.settings.unitsOfMeasure;
   }
 
-  // Inputs are always captured for saving, but the Suite is only called for valid forms.
   getResults(): void {
     this.baselineInput = this.compressedAirDryerService.getObjFromForm(this.baselineForm);
-    this.baselineOutput = this.baselineForm.valid ? this.compressedAirDryerService.calculate(this.baselineInput, this.settings) : undefined;
+    this.baselineOutput = this.compressedAirDryerService.calculate(this.baselineInput, this.settings);
     if (this.modificationExists) {
       this.modificationInput = this.compressedAirDryerService.getObjFromForm(this.modificationForm);
-      this.modificationOutput = this.modificationForm.valid ? this.compressedAirDryerService.calculate(this.modificationInput, this.settings) : undefined;
+      this.modificationOutput = this.compressedAirDryerService.calculate(this.modificationInput, this.settings);
     }
     if (this.assessmentCalculator) {
       this.setAssessmentCalculatorData();

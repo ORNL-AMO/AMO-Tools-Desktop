@@ -2,9 +2,9 @@ import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, HostList
 import { UntypedFormGroup } from '@angular/forms';
 import { Settings } from '../../../../shared/models/settings';
 import { OperatingHours } from '../../../../shared/models/operations';
-import { DryerType, PurgeInputMode } from '../../../../shared/models/standalone';
+import { PurgeInputMode } from '../../../../shared/models/standalone';
 import { CompressedAirDryerService } from '../compressed-air-dryer.service';
-import { DryerTypeConfig } from '../compressed-air-dryer-type-config';
+import { DRYER_TYPE_OPTIONS, DryerTypeConfig } from '../compressed-air-dryer-type-config';
 
 @Component({
   selector: 'app-compressed-air-dryer-form',
@@ -26,7 +26,7 @@ export class CompressedAirDryerFormComponent implements AfterViewInit {
     this.setOpHoursModalWidth();
   }
 
-  dryerType = DryerType;
+  dryerTypeOptions = DRYER_TYPE_OPTIONS;
   purgeInputMode = PurgeInputMode;
   showOperatingHoursModal: boolean = false;
   formWidth: number;
@@ -55,6 +55,9 @@ export class CompressedAirDryerFormComponent implements AfterViewInit {
     this.compressedAirDryerService.setConditionalControls(this.form);
     const valueControl = this.form.controls[valueControlName];
     if (valueControl.enabled) {
+      if (valueControl.value === 0) {
+        valueControl.patchValue(null, { emitEvent: false });
+      }
       valueControl.markAsDirty();
     }
     this.onFormChange();
