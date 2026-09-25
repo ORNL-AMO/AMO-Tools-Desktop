@@ -20,7 +20,6 @@ import {
   CompressedAirRegressionTestRunner,
   RegressionTestSnapshot,
 } from './compressed-air-regression-tests.runner';
-import { SYNTHETIC_FIXTURE_COUNT } from './synthetic-fixtures';
 
 declare const __karma__: {
   config: { args?: string[] };
@@ -49,9 +48,15 @@ describe('compressed-air assessment regression tests', () => {
       // structured diagnostic report without giving Karma filesystem access.
       emitSnapshot(actual);
       const expectedCount = scope === 'full'
-        ? corpusData.fixtures.length + SYNTHETIC_FIXTURE_COUNT
+        ? coverageData.totalFixtureCount
         : coverageData.coreFixtureIds.length;
       expect(actual.fixtures.length).toBe(expectedCount);
+      const expectedSyntheticCoverage = coverageData.syntheticFixtures
+        .filter(fixture => actual.fixtures.some(result => result.fixtureId === fixture.fixtureId));
+      for (const expectedFixture of expectedSyntheticCoverage) {
+        const actualFixture = actual.fixtures.find(fixture => fixture.fixtureId === expectedFixture.fixtureId);
+        expect([...actualFixture.coverageTags].sort()).toEqual(expectedFixture.coverageTags);
+      }
       return;
     }
 

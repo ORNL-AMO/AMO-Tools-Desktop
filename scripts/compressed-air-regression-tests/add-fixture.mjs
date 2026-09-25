@@ -29,9 +29,11 @@ const coveragePath = resolve(fixtureDir, 'coverage.json');
 
 let exportedData;
 let existingCorpus;
+let existingCoverage;
 try {
   exportedData = JSON.parse(readFileSync(resolve(args.input), 'utf8'));
   existingCorpus = JSON.parse(readFileSync(corpusPath, 'utf8'));
+  existingCoverage = JSON.parse(readFileSync(coveragePath, 'utf8'));
 } catch {
   console.error('Unable to read or parse the assessment export or committed fixture corpus.');
   process.exit(1);
@@ -39,7 +41,7 @@ try {
 
 let result;
 try {
-  result = addFixtureToCorpus(existingCorpus, exportedData);
+  result = addFixtureToCorpus(existingCorpus, exportedData, existingCoverage.syntheticFixtures ?? []);
 } catch (error) {
   console.error(error instanceof Error ? error.message : 'Unable to add the assessment fixture.');
   process.exit(1);

@@ -13,10 +13,14 @@ The repository contains everything needed to run the tests:
 
 - `fixtures/corpus.json` contains sanitized assessment inputs. It currently has
   43 real assessment cases originally derived from a private system backup.
-- `synthetic-fixtures.ts` creates five targeted cases in memory for scenarios
+- `synthetic-fixtures.ts` creates six targeted cases in memory for scenarios
   that were missing from the real assessments.
 - `fixtures/coverage.json` records coverage tags, the smaller core test set, and
-  a hash of the real fixture corpus.
+  a hash of the real fixture corpus. It reports real, synthetic, and combined
+  coverage separately.
+- `fixtures/known-non-finite-paths.json` is the exact fixture/path allowlist for
+  legacy `NaN` and infinity outputs. Any non-finite output outside this list
+  fails instead of becoming baseline data.
 - `fixtures/baselines/` contains accepted calculation outputs.
 
 The original private backup has no role in the tests and is not needed again.
@@ -143,7 +147,8 @@ npm run ca:regression-tests:record -- --baseline post-change-baseline-name --acc
 ```
 
 This creates a separate baseline file under `fixtures/baselines/`. Use a new,
-descriptive name for each accepted calculation state.
+descriptive name for each accepted calculation state. Recording refuses to
+overwrite any existing baseline, even when `--accept` is supplied.
 
 Never overwrite or remove `pre-pr409-suite-1.2.5`; it is the permanent reference
 for measuring the effect of Suite PR #409 and Desktop issue #8903.

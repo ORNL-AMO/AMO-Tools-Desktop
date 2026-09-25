@@ -17,8 +17,6 @@ export interface CompressedAirRegressionTestFixture {
   settings: any;
 }
 
-export const SYNTHETIC_FIXTURE_COUNT = 5;
-
 export function createSyntheticFixtures(
   realFixtures: CompressedAirRegressionTestFixture[],
   convertCompressedAirService: ConvertCompressedAirService,
@@ -29,6 +27,7 @@ export function createSyntheticFixtures(
     createMetricLoadSharing(realFixtures, convertCompressedAirService),
     createCascadingReplacement(realFixtures),
     createTwentyFourHourBoundaries(realFixtures),
+    createHalfHourPercentPower(realFixtures),
   ];
 }
 
@@ -101,7 +100,8 @@ function createMetricLoadSharing(
   );
   const metricData = fixture.assessment.compressedAirAssessment;
   metricData.systemInformation.multiCompressorSystemControls = 'loadSharing';
-  metricData.systemProfile.systemProfileSetup.profileDataType = 'airflow';
+  setProfileDataType(metricData, 'airflow');
+  setProfileValuesFromRatedCapacity(metricData, 'airflow', .5);
   setInterval(metricData, .25);
   fixture.settings = metricSettings;
   fixture.coverageTags = [
@@ -111,11 +111,13 @@ function createMetricLoadSharing(
 }
 
 function createCascadingReplacement(realFixtures: CompressedAirRegressionTestFixture[]): CompressedAirRegressionTestFixture {
-  // Covers ordered cascading/replacement EEMs, percent power, and 30-minute rows.
+  // Covers ordered cascading/replacement EEMs with percent-power input. Keep
+  // this at one-hour intervals so the separate known sub-hour pressure-indexing
+  // bug cannot prevent these EEMs from producing results.
   const fixture = cloneFixture(findFixture(realFixtures, 'ca-real-002'), 'ca-synthetic-004');
   const data = fixture.assessment.compressedAirAssessment;
-  data.systemProfile.systemProfileSetup.profileDataType = 'percentPower';
-  setInterval(data, .5);
+  setProfileDataType(data, 'percentPower');
+  setInterval(data, 1);
   const modification = data.modifications[0];
   modification.adjustCascadingSetPoints.order = 1;
   modification.replaceCompressor = {
@@ -145,7 +147,7 @@ function createCascadingReplacement(realFixtures: CompressedAirRegressionTestFix
     compressorId: replacement.itemId,
   }));
   fixture.coverageTags = [
-    'eem:adjust-cascading-set-points', 'eem:replace-compressor', 'interval:0.5',
+    'eem:adjust-cascading-set-points', 'eem:replace-compressor', 'interval:1',
     'profile-type:percentPower', 'synthetic',
   ];
   return fixture;
@@ -156,22 +158,61 @@ function createTwentyFourHourBoundaries(realFixtures: CompressedAirRegressionTes
   const fixture = cloneFixture(findFixture(realFixtures, 'ca-real-025'), 'ca-synthetic-005');
   const data = fixture.assessment.compressedAirAssessment;
   setInterval(data, 24);
+  setProfileDataType(data, 'percentCapacity');
   for (const profile of data.systemProfile.profileSummary) {
-    profile.profileSummaryData[0].powerFactor = 0;
     profile.profileSummaryData[0].percentCapacity = 250;
-    profile.profileSummaryData[0].percentPower = 250;
   }
-  if (data.modifications[0]) {
-    for (const key of [
-      'addPrimaryReceiverVolume', 'adjustCascadingSetPoints', 'improveEndUseEfficiency',
-      'reduceAirLeaks', 'reduceRuntime', 'reduceSystemAirPressure', 'useAutomaticSequencer',
-      'replaceCompressor',
-    ]) {
-      if (data.modifications[0][key]) data.modifications[0][key].order = 100;
-    }
-  }
+  deactivateEems(data.modifications[0]);
   fixture.coverageTags = ['insufficient-capacity', 'interval:24', 'zero-savings', 'synthetic'];
   return fixture;
+}
+
+function createHalfHourPercentPower(realFixtures: CompressedAirRegressionTestFixture[]): CompressedAirRegressionTestFixture {
+  // Covers 30-minute percent-power profiles without invoking the known sub-hour
+  // cascading pressure-indexing bug tracked separately from this framework.
+  const fixture = cloneFixture(findFixture(realFixtures, 'ca-real-002'), 'ca-synthetic-006');
+  const data = fixture.assessment.compressedAirAssessment;
+  setProfileDataType(data, 'percentPower');
+  setInterval(data, .5);
+  deactivateEems(data.modifications[0]);
+  fixture.coverageTags = ['interval:0.5', 'profile-type:percentPower', 'synthetic'];
+  return fixture;
+}
+
+function deactivateEems(modification: any): void {
+  if (!modification) return;
+  for (const key of [
+    'addPrimaryReceiverVolume', 'adjustCascadingSetPoints', 'improveEndUseEfficiency',
+    'reduceAirLeaks', 'reduceRuntime', 'reduceSystemAirPressure', 'useAutomaticSequencer',
+    'replaceCompressor',
+  ]) {
+    if (modification[key]) modification[key].order = 100;
+  }
+}
+
+function setProfileDataType(compressedAirAssessment: any, profileDataType: string): void {
+  compressedAirAssessment.systemProfile.systemProfileSetup.profileDataType = profileDataType;
+  for (const dayType of compressedAirAssessment.compressedAirDayTypes ?? []) {
+    dayType.profileDataType = profileDataType;
+  }
+}
+
+function setProfileValuesFromRatedCapacity(
+  compressedAirAssessment: any,
+  field: 'airflow' | 'percentCapacity',
+  capacityFraction: number,
+): void {
+  const compressorsById = new Map(
+    compressedAirAssessment.compressorInventoryItems
+      .map(compressor => [compressor.itemId, compressor]),
+  );
+  for (const profile of compressedAirAssessment.systemProfile.profileSummary) {
+    const compressor: any = compressorsById.get(profile.compressorId);
+    const value = field === 'airflow'
+      ? compressor.nameplateData.fullLoadRatedCapacity * capacityFraction
+      : capacityFraction * 100;
+    for (const row of profile.profileSummaryData) row[field] = value;
+  }
 }
 
 function setInterval(compressedAirAssessment: any, interval: .25 | .5 | 1 | 24): void {

@@ -14,6 +14,7 @@
  */
 import { UntypedFormBuilder } from '@angular/forms';
 import packageJson from '../../../../../package.json';
+import knownNonFinitePathsData from './fixtures/known-non-finite-paths.json';
 import { ElectronService } from '../../../electron/electron.service';
 import { AssessmentCo2SavingsService } from '../../../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -30,6 +31,15 @@ import { CompressedAirAssessmentBaselineResults } from '../CompressedAirAssessme
 import { CompressedAirAssessmentModificationResults } from '../modifications/CompressedAirAssessmentModificationResults';
 import { CompressedAirCombinedDayTypeResults } from '../modifications/CompressedAirCombinedDayTypeResults';
 import { CompressedAirRegressionTestFixture, createSyntheticFixtures } from './synthetic-fixtures';
+
+const KNOWN_NON_FINITE_PATHS = new Map(
+  knownNonFinitePathsData.fixtures.map(fixture => [fixture.fixtureId, new Set(fixture.paths)]),
+);
+
+// Calculation exceptions are not expected in the pre-change corpus. If a
+// legitimate legacy exception is discovered, document its exact fixture,
+// stage, and class here instead of allowing arbitrary errors to be snapshotted.
+const KNOWN_CALCULATION_FAILURES: Record<string, { stage: string; errorClass: string }> = {};
 
 export interface RegressionTestCorpus {
   schemaVersion: number;
@@ -102,7 +112,7 @@ export class CompressedAirRegressionTestRunner {
 
     return canonicalize({
       schemaVersion: 1,
-      resultSchemaVersion: 1,
+      resultSchemaVersion: 2,
       baselineName,
       desktopBaselineCommit: '52f3b3bdb',
       desktopApplicationVersion: packageJson.version,
@@ -196,6 +206,13 @@ export class CompressedAirRegressionTestRunner {
         output,
         display: getDisplayProjection(output),
       }, '$', nonFinitePaths);
+      const allowedNonFinitePaths = KNOWN_NON_FINITE_PATHS.get(fixture.fixtureId) ?? new Set<string>();
+      const unexpectedNonFinitePaths = nonFinitePaths.filter(path => !allowedNonFinitePaths.has(path));
+      if (unexpectedNonFinitePaths.length > 0) {
+        throw new Error(
+          `Unexpected non-finite result for ${fixture.fixtureId}: ${unexpectedNonFinitePaths.join(', ')}`,
+        );
+      }
       if (nonFinitePaths.length > 0) {
         result.status = 'known-failure';
         result.failureStage = 'output-validation';
@@ -204,13 +221,18 @@ export class CompressedAirRegressionTestRunner {
       }
       return result;
     } catch (error) {
+      const errorClass = error?.constructor?.name ?? 'Error';
+      const knownFailure = KNOWN_CALCULATION_FAILURES[fixture.fixtureId];
+      if (!knownFailure || knownFailure.stage !== stage || knownFailure.errorClass !== errorClass) {
+        throw error;
+      }
       return {
         fixtureId: fixture.fixtureId,
         source: fixture.source,
         coverageTags: fixture.coverageTags,
         status: 'known-failure',
         failureStage: stage,
-        errorClass: error?.constructor?.name ?? 'Error',
+        errorClass,
       };
     }
   }
@@ -277,7 +299,12 @@ function getDisplayProjection(output: any): any {
       modificationId: modification.modificationId,
       annualEnergy: fmt(modification.combined.allSavingsResults.adjustedResults.power, 0),
       energySavings: fmt(modification.combined.allSavingsResults.savings.power, 0),
-      costSavings: fmt(modification.combined.allSavingsResults.savings.cost, 0),
+      energyCostSavings: fmt(modification.combined.allSavingsResults.savings.cost, 0),
+      peakDemandCostSavings: fmt(modification.combined.peakDemandCostSavings, 2),
+      costSavings: fmt(
+        output.baseline.results.total.totalAnnualOperatingCost - modification.combined.totalAnnualOperatingCost,
+        0,
+      ),
       percentSavings: `${fmt(modification.combined.allSavingsResults.savings.percentSavings, 0)} %`,
       paybackMonths: fmt(modification.combined.allSavingsResults.paybackPeriod, 2),
       peakDemand: fmt(modification.combined.peakDemand, 2),

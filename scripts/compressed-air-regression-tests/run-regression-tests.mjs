@@ -12,7 +12,7 @@
  *
  * Normal comparison and reporting never modify committed fixtures or baselines.
  */
-import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -31,6 +31,10 @@ const temporaryDirectory = resolve(root, 'tmp/compressed-air-regression-tests');
 if (!['compare', 'record', 'report'].includes(args.command)) usage();
 if (args.command === 'record' && !args.accept) {
   console.error('Recording a baseline requires --accept.');
+  process.exit(2);
+}
+if (args.command === 'record' && existsSync(baselinePath)) {
+  console.error(`Refusing to overwrite existing baseline ${baselineName}. Choose a new baseline name.`);
   process.exit(2);
 }
 if (args.command === 'report' && !args.allowDifferences) {

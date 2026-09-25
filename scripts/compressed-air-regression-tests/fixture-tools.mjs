@@ -94,7 +94,7 @@ export function findCompleteCompressedAirAssessments(exportedData) {
  * is sanitized before it is compared, inspected, or returned; callers should
  * write only this returned corpus and coverage object to the repository.
  */
-export function addFixtureToCorpus(existingCorpus, exportedData) {
+export function addFixtureToCorpus(existingCorpus, exportedData, syntheticFixtures = []) {
   const matches = findCompleteCompressedAirAssessments(exportedData);
   if (matches.length === 0) {
     throw new Error('The export does not contain one complete compressed-air assessment with matching settings.');
@@ -144,17 +144,27 @@ export function addFixtureToCorpus(existingCorpus, exportedData) {
   return {
     fixture,
     corpus,
-    coverage: buildCoverage(fixtures),
+    coverage: buildCoverage(fixtures, syntheticFixtures),
   };
 }
 
-export function buildCoverage(fixtures) {
+export function buildCoverage(realFixtures, syntheticFixtures = []) {
+  const syntheticCoverage = syntheticFixtures.map(fixture => ({
+    fixtureId: fixture.fixtureId,
+    coverageTags: [...fixture.coverageTags].sort(),
+  }));
+  const allFixtures = [...realFixtures, ...syntheticCoverage];
   return {
     schemaVersion: 1,
-    realFixtureCount: fixtures.length,
-    coreFixtureIds: selectCoreFixtureIds(fixtures),
-    tags: countTags(fixtures),
-    corpusSha256: sha256(fixtures),
+    realFixtureCount: realFixtures.length,
+    syntheticFixtureCount: syntheticCoverage.length,
+    totalFixtureCount: allFixtures.length,
+    coreFixtureIds: selectCoreFixtureIds(allFixtures),
+    realTags: countTags(realFixtures),
+    syntheticTags: countTags(syntheticCoverage),
+    tags: countTags(allFixtures),
+    syntheticFixtures: syntheticCoverage,
+    corpusSha256: sha256(realFixtures),
   };
 }
 
@@ -365,6 +375,7 @@ function sanitizeEmissionsData(data) {
   data.eGridRegion = 'Sanitized';
   data.eGridSubregion = 'Sanitized';
   data.zipcode = '00000';
+  (data.otherFuelMixedCO2SavingsData ?? []).forEach(sanitizeEmissionsData);
 }
 
 function createIdMap(items, key, prefix) {
@@ -373,7 +384,10 @@ function createIdMap(items, key, prefix) {
 
 function mapId(map, value) {
   if (value === undefined || value === null || value === '') return value;
-  return map.get(value) ?? value;
+  if (!map.has(value)) {
+    throw new Error('A retained fixture reference does not match a retained assessment record.');
+  }
+  return map.get(value);
 }
 
 export function getCoverageTags(compressedAir, settings) {
@@ -513,10 +527,8 @@ function collectSensitiveStrings(assessment) {
     assessment.name,
     compressedAir.name,
     compressedAir.systemBasics?.notes,
-    compressedAir.systemInformation?.co2SavingsData?.zipcode,
-    compressedAir.systemInformation?.co2SavingsData?.eGridRegion,
-    compressedAir.systemInformation?.co2SavingsData?.eGridSubregion,
   ];
+  collectSensitiveEmissionsStrings(compressedAir.systemInformation?.co2SavingsData, values);
   for (const compressor of [
     ...(compressedAir.compressorInventoryItems ?? []),
     ...(compressedAir.replacementCompressorInventoryItems ?? []),
@@ -535,6 +547,13 @@ function collectSensitiveStrings(assessment) {
     values.push(field.alias, field.csvName, field.fieldName);
   }
   return values.filter(value => typeof value === 'string' && value.trim() !== '');
+}
+
+function collectSensitiveEmissionsStrings(data, values) {
+  if (!data) return;
+  values.push(data.energySource, data.fuelType, data.eGridRegion, data.eGridSubregion, data.zipcode);
+  (data.otherFuelMixedCO2SavingsData ?? [])
+    .forEach(item => collectSensitiveEmissionsStrings(item, values));
 }
 
 function collectSensitiveSettingStrings(settings) {

@@ -11,8 +11,10 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 import {
   addFixtureToCorpus,
+  buildCoverage,
   compareSnapshots,
   findCompleteCompressedAirAssessments,
   isCompleteCompressedAirAssessment,
@@ -72,7 +74,20 @@ test('fixture addition is deterministic, remaps references, and drops Log Tool d
         replacementCompressorInventoryItems: [],
         compressedAirDayTypes: [{ dayTypeId: 'source-day', name: 'Source Day', numberOfDays: 365, profileDataType: 'power' }],
         systemBasics: { notes: 'Private notes', electricityCost: .1, demandCost: 0 },
-        systemInformation: { multiCompressorSystemControls: 'cascading', trimSelections: [{ dayTypeId: 'source-day', compressorId: 'source-compressor' }] },
+        systemInformation: {
+          multiCompressorSystemControls: 'cascading',
+          trimSelections: [{ dayTypeId: 'source-day', compressorId: 'source-compressor' }],
+          co2SavingsData: {
+            energySource: 'Private root energy source',
+            zipcode: '12345',
+            otherFuelMixedCO2SavingsData: [{
+              energySource: 'Private nested energy source',
+              fuelType: 'Private nested fuel',
+              eGridRegion: 'Private nested region',
+              zipcode: '54321',
+            }],
+          },
+        },
         systemProfile: {
           systemProfileSetup: { dayTypeId: 'source-day', numberOfHours: 24, dataInterval: 1, profileDataType: 'power' },
           profileSummary: [{ compressorId: 'source-compressor', dayTypeId: 'source-day', logToolFieldId: 'source-log-field', profileSummaryData: [{}] }],
@@ -99,6 +114,30 @@ test('fixture addition is deterministic, remaps references, and drops Log Tool d
   assert.equal('logToolFieldId' in data.systemProfile.profileSummary[0], false);
   assert.equal(stableStringify(fixture).includes('Source Assessment Name'), false);
   assert.equal(stableStringify(fixture).includes('Private Region'), false);
+  assert.equal(stableStringify(fixture).includes('Private nested energy source'), false);
+  assert.equal(data.systemInformation.co2SavingsData.otherFuelMixedCO2SavingsData[0].zipcode, '00000');
+});
+
+test('fixture addition rejects stale retained references instead of leaking source IDs', () => {
+  const assessment = {
+    appVersion: '1.9.0',
+    type: 'CompressedAir',
+    compressedAirAssessment: {
+      setupDone: true,
+      compressorInventoryItems: [{ itemId: 'known-compressor', nameplateData: {}, compressorControls: {} }],
+      compressedAirDayTypes: [{ dayTypeId: 'known-day', profileDataType: 'power' }],
+      systemInformation: {
+        trimSelections: [{ compressorId: 'private-stale-id', dayTypeId: 'known-day' }],
+      },
+      systemProfile: { profileSummary: [{ compressorId: 'known-compressor', dayTypeId: 'known-day' }] },
+      modifications: [],
+    },
+  };
+  const exportedData = { assessments: [{ assessment, settings: { unitsOfMeasure: 'Imperial' } }] };
+  assert.throws(
+    () => addFixtureToCorpus({ schemaVersion: 1, fixtures: [] }, exportedData),
+    /retained fixture reference/,
+  );
 });
 
 test('fixture addition accepts a normal one-assessment export and preserves existing fixtures', () => {
@@ -162,6 +201,30 @@ test('fixture addition rejects duplicates and ambiguous multi-assessment exports
 
   const two = { assessments: [{ assessment, settings }, { assessment: structuredClone(assessment), settings }] };
   assert.throws(() => addFixtureToCorpus({ schemaVersion: 1, fixtures: [] }, two), /multiple complete/);
+});
+
+test('coverage aggregates real and synthetic fixture inventories', () => {
+  const coverage = buildCoverage(
+    [{ fixtureId: 'real', coverageTags: ['real-only', 'shared'] }],
+    [{ fixtureId: 'synthetic', coverageTags: ['synthetic-only', 'shared'] }],
+  );
+  assert.equal(coverage.realFixtureCount, 1);
+  assert.equal(coverage.syntheticFixtureCount, 1);
+  assert.equal(coverage.totalFixtureCount, 2);
+  assert.deepEqual(coverage.realTags, { 'real-only': 1, shared: 1 });
+  assert.deepEqual(coverage.syntheticTags, { shared: 1, 'synthetic-only': 1 });
+  assert.deepEqual(coverage.tags, { 'real-only': 1, shared: 2, 'synthetic-only': 1 });
+  assert.deepEqual(new Set(coverage.coreFixtureIds), new Set(['real', 'synthetic']));
+});
+
+test('baseline recording refuses to overwrite an existing baseline', () => {
+  const run = spawnSync(
+    process.execPath,
+    ['scripts/compressed-air-regression-tests/run-regression-tests.mjs', 'record', '--scope', 'full', '--accept'],
+    { cwd: root, encoding: 'utf8' },
+  );
+  assert.equal(run.status, 2);
+  assert.match(run.stderr, /Refusing to overwrite existing baseline pre-pr409-suite-1\.2\.5/);
 });
 
 test('committed fixtures pass the standalone privacy guard', () => {

@@ -33,7 +33,9 @@ Use a real fixture for a representative assessment and a synthetic fixture for a
 
 Capture canonical application-facing results, not Emscripten class instances. The projection should cover calculation outputs that users can observe or that downstream calculations consume, including baseline and modification profiles, totals, rated metrics, savings, cost, demand, emissions, and report-visible formatting.
 
-Canonicalization must preserve missing values separately from `null`, normalize negative zero, preserve array order, and represent existing non-finite values explicitly. Unexpected `NaN` or infinity should produce a `known-failure` classification with the failing stage and paths; do not silently discard them.
+Canonicalization must preserve missing values separately from `null`, normalize negative zero, preserve array order, and represent explicitly allowlisted legacy non-finite values. Unexpected `NaN`, infinity, or calculation exceptions must fail the test; never make them baselineable by classifying them automatically.
+
+`fixtures/known-non-finite-paths.json` is intentionally separate from result baselines. Update it only when a specific legacy output has been investigated and documented; baseline recording must never modify it.
 
 When adding or removing projected fields:
 
