@@ -24,8 +24,8 @@ export class ConvertCompressedAirDryerService {
     const newPowerUnit = newUnitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
     let copy: DryerOperatingCostInput = { ...input };
     copy.flowRate = this.roundVal(this.convertUnitsService.convertValue(copy.flowRate, oldFlowUnit, newFlowUnit));
-    copy.purgeFlowRate = this.roundVal(this.convertUnitsService.convertValue(copy.purgeFlowRate, oldFlowUnit, newFlowUnit));
-    copy.motorPower = this.roundVal(this.convertUnitsService.convertValue(copy.motorPower, oldPowerUnit, newPowerUnit));
+    copy.purgeFlowRate = this.convertOptionalValue(copy.purgeFlowRate, oldFlowUnit, newFlowUnit);
+    copy.motorPower = this.convertOptionalValue(copy.motorPower, oldPowerUnit, newPowerUnit);
     copy.pressure = this.roundVal(this.convertUnitsService.convertPsigAndBargValue(copy.pressure, oldSettings, newSettings));
     copy.temperature = this.roundVal(this.convertUnitsService.convertTemperatureValue(copy.temperature, oldSettings, newSettings));
     copy.costOfCompressedAir = this.roundVal(this.convertUnitsService.convertDollarsPerFt3AndM3(copy.costOfCompressedAir, oldSettings, newSettings));
@@ -125,6 +125,11 @@ export class ConvertCompressedAirDryerService {
         max: this.roundVal(this.convertUnitsService.convertValue(1000, 'hp', 'kW')),
       },
     };
+  }
+
+  private convertOptionalValue(value: number, oldUnit: string, newUnit: string): number {
+    if (value === null || value === undefined) return value;
+    return this.roundVal(this.convertUnitsService.convertValue(value, oldUnit, newUnit));
   }
 
   roundVal(num: number): number {

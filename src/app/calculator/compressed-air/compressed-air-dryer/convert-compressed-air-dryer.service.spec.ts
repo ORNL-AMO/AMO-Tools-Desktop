@@ -267,5 +267,38 @@ describe('ConvertCompressedAirDryerService', () => {
       expect(convertUnitsService.convertValue(metricResult.waterRemoved, 'kg', 'lb')).toBeCloseTo(imperialResult.waterRemoved, 1);
       expect(convertUnitsService.convertValue(metricResult.waterRemovedVolume, 'L', 'gal')).toBeCloseTo(imperialResult.waterRemovedVolume, 1);
     });
+
+    it('returns an empty output without calling the Suite for invalid inputs', () => {
+      const result = dryerService.calculate({ ...buildImperialEntry(), annualOperatingHours: null }, imperial);
+      expect(suiteInputs.length).toBe(0);
+      expect(result).toEqual(dryerService.getEmptyOutput());
+    });
+
+    it('treats a blank direct purge flow as invalid', () => {
+      dryerService.calculate({ ...buildImperialEntry(), purgeFlowRate: null }, imperial);
+      expect(suiteInputs.length).toBe(0);
+    });
+
+    it('requires a purge rate greater than 0 for dryer types that purge', () => {
+      const percentMode = { ...buildImperialEntry(), purgeInputMode: PurgeInputMode.PercentOfDryerCapacity, purgeFlowRate: 0 };
+      dryerService.calculate({ ...percentMode, purgeRate: 0 }, imperial);
+      expect(suiteInputs.length).toBe(0);
+      dryerService.calculate({ ...percentMode, purgeRate: 7 }, imperial);
+      expect(suiteInputs.length).toBe(1);
+    });
+
+    it('does not require a purge rate for dryer types without purge', () => {
+      dryerService.calculate({ ...buildImperialEntry(), dryerType: DryerType.BlowerPurgeWithoutSweep, purgeRate: 0, purgeFlowRate: 0 }, imperial);
+      expect(suiteInputs.length).toBe(1);
+    });
+
+    it('uses 8736 annual operating hours for the example', () => {
+      expect(dryerService.generateExample(imperial).annualOperatingHours).toBe(8736);
+    });
+
+    it('keeps a blank direct purge flow blank through a units change', () => {
+      const converted = service.convertStoredInput({ ...buildImperialEntry(), purgeFlowRate: null }, 'Imperial', 'Metric');
+      expect(converted.purgeFlowRate).toBeNull();
+    });
   });
 });

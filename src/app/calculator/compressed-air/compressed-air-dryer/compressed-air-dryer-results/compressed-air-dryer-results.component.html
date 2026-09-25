@@ -1,4 +1,4 @@
-<div *ngIf="baselineOutput; else noResults">
+<div *ngIf="baselineOutput">
   <table class="table table-hover table-striped">
     <tbody>
       <tr>
@@ -50,9 +50,3 @@
     </tbody>
   </table>
 </div>
-
-<ng-template #noResults>
-  <div class="p-3 text-center text-muted">
-    <p>No results yet. Complete the baseline form with valid values to calculate dryer operating cost.</p>
-  </div>
-</ng-template>
