@@ -26,6 +26,12 @@
     "electron": "electron .",
     "lint": "ng lint",
     "test": "ng test",
+    "test:ca-regression-tests:fixtures": "node --test scripts/compressed-air-regression-tests/fixture-tools.test.mjs",
+    "ca:regression-tests:add-fixture": "node scripts/compressed-air-regression-tests/add-fixture.mjs",
+    "test:ca-regression-tests:core": "node scripts/compressed-air-regression-tests/run-regression-tests.mjs compare --scope core",
+    "test:ca-regression-tests:full": "node scripts/compressed-air-regression-tests/run-regression-tests.mjs compare --scope full",
+    "ca:regression-tests:record": "node scripts/compressed-air-regression-tests/run-regression-tests.mjs record --scope full",
+    "ca:regression-tests:report": "node scripts/compressed-air-regression-tests/run-regression-tests.mjs report --scope full",
     "dist": "electron-builder",
     "build:stats": "webpack build --config ./process-flow-diagram-component/webpack-build-mfe.config.js --mode=development && node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build --stats-json",
     "analyze": "webpack-bundle-analyzer dist/stats.json"

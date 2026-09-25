@@ -1,10 +1,14 @@
 const { join } = require('node:path');
+const { writeFileSync } = require('node:fs');
 
 if (!process.env.CHROME_BIN) {
   process.env.CHROME_BIN = require('puppeteer').executablePath();
 }
 
 module.exports = function (config) {
+  // Dedicated compressed-air commands set this output path. Ordinary Karma
+  // runs leave it unset and compare the core snapshot inside Jasmine instead.
+  const captureCompressedAirSnapshot = Boolean(process.env.CA_REGRESSION_TEST_OUTPUT);
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -14,10 +18,20 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
       require('karma-spec-reporter'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      require('@angular-devkit/build-angular/plugins/karma'),
+      { 'reporter:ca-snapshot': ['type', CompressedAirRegressionTestSnapshotReporter] }
     ],
     client: {
-      clearContext: false
+      clearContext: false,
+      // Pass orchestration choices into the browser without coupling the
+      // regression spec to Node-only filesystem or process APIs.
+      args: captureCompressedAirSnapshot
+        ? [
+            'ca-capture',
+            process.env.CA_REGRESSION_TEST_SCOPE === 'full' ? 'ca-scope-full' : 'ca-scope-core',
+            `ca-baseline=${process.env.CA_REGRESSION_TEST_BASELINE || 'pre-pr409-suite-1.2.5'}`,
+          ]
+        : []
     },
     jasmineHtmlReporter: {
       suppressAll: true
@@ -27,7 +41,7 @@ module.exports = function (config) {
       subdir: '.',
       reporters: [{ type: 'html' }, { type: 'text-summary' }]
     },
-    reporters: ['spec', 'kjhtml'],
+    reporters: captureCompressedAirSnapshot ? ['spec', 'ca-snapshot'] : ['spec', 'kjhtml'],
     specReporter: {
       maxLogLines: 5,
       suppressErrorSummary: false,
@@ -55,3 +69,31 @@ module.exports = function (config) {
     restartOnFileChange: true
   });
 };
+
+function CompressedAirRegressionTestSnapshotReporter(baseReporterDecorator) {
+  // Bridge the calculated snapshot from Chrome to the Node orchestration script.
+  // The spec sends base64 chunks through browser_info; this reporter validates,
+  // reassembles, and writes one temporary JSON file under ignored tmp/.
+  baseReporterDecorator(this);
+  const chunks = [];
+  let expectedChunks;
+
+  this.onBrowserInfo = (_browser, info) => {
+    if (!info.caSnapshotChunk) return;
+    const { index, total, data } = info.caSnapshotChunk;
+    expectedChunks = total;
+    chunks[index] = data;
+  };
+
+  this.onRunComplete = () => {
+    if (!process.env.CA_REGRESSION_TEST_OUTPUT) return;
+    if (!expectedChunks || chunks.filter(Boolean).length !== expectedChunks) {
+      throw new Error(`Compressed-air snapshot capture was incomplete (${chunks.filter(Boolean).length}/${expectedChunks ?? 0} chunks).`);
+    }
+    const json = Buffer.from(chunks.join(''), 'base64').toString('utf8');
+    JSON.parse(json);
+    writeFileSync(process.env.CA_REGRESSION_TEST_OUTPUT, `${json}\n`);
+  };
+}
+
+CompressedAirRegressionTestSnapshotReporter.$inject = ['baseReporterDecorator'];

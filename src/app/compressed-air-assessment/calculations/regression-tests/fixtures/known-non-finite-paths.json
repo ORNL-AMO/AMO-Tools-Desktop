@@ -1,0 +1,508 @@
+{
+  "schemaVersion": 1,
+  "fixtures": [
+    {
+      "fixtureId": "ca-real-001",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][8].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][8].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][4].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][5].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][6].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][8].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][5].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][6].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][8].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].reduceRunTimeSavings.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].reduceRunTimeSavings.paybackPeriod",
+        "$.output.modifications[1].compressorSummaries[0][4].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[0][5].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[0][6].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[0][8].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[1][5].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[1][6].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[1][8].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-002",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-003",
+      "paths": [
+        "$.output.baseline.results.total.annualEmissionOutput",
+        "$.output.modifications[0].combined.allSavingsResults.baselineResults.annualEmissionOutput",
+        "$.output.modifications[0].combined.allSavingsResults.savings.annualEmissionOutput",
+        "$.output.modifications[0].combined.allSavingsResults.savings.annualEmissionOutputSavings",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-004",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].improveEndUseEfficiencySavings.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].improveEndUseEfficiencySavings.paybackPeriod",
+        "$.output.modifications[1].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[1].dayTypes[0].improveEndUseEfficiencySavings.paybackPeriod",
+        "$.output.modifications[1].dayTypes[1].improveEndUseEfficiencySavings.paybackPeriod",
+        "$.output.modifications[2].compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[3].compressorSummaries[1][2].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-005",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][3].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][3].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][3].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][3].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[1].compressorSummaries[1][2].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-006",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-007",
+      "paths": [
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-008",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][2].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-009",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][3].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][3].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[1].allSavingsResults.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].allSavingsResults.savings.percentSavings",
+        "$.output.modifications[0].dayTypes[1].flowReallocationSavings.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].flowReallocationSavings.savings.percentSavings"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-010",
+      "paths": [
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][2].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-011",
+      "paths": [
+        "$.output.baseline.compressorSummaries[2][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[2][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[2][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[2][1].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[2].allSavingsResults.savings.percentSavings",
+        "$.output.modifications[0].dayTypes[2].flowReallocationSavings.savings.percentSavings",
+        "$.output.modifications[0].dayTypes[2].reduceAirLeaksSavings.paybackPeriod"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-012",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][3].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][4].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][5].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][6].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][7].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][8].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][3].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][4].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][5].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][6].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][7].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][8].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][3].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][4].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][5].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][6].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][7].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][8].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][3].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][4].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][5].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][6].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][7].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][8].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].allSavingsResults.paybackPeriod",
+        "$.output.modifications[0].dayTypes[0].flowReallocationSavings.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].allSavingsResults.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].allSavingsResults.savings.percentSavings",
+        "$.output.modifications[0].dayTypes[1].flowReallocationSavings.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].flowReallocationSavings.savings.percentSavings"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-013",
+      "paths": [
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-014",
+      "paths": [
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-015",
+      "paths": [
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-016",
+      "paths": [
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-017",
+      "paths": [
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-018",
+      "paths": [
+        "$.output.modifications[0].dayTypes[0].reduceRunTimeSavings.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].reduceRunTimeSavings.paybackPeriod",
+        "$.output.modifications[0].dayTypes[2].reduceRunTimeSavings.paybackPeriod"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-020",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-021",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][4].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][6].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][6].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-022",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][4].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][5].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-023",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][3].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][3].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-024",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-026",
+      "paths": [
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-028",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-029",
+      "paths": [
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-031",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].combined.reduceRunTimeSavings.paybackPeriod",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][3].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].reduceRunTimeSavings.paybackPeriod"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-032",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][4].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][6].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][5].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][6].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-033",
+      "paths": [
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-034",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].allSavingsResults.savings.percentSavings",
+        "$.output.modifications[0].dayTypes[0].flowReallocationSavings.savings.percentSavings"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-035",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-036",
+      "paths": [
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-037",
+      "paths": [
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-038",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-039",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].reduceRunTimeSavings.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].reduceRunTimeSavings.paybackPeriod"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-040",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-041",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].adjustedCompressors[0].performancePoints.maxFullFlow.dischargePressure",
+        "$.output.modifications[0].dayTypes[0].adjustedCompressors[2].performancePoints.maxFullFlow.dischargePressure",
+        "$.output.modifications[0].dayTypes[1].adjustedCompressors[0].performancePoints.maxFullFlow.dischargePressure",
+        "$.output.modifications[0].dayTypes[1].adjustedCompressors[2].performancePoints.maxFullFlow.dischargePressure"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-042",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].adjustedCompressors[0].performancePoints.maxFullFlow.dischargePressure",
+        "$.output.modifications[0].dayTypes[0].adjustedCompressors[2].performancePoints.maxFullFlow.dischargePressure",
+        "$.output.modifications[0].dayTypes[1].adjustedCompressors[0].performancePoints.maxFullFlow.dischargePressure",
+        "$.output.modifications[0].dayTypes[1].adjustedCompressors[2].performancePoints.maxFullFlow.dischargePressure"
+      ]
+    },
+    {
+      "fixtureId": "ca-real-043",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].adjustedCompressors[0].performancePoints.maxFullFlow.dischargePressure",
+        "$.output.modifications[0].dayTypes[0].adjustedCompressors[2].performancePoints.maxFullFlow.dischargePressure",
+        "$.output.modifications[0].dayTypes[1].adjustedCompressors[0].performancePoints.maxFullFlow.dischargePressure",
+        "$.output.modifications[0].dayTypes[1].adjustedCompressors[2].performancePoints.maxFullFlow.dischargePressure"
+      ]
+    },
+    {
+      "fixtureId": "ca-synthetic-001",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][2].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][2].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-synthetic-002",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[0][2].specificPowerAvgLoad"
+      ]
+    },
+    {
+      "fixtureId": "ca-synthetic-004",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][1].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][1].specificPowerAvgLoad",
+        "$.output.modifications[0].dayTypes[0].replaceCompressorsProfileSummary[1].avgPercentPower",
+        "$.output.modifications[0].dayTypes[0].replaceCompressorsSavings.paybackPeriod",
+        "$.output.modifications[0].dayTypes[1].replaceCompressorsProfileSummary[1].avgPercentPower",
+        "$.output.modifications[0].dayTypes[1].replaceCompressorsSavings.paybackPeriod"
+      ]
+    },
+    {
+      "fixtureId": "ca-synthetic-005",
+      "paths": [
+        "$.output.modifications[0].dayTypes[0].allSavingsResults.paybackPeriod",
+        "$.output.modifications[0].dayTypes[0].flowReallocationSavings.paybackPeriod"
+      ]
+    },
+    {
+      "fixtureId": "ca-synthetic-006",
+      "paths": [
+        "$.output.baseline.compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.baseline.compressorSummaries[1][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[0][0].specificPowerAvgLoad",
+        "$.output.modifications[0].compressorSummaries[1][0].specificPowerAvgLoad"
+      ]
+    }
+  ]
+}
