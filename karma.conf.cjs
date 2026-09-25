@@ -6,6 +6,8 @@ if (!process.env.CHROME_BIN) {
 }
 
 module.exports = function (config) {
+  // Dedicated compressed-air commands set this output path. Ordinary Karma
+  // runs leave it unset and compare the core snapshot inside Jasmine instead.
   const captureCompressedAirSnapshot = Boolean(process.env.CA_REGRESSION_TEST_OUTPUT);
   config.set({
     basePath: '',
@@ -21,6 +23,8 @@ module.exports = function (config) {
     ],
     client: {
       clearContext: false,
+      // Pass orchestration choices into the browser without coupling the
+      // regression spec to Node-only filesystem or process APIs.
       args: captureCompressedAirSnapshot
         ? [
             'ca-capture',
@@ -67,6 +71,9 @@ module.exports = function (config) {
 };
 
 function CompressedAirRegressionTestSnapshotReporter(baseReporterDecorator) {
+  // Bridge the calculated snapshot from Chrome to the Node orchestration script.
+  // The spec sends base64 chunks through browser_info; this reporter validates,
+  // reassembles, and writes one temporary JSON file under ignored tmp/.
   baseReporterDecorator(this);
   const chunks = [];
   let expectedChunks;

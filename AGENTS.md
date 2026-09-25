@@ -14,8 +14,11 @@ The AMO-Tools-Desktop and MEASUR-Tools-Suite projects are maintained by the same
 - `docs/architecture/measur-tools-suite-integration.md`: how the WebAssembly suite is loaded and adapted.
 - `docs/architecture/data-persistence.md`: IndexedDB, default data, backups, and saved assessment data.
 - `docs/architecture/build-and-runtime.md`: Angular, Electron, process-flow component, and WASM build/runtime concerns.
+- `docs/testing/assessment-regression-tests.md`: how calculation-regression corpora work and how to extend the pattern to another assessment.
 - `docs/adr/0001-suite-api-boundary.md`: decision record for keeping suite calls behind `src/app/tools-suite-api/`.
 - `src/app/tools-suite-api/AGENTS.md`: detailed guidance for suite wrapper services, typings, Emscripten object cleanup, and suite migration work.
+- `scripts/compressed-air-regression-tests/AGENTS.md`: fixture, privacy, comparison, reporting, and baseline workflow for compressed-air regression tests.
+- `src/app/compressed-air-assessment/calculations/regression-tests/AGENTS.md`: browser runner, real-WASM calculation, and synthetic-fixture guidance.
 - `process-flow-diagram-component/AGENTS.md`: guidance for the React process-flow package.
 
 ## Repo-Wide Rules

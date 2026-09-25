@@ -1,3 +1,11 @@
+/**
+ * Pure Node utilities shared by fixture addition and baseline comparison.
+ *
+ * This file intentionally contains no Angular or Suite imports. It handles data
+ * around the calculations, while the Karma runner owns real-WASM execution.
+ * Keeping this layer pure lets privacy and comparison behavior run quickly in
+ * node:test without starting a browser.
+ */
 import { createHash } from 'node:crypto';
 
 const INACTIVE_EEM_ORDER = 100;
@@ -55,7 +63,7 @@ export function sha256(value) {
   return createHash('sha256').update(typeof value === 'string' ? value : stableStringify(value, 0)).digest('hex');
 }
 
-export function isCompleteCompressedAirAssessment(assessment, settingsByAssessmentId) {
+export function isCompleteCompressedAirAssessment(assessment, settings) {
   const compressedAir = assessment?.compressedAirAssessment;
   return assessment?.type === 'CompressedAir'
     && compressedAir?.setupDone === true
@@ -63,51 +71,107 @@ export function isCompleteCompressedAirAssessment(assessment, settingsByAssessme
     && compressedAir.compressorInventoryItems.length > 0
     && Array.isArray(compressedAir.systemProfile?.profileSummary)
     && compressedAir.systemProfile.profileSummary.length > 0
-    && settingsByAssessmentId.has(assessment.id);
+    && Boolean(settings);
 }
 
-export function sanitizeBackup(backup) {
-  const settingsByAssessmentId = new Map(
-    (backup.settings ?? [])
-      .filter(settings => settings.assessmentId !== undefined && settings.assessmentId !== null)
-      .map(settings => [settings.assessmentId, settings]),
-  );
+/**
+ * Finds calculation-ready compressed-air assessment/settings pairs in a normal
+ * MEASUR assessment export. System-backup records deliberately are not handled:
+ * this pipeline is for adding one deliberately exported assessment, not for
+ * rebuilding the corpus from a database backup.
+ */
+export function findCompleteCompressedAirAssessments(exportedData) {
+  return (exportedData?.assessments ?? [])
+    .filter(entry => entry?.assessment && entry?.settings)
+    .map(entry => ({ assessment: entry.assessment, settings: entry.settings }))
+    .filter(({ assessment, settings }) => isCompleteCompressedAirAssessment(assessment, settings));
+}
 
-  const complete = (backup.assessments ?? [])
-    .filter(assessment => isCompleteCompressedAirAssessment(assessment, settingsByAssessmentId));
-  const sensitiveValues = new Set(complete.flatMap(assessment => [
+/**
+ * Adds one private assessment export to an existing sanitized corpus.
+ *
+ * Existing fixtures are cloned and kept in their current order. The new source
+ * is sanitized before it is compared, inspected, or returned; callers should
+ * write only this returned corpus and coverage object to the repository.
+ */
+export function addFixtureToCorpus(existingCorpus, exportedData) {
+  const matches = findCompleteCompressedAirAssessments(exportedData);
+  if (matches.length === 0) {
+    throw new Error('The export does not contain one complete compressed-air assessment with matching settings.');
+  }
+  if (matches.length > 1) {
+    throw new Error('The export contains multiple complete compressed-air assessments. Export one assessment and try again.');
+  }
+
+  const existingFixtures = deepClone(existingCorpus?.fixtures ?? []);
+  const fixtureId = getNextRealFixtureId(existingFixtures);
+  const { assessment, settings } = matches[0];
+  const fixture = sanitizeAssessment(assessment, settings, fixtureId);
+  const sensitiveValues = new Set([
     ...collectSensitiveStrings(assessment),
-    ...collectSensitiveSettingStrings(settingsByAssessmentId.get(assessment.id)),
-  ]));
+    ...collectSensitiveSettingStrings(settings),
+  ]);
 
-  const fixtures = complete.map((assessment, index) => sanitizeAssessment(
-    assessment,
-    settingsByAssessmentId.get(assessment.id),
-    `ca-real-${String(index + 1).padStart(3, '0')}`,
-  ));
-
-  const privacy = verifyPrivacy(fixtures, sensitiveValues);
+  const privacy = verifyPrivacy([fixture], sensitiveValues);
   if (!privacy.valid) {
     throw new Error(`Sanitized fixture privacy validation failed: ${privacy.errors.join('; ')}`);
   }
 
-  const coreFixtureIds = selectCoreFixtureIds(fixtures, 7);
+  for (const existing of existingFixtures) {
+    const comparable = sanitizeAssessment(assessment, settings, existing.fixtureId);
+    comparable.source = existing.source;
+    if (stableStringify(comparable, 0) === stableStringify(existing, 0)) {
+      throw new Error(`This assessment is already represented by ${existing.fixtureId}.`);
+    }
+  }
+
+  const fixtures = [...existingFixtures, fixture];
+  const finalPrivacy = verifyPrivacy(fixtures);
+  if (!finalPrivacy.valid) {
+    throw new Error(`Combined fixture privacy validation failed: ${finalPrivacy.errors.join('; ')}`);
+  }
+
+  const versions = [...new Set(fixtures
+    .map(item => item.assessment?.appVersion)
+    .filter(Boolean))].sort();
+  const corpus = {
+    ...deepClone(existingCorpus),
+    schemaVersion: existingCorpus?.schemaVersion ?? 1,
+    sourceAppVersion: versions.join(', ') || 'unknown',
+    fixtures,
+  };
+
   return {
-    corpus: {
-      schemaVersion: 1,
-      sourceAppVersion: uniqueValue(complete.map(assessment => assessment.appVersion)) ?? 'unknown',
-      fixtures,
-    },
-    coverage: {
-      schemaVersion: 1,
-      realFixtureCount: fixtures.length,
-      coreFixtureIds,
-      tags: countTags(fixtures),
-      corpusSha256: sha256(fixtures),
-    },
+    fixture,
+    corpus,
+    coverage: buildCoverage(fixtures),
   };
 }
 
+export function buildCoverage(fixtures) {
+  return {
+    schemaVersion: 1,
+    realFixtureCount: fixtures.length,
+    coreFixtureIds: selectCoreFixtureIds(fixtures),
+    tags: countTags(fixtures),
+    corpusSha256: sha256(fixtures),
+  };
+}
+
+function getNextRealFixtureId(fixtures) {
+  const highest = fixtures.reduce((maximum, fixture) => {
+    const match = /^ca-real-(\d+)$/.exec(fixture.fixtureId);
+    return match ? Math.max(maximum, Number(match[1])) : maximum;
+  }, 0);
+  return `ca-real-${String(highest + 1).padStart(3, '0')}`;
+}
+
+/**
+ * Sanitizes one calculation-ready assessment and remaps every retained internal
+ * reference to deterministic IDs. Numeric and boolean calculation inputs remain
+ * unchanged; names, notes, dates, locations, source IDs, and Log Tool links do
+ * not cross the private-export boundary.
+ */
 export function sanitizeAssessment(assessment, settings, fixtureId) {
   const source = deepClone(assessment);
   const compressedAir = source.compressedAirAssessment;
@@ -169,7 +233,7 @@ export function sanitizeAssessment(assessment, settings, fixtureId) {
 
   return {
     fixtureId,
-    source: 'sanitized-backup',
+    source: 'sanitized-export',
     coverageTags: getCoverageTags(compressedAir, settings),
     assessment: sanitizedAssessment,
     settings: sanitizeSettings(settings),
@@ -343,7 +407,12 @@ export function getCoverageTags(compressedAir, settings) {
   return [...tags].sort();
 }
 
-export function selectCoreFixtureIds(fixtures, limit = 7) {
+/**
+ * Greedy set-cover selection for the fast test set. Sorting by fixture ID makes
+ * ties deterministic, so refreshing coverage produces the same core cases.
+ * The full command always runs every real and synthetic fixture.
+ */
+export function selectCoreFixtureIds(fixtures, limit = Number.POSITIVE_INFINITY) {
   const uncovered = new Set(fixtures.flatMap(fixture => fixture.coverageTags));
   const selected = [];
   const candidates = [...fixtures].sort((a, b) => a.fixtureId.localeCompare(b.fixtureId));
@@ -378,11 +447,12 @@ function countTags(fixtures) {
   return Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)));
 }
 
-function uniqueValue(values) {
-  const unique = [...new Set(values.filter(Boolean))];
-  return unique.length === 1 ? unique[0] : undefined;
-}
-
+/**
+ * Final defense before sanitized data can be written or committed. Common
+ * database/backup fields are forbidden for every module; sensitiveValues adds
+ * strings collected from this particular private source so accidental leakage
+ * is caught even when it appears under an otherwise allowed key.
+ */
 export function verifyPrivacy(fixtures, sensitiveValues = new Set()) {
   const errors = [];
   const forbiddenKeys = new Set([
@@ -490,6 +560,14 @@ function walk(value, path, visit) {
   }
 }
 
+/**
+ * Compares a current calculation snapshot with an accepted baseline.
+ *
+ * Object fields, array order/length, flags, strings, nulls, and special-value
+ * representations are exact. Finite numbers use a hybrid tolerance of
+ * tolerance * max(1, abs(expected)) so tiny floating-point drift does not hide
+ * meaningful engineering changes or create noise near zero.
+ */
 export function compareSnapshots(expected, actual, tolerance = 1e-6) {
   const differences = [];
   compareValue(expected, actual, '$', differences, tolerance);

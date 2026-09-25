@@ -1,75 +1,110 @@
 # Compressed-air regression tests
 
-These tests answer one question: **did a code or Suite change alter the results of
-an existing compressed-air assessment?**
+These tests answer one question: **did a Desktop or Suite change alter the
+results of an existing compressed-air assessment?**
 
-The checked-in test data represents Desktop behavior at commit `52f3b3bdb` with
-`measur-tools-suite@1.2.5`. It gives us a stable, pre-PR #409 reference point for
-reviewing later calculation changes.
+The permanent starting point is Desktop commit `52f3b3bdb` with
+`measur-tools-suite@1.2.5`. Its expected results are stored in the
+`pre-pr409-suite-1.2.5` baseline.
 
-## What is already in the repository?
+## What is checked in?
 
-The repository already contains everything needed to run the tests:
+The repository contains everything needed to run the tests:
 
-- 43 sanitized assessments extracted from a private MEASUR system backup.
-- A seven-assessment subset used by the faster, normal test run.
-- Five synthetic assessments created in test code to cover missing cases.
-- The expected calculation results in the
-  `pre-pr409-suite-1.2.5` baseline.
+- `fixtures/corpus.json` contains sanitized assessment inputs. It currently has
+  43 real assessment cases originally derived from a private system backup.
+- `synthetic-fixtures.ts` creates five targeted cases in memory for scenarios
+  that were missing from the real assessments.
+- `fixtures/coverage.json` records coverage tags, the smaller core test set, and
+  a hash of the real fixture corpus.
+- `fixtures/baselines/` contains accepted calculation outputs.
 
-You do **not** need the private backup just to run the tests. The extraction
-command is only needed when intentionally rebuilding the sanitized assessment
-fixtures from a MEASUR backup.
+The original private backup has no role in the tests and is not needed again.
+It is not stored in the repository.
 
-## Extraction: what goes in and what comes out?
+## Where are the Suite calculations called?
 
-The extraction command requires you to provide an existing MEASUR system backup
-`.json` file as its input. This is the same kind of JSON file produced when a
-user exports or backs up their MEASUR data. The command does not create or
-download that backup for you.
+The Karma test uses the production calculation path and the real Suite WASM:
 
-For example, if the private backup is at `/private/path/to/backup.json`, run this
-from the repository root:
+```text
+compressed-air-regression-tests.spec.ts
+  -> compressed-air-regression-tests.runner.ts
+    -> Desktop baseline and modification result classes
+      -> CompressedAirCalculationService
+        -> CompressedAirSuiteApiService
+          -> measur-tools-suite JavaScript/WASM
+  -> compare current results with an accepted baseline
+```
+
+The files under `src/app/.../regression-tests/` run in the browser through
+Karma, where the Suite WASM can initialize. The files in this `scripts/`
+directory manage sanitized fixture inputs, run the focused Karma test, and
+compare or record outputs.
+
+Important files:
+
+- `compressed-air-regression-tests.spec.ts` is the Karma entry point.
+- `compressed-air-regression-tests.runner.ts` migrates cloned fixture data and
+  calculates baseline and modification results through application services.
+- `synthetic-fixtures.ts` creates targeted coverage cases in memory.
+- `run-regression-tests.mjs` runs Karma and compares, reports, or records its
+  result snapshot.
+- `add-fixture.mjs` safely adds one private assessment export to the corpus.
+- `fixture-tools.mjs` contains sanitization, privacy, coverage, stable JSON, and
+  comparison helpers.
+- `karma.conf.cjs` transfers the large browser result back to the Node command.
+
+`corpus.json` is test **input**. A baseline is expected test **output**. Normal
+tests never rewrite either one.
+
+## Adding one real assessment
+
+Adding a fixture is optional. Do it when a new assessment represents useful
+calculation coverage that is not already in the corpus. For a small, artificial
+edge case, adding a synthetic fixture in code is usually clearer.
+
+First, use MEASUR to export the one complete compressed-air assessment you want
+to add. The JSON export must include that assessment and its matching settings.
+It may contain unrelated or incomplete records, but it must contain exactly one
+**complete** compressed-air assessment.
+
+Keep the export outside the repository, then run:
 
 ```sh
-npm run ca:regression-tests:extract -- --input "/private/path/to/backup.json" --accept
+npm run ca:regression-tests:add-fixture -- --input "/private/path/to/assessment-export.json" --accept
 ```
 
 The command:
 
-1. Reads the backup from the path supplied after `--input`.
-2. Selects only complete compressed-air assessments that have compressor
-   inventory, system-profile data, and matching settings.
-3. Ignores incomplete assessments and all unrelated MEASUR data.
-4. Removes Log Tool data and replaces identifying names, notes, IDs, locations,
-   dates, and other descriptive information with deterministic test values.
-5. Writes the sanitized assessment fixtures to
-   `src/app/compressed-air-assessment/calculations/regression-tests/fixtures/corpus.json`.
-6. Writes fixture counts, coverage tags, the seven-case selection, and a
-   repeatability hash to
-   `src/app/compressed-air-assessment/calculations/regression-tests/fixtures/coverage.json`.
+1. Reads the private export without changing it.
+2. Finds the one complete compressed-air assessment and its settings.
+3. Refuses the file if there are no complete matches, multiple complete
+   matches, or an equivalent fixture is already present.
+4. Removes Log Tool data and replaces names, notes, IDs, locations, dates, and
+   other identifying text with deterministic test values.
+5. Runs privacy checks before writing anything.
+6. Appends the next ID, such as `ca-real-044`, without rebuilding or renumbering
+   existing fixtures.
+7. Refreshes `coverage.json`, including the core selection and corpus hash.
 
-The source backup is read only. It is not changed, copied into the repository,
-or included in command output. Keep it outside the repository because it may
-contain private information.
+The private path and source names are not printed or stored. Only the sanitized
+fixture is committed. `--accept` is required because the command intentionally
+changes checked-in test inputs.
 
-`--accept` is an intentional-overwrite safeguard. Extraction replaces the
-checked-in `corpus.json` and `coverage.json`, so review those changes and rerun
-the privacy checks before committing them.
-
-Extraction creates test **inputs**; it does not calculate or update the expected
-results baseline. Baseline recording is a separate, explicitly accepted step.
+The command does **not** calculate or accept expected results. After adding a
+fixture, inspect the changes to `corpus.json` and `coverage.json`, run the
+privacy/helper tests, and calculate the full corpus. A missing expected result
+is intentional until the team reviews it and records a new baseline.
 
 ## Running the tests
 
-Run the seven-assessment core set during normal development:
+Run the smaller core set during normal development:
 
 ```sh
 npm run test:ca-regression-tests:core
 ```
 
-Run the complete set of 43 sanitized assessments plus five synthetic
-assessments before reviewing or accepting calculation changes:
+Run every real and synthetic fixture before reviewing calculation changes:
 
 ```sh
 npm run test:ca-regression-tests:full
@@ -79,8 +114,8 @@ Both commands calculate current results and compare them with the checked-in
 baseline. They do not rewrite fixtures or expected results. A difference causes
 the command to fail.
 
-The extraction and comparison helpers also have focused tests for filtering,
-sanitization, privacy, deterministic output, and comparison behavior:
+Run the fast Node tests for sanitization, fixture addition, privacy, coverage,
+and comparison behavior with:
 
 ```sh
 npm run test:ca-regression-tests:fixtures
@@ -88,50 +123,46 @@ npm run test:ca-regression-tests:fixtures
 
 ## Reviewing differences
 
-After a Suite or Desktop calculation change, generate a detailed report without
-making the command fail merely because results differ:
+After a Suite or Desktop calculation change, generate a report without failing
+just because results differ:
 
 ```sh
 npm run ca:regression-tests:report -- --baseline pre-pr409-suite-1.2.5 --allow-differences
 ```
 
-This writes sanitized JSON and Markdown reports under
-`tmp/compressed-air-regression-tests/`. The `tmp` directory is ignored by Git.
-The report shows which fixture and result field changed, along with the expected
-value, actual value, and numerical difference where applicable.
+Sanitized JSON and Markdown reports are written under the ignored
+`tmp/compressed-air-regression-tests/` directory. They identify the fixture and
+field that changed and show numerical differences where applicable.
 
 ## Recording a baseline
 
-A baseline is the checked-in set of expected calculation results. Record one
-only after the relevant result changes have been reviewed and accepted:
+Record expected results only after changes have been reviewed and accepted:
 
 ```sh
 npm run ca:regression-tests:record -- --baseline post-change-baseline-name --accept
 ```
 
-This runs all 48 cases and creates a separate baseline file under
-`src/app/compressed-air-assessment/calculations/regression-tests/fixtures/baselines/`.
-Use a new descriptive name for a new calculation state.
+This creates a separate baseline file under `fixtures/baselines/`. Use a new,
+descriptive name for each accepted calculation state.
 
 Never overwrite or remove `pre-pr409-suite-1.2.5`; it is the permanent reference
-for measuring the effect of PR #409 and Desktop issue #8903. The `--accept` flag
-exists to prevent accidental baseline creation or replacement.
+for measuring the effect of Suite PR #409 and Desktop issue #8903.
 
-## Typical workflows
+## Typical workflow
 
-For ordinary development, run the core test. No backup or extraction is needed:
+For ordinary development, run the core test. No private export is needed.
 
-```sh
-npm run test:ca-regression-tests:core
-```
+When evaluating a calculation change:
 
-When evaluating a calculation-package update:
-
-1. Run the full test against `pre-pr409-suite-1.2.5`.
+1. Run the full test against the accepted baseline.
 2. Generate the difference report.
-3. Review and explain the changes.
-4. After approval, record a new, separately named baseline.
+3. Review and explain the differences.
+4. After approval, record a separately named baseline.
 
-Only rerun extraction when the team intentionally wants to rebuild the sanitized
-fixture corpus from a supplied MEASUR backup. Extraction is not part of a normal
-test run.
+When adding a new real scenario:
+
+1. Export that one assessment from MEASUR.
+2. Run `ca:regression-tests:add-fixture` against the private export.
+3. Review the sanitized corpus and coverage changes.
+4. Run the helper/privacy tests and the full calculation report.
+5. Record a new baseline only after the new result is reviewed.

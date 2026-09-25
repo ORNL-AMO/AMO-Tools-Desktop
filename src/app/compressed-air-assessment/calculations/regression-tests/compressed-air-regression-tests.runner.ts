@@ -1,3 +1,17 @@
+/**
+ * Browser-side integration runner for the compressed-air regression corpus.
+ *
+ * Its purpose is to exercise the production calculation split, not reproduce
+ * any engineering formula in test code. The important call chain is:
+ *
+ *   assessment result classes
+ *     -> CompressedAirCalculationService
+ *       -> CompressedAirSuiteApiService
+ *         -> measur-tools-suite JavaScript/WASM compressor classes
+ *
+ * The runner then captures Desktop's baseline, modification, savings, emissions,
+ * and report-visible results as plain canonical JSON for comparison.
+ */
 import { UntypedFormBuilder } from '@angular/forms';
 import packageJson from '../../../../../package.json';
 import { ElectronService } from '../../../electron/electron.service';
@@ -42,6 +56,9 @@ export class CompressedAirRegressionTestRunner {
   private convertCompressedAirService: ConvertCompressedAirService;
 
   async initialize(): Promise<void> {
+    // Construct the same adapters used by the application, but omit IndexedDB
+    // services that are not needed by compressed-air calculations. Passing
+    // isElectron=false makes locateFile load the Karma-served client.wasm.
     const toolsSuiteApiService = new ToolsSuiteApiService(
       null, null, null, null, null, null, null, null,
       { isElectron: false } as ElectronService,
@@ -55,6 +72,9 @@ export class CompressedAirRegressionTestRunner {
     const inventoryFormService = new InventoryFormService(formBuilder, performancePointsFormService);
     const suiteApiHelperService = new SuiteApiHelperService(toolsSuiteApiService);
     const compressedAirSuiteApiService = new CompressedAirSuiteApiService(suiteApiHelperService, toolsSuiteApiService);
+    // This service is the production boundary used by profile calculations.
+    // Calls to compressorsCalc() made by the assessment result classes route
+    // through compressedAirSuiteApiService into real Emscripten instances.
     this.calculationService = new CompressedAirCalculationService(
       convertUnitsService,
       this.convertCompressedAirService,
@@ -70,6 +90,8 @@ export class CompressedAirRegressionTestRunner {
     scope: 'core' | 'full',
     baselineName = 'pre-pr409-suite-1.2.5',
   ): RegressionTestSnapshot {
+    // Synthetic fixtures are derived in memory on every run. They fill known
+    // coverage gaps without placing invented assessments in the private corpus.
     const allFixtures = [
       ...corpus.fixtures,
       ...createSyntheticFixtures(corpus.fixtures, this.convertCompressedAirService),
@@ -96,11 +118,15 @@ export class CompressedAirRegressionTestRunner {
     try {
       let assessment = clone(fixture.assessment);
       const settings = clone(fixture.settings);
+      // Fixtures retain their source MEASUR shape. Migration verifies that an
+      // older saved assessment still reaches the current calculation path.
       assessment = this.updateDataService.updateAssessmentVersion(assessment);
       assessment.compressedAirAssessment.replacementCompressorInventoryItems ??= [];
       const compressedAirAssessment = assessment.compressedAirAssessment;
 
       stage = 'baseline';
+      // Constructing this production result object calculates every day type,
+      // compressor, and interval. Those profile calculations call the Suite.
       const baseline = new CompressedAirAssessmentBaselineResults(
         compressedAirAssessment,
         settings,
@@ -125,6 +151,8 @@ export class CompressedAirRegressionTestRunner {
       };
 
       stage = 'modifications';
+      // Run modifications in the application's stored order. This includes the
+      // Desktop-owned EEM transformations around Suite compressor calculations.
       const modifications = compressedAirAssessment.modifications.map(modification => {
         const calculation = new CompressedAirAssessmentModificationResults(
           compressedAirAssessment,
@@ -158,6 +186,8 @@ export class CompressedAirRegressionTestRunner {
       const output = { baseline: baselineProjection, modifications };
       stage = 'output-validation';
       const nonFinitePaths: string[] = [];
+      // Canonicalization removes class identity/key-order noise while preserving
+      // array order, missing values, and known non-finite results explicitly.
       const result = canonicalize({
         fixtureId: fixture.fixtureId,
         source: fixture.source,
@@ -187,6 +217,8 @@ export class CompressedAirRegressionTestRunner {
 }
 
 export function compareRegressionTestSnapshots(expected: any, actual: any, tolerance = 1e-6): string[] {
+  // Used by ordinary Jasmine runs. Dedicated commands use the richer Node
+  // comparator in fixture-tools.mjs so they can produce structured reports.
   const differences: string[] = [];
   compareValue(expected, actual, '$', differences, tolerance);
   return differences;

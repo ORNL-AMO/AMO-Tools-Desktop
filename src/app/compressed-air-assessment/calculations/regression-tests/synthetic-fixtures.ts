@@ -1,12 +1,23 @@
+/**
+ * Targeted coverage that is absent from the sanitized real assessments.
+ *
+ * Each case clones a sanitized fixture, changes only the inputs needed for the
+ * missing scenario, and remains in memory. This avoids inventing a second saved-
+ * data format and ensures synthetic cases follow the same migration/calculation
+ * path as real assessments. Keep coverageTags synchronized with each mutation;
+ * they explain why the fixture exists and drive deterministic core selection.
+ */
 import { ConvertCompressedAirService } from '../../convert-compressed-air.service';
 
 export interface CompressedAirRegressionTestFixture {
   fixtureId: string;
-  source: 'sanitized-backup' | 'synthetic';
+  source: 'sanitized-backup' | 'sanitized-export' | 'synthetic';
   coverageTags: string[];
   assessment: any;
   settings: any;
 }
+
+export const SYNTHETIC_FIXTURE_COUNT = 5;
 
 export function createSyntheticFixtures(
   realFixtures: CompressedAirRegressionTestFixture[],
@@ -22,6 +33,7 @@ export function createSyntheticFixtures(
 }
 
 function createPositiveDisplacementControls(realFixtures: CompressedAirRegressionTestFixture[]): CompressedAirRegressionTestFixture {
+  // Adds modulation-without-unload, start/stop, and reciprocating coverage.
   const fixture = cloneFixture(findFixture(realFixtures, 'ca-real-002'), 'ca-synthetic-001');
   const data = fixture.assessment.compressedAirAssessment;
   const first = data.compressorInventoryItems[0];
@@ -43,6 +55,7 @@ function createPositiveDisplacementControls(realFixtures: CompressedAirRegressio
 }
 
 function createCentrifugalControls(realFixtures: CompressedAirRegressionTestFixture[]): CompressedAirRegressionTestFixture {
+  // Exercises all centrifugal control IDs using one consistent compressor shape.
   const fixture = cloneFixture(findFixture(realFixtures, 'ca-real-008'), 'ca-synthetic-002');
   const data = fixture.assessment.compressedAirAssessment;
   const centrifugal = data.compressorInventoryItems.find(item => item.nameplateData.compressorType === 6)
@@ -76,6 +89,7 @@ function createMetricLoadSharing(
   realFixtures: CompressedAirRegressionTestFixture[],
   convertCompressedAirService: ConvertCompressedAirService,
 ): CompressedAirRegressionTestFixture {
+  // Covers Metric conversion, measured airflow, load sharing, and 15-minute rows.
   const fixture = cloneFixture(findFixture(realFixtures, 'ca-real-008'), 'ca-synthetic-003');
   const data = fixture.assessment.compressedAirAssessment;
   const oldSettings = clone(fixture.settings);
@@ -97,6 +111,7 @@ function createMetricLoadSharing(
 }
 
 function createCascadingReplacement(realFixtures: CompressedAirRegressionTestFixture[]): CompressedAirRegressionTestFixture {
+  // Covers ordered cascading/replacement EEMs, percent power, and 30-minute rows.
   const fixture = cloneFixture(findFixture(realFixtures, 'ca-real-002'), 'ca-synthetic-004');
   const data = fixture.assessment.compressedAirAssessment;
   data.systemProfile.systemProfileSetup.profileDataType = 'percentPower';
@@ -137,6 +152,7 @@ function createCascadingReplacement(realFixtures: CompressedAirRegressionTestFix
 }
 
 function createTwentyFourHourBoundaries(realFixtures: CompressedAirRegressionTestFixture[]): CompressedAirRegressionTestFixture {
+  // Preserves current zero-savings and insufficient-capacity boundary behavior.
   const fixture = cloneFixture(findFixture(realFixtures, 'ca-real-025'), 'ca-synthetic-005');
   const data = fixture.assessment.compressedAirAssessment;
   setInterval(data, 24);

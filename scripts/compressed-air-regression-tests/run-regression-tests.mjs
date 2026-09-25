@@ -1,3 +1,17 @@
+/**
+ * Node orchestrator for the compressed-air regression tests.
+ *
+ * Angular/Karma must perform the calculations because the production Suite
+ * integration is browser/WASM based. This command starts that focused Karma
+ * spec in capture mode, receives the calculated JSON through the custom Karma
+ * reporter, and then performs one of three explicit operations:
+ *
+ *   compare - fail when current results differ from a committed baseline
+ *   record  - write a separately named baseline (requires --accept)
+ *   report  - describe differences without failing (requires --allow-differences)
+ *
+ * Normal comparison and reporting never modify committed fixtures or baselines.
+ */
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -26,6 +40,9 @@ if (args.command === 'report' && !args.allowDifferences) {
 
 mkdirSync(temporaryDirectory, { recursive: true });
 const actualPath = resolve(temporaryDirectory, `actual-${args.scope}.json`);
+
+// The environment variables put the Karma spec in capture mode. In this mode
+// the browser calculates results but leaves comparison and reporting to Node.
 const test = spawnSync(
   process.platform === 'win32' ? 'npx.cmd' : 'npx',
   ['ng', 'test', '--watch=false', '--no-progress', '--include=**/compressed-air-regression-tests.spec.ts'],
