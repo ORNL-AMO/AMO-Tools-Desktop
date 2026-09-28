@@ -40,6 +40,7 @@ describe('FsatComponent', () => {
       assessmentTab: new BehaviorSubject<string>('explore-opportunities'),
       showUpdateUnitsModal: new BehaviorSubject<{ show: boolean, oldSettings?: Settings }>({ show: false }),
       smallScreenTab: new BehaviorSubject<string>('form'),
+      containerHeight: new BehaviorSubject<number>(undefined),
       openNewModal: new BehaviorSubject<boolean>(false),
       openModificationModal: new BehaviorSubject<boolean>(false),
       showExportModal: new BehaviorSubject<boolean>(false),
