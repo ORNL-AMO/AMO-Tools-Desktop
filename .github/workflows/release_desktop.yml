@@ -272,7 +272,7 @@ jobs:
           path: release
           merge-multiple: true
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         # if: startsWith(github.ref, 'refs/tags/') # Uncomment if enabling tag gating
         with:
           name: MEASUR v${{ env.VERSION }}

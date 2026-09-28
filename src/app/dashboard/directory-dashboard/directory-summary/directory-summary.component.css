@@ -87,3 +87,9 @@ td, a{
 	background-color: #9da19f;
 	width: .3em;
 }
+
+.info-icon{
+  font-size: 16px;
+  color: var(--measur-brand);
+  cursor: help;
+}

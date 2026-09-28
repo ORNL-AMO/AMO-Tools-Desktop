@@ -9,7 +9,7 @@
   <hr class="my-1 hr-spacer">
 
   <div class="my-2"
-    *ngIf="psat.modifications.length == 0 || psat.modifications === undefined || psat.modifications === null">
+    *ngIf="psat.modifications === undefined || psat.modifications === null || psat.modifications.length == 0">
     <h6>
       <small class="text-muted">
         First determine if your pump’s operating conditions (head, flow) are correct for your system needs. If they are

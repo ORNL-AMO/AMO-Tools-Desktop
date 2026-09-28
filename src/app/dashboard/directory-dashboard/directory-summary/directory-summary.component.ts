@@ -102,6 +102,17 @@ export class DirectorySummaryComponent implements OnInit {
     this.selectedContact = (this.selectedContact?.id === contact.id) ? undefined : contact;
   }
 
+  async setPrimaryContact(contact: SavedContact, event: MouseEvent) {
+    event.stopPropagation();
+    const isPrimary: boolean = !contact.isPrimary;
+    const contactsToUpdate: Array<SavedContact> = this.savedContacts
+      .filter(existingContact => existingContact.isPrimary || existingContact.id === contact.id)
+      .map(existingContact => ({ ...existingContact, isPrimary: existingContact.id === contact.id ? isPrimary : false }));
+    await Promise.all(contactsToUpdate.map(updatedContact => firstValueFrom(this.contactDbService.updateWithObservable(updatedContact))));
+    await this.contactDbService.setAll();
+    this.savedContacts = this.contactDbService.allContacts;
+  }
+
   openConfirmDeleteContactModal() {
     if (!this.selectedContact) return;
     this.confirmDeleteContactData = {

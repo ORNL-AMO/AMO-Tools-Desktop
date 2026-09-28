@@ -14,7 +14,7 @@ import { ReportChartRenderService } from '../../shared/report-builder/services/r
 import { getGraphColors } from '../../shared/helperFunctions';
 import {
   ExecutiveSummaryResults, PlantSystemSummaryResults, SystemAnnualSummaryResults, SystemTrueCostData,
-  NodeErrors, getIsDiagramValid, getSystemTrueCostData, sortTrueCostReport, WaterAssessment,
+  DiagramFlowErrors, getIsDiagramValid, getSystemTrueCostData, sortTrueCostReport, WaterAssessment,
 } from 'process-flow-lib';
 
 export const WATER_SECTION_GROUPS: ReportSectionGroup[] = [
@@ -44,8 +44,8 @@ export class WaterReportAdapter implements ReportDataAdapter {
     };
 
     const diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
-    const nodeErrors: NodeErrors = diagram?.waterDiagram.flowDiagramData.nodeErrors;
-    const isDiagramValid = !!diagram && getIsDiagramValid(nodeErrors);
+    const diagramFlowErrors: DiagramFlowErrors = diagram?.waterDiagram.flowDiagramData.diagramFlowErrors;
+    const isDiagramValid = !!diagram && getIsDiagramValid(diagramFlowErrors);
 
     if (!isDiagramValid) {
       return of({
