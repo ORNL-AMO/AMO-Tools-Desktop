@@ -16,6 +16,7 @@ import { FanMotorService } from './fan-motor/fan-motor.service';
 import { OperationsService } from './operations/operations.service';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
+import { STEPPED_ROUTES } from './routing/stepped-routes';
 
 describe('FsatService.initAssessmentSettings', () => {
   let service: FsatService;
@@ -45,6 +46,7 @@ describe('FsatService.initAssessmentSettings', () => {
         { provide: FanSetupService, useValue: {} },
         { provide: FanMotorService, useValue: {} },
         { provide: OperationsService, useValue: {} },
+        { provide: STEPPED_ROUTES, useValue: [] },
       ]
     });
     service = TestBed.inject(FsatService);

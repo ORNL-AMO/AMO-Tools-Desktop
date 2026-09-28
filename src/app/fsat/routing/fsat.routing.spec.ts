@@ -13,21 +13,21 @@ describe('fsatRoutes', () => {
     expect(emptyRoute.pathMatch).toBe('full');
   });
 
-  const cases: Array<[string, any]> = [
-    ['baseline', FsatBaselineComponent],
-    ['assessment', FsatAssessmentComponent],
-    ['diagram', FsatDiagramComponent],
-    ['report', FsatReportComponent],
-    ['sankey', FsatSankeyResultsComponent],
-    ['calculators', FsatCalculatorsComponent],
+  const cases: Array<[string, any, number]> = [
+    ['baseline', FsatBaselineComponent, 0],
+    ['assessment', FsatAssessmentComponent, 1],
+    ['diagram', FsatDiagramComponent, 2],
+    ['report', FsatReportComponent, 3],
+    ['sankey', FsatSankeyResultsComponent, 4],
+    ['calculators', FsatCalculatorsComponent, 5],
   ];
 
-  cases.forEach(([path, component]) => {
+  cases.forEach(([path, component, stepIndex]) => {
     it(`resolves "${path}" to its component and sets data.mainView`, () => {
       const route = fsatRoutes.find(r => r.path === path);
       expect(route).toBeTruthy();
       expect(route.component).toBe(component);
-      expect(route.data).toEqual({ mainView: path });
+      expect(route.data).toEqual({ mainView: path, stepIndex });
     });
   });
 });

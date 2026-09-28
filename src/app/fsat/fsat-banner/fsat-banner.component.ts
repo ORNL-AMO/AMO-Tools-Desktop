@@ -64,31 +64,11 @@ export class FsatBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'calculators') {
-      this.fsatService.goToMainTab('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.fsatService.goToMainTab('report');
-    } else if (this.mainTab == 'report') {
-      this.fsatService.goToMainTab('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.fsatService.goToMainTab('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.fsatService.goToMainTab('baseline');
-    }
+    this.fsatService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.fsatService.goToMainTab('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.fsatService.goToMainTab('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.fsatService.goToMainTab('report');
-    } else if (this.mainTab == 'report') {
-      this.fsatService.goToMainTab('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.fsatService.goToMainTab('calculators');
-    }
+    this.fsatService.continueMainTab();
   }
 
   openExportModal() {

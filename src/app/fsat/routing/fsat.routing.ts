@@ -15,31 +15,31 @@ export const fsatRoutes: Routes = [
   {
     path: 'baseline',
     component: FsatBaselineComponent,
-    data: { mainView: 'baseline' }
+    data: { mainView: 'baseline', stepIndex: 0 }
   },
   {
     path: 'assessment',
     component: FsatAssessmentComponent,
-    data: { mainView: 'assessment' }
+    data: { mainView: 'assessment', stepIndex: 1 }
   },
   {
     path: 'diagram',
     component: FsatDiagramComponent,
-    data: { mainView: 'diagram' }
+    data: { mainView: 'diagram', stepIndex: 2 }
   },
   {
     path: 'report',
     component: FsatReportComponent,
-    data: { mainView: 'report' }
+    data: { mainView: 'report', stepIndex: 3 }
   },
   {
     path: 'sankey',
     component: FsatSankeyResultsComponent,
-    data: { mainView: 'sankey' }
+    data: { mainView: 'sankey', stepIndex: 4 }
   },
   {
     path: 'calculators',
     component: FsatCalculatorsComponent,
-    data: { mainView: 'calculators' }
+    data: { mainView: 'calculators', stepIndex: 5 }
   }
 ];
