@@ -1,6 +1,7 @@
-import { Inject, Injectable } from '@angular/core';
+import { DestroyRef, Inject, inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, firstValueFrom } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, FsatValid, PsychrometricResults, VelocityResults } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
@@ -63,6 +64,8 @@ export class FsatService {
     'fan-field-data'
   ];
 
+  private destroyRef = inject(DestroyRef);
+
   constructor
   (private convertFsatService: ConvertFsatService, private router: Router,
     private settingsDbService: SettingsDbService, private settingsService: SettingsService,
@@ -72,7 +75,10 @@ export class FsatService {
     /**
      * banner/footer navigation only ever has to call router.navigate(), never mainTab.next() directly.
      */
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
       const mainView: string = this.getActiveMainView();
       if (mainView) {
         this.mainTab.next(mainView);
@@ -124,8 +130,8 @@ export class FsatService {
    * fsatEdited — seeding is not an edit and must never cause a save.
    */
   seedAssessment(assessment: Assessment, fsat: FSAT, settings: Settings) {
-    this.assessment.next(assessment);
     this.fsat.next(fsat);
+    this.assessment.next(assessment);
     this.settings.next(settings);
     this.initSankeyList(fsat);
   }

@@ -197,6 +197,10 @@ export class FsatComponent implements OnInit, OnDestroy {
     this.addNewModal.hide();
   }
 
+  saveModifications(fsat: FSAT) {
+    this.fsatService.setFsat(fsat);
+  }
+
   saveNewMod(mod: Modification) {
     const current: FSAT = this.fsatService.fsat.getValue();
     const modifications: Modification[] = [...(current.modifications || []), mod];

@@ -48,28 +48,44 @@ export class FsatReportComponent implements OnInit, OnDestroy {
   reportDocument$: Observable<ReportDocument>;
   readonly sectionGroups: ReportSectionGroup[] = FSAT_SECTION_GROUPS;
   private containerHeightSub: Subscription;
+  private settingsSub: Subscription;
+  private assessmentSub: Subscription;
 
   constructor(private fsatService: FsatService,
     private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private settingsService: SettingsService, private reportAdapter: FsatReportAdapter) { }
 
   ngOnInit() {
+    this.createdDate = new Date();
     if (!this.assessment) {
-      this.assessment = this.fsatService.assessment.getValue();
       this.inFsat = true;
       this.containerHeightSub = this.fsatService.containerHeight.subscribe(val => {
         this.containerHeight = val;
         this.getContainerHeight();
       });
+      // service assessment/settings can re-seed on a `/fsat/:id` navigation without recreating this routed component
+      this.settingsSub = this.fsatService.settings.subscribe(settings => {
+        if (settings) {
+          this.settings = settings;
+        }
+      });
+      this.assessmentSub = this.fsatService.assessment.subscribe(assessment => {
+        if (assessment) {
+          this.assessment = assessment;
+          this.buildReportState();
+        }
+      });
+    } else {
+      if (!this.settings) {
+        this.getSettings();
+      }
+      this.buildReportState();
     }
-    this.createdDate = new Date();
-    if (!this.settings) {
-      this.getSettings();
-    }
-    if (this.assessment) {
-      this.assessmentDirectories = new Array();
-      this.getDirectoryList(this.assessment.directoryId);
-    }
+  }
+
+  private buildReportState() {
+    this.assessmentDirectories = new Array();
+    this.getDirectoryList(this.assessment.directoryId);
 
     if (!this.assessment.fsat.modifications) {
       this.assessment.fsat.modifications = new Array();
@@ -82,6 +98,12 @@ export class FsatReportComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.containerHeightSub) {
       this.containerHeightSub.unsubscribe();
+    }
+    if (this.settingsSub) {
+      this.settingsSub.unsubscribe();
+    }
+    if (this.assessmentSub) {
+      this.assessmentSub.unsubscribe();
     }
   }
 

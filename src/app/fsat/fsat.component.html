@@ -94,7 +94,7 @@
         </div>
         <div class="modal-body">
           @if (modListOpen) {
-            <app-modification-list [fsat]="fsat" (save)="save(fsat)" [modificationIndex]="modificationIndex"
+            <app-modification-list [fsat]="fsat" (save)="saveModifications(fsat)" [modificationIndex]="modificationIndex"
               (close)="closeSelectModification()" [settings]="settings"></app-modification-list>
           }
         </div>
