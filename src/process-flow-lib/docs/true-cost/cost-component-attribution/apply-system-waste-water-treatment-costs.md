@@ -21,7 +21,7 @@ This ensures that the full WWT block cost is always accounted for, with the recy
 
 The attribution is computed in two sequential passes. **Pass 1 must complete before Pass 2 begins** because Pass 2 depends on knowing what was already attributed in Pass 1.
 
-### Pass 1 — Case A — Downstream (Reuse Portion)
+### Pass 1 — reuse-and-discharge-split, reuse portion — Downstream
 
 **Objective:** Identify water-using systems that receive recycled water from this WWT unit and charge them for their proportional share of the WWT cost.
 
@@ -38,7 +38,7 @@ The attribution is computed in two sequential passes. **Pass 1 must complete bef
 
 After each downstream attribution, the system ID and its charged flow portion are recorded in an internal tracking map.
 
-### Pass 2 — Case B — Upstream (Discharged Portion)
+### Pass 2 — reuse-and-discharge-split, discharge portion — Upstream
 
 **Objective:** Identify water-using systems that sent effluent into this WWT unit and charge them for the remaining (non-recycled) portion of the WWT cost.
 
@@ -54,36 +54,13 @@ The standard Pass 2 calculation:
     Attribution fraction = System flow responsibility / WWT block cost total flow
     Cost to system = Attribution fraction × WWT total block cost
 
-**Case C — Chained WWT (Deduction):** When the WWT unit has both a downstream reuse path (Pass 1 attributed something) and upstream dischargers, each upstream system's flow responsibility is reduced by the total flow already charged to downstream systems in Pass 1:
+**reuse-and-discharge-split, chained deduction:** When the WWT unit has both a downstream reuse path (Pass 1 attributed something) and upstream dischargers, each upstream system's flow responsibility is reduced by the total flow already charged to downstream systems in Pass 1:
 
     System flow responsibility = System upstream edge flow − Total downstream charged portion (Pass 1)
     Attribution fraction = System flow responsibility / WWT block cost total flow
     Cost to system = Attribution fraction × WWT total block cost
 
 The "Total downstream charged portion" is the sum of all flow amounts attributed to downstream systems in Pass 1.
-
-### Pass 2 — Case D — RO-Owned WWT
-
-When the upstream path from a WWT node leads to an RO treatment node rather than directly to a water-using system, the normal Pass 2 stopping rule (stop at first system) does not apply — the RO node is not itself a water-using system, so the walk would otherwise terminate without finding a chargeable system.
-
-**Detection:** The algorithm checks `graph.systemsWithRODirectDischarge`. If the WWT node is registered as the `wasteTreatmentNode` of a single-system RO configuration, two things happen:
-
-1. **Attribution fraction is forced to 1.0** — the full WWT block cost is assigned to the water-using system that is the sole beneficiary of that RO unit (`ROWasteTreatmentOwner`).
-2. **Deduplication is bypassed** — the `visitedSystemIds` guard is skipped for this attribution because the RO system owner is not directly in the upstream walk path and would otherwise be missed.
-
-**Worked example:**
-
-```
-  Intake ──► RO Unit ──► (product water, 70 Mgal/yr) ──► System A
-                    └──► (reject,  30 Mgal/yr) ──► WWT ($1.00/kgal) ──► Discharge
-```
-
-- WWT block cost = 30 Mgal/yr × 1,000 × $1.00/kgal = $30,000/yr
-- **Pass 1 of WWT:** no downstream reuse path → downstream attributed portion = 0.
-- **Pass 2 of WWT:** upstream walk hits the RO node, not a water-using system.
-  - Algorithm detects the RO node is in `systemsWithRODirectDischarge` with System A as the owner (`ROWasteTreatmentOwner`).
-  - Attribution fraction overridden to 1.0; cost assigned to System A.
-- Cost to System A from WWT = 1.0 × $30,000 = **$30,000/yr**
 
 ---
 
@@ -190,15 +167,14 @@ Suppose instead the WWT has no reuse path (all 100 Mgal/yr goes to discharge). I
 
 | Rule | Description |
 |---|---|
-| Walk direction — Case A (Pass 1) | Downstream from WWT unit (reuse paths) |
-| Walk direction — Case B (Pass 2) | Upstream from WWT unit (discharge paths) |
-| Stopping point — Case A (Pass 1) | First water-using system on each downstream path |
-| Stopping point — Case B (Pass 2) | First water-using system on each upstream path (excluding Pass 1 systems) |
+| Walk direction — reuse-and-discharge-split, Pass 1 | Downstream from WWT unit (reuse paths) |
+| Walk direction — reuse-and-discharge-split, Pass 2 | Upstream from WWT unit (discharge paths) |
+| Stopping point — reuse-and-discharge-split, Pass 1 | First water-using system on each downstream path |
+| Stopping point — reuse-and-discharge-split, Pass 2 | First water-using system on each upstream path (excluding Pass 1 systems) |
 | Cost basis | Full WWT block cost (unit cost × total WWT inflow) |
-| Attribution denominator — Case A (Pass 1) | WWT total inflow |
-| Attribution denominator — Case B (Pass 2) | WWT total inflow |
-| Deduction — Case C (chained WWT) | Total flow already charged in Pass 1 is subtracted from each upstream system's flow responsibility when the WWT unit has both downstream reuse and upstream dischargers |
+| Attribution denominator — reuse-and-discharge-split, Pass 1 | WWT total inflow |
+| Attribution denominator — reuse-and-discharge-split, Pass 2 | WWT total inflow |
+| Deduction — reuse-and-discharge-split, chained deduction | Total flow already charged in Pass 1 is subtracted from each upstream system's flow responsibility when the WWT unit has both downstream reuse and upstream dischargers |
 | Balance check | Sum of all Pass 1 and Pass 2 fractions should equal 1.0 for a lossless WWT unit |
 | Series WWT | Each unit in series is evaluated independently |
-| RO-owned WWT (Case D) | When WWT is on the reject path of a single-system RO configuration, 100% of WWT cost is attributed to the RO system owner regardless of flow fractions |
 | Adjusted attribution | User-supplied fraction replaces computed default |

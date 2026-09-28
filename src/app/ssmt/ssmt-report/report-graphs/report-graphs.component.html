@@ -1,4 +1,4 @@
-<div class="d-flex flex-wrap justify-content-center" *ngIf="!printView">
+<div class="d-flex flex-wrap justify-content-center">
   <div class="d-flex" [ngClass]="{'col-12 col-lg-6 flex-column': selectedSsmt2, 'col-12': !selectedSsmt2}">
     <select *ngIf="selectedSsmt2" name="selectedSsmt1" class="form-control w-100" id="selectedSsmt1"
       [(ngModel)]="selectedSsmt1">
@@ -47,7 +47,3 @@
     </app-ssmt-waterfall>
   </div>
 </div>
-
-<app-report-graphs-print *ngIf="printView && printGraphs" [ssmt]="ssmt" [settings]="settings"
-  [baselineLosses]="baselineLosses" [modificationLosses]="modificationLosses" [xAxisRange]="waterfallXAxisRange">
-</app-report-graphs-print>

@@ -3,7 +3,7 @@ import { SSMT } from '../../../shared/models/steam/ssmt';
 import { SSMTLosses } from '../../../shared/models/steam/steam-outputs';
 import { WaterfallInput, WaterfallItem } from '../../../shared/models/plotting';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ReportGraphsService {
 
 

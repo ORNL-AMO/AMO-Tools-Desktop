@@ -68,6 +68,7 @@ export interface SSMTOutput {
   operationsOutput: SSMTOperationsOutput;
   co2EmissionsOutput?: SteamCo2EmissionsOutput;
   hasSteamModelerError?: boolean,
+  paybackPeriod?: number;
 }
 
 export interface SteamCo2EmissionsOutput {

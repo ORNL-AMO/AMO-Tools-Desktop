@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, UntypedFormGroup, Validators} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { pumpTypesConstant } from '../../../../psat/psatConstants';
+import { inventoryPumpTypesConstant, isPositiveDisplacementPump } from '../../../../psat/psatConstants';
 import { Settings } from '../../../../shared/models/settings';
 import { PumpItem, PumpPropertiesOptions } from '../../../pump-inventory';
 import { PumpInventoryService, pumpInventoryShaftOrientations, pumpInventoryShaftSealTypes } from '../../../pump-inventory.service';
@@ -28,6 +28,7 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   pumpTypes: Array<{value: number, display: string}>;
   shaftOrientations: Array<{value: number, display: string}>;
   shaftSealTypes: Array<{value: number, display: string}>;
+  pumpTypeChangeBlockedMsg: string;
 
   constructor(private pumpCatalogService: PumpCatalogService, private pumpInventoryService: PumpInventoryService,
     private pumpEquipmentCatalogService: PumpEquipmentCatalogService) { }
@@ -35,13 +36,14 @@ export class PumpEquipmentCatalogComponent implements OnInit {
   ngOnInit(): void {
     this.shaftOrientations = pumpInventoryShaftOrientations;
     this.shaftSealTypes = pumpInventoryShaftSealTypes;
-    this.pumpTypes = pumpTypesConstant;
+    this.pumpTypes = inventoryPumpTypesConstant;
     this.settingsSub = this.pumpInventoryService.settings.subscribe(val => {
       this.settings = val;
     });
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
         this.form = this.pumpEquipmentCatalogService.getFormFromPumpEquipmentProperties(selectedPump.pumpEquipment);
+        this.pumpTypeChangeBlockedMsg = undefined;
       }
     });
     this.displayOptions = this.pumpInventoryService.pumpInventoryData.getValue().displayOptions.pumpPropertiesOptions;
@@ -52,10 +54,38 @@ export class PumpEquipmentCatalogComponent implements OnInit {
     this.settingsSub.unsubscribe();
   }
 
+  get isPositiveDisplacement(): boolean {
+    return isPositiveDisplacementPump(this.form.controls.pumpType.value);
+  }
+
   save() {
     let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
     selectedPump.pumpEquipment = this.pumpEquipmentCatalogService.updatePumpEquipmentPropertiesFromForm(this.form, selectedPump.pumpEquipment);
     this.pumpInventoryService.updatePumpItem(selectedPump);
+  }
+
+  changePumpType() {
+    let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
+    let hasConnectedAssessments: boolean = selectedPump.connectedAssessments && selectedPump.connectedAssessments.length !== 0;
+    if (this.isPositiveDisplacement && hasConnectedAssessments) {
+      this.form.controls.pumpType.setValue(selectedPump.pumpEquipment.pumpType, { emitEvent: false });
+      this.pumpTypeChangeBlockedMsg = `${selectedPump.name} is connected to a PSAT assessment and cannot be changed to Positive Displacement. Remove the connection first.`;
+      return;
+    }
+    this.pumpTypeChangeBlockedMsg = undefined;
+
+    this.form = this.pumpEquipmentCatalogService.updateDesignDifferentialPressureValidators(this.form);
+    if (this.isPositiveDisplacement) {
+      this.form.controls.designHead.reset(null);
+      this.form.controls.designDifferentialPressure.reset(null);
+    } else {
+      this.form.controls.designDifferentialPressure.reset(null);
+      if (isPositiveDisplacementPump(selectedPump.pumpEquipment.pumpType)) {
+        this.form.controls.designHead.reset(null);
+      }
+    }
+    this.save();
+    this.pumpCatalogService.pumpTypeChanged.next(this.form.controls.pumpType.value);
   }
 
   focusField(str: string) {

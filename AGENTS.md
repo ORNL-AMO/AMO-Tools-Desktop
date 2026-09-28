@@ -40,8 +40,8 @@ Use the narrowest verification that covers the change:
 
 - Suite wrapper typecheck: `npx tsc -p src/tsconfig.app.json --noEmit`
 - Root app build: `npm run build`
-- Root app tests: `npm test`
-- Process-flow component tests: run from `process-flow-diagram-component/` with `npm run test`
+- Root app tests: `npm test` (Angular/Karma, ChromeHeadless); single spec: `ng test --include='**/path/to/file.spec.ts'`
+- Process-flow component tests: run from `process-flow-diagram-component/` with `npm run test` (Vitest)
 - Process-flow component typecheck: run from `process-flow-diagram-component/` with `npm run test:typecheck`
 
 For runtime checks, `npm run start` builds the process-flow component and serves the Angular app. Use Electron-specific testing when a change touches `ElectronService`, desktop packaging, file paths, preload/main process behavior, backups, or WASM `locateFile` behavior.

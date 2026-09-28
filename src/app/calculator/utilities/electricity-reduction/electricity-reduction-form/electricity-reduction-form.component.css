@@ -3,6 +3,10 @@
   border-bottom: 1px dashed;
 }
 
+.no-bottom-border {
+  border-bottom: none;
+}
+
 .form-row-pad-fix {
   margin-left: -15px !important;
 }

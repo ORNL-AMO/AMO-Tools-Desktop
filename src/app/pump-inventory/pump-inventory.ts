@@ -1,5 +1,5 @@
 import { Co2SavingsData } from "../calculator/utilities/co2-savings/co2-savings.service";
-import { ConnectedInventoryData, ConnectedItem } from "../shared/connected-inventory/integrations";
+import { ConnectedItem } from "../shared/connected-inventory/integrations";
 import { OperatingHours } from "../shared/models/operations";
 
 export interface PumpInventoryData {
@@ -102,8 +102,9 @@ export interface PumpProperties {
   ratedSpeed: number, 
   impellerDiameter: number, 
   minFlowSize: number, 
-  pumpSize: number, 
+  pumpSize: number,
   designHead: number,
+  designDifferentialPressure: number,
   designFlow: number,
   designEfficiency: number,
 }
@@ -124,7 +125,7 @@ export interface PumpPropertiesOptions {
   ratedSpeed: boolean, 
   impellerDiameter: boolean, 
   minFlowSize: boolean, 
-  pumpSize: boolean, 
+  pumpSize: boolean,
   designHead: boolean,
   designFlow: boolean,
   designEfficiency: boolean,

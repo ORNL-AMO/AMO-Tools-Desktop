@@ -81,19 +81,6 @@ export class ExecutiveSummaryComponent implements OnInit {
     return modificationsMadeList;
   }
 
-  getPayback(modCost: number, baselineCost: number, implementationCost: number) {
-    if (implementationCost) {
-      let paybackMonths = (implementationCost / (baselineCost - modCost)) * 12 * 1000;
-      if (isNaN(paybackMonths) === false) {
-        return paybackMonths;
-      } else {
-        return 0;
-      }
-    } else {
-      return 0;
-    }
-  }
-
   updateCopyTableString() {
     this.copyTableString = this.copyTable.nativeElement.innerText;
   }

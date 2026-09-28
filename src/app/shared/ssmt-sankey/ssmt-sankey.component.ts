@@ -279,7 +279,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let otherLosses = this.losses.highPressureHeader + this.losses.mediumPressureHeader + this.losses.lowPressureHeader + this.losses.condensateLosses + this.losses.deaeratorVentLoss + this.losses.condensateFlashTankLoss;
     this.hasLowPressureVentLoss = !isNaN(this.losses.lowPressureVentLoss);
     if (this.hasLowPressureVentLoss) {
-      otherLosses + this.losses.lowPressureVentLoss;
+      otherLosses += this.losses.lowPressureVentLoss;
     }
     // Returned condensate and steam
     let returnedCondensate = 0;

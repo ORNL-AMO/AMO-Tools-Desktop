@@ -18,12 +18,6 @@ export class ReportGraphsComponent implements OnInit {
   baselineLosses: SSMTLosses;
   @Input()
   modificationLosses: Array<{ outputData: SSMTLosses, name: string, valid: SsmtValid }>;
-  @Input()
-  printView: boolean;
-  @Input()
-  printSankey: boolean;
-  @Input()
-  printGraphs: boolean;
 
   selectedSsmt1: SSMT;
   selectedSsmt2: SSMT;

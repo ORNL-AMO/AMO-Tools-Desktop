@@ -94,6 +94,11 @@ export class SystemBasicsComponent {
     this.processCoolingUIService.focusedFieldSignal.set(str);
   }
 
+  updateNotes(notes: string) {
+    const processCooling = this.processCooling();
+    this.processCoolingAssessmentService.updateProcessCoolingProperty('systemBasics', { ...processCooling.systemBasics, notes });
+  }
+
   getExistingDataSettings(processCooling: ProcessCoolingAssessment): Settings {
     let existingSettingsForm: UntypedFormGroup = copyObject(this.settingsForm);
     existingSettingsForm.patchValue({ unitsOfMeasure: processCooling.existingDataUnits });

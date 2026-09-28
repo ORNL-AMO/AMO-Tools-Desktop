@@ -2,14 +2,14 @@ import * as React from 'react';
 import Alert from '@mui/material/Alert';
 import { Box, Slide } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { diagramAlertChange } from './diagramReducer';
+import { diagramAlertChange } from './uiSlice';
 
 export default function DiagramAlert(props: DiagramAlertProps) {
     const {
         diagramAlertState
     } = props;
     const dispatch = useAppDispatch();
-    const isDrawerOpen = useAppSelector(state => state.diagram.isDataDrawerOpen);
+    const isDrawerOpen = useAppSelector(state => state.ui.isDataDrawerOpen);
 
     React.useEffect(() => {
         if (diagramAlertState.dismissMS > 0) {

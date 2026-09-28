@@ -1,4 +1,5 @@
-<app-process-flow-diagram-wrapper 
-    *ngIf="processFlowParentState" 
+<app-process-flow-diagram-wrapper
+    *ngIf="processFlowParentState"
     [processFlowParentState]="processFlowParentState"
+    [convertValueFn]="convertValueFn"
     ></app-process-flow-diagram-wrapper>

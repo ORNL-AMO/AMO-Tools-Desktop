@@ -16,9 +16,8 @@ import { HeaderInputTableComponent } from './input-summary/header-summary/header
 import { TurbineInputTableComponent } from './input-summary/turbine-summary/turbine-input-table/turbine-input-table.component';
 import { FormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { ReportGraphsPrintComponent } from './report-graphs/report-graphs-print/report-graphs-print.component';
-import { ReportGraphsService } from './report-graphs/report-graphs.service';
-import { PrintOptionsMenuModule } from '../../shared/print-options-menu/print-options-menu.module';
+import { ReportBuilderModule } from '../../shared/report-builder/report-builder.module';
+import { SsmtReportAdapter } from './ssmt-report.adapter';
 import { FacilityInfoSummaryModule } from '../../shared/facility-info-summary/facility-info-summary.module';
 import { PercentGraphModule } from '../../shared/percent-graph/percent-graph.module';
 import { PieChartModule } from '../../shared/pie-chart/pie-chart.module';
@@ -35,7 +34,7 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     SsmtDiagramModule,
     FormsModule,
     ModalModule,
-    PrintOptionsMenuModule,
+    ReportBuilderModule,
     FacilityInfoSummaryModule,
     PercentGraphModule,
     PieChartModule,
@@ -58,7 +57,6 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     BoilerSummaryComponent,
     HeaderInputTableComponent,
     TurbineInputTableComponent,
-    ReportGraphsPrintComponent,
     SsmtPieChartComponent,
     SsmtWaterfallComponent,
     SsmtReportSankeyComponent
@@ -67,7 +65,7 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
     SsmtReportComponent
   ],
   providers: [
-    ReportGraphsService
+    SsmtReportAdapter
   ]
 })
 export class SsmtReportModule { }

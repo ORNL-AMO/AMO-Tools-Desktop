@@ -6,7 +6,6 @@ import { Settings } from '../../../../shared/models/settings';
 @Component({
     selector: 'app-fan-system-checklist-copy-table',
     templateUrl: './fan-system-checklist-copy-table.component.html',
-    styleUrls: ['./fan-system-checklist-copy-table.component.css'],
     standalone: false
 })
 export class FanSystemChecklistCopyTableComponent implements OnInit {
