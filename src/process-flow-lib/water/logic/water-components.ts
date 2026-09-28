@@ -418,7 +418,7 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
       incomingTemp: undefined,
       outgoingTemp: undefined,
       heaterEfficiency: undefined,
-      heatingFuelType: 0,
+      heatingFuelType: 1,
       wasteWaterDischarge: undefined
     },
     systemFlowTotals: {
@@ -667,14 +667,14 @@ export const getDefaultHeatEnergy = (): HeatEnergy => {
     incomingTemp: undefined,
     outgoingTemp: undefined,
     heaterEfficiency: undefined,
-    heatingFuelType: 0,
+    heatingFuelType: 1,
     wasteWaterDischarge: undefined,
   }
 }
 
 export const getDefaultMotorEnergy = (lastIndex: number): MotorEnergy => {
   return {
-    name: `Pump Energy ${lastIndex + 1}`,
+    name: `Machine Energy ${lastIndex + 1}`,
     numberUnits: 1,
     hoursPerYear: 8760,
     loadFactor: undefined,
