@@ -363,11 +363,13 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
   } else {
     waterProcessComponent = processFlowPart as WaterUsingSystem;
   }
+  // * Preserve existing system data - only fill defaults for missing fields (this runs on every diagram to assessment sync)
+  const existingSystem = waterProcessComponent as WaterUsingSystem;
 
   waterUsingSystem = {
     ...waterProcessComponent,
     createdByAssessment: createdByAssessment,
-    hoursPerYear: 8760,
+    hoursPerYear: existingSystem.hoursPerYear ?? 8760,
     // * important - need to pull user overrides for flows into waterUsingSystem for use in calculations and display. These values will override diagram flows when set by user and default to diagram flows when not set by user
     userDiagramFlowOverrides: {
       sourceWater: waterProcessComponent.userDiagramFlowOverrides?.sourceWater,
@@ -376,7 +378,7 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
       knownLosses: waterProcessComponent.userDiagramFlowOverrides?.knownLosses,
       waterInProduct: waterProcessComponent.userDiagramFlowOverrides?.waterInProduct,
     },
-    processUse: {
+    processUse: existingSystem.processUse || {
       waterRequiredMetric: 0,
       waterRequiredMetricValue: undefined,
       waterConsumedMetric: 0,
@@ -386,7 +388,7 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
       annualProduction: undefined,
       fractionGrossWaterRecirculated: undefined,
     },
-    coolingTower: {
+    coolingTower: existingSystem.coolingTower || {
       tonnage: undefined,
       loadFactor: undefined,
       evaporationRateDegree: undefined,
@@ -394,7 +396,7 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
       makeupConductivity: undefined,
       blowdownConductivity: undefined,
     },
-    boilerWater: {
+    boilerWater: existingSystem.boilerWater || {
       power: undefined,
       loadFactor: undefined,
       steamPerPower: undefined,
@@ -402,12 +404,12 @@ export const getWaterUsingSystem = (processFlowPart?: WaterProcessComponent): Wa
       makeupConductivity: undefined,
       blowdownConductivity: undefined,
     },
-    kitchenRestroom: {
+    kitchenRestroom: existingSystem.kitchenRestroom || {
       employeeCount: undefined,
       workdaysPerYear: undefined,
       dailyUsePerEmployee: undefined
     },
-    landscaping: {
+    landscaping: existingSystem.landscaping || {
       areaIrrigated: undefined,
       yearlyInchesIrrigated: undefined,
     },

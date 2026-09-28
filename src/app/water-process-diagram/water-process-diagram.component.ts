@@ -9,8 +9,11 @@ import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Settings } from '../shared/models/settings';
 import { Diagram } from '../shared/models/diagram';
 import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
+import { UpdateAssessmentFromDiagramService } from '../water/update-assessment-from-diagram.service';
 import { WaterDiagram } from 'process-flow-lib';
 import { WaterAssessmentService } from '../water/water-assessment.service';
+import { AssessmentDbService } from '../indexedDb/assessment-db.service';
+import { Assessment } from '../shared/models/assessment';
 
 @Component({
   selector: 'app-water-process-diagram',
@@ -43,7 +46,9 @@ export class WaterProcessDiagramComponent {
   constructor(
     private waterProcessDiagramService: WaterProcessDiagramService,
     private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService,
+    private updateAssessmentFromDiagramService: UpdateAssessmentFromDiagramService,
     private diagramIdbService: DiagramIdbService,
+    private assessmentIdbService: AssessmentDbService,
     private settingsDbService: SettingsDbService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -87,6 +92,14 @@ export class WaterProcessDiagramComponent {
     if (this.diagram) {
       this.getContainerHeight();
       this.diagram.waterDiagram.assessmentId = this.diagram.assessmentId;
+
+      if (this.diagram.assessmentId !== undefined) {
+        let assessment: Assessment = this.assessmentIdbService.findById(this.diagram.assessmentId);
+        let assessmentSettings: Settings = assessment ? this.settingsDbService.getByAssessmentId(assessment, true) : undefined;
+        if (assessment && assessmentSettings) {
+          this.updateAssessmentFromDiagramService.syncAssessmentToDiagram(assessment, assessmentSettings);
+        }
+      }
       this.updateDiagramFromAssessmentService.syncDiagramToAssessment(this.diagram, null);
       this.setSettings();
       this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);

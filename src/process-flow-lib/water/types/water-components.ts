@@ -19,7 +19,6 @@ export interface WaterTreatment extends ProcessFlowPart {
 
 export interface WasteWaterTreatment extends WaterTreatment { }
 
-
 export interface HeatEnergy {
     hoursPerYear?: number,
     incomingTemp: number,
@@ -60,9 +59,8 @@ export enum WaterSystemTypeEnum {
 
 
 
-// * Plant level intakes AND system level intakes
-// * IMPORTANT Partial - use in WaterUsingSystem without type check for diagram component properties
-export interface IntakeSource extends Partial<ProcessFlowPart> {
+// * Plant level intake - always a real diagram node
+export interface IntakeSource extends ProcessFlowPart {
     sourceType: number,
     annualUse: number,
     addedMotorEnergy?: MotorEnergy[],
@@ -101,7 +99,6 @@ export interface WaterUsingSystem extends ProcessFlowPart {
     processUse?: ProcessUse,
     coolingTower?: CoolingTower,
     boilerWater?: BoilerWater,
-    intakeSources: IntakeSource[],
     heatEnergy?: HeatEnergy,
     kitchenRestroom?: KitchenRestroom,
     landscaping?: Landscaping,

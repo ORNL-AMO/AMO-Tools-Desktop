@@ -12,6 +12,7 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
       // diagram: getResetData(),
       diagram: {
         name: waterDiagram.flowDiagramData.name,
+        isInitialized: false,
         nodes: [],
         edges: [],
         composedNodeData: [],
@@ -83,6 +84,7 @@ export type AppDispatch = AppStore['dispatch']
 // * may also use globalized selectors
 export const selectEdges = (state: RootState) => state.diagram.edges as Edge<CustomEdgeData>[];
 export const selectNodes = (state: RootState) => state.diagram.nodes;
+export const selectIsInitialized = (state: RootState) => state.diagram.isInitialized;
 export const selectNodeErrors = (state: RootState) => state.diagram.nodeErrors;
 export const selectisDataDrawerOpen = (state: RootState) => state.diagram.isDataDrawerOpen;
 export const selectIsModalOpen = (state: RootState) => state.diagram.isModalOpen;

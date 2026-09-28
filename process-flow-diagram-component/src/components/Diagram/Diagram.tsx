@@ -20,7 +20,7 @@ import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { AppStore, configureAppStore, RootState, selectEdges, selectNodes } from './store';
+import { AppStore, configureAppStore, RootState, selectEdges, selectIsInitialized, selectNodes } from './store';
 import { Provider } from 'react-redux';
 import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected, selectedIdChange } from './diagramReducer';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
@@ -76,6 +76,7 @@ const Diagram = (props: DiagramProps) => {
 
   const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
+  const isInitialized: boolean = useAppSelector(selectIsInitialized);
 
   const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
   const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
@@ -101,7 +102,7 @@ const Diagram = (props: DiagramProps) => {
   // todo 6918 - eventually move to side-effect/async middleware of state changes
   // todo 6918 - move debouncing to middleware?
   useEffect(() => {
-    if (assessmentCreatedNodes.length === 0) {
+    if (isInitialized && assessmentCreatedNodes.length === 0) {
       const updatedDiagramData: FlowDiagramData = {
         name: props.processDiagram.flowDiagramData.name,
         nodes: nodes,
@@ -117,7 +118,7 @@ const Diagram = (props: DiagramProps) => {
       formatDataForMEASUR(updatedDiagramData);
       props.saveFlowDiagramData(updatedDiagramData);
     }
-  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings, debouncedDiagramNotes, paletteColors]);
+  }, [isInitialized, debouncedNodes, debouncedEdges, userDiagramOptions, settings, debouncedDiagramNotes, paletteColors]);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';

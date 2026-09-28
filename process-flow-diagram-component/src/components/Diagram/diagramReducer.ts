@@ -35,6 +35,7 @@ export const getPaletteColorForType = (type: WaterProcessComponentType, paletteC
 
 export interface DiagramState {
   name: string,
+  isInitialized: boolean,
   nodes: Node[];
   edges: Edge[];
   // * Owned or managed by another node. Does not display in the diagram
@@ -63,6 +64,7 @@ export interface DiagramState {
 export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState => {
   return {
     name: undefined,
+    isInitialized: false,
     nodes: [],
     edges: [],
     composedNodeData: [],
@@ -139,6 +141,7 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.isDialogOpen = false;
   state.validationWindowLocation = 'diagram';
   state.assessmentId = assessmentId
+  state.isInitialized = true;
 }
 
 const resetDiagramReducer = (state: DiagramState) => {

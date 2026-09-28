@@ -37,7 +37,8 @@ export class AssessmentDbService {
         for await (let assessment of assessments) {
           if (assessment.appVersion !== environment.version) {
             this.updateDataService.updateAssessmentVersion(assessment);
-            await firstValueFrom(this.updateWithObservable(assessment));
+            // * Version migration is not a user edit - keep modifiedDate so diagram/assessment sync direction is preserved
+            await firstValueFrom(this.dbService.update(this.storeName, assessment));
             let assessmentCalculators: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
             let updatedAssessmentCalculators = this.updateDataService.updateAssessmentCalculatorVersion(assessmentCalculators);
             if (updatedAssessmentCalculators) {

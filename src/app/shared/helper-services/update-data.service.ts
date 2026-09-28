@@ -40,7 +40,14 @@ export class UpdateDataService {
             return this.updateCompressedAir(assessment);
         } else if (assessment.type === 'ProcessCooling') {
             return this.updateProcessCooling(assessment);
+        } else if (assessment.type === 'Water') {
+            return this.updateWater(assessment);
         }
+    }
+
+    updateWater(assessment: Assessment): Assessment {
+        assessment.appVersion = environment.version;
+        return assessment;
     }
 
 

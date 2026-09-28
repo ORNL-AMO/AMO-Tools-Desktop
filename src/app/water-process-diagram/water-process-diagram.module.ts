@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { WaterProcessDiagramService } from './water-process-diagram.service';
 import { CreateAssessmentModalModule } from '../shared/create-assessment-modal/create-assessment-modal.module';
 import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
+import { UpdateAssessmentFromDiagramService } from '../water/update-assessment-from-diagram.service';
 import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 
@@ -34,7 +35,8 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
   ],
   providers: [
     WaterProcessDiagramService,
-    UpdateDiagramFromAssessmentService
+    UpdateDiagramFromAssessmentService,
+    UpdateAssessmentFromDiagramService
   ]
 })
 export class WaterProcessDiagramModule { }
