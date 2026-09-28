@@ -38,9 +38,9 @@ export class FsatBannerComponent implements OnInit {
 
   changeTab(str: string) {
     if (str === 'baseline' || str === 'calculators') {
-      this.fsatService.mainTab.next(str);
+      this.fsatService.goToMainTab(str);
     } else if (this.assessment.fsat.setupDone) {
-      this.fsatService.mainTab.next(str);
+      this.fsatService.goToMainTab(str);
     }
     this.collapseBanner();
   }
@@ -65,29 +65,29 @@ export class FsatBannerComponent implements OnInit {
 
   back() {
     if (this.mainTab == 'calculators') {
-      this.fsatService.mainTab.next('sankey');
+      this.fsatService.goToMainTab('sankey');
     } else if (this.mainTab == 'sankey') {
-      this.fsatService.mainTab.next('report');
+      this.fsatService.goToMainTab('report');
     } else if (this.mainTab == 'report') {
-      this.fsatService.mainTab.next('diagram');
+      this.fsatService.goToMainTab('diagram');
     } else if (this.mainTab == 'diagram') {
-      this.fsatService.mainTab.next('assessment');
+      this.fsatService.goToMainTab('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('baseline');
+      this.fsatService.goToMainTab('baseline');
     }
   }
 
   continue() {
     if (this.mainTab == 'baseline') {
-      this.fsatService.mainTab.next('assessment');
+      this.fsatService.goToMainTab('assessment');
     } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('diagram');
+      this.fsatService.goToMainTab('diagram');
     } else if (this.mainTab == 'diagram') {
-      this.fsatService.mainTab.next('report');
+      this.fsatService.goToMainTab('report');
     } else if (this.mainTab == 'report') {
-      this.fsatService.mainTab.next('sankey');
+      this.fsatService.goToMainTab('sankey');
     } else if (this.mainTab == 'sankey') {
-      this.fsatService.mainTab.next('calculators');
+      this.fsatService.goToMainTab('calculators');
     }
   }
 

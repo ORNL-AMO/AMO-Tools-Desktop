@@ -1,130 +1,65 @@
-<div #content class="fsat-container d-flex flex-column fsat" *ngIf="assessment && settings">
-  <div #header class="w-100 hide-print sticky-top">
-    <app-fsat-banner [assessment]="assessment"></app-fsat-banner>
-    <app-fsat-tabs [settings]="settings" [fsat]="_fsat"></app-fsat-tabs>
-  </div>
-
-  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect *ngIf="mainTab == 'baseline'">
-    <div class="nav-item" (click)="setSmallScreenTab('form')"
-      [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
-      <a class="nav-link" *ngIf="stepTab == 'baseline'">Assessment Settings</a>
-      <a class="nav-link" *ngIf="stepTab == 'fan-operations'">Operations</a>
-      <a class="nav-link" *ngIf="stepTab == 'fan-setup'">Fan and Fluid</a>
-      <a class="nav-link" *ngIf="stepTab == 'fan-motor'">Motor</a>
-      <a class="nav-link" *ngIf="stepTab == 'fan-field-data'">Field Data</a>
+@if (assessment && settings) {
+  <div #content class="fsat-container d-flex flex-column fsat">
+    <div #header class="w-100 hide-print sticky-top">
+      <app-fsat-banner [assessment]="assessment"></app-fsat-banner>
+      <app-fsat-tabs [settings]="settings" [fsat]="fsat"></app-fsat-tabs>
     </div>
-    <div class="nav-item" (click)="setSmallScreenTab('details')"
-      [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
-      <a class="nav-link" *ngIf="stepTab != 'fan-setup' && stepTab != 'fan-field-data'">Help</a>
-      <a class="nav-link" *ngIf="stepTab == 'fan-setup' || stepTab == 'fan-field-data'">Details</a>
-    </div>
-  </div>
 
-  <!--Baseline-->
-  <div *ngIf="mainTab == 'baseline'" class="assessment-container tab-content">
-    <div class="assessment-panel-container lookup-form modification scroll-item" [ngStyle]="{'height.px': containerHeight}"
-      [ngClass]="{'modal-open': isModalOpen == true || showUpdateUnitsModal, 'small-screen-tab': smallScreenTab === 'form'}">
-      <app-system-basics *ngIf="stepTab == 'baseline'" [(settings)]="settings" [assessment]="assessment"
-        (emitSave)="saveSettings($event)" (emitSaveFsat)="saveFsat($event)"
-        (openUpdateUnitsModal)="initUpdateUnitsModal($event)"></app-system-basics>
-  
-      <app-operations *ngIf="stepTab == 'fan-operations'" [settings]="settings" [inSetup]="true" [selected]="true"
-        [fsatOperations]="_fsat.fsatOperations" [baseline]="true" (emitSave)="saveFsatOperations($event)" [fsat]="_fsat">
-      </app-operations>
-  
-      <app-fan-setup *ngIf="stepTab == 'fan-setup'" [containerHeight]="containerHeight" [settings]="settings"
-        [inSetup]="true" [selected]="true" [fanSetup]="_fsat.fanSetup" [fsat]="_fsat" [baseline]="true"
-        (emitSave)="saveFanSetup($event)"></app-fan-setup>
-      <app-fsat-fluid *ngIf="stepTab == 'fan-setup'" [inSetup]="true" [selected]="true"
-        [baseGasDensity]="_fsat.baseGasDensity" (emitSave)="saveGasDensity($event)" [settings]="settings"
-        [baseline]="true" [fsat]="_fsat"></app-fsat-fluid>
-      <app-fan-motor *ngIf="stepTab == 'fan-motor'" [settings]="settings" [inSetup]="true" [selected]="true"
-        [fanMotor]="_fsat.fanMotor" [baseline]="true" (emitSave)="saveFanMotor($event)" [fieldData]="_fsat.fieldData"
-        [fsat]="_fsat"></app-fan-motor>
-      <app-fan-field-data *ngIf="stepTab == 'fan-field-data'" [settings]="settings" [inSetup]="true" [selected]="true"
-        [fieldData]="_fsat.fieldData" [baseline]="true" (emitSave)="saveFieldData($event)" [fsat]="_fsat">
-      </app-fan-field-data>
-    </div>
-    <div class="assessment-panel-container scroll-item" [ngClass]="{'pl-0': stepTab == 'fan-field-data', 'small-screen-tab': smallScreenTab === 'details'}" [ngStyle]="{'height.px': containerHeight}">
-      <app-help-panel [modificationIndex]="modificationIndex" [settings]="settings" [inSetup]="true" [fsat]="_fsat">
-      </app-help-panel>
-    </div>
-  </div>
-
-
-  <!--Assessment-->
-  <div *ngIf="mainTab == 'assessment' && !modificationModalOpen" class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
-    <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [fsat]="_fsat" [assessment]="assessment"
-      [settings]="settings" (emitSave)="saveFsat($event)" [containerHeight]="containerHeight"
-      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()">
-    </app-explore-opportunities>
-    <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [assessment]="assessment"
-      [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"
-      (emitSaveAssessment)="saveFsat($event)" [containerHeight]="containerHeight"></app-modify-conditions>
-  </div>
-
-  <!--report-->
-  <div class="assessment-tab-container report-container mx-0" *ngIf="mainTab == 'report'">
-      <app-fsat-report [settings]="settings" [assessment]="assessment" [inFsat]="true" (closeReport)="closeReport()"
-        [containerHeight]="containerHeight"></app-fsat-report>
-  </div>
-
-  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'diagram'">
-    <app-fsat-diagram></app-fsat-diagram>
-  </div>
-
-  <div class="assessment-tab-container tab-content" *ngIf="mainTab == 'calculators'" [ngStyle]="{'height.px': containerHeight}">
-    <app-fan-efficiency *ngIf="calcTab == 'fan-efficiency'" [inAssessment]="true" [assessment]="assessment"
-      [fsat]="_fsat" [settings]="settings"></app-fan-efficiency>
-    <app-motor-performance *ngIf="calcTab == 'motor-performance'" [settings]="settings" [inAssessment]="true"
-      [assessment]="assessment" [fsat]="_fsat"></app-motor-performance>
-    <app-nema-energy-efficiency *ngIf="calcTab == 'nema-energy-efficiency'" [inAssessment]="true"
-      [assessment]="assessment" [settings]="settings" [fsat]="_fsat"></app-nema-energy-efficiency>
-    <app-system-and-equipment-curve *ngIf="calcTab == 'fan-curve'" [settings]="settings" [equipmentType]="'fan'"
-      [assessment]="assessment"></app-system-and-equipment-curve>
-  </div>
-  <div *ngIf="mainTab == 'sankey'" class="assessment-tab-container tab-content"
-    [ngStyle]="{'height.px': containerHeight}">
-    <nav class="navbar fsat">
-      <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
-        <div class="tab-content pl-2 pr-2">
-          <div class="form-group">
-            <select name="fsatSelect" class="form-control mt-0 mx-auto w-100" id="fsatSelect" [(ngModel)]="selectedSankeyFsatOption">
-              <option *ngFor="let fsat of fsatOptions" [ngValue]="fsat">{{fsat.name}}</option>
-            </select>
-          </div>
+    @if (mainTab == 'baseline') {
+      <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+        <div class="nav-item" (click)="setSmallScreenTab('form')"
+          [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+          @if (stepTab == 'baseline') {
+            <a class="nav-link">Assessment Settings</a>
+          }
+          @if (stepTab == 'fan-operations') {
+            <a class="nav-link">Operations</a>
+          }
+          @if (stepTab == 'fan-setup') {
+            <a class="nav-link">Fan and Fluid</a>
+          }
+          @if (stepTab == 'fan-motor') {
+            <a class="nav-link">Motor</a>
+          }
+          @if (stepTab == 'fan-field-data') {
+            <a class="nav-link">Field Data</a>
+          }
         </div>
-          <div class="btn-group btn-group-sm align-self-center">
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
-              <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
-                  [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
-          </div>
+        <div class="nav-item" (click)="setSmallScreenTab('details')"
+          [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+          @if (stepTab != 'fan-setup' && stepTab != 'fan-field-data') {
+            <a class="nav-link">Help</a>
+          }
+          @if (stepTab == 'fan-setup' || stepTab == 'fan-field-data') {
+            <a class="nav-link">Details</a>
+          }
+        </div>
       </div>
-  </nav>
-    <div class="sankey-padding w-100">
-      <app-fsat-sankey [fsat]="selectedSankeyFsatOption.fsat" 
-        [settings]="settings" 
-        [labelStyle]="sankeyLabelStyle" 
-        [appBackground]="true"
-        [isBaseline]="selectedSankeyFsatOption.name == 'Baseline'"></app-fsat-sankey>
-    </div>
-  </div>
+    }
 
-  <div #footer id="fsatFooter" class="footer hide-print d-none d-lg-block" *ngIf="mainTab == 'assessment' || mainTab == 'baseline'">
-    <div class="pull-left" *ngIf="stepTab != 'baseline' || mainTab == 'assessment'">
-      <button class="btn btn-default" (click)="back()">Back</button>
-    </div>
-    <div class="pull-right" *ngIf="mainTab == 'baseline' && mainTab != 'assessment'">
-      <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Next</button>
-    </div>
-    <div class="pull-right" *ngIf="mainTab == 'assessment'">
-      <button class="btn btn-primary" (click)="goToReport()">View Report</button>
-    </div>
+    <router-outlet></router-outlet>
+
+    @if (mainTab == 'assessment' || mainTab == 'baseline') {
+      <div #footer id="fsatFooter" class="footer hide-print d-none d-lg-block">
+        @if (stepTab != 'baseline' || mainTab == 'assessment') {
+          <div class="pull-left">
+            <button class="btn btn-default" (click)="back()">Back</button>
+          </div>
+        }
+        @if (mainTab == 'baseline' && mainTab != 'assessment') {
+          <div class="pull-right">
+            <button class="btn btn-primary" [disabled]="!getCanContinue()" (click)="continue()">Next</button>
+          </div>
+        }
+        @if (mainTab == 'assessment') {
+          <div class="pull-right">
+            <button class="btn btn-primary" (click)="goToReport()">View Report</button>
+          </div>
+        }
+      </div>
+    }
   </div>
-</div>
+}
 
 <div bsModal #addNewModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addNewModalLabel"
   aria-hidden="true" [config]="{backdrop: 'static'}">
@@ -137,38 +72,46 @@
         </button>
       </div>
       <div class="modal-body">
-        <app-add-modification *ngIf="showAdd" [fsat]="_fsat" [modifications]="_fsat.modifications"
-          (save)="saveNewMod($event)" [settings]="settings"></app-add-modification>
+        @if (showAdd) {
+          <app-add-modification [fsat]="fsat" [modifications]="fsat.modifications"
+            (save)="saveNewMod($event)" [settings]="settings"></app-add-modification>
+        }
       </div>
     </div>
   </div>
 </div>
 
-<div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
-  aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"
-  *ngIf="_fsat && _fsat.modifications">
-  <div class="modal-dialog modal-lg list-modal modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Select Scenario</h3>
-        <button class="close" (click)="closeSelectModification()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <app-modification-list *ngIf="modListOpen" [fsat]="_fsat" (save)="save()" [modificationIndex]="modificationIndex"
-          (close)="closeSelectModification()" [settings]="settings"></app-modification-list>
+@if (fsat && fsat.modifications) {
+  <div bsModal #changeModificationModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="changeModificationModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg list-modal modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Select Scenario</h3>
+          <button class="close" (click)="closeSelectModification()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          @if (modListOpen) {
+            <app-modification-list [fsat]="fsat" (save)="save(fsat)" [modificationIndex]="modificationIndex"
+              (close)="closeSelectModification()" [settings]="settings"></app-modification-list>
+          }
+        </div>
       </div>
     </div>
   </div>
-</div>
+}
 
+@if (showUpdateUnitsModal) {
+  <app-update-units-modal (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'fsat'"
+    (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+}
 
-<app-update-units-modal *ngIf="showUpdateUnitsModal" (emitClose)="closeUpdateUnitsModal()" [assessmentType]="'fsat'"
- (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings"></app-update-units-modal>
+@if (showWelcomeScreen) {
+  <app-welcome-screen (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
+}
 
- 
-<app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
-
-
-<app-export-modal *ngIf="showExportModal" [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>
+@if (showExportModal) {
+  <app-export-modal [inAssessment]="true" [assessment]="assessment" (close)="closeExportModal($event)"></app-export-modal>
+}

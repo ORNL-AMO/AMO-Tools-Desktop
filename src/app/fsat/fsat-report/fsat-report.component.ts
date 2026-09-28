@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Input, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { FSAT } from '../../shared/models/fans';
 import { Settings } from '../../shared/models/settings';
 import { Assessment } from '../../shared/models/assessment';
@@ -6,7 +6,7 @@ import { Directory } from '../../shared/models/directory';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 import { SettingsService } from '../../settings/settings.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { FsatService } from '../fsat.service';
 import { ReportDocument, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
 import { FsatReportAdapter, FSAT_SECTION_GROUPS } from './fsat-report.adapter';
@@ -17,7 +17,7 @@ import { FsatReportAdapter, FSAT_SECTION_GROUPS } from './fsat-report.adapter';
   styleUrls: ['./fsat-report.component.css'],
   standalone: false
 })
-export class FsatReportComponent implements OnInit {
+export class FsatReportComponent implements OnInit, OnDestroy {
   @Output('closeReport')
   closeReport = new EventEmitter();
   @Input()
@@ -47,15 +47,23 @@ export class FsatReportComponent implements OnInit {
   tabsCollapsed: boolean = true;
   reportDocument$: Observable<ReportDocument>;
   readonly sectionGroups: ReportSectionGroup[] = FSAT_SECTION_GROUPS;
+  private containerHeightSub: Subscription;
 
   constructor(private fsatService: FsatService,
     private settingsDbService: SettingsDbService, private directoryDbService: DirectoryDbService,
     private settingsService: SettingsService, private reportAdapter: FsatReportAdapter) { }
 
   ngOnInit() {
+    if (!this.assessment) {
+      this.assessment = this.fsatService.assessment.getValue();
+      this.inFsat = true;
+      this.containerHeightSub = this.fsatService.containerHeight.subscribe(val => {
+        this.containerHeight = val;
+        this.getContainerHeight();
+      });
+    }
     this.createdDate = new Date();
     if (!this.settings) {
-      //find settings
       this.getSettings();
     }
     if (this.assessment) {
@@ -71,6 +79,12 @@ export class FsatReportComponent implements OnInit {
     this.reportDocument$ = this.reportAdapter.buildDocument(this.assessment);
   }
 
+  ngOnDestroy() {
+    if (this.containerHeightSub) {
+      this.containerHeightSub.unsubscribe();
+    }
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.containerHeight && !changes.containerHeight.firstChange) {
       this.getContainerHeight();
@@ -84,6 +98,9 @@ export class FsatReportComponent implements OnInit {
   }
 
   getContainerHeight() {
+    if (!this.reportBtns || !this.reportHeader) {
+      return;
+    }
     let btnHeight: number = this.reportBtns.nativeElement.clientHeight;
     let headerHeight: number = this.reportHeader.nativeElement.clientHeight;
     this.reportContainerHeight = this.containerHeight - btnHeight - headerHeight - 2;

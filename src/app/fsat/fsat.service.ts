@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, firstValueFrom } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { NavigationEnd, Router } from '@angular/router';
 import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, FsatValid, PsychrometricResults, VelocityResults } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
 import { FanMotorService } from './fan-motor/fan-motor.service';
 import { FsatFluidService } from './fsat-fluid/fsat-fluid.service';
 import { Settings } from '../shared/models/settings';
+import { Assessment } from '../shared/models/assessment';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { FanImperialDefaults, SettingsService } from '../settings/settings.service';
 import { ConvertFsatService } from './convert-fsat.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { FanEfficiencyInputs } from '../calculator/fans/fan-efficiency/fan-efficiency.service';
@@ -31,6 +36,23 @@ export class FsatService {
   calculatorTab: BehaviorSubject<string>;
   showExportModal: BehaviorSubject<boolean>;
 
+  assessment: BehaviorSubject<Assessment>;
+  fsat: BehaviorSubject<FSAT>;
+  settings: BehaviorSubject<Settings>;
+  modificationIndex: BehaviorSubject<number>;
+  modificationExists: BehaviorSubject<boolean>;
+  containerHeight: BehaviorSubject<number>;
+  sankeyOptions: BehaviorSubject<Array<{ name: string, fsat: FSAT }>>;
+  selectedSankeyFsatOption: BehaviorSubject<{ fsat: FSAT, name: string }>;
+  sankeyLabelStyle: BehaviorSubject<string>;
+  showSankeyLabelOptions: BehaviorSubject<boolean>;
+  showUpdateUnitsModal: BehaviorSubject<{ show: boolean, oldSettings?: Settings }>;
+  smallScreenTab: BehaviorSubject<string>;
+
+  fsatEdited: Subject<FSAT>;
+  settingsEdited: Subject<Settings>;
+  addNewModRequested: Subject<{ exploreOpportunities: boolean }>;
+
   //Baseline tabs
   stepTabs: Array<string> = [
     'baseline',
@@ -41,11 +63,32 @@ export class FsatService {
   ];
 
   constructor
-  (private convertFsatService: ConvertFsatService, 
+  (private convertFsatService: ConvertFsatService, private router: Router,
+    private settingsDbService: SettingsDbService, private settingsService: SettingsService,
     private fansSuiteApiService: FansSuiteApiService, private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
     this.initData();
+    /**
+     * banner/footer navigation only ever has to call router.navigate(), never mainTab.next() directly.
+     */
+    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+      const mainView: string = this.getActiveMainView();
+      if (mainView) {
+        this.mainTab.next(mainView);
+      }
+    });
   }
 
+  private getActiveMainView(): string | undefined {
+    let snapshot = this.router.routerState.snapshot.root;
+    let mainView: string | undefined;
+    while (snapshot) {
+      if (snapshot.data && (snapshot.data as { mainView?: string }).mainView) {
+        mainView = (snapshot.data as { mainView?: string }).mainView;
+      }
+      snapshot = snapshot.firstChild;
+    }
+    return mainView;
+  }
 
   initData() {
     this.mainTab = new BehaviorSubject<string>('baseline');
@@ -57,12 +100,116 @@ export class FsatService {
     this.modalOpen = new BehaviorSubject<boolean>(false);
     this.updateData = new BehaviorSubject<boolean>(false);
     this.showExportModal = new BehaviorSubject<boolean>(false);
+    this.assessment = new BehaviorSubject<Assessment>(undefined);
+    this.fsat = new BehaviorSubject<FSAT>(undefined);
+    this.settings = new BehaviorSubject<Settings>(undefined);
+    this.modificationIndex = new BehaviorSubject<number>(undefined);
+    this.modificationExists = new BehaviorSubject<boolean>(false);
+    this.containerHeight = new BehaviorSubject<number>(undefined);
+    this.sankeyOptions = new BehaviorSubject<Array<{ name: string, fsat: FSAT }>>(undefined);
+    this.selectedSankeyFsatOption = new BehaviorSubject<{ fsat: FSAT, name: string }>(undefined);
+    this.sankeyLabelStyle = new BehaviorSubject<string>('both');
+    this.showSankeyLabelOptions = new BehaviorSubject<boolean>(false);
+    this.showUpdateUnitsModal = new BehaviorSubject<{ show: boolean, oldSettings?: Settings }>({ show: false });
+    this.smallScreenTab = new BehaviorSubject<string>('form');
+    this.fsatEdited = new Subject<FSAT>();
+    this.settingsEdited = new Subject<Settings>();
+    this.addNewModRequested = new Subject<{ exploreOpportunities: boolean }>();
+  }
+
+  /**
+   * Called once by FsatAssessmentResolver before any child route renders. Does not trigger
+   * fsatEdited — seeding is not an edit and must never cause a save.
+   */
+  seedAssessment(assessment: Assessment, fsat: FSAT, settings: Settings) {
+    this.assessment.next(assessment);
+    this.fsat.next(fsat);
+    this.settings.next(settings);
+    this.initSankeyList(fsat);
+  }
+
+  /**
+   * Settings lookup-or-create for the resolver to await before seeding, so fsatService.settings
+   * is never transiently undefined for a first-time assessment — relocated from FsatComponent's
+   * former getSettings()/addSettings()/setSettingsUnitType()/checkHasMatchingUnitTypes().
+   */
+  async initAssessmentSettings(assessment: Assessment): Promise<Settings> {
+    let settings: Settings = this.settingsDbService.getByAssessmentId(assessment, true);
+    if (settings) {
+      return settings;
+    }
+    const defaultSettings: Settings = this.settingsDbService.getByAssessmentId(assessment, false);
+    let newSettings: Settings = this.settingsService.getNewSettingFromSetting(defaultSettings);
+    newSettings = this.setSettingsUnitType(newSettings);
+    newSettings.assessmentId = assessment.id;
+    await firstValueFrom(this.settingsDbService.addWithObservable(newSettings));
+    const updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
+    this.settingsDbService.setAll(updatedSettings);
+    return this.settingsDbService.getByAssessmentId(assessment, true);
+  }
+
+  private setSettingsUnitType(settings: Settings): Settings {
+    const hasImperialUnits: boolean = this.checkHasMatchingUnitTypes(settings, FanImperialDefaults);
+    const hasMetricUnits: boolean = this.checkHasMatchingUnitTypes(settings, FanImperialDefaults);
+    if (settings.unitsOfMeasure === 'Custom' && hasImperialUnits) {
+      settings.unitsOfMeasure = 'Imperial';
+    } else if (settings.unitsOfMeasure === 'Custom' && hasMetricUnits) {
+      settings.unitsOfMeasure = 'Metric';
+    } else if (!hasMetricUnits && !hasImperialUnits) {
+      settings.unitsOfMeasure = 'Custom';
+    }
+    return settings;
+  }
+
+  private checkHasMatchingUnitTypes(settings: Settings, unitDefaults: any): boolean {
+    const hasMatchingDensityMeasurement: boolean = settings.densityMeasurement === unitDefaults.densityMeasurement;
+    const hasMatchingFanPowerMeasurement: boolean = settings.fanPowerMeasurement === unitDefaults.fanPowerMeasurement;
+    const hasMatchingFanFlowRate: boolean = settings.fanFlowRate === unitDefaults.fanFlowRate;
+    const hasMatchingFanPressureMeasurement: boolean = settings.fanPressureMeasurement === unitDefaults.fanPressureMeasurement;
+    const hasMatchingFanBarometricPressure: boolean = settings.fanBarometricPressure === unitDefaults.fanBarometricPressure;
+    const hasMatchingFanSpecificHeatGas: boolean = settings.fanSpecificHeatGas === unitDefaults.fanSpecificHeatGas;
+    const hasMatchingFanTemperatureMeasurement: boolean = settings.fanTemperatureMeasurement === unitDefaults.fanTemperatureMeasurement;
+    return hasMatchingDensityMeasurement
+      && hasMatchingFanPowerMeasurement
+      && hasMatchingFanFlowRate
+      && hasMatchingFanPressureMeasurement
+      && hasMatchingFanBarometricPressure
+      && hasMatchingFanSpecificHeatGas
+      && hasMatchingFanTemperatureMeasurement;
+  }
+
+  /**
+   * Replaces FsatComponent's per-field saveFanMotor/saveFanSetup/saveGasDensity/saveFieldData/
+   * saveFsatOperations methods with one generic, immutable update.
+   */
+  updateFsatProperty<K extends keyof FSAT>(key: K, value: FSAT[K]) {
+    const current: FSAT = this.fsat.getValue();
+    if (!current) {
+      return;
+    }
+    const updated: FSAT = { ...current, [key]: value };
+    this.fsat.next(updated);
+    this.fsatEdited.next(updated);
+    this.initSankeyList(updated);
+  }
+
+  /** For the few call sites that replace the whole working copy (explore-opportunities/modify-conditions emit an already-rebuilt FSAT, not a single field). */
+  setFsat(fsat: FSAT) {
+    this.fsat.next(fsat);
+    this.fsatEdited.next(fsat);
+    this.initSankeyList(fsat);
+  }
+
+  /** Settings equivalent of setFsat — used by the baseline tab's explicit settings save. */
+  updateSettings(settings: Settings) {
+    this.settings.next(settings);
+    this.settingsEdited.next(settings);
   }
 
   continue() {
     let tmpStepTab: string = this.stepTab.getValue();
     if (tmpStepTab === 'fan-field-data') {
-      this.mainTab.next('assessment');
+      this.goToMainTab('assessment');
     } else {
       let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
       let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
@@ -77,7 +224,57 @@ export class FsatService {
       let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
       this.stepTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('baseline');
+      this.goToMainTab('baseline');
+    }
+  }
+
+
+  goToMainTab(tab: string) {
+    const assessmentId: number = this.assessment.getValue()?.id;
+    if (assessmentId) {
+      this.router.navigate(['/fsat', assessmentId, tab]);
+    }
+  }
+
+
+  initSankeyList(fsat: FSAT) {
+    const fsatOptions: Array<{ name: string, fsat: FSAT }> = [{ name: 'Baseline', fsat: fsat }];
+    if (fsat.modifications) {
+      fsat.modifications.forEach(mod => {
+        fsatOptions.push({ name: mod.fsat.name, fsat: mod.fsat });
+      });
+    }
+    this.sankeyOptions.next(fsatOptions);
+    const selectedSankeyFsatOption = fsatOptions[0];
+    this.selectedSankeyFsatOption.next(selectedSankeyFsatOption);
+    // * we need isFinishedBaseline because setupDone can be true but not valid? ??
+    const isFinishedBaseline = selectedSankeyFsatOption.name == 'Baseline' && selectedSankeyFsatOption.fsat.setupDone;
+    const isValidFsat = selectedSankeyFsatOption.fsat.valid && selectedSankeyFsatOption.fsat.valid.isValid;
+    this.showSankeyLabelOptions.next(isFinishedBaseline || isValidFsat);
+  }
+
+  setSelectedSankeyFsatOption(option: { fsat: FSAT, name: string }) {
+    this.selectedSankeyFsatOption.next(option);
+  }
+
+  setSankeyLabelStyle(style: string) {
+    this.sankeyLabelStyle.next(style);
+  }
+
+  getCanContinueFromStep(fsat: FSAT, settings: Settings): boolean {
+    const currentStepTab: string = this.stepTab.getValue();
+    if (currentStepTab === 'baseline') {
+      return true;
+    } else if (currentStepTab === 'fan-operations') {
+      return this.fanOperationsService.getFormFromObj(fsat.fsatOperations).valid;
+    } else if (currentStepTab === 'fsat-fluid') {
+      return this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity, settings);
+    } else if (currentStepTab === 'fan-setup') {
+      return this.fanSetupService.isFanSetupValid(fsat.fanSetup, false);
+    } else if (currentStepTab === 'fan-motor') {
+      return this.fanMotorService.isFanMotorValid(fsat.fanMotor);
+    } else if (currentStepTab === 'fan-field-data') {
+      return this.fanFieldDataService.isFanFieldDataValid(fsat.fieldData);
     }
   }
 

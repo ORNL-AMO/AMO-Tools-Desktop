@@ -1,0 +1,35 @@
+@if (selectedSankeyFsatOption) {
+  <div class="assessment-tab-container tab-content"
+    [ngStyle]="{'height.px': containerHeight}">
+    <nav class="navbar fsat">
+      @if (showSankeyLabelOptions) {
+        <div class="d-flex justify-content-start align-items-center w-100 flex-wrap">
+          <div class="tab-content pl-2 pr-2">
+            <div class="form-group">
+              <select name="fsatSelect" class="form-control mt-0 mx-auto w-100" id="fsatSelect" [ngModel]="selectedSankeyFsatOption" (ngModelChange)="selectSankeyOption($event)">
+                @for (fsat of fsatOptions; track fsat.name) {
+                  <option [ngValue]="fsat">{{fsat.name}}</option>
+                }
+              </select>
+            </div>
+          </div>
+            <div class="btn-group btn-group-sm align-self-center">
+                <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('percent')"
+                    [ngClass]="{'active': sankeyLabelStyle == 'percent'}">Loss Percent</button>
+                <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('power')"
+                    [ngClass]="{'active': sankeyLabelStyle == 'power'}">Loss Power</button>
+                <button type="button" class="btn btn-sm" (click)="setSankeyLabelStyle('both')"
+                    [ngClass]="{'active': sankeyLabelStyle == 'both'}">Both</button>
+            </div>
+        </div>
+      }
+  </nav>
+    <div class="sankey-padding w-100">
+      <app-fsat-sankey [fsat]="selectedSankeyFsatOption.fsat"
+        [settings]="settings"
+        [labelStyle]="sankeyLabelStyle"
+        [appBackground]="true"
+        [isBaseline]="selectedSankeyFsatOption.name == 'Baseline'"></app-fsat-sankey>
+    </div>
+  </div>
+}

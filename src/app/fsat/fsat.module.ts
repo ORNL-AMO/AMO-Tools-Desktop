@@ -49,6 +49,11 @@ import { WelcomeScreenComponent } from './welcome-screen/welcome-screen.componen
 import { ImportExportModule } from '../shared/import-export/import-export.module';
 import { SnackbarModule } from '../shared/snackbar-notification/snackbar.module';
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
+import { FsatAssessmentResolver } from './routing/fsat-assessment.resolver';
+import { FsatBaselineComponent } from './baseline/fsat-baseline.component';
+import { FsatAssessmentComponent } from './assessment/fsat-assessment.component';
+import { FsatSankeyResultsComponent } from './sankey/fsat-sankey-results.component';
+import { FsatCalculatorsComponent } from './calculators/fsat-calculators.component';
 
 @NgModule({
   imports: [
@@ -94,7 +99,11 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     ModifyFieldDataFormComponent,
     FsatDiagramComponent,
     OperationsComponent,
-    WelcomeScreenComponent
+    WelcomeScreenComponent,
+    FsatBaselineComponent,
+    FsatAssessmentComponent,
+    FsatSankeyResultsComponent,
+    FsatCalculatorsComponent
   ],
   providers: [
     FsatService,
@@ -107,7 +116,8 @@ import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-t
     CompareService,
     ConvertFsatService,
     FsatWarningService,
-    OperationsService
+    OperationsService,
+    FsatAssessmentResolver
   ]
 })
 export class FsatModule { }
