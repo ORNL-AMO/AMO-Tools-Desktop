@@ -126,8 +126,17 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                         size="small"
                         fullWidth
                         margin="normal"
-                        value={heatEnergy?.heatingFuelType ?? 0}
+                        value={heatEnergy?.heatingFuelType ?? 1}
                         onChange={(e) => handleHeatEnergyChange('heatingFuelType', Number(e.target.value))}
+                        slotProps={{
+                            select: {
+                                MenuProps: {
+                                    disablePortal: true,
+                                    anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
+                                    transformOrigin: { vertical: 'top', horizontal: 'left' },
+                                },
+                            },
+                        }}
                     >
                         <MenuItem value={0}>Electricity</MenuItem>
                         <MenuItem value={1}>Fuel</MenuItem>
@@ -155,7 +164,7 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                 </>
             }
 
-            <Typography variant="subtitle2" sx={{ paddingLeft: 1 }}>Add Pump Energy</Typography>
+            <Typography variant="subtitle2" sx={{ paddingLeft: 1 }}>Add Turbomachinery Energy</Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                 <InputField
                     label="Name"
