@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
+import { Diagram } from '../models/diagram';
+import { FlowDiagramData, migrateFlowDiagramFieldNames } from 'process-flow-lib';
 import { SSMT } from '../models/steam/ssmt';
 import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
@@ -14,6 +16,8 @@ import { getNewIdString } from '../helperFunctions';
 import { Calculator } from '../models/calculators';
 import { SteamPressureOrTemp, SteamQuality } from '../models/steam/steam-inputs';
 import { AdjustedOrActual, BilledForDemand, MonthyInputs } from '../../calculator/utilities/power-factor-correction/power-factor-correction.service';
+import { ProcessCoolingAssessment } from '../models/process-cooling-assessment';
+import { getTowerTypeDependentValues } from '../../process-cooling-assessment/constants/process-cooling-constants';
 
 @Injectable()
 export class UpdateDataService {
@@ -36,7 +40,58 @@ export class UpdateDataService {
             return this.updateWasteWater(assessment);
         } else if (assessment.type === 'CompressedAir') {
             return this.updateCompressedAir(assessment);
+        } else if (assessment.type === 'Water') {
+            return this.updateWater(assessment);
+        } else if (assessment.type === 'ProcessCooling') {
+            return this.updateProcessCooling(assessment);
         }
+    }
+
+    /**
+     * No legacy fields to migrate on `assessment.water` itself — the diagram-side
+     * rename lives in `updateWaterDiagram()` below. This just advances `appVersion`
+     * so `AssessmentDbService`'s version check stops re-running every startup.
+     */
+    updateWater(assessment: Assessment): Assessment {
+        assessment.appVersion = environment.version;
+        return assessment;
+    }
+
+    /**
+     * Applies the shared `process-flow-lib` field migrations to a saved diagram's
+     * `flowDiagramData`, also used by the React diagram's upgrade path. Runs from
+     * AssessmentDbService.getAllAssessments() at app startup, before any Angular
+     * service reads the field.
+     */
+    updateWaterDiagram(diagram: Diagram): Diagram {
+        const flowDiagramData: FlowDiagramData = diagram.waterDiagram?.flowDiagramData;
+        if (flowDiagramData) {
+            migrateFlowDiagramFieldNames(flowDiagramData);
+        }
+        return diagram;
+    }
+
+
+    updateProcessCooling(assessment: Assessment): Assessment {
+        assessment.appVersion = environment.version;
+        if (assessment.processCooling) {
+            assessment.processCooling = this.updateTowerFanSpeedType(assessment.processCooling);
+        }
+        return assessment;
+    }
+
+    updateTowerFanSpeedType(processCooling: ProcessCoolingAssessment): ProcessCoolingAssessment {
+        if (processCooling.systemInformation?.towerInput && processCooling.systemInformation.towerInput.towerType != null) {
+            processCooling.systemInformation.towerInput.fanSpeedType = getTowerTypeDependentValues(processCooling.systemInformation.towerInput.towerType).fanSpeedType;
+        }
+        if (processCooling.modifications) {
+            processCooling.modifications.forEach(mod => {
+                if (mod.upgradeCoolingTowerFans && mod.upgradeCoolingTowerFans.towerType != null) {
+                    mod.upgradeCoolingTowerFans.fanSpeedType = getTowerTypeDependentValues(mod.upgradeCoolingTowerFans.towerType).fanSpeedType;
+                }
+            });
+        }
+        return processCooling;
     }
 
     updateWasteWater(assessment: Assessment): Assessment {
@@ -380,7 +435,38 @@ export class UpdateDataService {
             });
         }
 
+        assessment.phast = this.updateLossNames(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateLossNames(mod.phast);
+            });
+        }
+
         return assessment;
+    }
+
+    /**
+     * Older or imported wall/extended surface losses can have no name (WallLoss.name and
+     * ExtendedSurface.name are optional). getWallLossForm() requires name, so an unnamed
+     * loss fails validation and is silently dropped from summed totals. Backfill it once
+     * here so saved data always has a name going forward.
+     */
+    updateLossNames(phast: PHAST): PHAST {
+        if (phast.losses && phast.losses.wallLosses && phast.losses.wallLosses.length > 0) {
+            phast.losses.wallLosses.forEach((loss, index) => {
+                if (!loss.name) {
+                    loss.name = 'Loss #' + (index + 1);
+                }
+            });
+        }
+        if (phast.losses && phast.losses.extendedSurfaces && phast.losses.extendedSurfaces.length > 0) {
+            phast.losses.extendedSurfaces.forEach((loss, index) => {
+                if (!loss.name) {
+                    loss.name = 'Loss #' + (index + 1);
+                }
+            });
+        }
+        return phast;
     }
 
     updateMoistureInAirCombustion(phast: PHAST): PHAST {

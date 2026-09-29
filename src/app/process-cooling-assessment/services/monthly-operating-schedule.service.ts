@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { getMonthsMaxDays, MONTHS } from '../constants/process-cooling-constants';
 import { MonthlyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
 
 @Injectable()
 export class MonthlyOperatingScheduleService {
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
   monthNames: string[] = MONTHS;
 
   getMonthlyScheduleForm(monthlySchedule: MonthlyOperatingSchedule): FormGroup {

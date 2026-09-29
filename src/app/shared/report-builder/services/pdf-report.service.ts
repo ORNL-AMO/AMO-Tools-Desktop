@@ -24,8 +24,16 @@ const CONTENT_WIDTH_MM = PAGE_WIDTH_MM - PAGE_MARGIN_MM * 2;
 /** Vertical gap added after each rendered section */
 const SECTION_GAP_MM = 8;
 
-const SECTION_HEADING_FONT_SIZE = 11;
-const BODY_FONT_SIZE = 9;
+const SECTION_HEADING_FONT_SIZE = 14;
+const BODY_FONT_SIZE = 10;
+
+/** Conservative single-line row height estimate (BODY_FONT_SIZE + cellPadding), used only to decide whether a table fits on the current page before it starts. */
+const ESTIMATED_ROW_HEIGHT_MM = 7;
+
+function getContrastTextColor([r, g, b]: [number, number, number]): [number, number, number] {
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+  return luminance > 150 ? [0, 0, 0] : [255, 255, 255];
+}
 
 @Injectable({ providedIn: 'root' })
 export class PdfReportService extends BaseReportService {
@@ -65,7 +73,7 @@ export class PdfReportService extends BaseReportService {
 
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(18);
-    pdf.setTextColor(...this.moduleColor);
+    pdf.setTextColor(0, 0, 0);
     pdf.text(meta.title, PAGE_MARGIN_MM, cursorY);
     cursorY += 8;
 
@@ -169,7 +177,7 @@ export class PdfReportService extends BaseReportService {
       startY: cursorY,
       margin: { left: PAGE_MARGIN_MM, right: PAGE_MARGIN_MM },
       theme: 'striped',
-      headStyles: { fillColor: this.moduleColor, fontSize: BODY_FONT_SIZE, fontStyle: 'bold' },
+      headStyles: { fillColor: this.moduleColor, textColor: getContrastTextColor(this.moduleColor), fontSize: BODY_FONT_SIZE, fontStyle: 'bold' },
       styles: { fontSize: BODY_FONT_SIZE, cellPadding: 2 },
       columnStyles: { 0: { cellWidth: 80 } }
     });
@@ -207,7 +215,7 @@ export class PdfReportService extends BaseReportService {
       startY: cursorY,
       margin: { left: PAGE_MARGIN_MM, right: PAGE_MARGIN_MM },
       theme: 'striped',
-      headStyles: { fillColor: this.moduleColor, fontSize: BODY_FONT_SIZE, fontStyle: 'bold' },
+      headStyles: { fillColor: this.moduleColor, textColor: getContrastTextColor(this.moduleColor), fontSize: BODY_FONT_SIZE, fontStyle: 'bold' },
       styles: { fontSize: BODY_FONT_SIZE, cellPadding: 2 },
       columnStyles: {
         0: { cellWidth: LABEL_COL_WIDTH },
@@ -227,6 +235,17 @@ export class PdfReportService extends BaseReportService {
    * Returns the Y position after the table.
    */
   private renderTable(pdf: jsPDF, section: SummaryTableSection, cursorY: number): number {
+    // Push the whole table onto a fresh page rather than let it start here and split mid-table,
+    // whenever it would actually fit on one full page — tables too tall for a single page still
+    // split across pages as before, since that's unavoidable.
+    const estimatedTableHeightMM = (section.rows.length + 1) * ESTIMATED_ROW_HEIGHT_MM + (section.title ? 6 : 0);
+    const remainingPageHeightMM = PAGE_HEIGHT_MM - PAGE_MARGIN_MM - cursorY;
+    const fullPageContentHeightMM = PAGE_HEIGHT_MM - PAGE_MARGIN_MM * 2;
+    if (estimatedTableHeightMM > remainingPageHeightMM && estimatedTableHeightMM <= fullPageContentHeightMM) {
+      pdf.addPage();
+      cursorY = PAGE_MARGIN_MM;
+    }
+
     cursorY = this.renderSectionTitle(pdf, section.title, cursorY);
 
     const emphasisRowsIndiceset = new Set(section.emphasisRowsIndices ?? []);
@@ -234,9 +253,9 @@ export class PdfReportService extends BaseReportService {
     const [accentRed, accentGreen, accentBlue] = this.moduleColor;
 
     const emphasisFillColor: [number, number, number] = [
-      Math.min(255, accentRed + 200),
-      Math.min(255, accentGreen + 150),
-      Math.min(255, accentBlue + 110),
+      Math.round(accentRed * 0.25 + 255 * 0.75),
+      Math.round(accentGreen * 0.25 + 255 * 0.75),
+      Math.round(accentBlue * 0.25 + 255 * 0.75),
     ];
     const groupHeaderFillColor: [number, number, number] = [
       Math.round(accentRed * 0.6 + 255 * 0.4),
@@ -252,19 +271,22 @@ export class PdfReportService extends BaseReportService {
       theme: 'striped',
       headStyles: {
         fillColor: this.moduleColor,
+        textColor: getContrastTextColor(this.moduleColor),
         fontSize: BODY_FONT_SIZE,
         fontStyle: 'bold',
         halign: 'center',
       },
       styles: { fontSize: BODY_FONT_SIZE, cellPadding: 2, overflow: 'linebreak', halign: 'center' },
-      columnStyles: { 0: { halign: 'left' } },
+      // Wide tables (e.g. compressed-air's hour-per-column System Profiles) otherwise squeeze the label
+      // column down to near-nothing since autoTable distributes width evenly across every column.
+      columnStyles: { 0: { halign: 'left', minCellWidth: 32 } },
       rowPageBreak: 'avoid',
       didParseCell: (data) => {
         if (data.section !== 'body') return;
         if (subGroupHeaderIndiceset.has(data.row.index)) {
           data.cell.styles.fontStyle = 'bold';
           data.cell.styles.fillColor = groupHeaderFillColor;
-          data.cell.styles.textColor = [255, 255, 255];
+          data.cell.styles.textColor = getContrastTextColor(groupHeaderFillColor);
         } else if (emphasisRowsIndiceset.has(data.row.index)) {
           data.cell.styles.fontStyle = 'bold';
           data.cell.styles.fillColor = emphasisFillColor;
@@ -282,13 +304,11 @@ export class PdfReportService extends BaseReportService {
    */
   private async renderChart(pdf: jsPDF, section: ChartSection, cursorY: number): Promise<number> {
     let imageData: string | null = null;
-    let imageAspectRatio: number = 2;
+    const imageAspectRatio: number = section.aspectRatio ?? 2;
 
     if (section.imageDataProvider) {
       try {
         imageData = await section.imageDataProvider();
-        // Plotly.toImage returns a data URL; derive aspect from a known fixed ratio (1400×700)
-        imageAspectRatio = 2; // width / height
       } catch {
         // fall through to altData
         // todo display section with a message "Chart image failed to generate" and a warning icon
@@ -317,14 +337,14 @@ export class PdfReportService extends BaseReportService {
   }
 
   /**
-   * Renders an optional section heading in the accent color above the section content.
+   * Renders an optional section heading above the section content.
    * Returns the unchanged Y position when no title is provided.
    */
   private renderSectionTitle(pdf: jsPDF, title: string | undefined, cursorY: number): number {
     if (!title) return cursorY;
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(SECTION_HEADING_FONT_SIZE);
-    pdf.setTextColor(...this.moduleColor);
+    pdf.setTextColor(0, 0, 0);
     pdf.text(title, PAGE_MARGIN_MM, cursorY);
     return cursorY + 6;
   }

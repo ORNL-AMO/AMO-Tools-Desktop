@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, inject, input } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ChillerInventoryItem } from '../../shared/models/process-cooling-assessment';
 import { debounceTime} from 'rxjs';
@@ -13,23 +13,24 @@ import { LOAD_LABELS, MONTHS } from '../constants/process-cooling-constants';
   templateUrl: './chiller-load-schedule.component.html',
   styleUrls: ['./chiller-load-schedule.component.css']
 })
-export class ChillerLoadScheduleComponent implements OnInit {
-  @Input({required: true})
-  chiller: ChillerInventoryItem;
+export class ChillerLoadScheduleComponent {
+  chiller = input.required<ChillerInventoryItem>();
 
   destroyRef = inject(DestroyRef);
   processCoolingAssessmentService: ProcessCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
   chillerLoadScheduleService: ChillerLoadScheduleService = inject(ChillerLoadScheduleService);
 
   isCollapsed = false;
-  form: FormGroup<LoadForm>;
+  form!: FormGroup<LoadForm>;
   loadLabels = LOAD_LABELS;
   months = MONTHS;
   private copiedRow: number[] | null = null;
 
-  ngOnInit() {
-    this.form = this.chillerLoadScheduleService.getLoadScheduleForm(this.chiller);
-    this.observeFormChanges();
+  constructor() {
+    effect(() => {
+      this.form = this.chillerLoadScheduleService.getLoadScheduleForm(this.chiller());
+      this.observeFormChanges();
+    });
   }
 
   observeFormChanges() {
@@ -38,7 +39,7 @@ export class ChillerLoadScheduleComponent implements OnInit {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
       const fields = this.chillerLoadScheduleService.getLoadScheduleFields(this.form.getRawValue());
-      this.processCoolingAssessmentService.updateAssessmentChiller(this.chiller.itemId, fields);
+      this.processCoolingAssessmentService.updateAssessmentChiller(this.chiller().itemId, fields);
     });
   }
 
@@ -46,10 +47,11 @@ export class ChillerLoadScheduleComponent implements OnInit {
     if (row && row.controls) {
       return row.controls.reduce((sum, ctrl) => sum + (Number(ctrl.value) || 0), 0);
     }
+    return 0;
   }
 
   toggleUseSameLoading() {
-    this.form.get('useSameMonthlyLoading').setValue(!this.form.get('useSameMonthlyLoading').value);
+    this.form.get('useSameMonthlyLoading')!.setValue(!this.form.get('useSameMonthlyLoading')!.value);
   }
 
   copyRow(rowIndex: number) {
@@ -82,6 +84,6 @@ export class ChillerLoadScheduleComponent implements OnInit {
     return this.form.get('loadScheduleByMonth') as FormArray;
   }
   get useSameMonthlyLoading() {
-    return this.form.get('useSameMonthlyLoading').value;
+    return this.form.get('useSameMonthlyLoading')!.value;
   }
 }

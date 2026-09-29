@@ -1,4 +1,4 @@
-<div class="pt-2 d-flex flex-column help-info">
+﻿<div class="pt-2 d-flex flex-column help-info">
     <h5>
         Inventory Help
         <br>
@@ -7,7 +7,8 @@
     </h5>
     <hr class="my-1 hr-spacer">
 
-    <div class="my-2" *ngIf="focusedField() == 'chiller-name'">
+    @if (focusedField() == 'chiller-name') {
+<div class="my-2">
         <h6>
            Chiller Name
             <br>
@@ -17,8 +18,10 @@
             </small>
         </h6>
     </div>
+}
 
-    <div class="my-2" *ngIf="focusedField() == 'chiller-description'">
+    @if (focusedField() == 'chiller-description') {
+<div class="my-2">
         <h6>
             Description
             <br>
@@ -28,8 +31,10 @@
             </small>
         </h6>
     </div>
+}
 
-    <div class="my-2" *ngIf="focusedField() == 'chillerType'">
+    @if (focusedField() == 'chillerType') {
+<div class="my-2">
         <h6>
             Chiller Type
             <br>
@@ -43,8 +48,10 @@
             </small>
         </h6>
     </div>
+}
 
-    <div class="my-2" *ngIf="(focusedField() == 'isFullLoadEfficiencyKnown') || focusedField() == 'fullLoadEfficiency'">
+    @if ((focusedField() == 'isFullLoadEfficiencyKnown') || focusedField() == 'fullLoadEfficiency') {
+<div class="my-2">
         <h6>
             {{ focusedField() == 'isFullLoadEfficiencyKnown' ? 'Is Full Load Efficiency Known?' : 'Full Load Efficiency' }}
             <br>
@@ -61,9 +68,11 @@
             </small>
         </h6>
     </div>
+}
 
 
-    <div class="my-2" *ngIf="focusedField() == 'capacity'">
+    @if (focusedField() == 'capacity') {
+<div class="my-2">
         <h6>
             Capacity
             <br>
@@ -74,8 +83,10 @@
             </small>
         </h6>
     </div>
+}
 
-        <div class="my-2" *ngIf="focusedField() == 'age'">
+        @if (focusedField() == 'age') {
+<div class="my-2">
         <h6>
             Age
             <br>
@@ -91,6 +102,7 @@
             </small>
         </h6>
     </div>
+}
 
 
 

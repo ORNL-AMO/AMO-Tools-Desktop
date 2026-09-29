@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   build:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -57,7 +57,7 @@ jobs:
       BUILD_VERSION: ${{ steps.output.outputs.BUILD_VERSION }}
 
   bundle_macos:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: macos-14
     needs: [build]
     steps:
@@ -84,18 +84,15 @@ jobs:
       - name: Setup codesigning
         env:
           APPLE_CERT_A_BASE64: ${{ secrets.APPLE_CERT_A_BASE64 }}
-          APPLE_CERT_I_BASE64: ${{ secrets.APPLE_CERT_I_BASE64 }}
           APPLE_PROV_PROF_BASE64: ${{ secrets.APPLE_PROV_PROF_BASE64 }}
           APPLE_CERT_SECRET: ${{ secrets.APPLE_CERT_SECRET }}
           APPLE_KEYCHAIN_SECRET: ${{ secrets.APPLE_KEYCHAIN_SECRET }}
         run: |
           CERT_A_PATH=$RUNNER_TEMP/app_certificate.p12
-          CERT_I_PATH=$RUNNER_TEMP/ins_certificate.p12
           PROV_PROF_PATH=$RUNNER_TEMP/embedded.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/build.keychain
 
           echo -n "$APPLE_CERT_A_BASE64" | base64 --decode -o $CERT_A_PATH
-          echo -n "$APPLE_CERT_I_BASE64" | base64 --decode -o $CERT_I_PATH
           echo -n "$APPLE_PROV_PROF_BASE64" | base64 --decode -o $PROV_PROF_PATH
 
           security -v create-keychain -p "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
@@ -104,12 +101,14 @@ jobs:
           security -v unlock-keychain -p "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
 
           security -v import $CERT_A_PATH -P "$APPLE_CERT_SECRET" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security -v import $CERT_I_PATH -P "$APPLE_CERT_SECRET" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
 
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile
       - name: Bundle
         run: npm run dist -- --mac --universal --publish never
+      - name: Verify
+        run: |
+          codesign --verify --deep --strict --verbose=2 output/mac-universal/MEASUR.app
       - name: Notarize
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
@@ -134,7 +133,7 @@ jobs:
           retention-days: 1
 
   bundle_win:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: windows-2025
     needs: [build]
     steps:
@@ -182,7 +181,7 @@ jobs:
           retention-days: 1
 
   bundle_linux:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: ubuntu-24.04
     needs: [build]
     steps:
@@ -221,7 +220,7 @@ jobs:
           retention-days: 1
 
   sign_win:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: [self-hosted, cs]
     needs: [bundle_win]
     steps:
@@ -260,7 +259,7 @@ jobs:
         run: rm -rf ./output
 
   release:
-    if: github.ref_name == 'master'
+    if: github.event_name == 'push' && github.ref_name == 'master'
     runs-on: ubuntu-22.04
     needs: [build, bundle_macos, bundle_linux, sign_win]
     env:
@@ -273,7 +272,7 @@ jobs:
           path: release
           merge-multiple: true
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         # if: startsWith(github.ref, 'refs/tags/') # Uncomment if enabling tag gating
         with:
           name: MEASUR v${{ env.VERSION }}

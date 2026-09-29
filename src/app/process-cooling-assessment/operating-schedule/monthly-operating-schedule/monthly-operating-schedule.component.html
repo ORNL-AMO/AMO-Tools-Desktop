@@ -22,7 +22,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				<ng-container *ngFor="let month of months; let i = index" [formGroup]="monthsFormArray.at(i)">
+				@for (month of months; track $index; let i = $index) {
+				<ng-container [formGroup]="monthsFormArray.at(i)">
 					<tr>
 						<td>{{ month.name }} <span class="text-muted">({{ month.days }} days)</span></td>
 						<td>
@@ -30,12 +31,15 @@
 								[max]="month.days">
 						</td>
 					</tr>
-					<tr *ngIf="getMonthError(i)">
+					@if (getMonthError(i)) {
+					<tr>
 						<td colspan="2">
 							<span class="alert-danger pull-right small">{{ getMonthError(i) }}</span>
 						</td>
 					</tr>
+					}
 				</ng-container>
+				}
 			</tbody>
 		</table>
 	</div>

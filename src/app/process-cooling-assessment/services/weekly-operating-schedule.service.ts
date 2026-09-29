@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DayScheduleData, WeeklyOperatingSchedule } from '../../shared/models/process-cooling-assessment';
 import { getHoursOnMonToSun } from '../constants/process-cooling-constants';
 
 @Injectable()
 export class WeeklyOperatingScheduleService {
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
 
   getWeeklyScheduleForm(scheduleData: WeeklyOperatingSchedule): FormGroup<WeeklyOperatingScheduleForm> {
     const dayData = scheduleData.days;

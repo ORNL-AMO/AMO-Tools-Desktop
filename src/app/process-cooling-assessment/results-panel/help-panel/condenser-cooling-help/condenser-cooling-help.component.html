@@ -1,4 +1,4 @@
-<h5>
+﻿<h5>
     {{ condenserCoolingMethod === CondenserCoolingMethod.Water ? 'Water Cooled Condenser' : 'Air Cooled Condenser' }} Help
     <br>
     <small class="text-muted">Enter data related to the condenser cooling system</small>
@@ -6,7 +6,8 @@
 <hr class="my-1 hr-spacer">
 
 <!-- Air Cooled Fields -->
-<div class="my-2" *ngIf="focusedField() == 'outdoorAirTemp'">
+@if (focusedField() == 'outdoorAirTemp') {
+<div class="my-2">
     <h6>
         Design Outdoor Air Temperature
         <br>
@@ -15,7 +16,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'airCoolingSource'">
+}
+
+@if (focusedField() == 'airCoolingSource') {
+<div class="my-2">
     <h6>
         Air Cooling Source
         <br>
@@ -24,7 +28,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'indoorTemp'">
+}
+
+@if (focusedField() == 'indoorTemp') {
+<div class="my-2">
     <h6>
         Average Indoor Temperature
         <br>
@@ -33,7 +40,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'followingTempDifferential'">
+}
+
+@if (focusedField() == 'followingTempDifferential') {
+<div class="my-2">
     <h6>
         Following Temperature Differential
         <br>
@@ -44,9 +54,11 @@
         </small>
     </h6>
 </div>
+}
 
 <!-- Water Cooled Fields -->
-<div class="my-2" *ngIf="focusedField() == 'isConstantCondenserWaterTemp'">
+@if (focusedField() == 'isConstantCondenserWaterTemp') {
+<div class="my-2">
     <h6>
         Is Condenser Water Temp Constant
         <br>
@@ -57,7 +69,10 @@
         </small>
     </h6>
 </div>
-<div class="my-2" *ngIf="focusedField() == 'condenserWaterTemp'">
+}
+
+@if (focusedField() == 'condenserWaterTemp') {
+<div class="my-2">
     <h6>
         Condenser Water Temperature
         <br>
@@ -70,5 +85,4 @@
         </small>
     </h6>
 </div>
-
-
+}

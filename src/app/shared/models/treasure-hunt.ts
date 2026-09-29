@@ -1,7 +1,7 @@
 import { LightingReplacementData } from "./lighting";
 import { OperatingHours } from "./operations";
 import { ReplaceExistingData, MotorDriveInputs } from "./calculators";
-import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput } from "./standalone";
+import { NaturalGasReductionData, ElectricityReductionData, CompressedAirReductionData, WaterReductionData, CompressedAirPressureReductionData, SteamReductionData, PipeInsulationReductionInput, TankInsulationReductionInput, AirLeakSurveyInput, SteamLeakSurveyInput } from "./standalone";
 import { WallLoss } from "./phast/losses/wallLoss";
 import { FlueGas } from "./phast/losses/flueGas";
 import { EnergyData } from "./phast/losses/chargeMaterial";
@@ -22,7 +22,7 @@ import { ExistingIntegrationData } from "../assessment-integration/assessment-in
 import { BoilerBlowdownRateInputs } from "../../calculator/steam/boiler-blowdown-rate/boiler-blowdown-rate.service";
 import { PowerFactorCorrectionInputs } from "../../calculator/utilities/power-factor-correction/power-factor-correction.service";
 import { ImportExportTypes } from "../import-export/import.service";
-
+import { SteamLeakSurveyData } from "./standalone";
 export interface TreasureHunt {
     name: string,
     lightingReplacements?: Array<LightingReplacementTreasureHunt>;
@@ -53,7 +53,8 @@ export interface TreasureHunt {
     chillerPerformanceOpportunities?: Array<ChillerPerformanceTreasureHunt>;
     coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
     coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
-    boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;    
+    boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
+    steamLeakSurveys?: Array<SteamLeakSurveyTreasureHunt>;
     powerFactorCorrectionOpportunities?: Array<PowerFactorCorrectionTreasureHunt>;
     operatingHours?: OperatingHours;
     currentEnergyUsage?: EnergyUsage;
@@ -256,6 +257,16 @@ export const opportunities: OpportunityForFiltering[] = [
         description: 'Calculate the blowdown rate of a boiler.'
     },
     {
+        iconString: 'assets/images/calculator-icons/compressed-air-icons/CAleak-icon.png',
+        iconClass: 'steam-calc-icon',
+        imageSizeClass: 'calc-img th-calc-img-w',
+        iconCalcType: 'steam',
+        opportunityType: 'steam-leak-survey',
+        utilityType: ['All', 'Steam', 'Natural Gas', 'Other Fuel'],
+        name: 'Steam - Leak Survey',
+        description: 'Quantify the energy savings associated with reducing steam leaks.'
+    },
+    {
         iconString: 'assets/images/calculator-icons/utilities-icons/compressed-air-reduction-icon.png',
         iconClass: 'calc-icon',
         imageSizeClass: 'calc-img',
@@ -381,6 +392,7 @@ export enum Treasure {
     pipeInsulation = 'pipe-insulation-reduction',
     tankInsulation = 'tank-insulation-reduction',
     airLeak = 'air-leak-survey',
+    steamLeak = 'steam-leak-survey',
     wallLoss = 'wall-loss',
     airHeating = 'air-heating',
     flueGas = 'flue-gas',
@@ -398,7 +410,7 @@ export enum Treasure {
     coolingTowerBasin = 'cooling-tower-basin',
     assessmentOpportunity ='assessment-opportunity',
     boilerBlowdownRate = 'boiler-blowdown-rate',
-    powerFactorCorrection = 'power-factor-correction'
+    powerFactorCorrection = 'power-factor-correction',
 }
 
 export interface FilterOption {
@@ -633,6 +645,11 @@ export interface AirLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
     airLeakSurveyInput: AirLeakSurveyInput,
 }
 
+export interface SteamLeakSurveyTreasureHunt extends TreasureHuntOpportunity {
+    steamLeakSurveyInput: SteamLeakSurveyInput,
+}
+
+
 export interface WasteHeatTreasureHunt extends TreasureHuntOpportunity {
     inputData: WasteHeatInput;
     opportunitySheet?: OpportunitySheet;
@@ -738,7 +755,7 @@ export interface TreasureHuntOpportunityResults {
     baselineCost: number,
     modificationCost: number,
     utilityType: OpportunityUtilityType,
-  }
+}
 
 export interface OpportunitySheetResults {
     electricityResults: OpportunitySheetResult,
@@ -940,5 +957,6 @@ export interface ImportExportOpportunities {
     coolingTowerFanOpportunities?: Array<CoolingTowerFanTreasureHunt>;
     coolingTowerBasinOpportunities?: Array<CoolingTowerBasinTreasureHunt>;
     boilerBlowdownRateOpportunities?: Array<BoilerBlowdownRateTreasureHunt>;
+    steamLeakSurveys?: Array<SteamLeakSurveyTreasureHunt>;
     powerFactorCorrectionOpportunities?: Array<PowerFactorCorrectionTreasureHunt>;
 }

@@ -354,6 +354,11 @@ export class FsatService {
     return tmpSavingsPercent;
   }
 
+  getPaybackPeriod(annualCostSavings: number, implementationCosts: number): number {
+    if (!implementationCosts || (annualCostSavings ?? 0) <= 0) return 0;
+    return (implementationCosts / annualCostSavings) * 12;
+  }
+
   checkValid(fsat: FSAT, isBaseline: boolean, settings): FsatValid {
     let fsatOperationsValid: boolean = this.fanOperationsService.isOperationsDataValid(fsat.fsatOperations);
     let fsatFluidValid: boolean = this.fsatFluidService.isFanFluidValid(fsat.baseGasDensity, settings);

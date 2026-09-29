@@ -7,7 +7,7 @@ export class FieldMeasurementsCatalogService {
 
   constructor(private formBuilder: FormBuilder) { }
 
-  getFormFromFieldMeasurements(fieldMeasurements: FieldMeasurements): FormGroup {
+  getFormFromFieldMeasurements(fieldMeasurements: FieldMeasurements, pumpType?: number): FormGroup {
     let motorKwValidators: Array<ValidatorFn> = [];
     let motorAmpsValidators: Array<ValidatorFn> = [];
     if (fieldMeasurements.loadEstimationMethod == 0) {
@@ -25,16 +25,30 @@ export class FieldMeasurementsCatalogService {
       assessmentDate: [fieldMeasurements.assessmentDate],
       loadEstimatedMethod: [fieldMeasurements.loadEstimationMethod],
       operatingFlowRate: [fieldMeasurements.operatingFlowRate, [Validators.required, Validators.min(0)]],
-      operatingHead: [fieldMeasurements.operatingHead, [Validators.required, Validators.min(0.1)]], 
-      measuredPower: [fieldMeasurements.measuredPower, motorKwValidators], 
-      measuredCurrent: [fieldMeasurements.measuredCurrent, motorAmpsValidators], 
-      measuredVoltage: [fieldMeasurements.measuredVoltage, Validators.required], 
+      operatingHead: [fieldMeasurements.operatingHead, this.getOperatingHeadValidators(pumpType)],
+      measuredPower: [fieldMeasurements.measuredPower, motorKwValidators],
+      measuredCurrent: [fieldMeasurements.measuredCurrent, motorAmpsValidators],
+      measuredVoltage: [fieldMeasurements.measuredVoltage, Validators.required],
      });
 
     for (let key in form.controls) {
       form.controls[key].markAsDirty();
     }
 
+    return form;
+  }
+
+  getOperatingHeadValidators(pumpType: number): Array<ValidatorFn> {
+    if (pumpType == 12) {
+      return [Validators.min(0.1)];
+    } else {
+      return [Validators.required, Validators.min(0.1)];
+    }
+  }
+
+  updateOperatingHeadValidators(form: FormGroup, pumpType: number): FormGroup {
+    form.controls.operatingHead.setValidators(this.getOperatingHeadValidators(pumpType));
+    form.controls.operatingHead.updateValueAndValidity();
     return form;
   }
 

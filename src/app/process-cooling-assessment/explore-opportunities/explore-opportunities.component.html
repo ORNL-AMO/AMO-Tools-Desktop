@@ -1,17 +1,17 @@
 <div class="d-flex flex-column panel-container pb-4">
     <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
         <div class="nav-item" (click)="setSmallScreenTab('form')"
-            [ngClass]="{'small-screen-active': smallScreenTab === 'form'}">
+            [class.small-screen-active]="smallScreenTab === 'form'">
             <a>Explore Opportunities</a>
         </div>
         <div class="nav-item" (click)="setSmallScreenTab('details')"
-            [ngClass]="{'small-screen-active': smallScreenTab === 'details'}">
+            [class.small-screen-active]="smallScreenTab === 'details'">
             <a>Details</a>
         </div>
     </div>
 
     @if(selectedModification$ | async; as selectedModification) {
-        <div [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+        <div [class.small-screen-tab]="smallScreenTab === 'form'">
             <div class="header mr-2 ml-2">
                 <h3>Select Potential Energy Efficiency Measures</h3>
             </div>
@@ -47,7 +47,7 @@
         </div>
     } @else {
         <div class="no-data assessment-panel-container lookup-form scroll-item"
-            [ngClass]="{'small-screen-tab': smallScreenTab === 'form'}">
+            [class.small-screen-tab]="smallScreenTab === 'form'">
             <h2 class="h6">Explore energy efficiency measures (EEMs) to increase the efficiency and effectiveness of
                 your system.</h2>
             <p class="mt-2 small text-muted">EEMS will be modeled starting from Baseline conditions.</p>

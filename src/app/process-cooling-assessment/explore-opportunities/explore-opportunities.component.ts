@@ -26,7 +26,7 @@ export class ExploreOpportunitiesComponent {
   }
 
   addModification() {
-    this.modalService.openModal<AddModificationComponent, undefined>(
+    this.modalService.openModal(
       AddModificationComponent, 
       {
         width: '800px',

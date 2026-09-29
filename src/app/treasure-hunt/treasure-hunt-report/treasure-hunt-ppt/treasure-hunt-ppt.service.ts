@@ -361,7 +361,7 @@ export class TreasureHuntPptService {
             teamTop3Opportunities.push(teamOpp);
           }
         });
-        teamTop3Opportunities = _.orderBy(teamTop3Opportunities, 'costSavings', 'asc');
+        teamTop3Opportunities = _.orderBy(teamTop3Opportunities, 'costSavings', 'desc');
         let top3Rows = [];
         top3Rows.push([
           { text: "Opportunity Name", options: { color: "FFFFFF", bold: true, fill: { color: '1D428A' } } },

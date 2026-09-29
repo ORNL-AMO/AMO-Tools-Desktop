@@ -16,13 +16,13 @@
 <form [formGroup]="form" class="w-100">
 	<div class="table-responsive w-100">
 		<div class="d-flex flex-column w-100">
-			<div *ngFor="let dayLabel of DAY_LABELS; let dayIndex = index"
-					 [formGroup]="getDayGroup(dayIndex)"
+			@for (dayLabel of DAY_LABELS; track $index; let dayIndex = $index) {
+			<div [formGroup]="getDayGroup(dayIndex)"
 					 class="d-flex align-items-center w-100 mb-2 position-relative"
 					 [class.schedule-disabled]="useSameSchedule.value && dayIndex !== 0">
 				<label class="mb-0 mr-2 flex-shrink-0 day-label">{{ dayLabel }}</label>
 				<div class="btn-group btn-group-toggle mr-3" ngbRadioGroup name="scheduleType{{dayIndex}}" [value]="getScheduleType(dayIndex)" (change)="onScheduleTypeChange($event.target.value, dayIndex)">
-					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'off'" [ngClass]="{'bg-danger': getScheduleType(dayIndex) === 'off'}">
+					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'off'" [class.bg-danger]="getScheduleType(dayIndex) === 'off'">
 						<input type="radio" [checked]="getScheduleType(dayIndex) === 'off'" value="off"> Off
 					</label>
 					<label class="btn btn-outline-secondary mb-0" [class.active]="getScheduleType(dayIndex) === 'allDay'">
@@ -33,13 +33,14 @@
 					</label>
 				</div>
 				<select formControlName="start" class="form-control mx-1 start-control">
-					<option *ngFor="let hour of HOUR_OPTIONS" [value]="hour">{{ hour }}:00</option>
+					@for (hour of HOUR_OPTIONS; track hour) {<option [value]="hour">{{ hour }}:00</option>}
 				</select>
 				<span class="mx-1">-</span>
 				<select formControlName="end" class="form-control mx-1 end-control">
-					<option *ngFor="let hour of HOUR_OPTIONS" [value]="hour">{{ hour }}:00</option>
+					@for (hour of HOUR_OPTIONS; track hour) {<option [value]="hour">{{ hour }}:00</option>}
 				</select>
 			</div>
+			}
 		</div>
 	</div>
 </form>

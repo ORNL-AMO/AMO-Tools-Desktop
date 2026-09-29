@@ -13,8 +13,16 @@ export interface NodeGraphIndex {
   // nodeId, edge[]
   edgesByNode: Record<string, Edge<CustomEdgeData>[]>;
   // nodeId, node
-  nodeMap?: Record<string, Node>;
-  systemsWithRODirectDischarge?: Record<string, { intakeNode: Node, treatmentNode: Node, dischargeNode: Node, wasteTreatmentNode?: Node }>;
+  nodeMap: Record<string, Node>;
+  roRejectConfigurations?: Record<string, RoRejectConfiguration>;
+}
+
+export interface RoRejectConfiguration {
+  intakeNode: Node;
+  rejectDischargeNode: Node;
+  rejectWasteTreatmentNode?: Node;
+  rejectEdgeId: string;
+  productOutflow: number;
 }
 
 export const createGraphIndex = (nodes: Node[], edges: Edge<CustomEdgeData>[]) => {
@@ -23,6 +31,7 @@ export const createGraphIndex = (nodes: Node[], edges: Edge<CustomEdgeData>[]) =
     childMap: {},
     edgeMap: {},
     edgesByNode: {},
+    nodeMap: Object.fromEntries(nodes.map(node => [node.id, node])),
   }
 
   for (const edge of edges) {
@@ -41,11 +50,6 @@ export const createGraphIndex = (nodes: Node[], edges: Edge<CustomEdgeData>[]) =
         edgeDescription: getEdgeDescription(edge, graph)
       }
     };
-
-    graph.nodeMap = {};
-    for (const node of nodes) {
-      graph.nodeMap[node.id] = node;
-    }
   }
 
   return graph;

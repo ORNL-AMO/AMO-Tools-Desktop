@@ -6,6 +6,7 @@ import {
   MiniMap,
   Controls,
   Background,
+  Panel,
   ReactFlowProvider,
   OnConnect,
   type Node,
@@ -20,18 +21,18 @@ import { edgeTypes, nodeTypes } from './FlowTypes';
 import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
-import { AppStore, configureAppStore, RootState, selectEdges, selectNodes } from './store';
+import { AppStore, configureAppStore, RootState, selectEdges, selectFlowConfidenceEnabled, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, openDrawerWithSelected, selectedIdChange } from './diagramReducer';
+import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange } from './diagramReducer';
+import { openDrawerWithSelected, selectComponent } from './diagramThunks';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
-import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, NodeErrors, getIsDiagramValid } from 'process-flow-lib';
 import MenuSidebar from '../Drawer/MenuSidebar';
 import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
-import { FlowServiceProvider } from '../../services/FlowService';
-import ResultsPanel from './ResultsPanel';
+import FlowConfidenceLegend from './FlowConfidenceLegend';
+import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ConvertValueFn, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, DiagramFlowErrors, getIsDiagramValid } from 'process-flow-lib';
 
 
 export interface DiagramProps {
@@ -39,7 +40,9 @@ export interface DiagramProps {
   height?: number,
   parentContainer: ParentContainerDimensions,
   processDiagram?: WaterDiagram;
+  appVersion?: string;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
+  convertValueFn?: ConvertValueFn;
 }
 
 
@@ -51,9 +54,10 @@ const Diagram = (props: DiagramProps) => {
     }
   })
   const diagramNotes = useAppSelector((state: RootState) => state.diagram.diagramNotes);
+  const meta = useAppSelector((state: RootState) => state.diagram.meta);
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const isDialogOpen = useAppSelector((state: RootState) => state.diagram.isDialogOpen);
+  const isDialogOpen = useAppSelector((state: RootState) => state.ui.isDialogOpen);
   const edges: Edge[] = useAppSelector(selectEdges);
   const userDiagramOptions: UserDiagramOptions = useAppSelector((state: RootState) => state.diagram.diagramOptions);
   const settings: DiagramSettings = useAppSelector((state: RootState) => state.diagram.settings);
@@ -64,27 +68,29 @@ const Diagram = (props: DiagramProps) => {
   const animated: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.animated);
   const minimapVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
   const controlsVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
+  const flowConfidenceEnabled: boolean = useAppSelector(selectFlowConfidenceEnabled);
   const defaultEdgeType: string = useAppSelector((state: RootState) => state.diagram.diagramOptions.edgeType);
-  const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.diagram.validationWindowLocation);
+  const validationWindowLocation: ValidationWindowLocation = useAppSelector((state) => state.ui.validationWindowLocation);
   const diagramEdgeTypes: EdgeTypes = useAppSelector((state: RootState) => {
     return getEdgeTypesFromString(state.diagram.diagramOptions.edgeType, edgeTypes);
   });
   const diagramParentDimensions = props.parentContainer;
-  const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.diagram.diagramAlert);
-  const isMenuDrawerOpen = useAppSelector((state) => state.diagram.isMenuDrawerOpen);
+  const diagramAlertState: DiagramAlertState = useAppSelector((state) => state.ui.diagramAlert);
+  const isMenuDrawerOpen = useAppSelector((state) => state.ui.isMenuDrawerOpen);
 
-  const nodeErrors: NodeErrors = useAppSelector((state: RootState) => state.diagram.nodeErrors);
+  const diagramFlowErrors: DiagramFlowErrors = useAppSelector((state: RootState) => state.diagram.diagramFlowErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
 
   const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
-  const isDiagramValid = useMemo(() => getIsDiagramValid(nodeErrors), [nodeErrors]);
+  const isDiagramValid = useMemo(() => getIsDiagramValid(diagramFlowErrors), [diagramFlowErrors]);
 
   useEffect(() => {
     if (reactFlowInstance && props.height) {
       const parentState = {
         diagramData: props.processDiagram?.flowDiagramData,
         parentContainer: props.parentContainer,
-        assessmentId: props.processDiagram.assessmentId
+        assessmentId: props.processDiagram.assessmentId,
+        appVersion: props.appVersion
       }
       dispatch(diagramInitialized(parentState));
 
@@ -103,8 +109,9 @@ const Diagram = (props: DiagramProps) => {
     if (assessmentCreatedNodes.length === 0) {
       const updatedDiagramData: FlowDiagramData = {
         name: props.processDiagram.flowDiagramData.name,
+        meta,
         nodes: nodes,
-        nodeErrors: nodeErrors,
+        diagramFlowErrors: diagramFlowErrors,
         edges: debouncedEdges,
         settings,
         userDiagramOptions,
@@ -116,7 +123,7 @@ const Diagram = (props: DiagramProps) => {
       formatDataForMEASUR(updatedDiagramData);
       props.saveFlowDiagramData(updatedDiagramData);
     }
-  }, [debouncedNodes, debouncedEdges, userDiagramOptions, settings, debouncedDiagramNotes, paletteColors]);
+  }, [debouncedNodes, debouncedEdges, diagramFlowErrors, userDiagramOptions, settings, debouncedDiagramNotes, paletteColors]);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -170,7 +177,7 @@ const Diagram = (props: DiagramProps) => {
 
       {!isDiagramValid && validationWindowLocation === 'diagram' &&
       // * XY Flow Styles needed for Drawer operation no longer constrain canvas width. We need to explicitly style controls or they are hidden
-        <ValidationWindow nodes={nodes} errors={nodeErrors} openLocation={validationWindowLocation} 
+        <ValidationWindow nodes={nodes} errors={diagramFlowErrors} openLocation={validationWindowLocation}
         style={{
                 left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
                 transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
@@ -202,7 +209,7 @@ const Diagram = (props: DiagramProps) => {
             }}
             defaultViewport={{ x: 0, y: 0, zoom: 1.5 }}
             connectionLineType={ConnectionLineType.Bezier}
-            onNodeClick={(_, node) => dispatch(selectedIdChange(node.id))}
+            onNodeClick={(_, node) => dispatch(selectComponent(node.id))}
             onEdgeClick={(_, edge) => dispatch(openDrawerWithSelected(edge.id))}
             onDrop={onDrop}
             onBeforeDelete={onBeforeDelete}
@@ -219,12 +226,23 @@ const Diagram = (props: DiagramProps) => {
             }
             {controlsVisible &&
             // * XY Flow  Styles needed for Drawer operation no longer constrain canvas width. We need to explicitly style controls or they are hidden
-            <Controls
-              style={{
-                left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
-                transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
-              }}
-            />
+              <Controls
+                style={{
+                  left: isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx,
+                  transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              />
+            }
+            {flowConfidenceEnabled &&
+              <Panel position="bottom-left"
+                style={{
+                  // * clears the Controls panel's width (~34px) plus its own margin, only when Controls is shown
+                  left: (isMenuDrawerOpen ? drawerOpenOffsetPx : drawerClosedOffsetPx) + (controlsVisible ? 50 : 0),
+                  transition: 'left 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
+                }}
+              >
+                <FlowConfidenceLegend />
+              </Panel>
             }
             <Background />
           </ReactFlow>
@@ -236,7 +254,7 @@ const Diagram = (props: DiagramProps) => {
             shadowRootRef={props.shadowRoot}
             anchor={'left'}
           >
-          <MenuSidebar shadowRootRef={props.shadowRoot}/>
+          <MenuSidebar shadowRootRef={props.shadowRoot} convertValueFn={props.convertValueFn}/>
           </SharedDrawer>
         )}
 
@@ -267,9 +285,7 @@ export default (props: DiagramProps) => {
   }
   return (
     <Provider store={storeRef.current}>
-      <FlowServiceProvider>
-        <Diagram {...props} />
-      </FlowServiceProvider>
+      <Diagram {...props} />
     </Provider>
   );
 }

@@ -1,0 +1,54 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OperatingHoursModalModule } from '../../../shared/operating-hours-modal/operating-hours-modal.module';
+import { ExportableResultsTableModule } from '../../../shared/exportable-results-table/exportable-results-table.module';
+
+import { SteamLeakSurveyComponent } from './steam-leak-survey.component';
+import { SteamLeakSurveyService } from './steam-leak-survey-service';
+import { ConvertSteamLeakService } from './convert-steam-leak.service';
+import { SteamLeakSurveyFormComponent } from './steam-leak-survey-form/steam-leak-survey-form.component';
+import { SteamLeakSurveyFormService } from './steam-leak-survey-form/steam-leak-survey-form.service';
+import { SteamEstimateMethodFormComponent } from './steam-leak-survey-form/steam-estimate-method-form/steam-estimate-method-form.component';
+
+import { SteamOrificeMethodFormComponent } from './steam-leak-survey-form/steam-orifice-method-form/steam-orifice-method-form.component';
+import { SteamPlumeMethodFormComponent } from './steam-leak-survey-form/steam-plume-method-form/steam-plume-method-form.component';
+import { CostOfSteamFormComponent } from './cost-of-steam-form/cost-of-steam-form.component';
+import { SteamLeakSurveyResultsTableComponent } from './steam-leak-survey-results-table/steam-leak-survey-results-table.component';
+import { SharedPipesModule } from '../../../shared/shared-pipes/shared-pipes.module';
+import { SteamLeakSurveyResultsComponent } from './steam-leak-survey-results/steam-leak-survey-results.component';
+import { SteamLeakSurveyHelpComponent } from './steam-leak-survey-help/steam-leak-survey-help.component';
+import { SteamLeakCopyTableComponent } from './steam-leak-copy-table/steam-leak-copy-table.component';
+// creating Testing MR for Steam Leak
+@NgModule({
+    declarations: [
+        SteamLeakSurveyComponent,
+        SteamLeakSurveyFormComponent,
+        SteamEstimateMethodFormComponent,
+        SteamOrificeMethodFormComponent,
+        CostOfSteamFormComponent,
+        SteamPlumeMethodFormComponent,
+        SteamLeakSurveyResultsTableComponent,
+        SteamPlumeMethodFormComponent,
+        CostOfSteamFormComponent,
+        SteamLeakSurveyResultsTableComponent,
+        SteamLeakSurveyResultsComponent,
+        SteamLeakSurveyHelpComponent,
+        SteamLeakCopyTableComponent,
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        OperatingHoursModalModule,
+        ExportableResultsTableModule,
+        SharedPipesModule,
+    ],
+    exports: [SteamLeakSurveyComponent],
+    providers: [
+        SteamLeakSurveyService,
+        SteamLeakSurveyFormService,
+        ConvertSteamLeakService
+    ]
+})
+export class SteamLeakSurveyModule {}

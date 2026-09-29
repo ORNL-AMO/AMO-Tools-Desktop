@@ -70,6 +70,7 @@ export class ConvertSsmtService {
       boilerInput.steamTemperature = this.convertValue(boilerInput.steamTemperature, oldSettings.steamTemperatureMeasurement, newSettings.steamTemperatureMeasurement);
     }
     if (oldSettings.steamPressureMeasurement != newSettings.steamPressureMeasurement) {
+      boilerInput.saturatedPressure = this.convertValue(boilerInput.saturatedPressure, oldSettings.steamPressureMeasurement, newSettings.steamPressureMeasurement);
       boilerInput.deaeratorPressure = this.convertValue(boilerInput.deaeratorPressure, oldSettings.steamPressureMeasurement, newSettings.steamPressureMeasurement);
     }
     return boilerInput;

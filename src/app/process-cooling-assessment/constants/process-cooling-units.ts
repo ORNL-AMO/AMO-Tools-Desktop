@@ -59,7 +59,7 @@ export const PROCESS_COOLING_UNITS = {
     imperial: 'kw/ton',
     metric: 'kw/ton',
     labelHTML: {
-      imperial: 'kW/RT',
+      imperial: 'kW/Ton',
       metric: 'COP'
     }
   },
@@ -114,6 +114,6 @@ export interface AppUnits {
 }
 
 
-export type ProcessCoolingValidation = {
+export interface ProcessCoolingValidation {
   [unitType: string]: AppUnits;
-};
+}

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, combineLatest, debounceTime, filter, map, Observable } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
-import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getIsDiagramValid, getNewWaterTreatmentComponent, getWasteWaterTreatmentComponent, getWaterUsingSystem, IntakeSource, NodeErrors, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
+import { DiagramWaterSystemFlows, DischargeOutlet, EdgeFlowData, getComponentNameFromType, getDischargeOutlet, getIntakeSource, getIsDiagramValid, getNewWaterTreatmentComponent, getWasteWaterTreatmentComponent, getWaterUsingSystem, IntakeSource, DiagramFlowErrors, WasteWaterTreatment, WaterAssessment, WaterProcessComponent, WaterProcessComponentType, WaterTreatment, WaterUsingSystem } from 'process-flow-lib';
 import { Assessment } from '../shared/models/assessment';
 import { Diagram } from '../shared/models/diagram';
 import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/update-diagram-from-assessment.service';
@@ -26,8 +26,8 @@ export class WaterAssessmentService {
     filter((assessment) => assessment !== undefined),
     map((assessment) => {
       let diagram: Diagram = this.updateDiagramFromAssessmentService.getDiagramFromAssessment(assessment);
-      let nodeErrors: NodeErrors = diagram.waterDiagram.flowDiagramData.nodeErrors;
-      const isDiagramValid = getIsDiagramValid(nodeErrors);
+      let diagramFlowErrors: DiagramFlowErrors = diagram.waterDiagram.flowDiagramData.diagramFlowErrors;
+      const isDiagramValid = getIsDiagramValid(diagramFlowErrors);
       return isDiagramValid;
     })
   );

@@ -1,0 +1,158 @@
+**Date Generated:** June 17, 2026
+
+# Cost Attribution Rules — Reference
+
+**Document Scope:** This document provides a consolidated reference listing the attribution rules for each cost component type in the True Cost Attribution Algorithm. For detailed calculation procedures and worked examples, refer to the individual sub-routine documents listed in the companion document index.
+
+---
+
+## 1. Overview of Cost Components
+
+The algorithm recognizes four types of cost-bearing nodes in the facility flow diagram. Each type has a distinct set of attribution rules.
+
+| Cost Component | Node Type | Cost Basis | Walk Direction |
+|---|---|---|---|
+| Water Intake | External water source | Outflow from intake | Downstream |
+| Water Discharge | External effluent destination | Inflow to discharge | Upstream |
+| Water Treatment | Shared treatment unit | Inflow to treatment | Downstream |
+| Wastewater Treatment | Shared WWT unit | Inflow to WWT | Downstream (Pass 1) and Upstream (Pass 2) |
+
+---
+
+## 2. Block Cost Calculation
+
+Before any attribution occurs, the total annual cost (block cost) for each cost-component node is calculated. This is the amount to be distributed among water-using systems.
+
+| Cost Component | Flow Used for Block Cost | Formula |
+|---|---|---|
+| Water Intake | Total outflow from intake node | ($/kgal) × (outflow in Mgal/yr × 1,000) |
+| Water Discharge | Total inflow to discharge node | ($/kgal) × (inflow in Mgal/yr × 1,000) |
+| Water Treatment | Total inflow to treatment node | ($/kgal) × (inflow in Mgal/yr × 1,000) |
+| Wastewater Treatment | Total inflow to WWT node | ($/kgal) × (inflow in Mgal/yr × 1,000) |
+
+---
+
+## 3. Attribution Rules by Cost Component
+
+### 3.1 Water Intake
+
+| Rule | Specification |
+|---|---|
+| **Which systems are eligible?** | Systems that receive water — directly or through treatment — from this intake. Only the first system encountered on each downstream path is charged. |
+| **Walk direction** | Downstream from the intake node. |
+| **Stopping criterion** | First water-using system on each path. |
+| **Attribution fraction — branch-ratio product rule** | Walk every edge in the path from intake to system; for each edge whose source is a water-treatment node, take that edge's flow divided by the treatment node's total outflow (`localRatio`, 1.0 for a lossless single-child node). `branchFraction` = the product of every `localRatio` in the path. Attribution fraction = (path inflow × `branchFraction`) / (total intake outflow minus any unaccounted flow the intake reports). Naturally bounded to [0, 1] — no explicit cap needed. Covers direct splits, lossless chains, lossy chains, mid-chain forks to systems at different depths, and unaccounted flow with one formula. |
+| **Cost to system** | Attribution fraction × Intake total block cost. |
+| **Pump/motor energy** | Also attributed to the system using the same attribution fraction. |
+| **Systems excluded** | Systems further downstream that receive water only as reuse from the first-charged system. |
+| **Adjusted attribution** | User-supplied override fraction replaces computed default for the specified system–intake pair. |
+
+---
+
+### 3.2 Water Discharge
+
+| Rule | Specification |
+|---|---|
+| **Which systems are eligible?** | The system immediately upstream of the discharge — the final user that directly causes the discharge. Systems further upstream whose water was reused by an intermediate system are excluded. |
+| **Walk direction** | Upstream from the discharge node. |
+| **Stopping criterion** | First water-using system on each upstream path. |
+| **Attribution fraction — branch-ratio product rule** | Walk every edge in the path from discharge to system; for each edge whose target is a waste-water-treatment node, take that edge's flow divided by the treatment node's total inflow (`localRatio`, 1.0 for a single-contributor node regardless of loss). `branchFraction` = the product of every `localRatio` in the path. Attribution fraction = (discharge-adjacent flow × `branchFraction`) / (total discharge inflow minus any unaccounted flow the discharge reports). Naturally bounded to [0, 1] — no explicit cap needed. Covers direct shared discharges, single-contributor lossy chains, merge nodes with multiple contributors, and unaccounted flow with one formula. |
+| **Cost to system** | Attribution fraction × Discharge total block cost. |
+| **Pump/motor energy** | Also attributed to the system using the same attribution fraction. |
+| **Systems excluded** | Systems further upstream that reused their water before it reached this discharge point. |
+| **Adjusted attribution** | User-supplied override fraction replaces computed default for the specified system–discharge pair. |
+
+---
+
+### 3.3 Water Treatment
+
+| Rule | Specification |
+|---|---|
+| **Which systems are eligible?** | Systems that receive treated water — directly or through additional treatment units in series — from this treatment unit. Only the first system on each downstream path is charged. |
+| **Walk direction** | Downstream from the treatment node. |
+| **Stopping criterion** | First water-using system on each path. Intermediate treatment units in series are passed through; each is its own independent cost center. |
+| **Attribution fraction — branch-ratio product rule** | Walk every edge in the path after the first one; for each whose source is a water-treatment node, take that edge's flow divided by that node's total outflow (`localRatio`, 1.0 for a lossless single-child node). `branchFraction` = the product of every `localRatio` after the first edge. Attribution fraction = (first edge's flow × `branchFraction`) / (this treatment node's own total outflow). Naturally bounded to [0, 1] — no explicit cap needed. Covers unbranched chains where a later node has its own loss, and mid-chain forks to systems at different depths, with one formula. Uses treatment block cost (based on inflow) as cost basis. |
+| **Cost to system** | Attribution fraction × Treatment total block cost. |
+| **Series treatment** | Each unit in a series is attributed independently. No duplication. A system receiving water through three units in series will accumulate three separate treatment cost charges. |
+| **In-system treatment** | Treatment units located entirely within a single system are not evaluated by this sub-routine. They are costed separately in Step 3 using the full system inflow as the flow basis. |
+| **Adjusted attribution** | User-supplied override fraction replaces computed default for the specified system–treatment pair. |
+
+---
+
+### 3.4 Wastewater Treatment
+
+| Rule | Specification |
+|---|---|
+| **Which systems are eligible?** | Two groups: (1) downstream systems receiving recycled water from the WWT unit; and (2) upstream systems that sent effluent into the WWT unit and whose treated water was discharged (not recycled). |
+| **Walk direction — reuse-and-discharge-split, Pass 1** | Downstream from the WWT node (reuse paths). |
+| **Walk direction — reuse-and-discharge-split, Pass 2** | Upstream from the WWT node (discharge paths). |
+| **Stopping criterion — reuse-and-discharge-split, Pass 1** | First water-using system on each downstream path. |
+| **Stopping criterion — reuse-and-discharge-split, Pass 2** | First water-using system on each upstream path. Systems already charged in Pass 1 are excluded from Pass 2. |
+| **Attribution fraction — reuse-and-discharge-split, Pass 1** | (System recycled inflow) / (Total WWT inflow). Capped at 1.0 per path. |
+| **Attribution fraction — reuse-and-discharge-split, Pass 2** | (System upstream outflow) / (Total WWT inflow). |
+| **Attribution fraction — reuse-and-discharge-split, chained deduction** | (System upstream outflow − Total Pass 1 charged portion) / (Total WWT inflow). Applied when the WWT unit has both downstream reuse and upstream dischargers. |
+| **Cost to system** | Attribution fraction × WWT total block cost (applies to all cases). |
+| **Balance check** | Sum of all Pass 1 and Pass 2 fractions should equal 1.0 for a lossless WWT unit. |
+| **Adjusted attribution** | User-supplied override fraction replaces computed default for the specified system–WWT pair. Applies independently to each pass. |
+
+---
+
+### 3.5 Reverse Osmosis (RO) Configuration Override
+
+| Rule | Specification |
+|---|---|
+| **When it applies** | The treatment node's `treatmentType` is Reverse Osmosis (`6`), with a qualifying reject-redirect configuration. See [ro-specification.md](../algorithm/ro-specification.md) for the full qualification criteria. |
+| **What it overrides** | Intake (3.1), Water Treatment (3.3), Wastewater Treatment (3.4, reject-path WWT only), and Water Discharge (3.2, reject-path discharge only) attribution for a qualifying RO node's reject branch. |
+| **Attribution fraction — ro-reject-redirect** | Each product-recipient system receives `productShare × component block cost`, where `productShare` is that system's share of the RO node's product-only outflow (the reject branch is excluded from this denominator). |
+| **Non-qualifying configurations** | Fall back to the standard rules in 3.1-3.4, unchanged. |
+
+---
+
+## 4. Additional Cost Categories (Step 3 Only)
+
+The following cost categories are computed in Step 3 (finalization) and are not part of the Step 2 graph-walk attribution. They are assigned directly to each system without a flow-proportional walk.
+
+### 4.1 In-System Treatment
+
+| Rule | Specification |
+|---|---|
+| **Which systems are eligible?** | Any water-using system with treatment equipment configured as "in-system treatment." |
+| **Flow basis** | 100% of the system's total annual inflow. In-system treatment is assumed to process all water entering the system. |
+| **Cost** | Sum over all in-system treatment units: (unit cost per kgal) × (total system inflow × 1,000). |
+| **Cost category** | Added to the system's treatment cost total. |
+
+---
+
+### 4.2 Heat Energy
+
+| Rule | Specification |
+|---|---|
+| **Which systems are eligible?** | Any water-using system with heat energy data entered (heating fuel type, temperatures, efficiency). |
+| **Flow basis** | 100% of the system's total annual inflow. |
+| **Formula** | Q = [V × ρ × C_p × (T_out − T_in)] / η; Heat cost = Q × energy unit cost. |
+| **Cost category** | Assigned to the system's heat energy cost field. |
+
+---
+
+### 4.3 System Pump and Motor Energy
+
+| Rule | Specification |
+|---|---|
+| **Which systems are eligible?** | Any water-using system with pump/motor entries configured directly on the system node. |
+| **Flow basis** | Motor count, rated power, load factor, efficiency, and hours per year — from the system's motor entries. |
+| **Formula** | E = (0.746 × hp × N × L / η) × H; Energy cost = E × electricity unit cost ($/kWh). |
+| **Cost category** | Assigned to the system's pump and motor energy cost field. **This overwrites any pump/motor energy accumulated from intake and discharge node attributions during Step 2.** See *Known Limitations.* |
+
+---
+
+## 5. Adjusted Attribution — General Rules
+
+Adjusted attributions apply to all four cost-component types. The rules are the same in each case:
+
+| Rule | Specification |
+|---|---|
+| **Source** | User-entered override fractions in the system attribution map, keyed by system ID and cost-component ID. |
+| **Effect** | The override fraction replaces the computed default fraction for cost-to-system calculation. |
+| **Audit trail** | The default computed fraction is always preserved in the attribution record alongside the override. |
+| **Application timing** | Override costs are applied as a batch after all path walks complete for a given cost component, not during individual path iterations. |
+| **Energy attribution (intake/discharge)** | Pump/motor energy from intake or discharge nodes is also re-calculated using the adjusted fraction when an override is in effect. |

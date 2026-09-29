@@ -1,13 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import * as _ from 'lodash';
 import { LightingReplacementResults, LightingReplacementData, LightingReplacementResult } from '../../../shared/models/lighting';
 import { LightingReplacementTreasureHunt } from '../../../shared/models/treasure-hunt';
 import { OperatingHours } from '../../../shared/models/operations';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { LightingFixtureData } from '../../../tools-suite-api/lighting-suite-api.service';
-import { BehaviorSubject } from 'rxjs';
+import { LightingFixtureCategory, LightingFixtureData, LightingSuiteApiService } from '../../../tools-suite-api/lighting-suite-api.service';
+import { LightingFixtureServiceDbService } from '../../../indexedDb/lighting-fixture-db.service';
+import { LightingFixtureMaterial } from '../../../shared/models/materials';
+import { BehaviorSubject, Subscription } from 'rxjs';
 @Injectable()
-export class LightingReplacementService {
+export class LightingReplacementService implements OnDestroy {
 
   baselineData: Array<LightingReplacementData>;
   modificationData: Array<LightingReplacementData>;
@@ -17,8 +19,55 @@ export class LightingReplacementService {
   selectedFixtureTypes: BehaviorSubject<Array<LightingFixtureData>>;
   showAdditionalDetails: boolean = false;
 
-  constructor(private fb: UntypedFormBuilder) {
+  lightingFixtureCategories$: BehaviorSubject<Array<LightingFixtureCategory>>;
+
+  private customFixturesSub: Subscription;
+  private latestCustomMaterials: Array<LightingFixtureMaterial>;
+
+  constructor(private fb: UntypedFormBuilder, private lightingSuiteApiService: LightingSuiteApiService,
+    private lightingFixtureServiceDbService: LightingFixtureServiceDbService) {
     this.selectedFixtureTypes = new BehaviorSubject(undefined);
+    this.lightingFixtureCategories$ = new BehaviorSubject(undefined);
+
+    this.customFixturesSub = this.lightingFixtureServiceDbService.dbLightingFixtureMaterials.subscribe(materials => {
+      this.latestCustomMaterials = materials;
+      this.applyCustomFixtures();
+    });
+  }
+
+  ngOnDestroy() {
+    this.customFixturesSub?.unsubscribe();
+  }
+
+  loadLightingFixtureCategories() {
+    if (!this.lightingFixtureCategories$.value) {
+      this.lightingFixtureCategories$.next(this.lightingSuiteApiService.getLightingSystems());
+      this.applyCustomFixtures();
+    }
+  }
+
+  applyCustomFixtures() {
+    let categories = this.lightingFixtureCategories$.value;
+    if (!categories || !this.latestCustomMaterials) {
+      return;
+    }
+    let customCategory: LightingFixtureCategory = categories.find(fixtureCategory => fixtureCategory.category === 0);
+    customCategory.fixturesData = this.latestCustomMaterials.filter(material => !material.isDefault).map(material => this.toLightingFixtureData(material));
+    this.lightingFixtureCategories$.next(categories);
+  }
+
+  toLightingFixtureData(material: LightingFixtureMaterial): LightingFixtureData {
+    return {
+      category: material.category,
+      type: material.type && material.type.trim() !== '' ? material.type : material.name,
+      lampsPerFixture: material.lampsPerFixture,
+      wattsPerLamp: material.wattsPerLamp,
+      lumensPerLamp: material.lumensPerLamp,
+      lampLife: material.lampLife,
+      coefficientOfUtilization: material.coefficientOfUtilization,
+      ballastFactor: material.ballastFactor,
+      lumenDegradationFactor: material.lumenDegradationFactor
+    };
   }
 
   initObject(index: number, opperatingHoursPerYear: OperatingHours): LightingReplacementData {
@@ -75,7 +124,7 @@ export class LightingReplacementService {
       totalLighting: 0,
       electricityUse: 0,
       //added for #2381
-      lampLife: form.controls.lumensPerLamp.value,
+      lampLife: form.controls.lampLife.value,
       ballastFactor: form.controls.ballastFactor.value,
       lumenDegradationFactor: form.controls.lumenDegradationFactor.value,
       coefficientOfUtilization: form.controls.coefficientOfUtilization.value,

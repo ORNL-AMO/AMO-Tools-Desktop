@@ -124,13 +124,40 @@ export class AnalyticsService {
     }
   }
 
-  getPageWithoutId(pagePath: string) {
-    let pathWithoutId: string = pagePath.replace(/[0-9]/g, '');
-    pathWithoutId = pathWithoutId.replace(/\/$/, "");
-    if (pathWithoutId.includes('inventory')) {
-      pathWithoutId = pathWithoutId.replace('//', "/");
+  getPageWithoutId(pagePath: string): string {
+    // Strip query string and fragment before any other processing
+    const withoutQuery = pagePath.split('?')[0].split('#')[0];
+    // Remove purely numeric path segments (assessment/inventory IDs like /phast/42)
+    // but preserve digits that are part of a slug (e.g. co2-conversion, o2-enrichment)
+    const segments = withoutQuery.split('/').filter(seg => !/^\d+$/.test(seg));
+    const joined = segments.join('/');
+    // Trim trailing slash but preserve bare '/'
+    const trimmed = joined.length > 1 ? joined.replace(/\/$/, '') : joined;
+    return trimmed || '/';
+  }
+
+  sendPageView(path: string, title: string) {
+    if (environment.production) {
+      if (!this.electronService.isElectron) {
+        let eventParams: EventParameters = {
+          page_path: path,
+          page_title: title,
+          measur_platform: 'measur-web',
+          measur_version: environment.version,
+          session_id: undefined
+        };
+        gtag('event', 'page_view', eventParams);
+      } else {
+        let eventParams: EventParameters = {
+          page_path: path,
+          page_title: title,
+          measur_platform: 'measur-desktop',
+          measur_version: environment.version,
+          session_id: undefined
+        };
+        this.sendAnalyticsEvent('page_view', eventParams);
+      }
     }
-    return pathWithoutId;
   }
 
   sendEvent(eventName: AnalyticsEventString, path?: string) {
@@ -174,6 +201,7 @@ export interface GAEvent {
 
 export interface EventParameters {
   page_path?: string,
+  page_title?: string,
   measur_platform?: MeasurPlatformString,
   measur_version?: string,
   session_id: string,

@@ -118,6 +118,7 @@ export interface WasteWaterResults {
     costSavings: number,
     energySavings: number,
     percentCostSavings: number,
+    paybackPeriod?: number,
     calculationsTable: Array<Array<number>>,
     calculationsTableMapped: Array<CalculationsTableRow>
 }

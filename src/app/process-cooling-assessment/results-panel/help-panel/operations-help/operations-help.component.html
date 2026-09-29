@@ -1,4 +1,4 @@
-<h5>
+﻿<h5>
     Operations Help
     <br>
     <small class="text-muted">Enter data related to the operations
@@ -7,7 +7,8 @@
 <hr class="my-1 hr-spacer">
 
 
-    <div class="my-2" *ngIf="focusedField() == 'annualOperatingHours'">
+    @if (focusedField() == 'annualOperatingHours') {
+<div class="my-2">
         <h6>
             Annual Operating Hours
             <br>
@@ -17,8 +18,10 @@
             </small>
         </h6>
     </div>
+}
 
-    <div class="my-2" *ngIf="focusedField() == 'electricityCost'">
+    @if (focusedField() == 'electricityCost') {
+<div class="my-2">
         <h6>
             Electricity Cost
             <br>
@@ -32,8 +35,10 @@
             </small>
         </h6>
     </div>
+}
 
-    <div class="my-2" *ngIf="focusedField() == 'fuelCost'">
+    @if (focusedField() == 'fuelCost') {
+<div class="my-2">
         <h6>
             Fuel Cost
             <br>
@@ -43,8 +48,10 @@
             </small>
         </h6>
     </div>
+}
 
-    <div class="my-2" *ngIf="focusedField() == 'doChillerLoadSchedulesVary'">
+    @if (focusedField() == 'doChillerLoadSchedulesVary') {
+<div class="my-2">
         <h6>
             Do chiller load schedules vary?
             <br>
@@ -55,8 +62,10 @@
             </small>
         </h6>
     </div>
+}
 
-    <div class="my-2" *ngIf="focusedField() == 'chilledWaterSupplyTemp'">
+    @if (focusedField() == 'chilledWaterSupplyTemp') {
+<div class="my-2">
         <h6>
             Chilled Water Supply Temperature
             <br>
@@ -66,8 +75,10 @@
             </small>
         </h6>
     </div>
+}
 
-    <div class="my-2" *ngIf="focusedField() == 'condenserCoolingMethod'">
+    @if (focusedField() == 'condenserCoolingMethod') {
+<div class="my-2">
         <h6>
             Condenser Cooling Method
             <br>
@@ -77,6 +88,7 @@
             </small>
         </h6>
     </div>
+}
 
 
 

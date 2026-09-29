@@ -53,6 +53,16 @@
     </div>
 
     <div class="form-group">
+        <label for="{{controlIds.isFanTypeKnown}}">Is Fan Type Known?</label>
+        <select class="form-control" id="{{controlIds.isFanTypeKnown}}" formControlName="isFanTypeKnown"
+            (focus)="focusField('isFanTypeKnown')">
+            <option [ngValue]="true">Yes</option>
+            <option [ngValue]="false">No</option>
+        </select>
+    </div>
+
+    @if (isFanTypeKnown.value === true) {
+    <div class="form-group">
         <label for="{{controlIds.fanType}}">Fan Type</label>
         <select class="form-control" id="{{controlIds.fanType}}" formControlName="fanType"
             (focus)="focusField('fanType')">
@@ -61,6 +71,7 @@
             }
         </select>
     </div>
+    }
     }
 
     <div class="form-group">

@@ -37,11 +37,13 @@ import { UpdateUnitsModalModule } from '../shared/update-units-modal/update-unit
 import { ConvertProcessCoolingService } from './services/convert-process-cooling.service';
 import { ProcessCoolingResultsService } from './services/process-cooling-results.service';
 import { SystemInformationFormService } from './system-information/system-information-form.service';
+import { AlertBadgeComponent } from '../shared/alert-badge/alert-badge.component';
 import { FormControlErrorsComponent } from '../shared/form-control-errors.component';
 import { InputUnitComponent } from '../shared/input-unit.component';
 import { OperationsComponent } from './system-information/operations/operations.component';
 import { ProcessCoolingAssessmentResolver } from './routing/process-cooling-assessment-resolver.resolver';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
+import { AssessmentNotesComponent } from './results-panel/assessment-notes/assessment-notes.component';
 import { InventoryTableComponent } from './results-panel/inventory-table/inventory-table.component';
 import { SystemBasicsHelpComponent } from './results-panel/help-panel/system-basics-help/system-basics-help.component';
 import { SystemInformationHelpComponent } from './results-panel/help-panel/system-information-help/system-information-help.component';
@@ -123,96 +125,117 @@ const ROUTES: Route[] = [
       {
         path: ROUTE_TOKENS.baseline,
         component: BaselineComponent,
+        data: { mainView: ROUTE_TOKENS.baseline },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.assessmentSettings, pathMatch: 'full' },
           {
             path: ROUTE_TOKENS.assessmentSettings,
             component: SystemBasicsComponent,
+            data: { childView: ROUTE_TOKENS.assessmentSettings, stepIndex: 0 },
           },
           {
             path: ROUTE_TOKENS.systemInformation,
             component: SystemInformationComponent,
+            data: { childView: ROUTE_TOKENS.systemInformation },
             children: [
               { path: '', redirectTo: ROUTE_TOKENS.operations, pathMatch: 'full' },
               {
                 path: ROUTE_TOKENS.operations,
                 component: OperationsComponent,
+                data: { setupSubView: ROUTE_TOKENS.operations, stepIndex: 1 },
               },
               {
                 path: ROUTE_TOKENS.weather,
-                loadChildren: () => import('../shared/modules/weather-data/weather-data.module').then(m => m.WeatherDataModule)
+                loadChildren: () => import('../shared/modules/weather-data/weather-data.module').then(m => m.WeatherDataModule),
+                data: { setupSubView: ROUTE_TOKENS.weather, stepIndex: 2 },
               },
               {
                 path: ROUTE_TOKENS.waterPump,
                 component: PumpWrapperComponent,
+                data: { setupSubView: ROUTE_TOKENS.waterPump, stepIndex: 3 },
               },
               {
                 path: ROUTE_TOKENS.condenserCoolingSystem,
-                component: CondenserCoolingSystemComponent
+                component: CondenserCoolingSystemComponent,
+                data: { setupSubView: ROUTE_TOKENS.condenserCoolingSystem, stepIndex: 4 },
               },
               {
                 path: ROUTE_TOKENS.tower,
-                component: TowerComponent
+                component: TowerComponent,
+                data: { setupSubView: ROUTE_TOKENS.tower, stepIndex: 5 },
               }
             ]
           },
           {
             path: ROUTE_TOKENS.chillerInventory,
             component: ChillerInventoryComponent,
+            data: { childView: ROUTE_TOKENS.chillerInventory, stepIndex: 6 },
           },
           {
             path: ROUTE_TOKENS.operatingSchedule,
-            component: OperatingScheduleComponent
+            component: OperatingScheduleComponent,
+            data: { childView: ROUTE_TOKENS.operatingSchedule, stepIndex: 7 },
           },
           {
             path: ROUTE_TOKENS.loadSchedule,
-            component: LoadScheduleComponent
+            component: LoadScheduleComponent,
+            data: { childView: ROUTE_TOKENS.loadSchedule, stepIndex: 8 },
           }
         ]
       },
       {
         path: ROUTE_TOKENS.assessment,
         component: AssessmentComponent,
+        data: { mainView: ROUTE_TOKENS.assessment },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.exploreOpportunities, pathMatch: 'full' },
           {
             path: ROUTE_TOKENS.exploreOpportunities,
             component: ExploreOpportunitiesComponent,
+            data: { childView: ROUTE_TOKENS.exploreOpportunities, stepIndex: 9 },
           },
         ]
       },
       {
         path: ROUTE_TOKENS.report,
         component: ReportComponent,
+        data: { mainView: ROUTE_TOKENS.report, stepIndex: 10 },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.executiveSummary, pathMatch: 'full' },
           {
             path: ROUTE_TOKENS.facilityInfo,
             component: FacilityInfoComponent,
+            data: { childView: ROUTE_TOKENS.facilityInfo },
           },
           {
             path: ROUTE_TOKENS.executiveSummary,
             component: ExecutiveSummaryComponent,
+            data: { childView: ROUTE_TOKENS.executiveSummary },
           },
           {
             path: ROUTE_TOKENS.performanceProfile,
             component: PerformanceProfileComponent,
+            data: { childView: ROUTE_TOKENS.performanceProfile },
           },
           {
             path: ROUTE_TOKENS.systemProfile,
             component: SystemProfileComponent,
+            data: { childView: ROUTE_TOKENS.systemProfile },
           },
           {
             path: ROUTE_TOKENS.pumpSummary,
             component: PumpSummaryComponent,
+            data: { childView: ROUTE_TOKENS.pumpSummary },
           },
           {
             path: ROUTE_TOKENS.inputSummary,
             component: InputSummaryComponent,
+            data: { childView: ROUTE_TOKENS.inputSummary },
           },
           {
             path: ROUTE_TOKENS.towerSummary,
             component: TowerSummaryComponent,
+            data: { childView: ROUTE_TOKENS.towerSummary },
           },
         ]
       }
@@ -290,7 +313,8 @@ const ROUTES: Route[] = [
     UseFreeCoolingComponent,
     ReplaceChillerRefrigerantComponent,
     VsdInventoryTableComponent,
-    RefrigerantInventoryTableComponent
+    RefrigerantInventoryTableComponent,
+    AssessmentNotesComponent
   ],
   imports: [
     RouterModule.forChild(ROUTES),
@@ -310,6 +334,7 @@ const ROUTES: Route[] = [
     PercentGraphModule,
     ModalModule,
     NgbModule,
+    AlertBadgeComponent,
     FormControlErrorsComponent,
     InputUnitComponent,
     AlertInfoContainerComponent,

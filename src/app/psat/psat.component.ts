@@ -220,6 +220,7 @@ export class PsatComponent implements OnInit {
     if (this.mainTabSub) this.mainTabSub.unsubscribe();
     if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe();    
     this.showExportModalSub.unsubscribe();
+    this.modalOpenSub.unsubscribe();
     this.psatTabService.secondaryTab.next('explore-opportunities');
     this.psatTabService.mainTab.next('baseline');
     this.psatTabService.stepTab.next('baseline');
@@ -401,6 +402,10 @@ export class PsatComponent implements OnInit {
 
   goToReport() {
     this.psatTabService.mainTab.next('report');
+  }
+
+  closeReport() {
+    this.psatTabService.mainTab.next('assessment');
   }
 
   selectModificationModal() {

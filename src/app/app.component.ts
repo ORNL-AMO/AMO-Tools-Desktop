@@ -11,6 +11,8 @@ import { MeasurAppError } from './shared/errors/errors';
 import { ToolsSuiteApiService } from './tools-suite-api/tools-suite-api.service';
 import { CoreService } from './core/core.service';
 import { EGridService } from './shared/helper-services/e-grid.service';
+import { SeoService } from './shared/seo/seo.service';
+import { defaultSeoConfig, routeSeoMetadata } from './shared/seo/route-seo-metadata';
 // declare ga as a function to access the JS code in TS
 declare let gtag: Function;
 
@@ -34,22 +36,26 @@ export class AppComponent {
     private router: Router,
     private toolsSuiteApiService: ToolsSuiteApiService,
     private coreService: CoreService,
-    private eGridService: EGridService) {
+    private eGridService: EGridService,
+    private seoService: SeoService) {
+
+    // Update meta tags and canonical URL on every route change (all environments)
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const cleanPath = this.analyticsService.getPageWithoutId(event.urlAfterRedirects);
+        const seoConfig = routeSeoMetadata[cleanPath] ?? defaultSeoConfig;
+        this.seoService.updateMetadata(seoConfig);
+
+        if (environment.production) {
+          this.analyticsService.sendPageView(cleanPath, this.seoService.getCurrentTitle());
+        }
+      }
+    });
 
     if (environment.production) {
-      // analytics handled through gatg() automatically manages sessions, visits, clicks, etc
-      gtag('config', 'G-EEHE8GEBH4');
-
       if (!this.electronService.isElectron) {
         this.analyticsService.sendEvent('measur_app_open_v2');
       }
-      this.router.events.subscribe(event => {
-        if (event instanceof NavigationEnd) {
-          let path: string = environment.production ? event.urlAfterRedirects : 'testing-web';
-          path = this.analyticsService.getPageWithoutId(path);
-          this.analyticsService.sendEvent('page_view', path);
-        }
-      });
     }
 
     if (!this.electronService.isElectron && environment.production) {

@@ -66,9 +66,8 @@
 .clipboard-notification {
     position: absolute;
     display: none;
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
+    align-items: center;
+    padding: 10px;
     right: 10px;
     bottom: 10px;
     width: 280px;
@@ -81,19 +80,26 @@
 }
 
 .clipboard-notification.show-notification {
-    display: initial;
+    display: flex;
     opacity: 1;
     transition: ease-in-out 0.3s opacity;
 }
 
-.clipboard-notification.text-container {
-    /* display: inline-block; */
-    /* float: right; */
-    width: 70%;
+.clipboard-notification .text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    color: white;
 }
 
-.clipboard-notification.checkmark-container {
-    /* display: inline-block; */
-    /* float: left; */
-    width: 30%;
+.clipboard-notification .checkmark-container {
+    display: flex;
+    align-items: center;
+}
+
+.notification-checkmark {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
 }

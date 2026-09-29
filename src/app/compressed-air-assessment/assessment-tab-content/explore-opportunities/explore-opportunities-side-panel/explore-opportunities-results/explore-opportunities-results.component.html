@@ -62,7 +62,7 @@
 
     <div class="d-flex flex-column">
         <div [style.order]="modification.replaceCompressor.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.replaceCompressorsSavings.savings.power != 0">
+            *ngIf="modification.replaceCompressor.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.replaceCompressor}">
                 <span class="table-text">
@@ -77,7 +77,7 @@
             </div>
         </div>
         <div [style.order]="modification.addPrimaryReceiverVolume.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.addReceiverVolumeSavings.savings.power != 0">
+            *ngIf="modification.addPrimaryReceiverVolume.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.addReceiverVolume}">
                 <span class="table-text">
@@ -93,7 +93,7 @@
             </div>
         </div>
         <div [style.order]="modification.adjustCascadingSetPoints.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.power != 0">
+            *ngIf="modification.adjustCascadingSetPoints.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.adjustCascadingSetPoints}">
                 <span class="table-text">
@@ -109,7 +109,7 @@
             </div>
         </div>
         <div [style.order]="modification.improveEndUseEfficiency.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.improveEndUseEfficiencySavings.savings.power != 0">
+            *ngIf="modification.improveEndUseEfficiency.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.improveEndUseEfficiency}">
                 <span class="table-text">
@@ -125,7 +125,7 @@
             </div>
         </div>
         <div [style.order]="modification.reduceAirLeaks.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.reduceAirLeaksSavings.savings.power != 0">
+            *ngIf="modification.reduceAirLeaks.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.reduceAirLeaks}">
                 <span class="table-text">
@@ -142,7 +142,7 @@
         </div>
 
         <div [style.order]="modification.reduceRuntime.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.reduceRunTimeSavings.savings.power != 0">
+            *ngIf="modification.reduceRuntime.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.reduceRuntime}">
                 <span class="table-text">
@@ -159,7 +159,7 @@
         </div>
 
         <div [style.order]="modification.reduceSystemAirPressure.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.reduceSystemAirPressureSavings.savings.power != 0">
+            *ngIf="modification.reduceSystemAirPressure.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.reduceSystemPressure}">
                 <span class="table-text">
@@ -176,7 +176,7 @@
         </div>
 
         <div [style.order]="modification.useAutomaticSequencer.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.useAutomaticSequencerSavings.savings.power != 0">
+            *ngIf="modification.useAutomaticSequencer.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.useAutomaticSequencer}">
                 <span class="table-text">
@@ -346,7 +346,7 @@
     </div>
     <div class="d-flex flex-column">
         <div [style.order]="modification.replaceCompressor.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.replaceCompressorsSavings.savings.cost != 0">
+            *ngIf="modification.replaceCompressor.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.replaceCompressor}">
                 <span class="table-text">
@@ -361,7 +361,7 @@
             </div>
         </div>
         <div [style.order]="modification.addPrimaryReceiverVolume.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.addReceiverVolumeSavings.savings.cost != 0">
+            *ngIf="modification.addPrimaryReceiverVolume.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.addReceiverVolume}">
                 <span class="table-text">
@@ -377,7 +377,7 @@
             </div>
         </div>
         <div [style.order]="modification.adjustCascadingSetPoints.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.adjustCascadingSetPointsSavings.savings.cost != 0">
+            *ngIf="modification.adjustCascadingSetPoints.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.adjustCascadingSetPoints}">
                 <span class="table-text">
@@ -393,7 +393,7 @@
             </div>
         </div>
         <div [style.order]="modification.improveEndUseEfficiency.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.improveEndUseEfficiencySavings.savings.cost != 0">
+            *ngIf="modification.improveEndUseEfficiency.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.improveEndUseEfficiency}">
                 <span class="table-text">
@@ -409,7 +409,7 @@
             </div>
         </div>
         <div [style.order]="modification.reduceAirLeaks.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.reduceAirLeaksSavings.savings.cost != 0">
+            *ngIf="modification.reduceAirLeaks.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.reduceAirLeaks}">
                 <span class="table-text">
@@ -426,7 +426,7 @@
         </div>
 
         <div [style.order]="modification.reduceRuntime.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.reduceRunTimeSavings.savings.cost != 0">
+            *ngIf="modification.reduceRuntime.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.reduceRuntime}">
                 <span class="table-text">
@@ -443,7 +443,7 @@
         </div>
 
         <div [style.order]="modification.reduceSystemAirPressure.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.reduceSystemAirPressureSavings.savings.cost != 0">
+            *ngIf="modification.reduceSystemAirPressure.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.reduceSystemPressure}">
                 <span class="table-text">
@@ -460,7 +460,7 @@
         </div>
 
         <div [style.order]="modification.useAutomaticSequencer.order" class="d-flex my-table-item"
-            *ngIf="dayTypeModificationResult.useAutomaticSequencerSavings.savings.cost != 0">
+            *ngIf="modification.useAutomaticSequencer.order != 100">
             <div class="d-flex align-items-center pl-1 pr-1 col-4"
                 [ngClass]="{'invalid': !compressedAirModificationValid.useAutomaticSequencer}">
                 <span class="table-text">

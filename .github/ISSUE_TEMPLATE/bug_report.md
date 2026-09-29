@@ -17,10 +17,26 @@ What is the expected outcome of the action you were trying to perform?
 Ex.  “In the TH integrated version of the calculator, I used these inputs, clicked X button, then saw ___ error or problem”
 
 **Version information**
+Supply version information if submitted from user-support or is specific to one platform
+
  - OS: [e.g. iOS, Win 11]
  - Browser [e.g. chrome, safari]
  - Platform [Web, Desktop, PWA]
  - Version [e.g. 1.5.9]
 
-**Additional context**
-Add any other context about the problem here.
+
+---
+**Who should verify**
+
+ - [ ] Engineering
+ - [ ] QA
+ - [ ] Dev
+
+ **Release Notes**
+ Include the release note description following below formats
+ ```
+    - Added: ...
+    - Enhanced: ...
+    - Fixed: ...
+```
+

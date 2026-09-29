@@ -28,7 +28,6 @@
 
 .prompts/
 .claude/
-CLAUDE.md
 
 # misc
 /docker
@@ -41,6 +40,7 @@ testem.log
 /typings
 /db/*.db
 scripts/download-stats
+scripts/local/
 /docker
 
 # e2e

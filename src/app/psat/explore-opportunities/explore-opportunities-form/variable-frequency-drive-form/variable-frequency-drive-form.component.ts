@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { FieldDataWarnings } from '../../../psat-warning.service';
 import { Settings } from '../../../../shared/models/settings';
-import { pumpTypesConstant, driveConstants } from '../../../psatConstants';
 
 @Component({
     selector: 'app-variable-frequency-drive-form',
@@ -34,13 +33,9 @@ export class VariableFrequencyDriveFormComponent implements OnInit {
   @Output('openHeadToolModal')
   openHeadToolModal = new EventEmitter<boolean>();
 
-  pumpTypes: Array<{ display: string, value: number }>;
-  drives: Array<{ display: string, value: number }>;
   constructor() { }
 
   ngOnInit() {
-    this.pumpTypes = pumpTypesConstant;
-    this.drives = driveConstants;
   }
 
   calculate() {

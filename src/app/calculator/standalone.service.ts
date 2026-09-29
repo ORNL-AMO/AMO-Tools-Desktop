@@ -11,6 +11,7 @@ import {
   PipeInsulationReductionResult, TankInsulationReductionInput, TankInsulationReductionResult, AirLeakSurveyInput, AirLeakSurveyResult, CompEEM_kWAdjustedInput, SteamReductionOutput, SteamReductionResult,
   PowerFactorTriangleModeInputs,
   PowerFactorTriangleOutputs,
+  SteamLeakSurveyResult, SteamLeakSurveyInput,
   ReceiverTankMeteredResults,
   ReceiverTankCompressorCycle,
   ReceiverTankCompressorCycleOutput,
@@ -377,6 +378,11 @@ export class StandaloneService {
 
   airLeakSurvey(inputObj: AirLeakSurveyInput): AirLeakSurveyResult {
     let results: AirLeakSurveyResult = this.calculatorSuiteApiService.compressedAirLeakSurvey(inputObj);
+    return results;
+  }
+  
+  steamLeakSurvey(inputObj: SteamLeakSurveyInput): SteamLeakSurveyResult { 
+    let results: SteamLeakSurveyResult = this.calculatorSuiteApiService.steamLeakSurvey(inputObj);
     return results;
   }
 

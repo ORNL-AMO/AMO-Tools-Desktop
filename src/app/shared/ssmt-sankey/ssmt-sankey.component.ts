@@ -61,30 +61,41 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     ) { }
 
   ngOnInit(){
-    if (this.ssmt.setupDone) {
+    if (this.canCalculateSankey()) {
       this.getLosses();
       this.initSankeySetup();
+    } else if (!this.isBaseline) {
+      this.results = undefined;
     }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.ssmt && !changes.ssmt.firstChange) {
-      if (this.ssmt.setupDone) {
+      if (this.canCalculateSankey()) {
         this.getLosses();
         this.initSankeySetup();
         this.renderSankey();
+      } else if (!this.isBaseline) {
+        this.results = undefined;
       }
     }
     if (changes.labelStyle && !changes.labelStyle.firstChange) {
-      if (this.ssmt.setupDone) {
+      if (this.canCalculateSankey()) {
         this.initSankeySetup();
         this.renderSankey();
       }
     }
   }
-  
   ngAfterViewInit() {
     this.renderSankey();
+  }
+
+  canCalculateSankey(): boolean {
+    if (this.isBaseline) {
+      return this.ssmt.setupDone;
+    }
+    this.ssmt.valid = this.ssmtService.checkValid(this.ssmt, this.settings);
+    return this.ssmt.valid.isValid;
   }
 
   getLosses() {
@@ -268,7 +279,7 @@ export class SsmtSankeyComponent implements OnInit, AfterViewInit, OnChanges {
     let otherLosses = this.losses.highPressureHeader + this.losses.mediumPressureHeader + this.losses.lowPressureHeader + this.losses.condensateLosses + this.losses.deaeratorVentLoss + this.losses.condensateFlashTankLoss;
     this.hasLowPressureVentLoss = !isNaN(this.losses.lowPressureVentLoss);
     if (this.hasLowPressureVentLoss) {
-      otherLosses + this.losses.lowPressureVentLoss;
+      otherLosses += this.losses.lowPressureVentLoss;
     }
     // Returned condensate and steam
     let returnedCondensate = 0;

@@ -11,6 +11,13 @@ import { ProfileView } from './system-profile.service';
 import { ProcessCoolingView, SetupView, SystemInformationView, ViewLink } from '../models/views';
 export { ProcessCoolingMainTabString, ProcessCoolingSetupTabString, ProcessCoolingAssessmentTabString, ProcessCoolingView, MainView, SetupView, SystemInformationView, AssessmentView, ReportView, ViewLink, MAIN_VIEW_LINKS, SETUP_VIEW_LINKS, SYSTEM_INFORMATION_VIEW_LINKS, ASSESSMENT_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
 
+interface ProcessCoolingRouteData {
+  mainView?: string;
+  childView?: string;
+  setupSubView?: string;
+  stepIndex?: number;
+}
+
 @Injectable()
 export class ProcessCoolingUiService {
   private router = inject(Router);
@@ -34,14 +41,6 @@ export class ProcessCoolingUiService {
   
   executiveSummaryViewSignal: WritableSignal<SummaryView> = signal<SummaryView>('baseline-panel');
   profileViewSignal: WritableSignal<ProfileView> = signal<ProfileView>('baseline');
-
-  private readonly urlSegmentIndex = {
-    assessmentURL: 0,
-    assessmentId: 1,
-    main: 2,
-    setup: 3,
-    subview: 4
-  };
 
   private readonly STEPPED_ROUTES = [
     {
@@ -120,88 +119,33 @@ export class ProcessCoolingUiService {
 
 
 
-  readonly mainView: Signal<string> = toSignal(
+  private getActiveRouteData(): ProcessCoolingRouteData {
+    let snapshot = this.router.routerState.snapshot.root;
+    let merged: ProcessCoolingRouteData = {};
+    while (snapshot) {
+      merged = { ...merged, ...snapshot.data };
+      snapshot = snapshot.firstChild;
+    }
+    return merged;
+  }
+
+  private readonly routeData: Signal<ProcessCoolingRouteData> = toSignal(
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
-      map(() => {
-        const mainView = this.getCurrentMainView();
-        return mainView;
-      }),
-      startWith(this.getCurrentMainView())
+      map(() => this.getActiveRouteData()),
+      startWith(this.getActiveRouteData())
     ),
-    { initialValue: '' }
+    { initialValue: {} }
   );
 
-  readonly childView: Signal<string> = toSignal(
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => {
-        const childView = this.getCurrentChildView();
-        return childView;
-      }),
-      startWith(this.getCurrentChildView())
-    ),
-    { initialValue: '' }
-  );
+  readonly mainView: Signal<string> = computed(() => this.routeData().mainView ?? '');
+  readonly childView: Signal<string> = computed(() => this.routeData().childView ?? '');
+  readonly setupSubView: Signal<string> = computed(() => this.routeData().setupSubView ?? '');
 
-  readonly setupSubView: Signal<string> = toSignal(
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => {
-        const subView = this.getSetupSubView();
-        return subView;
-      }),
-      startWith(this.getSetupSubView())
-    ),
-    { initialValue: '' }
-  );
-
-
-  // * return full route without process-cooling/assessmentId:
-  readonly fullSubroute: Signal<string> = toSignal(
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      map(() => {
-        return this.getFullSubroute();
-      }),
-      startWith(this.getFullSubroute())
-    ),
-    { initialValue: '' }
-  );
-
-  readonly currentStepIndex: Signal<number> = computed(() => {
-    const fullSubroute = this.fullSubroute();
-    return this.STEPPED_ROUTES.findIndex(route => {
-      const isWeatherRouteMatch = fullSubroute.includes(ROUTE_TOKENS.weather) && route.path.includes(ROUTE_TOKENS.weather);
-      if (isWeatherRouteMatch) return true;
-      return fullSubroute === route.path;
-    });
-  });
+  readonly currentStepIndex: Signal<number> = computed(() => this.routeData().stepIndex ?? -1);
 
   readonly canContinue: Signal<boolean> = computed(() => this.canVisitSteppedView(this.currentStepIndex() + 1));
   readonly canGoBack: Signal<boolean> = computed(() => this.currentStepIndex() > 0);
-
-  private getCurrentMainView(): string {
-    const urlSegments = this.router.url.split('/').filter(s => s);
-    return urlSegments[this.urlSegmentIndex.main] || '';
-  }
-
-  private getCurrentChildView(): string {
-    const urlSegments = this.router.url.split('/').filter(s => s);
-    return urlSegments[this.urlSegmentIndex.setup] || '';
-  }
-
-  private getSetupSubView(): string {
-    const urlSegments = this.router.url.split('/').filter(s => s);
-    return urlSegments[this.urlSegmentIndex.subview] || '';
-  }
-
-  private getFullSubroute(): string {
-    const urlSegments = this.router.url.split('/').filter(s => s);
-    urlSegments.splice(0, 2);
-    const fullSubroute = urlSegments.join('/');
-    return fullSubroute;
-  }
 
   private buildUrl(path: string): string {
     const id = this.processCoolingAssessmentService.assessmentId;

@@ -184,8 +184,10 @@ export class ModificationListComponent implements OnInit {
     if (this.asssessmentTab === 'explore-opportunities') {
       tmpModification.exploreOpportunities = true;
     }
-    tmpModification.phast.co2SavingsData = (JSON.parse(JSON.stringify(phast.co2SavingsData)));
-    tmpModification.phast.co2SavingsData.userEnteredModificationEmissions = tmpModification.phast.co2SavingsData.userEnteredBaselineEmissions; 
+    if (phast.co2SavingsData) {
+      tmpModification.phast.co2SavingsData = (JSON.parse(JSON.stringify(phast.co2SavingsData)));
+      tmpModification.phast.co2SavingsData.userEnteredModificationEmissions = tmpModification.phast.co2SavingsData.userEnteredBaselineEmissions;
+    }
     tmpModification.phast.losses = (JSON.parse(JSON.stringify(phast.losses)));
     tmpModification.phast.operatingCosts = (JSON.parse(JSON.stringify(phast.operatingCosts)));
     tmpModification.phast.operatingHours = (JSON.parse(JSON.stringify(phast.operatingHours)));

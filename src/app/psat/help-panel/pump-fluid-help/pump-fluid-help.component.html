@@ -2,371 +2,389 @@
   <h5>
     Pump &amp; Fluid Help
     <br>
-    <small class="text-muted">
-      Enter measured data to calculate your system's annual savings potential.
-    </small>
-  </h5>
-  <hr class="my-1 hr-spacer">
-  <div class="my-2" *ngIf="currentField == 'pumpType'">
-    <h6>
-      Pump Type
-      <br>
       <small class="text-muted">
-        Pump Type represents what style of pump is being used based off of the listings in the standard ANSI/HI
-        1.3-2000.
-        <br> This value will be used to estimate achievable pump efficiencies based on pump style and operating
-        conditions.
-        <hr>
+        Enter measured data to calculate your system's annual savings potential.
       </small>
-      <div class="d-flex flex-column table">
-        <label class="group-label">Overhung Impeller</label>
-        <div class="d-flex align-items-center">
-          <div class="d-flex flex-column w-25">
-            <img class="w-100 p-2" src="assets/images/pump-types/overhung-impeller-pump.png">
-          </div>
-          <div class="d-flex w-75 p-2">
-            <table class="table table-hover table-striped">
-              <tbody>
-                <tr>
-                  <td class="text-center">End Suction Slurry</td>
-                  <td class="text-center">Slurry pumps, end suction</td>
-                </tr>
-                <tr>
-                  <td class="text-center">End Suction Sewage (and Submersible)</td>
-                  <td class="text-center">Solids-handling, end suction (Submersible)</td>
-                </tr>
-                <tr>
-                  <td class="text-center">End Suction Stock</td>
-                  <td class="text-center">Stock, end suction</td>
-                </tr>
-                <tr>
-                  <td class="text-center">End Suction ANSI/API</td>
-                  <td class="text-center">End suction - small, API end suction, ASME B73</td>
-                </tr>
-                <tr>
-                  <td class="text-center">Large End Suction</td>
-                  <td class="text-center">End suction - large (>5000 gpm)</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <label class="group-label">Between Bearings Impeller</label>
-        <div class="d-flex align-items-center">
-          <div class="d-flex flex-column w-25">
-            <img class="w-100 p-2" src="assets/images/pump-types/between-bearings-impeller-pump.png">
-          </div>
-          <div class="d-flex w-75 p-2">
-            <table class="table table-hover table-striped">
-              <tbody>
-                <tr>
-                  <td class="text-center">Multistage Boiler Feed</td>
-                  <td class="text-center">Horizontal multistage pumps; axially split, segmented ring diffuser barrel
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-center">API Double Suction</td>
-                  <td class="text-center">API Double suction</td>
-                </tr>
-                <tr>
-                  <td class="text-center">Double Suction</td>
-                  <td class="text-center">Double suction</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <label class="group-label">Vertical Turbine</label>
-        <div class="d-flex align-items-center">
-          <div class="d-flex flex-column w-25">
-            <img class="w-100 p-2" src="assets/images/pump-types/vertical-turbine.png">
-          </div>
-          <div class="d-flex w-75 p-2">
-            <table class="table table-hover table-striped">
-              <tbody>
-                <tr>
-                  <td class="text-center">Vertical Turbine and Axial Flow</td>
-                  <td class="text-center">Vertical turbine, mixed-flow and propeller, single and multistage diffuser
-                    type</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      <hr>
-      <small class="text-muted">
-        Overhung impeller pumps have the impeller(s) is mounted on the end of a shaft that is “overhung” from its
-        bearing supports. The impeller can be mounted directly on the driver shaft or on a separate pump shaft supported
-        by its own bearings.
-        <hr class="mt-1 mb-1">
-        Between Bearings pumps have the impeller(s) mounted on a shaft with bearings on both sides.
-        <hr class="mt-1 mb-1">
-        Vertically suspended pumps’ have an impeller with a vertical axis of rotation. Vertical turbine pumps typically
-        use radial, modified radial or mixed flow impellers.
-        <hr class="mb-1 mt-1">
-        See ANSI/HI 1.1-1.2, 1.3, 2.1-2.2, 2.3 and 20.3 or
-        <a href="http://pumps.org/Pump_Fundamentals_Rotodynamic_Pumps.aspx" target="_blank">Hydraulic
-          Institue webpage</a> for more information.
-      </small>
-    </h6>
-  </div>
-
-
-  <div class="my-2" *ngIf="currentField == 'specifiedPumpEfficiency'">
-    <h6>
-      Pump Efficiency
-      <br>
-      <small class="text-muted">
-        Efficiency of the pump in the modified scenario calculations. The default value for a modification's pump
-        efficiency is the efficiency value calculated in the baseline.
-        <hr>
-        There are several reasons to model a change to the pump’s efficiency. Installing a more efficient pump,
-        restoring the existing pump, or changing the impeller size can all result in changes to the pump efficiency.
-        Changing the pumps operating conditions (head, flow) can also result in a change to pump efficiency. Use your
-        pump curve and the affinity laws to determine your pump efficiency at the new conditions and enter the value
-        here.
-        <hr>
-        Clicking “Optimize Pump” will provide an estimate of a top-of-the-line, commercially available pump’s
-        efficiency at the modification’s flow rate for the pump type (using curves developed in the Hydraulic
-        Institute’s ANSI/HI 1.3 standard).
-        <!-- The specified pump efficiency input is only displayed when the pump style is "Selected optimal eff (below)".
-        <br> The input value would normally be the pump efficiency at the specified operating conditions (under the Field data
-        section), as opposed to the best efficiency point flow rate. -->
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">0%</td>
-            <td class="text-center">100%</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+    </h5>
+    <hr class="my-1 hr-spacer">
+    @if (currentField == 'pumpType') {
+      <div class="my-2">
+        <h6>
+          Pump Type
+          <br>
+            <small class="text-muted">
+              Pump Type represents what style of pump is being used based off of the listings in the standard ANSI/HI
+              1.3-2000.
+              <br> This value will be used to estimate achievable pump efficiencies based on pump style and operating
+                conditions.
+                <hr>
+                </small>
+                <div class="d-flex flex-column table">
+                  <label class="group-label">Overhung Impeller</label>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex flex-column w-25">
+                      <img class="w-100 p-2" src="assets/images/pump-types/overhung-impeller-pump.png">
+                    </div>
+                    <div class="d-flex w-75 p-2">
+                      <table class="table table-hover table-striped">
+                        <tbody>
+                          <tr>
+                            <td class="text-center">End Suction Slurry</td>
+                            <td class="text-center">Slurry pumps, end suction</td>
+                          </tr>
+                          <tr>
+                            <td class="text-center">End Suction Sewage (and Submersible)</td>
+                            <td class="text-center">Solids-handling, end suction (Submersible)</td>
+                          </tr>
+                          <tr>
+                            <td class="text-center">End Suction Stock</td>
+                            <td class="text-center">Stock, end suction</td>
+                          </tr>
+                          <tr>
+                            <td class="text-center">End Suction ANSI/API</td>
+                            <td class="text-center">End suction - small, API end suction, ASME B73</td>
+                          </tr>
+                          <tr>
+                            <td class="text-center">Large End Suction</td>
+                            <td class="text-center">End suction - large (>5000 gpm)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <label class="group-label">Between Bearings Impeller</label>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex flex-column w-25">
+                      <img class="w-100 p-2" src="assets/images/pump-types/between-bearings-impeller-pump.png">
+                    </div>
+                    <div class="d-flex w-75 p-2">
+                      <table class="table table-hover table-striped">
+                        <tbody>
+                          <tr>
+                            <td class="text-center">Multistage Boiler Feed</td>
+                            <td class="text-center">Horizontal multistage pumps; axially split, segmented ring diffuser barrel
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-center">API Double Suction</td>
+                            <td class="text-center">API Double suction</td>
+                          </tr>
+                          <tr>
+                            <td class="text-center">Double Suction</td>
+                            <td class="text-center">Double suction</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <label class="group-label">Vertical Turbine</label>
+                  <div class="d-flex align-items-center">
+                    <div class="d-flex flex-column w-25">
+                      <img class="w-100 p-2" src="assets/images/pump-types/vertical-turbine.png">
+                    </div>
+                    <div class="d-flex w-75 p-2">
+                      <table class="table table-hover table-striped">
+                        <tbody>
+                          <tr>
+                            <td class="text-center">Vertical Turbine and Axial Flow</td>
+                            <td class="text-center">Vertical turbine, mixed-flow and propeller, single and multistage diffuser
+                            type</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <hr>
+                  <small class="text-muted">
+                    Overhung impeller pumps have the impeller(s) is mounted on the end of a shaft that is “overhung” from its
+                    bearing supports. The impeller can be mounted directly on the driver shaft or on a separate pump shaft supported
+                    by its own bearings.
+                    <hr class="mt-1 mb-1">
+                    Between Bearings pumps have the impeller(s) mounted on a shaft with bearings on both sides.
+                    <hr class="mt-1 mb-1">
+                    Vertically suspended pumps’ have an impeller with a vertical axis of rotation. Vertical turbine pumps typically
+                    use radial, modified radial or mixed flow impellers.
+                    <hr class="mb-1 mt-1">
+                    See ANSI/HI 1.1-1.2, 1.3, 2.1-2.2, 2.3 and 20.3 or
+                    <a href="http://pumps.org/Pump_Fundamentals_Rotodynamic_Pumps.aspx" target="_blank">Hydraulic
+                    Institue webpage</a> for more information.
+                  </small>
+                </h6>
+              </div>
+            }
 
 
-  <div class="my-2" *ngIf="currentField == 'pumpRPM'">
-    <h6>
-      Pump Speed
-      <br>
-      <small class="text-muted">
-        The operating or nameplate speed at which the pump is running at. Used along with the measure/required flow
-        rate, head, and
-        number of stages, to calculate the pump specific speed. The specific speed is used to determine efficiency
-        penalty
-        associated with the particular pump application.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Drive Type</th>
-            <th class="text-center">Minimum</th>
-            <th class="text-center">Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">Direct Drive</td>
-            <td class="text-center">540 rpm</td>
-            <td class="text-center">3960 rpm</td>
-          </tr>
-          <tr>
-            <td class="text-center">Belt Drives</td>
-            <td class="text-center">1 rpm</td>
-            <td class="text-center">&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+            @if (currentField == 'specifiedPumpEfficiency') {
+              <div class="my-2">
+                <h6>
+                  Pump Efficiency
+                  <br>
+                    <small class="text-muted">
+                      Efficiency of the pump in the modified scenario calculations. The default value for a modification's pump
+                      efficiency is the efficiency value calculated in the baseline.
+                      <hr>
+                        There are several reasons to model a change to the pump’s efficiency. Installing a more efficient pump,
+                        restoring the existing pump, or changing the impeller size can all result in changes to the pump efficiency.
+                        Changing the pumps operating conditions (head, flow) can also result in a change to pump efficiency. Use your
+                        pump curve and the affinity laws to determine your pump efficiency at the new conditions and enter the value
+                        here.
+                        <hr>
+                          Clicking “Optimize Pump” will provide an estimate of a top-of-the-line, commercially available pump’s
+                          efficiency at the modification’s flow rate for the pump type (using curves developed in the Hydraulic
+                          Institute’s ANSI/HI 1.3 standard).
+                          <!-- The specified pump efficiency input is only displayed when the pump style is "Selected optimal eff (below)".
+                          <br> The input value would normally be the pump efficiency at the specified operating conditions (under the Field data
+                            section), as opposed to the best efficiency point flow rate. -->
+                            <hr>
+                            </small>
+                          </h6>
+                          <div class="w-100 justify-content-center">
+                            <table class="table table-hover table-striped">
+                              <tbody>
+                                <tr>
+                                  <th class="text-center">Minimum</th>
+                                  <th class="text-center">Maximum</th>
+                                </tr>
+                                <tr>
+                                  <td class="text-center">0%</td>
+                                  <td class="text-center">100%</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      }
 
 
-  <div class="my-2" *ngIf="currentField == 'drive'">
-    <h6>
-      Drive
-      <br>
-      <small class="text-muted">
-        This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or
-        belt-driven. There
-        are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt
-        drives
-        are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient
-        belts.
-        <br> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be
-        used if
-        adjustable frequency drives are used.
-        <hr> Drive options include
-        <u>Direct Drive</u>,
-        <u>V-Belt Drive</u>,
-        <u>Notched V-Belt</u>, or
-        <u>Synchronous Drive</u>.
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'specifiedDriveEfficiency'">
-    <h6>
-      Drive Efficiency
-      <br>
-      <small class="text-muted">
-        Drive efficiency is the approximate efficiency of the drive connecting the pump to the motor.
-        <hr>
-        The combined efficiency of the motor drive and VFD efficiency at the scenario’s load (if modifying system using
-        a VFD). VFD efficiency can be approximated as 95% if unknown.
-      </small>
-    </h6>
-  </div>
-
-  <div class="my-2" *ngIf="currentField == 'fluidType'">
-    <h6>
-      Fluid Type
-      <br>
-      <small class="text-muted">
-        Fluid Type is the type of fluid in your system.
-        <hr>
-      </small>
-    </h6>
-    <!-- <div class="w-100">
-      <label class="group-label w-100">Pump Type Options</label>
-      <div class="d-flex justify-content-center">
-        <table class="table table-hover table-striped">
-          <tbody>
-            <tr>
-              <td class="text-center">Acetone</td>
-            </tr>
-            <tr>
-              <td class="text-center">Ammonia</td>
-            </tr>
-            <tr>
-              <td class="text-center">Dichlorodifluoromethane refrigerant R-12</td>
-            </tr>
-            <tr>
-              <td class="text-center">Ethanol</td>
-            </tr>
-            <tr>
-              <td class="text-center">Ethylene glycol</td>
-            </tr>
-            <tr>
-              <td class="text-center">Glycerine (glycerol)</td>
-            </tr>
-            <tr>
-              <td class="text-center">Kerosene - jet fuel</td>
-            </tr>
-            <tr>
-              <td class="text-center">Methanol</td>
-            </tr>
-            <tr>
-              <td class="text-center">n-Octane</td>
-            </tr>
-            <tr>
-              <td class="text-center">Other (define your own k. viscosity)</td>
-            </tr>
-            <tr>
-              <td class="text-center">Petroleum</td>
-            </tr>
-            <tr>
-              <td class="text-center">Water</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div> -->
-  </div>
+                      @if (currentField == 'pumpRPM') {
+                        <div class="my-2">
+                          <h6>
+                            Pump Speed
+                            <br>
+                              <small class="text-muted">
+                                The operating or nameplate speed at which the pump is running at. Used along with the measure/required flow
+                                rate, head, and
+                                number of stages, to calculate the pump specific speed. The specific speed is used to determine efficiency
+                                penalty
+                                associated with the particular pump application.
+                                <hr>
+                                </small>
+                              </h6>
+                              <div class="w-100 justify-content-center">
+                                <table class="table table-hover table-striped">
+                                  <tbody>
+                                    <tr>
+                                      <th class="text-center">Drive Type</th>
+                                      <th class="text-center">Minimum</th>
+                                      <th class="text-center">Maximum</th>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-center">Direct Drive</td>
+                                      <td class="text-center">540 rpm</td>
+                                      <td class="text-center">3960 rpm</td>
+                                    </tr>
+                                    <tr>
+                                      <td class="text-center">Belt Drives</td>
+                                      <td class="text-center">1 rpm</td>
+                                      <td class="text-center">&mdash;</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          }
 
 
-  <div class="my-2" *ngIf="currentField == 'fluidTemperature'">
-    <h6>
-      Fluid Temperature
-      <br>
-      <small class="text-muted">
-        Fluid Temperature is the average temperature of the fluid in your system.
-        <br> This is used in combination with properties of the fluid itself to calculate specific gravity.
-        <hr>
-      </small>
-    </h6>
-    <div class="w-100 justify-content-center">
-      <table class="table table-hover table-striped">
-        <tbody>
-          <tr>
-            <th class="text-center">Suggested Minimum</th>
-            <th class="text-center">Suggested Maximum</th>
-          </tr>
-          <tr>
-            <td class="text-center">Fluid Freezing Point</td>
-            <td class="text-center">Fluid Boiling Point</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+                          @if (currentField == 'drive') {
+                            <div class="my-2">
+                              <h6>
+                                Drive
+                                <br>
+                                  <small class="text-muted">
+                                    This drop-down selection menu allows the user to define whether the pump is direct driven by the motor or
+                                    belt-driven. There
+                                    are three options for belt drives: V-Belt, Notched V-Belt and Synchronous Belt Drives. Of the three, V-Belt
+                                    drives
+                                    are the least efficient, Notched V-Belts are slightly better, and Synchronous Belts are the most efficient
+                                    belts.
+                                    <br> This value is used in the Load Estimation calculation. Note: The current estimating method should NOT be
+                                      used if
+                                      adjustable frequency drives are used.
+                                      <hr> Drive options include
+                                        <u>Direct Drive</u>,
+                                        <u>V-Belt Drive</u>,
+                                        <u>Notched V-Belt</u>, or
+                                        <u>Synchronous Drive</u>.
+                                      </small>
+                                    </h6>
+                                  </div>
+                                }
+
+                                @if (currentField == 'specifiedDriveEfficiency') {
+                                  <div class="my-2">
+                                    <h6>
+                                      Drive Efficiency
+                                      <br>
+                                        <small class="text-muted">
+                                          Drive efficiency is the approximate efficiency of the drive connecting the pump to the motor.
+                                          <hr>
+                                            The combined efficiency of the motor drive and VFD efficiency at the scenario’s load (if modifying system using
+                                            a VFD). VFD efficiency can be approximated as 95% if unknown.
+                                          </small>
+                                        </h6>
+                                      </div>
+                                    }
+
+                                    @if (currentField == 'fluidType') {
+                                      <div class="my-2">
+                                        <h6>
+                                          Fluid Type
+                                          <br>
+                                            <small class="text-muted">
+                                              Fluid Type is the type of fluid in your system.
+                                              <hr>
+                                              </small>
+                                            </h6>
+                                            <!-- <div class="w-100">
+                                            <label class="group-label w-100">Pump Type Options</label>
+                                            <div class="d-flex justify-content-center">
+                                              <table class="table table-hover table-striped">
+                                                <tbody>
+                                                  <tr>
+                                                    <td class="text-center">Acetone</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Ammonia</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Dichlorodifluoromethane refrigerant R-12</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Ethanol</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Ethylene glycol</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Glycerine (glycerol)</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Kerosene - jet fuel</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Methanol</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">n-Octane</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Other (define your own k. viscosity)</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Petroleum</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td class="text-center">Water</td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                          </div> -->
+                                        </div>
+                                      }
 
 
-
-  <div class="my-2" *ngIf="currentField == 'specificGravity'">
-    <h6>
-      Specific Gravity
-      <br>
-      <small class="text-muted">
-        Specific Gravity is the ratio of the density of the fluid to water at standard condition.
-        <br> This is used in calculating the fluid power at the specified pump flow rate and head conditions. This can
-        be found
-        through fluid property tables.
-        <br> This value is automatically calculated for the chosen fluid at the specified temperature. It can also be
-        edited
-        manually if desired.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-
-  <div class="my-2" *ngIf="currentField == 'viscosity'">
-    <h6>
-      Kinematic Viscosity
-      <br>
-      <small class="text-muted">
-        Kinematic viscosity is the ratio of absolute (or dynamic) viscosity to density - a quantity in which no force
-        is involved.
-        <br> This can be obtained by dividing the absolute viscosity of a fluid with the fluid mass density. It is
-        expressed
-        here in terms of CentiStokes.
-        <br> This value is automatically calculated for the chosen fluid at the specified temperature. For all fluids
-        other than
-        water, this value is only valid at the reference temperature, usually 25 deg C (68 deg F). It can also be
-        edited
-        manually.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-
-  <div class="my-2" *ngIf="currentField == 'stages'">
-    <h6>
-      Stages
-      <br>
-      <small class="text-muted">
-        The number of pump stages. This value is used to calculate pump specific speed.
-        <hr>
-      </small>
-    </h6>
-  </div>
-
-</div>
+                                      @if (currentField == 'fluidTemperature') {
+                                        <div class="my-2">
+                                          <h6>
+                                            Fluid Temperature
+                                            <br>
+                                              <small class="text-muted">
+                                                Fluid Temperature is the average temperature of the fluid in your system.
+                                                <br> This is used in combination with properties of the fluid itself to calculate specific gravity.
+                                                  <hr>
+                                                  </small>
+                                                </h6>
+                                                <div class="w-100 justify-content-center">
+                                                  <table class="table table-hover table-striped">
+                                                    <tbody>
+                                                      <tr>
+                                                        <th class="text-center">Suggested Minimum</th>
+                                                        <th class="text-center">Suggested Maximum</th>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="text-center">Fluid Freezing Point</td>
+                                                        <td class="text-center">Fluid Boiling Point</td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+                                            }
 
 
 
-<!-- <p class="text-muted">
-    <span class="fa fa-youtube-play"></span> Watch tutorial on gathering pump/fluid data.
-  </p> -->
+                                            @if (currentField == 'specificGravity') {
+                                              <div class="my-2">
+                                                <h6>
+                                                  Specific Gravity
+                                                  <br>
+                                                    <small class="text-muted">
+                                                      Specific Gravity is the ratio of the density of the fluid to water at standard condition.
+                                                      <br> This is used in calculating the fluid power at the specified pump flow rate and head conditions. This can
+                                                        be found
+                                                        through fluid property tables.
+                                                        <br> This value is automatically calculated for the chosen fluid at the specified temperature. It can also be
+                                                          edited
+                                                          manually if desired.
+                                                          <hr>
+                                                          </small>
+                                                        </h6>
+                                                      </div>
+                                                    }
+
+
+                                                    @if (currentField == 'viscosity') {
+                                                      <div class="my-2">
+                                                        <h6>
+                                                          Kinematic Viscosity
+                                                          <br>
+                                                            <small class="text-muted">
+                                                              Kinematic viscosity is the ratio of absolute (or dynamic) viscosity to density - a quantity in which no force
+                                                              is involved.
+                                                              <br> This can be obtained by dividing the absolute viscosity of a fluid with the fluid mass density. It is
+                                                                expressed
+                                                                here in terms of CentiStokes.
+                                                                <br> This value is automatically calculated for the chosen fluid at the specified temperature. For all fluids
+                                                                  other than
+                                                                  water, this value is only valid at the reference temperature, usually 25 deg C (68 deg F). It can also be
+                                                                  edited
+                                                                  manually.
+                                                                  <hr>
+                                                                  </small>
+                                                                </h6>
+                                                              </div>
+                                                            }
+
+
+                                                            @if (currentField == 'stages') {
+                                                              <div class="my-2">
+                                                                <h6>
+                                                                  Stages
+                                                                  <br>
+                                                                    <small class="text-muted">
+                                                                      The number of pump stages. This value is used to calculate pump specific speed.
+                                                                      <hr>
+                                                                      </small>
+                                                                    </h6>
+                                                                  </div>
+                                                                }
+
+                                                              </div>
+
+
+
+                                                              <!-- <p class="text-muted">
+                                                              <span class="fa fa-youtube-play"></span> Watch tutorial on gathering pump/fluid data.
+                                                            </p> -->

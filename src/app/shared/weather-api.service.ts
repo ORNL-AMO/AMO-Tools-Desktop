@@ -72,13 +72,12 @@ export class WeatherApiService {
     }).pipe(
       map(response => {
         const mappedData: WeatherDataResponse = {
-          // * 8190 - TMY data is now being returned only in C
+          // * TMY data is returned in F; convert to C for Metric users
           hourly_data: response.hourly_data.map(dataPoint => {
-
             const settings = this.weatherContextService.settings;
-            if (settings && settings.unitsOfMeasure === 'Imperial') {
-              dataPoint.dry_bulb_temp = new ConvertValue(dataPoint.dry_bulb_temp, 'C', 'F').convertedValue;
-              dataPoint.wet_bulb_temp = new ConvertValue(dataPoint.wet_bulb_temp, 'C', 'F').convertedValue;
+            if (settings && settings.unitsOfMeasure === 'Metric') {
+              dataPoint.dry_bulb_temp = new ConvertValue(dataPoint.dry_bulb_temp, 'F', 'C').convertedValue;
+              dataPoint.wet_bulb_temp = new ConvertValue(dataPoint.wet_bulb_temp, 'F', 'C').convertedValue;
             }
             return {
               ...dataPoint,

@@ -76,7 +76,7 @@
     <nav class="navbar phast">
       <div *ngIf="showSankeyLabelOptions" class="d-flex justify-content-start align-items-center w-100 flex-wrap">
         <div class="tab-content pl-2 pr-2">
-          <div class="form-group" *ngIf="phastOptions.length > 1">
+          <div class="form-group">
             <select name="phastSelect" class="form-control mx-auto w-100" id="phastSelect" [(ngModel)]="sankeyPhast">
               <option *ngFor="let mod of phastOptions" [ngValue]="mod.phast">{{mod.name}}</option>
             </select>

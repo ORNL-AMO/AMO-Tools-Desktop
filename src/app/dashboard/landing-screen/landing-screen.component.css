@@ -197,6 +197,7 @@ img.treasure-hunt-image {
     box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
 	width: 80px;
 	height: 70px;
+    position: relative;
 }
 
 
@@ -207,6 +208,13 @@ img.treasure-hunt-image {
     box-shadow: 1px 1px 5px 2px rgba(1,1,1,.55);
 	width: 88px;
 	height: 70px;
+    position: relative;
+}
+
+.beta-badge-tile {
+    position: absolute;
+    top: -8px;
+    right: -10px;
 }
 
 

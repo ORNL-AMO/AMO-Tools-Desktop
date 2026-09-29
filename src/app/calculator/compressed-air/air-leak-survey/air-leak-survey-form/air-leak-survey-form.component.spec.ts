@@ -56,7 +56,7 @@ describe('AirLeakSurveyFormComponent', () => {
 
   beforeEach(async () => {
     const convertSpy = jasmine.createSpyObj('ConvertAirLeakService', [
-      'convertInputs', 'convertCompressorSpecificPower', 'convertBagMethodResult', 'convertResult',
+      'convertInputs', 'convertCompressorSpecificPower', 'convertResult',
       'convertExample', 'convertImperialFacilityCompressorData',
     ]);
     convertSpy.convertImperialFacilityCompressorData.and.callFake((v: any) => v);

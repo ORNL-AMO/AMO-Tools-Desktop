@@ -73,23 +73,6 @@ export class ConvertAirLeakService {
     return result;
   }
 
-    /**
-   *  Convert AirLeakSurveyResult when Bag Method is selected (measurementMethod 2).
-   *  @param result the raw result returned from the suite. totalFlowRate is in scfm, annualTotalFlowRate is in kscf, energy in mWh
-   */
-  convertBagMethodResult(result: AirLeakSurveyResult, settings: Settings) {
-    result.annualTotalElectricity = result.annualTotalElectricity * 1000;
-    result.annualTotalElectricityCost = result.annualTotalElectricityCost * 1000;
-    if (settings.unitsOfMeasure === 'Metric') {
-      result.annualTotalFlowRate = result.annualTotalFlowRate * 1000;
-      result.totalFlowRate = this.convertUnitsService.value(result.totalFlowRate).from('ft3').to('m3');
-      result.annualTotalFlowRate = this.convertUnitsService.value(result.annualTotalFlowRate).from('ft3').to('m3');
-    } 
-
-    return result;
-  }
-
-
   convertInputDataImperialToMetric(inputData: AirLeakSurveyData): AirLeakSurveyData {
     inputData.bagMethodData.bagVolume = this.convertUnitsService.value(inputData.bagMethodData.bagVolume).from('gal').to('L');
     inputData.bagMethodData.bagVolume = roundVal(inputData.bagMethodData.bagVolume);

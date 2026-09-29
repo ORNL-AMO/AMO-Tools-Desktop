@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ChillerInventoryItem } from '../../shared/models/process-cooling-assessment';
 
 @Injectable()
 export class ChillerLoadScheduleService {
 
-  constructor(private fb: FormBuilder) { }
+  private fb = inject(FormBuilder);
 
   getLoadScheduleForm(chiller: ChillerInventoryItem): FormGroup<LoadForm> {
     const form = this.fb.group({

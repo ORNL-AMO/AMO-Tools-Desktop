@@ -1,5 +1,5 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, Divider } from "@mui/material";
-import { getEdgeSourceAndTarget } from "../Diagram/FlowUtils";
+import { getEdgeSourceAndTarget } from "process-flow-lib";
 import ConnectionBreadcrumbs from "./ConnectionBreadcrumbs";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Edge, Node } from '@xyflow/react';

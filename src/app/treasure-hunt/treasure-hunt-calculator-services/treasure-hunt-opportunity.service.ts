@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { AirHeatingTreasureHunt, AirLeakSurveyTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt, ChillerPerformanceTreasureHunt, ChillerStagingTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, CoolingTowerBasinTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ElectricityReductionTreasureHunt, FlueGasTreasureHunt, HeatCascadingTreasureHunt, LeakageLossTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpeningLossTreasureHunt, OpportunitySheet, OpportunitySummary, PipeInsulationReductionTreasureHunt, PowerFactorCorrectionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WallLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, WaterReductionTreasureHunt } from '../../shared/models/treasure-hunt';
+import { AirHeatingTreasureHunt, AirLeakSurveyTreasureHunt, AssessmentOpportunity, BoilerBlowdownRateTreasureHunt, ChillerPerformanceTreasureHunt, ChillerStagingTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, CoolingTowerBasinTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ElectricityReductionTreasureHunt, FlueGasTreasureHunt, HeatCascadingTreasureHunt, LeakageLossTreasureHunt, LightingReplacementTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, OpeningLossTreasureHunt, OpportunitySheet, OpportunitySummary, PipeInsulationReductionTreasureHunt, PowerFactorCorrectionTreasureHunt, ReplaceExistingMotorTreasureHunt, SteamReductionTreasureHunt, TankInsulationReductionTreasureHunt, Treasure, TreasureHunt, TreasureHuntOpportunity, WallLossTreasureHunt, WasteHeatTreasureHunt, WaterHeatingTreasureHunt, WaterReductionTreasureHunt, SteamLeakSurveyTreasureHunt } from '../../shared/models/treasure-hunt';
 import { CalculatorsService } from '../calculators/calculators.service';
 import { OpportunityCardData, OpportunityCardsService } from '../treasure-chest/opportunity-cards/opportunity-cards.service';
 import { OpportunitySummaryService } from '../treasure-hunt-report/opportunity-summary.service';
@@ -34,6 +34,7 @@ import { CoolingTowerBasinTreasureHuntService } from './cooling-tower-basin-trea
 import { AssessmentOpportunityService } from './assessment-opportunity.service';
 import { BoilerBlowdownRateTreasureHuntService } from './boiler-blowdown-rate-treasure-hunt.service';
 import { PowerFactorCorrectionTreasureHuntService } from './power-factor-correction-treasure-hunt.service';
+import { SteamLeakTreasureHuntService } from './steam-leak-treasure-hunt.service';
 
 @Injectable()
 export class TreasureHuntOpportunityService {
@@ -71,7 +72,8 @@ export class TreasureHuntOpportunityService {
     private coolingTowerFanTreasureHuntService: CoolingTowerFanTreasureHuntService,
     private coolingTowerBasinTreasureHuntService: CoolingTowerBasinTreasureHuntService,
     private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,   
-    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService
+    private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService,
+    private steamLeakTreasureHuntService: SteamLeakTreasureHuntService
   ) { }
 
   saveTreasureHuntOpportunity(currentOpportunity: TreasureHuntOpportunity, selectedCalc: string, customOpportunity: OpportunitySheet | AssessmentOpportunity) {
@@ -163,6 +165,9 @@ export class TreasureHuntOpportunityService {
     } else if (selectedCalc === Treasure.powerFactorCorrection) {
       let powerFactorCorrection = currentOpportunity as PowerFactorCorrectionTreasureHunt;
       treasureHunt = this.powerFactorCorrectionTreasureHuntService.saveTreasureHuntOpportunity(powerFactorCorrection, treasureHunt);
+    } else if (selectedCalc === Treasure.steamLeak) {
+      let steamLeakSurvey = currentOpportunity as SteamLeakSurveyTreasureHunt;
+      treasureHunt = this.steamLeakTreasureHuntService.saveTreasureHuntOpportunity(steamLeakSurvey, treasureHunt);
     }
 
     this.treasureHuntService.treasureHunt.next(treasureHunt);
@@ -229,6 +234,8 @@ export class TreasureHuntOpportunityService {
       this.boilerBlowdownRateTreasureHuntService.resetCalculatorInputs();
     } else if (selectedCalc == Treasure.powerFactorCorrection) {
       this.powerFactorCorrectionTreasureHuntService.resetCalculatorInputs();
+    } else if (selectedCalc === Treasure.steamLeak) {
+      this.steamLeakTreasureHuntService.resetCalculatorInputs();
     }
 
     this.calculatorsService.itemIndex = undefined;
@@ -414,6 +421,11 @@ export class TreasureHuntOpportunityService {
       let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(powerFactorCorrectionOpportunity, settings);
       updatedCard = this.powerFactorCorrectionTreasureHuntService.getPowerFactorCorrectionCardData(powerFactorCorrectionOpportunity, opportunitySummary, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage, settings);
     
+    } else if ( selectedCalc === Treasure.steamLeak) {
+      let steamLeakOpportunity = currentOpportunity as SteamLeakSurveyTreasureHunt;
+      treasureHunt.steamLeakSurveys[this.calculatorsService.itemIndex] = steamLeakOpportunity;
+      let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(steamLeakOpportunity, settings);
+      updatedCard = this.steamLeakTreasureHuntService.getSteamLeakSurveyCardData(steamLeakOpportunity, opportunitySummary, settings, this.calculatorsService.itemIndex, treasureHunt.currentEnergyUsage);
     }
     
     this.opportunityCardsService.updatedOpportunityCard.next(updatedCard);

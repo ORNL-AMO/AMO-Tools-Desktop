@@ -13,19 +13,23 @@
 
     @if (selectedModification$ | async; as selectedModification) {
     <div class="d-lg-flex d-none align-items-center tabs subtabs process-cooling-assessment ml-auto"
-        [ngClass]="{'br-color-white': selectedModification}">
-        <div class="mod-name active border-right" *ngIf="selectedModification">
+        [class.br-color-white]="selectedModification">
+        @if (selectedModification) {
+        <div class="mod-name active border-right">
             <a>{{selectedModification.name}}
                 <br>
                 <span class="help-text">Selected Scenario</span>
             </a>
         </div>
-        <div class="mod-name border-right" *ngIf="!selectedModification">
+        }
+        @if (!selectedModification) {
+        <div class="mod-name border-right">
             <a>&mdash; &mdash;
                 <br>
                 <span class="help-text">Selected Scenario</span>
             </a>
         </div>
+        }
         <div class="pl-2 pr-2">
             <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View /
                 Add
@@ -36,19 +40,23 @@
     <!--  MOBILE STYLES -->
     <div class="d-lg-none d-flex flex-column flex-fill">
         <div class="d-flex d-lg-none flex-fill align-items-center justify-content-center tabs subtabs process-cooling-assessment"
-            [ngClass]="{'br-color-white': selectedModification}">
-            <div class="mod-name active border-right flex-fill" *ngIf="selectedModification">
+            [class.br-color-white]="selectedModification">
+            @if (selectedModification) {
+            <div class="mod-name active border-right flex-fill">
                 <a>{{selectedModification.name}}
                     <br>
                     <span class="help-text">Selected Scenario</span>
                 </a>
             </div>
-            <div class="mod-name border-right flex-fill" *ngIf="!selectedModification">
+            }
+            @if (!selectedModification) {
+            <div class="mod-name border-right flex-fill">
                 <a>&mdash; &mdash;
                     <br>
                     <span class="help-text">Selected Scenario</span>
                 </a>
             </div>
+            }
             <div class="pl-2 pr-2 flex-fill">
                 <button class="btn btn-primary" (click)="selectModification()" [disabled]="!selectedModification">View /
                     Add
@@ -58,9 +66,9 @@
 
         <ul
             class="pagination d-flex d-lg-none justify-content-between tabs subtabs progress-tabs flex-fill process-cooling-assessment">
-            <li class="page-item" [ngClass]="{'disabled': assessmentView() == ROUTE_TOKENS.exploreOpportunities}">
+            <li class="page-item" [class.disabled]="assessmentView() == ROUTE_TOKENS.exploreOpportunities">
                 <a class="nav-link small" (click)="back()"
-                    [ngClass]="{'disabled': assessmentView() == ROUTE_TOKENS.exploreOpportunities}">
+                    [class.disabled]="assessmentView() == ROUTE_TOKENS.exploreOpportunities">
                     <span class="fa fa-chevron-left"></span></a>
             </li>
             @for (link of ASSESSMENT_VIEW_LINKS; track $index) {
@@ -71,9 +79,9 @@
             </li>
             }
             <li class="page-item"
-                [ngClass]="{'disabled': assessmentView() == ROUTE_TOKENS.modificationGraphs || !selectedModification}">
+                [class.disabled]="assessmentView() == ROUTE_TOKENS.modificationGraphs || !selectedModification">
                 <a class="nav-link small" (click)="next()"
-                    [ngClass]="{'disabled': assessmentView() == ROUTE_TOKENS.modificationGraphs || !selectedModification}">
+                    [class.disabled]="assessmentView() == ROUTE_TOKENS.modificationGraphs || !selectedModification">
                     <span class="fa fa-chevron-right"></span></a>
             </li>
         </ul>
@@ -90,7 +98,7 @@
     </div>
 
     <div class="assessment-panel-container scroll-item"
-        [ngClass]="{'small-screen-tab': smallScreenPanelTab === 'details'}">
+        [class.small-screen-tab]="smallScreenPanelTab === 'details'">
         <app-results-panel></app-results-panel>
     </div>
 </div>

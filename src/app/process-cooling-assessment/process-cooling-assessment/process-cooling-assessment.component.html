@@ -17,4 +17,4 @@
 </div>
 
 
-<app-welcome-screen *ngIf="showWelcomeScreen" (emitClose)="closeWelcomeScreen()"></app-welcome-screen>
+@if (showWelcomeScreen) {<app-welcome-screen (emitClose)="closeWelcomeScreen()"></app-welcome-screen>}

@@ -14,7 +14,7 @@ export class TowerSummaryComponent {
   private modificationService = inject(ModificationService);
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
-  copyTableString: any;
+  copyTableString: string;
 
   readonly towerSummaryUI$: Observable<TowerSummaryUI> = this.towerSummaryService.towerSummaryUI$;
   invalidModificationIds: WritableSignal<Array<string>> = this.modificationService.invalidModificationIds;

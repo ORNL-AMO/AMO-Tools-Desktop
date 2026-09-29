@@ -3,42 +3,47 @@ export type ProcessCoolingSetupTabString = 'assessment-settings' | 'system-infor
 export type ProcessCoolingAssessmentTabString = 'explore-opportunities';
 export type ProcessCoolingView = SetupView | MainView | ReportView | AssessmentView | SystemInformationView;
 
-export enum MainView {
-  BASELINE = 'baseline',
-  ASSESSMENT = 'assessment',
-  REPORT = 'report',
-}
+export const MainView = {
+  BASELINE: 'baseline',
+  ASSESSMENT: 'assessment',
+  REPORT: 'report',
+} as const;
+export type MainView = typeof MainView[keyof typeof MainView];
 
-export enum SetupView {
-  ASSESSMENT_SETTINGS = 'assessment-settings',
-  SYSTEM_INFORMATION = 'system-information',
-  INVENTORY = 'chiller-inventory',
-  OPERATING_SCHEDULE = 'operating-schedule',
-  LOAD_SCHEDULE = 'load-schedule',
-}
+export const SetupView = {
+  ASSESSMENT_SETTINGS: 'assessment-settings',
+  SYSTEM_INFORMATION: 'system-information',
+  INVENTORY: 'chiller-inventory',
+  OPERATING_SCHEDULE: 'operating-schedule',
+  LOAD_SCHEDULE: 'load-schedule',
+} as const;
+export type SetupView = typeof SetupView[keyof typeof SetupView];
 
-export enum SystemInformationView {
-  OPERATIONS = 'operations',
-  WEATHER = 'weather',
-  PUMP = 'pump',
-  CONDENSER_COOLING_SYSTEM_INPUT = 'condenser-cooling-system',
-  TOWER = 'tower',
-}
+export const SystemInformationView = {
+  OPERATIONS: 'operations',
+  WEATHER: 'weather',
+  PUMP: 'pump',
+  CONDENSER_COOLING_SYSTEM_INPUT: 'condenser-cooling-system',
+  TOWER: 'tower',
+} as const;
+export type SystemInformationView = typeof SystemInformationView[keyof typeof SystemInformationView];
 
-export enum AssessmentView {
-  EXPLORE_OPPORTUNITIES = 'explore-opportunities',
-}
+export const AssessmentView = {
+  EXPLORE_OPPORTUNITIES: 'explore-opportunities',
+} as const;
+export type AssessmentView = typeof AssessmentView[keyof typeof AssessmentView];
 
-export enum ReportView {
-  EXECUTIVE_SUMMARY = 'executive-summary',
-  PERFORMANCE_PROFILE = 'performance-profile',
-  PUMP_SUMMARY = 'pump-summary',
-  TOWER_SUMMARY = 'tower-summary',
-  INPUT_SUMMARY = 'input-summary',
-  GRAPHS = 'graphs',
-  SYSTEM_PROFILE = "system-profile",
-  FACILITY_INFO = 'facility-info',
-}
+export const ReportView = {
+  EXECUTIVE_SUMMARY: 'executive-summary',
+  PERFORMANCE_PROFILE: 'performance-profile',
+  PUMP_SUMMARY: 'pump-summary',
+  TOWER_SUMMARY: 'tower-summary',
+  INPUT_SUMMARY: 'input-summary',
+  GRAPHS: 'graphs',
+  SYSTEM_PROFILE: 'system-profile',
+  FACILITY_INFO: 'facility-info',
+} as const;
+export type ReportView = typeof ReportView[keyof typeof ReportView];
 
 
 export interface ViewLink {

@@ -107,7 +107,7 @@ export class FsatComponent implements OnInit {
       this.assessment = this.assessmentDbService.findById(parseInt(params['id']))
       if (!this.assessment || (this.assessment && this.assessment.type !== 'FSAT')) {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
-      } else { 
+      } else {
         this._fsat = (JSON.parse(JSON.stringify(this.assessment.fsat)));
         if (this._fsat.modifications) {
           if (this._fsat.modifications.length !== 0) {
@@ -237,7 +237,7 @@ export class FsatComponent implements OnInit {
   async saveSettings(newSettings: Settings) {
     this.settings = newSettings;
     await firstValueFrom(this.settingsDbService.updateWithObservable(this.settings));
-    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());  
+    let updatedSettings: Settings[] = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(updatedSettings);
   }
 

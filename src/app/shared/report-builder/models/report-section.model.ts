@@ -47,4 +47,6 @@ export interface ChartSection extends ReportSection {
   imageDataProvider?: () => Promise<string>;
   /** Fallback table for formats that cannot embed images (PPTX, XLSX) */
   altData?: SummaryTableSection;
+  /** Width / height of the image imageDataProvider resolves to. Defaults to 2 (assumes a 1400x700 image) when omitted. */
+  aspectRatio?: number;
 }

@@ -126,6 +126,6 @@ export interface FieldValidationRules {
   };
 }
 
-export type ProcessCoolingValidation = {
+export interface ProcessCoolingValidation {
   [field: string]: FieldValidationRules;
-};
+}

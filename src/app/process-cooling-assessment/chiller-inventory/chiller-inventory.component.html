@@ -4,11 +4,12 @@
         </h3>
         <br>
     </div>
-    <div class="mr-2 ml-2" *ngIf="selectedChiller$ | async as selectedChiller; else hasNoChiller">
+    @if (selectedChiller$ | async; as selectedChiller) {
+    <div class="mr-2 ml-2">
         <form [formGroup]="form">
             <!-- <a class="click-link small pull-right" (click)="openChillerModal()">Set Data From Existing Chiller</a> -->
 
-            <div class="form-group" [ngClass]="{'invalid': form.controls.name.invalid}">
+            <div class="form-group" [class.invalid]="form.controls.name.invalid">
                 <label for="{{controlIds.name}}">Chiller Name</label>
                 <input type="text" class="form-control" name="name" formControlName="name"
                     (focus)="focusField('chiller-name')" />
@@ -37,7 +38,8 @@
                     <option [ngValue]="false">No</option>
                 </select>
             </div>
-            <div class="form-group" *ngIf="form.controls.isFullLoadEfficiencyKnown.value">
+            @if (form.controls.isFullLoadEfficiencyKnown.value) {
+            <div class="form-group">
                 <label for="{{controlIds.fullLoadEfficiency}}">Full Load Efficiency</label>
                 <div class="input-group">
 
@@ -47,10 +49,13 @@
                 [metricUnit]="PROCESS_COOLING_UNITS.fullLoadEfficiency.labelHTML.metric"></app-input-unit>
                 </div>
                 <app-form-control-errors [control]="form.controls.fullLoadEfficiency"></app-form-control-errors>
-                <div class="alert-warning my-1 p-2 small" *ngIf="fullLoadEfficiencyWarning">
+                @if (fullLoadEfficiencyWarning) {
+                <div class="alert-warning my-1 p-2 small">
                   {{ fullLoadEfficiencyWarning }}
                 </div>
+                }
             </div>
+            }
             <!-- * 8117 refrigerant change hidden intentionally  -->
             <!-- <div class="form-group">
                 <label for="{{controlIds.refrigerantType}}">Refrigerant Type</label>
@@ -111,12 +116,12 @@
             }
         </form>
     </div>
-    <ng-template #hasNoChiller>
+    } @else {
         <div class="p-3 no-data">
             <h3>Add your Chiller Inventory for analysis..</h3>
             <button type="button" class="btn btn-primary" (click)="addInventoryItem()">Add Chiller</button>
         </div>
-    </ng-template>
+    }
 </div>
 
 <!-- <app-generic-chiller-modal *ngIf="showChillerModal" (emitClose)="closeChillerModal()">

@@ -2,6 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { Assessment } from '../../../shared/models/assessment';
 import { Settings } from '../../../shared/models/settings';
+import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
+
+export interface PsatSankeyScenario {
+  scenario: PSAT;
+  costSavings: number;
+  isBaseline: boolean;
+}
 
 @Component({
     selector: 'app-psat-report-sankey',
@@ -15,30 +22,24 @@ export class PsatReportSankeyComponent implements OnInit {
   @Input()
   assessment: Assessment;
 
-  psat1CostSavings: number;
-  psat2CostSavings: number;
-  psat1: PSAT;
-  psat2: PSAT;
-  psat2Baseline = false;
-  psat1Baseline = true;
+  psatOptions: Array<SankeyScenarioOption>;
+  sankeyScenarios: Array<PsatSankeyScenario>;
   constructor() { }
 
   ngOnInit() {
-    this.psat1 = this.assessment.psat;
-    this.setPsat1();
-    if (this.assessment.psat.modifications.length != 0) {
-      this.psat2 = this.assessment.psat.modifications.find(modification => {return modification.psat.valid.isValid == true}).psat;
-      this.setPsat2();
-    }
+    const psats = [this.assessment.psat, ...(this.assessment.psat.modifications ?? []).map(modification => modification.psat)];
+    this.psatOptions = psats.map(psat => ({ name: psat.name, value: psat }));
+    this.sankeyScenarios = psats.map(psat => ({ scenario: psat, costSavings: this.getCostSavings(psat), isBaseline: psat === this.assessment.psat }));
   }
 
-  setPsat1() {
-    this.psat1Baseline = this.assessment.psat.name == this.psat1.name? true : false
-    this.psat1CostSavings = this.assessment.psat.outputs.annual_cost - this.psat1.outputs.annual_cost;
+  setPsat(sankeyScenario: PsatSankeyScenario, selectedPsat: PSAT) {
+    sankeyScenario.scenario = selectedPsat;
+    sankeyScenario.isBaseline = selectedPsat === this.assessment.psat;
+    sankeyScenario.costSavings = this.getCostSavings(selectedPsat);
   }
 
-  setPsat2() {
-    this.psat2Baseline = this.assessment.psat.name == this.psat2.name? true : false
-    this.psat2CostSavings = this.assessment.psat.outputs.annual_cost - this.psat2.outputs.annual_cost;
+  getCostSavings(selectedPsat: PSAT): number {
+    return (this.assessment.psat.outputs && selectedPsat.valid?.isValid && selectedPsat.outputs)
+      ? this.assessment.psat.outputs.annual_cost - selectedPsat.outputs.annual_cost : undefined;
   }
 }
