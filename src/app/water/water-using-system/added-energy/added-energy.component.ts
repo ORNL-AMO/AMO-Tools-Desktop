@@ -7,7 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { HeatEnergy, MotorEnergy, WaterUsingSystem } from '../../../../process-flow-lib/water/types/water-components';
-import { WaterAssessment } from 'process-flow-lib';
+import { WaterAssessment, getNodeTotalInflow } from 'process-flow-lib';
 
 @Component({
   selector: 'app-added-energy',
@@ -19,6 +19,7 @@ export class AddedEnergyComponent {
   selectedWaterUsingSystem: WaterUsingSystem;
   waterAssessment: WaterAssessment;
   settings: Settings;
+  systemWaterUse: number = 0;
   selectedComponentSub: Subscription;
 
   showConfirmDeleteModal: boolean = false;
@@ -35,6 +36,7 @@ export class AddedEnergyComponent {
     this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
       this.selectedWaterUsingSystem = selectedComponent as WaterUsingSystem;
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
+      this.systemWaterUse = this.waterAssessment.calculatedData ? getNodeTotalInflow(this.selectedWaterUsingSystem, this.waterAssessment.calculatedData) : 0;
     });
 
   }

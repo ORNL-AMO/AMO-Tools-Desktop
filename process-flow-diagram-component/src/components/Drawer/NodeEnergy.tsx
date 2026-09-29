@@ -1,38 +1,51 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Divider, IconButton, InputAdornment, MenuItem, Typography } from '@mui/material';
+import { Box, Button, Divider, IconButton, InputAdornment, MenuItem, Paper, Table, TableBody, TableContainer, TableHead, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Node } from '@xyflow/react';
-import { HeatEnergy, MotorEnergy, ProcessFlowPart, getDefaultHeatEnergy, getDefaultMotorEnergy } from 'process-flow-lib';
+import { DiagramCalculatedData, HeatEnergy, MotorEnergy, ProcessFlowPart, getDefaultHeatEnergy, getDefaultMotorEnergy, getHeatEnergyCost, getHeatEnergyKWh, getMotorEnergyCost, getMotorEnergyPower, getNodeTotalInflow } from 'process-flow-lib';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { nodeDataPropertyChange } from '../Diagram/diagramReducer';
 import InputField from '../StyledMUI/InputField';
 import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
+import { StyledHeadTableRow, StyledTableCell, StyledTableRow } from '../StyledMUI/ResultTables';
 
 const toNumberOrUndefined = (value: string): number | undefined => value === '' ? undefined : Number(value);
 
-const isMotorEnergyComplete = (motor: MotorEnergy): boolean => Boolean(
-    motor.name?.trim() &&
-    motor.numberUnits !== undefined && motor.numberUnits !== null &&
-    motor.hoursPerYear !== undefined && motor.hoursPerYear !== null &&
-    motor.loadFactor !== undefined && motor.loadFactor !== null &&
-    motor.ratedPower !== undefined && motor.ratedPower !== null &&
-    motor.systemEfficiency !== undefined && motor.systemEfficiency !== null
+const HOURS_PER_YEAR = 8760;
+
+interface EnergyResult {
+    energyPerHour: number,
+    annualCost: number,
+}
+
+const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+const formatEnergyPerHour = (value: number): string => `${value.toLocaleString('en-US', { maximumFractionDigits: 2 })} kWh/hr`;
+
+const EnergyResultReadout = ({ result }: { result: EnergyResult }) => (
+    <Box sx={{ display: 'flex', paddingY: 1, textAlign: 'center' }}>
+        <Box sx={{ flex: 1 }}>
+            <Typography variant="caption" component="div">Energy</Typography>
+            <Typography variant="body2" fontWeight="bold">{formatEnergyPerHour(result.energyPerHour)}</Typography>
+        </Box>
+        <Box sx={{ flex: 1 }}>
+            <Typography variant="caption" component="div">Annual Cost</Typography>
+            <Typography variant="body2" fontWeight="bold">{currency.format(result.annualCost)}</Typography>
+        </Box>
+    </Box>
 );
 
 export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<ProcessFlowPart>, showHeatEnergy: boolean }) {
     const dispatch = useAppDispatch();
     const settings = useAppSelector((state) => state.diagram.settings);
+    const calculatedData: DiagramCalculatedData = useAppSelector((state) => state.diagram.calculatedData);
     const [heatEnergy, setHeatEnergy] = useState<HeatEnergy>(node.data.heatEnergy || getDefaultHeatEnergy());
     const [motorEnergy, setMotorEnergy] = useState<MotorEnergy[]>(node.data.addedMotorEnergy || []);
-    const [draftMotorEnergy, setDraftMotorEnergy] = useState<MotorEnergy>(getDefaultMotorEnergy((node.data.addedMotorEnergy || []).length));
     const [expandedIndices, setExpandedIndices] = useState<Set<number>>(new Set());
 
     // * Node switched - resync local state from the newly selected node instead of carrying over the previous node's values
     useEffect(() => {
-        const nextMotorEnergy = node.data.addedMotorEnergy || [];
         setHeatEnergy(node.data.heatEnergy || getDefaultHeatEnergy());
-        setMotorEnergy(nextMotorEnergy);
-        setDraftMotorEnergy(getDefaultMotorEnergy(nextMotorEnergy.length));
+        setMotorEnergy(node.data.addedMotorEnergy || []);
         setExpandedIndices(new Set());
     }, [node.data.diagramNodeId]);
 
@@ -57,14 +70,11 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
         setMotorEnergy(updatedMotorEnergy);
     };
 
-    const handleDraftMotorEnergyChange = (field: keyof MotorEnergy, value: string | number) => {
-        setDraftMotorEnergy({ ...draftMotorEnergy, [field]: value });
-    };
-
+    // * Append a default entry and expand it so its form is ready to fill in
     const addMotorEnergy = () => {
-        const updatedMotorEnergy = [...motorEnergy, draftMotorEnergy];
-        setMotorEnergy(updatedMotorEnergy);
-        setDraftMotorEnergy(getDefaultMotorEnergy(updatedMotorEnergy.length));
+        const newIndex = motorEnergy.length;
+        setMotorEnergy([...motorEnergy, getDefaultMotorEnergy(newIndex)]);
+        setExpandedIndices((prev) => new Set(prev).add(newIndex));
     };
 
     const removeMotorEnergy = (index: number) => {
@@ -88,14 +98,65 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
         });
     };
 
-    const isDraftComplete = isMotorEnergyComplete(draftMotorEnergy);
+    const getMotorEnergyResult = (motor: MotorEnergy): EnergyResult => ({
+        energyPerHour: getMotorEnergyPower(motor, settings.unitsOfMeasure),
+        annualCost: getMotorEnergyCost(motor, settings.electricityCost, settings.unitsOfMeasure),
+    });
+
+    const heatEnergyWithWaterUse: HeatEnergy = { ...heatEnergy, systemWaterUse: getNodeTotalInflow(node, calculatedData) };
+    const heatEnergyResult: EnergyResult = {
+        energyPerHour: getHeatEnergyKWh(heatEnergyWithWaterUse, settings.unitsOfMeasure) / (heatEnergy.hoursPerYear || HOURS_PER_YEAR),
+        annualCost: getHeatEnergyCost(
+            heatEnergyWithWaterUse,
+            heatEnergy.heatingFuelType === 0 ? settings.electricityCost : settings.fuelCost,
+            settings.unitsOfMeasure
+        ),
+    };
+
+    const motorEnergyResults: EnergyResult[] = motorEnergy.map(getMotorEnergyResult);
+    const turbomachineryResult: EnergyResult = motorEnergyResults.reduce((total, result) => ({
+        energyPerHour: total.energyPerHour + result.energyPerHour,
+        annualCost: total.annualCost + result.annualCost,
+    }), { energyPerHour: 0, annualCost: 0 });
+
+    const energyTotalRows: Array<{ label: string, result: EnergyResult }> = [
+        ...(showHeatEnergy ? [{ label: 'Heat Energy', result: heatEnergyResult }] : []),
+        { label: 'Turbomachinery Energy', result: turbomachineryResult },
+    ];
+    energyTotalRows.push({
+        label: 'Total Energy',
+        result: energyTotalRows.reduce((total, row) => ({
+            energyPerHour: total.energyPerHour + row.result.energyPerHour,
+            annualCost: total.annualCost + row.result.annualCost,
+        }), { energyPerHour: 0, annualCost: 0 }),
+    });
 
     const temperatureUnit = settings.unitsOfMeasure === 'Metric' ? '°C' : '°F';
     const powerUnit = settings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
-    const dischargeFlowUnit = settings.unitsOfMeasure === 'Imperial' ? 'Mgal/yr' : 'm³/yr';
 
     return (
         <Box sx={{ marginTop: 1, width: '100%', display: 'flex', flexDirection: 'column' }}>
+            <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
+                <Table size="small" aria-label="node energy totals">
+                    <TableHead>
+                        <StyledHeadTableRow>
+                            <StyledTableCell>Node Energy</StyledTableCell>
+                            <StyledTableCell align="right">Energy</StyledTableCell>
+                            <StyledTableCell align="right">Annual Cost</StyledTableCell>
+                        </StyledHeadTableRow>
+                    </TableHead>
+                    <TableBody>
+                        {energyTotalRows.map((row) => (
+                            <StyledTableRow key={row.label}>
+                                <StyledTableCell component="th" scope="row">{row.label}</StyledTableCell>
+                                <StyledTableCell align="right">{formatEnergyPerHour(row.result.energyPerHour)}</StyledTableCell>
+                                <StyledTableCell align="right">{currency.format(row.result.annualCost)}</StyledTableCell>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
             {showHeatEnergy &&
                 <>
                     <Typography variant="subtitle2" sx={{ paddingLeft: 1 }}>Heat Energy in Discharge</Typography>
@@ -151,90 +212,23 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                         onChange={(e) => handleHeatEnergyChange('heaterEfficiency', toNumberOrUndefined(e.target.value))}
                         slotProps={{ input: { endAdornment: <InputAdornment position="end">%</InputAdornment> } }}
                     />
-                    <Box sx={{ paddingY: 1, textAlign: 'center' }}>
-                        <Typography variant="caption" component="div">Waste Water Discharge</Typography>
-                        <Typography variant="body2" fontWeight="bold">
-                            {heatEnergy?.wasteWaterDischarge
-                                ? `${heatEnergy.wasteWaterDischarge.toLocaleString()} ${dischargeFlowUnit}`
-                                : '— —'}
-                        </Typography>
-                    </Box>
+                    <EnergyResultReadout result={heatEnergyResult} />
 
                     <Divider sx={{ marginY: 2 }} />
                 </>
             }
 
             <Typography variant="subtitle2" sx={{ paddingLeft: 1 }}>Add Turbomachinery Energy</Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <InputField
-                    label="Name"
-                    size="small"
-                    fullWidth
-                    margin="normal"
-                    value={draftMotorEnergy.name}
-                    onChange={(e) => handleDraftMotorEnergyChange('name', e.target.value)}
-                />
-                <InputField
-                    label="Number Units"
-                    type="number"
-                    size="small"
-                    fullWidth
-                    margin="normal"
-                    value={draftMotorEnergy.numberUnits ?? ''}
-                    onChange={(e) => handleDraftMotorEnergyChange('numberUnits', toNumberOrUndefined(e.target.value))}
-                />
-                <InputField
-                    label="Operating Hours"
-                    type="number"
-                    size="small"
-                    fullWidth
-                    margin="normal"
-                    value={draftMotorEnergy.hoursPerYear ?? ''}
-                    onChange={(e) => handleDraftMotorEnergyChange('hoursPerYear', toNumberOrUndefined(e.target.value))}
-                    slotProps={{ input: { endAdornment: <InputAdornment position="end">hrs/yr</InputAdornment> } }}
-                />
-                <InputField
-                    label="Load Factor"
-                    type="number"
-                    size="small"
-                    fullWidth
-                    margin="normal"
-                    value={draftMotorEnergy.loadFactor ?? ''}
-                    onChange={(e) => handleDraftMotorEnergyChange('loadFactor', toNumberOrUndefined(e.target.value))}
-                    slotProps={{ input: { endAdornment: <InputAdornment position="end">%</InputAdornment> } }}
-                />
-                <InputField
-                    label="Rated Power"
-                    type="number"
-                    size="small"
-                    fullWidth
-                    margin="normal"
-                    value={draftMotorEnergy.ratedPower ?? ''}
-                    onChange={(e) => handleDraftMotorEnergyChange('ratedPower', toNumberOrUndefined(e.target.value))}
-                    slotProps={{ input: { endAdornment: <InputAdornment position="end">{powerUnit}</InputAdornment> } }}
-                />
-                <InputField
-                    label="System Efficiency"
-                    type="number"
-                    size="small"
-                    fullWidth
-                    margin="normal"
-                    value={draftMotorEnergy.systemEfficiency ?? ''}
-                    onChange={(e) => handleDraftMotorEnergyChange('systemEfficiency', toNumberOrUndefined(e.target.value))}
-                    slotProps={{ input: { endAdornment: <InputAdornment position="end">%</InputAdornment> } }}
-                />
-                <Button
-                    sx={{ width: '100%', marginY: 1 }}
-                    variant="contained"
-                    disabled={!isDraftComplete}
-                    onClick={addMotorEnergy}
-                >
-                    Add Energy
-                </Button>
-            </Box>
+            <Button
+                sx={{ width: '100%', marginY: 1 }}
+                variant="contained"
+                onClick={addMotorEnergy}
+            >
+                Add Energy
+            </Button>
 
             {motorEnergy.length > 0 &&
-                <Box sx={{ marginTop: 2, display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column' }}>
                     {motorEnergy.map((motor, index) => (
                         <Accordion
                             key={index}
@@ -314,6 +308,7 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                                     onChange={(e) => handleMotorEnergyChange(index, 'systemEfficiency', toNumberOrUndefined(e.target.value))}
                                     slotProps={{ input: { endAdornment: <InputAdornment position="end">%</InputAdornment> } }}
                                 />
+                                <EnergyResultReadout result={motorEnergyResults[index]} />
                             </AccordionDetails>
                         </Accordion>
                     ))}

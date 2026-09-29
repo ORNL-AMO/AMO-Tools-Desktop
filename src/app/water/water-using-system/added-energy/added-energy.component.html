@@ -1,5 +1,5 @@
 <app-heat-energy *ngIf="selectedWaterUsingSystem.heatEnergy" [heatEnergy]="selectedWaterUsingSystem.heatEnergy"
-    (updateHeatEnergy)="saveHeatEnergy($event)">
+    [systemWaterUse]="systemWaterUse" (updateHeatEnergy)="saveHeatEnergy($event)">
 </app-heat-energy>
 <label class="group-label pl-3">
     Added Pump Energy

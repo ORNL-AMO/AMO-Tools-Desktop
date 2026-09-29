@@ -60,15 +60,13 @@
         </span>
     </div>
 
-    <div (click)="focusField('wasteWaterDischarge')" class="form-group">
-        <label for="wasteWaterDischarge">Waste Water Discharge</label>
-        <div class="text-center small bold">
-            <span *ngIf="heatEnergy.wasteWaterDischarge">{{wasteWaterDischarge | number}}
-                <span *ngIf="settings.unitsOfMeasure == 'Imperial'">Mgal/yr</span>
-                <span *ngIf="settings.unitsOfMeasure != 'Imperial'">m<sup>3</sup>/yr</span>
-            </span>
-            <span *ngIf="!heatEnergy.wasteWaterDischarge">&mdash; &mdash;</span>
-        </div>
+    <div class="form-group">
+        <label>Energy</label>
+        <div class="text-center small bold">{{energyPerHour | number:'1.0-2'}} kWh/hr</div>
+    </div>
+    <div class="form-group">
+        <label>Annual Cost</label>
+        <div class="text-center small bold">{{annualCost | currency}}</div>
     </div>
 </form>
 
