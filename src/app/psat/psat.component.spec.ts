@@ -1209,11 +1209,12 @@ describe('PsatComponent', () => {
       expect(component.showAdd).toBe(showAddBefore);
     });
 
-    it('keeps reacting to psatService.modalOpen after destroy — modalOpenSub is never unsubscribed in ngOnDestroy (real bug)', () => {
+    it('stops reacting to psatService.modalOpen after destroy', () => {
       fixture.detectChanges();
+      const isModalOpenBefore = component.isModalOpen;
       fixture.destroy();
       psatServiceSpy.modalOpen.next(true);
-      expect(component.isModalOpen).toBeTrue();
+      expect(component.isModalOpen).toBe(isModalOpenBefore);
     });
   });
 });

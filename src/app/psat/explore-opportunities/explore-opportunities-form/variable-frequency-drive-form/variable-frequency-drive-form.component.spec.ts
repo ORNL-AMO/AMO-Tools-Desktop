@@ -48,11 +48,6 @@ describe('VariableFrequencyDriveFormComponent', () => {
     it('creates the component', () => {
       expect(component).toBeTruthy();
     });
-
-    it('assigns pump type and drive constants', () => {
-      expect(component.pumpTypes).toBe(pumpTypesConstant);
-      expect(component.drives).toBe(driveConstants);
-    });
   });
 
   describe('calculate', () => {

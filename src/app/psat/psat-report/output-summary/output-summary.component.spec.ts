@@ -207,15 +207,15 @@ describe('OutputSummaryComponent', () => {
   });
 
   describe('getPaybackPeriod', () => {
-    it('computes months to payback from implementation cost and annual cost savings', () => {
+    it('returns the precomputed paybackPeriod from the modification outputs', () => {
       component.assessment = makeAssessment(makePsat({ annual_cost: 60000 }));
       fixture.detectChanges();
-      const modification = { outputs: makeOutputs({ annual_cost: 48000 }), inputs: { implementationCosts: 1200 } } as PSAT;
+      const modification = { outputs: makeOutputs({ annual_cost: 48000, paybackPeriod: 1.2 }), inputs: { implementationCosts: 1200 } } as PSAT;
 
-      expect(component.getPaybackPeriod(modification)).toBe(1200 / 12000 * 12);
+      expect(component.getPaybackPeriod(modification)).toBe(1.2);
     });
 
-    it('returns 0 when annual cost savings is not greater than 1', () => {
+    it('returns 0 when outputs has no paybackPeriod', () => {
       component.assessment = makeAssessment(makePsat({ annual_cost: 60000 }));
       fixture.detectChanges();
       const modification = { outputs: makeOutputs({ annual_cost: 60000 }), inputs: { implementationCosts: 1200 } } as PSAT;
