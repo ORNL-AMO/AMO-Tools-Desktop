@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Assessment regression tests preserve calculation behavior while Desktop and `measur-tools-suite` evolve. They run saved assessment inputs through the production calculation path, serialize a stable result projection, and compare it with an accepted baseline.
+Assessment regression tests preserve calculation behavior while Desktop and `measur-tools-suite` evolve. They run saved assessment inputs through the production calculation path, serialize a stable result projection, and compare it with an accepted expected-results snapshot. Here, “snapshot” means test output; an assessment “baseline” remains the system before modifications.
 
 The compressed-air implementation is the first complete example in this repository. It is a working pattern, but it is not yet an assessment-neutral library. Reuse its architecture deliberately rather than copying every compressed-air name or assumption.
 
@@ -13,9 +13,9 @@ Each assessment implementation needs four layers:
 1. **Sanitized inputs**: representative saved assessments with enough settings to calculate, stripped of identifying and unrelated data.
 2. **Browser calculation adapter**: migrates cloned saved data and invokes the assessment's real production services, including Suite/WASM where applicable.
 3. **Canonical result projection**: captures raw and report-visible behavior without serializing framework or Emscripten instances.
-4. **Node orchestration**: selects core or full scope, compares snapshots, reports differences, and records explicitly accepted baselines.
+4. **Node orchestration**: selects core or full scope, compares snapshots, reports differences, and records explicitly accepted expected results.
 
-Normal tests are read-only. Fixture addition and baseline recording are separate commands with explicit acceptance safeguards.
+Normal tests are read-only. Fixture addition and snapshot recording are separate commands with explicit acceptance safeguards.
 
 ## What Can Be Shared
 
@@ -25,7 +25,7 @@ The following concepts and code are candidates for assessment-neutral reuse:
 - Missing-value, negative-zero, and non-finite canonicalization.
 - Exact structural comparison plus relative numerical tolerance.
 - Difference classification and Markdown/JSON reporting.
-- Baseline naming, full-scope recording, and overwrite safeguards.
+- Snapshot naming, full-scope recording, activation, and overwrite safeguards.
 - Karma-to-Node snapshot chunk transport.
 - Core-set selection from deterministic coverage tags.
 - Common privacy checks and atomic fixture-file replacement.
@@ -46,18 +46,18 @@ Do not copy these unchanged into another assessment:
 
 - `ca-*` Karma arguments and `CA_REGRESSION_TEST_*` environment variables.
 - The `caSnapshotChunk` browser message and `ca-snapshot` reporter name.
-- Compressed-air fixture, baseline, report, and temporary paths.
+- Compressed-air fixture, snapshot, report, and temporary paths.
 - `CompressedAirRegressionTestRunner` service construction and result projection.
 - Compressed-air coverage tags and synthetic fixtures.
-- The permanent `pre-pr409-suite-1.2.5` baseline metadata.
+- The permanent `pre-pr409-suite-1.2.5` snapshot metadata.
 
-If a second assessment needs the same behavior, parameterize these seams rather than adding another large copy. At minimum, a shared orchestrator should accept an assessment key, spec path, fixture paths, baseline name, and snapshot-message key. A shared browser transport should not know the assessment's calculation services or result shape.
+If a second assessment needs the same behavior, parameterize these seams rather than adding another large copy. At minimum, a shared orchestrator should accept an assessment key, spec path, fixture paths, snapshot name, and snapshot-message key. A shared browser transport should not know the assessment's calculation services or result shape.
 
 ## Adding the Framework to Another Assessment
 
 ### 1. Define the compatibility contract
 
-Document what must remain stable: saved-data compatibility, raw calculated values, report-visible values, ordering, flags, nullability, known failures, units, and Suite version. Decide whether the baseline represents current accepted behavior or behavior before a planned refactor.
+Document what must remain stable: saved-data compatibility, raw calculated values, report-visible values, ordering, flags, nullability, known failures, units, and Suite version. Decide whether the snapshot represents current accepted behavior or behavior before a planned refactor.
 
 ### 2. Build a small private source corpus
 
@@ -81,7 +81,7 @@ Assign fixture and result schema versions. A schema change is not automatically 
 
 ### 6. Wire core, full, report, and record commands
 
-Provide clear package commands and keep comparison as the default. Reports may tolerate differences only through an explicit diagnostic flag. Recording must require an explicit acceptance flag, full scope, and a new descriptive baseline name.
+Provide clear package commands and keep comparison as the default. Reports may tolerate differences only through an explicit diagnostic flag. Recording must require an explicit acceptance flag, full scope, and a new descriptive snapshot name. Activation must be a separate explicit change to a single source of truth.
 
 ### 7. Establish phase gates
 
@@ -93,7 +93,7 @@ Before removing or replacing an old calculation path, require:
 - Core tests during development.
 - Full-corpus comparison and diagnostic review.
 - Import/export and report checks when their contracts are represented.
-- A separately reviewed baseline only after intended changes are understood.
+- A separately reviewed snapshot only after intended changes are understood.
 
 ## Deciding Where a New Case Belongs
 
@@ -103,7 +103,7 @@ Before removing or replacing an old calculation path, require:
 | Small missing boundary or rare option | Synthetic fixture |
 | Sanitization, privacy, tolerance, or comparison rule | Fast Node unit test |
 | Proof that application services and Suite/WASM are actually called | Browser integration test |
-| Accepted calculation behavior after review | New named baseline |
+| Accepted calculation behavior after review | New named snapshot |
 
 Avoid expanding a corpus solely for volume. Every fixture should add identifiable coverage or reproduce an important failure.
 
@@ -112,7 +112,7 @@ Avoid expanding a corpus solely for volume. Every fixture should add identifiabl
 Each assessment implementation should include:
 
 - A human README explaining what the tests protect and how to run them.
-- A local `AGENTS.md` for fixture, calculation, privacy, and baseline rules.
+- A local `AGENTS.md` for fixture, calculation, privacy, and snapshot rules.
 - Comments at the browser/Node boundary and the production calculation call site.
 - A coverage file or equivalent inventory that explains why each core case exists.
-- A permanent baseline policy, including which historical baselines must never be overwritten.
+- A permanent snapshot policy, including which historical snapshots must never be overwritten.

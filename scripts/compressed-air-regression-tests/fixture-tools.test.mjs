@@ -8,7 +8,8 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -17,7 +18,10 @@ import {
   buildCoverage,
   compareSnapshots,
   findCompleteCompressedAirAssessments,
+  getBrowserFixtureRegistrySource,
   isCompleteCompressedAirAssessment,
+  loadFixtureCorpus,
+  loadRegressionTestSnapshot,
   selectCoreFixtureIds,
   stableStringify,
   verifyPrivacy,
@@ -215,25 +219,105 @@ test('coverage aggregates real and synthetic fixture inventories', () => {
   assert.deepEqual(coverage.syntheticTags, { shared: 1, 'synthetic-only': 1 });
   assert.deepEqual(coverage.tags, { 'real-only': 1, shared: 2, 'synthetic-only': 1 });
   assert.deepEqual(new Set(coverage.coreFixtureIds), new Set(['real', 'synthetic']));
+  assert.equal(coverage.realFixtures[0].fixtureId, 'real');
+  assert.equal(typeof coverage.realFixtures[0].sha256, 'string');
+  assert.ok(coverage.missingScenarios.includes('auxiliary-equipment'));
 });
 
-test('baseline recording refuses to overwrite an existing baseline', () => {
+test('snapshot recording refuses to overwrite an existing snapshot', () => {
   const run = spawnSync(
     process.execPath,
-    ['scripts/compressed-air-regression-tests/run-regression-tests.mjs', 'record', '--scope', 'full', '--accept'],
+    [
+      'scripts/compressed-air-regression-tests/run-regression-tests.mjs',
+      'record', '--scope', 'full', '--snapshot', 'pre-pr409-suite-1.2.5', '--accept',
+    ],
     { cwd: root, encoding: 'utf8' },
   );
   assert.equal(run.status, 2);
-  assert.match(run.stderr, /Refusing to overwrite existing baseline pre-pr409-suite-1\.2\.5/);
+  assert.match(run.stderr, /Refusing to overwrite existing snapshot pre-pr409-suite-1\.2\.5/);
 });
 
 test('committed fixtures pass the standalone privacy guard', () => {
-  const corpusPath = resolve(root, 'src/app/compressed-air-assessment/calculations/regression-tests/fixtures/corpus.json');
-  const corpus = JSON.parse(readFileSync(corpusPath, 'utf8'));
+  const fixtureRoot = resolve(root, 'src/app/compressed-air-assessment/calculations/regression-tests/fixtures');
+  const corpus = loadFixtureCorpus(fixtureRoot);
   assert.ok(corpus.fixtures.length > 0);
   assert.equal(verifyPrivacy(corpus.fixtures).valid, true);
   const serialized = stableStringify(corpus);
   assert.doesNotMatch(serialized, /OneDrive|ADJUSTED_MEASUR_Backup_Data|logToolData|logToolFieldId/);
+});
+
+test('per-file fixture and snapshot loaders preserve deterministic order and manifests', () => {
+  const fixtureRoot = resolve(root, 'src/app/compressed-air-assessment/calculations/regression-tests/fixtures');
+  const corpus = loadFixtureCorpus(fixtureRoot);
+  assert.equal(corpus.fixtures.length, 43);
+  assert.equal(corpus.fixtures[0].fixtureId, 'ca-real-001');
+  assert.equal(corpus.fixtures.at(-1).fixtureId, 'ca-real-043');
+
+  const { manifest, snapshot } = loadRegressionTestSnapshot(
+    resolve(fixtureRoot, 'snapshots'),
+    'pre-pr409-suite-1.2.5',
+  );
+  assert.equal(manifest.desktopCommit, '52f3b3bdb');
+  assert.equal(snapshot.schemaVersion, 2);
+  assert.equal(snapshot.fixtures.length, 49);
+  assert.deepEqual(snapshot.fixtures.map(fixture => fixture.fixtureId), manifest.fixtureIds);
+});
+
+test('generated browser registry matches the per-file fixture manifests', () => {
+  const fixtureRoot = resolve(root, 'src/app/compressed-air-assessment/calculations/regression-tests/fixtures');
+  const registryPath = resolve(fixtureRoot, 'fixture-registry.ts');
+  assert.equal(readFileSync(registryPath, 'utf8'), getBrowserFixtureRegistrySource(fixtureRoot));
+});
+
+test('per-file loaders reject filename and manifest mismatches', () => {
+  const temporaryRoot = mkdtempSync(resolve(tmpdir(), 'ca-regression-loader-'));
+  try {
+    const fixtureRoot = resolve(temporaryRoot, 'fixtures');
+    mkdirSync(resolve(fixtureRoot, 'assessments'), { recursive: true });
+    writeFileSync(resolve(fixtureRoot, 'manifest.json'), JSON.stringify({ schemaVersion: 1, sourceAppVersion: 'test' }));
+    writeFileSync(resolve(fixtureRoot, 'assessments/ca-real-001.json'), JSON.stringify({ fixtureId: 'ca-real-002' }));
+    assert.throws(() => loadFixtureCorpus(fixtureRoot), /does not match embedded ID/);
+
+    const snapshotRoot = resolve(fixtureRoot, 'snapshots');
+    mkdirSync(resolve(snapshotRoot, 'test-snapshot'), { recursive: true });
+    writeFileSync(resolve(snapshotRoot, 'test-snapshot/manifest.json'), JSON.stringify({
+      snapshotName: 'test-snapshot',
+      fixtureIds: ['missing-fixture'],
+    }));
+    assert.throws(
+      () => loadRegressionTestSnapshot(snapshotRoot, 'test-snapshot'),
+      /fixture files do not match its manifest/,
+    );
+  } finally {
+    rmSync(temporaryRoot, { recursive: true, force: true });
+  }
+});
+
+test('coverage inventory names matching fixtures and known compound gaps', () => {
+  const coveragePath = resolve(root, 'src/app/compressed-air-assessment/calculations/regression-tests/fixtures/coverage.json');
+  const coverage = JSON.parse(readFileSync(coveragePath, 'utf8'));
+  const auxiliary = coverage.scenarios.find(scenario => scenario.id === 'auxiliary-equipment');
+  assert.equal(auxiliary.status, 'covered');
+  assert.ok(auxiliary.matchingFixtureIds.length > 0);
+  const subHourEem = coverage.scenarios.find(scenario => scenario.id === 'sub-hour-with-eem');
+  assert.equal(subHourEem.status, 'missing');
+  assert.match(subHourEem.missingReason, /pressure-indexing/);
+});
+
+test('every known non-finite path has a documented reason', () => {
+  const allowancePath = resolve(root, 'src/app/compressed-air-assessment/calculations/regression-tests/fixtures/known-non-finite-paths.json');
+  const allowance = JSON.parse(readFileSync(allowancePath, 'utf8'));
+  assert.equal(allowance.schemaVersion, 2);
+  const usedReasons = new Set();
+  for (const fixture of allowance.fixtures) {
+    assert.ok(fixture.allowances.length > 0);
+    for (const group of fixture.allowances) {
+      assert.ok(allowance.reasons[group.reason], `Unknown reason ${group.reason}`);
+      assert.ok(group.paths.length > 0);
+      usedReasons.add(group.reason);
+    }
+  }
+  assert.deepEqual(usedReasons, new Set(Object.keys(allowance.reasons)));
 });
 
 test('snapshot comparison uses hybrid tolerance and reports structure', () => {

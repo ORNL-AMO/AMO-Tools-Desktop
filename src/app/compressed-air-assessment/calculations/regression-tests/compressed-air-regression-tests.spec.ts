@@ -4,17 +4,17 @@
  * There are two execution modes:
  *
  * 1. A normal `npm test` run calculates the coverage-selected core set and
- *    compares it with the imported baseline directly in Jasmine.
+ *    compares it with the active expected-results snapshot in Jasmine.
  * 2. The dedicated core/full/report/record commands pass `ca-capture` through
  *    Karma. The browser still performs every real-WASM calculation, but emits
- *    the current snapshot so the Node command can select a baseline, produce a
- *    detailed report, or explicitly record a new baseline.
+ *    the current results so the Node command can select a snapshot, produce a
+ *    detailed report, or explicitly record a new snapshot.
  *
  * See scripts/compressed-air-regression-tests/README.md for the full data flow.
  */
-import corpusData from './fixtures/corpus.json';
+import fixtureManifest from './fixtures/manifest.json';
 import coverageData from './fixtures/coverage.json';
-import baselineData from './fixtures/baselines/pre-pr409-suite-1.2.5.json';
+import { regressionTestCorpus, regressionTestSnapshots } from './fixtures/fixture-registry';
 import {
   compareRegressionTestSnapshots,
   CompressedAirRegressionTestRunner,
@@ -36,12 +36,12 @@ describe('compressed-air assessment regression tests', () => {
     await runner.initialize();
   });
 
-  it('matches the immutable pre-change baseline', () => {
+  it('matches the active expected-results snapshot', () => {
     const args = new Set(__karma__?.config?.args ?? []);
     const scope = args.has('ca-scope-full') ? 'full' : 'core';
-    const baselineArg = [...args].find(arg => arg.startsWith('ca-baseline='));
-    const baselineName = baselineArg?.slice('ca-baseline='.length) ?? 'pre-pr409-suite-1.2.5';
-    const actual = runner.run(corpusData as any, coverageData.coreFixtureIds, scope, baselineName);
+    const snapshotArg = [...args].find(arg => arg.startsWith('ca-snapshot='));
+    const snapshotName = snapshotArg?.slice('ca-snapshot='.length) ?? fixtureManifest.activeSnapshot;
+    const actual = runner.run(regressionTestCorpus as any, coverageData.coreFixtureIds, scope, snapshotName);
 
     if (args.has('ca-capture')) {
       // Dedicated commands compare outside the browser so they can write a
@@ -60,7 +60,9 @@ describe('compressed-air assessment regression tests', () => {
       return;
     }
 
-    const expected = selectScope(baselineData as RegressionTestSnapshot, coverageData.coreFixtureIds, scope);
+    const expectedSnapshot = regressionTestSnapshots[snapshotName];
+    if (!expectedSnapshot) throw new Error(`Snapshot ${snapshotName} is not present in the generated browser registry.`);
+    const expected = selectScope(expectedSnapshot as RegressionTestSnapshot, coverageData.coreFixtureIds, scope);
     const differences = compareRegressionTestSnapshots(expected, actual);
     expect(differences).withContext(differences.slice(0, 20).join('\n')).toEqual([]);
   });

@@ -33,7 +33,10 @@ import { CompressedAirCombinedDayTypeResults } from '../modifications/Compressed
 import { CompressedAirRegressionTestFixture, createSyntheticFixtures } from './synthetic-fixtures';
 
 const KNOWN_NON_FINITE_PATHS = new Map(
-  knownNonFinitePathsData.fixtures.map(fixture => [fixture.fixtureId, new Set(fixture.paths)]),
+  knownNonFinitePathsData.fixtures.map(fixture => [
+    fixture.fixtureId,
+    new Set(fixture.allowances.flatMap(allowance => allowance.paths)),
+  ]),
 );
 
 // Calculation exceptions are not expected in the pre-change corpus. If a
@@ -50,8 +53,7 @@ export interface RegressionTestCorpus {
 export interface RegressionTestSnapshot {
   schemaVersion: number;
   resultSchemaVersion: number;
-  baselineName: string;
-  desktopBaselineCommit: string;
+  snapshotName: string;
   desktopApplicationVersion: string;
   suitePackageVersion: string;
   sourceMeasurVersion: string;
@@ -98,7 +100,7 @@ export class CompressedAirRegressionTestRunner {
     corpus: RegressionTestCorpus,
     coreFixtureIds: string[],
     scope: 'core' | 'full',
-    baselineName = 'pre-pr409-suite-1.2.5',
+    snapshotName: string,
   ): RegressionTestSnapshot {
     // Synthetic fixtures are derived in memory on every run. They fill known
     // coverage gaps without placing invented assessments in the private corpus.
@@ -111,10 +113,9 @@ export class CompressedAirRegressionTestRunner {
       : allFixtures;
 
     return canonicalize({
-      schemaVersion: 1,
+      schemaVersion: 2,
       resultSchemaVersion: 2,
-      baselineName,
-      desktopBaselineCommit: '52f3b3bdb',
+      snapshotName,
       desktopApplicationVersion: packageJson.version,
       suitePackageVersion: packageJson.dependencies['measur-tools-suite'],
       sourceMeasurVersion: corpus.sourceAppVersion,

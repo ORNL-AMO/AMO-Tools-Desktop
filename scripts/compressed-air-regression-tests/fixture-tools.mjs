@@ -1,5 +1,5 @@
 /**
- * Pure Node utilities shared by fixture addition and baseline comparison.
+ * Pure Node utilities shared by fixture addition and snapshot comparison.
  *
  * This file intentionally contains no Angular or Suite imports. It handles data
  * around the calculations, while the Karma runner owns real-WASM execution.
@@ -7,6 +7,8 @@
  * node:test without starting a browser.
  */
 import { createHash } from 'node:crypto';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { basename, resolve } from 'node:path';
 
 const INACTIVE_EEM_ORDER = 100;
 
@@ -19,6 +21,77 @@ const EEM_FIELDS = [
   ['reduceRuntime', 'eem:reduce-runtime'],
   ['addPrimaryReceiverVolume', 'eem:add-receiver-volume'],
   ['replaceCompressor', 'eem:replace-compressor'],
+];
+
+const COVERAGE_SCENARIOS = [
+  ...[
+    [1, 'Single-stage lubricant-injected rotary screw'],
+    [2, 'Two-stage lubricant-injected rotary screw'],
+    [3, 'Two-stage lubricant-free rotary screw'],
+    [4, 'Single-stage reciprocating'],
+    [5, 'Two-stage reciprocating'],
+    [6, 'Multiple-stage centrifugal'],
+  ].map(([value, name]) => ({ id: `compressor-type-${value}`, name, allOf: [`compressor-type:${value}`] })),
+  ...[
+    [1, 'Inlet modulation without unloading'],
+    [2, 'Inlet modulation with unloading'],
+    [3, 'Variable displacement with unloading'],
+    [4, 'Load/unload'],
+    [5, 'Multi-step unloading'],
+    [6, 'Start/stop'],
+    [7, 'Centrifugal butterfly modulation with blowoff'],
+    [8, 'Centrifugal butterfly modulation with unloading'],
+    [9, 'Centrifugal guide-vane modulation with blowoff'],
+    [10, 'Centrifugal guide-vane modulation with unloading'],
+    [11, 'Variable-frequency drive'],
+  ].map(([value, name]) => ({ id: `control-type-${value}`, name, allOf: [`control-type:${value}`] })),
+  ...[
+    ['power', 'Measured power input'],
+    ['percentCapacity', 'Percent-capacity input'],
+    ['airflow', 'Measured-airflow input'],
+    ['powerFactor', 'Electrical input'],
+    ['percentPower', 'Percent-power input'],
+  ].map(([value, name]) => ({ id: `profile-${value}`, name, allOf: [`profile-type:${value}`] })),
+  ...[
+    ['cascading', 'Cascading system control'],
+    ['targetPressureSequencer', 'Target-pressure sequencer'],
+    ['loadSharing', 'Load sharing'],
+    ['baseTrim', 'Base/trim'],
+  ].map(([value, name]) => ({ id: `system-control-${value}`, name, allOf: [`system-control:${value}`] })),
+  ...[
+    ['flow-reallocation', 'Flow reallocation'],
+    ['reduce-air-leaks', 'Reduce air leaks'],
+    ['improve-end-use-efficiency', 'Improve end-use efficiency'],
+    ['reduce-system-pressure', 'Reduce system pressure'],
+    ['adjust-cascading-set-points', 'Adjust cascading set points'],
+    ['automatic-sequencer', 'Automatic sequencer'],
+    ['reduce-runtime', 'Reduce runtime'],
+    ['add-receiver-volume', 'Add receiver volume'],
+    ['replace-compressor', 'Replace compressor'],
+  ].map(([value, name]) => ({ id: `eem-${value}`, name, allOf: [`eem:${value}`] })),
+  { id: 'multiple-day-types', name: 'Multiple day types', allOf: ['multiple-day-types'] },
+  { id: 'one-hour-profile', name: 'One-hour profile', allOf: ['interval:1'] },
+  { id: 'sub-hour-profile', name: 'Sub-hour profile', anyOf: ['interval:0.25', 'interval:0.5'] },
+  { id: 'imperial-units', name: 'Imperial settings', allOf: ['units:Imperial'] },
+  { id: 'metric-units', name: 'Metric settings', allOf: ['units:Metric'] },
+  { id: 'fractional-power-factor', name: 'Fractional power factor', allOf: ['fractional-power-factor'] },
+  { id: 'auxiliary-equipment', name: 'Auxiliary equipment', allOf: ['auxiliary-equipment'] },
+  { id: 'demand-charge', name: 'Demand charge', allOf: ['demand-charge'] },
+  { id: 'zero-savings', name: 'Zero savings', allOf: ['zero-savings'] },
+  { id: 'insufficient-capacity', name: 'Insufficient capacity', allOf: ['insufficient-capacity'] },
+  {
+    id: 'sub-hour-with-eem',
+    name: 'Sub-hour profile with an active EEM',
+    anyOf: ['interval:0.25', 'interval:0.5'],
+    anyPrefix: 'eem:',
+    missingReason: 'Intentionally deferred because the existing sub-hour pressure-indexing defect can prevent EEM results.',
+  },
+  {
+    id: 'metric-with-demand-charge',
+    name: 'Metric assessment with a demand charge',
+    allOf: ['units:Metric', 'demand-charge'],
+    missingReason: 'Metric and demand-charge behavior are covered separately; the private corpus has no assessment combining them.',
+  },
 ];
 
 const SETTING_KEYS = [
@@ -61,6 +134,133 @@ export function sortObjectKeys(value) {
 
 export function sha256(value) {
   return createHash('sha256').update(typeof value === 'string' ? value : stableStringify(value, 0)).digest('hex');
+}
+
+/**
+ * Reconstructs the browser-facing corpus from the per-assessment JSON files.
+ * The filename and embedded fixture ID must agree so a renamed or duplicated
+ * file cannot silently change calculation order.
+ */
+export function loadFixtureCorpus(fixtureRoot) {
+  const manifest = readJson(resolve(fixtureRoot, 'manifest.json'));
+  const fixtures = loadFixtureFiles(resolve(fixtureRoot, 'assessments'));
+  return {
+    schemaVersion: manifest.schemaVersion,
+    sourceAppVersion: manifest.sourceAppVersion,
+    fixtures,
+  };
+}
+
+/**
+ * Loads one immutable expected-results snapshot. Provenance stays in the
+ * manifest and is intentionally separate from the calculation payload.
+ */
+export function loadRegressionTestSnapshot(snapshotRoot, snapshotName) {
+  const directory = resolve(snapshotRoot, snapshotName);
+  const manifest = readJson(resolve(directory, 'manifest.json'));
+  if (manifest.snapshotName !== snapshotName) {
+    throw new Error(`Snapshot manifest name ${manifest.snapshotName} does not match directory ${snapshotName}.`);
+  }
+  const fixtures = loadFixtureFiles(directory, new Set(['manifest.json']));
+  const fixtureIds = fixtures.map(fixture => fixture.fixtureId);
+  if (stableStringify(fixtureIds, 0) !== stableStringify(manifest.fixtureIds, 0)) {
+    throw new Error(`Snapshot ${snapshotName} fixture files do not match its manifest.`);
+  }
+  return {
+    manifest,
+    snapshot: {
+      schemaVersion: manifest.schemaVersion,
+      resultSchemaVersion: manifest.resultSchemaVersion,
+      snapshotName: manifest.snapshotName,
+      desktopApplicationVersion: manifest.desktopApplicationVersion,
+      suitePackageVersion: manifest.suitePackageVersion,
+      sourceMeasurVersion: manifest.sourceMeasurVersion,
+      scope: manifest.scope,
+      fixtures,
+    },
+  };
+}
+
+/**
+ * Angular's test bundler requires static JSON imports. This small generated
+ * registry is the browser equivalent of the Node directory loaders above; the
+ * assessment and snapshot JSON files remain the reviewable source of truth.
+ */
+export function getBrowserFixtureRegistrySource(fixtureRoot) {
+  const assessmentNames = readdirSync(resolve(fixtureRoot, 'assessments'))
+    .filter(name => name.endsWith('.json'))
+    .sort((a, b) => a.localeCompare(b));
+  const snapshotRoot = resolve(fixtureRoot, 'snapshots');
+  const snapshotNames = readdirSync(snapshotRoot, { withFileTypes: true })
+    .filter(entry => entry.isDirectory())
+    .map(entry => entry.name)
+    .sort((a, b) => a.localeCompare(b));
+
+  const lines = [
+    '/**',
+    ' * Generated by the compressed-air regression-test tooling.',
+    ' * Edit the per-fixture JSON files and regenerate this registry instead of editing it by hand.',
+    ' */',
+    "import fixtureManifest from './manifest.json';",
+  ];
+  assessmentNames.forEach((name, index) => {
+    lines.push(`import assessment${index} from './assessments/${name}';`);
+  });
+  const snapshots = snapshotNames.map((snapshotName, snapshotIndex) => {
+    const { manifest } = loadRegressionTestSnapshot(snapshotRoot, snapshotName);
+    lines.push(`import snapshotManifest${snapshotIndex} from './snapshots/${snapshotName}/manifest.json';`);
+    manifest.fixtureIds.forEach((fixtureId, fixtureIndex) => {
+      lines.push(`import snapshot${snapshotIndex}Fixture${fixtureIndex} from './snapshots/${snapshotName}/${fixtureId}.json';`);
+    });
+    return { snapshotName, snapshotIndex, fixtureCount: manifest.fixtureIds.length };
+  });
+  lines.push('', 'export const regressionTestCorpus = {',
+    '  schemaVersion: fixtureManifest.schemaVersion,',
+    '  sourceAppVersion: fixtureManifest.sourceAppVersion,',
+    `  fixtures: [${assessmentNames.map((_name, index) => `assessment${index}`).join(', ')}],`,
+    '};', '', 'export const regressionTestSnapshots: Record<string, any> = {');
+  for (const snapshot of snapshots) {
+    const { snapshotName, snapshotIndex, fixtureCount } = snapshot;
+    lines.push(
+      `  '${snapshotName}': {`,
+      `    schemaVersion: snapshotManifest${snapshotIndex}.schemaVersion,`,
+      `    resultSchemaVersion: snapshotManifest${snapshotIndex}.resultSchemaVersion,`,
+      `    snapshotName: snapshotManifest${snapshotIndex}.snapshotName,`,
+      `    desktopApplicationVersion: snapshotManifest${snapshotIndex}.desktopApplicationVersion,`,
+      `    suitePackageVersion: snapshotManifest${snapshotIndex}.suitePackageVersion,`,
+      `    sourceMeasurVersion: snapshotManifest${snapshotIndex}.sourceMeasurVersion,`,
+      `    scope: snapshotManifest${snapshotIndex}.scope,`,
+      `    fixtures: [${Array.from({ length: fixtureCount }, (_value, index) => `snapshot${snapshotIndex}Fixture${index}`).join(', ')}],`,
+      '  },',
+    );
+  }
+  lines.push('};', '');
+  return `${lines.join('\n')}\n`;
+}
+
+export function writeBrowserFixtureRegistry(fixtureRoot) {
+  writeFileSync(resolve(fixtureRoot, 'fixture-registry.ts'), getBrowserFixtureRegistrySource(fixtureRoot));
+}
+
+function loadFixtureFiles(directory, excludedNames = new Set()) {
+  const names = readdirSync(directory)
+    .filter(name => name.endsWith('.json') && !excludedNames.has(name))
+    .sort((a, b) => a.localeCompare(b));
+  const fixtures = names.map(name => {
+    const fixture = readJson(resolve(directory, name));
+    const expectedId = basename(name, '.json');
+    if (fixture.fixtureId !== expectedId) {
+      throw new Error(`Fixture filename ${name} does not match embedded ID ${fixture.fixtureId ?? 'missing'}.`);
+    }
+    return fixture;
+  });
+  const ids = fixtures.map(fixture => fixture.fixtureId);
+  if (new Set(ids).size !== ids.length) throw new Error(`Duplicate fixture IDs found in ${directory}.`);
+  return fixtures;
+}
+
+function readJson(path) {
+  return JSON.parse(readFileSync(path, 'utf8'));
 }
 
 export function isCompleteCompressedAirAssessment(assessment, settings) {
@@ -154,18 +354,54 @@ export function buildCoverage(realFixtures, syntheticFixtures = []) {
     coverageTags: [...fixture.coverageTags].sort(),
   }));
   const allFixtures = [...realFixtures, ...syntheticCoverage];
+  const scenarios = COVERAGE_SCENARIOS.map(scenario => {
+    const matchingFixtureIds = allFixtures
+      .filter(fixture => matchesCoverageScenario(fixture.coverageTags, scenario))
+      .map(fixture => fixture.fixtureId);
+    return {
+      id: scenario.id,
+      name: scenario.name,
+      status: matchingFixtureIds.length > 0 ? 'covered' : 'missing',
+      matchingFixtureIds,
+      expectedTags: {
+        allOf: scenario.allOf ?? [],
+        anyOf: scenario.anyOf ?? [],
+        anyPrefix: scenario.anyPrefix ?? null,
+      },
+      ...(matchingFixtureIds.length === 0 && scenario.missingReason
+        ? { missingReason: scenario.missingReason }
+        : {}),
+    };
+  });
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     realFixtureCount: realFixtures.length,
     syntheticFixtureCount: syntheticCoverage.length,
     totalFixtureCount: allFixtures.length,
     coreFixtureIds: selectCoreFixtureIds(allFixtures),
+    realFixtures: realFixtures.map(fixture => ({
+      fixtureId: fixture.fixtureId,
+      coverageTags: [...fixture.coverageTags].sort(),
+      sha256: sha256(fixture),
+    })),
     realTags: countTags(realFixtures),
     syntheticTags: countTags(syntheticCoverage),
     tags: countTags(allFixtures),
     syntheticFixtures: syntheticCoverage,
+    scenarios,
+    missingScenarios: scenarios
+      .filter(scenario => scenario.status === 'missing')
+      .map(scenario => scenario.id),
     corpusSha256: sha256(realFixtures),
   };
+}
+
+function matchesCoverageScenario(tags, scenario) {
+  const tagSet = new Set(tags);
+  const hasAll = (scenario.allOf ?? []).every(tag => tagSet.has(tag));
+  const hasAny = !scenario.anyOf || scenario.anyOf.some(tag => tagSet.has(tag));
+  const hasPrefix = !scenario.anyPrefix || tags.some(tag => tag.startsWith(scenario.anyPrefix));
+  return hasAll && hasAny && hasPrefix;
 }
 
 function getNextRealFixtureId(fixtures) {
@@ -411,6 +647,11 @@ export function getCoverageTags(compressedAir, settings) {
     for (const [field, tag] of EEM_FIELDS) {
       if (modification[field] && modification[field].order < INACTIVE_EEM_ORDER) tags.add(tag);
     }
+    if (modification.improveEndUseEfficiency?.order < INACTIVE_EEM_ORDER
+      && (modification.improveEndUseEfficiency.endUseEfficiencyItems ?? [])
+        .some(item => item.substituteAuxiliaryEquipment)) {
+      tags.add('auxiliary-equipment');
+    }
   }
 
   const profileRows = (compressedAir.systemProfile?.profileSummary ?? [])
@@ -580,7 +821,7 @@ function walk(value, path, visit) {
 }
 
 /**
- * Compares a current calculation snapshot with an accepted baseline.
+ * Compares current calculation results with an accepted snapshot.
  *
  * Object fields, array order/length, flags, strings, nulls, and special-value
  * representations are exact. Finite numbers use a hybrid tolerance of

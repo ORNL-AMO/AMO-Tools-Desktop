@@ -1,5 +1,6 @@
 const { join } = require('node:path');
 const { writeFileSync } = require('node:fs');
+const compressedAirFixtureManifest = require('./src/app/compressed-air-assessment/calculations/regression-tests/fixtures/manifest.json');
 
 if (!process.env.CHROME_BIN) {
   process.env.CHROME_BIN = require('puppeteer').executablePath();
@@ -29,7 +30,7 @@ module.exports = function (config) {
         ? [
             'ca-capture',
             process.env.CA_REGRESSION_TEST_SCOPE === 'full' ? 'ca-scope-full' : 'ca-scope-core',
-            `ca-baseline=${process.env.CA_REGRESSION_TEST_BASELINE || 'pre-pr409-suite-1.2.5'}`,
+            `ca-snapshot=${process.env.CA_REGRESSION_TEST_SNAPSHOT || compressedAirFixtureManifest.activeSnapshot}`,
           ]
         : []
     },

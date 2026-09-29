@@ -3,28 +3,38 @@
 These tests answer one question: **did a Desktop or Suite change alter the
 results of an existing compressed-air assessment?**
 
-The permanent starting point is Desktop commit `52f3b3bdb` with
-`measur-tools-suite@1.2.5`. Its expected results are stored in the
-`pre-pr409-suite-1.2.5` baseline.
+The permanent pre-change reference is Desktop commit `52f3b3bdb` with
+`measur-tools-suite@1.2.5`. Its accepted results are stored in the immutable
+`pre-pr409-suite-1.2.5` snapshot. Suite PR #409 and Desktop issue #8903 are
+later comparison targets; they are not prerequisites for this snapshot.
+
+## Terminology
+
+- An **assessment baseline** is the compressed-air system before a user applies
+  modifications. This is production calculation terminology and appears in
+  fields such as `output.baseline`.
+- A **regression-test snapshot** is a checked-in set of expected test results.
+  Recording or activating a snapshot never changes an assessment baseline.
 
 ## What is checked in?
 
-The repository contains everything needed to run the tests:
+- `fixtures/assessments/` contains one sanitized real assessment per JSON file.
+  The 43 files were originally derived from a private system backup.
+- `fixtures/manifest.json` records the fixture schema/source version and names
+  the snapshot used by ordinary tests and CI through `activeSnapshot`.
+- `synthetic-fixtures.ts` creates targeted cases in memory for scenarios absent
+  from the real assessments.
+- `fixtures/coverage.json` records per-fixture hashes and tags, the smaller core
+  set, and a scenario matrix with matching fixtures and known gaps.
+- `fixtures/known-non-finite-paths.json` records exact legacy non-finite paths,
+  grouped by an investigated reason. Unexpected paths fail the test.
+- `fixtures/snapshots/<name>/` contains a provenance manifest and one expected-
+  result JSON file per real or synthetic fixture.
+- `fixtures/fixture-registry.ts` is a small generated static-import index needed
+  by the Karma bundler. Fixture addition and snapshot recording refresh it.
 
-- `fixtures/corpus.json` contains sanitized assessment inputs. It currently has
-  43 real assessment cases originally derived from a private system backup.
-- `synthetic-fixtures.ts` creates six targeted cases in memory for scenarios
-  that were missing from the real assessments.
-- `fixtures/coverage.json` records coverage tags, the smaller core test set, and
-  a hash of the real fixture corpus. It reports real, synthetic, and combined
-  coverage separately.
-- `fixtures/known-non-finite-paths.json` is the exact fixture/path allowlist for
-  legacy `NaN` and infinity outputs. Any non-finite output outside this list
-  fails instead of becoming baseline data.
-- `fixtures/baselines/` contains accepted calculation outputs.
-
-The original private backup has no role in the tests and is not needed again.
-It is not stored in the repository.
+The private backup has no role in test execution and is not needed again. It is
+not stored in the repository.
 
 ## Where are the Suite calculations called?
 
@@ -33,46 +43,29 @@ The Karma test uses the production calculation path and the real Suite WASM:
 ```text
 compressed-air-regression-tests.spec.ts
   -> compressed-air-regression-tests.runner.ts
-    -> Desktop baseline and modification result classes
+    -> Desktop assessment baseline and modification result classes
       -> CompressedAirCalculationService
         -> CompressedAirSuiteApiService
           -> measur-tools-suite JavaScript/WASM
-  -> compare current results with an accepted baseline
+  -> compare current results with the active regression-test snapshot
 ```
 
-The files under `src/app/.../regression-tests/` run in the browser through
+The files under `src/app/.../regression-tests/` execute in Chrome through
 Karma, where the Suite WASM can initialize. The files in this `scripts/`
-directory manage sanitized fixture inputs, run the focused Karma test, and
-compare or record outputs.
+directory manage sanitized fixtures, run the focused Karma spec, compare
+outputs, create reports, and record explicitly accepted snapshots.
 
-Important files:
-
-- `compressed-air-regression-tests.spec.ts` is the Karma entry point.
-- `compressed-air-regression-tests.runner.ts` migrates cloned fixture data and
-  calculates baseline and modification results through application services.
-- `synthetic-fixtures.ts` creates targeted coverage cases in memory.
-- `run-regression-tests.mjs` runs Karma and compares, reports, or records its
-  result snapshot.
-- `add-fixture.mjs` safely adds one private assessment export to the corpus.
-- `fixture-tools.mjs` contains sanitization, privacy, coverage, stable JSON, and
-  comparison helpers.
-- `karma.conf.cjs` transfers the large browser result back to the Node command.
-
-`corpus.json` is test **input**. A baseline is expected test **output**. Normal
-tests never rewrite either one.
+Normal tests never rewrite fixtures, the active-snapshot setting, expected
+results, or the known-non-finite allowance file.
 
 ## Adding one real assessment
 
-Adding a fixture is optional. Do it when a new assessment represents useful
-calculation coverage that is not already in the corpus. For a small, artificial
-edge case, adding a synthetic fixture in code is usually clearer.
+Add a fixture only when a new assessment contributes calculation coverage that
+is not already represented. For a small artificial boundary, a synthetic
+fixture is usually clearer.
 
-First, use MEASUR to export the one complete compressed-air assessment you want
-to add. The JSON export must include that assessment and its matching settings.
-It may contain unrelated or incomplete records, but it must contain exactly one
-**complete** compressed-air assessment.
-
-Keep the export outside the repository, then run:
+Use MEASUR to export one complete compressed-air assessment with its matching
+settings. Keep that private JSON outside the repository, then run:
 
 ```sh
 npm run ca:regression-tests:add-fixture -- --input "/private/path/to/assessment-export.json" --accept
@@ -80,46 +73,37 @@ npm run ca:regression-tests:add-fixture -- --input "/private/path/to/assessment-
 
 The command:
 
-1. Reads the private export without changing it.
-2. Finds the one complete compressed-air assessment and its settings.
-3. Refuses the file if there are no complete matches, multiple complete
-   matches, or an equivalent fixture is already present.
-4. Removes Log Tool data and replaces names, notes, IDs, locations, dates, and
-   other identifying text with deterministic test values.
-5. Runs privacy checks before writing anything.
-6. Appends the next ID, such as `ca-real-044`, without rebuilding or renumbering
-   existing fixtures.
-7. Refreshes `coverage.json`, including the core selection and corpus hash.
+1. Reads the private export without changing, copying, or logging its path.
+2. Requires exactly one complete compressed-air assessment and settings pair.
+3. Removes Log Tool data and deterministically replaces identifying text and
+   internal IDs while preserving calculation inputs and references.
+4. Runs privacy checks before publishing anything.
+5. Creates only the next `fixtures/assessments/ca-real-NNN.json` file.
+6. Refreshes the fixture manifest and coverage inventory without rewriting any
+   existing assessment or expected-results file.
 
-The private path and source names are not printed or stored. Only the sanitized
-fixture is committed. `--accept` is required because the command intentionally
-changes checked-in test inputs.
-
-The command does **not** calculate or accept expected results. After adding a
-fixture, inspect the changes to `corpus.json` and `coverage.json`, run the
-privacy/helper tests, and calculate the full corpus. A missing expected result
-is intentional until the team reviews it and records a new baseline.
+The new fixture has no expected result yet. Review its sanitized JSON and the
+coverage changes, run the helper tests, and generate a full diagnostic report.
+Only after the result is understood should a new snapshot be recorded and
+activated.
 
 ## Running the tests
 
-Run the smaller core set during normal development:
+Run the smaller coverage-selected set during normal development:
 
 ```sh
 npm run test:ca-regression-tests:core
 ```
 
-Run every real and synthetic fixture before reviewing calculation changes:
+Run every real and synthetic case before accepting calculation changes:
 
 ```sh
 npm run test:ca-regression-tests:full
 ```
 
-Both commands calculate current results and compare them with the checked-in
-baseline. They do not rewrite fixtures or expected results. A difference causes
-the command to fail.
-
-Run the fast Node tests for sanitization, fixture addition, privacy, coverage,
-and comparison behavior with:
+Both commands compare against `fixtures/manifest.json.activeSnapshot` and fail
+on differences. The fast Node tests cover sanitization, fixture storage,
+privacy, coverage, snapshot loading, and comparison behavior:
 
 ```sh
 npm run test:ca-regression-tests:fixtures
@@ -127,47 +111,52 @@ npm run test:ca-regression-tests:fixtures
 
 ## Reviewing differences
 
-After a Suite or Desktop calculation change, generate a report without failing
-just because results differ:
+Generate a non-failing diagnostic report against the active snapshot:
 
 ```sh
-npm run ca:regression-tests:report -- --baseline pre-pr409-suite-1.2.5 --allow-differences
+npm run ca:regression-tests:report -- --allow-differences
 ```
 
-Sanitized JSON and Markdown reports are written under the ignored
-`tmp/compressed-air-regression-tests/` directory. They identify the fixture and
-field that changed and show numerical differences where applicable.
+To compare with another immutable snapshot, add `--snapshot <name>`. Sanitized
+JSON and Markdown reports are written under the ignored
+`tmp/compressed-air-regression-tests/` directory. They include stored/current
+provenance and locate each structural, numerical, display, or failure change.
 
-## Recording a baseline
+## Recording and activating a snapshot
 
-Record expected results only after changes have been reviewed and accepted:
+Recording always requires a new explicit name:
 
 ```sh
-npm run ca:regression-tests:record -- --baseline post-change-baseline-name --accept
+npm run ca:regression-tests:record -- --snapshot post-change-name --accept
 ```
 
-This creates a separate baseline file under `fixtures/baselines/`. Use a new,
-descriptive name for each accepted calculation state. Recording refuses to
-overwrite any existing baseline, even when `--accept` is supplied.
+This creates `fixtures/snapshots/post-change-name/`, stamps its manifest with
+the current Desktop commit, application version, Suite version, and source
+MEASUR version, and writes one formatted result file per fixture. It refuses to
+overwrite an existing directory.
 
-Never overwrite or remove `pre-pr409-suite-1.2.5`; it is the permanent reference
-for measuring the effect of Suite PR #409 and Desktop issue #8903.
+Recording deliberately does **not** activate the snapshot. After review, change
+only `activeSnapshot` in `fixtures/manifest.json`, then run the commands without
+snapshot overrides. Never overwrite or remove `pre-pr409-suite-1.2.5`.
 
-## Typical workflow
+## Intentional calculation-change workflow
 
-For ordinary development, run the core test. No private export is needed.
+1. Make the calculation or Suite integration change.
+2. Run `npm run test:ca-regression-tests:full` against the active snapshot.
+3. Run `npm run ca:regression-tests:report -- --allow-differences`.
+4. Confirm every changed fixture and field is intended. A known failure that
+   starts calculating is also a behavior change and must be reviewed.
+5. If non-finite paths changed, investigate the producing formula and update
+   `known-non-finite-paths.json` with a documented reason. Recording never
+   changes this file automatically.
+6. Record a new snapshot with a lowercase descriptive name and `--accept`.
+7. Review its per-fixture files and provenance manifest.
+8. Set `fixtures/manifest.json.activeSnapshot` to the new name.
+9. Run `npm test -- --watch=false --no-progress`, the core command, and the full
+   command without `--snapshot`; all must pass.
+10. Commit the calculation change, new snapshot directory, activation change,
+    and any reviewed allowance update together. Explain the observed result
+    differences in the PR description.
 
-When evaluating a calculation change:
-
-1. Run the full test against the accepted baseline.
-2. Generate the difference report.
-3. Review and explain the differences.
-4. After approval, record a separately named baseline.
-
-When adding a new real scenario:
-
-1. Export that one assessment from MEASUR.
-2. Run `ca:regression-tests:add-fixture` against the private export.
-3. Review the sanitized corpus and coverage changes.
-4. Run the helper/privacy tests and the full calculation report.
-5. Record a new baseline only after the new result is reviewed.
+Do not modify an old snapshot to make tests pass. A post-#409/#8903 snapshot is
+a new accepted state and must coexist with the permanent pre-change snapshot.

@@ -22,10 +22,11 @@ Initialize the real Suite module once in `beforeAll`. Do not mock compressor cal
 - Deep-clone assessment and settings input before migration or calculation.
 - Run `UpdateDataService.updateAssessmentVersion` before calculating so older saved-data shapes exercise the current migration path.
 - Preserve fixture and array order; order is part of the snapshot contract.
-- Keep real fixture inputs in `fixtures/corpus.json`. Do not embed private source data in TypeScript.
+- Keep each real fixture in `fixtures/assessments/<fixture-id>.json`. Do not embed private source data in TypeScript.
 - Build synthetic fixtures by cloning sanitized real fixtures and changing only inputs required for the missing scenario.
 - Keep every synthetic fixture's `coverageTags` synchronized with its mutations.
 - Keep fixture-count assertions data-driven. Do not hard-code the current real, synthetic, or core counts.
+- Treat `fixtures/fixture-registry.ts` as generated code. Fixture addition and snapshot recording regenerate its static JSON imports for Karma.
 
 Use a real fixture for a representative assessment and a synthetic fixture for a narrow boundary or uncommon input combination. If a synthetic case depends on a particular real fixture, make that dependency obvious through `findFixture` and a comment explaining the required source characteristics.
 
@@ -33,16 +34,16 @@ Use a real fixture for a representative assessment and a synthetic fixture for a
 
 Capture canonical application-facing results, not Emscripten class instances. The projection should cover calculation outputs that users can observe or that downstream calculations consume, including baseline and modification profiles, totals, rated metrics, savings, cost, demand, emissions, and report-visible formatting.
 
-Canonicalization must preserve missing values separately from `null`, normalize negative zero, preserve array order, and represent explicitly allowlisted legacy non-finite values. Unexpected `NaN`, infinity, or calculation exceptions must fail the test; never make them baselineable by classifying them automatically.
+Canonicalization must preserve missing values separately from `null`, normalize negative zero, preserve array order, and represent explicitly allowlisted legacy non-finite values. Unexpected `NaN`, infinity, or calculation exceptions must fail the test; never make them acceptable snapshot data by classifying them automatically.
 
-`fixtures/known-non-finite-paths.json` is intentionally separate from result baselines. Update it only when a specific legacy output has been investigated and documented; baseline recording must never modify it.
+`fixtures/known-non-finite-paths.json` is intentionally separate from result snapshots. Update it only when a specific legacy output has been investigated and assigned a documented reason; snapshot recording must never modify it.
 
 When adding or removing projected fields:
 
 1. Explain why the field belongs in the compatibility contract.
 2. Increment the result schema version when the serialized contract changes.
 3. Run the full corpus and create a diagnostic report.
-4. Review both raw numerical differences and display-formatted differences before recording a new baseline.
+4. Review both raw numerical differences and display-formatted differences before recording a new snapshot.
 
 Keep report formatting tests small and intentional. They exist to detect user-visible rounding changes, not to duplicate report components.
 
@@ -55,4 +56,4 @@ For a runner, projection, synthetic-fixture, or Suite-integration change, run:
 3. `npm run test:ca-regression-tests:core`
 4. `npm run test:ca-regression-tests:full` before acceptance
 
-Use a diagnostic report when changes are expected. Baseline recording belongs to a separate, explicit review step and must never happen inside a Karma test.
+Use a diagnostic report when changes are expected. Snapshot recording belongs to a separate, explicit review step and must never happen inside a Karma test.
