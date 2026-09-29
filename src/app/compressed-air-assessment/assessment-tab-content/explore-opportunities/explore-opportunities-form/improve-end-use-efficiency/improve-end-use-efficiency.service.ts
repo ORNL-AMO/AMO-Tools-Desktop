@@ -30,7 +30,7 @@ export class ImproveEndUseEfficiencyService {
 
   setFormValidators(form: UntypedFormGroup, baselineResults: BaselineResults): UntypedFormGroup{
     if(form.controls.reductionType.value == 'Fixed'){
-      form.controls.airflowReduction.setValidators([Validators.required, Validators.min(0), Validators.max(baselineResults.total.maxAirFlow)])
+      form.controls.airflowReduction.setValidators([Validators.required, Validators.max(baselineResults.total.maxAirFlow)])
       form.controls.airflowReduction.updateValueAndValidity();
     }else if(form.controls.reductionType.value == 'Variable'){
       form.controls.airflowReduction.setValidators([]);

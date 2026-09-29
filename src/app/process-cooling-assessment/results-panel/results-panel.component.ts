@@ -29,6 +29,10 @@ export class ResultsPanelComponent {
     return this.mainView() === MainView.BASELINE && (this.setupView() === SetupView.INVENTORY || this.setupView() === SetupView.LOAD_SCHEDULE);
   });
 
+  displayNotes: Signal<boolean> = computed(() => {
+    return this.mainView() === MainView.ASSESSMENT;
+  });
+
   resultsSummaryView: SummaryView = 'baseline-panel';
 
   constructor() {
@@ -59,4 +63,4 @@ export class ResultsPanelComponent {
 }
 
 
-export type PanelTab = ProcessCoolingSetupTabString | 'help' | 'results';
+export type PanelTab = ProcessCoolingSetupTabString | 'help' | 'results' | 'notes';

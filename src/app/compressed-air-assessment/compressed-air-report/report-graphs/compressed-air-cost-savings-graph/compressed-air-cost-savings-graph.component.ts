@@ -1,10 +1,11 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { PlotlyService } from 'angular-plotly.js';
 import { CompressedAirAssessment, CompressedAirDayType, Modification } from '../../../../shared/models/compressed-air-assessment';
 import { CompressedAirAssessmentModificationResults } from '../../../calculations/modifications/CompressedAirAssessmentModificationResults';
 import { BaselineResults, DayTypeModificationResult } from '../../../calculations/caCalculationModels';
 import { CompressedAirModificationValid } from '../../../compressed-air-assessment-validation/CompressedAirAssessmentValidation';
 import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
+import { CompressedAirChartsService } from '../../../services/compressed-air-charts.service';
 
 @Component({
   selector: 'app-compressed-air-cost-savings-graph',
@@ -25,6 +26,8 @@ export class CompressedAirCostSavingsGraphComponent {
   baselineResults: BaselineResults;
 
   @ViewChild("modificationGraph", { static: false }) modificationGraph: ElementRef;
+  private readonly compressedAirChartsService = inject(CompressedAirChartsService);
+
   constructor(private plotlyService: PlotlyService) { }
 
   ngAfterViewInit() {
@@ -144,98 +147,12 @@ export class CompressedAirCostSavingsGraphComponent {
 
   drawCombinedDayTypeModificationGraph() {
     if (this.assessmentResults && this.combinedDayTypeResults && this.combinedDayTypeResults.length != 0 && this.modificationGraph) {
-      let y: Array<string> = this.combinedDayTypeResults.map(result => {
-        return result.modification.name
-      });
-      y.unshift('Baseline');
-
-      let xValue = this.combinedDayTypeResults.map(result => { return result.combinedResults.allSavingsResults.adjustedResults.cost });
-      xValue.unshift(this.assessmentResults[0].totalBaselineCost);
-      let traceData = [];
-      let text = xValue.map(v => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(v));
-      let trace = this.getTrace(xValue, y, 'Adjusted Annual Cost', text);
-      traceData.push(trace);
-
-      let flowReallocationX = this.combinedDayTypeResults.map(result => { return result.combinedResults.flowReallocationSavings.savings.cost });
-      flowReallocationX.unshift(0);
-      trace = this.getTrace(flowReallocationX, y, 'Flow Reallocation');
-      traceData.push(trace);
-      if (this.combinedDayTypeResults.some(result => { return result.modification.reduceAirLeaks.order != 100 })) {
-        let xValue = this.combinedDayTypeResults.map(result => { return result.combinedResults.reduceAirLeaksSavings.savings.cost });
-        xValue.unshift(0);
-        let trace = this.getTrace(xValue, y, 'Reduce Air Leaks');
-        traceData.push(trace);
-      }
-      if (this.combinedDayTypeResults.some(result => { return result.modification.improveEndUseEfficiency.order != 100 })) {
-        let xValue = this.combinedDayTypeResults.map(result => { return result.combinedResults.improveEndUseEfficiencySavings.savings.cost });
-        xValue.unshift(0);
-        let trace = this.getTrace(xValue, y, 'Improve End Use Efficiency');
-        traceData.push(trace);
-      }
-      if (this.combinedDayTypeResults.some(result => { return result.modification.reduceSystemAirPressure.order != 100 })) {
-        let xValue = this.combinedDayTypeResults.map(result => { return result.combinedResults.reduceSystemAirPressureSavings.savings.cost });
-        xValue.unshift(0);
-        let trace = this.getTrace(xValue, y, 'Reduce System Air Pressure');
-        traceData.push(trace);
-      }
-      if (this.combinedDayTypeResults.some(result => { return result.modification.adjustCascadingSetPoints.order != 100 })) {
-        let xValue = this.combinedDayTypeResults.map(result => { return result.combinedResults.adjustCascadingSetPointsSavings.savings.cost });
-        xValue.unshift(0);
-        let trace = this.getTrace(xValue, y, 'Adjust Cascading Set Points');
-        traceData.push(trace);
-      }
-      if (this.combinedDayTypeResults.some(result => { return result.modification.useAutomaticSequencer.order != 100 })) {
-        let xValue = this.combinedDayTypeResults.map(result => { return result.combinedResults.useAutomaticSequencerSavings.savings.cost });
-        xValue.unshift(0);
-        let trace = this.getTrace(xValue, y, 'Use Automatic Sequencer');
-        traceData.push(trace);
-      }
-      if (this.combinedDayTypeResults.some(result => { return result.modification.reduceRuntime.order != 100 })) {
-        let xValue = this.combinedDayTypeResults.map(result => { return result.combinedResults.reduceRunTimeSavings.savings.cost });
-        xValue.unshift(0);
-        let trace = this.getTrace(xValue, y, 'Reduce Runtime');
-        traceData.push(trace);
-      }
-      if (this.combinedDayTypeResults.some(result => { return result.modification.addPrimaryReceiverVolume.order != 100 })) {
-        let xValue = this.combinedDayTypeResults.map(result => { return result.combinedResults.addReceiverVolumeSavings.savings.cost });
-        xValue.unshift(0);
-        let trace = this.getTrace(xValue, y, 'Add Primary Receiver Volume');
-        traceData.push(trace);
-      }
-
-      if (this.combinedDayTypeResults.some(result => { return result.modification.replaceCompressor.order != 100 })) {
-        let xValue = this.combinedDayTypeResults.map(result => { return result.combinedResults.replaceCompressorsSavings.savings.cost });
-        xValue.unshift(0);
-        let trace = this.getTrace(xValue, y, 'Replace Compressors');
-        traceData.push(trace);
-      }
-
-      var layout = {
-        showlegend: true,
-        barmode: 'stack',
-        title: {
-          text: "Adjusted Annual Cost by Modification <br> All Day Types Combined",
-        },
-        yaxis: {
-          autotick: false,
-          automargin: true,
-        },
-        xaxis: {
-          tickprefix: '',
-          tickformat: '$~s',
-          hoverformat: '$~s',
-        },
-        margin: {},
-        legend: {
-          orientation: 'h',
-        },
-        hovermode: 'y unified'
-      }
+      const chart = this.compressedAirChartsService.buildCostSavingsChart(this.assessmentResults, this.combinedDayTypeResults);
       var config = {
         responsive: true,
         displaylogo: false
       };
-      this.plotlyService.newPlot(this.modificationGraph.nativeElement, traceData, layout, defaultPlotlyConfig(config, traceData));
+      this.plotlyService.newPlot(this.modificationGraph.nativeElement, chart.traces, chart.layout, defaultPlotlyConfig(config, chart.traces));
     }
   }
 

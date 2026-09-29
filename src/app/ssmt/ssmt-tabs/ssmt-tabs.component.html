@@ -172,6 +172,9 @@
     <li [ngClass]="{'active': calcTab == 'stack-loss'}">
       <a (click)="changeCalcTab('stack-loss')">Stack Loss</a>
     </li>
+    <li [ngClass]="{'active': calcTab == 'steam-leak'}">
+      <a (click)="changeCalcTab('steam-leak')">Steam Leak</a>
+    </li>
     <li [ngClass]="{'active': calcTab == 'steam-properties'}">
       <a (click)="changeCalcTab('steam-properties')">Steam Properties</a>
     </li>
@@ -213,11 +216,14 @@
     <div [ngClass]="{'active': calcTab == 'stack-loss', 'collapse': calcTabsCollapsed}">
       <a (click)="changeCalcTab('stack-loss')">Stack Loss</a>
     </div>
+    <div [ngClass]="{'active': calcTab == 'steam-leak', 'collapse': calcTabsCollapsed}">
+      <a (click)="changeCalcTab('steam-leak')">Steam Leak</a>
+    </div>
     <div [ngClass]="{'active': calcTab == 'steam-properties', 'collapse': calcTabsCollapsed}">
       <a (click)="changeCalcTab('steam-properties')">Steam Properties</a>
     </div>
     <div [ngClass]="{'active': calcTab == 'turbine', 'collapse': calcTabsCollapsed}">
       <a (click)="changeCalcTab('turbine')">Turbine</a>
     </div>
-  </div>  
+  </div>
 </div>

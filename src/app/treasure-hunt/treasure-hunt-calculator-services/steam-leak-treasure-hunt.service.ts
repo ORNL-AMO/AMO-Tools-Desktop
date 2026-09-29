@@ -22,7 +22,7 @@ import * as _ from 'lodash';
         this.steamLeakService.steamLeakInput.set(undefined);
     }
 
-    setCalculatorInputFromOpportunity(steamLeakSurvey: SteamLeakSurveyTreasureHunt, treasureHunt: TreasureHunt) {
+    setCalculatorInputFromOpportunity(steamLeakSurvey: SteamLeakSurveyTreasureHunt) {
         let steamLeakInput = _.cloneDeep(steamLeakSurvey.steamLeakSurveyInput);
         this.steamLeakService.steamLeakInput.set(steamLeakInput);
     }

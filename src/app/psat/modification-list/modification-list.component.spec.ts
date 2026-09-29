@@ -415,9 +415,9 @@ describe('ModificationListComponent', () => {
 
       component.addNewModification(sourceMod.psat);
 
-      // Scenario 1's name matches itself once among existing modifications, so the
-      // component's (buggy) always-suffix logic appends "(1)" even for a first copy.
-      expect(component.psat.modifications[1].psat.name).toBe('Scenario 1(1)');
+      // Scenario 1 only matches itself among existing modifications, so no
+      // copy suffix is added for this first copy.
+      expect(component.psat.modifications[1].psat.name).toBe('Scenario 1');
       expect(component.psat.modifications[1].psat.inputs.fluidTemperature).toBe(111);
     });
 

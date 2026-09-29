@@ -38,27 +38,6 @@ This guard does NOT extend across different WWT units. If System A sends to WWT-
 
 ---
 
-## The `ROWasteTreatmentOwner` Walk Does Not Break or Push — This Is the Double-Attribution Source
-
-### Note: this will need to be updated with 8481
-
-In Pass 2, when the upstream walk detects the current WWT node is registered as a single-system RO configuration's `wasteTreatmentNode`:
-
-```ts
-if (!ROWasteTreatmentOwner) {
-  visitedSystemIds.push(currentNode.id);
-  break;
-}
-```
-
-The `break` and the `push` are both guarded by `if (!ROWasteTreatmentOwner)`. When `ROWasteTreatmentOwner` is set, **neither fires**. The upstream walk continues traversing edges on the same path past the RO node.
-
-This is intentional for the basic case — the algorithm needs to keep walking to handle attribution correctly when the RO node is in the path. But it also means the `ROWasteTreatmentOwner` system never gets added to `visitedSystemIds`, so a second upstream path for the same WWT unit (e.g., the path that reaches through the RO node all the way back to the intake) can encounter and charge the same system again.
-
-This is the root mechanism behind the **RO Reject WWT Double-Attribution Bug** documented in `general-implementation-notes.md §RO Reject WWT Double-Attribution Bug`. A targeted fix would scope the continued walk tightly — the walk should continue past the RO node only until the intake edge is found, and once that path has been processed, the `ROWasteTreatmentOwner` should be added to `visitedSystemIds` to block re-entry from the intake-path direction.
-
----
-
 ## The Flat Deduction Bug — Geometry of the Error
 
 The Pass 2 deduction subtracts the *full* downstream-charged flow volume from *each* upstream system's flow responsibility independently:
@@ -75,7 +54,7 @@ With multiple upstream systems, this subtracts the *same* total downstream volum
 
 The correct deduction is proportional: each upstream system should have its flow responsibility reduced by `totalDownstreamChargedPortion × (its contribution / total WWT inflow)`.
 
-The test case `wwt-two-upstream-with-reuse` in `plant-summary-test-cases.md §4.3` uses a snapshot for System B's cost precisely because this bug produces a deterministic wrong number. When you fix the deduction, update the snapshot and verify the corrected values match the "Correct attribution" table in `§4.3`.
+The test case `wwt-two-upstream-with-reuse` in `plant-summary-test-cases.md §3.3` uses a snapshot for System B's cost precisely because this bug produces a deterministic wrong number. When you fix the deduction, update the snapshot and verify the corrected values match the "Correct attribution" table in `§3.3`.
 
 ---
 
@@ -155,33 +134,13 @@ If you add any processing that references edges by position in a path, do not as
 
 ---
 
-## RO `attributeROCostsToSystem` Check Runs Every Edge in the Upstream Path
-
-In Pass 2, inside the `for (edgeId of path)` loop, the RO ownership check re-runs on every edge iteration:
-
-```ts
-Object.entries(graph.systemsWithRODirectDischarge).map(([systemId, { ..., wasteTreatmentNode }]) => {
-  if (wasteTreatmentNode?.id === treatmentId) {
-    attributeROCostsToSystem = true;
-    ROWasteTreatmentOwner = graph.nodeMap[systemId];
-  }
-});
-```
-
-This check is keyed on `treatmentId` (the WWT node), not on any property of the current edge or node. It returns the same result on every iteration of the inner loop. The intent is for the check to fire whenever the upstream path from this WWT node encounters an RO node (checked by `currentNode.data.processComponentType`). But because `attributeROCostsToSystem` is set unconditionally when the WWT node is registered — regardless of what `currentNode` is — the flag is true for every edge in the path, not just the one that reaches the RO node.
-
-This does not produce incorrect results in the common case because the `if (currentNode.data.processComponentType === 'water-using-system' || attributeROCostsToSystem)` guard still skips non-system non-RO nodes: only water-using systems and the RO owner path actually trigger cost attribution. But if you refactor the inner loop or add intermediate node handling, be aware that `attributeROCostsToSystem` is a path-level flag, not a node-level flag.
-
----
-
 ## Test Coverage Reference for WWT
 
 | Test Case | Location | What It Guards |
 |---|---|---|
-| `wwt-discharge-only` | `plant-summary-test-cases.md §4.1` | Pass 1 finds nothing, Pass 2 charges 100% to single upstream system |
-| `wwt-reuse` | `plant-summary-test-cases.md §4.2` | Pass 1 + Pass 2 together sum to 100% block cost |
-| `wwt-two-upstream-with-reuse` ⚠ | `plant-summary-test-cases.md §4.3` | Flat deduction bug; snapshot test locks in broken output |
-| `ro-single-system-wwt` ⚠ | `plant-summary-test-cases.md §3.3` | RO double-attribution bug; snapshot test locks in broken output |
-| `wwt-recycled-back-to-same-system` *(pending)* | `plant-summary-test-cases.md §8` | Blocked by missing cycle detection in graph traversal |
+| `wwt-discharge-only` | `plant-summary-test-cases.md §3.1` | Pass 1 finds nothing, Pass 2 charges 100% to single upstream system |
+| `wwt-reuse` | `plant-summary-test-cases.md §3.2` | Pass 1 + Pass 2 together sum to 100% block cost |
+| `wwt-two-upstream-with-reuse` ⚠ | `plant-summary-test-cases.md §3.3` | Flat deduction bug; snapshot test locks in broken output |
+| `wwt-recycled-back-to-same-system` *(pending)* | `plant-summary-test-cases.md §7` | Blocked by missing cycle detection in graph traversal |
 
-The two snapshot tests (⚠) exist to make fixes visible, not to validate correct behavior. When you fix either bug, the snapshot will fail — update it intentionally after verifying the new value is correct.
+The snapshot test (⚠) exists to make the fix visible, not to validate correct behavior. When you fix the bug, the snapshot will fail — update it intentionally after verifying the new value is correct.

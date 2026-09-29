@@ -31,7 +31,7 @@ If you've never contributed before, see the following for help:
 
 ### Issues
 
-We are not accepting new contributor-created issues at this time. Issues that are eligible for community contribution will be marked with the `help wanted` label.
+We are not accepting new contributor-created issues at this time. Issues that are eligible for community contribution will be marked with the `Eligible for contributor help` label.
 
 Before starting work on an issue:
 1. Comment on the issue saying you'd like to work on it
@@ -65,7 +65,7 @@ PRs should:
 - Use a hashtag to connect the issue number it satisfies 
 - Avoid merge commits in your PR branch; instead, use rebase or cherry-pick to keep the commit history clean.
 - Follow best practices for code style:
-    - [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.md)
+    - [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.MD)
 
 #### Pre-PR Checklist
 Before creating a pull request, please review your code using this checklist:
@@ -97,7 +97,7 @@ Fork and pull process for contributors:
 
 ## Coding Style
 
-MEASUR specific style and pattern guidelines can be found in the [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.md)
+MEASUR specific style and pattern guidelines can be found in the [CODING_STYLE_GUIDE](CODING_STYLE_GUIDE.MD)
 
 Above all else, contributors should do their best to follow the conventions of modern Angular, React, Typescript, and Javascript versions.
 

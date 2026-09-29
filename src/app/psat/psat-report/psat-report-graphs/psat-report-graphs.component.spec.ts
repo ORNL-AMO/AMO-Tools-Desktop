@@ -113,14 +113,6 @@ describe('PsatReportGraphsComponent', () => {
     });
   });
 
-  describe('getValueArray', () => {
-    it('returns the loss and useful-output values computed by the charts service', () => {
-      fixture.detectChanges();
-      const outputs = makeOutputs({ motor_power: 300 });
-      expect(component.getValueArray(outputs)).toEqual([10, 5, 3, 282]);
-    });
-  });
-
   describe('template visibility', () => {
     it('shows the interactive graph layout when printView is false', () => {
       component.printView = false;

@@ -1,8 +1,8 @@
 <div>
     <label class="group-label" for="useApplyVariableSpeedControl" [class.eem-disabled]="isOpportunityDisabled">
-        <input class="pc-checkbox" type="checkbox" 
-            id="useApplyVariableSpeedControl" 
-            (focus)="focusField('useApplyVariableSpeedControl')" 
+        <input class="pc-checkbox" type="checkbox"
+            id="useApplyVariableSpeedControl"
+            (focus)="focusField('useApplyVariableSpeedControl')"
             (change)="setUseOpportunity()"
             [disabled]="isOpportunityDisabled"
             [(ngModel)]="useOpportunity" />
@@ -17,16 +17,18 @@
 <form [formGroup]="form" class="p-0">
     <div class="row no-gutters mt-3">
         <div class="col-6 pr-2">
+            @if (baselineChilledWaterVariableFlow === false) {
             <div class="form-group">
                 <label for="baselineChilledWaterVariableFlow">Chilled Water Pump</label>
-                <select id="baselineChilledWaterVariableFlow" class="form-control" 
+                <select id="baselineChilledWaterVariableFlow" class="form-control"
                 [value]="baselineChilledWaterVariableFlow ? 'Variable Flow' : 'Constant Flow'" disabled>
                     <option>Variable Flow</option>
                     <option>Constant Flow</option>
                 </select>
             </div>
-            @if (baselineCondenserWaterVariableFlow !== undefined && !isAirCooled) {
-            <div class="form-group mt-3">
+            }
+            @if (baselineCondenserWaterVariableFlow === false && !isAirCooled) {
+            <div class="form-group" [class.mt-3]="baselineChilledWaterVariableFlow === false">
                 <label for="baselineCondenserWaterVariableFlow">Condenser Water Pump</label>
                 <select id="baselineCondenserWaterVariableFlow" class="form-control"
                 [value]="baselineCondenserWaterVariableFlow ? 'Variable Flow' : 'Constant Flow'" disabled>
@@ -46,12 +48,14 @@
                 </label>
             </div>
             }
-            @if (baselineCondenserWaterVariableFlow === false) {
-            <label class="mb-1 w-100">
-                <input type="checkbox" class="pc-form-checkbox mr-1" id="modificationCondenserWaterVariableFlow"
-                    formControlName="condenserWaterVariableFlow" />
-                Apply VSD
-            </label>
+            @if (baselineCondenserWaterVariableFlow === false && !isAirCooled) {
+            <div class="form-group" [class.mt-3]="baselineChilledWaterVariableFlow === false">
+                <label class="mb-1 w-100">
+                    <input type="checkbox" class="pc-form-checkbox mr-1" id="modificationCondenserWaterVariableFlow"
+                        formControlName="condenserWaterVariableFlow" />
+                    Apply VSD
+                </label>
+            </div>
             }
         </div>
     </div>

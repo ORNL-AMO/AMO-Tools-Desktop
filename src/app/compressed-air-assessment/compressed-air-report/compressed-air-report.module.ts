@@ -26,6 +26,9 @@ import { ExportableResultsTableModule } from '../../shared/exportable-results-ta
 import { CompressedAirCostSavingsGraphComponent } from './report-graphs/compressed-air-cost-savings-graph/compressed-air-cost-savings-graph.component';
 import { CompressedAirEnergySavingsGraphComponent } from './report-graphs/compressed-air-energy-savings-graph/compressed-air-energy-savings-graph.component';
 import { CompressedAirAirflowSavingsGraphComponent } from './report-graphs/compressed-air-airflow-savings-graph/compressed-air-airflow-savings-graph.component';
+import { ReportBuilderModule } from '../../shared/report-builder/report-builder.module';
+import { CompressedAirReportAdapter } from './compressed-air-report.adapter';
+import { CompressedAirChartsService } from '../services/compressed-air-charts.service';
 
 @NgModule({
   declarations: [
@@ -57,8 +60,10 @@ import { CompressedAirAirflowSavingsGraphComponent } from './report-graphs/compr
     InventoryPerformanceProfileModule,
     CentrifugalGraphModule,
     CompressedAirSankeyModule,
-    ExportableResultsTableModule
+    ExportableResultsTableModule,
+    ReportBuilderModule
   ],
+  providers: [CompressedAirReportAdapter, CompressedAirChartsService],
   exports: [
     CompressedAirReportComponent
   ]

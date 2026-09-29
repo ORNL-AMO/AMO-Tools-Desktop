@@ -25,15 +25,31 @@ export function getContrastTextColor(bgColor: string): string {
 }
 
 
-const convertFlowValue = (value: number, newUnits: string) => {
-  if (isValidNumber(value)) {
-    if (newUnits === 'Metric') {
-      // * return m3 
-      return value * 3785.4118;
-    } else if (newUnits === 'Imperial') {
-      // * return mGal 
-      return value / 3785.4118;
-    }
+// process-flow-lib can't import it directly (separate bundle). Falls back if unset.
+export type ConvertValueFn = (value: number, from: string, to: string) => number;
+
+const defaultConvertFlowValue = (value: number, newUnits: string): number => {
+  if (newUnits === 'Metric') {
+    // * return m3
+    return value * 3785.4118;
+  } else if (newUnits === 'Imperial') {
+    // * return mGal
+    return value / 3785.4118;
+  }
+  return value;
+}
+
+const convertFlowValue = (value: number, newUnits: string, convertValueFn?: ConvertValueFn) => {
+  if (!isValidNumber(value)) {
+    return value;
+  }
+  if (!convertValueFn) {
+    return defaultConvertFlowValue(value, newUnits);
+  }
+  if (newUnits === 'Metric') {
+    return convertValueFn(value, 'Mgal', 'm3');
+  } else if (newUnits === 'Imperial') {
+    return convertValueFn(value, 'm3', 'Mgal');
   }
   return value;
 }
@@ -43,12 +59,12 @@ const isValidNumber = (num: number): boolean => {
 }
 
 
-export const convertFlowDiagramData = (flowDiagramData: { nodes: Node[], edges: Edge[], calculatedData: DiagramCalculatedData }, newUnits: string) => {
+export const convertFlowDiagramData = (flowDiagramData: { nodes: Node[], edges: Edge[], calculatedData: DiagramCalculatedData }, newUnits: string, convertValueFn?: ConvertValueFn) => {
   flowDiagramData.nodes = flowDiagramData.nodes.map((nd: Node<ProcessFlowPart>) => {
-    const convertedTotalSourceFlow = convertFlowValue(nd.data.userEnteredData.totalSourceFlow, newUnits);
-    const convertedTotalDischargeFlow = convertFlowValue(nd.data.userEnteredData.totalDischargeFlow, newUnits);
-    const convertedTotalKnownLosses = convertFlowValue(nd.data.userEnteredData.totalKnownLosses, newUnits);
-    const convertedWaterInProduct = convertFlowValue(nd.data.userEnteredData.waterInProduct, newUnits);
+    const convertedTotalSourceFlow = convertFlowValue(nd.data.userEnteredData.totalSourceFlow, newUnits, convertValueFn);
+    const convertedTotalDischargeFlow = convertFlowValue(nd.data.userEnteredData.totalDischargeFlow, newUnits, convertValueFn);
+    const convertedTotalKnownLosses = convertFlowValue(nd.data.userEnteredData.totalKnownLosses, newUnits, convertValueFn);
+    const convertedWaterInProduct = convertFlowValue(nd.data.userEnteredData.waterInProduct, newUnits, convertValueFn);
 
     const convertedUserEnteredData: NodeFlowData = {
       totalKnownLosses: convertedTotalKnownLosses,
@@ -67,7 +83,7 @@ export const convertFlowDiagramData = (flowDiagramData: { nodes: Node[], edges: 
   });
 
   flowDiagramData.edges = flowDiagramData.edges.map((edge: Edge<CustomEdgeData>) => {
-    const convertedEdgeflowValue = convertFlowValue(edge.data.flowValue, newUnits);
+    const convertedEdgeflowValue = convertFlowValue(edge.data.flowValue, newUnits, convertValueFn);
     return {
       ...edge,
       data: {
@@ -77,10 +93,10 @@ export const convertFlowDiagramData = (flowDiagramData: { nodes: Node[], edges: 
     }
   });
 
-  flowDiagramData.calculatedData = convertCalculatedData(flowDiagramData.calculatedData, newUnits);
+  flowDiagramData.calculatedData = convertCalculatedData(flowDiagramData.calculatedData, newUnits, convertValueFn);
 }
 
-  export const convertCalculatedData = (diagramCalculatedData: DiagramCalculatedData, newUnits: string): DiagramCalculatedData => {
+  export const convertCalculatedData = (diagramCalculatedData: DiagramCalculatedData, newUnits: string, convertValueFn?: ConvertValueFn): DiagramCalculatedData => {
     if (diagramCalculatedData) {
       let convertedCalculatedData: DiagramCalculatedData = {
         nodes: {}
@@ -88,10 +104,10 @@ export const convertFlowDiagramData = (flowDiagramData: { nodes: Node[], edges: 
       Object.entries(diagramCalculatedData.nodes).forEach(([nodeId, nodeData]) => {
         let convertedNodeData: NodeFlowData = {
           name: nodeData.name,
-          totalSourceFlow: convertFlowValue(nodeData.totalSourceFlow, newUnits),
-          totalDischargeFlow: convertFlowValue(nodeData.totalDischargeFlow, newUnits),
-          totalKnownLosses: convertFlowValue(nodeData.totalKnownLosses, newUnits),
-          waterInProduct: convertFlowValue(nodeData.waterInProduct, newUnits),
+          totalSourceFlow: convertFlowValue(nodeData.totalSourceFlow, newUnits, convertValueFn),
+          totalDischargeFlow: convertFlowValue(nodeData.totalDischargeFlow, newUnits, convertValueFn),
+          totalKnownLosses: convertFlowValue(nodeData.totalKnownLosses, newUnits, convertValueFn),
+          waterInProduct: convertFlowValue(nodeData.waterInProduct, newUnits, convertValueFn),
         };
         convertedCalculatedData.nodes[nodeId] = convertedNodeData;
       });

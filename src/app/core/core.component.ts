@@ -28,6 +28,7 @@ import { ToolsSuiteApiService } from '../tools-suite-api/tools-suite-api.service
 import { DialogRef} from '@angular/cdk/dialog';
 import { ModalDialogService } from '../shared/modal-dialog.service';
 import { FeatureFlagService } from '../shared/feature-flag.service';
+import { ContactDbService } from '../indexedDb/contact-db.service';
 
 @Component({
   selector: 'app-core',
@@ -101,6 +102,7 @@ export class CoreComponent implements OnInit {
     private toolsSuiteApiService: ToolsSuiteApiService,
     private modalDialogService: ModalDialogService,
     private featureFlagService: FeatureFlagService,
+    private contactDbService: ContactDbService,
   ) {
   }
 
@@ -296,6 +298,7 @@ export class CoreComponent implements OnInit {
           this.diagramIdbService.setAll(initializedData.diagrams);
           this.calculatorDbService.setAll(initializedData.calculators);
           this.inventoryDbService.setAll(initializedData.inventoryItems);
+          this.contactDbService.setAll(initializedData.contacts);
           this.idbStarted = true;
           this.initializeDefaultDbData();
           this.changeDetectorRef.detectChanges();
