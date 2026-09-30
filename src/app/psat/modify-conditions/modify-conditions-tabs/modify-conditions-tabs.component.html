@@ -34,42 +34,50 @@
     <li class="page-item" [ngClass]="{'disabled':  modifyTab == 'operations'}">
       <a class="nav-link small" (click)="back()" [ngClass]="{'disabled':  modifyTab == 'operations'}">
         <span class="fa fa-chevron-left"></span></a>
-    </li>
-    <li class="page-item" [ngClass]="{'active': modifyTab == 'operations'}" *ngIf="modifyTab == 'operations'">
-      <a class="nav-link small" (click)="tabChange('operations')">
-        Operations
-        <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')" class="badge gray-badge" [ngClass]="operationsBadgeClass">
-        </span>
-      </a>
-      <app-tabs-tooltip [display]="operationsBadgeHover" [reveal]="displayOperationsTooltip" [badgeClass]="operationsBadgeClass"></app-tabs-tooltip>
-    </li>
-    <li class="page-item" [ngClass]="{'active': modifyTab == 'pump-fluid'}" *ngIf="modifyTab == 'pump-fluid'">
-      <a class="nav-link small" (click)="tabChange('pump-fluid')">
-        Pump &amp; Fluid
-        <span (mouseenter)="showTooltip('pumpFluid')" (mouseleave)="hideTooltip('pumpFluid')" class="badge gray-badge" [ngClass]="pumpFluidBadgeClass">
-        </span>
-      </a>
-      <app-tabs-tooltip [display]="pumpFluidBadgeHover" [reveal]="displayPumpFluidTooltip" [badgeClass]="pumpFluidBadgeClass"></app-tabs-tooltip>
-    </li>
-    <li class="page-item" [ngClass]="{'active': modifyTab == 'motor'}" *ngIf="modifyTab == 'motor'">
-      <a class="nav-link small" (click)="tabChange('motor')">
-        Motor
-        <span (mouseenter)="showTooltip('motor')" (mouseleave)="hideTooltip('motor')" class="badge gray-badge" [ngClass]="motorBadgeClass">
-        </span>
-      </a>
-      <app-tabs-tooltip [display]="motorBadgeHover" [reveal]="displayMotorTooltip" [badgeClass]="motorBadgeClass"></app-tabs-tooltip>
-    </li>
-    <li class="page-item" [ngClass]="{'active': modifyTab == 'field-data'}" *ngIf="modifyTab == 'field-data'">
-      <a class="nav-link small" (click)="tabChange('field-data')">
-        Field Data
-        <span (mouseenter)="showTooltip('fieldData')" (mouseleave)="hideTooltip('fieldData')" class="badge gray-badge" [ngClass]="fieldDataBadgeClass">
-        </span>
-      </a>
-      <app-tabs-tooltip [display]="fieldDataBadgeHover" [reveal]="displayFieldDataTooltip" [badgeClass]="fieldDataBadgeClass"></app-tabs-tooltip>
-    </li>
-    <li class="page-item" [ngClass]="{'disabled':  modifyTab == 'field-data'}">
-      <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled':  modifyTab == 'field-data'}">
-        <span class="fa fa-chevron-right"></span></a>
-    </li>
-  </ul>
-</div>
+      </li>
+      @if (modifyTab == 'operations') {
+        <li class="page-item" [ngClass]="{'active': modifyTab == 'operations'}">
+          <a class="nav-link small" (click)="tabChange('operations')">
+            Operations
+            <span (mouseenter)="showTooltip('operations')" (mouseleave)="hideTooltip('operations')" class="badge gray-badge" [ngClass]="operationsBadgeClass">
+            </span>
+          </a>
+          <app-tabs-tooltip [display]="operationsBadgeHover" [reveal]="displayOperationsTooltip" [badgeClass]="operationsBadgeClass"></app-tabs-tooltip>
+        </li>
+      }
+      @if (modifyTab == 'pump-fluid') {
+        <li class="page-item" [ngClass]="{'active': modifyTab == 'pump-fluid'}">
+          <a class="nav-link small" (click)="tabChange('pump-fluid')">
+            Pump &amp; Fluid
+            <span (mouseenter)="showTooltip('pumpFluid')" (mouseleave)="hideTooltip('pumpFluid')" class="badge gray-badge" [ngClass]="pumpFluidBadgeClass">
+            </span>
+          </a>
+          <app-tabs-tooltip [display]="pumpFluidBadgeHover" [reveal]="displayPumpFluidTooltip" [badgeClass]="pumpFluidBadgeClass"></app-tabs-tooltip>
+        </li>
+      }
+      @if (modifyTab == 'motor') {
+        <li class="page-item" [ngClass]="{'active': modifyTab == 'motor'}">
+          <a class="nav-link small" (click)="tabChange('motor')">
+            Motor
+            <span (mouseenter)="showTooltip('motor')" (mouseleave)="hideTooltip('motor')" class="badge gray-badge" [ngClass]="motorBadgeClass">
+            </span>
+          </a>
+          <app-tabs-tooltip [display]="motorBadgeHover" [reveal]="displayMotorTooltip" [badgeClass]="motorBadgeClass"></app-tabs-tooltip>
+        </li>
+      }
+      @if (modifyTab == 'field-data') {
+        <li class="page-item" [ngClass]="{'active': modifyTab == 'field-data'}">
+          <a class="nav-link small" (click)="tabChange('field-data')">
+            Field Data
+            <span (mouseenter)="showTooltip('fieldData')" (mouseleave)="hideTooltip('fieldData')" class="badge gray-badge" [ngClass]="fieldDataBadgeClass">
+            </span>
+          </a>
+          <app-tabs-tooltip [display]="fieldDataBadgeHover" [reveal]="displayFieldDataTooltip" [badgeClass]="fieldDataBadgeClass"></app-tabs-tooltip>
+        </li>
+      }
+      <li class="page-item" [ngClass]="{'disabled':  modifyTab == 'field-data'}">
+        <a class="nav-link small" (click)="continue()" [ngClass]="{'disabled':  modifyTab == 'field-data'}">
+          <span class="fa fa-chevron-right"></span></a>
+        </li>
+      </ul>
+    </div>
