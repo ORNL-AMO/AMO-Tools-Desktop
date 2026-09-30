@@ -3,4 +3,5 @@
     class="pfd-wrapper"
     #pfdComponent 
     (updateDiagramDetailEvent)="onUpdateDiagramState($event)"
+    (diagramReadyEvent)="diagramReady.emit()"
     ></process-flow-diagram-component>

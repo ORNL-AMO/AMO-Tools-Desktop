@@ -26,6 +26,24 @@ export class DiagramIdbService {
     this.dbDiagrams.next(this.allDiagrams);
   }
 
+  /**
+   * Replaces one diagram in the cache with a copy of the saved object, without re-reading the whole store.
+   * Copied so cache consumers that mutate cached diagrams never touch the diagram a component is editing.
+   */
+  upsertInCache(diagram: Diagram) {
+    const cachedDiagram: Diagram = _.cloneDeep(diagram);
+    const diagrams: Diagram[] = this.allDiagrams ?? [];
+    const cachedIndex: number = diagrams.findIndex((cached: Diagram) => cached.id === diagram.id);
+    const updatedDiagrams: Diagram[] = [...diagrams];
+    if (cachedIndex === -1) {
+      updatedDiagrams.push(cachedDiagram);
+    } else {
+      updatedDiagrams[cachedIndex] = cachedDiagram;
+    }
+    this.allDiagrams = updatedDiagrams;
+    this.dbDiagrams.next(this.allDiagrams);
+  }
+
   getAllDiagrams(): Observable<Array<Diagram>> {
     return this.dbService.getAll(this.storeName);
   }

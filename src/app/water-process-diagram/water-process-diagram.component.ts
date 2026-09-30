@@ -1,16 +1,16 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { Subscription, firstValueFrom } from 'rxjs';
+import { Subscription, firstValueFrom, skip } from 'rxjs';
 import { WaterProcessDiagramService } from './water-process-diagram.service';
 import * as _ from 'lodash';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DiagramIdbService } from '../indexedDb/diagram-idb.service';
 import { Settings } from '../shared/models/settings';
 import { Diagram } from '../shared/models/diagram';
-import { UpdateDiagramFromAssessmentService } from './update-diagram-from-assessment.service';
 import { WaterDiagram } from 'process-flow-lib';
 import { WaterAssessmentService } from '../water/water-assessment.service';
+import { WaterDiagramSyncService } from './water-diagram-sync.service';
 
 @Component({
   selector: 'app-water-process-diagram',
@@ -42,14 +42,14 @@ export class WaterProcessDiagramComponent {
 
   constructor(
     private waterProcessDiagramService: WaterProcessDiagramService,
-    private updateDiagramFromAssessmentService: UpdateDiagramFromAssessmentService,
     private diagramIdbService: DiagramIdbService,
     private settingsDbService: SettingsDbService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private analyticsService: AnalyticsService,
-    private waterAssessmentService: WaterAssessmentService) { }
+    private waterAssessmentService: WaterAssessmentService,
+    private waterDiagramSyncService: WaterDiagramSyncService) { }
 
   ngOnInit() {
     // * diagram does not yet support mobile/touch for the drag and drop functions
@@ -57,7 +57,8 @@ export class WaterProcessDiagramComponent {
     this.analyticsService.sendEvent('view-water-diagram');
     this.isIntegrated = this.activatedRoute.snapshot.data['integrated'] ?? false;
     this.setupDiagram(this.activatedRoute.snapshot.data['diagram']);
-    this.waterDiagramSub = this.waterProcessDiagramService.waterDiagram.subscribe(waterDiagram => {
+    // * skip(1): the subject replays its current value on subscribe, which is a load, not a change to save
+    this.waterDiagramSub = this.waterProcessDiagramService.waterDiagram.pipe(skip(1)).subscribe(waterDiagram => {
       if (waterDiagram && this.diagram) {
         this.save(waterDiagram);
       }
@@ -75,6 +76,11 @@ export class WaterProcessDiagramComponent {
     this.mainTabSub.unsubscribe();
     this.waterDiagramSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
+    this.waterProcessDiagramService.diagram.next(undefined);
+    // * WaterDiagramComponent takes the first waterDiagram it sees, so a leftover value would mount the next diagram with this one's data
+    this.waterProcessDiagramService.waterDiagram.next(undefined);
+    // * a stale measurement would mount the next diagram, possibly hidden, at the wrong size
+    this.waterProcessDiagramService.parentContainer.next(undefined);
   }
 
   ngAfterViewInit() {
@@ -87,17 +93,15 @@ export class WaterProcessDiagramComponent {
     if (this.diagram) {
       this.getContainerHeight();
       this.diagram.waterDiagram.assessmentId = this.diagram.assessmentId;
-      this.updateDiagramFromAssessmentService.syncDiagramToAssessment(this.diagram, null);
       this.setSettings();
+      this.waterProcessDiagramService.diagram.next(this.diagram);
       this.waterProcessDiagramService.updateWaterDiagram(this.diagram.waterDiagram);
     }
   }
 
   async save(waterDiagram: WaterDiagram) {
     this.diagram.waterDiagram = waterDiagram;
-    await firstValueFrom(this.diagramIdbService.updateWithObservable(this.diagram));
-    let diagrams: Diagram[] = await firstValueFrom(this.diagramIdbService.getAllDiagrams());
-    this.diagramIdbService.setAll(diagrams);
+    await this.waterDiagramSyncService.saveDiagram(this.diagram);
   }
 
   // * 6893 Settings object - is unused, does not currently get updated by diagram operations
@@ -137,6 +141,9 @@ export class WaterProcessDiagramComponent {
     this.displayCreateAssessmentModal = false;
   }
 
+  // * Standalone only: this component measures its own container. Integrated, the assessment measures it instead
+  // * (WaterAssessmentComponent.setContainerHeight). Does nothing until #content is rendered, so it must also be
+  // * called from ngAfterViewInit
   getContainerHeight() {
     if (this.content) {
       setTimeout(() => {
