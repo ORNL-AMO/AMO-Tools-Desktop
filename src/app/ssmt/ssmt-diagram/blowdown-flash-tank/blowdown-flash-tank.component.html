@@ -1,11 +1,11 @@
 <div class="d-flex h-100 flex-column justify-content-center">
-  @if(boilerInput.sendBlowdownToDeaerator == true){
+  @if(routeBlowdownToDeaerator){
 
   <div class="d-flex w-100 flex-fill pt-px">
-    <!--horizontal pipe to dearator-->
+    <!--horizontal pipe to deaerator-->
     <div (mouseenter)="hoverEquipment('boilerBlowdownFlashedHovered')" (mouseleave)="hoverEquipment('default')"
       (click)="selectEquipment('boilerBlowdownFlashedHovered')">
-      <div class="d-flex tank-pipe to-dearator">
+      <div class="d-flex tank-pipe to-deaerator">
         <div class="outlet-blowdown-holder">
           <span class="fa fa-chevron-left hidden-chevron" (mouseenter)="hoverEquipment('boilerBlowdownFlashedHovered')"
             (mouseleave)="hoverEquipment('boilerBlowdownFlashedHovered')"></span>
@@ -13,10 +13,10 @@
       </div>
     </div>
     <div class="w-auto h-100" (mouseenter)="hoverEquipment('boilerBlowdownFlashedHovered')"
-      (mouseleave)="hoverEquipment('blowdownHovered')">
+      (mouseleave)="hoverEquipment('default')">
       <!--vertical pipe out of tank-->
-      <div class="d-flex align-self-center flex-fill to-dearator rounded-top-right h-100">
-        <div class="outlet-steam-dearator-holder">
+      <div class="d-flex align-self-center flex-fill to-deaerator rounded-top-right h-100">
+        <div class="outlet-steam-deaerator-holder">
         </div>
       </div>
     </div>

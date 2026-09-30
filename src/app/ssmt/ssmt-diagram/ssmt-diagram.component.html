@@ -178,7 +178,7 @@
     <div class="d-flex w-100 pl-4">
       <div class="d-flex flex-fill">
         <div class="w-25 deaerator-margin" [ngClass]="{'pt-3': inputData.headerInput.numberOfHeaders > 1}">
-          <!--dearator diagram for more than one header system-->
+          <!--deaerator diagram for more than one header system-->
           <app-deaerator-diagram *ngIf="inputData.headerInput.numberOfHeaders > 1"
             [deaerator]="outputData.deaeratorOutput" [inletPressure]="'low-pressure'" (emitSetHover)="setHover($event)"
             (emitSelectEquipment)="selectTable($event)" [settings]="settings"
@@ -189,20 +189,20 @@
             (emitSelectEquipment)="selectTable($event)" [settings]="settings"
             [boilerInput]="inputData.boilerInput"></app-deaerator-diagram>
         </div>
-        <div class="w-25 deaerator-condensate-padding">
-          <app-turbine-connector *ngIf="inputData.turbineInput.condensingTurbine.useTurbine == true"
-            [noOutletConnection]="false" [noInletConnection]="outputData.lowPressureHeaderSteam != undefined"
-            [inletColor]="'makeup-water'" (emitSetHover)="setHover($event)"
-            [massFlow]="outputData.condensingTurbine.massFlow" (emitSelectEquipment)="selectTable($event)">
-          </app-turbine-connector>
-        </div>
-        <div class="p-0 w-25">
-          @if(inputData.boilerInput.sendBlowdownToDeaerator == true){
-          <app-blowdown-flash-tank-connector [flashTank]="outputData.blowdownFlashTank"
-            (emitSetHover)="setHover($event)" (emitSelectEquipment)="selectTable($event)" [settings]="settings"
-            [boilerInput]="inputData.boilerInput"></app-blowdown-flash-tank-connector>
-          }@else {
-          <!--diagram spacer-->
+        <div class="d-flex w-50 deaerator-route-columns">
+          <div class="w-50 deaerator-condensate-padding">
+            <app-turbine-connector *ngIf="inputData.turbineInput.condensingTurbine.useTurbine == true"
+              [noOutletConnection]="false" [noInletConnection]="outputData.lowPressureHeaderSteam != undefined"
+              [inletColor]="'makeup-water'" (emitSetHover)="setHover($event)"
+              [massFlow]="outputData.condensingTurbine.massFlow" (emitSelectEquipment)="selectTable($event)">
+            </app-turbine-connector>
+          </div>
+          <div class="p-0 w-50"></div>
+          @if(routeBlowdownToDeaerator){
+          <app-blowdown-flash-tank-connector class="blowdown-flash-route"
+            [flashTank]="outputData.blowdownFlashTank" (emitSetHover)="setHover($event)"
+            (emitSelectEquipment)="selectTable($event)" [settings]="settings">
+          </app-blowdown-flash-tank-connector>
           }
         </div>
         <div class="p-0 w-25">

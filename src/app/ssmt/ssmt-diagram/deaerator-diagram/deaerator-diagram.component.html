@@ -35,14 +35,13 @@
     </div>
   </div>
 
-  @if(boilerInput.sendBlowdownToDeaerator == true){
+  @if(routeBlowdownToDeaerator){
   <!--inlet pressure with blowdown pipe-->
-  <div class="d-flex h-100 flex-fill inlet-pressure-column" (click)="selectPressure()">
+  <div class="d-flex h-100 flex-fill inlet-pressure-column">
     <div class="d-flex h-100 align-items-center inlet-pressure-tube flex-fill">
-      <div class="d-flex w-100 combined-tube" (mouseenter)="hoverPressure()" (mouseleave)="hoverEquipment('default')"
-        (click)="selectPressure()">
-        <span class="fa fa-chevron-left hidden-chevron" (mouseenter)="hoverEquipment('deaeratorInletSteamHovered')"
-            (mouseleave)="hoverPressure()"></span>
+      <div class="d-flex w-100 combined-tube" (mouseenter)="hoverEquipment('deaeratorInletSteamHovered')"
+        (mouseleave)="hoverEquipment('default')" (click)="selectEquipment('deaeratorInletSteamHovered')">
+        <span class="fa fa-chevron-left hidden-chevron"></span>
       </div>
     </div>
     <!--vertical pipe-->
@@ -50,30 +49,27 @@
       <div class="d-flex low-pressure-inlet-tube align-items-center with-flashtank" [ngClass]="inletSteamClasses"
         (mouseenter)="hoverPressure()" (mouseleave)="hoverEquipment('default')" (click)="selectPressure()">
         <div class="inlet-pressure-holder">
-          <!-- <span class="inlet-pressure-mass-flow">
-            {{deaerator.inletSteamMassFlow | number:'1.0-2'}}
-            <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
-          </span> -->
           <span class="fa fa-chevron-down" (mouseenter)="hoverPressure()"
             (mouseleave)="hoverPressure()"></span>
         </div>
       </div>
-      <div class="d-flex combined-inlet-tube combined-tube align-items-center flex-fill" (mouseenter)="hoverPressure()"
-        (mouseleave)="hoverEquipment('default')" (click)="selectPressure()">
+      <div class="d-flex combined-inlet-tube combined-tube align-items-center flex-fill"
+        (mouseenter)="hoverEquipment('deaeratorInletSteamHovered')" (mouseleave)="hoverEquipment('default')"
+        (click)="selectEquipment('deaeratorInletSteamHovered')">
         <div class="inlet-pressure-holder">
           <span class="inlet-pressure-mass-flow">
             {{deaerator.inletSteamMassFlow | number:'1.0-2'}}
             <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
           </span>
-          <span class="fa fa-chevron-down" (mouseenter)="hoverEquipment('deaeratorInletSteamHovered')"
-            (mouseleave)="hoverPressure()"></span>
+          <span class="fa fa-chevron-down"></span>
         </div>
       </div>
 
     </div>
     <!--inlet from tank-->
-    <div class="to-dearator to-dearator-connector no-condensate-turbine" (mouseenter)="hoverEquipment('boilerBlowdownFlashedHovered')">
-      <div class="outlet-steam-dearator-holder">
+    <div class="to-deaerator to-deaerator-connector" (mouseenter)="hoverEquipment('boilerBlowdownFlashedHovered')"
+      (mouseleave)="hoverEquipment('default')" (click)="selectEquipment('boilerBlowdownFlashedHovered')">
+      <div class="outlet-steam-deaerator-holder">
         <span class="fa fa-chevron-left hidden-chevron"></span>
       </div>
     </div>
@@ -148,17 +144,39 @@
           </div>
         </div>
       </div>
-      <!--inlet pressure-->
+      <!--inlet pressure / combined steam-->
       <div class="d-flex h-100 flex-fill inlet-pressure-column">
         <div class="d-flex h-100 align-items-center inlet-pressure-tube flex-fill">
-          <div class="d-flex w-100" [ngClass]="inletSteamClasses" (mouseenter)="hoverPressure()"
-            (mouseleave)="hoverEquipment('default')" (click)="selectPressure()">
+          <div class="d-flex w-100" [ngClass]="routeBlowdownToDeaerator ? 'combined-tube' : inletSteamClasses"
+            (mouseenter)="routeBlowdownToDeaerator ? hoverEquipment('deaeratorInletSteamHovered') : hoverPressure()"
+            (mouseleave)="hoverEquipment('default')"
+            (click)="routeBlowdownToDeaerator ? selectEquipment('deaeratorInletSteamHovered') : selectPressure()">
             <span class="fa fa-chevron-left hidden-chevron"></span>
           </div>
         </div>
       </div>
     </div>
   </div>
+  @if(routeBlowdownToDeaerator){
+  <div class="d-flex flex-column one-header-routed-inlet">
+    <div class="d-flex one-header-pressure-drop align-items-center" [ngClass]="inletSteamClasses"
+      (mouseenter)="hoverEquipment('deaeratorInletSteamHovered')" (mouseleave)="hoverEquipment('default')"
+      (click)="selectEquipment('deaeratorInletSteamHovered')">
+      <span class="fa fa-chevron-down"></span>
+    </div>
+    <div class="d-flex combined-tube one-header-combined-junction align-items-center"
+      (mouseenter)="hoverEquipment('deaeratorInletSteamHovered')" (mouseleave)="hoverEquipment('default')"
+      (click)="selectEquipment('deaeratorInletSteamHovered')">
+      <div class="inlet-pressure-holder">
+        <span class="inlet-pressure-mass-flow">
+          {{deaerator.inletSteamMassFlow | number:'1.0-1'}}
+          <span [innerHTML]="settings.steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+        </span>
+        <span class="fa fa-chevron-down"></span>
+      </div>
+    </div>
+  </div>
+  }@else{
   <div class="d-flex one-header-inlet" [ngClass]="inletSteamClasses" (mouseenter)="hoverPressure()"
     (mouseleave)="hoverEquipment('default')" (click)="selectPressure()">
     <div class="d-flex align-items-center">
@@ -172,4 +190,5 @@
       </div>
     </div>
   </div>
+  }
 </div>

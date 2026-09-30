@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { BoilerInput } from '../../../shared/models/steam/ssmt';
 import { FlashTankOutput } from '../../../shared/models/steam/steam-outputs';
 import { Settings } from '../../../shared/models/settings';
 
@@ -18,10 +17,6 @@ export class BlowdownFlashTankConnectorComponent {
   emitSelectEquipment = new EventEmitter<string>();
   @Input()
   settings: Settings;
-  @Input()
-  boilerInput: BoilerInput;
-
-
 
   hoverEquipment(str: string) {
     this.emitSetHover.emit(str);

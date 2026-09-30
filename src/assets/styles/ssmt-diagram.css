@@ -166,15 +166,23 @@
 }
 
 
-.ssmt-diagram .to-dearator {
+.ssmt-diagram .to-deaerator {
     background-color: #79716B;
 }
 
-.ssmt-diagram .to-dearator .hidden-chevron {
+.ssmt-diagram .to-deaerator .hidden-chevron {
     color: #79716B;
 }
 
 
-.ssmt-diagram.boilerBlowdownFlashedHovered .to-dearator {
+.ssmt-diagram.boilerBlowdownFlashedHovered .to-deaerator {
     box-shadow: 0px 0px 10px 0px #79716B;
+}
+
+.ssmt-diagram.deaeratorInletSteamHovered .combined-tube {
+    box-shadow: 0px 0px 10px 0px #bcae53;
+}
+
+.ssmt-diagram.deaeratorInletSteamHovered .one-header-pressure-drop:not(.no-steam-flow) {
+    box-shadow: 0px 0px 10px 0px #C0392B;
 }

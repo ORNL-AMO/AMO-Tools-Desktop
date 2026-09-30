@@ -8,6 +8,14 @@ module.exports = function (config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    files: [
+      {
+        pattern: 'node_modules/measur-tools-suite/bin/client.wasm',
+        included: false,
+        served: true,
+        watched: false
+      }
+    ],
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),

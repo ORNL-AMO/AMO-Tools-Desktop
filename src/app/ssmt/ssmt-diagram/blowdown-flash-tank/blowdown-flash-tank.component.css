@@ -91,29 +91,19 @@
     margin-bottom: 15px;
 }
 
-.outlet-steam-dearator-holder {
-    /* height: 30px; */
+.outlet-steam-deaerator-holder {
     width: 20px;
     margin-top: 5px;
-}
-
-.to-dearator {
-    background-color: #79716B;
-}
-
-.to-dearator .hidden-chevron {
-    color: #79716B;
 }
 
 .rounded-top-right {
     border-top-right-radius: 25px;
 }
 
-.tank-pipe.to-dearator {
+.tank-pipe.to-deaerator {
     width: 75px;
-    /* margin-bottom: 11px; */
     border-left: #79716B solid;
-    border-right: #79716B solid
+    border-right: #79716B solid;
 }
 
 .pt-px {

@@ -30,6 +30,11 @@ export class BlowdownFlashTankComponent implements OnInit {
   ngOnInit() {
   }
 
+  get routeBlowdownToDeaerator(): boolean {
+    return this.boilerInput?.blowdownFlashed === true
+      && this.boilerInput.sendBlowdownToDeaerator === true;
+  }
+
   ngOnChanges() {
     this.setClasses();
   }

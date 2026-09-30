@@ -129,11 +129,6 @@
 }
 
 
-.to-dearator {
-    background-color: #79716B;
-}
-
-
 .combined-tube {
     background-color: #bcae53;
 }
@@ -142,8 +137,9 @@
     height: .5rem;
 }
 
-.to-dearator-connector{
+.to-deaerator-connector{
     height: fit-content;
+    width: 50px;
 }
 
 .low-pressure.with-flashtank{
@@ -156,10 +152,32 @@
     border-bottom-right-radius: 25px;
 }
 
-.to-dearator-connector.no-condensate-turbine{
-    width: 50px;
+.outlet-steam-deaerator-holder {
+    width: 20px;
 }
 
-.to-dearator .hidden-chevron{
-    color: #79716B;
+.one-header-routed-inlet {
+    min-width: 25px;
+    border-top-right-radius: 25px;
+}
+
+.one-header-pressure-drop {
+    flex: 0 0 25px;
+    height: 25px;
+    min-height: 25px;
+    border-top-right-radius: 25px;
+}
+
+.one-header-pressure-drop .fa-chevron-down {
+    margin-top: auto;
+}
+
+.one-header-combined-junction {
+    flex: 1;
+    min-height: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.one-header-combined-junction .inlet-pressure-mass-flow {
+    bottom: -4px;
 }

@@ -80,7 +80,7 @@ export class BoilerService {
       approachTemperature: [obj.approachTemperature, approachTempValidators],
       blowdownConductivity: [obj.blowdownConductivity],
       feedwaterConductivity: [obj.feedwaterConductivity],
-      sendBlowdownToDeaerator: [obj.sendBlowdownToDeaerator]
+      sendBlowdownToDeaerator: [obj.sendBlowdownToDeaerator ?? false]
     });
 
     this.setPressureAndTemperatureValidators(form, settings);
