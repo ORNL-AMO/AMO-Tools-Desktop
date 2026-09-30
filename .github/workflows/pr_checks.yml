@@ -31,5 +31,9 @@ jobs:
           done
       - name: Run unit tests
         run: npm test -- --watch=false --no-progress
+      - name: Run compressed-air regression-test fixture privacy checks
+        run: npm run test:ca-regression-tests:fixtures
+      - name: Run complete compressed-air regression-test corpus
+        run: npm run test:ca-regression-tests:full
       - name: Run process-flow-diagram-component unit tests
         run: cd process-flow-diagram-component && npm test
