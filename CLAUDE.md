@@ -8,8 +8,7 @@ When sources conflict, apply this order (highest to lowest):
 
 1. Direct instructions from the user in the current conversation
 2. Claude's own persisted memory for this project (prior feedback and corrections)
-3. The coding style guide imported below
-4. `AGENTS.md` (imported below)
+3. `AGENTS.md` (imported below)
 
 `AGENTS.md` covers repo orientation, architecture, and workflow (what to do, where things live, how to verify changes). The style guide covers how to write the code. If the two disagree on style or pattern, the style guide wins.
 
