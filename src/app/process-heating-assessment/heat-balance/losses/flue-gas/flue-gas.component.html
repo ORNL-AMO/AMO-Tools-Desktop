@@ -1,4 +1,32 @@
+@let panelPrefix = scenario();
+
 <div class="panel-container p-3">
-  <h5>Flue Gas</h5>
-  <p class="text-muted">Fuel-fired heating system configuration only — implemented in Step 11.</p>
+  <h5 class="mb-2">Flue Gas</h5>
+
+  @if (service.isByMass()) {
+    <div class="alert alert-info">This flue gas entry is By Mass. Editing By Mass flue gas is not available yet; the saved values are unchanged.</div>
+  }
+
+  @for (form of service.formList(); track form) {
+    <app-flue-gas-volume-form [form]="form" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-volume-form>
+
+    @let result = service.result();
+    <div class="loss-results mt-3">
+      @if (availableHeatWarning(); as warning) {
+        <div class="alert alert-warning small">{{warning}}</div>
+      }
+      <div class="d-flex justify-content-between small">
+        <span class="font-weight-bold">Calculated Flue Gas O<sub>2</sub></span>
+        <span>@if (result) { {{result.calculatedFlueGasO2 | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
+      </div>
+      <div class="d-flex justify-content-between small">
+        <span class="font-weight-bold">Calculated Excess Air</span>
+        <span>@if (result) { {{result.calculatedExcessAir | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
+      </div>
+      <div class="d-flex justify-content-between small">
+        <span class="font-weight-bold">Available Heat</span>
+        <span>@if (result) { {{result.availableHeat | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
+      </div>
+    </div>
+  }
 </div>

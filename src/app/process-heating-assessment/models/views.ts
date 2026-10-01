@@ -89,6 +89,7 @@ export const BASELINE_VIEW_LINKS: ViewLink[] = [
 export const HEAT_BALANCE_VIEW_LINKS: ViewLink[] = [
   { view: LossView.OPERATIONS, label: 'Operations' },
   { view: LossView.CHARGE_MATERIAL, label: 'Charge Material' },
+  { view: LossView.FLUE_GAS, label: 'Flue Gas' },
   { view: LossView.WALL_LOSSES, label: 'Wall Losses' },
   { view: LossView.EXTENDED_SURFACE, label: 'Extended Surface' },
   { view: LossView.ATMOSPHERE, label: 'Atmosphere' },
@@ -96,7 +97,6 @@ export const HEAT_BALANCE_VIEW_LINKS: ViewLink[] = [
   { view: LossView.COOLING, label: 'Cooling' },
   { view: LossView.OPENING, label: 'Opening' },
   { view: LossView.OTHER, label: 'Other' },
-  { view: LossView.FLUE_GAS, label: 'Flue Gas' },
   { view: LossView.GAS_LEAKAGE, label: 'Gas Leakage' },
   { view: LossView.AUXILIARY_POWER, label: 'Auxiliary Power' },
   { view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas' },
@@ -116,6 +116,7 @@ export const EXPERT_VIEW_LOSS_VIEWS: ReadonlySet<ProcessHeatingView> = new Set<L
   LossView.COOLING,
   LossView.OPENING,
   LossView.OTHER,
+  LossView.FLUE_GAS,
   LossView.GAS_LEAKAGE,
 ]);
 
