@@ -39,6 +39,8 @@ import { FlueGasFormService } from '../../calculator/furnaces/flue-gas/flue-gas-
 
 export interface PhastServices {
   phastResultsService: PhastResultsService;
+  processHeatingApiService: ProcessHeatingApiService;
+  convertUnitsService: ConvertUnitsService;
 }
 
 export async function buildPhastServices(): Promise<PhastServices> {
@@ -91,5 +93,5 @@ export async function buildPhastServices(): Promise<PhastServices> {
     null as any, // FlueGasMaterialDbService — not used in getResults()
   );
 
-  return { phastResultsService };
+  return { phastResultsService, processHeatingApiService, convertUnitsService };
 }
