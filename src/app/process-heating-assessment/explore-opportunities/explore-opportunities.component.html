@@ -33,6 +33,9 @@
       <app-opening-emissivity-opportunity></app-opening-emissivity-opportunity>
       <app-opening-time-open-opportunity></app-opening-time-open-opportunity>
     }
+    @if (hasLeakageLosses()) {
+      <app-gas-leakage-opportunity></app-gas-leakage-opportunity>
+    }
   } @else {
     <div class="no-data text-center">
       <h2 class="h6">Explore energy efficiency opportunities to increase the efficiency and effectiveness of your system.</h2>

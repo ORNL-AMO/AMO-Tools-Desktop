@@ -1,0 +1,62 @@
+<form [formGroup]="form()">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds().draftPressure}}">Furnace Draft Pressure</label>
+      <div class="input-group" [class.invalid]="form().controls.draftPressure.invalid">
+        <input type="number" step="any" class="form-control"
+          id="{{controlIds().draftPressure}}" formControlName="draftPressure" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="in. H<sub>2</sub>O" metricUnit="Pa"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.draftPressure" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().openingArea}}">Opening Area</label>
+      <div class="input-group" [class.invalid]="form().controls.openingArea.invalid">
+        <input type="number" step="any" min="0" class="form-control"
+          id="{{controlIds().openingArea}}" formControlName="openingArea" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="ft<sup>2</sup>" metricUnit="m<sup>2</sup>"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.openingArea" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().leakageGasTemperature}}">Temperature of Leaking Gases</label>
+      <div class="input-group" [class.invalid]="form().controls.leakageGasTemperature.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds().leakageGasTemperature}}" formControlName="leakageGasTemperature" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.leakageGasTemperature" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().specificGravity}}">Specific Gravity of Flue Gas</label>
+      <input type="number" step="any" min="0" class="form-control"
+        id="{{controlIds().specificGravity}}" formControlName="specificGravity" onfocus="this.select();"
+        [class.invalid]="form().controls.specificGravity.invalid">
+      <app-form-control-errors [control]="form().controls.specificGravity" [settings]="settings()">
+      </app-form-control-errors>
+      @if (warnings()?.specificGravityWarning; as warning) {
+        <span class="alert-warning pull-right small">{{warning}}</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().ambientTemperature}}">Ambient Temperature</label>
+      <div class="input-group" [class.invalid]="form().controls.ambientTemperature.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds().ambientTemperature}}" formControlName="ambientTemperature" onfocus="this.select();">
+        <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+      </div>
+      <app-form-control-errors [control]="form().controls.ambientTemperature" [settings]="settings()">
+      </app-form-control-errors>
+      @if (warnings()?.temperatureWarning; as warning) {
+        <span class="alert-warning pull-right small">{{warning}}</span>
+      }
+    </div>
+  </div>
+</form>

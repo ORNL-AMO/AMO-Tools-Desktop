@@ -192,6 +192,14 @@ describe('ensureLossIdsForPhast', () => {
     expect(migrated.losses.coolingLosses[0].id).toBeTruthy();
   });
 
+  it('backfills a missing id on a baseline leakage loss', () => {
+    const phast: PHAST = { losses: { leakageLosses: [{ draftPressure: 0.1 }] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.leakageLosses[0].id).toBeTruthy();
+  });
+
   it('assigns distinct ids to multiple id-less wall losses instead of leaving them all undefined', () => {
     const phast: PHAST = {
       losses: { wallLosses: [{ surfaceArea: 100 } as never, { surfaceArea: 200 } as never] },

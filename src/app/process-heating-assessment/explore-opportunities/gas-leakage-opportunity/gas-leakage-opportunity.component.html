@@ -1,0 +1,126 @@
+@let imperial = settings().unitsOfMeasure === 'Imperial';
+
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowLeakage">
+    <input
+      type="checkbox"
+      id="exploreOppsShowLeakage"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    Control and Optimize Furnace Pressure
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  @for (comparison of comparisons(); track comparison.id) {
+    <ul>
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifyGasLeakageDraftPressure_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifyGasLeakageDraftPressure_' + comparison.id }}"
+              [checked]="isExpanded('draftPressure', comparison.id)"
+              (change)="toggleSection('draftPressure', comparison.id, $any($event.target).checked)"
+            />
+            Modify Furnace Draft Pressure
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded('draftPressure', comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Furnace Draft Pressure</label>
+              <div class="text-muted text-center baseline-value-input">
+                {{ comparison.baseline.draftPressure }}
+                @if (imperial) { <span>in. H<sub>2</sub>O</span> } @else { <span>Pa</span> }
+              </div>
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationGasLeakageDraftPressure_' + comparison.id }}" class="mod-value-label">Furnace Draft Pressure</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="{{ 'modificationGasLeakageDraftPressure_' + comparison.id }}"
+                  [value]="comparison.modification.draftPressure"
+                  (change)="setModificationValue(comparison.id, 'draftPressure', $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit [settings]="settings()" imperialUnit="in. H<sub>2</sub>O" metricUnit="Pa"></app-input-unit>
+              </div>
+            </div>
+          </form>
+        </li>
+      }
+
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifyGasLeakageOpeningArea_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifyGasLeakageOpeningArea_' + comparison.id }}"
+              [checked]="isExpanded('openingArea', comparison.id)"
+              (change)="toggleSection('openingArea', comparison.id, $any($event.target).checked)"
+            />
+            Modify Opening Area
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded('openingArea', comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Opening Area</label>
+              <div class="text-muted text-center baseline-value-input">
+                {{ comparison.baseline.openingArea }}
+                @if (imperial) { <span>ft<sup>2</sup></span> } @else { <span>m<sup>2</sup></span> }
+              </div>
+              @if (comparison.baselineWarnings.openingAreaWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.openingAreaWarning }}</span>
+              }
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationGasLeakageOpeningArea_' + comparison.id }}" class="mod-value-label">Opening Area</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  min="0"
+                  class="form-control"
+                  id="{{ 'modificationGasLeakageOpeningArea_' + comparison.id }}"
+                  [value]="comparison.modification.openingArea"
+                  (change)="setModificationValue(comparison.id, 'openingArea', $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit [settings]="settings()" imperialUnit="ft<sup>2</sup>" metricUnit="m<sup>2</sup>"></app-input-unit>
+              </div>
+              @if (comparison.modificationWarnings.openingAreaWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.openingAreaWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+      }
+    </ul>
+  }
+}

@@ -27,6 +27,7 @@ export class ExploreOpportunitiesComponent {
   readonly hasFixtureLosses = computed(() => this.hasBaselineLosses('fixtureLosses'));
   readonly hasCoolingLosses = computed(() => this.hasBaselineLosses('coolingLosses'));
   readonly hasOpeningLosses = computed(() => this.hasBaselineLosses('openingLosses'));
+  readonly hasLeakageLosses = computed(() => this.hasBaselineLosses('leakageLosses'));
 
   private hasBaselineLosses(lossKey: keyof Losses): boolean {
     return (this.assessmentService.lossSignal('baseline', lossKey)?.length ?? 0) > 0;

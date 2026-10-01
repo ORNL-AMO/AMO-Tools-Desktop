@@ -33,6 +33,7 @@ import { WallLossCalculationService } from '../heat-balance/losses/wall-losses/w
 import { AtmosphereCalculationService } from '../heat-balance/losses/atmosphere/atmosphere-calculation.service';
 import { FixtureCalculationService } from '../heat-balance/losses/fixture/fixture-calculation.service';
 import { CoolingCalculationService } from '../heat-balance/losses/cooling/cooling-calculation.service';
+import { GasLeakageCalculationService } from '../heat-balance/losses/gas-leakage/gas-leakage-calculation.service';
 import { buildPhastServices, PhastServices } from './snapshot.helper';
 import { FIXTURES } from './snapshot-fixtures';
 
@@ -58,6 +59,7 @@ describe('New calculation services vs. legacy snapshot totals', () => {
   let atmosphere: AtmosphereCalculationService;
   let fixture: FixtureCalculationService;
   let cooling: CoolingCalculationService;
+  let gasLeakage: GasLeakageCalculationService;
 
   beforeAll(async () => {
     services = await buildPhastServices();
@@ -70,6 +72,7 @@ describe('New calculation services vs. legacy snapshot totals', () => {
         { provide: AtmosphereCalculationService, useClass: AtmosphereCalculationService, deps: [] },
         { provide: FixtureCalculationService, useClass: FixtureCalculationService, deps: [] },
         { provide: CoolingCalculationService, useClass: CoolingCalculationService, deps: [] },
+        { provide: GasLeakageCalculationService, useClass: GasLeakageCalculationService, deps: [] },
       ],
     });
     opening = injector.get(OpeningCalculationService);
@@ -77,6 +80,7 @@ describe('New calculation services vs. legacy snapshot totals', () => {
     atmosphere = injector.get(AtmosphereCalculationService);
     fixture = injector.get(FixtureCalculationService);
     cooling = injector.get(CoolingCalculationService);
+    gasLeakage = injector.get(GasLeakageCalculationService);
   });
 
   function totalsFor(phast: PHAST, settings: Settings): Record<string, number> {
@@ -102,6 +106,7 @@ describe('New calculation services vs. legacy snapshot totals', () => {
         }
         return loss.coolingLossType === 'Liquid' ? cooling.calculateLiquid(loss.liquidCoolingLoss, settings) : 0;
       }),
+      totalLeakageLoss: sum(losses.leakageLosses, loss => gasLeakage.calculate(loss, settings)),
       totalOtherLoss: sum(losses.otherLosses, loss => loss.heatLoss),
     };
   }

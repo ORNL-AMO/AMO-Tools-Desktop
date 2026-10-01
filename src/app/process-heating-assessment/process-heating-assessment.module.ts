@@ -82,6 +82,8 @@ import { OtherComponent } from './heat-balance/losses/other/other.component';
 import { OtherFormComponent } from './heat-balance/losses/other/other-form.component';
 import { FlueGasComponent } from './heat-balance/losses/flue-gas/flue-gas.component';
 import { GasLeakageComponent } from './heat-balance/losses/gas-leakage/gas-leakage.component';
+import { GasLeakageFormComponent } from './heat-balance/losses/gas-leakage/gas-leakage-form.component';
+import { GasLeakageOpportunityComponent } from './explore-opportunities/gas-leakage-opportunity/gas-leakage-opportunity.component';
 import { AuxiliaryPowerComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power.component';
 import { EnergyInputExhaustGasComponent } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas.component';
 import { EnergyInputComponent } from './heat-balance/losses/energy-input/energy-input.component';
@@ -282,6 +284,7 @@ export const ROUTES: Route[] = [
     OpeningSizeOpportunityComponent,
     OpeningEmissivityOpportunityComponent,
     OpeningTimeOpenOpportunityComponent,
+    GasLeakageOpportunityComponent,
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
@@ -319,6 +322,7 @@ export const ROUTES: Route[] = [
     OtherFormComponent,
     FlueGasComponent,
     GasLeakageComponent,
+    GasLeakageFormComponent,
     AuxiliaryPowerComponent,
     EnergyInputExhaustGasComponent,
     EnergyInputComponent,

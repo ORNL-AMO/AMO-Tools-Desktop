@@ -1,4 +1,5 @@
 export interface LeakageLoss {
+    id?: string;
     draftPressure?: number;
     openingArea?: number;
     leakageGasTemperature?: number;
