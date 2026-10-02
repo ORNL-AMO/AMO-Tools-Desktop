@@ -34,6 +34,24 @@ export class AssessmentDbService {
     this.dbAssessments.next(this.allAssessments);
   }
 
+  /**
+   * Replaces one assessment in the cache with a copy of the saved object, without re-reading the whole store.
+   * Copied so cache consumers never share an object with the assessment a component is editing.
+   */
+  upsertInCache(assessment: Assessment) {
+    const cachedAssessment: Assessment = _.cloneDeep(assessment);
+    const assessments: Assessment[] = this.allAssessments ?? [];
+    const cachedIndex: number = assessments.findIndex((cached: Assessment) => cached.id === assessment.id);
+    const updatedAssessments: Assessment[] = [...assessments];
+    if (cachedIndex === -1) {
+      updatedAssessments.push(cachedAssessment);
+    } else {
+      updatedAssessments[cachedIndex] = cachedAssessment;
+    }
+    this.allAssessments = updatedAssessments;
+    this.dbAssessments.next(this.allAssessments);
+  }
+
   getAllAssessments(): Observable<Assessment[]> {
     return this.dbService.getAll(this.storeName).pipe(
       mergeMap(async (assessments: Array<Assessment>) => {

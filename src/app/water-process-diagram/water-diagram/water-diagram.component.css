@@ -1,0 +1,141 @@
+:host {
+    display: block;
+    height: 100%;
+}
+
+.diagram-host {
+    position: relative;
+    height: 100%;
+}
+
+/* * Mirrors the React layout: full-width canvas with a left menu drawer (open by default, SharedDrawer drawerWidthPx)
+   and a closed right drawer rail. Keep these sizes in step with SharedDrawer.tsx and the node styles in App.css. */
+.diagram-skeleton {
+    --drawer-open-width: 525px;
+    --drawer-rail-width: 65px;
+    --drawer-header-height: 64px;
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    overflow: hidden;
+    background: #fff;
+}
+
+.skeleton-block {
+    background: linear-gradient(90deg, #e3e6ea 25%, #eef0f3 50%, #e3e6ea 75%);
+    background-size: 200% 100%;
+    border-radius: 5px;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+/* * The canvas area between the two drawers. The padding is the matting around the placeholder panel. */
+.skeleton-canvas {
+    position: absolute;
+    inset: 0 var(--drawer-rail-width) 0 var(--drawer-open-width);
+    padding: 24px;
+    background: #f1f3f5;
+}
+
+.skeleton-panel {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.skeleton-drawer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: #fff;
+    box-shadow: 0 0 5px 0 rgba(136, 136, 136, .6);
+    overflow: hidden;
+}
+
+.skeleton-drawer-left {
+    left: 0;
+    width: min(var(--drawer-open-width), 100%);
+    padding: 0 1rem;
+}
+
+.skeleton-drawer-right {
+    right: 0;
+    width: var(--drawer-rail-width);
+}
+
+.skeleton-drawer-header {
+    height: var(--drawer-header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+}
+
+.skeleton-drawer-left .skeleton-drawer-header {
+    justify-content: flex-end;
+}
+
+.skeleton-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.skeleton-tabs {
+    display: flex;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e3e6ea;
+}
+
+.skeleton-tab {
+    flex: 1;
+    height: 32px;
+}
+
+.skeleton-drawer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 1rem .5rem;
+}
+
+.skeleton-bar {
+    height: 28px;
+}
+
+.skeleton-bar.short {
+    width: 60%;
+}
+
+.skeleton-leave {
+    animation: skeleton-fade-out 150ms ease-out forwards;
+}
+
+@keyframes skeleton-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+}
+
+@keyframes skeleton-fade-out {
+    to { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-block {
+        animation: none;
+    }
+
+    .skeleton-leave {
+        animation: none;
+    }
+}
+
+/* * narrower than the open drawer plus rail, the drawer covers the canvas, so show only the drawer */
+@media (max-width: 767px) {
+    .skeleton-canvas {
+        display: none;
+    }
+
+    .diagram-skeleton {
+        --drawer-rail-width: 57px;
+    }
+}

@@ -1,5 +1,44 @@
-<app-process-flow-diagram-wrapper
-    *ngIf="processFlowParentState"
-    [processFlowParentState]="processFlowParentState"
-    [convertValueFn]="convertValueFn"
-    ></app-process-flow-diagram-wrapper>
+<div class="diagram-host">
+    @for (mount of [remountCount()]; track mount) {
+        @if (processFlowParentState(); as parentState) {
+            <app-process-flow-diagram-wrapper
+                [processFlowParentState]="parentState"
+                [convertValueFn]="convertValueFn"
+                (diagramReady)="onDiagramReady()"
+                ></app-process-flow-diagram-wrapper>
+        }
+    }
+    @if (isSkeletonVisible()) {
+        <div class="diagram-skeleton" role="status" aria-busy="true" animate.leave="skeleton-leave">
+            <span class="sr-only">Loading diagram</span>
+            <div class="skeleton-canvas">
+                <div class="skeleton-block skeleton-panel"></div>
+            </div>
+
+            <div class="skeleton-drawer skeleton-drawer-left">
+                <div class="skeleton-drawer-header">
+                    <div class="skeleton-block skeleton-icon"></div>
+                </div>
+                <div class="skeleton-tabs">
+                    <div class="skeleton-block skeleton-tab"></div>
+                    <div class="skeleton-block skeleton-tab"></div>
+                    <div class="skeleton-block skeleton-tab"></div>
+                    <div class="skeleton-block skeleton-tab"></div>
+                    <div class="skeleton-block skeleton-tab"></div>
+                </div>
+                <div class="skeleton-drawer-content">
+                    <div class="skeleton-block skeleton-bar"></div>
+                    <div class="skeleton-block skeleton-bar"></div>
+                    <div class="skeleton-block skeleton-bar"></div>
+                    <div class="skeleton-block skeleton-bar short"></div>
+                </div>
+            </div>
+
+            <div class="skeleton-drawer skeleton-drawer-right">
+                <div class="skeleton-drawer-header">
+                    <div class="skeleton-block skeleton-icon"></div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
