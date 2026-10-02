@@ -1,4 +1,5 @@
 export interface FlueGas {
+    id?: string;
     flueGasType?: string;
     flueGasByVolume?: FlueGasByVolume;
     flueGasByMass?: FlueGasByMass;

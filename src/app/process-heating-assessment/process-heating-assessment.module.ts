@@ -81,7 +81,16 @@ import { OpeningFormComponent } from './heat-balance/losses/opening/opening-form
 import { OtherComponent } from './heat-balance/losses/other/other.component';
 import { OtherFormComponent } from './heat-balance/losses/other/other-form.component';
 import { FlueGasComponent } from './heat-balance/losses/flue-gas/flue-gas.component';
+import { FlueGasVolumeFormComponent } from './heat-balance/losses/flue-gas/flue-gas-volume-form.component';
+import { AddFlueGasMaterialModalComponent } from './heat-balance/losses/flue-gas/add-flue-gas-material-modal.component';
+import { FlueGasMassFormComponent } from './heat-balance/losses/flue-gas/flue-gas-mass-form.component';
+import { FlueGasConditionsFieldsComponent } from './heat-balance/losses/flue-gas/flue-gas-conditions-fields.component';
+import { AddSolidLiquidFlueGasMaterialModalComponent } from './heat-balance/losses/flue-gas/add-solid-liquid-flue-gas-material-modal.component';
 import { GasLeakageComponent } from './heat-balance/losses/gas-leakage/gas-leakage.component';
+import { GasLeakageFormComponent } from './heat-balance/losses/gas-leakage/gas-leakage-form.component';
+import { AirFuelRatioOpportunityComponent } from './explore-opportunities/air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
+import { PreheatCombustionAirOpportunityComponent } from './explore-opportunities/preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
+import { GasLeakageOpportunityComponent } from './explore-opportunities/gas-leakage-opportunity/gas-leakage-opportunity.component';
 import { AuxiliaryPowerComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power.component';
 import { EnergyInputExhaustGasComponent } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas.component';
 import { EnergyInputComponent } from './heat-balance/losses/energy-input/energy-input.component';
@@ -124,44 +133,44 @@ export const ROUTES: Route[] = [
                 data: { lossSubView: ROUTE_TOKENS.chargeMaterial, stepIndex: 2 },
               },
               {
+                path: ROUTE_TOKENS.flueGas,
+                component: FlueGasComponent,
+                data: { lossSubView: ROUTE_TOKENS.flueGas, stepIndex: 3 },
+              },
+              {
                 path: ROUTE_TOKENS.wallLosses,
                 component: WallLossesComponent,
-                data: { lossSubView: ROUTE_TOKENS.wallLosses, stepIndex: 3 },
+                data: { lossSubView: ROUTE_TOKENS.wallLosses, stepIndex: 4 },
               },
               {
                 path: ROUTE_TOKENS.extendedSurface,
                 component: ExtendedSurfaceComponent,
-                data: { lossSubView: ROUTE_TOKENS.extendedSurface, stepIndex: 4 },
+                data: { lossSubView: ROUTE_TOKENS.extendedSurface, stepIndex: 5 },
               },
               {
                 path: ROUTE_TOKENS.atmosphere,
                 component: AtmosphereComponent,
-                data: { lossSubView: ROUTE_TOKENS.atmosphere, stepIndex: 5 },
+                data: { lossSubView: ROUTE_TOKENS.atmosphere, stepIndex: 6 },
               },
               {
                 path: ROUTE_TOKENS.fixture,
                 component: FixtureComponent,
-                data: { lossSubView: ROUTE_TOKENS.fixture, stepIndex: 6 },
+                data: { lossSubView: ROUTE_TOKENS.fixture, stepIndex: 7 },
               },
               {
                 path: ROUTE_TOKENS.cooling,
                 component: CoolingComponent,
-                data: { lossSubView: ROUTE_TOKENS.cooling, stepIndex: 7 },
+                data: { lossSubView: ROUTE_TOKENS.cooling, stepIndex: 8 },
               },
               {
                 path: ROUTE_TOKENS.opening,
                 component: OpeningComponent,
-                data: { lossSubView: ROUTE_TOKENS.opening, stepIndex: 8 },
+                data: { lossSubView: ROUTE_TOKENS.opening, stepIndex: 9 },
               },
               {
                 path: ROUTE_TOKENS.other,
                 component: OtherComponent,
-                data: { lossSubView: ROUTE_TOKENS.other, stepIndex: 9 },
-              },
-              {
-                path: ROUTE_TOKENS.flueGas,
-                component: FlueGasComponent,
-                data: { lossSubView: ROUTE_TOKENS.flueGas, stepIndex: 10 },
+                data: { lossSubView: ROUTE_TOKENS.other, stepIndex: 10 },
               },
               {
                 path: ROUTE_TOKENS.gasLeakage,
@@ -282,6 +291,9 @@ export const ROUTES: Route[] = [
     OpeningSizeOpportunityComponent,
     OpeningEmissivityOpportunityComponent,
     OpeningTimeOpenOpportunityComponent,
+    GasLeakageOpportunityComponent,
+    AirFuelRatioOpportunityComponent,
+    PreheatCombustionAirOpportunityComponent,
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
@@ -318,7 +330,13 @@ export const ROUTES: Route[] = [
     OtherComponent,
     OtherFormComponent,
     FlueGasComponent,
+    FlueGasVolumeFormComponent,
+    AddFlueGasMaterialModalComponent,
+    FlueGasMassFormComponent,
+    FlueGasConditionsFieldsComponent,
+    AddSolidLiquidFlueGasMaterialModalComponent,
     GasLeakageComponent,
+    GasLeakageFormComponent,
     AuxiliaryPowerComponent,
     EnergyInputExhaustGasComponent,
     EnergyInputComponent,

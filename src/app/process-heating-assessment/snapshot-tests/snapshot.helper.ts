@@ -36,6 +36,9 @@ import { SolidMaterialFormService } from '../../calculator/furnaces/charge-mater
 import { SlagService } from '../../phast/losses/slag/slag.service';
 import { ExhaustGasService } from '../../phast/losses/exhaust-gas/exhaust-gas.service';
 import { FlueGasFormService } from '../../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
+import { SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
+import { FIXTURES } from './snapshot-fixtures';
 
 export interface PhastServices {
   phastResultsService: PhastResultsService;
@@ -43,7 +46,41 @@ export interface PhastServices {
   convertUnitsService: ConvertUnitsService;
 }
 
-export async function buildPhastServices(): Promise<PhastServices> {
+const FUEL_ANALYSIS_KEYS = ['carbon', 'hydrogen', 'sulphur', 'inertAsh', 'o2', 'moisture', 'nitrogen'] as const;
+
+/**
+ * Stands in for the fuel database using the By Mass flue gas entries already in FIXTURES, keyed by
+ * `gasTypeId`. Throws if two entries share an id but not an analysis, since one id cannot serve both:
+ * give the new fixture's fuel a distinct `gasTypeId` or pass `solidLiquidMaterialDbService` explicitly.
+ */
+export function createFixtureFuelDb(): Pick<SolidLiquidMaterialDbService, 'getById'> {
+  const fuels = new Map<number, SolidLiquidFlueGasMaterial>();
+  for (const { name, fixture } of FIXTURES) {
+    const phast = fixture.assessments[0].assessment.phast;
+    const losses = [phast.losses, ...(phast.modifications ?? []).map((modification: any) => modification.phast?.losses)];
+    for (const flueGas of losses.flatMap(loss => loss?.flueGasLosses ?? [])) {
+      const mass = flueGas.flueGasByMass;
+      if (flueGas.flueGasType !== 'By Mass' || !mass) continue;
+      const fuel: SolidLiquidFlueGasMaterial = {
+        id: mass.gasTypeId, substance: `${name} fuel`, isDefault: false, heatingValue: 0,
+        ...Object.fromEntries(FUEL_ANALYSIS_KEYS.map(key => [key, mass[key]])),
+      } as SolidLiquidFlueGasMaterial;
+      const existing = fuels.get(fuel.id);
+      if (existing && FUEL_ANALYSIS_KEYS.some(key => existing[key] !== fuel[key])) {
+        throw new Error(`Fixtures give fuel id ${fuel.id} different analyses (see ${name}); use a distinct gasTypeId.`);
+      }
+      fuels.set(fuel.id, fuel);
+    }
+  }
+  return { getById: (id: number) => fuels.get(id) };
+}
+
+export interface PhastServiceOptions {
+  /** Defaults to {@link createFixtureFuelDb}. Legacy looks the fuel up by id to derive O2 / excess air for By Mass flue gas. */
+  solidLiquidMaterialDbService?: Pick<SolidLiquidMaterialDbService, 'getById'>;
+}
+
+export async function buildPhastServices(options: PhastServiceOptions = {}): Promise<PhastServices> {
   const fb = new UntypedFormBuilder();
   const convertUnitsService = new ConvertUnitsService();
 
@@ -88,7 +125,7 @@ export async function buildPhastServices(): Promise<PhastServices> {
     convertUnitsService,
     new EnergyInputExhaustGasService(fb),
     new EnergyInputService(fb, convertUnitsService),
-    null as any, // SolidLiquidMaterialDbService — not used in By Volume flue gas path
+    (options.solidLiquidMaterialDbService ?? createFixtureFuelDb()) as any, // SolidLiquidMaterialDbService — only the By Mass flue gas path uses it
     new Co2SavingsPhastService(convertUnitsService, fb),
     null as any, // FlueGasMaterialDbService — not used in getResults()
   );

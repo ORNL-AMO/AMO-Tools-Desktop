@@ -105,6 +105,10 @@ Snapshots must never be auto-updated. Regeneration requires a deliberate decisio
 3. Run `npm run test:phast-snapshot` to confirm everything is green
 4. Commit fixture, spec, and snapshot together
 
+When a fixture has a Flue Gas **By Mass** entry, the spec must pass a stand-in fuel database, otherwise capture fails with `Cannot read properties of null (reading 'getById')`: `buildPhastServices({ solidLiquidMaterialDbService: { getById: () => <the fixture's fuel analysis> } })`. See `phast-20-1367-by-mass.snapshot.spec.ts`.
+
+To also cover the fixture in the process-heating-assessment module, follow `src/app/process-heating-assessment/snapshot-tests/README.md`.
+
 When adding fixtures for electrotechnology, EAF, or steam assessments, check `snapshot.helper.ts` — those heating system configurations may require material DB services to be provided (the fuel-fired By Volume path is the only one that needs no DB mocking).
 
 > **Why the placeholder is required:** webpack resolves all `require()` calls statically at

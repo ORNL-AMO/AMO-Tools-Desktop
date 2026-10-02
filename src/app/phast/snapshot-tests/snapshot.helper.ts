@@ -32,12 +32,18 @@ import { SolidMaterialFormService } from '../../calculator/furnaces/charge-mater
 import { SlagService } from '../losses/slag/slag.service';
 import { ExhaustGasService } from '../losses/exhaust-gas/exhaust-gas.service';
 import { FlueGasFormService } from '../../calculator/furnaces/flue-gas/flue-gas-form.service';
+import { SolidLiquidMaterialDbService } from '../../indexedDb/solid-liquid-material-db.service';
 
 export interface PhastServices {
   phastResultsService: PhastResultsService;
 }
 
-export async function buildPhastServices(): Promise<PhastServices> {
+export interface PhastServiceOptions {
+  /** Needed only for By Mass flue gas, where results look the fuel up by id to derive O2 / excess air. */
+  solidLiquidMaterialDbService?: Pick<SolidLiquidMaterialDbService, 'getById'>;
+}
+
+export async function buildPhastServices(options: PhastServiceOptions = {}): Promise<PhastServices> {
   const fb = new UntypedFormBuilder();
   const convertUnitsService = new ConvertUnitsService();
 
@@ -82,7 +88,7 @@ export async function buildPhastServices(): Promise<PhastServices> {
     convertUnitsService,
     new EnergyInputExhaustGasService(fb),
     new EnergyInputService(fb, convertUnitsService),
-    null as any, // SolidLiquidMaterialDbService — not used in By Volume flue gas path
+    (options.solidLiquidMaterialDbService ?? null) as any, // SolidLiquidMaterialDbService — only the By Mass flue gas path uses it
     new Co2SavingsPhastService(convertUnitsService, fb),
     null as any, // FlueGasMaterialDbService — not used in getResults()
   );

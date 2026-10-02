@@ -1,0 +1,70 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowAirTemp">
+    <input
+      type="checkbox"
+      id="exploreOppsShowAirTemp"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    Preheat Combustion Air
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  @for (comparison of comparisons(); track comparison.id) {
+    <ul>
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifyFlueGasCombustionAirTemperature_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifyFlueGasCombustionAirTemperature_' + comparison.id }}"
+              [checked]="isExpanded('combustionAirTemperature', comparison.id)"
+              (change)="toggleSection('combustionAirTemperature', comparison.id, $any($event.target).checked)"
+            />
+            Modify Combustion Air Temperature
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded('combustionAirTemperature', comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Combustion Air Temperature</label>
+              <div class="text-muted text-center baseline-value-input">
+                {{ comparison.baseline.combustionAirTemperature }}
+                <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+              </div>
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationFlueGasCombustionAirTemperature_' + comparison.id }}" class="mod-value-label">Combustion Air Temperature</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  class="form-control"
+                  id="{{ 'modificationFlueGasCombustionAirTemperature_' + comparison.id }}"
+                  [value]="comparison.modification.combustionAirTemperature"
+                  (change)="setModificationValue(comparison.id, 'combustionAirTemperature', $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+              </div>
+              @if (comparison.modificationWarnings.combustionAirTempWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.combustionAirTempWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+      }
+    </ul>
+  }
+}

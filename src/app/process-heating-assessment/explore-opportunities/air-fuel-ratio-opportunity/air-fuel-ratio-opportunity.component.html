@@ -1,0 +1,147 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowFlueGas">
+    <input
+      type="checkbox"
+      id="exploreOppsShowFlueGas"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    Maintain Optimum Air/Fuel Ratio or Recommended O<sub>2</sub> Level in Flue Gas
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  @for (comparison of comparisons(); track comparison.id) {
+    <ul>
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifyFlueGasAirFuelRatio_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifyFlueGasAirFuelRatio_' + comparison.id }}"
+              [checked]="isExpanded('airFuelRatio', comparison.id)"
+              (change)="toggleSection('airFuelRatio', comparison.id, $any($event.target).checked)"
+            />
+            Modify Air/Fuel Ratio
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded('airFuelRatio', comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Oxygen Calculation Method</label>
+              <div class="text-muted text-center baseline-value-input">{{ comparison.baselineMethod }}</div>
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationFlueGasMethod_' + comparison.id }}" class="mod-value-label">Oxygen Calculation Method</label>
+              <select
+                class="form-control mod-max-width"
+                id="{{ 'modificationFlueGasMethod_' + comparison.id }}"
+                (change)="changeOxygenCalculationMethod(comparison.id, $any($event.target).value)"
+              >
+                @for (method of calculationMethods; track method) {
+                  <option [value]="method" [selected]="method === comparison.modificationMethod">{{ method }}</option>
+                }
+              </select>
+            </div>
+          </form>
+        </li>
+
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Oxygen in Flue Gas</label>
+              <div class="text-muted text-center baseline-value-input">
+                @if (comparison.baselineMethod === OxygenCalculationMethod.OxygenInFlueGas) {
+                  {{ comparison.baseline.o2InFlueGas }}%
+                } @else {
+                  {{ comparison.baselineDerived?.calculatedFlueGasO2 | number: '1.2-2' }}%
+                }
+              </div>
+              @if (comparison.baselineWarnings.o2Warning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.o2Warning }}</span>
+              }
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationFlueGasO2_' + comparison.id }}" class="mod-value-label">Oxygen in Flue Gas</label>
+              @if (comparison.modificationMethod === OxygenCalculationMethod.OxygenInFlueGas) {
+                <div class="input-group mod-max-width">
+                  <input
+                    type="number"
+                    step="any"
+                    min="0"
+                    class="form-control"
+                    id="{{ 'modificationFlueGasO2_' + comparison.id }}"
+                    [value]="comparison.modification.o2InFlueGas"
+                    (change)="setModificationValue(comparison.id, 'o2InFlueGas', $any($event.target).valueAsNumber)"
+                  />
+                  <span class="input-group-addon units">%</span>
+                </div>
+              } @else {
+                <div class="text-center small">{{ comparison.modificationDerived?.calculatedFlueGasO2 | number: '1.2-2' }}%</div>
+              }
+              @if (comparison.modificationWarnings.o2Warning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.o2Warning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Excess Air in Flue Gas</label>
+              <div class="text-muted text-center baseline-value-input">
+                @if (comparison.baselineMethod === OxygenCalculationMethod.ExcessAir) {
+                  {{ comparison.baseline.excessAirPercentage }}%
+                } @else {
+                  {{ comparison.baselineDerived?.calculatedExcessAir | number: '1.2-2' }}%
+                }
+              </div>
+              @if (comparison.baselineWarnings.excessAirWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.baselineWarnings.excessAirWarning }}</span>
+              }
+            </div>
+          </form>
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationFlueGasExcessAir_' + comparison.id }}" class="mod-value-label">Excess Air in Flue Gas</label>
+              @if (comparison.modificationMethod === OxygenCalculationMethod.ExcessAir) {
+                <div class="input-group mod-max-width">
+                  <input
+                    type="number"
+                    step="any"
+                    min="0"
+                    class="form-control"
+                    id="{{ 'modificationFlueGasExcessAir_' + comparison.id }}"
+                    [value]="comparison.modification.excessAirPercentage"
+                    (change)="setModificationValue(comparison.id, 'excessAirPercentage', $any($event.target).valueAsNumber)"
+                  />
+                  <span class="input-group-addon units">%</span>
+                </div>
+              } @else {
+                <div class="text-center small">{{ comparison.modificationDerived?.calculatedExcessAir | number: '1.2-2' }}%</div>
+              }
+              @if (comparison.modificationWarnings.excessAirWarning) {
+                <span class="alert-warning pull-right small">{{ comparison.modificationWarnings.excessAirWarning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+      }
+    </ul>
+  }
+}
