@@ -33,14 +33,14 @@ describe('ProcessHeatingUiService fuel-fired gating', () => {
   const otherConfigurations = Object.values(HeatingEquipmentConfiguration)
     .filter(value => value !== HeatingEquipmentConfiguration.FUEL_FIRED);
 
-  it('shows Flue Gas and Gas Leakage in heat balance, and Gas Leakage in Expert View, for fuel-fired', () => {
+  it('shows Flue Gas and Gas Leakage in heat balance and Expert View for fuel-fired', () => {
     const heatBalance = service.visibleHeatBalanceTabs().map(link => link.view);
     const expertView = service.visibleExpertViewTabs().map(link => link.view);
 
     for (const view of fuelFiredViews) {
       expect(heatBalance).toContain(view);
+      expect(expertView).toContain(view);
     }
-    expect(expertView).toContain(LossView.GAS_LEAKAGE);
   });
 
   for (const otherConfiguration of otherConfigurations) {

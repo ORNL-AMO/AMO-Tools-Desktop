@@ -6,6 +6,8 @@
  * new calculators see the same effective data the module would.
  *
  * Coverage limits:
+ * - Flue gas is compared as available heat and O2 only (the legacy totals also depend on total input).
+ *   No fixture has a By Mass entry, so that path is covered by flue-gas-by-mass.snapshot.spec.ts.
  * - Every fixture is Imperial, so Metric conversions are only covered by the calculation-service unit specs.
  * - No fixture has an 'Other Gas' / 'Other Liquid' cooling loss. The new CoolingCalculationService
  *   would include them while legacy sumCoolingLosses() adds 0 (see
@@ -34,6 +36,7 @@ import { AtmosphereCalculationService } from '../heat-balance/losses/atmosphere/
 import { FixtureCalculationService } from '../heat-balance/losses/fixture/fixture-calculation.service';
 import { CoolingCalculationService } from '../heat-balance/losses/cooling/cooling-calculation.service';
 import { GasLeakageCalculationService } from '../heat-balance/losses/gas-leakage/gas-leakage-calculation.service';
+import { FlueGasCalculationService } from '../heat-balance/losses/flue-gas/flue-gas-calculation.service';
 import { buildPhastServices, PhastServices } from './snapshot.helper';
 import { FIXTURES } from './snapshot-fixtures';
 
@@ -60,6 +63,7 @@ describe('New calculation services vs. legacy snapshot totals', () => {
   let fixture: FixtureCalculationService;
   let cooling: CoolingCalculationService;
   let gasLeakage: GasLeakageCalculationService;
+  let flueGas: FlueGasCalculationService;
 
   beforeAll(async () => {
     services = await buildPhastServices();
@@ -73,6 +77,7 @@ describe('New calculation services vs. legacy snapshot totals', () => {
         { provide: FixtureCalculationService, useClass: FixtureCalculationService, deps: [] },
         { provide: CoolingCalculationService, useClass: CoolingCalculationService, deps: [] },
         { provide: GasLeakageCalculationService, useClass: GasLeakageCalculationService, deps: [] },
+        { provide: FlueGasCalculationService, useClass: FlueGasCalculationService, deps: [] },
       ],
     });
     opening = injector.get(OpeningCalculationService);
@@ -81,6 +86,7 @@ describe('New calculation services vs. legacy snapshot totals', () => {
     fixture = injector.get(FixtureCalculationService);
     cooling = injector.get(CoolingCalculationService);
     gasLeakage = injector.get(GasLeakageCalculationService);
+    flueGas = injector.get(FlueGasCalculationService);
   });
 
   function totalsFor(phast: PHAST, settings: Settings): Record<string, number> {
@@ -136,6 +142,20 @@ describe('New calculation services vs. legacy snapshot totals', () => {
           for (const key of Object.keys(actual).filter(key => key !== 'totalExtSurfaceLoss')) {
             expect(actual[key]).withContext(key).toBeCloseTo(expected[key] ?? 0, 6);
           }
+        });
+
+        it(`${scenario.label} flue gas available heat matches snapshot`, () => {
+          const expected = snapshots[scenario.snapshotKey];
+          const entry = scenario.effective().losses.flueGasLosses?.[0];
+          if (!entry || !expected.flueGasAvailableHeat) {
+            pending('no flue gas result in this scenario');
+            return;
+          }
+          const actual = entry.flueGasType === 'By Mass'
+            ? flueGas.calculateByMass(entry.flueGasByMass, settings)
+            : flueGas.calculateByVolume(entry.flueGasByVolume, settings);
+          expect(actual.availableHeat).withContext('availableHeat').toBeCloseTo(expected.flueGasAvailableHeat, 6);
+          expect(actual.calculatedFlueGasO2).withContext('calculatedFlueGasO2').toBeCloseTo(expected.calculatedFlueGasO2, 6);
         });
       }
     });
