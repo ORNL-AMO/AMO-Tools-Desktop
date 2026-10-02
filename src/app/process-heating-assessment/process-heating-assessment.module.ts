@@ -88,6 +88,8 @@ import { FlueGasConditionsFieldsComponent } from './heat-balance/losses/flue-gas
 import { AddSolidLiquidFlueGasMaterialModalComponent } from './heat-balance/losses/flue-gas/add-solid-liquid-flue-gas-material-modal.component';
 import { GasLeakageComponent } from './heat-balance/losses/gas-leakage/gas-leakage.component';
 import { GasLeakageFormComponent } from './heat-balance/losses/gas-leakage/gas-leakage-form.component';
+import { AirFuelRatioOpportunityComponent } from './explore-opportunities/air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
+import { PreheatCombustionAirOpportunityComponent } from './explore-opportunities/preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
 import { GasLeakageOpportunityComponent } from './explore-opportunities/gas-leakage-opportunity/gas-leakage-opportunity.component';
 import { AuxiliaryPowerComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power.component';
 import { EnergyInputExhaustGasComponent } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas.component';
@@ -290,6 +292,8 @@ export const ROUTES: Route[] = [
     OpeningEmissivityOpportunityComponent,
     OpeningTimeOpenOpportunityComponent,
     GasLeakageOpportunityComponent,
+    AirFuelRatioOpportunityComponent,
+    PreheatCombustionAirOpportunityComponent,
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,

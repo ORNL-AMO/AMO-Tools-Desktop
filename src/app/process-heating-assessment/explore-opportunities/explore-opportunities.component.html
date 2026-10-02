@@ -36,6 +36,10 @@
     @if (hasLeakageLosses()) {
       <app-gas-leakage-opportunity></app-gas-leakage-opportunity>
     }
+    @if (hasFlueGasLosses()) {
+      <app-air-fuel-ratio-opportunity></app-air-fuel-ratio-opportunity>
+      <app-preheat-combustion-air-opportunity></app-preheat-combustion-air-opportunity>
+    }
   } @else {
     <div class="no-data text-center">
       <h2 class="h6">Explore energy efficiency opportunities to increase the efficiency and effectiveness of your system.</h2>

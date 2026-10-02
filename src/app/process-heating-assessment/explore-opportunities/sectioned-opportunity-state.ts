@@ -45,6 +45,8 @@ export interface SectionedOpportunityState<K extends ComparableLossKey, TField e
   toggleOpportunity(hasOpportunity: boolean): void;
   toggleSection(section: TSection, itemId: string, show: boolean): void;
   setModificationValue(itemId: string, field: TField, value: number): void;
+  /** Escape hatch for edits that span several fields or non-numeric values; `update` receives the effective item. */
+  updateModificationItem(itemId: string, update: (item: LossItem<K>) => LossItem<K>): void;
 }
 
 type ExpandedSections<TSection extends string> = Record<TSection, ReadonlySet<string>>;
@@ -189,7 +191,11 @@ export function createSectionedOpportunityState<K extends ComparableLossKey, TFi
     writeModificationItems(item => (item.id === itemId ? config.fields[field].set(item, value) : item));
   }
 
-  return { useOpportunity, comparisons, isExpanded, toggleOpportunity, toggleSection, setModificationValue };
+  function updateModificationItem(itemId: string, update: (item: Item) => Item): void {
+    writeModificationItems(item => (item.id === itemId ? update(item) : item));
+  }
+
+  return { useOpportunity, comparisons, isExpanded, toggleOpportunity, toggleSection, setModificationValue, updateModificationItem };
 }
 
 /** Accessor for a field stored directly on the loss item. */

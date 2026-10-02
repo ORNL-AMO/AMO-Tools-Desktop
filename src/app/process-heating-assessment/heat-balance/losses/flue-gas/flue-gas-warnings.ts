@@ -1,5 +1,6 @@
-import { FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
+import { FlueGasType } from './flue-gas-form.service';
 
 const CONDENSING_TEMP_IMPERIAL = 212;
 const CONDENSING_TEMP_METRIC = 100;
@@ -28,6 +29,14 @@ function getSharedWarnings(loss: FlueGasByVolume | FlueGasByMass, settings: Sett
     flueGasTemp: loss.flueGasTemperature && loss.flueGasTemperature < condensingTemp
       ? `Flue Gas Temperature less than ${condensingTemp}, gases may be condensing in the flue and calculated efficiency may not be valid.` : null,
   };
+}
+
+/** Picks the By Mass or By Volume checks from the entry's type; an entry with no inputs has no warnings. */
+export function getFlueGasWarnings(loss: FlueGas, settings: Settings): FlueGasWarnings {
+  if (loss.flueGasType === FlueGasType.ByMass) {
+    return loss.flueGasByMass ? getFlueGasByMassWarnings(loss.flueGasByMass, settings) : {};
+  }
+  return loss.flueGasByVolume ? getFlueGasByVolumeWarnings(loss.flueGasByVolume, settings) : {};
 }
 
 export function hasFlueGasWarnings(warnings: FlueGasWarnings): boolean {

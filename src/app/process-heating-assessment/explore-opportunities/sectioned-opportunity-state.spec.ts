@@ -184,6 +184,14 @@ describe('createSectionedOpportunityState', () => {
 
       expect(effectiveLoss('atm-1').flowRate).toBe(1000);
     });
+
+    it('applies a multi-field update to only the targeted loss', () => {
+      state.updateModificationItem('atm-1', item => ({ ...item, flowRate: 1, inletTemperature: 2 }));
+
+      expect(effectiveLoss('atm-1').flowRate).toBe(1);
+      expect(effectiveLoss('atm-1').inletTemperature).toBe(2);
+      expect(effectiveLoss('atm-2').flowRate).toBe(BASELINE.losses.atmosphereLosses[1].flowRate);
+    });
   });
 
   describe('section seeding', () => {

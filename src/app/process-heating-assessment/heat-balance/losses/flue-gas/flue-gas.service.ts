@@ -1,6 +1,7 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
+import { getNewIdString } from '../../../../shared/helperFunctions';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGas, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
@@ -20,6 +21,7 @@ export class FlueGasService {
   private readonly destroyRef = inject(DestroyRef);
 
   private scenario: AssessmentScenario = 'baseline';
+  private id = getNewIdString();
   private name = DEFAULT_FLUE_GAS_NAME;
 
   readonly form = signal<FlueGasForm | null>(null);
@@ -35,6 +37,7 @@ export class FlueGasService {
   initialize(scenario: AssessmentScenario = 'baseline'): void {
     this.scenario = scenario;
     const existing = this.assessmentService.lossSignal(scenario, 'flueGasLosses')?.[0];
+    this.id = existing?.id ?? getNewIdString();
     this.name = existing?.name ?? DEFAULT_FLUE_GAS_NAME;
     this.setForm(existing?.flueGasType === FlueGasType.ByMass ? FlueGasType.ByMass : FlueGasType.ByVolume, existing);
   }
@@ -65,7 +68,7 @@ export class FlueGasService {
 
   private save(form: FlueGasForm): void {
     const extraLosses = this.assessmentService.lossSignal(this.scenario, 'flueGasLosses')?.slice(1) ?? [];
-    const losses: FlueGas[] = [this.formService.buildLoss(form, this.name), ...extraLosses];
+    const losses: FlueGas[] = [{ ...this.formService.buildLoss(form, this.name), id: this.id }, ...extraLosses];
     this.assessmentService.updateLossesProperty(this.scenario, 'flueGasLosses', losses);
   }
 

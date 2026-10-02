@@ -157,6 +157,14 @@ describe('ensureLossIdsForPhast', () => {
     expect(migrated.losses.atmosphereLosses[0].id).toBeTruthy();
   });
 
+  it('backfills a missing id on a baseline flue gas entry', () => {
+    const phast: PHAST = { losses: { flueGasLosses: [{ flueGasType: 'By Volume' }] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.flueGasLosses[0].id).toBeTruthy();
+  });
+
   it('aligns a legacy modification atmosphere override to baseline ids by position', () => {
     const modification: ProcessHeatingModification = {
       id: 'mod-1',
