@@ -138,7 +138,12 @@ export class AssessmentReportsComponent implements OnInit {
     } else if (assessment.type === 'PHAST') {
       itemSegment = '/phast/';
     } else if (assessment.type === 'FSAT') {
-      itemSegment = '/fsat/';
+      let fsatTab: string = 'baseline';
+      if (assessment.fsat.setupDone && !assessment.isExample) {
+        fsatTab = 'assessment';
+      }
+      this.dashboardService.navigateWithSidebarOptions('/fsat/' + assessment.id + '/' + fsatTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type === 'SSMT') {
       itemSegment = '/ssmt/';
     } else if (assessment.type == 'TreasureHunt') {
