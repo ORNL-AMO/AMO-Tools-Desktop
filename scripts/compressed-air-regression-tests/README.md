@@ -3,10 +3,11 @@
 These tests answer one question: **did a Desktop or Suite change alter the
 results of an existing compressed-air assessment?**
 
-The permanent pre-change reference is Desktop commit `52f3b3bdb` with
-`measur-tools-suite@1.2.5`. Its accepted results are stored in the immutable
-`pre-pr409-suite-1.2.5` snapshot. Suite PR #409 and Desktop issue #8903 are
-later comparison targets; they are not prerequisites for this snapshot.
+The active accepted reference uses the compressed-air integration from Desktop
+issue #8903 with `measur-tools-suite@1.2.6-rc.2`. Its results are stored in the
+`post-pr409-issue-8903-suite-1.2.6-rc.2` snapshot. The earlier Suite 1.2.5
+snapshot was used to review this transition; it was removed after acceptance
+because Git history already preserves it.
 
 ## Terminology
 
@@ -137,7 +138,9 @@ overwrite an existing directory.
 
 Recording deliberately does **not** activate the snapshot. After review, change
 only `activeSnapshot` in `fixtures/manifest.json`, then run the commands without
-snapshot overrides. Never overwrite or remove `pre-pr409-suite-1.2.5`.
+snapshot overrides. Never overwrite a snapshot in place. A superseded snapshot
+may be removed after the replacement is accepted when Git history provides the
+required audit trail.
 
 ## Intentional calculation-change workflow
 
@@ -158,5 +161,7 @@ snapshot overrides. Never overwrite or remove `pre-pr409-suite-1.2.5`.
     and any reviewed allowance update together. Explain the observed result
     differences in the PR description.
 
-Do not modify an old snapshot to make tests pass. A post-#409/#8903 snapshot is
-a new accepted state and must coexist with the permanent pre-change snapshot.
+Do not modify an old snapshot to make tests pass. Record and review a new
+snapshot first. Once it is accepted and active, decide whether an older
+snapshot still provides enough day-to-day comparison value to justify keeping
+its duplicate result files in the current tree.
