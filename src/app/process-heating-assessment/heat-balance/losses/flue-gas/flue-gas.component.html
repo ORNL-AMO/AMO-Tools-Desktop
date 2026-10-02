@@ -3,12 +3,21 @@
 <div class="panel-container p-3">
   <h5 class="mb-2">Flue Gas</h5>
 
-  @if (service.isByMass()) {
-    <div class="alert alert-info">This flue gas entry is By Mass. Editing By Mass flue gas is not available yet; the saved values are unchanged.</div>
-  }
+  <div class="form-group">
+    <label for="flueGasType_{{ panelPrefix }}">Fuel Type</label>
+    <select class="form-control" id="flueGasType_{{ panelPrefix }}" [ngModel]="service.flueGasType()" (ngModelChange)="service.switchType($event)">
+      <option [value]="FlueGasType.ByVolume">Gas (By Volume)</option>
+      <option [value]="FlueGasType.ByMass">Solid/Liquid (By Mass)</option>
+    </select>
+    <span class="form-text small text-muted">Switching type resets the flue gas inputs.</span>
+  </div>
 
   @for (form of service.formList(); track form) {
-    <app-flue-gas-volume-form [form]="form" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-volume-form>
+    @if (service.flueGasType() === FlueGasType.ByMass) {
+      <app-flue-gas-mass-form [form]="asMassForm(form)" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-mass-form>
+    } @else {
+      <app-flue-gas-volume-form [form]="asVolumeForm(form)" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-volume-form>
+    }
 
     @let result = service.result();
     <div class="loss-results mt-3">

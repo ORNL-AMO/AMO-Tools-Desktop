@@ -3,7 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { reinitOnScenarioChange } from '../reinit-on-scenario-change';
 import { FlueGasCalculationService } from './flue-gas-calculation.service';
-import { FlueGasFormService } from './flue-gas-form.service';
+import { FlueGasForm, FlueGasFormService, FlueGasMassForm, FlueGasType, FlueGasVolumeForm } from './flue-gas-form.service';
 import { FlueGasService } from './flue-gas.service';
 import { getAvailableHeatWarning } from './flue-gas-warnings';
 
@@ -21,9 +21,19 @@ export class FlueGasComponent {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   protected readonly service = inject(FlueGasService);
 
+  readonly FlueGasType = FlueGasType;
+
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
 
   readonly availableHeatWarning = computed(() => getAvailableHeatWarning(this.service.result()?.availableHeat));
+
+  asMassForm(form: FlueGasForm): FlueGasMassForm {
+    return form as FlueGasMassForm;
+  }
+
+  asVolumeForm(form: FlueGasForm): FlueGasVolumeForm {
+    return form as FlueGasVolumeForm;
+  }
 
   constructor() {
     reinitOnScenarioChange(this.scenario, scenario => this.service.initialize(scenario));

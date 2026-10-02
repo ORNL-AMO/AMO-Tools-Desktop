@@ -1,5 +1,5 @@
 import { Settings } from '../../../../shared/models/settings';
-import { getAvailableHeatWarning, getFlueGasByVolumeWarnings, hasFlueGasWarnings } from './flue-gas-warnings';
+import { getAvailableHeatWarning, getFlueGasByMassWarnings, getFlueGasByVolumeWarnings, hasFlueGasWarnings } from './flue-gas-warnings';
 
 const IMPERIAL = { unitsOfMeasure: 'Imperial' } as Settings;
 const METRIC = { unitsOfMeasure: 'Metric' } as Settings;
@@ -46,5 +46,18 @@ describe('flue gas warnings', () => {
     expect(getAvailableHeatWarning(0)).toBeNull();
     expect(getAvailableHeatWarning(100)).toBeNull();
     expect(getAvailableHeatWarning(null)).toBeNull();
+  });
+
+  it('flags unburned carbon in ash outside 0 to 100 for By Mass only', () => {
+    expect(getFlueGasByMassWarnings({ unburnedCarbonInAsh: -1 }, IMPERIAL).unburnedCarbonInAshWarning)
+      .toBe('Unburned Carbon in Ash must be equal or greater than 0%');
+    expect(getFlueGasByMassWarnings({ unburnedCarbonInAsh: 101 }, IMPERIAL).unburnedCarbonInAshWarning)
+      .toBe('Unburned Carbon in Ash must be less than or equal to 100%');
+    expect(getFlueGasByMassWarnings({ unburnedCarbonInAsh: 5 }, IMPERIAL).unburnedCarbonInAshWarning).toBeNull();
+    expect(getFlueGasByVolumeWarnings({}, IMPERIAL).unburnedCarbonInAshWarning).toBeUndefined();
+  });
+
+  it('applies the shared checks to By Mass', () => {
+    expect(getFlueGasByMassWarnings({ flueGasTemperature: 150 }, IMPERIAL).flueGasTemp).toContain('condensing');
   });
 });

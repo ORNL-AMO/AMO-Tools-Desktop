@@ -7,7 +7,7 @@ import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { MaterialSelector } from '../charge-material/material-selector';
 import { AddFlueGasMaterialModalComponent } from './add-flue-gas-material-modal.component';
 import { adaptFlueGasMaterialDb } from './flue-gas-material-db.adapter';
-import { FLUE_GAS_COMPONENTS, FlueGasVolumeForm, OXYGEN_CALCULATION_METHODS } from './flue-gas-form.service';
+import { FLUE_GAS_COMPONENTS, FlueGasVolumeForm } from './flue-gas-form.service';
 
 @Component({
   selector: 'app-flue-gas-volume-form',
@@ -23,7 +23,6 @@ export class FlueGasVolumeFormComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly components = FLUE_GAS_COMPONENTS;
-  readonly calculationMethods = OXYGEN_CALCULATION_METHODS;
 
   readonly materialSelector = new MaterialSelector<FlueGasMaterial, FlueGasVolumeForm>({
     form: this.form,
@@ -54,10 +53,5 @@ export class FlueGasVolumeFormComponent implements OnInit {
         this.materialSelector.applyMaterial(material);
       }
     });
-  }
-
-  /** Zeroes both O2 and excess air so only the newly selected method's input is entered. */
-  changeOxygenCalculationMethod(): void {
-    this.form().patchValue({ o2InFlueGas: 0, excessAirPercentage: 0 });
   }
 }

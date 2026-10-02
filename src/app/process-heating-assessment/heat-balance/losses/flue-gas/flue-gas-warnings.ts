@@ -1,4 +1,4 @@
-import { FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 
 const CONDENSING_TEMP_IMPERIAL = 212;
@@ -6,6 +6,17 @@ const CONDENSING_TEMP_METRIC = 100;
 
 /** Advisory checks for values that bypass the form's validators (e.g. Explore Opportunities inputs). */
 export function getFlueGasByVolumeWarnings(loss: FlueGasByVolume, settings: Settings): FlueGasWarnings {
+  return getSharedWarnings(loss, settings);
+}
+
+export function getFlueGasByMassWarnings(loss: FlueGasByMass, settings: Settings): FlueGasWarnings {
+  return {
+    ...getSharedWarnings(loss, settings),
+    unburnedCarbonInAshWarning: getUnburnedCarbonWarning(loss.unburnedCarbonInAsh),
+  };
+}
+
+function getSharedWarnings(loss: FlueGasByVolume | FlueGasByMass, settings: Settings): FlueGasWarnings {
   const condensingTemp = settings?.unitsOfMeasure === 'Metric' ? CONDENSING_TEMP_METRIC : CONDENSING_TEMP_IMPERIAL;
   return {
     moistureInAirCombustionWarning: getMoistureWarning(loss.moistureInAirCombustion),
@@ -27,6 +38,12 @@ export function getAvailableHeatWarning(availableHeat: number | null | undefined
   return availableHeat != null && (availableHeat < 0 || availableHeat > 100)
     ? `Available heat is ${availableHeat.toFixed(2)}%. Check your input fields.`
     : null;
+}
+
+function getUnburnedCarbonWarning(unburnedCarbon: number): string | null {
+  if (unburnedCarbon < 0) return 'Unburned Carbon in Ash must be equal or greater than 0%';
+  if (unburnedCarbon > 100) return 'Unburned Carbon in Ash must be less than or equal to 100%';
+  return null;
 }
 
 function getMoistureWarning(moisture: number): string | null {

@@ -6,17 +6,17 @@ import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { FlueGasCalculationService } from './flue-gas-calculation.service';
-import { FlueGasFormService } from './flue-gas-form.service';
+import { FlueGasFormService, FlueGasType, OxygenCalculationMethod } from './flue-gas-form.service';
 import { FlueGasService } from './flue-gas.service';
 
 const BY_VOLUME: FlueGas = {
   name: 'Primary',
-  flueGasType: 'By Volume',
-  flueGasByVolume: { gasTypeId: 1, flueGasTemperature: 400, oxygenCalculationMethod: 'Excess Air', excessAirPercentage: 10, o2InFlueGas: 0,
+  flueGasType: FlueGasType.ByVolume,
+  flueGasByVolume: { gasTypeId: 1, flueGasTemperature: 400, oxygenCalculationMethod: OxygenCalculationMethod.ExcessAir, excessAirPercentage: 10, o2InFlueGas: 0,
     combustionAirTemperature: 70, fuelTemperature: 60, ambientAirTemp: 65, moistureInAirCombustion: 1, CH4: 90, C2H6: 5, N2: 5, H2: 0, C3H8: 0,
     C4H10_CnH2n: 0, H2O: 0, CO: 0, CO2: 0, SO2: 0, O2: 0 },
 };
-const EXTRA: FlueGas = { name: 'Extra', flueGasType: 'By Volume', flueGasByVolume: { gasTypeId: 2 } };
+const EXTRA: FlueGas = { name: 'Extra', flueGasType: FlueGasType.ByVolume, flueGasByVolume: { gasTypeId: 2 } };
 
 describe('FlueGasService', () => {
   let service: FlueGasService;
@@ -25,8 +25,10 @@ describe('FlueGasService', () => {
   let savedLosses: FlueGas[];
 
   beforeEach(() => {
-    calculationSpy = jasmine.createSpyObj('FlueGasCalculationService', ['calculateByVolume']);
+    calculationSpy = jasmine.createSpyObj('FlueGasCalculationService', ['calculateByVolume', 'calculateByMass', 'deriveOxygenAndExcessAir']);
     calculationSpy.calculateByVolume.and.returnValue({ calculatedFlueGasO2: 2, calculatedExcessAir: 10, availableHeat: 75 });
+    calculationSpy.calculateByMass.and.returnValue({ calculatedFlueGasO2: 3, calculatedExcessAir: 15, availableHeat: 70 });
+    calculationSpy.deriveOxygenAndExcessAir.and.returnValue({ o2InFlueGas: 3, excessAirPercentage: 15 });
     existing = [BY_VOLUME, EXTRA];
     savedLosses = [];
 
@@ -55,7 +57,7 @@ describe('FlueGasService', () => {
 
     expect(service.form().controls.flueGasTemperature.value).toBe(400);
     expect(service.result()).toEqual({ calculatedFlueGasO2: 2, calculatedExcessAir: 10, availableHeat: 75 });
-    expect(service.isByMass()).toBeFalse();
+    expect(service.flueGasType()).toBe(FlueGasType.ByVolume);
   });
 
   it('leaves the form blank and result empty when the form is invalid', () => {
@@ -91,12 +93,47 @@ describe('FlueGasService', () => {
     expect(service.warnings().flueGasTemp).toContain('condensing');
   });
 
-  it('does not build a form or write when the saved entry is By Mass', () => {
-    existing = [{ flueGasType: 'By Mass', flueGasByMass: { gasTypeId: 1 } }];
+  it('builds a By Mass form when the saved entry is By Mass', () => {
+    existing = [{ name: 'Coal', flueGasType: FlueGasType.ByMass, flueGasByMass: { gasTypeId: 2, carbon: 70, hydrogen: 5, sulphur: 1, inertAsh: 10, o2: 8, moisture: 4, nitrogen: 2 } }];
     service.initialize('baseline');
 
-    expect(service.isByMass()).toBeTrue();
-    expect(service.form()).toBeNull();
+    expect(service.flueGasType()).toBe(FlueGasType.ByMass);
+    expect(service.form().controls['carbon'].value).toBe(70);
+    expect(calculationSpy.calculateByMass).toHaveBeenCalled();
+  });
+
+  it('writes the derived O2 / excess air from the calculation service into a By Mass form', () => {
+    existing = [{ flueGasType: FlueGasType.ByMass, flueGasByMass: { carbon: 70 } }];
+    service.initialize('baseline');
+
+    expect(service.form().controls['o2InFlueGas'].value).toBe(3);
+    expect(service.form().controls['excessAirPercentage'].value).toBe(15);
+  });
+
+  it('switches type, discarding the other type values, and saves entry 0 while preserving extras', () => {
+    service.initialize('baseline');
+    service.switchType(FlueGasType.ByMass);
+
+    expect(service.flueGasType()).toBe(FlueGasType.ByMass);
+    expect(savedLosses[0].flueGasType).toBe(FlueGasType.ByMass);
+    expect(savedLosses[0].flueGasByVolume).toBeUndefined();
+    expect(savedLosses[0].name).toBe('Primary');
+    expect(savedLosses[1]).toBe(EXTRA);
+  });
+
+  it('does nothing when switching to the current type', () => {
+    service.initialize('baseline');
+    service.switchType(FlueGasType.ByVolume);
+
     expect(savedLosses).toEqual([]);
+  });
+
+  it('saves By Mass edits to entry 0', () => {
+    existing = [{ flueGasType: FlueGasType.ByMass, flueGasByMass: { carbon: 70 } }, EXTRA];
+    service.initialize('baseline');
+    service.form().patchValue({ flueGasTemperature: 650 });
+
+    expect(savedLosses[0].flueGasByMass.flueGasTemperature).toBe(650);
+    expect(savedLosses[1]).toBe(EXTRA);
   });
 });
