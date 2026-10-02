@@ -3,6 +3,7 @@ import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { Losses } from '../models/phast';
+import { HeatingEquipmentConfiguration } from '../models/views';
 import { getModificationName, ProcessHeatingModification } from '../models/modification';
 import { AddModificationComponent, DEFAULT_DESCRIPTION } from '../../shared/add-modification/add-modification.component';
 
@@ -27,8 +28,10 @@ export class ExploreOpportunitiesComponent {
   readonly hasFixtureLosses = computed(() => this.hasBaselineLosses('fixtureLosses'));
   readonly hasCoolingLosses = computed(() => this.hasBaselineLosses('coolingLosses'));
   readonly hasOpeningLosses = computed(() => this.hasBaselineLosses('openingLosses'));
-  readonly hasLeakageLosses = computed(() => this.hasBaselineLosses('leakageLosses'));
-  readonly hasFlueGasLosses = computed(() => this.hasBaselineLosses('flueGasLosses'));
+  readonly hasLeakageLosses = computed(() => this.isFuelFired() && this.hasBaselineLosses('leakageLosses'));
+  readonly hasFlueGasLosses = computed(() => this.isFuelFired() && this.hasBaselineLosses('flueGasLosses'));
+
+  private readonly isFuelFired = computed(() => this.assessmentService.heatingEquipmentConfiguration() === HeatingEquipmentConfiguration.FUEL_FIRED);
 
   private hasBaselineLosses(lossKey: keyof Losses): boolean {
     return (this.assessmentService.lossSignal('baseline', lossKey)?.length ?? 0) > 0;

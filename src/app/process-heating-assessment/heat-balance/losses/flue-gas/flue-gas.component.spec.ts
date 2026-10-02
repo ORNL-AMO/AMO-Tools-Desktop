@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.module';
+import { FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { FlueGasAvailableHeatResult } from './flue-gas-calculation.service';
@@ -19,12 +20,14 @@ describe('FlueGasComponent', () => {
   let formList: WritableSignal<FlueGasForm[]>;
   let flueGasType: WritableSignal<FlueGasType>;
   let result: WritableSignal<FlueGasAvailableHeatResult | null>;
+  let warnings: WritableSignal<FlueGasWarnings | null>;
 
   beforeEach(async () => {
     formList = signal<FlueGasForm[]>([]);
     flueGasType = signal<FlueGasType>(FlueGasType.ByVolume);
     result = signal<FlueGasAvailableHeatResult | null>(null);
-    serviceSpy = jasmine.createSpyObj('FlueGasService', ['initialize', 'switchType'], { formList, flueGasType, result });
+    warnings = signal<FlueGasWarnings | null>(null);
+    serviceSpy = jasmine.createSpyObj('FlueGasService', ['initialize', 'switchType'], { formList, flueGasType, result, warnings });
 
     await TestBed.configureTestingModule({
       imports: [FormsModule, SharedPipesModule],
@@ -135,6 +138,22 @@ describe('FlueGasComponent', () => {
       result.set({ ...RESULT, availableHeat: 120 });
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('.alert-warning')).not.toBeNull();
+    });
+
+    it('shows the condensing flue gas advisory when the service reports it', () => {
+      formList.set([{} as FlueGasForm]);
+      warnings.set({ flueGasTemp: 'Flue Gas Temperature less than 212, gases may be condensing' });
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.alert-warning').textContent).toContain('condensing');
+    });
+
+    it('does not render warnings that a validator already guards', () => {
+      formList.set([{} as FlueGasForm]);
+      warnings.set({ excessAirWarning: 'Excess Air must be greater than 0 percent', o2Warning: 'O2 out of range' });
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.alert-warning')).toBeNull();
     });
   });
 });

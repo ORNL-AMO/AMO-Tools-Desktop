@@ -1,7 +1,8 @@
 /**
- * No fixture has a Flue Gas By Mass entry (refactor-plan/snapshot-test-coverage.md, gap 13), so this
- * swaps one into the Fuel Example baseline and checks the new FlueGasCalculationService against the
- * legacy PhastResultsService run live on the same data, with the real suite WASM.
+ * The `20-1367 By Mass` fixture covers Flue Gas By Mass with the Oxygen in Flue Gas method in
+ * Imperial units. This live comparison adds the Excess Air method and Metric units by swapping a By Mass entry into the
+ * Fuel Example baseline and checking the new FlueGasCalculationService against the legacy
+ * PhastResultsService run live on the same data, with the real suite WASM.
  *
  * Legacy looks the fuel up by id to derive O2 / excess air, so the stubbed material carries the same
  * analysis as the loss. Its suite call reads the stored `excessAirPercentage` as-is, which the legacy

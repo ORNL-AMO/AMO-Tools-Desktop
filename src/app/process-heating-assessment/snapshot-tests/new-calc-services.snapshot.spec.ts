@@ -7,7 +7,8 @@
  *
  * Coverage limits:
  * - Flue gas is compared as available heat and O2 only (the legacy totals also depend on total input).
- *   No fixture has a By Mass entry, so that path is covered by flue-gas-by-mass.snapshot.spec.ts.
+ *   The `20-1367 By Mass` fixture covers By Mass; flue-gas-by-mass.snapshot.spec.ts adds the Excess Air method
+ *   and Metric cases.
  * - Every fixture is Imperial, so Metric conversions are only covered by the calculation-service unit specs.
  * - No fixture has an 'Other Gas' / 'Other Liquid' cooling loss. The new CoolingCalculationService
  *   would include them while legacy sumCoolingLosses() adds 0 (see

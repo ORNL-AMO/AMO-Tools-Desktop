@@ -7,7 +7,7 @@ import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 import { MaterialModalData } from '../../../models/material-modal-data';
 import { adaptFlueGasMaterialDb } from './flue-gas-material-db.adapter';
-import { FLUE_GAS_COMPONENTS } from './flue-gas-form.service';
+import { FLUE_GAS_COMPONENTS, PERCENT_VALIDATORS } from './flue-gas-form.service';
 
 @Component({
   selector: 'app-add-flue-gas-material-modal',
@@ -27,17 +27,17 @@ export class AddFlueGasMaterialModalComponent {
 
   readonly form = this.formBuilder.group({
     substance: ['', Validators.required],
-    CH4: [null as number | null, Validators.required],
-    C2H6: [null as number | null, Validators.required],
-    N2: [null as number | null, Validators.required],
-    H2: [null as number | null, Validators.required],
-    C3H8: [null as number | null, Validators.required],
-    C4H10_CnH2n: [null as number | null, Validators.required],
-    H2O: [null as number | null, Validators.required],
-    CO: [null as number | null, Validators.required],
-    CO2: [null as number | null, Validators.required],
-    SO2: [null as number | null, Validators.required],
-    O2: [null as number | null, Validators.required],
+    CH4: [null as number | null, PERCENT_VALIDATORS],
+    C2H6: [null as number | null, PERCENT_VALIDATORS],
+    N2: [null as number | null, PERCENT_VALIDATORS],
+    H2: [null as number | null, PERCENT_VALIDATORS],
+    C3H8: [null as number | null, PERCENT_VALIDATORS],
+    C4H10_CnH2n: [null as number | null, PERCENT_VALIDATORS],
+    H2O: [null as number | null, PERCENT_VALIDATORS],
+    CO: [null as number | null, PERCENT_VALIDATORS],
+    CO2: [null as number | null, PERCENT_VALIDATORS],
+    SO2: [null as number | null, PERCENT_VALIDATORS],
+    O2: [null as number | null, PERCENT_VALIDATORS],
   });
 
   save(): void {

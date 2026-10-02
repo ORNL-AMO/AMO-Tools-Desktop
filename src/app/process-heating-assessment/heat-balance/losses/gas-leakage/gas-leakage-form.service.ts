@@ -18,7 +18,7 @@ export class GasLeakageFormService {
 
   getGasLeakageForm(loss: LeakageLoss = {}): GasLeakageForm {
     return this.fb.group({
-      draftPressure: [loss.draftPressure ?? null, Validators.required],
+      draftPressure: [loss.draftPressure ?? null, [Validators.required, Validators.min(0)]],
       openingArea: [loss.openingArea ?? null, [Validators.required, Validators.min(0)]],
       leakageGasTemperature: [loss.leakageGasTemperature ?? null, Validators.required],
       ambientTemperature: [loss.ambientTemperature ?? null, Validators.required],

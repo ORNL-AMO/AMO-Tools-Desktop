@@ -55,6 +55,34 @@ describe('FlueGasFormService', () => {
     FLUE_GAS_COMPONENTS.forEach(component => expect(form.controls[component].errors?.['required']).toBeTrue());
   });
 
+  it('limits every gas fraction to 0..100', () => {
+    const form = service.getFlueGasVolumeForm({}, IMPERIAL);
+
+    FLUE_GAS_COMPONENTS.forEach(component => {
+      form.controls[component].setValue(-1);
+      expect(form.controls[component].errors?.['min']).toBeDefined();
+      form.controls[component].setValue(101);
+      expect(form.controls[component].errors?.['max']).toBeDefined();
+      form.controls[component].setValue(0);
+      expect(form.controls[component].valid).toBeTrue();
+      form.controls[component].setValue(100);
+      expect(form.controls[component].valid).toBeTrue();
+    });
+  });
+
+  it('rejects negative excess air and O2 outside 0..20.5 in both forms', () => {
+    [service.getFlueGasVolumeForm({}, IMPERIAL), service.getFlueGasMassForm({}, IMPERIAL)].forEach(form => {
+      form.patchValue({ excessAirPercentage: -1 });
+      expect(form.controls.excessAirPercentage.errors?.['min']).toBeDefined();
+      form.patchValue({ excessAirPercentage: 0, o2InFlueGas: -1 });
+      expect(form.controls.o2InFlueGas.errors?.['min']).toBeDefined();
+      form.patchValue({ o2InFlueGas: 20.6 });
+      expect(form.controls.o2InFlueGas.errors?.['max']).toBeDefined();
+      form.patchValue({ o2InFlueGas: 20.5 });
+      expect(form.controls.o2InFlueGas.valid).toBeTrue();
+    });
+  });
+
   it('bounds flue gas temperature below by combustion air temperature and vice versa', () => {
     const form = service.getFlueGasVolumeForm({}, IMPERIAL);
     form.patchValue({ combustionAirTemperature: 300 });
@@ -100,6 +128,19 @@ describe('FlueGasFormService', () => {
 
       form.patchValue({ unburnedCarbonInAsh: 101 });
       expect(form.controls.unburnedCarbonInAsh.errors?.['max']).toBeDefined();
+    });
+
+    it('limits every fuel analysis field to 0..100', () => {
+      const form = service.getFlueGasMassForm({}, IMPERIAL);
+
+      FLUE_GAS_FUEL_ANALYSIS.forEach(({ key }) => {
+        form.controls[key].setValue(-1);
+        expect(form.controls[key].errors?.['min']).toBeDefined();
+        form.controls[key].setValue(101);
+        expect(form.controls[key].errors?.['max']).toBeDefined();
+        form.controls[key].setValue(100);
+        expect(form.controls[key].valid).toBeTrue();
+      });
     });
 
     it('identifies the form type and builds the matching loss', () => {

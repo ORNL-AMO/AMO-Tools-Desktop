@@ -57,6 +57,18 @@ describe('AddSolidLiquidFlueGasMaterialModalComponent', () => {
   });
 
   describe('save', () => {
+    [-1, 101].forEach(value => {
+      it(`does not save when a percentage is ${value}`, () => {
+        fillValidForm();
+        component.form.patchValue({ carbon: value });
+
+        component.save();
+
+        expect(component.form.controls.carbon.invalid).toBeTrue();
+        expect(dbServiceSpy.addMaterial).not.toHaveBeenCalled();
+      });
+    });
+
     it('does not save when the form is invalid', () => {
       component.save();
 

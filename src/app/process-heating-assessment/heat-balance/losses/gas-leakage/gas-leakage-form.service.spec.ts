@@ -26,6 +26,12 @@ describe('GasLeakageFormService', () => {
     expect(form.controls.specificGravity.errors?.['min']).toBeTruthy();
   });
 
+  it('rejects a negative furnace draft pressure', () => {
+    const form = service.getGasLeakageForm({ draftPressure: -0.1, leakageGasTemperature: 1500, ambientTemperature: 70, openingArea: 1 });
+
+    expect(form.controls.draftPressure.errors?.['min']).toBeTruthy();
+  });
+
   it('round-trips a loss through the form', () => {
     const loss = { draftPressure: 0.1, openingArea: 2, leakageGasTemperature: 1500, ambientTemperature: 70, coefficient: 0.9, specificGravity: 1.2, correctionFactor: 0.8 };
 

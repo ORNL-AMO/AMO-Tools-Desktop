@@ -25,6 +25,7 @@ export class FlueGasComponent {
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
 
+  readonly flueGasTempWarning = computed(() => this.service.warnings()?.flueGasTemp ?? null);
   readonly availableHeatWarning = computed(() => getAvailableHeatWarning(this.service.result()?.availableHeat));
 
   asMassForm(form: FlueGasForm): FlueGasMassForm {

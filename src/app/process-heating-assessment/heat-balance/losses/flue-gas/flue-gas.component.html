@@ -21,6 +21,9 @@
 
     @let result = service.result();
     <div class="loss-results mt-3">
+      @if (flueGasTempWarning(); as warning) {
+        <div class="alert alert-warning small">{{warning}}</div>
+      }
       @if (availableHeatWarning(); as warning) {
         <div class="alert alert-warning small">{{warning}}</div>
       }

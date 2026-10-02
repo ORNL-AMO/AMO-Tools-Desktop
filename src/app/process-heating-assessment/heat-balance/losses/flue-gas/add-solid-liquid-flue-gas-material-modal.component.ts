@@ -6,7 +6,7 @@ import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials'
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 import { MaterialModalData } from '../../../models/material-modal-data';
 import { adaptSolidLiquidFlueGasMaterialDb } from './flue-gas-material-db.adapter';
-import { FLUE_GAS_FUEL_ANALYSIS } from './flue-gas-form.service';
+import { FLUE_GAS_FUEL_ANALYSIS, PERCENT_VALIDATORS } from './flue-gas-form.service';
 
 @Component({
   selector: 'app-add-solid-liquid-flue-gas-material-modal',
@@ -26,13 +26,13 @@ export class AddSolidLiquidFlueGasMaterialModalComponent {
 
   readonly form = this.formBuilder.group({
     substance: ['', Validators.required],
-    carbon: this.formBuilder.control<number | null>(null, Validators.required),
-    hydrogen: this.formBuilder.control<number | null>(null, Validators.required),
-    sulphur: this.formBuilder.control<number | null>(null, Validators.required),
-    inertAsh: this.formBuilder.control<number | null>(null, Validators.required),
-    o2: this.formBuilder.control<number | null>(null, Validators.required),
-    moisture: this.formBuilder.control<number | null>(null, Validators.required),
-    nitrogen: this.formBuilder.control<number | null>(null, Validators.required),
+    carbon: this.formBuilder.control<number | null>(null, PERCENT_VALIDATORS),
+    hydrogen: this.formBuilder.control<number | null>(null, PERCENT_VALIDATORS),
+    sulphur: this.formBuilder.control<number | null>(null, PERCENT_VALIDATORS),
+    inertAsh: this.formBuilder.control<number | null>(null, PERCENT_VALIDATORS),
+    o2: this.formBuilder.control<number | null>(null, PERCENT_VALIDATORS),
+    moisture: this.formBuilder.control<number | null>(null, PERCENT_VALIDATORS),
+    nitrogen: this.formBuilder.control<number | null>(null, PERCENT_VALIDATORS),
   });
 
   save(): void {
