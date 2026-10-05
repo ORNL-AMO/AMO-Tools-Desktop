@@ -49,7 +49,7 @@ Never commit or attach the source export. Never write private source data or sou
 - Ordinary tests and reports are read-only with respect to fixtures and snapshots.
 - Recording requires `--accept` and full scope.
 - Use a new lowercase, descriptive snapshot name containing only letters, numbers, dots, and hyphens.
-- Never overwrite or remove `pre-pr409-suite-1.2.5`; it is the permanent historical reference.
+- Never overwrite a snapshot in place. Record and review a new snapshot first. A superseded snapshot may be removed after acceptance when Git history is sufficient for the audit trail.
 - Do not accept a snapshot solely to make a failing test pass. First produce and review the diagnostic report and explain every intended behavior change.
 - Recording never activates a snapshot. Change only `fixtures/manifest.json.activeSnapshot` after review.
 - A newly fixed `known-failure` is still a behavior change and requires review.

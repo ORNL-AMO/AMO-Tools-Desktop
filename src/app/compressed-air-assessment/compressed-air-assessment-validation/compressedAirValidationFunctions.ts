@@ -58,8 +58,8 @@ export function checkPowerFactorInputData(powerFactor: number, amps: number, vol
 }
 
 export function checkIsPowerFactorValid(powerFactor: number): string {
-    if (powerFactor >= 1) {
-        return `Power Factor must be less than 1`;
+    if (powerFactor > 1) {
+        return `Power Factor must be 1 or less`;
     } else if (checkIsInvalidNumber(powerFactor)) {
         return `Power Factor must be 0 or greater`;
     }
