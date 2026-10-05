@@ -208,6 +208,22 @@ describe('ensureLossIdsForPhast', () => {
     expect(migrated.losses.leakageLosses[0].id).toBeTruthy();
   });
 
+  it('backfills a missing id on a baseline auxiliary power loss', () => {
+    const phast: PHAST = { losses: { auxiliaryPowerLosses: [{ motorPhase: 3 }] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.auxiliaryPowerLosses[0].id).toBeTruthy();
+  });
+
+  it('backfills a missing id on a baseline energy input exhaust gas loss', () => {
+    const phast: PHAST = { losses: { energyInputExhaustGasLoss: [{ totalHeatInput: 2 }] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.energyInputExhaustGasLoss[0].id).toBeTruthy();
+  });
+
   it('assigns distinct ids to multiple id-less wall losses instead of leaving them all undefined', () => {
     const phast: PHAST = {
       losses: { wallLosses: [{ surfaceArea: 100 } as never, { surfaceArea: 200 } as never] },

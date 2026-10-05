@@ -1,4 +1,6 @@
 export interface AuxiliaryPowerLoss {
+    id?: string;
+    heatLoss?: number;
     motorPhase?: number;
     supplyVoltage?: number;
     avgCurrent?: number;

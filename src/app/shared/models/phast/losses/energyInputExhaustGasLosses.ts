@@ -1,4 +1,6 @@
 export interface EnergyInputExhaustGasLoss {
+    id?: string;
+    heatLoss?: number;
     excessAir?: number;
     combustionAirTemp?: number;
     exhaustGasTemp?: number;

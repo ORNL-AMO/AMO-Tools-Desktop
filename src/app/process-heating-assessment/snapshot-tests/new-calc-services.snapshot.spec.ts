@@ -9,6 +9,9 @@
  * - Flue gas is compared as available heat and O2 only (the legacy totals also depend on total input).
  *   The `20-1367 By Mass` fixture covers By Mass; flue-gas-by-mass.snapshot.spec.ts adds the Excess Air method
  *   and Metric cases.
+ * - Auxiliary Power is compared after converting the snapshot's totalAuxPower. Legacy sumAuxilaryPowerLosses()
+ *   returns the raw suite value (Btu/hr) with no unit conversion, a known legacy bug; the new calculator converts to
+ *   the energy result unit. The expected value is converted here the same way until the legacy total is fixed.
  * - Every fixture is Imperial, so Metric conversions are only covered by the calculation-service unit specs.
  * - No fixture has an 'Other Gas' / 'Other Liquid' cooling loss. The new CoolingCalculationService
  *   would include them while legacy sumCoolingLosses() adds 0 (see
@@ -37,6 +40,8 @@ import { AtmosphereCalculationService } from '../heat-balance/losses/atmosphere/
 import { FixtureCalculationService } from '../heat-balance/losses/fixture/fixture-calculation.service';
 import { CoolingCalculationService } from '../heat-balance/losses/cooling/cooling-calculation.service';
 import { GasLeakageCalculationService } from '../heat-balance/losses/gas-leakage/gas-leakage-calculation.service';
+import { EnergyInputExhaustGasCalculationService } from '../heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas-calculation.service';
+import { AuxiliaryPowerCalculationService } from '../heat-balance/losses/auxiliary-power/auxiliary-power-calculation.service';
 import { FlueGasCalculationService } from '../heat-balance/losses/flue-gas/flue-gas-calculation.service';
 import { buildPhastServices, PhastServices } from './snapshot.helper';
 import { FIXTURES } from './snapshot-fixtures';
@@ -65,6 +70,8 @@ describe('New calculation services vs. legacy snapshot totals', () => {
   let cooling: CoolingCalculationService;
   let gasLeakage: GasLeakageCalculationService;
   let flueGas: FlueGasCalculationService;
+  let auxiliaryPower: AuxiliaryPowerCalculationService;
+  let energyInputExhaustGas: EnergyInputExhaustGasCalculationService;
 
   beforeAll(async () => {
     services = await buildPhastServices();
@@ -79,6 +86,8 @@ describe('New calculation services vs. legacy snapshot totals', () => {
         { provide: CoolingCalculationService, useClass: CoolingCalculationService, deps: [] },
         { provide: GasLeakageCalculationService, useClass: GasLeakageCalculationService, deps: [] },
         { provide: FlueGasCalculationService, useClass: FlueGasCalculationService, deps: [] },
+        { provide: AuxiliaryPowerCalculationService, useClass: AuxiliaryPowerCalculationService, deps: [] },
+        { provide: EnergyInputExhaustGasCalculationService, useClass: EnergyInputExhaustGasCalculationService, deps: [] },
       ],
     });
     opening = injector.get(OpeningCalculationService);
@@ -88,7 +97,19 @@ describe('New calculation services vs. legacy snapshot totals', () => {
     cooling = injector.get(CoolingCalculationService);
     gasLeakage = injector.get(GasLeakageCalculationService);
     flueGas = injector.get(FlueGasCalculationService);
+    auxiliaryPower = injector.get(AuxiliaryPowerCalculationService);
+    energyInputExhaustGas = injector.get(EnergyInputExhaustGasCalculationService);
   });
+
+  /** Legacy totalAuxPower is the raw suite value (Btu/hr); converts it the way the new calculator reports it. */
+  function legacyAuxPowerToResultUnit(btuPerHour: number, unit: string): number {
+    if (unit === 'Btu') {
+      return btuPerHour;
+    }
+    return unit === 'kWh'
+      ? services.convertUnitsService.value(btuPerHour).from('btuhr').to('kW')
+      : services.convertUnitsService.value(btuPerHour).from('Btu').to(unit);
+  }
 
   function totalsFor(phast: PHAST, settings: Settings): Record<string, number> {
     const losses = phast.losses;
@@ -143,6 +164,29 @@ describe('New calculation services vs. legacy snapshot totals', () => {
           for (const key of Object.keys(actual).filter(key => key !== 'totalExtSurfaceLoss')) {
             expect(actual[key]).withContext(key).toBeCloseTo(expected[key] ?? 0, 6);
           }
+        });
+
+        it(`${scenario.label} auxiliary power matches snapshot after unit conversion`, () => {
+          const expected = snapshots[scenario.snapshotKey];
+          const losses = scenario.effective().losses.auxiliaryPowerLosses;
+          if (!losses?.length || expected.totalAuxPower === undefined) {
+            pending('no auxiliary power result in this scenario');
+            return;
+          }
+          const actual = sum(losses, loss => auxiliaryPower.calculate(loss, settings));
+          expect(actual).withContext('totalAuxPower').toBeCloseTo(legacyAuxPowerToResultUnit(expected.totalAuxPower, settings.energyResultUnit), 6);
+        });
+
+        it(`${scenario.label} energy input exhaust gas matches snapshot`, () => {
+          const expected = snapshots[scenario.snapshotKey];
+          const entry = scenario.effective().losses.energyInputExhaustGasLoss?.[0];
+          if (!entry || expected.totalExhaustGas === undefined) {
+            pending('no energy input exhaust gas result in this scenario');
+            return;
+          }
+          const actual = energyInputExhaustGas.calculate(entry, settings);
+          expect(actual.exhaustGasLosses).withContext('exhaustGasLosses').toBeCloseTo(expected.totalExhaustGas, 6);
+          expect(actual.fuelHeatDelivered).withContext('fuelHeatDelivered').toBeCloseTo(expected.energyInputHeatDelivered, 6);
         });
 
         it(`${scenario.label} flue gas available heat matches snapshot`, () => {
