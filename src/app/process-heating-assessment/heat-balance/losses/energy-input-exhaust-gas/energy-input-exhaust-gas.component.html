@@ -1,6 +1,7 @@
 <div class="panel-container p-3">
   <div class="d-flex align-items-center justify-content-between mb-2">
     <h5 class="mb-0">Energy Input Exhaust Gas</h5>
+    <!-- Results read only the first entry, so a second entry would show numbers nothing uses -->
     @if (service.losses().length === 0) {
       <button class="btn btn-primary btn-sm" (click)="service.add()">+ Add Loss</button>
     }

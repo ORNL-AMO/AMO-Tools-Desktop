@@ -6,7 +6,7 @@ describe('getAuxiliaryPowerWarnings', () => {
   });
 
   it('warns on a negative supply voltage', () => {
-    expect(getAuxiliaryPowerWarnings({ supplyVoltage: -1 }).voltageWarning).toBe('Supply Voltage should be greater than 0 V');
+    expect(getAuxiliaryPowerWarnings({ supplyVoltage: -1 }).voltageWarning).toBe('Supply Voltage should be 0 V or greater');
   });
 
   it('warns when supply voltage exceeds 480 V', () => {

@@ -8,6 +8,7 @@ import { EnergyExhaustGasOutput } from '../../../../tools-suite-api/process-heat
 export class EnergyInputExhaustGasCalculationService {
   private readonly convertUnitsService = inject(ConvertUnitsService);
 
+  /** Inputs and results are hourly rates; converting Btu to the result unit matches legacy `convertResult`. */
   calculate(input: EnergyInputExhaustGasLoss, settings: Settings): EnergyExhaustGasOutput {
     const heatInputUnit = settings.unitsOfMeasure === 'Metric' ? 'GJ' : 'MMBtu';
     const totalHeatInputBtu = this.convertUnitsService.value(input.totalHeatInput).from(heatInputUnit).to('Btu');
