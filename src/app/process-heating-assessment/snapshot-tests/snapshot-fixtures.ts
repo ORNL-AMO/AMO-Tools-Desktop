@@ -8,6 +8,7 @@ export const FIXTURES: { name: string; fixture: any; snapshots: any }[] = [
   { name: '48-1380', fixture: require('./fixtures/48-1380.json'), snapshots: require('./snapshots/48-1380.snap.json') },
   { name: '20-1367 By Mass', fixture: require('./fixtures/20-1367-By-Mass.json'), snapshots: require('./snapshots/20-1367-by-mass.snap.json') },
   { name: 'Induction melters', fixture: require('./fixtures/Induction melters_6-11-2026.json'), snapshots: require('./snapshots/induction-melters_6-11-2026.snap.json') },
+  { name: 'Induction melters - With Aux', fixture: require('./fixtures/Induction melters - With Aux.json'), snapshots: require('./snapshots/induction-melters---with-aux.snap.json') },
   { name: 'Fuel Example', fixture: require('./fixtures/Process Heating - Fuel Example.json'), snapshots: require('./snapshots/fuel-example.snap.json') },
   { name: 'TEST A1', fixture: require('./fixtures/TEST A1.json'), snapshots: require('./snapshots/test-a1.snap.json') },
   { name: 'TEST A2', fixture: require('./fixtures/TEST A2.json'), snapshots: require('./snapshots/test-a2.snap.json') },
