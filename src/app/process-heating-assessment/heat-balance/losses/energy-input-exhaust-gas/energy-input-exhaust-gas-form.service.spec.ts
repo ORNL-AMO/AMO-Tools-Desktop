@@ -17,8 +17,8 @@ describe('EnergyInputExhaustGasFormService', () => {
   });
 
   it('rejects available heat of 0 and above 100', () => {
-    expect(service.getEnergyInputExhaustGasForm({ availableHeat: 0 }).controls.availableHeat.valid).toBeFalse();
-    expect(service.getEnergyInputExhaustGasForm({ availableHeat: 101 }).controls.availableHeat.errors?.['max']).toBeTruthy();
+    expect(service.getEnergyInputExhaustGasForm({ totalHeatInput: 5, availableHeat: 0 }).controls.availableHeat.valid).toBeFalse();
+    expect(service.getEnergyInputExhaustGasForm({ totalHeatInput: 5, availableHeat: 101 }).controls.availableHeat.errors?.['max']).toBeTruthy();
   });
 
   it('rejects electrical heater efficiency of 0 and above 100', () => {
@@ -31,6 +31,33 @@ describe('EnergyInputExhaustGasFormService', () => {
     form.controls.totalHeatInput.setValue(null);
 
     expect(form.controls.totalHeatInput.errors?.['required']).toBeTruthy();
+  });
+
+  it('rejects negative total heat input', () => {
+    expect(service.getEnergyInputExhaustGasForm({ totalHeatInput: -1 }).controls.totalHeatInput.errors?.['min']).toBeTruthy();
+  });
+
+  it('resets an invalid available heat to 100 when heat input goes to 0', () => {
+    const form = service.getEnergyInputExhaustGasForm({ totalHeatInput: 5, availableHeat: 80 });
+    form.controls.availableHeat.setValue(0);
+    expect(form.valid).toBeFalse();
+
+    form.controls.totalHeatInput.setValue(0);
+
+    expect(form.controls.availableHeat.value).toBe(100);
+    expect(form.valid).toBeTrue();
+  });
+
+  it('keeps available heat when heat input stays above 0', () => {
+    const form = service.getEnergyInputExhaustGasForm({ totalHeatInput: 5, availableHeat: 80 });
+
+    form.controls.totalHeatInput.setValue(10);
+
+    expect(form.controls.availableHeat.value).toBe(80);
+  });
+
+  it('ignores a stored available heat when the loaded heat input is 0', () => {
+    expect(service.getEnergyInputExhaustGasForm({ totalHeatInput: 0, availableHeat: 0 }).valid).toBeTrue();
   });
 
   it('builds a loss with otherLosses fixed at 0', () => {
