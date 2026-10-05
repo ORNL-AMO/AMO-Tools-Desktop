@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Button, Divider, IconButton, InputAdornment, MenuItem, Paper, Table, TableBody, TableContainer, TableHead, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Node } from '@xyflow/react';
-import { DiagramCalculatedData, HeatEnergy, MotorEnergy, ProcessFlowPart, getDefaultHeatEnergy, getDefaultMotorEnergy, getHeatEnergyCost, getHeatEnergyKWh, getMotorEnergyCost, getMotorEnergyPower, getNodeTotalInflow } from 'process-flow-lib';
+import { DiagramCalculatedData, HeatEnergy, MotorEnergy, ProcessFlowPart, getDefaultHeatEnergy, getDefaultMotorEnergy, getMaxHeatEnergyOutgoingTemp, getHeatEnergyCost, getHeatEnergyKWh, getMotorEnergyCost, getMotorEnergyPower, getNodeTotalInflow } from 'process-flow-lib';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { nodeDataPropertyChange } from '../Diagram/diagramReducer';
 import InputField from '../StyledMUI/InputField';
@@ -13,8 +13,6 @@ import { StyledHeadTableRow, StyledTableCell, StyledTableRow } from '../StyledMU
 const toNumberOrUndefined = (value: string): number | undefined => value === '' ? undefined : Number(value);
 
 const HOURS_PER_YEAR = 8760;
-const MAX_OUTGOING_TEMP_IMPERIAL = 400;
-const MAX_OUTGOING_TEMP_METRIC = 204.44;
 const MAX_LOAD_FACTOR = 150;
 
 const getLoadFactorError = (loadFactor: number): string | undefined => {
@@ -31,7 +29,7 @@ interface HeatEnergyErrors {
 const getHeatEnergyErrors = (heatEnergy: HeatEnergy, unitsOfMeasure: string): HeatEnergyErrors => {
     const errors: HeatEnergyErrors = {};
     const isMetric = unitsOfMeasure === 'Metric';
-    const maxOutgoingTemp = isMetric ? MAX_OUTGOING_TEMP_METRIC : MAX_OUTGOING_TEMP_IMPERIAL;
+    const maxOutgoingTemp = getMaxHeatEnergyOutgoingTemp(unitsOfMeasure);
     if (heatEnergy.outgoingTemp !== undefined && heatEnergy.outgoingTemp !== null && heatEnergy.outgoingTemp > maxOutgoingTemp) {
         errors.outgoingTemp = `Value can't be greater than ${maxOutgoingTemp} ${isMetric ? '°C' : '°F'}`;
     }
@@ -106,7 +104,7 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
     const addMotorEnergy = () => {
         const newIndex = motorEnergy.length;
         setMotorEnergy([...motorEnergy, getDefaultMotorEnergy(newIndex)]);
-        setExpandedIndices((prev) => new Set(prev).add(newIndex));
+        setExpandedIndices(new Set([newIndex]));
     };
 
     const removeMotorEnergy = (index: number) => {

@@ -41,7 +41,7 @@ export class HeatEnergyComponent {
   }
 
   initForm() {
-    this.form = this.heatEnergyService.getHeatEnergyForm(this.heatEnergy);
+    this.form = this.heatEnergyService.getHeatEnergyForm(this.heatEnergy, this.settings.unitsOfMeasure);
   }
 
   save() {

@@ -42,6 +42,10 @@
             @if (form.controls.outgoingTemp.errors.required) {
             <span>Value Required</span>
             }
+            @if (form.controls.outgoingTemp.errors.max) {
+            <span>Value can't be greater than
+                {{form.controls.outgoingTemp.errors.max.max}} {{settings.unitsOfMeasure == 'Metric' ? '°C' : '°F'}}</span>
+            }
         </span>
         }
     </div>
@@ -69,13 +73,13 @@
             @if (form.controls.heaterEfficiency.errors.required) {
             <span>Value Required</span>
             }
-            @if (form.controls.heaterEfficiency.errors.min) {
-            <span>Value can't be less than
-                {{form.controls.heaterEfficiency.errors.min.min}} </span>
+            @if (form.controls.heaterEfficiency.errors.greaterThan !== undefined) {
+            <span>Value must be greater than
+                {{form.controls.heaterEfficiency.errors.greaterThan}} %</span>
             }
             @if (form.controls.heaterEfficiency.errors.max) {
             <span>Value can't be greater than
-                {{form.controls.heaterEfficiency.errors.max.max}}</span>
+                {{form.controls.heaterEfficiency.errors.max.max}} %</span>
             }
         </span>
         }

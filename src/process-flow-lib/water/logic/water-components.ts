@@ -697,6 +697,10 @@ export const getDefaultHeatEnergy = (): HeatEnergy => {
   }
 }
 
+export const getMaxHeatEnergyOutgoingTemp = (unitsOfMeasure: string): number => {
+  return unitsOfMeasure === 'Metric' ? 204.44 : 400;
+}
+
 export const getDefaultMotorEnergy = (lastIndex: number): MotorEnergy => {
   return {
     name: `Machine Energy ${lastIndex + 1}`,
