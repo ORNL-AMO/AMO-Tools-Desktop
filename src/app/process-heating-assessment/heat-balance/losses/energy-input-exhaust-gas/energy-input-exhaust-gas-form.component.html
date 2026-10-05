@@ -1,0 +1,40 @@
+<form [formGroup]="form()">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds().electricalHeaterEfficiency}}">Electrical Heater Efficiency</label>
+      <div class="input-group" [class.invalid]="form().controls.electricalHeaterEfficiency.invalid">
+        <input type="number" step="any" class="form-control"
+          id="{{controlIds().electricalHeaterEfficiency}}" formControlName="electricalHeaterEfficiency" onfocus="this.select();">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <app-form-control-errors [control]="form().controls.electricalHeaterEfficiency" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds().totalHeatInput}}">Total Additional Fuel Heat</label>
+      <div class="input-group" [class.invalid]="form().controls.totalHeatInput.invalid">
+        <input type="number" step="100" min="0" class="form-control"
+          id="{{controlIds().totalHeatInput}}" formControlName="totalHeatInput" onfocus="this.select();">
+        <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Metric' ? 'GJ/hr' : 'MMBtu/hr'}}</span>
+      </div>
+      <app-form-control-errors [control]="form().controls.totalHeatInput" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    @if (form().controls.totalHeatInput.value > 0) {
+      <div class="form-group">
+        <label class="small" for="{{controlIds().availableHeat}}">Available Heat of Fuel</label>
+        <div class="input-group" [class.invalid]="form().controls.availableHeat.invalid">
+          <input type="number" step="any" min="0" class="form-control"
+            id="{{controlIds().availableHeat}}" formControlName="availableHeat" onfocus="this.select();">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <app-form-control-errors [control]="form().controls.availableHeat" [settings]="settings()">
+        </app-form-control-errors>
+      </div>
+    }
+  </div>
+</form>

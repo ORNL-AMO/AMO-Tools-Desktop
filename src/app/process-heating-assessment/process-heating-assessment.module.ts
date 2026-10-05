@@ -94,6 +94,7 @@ import { GasLeakageOpportunityComponent } from './explore-opportunities/gas-leak
 import { AuxiliaryPowerComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power.component';
 import { AuxiliaryPowerFormComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power-form.component';
 import { EnergyInputExhaustGasComponent } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas.component';
+import { EnergyInputExhaustGasFormComponent } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas-form.component';
 import { EnergyInputComponent } from './heat-balance/losses/energy-input/energy-input.component';
 import { ExhaustGasComponent } from './heat-balance/losses/exhaust-gas/exhaust-gas.component';
 import { SlagComponent } from './heat-balance/losses/slag/slag.component';
@@ -341,6 +342,7 @@ export const ROUTES: Route[] = [
     AuxiliaryPowerComponent,
     AuxiliaryPowerFormComponent,
     EnergyInputExhaustGasComponent,
+    EnergyInputExhaustGasFormComponent,
     EnergyInputComponent,
     ExhaustGasComponent,
     SlagComponent,
