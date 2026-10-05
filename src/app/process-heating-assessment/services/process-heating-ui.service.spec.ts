@@ -62,3 +62,69 @@ describe('ProcessHeatingUiService fuel-fired gating', () => {
     expect(LossView.GAS_LEAKAGE).toBe(ROUTE_TOKENS.gasLeakage);
   });
 });
+
+describe('ProcessHeatingUiService electrotechnology-standard gating', () => {
+  let service: ProcessHeatingUiService;
+  let configuration: WritableSignal<HeatingEquipmentConfiguration>;
+
+  beforeEach(() => {
+    configuration = signal<HeatingEquipmentConfiguration>(HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_STANDARD);
+    const router = {
+      events: new Subject(),
+      routerState: { snapshot: { root: { params: {}, data: {}, firstChild: null } } },
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        ProcessHeatingUiService,
+        { provide: Router, useValue: router },
+        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration } },
+        { provide: STEPPED_ROUTES, useValue: [] },
+      ],
+    });
+    service = TestBed.inject(ProcessHeatingUiService);
+  });
+
+  const electroStandardViews = [LossView.AUXILIARY_POWER, LossView.ENERGY_INPUT_EXHAUST_GAS];
+  const hiddenConfigurations = [
+    HeatingEquipmentConfiguration.FUEL_FIRED,
+    HeatingEquipmentConfiguration.STEAM,
+    HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF,
+    HeatingEquipmentConfiguration.CUSTOM_ELECTROTECHNOLOGY,
+  ];
+
+  it('covers every configuration other than electrotechnology-standard', () => {
+    const expected = Object.values(HeatingEquipmentConfiguration)
+      .filter(value => value !== HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_STANDARD);
+
+    expect(hiddenConfigurations.slice().sort()).toEqual(expected.slice().sort());
+  });
+
+  it('shows Auxiliary Power and Energy Input Exhaust Gas in heat balance and Expert View for electrotechnology-standard', () => {
+    const heatBalance = service.visibleHeatBalanceTabs().map(link => link.view);
+    const expertView = service.visibleExpertViewTabs().map(link => link.view);
+
+    for (const view of electroStandardViews) {
+      expect(heatBalance).toContain(view);
+      expect(expertView).toContain(view);
+    }
+  });
+
+  for (const hiddenConfiguration of hiddenConfigurations) {
+    it(`hides Auxiliary Power and Energy Input Exhaust Gas for ${hiddenConfiguration}`, () => {
+      configuration.set(hiddenConfiguration);
+
+      const heatBalance = service.visibleHeatBalanceTabs().map(link => link.view);
+      const expertView = service.visibleExpertViewTabs().map(link => link.view);
+
+      for (const view of electroStandardViews) {
+        expect(heatBalance).not.toContain(view);
+        expect(expertView).not.toContain(view);
+      }
+    });
+  }
+
+  it('uses the same route tokens the gating set is keyed on', () => {
+    expect(LossView.AUXILIARY_POWER).toBe(ROUTE_TOKENS.auxiliaryPower);
+    expect(LossView.ENERGY_INPUT_EXHAUST_GAS).toBe(ROUTE_TOKENS.energyInputExhaustGas);
+  });
+});
