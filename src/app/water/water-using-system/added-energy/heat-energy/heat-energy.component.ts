@@ -75,6 +75,7 @@ export class HeatEnergyComponent {
 
   setBoilerEfficiencyAndClose(efficiency: number) {
     this.form.controls.heaterEfficiency.patchValue(efficiency);
+    this.save();
     this.closeBoilerEfficiencyModal();
   }
 

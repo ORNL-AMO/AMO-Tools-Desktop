@@ -35,7 +35,10 @@ export class AddedEnergyComponent {
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
       this.systemWaterUse = this.waterAssessment.calculatedData ? getNodeTotalInflow(this.selectedWaterUsingSystem, this.waterAssessment.calculatedData) : 0;
     });
+  }
 
+  ngOnDestroy() {
+    this.selectedComponentSub.unsubscribe();
   }
 
   /**
