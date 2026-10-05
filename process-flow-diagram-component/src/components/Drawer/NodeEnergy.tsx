@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, Divider, IconButton, InputAdornment, MenuItem, Paper, Table, TableBody, TableContainer, TableHead, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Node } from '@xyflow/react';
@@ -6,12 +6,44 @@ import { DiagramCalculatedData, HeatEnergy, MotorEnergy, ProcessFlowPart, getDef
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { nodeDataPropertyChange } from '../Diagram/diagramReducer';
 import InputField from '../StyledMUI/InputField';
+import CalculatorInputField from '../Calculators/CalculatorInputField';
 import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
 import { StyledHeadTableRow, StyledTableCell, StyledTableRow } from '../StyledMUI/ResultTables';
 
 const toNumberOrUndefined = (value: string): number | undefined => value === '' ? undefined : Number(value);
 
 const HOURS_PER_YEAR = 8760;
+const MAX_OUTGOING_TEMP_IMPERIAL = 400;
+const MAX_OUTGOING_TEMP_METRIC = 204.44;
+const MAX_LOAD_FACTOR = 150;
+
+const getLoadFactorError = (loadFactor: number): string | undefined => {
+    return loadFactor !== undefined && loadFactor !== null && loadFactor > MAX_LOAD_FACTOR
+        ? `Value can't be greater than ${MAX_LOAD_FACTOR} %`
+        : undefined;
+};
+
+interface HeatEnergyErrors {
+    outgoingTemp?: string,
+    heaterEfficiency?: string,
+}
+
+const getHeatEnergyErrors = (heatEnergy: HeatEnergy, unitsOfMeasure: string): HeatEnergyErrors => {
+    const errors: HeatEnergyErrors = {};
+    const isMetric = unitsOfMeasure === 'Metric';
+    const maxOutgoingTemp = isMetric ? MAX_OUTGOING_TEMP_METRIC : MAX_OUTGOING_TEMP_IMPERIAL;
+    if (heatEnergy.outgoingTemp !== undefined && heatEnergy.outgoingTemp !== null && heatEnergy.outgoingTemp > maxOutgoingTemp) {
+        errors.outgoingTemp = `Value can't be greater than ${maxOutgoingTemp} ${isMetric ? '°C' : '°F'}`;
+    }
+    if (heatEnergy.heaterEfficiency !== undefined && heatEnergy.heaterEfficiency !== null) {
+        if (heatEnergy.heaterEfficiency <= 0) {
+            errors.heaterEfficiency = 'Value must be greater than 0 %';
+        } else if (heatEnergy.heaterEfficiency > 100) {
+            errors.heaterEfficiency = "Value can't be greater than 100 %";
+        }
+    }
+    return errors;
+};
 
 interface EnergyResult {
     energyPerHour: number,
@@ -131,6 +163,8 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
         }), { energyPerHour: 0, annualCost: 0 }),
     });
 
+    const heatEnergyErrors: HeatEnergyErrors = getHeatEnergyErrors(heatEnergy, settings.unitsOfMeasure);
+
     const temperatureUnit = settings.unitsOfMeasure === 'Metric' ? '°C' : '°F';
     const powerUnit = settings.unitsOfMeasure === 'Imperial' ? 'hp' : 'kW';
 
@@ -178,6 +212,8 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                         fullWidth
                         margin="normal"
                         value={heatEnergy?.outgoingTemp ?? ''}
+                        error={Boolean(heatEnergyErrors.outgoingTemp)}
+                        helperText={heatEnergyErrors.outgoingTemp}
                         onChange={(e) => handleHeatEnergyChange('outgoingTemp', toNumberOrUndefined(e.target.value))}
                         slotProps={{ input: { endAdornment: <InputAdornment position="end">{temperatureUnit}</InputAdornment> } }}
                     />
@@ -202,13 +238,17 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                         <MenuItem value={0}>Electricity</MenuItem>
                         <MenuItem value={1}>Fuel</MenuItem>
                     </InputField>
-                    <InputField
+                    <CalculatorInputField
+                        calculators={['heater-efficiency']}
+                        onCalculatedValue={(value) => handleHeatEnergyChange('heaterEfficiency', value)}
                         label="Heater Efficiency"
                         type="number"
                         size="small"
                         fullWidth
                         margin="normal"
                         value={heatEnergy?.heaterEfficiency ?? ''}
+                        error={Boolean(heatEnergyErrors.heaterEfficiency)}
+                        helperText={heatEnergyErrors.heaterEfficiency}
                         onChange={(e) => handleHeatEnergyChange('heaterEfficiency', toNumberOrUndefined(e.target.value))}
                         slotProps={{ input: { endAdornment: <InputAdornment position="end">%</InputAdornment> } }}
                     />
@@ -268,7 +308,9 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                                     value={motor.numberUnits ?? ''}
                                     onChange={(e) => handleMotorEnergyChange(index, 'numberUnits', toNumberOrUndefined(e.target.value))}
                                 />
-                                <InputField
+                                <CalculatorInputField
+                                    calculators={['operating-hours']}
+                                    onCalculatedValue={(value) => handleMotorEnergyChange(index, 'hoursPerYear', value)}
                                     label="Operating Hours"
                                     type="number"
                                     size="small"
@@ -278,13 +320,17 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                                     onChange={(e) => handleMotorEnergyChange(index, 'hoursPerYear', toNumberOrUndefined(e.target.value))}
                                     slotProps={{ input: { endAdornment: <InputAdornment position="end">hrs/yr</InputAdornment> } }}
                                 />
-                                <InputField
+                                <CalculatorInputField
+                                    calculators={['load-factor']}
+                                    onCalculatedValue={(value) => handleMotorEnergyChange(index, 'loadFactor', value)}
                                     label="Load Factor"
                                     type="number"
                                     size="small"
                                     fullWidth
                                     margin="normal"
                                     value={motor.loadFactor ?? ''}
+                                    error={Boolean(getLoadFactorError(motor.loadFactor))}
+                                    helperText={getLoadFactorError(motor.loadFactor)}
                                     onChange={(e) => handleMotorEnergyChange(index, 'loadFactor', toNumberOrUndefined(e.target.value))}
                                     slotProps={{ input: { endAdornment: <InputAdornment position="end">%</InputAdornment> } }}
                                 />

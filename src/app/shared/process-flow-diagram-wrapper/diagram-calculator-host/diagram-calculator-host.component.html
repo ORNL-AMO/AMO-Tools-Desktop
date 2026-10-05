@@ -1,0 +1,20 @@
+@if (activeRequest) {
+  @switch (activeRequest.calculatorId) {
+    @case ('heater-efficiency') {
+      <app-boiler-efficiency-modal [settings]="settings" (emitClose)="close(undefined)" (emitSave)="close($event)">
+      </app-boiler-efficiency-modal>
+    }
+    @case ('load-factor') {
+      <app-load-factor-modal [settings]="settings" (emitClose)="close(undefined)" (emitSave)="close($event)">
+      </app-load-factor-modal>
+    }
+    @case ('operating-hours') {
+      <!-- * operating hours modal is a fixed card without its own backdrop or horizontal position -->
+      <div class="calculator-backdrop">
+        <app-operating-hours-modal [width]="operatingHoursModalWidth" [showMinutesSeconds]="false"
+          (emitClose)="close(undefined)" (emitSave)="close($event.hoursPerYear)">
+        </app-operating-hours-modal>
+      </div>
+    }
+  }
+}

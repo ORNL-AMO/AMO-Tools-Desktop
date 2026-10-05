@@ -1,8 +1,10 @@
 <label class="group-label pl-3">
     Heat Energy in Discharge
-    <span *ngIf="!form.valid" class="pull-right">
+    @if (!form.valid) {
+    <span class="pull-right">
         <span class="fa fa-exclamation-circle"></span>
     </span>
+    }
 </label>
 <form [formGroup]="form">
     <div class="form-group" [ngClass]="{'invalid': form.controls.incomingTemp.invalid}">
@@ -10,26 +12,38 @@
         <div class="input-group">
             <input name="incomingTemp" type="number" class="form-control" id="incomingTemp"
                 formControlName="incomingTemp" (input)="save()" (focus)="focusField('incomingTemp')">
-            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+            @if (settings.unitsOfMeasure != 'Metric') {
+            <span class="input-group-addon units">&#8457;</span>
+            } @else {
+            <span class="input-group-addon units">&#8451;</span>
+            }
         </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.incomingTemp.invalid && !form.controls.incomingTemp.pristine">
-            <span *ngIf="form.controls.incomingTemp.errors.required">Value Required</span>
+        @if (form.controls.incomingTemp.invalid && !form.controls.incomingTemp.pristine) {
+        <span class="alert-danger pull-right small">
+            @if (form.controls.incomingTemp.errors.required) {
+            <span>Value Required</span>
+            }
         </span>
+        }
     </div>
     <div class="form-group" [ngClass]="{'invalid': form.controls.outgoingTemp.invalid}">
         <label for="outgoingTemp">Outgoing Water Temperature</label>
         <div class="input-group">
             <input name="outgoingTemp" type="number" class="form-control" id="outgoingTemp"
                 formControlName="outgoingTemp" (input)="save()" (focus)="focusField('outgoingTemp')">
-            <span *ngIf="settings.unitsOfMeasure != 'Metric'" class="input-group-addon units">&#8457;</span>
-            <span *ngIf="settings.unitsOfMeasure == 'Metric'" class="input-group-addon units">&#8451;</span>
+            @if (settings.unitsOfMeasure != 'Metric') {
+            <span class="input-group-addon units">&#8457;</span>
+            } @else {
+            <span class="input-group-addon units">&#8451;</span>
+            }
         </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.outgoingTemp.invalid && !form.controls.outgoingTemp.pristine">
-            <span *ngIf="form.controls.outgoingTemp.errors.required">Value Required</span>
+        @if (form.controls.outgoingTemp.invalid && !form.controls.outgoingTemp.pristine) {
+        <span class="alert-danger pull-right small">
+            @if (form.controls.outgoingTemp.errors.required) {
+            <span>Value Required</span>
+            }
         </span>
+        }
     </div>
 
     <div class="form-group">
@@ -50,14 +64,21 @@
                 formControlName="heaterEfficiency" (input)="save()" (focus)="focusField('heaterEfficiency')">
             <span class="input-group-addon units">%</span>
         </div>
-        <span class="alert-danger pull-right small"
-            *ngIf="form.controls.heaterEfficiency.invalid && !form.controls.heaterEfficiency.pristine">
-            <span *ngIf="form.controls.heaterEfficiency.errors.required">Value Required</span>
-            <span *ngIf="form.controls.heaterEfficiency.errors.min">Value can't be less than
+        @if (form.controls.heaterEfficiency.invalid && !form.controls.heaterEfficiency.pristine) {
+        <span class="alert-danger pull-right small">
+            @if (form.controls.heaterEfficiency.errors.required) {
+            <span>Value Required</span>
+            }
+            @if (form.controls.heaterEfficiency.errors.min) {
+            <span>Value can't be less than
                 {{form.controls.heaterEfficiency.errors.min.min}} </span>
-            <span *ngIf="form.controls.heaterEfficiency.errors.max">Value can't be greater than
+            }
+            @if (form.controls.heaterEfficiency.errors.max) {
+            <span>Value can't be greater than
                 {{form.controls.heaterEfficiency.errors.max.max}}</span>
+            }
         </span>
+        }
     </div>
 
     <div class="form-group">
@@ -71,6 +92,8 @@
 </form>
 
 
-<app-boiler-efficiency-modal *ngIf="showBoilerEfficiencyModal" [settings]="settings"
+@if (showBoilerEfficiencyModal) {
+<app-boiler-efficiency-modal [settings]="settings"
   (emitClose)="closeBoilerEfficiencyModal()" (emitSave)="setBoilerEfficiencyAndClose($event)">
 </app-boiler-efficiency-modal>
+}

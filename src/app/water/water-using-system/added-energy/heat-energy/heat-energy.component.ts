@@ -20,7 +20,6 @@ export class HeatEnergyComponent {
   updateHeatEnergy: EventEmitter<HeatEnergy> = new EventEmitter<HeatEnergy>();
   settings: Settings;
   form: FormGroup;
-  isCollapsed: boolean = true;
   showBoilerEfficiencyModal: boolean = false;
   energyPerHour: number = 0;
   annualCost: number = 0;
@@ -40,8 +39,6 @@ export class HeatEnergyComponent {
       this.setEnergyResults();
     }
   }
-
-  ngOnDestroy() { }
 
   initForm() {
     this.form = this.heatEnergyService.getHeatEnergyForm(this.heatEnergy);
@@ -66,11 +63,6 @@ export class HeatEnergyComponent {
     this.waterAssessmentService.focusedField.next(str);
   }
 
-  toggleCollapse() {
-    this.isCollapsed = !this.isCollapsed;
-  }
-
-  
   openBoilerEfficiencyModal() {
     this.showBoilerEfficiencyModal = true;
     this.waterAssessmentService.modalOpen.next(this.showBoilerEfficiencyModal);
