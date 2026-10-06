@@ -10,8 +10,11 @@ The AMO-Tools-Desktop and MEASUR-Tools-Suite projects are maintained by the same
 
 ## Documentation Map
 
+Read only the documents relevant to the current task; this map is not a required-reading list.
+
 - `ARCHITECTURE.md`: stable, human-facing overview of the application structure and major runtime boundaries.
 - `docs/architecture/measur-tools-suite-integration.md`: how the WebAssembly suite is loaded and adapted.
+- `docs/development/suite-coordination.md`: task-specific workflow for coordinated Suite changes; load it through the `suite-coordination` skill when the task matches that skill.
 - `docs/architecture/data-persistence.md`: IndexedDB, default data, backups, and saved assessment data.
 - `docs/architecture/build-and-runtime.md`: Angular, Electron, process-flow component, and WASM build/runtime concerns.
 - `docs/testing/assessment-regression-tests.md`: how calculation-regression corpora work and how to extend the pattern to another assessment.
@@ -29,6 +32,10 @@ The AMO-Tools-Desktop and MEASUR-Tools-Suite projects are maintained by the same
 - Preserve existing units, percentage conventions, and saved data shapes unless the requested change intentionally updates them.
 - Treat default database data carefully. Reseeding or changing default records can affect existing IndexedDB state and user-defined materials.
 - Keep changes scoped to the affected feature, adapter, or package. If a suite change alters calculation meaning, trace it from input form to wrapper, result display, reports/exports, and saved assessment data.
+
+## Task-Specific Workflows
+
+Suite coordination guidance is task-specific. Use the `suite-coordination` skill when a task changes a Suite API, calculation behavior, Suite-backed default data, declarations, dependency version, or WASM packaging, or when it coordinates linked Suite/Desktop issues, pull requests, or releases. Do not load that workflow for ordinary Desktop work.
 
 ## Useful Search Patterns
 

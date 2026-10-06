@@ -13,6 +13,10 @@
 
 Keep the root and process-flow dependency versions aligned unless there is an intentional compatibility bridge.
 
+## Coordinated Suite Changes
+
+Coordination is a task-specific development workflow rather than part of the application architecture. When a change affects a Suite API, calculation behavior, Suite-backed default data, declarations, dependency version, or WASM packaging, follow `docs/development/suite-coordination.md`. Ordinary Desktop work does not need that workflow.
+
 ## Angular Suite Boundary
 
 Angular suite usage belongs in `src/app/tools-suite-api/`.
