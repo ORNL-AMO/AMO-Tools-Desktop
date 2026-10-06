@@ -96,7 +96,7 @@
     </div>
   </div>
 
-  <div class="form-group" *ngIf="displayOptions.operatingHead">
+  <div class="form-group" *ngIf="displayOptions.operatingHead && !isPositiveDisplacement">
     <label for="operatingHead">Operating Head</label>
     <div class="input-group">
       <input type="number" class="form-control" (focus)="focusField('operatingHead')" (input)="save()"
@@ -110,6 +110,22 @@
           {{form.controls.operatingHead.errors.max.max}}.</span>
         <span *ngIf="form.controls.operatingHead.errors.min">Value can't be less than
           {{form.controls.operatingHead.errors.min.min}}</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="isPositiveDisplacement && displayOptions.operatingHead">
+    <label for="operatingDifferentialPressure">Operating Differential Pressure</label>
+    <div class="input-group">
+      <input type="number" class="form-control" (focus)="focusField('operatingDifferentialPressure')" (input)="save()"
+        formControlName="operatingDifferentialPressure" id="operatingDifferentialPressure">
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure == 'Imperial'">psi</span>
+      <span class="input-group-addon units" *ngIf="settings.unitsOfMeasure != 'Imperial'">Pa</span>
+      <span class="alert-danger pull-right small"
+        *ngIf="form.controls.operatingDifferentialPressure.invalid && !form.controls.operatingDifferentialPressure.pristine">
+        <span *ngIf="form.controls.operatingDifferentialPressure.errors.required">Value Required</span>
+        <span *ngIf="form.controls.operatingDifferentialPressure.errors.min">Value can't be less than
+          {{form.controls.operatingDifferentialPressure.errors.min.min}}.</span>
       </span>
     </div>
   </div>

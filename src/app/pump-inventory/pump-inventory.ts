@@ -171,6 +171,7 @@ export interface FieldMeasurements {
   assessmentDate: string,
   operatingFlowRate: number,
   operatingHead: number,
+  operatingDifferentialPressure?: number,
   operatingHours?: OperatingHours,
   loadEstimationMethod: number,
   measuredPower: number;

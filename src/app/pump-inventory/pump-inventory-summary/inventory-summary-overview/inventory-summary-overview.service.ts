@@ -108,7 +108,7 @@ export class InventorySummaryOverviewService {
       emissionsOutput: 0,
     };
     if (this.pumpInventoryService.isPumpValid(pumpItem)) {
-      let differentialPressurePsi: number = pumpItem.pumpEquipment.designDifferentialPressure;
+      let differentialPressurePsi: number = pumpItem.fieldMeasurements.operatingDifferentialPressure;
       if (settings.unitsOfMeasure == 'Metric') {
         differentialPressurePsi = this.convertUnitsService.value(differentialPressurePsi).from('Pa').to('psi');
       }

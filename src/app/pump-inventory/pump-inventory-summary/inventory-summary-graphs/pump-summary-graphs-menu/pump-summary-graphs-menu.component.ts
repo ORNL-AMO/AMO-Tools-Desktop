@@ -68,7 +68,7 @@ export class PumpSummaryGraphsMenuComponent {
       showGroup: false
     });
     this.groups.push({
-      options: this.pumpInventorySummaryService.getFieldMeasurementsFields(pumpInventoryData.displayOptions.fieldMeasurementOptions, settings),
+      options: this.pumpInventorySummaryService.getFieldMeasurementsFields(pumpInventoryData.displayOptions.fieldMeasurementOptions, settings, pumps),
       groupLabel: 'Field Measurements',
       showGroup: false
     });

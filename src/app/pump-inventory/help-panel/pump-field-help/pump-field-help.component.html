@@ -109,6 +109,17 @@
     </div>
   </div>
 
+  <div class="my-2" *ngIf="focusedField == 'operatingDifferentialPressure'">
+    <h6>
+      Operating Differential Pressure
+      <br>
+      <small class="text-muted">
+        Measured differential pressure (discharge minus suction) across a positive displacement pump at operating
+        conditions, in psi or Pa. Used in place of operating head to calculate fluid power for positive displacement pumps.
+      </small>
+    </h6>
+  </div>
+
   <div class="my-2" *ngIf="focusedField == 'operatingHead'">
     <h6>
       Operating Head

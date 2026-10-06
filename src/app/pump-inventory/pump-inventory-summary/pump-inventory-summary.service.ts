@@ -36,7 +36,7 @@ export class PumpInventorySummaryService {
     fields = fields.concat(pumpPropertiesFields);
     let fluidPropertiesFields: Array<PumpField> = this.getFluidPropertiesFields(displayOptions.fluidPropertiesOptions, settings);
     fields = fields.concat(fluidPropertiesFields);
-    let fieldMeasurementFields: Array<PumpField> = this.getFieldMeasurementsFields(displayOptions.fieldMeasurementOptions, settings);
+    let fieldMeasurementFields: Array<PumpField> = this.getFieldMeasurementsFields(displayOptions.fieldMeasurementOptions, settings, pumps);
     fields = fields.concat(fieldMeasurementFields);
     let pumpMotorPropertiesFields: Array<PumpField> = this.getPumpMotorFields(displayOptions.pumpMotorPropertiesOptions, settings);
     fields = fields.concat(pumpMotorPropertiesFields);
@@ -114,8 +114,7 @@ export class PumpInventorySummaryService {
     } 
     if (pumpPropertiesOptions.designHead) {
       fields.push({display: 'Design Head', value: 'designHead', group: 'pumpEquipment', unit: units.designHead});
-      let hasPositiveDisplacementPump: boolean = pumps.some(pump => isPositiveDisplacementPump(pump.pumpEquipment.pumpType));
-      if (hasPositiveDisplacementPump) {
+      if (this.hasPositiveDisplacementPump(pumps)) {
         fields.push({display: 'Design Differential Pressure', value: 'designDifferentialPressure', group: 'pumpEquipment', unit: units.designDifferentialPressure});
       }
     }
@@ -143,7 +142,11 @@ export class PumpInventorySummaryService {
     return fields;
   }
 
-  getFieldMeasurementsFields(fieldMeasurementOptions: FieldMeasurementsOptions, settings: Settings): Array<PumpField> {
+  hasPositiveDisplacementPump(pumps: Array<PumpItem>): boolean {
+    return pumps.some(pump => isPositiveDisplacementPump(pump.pumpEquipment.pumpType));
+  }
+
+  getFieldMeasurementsFields(fieldMeasurementOptions: FieldMeasurementsOptions, settings: Settings, pumps: Array<PumpItem>): Array<PumpField> {
     let fields: Array<PumpField> = [];
     let units = settings.unitsOfMeasure === 'Imperial'? PumpSummaryUnitsImperial.fieldMeasurements : PumpSummaryUnitsMetric.fieldMeasurements; 
 
@@ -170,6 +173,9 @@ export class PumpInventorySummaryService {
     } 
     if (fieldMeasurementOptions.operatingHead) {
       fields.push({display: 'Operating Head', value: 'operatingHead', group: 'fieldMeasurements', unit: units.operatingHead});
+      if (this.hasPositiveDisplacementPump(pumps)) {
+        fields.push({display: 'Operating Differential Pressure', value: 'operatingDifferentialPressure', group: 'fieldMeasurements', unit: units.operatingDifferentialPressure});
+      }
     } 
     if (fieldMeasurementOptions.operatingHours) {
       fields.push({display: 'Operating Hours', value: 'operatingHours', group: 'fieldMeasurements'});
@@ -276,6 +282,7 @@ export const PumpSummaryUnitsImperial = {
       efficiency: '%',
       operatingFlowRate: 'gpm',
       operatingHead: 'ft',
+      operatingDifferentialPressure: 'psi',
       measuredPower: 'kW',
       measuredCurrent: 'A',
       measuredVoltage: 'V',
@@ -320,6 +327,7 @@ export const PumpSummaryUnitsMetric = {
       efficiency: '%',
       operatingFlowRate: 'm3/hr',
       operatingHead: 'm',
+      operatingDifferentialPressure: 'Pa',
       measuredPower: 'A',
       measuredCurrent: 'kW',
       measuredVoltage: 'V',

@@ -17,9 +17,9 @@ export class PumpSummaryGraphsService {
 
   getBinData(pumpInventoryData: PumpInventoryData, pumpField: PumpField): { xData: Array<any>, yData: Array<number> } {
     let pumps: Array<PumpItem> = this.pumpInventorySummaryService.getAllPumps(pumpInventoryData);
-    if (pumpField.value === 'designHead') {
+    if (pumpField.value === 'designHead' || pumpField.value === 'operatingHead') {
       pumps = pumps.filter(pump => !isPositiveDisplacementPump(pump.pumpEquipment.pumpType));
-    } else if (pumpField.value === 'designDifferentialPressure') {
+    } else if (pumpField.value === 'designDifferentialPressure' || pumpField.value === 'operatingDifferentialPressure') {
       pumps = pumps.filter(pump => isPositiveDisplacementPump(pump.pumpEquipment.pumpType));
     }
     let fieldCount: _.Dictionary<number> = _.countBy(pumps, (pump) => { return this.getFieldValue(pump, pumpField); });
@@ -39,6 +39,12 @@ export class PumpSummaryGraphsService {
     }
     if (pumpField.value === 'designDifferentialPressure') {
       return isPositiveDisplacementPump(pump.pumpEquipment.pumpType) ? pump.pumpEquipment.designDifferentialPressure : undefined;
+    }
+    if (pumpField.value === 'operatingHead') {
+      return isPositiveDisplacementPump(pump.pumpEquipment.pumpType) ? undefined : pump.fieldMeasurements.operatingHead;
+    }
+    if (pumpField.value === 'operatingDifferentialPressure') {
+      return isPositiveDisplacementPump(pump.pumpEquipment.pumpType) ? pump.fieldMeasurements.operatingDifferentialPressure : undefined;
     }
     return pump[pumpField.group][pumpField.value];
   }
