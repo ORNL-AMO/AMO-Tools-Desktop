@@ -18,6 +18,9 @@ export class WaterProcessDiagramService {
   // * bumped to make the diagram web component re-mount and re-hydrate from the current waterDiagram
   diagramRemount: BehaviorSubject<number>;
 
+  // * set by the mounted diagram so the parent can emit a save the web component is still debouncing
+  flushPendingSave?: () => void;
+
   constructor() { 
     this.mainTab = new BehaviorSubject<string>('diagram');
     this.parentContainer = new BehaviorSubject<ParentContainerDimensions>(undefined);

@@ -39,6 +39,11 @@ export class ProcessFlowDiagramWrapperComponent {
         }
     }
 
+    /** Emits any save the web component is still debouncing, so the parent can persist it now. */
+    flush() {
+        this.processFlowDiagramElement?.nativeElement?.flush?.();
+    }
+
     // * this hook runs in the parent view's cleanup, after this view's template listener is already removed, so listen directly
     // * for the flushed event. The parent's diagram subscription is still live at this point.
     ngOnDestroy() {

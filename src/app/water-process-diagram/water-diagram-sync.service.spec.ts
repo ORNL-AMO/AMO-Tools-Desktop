@@ -26,10 +26,11 @@ describe('WaterDiagramSyncService', () => {
   let cacheLog: string[];
   let assessmentWriteLog: string[];
   let updateWithObservable: (diagram: Diagram) => Observable<Diagram>;
+  let updateAssessmentWithObservable: (assessment: Assessment) => Observable<Assessment>;
   let linkedDiagram: Diagram;
   let linkedAssessment: Assessment;
   let openDiagram: BehaviorSubject<Diagram>;
-  let waterProcessDiagramService: { diagram: BehaviorSubject<Diagram>, remountDiagram: jasmine.Spy };
+  let waterProcessDiagramService: { diagram: BehaviorSubject<Diagram>, remountDiagram: jasmine.Spy, flushPendingSave?: jasmine.Spy };
   let updateAssessmentFromDiagramService: jasmine.SpyObj<UpdateAssessmentFromDiagramService>;
   let updateDiagramFromAssessmentService: jasmine.SpyObj<UpdateDiagramFromAssessmentService>;
 
@@ -44,6 +45,10 @@ describe('WaterDiagramSyncService', () => {
     updateWithObservable = (diagram: Diagram) => {
       writeLog.push(`write ${diagram.id}:${diagram.waterDiagram.flowDiagramData.nodes.length}`);
       return of(diagram);
+    };
+    updateAssessmentWithObservable = (assessment: Assessment) => {
+      assessmentWriteLog.push(`assessment ${assessment.id}`);
+      return of(assessment);
     };
     updateAssessmentFromDiagramService = jasmine.createSpyObj('UpdateAssessmentFromDiagramService', ['applyDiagramToAssessment', 'saveAssessmentSettings']);
     updateAssessmentFromDiagramService.applyDiagramToAssessment.and.returnValue(false);
@@ -64,10 +69,7 @@ describe('WaterDiagramSyncService', () => {
         {
           provide: AssessmentDbService,
           useValue: {
-            updateWithObservable: (assessment: Assessment) => {
-              assessmentWriteLog.push(`assessment ${assessment.id}`);
-              return of(assessment);
-            },
+            updateWithObservable: (assessment: Assessment) => updateAssessmentWithObservable(assessment),
             upsertInCache: () => undefined,
             findById: () => linkedAssessment
           }
@@ -120,6 +122,33 @@ describe('WaterDiagramSyncService', () => {
 
     it('syncs once for a burst of saves', async () => {
       await Promise.all([service.saveDiagram(linkedDiagram), service.saveDiagram(linkedDiagram), service.saveDiagram(linkedDiagram)]);
+      await service.whenIdle();
+      expect(updateAssessmentFromDiagramService.applyDiagramToAssessment).toHaveBeenCalledTimes(1);
+    });
+
+    it('syncs each linked assessment when saves for different diagrams overlap', async () => {
+      const otherDiagram = makeDiagram(2, 1, 20);
+      await Promise.all([service.saveDiagram(linkedDiagram), service.saveDiagram(otherDiagram)]);
+      await service.whenIdle();
+      const syncedDiagrams = updateAssessmentFromDiagramService.applyDiagramToAssessment.calls.allArgs().map(args => args[0].id);
+      expect(syncedDiagrams).toEqual([1, 2]);
+    });
+
+    it('skips the assessment sync when the diagram write failed', async () => {
+      spyOn(console, 'error');
+      updateWithObservable = () => throwError(() => new Error('write failed'));
+      await expectAsync(service.saveDiagram(linkedDiagram)).toBeRejectedWithError('write failed');
+      await service.whenIdle();
+      expect(updateAssessmentFromDiagramService.applyDiagramToAssessment).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalled();
+    });
+
+    it('syncs again once a later write of the diagram succeeds', async () => {
+      spyOn(console, 'error');
+      updateWithObservable = () => throwError(() => new Error('write failed'));
+      await expectAsync(service.saveDiagram(linkedDiagram)).toBeRejected();
+      updateWithObservable = (diagram: Diagram) => of(diagram);
+      await service.saveDiagram(linkedDiagram);
       await service.whenIdle();
       expect(updateAssessmentFromDiagramService.applyDiagramToAssessment).toHaveBeenCalledTimes(1);
     });
@@ -202,6 +231,24 @@ describe('WaterDiagramSyncService', () => {
       expect(assessmentWriteLog.length).toBe(3);
     });
 
+    it('refreshes each linked diagram when edits to different assessments overlap', async () => {
+      const otherAssessment = makeAssessment(20, 2);
+      await Promise.all([service.assessmentChanged(linkedAssessment), service.assessmentChanged(otherAssessment)]);
+      await service.whenIdle();
+      expect(updateDiagramFromAssessmentService.setDiagramSettingsFromAssessment).toHaveBeenCalledTimes(2);
+      const refreshedAssessmentIds = updateDiagramFromAssessmentService.setDiagramSettingsFromAssessment.calls.allArgs().map(args => args[0].id);
+      expect(refreshedAssessmentIds).toEqual([10, 20]);
+    });
+
+    it('skips the diagram refresh when the assessment write failed', async () => {
+      spyOn(console, 'error');
+      updateAssessmentWithObservable = () => throwError(() => new Error('write failed'));
+      await expectAsync(service.assessmentChanged(linkedAssessment)).toBeRejectedWithError('write failed');
+      await service.whenIdle();
+      expect(updateDiagramFromAssessmentService.updateDiagramFromAssessment).not.toHaveBeenCalled();
+      expect(console.error).toHaveBeenCalled();
+    });
+
     it('prefers the diagram a component has open over the cached copy', async () => {
       const openLinkedDiagram = makeDiagram(1, 1, 10);
       openDiagram.next(openLinkedDiagram);
@@ -226,6 +273,18 @@ describe('WaterDiagramSyncService', () => {
       updateDiagramFromAssessmentService.addMissingNodesFromAssessment.and.returnValue(true);
       await service.reconcileWithDiagram(linkedAssessment);
       expect(writeLog).toEqual(['write 1:1']);
+    });
+  });
+
+  describe('flushDiagram', () => {
+    it('asks the mounted diagram to emit its pending save', () => {
+      waterProcessDiagramService.flushPendingSave = jasmine.createSpy('flushPendingSave');
+      service.flushDiagram();
+      expect(waterProcessDiagramService.flushPendingSave).toHaveBeenCalled();
+    });
+
+    it('does nothing when no diagram is mounted', () => {
+      expect(() => service.flushDiagram()).not.toThrow();
     });
   });
 

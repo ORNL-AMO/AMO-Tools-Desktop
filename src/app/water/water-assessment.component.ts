@@ -104,6 +104,7 @@ export class WaterAssessmentComponent {
     }
     this.mainTabSub = this.waterAssessmentService.mainTab.subscribe(async newMainTab => {
       if (this.mainTab === 'diagram') {
+        this.waterDiagramSyncService.flushDiagram();
         await this.waterDiagramSyncService.whenIdle();
       }
       this.mainTab = newMainTab;

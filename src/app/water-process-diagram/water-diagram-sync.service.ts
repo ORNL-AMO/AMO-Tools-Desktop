@@ -40,10 +40,14 @@ export class WaterDiagramSyncService {
   private lastTask: Promise<void> = Promise.resolve();
   private pendingTasks: number = 0;
   
-  // * a queued sync reads the latest state when it runs, so requests made while one is waiting are already covered
-  private isAssessmentSyncQueued: boolean = false;
-  private isDiagramSyncQueued: boolean = false;
+  // * a queued sync reads the latest state when it runs, so requests made for the same record while one is waiting are already covered
+  private pendingAssessmentSyncs = new Map<number, Diagram>();
+  private pendingDiagramSyncs = new Map<number, Assessment>();
   private isDiagramStale: boolean = false;
+
+  // * records whose latest write failed. A dependent sync is skipped so the linked record is not rebuilt from data that never saved
+  private unsavedDiagramIds = new Set<number>();
+  private unsavedAssessmentIds = new Set<number>();
 
   saveDiagram(diagram: Diagram): Promise<void> {
     const thisSave = this.enqueue(() => this.persistDiagram(diagram));
@@ -90,6 +94,11 @@ export class WaterDiagramSyncService {
     }
   }
 
+  /** Emits any save the diagram web component is still debouncing, so it is queued before waiting on {@link whenIdle}. */
+  flushDiagram() {
+    this.waterProcessDiagramService.flushPendingSave?.();
+  }
+
   async whenIdle(): Promise<void> {
     while (this.pendingTasks > 0) {
       await this.lastTask;
@@ -105,27 +114,39 @@ export class WaterDiagramSyncService {
   }
 
   private queueAssessmentSync(diagram: Diagram) {
-    if (this.isAssessmentSyncQueued) {
+    const isQueued = this.pendingAssessmentSyncs.has(diagram.assessmentId);
+    this.pendingAssessmentSyncs.set(diagram.assessmentId, diagram);
+    if (isQueued) {
       return;
     }
-    this.isAssessmentSyncQueued = true;
     this.enqueue(async () => {
-      this.isAssessmentSyncQueued = false;
-      const assessment = this.getLinkedAssessment(diagram.assessmentId);
+      const latestDiagram = this.pendingAssessmentSyncs.get(diagram.assessmentId);
+      this.pendingAssessmentSyncs.delete(diagram.assessmentId);
+      const assessment = this.getLinkedAssessment(latestDiagram.assessmentId);
+      if (this.unsavedDiagramIds.has(latestDiagram.id)) {
+        console.error('Skipped assessment sync, diagram write failed', latestDiagram.id);
+        return;
+      }
       if (assessment) {
-        await this.syncAssessmentFromDiagram(diagram, assessment);
+        await this.syncAssessmentFromDiagram(latestDiagram, assessment);
       }
     }).catch((error) => console.error('Water diagram to assessment sync failed', error));
   }
 
   private queueDiagramSync(assessment: Assessment) {
-    if (this.isDiagramSyncQueued) {
+    const isQueued = this.pendingDiagramSyncs.has(assessment.id);
+    this.pendingDiagramSyncs.set(assessment.id, assessment);
+    if (isQueued) {
       return;
     }
-    this.isDiagramSyncQueued = true;
     this.enqueue(async () => {
-      this.isDiagramSyncQueued = false;
-      await this.syncDiagramFromAssessment(assessment);
+      const latestAssessment = this.pendingDiagramSyncs.get(assessment.id);
+      this.pendingDiagramSyncs.delete(assessment.id);
+      if (this.unsavedAssessmentIds.has(latestAssessment.id)) {
+        console.error('Skipped diagram sync, assessment write failed', latestAssessment.id);
+        return;
+      }
+      await this.syncDiagramFromAssessment(latestAssessment);
     }).catch((error) => console.error('Water assessment to diagram sync failed', error));
   }
 
@@ -164,12 +185,24 @@ export class WaterDiagramSyncService {
   }
 
   private async persistDiagram(diagram: Diagram) {
-    await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
+    try {
+      await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
+    } catch (error) {
+      this.unsavedDiagramIds.add(diagram.id);
+      throw error;
+    }
+    this.unsavedDiagramIds.delete(diagram.id);
     this.diagramIdbService.upsertInCache(diagram);
   }
 
   private async persistAssessment(assessment: Assessment) {
-    await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+    try {
+      await firstValueFrom(this.assessmentDbService.updateWithObservable(assessment));
+    } catch (error) {
+      this.unsavedAssessmentIds.add(assessment.id);
+      throw error;
+    }
+    this.unsavedAssessmentIds.delete(assessment.id);
     this.assessmentDbService.upsertInCache(assessment);
   }
 

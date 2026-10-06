@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, linkedSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, linkedSignal, viewChild } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { combineLatest, filter, map, take } from 'rxjs';
 import { WaterProcessDiagramService } from '../water-process-diagram.service';
 import { environment } from '../../../environments/environment';
 import { ProcessFlowParentState, ConvertValueFn } from 'process-flow-lib';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
+import { ProcessFlowDiagramWrapperComponent } from '../../shared/process-flow-diagram-wrapper/process-flow-diagram-wrapper.component';
 
 const SKELETON_MINIMUM_MS = 500;
 const DIAGRAM_READY_FAILSAFE_MS = 10000;
@@ -18,6 +19,7 @@ const DIAGRAM_READY_FAILSAFE_MS = 10000;
 })
 export class WaterDiagramComponent {
   private readonly waterProcessDiagramService = inject(WaterProcessDiagramService);
+  private readonly diagramWrapper = viewChild(ProcessFlowDiagramWrapperComponent);
 
   // * The diagram store is created once per web component, so re-hydrating it means creating a new component.
   // * The template tracks this count in an @for, so each bump destroys and re-creates the wrapper.
@@ -34,6 +36,15 @@ export class WaterDiagramComponent {
   protected readonly convertValueFn: ConvertValueFn = (value, from, to) => new ConvertValue(value, from, to).convertedValue;
 
   constructor() {
+    effect((onCleanup) => {
+      const wrapper = this.diagramWrapper();
+      if (!wrapper) {
+        return;
+      }
+      this.waterProcessDiagramService.flushPendingSave = () => wrapper.flush();
+      onCleanup(() => this.waterProcessDiagramService.flushPendingSave = undefined);
+    });
+
     // * Both timers wait for parent state: in an assessment this component exists while the diagram tab is hidden,
     // * and the skeleton should time from when the diagram actually mounts, not from when the assessment opened.
     effect((onCleanup) => {
