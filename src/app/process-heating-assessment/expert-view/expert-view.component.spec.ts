@@ -10,6 +10,8 @@ import { ExpertViewComponent } from './expert-view.component';
 const EXPERT_VIEW_TABS: ViewLink[] = HEAT_BALANCE_VIEW_LINKS.filter(link =>
   link.view === LossView.CHARGE_MATERIAL || link.view === LossView.WALL_LOSSES || link.view === LossView.EXTENDED_SURFACE
     || link.view === LossView.AUXILIARY_POWER || link.view === LossView.ENERGY_INPUT_EXHAUST_GAS
+    || link.view === LossView.ENERGY_INPUT || link.view === LossView.EXHAUST_GAS || link.view === LossView.SLAG
+    || link.view === LossView.HEAT_SYSTEM_EFFICIENCY
 );
 
 class FakeModificationService {
@@ -52,7 +54,7 @@ describe('ExpertViewComponent', () => {
   });
 
   it('renders one tab per built loss type', () => {
-    expect(query('.tabs li').map(tab => tab.textContent.trim())).toEqual(['Charge Material', 'Wall Losses', 'Extended Surface', 'Auxiliary Power', 'Energy Input Exhaust Gas']);
+    expect(query('.tabs li').map(tab => tab.textContent.trim())).toEqual(['Charge Material', 'Wall Losses', 'Extended Surface', 'Auxiliary Power', 'Energy Input Exhaust Gas', 'Energy Input', 'Exhaust Gas', 'Slag', 'Heat System Efficiency']);
   });
 
   it('shows charge material in both panels by default', () => {
@@ -92,6 +94,24 @@ describe('ExpertViewComponent', () => {
     expect(panels.map(panel => panel.scenario)).toEqual(['baseline', 'mod-1']);
     expect(query('.tabs li.active')[0].textContent.trim()).toBe('Energy Input Exhaust Gas');
   });
+
+  const eafAndEfficiencyTabs: { index: number; selector: string; label: string }[] = [
+    { index: 5, selector: 'app-energy-input', label: 'Energy Input' },
+    { index: 6, selector: 'app-exhaust-gas', label: 'Exhaust Gas' },
+    { index: 7, selector: 'app-slag', label: 'Slag' },
+    { index: 8, selector: 'app-heat-system-efficiency', label: 'Heat System Efficiency' },
+  ];
+
+  for (const { index, selector, label } of eafAndEfficiencyTabs) {
+    it(`switches both panels to ${label} with baseline and the modification id`, () => {
+      query('.tabs li')[index].click();
+      fixture.detectChanges();
+
+      const panels = query(selector) as (HTMLElement & { scenario: string })[];
+      expect(panels.map(panel => panel.scenario)).toEqual(['baseline', 'mod-1']);
+      expect(query('.tabs li.active')[0].textContent.trim()).toBe(label);
+    });
+  }
 
   it('shows no tabs when there is no modification', () => {
     modificationService.selectedModification.set(undefined);

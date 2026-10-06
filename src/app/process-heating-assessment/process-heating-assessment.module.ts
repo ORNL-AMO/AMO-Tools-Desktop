@@ -96,8 +96,11 @@ import { AuxiliaryPowerFormComponent } from './heat-balance/losses/auxiliary-pow
 import { EnergyInputExhaustGasComponent } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas.component';
 import { EnergyInputExhaustGasFormComponent } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas-form.component';
 import { EnergyInputComponent } from './heat-balance/losses/energy-input/energy-input.component';
+import { EnergyInputFormComponent } from './heat-balance/losses/energy-input/energy-input-form.component';
 import { ExhaustGasComponent } from './heat-balance/losses/exhaust-gas/exhaust-gas.component';
+import { ExhaustGasFormComponent } from './heat-balance/losses/exhaust-gas/exhaust-gas-form.component';
 import { SlagComponent } from './heat-balance/losses/slag/slag.component';
+import { SlagFormComponent } from './heat-balance/losses/slag/slag-form.component';
 import { HeatSystemEfficiencyComponent } from './heat-balance/losses/heat-system-efficiency/heat-system-efficiency.component';
 
 export const ROUTES: Route[] = [
@@ -344,8 +347,11 @@ export const ROUTES: Route[] = [
     EnergyInputExhaustGasComponent,
     EnergyInputExhaustGasFormComponent,
     EnergyInputComponent,
+    EnergyInputFormComponent,
     ExhaustGasComponent,
+    ExhaustGasFormComponent,
     SlagComponent,
+    SlagFormComponent,
     HeatSystemEfficiencyComponent,
   ],
   imports: [

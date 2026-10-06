@@ -120,6 +120,10 @@ export const EXPERT_VIEW_LOSS_VIEWS: ReadonlySet<ProcessHeatingView> = new Set<L
   LossView.GAS_LEAKAGE,
   LossView.AUXILIARY_POWER,
   LossView.ENERGY_INPUT_EXHAUST_GAS,
+  LossView.ENERGY_INPUT,
+  LossView.EXHAUST_GAS,
+  LossView.SLAG,
+  LossView.HEAT_SYSTEM_EFFICIENCY,
 ]);
 
 export const ASSESSMENT_VIEW_LINKS: ViewLink[] = [
