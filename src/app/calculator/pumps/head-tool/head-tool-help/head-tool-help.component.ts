@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { environment } from '../../../../../environments/environment';
 import { Settings } from '../../../../shared/models/settings';
 
 @Component({
@@ -17,6 +18,7 @@ export class HeadToolHelpComponent implements OnInit {
 
   dischargeLineLossCoefficientsExample: boolean = false;
   smallUnit: string;
+  docsLink: string = environment.measurDocsUrl;
   constructor() { }
 
   ngOnInit() {

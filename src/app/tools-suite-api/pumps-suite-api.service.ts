@@ -7,9 +7,6 @@ import { ToolsSuiteApiService } from './tools-suite-api.service';
 import {
   type Drive,
   type EstimateFLA,
-  type HeadTool,
-  type HeadToolOutput,
-  type HeadToolSuctionTank,
   type LineFrequency,
   type LoadEstimationMethod,
   type Motor,
@@ -22,6 +19,9 @@ import {
   type PumpEfficiency as SuitePumpEfficiency,
   type PumpEfficiencyResults,
   type PumpFieldData,
+  type PumpHeadResult,
+  type PumpHeadSuctionGaugeInput,
+  type PumpHeadSuctionTankInput,
   type PumpResult,
   type PumpResultInput,
   type PumpResults,
@@ -149,8 +149,19 @@ export class PumpsSuiteApiService {
 
   //calculators
   headToolSuctionTank(specificGravity: number, flowRate: number, suctionPipeDiameter: number, suctionTankGasOverPressure: number, suctionTankFluidSurfaceElevation: number, suctionLineLossCoefficients: number, dischargePipeDiameter: number, dischargeGaugePressure: number, dischargeGaugeElevation: number, dischargeLineLossCoefficients: number): HeadToolResults {
-    let instance: HeadToolSuctionTank = new this.toolsSuiteApiService.ToolsSuiteModule.HeadToolSuctionTank(specificGravity, flowRate, suctionPipeDiameter, suctionTankGasOverPressure, suctionTankFluidSurfaceElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
-    let headToolSuctionTankResults: HeadToolOutput = instance.calculate();
+    let input: PumpHeadSuctionTankInput = {
+      specificGravity: specificGravity,
+      flowRate: flowRate,
+      suctionPipeDiameter: suctionPipeDiameter,
+      suctionTankGasOverPressure: suctionTankGasOverPressure,
+      suctionTankFluidSurfaceElevation: suctionTankFluidSurfaceElevation,
+      suctionLineLossCoefficients: suctionLineLossCoefficients,
+      dischargePipeDiameter: dischargePipeDiameter,
+      dischargeGaugePressure: dischargeGaugePressure,
+      dischargeGaugeElevation: dischargeGaugeElevation,
+      dischargeLineLossCoefficients: dischargeLineLossCoefficients
+    };
+    let headToolSuctionTankResults: PumpHeadResult = this.toolsSuiteApiService.ToolsSuiteModule.calculatePumpHeadFromSuctionTank(input);
     let results: HeadToolResults = {
       differentialElevationHead: headToolSuctionTankResults.differentialElevationHead,
       differentialPressureHead: headToolSuctionTankResults.differentialPressureHead,
@@ -158,15 +169,24 @@ export class PumpsSuiteApiService {
       estimatedSuctionFrictionHead: headToolSuctionTankResults.estimatedSuctionFrictionHead,
       estimatedDischargeFrictionHead: headToolSuctionTankResults.estimatedDischargeFrictionHead,
       pumpHead: headToolSuctionTankResults.pumpHead
-    }
-    headToolSuctionTankResults.delete();
-    instance.delete();
+    };
     return results;
   }
 
   headTool(specificGravity: number, flowRate: number, suctionPipeDiameter: number, suctionGaugePressure: number, suctionGaugeElevation: number, suctionLineLossCoefficients: number, dischargePipeDiameter: number, dischargeGaugePressure: number, dischargeGaugeElevation: number, dischargeLineLossCoefficients: number): HeadToolResults {
-    let instance: HeadTool = new this.toolsSuiteApiService.ToolsSuiteModule.HeadTool(specificGravity, flowRate, suctionPipeDiameter, suctionGaugePressure, suctionGaugeElevation, suctionLineLossCoefficients, dischargePipeDiameter, dischargeGaugePressure, dischargeGaugeElevation, dischargeLineLossCoefficients);
-    let headToolResults: HeadToolOutput = instance.calculate();
+    let input: PumpHeadSuctionGaugeInput = {
+      specificGravity: specificGravity,
+      flowRate: flowRate,
+      suctionPipeDiameter: suctionPipeDiameter,
+      suctionGaugePressure: suctionGaugePressure,
+      suctionGaugeElevation: suctionGaugeElevation,
+      suctionLineLossCoefficients: suctionLineLossCoefficients,
+      dischargePipeDiameter: dischargePipeDiameter,
+      dischargeGaugePressure: dischargeGaugePressure,
+      dischargeGaugeElevation: dischargeGaugeElevation,
+      dischargeLineLossCoefficients: dischargeLineLossCoefficients
+    };
+    let headToolResults: PumpHeadResult = this.toolsSuiteApiService.ToolsSuiteModule.calculatePumpHeadFromSuctionGauge(input);
     let results: HeadToolResults = {
       differentialElevationHead: headToolResults.differentialElevationHead,
       differentialPressureHead: headToolResults.differentialPressureHead,
@@ -174,9 +194,7 @@ export class PumpsSuiteApiService {
       estimatedSuctionFrictionHead: headToolResults.estimatedSuctionFrictionHead,
       estimatedDischargeFrictionHead: headToolResults.estimatedDischargeFrictionHead,
       pumpHead: headToolResults.pumpHead
-    }
-    headToolResults.delete();
-    instance.delete();
+    };
     return results;
   }
 
