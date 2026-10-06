@@ -12,33 +12,8 @@
       />
     </div>
     <hr>
-    @if (hasChargeMaterials()) {
-      <app-charge-material-opportunity></app-charge-material-opportunity>
-    }
-    @if (hasWallLosses()) {
-      <app-wall-loss-opportunity></app-wall-loss-opportunity>
-    }
-    @if (hasAtmosphereLosses()) {
-      <app-atmosphere-opportunity></app-atmosphere-opportunity>
-    }
-    @if (hasFixtureLosses()) {
-      <app-fixture-materials-handling-opportunity></app-fixture-materials-handling-opportunity>
-      <app-fixture-cooling-opportunity></app-fixture-cooling-opportunity>
-    }
-    @if (hasCoolingLosses()) {
-      <app-cooling-opportunity></app-cooling-opportunity>
-    }
-    @if (hasOpeningLosses()) {
-      <app-opening-size-opportunity></app-opening-size-opportunity>
-      <app-opening-emissivity-opportunity></app-opening-emissivity-opportunity>
-      <app-opening-time-open-opportunity></app-opening-time-open-opportunity>
-    }
-    @if (hasLeakageLosses()) {
-      <app-gas-leakage-opportunity></app-gas-leakage-opportunity>
-    }
-    @if (hasFlueGasLosses()) {
-      <app-air-fuel-ratio-opportunity></app-air-fuel-ratio-opportunity>
-      <app-preheat-combustion-air-opportunity></app-preheat-combustion-air-opportunity>
+    @for (component of visibleOpportunityComponents(); track component) {
+      <ng-container *ngComponentOutlet="component"></ng-container>
     }
   } @else {
     <div class="no-data text-center">

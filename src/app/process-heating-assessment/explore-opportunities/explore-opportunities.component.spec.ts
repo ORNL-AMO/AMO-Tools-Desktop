@@ -5,11 +5,18 @@ import { HeatingEquipmentConfiguration } from '../models/views';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { ExploreOpportunitiesComponent } from './explore-opportunities.component';
+import { OPPORTUNITY_REGISTRY } from './opportunity-registry';
+import { GasLeakageOpportunityComponent } from './gas-leakage-opportunity/gas-leakage-opportunity.component';
+import { AirFuelRatioOpportunityComponent } from './air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
+import { PreheatCombustionAirOpportunityComponent } from './preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
 
-describe('ExploreOpportunitiesComponent fuel-fired gating', () => {
+describe('ExploreOpportunitiesComponent opportunity registry', () => {
   let configuration: WritableSignal<HeatingEquipmentConfiguration>;
+  let baselineLosses: () => unknown[];
+  const fuelFiredComponents = [GasLeakageOpportunityComponent, AirFuelRatioOpportunityComponent, PreheatCombustionAirOpportunityComponent];
 
   beforeEach(() => {
+    baselineLosses = () => [{}];
     configuration = signal<HeatingEquipmentConfiguration>(HeatingEquipmentConfiguration.FUEL_FIRED);
     TestBed.configureTestingModule({
       declarations: [ExploreOpportunitiesComponent],
@@ -21,18 +28,24 @@ describe('ExploreOpportunitiesComponent fuel-fired gating', () => {
           provide: ProcessHeatingAssessmentService,
           useValue: {
             heatingEquipmentConfiguration: configuration,
-            lossSignal: () => [{}],
+            lossSignal: () => baselineLosses(),
           },
         },
       ],
     });
   });
 
-  it('shows leakage and flue gas opportunities for fuel-fired with baseline data', () => {
+  it('renders every registered component in registry order when baseline has data', () => {
     const component = TestBed.createComponent(ExploreOpportunitiesComponent).componentInstance;
 
-    expect(component.hasLeakageLosses()).toBeTrue();
-    expect(component.hasFlueGasLosses()).toBeTrue();
+    expect(component.visibleOpportunityComponents()).toEqual(OPPORTUNITY_REGISTRY.flatMap(entry => entry.opportunityComponents));
+  });
+
+  it('hides all opportunities when baseline has no losses', () => {
+    baselineLosses = () => [];
+    const component = TestBed.createComponent(ExploreOpportunitiesComponent).componentInstance;
+
+    expect(component.visibleOpportunityComponents()).toEqual([]);
   });
 
   for (const otherConfiguration of Object.values(HeatingEquipmentConfiguration)
@@ -40,9 +53,12 @@ describe('ExploreOpportunitiesComponent fuel-fired gating', () => {
     it(`hides leakage and flue gas opportunities for ${otherConfiguration} even with baseline data`, () => {
       configuration.set(otherConfiguration);
       const component = TestBed.createComponent(ExploreOpportunitiesComponent).componentInstance;
+      const visible = component.visibleOpportunityComponents();
 
-      expect(component.hasLeakageLosses()).toBeFalse();
-      expect(component.hasFlueGasLosses()).toBeFalse();
+      for (const fuelFiredComponent of fuelFiredComponents) {
+        expect(visible).not.toContain(fuelFiredComponent);
+      }
+      expect(visible.length).toBeGreaterThan(0);
     });
   }
 });
