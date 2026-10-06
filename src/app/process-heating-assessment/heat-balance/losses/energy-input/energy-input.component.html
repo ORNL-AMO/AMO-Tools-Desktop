@@ -13,6 +13,13 @@
     </div>
   }
 
+  @if (service.warnings().electricityInput; as warning) {
+    <div class="alert alert-warning small">{{warning}}</div>
+  }
+  @if (service.warnings().heatDelivered; as warning) {
+    <div class="alert alert-warning small">{{warning}}</div>
+  }
+
   @for (item of service.losses(); track scenario() + '_' + item.id) {
     <div class="card mb-3">
       <div class="card-header d-flex align-items-center justify-content-between">

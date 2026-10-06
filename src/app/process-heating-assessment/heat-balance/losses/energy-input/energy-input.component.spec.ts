@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { EnergyInputComponent } from './energy-input.component';
 import { EnergyInputItem, EnergyInputService } from './energy-input.service';
-import { EnergyInputFormService } from './energy-input-form.service';
+import { EnergyInputFormService, EnergyInputWarnings } from './energy-input-form.service';
 import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.module';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
@@ -22,6 +22,7 @@ describe('EnergyInputComponent', () => {
   let settingsSignal: WritableSignal<Settings>;
   let lossesSignal: WritableSignal<EnergyInputItem[]>;
   let totalSignal: WritableSignal<number>;
+  let warningsSignal: WritableSignal<EnergyInputWarnings>;
   let item: EnergyInputItem;
 
   beforeEach(async () => {
@@ -32,6 +33,7 @@ describe('EnergyInputComponent', () => {
 
     lossesSignal = signal<EnergyInputItem[]>([]);
     totalSignal = signal(0);
+    warningsSignal = signal<EnergyInputWarnings>({ electricityInput: null, heatDelivered: null });
 
     energyInputServiceSpy = jasmine.createSpyObj(
       'EnergyInputService',
@@ -39,6 +41,7 @@ describe('EnergyInputComponent', () => {
       {
         losses: lossesSignal,
         total: totalSignal,
+        warnings: warningsSignal,
       },
     );
 
@@ -183,6 +186,24 @@ describe('EnergyInputComponent', () => {
       fixture.detectChanges();
 
       expect(fixture.nativeElement.querySelector('.loss-results').textContent).toContain('——');
+    });
+
+    it('shows no warnings by default', () => {
+      expect(fixture.nativeElement.querySelector('.alert-warning')).toBeNull();
+    });
+
+    it('shows the electricity input warning from the service', () => {
+      warningsSignal.set({ electricityInput: 'Check Electricity Input value.', heatDelivered: null });
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.alert-warning').textContent).toContain('Check Electricity Input value.');
+    });
+
+    it('shows the heat delivered warning from the service', () => {
+      warningsSignal.set({ electricityInput: null, heatDelivered: 'Too much heat delivered.' });
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.alert-warning').textContent).toContain('Too much heat delivered.');
     });
 
     it('hides the total when there are no losses', () => {

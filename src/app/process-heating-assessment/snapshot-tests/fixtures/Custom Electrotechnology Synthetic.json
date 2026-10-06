@@ -34,7 +34,7 @@
                       "chargeMaterialType": "Solid",
                       "solidChargeMaterial": {
                         "materialId": 1,
-                        "thermicReactionType": 0,
+                        "thermicReactionType": 1,
                         "specificHeatSolid": 0.2479,
                         "latentHeat": 169,
                         "specificHeatLiquid": 0.2601,
@@ -46,8 +46,8 @@
                         "dischargeTemperature": 1400,
                         "waterVaporDischargeTemperature": 0,
                         "chargeMelted": 0,
-                        "chargeReacted": 0,
-                        "reactionHeat": 0,
+                        "chargeReacted": 50,
+                        "reactionHeat": 10,
                         "additionalHeat": 0,
                         "heatRequired": 0
                       }
@@ -193,7 +193,7 @@
                 "chargeMaterialType": "Solid",
                 "solidChargeMaterial": {
                   "materialId": 1,
-                  "thermicReactionType": 0,
+                  "thermicReactionType": 1,
                   "specificHeatSolid": 0.2479,
                   "latentHeat": 169,
                   "specificHeatLiquid": 0.2601,
@@ -205,8 +205,8 @@
                   "dischargeTemperature": 1500,
                   "waterVaporDischargeTemperature": 0,
                   "chargeMelted": 0,
-                  "chargeReacted": 0,
-                  "reactionHeat": 0,
+                  "chargeReacted": 50,
+                  "reactionHeat": 10,
                   "additionalHeat": 0,
                   "heatRequired": 0
                 }

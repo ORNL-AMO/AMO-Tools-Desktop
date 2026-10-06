@@ -78,6 +78,27 @@ describe('EnergyInputFormComponent', () => {
       expect(fixture.nativeElement.querySelector(`[id="${component.controlIds().flowRateInput}"]`)).not.toBeNull();
     });
 
+    it('uses a native button for the toggle and reflects its state in aria-expanded', () => {
+      render();
+
+      const toggle: HTMLButtonElement = fixture.nativeElement.querySelector('button.btn-link');
+      expect(toggle.getAttribute('aria-expanded')).toBe('false');
+
+      toggle.click();
+      fixture.detectChanges();
+
+      expect(toggle.getAttribute('aria-expanded')).toBe('true');
+    });
+
+    it('labels the flow rate input', () => {
+      render();
+
+      component.toggleFlowRate();
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector(`label[for="${component.controlIds().flowRateInput}"]`)).not.toBeNull();
+    });
+
     it('hides the flow rate input after toggling twice', () => {
       render();
 

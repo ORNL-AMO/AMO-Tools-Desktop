@@ -91,6 +91,13 @@ describe('HeatSystemEfficiencyComponent', () => {
       expect(assessmentServiceSpy.updateProcessHeatingProperty).not.toHaveBeenCalled();
     });
 
+    it('does not save zero, which the results engine treats as missing', () => {
+      create();
+      component.form.controls.efficiency.setValue(0);
+      expect(component.form.controls.efficiency.valid).toBeFalse();
+      expect(assessmentServiceSpy.updateProcessHeatingProperty).not.toHaveBeenCalled();
+    });
+
     it('does not save an empty value', () => {
       create();
       component.form.controls.efficiency.setValue(null);
@@ -109,17 +116,24 @@ describe('HeatSystemEfficiencyComponent', () => {
   describe('results', () => {
     it('derives gross heat and system losses from total input, exothermic heat and efficiency', () => {
       create();
-      // (800 / 80 - 5) * 100 = 500 gross heat; 500 * (1 - 0.8) = 100 losses
-      expect(component.results()?.grossHeat).toBeCloseTo(500, 6);
-      expect(component.results()?.systemLosses).toBeCloseTo(100, 6);
+      // losses = 800 / 0.8 * 0.2 = 200; gross = 800 + 200 - 5 = 995
+      expect(component.results()?.grossHeat).toBeCloseTo(995, 6);
+      expect(component.results()?.systemLosses).toBeCloseTo(200, 6);
     });
 
     it('updates when the saved efficiency changes', () => {
       create();
       phastSignal.set({ systemEfficiency: 50 });
-      // (800 / 50 - 5) * 100 = 1100 gross heat; 1100 * 0.5 = 550 losses
-      expect(component.results()?.grossHeat).toBeCloseTo(1100, 6);
-      expect(component.results()?.systemLosses).toBeCloseTo(550, 6);
+      // losses = 800 / 0.5 * 0.5 = 800; gross = 800 + 800 - 5 = 1595
+      expect(component.results()?.grossHeat).toBeCloseTo(1595, 6);
+      expect(component.results()?.systemLosses).toBeCloseTo(800, 6);
+    });
+
+    it('subtracts exothermic heat after applying the efficiency loss', () => {
+      resultsServiceSpy.getResults.and.returnValue({ totalInput: 800, exothermicHeat: -20 } as never);
+      create();
+      expect(component.results()?.grossHeat).toBeCloseTo(980, 6);
+      expect(component.results()?.systemLosses).toBeCloseTo(200, 6);
     });
 
     it('is null when no efficiency is saved', () => {
@@ -153,8 +167,8 @@ describe('HeatSystemEfficiencyComponent', () => {
     it('shows gross heat and system losses when results exist', () => {
       create();
       const text = fixture.nativeElement.querySelector('.loss-results').textContent;
-      expect(text).toContain('500');
-      expect(text).toContain('100');
+      expect(text).toContain('995');
+      expect(text).toContain('200');
     });
 
     it('shows placeholders when results are unavailable', () => {

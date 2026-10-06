@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, Signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
@@ -12,8 +13,8 @@ import { reinitOnScenarioChange } from '../reinit-on-scenario-change';
  * @param efficiency heat system efficiency, percent
  */
 export function calculateSystemEfficiencyResults(totalInput: number, exothermicHeat: number, efficiency: number): { grossHeat: number; systemLosses: number } {
-  const grossHeat = (totalInput / efficiency - Math.abs(exothermicHeat)) * 100;
-  return { grossHeat, systemLosses: grossHeat * (1 - efficiency / 100) };
+  const systemLosses = (totalInput / (efficiency / 100)) * (1 - efficiency / 100);
+  return { grossHeat: totalInput + systemLosses - Math.abs(exothermicHeat), systemLosses };
 }
 
 @Component({
@@ -32,7 +33,7 @@ export class HeatSystemEfficiencyComponent {
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
   readonly form = new FormGroup({
-    efficiency: new FormControl<number | null>(null, [Validators.required, Validators.min(0), Validators.max(100)]),
+    efficiency: new FormControl<number | null>(null, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]),
   });
 
   /** Gross heat and system losses derived from the scenario's total heat input and exothermic heat. */

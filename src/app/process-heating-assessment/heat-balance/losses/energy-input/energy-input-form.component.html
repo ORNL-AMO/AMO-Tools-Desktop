@@ -11,10 +11,11 @@
       </app-form-control-errors>
     </div>
     <div class="form-group">
-      <a class="form-text small click-link" (click)="toggleFlowRate()">
+      <button type="button" class="btn btn-link btn-sm p-0" [attr.aria-expanded]="showFlowRate()" (click)="toggleFlowRate()">
         {{showFlowRate() ? 'Hide Flow Rate' : 'Calculate using flow rate'}}
-      </a>
+      </button>
       @if (showFlowRate()) {
+        <label class="small d-block" for="{{controlIds().flowRateInput}}">Natural Gas Flow Rate</label>
         <div class="input-group">
           <input type="number" step="any" class="form-control" id="{{controlIds().flowRateInput}}"
             formControlName="flowRateInput" onfocus="this.select();" (input)="setHeatInputFromFlowRate()">

@@ -12,12 +12,13 @@
  * - Auxiliary Power is compared after converting the snapshot's totalAuxPower. Legacy sumAuxilaryPowerLosses()
  *   returns the raw suite value (Btu/hr) with no unit conversion, a known legacy bug; the new calculator converts to
  *   the energy result unit. The expected value is converted here the same way until the legacy total is fixed.
- * - Energy Input EAF is compared against a live legacy PhastService.energyInputEAF() call, not a snapshot key:
- *   the snapshot's energyInputHeatDelivered is a results rollup (gross heat input less chemical energy), not the
- *   form's heat delivered.
- * - Heat System Efficiency is compared on system losses only. Legacy's results rollup and its tab apply
- *   exothermic heat differently (see master-rebuild-plan.md, Heat System Efficiency Formula Mismatch), so a
- *   fixture with exothermic heat would expose that difference. None of these fixtures has any.
+ * - Energy Input EAF is compared against a live legacy PhastService.energyInputEAF() call and against frozen
+ *   heat delivered values (FROZEN_ENERGY_INPUT_EAF_HEAT_DELIVERED), not a snapshot key: the snapshot's
+ *   energyInputHeatDelivered is a results rollup (gross heat input less chemical energy), not the form's heat
+ *   delivered. Both sides of the live comparison use the same suite call, so only the frozen values catch a suite
+ *   regression.
+ * - Heat System Efficiency is compared on system losses and gross heat. The Steam and Custom Electrotechnology
+ *   Synthetic fixtures carry a small exothermic reaction so the exothermic term is exercised.
  * - The EAF Dummy Values, Steam Synthetic and Custom Electrotechnology Synthetic fixtures are synthetic, not real
  *   assessments, and are to be replaced with real ones later.
  * - Every fixture is Imperial, so Metric conversions are only covered by the calculation-service unit specs.
@@ -57,6 +58,15 @@ import { ExhaustGasCalculationService } from '../heat-balance/losses/exhaust-gas
 import { calculateSystemEfficiencyResults } from '../heat-balance/losses/heat-system-efficiency/heat-system-efficiency.component';
 import { buildPhastServices, PhastServices } from './snapshot.helper';
 import { FIXTURES } from './snapshot-fixtures';
+
+/**
+ * Btu-converted heat delivered (energyResultUnit) for the EAF Dummy Values fixture's first Energy Input entry,
+ * captured from the legacy PhastService.energyInputEAF(). Recapture only on an intentional suite change.
+ */
+const FROZEN_ENERGY_INPUT_EAF_HEAT_DELIVERED: Record<string, number> = {
+  'EAF Dummy Values:baseline': 41345.53286041355,
+  'EAF Dummy Values:modification_0': 41345.53286041355,
+};
 
 function migrate(baseline: PHAST): PHAST {
   const modifications = baseline.modifications?.map(modification => {
@@ -237,7 +247,12 @@ describe('New calculation services vs. legacy snapshot totals', () => {
             return;
           }
           const expected = services.phastService.energyInputEAF(JSON.parse(JSON.stringify(entry)), settings).heatDelivered;
-          expect(energyInput.calculate(entry, settings)).withContext('heatDelivered').toBeCloseTo(expected, 6);
+          const actual = energyInput.calculate(entry, settings);
+          expect(actual).withContext('heatDelivered').toBeCloseTo(expected, 6);
+          const frozen = FROZEN_ENERGY_INPUT_EAF_HEAT_DELIVERED[`${name}:${scenario.snapshotKey}`];
+          if (frozen !== undefined) {
+            expect(actual).withContext('frozen heatDelivered').toBeCloseTo(frozen, 6);
+          }
         });
 
         it(`${scenario.label} heat system efficiency matches snapshot`, () => {
@@ -248,6 +263,7 @@ describe('New calculation services vs. legacy snapshot totals', () => {
           }
           const actual = calculateSystemEfficiencyResults(expected.totalInput, expected.exothermicHeat, expected.heatingSystemEfficiency);
           expect(actual.systemLosses).withContext('totalSystemLosses').toBeCloseTo(expected.totalSystemLosses, 6);
+          expect(actual.grossHeat).withContext('grossHeatInput').toBeCloseTo(expected.grossHeatInput, 6);
         });
 
         it(`${scenario.label} flue gas available heat matches snapshot`, () => {
