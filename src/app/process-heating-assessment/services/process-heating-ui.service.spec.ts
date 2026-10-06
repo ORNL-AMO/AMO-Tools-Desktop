@@ -128,3 +128,60 @@ describe('ProcessHeatingUiService electrotechnology-standard gating', () => {
     expect(LossView.ENERGY_INPUT_EXHAUST_GAS).toBe(ROUTE_TOKENS.energyInputExhaustGas);
   });
 });
+
+describe('ProcessHeatingUiService EAF and heat system efficiency gating', () => {
+  let service: ProcessHeatingUiService;
+  let configuration: WritableSignal<HeatingEquipmentConfiguration>;
+
+  beforeEach(() => {
+    configuration = signal<HeatingEquipmentConfiguration>(HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF);
+    const router = {
+      events: new Subject(),
+      routerState: { snapshot: { root: { params: {}, data: {}, firstChild: null } } },
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        ProcessHeatingUiService,
+        { provide: Router, useValue: router },
+        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration } },
+        { provide: STEPPED_ROUTES, useValue: [] },
+      ],
+    });
+    service = TestBed.inject(ProcessHeatingUiService);
+  });
+
+  const eafViews = [LossView.ENERGY_INPUT, LossView.EXHAUST_GAS, LossView.SLAG];
+  const steamCustomViews = [LossView.HEAT_SYSTEM_EFFICIENCY];
+
+  function visibleViews(): { heatBalance: unknown[]; expertView: unknown[] } {
+    return {
+      heatBalance: service.visibleHeatBalanceTabs().map(link => link.view),
+      expertView: service.visibleExpertViewTabs().map(link => link.view),
+    };
+  }
+
+  for (const config of Object.values(HeatingEquipmentConfiguration)) {
+    it(`shows EAF forms only and Heat System Efficiency only per gating for ${config}`, () => {
+      configuration.set(config);
+      const { heatBalance, expertView } = visibleViews();
+      const eafVisible = config === HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF;
+      const steamCustomVisible = config === HeatingEquipmentConfiguration.STEAM || config === HeatingEquipmentConfiguration.CUSTOM_ELECTROTECHNOLOGY;
+
+      for (const view of eafViews) {
+        expect(heatBalance.includes(view)).toBe(eafVisible);
+        expect(expertView.includes(view)).toBe(eafVisible);
+      }
+      for (const view of steamCustomViews) {
+        expect(heatBalance.includes(view)).toBe(steamCustomVisible);
+        expect(expertView.includes(view)).toBe(steamCustomVisible);
+      }
+    });
+  }
+
+  it('uses the same route tokens the gating sets are keyed on', () => {
+    expect(LossView.ENERGY_INPUT).toBe(ROUTE_TOKENS.energyInput);
+    expect(LossView.EXHAUST_GAS).toBe(ROUTE_TOKENS.exhaustGas);
+    expect(LossView.SLAG).toBe(ROUTE_TOKENS.slag);
+    expect(LossView.HEAT_SYSTEM_EFFICIENCY).toBe(ROUTE_TOKENS.heatSystemEfficiency);
+  });
+});

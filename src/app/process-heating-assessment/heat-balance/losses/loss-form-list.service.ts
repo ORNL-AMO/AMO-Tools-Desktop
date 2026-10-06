@@ -50,6 +50,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
     const losses = (this.assessmentService.lossSignal(scenario, this.lossKey) as TLoss[] | undefined) ?? [];
     const items = losses.map((loss, idx) => this.buildItem(this.ensureId(loss), idx + 1));
     this.store.load(items);
+    this.onLossesChanged();
   }
 
   updateItem(id: string): void {
@@ -141,5 +142,23 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
 
     /** `TLoss[]` matches `Losses[typeof this.lossKey]` per subclass, but TS can't verify that generically here. */
     this.assessmentService.updateLossesProperty(this.scenario, this.lossKey, losses as never);
+    this.onLossesChanged();
   }
+
+  /**
+   * Recalculates every entry's cached result after something outside the entry's own form changes its validity.
+   * Not persisted until the next save, so a reader of the saved `heatLoss` can briefly see the previous value.
+   */
+  protected refreshResults(): void {
+    for (const item of this.store.all()) {
+      const updated = { ...item };
+      this.calculateItemResult(updated);
+      if (updated.heatLoss !== item.heatLoss) {
+        this.store.set(item.id, updated);
+      }
+    }
+  }
+
+  /** Called after entries are loaded or saved; override for work that depends on the scenario's updated losses. */
+  protected onLossesChanged(): void {}
 }

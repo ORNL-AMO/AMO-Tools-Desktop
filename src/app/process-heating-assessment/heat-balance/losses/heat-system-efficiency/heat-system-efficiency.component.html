@@ -1,4 +1,32 @@
 <div class="panel-container p-3">
   <h5>Heat System Efficiency</h5>
-  <p class="text-muted">Steam / Custom Electrotechnology heating system configuration only — implemented in Step 13.</p>
+  <form [formGroup]="form">
+    <div class="form-section">
+      <div class="form-group">
+        <label class="small" for="efficiency_{{scenario()}}">Heat System Efficiency</label>
+        <div class="input-group" [class.invalid]="form.controls.efficiency.invalid">
+          <input type="number" step="any" min="0" max="100" class="form-control"
+            id="efficiency_{{scenario()}}" formControlName="efficiency" onfocus="this.select();">
+          <span class="input-group-addon units">%</span>
+        </div>
+        <app-form-control-errors [control]="form.controls.efficiency" [settings]="settings()">
+        </app-form-control-errors>
+      </div>
+    </div>
+  </form>
+
+  <div class="loss-results mt-3">
+    <div class="d-flex justify-content-between small font-weight-bold">
+      <span>Gross Heat</span>
+      <span>
+        @if (results(); as r) { {{r.grossHeat | sigFigs: 6}} {{resultsUnit}} } @else { &mdash;&mdash; }
+      </span>
+    </div>
+    <div class="d-flex justify-content-between small font-weight-bold">
+      <span>System Losses</span>
+      <span>
+        @if (results(); as r) { {{r.systemLosses | sigFigs: 6}} {{resultsUnit}} } @else { &mdash;&mdash; }
+      </span>
+    </div>
+  </div>
 </div>

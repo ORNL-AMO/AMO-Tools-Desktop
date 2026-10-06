@@ -224,6 +224,16 @@ describe('ensureLossIdsForPhast', () => {
     expect(migrated.losses.energyInputExhaustGasLoss[0].id).toBeTruthy();
   });
 
+  it('backfills missing ids on baseline slag, energy input EAF, and exhaust gas EAF losses', () => {
+    const phast: PHAST = { losses: { slagLosses: [{ weight: 1 }], energyInputEAF: [{ otherFuels: 1 }], exhaustGasEAF: [{ CO: 1 }] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.slagLosses[0].id).toBeTruthy();
+    expect(migrated.losses.energyInputEAF[0].id).toBeTruthy();
+    expect(migrated.losses.exhaustGasEAF[0].id).toBeTruthy();
+  });
+
   it('assigns distinct ids to multiple id-less wall losses instead of leaving them all undefined', () => {
     const phast: PHAST = {
       losses: { wallLosses: [{ surfaceArea: 100 } as never, { surfaceArea: 200 } as never] },

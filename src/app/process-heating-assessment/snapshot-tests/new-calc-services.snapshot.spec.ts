@@ -12,6 +12,15 @@
  * - Auxiliary Power is compared after converting the snapshot's totalAuxPower. Legacy sumAuxilaryPowerLosses()
  *   returns the raw suite value (Btu/hr) with no unit conversion, a known legacy bug; the new calculator converts to
  *   the energy result unit. The expected value is converted here the same way until the legacy total is fixed.
+ * - Energy Input EAF is compared against a live legacy PhastService.energyInputEAF() call and against frozen
+ *   heat delivered values (FROZEN_ENERGY_INPUT_EAF_HEAT_DELIVERED), not a snapshot key: the snapshot's
+ *   energyInputHeatDelivered is a results rollup (gross heat input less chemical energy), not the form's heat
+ *   delivered. Both sides of the live comparison use the same suite call, so only the frozen values catch a suite
+ *   regression.
+ * - Heat System Efficiency is compared on system losses and gross heat. The Steam and Custom Electrotechnology
+ *   Synthetic fixtures carry a small exothermic reaction so the exothermic term is exercised.
+ * - The EAF Dummy Values, Steam Synthetic and Custom Electrotechnology Synthetic fixtures are synthetic, not real
+ *   assessments, and are to be replaced with real ones later.
  * - Every fixture is Imperial, so Metric conversions are only covered by the calculation-service unit specs.
  * - No fixture has an 'Other Gas' / 'Other Liquid' cooling loss. The new CoolingCalculationService
  *   would include them while legacy sumCoolingLosses() adds 0 (see
@@ -43,8 +52,21 @@ import { GasLeakageCalculationService } from '../heat-balance/losses/gas-leakage
 import { EnergyInputExhaustGasCalculationService } from '../heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas-calculation.service';
 import { AuxiliaryPowerCalculationService } from '../heat-balance/losses/auxiliary-power/auxiliary-power-calculation.service';
 import { FlueGasCalculationService } from '../heat-balance/losses/flue-gas/flue-gas-calculation.service';
+import { SlagCalculationService } from '../heat-balance/losses/slag/slag-calculation.service';
+import { EnergyInputCalculationService } from '../heat-balance/losses/energy-input/energy-input-calculation.service';
+import { ExhaustGasCalculationService } from '../heat-balance/losses/exhaust-gas/exhaust-gas-calculation.service';
+import { calculateSystemEfficiencyResults } from '../heat-balance/losses/heat-system-efficiency/heat-system-efficiency.component';
 import { buildPhastServices, PhastServices } from './snapshot.helper';
 import { FIXTURES } from './snapshot-fixtures';
+
+/**
+ * Btu-converted heat delivered (energyResultUnit) for the EAF Dummy Values fixture's first Energy Input entry,
+ * captured from the legacy PhastService.energyInputEAF(). Recapture only on an intentional suite change.
+ */
+const FROZEN_ENERGY_INPUT_EAF_HEAT_DELIVERED: Record<string, number> = {
+  'EAF Dummy Values:baseline': 41345.53286041355,
+  'EAF Dummy Values:modification_0': 41345.53286041355,
+};
 
 function migrate(baseline: PHAST): PHAST {
   const modifications = baseline.modifications?.map(modification => {
@@ -72,6 +94,9 @@ describe('New calculation services vs. legacy snapshot totals', () => {
   let flueGas: FlueGasCalculationService;
   let auxiliaryPower: AuxiliaryPowerCalculationService;
   let energyInputExhaustGas: EnergyInputExhaustGasCalculationService;
+  let slag: SlagCalculationService;
+  let energyInput: EnergyInputCalculationService;
+  let exhaustGas: ExhaustGasCalculationService;
 
   beforeAll(async () => {
     services = await buildPhastServices();
@@ -88,6 +113,9 @@ describe('New calculation services vs. legacy snapshot totals', () => {
         { provide: FlueGasCalculationService, useClass: FlueGasCalculationService, deps: [] },
         { provide: AuxiliaryPowerCalculationService, useClass: AuxiliaryPowerCalculationService, deps: [] },
         { provide: EnergyInputExhaustGasCalculationService, useClass: EnergyInputExhaustGasCalculationService, deps: [] },
+        { provide: SlagCalculationService, useClass: SlagCalculationService, deps: [] },
+        { provide: EnergyInputCalculationService, useClass: EnergyInputCalculationService, deps: [] },
+        { provide: ExhaustGasCalculationService, useClass: ExhaustGasCalculationService, deps: [] },
       ],
     });
     opening = injector.get(OpeningCalculationService);
@@ -99,6 +127,9 @@ describe('New calculation services vs. legacy snapshot totals', () => {
     flueGas = injector.get(FlueGasCalculationService);
     auxiliaryPower = injector.get(AuxiliaryPowerCalculationService);
     energyInputExhaustGas = injector.get(EnergyInputExhaustGasCalculationService);
+    slag = injector.get(SlagCalculationService);
+    energyInput = injector.get(EnergyInputCalculationService);
+    exhaustGas = injector.get(ExhaustGasCalculationService);
   });
 
   /** Legacy totalAuxPower is the raw suite value (Btu/hr); converts it the way the new calculator reports it. */
@@ -187,6 +218,52 @@ describe('New calculation services vs. legacy snapshot totals', () => {
           const actual = energyInputExhaustGas.calculate(entry, settings);
           expect(actual.exhaustGasLosses).withContext('exhaustGasLosses').toBeCloseTo(expected.totalExhaustGas, 6);
           expect(actual.fuelHeatDelivered).withContext('fuelHeatDelivered').toBeCloseTo(expected.energyInputHeatDelivered, 6);
+        });
+
+        it(`${scenario.label} slag matches snapshot`, () => {
+          const expected = snapshots[scenario.snapshotKey];
+          const losses = scenario.effective().losses.slagLosses;
+          if (!losses?.length || expected.totalSlag === undefined) {
+            pending('no slag result in this scenario');
+            return;
+          }
+          expect(sum(losses, loss => slag.calculate(loss, settings))).withContext('totalSlag').toBeCloseTo(expected.totalSlag, 6);
+        });
+
+        it(`${scenario.label} exhaust gas EAF matches snapshot`, () => {
+          const expected = snapshots[scenario.snapshotKey];
+          const losses = scenario.effective().losses.exhaustGasEAF;
+          if (!losses?.length || expected.totalExhaustGasEAF === undefined) {
+            pending('no exhaust gas EAF result in this scenario');
+            return;
+          }
+          expect(sum(losses, loss => exhaustGas.calculate(loss, settings))).withContext('totalExhaustGasEAF').toBeCloseTo(expected.totalExhaustGasEAF, 6);
+        });
+
+        it(`${scenario.label} energy input EAF matches legacy heat delivered`, () => {
+          const entry = scenario.effective().losses.energyInputEAF?.[0];
+          if (!entry) {
+            pending('no energy input EAF result in this scenario');
+            return;
+          }
+          const expected = services.phastService.energyInputEAF(JSON.parse(JSON.stringify(entry)), settings).heatDelivered;
+          const actual = energyInput.calculate(entry, settings);
+          expect(actual).withContext('heatDelivered').toBeCloseTo(expected, 6);
+          const frozen = FROZEN_ENERGY_INPUT_EAF_HEAT_DELIVERED[`${name}:${scenario.snapshotKey}`];
+          if (frozen !== undefined) {
+            expect(actual).withContext('frozen heatDelivered').toBeCloseTo(frozen, 6);
+          }
+        });
+
+        it(`${scenario.label} heat system efficiency matches snapshot`, () => {
+          const expected = snapshots[scenario.snapshotKey];
+          if (!expected.heatingSystemEfficiency) {
+            pending('no heat system efficiency result in this scenario');
+            return;
+          }
+          const actual = calculateSystemEfficiencyResults(expected.totalInput, expected.exothermicHeat, expected.heatingSystemEfficiency);
+          expect(actual.systemLosses).withContext('totalSystemLosses').toBeCloseTo(expected.totalSystemLosses, 6);
+          expect(actual.grossHeat).withContext('grossHeatInput').toBeCloseTo(expected.grossHeatInput, 6);
         });
 
         it(`${scenario.label} flue gas available heat matches snapshot`, () => {

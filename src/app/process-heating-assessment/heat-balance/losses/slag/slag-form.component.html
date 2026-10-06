@@ -1,0 +1,56 @@
+<form [formGroup]="form()">
+  <div class="form-section">
+    <div class="form-group">
+      <label class="small" for="{{controlIds().weight}}">Weight</label>
+      <div class="input-group" [class.invalid]="form().controls.weight.invalid">
+        <input type="number" step="10" min="0" class="form-control"
+          id="{{controlIds().weight}}" formControlName="weight" onfocus="this.select();">
+        <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'lb/hr' : 'kg/hr'}}</span>
+      </div>
+      <app-form-control-errors [control]="form().controls.weight" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().inletTemperature}}">Inlet Temperature</label>
+      <div class="input-group" [class.invalid]="form().controls.inletTemperature.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds().inletTemperature}}" formControlName="inletTemperature" onfocus="this.select();">
+        <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? '℉' : '℃'}}</span>
+      </div>
+      <app-form-control-errors [control]="form().controls.inletTemperature" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().outletTemperature}}">Outlet Temperature</label>
+      <div class="input-group" [class.invalid]="form().controls.outletTemperature.invalid">
+        <input type="number" step="10" class="form-control"
+          id="{{controlIds().outletTemperature}}" formControlName="outletTemperature" onfocus="this.select();">
+        <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? '℉' : '℃'}}</span>
+      </div>
+      <app-form-control-errors [control]="form().controls.outletTemperature" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().specificHeat}}">Specific Heat</label>
+      <div class="input-group" [class.invalid]="form().controls.specificHeat.invalid">
+        <input type="number" step="any" min="0" class="form-control"
+          id="{{controlIds().specificHeat}}" formControlName="specificHeat" onfocus="this.select();">
+        <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'Btu/(lb-℉)' : 'kJ/(kg-℃)'}}</span>
+      </div>
+      <app-form-control-errors [control]="form().controls.specificHeat" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+
+    <div class="form-group">
+      <label class="small" for="{{controlIds().correctionFactor}}">Correction Factor</label>
+      <input type="number" step="any" min="0" class="form-control"
+        id="{{controlIds().correctionFactor}}" formControlName="correctionFactor" onfocus="this.select();"
+        [class.invalid]="form().controls.correctionFactor.invalid">
+      <app-form-control-errors [control]="form().controls.correctionFactor" [settings]="settings()">
+      </app-form-control-errors>
+    </div>
+  </div>
+</form>

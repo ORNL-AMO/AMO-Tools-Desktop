@@ -42,6 +42,7 @@ import { FIXTURES } from './snapshot-fixtures';
 
 export interface PhastServices {
   phastResultsService: PhastResultsService;
+  phastService: PhastService;
   processHeatingApiService: ProcessHeatingApiService;
   convertUnitsService: ConvertUnitsService;
 }
@@ -130,5 +131,5 @@ export async function buildPhastServices(options: PhastServiceOptions = {}): Pro
     null as any, // FlueGasMaterialDbService — not used in getResults()
   );
 
-  return { phastResultsService, processHeatingApiService, convertUnitsService };
+  return { phastResultsService, phastService, processHeatingApiService, convertUnitsService };
 }

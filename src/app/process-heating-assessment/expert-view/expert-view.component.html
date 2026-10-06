@@ -41,6 +41,10 @@
     @case (LossView.GAS_LEAKAGE) { <app-gas-leakage [scenario]="scenario"></app-gas-leakage> }
     @case (LossView.AUXILIARY_POWER) { <app-auxiliary-power [scenario]="scenario"></app-auxiliary-power> }
     @case (LossView.ENERGY_INPUT_EXHAUST_GAS) { <app-energy-input-exhaust-gas [scenario]="scenario"></app-energy-input-exhaust-gas> }
+    @case (LossView.ENERGY_INPUT) { <app-energy-input [scenario]="scenario"></app-energy-input> }
+    @case (LossView.EXHAUST_GAS) { <app-exhaust-gas [scenario]="scenario"></app-exhaust-gas> }
+    @case (LossView.SLAG) { <app-slag [scenario]="scenario"></app-slag> }
+    @case (LossView.HEAT_SYSTEM_EFFICIENCY) { <app-heat-system-efficiency [scenario]="scenario"></app-heat-system-efficiency> }
     @case (LossView.OTHER) { <app-other [scenario]="scenario"></app-other> }
   }
 </ng-template>

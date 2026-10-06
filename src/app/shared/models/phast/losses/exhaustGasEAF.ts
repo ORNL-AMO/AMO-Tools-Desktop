@@ -10,4 +10,6 @@ export interface ExhaustGasEAF {
     dustLoading?: number;
     otherLosses?: number;
     name?: string;
+    id?: string;
+    heatLoss?: number;
 }

@@ -6,4 +6,5 @@ export interface Slag {
     correctionFactor?: number;
     heatLoss?: number;
     name?: string;
+    id?: string;
 }

@@ -1,26 +1,86 @@
 /**
- * Snapshot test: Electric Arc Furnace (EAF) (STUB — blocked on real fixture data)
+ * Snapshot test: EAF Dummy Values (synthetic, not a real assessment; replace with a real EAF assessment later)
  *
- * TODO(fixture-data): no fixture uses `furnaceType: 'Electric Arc Furnace (EAF)'` anywhere in the
- * repo (legacy or new). `PhastResultsService.getResults()` branches on this furnace type
- * (phast-results.service.ts:291,414) and it's the only pathway that exercises the EAF-only loss
- * types: Slag, Auxiliary Power, Energy Input EAF, Exhaust Gas EAF (see
- * refactor-plan/snapshot-test-coverage.md Group B). Real assessment data for this configuration will
- * be provided later; until then this suite stays a skipped stub rather than silently reporting the
- * gap as covered.
+ * Electrotechnology / EAF, Imperial, 1 charge material, 1 wall loss, 1 modification.
  *
- * Once fixture data lands:
- *   1. Add `fixtures/<name>.json` (an exported Assessment with `settings.energySourceType:
- *      'Electricity'`, `settings.furnaceType: 'Electric Arc Furnace (EAF)'`) and follow the pattern
- *      in e.g. fuel-example.snapshot.spec.ts to generate its `.snap.json`.
- *   2. Replace this stub's body with the real baseline + per-modification assertions.
- *   3. Update refactor-plan/snapshot-test-coverage.md's Group B rows (Slag, Auxiliary Power, Energy
- *      Input EAF, Exhaust Gas EAF).
+ * To regenerate snapshots:
+ *   1. Set GENERATE = true
+ *   2. Run: ng test --include="**\/eaf-dummy-values.snapshot.spec.ts" --watch=false --browsers=ChromeHeadlessNoSandbox
+ *   3. Pipe output through generate-snapshot.py into snapshots/eaf-dummy-values.snap.json
+ *   4. Set GENERATE = false and re-run to confirm green
  */
 
-// eslint-disable-next-line jasmine/no-disabled-tests
-xdescribe('Snapshot Test: Electric Arc Furnace (EAF)', () => {
-  it('TODO(fixture-data): blocked on an EAF-pathway assessment fixture', () => {
-    // Intentionally skipped — see file header.
+import { PHAST } from '../../shared/models/phast/phast';
+import { Settings } from '../../shared/models/settings';
+import { PhastResultsService } from '../../phast/phast-results.service';
+import { buildPhastServices } from './snapshot.helper';
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const fixture = require('./fixtures/EAF Dummy Values.json');
+
+const GENERATE = false;
+
+const MODIFICATION_COUNT = 1;
+
+function extractAssessment(): { phast: PHAST; settings: Settings } {
+  const raw = fixture.assessments[0];
+  return { phast: raw.assessment.phast, settings: raw.settings };
+}
+
+describe('Snapshot Test: EAF Dummy Values', () => {
+  let phastResultsService: PhastResultsService;
+
+  beforeAll(async () => {
+    const services = await buildPhastServices();
+    phastResultsService = services.phastResultsService;
   });
+
+  it('GENERATE flag must be false before committing', () => {
+    expect(GENERATE).toBe(false);
+  });
+
+  it('fixture has expected modification count', () => {
+    expect(extractAssessment().phast.modifications.length).toBe(MODIFICATION_COUNT);
+  });
+
+  if (GENERATE) {
+
+    it('generates baseline snapshot', () => {
+      const { phast, settings } = extractAssessment();
+      const result = phastResultsService.getResults(phast, settings);
+      console.log('SNAPSHOT:baseline:' + JSON.stringify(result));
+      expect(true).toBe(true);
+    });
+
+    for (let i = 0; i < MODIFICATION_COUNT; i++) {
+      it(`generates modification[${i}] snapshot`, () => {
+        const { phast, settings } = extractAssessment();
+        const modPhast: PHAST = phast.modifications[i].phast;
+        const result = phastResultsService.getResults(modPhast, settings);
+        console.log(`SNAPSHOT:modification_${i}:` + JSON.stringify(result));
+        expect(true).toBe(true);
+      });
+    }
+
+  } else {
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const snapshots = require('./snapshots/eaf-dummy-values.snap.json');
+
+    it('baseline results match snapshot', () => {
+      const { phast, settings } = extractAssessment();
+      const result = JSON.parse(JSON.stringify(phastResultsService.getResults(phast, settings)));
+      expect(result).toEqual(snapshots.baseline);
+    });
+
+    for (let i = 0; i < MODIFICATION_COUNT; i++) {
+      it(`modification[${i}] results match snapshot`, () => {
+        const { phast, settings } = extractAssessment();
+        const modPhast: PHAST = phast.modifications[i].phast;
+        const result = JSON.parse(JSON.stringify(phastResultsService.getResults(modPhast, settings)));
+        expect(result).toEqual(snapshots[`modification_${i}`]);
+      });
+    }
+
+  }
 });

@@ -10,4 +10,6 @@ export interface EnergyInputEAF {
     electricityInput?: number;
     flowRateInput?: number;
     name?: string;
+    id?: string;
+    heatLoss?: number;
 }
