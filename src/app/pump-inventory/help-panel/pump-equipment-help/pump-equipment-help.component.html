@@ -140,3 +140,15 @@
       </small>
     </h6>
   </div>
+
+  <div class="my-2" *ngIf="focusedField == 'designDifferentialPressure'">
+    <h6>
+      Design Differential Pressure
+      <br>
+      <small class="text-muted">
+        Rated differential pressure (discharge minus suction) of a positive displacement pump at its design point, in psi or Pa,
+        typically found on the manufacturer's data sheet or nameplate. Used in place of design head for positive displacement pumps.
+        <br> This value is for reference only and is not used in results calculations. Enter the measured value as Operating Differential Pressure in Field Measurements.
+      </small>
+    </h6>
+  </div>
