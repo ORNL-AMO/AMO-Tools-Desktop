@@ -14,5 +14,9 @@ export const FIXTURES: { name: string; fixture: any; snapshots: any }[] = [
   { name: 'TEST A1', fixture: require('./fixtures/TEST A1.json'), snapshots: require('./snapshots/test-a1.snap.json') },
   { name: 'TEST A2', fixture: require('./fixtures/TEST A2.json'), snapshots: require('./snapshots/test-a2.snap.json') },
   { name: 'TEST B1', fixture: require('./fixtures/TEST B1.json'), snapshots: require('./snapshots/test-b1.snap.json') },
+  // Synthetic fixtures (not real assessments); replace with real ones later
+  { name: 'EAF Dummy Values', fixture: require('./fixtures/EAF Dummy Values.json'), snapshots: require('./snapshots/eaf-dummy-values.snap.json') },
+  { name: 'Steam Synthetic', fixture: require('./fixtures/Steam Synthetic.json'), snapshots: require('./snapshots/steam-synthetic.snap.json') },
+  { name: 'Custom Electrotechnology Synthetic', fixture: require('./fixtures/Custom Electrotechnology Synthetic.json'), snapshots: require('./snapshots/custom-electrotechnology-synthetic.snap.json') },
 ];
 /* eslint-enable @typescript-eslint/no-require-imports */

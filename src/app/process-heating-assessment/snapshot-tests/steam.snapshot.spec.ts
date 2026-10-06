@@ -1,22 +1,86 @@
 /**
- * Snapshot test: Steam (STUB — blocked on real fixture data)
+ * Snapshot test: Steam (synthetic) (synthetic, not a real assessment; replace with a real assessment later)
  *
- * TODO(fixture-data): no Steam-pathway assessment fixture exists anywhere in the repo (legacy or
- * new). `PhastResultsService.getResults()` branches on `settings.energySourceType === 'Steam'`
- * (phast-results.service.ts:306,426) — a real, untested calculation path, not just UI routing.
- * Real assessment data for this configuration will be provided later; until then this suite stays
- * a skipped stub rather than silently reporting the gap as covered.
+ * Steam, Imperial, 1 charge material, 1 wall loss, 1 modification (system efficiency 90 baseline, 80 modification).
  *
- * Once fixture data lands:
- *   1. Add `fixtures/<name>.json` (an exported Assessment with `settings.energySourceType: 'Steam'`)
- *      and follow the pattern in e.g. fuel-example.snapshot.spec.ts to generate its `.snap.json`.
- *   2. Replace this stub's body with the real baseline + per-modification assertions.
- *   3. Update refactor-plan/snapshot-test-coverage.md's Steam row.
+ * To regenerate snapshots:
+ *   1. Set GENERATE = true
+ *   2. Run: ng test --include="**\/steam-synthetic.snapshot.spec.ts" --watch=false --browsers=ChromeHeadlessNoSandbox
+ *   3. Pipe output through generate-snapshot.py into snapshots/steam-synthetic.snap.json
+ *   4. Set GENERATE = false and re-run to confirm green
  */
 
-// eslint-disable-next-line jasmine/no-disabled-tests
-xdescribe('Snapshot Test: Steam', () => {
-  it('TODO(fixture-data): blocked on a Steam-pathway assessment fixture', () => {
-    // Intentionally skipped — see file header.
+import { PHAST } from '../../shared/models/phast/phast';
+import { Settings } from '../../shared/models/settings';
+import { PhastResultsService } from '../../phast/phast-results.service';
+import { buildPhastServices } from './snapshot.helper';
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const fixture = require('./fixtures/Steam Synthetic.json');
+
+const GENERATE = false;
+
+const MODIFICATION_COUNT = 1;
+
+function extractAssessment(): { phast: PHAST; settings: Settings } {
+  const raw = fixture.assessments[0];
+  return { phast: raw.assessment.phast, settings: raw.settings };
+}
+
+describe('Snapshot Test: Steam (synthetic)', () => {
+  let phastResultsService: PhastResultsService;
+
+  beforeAll(async () => {
+    const services = await buildPhastServices();
+    phastResultsService = services.phastResultsService;
   });
+
+  it('GENERATE flag must be false before committing', () => {
+    expect(GENERATE).toBe(false);
+  });
+
+  it('fixture has expected modification count', () => {
+    expect(extractAssessment().phast.modifications.length).toBe(MODIFICATION_COUNT);
+  });
+
+  if (GENERATE) {
+
+    it('generates baseline snapshot', () => {
+      const { phast, settings } = extractAssessment();
+      const result = phastResultsService.getResults(phast, settings);
+      console.log('SNAPSHOT:baseline:' + JSON.stringify(result));
+      expect(true).toBe(true);
+    });
+
+    for (let i = 0; i < MODIFICATION_COUNT; i++) {
+      it(`generates modification[${i}] snapshot`, () => {
+        const { phast, settings } = extractAssessment();
+        const modPhast: PHAST = phast.modifications[i].phast;
+        const result = phastResultsService.getResults(modPhast, settings);
+        console.log(`SNAPSHOT:modification_${i}:` + JSON.stringify(result));
+        expect(true).toBe(true);
+      });
+    }
+
+  } else {
+
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const snapshots = require('./snapshots/steam-synthetic.snap.json');
+
+    it('baseline results match snapshot', () => {
+      const { phast, settings } = extractAssessment();
+      const result = JSON.parse(JSON.stringify(phastResultsService.getResults(phast, settings)));
+      expect(result).toEqual(snapshots.baseline);
+    });
+
+    for (let i = 0; i < MODIFICATION_COUNT; i++) {
+      it(`modification[${i}] results match snapshot`, () => {
+        const { phast, settings } = extractAssessment();
+        const modPhast: PHAST = phast.modifications[i].phast;
+        const result = JSON.parse(JSON.stringify(phastResultsService.getResults(modPhast, settings)));
+        expect(result).toEqual(snapshots[`modification_${i}`]);
+      });
+    }
+
+  }
 });

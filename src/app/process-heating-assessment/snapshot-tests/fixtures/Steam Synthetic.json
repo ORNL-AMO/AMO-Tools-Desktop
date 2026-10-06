@@ -1,0 +1,369 @@
+{
+  "directories": [],
+  "assessments": [
+    {
+      "assessment": {
+        "name": "Steam (synthetic)",
+        "createdDate": "2026-10-06T12:55:43.743Z",
+        "modifiedDate": "2026-10-06T13:04:21.284Z",
+        "type": "PHAST",
+        "appVersion": "1.9.0-f2094c5",
+        "phast": {
+          "name": "Steam (synthetic)",
+          "systemEfficiency": 90,
+          "operatingHours": {
+            "weeksPerYear": 52,
+            "daysPerWeek": 7,
+            "hoursPerYear": 8760
+          },
+          "operatingCosts": {
+            "electricityCost": 0.066,
+            "steamCost": 4.69,
+            "fuelCost": 3.99,
+            "coalCarbonCost": 0.06,
+            "electrodeCost": 3,
+            "otherFuelCost": 3.99
+          },
+          "modifications": [
+            {
+              "phast": {
+                "losses": {
+                  "chargeMaterials": [
+                    {
+                      "name": "Material #1",
+                      "chargeMaterialType": "Solid",
+                      "solidChargeMaterial": {
+                        "materialId": 1,
+                        "thermicReactionType": 0,
+                        "specificHeatSolid": 0.2479,
+                        "latentHeat": 169,
+                        "specificHeatLiquid": 0.2601,
+                        "meltingPoint": 1215,
+                        "chargeFeedRate": 33,
+                        "waterContentCharged": 0,
+                        "waterContentDischarged": 0,
+                        "initialTemperature": 33,
+                        "dischargeTemperature": 1400,
+                        "waterVaporDischargeTemperature": 0,
+                        "chargeMelted": 0,
+                        "chargeReacted": 0,
+                        "reactionHeat": 0,
+                        "additionalHeat": 0,
+                        "heatRequired": 0
+                      }
+                    }
+                  ],
+                  "wallLosses": [
+                    {
+                      "surfaceArea": 555,
+                      "ambientTemperature": 55,
+                      "surfaceTemperature": 555,
+                      "windVelocity": 0,
+                      "surfaceEmissivity": 0.9,
+                      "surfaceShape": 3,
+                      "conditionFactor": 1.394,
+                      "correctionFactor": 1,
+                      "availableHeat": 0,
+                      "name": "Loss #1",
+                      "heatLoss": 359.6355431380621
+                    }
+                  ]
+                },
+                "name": "Scenario 1",
+                "operatingCosts": {
+                  "electricityCost": 0.066,
+                  "steamCost": 4.69,
+                  "fuelCost": 3.99,
+                  "coalCarbonCost": 0.06,
+                  "electrodeCost": 3,
+                  "otherFuelCost": 3.99
+                },
+                "operatingHours": {
+                  "weeksPerYear": 52,
+                  "daysPerWeek": 7,
+                  "hoursPerYear": 8760
+                },
+                "systemEfficiency": 80,
+                "valid": {
+                  "isValid": true,
+                  "operationsValid": true,
+                  "chargeMaterialValid": true,
+                  "flueGasValid": true,
+                  "fixtureValid": true,
+                  "wallValid": true,
+                  "coolingValid": true,
+                  "atmosphereValid": true,
+                  "openingValid": true,
+                  "leakageValid": true,
+                  "extendedSurfaceValid": true,
+                  "otherValid": true,
+                  "systemEfficiencyValid": true,
+                  "energyInputValid": true,
+                  "slagValid": true,
+                  "exhaustGasValid": true,
+                  "inputExhaustValid": true,
+                  "auxPowerValid": true
+                }
+              },
+              "id": "d9c68e30-2fcf-4337-95c6-8b3b9b967683",
+              "notes": {
+                "chargeNotes": "",
+                "wallNotes": "",
+                "atmosphereNotes": "",
+                "fixtureNotes": "",
+                "openingNotes": "",
+                "coolingNotes": "",
+                "flueGasNotes": "",
+                "otherNotes": "",
+                "leakageNotes": "",
+                "extendedNotes": "",
+                "slagNotes": "",
+                "auxiliaryPowerNotes": "",
+                "exhaustGasNotes": "",
+                "energyInputExhaustGasNotes": "",
+                "operationsNotes": ""
+              },
+              "exploreOppsShowFlueGas": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowAirTemp": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowMaterial": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowAllTimeOpen": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowOpening": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowAllEmissivity": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowCooling": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowAtmosphere": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowOperations": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowLeakage": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowSlag": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowEfficiencyData": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowWall": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowAllTemp": {
+                "hasOpportunity": false,
+                "display": ""
+              },
+              "exploreOppsShowFixtures": {
+                "hasOpportunity": false,
+                "display": ""
+              }
+            }
+          ],
+          "setupDone": true,
+          "losses": {
+            "chargeMaterials": [
+              {
+                "name": "Material #1",
+                "chargeMaterialType": "Solid",
+                "solidChargeMaterial": {
+                  "materialId": 1,
+                  "thermicReactionType": 0,
+                  "specificHeatSolid": 0.2479,
+                  "latentHeat": 169,
+                  "specificHeatLiquid": 0.2601,
+                  "meltingPoint": 1215,
+                  "chargeFeedRate": 33,
+                  "waterContentCharged": 0,
+                  "waterContentDischarged": 0,
+                  "initialTemperature": 33,
+                  "dischargeTemperature": 1500,
+                  "waterVaporDischargeTemperature": 0,
+                  "chargeMelted": 0,
+                  "chargeReacted": 0,
+                  "reactionHeat": 0,
+                  "additionalHeat": 0,
+                  "heatRequired": 0
+                }
+              }
+            ],
+            "wallLosses": [
+              {
+                "surfaceArea": 555,
+                "ambientTemperature": 55,
+                "surfaceTemperature": 555,
+                "windVelocity": 0,
+                "surfaceEmissivity": 0.9,
+                "surfaceShape": 3,
+                "conditionFactor": 1.394,
+                "correctionFactor": 1,
+                "availableHeat": 0,
+                "name": "Loss #1",
+                "heatLoss": 359.6355431380621
+              }
+            ]
+          },
+          "valid": {
+            "isValid": true,
+            "operationsValid": true,
+            "chargeMaterialValid": true,
+            "flueGasValid": true,
+            "fixtureValid": true,
+            "wallValid": true,
+            "coolingValid": true,
+            "atmosphereValid": true,
+            "openingValid": true,
+            "leakageValid": true,
+            "extendedSurfaceValid": true,
+            "otherValid": true,
+            "systemEfficiencyValid": true,
+            "energyInputValid": true,
+            "slagValid": true,
+            "exhaustGasValid": true,
+            "inputExhaustValid": true,
+            "auxPowerValid": true
+          },
+          "disableSetupDialog": true
+        },
+        "directoryId": 1,
+        "id": 13
+      },
+      "settings": {
+        "language": "English",
+        "currency": "$",
+        "unitsOfMeasure": "Imperial",
+        "distanceMeasurement": "ft",
+        "flowMeasurement": "gpm",
+        "powerMeasurement": "hp",
+        "pressureMeasurement": "psi",
+        "steamPressureMeasurement": "psig",
+        "steamTemperatureMeasurement": "F",
+        "steamSpecificEnthalpyMeasurement": "btuLb",
+        "steamSpecificEntropyMeasurement": "btulbF",
+        "steamSpecificVolumeMeasurement": "ft3lb",
+        "steamMassFlowMeasurement": "klb",
+        "steamPowerMeasurement": "kW",
+        "steamVolumeMeasurement": "gal",
+        "steamVolumeFlowMeasurement": "gpm",
+        "steamVacuumPressure": "psia",
+        "currentMeasurement": null,
+        "viscosityMeasurement": null,
+        "voltageMeasurement": null,
+        "energySourceType": "Steam",
+        "furnaceType": null,
+        "energyResultUnit": "kWh",
+        "customFurnaceName": null,
+        "temperatureMeasurement": "F",
+        "appVersion": "1.9.0-f2094c5",
+        "fanCurveType": null,
+        "fanConvertedConditions": null,
+        "phastRollupUnit": "MMBtu",
+        "phastRollupFuelUnit": "MMBtu",
+        "phastRollupElectricityUnit": "kWh",
+        "phastRollupSteamUnit": "MMBtu",
+        "defaultPanelTab": "results",
+        "fuelCost": 3.99,
+        "steamCost": 4.69,
+        "electricityCost": 0.066,
+        "densityMeasurement": "lbscf",
+        "fanFlowRate": "ft3/min",
+        "fanPressureMeasurement": "inH2o",
+        "fanBarometricPressure": "inHg",
+        "fanSpecificHeatGas": "btulbF",
+        "fanPowerMeasurement": "hp",
+        "fanTemperatureMeasurement": "F",
+        "steamEnergyMeasurement": "MMBtu",
+        "disableTutorial": false,
+        "disableDashboardTutorial": false,
+        "disablePsatTutorial": false,
+        "disableFansTutorial": false,
+        "disablePhastTutorial": true,
+        "disableWasteWaterTutorial": false,
+        "disableSteamTutorial": false,
+        "disableMotorInventoryTutorial": false,
+        "disableTreasureHuntTutorial": false,
+        "disableDataExplorerTutorial": false,
+        "compressedAirCost": 0.022,
+        "otherFuelCost": 0,
+        "waterCost": 0,
+        "waterWasteCost": 0,
+        "printPsatRollup": true,
+        "printPhastRollup": true,
+        "printFsatRollup": true,
+        "printTreasureHuntRollup": true,
+        "printReportGraphs": true,
+        "printReportSankey": true,
+        "printResults": true,
+        "printInputData": true,
+        "printExecutiveSummary": true,
+        "printEnergySummary": true,
+        "printLossesSummary": true,
+        "printReportOpportunityPayback": true,
+        "printReportOpportunitySummary": true,
+        "printSsmtRollup": true,
+        "printWasteWaterRollup": true,
+        "printDetailedResults": true,
+        "printReportDiagram": true,
+        "printAll": true,
+        "co2SavingsEnergyType": "electricity",
+        "co2SavingsEnergySource": "Natural Gas",
+        "co2SavingsFuelType": "Natural Gas",
+        "totalEmissionOutputRate": 401.07,
+        "emissionsUnit": "Metric",
+        "totalFuelEmissionOutputRate": 0,
+        "electricityUse": 0,
+        "eGridRegion": "",
+        "eGridSubregion": "U.S. Average",
+        "totalEmissionOutput": 0,
+        "totalNaturalGasEmissionOutputRate": 53.06,
+        "totalCoalEmissionOutputRate": 0,
+        "totalOtherEmissionOutputRate": 0,
+        "coalFuelType": "Mixed - Industrial Sector",
+        "eafOtherFuelSource": "None",
+        "otherFuelType": "",
+        "userEnteredBaselineEmissions": false,
+        "userEnteredModificationEmissions": false,
+        "zipcode": "00000",
+        "commonRollupUnit": "MMBtu",
+        "pumpsRollupUnit": "MWh",
+        "fansRollupUnit": "MWh",
+        "steamRollupUnit": "MMBtu",
+        "wasteWaterRollupUnit": "MWh",
+        "compressedAirRollupUnit": "MWh",
+        "flowDecimalPrecision": 2,
+        "id": 18,
+        "assessmentId": 13,
+        "modifiedDate": "2026-10-06T12:55:48.307Z"
+      }
+    }
+  ],
+  "calculators": [],
+  "inventories": [],
+  "diagrams": [],
+  "origin": "AMO-TOOLS-DESKTOP"
+}

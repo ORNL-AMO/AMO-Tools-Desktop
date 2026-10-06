@@ -20,7 +20,10 @@ snapshot-tests/
 └── flue-gas-by-mass.snapshot.spec.ts     Live legacy vs. new, for By Mass cases no fixture covers
 ```
 
-`eaf`, `steam` and `custom-electrotechnology` specs and their fixtures exist only in this module.
+The `EAF Dummy Values`, `Steam Synthetic` and `Custom Electrotechnology Synthetic` fixtures are synthetic, not real
+assessments, and are to be replaced with real ones later. `EAF Dummy Values` was captured in the legacy folder and
+ported; the Steam and Custom Electrotechnology fixtures (and their `steam` and `custom-electrotechnology` specs) exist only
+in this module, with snapshots captured here from the legacy `PhastResultsService`.
 
 Snapshots are never written here first for a shared fixture. Capture them in the legacy folder, then copy.
 

@@ -1,22 +1,22 @@
 /**
- * Snapshot test: Custom Electrotechnology (synthetic) (synthetic, not a real assessment; replace with a real assessment later)
+ * Snapshot test: EAF Dummy Values (synthetic, not a real assessment; replace with a real EAF assessment later)
  *
- * Custom Electrotechnology, Imperial, 1 charge material, 1 wall loss, 1 modification (system efficiency 90 baseline, 80 modification).
+ * Electrotechnology / EAF, Imperial, 1 charge material, 1 wall loss, 1 modification.
  *
  * To regenerate snapshots:
  *   1. Set GENERATE = true
- *   2. Run: ng test --include="**\/custom-electrotechnology-synthetic.snapshot.spec.ts" --watch=false --browsers=ChromeHeadlessNoSandbox
- *   3. Pipe output through generate-snapshot.py into snapshots/custom-electrotechnology-synthetic.snap.json
+ *   2. Run: ng test --include="**\/phast-eaf-dummy-values.snapshot.spec.ts" --watch=false --browsers=ChromeHeadlessNoSandbox
+ *   3. Pipe output through generate-snapshot.py into snapshots/eaf-dummy-values.snap.json
  *   4. Set GENERATE = false and re-run to confirm green
  */
 
 import { PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
-import { PhastResultsService } from '../../phast/phast-results.service';
+import { PhastResultsService } from '../phast-results.service';
 import { buildPhastServices } from './snapshot.helper';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const fixture = require('./fixtures/Custom Electrotechnology Synthetic.json');
+const fixture = require('./fixtures/EAF Dummy Values.json');
 
 const GENERATE = false;
 
@@ -27,7 +27,7 @@ function extractAssessment(): { phast: PHAST; settings: Settings } {
   return { phast: raw.assessment.phast, settings: raw.settings };
 }
 
-describe('Snapshot Test: Custom Electrotechnology (synthetic)', () => {
+describe('Snapshot Test: EAF Dummy Values', () => {
   let phastResultsService: PhastResultsService;
 
   beforeAll(async () => {
@@ -65,7 +65,7 @@ describe('Snapshot Test: Custom Electrotechnology (synthetic)', () => {
   } else {
 
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const snapshots = require('./snapshots/custom-electrotechnology-synthetic.snap.json');
+    const snapshots = require('./snapshots/eaf-dummy-values.snap.json');
 
     it('baseline results match snapshot', () => {
       const { phast, settings } = extractAssessment();
