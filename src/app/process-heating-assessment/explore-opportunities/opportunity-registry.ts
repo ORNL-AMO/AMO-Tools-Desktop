@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { Losses } from '../models/phast';
+import { HeatingEquipmentConfiguration } from '../models/views';
 import { ChargeMaterialOpportunityComponent } from './charge-material-opportunity/charge-material-opportunity.component';
 import { WallLossOpportunityComponent } from './wall-loss-opportunity/wall-loss-opportunity.component';
 import { AtmosphereOpportunityComponent } from './atmosphere-opportunity/atmosphere-opportunity.component';
@@ -13,30 +14,37 @@ import { GasLeakageOpportunityComponent } from './gas-leakage-opportunity/gas-le
 import { AirFuelRatioOpportunityComponent } from './air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
 import { PreheatCombustionAirOpportunityComponent } from './preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
 
+export interface OpportunityRegistration {
+  component: Type<unknown>;
+  /** Renders only for these heating equipment configurations; omit to render for all. */
+  heatingEquipmentConfigurations?: readonly HeatingEquipmentConfiguration[];
+}
+
 export interface OpportunityRegistryEntry {
   /** Opportunities render only while the baseline has at least one loss of this type. */
   lossKey: keyof Losses;
   /** Rendered in array order. */
-  opportunityComponents: Type<unknown>[];
-  /** Also requires the fuel-fired heating equipment configuration. */
-  fuelFiredOnly?: boolean;
+  opportunityComponents: OpportunityRegistration[];
 }
+
+const FUEL_FIRED_ONLY = [HeatingEquipmentConfiguration.FUEL_FIRED];
 
 /**
  * Opportunities shown in the Explore Opportunities shell, in render order.
  *
  * To add an opportunity:
  * 1. Create the opportunity component and declare it in `process-heating-assessment.module.ts`.
- * 2. Add its class to `opportunityComponents` of the entry for its loss type, or add a new entry for a new loss type.
+ * 2. Add `{ component }` to `opportunityComponents` of the entry for its loss type, or add a new entry for a new loss type.
+ * 3. Set `heatingEquipmentConfigurations` on the registration if it applies to only some configurations.
  * The shell template needs no change.
  */
 export const OPPORTUNITY_REGISTRY: readonly OpportunityRegistryEntry[] = [
-  { lossKey: 'chargeMaterials', opportunityComponents: [ChargeMaterialOpportunityComponent] },
-  { lossKey: 'wallLosses', opportunityComponents: [WallLossOpportunityComponent] },
-  { lossKey: 'atmosphereLosses', opportunityComponents: [AtmosphereOpportunityComponent] },
-  { lossKey: 'fixtureLosses', opportunityComponents: [FixtureMaterialsHandlingOpportunityComponent, FixtureCoolingOpportunityComponent] },
-  { lossKey: 'coolingLosses', opportunityComponents: [CoolingOpportunityComponent] },
-  { lossKey: 'openingLosses', opportunityComponents: [OpeningSizeOpportunityComponent, OpeningEmissivityOpportunityComponent, OpeningTimeOpenOpportunityComponent] },
-  { lossKey: 'leakageLosses', opportunityComponents: [GasLeakageOpportunityComponent], fuelFiredOnly: true },
-  { lossKey: 'flueGasLosses', opportunityComponents: [AirFuelRatioOpportunityComponent, PreheatCombustionAirOpportunityComponent], fuelFiredOnly: true },
+  { lossKey: 'chargeMaterials', opportunityComponents: [{ component: ChargeMaterialOpportunityComponent }] },
+  { lossKey: 'wallLosses', opportunityComponents: [{ component: WallLossOpportunityComponent }] },
+  { lossKey: 'atmosphereLosses', opportunityComponents: [{ component: AtmosphereOpportunityComponent }] },
+  { lossKey: 'fixtureLosses', opportunityComponents: [{ component: FixtureMaterialsHandlingOpportunityComponent }, { component: FixtureCoolingOpportunityComponent }] },
+  { lossKey: 'coolingLosses', opportunityComponents: [{ component: CoolingOpportunityComponent }] },
+  { lossKey: 'openingLosses', opportunityComponents: [{ component: OpeningSizeOpportunityComponent }, { component: OpeningEmissivityOpportunityComponent }, { component: OpeningTimeOpenOpportunityComponent }] },
+  { lossKey: 'leakageLosses', opportunityComponents: [{ component: GasLeakageOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
+  { lossKey: 'flueGasLosses', opportunityComponents: [{ component: AirFuelRatioOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }, { component: PreheatCombustionAirOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
 ];
