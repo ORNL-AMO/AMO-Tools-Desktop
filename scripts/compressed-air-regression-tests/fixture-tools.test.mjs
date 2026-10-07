@@ -330,6 +330,30 @@ test('snapshot comparison uses hybrid tolerance and reports structure', () => {
   assert.deepEqual(differences.map(item => item.category), ['array-length', 'numeric']);
 });
 
+test('snapshot comparison ignores provenance and still checks the calculation contract', () => {
+  const expected = {
+    schemaVersion: 2,
+    resultSchemaVersion: 2,
+    snapshotName: 'accepted-snapshot',
+    desktopApplicationVersion: '1.0.0',
+    suitePackageVersion: '1.2.6-rc.2',
+    sourceMeasurVersion: '1.4.0',
+    scope: 'core',
+    fixtures: [{ fixtureId: 'ca-real-001', value: 100 }],
+  };
+  const actual = {
+    ...expected,
+    snapshotName: 'current-run',
+    desktopApplicationVersion: '1.1.0',
+    suitePackageVersion: '1.2.6-rc.350.1',
+    sourceMeasurVersion: '1.5.0',
+  };
+
+  assert.deepEqual(compareSnapshots(expected, actual), []);
+  const differences = compareSnapshots(expected, { ...actual, resultSchemaVersion: 3 });
+  assert.deepEqual(differences.map(item => item.path), ['$.resultSchemaVersion']);
+});
+
 test('snapshot comparison distinguishes missing, reordered, exception, and non-finite changes', () => {
   const differences = compareSnapshots(
     { rows: [{ id: 1 }, { id: 2 }], status: 'known-failure', failure: 'TypeError', value: 1 },

@@ -68,6 +68,32 @@ describe('compressed-air assessment regression tests', () => {
   });
 });
 
+describe('compressed-air regression snapshot comparison', () => {
+  it('ignores snapshot provenance while preserving calculation contract checks', () => {
+    const expected = {
+      schemaVersion: 2,
+      resultSchemaVersion: 2,
+      snapshotName: 'accepted-snapshot',
+      desktopApplicationVersion: '1.0.0',
+      suitePackageVersion: '1.2.6-rc.2',
+      sourceMeasurVersion: '1.4.0',
+      scope: 'core',
+      fixtures: [{ fixtureId: 'ca-real-001', value: 100 }],
+    };
+    const actual = {
+      ...expected,
+      snapshotName: 'current-run',
+      desktopApplicationVersion: '1.1.0',
+      suitePackageVersion: '1.2.6-rc.350.1',
+      sourceMeasurVersion: '1.5.0',
+    };
+
+    expect(compareRegressionTestSnapshots(expected, actual)).toEqual([]);
+    expect(compareRegressionTestSnapshots(expected, { ...actual, resultSchemaVersion: 3 }))
+      .toContain('$.resultSchemaVersion: numeric change');
+  });
+});
+
 function selectScope(snapshot: RegressionTestSnapshot, coreFixtureIds: string[], scope: 'core' | 'full'): RegressionTestSnapshot {
   if (scope === 'full') return snapshot;
   return {
