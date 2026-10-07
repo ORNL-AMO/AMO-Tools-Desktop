@@ -1,6 +1,10 @@
-import { OperatingCosts } from '../../../shared/models/operations';
-import { OperatingHours } from '../../../shared/models/operations';
+import { OperatingCosts, OperatingHours } from '../../../shared/models/operations';
 import { signal, WritableSignal } from '@angular/core';
+import { of } from 'rxjs';
+import { GasLoadMaterialDbService } from '../../../indexedDb/gas-load-material-db.service';
+import { LiquidLoadMaterialDbService } from '../../../indexedDb/liquid-load-material-db.service';
+import { SolidLoadMaterialDbService } from '../../../indexedDb/solid-load-material-db.service';
+import { WallLossesSurfaceDbService } from '../../../indexedDb/wall-losses-surface-db.service';
 import { TestBed } from '@angular/core/testing';
 import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
@@ -65,6 +69,10 @@ describe('InputSummaryResultsService', () => {
           useValue: { settingsSignal: settings, scenarioPhastSignal: (scenario: string) => scenarios[scenario] },
         },
         { provide: ModificationService, useValue: { modifications } },
+        { provide: SolidLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Carbon Steel' }]) } },
+        { provide: LiquidLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Water' }]) } },
+        { provide: GasLoadMaterialDbService, useValue: { getAllWithObservable: () => of([{ id: 7, substance: 'Nitrogen' }]) } },
+        { provide: WallLossesSurfaceDbService, useValue: { getAllWithObservable: () => of([{ id: 3, surface: 'Vertical Cylinders', conditionFactor: 1.394 }]) } },
         { provide: ProcessHeatingResultsService, useValue: { getResultCategories: () => categories() } },
       ],
     });
@@ -158,7 +166,78 @@ describe('InputSummaryResultsService', () => {
     });
   });
 
+  describe('operating cost units', () => {
+    it('shows energy cost units for the active unit system', () => {
+      expect(row('Operations', 'Fuel Cost').units).toBe('$/MMBtu');
+      settings.update(current => ({ ...current, unitsOfMeasure: 'Metric' }));
+      expect(row('Operations', 'Fuel Cost').units).toBe('$/GJ');
+    });
+
+    it('shows mass cost units for EAF consumables', () => {
+      scenarios['baseline'] = buildPhast({ operatingCosts: { coalCarbonCost: 1, electrodeCost: 2, electricityCost: 0.1 } as OperatingCosts });
+      expect(row('Operations', 'Coal Carbon Cost').units).toBe('$/lb');
+      expect(row('Operations', 'Electrode Cost').units).toBe('$/lb');
+      expect(row('Operations', 'Electricity Cost').units).toBe('$/kWh');
+    });
+  });
+
+  describe('wall surface', () => {
+    beforeEach(() => {
+      scenarios['baseline'] = buildPhast({
+        losses: { wallLosses: [{ name: 'North wall', surfaceShape: 3, conditionFactor: 1.394 }] } as Losses,
+      });
+    });
+
+    it('shows the selected surface by name, not its stored ID', () => {
+      expect(row('Wall Loss 1: North wall', 'Surface Shape / Orientation').baseline.value).toBe('Vertical Cylinders');
+    });
+
+    it('shows the condition factor as the orientation factor', () => {
+      expect(row('Wall Loss 1: North wall', 'Surface Shape / Orientation Factor').baseline.value).toBe(1.394);
+      expect(row('Wall Loss 1: North wall', 'Condition Factor')).toBeUndefined();
+    });
+  });
+
+  describe('entry alignment', () => {
+    const wall = (id: string, name: string) => ({ id, name, surfaceArea: 10 });
+
+    it('matches entries by ID when a modification deletes an earlier entry', () => {
+      scenarios['baseline'] = buildPhast({ losses: { wallLosses: [wall('a', 'A'), wall('b', 'B')] } as Losses });
+      scenarios['mod1'] = buildPhast({ losses: { wallLosses: [{ ...wall('b', 'B'), surfaceArea: 99 }] } as Losses });
+      const first = row('Wall Loss 1: A', 'Total Outside Surface Area');
+      const second = row('Wall Loss 2: B', 'Total Outside Surface Area');
+      expect(first.modifications[0].value).toBeNull();
+      expect(second.baseline.value).toBe(10);
+      expect(second.modifications[0].value).toBe(99);
+    });
+
+    it('lists entries only a modification has after the baseline entries', () => {
+      scenarios['baseline'] = buildPhast({ losses: { wallLosses: [wall('a', 'A')] } as Losses });
+      scenarios['mod1'] = buildPhast({ losses: { wallLosses: [wall('c', 'C'), wall('a', 'A')] } as Losses });
+      expect(ui().sections.map(section => section.label).filter(label => label.startsWith('Wall'))).toEqual(['Wall Loss 1: A', 'Wall Loss 2: C']);
+    });
+
+    it('falls back to position for entries saved without an ID', () => {
+      scenarios['baseline'] = buildPhast({ losses: { wallLosses: [{ name: 'Legacy', surfaceArea: 10 }] } as Losses });
+      scenarios['mod1'] = buildPhast({ losses: { wallLosses: [{ name: 'Legacy', surfaceArea: 20 }] } as Losses });
+      expect(row('Wall Loss 1: Legacy', 'Total Outside Surface Area').modifications[0].value).toBe(20);
+    });
+  });
+
   describe('charge material', () => {
+    it('shows the selected material by name and the reaction type', () => {
+      const losses = {
+        chargeMaterials: [{
+          name: 'Batch 1',
+          chargeMaterialType: 'Liquid',
+          liquidChargeMaterial: { materialId: 7, thermicReactionType: 1, chargeFeedRate: 5 },
+        }],
+      } as unknown as Losses;
+      scenarios['baseline'] = buildPhast({ losses });
+      expect(row('Charge Material 1: Batch 1', 'Name of Material').baseline.value).toBe('Water');
+      expect(row('Charge Material 1: Batch 1', 'Type of Reaction').baseline.value).toBe('Exothermic');
+    });
+
     it('reads fields from the active material type only', () => {
       const losses = {
         chargeMaterials: [{

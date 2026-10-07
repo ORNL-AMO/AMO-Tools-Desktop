@@ -1,4 +1,5 @@
-import { ChargeMaterial } from '../../../shared/models/phast/losses/chargeMaterial';
+import { ChargeMaterial, ThermicReactionType } from '../../../shared/models/phast/losses/chargeMaterial';
+import { GasLoadChargeMaterial, LiquidLoadChargeMaterial, SolidLoadChargeMaterial, WallLossesSurface } from '../../../shared/models/materials';
 import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { Losses, PHAST } from '../../models/phast';
@@ -6,10 +7,20 @@ import { Losses, PHAST } from '../../models/phast';
 export type SummaryValue = string | number | undefined | null;
 type UnitPair = readonly [imperial: string, metric: string];
 
+/** Database records used to show a material or surface by name instead of its stored ID. */
+export interface InputSummaryLookups {
+  solidMaterials: SolidLoadChargeMaterial[];
+  liquidMaterials: LiquidLoadChargeMaterial[];
+  gasMaterials: GasLoadChargeMaterial[];
+  wallSurfaces: WallLossesSurface[];
+}
+
+export const EMPTY_LOOKUPS: InputSummaryLookups = { solidMaterials: [], liquidMaterials: [], gasMaterials: [], wallSurfaces: [] };
+
 export interface FieldDefinition<T> {
   label: string;
   unit?: string | UnitPair;
-  value: (item: T, settings: Settings) => SummaryValue;
+  value: (item: T, settings: Settings, lookups: InputSummaryLookups) => SummaryValue;
 }
 
 /** A list-based loss: one summary section per item, matched across scenarios by index. */
@@ -37,8 +48,10 @@ const SPECIFIC_HEAT: UnitPair = ['Btu/(lb-℉)', 'kJ/(kg-℃)'];
 const MASS_FLOW: UnitPair = ['lb/hr', 'kg/hr'];
 const LENGTH_SMALL: UnitPair = ['in', 'mm'];
 const PERCENT = '%';
+const ENERGY_COST: UnitPair = ['$/MMBtu', '$/GJ'];
+const MASS_COST: UnitPair = ['$/lb', '$/kg'];
 
-function field<T>(label: string, unit: string | UnitPair | undefined, value: (item: T, settings: Settings) => SummaryValue): FieldDefinition<T> {
+function field<T>(label: string, unit: string | UnitPair | undefined, value: FieldDefinition<T>['value']): FieldDefinition<T> {
   return { label, unit, value };
 }
 
@@ -63,12 +76,25 @@ function chargeField(label: string, key: string, unit?: string | UnitPair): Fiel
   });
 }
 
+const REACTION_TYPE_LABELS = { [ThermicReactionType.Endothermic]: 'Endothermic', [ThermicReactionType.Exothermic]: 'Exothermic' };
+
+function materialName(item: ChargeMaterial, lookups: InputSummaryLookups): string | undefined {
+  const materials = { Solid: lookups.solidMaterials, Liquid: lookups.liquidMaterials, Gas: lookups.gasMaterials }[item.chargeMaterialType];
+  const materialId = (item[CHARGE_MATERIAL_TYPE_KEY[item.chargeMaterialType]] as { materialId?: number } | undefined)?.materialId;
+  return materials?.find(material => material.id === materialId)?.substance;
+}
+
 const CHARGE_MATERIAL_SECTION: LossSectionDefinition<ChargeMaterial> = {
   kind: 'items',
   label: 'Charge Material',
   items: losses => losses.chargeMaterials,
   fields: [
     prop('Material Type', 'chargeMaterialType'),
+    field('Name of Material', undefined, (item, _, lookups) => materialName(item, lookups)),
+    field('Type of Reaction', undefined, item => {
+      const type = (item[CHARGE_MATERIAL_TYPE_KEY[item.chargeMaterialType]] as { thermicReactionType?: ThermicReactionType } | undefined)?.thermicReactionType;
+      return type === undefined ? undefined : REACTION_TYPE_LABELS[type];
+    }),
     chargeField('Charge Feed Rate', 'chargeFeedRate', MASS_FLOW),
     chargeField('Gas Feed Rate', 'feedRate'),
     chargeField('Specific Heat of Solid', 'specificHeatSolid', SPECIFIC_HEAT),
@@ -104,12 +130,12 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
       field<PHAST>('Days per Week', undefined, phast => phast.operatingHours?.daysPerWeek),
       field<PHAST>('Hours per Day', undefined, phast => phast.operatingHours?.hoursPerDay),
       field<PHAST>('Operating Hours', 'hr/yr', phast => phast.operatingHours?.hoursPerYear),
-      field<PHAST>('Fuel Cost', undefined, phast => phast.operatingCosts?.fuelCost),
-      field<PHAST>('Steam Cost', undefined, phast => phast.operatingCosts?.steamCost),
-      field<PHAST>('Electricity Cost', '/kWh', phast => phast.operatingCosts?.electricityCost),
-      field<PHAST>('Coal Carbon Cost', undefined, phast => phast.operatingCosts?.coalCarbonCost),
-      field<PHAST>('Electrode Cost', undefined, phast => phast.operatingCosts?.electrodeCost),
-      field<PHAST>('Other Fuel Cost', undefined, phast => phast.operatingCosts?.otherFuelCost),
+      field<PHAST>('Fuel Cost', ENERGY_COST, phast => phast.operatingCosts?.fuelCost),
+      field<PHAST>('Steam Cost', ENERGY_COST, phast => phast.operatingCosts?.steamCost),
+      field<PHAST>('Electricity Cost', '$/kWh', phast => phast.operatingCosts?.electricityCost),
+      field<PHAST>('Coal Carbon Cost', MASS_COST, phast => phast.operatingCosts?.coalCarbonCost),
+      field<PHAST>('Electrode Cost', MASS_COST, phast => phast.operatingCosts?.electrodeCost),
+      field<PHAST>('Other Fuel Cost', ENERGY_COST, phast => phast.operatingCosts?.otherFuelCost),
       field<PHAST>('Implementation Cost', undefined, phast => phast.implementationCost),
     ],
   },
@@ -122,8 +148,8 @@ export const SECTION_DEFINITIONS: SectionDefinition[] = [
       prop('Average Surface Temperature', 'surfaceTemperature', TEMPERATURE),
       prop('Ambient Temperature', 'ambientTemperature', TEMPERATURE),
       prop('Wind Velocity', 'windVelocity', ['mph', 'km/hr']),
-      prop('Surface Shape / Orientation Factor', 'surfaceShape'),
-      prop('Condition Factor', 'conditionFactor'),
+      field('Surface Shape / Orientation', undefined, (item, _, lookups) => lookups.wallSurfaces.find(surface => surface.id === item.surfaceShape)?.surface),
+      prop('Surface Shape / Orientation Factor', 'conditionFactor'),
       prop('Surface Emissivity', 'surfaceEmissivity'),
       prop('Total Outside Surface Area', 'surfaceArea', AREA),
       prop('Correction Factor', 'correctionFactor'),

@@ -4,6 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ReportDocument } from '../../shared/report-builder/models/report-document.model';
 import { KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { PHAST } from '../models/phast';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { EnergySummaryResultsService, EnergySummaryUI } from './energy-summary/energy-summary-results.service';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from './executive-summary/executive-summary-results.service';
@@ -50,6 +51,7 @@ describe('ProcessHeatingReportAdapter', () => {
   let executiveSummary: ExecutiveSummaryUI | undefined;
   let energySummary: EnergySummaryUI | undefined;
   let inputSummary: InputSummaryUI | undefined;
+  let processHeating: PHAST;
 
   const assessment = { name: 'Furnace 1' } as Assessment;
 
@@ -65,10 +67,17 @@ describe('ProcessHeatingReportAdapter', () => {
     executiveSummary = buildExecutiveSummary();
     energySummary = ENERGY_SUMMARY;
     inputSummary = INPUT_SUMMARY;
+    processHeating = { equipmentNotes: 'Batch furnace', operatingHours: { operatingConditions: 'Two shifts' } } as PHAST;
     TestBed.configureTestingModule({
       providers: [
         ProcessHeatingReportAdapter,
-        { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: signal({ facilityInfo: { companyName: 'Acme' } }) } },
+        {
+          provide: ProcessHeatingAssessmentService,
+          useValue: {
+            settingsSignal: signal({ facilityInfo: { companyName: 'Acme' } }),
+            processHeatingSignal: () => processHeating,
+          },
+        },
         { provide: ExecutiveSummaryResultsService, useValue: { executiveSummaryUI: () => executiveSummary } },
         { provide: EnergySummaryResultsService, useValue: { energySummaryUI: () => energySummary } },
         { provide: InputSummaryResultsService, useValue: { inputSummaryUI: () => inputSummary } },
@@ -125,6 +134,20 @@ describe('ProcessHeatingReportAdapter', () => {
   it('includes equipment notes in the energy summary group', async () => {
     const notes = (await build()).sections.find(candidate => candidate.type === 'key-value-list' && candidate.group === 'energy-summary') as KeyValueSection;
     expect(notes.rows).toEqual([{ label: 'Equipment Notes', value: 'Batch furnace' }]);
+  });
+
+  it('includes equipment notes and operating conditions in the facility info group', async () => {
+    const equipment = section<KeyValueSection>(await build(), 'Equipment');
+    expect(equipment.group).toBe('facility-info');
+    expect(equipment.rows).toEqual([
+      { label: 'Equipment Notes', value: 'Batch furnace' },
+      { label: 'Operating Conditions', value: 'Two shifts' },
+    ]);
+  });
+
+  it('omits the equipment section when neither field is set', async () => {
+    processHeating = {} as PHAST;
+    expect(section<KeyValueSection>(await build(), 'Equipment')).toBeUndefined();
   });
 
   it('builds input summary as one table with sub-group headers', async () => {

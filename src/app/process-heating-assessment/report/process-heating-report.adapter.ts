@@ -46,12 +46,26 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
         meta,
         sections: [
           ...buildFacilityInfoSections(this.assessmentService.settingsSignal()?.facilityInfo, ROUTE_TOKENS.facilityInfo),
+          ...this.buildEquipmentSections(),
           ...(executiveSummary ? this.buildExecutiveSummarySections(executiveSummary) : []),
           ...(energySummary ? this.buildEnergySummarySections(energySummary) : []),
           ...(inputSummary ? this.buildInputSummarySections(inputSummary) : []),
         ],
       });
     });
+  }
+
+  /** Equipment notes and operating conditions appear on the Facility Info tab, so the Facility Info export carries them too. */
+  private buildEquipmentSections(): KeyValueSection[] {
+    const phast = this.assessmentService.processHeatingSignal();
+    const rows: KeyValueSection['rows'] = [];
+    if (phast?.equipmentNotes) {
+      rows.push({ label: 'Equipment Notes', value: phast.equipmentNotes });
+    }
+    if (phast?.operatingHours?.operatingConditions) {
+      rows.push({ label: 'Operating Conditions', value: phast.operatingHours.operatingConditions });
+    }
+    return rows.length ? [{ type: 'key-value-list', title: 'Equipment', rows, group: ROUTE_TOKENS.facilityInfo }] : [];
   }
 
   private buildExecutiveSummarySections(ui: ExecutiveSummaryUI): Array<SummaryTableSection | KeyValueSection> {
