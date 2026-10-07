@@ -58,7 +58,8 @@ export class AssessmentService {
       if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'assessment';
       }
-      itemSegment = '/fsat/';
+      this.dashboardService.navigateWithSidebarOptions('/fsat/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type === 'SSMT') {
       if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'assessment';

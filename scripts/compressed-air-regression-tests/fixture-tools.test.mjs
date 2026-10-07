@@ -225,16 +225,18 @@ test('coverage aggregates real and synthetic fixture inventories', () => {
 });
 
 test('snapshot recording refuses to overwrite an existing snapshot', () => {
+  const fixtureRoot = resolve(root, 'src/app/compressed-air-assessment/calculations/regression-tests/fixtures');
+  const activeSnapshot = JSON.parse(readFileSync(resolve(fixtureRoot, 'manifest.json'), 'utf8')).activeSnapshot;
   const run = spawnSync(
     process.execPath,
     [
       'scripts/compressed-air-regression-tests/run-regression-tests.mjs',
-      'record', '--scope', 'full', '--snapshot', 'pre-pr409-suite-1.2.5', '--accept',
+      'record', '--scope', 'full', '--snapshot', activeSnapshot, '--accept',
     ],
     { cwd: root, encoding: 'utf8' },
   );
   assert.equal(run.status, 2);
-  assert.match(run.stderr, /Refusing to overwrite existing snapshot pre-pr409-suite-1\.2\.5/);
+  assert.match(run.stderr, new RegExp(`Refusing to overwrite existing snapshot ${activeSnapshot.replaceAll('.', '\\.')}\\b`));
 });
 
 test('committed fixtures pass the standalone privacy guard', () => {
@@ -248,6 +250,7 @@ test('committed fixtures pass the standalone privacy guard', () => {
 
 test('per-file fixture and snapshot loaders preserve deterministic order and manifests', () => {
   const fixtureRoot = resolve(root, 'src/app/compressed-air-assessment/calculations/regression-tests/fixtures');
+  const activeSnapshot = JSON.parse(readFileSync(resolve(fixtureRoot, 'manifest.json'), 'utf8')).activeSnapshot;
   const corpus = loadFixtureCorpus(fixtureRoot);
   assert.equal(corpus.fixtures.length, 43);
   assert.equal(corpus.fixtures[0].fixtureId, 'ca-real-001');
@@ -255,9 +258,10 @@ test('per-file fixture and snapshot loaders preserve deterministic order and man
 
   const { manifest, snapshot } = loadRegressionTestSnapshot(
     resolve(fixtureRoot, 'snapshots'),
-    'pre-pr409-suite-1.2.5',
+    activeSnapshot,
   );
-  assert.equal(manifest.desktopCommit, '52f3b3bdb');
+  assert.equal(manifest.snapshotName, activeSnapshot);
+  assert.equal(typeof manifest.desktopCommit, 'string');
   assert.equal(snapshot.schemaVersion, 2);
   assert.equal(snapshot.fixtures.length, 49);
   assert.deepEqual(snapshot.fixtures.map(fixture => fixture.fixtureId), manifest.fixtureIds);

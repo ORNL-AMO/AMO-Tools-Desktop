@@ -1,6 +1,6 @@
 {
   "desktopApplicationVersion": "1.9.0",
-  "desktopCommit": "52f3b3bdb",
+  "desktopCommit": "43b1cf013",
   "fixtureIds": [
     "ca-real-001",
     "ca-real-002",
@@ -55,7 +55,7 @@
   "resultSchemaVersion": 2,
   "schemaVersion": 2,
   "scope": "full",
-  "snapshotName": "pre-pr409-suite-1.2.5",
+  "snapshotName": "post-pr409-issue-8903-suite-1.2.6-rc.2",
   "sourceMeasurVersion": "1.6.10",
-  "suitePackageVersion": "1.2.5"
+  "suitePackageVersion": "1.2.6-rc.2"
 }

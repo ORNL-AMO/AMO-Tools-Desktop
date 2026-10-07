@@ -185,6 +185,11 @@
             ],
             "assets": [
               "src/assets",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/measur-tools-suite/bin/",
+                "output": "."
+              },
               "src/favicon.ico",
               "src/robots.txt",
               "src/sitemap.xml",
