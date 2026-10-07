@@ -2,7 +2,7 @@ import { DialogRef } from '@angular/cdk/dialog';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { FlueGasAvailableHeatResult, FlueGasCalculationService } from './flue-gas-calculation.service';
@@ -40,6 +40,8 @@ export class FlueGasCalculatorDialogComponent {
   readonly warnings = signal<FlueGasWarnings | null>(null);
   readonly availableHeatWarning = computed(() => getAvailableHeatWarning(this.result()?.availableHeat));
 
+  private formSubscription?: Subscription;
+
   constructor() {
     this.initializeForm(this.form());
   }
@@ -72,7 +74,8 @@ export class FlueGasCalculatorDialogComponent {
   private initializeForm(form: FlueGasForm): void {
     this.form.set(form);
     this.recalculate(form);
-    (form.valueChanges as Observable<unknown>).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+    this.formSubscription?.unsubscribe();
+    this.formSubscription = (form.valueChanges as Observable<unknown>).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.formService.setTemperatureValidators(form);
       this.recalculate(form);
     });
