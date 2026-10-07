@@ -21,6 +21,10 @@ export const AssessmentView = {
 export type AssessmentView = typeof AssessmentView[keyof typeof AssessmentView];
 
 export const ReportView = {
+  ENERGY_SUMMARY: 'energy-summary',
+  RESULTS_DATA: 'results-data',
+  REPORT_GRAPHS: 'report-graphs',
+  REPORT_SANKEY: 'report-sankey',
   EXECUTIVE_SUMMARY: 'executive-summary',
   INPUT_SUMMARY: 'input-summary',
   FACILITY_INFO: 'facility-info',
@@ -132,7 +136,11 @@ export const ASSESSMENT_VIEW_LINKS: ViewLink[] = [
 ];
 
 export const REPORT_VIEW_LINKS: ViewLink[] = [
+  { view: ReportView.ENERGY_SUMMARY, label: 'Energy Summary' },
   { view: ReportView.EXECUTIVE_SUMMARY, label: 'Executive Summary' },
+  { view: ReportView.RESULTS_DATA, label: 'Result Data' },
+  { view: ReportView.REPORT_GRAPHS, label: 'Report Graphs' },
+  { view: ReportView.REPORT_SANKEY, label: 'Sankey' },
   { view: ReportView.INPUT_SUMMARY, label: 'Input Summary' },
   { view: ReportView.FACILITY_INFO, label: 'Facility Info' },
 ];

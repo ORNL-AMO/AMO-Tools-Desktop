@@ -14,6 +14,8 @@ export interface ReportTableRow {
   label: string;
   units?: string;
   className?: 'default' | 'emphasis';
+  /** Optional rendering hint: a savings graph, or a cell whose string value holds one item per line */
+  display?: 'percent-graph' | 'list';
   baseline: ReportColumnCell;
   modifications: Array<ReportColumnCell>;
 }

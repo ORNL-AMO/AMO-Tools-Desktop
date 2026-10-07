@@ -23,6 +23,8 @@ import { ProcessHeatingResultsService } from './services/process-heating-results
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
 import { ConvertPhastService } from '../phast/convert-phast.service';
 import { PhastResultsService } from '../phast/phast-results.service';
+import { MeteredEnergyService } from '../phast/metered-energy/metered-energy.service';
+import { DesignedEnergyService } from '../phast/designed-energy/designed-energy.service';
 import { LossesHelpModule } from '../phast/losses/losses-help/losses-help.module';
 import { LossesService } from '../phast/losses/losses.service';
 import { Co2SavingsPhastService } from '../phast/losses/operations/co2-savings-phast/co2-savings-phast.service';
@@ -50,7 +52,19 @@ import { OpeningEmissivityOpportunityComponent } from './explore-opportunities/o
 import { OpeningTimeOpenOpportunityComponent } from './explore-opportunities/opening-time-open-opportunity/opening-time-open-opportunity.component';
 import { ExpertViewComponent } from './expert-view/expert-view.component';
 import { ReportComponent } from './report/report.component';
+import { EnergySummaryComponent } from './report/energy-summary/energy-summary.component';
+import { EnergySummaryResultsService } from './report/energy-summary/energy-summary-results.service';
+import { ResultsDataComponent } from './report/results-data/results-data.component';
+import { ReportGraphsComponent } from './report/report-graphs/report-graphs.component';
+import { ReportSankeyComponent } from './report/report-sankey/report-sankey.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
+import { ProcessHeatingReportAdapter } from './report/process-heating-report.adapter';
+import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
+import { InputSummaryResultsService } from './report/input-summary/input-summary-results.service';
+import { ExecutiveSummaryResultsService } from './report/executive-summary/executive-summary-results.service';
+import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
+import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
+import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
 import { InputSummaryComponent } from './report/input-summary/input-summary.component';
 import { FacilityInfoComponent } from './report/facility-info/facility-info.component';
 import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
@@ -260,11 +274,31 @@ export const ROUTES: Route[] = [
         component: ReportComponent,
         data: { mainView: ROUTE_TOKENS.report, stepIndex: 22 },
         children: [
-          { path: '', redirectTo: ROUTE_TOKENS.executiveSummary, pathMatch: 'full' },
+          { path: '', redirectTo: ROUTE_TOKENS.energySummary, pathMatch: 'full' },
+          {
+            path: ROUTE_TOKENS.energySummary,
+            component: EnergySummaryComponent,
+            data: { childView: ROUTE_TOKENS.energySummary },
+          },
           {
             path: ROUTE_TOKENS.executiveSummary,
             component: ExecutiveSummaryComponent,
             data: { childView: ROUTE_TOKENS.executiveSummary },
+          },
+          {
+            path: ROUTE_TOKENS.resultsData,
+            component: ResultsDataComponent,
+            data: { childView: ROUTE_TOKENS.resultsData },
+          },
+          {
+            path: ROUTE_TOKENS.reportGraphs,
+            component: ReportGraphsComponent,
+            data: { childView: ROUTE_TOKENS.reportGraphs },
+          },
+          {
+            path: ROUTE_TOKENS.reportSankey,
+            component: ReportSankeyComponent,
+            data: { childView: ROUTE_TOKENS.reportSankey },
           },
           {
             path: ROUTE_TOKENS.inputSummary,
@@ -308,6 +342,10 @@ export const ROUTES: Route[] = [
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
+    EnergySummaryComponent,
+    ResultsDataComponent,
+    ReportGraphsComponent,
+    ReportSankeyComponent,
     InputSummaryComponent,
     FacilityInfoComponent,
     AssessmentSettingsComponent,
@@ -378,6 +416,10 @@ export const ROUTES: Route[] = [
     LossesHelpModule,
     AddModificationComponent,
     ModificationListComponent,
+    PercentGraphModule,
+    ExportableResultsTableModule,
+    ReportTableCellPipe,
+    ReportBuilderModule,
   ],
   providers: [
     { provide: STEPPED_ROUTES, useValue: deriveSteppedRoutes(ROUTES) },
@@ -387,6 +429,10 @@ export const ROUTES: Route[] = [
     ModificationService,
     ProcessHeatingOperationsFormService,
     ProcessHeatingResultsService,
+    ExecutiveSummaryResultsService,
+    InputSummaryResultsService,
+    EnergySummaryResultsService,
+    ProcessHeatingReportAdapter,
     ProcessHeatingAssessmentResolver,
     ConvertPhastService,
     // PhastResultsService remains a temporary bridge for loss types not yet rebuilt (Steps 7, 9–13).
@@ -394,6 +440,8 @@ export const ROUTES: Route[] = [
     // type gets its own local result service (see charge-material-results.service.ts), it stops
     // reading that field from here.
     PhastResultsService,
+    MeteredEnergyService,
+    DesignedEnergyService,
     Co2SavingsPhastService,
     // Legacy opening-losses help only toggles modalOpen; the real service pulls in the legacy form-service graph.
     { provide: LossesService, useValue: { modalOpen: new BehaviorSubject<boolean>(false) } },
