@@ -10,6 +10,7 @@ import { FlueGasMoistureHelpComponent } from './flue-gas-moisture-modal/flue-gas
 import { FlueGasMoisturePanelComponent } from './flue-gas-moisture-modal/flue-gas-moisture-panel/flue-gas-moisture-panel.component';
 import { FlueGasMoistureModalComponent } from './flue-gas-moisture-modal/flue-gas-moisture-modal.component';
 import { LossesModule } from '../../phast/losses/losses.module';
+import { FlueGasMoistureDialogComponent } from './flue-gas-moisture-dialog/flue-gas-moisture-dialog.component';
 import { FlueGasMoistureModalService } from './flue-gas-moisture-modal.service';
 
 
@@ -28,6 +29,7 @@ import { FlueGasMoistureModalService } from './flue-gas-moisture-modal.service';
       FlueGasMoistureHelpComponent,
       FlueGasMoisturePanelComponent,
       FlueGasMoistureModalComponent,
+      FlueGasMoistureDialogComponent,
     ],
     providers: [
       FlueGasMoistureModalService
@@ -38,6 +40,7 @@ import { FlueGasMoistureModalService } from './flue-gas-moisture-modal.service';
       FlueGasMoistureHelpComponent,
       FlueGasMoisturePanelComponent,
       FlueGasMoistureModalComponent,
+      FlueGasMoistureDialogComponent,
     ],
 })
 export class FlueGasMoistureModalModule { }

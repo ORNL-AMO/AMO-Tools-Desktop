@@ -7,6 +7,7 @@ import { FormControlErrorsComponent } from '../shared/form-control-errors.compon
 import { InputUnitComponent } from '../shared/input-unit.component';
 import { SettingsModule } from '../settings/settings.module';
 import { Co2SavingsPhastModule } from '../phast/losses/operations/co2-savings-phast/co2-savings-phast.module';
+import { FlueGasMoistureModalModule } from '../shared/flue-gas-moisture-modal/flue-gas-moisture-modal.module';
 import { OperatingHoursModule } from '../shared/operating-hours/operating-hours.module';
 import { PhastOperatingCostsModule } from '../shared/phast-operating-costs/phast-operating-costs.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
@@ -367,6 +368,7 @@ export const ROUTES: Route[] = [
     SettingsModule,
     Co2SavingsPhastModule,
     OperatingHoursModule,
+    FlueGasMoistureModalModule,
     PhastOperatingCostsModule,
     SharedPipesModule,
     LossesHelpModule,
