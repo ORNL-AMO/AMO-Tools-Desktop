@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
@@ -21,6 +22,8 @@ import { ProcessHeatingResultsService } from './services/process-heating-results
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
 import { ConvertPhastService } from '../phast/convert-phast.service';
 import { PhastResultsService } from '../phast/phast-results.service';
+import { LossesHelpModule } from '../phast/losses/losses-help/losses-help.module';
+import { LossesService } from '../phast/losses/losses.service';
 import { Co2SavingsPhastService } from '../phast/losses/operations/co2-savings-phast/co2-savings-phast.service';
 
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
@@ -366,6 +369,7 @@ export const ROUTES: Route[] = [
     OperatingHoursModule,
     PhastOperatingCostsModule,
     SharedPipesModule,
+    LossesHelpModule,
     AddModificationComponent,
     ModificationListComponent,
   ],
@@ -385,6 +389,8 @@ export const ROUTES: Route[] = [
     // reading that field from here.
     PhastResultsService,
     Co2SavingsPhastService,
+    // Legacy opening-losses help only toggles modalOpen; the real service pulls in the legacy form-service graph.
+    { provide: LossesService, useValue: { modalOpen: new BehaviorSubject<boolean>(false) } },
   ]
 })
 export class ProcessHeatingAssessmentModule {}

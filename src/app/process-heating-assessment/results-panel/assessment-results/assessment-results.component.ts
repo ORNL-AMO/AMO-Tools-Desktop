@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, Signal } from '@angular/core';
 import { PhastResults } from '../../models/phast';
+import { ShowResultsCategories } from '../../../shared/models/phast/phast';
+import { Settings } from '../../../shared/models/settings';
+import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
 
@@ -13,6 +16,7 @@ import { ProcessHeatingResultsService } from '../../services/process-heating-res
 export class AssessmentResultsComponent {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly resultsService = inject(ProcessHeatingResultsService);
+  private readonly featureFlagService = inject(FeatureFlagService);
 
   readonly scenario = input<AssessmentScenario>('baseline');
 
@@ -20,12 +24,14 @@ export class AssessmentResultsComponent {
     this.resultsService.getResults(this.assessmentService.scenarioPhastSignal(this.scenario()), this.assessmentService.settingsSignal())
   );
 
-  constructor() {
-    effect(() => {
-      const results = this.results();
-      if (results) {
-        console.log(`[ProcessHeatingAssessment] scenario "${this.scenario()}" results`, results);
-      }
-    });
-  }
+  readonly showResultsCats: Signal<ShowResultsCategories | undefined> = computed(() => {
+    const settings = this.assessmentService.settingsSignal();
+    return settings ? this.resultsService.getResultCategories(settings) : undefined;
+  });
+
+  /** Standard electrotechnology only (electricity, not EAF or Custom Electrotechnology); legacy flag `showEnInput2`. */
+  readonly showStandardElectrotechRows: Signal<boolean> = computed(() => !!this.showResultsCats()?.showEnInput2);
+
+  readonly showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
+  readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
 }

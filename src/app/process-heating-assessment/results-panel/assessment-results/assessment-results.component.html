@@ -42,17 +42,88 @@
         <span class="result-label">Flue Gas Losses</span>
         <span class="result-value">{{results.totalFlueGas | number:'1.2-2'}}</span>
       </div>
+      @if (showResultsCats(); as cats) {
+        @if (cats.showAuxPower) {
+          <div class="result-row">
+            <span class="result-label">Aux Power Losses</span>
+            <span class="result-value">{{results.totalAuxPower | number:'1.2-2'}}</span>
+          </div>
+        }
+        @if (cats.showSlag) {
+          <div class="result-row">
+            <span class="result-label">Slag Losses</span>
+            <span class="result-value">{{results.totalSlag | number:'1.2-2'}}</span>
+          </div>
+        }
+      }
       <div class="result-row">
         <span class="result-label">Total Available Heat Required</span>
         <span class="result-value">{{results.totalInput | number:'1.2-2'}}</span>
       </div>
+      @if (showResultsCats(); as cats) {
+        @if (cats.showFlueGas) {
+          <div class="result-row">
+            <span class="result-label">Available Heat (%)</span>
+            <span class="result-value">{{results.flueGasAvailableHeat | number:'2.1-1'}}%</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Flue Gas System Losses</span>
+            <span class="result-value">{{results.flueGasSystemLosses | number:'1.2-2'}}</span>
+          </div>
+        }
+        <div class="result-row">
+          <span class="result-label">Exothermic Heat from Process</span>
+          <span class="result-value">{{results.exothermicHeat | number:'1.2-2'}}</span>
+        </div>
+        @if (showStandardElectrotechRows()) {
+          <div class="result-row">
+            <span class="result-label">Fuel Input Available Heat</span>
+            <span class="result-value">{{results.availableHeatPercent | number:'1.0-0'}}%</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Exhaust Gas Losses</span>
+            <span class="result-value">{{results.totalExhaustGas | number:'1.2-2'}}</span>
+          </div>
+        }
+        @if (cats.showExGas) {
+          <div class="result-row">
+            <span class="result-label">Exhaust Gas Losses</span>
+            <span class="result-value">{{results.totalExhaustGasEAF | number:'1.2-2'}}</span>
+          </div>
+        }
+        @if (cats.showSystemEff) {
+          <div class="result-row">
+            <span class="result-label">System Efficiency</span>
+            <span class="result-value">{{results.heatingSystemEfficiency | number:'1.0-0'}}%</span>
+          </div>
+          <div class="result-row">
+            <span class="result-label">Total System Losses</span>
+            <span class="result-value">{{results.totalSystemLosses | number:'1.2-2'}}</span>
+          </div>
+        }
+      }
       <div class="result-row">
         <span class="result-label result-label--bold">Gross Heat Input</span>
         <span class="result-value result-value--bold">{{results.grossHeatInput | number:'1.2-2'}}</span>
       </div>
-      <!-- TODO Step 17: add conditional rows — Aux Power Losses, Slag Losses, Available Heat (%),
-           Flue Gas System Losses, Exothermic Heat, EAF-specific rows, CO₂ Emissions —
-           gated by showResultsCats from ProcessHeatingResultsService -->
+      @if (showOperationalImpacts()) {
+        <div class="result-row">
+          <span class="result-label">CO<sub>2</sub> Emissions
+            @if (settings().emissionsUnit === 'Imperial') {
+              (ton CO<sub>2</sub>)
+            } @else if (settings().emissionsUnit === 'Metric') {
+              (tonne CO<sub>2</sub>)
+            }
+          </span>
+          <span class="result-value">
+            @if (results.co2EmissionsOutput?.hourlyTotalEmissionOutput; as emissions) {
+              {{emissions | number:'1.0-2'}}
+            } @else {
+              &mdash; &mdash;
+            }
+          </span>
+        </div>
+      }
     </div>
   </div>
 }
