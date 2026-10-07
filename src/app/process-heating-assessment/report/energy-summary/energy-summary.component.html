@@ -1,0 +1,91 @@
+<div class="output-summary p-3">
+  @let ui = energySummaryUI();
+  @if (ui) {
+    <h5 class="print-section-header">Summary of Energy Sources Used</h5>
+    <table #sourcesTable class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>Energy Name</th>
+          <th>Energy Used</th>
+          <th>Heating Value (HHV)</th>
+          <th>Cost per Unit</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (source of ui.sources; track source.name) {
+          <tr>
+            <td>{{source.name}}</td>
+            <td>
+              @if (source.energyUsed) {
+                {{source.energyUsed | sigFigs:'5'}} {{source.energyUsedUnit}}
+              } @else {
+                &mdash; &mdash;
+              }
+            </td>
+            <td>
+              @if (source.heatingValue) {
+                {{source.heatingValue | sigFigs:'5'}} {{source.heatingValueUnit}}
+              } @else {
+                &mdash; &mdash;
+              }
+            </td>
+            <td>{{source.costPerUnit | currency:'USD':'symbol':'1.2-2'}} {{source.costUnit}}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <app-exportable-results-table [tableString]="sourcesTableString"
+      (updateTableString)="updateSourcesTableString()"></app-exportable-results-table>
+
+    @if (ui.equipmentNotes) {
+      <p><small><b>Equipment Notes &mdash;</b> {{ui.equipmentNotes}}</small></p>
+    }
+    @if (ui.operatingConditions) {
+      <p><small><b>Operating Conditions &mdash;</b> {{ui.operatingConditions}}</small></p>
+    }
+
+    <h5 class="print-section-header">Compare PHA Calculations</h5>
+    <table #comparisonTable class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Calculated By PHA</th>
+          <th>Metered Comparison</th>
+          <th>Design Comparison</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of ui.comparison; track row.label) {
+          <tr>
+            <td>{{row.label}}</td>
+            @for (value of [row.calculated, row.metered, row.designed]; track $index) {
+              <td>
+                @if (value) {
+                  {{value | sigFigs:'5'}} {{row.unit}}
+                } @else {
+                  &mdash; &mdash;
+                }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+    <app-exportable-results-table [tableString]="comparisonTableString"
+      (updateTableString)="updateComparisonTableString()"></app-exportable-results-table>
+
+    <p>
+      <small>
+        <b>Calculated By PHA &mdash;</b> This method calculates total energy used by a furnace using bottom-up heat balance
+        analysis. The heat balance analysis includes heat to load and various heat losses.
+        <br>
+        <b>Metered Energy Use &mdash;</b> This method calculates total energy used by a furnace by multiplying metered fuel
+        energy used by the measurement period.
+        <br>
+        <b>Design Energy Use &mdash;</b> This method calculates total energy used by a furnace by multiplying total rated
+        capacity of burners ({{ui.energyPerTimeUnit}}) used in different heat zones with annual operating hours, percentage
+        rated capacity used and duty cycle.
+      </small>
+    </p>
+  }
+</div>

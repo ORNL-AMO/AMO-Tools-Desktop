@@ -1,0 +1,23 @@
+.output-summary .table {
+  font-size: small;
+}
+
+.output-summary .table td {
+  padding: 4px 8px;
+  vertical-align: middle;
+}
+
+.show-print {
+  display: none;
+}
+
+@media print {
+  .show-print {
+    display: inline !important;
+  }
+}
+
+.section-title-header {
+    font-weight: bold;
+    background-color: #D6DBDF;
+}

@@ -17,7 +17,11 @@ export const ROUTE_TOKENS = {
   expertView: 'expert-view',
 
   // Report sub-tabs
+  energySummary: 'energy-summary',
   executiveSummary: 'executive-summary',
+  resultsData: 'results-data',
+  reportGraphs: 'report-graphs',
+  reportSankey: 'report-sankey',
   inputSummary: 'input-summary',
   facilityInfo: 'facility-info',
 

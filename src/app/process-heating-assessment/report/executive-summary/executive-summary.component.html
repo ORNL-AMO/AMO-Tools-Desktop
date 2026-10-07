@@ -1,0 +1,100 @@
+<div class="output-summary p-3">
+  <h4 class="show-print print-section-header">Assessment Executive Summary</h4>
+
+  @let ui = executiveSummaryUI();
+  @if (ui) {
+    <ng-template #tableHead let-title="title">
+      <thead>
+        <tr>
+          <th class="text-left">{{title}}</th>
+          <th>Baseline</th>
+          @for (modificationName of ui.modificationNames; track modificationName.id) {
+            <th>{{modificationName.name}}</th>
+          }
+        </tr>
+      </thead>
+    </ng-template>
+
+    <ng-template #rowsBody let-rows="rows">
+      @for (row of rows; track row.label) {
+        <tr [class]="row.className" [class.savings-graph-row]="row.display === 'percent-graph'">
+          <td>
+            <span [innerHTML]="row.label"></span>
+            @if (row.units) {
+              <span class="pl-1" [innerHTML]="'(' + row.units + ')'"></span>
+            }
+          </td>
+          <td>{{ row.baseline | reportTableCell }}</td>
+          @for (modification of row.modifications; track $index) {
+            <td>
+              @switch (row.display) {
+                @case ('percent-graph') {
+                  @if (modification.value) {
+                    <div class="hide-print"><app-percent-graph [value]="modification.value"></app-percent-graph></div>
+                    <div class="show-print text-center">{{modification.value}} %</div>
+                  } @else {
+                    &mdash; &mdash;
+                  }
+                }
+                @case ('list') {
+                  @for (item of (modification.value ?? '').toString().split('\n'); track item) {
+                    @if (item) {
+                      <span class="d-block" [innerHTML]="item"></span>
+                    }
+                  }
+                }
+                @default {
+                  {{ modification | reportTableCell }}
+                }
+              }
+            </td>
+          }
+        </tr>
+      }
+    </ng-template>
+
+    <table #copyTable class="table table-hover table-striped">
+      <ng-container *ngTemplateOutlet="tableHead; context: { title: 'Annual Result Totals' }"></ng-container>
+      <tbody>
+        <ng-container *ngTemplateOutlet="rowsBody; context: { rows: ui.summaryRows }"></ng-container>
+      </tbody>
+    </table>
+    <app-exportable-results-table [tableString]="copyTableString"
+      (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+
+    @if (ui.eafEnergyRows.length) {
+      <table class="table table-hover table-striped">
+        <ng-container *ngTemplateOutlet="tableHead; context: { title: 'Annual Electrical and Chemical Energy Used' }"></ng-container>
+        <tbody><ng-container *ngTemplateOutlet="rowsBody; context: { rows: ui.eafEnergyRows }"></ng-container></tbody>
+      </table>
+    }
+
+    @if (ui.co2Rows.length) {
+      <table class="table table-hover table-striped">
+        <ng-container *ngTemplateOutlet="tableHead; context: { title: 'Annual Emissions' }"></ng-container>
+        <tbody><ng-container *ngTemplateOutlet="rowsBody; context: { rows: ui.co2Rows }"></ng-container></tbody>
+      </table>
+    }
+
+    @if (ui.costRows.length) {
+      <table class="table table-hover table-striped">
+        <ng-container *ngTemplateOutlet="tableHead; context: { title: 'Annual Costs' }"></ng-container>
+        <tbody><ng-container *ngTemplateOutlet="rowsBody; context: { rows: ui.costRows }"></ng-container></tbody>
+      </table>
+    }
+
+    @if (ui.notes.length) {
+      <h5>Modification Notes</h5>
+      <p>
+        <small>
+          @for (note of ui.notes; track $index) {
+            <span class="print-notes">
+              <b>{{note.modificationName}} &mdash; {{note.lossName}}:</b> {{note.note}}
+              <br>
+            </span>
+          }
+        </small>
+      </p>
+    }
+  }
+</div>

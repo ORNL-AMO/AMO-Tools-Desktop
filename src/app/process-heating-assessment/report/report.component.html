@@ -1,17 +1,34 @@
-<div class="report-container">
-  <div class="d-none d-lg-flex">
-    <ul class="tabs primary">
-      @for (link of REPORT_VIEW_LINKS; track $index) {
-        <li routerLinkActive="active" [routerLink]="[link.view]">
-          <a [routerLink]="[link.view]">{{link.label}}</a>
-        </li>
-      }
-    </ul>
-  </div>
+@if (assessment$ | async; as assessment) {
+  <div class="report-container">
+    <div class="d-none d-lg-flex">
+      <ul class="tabs primary">
+        @for (link of REPORT_VIEW_LINKS; track $index) {
+          <li routerLinkActive="active" [routerLink]="[link.view]">
+            <a [routerLink]="[link.view]">{{link.label}}</a>
+          </li>
+        }
+      </ul>
+      <app-export-button
+        class="ml-auto align-self-center mr-2"
+        [document]="reportDocument$"
+        [assessmentName]="assessment.name"
+        [sectionGroups]="sectionGroups">
+      </app-export-button>
+    </div>
 
-  <div class="assessment-container tab-content">
-    <div class="assessment-panel-container modification">
-      <router-outlet></router-outlet>
+    <div class="d-flex d-lg-none flex-column">
+      <app-export-button
+        class="mx-2 mb-2"
+        [document]="reportDocument$"
+        [assessmentName]="assessment.name"
+        [sectionGroups]="sectionGroups">
+      </app-export-button>
+    </div>
+
+    <div class="assessment-container tab-content">
+      <div class="assessment-panel-container modification">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </div>
-</div>
+}

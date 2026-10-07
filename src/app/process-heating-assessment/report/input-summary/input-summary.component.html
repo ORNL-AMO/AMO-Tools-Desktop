@@ -1,0 +1,41 @@
+<div class="output-summary p-3">
+  <h4 class="show-print print-section-header">Assessment Input Summary</h4>
+
+  @let ui = inputSummaryUI();
+  @if (ui) {
+    @let columnWidth = 100 / (ui.modificationNames.length + 2);
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th [style.width.%]="columnWidth"></th>
+          <th [style.width.%]="columnWidth">Baseline</th>
+          @for (modificationName of ui.modificationNames; track modificationName.id) {
+            <th [style.width.%]="columnWidth">{{modificationName.name}}</th>
+          }
+        </tr>
+      </thead>
+      @for (section of ui.sections; track section.label) {
+        <tbody class="avoid-break">
+          <tr>
+            <td class="bold">{{section.label}}</td>
+            <td></td>
+            @for (modificationName of ui.modificationNames; track modificationName.id) {
+              <td></td>
+            }
+          </tr>
+          @for (row of section.rows; track row.label) {
+            <tr>
+              <td>{{row.label}}{{row.units ? ' (' + row.units + ')' : ''}}</td>
+              <td>{{row.baseline | reportTableCell}}</td>
+              @for (modification of row.modifications; track $index) {
+                <td [class.indicate-report-field-different]="row.baseline.value !== modification.value">
+                  {{modification | reportTableCell}}
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      }
+    </table>
+  }
+</div>

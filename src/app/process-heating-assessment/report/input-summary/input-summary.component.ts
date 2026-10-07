@@ -1,9 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
+import { InputSummaryResultsService, InputSummaryUI } from './input-summary-results.service';
 
 @Component({
   selector: 'app-input-summary',
   standalone: false,
-  template: `<div class="panel-container p-3"><h4>Input Summary</h4><p class="text-muted">Placeholder — implemented in Step 16.</p></div>`,
+  templateUrl: './input-summary.component.html',
+  styleUrls: ['./input-summary.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InputSummaryComponent {}
+export class InputSummaryComponent {
+  private readonly inputSummaryResultsService = inject(InputSummaryResultsService);
+
+  readonly inputSummaryUI: Signal<InputSummaryUI | undefined> = this.inputSummaryResultsService.inputSummaryUI;
+}
