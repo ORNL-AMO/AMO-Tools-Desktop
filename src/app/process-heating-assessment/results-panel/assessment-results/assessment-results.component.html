@@ -116,7 +116,8 @@
             }
           </span>
           <span class="result-value">
-            @if (results.co2EmissionsOutput?.hourlyTotalEmissionOutput; as emissions) {
+            @let emissions = results.co2EmissionsOutput?.hourlyTotalEmissionOutput;
+            @if (emissions != null) {
               {{emissions | number:'1.0-2'}}
             } @else {
               &mdash; &mdash;

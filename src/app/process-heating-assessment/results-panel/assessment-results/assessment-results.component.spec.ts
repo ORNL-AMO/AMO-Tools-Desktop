@@ -206,6 +206,13 @@ describe('AssessmentResultsComponent', () => {
       expect(labels()).toContain(`${LABELS.co2} (tonne CO2)`);
     });
 
+    it('shows zero when emissions are zero', () => {
+      showOperationalImpacts.set(true);
+      results.update((r) => ({ ...r, co2EmissionsOutput: { hourlyTotalEmissionOutput: 0 } as PhastResults['co2EmissionsOutput'] }));
+      render();
+      expect(rowValue(LABELS.co2)).toBe('0');
+    });
+
     it('shows a placeholder when emissions are missing', () => {
       showOperationalImpacts.set(true);
       render();
