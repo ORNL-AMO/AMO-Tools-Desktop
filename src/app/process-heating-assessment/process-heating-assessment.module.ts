@@ -7,6 +7,7 @@ import { FormControlErrorsComponent } from '../shared/form-control-errors.compon
 import { InputUnitComponent } from '../shared/input-unit.component';
 import { SettingsModule } from '../settings/settings.module';
 import { Co2SavingsPhastModule } from '../phast/losses/operations/co2-savings-phast/co2-savings-phast.module';
+import { FlueGasMoistureModalModule } from '../shared/flue-gas-moisture-modal/flue-gas-moisture-modal.module';
 import { OperatingHoursModule } from '../shared/operating-hours/operating-hours.module';
 import { PhastOperatingCostsModule } from '../shared/phast-operating-costs/phast-operating-costs.module';
 import { SharedPipesModule } from '../shared/shared-pipes/shared-pipes.module';
@@ -87,6 +88,8 @@ import { FlueGasComponent } from './heat-balance/losses/flue-gas/flue-gas.compon
 import { FlueGasVolumeFormComponent } from './heat-balance/losses/flue-gas/flue-gas-volume-form.component';
 import { AddFlueGasMaterialModalComponent } from './heat-balance/losses/flue-gas/add-flue-gas-material-modal.component';
 import { FlueGasMassFormComponent } from './heat-balance/losses/flue-gas/flue-gas-mass-form.component';
+import { FlueGasMoistureDialogComponent } from './heat-balance/losses/flue-gas/flue-gas-moisture-dialog.component';
+import { FlueGasCalculatorDialogComponent } from './heat-balance/losses/flue-gas/flue-gas-calculator-dialog.component';
 import { FlueGasConditionsFieldsComponent } from './heat-balance/losses/flue-gas/flue-gas-conditions-fields.component';
 import { AddSolidLiquidFlueGasMaterialModalComponent } from './heat-balance/losses/flue-gas/add-solid-liquid-flue-gas-material-modal.component';
 import { GasLeakageComponent } from './heat-balance/losses/gas-leakage/gas-leakage.component';
@@ -342,6 +345,8 @@ export const ROUTES: Route[] = [
     AddFlueGasMaterialModalComponent,
     FlueGasMassFormComponent,
     FlueGasConditionsFieldsComponent,
+    FlueGasMoistureDialogComponent,
+    FlueGasCalculatorDialogComponent,
     AddSolidLiquidFlueGasMaterialModalComponent,
     GasLeakageComponent,
     GasLeakageFormComponent,
@@ -367,6 +372,7 @@ export const ROUTES: Route[] = [
     SettingsModule,
     Co2SavingsPhastModule,
     OperatingHoursModule,
+    FlueGasMoistureModalModule,
     PhastOperatingCostsModule,
     SharedPipesModule,
     LossesHelpModule,

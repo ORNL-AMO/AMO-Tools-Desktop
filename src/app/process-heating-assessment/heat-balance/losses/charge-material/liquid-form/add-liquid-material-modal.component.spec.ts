@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { AddLiquidMaterialModalComponent } from './add-liquid-material-modal.component';
 import { LiquidLoadMaterialDbService } from '../../../../../indexedDb/liquid-load-material-db.service';
 import { MaterialModalData } from '../../../../models/material-modal-data';
@@ -26,6 +26,8 @@ function fillValidForm(form: AddLiquidMaterialModalComponent['form']): void {
   form.patchValue(VALID_FORM_VALUE as unknown as Partial<typeof form['value']>);
 }
 
+const EXISTING_MATERIAL: LiquidLoadChargeMaterial = { id: 1, substance: 'Water', specificHeatLiquid: 1, specificHeatVapor: 0.48, latentHeat: 970, vaporizationTemperature: 212, isDefault: true };
+
 describe('AddLiquidMaterialModalComponent', () => {
   let component: AddLiquidMaterialModalComponent;
   let fixture: ComponentFixture<AddLiquidMaterialModalComponent>;
@@ -33,7 +35,9 @@ describe('AddLiquidMaterialModalComponent', () => {
   let dialogRefSpy: jasmine.SpyObj<DialogRef<LiquidLoadChargeMaterial>>;
 
   beforeEach(async () => {
-    dbServiceSpy = jasmine.createSpyObj('LiquidLoadMaterialDbService', ['addWithObservable']);
+    MOCK_SETTINGS.unitsOfMeasure = 'Imperial';
+    dbServiceSpy = jasmine.createSpyObj('LiquidLoadMaterialDbService', ['addWithObservable', 'getAllWithObservable']);
+    dbServiceSpy.getAllWithObservable.and.returnValue(new BehaviorSubject<LiquidLoadChargeMaterial[]>([EXISTING_MATERIAL]));
     dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
 
     await TestBed.configureTestingModule({
@@ -50,6 +54,32 @@ describe('AddLiquidMaterialModalComponent', () => {
     fixture = TestBed.createComponent(AddLiquidMaterialModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  describe('existing material', () => {
+    it('lists the saved materials', () => {
+      expect(component.materials()).toEqual([EXISTING_MATERIAL]);
+    });
+
+    it('starts a new material from the selected one with a (mod) name', () => {
+      component.applyExistingMaterial(EXISTING_MATERIAL);
+
+      expect(component.form.getRawValue()).toEqual(jasmine.objectContaining({ substance: 'Water (mod)', specificHeatLiquid: 1, specificHeatVapor: 0.48, latentHeat: 970, vaporizationTemperature: 212 }));
+    });
+
+    it('converts the selected material to Metric units for display', () => {
+      MOCK_SETTINGS.unitsOfMeasure = 'Metric';
+
+      component.applyExistingMaterial(EXISTING_MATERIAL);
+
+      expect(component.form.getRawValue().specificHeatLiquid).not.toBe(1);
+    });
+
+    it('ignores an empty selection', () => {
+      component.applyExistingMaterial(null);
+
+      expect(component.form.controls.substance.value).toBe('');
+    });
   });
 
   describe('initialization', () => {

@@ -27,6 +27,7 @@
     @if (form().controls.totalHeatInput.value > 0) {
       <div class="form-group">
         <label class="small" for="{{controlIds().availableHeat}}">Available Heat of Fuel</label>
+        <button type="button" class="btn btn-link btn-sm p-0 d-block" (click)="openFlueGasModal()">Calculate</button>
         <div class="input-group" [class.invalid]="form().controls.availableHeat.invalid">
           <input type="number" step="any" min="0" class="form-control"
             id="{{controlIds().availableHeat}}" formControlName="availableHeat" onfocus="this.select();">

@@ -69,6 +69,7 @@
 
   <div class="form-group">
     <label for="moistureInAirCombustion_{{ instanceId() }}">Moisture in Combustion Air</label>
+    <button type="button" class="btn btn-link btn-sm p-0 d-block" (click)="openMoistureModal()">Calculate</button>
     <div class="input-group" [class.invalid]="f.moistureInAirCombustion.invalid">
       <input type="number" step="0.1" class="form-control" id="moistureInAirCombustion_{{ instanceId() }}" formControlName="moistureInAirCombustion" onfocus="this.select();">
       <span class="input-group-addon units">%</span>

@@ -1,6 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasConditionsFieldsComponent } from './flue-gas-conditions-fields.component';
@@ -12,12 +14,17 @@ describe('FlueGasConditionsFieldsComponent', () => {
   let fixture: ComponentFixture<FlueGasConditionsFieldsComponent>;
   let component: FlueGasConditionsFieldsComponent;
   let formService: FlueGasFormService;
+  let modalDialogServiceSpy: jasmine.SpyObj<ModalDialogService>;
+  let closed$: Subject<number | undefined>;
 
   beforeEach(async () => {
+    closed$ = new Subject<number | undefined>();
+    modalDialogServiceSpy = jasmine.createSpyObj('ModalDialogService', ['openModal']);
+    modalDialogServiceSpy.openModal.and.returnValue({ closed: closed$.asObservable() } as never);
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [FlueGasConditionsFieldsComponent],
-      providers: [FlueGasFormService, ConvertUnitsService],
+      providers: [FlueGasFormService, ConvertUnitsService, { provide: ModalDialogService, useValue: modalDialogServiceSpy }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
     formService = TestBed.inject(FlueGasFormService);
@@ -44,6 +51,45 @@ describe('FlueGasConditionsFieldsComponent', () => {
 
       expect(form.controls.o2InFlueGas.value).toBe(0);
       expect(form.controls.excessAirPercentage.value).toBe(0);
+    });
+  });
+
+  describe('openMoistureModal', () => {
+    it('opens the dialog with the current settings', () => {
+      render(OxygenCalculationMethod.ExcessAir);
+
+      component.openMoistureModal();
+
+      expect(modalDialogServiceSpy.openModal.calls.mostRecent().args[1]?.data).toEqual({ settings: MOCK_SETTINGS });
+    });
+
+    it('applies the calculated moisture rounded to 2 decimals', () => {
+      const form = render(OxygenCalculationMethod.ExcessAir);
+      component.openMoistureModal();
+
+      closed$.next(1.23456);
+
+      expect(form.controls.moistureInAirCombustion.value).toBe(1.23);
+    });
+
+    it('applies a calculated moisture of 0', () => {
+      const form = render(OxygenCalculationMethod.ExcessAir);
+      form.patchValue({ moistureInAirCombustion: 5 });
+      component.openMoistureModal();
+
+      closed$.next(0);
+
+      expect(form.controls.moistureInAirCombustion.value).toBe(0);
+    });
+
+    it('leaves the field unchanged when the dialog is cancelled', () => {
+      const form = render(OxygenCalculationMethod.ExcessAir);
+      form.patchValue({ moistureInAirCombustion: 5 });
+      component.openMoistureModal();
+
+      closed$.next(undefined);
+
+      expect(form.controls.moistureInAirCombustion.value).toBe(5);
     });
   });
 
