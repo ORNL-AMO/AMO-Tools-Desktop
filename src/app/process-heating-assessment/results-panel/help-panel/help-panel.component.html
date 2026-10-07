@@ -1,2 +1,44 @@
-<!-- TODO Step 17: add per-route help content components, routed by childView() and lossSubView() -->
-<p class="text-muted p-2">Help content coming soon.</p>
+<div class="help-panel">
+  @if (childView() === ROUTE_TOKENS.heatBalance && lossSubView()) {
+    @switch (lossSubView()) {
+      @case (ROUTE_TOKENS.operations) { <app-operations-help currentField=""></app-operations-help> }
+      @case (ROUTE_TOKENS.chargeMaterial) { <app-charge-material-help [settings]="settings()" currentField=""></app-charge-material-help> }
+      @case (ROUTE_TOKENS.wallLosses) { <app-wall-losses-help [settings]="settings()" currentField=""></app-wall-losses-help> }
+      @case (ROUTE_TOKENS.extendedSurface) { <app-extended-surface-losses-help [settings]="settings()" currentField=""></app-extended-surface-losses-help> }
+      @case (ROUTE_TOKENS.atmosphere) { <app-atmosphere-losses-help [settings]="settings()" currentField=""></app-atmosphere-losses-help> }
+      @case (ROUTE_TOKENS.fixture) { <app-fixture-losses-help [settings]="settings()" currentField=""></app-fixture-losses-help> }
+      @case (ROUTE_TOKENS.cooling) { <app-cooling-losses-help [settings]="settings()" currentField=""></app-cooling-losses-help> }
+      @case (ROUTE_TOKENS.opening) { <app-opening-losses-help [settings]="settings()" currentField=""></app-opening-losses-help> }
+      @case (ROUTE_TOKENS.other) { <app-other-losses-help currentField=""></app-other-losses-help> }
+      @case (ROUTE_TOKENS.flueGas) { <app-flue-gas-losses-help [settings]="settings()" currentField=""></app-flue-gas-losses-help> }
+      @case (ROUTE_TOKENS.gasLeakage) { <app-gas-leakage-losses-help [settings]="settings()" currentField=""></app-gas-leakage-losses-help> }
+      @case (ROUTE_TOKENS.auxiliaryPower) { <app-auxiliary-power-losses-help [settings]="settings()" currentField=""></app-auxiliary-power-losses-help> }
+      @case (ROUTE_TOKENS.energyInputExhaustGas) { <app-energy-input-exhaust-gas-losses-help [settings]="settings()" currentField=""></app-energy-input-exhaust-gas-losses-help> }
+      @case (ROUTE_TOKENS.energyInput) { <app-energy-input-help [settings]="settings()" currentField=""></app-energy-input-help> }
+      @case (ROUTE_TOKENS.exhaustGas) { <app-exhaust-gas-help [settings]="settings()" currentField=""></app-exhaust-gas-help> }
+      @case (ROUTE_TOKENS.slag) { <app-slag-help [settings]="settings()" currentField=""></app-slag-help> }
+      @case (ROUTE_TOKENS.heatSystemEfficiency) { <app-heat-system-efficiency-help [settings]="settings()" currentField=""></app-heat-system-efficiency-help> }
+      @default { <ng-container *ngTemplateOutlet="noHelp"></ng-container> }
+    }
+  } @else {
+    @switch (childView()) {
+      @case (ROUTE_TOKENS.exploreOpportunities) {
+        <div class="p-2 pt-3 d-flex flex-column help-info">
+          <h5>
+            Explore Opportunities Help
+            <br>
+            <small class="text-muted">
+              Use the list on the left to discover potential opportunities for energy and cost savings within your system.
+            </small>
+          </h5>
+          <hr class="my-1 hr-spacer">
+        </div>
+      }
+      @default { <ng-container *ngTemplateOutlet="noHelp"></ng-container> }
+    }
+  }
+</div>
+
+<ng-template #noHelp>
+  <p class="text-muted p-2" data-testid="no-help">No help content is available for this view.</p>
+</ng-template>
