@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, Injector, input } from '@angular/core';
 import { roundVal } from '../../../../shared/helperFunctions';
 import { ModalDialogService } from '../../../../shared/modal-dialog.service';
-import { FlueGasMoistureDialogComponent, FlueGasMoistureDialogData } from '../../../../shared/flue-gas-moisture-modal/flue-gas-moisture-dialog/flue-gas-moisture-dialog.component';
+import { FlueGasMoistureDialogComponent, FlueGasMoistureDialogData } from './flue-gas-moisture-dialog.component';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasForm, OXYGEN_CALCULATION_METHODS, OxygenCalculationMethod } from './flue-gas-form.service';
 

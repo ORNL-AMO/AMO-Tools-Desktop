@@ -1,6 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { Settings } from '../../../../shared/models/settings';
 import { EnergyInputExhaustGasFormComponent } from './energy-input-exhaust-gas-form.component';
@@ -14,12 +16,17 @@ describe('EnergyInputExhaustGasFormComponent', () => {
   let component: EnergyInputExhaustGasFormComponent;
   let fixture: ComponentFixture<EnergyInputExhaustGasFormComponent>;
   let formService: EnergyInputExhaustGasFormService;
+  let modalDialogServiceSpy: jasmine.SpyObj<ModalDialogService>;
+  let closed$: Subject<number | undefined>;
 
   beforeEach(async () => {
+    closed$ = new Subject<number | undefined>();
+    modalDialogServiceSpy = jasmine.createSpyObj('ModalDialogService', ['openModal']);
+    modalDialogServiceSpy.openModal.and.returnValue({ closed: closed$.asObservable() } as never);
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
       declarations: [EnergyInputExhaustGasFormComponent],
-      providers: [EnergyInputExhaustGasFormService],
+      providers: [EnergyInputExhaustGasFormService, { provide: ModalDialogService, useValue: modalDialogServiceSpy }],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
@@ -49,6 +56,34 @@ describe('EnergyInputExhaustGasFormComponent', () => {
       render();
 
       expect(Object.keys(component.controlIds())).toEqual(Object.keys(component.form().controls));
+    });
+  });
+
+  describe('openFlueGasModal', () => {
+    it('opens the dialog with the current settings', () => {
+      render();
+
+      component.openFlueGasModal();
+
+      expect(modalDialogServiceSpy.openModal.calls.mostRecent().args[1]?.data).toEqual({ settings: IMPERIAL });
+    });
+
+    it('applies the calculated available heat rounded to 1 decimal', () => {
+      const item = render({ totalHeatInput: 5 });
+      component.openFlueGasModal();
+
+      closed$.next(78.456);
+
+      expect((item.form as ReturnType<typeof component.form>).controls.availableHeat.value).toBe(78.5);
+    });
+
+    it('leaves available heat unchanged when the dialog is cancelled', () => {
+      const item = render({ totalHeatInput: 5, availableHeat: 60 });
+      component.openFlueGasModal();
+
+      closed$.next(undefined);
+
+      expect((item.form as ReturnType<typeof component.form>).controls.availableHeat.value).toBe(60);
     });
   });
 

@@ -88,6 +88,8 @@ import { FlueGasComponent } from './heat-balance/losses/flue-gas/flue-gas.compon
 import { FlueGasVolumeFormComponent } from './heat-balance/losses/flue-gas/flue-gas-volume-form.component';
 import { AddFlueGasMaterialModalComponent } from './heat-balance/losses/flue-gas/add-flue-gas-material-modal.component';
 import { FlueGasMassFormComponent } from './heat-balance/losses/flue-gas/flue-gas-mass-form.component';
+import { FlueGasMoistureDialogComponent } from './heat-balance/losses/flue-gas/flue-gas-moisture-dialog.component';
+import { FlueGasCalculatorDialogComponent } from './heat-balance/losses/flue-gas/flue-gas-calculator-dialog.component';
 import { FlueGasConditionsFieldsComponent } from './heat-balance/losses/flue-gas/flue-gas-conditions-fields.component';
 import { AddSolidLiquidFlueGasMaterialModalComponent } from './heat-balance/losses/flue-gas/add-solid-liquid-flue-gas-material-modal.component';
 import { GasLeakageComponent } from './heat-balance/losses/gas-leakage/gas-leakage.component';
@@ -343,6 +345,8 @@ export const ROUTES: Route[] = [
     AddFlueGasMaterialModalComponent,
     FlueGasMassFormComponent,
     FlueGasConditionsFieldsComponent,
+    FlueGasMoistureDialogComponent,
+    FlueGasCalculatorDialogComponent,
     AddSolidLiquidFlueGasMaterialModalComponent,
     GasLeakageComponent,
     GasLeakageFormComponent,

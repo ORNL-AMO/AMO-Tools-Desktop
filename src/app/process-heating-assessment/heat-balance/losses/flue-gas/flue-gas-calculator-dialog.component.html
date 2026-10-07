@@ -1,0 +1,36 @@
+<div class="modal-header">
+  <h4 class="modal-title">Calculate Available Heat From Flue Gas</h4>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <label for="flueGasCalculatorType">Fuel Type</label>
+    <select class="form-control" id="flueGasCalculatorType" [ngModel]="flueGasType()" (ngModelChange)="switchType($event)">
+      <option [value]="FlueGasType.ByVolume">Gas (By Volume)</option>
+      <option [value]="FlueGasType.ByMass">Solid/Liquid (By Mass)</option>
+    </select>
+  </div>
+
+  @if (flueGasType() === FlueGasType.ByMass) {
+    <app-flue-gas-mass-form [form]="asMassForm(form())" [settings]="settings" instanceId="flueGasCalculator"></app-flue-gas-mass-form>
+  } @else {
+    <app-flue-gas-volume-form [form]="asVolumeForm(form())" [settings]="settings" instanceId="flueGasCalculator"></app-flue-gas-volume-form>
+  }
+
+  @let flueGasTempWarning = warnings()?.flueGasTemp;
+  <div class="loss-results mt-3">
+    @if (flueGasTempWarning) {
+      <div class="alert alert-warning small">{{flueGasTempWarning}}</div>
+    }
+    @if (availableHeatWarning(); as warning) {
+      <div class="alert alert-warning small">{{warning}}</div>
+    }
+    <div class="d-flex justify-content-between small">
+      <span class="font-weight-bold">Available Heat</span>
+      <span>@if (result(); as result) { {{result.availableHeat | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-white" (click)="cancel()">Cancel</button>
+  <button type="button" class="btn btn-primary" [disabled]="!result()" (click)="apply()">Use Result</button>
+</div>

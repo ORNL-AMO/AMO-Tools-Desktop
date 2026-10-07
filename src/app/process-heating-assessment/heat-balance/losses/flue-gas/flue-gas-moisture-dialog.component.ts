@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { Settings } from '../../models/settings';
-import { FlueGasMoistureModalService } from '../flue-gas-moisture-modal.service';
+import { Settings } from '../../../../shared/models/settings';
+import { FlueGasMoistureModalService } from '../../../../shared/flue-gas-moisture-modal/flue-gas-moisture-modal.service';
 
 export interface FlueGasMoistureDialogData {
   settings: Settings;
