@@ -1,132 +1,175 @@
-<form *ngIf="psatForm" #formRef [formGroup]="psatForm">
-  <div *ngIf="inSetup" class="d-flex flex-column">
-    <div class="header mr-2 ml-2">
-      <h3>Motor</h3>
-    </div>
-  </div>
-
-  <div *ngIf="inSetup || baseline" class="d-flex justify-content-center flex-column my-0 mx-3">
-    <app-connected-assessment-status class="w-100" *ngIf="hasConnectedPumpInventory" [connectedToType]="'inventory'"
-      [connectedFormGroupName]="'motor'">
-    </app-connected-assessment-status>
-
-      <app-inventory-integration class="w-100" (focusedField)="focusField($event, true)"
-        *ngIf="inventorySelectOptions || psat.connectedItem" [inPsat]="true" [allowChanges]="inSetup"
-        [connectedInventoryType]="connectedInventoryType"
-        [selectOptions]="inventorySelectOptions">
-      </app-inventory-integration>
-      <app-integration-status *ngIf="inSetup" class="w-100"></app-integration-status>
-  </div>
-
-  <div [ngClass]="{'px-4 pb-4 pt-0': inSetup, 'p-3': !inSetup}"
-    [ngStyle]="{'margin-top.px': integrationContainerOffsetHeight}">
-    <div class="form-group" [ngClass]="{'indicate-different': isLineFreqDifferent()}">
-      <label for="{{'frequency_'+idString}}">Line Frequency</label>
-      <select name="frequency" class="form-control number-input-field" id="{{'frequency_'+idString}}"
-        formControlName="frequency" (change)="changeLineFreq()" (focus)="focusField('lineFrequency')">
-        <option *ngFor="let frequency of frequencies" [ngValue]="frequency">{{frequency}} Hz</option>
-      </select>
-    </div>
-
-    <div class="form-group"
-      [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': motorWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.horsePower.invalid}">
-      <label for="{{'horsePower_'+idString}}">Rated Motor Power</label>
-      <div name="horsePower" class="input-group">
-        <input [readonly]="!selected" type="number" step="10" min="0" class="form-control number-input-field"
-          id="{{'horsePower_'+idString}}" formControlName="horsePower" (input)="save()"
-          (focus)="focusField('horsePower')" onfocus="this.select();">
-        <span class="input-group-addon units">{{settings.powerMeasurement}}</span>
+@if (psatForm) {
+  <form #formRef [formGroup]="psatForm">
+    @if (inSetup) {
+      <div class="d-flex flex-column">
+        <div class="header mr-2 ml-2">
+          <h3>Motor</h3>
+        </div>
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="psatForm.controls.horsePower.invalid && !psatForm.controls.horsePower.pristine">
-        <span *ngIf="psatForm.controls.horsePower.errors.required">Value Required</span>
-      </span>
-      <span class="alert-warning pull-right small"
-        *ngIf="motorWarnings.ratedPowerError !== null && !psatForm.controls.horsePower.invalid && !psatForm.controls.horsePower.pristine">{{motorWarnings.ratedPowerError}}</span>
-    </div>
-
-    <div class="form-group"
-      [ngClass]="{'indicate-different': isMotorRatedSpeedDifferent(),'error': motorWarnings.rpmError !== null, 'invalid': psatForm.controls.motorRPM.invalid}">
-      <label for="{{'motorRPM_'+idString}}">Motor RPM</label>
-      <div name="motorRPM" class="input-group">
-        <input [readonly]="!selected" type="number" step="100" min="0" class="form-control number-input-field"
-          id="{{'motorRPM_'+idString}}" formControlName="motorRPM" (input)="save()" (focus)="focusField('motorRPM')"
-          onfocus="this.select();">
-        <span class="input-group-addon units">rpm</span>
+    }
+    @if (inSetup || baseline) {
+      <div class="d-flex justify-content-center flex-column my-0 mx-3">
+        @if (hasConnectedPumpInventory) {
+          <app-connected-assessment-status class="w-100" [connectedToType]="'inventory'"
+            [connectedFormGroupName]="'motor'">
+          </app-connected-assessment-status>
+        }
+        @if (inventorySelectOptions || psat.connectedItem) {
+          <app-inventory-integration class="w-100" (focusedField)="focusField($event, true)"
+            [inPsat]="true" [allowChanges]="inSetup"
+            [connectedInventoryType]="connectedInventoryType"
+            [selectOptions]="inventorySelectOptions">
+          </app-inventory-integration>
+        }
+        @if (inSetup) {
+          <app-integration-status class="w-100"></app-integration-status>
+        }
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="psatForm.controls.motorRPM.invalid && !psatForm.controls.motorRPM.pristine">
-        <span *ngIf="psatForm.controls.motorRPM.errors.required">Value Required</span>
-      </span>
-      <span class="alert-warning pull-right small"
-        *ngIf="motorWarnings.rpmError !== null && !psatForm.controls.motorRPM.invalid && !psatForm.controls.motorRPM.pristine">{{motorWarnings.rpmError}}</span>
-    </div>
-
-    <div class="form-group" [ngClass]="{'indicate-different': isEfficiencyClassDifferent()}">
-      <label for="{{'efficiencyClass_'+idString}}">Efficiency Class</label>
-      <select name="efficiencyClass" class="form-control select-input-field" id="{{'efficiencyClass_'+idString}}"
-        formControlName="efficiencyClass" (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')">
-        <option *ngFor="let efficiencyClass of efficiencyClasses" [ngValue]="efficiencyClass.value">
-          {{efficiencyClass.display}}</option>
-      </select>
-    </div>
-
-    <div class="form-group" *ngIf="psatForm.controls.efficiencyClass.value == 3"
-      [ngClass]="{'indicate-different': isEfficiencyDifferent(), 'invalid': psatForm.controls.efficiency.invalid}">
-      <label for="{{'efficiency_'+idString}}">Efficiency</label>
-      <div class="input-group">
-        <input [readonly]="!selected" name="efficiency" type="number" min="0" step="any" class="form-control"
-          id="{{'efficiency_'+idString}}" formControlName="efficiency" (input)="save()"
-          (focus)="focusField('efficiency')" onfocus="this.select();">
-        <span class="input-group-addon units">%</span>
+    }
+    <div [ngClass]="{'px-4 pb-4 pt-0': inSetup, 'p-3': !inSetup}"
+      [ngStyle]="{'margin-top.px': integrationContainerOffsetHeight}">
+      <div class="form-group" [ngClass]="{'indicate-different': isLineFreqDifferent()}">
+        <label for="{{'frequency_'+idString}}">Line Frequency</label>
+        <select name="frequency" class="form-control number-input-field" id="{{'frequency_'+idString}}"
+          formControlName="frequency" (change)="changeLineFreq()" (focus)="focusField('lineFrequency')">
+          @for (frequency of frequencies; track frequency) {
+            <option [ngValue]="frequency">{{frequency}} Hz</option>
+          }
+        </select>
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="psatForm.controls.efficiency.invalid && !psatForm.controls.efficiency.pristine">
-        <span *ngIf="psatForm.controls.efficiency.errors.required">Value Required</span>
-        <span *ngIf="psatForm.controls.efficiency.errors.max">Value can't be greater than
-          {{psatForm.controls.efficiency.errors.max.max}} %.</span>
-        <span *ngIf="psatForm.controls.efficiency.errors.min">Value can't be less than
-          {{psatForm.controls.efficiency.errors.min.min}} %.</span>
-      </span>
-    </div>
-
-    <div class="form-group"
-      [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': motorWarnings.voltageError !== null, 'invalid': psatForm.controls.motorVoltage.invalid }">
-      <label for="{{'motorVoltage_'+idString}}">Rated Voltage</label>
-      <div class="input-group">
-        <input [readonly]="!selected" name="motorVoltage" type="number" min="0" step="10"
-          class="form-control number-input-field" id="{{'motorVoltage_'+idString}}" formControlName="motorVoltage"
-          (input)="save()" (focus)="focusField('motorVoltage')" onfocus="this.select();">
-        <span class="input-group-addon units">V</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="psatForm.controls.motorVoltage.invalid && !psatForm.controls.motorVoltage.pristine">
-        <span *ngIf="psatForm.controls.motorVoltage.errors.required">Value Required</span>
-      </span>
-      <span class="alert-warning pull-right small"
-        *ngIf="motorWarnings.voltageError !== null && !psatForm.controls.motorVoltage.invalid && !psatForm.controls.motorVoltage.pristine">{{motorWarnings.voltageError}}</span>
-    </div>
-
-    <div class="form-group"
-      [ngClass]="{'indicate-different': isMotorRatedFlaDifferent(),'error': motorWarnings.flaError !== null, 'invalid': psatForm.controls.fullLoadAmps.invalid}">
-      <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
-        Full-Load Amps
-        <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}" *ngIf="!disableFLA()"
-          id="flaHelp" (click)="getFullLoadAmps()">Estimate
-          Full-Load Amps</a>
-      </label>
-      <div class="input-group">
-        <input [readonly]="!selected" name="fullLoadAmps" type="number" min="0" step="any"
-          class="form-control number-input-field" id="{{'fullLoadAmps_'+idString}}" formControlName="fullLoadAmps"
-          (input)="save()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();">
-        <span class="input-group-addon units">A</span>
-      </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="psatForm.controls.fullLoadAmps.invalid && !psatForm.controls.fullLoadAmps.pristine">
-        <span *ngIf="psatForm.controls.fullLoadAmps.errors.required">Value Required</span>
-      </span>
-      <span class="alert-warning small pull-right"
-        *ngIf="motorWarnings.flaError !== null && !psatForm.controls.fullLoadAmps.invalid">{{motorWarnings.flaError}}</span>
-    </div>
-  </div>
-</form>
+      <div class="form-group"
+        [ngClass]="{'indicate-different': isMotorRatedPowerDifferent(),'error': motorWarnings.ratedPowerError !== null, 'invalid': psatForm.controls.horsePower.invalid}">
+        <label for="{{'horsePower_'+idString}}">Rated Motor Power</label>
+        <div name="horsePower" class="input-group">
+          <input [readonly]="!selected" type="number" step="10" min="0" class="form-control number-input-field"
+            id="{{'horsePower_'+idString}}" formControlName="horsePower" (input)="save()"
+            (focus)="focusField('horsePower')" onfocus="this.select();">
+            <span class="input-group-addon units">{{settings.powerMeasurement}}</span>
+          </div>
+          @if (psatForm.controls.horsePower.invalid && !psatForm.controls.horsePower.pristine) {
+            <span class="alert-danger pull-right small"
+              >
+              @if (psatForm.controls.horsePower.errors.required) {
+                <span>Value Required</span>
+              }
+            </span>
+          }
+          @if (motorWarnings.ratedPowerError !== null && !psatForm.controls.horsePower.invalid && !psatForm.controls.horsePower.pristine) {
+            <span class="alert-warning pull-right small"
+            >{{motorWarnings.ratedPowerError}}</span>
+          }
+        </div>
+        <div class="form-group"
+          [ngClass]="{'indicate-different': isMotorRatedSpeedDifferent(),'error': motorWarnings.rpmError !== null, 'invalid': psatForm.controls.motorRPM.invalid}">
+          <label for="{{'motorRPM_'+idString}}">Motor RPM</label>
+          <div name="motorRPM" class="input-group">
+            <input [readonly]="!selected" type="number" step="100" min="0" class="form-control number-input-field"
+              id="{{'motorRPM_'+idString}}" formControlName="motorRPM" (input)="save()" (focus)="focusField('motorRPM')"
+              onfocus="this.select();">
+              <span class="input-group-addon units">rpm</span>
+            </div>
+            @if (psatForm.controls.motorRPM.invalid && !psatForm.controls.motorRPM.pristine) {
+              <span class="alert-danger pull-right small"
+                >
+                @if (psatForm.controls.motorRPM.errors.required) {
+                  <span>Value Required</span>
+                }
+              </span>
+            }
+            @if (motorWarnings.rpmError !== null && !psatForm.controls.motorRPM.invalid && !psatForm.controls.motorRPM.pristine) {
+              <span class="alert-warning pull-right small"
+              >{{motorWarnings.rpmError}}</span>
+            }
+          </div>
+          <div class="form-group" [ngClass]="{'indicate-different': isEfficiencyClassDifferent()}">
+            <label for="{{'efficiencyClass_'+idString}}">Efficiency Class</label>
+            <select name="efficiencyClass" class="form-control select-input-field" id="{{'efficiencyClass_'+idString}}"
+              formControlName="efficiencyClass" (change)="changeEfficiencyClass()" (focus)="focusField('efficiencyClass')">
+              @for (efficiencyClass of efficiencyClasses; track efficiencyClass) {
+                <option [ngValue]="efficiencyClass.value">
+                {{efficiencyClass.display}}</option>
+              }
+            </select>
+          </div>
+          @if (psatForm.controls.efficiencyClass.value == 3) {
+            <div class="form-group"
+              [ngClass]="{'indicate-different': isEfficiencyDifferent(), 'invalid': psatForm.controls.efficiency.invalid}">
+              <label for="{{'efficiency_'+idString}}">Efficiency</label>
+              <div class="input-group">
+                <input [readonly]="!selected" name="efficiency" type="number" min="0" step="any" class="form-control"
+                  id="{{'efficiency_'+idString}}" formControlName="efficiency" (input)="save()"
+                  (focus)="focusField('efficiency')" onfocus="this.select();">
+                  <span class="input-group-addon units">%</span>
+                </div>
+                @if (psatForm.controls.efficiency.invalid && !psatForm.controls.efficiency.pristine) {
+                  <span class="alert-danger pull-right small"
+                    >
+                    @if (psatForm.controls.efficiency.errors.required) {
+                      <span>Value Required</span>
+                    }
+                    @if (psatForm.controls.efficiency.errors.max) {
+                      <span>Value can't be greater than
+                      {{psatForm.controls.efficiency.errors.max.max}} %.</span>
+                    }
+                    @if (psatForm.controls.efficiency.errors.min) {
+                      <span>Value can't be less than
+                      {{psatForm.controls.efficiency.errors.min.min}} %.</span>
+                    }
+                  </span>
+                }
+              </div>
+            }
+            <div class="form-group"
+              [ngClass]="{'indicate-different': isMotorRatedVoltageDifferent(),'error': motorWarnings.voltageError !== null, 'invalid': psatForm.controls.motorVoltage.invalid }">
+              <label for="{{'motorVoltage_'+idString}}">Rated Voltage</label>
+              <div class="input-group">
+                <input [readonly]="!selected" name="motorVoltage" type="number" min="0" step="10"
+                  class="form-control number-input-field" id="{{'motorVoltage_'+idString}}" formControlName="motorVoltage"
+                  (input)="save()" (focus)="focusField('motorVoltage')" onfocus="this.select();">
+                  <span class="input-group-addon units">V</span>
+                </div>
+                @if (psatForm.controls.motorVoltage.invalid && !psatForm.controls.motorVoltage.pristine) {
+                  <span class="alert-danger pull-right small"
+                    >
+                    @if (psatForm.controls.motorVoltage.errors.required) {
+                      <span>Value Required</span>
+                    }
+                  </span>
+                }
+                @if (motorWarnings.voltageError !== null && !psatForm.controls.motorVoltage.invalid && !psatForm.controls.motorVoltage.pristine) {
+                  <span class="alert-warning pull-right small"
+                  >{{motorWarnings.voltageError}}</span>
+                }
+              </div>
+              <div class="form-group"
+                [ngClass]="{'indicate-different': isMotorRatedFlaDifferent(),'error': motorWarnings.flaError !== null, 'invalid': psatForm.controls.fullLoadAmps.invalid}">
+                <label for="{{'fullLoadAmps_'+idString}}" aria-describedby="flaHelp">
+                  Full-Load Amps
+                  @if (!disableFLA()) {
+                    <a class="form-text small click-link" [ngClass]="{'disabled-link': !selected}"
+                      id="flaHelp" (click)="getFullLoadAmps()">Estimate
+                    Full-Load Amps</a>
+                  }
+                </label>
+                <div class="input-group">
+                  <input [readonly]="!selected" name="fullLoadAmps" type="number" min="0" step="any"
+                    class="form-control number-input-field" id="{{'fullLoadAmps_'+idString}}" formControlName="fullLoadAmps"
+                    (input)="save()" (focus)="focusField('fullLoadAmps')" onfocus="this.select();">
+                    <span class="input-group-addon units">A</span>
+                  </div>
+                  @if (psatForm.controls.fullLoadAmps.invalid && !psatForm.controls.fullLoadAmps.pristine) {
+                    <span class="alert-danger pull-right small"
+                      >
+                      @if (psatForm.controls.fullLoadAmps.errors.required) {
+                        <span>Value Required</span>
+                      }
+                    </span>
+                  }
+                  @if (motorWarnings.flaError !== null && !psatForm.controls.fullLoadAmps.invalid) {
+                    <span class="alert-warning small pull-right"
+                    >{{motorWarnings.flaError}}</span>
+                  }
+                </div>
+              </div>
+            </form>
+          }

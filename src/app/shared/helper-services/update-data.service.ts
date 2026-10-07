@@ -435,7 +435,38 @@ export class UpdateDataService {
             });
         }
 
+        assessment.phast = this.updateLossNames(assessment.phast);
+        if (assessment.phast.modifications && assessment.phast.modifications.length > 0) {
+            assessment.phast.modifications.forEach(mod => {
+                mod.phast = this.updateLossNames(mod.phast);
+            });
+        }
+
         return assessment;
+    }
+
+    /**
+     * Older or imported wall/extended surface losses can have no name (WallLoss.name and
+     * ExtendedSurface.name are optional). getWallLossForm() requires name, so an unnamed
+     * loss fails validation and is silently dropped from summed totals. Backfill it once
+     * here so saved data always has a name going forward.
+     */
+    updateLossNames(phast: PHAST): PHAST {
+        if (phast.losses && phast.losses.wallLosses && phast.losses.wallLosses.length > 0) {
+            phast.losses.wallLosses.forEach((loss, index) => {
+                if (!loss.name) {
+                    loss.name = 'Loss #' + (index + 1);
+                }
+            });
+        }
+        if (phast.losses && phast.losses.extendedSurfaces && phast.losses.extendedSurfaces.length > 0) {
+            phast.losses.extendedSurfaces.forEach((loss, index) => {
+                if (!loss.name) {
+                    loss.name = 'Loss #' + (index + 1);
+                }
+            });
+        }
+        return phast;
     }
 
     updateMoistureInAirCombustion(phast: PHAST): PHAST {

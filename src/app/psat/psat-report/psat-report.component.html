@@ -1,150 +1,169 @@
 <div class="assessment-report report-in-psat psat"
-    [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': inRollup}">
-    <div *ngIf="inPsat" class="report-cover">
-        <img src="assets/images/Logo_Color_Seal_Blue_Lettering_Horizontal.png" class="doe-logo">
-
-        <div class="report-title">
-            <h4>Pump Efficiency Report:</h4>
-            <h4>{{assessment.name}}</h4>
-            <h5>{{createdDate| date:'short'}}</h5>
-        </div>
+  [ngClass]="{'assessment-report-padding': inPsat, 'report-in-rollup': inRollup}">
+  @if (inPsat) {
+    <div class="report-cover">
+      <img src="assets/images/Logo_Color_Seal_Blue_Lettering_Horizontal.png" class="doe-logo">
+      <div class="report-title">
+        <h4>Pump Efficiency Report:</h4>
+        <h4>{{assessment.name}}</h4>
+        <h5>{{createdDate| date:'short'}}</h5>
+      </div>
     </div>
+  }
 
-    <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inPsat}">
-        <!-- When does this show? -->
-        <h2 *ngIf="!assessment" class="assessment-name">Assessment Report</h2>
-        <!-- Assessment view -->
-        <!-- <div *ngIf="assessment && inPsat" class="row">
-            <div class="col-12 p-2">
-                <div class="d-flex justify-content-between">
-                    <div class="d-flex">
-                        <div class="mt-auto ml-3">
-                            <ng-container class="ml-3 pl-2" *ngFor="let directory of assessmentDirectories">
-                                {{directory.name}} /
-                            </ng-container>
-                            {{assessment.name}}
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
-            </div>
-        </div> -->
-        <!-- Rollup view -->
-        <div *ngIf="assessment && !inPsat" class="row assessment-name">
-            <div class="col-12">
-                <h2 class="assessment-title">
-                    <div class="d-flex">
-                        <span class="pl-2" *ngFor="let directory of assessmentDirectories">
-                            {{directory.name}} /
-                        </span>
-                    </div>
-                    {{assessment.name}}
-                </h2>
-            </div>
-            <div class="col-12">
-                <h2 class="date-modified">
-                    <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
-                </h2>
-            </div>
+  <div #reportHeader class="report-header d-none d-lg-block" [ngClass]="{'hide-print': inPsat}">
+    <!-- When does this show? -->
+    @if (!assessment) {
+      <h2 class="assessment-name">Assessment Report</h2>
+    }
+    <!-- Assessment view -->
+    <!-- <div *ngIf="assessment && inPsat" class="row">
+    <div class="col-12 p-2">
+      <div class="d-flex justify-content-between">
+        <div class="d-flex">
+          <div class="mt-auto ml-3">
+            <ng-container class="ml-3 pl-2" *ngFor="let directory of assessmentDirectories">
+              {{directory.name}} /
+            </ng-container>
+            {{assessment.name}}
+          </div>
         </div>
+        <div></div>
+      </div>
     </div>
-    <!-- End .report-header -->
-
-    <div class="report-data" *ngIf="assessment.psat.setupDone && assessment.psat.valid.isValid">
-        <div class="d-none d-lg-flex tabs-bar-row">
-            <ul #reportBtns class="tabs primary">
-                <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
-                    <a>Result Data</a>
-                </li>
-                <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
-                    <a>Report Graphs</a>
-                </li>
-                <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
-                    <a>Sankey</a>
-                </li>
-                <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
-                    <a>Input Summary</a>
-                </li>
-                <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
-                    <a>Facility Info</a>
-                </li>
-            </ul>
-            <app-export-button
-                class="ml-auto align-self-center mr-2"
-                [document]="reportDocument$"
-                [assessmentName]="assessment.name"
-                [sectionGroups]="sectionGroups">
-            </app-export-button>
-        </div>
-
-        <div class="d-flex d-lg-none flex-column">
-            <div #reportBtns class="tabs primary hide-print">
-                <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
-                    <span *ngIf="!tabsCollapsed" class="fa fa-caret-up pr-2"></span>
-                    <span *ngIf="tabsCollapsed" class="fa fa-caret-down pr-2"></span>
-                    <span class="small text-uppercase">Menu</span>
-                </div>
-                <div (click)="setTab('results')"
-                    [ngClass]="{'active': currentTab == 'results', 'collapse': tabsCollapsed}">
-                    <a>Result Data</a>
-                </div>
-                <div (click)="setTab('reportGraphs')"
-                    [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
-                    <a>Report Graphs</a>
-                </div>
-                <div (click)="setTab('reportSankey')"
-                    [ngClass]="{'active': currentTab == 'reportSankey', 'collapse': tabsCollapsed}">
-                    <a>Sankey</a>
-                </div>
-                <div (click)="setTab('inputData')"
-                    [ngClass]="{'active': currentTab == 'inputData', 'collapse': tabsCollapsed}">
-                    <a>Input Summary</a>
-                </div>
-                <div (click)="setTab('facilityInfo')"
-                    [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
-                    <a>Facility Info</a>
-                </div>
-            </div>
-            <app-export-button
-                class="mx-2 mb-2"
-                [document]="reportDocument$"
-                [assessmentName]="assessment.name"
-                [sectionGroups]="sectionGroups">
-            </app-export-button>
-        </div>
-
-        <div class="results scroll-item print-height" *ngIf="currentTab == 'facilityInfo'"
-            [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
-        </div>
-        <div class="input-data results scroll-item print-height"
-            *ngIf="currentTab == 'inputData'"
-            [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-input-summary [psat]="assessment.psat" [settings]="settings">
-            </app-input-summary>
-        </div>
-        <div class="results scroll-item print-height"
-            *ngIf="currentTab == 'results'"
-            [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-output-summary [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
-            </app-output-summary>
-        </div>
-        <div class="results scroll-item print-height"
-            *ngIf="currentTab == 'reportGraphs'"
-            [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-psat-report-graphs [settings]="settings" [psat]="assessment.psat">
-            </app-psat-report-graphs>
-        </div>
-        <div class="results scroll-item print-height" *ngIf="currentTab == 'reportSankey'"
-            [ngStyle]="{'height.px':reportContainerHeight}">
-            <app-psat-report-sankey [settings]="settings" [assessment]="assessment"></app-psat-report-sankey>
-        </div>
-
+  </div> -->
+  <!-- Rollup view -->
+  @if (assessment && !inPsat) {
+    <div class="row assessment-name">
+      <div class="col-12">
+        <h2 class="assessment-title">
+          <div class="d-flex">
+            @for (directory of assessmentDirectories; track directory) {
+              <span class="pl-2">
+                {{directory.name}} /
+              </span>
+            }
+          </div>
+          {{assessment.name}}
+        </h2>
+      </div>
+      <div class="col-12">
+        <h2 class="date-modified">
+          <span>Last Modified {{assessment.modifiedDate | date:'short'}}</span>
+        </h2>
+      </div>
     </div>
-    <!-- End .report-data -->
+  }
+</div>
+<!-- End .report-header -->
 
-    <div *ngIf="!assessment.psat.setupDone || !assessment.psat.valid.isValid">
-        <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
-            see the resulting data.</p>
+@if (assessment.psat.setupDone && assessment.psat.valid.isValid) {
+  <div class="report-data">
+    <div class="d-none d-lg-flex tabs-bar-row">
+      <ul #reportBtns class="tabs primary">
+        <li (click)="setTab('results')" [ngClass]="{'active': currentTab == 'results'}">
+          <a>Result Data</a>
+        </li>
+        <li (click)="setTab('reportGraphs')" [ngClass]="{'active': currentTab == 'reportGraphs'}">
+          <a>Report Graphs</a>
+        </li>
+        <li (click)="setTab('reportSankey')" [ngClass]="{'active': currentTab == 'reportSankey'}">
+          <a>Sankey</a>
+        </li>
+        <li (click)="setTab('inputData')" [ngClass]="{'active': currentTab == 'inputData'}">
+          <a>Input Summary</a>
+        </li>
+        <li (click)="setTab('facilityInfo')" [ngClass]="{'active': currentTab == 'facilityInfo'}">
+          <a>Facility Info</a>
+        </li>
+      </ul>
+      <app-export-button
+        class="ml-auto align-self-center mr-2"
+        [document]="reportDocument$"
+        [assessmentName]="assessment.name"
+        [sectionGroups]="sectionGroups">
+      </app-export-button>
     </div>
+    <div class="d-flex d-lg-none flex-column">
+      <div #reportBtns class="tabs primary hide-print">
+        <div class="mx-auto pl-2 align-items-center justify-content-center" (click)="collapseTabs()">
+          @if (!tabsCollapsed) {
+            <span class="fa fa-caret-up pr-2"></span>
+          }
+          @if (tabsCollapsed) {
+            <span class="fa fa-caret-down pr-2"></span>
+          }
+          <span class="small text-uppercase">Menu</span>
+        </div>
+        <div (click)="setTab('results')"
+          [ngClass]="{'active': currentTab == 'results', 'collapse': tabsCollapsed}">
+          <a>Result Data</a>
+        </div>
+        <div (click)="setTab('reportGraphs')"
+          [ngClass]="{'active': currentTab == 'reportGraphs', 'collapse': tabsCollapsed}">
+          <a>Report Graphs</a>
+        </div>
+        <div (click)="setTab('reportSankey')"
+          [ngClass]="{'active': currentTab == 'reportSankey', 'collapse': tabsCollapsed}">
+          <a>Sankey</a>
+        </div>
+        <div (click)="setTab('inputData')"
+          [ngClass]="{'active': currentTab == 'inputData', 'collapse': tabsCollapsed}">
+          <a>Input Summary</a>
+        </div>
+        <div (click)="setTab('facilityInfo')"
+          [ngClass]="{'active': currentTab == 'facilityInfo', 'collapse': tabsCollapsed}">
+          <a>Facility Info</a>
+        </div>
+      </div>
+      <app-export-button
+        class="mx-2 mb-2"
+        [document]="reportDocument$"
+        [assessmentName]="assessment.name"
+        [sectionGroups]="sectionGroups">
+      </app-export-button>
+    </div>
+    @if (currentTab == 'facilityInfo') {
+      <div class="results scroll-item print-height"
+        [ngStyle]="{'height.px':reportContainerHeight}">
+        <app-facility-info-summary [assessment]="assessment"></app-facility-info-summary>
+      </div>
+    }
+    @if (currentTab == 'inputData') {
+      <div class="input-data results scroll-item print-height"
+        [ngStyle]="{'height.px':reportContainerHeight}">
+        <app-input-summary [psat]="assessment.psat" [settings]="settings">
+        </app-input-summary>
+      </div>
+    }
+    @if (currentTab == 'results') {
+      <div class="results scroll-item print-height"
+        [ngStyle]="{'height.px':reportContainerHeight}">
+        <app-output-summary [settings]="settings" [inRollup]="inRollup" [assessment]="assessment">
+        </app-output-summary>
+      </div>
+    }
+    @if (currentTab == 'reportGraphs') {
+      <div class="results scroll-item print-height"
+        [ngStyle]="{'height.px':reportContainerHeight}">
+        <app-psat-report-graphs [settings]="settings" [psat]="assessment.psat">
+        </app-psat-report-graphs>
+      </div>
+    }
+    @if (currentTab == 'reportSankey') {
+      <div class="results scroll-item print-height"
+        [ngStyle]="{'height.px':reportContainerHeight}">
+        <app-psat-report-sankey [settings]="settings" [assessment]="assessment"></app-psat-report-sankey>
+      </div>
+    }
+  </div>
+}
+<!-- End .report-data -->
+
+@if (!assessment.psat.setupDone || !assessment.psat.valid.isValid) {
+  <div>
+    <p class="alert-warning text-center">This assessment has not been completed, please complete this assessment to
+    see the resulting data.</p>
+  </div>
+}
 </div>
