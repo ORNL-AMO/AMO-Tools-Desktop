@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { AddGasMaterialModalComponent } from './add-gas-material-modal.component';
 import { GasLoadMaterialDbService } from '../../../../../indexedDb/gas-load-material-db.service';
 import { MaterialModalData } from '../../../../models/material-modal-data';
@@ -23,6 +23,8 @@ function fillValidForm(form: AddGasMaterialModalComponent['form']): void {
   form.patchValue(VALID_FORM_VALUE as unknown as Partial<typeof form['value']>);
 }
 
+const EXISTING_MATERIAL: GasLoadChargeMaterial = { id: 1, substance: 'Air', specificHeatVapor: 0.24, isDefault: true };
+
 describe('AddGasMaterialModalComponent', () => {
   let component: AddGasMaterialModalComponent;
   let fixture: ComponentFixture<AddGasMaterialModalComponent>;
@@ -30,7 +32,9 @@ describe('AddGasMaterialModalComponent', () => {
   let dialogRefSpy: jasmine.SpyObj<DialogRef<GasLoadChargeMaterial>>;
 
   beforeEach(async () => {
-    dbServiceSpy = jasmine.createSpyObj('GasLoadMaterialDbService', ['addWithObservable']);
+    MOCK_SETTINGS.unitsOfMeasure = 'Imperial';
+    dbServiceSpy = jasmine.createSpyObj('GasLoadMaterialDbService', ['addWithObservable', 'getAllWithObservable']);
+    dbServiceSpy.getAllWithObservable.and.returnValue(new BehaviorSubject<GasLoadChargeMaterial[]>([EXISTING_MATERIAL]));
     dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
 
     await TestBed.configureTestingModule({
@@ -47,6 +51,32 @@ describe('AddGasMaterialModalComponent', () => {
     fixture = TestBed.createComponent(AddGasMaterialModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  describe('existing material', () => {
+    it('lists the saved materials', () => {
+      expect(component.materials()).toEqual([EXISTING_MATERIAL]);
+    });
+
+    it('starts a new material from the selected one with a (mod) name', () => {
+      component.applyExistingMaterial(EXISTING_MATERIAL);
+
+      expect(component.form.getRawValue()).toEqual(jasmine.objectContaining({ substance: 'Air (mod)', specificHeatVapor: 0.24 }));
+    });
+
+    it('converts the selected material to Metric units for display', () => {
+      MOCK_SETTINGS.unitsOfMeasure = 'Metric';
+
+      component.applyExistingMaterial(EXISTING_MATERIAL);
+
+      expect(component.form.getRawValue().specificHeatVapor).not.toBe(0.24);
+    });
+
+    it('ignores an empty selection', () => {
+      component.applyExistingMaterial(null);
+
+      expect(component.form.controls.substance.value).toBe('');
+    });
   });
 
   describe('initialization', () => {

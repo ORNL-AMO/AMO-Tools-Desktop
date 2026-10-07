@@ -1,16 +1,19 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { FormBuilder, Validators } from '@angular/forms';
+import { take } from 'rxjs';
 import { GasLoadChargeMaterial } from '../../../../../shared/models/materials';
 import { GasLoadMaterialDbService } from '../../../../../indexedDb/gas-load-material-db.service';
 import { MaterialModalData } from '../../../../models/material-modal-data';
-import { convertForSave } from '../charge-material-db-material.util';
+import { convertDbValue, convertForSave } from '../charge-material-db-material.util';
 import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
 
 @Component({
   selector: 'app-add-gas-material-modal',
   standalone: false,
   templateUrl: './add-gas-material-modal.component.html',
+  styleUrl: '../../add-material-modal.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddGasMaterialModalComponent {
@@ -23,8 +26,23 @@ export class AddGasMaterialModalComponent {
 
   readonly form = this.formBuilder.group({
     substance: ['', Validators.required],
-    specificHeatVapor: [null, [Validators.required, Validators.min(0)]],
+    specificHeatVapor: this.formBuilder.control<number | null>(null, [Validators.required, Validators.min(0)]),
   });
+
+  readonly materials = signal<GasLoadChargeMaterial[]>([]);
+
+  constructor() {
+    this.gasLoadMaterialDbService.getAllWithObservable().pipe(take(1), takeUntilDestroyed()).subscribe(materials => this.materials.set(materials));
+  }
+
+  /** Starts a new material from an existing one, marked "(mod)" so the name stays distinct. */
+  applyExistingMaterial(material: GasLoadChargeMaterial | null): void {
+    if (!material) return;
+    this.form.patchValue({
+      substance: `${material.substance} (mod)`,
+      specificHeatVapor: convertDbValue(material.specificHeatVapor, CHARGE_MATERIAL_UNITS.specificHeat, this.settings),
+    });
+  }
 
   save(): void {
     if (this.form.invalid) return;

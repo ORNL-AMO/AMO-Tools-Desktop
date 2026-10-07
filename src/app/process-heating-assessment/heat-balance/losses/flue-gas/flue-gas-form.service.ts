@@ -78,6 +78,9 @@ export function isFlueGasMassForm(form: FlueGasForm): form is FlueGasMassForm {
   return 'carbon' in form.controls;
 }
 
+/** Components summing outside this band of 100% are flagged in the add fuel modals, matching legacy. */
+export const DIFFERENCE_TOLERANCE_PERCENT = 0.4;
+
 export const PERCENT_VALIDATORS = [Validators.required, Validators.min(0), Validators.max(100)];
 /** Legacy form's upper limit for O2 in flue gas (percent). */
 const MAX_O2_IN_FLUE_GAS = 20.5;

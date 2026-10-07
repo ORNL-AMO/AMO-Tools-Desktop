@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import { of } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { AddSolidMaterialModalComponent } from './add-solid-material-modal.component';
 import { SolidLoadMaterialDbService } from '../../../../../indexedDb/solid-load-material-db.service';
 import { MaterialModalData } from '../../../../models/material-modal-data';
@@ -26,6 +26,8 @@ function fillValidForm(form: AddSolidMaterialModalComponent['form']): void {
   form.patchValue(VALID_FORM_VALUE as unknown as Partial<typeof form['value']>);
 }
 
+const EXISTING_MATERIAL: SolidLoadChargeMaterial = { id: 1, substance: 'Steel', specificHeatSolid: 0.12, specificHeatLiquid: 0.17, latentHeat: 120, meltingPoint: 2700, isDefault: true };
+
 describe('AddSolidMaterialModalComponent', () => {
   let component: AddSolidMaterialModalComponent;
   let fixture: ComponentFixture<AddSolidMaterialModalComponent>;
@@ -33,7 +35,9 @@ describe('AddSolidMaterialModalComponent', () => {
   let dialogRefSpy: jasmine.SpyObj<DialogRef<SolidLoadChargeMaterial>>;
 
   beforeEach(async () => {
-    dbServiceSpy = jasmine.createSpyObj('SolidLoadMaterialDbService', ['addWithObservable']);
+    MOCK_SETTINGS.unitsOfMeasure = 'Imperial';
+    dbServiceSpy = jasmine.createSpyObj('SolidLoadMaterialDbService', ['addWithObservable', 'getAllWithObservable']);
+    dbServiceSpy.getAllWithObservable.and.returnValue(new BehaviorSubject<SolidLoadChargeMaterial[]>([EXISTING_MATERIAL]));
     dialogRefSpy = jasmine.createSpyObj('DialogRef', ['close']);
 
     await TestBed.configureTestingModule({
@@ -50,6 +54,32 @@ describe('AddSolidMaterialModalComponent', () => {
     fixture = TestBed.createComponent(AddSolidMaterialModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  describe('existing material', () => {
+    it('lists the saved materials', () => {
+      expect(component.materials()).toEqual([EXISTING_MATERIAL]);
+    });
+
+    it('starts a new material from the selected one with a (mod) name', () => {
+      component.applyExistingMaterial(EXISTING_MATERIAL);
+
+      expect(component.form.getRawValue()).toEqual(jasmine.objectContaining({ substance: 'Steel (mod)', specificHeatSolid: 0.12, specificHeatLiquid: 0.17, latentHeat: 120, meltingPoint: 2700 }));
+    });
+
+    it('converts the selected material to Metric units for display', () => {
+      MOCK_SETTINGS.unitsOfMeasure = 'Metric';
+
+      component.applyExistingMaterial(EXISTING_MATERIAL);
+
+      expect(component.form.getRawValue().specificHeatSolid).not.toBe(0.12);
+    });
+
+    it('ignores an empty selection', () => {
+      component.applyExistingMaterial(null);
+
+      expect(component.form.controls.substance.value).toBe('');
+    });
   });
 
   describe('initialization', () => {

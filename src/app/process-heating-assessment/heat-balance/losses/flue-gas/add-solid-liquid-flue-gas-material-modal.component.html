@@ -2,23 +2,51 @@
   <h4 class="modal-title">Add New Fuel</h4>
 </div>
 <div class="modal-body">
-  <form [formGroup]="form">
-    <div class="form-group">
+  <section class="section">
+    <div class="row-field">
+      <label for="existingMaterial">Start with existing material</label>
+      <select class="form-control" id="existingMaterial" #existingMaterial
+        (change)="applyExistingMaterial(materials()[existingMaterial.selectedIndex - 1])">
+        <option></option>
+        @for (material of materials(); track material.id) {
+          <option>{{ material.substance }}</option>
+        }
+      </select>
+    </div>
+  </section>
+
+  <form class="section" [formGroup]="form">
+    <div class="row-field">
       <label for="substance">Material Name</label>
       <input type="text" class="form-control" id="substance" formControlName="substance">
-      <app-form-control-errors [control]="form.controls.substance" [settings]="settings"></app-form-control-errors>
+      <app-form-control-errors class="field-errors" [control]="form.controls.substance" [settings]="settings"></app-form-control-errors>
     </div>
     @for (component of fuelAnalysis; track component.key) {
-      <div class="form-group">
+      <div class="row-field">
         <label for="{{ component.key }}">{{ component.label }}</label>
         <div class="input-group">
           <input type="number" step="0.01" class="form-control" id="{{ component.key }}" [formControlName]="component.key">
           <span class="input-group-addon units">%</span>
         </div>
-        <app-form-control-errors [control]="form.controls[component.key]" [settings]="settings"></app-form-control-errors>
+        <app-form-control-errors class="field-errors" [control]="form.controls[component.key]" [settings]="settings"></app-form-control-errors>
       </div>
     }
   </form>
+
+  <dl class="section">
+    <div class="row-field">
+      <dt>Total of Fuel Components</dt>
+      <dd>{{ totalOfComponents() | number: '1.2-2' }} %</dd>
+    </div>
+    <div class="row-field" [class.result-error]="hasLargeDifference()">
+      <dt>Difference</dt>
+      <dd>{{ difference() | number: '1.0-3' }} %</dd>
+    </div>
+    <div class="row-field">
+      <dt>Heating Value</dt>
+      <dd>@if (heatingValue() !== null) { {{ heatingValue() | sigFigs: 6 }} {{ settings.unitsOfMeasure === 'Metric' ? 'kJ/kg' : 'Btu/lb' }} } @else { &mdash;&mdash; }</dd>
+    </div>
+  </dl>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-white" (click)="close()">Cancel</button>

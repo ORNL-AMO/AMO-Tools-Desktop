@@ -9,16 +9,13 @@ import { FlueGasMaterial } from '../../../../shared/models/materials';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 import { MaterialModalData } from '../../../models/material-modal-data';
 import { adaptFlueGasMaterialDb } from './flue-gas-material-db.adapter';
-import { FLUE_GAS_COMPONENTS, PERCENT_VALIDATORS } from './flue-gas-form.service';
-
-/** Combined components outside this band of 100% are flagged, matching legacy. */
-const DIFFERENCE_TOLERANCE_PERCENT = 0.4;
+import { DIFFERENCE_TOLERANCE_PERCENT, FLUE_GAS_COMPONENTS, PERCENT_VALIDATORS } from './flue-gas-form.service';
 
 @Component({
   selector: 'app-add-flue-gas-material-modal',
   standalone: false,
   templateUrl: './add-flue-gas-material-modal.component.html',
-  styleUrl: './add-flue-gas-material-modal.component.css',
+  styleUrl: '../add-material-modal.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddFlueGasMaterialModalComponent {
