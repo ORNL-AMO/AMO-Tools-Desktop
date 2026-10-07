@@ -141,10 +141,10 @@ export class InventorySummaryOverviewService {
 
       this.psatService.convertInputs(psatInputs, settings);
       let psatResults: PsatOutputs = this.psatService.resultsExisting(psatInputs, settings);
-      results.energyUse = psatResults.annual_energy;
+      results.energyUse = this.convertUnitsService.value(psatResults.annual_energy).from('MWh').to('kWh');
       results.energyCost = results.energyUse * settings.electricityCost;
       if (co2SavingsData) {
-        co2SavingsData.electricityUse = results.energyUse;
+        co2SavingsData.electricityUse = psatResults.annual_energy;
         results.emissionsOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(co2SavingsData, settings);
 
       }
