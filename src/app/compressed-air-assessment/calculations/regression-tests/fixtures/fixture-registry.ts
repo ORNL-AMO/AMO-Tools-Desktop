@@ -46,56 +46,56 @@ import assessment39 from './assessments/ca-real-040.json';
 import assessment40 from './assessments/ca-real-041.json';
 import assessment41 from './assessments/ca-real-042.json';
 import assessment42 from './assessments/ca-real-043.json';
-import snapshotManifest0 from './snapshots/pre-pr409-suite-1.2.5/manifest.json';
-import snapshot0Fixture0 from './snapshots/pre-pr409-suite-1.2.5/ca-real-001.json';
-import snapshot0Fixture1 from './snapshots/pre-pr409-suite-1.2.5/ca-real-002.json';
-import snapshot0Fixture2 from './snapshots/pre-pr409-suite-1.2.5/ca-real-003.json';
-import snapshot0Fixture3 from './snapshots/pre-pr409-suite-1.2.5/ca-real-004.json';
-import snapshot0Fixture4 from './snapshots/pre-pr409-suite-1.2.5/ca-real-005.json';
-import snapshot0Fixture5 from './snapshots/pre-pr409-suite-1.2.5/ca-real-006.json';
-import snapshot0Fixture6 from './snapshots/pre-pr409-suite-1.2.5/ca-real-007.json';
-import snapshot0Fixture7 from './snapshots/pre-pr409-suite-1.2.5/ca-real-008.json';
-import snapshot0Fixture8 from './snapshots/pre-pr409-suite-1.2.5/ca-real-009.json';
-import snapshot0Fixture9 from './snapshots/pre-pr409-suite-1.2.5/ca-real-010.json';
-import snapshot0Fixture10 from './snapshots/pre-pr409-suite-1.2.5/ca-real-011.json';
-import snapshot0Fixture11 from './snapshots/pre-pr409-suite-1.2.5/ca-real-012.json';
-import snapshot0Fixture12 from './snapshots/pre-pr409-suite-1.2.5/ca-real-013.json';
-import snapshot0Fixture13 from './snapshots/pre-pr409-suite-1.2.5/ca-real-014.json';
-import snapshot0Fixture14 from './snapshots/pre-pr409-suite-1.2.5/ca-real-015.json';
-import snapshot0Fixture15 from './snapshots/pre-pr409-suite-1.2.5/ca-real-016.json';
-import snapshot0Fixture16 from './snapshots/pre-pr409-suite-1.2.5/ca-real-017.json';
-import snapshot0Fixture17 from './snapshots/pre-pr409-suite-1.2.5/ca-real-018.json';
-import snapshot0Fixture18 from './snapshots/pre-pr409-suite-1.2.5/ca-real-019.json';
-import snapshot0Fixture19 from './snapshots/pre-pr409-suite-1.2.5/ca-real-020.json';
-import snapshot0Fixture20 from './snapshots/pre-pr409-suite-1.2.5/ca-real-021.json';
-import snapshot0Fixture21 from './snapshots/pre-pr409-suite-1.2.5/ca-real-022.json';
-import snapshot0Fixture22 from './snapshots/pre-pr409-suite-1.2.5/ca-real-023.json';
-import snapshot0Fixture23 from './snapshots/pre-pr409-suite-1.2.5/ca-real-024.json';
-import snapshot0Fixture24 from './snapshots/pre-pr409-suite-1.2.5/ca-real-025.json';
-import snapshot0Fixture25 from './snapshots/pre-pr409-suite-1.2.5/ca-real-026.json';
-import snapshot0Fixture26 from './snapshots/pre-pr409-suite-1.2.5/ca-real-027.json';
-import snapshot0Fixture27 from './snapshots/pre-pr409-suite-1.2.5/ca-real-028.json';
-import snapshot0Fixture28 from './snapshots/pre-pr409-suite-1.2.5/ca-real-029.json';
-import snapshot0Fixture29 from './snapshots/pre-pr409-suite-1.2.5/ca-real-030.json';
-import snapshot0Fixture30 from './snapshots/pre-pr409-suite-1.2.5/ca-real-031.json';
-import snapshot0Fixture31 from './snapshots/pre-pr409-suite-1.2.5/ca-real-032.json';
-import snapshot0Fixture32 from './snapshots/pre-pr409-suite-1.2.5/ca-real-033.json';
-import snapshot0Fixture33 from './snapshots/pre-pr409-suite-1.2.5/ca-real-034.json';
-import snapshot0Fixture34 from './snapshots/pre-pr409-suite-1.2.5/ca-real-035.json';
-import snapshot0Fixture35 from './snapshots/pre-pr409-suite-1.2.5/ca-real-036.json';
-import snapshot0Fixture36 from './snapshots/pre-pr409-suite-1.2.5/ca-real-037.json';
-import snapshot0Fixture37 from './snapshots/pre-pr409-suite-1.2.5/ca-real-038.json';
-import snapshot0Fixture38 from './snapshots/pre-pr409-suite-1.2.5/ca-real-039.json';
-import snapshot0Fixture39 from './snapshots/pre-pr409-suite-1.2.5/ca-real-040.json';
-import snapshot0Fixture40 from './snapshots/pre-pr409-suite-1.2.5/ca-real-041.json';
-import snapshot0Fixture41 from './snapshots/pre-pr409-suite-1.2.5/ca-real-042.json';
-import snapshot0Fixture42 from './snapshots/pre-pr409-suite-1.2.5/ca-real-043.json';
-import snapshot0Fixture43 from './snapshots/pre-pr409-suite-1.2.5/ca-synthetic-001.json';
-import snapshot0Fixture44 from './snapshots/pre-pr409-suite-1.2.5/ca-synthetic-002.json';
-import snapshot0Fixture45 from './snapshots/pre-pr409-suite-1.2.5/ca-synthetic-003.json';
-import snapshot0Fixture46 from './snapshots/pre-pr409-suite-1.2.5/ca-synthetic-004.json';
-import snapshot0Fixture47 from './snapshots/pre-pr409-suite-1.2.5/ca-synthetic-005.json';
-import snapshot0Fixture48 from './snapshots/pre-pr409-suite-1.2.5/ca-synthetic-006.json';
+import snapshotManifest0 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/manifest.json';
+import snapshot0Fixture0 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-001.json';
+import snapshot0Fixture1 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-002.json';
+import snapshot0Fixture2 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-003.json';
+import snapshot0Fixture3 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-004.json';
+import snapshot0Fixture4 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-005.json';
+import snapshot0Fixture5 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-006.json';
+import snapshot0Fixture6 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-007.json';
+import snapshot0Fixture7 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-008.json';
+import snapshot0Fixture8 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-009.json';
+import snapshot0Fixture9 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-010.json';
+import snapshot0Fixture10 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-011.json';
+import snapshot0Fixture11 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-012.json';
+import snapshot0Fixture12 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-013.json';
+import snapshot0Fixture13 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-014.json';
+import snapshot0Fixture14 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-015.json';
+import snapshot0Fixture15 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-016.json';
+import snapshot0Fixture16 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-017.json';
+import snapshot0Fixture17 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-018.json';
+import snapshot0Fixture18 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-019.json';
+import snapshot0Fixture19 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-020.json';
+import snapshot0Fixture20 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-021.json';
+import snapshot0Fixture21 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-022.json';
+import snapshot0Fixture22 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-023.json';
+import snapshot0Fixture23 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-024.json';
+import snapshot0Fixture24 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-025.json';
+import snapshot0Fixture25 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-026.json';
+import snapshot0Fixture26 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-027.json';
+import snapshot0Fixture27 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-028.json';
+import snapshot0Fixture28 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-029.json';
+import snapshot0Fixture29 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-030.json';
+import snapshot0Fixture30 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-031.json';
+import snapshot0Fixture31 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-032.json';
+import snapshot0Fixture32 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-033.json';
+import snapshot0Fixture33 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-034.json';
+import snapshot0Fixture34 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-035.json';
+import snapshot0Fixture35 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-036.json';
+import snapshot0Fixture36 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-037.json';
+import snapshot0Fixture37 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-038.json';
+import snapshot0Fixture38 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-039.json';
+import snapshot0Fixture39 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-040.json';
+import snapshot0Fixture40 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-041.json';
+import snapshot0Fixture41 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-042.json';
+import snapshot0Fixture42 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-real-043.json';
+import snapshot0Fixture43 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-synthetic-001.json';
+import snapshot0Fixture44 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-synthetic-002.json';
+import snapshot0Fixture45 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-synthetic-003.json';
+import snapshot0Fixture46 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-synthetic-004.json';
+import snapshot0Fixture47 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-synthetic-005.json';
+import snapshot0Fixture48 from './snapshots/post-pr409-issue-8903-suite-1.2.6-rc.2/ca-synthetic-006.json';
 
 export const regressionTestCorpus = {
   schemaVersion: fixtureManifest.schemaVersion,
@@ -104,7 +104,7 @@ export const regressionTestCorpus = {
 };
 
 export const regressionTestSnapshots: Record<string, any> = {
-  'pre-pr409-suite-1.2.5': {
+  'post-pr409-issue-8903-suite-1.2.6-rc.2': {
     schemaVersion: snapshotManifest0.schemaVersion,
     resultSchemaVersion: snapshotManifest0.resultSchemaVersion,
     snapshotName: snapshotManifest0.snapshotName,

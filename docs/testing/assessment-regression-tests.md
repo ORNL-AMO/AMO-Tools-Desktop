@@ -49,7 +49,7 @@ Do not copy these unchanged into another assessment:
 - Compressed-air fixture, snapshot, report, and temporary paths.
 - `CompressedAirRegressionTestRunner` service construction and result projection.
 - Compressed-air coverage tags and synthetic fixtures.
-- The permanent `pre-pr409-suite-1.2.5` snapshot metadata.
+- Compressed-air snapshot names, provenance, and the generated browser fixture registry.
 
 If a second assessment needs the same behavior, parameterize these seams rather than adding another large copy. At minimum, a shared orchestrator should accept an assessment key, spec path, fixture paths, snapshot name, and snapshot-message key. A shared browser transport should not know the assessment's calculation services or result shape.
 
