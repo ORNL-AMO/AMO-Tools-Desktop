@@ -25,7 +25,7 @@ export class PumpSummaryGraphsService {
     let fieldCount: _.Dictionary<number> = _.countBy(pumps, (pump) => { return this.getFieldValue(pump, pumpField); });
     let xData: Array<any> = new Array();
     let yData: Array<any> = new Array();
-    Object.keys(fieldCount).forEach((fieldValue: string, index: number) => {
+    Object.keys(fieldCount).forEach((fieldValue: string) => {
       let label: string = this.getLabel(fieldValue, pumpField);
       xData.push(label);
       yData.push(fieldCount[fieldValue]);

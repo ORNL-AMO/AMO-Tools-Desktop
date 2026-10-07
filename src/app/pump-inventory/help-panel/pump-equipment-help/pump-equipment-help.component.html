@@ -1,25 +1,28 @@
 <hr class="my-1 hr-spacer">
 <div class="my-2">
-    <h6>
-        Pump Equipment
-        <br>
-        <small class="text-muted">
-            <!-- Enter information for a potential motor replacemnt, used in the batch analysis. -->
-            <hr>
-        </small>
-    </h6>
-</div>
-<div class="my-2" *ngIf="focusedField == 'numStages'">
   <h6>
-    Stages
+    Pump Equipment
     <br>
     <small class="text-muted">
-      The number of pump stages. This value is used to calculate pump specific speed.
+      <!-- Enter information for a potential motor replacemnt, used in the batch analysis. -->
       <hr>
     </small>
   </h6>
 </div>
-<div class="my-2" *ngIf="focusedField == 'pumpType'">
+@if (focusedField == 'numStages') {
+  <div class="my-2">
+    <h6>
+      Stages
+      <br>
+      <small class="text-muted">
+        The number of pump stages. This value is used to calculate pump specific speed.
+        <hr>
+      </small>
+    </h6>
+  </div>
+}
+@if (focusedField == 'pumpType') {
+  <div class="my-2">
     <h6>
       Pump Type
       <br>
@@ -125,12 +128,14 @@
       </small>
     </h6>
   </div>
+}
 
-  <!-- Pump rpm? -->
+<!-- Pump rpm? -->
 
-  
 
-  <div class="my-2" *ngIf="focusedField == 'minFlowSize'">
+
+@if (focusedField == 'minFlowSize') {
+  <div class="my-2">
     <h6>
       Minimum Flow Rate
       <br>
@@ -140,8 +145,10 @@
       </small>
     </h6>
   </div>
+}
 
-  <div class="my-2" *ngIf="focusedField == 'designDifferentialPressure'">
+@if (focusedField == 'designDifferentialPressure') {
+  <div class="my-2">
     <h6>
       Design Differential Pressure
       <br>
@@ -152,3 +159,4 @@
       </small>
     </h6>
   </div>
+}

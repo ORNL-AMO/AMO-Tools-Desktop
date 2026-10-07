@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -41,8 +41,8 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
   ];
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  @HostListener('window:resize')
+  onResize() {
     this.setOpHoursModalWidth();
   }
   

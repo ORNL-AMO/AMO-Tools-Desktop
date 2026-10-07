@@ -30,7 +30,7 @@ export class PumpInventorySummaryService {
       group: 'nameplateData'
     }];
     //nameplate
-    let nameplateFields: Array<PumpField> = this.getNameplateDataFields(displayOptions.nameplateDataOptions, settings);
+    let nameplateFields: Array<PumpField> = this.getNameplateDataFields(displayOptions.nameplateDataOptions);
     fields = fields.concat(nameplateFields);
     let pumpPropertiesFields: Array<PumpField> = this.getPumpPropertiesFields(displayOptions.pumpPropertiesOptions, settings, pumps);
     fields = fields.concat(pumpPropertiesFields);
@@ -40,14 +40,14 @@ export class PumpInventorySummaryService {
     fields = fields.concat(fieldMeasurementFields);
     let pumpMotorPropertiesFields: Array<PumpField> = this.getPumpMotorFields(displayOptions.pumpMotorPropertiesOptions, settings);
     fields = fields.concat(pumpMotorPropertiesFields);
-    let pumpStatusFields: Array<PumpField> = this.getPumpStatusFields(displayOptions.pumpStatusOptions, settings);
+    let pumpStatusFields: Array<PumpField> = this.getPumpStatusFields(displayOptions.pumpStatusOptions);
     fields = fields.concat(pumpStatusFields);
     let systemPropertiesFields: Array<PumpField> = this.getSystemPropertiesFields(displayOptions.systemPropertiesOptions, settings);
     fields = fields.concat(systemPropertiesFields);
     return fields;
   }
 
-  getNameplateDataFields(nameplateDataOptions: NameplateDataOptions, settings: Settings): Array<PumpField> {
+  getNameplateDataFields(nameplateDataOptions: NameplateDataOptions): Array<PumpField> {
     let fields: Array<PumpField> = [];
     if (nameplateDataOptions.manufacturer) {
       fields.push({ display: 'Manufacturer', value: 'manufacturer', group: 'nameplateData' });
@@ -212,7 +212,7 @@ export class PumpInventorySummaryService {
       return fields;
     }
 
-  getPumpStatusFields(pumpStatusOptions: PumpStatusOptions, settings: Settings): Array<PumpField> {
+  getPumpStatusFields(pumpStatusOptions: PumpStatusOptions): Array<PumpField> {
     let fields: Array<PumpField> = [];
     if (pumpStatusOptions.status) {
       fields.push({ display: 'Status', value: 'status', group: 'pumpStatus' });

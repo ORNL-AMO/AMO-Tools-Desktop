@@ -1,74 +1,79 @@
 <hr class="my-1 hr-spacer">
 <div class="my-2">
+  <h6>
+    Pump Field Measurements
+    <br>
+    <small class="text-muted">
+      <!-- Enter information for a potential motor replacemnt, used in the batch analysis. -->
+      <hr>
+    </small>
+  </h6>
+</div>
+@if (focusedField == 'pumpSpeed') {
+  <div class="my-2">
     <h6>
-        Pump Field Measurements
-        <br>
-        <small class="text-muted">
-            <!-- Enter information for a potential motor replacemnt, used in the batch analysis. -->
-            <hr>
-        </small>
+      Pump Speed
+      <br>
+      <small class="text-muted">
+        The operating or nameplate speed at which the pump is running at. Used along with the measure/required flow
+        rate, head, and
+        number of stages, to calculate the pump specific speed. The specific speed is used to determine efficiency
+        penalty
+        associated with the particular pump application.
+        <hr>
+      </small>
     </h6>
-</div>
-<div class="my-2" *ngIf="focusedField == 'pumpSpeed'">
-  <h6>
-    Pump Speed
-    <br>
-    <small class="text-muted">
-      The operating or nameplate speed at which the pump is running at. Used along with the measure/required flow
-      rate, head, and
-      number of stages, to calculate the pump specific speed. The specific speed is used to determine efficiency
-      penalty
-      associated with the particular pump application.
-      <hr>
-    </small>
-  </h6>
-  <div class="w-100 justify-content-center">
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <th class="text-center">Drive Type</th>
-          <th class="text-center">Minimum</th>
-          <th class="text-center">Maximum</th>
-        </tr>
-        <tr>
-          <td class="text-center">Direct Drive</td>
-          <td class="text-center">540 rpm</td>
-          <td class="text-center">3960 rpm</td>
-        </tr>
-        <tr>
-          <td class="text-center">Belt Drives</td>
-          <td class="text-center">1 rpm</td>
-          <td class="text-center">&mdash;</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Drive Type</th>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">Direct Drive</td>
+            <td class="text-center">540 rpm</td>
+            <td class="text-center">3960 rpm</td>
+          </tr>
+          <tr>
+            <td class="text-center">Belt Drives</td>
+            <td class="text-center">1 rpm</td>
+            <td class="text-center">&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
-<div class="my-2" *ngIf="focusedField == 'yearlyOperatingHours'">
-  <h6>
-    Operating Hours
-    <br>
-    <small class="text-muted">
-      Annual operating hours of the pump.
-      <hr>
-    </small>
-  </h6>
-  <div class="w-100 justify-content-center">
-    <table class="table table-hover table-striped">
-      <tbody>
-        <tr>
-          <th class="text-center">Minimum</th>
-          <th class="text-center">Maximum</th>
-        </tr>
-        <tr>
-          <td class="text-center">0 hrs/yr</td>
-          <td class="text-center">8760 hrs/yr</td>
-        </tr>
-      </tbody>
-    </table>
+}
+@if (focusedField == 'yearlyOperatingHours') {
+  <div class="my-2">
+    <h6>
+      Operating Hours
+      <br>
+      <small class="text-muted">
+        Annual operating hours of the pump.
+        <hr>
+      </small>
+    </h6>
+    <div class="w-100 justify-content-center">
+      <table class="table table-hover table-striped">
+        <tbody>
+          <tr>
+            <th class="text-center">Minimum</th>
+            <th class="text-center">Maximum</th>
+          </tr>
+          <tr>
+            <td class="text-center">0 hrs/yr</td>
+            <td class="text-center">8760 hrs/yr</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
-  <div class="my-2" *ngIf="focusedField == 'operatingFlowRate'">
+}
+@if (focusedField == 'operatingFlowRate') {
+  <div class="my-2">
     <h6>
       Operating Flow Rate
       <br>
@@ -108,8 +113,10 @@
       </table>
     </div>
   </div>
+}
 
-  <div class="my-2" *ngIf="focusedField == 'operatingDifferentialPressure'">
+@if (focusedField == 'operatingDifferentialPressure') {
+  <div class="my-2">
     <h6>
       Operating Differential Pressure
       <br>
@@ -119,8 +126,10 @@
       </small>
     </h6>
   </div>
+}
 
-  <div class="my-2" *ngIf="focusedField == 'operatingHead'">
+@if (focusedField == 'operatingHead') {
+  <div class="my-2">
     <h6>
       Operating Head
       <br>
@@ -138,8 +147,10 @@
       </small>
     </h6>
   </div>
+}
 
-  <div class="my-2" *ngIf="focusedField == 'loadEstimatedMethod'">
+@if (focusedField == 'loadEstimatedMethod') {
+  <div class="my-2">
     <h6>
       Load Estimation Method
       <br>
@@ -154,9 +165,11 @@
       </small>
     </h6>
   </div>
+}
 
 
-  <div class="my-2" *ngIf="focusedField == 'measuredCurrent' || focusedField == 'measuredPower'">
+@if (focusedField == 'measuredCurrent' || focusedField == 'measuredPower') {
+  <div class="my-2">
     <h6>
       Measured Power or Measured Current
       <br>
@@ -170,8 +183,10 @@
       </small>
     </h6>
   </div>
+}
 
-  <div class="my-2" *ngIf="focusedField == 'measuredVoltage'">
+@if (focusedField == 'measuredVoltage') {
+  <div class="my-2">
     <h6>
       Measured Voltage
       <br>
@@ -197,3 +212,4 @@
       </table>
     </div>
   </div>
+}

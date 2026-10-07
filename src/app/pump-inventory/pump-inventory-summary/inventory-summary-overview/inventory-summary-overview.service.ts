@@ -94,12 +94,6 @@ export class InventorySummaryOverviewService {
   }
 
 
-  getDataAndResultsFromPumpItem(pumpItem: PumpItem, settings: Settings): { data: PumpItem, results: PumpInventoryResults } {
-    let co2SavingsData: Co2SavingsData = this.pumpInventoryService.pumpInventoryData.getValue().co2SavingsData;
-    let pumpInventoryResults: PumpInventoryResults = this.getResults(pumpItem, settings, co2SavingsData);
-    return { data: pumpItem, results: pumpInventoryResults };
-  }
-
 
   getResults(pumpItem: PumpItem, settings: Settings, co2SavingsData?: Co2SavingsData): PumpInventoryResults {
     let results: PumpInventoryResults = {
