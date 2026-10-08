@@ -46,9 +46,21 @@ Keep Suite calls behind `src/app/tools-suite-api/`. Do not expose Suite-owned ob
 
 1. Test the exact Suite beta version produced by the ready Suite pull request.
 2. Keep the root and process-flow `measur-tools-suite` dependency pins aligned unless an intentional compatibility bridge is documented.
-3. Run the narrowest typecheck, unit, integration, and assessment-regression coverage that exercises the changed contract or calculation behavior.
-4. Verify web and Electron loading when WASM filenames, paths, packaging, or `locateFile` behavior changes.
-5. Replace the beta with the approved final version and record that version in the Desktop issue and pull request.
+3. Update the Suite version in both `package.json` files, then let npm update the lockfiles from those manifests rather than editing either lockfile by hand:
+
+   ```bash
+   npm install
+   npm --prefix process-flow-diagram-component install
+   ```
+
+4. Run the narrowest typecheck, unit, integration, and assessment-regression coverage that exercises the changed contract or calculation behavior.
+5. Verify web and Electron loading when WASM filenames, paths, packaging, or `locateFile` behavior changes.
+6. Replace the beta with the approved final version, repeat the two npm installs, and record that version in the Desktop issue and pull request.
+7. As the final dependency-synchronization step, commit both manifests and both npm-generated lockfiles together:
+   - `package.json`
+   - `package-lock.json`
+   - `process-flow-diagram-component/package.json`
+   - `process-flow-diagram-component/package-lock.json`
 
 ## Data Safety
 
