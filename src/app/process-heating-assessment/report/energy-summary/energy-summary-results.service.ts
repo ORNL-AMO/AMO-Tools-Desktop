@@ -42,7 +42,7 @@ export class EnergySummaryResultsService {
   readonly energySummaryUI: Signal<EnergySummaryUI | undefined> = computed(() => {
     const settings = this.assessmentService.settingsSignal();
     const phast = this.assessmentService.scenarioPhastSignal('baseline');
-    const results = this.resultsService.getResults(phast, settings);
+    const results = this.resultsService.scenarioResults('baseline');
     if (!results) {
       return undefined;
     }

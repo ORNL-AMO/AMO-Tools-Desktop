@@ -34,9 +34,9 @@ describe('EnergySummaryResultsService', () => {
     };
     results = { grossHeatInput: 10 };
     resultsService = jasmine.createSpyObj<ProcessHeatingResultsService>('ProcessHeatingResultsService', [
-      'getResults', 'getEnergyUseReportData', 'getCalculatedByPhast', 'getMeteredEnergyResults', 'getDesignedEnergyResults',
+      'scenarioResults', 'getEnergyUseReportData', 'getCalculatedByPhast', 'getMeteredEnergyResults', 'getDesignedEnergyResults',
     ]);
-    resultsService.getResults.and.callFake(() => results as PhastResults);
+    resultsService.scenarioResults.and.callFake(() => results as PhastResults);
     resultsService.getEnergyUseReportData.and.returnValue({
       fuelName: 'Natural Gas', fuelEnergyUsed: 10, fuelHeatingValue: 1000, energyPerMassUnit: undefined, baseEnergyUnit: undefined, steamEnergyUsed: undefined,
     });

@@ -81,11 +81,29 @@ describe('ExecutiveSummaryResultsService', () => {
         { provide: FeatureFlagService, useValue: { showOperationalImpacts } },
         {
           provide: ProcessHeatingResultsService,
-          useValue: { getResults: (phast: PHAST) => resultsByName[phast.name] },
+          useValue: {
+            scenarioResults: (scenario: string) => resultsByName[scenario],
+            getCo2EmissionsSavings: (baseline: PhastResults, mod: PhastResults) =>
+              baseline.co2EmissionsOutput.totalEmissionOutput - mod.co2EmissionsOutput.totalEmissionOutput,
+          },
         },
       ],
     });
     service = TestBed.inject(ExecutiveSummaryResultsService);
+  });
+
+  describe('scenario savings', () => {
+    it('keys annual energy and cost savings by scenario id with a zero baseline', () => {
+      expect(service.scenarioSavings()).toEqual({
+        baseline: { costSavings: 0, energySavings: 0 },
+        mod1: { costSavings: 10000, energySavings: 2000 },
+      });
+    });
+
+    it('is empty when the baseline has no results', () => {
+      resultsByName.baseline = undefined;
+      expect(service.scenarioSavings()).toEqual({});
+    });
   });
 
   describe('fuel-fired', () => {

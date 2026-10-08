@@ -1,0 +1,23 @@
+<div class="output-summary p-3">
+  <h4 class="show-print print-section-header">Sankey</h4>
+
+  @let ui = reportSankeyUI();
+  @if (ui) {
+    <div class="btn-group btn-group-sm hide-print mb-2">
+      @for (option of labelStyleOptions; track option.style) {
+        <button type="button" class="btn btn-sm" [class.active]="labelStyle() === option.style"
+          (click)="labelStyle.set(option.style)">{{option.label}}</button>
+      }
+    </div>
+    <div class="d-flex flex-column">
+      @for (picker of ui.scenarios; track picker.id; let index = $index) {
+        @let scenario = getScenario(ui, index);
+        <app-sankey-scenario-picker [options]="getOptions(ui)" [selected]="scenario.id"
+          (selectedChange)="selectScenario(index, $event)" [costSavings]="scenario.costSavings"
+          [energySavings]="scenario.energySavings" [energySavingsUnit]="ui.energySavingsUnit">
+          <app-phast-sankey [phast]="scenario.phast" [settings]="ui.settings" [labelStyle]="labelStyle()"></app-phast-sankey>
+        </app-sankey-scenario-picker>
+      }
+    </div>
+  }
+</div>

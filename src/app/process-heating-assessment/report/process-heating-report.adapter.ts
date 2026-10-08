@@ -1,15 +1,20 @@
 import { inject, Injectable } from '@angular/core';
 import { defer, Observable, of } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
+import { PhastChartsService } from '../../phast/phast-report/phast-charts.service';
+import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
-import { appendSubGroup, buildFacilityInfoSections, decodeHtmlEntities, formatCell, formatNumber, labelWithUnits } from '../../shared/report-builder/adapters/report-adapter.utils';
+import { appendSubGroup, buildFacilityInfoSections, decodeHtmlEntities, formatCell, formatNumber, labelWithUnits, renderPlotlyChart } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
-import { KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { ChartSection, KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { ModificationNameCell, ReportColumnCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { EnergySummaryResultsService, EnergySummaryUI } from './energy-summary/energy-summary-results.service';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from './executive-summary/executive-summary-results.service';
+import { ResultsDataResultsService, ResultsDataUI } from './results-data/results-data-results.service';
+import { ReportGraphsResultsService, ReportGraphsUI } from './report-graphs/report-graphs-results.service';
+import { ReportSankeyResultsService, ReportSankeyUI } from './report-sankey/report-sankey-results.service';
 import { InputSummaryResultsService, InputSummaryUI } from './input-summary/input-summary-results.service';
 
 export const PROCESS_HEATING_SECTION_GROUPS: ReportSectionGroup[] = [
@@ -27,6 +32,11 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly executiveSummaryService = inject(ExecutiveSummaryResultsService);
   private readonly energySummaryService = inject(EnergySummaryResultsService);
+  private readonly resultsDataService = inject(ResultsDataResultsService);
+  private readonly reportSankeyService = inject(ReportSankeyResultsService);
+  private readonly reportGraphsService = inject(ReportGraphsResultsService);
+  private readonly phastChartsService = inject(PhastChartsService);
+  private readonly chartRenderService = inject(ReportChartRenderService);
   private readonly inputSummaryService = inject(InputSummaryResultsService);
 
   private static readonly ACCENT_COLOR: [number, number, number] = [192, 57, 43]; // #C0392B
@@ -40,6 +50,9 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
       };
       const executiveSummary = this.executiveSummaryService.executiveSummaryUI();
       const energySummary = this.energySummaryService.energySummaryUI();
+      const resultsData = this.resultsDataService.resultsDataUI();
+      const reportGraphs = this.reportGraphsService.reportGraphsUI();
+      const reportSankey = this.reportSankeyService.reportSankeyUI();
       const inputSummary = this.inputSummaryService.inputSummaryUI();
 
       return of<ReportDocument>({
@@ -49,6 +62,9 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
           ...this.buildEquipmentSections(),
           ...(executiveSummary ? this.buildExecutiveSummarySections(executiveSummary) : []),
           ...(energySummary ? this.buildEnergySummarySections(energySummary) : []),
+          ...(resultsData ? this.buildResultsDataSections(resultsData) : []),
+          ...(reportGraphs ? this.buildReportGraphsSections(reportGraphs) : []),
+          ...(reportSankey ? this.buildSankeySections(reportSankey) : []),
           ...(inputSummary ? this.buildInputSummarySections(inputSummary) : []),
         ],
       });
@@ -140,6 +156,75 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
       ? [{ type: 'key-value-list', rows: notes, group: ROUTE_TOKENS.energySummary }]
       : [];
     return [sourcesTable, ...notesSection, comparisonTable];
+  }
+
+  private buildResultsDataSections(ui: ResultsDataUI): SummaryTableSection[] {
+    return [{
+      type: 'summary-table',
+      title: 'Result Data',
+      headers: [ui.title, ...this.buildHeaders(ui.modificationNames).slice(1)],
+      rows: ui.rows.map(row => this.rowToStrings(row)),
+      emphasisRowsIndices: ui.rows.flatMap((row, index) => (row.className === 'emphasis' ? [index] : [])),
+      group: ROUTE_TOKENS.resultsData,
+      pageBreakBefore: true,
+    }];
+  }
+
+  /** One chart set per modification so the pies and comparison bar paginate together; only the first chart forces a page break. */
+  private buildReportGraphsSections(ui: ReportGraphsUI): ChartSection[] {
+    const [baseline, ...modifications] = ui.scenarios;
+    const group = ROUTE_TOKENS.reportGraphs;
+    const render = (chart: { traces: unknown[]; layout: object }) => () => renderPlotlyChart(this.chartRenderService, chart);
+
+    if (!modifications.length) {
+      const cells = [{ valuesAndLabels: baseline.lossValuesAndLabels, unit: ui.lossUnit, label: 'Loss Distribution' }];
+      if (baseline.deliverValuesAndLabels.length) {
+        cells.push({ valuesAndLabels: baseline.deliverValuesAndLabels, unit: ui.deliverUnit, label: 'Heat Delivered' });
+      }
+      return [{
+        type: 'chart', title: `${baseline.name} Energy Distribution`, group, pageBreakBefore: true,
+        imageDataProvider: render(this.phastChartsService.buildPieChart(cells)),
+      }];
+    }
+
+    return modifications.flatMap((modification, index) => {
+      const sections: ChartSection[] = [{
+        type: 'chart', title: `Loss Distribution — Baseline vs. ${modification.name}`, group, pageBreakBefore: index === 0,
+        imageDataProvider: render(this.phastChartsService.buildPieChart([
+          { valuesAndLabels: baseline.lossValuesAndLabels, unit: ui.lossUnit, label: 'Baseline' },
+          { valuesAndLabels: modification.lossValuesAndLabels, unit: ui.lossUnit, label: modification.name },
+        ])),
+      }];
+      if (baseline.deliverValuesAndLabels.length || modification.deliverValuesAndLabels.length) {
+        sections.push({
+          type: 'chart', title: `Heat Delivered — Baseline vs. ${modification.name}`, group,
+          imageDataProvider: render(this.phastChartsService.buildPieChart([
+            { valuesAndLabels: baseline.deliverValuesAndLabels, unit: ui.deliverUnit, label: 'Baseline' },
+            { valuesAndLabels: modification.deliverValuesAndLabels, unit: ui.deliverUnit, label: modification.name },
+          ])),
+        });
+      }
+      sections.push({
+        type: 'chart', title: `Baseline vs. ${modification.name} Loss Comparison`, group,
+        imageDataProvider: render(this.phastChartsService.buildLossBarChart([baseline, modification].map(scenario => ({
+          name: scenario.name,
+          labels: scenario.lossValuesAndLabels.map(item => item.label),
+          values: scenario.lossValuesAndLabels.map(item => item.value),
+        })), ui.lossUnit)),
+      });
+      return sections;
+    });
+  }
+
+  private buildSankeySections(ui: ReportSankeyUI): ChartSection[] {
+    return ui.scenarios.map((scenario, index) => ({
+      type: 'chart',
+      title: `${scenario.name} Sankey`,
+      group: ROUTE_TOKENS.reportSankey,
+      pageBreakBefore: index === 0,
+      aspectRatio: 1400 / 500,
+      imageDataProvider: () => this.phastChartsService.renderSankeyAsImage(scenario.phast, ui.settings),
+    }));
   }
 
   private buildInputSummarySections(ui: InputSummaryUI): SummaryTableSection[] {

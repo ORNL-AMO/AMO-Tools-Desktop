@@ -1,0 +1,36 @@
+<div class="output-summary p-3">
+  <h4 class="show-print print-section-header">Result Data</h4>
+
+  @let ui = resultsDataUI();
+  @if (ui) {
+    <table #copyTable class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th class="text-left">{{ui.title}}</th>
+          <th>Baseline</th>
+          @for (modificationName of ui.modificationNames; track modificationName.id) {
+            <th>{{modificationName.name}}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of ui.rows; track row.label) {
+          <tr [class]="row.className">
+            <td>
+              <span [innerHTML]="row.label"></span>
+              @if (row.units) {
+                <span class="pl-1" [innerHTML]="'(' + row.units + ')'"></span>
+              }
+            </td>
+            <td>{{ row.baseline | reportTableCell }}</td>
+            @for (modification of row.modifications; track $index) {
+              <td>{{ modification | reportTableCell }}</td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+    <app-exportable-results-table [tableString]="copyTableString"
+      (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+  }
+</div>
