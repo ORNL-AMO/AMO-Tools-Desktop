@@ -1,9 +1,10 @@
 import { configureStore, createListenerMiddleware, createSelector, isAnyOf } from '@reduxjs/toolkit'
-import diagramReducer, { addNode, connectEdge, diagramSlice, DiagramActionType, edgesChangeFromPropagation, recomputeNodeErrors, RECOMPUTES_DIAGRAM_ERRORS, saveDiagramState } from './diagramReducer'
+import diagramReducer, { connectEdge, diagramSlice, DiagramActionType, DiagramSaveExtra, edgesChangeFromPropagation, recomputeNodeErrors, RECOMPUTES_DIAGRAM_ERRORS, saveDiagramState } from './diagramReducer'
+import { DIAGRAM_SAVE_DEBOUNCE_MS, isPersistableChange } from './diagramPersistence';
 import uiReducer, { diagramAlertChange } from './uiSlice';
 import { Edge, Node } from '@xyflow/react';
 import { getNodeSourceEdges, getNodeTargetEdges, getNodeTotalFlow } from './FlowUtils';
-import { createGraphIndex, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramMetaData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
+import { createGraphIndex, CustomEdgeData, DiagramAlertMessages, DiagramCalculatedData, DiagramMetaData, FlowDiagramData, getWaterUsingSystem, NodeFlowData, ProcessFlowPart, WaterDiagram, WaterProcessComponent } from 'process-flow-lib';
 
 /**
  * Builds the `isAnyOf` matcher for the "recompute diagram errors" listener below,
@@ -28,8 +29,11 @@ export function getStructuralDiagramActionMatcher() {
   return structuralDiagramActionMatcherCache;
 }
 
-export function configureAppStore(waterDiagram: WaterDiagram) {
+export function configureAppStore(waterDiagram: WaterDiagram, saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void) {
   const preloadedMeta: DiagramMetaData = waterDiagram.flowDiagramData.meta ?? { version: '0.0.0', upgrades: [] };
+  // * upgradeDiagram mutates this same meta object on hydration, so capture the version before that happens
+  const loadedVersion = preloadedMeta.version;
+  const saveExtra: DiagramSaveExtra = { saveFlowDiagramData, hasPendingSave: false };
   const store = configureStore({
     reducer: { diagram: diagramReducer, ui: uiReducer },
     preloadedState: {
@@ -53,17 +57,19 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
           footerHeight: undefined
         },
         assessmentId: undefined,
-        diagramNotes: waterDiagram.flowDiagramData.diagramNotes
+        diagramNotes: waterDiagram.flowDiagramData.diagramNotes,
+        isInitialized: false
       }
     },
     middleware: (getDefaultMiddleware) => {
-      // todo 7364 - listener is registered below, but saveDiagramState itself is a stub:
-      // todo its actual MEASUR save call is commented out, so this doesn't persist anything yet
       const listenerMiddleware = createListenerMiddleware();
       listenerMiddleware.startListening({
-        matcher: isAnyOf(addNode),
-        effect: async (_, { dispatch }) => {
-          dispatch(saveDiagramState());
+        predicate: (action, currentState, previousState) => isPersistableChange(action, currentState, previousState, loadedVersion),
+        effect: async (_, listenerApi) => {
+          saveExtra.hasPendingSave = true;
+          listenerApi.cancelActiveListeners();
+          await listenerApi.delay(DIAGRAM_SAVE_DEBOUNCE_MS);
+          listenerApi.dispatch(saveDiagramState());
         },
       });
 
@@ -126,6 +132,7 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
       });
 
       return getDefaultMiddleware({
+        thunk: { extraArgument: saveExtra },
         // convertValueFn is transient (never stored in state); meta.arg/meta.baseQueryMeta are RTK's own defaults, restated here since this option replaces rather than merges with them.
         serializableCheck: {
           ignoredActionPaths: ['meta.arg', 'meta.baseQueryMeta', 'payload.convertValueFn'],
@@ -136,19 +143,6 @@ export function configureAppStore(waterDiagram: WaterDiagram) {
 
   return store;
 }
-
-// // todo 7364 - migrate save event to thunk
-// // which reducer/events should dispatch?
-// const listenerMiddleware = createListenerMiddleware();
-// listenerMiddleware.startListening({
-//   matcher: isAnyOf(addNode),
-//   effect: async (_, { dispatch }) => {
-//     console.log('Node added - call savediagramstate');
-//     // todo wrap w lodash debounce and/or batching 
-//     dispatch(saveDiagramState());
-//   },
-// });
-
 
 export type AppStore = ReturnType<typeof configureAppStore>
 // Infer the type of `store`

@@ -36,34 +36,41 @@ export class UpdateAssessmentFromDiagramService {
   }
 
   /**
-   * This is the entry point method for syncing an assessment to diagram.
-   * Checks if the diagram has been modified since the last time the assessment was updated. If it has, updates the assessment with the diagram data and saves it to indexedDB.
+   * Writes the diagram's water components, flows, and settings values onto the assessment (in memory only).
+   * @returns whether units of measure or flow decimal precision changed, so callers that only persist on change can skip the settings save
    */
-  async syncAssessmentToDiagram(assessment: Assessment, assessmentSettings: Settings) {
-    let integratedDiagram = this.diagramIdbService.findById(assessment.diagramId);
-    if (integratedDiagram && assessment.modifiedDate < integratedDiagram.modifiedDate) {
-      this.updateAssessmentWithDiagram(integratedDiagram, assessment, assessmentSettings);
-      await firstValueFrom(this.assessmentIdbService.updateWithObservable(assessment));
-    }
-  }
-
-  async updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment, assessmentSettings: Settings) {
+  applyDiagramToAssessment(diagram: Diagram, assessment: Assessment, assessmentSettings: Settings): boolean {
     this.updateAssessmentWaterComponents(diagram, assessment.water, diagram.waterDiagram.flowDiagramData.calculatedData);
     assessment.water.diagramWaterSystemFlows = setWaterUsingSystemFlows(assessment.water.waterUsingSystems, diagram.waterDiagram.flowDiagramData.edges);
     assessment.water.calculatedData = diagram.waterDiagram.flowDiagramData.calculatedData;
-    this.setAssessmentSettingsFromDiagram(assessment, assessmentSettings, diagram);
+    return this.setAssessmentSettingsFromDiagram(assessment, assessmentSettings, diagram);
+  }
+
+  async updateAssessmentWithDiagram(diagram: Diagram, assessment: Assessment, assessmentSettings: Settings) {
+    this.applyDiagramToAssessment(diagram, assessment, assessmentSettings);
+    await this.saveAssessmentSettings(assessmentSettings);
+  }
+
+  async saveAssessmentSettings(assessmentSettings: Settings) {
     await firstValueFrom(this.settingsDbService.updateWithObservable(assessmentSettings));
     this.waterAssessmentService.settings.next(assessmentSettings);
     let allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
     this.settingsDbService.setAll(allSettings);
   }
   
-  setAssessmentSettingsFromDiagram(assessment: Assessment, settings: Settings, diagram: Diagram) {
+  /**
+   * @returns whether units of measure or flow decimal precision changed, so callers that only persist on change can skip the settings save
+   */
+  setAssessmentSettingsFromDiagram(assessment: Assessment, settings: Settings, diagram: Diagram): boolean {
+    const previousUnitsOfMeasure = settings.unitsOfMeasure;
+    const previousFlowDecimalPrecision = settings.flowDecimalPrecision;
     settings.unitsOfMeasure = diagram.waterDiagram.flowDiagramData.settings.unitsOfMeasure;
     settings.flowDecimalPrecision = diagram.waterDiagram.flowDiagramData.settings.flowDecimalPrecision;
     assessment.water.systemBasics.electricityCost = diagram.waterDiagram.flowDiagramData.settings.electricityCost;
     assessment.water.systemBasics.conductivityUnit = diagram.waterDiagram.flowDiagramData.settings.conductivityUnit;
     assessment.water.systemBasics.notes = diagram.waterDiagram.flowDiagramData.diagramNotes;
+    const areSettingsChanged = previousUnitsOfMeasure !== settings.unitsOfMeasure || previousFlowDecimalPrecision !== settings.flowDecimalPrecision;
+    return areSettingsChanged;
   }
 
   getTotalFlowValue(flows: Array<EdgeFlowData>) {
