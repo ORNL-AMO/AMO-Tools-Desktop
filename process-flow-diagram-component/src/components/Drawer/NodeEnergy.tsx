@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Box, Button, Divider, IconButton, InputAdornment, MenuItem, Paper, Table, TableBody, TableContainer, TableHead, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Node } from '@xyflow/react';
-import { DiagramCalculatedData, HeatEnergy, MotorEnergy, ProcessFlowPart, getDefaultHeatEnergy, getDefaultMotorEnergy, getMaxHeatEnergyOutgoingTemp, getHeatEnergyCost, getHeatEnergyKWh, getMotorEnergyCost, getMotorEnergyPower, getNodeTotalInflow } from 'process-flow-lib';
+import { DiagramCalculatedData, HeatEnergy, MotorEnergy, ProcessFlowPart, getDefaultHeatEnergy, getDefaultMotorEnergy, getMaxHeatEnergyOutgoingTemp, getHeatEnergyCost, getHeatEnergyKWh, getHeatEnergyUse, getMotorEnergyCost, getMotorEnergyKWh, getNodeTotalInflow } from 'process-flow-lib';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { nodeDataPropertyChange } from '../Diagram/diagramReducer';
 import InputField from '../StyledMUI/InputField';
@@ -12,7 +12,6 @@ import { StyledHeadTableRow, StyledTableCell, StyledTableRow } from '../StyledMU
 
 const toNumberOrUndefined = (value: string): number | undefined => value === '' ? undefined : Number(value);
 
-const HOURS_PER_YEAR = 8760;
 const MAX_LOAD_FACTOR = 150;
 
 const getLoadFactorError = (loadFactor: number): string | undefined => {
@@ -44,18 +43,24 @@ const getHeatEnergyErrors = (heatEnergy: HeatEnergy, unitsOfMeasure: string): He
 };
 
 interface EnergyResult {
-    energyPerHour: number,
+    annualEnergy: number,
     annualCost: number,
+    // * fuel-fired heat only - energy in the fuel's native unit (MMBtu/yr ; GJ/yr), shown below kWh/yr
+    annualFuelEnergy?: { value: number, unit: string },
 }
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
-const formatEnergyPerHour = (value: number): string => `${value.toLocaleString('en-US', { maximumFractionDigits: 2 })} kWh/hr`;
+const formatNumber = (value: number): string => value.toLocaleString('en-US', { maximumFractionDigits: 2 });
+const formatAnnualEnergy = (value: number): string => `${formatNumber(value)} kWh/yr`;
 
 const EnergyResultReadout = ({ result }: { result: EnergyResult }) => (
     <Box sx={{ display: 'flex', paddingY: 1, textAlign: 'center' }}>
         <Box sx={{ flex: 1 }}>
             <Typography variant="caption" component="div">Energy</Typography>
-            <Typography variant="body2" fontWeight="bold">{formatEnergyPerHour(result.energyPerHour)}</Typography>
+            <Typography variant="body2" fontWeight="bold">{formatAnnualEnergy(result.annualEnergy)}</Typography>
+            {result.annualFuelEnergy &&
+                <Typography variant="body2" fontWeight="bold">{formatNumber(result.annualFuelEnergy.value)} {result.annualFuelEnergy.unit}</Typography>
+            }
         </Box>
         <Box sx={{ flex: 1 }}>
             <Typography variant="caption" component="div">Annual Cost</Typography>
@@ -129,25 +134,29 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
     };
 
     const getMotorEnergyResult = (motor: MotorEnergy): EnergyResult => ({
-        energyPerHour: getMotorEnergyPower(motor, settings.unitsOfMeasure),
+        annualEnergy: getMotorEnergyKWh(motor, settings.unitsOfMeasure),
         annualCost: getMotorEnergyCost(motor, settings.electricityCost, settings.unitsOfMeasure),
     });
 
     const heatEnergyWithWaterUse: HeatEnergy = { ...heatEnergy, systemWaterUse: getNodeTotalInflow(node, calculatedData) };
     const heatEnergyResult: EnergyResult = {
-        energyPerHour: getHeatEnergyKWh(heatEnergyWithWaterUse, settings.unitsOfMeasure) / (heatEnergy.hoursPerYear || HOURS_PER_YEAR),
+        annualEnergy: getHeatEnergyKWh(heatEnergyWithWaterUse, settings.unitsOfMeasure),
         annualCost: getHeatEnergyCost(
             heatEnergyWithWaterUse,
             heatEnergy.heatingFuelType === 0 ? settings.electricityCost : settings.fuelCost,
             settings.unitsOfMeasure
         ),
+        annualFuelEnergy: heatEnergy.heatingFuelType === 0 ? undefined : {
+            value: getHeatEnergyUse(heatEnergyWithWaterUse, settings.unitsOfMeasure),
+            unit: settings.unitsOfMeasure === 'Imperial' ? 'MMBtu/yr' : 'GJ/yr',
+        },
     };
 
     const motorEnergyResults: EnergyResult[] = motorEnergy.map(getMotorEnergyResult);
     const turbomachineryResult: EnergyResult = motorEnergyResults.reduce((total, result) => ({
-        energyPerHour: total.energyPerHour + result.energyPerHour,
+        annualEnergy: total.annualEnergy + result.annualEnergy,
         annualCost: total.annualCost + result.annualCost,
-    }), { energyPerHour: 0, annualCost: 0 });
+    }), { annualEnergy: 0, annualCost: 0 });
 
     const energyTotalRows: Array<{ label: string, result: EnergyResult }> = [
         ...(showHeatEnergy ? [{ label: 'Heat Energy', result: heatEnergyResult }] : []),
@@ -156,9 +165,9 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
     energyTotalRows.push({
         label: 'Total Energy',
         result: energyTotalRows.reduce((total, row) => ({
-            energyPerHour: total.energyPerHour + row.result.energyPerHour,
+            annualEnergy: total.annualEnergy + row.result.annualEnergy,
             annualCost: total.annualCost + row.result.annualCost,
-        }), { energyPerHour: 0, annualCost: 0 }),
+        }), { annualEnergy: 0, annualCost: 0 }),
     });
 
     const heatEnergyErrors: HeatEnergyErrors = getHeatEnergyErrors(heatEnergy, settings.unitsOfMeasure);
@@ -181,7 +190,7 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                         {energyTotalRows.map((row) => (
                             <StyledTableRow key={row.label}>
                                 <StyledTableCell component="th" scope="row">{row.label}</StyledTableCell>
-                                <StyledTableCell align="right">{formatEnergyPerHour(row.result.energyPerHour)}</StyledTableCell>
+                                <StyledTableCell align="right">{formatAnnualEnergy(row.result.annualEnergy)}</StyledTableCell>
                                 <StyledTableCell align="right">{currency.format(row.result.annualCost)}</StyledTableCell>
                             </StyledTableRow>
                         ))}

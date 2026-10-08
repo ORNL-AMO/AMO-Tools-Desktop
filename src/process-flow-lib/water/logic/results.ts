@@ -573,18 +573,26 @@ export const getMotorEnergyPower = (motorEnergy: MotorEnergy, unitsOfMeasure: st
 }
 
 /**
-* Get cost for MotorEnergy
+* Get annual MotorEnergy use (kWh/yr). Returns 0 until operating hours and all power inputs are entered.
 * @param motorEnergy MotorEnergy object
-* @param energyUnitCost 
 */
-export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: number, unitsOfMeasure: string): number => {
+export const getMotorEnergyKWh = (motorEnergy: MotorEnergy, unitsOfMeasure: string): number => {
   // H = Hours of Operation per Year
   // E = Pump Energy Use (kWh)
   // E = P * H
   if (isMissingValue(motorEnergy.hoursPerYear)) {
     return 0;
   }
-  return energyUnitCost * getMotorEnergyPower(motorEnergy, unitsOfMeasure) * motorEnergy.hoursPerYear;
+  return getMotorEnergyPower(motorEnergy, unitsOfMeasure) * motorEnergy.hoursPerYear;
+}
+
+/**
+* Get cost for MotorEnergy
+* @param motorEnergy MotorEnergy object
+* @param energyUnitCost
+*/
+export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: number, unitsOfMeasure: string): number => {
+  return energyUnitCost * getMotorEnergyKWh(motorEnergy, unitsOfMeasure);
 }
 
 /**

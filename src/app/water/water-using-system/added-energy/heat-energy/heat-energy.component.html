@@ -87,7 +87,10 @@
 
     <div class="form-group">
         <label>Energy</label>
-        <div class="text-center small bold">{{energyPerHour | number:'1.0-2'}} kWh/hr</div>
+        <div class="text-center small bold">{{annualEnergy | number:'1.0-2'}} kWh/yr</div>
+        @if (annualFuelEnergy !== undefined) {
+        <div class="text-center small bold">{{annualFuelEnergy | number:'1.0-2'}} {{fuelEnergyUnit}}</div>
+        }
     </div>
     <div class="form-group">
         <label>Annual Cost</label>
