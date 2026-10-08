@@ -29,7 +29,8 @@
 .prompts/
 .claude/*
 !.claude/skills/
-!.claude/skills/**
+.claude/skills/*
+!.claude/skills/suite-coordination/
 
 # misc
 /docker

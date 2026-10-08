@@ -110,6 +110,11 @@ privacy, coverage, snapshot loading, and comparison behavior:
 npm run test:ca-regression-tests:fixtures
 ```
 
+Snapshot, Desktop, Suite, and source MEASUR versions are provenance metadata.
+They remain recorded in manifests and diagnostic reports, but version changes
+alone do not fail result comparison. Schema versions, scope, fixture structure,
+and calculation results are still compared.
+
 ## Reviewing differences
 
 Generate a non-failing diagnostic report against the active snapshot:

@@ -243,8 +243,18 @@ export function compareRegressionTestSnapshots(expected: any, actual: any, toler
   // Used by ordinary Jasmine runs. Dedicated commands use the richer Node
   // comparator in fixture-tools.mjs so they can produce structured reports.
   const differences: string[] = [];
-  compareValue(expected, actual, '$', differences, tolerance);
+  compareValue(getComparableSnapshot(expected), getComparableSnapshot(actual), '$', differences, tolerance);
   return differences;
+}
+
+function getComparableSnapshot(snapshot: any): any {
+  if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) return snapshot;
+  const comparable = { ...snapshot };
+  delete comparable.snapshotName;
+  delete comparable.desktopApplicationVersion;
+  delete comparable.suitePackageVersion;
+  delete comparable.sourceMeasurVersion;
+  return comparable;
 }
 
 function compareValue(expected: any, actual: any, path: string, differences: string[], tolerance: number): void {

@@ -830,8 +830,18 @@ function walk(value, path, visit) {
  */
 export function compareSnapshots(expected, actual, tolerance = 1e-6) {
   const differences = [];
-  compareValue(expected, actual, '$', differences, tolerance);
+  compareValue(getComparableSnapshot(expected), getComparableSnapshot(actual), '$', differences, tolerance);
   return differences;
+}
+
+function getComparableSnapshot(snapshot) {
+  if (!snapshot || typeof snapshot !== 'object' || Array.isArray(snapshot)) return snapshot;
+  const comparable = { ...snapshot };
+  delete comparable.snapshotName;
+  delete comparable.desktopApplicationVersion;
+  delete comparable.suitePackageVersion;
+  delete comparable.sourceMeasurVersion;
+  return comparable;
 }
 
 function compareValue(expected, actual, path, differences, tolerance) {
