@@ -24,7 +24,7 @@ describe('ReportGraphsResultsService', () => {
   }
 
   beforeEach(() => {
-    settings = signal<Partial<Settings>>({ unitsOfMeasure: 'Imperial' });
+    settings = signal<Partial<Settings>>({ unitsOfMeasure: 'Imperial', energyResultUnit: 'MMBtu' });
     resultsByName = { baseline: { totalWallLoss: 2 }, mod1: { totalWallLoss: 1 } };
     modifications = signal<ProcessHeatingModification[]>([{ id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } }]);
     chartsService = jasmine.createSpyObj<PhastChartsService>('PhastChartsService', ['getLossValuesAndLabels', 'getDeliverValuesAndLabels']);
@@ -59,15 +59,21 @@ describe('ReportGraphsResultsService', () => {
     expect(chartsService.getLossValuesAndLabels).toHaveBeenCalledWith(jasmine.anything(), CATEGORIES);
   });
 
-  it('uses imperial units', () => {
+  it('labels losses with the hourly energy result unit', () => {
     expect(ui().lossUnit).toBe('MMBtu/hr');
     expect(ui().barChartYAxisLabel).toBe('Heat Loss (MMBtu/hr)');
     expect(ui().deliverUnit).toBe('kW');
   });
 
-  it('uses metric units', () => {
-    settings.set({ unitsOfMeasure: 'Metric' });
+  it('uses the metric energy result unit', () => {
+    settings.set({ unitsOfMeasure: 'Metric', energyResultUnit: 'GJ' });
     expect(ui().lossUnit).toBe('GJ/hr');
+  });
+
+  it('uses kWh for electrotechnology even with imperial units', () => {
+    settings.set({ unitsOfMeasure: 'Imperial', energySourceType: 'Electricity', energyResultUnit: 'kWh' });
+    expect(ui().lossUnit).toBe('kWh/hr');
+    expect(ui().barChartYAxisLabel).toBe('Heat Loss (kWh/hr)');
   });
 
   it('carries delivered heat data for electrotechnology scenarios', () => {

@@ -54,7 +54,7 @@ export class ReportGraphsResultsService {
       return undefined;
     }
 
-    const lossUnit = settings.unitsOfMeasure === 'Metric' ? 'GJ/hr' : 'MMBtu/hr';
+    const lossUnit = `${settings.energyResultUnit}/hr`;
     return { scenarios, lossUnit, deliverUnit: 'kW', barChartYAxisLabel: `Heat Loss (${lossUnit})` };
   });
 }
