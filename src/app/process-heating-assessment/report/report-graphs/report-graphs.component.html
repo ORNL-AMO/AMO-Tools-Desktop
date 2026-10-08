@@ -1,0 +1,43 @@
+<div class="p-3">
+  <h4 class="show-print print-section-header">Report Graphs</h4>
+
+  @let ui = reportGraphsUI();
+  @let baseline = baselineScenario();
+  @let modification = modificationScenario();
+  @if (ui && baseline) {
+    <ng-template #scenarioColumn let-scenario="scenario" let-selectId="selectId" let-selected="selected" let-select="select">
+      <div class="d-flex col-12 col-lg-6 flex-column">
+        <div class="pl-2 pr-2">
+          <select class="form-control mx-auto hide-print" [id]="selectId" [ngModel]="selected"
+            (ngModelChange)="select($event)">
+            @for (option of ui.scenarios; track option.id) {
+              <option [value]="option.id">{{option.name}}</option>
+            }
+          </select>
+          <h5 class="show-print">{{scenario.name}}</h5>
+        </div>
+        <div class="p-2 pie-chart-container">
+          <app-plotly-pie-chart [valuesAndLabels]="scenario.lossValuesAndLabels" [valuesUnit]="ui.lossUnit"></app-plotly-pie-chart>
+        </div>
+        @if (scenario.deliverValuesAndLabels.length) {
+          <div class="p-2 pie-chart-container">
+            <app-plotly-pie-chart [valuesAndLabels]="scenario.deliverValuesAndLabels" [valuesUnit]="ui.deliverUnit"></app-plotly-pie-chart>
+          </div>
+        }
+      </div>
+    </ng-template>
+
+    <div class="d-flex flex-wrap">
+      <ng-container *ngTemplateOutlet="scenarioColumn; context: {
+        scenario: baseline, selectId: 'selectedBaselineData', selected: baselineSelection(), select: baselineSelection.set }"></ng-container>
+      @if (modification) {
+        <ng-container *ngTemplateOutlet="scenarioColumn; context: {
+          scenario: modification, selectId: 'selectedModificationData', selected: modification.id, select: modificationSelection.set }"></ng-container>
+        <div class="w-100">
+          <app-plotly-bar-chart [barChartDataArray]="barChartData()" [yAxisLabel]="ui.barChartYAxisLabel"
+            [yValueUnit]="ui.lossUnit" [hoverLabel]="'Heat Loss'"></app-plotly-bar-chart>
+        </div>
+      }
+    </div>
+  }
+</div>

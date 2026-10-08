@@ -22,6 +22,10 @@ import { ProcessHeatingOperationsFormService } from './services/process-heating-
 import { ProcessHeatingResultsService } from './services/process-heating-results.service';
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
 import { ConvertPhastService } from '../phast/convert-phast.service';
+import { PhastChartsService } from '../phast/phast-report/phast-charts.service';
+import { SankeySharedModule } from '../shared/sankey/sankey-shared.module';
+import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
+import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
 import { PhastResultsService } from '../phast/phast-results.service';
 import { MeteredEnergyService } from '../phast/metered-energy/metered-energy.service';
 import { DesignedEnergyService } from '../phast/designed-energy/designed-energy.service';
@@ -61,6 +65,9 @@ import { ExecutiveSummaryComponent } from './report/executive-summary/executive-
 import { ProcessHeatingReportAdapter } from './report/process-heating-report.adapter';
 import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
 import { InputSummaryResultsService } from './report/input-summary/input-summary-results.service';
+import { ReportSankeyResultsService } from './report/report-sankey/report-sankey-results.service';
+import { ReportGraphsResultsService } from './report/report-graphs/report-graphs-results.service';
+import { ResultsDataResultsService } from './report/results-data/results-data-results.service';
 import { ExecutiveSummaryResultsService } from './report/executive-summary/executive-summary-results.service';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
@@ -420,6 +427,9 @@ export const ROUTES: Route[] = [
     ExportableResultsTableModule,
     ReportTableCellPipe,
     ReportBuilderModule,
+    PieChartModule,
+    SankeySharedModule,
+    PhastSankeyModule,
   ],
   providers: [
     { provide: STEPPED_ROUTES, useValue: deriveSteppedRoutes(ROUTES) },
@@ -430,6 +440,14 @@ export const ROUTES: Route[] = [
     ProcessHeatingOperationsFormService,
     ProcessHeatingResultsService,
     ExecutiveSummaryResultsService,
+    ResultsDataResultsService,
+    ReportGraphsResultsService,
+    ReportSankeyResultsService,
+    // Root-scoped legacy service that injects the module-scoped PhastResultsService, so it must be provided here
+    // to resolve that dep from this module, not the root injector (SankeyService comes via PhastSankeyModule).
+    // Remove this provider once this module has its own results service: build the chart data from that service
+    // instead of PhastChartsService, or drop PhastChartsService's PhastResultsService dependency.
+    PhastChartsService,
     InputSummaryResultsService,
     EnergySummaryResultsService,
     ProcessHeatingReportAdapter,

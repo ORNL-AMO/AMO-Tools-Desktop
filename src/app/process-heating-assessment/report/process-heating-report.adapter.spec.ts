@@ -8,6 +8,12 @@ import { PHAST } from '../models/phast';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { EnergySummaryResultsService, EnergySummaryUI } from './energy-summary/energy-summary-results.service';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from './executive-summary/executive-summary-results.service';
+import { ResultsDataResultsService, ResultsDataUI } from './results-data/results-data-results.service';
+import { ReportGraphsResultsService, ReportGraphsUI } from './report-graphs/report-graphs-results.service';
+import { PhastChartsService } from '../../phast/phast-report/phast-charts.service';
+import { ReportChartRenderService } from '../../shared/report-builder/services/report-chart-render.service';
+import { ChartSection } from '../../shared/report-builder/models/report-section.model';
+import { ReportSankeyResultsService, ReportSankeyUI } from './report-sankey/report-sankey-results.service';
 import { InputSummaryResultsService, InputSummaryUI } from './input-summary/input-summary-results.service';
 import { PROCESS_HEATING_SECTION_GROUPS, ProcessHeatingReportAdapter } from './process-heating-report.adapter';
 
@@ -38,6 +44,43 @@ const ENERGY_SUMMARY: EnergySummaryUI = {
   energyPerTimeUnit: 'MMBtu/kWh',
 };
 
+const RESULTS_DATA: ResultsDataUI = {
+  modificationNames: MODIFICATION_NAMES,
+  title: 'Hourly Energy Loss/Use (MMBtu/hr)',
+  rows: [
+    { label: 'Wall Losses', className: 'default', baseline: { value: 1.5, decimalPipe: '1.2-2' }, modifications: [{ value: null }] },
+    { label: 'Available Heat', units: '%', className: 'default', baseline: { value: 55.5, decimalPipe: '1.1-1' }, modifications: [{ value: 60, decimalPipe: '1.1-1' }] },
+    { label: 'Gross Heat Input', className: 'emphasis', baseline: { value: 10, decimalPipe: '1.2-2' }, modifications: [{ value: 8, decimalPipe: '1.2-2' }] },
+  ],
+};
+
+function buildReportGraphs(modificationCount = 1, deliver = false): ReportGraphsUI {
+  const scenario = (id: string, name: string) => ({
+    id, name, lossValuesAndLabels: [{ label: 'Wall', value: 1 }],
+    deliverValuesAndLabels: deliver ? [{ label: 'Electrical Energy Input', value: 5 }] : [],
+  });
+  return {
+    scenarios: [scenario('baseline', 'Baseline'), ...Array.from({ length: modificationCount }, (_, i) => scenario(`mod${i + 1}`, `Scenario ${i + 1}`))],
+    lossUnit: 'MMBtu/hr',
+    deliverUnit: 'kW',
+    barChartYAxisLabel: 'Heat Loss (MMBtu/hr)',
+  };
+}
+
+function buildReportSankey(modificationCount = 1): ReportSankeyUI {
+  return {
+    settings: { energyResultUnit: 'MMBtu' } as ReportSankeyUI['settings'],
+    scenarios: Array.from({ length: modificationCount + 1 }, (_, i) => ({
+      id: i === 0 ? 'baseline' : `mod${i}`,
+      name: i === 0 ? 'Baseline' : `Scenario ${i}`,
+      phast: { name: `phast${i}` } as ReportSankeyUI['scenarios'][number]['phast'],
+      costSavings: 0,
+      energySavings: 0,
+    })),
+    energySavingsUnit: 'MMBtu/yr',
+  };
+}
+
 const INPUT_SUMMARY: InputSummaryUI = {
   modificationNames: MODIFICATION_NAMES,
   sections: [{
@@ -50,6 +93,11 @@ describe('ProcessHeatingReportAdapter', () => {
   let adapter: ProcessHeatingReportAdapter;
   let executiveSummary: ExecutiveSummaryUI | undefined;
   let energySummary: EnergySummaryUI | undefined;
+  let resultsData: ResultsDataUI | undefined;
+  let reportGraphs: ReportGraphsUI | undefined;
+  let reportSankey: ReportSankeyUI | undefined;
+  let chartsService: jasmine.SpyObj<PhastChartsService>;
+  let renderService: jasmine.SpyObj<ReportChartRenderService>;
   let inputSummary: InputSummaryUI | undefined;
   let processHeating: PHAST;
 
@@ -66,6 +114,15 @@ describe('ProcessHeatingReportAdapter', () => {
   beforeEach(() => {
     executiveSummary = buildExecutiveSummary();
     energySummary = ENERGY_SUMMARY;
+    resultsData = RESULTS_DATA;
+    reportGraphs = buildReportGraphs();
+    reportSankey = buildReportSankey();
+    chartsService = jasmine.createSpyObj<PhastChartsService>('PhastChartsService', ['buildPieChart', 'buildLossBarChart', 'renderSankeyAsImage']);
+    chartsService.buildPieChart.and.returnValue({ traces: [], layout: {} });
+    chartsService.buildLossBarChart.and.returnValue({ traces: [], layout: {} });
+    chartsService.renderSankeyAsImage.and.resolveTo('data:image/jpeg;base64,sankey');
+    renderService = jasmine.createSpyObj<ReportChartRenderService>('ReportChartRenderService', ['renderChartToImage']);
+    renderService.renderChartToImage.and.resolveTo('data:image/jpeg;base64,abc');
     inputSummary = INPUT_SUMMARY;
     processHeating = { equipmentNotes: 'Batch furnace', operatingHours: { operatingConditions: 'Two shifts' } } as PHAST;
     TestBed.configureTestingModule({
@@ -80,6 +137,11 @@ describe('ProcessHeatingReportAdapter', () => {
         },
         { provide: ExecutiveSummaryResultsService, useValue: { executiveSummaryUI: () => executiveSummary } },
         { provide: EnergySummaryResultsService, useValue: { energySummaryUI: () => energySummary } },
+        { provide: ReportGraphsResultsService, useValue: { reportGraphsUI: () => reportGraphs } },
+        { provide: PhastChartsService, useValue: chartsService },
+        { provide: ReportChartRenderService, useValue: renderService },
+        { provide: ReportSankeyResultsService, useValue: { reportSankeyUI: () => reportSankey } },
+        { provide: ResultsDataResultsService, useValue: { resultsDataUI: () => resultsData } },
         { provide: InputSummaryResultsService, useValue: { inputSummaryUI: () => inputSummary } },
       ],
     });
@@ -96,10 +158,10 @@ describe('ProcessHeatingReportAdapter', () => {
     expect((await build()).meta.title).toBe('Furnace 1');
   });
 
-  it('includes facility info, executive summary, energy summary, and input summary', async () => {
+  it('includes facility info, executive summary, energy summary, result data, and input summary', async () => {
     const document = await build();
     const groups = new Set(document.sections.map(candidate => candidate.group));
-    expect(groups).toEqual(new Set(['facility-info', 'executive-summary', 'energy-summary', 'input-summary']));
+    expect(groups).toEqual(new Set(['facility-info', 'executive-summary', 'energy-summary', 'results-data', 'report-graphs', 'report-sankey', 'input-summary']));
   });
 
   it('builds executive summary rows with percent savings, projects, and modifications', async () => {
@@ -150,6 +212,60 @@ describe('ProcessHeatingReportAdapter', () => {
     expect(section<KeyValueSection>(await build(), 'Equipment')).toBeUndefined();
   });
 
+  it('builds the result data table with units in the header and an emphasized gross heat input row', async () => {
+    const table = section<SummaryTableSection>(await build(), 'Result Data');
+    expect(table.group).toBe('results-data');
+    expect(table.headers).toEqual(['Hourly Energy Loss/Use (MMBtu/hr)', 'Baseline', 'Scenario 1']);
+    expect(table.rows[0]).toEqual(['Wall Losses', '1.50', '—']);
+    expect(table.rows[1]).toEqual(['Available Heat (%)', '55.5', '60.0']);
+    expect(table.emphasisRowsIndices).toEqual([2]);
+  });
+
+  it('builds loss pie and comparison bar charts per modification, with a page break only on the first', async () => {
+    reportGraphs = buildReportGraphs(2);
+    const charts = (await build()).sections.filter(candidate => candidate.group === 'report-graphs') as ChartSection[];
+    expect(charts.map(chart => chart.title)).toEqual([
+      'Loss Distribution — Baseline vs. Scenario 1', 'Baseline vs. Scenario 1 Loss Comparison',
+      'Loss Distribution — Baseline vs. Scenario 2', 'Baseline vs. Scenario 2 Loss Comparison',
+    ]);
+    expect(charts.map(chart => !!chart.pageBreakBefore)).toEqual([true, false, false, false]);
+  });
+
+  it('adds a heat delivered chart when any scenario delivers heat', async () => {
+    reportGraphs = buildReportGraphs(1, true);
+    const titles = (await build()).sections.filter(candidate => candidate.group === 'report-graphs').map(chart => chart.title);
+    expect(titles).toContain('Heat Delivered — Baseline vs. Scenario 1');
+  });
+
+  it('builds a single distribution chart when there are no modifications', async () => {
+    reportGraphs = buildReportGraphs(0, true);
+    const charts = (await build()).sections.filter(candidate => candidate.group === 'report-graphs') as ChartSection[];
+    expect(charts.map(chart => chart.title)).toEqual(['Baseline Energy Distribution']);
+    await charts[0].imageDataProvider();
+    const cells = chartsService.buildPieChart.calls.mostRecent().args[0];
+    expect(cells.map(cell => cell.label)).toEqual(['Loss Distribution', 'Heat Delivered']);
+  });
+
+  it('renders chart images lazily through the chart render service', async () => {
+    const charts = (await build()).sections.filter(candidate => candidate.group === 'report-graphs') as ChartSection[];
+    expect(renderService.renderChartToImage).not.toHaveBeenCalled();
+    expect(await charts[0].imageDataProvider()).toBe('data:image/jpeg;base64,abc');
+  });
+
+  it('builds a sankey chart per scenario with a page break only on the first', async () => {
+    reportSankey = buildReportSankey(2);
+    const charts = (await build()).sections.filter(candidate => candidate.group === 'report-sankey') as ChartSection[];
+    expect(charts.map(chart => chart.title)).toEqual(['Baseline Sankey', 'Scenario 1 Sankey', 'Scenario 2 Sankey']);
+    expect(charts.map(chart => !!chart.pageBreakBefore)).toEqual([true, false, false]);
+    expect(charts[0].aspectRatio).toBe(1400 / 500);
+  });
+
+  it('renders each sankey image from its own scenario', async () => {
+    const charts = (await build()).sections.filter(candidate => candidate.group === 'report-sankey') as ChartSection[];
+    expect(await charts[1].imageDataProvider()).toBe('data:image/jpeg;base64,sankey');
+    expect(chartsService.renderSankeyAsImage).toHaveBeenCalledWith(reportSankey.scenarios[1].phast, reportSankey.settings);
+  });
+
   it('builds input summary as one table with sub-group headers', async () => {
     const table = section<SummaryTableSection>(await build(), 'Input Summary');
     expect(table.subGroupHeaderIndices).toEqual([0]);
@@ -160,6 +276,9 @@ describe('ProcessHeatingReportAdapter', () => {
   it('skips sections whose summaries are unavailable', async () => {
     executiveSummary = undefined;
     energySummary = undefined;
+    resultsData = undefined;
+    reportGraphs = undefined;
+    reportSankey = undefined;
     inputSummary = undefined;
     const groups = (await build()).sections.map(candidate => candidate.group);
     expect(groups.every(group => group === 'facility-info')).toBeTrue();

@@ -8,7 +8,7 @@ import { Settings } from '../../../shared/models/settings';
 import { getModificationName, ProcessHeatingModification } from '../../models/modification';
 import { EAFResults, Losses, Notes, PHAST, PhastResults } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
-import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
 
 export interface ExecutiveSummaryUI {
@@ -18,6 +18,11 @@ export interface ExecutiveSummaryUI {
   co2Rows: ReportTableRow[];
   costRows: ReportTableRow[];
   notes: SummaryNote[];
+}
+
+export interface ScenarioSavings {
+  costSavings: number;
+  energySavings: number;
 }
 
 export interface SummaryNote {
@@ -81,24 +86,48 @@ export class ExecutiveSummaryResultsService {
   private readonly modificationService = inject(ModificationService);
   private readonly featureFlagService = inject(FeatureFlagService);
 
-  readonly executiveSummaryUI: Signal<ExecutiveSummaryUI | undefined> = computed(() => {
+  private readonly scenarioSummaries = computed(() => {
     const settings = this.assessmentService.settingsSignal();
     const baselinePhast = this.assessmentService.scenarioPhastSignal('baseline');
     const modifications = this.modificationService.modifications();
-    const baseline = this.getScenarioSummary(baselinePhast, settings);
+    const baseline = this.getScenarioSummary('baseline', settings);
     if (!baseline) {
       return undefined;
     }
 
-    const showCo2 = this.featureFlagService.showOperationalImpacts();
-    const modificationSummaries: ScenarioSummary[] = modifications.map(modification => {
-      const phast = this.assessmentService.scenarioPhastSignal(modification.id);
-      return this.getScenarioSummary(phast, settings, baseline.summary);
+    const modificationSummaries: ScenarioSummary[] = modifications.map(modification =>
+      this.getScenarioSummary(modification.id, settings, baseline.summary)
+    );
+    this.applyCo2Savings(baseline, modificationSummaries.filter(Boolean));
+    return { settings, baselinePhast, baseline, modifications, modificationSummaries };
+  });
+
+  /** Annual energy and cost savings against baseline, keyed by scenario id ('baseline' is always zero) */
+  readonly scenarioSavings: Signal<Record<string, ScenarioSavings>> = computed(() => {
+    const summaries = this.scenarioSummaries();
+    if (!summaries) {
+      return {};
+    }
+    const savings: Record<string, ScenarioSavings> = { baseline: { costSavings: 0, energySavings: 0 } };
+    summaries.modifications.forEach((modification, index) => {
+      const summary = summaries.modificationSummaries[index]?.summary;
+      if (summary) {
+        savings[modification.id] = { costSavings: summary.annualCostSavings, energySavings: summary.annualEnergySavings };
+      }
     });
+    return savings;
+  });
+
+  readonly executiveSummaryUI: Signal<ExecutiveSummaryUI | undefined> = computed(() => {
+    const summaries = this.scenarioSummaries();
+    if (!summaries) {
+      return undefined;
+    }
+    const { settings, baselinePhast, baseline, modifications, modificationSummaries } = summaries;
+
+    const showCo2 = this.featureFlagService.showOperationalImpacts();
     const validModifications = modifications.filter((_, index) => modificationSummaries[index]);
     const mods = modificationSummaries.filter(Boolean);
-
-    this.applyCo2Savings(baseline, mods);
 
     return {
       modificationNames: validModifications.map(modification => ({ id: modification.id, name: getModificationName(modification) })),
@@ -110,8 +139,9 @@ export class ExecutiveSummaryResultsService {
     };
   });
 
-  private getScenarioSummary(phast: PHAST, settings: Settings, baselineSummary?: ExecutiveSummary): ScenarioSummary | undefined {
-    const results = this.resultsService.getResults(phast, settings);
+  private getScenarioSummary(scenario: AssessmentScenario, settings: Settings, baselineSummary?: ExecutiveSummary): ScenarioSummary | undefined {
+    const phast = this.assessmentService.scenarioPhastSignal(scenario);
+    const results = this.resultsService.scenarioResults(scenario);
     if (!results) {
       return undefined;
     }
@@ -191,11 +221,11 @@ export class ExecutiveSummaryResultsService {
   }
 
   private applyCo2Savings(baseline: ScenarioSummary, modifications: ScenarioSummary[]): void {
-    modifications.forEach(({ summary }) => {
+    modifications.forEach(({ summary, results }) => {
       if (summary.co2EmissionsOutput && baseline.summary.co2EmissionsOutput) {
         summary.co2EmissionsOutput = {
           ...summary.co2EmissionsOutput,
-          emissionsSavings: baseline.summary.co2EmissionsOutput.totalEmissionOutput - summary.co2EmissionsOutput.totalEmissionOutput,
+          emissionsSavings: this.resultsService.getCo2EmissionsSavings(baseline.results, results, 'totalEmissionOutput'),
         };
       }
     });
