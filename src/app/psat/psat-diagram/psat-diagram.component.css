@@ -69,10 +69,13 @@ td, th{
     font-weight: bold;
 }
 
+/* Sized from the image (796x600) instead of the column height, so the table height can't clip it and badge %s map to the image */
 .psat-diagram .diagram {
-    background: url('../../../assets/images/psat-diagram.png') no-repeat center 20%;
-    background-size: 70%;
-    height: 100%;
+    background: url('../../../assets/images/psat-diagram.png') no-repeat center top;
+    background-size: contain;
+    width: 70%;
+    margin: 0 auto;
+    aspect-ratio: 796 / 600;
     position: relative;
 }
     .diagram .motor, .diagram .rated-motor, .diagram .fluid, .diagram .pump {
@@ -84,20 +87,20 @@ td, th{
         position: absolute;
     }
     .diagram .motor {
-        top: 40%;
-        left: 69%;
+        top: 30%;
+        left: 77%;
     }
     .diagram .rated-motor {
         top: 33%;
         left: 7%;
     }
     .diagram .fluid {
-        top: 40%;
-        left: 20%;
+        top: 30%;
+        left: 7%;
     }
     .diagram .pump {
-        top: 30%;
-        left: 30%;
+        top: 23%;
+        left: 21%;
     }
 
 

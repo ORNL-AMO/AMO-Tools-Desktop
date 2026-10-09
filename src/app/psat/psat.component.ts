@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { AssessmentService } from '../dashboard/assessment.service';
 import { PSAT, Modification, PsatOutputs } from '../shared/models/psat';
 import { PsatService } from './psat.service';
 import * as _ from 'lodash';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Settings } from '../shared/models/settings';
 import { CompareService } from './compare.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -22,6 +21,12 @@ import { PsatIntegrationService } from '../shared/connected-inventory/psat-integ
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { copyObject, getNewIdString } from '../shared/helperFunctions';
+import { PsatRouteData } from './routing/stepped-routes';
+
+/**
+ * Tabs that are gated by the setup process, i.e. setupDone.
+ */
+const SETUP_GATED_TABS: Array<string> = ['assessment', 'diagram', 'report', 'sankey'];
 
 @Component({
     selector: 'app-psat',
@@ -71,6 +76,7 @@ export class PsatComponent implements OnInit {
   addNewSub: Subscription;
   modificationExists: boolean = false;
   mainTabSub: Subscription;
+  routerEventsSub: Subscription;
   secondaryTabSub: Subscription;
   calcTabSub: Subscription;
   openModSub: Subscription;
@@ -87,7 +93,6 @@ export class PsatComponent implements OnInit {
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
   constructor(
-    private assessmentService: AssessmentService,
     private router: Router,
     private psatService: PsatService,
     private psatIntegrationService: PsatIntegrationService,
@@ -115,7 +120,9 @@ export class PsatComponent implements OnInit {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'assessment' }});
       } else { 
         this._psat = (JSON.parse(JSON.stringify(this.assessment.psat)));
+        this.psatTabService.assessmentId = this.assessment.id;
         this.initModificationState();
+        this.syncMainTabFromRoute();
 
         let fromConnectedItem = this.activatedRoute.snapshot.queryParamMap.get('fromConnectedItem');
         if (fromConnectedItem) {
@@ -133,10 +140,11 @@ export class PsatComponent implements OnInit {
       }
     });
     
-    let tmpTab = this.assessmentService.getStartingTab();
-    if (tmpTab) {
-      this.psatTabService.mainTab.next(tmpTab);
-    }
+    this.routerEventsSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.syncMainTabFromRoute();
+    });
     this.mainTabSub = this.psatTabService.mainTab.subscribe(val => {
       this.mainTab = val;
       if (this.mainTab == 'diagram') {
@@ -218,6 +226,8 @@ export class PsatComponent implements OnInit {
     if (this.calcTabSub) this.calcTabSub.unsubscribe();
     if (this.secondaryTabSub) this.secondaryTabSub.unsubscribe();
     if (this.mainTabSub) this.mainTabSub.unsubscribe();
+    if (this.routerEventsSub) this.routerEventsSub.unsubscribe();
+    this.psatTabService.assessmentId = undefined;
     if (this.stepTabSubscription) this.stepTabSubscription.unsubscribe();    
     this.showExportModalSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
@@ -237,8 +247,22 @@ export class PsatComponent implements OnInit {
   }
 
   
+  /**
+   * The route is the source of truth for the main tab. Tabs the banner gates behind setup redirect to baseline when reached by URL or history.
+   */
+  syncMainTabFromRoute() {
+    const mainView: string = (this.activatedRoute.firstChild?.snapshot.data as PsatRouteData)?.mainView;
+    if (!mainView || !this.assessment) {
+      return;
+    }
+    if (!this.assessment.psat.setupDone && SETUP_GATED_TABS.includes(mainView)) {
+      this.router.navigate(['/psat', this.assessment.id, 'baseline'], { replaceUrl: true });
+    } else {
+      this.psatTabService.mainTab.next(mainView);
+    }
+  }
+
   redirectFromConnectedInventory() {
-    this.psatTabService.mainTab.next('baseline');
     this.psatTabService.stepTab.next('motor');
   }
 
@@ -325,7 +349,7 @@ export class PsatComponent implements OnInit {
       return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
       let tmpForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this._psat.inputs, true, this._psat.inputs.whatIfScenario);
-      return tmpForm.valid;
+      return tmpForm.valid && this._psat.setupDone;
     }
   }
 
@@ -401,11 +425,11 @@ export class PsatComponent implements OnInit {
   }
 
   goToReport() {
-    this.psatTabService.mainTab.next('report');
+    this.psatTabService.goToMainTab('report');
   }
 
   closeReport() {
-    this.psatTabService.mainTab.next('assessment');
+    this.psatTabService.goToMainTab('assessment');
   }
 
   selectModificationModal() {
@@ -480,7 +504,7 @@ export class PsatComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.psatTabService.mainTab.next('baseline');
+      this.psatTabService.goToMainTab('baseline');
       this.psatTabService.stepTab.next('baseline');
     }
     this.showUpdateUnitsModal = false;

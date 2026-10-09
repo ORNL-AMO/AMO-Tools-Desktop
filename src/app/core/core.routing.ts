@@ -3,6 +3,7 @@ import { diagramResolver } from '../water-process-diagram/diagram.resolver';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { PhastComponent } from '../phast/phast.component';
 import { PsatComponent } from '../psat/psat.component';
+import { psatRoutes } from '../psat/routing/psat.routing';
 import { FsatComponent } from '../fsat/fsat.component';
 import { fsatRoutes } from '../fsat/routing/fsat.routing';
 import { FsatAssessmentResolver } from '../fsat/routing/fsat-assessment.resolver';
@@ -562,7 +563,8 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'psat/:id',
-    component: PsatComponent
+    component: PsatComponent,
+    children: psatRoutes
   },
   {
     path: 'fsat/:id',
