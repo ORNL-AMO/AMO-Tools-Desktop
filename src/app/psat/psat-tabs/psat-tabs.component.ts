@@ -134,7 +134,7 @@ export class PsatTabsComponent implements OnInit {
         this.psatTabService.stepTab.next(str);
       }
     } else if (str == 'field-data') {
-      let tmpBool = this.checkMotorInvalid();
+      let tmpBool = this.checkPumpFluidInvalid() || this.checkMotorInvalid();
       if (!tmpBool == true) {
         this.psatTabService.stepTab.next(str);
       }
@@ -187,14 +187,7 @@ export class PsatTabsComponent implements OnInit {
   checkMotorStatus() {
     let pumpFluidInvalid: boolean = this.checkPumpFluidInvalid();
     let motorInvalid: boolean = this.checkMotorInvalid();
-    let isMod: boolean;
-    if (this.psat.modifications !== undefined && this.psat.modifications !== null) {
-      isMod = true;
-    }
-    else {
-      isMod = false;
-    }
-    let motorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, isMod);
+    let motorWarnings: MotorWarnings = this.psatWarningService.checkMotorWarnings(this.psat, this.settings, false);
     let checkWarnings: boolean = this.psatWarningService.checkWarningsExist(motorWarnings);
     if (pumpFluidInvalid) {
       this.motorClassStatus = ['disabled'];
@@ -251,7 +244,10 @@ export class PsatTabsComponent implements OnInit {
   }
 
   continue() {
-    this.psatTabService.continue();
+    // * [disabled] on the chevron <a> does not block clicks
+    if (this.getCanContinue()) {
+      this.psatTabService.continue();
+    }
   }
 
   back() {
@@ -262,6 +258,9 @@ export class PsatTabsComponent implements OnInit {
     if (this.stepTab == 'baseline') {
       return true;
     }
+    else if (this.stepTab == 'operations') {
+      return !this.checkOperationsInvalid();
+    }
     else if (this.stepTab == 'pump-fluid') {
       let tmpForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(this.psat.inputs);
       return tmpForm.valid;
@@ -270,7 +269,7 @@ export class PsatTabsComponent implements OnInit {
       return tmpForm.valid;
     } else if (this.stepTab == 'field-data') {
       let tmpForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(this.psat.inputs, true, this.psat.inputs.whatIfScenario);
-      return tmpForm.valid;
+      return tmpForm.valid && this.psat.setupDone;
     }
   }
 

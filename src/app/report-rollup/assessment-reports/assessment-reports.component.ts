@@ -134,7 +134,12 @@ export class AssessmentReportsComponent implements OnInit {
     let tab: string;
     let itemSegment: string;
     if (assessment.type === 'PSAT') {
-      itemSegment = '/psat/';
+      let psatTab: string = 'baseline';
+      if (assessment.psat.setupDone && !assessment.isExample) {
+        psatTab = 'assessment';
+      }
+      this.dashboardService.navigateWithSidebarOptions('/psat/' + assessment.id + '/' + psatTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type === 'PHAST') {
       itemSegment = '/phast/';
     } else if (assessment.type === 'FSAT') {

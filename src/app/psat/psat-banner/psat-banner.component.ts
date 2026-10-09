@@ -63,9 +63,9 @@ export class PsatBannerComponent implements OnInit {
 
   changeTab(str: string) {
     if (str == 'baseline' || str == 'calculators') {
-      this.psatTabService.mainTab.next(str);
+      this.psatTabService.goToMainTab(str);
     } else if (this.assessment.psat.setupDone) {
-      this.psatTabService.mainTab.next(str);
+      this.psatTabService.goToMainTab(str);
     }
     this.collapseBanner();
   }
@@ -75,31 +75,11 @@ export class PsatBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'calculators') {
-      this.psatTabService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.psatTabService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.psatTabService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.psatTabService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.psatTabService.mainTab.next('baseline');
-    }
+    this.psatTabService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.psatTabService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.psatTabService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.psatTabService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.psatTabService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.psatTabService.mainTab.next('calculators');
-    }
+    this.psatTabService.continueMainTab();
   }
 
   openExportModal() {
