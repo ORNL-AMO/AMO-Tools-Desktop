@@ -22,7 +22,6 @@ export class HeatEnergyComponent {
   form: FormGroup;
   showBoilerEfficiencyModal: boolean = false;
   annualEnergy: number = 0;
-  // * fuel-fired heat only - energy in the fuel's native unit (MMBtu/yr ; GJ/yr), shown below kWh/yr
   annualFuelEnergy: number;
   fuelEnergyUnit: string;
   annualCost: number = 0;

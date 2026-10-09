@@ -353,15 +353,25 @@ export const calculateBoilerWaterResults = (inputData: BoilerWater, hoursPerYear
   return results;
 }
 
-export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYear: number, WaterAssessmentInstance): CoolingTowerResults => {
+/**
+* Calculate cooling tower losses. Suite inputs are Imperial (degF based) - Metric inputs are converted before calling the suite.
+* @param unitsOfMeasure units the inputData values are in
+*/
+export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYear: number, WaterAssessmentInstance, unitsOfMeasure?: string): CoolingTowerResults => {
   const suiteApiInputData = JSON.parse(JSON.stringify(inputData));
   hoursPerYear = convertNullInputValueForObjectConstructor(hoursPerYear);
   suiteApiInputData.tonnage = convertNullInputValueForObjectConstructor(suiteApiInputData.tonnage);
   suiteApiInputData.loadFactor = convertNullInputValueForObjectConstructor(suiteApiInputData.loadFactor);
   suiteApiInputData.loadFactor = suiteApiInputData.loadFactor / 100;
   suiteApiInputData.evaporationRateDegree = convertNullInputValueForObjectConstructor(suiteApiInputData.evaporationRateDegree);
-  suiteApiInputData.evaporationRateDegree = suiteApiInputData.evaporationRateDegree / 100;
   suiteApiInputData.temperatureDrop = convertNullInputValueForObjectConstructor(suiteApiInputData.temperatureDrop);
+  if (unitsOfMeasure === 'Metric') {
+    // * temperature differences: 1 degC = 1.8 degF
+    suiteApiInputData.temperatureDrop = suiteApiInputData.temperatureDrop * 1.8;
+    // * % per 10 degC -> % per 10 degF
+    suiteApiInputData.evaporationRateDegree = suiteApiInputData.evaporationRateDegree / 1.8;
+  }
+  suiteApiInputData.evaporationRateDegree = suiteApiInputData.evaporationRateDegree / 100;
   suiteApiInputData.makeupConductivity = convertNullInputValueForObjectConstructor(suiteApiInputData.makeupConductivity);
   suiteApiInputData.blowdownConductivity = convertNullInputValueForObjectConstructor(suiteApiInputData.blowdownConductivity);
 

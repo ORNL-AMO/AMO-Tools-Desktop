@@ -45,7 +45,6 @@ const getHeatEnergyErrors = (heatEnergy: HeatEnergy, unitsOfMeasure: string): He
 interface EnergyResult {
     annualEnergy: number,
     annualCost: number,
-    // * fuel-fired heat only - energy in the fuel's native unit (MMBtu/yr ; GJ/yr), shown below kWh/yr
     annualFuelEnergy?: { value: number, unit: string },
 }
 
@@ -57,10 +56,10 @@ const EnergyResultReadout = ({ result }: { result: EnergyResult }) => (
     <Box sx={{ display: 'flex', paddingY: 1, textAlign: 'center' }}>
         <Box sx={{ flex: 1 }}>
             <Typography variant="caption" component="div">Energy</Typography>
-            <Typography variant="body2" fontWeight="bold">{formatAnnualEnergy(result.annualEnergy)}</Typography>
             {result.annualFuelEnergy &&
                 <Typography variant="body2" fontWeight="bold">{formatNumber(result.annualFuelEnergy.value)} {result.annualFuelEnergy.unit}</Typography>
             }
+            <Typography variant="body2" fontWeight="bold">{formatAnnualEnergy(result.annualEnergy)}</Typography>
         </Box>
         <Box sx={{ flex: 1 }}>
             <Typography variant="caption" component="div">Annual Cost</Typography>
@@ -83,6 +82,11 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
         setMotorEnergy(node.data.addedMotorEnergy || []);
         setExpandedIndices(new Set());
     }, [node.data.diagramNodeId]);
+
+    useEffect(() => {
+        setHeatEnergy(node.data.heatEnergy || getDefaultHeatEnergy());
+        setMotorEnergy(node.data.addedMotorEnergy || []);
+    }, [settings.unitsOfMeasure]);
 
     useEffect(() => {
         if (showHeatEnergy) {
