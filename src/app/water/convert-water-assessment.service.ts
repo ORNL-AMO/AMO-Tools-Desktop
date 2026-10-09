@@ -126,15 +126,15 @@ export class ConvertWaterAssessmentService {
           };
         });
       
-      waterUsingSystem.processUse = this.convertProcessUse(waterUsingSystem.processUse, newSettings, oldSettings);
-      waterUsingSystem.coolingTower = this.convertCoolingTower(waterUsingSystem.coolingTower, newSettings, oldSettings);
-      waterUsingSystem.boilerWater = this.convertBoilerWater(waterUsingSystem.boilerWater, newSettings, oldSettings);
-      waterUsingSystem.kitchenRestroom = this.convertKitchenRestroom(waterUsingSystem.kitchenRestroom, newSettings, oldSettings);
-      waterUsingSystem.landscaping = this.convertLandscaping(waterUsingSystem.landscaping, newSettings, oldSettings);
+      waterUsingSystem.processUse = this.convertProcessUse(waterUsingSystem.processUse, oldSettings, newSettings);
+      waterUsingSystem.coolingTower = this.convertCoolingTower(waterUsingSystem.coolingTower, oldSettings, newSettings);
+      waterUsingSystem.boilerWater = this.convertBoilerWater(waterUsingSystem.boilerWater, oldSettings, newSettings);
+      waterUsingSystem.kitchenRestroom = this.convertKitchenRestroom(waterUsingSystem.kitchenRestroom, oldSettings, newSettings);
+      waterUsingSystem.landscaping = this.convertLandscaping(waterUsingSystem.landscaping, oldSettings, newSettings);
       
-      waterUsingSystem.heatEnergy = this.convertHeatEnergy(waterUsingSystem.heatEnergy, newSettings, oldSettings);
+      waterUsingSystem.heatEnergy = this.convertHeatEnergy(waterUsingSystem.heatEnergy, oldSettings, newSettings);
       waterUsingSystem.addedMotorEnergy.map(motorEnergy => {
-        return this.convertMotorEnergy(motorEnergy, newSettings, oldSettings);
+        return this.convertMotorEnergy(motorEnergy, oldSettings, newSettings);
       });
 
       waterUsingSystem.userEnteredData = this.convertUserEnteredFlowData(waterUsingSystem.userEnteredData, oldSettings, newSettings);
@@ -233,15 +233,18 @@ export class ConvertWaterAssessmentService {
   convertCoolingTower(coolingTower: CoolingTower, oldSettings: Settings, newSettings: Settings) {
     if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       coolingTower.tonnage = this.convertUnitsService.value(coolingTower.tonnage).from('Mgal').to('m3');
-      coolingTower.temperatureDrop = this.convertUnitsService.value(coolingTower.temperatureDrop).from('F').to('C');
+      coolingTower.temperatureDrop = this.convertUnitsService.value(coolingTower.temperatureDrop).from('R').to('K');
+      coolingTower.evaporationRateDegree = coolingTower.evaporationRateDegree * 1.8;
     } else if (oldSettings.unitsOfMeasure == 'Metric' && newSettings.unitsOfMeasure == 'Imperial') {
       coolingTower.tonnage = this.convertUnitsService.value(coolingTower.tonnage).from('m3').to('Mgal');
-      coolingTower.temperatureDrop = this.convertUnitsService.value(coolingTower.temperatureDrop).from('C').to('F');
+      coolingTower.temperatureDrop = this.convertUnitsService.value(coolingTower.temperatureDrop).from('K').to('R');
+      coolingTower.evaporationRateDegree = coolingTower.evaporationRateDegree / 1.8;
     }
 
     coolingTower.tonnage = this.convertUnitsService.roundVal(coolingTower.tonnage, newSettings.flowDecimalPrecision);
     coolingTower.loadFactor = this.convertUnitsService.roundVal(coolingTower.loadFactor, newSettings.flowDecimalPrecision);
     coolingTower.temperatureDrop = this.convertUnitsService.roundVal(coolingTower.temperatureDrop, newSettings.flowDecimalPrecision);
+    coolingTower.evaporationRateDegree = this.convertUnitsService.roundVal(coolingTower.evaporationRateDegree, newSettings.flowDecimalPrecision);
     coolingTower.makeupConductivity = this.convertUnitsService.roundVal(coolingTower.makeupConductivity, newSettings.flowDecimalPrecision);
     coolingTower.blowdownConductivity = this.convertUnitsService.roundVal(coolingTower.blowdownConductivity, newSettings.flowDecimalPrecision);
 

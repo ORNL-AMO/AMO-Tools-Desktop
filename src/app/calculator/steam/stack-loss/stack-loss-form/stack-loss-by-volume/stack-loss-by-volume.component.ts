@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges, OnInit, OnDestroy } from '@angular/core';
 import { PhastService } from '../../../../../phast/phast.service';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 import { Settings } from '../../../../../shared/models/settings';
@@ -8,6 +8,7 @@ import { StackLossService } from '../../stack-loss.service';
 import { FlueGasMaterial } from '../../../../../shared/models/materials';
 import { FlueGasMaterialDbService } from '../../../../../indexedDb/flue-gas-material-db.service';
 import { roundVal } from '../../../../../shared/helperFunctions';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-stack-loss-by-volume',
@@ -15,7 +16,7 @@ import { roundVal } from '../../../../../shared/helperFunctions';
     styleUrls: ['./stack-loss-by-volume.component.css'],
     standalone: false
 })
-export class StackLossByVolumeComponent implements OnChanges {
+export class StackLossByVolumeComponent implements OnChanges, OnInit, OnDestroy {
   @Input()
   stackLossForm: UntypedFormGroup;
   @Output('emitCalculate')
@@ -30,6 +31,7 @@ export class StackLossByVolumeComponent implements OnChanges {
   @ViewChild('materialModal', { static: false }) public materialModal: ModalDirective;
 
   options: Array<FlueGasMaterial> = [];
+  optionsSub: Subscription;
   calculationMethods: Array<string> = [
     'Excess Air',
     'Oxygen in Flue Gas'
@@ -51,6 +53,16 @@ export class StackLossByVolumeComponent implements OnChanges {
     this.tempMin = this.convertUnitsService.value(this.tempMin).from('F').to(this.settings.steamTemperatureMeasurement);
     this.tempMin = this.convertUnitsService.roundVal(this.tempMin, 1);
     this.checkStackLossTemp();
+  }
+
+  ngOnInit() {
+    this.optionsSub = this.flueGasMaterialDbService.dbFlueGasMaterials.subscribe(() => {
+      this.setOptions();
+    });
+  }
+
+  ngOnDestroy() {
+    this.optionsSub.unsubscribe();
   }
 
   setOptions(){

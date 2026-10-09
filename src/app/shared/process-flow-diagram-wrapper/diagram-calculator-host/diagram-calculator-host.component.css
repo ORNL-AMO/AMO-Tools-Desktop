@@ -1,0 +1,9 @@
+/* * full screen backdrop for calculator modals that don't provide their own - centers fixed-position cards horizontally */
+.calculator-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 7999;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}

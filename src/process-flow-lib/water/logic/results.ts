@@ -353,15 +353,25 @@ export const calculateBoilerWaterResults = (inputData: BoilerWater, hoursPerYear
   return results;
 }
 
-export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYear: number, WaterAssessmentInstance): CoolingTowerResults => {
+/**
+* Calculate cooling tower losses. Suite inputs are Imperial (degF based) - Metric inputs are converted before calling the suite.
+* @param unitsOfMeasure units the inputData values are in
+*/
+export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYear: number, WaterAssessmentInstance, unitsOfMeasure?: string): CoolingTowerResults => {
   const suiteApiInputData = JSON.parse(JSON.stringify(inputData));
   hoursPerYear = convertNullInputValueForObjectConstructor(hoursPerYear);
   suiteApiInputData.tonnage = convertNullInputValueForObjectConstructor(suiteApiInputData.tonnage);
   suiteApiInputData.loadFactor = convertNullInputValueForObjectConstructor(suiteApiInputData.loadFactor);
   suiteApiInputData.loadFactor = suiteApiInputData.loadFactor / 100;
   suiteApiInputData.evaporationRateDegree = convertNullInputValueForObjectConstructor(suiteApiInputData.evaporationRateDegree);
-  suiteApiInputData.evaporationRateDegree = suiteApiInputData.evaporationRateDegree / 100;
   suiteApiInputData.temperatureDrop = convertNullInputValueForObjectConstructor(suiteApiInputData.temperatureDrop);
+  if (unitsOfMeasure === 'Metric') {
+    // * temperature differences: 1 degC = 1.8 degF
+    suiteApiInputData.temperatureDrop = suiteApiInputData.temperatureDrop * 1.8;
+    // * % per 10 degC -> % per 10 degF
+    suiteApiInputData.evaporationRateDegree = suiteApiInputData.evaporationRateDegree / 1.8;
+  }
+  suiteApiInputData.evaporationRateDegree = suiteApiInputData.evaporationRateDegree / 100;
   suiteApiInputData.makeupConductivity = convertNullInputValueForObjectConstructor(suiteApiInputData.makeupConductivity);
   suiteApiInputData.blowdownConductivity = convertNullInputValueForObjectConstructor(suiteApiInputData.blowdownConductivity);
 
@@ -552,64 +562,96 @@ export const getWaterTrueCost = (
   return trueCost;
 }
 
+const isMissingValue = (value: number): boolean => value === undefined || value === null || Number.isNaN(value);
+
+/**
+* Get MotorEnergy power draw (kW, equivalent to kWh/hr). Returns 0 until all power inputs are entered.
+* @param motorEnergy MotorEnergy object
+*/
+export const getMotorEnergyPower = (motorEnergy: MotorEnergy, unitsOfMeasure: string): number => {
+  //  N = Number of pumps, fans or motors.
+  // L = Load Factor
+  // hp = Horsepower
+  // h = Efficiency
+  // P = (0.746 * hp * N * L / h)
+  const { ratedPower, numberUnits, loadFactor, systemEfficiency } = motorEnergy;
+  if (!systemEfficiency || [ratedPower, numberUnits, loadFactor].some(isMissingValue)) {
+    return 0;
+  }
+  const ratedPowerKW = unitsOfMeasure === 'Imperial' ? ratedPower * 0.7457 : ratedPower;
+  return ratedPowerKW * numberUnits * loadFactor / systemEfficiency;
+}
+
+/**
+* Get annual MotorEnergy use (kWh/yr). Returns 0 until operating hours and all power inputs are entered.
+* @param motorEnergy MotorEnergy object
+*/
+export const getMotorEnergyKWh = (motorEnergy: MotorEnergy, unitsOfMeasure: string): number => {
+  // H = Hours of Operation per Year
+  // E = Pump Energy Use (kWh)
+  // E = P * H
+  if (isMissingValue(motorEnergy.hoursPerYear)) {
+    return 0;
+  }
+  return getMotorEnergyPower(motorEnergy, unitsOfMeasure) * motorEnergy.hoursPerYear;
+}
+
 /**
 * Get cost for MotorEnergy
 * @param motorEnergy MotorEnergy object
-* @param energyUnitCost 
+* @param energyUnitCost
 */
 export const getMotorEnergyCost = (motorEnergy: MotorEnergy, energyUnitCost: number, unitsOfMeasure: string): number => {
-  //  N = Number of pumps, fans or motors.
-  // H = Hours of Operation per Year
-  // L = Load Factor
-  // hp = Horsepowe
-  // h = Efficiency
-  // E = Pump Energy Use (kWh)
+  return energyUnitCost * getMotorEnergyKWh(motorEnergy, unitsOfMeasure);
+}
 
-  // E = (0.746 * hp * N * L / h) * H
-  let motorEnergyCost = 0;
-  if (motorEnergy.systemEfficiency) {
-    const ratedPowerKW = unitsOfMeasure === 'Imperial' ? motorEnergy.ratedPower * 0.7457 : motorEnergy.ratedPower;
-    motorEnergyCost = energyUnitCost * ((ratedPowerKW * motorEnergy.numberUnits * motorEnergy.loadFactor / motorEnergy.systemEfficiency) * motorEnergy.hoursPerYear);
+/**
+* Get annual heat energy in wastewater in native units (Million Btu ; GJ)
+* @param heatEnergy HeatEnergy object, systemWaterUse must be set from the water balance
+*/
+export const getHeatEnergyUse = (systemHeatEnergy: HeatEnergy, unitsOfMeasure: string): number => {
+  if (!systemHeatEnergy.heaterEfficiency) {
+    return 0;
   }
-  return motorEnergyCost;
+  const incomingTemp = systemHeatEnergy.incomingTemp ?? 0;
+  const outgoingTemp = systemHeatEnergy.outgoingTemp ?? 0;
+  const systemWaterUse = systemHeatEnergy.systemWaterUse ?? 0;
+  const densityOfWater = unitsOfMeasure === 'Imperial' ? 8.345385 : 1000;
+  const specificHeatWater = unitsOfMeasure === 'Imperial' ? 1.00 : 4.1868 / 1000000; // GJ/kg-°C
+
+  //  V = Quantity of water used by system (Million Gallon ; m^3) (from water balance)
+  // r = Density of Water = 8.345385 lb/gal = 8.345385 million lb/ million gal (constant)
+  // r = 1000 kg/m3  (metrics units)
+  // Cp = Specific Heat of Water = 1.00 Btu/lb-°F = 1.0 MMBtu/million lb-°F (constant)
+  // Cp = 4.1868 kJ/kg-°C or 4.1868/1000000 GJ/kg-°C (metrics units)
+  // Ti = Average Temperature of Source Water (°F ; °C) (user input)
+  // To = Average Temperature of Leaving Wastewater (°F ; °C) (user input)
+  // h = Heating Efficiency = 0.78 (default) (user input)
+  // Q = Heat Energy in Wastewater (Million Btu ; GJ) (calculated)
+
+  // Q = [V*r*Cp*(To-Ti)]/h
+  return (systemWaterUse * densityOfWater * specificHeatWater * (outgoingTemp - incomingTemp)) / (systemHeatEnergy.heaterEfficiency / 100);
+}
+
+/**
+* Get annual heat energy in wastewater converted to kWh
+*/
+export const getHeatEnergyKWh = (systemHeatEnergy: HeatEnergy, unitsOfMeasure: string): number => {
+  const kWhPerUnit = unitsOfMeasure === 'Imperial' ? 293.07107 : 277.77778; // kWh per MMBtu ; kWh per GJ
+  return getHeatEnergyUse(systemHeatEnergy, unitsOfMeasure) * kWhPerUnit;
 }
 
 /**
 * Get Cost for HeatEnergy
 * @param heatEnergy HeatEnergy object
-* @param energyUnitCost Cost of energy per kWh or MMBTU / GJ
+* @param energyUnitCost Cost of energy per kWh (electricity) or MMBTU / GJ (fuel)
 */
 export const getHeatEnergyCost = (systemHeatEnergy: HeatEnergy, energyUnitCost: number, unitsOfMeasure: string): number => {
-  let heatEnergyCost = 0;
-  if (systemHeatEnergy.heaterEfficiency) {
-    const heatEnergy: HeatEnergy = {
-      incomingTemp: systemHeatEnergy.incomingTemp ?? 0,
-      outgoingTemp: systemHeatEnergy.outgoingTemp ?? 0,
-      heaterEfficiency: systemHeatEnergy.heaterEfficiency ?? 0,
-      wasteWaterDischarge: systemHeatEnergy.wasteWaterDischarge ?? 0,
-      hoursPerYear: systemHeatEnergy.hoursPerYear ?? 0,
-      heatingFuelType: systemHeatEnergy.heatingFuelType ?? 0,
-      systemWaterUse: systemHeatEnergy.systemWaterUse ?? 0,
-    }
-    const densityOfWater = unitsOfMeasure === 'Imperial' ? 8.345385 : 1000;
-    const specificHeatWater = unitsOfMeasure === 'Imperial' ? 1.00 : 4.1868 / 1000000; // GJ/kg-°C
-
-    //  V = Quantity of water used by system (Million Gallon ; m^3) (from water balance)
-    // r = Density of Water = 8.345385 lb/gal = 8.345385 million lb/ million gal (constant)
-    // r = 1000 kg/m3  (metrics units)
-    // Cp = Specific Heat of Water = 1.00 Btu/lb-°F = 1.0 MMBtu/million lb-°F (constant)
-    // Cp = 4.1868 kJ/kg-°C or 4.1868/1000000 GJ/kg-°C (metrics units)
-    // Ti = Average Temperature of Source Water (°F ; °C) (user input)
-    // To = Average Temperature of Leaving Wastewater (°F ; °C) (user input)
-    // h = Heating Efficiency = 0.78 (default) (user input)
-    // Q = Heat Energy in Wastewater (Million Btu ; GJ) (calculated)
-
-    // Q = [V*r*Cp*(To-Ti)]/h
-
-    const energy = (heatEnergy.systemWaterUse * densityOfWater * specificHeatWater * (heatEnergy.outgoingTemp - heatEnergy.incomingTemp)) / (heatEnergy.heaterEfficiency / 100);
-    heatEnergyCost = energy * energyUnitCost;
-  }
-  return heatEnergyCost;
+  // * electricity is priced per kWh, fuel per MMBtu / GJ
+  const energy = systemHeatEnergy.heatingFuelType === 0
+    ? getHeatEnergyKWh(systemHeatEnergy, unitsOfMeasure)
+    : getHeatEnergyUse(systemHeatEnergy, unitsOfMeasure);
+  return energy * energyUnitCost;
 }
 
 
