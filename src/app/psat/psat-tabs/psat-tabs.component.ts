@@ -134,7 +134,7 @@ export class PsatTabsComponent implements OnInit {
         this.psatTabService.stepTab.next(str);
       }
     } else if (str == 'field-data') {
-      let tmpBool = this.checkMotorInvalid();
+      let tmpBool = this.checkPumpFluidInvalid() || this.checkMotorInvalid();
       if (!tmpBool == true) {
         this.psatTabService.stepTab.next(str);
       }

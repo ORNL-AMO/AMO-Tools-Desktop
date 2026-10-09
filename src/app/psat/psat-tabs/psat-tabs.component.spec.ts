@@ -251,6 +251,15 @@ describe('PsatTabsComponent', () => {
 
       expect(stepTabSubject.value).toBe('motor');
     });
+
+    it('does not navigate to field-data when pump/fluid data is invalid', () => {
+      pumpFluidServiceSpy.getFormFromObj.and.returnValue(makeForm(false));
+      stepTabSubject.next('pump-fluid');
+
+      component.changeSubTab('field-data');
+
+      expect(stepTabSubject.value).toBe('pump-fluid');
+    });
   });
 
   describe('continue / back', () => {
