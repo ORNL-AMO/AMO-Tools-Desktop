@@ -94,12 +94,6 @@ export class InventorySummaryOverviewService {
   }
 
 
-  getDataAndResultsFromPumpItem(pumpItem: PumpItem, settings: Settings): { data: PumpItem, results: PumpInventoryResults } {
-    let co2SavingsData: Co2SavingsData = this.pumpInventoryService.pumpInventoryData.getValue().co2SavingsData;
-    let pumpInventoryResults: PumpInventoryResults = this.getResults(pumpItem, settings, co2SavingsData);
-    return { data: pumpItem, results: pumpInventoryResults };
-  }
-
 
   getResults(pumpItem: PumpItem, settings: Settings, co2SavingsData?: Co2SavingsData): PumpInventoryResults {
     let results: PumpInventoryResults = {
@@ -108,7 +102,7 @@ export class InventorySummaryOverviewService {
       emissionsOutput: 0,
     };
     if (this.pumpInventoryService.isPumpValid(pumpItem)) {
-      let differentialPressurePsi: number = pumpItem.pumpEquipment.designDifferentialPressure;
+      let differentialPressurePsi: number = pumpItem.fieldMeasurements.operatingDifferentialPressure;
       if (settings.unitsOfMeasure == 'Metric') {
         differentialPressurePsi = this.convertUnitsService.value(differentialPressurePsi).from('Pa').to('psi');
       }
@@ -147,10 +141,10 @@ export class InventorySummaryOverviewService {
 
       this.psatService.convertInputs(psatInputs, settings);
       let psatResults: PsatOutputs = this.psatService.resultsExisting(psatInputs, settings);
-      results.energyUse = psatResults.annual_energy;
+      results.energyUse = this.convertUnitsService.value(psatResults.annual_energy).from('MWh').to('kWh');
       results.energyCost = results.energyUse * settings.electricityCost;
       if (co2SavingsData) {
-        co2SavingsData.electricityUse = results.energyUse;
+        co2SavingsData.electricityUse = psatResults.annual_energy;
         results.emissionsOutput = this.assessmentCo2SavingsService.getCo2EmissionsResult(co2SavingsData, settings);
 
       }
