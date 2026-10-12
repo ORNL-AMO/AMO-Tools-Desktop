@@ -60,7 +60,7 @@ export class BatchAnalysisTableComponent implements OnInit {
     this.motorCatalogService.selectedDepartmentId.next(batchAnalysisItem.departmentId);
     this.motorCatalogService.selectedMotorItem.next(batchAnalysisItem.motorItem);
     this.motorInventoryService.setupTab.next('motor-catalog');
-    this.motorInventoryService.mainTab.next('setup');
+    this.motorInventoryService.goToMainTab('setup');
   }
 
   updateTableString() {

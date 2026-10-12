@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { MOTOR_INVENTORY_MAIN_VIEWS, MotorInventoryRouteData } from './motor-inventory.routing';
 import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyDisplayOptions, FilterInventorySummary } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import * as _ from 'lodash';
@@ -17,7 +19,8 @@ export class MotorInventoryService {
   helpPanelTab: BehaviorSubject<string>;
   filterInventorySummary: BehaviorSubject<FilterInventorySummary>;
   showExportModal: BehaviorSubject<boolean>;
-  constructor() {
+  currentInventoryId: number;
+  constructor(private router: Router) {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
     let inventoryData: MotorInventoryData = this.initInventoryData();
@@ -35,6 +38,43 @@ export class MotorInventoryService {
       ratedPower: new Array(),
       ratedVoltage: new Array()
     });
+  }
+
+  /**
+   * Pushes the main tab value found in the route data into `mainTab`.
+   * @param snapshot snapshot to walk down through its `firstChild` chain
+   */
+  syncMainTabFromRoute(snapshot: ActivatedRouteSnapshot) {
+    while (snapshot) {
+      let data: MotorInventoryRouteData = snapshot.data;
+      if (data.mainView && data.mainView !== this.mainTab.getValue()) {
+        this.mainTab.next(data.mainView);
+      }
+      snapshot = snapshot.firstChild;
+    }
+  }
+
+  /**
+   * @param view one of `MOTOR_INVENTORY_MAIN_VIEWS`
+   */
+  goToMainTab(view: string) {
+    this.router.navigate(['/motor-inventory', this.currentInventoryId, view]);
+  }
+
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
+  backMainTab() {
+    this.stepMainTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const index: number = MOTOR_INVENTORY_MAIN_VIEWS.indexOf(this.mainTab.getValue());
+    const view: string = MOTOR_INVENTORY_MAIN_VIEWS[index + offset];
+    if (index !== -1 && view) {
+      this.goToMainTab(view);
+    }
   }
 
   updateMotorItem(selectedMotor: MotorItem) {
