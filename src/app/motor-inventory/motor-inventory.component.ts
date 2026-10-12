@@ -1,11 +1,11 @@
 import { Component, OnInit, HostListener, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { MotorInventoryService } from './motor-inventory.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
  
 import { MotorInventoryData, MotorInventoryDepartment, MotorItem } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { MotorCatalogService } from './motor-inventory-setup/motor-catalog/motor-catalog.service';
@@ -36,6 +36,7 @@ export class MotorInventoryComponent implements OnInit {
   setupTab: string;
   mainTab: string;
   mainTabSub: Subscription;
+  routerEventsSub: Subscription;
 
   modalOpenSub: Subscription;
   isModalOpen: boolean;
@@ -60,6 +61,7 @@ export class MotorInventoryComponent implements OnInit {
     this.analyticsService.sendEvent('view-motor-inventory');
     this.activatedRoute.params.subscribe(params => {
       let tmpItemId = Number(params['id']);
+      this.motorInventoryService.currentInventoryId = tmpItemId;
       this.motorInventoryItem = this.inventoryDbService.getById(tmpItemId);
       if (!this.motorInventoryItem) {
         this.router.navigate(['/not-found'], { queryParams: { measurItemType: 'motor inventory' }});
@@ -68,6 +70,8 @@ export class MotorInventoryComponent implements OnInit {
         this.motorInventoryService.settings.next(settings);
         this.motorInventoryItem.motorInventoryData.hasConnectedInventoryItems = this.pumpMotorIntegrationService.getHasConnectedPumpItems(this.motorInventoryItem) || this.compressedAirMotorIntegrationService.getHasConnectedCompressedAirItems(this.motorInventoryItem);
         this.motorInventoryService.motorInventoryData.next(this.motorInventoryItem.motorInventoryData);
+        this.motorInventoryService.setupTab.next('plant-setup');
+        this.motorCatalogService.selectedDepartmentId.next(this.motorInventoryItem.motorInventoryData.departments[0].id);
         if (this.motorInventoryItem.batchAnalysisSettings) {
           this.batchAnalysisService.batchAnalysisSettings.next(this.motorInventoryItem.batchAnalysisSettings);
         }
@@ -77,8 +81,11 @@ export class MotorInventoryComponent implements OnInit {
       if (departmentId && itemId) {
         this.redirectFromConnectedInventory(departmentId, itemId);
       }
+      this.syncMainTabFromRoute();
     });
-
+    this.routerEventsSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => this.syncMainTabFromRoute());
 
     this.mainTabSub = this.motorInventoryService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -105,6 +112,8 @@ export class MotorInventoryComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.routerEventsSub.unsubscribe();
+    this.motorInventoryService.currentInventoryId = undefined;
     this.setupTabSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.motorInventoryDataSub.unsubscribe();
@@ -119,6 +128,10 @@ export class MotorInventoryComponent implements OnInit {
 
   ngAfterViewInit() {
     this.getContainerHeight();
+  }
+
+  syncMainTabFromRoute() {
+    this.motorInventoryService.syncMainTabFromRoute(this.activatedRoute.snapshot);
   }
 
   getContainerHeight() {
@@ -156,7 +169,7 @@ export class MotorInventoryComponent implements OnInit {
     } else if (this.setupTab == 'motor-properties') {
       this.motorInventoryService.setupTab.next('motor-catalog');
     } else if (this.setupTab == 'motor-catalog') {
-      this.motorInventoryService.mainTab.next('summary');
+      this.motorInventoryService.goToMainTab('summary');
     }
   }
 
@@ -182,7 +195,6 @@ export class MotorInventoryComponent implements OnInit {
     let department: MotorInventoryDepartment = this.motorInventoryItem.motorInventoryData.departments.find(department => { return department.id == departmentId });
     let selectedItem: MotorItem = department.catalog.find(motorItem => { return motorItem.id ==  itemId});
     this.motorCatalogService.selectedMotorItem.next(selectedItem);
-    this.motorInventoryService.mainTab.next('setup');
     this.motorInventoryService.setupTab.next('motor-catalog');
   }
 

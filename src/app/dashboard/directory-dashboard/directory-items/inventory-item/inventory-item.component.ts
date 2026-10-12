@@ -12,7 +12,6 @@ import * as _ from 'lodash';
 import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
-import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
 import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
 import { CompressedAirMotorIntegrationService } from '../../../../shared/connected-inventory/compressed-air-motor-integration.service';
 
@@ -45,7 +44,6 @@ export class InventoryItemComponent implements OnInit {
     private dashboardService: DashboardService, 
     private directoryDbService: DirectoryDbService, 
     private settingsDbService: SettingsDbService,
-    private motorInventoryService: MotorInventoryService,
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
@@ -77,8 +75,8 @@ export class InventoryItemComponent implements OnInit {
     let inventoryRoute: string = 'motor-inventory';
     let inventoryTab: string = '';
     if (this.inventoryItem.motorInventoryData) {
-      if (inventoryPage) {
-        this.motorInventoryService.mainTab.next(inventoryPage);
+      if (inventoryPage == 'setup' || inventoryPage == 'summary' || inventoryPage == 'analysis') {
+        inventoryTab = `/${inventoryPage}`;
       }
     } else if (this.inventoryItem.pumpInventoryData) {
       inventoryRoute = 'pump-inventory';

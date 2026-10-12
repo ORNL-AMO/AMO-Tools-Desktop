@@ -107,7 +107,6 @@ export class CreateInventoryComponent implements OnInit {
         let inventoryItem: InventoryItem;
         if (this.newInventoryItemForm.controls.inventoryType.value === 'motorInventory') {
           this.analyticsService.sendEvent('create-inventory', undefined);
-          this.motorInventoryService.mainTab.next('setup');
           this.motorInventoryService.setupTab.next('plant-setup');
           inventoryItem = this.inventoryService.getNewMotorInventoryItem();
           inventoryRoute = 'motor-inventory';

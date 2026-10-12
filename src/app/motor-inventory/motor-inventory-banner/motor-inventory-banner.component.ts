@@ -61,10 +61,6 @@ export class MotorInventoryBannerComponent implements OnInit {
     this.summaryTabSub = this.motorInventoryService.summaryTab.subscribe(val => {
       this.summaryTab = val;
     });
-
-    this.motorInventoryService.setupTab.next('plant-setup');
-    let nextID: string = this.motorInventoryData.departments[0].id;
-    this.motorCatalogService.selectedDepartmentId.next(nextID);  
   }
 
   showSecurityAndPrivacyModal() {
@@ -110,7 +106,7 @@ export class MotorInventoryBannerComponent implements OnInit {
 
 
   setMainTab(str: string) {
-    this.motorInventoryService.mainTab.next(str);
+    this.motorInventoryService.goToMainTab(str);
     this.collapseBanner();
   }
 
@@ -124,19 +120,11 @@ export class MotorInventoryBannerComponent implements OnInit {
   }
 
   back(){
-    if (this.mainTab == 'analysis') {
-      this.motorInventoryService.mainTab.next('summary');
-    } else if (this.mainTab == 'summary') {
-      this.motorInventoryService.mainTab.next('setup');
-    } 
+    this.motorInventoryService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'setup') {
-      this.motorInventoryService.mainTab.next('summary');
-    } else if (this.mainTab == 'summary') {
-      this.motorInventoryService.mainTab.next('analysis');
-    } 
+    this.motorInventoryService.continueMainTab();
   }
 
   backSetupTabs(){
