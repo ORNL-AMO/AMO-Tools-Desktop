@@ -18,7 +18,6 @@ import { MotorInventoryService } from '../../motor-inventory/motor-inventory.ser
 import { firstValueFrom } from 'rxjs';
 import { PumpInventoryService } from '../../pump-inventory/pump-inventory.service';
 import { AnalyticsService } from '../../shared/analytics/analytics.service';
-import { CompressedAirInventoryService } from '../../compressed-air-inventory/compressed-air-inventory.service';
 
 @Component({
     selector: 'app-create-inventory',
@@ -50,7 +49,6 @@ export class CreateInventoryComponent implements OnInit {
     private settingsService: SettingsService,
     private motorInventoryService: MotorInventoryService,
     private pumpInventoryService: PumpInventoryService,    
-    private compressedAirInventoryService: CompressedAirInventoryService,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
@@ -128,8 +126,6 @@ export class CreateInventoryComponent implements OnInit {
         }
         if (this.newInventoryItemForm.controls.inventoryType.value === 'compressedAirInventory') {
           this.analyticsService.sendEvent('create-inventory', undefined);
-          this.compressedAirInventoryService.mainTab.next('setup');
-          this.compressedAirInventoryService.setupTab.next('plant-setup');
           inventoryItem = this.inventoryService.getNewCompressedAirInventoryItem();
           inventoryRoute = 'compressed-air-inventory';
         }

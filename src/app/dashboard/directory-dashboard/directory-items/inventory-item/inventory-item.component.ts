@@ -16,7 +16,6 @@ import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
 import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
 import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
-import { CompressedAirInventoryService } from '../../../../compressed-air-inventory/compressed-air-inventory.service';
 import { CompressedAirMotorIntegrationService } from '../../../../shared/connected-inventory/compressed-air-motor-integration.service';
 
 @Component({
@@ -51,7 +50,6 @@ export class InventoryItemComponent implements OnInit {
     private motorInventoryService: MotorInventoryService,
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
     private pumpInventoryService: PumpInventoryService,
-    private compressedAirInventoryService: CompressedAirInventoryService,
     private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
   ngOnInit(): void {
@@ -80,6 +78,7 @@ export class InventoryItemComponent implements OnInit {
 
   goToInventoryItem(inventoryPage?: string) {
     let inventoryRoute: string = 'motor-inventory';
+    let inventoryTab: string = '';
     if (this.inventoryItem.motorInventoryData) {
       if (inventoryPage) {
         this.motorInventoryService.mainTab.next(inventoryPage);
@@ -91,11 +90,11 @@ export class InventoryItemComponent implements OnInit {
       }
     } else if (this.inventoryItem.compressedAirInventoryData) {
       inventoryRoute = 'compressed-air-inventory';
-      if (inventoryPage) {
-        this.compressedAirInventoryService.mainTab.next(inventoryPage);
+      if (inventoryPage == 'setup' || inventoryPage == 'summary') {
+        inventoryTab = `/${inventoryPage}`;
       }
     }
-    this.dashboardService.navigateWithSidebarOptions(`/${inventoryRoute}/${this.inventoryItem.id}`, {shouldCollapse: true})
+    this.dashboardService.navigateWithSidebarOptions(`/${inventoryRoute}/${this.inventoryItem.id}${inventoryTab}`, {shouldCollapse: true})
 
   }
 
