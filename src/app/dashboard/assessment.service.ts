@@ -48,7 +48,8 @@ export class AssessmentService {
       if (assessment.psat.setupDone && !mainTab && (!assessment.isExample)) {
         this.startingTab = 'assessment';
       }
-      itemSegment = '/psat/';
+      this.dashboardService.navigateWithSidebarOptions('/psat/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type === 'PHAST') {
       if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
         this.startingTab = 'assessment';
@@ -66,7 +67,8 @@ export class AssessmentService {
       }
       itemSegment = '/ssmt/';
     } else if (assessment.type == 'TreasureHunt') {
-      if (assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) {
+      // * Treasure Hunt has no 'assessment' tab; the generic dashboard 'Assessment' link maps to its treasure chest
+      if ((assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) || mainTab == 'assessment') {
         this.startingTab = 'treasure-chest';
       }
       itemSegment = '/treasure-hunt/';

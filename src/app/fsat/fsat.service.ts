@@ -76,7 +76,7 @@ export class FsatService {
      * banner/footer navigation only ever has to call router.navigate(), never mainTab.next() directly.
      */
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
+      filter(event => event instanceof NavigationEnd && event.urlAfterRedirects.startsWith('/fsat/')),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
       const mainView: string = this.getActiveMainView();
