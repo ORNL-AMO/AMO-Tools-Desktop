@@ -239,6 +239,7 @@ export class PumpInventoryService {
         operatingFlowRate: undefined,
         loadEstimationMethod: 1,
         operatingHead: undefined,
+        operatingDifferentialPressure: undefined,
         measuredPower: undefined,
         measuredCurrent: undefined,
         measuredVoltage: undefined,

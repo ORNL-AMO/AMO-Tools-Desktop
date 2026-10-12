@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { FieldMeasurements } from '../../../pump-inventory';
+import { isPositiveDisplacementPump } from '../../../../psat/psatConstants';
 
 @Injectable()
 export class FieldMeasurementsCatalogService {
@@ -26,6 +27,7 @@ export class FieldMeasurementsCatalogService {
       loadEstimatedMethod: [fieldMeasurements.loadEstimationMethod],
       operatingFlowRate: [fieldMeasurements.operatingFlowRate, [Validators.required, Validators.min(0)]],
       operatingHead: [fieldMeasurements.operatingHead, this.getOperatingHeadValidators(pumpType)],
+      operatingDifferentialPressure: [fieldMeasurements.operatingDifferentialPressure, this.getOperatingDifferentialPressureValidators(pumpType)],
       measuredPower: [fieldMeasurements.measuredPower, motorKwValidators],
       measuredCurrent: [fieldMeasurements.measuredCurrent, motorAmpsValidators],
       measuredVoltage: [fieldMeasurements.measuredVoltage, Validators.required],
@@ -46,9 +48,19 @@ export class FieldMeasurementsCatalogService {
     }
   }
 
-  updateOperatingHeadValidators(form: FormGroup, pumpType: number): FormGroup {
+  getOperatingDifferentialPressureValidators(pumpType: number): Array<ValidatorFn> {
+    if (isPositiveDisplacementPump(pumpType)) {
+      return [Validators.required, Validators.min(0)];
+    } else {
+      return [];
+    }
+  }
+
+  updatePumpTypeValidators(form: FormGroup, pumpType: number): FormGroup {
     form.controls.operatingHead.setValidators(this.getOperatingHeadValidators(pumpType));
     form.controls.operatingHead.updateValueAndValidity();
+    form.controls.operatingDifferentialPressure.setValidators(this.getOperatingDifferentialPressureValidators(pumpType));
+    form.controls.operatingDifferentialPressure.updateValueAndValidity();
     return form;
   }
 
@@ -70,7 +82,7 @@ export class FieldMeasurementsCatalogService {
     form.controls.measuredPower.markAsDirty();
   }
 
-  updateFieldMeasurementsFromForm(form: FormGroup, fieldMeasurements: FieldMeasurements): FieldMeasurements {
+  updateFieldMeasurementsFromForm(form: FormGroup, fieldMeasurements: FieldMeasurements, pumpType: number): FieldMeasurements {
     fieldMeasurements.pumpSpeed = form.controls.pumpSpeed.value;
     fieldMeasurements.yearlyOperatingHours = form.controls.yearlyOperatingHours.value;
     fieldMeasurements.staticSuctionHead = form.controls.staticSuctionHead.value;
@@ -78,7 +90,13 @@ export class FieldMeasurementsCatalogService {
     fieldMeasurements.efficiency = form.controls.efficiency.value;
     fieldMeasurements.assessmentDate = form.controls.assessmentDate.value;
     fieldMeasurements.operatingFlowRate = form.controls.operatingFlowRate.value;
-    fieldMeasurements.operatingHead = form.controls.operatingHead.value;
+    if (isPositiveDisplacementPump(pumpType)) {
+      fieldMeasurements.operatingHead = null;
+      fieldMeasurements.operatingDifferentialPressure = form.controls.operatingDifferentialPressure.value;
+    } else {
+      fieldMeasurements.operatingHead = form.controls.operatingHead.value;
+      fieldMeasurements.operatingDifferentialPressure = null;
+    }
     fieldMeasurements.measuredPower = form.controls.measuredPower.value;
     fieldMeasurements.measuredCurrent = form.controls.measuredCurrent.value;
     fieldMeasurements.measuredVoltage = form.controls.measuredVoltage.value;
