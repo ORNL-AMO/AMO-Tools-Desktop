@@ -134,7 +134,12 @@ export class AssessmentReportsComponent implements OnInit {
     let tab: string;
     let itemSegment: string;
     if (assessment.type === 'PSAT') {
-      itemSegment = '/psat/';
+      let psatTab: string = 'baseline';
+      if (assessment.psat.setupDone && !assessment.isExample) {
+        psatTab = 'assessment';
+      }
+      this.dashboardService.navigateWithSidebarOptions('/psat/' + assessment.id + '/' + psatTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type === 'PHAST') {
       itemSegment = '/phast/';
     } else if (assessment.type === 'FSAT') {
@@ -154,7 +159,12 @@ export class AssessmentReportsComponent implements OnInit {
     } else if (assessment.type == 'TreasureHunt') {
       itemSegment = '/treasure-hunt/';
     } else if (assessment.type == 'WasteWater') {
-      itemSegment = '/waste-water/';
+      let wasteWaterTab: string = 'baseline';
+      if (assessment.wasteWater.setupDone && !assessment.isExample) {
+        wasteWaterTab = 'assessment';
+      }
+      this.dashboardService.navigateWithSidebarOptions('/waste-water/' + assessment.id + '/' + wasteWaterTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type == 'CompressedAir') {
       itemSegment = '/compressed-air/';
     }

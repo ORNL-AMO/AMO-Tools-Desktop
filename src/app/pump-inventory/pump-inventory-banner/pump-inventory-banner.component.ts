@@ -82,7 +82,6 @@ export class PumpInventoryBannerComponent implements OnInit {
       this.showConnectedItemBadge = connectedInventoryData.connectedItem !== undefined;
     });
 
-    this.pumpInventoryService.setupTab.next('plant-setup');
     let nextID: string = this.pumpInventoryData.departments[0].id;
     this.pumpCatalogService.selectedDepartmentId.next(nextID);  
   }
@@ -98,7 +97,7 @@ export class PumpInventoryBannerComponent implements OnInit {
   }
 
   setSetupTab(str: string) {
-    this.pumpInventoryService.setupTab.next(str);
+    this.pumpInventoryService.goToSetupTab(str);
   }
 
   selectTab(tabId: string) {
@@ -113,12 +112,12 @@ export class PumpInventoryBannerComponent implements OnInit {
   }
 
   setMainTab(str: string) {
-    this.pumpInventoryService.mainTab.next(str);
+    this.pumpInventoryService.goToMainTab(str);
     this.collapseBanner();
   }
 
   setSummaryTab(str: string) {
-    this.pumpInventoryService.summaryTab.next(str);
+    this.pumpInventoryService.goToSummaryTab(str);
   }
 
   showSecurityAndPrivacyModal() {
@@ -137,30 +136,22 @@ export class PumpInventoryBannerComponent implements OnInit {
 
   back(){
     if (this.mainTab == 'summary') {
-      this.pumpInventoryService.mainTab.next('setup');    
+      this.pumpInventoryService.goToMainTab('setup');
     } 
   }
 
   continue(){
     if (this.mainTab == 'setup') {
-      this.pumpInventoryService.mainTab.next('summary');    
+      this.pumpInventoryService.goToMainTab('summary');
     } 
   }
 
   backSetupTabs(){
-    if (this.setupTab == 'pump-catalog') {
-      this.pumpInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'department-setup') {
-      this.pumpInventoryService.setupTab.next('plant-setup');
-    }
+    this.pumpInventoryService.backSetupTab();
   }
 
   continueSetupTabs(){
-    if (this.setupTab == 'plant-setup') {
-      this.pumpInventoryService.setupTab.next('department-setup');
-    } else if (this.setupTab == 'department-setup') {
-      this.pumpInventoryService.setupTab.next('pump-catalog');
-    }
+    this.pumpInventoryService.continueSetupTab();
   }
 
   continuePumpCatalogTabs(){
@@ -203,19 +194,11 @@ export class PumpInventoryBannerComponent implements OnInit {
   }
 
   continueSummaryTabs(){
-    if (this.summaryTab == 'overview') {
-      this.pumpInventoryService.summaryTab.next('graphs');
-    } else if (this.summaryTab == 'graphs') {
-      this.pumpInventoryService.summaryTab.next('table');
-    } 
+    this.pumpInventoryService.continueSummaryTab();
   }
 
   backSummaryTabs(){
-    if (this.summaryTab == 'table') {
-      this.pumpInventoryService.summaryTab.next('graphs');
-    } else if (this.summaryTab == 'graphs') {
-      this.pumpInventoryService.summaryTab.next('overview');
-    }
+    this.pumpInventoryService.backSummaryTab();
   }
 
   openExportModal(){

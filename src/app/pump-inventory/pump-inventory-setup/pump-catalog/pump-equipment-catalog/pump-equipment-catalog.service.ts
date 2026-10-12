@@ -39,7 +39,7 @@ export class PumpEquipmentCatalogService {
 
   getDesignDifferentialPressureValidators(pumpType: number): Array<ValidatorFn> {
     if (isPositiveDisplacementPump(pumpType)) {
-      return [Validators.required, Validators.min(0)];
+      return [Validators.min(0)];
     } else {
       return [];
     }

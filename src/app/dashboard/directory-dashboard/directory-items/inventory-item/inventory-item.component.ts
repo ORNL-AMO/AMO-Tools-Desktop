@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { InventoryItem } from '../../../../shared/models/inventory/inventory';
-import { Router } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -14,9 +13,7 @@ import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
-import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
 import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
-import { CompressedAirInventoryService } from '../../../../compressed-air-inventory/compressed-air-inventory.service';
 import { CompressedAirMotorIntegrationService } from '../../../../shared/connected-inventory/compressed-air-motor-integration.service';
 
 @Component({
@@ -50,8 +47,6 @@ export class InventoryItemComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private motorInventoryService: MotorInventoryService,
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
-    private pumpInventoryService: PumpInventoryService,
-    private compressedAirInventoryService: CompressedAirInventoryService,
     private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
   ngOnInit(): void {
@@ -80,22 +75,23 @@ export class InventoryItemComponent implements OnInit {
 
   goToInventoryItem(inventoryPage?: string) {
     let inventoryRoute: string = 'motor-inventory';
+    let inventoryTab: string = '';
     if (this.inventoryItem.motorInventoryData) {
       if (inventoryPage) {
         this.motorInventoryService.mainTab.next(inventoryPage);
       }
     } else if (this.inventoryItem.pumpInventoryData) {
       inventoryRoute = 'pump-inventory';
-      if (inventoryPage) {
-        this.pumpInventoryService.mainTab.next(inventoryPage);
+      if (inventoryPage == 'setup' || inventoryPage == 'summary') {
+        inventoryTab = `/${inventoryPage}`;
       }
     } else if (this.inventoryItem.compressedAirInventoryData) {
       inventoryRoute = 'compressed-air-inventory';
-      if (inventoryPage) {
-        this.compressedAirInventoryService.mainTab.next(inventoryPage);
+      if (inventoryPage == 'setup' || inventoryPage == 'summary') {
+        inventoryTab = `/${inventoryPage}`;
       }
     }
-    this.dashboardService.navigateWithSidebarOptions(`/${inventoryRoute}/${this.inventoryItem.id}`, {shouldCollapse: true})
+    this.dashboardService.navigateWithSidebarOptions(`/${inventoryRoute}/${this.inventoryItem.id}${inventoryTab}`, {shouldCollapse: true})
 
   }
 

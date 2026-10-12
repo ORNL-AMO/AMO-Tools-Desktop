@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { CompressedAirInventoryData, CompressedAirInventorySystem, CompressedAirItem, CompressedAirPropertyDisplayOptions, EndUse, SystemInformation, ValidCompressedAir } from './compressed-air-inventory';
@@ -14,6 +15,7 @@ import { PerformancePointsCatalogService } from './compressed-air-inventory-setu
 import _ from 'lodash';
 import { copyObject } from '../shared/helperFunctions';
 import { CompressedAirMotorIntegrationService } from '../shared/connected-inventory/compressed-air-motor-integration.service';
+import { COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS } from './compressed-air-inventory.routing';
 
 @Injectable()
 export class CompressedAirInventoryService {
@@ -40,7 +42,8 @@ export class CompressedAirInventoryService {
     private fieldMeasurementsCatalogService: FieldMeasurementsCatalogService,
     private nameplateDataCatalogService: NameplateDataCatalogService,
     private performancePointsCatalogService: PerformancePointsCatalogService,
-    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService
+    private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService,
+    private router: Router
 
   ) {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
@@ -60,6 +63,71 @@ export class CompressedAirInventoryService {
       controlTypes: new Array<number>(),
       horsepowerTypes: new Array<number>(),
     });
+  }
+
+  /**
+   * Opens a main tab on its last visited sub-tab.
+   * @param view one of `COMPRESSED_AIR_INVENTORY_MAIN_VIEWS`
+   */
+  goToMainTab(view: string) {
+    if (view === 'setup') {
+      this.goToSetupTab(this.setupTab.getValue());
+    } else {
+      this.goToSummaryTab(this.summaryTab.getValue());
+    }
+  }
+
+  goToSetupTab(view: string) {
+    this.router.navigate(['/compressed-air-inventory', this.currentInventoryId, 'setup', view]);
+  }
+
+  goToSummaryTab(view: string) {
+    this.router.navigate(['/compressed-air-inventory', this.currentInventoryId, 'summary', view]);
+  }
+
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
+  backMainTab() {
+    this.stepMainTab(-1);
+  }
+
+  continueSetupTab() {
+    this.stepSetupTab(1);
+  }
+
+  backSetupTab() {
+    this.stepSetupTab(-1);
+  }
+
+  continueSummaryTab() {
+    this.stepSummaryTab(1);
+  }
+
+  backSummaryTab() {
+    this.stepSummaryTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const adjacentView: string = COMPRESSED_AIR_INVENTORY_MAIN_VIEWS[COMPRESSED_AIR_INVENTORY_MAIN_VIEWS.indexOf(this.mainTab.getValue()) + offset];
+    if (adjacentView) {
+      this.goToMainTab(adjacentView);
+    }
+  }
+
+  private stepSetupTab(offset: number) {
+    const adjacentView: string = COMPRESSED_AIR_INVENTORY_SETUP_VIEWS[COMPRESSED_AIR_INVENTORY_SETUP_VIEWS.indexOf(this.setupTab.getValue()) + offset];
+    if (adjacentView) {
+      this.goToSetupTab(adjacentView);
+    }
+  }
+
+  private stepSummaryTab(offset: number) {
+    const adjacentView: string = COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS[COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS.indexOf(this.summaryTab.getValue()) + offset];
+    if (adjacentView) {
+      this.goToSummaryTab(adjacentView);
+    }
   }
 
   initInventoryData(): CompressedAirInventoryData {

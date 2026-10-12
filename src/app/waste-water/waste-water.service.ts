@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Settings } from '../shared/models/settings';
@@ -12,9 +13,11 @@ import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
+import { WASTE_WATER_MAIN_VIEWS } from './routing/waste-water.routing';
 
 @Injectable()
 export class WasteWaterService {
+  private router = inject(Router);
 
   wasteWater: BehaviorSubject<WasteWater>;
   mainTab: BehaviorSubject<string>;
@@ -29,6 +32,7 @@ export class WasteWaterService {
   selectedModificationId: BehaviorSubject<string>;
   focusedField: BehaviorSubject<string>;
   showExportModal: BehaviorSubject<boolean>;
+  assessmentId: number;
 
   //baseline tabs
   setupTabs: Array<string> = [
@@ -462,7 +466,7 @@ export class WasteWaterService {
   continue() {
     let tmpStepTab: string = this.setupTab.getValue();
     if (tmpStepTab === 'aerator-performance') {
-      this.mainTab.next('assessment');
+      this.goToMainTab('assessment');
     } else {
       let assessmentTabIndex: number = this.setupTabs.indexOf(tmpStepTab);
       let nextTab: string = this.setupTabs[assessmentTabIndex + 1];
@@ -477,7 +481,31 @@ export class WasteWaterService {
       let nextTab: string = this.setupTabs[assessmentTabIndex - 1];
       this.setupTab.next(nextTab);
     } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('baseline');
+      this.goToMainTab('baseline');
+    }
+  }
+
+  /**
+   * Main tab changes are navigations; WasteWaterComponent syncs mainTab from the resulting route.
+   * @param tab Main tab route path
+   */
+  goToMainTab(tab: string) {
+    if (this.assessmentId) {
+      this.router.navigate(['/waste-water', this.assessmentId, tab]);
+    }
+  }
+
+  continueMainTab() {
+    const nextView: string = WASTE_WATER_MAIN_VIEWS[WASTE_WATER_MAIN_VIEWS.indexOf(this.mainTab.getValue()) + 1];
+    if (nextView) {
+      this.goToMainTab(nextView);
+    }
+  }
+
+  backMainTab() {
+    const currentIndex: number = WASTE_WATER_MAIN_VIEWS.indexOf(this.mainTab.getValue());
+    if (currentIndex > 0) {
+      this.goToMainTab(WASTE_WATER_MAIN_VIEWS[currentIndex - 1]);
     }
   }
 }

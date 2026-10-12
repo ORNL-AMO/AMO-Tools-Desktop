@@ -1,9 +1,8 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UntypedFormGroup } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { firstValueFrom, Subscription } from 'rxjs';
-import { AssessmentService } from '../dashboard/assessment.service';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Assessment } from '../shared/models/assessment';
@@ -17,6 +16,7 @@ import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterService } from './waste-water.service';
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { SETUP_GATED_TABS, WasteWaterRouteData } from './routing/waste-water.routing';
 
 @Component({
     selector: 'app-waste-water',
@@ -44,6 +44,7 @@ export class WasteWaterComponent implements OnInit {
   settings: Settings;
   mainTab: string;
   mainTabSub: Subscription;
+  routerEventsSub: Subscription;
   setupTab: string;
   setupTabSub: Subscription;
   wasteWaterSub: Subscription;
@@ -71,7 +72,7 @@ export class WasteWaterComponent implements OnInit {
     private settingsDbService: SettingsDbService, private wasteWaterService: WasteWaterService, private convertWasteWaterService: ConvertWasteWaterService,
     private assessmentDbService: AssessmentDbService, private cd: ChangeDetectorRef, private compareService: CompareService,
     private activatedSludgeFormService: ActivatedSludgeFormService, private aeratorPerformanceFormService: AeratorPerformanceFormService,
-    private systemBasicsService: SystemBasicsService, private assessmentService: AssessmentService, private wasteWaterOperationsService: WasteWaterOperationsService,
+    private systemBasicsService: SystemBasicsService, private wasteWaterOperationsService: WasteWaterOperationsService,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit(): void {
@@ -91,10 +92,15 @@ export class WasteWaterComponent implements OnInit {
           this.settings = settings;
           this.wasteWaterService.settings.next(settings);
         }
-        if (this.assessmentService.startingTab) {
-          this.wasteWaterService.mainTab.next(this.assessmentService.startingTab);
-        }
+        this.wasteWaterService.assessmentId = this.assessment.id;
+        this.syncMainTabFromRoute();
       }
+    });
+
+    this.routerEventsSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.syncMainTabFromRoute();
     });
 
     this.mainTabSub = this.wasteWaterService.mainTab.subscribe(val => {
@@ -145,6 +151,8 @@ export class WasteWaterComponent implements OnInit {
   ngOnDestroy() {
     this.wasteWaterService.setupTab.next('baseline');
     this.mainTabSub.unsubscribe();
+    this.routerEventsSub.unsubscribe();
+    this.wasteWaterService.assessmentId = undefined;
     this.setupTabSub.unsubscribe();
     this.wasteWaterSub.unsubscribe();
     this.assessmentTabSub.unsubscribe();
@@ -152,6 +160,21 @@ export class WasteWaterComponent implements OnInit {
     this.showModificationListSub.unsubscribe();
     this.isModalOpenSub.unsubscribe();
     this.showExportModalSub.unsubscribe();
+  }
+
+  /**
+   * The route is the source of truth for the main tab. Tabs the banner gates behind setup redirect to baseline when reached by URL or history.
+   */
+  syncMainTabFromRoute() {
+    const mainView: string = (this.activatedRoute.firstChild?.snapshot.data as WasteWaterRouteData)?.mainView;
+    if (!mainView || !this.assessment) {
+      return;
+    }
+    if (!this.assessment.wasteWater.setupDone && SETUP_GATED_TABS.includes(mainView)) {
+      this.router.navigate(['/waste-water', this.assessment.id, 'baseline'], { replaceUrl: true });
+    } else {
+      this.wasteWaterService.mainTab.next(mainView);
+    }
   }
 
   ngAfterViewInit() {
@@ -240,7 +263,7 @@ export class WasteWaterComponent implements OnInit {
     } else if (this.setupTab == 'activated-sludge') {
       this.wasteWaterService.setupTab.next('aerator-performance');
     } else if (this.setupTab == 'aerator-performance') {
-      this.wasteWaterService.mainTab.next('assessment');
+      this.wasteWaterService.goToMainTab('assessment');
     }
   }
 
@@ -260,7 +283,7 @@ export class WasteWaterComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.wasteWaterService.mainTab.next('baseline');
+      this.wasteWaterService.goToMainTab('baseline');
       this.wasteWaterService.setupTab.next('baseline');
     }
     this.showUpdateUnitsModal = false;
