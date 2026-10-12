@@ -74,7 +74,8 @@ export class AssessmentService {
       if (assessment.wasteWater.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'assessment';
       }
-      itemSegment = '/waste-water/';
+      this.dashboardService.navigateWithSidebarOptions('/waste-water/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type == 'CompressedAir') {
       let url: string = '/compressed-air/' + assessment.id;
       if (mainTab == 'baseline' && subTab == 'day-types') {

@@ -8,6 +8,7 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { WasteWaterService } from '../waste-water.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { SETUP_GATED_TABS } from '../routing/waste-water.routing';
 
 @Component({
   selector: 'app-waste-water-banner',
@@ -76,8 +77,8 @@ export class WasteWaterBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'baseline' || this.isBaselineValid) {
-      this.wasteWaterService.mainTab.next(str);
+    if (!SETUP_GATED_TABS.includes(str) || this.isBaselineValid) {
+      this.wasteWaterService.goToMainTab(str);
     }
     this.collapseBanner();
   }
@@ -98,31 +99,11 @@ export class WasteWaterBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'calculators') {
-      this.wasteWaterService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.wasteWaterService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.wasteWaterService.mainTab.next('analysis');
-    } else if (this.mainTab == 'analysis') {
-      this.wasteWaterService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.wasteWaterService.mainTab.next('baseline');
-    }
+    this.wasteWaterService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.wasteWaterService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.wasteWaterService.mainTab.next('analysis');
-    } else if (this.mainTab == 'analysis') {
-      this.wasteWaterService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.wasteWaterService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.wasteWaterService.mainTab.next('calculators');
-    }
+    this.wasteWaterService.continueMainTab();
   }
 
   collapseTabs() {

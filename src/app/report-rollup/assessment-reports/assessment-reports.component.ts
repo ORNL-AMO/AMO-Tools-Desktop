@@ -149,7 +149,12 @@ export class AssessmentReportsComponent implements OnInit {
     } else if (assessment.type == 'TreasureHunt') {
       itemSegment = '/treasure-hunt/';
     } else if (assessment.type == 'WasteWater') {
-      itemSegment = '/waste-water/';
+      let wasteWaterTab: string = 'baseline';
+      if (assessment.wasteWater.setupDone && !assessment.isExample) {
+        wasteWaterTab = 'assessment';
+      }
+      this.dashboardService.navigateWithSidebarOptions('/waste-water/' + assessment.id + '/' + wasteWaterTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type == 'CompressedAir') {
       itemSegment = '/compressed-air/';
     }
