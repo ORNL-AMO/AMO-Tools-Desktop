@@ -7,6 +7,7 @@ import { FsatComponent } from '../fsat/fsat.component';
 import { fsatRoutes } from '../fsat/routing/fsat.routing';
 import { FsatAssessmentResolver } from '../fsat/routing/fsat-assessment.resolver';
 import { SsmtComponent } from '../ssmt/ssmt.component';
+import { ssmtRoutes } from '../ssmt/routing/ssmt.routing';
 import { TreasureHuntComponent } from '../treasure-hunt/treasure-hunt.component';
 import { LandingScreenComponent } from '../dashboard/landing-screen/landing-screen.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
@@ -572,7 +573,8 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'ssmt/:id',
-    component: SsmtComponent
+    component: SsmtComponent,
+    children: ssmtRoutes
   },
   {
     path: 'treasure-hunt/:id',

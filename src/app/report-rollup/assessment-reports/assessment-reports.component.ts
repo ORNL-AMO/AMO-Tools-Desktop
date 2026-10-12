@@ -145,7 +145,12 @@ export class AssessmentReportsComponent implements OnInit {
       this.dashboardService.navigateWithSidebarOptions('/fsat/' + assessment.id + '/' + fsatTab, { shouldCollapse: true });
       return;
     } else if (assessment.type === 'SSMT') {
-      itemSegment = '/ssmt/';
+      let ssmtTab: string = 'baseline';
+      if (assessment.ssmt.setupDone && !assessment.isExample) {
+        ssmtTab = 'assessment';
+      }
+      this.dashboardService.navigateWithSidebarOptions('/ssmt/' + assessment.id + '/' + ssmtTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type == 'TreasureHunt') {
       itemSegment = '/treasure-hunt/';
     } else if (assessment.type == 'WasteWater') {

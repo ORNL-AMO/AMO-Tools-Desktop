@@ -64,7 +64,8 @@ export class AssessmentService {
       if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'assessment';
       }
-      itemSegment = '/ssmt/';
+      this.dashboardService.navigateWithSidebarOptions('/ssmt/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type == 'TreasureHunt') {
       if (assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'treasure-chest';

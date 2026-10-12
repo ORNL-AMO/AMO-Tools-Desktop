@@ -55,6 +55,7 @@
     <app-modify-conditions *ngIf="assessmentTab == 'modify-conditions'" [settings]="settings" [ssmt]="_ssmt"
       [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitSaveAssessment)="save()"
       [containerHeight]="containerHeight" [inSetup]="false"></app-modify-conditions>
+    <!-- TODO: addNewMod() is not defined on SsmtComponent; review this binding -->
     <app-explore-opportunities *ngIf="assessmentTab == 'explore-opportunities'" [ssmt]="_ssmt" [assessment]="assessment"
       [settings]="settings" (emitSave)="saveSsmt($event)" [containerHeight]="containerHeight"
       [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()">
