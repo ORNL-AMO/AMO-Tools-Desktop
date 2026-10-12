@@ -65,7 +65,8 @@ export class AssessmentService {
       if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'assessment';
       }
-      itemSegment = '/ssmt/';
+      this.dashboardService.navigateWithSidebarOptions('/ssmt/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type == 'TreasureHunt') {
       // * Treasure Hunt has no 'assessment' tab; the generic dashboard 'Assessment' link maps to its treasure chest
       if ((assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) || mainTab == 'assessment') {

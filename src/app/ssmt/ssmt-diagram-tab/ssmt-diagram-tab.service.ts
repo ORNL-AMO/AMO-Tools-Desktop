@@ -28,7 +28,7 @@ export class SsmtDiagramTabService {
     }
     this.boilerCalculatorService.boilerInput = boilerInput;
     this.ssmtService.calcTab.next('boiler');
-    this.ssmtService.mainTab.next('calculators');
+    this.ssmtService.goToMainTab('calculators');
   }
 
   setTurbine(turbine: TurbineOutput){
@@ -47,7 +47,7 @@ export class SsmtDiagramTabService {
     }
     this.turbineService.turbineInput = turbineInput;
     this.ssmtService.calcTab.next('turbine');
-    this.ssmtService.mainTab.next('calculators');
+    this.ssmtService.goToMainTab('calculators');
   }
 
   setPRV(prv: PrvOutput){
@@ -69,7 +69,7 @@ export class SsmtDiagramTabService {
       this.prvService.isSuperHeating = false;
     }
     this.ssmtService.calcTab.next('prv');
-    this.ssmtService.mainTab.next('calculators');
+    this.ssmtService.goToMainTab('calculators');
   }
 
   setDeaeratorCalculator(deaerator: DeaeratorOutput, inputData: SSMTInputs){
@@ -86,7 +86,7 @@ export class SsmtDiagramTabService {
     }
     this.deaeratorService.deaeratorInput = deaeratorInput;
     this.ssmtService.calcTab.next('deaerator');
-    this.ssmtService.mainTab.next('calculators');
+    this.ssmtService.goToMainTab('calculators');
   }
 
   setFlashTankCalculator(flashTank: FlashTankOutput){
@@ -99,6 +99,6 @@ export class SsmtDiagramTabService {
     }
     this.flashTankService.flashTankInput = flashTankInput;
     this.ssmtService.calcTab.next('flash-tank');
-    this.ssmtService.mainTab.next('calculators');
+    this.ssmtService.goToMainTab('calculators');
   }
 }
