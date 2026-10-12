@@ -10,6 +10,7 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { CompressedAirCatalogService } from '../compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
 import _ from 'lodash';
+import { COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS } from '../compressed-air-inventory.routing';
 
 @Component({
   selector: 'app-compressed-air-inventory-banner',
@@ -74,10 +75,6 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     this.connectedInventoryDataSub = this.integrationStateService.connectedInventoryData.subscribe(connectedInventoryData => {
       this.showConnectedItemBadge = connectedInventoryData.connectedItem !== undefined;
     });
-
-    this.compressedAirInventoryService.setupTab.next('plant-setup');
-    let nextID: string = this.compressedAirInventoryData.systems[0].id;
-    this.compressedAirCatalogService.selectedSystemId.next(nextID);
   }
 
 
@@ -104,17 +101,19 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   setSetupTab(str: string) {
-    this.compressedAirInventoryService.setupTab.next(str);
+    this.compressedAirInventoryService.goToSetupTab(str);
   }
 
 
   setMainTab(str: string) {
-    this.compressedAirInventoryService.mainTab.next(str);
+    if (!COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS.includes(str) || this.compressedAirInventoryData.isValid) {
+      this.compressedAirInventoryService.goToMainTab(str);
+    }
     this.collapseBanner();
   }
 
   setSummaryTab(str: string) {
-    this.compressedAirInventoryService.summaryTab.next(str);
+    this.compressedAirInventoryService.goToSummaryTab(str);
   }
 
   showSecurityAndPrivacyModal() {
@@ -132,35 +131,19 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'summary') {
-      this.compressedAirInventoryService.mainTab.next('setup');
-    }
+    this.compressedAirInventoryService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'setup') {
-      this.compressedAirInventoryService.mainTab.next('summary');
-    }
+    this.compressedAirInventoryService.continueMainTab();
   }
 
   backSetupTabs() {
-    if (this.setupTab == 'end-uses') {
-      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
-    } else if (this.setupTab == 'compressed-air-catalog') {
-      this.compressedAirInventoryService.setupTab.next('system-setup');
-    } else if (this.setupTab == 'system-setup') {
-      this.compressedAirInventoryService.setupTab.next('plant-setup');
-    }
+    this.compressedAirInventoryService.backSetupTab();
   }
 
   continueSetupTabs() {
-    if (this.setupTab == 'plant-setup') {
-      this.compressedAirInventoryService.setupTab.next('system-setup');
-    } else if (this.setupTab == 'system-setup') {
-      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
-    } else if (this.setupTab == 'compressed-air-catalog') {
-      this.compressedAirInventoryService.setupTab.next('end-uses');
-    }
+    this.compressedAirInventoryService.continueSetupTab();
   }
 
   continueCompressedAirCatalogTabs() {
@@ -201,19 +184,11 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
   continueSummaryTabs() {
-    if (this.summaryTab == 'overview') {
-      this.compressedAirInventoryService.summaryTab.next('graphs');
-    } else if (this.summaryTab == 'graphs') {
-      this.compressedAirInventoryService.summaryTab.next('table');
-    }
+    this.compressedAirInventoryService.continueSummaryTab();
   }
 
   backSummaryTabs() {
-    if (this.summaryTab == 'table') {
-      this.compressedAirInventoryService.summaryTab.next('graphs');
-    } else if (this.summaryTab == 'graphs') {
-      this.compressedAirInventoryService.summaryTab.next('overview');
-    }
+    this.compressedAirInventoryService.backSummaryTab();
   }
 
   openExportModal() {

@@ -2,7 +2,6 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Directory } from '../../shared/models/directory';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Settings } from '../../shared/models/settings';
-import { Router } from '@angular/router';
  
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
@@ -17,7 +16,6 @@ import { SettingsService } from '../../settings/settings.service';
 import { MotorInventoryService } from '../../motor-inventory/motor-inventory.service';
 import { firstValueFrom } from 'rxjs';
 import { AnalyticsService } from '../../shared/analytics/analytics.service';
-import { CompressedAirInventoryService } from '../../compressed-air-inventory/compressed-air-inventory.service';
 
 @Component({
     selector: 'app-create-inventory',
@@ -38,8 +36,6 @@ export class CreateInventoryComponent implements OnInit {
   settings: Settings;
   constructor(
     private formBuilder: UntypedFormBuilder,
-    private router: Router,
-      
     private settingsDbService: SettingsDbService,
     private directoryDbService: DirectoryDbService,
     private directoryDashboardService: DirectoryDashboardService,
@@ -48,7 +44,6 @@ export class CreateInventoryComponent implements OnInit {
     private inventoryService: InventoryService,
     private settingsService: SettingsService,
     private motorInventoryService: MotorInventoryService,
-    private compressedAirInventoryService: CompressedAirInventoryService,
     private analyticsService: AnalyticsService) { }
 
   ngOnInit() {
@@ -124,8 +119,6 @@ export class CreateInventoryComponent implements OnInit {
         }
         if (this.newInventoryItemForm.controls.inventoryType.value === 'compressedAirInventory') {
           this.analyticsService.sendEvent('create-inventory', undefined);
-          this.compressedAirInventoryService.mainTab.next('setup');
-          this.compressedAirInventoryService.setupTab.next('plant-setup');
           inventoryItem = this.inventoryService.getNewCompressedAirInventoryItem();
           inventoryRoute = 'compressed-air-inventory';
         }
