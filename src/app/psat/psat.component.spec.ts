@@ -1,12 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Data, Event, NavigationEnd, Router, convertToParamMap } from '@angular/router';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { BehaviorSubject, of } from 'rxjs';
+import { BehaviorSubject, of, Subject } from 'rxjs';
 
 import { PsatComponent } from './psat.component';
-import { AssessmentService } from '../dashboard/assessment.service';
 import { PsatService } from './psat.service';
 import { PsatIntegrationService } from '../shared/connected-inventory/psat-integration.service';
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
@@ -58,13 +57,17 @@ describe('PsatComponent', () => {
   let component: PsatComponent;
   let fixture: ComponentFixture<PsatComponent>;
 
-  let assessmentServiceSpy: jasmine.SpyObj<AssessmentService>;
   let routerSpy: jasmine.SpyObj<Router>;
+  let routerEvents: Subject<Event>;
   let psatServiceSpy: jasmine.SpyObj<PsatService>;
   let psatIntegrationServiceSpy: jasmine.SpyObj<PsatIntegrationService>;
   let integrationStateServiceSpy: jasmine.SpyObj<IntegrationStateService>;
   let pumpOperationsServiceSpy: jasmine.SpyObj<PumpOperationsService>;
-  let activatedRouteMock: { params: BehaviorSubject<{ id: string }>; snapshot: { queryParamMap: ReturnType<typeof convertToParamMap> } };
+  let activatedRouteMock: {
+    params: BehaviorSubject<{ id: string }>;
+    snapshot: { queryParamMap: ReturnType<typeof convertToParamMap> };
+    firstChild: { snapshot: { data: Data } };
+  };
   let compareServiceSpy: jasmine.SpyObj<CompareService>;
   let settingsDbServiceSpy: jasmine.SpyObj<SettingsDbService>;
   let assessmentDbServiceSpy: jasmine.SpyObj<AssessmentDbService>;
@@ -80,10 +83,8 @@ describe('PsatComponent', () => {
   beforeEach(async () => {
     mockAssessment = makeAssessment();
 
-    assessmentServiceSpy = jasmine.createSpyObj('AssessmentService', ['getStartingTab']);
-    assessmentServiceSpy.getStartingTab.and.returnValue(undefined);
-
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    routerEvents = new Subject<Event>();
+    routerSpy = jasmine.createSpyObj('Router', ['navigate'], { events: routerEvents });
 
     psatServiceSpy = jasmine.createSpyObj(
       'PsatService',
@@ -114,6 +115,7 @@ describe('PsatComponent', () => {
     activatedRouteMock = {
       params: new BehaviorSubject({ id: '1' }),
       snapshot: { queryParamMap: convertToParamMap({}) },
+      firstChild: { snapshot: { data: { mainView: 'baseline' } } },
     };
 
     compareServiceSpy = jasmine.createSpyObj(
@@ -156,7 +158,7 @@ describe('PsatComponent', () => {
 
     psatTabServiceSpy = jasmine.createSpyObj(
       'PsatTabService',
-      ['continue', 'back'],
+      ['continue', 'back', 'goToMainTab'],
       {
         mainTab: new BehaviorSubject<string>('baseline'),
         secondaryTab: new BehaviorSubject<string>('explore-opportunities'),
@@ -186,7 +188,6 @@ describe('PsatComponent', () => {
       imports: [ModalModule.forRoot()],
       declarations: [PsatComponent],
       providers: [
-        { provide: AssessmentService, useValue: assessmentServiceSpy },
         { provide: Router, useValue: routerSpy },
         { provide: PsatService, useValue: psatServiceSpy },
         { provide: PsatIntegrationService, useValue: psatIntegrationServiceSpy },
@@ -279,10 +280,10 @@ describe('PsatComponent', () => {
       expect(assessmentDbServiceSpy.updateWithObservable).toHaveBeenCalled();
     });
 
-    it('sets mainTab from assessmentService.getStartingTab when provided', () => {
-      assessmentServiceSpy.getStartingTab.and.returnValue('sankey');
+    it('sets mainTab from the active child route on load', () => {
+      activatedRouteMock.firstChild.snapshot.data = { mainView: 'calculators' };
       fixture.detectChanges();
-      expect(component.mainTab).toBe('sankey');
+      expect(component.mainTab).toBe('calculators');
     });
 
     it('shows the welcome screen and opens the modal state when the tutorial has not been dismissed', () => {
@@ -295,6 +296,50 @@ describe('PsatComponent', () => {
     it('does not show the welcome screen when the tutorial has already been dismissed', () => {
       fixture.detectChanges();
       expect(component.showWelcomeScreen).toBeFalse();
+    });
+  });
+
+  describe('syncMainTabFromRoute', () => {
+    function navigateTo(mainView: string) {
+      activatedRouteMock.firstChild.snapshot.data = { mainView };
+      routerEvents.next(new NavigationEnd(1, `/psat/1/${mainView}`, `/psat/1/${mainView}`));
+    }
+
+    it('updates mainTab on NavigationEnd', () => {
+      assessmentDbServiceSpy.findById.and.returnValue(makeAssessment(makePsat({ setupDone: true })));
+      fixture.detectChanges();
+      navigateTo('report');
+      expect(psatTabServiceSpy.mainTab.value).toBe('report');
+    });
+
+    ['assessment', 'diagram', 'report', 'sankey'].forEach(mainView => {
+      it(`redirects ${mainView} to baseline, replacing the URL, when setup is not done`, () => {
+        fixture.detectChanges();
+        navigateTo(mainView);
+        expect(routerSpy.navigate).toHaveBeenCalledWith(['/psat', 1, 'baseline'], { replaceUrl: true });
+        expect(psatTabServiceSpy.mainTab.value).toBe('baseline');
+      });
+    });
+
+    it('allows calculators when setup is not done', () => {
+      fixture.detectChanges();
+      navigateTo('calculators');
+      expect(routerSpy.navigate).not.toHaveBeenCalled();
+      expect(psatTabServiceSpy.mainTab.value).toBe('calculators');
+    });
+
+    it('stops syncing after destroy', () => {
+      fixture.detectChanges();
+      fixture.destroy();
+      navigateTo('calculators');
+      expect(psatTabServiceSpy.mainTab.value).toBe('baseline');
+    });
+
+    it('sets the tab service assessment id on load and clears it on destroy', () => {
+      fixture.detectChanges();
+      expect(psatTabServiceSpy.assessmentId).toBe(1);
+      fixture.destroy();
+      expect(psatTabServiceSpy.assessmentId).toBeUndefined();
     });
   });
 
@@ -611,10 +656,18 @@ describe('PsatComponent', () => {
   });
 
   describe('goToReport', () => {
-    it('pushes report to psatTabService.mainTab', () => {
+    it('navigates to the report tab', () => {
       fixture.detectChanges();
       component.goToReport();
-      expect(psatTabServiceSpy.mainTab.value).toBe('report');
+      expect(psatTabServiceSpy.goToMainTab).toHaveBeenCalledWith('report');
+    });
+  });
+
+  describe('closeReport', () => {
+    it('navigates to the assessment tab', () => {
+      fixture.detectChanges();
+      component.closeReport();
+      expect(psatTabServiceSpy.goToMainTab).toHaveBeenCalledWith('assessment');
     });
   });
 
@@ -627,7 +680,7 @@ describe('PsatComponent', () => {
 
       expect(psatServiceSpy.convertExistingData).toHaveBeenCalled();
       expect(component.showUpdateUnitsModal).toBeFalse();
-      expect(psatTabServiceSpy.mainTab.value).toBe('baseline');
+      expect(psatTabServiceSpy.goToMainTab).toHaveBeenCalledWith('baseline');
       expect(psatTabServiceSpy.stepTab.value).toBe('baseline');
     });
 
@@ -686,7 +739,7 @@ describe('PsatComponent', () => {
       fixture.detectChanges();
       component.showUpdateUnitsModal = true;
       component.closeUpdateUnitsModal(true);
-      expect(psatTabServiceSpy.mainTab.value).toBe('baseline');
+      expect(psatTabServiceSpy.goToMainTab).toHaveBeenCalledWith('baseline');
       expect(psatTabServiceSpy.stepTab.value).toBe('baseline');
       expect(component.showUpdateUnitsModal).toBeFalse();
     });
@@ -696,6 +749,7 @@ describe('PsatComponent', () => {
       psatTabServiceSpy.mainTab.next('assessment');
       component.showUpdateUnitsModal = true;
       component.closeUpdateUnitsModal();
+      expect(psatTabServiceSpy.goToMainTab).not.toHaveBeenCalled();
       expect(psatTabServiceSpy.mainTab.value).toBe('assessment');
       expect(component.showUpdateUnitsModal).toBeFalse();
     });
@@ -737,6 +791,22 @@ describe('PsatComponent', () => {
       component.stepTab = 'field-data';
       fieldDataServiceSpy.getFormFromObj.and.returnValue(makeForm(false));
       expect(component.getCanContinue()).toBeFalse();
+    });
+
+    it('returns false on field-data when the form is valid but setup is not done', () => {
+      fixture.detectChanges();
+      component.stepTab = 'field-data';
+      component._psat.setupDone = false;
+      fieldDataServiceSpy.getFormFromObj.and.returnValue(makeForm(true));
+      expect(component.getCanContinue()).toBeFalse();
+    });
+
+    it('returns true on field-data when the form is valid and setup is done', () => {
+      fixture.detectChanges();
+      component.stepTab = 'field-data';
+      component._psat.setupDone = true;
+      fieldDataServiceSpy.getFormFromObj.and.returnValue(makeForm(true));
+      expect(component.getCanContinue()).toBeTrue();
     });
   });
 

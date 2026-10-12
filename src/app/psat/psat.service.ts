@@ -167,7 +167,7 @@ export class PsatService {
     integratedAssessment.thEquipmentType = 'pump';
     integratedAssessment.navigation = {
       queryParams: undefined,
-      url: '/psat/' + integratedAssessment.assessment.id
+      url: '/psat/' + integratedAssessment.assessment.id + '/assessment'
     }
   }
 

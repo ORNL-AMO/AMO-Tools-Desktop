@@ -3,6 +3,7 @@ import { diagramResolver } from '../water-process-diagram/diagram.resolver';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { PhastComponent } from '../phast/phast.component';
 import { PsatComponent } from '../psat/psat.component';
+import { psatRoutes } from '../psat/routing/psat.routing';
 import { FsatComponent } from '../fsat/fsat.component';
 import { fsatRoutes } from '../fsat/routing/fsat.routing';
 import { FsatAssessmentResolver } from '../fsat/routing/fsat-assessment.resolver';
@@ -100,6 +101,7 @@ import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.compone
 import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat.component';
 import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
+import { wasteWaterRoutes } from '../waste-water/routing/waste-water.routing';
 import { ChillerPerformanceComponent } from '../calculator/process-cooling/chiller-performance/chiller-performance.component';
 import { CoolingTowerFanComponent } from '../calculator/process-cooling/cooling-tower-fan/cooling-tower-fan.component';
 import { CoolingTowerBasinComponent } from '../calculator/process-cooling/cooling-tower-basin/cooling-tower-basin.component';
@@ -562,7 +564,8 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'psat/:id',
-    component: PsatComponent
+    component: PsatComponent,
+    children: psatRoutes
   },
   {
     path: 'fsat/:id',
@@ -611,6 +614,7 @@ export const coreRoutes: Routes = [
   {
     component: WasteWaterComponent,
     path: 'waste-water/:id',
+    children: wasteWaterRoutes
   },
   {
     component: CompressedAirInventoryComponent,

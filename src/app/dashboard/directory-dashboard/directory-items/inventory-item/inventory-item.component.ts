@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { InventoryItem } from '../../../../shared/models/inventory/inventory';
-import { Router } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { DirectoryDashboardService } from '../../directory-dashboard.service';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -14,7 +13,6 @@ import { DirectoryDbService } from '../../../../indexedDb/directory-db.service';
 import { SettingsDbService } from '../../../../indexedDb/settings-db.service';
 import { Settings } from '../../../../shared/models/settings';
 import { MotorInventoryService } from '../../../../motor-inventory/motor-inventory.service';
-import { PumpInventoryService } from '../../../../pump-inventory/pump-inventory.service';
 import { PumpMotorIntegrationService } from '../../../../shared/connected-inventory/pump-motor-integration.service';
 import { CompressedAirMotorIntegrationService } from '../../../../shared/connected-inventory/compressed-air-motor-integration.service';
 
@@ -49,7 +47,6 @@ export class InventoryItemComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private motorInventoryService: MotorInventoryService,
     private pumpMotorIntegrationService: PumpMotorIntegrationService,
-    private pumpInventoryService: PumpInventoryService,
     private compressedAirMotorIntegrationService: CompressedAirMotorIntegrationService) { }
 
   ngOnInit(): void {
@@ -85,8 +82,8 @@ export class InventoryItemComponent implements OnInit {
       }
     } else if (this.inventoryItem.pumpInventoryData) {
       inventoryRoute = 'pump-inventory';
-      if (inventoryPage) {
-        this.pumpInventoryService.mainTab.next(inventoryPage);
+      if (inventoryPage == 'setup' || inventoryPage == 'summary') {
+        inventoryTab = `/${inventoryPage}`;
       }
     } else if (this.inventoryItem.compressedAirInventoryData) {
       inventoryRoute = 'compressed-air-inventory';

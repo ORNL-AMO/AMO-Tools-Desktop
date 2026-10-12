@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
-import { Router } from '@angular/router';
+import { of, Subject } from 'rxjs';
+import { ActivatedRouteSnapshot, Event, NavigationEnd, Router } from '@angular/router';
 import { FsatService } from './fsat.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
@@ -77,5 +77,45 @@ describe('FsatService.initAssessmentSettings', () => {
     expect(settingsDbService.addWithObservable).toHaveBeenCalled();
     expect(settingsDbService.setAll).toHaveBeenCalledWith([createdSettings]);
     expect(result).toBe(createdSettings);
+  });
+});
+
+describe('FsatService main tab sync', () => {
+  let service: FsatService;
+  let routerEvents: Subject<Event>;
+
+  beforeEach(() => {
+    routerEvents = new Subject<Event>();
+    const root = { data: {}, firstChild: { data: { mainView: 'report' }, firstChild: null } } as unknown as ActivatedRouteSnapshot;
+    TestBed.configureTestingModule({
+      providers: [
+        FsatService,
+        { provide: Router, useValue: { events: routerEvents, routerState: { snapshot: { root } } } },
+        { provide: SettingsDbService, useValue: {} },
+        { provide: SettingsService, useValue: {} },
+        { provide: ConvertFsatService, useValue: {} },
+        { provide: FansSuiteApiService, useValue: {} },
+        { provide: AssessmentCo2SavingsService, useValue: {} },
+        { provide: ConvertUnitsService, useValue: {} },
+        { provide: FanFieldDataService, useValue: {} },
+        { provide: ConvertFanAnalysisService, useValue: {} },
+        { provide: FsatFluidService, useValue: {} },
+        { provide: FanSetupService, useValue: {} },
+        { provide: FanMotorService, useValue: {} },
+        { provide: OperationsService, useValue: {} },
+        { provide: STEPPED_ROUTES, useValue: [] },
+      ]
+    });
+    service = TestBed.inject(FsatService);
+  });
+
+  it('syncs mainTab from route data on FSAT navigations', () => {
+    routerEvents.next(new NavigationEnd(1, '/fsat/1/report', '/fsat/1/report'));
+    expect(service.mainTab.value).toBe('report');
+  });
+
+  it('ignores navigations outside FSAT that share the mainView route data key', () => {
+    routerEvents.next(new NavigationEnd(1, '/psat/1/report', '/psat/1/report'));
+    expect(service.mainTab.value).toBe('baseline');
   });
 });

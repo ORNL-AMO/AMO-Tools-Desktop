@@ -251,12 +251,42 @@ describe('PsatTabsComponent', () => {
 
       expect(stepTabSubject.value).toBe('motor');
     });
+
+    it('does not navigate to field-data when pump/fluid data is invalid', () => {
+      pumpFluidServiceSpy.getFormFromObj.and.returnValue(makeForm(false));
+      stepTabSubject.next('pump-fluid');
+
+      component.changeSubTab('field-data');
+
+      expect(stepTabSubject.value).toBe('pump-fluid');
+    });
   });
 
   describe('continue / back', () => {
     it('continue delegates to psatTabService.continue', () => {
       component.continue();
       expect(psatTabServiceSpy.continue).toHaveBeenCalled();
+    });
+
+    it('continue advances from operations when the operations form is valid', () => {
+      pumpOperationsServiceSpy.getFormFromObj.and.returnValue(makeForm(true));
+      component.stepTab = 'operations';
+      component.continue();
+      expect(psatTabServiceSpy.continue).toHaveBeenCalled();
+    });
+
+    it('continue does nothing on operations when the operations form is invalid', () => {
+      pumpOperationsServiceSpy.getFormFromObj.and.returnValue(makeForm(false));
+      component.stepTab = 'operations';
+      component.continue();
+      expect(psatTabServiceSpy.continue).not.toHaveBeenCalled();
+    });
+
+    it('continue does nothing when the step cannot continue', () => {
+      pumpFluidServiceSpy.getFormFromObj.and.returnValue(makeForm(false));
+      component.stepTab = 'pump-fluid';
+      component.continue();
+      expect(psatTabServiceSpy.continue).not.toHaveBeenCalled();
     });
 
     it('back delegates to psatTabService.back', () => {
@@ -376,6 +406,12 @@ describe('PsatTabsComponent', () => {
       expect(component.motorClassStatus).toEqual(['success']);
     });
 
+    it('checkMotorStatus checks motor warnings in baseline mode even when the baseline holds modifications', () => {
+      component.psat = makePsat([{ psat: makePsat() } as Modification]);
+      component.checkMotorStatus();
+      expect(psatWarningServiceSpy.checkMotorWarnings).toHaveBeenCalledWith(component.psat, component.settings, false);
+    });
+
     it('checkFieldDataSatus disables the tab when pump/fluid or motor data is invalid', () => {
       pumpFluidServiceSpy.getFormFromObj.and.returnValue(makeForm(true));
       motorServiceSpy.getFormFromObj.and.returnValue(makeForm(false));
@@ -413,10 +449,18 @@ describe('PsatTabsComponent', () => {
       expect(component.getCanContinue()).toBeFalse();
     });
 
-    it('returns the field-data form validity when stepTab is field-data', () => {
+    it('returns true on field-data when the form is valid and setup is done', () => {
       fieldDataServiceSpy.getFormFromObj.and.returnValue(makeForm(true));
+      component.psat.setupDone = true;
       component.stepTab = 'field-data';
       expect(component.getCanContinue()).toBeTrue();
+    });
+
+    it('returns false on field-data when the form is valid but setup is not done', () => {
+      fieldDataServiceSpy.getFormFromObj.and.returnValue(makeForm(true));
+      component.psat.setupDone = false;
+      component.stepTab = 'field-data';
+      expect(component.getCanContinue()).toBeFalse();
     });
   });
 

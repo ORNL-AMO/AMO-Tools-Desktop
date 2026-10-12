@@ -78,10 +78,14 @@ export class PumpEquipmentCatalogComponent implements OnInit {
     if (this.isPositiveDisplacement) {
       this.form.controls.designHead.reset(null);
       this.form.controls.designDifferentialPressure.reset(null);
+      selectedPump.fieldMeasurements.operatingHead = null;
+      selectedPump.fieldMeasurements.operatingDifferentialPressure = null;
     } else {
       this.form.controls.designDifferentialPressure.reset(null);
+      selectedPump.fieldMeasurements.operatingDifferentialPressure = null;
       if (isPositiveDisplacementPump(selectedPump.pumpEquipment.pumpType)) {
         this.form.controls.designHead.reset(null);
+        selectedPump.fieldMeasurements.operatingHead = null;
       }
     }
     this.save();

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem, PumpPropertyDisplayOptions, ValidPump } from './pump-inventory';
@@ -9,6 +10,7 @@ import { PumpEquipmentCatalogService } from './pump-inventory-setup/pump-catalog
 import { UntypedFormGroup } from '@angular/forms';
 import { PumpMotorCatalogService } from './pump-inventory-setup/pump-catalog/pump-motor-catalog/pump-motor-catalog.service';
 import { copyObject } from '../shared/helperFunctions';
+import { PumpInventoryRouteData, setupTabs, summaryTabs } from './pump-inventory.routing';
 
 @Injectable()
 export class PumpInventoryService {
@@ -31,7 +33,8 @@ export class PumpInventoryService {
     private fieldCatalogService: FieldMeasurementsCatalogService,
     private motorCatalogService: PumpMotorCatalogService,
     private pumpEquipmentService: PumpEquipmentCatalogService,
-    private pumpMotorIntegrationService: PumpMotorIntegrationService) {
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
+    private router: Router) {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
     this.mainTab = new BehaviorSubject<string>('setup');
     let inventoryData: PumpInventoryData = this.initInventoryData();
@@ -49,6 +52,85 @@ export class PumpInventoryService {
       motorRatedPowerValues: new Array(),
       statusValues: new Array()
     });
+  }
+
+  /**
+   * Pushes the main, setup and summary tab values found in the route data into the tab subjects.
+   * @param snapshot snapshot to walk down through its `firstChild` chain
+   */
+  syncTabsFromRoute(snapshot: ActivatedRouteSnapshot) {
+    while (snapshot) {
+      let data: PumpInventoryRouteData = snapshot.data;
+      if (data.mainView && data.mainView !== this.mainTab.getValue()) {
+        this.mainTab.next(data.mainView);
+      }
+      if (data.setupView && data.setupView !== this.setupTab.getValue()) {
+        this.setupTab.next(data.setupView);
+      }
+      if (data.summaryView && data.summaryView !== this.summaryTab.getValue()) {
+        this.summaryTab.next(data.summaryView);
+      }
+      snapshot = snapshot.firstChild;
+    }
+  }
+
+  /**
+   * Replaces the summary route with plant setup while the inventory is invalid, so Back does not return to it.
+   */
+  redirectInvalidSummary() {
+    if (this.mainTab.getValue() === 'summary' && !this.pumpInventoryData.getValue().isValid) {
+      this.router.navigate(['/pump-inventory', this.currentInventoryId, 'setup', setupTabs[0]], { replaceUrl: true });
+    }
+  }
+
+  /**
+   * Opens a main tab on its last visited sub-tab.
+   * @param tab `setup` or `summary`
+   */
+  goToMainTab(tab: string) {
+    if (tab === 'setup') {
+      this.goToSetupTab(this.setupTab.getValue());
+    } else {
+      this.goToSummaryTab(this.summaryTab.getValue());
+    }
+  }
+
+  goToSetupTab(tab: string) {
+    this.router.navigate(['/pump-inventory', this.currentInventoryId, 'setup', tab]);
+  }
+
+  goToSummaryTab(tab: string) {
+    this.router.navigate(['/pump-inventory', this.currentInventoryId, 'summary', tab]);
+  }
+
+  continueSetupTab() {
+    this.stepSetupTab(1);
+  }
+
+  backSetupTab() {
+    this.stepSetupTab(-1);
+  }
+
+  continueSummaryTab() {
+    this.stepSummaryTab(1);
+  }
+
+  backSummaryTab() {
+    this.stepSummaryTab(-1);
+  }
+
+  private stepSetupTab(offset: number) {
+    const adjacentTab: string = setupTabs[setupTabs.indexOf(this.setupTab.getValue()) + offset];
+    if (adjacentTab) {
+      this.goToSetupTab(adjacentTab);
+    }
+  }
+
+  private stepSummaryTab(offset: number) {
+    const adjacentTab: string = summaryTabs[summaryTabs.indexOf(this.summaryTab.getValue()) + offset];
+    if (adjacentTab) {
+      this.goToSummaryTab(adjacentTab);
+    }
   }
 
   updatePumpItem(selectedPump: PumpItem) {
@@ -157,6 +239,7 @@ export class PumpInventoryService {
         operatingFlowRate: undefined,
         loadEstimationMethod: 1,
         operatingHead: undefined,
+        operatingDifferentialPressure: undefined,
         measuredPower: undefined,
         measuredCurrent: undefined,
         measuredVoltage: undefined,
