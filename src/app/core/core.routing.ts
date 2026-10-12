@@ -101,6 +101,7 @@ import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.compone
 import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat.component';
 import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
+import { wasteWaterRoutes } from '../waste-water/routing/waste-water.routing';
 import { ChillerPerformanceComponent } from '../calculator/process-cooling/chiller-performance/chiller-performance.component';
 import { CoolingTowerFanComponent } from '../calculator/process-cooling/cooling-tower-fan/cooling-tower-fan.component';
 import { CoolingTowerBasinComponent } from '../calculator/process-cooling/cooling-tower-basin/cooling-tower-basin.component';
@@ -613,6 +614,7 @@ export const coreRoutes: Routes = [
   {
     component: WasteWaterComponent,
     path: 'waste-water/:id',
+    children: wasteWaterRoutes
   },
   {
     component: CompressedAirInventoryComponent,
