@@ -72,7 +72,8 @@ export class AssessmentService {
       if ((assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) || mainTab == 'assessment') {
         this.startingTab = 'treasure-chest';
       }
-      itemSegment = '/treasure-hunt/';
+      this.dashboardService.navigateWithSidebarOptions('/treasure-hunt/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type == 'WasteWater') {
       if (assessment.wasteWater.setupDone && !mainTab && !assessment.isExample) {
         this.startingTab = 'assessment';

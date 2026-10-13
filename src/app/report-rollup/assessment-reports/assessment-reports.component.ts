@@ -157,7 +157,12 @@ export class AssessmentReportsComponent implements OnInit {
       this.dashboardService.navigateWithSidebarOptions('/ssmt/' + assessment.id + '/' + ssmtTab, { shouldCollapse: true });
       return;
     } else if (assessment.type == 'TreasureHunt') {
-      itemSegment = '/treasure-hunt/';
+      let treasureHuntTab: string = 'baseline';
+      if (assessment.treasureHunt.setupDone && !assessment.isExample) {
+        treasureHuntTab = 'treasure-chest';
+      }
+      this.dashboardService.navigateWithSidebarOptions('/treasure-hunt/' + assessment.id + '/' + treasureHuntTab, { shouldCollapse: true });
+      return;
     } else if (assessment.type == 'WasteWater') {
       let wasteWaterTab: string = 'baseline';
       if (assessment.wasteWater.setupDone && !assessment.isExample) {

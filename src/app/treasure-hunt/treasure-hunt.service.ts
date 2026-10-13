@@ -6,6 +6,8 @@ import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SettingsService } from '../settings/settings.service';
 import { Assessment } from '../shared/models/assessment';
+import { Router } from '@angular/router';
+import { TREASURE_HUNT_MAIN_VIEWS } from './routing/treasure-hunt.routing';
 
 @Injectable()
 export class TreasureHuntService {
@@ -23,10 +25,12 @@ export class TreasureHuntService {
   modalOpen: BehaviorSubject<boolean>;
   currentField: BehaviorSubject<string>;
   showExportModal: BehaviorSubject<boolean>;
+  assessmentId: number;
 
   constructor(
         private settingsDbService: SettingsDbService,
-        private settingsService: SettingsService
+        private settingsService: SettingsService,
+        private router: Router
   ) {
     this.mainTab = new BehaviorSubject<string>('baseline');
     this.subTab = new BehaviorSubject<string>('settings');
@@ -84,6 +88,29 @@ export class TreasureHuntService {
     this.settingsDbService.setAll(updatedSettings);
   }
 
+  /**
+   * @param view one of `TREASURE_HUNT_MAIN_VIEWS`
+   */
+  goToMainTab(view: string) {
+    if (this.assessmentId) {
+      this.router.navigate(['/treasure-hunt', this.assessmentId, view]);
+    }
+  }
 
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
+  backMainTab() {
+    this.stepMainTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const index: number = TREASURE_HUNT_MAIN_VIEWS.indexOf(this.mainTab.getValue());
+    const view: string = TREASURE_HUNT_MAIN_VIEWS[index + offset];
+    if (index !== -1 && view) {
+      this.goToMainTab(view);
+    }
+  }
 }
 
