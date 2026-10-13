@@ -100,4 +100,33 @@ describe('AssessmentService', () => {
       expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/treasure-hunt/5/treasure-chest', { shouldCollapse: true });
     });
   });
+
+  describe('goToAssessment for Water', () => {
+    const waterAssessment: Assessment = { id: 8, name: 'Water', type: 'Water' };
+
+    it('opens baseline when no tab is given', () => {
+      service.goToAssessment(waterAssessment);
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/water/8/baseline', { shouldCollapse: true });
+    });
+
+    it('opens the requested report tab', () => {
+      service.goToAssessment(waterAssessment, 'report');
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/water/8/report', { shouldCollapse: true });
+    });
+
+    it('opens the diagram tab with the diagram id when known', () => {
+      service.goToAssessment({ ...waterAssessment, diagramId: 12 }, 'diagram');
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/water/8/diagram/12', { shouldCollapse: true });
+    });
+
+    it('opens bare diagram when the diagram id is not known', () => {
+      service.goToAssessment(waterAssessment, 'diagram');
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/water/8/diagram', { shouldCollapse: true });
+    });
+
+    it('falls back to baseline for the unrouted assessment tab', () => {
+      service.goToAssessment(waterAssessment, 'assessment');
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/water/8/baseline', { shouldCollapse: true });
+    });
+  });
 });
