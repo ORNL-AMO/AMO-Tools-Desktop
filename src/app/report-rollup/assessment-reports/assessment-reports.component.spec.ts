@@ -3,6 +3,7 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
 import { SSMT } from '../../shared/models/steam/ssmt';
+import { TreasureHunt } from '../../shared/models/treasure-hunt';
 
 describe('AssessmentReportsComponent', () => {
   let component: AssessmentReportsComponent;
@@ -54,6 +55,27 @@ describe('AssessmentReportsComponent', () => {
     it('opens baseline for a completed example assessment', () => {
       component.goToAssessment(makeSsmtAssessment(true, true));
       expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/ssmt/3/baseline', { shouldCollapse: true });
+    });
+  });
+
+  describe('goToAssessment for Treasure Hunt', () => {
+    function makeTreasureHuntAssessment(setupDone: boolean, isExample: boolean = false): Assessment {
+      return { id: 6, type: 'TreasureHunt', isExample, treasureHunt: { setupDone } as TreasureHunt } as Assessment;
+    }
+
+    it('opens baseline when setup is not done', () => {
+      component.goToAssessment(makeTreasureHuntAssessment(false));
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/treasure-hunt/6/baseline', { shouldCollapse: true });
+    });
+
+    it('opens the treasure chest when setup is done', () => {
+      component.goToAssessment(makeTreasureHuntAssessment(true));
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/treasure-hunt/6/treasure-chest', { shouldCollapse: true });
+    });
+
+    it('opens baseline for a completed example assessment', () => {
+      component.goToAssessment(makeTreasureHuntAssessment(true, true));
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/treasure-hunt/6/baseline', { shouldCollapse: true });
     });
   });
 });
