@@ -122,6 +122,7 @@ import { PumpInventoryComponent } from '../pump-inventory/pump-inventory.compone
 import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
 import { WaterProcessDiagramComponent } from '../water-process-diagram/water-process-diagram.component';
 import { WaterAssessmentComponent } from '../water/water-assessment.component';
+import { waterRoutes } from '../water/routing/water.routing';
 import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
 import { PowerFactorTriangleComponent } from '../calculator/utilities/power-factor-triangle/power-factor-triangle.component';
 import { ValveEnergyLossComponent } from '../calculator/pumps/valve-energy-loss/valve-energy-loss.component';
@@ -628,14 +629,7 @@ export const coreRoutes: Routes = [
   {
     path: 'water/:id',
     component: WaterAssessmentComponent,
-    children: [
-      {
-        path: 'diagram/:diagramId',
-        component: WaterProcessDiagramComponent,
-        resolve: { diagram: diagramResolver },
-        data: { integrated: true },
-      }
-    ]
+    children: waterRoutes
   },
   {
     path: 'process-flow-diagram/:id',
