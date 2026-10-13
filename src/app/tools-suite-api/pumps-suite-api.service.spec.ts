@@ -113,16 +113,16 @@ describe('PumpsSuiteApiService pump wrappers', () => {
     expect('delete' in results).toBeFalse();
   });
 
-  it('calculates NEMA motor efficiency through the stateless Suite API', () => {
-    const efficiencyPercent: number = service.nema(60, 1785, 1, 0, 200);
+  it('calculates specified NEMA motor efficiency through the stateless Suite API', () => {
+    const efficiencyPercent: number = service.nema(60, 1785, 3, 90, 200);
 
-    expect(efficiencyPercent).toBeCloseTo(95.6259245, 6);
+    expect(efficiencyPercent).toBeCloseTo(89.1, 6);
   });
 
-  it('calculates partial-load motor efficiency through the stateless Suite API', () => {
-    const efficiencyPercent: number = service.motorEfficiency(60, 1785, 1, 0, 200, 50);
+  it('calculates specified partial-load motor efficiency through the stateless Suite API', () => {
+    const efficiencyPercent: number = service.motorEfficiency(60, 1785, 3, 90, 200, 50);
 
-    expect(efficiencyPercent).toBeCloseTo(94.9504131, 6);
+    expect(efficiencyPercent).toBeCloseTo(89.0098004, 6);
   });
 });
 
