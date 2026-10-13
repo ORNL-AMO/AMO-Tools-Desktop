@@ -1,5 +1,5 @@
 <div bsModal #exportModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel"
-    aria-hidden="true" [config]="{backdrop: 'static'}">
+    aria-hidden="true" [config]="{backdrop: 'static'}" (onHidden)="onExportModalHidden()">
     <div class="modal-dialog modal-lg export-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,11 +10,12 @@
             </div>
             <div class="modal-body pb-0 scroll-item">
                 <div class="row no-gutters">
-                    <div class="col-6 p-2" *ngIf="exportOpportunities.lightingReplacements">
+                    <div class="col-6 p-2" *ngIf="treasureHunt.lightingReplacements?.length > 0">
                         <label>Lighting Replacements</label>
                         <ul>
-                            <li
-                                *ngFor="let replacement of exportOpportunities.lightingReplacements; let index = index;">
+                            <li *ngFor="let replacement of treasureHunt.lightingReplacements; let index = index;"
+                                [class.not-exported]="!replacement.selected && !includeUnselected"
+                                [attr.title]="replacement.selected || includeUnselected ? null : 'Not selected for export'">
                                 <span *ngIf="!replacement.opportunitySheet || !replacement.opportunitySheet.name">
                                     Lighting Replacement #{{index+1}}
                                 </span>
@@ -477,15 +478,22 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer justify-content-between">
+            <div class="modal-footer export-footer flex-wrap justify-content-between">
                 <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
-                <div class="d-flex">
-                    <div class="form-group d-flex mr-2">
-                        <label for="exportName"> Name your file:</label>
+                <div class="export-controls d-flex flex-wrap align-items-center justify-content-end ml-auto">
+                    <div class="form-group d-flex align-items-center my-1 mr-3">
+                        <label for="includeUnselected" class="mb-0 mr-2">Include unselected:</label>
+                        <label class="switch export-switch mb-0">
+                            <input name="includeUnselected" id="includeUnselected" type="checkbox" [(ngModel)]="includeUnselected">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="form-group d-flex align-items-center my-1 mr-2">
+                        <label for="exportName" class="mb-0 mr-2">Name your file:</label>
                         <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
                     </div>
-                    <button class="btn btn-primary ml-2" (click)="exportData()">Export as .json</button>
                 </div>
+                <button class="btn btn-primary my-1 ml-2" (click)="exportData()">Export as .json</button>
             </div>
         </div>
     </div>

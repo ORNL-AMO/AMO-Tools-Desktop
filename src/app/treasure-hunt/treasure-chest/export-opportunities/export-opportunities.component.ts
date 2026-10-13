@@ -21,6 +21,7 @@ export class ExportOpportunitiesComponent implements OnInit {
   treasureHunt: TreasureHunt;
   treasureHuntSub: Subscription;
   exportName: string = 'Opportunites Data';
+  includeUnselected: boolean = false;
   constructor(private importExportService: ImportExportService, 
     private treasureHuntService: TreasureHuntService,
     private treasureChestMenuService: TreasureChestMenuService,
@@ -49,13 +50,15 @@ export class ExportOpportunitiesComponent implements OnInit {
 
   hideExportModal() {
     this.exportModal.hide();
-    this.exportModal.onHidden.subscribe(val => {
-      this.treasureChestMenuService.showExportModal.next(false);
-    });
+  }
+
+  onExportModalHidden() {
+    this.treasureChestMenuService.showExportModal.next(false);
   }
 
   exportData() {
-    this.importExportService.downloadOpportunities(this.exportOpportunities, this.exportName);
+    const exportOpportunities: ImportExportOpportunities = this.exportOpportunitiesService.setImportExportData(this.treasureHunt, this.includeUnselected);
+    this.importExportService.downloadOpportunities(exportOpportunities, this.exportName);
     this.hideExportModal();
   }
 
