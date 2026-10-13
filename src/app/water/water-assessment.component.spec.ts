@@ -79,3 +79,42 @@ describe('WaterAssessmentComponent syncMainTabFromRoute', () => {
     expect(routerSpy.navigate).not.toHaveBeenCalled();
   });
 });
+
+describe('WaterAssessmentComponent initAssessment with overlapping inits', () => {
+  it('lets a superseded init return before marking initialization or redirecting', async () => {
+    const assessments: { [id: number]: Assessment } = {
+      1: { id: 1, type: 'Water', diagramId: 11, water: {} } as Assessment,
+      2: { id: 2, type: 'Water', diagramId: 22, water: {} } as Assessment,
+    };
+    let releaseFirstSync: () => void;
+    const firstSync = new Promise<void>(resolve => releaseFirstSync = resolve);
+    const updateAssessmentFromDiagramService = {
+      syncAssessmentToDiagram: (assessment: Assessment) => assessment.id === 1 ? firstSync : Promise.resolve()
+    };
+    const assessmentDbService = { findById: (id: number) => assessments[id] };
+    const settingsDbService = { getByAssessmentId: () => ({}) };
+    const waterAssessmentService = {
+      settings: { next: () => {} },
+      setAssessment: () => {},
+      updateWaterAssessment: () => {},
+      mainTab: { getValue: () => 'baseline', next: () => {} },
+    };
+    const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const activatedRoute = { firstChild: { snapshot: { data: { mainView: 'diagram' }, paramMap: { has: () => false } } } };
+    const unused = {} as never;
+    const component = new WaterAssessmentComponent(
+      activatedRoute as unknown as ActivatedRoute, routerSpy, unused, updateAssessmentFromDiagramService as never,
+      assessmentDbService as never, unused, unused, settingsDbService as never,
+      waterAssessmentService as unknown as WaterAssessmentService, unused, unused
+    );
+
+    const firstInit = component.initAssessment(1);
+    await component.initAssessment(2);
+    expect(routerSpy.navigate).toHaveBeenCalledTimes(1);
+
+    releaseFirstSync();
+    await firstInit;
+    expect(routerSpy.navigate).toHaveBeenCalledTimes(1);
+    expect(routerSpy.navigate.calls.mostRecent().args[0]).toEqual(['diagram', 22]);
+  });
+});

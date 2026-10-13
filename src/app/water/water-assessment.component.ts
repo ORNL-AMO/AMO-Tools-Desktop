@@ -169,6 +169,10 @@ export class WaterAssessmentComponent {
     this.waterAssessmentService.setAssessment(this.assessment);
     this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
     await diagramReady;
+    // A superseded init (:id changed mid-init) must not mark init complete or redirect a bare /diagram with the new assessment's possibly-undefined diagramId
+    if (this.assessment?.id !== assessmentId) {
+      return;
+    }
     this.isInitialized = true;
     this.syncMainTabFromRoute();
   }
