@@ -10,8 +10,8 @@ import {
   type LineFrequency,
   type ModifiedPumpResultInput,
   type MotorCurrent,
-  type MotorEfficiency as SuiteMotorEfficiency,
   type MotorEfficiencyClass,
+  type MotorEfficiencyInput,
   type MotorPerformance,
   type MotorPerformanceOutput,
   type MotorPowerFactor,
@@ -222,12 +222,16 @@ export class PumpsSuiteApiService {
   nema(lineFreq: number, motorRPM: number, efficiencyClass: number, efficiency: number, motorRatedPower: number): number {
     let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
     let efficiencyClassEnum: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let instance: SuiteMotorEfficiency = new this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiency(lineFrequency, motorRPM, efficiencyClassEnum, motorRatedPower);
-    //loadFactor hard coded to 1 for nema
-    let loadFactor: number = 1;
-    let motorEfficiency: number = instance.calculate(loadFactor, efficiency / 100) * 100;
-    instance.delete();
-    return motorEfficiency;
+    const input: MotorEfficiencyInput = {
+      lineFrequency: lineFrequency,
+      motorRpm: motorRPM,
+      efficiencyClass: efficiencyClassEnum,
+      motorRatedPower: motorRatedPower,
+      // Load factor remains hard coded to full load for the NEMA calculator.
+      loadFactor: 1,
+      specifiedEfficiency: efficiency / 100,
+    };
+    return this.toolsSuiteApiService.ToolsSuiteModule.calculateMotorEfficiency(input) * 100;
   }
 
   /**
@@ -240,14 +244,16 @@ export class PumpsSuiteApiService {
   motorEfficiency(lineFreq: number, motorRPM: number, efficiencyClass: number, efficiencyPercent: number, motorRatedPower: number, loadFactorPercent: number): number {
     let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
     let efficiencyClassEnum: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let instance: SuiteMotorEfficiency = new this.toolsSuiteApiService.ToolsSuiteModule.MotorEfficiency(lineFrequency, motorRPM, efficiencyClassEnum, motorRatedPower);
-    
-    let efficiency: number = efficiencyPercent / 100;
-    // * if efficiency class 0,1,2 (Standard, EE, Prem), efficiency input is not used and result is returned in decimal
-    let motorEfficiency: number = instance.calculate(loadFactorPercent / 100, efficiency);
-    motorEfficiency = motorEfficiency * 100;
-    instance.delete();
-    return motorEfficiency;
+    const input: MotorEfficiencyInput = {
+      lineFrequency: lineFrequency,
+      motorRpm: motorRPM,
+      efficiencyClass: efficiencyClassEnum,
+      motorRatedPower: motorRatedPower,
+      loadFactor: loadFactorPercent / 100,
+      // Efficiency classes 0, 1, and 2 ignore this value in the Suite calculation.
+      specifiedEfficiency: efficiencyPercent / 100,
+    };
+    return this.toolsSuiteApiService.ToolsSuiteModule.calculateMotorEfficiency(input) * 100;
   }
 
   
