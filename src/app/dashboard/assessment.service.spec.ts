@@ -82,12 +82,22 @@ describe('AssessmentService', () => {
 
     it('maps the generic assessment tab to the treasure chest', () => {
       service.goToAssessment(makeTreasureHuntAssessment(true), 'assessment');
-      expect(service.getStartingTab()).toBe('treasure-chest');
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/treasure-hunt/5/treasure-chest', { shouldCollapse: true });
     });
 
     it('keeps other requested tabs', () => {
       service.goToAssessment(makeTreasureHuntAssessment(true), 'report');
-      expect(service.getStartingTab()).toBe('report');
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/treasure-hunt/5/report', { shouldCollapse: true });
+    });
+
+    it('opens baseline when setup is not done', () => {
+      service.goToAssessment(makeTreasureHuntAssessment(false));
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/treasure-hunt/5/baseline', { shouldCollapse: true });
+    });
+
+    it('opens the treasure chest when setup is done and no tab is given', () => {
+      service.goToAssessment(makeTreasureHuntAssessment(true));
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/treasure-hunt/5/treasure-chest', { shouldCollapse: true });
     });
   });
 });

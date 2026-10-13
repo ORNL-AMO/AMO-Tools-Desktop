@@ -3,7 +3,8 @@ import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
  
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { TREASURE_HUNT_MAIN_VIEWS, TREASURE_HUNT_SETUP_GATED_VIEWS, TreasureHuntRouteData } from './routing/treasure-hunt.routing';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { EMPTY, filter, firstValueFrom, from, Subscription, switchMap } from 'rxjs';
@@ -40,6 +41,7 @@ export class TreasureHuntComponent implements OnInit {
   settings: Settings;
 
   mainTabSub: Subscription;
+  routerEventsSub: Subscription;
   mainTab: string;
   subTab: string;
   subTabSub: Subscription;
@@ -90,11 +92,7 @@ export class TreasureHuntComponent implements OnInit {
         return from(this.treasureHuntService.initializeSettings(this.assessment));
       })
     ).subscribe(() => {
-      let startingTab = this.assessmentService.getStartingTab();
-      if (startingTab) {
-        this.treasureHuntService.mainTab.next(startingTab);
-      }
-
+      this.treasureHuntService.assessmentId = this.assessment.id;
       if (this.assessment && !this.assessment.treasureHunt && this.settings) {
         this.assessment.treasureHunt = this.assessmentService.getDefaultTreasureHunt(this.settings);
       }
@@ -102,7 +100,12 @@ export class TreasureHuntComponent implements OnInit {
         this.assessment.treasureHunt.currentEnergyUsage = this.assessmentService.getDefaultTreasureHunt(this.settings).currentEnergyUsage;
       }
       this.treasureHuntService.treasureHunt.next(this.assessment.treasureHunt);
+      this.syncMainTabFromRoute();
     });
+
+    this.routerEventsSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => this.syncMainTabFromRoute());
 
     this.mainTabSub = this.treasureHuntService.mainTab.subscribe(val => {
       this.mainTab = val;
@@ -136,6 +139,8 @@ export class TreasureHuntComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.routerEventsSub?.unsubscribe();
+    this.treasureHuntService.assessmentId = undefined;
     this.mainTabSub.unsubscribe();
     this.subTabSub.unsubscribe();
     this.treasureHuntService.mainTab.next('baseline');
@@ -156,6 +161,18 @@ export class TreasureHuntComponent implements OnInit {
     }, 100);
   }
 
+
+  syncMainTabFromRoute() {
+    const mainView: string = (this.activatedRoute.firstChild?.snapshot.data as TreasureHuntRouteData)?.mainView;
+    if (!mainView || !this.assessment?.treasureHunt) {
+      return;
+    }
+    if (!this.assessment.treasureHunt.setupDone && TREASURE_HUNT_SETUP_GATED_VIEWS.includes(mainView)) {
+      this.router.navigate(['/treasure-hunt', this.assessment.id, TREASURE_HUNT_MAIN_VIEWS[0]], { replaceUrl: true });
+    } else {
+      this.treasureHuntService.mainTab.next(mainView);
+    }
+  }
 
   getContainerHeight() {
     if (this.content) {
@@ -214,7 +231,7 @@ export class TreasureHuntComponent implements OnInit {
     if (this.subTab == 'settings') {
       this.treasureHuntService.subTab.next('operation-costs');
     } else if (this.subTab == 'operation-costs') {
-      this.treasureHuntService.mainTab.next('find-treasure');
+      this.treasureHuntService.goToMainTab('find-treasure');
     }
   }
 
@@ -226,7 +243,7 @@ export class TreasureHuntComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.treasureHuntService.mainTab.next('baseline');
+      this.treasureHuntService.goToMainTab('baseline');
       this.treasureHuntService.subTab.next('settings');
     }
     this.showUpdateUnitsModal = false;

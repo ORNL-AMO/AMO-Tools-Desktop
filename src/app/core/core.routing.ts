@@ -10,6 +10,7 @@ import { FsatAssessmentResolver } from '../fsat/routing/fsat-assessment.resolver
 import { SsmtComponent } from '../ssmt/ssmt.component';
 import { ssmtRoutes } from '../ssmt/routing/ssmt.routing';
 import { TreasureHuntComponent } from '../treasure-hunt/treasure-hunt.component';
+import { treasureHuntRoutes } from '../treasure-hunt/routing/treasure-hunt.routing';
 import { LandingScreenComponent } from '../dashboard/landing-screen/landing-screen.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
 import { AboutPageComponent } from '../dashboard/about-page/about-page.component';
@@ -581,7 +582,8 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'treasure-hunt/:id',
-    component: TreasureHuntComponent
+    component: TreasureHuntComponent,
+    children: treasureHuntRoutes
   },
   {
     path: 'compressed-air/:id',
