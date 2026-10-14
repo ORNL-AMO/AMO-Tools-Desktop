@@ -12,7 +12,7 @@ import {
   applyEstimatedFlowResultsReducer,
   edgesChangeFromPropagationReducer,
 } from './flowCalculationReducers';
-import { WaterProcessComponentType, DiagramMetaData, ProcessFlowPart, DiagramSettings, UserDiagramOptions, DiagramCalculatedData, ParentContainerDimensions, DiagramFlowErrors, getDefaultUserDiagramOptions, getDefaultColorPalette, FlowDiagramData, CustomEdgeData, checkDiagramNodeErrors, getContrastTextColor, WaterTreatment, NodeFlowProperty, FlowConfidence, Handles, getEdgeFromConnection, ConvertValueFn, convertFlowDiagramData, WaterSystemResults, getConnectionFromEdgeId, migrateFlowDiagramFieldNames, getDefaultFlowConfidence, ProcessFlowNodeType, getEdgeDescription, DEFAULT_EDGE_STROKE_COLOR, getDefaultSettings } from 'process-flow-lib';
+import { WaterProcessComponentType, DiagramMetaData, ProcessFlowPart, DiagramSettings, UserDiagramOptions, DiagramCalculatedData, ParentContainerDimensions, DiagramFlowErrors, getDefaultUserDiagramOptions, getDefaultColorPalette, FlowDiagramData, CustomEdgeData, checkDiagramNodeErrors, getContrastTextColor, WaterTreatment, NodeFlowProperty, FlowConfidence, Handles, getEdgeFromConnection, ConvertValueFn, convertFlowDiagramData, convertNodeEnergyData, withNodeEnergyDefaults, WaterSystemResults, getConnectionFromEdgeId, migrateFlowDiagramFieldNames, getDefaultFlowConfidence, ProcessFlowNodeType, getEdgeDescription, DEFAULT_EDGE_STROKE_COLOR, getDefaultSettings } from 'process-flow-lib';
 import { createNewNode, ensureFlowTotalTouched, getNodeTargetEdges, mirrorSingleEdgeConfidenceToTotal, getNodeSourceEdges, formatDataForMEASUR } from './FlowUtils';
 
 import packageJson from '../../../package.json';
@@ -110,6 +110,9 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
     if (node.position) {
       return node;
     }
+  }).map((node: Node<ProcessFlowPart>) => {
+    const data = withNodeEnergyDefaults(node.data);
+    return data === node.data ? node : { ...node, data };
   });
   state.edges = diagramData.edges.map((edge: Edge<CustomEdgeData>) => edge);
   state.diagramOptions = diagramData.userDiagramOptions ? { ...diagramData.userDiagramOptions } : getDefaultUserDiagramOptions();
@@ -370,6 +373,7 @@ const unitsOfMeasureChangeReducer = (state: DiagramState, action: PayloadAction<
   const { newUnits, convertValueFn } = action.payload;
   const convertedDiagramData = { nodes: state.nodes as Node[], edges: state.edges as Edge[], calculatedData: state.calculatedData };
   convertFlowDiagramData(convertedDiagramData, newUnits, convertValueFn);
+  convertedDiagramData.nodes = convertNodeEnergyData(convertedDiagramData.nodes, newUnits, convertValueFn, state.settings.flowDecimalPrecision);
 
   state.settings.unitsOfMeasure = newUnits;
   state.nodes = convertedDiagramData.nodes;

@@ -1,0 +1,22 @@
+<div bsModal #loadFactorModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+    aria-labelledby="loadFactorLabel" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" aria-label="Close" (click)="hideModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body p-0 d-flex h-100 w-100">
+                @if (loadFactorModal.isShown) {
+                <app-percent-load-estimation class="w-100 h-100" [settings]="settings">
+                </app-percent-load-estimation>
+                }
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button class="btn btn-default pull-left" (click)="hideModal()">Cancel</button>
+                <button class="ml-2 btn btn-primary" (click)="save()">Apply Data</button>
+            </div>
+        </div>
+    </div>
+</div>

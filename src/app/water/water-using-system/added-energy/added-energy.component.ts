@@ -1,13 +1,11 @@
-import { Component, ElementRef, HostListener, Input, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { MotorEnergyService } from './motor-energy/motor-energy.service';
-import { WaterUsingSystemService } from '../water-using-system.service';
 import { WaterAssessmentService } from '../../water-assessment.service';
 import { WaterSystemComponentService } from '../../water-system-component.service';
-import { Settings } from '../../../shared/models/settings';
 import { Subscription } from 'rxjs';
 import { ConfirmDeleteData } from '../../../shared/confirm-delete-modal/confirmDeleteData';
 import { HeatEnergy, MotorEnergy, WaterUsingSystem } from '../../../../process-flow-lib/water/types/water-components';
-import { WaterAssessment } from 'process-flow-lib';
+import { WaterAssessment, getNodeTotalInflow } from 'process-flow-lib';
 
 @Component({
   selector: 'app-added-energy',
@@ -18,7 +16,7 @@ import { WaterAssessment } from 'process-flow-lib';
 export class AddedEnergyComponent {
   selectedWaterUsingSystem: WaterUsingSystem;
   waterAssessment: WaterAssessment;
-  settings: Settings;
+  systemWaterUse: number = 0;
   selectedComponentSub: Subscription;
 
   showConfirmDeleteModal: boolean = false;
@@ -35,12 +33,12 @@ export class AddedEnergyComponent {
     this.selectedComponentSub = this.waterSystemComponentService.selectedComponent.subscribe(selectedComponent => {
       this.selectedWaterUsingSystem = selectedComponent as WaterUsingSystem;
       this.waterAssessment = this.waterAssessmentService.waterAssessment.getValue();
+      this.systemWaterUse = this.waterAssessment.calculatedData ? getNodeTotalInflow(this.selectedWaterUsingSystem, this.waterAssessment.calculatedData) : 0;
     });
-
   }
 
-  focusField(str: string) {
-    this.waterAssessmentService.focusedField.next(str);
+  ngOnDestroy() {
+    this.selectedComponentSub.unsubscribe();
   }
 
   /**
