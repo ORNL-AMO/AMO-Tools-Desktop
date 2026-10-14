@@ -42,7 +42,7 @@
         </div>
         <div class="nav-item d-none d-lg-inline-block">
             <a class="nav-link" (click)="setMainTab('summary')"
-                [ngClass]="{'active': mainTab == 'summary', 'disabled': !compressedAirInventoryData.isValid}">Summary</a>
+                [ngClass]="{'active': mainTab == 'summary', 'disabled': !canOpenMainTab('summary')}">Summary</a>
         </div>
     </div>
     <div *ngIf="!bannerCollapsed" class="d-block d-lg-none nav-pills nav-fill flex-wrap mx-auto">
@@ -51,7 +51,7 @@
         </div>
         <div class="nav-item">
             <a class="nav-link" (click)="setMainTab('summary')"
-                [ngClass]="{'active': mainTab == 'summary', 'disabled': !compressedAirInventoryData.isValid}">Summary</a>
+                [ngClass]="{'active': mainTab == 'summary', 'disabled': !canOpenMainTab('summary')}">Summary</a>
         </div>
     </div>
 

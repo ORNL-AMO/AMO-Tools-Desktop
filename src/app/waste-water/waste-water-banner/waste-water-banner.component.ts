@@ -77,8 +77,12 @@ export class WasteWaterBannerComponent implements OnInit {
     this.dashboardService.navigateWithSidebarOptions('/landing-screen', { shouldCollapse: false });
   }
 
+  canOpenMainTab(view: WasteWaterMainView): boolean {
+    return isMainTabAllowed(WASTE_WATER_SETUP_GATED_VIEWS, view, this.isBaselineValid);
+  }
+
   changeTab(str: WasteWaterMainView) {
-    if (isMainTabAllowed(WASTE_WATER_SETUP_GATED_VIEWS, str, this.isBaselineValid)) {
+    if (this.canOpenMainTab(str)) {
       this.wasteWaterService.goToMainTab(str);
     }
     this.collapseBanner();

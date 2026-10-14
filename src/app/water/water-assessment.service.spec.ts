@@ -59,6 +59,27 @@ describe('WaterAssessmentService main tab navigation', () => {
     });
   });
 
+  describe('continueSetupTab / backSetupTab', () => {
+    it('steps through the setup tabs on baseline', () => {
+      service.mainTab.next('baseline');
+      service.setupTab.next('water-intake');
+      service.continueSetupTab();
+      expect(service.setupTab.getValue()).toBe('water-discharge');
+      service.backSetupTab();
+      expect(service.setupTab.getValue()).toBe('water-intake');
+    });
+
+    it('does not step past either end', () => {
+      service.mainTab.next('baseline');
+      service.setupTab.next('system-basics');
+      service.backSetupTab();
+      expect(service.setupTab.getValue()).toBe('system-basics');
+      service.setupTab.next('waste-water-treatment');
+      service.continueSetupTab();
+      expect(service.setupTab.getValue()).toBe('waste-water-treatment');
+    });
+  });
+
   describe('continueMainTab / backMainTab', () => {
     beforeEach(() => {
       service.assessmentId = 7;

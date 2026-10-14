@@ -52,8 +52,12 @@ export class SsmtBannerComponent implements OnInit {
     );
   }
 
+  canOpenMainTab(view: SsmtMainView): boolean {
+    return isMainTabAllowed(SSMT_SETUP_GATED_VIEWS, view, this.assessment.ssmt.setupDone);
+  }
+
   changeTab(str: SsmtMainView) {
-    if (isMainTabAllowed(SSMT_SETUP_GATED_VIEWS, str, this.assessment.ssmt.setupDone)) {
+    if (this.canOpenMainTab(str)) {
       this.ssmtService.goToMainTab(str);
     }
     this.collapseBanner();

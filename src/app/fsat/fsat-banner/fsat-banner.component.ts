@@ -38,8 +38,12 @@ export class FsatBannerComponent implements OnInit {
     this.mainTabSubscription.unsubscribe();
   }
 
+  canOpenMainTab(view: FsatMainView): boolean {
+    return isMainTabAllowed(FSAT_SETUP_GATED_VIEWS, view, this.assessment.fsat.setupDone);
+  }
+
   changeTab(str: FsatMainView) {
-    if (isMainTabAllowed(FSAT_SETUP_GATED_VIEWS, str, this.assessment.fsat.setupDone)) {
+    if (this.canOpenMainTab(str)) {
       this.fsatService.goToMainTab(str);
     }
     this.collapseBanner();

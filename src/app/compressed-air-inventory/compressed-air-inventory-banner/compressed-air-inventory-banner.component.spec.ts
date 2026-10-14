@@ -57,6 +57,18 @@ describe('CompressedAirInventoryBannerComponent', () => {
     component = fixture.componentInstance;
   });
 
+  describe('canOpenMainTab', () => {
+    it('allows summary only while the inventory is valid', () => {
+      inventoryDataSubject.next(makeInventoryData(false));
+      fixture.detectChanges();
+      expect(component.canOpenMainTab('setup')).toBeTrue();
+      expect(component.canOpenMainTab('summary')).toBeFalse();
+      inventoryDataSubject.next(makeInventoryData(true));
+      fixture.detectChanges();
+      expect(component.canOpenMainTab('summary')).toBeTrue();
+    });
+  });
+
   describe('setMainTab', () => {
     it('navigates to summary when the inventory is valid', () => {
       fixture.detectChanges();

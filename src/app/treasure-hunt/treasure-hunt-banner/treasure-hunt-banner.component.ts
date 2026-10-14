@@ -68,9 +68,13 @@ export class TreasureHuntBannerComponent implements OnInit {
   }
 
 
+  canOpenMainTab(view: TreasureHuntMainView): boolean {
+    return isMainTabAllowed(TREASURE_HUNT_SETUP_GATED_VIEWS, view, this.assessment.treasureHunt.setupDone);
+  }
+
   changeTab(str: TreasureHuntMainView) {
     if (this.disableTabs == false) {
-      if (isMainTabAllowed(TREASURE_HUNT_SETUP_GATED_VIEWS, str, this.assessment.treasureHunt.setupDone)) {
+      if (this.canOpenMainTab(str)) {
         this.treasureHuntService.goToMainTab(str);
       }
     }

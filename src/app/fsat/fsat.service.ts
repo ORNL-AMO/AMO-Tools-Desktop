@@ -191,18 +191,20 @@ export class FsatService {
     if (tmpStepTab === 'fan-field-data') {
       this.goToMainTab('assessment');
     } else {
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
-      this.stepTab.next(nextTab);
+      const nextTab: string = getSteppedView(this.stepTabs, tmpStepTab, 1);
+      if (nextTab) {
+        this.stepTab.next(nextTab);
+      }
     }
   }
 
   back() {
     let tmpStepTab: string = this.stepTab.getValue();
     if (tmpStepTab !== 'baseline' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
-      this.stepTab.next(nextTab);
+      const previousTab: string = getSteppedView(this.stepTabs, tmpStepTab, -1);
+      if (previousTab) {
+        this.stepTab.next(previousTab);
+      }
     } else if (this.mainTab.getValue() == 'assessment') {
       this.goToMainTab('baseline');
     }

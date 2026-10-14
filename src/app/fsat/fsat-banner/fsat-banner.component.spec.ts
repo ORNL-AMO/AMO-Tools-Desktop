@@ -47,6 +47,16 @@ describe('FsatBannerComponent', () => {
     fixture.detectChanges();
   });
 
+  describe('canOpenMainTab', () => {
+    it('allows gated tabs only once setup is done', () => {
+      component.assessment = makeAssessment(false);
+      expect(component.canOpenMainTab('baseline')).toBeTrue();
+      expect(component.canOpenMainTab('report')).toBeFalse();
+      component.assessment = makeAssessment(true);
+      expect(component.canOpenMainTab('report')).toBeTrue();
+    });
+  });
+
   describe('changeTab', () => {
     (['baseline', 'calculators'] satisfies Array<FsatMainView>).forEach(view => {
       it(`changes to ${view} regardless of setupDone and collapses the banner`, () => {

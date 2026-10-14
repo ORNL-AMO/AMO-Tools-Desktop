@@ -129,4 +129,25 @@ describe('FsatService main tab stepping', () => {
     service.backMainTab();
     expect(routerSpy.navigate).not.toHaveBeenCalled();
   });
+
+  describe('baseline step tabs', () => {
+    it('continue advances to the next step tab', () => {
+      service.stepTab.next('fan-operations');
+      service.continue();
+      expect(service.stepTab.value).toBe('fan-setup');
+    });
+
+    it('continue from the last step tab opens the assessment tab', () => {
+      service.stepTab.next('fan-field-data');
+      service.continue();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/fsat', 7, 'assessment']);
+    });
+
+    it('back returns to the previous step tab on baseline', () => {
+      service.mainTab.next('baseline');
+      service.stepTab.next('fan-motor');
+      service.back();
+      expect(service.stepTab.value).toBe('fan-setup');
+    });
+  });
 });

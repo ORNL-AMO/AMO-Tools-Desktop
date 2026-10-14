@@ -52,6 +52,18 @@ describe('WasteWaterBannerComponent', () => {
     component = fixture.componentInstance;
   });
 
+  describe('canOpenMainTab', () => {
+    it('allows gated tabs only while the baseline is valid', () => {
+      wasteWaterSubject.next(makeWasteWater(false));
+      fixture.detectChanges();
+      expect(component.canOpenMainTab('calculators')).toBeTrue();
+      expect(component.canOpenMainTab('assessment')).toBeFalse();
+      wasteWaterSubject.next(makeWasteWater(true));
+      fixture.detectChanges();
+      expect(component.canOpenMainTab('assessment')).toBeTrue();
+    });
+  });
+
   describe('changeTab', () => {
     it('navigates to the selected main tab when the baseline is valid', () => {
       fixture.detectChanges();

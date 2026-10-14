@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import * as _ from 'lodash';
 import { PSAT_MAIN_VIEWS, PsatMainView } from './routing/psat.routing';
 import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 @Injectable()
@@ -40,9 +39,10 @@ export class PsatTabService {
     if (tmpStepTab == 'field-data') {
       this.goToMainTab('assessment');
     } else {
-      let currentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab })
-      let nextTab: string = this.stepTabs[currentTabIndex + 1];
-      this.stepTab.next(nextTab);
+      const nextTab: string = getSteppedView(this.stepTabs, tmpStepTab, 1);
+      if (nextTab) {
+        this.stepTab.next(nextTab);
+      }
     }
   }
 
@@ -51,9 +51,10 @@ export class PsatTabService {
       this.goToMainTab('baseline');
     } else {
       let tmpStepTab: string = this.stepTab.getValue();
-      let currentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab })
-      let previusTab: string = this.stepTabs[currentTabIndex - 1];
-      this.stepTab.next(previusTab);
+      const previousTab: string = getSteppedView(this.stepTabs, tmpStepTab, -1);
+      if (previousTab) {
+        this.stepTab.next(previousTab);
+      }
     }
   }
 

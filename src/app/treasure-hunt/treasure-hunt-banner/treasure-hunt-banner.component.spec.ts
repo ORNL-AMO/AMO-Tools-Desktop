@@ -51,6 +51,17 @@ describe('TreasureHuntBannerComponent', () => {
     component = fixture.componentInstance;
   });
 
+  describe('canOpenMainTab', () => {
+    it('allows gated tabs only once setup is done', () => {
+      component.assessment = makeAssessment(false);
+      fixture.detectChanges();
+      expect(component.canOpenMainTab('baseline')).toBeTrue();
+      expect(component.canOpenMainTab('report')).toBeFalse();
+      component.assessment = makeAssessment(true);
+      expect(component.canOpenMainTab('report')).toBeTrue();
+    });
+  });
+
   describe('changeTab', () => {
     (['find-treasure', 'treasure-chest', 'report'] satisfies Array<TreasureHuntMainView>).forEach(tab => {
       it(`navigates to ${tab} when setup is done`, () => {

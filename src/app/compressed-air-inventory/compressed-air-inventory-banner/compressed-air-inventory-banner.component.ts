@@ -106,8 +106,12 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
   }
 
 
+  canOpenMainTab(view: CompressedAirInventoryMainView): boolean {
+    return isMainTabAllowed(COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, view, this.compressedAirInventoryData.isValid);
+  }
+
   setMainTab(str: CompressedAirInventoryMainView) {
-    if (isMainTabAllowed(COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, str, this.compressedAirInventoryData.isValid)) {
+    if (this.canOpenMainTab(str)) {
       this.compressedAirInventoryService.goToMainTab(str);
     }
     this.collapseBanner();

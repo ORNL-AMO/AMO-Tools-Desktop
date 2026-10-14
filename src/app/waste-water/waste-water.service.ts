@@ -469,18 +469,20 @@ export class WasteWaterService {
     if (tmpStepTab === 'aerator-performance') {
       this.goToMainTab('assessment');
     } else {
-      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.setupTabs[assessmentTabIndex + 1];
-      this.setupTab.next(nextTab);
+      const nextTab: string = getSteppedView(this.setupTabs, tmpStepTab, 1);
+      if (nextTab) {
+        this.setupTab.next(nextTab);
+      }
     }
   }
 
   back() {
     let tmpStepTab: string = this.setupTab.getValue();
     if (tmpStepTab !== 'baseline' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.setupTabs[assessmentTabIndex - 1];
-      this.setupTab.next(nextTab);
+      const previousTab: string = getSteppedView(this.setupTabs, tmpStepTab, -1);
+      if (previousTab) {
+        this.setupTab.next(previousTab);
+      }
     } else if (this.mainTab.getValue() == 'assessment') {
       this.goToMainTab('baseline');
     }

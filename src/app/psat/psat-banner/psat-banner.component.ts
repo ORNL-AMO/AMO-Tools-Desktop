@@ -63,8 +63,12 @@ export class PsatBannerComponent implements OnInit {
     );
   }
 
+  canOpenMainTab(view: PsatMainView): boolean {
+    return isMainTabAllowed(PSAT_SETUP_GATED_VIEWS, view, this.assessment.psat.setupDone);
+  }
+
   changeTab(str: PsatMainView) {
-    if (isMainTabAllowed(PSAT_SETUP_GATED_VIEWS, str, this.assessment.psat.setupDone)) {
+    if (this.canOpenMainTab(str)) {
       this.psatTabService.goToMainTab(str);
     }
     this.collapseBanner();
