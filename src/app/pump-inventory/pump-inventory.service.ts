@@ -10,7 +10,8 @@ import { PumpEquipmentCatalogService } from './pump-inventory-setup/pump-catalog
 import { UntypedFormGroup } from '@angular/forms';
 import { PumpMotorCatalogService } from './pump-inventory-setup/pump-catalog/pump-motor-catalog/pump-motor-catalog.service';
 import { copyObject } from '../shared/helperFunctions';
-import { PumpInventoryRouteData, setupTabs, summaryTabs } from './pump-inventory.routing';
+import { PUMP_INVENTORY_MAIN_VIEWS, PUMP_INVENTORY_SETUP_GATED_VIEWS, PUMP_INVENTORY_SETUP_VIEWS, PUMP_INVENTORY_SUMMARY_VIEWS } from './pump-inventory.routing';
+import { MainTabRouteData, getMergedRouteData, getSteppedView, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class PumpInventoryService {
@@ -59,18 +60,15 @@ export class PumpInventoryService {
    * @param snapshot snapshot to walk down through its `firstChild` chain
    */
   syncTabsFromRoute(snapshot: ActivatedRouteSnapshot) {
-    while (snapshot) {
-      let data: PumpInventoryRouteData = snapshot.data;
-      if (data.mainView && data.mainView !== this.mainTab.getValue()) {
-        this.mainTab.next(data.mainView);
-      }
-      if (data.setupView && data.setupView !== this.setupTab.getValue()) {
-        this.setupTab.next(data.setupView);
-      }
-      if (data.summaryView && data.summaryView !== this.summaryTab.getValue()) {
-        this.summaryTab.next(data.summaryView);
-      }
-      snapshot = snapshot.firstChild;
+    const data: MainTabRouteData = getMergedRouteData(snapshot);
+    if (data.mainView && data.mainView !== this.mainTab.getValue()) {
+      this.mainTab.next(data.mainView);
+    }
+    if (data.setupView && data.setupView !== this.setupTab.getValue()) {
+      this.setupTab.next(data.setupView);
+    }
+    if (data.summaryView && data.summaryView !== this.summaryTab.getValue()) {
+      this.summaryTab.next(data.summaryView);
     }
   }
 
@@ -78,8 +76,8 @@ export class PumpInventoryService {
    * Replaces the summary route with plant setup while the inventory is invalid, so Back does not return to it.
    */
   redirectInvalidSummary() {
-    if (this.mainTab.getValue() === 'summary' && !this.pumpInventoryData.getValue().isValid) {
-      this.router.navigate(['/pump-inventory', this.currentInventoryId, 'setup', setupTabs[0]], { replaceUrl: true });
+    if (!isMainTabAllowed(PUMP_INVENTORY_SETUP_GATED_VIEWS, this.mainTab.getValue(), this.pumpInventoryData.getValue().isValid)) {
+      this.router.navigate(['/pump-inventory', this.currentInventoryId, PUMP_INVENTORY_MAIN_VIEWS[0], PUMP_INVENTORY_SETUP_VIEWS[0]], { replaceUrl: true });
     }
   }
 
@@ -103,6 +101,14 @@ export class PumpInventoryService {
     this.router.navigate(['/pump-inventory', this.currentInventoryId, 'summary', tab]);
   }
 
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
+  backMainTab() {
+    this.stepMainTab(-1);
+  }
+
   continueSetupTab() {
     this.stepSetupTab(1);
   }
@@ -119,17 +125,24 @@ export class PumpInventoryService {
     this.stepSummaryTab(-1);
   }
 
+  private stepMainTab(offset: number) {
+    const view: string = getSteppedView(PUMP_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
+    }
+  }
+
   private stepSetupTab(offset: number) {
-    const adjacentTab: string = setupTabs[setupTabs.indexOf(this.setupTab.getValue()) + offset];
-    if (adjacentTab) {
-      this.goToSetupTab(adjacentTab);
+    const view: string = getSteppedView(PUMP_INVENTORY_SETUP_VIEWS, this.setupTab.getValue(), offset);
+    if (view) {
+      this.goToSetupTab(view);
     }
   }
 
   private stepSummaryTab(offset: number) {
-    const adjacentTab: string = summaryTabs[summaryTabs.indexOf(this.summaryTab.getValue()) + offset];
-    if (adjacentTab) {
-      this.goToSummaryTab(adjacentTab);
+    const view: string = getSteppedView(PUMP_INVENTORY_SUMMARY_VIEWS, this.summaryTab.getValue(), offset);
+    if (view) {
+      this.goToSummaryTab(view);
     }
   }
 

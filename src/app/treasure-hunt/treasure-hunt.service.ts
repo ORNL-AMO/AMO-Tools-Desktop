@@ -8,6 +8,7 @@ import { SettingsService } from '../settings/settings.service';
 import { Assessment } from '../shared/models/assessment';
 import { Router } from '@angular/router';
 import { TREASURE_HUNT_MAIN_VIEWS } from './routing/treasure-hunt.routing';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class TreasureHuntService {
@@ -106,9 +107,8 @@ export class TreasureHuntService {
   }
 
   private stepMainTab(offset: number) {
-    const index: number = TREASURE_HUNT_MAIN_VIEWS.indexOf(this.mainTab.getValue());
-    const view: string = TREASURE_HUNT_MAIN_VIEWS[index + offset];
-    if (index !== -1 && view) {
+    const view: string = getSteppedView(TREASURE_HUNT_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
       this.goToMainTab(view);
     }
   }

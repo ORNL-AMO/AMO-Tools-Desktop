@@ -4,7 +4,8 @@ import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
  
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { TREASURE_HUNT_MAIN_VIEWS, TREASURE_HUNT_SETUP_GATED_VIEWS, TreasureHuntRouteData } from './routing/treasure-hunt.routing';
+import { TREASURE_HUNT_MAIN_VIEWS, TREASURE_HUNT_SETUP_GATED_VIEWS } from './routing/treasure-hunt.routing';
+import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { EMPTY, filter, firstValueFrom, from, Subscription, switchMap } from 'rxjs';
@@ -163,14 +164,14 @@ export class TreasureHuntComponent implements OnInit {
 
 
   syncMainTabFromRoute() {
-    const mainView: string = (this.activatedRoute.firstChild?.snapshot.data as TreasureHuntRouteData)?.mainView;
+    const mainView: string = getMergedRouteData(this.activatedRoute.firstChild?.snapshot).mainView;
     if (!mainView || !this.assessment?.treasureHunt) {
       return;
     }
-    if (!this.assessment.treasureHunt.setupDone && TREASURE_HUNT_SETUP_GATED_VIEWS.includes(mainView)) {
-      this.router.navigate(['/treasure-hunt', this.assessment.id, TREASURE_HUNT_MAIN_VIEWS[0]], { replaceUrl: true });
-    } else {
+    if (isMainTabAllowed(TREASURE_HUNT_SETUP_GATED_VIEWS, mainView, this.assessment.treasureHunt.setupDone)) {
       this.treasureHuntService.mainTab.next(mainView);
+    } else {
+      this.router.navigate(['/treasure-hunt', this.assessment.id, TREASURE_HUNT_MAIN_VIEWS[0]], { replaceUrl: true });
     }
   }
 

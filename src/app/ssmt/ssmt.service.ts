@@ -14,6 +14,7 @@ import { ConvertUnitsService } from '../shared/convert-units/convert-units.servi
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { SSMT_MAIN_VIEWS } from './routing/ssmt.routing';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class SsmtService {
@@ -452,9 +453,8 @@ export class SsmtService {
   }
 
   private stepMainTab(offset: number) {
-    const index: number = SSMT_MAIN_VIEWS.indexOf(this.mainTab.getValue());
-    const view: string = SSMT_MAIN_VIEWS[index + offset];
-    if (index !== -1 && view) {
+    const view: string = getSteppedView(SSMT_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
       this.goToMainTab(view);
     }
   }

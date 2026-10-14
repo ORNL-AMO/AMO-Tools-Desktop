@@ -8,6 +8,8 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { TREASURE_HUNT_SETUP_GATED_VIEWS } from '../routing/treasure-hunt.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
     selector: 'app-treasure-hunt-banner',
@@ -68,9 +70,7 @@ export class TreasureHuntBannerComponent implements OnInit {
 
   changeTab(str: string) {
     if (this.disableTabs == false) {
-      if (str == 'baseline') {
-        this.treasureHuntService.goToMainTab(str);
-      } else if (this.assessment.treasureHunt.setupDone == true) {
+      if (isMainTabAllowed(TREASURE_HUNT_SETUP_GATED_VIEWS, str, this.assessment.treasureHunt.setupDone)) {
         this.treasureHuntService.goToMainTab(str);
       }
     }

@@ -2,11 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import * as _ from 'lodash';
-import { PSAT_STEPPED_ROUTES, SteppedRoute } from './routing/stepped-routes';
+import { PSAT_MAIN_VIEWS } from './routing/psat.routing';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 @Injectable()
 export class PsatTabService {
   private router = inject(Router);
-  private steppedRoutes: SteppedRoute[] = inject(PSAT_STEPPED_ROUTES);
 
   modifyConditionsTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<string>;
@@ -68,18 +68,17 @@ export class PsatTabService {
   }
 
   continueMainTab() {
-    const currentIndex: number = this.steppedRoutes.findIndex(route => route.view === this.mainTab.getValue());
-    const nextRoute: SteppedRoute = this.steppedRoutes[currentIndex + 1];
-    if (nextRoute) {
-      this.goToMainTab(nextRoute.path);
-    }
+    this.stepMainTab(1);
   }
 
   backMainTab() {
-    const currentIndex: number = this.steppedRoutes.findIndex(route => route.view === this.mainTab.getValue());
-    const previousRoute: SteppedRoute = this.steppedRoutes[currentIndex - 1];
-    if (previousRoute) {
-      this.goToMainTab(previousRoute.path);
+    this.stepMainTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const view: string = getSteppedView(PSAT_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
     }
   }
 

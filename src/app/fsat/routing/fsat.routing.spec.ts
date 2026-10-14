@@ -1,4 +1,5 @@
 import { fsatRoutes } from './fsat.routing';
+import { FSAT_MAIN_VIEWS, FSAT_SETUP_GATED_VIEWS } from './fsat-main-views';
 import { FsatBaselineComponent } from '../baseline/fsat-baseline.component';
 import { FsatAssessmentComponent } from '../assessment/fsat-assessment.component';
 import { FsatDiagramComponent } from '../fsat-diagram/fsat-diagram.component';
@@ -13,21 +14,31 @@ describe('fsatRoutes', () => {
     expect(emptyRoute.pathMatch).toBe('full');
   });
 
-  const cases: Array<[string, any, number]> = [
-    ['baseline', FsatBaselineComponent, 0],
-    ['assessment', FsatAssessmentComponent, 1],
-    ['diagram', FsatDiagramComponent, 2],
-    ['report', FsatReportComponent, 3],
-    ['sankey', FsatSankeyResultsComponent, 4],
-    ['calculators', FsatCalculatorsComponent, 5],
+  const cases: Array<[string, any]> = [
+    ['baseline', FsatBaselineComponent],
+    ['assessment', FsatAssessmentComponent],
+    ['diagram', FsatDiagramComponent],
+    ['report', FsatReportComponent],
+    ['sankey', FsatSankeyResultsComponent],
+    ['calculators', FsatCalculatorsComponent],
   ];
 
-  cases.forEach(([path, component, stepIndex]) => {
+  it('defines one route per main view in banner order', () => {
+    const paths = fsatRoutes.filter(route => route.path !== '').map(route => route.path);
+    expect(paths).toEqual(FSAT_MAIN_VIEWS);
+    expect(paths).toEqual(cases.map(([path]) => path));
+  });
+
+  it('gates every main view except baseline and calculators', () => {
+    expect(FSAT_SETUP_GATED_VIEWS).toEqual(FSAT_MAIN_VIEWS.filter(view => view !== 'baseline' && view !== 'calculators'));
+  });
+
+  cases.forEach(([path, component]) => {
     it(`resolves "${path}" to its component and sets data.mainView`, () => {
       const route = fsatRoutes.find(r => r.path === path);
       expect(route).toBeTruthy();
       expect(route.component).toBe(component);
-      expect(route.data).toEqual({ mainView: path, stepIndex });
+      expect(route.data).toEqual({ mainView: path });
     });
   });
 });

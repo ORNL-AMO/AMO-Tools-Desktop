@@ -17,6 +17,7 @@ import { getDefaultProcessCoolingAssessment } from '../process-cooling-assessmen
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { OperatingHours } from '../shared/models/operations';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { getRoutedAssessmentUrl } from './routed-assessment-tabs';
 
 @Injectable()
 export class AssessmentService {
@@ -43,43 +44,18 @@ export class AssessmentService {
       this.subTab = subTab;
     }
 
-    let itemSegment: string;
-    if (assessment.type === 'PSAT') {
-      if (assessment.psat.setupDone && !mainTab && (!assessment.isExample)) {
-        this.startingTab = 'assessment';
-      }
-      this.dashboardService.navigateWithSidebarOptions('/psat/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
+    const routedUrl: string | undefined = getRoutedAssessmentUrl(assessment, mainTab);
+    if (routedUrl) {
+      this.dashboardService.navigateWithSidebarOptions(routedUrl, { shouldCollapse: true });
       return;
-    } else if (assessment.type === 'PHAST') {
+    }
+
+    let itemSegment: string;
+    if (assessment.type === 'PHAST') {
       if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
         this.startingTab = 'assessment';
       }
       itemSegment = '/phast/';
-    } else if (assessment.type === 'FSAT') {
-      if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
-        this.startingTab = 'assessment';
-      }
-      this.dashboardService.navigateWithSidebarOptions('/fsat/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
-      return;
-    } else if (assessment.type === 'SSMT') {
-      if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
-        this.startingTab = 'assessment';
-      }
-      this.dashboardService.navigateWithSidebarOptions('/ssmt/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
-      return;
-    } else if (assessment.type == 'TreasureHunt') {
-      // * Treasure Hunt has no 'assessment' tab; the generic dashboard 'Assessment' link maps to its treasure chest
-      if ((assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) || mainTab == 'assessment') {
-        this.startingTab = 'treasure-chest';
-      }
-      this.dashboardService.navigateWithSidebarOptions('/treasure-hunt/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
-      return;
-    } else if (assessment.type == 'WasteWater') {
-      if (assessment.wasteWater.setupDone && !mainTab && !assessment.isExample) {
-        this.startingTab = 'assessment';
-      }
-      this.dashboardService.navigateWithSidebarOptions('/waste-water/' + assessment.id + '/' + this.startingTab, { shouldCollapse: true });
-      return;
     } else if (assessment.type == 'CompressedAir') {
       let url: string = '/compressed-air/' + assessment.id;
       if (mainTab == 'baseline' && subTab == 'day-types') {
@@ -98,15 +74,6 @@ export class AssessmentService {
         this.startingTab = 'assessment';
       }
       itemSegment = '/process-cooling/';
-    } else if (assessment.type == 'Water') {
-      const waterMainTabs: string[] = ['baseline', 'diagram', 'report'];
-      this.startingTab = waterMainTabs.includes(mainTab) ? mainTab : 'baseline';
-      let waterPath: string = '/water/' + assessment.id + '/' + this.startingTab;
-      if (this.startingTab === 'diagram' && assessment.diagramId) {
-        waterPath += '/' + assessment.diagramId;
-      }
-      this.dashboardService.navigateWithSidebarOptions(waterPath, { shouldCollapse: true });
-      return;
     }
 
     this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, { shouldCollapse: true })

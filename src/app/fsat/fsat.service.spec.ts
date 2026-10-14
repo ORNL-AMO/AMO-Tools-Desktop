@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { of, Subject } from 'rxjs';
-import { ActivatedRouteSnapshot, Event, NavigationEnd, Router } from '@angular/router';
+import { of } from 'rxjs';
+import { Router } from '@angular/router';
 import { FsatService } from './fsat.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { SettingsService } from '../settings/settings.service';
@@ -16,7 +16,6 @@ import { FanMotorService } from './fan-motor/fan-motor.service';
 import { OperationsService } from './operations/operations.service';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
-import { STEPPED_ROUTES } from './routing/stepped-routes';
 
 describe('FsatService.initAssessmentSettings', () => {
   let service: FsatService;
@@ -33,7 +32,7 @@ describe('FsatService.initAssessmentSettings', () => {
     TestBed.configureTestingModule({
       providers: [
         FsatService,
-        { provide: Router, useValue: { events: of(), routerState: { snapshot: { root: undefined } } } },
+        { provide: Router, useValue: {} },
         { provide: SettingsDbService, useValue: settingsDbService },
         { provide: SettingsService, useValue: settingsService },
         { provide: ConvertFsatService, useValue: {} },
@@ -46,7 +45,6 @@ describe('FsatService.initAssessmentSettings', () => {
         { provide: FanSetupService, useValue: {} },
         { provide: FanMotorService, useValue: {} },
         { provide: OperationsService, useValue: {} },
-        { provide: STEPPED_ROUTES, useValue: [] },
       ]
     });
     service = TestBed.inject(FsatService);
@@ -80,17 +78,16 @@ describe('FsatService.initAssessmentSettings', () => {
   });
 });
 
-describe('FsatService main tab sync', () => {
+describe('FsatService main tab stepping', () => {
   let service: FsatService;
-  let routerEvents: Subject<Event>;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(() => {
-    routerEvents = new Subject<Event>();
-    const root = { data: {}, firstChild: { data: { mainView: 'report' }, firstChild: null } } as unknown as ActivatedRouteSnapshot;
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
     TestBed.configureTestingModule({
       providers: [
         FsatService,
-        { provide: Router, useValue: { events: routerEvents, routerState: { snapshot: { root } } } },
+        { provide: Router, useValue: routerSpy },
         { provide: SettingsDbService, useValue: {} },
         { provide: SettingsService, useValue: {} },
         { provide: ConvertFsatService, useValue: {} },
@@ -103,19 +100,33 @@ describe('FsatService main tab sync', () => {
         { provide: FanSetupService, useValue: {} },
         { provide: FanMotorService, useValue: {} },
         { provide: OperationsService, useValue: {} },
-        { provide: STEPPED_ROUTES, useValue: [] },
       ]
     });
     service = TestBed.inject(FsatService);
+    service.assessment.next({ id: 7 } as Assessment);
   });
 
-  it('syncs mainTab from route data on FSAT navigations', () => {
-    routerEvents.next(new NavigationEnd(1, '/fsat/1/report', '/fsat/1/report'));
-    expect(service.mainTab.value).toBe('report');
+  it('continueMainTab navigates to the next main tab', () => {
+    service.mainTab.next('report');
+    service.continueMainTab();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/fsat', 7, 'sankey']);
   });
 
-  it('ignores navigations outside FSAT that share the mainView route data key', () => {
-    routerEvents.next(new NavigationEnd(1, '/psat/1/report', '/psat/1/report'));
-    expect(service.mainTab.value).toBe('baseline');
+  it('continueMainTab does nothing on the last main tab', () => {
+    service.mainTab.next('calculators');
+    service.continueMainTab();
+    expect(routerSpy.navigate).not.toHaveBeenCalled();
+  });
+
+  it('backMainTab navigates to the previous main tab', () => {
+    service.mainTab.next('calculators');
+    service.backMainTab();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/fsat', 7, 'sankey']);
+  });
+
+  it('backMainTab does nothing on the first main tab', () => {
+    service.mainTab.next('baseline');
+    service.backMainTab();
+    expect(routerSpy.navigate).not.toHaveBeenCalled();
   });
 });

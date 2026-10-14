@@ -5,12 +5,15 @@ import { Settings } from '../shared/models/settings';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { FSAT, Modification } from '../shared/models/fans';
 import { CompareService } from './compare.service';
 import { ConvertFsatService } from './convert-fsat.service';
 import * as _ from 'lodash';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { FSAT_MAIN_VIEWS, FSAT_SETUP_GATED_VIEWS } from './routing/fsat-main-views';
+import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
     selector: 'app-fsat',
@@ -56,7 +59,9 @@ export class FsatComponent implements OnInit, OnDestroy {
     private compareService: CompareService,
     private cd: ChangeDetectorRef,
     private convertFsatService: ConvertFsatService,
-    private analyticsService: AnalyticsService) {
+    private analyticsService: AnalyticsService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -130,6 +135,10 @@ export class FsatComponent implements OnInit, OnDestroy {
       tmpModification.exploreOpportunities = exploreOpportunities;
       this.saveNewMod(tmpModification);
     }));
+    this.syncMainTabFromRoute();
+    this.subs.push(this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => this.syncMainTabFromRoute()));
 
     this.checkShowWelcomeScreen();
   }
@@ -140,6 +149,21 @@ export class FsatComponent implements OnInit, OnDestroy {
     this.compareService.selectedModification.next(undefined);
     this.subs.forEach(sub => sub.unsubscribe());
     this.fsatService.initData();
+  }
+
+  /**
+   * The route is the source of truth for the main tab. Tabs the banner gates behind setup redirect to baseline when reached by URL or history.
+   */
+  syncMainTabFromRoute() {
+    const mainView: string = getMergedRouteData(this.activatedRoute.firstChild?.snapshot).mainView;
+    if (!mainView || !this.assessment) {
+      return;
+    }
+    if (isMainTabAllowed(FSAT_SETUP_GATED_VIEWS, mainView, this.assessment.fsat.setupDone)) {
+      this.fsatService.mainTab.next(mainView);
+    } else {
+      this.router.navigate(['/fsat', this.assessment.id, FSAT_MAIN_VIEWS[0]], { replaceUrl: true });
+    }
   }
 
   ngAfterViewInit() {

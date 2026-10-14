@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { MOTOR_INVENTORY_MAIN_VIEWS, MotorInventoryRouteData } from './motor-inventory.routing';
+import { MOTOR_INVENTORY_MAIN_VIEWS } from './motor-inventory.routing';
+import { MainTabRouteData, getMergedRouteData, getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyDisplayOptions, FilterInventorySummary } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import * as _ from 'lodash';
@@ -45,12 +46,9 @@ export class MotorInventoryService {
    * @param snapshot snapshot to walk down through its `firstChild` chain
    */
   syncMainTabFromRoute(snapshot: ActivatedRouteSnapshot) {
-    while (snapshot) {
-      let data: MotorInventoryRouteData = snapshot.data;
-      if (data.mainView && data.mainView !== this.mainTab.getValue()) {
-        this.mainTab.next(data.mainView);
-      }
-      snapshot = snapshot.firstChild;
+    const data: MainTabRouteData = getMergedRouteData(snapshot);
+    if (data.mainView && data.mainView !== this.mainTab.getValue()) {
+      this.mainTab.next(data.mainView);
     }
   }
 
@@ -70,9 +68,8 @@ export class MotorInventoryService {
   }
 
   private stepMainTab(offset: number) {
-    const index: number = MOTOR_INVENTORY_MAIN_VIEWS.indexOf(this.mainTab.getValue());
-    const view: string = MOTOR_INVENTORY_MAIN_VIEWS[index + offset];
-    if (index !== -1 && view) {
+    const view: string = getSteppedView(MOTOR_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
       this.goToMainTab(view);
     }
   }

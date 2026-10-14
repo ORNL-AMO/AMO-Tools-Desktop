@@ -16,6 +16,7 @@ import _ from 'lodash';
 import { copyObject } from '../shared/helperFunctions';
 import { CompressedAirMotorIntegrationService } from '../shared/connected-inventory/compressed-air-motor-integration.service';
 import { COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS } from './compressed-air-inventory.routing';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class CompressedAirInventoryService {
@@ -110,23 +111,23 @@ export class CompressedAirInventoryService {
   }
 
   private stepMainTab(offset: number) {
-    const adjacentView: string = COMPRESSED_AIR_INVENTORY_MAIN_VIEWS[COMPRESSED_AIR_INVENTORY_MAIN_VIEWS.indexOf(this.mainTab.getValue()) + offset];
-    if (adjacentView) {
-      this.goToMainTab(adjacentView);
+    const view: string = getSteppedView(COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
     }
   }
 
   private stepSetupTab(offset: number) {
-    const adjacentView: string = COMPRESSED_AIR_INVENTORY_SETUP_VIEWS[COMPRESSED_AIR_INVENTORY_SETUP_VIEWS.indexOf(this.setupTab.getValue()) + offset];
-    if (adjacentView) {
-      this.goToSetupTab(adjacentView);
+    const view: string = getSteppedView(COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, this.setupTab.getValue(), offset);
+    if (view) {
+      this.goToSetupTab(view);
     }
   }
 
   private stepSummaryTab(offset: number) {
-    const adjacentView: string = COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS[COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS.indexOf(this.summaryTab.getValue()) + offset];
-    if (adjacentView) {
-      this.goToSummaryTab(adjacentView);
+    const view: string = getSteppedView(COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS, this.summaryTab.getValue(), offset);
+    if (view) {
+      this.goToSummaryTab(view);
     }
   }
 

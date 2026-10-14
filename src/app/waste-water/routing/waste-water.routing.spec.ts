@@ -1,4 +1,4 @@
-import { WASTE_WATER_MAIN_VIEWS, wasteWaterRoutes } from './waste-water.routing';
+import { WASTE_WATER_MAIN_VIEWS, WASTE_WATER_SETUP_GATED_VIEWS, wasteWaterRoutes } from './waste-water.routing';
 
 describe('wasteWaterRoutes', () => {
   const mainViews: Array<string> = ['baseline', 'assessment', 'analysis', 'diagram', 'report', 'calculators'];
@@ -21,5 +21,9 @@ describe('wasteWaterRoutes', () => {
 
   it('lists main views in banner order', () => {
     expect(WASTE_WATER_MAIN_VIEWS).toEqual(mainViews);
+  });
+
+  it('gates the setup-dependent main views only', () => {
+    expect(WASTE_WATER_SETUP_GATED_VIEWS).toEqual(['assessment', 'analysis', 'diagram', 'report']);
   });
 });
