@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -18,17 +18,15 @@ const METRIC = { unitsOfMeasure: 'Metric', energyResultUnit: 'kJ' } as Settings;
 describe('OpeningCalculationService', () => {
   let service: OpeningCalculationService;
   let apiSpy: jasmine.SpyObj<ProcessHeatingApiService>;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
     apiSpy = jasmine.createSpyObj('ProcessHeatingApiService', ['openingLossesCircular', 'openingLossesQuad']);
     apiSpy.openingLossesCircular.and.returnValue(1000);
     apiSpy.openingLossesQuad.and.returnValue(1000);
     TestBed.configureTestingModule({
-      providers: [OpeningCalculationService, ConvertUnitsService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
+      providers: [OpeningCalculationService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
     });
     service = TestBed.inject(OpeningCalculationService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('dispatches Round openings to the circular suite call with Imperial inputs unchanged', () => {
@@ -57,18 +55,18 @@ describe('OpeningCalculationService', () => {
     service.calculate(ROUND_LOSS, METRIC);
 
     const sent = apiSpy.openingLossesCircular.calls.mostRecent().args[0];
-    expect(sent.ambientTemperature).toBeCloseTo(convert.value(70).from('C').to('F'), 6);
-    expect(sent.insideTemperature).toBeCloseTo(convert.value(500).from('C').to('F'), 6);
-    expect(sent.thickness).toBeCloseTo(convert.value(6).from('mm').to('in'), 6);
-    expect(sent.diameter).toBeCloseTo(convert.value(12).from('mm').to('in'), 6);
+    expect(sent.ambientTemperature).toBeCloseTo(new ConvertValue(70, 'C', 'F').convertedValue, 6);
+    expect(sent.insideTemperature).toBeCloseTo(new ConvertValue(500, 'C', 'F').convertedValue, 6);
+    expect(sent.thickness).toBeCloseTo(new ConvertValue(6, 'mm', 'in').convertedValue, 6);
+    expect(sent.diameter).toBeCloseTo(new ConvertValue(12, 'mm', 'in').convertedValue, 6);
   });
 
   it('converts Metric inputs to Imperial before calling the suite (quad, including height)', () => {
     service.calculate(QUAD_LOSS, METRIC);
 
     const sent = apiSpy.openingLossesQuad.calls.mostRecent().args[0];
-    expect(sent.length).toBeCloseTo(convert.value(12).from('mm').to('in'), 6);
-    expect(sent.width).toBeCloseTo(convert.value(8).from('mm').to('in'), 6);
+    expect(sent.length).toBeCloseTo(new ConvertValue(12, 'mm', 'in').convertedValue, 6);
+    expect(sent.width).toBeCloseTo(new ConvertValue(8, 'mm', 'in').convertedValue, 6);
   });
 
   it('does not mutate the input loss', () => {
@@ -84,7 +82,7 @@ describe('OpeningCalculationService', () => {
 
     const result = service.calculate(ROUND_LOSS, { unitsOfMeasure: 'Imperial', energyResultUnit: 'kWh' } as Settings);
 
-    expect(result).toBeCloseTo(convert.value(1000).from('Btu').to('kWh') * 2, 6);
+    expect(result).toBeCloseTo(new ConvertValue(1000, 'Btu', 'kWh').convertedValue * 2, 6);
   });
 
   it('returns 0 when the suite returns NaN', () => {

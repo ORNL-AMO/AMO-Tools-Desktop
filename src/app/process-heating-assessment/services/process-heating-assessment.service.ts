@@ -8,10 +8,10 @@ import { Losses, PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../../indexedDb/settings-db.service';
-import { ConvertPhastService } from '../../phast/convert-phast.service';
 import { HeatingEquipmentConfiguration, HeatingSystemEnergyType } from '../models/views';
 import { ScenarioOverrides, ProcessHeatingModification } from '../models/modification';
 import { getEffectivePhast } from './scenario-merge.util';
+import { convertProcessHeatingEnergyUnit, convertProcessHeatingUnits } from './convert-process-heating.util';
 
 export type ProcessHeatingDataProperty = keyof PHAST;
 
@@ -42,7 +42,6 @@ export function deriveHeatingEquipmentConfiguration(settings: Settings): Heating
 export class ProcessHeatingAssessmentService {
   private readonly assessmentDbService = inject(AssessmentDbService);
   private readonly settingsDbService = inject(SettingsDbService);
-  private readonly convertPhastService = inject(ConvertPhastService);
 
   private readonly assessment = new BehaviorSubject<Assessment>(undefined);
   readonly assessment$ = this.assessment.asObservable();
@@ -197,12 +196,47 @@ export class ProcessHeatingAssessmentService {
     this.settingsDbService.setAll(updatedSettings);
     settings = this.settingsDbService.getByAssessmentId(assessment, true);
 
-    if (settings.unitsOfMeasure === 'Metric') {
-      const oldSettings: Settings = JSON.parse(JSON.stringify(settings));
-      oldSettings.unitsOfMeasure = 'Imperial';
-      assessment.phast = this.convertPhastService.convertExistingData(assessment.phast, oldSettings, settings);
+    if (settings.unitsOfMeasure === 'Metric' && this.convertStoredData({ ...settings, unitsOfMeasure: 'Imperial' }, settings)) {
+      await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessmentValue));
     }
 
     this.setSettings(settings);
+  }
+
+  /**
+   * Converts stored assessment data to `newSettings` units when the unit system or energy result
+   * unit differs from the current settings, then persists the converted data and the settings.
+   *
+   * @param newSettings The settings to apply and persist.
+   */
+  async saveSettings(newSettings: Settings): Promise<void> {
+    // Convert and apply before the first await so overlapping saves each start from the previous
+    // save's settings instead of converting the same data twice.
+    const converted = this.convertStoredData(this.settingsValue, newSettings);
+    this.setSettings(newSettings);
+    // Written now instead of through the debounced auto-save so converted data reaches disk before
+    // the settings that describe its units. Nothing reconciles a mismatch on load: legacy lets users
+    // decline conversion, so a units mismatch on disk can be intentional.
+    if (converted) {
+      await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessmentValue));
+    }
+    await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
+    this.settingsDbService.setAll(await firstValueFrom(this.settingsDbService.getAllSettings()));
+  }
+
+  /**
+   * @returns Whether stored data was converted and pushed through `setProcessHeating`.
+   */
+  private convertStoredData(oldSettings: Settings, newSettings: Settings): boolean {
+    const phast = this.processHeating.getValue();
+    if (!phast) {
+      return false;
+    }
+    const converted = convertProcessHeatingEnergyUnit(convertProcessHeatingUnits(phast, oldSettings, newSettings), oldSettings, newSettings);
+    if (converted === phast) {
+      return false;
+    }
+    this.setProcessHeating(converted);
+    return true;
   }
 }

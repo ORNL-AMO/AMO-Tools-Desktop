@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -12,16 +12,14 @@ const METRIC = { unitsOfMeasure: 'Metric', energyResultUnit: 'kJ' } as Settings;
 describe('AtmosphereCalculationService', () => {
   let service: AtmosphereCalculationService;
   let apiSpy: jasmine.SpyObj<ProcessHeatingApiService>;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
     apiSpy = jasmine.createSpyObj('ProcessHeatingApiService', ['atmosphere']);
     apiSpy.atmosphere.and.returnValue(1000);
     TestBed.configureTestingModule({
-      providers: [AtmosphereCalculationService, ConvertUnitsService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
+      providers: [AtmosphereCalculationService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
     });
     service = TestBed.inject(AtmosphereCalculationService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('passes Imperial inputs through unchanged', () => {
@@ -35,10 +33,10 @@ describe('AtmosphereCalculationService', () => {
     service.calculate(LOSS, METRIC);
 
     const sent = apiSpy.atmosphere.calls.mostRecent().args[0];
-    expect(sent.inletTemperature).toBeCloseTo(convert.value(70).from('C').to('F'), 6);
-    expect(sent.outletTemperature).toBeCloseTo(convert.value(300).from('C').to('F'), 6);
-    expect(sent.flowRate).toBeCloseTo(convert.value(1000).from('m3/h').to('ft3/h'), 6);
-    expect(sent.specificHeat).toBeCloseTo(convert.value(0.018).from('kJm3C').to('btuScfF'), 6);
+    expect(sent.inletTemperature).toBeCloseTo(new ConvertValue(70, 'C', 'F').convertedValue, 6);
+    expect(sent.outletTemperature).toBeCloseTo(new ConvertValue(300, 'C', 'F').convertedValue, 6);
+    expect(sent.flowRate).toBeCloseTo(new ConvertValue(1000, 'm3/h', 'ft3/h').convertedValue, 6);
+    expect(sent.specificHeat).toBeCloseTo(new ConvertValue(0.018, 'kJm3C', 'btuScfF').convertedValue, 6);
   });
 
   it('does not mutate the input loss', () => {
@@ -54,7 +52,7 @@ describe('AtmosphereCalculationService', () => {
 
     const result = service.calculate(LOSS, { unitsOfMeasure: 'Imperial', energyResultUnit: 'kWh' } as Settings);
 
-    expect(result).toBeCloseTo(convert.value(1000).from('Btu').to('kWh'), 6);
+    expect(result).toBeCloseTo(new ConvertValue(1000, 'Btu', 'kWh').convertedValue, 6);
   });
 
   it('returns 0 when the suite returns NaN', () => {

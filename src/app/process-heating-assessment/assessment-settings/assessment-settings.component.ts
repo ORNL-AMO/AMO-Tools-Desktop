@@ -2,19 +2,11 @@ import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, Signal 
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { UntypedFormGroup } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, concatMap, debounceTime, EMPTY, firstValueFrom, from } from 'rxjs';
+import { catchError, concatMap, debounceTime, EMPTY, from } from 'rxjs';
 import { PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
-
-// TODO Step N: When settings change units of measure (Imperial ↔ Metric), existing loss values stored
-// on the assessment need to be converted to the new unit system before being persisted — the same
-// conversion logic the old PHAST ran on every settings save. Wire that conversion here once the
-// loss forms exist (Step 6+), keying off the old vs. new unitsOfMeasure value.
-
-// TODO StepN.2: Db save should be changed
 
 interface AssessmentSettingsMetaForm {
   facilityName: FormControl<string>;
@@ -33,7 +25,6 @@ interface AssessmentSettingsMetaForm {
 export class AssessmentSettingsComponent {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly settingsService = inject(SettingsService);
-  private readonly settingsDbService = inject(SettingsDbService);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -87,13 +78,9 @@ export class AssessmentSettingsComponent {
     newSettings.createdDate = current.createdDate;
     newSettings.assessmentId = current.assessmentId;
     newSettings.facilityInfo = current.facilityInfo;
-    await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
-    const allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(allSettings);
     this.lastWrittenSettings = newSettings;
-    this.assessmentService.setSettings(newSettings);
+    await this.assessmentService.saveSettings(newSettings);
   }
-
 
   private async saveMetaData(): Promise<void> {
     const { facilityName, contactName, equipmentNotes, operatingConditions } = this.metaForm.getRawValue();
@@ -110,11 +97,8 @@ export class AssessmentSettingsComponent {
         },
       },
     };
-    await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
-    const allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(allSettings);
     this.lastWrittenSettings = newSettings;
-    this.assessmentService.setSettings(newSettings);
+    await this.assessmentService.saveSettings(newSettings);
 
     const phast = this.processHeating();
     this.assessmentService.setProcessHeating({

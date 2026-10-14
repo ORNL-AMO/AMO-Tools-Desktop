@@ -1,24 +1,23 @@
 import { inject, Injectable } from '@angular/core';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 import { CircularOpeningLoss, OpeningLoss, QuadOpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
 
 @Injectable()
 export class OpeningCalculationService {
-  private readonly convertUnitsService = inject(ConvertUnitsService);
   private readonly processHeatingApiService = inject(ProcessHeatingApiService);
 
   calculate(input: OpeningLoss, settings: Settings): number {
     const inputs: OpeningLoss = { ...input };
     const isRound = inputs.openingType === 'Round';
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
-      inputs.insideTemperature = this.convertUnitsService.value(inputs.insideTemperature).from('C').to('F');
-      inputs.thickness = this.convertUnitsService.value(inputs.thickness).from('mm').to('in');
-      inputs.lengthOfOpening = this.convertUnitsService.value(inputs.lengthOfOpening).from('mm').to('in');
+      inputs.ambientTemperature = new ConvertValue(inputs.ambientTemperature, 'C', 'F').convertedValue;
+      inputs.insideTemperature = new ConvertValue(inputs.insideTemperature, 'C', 'F').convertedValue;
+      inputs.thickness = new ConvertValue(inputs.thickness, 'mm', 'in').convertedValue;
+      inputs.lengthOfOpening = new ConvertValue(inputs.lengthOfOpening, 'mm', 'in').convertedValue;
       if (!isRound) {
-        inputs.heightOfOpening = this.convertUnitsService.value(inputs.heightOfOpening).from('mm').to('in');
+        inputs.heightOfOpening = new ConvertValue(inputs.heightOfOpening, 'mm', 'in').convertedValue;
       }
     }
 
@@ -26,7 +25,7 @@ export class OpeningCalculationService {
       ? this.processHeatingApiService.openingLossesCircular(this.toCircular(inputs))
       : this.processHeatingApiService.openingLossesQuad(this.toQuad(inputs));
 
-    const converted = isNaN(result) ? 0 : this.convertUnitsService.value(result).from('Btu').to(settings.energyResultUnit);
+    const converted = isNaN(result) ? 0 : new ConvertValue(result, 'Btu', settings.energyResultUnit).convertedValue;
     return converted * (inputs.numberOfOpenings ?? 0);
   }
 
