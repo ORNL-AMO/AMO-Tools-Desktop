@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, combineLatest, debounceTime, filter, map, Observable } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
@@ -12,6 +13,7 @@ import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/upd
 })
 export class WaterAssessmentService {
   private readonly updateDiagramFromAssessmentService = inject(UpdateDiagramFromAssessmentService);
+  private readonly router = inject(Router);
 
   waterAssessment: BehaviorSubject<WaterAssessment>;
 
@@ -227,22 +229,34 @@ export class WaterAssessmentService {
     }
   }
 
-  continueMainTab() {
-    let mainTab: WaterMainTabString = this.mainTab.getValue();
-    let nextTab: WaterMainTabString;
-    if (mainTab !== 'report') {
-      let assessmentTabIndex: number = this.mainTabs.indexOf(mainTab);
-      nextTab = this.mainTabs[assessmentTabIndex + 1];
-      this.mainTab.next(nextTab);
+  /**
+   * @param view one of `mainTabs`
+   */
+  goToMainTab(view: WaterMainTabString) {
+    if (!this.assessmentId) {
+      return;
+    }
+    const diagramId: number = this.assessment.getValue()?.diagramId;
+    if (view === 'diagram' && diagramId) {
+      this.router.navigate(['/water', this.assessmentId, 'diagram', diagramId]);
+    } else {
+      this.router.navigate(['/water', this.assessmentId, view]);
     }
   }
 
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
   backMainTab() {
-    let mainTab: WaterMainTabString = this.mainTab.getValue();
-    if (mainTab !== 'baseline') {
-      let assessmentTabIndex: number = this.mainTabs.indexOf(mainTab);
-      let nextTab: WaterMainTabString = this.mainTabs[assessmentTabIndex - 1];
-      this.mainTab.next(nextTab);
+    this.stepMainTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const index: number = this.mainTabs.indexOf(this.mainTab.getValue());
+    const view: WaterMainTabString = this.mainTabs[index + offset];
+    if (index !== -1 && view) {
+      this.goToMainTab(view);
     }
   }
 
