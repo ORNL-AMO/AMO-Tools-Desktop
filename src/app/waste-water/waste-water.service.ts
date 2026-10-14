@@ -14,6 +14,7 @@ import { WasteWaterOperationsService } from './waste-water-operations/waste-wate
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 import { WASTE_WATER_MAIN_VIEWS } from './routing/waste-water.routing';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class WasteWaterService {
@@ -496,16 +497,17 @@ export class WasteWaterService {
   }
 
   continueMainTab() {
-    const nextView: string = WASTE_WATER_MAIN_VIEWS[WASTE_WATER_MAIN_VIEWS.indexOf(this.mainTab.getValue()) + 1];
-    if (nextView) {
-      this.goToMainTab(nextView);
-    }
+    this.stepMainTab(1);
   }
 
   backMainTab() {
-    const currentIndex: number = WASTE_WATER_MAIN_VIEWS.indexOf(this.mainTab.getValue());
-    if (currentIndex > 0) {
-      this.goToMainTab(WASTE_WATER_MAIN_VIEWS[currentIndex - 1]);
+    this.stepMainTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const view: string = getSteppedView(WASTE_WATER_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { SSMT_MAIN_VIEWS, ssmtRoutes } from './ssmt.routing';
+import { SSMT_MAIN_VIEWS, SSMT_SETUP_GATED_VIEWS, ssmtRoutes } from './ssmt.routing';
 
 describe('ssmtRoutes', () => {
   it('redirects the empty path to baseline', () => {
@@ -20,5 +20,9 @@ describe('ssmtRoutes', () => {
       expect(route.children).toEqual([]);
       expect(route.data).toEqual({ mainView: view });
     });
+  });
+
+  it('gates every main view except baseline and calculators', () => {
+    expect(SSMT_SETUP_GATED_VIEWS).toEqual(SSMT_MAIN_VIEWS.filter(view => view !== 'baseline' && view !== 'calculators'));
   });
 });

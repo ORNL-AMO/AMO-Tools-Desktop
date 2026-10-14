@@ -16,7 +16,8 @@ import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterService } from './waste-water.service';
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
-import { SETUP_GATED_TABS, WasteWaterRouteData } from './routing/waste-water.routing';
+import { WASTE_WATER_MAIN_VIEWS, WASTE_WATER_SETUP_GATED_VIEWS } from './routing/waste-water.routing';
+import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
     selector: 'app-waste-water',
@@ -166,14 +167,14 @@ export class WasteWaterComponent implements OnInit {
    * The route is the source of truth for the main tab. Tabs the banner gates behind setup redirect to baseline when reached by URL or history.
    */
   syncMainTabFromRoute() {
-    const mainView: string = (this.activatedRoute.firstChild?.snapshot.data as WasteWaterRouteData)?.mainView;
+    const mainView: string = getMergedRouteData(this.activatedRoute.firstChild?.snapshot).mainView;
     if (!mainView || !this.assessment) {
       return;
     }
-    if (!this.assessment.wasteWater.setupDone && SETUP_GATED_TABS.includes(mainView)) {
-      this.router.navigate(['/waste-water', this.assessment.id, 'baseline'], { replaceUrl: true });
-    } else {
+    if (isMainTabAllowed(WASTE_WATER_SETUP_GATED_VIEWS, mainView, this.assessment.wasteWater.setupDone)) {
       this.wasteWaterService.mainTab.next(mainView);
+    } else {
+      this.router.navigate(['/waste-water', this.assessment.id, WASTE_WATER_MAIN_VIEWS[0]], { replaceUrl: true });
     }
   }
 

@@ -8,7 +8,8 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { WasteWaterService } from '../waste-water.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
-import { SETUP_GATED_TABS } from '../routing/waste-water.routing';
+import { WASTE_WATER_SETUP_GATED_VIEWS } from '../routing/waste-water.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-waste-water-banner',
@@ -77,7 +78,7 @@ export class WasteWaterBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (!SETUP_GATED_TABS.includes(str) || this.isBaselineValid) {
+    if (isMainTabAllowed(WASTE_WATER_SETUP_GATED_VIEWS, str, this.isBaselineValid)) {
       this.wasteWaterService.goToMainTab(str);
     }
     this.collapseBanner();

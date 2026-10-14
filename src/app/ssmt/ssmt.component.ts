@@ -17,7 +17,8 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 import { SaturatedPropertiesOutput } from '../shared/models/steam/steam-outputs';
 import { BoilerService } from './boiler/boiler.service';
-import { SSMT_MAIN_VIEWS, SSMT_SETUP_GATED_VIEWS, SsmtRouteData } from './routing/ssmt.routing';
+import { SSMT_MAIN_VIEWS, SSMT_SETUP_GATED_VIEWS } from './routing/ssmt.routing';
+import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
     selector: 'app-ssmt',
@@ -225,14 +226,14 @@ export class SsmtComponent implements OnInit {
   }
 
   syncMainTabFromRoute() {
-    const mainView: string = (this.activatedRoute.firstChild?.snapshot.data as SsmtRouteData)?.mainView;
+    const mainView: string = getMergedRouteData(this.activatedRoute.firstChild?.snapshot).mainView;
     if (!mainView || !this.assessment) {
       return;
     }
-    if (!this.assessment.ssmt.setupDone && SSMT_SETUP_GATED_VIEWS.includes(mainView)) {
-      this.router.navigate(['/ssmt', this.assessment.id, SSMT_MAIN_VIEWS[0]], { replaceUrl: true });
-    } else {
+    if (isMainTabAllowed(SSMT_SETUP_GATED_VIEWS, mainView, this.assessment.ssmt.setupDone)) {
       this.ssmtService.mainTab.next(mainView);
+    } else {
+      this.router.navigate(['/ssmt', this.assessment.id, SSMT_MAIN_VIEWS[0]], { replaceUrl: true });
     }
   }
 
