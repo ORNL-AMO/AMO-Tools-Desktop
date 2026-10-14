@@ -9,6 +9,7 @@ import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { CoreService } from '../../core/core.service';
 import { Assessment } from '../../shared/models/assessment';
 import { SSMT } from '../../shared/models/steam/ssmt';
+import { SsmtMainView } from '../routing/ssmt.routing';
 
 function makeAssessment(setupDone: boolean): Assessment {
   return { id: 1, type: 'SSMT', ssmt: { setupDone } as SSMT } as Assessment;
@@ -49,7 +50,7 @@ describe('SsmtBannerComponent', () => {
       expect(ssmtServiceSpy.goToMainTab).toHaveBeenCalledWith('report');
     });
 
-    ['assessment', 'diagram', 'report', 'sankey'].forEach(tab => {
+    (['assessment', 'diagram', 'report', 'sankey'] satisfies Array<SsmtMainView>).forEach(tab => {
       it(`blocks ${tab} when setup is not done`, () => {
         component.assessment = makeAssessment(false);
         fixture.detectChanges();
@@ -58,7 +59,7 @@ describe('SsmtBannerComponent', () => {
       });
     });
 
-    ['baseline', 'calculators'].forEach(tab => {
+    (['baseline', 'calculators'] satisfies Array<SsmtMainView>).forEach(tab => {
       it(`allows ${tab} when setup is not done`, () => {
         component.assessment = makeAssessment(false);
         fixture.detectChanges();

@@ -7,7 +7,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SettingsService } from '../settings/settings.service';
 import { Assessment } from '../shared/models/assessment';
 import { Router } from '@angular/router';
-import { TREASURE_HUNT_MAIN_VIEWS } from './routing/treasure-hunt.routing';
+import { TREASURE_HUNT_MAIN_VIEWS, TreasureHuntMainView } from './routing/treasure-hunt.routing';
 import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class TreasureHuntService {
   readonly settings$ = this.settings.asObservable();
   private destroyRef = inject(DestroyRef);
 
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<TreasureHuntMainView>;
   subTab: BehaviorSubject<string>;
   getResults: BehaviorSubject<boolean>;
   updateMenuOptions: BehaviorSubject<boolean>;
@@ -33,7 +33,7 @@ export class TreasureHuntService {
         private settingsService: SettingsService,
         private router: Router
   ) {
-    this.mainTab = new BehaviorSubject<string>('baseline');
+    this.mainTab = new BehaviorSubject<TreasureHuntMainView>('baseline');
     this.subTab = new BehaviorSubject<string>('settings');
     this.getResults = new BehaviorSubject<boolean>(true);
     this.updateMenuOptions = new BehaviorSubject<boolean>(true);
@@ -92,7 +92,7 @@ export class TreasureHuntService {
   /**
    * @param view one of `TREASURE_HUNT_MAIN_VIEWS`
    */
-  goToMainTab(view: string) {
+  goToMainTab(view: TreasureHuntMainView) {
     if (this.assessmentId) {
       this.router.navigate(['/treasure-hunt', this.assessmentId, view]);
     }
@@ -107,7 +107,7 @@ export class TreasureHuntService {
   }
 
   private stepMainTab(offset: number) {
-    const view: string = getSteppedView(TREASURE_HUNT_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    const view: TreasureHuntMainView = getSteppedView(TREASURE_HUNT_MAIN_VIEWS, this.mainTab.getValue(), offset);
     if (view) {
       this.goToMainTab(view);
     }

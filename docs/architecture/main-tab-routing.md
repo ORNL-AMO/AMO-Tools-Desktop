@@ -37,11 +37,14 @@ Each module has a routing file exporting:
 
 | Export | Meaning |
 |---|---|
-| `<M>_MAIN_VIEWS` | Main tab path segments in banner chevron order |
-| `<M>_SETUP_GATED_VIEWS` | Main tabs blocked until setup is complete |
-| `<m>Routes` | The child routes, built from the two lists above |
+| `<M>_MAIN_VIEWS` | Main tab path segments in banner chevron order, declared `as const` |
+| `<M>MainView` | Union type derived from the list: `typeof <M>_MAIN_VIEWS[number]` |
+| `<M>_SETUP_GATED_VIEWS` | Main tabs blocked until setup is complete, typed `ReadonlyArray<<M>MainView>` |
+| `<m>Routes` | The child routes, built from the lists above |
 
-Inventories with nested tabs also export `<M>_SETUP_VIEWS` and `<M>_SUMMARY_VIEWS`.
+Inventories with nested tabs also export `<M>_SETUP_VIEWS` and `<M>_SUMMARY_VIEWS`, with `<M>SetupView` and `<M>SummaryView` types derived the same way.
+
+Declare each list once with `as const` and derive the type from it, so the list and the type cannot drift apart. Use the type for the tab service's `BehaviorSubject`, `goToMainTab` and the banner's `changeTab`. A typo such as `goToMainTab('summry')` then fails to compile.
 
 When the routes import the tab components, keep the view lists in a component-free file. A routing file that imports components can create a circular import with the tab service that imports the list. FSAT and Water do this: `src/app/fsat/routing/fsat-main-views.ts`, `src/app/water/routing/water-main-views.ts`.
 
@@ -51,11 +54,11 @@ Location: `src/app/shared/main-tab-routing/main-tab-routing.ts`. Plain TypeScrip
 
 | Helper | Use |
 |---|---|
-| `MainTabRouteData` | Route data shape: `mainView`, `setupView`, `summaryView` |
+| `MainTabRouteData<TMain, TSetup, TSummary>` | Route data shape: `mainView`, `setupView`, `summaryView`. The type arguments default to `string`. |
 | `buildViewRoutes(views, dataKey, extra)` | Empty-path redirect to `views[0]` plus one componentless child route per view, with `data: { [dataKey]: view }`. `extra` adds properties to every view route, for example `canDeactivate`. |
-| `getMergedRouteData(snapshot)` | Merges route data down the `firstChild` chain, so a nested route such as `setup/plant-setup` yields `mainView` and `setupView` together. |
-| `getSteppedView(views, current, offset)` | Target view of a next (`1`) or back (`-1`) step. Returns `undefined` when `current` is not in the list or the step runs off either end. |
-| `isMainTabAllowed(gatedViews, view, setupDone)` | The one gating rule: a view is allowed when it is not gated or setup is done. |
+| `getMergedRouteData<TMain, TSetup, TSummary>(snapshot)` | Merges route data down the `firstChild` chain, so a nested route such as `setup/plant-setup` yields `mainView` and `setupView` together. Route data is untyped, so this is the one place the module's view types are asserted; pass them as type arguments. |
+| `getSteppedView(views, current, offset)` (generic over the view type) | Target view of a next (`1`) or back (`-1`) step. Returns `undefined` when `current` is not in the list or the step runs off either end. |
+| `isMainTabAllowed(gatedViews, view, setupDone)` (generic over the view type) | The one gating rule: a view is allowed when it is not gated or setup is done. |
 
 ## Wiring in a Module
 
@@ -102,3 +105,5 @@ Componentless routes exist where the module already rendered all tabs inside one
 
 - Water has no setup gate (its assessment tab is not implemented), so it has no gated list and does not use `isMainTabAllowed`.
 - Waste Water's banner gates on `isBaselineValid` while its component gates on `setupDone`.
+- Water declares its main-tab union (`WaterMainTabString`) separately from `WATER_MAIN_VIEWS`, which omits the unimplemented `assessment` tab, so the two are not derived from one list.
+- Motor Inventory types only its main views; its setup and summary sub-tabs are not routed and stay `string`.

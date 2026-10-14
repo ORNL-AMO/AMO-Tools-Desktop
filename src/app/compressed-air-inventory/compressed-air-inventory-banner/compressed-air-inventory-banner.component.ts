@@ -10,7 +10,7 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { CompressedAirCatalogService } from '../compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
 import _ from 'lodash';
-import { COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS } from '../compressed-air-inventory.routing';
+import { COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, CompressedAirInventoryMainView, CompressedAirInventorySetupView, CompressedAirInventorySummaryView } from '../compressed-air-inventory.routing';
 import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -101,19 +101,19 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
     this.connectedInventoryDataSub.unsubscribe();
   }
 
-  setSetupTab(str: string) {
+  setSetupTab(str: CompressedAirInventorySetupView) {
     this.compressedAirInventoryService.goToSetupTab(str);
   }
 
 
-  setMainTab(str: string) {
+  setMainTab(str: CompressedAirInventoryMainView) {
     if (isMainTabAllowed(COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, str, this.compressedAirInventoryData.isValid)) {
       this.compressedAirInventoryService.goToMainTab(str);
     }
     this.collapseBanner();
   }
 
-  setSummaryTab(str: string) {
+  setSummaryTab(str: CompressedAirInventorySummaryView) {
     this.compressedAirInventoryService.goToSummaryTab(str);
   }
 

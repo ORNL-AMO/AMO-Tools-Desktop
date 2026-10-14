@@ -10,6 +10,7 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
 import { Assessment } from '../../shared/models/assessment';
+import { FsatMainView } from '../routing/fsat-main-views';
 
 function makeAssessment(setupDone: boolean): Assessment {
   return { name: 'Test Fan Assessment', type: 'FSAT', fsat: { setupDone } as Assessment['fsat'] } as Assessment;
@@ -47,7 +48,7 @@ describe('FsatBannerComponent', () => {
   });
 
   describe('changeTab', () => {
-    ['baseline', 'calculators'].forEach(view => {
+    (['baseline', 'calculators'] satisfies Array<FsatMainView>).forEach(view => {
       it(`changes to ${view} regardless of setupDone and collapses the banner`, () => {
         component.assessment = makeAssessment(false);
         component.bannerCollapsed = false;
@@ -59,7 +60,7 @@ describe('FsatBannerComponent', () => {
       });
     });
 
-    ['assessment', 'diagram', 'report', 'sankey'].forEach(view => {
+    (['assessment', 'diagram', 'report', 'sankey'] satisfies Array<FsatMainView>).forEach(view => {
       it(`changes to ${view} when setupDone is true`, () => {
         component.changeTab(view);
         expect(fsatServiceSpy.goToMainTab).toHaveBeenCalledWith(view);

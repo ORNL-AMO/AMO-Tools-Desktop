@@ -21,7 +21,7 @@ import { PsatIntegrationService } from '../shared/connected-inventory/psat-integ
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { copyObject, getNewIdString } from '../shared/helperFunctions';
-import { PSAT_MAIN_VIEWS, PSAT_SETUP_GATED_VIEWS } from './routing/psat.routing';
+import { PSAT_MAIN_VIEWS, PSAT_SETUP_GATED_VIEWS, PsatMainView } from './routing/psat.routing';
 import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -247,7 +247,7 @@ export class PsatComponent implements OnInit {
    * The route is the source of truth for the main tab. Tabs the banner gates behind setup redirect to baseline when reached by URL or history.
    */
   syncMainTabFromRoute() {
-    const mainView: string = getMergedRouteData(this.activatedRoute.firstChild?.snapshot).mainView;
+    const mainView: PsatMainView = getMergedRouteData<PsatMainView>(this.activatedRoute.firstChild?.snapshot).mainView;
     if (!mainView || !this.assessment) {
       return;
     }

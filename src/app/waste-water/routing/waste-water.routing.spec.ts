@@ -1,7 +1,7 @@
-import { WASTE_WATER_MAIN_VIEWS, WASTE_WATER_SETUP_GATED_VIEWS, wasteWaterRoutes } from './waste-water.routing';
+import { WasteWaterMainView, WASTE_WATER_MAIN_VIEWS, WASTE_WATER_SETUP_GATED_VIEWS, wasteWaterRoutes } from './waste-water.routing';
 
 describe('wasteWaterRoutes', () => {
-  const mainViews: Array<string> = ['baseline', 'assessment', 'analysis', 'diagram', 'report', 'calculators'];
+  const mainViews: Array<WasteWaterMainView> = ['baseline', 'assessment', 'analysis', 'diagram', 'report', 'calculators'];
 
   it('redirects the empty path to baseline', () => {
     const emptyRoute = wasteWaterRoutes.find(route => route.path === '');

@@ -9,6 +9,7 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { DashboardService } from '../../dashboard/dashboard.service';
 import _ from 'lodash';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
+import { MotorInventoryMainView } from '../motor-inventory.routing';
 
 @Component({
     selector: 'app-motor-inventory-banner',
@@ -105,7 +106,7 @@ export class MotorInventoryBannerComponent implements OnInit {
   }
 
 
-  setMainTab(str: string) {
+  setMainTab(str: MotorInventoryMainView) {
     this.motorInventoryService.goToMainTab(str);
     this.collapseBanner();
   }

@@ -13,7 +13,7 @@ import { SystemBasicsService } from './system-basics/system-basics.service';
 import { WasteWaterOperationsService } from './waste-water-operations/waste-water-operations.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
-import { WASTE_WATER_MAIN_VIEWS } from './routing/waste-water.routing';
+import { WASTE_WATER_MAIN_VIEWS, WasteWaterMainView } from './routing/waste-water.routing';
 import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class WasteWaterService {
   private router = inject(Router);
 
   wasteWater: BehaviorSubject<WasteWater>;
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<WasteWaterMainView>;
   setupTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
@@ -49,7 +49,7 @@ export class WasteWaterService {
     private wasteWaterApiService: WasteWaterSuiteApiService,
     private aeratorPerformanceFormService: AeratorPerformanceFormService,
     private convertWasteWaterService: ConvertWasteWaterService, private convertUnitsService: ConvertUnitsService, private operationsService: WasteWaterOperationsService) {
-    this.mainTab = new BehaviorSubject<string>('baseline');
+    this.mainTab = new BehaviorSubject<WasteWaterMainView>('baseline');
     this.setupTab = new BehaviorSubject<string>('baseline');
     this.assessmentTab = new BehaviorSubject<string>('modify-conditions');
     this.calcTab = new BehaviorSubject<string>('o2-utilization-rate');
@@ -490,7 +490,7 @@ export class WasteWaterService {
    * Main tab changes are navigations; WasteWaterComponent syncs mainTab from the resulting route.
    * @param tab Main tab route path
    */
-  goToMainTab(tab: string) {
+  goToMainTab(tab: WasteWaterMainView) {
     if (this.assessmentId) {
       this.router.navigate(['/waste-water', this.assessmentId, tab]);
     }
@@ -505,7 +505,7 @@ export class WasteWaterService {
   }
 
   private stepMainTab(offset: number) {
-    const view: string = getSteppedView(WASTE_WATER_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    const view: WasteWaterMainView = getSteppedView(WASTE_WATER_MAIN_VIEWS, this.mainTab.getValue(), offset);
     if (view) {
       this.goToMainTab(view);
     }

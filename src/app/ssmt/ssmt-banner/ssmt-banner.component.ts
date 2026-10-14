@@ -7,7 +7,7 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
-import { SSMT_SETUP_GATED_VIEWS } from '../routing/ssmt.routing';
+import { SSMT_SETUP_GATED_VIEWS, SsmtMainView } from '../routing/ssmt.routing';
 import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -52,7 +52,7 @@ export class SsmtBannerComponent implements OnInit {
     );
   }
 
-  changeTab(str: string) {
+  changeTab(str: SsmtMainView) {
     if (isMainTabAllowed(SSMT_SETUP_GATED_VIEWS, str, this.assessment.ssmt.setupDone)) {
       this.ssmtService.goToMainTab(str);
     }

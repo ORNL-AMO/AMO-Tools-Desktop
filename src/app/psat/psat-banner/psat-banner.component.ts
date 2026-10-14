@@ -8,7 +8,7 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
-import { PSAT_SETUP_GATED_VIEWS } from '../routing/psat.routing';
+import { PSAT_SETUP_GATED_VIEWS, PsatMainView } from '../routing/psat.routing';
 import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -63,7 +63,7 @@ export class PsatBannerComponent implements OnInit {
     );
   }
 
-  changeTab(str: string) {
+  changeTab(str: PsatMainView) {
     if (isMainTabAllowed(PSAT_SETUP_GATED_VIEWS, str, this.assessment.psat.setupDone)) {
       this.psatTabService.goToMainTab(str);
     }

@@ -15,15 +15,15 @@ import { PerformancePointsCatalogService } from './compressed-air-inventory-setu
 import _ from 'lodash';
 import { copyObject } from '../shared/helperFunctions';
 import { CompressedAirMotorIntegrationService } from '../shared/connected-inventory/compressed-air-motor-integration.service';
-import { COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS } from './compressed-air-inventory.routing';
+import { COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS, CompressedAirInventoryMainView, CompressedAirInventorySetupView, CompressedAirInventorySummaryView } from './compressed-air-inventory.routing';
 import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class CompressedAirInventoryService {
 
-  mainTab: BehaviorSubject<string>;
-  setupTab: BehaviorSubject<string>;
-  summaryTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<CompressedAirInventoryMainView>;
+  setupTab: BehaviorSubject<CompressedAirInventorySetupView>;
+  summaryTab: BehaviorSubject<CompressedAirInventorySummaryView>;
   compressedAirInventoryData: BehaviorSubject<CompressedAirInventoryData>;
   focusedField: BehaviorSubject<string>;
   focusedDataGroup: BehaviorSubject<string>;
@@ -47,14 +47,14 @@ export class CompressedAirInventoryService {
     private router: Router
 
   ) {
-    this.setupTab = new BehaviorSubject<string>('plant-setup');
-    this.mainTab = new BehaviorSubject<string>('setup');
+    this.setupTab = new BehaviorSubject<CompressedAirInventorySetupView>('plant-setup');
+    this.mainTab = new BehaviorSubject<CompressedAirInventoryMainView>('setup');
     let inventoryData: CompressedAirInventoryData;
     this.compressedAirInventoryData = new BehaviorSubject<CompressedAirInventoryData>(inventoryData);
     this.focusedField = new BehaviorSubject<string>('default');
     this.focusedDataGroup = new BehaviorSubject<string>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
-    this.summaryTab = new BehaviorSubject<string>('overview');
+    this.summaryTab = new BehaviorSubject<CompressedAirInventorySummaryView>('overview');
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
     this.showExportModal = new BehaviorSubject<boolean>(false);
@@ -70,7 +70,7 @@ export class CompressedAirInventoryService {
    * Opens a main tab on its last visited sub-tab.
    * @param view one of `COMPRESSED_AIR_INVENTORY_MAIN_VIEWS`
    */
-  goToMainTab(view: string) {
+  goToMainTab(view: CompressedAirInventoryMainView) {
     if (view === 'setup') {
       this.goToSetupTab(this.setupTab.getValue());
     } else {
@@ -78,11 +78,11 @@ export class CompressedAirInventoryService {
     }
   }
 
-  goToSetupTab(view: string) {
+  goToSetupTab(view: CompressedAirInventorySetupView) {
     this.router.navigate(['/compressed-air-inventory', this.currentInventoryId, 'setup', view]);
   }
 
-  goToSummaryTab(view: string) {
+  goToSummaryTab(view: CompressedAirInventorySummaryView) {
     this.router.navigate(['/compressed-air-inventory', this.currentInventoryId, 'summary', view]);
   }
 
@@ -111,21 +111,21 @@ export class CompressedAirInventoryService {
   }
 
   private stepMainTab(offset: number) {
-    const view: string = getSteppedView(COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    const view: CompressedAirInventoryMainView = getSteppedView(COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
     if (view) {
       this.goToMainTab(view);
     }
   }
 
   private stepSetupTab(offset: number) {
-    const view: string = getSteppedView(COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, this.setupTab.getValue(), offset);
+    const view: CompressedAirInventorySetupView = getSteppedView(COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, this.setupTab.getValue(), offset);
     if (view) {
       this.goToSetupTab(view);
     }
   }
 
   private stepSummaryTab(offset: number) {
-    const view: string = getSteppedView(COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS, this.summaryTab.getValue(), offset);
+    const view: CompressedAirInventorySummaryView = getSteppedView(COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS, this.summaryTab.getValue(), offset);
     if (view) {
       this.goToSummaryTab(view);
     }

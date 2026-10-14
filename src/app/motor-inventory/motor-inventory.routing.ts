@@ -2,7 +2,8 @@ import { Routes } from "@angular/router";
 import { buildViewRoutes } from "../shared/main-tab-routing/main-tab-routing";
 
 /** Array order is the banner chevron order. */
-export const MOTOR_INVENTORY_MAIN_VIEWS: Array<string> = ['setup', 'summary', 'analysis'];
+export const MOTOR_INVENTORY_MAIN_VIEWS = ['setup', 'summary', 'analysis'] as const;
+export type MotorInventoryMainView = typeof MOTOR_INVENTORY_MAIN_VIEWS[number];
 
 /** Componentless child routes: MotorInventoryComponent renders each tab and syncs mainTab from route data. */
 export const motorInventoryRoutes: Routes = [

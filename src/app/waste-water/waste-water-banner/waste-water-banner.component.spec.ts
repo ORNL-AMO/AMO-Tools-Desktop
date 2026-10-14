@@ -8,6 +8,7 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { CoreService } from '../../core/core.service';
 import { WasteWater } from '../../shared/models/waste-water';
+import { WasteWaterMainView } from '../routing/waste-water.routing';
 
 function makeWasteWater(isValid: boolean): WasteWater {
   return {
@@ -58,7 +59,7 @@ describe('WasteWaterBannerComponent', () => {
       expect(wasteWaterServiceSpy.goToMainTab).toHaveBeenCalledWith('report');
     });
 
-    ['assessment', 'analysis', 'diagram', 'report'].forEach(tab => {
+    (['assessment', 'analysis', 'diagram', 'report'] satisfies Array<WasteWaterMainView>).forEach(tab => {
       it(`blocks ${tab} when the baseline is invalid`, () => {
         wasteWaterSubject.next(makeWasteWater(false));
         fixture.detectChanges();
@@ -67,7 +68,7 @@ describe('WasteWaterBannerComponent', () => {
       });
     });
 
-    ['baseline', 'calculators'].forEach(tab => {
+    (['baseline', 'calculators'] satisfies Array<WasteWaterMainView>).forEach(tab => {
       it(`allows ${tab} when the baseline is invalid`, () => {
         wasteWaterSubject.next(makeWasteWater(false));
         fixture.detectChanges();

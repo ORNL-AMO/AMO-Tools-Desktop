@@ -21,13 +21,13 @@ import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption
 import { EnergyUseItem } from '../shared/models/treasure-hunt';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 import { getNewIdString } from '../shared/helperFunctions';
-import { FSAT_MAIN_VIEWS } from './routing/fsat-main-views';
+import { FSAT_MAIN_VIEWS, FsatMainView } from './routing/fsat-main-views';
 import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 
 @Injectable()
 export class FsatService {
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<FsatMainView>;
   stepTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
   openNewModal: BehaviorSubject<boolean>;
@@ -71,7 +71,7 @@ export class FsatService {
   }
 
   initData() {
-    this.mainTab = new BehaviorSubject<string>('baseline');
+    this.mainTab = new BehaviorSubject<FsatMainView>('baseline');
     this.stepTab = new BehaviorSubject<string>('baseline');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.calculatorTab = new BehaviorSubject<string>('fan-efficiency');
@@ -209,7 +209,7 @@ export class FsatService {
   }
 
 
-  goToMainTab(tab: string) {
+  goToMainTab(tab: FsatMainView) {
     const assessmentId: number = this.assessment.getValue()?.id;
     if (assessmentId) {
       this.router.navigate(['/fsat', assessmentId, tab]);
@@ -225,7 +225,7 @@ export class FsatService {
   }
 
   private stepMainTab(offset: number) {
-    const view: string = getSteppedView(FSAT_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    const view: FsatMainView = getSteppedView(FSAT_MAIN_VIEWS, this.mainTab.getValue(), offset);
     if (view) {
       this.goToMainTab(view);
     }
