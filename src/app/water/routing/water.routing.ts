@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { WaterProcessDiagramComponent } from '../../water-process-diagram/water-process-diagram.component';
 import { diagramResolver } from '../../water-process-diagram/diagram.resolver';
 import { WaterMainTabString } from '../water-assessment.service';
+import { buildViewRoutes } from '../../shared/main-tab-routing/main-tab-routing';
+import { WATER_MAIN_VIEWS } from './water-main-views';
 
 export interface WaterRouteData {
   mainView?: WaterMainTabString;
@@ -12,9 +14,7 @@ export interface WaterRouteData {
  * The diagram renders through `diagram/:diagramId`; bare `diagram` is redirected there once the assessment's diagram is known.
  */
 export const waterRoutes: Routes = [
-  { path: '', redirectTo: 'baseline', pathMatch: 'full' },
-  { path: 'baseline', children: [], data: { mainView: 'baseline' } as WaterRouteData },
-  { path: 'report', children: [], data: { mainView: 'report' } as WaterRouteData },
+  ...buildViewRoutes(WATER_MAIN_VIEWS.filter(view => view !== 'diagram')),
   {
     path: 'diagram/:diagramId',
     component: WaterProcessDiagramComponent,

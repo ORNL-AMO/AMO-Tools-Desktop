@@ -1,6 +1,7 @@
 import { diagramResolver } from '../../water-process-diagram/diagram.resolver';
 import { WaterProcessDiagramComponent } from '../../water-process-diagram/water-process-diagram.component';
 import { waterRoutes } from './water.routing';
+import { WATER_MAIN_VIEWS } from './water-main-views';
 
 describe('waterRoutes', () => {
   it('redirects the empty path to baseline', () => {
@@ -30,5 +31,9 @@ describe('waterRoutes', () => {
     expect(route.component).toBeUndefined();
     expect(route.pathMatch).toBe('full');
     expect(route.data).toEqual({ mainView: 'diagram' });
+  });
+
+  it('lists main views in banner order', () => {
+    expect(WATER_MAIN_VIEWS).toEqual(['baseline', 'diagram', 'report']);
   });
 });

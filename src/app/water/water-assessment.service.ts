@@ -1,5 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { WATER_MAIN_VIEWS } from './routing/water-main-views';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 import { BehaviorSubject, combineLatest, debounceTime, filter, map, Observable } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
@@ -50,13 +52,6 @@ export class WaterAssessmentService {
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
   showExportModal: BehaviorSubject<boolean>;
-  mainTabs: Array<WaterMainTabString> = [
-    'baseline',
-    // todo assessment tab not implemented yet
-    // 'assessment',
-    'diagram',
-    'report',
-  ];
   setupTabs: Array<WaterSetupTabString> = [
     'system-basics',
     'water-intake',
@@ -230,7 +225,7 @@ export class WaterAssessmentService {
   }
 
   /**
-   * @param view one of `mainTabs`
+   * @param view one of `WATER_MAIN_VIEWS`
    */
   goToMainTab(view: WaterMainTabString) {
     if (!this.assessmentId) {
@@ -253,9 +248,8 @@ export class WaterAssessmentService {
   }
 
   private stepMainTab(offset: number) {
-    const index: number = this.mainTabs.indexOf(this.mainTab.getValue());
-    const view: WaterMainTabString = this.mainTabs[index + offset];
-    if (index !== -1 && view) {
+    const view: WaterMainTabString = getSteppedView(WATER_MAIN_VIEWS, this.mainTab.getValue(), offset) as WaterMainTabString;
+    if (view) {
       this.goToMainTab(view);
     }
   }

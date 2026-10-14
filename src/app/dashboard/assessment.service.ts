@@ -74,15 +74,6 @@ export class AssessmentService {
         this.startingTab = 'assessment';
       }
       itemSegment = '/process-cooling/';
-    } else if (assessment.type == 'Water') {
-      const waterMainTabs: string[] = ['baseline', 'diagram', 'report'];
-      this.startingTab = waterMainTabs.includes(mainTab) ? mainTab : 'baseline';
-      let waterPath: string = '/water/' + assessment.id + '/' + this.startingTab;
-      if (this.startingTab === 'diagram' && assessment.diagramId) {
-        waterPath += '/' + assessment.diagramId;
-      }
-      this.dashboardService.navigateWithSidebarOptions(waterPath, { shouldCollapse: true });
-      return;
     }
 
     this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, { shouldCollapse: true })

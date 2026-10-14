@@ -43,7 +43,7 @@ Each module has a routing file exporting:
 
 Inventories with nested tabs also export `<M>_SETUP_VIEWS` and `<M>_SUMMARY_VIEWS`.
 
-When the routes import the tab components, keep the view lists in a component-free file. A routing file that imports components can create a circular import with the tab service that imports the list. FSAT does this: `src/app/fsat/routing/fsat-main-views.ts`.
+When the routes import the tab components, keep the view lists in a component-free file. A routing file that imports components can create a circular import with the tab service that imports the list. FSAT and Water do this: `src/app/fsat/routing/fsat-main-views.ts`, `src/app/water/routing/water-main-views.ts`.
 
 ## Shared Helpers
 
@@ -67,7 +67,7 @@ Location: `src/app/shared/main-tab-routing/main-tab-routing.ts`. Plain TypeScrip
 
 `src/app/dashboard/routed-assessment-tabs.ts` exports `getRoutedAssessmentUrl(assessment, requestedTab?)`, the single rule for which tab an assessment opens on. The dashboard (`src/app/dashboard/assessment.service.ts`) and Report Rollup (`src/app/report-rollup/assessment-reports/assessment-reports.component.ts`) both use it.
 
-Rule: a requested tab wins; otherwise the module's setup-done tab when setup is done and the assessment is not an example; otherwise `baseline`. The generic `assessment` request maps to the module's setup-done tab (Treasure Hunt uses `treasure-chest`). Types that do not route main tabs return `undefined` and keep their own navigation.
+Rule: a requested tab wins; otherwise the module's setup-done tab when setup is done and the assessment is not an example; otherwise `baseline`. The generic `assessment` request maps to the module's setup-done tab (Treasure Hunt uses `treasure-chest`). Types that do not route main tabs return `undefined` and keep their own navigation. A module can restrict the tabs a link may request (`views`, Water) and append a URL segment to a tab (`getTabSuffix`, Water's diagram id).
 
 Adding a module means adding one entry to `ROUTED_ASSESSMENTS` in that file.
 
@@ -93,12 +93,12 @@ Adding a module means adding one entry to `ROUTED_ASSESSMENTS` in that file.
 | PSAT, SSMT, Waste Water, Treasure Hunt | Componentless child routes. One monolithic component renders every tab and syncs `mainTab` from route data. |
 | Pump Inventory, Compressed Air Inventory | Nested setup and summary child routes with `dataKey` per level. |
 | Motor Inventory | Main tabs routed; setup and summary sub-tabs still set by `.next()`. |
-| Water | Componentless child routes plus a routed `diagram/:diagramId` child with `diagramResolver`. Routed in its own change and does not use the shared helpers yet. |
+| Water | Componentless `baseline` and `report` routes plus a routed `diagram/:diagramId` child with `diagramResolver`. Uses the shared route builder, step helper and starting-tab rule; its component keeps a specialized sync that redirects bare `diagram` once the diagram id is known. |
 | PHAST | Not converted; still uses `getStartingTab()` and `mainTab.next()`. |
 
 Componentless routes exist where the module already rendered all tabs inside one component. New modules use routed components and a resolver instead.
 
 ## Known Gaps
 
-- Water's routes and dashboard link do not use the shared helpers or `getRoutedAssessmentUrl` yet.
+- Water has no setup gate (its assessment tab is not implemented), so it has no gated list and does not use `isMainTabAllowed`.
 - Waste Water's banner gates on `isBaselineValid` while its component gates on `setupDone`.
