@@ -248,7 +248,7 @@ export class WaterAssessmentService {
   }
 
   private stepMainTab(offset: number) {
-    const view: WaterMainTabString = getSteppedView(WATER_MAIN_VIEWS, this.mainTab.getValue(), offset) as WaterMainTabString;
+    const view: WaterMainTabString = getSteppedView(WATER_MAIN_VIEWS, this.mainTab.getValue(), offset);
     if (view) {
       this.goToMainTab(view);
     }

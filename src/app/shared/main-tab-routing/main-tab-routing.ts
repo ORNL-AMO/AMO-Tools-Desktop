@@ -46,8 +46,8 @@ export function getMergedRouteData(snapshot: ActivatedRouteSnapshot): MainTabRou
  * @param offset Steps from the current view, e.g. 1 for next and -1 for back
  * @returns The view `offset` steps away, or undefined when the current view is not in the list or the offset runs past either end
  */
-export function getSteppedView(views: Array<string>, current: string, offset: number): string | undefined {
-  const index = views.indexOf(current);
+export function getSteppedView<T extends string>(views: Array<T>, current: string, offset: number): T | undefined {
+  const index = views.findIndex(view => view === current);
   return index === -1 ? undefined : views[index + offset];
 }
 

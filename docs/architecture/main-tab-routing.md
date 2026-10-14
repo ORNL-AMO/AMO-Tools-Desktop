@@ -6,7 +6,7 @@ How assessments and inventories route their main tabs (for example `baseline`, `
 
 Each main tab has its own URL, such as `/psat/12/report`. Routing the tabs gives Google Analytics a page view per tab, makes tabs deep-linkable, and makes browser back/forward step between tabs.
 
-In scope: main tabs, and nested setup/summary tabs in the inventories. Out of scope: calculators and navigation inside a single tab.
+In scope: main tabs, and nested setup/summary tabs in the inventories. Out of scope: navigation inside a single tab or calculator. The `calculators` tab itself is a routed main view in most modules.
 
 ## Standard for New Routing
 

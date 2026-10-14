@@ -21,7 +21,7 @@ import { PsatIntegrationService } from '../shared/connected-inventory/psat-integ
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { copyObject, getNewIdString } from '../shared/helperFunctions';
-import { PSAT_SETUP_GATED_VIEWS } from './routing/psat.routing';
+import { PSAT_MAIN_VIEWS, PSAT_SETUP_GATED_VIEWS } from './routing/psat.routing';
 import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -254,7 +254,7 @@ export class PsatComponent implements OnInit {
     if (isMainTabAllowed(PSAT_SETUP_GATED_VIEWS, mainView, this.assessment.psat.setupDone)) {
       this.psatTabService.mainTab.next(mainView);
     } else {
-      this.router.navigate(['/psat', this.assessment.id, 'baseline'], { replaceUrl: true });
+      this.router.navigate(['/psat', this.assessment.id, PSAT_MAIN_VIEWS[0]], { replaceUrl: true });
     }
   }
 

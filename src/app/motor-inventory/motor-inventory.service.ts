@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { MOTOR_INVENTORY_MAIN_VIEWS } from './motor-inventory.routing';
-import { getMergedRouteData, getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
+import { MainTabRouteData, getMergedRouteData, getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyDisplayOptions, FilterInventorySummary } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import * as _ from 'lodash';
@@ -46,7 +46,7 @@ export class MotorInventoryService {
    * @param snapshot snapshot to walk down through its `firstChild` chain
    */
   syncMainTabFromRoute(snapshot: ActivatedRouteSnapshot) {
-    const data = getMergedRouteData(snapshot);
+    const data: MainTabRouteData = getMergedRouteData(snapshot);
     if (data.mainView && data.mainView !== this.mainTab.getValue()) {
       this.mainTab.next(data.mainView);
     }

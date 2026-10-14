@@ -10,6 +10,8 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import _ from 'lodash';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
+import { PUMP_INVENTORY_SETUP_GATED_VIEWS } from '../pump-inventory.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
     selector: 'app-pump-inventory-banner',
@@ -111,8 +113,14 @@ export class PumpInventoryBannerComponent implements OnInit {
     }
   }
 
+  canOpenMainTab(view: string): boolean {
+    return isMainTabAllowed(PUMP_INVENTORY_SETUP_GATED_VIEWS, view, this.pumpInventoryData.isValid);
+  }
+
   setMainTab(str: string) {
-    this.pumpInventoryService.goToMainTab(str);
+    if (this.canOpenMainTab(str)) {
+      this.pumpInventoryService.goToMainTab(str);
+    }
     this.collapseBanner();
   }
 

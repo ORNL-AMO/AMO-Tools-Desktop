@@ -11,7 +11,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { PumpMotorCatalogService } from './pump-inventory-setup/pump-catalog/pump-motor-catalog/pump-motor-catalog.service';
 import { copyObject } from '../shared/helperFunctions';
 import { PUMP_INVENTORY_MAIN_VIEWS, PUMP_INVENTORY_SETUP_GATED_VIEWS, PUMP_INVENTORY_SETUP_VIEWS, PUMP_INVENTORY_SUMMARY_VIEWS } from './pump-inventory.routing';
-import { getMergedRouteData, getSteppedView, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
+import { MainTabRouteData, getMergedRouteData, getSteppedView, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class PumpInventoryService {
@@ -60,7 +60,7 @@ export class PumpInventoryService {
    * @param snapshot snapshot to walk down through its `firstChild` chain
    */
   syncTabsFromRoute(snapshot: ActivatedRouteSnapshot) {
-    const data = getMergedRouteData(snapshot);
+    const data: MainTabRouteData = getMergedRouteData(snapshot);
     if (data.mainView && data.mainView !== this.mainTab.getValue()) {
       this.mainTab.next(data.mainView);
     }
