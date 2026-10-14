@@ -17,6 +17,7 @@ Read only the documents relevant to the current task; this map is not a required
 - `docs/development/suite-coordination.md`: task-specific workflow for coordinated Suite changes; load it through the `suite-coordination` skill when the task matches that skill.
 - `docs/architecture/data-persistence.md`: IndexedDB, default data, backups, and saved assessment data.
 - `docs/architecture/build-and-runtime.md`: Angular, Electron, process-flow component, and WASM build/runtime concerns.
+- `docs/architecture/main-tab-routing.md`: how assessment and inventory main tabs route through the URL, the shared helpers, and the standard for new module routing.
 - `docs/testing/assessment-regression-tests.md`: how calculation-regression corpora work and how to extend the pattern to another assessment.
 - `docs/adr/0001-suite-api-boundary.md`: decision record for keeping suite calls behind `src/app/tools-suite-api/`.
 - `src/app/tools-suite-api/AGENTS.md`: detailed guidance for suite wrapper services, typings, Emscripten object cleanup, and suite migration work.
