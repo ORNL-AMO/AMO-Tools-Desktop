@@ -1,5 +1,4 @@
-import { psatRoutes } from './psat.routing';
-import { deriveSteppedRoutes } from './stepped-routes';
+import { PSAT_MAIN_VIEWS, PSAT_SETUP_GATED_VIEWS, psatRoutes } from './psat.routing';
 
 describe('psatRoutes', () => {
   it('redirects the empty path to baseline', () => {
@@ -8,26 +7,22 @@ describe('psatRoutes', () => {
     expect(emptyRoute.pathMatch).toBe('full');
   });
 
-  const cases: Array<[string, number]> = [
-    ['baseline', 0],
-    ['assessment', 1],
-    ['diagram', 2],
-    ['report', 3],
-    ['sankey', 4],
-    ['calculators', 5],
-  ];
+  it('defines one route per main view in banner order', () => {
+    const paths = psatRoutes.filter(route => route.path !== '').map(route => route.path);
+    expect(paths).toEqual(PSAT_MAIN_VIEWS);
+    expect(paths).toEqual(['baseline', 'assessment', 'diagram', 'report', 'sankey', 'calculators']);
+  });
 
-  cases.forEach(([path, stepIndex]) => {
-    it(`declares "${path}" as a componentless route with data.mainView`, () => {
-      const route = psatRoutes.find(r => r.path === path);
-      expect(route).toBeTruthy();
+  PSAT_MAIN_VIEWS.forEach(view => {
+    it(`defines "${view}" as a componentless route with data.mainView`, () => {
+      const route = psatRoutes.find(r => r.path === view);
       expect(route.component).toBeUndefined();
       expect(route.children).toEqual([]);
-      expect(route.data).toEqual({ mainView: path, stepIndex });
+      expect(route.data).toEqual({ mainView: view });
     });
   });
 
-  it('derives stepped routes in banner order', () => {
-    expect(deriveSteppedRoutes(psatRoutes).map(route => route.view)).toEqual(cases.map(([path]) => path));
+  it('gates every main view except baseline and calculators', () => {
+    expect(PSAT_SETUP_GATED_VIEWS).toEqual(PSAT_MAIN_VIEWS.filter(view => view !== 'baseline' && view !== 'calculators'));
   });
 });

@@ -67,8 +67,6 @@ import { ExportableResultsTableModule } from '../shared/exportable-results-table
 import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
 import { PsatReportAdapter } from './psat-report/psat-report.adapter';
-import { psatRoutes } from './routing/psat.routing';
-import { deriveSteppedRoutes, PSAT_STEPPED_ROUTES } from './routing/stepped-routes';
 
 
 @NgModule({
@@ -145,8 +143,7 @@ import { deriveSteppedRoutes, PSAT_STEPPED_ROUTES } from './routing/stepped-rout
     FieldDataService,
     DecimalPipe, 
     PumpOperationsService,
-    PsatReportAdapter,
-    { provide: PSAT_STEPPED_ROUTES, useValue: deriveSteppedRoutes(psatRoutes) }
+    PsatReportAdapter
   ]
 })
 

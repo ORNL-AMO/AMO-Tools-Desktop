@@ -1,8 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { PsatTabService } from './psat-tab.service';
-import { psatRoutes } from './routing/psat.routing';
-import { deriveSteppedRoutes, PSAT_STEPPED_ROUTES } from './routing/stepped-routes';
 
 describe('PsatTabService', () => {
   let service: PsatTabService;
@@ -14,7 +12,6 @@ describe('PsatTabService', () => {
       providers: [
         PsatTabService,
         { provide: Router, useValue: routerSpy },
-        { provide: PSAT_STEPPED_ROUTES, useValue: deriveSteppedRoutes(psatRoutes) },
       ],
     });
     service = TestBed.inject(PsatTabService);

@@ -8,6 +8,8 @@ import { DashboardService } from '../../dashboard/dashboard.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { PSAT_SETUP_GATED_VIEWS } from '../routing/psat.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-psat-banner',
@@ -62,9 +64,7 @@ export class PsatBannerComponent implements OnInit {
   }
 
   changeTab(str: string) {
-    if (str == 'baseline' || str == 'calculators') {
-      this.psatTabService.goToMainTab(str);
-    } else if (this.assessment.psat.setupDone) {
+    if (isMainTabAllowed(PSAT_SETUP_GATED_VIEWS, str, this.assessment.psat.setupDone)) {
       this.psatTabService.goToMainTab(str);
     }
     this.collapseBanner();
