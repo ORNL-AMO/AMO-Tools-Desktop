@@ -1,10 +1,5 @@
 import { Routes } from "@angular/router";
-
-export interface CompressedAirInventoryRouteData {
-    mainView?: string;
-    setupView?: string;
-    summaryView?: string;
-}
+import { buildViewRoutes } from "../shared/main-tab-routing/main-tab-routing";
 
 /** Array order is the banner chevron order. */
 export const COMPRESSED_AIR_INVENTORY_MAIN_VIEWS: Array<string> = ['setup', 'summary'];
@@ -23,18 +18,12 @@ export const compressedAirInventoryRoutes: Routes = [
     {
         path: 'setup',
         data: { mainView: 'setup' },
-        children: [
-            { path: '', pathMatch: 'full', redirectTo: COMPRESSED_AIR_INVENTORY_SETUP_VIEWS[0] },
-            ...COMPRESSED_AIR_INVENTORY_SETUP_VIEWS.map(view => ({ path: view, children: [], data: { setupView: view } }))
-        ]
+        children: buildViewRoutes(COMPRESSED_AIR_INVENTORY_SETUP_VIEWS, 'setupView')
     },
     {
         path: 'summary',
         data: { mainView: 'summary' },
-        children: [
-            { path: '', pathMatch: 'full', redirectTo: COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS[0] },
-            ...COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS.map(view => ({ path: view, children: [], data: { summaryView: view } }))
-        ]
+        children: buildViewRoutes(COMPRESSED_AIR_INVENTORY_SUMMARY_VIEWS, 'summaryView')
     },
     {
         path: '**',

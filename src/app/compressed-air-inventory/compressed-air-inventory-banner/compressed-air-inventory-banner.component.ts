@@ -11,6 +11,7 @@ import { IntegrationStateService } from '../../shared/connected-inventory/integr
 import { CompressedAirCatalogService } from '../compressed-air-inventory-setup/compressed-air-catalog/compressed-air-catalog.service';
 import _ from 'lodash';
 import { COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS } from '../compressed-air-inventory.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-compressed-air-inventory-banner',
@@ -106,7 +107,7 @@ export class CompressedAirInventoryBannerComponent implements OnInit {
 
 
   setMainTab(str: string) {
-    if (!COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS.includes(str) || this.compressedAirInventoryData.isValid) {
+    if (isMainTabAllowed(COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, str, this.compressedAirInventoryData.isValid)) {
       this.compressedAirInventoryService.goToMainTab(str);
     }
     this.collapseBanner();

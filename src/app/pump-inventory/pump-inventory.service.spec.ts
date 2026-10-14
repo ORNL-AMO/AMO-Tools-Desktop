@@ -82,6 +82,24 @@ describe('PumpInventoryService routing', () => {
     expect(routerSpy.navigate).not.toHaveBeenCalled();
   });
 
+  it('steps between main tabs on their last visited sub-tabs', () => {
+    service.mainTab.next('setup');
+    service.setupTab.next('pump-catalog');
+    service.continueMainTab();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/pump-inventory', 5, 'summary', 'overview']);
+    service.mainTab.next('summary');
+    service.backMainTab();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/pump-inventory', 5, 'setup', 'pump-catalog']);
+  });
+
+  it('does not step past the first or last main tab', () => {
+    service.mainTab.next('setup');
+    service.backMainTab();
+    service.mainTab.next('summary');
+    service.continueMainTab();
+    expect(routerSpy.navigate).not.toHaveBeenCalled();
+  });
+
   it('does not navigate past the first or last tab', () => {
     service.setupTab.next('plant-setup');
     service.backSetupTab();

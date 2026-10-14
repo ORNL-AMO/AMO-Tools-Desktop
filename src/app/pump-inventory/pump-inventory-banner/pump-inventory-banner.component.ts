@@ -135,15 +135,11 @@ export class PumpInventoryBannerComponent implements OnInit {
   }
 
   back(){
-    if (this.mainTab == 'summary') {
-      this.pumpInventoryService.goToMainTab('setup');
-    } 
+    this.pumpInventoryService.backMainTab();
   }
 
   continue(){
-    if (this.mainTab == 'setup') {
-      this.pumpInventoryService.goToMainTab('summary');
-    } 
+    this.pumpInventoryService.continueMainTab();
   }
 
   backSetupTabs(){
