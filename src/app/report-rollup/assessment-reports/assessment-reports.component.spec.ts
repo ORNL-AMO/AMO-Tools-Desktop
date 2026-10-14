@@ -1,5 +1,6 @@
 import { AssessmentReportsComponent } from './assessment-reports.component';
 import { DashboardService } from '../../dashboard/dashboard.service';
+import { AssessmentService } from '../../dashboard/assessment.service';
 import { Assessment } from '../../shared/models/assessment';
 import { PSAT } from '../../shared/models/psat';
 import { SSMT } from '../../shared/models/steam/ssmt';
@@ -8,12 +9,14 @@ import { TreasureHunt } from '../../shared/models/treasure-hunt';
 describe('AssessmentReportsComponent', () => {
   let component: AssessmentReportsComponent;
   let dashboardServiceSpy: jasmine.SpyObj<DashboardService>;
+  let assessmentServiceSpy: jasmine.SpyObj<AssessmentService>;
 
   beforeEach(() => {
     dashboardServiceSpy = jasmine.createSpyObj('DashboardService', ['navigateWithSidebarOptions']);
-    // goToAssessment only uses DashboardService. Constructed directly so the rollup subscriptions in ngOnInit/ngOnDestroy never run.
+    assessmentServiceSpy = jasmine.createSpyObj('AssessmentService', ['setStartingTab']);
+    // goToAssessment only uses DashboardService and AssessmentService. Constructed directly so the rollup subscriptions in ngOnInit/ngOnDestroy never run.
     const unused = {} as never;
-    component = new AssessmentReportsComponent(unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, dashboardServiceSpy);
+    component = new AssessmentReportsComponent(unused, unused, unused, unused, unused, unused, unused, unused, unused, unused, dashboardServiceSpy, assessmentServiceSpy);
   });
 
   describe('goToAssessment for PSAT', () => {
@@ -76,6 +79,14 @@ describe('AssessmentReportsComponent', () => {
     it('opens baseline for a completed example assessment', () => {
       component.goToAssessment(makeTreasureHuntAssessment(true, true));
       expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/treasure-hunt/6/baseline', { shouldCollapse: true });
+    });
+  });
+
+  describe('goToAssessment for PHAST', () => {
+    it('resets the starting tab to baseline before opening', () => {
+      component.goToAssessment({ id: 2, type: 'PHAST' } as Assessment);
+      expect(assessmentServiceSpy.setStartingTab).toHaveBeenCalledWith('baseline');
+      expect(dashboardServiceSpy.navigateWithSidebarOptions).toHaveBeenCalledWith('/phast/2', { shouldCollapse: true });
     });
   });
 });
