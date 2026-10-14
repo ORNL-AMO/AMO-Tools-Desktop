@@ -8,7 +8,7 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { WasteWaterService } from '../waste-water.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
-import { WASTE_WATER_SETUP_GATED_VIEWS } from '../routing/waste-water.routing';
+import { WASTE_WATER_SETUP_GATED_VIEWS, WasteWaterMainView } from '../routing/waste-water.routing';
 import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -77,8 +77,12 @@ export class WasteWaterBannerComponent implements OnInit {
     this.dashboardService.navigateWithSidebarOptions('/landing-screen', { shouldCollapse: false });
   }
 
-  changeTab(str: string) {
-    if (isMainTabAllowed(WASTE_WATER_SETUP_GATED_VIEWS, str, this.isBaselineValid)) {
+  canOpenMainTab(view: WasteWaterMainView): boolean {
+    return isMainTabAllowed(WASTE_WATER_SETUP_GATED_VIEWS, view, this.isBaselineValid);
+  }
+
+  changeTab(str: WasteWaterMainView) {
+    if (this.canOpenMainTab(str)) {
       this.wasteWaterService.goToMainTab(str);
     }
     this.collapseBanner();

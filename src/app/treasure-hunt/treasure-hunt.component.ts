@@ -4,7 +4,7 @@ import { Settings } from '../shared/models/settings';
 import { AssessmentService } from '../dashboard/assessment.service';
  
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { TREASURE_HUNT_MAIN_VIEWS, TREASURE_HUNT_SETUP_GATED_VIEWS } from './routing/treasure-hunt.routing';
+import { TREASURE_HUNT_MAIN_VIEWS, TREASURE_HUNT_SETUP_GATED_VIEWS, TreasureHuntMainView } from './routing/treasure-hunt.routing';
 import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
@@ -164,7 +164,7 @@ export class TreasureHuntComponent implements OnInit {
 
 
   syncMainTabFromRoute() {
-    const mainView: string = getMergedRouteData(this.activatedRoute.firstChild?.snapshot).mainView;
+    const mainView: TreasureHuntMainView = getMergedRouteData<TreasureHuntMainView>(this.activatedRoute.firstChild?.snapshot).mainView;
     if (!mainView || !this.assessment?.treasureHunt) {
       return;
     }

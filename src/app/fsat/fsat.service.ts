@@ -21,13 +21,13 @@ import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption
 import { EnergyUseItem } from '../shared/models/treasure-hunt';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 import { getNewIdString } from '../shared/helperFunctions';
-import { FSAT_MAIN_VIEWS } from './routing/fsat-main-views';
+import { FSAT_MAIN_VIEWS, FsatMainView } from './routing/fsat-main-views';
 import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 
 @Injectable()
 export class FsatService {
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<FsatMainView>;
   stepTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
   openNewModal: BehaviorSubject<boolean>;
@@ -71,7 +71,7 @@ export class FsatService {
   }
 
   initData() {
-    this.mainTab = new BehaviorSubject<string>('baseline');
+    this.mainTab = new BehaviorSubject<FsatMainView>('baseline');
     this.stepTab = new BehaviorSubject<string>('baseline');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.calculatorTab = new BehaviorSubject<string>('fan-efficiency');
@@ -191,25 +191,27 @@ export class FsatService {
     if (tmpStepTab === 'fan-field-data') {
       this.goToMainTab('assessment');
     } else {
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
-      this.stepTab.next(nextTab);
+      const nextTab: string = getSteppedView(this.stepTabs, tmpStepTab, 1);
+      if (nextTab) {
+        this.stepTab.next(nextTab);
+      }
     }
   }
 
   back() {
     let tmpStepTab: string = this.stepTab.getValue();
     if (tmpStepTab !== 'baseline' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
-      this.stepTab.next(nextTab);
+      const previousTab: string = getSteppedView(this.stepTabs, tmpStepTab, -1);
+      if (previousTab) {
+        this.stepTab.next(previousTab);
+      }
     } else if (this.mainTab.getValue() == 'assessment') {
       this.goToMainTab('baseline');
     }
   }
 
 
-  goToMainTab(tab: string) {
+  goToMainTab(tab: FsatMainView) {
     const assessmentId: number = this.assessment.getValue()?.id;
     if (assessmentId) {
       this.router.navigate(['/fsat', assessmentId, tab]);
@@ -225,7 +227,7 @@ export class FsatService {
   }
 
   private stepMainTab(offset: number) {
-    const view: string = getSteppedView(FSAT_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    const view: FsatMainView = getSteppedView(FSAT_MAIN_VIEWS, this.mainTab.getValue(), offset);
     if (view) {
       this.goToMainTab(view);
     }

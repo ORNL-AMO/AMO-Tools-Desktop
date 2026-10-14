@@ -12,7 +12,7 @@ import { CompareService } from './compare.service';
 import { ConvertFsatService } from './convert-fsat.service';
 import * as _ from 'lodash';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
-import { FSAT_MAIN_VIEWS, FSAT_SETUP_GATED_VIEWS } from './routing/fsat-main-views';
+import { FSAT_MAIN_VIEWS, FSAT_SETUP_GATED_VIEWS, FsatMainView } from './routing/fsat-main-views';
 import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -155,7 +155,7 @@ export class FsatComponent implements OnInit, OnDestroy {
    * The route is the source of truth for the main tab. Tabs the banner gates behind setup redirect to baseline when reached by URL or history.
    */
   syncMainTabFromRoute() {
-    const mainView: string = getMergedRouteData(this.activatedRoute.firstChild?.snapshot).mainView;
+    const mainView: FsatMainView = getMergedRouteData<FsatMainView>(this.activatedRoute.firstChild?.snapshot).mainView;
     if (!mainView || !this.assessment) {
       return;
     }

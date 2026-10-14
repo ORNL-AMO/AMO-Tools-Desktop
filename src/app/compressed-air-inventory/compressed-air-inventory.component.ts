@@ -16,8 +16,8 @@ import { CompressedAirCatalogService } from './compressed-air-inventory-setup/co
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { CompressedAirAssessmentIntegrationService } from '../shared/connected-inventory/compressed-air-assessment-integration.service';
 import { GenericCompressorDbService } from '../shared/generic-compressor-db.service';
-import { COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS } from './compressed-air-inventory.routing';
-import { MainTabRouteData, getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
+import { COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, CompressedAirInventoryMainView, CompressedAirInventorySetupView, CompressedAirInventorySummaryView } from './compressed-air-inventory.routing';
+import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-compressed-air-inventory',
@@ -184,7 +184,7 @@ export class CompressedAirInventoryComponent implements OnInit {
    * Replaces a gated main tab with the first main tab while the inventory is invalid.
    */
   syncTabsFromRoute() {
-    const routeData: MainTabRouteData = getMergedRouteData(this.activatedRoute.snapshot);
+    const routeData = getMergedRouteData<CompressedAirInventoryMainView, CompressedAirInventorySetupView, CompressedAirInventorySummaryView>(this.activatedRoute.snapshot);
 
     const isValid: boolean = this.compressedAirInventoryService.compressedAirInventoryData.getValue().isValid;
     if (routeData.mainView && !isMainTabAllowed(COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, routeData.mainView, isValid)) {

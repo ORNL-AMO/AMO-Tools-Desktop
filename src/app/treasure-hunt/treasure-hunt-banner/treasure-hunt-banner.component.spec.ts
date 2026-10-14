@@ -10,6 +10,7 @@ import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { CoreService } from '../../core/core.service';
 import { Assessment } from '../../shared/models/assessment';
 import { TreasureHunt } from '../../shared/models/treasure-hunt';
+import { TreasureHuntMainView } from '../routing/treasure-hunt.routing';
 
 function makeAssessment(setupDone: boolean): Assessment {
   return { id: 1, type: 'TreasureHunt', treasureHunt: { setupDone } as TreasureHunt } as Assessment;
@@ -50,8 +51,19 @@ describe('TreasureHuntBannerComponent', () => {
     component = fixture.componentInstance;
   });
 
+  describe('canOpenMainTab', () => {
+    it('allows gated tabs only once setup is done', () => {
+      component.assessment = makeAssessment(false);
+      fixture.detectChanges();
+      expect(component.canOpenMainTab('baseline')).toBeTrue();
+      expect(component.canOpenMainTab('report')).toBeFalse();
+      component.assessment = makeAssessment(true);
+      expect(component.canOpenMainTab('report')).toBeTrue();
+    });
+  });
+
   describe('changeTab', () => {
-    ['find-treasure', 'treasure-chest', 'report'].forEach(tab => {
+    (['find-treasure', 'treasure-chest', 'report'] satisfies Array<TreasureHuntMainView>).forEach(tab => {
       it(`navigates to ${tab} when setup is done`, () => {
         component.assessment = makeAssessment(true);
         fixture.detectChanges();

@@ -8,7 +8,7 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
-import { TREASURE_HUNT_SETUP_GATED_VIEWS } from '../routing/treasure-hunt.routing';
+import { TREASURE_HUNT_SETUP_GATED_VIEWS, TreasureHuntMainView } from '../routing/treasure-hunt.routing';
 import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -68,9 +68,13 @@ export class TreasureHuntBannerComponent implements OnInit {
   }
 
 
-  changeTab(str: string) {
+  canOpenMainTab(view: TreasureHuntMainView): boolean {
+    return isMainTabAllowed(TREASURE_HUNT_SETUP_GATED_VIEWS, view, this.assessment.treasureHunt.setupDone);
+  }
+
+  changeTab(str: TreasureHuntMainView) {
     if (this.disableTabs == false) {
-      if (isMainTabAllowed(TREASURE_HUNT_SETUP_GATED_VIEWS, str, this.assessment.treasureHunt.setupDone)) {
+      if (this.canOpenMainTab(str)) {
         this.treasureHuntService.goToMainTab(str);
       }
     }

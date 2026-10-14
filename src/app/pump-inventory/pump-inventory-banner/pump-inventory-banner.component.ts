@@ -10,7 +10,7 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import _ from 'lodash';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
-import { PUMP_INVENTORY_SETUP_GATED_VIEWS } from '../pump-inventory.routing';
+import { PUMP_INVENTORY_SETUP_GATED_VIEWS, PumpInventoryMainView, PumpInventorySetupView, PumpInventorySummaryView } from '../pump-inventory.routing';
 import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -98,7 +98,7 @@ export class PumpInventoryBannerComponent implements OnInit {
     this.showPumpPropertiesSub.unsubscribe();
   }
 
-  setSetupTab(str: string) {
+  setSetupTab(str: PumpInventorySetupView) {
     this.pumpInventoryService.goToSetupTab(str);
   }
 
@@ -113,18 +113,18 @@ export class PumpInventoryBannerComponent implements OnInit {
     }
   }
 
-  canOpenMainTab(view: string): boolean {
+  canOpenMainTab(view: PumpInventoryMainView): boolean {
     return isMainTabAllowed(PUMP_INVENTORY_SETUP_GATED_VIEWS, view, this.pumpInventoryData.isValid);
   }
 
-  setMainTab(str: string) {
+  setMainTab(str: PumpInventoryMainView) {
     if (this.canOpenMainTab(str)) {
       this.pumpInventoryService.goToMainTab(str);
     }
     this.collapseBanner();
   }
 
-  setSummaryTab(str: string) {
+  setSummaryTab(str: PumpInventorySummaryView) {
     this.pumpInventoryService.goToSummaryTab(str);
   }
 

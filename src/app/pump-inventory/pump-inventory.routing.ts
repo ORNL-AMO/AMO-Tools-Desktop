@@ -2,11 +2,14 @@ import { Routes } from "@angular/router";
 import { buildViewRoutes } from "../shared/main-tab-routing/main-tab-routing";
 
 /** Array order is the banner chevron order. */
-export const PUMP_INVENTORY_MAIN_VIEWS: Array<string> = ['setup', 'summary'];
-export const PUMP_INVENTORY_SETUP_VIEWS: Array<string> = ['plant-setup', 'department-setup', 'pump-catalog'];
-export const PUMP_INVENTORY_SUMMARY_VIEWS: Array<string> = ['overview', 'graphs', 'table'];
+export const PUMP_INVENTORY_MAIN_VIEWS = ['setup', 'summary'] as const;
+export type PumpInventoryMainView = typeof PUMP_INVENTORY_MAIN_VIEWS[number];
+export const PUMP_INVENTORY_SETUP_VIEWS = ['plant-setup', 'department-setup', 'pump-catalog'] as const;
+export type PumpInventorySetupView = typeof PUMP_INVENTORY_SETUP_VIEWS[number];
+export const PUMP_INVENTORY_SUMMARY_VIEWS = ['overview', 'graphs', 'table'] as const;
+export type PumpInventorySummaryView = typeof PUMP_INVENTORY_SUMMARY_VIEWS[number];
 /** Main tabs gated behind a valid inventory. */
-export const PUMP_INVENTORY_SETUP_GATED_VIEWS: Array<string> = ['summary'];
+export const PUMP_INVENTORY_SETUP_GATED_VIEWS: ReadonlyArray<PumpInventoryMainView> = ['summary'];
 
 export const pumpInventoryRoutes: Routes = [
     {

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { MOTOR_INVENTORY_MAIN_VIEWS } from './motor-inventory.routing';
-import { MainTabRouteData, getMergedRouteData, getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
+import { MOTOR_INVENTORY_MAIN_VIEWS, MotorInventoryMainView } from './motor-inventory.routing';
+import { getMergedRouteData, getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 import { MotorItem, MotorInventoryDepartment, MotorInventoryData, MotorPropertyDisplayOptions, FilterInventorySummary } from './motor-inventory';
 import { Settings } from '../shared/models/settings';
 import * as _ from 'lodash';
 @Injectable()
 export class MotorInventoryService {
 
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<MotorInventoryMainView>;
   setupTab: BehaviorSubject<string>;
   summaryTab: BehaviorSubject<string>;
   motorInventoryData: BehaviorSubject<MotorInventoryData>;
@@ -23,7 +23,7 @@ export class MotorInventoryService {
   currentInventoryId: number;
   constructor(private router: Router) {
     this.setupTab = new BehaviorSubject<string>('plant-setup');
-    this.mainTab = new BehaviorSubject<string>('setup');
+    this.mainTab = new BehaviorSubject<MotorInventoryMainView>('setup');
     let inventoryData: MotorInventoryData = this.initInventoryData();
     this.motorInventoryData = new BehaviorSubject<MotorInventoryData>(inventoryData);
     this.focusedField = new BehaviorSubject<string>('default');
@@ -46,7 +46,7 @@ export class MotorInventoryService {
    * @param snapshot snapshot to walk down through its `firstChild` chain
    */
   syncMainTabFromRoute(snapshot: ActivatedRouteSnapshot) {
-    const data: MainTabRouteData = getMergedRouteData(snapshot);
+    const data = getMergedRouteData<MotorInventoryMainView>(snapshot);
     if (data.mainView && data.mainView !== this.mainTab.getValue()) {
       this.mainTab.next(data.mainView);
     }
@@ -55,7 +55,7 @@ export class MotorInventoryService {
   /**
    * @param view one of `MOTOR_INVENTORY_MAIN_VIEWS`
    */
-  goToMainTab(view: string) {
+  goToMainTab(view: MotorInventoryMainView) {
     this.router.navigate(['/motor-inventory', this.currentInventoryId, view]);
   }
 
@@ -68,7 +68,7 @@ export class MotorInventoryService {
   }
 
   private stepMainTab(offset: number) {
-    const view: string = getSteppedView(MOTOR_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    const view: MotorInventoryMainView = getSteppedView(MOTOR_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
     if (view) {
       this.goToMainTab(view);
     }

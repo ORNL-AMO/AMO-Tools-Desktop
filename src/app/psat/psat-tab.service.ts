@@ -1,8 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import * as _ from 'lodash';
-import { PSAT_MAIN_VIEWS } from './routing/psat.routing';
+import { PSAT_MAIN_VIEWS, PsatMainView } from './routing/psat.routing';
 import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 @Injectable()
 export class PsatTabService {
@@ -10,7 +9,7 @@ export class PsatTabService {
 
   modifyConditionsTab: BehaviorSubject<string>;
   stepTab: BehaviorSubject<string>;
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<PsatMainView>;
   secondaryTab: BehaviorSubject<string>;
   calcTab: BehaviorSubject<string>;
   showExportModal: BehaviorSubject<boolean>;
@@ -26,7 +25,7 @@ export class PsatTabService {
   ];
 
   constructor() {
-    this.mainTab = new BehaviorSubject<string>('baseline');
+    this.mainTab = new BehaviorSubject<PsatMainView>('baseline');
     this.secondaryTab = new BehaviorSubject<string>('explore-opportunities');
     this.calcTab = new BehaviorSubject<string>('achievable-efficiency');
     this.modifyConditionsTab = new BehaviorSubject<string>('pump-fluid');
@@ -40,9 +39,10 @@ export class PsatTabService {
     if (tmpStepTab == 'field-data') {
       this.goToMainTab('assessment');
     } else {
-      let currentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab })
-      let nextTab: string = this.stepTabs[currentTabIndex + 1];
-      this.stepTab.next(nextTab);
+      const nextTab: string = getSteppedView(this.stepTabs, tmpStepTab, 1);
+      if (nextTab) {
+        this.stepTab.next(nextTab);
+      }
     }
   }
 
@@ -51,9 +51,10 @@ export class PsatTabService {
       this.goToMainTab('baseline');
     } else {
       let tmpStepTab: string = this.stepTab.getValue();
-      let currentTabIndex: number = _.findIndex(this.stepTabs, function (tab) { return tab == tmpStepTab })
-      let previusTab: string = this.stepTabs[currentTabIndex - 1];
-      this.stepTab.next(previusTab);
+      const previousTab: string = getSteppedView(this.stepTabs, tmpStepTab, -1);
+      if (previousTab) {
+        this.stepTab.next(previousTab);
+      }
     }
   }
 
@@ -61,7 +62,7 @@ export class PsatTabService {
    * Main tab changes are navigations; PsatComponent syncs mainTab from the resulting route.
    * @param tab Main tab route path
    */
-  goToMainTab(tab: string) {
+  goToMainTab(tab: PsatMainView) {
     if (this.assessmentId) {
       this.router.navigate(['/psat', this.assessmentId, tab]);
     }
@@ -76,7 +77,7 @@ export class PsatTabService {
   }
 
   private stepMainTab(offset: number) {
-    const view: string = getSteppedView(PSAT_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    const view: PsatMainView = getSteppedView(PSAT_MAIN_VIEWS, this.mainTab.getValue(), offset);
     if (view) {
       this.goToMainTab(view);
     }

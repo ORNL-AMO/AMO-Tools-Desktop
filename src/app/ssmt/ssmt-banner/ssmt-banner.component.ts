@@ -7,7 +7,7 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
-import { SSMT_SETUP_GATED_VIEWS } from '../routing/ssmt.routing';
+import { SSMT_SETUP_GATED_VIEWS, SsmtMainView } from '../routing/ssmt.routing';
 import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -52,8 +52,12 @@ export class SsmtBannerComponent implements OnInit {
     );
   }
 
-  changeTab(str: string) {
-    if (isMainTabAllowed(SSMT_SETUP_GATED_VIEWS, str, this.assessment.ssmt.setupDone)) {
+  canOpenMainTab(view: SsmtMainView): boolean {
+    return isMainTabAllowed(SSMT_SETUP_GATED_VIEWS, view, this.assessment.ssmt.setupDone);
+  }
+
+  changeTab(str: SsmtMainView) {
+    if (this.canOpenMainTab(str)) {
       this.ssmtService.goToMainTab(str);
     }
     this.collapseBanner();

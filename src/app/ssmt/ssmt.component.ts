@@ -17,7 +17,7 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 import { SaturatedPropertiesOutput } from '../shared/models/steam/steam-outputs';
 import { BoilerService } from './boiler/boiler.service';
-import { SSMT_MAIN_VIEWS, SSMT_SETUP_GATED_VIEWS } from './routing/ssmt.routing';
+import { SSMT_MAIN_VIEWS, SSMT_SETUP_GATED_VIEWS, SsmtMainView } from './routing/ssmt.routing';
 import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
@@ -226,7 +226,7 @@ export class SsmtComponent implements OnInit {
   }
 
   syncMainTabFromRoute() {
-    const mainView: string = getMergedRouteData(this.activatedRoute.firstChild?.snapshot).mainView;
+    const mainView: SsmtMainView = getMergedRouteData<SsmtMainView>(this.activatedRoute.firstChild?.snapshot).mainView;
     if (!mainView || !this.assessment) {
       return;
     }

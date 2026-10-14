@@ -256,20 +256,21 @@ export class WaterAssessmentService {
 
   continueSetupTab() {
     let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
-    let nextTab: WaterSetupTabString;
     if (tmpSetupTab !== 'waste-water-treatment' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-      nextTab = this.setupTabs[assessmentTabIndex + 1];
-      this.setupTab.next(nextTab);
+      const nextTab: WaterSetupTabString = getSteppedView(this.setupTabs, tmpSetupTab, 1);
+      if (nextTab) {
+        this.setupTab.next(nextTab);
+      }
     }
   }
 
   backSetupTab() {
     let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
     if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-      let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex - 1];
-      this.setupTab.next(nextTab);
+      const previousTab: WaterSetupTabString = getSteppedView(this.setupTabs, tmpSetupTab, -1);
+      if (previousTab) {
+        this.setupTab.next(previousTab);
+      }
     }
   }
 
