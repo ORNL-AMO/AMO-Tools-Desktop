@@ -21,6 +21,7 @@ import { GasLeakageOpportunityComponent } from './gas-leakage-opportunity/gas-le
 import { AirFuelRatioOpportunityComponent } from './air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
 import { PreheatCombustionAirOpportunityComponent } from './preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
 import { SlagOpportunityComponent } from './slag-opportunity/slag-opportunity.component';
+import { HeatSystemEfficiencyOpportunityComponent } from './heat-system-efficiency-opportunity/heat-system-efficiency-opportunity.component';
 
 const COMPONENTS_BY_LOSS_KEY: Partial<Record<keyof Losses, Type<unknown>[]>> = {
   chargeMaterials: [ChargeMaterialOpportunityComponent],
@@ -38,9 +39,10 @@ const ALLOWED_CONFIGURATIONS_BY_COMPONENT = new Map<Type<unknown>, HeatingEquipm
   ...[...COMPONENTS_BY_LOSS_KEY.leakageLosses!, ...COMPONENTS_BY_LOSS_KEY.flueGasLosses!]
     .map((component): [Type<unknown>, HeatingEquipmentConfiguration[]] => [component, [HeatingEquipmentConfiguration.FUEL_FIRED]]),
   [SlagOpportunityComponent, [HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF]],
+  [HeatSystemEfficiencyOpportunityComponent, [HeatingEquipmentConfiguration.STEAM, HeatingEquipmentConfiguration.CUSTOM_ELECTROTECHNOLOGY]],
 ]);
 
-const ALL_COMPONENTS_IN_ORDER = Object.values(COMPONENTS_BY_LOSS_KEY).flat();
+const ALL_COMPONENTS_IN_ORDER = [...Object.values(COMPONENTS_BY_LOSS_KEY).flat(), HeatSystemEfficiencyOpportunityComponent];
 
 function componentsAllowedFor(components: Type<unknown>[], configuration: HeatingEquipmentConfiguration): Type<unknown>[] {
   return components.filter(component => ALLOWED_CONFIGURATIONS_BY_COMPONENT.get(component)?.includes(configuration) ?? true);
@@ -113,6 +115,17 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
         .toEqual(componentsAllowedFor(ALL_COMPONENTS_IN_ORDER, heatingConfiguration));
     });
   }
+
+  it('shows the heat system efficiency opportunity only for steam and custom electrotechnology, even with no baseline losses', () => {
+    populatedLossKeys.clear();
+
+    for (const heatingConfiguration of Object.values(HeatingEquipmentConfiguration)) {
+      configuration.set(heatingConfiguration);
+
+      expect(createComponent().visibleOpportunityComponents().includes(HeatSystemEfficiencyOpportunityComponent))
+        .toBe(heatingConfiguration === HeatingEquipmentConfiguration.STEAM || heatingConfiguration === HeatingEquipmentConfiguration.CUSTOM_ELECTROTECHNOLOGY);
+    }
+  });
 
   it('shows the slag opportunity only for electrotechnology EAF', () => {
     for (const heatingConfiguration of Object.values(HeatingEquipmentConfiguration)) {

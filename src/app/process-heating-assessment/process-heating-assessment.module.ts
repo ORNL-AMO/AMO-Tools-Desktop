@@ -52,6 +52,7 @@ import { FixtureMaterialsHandlingOpportunityComponent } from './explore-opportun
 import { FixtureCoolingOpportunityComponent } from './explore-opportunities/fixture-cooling-opportunity/fixture-cooling-opportunity.component';
 import { CoolingOpportunityComponent } from './explore-opportunities/cooling-opportunity/cooling-opportunity.component';
 import { SlagOpportunityComponent } from './explore-opportunities/slag-opportunity/slag-opportunity.component';
+import { HeatSystemEfficiencyOpportunityComponent } from './explore-opportunities/heat-system-efficiency-opportunity/heat-system-efficiency-opportunity.component';
 import { OpeningSizeOpportunityComponent } from './explore-opportunities/opening-size-opportunity/opening-size-opportunity.component';
 import { OpeningEmissivityOpportunityComponent } from './explore-opportunities/opening-emissivity-opportunity/opening-emissivity-opportunity.component';
 import { OpeningTimeOpenOpportunityComponent } from './explore-opportunities/opening-time-open-opportunity/opening-time-open-opportunity.component';
@@ -342,6 +343,7 @@ export const ROUTES: Route[] = [
     FixtureCoolingOpportunityComponent,
     CoolingOpportunityComponent,
     SlagOpportunityComponent,
+    HeatSystemEfficiencyOpportunityComponent,
     OpeningSizeOpportunityComponent,
     OpeningEmissivityOpportunityComponent,
     OpeningTimeOpenOpportunityComponent,

@@ -1,0 +1,53 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowEfficiencyData">
+    <input
+      type="checkbox"
+      id="exploreOppsShowEfficiencyData"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    {{ displayName }}
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  <ul>
+    <li class="explore-opps-header">
+      <span class="explore-opps-title text-muted">Baseline</span>
+      <span class="explore-opps-title text-muted">Modification</span>
+    </li>
+    <li class="explore-opps-item mb-2">
+      <form class="explore-opps-form">
+        <div class="text-center">
+          <label class="baseline-value-label">System Efficiency</label>
+          <div class="text-muted text-center baseline-value-input">
+            {{ baselineValue() }}
+            <span>%</span>
+          </div>
+        </div>
+      </form>
+
+      <form class="explore-opps-form">
+        <div class="form-group explore-opps-formgroup">
+          <label for="modificationSystemEfficiency" class="mod-value-label">System Efficiency</label>
+          <div class="input-group mod-max-width">
+            <input
+              type="number"
+              step="any"
+              min="0"
+              max="100"
+              class="form-control"
+              id="modificationSystemEfficiency"
+              [value]="modificationValue()"
+              (change)="setModificationValue($any($event.target).valueAsNumber)"
+            />
+            <span class="input-group-addon units">%</span>
+          </div>
+          @if (warning()) {
+            <span class="alert-warning pull-right small">{{ warning() }}</span>
+          }
+        </div>
+      </form>
+    </li>
+  </ul>
+}
