@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, Injector, linkedSignal, Signal, untracked } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { isEqual } from 'lodash';
 import { DialogRef } from '@angular/cdk/dialog';
 import { OperatingCosts, OperatingHours } from '../../../shared/models/operations';
 import { Settings } from '../../../shared/models/settings';
@@ -10,6 +11,9 @@ import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 
 export const OPERATIONS_DISPLAY_NAME = 'Adjust Operational Data';
+
+// Hours in a non-leap year (hrs/yr); matches the cap on the setup Operations form.
+const MAX_HOURS_PER_YEAR = 8760;
 
 export type OperationsOpportunitySection = 'operatingHours' | 'fuelCost' | 'steamCost' | 'electricityCost';
 // Derived so the cost sections stay in step with the section union.
@@ -31,6 +35,10 @@ const SECTION_DEFINITIONS: readonly OperationsSectionDefinition[] = [
 ];
 
 const ALL_SECTIONS: readonly OperationsOpportunitySection[] = SECTION_DEFINITIONS.map(({ section }) => section);
+
+function isWithinBounds(section: OperationsOpportunitySection, value: number): boolean {
+  return value >= 0 && (section !== 'operatingHours' || value <= MAX_HOURS_PER_YEAR);
+}
 
 function readSectionValue(phast: PHAST | undefined, section: OperationsOpportunitySection): number | undefined {
   return section === 'operatingHours' ? phast?.operatingHours?.hoursPerYear : phast?.operatingCosts?.[section];
@@ -115,7 +123,7 @@ export class OperationsOpportunityComponent {
   setModificationValue(section: OperationsOpportunitySection, value: number): void {
     const modification = this.modification();
     const modificationId = this.modificationService.selectedModificationId();
-    if (Number.isNaN(value) || !modification || !modificationId) {
+    if (Number.isNaN(value) || !isWithinBounds(section, value) || !modification || !modificationId) {
       return;
     }
     if (section === 'operatingHours') {
@@ -151,19 +159,23 @@ export class OperationsOpportunityComponent {
     return readSectionValue(this.baseline(), section) !== readSectionValue(this.modification(), section);
   }
 
+  /** The hours calculator writes weeks, days and hours per day too, so a reset compares the whole object. */
+  private differsForReset(section: OperationsOpportunitySection): boolean {
+    return section === 'operatingHours'
+      ? !isEqual(this.baseline()?.operatingHours, this.modification()?.operatingHours)
+      : this.differsFromBaseline(section);
+  }
+
   private resetToBaseline(sections: readonly OperationsOpportunitySection[]): void {
     const modificationId = this.modificationService.selectedModificationId();
     const modification = this.modification();
     const baseline = this.baseline();
-    const changedSections = sections.filter(section => this.differsFromBaseline(section));
+    const changedSections = sections.filter(section => this.differsForReset(section));
     if (!modificationId || !modification || !changedSections.length) {
       return;
     }
     if (changedSections.includes('operatingHours')) {
-      this.assessmentService.updateModificationProperty(modificationId, 'operatingHours', {
-        ...modification.operatingHours,
-        hoursPerYear: baseline?.operatingHours?.hoursPerYear,
-      });
+      this.assessmentService.updateModificationProperty(modificationId, 'operatingHours', baseline?.operatingHours);
     }
     const costSections = changedSections.filter((section): section is OperatingCostSection => section !== 'operatingHours');
     if (costSections.length) {

@@ -147,6 +147,35 @@ describe('OperationsOpportunityComponent', () => {
       });
     }
 
+    it('ignores operating hours below 0 or above 8760', () => {
+      component.setModificationValue('operatingHours', -1);
+      component.setModificationValue('operatingHours', 8761);
+
+      expect(effective().operatingHours.hoursPerYear).toBe(8736);
+    });
+
+    it('accepts the operating hours bounds 0 and 8760', () => {
+      component.setModificationValue('operatingHours', 0);
+      expect(effective().operatingHours.hoursPerYear).toBe(0);
+
+      component.setModificationValue('operatingHours', 8760);
+      expect(effective().operatingHours.hoursPerYear).toBe(8760);
+    });
+
+    for (const section of ['fuelCost', 'steamCost', 'electricityCost'] as const) {
+      it(`ignores a negative ${section}`, () => {
+        component.setModificationValue(section, -0.01);
+
+        expect(effective().operatingCosts[section]).toBe(BASELINE.operatingCosts[section]);
+      });
+    }
+
+    it('accepts a cost of 0', () => {
+      component.setModificationValue('fuelCost', 0);
+
+      expect(effective().operatingCosts.fuelCost).toBe(0);
+    });
+
     it('ignores a cleared input', () => {
       component.setModificationValue('fuelCost', NaN);
 
@@ -180,14 +209,21 @@ describe('OperationsOpportunityComponent', () => {
       expect(writeSpy).not.toHaveBeenCalled();
     });
 
-    it('resets only hoursPerYear when the hours section is closed', () => {
+    it('resets the whole operating hours object when the hours section is closed', () => {
       component.toggleSection('operatingHours', true);
       assessmentService.updateModificationProperty(modificationService.selectedModificationId(), 'operatingHours', { ...BASELINE.operatingHours, daysPerWeek: 5, hoursPerYear: 4000 });
 
       component.toggleSection('operatingHours', false);
 
-      expect(effective().operatingHours.hoursPerYear).toBe(8736);
-      expect(effective().operatingHours.daysPerWeek).toBe(5);
+      expect(effective().operatingHours).toEqual(BASELINE.operatingHours);
+    });
+
+    it('resets the whole operating hours object when the opportunity is deselected', () => {
+      assessmentService.updateModificationProperty(modificationService.selectedModificationId(), 'operatingHours', { ...BASELINE.operatingHours, daysPerWeek: 5, hoursPerYear: 8736 });
+
+      component.toggleOpportunity(false);
+
+      expect(effective().operatingHours).toEqual(BASELINE.operatingHours);
     });
 
     it('expands the sections that already differ from baseline when a modification is selected', () => {
