@@ -13,6 +13,7 @@ import { OpeningTimeOpenOpportunityComponent } from './opening-time-open-opportu
 import { GasLeakageOpportunityComponent } from './gas-leakage-opportunity/gas-leakage-opportunity.component';
 import { AirFuelRatioOpportunityComponent } from './air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
 import { PreheatCombustionAirOpportunityComponent } from './preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
+import { SlagOpportunityComponent } from './slag-opportunity/slag-opportunity.component';
 
 export interface OpportunityRegistration {
   component: Type<unknown>;
@@ -28,6 +29,7 @@ export interface OpportunityRegistryEntry {
 }
 
 const FUEL_FIRED_ONLY = [HeatingEquipmentConfiguration.FUEL_FIRED];
+const ELECTROTECHNOLOGY_EAF_ONLY = [HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF];
 
 /**
  * Opportunities shown in the Explore Opportunities shell, in render order.
@@ -47,4 +49,5 @@ export const OPPORTUNITY_REGISTRY: readonly OpportunityRegistryEntry[] = [
   { lossKey: 'openingLosses', opportunityComponents: [{ component: OpeningSizeOpportunityComponent }, { component: OpeningEmissivityOpportunityComponent }, { component: OpeningTimeOpenOpportunityComponent }] },
   { lossKey: 'leakageLosses', opportunityComponents: [{ component: GasLeakageOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
   { lossKey: 'flueGasLosses', opportunityComponents: [{ component: AirFuelRatioOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }, { component: PreheatCombustionAirOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
+  { lossKey: 'slagLosses', opportunityComponents: [{ component: SlagOpportunityComponent, heatingEquipmentConfigurations: ELECTROTECHNOLOGY_EAF_ONLY }] },
 ];

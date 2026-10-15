@@ -1,0 +1,71 @@
+@let imperial = settings().unitsOfMeasure === 'Imperial';
+
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowSlag">
+    <input
+      type="checkbox"
+      id="exploreOppsShowSlag"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    Reduce Slag
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  @for (comparison of comparisons(); track comparison.id) {
+    <ul>
+      <li class="explore-opps-item">
+        <div class="checkbox form-group mt-2">
+          <label for="{{ 'modifySlagWeight_' + comparison.id }}" class="w-100">
+            <input
+              type="checkbox"
+              id="{{ 'modifySlagWeight_' + comparison.id }}"
+              [checked]="isExpanded(comparison.id)"
+              (change)="toggleSection(comparison.id, $any($event.target).checked)"
+            />
+            Modify Slag Weight
+            <span class="text-muted">{{ comparison.name }}</span>
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (isExpanded(comparison.id)) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">Slag Weight</label>
+              <div class="text-muted text-center baseline-value-input">
+                {{ comparison.baseline.weight }}
+                @if (imperial) { <span>lb/hr</span> } @else { <span>kg/hr</span> }
+              </div>
+            </div>
+          </form>
+
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modificationSlagWeight_' + comparison.id }}" class="mod-value-label">Slag Weight</label>
+              <div class="input-group mod-max-width">
+                <input
+                  type="number"
+                  step="any"
+                  min="0"
+                  class="form-control"
+                  id="{{ 'modificationSlagWeight_' + comparison.id }}"
+                  [value]="comparison.modification.weight"
+                  (change)="setModificationValue(comparison.id, $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit [settings]="settings()" imperialUnit="lb/hr" metricUnit="kg/hr"></app-input-unit>
+              </div>
+            </div>
+          </form>
+        </li>
+      }
+    </ul>
+  }
+}
