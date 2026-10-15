@@ -36,6 +36,13 @@ const SECTION_DEFINITIONS: readonly OperationsSectionDefinition[] = [
 
 const ALL_SECTIONS: readonly OperationsOpportunitySection[] = SECTION_DEFINITIONS.map(({ section }) => section);
 
+const OUT_OF_RANGE_WARNINGS: Record<OperationsOpportunitySection, string> = {
+  operatingHours: `Operating hours must be between 0 and ${MAX_HOURS_PER_YEAR}. The entered value is not applied.`,
+  fuelCost: 'Fuel cost must be 0 or greater. The entered value is not applied.',
+  steamCost: 'Steam cost must be 0 or greater. The entered value is not applied.',
+  electricityCost: 'Electricity cost must be 0 or greater. The entered value is not applied.',
+};
+
 function isWithinBounds(section: OperationsOpportunitySection, value: number): boolean {
   return value >= 0 && (section !== 'operatingHours' || value <= MAX_HOURS_PER_YEAR);
 }
@@ -78,15 +85,23 @@ export class OperationsOpportunityComponent {
     computation: () => untracked(() => new Set(ALL_SECTIONS.filter(section => this.differsFromBaseline(section)))),
   });
 
+  /** Sections whose last entry was out of range and not saved; cleared when the modification changes. */
+  private readonly rejectedSections = linkedSignal<string | undefined, ReadonlySet<OperationsOpportunitySection>>({
+    source: this.modificationService.selectedModificationId,
+    computation: () => new Set(),
+  });
+
   readonly sections = computed(() => {
     const imperial = this.settings().unitsOfMeasure === 'Imperial';
     const expanded = this.expandedSections();
+    const rejected = this.rejectedSections();
     return SECTION_DEFINITIONS.map(definition => ({
       ...definition,
       unit: imperial ? definition.imperialUnit : definition.metricUnit,
       expanded: expanded.has(definition.section),
       baselineValue: readSectionValue(this.baseline(), definition.section),
       modificationValue: readSectionValue(this.modification(), definition.section),
+      warning: rejected.has(definition.section) ? OUT_OF_RANGE_WARNINGS[definition.section] : null,
     }));
   });
 
@@ -101,6 +116,7 @@ export class OperationsOpportunityComponent {
     });
     if (!hasOpportunity) {
       this.expandedSections.set(new Set());
+      this.rejectedSections.set(new Set());
       this.resetToBaseline(ALL_SECTIONS);
     }
   }
@@ -116,6 +132,7 @@ export class OperationsOpportunityComponent {
       return updated;
     });
     if (!show) {
+      this.setRejected(section, false);
       this.resetToBaseline([section]);
     }
   }
@@ -123,7 +140,12 @@ export class OperationsOpportunityComponent {
   setModificationValue(section: OperationsOpportunitySection, value: number): void {
     const modification = this.modification();
     const modificationId = this.modificationService.selectedModificationId();
-    if (Number.isNaN(value) || !isWithinBounds(section, value) || !modification || !modificationId) {
+    if (Number.isNaN(value) || !modification || !modificationId) {
+      return;
+    }
+    const withinBounds = isWithinBounds(section, value);
+    this.setRejected(section, !withinBounds);
+    if (!withinBounds) {
       return;
     }
     if (section === 'operatingHours') {
@@ -153,6 +175,18 @@ export class OperationsOpportunityComponent {
     if (modificationId) {
       this.assessmentService.updateModificationProperty(modificationId, 'operatingHours', { ...this.modification()?.operatingHours, ...operatingHours });
     }
+  }
+
+  private setRejected(section: OperationsOpportunitySection, rejected: boolean): void {
+    this.rejectedSections.update(sections => {
+      const updated = new Set(sections);
+      if (rejected) {
+        updated.add(section);
+      } else {
+        updated.delete(section);
+      }
+      return updated;
+    });
   }
 
   private differsFromBaseline(section: OperationsOpportunitySection): boolean {

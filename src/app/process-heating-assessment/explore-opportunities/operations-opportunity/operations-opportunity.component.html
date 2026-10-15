@@ -68,6 +68,9 @@
                 />
                 <app-input-unit [settings]="settings()" [imperialUnit]="section.imperialUnit" [metricUnit]="section.metricUnit"></app-input-unit>
               </div>
+              @if (section.warning) {
+                <span class="alert-warning pull-right small">{{ section.warning }}</span>
+              }
             </div>
           </form>
         </li>

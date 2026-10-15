@@ -154,6 +154,46 @@ describe('OperationsOpportunityComponent', () => {
       expect(effective().operatingHours.hoursPerYear).toBe(8736);
     });
 
+    it('warns that an out-of-range entry is not applied, and clears the warning on a valid entry', () => {
+      component.toggleSection('operatingHours', true);
+
+      component.setModificationValue('operatingHours', 9000);
+      fixture.detectChanges();
+      expect(sectionState('operatingHours').warning).toContain('between 0 and 8760');
+      expect(fixture.nativeElement.querySelector('.alert-warning')).not.toBeNull();
+
+      component.setModificationValue('operatingHours', 4000);
+      fixture.detectChanges();
+      expect(sectionState('operatingHours').warning).toBeNull();
+      expect(fixture.nativeElement.querySelector('.alert-warning')).toBeNull();
+    });
+
+    it('warns about a negative cost only in the section it was entered in', () => {
+      component.setModificationValue('steamCost', -5);
+
+      expect(sectionState('steamCost').warning).toContain('Steam cost must be 0 or greater');
+      expect(sectionState('fuelCost').warning).toBeNull();
+    });
+
+    it('clears the warning when its section is closed or the opportunity is deselected', () => {
+      component.setModificationValue('fuelCost', -1);
+      component.setModificationValue('steamCost', -1);
+
+      component.toggleSection('fuelCost', false);
+      expect(sectionState('fuelCost').warning).toBeNull();
+
+      component.toggleOpportunity(false);
+      expect(sectionState('steamCost').warning).toBeNull();
+    });
+
+    it('clears the warning when a different modification is selected', () => {
+      component.setModificationValue('fuelCost', -1);
+
+      modificationService.addModification('Scenario 2');
+
+      expect(sectionState('fuelCost').warning).toBeNull();
+    });
+
     it('accepts the operating hours bounds 0 and 8760', () => {
       component.setModificationValue('operatingHours', 0);
       expect(effective().operatingHours.hoursPerYear).toBe(0);
