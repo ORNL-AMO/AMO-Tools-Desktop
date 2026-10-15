@@ -20,6 +20,7 @@ import { OpeningTimeOpenOpportunityComponent } from './opening-time-open-opportu
 import { GasLeakageOpportunityComponent } from './gas-leakage-opportunity/gas-leakage-opportunity.component';
 import { AirFuelRatioOpportunityComponent } from './air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
 import { PreheatCombustionAirOpportunityComponent } from './preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
+import { OperationsOpportunityComponent } from './operations-opportunity/operations-opportunity.component';
 
 const COMPONENTS_BY_LOSS_KEY: Partial<Record<keyof Losses, Type<unknown>[]>> = {
   chargeMaterials: [ChargeMaterialOpportunityComponent],
@@ -37,7 +38,7 @@ const FUEL_FIRED_ONLY_COMPONENTS = [
   ...COMPONENTS_BY_LOSS_KEY.flueGasLosses!,
 ];
 
-const ALL_COMPONENTS_IN_ORDER = Object.values(COMPONENTS_BY_LOSS_KEY).flat();
+const ALL_COMPONENTS_IN_ORDER = [...Object.values(COMPONENTS_BY_LOSS_KEY).flat(), OperationsOpportunityComponent];
 
 @Component({ selector: 'app-first-stub-opportunity', template: '', standalone: false })
 class FirstStubOpportunityComponent {}
@@ -82,17 +83,17 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
     expect(createComponent().visibleOpportunityComponents()).toEqual(ALL_COMPONENTS_IN_ORDER);
   });
 
-  it('hides all opportunities when baseline has no losses', () => {
+  it('shows only the operations opportunity when baseline has no losses', () => {
     populatedLossKeys.clear();
 
-    expect(createComponent().visibleOpportunityComponents()).toEqual([]);
+    expect(createComponent().visibleOpportunityComponents()).toEqual([OperationsOpportunityComponent]);
   });
 
   for (const [lossKey, components] of Object.entries(COMPONENTS_BY_LOSS_KEY) as [keyof Losses, Type<unknown>[]][]) {
-    it(`shows only ${lossKey} opportunities when only that loss type has baseline data`, () => {
+    it(`shows only ${lossKey} and operations opportunities when only that loss type has baseline data`, () => {
       populatedLossKeys = new Set([lossKey]);
 
-      expect(createComponent().visibleOpportunityComponents()).toEqual(components);
+      expect(createComponent().visibleOpportunityComponents()).toEqual([...components, OperationsOpportunityComponent]);
     });
   }
 
@@ -103,6 +104,14 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
       const visible = createComponent().visibleOpportunityComponents();
 
       expect(visible).toEqual(ALL_COMPONENTS_IN_ORDER.filter(component => !FUEL_FIRED_ONLY_COMPONENTS.includes(component)));
+    });
+  }
+
+  for (const otherConfiguration of Object.values(HeatingEquipmentConfiguration)) {
+    it(`shows the operations opportunity for ${otherConfiguration}`, () => {
+      configuration.set(otherConfiguration);
+
+      expect(createComponent().visibleOpportunityComponents()).toContain(OperationsOpportunityComponent);
     });
   }
 
