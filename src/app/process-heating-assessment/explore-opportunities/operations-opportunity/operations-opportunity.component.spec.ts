@@ -214,6 +214,17 @@ describe('OperationsOpportunityComponent', () => {
       expect(BASELINE.operatingHours.hoursPerYear).toBe(8736);
     });
 
+    it('opens the calculator from the labelled button in the hours section', () => {
+      modalDialogService.openModal.and.returnValue({ closed: of(undefined) } as unknown as DialogRef<OperatingHours, OperatingHoursComponent>);
+      component.toggleOpportunity(true);
+      component.toggleSection('operatingHours', true);
+      fixture.detectChanges();
+
+      fixture.nativeElement.querySelector('button[aria-label="Open operating hours calculator"]').click();
+
+      expect(modalDialogService.openModal).toHaveBeenCalledTimes(1);
+    });
+
     it('ignores the modal result after the component is destroyed', () => {
       const closed = new Subject<OperatingHours>();
       modalDialogService.openModal.and.returnValue({ closed } as unknown as DialogRef<OperatingHours, OperatingHoursComponent>);

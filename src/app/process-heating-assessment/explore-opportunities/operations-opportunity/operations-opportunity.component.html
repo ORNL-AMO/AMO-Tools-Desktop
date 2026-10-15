@@ -54,7 +54,7 @@
               <div class="input-group mod-max-width">
                 @if (section.section === 'operatingHours') {
                   <span class="input-group-addon op-hour-addon units">
-                    <a class="click-link" (click)="openOperatingHoursModal()"><span class="fa fa-calculator"></span></a>
+                    <button type="button" class="btn btn-link p-0" aria-label="Open operating hours calculator" (click)="openOperatingHoursModal()"><span class="fa fa-calculator" aria-hidden="true"></span></button>
                   </span>
                 }
                 <input
