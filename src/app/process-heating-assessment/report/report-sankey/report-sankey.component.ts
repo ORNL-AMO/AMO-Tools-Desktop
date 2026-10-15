@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, Signal } from '@angular/core';
 import { PhastValidService } from '../../../phast/phast-valid.service';
 import { PhastValid } from '../../../shared/models/phast/phast';
 import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
@@ -34,10 +34,10 @@ export class ReportSankeyComponent {
   /** Overrides by picker position; pickers default to showing their own scenario */
   private readonly selectedIds = signal<Record<number, string>>({});
 
-  /** @returns the picker dropdown options, one per scenario */
-  getOptions(ui: ReportSankeyUI): SankeyScenarioOption[] {
-    return ui.scenarios.map(scenario => ({ name: scenario.name, value: scenario.id }));
-  }
+  /** Picker dropdown options, one per scenario. A stable reference, since the picker re-renders its options when the array changes. */
+  readonly pickerOptions: Signal<SankeyScenarioOption[]> = computed(() =>
+    this.reportSankeyUI()?.scenarios.map(scenario => ({ name: scenario.name, value: scenario.id })) ?? []
+  );
 
   /** @returns the scenario shown by the picker at the given position */
   getScenario(ui: ReportSankeyUI, index: number): ReportSankeyScenario {

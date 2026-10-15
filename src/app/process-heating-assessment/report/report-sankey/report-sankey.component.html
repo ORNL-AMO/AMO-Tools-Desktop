@@ -12,7 +12,7 @@
     <div class="d-flex flex-column">
       @for (picker of ui.scenarios; track picker.id; let index = $index) {
         @let scenario = getScenario(ui, index);
-        <app-sankey-scenario-picker [options]="getOptions(ui)" [selected]="scenario.id"
+        <app-sankey-scenario-picker [options]="pickerOptions()" [selected]="scenario.id"
           (selectedChange)="selectScenario(index, $event)" [costSavings]="scenario.costSavings"
           [energySavings]="scenario.energySavings" [energySavingsUnit]="ui.energySavingsUnit">
           <app-phast-sankey [phast]="scenario.phast" [settings]="ui.settings" [labelStyle]="labelStyle()"></app-phast-sankey>
