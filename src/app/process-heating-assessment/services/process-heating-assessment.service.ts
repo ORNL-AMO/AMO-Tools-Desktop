@@ -143,6 +143,8 @@ export class ProcessHeatingAssessmentService {
     return getEffectivePhast(baseline, modification);
   }
 
+  private persistQueue: Promise<void> = Promise.resolve();
+
   private readonly lossSignalCache = new Map<string, Signal<unknown>>();
 
   lossSignal<K extends keyof Losses>(scenario: AssessmentScenario, lossKey: K): Losses[K] {
@@ -222,14 +224,25 @@ export class ProcessHeatingAssessmentService {
     const valuesConverted = convertData && dataChanged
       && !isEqual({ ...this.processHeating.getValue(), lossDataUnits: undefined }, { ...original, lossDataUnits: undefined });
     this.setSettings(newSettings);
-    // Written now instead of through the debounced auto-save so the data reaches disk before the
-    // settings that describe its units.
+    const persisted = this.persistQueue.then(() => this.persistSettings(newSettings, dataChanged));
+    this.persistQueue = persisted.catch(() => undefined);
+    await persisted;
+    return valuesConverted;
+  }
+
+  /**
+   * Runs one save's writes after the previous save's writes finish, so an older save cannot
+   * overwrite newer settings on disk.
+   *
+   * Written now instead of through the debounced auto-save so the data reaches disk before the
+   * settings that describe its units.
+   */
+  private async persistSettings(newSettings: Settings, dataChanged: boolean): Promise<void> {
     if (dataChanged) {
       await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessmentValue));
     }
     await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
     this.settingsDbService.setAll(await firstValueFrom(this.settingsDbService.getAllSettings()));
-    return valuesConverted;
   }
 
   /**

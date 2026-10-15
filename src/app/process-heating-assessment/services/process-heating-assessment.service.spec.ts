@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { Settings } from '../../shared/models/settings';
 import { AssessmentDbService } from '../../indexedDb/assessment-db.service';
@@ -101,8 +101,8 @@ describe('ProcessHeatingAssessmentService', () => {
       const [modification] = service.getModifications(phast);
       expect(phast.losses.wallLosses[0].ambientTemperature).toBe(100);
       expect(modification.scenarioOverrides.losses.wallLosses[0].ambientTemperature).toBe(100);
-      expect(phast.losses.otherLosses[0].heatLoss).toBe(10.5506);
-      expect(phast.operatingCosts.fuelCost).toBeCloseTo(5 / 1.055056, 3);
+      expect(phast.losses.otherLosses[0].heatLoss).toBeCloseTo(10.5506, 10);
+      expect(phast.operatingCosts.fuelCost).toBeCloseTo(5 / 1.05506, 10);
     });
 
     it('converts only energyResultUnit-based values when only the energy unit changes', async () => {
@@ -110,7 +110,8 @@ describe('ProcessHeatingAssessmentService', () => {
 
       const phast = service.processHeatingSignal();
       expect(phast.losses.wallLosses[0].ambientTemperature).toBe(212);
-      expect(phast.losses.otherLosses[0].heatLoss).toBe(10.5506);
+      expect(phast.losses.otherLosses[0].heatLoss).toBeCloseTo(10.5506, 10);
+      expect(phast.operatingCosts.fuelCost).toBe(5);
     });
 
     it('leaves stored data untouched when neither unit changed', async () => {
@@ -125,6 +126,32 @@ describe('ProcessHeatingAssessmentService', () => {
       await Promise.all([service.saveSettings(metric), service.saveSettings({ ...metric })]);
 
       expect(service.processHeatingSignal().losses.wallLosses[0].ambientTemperature).toBe(100);
+    });
+
+    it('persists a later save after an earlier save whose assessment write is still pending', async () => {
+      const pendingAssessmentWrite = new Subject<Assessment>();
+      assessmentDb.updateWithObservable.and.returnValue(pendingAssessmentWrite);
+      const withFacility = { ...metric, facilityInfo: { facilityName: 'Plant A' } } as Settings;
+
+      const unitChange = service.saveSettings(metric);
+      const metadataSave = service.saveSettings(withFacility);
+      await Promise.resolve();
+      expect(settingsDb.updateWithObservable).not.toHaveBeenCalled();
+
+      pendingAssessmentWrite.next(undefined);
+      pendingAssessmentWrite.complete();
+      await Promise.all([unitChange, metadataSave]);
+
+      expect(settingsDb.updateWithObservable.calls.allArgs()).toEqual([[metric], [withFacility]]);
+    });
+
+    it('keeps persisting later saves after an earlier save fails', async () => {
+      assessmentDb.updateWithObservable.and.returnValue(throwError(() => new Error('write failed')));
+
+      await expectAsync(service.saveSettings(metric)).toBeRejectedWithError('write failed');
+      await service.saveSettings({ ...metric, currency: '€' });
+
+      expect(settingsDb.updateWithObservable).toHaveBeenCalledTimes(1);
     });
 
     it('applies the new settings and persists them', async () => {

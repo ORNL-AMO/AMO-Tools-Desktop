@@ -127,12 +127,22 @@ describe('convertProcessHeatingUnits', () => {
     expect(flueGas.ambientAirTemp).toBe(21.1111);
   });
 
-  it('does not touch Other heatLoss or fuel cost (those follow energyResultUnit)', () => {
+  it('does not touch Other heatLoss (it follows energyResultUnit) or the electricity cost', () => {
     const converted = convertProcessHeatingUnits(buildPhast(), imperial, metric);
 
     expect(converted.losses.otherLosses[0].heatLoss).toBe(12.5);
-    expect(converted.operatingCosts.fuelCost).toBe(5);
     expect(converted.operatingCosts.electricityCost).toBe(0.08);
+  });
+
+  it('converts fuel and steam cost per MMBtu or GJ without rounding', () => {
+    const phast = { ...buildPhast(), operatingCosts: { fuelCost: 5, steamCost: 4 } };
+    const costs = convertProcessHeatingUnits(phast, imperial, metric).operatingCosts;
+    const roundTrip = convertProcessHeatingUnits(convertProcessHeatingUnits(phast, imperial, metric), metric, imperial).operatingCosts;
+
+    expect(costs.fuelCost).toBeCloseTo(5 / 1.05506, 10);
+    expect(costs.steamCost).toBeCloseTo(4 / 1.05506, 10);
+    expect(roundTrip.fuelCost).toBeCloseTo(5, 10);
+    expect(roundTrip.steamCost).toBeCloseTo(4, 10);
   });
 
   it('converts per-unit costs by the reciprocal of the quantity conversion', () => {
@@ -146,7 +156,7 @@ describe('convertProcessHeatingUnits', () => {
   it('converts emission rates per energy unit and leaves the electricity rate alone', () => {
     const co2 = convertProcessHeatingUnits(buildPhast(), imperial, metric).co2SavingsData;
 
-    expect(co2.totalFuelEmissionOutputRate).toBeCloseTo(53.06 / 1.055056, 3);
+    expect(co2.totalFuelEmissionOutputRate).toBeCloseTo(53.06 / 1.05506, 3);
     expect(co2.totalEmissionOutputRate).toBe(400);
   });
 
@@ -231,17 +241,25 @@ describe('convertProcessHeatingEnergyUnit', () => {
   it('converts Other heatLoss by the energy ratio', () => {
     const converted = convertProcessHeatingEnergyUnit(buildPhast(), mmbtu, gigajoule);
 
-    expect(converted.losses.otherLosses[0].heatLoss).toBe(10.5506);
+    expect(converted.losses.otherLosses[0].heatLoss).toBeCloseTo(10.5506, 10);
     expect(converted.losses.wallLosses[0].ambientTemperature).toBe(70);
   });
 
-  it('converts fuel and steam cost by the reciprocal of the energy ratio', () => {
-    const costs = convertProcessHeatingEnergyUnit(buildPhast(), mmbtu, gigajoule).operatingCosts;
+  it('leaves operating costs unchanged because they follow the unit system', () => {
+    const phast = buildPhast();
 
-    expect(costs.fuelCost).toBeCloseTo(5 / 1.055056, 3);
-    expect(costs.steamCost).toBeCloseTo(4 / 1.055056, 3);
-    expect(costs.coalCarbonCost).toBe(1);
-    expect(costs.electricityCost).toBe(0.08);
+    expect(convertProcessHeatingEnergyUnit(phast, mmbtu, kilowattHour).operatingCosts).toEqual(phast.operatingCosts);
+  });
+
+  it('keeps small Other heatLoss values through a round trip to a larger unit', () => {
+    const phast: PHAST = { losses: { otherLosses: [{ id: 'other-1', heatLoss: 10 }] } };
+    const btu = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
+
+    const larger = convertProcessHeatingEnergyUnit(phast, btu, mmbtu);
+    const roundTrip = convertProcessHeatingEnergyUnit(larger, mmbtu, btu);
+
+    expect(larger.losses.otherLosses[0].heatLoss).toBeCloseTo(0.00001, 12);
+    expect(roundTrip.losses.otherLosses[0].heatLoss).toBeCloseTo(10, 8);
   });
 
   it('converts modification scenarioOverrides', () => {
@@ -253,21 +271,18 @@ describe('convertProcessHeatingEnergyUnit', () => {
     const converted = convertProcessHeatingEnergyUnit({ ...buildPhast(), modifications: [modification] }, mmbtu, gigajoule);
     const [convertedModification] = converted.modifications as ProcessHeatingModification[];
 
-    expect(convertedModification.scenarioOverrides.losses.otherLosses[0].heatLoss).toBe(10.5506);
-    expect(convertedModification.scenarioOverrides.operatingCosts.fuelCost).toBeCloseTo(5 / 1.055056, 3);
+    expect(convertedModification.scenarioOverrides.losses.otherLosses[0].heatLoss).toBeCloseTo(10.5506, 10);
+    expect(convertedModification.scenarioOverrides.operatingCosts.fuelCost).toBe(5);
   });
 
-  it('leaves empty Other heatLoss and costs empty instead of converting them to 0', () => {
+  it('leaves empty Other heatLoss empty instead of converting it to 0', () => {
     const phast: PHAST = {
       losses: { otherLosses: [{ id: 'other-1', heatLoss: null }, { id: 'other-2', heatLoss: undefined }, { id: 'other-3', heatLoss: 0 }] },
-      operatingCosts: { fuelCost: null, steamCost: undefined } as never,
     };
 
     const converted = convertProcessHeatingEnergyUnit(phast, mmbtu, gigajoule);
 
     expect(converted.losses.otherLosses.map(loss => loss.heatLoss)).toEqual([null, undefined, 0]);
-    expect(converted.operatingCosts.fuelCost).toBeNull();
-    expect(converted.operatingCosts.steamCost).toBeUndefined();
   });
 
   it('does not mutate its input and tolerates missing branches', () => {

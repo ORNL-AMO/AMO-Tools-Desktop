@@ -41,7 +41,6 @@ type ConversionDirection = 'toMetric' | 'toImperial';
 type ScenarioConverter = (scenario: ScenarioOverrides) => ScenarioOverrides;
 
 const ROUNDING_DIGITS = 4;
-const COST_ROUNDING_DIGITS = 3;
 
 const TEMPERATURE: FieldConversion = { units: CHARGE_MATERIAL_UNITS.temperature };
 const SPECIFIC_HEAT: FieldConversion = { units: CHARGE_MATERIAL_UNITS.specificHeat };
@@ -204,8 +203,10 @@ const WALL_FIELDS: FieldMap<WallLoss> = {
   surfaceArea: AREA,
 };
 
-// fuelCost and steamCost are excluded: they scale with `energyResultUnit` (see convertProcessHeatingEnergyUnit).
+// fuelCost and steamCost are billed per MMBtu or GJ by unit system, independent of `energyResultUnit`.
 const OPERATING_COST_FIELDS: FieldMap<OperatingCosts> = {
+  fuelCost: inverse(exact(ENERGY_RATE)),
+  steamCost: inverse(exact(ENERGY_RATE)),
   coalCarbonCost: inverse(MASS),
   electrodeCost: inverse(MASS),
   otherFuelCost: inverse(ENERGY_RATE),
@@ -413,30 +414,20 @@ export function convertProcessHeatingUnits(phast: PHAST, oldSettings: Settings, 
 
 function convertScenarioEnergyUnit(scenario: ScenarioOverrides, from: string, to: string): ScenarioOverrides {
   const converted: ScenarioOverrides = {};
-  const costRatio = new ConvertValue(1, from, to).convertedValue;
   if (scenario.losses?.otherLosses) {
     converted.losses = {
       ...scenario.losses,
       otherLosses: scenario.losses.otherLosses.map((loss: OtherLoss) => typeof loss.heatLoss === 'number'
-        ? { ...loss, heatLoss: roundTo(new ConvertValue(loss.heatLoss, from, to).convertedValue, ROUNDING_DIGITS) }
+        ? { ...loss, heatLoss: new ConvertValue(loss.heatLoss, from, to).convertedValue }
         : loss),
     };
-  }
-  if (scenario.operatingCosts) {
-    const costs: OperatingCosts = { ...scenario.operatingCosts };
-    (['fuelCost', 'steamCost'] as const).forEach(key => {
-      if (typeof costs[key] === 'number') {
-        costs[key] = roundTo(costs[key] / costRatio, COST_ROUNDING_DIGITS);
-      }
-    });
-    converted.operatingCosts = costs;
   }
   return converted;
 }
 
 /**
  * Converts the stored values that are expressed in `energyResultUnit` rather than the unit
- * system: Other loss `heatLoss` (per hour) and `fuelCost` / `steamCost` (per energy unit).
+ * system: Other loss `heatLoss` (per hour).
  *
  * @param phast Assessment data in `oldSettings.energyResultUnit`. Not mutated.
  * @param oldSettings Settings the data is currently stored in.
