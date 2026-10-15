@@ -126,6 +126,7 @@ export class CondensateHandlingFormComponent implements OnInit {
   }
 
   toggleHighPressureCondensateRecovery() {
+    if (this.hasProcessSteamUsageData('highPressureHeader')) return;
     if (this.showHighPressureCondensateRecovery === false) {
       this.modificationHighPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineHighPressureForm.controls.condensationRecoveryRate.value);
       this.save();
@@ -133,6 +134,7 @@ export class CondensateHandlingFormComponent implements OnInit {
   }
 
   toggleMediumPressureCondensateRecovery() {
+    if (this.hasProcessSteamUsageData('mediumPressureHeader')) return;
     if (this.showMediumPressureCondensateRecovery === false) {
       this.modificationMediumPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineMediumPressureForm.controls.condensationRecoveryRate.value);
       this.save();
@@ -140,6 +142,7 @@ export class CondensateHandlingFormComponent implements OnInit {
   }
 
   toggleLowPressureCondensateRecovery() {
+    if (this.hasProcessSteamUsageData('lowPressureHeader')) return;
     if (this.showLowPressureCondensateRecovery === false) {
       this.modificationLowPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineLowPressureForm.controls.condensationRecoveryRate.value);
       this.save();
@@ -193,6 +196,10 @@ export class CondensateHandlingFormComponent implements OnInit {
       this.save();
     }
   }
+  hasProcessSteamUsageData(header: 'highPressureHeader' | 'mediumPressureHeader' | 'lowPressureHeader'): boolean {
+    return !!this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header]?.processSteamUsageData;
+  }
+
   save() {
     this.emitSave.emit(true);
   }

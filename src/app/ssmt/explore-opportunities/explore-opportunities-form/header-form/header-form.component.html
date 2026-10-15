@@ -1,3 +1,6 @@
+@if (hasProcessSteamUsageData('highPressureHeader') || hasProcessSteamUsageData('mediumPressureHeader') || hasProcessSteamUsageData('lowPressureHeader')) {
+  <p class="alert alert-info">Steam usage and recovery calculated from rows can be edited in Expert View &rarr; Header using the process steam usage calculator.</p>
+}
 <app-condensate-handling-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings"
   (emitSave)="save()" [baselineHighPressureForm]="baselineHighPressureForm"
   [modificationHighPressureForm]="modificationHighPressureForm"
@@ -193,7 +196,7 @@
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
       <label for="modifyHighPressureSteamUsage" class="steam-check-label">
-        <input type="checkbox" id="modifyHighPressureSteamUsage" (focus)="focusField('processSteamUsage')"
+        <input type="checkbox" id="modifyHighPressureSteamUsage" [disabled]="hasProcessSteamUsageData('highPressureHeader')" (focus)="focusField('processSteamUsage')"
           (change)="toggleHighPressureSteamUsage()" [(ngModel)]="showHighPressureSteamUsage" /> Adjust High Pressure
         Steam Usage
       </label>
@@ -229,7 +232,7 @@
         <div class="form-group explore-opps-formgroup">
           <label for="modificationHPSteamUsage" class="mod-value-label">Steam Usage</label>
           <div class="input-group mod-max-width">
-            <input name="modificationHPSteamUsage" type="number" step="any" id="modificationHPSteamUsage"
+            <input name="modificationHPSteamUsage" type="number" step="any" id="modificationHPSteamUsage" [readonly]="hasProcessSteamUsageData('highPressureHeader')"
               class="form-control" (focus)="focusField('processSteamUsage')" (input)="save()"
               formControlName="processSteamUsage" />
             <span class="units input-group-addon"
@@ -256,7 +259,7 @@
     <li class="explore-opps-item">
       <div class="checkbox mt-2">
         <label for="modifyMediumPressureSteamUsage" class="steam-check-label">
-          <input type="checkbox" id="modifyMediumPressureSteamUsage" (focus)="focusField('processSteamUsage')"
+          <input type="checkbox" id="modifyMediumPressureSteamUsage" [disabled]="hasProcessSteamUsageData('mediumPressureHeader')" (focus)="focusField('processSteamUsage')"
             (change)="toggleMediumPressureSteamUsage()" [(ngModel)]="showMediumPressureSteamUsage" /> Adjust Medium
           Pressure Steam Usage
         </label>
@@ -295,7 +298,7 @@
           <div class="form-group explore-opps-formgroup">
             <label for="modificationMPSteamUsage" class="mod-value-label">Steam Usage</label>
             <div class="input-group mod-max-width">
-              <input name="modificationMPSteamUsage" type="number" step="any" id="modificationMPSteamUsage"
+              <input name="modificationMPSteamUsage" type="number" step="any" id="modificationMPSteamUsage" [readonly]="hasProcessSteamUsageData('mediumPressureHeader')"
                 class="form-control" (focus)="focusField('processSteamUsage')" (input)="save()"
                 formControlName="processSteamUsage" />
               <span class="units input-group-addon"><span
@@ -325,7 +328,7 @@
     <li class="explore-opps-item">
       <div class="checkbox mt-2">
         <label for="modifyLowPressureSteamUsage" class="steam-check-label">
-          <input type="checkbox" id="modifyLowPressureSteamUsage" (focus)="focusField('processSteamUsage')"
+          <input type="checkbox" id="modifyLowPressureSteamUsage" [disabled]="hasProcessSteamUsageData('lowPressureHeader')" (focus)="focusField('processSteamUsage')"
             (change)="toggleLowPressureSteamUsage()" [(ngModel)]="showLowPressureSteamUsage" /> Adjust Low Pressure
           Steam Usage
         </label>
@@ -361,7 +364,7 @@
           <div class="form-group explore-opps-formgroup">
             <label for="modificationLPSteamUsage" class="mod-value-label">Steam Usage</label>
             <div class="input-group mod-max-width">
-              <input name="modificationLPSteamUsage" type="number" step="any" id="modificationLPSteamUsage"
+              <input name="modificationLPSteamUsage" type="number" step="any" id="modificationLPSteamUsage" [readonly]="hasProcessSteamUsageData('lowPressureHeader')"
                 class="form-control" (focus)="focusField('processSteamUsage')" (input)="save()"
                 formControlName="processSteamUsage" />
               <span class="units input-group-addon"><span

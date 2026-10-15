@@ -128,10 +128,16 @@
       <a *ngIf="isBaseline == false && showProcessSteamUsage == false" class="form-text small click-link"
         (click)="setCustomProcessUsage()" (focus)="focusField('processSteamUsage')">Use
         custom process steam usage.</a>
+      @if (showProcessSteamUsage) {
+        <a class="form-text small click-link" (click)="showProcessSteamUsageModal()" [class.disabled-link]="!selected">
+          {{ processSteamUsageData ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+        </a>
+      }
     </label>
     <div class="input-group" *ngIf="showProcessSteamUsage == true">
       <input name="processSteamUsage" type="number" step="10" class="form-control"
-        id="{{idString+pressureLevel+'_processSteamUsage'}}" (input)="save()" [readonly]="!selected"
+        id="{{idString+pressureLevel+'_processSteamUsage'}}" (input)="save()"
+        [readonly]="!selected || (showProcessSteamUsage && processSteamUsageData != undefined)"
         formControlName="processSteamUsage" (focus)="focusField('processSteamUsage')"
         [ngClass]="{'indicate-different': isProcessSteamUsageDifferent()}">
       <span class="units input-group-addon"><span
@@ -156,7 +162,8 @@
     <label for="{{idString+pressureLevel+'_condensationRecoveryRate'}}">Condensate Recovery Rate</label>
     <div class="input-group">
       <input name="condensationRecoveryRate" type="number" step="1" class="form-control"
-        id="{{idString+pressureLevel+'_condensationRecoveryRate'}}" (input)="save()" [readonly]="!selected"
+        id="{{idString+pressureLevel+'_condensationRecoveryRate'}}" (input)="save()"
+        [readonly]="!selected || (showProcessSteamUsage && processSteamUsageData != undefined)"
         formControlName="condensationRecoveryRate" (focus)="focusField('condensationRecoveryRate')"
         [ngClass]="{'indicate-different': isCondensationRecoveryRateDifferent()}">
       <span class="units input-group-addon">%</span>
@@ -241,3 +248,34 @@
   </div>
 
 </form>
+
+<div bsModal #processSteamUsageModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  [attr.aria-labelledby]="idString + pressureLevel + '_processSteamUsageModalLabel'" aria-hidden="true"
+  [config]="{backdrop: 'static', keyboard: false}">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" [id]="idString + pressureLevel + '_processSteamUsageModalLabel'">
+          Process Steam Usage
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="hideProcessSteamUsageModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-0">
+        @if (processSteamUsageDataCopy) {
+          <app-process-steam-usage-modal [data]="processSteamUsageDataCopy" [settings]="settings"
+            [pressureLevel]="pressureLevel" [idPrefix]="idString + pressureLevel">
+          </app-process-steam-usage-modal>
+        }
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" (click)="hideProcessSteamUsageModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="applyProcessSteamUsageData()"
+          [disabled]="!!processSteamUsageCalculator?.form?.invalid">
+          Apply Data
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
