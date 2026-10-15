@@ -51,6 +51,24 @@ describe('getEffectivePhast', () => {
     expect(effectivePhast.losses.chargeMaterials).toBe(modifiedChargeMaterials);
   });
 
+  it('overrides operating hours and operating costs wholesale, leaving the rest of baseline as is', () => {
+    const operationsBaseline: PHAST = {
+      ...baseline,
+      operatingHours: { weeksPerYear: 52, daysPerWeek: 7, hoursPerDay: 24, hoursPerYear: 8736 },
+      operatingCosts: { fuelCost: 3.5, steamCost: 10, electricityCost: 0.066 },
+    };
+    const modifiedHours = { ...operationsBaseline.operatingHours, hoursPerYear: 4000 };
+    const modifiedCosts = { ...operationsBaseline.operatingCosts, fuelCost: 9 };
+    const modification = buildModification({ operatingHours: modifiedHours, operatingCosts: modifiedCosts });
+
+    const effectivePhast = getEffectivePhast(operationsBaseline, modification);
+
+    expect(effectivePhast.operatingHours).toBe(modifiedHours);
+    expect(effectivePhast.operatingCosts).toBe(modifiedCosts);
+    expect(effectivePhast.losses).toBe(operationsBaseline.losses);
+    expect(operationsBaseline.operatingHours.hoursPerYear).toBe(8736);
+  });
+
   it('stays frozen for a loss type that did not exist on baseline at snapshot time, even after baseline adds it', () => {
     let mutableBaseline: PHAST = { name: 'Baseline', losses: {} };
     const modification = buildModification({ losses: getBaselineSnapshot(mutableBaseline).losses });
