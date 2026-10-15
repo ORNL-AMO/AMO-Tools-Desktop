@@ -127,6 +127,20 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
     }
   });
 
+  it('hides the slag opportunity for electrotechnology EAF without baseline slag losses', () => {
+    configuration.set(HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF);
+    populatedLossKeys.delete('slagLosses');
+
+    expect(createComponent().visibleOpportunityComponents().includes(SlagOpportunityComponent)).toBeFalse();
+  });
+
+  it('shows the slag opportunity for electrotechnology EAF with only baseline slag losses', () => {
+    configuration.set(HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF);
+    populatedLossKeys = new Set(['slagLosses']);
+
+    expect(createComponent().visibleOpportunityComponents()).toEqual([SlagOpportunityComponent]);
+  });
+
   it('shows the slag opportunity only for electrotechnology EAF', () => {
     for (const heatingConfiguration of Object.values(HeatingEquipmentConfiguration)) {
       configuration.set(heatingConfiguration);

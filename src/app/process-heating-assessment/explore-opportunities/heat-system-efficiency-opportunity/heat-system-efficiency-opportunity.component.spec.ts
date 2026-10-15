@@ -112,6 +112,37 @@ describe('HeatSystemEfficiencyOpportunityComponent', () => {
     expect(fixture.nativeElement.textContent).not.toContain('System efficiency must be greater than 0');
   });
 
+  it('clears the warning when the opportunity is turned off', () => {
+    component.toggleOpportunity(true);
+    component.setModificationValue(0);
+
+    component.toggleOpportunity(false);
+    component.toggleOpportunity(true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).not.toContain('System efficiency must be greater than 0');
+  });
+
+  it('clears the warning when the selected modification changes', () => {
+    component.toggleOpportunity(true);
+    component.setModificationValue(0);
+
+    modificationService.addModification('Scenario 2');
+    component.toggleOpportunity(true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).not.toContain('System efficiency must be greater than 0');
+  });
+
+  it('renders the editor on creation when the modification already has the opportunity enabled', () => {
+    component.toggleOpportunity(true);
+
+    const secondFixture = TestBed.createComponent(HeatSystemEfficiencyOpportunityComponent);
+    secondFixture.detectChanges();
+
+    expect(secondFixture.nativeElement.querySelector('#modificationSystemEfficiency')).not.toBeNull();
+  });
+
   it('ignores a NaN entry', () => {
     component.toggleOpportunity(true);
 

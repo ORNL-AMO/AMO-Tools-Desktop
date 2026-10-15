@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, Signal } from '@angular/core';
-import { Settings } from '../../../shared/models/settings';
 import { ExploreOpportunityCategory, PHAST } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
@@ -20,7 +19,6 @@ export class HeatSystemEfficiencyOpportunityComponent {
   private readonly modificationService = inject(ModificationService);
 
   readonly displayName = HEAT_SYSTEM_EFFICIENCY_DISPLAY_NAME;
-  readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
 
   readonly useOpportunity: Signal<boolean> = computed(() =>
     this.modificationService.selectedModification()?.exploreOpportunityFlags?.[ExploreOpportunityCategory.EfficiencyData]?.hasOpportunity ?? false

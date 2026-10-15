@@ -71,6 +71,20 @@ describe('SlagOpportunityComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('input[id^="modifySlagWeight_"]').length).toBe(2);
   });
 
+  it('shows the baseline and modification weight side by side only while the section is open', () => {
+    component.toggleOpportunity(true);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('#modificationSlagWeight_slag-1')).toBeNull();
+
+    component.toggleSection('slag-1', true);
+    fixture.detectChanges();
+
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('#modificationSlagWeight_slag-1');
+    expect(input.value).toBe('100');
+    expect(fixture.nativeElement.querySelector('.baseline-value-input').textContent).toContain('100');
+  });
+
   it('writes the modified weight to the targeted slag entry only', () => {
     component.toggleOpportunity(true);
     component.toggleSection('slag-2', true);
