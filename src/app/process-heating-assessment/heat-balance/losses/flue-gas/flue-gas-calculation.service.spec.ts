@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -17,7 +17,6 @@ const INPUT: FlueGasByVolume = {
 describe('FlueGasCalculationService', () => {
   let service: FlueGasCalculationService;
   let apiSpy: jasmine.SpyObj<ProcessHeatingApiService>;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
     apiSpy = jasmine.createSpyObj('ProcessHeatingApiService', ['flueGasLossesByVolume', 'flueGasLossesByMass', 'flueGasByMassCalculateExcessAir', 'flueGasByMassCalculateO2']);
@@ -26,10 +25,9 @@ describe('FlueGasCalculationService', () => {
     apiSpy.flueGasByMassCalculateExcessAir.and.returnValue(18);
     apiSpy.flueGasByMassCalculateO2.and.returnValue(3.5);
     TestBed.configureTestingModule({
-      providers: [FlueGasCalculationService, ConvertUnitsService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
+      providers: [FlueGasCalculationService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
     });
     service = TestBed.inject(FlueGasCalculationService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('passes Imperial temperatures through and maps the suite-named inputs', () => {
@@ -45,10 +43,10 @@ describe('FlueGasCalculationService', () => {
     service.calculateByVolume({ ...INPUT, flueGasTemperature: 200, combustionAirTemperature: 20, fuelTemperature: 15, ambientAirTemp: 18 }, METRIC);
 
     const sent = apiSpy.flueGasLossesByVolume.calls.mostRecent().args[0];
-    expect(sent.flueGasTemperature).toBeCloseTo(convert.value(200).from('C').to('F'), 6);
-    expect(sent.combustionAirTemperature).toBeCloseTo(convert.value(20).from('C').to('F'), 6);
-    expect(sent.fuelTemperature).toBeCloseTo(convert.value(15).from('C').to('F'), 6);
-    expect(sent.ambientAirTempF).toBeCloseTo(convert.value(18).from('C').to('F'), 6);
+    expect(sent.flueGasTemperature).toBeCloseTo(new ConvertValue(200, 'C', 'F').convertedValue, 6);
+    expect(sent.combustionAirTemperature).toBeCloseTo(new ConvertValue(20, 'C', 'F').convertedValue, 6);
+    expect(sent.fuelTemperature).toBeCloseTo(new ConvertValue(15, 'C', 'F').convertedValue, 6);
+    expect(sent.ambientAirTempF).toBeCloseTo(new ConvertValue(18, 'C', 'F').convertedValue, 6);
   });
 
   it('does not mutate the input', () => {
@@ -102,9 +100,9 @@ describe('FlueGasCalculationService', () => {
       service.calculateByMass({ ...MASS, flueGasTemperature: 250, combustionAirTemperature: 20, fuelTemperature: 15, ambientAirTemp: 18, ashDischargeTemperature: 150 }, METRIC);
 
       const sent = apiSpy.flueGasLossesByMass.calls.mostRecent().args[0];
-      expect(sent.flueGasTemperature).toBeCloseTo(convert.value(250).from('C').to('F'), 6);
-      expect(sent.ashDischargeTemperature).toBeCloseTo(convert.value(150).from('C').to('F'), 6);
-      expect(sent.ambientAirTempF).toBeCloseTo(convert.value(18).from('C').to('F'), 6);
+      expect(sent.flueGasTemperature).toBeCloseTo(new ConvertValue(250, 'C', 'F').convertedValue, 6);
+      expect(sent.ashDischargeTemperature).toBeCloseTo(new ConvertValue(150, 'C', 'F').convertedValue, 6);
+      expect(sent.ambientAirTempF).toBeCloseTo(new ConvertValue(18, 'C', 'F').convertedValue, 6);
     });
 
     it('returns 0 for NaN suite results', () => {

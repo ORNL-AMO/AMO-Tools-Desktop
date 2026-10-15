@@ -1,6 +1,5 @@
 import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ConvertPhastService } from '../../../phast/convert-phast.service';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
@@ -23,7 +22,6 @@ describe('ResultsDataResultsService', () => {
   let categories: ShowResultsCategories;
   let modifications: WritableSignal<ProcessHeatingModification[]>;
   let showOperationalImpacts: WritableSignal<boolean>;
-  let convertEAF: jasmine.Spy;
 
   function ui(): ResultsDataUI {
     return service.resultsDataUI();
@@ -50,7 +48,6 @@ describe('ResultsDataResultsService', () => {
     categories = { ...NO_CATEGORIES };
     modifications = signal<ProcessHeatingModification[]>([{ id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } }]);
     showOperationalImpacts = signal(false);
-    convertEAF = jasmine.createSpy('convertEAFEnergyUsed').and.callFake((results: PhastResults) => results);
 
     TestBed.configureTestingModule({
       providers: [
@@ -61,7 +58,6 @@ describe('ResultsDataResultsService', () => {
         },
         { provide: ModificationService, useValue: { modifications } },
         { provide: FeatureFlagService, useValue: { showOperationalImpacts } },
-        { provide: ConvertPhastService, useValue: { convertEAFEnergyUsed: convertEAF } },
         {
           provide: ProcessHeatingResultsService,
           useValue: {
@@ -131,16 +127,14 @@ describe('ResultsDataResultsService', () => {
       expect(labels()).toContain('Electrical Heat Delivered');
       expect(labels()).toContain('Electrical Heater Losses');
       expect(labels()).toContain('Total Provided Electrical Heat');
-      expect(convertEAF).not.toHaveBeenCalled();
     });
 
-    it('converts EAF results and shows slag, exhaust gas, and chemical energy rows', () => {
+    it('shows slag, exhaust gas, and chemical energy rows for EAF furnaces', () => {
       settings.update(current => ({ ...current, energySourceType: 'Electricity', furnaceType: 'Electric Arc Furnace (EAF)' }));
       categories = { ...NO_CATEGORIES, showSlag: true, showExGas: true, showEnInput1: true, showElectricalDelivered: true, showChemicalEnergyDelivered: true };
       expect(labels()).toContain('Slag Losses');
       expect(labels()).toContain('Exhaust Gas Losses');
       expect(labels()).toContain('Chemical Energy Delivered');
-      expect(convertEAF).toHaveBeenCalled();
     });
   });
 

@@ -40,7 +40,6 @@ import { PHAST } from '../models/phast';
 import { LegacyModification, ProcessHeatingModification } from '../models/modification';
 import { WallLoss } from '../models/wall-loss';
 import { ExtendedSurface } from '../models/extended-surface';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ProcessHeatingApiService } from '../../tools-suite-api/process-heating-api.service';
 import { deriveScenarioOverridesFromLegacyModification, ensureLossIdsForPhast, getEffectivePhast } from '../services/scenario-merge.util';
 import { OpeningCalculationService } from '../heat-balance/losses/opening/opening-calculation.service';
@@ -102,7 +101,6 @@ describe('New calculation services vs. legacy snapshot totals', () => {
     services = await buildPhastServices();
     const injector = Injector.create({
       providers: [
-        { provide: ConvertUnitsService, useValue: services.convertUnitsService },
         { provide: ProcessHeatingApiService, useValue: services.processHeatingApiService },
         { provide: OpeningCalculationService, useClass: OpeningCalculationService, deps: [] },
         { provide: WallLossCalculationService, useClass: WallLossCalculationService, deps: [] },

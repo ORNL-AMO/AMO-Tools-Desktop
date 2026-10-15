@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { Slag } from '../../../../shared/models/phast/losses/slag';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -11,16 +11,14 @@ const settingsFor = (unitsOfMeasure: string, energyResultUnit: string) => ({ uni
 describe('SlagCalculationService', () => {
   let service: SlagCalculationService;
   let apiSpy: jasmine.SpyObj<ProcessHeatingApiService>;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
     apiSpy = jasmine.createSpyObj('ProcessHeatingApiService', ['slagOtherMaterialTotalHeatLoss']);
     apiSpy.slagOtherMaterialTotalHeatLoss.and.returnValue(1000);
     TestBed.configureTestingModule({
-      providers: [SlagCalculationService, ConvertUnitsService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
+      providers: [SlagCalculationService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
     });
     service = TestBed.inject(SlagCalculationService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('passes Imperial inputs through and returns the Btu result', () => {
@@ -32,13 +30,13 @@ describe('SlagCalculationService', () => {
     service.calculate({ weight: 100, inletTemperature: 25, outletTemperature: 1000, specificHeat: 1, correctionFactor: 1 }, settingsFor('Metric', 'Btu'));
 
     const sent = apiSpy.slagOtherMaterialTotalHeatLoss.calls.mostRecent().args[0];
-    expect(sent.weight).toBeCloseTo(convert.value(100).from('kg').to('lb'), 6);
+    expect(sent.weight).toBeCloseTo(new ConvertValue(100, 'kg', 'lb').convertedValue, 6);
     expect(sent.inletTemperature).toBeCloseTo(77, 6);
-    expect(sent.specificHeat).toBeCloseTo(convert.value(1).from('kJkgC').to('btulbF'), 6);
+    expect(sent.specificHeat).toBeCloseTo(new ConvertValue(1, 'kJkgC', 'btulbF').convertedValue, 6);
   });
 
   it('converts the result to the energy result unit', () => {
-    expect(service.calculate(LOSS, settingsFor('Imperial', 'kJ'))).toBeCloseTo(convert.value(1000).from('Btu').to('kJ'), 6);
+    expect(service.calculate(LOSS, settingsFor('Imperial', 'kJ'))).toBeCloseTo(new ConvertValue(1000, 'Btu', 'kJ').convertedValue, 6);
   });
 
   it('does not mutate the input', () => {

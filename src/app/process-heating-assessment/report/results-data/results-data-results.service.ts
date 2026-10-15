@@ -1,5 +1,4 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
-import { ConvertPhastService } from '../../../phast/convert-phast.service';
 import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
@@ -7,7 +6,7 @@ import { ModificationNameCell, ReportColumnCell, ReportTableRow } from '../../..
 import { getModificationName } from '../../models/modification';
 import { PhastResults } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
-import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
 
 export interface ResultsDataUI {
@@ -28,18 +27,17 @@ export class ResultsDataResultsService {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly resultsService = inject(ProcessHeatingResultsService);
   private readonly modificationService = inject(ModificationService);
-  private readonly convertPhastService = inject(ConvertPhastService);
   private readonly featureFlagService = inject(FeatureFlagService);
 
   readonly resultsDataUI: Signal<ResultsDataUI | undefined> = computed(() => {
     const settings = this.assessmentService.settingsSignal();
-    const baselineResults = this.getScenarioResults('baseline', settings);
+    const baselineResults = this.resultsService.scenarioResults('baseline');
     if (!baselineResults) {
       return undefined;
     }
 
     const modifications = this.modificationService.modifications();
-    const modificationResults = modifications.map(modification => this.getScenarioResults(modification.id, settings));
+    const modificationResults = modifications.map(modification => this.resultsService.scenarioResults(modification.id));
     const validModifications = modifications.filter((_, index) => modificationResults[index]);
     const mods = modificationResults.filter(Boolean);
 
@@ -50,15 +48,6 @@ export class ResultsDataResultsService {
       rows: this.buildRows(baselineResults, mods, settings),
     };
   });
-
-  /** @returns results with EAF fuel energy converted to kWh, or undefined when the scenario has no results */
-  private getScenarioResults(scenario: AssessmentScenario, settings: Settings): PhastResults | undefined {
-    const results = this.resultsService.scenarioResults(scenario);
-    if (results && this.isEaf(settings)) {
-      return this.convertPhastService.convertEAFEnergyUsed(results, settings);
-    }
-    return results;
-  }
 
   private buildRows(baseline: PhastResults, mods: PhastResults[], settings: Settings): ReportTableRow[] {
     const categories: ShowResultsCategories = this.resultsService.getResultCategories(settings);

@@ -21,7 +21,6 @@ import { ModificationService } from './services/modification.service';
 import { ProcessHeatingOperationsFormService } from './services/process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './services/process-heating-results.service';
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
-import { ConvertPhastService } from '../phast/convert-phast.service';
 import { PhastChartsService } from '../phast/phast-report/phast-charts.service';
 import { SankeySharedModule } from '../shared/sankey/sankey-shared.module';
 import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
@@ -452,7 +451,6 @@ export const ROUTES: Route[] = [
     EnergySummaryResultsService,
     ProcessHeatingReportAdapter,
     ProcessHeatingAssessmentResolver,
-    ConvertPhastService,
     // PhastResultsService remains a temporary bridge for loss types not yet rebuilt (Steps 7, 9–13).
     // It must only be read from — never edited to expose new fields for this module. As each loss
     // type gets its own local result service (see charge-material-results.service.ts), it stops

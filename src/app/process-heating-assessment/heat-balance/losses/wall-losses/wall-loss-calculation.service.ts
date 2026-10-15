@@ -1,23 +1,22 @@
 import { inject, Injectable } from '@angular/core';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 import { WallLoss } from '../../../models/wall-loss';
 
 @Injectable()
 export class WallLossCalculationService {
-  private readonly convertUnitsService = inject(ConvertUnitsService);
   private readonly processHeatingApiService = inject(ProcessHeatingApiService);
 
   calculate(input: WallLoss, settings: Settings): number {
     const inputs: WallLoss = { ...input };
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.ambientTemperature = this.convertUnitsService.value(inputs.ambientTemperature).from('C').to('F');
-      inputs.surfaceTemperature = this.convertUnitsService.value(inputs.surfaceTemperature).from('C').to('F');
-      inputs.windVelocity = this.convertUnitsService.value(inputs.windVelocity).from('km/h').to('mph');
-      inputs.surfaceArea = this.convertUnitsService.value(inputs.surfaceArea).from('m2').to('ft2');
+      inputs.ambientTemperature = new ConvertValue(inputs.ambientTemperature, 'C', 'F').convertedValue;
+      inputs.surfaceTemperature = new ConvertValue(inputs.surfaceTemperature, 'C', 'F').convertedValue;
+      inputs.windVelocity = new ConvertValue(inputs.windVelocity, 'km/h', 'mph').convertedValue;
+      inputs.surfaceArea = new ConvertValue(inputs.surfaceArea, 'm2', 'ft2').convertedValue;
     }
     const result = this.processHeatingApiService.wallLosses(inputs);
-    return isNaN(result) ? 0 : this.convertUnitsService.value(result).from('Btu').to(settings.energyResultUnit);
+    return isNaN(result) ? 0 : new ConvertValue(result, 'Btu', settings.energyResultUnit).convertedValue;
   }
 }

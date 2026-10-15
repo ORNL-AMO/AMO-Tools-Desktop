@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInputEAF';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -14,16 +14,14 @@ const settingsFor = (unitsOfMeasure: string, energyResultUnit: string) => ({ uni
 describe('EnergyInputCalculationService', () => {
   let service: EnergyInputCalculationService;
   let apiSpy: jasmine.SpyObj<ProcessHeatingApiService>;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
     apiSpy = jasmine.createSpyObj('ProcessHeatingApiService', ['energyInputEAF']);
     apiSpy.energyInputEAF.and.returnValue({ heatDelivered: 1000, totalChemicalEnergyInput: 500 });
     TestBed.configureTestingModule({
-      providers: [EnergyInputCalculationService, ConvertUnitsService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
+      providers: [EnergyInputCalculationService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
     });
     service = TestBed.inject(EnergyInputCalculationService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('passes Imperial inputs through and returns heat delivered in Btu', () => {
@@ -35,13 +33,13 @@ describe('EnergyInputCalculationService', () => {
     service.calculate({ ...LOSS, naturalGasHeatInput: 10, coalCarbonInjection: 100, coalHeatingValue: 28000 }, settingsFor('Metric', 'Btu'));
 
     const sent = apiSpy.energyInputEAF.calls.mostRecent().args[0];
-    expect(sent.naturalGasHeatInput).toBeCloseTo(convert.value(10).from('GJ').to('MMBtu'), 6);
-    expect(sent.coalCarbonInjection).toBeCloseTo(convert.value(100).from('kg').to('lb'), 6);
-    expect(sent.coalHeatingValue).toBeCloseTo(convert.value(28000).from('kJkg').to('btuLb'), 6);
+    expect(sent.naturalGasHeatInput).toBeCloseTo(new ConvertValue(10, 'GJ', 'MMBtu').convertedValue, 6);
+    expect(sent.coalCarbonInjection).toBeCloseTo(new ConvertValue(100, 'kg', 'lb').convertedValue, 6);
+    expect(sent.coalHeatingValue).toBeCloseTo(new ConvertValue(28000, 'kJkg', 'btuLb').convertedValue, 6);
   });
 
   it('converts heat delivered to the energy result unit', () => {
-    expect(service.calculate(LOSS, settingsFor('Imperial', 'kJ'))).toBeCloseTo(convert.value(1000).from('Btu').to('kJ'), 6);
+    expect(service.calculate(LOSS, settingsFor('Imperial', 'kJ'))).toBeCloseTo(new ConvertValue(1000, 'Btu', 'kJ').convertedValue, 6);
   });
 
   it('returns 0 when the suite returns NaN', () => {

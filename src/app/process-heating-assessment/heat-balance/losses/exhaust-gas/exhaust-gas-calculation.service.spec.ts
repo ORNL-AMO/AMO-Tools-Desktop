@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { ExhaustGasEAF } from '../../../../shared/models/phast/losses/exhaustGasEAF';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -11,16 +11,14 @@ const settingsFor = (unitsOfMeasure: string, energyResultUnit: string) => ({ uni
 describe('ExhaustGasCalculationService', () => {
   let service: ExhaustGasCalculationService;
   let apiSpy: jasmine.SpyObj<ProcessHeatingApiService>;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
     apiSpy = jasmine.createSpyObj('ProcessHeatingApiService', ['exhaustGasEAF']);
     apiSpy.exhaustGasEAF.and.returnValue(1000);
     TestBed.configureTestingModule({
-      providers: [ExhaustGasCalculationService, ConvertUnitsService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
+      providers: [ExhaustGasCalculationService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
     });
     service = TestBed.inject(ExhaustGasCalculationService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('passes Imperial inputs through and returns the Btu result', () => {
@@ -33,12 +31,12 @@ describe('ExhaustGasCalculationService', () => {
 
     const sent = apiSpy.exhaustGasEAF.calls.mostRecent().args[0];
     expect(sent.offGasTemp).toBeCloseTo(212, 6);
-    expect(sent.vfr).toBeCloseTo(convert.value(10).from('m3').to('ft3'), 6);
-    expect(sent.dustLoading).toBeCloseTo(convert.value(0.5).from('kgNm3').to('lbscf'), 6);
+    expect(sent.vfr).toBeCloseTo(new ConvertValue(10, 'm3', 'ft3').convertedValue, 6);
+    expect(sent.dustLoading).toBeCloseTo(new ConvertValue(0.5, 'kgNm3', 'lbscf').convertedValue, 6);
   });
 
   it('converts the result to the energy result unit', () => {
-    expect(service.calculate(LOSS, settingsFor('Imperial', 'kJ'))).toBeCloseTo(convert.value(1000).from('Btu').to('kJ'), 6);
+    expect(service.calculate(LOSS, settingsFor('Imperial', 'kJ'))).toBeCloseTo(new ConvertValue(1000, 'Btu', 'kJ').convertedValue, 6);
   });
 
   it('returns 0 when the suite returns NaN', () => {
