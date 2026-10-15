@@ -60,12 +60,13 @@
                 <input
                   type="number"
                   step="any"
+                  [attr.min]="section.section === 'operatingHours' ? 0 : null"
                   class="form-control"
                   id="{{ 'modification_' + section.section }}"
                   [value]="section.modificationValue"
                   (change)="setModificationValue(section.section, $any($event.target).valueAsNumber)"
                 />
-                <span class="input-group-addon units">{{ section.unit }}</span>
+                <app-input-unit [settings]="settings()" [imperialUnit]="section.imperialUnit" [metricUnit]="section.metricUnit"></app-input-unit>
               </div>
             </div>
           </form>

@@ -1,8 +1,10 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
+import { DialogRef } from '@angular/cdk/dialog';
+import { of, Subject } from 'rxjs';
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
 import { OperatingHours } from '../../../shared/models/operations';
+import { OperatingHoursComponent } from '../../../shared/operating-hours/operating-hours.component';
 import { PHAST } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
@@ -169,6 +171,15 @@ describe('OperationsOpportunityComponent', () => {
       expect(sectionState('operatingHours').expanded).toBe(true);
     });
 
+    it('does not write overrides when closing a section that already matches baseline', () => {
+      component.toggleSection('fuelCost', true);
+      const writeSpy = spyOn(assessmentService, 'updateModificationProperty').and.callThrough();
+
+      component.toggleSection('fuelCost', false);
+
+      expect(writeSpy).not.toHaveBeenCalled();
+    });
+
     it('resets only hoursPerYear when the hours section is closed', () => {
       component.toggleSection('operatingHours', true);
       assessmentService.updateModificationProperty(modificationService.selectedModificationId(), 'operatingHours', { ...BASELINE.operatingHours, daysPerWeek: 5, hoursPerYear: 4000 });
@@ -194,7 +205,7 @@ describe('OperationsOpportunityComponent', () => {
 
   describe('operating hours calculator', () => {
     it('saves the hours returned by the modal into the modification', () => {
-      modalDialogService.openModal.and.returnValue({ closed: of(MODAL_HOURS) } as ReturnType<ModalDialogService['openModal']>);
+      modalDialogService.openModal.and.returnValue({ closed: of(MODAL_HOURS) } as unknown as DialogRef<OperatingHours, OperatingHoursComponent>);
       component.toggleOpportunity(true);
 
       component.openOperatingHoursModal();
@@ -203,8 +214,20 @@ describe('OperationsOpportunityComponent', () => {
       expect(BASELINE.operatingHours.hoursPerYear).toBe(8736);
     });
 
+    it('ignores the modal result after the component is destroyed', () => {
+      const closed = new Subject<OperatingHours>();
+      modalDialogService.openModal.and.returnValue({ closed } as unknown as DialogRef<OperatingHours, OperatingHoursComponent>);
+      component.toggleOpportunity(true);
+      component.openOperatingHoursModal();
+
+      fixture.destroy();
+      closed.next(MODAL_HOURS);
+
+      expect(effective().operatingHours.hoursPerYear).toBe(8736);
+    });
+
     it('leaves the hours unchanged when the modal is dismissed', () => {
-      modalDialogService.openModal.and.returnValue({ closed: of(undefined) } as ReturnType<ModalDialogService['openModal']>);
+      modalDialogService.openModal.and.returnValue({ closed: of(undefined) } as unknown as DialogRef<OperatingHours, OperatingHoursComponent>);
       component.toggleOpportunity(true);
 
       component.openOperatingHoursModal();

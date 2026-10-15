@@ -12,6 +12,7 @@ import { ProcessHeatingAssessmentService } from '../../services/process-heating-
 export const OPERATIONS_DISPLAY_NAME = 'Adjust Operational Data';
 
 export type OperationsOpportunitySection = 'operatingHours' | 'fuelCost' | 'steamCost' | 'electricityCost';
+// Derived so the cost sections stay in step with the section union.
 type OperatingCostSection = Exclude<OperationsOpportunitySection, 'operatingHours'>;
 
 interface OperationsSectionDefinition {
@@ -154,16 +155,17 @@ export class OperationsOpportunityComponent {
     const modificationId = this.modificationService.selectedModificationId();
     const modification = this.modification();
     const baseline = this.baseline();
-    if (!modificationId || !modification) {
+    const changedSections = sections.filter(section => this.differsFromBaseline(section));
+    if (!modificationId || !modification || !changedSections.length) {
       return;
     }
-    if (sections.includes('operatingHours')) {
+    if (changedSections.includes('operatingHours')) {
       this.assessmentService.updateModificationProperty(modificationId, 'operatingHours', {
         ...modification.operatingHours,
         hoursPerYear: baseline?.operatingHours?.hoursPerYear,
       });
     }
-    const costSections = sections.filter((section): section is OperatingCostSection => section !== 'operatingHours');
+    const costSections = changedSections.filter((section): section is OperatingCostSection => section !== 'operatingHours');
     if (costSections.length) {
       const baselineCosts: Partial<OperatingCosts> = Object.fromEntries(costSections.map(section => [section, baseline?.operatingCosts?.[section]]));
       this.assessmentService.updateModificationProperty(modificationId, 'operatingCosts', { ...modification.operatingCosts, ...baselineCosts });
