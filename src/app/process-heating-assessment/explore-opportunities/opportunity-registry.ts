@@ -21,8 +21,8 @@ export interface OpportunityRegistration {
 }
 
 export interface OpportunityRegistryEntry {
-  /** Opportunities render only while the baseline has at least one loss of this type. */
-  lossKey: keyof Losses;
+  /** Opportunities render only while the baseline has at least one loss of this type; omit for a non-loss opportunity that always renders. */
+  lossKey?: keyof Losses;
   /** Rendered in array order. */
   opportunityComponents: OpportunityRegistration[];
 }
@@ -34,7 +34,7 @@ const FUEL_FIRED_ONLY = [HeatingEquipmentConfiguration.FUEL_FIRED];
  *
  * To add an opportunity:
  * 1. Create the opportunity component and declare it in `process-heating-assessment.module.ts`.
- * 2. Add `{ component }` to `opportunityComponents` of the entry for its loss type, or add a new entry for a new loss type.
+ * 2. Add `{ component }` to `opportunityComponents` of the entry for its loss type, or add a new entry for a new loss type (or one without `lossKey` for a non-loss opportunity).
  * 3. Set `heatingEquipmentConfigurations` on the registration if it applies to only some configurations.
  * The shell template needs no change.
  */
