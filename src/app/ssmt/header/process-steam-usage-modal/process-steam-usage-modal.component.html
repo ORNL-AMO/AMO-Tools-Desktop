@@ -1,0 +1,140 @@
+<div class="panel-container d-block d-lg-flex w-100">
+  <div class="panel-column col-12 col-lg-8 p-3 scroll-item">
+    <div class="header">
+      <h3>Calculate Process Steam Usage</h3>
+    </div>
+
+    <form [formGroup]="form">
+      <div formArrayName="rows" class="usage-rows">
+        <div class="usage-row usage-row-header">
+          <span>Steam Use</span>
+          <span>Quantity</span>
+          <span>Steam Usage</span>
+          <span class="text-center">Condensate Recoverable?</span>
+          <span>Condensate Recovery Rate</span>
+          <span></span>
+        </div>
+
+        @for (row of rows.controls; track row; let index = $index) {
+          <div class="usage-row" [formGroupName]="index">
+            <div class="form-group">
+              <label class="d-lg-none" [for]="idPrefix() + '_name_' + index">Steam Use</label>
+              @if (row.controls.type.value === 'process') {
+                <input class="form-control" type="text" formControlName="name"
+                  aria-label="Steam use name"
+                  [id]="idPrefix() + '_name_' + index" (input)="calculate()">
+                @if (row.controls.name.invalid && row.controls.name.dirty) {
+                  <span class="text-danger small">Enter a name.</span>
+                }
+              } @else {
+                <span class="fixed-row-label">{{ row.controls.name.value }}</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="d-lg-none" [for]="idPrefix() + '_quantity_' + index">Quantity</label>
+              @if (row.controls.type.value !== 'process') {
+                <input class="form-control" type="number" min="0" step="1" formControlName="quantity"
+                  [attr.aria-label]="row.controls.name.value + ' quantity'"
+                  [id]="idPrefix() + '_quantity_' + index" (input)="calculate()">
+                @if (row.controls.quantity.invalid && row.controls.quantity.dirty) {
+                  <span class="text-danger small">Enter a whole number of 0 or more.</span>
+                }
+              } @else {
+                <span class="not-applicable">&mdash;</span>
+              }
+            </div>
+
+            <div class="form-group">
+              <label class="d-lg-none" [for]="idPrefix() + '_steamUsage_' + index">Steam Usage</label>
+              <div class="input-group">
+                <input class="form-control" type="number" min="0" step="any" formControlName="steamUsage"
+                  [attr.aria-label]="row.controls.name.value + ' steam usage'"
+                  [id]="idPrefix() + '_steamUsage_' + index" (input)="calculate()"
+                  [readonly]="row.controls.type.value !== 'process'">
+                <span class="input-group-addon units"
+                  [innerHTML]="settings().steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+              </div>
+              @if (row.controls.steamUsage.invalid && row.controls.steamUsage.dirty) {
+                <span class="text-danger small">Enter a flow of 0 or more.</span>
+              }
+            </div>
+
+            <div class="form-group recoverable-checkbox">
+              <label class="d-lg-none" [for]="idPrefix() + '_recoverable_' + index">Condensate Recoverable?</label>
+              <input type="checkbox" formControlName="condensateRecoverable"
+                [attr.aria-label]="row.controls.name.value + ' condensate recoverable'"
+                [id]="idPrefix() + '_recoverable_' + index" (change)="toggleRecoverable(index)">
+            </div>
+
+            <div class="form-group">
+              <label class="d-lg-none" [for]="idPrefix() + '_recoveryRate_' + index">Condensate Recovery Rate</label>
+              <div class="input-group">
+                <input class="form-control" type="number" min="0" max="100" step="any"
+                  [attr.aria-label]="row.controls.name.value + ' recovery rate'"
+                  formControlName="condensateRecoveryRate" [id]="idPrefix() + '_recoveryRate_' + index"
+                  (input)="calculate()" [readonly]="!row.controls.condensateRecoverable.value">
+                <span class="input-group-addon units">%</span>
+              </div>
+              @if (row.controls.condensateRecoveryRate.invalid && row.controls.condensateRecoveryRate.dirty) {
+                <span class="text-danger small">Enter a recovery rate from 0 to 100%.</span>
+              }
+            </div>
+
+            <div class="remove-row">
+              @if (row.controls.type.value === 'process') {
+                <button type="button" class="btn btn-sm btn-danger" (click)="removeRow(index)"
+                  aria-label="Remove steam use row">
+                  <span class="fa fa-trash"></span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <button type="button" class="btn btn-secondary btn-sm mt-2" (click)="addRow()">
+        <span class="fa fa-plus"></span> Add Row
+      </button>
+    </form>
+
+    <div class="totals mt-3">
+      <div>
+        <span>Total Process Steam Usage</span>
+        <strong>{{ totals.processSteamUsage | number:'1.0-4' }}
+          <span [innerHTML]="settings().steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+        </strong>
+      </div>
+      <div>
+        <span>Recovered Condensate</span>
+        <strong>{{ totals.recoveredCondensate | number:'1.0-4' }}
+          <span [innerHTML]="settings().steamMassFlowMeasurement | settingsLabel:'/hr'"></span>
+        </strong>
+      </div>
+      <div>
+        <span>Overall Condensate Recovery Rate</span>
+        <strong>{{ totals.condensateRecoveryRate | number:'1.0-3' }}%</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-4 p-3 help-panel scroll-item">
+    <div class="header">
+      <h3>Help</h3>
+    </div>
+    <h5>Process Steam Usage</h5>
+    <p>
+      Enter the number of steam leaks and failed steam traps on this header. Their estimated steam losses are
+      calculated using the header pressure level. Add a row for each process or other steam use.
+    </p>
+    <h5>Condensate Recovery</h5>
+    <p>
+      Select <strong>Condensate Recoverable?</strong> only when condensate from that steam use can return to the
+      system, then enter the percentage recovered for that row.
+    </p>
+    <p>
+      The overall recovery rate is the total recovered condensate divided by total process steam usage. Steam leaks
+      and trap losses are excluded from recovered condensate unless explicitly marked recoverable.
+    </p>
+  </div>
+</div>

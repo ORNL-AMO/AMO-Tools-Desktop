@@ -10,7 +10,7 @@
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
       <label for="modifyHighPressureCondensateRecovery" class="steam-check-label">
-        <input type="checkbox" id="modifyHighPressureCondensateRecovery"
+        <input type="checkbox" id="modifyHighPressureCondensateRecovery" [disabled]="hasProcessSteamUsageData('highPressureHeader')"
           (focus)="focusField('condensationRecoveryRate')" (change)="toggleHighPressureCondensateRecovery()"
           [(ngModel)]="showHighPressureCondensateRecovery" />
         Adjust High Pressure Condensate Recovery Rate
@@ -47,7 +47,7 @@
           <label for="modificationHPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
           <div class="input-group mod-max-width">
             <input name="modificationHPCondensateRecovery" type="number" step="any"
-              id="modificationHPCondensateRecovery" class="form-control"
+              id="modificationHPCondensateRecovery" [readonly]="hasProcessSteamUsageData('highPressureHeader')" class="form-control"
               (focus)="focusField('condensationRecoveryRate')" (input)="save()"
               formControlName="condensationRecoveryRate" />
             <span class="input-group-addon units">%</span>
@@ -73,7 +73,7 @@
     <li class="explore-opps-item">
       <div class="checkbox mt-2">
         <label for="modifyMediumPressureCondensateRecovery" class="steam-check-label">
-          <input type="checkbox" id="modifyMediumPressureCondensateRecovery"
+          <input type="checkbox" id="modifyMediumPressureCondensateRecovery" [disabled]="hasProcessSteamUsageData('mediumPressureHeader')"
             (focus)="focusField('condensationRecoveryRate')" (change)="toggleMediumPressureCondensateRecovery()"
             [(ngModel)]="showMediumPressureCondensateRecovery" />
           Adjust Medium Pressure Condensate Recovery Rate
@@ -112,7 +112,7 @@
             <label for="modificationMPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
             <div class="input-group mod-max-width">
               <input name="modificationMPCondensateRecovery" type="number" step="any"
-                id="modificationMPCondensateRecovery" class="form-control"
+                id="modificationMPCondensateRecovery" [readonly]="hasProcessSteamUsageData('mediumPressureHeader')" class="form-control"
                 (focus)="focusField('condensationRecoveryRate')" (input)="save()"
                 formControlName="condensationRecoveryRate" />
               <span class="input-group-addon units">%</span>
@@ -138,7 +138,7 @@
     <li class="explore-opps-item">
       <div class="checkbox mt-2">
         <label for="modifyLowPressureCondensateRecovery" class="steam-check-label">
-          <input type="checkbox" id="modifyLowPressureCondensateRecovery"
+          <input type="checkbox" id="modifyLowPressureCondensateRecovery" [disabled]="hasProcessSteamUsageData('lowPressureHeader')"
             (focus)="focusField('condensationRecoveryRate')" (change)="toggleLowPressureCondensateRecovery()"
             [(ngModel)]="showLowPressureCondensateRecovery" /> Adjust
           Low Pressure Condensate Recovery Rate
@@ -176,7 +176,7 @@
             <label for="modificationLPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
             <div class="input-group mod-max-width">
               <input name="modificationLPCondensateRecovery" type="number" step="any"
-                id="modificationLPCondensateRecovery" class="form-control"
+                id="modificationLPCondensateRecovery" [readonly]="hasProcessSteamUsageData('lowPressureHeader')" class="form-control"
                 (focus)="focusField('condensationRecoveryRate')" (input)="save()"
                 formControlName="condensationRecoveryRate" />
               <span class="input-group-addon units">%</span>

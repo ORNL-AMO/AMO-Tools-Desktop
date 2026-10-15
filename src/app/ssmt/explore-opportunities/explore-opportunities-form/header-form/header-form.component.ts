@@ -227,6 +227,7 @@ export class HeaderFormComponent implements OnInit {
     }
   }
   toggleHighPressureSteamUsage() {
+    if (this.hasProcessSteamUsageData('highPressureHeader')) return;
     if (this.showHighPressureSteamUsage === false) {
       this.modificationHighPressureForm.controls.processSteamUsage.patchValue(this.baselineHighPressureForm.controls.processSteamUsage.value);
       this.save();
@@ -234,6 +235,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   toggleMediumPressureSteamUsage() {
+    if (this.hasProcessSteamUsageData('mediumPressureHeader')) return;
     if (this.showMediumPressureSteamUsage === false) {
       this.modificationMediumPressureForm.controls.processSteamUsage.patchValue(this.baselineMediumPressureForm.controls.processSteamUsage.value);
       this.save();
@@ -242,6 +244,7 @@ export class HeaderFormComponent implements OnInit {
   }
 
   toggleLowPressureSteamUsage() {
+    if (this.hasProcessSteamUsageData('lowPressureHeader')) return;
     if (this.showLowPressureSteamUsage === false) {
       this.modificationLowPressureForm.controls.processSteamUsage.patchValue(this.baselineLowPressureForm.controls.processSteamUsage.value);
       this.save();
@@ -249,15 +252,22 @@ export class HeaderFormComponent implements OnInit {
     this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.patchValue(!this.showLowPressureSteamUsage);
   }
 
+  hasProcessSteamUsageData(header: 'highPressureHeader' | 'mediumPressureHeader' | 'lowPressureHeader'): boolean {
+    return !!this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header]?.processSteamUsageData;
+  }
+
   save() {
     // add rest of baseline if we ever enable baseline
     // let tmpBaselineHighPressureHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.baselineHighPressureForm);
     // this.ssmt.headerInput.highPressureHeader = tmpBaselineHighPressureHeader;
     let tmpModificationHighPressureHeader: HeaderWithHighestPressure = this.headerService.getHighestPressureObjFromForm(this.modificationHighPressureForm);
+    tmpModificationHighPressureHeader.processSteamUsageData = this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressureHeader?.processSteamUsageData;
     this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.highPressureHeader = tmpModificationHighPressureHeader;
     let tmpModificationMediumPressureHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.modificationMediumPressureForm);
+    tmpModificationMediumPressureHeader.processSteamUsageData = this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressureHeader?.processSteamUsageData;
     this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.mediumPressureHeader = tmpModificationMediumPressureHeader;
     let tmpModificationLowPressureHeader: HeaderNotHighestPressure = this.headerService.initHeaderObjFromForm(this.modificationLowPressureForm);
+    tmpModificationLowPressureHeader.processSteamUsageData = this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressureHeader?.processSteamUsageData;
     this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput.lowPressureHeader = tmpModificationLowPressureHeader;
     this.updatePressureMaxMins();
     this.setWarnings();
