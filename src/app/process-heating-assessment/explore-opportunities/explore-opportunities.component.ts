@@ -23,7 +23,7 @@ export class ExploreOpportunitiesComponent {
   readonly selectedModification: Signal<ProcessHeatingModification | undefined> = this.modificationService.selectedModification;
 
   readonly visibleOpportunityComponents = computed(() => OPPORTUNITY_REGISTRY
-    .filter(entry => this.hasBaselineLosses(entry.lossKey))
+    .filter(entry => !entry.lossKey || this.hasBaselineLosses(entry.lossKey))
     .flatMap(entry => entry.opportunityComponents)
     .filter(({ heatingEquipmentConfigurations }) => !heatingEquipmentConfigurations || heatingEquipmentConfigurations.includes(this.heatingEquipmentConfiguration()))
     .map(({ component }) => component));

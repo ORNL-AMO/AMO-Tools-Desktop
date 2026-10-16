@@ -37,6 +37,10 @@ export class FakeProcessHeatingAssessmentService {
     return modification ? getEffectivePhast(baseline, modification) : undefined;
   }
 
+  scenarioPhastSignal(scenario: string): PHAST | undefined {
+    return this.scenarioPhast(scenario);
+  }
+
   lossSignal(scenario: string, lossKey: keyof PHAST['losses']) {
     return this.scenarioPhast(scenario)?.losses?.[lossKey];
   }
