@@ -87,10 +87,11 @@ describe('SlagOpportunityComponent', () => {
   it('shows the baseline weight beside the modification input', () => {
     component.toggleOpportunity(true);
     component.toggleSection('slag-1', true);
+    component.setModificationValue('slag-1', 40);
     fixture.detectChanges();
 
     const input: HTMLInputElement = fixture.nativeElement.querySelector('#modificationSlagWeight_slag-1');
-    expect(input.value).toBe('100');
+    expect(input.value).toBe('40');
     expect(fixture.nativeElement.querySelector('.baseline-value-input').textContent).toContain('100');
   });
 
