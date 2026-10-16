@@ -20,6 +20,7 @@ import { OpeningTimeOpenOpportunityComponent } from './opening-time-open-opportu
 import { GasLeakageOpportunityComponent } from './gas-leakage-opportunity/gas-leakage-opportunity.component';
 import { AirFuelRatioOpportunityComponent } from './air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
 import { PreheatCombustionAirOpportunityComponent } from './preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
+import { SlagOpportunityComponent } from './slag-opportunity/slag-opportunity.component';
 
 const COMPONENTS_BY_LOSS_KEY: Partial<Record<keyof Losses, Type<unknown>[]>> = {
   chargeMaterials: [ChargeMaterialOpportunityComponent],
@@ -30,12 +31,14 @@ const COMPONENTS_BY_LOSS_KEY: Partial<Record<keyof Losses, Type<unknown>[]>> = {
   openingLosses: [OpeningSizeOpportunityComponent, OpeningEmissivityOpportunityComponent, OpeningTimeOpenOpportunityComponent],
   leakageLosses: [GasLeakageOpportunityComponent],
   flueGasLosses: [AirFuelRatioOpportunityComponent, PreheatCombustionAirOpportunityComponent],
+  slagLosses: [SlagOpportunityComponent],
 };
 
-const FUEL_FIRED_ONLY_COMPONENTS = [
-  ...COMPONENTS_BY_LOSS_KEY.leakageLosses!,
-  ...COMPONENTS_BY_LOSS_KEY.flueGasLosses!,
-];
+const ALLOWED_CONFIGURATIONS_BY_GATED_COMPONENT = new Map<Type<unknown>, HeatingEquipmentConfiguration[]>([
+  ...[...COMPONENTS_BY_LOSS_KEY.leakageLosses!, ...COMPONENTS_BY_LOSS_KEY.flueGasLosses!]
+    .map((component): [Type<unknown>, HeatingEquipmentConfiguration[]] => [component, [HeatingEquipmentConfiguration.FUEL_FIRED]]),
+  [SlagOpportunityComponent, [HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF]],
+]);
 
 const ALL_COMPONENTS_IN_ORDER = Object.values(COMPONENTS_BY_LOSS_KEY).flat();
 
@@ -78,8 +81,9 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
       .toEqual(ALL_COMPONENTS_IN_ORDER);
   });
 
-  it('shows every opportunity in order for fuel-fired with all baseline losses', () => {
-    expect(createComponent().visibleOpportunityComponents()).toEqual(ALL_COMPONENTS_IN_ORDER);
+  it('shows every fuel-fired opportunity in order for fuel-fired with all baseline losses', () => {
+    expect(createComponent().visibleOpportunityComponents())
+      .toEqual(ALL_COMPONENTS_IN_ORDER.filter(component => component !== SlagOpportunityComponent));
   });
 
   it('hides all opportunities when baseline has no losses', () => {
@@ -91,18 +95,19 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
   for (const [lossKey, components] of Object.entries(COMPONENTS_BY_LOSS_KEY) as [keyof Losses, Type<unknown>[]][]) {
     it(`shows only ${lossKey} opportunities when only that loss type has baseline data`, () => {
       populatedLossKeys = new Set([lossKey]);
+      configuration.set(ALLOWED_CONFIGURATIONS_BY_GATED_COMPONENT.get(components[0])?.[0] ?? HeatingEquipmentConfiguration.FUEL_FIRED);
 
       expect(createComponent().visibleOpportunityComponents()).toEqual(components);
     });
   }
 
-  for (const otherConfiguration of Object.values(HeatingEquipmentConfiguration)
-    .filter(value => value !== HeatingEquipmentConfiguration.FUEL_FIRED)) {
-    it(`hides leakage and flue gas opportunities for ${otherConfiguration} even with baseline data`, () => {
-      configuration.set(otherConfiguration);
+  for (const heatingEquipmentConfiguration of Object.values(HeatingEquipmentConfiguration)) {
+    it(`shows only the opportunities allowed for ${heatingEquipmentConfiguration} even with baseline data for every loss`, () => {
+      configuration.set(heatingEquipmentConfiguration);
       const visible = createComponent().visibleOpportunityComponents();
 
-      expect(visible).toEqual(ALL_COMPONENTS_IN_ORDER.filter(component => !FUEL_FIRED_ONLY_COMPONENTS.includes(component)));
+      expect(visible).toEqual(ALL_COMPONENTS_IN_ORDER.filter(component =>
+        ALLOWED_CONFIGURATIONS_BY_GATED_COMPONENT.get(component)?.includes(heatingEquipmentConfiguration) ?? true));
     });
   }
 

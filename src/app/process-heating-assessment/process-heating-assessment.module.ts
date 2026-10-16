@@ -50,6 +50,7 @@ import { WallLossOpportunityComponent } from './explore-opportunities/wall-loss-
 import { AtmosphereOpportunityComponent } from './explore-opportunities/atmosphere-opportunity/atmosphere-opportunity.component';
 import { FixtureMaterialsHandlingOpportunityComponent } from './explore-opportunities/fixture-materials-handling-opportunity/fixture-materials-handling-opportunity.component';
 import { FixtureCoolingOpportunityComponent } from './explore-opportunities/fixture-cooling-opportunity/fixture-cooling-opportunity.component';
+import { SlagOpportunityComponent } from './explore-opportunities/slag-opportunity/slag-opportunity.component';
 import { CoolingOpportunityComponent } from './explore-opportunities/cooling-opportunity/cooling-opportunity.component';
 import { OpeningSizeOpportunityComponent } from './explore-opportunities/opening-size-opportunity/opening-size-opportunity.component';
 import { OpeningEmissivityOpportunityComponent } from './explore-opportunities/opening-emissivity-opportunity/opening-emissivity-opportunity.component';
@@ -339,6 +340,7 @@ export const ROUTES: Route[] = [
     AtmosphereOpportunityComponent,
     FixtureMaterialsHandlingOpportunityComponent,
     FixtureCoolingOpportunityComponent,
+    SlagOpportunityComponent,
     CoolingOpportunityComponent,
     OpeningSizeOpportunityComponent,
     OpeningEmissivityOpportunityComponent,
