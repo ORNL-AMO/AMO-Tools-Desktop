@@ -46,6 +46,10 @@ const NON_LOSS_COMPONENTS = [HeatSystemEfficiencyOpportunityComponent];
 
 const ALL_COMPONENTS_IN_ORDER = [...Object.values(COMPONENTS_BY_LOSS_KEY).flat(), ...NON_LOSS_COMPONENTS];
 
+function componentsAllowedFor(components: Type<unknown>[], configuration: HeatingEquipmentConfiguration): Type<unknown>[] {
+  return components.filter(component => ALLOWED_CONFIGURATIONS_BY_GATED_COMPONENT.get(component)?.includes(configuration) ?? true);
+}
+
 @Component({ selector: 'app-first-stub-opportunity', template: '', standalone: false })
 class FirstStubOpportunityComponent {}
 
@@ -87,7 +91,7 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
 
   it('shows every fuel-fired opportunity in order for fuel-fired with all baseline losses', () => {
     expect(createComponent().visibleOpportunityComponents())
-      .toEqual(ALL_COMPONENTS_IN_ORDER.filter(component => !ALLOWED_CONFIGURATIONS_BY_GATED_COMPONENT.has(component) || ALLOWED_CONFIGURATIONS_BY_GATED_COMPONENT.get(component)!.includes(HeatingEquipmentConfiguration.FUEL_FIRED)));
+      .toEqual(componentsAllowedFor(ALL_COMPONENTS_IN_ORDER, HeatingEquipmentConfiguration.FUEL_FIRED));
   });
 
   it('hides all opportunities when baseline has no losses', () => {
@@ -101,8 +105,8 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
       populatedLossKeys.clear();
       configuration.set(heatingEquipmentConfiguration);
 
-      expect(createComponent().visibleOpportunityComponents()).toEqual(NON_LOSS_COMPONENTS.filter(component =>
-        ALLOWED_CONFIGURATIONS_BY_GATED_COMPONENT.get(component)?.includes(heatingEquipmentConfiguration) ?? true));
+      expect(createComponent().visibleOpportunityComponents())
+        .toEqual(componentsAllowedFor(NON_LOSS_COMPONENTS, heatingEquipmentConfiguration));
     });
   }
 
@@ -120,8 +124,7 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
       configuration.set(heatingEquipmentConfiguration);
       const visible = createComponent().visibleOpportunityComponents();
 
-      expect(visible).toEqual(ALL_COMPONENTS_IN_ORDER.filter(component =>
-        ALLOWED_CONFIGURATIONS_BY_GATED_COMPONENT.get(component)?.includes(heatingEquipmentConfiguration) ?? true));
+      expect(visible).toEqual(componentsAllowedFor(ALL_COMPONENTS_IN_ORDER, heatingEquipmentConfiguration));
     });
   }
 

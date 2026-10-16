@@ -25,17 +25,19 @@ export class HeatSystemEfficiencyOpportunityComponent {
 
   readonly baselineValue: Signal<number | undefined> = computed(() => this.assessmentService.scenarioPhastSignal('baseline')?.systemEfficiency);
 
-  readonly modificationValue: Signal<number | undefined> = computed(() => this.modification()?.systemEfficiency);
-
-  readonly warning = linkedSignal<string | undefined, string | null>({
-    source: this.modificationService.selectedModificationId,
-    computation: () => null,
-  });
-
   private readonly modification: Signal<PHAST | undefined> = computed(() => {
     const modificationId = this.modificationService.selectedModificationId();
     return modificationId ? this.assessmentService.scenarioPhastSignal(modificationId) : undefined;
   });
+
+  readonly modificationValue: Signal<number | undefined> = computed(() => this.modification()?.systemEfficiency);
+
+  private readonly warningState = linkedSignal<string | undefined, string | null>({
+    source: this.modificationService.selectedModificationId,
+    computation: () => null,
+  });
+
+  readonly warning: Signal<string | null> = this.warningState.asReadonly();
 
   toggleOpportunity(hasOpportunity: boolean): void {
     const modificationId = this.modificationService.selectedModificationId();
@@ -47,7 +49,7 @@ export class HeatSystemEfficiencyOpportunityComponent {
       display: HEAT_SYSTEM_EFFICIENCY_DISPLAY_NAME,
     });
     if (!hasOpportunity) {
-      this.warning.set(null);
+      this.warningState.set(null);
       this.resetToBaseline(modificationId);
     }
   }
@@ -59,10 +61,10 @@ export class HeatSystemEfficiencyOpportunityComponent {
       return;
     }
     if (value <= 0 || value > 100) {
-      this.warning.set(OUT_OF_RANGE_WARNING);
+      this.warningState.set(OUT_OF_RANGE_WARNING);
       return;
     }
-    this.warning.set(null);
+    this.warningState.set(null);
     this.assessmentService.updateModificationProperty(modificationId, 'systemEfficiency', value);
   }
 
