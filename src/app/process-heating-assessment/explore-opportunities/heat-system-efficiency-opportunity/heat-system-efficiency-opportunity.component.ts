@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, linkedSignal, Signal } from '@angular/core';
 import { ExploreOpportunityCategory, PHAST } from '../../models/phast';
 import { ModificationService } from '../../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
@@ -27,7 +27,10 @@ export class HeatSystemEfficiencyOpportunityComponent {
 
   readonly modificationValue: Signal<number | undefined> = computed(() => this.modification()?.systemEfficiency);
 
-  readonly warning = signal<string | null>(null);
+  readonly warning = linkedSignal<string | undefined, string | null>({
+    source: this.modificationService.selectedModificationId,
+    computation: () => null,
+  });
 
   private readonly modification: Signal<PHAST | undefined> = computed(() => {
     const modificationId = this.modificationService.selectedModificationId();

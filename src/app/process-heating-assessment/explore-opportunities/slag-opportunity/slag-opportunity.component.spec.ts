@@ -84,6 +84,16 @@ describe('SlagOpportunityComponent', () => {
     expect(fixture.nativeElement.querySelector('#modificationSlagWeight_slag-2')).toBeNull();
   });
 
+  it('shows the baseline weight beside the modification input', () => {
+    component.toggleOpportunity(true);
+    component.toggleSection('slag-1', true);
+    fixture.detectChanges();
+
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('#modificationSlagWeight_slag-1');
+    expect(input.value).toBe('100');
+    expect(fixture.nativeElement.querySelector('.baseline-value-input').textContent).toContain('100');
+  });
+
   it('writes the modified weight to the scenario slag losses', () => {
     component.toggleOpportunity(true);
     component.toggleSection('slag-2', true);

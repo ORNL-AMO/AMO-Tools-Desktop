@@ -113,6 +113,25 @@ describe('HeatSystemEfficiencyOpportunityComponent', () => {
     expect(component.warning()).toBeNull();
   });
 
+  it('clears the warning when the selected modification changes', () => {
+    component.toggleOpportunity(true);
+    component.setModificationValue(101);
+    expect(component.warning()).toBe(OUT_OF_RANGE_WARNING);
+
+    modificationService.addModification('Scenario 2');
+
+    expect(component.warning()).toBeNull();
+  });
+
+  it('renders the editor on creation when the modification already has the opportunity enabled', () => {
+    component.toggleOpportunity(true);
+
+    const created = TestBed.createComponent(HeatSystemEfficiencyOpportunityComponent);
+    created.detectChanges();
+
+    expect(created.nativeElement.querySelector('#modificationSystemEfficiency')).not.toBeNull();
+  });
+
   it('clears the warning when the opportunity is disabled', () => {
     component.toggleOpportunity(true);
     component.setModificationValue(0);
