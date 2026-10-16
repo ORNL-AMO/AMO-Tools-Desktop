@@ -188,8 +188,7 @@ export class WaterProcessDiagramComponent {
   returnFromMobileUnavailable() {
     let assessmentMatch = this.router.url.match(/\/water\/(\d+)(\/|$)/);
     if (assessmentMatch && assessmentMatch[1]) {
-      this.waterAssessmentService.mainTab.next('baseline');
-      this.router.navigate(['/water', assessmentMatch[1]]);
+      this.waterAssessmentService.goToMainTab('baseline');
       return;
     }
     this.router.navigate(['/landing-screen']);

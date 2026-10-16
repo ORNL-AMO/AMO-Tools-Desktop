@@ -1,0 +1,15 @@
+@if (fsat && assessment && settings && !modificationModalOpen) {
+  <div class="assessment-tab-container tab-content" [ngStyle]="{'height.px': containerHeight}">
+    @if (assessmentTab == 'explore-opportunities') {
+      <app-explore-opportunities [fsat]="fsat" [assessment]="assessment"
+        [settings]="settings" (emitSave)="saveFsat($event)" [containerHeight]="containerHeight"
+        [modificationIndex]="modificationIndex" [modificationExists]="modificationExists" (emitAddNewMod)="addNewMod()">
+      </app-explore-opportunities>
+    }
+    @if (assessmentTab == 'modify-conditions') {
+      <app-modify-conditions [settings]="settings" [assessment]="assessment"
+        [modificationIndex]="modificationIndex" [modificationExists]="modificationExists"
+        (emitSaveAssessment)="saveFsat($event)" [containerHeight]="containerHeight"></app-modify-conditions>
+    }
+  </div>
+}

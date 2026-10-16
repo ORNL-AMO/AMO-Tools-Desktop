@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { CompressedAirInventoryService } from './compressed-air-inventory.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { InventoryDbService } from '../indexedDb/inventory-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { Settings } from '../shared/models/settings';
@@ -16,6 +16,8 @@ import { CompressedAirCatalogService } from './compressed-air-inventory-setup/co
 import { IntegrationStateService } from '../shared/connected-inventory/integration-state.service';
 import { CompressedAirAssessmentIntegrationService } from '../shared/connected-inventory/compressed-air-assessment-integration.service';
 import { GenericCompressorDbService } from '../shared/generic-compressor-db.service';
+import { COMPRESSED_AIR_INVENTORY_MAIN_VIEWS, COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, CompressedAirInventoryMainView, CompressedAirInventorySetupView, CompressedAirInventorySummaryView } from './compressed-air-inventory.routing';
+import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-compressed-air-inventory',
@@ -38,6 +40,7 @@ export class CompressedAirInventoryComponent implements OnInit {
   setupTab: string;
   mainTab: string;
   mainTabSub: Subscription;
+  routerEventsSub: Subscription;
 
   modalOpenSub: Subscription;
   isModalOpen: boolean;
@@ -52,6 +55,7 @@ export class CompressedAirInventoryComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private analyticsService: AnalyticsService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
     private settingsDbService: SettingsDbService,
     private inventoryDbService: InventoryDbService,
     private genericCompressorDbService: GenericCompressorDbService,
@@ -71,6 +75,7 @@ export class CompressedAirInventoryComponent implements OnInit {
       this.compressedAirInventoryService.setIsValidInventory(this.compressedAirInventoryItem.compressedAirInventoryData);
       this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryItem.compressedAirInventoryData);
       this.compressedAirInventoryService.currentInventoryId = tmpItemId;
+      this.syncTabsFromRoute();
       this.genericCompressorDbService.getAllCompressors(settings);
 
       let systemId = this.activatedRoute.snapshot.queryParamMap.get('systemId');
@@ -89,6 +94,12 @@ export class CompressedAirInventoryComponent implements OnInit {
       } else {
         this.compressedAirCatalogService.selectedSystemId.next(this.compressedAirInventoryItem.compressedAirInventoryData.systems[0].id);
       }
+    });
+
+    this.routerEventsSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.syncTabsFromRoute();
     });
 
     this.mainTabSub = this.compressedAirInventoryService.mainTab.subscribe(val => {
@@ -128,6 +139,8 @@ export class CompressedAirInventoryComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.routerEventsSub.unsubscribe();
+    this.compressedAirInventoryService.currentInventoryId = undefined;
     this.setupTabSub.unsubscribe();
     this.mainTabSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
@@ -166,28 +179,42 @@ export class CompressedAirInventoryComponent implements OnInit {
   }
 
 
+  /**
+   * Pushes the main, setup and summary tab values found in the route data into the tab subjects.
+   * Replaces a gated main tab with the first main tab while the inventory is invalid.
+   */
+  syncTabsFromRoute() {
+    const routeData = getMergedRouteData<CompressedAirInventoryMainView, CompressedAirInventorySetupView, CompressedAirInventorySummaryView>(this.activatedRoute.snapshot);
+
+    const isValid: boolean = this.compressedAirInventoryService.compressedAirInventoryData.getValue().isValid;
+    if (routeData.mainView && !isMainTabAllowed(COMPRESSED_AIR_INVENTORY_SETUP_GATED_VIEWS, routeData.mainView, isValid)) {
+      if (this.compressedAirInventoryService.mainTab.getValue() !== COMPRESSED_AIR_INVENTORY_MAIN_VIEWS[0]) {
+        this.compressedAirInventoryService.mainTab.next(COMPRESSED_AIR_INVENTORY_MAIN_VIEWS[0]);
+      }
+      this.router.navigate(['/compressed-air-inventory', this.compressedAirInventoryService.currentInventoryId, COMPRESSED_AIR_INVENTORY_MAIN_VIEWS[0]], { replaceUrl: true });
+      return;
+    }
+    if (routeData.mainView && routeData.mainView !== this.compressedAirInventoryService.mainTab.getValue()) {
+      this.compressedAirInventoryService.mainTab.next(routeData.mainView);
+    }
+    if (routeData.setupView && routeData.setupView !== this.compressedAirInventoryService.setupTab.getValue()) {
+      this.compressedAirInventoryService.setupTab.next(routeData.setupView);
+    }
+    if (routeData.summaryView && routeData.summaryView !== this.compressedAirInventoryService.summaryTab.getValue()) {
+      this.compressedAirInventoryService.summaryTab.next(routeData.summaryView);
+    }
+  }
+
   continue() {
-    if (this.setupTab == 'plant-setup') {
-      this.compressedAirInventoryService.setupTab.next('system-setup');
-    } else if (this.setupTab == 'system-setup') {
-      this.compressedAirInventoryService.setupTab.next('compressor-properties');
-    } else if (this.setupTab == 'compressor-properties') {
-      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
-    } else if (this.setupTab == 'compressed-air-catalog') {
-      this.compressedAirInventoryService.setupTab.next('end-uses');
+    if (this.setupTab == 'end-uses') {
+      this.compressedAirInventoryService.goToMainTab('summary');
+    } else {
+      this.compressedAirInventoryService.continueSetupTab();
     }
   }
 
   back() {
-    if (this.setupTab == 'end-uses') {
-      this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
-    } else if (this.setupTab == 'compressed-air-catalog') {
-      this.compressedAirInventoryService.setupTab.next('compressor-properties');
-    } else if (this.setupTab == 'compressor-properties') {
-      this.compressedAirInventoryService.setupTab.next('system-setup');
-    } else if (this.setupTab == 'system-setup') {
-      this.compressedAirInventoryService.setupTab.next('plant-setup');
-    }
+    this.compressedAirInventoryService.backSetupTab();
   }
 
   closeExportModal(input: boolean) {
@@ -218,8 +245,6 @@ export class CompressedAirInventoryComponent implements OnInit {
     let system: CompressedAirInventorySystem = this.compressedAirInventoryItem.compressedAirInventoryData.systems.find(system => { return system.id == systemId });
     let selectedItem: CompressedAirItem = system.catalog.find(compressedAirItem => { return compressedAirItem.id == itemId });
     this.compressedAirCatalogService.selectedCompressedAirItem.next(selectedItem);
-    this.compressedAirInventoryService.mainTab.next('setup');
-    this.compressedAirInventoryService.setupTab.next('compressed-air-catalog');
   }
 
 }

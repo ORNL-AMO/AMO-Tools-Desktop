@@ -28,16 +28,19 @@ export class ConvertPumpInventoryService {
       fieldMeasurements.staticDischargeHead = this.convertVal(fieldMeasurements.staticDischargeHead, 'm', 'ft');
       fieldMeasurements.operatingFlowRate = this.convertVal(fieldMeasurements.operatingFlowRate, 'm3/h', 'gpm');
       fieldMeasurements.operatingHead = this.convertVal(fieldMeasurements.operatingHead, 'm', 'ft');
+      fieldMeasurements.operatingDifferentialPressure = this.convertVal(fieldMeasurements.operatingDifferentialPressure, 'Pa', 'psi');
     } else if (oldSettings.unitsOfMeasure == 'Imperial' && newSettings.unitsOfMeasure == 'Metric') {
       fieldMeasurements.staticSuctionHead = this.convertVal(fieldMeasurements.staticSuctionHead, 'ft', 'm');
       fieldMeasurements.staticDischargeHead = this.convertVal(fieldMeasurements.staticDischargeHead, 'ft', 'm');
       fieldMeasurements.operatingFlowRate = this.convertVal(fieldMeasurements.operatingFlowRate, 'gpm', 'm3/h');
       fieldMeasurements.operatingHead = this.convertVal(fieldMeasurements.operatingHead, 'ft', 'm');
+      fieldMeasurements.operatingDifferentialPressure = this.convertVal(fieldMeasurements.operatingDifferentialPressure, 'psi', 'Pa');
     }
     fieldMeasurements.staticSuctionHead = this.roundVal(fieldMeasurements.staticSuctionHead, 2);
     fieldMeasurements.staticDischargeHead = this.roundVal(fieldMeasurements.staticDischargeHead, 2);
     fieldMeasurements.operatingFlowRate = this.roundVal(fieldMeasurements.operatingFlowRate, 2);
     fieldMeasurements.operatingHead = this.roundVal(fieldMeasurements.operatingHead, 2);
+    fieldMeasurements.operatingDifferentialPressure = this.roundVal(fieldMeasurements.operatingDifferentialPressure, 2);
     return fieldMeasurements;
   }
 

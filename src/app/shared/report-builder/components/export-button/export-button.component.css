@@ -72,3 +72,20 @@
 .gap-2 {
   gap: 0.5rem;
 }
+
+/* Small-screen report layout: button sits on the left, so anchor the panel to the full column width */
+@media screen and (max-width: 991px) {
+  .export-wrapper {
+    display: block;
+  }
+
+  .button-wrapper {
+    justify-content: flex-start;
+  }
+
+  .export-panel {
+    left: 0;
+    right: 0;
+    min-width: 0;
+  }
+}
