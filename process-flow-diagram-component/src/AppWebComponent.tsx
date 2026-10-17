@@ -30,10 +30,29 @@ class AppWebComponent extends HTMLElement {
             shadowRoot={this.shadowRoot}
             saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
             convertValueFn={this._convertValueFn}
+            registerFlush={this.registerFlush}
+            onReady={this.emitDiagramReady}
             />
         </CacheProvider>
         )
     }
+  }
+
+  private flushPendingSave?: () => void;
+
+  // * dispatched from shadowRoot for the same reason as updateDiagramDetailEvent, see note at shadowRoot declaration
+  emitDiagramReady = () => {
+    this.shadowRoot.dispatchEvent(new CustomEvent('diagramReadyEvent', { composed: true, bubbles: true }));
+  }
+
+  // * arrow properties keep `this` bound when passed into React
+  registerFlush = (flush: () => void) => {
+    this.flushPendingSave = flush;
+  }
+
+  /** Emits any debounced save that has not fired yet. Call before removing the element. */
+  flush() {
+    this.flushPendingSave?.();
   }
 
   get convertValueFn(): ConvertValueFn | undefined {

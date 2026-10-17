@@ -21,8 +21,8 @@ describe('WaterAssessmentComponent syncMainTabFromRoute', () => {
     // syncMainTabFromRoute only uses Router, ActivatedRoute and WaterAssessmentService; the rest are never touched.
     const unused = {} as never;
     component = new WaterAssessmentComponent(
-      activatedRoute as unknown as ActivatedRoute, routerSpy, unused, unused, unused, unused, unused, unused,
-      waterAssessmentService as unknown as WaterAssessmentService, unused, unused
+      activatedRoute as unknown as ActivatedRoute, routerSpy, unused, unused, unused, unused, unused, unused, unused,
+      waterAssessmentService as unknown as WaterAssessmentService, unused, unused, unused
     );
     component.assessment = { id: 9, type: 'Water', diagramId: 4 } as Assessment;
     component.isInitialized = true;
@@ -88,8 +88,8 @@ describe('WaterAssessmentComponent initAssessment with overlapping inits', () =>
     };
     let releaseFirstSync: () => void;
     const firstSync = new Promise<void>(resolve => releaseFirstSync = resolve);
-    const updateAssessmentFromDiagramService = {
-      syncAssessmentToDiagram: (assessment: Assessment) => assessment.id === 1 ? firstSync : Promise.resolve()
+    const waterDiagramSyncService = {
+      reconcileWithDiagram: (assessment: Assessment) => assessment.id === 1 ? firstSync : Promise.resolve()
     };
     const assessmentDbService = { findById: (id: number) => assessments[id] };
     const settingsDbService = { getByAssessmentId: () => ({}) };
@@ -103,9 +103,9 @@ describe('WaterAssessmentComponent initAssessment with overlapping inits', () =>
     const activatedRoute = { firstChild: { snapshot: { data: { mainView: 'diagram' }, paramMap: { has: () => false } } } };
     const unused = {} as never;
     const component = new WaterAssessmentComponent(
-      activatedRoute as unknown as ActivatedRoute, routerSpy, unused, updateAssessmentFromDiagramService as never,
+      activatedRoute as unknown as ActivatedRoute, routerSpy, unused, unused, unused,
       assessmentDbService as never, unused, unused, settingsDbService as never,
-      waterAssessmentService as unknown as WaterAssessmentService, unused, unused
+      waterAssessmentService as unknown as WaterAssessmentService, unused, unused, waterDiagramSyncService as never
     );
 
     const firstInit = component.initAssessment(1);

@@ -57,6 +57,8 @@ export interface DiagramState {
   diagramFlowErrors: DiagramFlowErrors,
   assessmentId: number,
   diagramNotes: string,
+  // * true once parent data is hydrated into the store; saves are skipped until then
+  isInitialized: boolean,
 }
 
 export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState => {
@@ -80,6 +82,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     },
     assessmentId: undefined,
     diagramNotes: '',
+    isInitialized: currentState?.isInitialized ?? false,
   }
 }
 
@@ -133,6 +136,10 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
   state.assessmentId = assessmentId
+}
+
+const diagramReadyReducer = (state: DiagramState) => {
+  state.isInitialized = true;
 }
 
 const resetDiagramReducer = (state: DiagramState) => {
@@ -460,6 +467,7 @@ export const diagramSlice = createSlice({
     resetDiagram: resetDiagramReducer,
     recomputeNodeErrors: recomputeNodeErrorsReducer,
     diagramInitialized: diagramInitializedReducer,
+    diagramReady: diagramReadyReducer,
     nodesChange: nodesChangeReducer,
     addNode: addNodeReducer,
     addNodes: addNodesReducer,
@@ -511,6 +519,7 @@ export const {
   deleteNode,
   keyboardDeleteNode,
   diagramInitialized,
+  diagramReady,
   nodeDataPropertyChange,
   setNodeStyle,
   totalFlowChange,
@@ -555,6 +564,7 @@ export const RECOMPUTES_DIAGRAM_ERRORS: Record<DiagramActionType, boolean> = {
   // self-referential / already-handled inline — matching these would be redundant or circular
   recomputeNodeErrors: false, // this *is* the recompute action
   diagramInitialized: false, // recomputes inline in diagramInitializedReducer
+  diagramReady: false, // lifecycle flag only
   resetDiagram: false, // resets diagramFlowErrors to {} directly via getDefaultDiagramData
 
   // cosmetic — position/selection/viewport/styling, never read by checkDiagramNodeErrors
@@ -612,31 +622,39 @@ export interface EstimatedSystemPayload<K extends keyof WaterSystemResults> { sy
 export type OptionsDependentState = 'updateEdges' | 'updateEdgeProperties';
 
 
-// todo 7364 - migrate save event to thunk
-// pass MEASUR save method here, 
-// need to check for assessment added nodes,
-//  handle debouncing
-export const saveDiagramState = createAsyncThunk(
+/**
+ * Thunk `extra` argument (see configureAppStore). Kept out of state/actions because the save callback is a function.
+ * `hasPendingSave` is set by the persistence listener and cleared on emit, so a flush dispatched on unmount
+ * only emits when a debounced save has not fired yet.
+ */
+export interface DiagramSaveExtra {
+  saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
+  hasPendingSave: boolean;
+}
+
+export const saveDiagramState = createAsyncThunk<void, void, { state: { diagram: DiagramState }, extra: DiagramSaveExtra }>(
   'diagram/save',
-  async (_, { getState }) => {
-    const diagramState = getState() as DiagramState;
-    const { name, nodes, edges, diagramFlowErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors } = diagramState;
-    const userDiagramOptions = diagramOptions;
+  async (_, { getState, extra }) => {
+    const { name, meta, nodes, edges, diagramFlowErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors, diagramNotes } = getState().diagram;
     const updatedDiagramData: FlowDiagramData = {
-      name: name,
-      nodes: nodes,
-      diagramFlowErrors: diagramFlowErrors,
-      edges: edges,
+      name,
+      meta,
+      nodes,
+      diagramFlowErrors,
+      edges,
       settings,
-      userDiagramOptions,
+      userDiagramOptions: diagramOptions,
       calculatedData,
       recentNodeColors,
       recentEdgeColors,
+      diagramNotes,
     };
     formatDataForMEASUR(updatedDiagramData);
-
-    // props.saveFlowDiagram(updatedDiagramData);
-    // console.log('=== SAVED FlowDiagram', updatedDiagramData);
+    extra.hasPendingSave = false;
+    extra.saveFlowDiagramData(updatedDiagramData);
+  },
+  {
+    condition: (_, { getState, extra }) => getState().diagram.isInitialized && extra.hasPendingSave,
   }
 );
 
