@@ -118,6 +118,7 @@ import { GasLeakageComponent } from './heat-balance/losses/gas-leakage/gas-leaka
 import { GasLeakageFormComponent } from './heat-balance/losses/gas-leakage/gas-leakage-form.component';
 import { AirFuelRatioOpportunityComponent } from './explore-opportunities/air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
 import { PreheatCombustionAirOpportunityComponent } from './explore-opportunities/preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
+import { OperationsOpportunityComponent } from './explore-opportunities/operations-opportunity/operations-opportunity.component';
 import { GasLeakageOpportunityComponent } from './explore-opportunities/gas-leakage-opportunity/gas-leakage-opportunity.component';
 import { AuxiliaryPowerComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power.component';
 import { AuxiliaryPowerFormComponent } from './heat-balance/losses/auxiliary-power/auxiliary-power-form.component';
@@ -349,6 +350,7 @@ export const ROUTES: Route[] = [
     GasLeakageOpportunityComponent,
     AirFuelRatioOpportunityComponent,
     PreheatCombustionAirOpportunityComponent,
+    OperationsOpportunityComponent,
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,

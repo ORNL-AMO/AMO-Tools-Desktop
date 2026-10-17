@@ -13,6 +13,7 @@ import { OpeningTimeOpenOpportunityComponent } from './opening-time-open-opportu
 import { GasLeakageOpportunityComponent } from './gas-leakage-opportunity/gas-leakage-opportunity.component';
 import { AirFuelRatioOpportunityComponent } from './air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
 import { PreheatCombustionAirOpportunityComponent } from './preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
+import { OperationsOpportunityComponent } from './operations-opportunity/operations-opportunity.component';
 import { SlagOpportunityComponent } from './slag-opportunity/slag-opportunity.component';
 import { HeatSystemEfficiencyOpportunityComponent } from './heat-system-efficiency-opportunity/heat-system-efficiency-opportunity.component';
 
@@ -52,5 +53,6 @@ export const OPPORTUNITY_REGISTRY: readonly OpportunityRegistryEntry[] = [
   { lossKey: 'leakageLosses', opportunityComponents: [{ component: GasLeakageOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
   { lossKey: 'flueGasLosses', opportunityComponents: [{ component: AirFuelRatioOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }, { component: PreheatCombustionAirOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
   { lossKey: 'slagLosses', opportunityComponents: [{ component: SlagOpportunityComponent, heatingEquipmentConfigurations: ELECTROTECHNOLOGY_EAF_ONLY }] },
+  { opportunityComponents: [{ component: OperationsOpportunityComponent }] },
   { opportunityComponents: [{ component: HeatSystemEfficiencyOpportunityComponent, heatingEquipmentConfigurations: STEAM_CUSTOM_ONLY }] },
 ];

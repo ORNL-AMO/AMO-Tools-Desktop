@@ -1,0 +1,80 @@
+<div class="checkbox">
+  <label class="group-label" for="exploreOppsShowOperations">
+    <input
+      type="checkbox"
+      id="exploreOppsShowOperations"
+      [checked]="useOpportunity()"
+      (change)="toggleOpportunity($any($event.target).checked)"
+    />
+    {{ displayName }}
+  </label>
+</div>
+
+@if (useOpportunity()) {
+  <ul>
+    @for (section of sections(); track section.section) {
+      <li class="explore-opps-item">
+        <div class="checkbox mt-2">
+          <label for="{{ 'modify_' + section.section }}" class="phast-check-label">
+            <input
+              type="checkbox"
+              id="{{ 'modify_' + section.section }}"
+              [checked]="section.expanded"
+              (change)="toggleSection(section.section, $any($event.target).checked)"
+            />
+            {{ section.checkboxLabel }}
+          </label>
+        </div>
+      </li>
+      <hr class="mt-0 mb-0">
+
+      @if (section.expanded) {
+        <li class="explore-opps-header">
+          <span class="explore-opps-title text-muted">Baseline</span>
+          <span class="explore-opps-title text-muted">Modification</span>
+        </li>
+        <li class="explore-opps-item mb-2">
+          <form class="explore-opps-form">
+            <div class="text-center">
+              <label class="baseline-value-label">{{ section.fieldLabel }}</label>
+              <div class="text-muted text-center baseline-value-input">
+                @if (section.section === 'operatingHours') {
+                  {{ section.baselineValue | number: '1.0-0' }}
+                } @else {
+                  {{ section.baselineValue }}
+                }
+                <span>{{ section.unit }}</span>
+              </div>
+            </div>
+          </form>
+
+          <form class="explore-opps-form">
+            <div class="form-group explore-opps-formgroup">
+              <label for="{{ 'modification_' + section.section }}" class="mod-value-label">{{ section.fieldLabel }}</label>
+              <div class="input-group mod-max-width">
+                @if (section.section === 'operatingHours') {
+                  <span class="input-group-addon op-hour-addon units">
+                    <button type="button" class="btn btn-link p-0" aria-label="Open operating hours calculator" (click)="openOperatingHoursModal()"><span class="fa fa-calculator" aria-hidden="true"></span></button>
+                  </span>
+                }
+                <input
+                  type="number"
+                  step="any"
+                  [attr.min]="section.section === 'operatingHours' ? 0 : null"
+                  class="form-control"
+                  id="{{ 'modification_' + section.section }}"
+                  [value]="section.modificationValue"
+                  (change)="setModificationValue(section.section, $any($event.target).valueAsNumber)"
+                />
+                <app-input-unit [settings]="settings()" [imperialUnit]="section.imperialUnit" [metricUnit]="section.metricUnit"></app-input-unit>
+              </div>
+              @if (section.warning) {
+                <span class="alert-warning pull-right small">{{ section.warning }}</span>
+              }
+            </div>
+          </form>
+        </li>
+      }
+    }
+  </ul>
+}
