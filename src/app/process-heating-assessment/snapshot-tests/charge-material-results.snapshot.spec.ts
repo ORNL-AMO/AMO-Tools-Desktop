@@ -18,7 +18,6 @@ import { Injector } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
 import { PHAST } from '../models/phast';
 import { LegacyModification, ProcessHeatingModification } from '../models/modification';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ProcessHeatingApiService } from '../../tools-suite-api/process-heating-api.service';
 import { deriveScenarioOverridesFromLegacyModification, ensureLossIdsForPhast, getEffectivePhast } from '../services/scenario-merge.util';
 import { ChargeMaterialResultsService } from '../heat-balance/losses/charge-material/charge-material-results.service';
@@ -44,7 +43,6 @@ describe('ChargeMaterialResultsService vs. legacy snapshot totalChargeMaterialLo
     const services = await buildPhastServices();
     const injector = Injector.create({
       providers: [
-        { provide: ConvertUnitsService, useValue: services.convertUnitsService },
         { provide: ProcessHeatingApiService, useValue: services.processHeatingApiService },
         { provide: ChargeMaterialResultsService, useClass: ChargeMaterialResultsService, deps: [] },
       ],

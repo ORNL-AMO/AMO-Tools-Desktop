@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -11,16 +11,14 @@ const settingsFor = (energyResultUnit: string) => ({ unitsOfMeasure: 'Imperial',
 describe('AuxiliaryPowerCalculationService', () => {
   let service: AuxiliaryPowerCalculationService;
   let apiSpy: jasmine.SpyObj<ProcessHeatingApiService>;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
     apiSpy = jasmine.createSpyObj('ProcessHeatingApiService', ['auxiliaryPowerLoss']);
     apiSpy.auxiliaryPowerLoss.and.returnValue(1000);
     TestBed.configureTestingModule({
-      providers: [AuxiliaryPowerCalculationService, ConvertUnitsService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
+      providers: [AuxiliaryPowerCalculationService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
     });
     service = TestBed.inject(AuxiliaryPowerCalculationService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('sends the loss to the suite and returns the Btu result unchanged', () => {
@@ -29,11 +27,11 @@ describe('AuxiliaryPowerCalculationService', () => {
   });
 
   it('converts Btu/hr to kW for kWh results', () => {
-    expect(service.calculate(LOSS, settingsFor('kWh'))).toBeCloseTo(convert.value(1000).from('btuhr').to('kW'), 6);
+    expect(service.calculate(LOSS, settingsFor('kWh'))).toBeCloseTo(new ConvertValue(1000, 'btuhr', 'kW').convertedValue, 6);
   });
 
   it('converts to other energy units from Btu', () => {
-    expect(service.calculate(LOSS, settingsFor('kJ'))).toBeCloseTo(convert.value(1000).from('Btu').to('kJ'), 6);
+    expect(service.calculate(LOSS, settingsFor('kJ'))).toBeCloseTo(new ConvertValue(1000, 'Btu', 'kJ').convertedValue, 6);
   });
 
   it('does not mutate the input loss', () => {

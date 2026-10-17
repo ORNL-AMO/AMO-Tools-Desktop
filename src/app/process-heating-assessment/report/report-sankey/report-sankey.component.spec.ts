@@ -1,7 +1,9 @@
-import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
+import { Component, Input, NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { Settings } from '../../../shared/models/settings';
 import { PHAST } from '../../../shared/models/phast/phast';
+import { SankeyScenarioPickerComponent } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
 import { ReportSankeyComponent } from './report-sankey.component';
 import { ReportSankeyResultsService, ReportSankeyUI } from './report-sankey-results.service';
 
@@ -55,7 +57,7 @@ describe('ReportSankeyComponent', () => {
   });
 
   it('lists every scenario as a picker option', () => {
-    expect(component.getOptions(ui()).map(option => option.name)).toEqual(['Baseline', 'Scenario 1']);
+    expect(component.pickerOptions().map(option => option.name)).toEqual(['Baseline', 'Scenario 1']);
   });
 
   it('defaults label style to both and switches it from the buttons', () => {
@@ -69,5 +71,28 @@ describe('ReportSankeyComponent', () => {
     ui.set(undefined);
     fixture.detectChanges();
     expect(pickers().length).toBe(0);
+  });
+});
+
+@Component({ selector: 'app-phast-sankey', template: '', standalone: false })
+class StubPhastSankeyComponent {
+  @Input() phast: PHAST;
+  @Input() settings: Settings;
+  @Input() labelStyle: string;
+}
+
+describe('ReportSankeyComponent with the shared scenario picker', () => {
+  it('renders without looping change detection', async () => {
+    TestBed.configureTestingModule({
+      declarations: [ReportSankeyComponent, SankeyScenarioPickerComponent, StubPhastSankeyComponent],
+      imports: [FormsModule],
+      providers: [{ provide: ReportSankeyResultsService, useValue: { reportSankeyUI: signal(buildUI()) } }],
+    });
+    const fixture = TestBed.createComponent(ReportSankeyComponent);
+
+    fixture.autoDetectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelectorAll('option').length).toBe(4);
   });
 });

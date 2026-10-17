@@ -14,6 +14,8 @@ import { GasLeakageOpportunityComponent } from './gas-leakage-opportunity/gas-le
 import { AirFuelRatioOpportunityComponent } from './air-fuel-ratio-opportunity/air-fuel-ratio-opportunity.component';
 import { PreheatCombustionAirOpportunityComponent } from './preheat-combustion-air-opportunity/preheat-combustion-air-opportunity.component';
 import { OperationsOpportunityComponent } from './operations-opportunity/operations-opportunity.component';
+import { SlagOpportunityComponent } from './slag-opportunity/slag-opportunity.component';
+import { HeatSystemEfficiencyOpportunityComponent } from './heat-system-efficiency-opportunity/heat-system-efficiency-opportunity.component';
 
 export interface OpportunityRegistration {
   component: Type<unknown>;
@@ -29,6 +31,8 @@ export interface OpportunityRegistryEntry {
 }
 
 const FUEL_FIRED_ONLY = [HeatingEquipmentConfiguration.FUEL_FIRED];
+const ELECTROTECHNOLOGY_EAF_ONLY = [HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF];
+const STEAM_CUSTOM_ONLY = [HeatingEquipmentConfiguration.STEAM, HeatingEquipmentConfiguration.CUSTOM_ELECTROTECHNOLOGY];
 
 /**
  * Opportunities shown in the Explore Opportunities shell, in render order.
@@ -48,5 +52,7 @@ export const OPPORTUNITY_REGISTRY: readonly OpportunityRegistryEntry[] = [
   { lossKey: 'openingLosses', opportunityComponents: [{ component: OpeningSizeOpportunityComponent }, { component: OpeningEmissivityOpportunityComponent }, { component: OpeningTimeOpenOpportunityComponent }] },
   { lossKey: 'leakageLosses', opportunityComponents: [{ component: GasLeakageOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
   { lossKey: 'flueGasLosses', opportunityComponents: [{ component: AirFuelRatioOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }, { component: PreheatCombustionAirOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
+  { lossKey: 'slagLosses', opportunityComponents: [{ component: SlagOpportunityComponent, heatingEquipmentConfigurations: ELECTROTECHNOLOGY_EAF_ONLY }] },
   { opportunityComponents: [{ component: OperationsOpportunityComponent }] },
+  { opportunityComponents: [{ component: HeatSystemEfficiencyOpportunityComponent, heatingEquipmentConfigurations: STEAM_CUSTOM_ONLY }] },
 ];

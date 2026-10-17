@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -15,16 +15,14 @@ const METRIC = { unitsOfMeasure: 'Metric', energyResultUnit: 'kJ' } as Settings;
 describe('GasLeakageCalculationService', () => {
   let service: GasLeakageCalculationService;
   let apiSpy: jasmine.SpyObj<ProcessHeatingApiService>;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
     apiSpy = jasmine.createSpyObj('ProcessHeatingApiService', ['leakageLosses']);
     apiSpy.leakageLosses.and.returnValue(1000);
     TestBed.configureTestingModule({
-      providers: [GasLeakageCalculationService, ConvertUnitsService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
+      providers: [GasLeakageCalculationService, { provide: ProcessHeatingApiService, useValue: apiSpy }],
     });
     service = TestBed.inject(GasLeakageCalculationService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('passes Imperial inputs to the suite unchanged and returns the Btu result', () => {
@@ -38,10 +36,10 @@ describe('GasLeakageCalculationService', () => {
     service.calculate(LOSS, METRIC);
 
     const sent = apiSpy.leakageLosses.calls.mostRecent().args[0];
-    expect(sent.draftPressure).toBeCloseTo(convert.value(0.1).from('Pa').to('inH2o'), 6);
-    expect(sent.openingArea).toBeCloseTo(convert.value(2).from('m2').to('ft2'), 6);
-    expect(sent.ambientTemperature).toBeCloseTo(convert.value(70).from('C').to('F'), 6);
-    expect(sent.leakageGasTemperature).toBeCloseTo(convert.value(1500).from('C').to('F'), 6);
+    expect(sent.draftPressure).toBeCloseTo(new ConvertValue(0.1, 'Pa', 'inH2o').convertedValue, 6);
+    expect(sent.openingArea).toBeCloseTo(new ConvertValue(2, 'm2', 'ft2').convertedValue, 6);
+    expect(sent.ambientTemperature).toBeCloseTo(new ConvertValue(70, 'C', 'F').convertedValue, 6);
+    expect(sent.leakageGasTemperature).toBeCloseTo(new ConvertValue(1500, 'C', 'F').convertedValue, 6);
   });
 
   it('does not mutate the input loss', () => {
@@ -55,7 +53,7 @@ describe('GasLeakageCalculationService', () => {
   it('converts the result to the requested energy unit', () => {
     const result = service.calculate(LOSS, { unitsOfMeasure: 'Imperial', energyResultUnit: 'kWh' } as Settings);
 
-    expect(result).toBeCloseTo(convert.value(1000).from('Btu').to('kWh'), 6);
+    expect(result).toBeCloseTo(new ConvertValue(1000, 'Btu', 'kWh').convertedValue, 6);
   });
 
   it('returns 0 when the suite returns NaN', () => {

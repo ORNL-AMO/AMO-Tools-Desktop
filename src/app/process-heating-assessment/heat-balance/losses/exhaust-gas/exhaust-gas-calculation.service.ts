@@ -1,22 +1,21 @@
 import { inject, Injectable } from '@angular/core';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { ExhaustGasEAF } from '../../../../shared/models/phast/losses/exhaustGasEAF';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
 
 @Injectable()
 export class ExhaustGasCalculationService {
-  private readonly convertUnitsService = inject(ConvertUnitsService);
   private readonly processHeatingApiService = inject(ProcessHeatingApiService);
 
   calculate(input: ExhaustGasEAF, settings: Settings): number {
     const inputs: ExhaustGasEAF = { ...input };
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.offGasTemp = this.convertUnitsService.value(inputs.offGasTemp).from('C').to('F');
-      inputs.vfr = this.convertUnitsService.value(inputs.vfr).from('m3').to('ft3');
-      inputs.dustLoading = this.convertUnitsService.value(inputs.dustLoading).from('kgNm3').to('lbscf');
+      inputs.offGasTemp = new ConvertValue(inputs.offGasTemp, 'C', 'F').convertedValue;
+      inputs.vfr = new ConvertValue(inputs.vfr, 'm3', 'ft3').convertedValue;
+      inputs.dustLoading = new ConvertValue(inputs.dustLoading, 'kgNm3', 'lbscf').convertedValue;
     }
     const result = this.processHeatingApiService.exhaustGasEAF(inputs);
-    return isNaN(result) ? 0 : this.convertUnitsService.value(result).from('Btu').to(settings.energyResultUnit);
+    return isNaN(result) ? 0 : new ConvertValue(result, 'Btu', settings.energyResultUnit).convertedValue;
   }
 }
