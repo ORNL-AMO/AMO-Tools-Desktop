@@ -13,7 +13,6 @@ import { FlueGas } from '../../shared/models/phast/losses/flueGas';
 import { SolidLiquidFlueGasMaterial } from '../../shared/models/materials';
 import { PhastResults, PHAST } from '../../shared/models/phast/phast';
 import { Settings } from '../../shared/models/settings';
-import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
 import { ProcessHeatingApiService } from '../../tools-suite-api/process-heating-api.service';
 import { FlueGasCalculationService } from '../heat-balance/losses/flue-gas/flue-gas-calculation.service';
 import { buildPhastServices, PhastServices } from './snapshot.helper';
@@ -57,7 +56,6 @@ describe('Flue gas By Mass vs. legacy results', () => {
     services = await buildPhastServices({ solidLiquidMaterialDbService: { getById: () => MATERIAL } });
     const injector = Injector.create({
       providers: [
-        { provide: ConvertUnitsService, useValue: services.convertUnitsService },
         { provide: ProcessHeatingApiService, useValue: services.processHeatingApiService },
         { provide: FlueGasCalculationService, useClass: FlueGasCalculationService, deps: [] },
       ],

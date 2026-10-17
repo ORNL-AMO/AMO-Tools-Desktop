@@ -5,16 +5,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, concatMap, debounceTime, EMPTY, firstValueFrom, from } from 'rxjs';
 import { PHAST } from '../models/phast';
 import { Settings } from '../../shared/models/settings';
-import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { SettingsService } from '../../settings/settings.service';
+import { ModalDialogService } from '../../shared/modal-dialog.service';
+import { SnackbarService } from '../../shared/snackbar-notification/snackbar.service';
+import { UnitsChangeAction, UnitsChangeDialogComponent, UnitsChangeDialogData } from '../../shared/units-change-dialog/units-change-dialog.component';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
-
-// TODO Step N: When settings change units of measure (Imperial ↔ Metric), existing loss values stored
-// on the assessment need to be converted to the new unit system before being persisted — the same
-// conversion logic the old PHAST ran on every settings save. Wire that conversion here once the
-// loss forms exist (Step 6+), keying off the old vs. new unitsOfMeasure value.
-
-// TODO StepN.2: Db save should be changed
 
 interface AssessmentSettingsMetaForm {
   facilityName: FormControl<string>;
@@ -33,7 +28,8 @@ interface AssessmentSettingsMetaForm {
 export class AssessmentSettingsComponent {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
   private readonly settingsService = inject(SettingsService);
-  private readonly settingsDbService = inject(SettingsDbService);
+  private readonly modalDialogService = inject(ModalDialogService);
+  private readonly snackbarService = inject(SnackbarService);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -86,14 +82,48 @@ export class AssessmentSettingsComponent {
     newSettings.id = current.id;
     newSettings.createdDate = current.createdDate;
     newSettings.assessmentId = current.assessmentId;
-    newSettings.facilityInfo = current.facilityInfo;
-    await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
-    const allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(allSettings);
+
+    let convertData = true;
+    if (newSettings.unitsOfMeasure !== current.unitsOfMeasure) {
+      const action = await this.confirmUnitsChange(current.unitsOfMeasure, newSettings.unitsOfMeasure);
+      if (!action) {
+        // Switching units also rewrites dependent fields (energy and rollup units), so restore the whole form.
+        this.settingsForm.patchValue(this.settingsService.getFormFromSettings(current).getRawValue());
+        return;
+      }
+      convertData = action === 'convert';
+    }
+    // Read after the modal closes so a metadata save that landed while it was open is kept.
+    newSettings.facilityInfo = this.settings().facilityInfo;
+
     this.lastWrittenSettings = newSettings;
-    this.assessmentService.setSettings(newSettings);
+    const valuesConverted = await this.assessmentService.saveSettings(newSettings, convertData);
+    if (valuesConverted) {
+      this.notifyConversion(current, newSettings);
+    }
   }
 
+  private notifyConversion(current: Settings, newSettings: Settings): void {
+    let message: string | undefined;
+    if (newSettings.unitsOfMeasure !== current.unitsOfMeasure) {
+      message = `Values converted from ${current.unitsOfMeasure} to ${newSettings.unitsOfMeasure}.`;
+    } else if (newSettings.energyResultUnit !== current.energyResultUnit) {
+      message = `Values converted from ${current.energyResultUnit} to ${newSettings.energyResultUnit}.`;
+    }
+    if (message) {
+      this.snackbarService.setSnackbarMessage(message, 'info', 'short');
+    }
+  }
+
+  /**
+   * @returns The chosen action, or `undefined` when the user cancels.
+   */
+  private confirmUnitsChange(fromUnits: string, toUnits: string): Promise<UnitsChangeAction | undefined> {
+    const dialogRef = this.modalDialogService.openModal<UnitsChangeAction, UnitsChangeDialogData, UnitsChangeDialogComponent>(
+      UnitsChangeDialogComponent, { data: { fromUnits, toUnits } },
+    );
+    return firstValueFrom(dialogRef.closed);
+  }
 
   private async saveMetaData(): Promise<void> {
     const { facilityName, contactName, equipmentNotes, operatingConditions } = this.metaForm.getRawValue();
@@ -110,11 +140,8 @@ export class AssessmentSettingsComponent {
         },
       },
     };
-    await firstValueFrom(this.settingsDbService.updateWithObservable(newSettings));
-    const allSettings = await firstValueFrom(this.settingsDbService.getAllSettings());
-    this.settingsDbService.setAll(allSettings);
     this.lastWrittenSettings = newSettings;
-    this.assessmentService.setSettings(newSettings);
+    await this.assessmentService.saveSettings(newSettings);
 
     const phast = this.processHeating();
     this.assessmentService.setProcessHeating({

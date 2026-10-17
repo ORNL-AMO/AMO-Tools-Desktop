@@ -1,0 +1,26 @@
+<div class="modal-header">
+  <h4 class="modal-title">Switching from {{ data.fromUnits }} to {{ data.toUnits }}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body p-4">
+  <p class="mb-2">What units are your existing values in?</p>
+
+  <div class="d-flex align-items-center border rounded p-2 mb-2">
+    <span class="small flex-grow-1 mr-3">{{ data.fromUnits }}</span>
+    <button type="button" class="btn btn-sm btn-primary text-nowrap" style="min-width: 12rem" (click)="close('convert')">Convert data to {{ data.toUnits }}</button>
+  </div>
+  <div class="d-flex align-items-center border rounded p-2">
+    <div class="small flex-grow-1 mr-3">
+      <div>{{ data.toUnits }} (keep the numbers as entered)</div>
+      <div class="alert alert-warning text-left py-1 px-2 mt-1 mb-0" style="font-size: 0.75rem">
+        Note: Values filled in from the material database were in {{ data.fromUnits }} and will now be labeled {{ data.toUnits }}, so they will show "Differs from database".
+      </div>
+    </div>
+    <button type="button" class="btn btn-sm btn-primary text-nowrap" style="min-width: 12rem" (click)="close('relabel')">Change labels only</button>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-white" (click)="close()">Cancel</button>
+</div>

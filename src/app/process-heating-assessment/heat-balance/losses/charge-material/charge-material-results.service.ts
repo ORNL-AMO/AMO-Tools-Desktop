@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { Settings } from '../../../../shared/models/settings';
 import {
   ChargeMaterial,
@@ -18,7 +18,6 @@ export interface ChargeMaterialResultEntry {
 
 @Injectable()
 export class ChargeMaterialResultsService {
-  private readonly convertUnitsService = inject(ConvertUnitsService);
   private readonly processHeatingApiService = inject(ProcessHeatingApiService);
 
   getResults(entries: ChargeMaterialResultEntry[], settings: Settings): ChargeMaterialResult[] {
@@ -36,13 +35,13 @@ export class ChargeMaterialResultsService {
   private gasResult(input: GasChargeMaterial, settings: Settings): ChargeMaterialResult {
     const inputs = this.createInputCopy(input);
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
-      inputs.dischargeTemperature = this.convertUnitsService.value(inputs.dischargeTemperature).from('C').to('F');
-      inputs.feedRate = this.convertUnitsService.value(inputs.feedRate).from('kg').to('lb');
-      inputs.reactionHeat = this.convertUnitsService.value(inputs.reactionHeat).from('kJkg').to('btuLb');
-      inputs.additionalHeat = this.convertUnitsService.value(inputs.additionalHeat).from('kJ').to('Btu');
-      inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulbF');
-      inputs.specificHeatGas = this.convertUnitsService.value(inputs.specificHeatGas).from('kJkgC').to('btulbF');
+      inputs.initialTemperature = new ConvertValue(inputs.initialTemperature, 'C', 'F').convertedValue;
+      inputs.dischargeTemperature = new ConvertValue(inputs.dischargeTemperature, 'C', 'F').convertedValue;
+      inputs.feedRate = new ConvertValue(inputs.feedRate, 'kg', 'lb').convertedValue;
+      inputs.reactionHeat = new ConvertValue(inputs.reactionHeat, 'kJkg', 'btuLb').convertedValue;
+      inputs.additionalHeat = new ConvertValue(inputs.additionalHeat, 'kJ', 'Btu').convertedValue;
+      inputs.specificHeatVapor = new ConvertValue(inputs.specificHeatVapor, 'kJkgC', 'btulbF').convertedValue;
+      inputs.specificHeatGas = new ConvertValue(inputs.specificHeatGas, 'kJkgC', 'btulbF').convertedValue;
     }
     const netHeatLoss = this.convertResult(this.processHeatingApiService.gasLoadChargeMaterial(inputs), settings.energyResultUnit);
     return this.assembleResult(input, netHeatLoss, inputs.feedRate, inputs.reactionHeat, input.percentReacted, settings.energyResultUnit);
@@ -51,15 +50,15 @@ export class ChargeMaterialResultsService {
   private liquidResult(input: LiquidChargeMaterial, settings: Settings): ChargeMaterialResult {
     const inputs = this.createInputCopy(input);
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.vaporizingTemperature = this.convertUnitsService.value(inputs.vaporizingTemperature).from('C').to('F');
-      inputs.latentHeat = this.convertUnitsService.value(inputs.latentHeat).from('kJkg').to('btuLb');
-      inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
-      inputs.dischargeTemperature = this.convertUnitsService.value(inputs.dischargeTemperature).from('C').to('F');
-      inputs.chargeFeedRate = this.convertUnitsService.value(inputs.chargeFeedRate).from('kg').to('lb');
-      inputs.reactionHeat = this.convertUnitsService.value(inputs.reactionHeat).from('kJkg').to('btuLb');
-      inputs.additionalHeat = this.convertUnitsService.value(inputs.additionalHeat).from('kJ').to('Btu');
-      inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulbF');
-      inputs.specificHeatVapor = this.convertUnitsService.value(inputs.specificHeatVapor).from('kJkgC').to('btulbF');
+      inputs.vaporizingTemperature = new ConvertValue(inputs.vaporizingTemperature, 'C', 'F').convertedValue;
+      inputs.latentHeat = new ConvertValue(inputs.latentHeat, 'kJkg', 'btuLb').convertedValue;
+      inputs.initialTemperature = new ConvertValue(inputs.initialTemperature, 'C', 'F').convertedValue;
+      inputs.dischargeTemperature = new ConvertValue(inputs.dischargeTemperature, 'C', 'F').convertedValue;
+      inputs.chargeFeedRate = new ConvertValue(inputs.chargeFeedRate, 'kg', 'lb').convertedValue;
+      inputs.reactionHeat = new ConvertValue(inputs.reactionHeat, 'kJkg', 'btuLb').convertedValue;
+      inputs.additionalHeat = new ConvertValue(inputs.additionalHeat, 'kJ', 'Btu').convertedValue;
+      inputs.specificHeatLiquid = new ConvertValue(inputs.specificHeatLiquid, 'kJkgC', 'btulbF').convertedValue;
+      inputs.specificHeatVapor = new ConvertValue(inputs.specificHeatVapor, 'kJkgC', 'btulbF').convertedValue;
     }
     const netHeatLoss = this.convertResult(this.processHeatingApiService.liquidLoadChargeMaterial(inputs), settings.energyResultUnit);
     return this.assembleResult(input, netHeatLoss, inputs.chargeFeedRate, inputs.reactionHeat, input.percentReacted, settings.energyResultUnit);
@@ -68,16 +67,16 @@ export class ChargeMaterialResultsService {
   private solidResult(input: SolidChargeMaterial, settings: Settings): ChargeMaterialResult {
     const inputs = this.createInputCopy(input);
     if (settings.unitsOfMeasure === 'Metric') {
-      inputs.meltingPoint = this.convertUnitsService.value(inputs.meltingPoint).from('C').to('F');
-      inputs.initialTemperature = this.convertUnitsService.value(inputs.initialTemperature).from('C').to('F');
-      inputs.dischargeTemperature = this.convertUnitsService.value(inputs.dischargeTemperature).from('C').to('F');
-      inputs.waterVaporDischargeTemperature = this.convertUnitsService.value(inputs.waterVaporDischargeTemperature).from('C').to('F');
-      inputs.chargeFeedRate = this.convertUnitsService.value(inputs.chargeFeedRate).from('kg').to('lb');
-      inputs.reactionHeat = this.convertUnitsService.value(inputs.reactionHeat).from('kJkg').to('btuLb');
-      inputs.additionalHeat = this.convertUnitsService.value(inputs.additionalHeat).from('kJ').to('Btu');
-      inputs.specificHeatLiquid = this.convertUnitsService.value(inputs.specificHeatLiquid).from('kJkgC').to('btulbF');
-      inputs.specificHeatSolid = this.convertUnitsService.value(inputs.specificHeatSolid).from('kJkgC').to('btulbF');
-      inputs.latentHeat = this.convertUnitsService.value(inputs.latentHeat).from('kJkg').to('btuLb');
+      inputs.meltingPoint = new ConvertValue(inputs.meltingPoint, 'C', 'F').convertedValue;
+      inputs.initialTemperature = new ConvertValue(inputs.initialTemperature, 'C', 'F').convertedValue;
+      inputs.dischargeTemperature = new ConvertValue(inputs.dischargeTemperature, 'C', 'F').convertedValue;
+      inputs.waterVaporDischargeTemperature = new ConvertValue(inputs.waterVaporDischargeTemperature, 'C', 'F').convertedValue;
+      inputs.chargeFeedRate = new ConvertValue(inputs.chargeFeedRate, 'kg', 'lb').convertedValue;
+      inputs.reactionHeat = new ConvertValue(inputs.reactionHeat, 'kJkg', 'btuLb').convertedValue;
+      inputs.additionalHeat = new ConvertValue(inputs.additionalHeat, 'kJ', 'Btu').convertedValue;
+      inputs.specificHeatLiquid = new ConvertValue(inputs.specificHeatLiquid, 'kJkgC', 'btulbF').convertedValue;
+      inputs.specificHeatSolid = new ConvertValue(inputs.specificHeatSolid, 'kJkgC', 'btulbF').convertedValue;
+      inputs.latentHeat = new ConvertValue(inputs.latentHeat, 'kJkg', 'btuLb').convertedValue;
     }
     const netHeatLoss = this.convertResult(this.processHeatingApiService.solidLoadChargeMaterial(inputs), settings.energyResultUnit);
     const waterContentFactor = 1 - (inputs.waterContentCharged ?? 0) / 100;
@@ -94,7 +93,7 @@ export class ChargeMaterialResultsService {
   ): ChargeMaterialResult {
     const isEndothermic = input.thermicReactionType === ThermicReactionType.Endothermic;
     const reactionFraction = isEndothermic ? percentReacted / 100 : -percentReacted / 100;
-    const endoExoHeat = this.convertUnitsService.value(reactionFraction * feedRate * reactionHeat).from('Btu').to(energyResultUnit);
+    const endoExoHeat = new ConvertValue(reactionFraction * feedRate * reactionHeat, 'Btu', energyResultUnit).convertedValue;
     const grossHeatLoss = isEndothermic ? netHeatLoss : netHeatLoss + endoExoHeat;
     return {
       netHeatLoss: isEndothermic ? netHeatLoss - endoExoHeat : netHeatLoss,
@@ -108,6 +107,6 @@ export class ChargeMaterialResultsService {
   }
 
   private convertResult(value: number, toUnit: string): number {
-    return isNaN(value) ? 0 : this.convertUnitsService.value(value).from('Btu').to(toUnit);
+    return isNaN(value) ? 0 : new ConvertValue(value, 'Btu', toUnit).convertedValue;
   }
 }

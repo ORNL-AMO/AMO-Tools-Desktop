@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingApiService } from '../../../../tools-suite-api/process-heating-api.service';
@@ -14,7 +14,6 @@ export interface FlueGasAvailableHeatResult {
 
 @Injectable()
 export class FlueGasCalculationService {
-  private readonly convertUnitsService = inject(ConvertUnitsService);
   private readonly processHeatingApiService = inject(ProcessHeatingApiService);
 
   calculateByVolume(input: FlueGasByVolume, settings: Settings): FlueGasAvailableHeatResult {
@@ -81,7 +80,7 @@ export class FlueGasCalculationService {
   }
 
   private toFahrenheit(celsius: number): number {
-    return this.convertUnitsService.value(celsius).from('C').to('F');
+    return new ConvertValue(celsius, 'C', 'F').convertedValue;
   }
 
   private toPercent(fraction: number): number {

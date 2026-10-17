@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { ConvertValue } from '../../../../shared/convert-units/ConvertValue';
 import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { Settings } from '../../../../shared/models/settings';
 import { EnergyInputExhaustGasCalculationService } from './energy-input-exhaust-gas-calculation.service';
@@ -10,12 +10,10 @@ const METRIC = { unitsOfMeasure: 'Metric', energyResultUnit: 'kJ' } as Settings;
 
 describe('EnergyInputExhaustGasCalculationService', () => {
   let service: EnergyInputExhaustGasCalculationService;
-  let convert: ConvertUnitsService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({ providers: [EnergyInputExhaustGasCalculationService, ConvertUnitsService] });
+    TestBed.configureTestingModule({ providers: [EnergyInputExhaustGasCalculationService] });
     service = TestBed.inject(EnergyInputExhaustGasCalculationService);
-    convert = TestBed.inject(ConvertUnitsService);
   });
 
   it('computes fuel heat delivered and exhaust gas losses from MMBtu in Imperial', () => {
@@ -36,8 +34,8 @@ describe('EnergyInputExhaustGasCalculationService', () => {
   it('treats total heat input as GJ in Metric and converts results to the energy unit', () => {
     const result = service.calculate(LOSS, METRIC);
 
-    const deliveredBtu = convert.value(10).from('GJ').to('Btu') * 0.8;
-    expect(result.fuelHeatDelivered).toBeCloseTo(convert.value(deliveredBtu).from('Btu').to('kJ'), 3);
+    const deliveredBtu = new ConvertValue(10, 'GJ', 'Btu').convertedValue * 0.8;
+    expect(result.fuelHeatDelivered).toBeCloseTo(new ConvertValue(deliveredBtu, 'Btu', 'kJ').convertedValue, 3);
   });
 
   it('has no exhaust gas losses at 100% available heat', () => {
