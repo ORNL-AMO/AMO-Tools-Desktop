@@ -20,6 +20,19 @@ const getLoadFactorError = (loadFactor: number): string | undefined => {
         : undefined;
 };
 
+const getSystemEfficiencyError = (systemEfficiency: number): string | undefined => {
+    if (systemEfficiency === undefined || systemEfficiency === null) {
+        return undefined;
+    }
+    if (systemEfficiency <= 0) {
+        return 'Value must be greater than 0 %';
+    }
+    if (systemEfficiency > 100) {
+        return "Value can't be greater than 100 %";
+    }
+    return undefined;
+};
+
 interface HeatEnergyErrors {
     outgoingTemp?: string,
     heaterEfficiency?: string,
@@ -362,6 +375,8 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                                     fullWidth
                                     margin="normal"
                                     value={motor.systemEfficiency ?? ''}
+                                    error={Boolean(getSystemEfficiencyError(motor.systemEfficiency))}
+                                    helperText={getSystemEfficiencyError(motor.systemEfficiency)}
                                     onChange={(e) => handleMotorEnergyChange(index, 'systemEfficiency', toNumberOrUndefined(e.target.value))}
                                     slotProps={{ input: { endAdornment: <InputAdornment position="end">%</InputAdornment> } }}
                                 />

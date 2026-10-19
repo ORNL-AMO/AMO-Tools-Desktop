@@ -76,10 +76,10 @@
         <span class="alert-danger pull-right small"
             *ngIf="form.controls.systemEfficiency.invalid && !form.controls.systemEfficiency.pristine">
             <span *ngIf="form.controls.systemEfficiency.errors.required">Value Required</span>
-            <span *ngIf="form.controls.systemEfficiency.errors.min">Value can't be less than
-                {{form.controls.systemEfficiency.errors.min.min}} </span>
+            <span *ngIf="form.controls.systemEfficiency.errors.greaterThan !== undefined">Value must be greater than
+                {{form.controls.systemEfficiency.errors.greaterThan}} %</span>
             <span *ngIf="form.controls.systemEfficiency.errors.max">Value can't be greater than
-                {{form.controls.systemEfficiency.errors.max.max}}</span>
+                {{form.controls.systemEfficiency.errors.max.max}} %</span>
         </span>
     </div>
 </form>
