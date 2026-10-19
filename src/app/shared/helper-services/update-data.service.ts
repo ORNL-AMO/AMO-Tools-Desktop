@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { Diagram } from '../models/diagram';
-import { FlowDiagramData, migrateFlowDiagramFieldNames } from 'process-flow-lib';
+import { FlowDiagramData, migrateFlowDiagramFieldNames, migrateInapplicableNodeTotals } from 'process-flow-lib';
 import { SSMT } from '../models/steam/ssmt';
 import { AirLeakSurveyTreasureHunt, CompressedAirPressureReductionTreasureHunt, CompressedAirReductionTreasureHunt, ElectricityReductionTreasureHunt, HeatCascadingTreasureHunt, LightingReplacementTreasureHunt, PowerFactorCorrectionTreasureHunt, Treasure } from '../models/treasure-hunt';
 import { LightingReplacementData } from '../models/lighting';
@@ -67,6 +67,7 @@ export class UpdateDataService {
         const flowDiagramData: FlowDiagramData = diagram.waterDiagram?.flowDiagramData;
         if (flowDiagramData) {
             migrateFlowDiagramFieldNames(flowDiagramData);
+            migrateInapplicableNodeTotals(flowDiagramData);
         }
         return diagram;
     }
