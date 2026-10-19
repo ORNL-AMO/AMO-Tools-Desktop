@@ -12,7 +12,7 @@ import {
   applyEstimatedFlowResultsReducer,
   edgesChangeFromPropagationReducer,
 } from './flowCalculationReducers';
-import { WaterProcessComponentType, DiagramMetaData, ProcessFlowPart, DiagramSettings, UserDiagramOptions, DiagramCalculatedData, ParentContainerDimensions, DiagramFlowErrors, getDefaultUserDiagramOptions, getDefaultColorPalette, FlowDiagramData, CustomEdgeData, checkDiagramNodeErrors, getContrastTextColor, WaterTreatment, NodeFlowProperty, FlowConfidence, Handles, getEdgeFromConnection, ConvertValueFn, convertFlowDiagramData, WaterSystemResults, getConnectionFromEdgeId, migrateFlowDiagramFieldNames, getDefaultFlowConfidence, ProcessFlowNodeType, getEdgeDescription, DEFAULT_EDGE_STROKE_COLOR, getDefaultSettings } from 'process-flow-lib';
+import { WaterProcessComponentType, DiagramMetaData, ProcessFlowPart, DiagramSettings, UserDiagramOptions, DiagramCalculatedData, ParentContainerDimensions, DiagramFlowErrors, getDefaultUserDiagramOptions, getDefaultColorPalette, FlowDiagramData, CustomEdgeData, checkDiagramNodeErrors, getContrastTextColor, WaterTreatment, NodeFlowProperty, FlowConfidence, Handles, getEdgeFromConnection, ConvertValueFn, convertFlowDiagramData, WaterSystemResults, getConnectionFromEdgeId, migrateFlowDiagramFieldNames, migrateInapplicableNodeTotals, getDefaultFlowConfidence, ProcessFlowNodeType, getEdgeDescription, DEFAULT_EDGE_STROKE_COLOR, getDefaultSettings } from 'process-flow-lib';
 import { createNewNode, ensureFlowTotalTouched, getNodeTargetEdges, mirrorSingleEdgeConfidenceToTotal, getNodeSourceEdges, formatDataForMEASUR } from './FlowUtils';
 
 import packageJson from '../../../package.json';
@@ -695,6 +695,7 @@ const upgradeDiagram = (diagramData: FlowDiagramData, appVersion?: string) => {
   upgradeNodeData(diagramData);
   upgradeEdgeData(diagramData);
   migrateFlowDiagramFieldNames(diagramData);
+  migrateInapplicableNodeTotals(diagramData);
 
   diagramData.meta.upgrades.push({
     fromVersion,
