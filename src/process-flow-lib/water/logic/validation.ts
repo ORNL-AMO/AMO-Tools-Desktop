@@ -224,53 +224,55 @@ export const checkDiagramNodeErrors = (nodes: Node[], allEdges: Edge[], settings
         const { totalCalculatedSourceFlow: calculatedSourceFlow, totalCalculatedDischargeFlow: calculatedDischargeFlow } =
             getNodeFlowTotals([...componentSourceEdges, ...componentDischargeEdges], nodes as Node<ProcessFlowPart>[], nd.data.diagramNodeId);
 
-        // * Source errors
-        const sourceResult: FlowValidationResult = validateFlowSection({
-            totalFlow: nd.data.userEnteredData.totalSourceFlow,
-            edges: componentSourceEdges as Edge<CustomEdgeData>[],
-            calculatedTotal: calculatedSourceFlow,
-            unaccountedFlow: nd.data.userEnteredData.dischargeUnaccounted,
-            componentType: nd.data.processComponentType,
-            flowDirection: 'source',
-            precision: settings.flowDecimalPrecision,
-        });
-        const sourceErrors: FlowErrors = {
-            totalFlow: sourceResult.totalFlowError,
-            flows: sourceResult.edgeErrors,
-            knownLosses: sourceResult.knownLossesError,
-            level: sourceResult.level,
-        };
-        const sourceErrorsExist: boolean = getFlowTypeErrorsExist(sourceErrors);
-        if (sourceErrorsExist) {
-            setFlowErrors(diagramFlowErrors, nd.id, 'source', sourceErrors);
-        } else if (diagramFlowErrors[nd.id]) {
-            removeFlowErrors(diagramFlowErrors, nd.id, 'source');
+        if (!nd.data.disableInflowConnections) {
+            const sourceResult: FlowValidationResult = validateFlowSection({
+                totalFlow: nd.data.userEnteredData.totalSourceFlow,
+                edges: componentSourceEdges as Edge<CustomEdgeData>[],
+                calculatedTotal: calculatedSourceFlow,
+                unaccountedFlow: nd.data.userEnteredData.dischargeUnaccounted,
+                componentType: nd.data.processComponentType,
+                flowDirection: 'source',
+                precision: settings.flowDecimalPrecision,
+            });
+            const sourceErrors: FlowErrors = {
+                totalFlow: sourceResult.totalFlowError,
+                flows: sourceResult.edgeErrors,
+                knownLosses: sourceResult.knownLossesError,
+                level: sourceResult.level,
+            };
+            const sourceErrorsExist: boolean = getFlowTypeErrorsExist(sourceErrors);
+            if (sourceErrorsExist) {
+                setFlowErrors(diagramFlowErrors, nd.id, 'source', sourceErrors);
+            } else if (diagramFlowErrors[nd.id]) {
+                removeFlowErrors(diagramFlowErrors, nd.id, 'source');
+            }
         }
 
-        // * Discharge errors
-        const sumKnownLossEdges: number = getKnownLossComponentTotals(componentDischargeEdges as Edge<CustomEdgeData>[], nodes as Node<ProcessFlowPart>[], nd.data.diagramNodeId);
-        const dischargeResult: FlowValidationResult = validateFlowSection({
-            totalFlow: nd.data.userEnteredData.totalDischargeFlow,
-            edges: componentDischargeEdges as Edge<CustomEdgeData>[],
-            calculatedTotal: calculatedDischargeFlow,
-            unaccountedFlow: nd.data.userEnteredData.intakeUnaccounted,
-            componentType: nd.data.processComponentType,
-            flowDirection: 'discharge',
-            precision: settings.flowDecimalPrecision,
-            sumKnownLossEdges,
-            userKnownLosses: nd.data.userEnteredData.totalKnownLosses,
-        });
-        const dischargeErrors: FlowErrors = {
-            totalFlow: dischargeResult.totalFlowError,
-            flows: dischargeResult.edgeErrors,
-            knownLosses: dischargeResult.knownLossesError,
-            level: dischargeResult.level,
-        };
-        const dischargeErrorsExist: boolean = getFlowTypeErrorsExist(dischargeErrors);
-        if (dischargeErrorsExist) {
-            setFlowErrors(diagramFlowErrors, nd.id, 'discharge', dischargeErrors);
-        } else if (diagramFlowErrors[nd.id]) {
-            removeFlowErrors(diagramFlowErrors, nd.id, 'discharge');
+        if (!nd.data.disableOutflowConnections) {
+            const sumKnownLossEdges: number = getKnownLossComponentTotals(componentDischargeEdges as Edge<CustomEdgeData>[], nodes as Node<ProcessFlowPart>[], nd.data.diagramNodeId);
+            const dischargeResult: FlowValidationResult = validateFlowSection({
+                totalFlow: nd.data.userEnteredData.totalDischargeFlow,
+                edges: componentDischargeEdges as Edge<CustomEdgeData>[],
+                calculatedTotal: calculatedDischargeFlow,
+                unaccountedFlow: nd.data.userEnteredData.intakeUnaccounted,
+                componentType: nd.data.processComponentType,
+                flowDirection: 'discharge',
+                precision: settings.flowDecimalPrecision,
+                sumKnownLossEdges,
+                userKnownLosses: nd.data.userEnteredData.totalKnownLosses,
+            });
+            const dischargeErrors: FlowErrors = {
+                totalFlow: dischargeResult.totalFlowError,
+                flows: dischargeResult.edgeErrors,
+                knownLosses: dischargeResult.knownLossesError,
+                level: dischargeResult.level,
+            };
+            const dischargeErrorsExist: boolean = getFlowTypeErrorsExist(dischargeErrors);
+            if (dischargeErrorsExist) {
+                setFlowErrors(diagramFlowErrors, nd.id, 'discharge', dischargeErrors);
+            } else if (diagramFlowErrors[nd.id]) {
+                removeFlowErrors(diagramFlowErrors, nd.id, 'discharge');
+            }
         }
     });
 
