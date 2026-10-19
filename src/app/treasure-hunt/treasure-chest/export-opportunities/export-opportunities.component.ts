@@ -29,6 +29,7 @@ export class ExportOpportunitiesComponent implements OnInit {
   treasureHuntSub: Subscription;
   exportName: string = 'Opportunites Data';
   includeUnselected: boolean = false;
+  hasUnselectedOpportunities: boolean = false;
   previewSections: Array<ExportPreviewSection> = [
     { label: 'Lighting Replacements', key: 'lightingReplacements', fallbackName: 'Lighting Replacement' },
     { label: 'Motor Replacements', key: 'replaceExistingMotors', fallbackName: 'Replace Motor' },
@@ -71,6 +72,10 @@ export class ExportOpportunitiesComponent implements OnInit {
   ngOnInit() {
     this.treasureHuntSub = this.treasureHuntService.treasureHunt.subscribe(val => {
       this.treasureHunt = val;
+      this.hasUnselectedOpportunities = this.previewSections.some(section => {
+        const opportunities: Array<TreasureHuntOpportunity> = this.treasureHunt?.[section.key];
+        return opportunities?.some(opportunity => !opportunity.selected);
+      });
     });
   }
 
