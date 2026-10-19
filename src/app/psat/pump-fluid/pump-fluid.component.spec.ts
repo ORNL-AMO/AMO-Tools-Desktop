@@ -216,6 +216,19 @@ describe('PumpFluidComponent', () => {
       expect(component.fluidTypes.length).toBeGreaterThan(0);
     });
 
+    it('renders Stages in the Pump section before Fluid', () => {
+      component.inSetup = true;
+      fixture.detectChanges();
+
+      const headers = Array.from(fixture.nativeElement.querySelectorAll('h3')) as HTMLElement[];
+      const stagesLabel = fixture.nativeElement.querySelector('label[for="stages_psat_baseline"]') as HTMLElement;
+
+      expect(headers[0].textContent).toContain('Pump');
+      expect(headers[0].compareDocumentPosition(stagesLabel) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(stagesLabel.compareDocumentPosition(headers[1]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(headers[1].textContent).toContain('Fluid');
+    });
+
     it('calls getFormFromObj with the psat inputs and assigns the returned form', () => {
       expect(pumpFluidServiceSpy.getFormFromObj).toHaveBeenCalledWith(mockPsat.inputs);
       expect(component.psatForm).toBeDefined();
