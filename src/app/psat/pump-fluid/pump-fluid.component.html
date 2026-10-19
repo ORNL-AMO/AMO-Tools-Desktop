@@ -151,42 +151,41 @@
               }
             </div>
           }
+      <div class="form-group"
+        [ngClass]="{'indicate-different': isStagesDifferent(), 'invalid': psatForm.controls.stages.invalid}">
+        <label for="{{'stages_'+idString}}">Stages</label>
+        <div name="stages" class="incrementor form-control input-group">
+          <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('stages')">
+            <i class="fa fa-minus"></i>
+          </button>
+          <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')">
+            <i class="fa fa-plus"></i>
+          </button>
+          <input type="number" step="1" class="form-control" formControlName="stages"
+            id="{{'stages_'+idString}}" (input)="save()" (focus)="focusField('stages')" onfocus="this.select();">
         </div>
+        @if (psatForm.controls.stages.invalid && !psatForm.controls.stages.pristine) {
+          <span class="alert-danger pull-right small">
+            @if (psatForm.controls.stages.errors.required) {
+              <span>Value Required</span>
+            }
+            @if (psatForm.controls.stages.errors.min) {
+              <span>Value can't be less than
+              {{psatForm.controls.stages.errors.min.min}}.</span>
+            }
+            @if (psatForm.controls.stages.errors.notWholeNumber) {
+              <span>{{notWholeNumberMsg}}</span>
+            }
+          </span>
+        }
 
-        <div class="form-group"
-          [ngClass]="{'indicate-different': isStagesDifferent(), 'invalid': psatForm.controls.stages.invalid}">
-          <label for="{{'stages_'+idString}}">Stages</label>
-          <div name="stages" class="incrementor form-control input-group">
-            <button class="btn input-group-btn" [disabled]="!selected" (click)="subtractNum('stages')">
-              <i class="fa fa-minus"></i>
-            </button>
-            <button class="btn input-group-btn" [disabled]="!selected" (click)="addNum('stages')">
-              <i class="fa fa-plus"></i>
-            </button>
-            <input type="number" step="1" class="form-control" formControlName="stages"
-              id="{{'stages_'+idString}}" (input)="save()" (focus)="focusField('stages')" onfocus="this.select();">
-          </div>
-          @if (psatForm.controls.stages.invalid && !psatForm.controls.stages.pristine) {
-            <span class="alert-danger pull-right small">
-              @if (psatForm.controls.stages.errors.required) {
-                <span>Value Required</span>
-              }
-              @if (psatForm.controls.stages.errors.min) {
-                <span>Value can't be less than
-                {{psatForm.controls.stages.errors.min.min}}.</span>
-              }
-              @if (psatForm.controls.stages.errors.notWholeNumber) {
-                <span>{{notWholeNumberMsg}}</span>
-              }
-            </span>
-          }
-
-          @if (psatForm.controls.stages.value >= 15) {
-            <span class="alert-warning pull-right small">
-              <span>Multistage pumps usually have less than 15 impellers.</span>
-            </span>
-          }
-        </div>
+        @if (psatForm.controls.stages.value >= 15) {
+          <span class="alert-warning pull-right small">
+            <span>Multistage pumps usually have less than 15 impellers.</span>
+          </span>
+        }
+      </div>
+  </div>
 
         @if (inSetup) {
           <div class="d-flex flex-column">
@@ -279,5 +278,5 @@
                   }
                 </div>
 
-
+          </div>
               </form>
