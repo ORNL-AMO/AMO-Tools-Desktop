@@ -222,8 +222,10 @@ describe('PumpFluidComponent', () => {
 
       const headers = Array.from(fixture.nativeElement.querySelectorAll('h3')) as HTMLElement[];
       const stagesLabel = fixture.nativeElement.querySelector('label[for="stages_psat_baseline"]') as HTMLElement;
+      const pumpSection = fixture.nativeElement.querySelector('.p-4') as HTMLElement;
 
       expect(headers[0].textContent).toContain('Pump');
+      expect(pumpSection.contains(stagesLabel)).toBeTrue();
       expect(headers[0].compareDocumentPosition(stagesLabel) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(stagesLabel.compareDocumentPosition(headers[1]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(headers[1].textContent).toContain('Fluid');
