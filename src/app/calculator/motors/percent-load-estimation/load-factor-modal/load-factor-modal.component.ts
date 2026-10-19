@@ -17,6 +17,8 @@ export class LoadFactorModalComponent {
   settings: Settings;
   @Input()
   ratedVoltage: number = 0;
+  @Input()
+  powerFactor: number = 0;
   @Output('emitClose')
   emitClose = new EventEmitter<boolean>();
   @Output('emitSave')
@@ -35,7 +37,7 @@ export class LoadFactorModalComponent {
       phase3Amps: 0,
       ratedVoltage: this.ratedVoltage ?? 0,
       ratedCurrent: 0,
-      powerFactor: 0
+      powerFactor: this.powerFactor ?? 0
     };
   }
 

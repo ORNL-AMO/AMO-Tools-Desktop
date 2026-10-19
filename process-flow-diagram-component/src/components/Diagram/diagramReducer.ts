@@ -190,7 +190,8 @@ const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) 
 }
 
 const nodeDataPropertyChangeReducer = <K extends keyof ProcessFlowPart, T extends keyof WaterTreatment>(state: DiagramState, action: PayloadAction<NodeDataPayload<K> | NodeTreatmentDataPayload<T>>) => {
-  const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart>;
+  const targetNodeId = (action.payload as NodeDataPayload<K>).nodeId ?? state.selectedDataId;
+  const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === targetNodeId) as Node<ProcessFlowPart>;
   const { optionsProp, updatedValue } = action.payload;
   if (updateNode && optionsProp in updateNode.data) {
     updateNode.data[optionsProp] = updatedValue;
@@ -606,7 +607,8 @@ export const RECOMPUTES_DIAGRAM_ERRORS: Record<DiagramActionType, boolean> = {
 };
 
 export interface UserOptionsPayload<K extends keyof UserDiagramOptions> { optionsProp: K, updatedValue: UserDiagramOptions[K], updateDependencies?: OptionsDependentState[] };
-export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K] };
+// * nodeId (diagramNodeId) targets a specific node - defaults to the selected node. Set it for writes that can land after selection changes (debounced input)
+export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K], nodeId?: string };
 export interface NodeTreatmentDataPayload<K extends keyof WaterTreatment> { optionsProp: K, updatedValue: WaterTreatment[K] };
 
 /**

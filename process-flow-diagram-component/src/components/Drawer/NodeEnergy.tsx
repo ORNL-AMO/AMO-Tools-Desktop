@@ -5,6 +5,7 @@ import { Node } from '@xyflow/react';
 import { DiagramCalculatedData, HeatEnergy, MotorEnergy, ProcessFlowPart, getDefaultHeatEnergy, getDefaultMotorEnergy, getMaxHeatEnergyOutgoingTemp, getHeatEnergyCost, getHeatEnergyKWh, getHeatEnergyUse, getMotorEnergyCost, getMotorEnergyKWh, getNodeTotalInflow } from 'process-flow-lib';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { nodeDataPropertyChange } from '../Diagram/diagramReducer';
+import useDebouncedCommit from '../../hooks/useDebouncedCommit';
 import InputField from '../StyledMUI/InputField';
 import CalculatorInputField from '../Calculators/CalculatorInputField';
 import { Accordion, AccordionDetails, AccordionSummary } from '../StyledMUI/AccordianComponents';
@@ -13,6 +14,8 @@ import { StyledHeadTableRow, StyledTableCell, StyledTableRow } from '../StyledMU
 const toNumberOrUndefined = (value: string): number | undefined => value === '' ? undefined : Number(value);
 
 const MAX_LOAD_FACTOR = 150;
+// * store writes recompute diagram errors and re-render the diagram - debounce so typing stays responsive
+const ENERGY_INPUT_DEBOUNCE_MS = 300;
 
 const getLoadFactorError = (loadFactor: number): string | undefined => {
     return loadFactor !== undefined && loadFactor !== null && loadFactor > MAX_LOAD_FACTOR
@@ -101,25 +104,30 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
         setMotorEnergy(node.data.addedMotorEnergy || []);
     }, [settings.unitsOfMeasure]);
 
-    useEffect(() => {
-        if (showHeatEnergy) {
-            dispatch(nodeDataPropertyChange({ optionsProp: 'heatEnergy', updatedValue: heatEnergy }));
-        }
-    }, [heatEnergy]);
+    const nodeId = node.data.diagramNodeId;
+    useDebouncedCommit(
+        heatEnergy,
+        (updatedValue) => dispatch(nodeDataPropertyChange({ optionsProp: 'heatEnergy', updatedValue, nodeId })),
+        nodeId,
+        ENERGY_INPUT_DEBOUNCE_MS,
+        showHeatEnergy
+    );
+    useDebouncedCommit(
+        motorEnergy,
+        (updatedValue) => dispatch(nodeDataPropertyChange({ optionsProp: 'addedMotorEnergy', updatedValue, nodeId })),
+        nodeId,
+        ENERGY_INPUT_DEBOUNCE_MS
+    );
 
-    useEffect(() => {
-        dispatch(nodeDataPropertyChange({ optionsProp: 'addedMotorEnergy', updatedValue: motorEnergy }));
-    }, [motorEnergy]);
-
+    // * functional updates - calculator results resolve after their modal closes, when this render's state may be stale
     const handleHeatEnergyChange = (field: keyof HeatEnergy, value: number) => {
-        setHeatEnergy({ ...heatEnergy, [field]: value });
+        setHeatEnergy((current) => ({ ...current, [field]: value }));
     };
 
     const handleMotorEnergyChange = (index: number, field: keyof MotorEnergy, value: string | number) => {
-        const updatedMotorEnergy = motorEnergy.map((motor, i) =>
+        setMotorEnergy((current) => current.map((motor, i) =>
             i === index ? { ...motor, [field]: value } : motor
-        );
-        setMotorEnergy(updatedMotorEnergy);
+        ));
     };
 
     // * Append a default entry and expand it so its form is ready to fill in
@@ -195,10 +203,10 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
     return (
         <Box sx={{ marginTop: 1, width: '100%', display: 'flex', flexDirection: 'column' }}>
             <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
-                <Table size="small" aria-label="node energy totals">
+                <Table size="small" aria-label="component energy totals">
                     <TableHead>
                         <StyledHeadTableRow>
-                            <StyledTableCell>Node Energy</StyledTableCell>
+                            <StyledTableCell>Component Energy</StyledTableCell>
                             <StyledTableCell align="right">Energy</StyledTableCell>
                             <StyledTableCell align="right">Annual Cost</StyledTableCell>
                         </StyledHeadTableRow>
@@ -282,13 +290,12 @@ export default function NodeEnergy({ node, showHeatEnergy }: { node: Node<Proces
                 </>
             }
 
-            <Typography variant="subtitle2" sx={{ paddingLeft: 1 }}>Add Turbomachinery Energy</Typography>
             <Button
                 sx={{ width: '100%', marginY: 1 }}
                 variant="contained"
                 onClick={addMotorEnergy}
             >
-                Add Energy
+                Add Turbomachinery Energy
             </Button>
 
             {motorEnergy.length > 0 &&
