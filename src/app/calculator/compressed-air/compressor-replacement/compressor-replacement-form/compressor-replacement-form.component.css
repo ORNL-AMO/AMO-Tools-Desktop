@@ -1,0 +1,41 @@
+.btn-edit-name {
+  cursor: pointer;
+}
+
+.form-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+/* Suggestions stay in normal flow so the panel's overflow doesn't clip them */
+.search-wrapper {
+  position: relative;
+}
+
+.suggestions {
+  margin: 2px 0 0;
+  padding: 0;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  max-height: 14rem;
+  overflow-y: auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+}
+
+.suggestion-item {
+  padding: .35rem .6rem;
+  cursor: pointer;
+  font-size: small;
+}
+
+.suggestion-item:hover {
+  background: #f1f5f9;
+}
+
+.suggestion-empty {
+  padding: .35rem .6rem;
+  color: #6c757d;
+  font-size: small;
+}

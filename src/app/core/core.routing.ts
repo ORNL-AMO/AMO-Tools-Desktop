@@ -79,6 +79,8 @@ import { TankInsulationReductionComponent } from '../calculator/steam/tank-insul
 import { AssessmentReportsComponent } from '../report-rollup/assessment-reports/assessment-reports.component';
 import { WeatherBinsComponent } from '../calculator/utilities/weather-bins/weather-bins.component';
 import { AirLeakSurveyComponent } from '../calculator/compressed-air/air-leak-survey/air-leak-survey.component';
+import { CompressorReplacementComponent } from '../calculator/compressed-air/compressor-replacement/compressor-replacement.component';
+import { CagiLookupComponent } from '../calculator/compressed-air/cagi-lookup/cagi-lookup.component';
 import { CompressedAirReductionComponent } from '../calculator/compressed-air/compressed-air-reduction/compressed-air-reduction.component';
 import { CompressedAirPressureReductionComponent } from '../calculator/compressed-air/compressed-air-pressure-reduction/compressed-air-pressure-reduction.component';
 import { SteamReductionComponent } from '../calculator/steam/steam-reduction/steam-reduction.component';
@@ -267,6 +269,14 @@ export const coreRoutes: Routes = [
           {
             path: 'air-leak',
             component: AirLeakSurveyComponent
+          },
+          {
+            path: 'compressor-replacement',
+            component: CompressorReplacementComponent
+          },
+          {
+            path: 'cagi-lookup',
+            component: CagiLookupComponent
           },
           {
             path: 'steam-leak',

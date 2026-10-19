@@ -1,0 +1,8 @@
+.no-data {
+  text-align: center;
+}
+
+.no-data p {
+  margin-top: 0.5rem;
+  color: #6c757d;
+}

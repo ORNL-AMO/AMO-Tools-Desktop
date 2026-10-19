@@ -1,0 +1,10 @@
+<div class="performance-profile">
+  <div #performanceProfileChart class="chart"></div>
+  @if (profileBlockerMessages.length > 0) {
+    <div class="small alert-warning p-2 mt-2">
+      @for (message of profileBlockerMessages; track message) {
+        <div>{{message}}</div>
+      }
+    </div>
+  }
+</div>

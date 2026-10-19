@@ -1,0 +1,76 @@
+.cagi-lookup .search-label {
+    font-weight: 600;
+    margin-bottom: .25rem;
+}
+
+.cagi-lookup .search-wrapper {
+    max-width: 30rem;
+}
+
+/* Suggestions render in-flow (not absolute) so the input panel's overflow can't clip them. */
+.cagi-lookup .suggestions {
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    max-height: 16rem;
+    overflow-y: auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+}
+
+.cagi-lookup .suggestion-item {
+    padding: .4rem .75rem;
+    cursor: pointer;
+}
+
+.cagi-lookup .suggestion-item:hover {
+    background: #f1f5f9;
+}
+
+.cagi-lookup .suggestion-empty {
+    padding: .4rem .75rem;
+    color: #6c757d;
+}
+
+/* Right output panel: let it scroll vertically, table scroll horizontally for wide schemas. */
+.cagi-lookup .help-panel {
+    overflow-y: auto;
+}
+
+.cagi-lookup .results-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.cagi-lookup .table-scroll {
+    overflow-x: auto;
+}
+
+/* Manually reduced font on the header row to fit. */
+.cagi-lookup table thead th {
+    font-size: 0.8rem;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 1;
+}
+
+.cagi-lookup table td {
+    white-space: nowrap;
+}
+
+.cagi-lookup .action-col {
+    width: 2rem;
+    text-align: center;
+}
+
+.cagi-lookup .remove-btn {
+    color: #dc3545;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0 .25rem;
+    text-decoration: none;
+}

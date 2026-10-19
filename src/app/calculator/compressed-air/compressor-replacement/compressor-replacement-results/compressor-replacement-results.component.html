@@ -1,0 +1,127 @@
+<label class="group-label">Baseline Summary</label>
+<table class="table table-hover table-striped table-sm">
+  <tbody>
+    <tr>
+      <td> </td>
+      <td class="bold text-center">Operating Hours (hrs/yr)</td>
+      <td class="bold text-center">Wtd. Avg. Duty Factor</td>
+      <td class="bold text-center">Airflow ({{airflowUnit}})</td>
+      <td class="bold text-center">Electricity Use (kWh/yr)</td>
+      <td class="bold text-center">Max Possible Input Power ({{powerUnit}})</td>
+      <td class="bold text-center">Total Annual Cost ($/yr)</td>
+      <td class="bold text-center">Air Produced ({{airVolumeUnit}}/yr)</td>
+      <td class="bold text-center">$/{{costVolumeUnit}}</td>
+    </tr>
+    @for (row of baselineRows; track $index) {
+      <tr>
+        <td class="bold">{{row.name}}</td>
+        <td class="text-center">{{row.operatingHours | number:'1.0-0'}}</td>
+        <td class="text-center">{{row.weightedDutyFactor | number:'1.2-2'}}</td>
+        <td class="text-center">{{row.cfm | number:airflowFormat}}</td>
+        <td class="text-center">{{row.electricityUse | number:'1.0-0'}}</td>
+        <td class="text-center">{{row.maxInputPower | number:'1.0-1'}}</td>
+        <td class="text-center">{{row.annualCost | currency:'USD':'symbol':'1.0-0'}}</td>
+        <td class="text-center">{{row.cubicFeet / 1000000 | number:'1.2-2'}}</td>
+        <td class="text-center">{{row.costPerCF | currency:'USD':'symbol':'1.2-5'}}</td>
+      </tr>
+    }
+  </tbody>
+</table>
+
+@if (modificationExists) {
+  <div>
+    <label class="group-label">Modification Summary</label>
+    <table class="table table-hover table-striped table-sm">
+      <tbody>
+        <tr>
+          <td> </td>
+          <td class="bold text-center">Operating Hours (hrs/yr)</td>
+          <td class="bold text-center">Wtd. Avg. Duty Factor</td>
+          <td class="bold text-center">Airflow ({{airflowUnit}})</td>
+          <td class="bold text-center">Electricity Use (kWh/yr)</td>
+          <td class="bold text-center">Max Possible Input Power ({{powerUnit}})</td>
+          <td class="bold text-center">Total Annual Cost ($/yr)</td>
+          <td class="bold text-center">Air Produced ({{airVolumeUnit}}/yr)</td>
+          <td class="bold text-center">$/{{costVolumeUnit}}</td>
+        </tr>
+        @for (row of modificationRows; track $index) {
+          <tr>
+            <td class="bold">{{row.name}}</td>
+            <td class="text-center">{{row.operatingHours | number:'1.0-0'}}</td>
+            <td class="text-center">{{row.weightedDutyFactor | number:'1.2-2'}}</td>
+            <td class="text-center">{{row.cfm | number:airflowFormat}}</td>
+            <td class="text-center">{{row.electricityUse | number:'1.0-0'}}</td>
+            <td class="text-center">{{row.maxInputPower | number:'1.0-1'}}</td>
+            <td class="text-center">{{row.annualCost | currency:'USD':'symbol':'1.0-0'}}</td>
+            <td class="text-center">{{row.cubicFeet / 1000000 | number:'1.2-2'}}</td>
+            <td class="text-center">{{row.costPerCF | currency:'USD':'symbol':'1.2-5'}}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<label class="group-label">Totals</label>
+<table class="table table-hover table-striped table-sm">
+  <tbody>
+    <tr>
+      <td> </td>
+      <td class="bold text-center">Operating Hours (hrs/yr)</td>
+      <td class="bold text-center">Wtd. Avg. Duty Factor</td>
+      <td class="bold text-center">Airflow ({{airflowUnit}})</td>
+      <td class="bold text-center">Electricity Use (kWh/yr)</td>
+      <td class="bold text-center">Max Possible Input Power ({{powerUnit}})</td>
+      <td class="bold text-center">Total Annual Cost ($/yr)</td>
+      <td class="bold text-center">Air Produced ({{airVolumeUnit}}/yr)</td>
+      <td class="bold text-center">$/{{costVolumeUnit}}</td>
+    </tr>
+    <tr>
+      <td class="bold">Baseline</td>
+      <td class="text-center">{{results.baselineResults.totalOperatingHours | number:'1.0-0'}}</td>
+      <td class="text-center">{{results.baselineResults.weightedDutyFactor | number:'1.2-2'}}</td>
+      <td class="text-center">{{results.baselineResults.totalCfm | number:airflowFormat}}</td>
+      <td class="text-center">{{results.baselineResults.totalElectricityUse | number:'1.0-0'}}</td>
+      <td class="text-center">{{results.baselineResults.totalMaxInputPower | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.baselineResults.totalAnnualCost | currency:'USD':'symbol':'1.0-0'}}</td>
+      <td class="text-center">{{results.baselineResults.totalCubicFeet / 1000000 | number:'1.2-2'}}</td>
+      <td class="text-center">{{results.baselineResults.costPerCF | currency:'USD':'symbol':'1.2-5'}}</td>
+    </tr>
+    <tr>
+      <td class="bold">Modification</td>
+      <td class="text-center">{{results.modificationResults.totalOperatingHours | number:'1.0-0'}}</td>
+      <td class="text-center">{{results.modificationResults.weightedDutyFactor | number:'1.2-2'}}</td>
+      <td class="text-center">{{results.modificationResults.totalCfm | number:airflowFormat}}</td>
+      <td class="text-center">{{results.modificationResults.totalElectricityUse | number:'1.0-0'}}</td>
+      <td class="text-center">{{results.modificationResults.totalMaxInputPower | number:'1.0-1'}}</td>
+      <td class="text-center">{{results.modificationResults.totalAnnualCost | currency:'USD':'symbol':'1.0-0'}}</td>
+      <td class="text-center">{{results.modificationResults.totalCubicFeet / 1000000 | number:'1.2-2'}}</td>
+      <td class="text-center">{{results.modificationResults.costPerCF | currency:'USD':'symbol':'1.2-5'}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table class="table table-hover table-striped table-sm pt-2">
+  <tbody>
+    <tr>
+      <td class="bold w-50">Electricity Savings</td>
+      <td class="text-center w-50">{{results.electricitySavings | number:'1.0-0'}} kWh/yr</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Electricity Cost Savings</td>
+      <td class="text-center w-50">{{results.electricityCostSavings | currency:'USD':'symbol':'1.0-0'}} /yr</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Change in Max Possible Input Power</td>
+      <td class="text-center w-50">{{results.maxInputPowerChange | number:'1.0-1'}} {{powerUnit}}</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Change in Airflow</td>
+      <td class="text-center w-50">{{results.cfmChange | number:airflowFormat}} {{airflowUnit}}</td>
+    </tr>
+    <tr>
+      <td class="bold w-50">Change in Air Produced</td>
+      <td class="text-center w-50">{{results.cubicFeetChange / 1000000 | number:'1.2-2'}} {{airVolumeUnit}}/yr</td>
+    </tr>
+  </tbody>
+</table>

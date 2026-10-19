@@ -1,0 +1,429 @@
+<div class="mb-4 p-2 form-card">
+  <form [formGroup]="form" #formElement>
+    @if (!isEditingName) {
+      <label class="group-label w-100 bold">
+        <span (click)="editCompressorName()" class="fa fa-pencil pr-2 btn-edit-name"></span>
+        <span>{{form.controls.name.value}}</span>
+        <span class="fa fa-times-circle-o pull-right large" (click)="removeCompressor()"></span>
+      </label>
+    } @else {
+      <label class="group-label w-100">
+        <span class="fa fa-save pr-2 btn-edit-name" (click)="doneEditingName()"></span>
+        <input type="text" id="{{'name_'+idString}}" formControlName="name" onfocus="this.select();" (input)="calculate()">
+        <app-form-control-errors [control]="form.controls.name"></app-form-control-errors>
+      </label>
+    }
+
+    <!-- ================= DUTY FACTOR ================= -->
+    <div class="form-section">
+      <div class="form-group" [class.invalid]="form.controls.averageDutyFactor.invalid">
+        <label for="{{'averageDutyFactor_'+idString}}">Duty Factor / Percent Speed</label>
+        <input name="averageDutyFactor" formControlName="averageDutyFactor" type="number" step="any" min="0" max="1" class="form-control" id="{{'averageDutyFactor_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('averageDutyFactor')">
+        <app-form-control-errors [control]="form.controls.averageDutyFactor"></app-form-control-errors>
+        @if (warnings.averageDutyFactor) {
+          <span class="alert-warning pull-right small">{{warnings.averageDutyFactor}}</span>
+        }
+      </div>
+      <div class="form-group" [class.invalid]="form.controls.totalOperatingHours.invalid">
+        <label for="{{'totalOperatingHours_'+idString}}">Total Operating Hours</label>
+        <div class="input-group">
+          <span class="input-group-addon op-hour-addon units"><a class="click-link" (click)="openOperatingHoursModal('totalOperatingHours')"><span class="fa fa-calculator"></span></a></span>
+          <input name="totalOperatingHours" formControlName="totalOperatingHours" type="number" step="1" min="0" class="form-control" id="{{'totalOperatingHours_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('totalOperatingHours')">
+          <span class="input-group-addon units">hrs/yr</span>
+        </div>
+        <app-form-control-errors [control]="form.controls.totalOperatingHours"></app-form-control-errors>
+        @if (warnings.totalOperatingHours) {
+          <span class="alert-warning pull-right small">{{warnings.totalOperatingHours}}</span>
+        }
+      </div>
+      <div class="form-group" [class.invalid]="form.controls.operatingPressure.invalid">
+        <label for="{{'operatingPressure_'+idString}}">Operating Pressure</label>
+        <div class="input-group">
+          <input name="operatingPressure" formControlName="operatingPressure" type="number" step="any" min="0" class="form-control" id="{{'operatingPressure_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('operatingPressure')">
+          <span class="input-group-addon units">{{units.pressure}}</span>
+        </div>
+        <app-form-control-errors [control]="form.controls.operatingPressure"></app-form-control-errors>
+        @if (warnings.operatingPressure) {
+          <span class="alert-warning pull-right small">{{warnings.operatingPressure}}</span>
+        }
+      </div>
+    </div>
+
+    <!-- ================= COMPRESSOR DATA LOOKUP ================= -->
+    <div class="form-section">
+      <div class="form-group">
+        <label for="{{'lookupType_'+idString}}">Compressor Data Lookup</label>
+        <select name="lookupType" class="form-control" id="{{'lookupType_'+idString}}" formControlName="lookupType" (change)="setLookupType()" (focus)="focusField('lookupType')">
+          <option value="modelNumber">Model Number</option>
+          <option value="capacityPressure">Capacity and Pressure Requirements</option>
+          <option value="manual">Manual</option>
+        </select>
+      </div>
+
+      @if (cagiLoadError && form.controls.lookupType.value !== 'manual') {
+        <div class="form-group">
+          <small class="alert-danger">Unable to load the CAGI dataset (assets/cagi_output.csv).</small>
+        </div>
+      }
+
+      <!-- MODEL NUMBER LOOKUP -->
+      @if (form.controls.lookupType.value === 'modelNumber') {
+        <div class="form-group search-wrapper">
+          <label for="{{'modelSearch_'+idString}}">Model Number</label>
+          <input type="text" class="form-control" id="{{'modelSearch_'+idString}}" autocomplete="off" placeholder="Start typing a model number…"
+            [value]="form.controls.searchModelTerm.value" (input)="onModelSearch($event)" (focus)="cancelHideSuggestions(); focusField('modelSearch')" (blur)="hideSuggestionsSoon()">
+          @if (showModelSuggestions && modelSuggestions.length) {
+            <ul class="suggestions">
+              @for (row of modelSuggestions; track row) {
+                <li class="suggestion-item" (mousedown)="selectRow(row)">{{suggestionLabel(row)}}</li>
+              }
+            </ul>
+          }
+          @if (showModelSuggestions && form.controls.searchModelTerm.value && !modelSuggestions.length) {
+            <ul class="suggestions">
+              <li class="suggestion-empty">No matches</li>
+            </ul>
+          }
+        </div>
+      }
+
+      <!-- CAPACITY & PRESSURE LOOKUP -->
+      @if (form.controls.lookupType.value === 'capacityPressure') {
+        <div class="form-group search-wrapper" [class.invalid]="form.controls.capacityRequirement.invalid">
+          <label for="{{'capacityRequirement_'+idString}}">Capacity</label>
+          <div class="input-group">
+            <input type="number" step="any" min="0" class="form-control" id="{{'capacityRequirement_'+idString}}" formControlName="capacityRequirement" placeholder="required"
+              (input)="onRequirementChange()" (focus)="cancelHideSuggestions(); focusField('capacityRequirement')" (blur)="hideSuggestionsSoon()">
+            <span class="input-group-addon units">{{units.airflow}}</span>
+          </div>
+          <app-form-control-errors [control]="form.controls.capacityRequirement"></app-form-control-errors>
+          @if (showRequirementSuggestions && requirementSuggestions.length) {
+            <ul class="suggestions">
+              @for (row of requirementSuggestions; track row) {
+                <li class="suggestion-item" (mousedown)="selectRow(row)">{{suggestionLabel(row)}}</li>
+              }
+            </ul>
+          }
+          @if (showRequirementSuggestions && form.controls.capacityRequirement.value && !requirementSuggestions.length) {
+            <ul class="suggestions">
+              <li class="suggestion-empty">No matches</li>
+            </ul>
+          }
+        </div>
+        <div class="form-group" [class.invalid]="form.controls.capacityRange.invalid">
+          <label>Capacity Range (±)</label>
+          <div class="input-group">
+            <input type="number" step="any" min="0" class="form-control" formControlName="capacityRange" (input)="onRequirementChange()">
+            <span class="input-group-addon units">{{units.airflow}}</span>
+          </div>
+          <app-form-control-errors [control]="form.controls.capacityRange"></app-form-control-errors>
+        </div>
+        <div class="form-group" [class.invalid]="form.controls.pressureRequirement.invalid">
+          <label for="{{'pressureRequirement_'+idString}}">Pressure</label>
+          <div class="input-group">
+            <input type="number" step="any" min="0" class="form-control" id="{{'pressureRequirement_'+idString}}" formControlName="pressureRequirement" (input)="onRequirementChange()" (focus)="focusField('pressureRequirement')">
+            <span class="input-group-addon units">{{units.pressure}}</span>
+          </div>
+          <app-form-control-errors [control]="form.controls.pressureRequirement"></app-form-control-errors>
+        </div>
+        <div class="form-group" [class.invalid]="form.controls.pressureRange.invalid">
+          <label>Pressure Range (±)</label>
+          <div class="input-group">
+            <input type="number" step="any" min="0" class="form-control" formControlName="pressureRange" (input)="onRequirementChange()">
+            <span class="input-group-addon units">{{units.pressure}}</span>
+          </div>
+          <app-form-control-errors [control]="form.controls.pressureRange"></app-form-control-errors>
+        </div>
+        <div class="form-group">
+          <label for="{{'brand_'+idString}}">Brand</label>
+          <select class="form-control" id="{{'brand_'+idString}}" formControlName="brand" (change)="onRequirementChange()">
+            <option value="">All Brands</option>
+            @for (manufacturer of manufacturers; track manufacturer) {
+              <option [value]="manufacturer">{{manufacturer}}</option>
+            }
+          </select>
+        </div>
+        <div class="form-check pl-4 mb-1">
+          <input type="checkbox" class="form-check-input" id="{{'vsdOnly_'+idString}}" formControlName="vsdOnly" (change)="onRequirementChange()">
+          <label class="form-check-label" for="{{'vsdOnly_'+idString}}">VSD only</label>
+        </div>
+        <div class="form-check pl-4 mb-1">
+          <input type="checkbox" class="form-check-input" id="{{'includeWaterCooled_'+idString}}" formControlName="includeWaterCooled" (change)="onRequirementChange()">
+          <label class="form-check-label" for="{{'includeWaterCooled_'+idString}}">Include water-cooled</label>
+        </div>
+        <div class="form-check pl-4 mb-2">
+          <input type="checkbox" class="form-check-input" id="{{'oilFree_'+idString}}" formControlName="oilFree" (change)="onRequirementChange()">
+          <label class="form-check-label" for="{{'oilFree_'+idString}}">Oil-free only</label>
+        </div>
+      }
+
+      <!-- SELECTED + CAGI DETAILS TOGGLE -->
+      @if (form.controls.lookupType.value !== 'manual' && form.controls.selectedModelNumber.value) {
+        <div class="mt-2 mb-1">
+          <small class="text-muted">Selected: <strong>{{form.controls.selectedManufacturer.value}} {{form.controls.selectedModelNumber.value}}</strong></small>
+        </div>
+      }
+      @if (form.controls.lookupType.value !== 'manual') {
+        <div class="mt-2 mb-2">
+          <a class="click-link" (click)="toggleCagiDetails()">{{showCagiDetails ? 'Hide CAGI Data Details -' : 'Show CAGI Data Details +'}}</a>
+        </div>
+      }
+
+      <!-- DATA DETAILS -->
+      @if (form.controls.lookupType.value === 'manual' || showCagiDetails) {
+        <div class="form-group" [class.invalid]="form.controls.ratedCapacity.invalid">
+          <label for="{{'ratedCapacity_'+idString}}">Rated Capacity</label>
+          <div class="input-group">
+            <input name="ratedCapacity" formControlName="ratedCapacity" type="number" step="any" min="0" class="form-control" id="{{'ratedCapacity_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('ratedCapacity')">
+            <span class="input-group-addon units">{{units.airflow}}</span>
+          </div>
+          <app-form-control-errors [control]="form.controls.ratedCapacity"></app-form-control-errors>
+        </div>
+        <div class="form-group">
+          <label for="{{'powerInputType_'+idString}}">Power Input</label>
+          <select name="powerInputType" class="form-control" id="{{'powerInputType_'+idString}}" formControlName="powerInputType" (change)="setPowerInputType()" (focus)="focusField('powerInputType')">
+            <option value="flAndZeroFlow">Full-Load + Zero-Flow Power</option>
+            <option value="averagePower">Average Power at Operating Pressure</option>
+          </select>
+        </div>
+        @if (form.controls.powerInputType.value === 'flAndZeroFlow') {
+          <div class="form-group" [class.invalid]="form.controls.fullLoadPower.invalid">
+            <label>Full-Load Package Power</label>
+            <div class="input-group">
+              <input name="fullLoadPower" formControlName="fullLoadPower" type="number" step="any" min="0" class="form-control" (input)="calculate()" onfocus="this.select();" (focus)="focusField('fullLoadPower')">
+              <span class="input-group-addon units">{{units.power}}</span>
+            </div>
+            <app-form-control-errors [control]="form.controls.fullLoadPower"></app-form-control-errors>
+          </div>
+          <div class="form-group" [class.invalid]="form.controls.zeroFlowPower.invalid">
+            <label>Zero-Flow Power</label>
+            <div class="input-group">
+              <input name="zeroFlowPower" formControlName="zeroFlowPower" type="number" step="any" min="0" class="form-control" (input)="calculate()" onfocus="this.select();" (focus)="focusField('zeroFlowPower')">
+              <span class="input-group-addon units">{{units.power}}</span>
+            </div>
+            <app-form-control-errors [control]="form.controls.zeroFlowPower"></app-form-control-errors>
+            @if (warnings.zeroFlowPower) {
+              <span class="alert-warning pull-right small">{{warnings.zeroFlowPower}}</span>
+            }
+          </div>
+        }
+        @if (form.controls.powerInputType.value === 'averagePower') {
+          @if (showAveragePowerLink) {
+            <div class="form-group">
+              <label for="{{'linkedCompressorId_'+idString}}">Alter Operations For</label>
+              <select name="linkedCompressorId" class="form-control" id="{{'linkedCompressorId_'+idString}}" formControlName="linkedCompressorId" (change)="setLinkedCompressor()" (focus)="focusField('linkedCompressorId')">
+                <option value="">N/A</option>
+                @for (target of linkTargets; track target.compressorId) {
+                  <option [value]="target.compressorId">{{target.name}}</option>
+                }
+              </select>
+            </div>
+          }
+          <div class="form-group">
+            <label>Average Power at Operating Pressure</label>
+            <div class="input-group">
+              @if (isAveragePowerLinked) {
+                <input type="text" class="form-control" [value]="linkedAveragePower | number:'1.0-2'" disabled>
+              } @else {
+                <input name="averagePower" formControlName="averagePower" type="number" step="any" min="0" class="form-control" (input)="calculate()" onfocus="this.select();" (focus)="focusField('averagePower')">
+              }
+              <span class="input-group-addon units">{{units.power}}</span>
+            </div>
+            @if (!isAveragePowerLinked) {
+              <app-form-control-errors [control]="form.controls.averagePower"></app-form-control-errors>
+            }
+            @if (isAveragePowerLinked && !isLinkTargetIncomplete) {
+              <span class="small text-muted">
+                Derived from the baseline compressor, re-scaled for the operating pressure change.
+              </span>
+            }
+            @if (isLinkTargetIncomplete) {
+              <span class="small alert-warning d-block p-1">
+                The selected baseline compressor needs both an average power and an operating pressure
+                before it can be referenced.
+              </span>
+            }
+          </div>
+        }
+      }
+    </div>
+
+    <!-- ================= DESIGN DETAILS ================= -->
+    <!-- Average-power rows have no part-load curve, so design details are hidden -->
+    @if (!isAveragePowerMode) {
+    <div class="form-section">
+      <label class="group-label w-100">
+        <a class="click-link" (click)="toggleDesignDetails()">{{showDesignDetails ? 'Hide Design Details (for performance profile graph) -' : 'Show Design Details (for performance profile graph) +'}}</a>
+      </label>
+
+      @if (showDesignDetails) {
+        @if (isCentrifugalDeferred) {
+          <div class="alert-warning small p-2 mb-2">
+            Centrifugal compressors are not yet supported on the performance profile plot and will be skipped.
+          </div>
+        }
+
+        <div class="form-group">
+          <label for="{{'controlType_'+idString}}">Control Type</label>
+          <select name="controlType" class="form-control" id="{{'controlType_'+idString}}" formControlName="controlType" (change)="setControlType()" (focus)="focusField('controlType')">
+            <option [ngValue]="null">Auto ({{hasLadder ? 'VFD' : 'Load/unload'}})</option>
+            @for (option of controlTypeOptions; track option.value) {
+              <option [ngValue]="option.value">{{option.label}}</option>
+            }
+          </select>
+        </div>
+
+        @if (showBlowdownTime) {
+          <div class="form-group" [class.invalid]="form.controls.blowdownTime.invalid">
+            <label for="{{'blowdownTime_'+idString}}">Blowdown Time</label>
+            <div class="input-group">
+              <input name="blowdownTime" formControlName="blowdownTime" type="number" step="any" min="0" class="form-control" id="{{'blowdownTime_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('blowdownTime')">
+              <span class="input-group-addon units">sec</span>
+            </div>
+            <span class="small text-muted">Default 40 (lubricant-injected) / 0.0003 (lubricant-free).</span>
+            <app-form-control-errors [control]="form.controls.blowdownTime"></app-form-control-errors>
+          </div>
+        }
+
+        @if (showUnloadSumpPressure) {
+          <div class="form-group" [class.invalid]="form.controls.unloadSumpPressure.invalid">
+            <label for="{{'unloadSumpPressure_'+idString}}">Unload Sump Pressure</label>
+            <div class="input-group">
+              <input name="unloadSumpPressure" formControlName="unloadSumpPressure" type="number" step="any" min="0" class="form-control" id="{{'unloadSumpPressure_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('unloadSumpPressure')">
+              <span class="input-group-addon units">{{units.pressure}}</span>
+            </div>
+            <app-form-control-errors [control]="form.controls.unloadSumpPressure"></app-form-control-errors>
+            @if (warnings.unloadSumpPressure) {
+              <span class="alert-warning pull-right small">{{warnings.unloadSumpPressure}}</span>
+            }
+          </div>
+        }
+
+        @if (showUnloadPointCapacity) {
+          <div class="form-group" [class.invalid]="form.controls.unloadPointCapacity.invalid">
+            <label for="{{'unloadPointCapacity_'+idString}}">Unload Point Capacity</label>
+            <div class="input-group">
+              <input name="unloadPointCapacity" formControlName="unloadPointCapacity" type="number" step="any" min="0" max="100" class="form-control" id="{{'unloadPointCapacity_'+idString}}" [readonly]="unloadPointCapacityLocked" (input)="calculate()" onfocus="this.select();" (focus)="focusField('unloadPointCapacity')">
+              <span class="input-group-addon units">%</span>
+            </div>
+            @if (unloadPointCapacityLocked) {
+              <span class="small text-muted">Fixed at 100% for this control type.</span>
+            }
+            <app-form-control-errors [control]="form.controls.unloadPointCapacity"></app-form-control-errors>
+          </div>
+        }
+
+        @if (showModulatingFields) {
+          <div class="form-group" [class.invalid]="form.controls.noLoadPowerFM.invalid">
+            <label for="{{'noLoadPowerFM_'+idString}}">No Load Power (Fully Modulating)</label>
+            <div class="input-group">
+              <input name="noLoadPowerFM" formControlName="noLoadPowerFM" type="number" step="any" min="0" class="form-control" id="{{'noLoadPowerFM_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('noLoadPowerFM')">
+              <span class="input-group-addon units">%</span>
+            </div>
+            <span class="small text-muted">Leave blank to use {{computedNoLoadPowerFM | number:'1.0-1'}}% (zero-flow / full-load).</span>
+            <app-form-control-errors [control]="form.controls.noLoadPowerFM"></app-form-control-errors>
+            @if (warnings.noLoadPowerFM) {
+              <span class="alert-warning pull-right small">{{warnings.noLoadPowerFM}}</span>
+            }
+          </div>
+        }
+
+        <div class="form-group">
+          <label for="{{'cagiType_'+idString}}">Compressor Type</label>
+          <select name="cagiType" class="form-control" id="{{'cagiType_'+idString}}" formControlName="cagiType" (change)="calculate()" (focus)="focusField('cagiType')">
+            <option value="Rotary Screw">Rotary Screw</option>
+            <option value="Reciprocating">Reciprocating</option>
+          </select>
+        </div>
+        <div class="form-group" [class.invalid]="form.controls.numberOfStages.invalid">
+          <label for="{{'numberOfStages_'+idString}}">Number of Stages</label>
+          <input name="numberOfStages" formControlName="numberOfStages" type="number" step="1" min="1" max="2" class="form-control" id="{{'numberOfStages_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('numberOfStages')">
+          <span class="small text-muted">Blank assumes single stage.</span>
+          <app-form-control-errors [control]="form.controls.numberOfStages"></app-form-control-errors>
+          @if (warnings.numberOfStages) {
+            <span class="alert-warning pull-right small">{{warnings.numberOfStages}}</span>
+          }
+        </div>
+        <div class="form-check pl-4 mb-2">
+          <input type="checkbox" class="form-check-input" id="{{'compressorOilFree_'+idString}}" formControlName="compressorOilFree" (change)="calculate()">
+          <label class="form-check-label" for="{{'compressorOilFree_'+idString}}">Lubricant-free (oil-free)</label>
+        </div>
+
+        <div class="form-group" [class.invalid]="form.controls.fullLoadPressure.invalid">
+          <label for="{{'fullLoadPressure_'+idString}}">Full Load Operating Pressure</label>
+          <div class="input-group">
+            <input name="fullLoadPressure" formControlName="fullLoadPressure" type="number" step="any" min="0" class="form-control" id="{{'fullLoadPressure_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('fullLoadPressure')">
+            <span class="input-group-addon units">{{units.pressure}}</span>
+          </div>
+          <app-form-control-errors [control]="form.controls.fullLoadPressure"></app-form-control-errors>
+        </div>
+        <div class="form-group" [class.invalid]="form.controls.maxFullFlowPressure.invalid">
+          <label for="{{'maxFullFlowPressure_'+idString}}">Maximum Full Flow Pressure</label>
+          <div class="input-group">
+            <input name="maxFullFlowPressure" formControlName="maxFullFlowPressure" type="number" step="any" min="0" class="form-control" id="{{'maxFullFlowPressure_'+idString}}" (input)="calculate()" onfocus="this.select();" (focus)="focusField('maxFullFlowPressure')">
+            <span class="input-group-addon units">{{units.pressure}}</span>
+          </div>
+          <app-form-control-errors [control]="form.controls.maxFullFlowPressure"></app-form-control-errors>
+          @if (warnings.maxFullFlowPressure) {
+            <span class="alert-warning pull-right small">{{warnings.maxFullFlowPressure}}</span>
+          }
+        </div>
+        @if (showTurndownSelection) {
+          <div class="form-group mb-1">
+            <label for="{{'turndownRung_'+idString}}">Turndown Point</label>
+            <select name="turndownRung" class="form-control" id="{{'turndownRung_'+idString}}" formControlName="turndownRung" (change)="onTurndownRungChange()" (focus)="focusField('turndownRung')">
+              @for (rung of turndownRungOptions; track rung.value) {
+                <option [value]="rung.value">{{rung.label}}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group mb-1" [class.invalid]="form.controls.turndownCapacity.invalid">
+            <label>Turndown Capacity</label>
+            <div class="input-group">
+              <input name="turndownCapacity" formControlName="turndownCapacity" type="number" step="any" min="0" class="form-control" (input)="calculate()" onfocus="this.select();" (focus)="focusField('turndownRung')">
+              <span class="input-group-addon units">{{units.airflow}}</span>
+            </div>
+            <app-form-control-errors [control]="form.controls.turndownCapacity"></app-form-control-errors>
+          </div>
+          <div class="form-group mb-3" [class.invalid]="form.controls.turndownPower.invalid">
+            <label>Turndown Input Power</label>
+            <div class="input-group">
+              <input name="turndownPower" formControlName="turndownPower" type="number" step="any" min="0" class="form-control" (input)="calculate()" onfocus="this.select();" (focus)="focusField('turndownRung')">
+              <span class="input-group-addon units">{{units.power}}</span>
+            </div>
+            <app-form-control-errors [control]="form.controls.turndownPower"></app-form-control-errors>
+          </div>
+          <div class="form-group mb-1">
+            <label for="{{'midTurndownRung_'+idString}}">Mid Turndown Point</label>
+            <select name="midTurndownRung" class="form-control" id="{{'midTurndownRung_'+idString}}" formControlName="midTurndownRung" (change)="onMidTurndownRungChange()" (focus)="focusField('midTurndownRung')">
+              @for (rung of turndownRungOptions; track rung.value) {
+                <option [value]="rung.value">{{rung.label}}</option>
+              }
+            </select>
+          </div>
+          <div class="form-group mb-1" [class.invalid]="form.controls.midTurndownCapacity.invalid">
+            <label>Mid Turndown Capacity</label>
+            <div class="input-group">
+              <input name="midTurndownCapacity" formControlName="midTurndownCapacity" type="number" step="any" min="0" class="form-control" (input)="calculate()" onfocus="this.select();" (focus)="focusField('midTurndownRung')">
+              <span class="input-group-addon units">{{units.airflow}}</span>
+            </div>
+            <app-form-control-errors [control]="form.controls.midTurndownCapacity"></app-form-control-errors>
+          </div>
+          <div class="form-group mb-2" [class.invalid]="form.controls.midTurndownPower.invalid">
+            <label>Mid Turndown Input Power</label>
+            <div class="input-group">
+              <input name="midTurndownPower" formControlName="midTurndownPower" type="number" step="any" min="0" class="form-control" (input)="calculate()" onfocus="this.select();" (focus)="focusField('midTurndownRung')">
+              <span class="input-group-addon units">{{units.power}}</span>
+            </div>
+            <app-form-control-errors [control]="form.controls.midTurndownPower"></app-form-control-errors>
+          </div>
+        }
+      }
+    </div>
+    }
+  </form>
+</div>
+
+@if (showOperatingHoursModal) {
+  <app-operating-hours-modal (emitClose)="closeOperatingHoursModal()" (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false" [operatingHours]="compressorReplacementService.operatingHours"></app-operating-hours-modal>
+}
