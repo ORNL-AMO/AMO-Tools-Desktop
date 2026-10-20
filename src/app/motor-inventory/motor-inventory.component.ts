@@ -165,8 +165,6 @@ export class MotorInventoryComponent implements OnInit {
     if (this.setupTab == 'plant-setup') {
       this.motorInventoryService.setupTab.next('department-setup');
     } else if (this.setupTab == 'department-setup') {
-      this.motorInventoryService.setupTab.next('motor-properties');
-    } else if (this.setupTab == 'motor-properties') {
       this.motorInventoryService.setupTab.next('motor-catalog');
     } else if (this.setupTab == 'motor-catalog') {
       this.motorInventoryService.goToMainTab('summary');
@@ -176,10 +174,8 @@ export class MotorInventoryComponent implements OnInit {
   back(){
     if (this.setupTab == 'department-setup') {
       this.motorInventoryService.setupTab.next('plant-setup');
-    } else if (this.setupTab == 'motor-properties') {
-      this.motorInventoryService.setupTab.next('department-setup');
     } else if (this.setupTab == 'motor-catalog') {
-      this.motorInventoryService.setupTab.next('motor-properties');
+      this.motorInventoryService.setupTab.next('department-setup');
     }
   }
 
