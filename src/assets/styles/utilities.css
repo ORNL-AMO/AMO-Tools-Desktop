@@ -205,6 +205,16 @@ a:not([href]):not([tabindex]).disabled-link:hover {
     /* box-shadow: 0px 0px 1px #007bff; */
 }
 
+app-expert-view .input-group.indicate-different,
+app-expert-view .form-control.indicate-different {
+    border: #007bff solid 2px;
+}
+
+app-expert-view .input-group.indicate-different.invalid,
+app-expert-view .form-control.indicate-different.invalid {
+    border: red solid 2px;
+}
+
 
 .ssmt .input-group .ng-invalid,
 .ssmt .input-group.indicate-different .ng-invalid,
