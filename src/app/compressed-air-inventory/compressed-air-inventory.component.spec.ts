@@ -14,7 +14,7 @@ import { IntegrationStateService } from '../shared/connected-inventory/integrati
 import { CompressedAirAssessmentIntegrationService } from '../shared/connected-inventory/compressed-air-assessment-integration.service';
 import { InventoryItem } from '../shared/models/inventory/inventory';
 import { Settings } from '../shared/models/settings';
-import { CompressedAirInventoryData } from './compressed-air-inventory';
+import { CompressedAirInventoryData, CompressedAirItem } from './compressed-air-inventory';
 
 function makeInventoryItem(isValid: boolean): InventoryItem {
   return {
@@ -154,6 +154,14 @@ describe('CompressedAirInventoryComponent', () => {
     inventoryServiceSpy.setupTab.next('end-uses');
     component.continue();
     expect(inventoryServiceSpy.goToMainTab).toHaveBeenCalledWith('summary');
+  });
+
+  it('clears a compressor selected in a previous visit when the inventory loads', () => {
+    const catalogService = TestBed.inject(CompressedAirCatalogService);
+    catalogService.selectedCompressedAirItem.next({ id: 'stale' } as CompressedAirItem);
+    loadInventory(true);
+    fixture.detectChanges();
+    expect(catalogService.selectedCompressedAirItem.value).toBeUndefined();
   });
 
   it('continue and back step setup tabs elsewhere', () => {

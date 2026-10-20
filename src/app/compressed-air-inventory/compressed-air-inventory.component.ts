@@ -74,6 +74,7 @@ export class CompressedAirInventoryComponent implements OnInit {
       this.compressedAirInventoryService.setIsValidInventory(this.compressedAirInventoryItem.compressedAirInventoryData);
       this.compressedAirInventoryService.compressedAirInventoryData.next(this.compressedAirInventoryItem.compressedAirInventoryData);
       this.compressedAirInventoryService.currentInventoryId = tmpItemId;
+      this.compressedAirCatalogService.selectedCompressedAirItem.next(undefined);
       this.syncTabsFromRoute();
       this.genericCompressorDbService.getAllCompressors(settings);
 
