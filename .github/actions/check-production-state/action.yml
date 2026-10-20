@@ -1,0 +1,19 @@
+name: Check production release state
+description: Prevent historical redeployments and replacement of published installers
+inputs:
+  release-tag:
+    description: When creating a draft, reject an already published release for this tag
+    required: false
+    default: ''
+runs:
+  using: composite
+  steps:
+    - uses: actions/github-script@v7
+      env:
+        POLICY_SCRIPT: ${{ github.action_path }}/check-production-state.cjs
+        RELEASE_TAG: ${{ inputs.release-tag }}
+      with:
+        script: |
+          await require(process.env.POLICY_SCRIPT)({
+            github, context, releaseTag: process.env.RELEASE_TAG,
+          });

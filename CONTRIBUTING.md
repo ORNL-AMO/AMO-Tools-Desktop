@@ -104,7 +104,7 @@ Above all else, contributors should do their best to follow the conventions of m
 
 ## Release Process
 
-Releases are managed by the core development team. An "Epic" issue and a Milestone are used to track the issues going into the next release of MEASUR. Our QA team will test issues via the project board. When QA has been completed on the full set of "Epic" issues develop is merged into main and a release will be drafted by the CI system. Release notes are compiled from the changelog entries in PRs. Version numbers follow semantic versioning. Only core maintainers should publish releases.
+Releases are managed by the core development team using a release epic, milestone, and QA approvals. Prepare the approved version in `develop`, then promote it to `master` through a reviewed PR using **Create a merge commit**. Every `master` push is an intentional release and must advance the version. Tests and the complete signed/notarized desktop workflow, including draft GitHub Release creation, must succeed before production web deployment. Only core maintainers review the installers and release notes and publish the draft. See the [release process](docs/release-process.md) for normal promotions, hotfixes, required checks, manual runs, and failure recovery.
 
 ## Versioning
 

@@ -10,6 +10,9 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -18,9 +21,9 @@ jobs:
         with:
           fetch-depth: 1
       - name: Get Node version
-        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> $GITHUB_ENV
+        run: echo "BUILD_NODE_VER=$(grep -o -P -m 1 '(?<=node":\s").*(?=")' package.json)" >> "$GITHUB_ENV"
       - name: Node setup
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.BUILD_NODE_VER }}
       - name: Attach SHA to build
@@ -29,7 +32,7 @@ jobs:
           BUILD_VERSION=$(grep -o -P -m 1 '(?<=version":\s").*(?=")' package.json)
           sed -i "s/$BUILD_VERSION/$BUILD_VERSION-${GITHUB_SHA::7}/g" package.json
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: ~/.npm
           key: npm-${{ hashFiles('package-lock.json') }}
@@ -37,9 +40,9 @@ jobs:
       - name: Install dependencies
         run: |
           find . -name "package-lock.json" -not -path "*/node_modules/*" -not -path "*/dist/*" -exec dirname {} \; | sort -u |
-          while read dir; do
+          while IFS= read -r dir; do
             echo "Installing dependencies for: $dir"
-            (cd $dir && npm ci $dir);
+            (cd "$dir" && npm ci);
           done
       - name: Build
         run: |
