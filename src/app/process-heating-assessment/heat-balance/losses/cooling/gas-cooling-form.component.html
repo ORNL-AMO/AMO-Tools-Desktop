@@ -56,7 +56,7 @@
 
   <div class="form-group">
     <label for="outletTemp_{{ instanceId() }}">Outlet Temperature</label>
-    <div class="input-group" [class.invalid]="f.outletTemp.invalid" [class.indicate-different]="gasDifferences().has('outletTemperature')">
+    <div class="input-group" [class.invalid]="f.outletTemp.invalid" [class.indicate-different]="gasDifferences().has('finalTemperature')">
       <input type="number" step="10" class="form-control" id="outletTemp_{{ instanceId() }}" formControlName="outletTemp" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
     </div>

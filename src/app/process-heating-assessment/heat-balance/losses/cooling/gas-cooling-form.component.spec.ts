@@ -67,6 +67,20 @@ describe('GasCoolingFormComponent', () => {
       expect(group('gasDensity_instance-1').classList).not.toContain('indicate-different');
     });
 
+    it('keys the outlet temperature indicator to finalTemperature, the value the form loads', () => {
+      fixture.componentRef.setInput('differingFields', new Set(['gasCoolingLoss.finalTemperature']));
+      fixture.detectChanges();
+
+      expect(group('outletTemp_instance-1').classList).toContain('indicate-different');
+    });
+
+    it('does not highlight the outlet temperature for outletTemperature alone', () => {
+      fixture.componentRef.setInput('differingFields', new Set(['gasCoolingLoss.outletTemperature']));
+      fixture.detectChanges();
+
+      expect(group('outletTemp_instance-1').classList).not.toContain('indicate-different');
+    });
+
     it('highlights nothing without differing fields', () => {
 
       expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
