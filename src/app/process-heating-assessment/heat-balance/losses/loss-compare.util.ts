@@ -7,8 +7,8 @@ export type LossFieldDifferences<T> = ReadonlySet<keyof T & string>;
 /** Per-item differences keyed by loss item id. */
 export type LossDifferences<T> = ReadonlyMap<string, LossFieldDifferences<T>>;
 
-/** Results and labels aren't user inputs, so they never count as a difference. */
-const IGNORED_KEYS: ReadonlySet<string> = new Set(['id', 'name', 'heatLoss']);
+/** Identity and label aren't field values. `heatLoss` stays: it's the user input for other losses. */
+const IGNORED_KEYS: ReadonlySet<string> = new Set(['id', 'name']);
 
 const isBlank = (value: unknown): boolean => value === null || value === undefined || value === '';
 

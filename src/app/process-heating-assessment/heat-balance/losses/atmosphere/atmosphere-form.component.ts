@@ -11,6 +11,8 @@ import { AtmosphereItem } from './atmosphere.service';
 import { AtmosphereForm, AtmosphereFormService } from './atmosphere-form.service';
 import { AddAtmosphereMaterialModalComponent } from './add-atmosphere-material-modal.component';
 import { ATMOSPHERE_UNITS } from './atmosphere-units';
+import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmosphereLoss';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-atmosphere-form',
@@ -21,6 +23,7 @@ import { ATMOSPHERE_UNITS } from './atmosphere-units';
 export class AtmosphereFormComponent implements OnInit {
   readonly item = input.required<AtmosphereItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<AtmosphereLoss>>();
   readonly instanceId = input.required<string>();
 
   private readonly formService = inject(AtmosphereFormService);

@@ -3,7 +3,7 @@
     <div class="form-group">
       <label class="small" for="{{controlIds().motorPhase}}">Motor Current Phase(s)</label>
       <select class="form-control" id="{{controlIds().motorPhase}}" formControlName="motorPhase"
-        [class.invalid]="form().controls.motorPhase.invalid">
+        [class.invalid]="form().controls.motorPhase.invalid" [class.indicate-different]="differingFields()?.has('motorPhase')">
         @for (phase of motorPhases; track phase) {
           <option [ngValue]="phase">{{phase}}</option>
         }
@@ -12,7 +12,7 @@
 
     <div class="form-group">
       <label class="small" for="{{controlIds().supplyVoltage}}">Supply Voltage</label>
-      <div class="input-group" [class.invalid]="form().controls.supplyVoltage.invalid">
+      <div class="input-group" [class.invalid]="form().controls.supplyVoltage.invalid" [class.indicate-different]="differingFields()?.has('supplyVoltage')">
         <input type="number" step="10" class="form-control"
           id="{{controlIds().supplyVoltage}}" formControlName="supplyVoltage" onfocus="this.select();">
         <span class="input-group-addon units">V</span>
@@ -26,7 +26,7 @@
 
     <div class="form-group">
       <label class="small" for="{{controlIds().avgCurrent}}">Average Current</label>
-      <div class="input-group" [class.invalid]="form().controls.avgCurrent.invalid">
+      <div class="input-group" [class.invalid]="form().controls.avgCurrent.invalid" [class.indicate-different]="differingFields()?.has('avgCurrent')">
         <input type="number" step="10" class="form-control"
           id="{{controlIds().avgCurrent}}" formControlName="avgCurrent" onfocus="this.select();">
         <span class="input-group-addon units">A</span>
@@ -39,14 +39,14 @@
       <label class="small" for="{{controlIds().powerFactor}}">Power Factor</label>
       <input type="number" step="0.1" class="form-control"
         id="{{controlIds().powerFactor}}" formControlName="powerFactor" onfocus="this.select();"
-        [class.invalid]="form().controls.powerFactor.invalid">
+        [class.invalid]="form().controls.powerFactor.invalid" [class.indicate-different]="differingFields()?.has('powerFactor')">
       <app-form-control-errors [control]="form().controls.powerFactor" [settings]="settings()">
       </app-form-control-errors>
     </div>
 
     <div class="form-group">
       <label class="small" for="{{controlIds().operatingTime}}">Operating Time</label>
-      <div class="input-group" [class.invalid]="form().controls.operatingTime.invalid">
+      <div class="input-group" [class.invalid]="form().controls.operatingTime.invalid" [class.indicate-different]="differingFields()?.has('operatingTime')">
         <input type="number" step="any" class="form-control"
           id="{{controlIds().operatingTime}}" formControlName="operatingTime" onfocus="this.select();">
         <span class="input-group-addon units">%</span>

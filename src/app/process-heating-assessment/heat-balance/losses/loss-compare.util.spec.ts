@@ -33,10 +33,16 @@ describe('getLossDifferences', () => {
     expect(getLossDifferences(baseline, modification).get('a')?.has('area')).toBeTrue();
   });
 
-  it('ignores id, name and heatLoss', () => {
-    const baseline: TestLoss[] = [{ id: 'a', name: 'Loss #1', heatLoss: 1 }];
-    const modification: TestLoss[] = [{ id: 'a', name: 'Renamed', heatLoss: 2 }];
+  it('ignores id and name', () => {
+    const baseline: TestLoss[] = [{ id: 'a', name: 'Loss #1' }];
+    const modification: TestLoss[] = [{ id: 'a', name: 'Renamed' }];
     expect(getLossDifferences(baseline, modification).get('a')?.size).toBe(0);
+  });
+
+  it('reports heatLoss differences', () => {
+    const baseline: TestLoss[] = [{ id: 'a', heatLoss: 1 }];
+    const modification: TestLoss[] = [{ id: 'a', heatLoss: 2 }];
+    expect(getLossDifferences(baseline, modification).get('a')?.has('heatLoss')).toBeTrue();
   });
 
   it('matches items by id regardless of order', () => {

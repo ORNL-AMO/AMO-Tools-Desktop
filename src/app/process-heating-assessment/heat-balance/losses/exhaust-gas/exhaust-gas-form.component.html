@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{controlIds().offGasTemp}}">Off (Exhaust) Gas Temp</label>
-      <div class="input-group" [class.invalid]="form().controls.offGasTemp.invalid">
+      <div class="input-group" [class.invalid]="form().controls.offGasTemp.invalid" [class.indicate-different]="differingFields()?.has('offGasTemp')">
         <input type="number" step="10" class="form-control"
           id="{{controlIds().offGasTemp}}" formControlName="offGasTemp" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? '℉' : '℃'}}</span>
@@ -12,7 +12,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().CO}}">CO</label>
-      <div class="input-group" [class.invalid]="form().controls.CO.invalid">
+      <div class="input-group" [class.invalid]="form().controls.CO.invalid" [class.indicate-different]="differingFields()?.has('CO')">
         <input type="number" step="any" class="form-control"
           id="{{controlIds().CO}}" formControlName="CO" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
@@ -22,7 +22,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().H2}}">H2</label>
-      <div class="input-group" [class.invalid]="form().controls.H2.invalid">
+      <div class="input-group" [class.invalid]="form().controls.H2.invalid" [class.indicate-different]="differingFields()?.has('H2')">
         <input type="number" step="any" class="form-control"
           id="{{controlIds().H2}}" formControlName="H2" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
@@ -32,7 +32,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().combustibleGases}}">Combustible Gas as CH4</label>
-      <div class="input-group" [class.invalid]="form().controls.combustibleGases.invalid">
+      <div class="input-group" [class.invalid]="form().controls.combustibleGases.invalid" [class.indicate-different]="differingFields()?.has('combustibleGases')">
         <input type="number" step="any" class="form-control"
           id="{{controlIds().combustibleGases}}" formControlName="combustibleGases" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
@@ -42,7 +42,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().vfr}}">Total Volumetric Flow Rate</label>
-      <div class="input-group" [class.invalid]="form().controls.vfr.invalid">
+      <div class="input-group" [class.invalid]="form().controls.vfr.invalid" [class.indicate-different]="differingFields()?.has('vfr')">
         <input type="number" step="10" class="form-control"
           id="{{controlIds().vfr}}" formControlName="vfr" onfocus="this.select();">
         <span class="input-group-addon units">@if (settings().unitsOfMeasure === 'Imperial') { cfm } @else { m<sup>3</sup>/min }</span>
@@ -52,7 +52,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().dustLoading}}">Dust Loading</label>
-      <div class="input-group" [class.invalid]="form().controls.dustLoading.invalid">
+      <div class="input-group" [class.invalid]="form().controls.dustLoading.invalid" [class.indicate-different]="differingFields()?.has('dustLoading')">
         <input type="number" step="any" class="form-control"
           id="{{controlIds().dustLoading}}" formControlName="dustLoading" onfocus="this.select();">
         <span class="input-group-addon units">@if (settings().unitsOfMeasure === 'Imperial') { lb/scf } @else { kg/Nm<sup>3</sup> }</span>

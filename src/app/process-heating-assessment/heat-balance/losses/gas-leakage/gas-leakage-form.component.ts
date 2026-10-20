@@ -6,6 +6,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { GasLeakageWarnings, getGasLeakageWarnings } from './gas-leakage-warnings';
 import { GasLeakageForm, GasLeakageFormService } from './gas-leakage-form.service';
 import { GasLeakageItem } from './gas-leakage.service';
+import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-gas-leakage-form',
@@ -16,6 +18,7 @@ import { GasLeakageItem } from './gas-leakage.service';
 export class GasLeakageFormComponent implements OnInit {
   readonly item = input.required<GasLeakageItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<LeakageLoss>>();
 
   private readonly formService = inject(GasLeakageFormService);
   private readonly destroyRef = inject(DestroyRef);

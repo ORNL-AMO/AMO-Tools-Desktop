@@ -126,4 +126,28 @@ describe('AuxiliaryPowerFormComponent', () => {
       expect(component.warnings().voltageWarning).toBeNull();
     });
   });
+
+  describe('compare indicators', () => {
+    it('highlights fields listed as differing from baseline', () => {
+      render();
+      fixture.componentRef.setInput('differingFields', new Set(['supplyVoltage']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector(`[id="${component.controlIds().supplyVoltage}"]`).closest('.input-group').classList).toContain('indicate-different');
+    });
+
+    it('leaves fields that match baseline unhighlighted', () => {
+      render();
+      fixture.componentRef.setInput('differingFields', new Set(['supplyVoltage']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector(`[id="${component.controlIds().avgCurrent}"]`).closest('.input-group').classList).not.toContain('indicate-different');
+    });
+
+    it('highlights nothing without differing fields', () => {
+      render();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+  });
 });

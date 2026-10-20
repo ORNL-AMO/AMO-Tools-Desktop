@@ -4,6 +4,8 @@ import { generateFormControlIds } from '../../../../shared/helperFunctions';
 import { Settings } from '../../../../shared/models/settings';
 import { WallLossForm, WallLossesFormService } from './wall-losses-form.service';
 import { WallLossItem, WallLossesService } from './wall-losses.service';
+import { WallLoss } from '../../../models/wall-loss';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-wall-losses-form',
@@ -14,6 +16,7 @@ import { WallLossItem, WallLossesService } from './wall-losses.service';
 export class WallLossesFormComponent implements OnInit {
   readonly item = input.required<WallLossItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<WallLoss>>();
 
   private readonly formService = inject(WallLossesFormService);
   private readonly wallLossesService = inject(WallLossesService);

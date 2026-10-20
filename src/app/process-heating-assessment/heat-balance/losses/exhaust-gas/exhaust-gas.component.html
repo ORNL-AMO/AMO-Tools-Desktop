@@ -28,7 +28,7 @@
 
       @if (!item.collapse) {
         <div class="card-body">
-          <app-exhaust-gas-form [item]="item" [settings]="settings()"></app-exhaust-gas-form>
+          <app-exhaust-gas-form [item]="item" [differingFields]="service.differingFields(item.id)" [settings]="settings()"></app-exhaust-gas-form>
 
           <div class="loss-results mt-3">
             <div class="d-flex justify-content-between small">

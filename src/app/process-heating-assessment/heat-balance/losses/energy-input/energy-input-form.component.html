@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{controlIds().naturalGasHeatInput}}">Natural Gas Heat Input</label>
-      <div class="input-group" [class.invalid]="form().controls.naturalGasHeatInput.invalid">
+      <div class="input-group" [class.invalid]="form().controls.naturalGasHeatInput.invalid" [class.indicate-different]="differingFields()?.has('naturalGasHeatInput')">
         <input type="number" step="100" min="0" class="form-control"
           id="{{controlIds().naturalGasHeatInput}}" formControlName="naturalGasHeatInput" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'MMBtu/hr' : 'GJ/hr'}}</span>
@@ -16,7 +16,7 @@
       </button>
       @if (showFlowRate()) {
         <label class="small d-block" for="{{controlIds().flowRateInput}}">Natural Gas Flow Rate</label>
-        <div class="input-group">
+        <div class="input-group" [class.indicate-different]="differingFields()?.has('flowRateInput')">
           <input type="number" step="any" class="form-control" id="{{controlIds().flowRateInput}}"
             formControlName="flowRateInput" onfocus="this.select();" (input)="setHeatInputFromFlowRate()">
           <span class="input-group-addon units">@if (settings().unitsOfMeasure === 'Imperial') { scf/hr } @else { Nm<sup>3</sup>/hr }</span>
@@ -25,7 +25,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().coalCarbonInjection}}">Coal Carbon Injection</label>
-      <div class="input-group" [class.invalid]="form().controls.coalCarbonInjection.invalid">
+      <div class="input-group" [class.invalid]="form().controls.coalCarbonInjection.invalid" [class.indicate-different]="differingFields()?.has('coalCarbonInjection')">
         <input type="number" step="10" min="0" class="form-control"
           id="{{controlIds().coalCarbonInjection}}" formControlName="coalCarbonInjection" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'lb/hr' : 'kg/hr'}}</span>
@@ -35,7 +35,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().coalHeatingValue}}">Coal Heating Value</label>
-      <div class="input-group" [class.invalid]="form().controls.coalHeatingValue.invalid">
+      <div class="input-group" [class.invalid]="form().controls.coalHeatingValue.invalid" [class.indicate-different]="differingFields()?.has('coalHeatingValue')">
         <input type="number" step="100" min="0" class="form-control"
           id="{{controlIds().coalHeatingValue}}" formControlName="coalHeatingValue" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'Btu/lb' : 'kJ/kg'}}</span>
@@ -45,7 +45,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().electrodeUse}}">Electrode Use</label>
-      <div class="input-group" [class.invalid]="form().controls.electrodeUse.invalid">
+      <div class="input-group" [class.invalid]="form().controls.electrodeUse.invalid" [class.indicate-different]="differingFields()?.has('electrodeUse')">
         <input type="number" step="10" min="0" class="form-control"
           id="{{controlIds().electrodeUse}}" formControlName="electrodeUse" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'lb/hr' : 'kg/hr'}}</span>
@@ -55,7 +55,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().electrodeHeatingValue}}">Electrode Heating Value</label>
-      <div class="input-group" [class.invalid]="form().controls.electrodeHeatingValue.invalid">
+      <div class="input-group" [class.invalid]="form().controls.electrodeHeatingValue.invalid" [class.indicate-different]="differingFields()?.has('electrodeHeatingValue')">
         <input type="number" step="100" min="0" class="form-control"
           id="{{controlIds().electrodeHeatingValue}}" formControlName="electrodeHeatingValue" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'Btu/lb' : 'kJ/kg'}}</span>
@@ -65,7 +65,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().otherFuels}}">Other Fuels</label>
-      <div class="input-group" [class.invalid]="form().controls.otherFuels.invalid">
+      <div class="input-group" [class.invalid]="form().controls.otherFuels.invalid" [class.indicate-different]="differingFields()?.has('otherFuels')">
         <input type="number" step="10" min="0" class="form-control"
           id="{{controlIds().otherFuels}}" formControlName="otherFuels" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'MMBtu/hr' : 'GJ/hr'}}</span>
@@ -75,7 +75,7 @@
     </div>
     <div class="form-group">
       <label class="small" for="{{controlIds().electricityInput}}">Electricity Input</label>
-      <div class="input-group" [class.invalid]="form().controls.electricityInput.invalid">
+      <div class="input-group" [class.invalid]="form().controls.electricityInput.invalid" [class.indicate-different]="differingFields()?.has('electricityInput')">
         <input type="number" step="10" min="0" class="form-control"
           id="{{controlIds().electricityInput}}" formControlName="electricityInput" onfocus="this.select();">
         <span class="input-group-addon units">kW</span>

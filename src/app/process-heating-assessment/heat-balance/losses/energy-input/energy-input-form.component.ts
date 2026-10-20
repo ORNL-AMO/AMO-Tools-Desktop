@@ -3,6 +3,8 @@ import { generateFormControlIds } from '../../../../shared/helperFunctions';
 import { Settings } from '../../../../shared/models/settings';
 import { EnergyInputForm, EnergyInputFormService } from './energy-input-form.service';
 import { EnergyInputItem } from './energy-input.service';
+import { EnergyInputEAF } from '../../../../shared/models/phast/losses/energyInputEAF';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-energy-input-form',
@@ -13,6 +15,7 @@ import { EnergyInputItem } from './energy-input.service';
 export class EnergyInputFormComponent {
   readonly item = input.required<EnergyInputItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<EnergyInputEAF>>();
 
   private readonly formService = inject(EnergyInputFormService);
 

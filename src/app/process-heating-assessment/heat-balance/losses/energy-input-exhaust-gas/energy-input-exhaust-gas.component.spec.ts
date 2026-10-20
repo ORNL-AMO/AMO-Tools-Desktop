@@ -34,7 +34,7 @@ describe('EnergyInputExhaustGasComponent', () => {
 
     energyInputExhaustGasServiceSpy = jasmine.createSpyObj(
       'EnergyInputExhaustGasService',
-      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse'],
+      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse', 'differingFields'],
       {
         losses: lossesSignal,
         total: totalSignal,

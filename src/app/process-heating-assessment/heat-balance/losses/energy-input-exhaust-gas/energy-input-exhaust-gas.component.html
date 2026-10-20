@@ -31,7 +31,7 @@
 
       @if (!item.collapse) {
         <div class="card-body">
-          <app-energy-input-exhaust-gas-form [item]="item" [settings]="settings()"></app-energy-input-exhaust-gas-form>
+          <app-energy-input-exhaust-gas-form [item]="item" [differingFields]="service.differingFields(item.id)" [settings]="settings()"></app-energy-input-exhaust-gas-form>
 
           <div class="loss-results mt-3">
             <div class="d-flex justify-content-between small">

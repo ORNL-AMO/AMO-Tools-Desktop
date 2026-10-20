@@ -222,4 +222,28 @@ describe('AtmosphereFormComponent', () => {
       expect(formService.setOutletTempValidator).not.toHaveBeenCalled();
     });
   });
+
+  describe('compare indicators', () => {
+    it('highlights fields listed as differing from baseline', () => {
+      setInputsAndInit();
+      fixture.componentRef.setInput('differingFields', new Set(['specificHeat']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('[id="specificHeat_instance-1"]').closest('.input-group').classList).toContain('indicate-different');
+    });
+
+    it('leaves fields that match baseline unhighlighted', () => {
+      setInputsAndInit();
+      fixture.componentRef.setInput('differingFields', new Set(['specificHeat']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('[id="inletTemp_instance-1"]').closest('.input-group').classList).not.toContain('indicate-different');
+    });
+
+    it('highlights nothing without differing fields', () => {
+      setInputsAndInit();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+  });
 });

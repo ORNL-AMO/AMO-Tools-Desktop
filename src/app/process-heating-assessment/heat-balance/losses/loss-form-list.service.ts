@@ -7,6 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Losses } from '../../models/phast';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { EntityWithId, LossItemsStore } from './loss-items-store';
+import { LossDifferences, LossFieldDifferences } from './loss-compare.util';
 
 export interface LossFormItem<TForm> extends EntityWithId {
   name: string;
@@ -84,6 +85,14 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
     this.subscriptions.delete(id);
     this.store.remove(id);
     this.saveLosses();
+  }
+
+  /**
+   * @param id loss item id
+   * @returns fields of the item that differ from baseline, or undefined when none apply (baseline scenario, new item)
+   */
+  differingFields(id: string): LossFieldDifferences<TLoss> | undefined {
+    return (this.assessmentService.lossDifferences(this.scenario, this.lossKey) as LossDifferences<TLoss>).get(id);
   }
 
   /** Swaps an entry's form for one of a different shape (e.g. a cooling loss switching gas ↔ liquid). */

@@ -4,6 +4,8 @@ import { generateFormControlIds } from '../../../../shared/helperFunctions';
 import { Settings } from '../../../../shared/models/settings';
 import { OpeningForm, OpeningFormService } from './opening-form.service';
 import { OpeningItem } from './opening.service';
+import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-opening-form',
@@ -14,6 +16,7 @@ import { OpeningItem } from './opening.service';
 export class OpeningFormComponent implements OnInit {
   readonly item = input.required<OpeningItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<OpeningLoss>>();
 
   private readonly formService = inject(OpeningFormService);
   private readonly destroyRef = inject(DestroyRef);

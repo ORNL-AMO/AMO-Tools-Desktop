@@ -30,7 +30,7 @@
 
       @if (!item.collapse) {
         <div class="card-body">
-          <app-fixture-form [item]="item" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-fixture-form>
+          <app-fixture-form [item]="item" [differingFields]="service.differingFields(item.id)" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-fixture-form>
 
           <div class="loss-results mt-3">
             <div class="d-flex justify-content-between small">

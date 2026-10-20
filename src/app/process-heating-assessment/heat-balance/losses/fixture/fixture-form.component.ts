@@ -9,6 +9,8 @@ import { CHARGE_MATERIAL_UNITS } from '../charge-material/charge-material-units'
 import { AddSolidMaterialModalComponent } from '../charge-material/solid-form/add-solid-material-modal.component';
 import { FixtureItem } from './fixture.service';
 import { FixtureForm } from './fixture-form.service';
+import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-fixture-form',
@@ -19,6 +21,7 @@ import { FixtureForm } from './fixture-form.service';
 export class FixtureFormComponent implements OnInit {
   readonly item = input.required<FixtureItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<FixtureLoss>>();
   readonly instanceId = input.required<string>();
 
   readonly form = computed(() => this.item().form as FixtureForm);

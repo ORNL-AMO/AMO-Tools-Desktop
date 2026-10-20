@@ -91,4 +91,28 @@ describe('SlagFormComponent', () => {
       expect(fixture.nativeElement.textContent).toContain('℃');
     });
   });
+
+  describe('compare indicators', () => {
+    it('highlights fields listed as differing from baseline', () => {
+      render();
+      fixture.componentRef.setInput('differingFields', new Set(['weight']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector(`[id="${component.controlIds().weight}"]`).closest('.input-group').classList).toContain('indicate-different');
+    });
+
+    it('leaves fields that match baseline unhighlighted', () => {
+      render();
+      fixture.componentRef.setInput('differingFields', new Set(['weight']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector(`[id="${component.controlIds().inletTemperature}"]`).closest('.input-group').classList).not.toContain('indicate-different');
+    });
+
+    it('highlights nothing without differing fields', () => {
+      render();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+  });
 });

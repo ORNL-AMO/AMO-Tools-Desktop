@@ -126,4 +126,28 @@ describe('EnergyInputExhaustGasFormComponent', () => {
       expect(query(component.controlIds().electricalHeaterEfficiency).closest('.input-group').classList).not.toContain('invalid');
     });
   });
+
+  describe('compare indicators', () => {
+    it('highlights fields listed as differing from baseline', () => {
+      render();
+      fixture.componentRef.setInput('differingFields', new Set(['electricalHeaterEfficiency']));
+      fixture.detectChanges();
+
+      expect(query(component.controlIds().electricalHeaterEfficiency).closest('.input-group').classList).toContain('indicate-different');
+    });
+
+    it('leaves fields that match baseline unhighlighted', () => {
+      render();
+      fixture.componentRef.setInput('differingFields', new Set(['electricalHeaterEfficiency']));
+      fixture.detectChanges();
+
+      expect(query(component.controlIds().totalHeatInput).closest('.input-group').classList).not.toContain('indicate-different');
+    });
+
+    it('highlights nothing without differing fields', () => {
+      render();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+  });
 });
