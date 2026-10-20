@@ -43,7 +43,6 @@ export class FlueGasService {
     this.setForm(existing?.flueGasType === FlueGasType.ByMass ? FlueGasType.ByMass : FlueGasType.ByVolume, existing);
   }
 
-  /** Switching types intentionally discards the other type's values. */
   /**
    * @returns fields of the flue gas entry that differ from baseline, or undefined when none apply (baseline scenario)
    */
@@ -51,6 +50,7 @@ export class FlueGasService {
     return this.assessmentService.lossDifferences(this.scenario, 'flueGasLosses').get(this.id);
   }
 
+  /** Switching types intentionally discards the other type's values. */
   switchType(type: FlueGasType): void {
     if (type === this.flueGasType()) return;
     this.setForm(type, undefined);

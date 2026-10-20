@@ -156,4 +156,22 @@ describe('FlueGasComponent', () => {
       expect(fixture.nativeElement.querySelector('.alert-warning')).toBeNull();
     });
   });
+
+  describe('compare indicators', () => {
+    const select = (): HTMLElement => fixture.nativeElement.querySelector('select');
+
+    it('highlights the fuel type select when it differs from baseline', () => {
+      serviceSpy.differingFields.and.returnValue(new Set(['flueGasType']) as never);
+      fixture.detectChanges();
+
+      expect(select().classList).toContain('indicate-different');
+    });
+
+    it('leaves the fuel type select unhighlighted when it matches baseline', () => {
+      serviceSpy.differingFields.and.returnValue(new Set(['flueGasByVolume.CH4']) as never);
+      fixture.detectChanges();
+
+      expect(select().classList).not.toContain('indicate-different');
+    });
+  });
 });
