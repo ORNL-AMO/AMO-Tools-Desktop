@@ -178,4 +178,34 @@ describe('HeatSystemEfficiencyComponent', () => {
       expect(text).toContain('——');
     });
   });
+
+  describe('compare indicator', () => {
+    const efficiencyGroup = (): HTMLElement => fixture.nativeElement.querySelector('.input-group');
+
+    function stubScenarios(baselineEfficiency: number, modificationEfficiency: number): void {
+      assessmentServiceSpy.scenarioPhastSignal.and.callFake(
+        scenario => ({ systemEfficiency: scenario === 'baseline' ? baselineEfficiency : modificationEfficiency }) as never,
+      );
+    }
+
+    it('highlights the field when the modification efficiency differs from baseline', () => {
+      stubScenarios(80, 90);
+      create('mod-1');
+
+      expect(efficiencyGroup().classList).toContain('indicate-different');
+    });
+
+    it('does not highlight the field when the modification efficiency matches baseline', () => {
+      stubScenarios(80, 80);
+      create('mod-1');
+
+      expect(efficiencyGroup().classList).not.toContain('indicate-different');
+    });
+
+    it('never highlights the baseline scenario', () => {
+      create();
+
+      expect(efficiencyGroup().classList).not.toContain('indicate-different');
+    });
+  });
 });

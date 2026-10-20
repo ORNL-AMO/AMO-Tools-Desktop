@@ -27,7 +27,7 @@ describe('FlueGasComponent', () => {
     flueGasType = signal<FlueGasType>(FlueGasType.ByVolume);
     result = signal<FlueGasAvailableHeatResult | null>(null);
     warnings = signal<FlueGasWarnings | null>(null);
-    serviceSpy = jasmine.createSpyObj('FlueGasService', ['initialize', 'switchType'], { formList, flueGasType, result, warnings });
+    serviceSpy = jasmine.createSpyObj('FlueGasService', ['initialize', 'switchType', 'differingFields'], { formList, flueGasType, result, warnings });
 
     await TestBed.configureTestingModule({
       imports: [FormsModule, SharedPipesModule],

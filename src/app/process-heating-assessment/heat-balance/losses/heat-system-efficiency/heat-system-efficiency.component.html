@@ -4,7 +4,7 @@
     <div class="form-section">
       <div class="form-group">
         <label class="small" for="efficiency_{{scenario()}}">Heat System Efficiency</label>
-        <div class="input-group" [class.invalid]="form.controls.efficiency.invalid">
+        <div class="input-group" [class.invalid]="form.controls.efficiency.invalid" [class.indicate-different]="efficiencyDiffersFromBaseline()">
           <input type="number" step="any" min="0" max="100" class="form-control"
             id="efficiency_{{scenario()}}" formControlName="efficiency" onfocus="this.select();">
           <span class="input-group-addon units">%</span>

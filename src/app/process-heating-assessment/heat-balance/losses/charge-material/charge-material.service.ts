@@ -9,6 +9,7 @@ import { LossItemsStore } from '../loss-items-store';
 import { GasMaterialForm, GasMaterialFormService } from './gas-form/gas-material-form.service';
 import { LiquidMaterialForm, LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
 import { SolidMaterialForm, SolidMaterialFormService } from './solid-form/solid-material-form.service';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 interface ChargeMaterialItemBase {
   id: string;
@@ -95,6 +96,14 @@ export class ChargeMaterialService {
     const chargeMaterials = this.assessmentService.lossSignal(scenario, 'chargeMaterials') ?? [];
     const items = chargeMaterials.map((material, index) => this.buildItem(this.ensureId(material), index));
     this.store.load(items);
+  }
+
+  /**
+   * @param id charge material id
+   * @returns fields of the material that differ from baseline, or undefined when none apply (baseline scenario, new item)
+   */
+  differingFields(id: string): LossFieldDifferences<ChargeMaterial> | undefined {
+    return this.assessmentService.lossDifferences(this.scenario, 'chargeMaterials').get(id);
   }
 
   toggleCollapse(id: string): void {

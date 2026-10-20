@@ -114,4 +114,30 @@ describe('FlueGasConditionsFieldsComponent', () => {
       expect(fixture.nativeElement.querySelector('#flueGasTemperature_instance-1')).not.toBeNull();
     });
   });
+
+  describe('compare indicators', () => {
+    const group = (id: string): HTMLElement => fixture.nativeElement.querySelector(`[id="${id}"]`).closest('.input-group');
+
+    it('highlights fields listed as differing from baseline', () => {
+      render(OxygenCalculationMethod.ExcessAir);
+      fixture.componentRef.setInput('differingFields', new Set(['flueGasTemperature']));
+      fixture.detectChanges();
+
+      expect(group('flueGasTemperature_instance-1').classList).toContain('indicate-different');
+    });
+
+    it('leaves fields that match baseline unhighlighted', () => {
+      render(OxygenCalculationMethod.ExcessAir);
+      fixture.componentRef.setInput('differingFields', new Set(['flueGasTemperature']));
+      fixture.detectChanges();
+
+      expect(group('fuelTemperature_instance-1').classList).not.toContain('indicate-different');
+    });
+
+    it('highlights nothing without differing fields', () => {
+      render(OxygenCalculationMethod.ExcessAir);
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+  });
 });

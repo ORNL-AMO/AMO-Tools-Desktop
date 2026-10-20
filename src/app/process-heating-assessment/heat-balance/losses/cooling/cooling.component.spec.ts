@@ -34,7 +34,7 @@ describe('CoolingComponent', () => {
 
     coolingServiceSpy = jasmine.createSpyObj(
       'CoolingService',
-      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse', 'switchMedium'],
+      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse', 'switchMedium', 'differingFields'],
       {
         losses: lossesSignal,
         total: totalSignal,

@@ -51,7 +51,7 @@ describe('ChargeMaterialComponent', () => {
 
     chargeMaterialServiceSpy = jasmine.createSpyObj(
       'ChargeMaterialService',
-      ['initialize', 'setName', 'switchType', 'add', 'remove', 'toggleCollapse'],
+      ['initialize', 'setName', 'switchType', 'add', 'remove', 'toggleCollapse', 'differingFields'],
       {
         materials: materialsSignal,
         results: signal(new Map()),

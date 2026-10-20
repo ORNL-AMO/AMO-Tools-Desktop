@@ -12,7 +12,7 @@
 <form [formGroup]="form()">
   <div class="form-group">
     <label for="materialId_{{ instanceId() }}">Name of Material</label>
-    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId"
+    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" [class.indicate-different]="liquidDifferences().has('materialId')"
       (change)="materialSelector.onMaterialSelected(f.materialId.value)">
       @for (material of materialSelector.materialTypes(); track material.id) {
         <option [ngValue]="material.id">{{ material.substance }}</option>
@@ -24,7 +24,7 @@
 
   <div class="form-group">
     <label for="specificHeatOfLiquid_{{ instanceId() }}">Specific Heat of Liquid</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('specificHeatLiquid')">
       <input type="number" class="form-control" id="specificHeatOfLiquid_{{ instanceId() }}" formControlName="specificHeatOfLiquid">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
@@ -36,7 +36,7 @@
 
   <div class="form-group">
     <label for="vaporizingTemperature_{{ instanceId() }}">Vaporizing Temperature</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('vaporizingTemperature')">
       <input type="number" class="form-control" id="vaporizingTemperature_{{ instanceId() }}" formControlName="vaporizingTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
@@ -48,7 +48,7 @@
 
   <div class="form-group">
     <label for="latentHeatOfVaporization_{{ instanceId() }}">Latent Heat of Vaporization</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('latentHeat')">
       <input type="number" class="form-control" id="latentHeatOfVaporization_{{ instanceId() }}" formControlName="latentHeatOfVaporization">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
@@ -60,7 +60,7 @@
 
   <div class="form-group">
     <label for="specificHeatOfVapor_{{ instanceId() }}">Specific Heat of Vapor</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('specificHeatVapor')">
       <input type="number" class="form-control" id="specificHeatOfVapor_{{ instanceId() }}" formControlName="specificHeatOfVapor">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
@@ -72,7 +72,7 @@
 
   <div class="form-group">
     <label for="feedRate_{{ instanceId() }}">Charge Feed Rate</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('chargeFeedRate')">
       <input type="number" class="form-control" id="feedRate_{{ instanceId() }}" formControlName="feedRate">
       <app-input-unit [settings]="settings()" [imperialUnit]="'lb/hr'" [metricUnit]="'kg/hr'"></app-input-unit>
     </div>
@@ -86,7 +86,7 @@
 
   <div class="form-group">
     <label for="initialTemperature_{{ instanceId() }}">Charge Inlet Temperature</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('initialTemperature')">
       <input type="number" class="form-control" id="initialTemperature_{{ instanceId() }}" formControlName="initialTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
@@ -105,7 +105,7 @@
 
   <div class="form-group">
     <label for="chargeMaterialDischargeTemperature_{{ instanceId() }}">Charge Outlet Temperature</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('dischargeTemperature')">
       <input type="number" class="form-control" id="chargeMaterialDischargeTemperature_{{ instanceId() }}" formControlName="chargeMaterialDischargeTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
@@ -123,7 +123,7 @@
 
   <div class="form-group">
     <label for="percentChargeVaporized_{{ instanceId() }}">Charge Vaporized</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('percentVaporized')">
       <input type="number" class="form-control" id="percentChargeVaporized_{{ instanceId() }}" formControlName="percentChargeVaporized">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
@@ -132,7 +132,7 @@
 
   <div class="form-group">
     <label for="percentChargeReacted_{{ instanceId() }}">Charge Reacted</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('percentReacted')">
       <input type="number" class="form-control" id="percentChargeReacted_{{ instanceId() }}" formControlName="percentChargeReacted">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
@@ -141,7 +141,7 @@
 
   <div class="form-group">
     <label for="heatOfReaction_{{ instanceId() }}">Heat of Reaction</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('reactionHeat')">
       <input type="number" class="form-control" id="heatOfReaction_{{ instanceId() }}" formControlName="heatOfReaction">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
@@ -151,7 +151,7 @@
 
   <div class="form-group">
     <label for="endothermicOrExothermic_{{ instanceId() }}">Type of Reaction</label>
-    <select class="form-control" id="endothermicOrExothermic_{{ instanceId() }}" formControlName="endothermicOrExothermic">
+    <select class="form-control" id="endothermicOrExothermic_{{ instanceId() }}" formControlName="endothermicOrExothermic" [class.indicate-different]="liquidDifferences().has('thermicReactionType')">
       <option [ngValue]="0">Endothermic</option>
       <option [ngValue]="1">Exothermic</option>
     </select>
@@ -159,7 +159,7 @@
 
   <div class="form-group">
     <label for="additionalHeatRequired_{{ instanceId() }}">Additional Heat Required</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="liquidDifferences().has('additionalHeat')">
       <input type="number" class="form-control" id="additionalHeatRequired_{{ instanceId() }}" formControlName="additionalHeatRequired">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/hr'" [metricUnit]="'kJ/hr'"></app-input-unit>
     </div>

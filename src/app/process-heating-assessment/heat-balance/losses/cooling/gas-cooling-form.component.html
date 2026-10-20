@@ -3,12 +3,12 @@
 <form [formGroup]="form()">
   <div class="form-group">
     <label for="coolingMedium_{{ instanceId() }}">Name of Cooling Medium</label>
-    <input type="text" class="form-control" id="coolingMedium_{{ instanceId() }}" formControlName="coolingMedium" onfocus="this.select();">
+    <input type="text" class="form-control" id="coolingMedium_{{ instanceId() }}" formControlName="coolingMedium" [class.indicate-different]="differingFields()?.has('coolingMedium')" onfocus="this.select();">
   </div>
 
   <div class="form-group">
     <label for="specificHeat_{{ instanceId() }}">Average Specific Heat of Gas</label>
-    <div class="input-group" [class.invalid]="f.specificHeat.invalid">
+    <div class="input-group" [class.invalid]="f.specificHeat.invalid" [class.indicate-different]="gasDifferences().has('specificHeat')">
       <input type="number" step="any" class="form-control" id="specificHeat_{{ instanceId() }}" formControlName="specificHeat" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="Btu/(lb-&#8457;)" metricUnit="kJ/(kg-&#8451;)"></app-input-unit>
     </div>
@@ -20,7 +20,7 @@
 
   <div class="form-group">
     <label for="gasDensity_{{ instanceId() }}">Density</label>
-    <div class="input-group" [class.invalid]="f.gasDensity.invalid">
+    <div class="input-group" [class.invalid]="f.gasDensity.invalid" [class.indicate-different]="gasDifferences().has('gasDensity')">
       <input type="number" step="any" class="form-control" id="gasDensity_{{ instanceId() }}" formControlName="gasDensity" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="lb/scf" metricUnit="kg/Nm&sup3;"></app-input-unit>
     </div>
@@ -32,7 +32,7 @@
 
   <div class="form-group">
     <label for="flowRate_{{ instanceId() }}">Gas Flow</label>
-    <div class="input-group" [class.invalid]="f.flowRate.invalid">
+    <div class="input-group" [class.invalid]="f.flowRate.invalid" [class.indicate-different]="gasDifferences().has('flowRate')">
       <input type="number" step="any" class="form-control" id="flowRate_{{ instanceId() }}" formControlName="flowRate" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="scfm" metricUnit="Nm&sup3;/min"></app-input-unit>
     </div>
@@ -44,7 +44,7 @@
 
   <div class="form-group">
     <label for="inletTemp_{{ instanceId() }}">Inlet Temperature</label>
-    <div class="input-group" [class.invalid]="f.inletTemp.invalid">
+    <div class="input-group" [class.invalid]="f.inletTemp.invalid" [class.indicate-different]="gasDifferences().has('initialTemperature')">
       <input type="number" step="10" class="form-control" id="inletTemp_{{ instanceId() }}" formControlName="inletTemp" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
     </div>
@@ -56,7 +56,7 @@
 
   <div class="form-group">
     <label for="outletTemp_{{ instanceId() }}">Outlet Temperature</label>
-    <div class="input-group" [class.invalid]="f.outletTemp.invalid">
+    <div class="input-group" [class.invalid]="f.outletTemp.invalid" [class.indicate-different]="gasDifferences().has('outletTemperature')">
       <input type="number" step="10" class="form-control" id="outletTemp_{{ instanceId() }}" formControlName="outletTemp" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
     </div>
@@ -65,7 +65,7 @@
 
   <div class="form-group">
     <label for="correctionFactor_{{ instanceId() }}">Correction Factor</label>
-    <input type="number" step="any" class="form-control" id="correctionFactor_{{ instanceId() }}" formControlName="correctionFactor" onfocus="this.select();" [class.invalid]="f.correctionFactor.invalid">
+    <input type="number" step="any" class="form-control" id="correctionFactor_{{ instanceId() }}" formControlName="correctionFactor" onfocus="this.select();" [class.invalid]="f.correctionFactor.invalid" [class.indicate-different]="gasDifferences().has('correctionFactor')">
     <app-form-control-errors [control]="f.correctionFactor" [settings]="settings()"></app-form-control-errors>
   </div>
 </form>

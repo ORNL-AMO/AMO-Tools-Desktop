@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, Injector, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, Injector, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs';
 import { Settings } from '../../../../../shared/models/settings';
@@ -11,6 +11,8 @@ import { EMPTY_WARNINGS, LiquidMaterialForm, LiquidMaterialFormService, LiquidMa
 import { AddLiquidMaterialModalComponent } from './add-liquid-material-modal.component';
 import { UnitConversion } from '../../../../models/unit-conversion';
 import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
+import { ChargeMaterial, LiquidChargeMaterial } from '../../../../../shared/models/phast/losses/chargeMaterial';
+import { LossFieldDifferences, nestedDifferences } from '../../loss-compare.util';
 
 @Component({
   selector: 'app-charge-material-liquid-form',
@@ -22,7 +24,9 @@ export class ChargeMaterialLiquidFormComponent implements OnInit {
   readonly form = input.required<LiquidMaterialForm>();
   readonly settings = input.required<Settings>();
   readonly instanceId = input.required<string>();
+  readonly differingFields = input<LossFieldDifferences<ChargeMaterial>>();
 
+  protected readonly liquidDifferences = computed(() => nestedDifferences<LiquidChargeMaterial>(this.differingFields(), 'liquidChargeMaterial'));
   private readonly formService = inject(LiquidMaterialFormService);
   private readonly destroyRef = inject(DestroyRef);
 

@@ -12,7 +12,7 @@
 <form [formGroup]="form()">
   <div class="form-group">
     <label for="materialId_{{ instanceId() }}">Fuel</label>
-    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId"
+    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" [class.indicate-different]="massDifferences().has('gasTypeId')"
       (change)="materialSelector.onMaterialSelected(f.materialId.value)">
       @for (material of materialSelector.materialTypes(); track material.id) {
         <option [ngValue]="material.id">{{ material.substance }}</option>
@@ -22,11 +22,11 @@
     <app-form-control-errors [control]="f.materialId" [settings]="settings()"></app-form-control-errors>
   </div>
 
-  <app-flue-gas-conditions-fields [form]="form()" [settings]="settings()" [instanceId]="instanceId()"></app-flue-gas-conditions-fields>
+  <app-flue-gas-conditions-fields [form]="form()" [differingFields]="massDifferences()" [settings]="settings()" [instanceId]="instanceId()"></app-flue-gas-conditions-fields>
 
   <div class="form-group">
     <label for="ashDischargeTemperature_{{ instanceId() }}">Ash Discharge Temperature</label>
-    <div class="input-group" [class.invalid]="f.ashDischargeTemperature.invalid">
+    <div class="input-group" [class.invalid]="f.ashDischargeTemperature.invalid" [class.indicate-different]="massDifferences().has('ashDischargeTemperature')">
       <input type="number" step="10" class="form-control" id="ashDischargeTemperature_{{ instanceId() }}" formControlName="ashDischargeTemperature" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
     </div>
@@ -35,7 +35,7 @@
 
   <div class="form-group">
     <label for="unburnedCarbonInAsh_{{ instanceId() }}">Unburned Carbon in Ash</label>
-    <div class="input-group" [class.invalid]="f.unburnedCarbonInAsh.invalid">
+    <div class="input-group" [class.invalid]="f.unburnedCarbonInAsh.invalid" [class.indicate-different]="massDifferences().has('unburnedCarbonInAsh')">
       <input type="number" step="0.1" class="form-control" id="unburnedCarbonInAsh_{{ instanceId() }}" formControlName="unburnedCarbonInAsh" onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
@@ -46,7 +46,7 @@
   @for (component of fuelAnalysis; track component.key) {
     <div class="form-group">
       <label for="{{ component.key }}_{{ instanceId() }}">{{ component.label }}</label>
-      <div class="input-group" [class.invalid]="form().controls[component.key].invalid">
+      <div class="input-group" [class.invalid]="form().controls[component.key].invalid" [class.indicate-different]="massDifferences().has(component.key)">
         <input type="number" step="0.01" class="form-control" id="{{ component.key }}_{{ instanceId() }}" [formControlName]="component.key" onfocus="this.select();">
         <span class="input-group-addon units">%</span>
       </div>

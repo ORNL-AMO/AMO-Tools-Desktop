@@ -203,4 +203,38 @@ describe('ChargeMaterialGasFormComponent', () => {
       expect(gasFormService.setInitialTempValidator).not.toHaveBeenCalled();
     });
   });
+
+  describe('compare indicators', () => {
+    const group = (id: string): HTMLElement => fixture.nativeElement.querySelector(`[id="${id}"]`).closest('.input-group');
+
+    it('highlights fields listed as differing from baseline', () => {
+      setInputsAndInit();
+      fixture.componentRef.setInput('differingFields', new Set(['gasChargeMaterial.specificHeatGas']));
+      fixture.detectChanges();
+
+      expect(group('specificHeatOfGas_instance-1').classList).toContain('indicate-different');
+    });
+
+    it('leaves fields that match baseline unhighlighted', () => {
+      setInputsAndInit();
+      fixture.componentRef.setInput('differingFields', new Set(['gasChargeMaterial.specificHeatGas']));
+      fixture.detectChanges();
+
+      expect(group('feedRate_instance-1').classList).not.toContain('indicate-different');
+    });
+
+    it('highlights nothing without differing fields', () => {
+      setInputsAndInit();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+
+    it('ignores differences that belong to another material type', () => {
+      setInputsAndInit();
+      fixture.componentRef.setInput('differingFields', new Set(['solidChargeMaterial.specificHeatSolid']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+  });
 });

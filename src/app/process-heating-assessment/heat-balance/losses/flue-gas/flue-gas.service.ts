@@ -8,6 +8,7 @@ import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../se
 import { FlueGasAvailableHeatResult, FlueGasCalculationService } from './flue-gas-calculation.service';
 import { DEFAULT_FLUE_GAS_NAME, FlueGasForm, FlueGasFormService, FlueGasMassForm, FlueGasType, isFlueGasMassForm } from './flue-gas-form.service';
 import { getFlueGasByMassWarnings, getFlueGasByVolumeWarnings } from './flue-gas-warnings';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 /**
  * Single-entry flue gas state. Results read only `flueGasLosses[0]`, so the form edits that entry and
@@ -43,6 +44,13 @@ export class FlueGasService {
   }
 
   /** Switching types intentionally discards the other type's values. */
+  /**
+   * @returns fields of the flue gas entry that differ from baseline, or undefined when none apply (baseline scenario)
+   */
+  differingFields(): LossFieldDifferences<FlueGas> | undefined {
+    return this.assessmentService.lossDifferences(this.scenario, 'flueGasLosses').get(this.id);
+  }
+
   switchType(type: FlueGasType): void {
     if (type === this.flueGasType()) return;
     this.setForm(type, undefined);
