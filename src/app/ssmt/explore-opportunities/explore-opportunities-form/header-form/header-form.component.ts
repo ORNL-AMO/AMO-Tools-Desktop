@@ -1,10 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
-import { SSMT, HeaderWithHighestPressure, HeaderNotHighestPressure } from '../../../../shared/models/steam/ssmt';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild } from '@angular/core';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { SSMT, HeaderWithHighestPressure, HeaderNotHighestPressure, ProcessSteamUsageData } from '../../../../shared/models/steam/ssmt';
 import { Settings } from '../../../../shared/models/settings';
 import { ExploreOpportunitiesService } from '../../explore-opportunities.service';
 import { HeaderService, HeaderRanges, HeaderWarnings } from '../../../header/header.service';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 import { SsmtService } from '../../../ssmt.service';
+import { ProcessSteamUsageModalComponent } from '../../../header/process-steam-usage-modal/process-steam-usage-modal.component';
+import { ProcessSteamUsageService, SteamHeaderKey, SteamHeaderPressureLevel } from '../../../header/process-steam-usage-modal/process-steam-usage.service';
+import { CondensateHandlingFormComponent } from './condensate-handling-form/condensate-handling-form.component';
 
 @Component({
     selector: 'app-header-form',
@@ -21,6 +25,9 @@ export class HeaderFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<SSMT>();
+  @ViewChild('processSteamUsageModal', { static: false }) processSteamUsageModal: ModalDirective;
+  @ViewChild(ProcessSteamUsageModalComponent) processSteamUsageCalculator: ProcessSteamUsageModalComponent;
+  @ViewChild(CondensateHandlingFormComponent) condensateHandlingForm: CondensateHandlingFormComponent;
 
   showHighPressureHeatLoss: boolean = false;
   showMediumPressureHeatLoss: boolean = false;
@@ -39,8 +46,11 @@ export class HeaderFormComponent implements OnInit {
   modificationMediumPressureForm: UntypedFormGroup;
   baselineWarnings: HeaderWarnings;
   modificationWarnings: HeaderWarnings;
+  processSteamUsageHeader: SteamHeaderKey;
+  processSteamUsagePressureLevel: SteamHeaderPressureLevel;
+  processSteamUsageDataCopy: ProcessSteamUsageData;
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private headerService: HeaderService,
-    private ssmtService: SsmtService) { }
+    private ssmtService: SsmtService, private processSteamUsageService: ProcessSteamUsageService) { }
 
   ngOnInit() {
     this.initFormSetup();
@@ -197,19 +207,22 @@ export class HeaderFormComponent implements OnInit {
   }
 
   initHighPressureSteamUsage() {
-    if (this.baselineHighPressureForm.controls.processSteamUsage.value !== this.modificationHighPressureForm.controls.processSteamUsage.value) {
+    if (this.baselineHighPressureForm.controls.processSteamUsage.value !== this.modificationHighPressureForm.controls.processSteamUsage.value
+      || this.isProcessSteamUsageDataModified('highPressureHeader')) {
       this.showHighPressureSteamUsage = true;
     } else {
       this.showHighPressureHeatLoss = false;
     }
   }
   initMediumPressureSteamUsage() {
-    if (this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false) {
+    if (this.modificationMediumPressureForm.controls.useBaselineProcessSteamUsage.value == false
+      || this.isProcessSteamUsageDataModified('mediumPressureHeader')) {
       this.showMediumPressureSteamUsage = true;
     }
   }
   initLowPressureSteamUsage() {
-    if (this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false) {
+    if (this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.value == false
+      || this.isProcessSteamUsageDataModified('lowPressureHeader')) {
       this.showLowPressureSteamUsage = true;
     }
   }
@@ -227,7 +240,10 @@ export class HeaderFormComponent implements OnInit {
     }
   }
   toggleHighPressureSteamUsage() {
-    if (this.hasProcessSteamUsageData('highPressureHeader')) return;
+    if (this.showHighPressureSteamUsage === false && this.hasProcessSteamUsageData('highPressureHeader')) {
+      this.resetProcessSteamUsage('highPressureHeader');
+      return;
+    }
     if (this.showHighPressureSteamUsage === false) {
       this.modificationHighPressureForm.controls.processSteamUsage.patchValue(this.baselineHighPressureForm.controls.processSteamUsage.value);
       this.save();
@@ -235,7 +251,10 @@ export class HeaderFormComponent implements OnInit {
   }
 
   toggleMediumPressureSteamUsage() {
-    if (this.hasProcessSteamUsageData('mediumPressureHeader')) return;
+    if (this.showMediumPressureSteamUsage === false && this.hasProcessSteamUsageData('mediumPressureHeader')) {
+      this.resetProcessSteamUsage('mediumPressureHeader');
+      return;
+    }
     if (this.showMediumPressureSteamUsage === false) {
       this.modificationMediumPressureForm.controls.processSteamUsage.patchValue(this.baselineMediumPressureForm.controls.processSteamUsage.value);
       this.save();
@@ -244,7 +263,10 @@ export class HeaderFormComponent implements OnInit {
   }
 
   toggleLowPressureSteamUsage() {
-    if (this.hasProcessSteamUsageData('lowPressureHeader')) return;
+    if (this.showLowPressureSteamUsage === false && this.hasProcessSteamUsageData('lowPressureHeader')) {
+      this.resetProcessSteamUsage('lowPressureHeader');
+      return;
+    }
     if (this.showLowPressureSteamUsage === false) {
       this.modificationLowPressureForm.controls.processSteamUsage.patchValue(this.baselineLowPressureForm.controls.processSteamUsage.value);
       this.save();
@@ -252,8 +274,114 @@ export class HeaderFormComponent implements OnInit {
     this.modificationLowPressureForm.controls.useBaselineProcessSteamUsage.patchValue(!this.showLowPressureSteamUsage);
   }
 
-  hasProcessSteamUsageData(header: 'highPressureHeader' | 'mediumPressureHeader' | 'lowPressureHeader'): boolean {
+  hasProcessSteamUsageData(header: SteamHeaderKey): boolean {
     return !!this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header]?.processSteamUsageData;
+  }
+
+  isProcessSteamUsageDataModified(header: SteamHeaderKey): boolean {
+    return this.processSteamUsageService.isDataModified(
+      this.ssmt.headerInput[header]?.processSteamUsageData,
+      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header]?.processSteamUsageData
+    );
+  }
+
+  showProcessSteamUsageModal(header: SteamHeaderKey) {
+    const modificationForm = this.getModificationHeaderForm(header);
+    const baselineForm = this.getBaselineHeaderForm(header);
+    const useBaselineValues = header !== 'highPressureHeader' && modificationForm.controls.useBaselineProcessSteamUsage.value;
+    const data = this.hasProcessSteamUsageData(header)
+      ? this.processSteamUsageService.copyData(this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header].processSteamUsageData)
+      : this.processSteamUsageService.getDefaultData(
+        useBaselineValues ? baselineForm.controls.processSteamUsage.value : modificationForm.controls.processSteamUsage.value,
+        modificationForm.controls.condensationRecoveryRate.value
+      );
+    this.processSteamUsageHeader = header;
+    this.processSteamUsagePressureLevel = this.processSteamUsageService.getPressureLevel(header);
+    this.processSteamUsageDataCopy = this.processSteamUsageService.updateCalculatedLosses(data, this.processSteamUsagePressureLevel, this.settings);
+    this.ssmtService.modalOpen.next(true);
+    this.processSteamUsageModal.show();
+  }
+
+  hideProcessSteamUsageModal() {
+    this.ssmtService.modalOpen.next(false);
+    this.processSteamUsageModal.hide();
+    this.processSteamUsageDataCopy = undefined;
+  }
+
+  applyProcessSteamUsageData() {
+    if (!this.processSteamUsageCalculator || this.processSteamUsageCalculator.form.invalid) {
+      this.processSteamUsageCalculator?.form.markAllAsTouched();
+      return;
+    }
+    const header = this.processSteamUsageHeader;
+    const data = this.processSteamUsageService.updateCalculatedLosses(
+      this.processSteamUsageCalculator.getData(),
+      this.processSteamUsagePressureLevel,
+      this.settings
+    );
+    const totals = this.processSteamUsageService.calculateTotals(data);
+    const modificationForm = this.getModificationHeaderForm(header);
+    modificationForm.patchValue({
+      processSteamUsage: totals.processSteamUsage,
+      condensationRecoveryRate: totals.condensateRecoveryRate
+    });
+    if (header !== 'highPressureHeader') {
+      modificationForm.controls.useBaselineProcessSteamUsage.patchValue(false);
+    }
+    this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header].processSteamUsageData = data;
+    // The calculator sets both values, so both checkboxes for this header are turned on together.
+    this.setSteamUsageShown(header, true);
+    this.condensateHandlingForm.setCondensateRecoveryShown(header, true);
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowSteamUsage.hasOpportunity = true;
+    this.ssmt.modifications[this.exploreModIndex].exploreOppsShowCondensateHandling.hasOpportunity = true;
+    this.save();
+    this.hideProcessSteamUsageModal();
+  }
+
+  // Unchecking either box for a header with calculated rows puts both values and the rows back to baseline.
+  resetProcessSteamUsage(header: SteamHeaderKey) {
+    const modificationForm = this.getModificationHeaderForm(header);
+    const baselineForm = this.getBaselineHeaderForm(header);
+    modificationForm.patchValue({
+      processSteamUsage: baselineForm.controls.processSteamUsage.value,
+      condensationRecoveryRate: baselineForm.controls.condensationRecoveryRate.value
+    });
+    if (header !== 'highPressureHeader') {
+      modificationForm.controls.useBaselineProcessSteamUsage.patchValue(true);
+    }
+    this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header].processSteamUsageData =
+      this.processSteamUsageService.copyData(this.ssmt.headerInput[header]?.processSteamUsageData);
+    this.setSteamUsageShown(header, false);
+    this.condensateHandlingForm?.setCondensateRecoveryShown(header, false);
+    this.save();
+  }
+
+  setSteamUsageShown(header: SteamHeaderKey, shown: boolean) {
+    if (header === 'highPressureHeader') {
+      this.showHighPressureSteamUsage = shown;
+    } else if (header === 'mediumPressureHeader') {
+      this.showMediumPressureSteamUsage = shown;
+    } else {
+      this.showLowPressureSteamUsage = shown;
+    }
+  }
+
+  getModificationHeaderForm(header: SteamHeaderKey): UntypedFormGroup {
+    if (header === 'highPressureHeader') {
+      return this.modificationHighPressureForm;
+    } else if (header === 'mediumPressureHeader') {
+      return this.modificationMediumPressureForm;
+    }
+    return this.modificationLowPressureForm;
+  }
+
+  getBaselineHeaderForm(header: SteamHeaderKey): UntypedFormGroup {
+    if (header === 'highPressureHeader') {
+      return this.baselineHighPressureForm;
+    } else if (header === 'mediumPressureHeader') {
+      return this.baselineMediumPressureForm;
+    }
+    return this.baselineLowPressureForm;
   }
 
   save() {

@@ -143,4 +143,30 @@ describe('ProcessSteamUsageService', () => {
     expect(totals.recoveredCondensate).toBe(0.007);
     expect(totals.condensateRecoveryRate).toBe(100);
   });
+
+  it('maps header keys to pressure levels', () => {
+    expect(service.getPressureLevel('highPressureHeader')).toBe('highPressure');
+    expect(service.getPressureLevel('mediumPressureHeader')).toBe('mediumPressure');
+    expect(service.getPressureLevel('lowPressureHeader')).toBe('lowPressure');
+  });
+
+  it('copies rows so edits to a modification do not change the baseline', () => {
+    const baseline = service.getDefaultData(75, 33);
+    const copy = service.copyData(baseline);
+    copy.rows[2].steamUsage = 50;
+
+    expect(baseline.rows[2].steamUsage).toBe(75);
+    expect(service.copyData(undefined)).toBeUndefined();
+  });
+
+  it('only reports modification rows as modified when they differ from baseline', () => {
+    const baseline = service.getDefaultData(75, 33);
+    const modification = service.copyData(baseline);
+
+    expect(service.isDataModified(baseline, undefined)).toBeFalse();
+    expect(service.isDataModified(baseline, modification)).toBeFalse();
+    modification.rows[0].quantity = 10;
+    expect(service.isDataModified(baseline, modification)).toBeTrue();
+    expect(service.isDataModified(undefined, modification)).toBeTrue();
+  });
 });

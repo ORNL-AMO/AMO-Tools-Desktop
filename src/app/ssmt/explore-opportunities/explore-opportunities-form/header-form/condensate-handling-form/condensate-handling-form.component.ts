@@ -5,6 +5,7 @@ import { ExploreOpportunitiesService } from '../../../explore-opportunities.serv
 import { UntypedFormGroup } from '@angular/forms';
 import { SsmtService } from '../../../../ssmt.service';
 import { HeaderService, HeaderWarnings } from '../../../../header/header.service';
+import { ProcessSteamUsageService, SteamHeaderKey } from '../../../../header/process-steam-usage-modal/process-steam-usage.service';
 
 @Component({
     selector: 'app-condensate-handling-form',
@@ -21,6 +22,10 @@ export class CondensateHandlingFormComponent implements OnInit {
   exploreModIndex: number;
   @Output('emitSave')
   emitSave = new EventEmitter<boolean>();
+  @Output('emitShowProcessSteamUsage')
+  emitShowProcessSteamUsage = new EventEmitter<SteamHeaderKey>();
+  @Output('emitResetProcessSteamUsage')
+  emitResetProcessSteamUsage = new EventEmitter<SteamHeaderKey>();
   @Input()
   baselineHighPressureForm: UntypedFormGroup;
   @Input()
@@ -46,7 +51,7 @@ export class CondensateHandlingFormComponent implements OnInit {
   showFlashCondensateMediumPressure: boolean = false;
   showFlashCondensateLowPressure: boolean = false;
   constructor(private exploreOpportunitiesService: ExploreOpportunitiesService, private ssmtService: SsmtService,
-    private headerService: HeaderService) { }
+    private headerService: HeaderService, private processSteamUsageService: ProcessSteamUsageService) { }
 
   ngOnInit() {
     this.initCondensateHandling();
@@ -104,21 +109,24 @@ export class CondensateHandlingFormComponent implements OnInit {
 
   //condensate recovery rate
   initHighPressureCondensateRecovery() {
-    if (this.baselineHighPressureForm.controls.condensationRecoveryRate.value !== this.modificationHighPressureForm.controls.condensationRecoveryRate.value) {
+    if (this.baselineHighPressureForm.controls.condensationRecoveryRate.value !== this.modificationHighPressureForm.controls.condensationRecoveryRate.value
+      || this.isProcessSteamUsageDataModified('highPressureHeader')) {
       this.showHighPressureCondensateRecovery = true;
     } else {
       this.showHighPressureCondensateRecovery = false;
     }
   }
   initMediumPressureCondensateRecovery() {
-    if (this.baselineMediumPressureForm.controls.condensationRecoveryRate.value !== this.modificationMediumPressureForm.controls.condensationRecoveryRate.value) {
+    if (this.baselineMediumPressureForm.controls.condensationRecoveryRate.value !== this.modificationMediumPressureForm.controls.condensationRecoveryRate.value
+      || this.isProcessSteamUsageDataModified('mediumPressureHeader')) {
       this.showMediumPressureCondensateRecovery = true;
     } else {
       this.showMediumPressureCondensateRecovery = false;
     }
   }
   initLowPressureCondensateRecovery() {
-    if (this.baselineLowPressureForm.controls.condensationRecoveryRate.value !== this.modificationLowPressureForm.controls.condensationRecoveryRate.value) {
+    if (this.baselineLowPressureForm.controls.condensationRecoveryRate.value !== this.modificationLowPressureForm.controls.condensationRecoveryRate.value
+      || this.isProcessSteamUsageDataModified('lowPressureHeader')) {
       this.showLowPressureCondensateRecovery = true;
     } else {
       this.showLowPressureCondensateRecovery = false;
@@ -126,7 +134,10 @@ export class CondensateHandlingFormComponent implements OnInit {
   }
 
   toggleHighPressureCondensateRecovery() {
-    if (this.hasProcessSteamUsageData('highPressureHeader')) return;
+    if (this.showHighPressureCondensateRecovery === false && this.hasProcessSteamUsageData('highPressureHeader')) {
+      this.emitResetProcessSteamUsage.emit('highPressureHeader');
+      return;
+    }
     if (this.showHighPressureCondensateRecovery === false) {
       this.modificationHighPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineHighPressureForm.controls.condensationRecoveryRate.value);
       this.save();
@@ -134,7 +145,10 @@ export class CondensateHandlingFormComponent implements OnInit {
   }
 
   toggleMediumPressureCondensateRecovery() {
-    if (this.hasProcessSteamUsageData('mediumPressureHeader')) return;
+    if (this.showMediumPressureCondensateRecovery === false && this.hasProcessSteamUsageData('mediumPressureHeader')) {
+      this.emitResetProcessSteamUsage.emit('mediumPressureHeader');
+      return;
+    }
     if (this.showMediumPressureCondensateRecovery === false) {
       this.modificationMediumPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineMediumPressureForm.controls.condensationRecoveryRate.value);
       this.save();
@@ -142,7 +156,10 @@ export class CondensateHandlingFormComponent implements OnInit {
   }
 
   toggleLowPressureCondensateRecovery() {
-    if (this.hasProcessSteamUsageData('lowPressureHeader')) return;
+    if (this.showLowPressureCondensateRecovery === false && this.hasProcessSteamUsageData('lowPressureHeader')) {
+      this.emitResetProcessSteamUsage.emit('lowPressureHeader');
+      return;
+    }
     if (this.showLowPressureCondensateRecovery === false) {
       this.modificationLowPressureForm.controls.condensationRecoveryRate.patchValue(this.baselineLowPressureForm.controls.condensationRecoveryRate.value);
       this.save();
@@ -196,8 +213,29 @@ export class CondensateHandlingFormComponent implements OnInit {
       this.save();
     }
   }
-  hasProcessSteamUsageData(header: 'highPressureHeader' | 'mediumPressureHeader' | 'lowPressureHeader'): boolean {
+  hasProcessSteamUsageData(header: SteamHeaderKey): boolean {
     return !!this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header]?.processSteamUsageData;
+  }
+
+  isProcessSteamUsageDataModified(header: SteamHeaderKey): boolean {
+    return this.processSteamUsageService.isDataModified(
+      this.ssmt.headerInput[header]?.processSteamUsageData,
+      this.ssmt.modifications[this.exploreModIndex].ssmt.headerInput[header]?.processSteamUsageData
+    );
+  }
+
+  showProcessSteamUsage(header: SteamHeaderKey) {
+    this.emitShowProcessSteamUsage.emit(header);
+  }
+
+  setCondensateRecoveryShown(header: SteamHeaderKey, shown: boolean) {
+    if (header === 'highPressureHeader') {
+      this.showHighPressureCondensateRecovery = shown;
+    } else if (header === 'mediumPressureHeader') {
+      this.showMediumPressureCondensateRecovery = shown;
+    } else {
+      this.showLowPressureCondensateRecovery = shown;
+    }
   }
 
   save() {

@@ -1,13 +1,12 @@
-@if (hasProcessSteamUsageData('highPressureHeader') || hasProcessSteamUsageData('mediumPressureHeader') || hasProcessSteamUsageData('lowPressureHeader')) {
-  <p class="alert alert-info">Steam usage and recovery calculated from rows can be edited in Expert View &rarr; Header using the process steam usage calculator.</p>
-}
 <app-condensate-handling-form [exploreModIndex]="exploreModIndex" [(ssmt)]="ssmt" [settings]="settings"
   (emitSave)="save()" [baselineHighPressureForm]="baselineHighPressureForm"
   [modificationHighPressureForm]="modificationHighPressureForm"
   [baselineMediumPressureForm]="baselineMediumPressureForm"
   [modificationMediumPressureForm]="modificationMediumPressureForm" [baselineLowPressureForm]="baselineLowPressureForm"
   [modificationLowPressureForm]="modificationLowPressureForm" [baselineWarnings]="baselineWarnings"
-  [modificationWarnings]="modificationWarnings"></app-condensate-handling-form>
+  [modificationWarnings]="modificationWarnings"
+  (emitShowProcessSteamUsage)="showProcessSteamUsageModal($event)"
+  (emitResetProcessSteamUsage)="resetProcessSteamUsage($event)"></app-condensate-handling-form>
 
 <!--HEAT LOSS-->
 <div class="checkbox">
@@ -196,7 +195,7 @@
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
       <label for="modifyHighPressureSteamUsage" class="steam-check-label">
-        <input type="checkbox" id="modifyHighPressureSteamUsage" [disabled]="hasProcessSteamUsageData('highPressureHeader')" (focus)="focusField('processSteamUsage')"
+        <input type="checkbox" id="modifyHighPressureSteamUsage" (focus)="focusField('processSteamUsage')"
           (change)="toggleHighPressureSteamUsage()" [(ngModel)]="showHighPressureSteamUsage" /> Adjust High Pressure
         Steam Usage
       </label>
@@ -251,6 +250,9 @@
             </span>
           </div>
         </div>
+        <a class="form-text small click-link" (click)="showProcessSteamUsageModal('highPressureHeader')">
+          {{ hasProcessSteamUsageData('highPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+        </a>
       </form>
     </li>
   </div>
@@ -259,7 +261,7 @@
     <li class="explore-opps-item">
       <div class="checkbox mt-2">
         <label for="modifyMediumPressureSteamUsage" class="steam-check-label">
-          <input type="checkbox" id="modifyMediumPressureSteamUsage" [disabled]="hasProcessSteamUsageData('mediumPressureHeader')" (focus)="focusField('processSteamUsage')"
+          <input type="checkbox" id="modifyMediumPressureSteamUsage" (focus)="focusField('processSteamUsage')"
             (change)="toggleMediumPressureSteamUsage()" [(ngModel)]="showMediumPressureSteamUsage" /> Adjust Medium
           Pressure Steam Usage
         </label>
@@ -319,6 +321,9 @@
               </span>
             </div>
           </div>
+          <a class="form-text small click-link" (click)="showProcessSteamUsageModal('mediumPressureHeader')">
+            {{ hasProcessSteamUsageData('mediumPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+          </a>
         </form>
       </li>
     </div>
@@ -328,7 +333,7 @@
     <li class="explore-opps-item">
       <div class="checkbox mt-2">
         <label for="modifyLowPressureSteamUsage" class="steam-check-label">
-          <input type="checkbox" id="modifyLowPressureSteamUsage" [disabled]="hasProcessSteamUsageData('lowPressureHeader')" (focus)="focusField('processSteamUsage')"
+          <input type="checkbox" id="modifyLowPressureSteamUsage" (focus)="focusField('processSteamUsage')"
             (change)="toggleLowPressureSteamUsage()" [(ngModel)]="showLowPressureSteamUsage" /> Adjust Low Pressure
           Steam Usage
         </label>
@@ -383,9 +388,43 @@
               </span>
             </div>
           </div>
+          <a class="form-text small click-link" (click)="showProcessSteamUsageModal('lowPressureHeader')">
+            {{ hasProcessSteamUsageData('lowPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+          </a>
         </form>
       </li>
     </div>
   </div>
 
 </ul>
+
+<div bsModal #processSteamUsageModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="exploreProcessSteamUsageModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static', keyboard: false}">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exploreProcessSteamUsageModalLabel">
+          Process Steam Usage (Modification)
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="hideProcessSteamUsageModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-0">
+        @if (processSteamUsageDataCopy) {
+          <app-process-steam-usage-modal [data]="processSteamUsageDataCopy" [settings]="settings"
+            [pressureLevel]="processSteamUsagePressureLevel" [idPrefix]="'explore_' + processSteamUsagePressureLevel">
+          </app-process-steam-usage-modal>
+        }
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" (click)="hideProcessSteamUsageModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="applyProcessSteamUsageData()"
+          [disabled]="!!processSteamUsageCalculator?.form?.invalid">
+          Apply Data
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

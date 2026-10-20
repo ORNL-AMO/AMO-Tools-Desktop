@@ -5,6 +5,7 @@ import { ProcessSteamUsageData, ProcessSteamUsageRow } from '../../../shared/mod
 import { Settings } from '../../../shared/models/settings';
 
 export type SteamHeaderPressureLevel = 'highPressure' | 'mediumPressure' | 'lowPressure';
+export type SteamHeaderKey = 'highPressureHeader' | 'mediumPressureHeader' | 'lowPressureHeader';
 
 export interface ProcessSteamUsageTotals {
   processSteamUsage: number;
@@ -82,6 +83,26 @@ export class ProcessSteamUsageService {
       recoveredCondensate: roundVal(recoveredCondensate, 4),
       condensateRecoveryRate: roundVal(condensateRecoveryRate, 4)
     };
+  }
+
+  getPressureLevel(header: SteamHeaderKey): SteamHeaderPressureLevel {
+    const pressureLevels: Record<SteamHeaderKey, SteamHeaderPressureLevel> = {
+      highPressureHeader: 'highPressure',
+      mediumPressureHeader: 'mediumPressure',
+      lowPressureHeader: 'lowPressure'
+    };
+    return pressureLevels[header];
+  }
+
+  copyData(data: ProcessSteamUsageData): ProcessSteamUsageData {
+    return data ? JSON.parse(JSON.stringify(data)) : undefined;
+  }
+
+  isDataModified(baselineData: ProcessSteamUsageData, modificationData: ProcessSteamUsageData): boolean {
+    if (!modificationData) {
+      return false;
+    }
+    return JSON.stringify(baselineData ?? null) !== JSON.stringify(modificationData);
   }
 
   private getLossRow(name: string, type: 'steam-leaks' | 'steam-trap-leaks'): ProcessSteamUsageRow {

@@ -10,7 +10,7 @@
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
       <label for="modifyHighPressureCondensateRecovery" class="steam-check-label">
-        <input type="checkbox" id="modifyHighPressureCondensateRecovery" [disabled]="hasProcessSteamUsageData('highPressureHeader')"
+        <input type="checkbox" id="modifyHighPressureCondensateRecovery"
           (focus)="focusField('condensationRecoveryRate')" (change)="toggleHighPressureCondensateRecovery()"
           [(ngModel)]="showHighPressureCondensateRecovery" />
         Adjust High Pressure Condensate Recovery Rate
@@ -65,6 +65,9 @@
             </span>
           </div>
         </div>
+        <a class="form-text small click-link" (click)="showProcessSteamUsage('highPressureHeader')">
+          {{ hasProcessSteamUsageData('highPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+        </a>
       </form>
     </li>
   </div>
@@ -73,7 +76,7 @@
     <li class="explore-opps-item">
       <div class="checkbox mt-2">
         <label for="modifyMediumPressureCondensateRecovery" class="steam-check-label">
-          <input type="checkbox" id="modifyMediumPressureCondensateRecovery" [disabled]="hasProcessSteamUsageData('mediumPressureHeader')"
+          <input type="checkbox" id="modifyMediumPressureCondensateRecovery"
             (focus)="focusField('condensationRecoveryRate')" (change)="toggleMediumPressureCondensateRecovery()"
             [(ngModel)]="showMediumPressureCondensateRecovery" />
           Adjust Medium Pressure Condensate Recovery Rate
@@ -129,6 +132,9 @@
               </span>
             </div>
           </div>
+          <a class="form-text small click-link" (click)="showProcessSteamUsage('mediumPressureHeader')">
+            {{ hasProcessSteamUsageData('mediumPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+          </a>
         </form>
       </li>
     </div>
@@ -138,7 +144,7 @@
     <li class="explore-opps-item">
       <div class="checkbox mt-2">
         <label for="modifyLowPressureCondensateRecovery" class="steam-check-label">
-          <input type="checkbox" id="modifyLowPressureCondensateRecovery" [disabled]="hasProcessSteamUsageData('lowPressureHeader')"
+          <input type="checkbox" id="modifyLowPressureCondensateRecovery"
             (focus)="focusField('condensationRecoveryRate')" (change)="toggleLowPressureCondensateRecovery()"
             [(ngModel)]="showLowPressureCondensateRecovery" /> Adjust
           Low Pressure Condensate Recovery Rate
@@ -195,6 +201,9 @@
               </span>
             </div>
           </div>
+          <a class="form-text small click-link" (click)="showProcessSteamUsage('lowPressureHeader')">
+            {{ hasProcessSteamUsageData('lowPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+          </a>
         </form>
       </li>
     </div>
