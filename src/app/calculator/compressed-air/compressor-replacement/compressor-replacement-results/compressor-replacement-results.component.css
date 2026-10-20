@@ -1,0 +1,15 @@
+td {
+  font-size: 0.65rem;
+  border-right: solid 1px darkgray;
+  border-left: solid 1px darkgray;
+  padding: 1px 2px;
+}
+
+tbody {
+  box-shadow: 0 4px 8px 0 grey;
+}
+
+.group-label {
+  font-weight: bold;
+  font-size: 0.8rem;
+}

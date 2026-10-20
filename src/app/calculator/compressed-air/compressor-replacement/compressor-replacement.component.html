@@ -1,0 +1,217 @@
+<div class="calculator-container modify-conditions compressed-air standalone-calculator" #contentContainer>
+  <div class="d-flex header pb-1 pt-1 align-items-center bg-white" #leftPanelHeader>
+    <div class="d-flex align-items-center">
+      <div class="calc-icon-header icon-compressed-air d-none d-sm-flex">
+        <img src="assets/images/calculator-icons/compressed-air-icons/compressor-performance.png">
+      </div>
+      <div class="mx-auto">
+        <h3>Compressor Performance</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="small-tab-select nav-pills nav-fill" #smallTabSelect>
+    <div class="nav-item" (click)="setSmallScreenTab('baseline')" [class.small-screen-active]="smallScreenTab === 'baseline'">
+      <a class="nav-link">Baseline</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('modification')" [class.small-screen-active]="smallScreenTab === 'modification'">
+      <a class="nav-link">Modification</a>
+    </div>
+    <div class="nav-item" (click)="setSmallScreenTab('details')" [class.small-screen-active]="smallScreenTab === 'details'">
+      <a class="nav-link">Details</a>
+    </div>
+  </div>
+
+  <div class="panel-group" [style.height.px]="containerHeight">
+
+    <!-- ================= BASELINE ================= -->
+    <div class="calculator-panel-container" [class.small-screen-tab]="smallScreenTab === 'baseline'" [style.height.px]="containerHeight" (click)="setBaselineSelected()">
+      <div class="header mr-2 ml-2">
+        <h3>Baseline</h3>
+        <a class="click-link pull-right small add-fixture" (click)="addBaselineCompressor()">+Add Compressor</a>
+      </div>
+      <div class="d-flex flex-column ml-4 mr-4 mb-4">
+        <div class="form-group mb-2" [class.invalid]="baselineErrors.electricityCost">
+          <label for="baselineElectricityCost">Electricity Cost</label>
+          <div class="input-group">
+            <input class="form-control" type="number" [(ngModel)]="baselineElectricityCost" name="baselineElectricityCost" (input)="getResults()" [disabled]="!baselineSelected" (focus)="focusField('electricityCost')">
+            <span class="input-group-addon units">$/kWh</span>
+          </div>
+          @if (baselineErrors.electricityCost) {
+            <span class="alert-danger pull-right small">{{baselineErrors.electricityCost}}</span>
+          }
+        </div>
+
+
+        <div class="form-group mb-2" [class.invalid]="baselineErrors.atmosphericPressure">
+          <label>Atmospheric Pressure
+            <a class="form-text small click-link" (click)="toggleBaselinePressureKnown()">
+              {{baselineAtmosphericPressureKnown ? 'Calculate from Elevation' : 'Pressure Known'}}
+            </a>
+          </label>
+          @if (!baselineAtmosphericPressureKnown) {
+            <div class="input-group">
+              <input class="form-control" type="number" step="10" min="0" [(ngModel)]="baselineElevation" name="baselineElevation" (input)="setBaselineAtmosphericPressure()" [disabled]="!baselineSelected" (focus)="focusField('systemElevation')">
+              <span class="input-group-addon units">{{units.distance}}</span>
+            </div>
+          } @else {
+            <div class="input-group">
+              <input class="form-control" type="number" step="any" min="0" [(ngModel)]="baselineAtmosphericPressure" name="baselineAtmosphericPressure" (input)="getResults()" [disabled]="!baselineSelected" (focus)="focusField('atmosphericPressure')">
+              <span class="input-group-addon units">{{units.atmospheric}}</span>
+            </div>
+          }
+          @if (!baselineAtmosphericPressureKnown) {
+            <div class="d-flex justify-content-center small bold">
+              {{baselineAtmosphericPressure | number:'1.0-2'}} <span class="pl-2">{{units.atmospheric}}</span>
+            </div>
+          }
+          @if (baselineErrors.atmosphericPressure) {
+            <span class="alert-danger pull-right small">{{baselineErrors.atmosphericPressure}}</span>
+          }
+          @if (baselineWarnings.atmosphericPressure) {
+            <span class="alert-warning pull-right small">{{baselineWarnings.atmosphericPressure}}</span>
+          }
+        </div>
+
+        <div class="form-group mb-3" [class.invalid]="baselineErrors.totalAirStorage">
+          <label for="baselineTotalAirStorage">Total Air Storage</label>
+          <div class="input-group">
+            <input class="form-control" type="number" step="10" min="0" [(ngModel)]="baselineTotalAirStorage" name="baselineTotalAirStorage" (input)="getResults()" [disabled]="!baselineSelected" (focus)="focusField('totalAirStorage')">
+            <span class="input-group-addon units">{{units.volume}}</span>
+          </div>
+          @if (baselineErrors.totalAirStorage) {
+            <span class="alert-danger pull-right small">{{baselineErrors.totalAirStorage}}</span>
+          }
+        </div>
+
+        @for (data of baselineData; track data; let index = $index) {
+          <div>
+            <app-compressor-replacement-form [data]="data" [isBaseline]="true" [index]="index" [selected]="baselineSelected" [settings]="settings" (emitCalculate)="updateBaselineData($event, index)" (emitFocusField)="focusField($event)" (emitRemoveCompressor)="removeBaselineCompressor($event)"></app-compressor-replacement-form>
+          </div>
+        }
+
+        <div class="w-100 justify-content-center btn-group btn-group-sm">
+          <button type="button" class="btn btn-danger pull-right btn-sm m-2 btn-form" (click)="btnResetData()">Reset Data</button>
+          <button type="button" class="btn btn-primary pull-right btn-sm m-2 btn-form" (click)="btnGenerateExample()">Generate Example</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= MODIFICATION ================= -->
+    <div class="calculator-panel-container" [class.small-screen-tab]="smallScreenTab === 'modification'" (click)="setModificationSelected()" [style.height.px]="containerHeight">
+      @if (modificationExists) {
+        <div class="header mr-2 ml-2">
+          <h3>Modification</h3>
+          <a class="click-link pull-right small add-fixture" (click)="addModificationCompressor()">+Add Compressor</a>
+        </div>
+        <div class="d-flex flex-column ml-4 mr-4 mb-4">
+          <div class="form-group mb-2" [class.invalid]="modificationErrors.electricityCost">
+            <label for="modificationElectricityCost">Electricity Cost</label>
+            <div class="input-group">
+              <input class="form-control" type="number" [(ngModel)]="modificationElectricityCost" name="modificationElectricityCost" (input)="getResults()" [disabled]="baselineSelected">
+              <span class="input-group-addon units">$/kWh</span>
+            </div>
+            @if (modificationErrors.electricityCost) {
+              <span class="alert-danger pull-right small">{{modificationErrors.electricityCost}}</span>
+            }
+          </div>
+
+
+          <div class="form-group mb-2" [class.invalid]="modificationErrors.atmosphericPressure">
+            <label>Atmospheric Pressure
+              <a class="form-text small click-link" (click)="toggleModificationPressureKnown()">
+                {{modificationAtmosphericPressureKnown ? 'Calculate from Elevation' : 'Pressure Known'}}
+              </a>
+            </label>
+            @if (!modificationAtmosphericPressureKnown) {
+              <div class="input-group">
+                <input class="form-control" type="number" step="10" min="0" [(ngModel)]="modificationElevation" name="modificationElevation" (input)="setModificationAtmosphericPressure()" [disabled]="baselineSelected">
+                <span class="input-group-addon units">{{units.distance}}</span>
+              </div>
+            } @else {
+              <div class="input-group">
+                <input class="form-control" type="number" step="any" min="0" [(ngModel)]="modificationAtmosphericPressure" name="modificationAtmosphericPressure" (input)="getResults()" [disabled]="baselineSelected">
+                <span class="input-group-addon units">{{units.atmospheric}}</span>
+              </div>
+            }
+            @if (!modificationAtmosphericPressureKnown) {
+              <div class="d-flex justify-content-center small bold">
+                {{modificationAtmosphericPressure | number:'1.0-2'}} <span class="pl-2">{{units.atmospheric}}</span>
+              </div>
+            }
+            @if (modificationErrors.atmosphericPressure) {
+              <span class="alert-danger pull-right small">{{modificationErrors.atmosphericPressure}}</span>
+            }
+            @if (modificationWarnings.atmosphericPressure) {
+              <span class="alert-warning pull-right small">{{modificationWarnings.atmosphericPressure}}</span>
+            }
+          </div>
+
+          <div class="form-group mb-3" [class.invalid]="modificationErrors.totalAirStorage">
+            <label for="modificationTotalAirStorage">Total Air Storage</label>
+            <div class="input-group">
+              <input class="form-control" type="number" step="10" min="0" [(ngModel)]="modificationTotalAirStorage" name="modificationTotalAirStorage" (input)="getResults()" [disabled]="baselineSelected">
+              <span class="input-group-addon units">{{units.volume}}</span>
+            </div>
+            @if (modificationErrors.totalAirStorage) {
+              <span class="alert-danger pull-right small">{{modificationErrors.totalAirStorage}}</span>
+            }
+          </div>
+
+          @for (data of modificationData; track data; let index = $index) {
+            <div>
+              <app-compressor-replacement-form [data]="data" [isBaseline]="false" [index]="index" [selected]="!baselineSelected" [settings]="settings"
+                [linkTargets]="averagePowerLinkTargets" [linkSourceAtmosphericPressure]="baselineAtmosphericPressure" [atmosphericPressure]="modificationAtmosphericPressure"
+                (emitCalculate)="updateModificationData($event, index)" (emitFocusField)="focusField($event)" (emitRemoveCompressor)="removeModificationCompressor($event)"></app-compressor-replacement-form>
+            </div>
+          }
+        </div>
+      } @else {
+        <div>
+          <div class="header mr-2 ml-2">
+            <h3>Modification</h3>
+          </div>
+          <div class="p-3 no-data">
+            <h3>Once you have set up your baseline..</h3>
+            <button type="button" class="btn btn-primary" (click)="createModification()">Add Modified Condition</button>
+            <p>Data will be copied from your current baseline condition.</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- ================= DETAILS ================= -->
+    <div class="calculator-panel-container help-panel" [class.small-screen-tab]="smallScreenTab === 'details'" [style.height.px]="containerHeight">
+      <div class="d-flex flex-column mh-100">
+        <div class="d-flex flex-wrap tabs primary sticky-top">
+          <div class="flex-fill panel-tab-item h-100" [class.active]="tabSelect == 'results'">
+            <a class="border-left-0 h-100 d-flex justify-content-center align-items-center" (click)="setTab('results')"><div>Results</div></a>
+          </div>
+          <div class="flex-fill panel-tab-item h-100" [class.active]="tabSelect == 'help'">
+            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('help')"><div>Help</div></a>
+          </div>
+          <div class="flex-fill panel-tab-item h-100" [class.active]="tabSelect == 'profile'">
+            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setTab('profile')"><div>Performance Profile</div></a>
+          </div>
+        </div>
+
+        <div class="p-2">
+          @if (tabSelect == 'results') {
+            <app-compressor-replacement-results [results]="results" [baselineRows]="baselineRows" [modificationRows]="modificationRows" [modificationExists]="modificationExists" [airflowUnit]="units.airflow" [airVolumeUnit]="units.airVolume" [costVolumeUnit]="units.costVolume" [powerUnit]="units.power" [isMetric]="isMetric"></app-compressor-replacement-results>
+          }
+          @if (tabSelect == 'help') {
+            <app-compressor-replacement-help [currentField]="currentField"></app-compressor-replacement-help>
+          }
+          @if (tabSelect == 'profile') {
+            <app-compressor-replacement-plot
+              [baselineData]="baselineData" [modificationData]="modificationData" [modificationExists]="modificationExists"
+              [settings]="settings" [refreshTrigger]="plotRefresh"
+              [baselineAtmosphericPressure]="baselineAtmosphericPressure" [baselineTotalAirStorage]="baselineTotalAirStorage"
+              [modificationAtmosphericPressure]="modificationAtmosphericPressure" [modificationTotalAirStorage]="modificationTotalAirStorage">
+            </app-compressor-replacement-plot>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,190 @@
+<div class="pr-2 pl-2 pt-3 d-flex flex-column help-info">
+  <h5>
+    Compressor Performance Help
+    <br>
+    <small class="text-muted">
+      Estimate the energy, cost and air-production impact of replacing or re-controlling air
+      compressors. Click any input to see what it means.
+    </small>
+  </h5>
+
+  <!-- Panel-level pricing / conditions -->
+  @if (currentField == 'electricityCost') {
+    <div class="my-2">
+    <h6>Electricity Cost<small class="text-muted"><br>Cost of electricity used to run the compressors, applied to annual consumption.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'systemElevation') {
+    <div class="my-2">
+    <h6>Elevation<small class="text-muted"><br>Site elevation above sea level. Used to estimate atmospheric pressure, which feeds the pressure correction below.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'atmosphericPressure') {
+    <div class="my-2">
+    <h6>Atmospheric Pressure<small class="text-muted"><br>Absolute ambient pressure at the site (defaults to sea level, 14.7 psia / 101.325 kPaa, or calculate it from elevation). It is the P<sub>alt</sub> term in the pressure correction and lowers power at altitude. Must be greater than 0; a warning shows outside about 10–16 psia (69–110 kPaa).<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'totalAirStorage') {
+    <div class="my-2">
+    <h6>Total Air Storage<small class="text-muted"><br>Combined receiver-tank and system volume. Required by the performance profile for the controls that unload into a receiver (inlet modulation with unloading, variable displacement, load/unload and multi-step unloading).<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'maxInputPower') {
+    <div class="my-2">
+    <h6>Max Possible Input Power<small class="text-muted"><br>The highest package input power the compressor can draw, i.e. its power at 100% duty factor after the operating-pressure correction.
+      <br><br>This is reported instead of a billed demand so that no assumption is made about your utility's demand structure. Apply your own ratchet, coincidence and demand-window rules to this figure, and use the change between baseline and modification to size a demand reduction.<hr></small></h6>
+  </div>
+  }
+
+  <!-- Duty factor -->
+  @if (currentField == 'averageDutyFactor') {
+    <div class="my-2">
+    <h6>Duty Factor / Percent Speed<small class="text-muted"><br>Average fraction of full output the compressor delivers over the year (0–1). For a VSD unit this is effectively its average percent speed. If a compressor runs at more than one duty factor, add it as a separate compressor. Values above 1 still calculate but show a warning.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'totalOperatingHours') {
+    <div class="my-2">
+    <h6>Total Operating Hours<small class="text-muted"><br>Hours per year the compressor runs. Use the calculator icon to build this from a weekly schedule.<hr></small></h6>
+  </div>
+  }
+
+  <!-- Lookup -->
+  @if (currentField == 'lookupType') {
+    <div class="my-2">
+    <h6>Compressor Data Lookup<small class="text-muted"><br>How the compressor's data is provided. Model Number and Capacity &amp; Pressure Requirements search the CAGI dataset and fill the data automatically; Manual lets you enter values directly.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'modelSearch') {
+    <div class="my-2">
+    <h6>Model Number Search<small class="text-muted"><br>Type a model number to fuzzy-search the CAGI dataset. Click a match to fill this compressor's data.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'capacityRequirement') {
+    <div class="my-2">
+    <h6>Capacity Requirement<small class="text-muted"><br>Target rated capacity. Matches within the capacity and pressure ranges (and the selected filters) appear as you type.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'pressureRequirement') {
+    <div class="my-2">
+    <h6>Pressure Requirement<small class="text-muted"><br>Target full-load operating pressure used to filter matches.<hr></small></h6>
+  </div>
+  }
+
+  <!-- Core power data -->
+  @if (currentField == 'ratedCapacity') {
+    <div class="my-2">
+    <h6>Rated Capacity<small class="text-muted"><br>Rated capacity at full-load operating pressure. Drives the air-produced and airflow calculations.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'powerInputType') {
+    <div class="my-2">
+    <h6>Power Input<small class="text-muted"><br>Provide full-load and zero-flow package power (blended by duty factor), or enter a single average power measured at the compressor's operating pressure.
+      <br><br>No performance profile is available for compressors entered as average power: one operating point cannot describe a part-load curve, so those rows are left off the profile graph and their design details are hidden.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'fullLoadPower') {
+    <div class="my-2">
+    <h6>Full-Load Package Power<small class="text-muted"><br>Total package input power at rated capacity and full-load operating pressure. This is the endpoint the pressure correction scales.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'zeroFlowPower') {
+    <div class="my-2">
+    <h6>Zero-Flow Power<small class="text-muted"><br>Total package input power at zero flow / fully unloaded. Left uncorrected by the pressure adjustment, since unloaded power is far less pressure-sensitive.
+      <br><br>Enter 0 for a unit that draws no power when unloaded; that is a valid value and the performance profile will still plot. For start/stop control it must be 0. It must always be less than full-load power.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'averagePower') {
+    <div class="my-2">
+    <h6>Average Power at Operating Pressure<small class="text-muted"><br>A single measured or estimated average package power, used in place of the full-load/zero-flow blend. Enter it as the power drawn <em>at the operating pressure shown above</em> &mdash; it already reflects that pressure, so it is used exactly as entered and is not corrected again.
+      <br><br>On the Modification side, <strong>Alter Operations For</strong> lets this row derive its power from a baseline compressor instead. The baseline reading is then re-scaled by the change in operating pressure:
+      <br>kW<sub>mod</sub> = kW<sub>base</sub> × [((P<sub>mod</sub>+P<sub>alt,mod</sub>)/P<sub>alt,mod</sub>)<sup>0.283</sup> &minus; 1] &divide; [((P<sub>base</sub>+P<sub>alt,base</sub>)/P<sub>alt,base</sub>)<sup>0.283</sup> &minus; 1]
+      <br><br>Because both sides share the same rated-pressure term, it cancels &mdash; no nameplate rated pressure is needed for this mode. Equal operating pressures give exactly the baseline power.<hr></small></h6>
+  </div>
+  }
+
+  <!-- Design details -->
+  @if (currentField == 'controlType') {
+    <div class="my-2">
+    <h6>Control Type<small class="text-muted"><br>Compressor control scheme. Auto selects VFD when a capacity ladder is present, otherwise Load/unload. Control type governs which design fields apply and the shape of the performance curve.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'blowdownTime') {
+    <div class="my-2">
+    <h6>Blowdown Time<small class="text-muted"><br>Time for the sump to blow down when unloading (lubricant-injected screw, control types 1–5). Defaults to 40 s injected / 0.0003 for lubricant-free.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'unloadSumpPressure') {
+    <div class="my-2">
+    <h6>Unload Sump Pressure<small class="text-muted"><br>Sump pressure held while unloaded. Applies to screw compressors on any control except start/stop; defaults to 15 psig (1.03 barg).<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'unloadPointCapacity') {
+    <div class="my-2">
+    <h6>Unload Point Capacity<small class="text-muted"><br>Capacity (%) at which the compressor stops modulating and begins unloading. For inlet modulation with unloading, the curve is a near-straight modulation line from full capacity down to this point, then unloads (storage-based cycling) below it. Fixed at 100% for load/unload; editable for modulation-with-unloading and VFD.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'noLoadPowerFM') {
+    <div class="my-2">
+    <h6>No Load Power (Fully Modulating)<small class="text-muted"><br>Power drawn when fully modulated, as a percent of full-load power. Sets the floor of the modulation line — inlet modulation is inefficient, so ~70% is typical. Leave blank to estimate from zero-flow ÷ full-load power.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'cagiType') {
+    <div class="my-2">
+    <h6>Compressor Type<small class="text-muted"><br>Rotary screw or reciprocating. Combined with stage count and oil-free status to select the underlying compressor model. Centrifugal is not yet supported.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'numberOfStages') {
+    <div class="my-2">
+    <h6>Number of Stages<small class="text-muted"><br>Compression stages (1 or 2). Blank assumes single stage.<hr></small></h6>
+  </div>
+  }
+
+  <!-- Pressures + correction -->
+  @if (currentField == 'fullLoadPressure') {
+    <div class="my-2">
+    <h6>Full Load Operating Pressure<small class="text-muted"><br>Rated discharge pressure at which the full-load power was measured (P<sub>rated</sub> in the correction). The performance data is referenced to this pressure.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'maxFullFlowPressure') {
+    <div class="my-2">
+    <h6>Maximum Full Flow Pressure<small class="text-muted"><br>Highest pressure at which the compressor still delivers full flow.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'operatingPressure') {
+    <div class="my-2">
+    <h6>Operating Pressure<small class="text-muted"><br>Discharge pressure to evaluate the compressor at (P<sub>discharge</sub>). Leave it equal to the rated pressure for no correction; lower it to model running at reduced pressure.
+      <br><br>Full-load and ladder power are scaled by the pressure-inlet correction:
+      <br>kW<sub>adj</sub> = kW<sub>rated</sub> × [((P<sub>discharge</sub>+P<sub>alt</sub>)/P<sub>alt</sub>)<sup>0.283</sup> − 1] ÷ [((P<sub>rated</sub>+P<sub>sea</sub>)/P<sub>sea</sub>)<sup>0.283</sup> − 1], with exponent (1.395−1)/1.395.
+      <br><br>The denominator is referenced to sea level (P<sub>sea</sub> = 14.7 psia / 101.325 kPaa) because rated data is published at sea level. At altitude, reaching the same gauge pressure requires more work, so the factor rises above 1 and the profile curve can sit above 100% even at rated pressure.
+      <br><br>Source: NREL Uniform Methods Project, Chapter 22 — Compressed Air Evaluation Protocol, p. 7, Eq. 3 (research-hub.nlr.gov/en/publications/chapter-22-compressed-air-evaluation-protocol-the-uniform-methods).<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'linkedCompressorId') {
+    <div class="my-2">
+    <h6>Alter Operations For<small class="text-muted"><br>Derive this modification compressor's average power from a baseline compressor instead of typing it. Select <strong>N/A</strong> to enter power directly.
+      <br><br>When a baseline compressor is selected, the average power field is locked and shows the baseline reading re-scaled by the difference between the two operating pressures. Only baseline compressors also entered as average power can be referenced, and the selected one needs both a power and an operating pressure.<hr></small></h6>
+  </div>
+  }
+
+  <!-- Turndown -->
+  @if (currentField == 'turndownRung') {
+    <div class="my-2">
+    <h6>Turndown Point<small class="text-muted"><br>Ladder rung used as the lower VFD turndown point on the performance curve.<hr></small></h6>
+  </div>
+  }
+  @if (currentField == 'midTurndownRung') {
+    <div class="my-2">
+    <h6>Mid Turndown Point<small class="text-muted"><br>Ladder rung used as the intermediate VFD turndown point on the performance curve.<hr></small></h6>
+  </div>
+  }
+
+  <div class="mt-4 pt-2 border-top">
+    <small class="text-muted" style="font-size: 0.7rem;">
+      <strong>Acknowledgement:</strong><br>
+      This material is based upon work by Texas A&amp;M supported by the U.S. Department of Energy's
+      Office of Manufacturing and Energy Supply Chains (DE-MS0000022). The views expressed herein do
+      not necessarily represent the views of the U.S. Department of Energy or the United States
+      Government.
+    </small>
+  </div>
+</div>

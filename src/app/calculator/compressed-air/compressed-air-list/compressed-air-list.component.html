@@ -194,5 +194,35 @@
                 </p>
             </div>
         </div>
+
+	<div class="d-block d-lg-flex calc-item-row w-100">
+	    <div class="p-2 col-12 col-lg-2 d-flex justify-content-center align-items-center">
+	        <div class="calc-icon-div d-flex justify-content-center align-items-center">
+	            <img src="assets/images/calculator-icons/compressed-air-icons/compressor-performance.png"
+	                class="calc-img" [routerLink]="['/calculators/compressor-replacement']">
+	        </div>
+	    </div>
+	    <div class="d-flex flex-fill flex-column justify-content-center">
+	        <a [routerLink]="['/calculators/compressor-replacement']">Compressor Performance</a>
+	        <p>
+		    Compare baseline vs. modified compressor scenarios for energy, cost, and air-production savings.
+		</p>
+	    </div>
+	</div>
+        <div class="d-block d-lg-flex calc-item-row w-100">
+            <div class="p-2 col-12 col-lg-2 d-flex justify-content-center align-items-center">
+                <div class="calc-icon-div d-flex justify-content-center align-items-center">
+                    <img src="assets/images/calculator-icons/compressed-air-icons/cagi-lookup.png"
+                        class="calc-img" [routerLink]="['/calculators/cagi-lookup']">
+                </div>
+            </div>
+            <div class="d-flex flex-fill flex-column justify-content-center">
+                <a [routerLink]="['/calculators/cagi-lookup']">CAGI Lookup</a>
+                <p>
+                    Search bundled CAGI compressor data sheets by model number and build a
+                    comparison table of selected units.
+                </p>
+            </div>
+        </div>
     </div>
 </div>
