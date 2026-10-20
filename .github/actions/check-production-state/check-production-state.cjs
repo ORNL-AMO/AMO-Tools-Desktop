@@ -8,15 +8,24 @@ module.exports = async function checkProductionState({ github, context, releaseT
 
   const seen = new Set([context.sha]);
   for await (const page of github.paginate.iterator(github.rest.actions.listWorkflowRuns, {
-    ...repository, workflow_id: 'main.yml', branch: 'master', status: 'success', per_page: 100,
+    ...repository, workflow_id: 'main.yml', branch: 'master', per_page: 100,
   })) {
-    for (const run of page.data.workflow_runs) {
-      if (run.head_branch !== 'master' || run.status !== 'completed' || run.conclusion !== 'success' ||
+    // Octokit normalizes list endpoints such as { workflow_runs: [...] } into
+    // arrays for paginate.iterator(), unlike the raw GitHub REST response.
+    for (const run of page.data) {
+      if (run.head_branch !== 'master' ||
           !['push', 'workflow_dispatch'].includes(run.event) || seen.has(run.head_sha)) continue;
-      seen.add(run.head_sha);
       const comparison = await github.rest.repos.compareCommitsWithBasehead({
         ...repository, basehead: `${context.sha}...${run.head_sha}`,
       });
+      // Ancestors cannot make this deployment stale; their attempt histories
+      // need not remain available or consume additional API requests.
+      if (['behind', 'identical'].includes(comparison.data.status)) {
+        seen.add(run.head_sha);
+        continue;
+      }
+      if (!await hasSuccessfulAttempt(github, repository, run)) continue;
+      seen.add(run.head_sha);
       if (comparison.data.status === 'ahead') {
         throw new Error(`A newer production commit (${run.head_sha}) has already completed. Refusing to redeploy this older run.`);
       }
@@ -51,3 +60,17 @@ module.exports = async function checkProductionState({ github, context, releaseT
     if (error.status !== 404) throw error;
   }
 };
+
+async function hasSuccessfulAttempt(github, repository, run) {
+  if (run.status === 'completed' && run.conclusion === 'success') return true;
+  // A rerun replaces the run's current conclusion. An earlier successful
+  // attempt remains evidence of production completion even if a later rerun
+  // failed (for example because its installer release is already published).
+  for (let attempt = run.run_attempt - 1; attempt >= 1; attempt--) {
+    const { data } = await github.rest.actions.getWorkflowRunAttempt({
+      ...repository, run_id: run.id, attempt_number: attempt,
+    });
+    if (data.status === 'completed' && data.conclusion === 'success') return true;
+  }
+  return false;
+}
