@@ -178,6 +178,7 @@ export interface HeaderWithHighestPressure {
     pressure: number;
     processSteamUsage: number;
     condensationRecoveryRate: number;
+    processSteamUsageData?: ProcessSteamUsageData;
     heatLoss: number;
     condensateReturnTemperature: number;
     flashCondensateReturn: boolean;
@@ -187,11 +188,25 @@ export interface HeaderNotHighestPressure {
     pressure: number;
     processSteamUsage: number;
     condensationRecoveryRate: number;
+    processSteamUsageData?: ProcessSteamUsageData;
     heatLoss: number;
     flashCondensateIntoHeader: boolean;
     desuperheatSteamIntoNextHighest: boolean;
     desuperheatSteamTemperature: number;
     useBaselineProcessSteamUsage: boolean;
+}
+
+export interface ProcessSteamUsageData {
+    rows: ProcessSteamUsageRow[];
+}
+
+export interface ProcessSteamUsageRow {
+    name: string;
+    type: 'steam-leaks' | 'steam-trap-leaks' | 'process';
+    quantity?: number;
+    steamUsage: number;
+    condensateRecoverable: boolean;
+    condensateRecoveryRate: number;
 }
 
 
