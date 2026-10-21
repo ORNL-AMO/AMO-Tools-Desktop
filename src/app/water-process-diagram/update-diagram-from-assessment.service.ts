@@ -17,25 +17,6 @@ export class UpdateDiagramFromAssessmentService {
     private settingsDbService: SettingsDbService,
     private assessmentIdbService: AssessmentDbService) { }
 
-  async syncDiagramToAssessment(diagram: Diagram, 
-    integratedDiagram: IntegratedAssessmentDiagram) {
-    if (diagram.assessmentId !== undefined) {
-      let integratedAssessment: Assessment;
-      if (integratedDiagram) {
-        integratedAssessment = integratedDiagram.assessment;
-      } else {
-        integratedAssessment = this.assessmentIdbService.findById(diagram.assessmentId);
-      }
-
-      if (integratedAssessment && diagram.modifiedDate < integratedAssessment.modifiedDate) {
-        this.updateDiagramFromAssessment(diagram, integratedAssessment.water);
-        let assessmentSettings: Settings = this.settingsDbService.getByAssessmentId(integratedAssessment);
-        this.setDiagramSettingsFromAssessment(integratedAssessment, assessmentSettings, diagram);
-        await firstValueFrom(this.diagramIdbService.updateWithObservable(diagram));
-      }
-    }
-  }
-
   getDiagramFromAssessment(assessment: Assessment): Diagram {
     let diagram = this.diagramIdbService.findById(assessment.diagramId);
     if (diagram) {
@@ -64,6 +45,29 @@ export class UpdateDiagramFromAssessmentService {
     this.filterDeletedEdges(diagram.waterDiagram, waterAssessment, assessmentNodes);
 
     diagram.waterDiagram.flowDiagramData.nodes = assessmentNodes;
+  }
+
+  /**
+   * Adds nodes for assessment components that have no node yet, without removing or changing existing nodes.
+   * Returns whether any node was added.
+   */
+  addMissingNodesFromAssessment(diagram: Diagram, waterAssessment: WaterAssessment): boolean {
+    const componentGroups: [WaterProcessComponentType, WaterProcessComponent[]][] = [
+      ['water-intake', waterAssessment.intakeSources],
+      ['water-discharge', waterAssessment.dischargeOutlets],
+      ['water-using-system', waterAssessment.waterUsingSystems],
+      ['water-treatment', waterAssessment.waterTreatments],
+      ['waste-water-treatment', waterAssessment.wasteWaterTreatments],
+      ['known-loss', waterAssessment.knownLosses],
+    ];
+    const flowDiagramData = diagram.waterDiagram.flowDiagramData;
+    const addedNodes: Node[] = [];
+    componentGroups.forEach(([componentType, components]) => {
+      const componentTypeNodes: Node[] = flowDiagramData.nodes.filter(node => node.data.processComponentType === componentType);
+      this.addNewDiagramNodes(componentTypeNodes, components, addedNodes);
+    });
+    flowDiagramData.nodes = flowDiagramData.nodes.concat(addedNodes);
+    return addedNodes.length > 0;
   }
 
   setDiagramSettingsFromAssessment(integratedAssessment: Assessment, settings: Settings, diagram: Diagram) {

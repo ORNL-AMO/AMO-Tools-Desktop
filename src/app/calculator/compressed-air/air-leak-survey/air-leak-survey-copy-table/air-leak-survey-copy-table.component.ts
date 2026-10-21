@@ -5,7 +5,6 @@ import { AirLeakSurveyService } from '../air-leak-survey.service';
 @Component({
   selector: 'app-air-leak-survey-copy-table',
   templateUrl: './air-leak-survey-copy-table.component.html',
-  styleUrls: ['./air-leak-survey-copy-table.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })

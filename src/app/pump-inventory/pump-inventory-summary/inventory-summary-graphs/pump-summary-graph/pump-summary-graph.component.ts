@@ -19,7 +19,6 @@ export class PumpSummaryGraphComponent {
     private plotlyService: PlotlyService) { }
 
   ngOnInit(): void {
-
   }
 
   ngAfterViewInit() {

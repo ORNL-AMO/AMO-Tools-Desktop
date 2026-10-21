@@ -92,8 +92,8 @@ export class AssessmentItemComponent implements OnInit {
     this.directoryDashboardService.updateSelectedStatus.next(true);
   }
 
-  goToAssessment(assessment: Assessment) {
-    this.assessmentService.goToAssessment(assessment);
+  goToAssessment(assessment: Assessment, mainTab?: string) {
+    this.assessmentService.goToAssessment(assessment, mainTab);
   }
 
   showEditModal() {

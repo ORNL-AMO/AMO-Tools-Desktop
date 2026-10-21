@@ -1,0 +1,5 @@
+<div class="note-form" *ngIf="modification">
+    <textarea rows="6" id="notes" class="w-100" (input)="save()"
+        [(ngModel)]="modification.notes"
+        placeholder="Add notes for modifications"></textarea>
+</div>

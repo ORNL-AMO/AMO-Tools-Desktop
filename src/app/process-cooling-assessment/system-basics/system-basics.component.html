@@ -20,9 +20,22 @@
     <a class="click-link" (click)="dismissSuccessMessage()">Dismiss</a>
   </div>
   }
-  <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()" [inPhast]="true"
-    [inTreasureHunt]="true">
-  </app-application-settings>
+  <div class="pl-3 pr-3 pt-2">
+    <app-application-settings [(settingsForm)]="settingsForm" (startSavePolling)="saveSettings()" [inPhast]="true"
+      [inTreasureHunt]="true">
+    </app-application-settings>
+  </div>
+
+  <div class="pl-3 pr-3">
+    <form>
+      <div class="form-group">
+        <label class="group-label w-100">Equipment Notes</label>
+        <textarea name="notes" rows="4" id="notes" class="w-100" [ngModel]="processCooling().systemBasics.notes"
+          (ngModelChange)="updateNotes($event)" (focus)="focusField('equipmentNotes')"
+          placeholder="Add additional information for your equipment"></textarea>
+      </div>
+    </form>
+  </div>
 
 </div>
 }

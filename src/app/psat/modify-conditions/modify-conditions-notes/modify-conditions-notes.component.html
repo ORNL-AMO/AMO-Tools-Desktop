@@ -1,15 +1,23 @@
-<div class="note-form" *ngIf="currentTab == 'baseline'">
-  <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.systemBasicsNotes" placeholder="Add note for baseline"></textarea>
-</div>
+@if (currentTab == 'baseline') {
+  <div class="note-form">
+    <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.systemBasicsNotes" placeholder="Add note for baseline"></textarea>
+  </div>
+}
 
-<div class="note-form" *ngIf="currentTab == 'pump-fluid'">
-  <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.pumpFluidNotes" placeholder="Add notes for modification pump & fluid"></textarea>
-</div>
+@if (currentTab == 'pump-fluid') {
+  <div class="note-form">
+    <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.pumpFluidNotes" placeholder="Add notes for modification pump & fluid"></textarea>
+  </div>
+}
 
-<div class="note-form" *ngIf="currentTab == 'motor'">
-  <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.motorNotes" placeholder="Add notes for modification motor"></textarea>
-</div>
+@if (currentTab == 'motor') {
+  <div class="note-form">
+    <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.motorNotes" placeholder="Add notes for modification motor"></textarea>
+  </div>
+}
 
-<div class="note-form" *ngIf="currentTab == 'field-data'">
-  <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.fieldDataNotes" placeholder="Add notes for modification field data"></textarea>
-</div>
+@if (currentTab == 'field-data') {
+  <div class="note-form">
+    <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.fieldDataNotes" placeholder="Add notes for modification field data"></textarea>
+  </div>
+}

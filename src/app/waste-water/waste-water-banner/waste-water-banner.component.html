@@ -45,23 +45,23 @@
         </div>
         <div class="nav-item d-none d-lg-inline-block">
             <a class="nav-link"
-                [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid && mainTab !== 'assessment'}"
+                [ngClass]="{'active': mainTab == 'assessment', 'disabled': !canOpenMainTab('assessment') && mainTab !== 'assessment'}"
                 (click)="changeTab('assessment')">Assessment</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'analysis', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'analysis', 'disabled': !canOpenMainTab('analysis')}"
                 (click)="changeTab('analysis')">Analysis</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !canOpenMainTab('diagram')}"
                 (click)="changeTab('diagram')">Diagram</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !canOpenMainTab('report')}"
                 (click)="changeTab('report')">Report</a>
         </div>
         <div class="nav-item d-none d-lg-inline-block">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}"
                 (click)="changeTab('calculators')">Calculators</a>
         </div>
     </div>
@@ -72,19 +72,19 @@
                 (click)="changeTab('baseline')">Baseline</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !canOpenMainTab('assessment')}"
                 (click)="changeTab('assessment')">Assessment</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'analysis', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'analysis', 'disabled': !canOpenMainTab('analysis')}"
                 (click)="changeTab('analysis')">Analysis</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !canOpenMainTab('diagram')}"
                 (click)="changeTab('diagram')">Diagram</a>
         </div>
         <div class="nav-item">
-            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !isBaselineValid}"
+            <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !canOpenMainTab('report')}"
                 (click)="changeTab('report')">Report</a>
         </div>
         <div class="nav-item">

@@ -1,0 +1,2100 @@
+{
+  "coreFixtureIds": [
+    "ca-real-001",
+    "ca-real-039",
+    "ca-synthetic-001",
+    "ca-synthetic-003",
+    "ca-real-004",
+    "ca-synthetic-002",
+    "ca-synthetic-004",
+    "ca-synthetic-005",
+    "ca-real-012",
+    "ca-real-009",
+    "ca-real-025",
+    "ca-synthetic-006"
+  ],
+  "corpusSha256": "99c14840a67e6e07ee1578b5dbd9f11fb615801ee585f29f394a04cb2f0b084c",
+  "missingScenarios": [
+    "sub-hour-with-eem",
+    "metric-with-demand-charge"
+  ],
+  "realFixtureCount": 43,
+  "realFixtures": [
+    {
+      "coverageTags": [
+        "compressor-type:2",
+        "compressor-type:6",
+        "control-type:4",
+        "control-type:9",
+        "demand-charge",
+        "eem:add-receiver-volume",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "eem:reduce-runtime",
+        "eem:reduce-system-pressure",
+        "interval:1",
+        "large-system",
+        "multiple-day-types",
+        "multiple-modifications",
+        "profile-type:power",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-001",
+      "sha256": "8f241892e5bf4ceaf3e1a070058c22aa095a09f15a605d96e13c70b073001ed7"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "eem:reduce-system-pressure",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:percentCapacity",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-002",
+      "sha256": "fbc4336c36858680192242163e353a86668f8264fc1b1da800b01b530ec05396"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "eem:reduce-system-pressure",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:power",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-003",
+      "sha256": "4914e17aa8ee34765c2258bde73bf2aa72b64ee2ff71815d6d1b4781a66c8895"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:3",
+        "control-type:4",
+        "demand-charge",
+        "eem:automatic-sequencer",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "interval:1",
+        "multiple-day-types",
+        "multiple-modifications",
+        "profile-type:power",
+        "system-control:targetPressureSequencer",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-004",
+      "sha256": "3524b669518281b42bfd5ac21c77ae68cd10e288198f6f49489353926d7f65f7"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:3",
+        "control-type:11",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "eem:reduce-runtime",
+        "eem:reduce-system-pressure",
+        "interval:1",
+        "multiple-day-types",
+        "multiple-modifications",
+        "profile-type:power",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-005",
+      "sha256": "223a3f9ac10fd5361413eaef4ccc805707742d8d6ee13342bf98dac5cd995796"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "eem:reduce-runtime",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:power",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-006",
+      "sha256": "9da7f8bad68472af06f76d12594bf6e09d1570959d61a601c75a5b48c63b06ce"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:3",
+        "control-type:4",
+        "eem:automatic-sequencer",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "interval:1",
+        "profile-type:power",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-007",
+      "sha256": "89ff4bf53833510466abbae91ead74e21bde2e0a1ce5dc5961c40f3a896d4b06"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:3",
+        "compressor-type:6",
+        "control-type:4",
+        "control-type:9",
+        "interval:1",
+        "profile-type:percentCapacity",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-008",
+      "sha256": "3813691d7f552b9dfb42d8157604a7730062e35c4dcb9f3891784bc53ffe49b6"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:3",
+        "eem:flow-reallocation",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:power",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-009",
+      "sha256": "bb82a20ce18af47da6258cdb8e1610412aede86bd051f70811aa2932fd766d24"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:4",
+        "eem:automatic-sequencer",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-010",
+      "sha256": "35739e0c241d90b04a8fd6e14c1e8ec06696b5f3ebaf55895df5e6cbd59270d7"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:power",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-011",
+      "sha256": "758cea991f1bd476b01af4f913a7193ae207c4ff7c523c368050202c9e440d0e"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:5",
+        "compressor-type:6",
+        "control-type:5",
+        "control-type:9",
+        "eem:flow-reallocation",
+        "fractional-power-factor",
+        "interval:1",
+        "large-system",
+        "multiple-day-types",
+        "profile-type:power",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-012",
+      "sha256": "8547c70fc2718faeeb87ef6555153e966b709727d41af8a9f6ae9e749b9b146e"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:3",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-013",
+      "sha256": "8ed926d6182b0aece199fc1c7118ab26ba90bfcaa89efee00a22b94377d8fe38"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:3",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-014",
+      "sha256": "c22911394dd43628a75a1316d18030518a3dac878b7970d7c645cf19d0f1f5fe"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:3",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-015",
+      "sha256": "8b2086d6313c9f80db70127e2690f8b6ce50bec4eb1d2f4613bc07e2a40db76e"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:3",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-016",
+      "sha256": "02267741b7f2295f589db98aabfa28d1185af774cff4f61cecd3e6ac91050891"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:3",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-017",
+      "sha256": "7ffe9aa19aa640978df1a86dbd714a8396cfe812f7bc35c704c373eb12d8fddb"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "eem:reduce-runtime",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:power",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-018",
+      "sha256": "0d652046cdc24a4cf8b2b875b0a35024b714341fc952d40f66e46fc94ffcf623"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:3",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "interval:1",
+        "profile-type:power",
+        "system-control:cascading",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-019",
+      "sha256": "029f8454260c92c336bec365feb8b1cfb359567fe5a958aa82fe179d2840cb19"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "interval:1",
+        "profile-type:power",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-020",
+      "sha256": "f56e67452f65ba8f263a9e36d09bc38caba519c81428603545593fcb37b0acda"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:3",
+        "control-type:11",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "eem:reduce-runtime",
+        "fractional-power-factor",
+        "interval:1",
+        "large-system",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-021",
+      "sha256": "25ae0730dc36b9446fe7e94ac2ba0110b57852aa3d41d3f174d00db737ea167c"
+    },
+    {
+      "coverageTags": [
+        "auxiliary-equipment",
+        "compressor-type:3",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "large-system",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-022",
+      "sha256": "7f9451742181b4d610d3148fdc0d2e481686aee2ab0903a581b2822e06efd305"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "compressor-type:2",
+        "control-type:11",
+        "control-type:4",
+        "eem:add-receiver-volume",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-023",
+      "sha256": "2d18b74df2b1298cc82219d8cfee5114cdd42d564d5ab2852386beeea38e886d"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "compressor-type:2",
+        "control-type:4",
+        "eem:add-receiver-volume",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-024",
+      "sha256": "187641d3ef2186b43529b765af08345a5ad07d8d5f0e8a41d21c099e25b91ad1"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:2",
+        "control-type:4",
+        "eem:add-receiver-volume",
+        "eem:flow-reallocation",
+        "fractional-power-factor",
+        "interval:1",
+        "profile-type:powerFactor",
+        "single-compressor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-025",
+      "sha256": "a169a3f5aa57b71e88b4cca65640564ed4130f849b552f677c616d0a98ca6ee1"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "compressor-type:2",
+        "control-type:4",
+        "eem:add-receiver-volume",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-026",
+      "sha256": "edd46e3031ce4c7406b2f39ecd7c0d74f8bf2755b81c835ce162c80c5d96cec1"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:2",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "profile-type:powerFactor",
+        "single-compressor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-027",
+      "sha256": "f41b6eca7f3b27a2e6c1207eb0633d2339d7234671f942ead320452fc04e67f9"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "compressor-type:2",
+        "control-type:2",
+        "control-type:4",
+        "eem:add-receiver-volume",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-028",
+      "sha256": "336345efdac6140f76c9e936d89dd32f77b5b54686d08b3edea54d889963288c"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "compressor-type:2",
+        "control-type:4",
+        "eem:add-receiver-volume",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-029",
+      "sha256": "63266106a40303ba65640e1b89f2de6ae68573f5b78053775532a43239196e39"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:2",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "profile-type:powerFactor",
+        "single-compressor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-030",
+      "sha256": "b2c59e40ef28301f4f9bb0c375cfd2b07a6ad6c90fb4569a18e5662cb0c0a83b"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "compressor-type:2",
+        "control-type:11",
+        "control-type:2",
+        "control-type:4",
+        "eem:add-receiver-volume",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "eem:reduce-runtime",
+        "fractional-power-factor",
+        "interval:1",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-031",
+      "sha256": "76d8c25a46d2fe9d04762cc4c9a66bc6cf7ad3aa09d67bcf776f928fe0eb8ce7"
+    },
+    {
+      "coverageTags": [
+        "auxiliary-equipment",
+        "compressor-type:3",
+        "control-type:11",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "large-system",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-032",
+      "sha256": "daf16f2ac29661dc201ebaddda24794bbce7ebd48a1d7529542d471c88d05017"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-033",
+      "sha256": "68229b20b73f9a0b3158c94bd21f69ae542c751bcb9dab882985ae2220c4d503"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-034",
+      "sha256": "c0557a90bc22af5895723231847eb14d7e14d3bba263538c34ca10510bae0aae"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:2",
+        "demand-charge",
+        "eem:flow-reallocation",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-035",
+      "sha256": "b06fdcfb946c1760d3429c55a093ae6cad85857c238a0df04001c6868bc1340e"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-036",
+      "sha256": "bd0e48dec9ca152e25ea9a841c655e9d5e2cb29be3986010d243c1c675323ce6"
+    },
+    {
+      "coverageTags": [
+        "auxiliary-equipment",
+        "compressor-type:1",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-037",
+      "sha256": "25e946bee93a6580416ccdf81244219d102c98d4b650407122755b9b981ab98c"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-038",
+      "sha256": "b5c4b6266fa47315e2ff0d9baeba4e194c46915949d91186fb8f4b5c3723e907"
+    },
+    {
+      "coverageTags": [
+        "auxiliary-equipment",
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "eem:reduce-runtime",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-039",
+      "sha256": "59f62b195f92385b626b40b66bbb184e8c1de01e537630eb8e9970e1b8c2eb9e"
+    },
+    {
+      "coverageTags": [
+        "auxiliary-equipment",
+        "compressor-type:1",
+        "control-type:11",
+        "control-type:2",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-040",
+      "sha256": "d1629db32a402a878a8cf2ceee40eb42bd3d56e6537846d84e6639ae218ac65a"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:3",
+        "control-type:11",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "eem:reduce-system-pressure",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-041",
+      "sha256": "a869a5dec0150e42dedb61a46257e686b6bfc54f4a843bd989fab8e7607e2cfb"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:3",
+        "control-type:11",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:reduce-air-leaks",
+        "eem:reduce-system-pressure",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-042",
+      "sha256": "52c03b8efd58393fffe6314ee8c145612a3b0787a5ca44236d60d99f04dd438a"
+    },
+    {
+      "coverageTags": [
+        "auxiliary-equipment",
+        "compressor-type:3",
+        "control-type:11",
+        "control-type:4",
+        "eem:flow-reallocation",
+        "eem:improve-end-use-efficiency",
+        "eem:reduce-air-leaks",
+        "eem:reduce-system-pressure",
+        "fractional-power-factor",
+        "interval:1",
+        "multiple-day-types",
+        "profile-type:powerFactor",
+        "system-control:baseTrim",
+        "units:Imperial"
+      ],
+      "fixtureId": "ca-real-043",
+      "sha256": "9e5066b84bd5695a60f3aea1ee3a77f88356e11ac44feda44a22a89a8f841a0a"
+    }
+  ],
+  "realTags": {
+    "auxiliary-equipment": 6,
+    "compressor-type:1": 27,
+    "compressor-type:2": 10,
+    "compressor-type:3": 11,
+    "compressor-type:5": 1,
+    "compressor-type:6": 3,
+    "control-type:11": 21,
+    "control-type:2": 13,
+    "control-type:3": 6,
+    "control-type:4": 25,
+    "control-type:5": 1,
+    "control-type:9": 3,
+    "demand-charge": 3,
+    "eem:add-receiver-volume": 8,
+    "eem:automatic-sequencer": 3,
+    "eem:flow-reallocation": 42,
+    "eem:improve-end-use-efficiency": 13,
+    "eem:reduce-air-leaks": 32,
+    "eem:reduce-runtime": 7,
+    "eem:reduce-system-pressure": 7,
+    "fractional-power-factor": 30,
+    "interval:1": 43,
+    "large-system": 5,
+    "multiple-day-types": 27,
+    "multiple-modifications": 3,
+    "profile-type:percentCapacity": 2,
+    "profile-type:power": 12,
+    "profile-type:powerFactor": 29,
+    "single-compressor": 3,
+    "system-control:baseTrim": 31,
+    "system-control:cascading": 11,
+    "system-control:targetPressureSequencer": 1,
+    "units:Imperial": 43
+  },
+  "scenarios": [
+    {
+      "expectedTags": {
+        "allOf": [
+          "compressor-type:1"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "compressor-type-1",
+      "matchingFixtureIds": [
+        "ca-real-002",
+        "ca-real-003",
+        "ca-real-006",
+        "ca-real-009",
+        "ca-real-010",
+        "ca-real-011",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-018",
+        "ca-real-020",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-026",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-031",
+        "ca-real-033",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-036",
+        "ca-real-037",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-synthetic-001"
+      ],
+      "name": "Single-stage lubricant-injected rotary screw",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "compressor-type:2"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "compressor-type-2",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-025",
+        "ca-real-026",
+        "ca-real-027",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-030",
+        "ca-real-031"
+      ],
+      "name": "Two-stage lubricant-injected rotary screw",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "compressor-type:3"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "compressor-type-3",
+      "matchingFixtureIds": [
+        "ca-real-004",
+        "ca-real-005",
+        "ca-real-007",
+        "ca-real-008",
+        "ca-real-019",
+        "ca-real-021",
+        "ca-real-022",
+        "ca-real-032",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Two-stage lubricant-free rotary screw",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "compressor-type:4"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "compressor-type-4",
+      "matchingFixtureIds": [
+        "ca-synthetic-001"
+      ],
+      "name": "Single-stage reciprocating",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "compressor-type:5"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "compressor-type-5",
+      "matchingFixtureIds": [
+        "ca-real-012"
+      ],
+      "name": "Two-stage reciprocating",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "compressor-type:6"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "compressor-type-6",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-008",
+        "ca-real-012",
+        "ca-synthetic-002"
+      ],
+      "name": "Multiple-stage centrifugal",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:1"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-1",
+      "matchingFixtureIds": [
+        "ca-synthetic-001"
+      ],
+      "name": "Inlet modulation without unloading",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:2"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-2",
+      "matchingFixtureIds": [
+        "ca-real-006",
+        "ca-real-011",
+        "ca-real-018",
+        "ca-real-028",
+        "ca-real-031",
+        "ca-real-033",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-036",
+        "ca-real-037",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040"
+      ],
+      "name": "Inlet modulation with unloading",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:3"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-3",
+      "matchingFixtureIds": [
+        "ca-real-009",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017"
+      ],
+      "name": "Variable displacement with unloading",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:4"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-4",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-002",
+        "ca-real-003",
+        "ca-real-004",
+        "ca-real-005",
+        "ca-real-007",
+        "ca-real-008",
+        "ca-real-010",
+        "ca-real-019",
+        "ca-real-020",
+        "ca-real-021",
+        "ca-real-022",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-025",
+        "ca-real-026",
+        "ca-real-027",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-030",
+        "ca-real-031",
+        "ca-real-032",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Load/unload",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:5"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-5",
+      "matchingFixtureIds": [
+        "ca-real-012"
+      ],
+      "name": "Multi-step unloading",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:6"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-6",
+      "matchingFixtureIds": [
+        "ca-synthetic-001"
+      ],
+      "name": "Start/stop",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:7"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-7",
+      "matchingFixtureIds": [
+        "ca-synthetic-002"
+      ],
+      "name": "Centrifugal butterfly modulation with blowoff",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:8"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-8",
+      "matchingFixtureIds": [
+        "ca-synthetic-002"
+      ],
+      "name": "Centrifugal butterfly modulation with unloading",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:9"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-9",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-008",
+        "ca-real-012"
+      ],
+      "name": "Centrifugal guide-vane modulation with blowoff",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:10"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-10",
+      "matchingFixtureIds": [
+        "ca-synthetic-002"
+      ],
+      "name": "Centrifugal guide-vane modulation with unloading",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "control-type:11"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "control-type-11",
+      "matchingFixtureIds": [
+        "ca-real-005",
+        "ca-real-006",
+        "ca-real-010",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-020",
+        "ca-real-021",
+        "ca-real-023",
+        "ca-real-031",
+        "ca-real-032",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Variable-frequency drive",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "profile-type:power"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "profile-power",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-003",
+        "ca-real-004",
+        "ca-real-005",
+        "ca-real-006",
+        "ca-real-007",
+        "ca-real-009",
+        "ca-real-011",
+        "ca-real-012",
+        "ca-real-018",
+        "ca-real-019",
+        "ca-real-020"
+      ],
+      "name": "Measured power input",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "profile-type:percentCapacity"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "profile-percentCapacity",
+      "matchingFixtureIds": [
+        "ca-real-002",
+        "ca-real-008",
+        "ca-synthetic-001",
+        "ca-synthetic-002"
+      ],
+      "name": "Percent-capacity input",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "profile-type:airflow"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "profile-airflow",
+      "matchingFixtureIds": [
+        "ca-synthetic-003"
+      ],
+      "name": "Measured-airflow input",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "profile-type:powerFactor"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "profile-powerFactor",
+      "matchingFixtureIds": [
+        "ca-real-010",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-021",
+        "ca-real-022",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-025",
+        "ca-real-026",
+        "ca-real-027",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-030",
+        "ca-real-031",
+        "ca-real-032",
+        "ca-real-033",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-036",
+        "ca-real-037",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Electrical input",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "profile-type:percentPower"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "profile-percentPower",
+      "matchingFixtureIds": [
+        "ca-synthetic-004",
+        "ca-synthetic-006"
+      ],
+      "name": "Percent-power input",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "system-control:cascading"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "system-control-cascading",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-002",
+        "ca-real-003",
+        "ca-real-005",
+        "ca-real-006",
+        "ca-real-007",
+        "ca-real-009",
+        "ca-real-010",
+        "ca-real-011",
+        "ca-real-012",
+        "ca-real-019"
+      ],
+      "name": "Cascading system control",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "system-control:targetPressureSequencer"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "system-control-targetPressureSequencer",
+      "matchingFixtureIds": [
+        "ca-real-004"
+      ],
+      "name": "Target-pressure sequencer",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "system-control:loadSharing"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "system-control-loadSharing",
+      "matchingFixtureIds": [
+        "ca-synthetic-003"
+      ],
+      "name": "Load sharing",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "system-control:baseTrim"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "system-control-baseTrim",
+      "matchingFixtureIds": [
+        "ca-real-008",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-018",
+        "ca-real-020",
+        "ca-real-021",
+        "ca-real-022",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-025",
+        "ca-real-026",
+        "ca-real-027",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-030",
+        "ca-real-031",
+        "ca-real-032",
+        "ca-real-033",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-036",
+        "ca-real-037",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Base/trim",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "eem:flow-reallocation"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "eem-flow-reallocation",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-002",
+        "ca-real-003",
+        "ca-real-004",
+        "ca-real-005",
+        "ca-real-006",
+        "ca-real-007",
+        "ca-real-009",
+        "ca-real-010",
+        "ca-real-011",
+        "ca-real-012",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-018",
+        "ca-real-019",
+        "ca-real-020",
+        "ca-real-021",
+        "ca-real-022",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-025",
+        "ca-real-026",
+        "ca-real-027",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-030",
+        "ca-real-031",
+        "ca-real-032",
+        "ca-real-033",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-036",
+        "ca-real-037",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Flow reallocation",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "eem:reduce-air-leaks"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "eem-reduce-air-leaks",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-002",
+        "ca-real-003",
+        "ca-real-004",
+        "ca-real-005",
+        "ca-real-006",
+        "ca-real-007",
+        "ca-real-010",
+        "ca-real-011",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-019",
+        "ca-real-021",
+        "ca-real-022",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-026",
+        "ca-real-027",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-030",
+        "ca-real-031",
+        "ca-real-032",
+        "ca-real-037",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Reduce air leaks",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "eem:improve-end-use-efficiency"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "eem-improve-end-use-efficiency",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-004",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-022",
+        "ca-real-032",
+        "ca-real-037",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-043"
+      ],
+      "name": "Improve end-use efficiency",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "eem:reduce-system-pressure"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "eem-reduce-system-pressure",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-002",
+        "ca-real-003",
+        "ca-real-005",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Reduce system pressure",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "eem:adjust-cascading-set-points"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "eem-adjust-cascading-set-points",
+      "matchingFixtureIds": [
+        "ca-synthetic-004"
+      ],
+      "name": "Adjust cascading set points",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "eem:automatic-sequencer"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "eem-automatic-sequencer",
+      "matchingFixtureIds": [
+        "ca-real-004",
+        "ca-real-007",
+        "ca-real-010"
+      ],
+      "name": "Automatic sequencer",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "eem:reduce-runtime"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "eem-reduce-runtime",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-005",
+        "ca-real-006",
+        "ca-real-018",
+        "ca-real-021",
+        "ca-real-031",
+        "ca-real-039"
+      ],
+      "name": "Reduce runtime",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "eem:add-receiver-volume"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "eem-add-receiver-volume",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-025",
+        "ca-real-026",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-031"
+      ],
+      "name": "Add receiver volume",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "eem:replace-compressor"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "eem-replace-compressor",
+      "matchingFixtureIds": [
+        "ca-synthetic-004"
+      ],
+      "name": "Replace compressor",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "multiple-day-types"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "multiple-day-types",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-002",
+        "ca-real-003",
+        "ca-real-004",
+        "ca-real-005",
+        "ca-real-006",
+        "ca-real-009",
+        "ca-real-010",
+        "ca-real-011",
+        "ca-real-012",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-018",
+        "ca-real-033",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-036",
+        "ca-real-037",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Multiple day types",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "interval:1"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "one-hour-profile",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-002",
+        "ca-real-003",
+        "ca-real-004",
+        "ca-real-005",
+        "ca-real-006",
+        "ca-real-007",
+        "ca-real-008",
+        "ca-real-009",
+        "ca-real-010",
+        "ca-real-011",
+        "ca-real-012",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-018",
+        "ca-real-019",
+        "ca-real-020",
+        "ca-real-021",
+        "ca-real-022",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-025",
+        "ca-real-026",
+        "ca-real-027",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-030",
+        "ca-real-031",
+        "ca-real-032",
+        "ca-real-033",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-036",
+        "ca-real-037",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043",
+        "ca-synthetic-001",
+        "ca-synthetic-002",
+        "ca-synthetic-004"
+      ],
+      "name": "One-hour profile",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [],
+        "anyOf": [
+          "interval:0.25",
+          "interval:0.5"
+        ],
+        "anyPrefix": null
+      },
+      "id": "sub-hour-profile",
+      "matchingFixtureIds": [
+        "ca-synthetic-003",
+        "ca-synthetic-006"
+      ],
+      "name": "Sub-hour profile",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "units:Imperial"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "imperial-units",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-002",
+        "ca-real-003",
+        "ca-real-004",
+        "ca-real-005",
+        "ca-real-006",
+        "ca-real-007",
+        "ca-real-008",
+        "ca-real-009",
+        "ca-real-010",
+        "ca-real-011",
+        "ca-real-012",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-018",
+        "ca-real-019",
+        "ca-real-020",
+        "ca-real-021",
+        "ca-real-022",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-025",
+        "ca-real-026",
+        "ca-real-027",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-030",
+        "ca-real-031",
+        "ca-real-032",
+        "ca-real-033",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-036",
+        "ca-real-037",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Imperial settings",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "units:Metric"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "metric-units",
+      "matchingFixtureIds": [
+        "ca-synthetic-003"
+      ],
+      "name": "Metric settings",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "fractional-power-factor"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "fractional-power-factor",
+      "matchingFixtureIds": [
+        "ca-real-010",
+        "ca-real-012",
+        "ca-real-013",
+        "ca-real-014",
+        "ca-real-015",
+        "ca-real-016",
+        "ca-real-017",
+        "ca-real-021",
+        "ca-real-022",
+        "ca-real-023",
+        "ca-real-024",
+        "ca-real-025",
+        "ca-real-026",
+        "ca-real-027",
+        "ca-real-028",
+        "ca-real-029",
+        "ca-real-030",
+        "ca-real-031",
+        "ca-real-032",
+        "ca-real-033",
+        "ca-real-034",
+        "ca-real-035",
+        "ca-real-036",
+        "ca-real-037",
+        "ca-real-038",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-041",
+        "ca-real-042",
+        "ca-real-043"
+      ],
+      "name": "Fractional power factor",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "auxiliary-equipment"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "auxiliary-equipment",
+      "matchingFixtureIds": [
+        "ca-real-022",
+        "ca-real-032",
+        "ca-real-037",
+        "ca-real-039",
+        "ca-real-040",
+        "ca-real-043"
+      ],
+      "name": "Auxiliary equipment",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "demand-charge"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "demand-charge",
+      "matchingFixtureIds": [
+        "ca-real-001",
+        "ca-real-004",
+        "ca-real-035"
+      ],
+      "name": "Demand charge",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "zero-savings"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "zero-savings",
+      "matchingFixtureIds": [
+        "ca-synthetic-005"
+      ],
+      "name": "Zero savings",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "insufficient-capacity"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "insufficient-capacity",
+      "matchingFixtureIds": [
+        "ca-synthetic-005"
+      ],
+      "name": "Insufficient capacity",
+      "status": "covered"
+    },
+    {
+      "expectedTags": {
+        "allOf": [],
+        "anyOf": [
+          "interval:0.25",
+          "interval:0.5"
+        ],
+        "anyPrefix": "eem:"
+      },
+      "id": "sub-hour-with-eem",
+      "matchingFixtureIds": [],
+      "missingReason": "Intentionally deferred because the existing sub-hour pressure-indexing defect can prevent EEM results.",
+      "name": "Sub-hour profile with an active EEM",
+      "status": "missing"
+    },
+    {
+      "expectedTags": {
+        "allOf": [
+          "units:Metric",
+          "demand-charge"
+        ],
+        "anyOf": [],
+        "anyPrefix": null
+      },
+      "id": "metric-with-demand-charge",
+      "matchingFixtureIds": [],
+      "missingReason": "Metric and demand-charge behavior are covered separately; the private corpus has no assessment combining them.",
+      "name": "Metric assessment with a demand charge",
+      "status": "missing"
+    }
+  ],
+  "schemaVersion": 2,
+  "syntheticFixtureCount": 6,
+  "syntheticFixtures": [
+    {
+      "coverageTags": [
+        "compressor-type:1",
+        "compressor-type:4",
+        "control-type:1",
+        "control-type:6",
+        "interval:1",
+        "profile-type:percentCapacity",
+        "synthetic"
+      ],
+      "fixtureId": "ca-synthetic-001"
+    },
+    {
+      "coverageTags": [
+        "compressor-type:6",
+        "control-type:10",
+        "control-type:7",
+        "control-type:8",
+        "interval:1",
+        "profile-type:percentCapacity",
+        "synthetic"
+      ],
+      "fixtureId": "ca-synthetic-002"
+    },
+    {
+      "coverageTags": [
+        "interval:0.25",
+        "profile-type:airflow",
+        "synthetic",
+        "system-control:loadSharing",
+        "units:Metric"
+      ],
+      "fixtureId": "ca-synthetic-003"
+    },
+    {
+      "coverageTags": [
+        "eem:adjust-cascading-set-points",
+        "eem:replace-compressor",
+        "interval:1",
+        "profile-type:percentPower",
+        "synthetic"
+      ],
+      "fixtureId": "ca-synthetic-004"
+    },
+    {
+      "coverageTags": [
+        "insufficient-capacity",
+        "interval:24",
+        "synthetic",
+        "zero-savings"
+      ],
+      "fixtureId": "ca-synthetic-005"
+    },
+    {
+      "coverageTags": [
+        "interval:0.5",
+        "profile-type:percentPower",
+        "synthetic"
+      ],
+      "fixtureId": "ca-synthetic-006"
+    }
+  ],
+  "syntheticTags": {
+    "compressor-type:1": 1,
+    "compressor-type:4": 1,
+    "compressor-type:6": 1,
+    "control-type:1": 1,
+    "control-type:10": 1,
+    "control-type:6": 1,
+    "control-type:7": 1,
+    "control-type:8": 1,
+    "eem:adjust-cascading-set-points": 1,
+    "eem:replace-compressor": 1,
+    "insufficient-capacity": 1,
+    "interval:0.25": 1,
+    "interval:0.5": 1,
+    "interval:1": 3,
+    "interval:24": 1,
+    "profile-type:airflow": 1,
+    "profile-type:percentCapacity": 2,
+    "profile-type:percentPower": 2,
+    "synthetic": 6,
+    "system-control:loadSharing": 1,
+    "units:Metric": 1,
+    "zero-savings": 1
+  },
+  "tags": {
+    "auxiliary-equipment": 6,
+    "compressor-type:1": 28,
+    "compressor-type:2": 10,
+    "compressor-type:3": 11,
+    "compressor-type:4": 1,
+    "compressor-type:5": 1,
+    "compressor-type:6": 4,
+    "control-type:1": 1,
+    "control-type:10": 1,
+    "control-type:11": 21,
+    "control-type:2": 13,
+    "control-type:3": 6,
+    "control-type:4": 25,
+    "control-type:5": 1,
+    "control-type:6": 1,
+    "control-type:7": 1,
+    "control-type:8": 1,
+    "control-type:9": 3,
+    "demand-charge": 3,
+    "eem:add-receiver-volume": 8,
+    "eem:adjust-cascading-set-points": 1,
+    "eem:automatic-sequencer": 3,
+    "eem:flow-reallocation": 42,
+    "eem:improve-end-use-efficiency": 13,
+    "eem:reduce-air-leaks": 32,
+    "eem:reduce-runtime": 7,
+    "eem:reduce-system-pressure": 7,
+    "eem:replace-compressor": 1,
+    "fractional-power-factor": 30,
+    "insufficient-capacity": 1,
+    "interval:0.25": 1,
+    "interval:0.5": 1,
+    "interval:1": 46,
+    "interval:24": 1,
+    "large-system": 5,
+    "multiple-day-types": 27,
+    "multiple-modifications": 3,
+    "profile-type:airflow": 1,
+    "profile-type:percentCapacity": 4,
+    "profile-type:percentPower": 2,
+    "profile-type:power": 12,
+    "profile-type:powerFactor": 29,
+    "single-compressor": 3,
+    "synthetic": 6,
+    "system-control:baseTrim": 31,
+    "system-control:cascading": 11,
+    "system-control:loadSharing": 1,
+    "system-control:targetPressureSequencer": 1,
+    "units:Imperial": 43,
+    "units:Metric": 1,
+    "zero-savings": 1
+  },
+  "totalFixtureCount": 49
+}
