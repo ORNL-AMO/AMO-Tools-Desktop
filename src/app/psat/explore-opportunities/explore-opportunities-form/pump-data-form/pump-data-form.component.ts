@@ -39,7 +39,6 @@ export class PumpDataFormComponent implements OnInit {
 
   ngOnInit() {
     this.pumpTypes = JSON.parse(JSON.stringify(pumpTypesConstant));
-    this.pumpTypes.pop();
     this.drives = JSON.parse(JSON.stringify(driveConstants));
     let tmpResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     this.baselinePumpEfficiency = tmpResults.pump_efficiency;
