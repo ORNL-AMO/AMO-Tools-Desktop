@@ -10,6 +10,7 @@ import { ChartSection, KeyValueSection, SummaryTableSection } from '../../shared
 import { ModificationNameCell, ReportColumnCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
 import { EnergySummaryResultsService, EnergySummaryUI } from './energy-summary/energy-summary-results.service';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from './executive-summary/executive-summary-results.service';
 import { ResultsDataResultsService, ResultsDataUI } from './results-data/results-data-results.service';
@@ -30,6 +31,7 @@ export const PROCESS_HEATING_SECTION_GROUPS: ReportSectionGroup[] = [
 @Injectable()
 export class ProcessHeatingReportAdapter implements ReportDataAdapter {
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
+  private readonly validityService = inject(ProcessHeatingValidityService);
   private readonly executiveSummaryService = inject(ExecutiveSummaryResultsService);
   private readonly energySummaryService = inject(EnergySummaryResultsService);
   private readonly resultsDataService = inject(ResultsDataResultsService);
@@ -96,7 +98,10 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
       pageBreakBefore,
     });
 
-    const sections: Array<SummaryTableSection | KeyValueSection> = [toSection('Executive Summary', ui.summaryRows)];
+    const sections: Array<SummaryTableSection | KeyValueSection> = [
+      ...this.buildInvalidModificationSections(ROUTE_TOKENS.executiveSummary),
+      toSection('Executive Summary', ui.summaryRows),
+    ];
     const optionalTables: Array<[string, ReportTableRow[]]> = [
       ['Annual Electrical and Chemical Energy Used', ui.eafEnergyRows],
       ['Annual Emissions', ui.co2Rows],
@@ -158,16 +163,32 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
     return [sourcesTable, ...notesSection, comparisonTable];
   }
 
-  private buildResultsDataSections(ui: ResultsDataUI): SummaryTableSection[] {
-    return [{
-      type: 'summary-table',
-      title: 'Result Data',
-      headers: [ui.title, ...this.buildHeaders(ui.modificationNames).slice(1)],
-      rows: ui.rows.map(row => this.rowToStrings(row)),
-      emphasisRowsIndices: ui.rows.flatMap((row, index) => (row.className === 'emphasis' ? [index] : [])),
-      group: ROUTE_TOKENS.resultsData,
-      pageBreakBefore: true,
-    }];
+  private buildResultsDataSections(ui: ResultsDataUI): Array<SummaryTableSection | KeyValueSection> {
+    const invalidModifications = this.buildInvalidModificationSections(ROUTE_TOKENS.resultsData, true);
+    return [
+      ...invalidModifications,
+      {
+        type: 'summary-table',
+        title: 'Result Data',
+        headers: [ui.title, ...this.buildHeaders(ui.modificationNames).slice(1)],
+        rows: ui.rows.map(row => this.rowToStrings(row)),
+        emphasisRowsIndices: ui.rows.flatMap((row, index) => (row.className === 'emphasis' ? [index] : [])),
+        group: ROUTE_TOKENS.resultsData,
+        pageBreakBefore: !invalidModifications.length,
+      },
+    ];
+  }
+
+  /** Results still export for an invalid modification, so the warning has to travel with them. */
+  private buildInvalidModificationSections(group: string, pageBreakBefore = false): KeyValueSection[] {
+    const invalidModifications = this.validityService.invalidModifications();
+    return invalidModifications.length ? [{
+      type: 'key-value-list',
+      title: 'Invalid Modifications',
+      rows: invalidModifications.map(modification => ({ label: modification.name, value: modification.errors.join(', ') })),
+      group,
+      pageBreakBefore,
+    }] : [];
   }
 
   /** One chart set per modification so the pies and comparison bar paginate together; only the first chart forces a page break. */
