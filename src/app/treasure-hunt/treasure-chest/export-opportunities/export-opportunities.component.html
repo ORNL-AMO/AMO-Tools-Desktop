@@ -27,12 +27,9 @@
             <div class="modal-footer export-footer flex-wrap justify-content-between">
                 <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
                 <div class="export-controls d-flex flex-wrap align-items-center justify-content-end ml-auto">
-                    <div class="form-group d-flex align-items-center my-1 mr-3">
+                    <div class="form-group d-flex align-items-center my-1 mr-3" *ngIf="hasUnselectedOpportunities">
                         <label for="includeUnselected" class="mb-0 mr-2">Include unselected:</label>
-                        <label class="switch export-switch mb-0">
-                            <input name="includeUnselected" id="includeUnselected" type="checkbox" [(ngModel)]="includeUnselected">
-                            <span class="slider round"></span>
-                        </label>
+                        <input name="includeUnselected" id="includeUnselected" type="checkbox" [(ngModel)]="includeUnselected">
                     </div>
                     <div class="form-group d-flex align-items-center my-1 mr-2">
                         <label for="exportName" class="mb-0 mr-2">Name your file:</label>
