@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, Injector, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, input, Injector, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Settings } from '../../../../../shared/models/settings';
 import { GasLoadChargeMaterial } from '../../../../../shared/models/materials';
@@ -10,6 +10,8 @@ import { GasMaterialForm, GasMaterialFormService } from './gas-material-form.ser
 import { AddGasMaterialModalComponent } from './add-gas-material-modal.component';
 import { UnitConversion } from '../../../../models/unit-conversion';
 import { CHARGE_MATERIAL_UNITS } from '../charge-material-units';
+import { ChargeMaterial, GasChargeMaterial } from '../../../../../shared/models/phast/losses/chargeMaterial';
+import { LossFieldDifferences, nestedDifferences } from '../../loss-compare.util';
 
 @Component({
   selector: 'app-charge-material-gas-form',
@@ -21,7 +23,9 @@ export class ChargeMaterialGasFormComponent implements OnInit {
   readonly form = input.required<GasMaterialForm>();
   readonly settings = input.required<Settings>();
   readonly instanceId = input.required<string>();
+  readonly differingFields = input<LossFieldDifferences<ChargeMaterial>>();
 
+  protected readonly gasDifferences = computed(() => nestedDifferences<GasChargeMaterial>(this.differingFields(), 'gasChargeMaterial'));
   private readonly formService = inject(GasMaterialFormService);
   private readonly destroyRef = inject(DestroyRef);
 

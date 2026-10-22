@@ -28,7 +28,7 @@
 
       @if (!item.collapse) {
         <div class="card-body">
-          <app-auxiliary-power-form [item]="item" [settings]="settings()"></app-auxiliary-power-form>
+          <app-auxiliary-power-form [item]="item" [differingFields]="service.differingFields(item.id)" [settings]="settings()"></app-auxiliary-power-form>
 
           <div class="loss-results mt-3">
             <div class="d-flex justify-content-between small">

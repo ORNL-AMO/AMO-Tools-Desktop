@@ -36,6 +36,13 @@ export class HeatSystemEfficiencyComponent {
     efficiency: new FormControl<number | null>(null, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]),
   });
 
+  readonly efficiencyDiffersFromBaseline = computed(() => {
+    const scenario = this.scenario();
+    if (scenario === 'baseline') return false;
+    const baseline = this.assessmentService.scenarioPhastSignal('baseline')?.systemEfficiency;
+    return (this.assessmentService.scenarioPhastSignal(scenario)?.systemEfficiency ?? null) !== (baseline ?? null);
+  });
+
   /** Gross heat and system losses derived from the scenario's total heat input and exothermic heat. */
   readonly results = computed(() => {
     const phast = this.assessmentService.scenarioPhastSignal(this.scenario());

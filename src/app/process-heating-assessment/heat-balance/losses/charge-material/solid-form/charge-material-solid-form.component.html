@@ -12,7 +12,7 @@
 <form [formGroup]="form()">
   <div class="form-group">
     <label for="materialId_{{ instanceId() }}">Name of Material</label>
-    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId"
+    <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" [class.indicate-different]="solidDifferences().has('materialId')"
       (change)="materialSelector.onMaterialSelected(f.materialId.value)">
       @for (material of materialSelector.materialTypes(); track material.id) {
         <option [ngValue]="material.id">{{ material.substance }}</option>
@@ -24,7 +24,7 @@
 
   <div class="form-group">
     <label for="materialSpecificHeatOfSolidMaterial_{{ instanceId() }}">Average Specific Heat of Solid</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('specificHeatSolid')">
       <input type="number" class="form-control" id="materialSpecificHeatOfSolidMaterial_{{ instanceId() }}" formControlName="materialSpecificHeatOfSolidMaterial">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
@@ -36,7 +36,7 @@
 
   <div class="form-group">
     <label for="materialLatentHeatOfFusion_{{ instanceId() }}">Latent Heat of Fusion</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('latentHeat')">
       <input type="number" class="form-control" id="materialLatentHeatOfFusion_{{ instanceId() }}" formControlName="materialLatentHeatOfFusion">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
@@ -48,7 +48,7 @@
 
   <div class="form-group">
     <label for="materialHeatOfLiquid_{{ instanceId() }}">Average Specific Heat of Molten Material</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('specificHeatLiquid')">
       <input type="number" class="form-control" id="materialHeatOfLiquid_{{ instanceId() }}" formControlName="materialHeatOfLiquid">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
@@ -60,7 +60,7 @@
 
   <div class="form-group">
     <label for="materialMeltingPoint_{{ instanceId() }}">Melting Point</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('meltingPoint')">
       <input type="number" class="form-control" id="materialMeltingPoint_{{ instanceId() }}" formControlName="materialMeltingPoint">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
@@ -72,7 +72,7 @@
 
   <div class="form-group">
     <label for="feedRate_{{ instanceId() }}">Charge Feed Rate (Wet)</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('chargeFeedRate')">
       <input type="number" class="form-control" id="feedRate_{{ instanceId() }}" formControlName="feedRate">
       <app-input-unit [settings]="settings()" [imperialUnit]="'lb/hr'" [metricUnit]="'kg/hr'"></app-input-unit>
     </div>
@@ -86,7 +86,7 @@
 
   <div class="form-group">
     <label for="waterContentAsCharged_{{ instanceId() }}">Water Content (Charged)</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('waterContentCharged')">
       <input type="number" class="form-control" id="waterContentAsCharged_{{ instanceId() }}" formControlName="waterContentAsCharged">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
@@ -95,7 +95,7 @@
 
   <div class="form-group">
     <label for="waterContentAsDischarged_{{ instanceId() }}">Water Content (Discharged)</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('waterContentDischarged')">
       <input type="number" class="form-control" id="waterContentAsDischarged_{{ instanceId() }}" formControlName="waterContentAsDischarged">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
@@ -104,7 +104,7 @@
 
   <div class="form-group">
     <label for="initialTemperature_{{ instanceId() }}">Charge Inlet Temperature</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('initialTemperature')">
       <input type="number" class="form-control" id="initialTemperature_{{ instanceId() }}" formControlName="initialTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
@@ -120,7 +120,7 @@
 
   <div class="form-group">
     <label for="chargeMaterialDischargeTemperature_{{ instanceId() }}">Charge Outlet Temperature</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('dischargeTemperature')">
       <input type="number" class="form-control" id="chargeMaterialDischargeTemperature_{{ instanceId() }}" formControlName="chargeMaterialDischargeTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
@@ -135,7 +135,7 @@
 
   <div class="form-group">
     <label for="waterVaporDischargeTemperature_{{ instanceId() }}">Water Vapor Discharge Temperature</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('waterVaporDischargeTemperature')">
       <input type="number" class="form-control" id="waterVaporDischargeTemperature_{{ instanceId() }}" formControlName="waterVaporDischargeTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
@@ -144,7 +144,7 @@
 
   <div class="form-group">
     <label for="percentChargeMelted_{{ instanceId() }}">Charge Melted</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('chargeMelted')">
       <input type="number" class="form-control" id="percentChargeMelted_{{ instanceId() }}" formControlName="percentChargeMelted">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
@@ -153,7 +153,7 @@
 
   <div class="form-group">
     <label for="percentChargeReacted_{{ instanceId() }}">Charge Reacted</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('chargeReacted')">
       <input type="number" class="form-control" id="percentChargeReacted_{{ instanceId() }}" formControlName="percentChargeReacted">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
@@ -162,7 +162,7 @@
 
   <div class="form-group">
     <label for="heatOfReaction_{{ instanceId() }}">Heat of Reaction</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('reactionHeat')">
       <input type="number" class="form-control" id="heatOfReaction_{{ instanceId() }}" formControlName="heatOfReaction">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
@@ -172,7 +172,7 @@
 
   <div class="form-group">
     <label for="endothermicOrExothermic_{{ instanceId() }}">Type of Reaction</label>
-    <select class="form-control" id="endothermicOrExothermic_{{ instanceId() }}" formControlName="endothermicOrExothermic">
+    <select class="form-control" id="endothermicOrExothermic_{{ instanceId() }}" formControlName="endothermicOrExothermic" [class.indicate-different]="solidDifferences().has('thermicReactionType')">
       <option [ngValue]="0">Endothermic</option>
       <option [ngValue]="1">Exothermic</option>
     </select>
@@ -180,7 +180,7 @@
 
   <div class="form-group">
     <label for="additionalHeatRequired_{{ instanceId() }}">Additional Heat Required</label>
-    <div class="input-group">
+    <div class="input-group" [class.indicate-different]="solidDifferences().has('additionalHeat')">
       <input type="number" class="form-control" id="additionalHeatRequired_{{ instanceId() }}" formControlName="additionalHeatRequired">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/hr'" [metricUnit]="'kJ/hr'"></app-input-unit>
     </div>

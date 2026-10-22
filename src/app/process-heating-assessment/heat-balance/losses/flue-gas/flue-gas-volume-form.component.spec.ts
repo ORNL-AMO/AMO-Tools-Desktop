@@ -166,4 +166,38 @@ describe('FlueGasVolumeFormComponent', () => {
       expect(component.materialSelector.materialTypes()).toEqual(MOCK_MATERIALS);
     });
   });
+
+  describe('compare indicators', () => {
+    const group = (id: string): HTMLElement => fixture.nativeElement.querySelector(`[id="${id}"]`).closest('.input-group');
+
+    it('highlights fields listed as differing from baseline', () => {
+      render();
+      fixture.componentRef.setInput('differingFields', new Set(['flueGasByVolume.CH4']));
+      fixture.detectChanges();
+
+      expect(group('CH4_instance-1').classList).toContain('indicate-different');
+    });
+
+    it('leaves fields that match baseline unhighlighted', () => {
+      render();
+      fixture.componentRef.setInput('differingFields', new Set(['flueGasByVolume.CH4']));
+      fixture.detectChanges();
+
+      expect(group('C2H6_instance-1').classList).not.toContain('indicate-different');
+    });
+
+    it('highlights nothing without differing fields', () => {
+      render();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+
+    it('ignores differences that belong to another material type', () => {
+      render();
+      fixture.componentRef.setInput('differingFields', new Set(['flueGasByMass.carbon']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+  });
 });

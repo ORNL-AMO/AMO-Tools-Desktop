@@ -244,4 +244,38 @@ describe('ChargeMaterialLiquidFormComponent', () => {
       expect(liquidFormService.setInitialTempValidator).not.toHaveBeenCalled();
     });
   });
+
+  describe('compare indicators', () => {
+    const group = (id: string): HTMLElement => fixture.nativeElement.querySelector(`[id="${id}"]`).closest('.input-group');
+
+    it('highlights fields listed as differing from baseline', () => {
+      setInputsAndInit();
+      fixture.componentRef.setInput('differingFields', new Set(['liquidChargeMaterial.specificHeatLiquid']));
+      fixture.detectChanges();
+
+      expect(group('specificHeatOfLiquid_instance-1').classList).toContain('indicate-different');
+    });
+
+    it('leaves fields that match baseline unhighlighted', () => {
+      setInputsAndInit();
+      fixture.componentRef.setInput('differingFields', new Set(['liquidChargeMaterial.specificHeatLiquid']));
+      fixture.detectChanges();
+
+      expect(group('vaporizingTemperature_instance-1').classList).not.toContain('indicate-different');
+    });
+
+    it('highlights nothing without differing fields', () => {
+      setInputsAndInit();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+
+    it('ignores differences that belong to another material type', () => {
+      setInputsAndInit();
+      fixture.componentRef.setInput('differingFields', new Set(['solidChargeMaterial.specificHeatSolid']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+  });
 });

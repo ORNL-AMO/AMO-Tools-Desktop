@@ -7,6 +7,8 @@ import { generateFormControlIds, roundVal } from '../../../../shared/helperFunct
 import { Settings } from '../../../../shared/models/settings';
 import { EnergyInputExhaustGasForm } from './energy-input-exhaust-gas-form.service';
 import { EnergyInputExhaustGasItem } from './energy-input-exhaust-gas.service';
+import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-energy-input-exhaust-gas-form',
@@ -21,6 +23,7 @@ export class EnergyInputExhaustGasFormComponent {
 
   readonly item = input.required<EnergyInputExhaustGasItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<EnergyInputExhaustGasLoss>>();
 
   readonly form = computed(() => this.item().form as EnergyInputExhaustGasForm);
   readonly controlIds = computed(() => generateFormControlIds(this.form().controls));

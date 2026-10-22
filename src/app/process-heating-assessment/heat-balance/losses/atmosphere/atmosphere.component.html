@@ -30,7 +30,7 @@
 
       @if (!item.collapse) {
         <div class="card-body">
-          <app-atmosphere-form [item]="item" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-atmosphere-form>
+          <app-atmosphere-form [item]="item" [differingFields]="service.differingFields(item.id)" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-atmosphere-form>
 
           <div class="loss-results mt-3">
             <div class="d-flex justify-content-between small">

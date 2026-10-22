@@ -34,7 +34,7 @@ describe('GasLeakageComponent', () => {
 
     gasLeakageServiceSpy = jasmine.createSpyObj(
       'GasLeakageService',
-      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse'],
+      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse', 'differingFields'],
       {
         losses: lossesSignal,
         total: totalSignal,

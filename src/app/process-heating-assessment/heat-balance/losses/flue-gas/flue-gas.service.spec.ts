@@ -22,6 +22,7 @@ describe('FlueGasService', () => {
   let service: FlueGasService;
   let calculationSpy: jasmine.SpyObj<FlueGasCalculationService>;
   let existing: FlueGas[];
+  let modification: FlueGas[];
   let savedLosses: FlueGas[];
 
   beforeEach(() => {
@@ -30,6 +31,7 @@ describe('FlueGasService', () => {
     calculationSpy.calculateByMass.and.returnValue({ calculatedFlueGasO2: 3, calculatedExcessAir: 15, availableHeat: 70 });
     calculationSpy.deriveOxygenAndExcessAir.and.returnValue({ o2InFlueGas: 3, excessAirPercentage: 15 });
     existing = [BY_VOLUME, EXTRA];
+    modification = existing;
     savedLosses = [];
 
     TestBed.configureTestingModule({
@@ -43,7 +45,7 @@ describe('FlueGasService', () => {
           provide: ProcessHeatingAssessmentService,
           useValue: {
             settingsSignal: signal({ unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings),
-            lossSignal: () => existing,
+            lossSignal: (scenario: string) => (scenario === 'baseline' ? existing : modification),
             updateLossesProperty: (_scenario: string, _key: string, losses: FlueGas[]) => savedLosses = losses,
           },
         },
@@ -135,5 +137,28 @@ describe('FlueGasService', () => {
 
     expect(savedLosses[0].flueGasByMass.flueGasTemperature).toBe(650);
     expect(savedLosses[1]).toBe(EXTRA);
+  });
+
+  describe('differingFields', () => {
+    it('flags only the edited field when the modification saved form defaults baseline omits', () => {
+      const sparse: FlueGas = { id: 'fg-1', flueGasType: FlueGasType.ByVolume, flueGasByVolume: { gasTypeId: 1, flueGasTemperature: 400, CH4: 100 } };
+      existing = [sparse];
+      const formService = TestBed.inject(FlueGasFormService);
+      const form = formService.getFlueGasVolumeForm(sparse, { unitsOfMeasure: 'Imperial' } as Settings);
+      form.patchValue({ flueGasTemperature: 450 });
+      modification = [{ ...formService.buildFlueGasLoss(form), id: 'fg-1' }];
+
+      service.initialize('mod-1');
+
+      expect([...service.differingFields()!] as string[]).toEqual(['flueGasByVolume.flueGasTemperature']);
+    });
+
+    it('is undefined for the baseline scenario', () => {
+      existing = [{ ...BY_VOLUME, id: 'fg-1' }];
+
+      service.initialize('baseline');
+
+      expect(service.differingFields()).toBeUndefined();
+    });
   });
 });

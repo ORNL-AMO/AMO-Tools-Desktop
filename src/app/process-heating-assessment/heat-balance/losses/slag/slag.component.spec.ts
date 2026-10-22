@@ -34,7 +34,7 @@ describe('SlagComponent', () => {
 
     slagServiceSpy = jasmine.createSpyObj(
       'SlagService',
-      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse'],
+      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse', 'differingFields'],
       {
         losses: lossesSignal,
         total: totalSignal,

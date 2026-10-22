@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, Injector, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, Injector, input, OnInit } from '@angular/core';
 import { FlueGasMaterialDbService } from '../../../../indexedDb/flue-gas-material-db.service';
 import { roundVal } from '../../../../shared/helperFunctions';
 import { FlueGasMaterial } from '../../../../shared/models/materials';
@@ -8,6 +8,8 @@ import { MaterialSelector } from '../charge-material/material-selector';
 import { AddFlueGasMaterialModalComponent } from './add-flue-gas-material-modal.component';
 import { adaptFlueGasMaterialDb } from './flue-gas-material-db.adapter';
 import { FLUE_GAS_COMPONENTS, FlueGasVolumeForm } from './flue-gas-form.service';
+import { FlueGas, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
+import { LossFieldDifferences, nestedDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-flue-gas-volume-form',
@@ -19,8 +21,11 @@ export class FlueGasVolumeFormComponent implements OnInit {
   readonly form = input.required<FlueGasVolumeForm>();
   readonly settings = input.required<Settings>();
   readonly instanceId = input.required<string>();
+  readonly differingFields = input<LossFieldDifferences<FlueGas>>();
 
   private readonly destroyRef = inject(DestroyRef);
+
+  protected readonly volumeDifferences = computed(() => nestedDifferences<FlueGasByVolume>(this.differingFields(), 'flueGasByVolume'));
 
   readonly components = FLUE_GAS_COMPONENTS;
 

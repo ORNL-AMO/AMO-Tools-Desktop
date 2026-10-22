@@ -3,6 +3,8 @@ import { generateFormControlIds } from '../../../../shared/helperFunctions';
 import { Settings } from '../../../../shared/models/settings';
 import { ExhaustGasForm } from './exhaust-gas-form.service';
 import { ExhaustGasItem } from './exhaust-gas.service';
+import { ExhaustGasEAF } from '../../../../shared/models/phast/losses/exhaustGasEAF';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-exhaust-gas-form',
@@ -13,6 +15,7 @@ import { ExhaustGasItem } from './exhaust-gas.service';
 export class ExhaustGasFormComponent {
   readonly item = input.required<ExhaustGasItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<ExhaustGasEAF>>();
 
   readonly form = computed(() => this.item().form as ExhaustGasForm);
   readonly controlIds = computed(() => generateFormControlIds(this.form().controls));

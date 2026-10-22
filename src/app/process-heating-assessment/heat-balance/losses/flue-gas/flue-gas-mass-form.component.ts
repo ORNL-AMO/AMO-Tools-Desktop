@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, Injector, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, Injector, input, OnInit } from '@angular/core';
 import { SolidLiquidMaterialDbService } from '../../../../indexedDb/solid-liquid-material-db.service';
 import { roundVal } from '../../../../shared/helperFunctions';
 import { SolidLiquidFlueGasMaterial } from '../../../../shared/models/materials';
@@ -8,6 +8,8 @@ import { MaterialSelector } from '../charge-material/material-selector';
 import { AddSolidLiquidFlueGasMaterialModalComponent } from './add-solid-liquid-flue-gas-material-modal.component';
 import { adaptSolidLiquidFlueGasMaterialDb } from './flue-gas-material-db.adapter';
 import { FLUE_GAS_FUEL_ANALYSIS, FlueGasMassForm } from './flue-gas-form.service';
+import { FlueGas, FlueGasByMass } from '../../../../shared/models/phast/losses/flueGas';
+import { LossFieldDifferences, nestedDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-flue-gas-mass-form',
@@ -19,8 +21,11 @@ export class FlueGasMassFormComponent implements OnInit {
   readonly form = input.required<FlueGasMassForm>();
   readonly settings = input.required<Settings>();
   readonly instanceId = input.required<string>();
+  readonly differingFields = input<LossFieldDifferences<FlueGas>>();
 
   private readonly destroyRef = inject(DestroyRef);
+
+  protected readonly massDifferences = computed(() => nestedDifferences<FlueGasByMass>(this.differingFields(), 'flueGasByMass'));
 
   readonly fuelAnalysis = FLUE_GAS_FUEL_ANALYSIS;
 

@@ -34,7 +34,7 @@ describe('CoolingComponent', () => {
 
     coolingServiceSpy = jasmine.createSpyObj(
       'CoolingService',
-      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse', 'switchMedium'],
+      ['initialize', 'setName', 'add', 'remove', 'toggleCollapse', 'switchMedium', 'differingFields'],
       {
         losses: lossesSignal,
         total: totalSignal,
@@ -211,6 +211,26 @@ describe('CoolingComponent', () => {
       select.dispatchEvent(new Event('change'));
 
       expect(coolingServiceSpy.switchMedium).toHaveBeenCalledWith('loss-1', 'Other Liquid');
+    });
+  });
+
+  describe('compare indicators', () => {
+    const select = (): HTMLElement => fixture.nativeElement.querySelector('.card-body select');
+
+    it('highlights the cooling medium select when it differs from baseline', () => {
+      coolingServiceSpy.differingFields.and.returnValue(new Set(['coolingLossType']) as never);
+      lossesSignal.set([item]);
+      fixture.detectChanges();
+
+      expect(select().classList).toContain('indicate-different');
+    });
+
+    it('leaves the cooling medium select unhighlighted when it matches baseline', () => {
+      coolingServiceSpy.differingFields.and.returnValue(new Set(['coolingMedium']) as never);
+      lossesSignal.set([item]);
+      fixture.detectChanges();
+
+      expect(select().classList).not.toContain('indicate-different');
     });
   });
 });

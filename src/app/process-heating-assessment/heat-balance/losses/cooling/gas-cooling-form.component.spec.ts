@@ -49,4 +49,48 @@ describe('GasCoolingFormComponent', () => {
   it('requires a flow rate', () => {
     expect(form.controls.flowRate.hasError('required')).toBeTrue();
   });
+
+  describe('compare indicators', () => {
+    const group = (id: string): HTMLElement => fixture.nativeElement.querySelector(`[id="${id}"]`).closest('.input-group');
+
+    it('highlights fields listed as differing from baseline', () => {
+      fixture.componentRef.setInput('differingFields', new Set(['gasCoolingLoss.specificHeat']));
+      fixture.detectChanges();
+
+      expect(group('specificHeat_instance-1').classList).toContain('indicate-different');
+    });
+
+    it('leaves fields that match baseline unhighlighted', () => {
+      fixture.componentRef.setInput('differingFields', new Set(['gasCoolingLoss.specificHeat']));
+      fixture.detectChanges();
+
+      expect(group('gasDensity_instance-1').classList).not.toContain('indicate-different');
+    });
+
+    it('keys the outlet temperature indicator to finalTemperature, the value the form loads', () => {
+      fixture.componentRef.setInput('differingFields', new Set(['gasCoolingLoss.finalTemperature']));
+      fixture.detectChanges();
+
+      expect(group('outletTemp_instance-1').classList).toContain('indicate-different');
+    });
+
+    it('does not highlight the outlet temperature for outletTemperature alone', () => {
+      fixture.componentRef.setInput('differingFields', new Set(['gasCoolingLoss.outletTemperature']));
+      fixture.detectChanges();
+
+      expect(group('outletTemp_instance-1').classList).not.toContain('indicate-different');
+    });
+
+    it('highlights nothing without differing fields', () => {
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+
+    it('ignores differences that belong to another material type', () => {
+      fixture.componentRef.setInput('differingFields', new Set(['liquidCoolingLoss.specificHeat']));
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();
+    });
+  });
 });

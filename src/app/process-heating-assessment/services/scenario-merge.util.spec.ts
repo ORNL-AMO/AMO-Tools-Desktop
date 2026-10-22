@@ -252,6 +252,30 @@ describe('ensureLossIdsForPhast', () => {
     expect(migrated.losses.exhaustGasEAF[0].id).toBeTruthy();
   });
 
+  it('backfills a missing id on a baseline other loss', () => {
+    const phast: PHAST = { losses: { otherLosses: [{ description: 'Other', heatLoss: 5 }] } };
+
+    const migrated = ensureLossIdsForPhast(phast);
+
+    expect(migrated.losses.otherLosses[0].id).toBeTruthy();
+  });
+
+  it('aligns a legacy modification other loss override to baseline ids by position', () => {
+    const modification: ProcessHeatingModification = {
+      id: 'mod-1',
+      scenarioOverrides: { losses: { otherLosses: [{ description: 'Other', heatLoss: 7 }] } },
+    };
+    const phast: PHAST = {
+      losses: { otherLosses: [{ description: 'Other', heatLoss: 5 }] },
+      modifications: [modification],
+    };
+
+    const migrated = ensureLossIdsForPhast(phast);
+    const migratedModification = migrated.modifications[0] as unknown as ProcessHeatingModification;
+
+    expect(migratedModification.scenarioOverrides.losses.otherLosses[0].id).toBe(migrated.losses.otherLosses[0].id);
+  });
+
   it('assigns distinct ids to multiple id-less wall losses instead of leaving them all undefined', () => {
     const phast: PHAST = {
       losses: { wallLosses: [{ surfaceArea: 100 } as never, { surfaceArea: 200 } as never] },

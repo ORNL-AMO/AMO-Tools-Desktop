@@ -7,6 +7,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { AuxiliaryPowerWarnings, getAuxiliaryPowerWarnings } from './auxiliary-power-warnings';
 import { AuxiliaryPowerForm, AuxiliaryPowerFormService } from './auxiliary-power-form.service';
 import { AuxiliaryPowerItem } from './auxiliary-power.service';
+import { AuxiliaryPowerLoss } from '../../../../shared/models/phast/losses/auxiliaryPowerLoss';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-auxiliary-power-form',
@@ -17,6 +19,7 @@ import { AuxiliaryPowerItem } from './auxiliary-power.service';
 export class AuxiliaryPowerFormComponent implements OnInit {
   readonly item = input.required<AuxiliaryPowerItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<AuxiliaryPowerLoss>>();
 
   private readonly formService = inject(AuxiliaryPowerFormService);
   private readonly destroyRef = inject(DestroyRef);

@@ -51,7 +51,7 @@ describe('ChargeMaterialComponent', () => {
 
     chargeMaterialServiceSpy = jasmine.createSpyObj(
       'ChargeMaterialService',
-      ['initialize', 'setName', 'switchType', 'add', 'remove', 'toggleCollapse'],
+      ['initialize', 'setName', 'switchType', 'add', 'remove', 'toggleCollapse', 'differingFields'],
       {
         materials: materialsSignal,
         results: signal(new Map()),
@@ -238,6 +238,26 @@ describe('ChargeMaterialComponent', () => {
       fixture.detectChanges();
 
       expect(fixture.nativeElement.querySelector('app-charge-material-gas-form')).not.toBeNull();
+    });
+  });
+
+  describe('compare indicators', () => {
+    const select = (): HTMLElement => fixture.nativeElement.querySelector('.charge-material-type-select');
+
+    it('highlights the material type select when it differs from baseline', () => {
+      chargeMaterialServiceSpy.differingFields.and.returnValue(new Set(['chargeMaterialType']) as never);
+      materialsSignal.set([solidItem]);
+      fixture.detectChanges();
+
+      expect(select().classList).toContain('indicate-different');
+    });
+
+    it('leaves the material type select unhighlighted when it matches baseline', () => {
+      chargeMaterialServiceSpy.differingFields.and.returnValue(new Set(['solidChargeMaterial.feedRate']) as never);
+      materialsSignal.set([solidItem]);
+      fixture.detectChanges();
+
+      expect(select().classList).not.toContain('indicate-different');
     });
   });
 });

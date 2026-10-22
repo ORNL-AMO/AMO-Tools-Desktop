@@ -33,6 +33,7 @@
           <div class="form-group">
             <label for="coolingLossType_{{ panelPrefix + '_' + item.id }}">Cooling Medium</label>
             <select class="form-control" id="coolingLossType_{{ panelPrefix + '_' + item.id }}"
+              [class.indicate-different]="service.differingFields(item.id)?.has('coolingLossType')"
               (change)="service.switchMedium(item.id, $any($event.target).value)">
               @for (option of mediumOptions; track option.value) {
                 <option [value]="option.value" [selected]="option.value === item.form.controls.coolingLossType.value">{{ option.label }}</option>
@@ -40,9 +41,9 @@
             </select>
           </div>
           @if (gasForm(item); as form) {
-            <app-gas-cooling-form [form]="form" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-gas-cooling-form>
+            <app-gas-cooling-form [form]="form" [differingFields]="service.differingFields(item.id)" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-gas-cooling-form>
           } @else if (liquidForm(item); as form) {
-            <app-liquid-cooling-form [form]="form" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-liquid-cooling-form>
+            <app-liquid-cooling-form [form]="form" [differingFields]="service.differingFields(item.id)" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-liquid-cooling-form>
           }
 
           <div class="loss-results mt-3">

@@ -3,6 +3,8 @@ import { generateFormControlIds } from '../../../../shared/helperFunctions';
 import { Settings } from '../../../../shared/models/settings';
 import { ExtendedSurfaceForm } from './extended-surface-form.service';
 import { ExtendedSurfaceItem } from './extended-surface.service';
+import { ExtendedSurface } from '../../../models/extended-surface';
+import { LossFieldDifferences } from '../loss-compare.util';
 
 @Component({
   selector: 'app-extended-surface-form',
@@ -13,6 +15,7 @@ import { ExtendedSurfaceItem } from './extended-surface.service';
 export class ExtendedSurfaceFormComponent {
   readonly item = input.required<ExtendedSurfaceItem>();
   readonly settings = input.required<Settings>();
+  readonly differingFields = input<LossFieldDifferences<ExtendedSurface>>();
 
   readonly form = computed(() => this.item().form as ExtendedSurfaceForm);
   readonly controlIds = computed(() => generateFormControlIds(this.form().controls));

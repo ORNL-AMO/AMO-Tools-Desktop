@@ -38,7 +38,7 @@
 
       @if (!item.collapse) {
         <div class="card-body">
-          <app-energy-input-form [item]="item" [settings]="settings()"></app-energy-input-form>
+          <app-energy-input-form [item]="item" [differingFields]="service.differingFields(item.id)" [settings]="settings()"></app-energy-input-form>
 
           <div class="loss-results mt-3">
             <div class="d-flex justify-content-between small">

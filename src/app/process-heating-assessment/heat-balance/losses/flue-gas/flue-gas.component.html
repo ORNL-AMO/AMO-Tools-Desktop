@@ -5,7 +5,7 @@
 
   <div class="form-group">
     <label for="flueGasType_{{ panelPrefix }}">Fuel Type</label>
-    <select class="form-control" id="flueGasType_{{ panelPrefix }}" [ngModel]="service.flueGasType()" (ngModelChange)="service.switchType($event)">
+    <select class="form-control" id="flueGasType_{{ panelPrefix }}" [class.indicate-different]="service.differingFields()?.has('flueGasType')" [ngModel]="service.flueGasType()" (ngModelChange)="service.switchType($event)">
       <option [value]="FlueGasType.ByVolume">Gas (By Volume)</option>
       <option [value]="FlueGasType.ByMass">Solid/Liquid (By Mass)</option>
     </select>
@@ -14,9 +14,9 @@
 
   @for (form of service.formList(); track form) {
     @if (service.flueGasType() === FlueGasType.ByMass) {
-      <app-flue-gas-mass-form [form]="asMassForm(form)" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-mass-form>
+      <app-flue-gas-mass-form [form]="asMassForm(form)" [differingFields]="service.differingFields()" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-mass-form>
     } @else {
-      <app-flue-gas-volume-form [form]="asVolumeForm(form)" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-volume-form>
+      <app-flue-gas-volume-form [form]="asVolumeForm(form)" [differingFields]="service.differingFields()" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-volume-form>
     }
 
     @let result = service.result();

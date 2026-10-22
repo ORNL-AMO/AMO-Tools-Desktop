@@ -2,7 +2,7 @@
   <div class="form-section">
     <div class="form-group">
       <label class="small" for="{{controlIds().weight}}">Weight</label>
-      <div class="input-group" [class.invalid]="form().controls.weight.invalid">
+      <div class="input-group" [class.invalid]="form().controls.weight.invalid" [class.indicate-different]="differingFields()?.has('weight')">
         <input type="number" step="10" min="0" class="form-control"
           id="{{controlIds().weight}}" formControlName="weight" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'lb/hr' : 'kg/hr'}}</span>
@@ -13,7 +13,7 @@
 
     <div class="form-group">
       <label class="small" for="{{controlIds().inletTemperature}}">Inlet Temperature</label>
-      <div class="input-group" [class.invalid]="form().controls.inletTemperature.invalid">
+      <div class="input-group" [class.invalid]="form().controls.inletTemperature.invalid" [class.indicate-different]="differingFields()?.has('inletTemperature')">
         <input type="number" step="10" class="form-control"
           id="{{controlIds().inletTemperature}}" formControlName="inletTemperature" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? '℉' : '℃'}}</span>
@@ -24,7 +24,7 @@
 
     <div class="form-group">
       <label class="small" for="{{controlIds().outletTemperature}}">Outlet Temperature</label>
-      <div class="input-group" [class.invalid]="form().controls.outletTemperature.invalid">
+      <div class="input-group" [class.invalid]="form().controls.outletTemperature.invalid" [class.indicate-different]="differingFields()?.has('outletTemperature')">
         <input type="number" step="10" class="form-control"
           id="{{controlIds().outletTemperature}}" formControlName="outletTemperature" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? '℉' : '℃'}}</span>
@@ -35,7 +35,7 @@
 
     <div class="form-group">
       <label class="small" for="{{controlIds().specificHeat}}">Specific Heat</label>
-      <div class="input-group" [class.invalid]="form().controls.specificHeat.invalid">
+      <div class="input-group" [class.invalid]="form().controls.specificHeat.invalid" [class.indicate-different]="differingFields()?.has('specificHeat')">
         <input type="number" step="any" min="0" class="form-control"
           id="{{controlIds().specificHeat}}" formControlName="specificHeat" onfocus="this.select();">
         <span class="input-group-addon units">{{settings().unitsOfMeasure === 'Imperial' ? 'Btu/(lb-℉)' : 'kJ/(kg-℃)'}}</span>
@@ -48,7 +48,7 @@
       <label class="small" for="{{controlIds().correctionFactor}}">Correction Factor</label>
       <input type="number" step="any" min="0" class="form-control"
         id="{{controlIds().correctionFactor}}" formControlName="correctionFactor" onfocus="this.select();"
-        [class.invalid]="form().controls.correctionFactor.invalid">
+        [class.invalid]="form().controls.correctionFactor.invalid" [class.indicate-different]="differingFields()?.has('correctionFactor')">
       <app-form-control-errors [control]="form().controls.correctionFactor" [settings]="settings()">
       </app-form-control-errors>
     </div>

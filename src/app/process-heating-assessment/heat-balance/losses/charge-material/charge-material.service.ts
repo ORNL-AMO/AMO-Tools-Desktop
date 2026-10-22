@@ -9,6 +9,7 @@ import { LossItemsStore } from '../loss-items-store';
 import { GasMaterialForm, GasMaterialFormService } from './gas-form/gas-material-form.service';
 import { LiquidMaterialForm, LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
 import { SolidMaterialForm, SolidMaterialFormService } from './solid-form/solid-material-form.service';
+import { createLossDifferences, LossFieldDifferences } from '../loss-compare.util';
 
 interface ChargeMaterialItemBase {
   id: string;
@@ -49,8 +50,13 @@ export class ChargeMaterialService {
   private readonly liquidFormService = inject(LiquidMaterialFormService);
   private readonly gasFormService = inject(GasMaterialFormService);
 
-  private scenario: AssessmentScenario = 'baseline';
+  private readonly scenario = signal<AssessmentScenario>('baseline');
   private readonly store = new LossItemsStore<ChargeMaterialItem>();
+  private readonly differences = createLossDifferences<ChargeMaterial>(
+    this.scenario,
+    source => this.assessmentService.lossSignal(source, 'chargeMaterials'),
+    material => this.normalize(material),
+  );
 
   // Caches a switched-away-from type's last known values per entry so switching back restores
   // them
@@ -89,12 +95,20 @@ export class ChargeMaterialService {
   });
 
   initialize(scenario: AssessmentScenario = 'baseline'): void {
-    this.scenario = scenario;
+    this.scenario.set(scenario);
     this.typeCache.clear();
 
     const chargeMaterials = this.assessmentService.lossSignal(scenario, 'chargeMaterials') ?? [];
     const items = chargeMaterials.map((material, index) => this.buildItem(this.ensureId(material), index));
     this.store.load(items);
+  }
+
+  /**
+   * @param id charge material id
+   * @returns fields of the material that differ from baseline, or undefined when none apply (baseline scenario, new item)
+   */
+  differingFields(id: string): LossFieldDifferences<ChargeMaterial> | undefined {
+    return this.differences().get(id);
   }
 
   toggleCollapse(id: string): void {
@@ -140,6 +154,11 @@ export class ChargeMaterialService {
     this.saveLosses();
   }
 
+  /** Rebuilds a saved material through its type's form so its defaults match what a save would persist. */
+  private normalize(material: ChargeMaterial): ChargeMaterial {
+    return { ...this.buildChargeMaterial(this.createItem(material, material.id ?? '', 0)), id: material.id };
+  }
+
   private ensureId(material: ChargeMaterial): ChargeMaterial & { id: string } {
     return material.id ? (material as ChargeMaterial & { id: string }) : { ...material, id: getNewIdString() };
   }
@@ -180,6 +199,6 @@ export class ChargeMaterialService {
 
   private saveLosses(): void {
     const chargeMaterials = this.store.all().map(item => ({ ...this.buildChargeMaterial(item), name: item.name, id: item.id }));
-    this.assessmentService.updateLossesProperty(this.scenario, 'chargeMaterials', chargeMaterials);
+    this.assessmentService.updateLossesProperty(this.scenario(), 'chargeMaterials', chargeMaterials);
   }
 }
