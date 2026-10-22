@@ -107,10 +107,10 @@ export class ProcessHeatingValidityService {
 
   private readonly scenarioValidityCache = new Map<AssessmentScenario, Signal<PhastValid>>();
 
-  /** Assessment Settings step: the settings form's own validation. */
+  /** Assessment Settings step: the settings form's own validation. Built from a copy because the settings service normalizes the object it is given. */
   readonly isAssessmentSettingsValid: Signal<boolean> = computed(() => {
     const settings = this.assessmentService.settingsSignal();
-    return !!settings && this.settingsService.getFormFromSettings(settings).valid;
+    return !!settings && this.settingsService.getFormFromSettings({ ...settings }).valid;
   });
 
   /** Modifications with at least one invalid step, in assessment order. */

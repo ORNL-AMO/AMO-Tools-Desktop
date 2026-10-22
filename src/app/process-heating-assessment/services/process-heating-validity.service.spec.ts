@@ -83,7 +83,15 @@ describe('ProcessHeatingValidityService', () => {
             getResults: () => ({ totalInput: 1000, exothermicHeat: -100, energyInputTotalChemEnergy: 300 } as PhastResults),
           },
         },
-        { provide: SettingsService, useValue: { getFormFromSettings: () => ({ valid: settingsFormValid } as FormGroup) } },
+        {
+          provide: SettingsService,
+          useValue: {
+            getFormFromSettings: (formSettings: Settings) => {
+              formSettings.steamPressureMeasurement = 'psig';
+              return { valid: settingsFormValid } as FormGroup;
+            },
+          },
+        },
       ],
     });
     service = TestBed.inject(ProcessHeatingValidityService);
@@ -197,6 +205,15 @@ describe('ProcessHeatingValidityService', () => {
       settings.set({ ...FUEL_FIRED });
 
       expect(service.isAssessmentSettingsValid()).toBeFalse();
+    });
+
+    it('leaves the assessment settings untouched', () => {
+      const original = { ...FUEL_FIRED, steamPressureMeasurement: 'psi' } as Settings;
+      settings.set(original);
+
+      service.isAssessmentSettingsValid();
+
+      expect(original.steamPressureMeasurement).toBe('psi');
     });
   });
 });
