@@ -1,8 +1,10 @@
 import { Component, Input, NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { PhastValidService } from '../../../phast/phast-valid.service';
 import { Settings } from '../../../shared/models/settings';
-import { PHAST } from '../../../shared/models/phast/phast';
+import { ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
+import { PHAST, PhastValid } from '../../../shared/models/phast/phast';
 import { SankeyScenarioPickerComponent } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
 import { ReportSankeyComponent } from './report-sankey.component';
 import { ReportSankeyResultsService, ReportSankeyUI } from './report-sankey-results.service';
@@ -25,19 +27,36 @@ describe('ReportSankeyComponent', () => {
   let fixture: ComponentFixture<ReportSankeyComponent>;
   let component: ReportSankeyComponent;
   let ui: WritableSignal<ReportSankeyUI | undefined>;
+  let checkValid: jasmine.Spy;
 
   const pickers = (): HTMLElement[] => Array.from(fixture.nativeElement.querySelectorAll('app-sankey-scenario-picker'));
 
   beforeEach(() => {
     ui = signal<ReportSankeyUI | undefined>(buildUI());
+    checkValid = jasmine.createSpy('checkValid');
     TestBed.configureTestingModule({
       declarations: [ReportSankeyComponent],
-      providers: [{ provide: ReportSankeyResultsService, useValue: { reportSankeyUI: ui } }],
+      providers: [
+        { provide: ReportSankeyResultsService, useValue: { reportSankeyUI: ui } },
+        { provide: ProcessHeatingValidityService, useValue: { checkValid: checkValid } },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ReportSankeyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  it('checks the sankey input with the module validity service instead of legacy validity', () => {
+    const invalid = { isValid: false } as PhastValid;
+    checkValid.and.returnValue(invalid);
+    const phast = { name: 'scenario' } as PHAST;
+    const settings = { energyResultUnit: 'MMBtu' } as Settings;
+
+    const result = fixture.debugElement.injector.get(PhastValidService).checkValid(phast, settings);
+
+    expect(checkValid).toHaveBeenCalledWith(phast, settings);
+    expect(result).toBe(invalid);
   });
 
   it('renders one picker with a sankey per scenario', () => {

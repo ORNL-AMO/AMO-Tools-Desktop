@@ -1,24 +1,28 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, Signal } from '@angular/core';
 import { PhastValidService } from '../../../phast/phast-valid.service';
-import { PhastValid } from '../../../shared/models/phast/phast';
+import { PHAST as SharedPHAST, PhastValid as SharedPhastValid } from '../../../shared/models/phast/phast';
+import { Settings } from '../../../shared/models/settings';
+import { PHAST } from '../../models/phast';
+import { ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
 import { ReportSankeyResultsService, ReportSankeyScenario, ReportSankeyUI } from './report-sankey-results.service';
 
 export type SankeyLabelStyle = 'percent' | 'power' | 'both';
 
-/**
- * Report results are shown for every scenario, so the shared sankey's legacy validity check always passes.
- * Stand-in until this module has its own validity service; replace this provider with that check.
- */
-const ALWAYS_VALID: Pick<PhastValidService, 'checkValid'> = {
-  checkValid: () => ({ isValid: true } as PhastValid),
-};
+/** The shared sankey checks its input's validity itself, so it gets this module's check in place of legacy's. */
+function providePhastValidService(): Pick<PhastValidService, 'checkValid'> {
+  const validityService = inject(ProcessHeatingValidityService);
+  return {
+    checkValid: (phast: SharedPHAST, settings: Settings): SharedPhastValid =>
+      validityService.checkValid(phast as unknown as PHAST, settings),
+  };
+}
 
 @Component({
   selector: 'app-report-sankey',
   standalone: false,
   templateUrl: './report-sankey.component.html',
-  providers: [{ provide: PhastValidService, useValue: ALWAYS_VALID }],
+  providers: [{ provide: PhastValidService, useFactory: providePhastValidService }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReportSankeyComponent {

@@ -237,8 +237,9 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
     });
   }
 
+  /** An invalid scenario has no trustworthy flows to draw. */
   private buildSankeySections(ui: ReportSankeyUI): ChartSection[] {
-    return ui.scenarios.map((scenario, index) => ({
+    return ui.scenarios.filter(scenario => this.validityService.scenarioValidity(scenario.id).isValid).map((scenario, index) => ({
       type: 'chart',
       title: `${scenario.name} Sankey`,
       group: ROUTE_TOKENS.reportSankey,

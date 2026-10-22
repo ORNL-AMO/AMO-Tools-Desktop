@@ -146,7 +146,11 @@ describe('ProcessHeatingReportAdapter', () => {
         { provide: ReportSankeyResultsService, useValue: { reportSankeyUI: () => reportSankey } },
         { provide: ResultsDataResultsService, useValue: { resultsDataUI: () => resultsData } },
         { provide: InputSummaryResultsService, useValue: { inputSummaryUI: () => inputSummary } },
-        { provide: ProcessHeatingValidityService, useValue: { invalidModifications: () => invalidModifications } },
+        { provide: ProcessHeatingValidityService, useValue: {
+          invalidModifications: () => invalidModifications,
+          scenarioValidity: (scenario: string) => ({ isValid: !invalidModifications.some(modification => modification.id === scenario) }),
+        },
+        },
       ],
     });
     adapter = TestBed.inject(ProcessHeatingReportAdapter);
@@ -296,6 +300,16 @@ describe('ProcessHeatingReportAdapter', () => {
 
       expect(sections.map(candidate => candidate.title)).toEqual(['Invalid Modifications', 'Result Data']);
       expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, false]);
+    });
+
+    it('leaves an invalid scenario out of the sankey charts', async () => {
+      reportSankey = buildReportSankey(2);
+      invalidModifications = [{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }];
+
+      const charts = (await build()).sections.filter(candidate => candidate.group === 'report-sankey') as ChartSection[];
+
+      expect(charts.map(chart => chart.title)).toEqual(['Baseline Sankey', 'Scenario 2 Sankey']);
+      expect(charts.map(chart => !!chart.pageBreakBefore)).toEqual([true, false]);
     });
 
     it('adds nothing when every modification is valid', async () => {
