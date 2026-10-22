@@ -1,6 +1,10 @@
 <div class="output-summary p-3">
   <h4 class="show-print print-section-header">Assessment Executive Summary</h4>
 
+  @if (invalidModifications().length) {
+    <app-invalid-modification-alert [modifications]="invalidModifications()"></app-invalid-modification-alert>
+  }
+
   @let ui = executiveSummaryUI();
   @if (ui) {
     <ng-template #tableHead let-title="title">

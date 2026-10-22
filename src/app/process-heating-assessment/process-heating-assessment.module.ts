@@ -81,6 +81,7 @@ import { ResultsDataComponent } from './report/results-data/results-data.compone
 import { ReportGraphsComponent } from './report/report-graphs/report-graphs.component';
 import { ReportSankeyComponent } from './report/report-sankey/report-sankey.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
+import { InvalidModificationAlertComponent } from './report/invalid-modification-alert/invalid-modification-alert.component';
 import { ProcessHeatingReportAdapter } from './report/process-heating-report.adapter';
 import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
 import { InputSummaryResultsService } from './report/input-summary/input-summary-results.service';
@@ -372,6 +373,7 @@ export const ROUTES: Route[] = [
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
+    InvalidModificationAlertComponent,
     EnergySummaryComponent,
     ResultsDataComponent,
     ReportGraphsComponent,

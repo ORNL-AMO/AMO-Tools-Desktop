@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { ReportTableCellPipe } from '../../../shared/pipes/report-table-cell.pipe';
 import { ExecutiveSummaryComponent } from './executive-summary.component';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from './executive-summary-results.service';
@@ -23,17 +24,22 @@ function buildUI(overrides: Partial<ExecutiveSummaryUI> = {}): ExecutiveSummaryU
 
 describe('ExecutiveSummaryComponent', () => {
   let fixture: ComponentFixture<ExecutiveSummaryComponent>;
+  let invalidModifications: WritableSignal<InvalidModification[]>;
   let ui: WritableSignal<ExecutiveSummaryUI | undefined>;
 
   const text = (): string => fixture.nativeElement.textContent.replace(/\s+/g, ' ');
   const tableCount = (): number => fixture.nativeElement.querySelectorAll('table').length;
 
   beforeEach(() => {
+    invalidModifications = signal<InvalidModification[]>([]);
     ui = signal<ExecutiveSummaryUI | undefined>(buildUI());
     TestBed.configureTestingModule({
       declarations: [ExecutiveSummaryComponent],
       imports: [ReportTableCellPipe],
-      providers: [{ provide: ExecutiveSummaryResultsService, useValue: { executiveSummaryUI: ui } }],
+      providers: [
+        { provide: ExecutiveSummaryResultsService, useValue: { executiveSummaryUI: ui } },
+        { provide: ProcessHeatingValidityService, useValue: { invalidModifications } },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ExecutiveSummaryComponent);
@@ -95,5 +101,15 @@ describe('ExecutiveSummaryComponent', () => {
   it('copies the table text for export', () => {
     fixture.componentInstance.updateCopyTableString();
     expect(fixture.componentInstance.copyTableString).toContain('Annual Result Totals');
+  });
+
+  it('shows the invalid modification alert only when a modification is invalid', () => {
+    const alert = (): Element | null => fixture.nativeElement.querySelector('app-invalid-modification-alert');
+    expect(alert()).toBeNull();
+
+    invalidModifications.set([{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }]);
+    fixture.detectChanges();
+
+    expect(alert()).not.toBeNull();
   });
 });

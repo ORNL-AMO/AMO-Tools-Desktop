@@ -1,6 +1,10 @@
 <div class="output-summary p-3">
   <h4 class="show-print print-section-header">Result Data</h4>
 
+  @if (invalidModifications().length) {
+    <app-invalid-modification-alert [modifications]="invalidModifications()"></app-invalid-modification-alert>
+  }
+
   @let ui = resultsDataUI();
   @if (ui) {
     <table #copyTable class="table table-hover table-striped">

@@ -1,0 +1,8 @@
+@for (modification of modifications(); track modification.id) {
+  <div class="alert-danger mb-2">
+    <div>Invalid Modification: {{modification.name}}</div>
+    @for (error of modification.errors; track error) {
+      <div>{{error}}</div>
+    }
+  </div>
+}
