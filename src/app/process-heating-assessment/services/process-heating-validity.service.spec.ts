@@ -80,7 +80,12 @@ describe('ProcessHeatingValidityService', () => {
         {
           provide: ProcessHeatingResultsService,
           useValue: {
-            getResults: () => ({ totalInput: 1000, exothermicHeat: -100, energyInputTotalChemEnergy: 300 } as PhastResults),
+            getResults: (phast: PHAST) => {
+              if (!phast.operatingHours) {
+                throw new TypeError("Cannot read properties of undefined (reading 'hoursPerYear')");
+              }
+              return { totalInput: 1000, exothermicHeat: -100, energyInputTotalChemEnergy: 300 } as PhastResults;
+            },
           },
         },
         {
@@ -171,6 +176,15 @@ describe('ProcessHeatingValidityService', () => {
         scenarios.baseline.set(phastWith(energyInput(599)));
 
         expect(service.scenarioValidity('baseline').energyInputValid).toBeFalse();
+      });
+
+      it('reports invalid operations instead of throwing when operating hours are missing', () => {
+        scenarios.baseline.set(phastWith(energyInput(600), { operatingHours: undefined }));
+
+        const validity = service.scenarioValidity('baseline');
+
+        expect(validity.operationsValid).toBeFalse();
+        expect(validity.isValid).toBeFalse();
       });
 
       it('is valid at the required electricity', () => {

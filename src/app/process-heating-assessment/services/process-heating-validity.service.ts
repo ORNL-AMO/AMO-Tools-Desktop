@@ -162,7 +162,9 @@ export class ProcessHeatingValidityService {
     if (!losses?.length) {
       return true;
     }
-    const minElectricityInput = this.energyInputFormService.getMinElectricityInput(this.resultsService.getResults(phast, settings), settings);
+    // The legacy EAF results read operating hours, which the Operations check reports as missing
+    const results = phast.operatingHours ? this.resultsService.getResults(phast, settings) : undefined;
+    const minElectricityInput = this.energyInputFormService.getMinElectricityInput(results, settings);
     return losses.every(loss => {
       const form = this.energyInputFormService.getEnergyInputForm(loss, settings);
       this.energyInputFormService.setMinElectricityInput(form, minElectricityInput);
