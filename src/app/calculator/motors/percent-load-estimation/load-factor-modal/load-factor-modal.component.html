@@ -8,10 +8,8 @@
                 </button>
             </div>
             <div class="modal-body p-0 d-flex h-100 w-100">
-                @if (loadFactorModal.isShown) {
                 <app-percent-load-estimation class="w-100 h-100" [settings]="settings">
                 </app-percent-load-estimation>
-                }
             </div>
             <div class="modal-footer justify-content-between">
                 <button class="btn btn-default pull-left" (click)="hideModal()">Cancel</button>

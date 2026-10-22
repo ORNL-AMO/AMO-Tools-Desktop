@@ -10,15 +10,12 @@ import { PercentLoadEstimationService } from '../percent-load-estimation.service
   selector: 'app-load-factor-modal',
   templateUrl: './load-factor-modal.component.html',
   styleUrls: ['./load-factor-modal.component.css'],
-  standalone: false
+  standalone: false,
+  providers: [PercentLoadEstimationService]
 })
 export class LoadFactorModalComponent {
   @Input()
   settings: Settings;
-  @Input()
-  ratedVoltage: number = 0;
-  @Input()
-  powerFactor: number = 0;
   @Output('emitClose')
   emitClose = new EventEmitter<boolean>();
   @Output('emitSave')
@@ -26,20 +23,6 @@ export class LoadFactorModalComponent {
   @ViewChild('loadFactorModal', { static: false }) public loadFactorModal: ModalDirective;
 
   constructor(private percentLoadEstimationService: PercentLoadEstimationService) { }
-
-  ngOnInit() {
-    this.percentLoadEstimationService.fieldMeasurementInputs = {
-      phase1Voltage: 0,
-      phase1Amps: 0,
-      phase2Voltage: 0,
-      phase2Amps: 0,
-      phase3Voltage: 0,
-      phase3Amps: 0,
-      ratedVoltage: this.ratedVoltage ?? 0,
-      ratedCurrent: 0,
-      powerFactor: this.powerFactor ?? 0
-    };
-  }
 
   ngAfterViewInit() {
     this.loadFactorModal.show();

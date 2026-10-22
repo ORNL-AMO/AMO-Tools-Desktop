@@ -116,7 +116,9 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   });
   state.edges = diagramData.edges.map((edge: Edge<CustomEdgeData>) => edge);
   state.diagramOptions = diagramData.userDiagramOptions ? { ...diagramData.userDiagramOptions } : getDefaultUserDiagramOptions();
-  state.settings = diagramData.settings ? { ...diagramData.settings } : getDefaultSettings();
+  const defaultSettings = getDefaultSettings();
+  state.settings = { ...defaultSettings, ...diagramData.settings };
+  state.settings.fuelCost = state.settings.fuelCost ?? defaultSettings.fuelCost;
   state.calculatedData = diagramData.calculatedData ? { ...diagramData.calculatedData } : { nodes: {} };
   const diagramFlowErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
   state.diagramFlowErrors = diagramFlowErrors;

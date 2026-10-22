@@ -357,7 +357,7 @@ export const calculateBoilerWaterResults = (inputData: BoilerWater, hoursPerYear
 * Calculate cooling tower losses. Suite inputs are Imperial (degF based) - Metric inputs are converted before calling the suite.
 * @param unitsOfMeasure units the inputData values are in
 */
-export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYear: number, WaterAssessmentInstance, unitsOfMeasure?: string): CoolingTowerResults => {
+export const calculateCoolingTowerResults = (inputData: CoolingTower, hoursPerYear: number, WaterAssessmentInstance, unitsOfMeasure: string): CoolingTowerResults => {
   const suiteApiInputData = JSON.parse(JSON.stringify(inputData));
   hoursPerYear = convertNullInputValueForObjectConstructor(hoursPerYear);
   suiteApiInputData.tonnage = convertNullInputValueForObjectConstructor(suiteApiInputData.tonnage);

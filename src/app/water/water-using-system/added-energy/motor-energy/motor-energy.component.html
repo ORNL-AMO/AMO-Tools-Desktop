@@ -91,7 +91,7 @@
 </app-operating-hours-modal>
 
 @if (showLoadFactorModal) {
-<app-load-factor-modal [settings]="settings" [powerFactor]="form.controls.loadFactor.value"
+<app-load-factor-modal [settings]="settings"
     (emitClose)="hideLoadFactorModal()" (emitSave)="applyModalData($event)">
 </app-load-factor-modal>
 }
