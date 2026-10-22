@@ -2,6 +2,7 @@ import { signal, WritableSignal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { TestBed } from '@angular/core/testing';
 import { ConvertUnitsService } from '../../shared/convert-units/convert-units.service';
+import { FlueGas } from '../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../shared/models/settings';
 import { SettingsService } from '../../settings/settings.service';
 import { AtmosphereFormService } from '../heat-balance/losses/atmosphere/atmosphere-form.service';
@@ -15,7 +16,7 @@ import { EnergyInputFormService } from '../heat-balance/losses/energy-input/ener
 import { ExhaustGasFormService } from '../heat-balance/losses/exhaust-gas/exhaust-gas-form.service';
 import { ExtendedSurfaceFormService } from '../heat-balance/losses/extended-surface/extended-surface-form.service';
 import { FixtureFormService } from '../heat-balance/losses/fixture/fixture-form.service';
-import { FlueGasFormService } from '../heat-balance/losses/flue-gas/flue-gas-form.service';
+import { FlueGasFormService, FlueGasVolumeForm } from '../heat-balance/losses/flue-gas/flue-gas-form.service';
 import { GasLeakageFormService } from '../heat-balance/losses/gas-leakage/gas-leakage-form.service';
 import { OpeningFormService } from '../heat-balance/losses/opening/opening-form.service';
 import { OtherFormService } from '../heat-balance/losses/other/other-form.service';
@@ -134,6 +135,17 @@ describe('ProcessHeatingValidityService', () => {
       expect(service.scenarioValidity('baseline').flueGasValid).toBeTrue();
 
       settings.set(FUEL_FIRED);
+      expect(service.scenarioValidity('baseline').flueGasValid).toBeFalse();
+    });
+
+    it('validates only the first flue gas entry', () => {
+      spyOn(TestBed.inject(FlueGasFormService), 'getFlueGasVolumeForm')
+        .and.callFake((loss: FlueGas) => ({ valid: loss.name === 'Complete' }) as FlueGasVolumeForm);
+
+      scenarios.baseline.set(phastWith({ flueGasLosses: [{ name: 'Complete' }, { name: 'Incomplete' }] }));
+      expect(service.scenarioValidity('baseline').flueGasValid).toBeTrue();
+
+      scenarios.baseline.set(phastWith({ flueGasLosses: [{ name: 'Incomplete' }, { name: 'Complete' }] }));
       expect(service.scenarioValidity('baseline').flueGasValid).toBeFalse();
     });
 

@@ -85,7 +85,8 @@ export class ProcessHeatingValidityService {
         default: return this.solidMaterialFormService.getSolidChargeMaterialForm(material);
       }
     }) },
-    { key: 'flueGasValid', view: LossView.FLUE_GAS, label: 'Flue Gas', isValid: (phast, settings) => this.allValid(phast.losses?.flueGasLosses, loss =>
+    // The flue gas editor and the results read only the first entry; extra imported entries can't be fixed in the UI.
+    { key: 'flueGasValid', view: LossView.FLUE_GAS, label: 'Flue Gas', isValid: (phast, settings) => this.allValid(phast.losses?.flueGasLosses?.slice(0, 1), loss =>
       loss.flueGasType === FlueGasType.ByMass
         ? this.flueGasFormService.getFlueGasMassForm(loss, settings)
         : this.flueGasFormService.getFlueGasVolumeForm(loss, settings)) },
