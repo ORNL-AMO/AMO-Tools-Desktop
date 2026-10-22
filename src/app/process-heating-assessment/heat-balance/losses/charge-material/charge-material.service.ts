@@ -1,4 +1,4 @@
-import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { computed, DestroyRef, inject, Injectable, Signal, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { getNewIdString } from '../../../../shared/helperFunctions';
@@ -9,7 +9,7 @@ import { LossItemsStore } from '../loss-items-store';
 import { GasMaterialForm, GasMaterialFormService } from './gas-form/gas-material-form.service';
 import { LiquidMaterialForm, LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
 import { SolidMaterialForm, SolidMaterialFormService } from './solid-form/solid-material-form.service';
-import { LossFieldDifferences } from '../loss-compare.util';
+import { createLossDifferences, LossDifferences, LossFieldDifferences } from '../loss-compare.util';
 
 interface ChargeMaterialItemBase {
   id: string;
@@ -52,6 +52,7 @@ export class ChargeMaterialService {
 
   private scenario: AssessmentScenario = 'baseline';
   private readonly store = new LossItemsStore<ChargeMaterialItem>();
+  private differences: Signal<LossDifferences<ChargeMaterial>> = createLossDifferences<ChargeMaterial>('baseline', () => undefined, material => material);
 
   // Caches a switched-away-from type's last known values per entry so switching back restores
   // them
@@ -92,6 +93,11 @@ export class ChargeMaterialService {
   initialize(scenario: AssessmentScenario = 'baseline'): void {
     this.scenario = scenario;
     this.typeCache.clear();
+    this.differences = createLossDifferences<ChargeMaterial>(
+      scenario,
+      source => this.assessmentService.lossSignal(source, 'chargeMaterials'),
+      material => this.normalize(material),
+    );
 
     const chargeMaterials = this.assessmentService.lossSignal(scenario, 'chargeMaterials') ?? [];
     const items = chargeMaterials.map((material, index) => this.buildItem(this.ensureId(material), index));
@@ -103,7 +109,7 @@ export class ChargeMaterialService {
    * @returns fields of the material that differ from baseline, or undefined when none apply (baseline scenario, new item)
    */
   differingFields(id: string): LossFieldDifferences<ChargeMaterial> | undefined {
-    return this.assessmentService.lossDifferences(this.scenario, 'chargeMaterials').get(id);
+    return this.differences().get(id);
   }
 
   toggleCollapse(id: string): void {
@@ -147,6 +153,11 @@ export class ChargeMaterialService {
     this.observeItem(nextItem);
     this.store.set(id, nextItem);
     this.saveLosses();
+  }
+
+  /** Rebuilds a saved material through its type's form so its defaults match what a save would persist. */
+  private normalize(material: ChargeMaterial): ChargeMaterial {
+    return { ...this.buildChargeMaterial(this.createItem(material, material.id ?? '', 0)), id: material.id };
   }
 
   private ensureId(material: ChargeMaterial): ChargeMaterial & { id: string } {

@@ -1,4 +1,4 @@
-import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { computed, DestroyRef, inject, Injectable, Signal, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { getNewIdString } from '../../../../shared/helperFunctions';
@@ -8,7 +8,7 @@ import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../../se
 import { FlueGasAvailableHeatResult, FlueGasCalculationService } from './flue-gas-calculation.service';
 import { DEFAULT_FLUE_GAS_NAME, FlueGasForm, FlueGasFormService, FlueGasMassForm, FlueGasType, isFlueGasMassForm } from './flue-gas-form.service';
 import { getFlueGasByMassWarnings, getFlueGasByVolumeWarnings } from './flue-gas-warnings';
-import { LossFieldDifferences } from '../loss-compare.util';
+import { createLossDifferences, LossDifferences, LossFieldDifferences } from '../loss-compare.util';
 
 /**
  * Single-entry flue gas state. Results read only `flueGasLosses[0]`, so the form edits that entry and
@@ -24,6 +24,7 @@ export class FlueGasService {
   private scenario: AssessmentScenario = 'baseline';
   private id = getNewIdString();
   private name = DEFAULT_FLUE_GAS_NAME;
+  private differences: Signal<LossDifferences<FlueGas>> = createLossDifferences<FlueGas>('baseline', () => undefined, loss => loss);
 
   readonly form = signal<FlueGasForm | null>(null);
   /** One-element list so the template can recreate the form component when the form is replaced. */
@@ -37,6 +38,11 @@ export class FlueGasService {
 
   initialize(scenario: AssessmentScenario = 'baseline'): void {
     this.scenario = scenario;
+    this.differences = createLossDifferences<FlueGas>(
+      scenario,
+      source => this.assessmentService.lossSignal(source, 'flueGasLosses'),
+      loss => this.normalize(loss),
+    );
     const existing = this.assessmentService.lossSignal(scenario, 'flueGasLosses')?.[0];
     this.id = existing?.id ?? getNewIdString();
     this.name = existing?.name ?? DEFAULT_FLUE_GAS_NAME;
@@ -47,7 +53,18 @@ export class FlueGasService {
    * @returns fields of the flue gas entry that differ from baseline, or undefined when none apply (baseline scenario)
    */
   differingFields(): LossFieldDifferences<FlueGas> | undefined {
-    return this.assessmentService.lossDifferences(this.scenario, 'flueGasLosses').get(this.id);
+    return this.differences().get(this.id);
+  }
+
+  /** Rebuilds a saved entry through its form so its defaults match what a save would persist. */
+  private normalize(loss: FlueGas): FlueGas {
+    const settings = this.assessmentService.settingsSignal();
+    if (loss.flueGasType !== FlueGasType.ByMass) {
+      return { ...this.formService.buildFlueGasLoss(this.formService.getFlueGasVolumeForm(loss, settings)), id: loss.id };
+    }
+    const form = this.formService.getFlueGasMassForm(loss, settings);
+    form.patchValue(this.calculationService.deriveOxygenAndExcessAir(this.formService.buildFlueGasMassLoss(form).flueGasByMass), { emitEvent: false });
+    return { ...this.formService.buildFlueGasMassLoss(form), id: loss.id };
   }
 
   /** Switching types intentionally discards the other type's values. */

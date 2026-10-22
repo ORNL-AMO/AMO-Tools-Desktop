@@ -1,4 +1,6 @@
+import { computed, Signal } from '@angular/core';
 import { isEqual, isPlainObject } from 'lodash';
+import { AssessmentScenario } from '../../services/process-heating-assessment.service';
 import { LossEntity } from './loss-form-list.service';
 
 /** Fields of a loss item whose modification value differs from baseline; nested fields are dot-joined (e.g. `solidChargeMaterial.specificHeat`). */
@@ -30,6 +32,27 @@ export function getLossDifferences<T extends LossEntity>(baseline: T[] | undefin
     }
   }
   return differences;
+}
+
+/**
+ * Differences between baseline and a modification, with both sides passed through the same form
+ * round trip so defaults a form applies on save (e.g. wall loss `correctionFactor`) don't count as edits.
+ *
+ * @param scenario scenario whose losses are compared against baseline; baseline itself never differs
+ * @param readLosses reads the saved losses of a scenario
+ * @param normalize rebuilds one loss through its form service, preserving `id` and `heatLoss`
+ * @returns differing field names per modification item id, recomputed when either side's losses change
+ */
+export function createLossDifferences<T extends LossEntity>(
+  scenario: AssessmentScenario,
+  readLosses: (scenario: AssessmentScenario) => T[] | undefined,
+  normalize: (loss: T) => T,
+): Signal<LossDifferences<T>> {
+  if (scenario === 'baseline') return computed<LossDifferences<T>>(() => new Map());
+  return computed(
+    () => getLossDifferences(readLosses('baseline')?.map(normalize), readLosses(scenario)?.map(normalize)),
+    { equal: isEqual },
+  );
 }
 
 /**

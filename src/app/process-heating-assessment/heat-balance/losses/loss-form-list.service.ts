@@ -7,7 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Losses } from '../../models/phast';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { EntityWithId, LossItemsStore } from './loss-items-store';
-import { LossDifferences, LossFieldDifferences } from './loss-compare.util';
+import { createLossDifferences, LossDifferences, LossFieldDifferences } from './loss-compare.util';
 
 export interface LossFormItem<TForm> extends EntityWithId {
   name: string;
@@ -35,6 +35,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
   protected scenario: AssessmentScenario = 'baseline';
   private readonly store = new LossItemsStore<LossFormItem<TForm>>();
   private readonly subscriptions = new Map<string, Subscription>();
+  private differences: Signal<LossDifferences<TLoss>> = createLossDifferences<TLoss>('baseline', () => undefined, loss => loss);
 
   readonly items: Signal<LossFormItem<TForm>[]> = this.store.all;
   readonly total: Signal<number> = computed(() =>
@@ -48,6 +49,11 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
 
   initialize(scenario: AssessmentScenario = 'baseline'): void {
     this.scenario = scenario;
+    this.differences = createLossDifferences<TLoss>(
+      scenario,
+      source => this.assessmentService.lossSignal(source, this.lossKey) as TLoss[] | undefined,
+      loss => this.normalize(loss),
+    );
     const losses = (this.assessmentService.lossSignal(scenario, this.lossKey) as TLoss[] | undefined) ?? [];
     const items = losses.map((loss, idx) => this.buildItem(this.ensureId(loss), idx + 1));
     this.store.load(items);
@@ -92,7 +98,12 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
    * @returns fields of the item that differ from baseline, or undefined when none apply (baseline scenario, new item)
    */
   differingFields(id: string): LossFieldDifferences<TLoss> | undefined {
-    return (this.assessmentService.lossDifferences(this.scenario, this.lossKey) as LossDifferences<TLoss>).get(id);
+    return this.differences().get(id);
+  }
+
+  /** Rebuilds a saved loss through the form so its defaults match what a save would persist. */
+  private normalize(loss: TLoss): TLoss {
+    return { ...this.buildLoss(this.buildForm(loss)), id: loss.id, heatLoss: loss.heatLoss };
   }
 
   /** Swaps an entry's form for one of a different shape (e.g. a cooling loss switching gas ↔ liquid). */

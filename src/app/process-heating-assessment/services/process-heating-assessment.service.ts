@@ -11,8 +11,6 @@ import { SettingsDbService } from '../../indexedDb/settings-db.service';
 import { HeatingEquipmentConfiguration, HeatingSystemEnergyType } from '../models/views';
 import { ScenarioOverrides, ProcessHeatingModification } from '../models/modification';
 import { getEffectivePhast } from './scenario-merge.util';
-import { LossEntity } from '../heat-balance/losses/loss-form-list.service';
-import { getLossDifferences, LossDifferences } from '../heat-balance/losses/loss-compare.util';
 import { convertProcessHeatingEnergyUnit, convertProcessHeatingUnits } from './convert-process-heating.util';
 
 export type ProcessHeatingDataProperty = keyof PHAST;
@@ -157,30 +155,6 @@ export class ProcessHeatingAssessmentService {
       this.lossSignalCache.set(cacheKey, cached);
     }
     return cached() as Losses[K];
-  }
-
-  private readonly lossDifferencesCache = new Map<string, Signal<LossDifferences<never>>>();
-
-  /**
-   * Per-item fields of a modification's `lossKey` losses that differ from baseline, keyed by item id.
-   * Always empty for the baseline scenario.
-   */
-  lossDifferences<K extends keyof Losses>(scenario: AssessmentScenario, lossKey: K): LossDifferences<NonNullable<Losses[K]>[number]> {
-    const cacheKey = `${scenario}:${lossKey}`;
-    let cached = this.lossDifferencesCache.get(cacheKey);
-    if (!cached) {
-      cached = computed(
-        () => {
-          if (scenario === 'baseline') return new Map();
-          const baseline = this.lossSignal('baseline', lossKey) as LossEntity[] | undefined;
-          const modification = this.lossSignal(scenario, lossKey) as LossEntity[] | undefined;
-          return getLossDifferences(baseline, modification) as LossDifferences<never>;
-        },
-        { equal: isEqual },
-      );
-      this.lossDifferencesCache.set(cacheKey, cached);
-    }
-    return cached() as LossDifferences<NonNullable<Losses[K]>[number]>;
   }
 
   private readonly scenarioPhastSignalCache = new Map<AssessmentScenario, Signal<PHAST | undefined>>();

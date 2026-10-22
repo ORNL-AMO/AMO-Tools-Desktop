@@ -73,44 +73,6 @@ describe('ProcessHeatingAssessmentService', () => {
     });
   });
 
-  describe('lossDifferences', () => {
-    const baseline: PHAST = {
-      name: 'Baseline',
-      losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 100, windVelocity: 5 } as never] },
-    };
-
-    function setWithModification(overrides: ProcessHeatingModification['scenarioOverrides']): void {
-      service.setProcessHeating({ ...baseline, modifications: [{ id: 'mod-1', scenarioOverrides: overrides } as never] });
-    }
-
-    it('returns an empty map for the baseline scenario', () => {
-      setWithModification({ losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 999 } as never] } });
-
-      expect(service.lossDifferences('baseline', 'wallLosses').size).toBe(0);
-    });
-
-    it('returns the differing fields per item id for a modification', () => {
-      setWithModification({ losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 999, windVelocity: 5 } as never] } });
-
-      expect([...service.lossDifferences('mod-1', 'wallLosses').get('wall-1')!]).toEqual(['surfaceArea']);
-    });
-
-    it('returns no differences when the modification does not override the loss type', () => {
-      setWithModification({ losses: {} });
-
-      expect(service.lossDifferences('mod-1', 'wallLosses').get('wall-1')?.size).toBe(0);
-    });
-
-    it('updates when the modification changes', () => {
-      setWithModification({ losses: { wallLosses: [{ id: 'wall-1', surfaceArea: 100, windVelocity: 5 } as never] } });
-      expect(service.lossDifferences('mod-1', 'wallLosses').get('wall-1')?.size).toBe(0);
-
-      service.updateLossesProperty('mod-1', 'wallLosses', [{ id: 'wall-1', surfaceArea: 100, windVelocity: 9 } as never]);
-
-      expect([...service.lossDifferences('mod-1', 'wallLosses').get('wall-1')!]).toEqual(['windVelocity']);
-    });
-  });
-
   describe('saveSettings', () => {
     const imperial = { id: 1, unitsOfMeasure: 'Imperial', energyResultUnit: 'MMBtu' } as Settings;
     const metric = { id: 1, unitsOfMeasure: 'Metric', energyResultUnit: 'GJ' } as Settings;
