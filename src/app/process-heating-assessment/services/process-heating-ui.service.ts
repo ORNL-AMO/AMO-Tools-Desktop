@@ -3,17 +3,23 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
-import { EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, ProcessHeatingView, ViewLink } from '../models/views';
+import { AssessmentView, EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { ProcessHeatingValidityService } from './process-heating-validity.service';
 export { MainView, BaselineView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
 
 @Injectable()
 export class ProcessHeatingUiService {
   private readonly router = inject(Router);
   private readonly processHeatingAssessmentService = inject(ProcessHeatingAssessmentService);
+  private readonly validityService = inject(ProcessHeatingValidityService);
 
   private readonly STEPPED_ROUTES = inject(STEPPED_ROUTES);
+
+  private readonly REQUIRES_VALID_BASELINE_VIEWS: ReadonlySet<string> = new Set<string>([
+    MainView.ASSESSMENT, MainView.REPORT, ...Object.values(AssessmentView), ...Object.values(ReportView),
+  ]);
 
   // Derived from assessment settings — energySourceType + furnaceType determine the active tab set
   readonly heatingSystemConfigurationSignal: Signal<HeatingEquipmentConfiguration> =
@@ -29,9 +35,8 @@ export class ProcessHeatingUiService {
   showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
 
-  // Per-step validity signals — stubbed true; wired to real validation in future steps
-  readonly isAssessmentSettingsValidSignal: WritableSignal<boolean> = signal<boolean>(true);
-  readonly isHeatBalanceValidSignal: WritableSignal<boolean> = signal<boolean>(true);
+  readonly isAssessmentSettingsValidSignal: Signal<boolean> = this.validityService.isAssessmentSettingsValid;
+  readonly isHeatBalanceValidSignal: Signal<boolean> = computed(() => this.validityService.scenarioValidity('baseline').isValid);
 
   // Loss tabs filtered to the active HeatingSystemConfiguration
   readonly visibleHeatBalanceTabs: Signal<ViewLink[]> = computed(() =>
@@ -79,9 +84,10 @@ export class ProcessHeatingUiService {
   readonly lossSubView: Signal<string> = computed(() => this.routeData().lossSubView ?? '');
   readonly currentStepIndex: Signal<number> = computed(() => this.routeData().stepIndex ?? -1);
 
-  readonly canContinue: Signal<boolean> = computed(() =>
-    this.findNextVisibleStep(this.currentStepIndex() + 1, 'forward') !== -1
-  );
+  readonly canContinue: Signal<boolean> = computed(() => {
+    const nextIndex = this.findNextVisibleStep(this.currentStepIndex() + 1, 'forward');
+    return nextIndex !== -1 && this.canVisitView(this.STEPPED_ROUTES[nextIndex].view);
+  });
   readonly canGoBack: Signal<boolean> = computed(() =>
     this.findNextVisibleStep(this.currentStepIndex() - 1, 'back') !== -1
   );
@@ -121,7 +127,7 @@ export class ProcessHeatingUiService {
 
   continue(): void {
     const nextIndex = this.findNextVisibleStep(this.currentStepIndex() + 1, 'forward');
-    if (nextIndex !== -1) {
+    if (nextIndex !== -1 && this.canVisitView(this.STEPPED_ROUTES[nextIndex].view)) {
       this.router.navigateByUrl(this.buildUrl(this.STEPPED_ROUTES[nextIndex].path));
     }
   }
@@ -133,7 +139,9 @@ export class ProcessHeatingUiService {
     }
   }
 
-  canVisitView(view: ProcessHeatingView): boolean {
-    return this.isTabVisibleForHeatingEquipmentConfiguration(view);
+  /** Assessment and Report need valid baseline inputs, since they present results built from them. */
+  canVisitView(view: string): boolean {
+    if (!this.isTabVisibleForHeatingEquipmentConfiguration(view)) return false;
+    return !this.REQUIRES_VALID_BASELINE_VIEWS.has(view) || (this.isAssessmentSettingsValidSignal() && this.isHeatBalanceValidSignal());
   }
 }
