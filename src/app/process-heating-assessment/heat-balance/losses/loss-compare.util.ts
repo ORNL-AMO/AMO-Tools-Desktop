@@ -45,6 +45,16 @@ export function nestedDifferences<TNested>(differences: ReadonlySet<string> | un
   return new Set(nested) as unknown as LossFieldDifferences<TNested>;
 }
 
+/** A nested object against a missing one (a type switch) recurses so each of its populated fields is flagged. */
+function isNestedPair(baselineValue: unknown, modificationValue: unknown): boolean {
+  const bothNestable = (isPlainObject(baselineValue) || isBlank(baselineValue)) && (isPlainObject(modificationValue) || isBlank(modificationValue));
+  return bothNestable && (isPlainObject(baselineValue) || isPlainObject(modificationValue));
+}
+
+function toObject(value: unknown): object {
+  return isPlainObject(value) ? (value as object) : {};
+}
+
 function collectDifferences(baseline: object, modification: object, prefix = ''): string[] {
   const keys = new Set([...Object.keys(baseline), ...Object.keys(modification)]);
   const differing: string[] = [];
@@ -53,8 +63,8 @@ function collectDifferences(baseline: object, modification: object, prefix = '')
     const baselineValue = (baseline as Record<string, unknown>)[key];
     const modificationValue = (modification as Record<string, unknown>)[key];
     const path = `${prefix}${key}`;
-    if (isPlainObject(baselineValue) && isPlainObject(modificationValue)) {
-      differing.push(...collectDifferences(baselineValue as object, modificationValue as object, `${path}.`));
+    if (isNestedPair(baselineValue, modificationValue)) {
+      differing.push(...collectDifferences(toObject(baselineValue), toObject(modificationValue), `${path}.`));
     } else if (!(isBlank(baselineValue) && isBlank(modificationValue)) && !isEqual(baselineValue, modificationValue)) {
       differing.push(path);
     }

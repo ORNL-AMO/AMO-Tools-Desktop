@@ -71,6 +71,18 @@ describe('getLossDifferences', () => {
     expect([...getLossDifferences(baseline, modification).get('a')!] as string[]).toEqual(['nested.factor']);
   });
 
+  it('flags every populated field of a nested object missing from baseline', () => {
+    const baseline: TestLoss[] = [{ id: 'a' }];
+    const modification: TestLoss[] = [{ id: 'a', nested: { temp: 1, factor: 0 } }];
+    expect([...getLossDifferences(baseline, modification).get('a')!].sort() as string[]).toEqual(['nested.factor', 'nested.temp']);
+  });
+
+  it('does not flag blank fields of a nested object missing from baseline', () => {
+    const baseline: TestLoss[] = [{ id: 'a' }];
+    const modification: TestLoss[] = [{ id: 'a', nested: { temp: undefined, factor: null as never } }];
+    expect(getLossDifferences(baseline, modification).get('a')?.size).toBe(0);
+  });
+
   it('compares arrays by value', () => {
     const baseline: TestLoss[] = [{ id: 'a', tags: ['x'] }, { id: 'b', tags: ['x'] }];
     const modification: TestLoss[] = [{ id: 'a', tags: ['x'] }, { id: 'b', tags: ['y'] }];
