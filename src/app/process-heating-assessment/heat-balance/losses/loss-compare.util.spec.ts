@@ -1,4 +1,6 @@
-import { getLossDifferences, nestedDifferences } from './loss-compare.util';
+import { signal } from '@angular/core';
+import { AssessmentScenario } from '../../services/process-heating-assessment.service';
+import { createLossDifferences, getLossDifferences, nestedDifferences } from './loss-compare.util';
 import { LossEntity } from './loss-form-list.service';
 
 interface TestLoss extends LossEntity {
@@ -100,5 +102,81 @@ describe('nestedDifferences', () => {
 
   it('returns an empty set for undefined differences', () => {
     expect(nestedDifferences(undefined, 'nested').size).toBe(0);
+  });
+});
+
+describe('createLossDifferences', () => {
+  function setup(normalize: (loss: TestLoss) => TestLoss = loss => loss) {
+    const baseline = signal<TestLoss[]>([{ id: 'a', area: 1 }]);
+    const modification = signal<TestLoss[]>([{ id: 'a', area: 1 }]);
+    const scenario = signal<AssessmentScenario>('modification');
+    const normalizeSpy = jasmine.createSpy('normalize').and.callFake(normalize);
+    const differences = createLossDifferences<TestLoss>(
+      scenario,
+      source => (source === 'baseline' ? baseline() : modification()),
+      normalizeSpy,
+    );
+    return { baseline, modification, scenario, normalizeSpy, differences };
+  }
+
+  it('has no differences for the baseline scenario', () => {
+    const { scenario, modification, differences } = setup();
+    modification.set([{ id: 'a', area: 9 }]);
+    scenario.set('baseline');
+    expect(differences().size).toBe(0);
+  });
+
+  it('does not normalize anything for the baseline scenario', () => {
+    const { scenario, normalizeSpy, differences } = setup();
+    scenario.set('baseline');
+    differences();
+    expect(normalizeSpy).not.toHaveBeenCalled();
+  });
+
+  it('does not count a default applied by normalize as a difference', () => {
+    const withDefault = (loss: TestLoss): TestLoss => ({ ...loss, area: loss.area ?? 1 });
+    const { baseline, modification, differences } = setup(withDefault);
+    baseline.set([{ id: 'a' }]);
+    modification.set([{ id: 'a', area: 1 }]);
+    expect(differences().get('a')?.size).toBe(0);
+  });
+
+  it('updates when the modification changes', () => {
+    const { modification, differences } = setup();
+    expect(differences().get('a')?.size).toBe(0);
+    modification.set([{ id: 'a', area: 2 }]);
+    expect(differences().get('a')?.has('area')).toBeTrue();
+  });
+
+  it('updates when the baseline changes', () => {
+    const { baseline, differences } = setup();
+    expect(differences().get('a')?.size).toBe(0);
+    baseline.set([{ id: 'a', area: 2 }]);
+    expect(differences().get('a')?.has('area')).toBeTrue();
+  });
+
+  it('follows the scenario signal', () => {
+    const { scenario, modification, differences } = setup();
+    modification.set([{ id: 'a', area: 2 }]);
+    expect(differences().get('a')?.has('area')).toBeTrue();
+    scenario.set('baseline');
+    expect(differences().size).toBe(0);
+  });
+
+  it('keeps the same result reference when a change does not alter the differences', () => {
+    const { baseline, modification, differences } = setup();
+    modification.set([{ id: 'a', area: 2 }]);
+    const first = differences();
+    baseline.set([{ id: 'a', area: 1 }, { id: 'unrelated', area: 5 }]);
+    expect(differences()).toBe(first);
+  });
+
+  it('does not re-normalize baseline when only the modification changes', () => {
+    const { modification, normalizeSpy, differences } = setup();
+    differences();
+    normalizeSpy.calls.reset();
+    modification.set([{ id: 'a', area: 2 }]);
+    differences();
+    expect(normalizeSpy).toHaveBeenCalledTimes(1);
   });
 });

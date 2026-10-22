@@ -9,10 +9,14 @@ export type LossFieldDifferences<T> = ReadonlySet<keyof T & string>;
 /** Per-item differences keyed by loss item id. */
 export type LossDifferences<T> = ReadonlyMap<string, LossFieldDifferences<T>>;
 
-/** Identity and label aren't field values. `heatLoss` stays: it's the user input for other losses. */
+type PlainRecord = Record<string, unknown>;
+
+/** Identity and label aren't field values. Skipped at the top level only: a nested `name` is a real field. `heatLoss` is compared because for 'other' losses it is the user's input. */
 const IGNORED_KEYS: ReadonlySet<string> = new Set(['id', 'name']);
 
 const isBlank = (value: unknown): boolean => value === null || value === undefined || value === '';
+
+const NO_DIFFERENCES: LossDifferences<never> = new Map();
 
 /**
  * Compares effective baseline and modification losses item by item, matching on `id`.
@@ -28,7 +32,7 @@ export function getLossDifferences<T extends LossEntity>(baseline: T[] | undefin
   for (const item of modification ?? []) {
     const baselineItem = item.id ? baselineById.get(item.id) : undefined;
     if (item.id && baselineItem) {
-      differences.set(item.id, new Set(collectDifferences(baselineItem, item)) as LossFieldDifferences<T>);
+      differences.set(item.id, new Set(collectDifferences(toRecord(baselineItem), toRecord(item))) as LossFieldDifferences<T>);
     }
   }
   return differences;
@@ -37,6 +41,7 @@ export function getLossDifferences<T extends LossEntity>(baseline: T[] | undefin
 /**
  * Differences between baseline and a modification, with both sides passed through the same form
  * round trip so defaults a form applies on save (e.g. wall loss `correctionFactor`) don't count as edits.
+ * Baseline is normalized independently of the modification so an edit doesn't re-normalize it.
  *
  * @param scenario scenario whose losses are compared against baseline; baseline itself never differs
  * @param readLosses reads the saved losses of a scenario
@@ -44,15 +49,19 @@ export function getLossDifferences<T extends LossEntity>(baseline: T[] | undefin
  * @returns differing field names per modification item id, recomputed when either side's losses change
  */
 export function createLossDifferences<T extends LossEntity>(
-  scenario: AssessmentScenario,
+  scenario: Signal<AssessmentScenario>,
   readLosses: (scenario: AssessmentScenario) => T[] | undefined,
   normalize: (loss: T) => T,
 ): Signal<LossDifferences<T>> {
-  if (scenario === 'baseline') return computed<LossDifferences<T>>(() => new Map());
-  return computed(
-    () => getLossDifferences(readLosses('baseline')?.map(normalize), readLosses(scenario)?.map(normalize)),
-    { equal: isEqual },
-  );
+  const baseline = computed(() => readLosses('baseline')?.map(normalize));
+  const modification = computed(() => {
+    const current = scenario();
+    return current === 'baseline' ? undefined : readLosses(current)?.map(normalize);
+  });
+  return computed(() => {
+    const modified = modification();
+    return modified ? getLossDifferences(baseline(), modified) : NO_DIFFERENCES;
+  }, { equal: isEqual });
 }
 
 /**
@@ -68,26 +77,27 @@ export function nestedDifferences<TNested>(differences: ReadonlySet<string> | un
   return new Set(nested) as unknown as LossFieldDifferences<TNested>;
 }
 
+const isNestable = (value: unknown): boolean => isPlainObject(value) || isBlank(value);
+
 /** A nested object against a missing one (a type switch) recurses so each of its populated fields is flagged. */
 function isNestedPair(baselineValue: unknown, modificationValue: unknown): boolean {
-  const bothNestable = (isPlainObject(baselineValue) || isBlank(baselineValue)) && (isPlainObject(modificationValue) || isBlank(modificationValue));
-  return bothNestable && (isPlainObject(baselineValue) || isPlainObject(modificationValue));
+  return isNestable(baselineValue) && isNestable(modificationValue) && (isPlainObject(baselineValue) || isPlainObject(modificationValue));
 }
 
-function toObject(value: unknown): object {
-  return isPlainObject(value) ? (value as object) : {};
+function toRecord(value: unknown): PlainRecord {
+  return isPlainObject(value) ? (value as PlainRecord) : {};
 }
 
-function collectDifferences(baseline: object, modification: object, prefix = ''): string[] {
+function collectDifferences(baseline: PlainRecord, modification: PlainRecord, prefix = ''): string[] {
   const keys = new Set([...Object.keys(baseline), ...Object.keys(modification)]);
   const differing: string[] = [];
   for (const key of keys) {
     if (!prefix && IGNORED_KEYS.has(key)) continue;
-    const baselineValue = (baseline as Record<string, unknown>)[key];
-    const modificationValue = (modification as Record<string, unknown>)[key];
+    const baselineValue = baseline[key];
+    const modificationValue = modification[key];
     const path = `${prefix}${key}`;
     if (isNestedPair(baselineValue, modificationValue)) {
-      differing.push(...collectDifferences(toObject(baselineValue), toObject(modificationValue), `${path}.`));
+      differing.push(...collectDifferences(toRecord(baselineValue), toRecord(modificationValue), `${path}.`));
     } else if (!(isBlank(baselineValue) && isBlank(modificationValue)) && !isEqual(baselineValue, modificationValue)) {
       differing.push(path);
     }

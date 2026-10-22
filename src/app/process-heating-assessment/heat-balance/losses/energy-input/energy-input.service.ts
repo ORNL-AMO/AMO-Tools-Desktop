@@ -39,7 +39,7 @@ export class EnergyInputService extends LossFormListService<EnergyInputEAF, Ener
    * validator) would remove this ordering dependency.
    */
   protected override onLossesChanged(): void {
-    const phast = this.assessmentService.scenarioPhast(this.scenario);
+    const phast = this.assessmentService.scenarioPhast(this.scenario());
     const settings = this.assessmentService.settingsSignal();
     const results = phast && settings ? this.resultsService.getResults(phast, settings) : undefined;
     const minElectricityInput = this.formService.getMinElectricityInput(results, settings);

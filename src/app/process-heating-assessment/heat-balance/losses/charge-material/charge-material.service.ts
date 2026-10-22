@@ -1,4 +1,4 @@
-import { computed, DestroyRef, inject, Injectable, Signal, signal } from '@angular/core';
+import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import { getNewIdString } from '../../../../shared/helperFunctions';
@@ -9,7 +9,7 @@ import { LossItemsStore } from '../loss-items-store';
 import { GasMaterialForm, GasMaterialFormService } from './gas-form/gas-material-form.service';
 import { LiquidMaterialForm, LiquidMaterialFormService } from './liquid-form/liquid-material-form.service';
 import { SolidMaterialForm, SolidMaterialFormService } from './solid-form/solid-material-form.service';
-import { createLossDifferences, LossDifferences, LossFieldDifferences } from '../loss-compare.util';
+import { createLossDifferences, LossFieldDifferences } from '../loss-compare.util';
 
 interface ChargeMaterialItemBase {
   id: string;
@@ -50,9 +50,13 @@ export class ChargeMaterialService {
   private readonly liquidFormService = inject(LiquidMaterialFormService);
   private readonly gasFormService = inject(GasMaterialFormService);
 
-  private scenario: AssessmentScenario = 'baseline';
+  private readonly scenario = signal<AssessmentScenario>('baseline');
   private readonly store = new LossItemsStore<ChargeMaterialItem>();
-  private differences: Signal<LossDifferences<ChargeMaterial>> = createLossDifferences<ChargeMaterial>('baseline', () => undefined, material => material);
+  private readonly differences = createLossDifferences<ChargeMaterial>(
+    this.scenario,
+    source => this.assessmentService.lossSignal(source, 'chargeMaterials'),
+    material => this.normalize(material),
+  );
 
   // Caches a switched-away-from type's last known values per entry so switching back restores
   // them
@@ -91,13 +95,8 @@ export class ChargeMaterialService {
   });
 
   initialize(scenario: AssessmentScenario = 'baseline'): void {
-    this.scenario = scenario;
+    this.scenario.set(scenario);
     this.typeCache.clear();
-    this.differences = createLossDifferences<ChargeMaterial>(
-      scenario,
-      source => this.assessmentService.lossSignal(source, 'chargeMaterials'),
-      material => this.normalize(material),
-    );
 
     const chargeMaterials = this.assessmentService.lossSignal(scenario, 'chargeMaterials') ?? [];
     const items = chargeMaterials.map((material, index) => this.buildItem(this.ensureId(material), index));
@@ -200,6 +199,6 @@ export class ChargeMaterialService {
 
   private saveLosses(): void {
     const chargeMaterials = this.store.all().map(item => ({ ...this.buildChargeMaterial(item), name: item.name, id: item.id }));
-    this.assessmentService.updateLossesProperty(this.scenario, 'chargeMaterials', chargeMaterials);
+    this.assessmentService.updateLossesProperty(this.scenario(), 'chargeMaterials', chargeMaterials);
   }
 }

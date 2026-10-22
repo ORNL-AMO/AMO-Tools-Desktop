@@ -1,4 +1,4 @@
-import { computed, DestroyRef, inject, Signal } from '@angular/core';
+import { computed, DestroyRef, inject, Signal, signal } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
@@ -7,7 +7,7 @@ import { Settings } from '../../../shared/models/settings';
 import { Losses } from '../../models/phast';
 import { AssessmentScenario, ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { EntityWithId, LossItemsStore } from './loss-items-store';
-import { createLossDifferences, LossDifferences, LossFieldDifferences } from './loss-compare.util';
+import { createLossDifferences, LossFieldDifferences } from './loss-compare.util';
 
 export interface LossFormItem<TForm> extends EntityWithId {
   name: string;
@@ -32,10 +32,14 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
   protected readonly destroyRef = inject(DestroyRef);
   protected readonly assessmentService = inject(ProcessHeatingAssessmentService);
 
-  protected scenario: AssessmentScenario = 'baseline';
+  protected readonly scenario = signal<AssessmentScenario>('baseline');
   private readonly store = new LossItemsStore<LossFormItem<TForm>>();
   private readonly subscriptions = new Map<string, Subscription>();
-  private differences: Signal<LossDifferences<TLoss>> = createLossDifferences<TLoss>('baseline', () => undefined, loss => loss);
+  private readonly differences = createLossDifferences<TLoss>(
+    this.scenario,
+    source => this.assessmentService.lossSignal(source, this.lossKey) as TLoss[] | undefined,
+    loss => this.normalize(loss),
+  );
 
   readonly items: Signal<LossFormItem<TForm>[]> = this.store.all;
   readonly total: Signal<number> = computed(() =>
@@ -48,12 +52,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
   protected abstract calculateResult(form: TForm, settings: Settings): number | null;
 
   initialize(scenario: AssessmentScenario = 'baseline'): void {
-    this.scenario = scenario;
-    this.differences = createLossDifferences<TLoss>(
-      scenario,
-      source => this.assessmentService.lossSignal(source, this.lossKey) as TLoss[] | undefined,
-      loss => this.normalize(loss),
-    );
+    this.scenario.set(scenario);
     const losses = (this.assessmentService.lossSignal(scenario, this.lossKey) as TLoss[] | undefined) ?? [];
     const items = losses.map((loss, idx) => this.buildItem(this.ensureId(loss), idx + 1));
     this.store.load(items);
@@ -161,7 +160,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
     }));
 
     /** `TLoss[]` matches `Losses[typeof this.lossKey]` per subclass, but TS can't verify that generically here. */
-    this.assessmentService.updateLossesProperty(this.scenario, this.lossKey, losses as never);
+    this.assessmentService.updateLossesProperty(this.scenario(), this.lossKey, losses as never);
     this.onLossesChanged();
   }
 
