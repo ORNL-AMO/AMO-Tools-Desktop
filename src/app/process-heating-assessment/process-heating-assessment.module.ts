@@ -20,6 +20,24 @@ import { ProcessHeatingAssessmentService } from './services/process-heating-asse
 import { ModificationService } from './services/modification.service';
 import { ProcessHeatingOperationsFormService } from './services/process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './services/process-heating-results.service';
+import { ProcessHeatingValidityService } from './services/process-heating-validity.service';
+import { AtmosphereFormService } from './heat-balance/losses/atmosphere/atmosphere-form.service';
+import { AuxiliaryPowerFormService } from './heat-balance/losses/auxiliary-power/auxiliary-power-form.service';
+import { GasMaterialFormService } from './heat-balance/losses/charge-material/gas-form/gas-material-form.service';
+import { LiquidMaterialFormService } from './heat-balance/losses/charge-material/liquid-form/liquid-material-form.service';
+import { SolidMaterialFormService } from './heat-balance/losses/charge-material/solid-form/solid-material-form.service';
+import { CoolingFormService } from './heat-balance/losses/cooling/cooling-form.service';
+import { EnergyInputExhaustGasFormService } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas-form.service';
+import { EnergyInputFormService } from './heat-balance/losses/energy-input/energy-input-form.service';
+import { ExhaustGasFormService } from './heat-balance/losses/exhaust-gas/exhaust-gas-form.service';
+import { ExtendedSurfaceFormService } from './heat-balance/losses/extended-surface/extended-surface-form.service';
+import { FixtureFormService } from './heat-balance/losses/fixture/fixture-form.service';
+import { FlueGasFormService } from './heat-balance/losses/flue-gas/flue-gas-form.service';
+import { GasLeakageFormService } from './heat-balance/losses/gas-leakage/gas-leakage-form.service';
+import { OpeningFormService } from './heat-balance/losses/opening/opening-form.service';
+import { OtherFormService } from './heat-balance/losses/other/other-form.service';
+import { SlagFormService } from './heat-balance/losses/slag/slag-form.service';
+import { WallLossesFormService } from './heat-balance/losses/wall-losses/wall-losses-form.service';
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
 import { PhastChartsService } from '../phast/phast-report/phast-charts.service';
 import { SankeySharedModule } from '../shared/sankey/sankey-shared.module';
@@ -444,6 +462,25 @@ export const ROUTES: Route[] = [
     ModificationService,
     ProcessHeatingOperationsFormService,
     ProcessHeatingResultsService,
+    ProcessHeatingValidityService,
+    // Stateless form builders the validity service uses to rebuild saved entries; the loss steps keep their own instances.
+    SolidMaterialFormService,
+    LiquidMaterialFormService,
+    GasMaterialFormService,
+    FlueGasFormService,
+    FixtureFormService,
+    WallLossesFormService,
+    CoolingFormService,
+    AtmosphereFormService,
+    OpeningFormService,
+    GasLeakageFormService,
+    ExtendedSurfaceFormService,
+    OtherFormService,
+    SlagFormService,
+    EnergyInputFormService,
+    ExhaustGasFormService,
+    EnergyInputExhaustGasFormService,
+    AuxiliaryPowerFormService,
     ExecutiveSummaryResultsService,
     ResultsDataResultsService,
     ReportGraphsResultsService,

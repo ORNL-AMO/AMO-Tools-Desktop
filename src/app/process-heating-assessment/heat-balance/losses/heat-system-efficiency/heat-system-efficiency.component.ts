@@ -17,6 +17,8 @@ export function calculateSystemEfficiencyResults(totalInput: number, exothermicH
   return { grossHeat: totalInput + systemLosses - Math.abs(exothermicHeat), systemLosses };
 }
 
+export const HEAT_SYSTEM_EFFICIENCY_VALIDATORS = [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)];
+
 @Component({
   selector: 'app-heat-system-efficiency',
   standalone: false,
@@ -33,7 +35,7 @@ export class HeatSystemEfficiencyComponent {
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
   readonly form = new FormGroup({
-    efficiency: new FormControl<number | null>(null, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]),
+    efficiency: new FormControl<number | null>(null, HEAT_SYSTEM_EFFICIENCY_VALIDATORS),
   });
 
   readonly efficiencyDiffersFromBaseline = computed(() => {

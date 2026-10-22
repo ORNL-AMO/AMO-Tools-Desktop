@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
-import { EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink } from '../models/views';
+import { EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, ProcessHeatingView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 export { MainView, BaselineView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
@@ -14,12 +14,6 @@ export class ProcessHeatingUiService {
   private readonly processHeatingAssessmentService = inject(ProcessHeatingAssessmentService);
 
   private readonly STEPPED_ROUTES = inject(STEPPED_ROUTES);
-
-  // HeatingEquipmentConfiguration-specific loss tab sets
-  private readonly FUEL_FIRED_ONLY = new Set<string>([ROUTE_TOKENS.flueGas, ROUTE_TOKENS.gasLeakage]);
-  private readonly ELECTRO_STANDARD_ONLY = new Set<string>([ROUTE_TOKENS.auxiliaryPower, ROUTE_TOKENS.energyInputExhaustGas]);
-  private readonly EAF_ONLY = new Set<string>([ROUTE_TOKENS.energyInput, ROUTE_TOKENS.exhaustGas, ROUTE_TOKENS.slag]);
-  private readonly STEAM_CUSTOM_ONLY = new Set<string>([ROUTE_TOKENS.heatSystemEfficiency]);
 
   // Derived from assessment settings — energySourceType + furnaceType determine the active tab set
   readonly heatingSystemConfigurationSignal: Signal<HeatingEquipmentConfiguration> =
@@ -110,14 +104,7 @@ export class ProcessHeatingUiService {
   }
 
   private isTabVisibleForHeatingEquipmentConfiguration(view: string): boolean {
-    const heatingSystemConfiguration = this.heatingSystemConfigurationSignal();
-    if (this.FUEL_FIRED_ONLY.has(view)) return heatingSystemConfiguration === HeatingEquipmentConfiguration.FUEL_FIRED;
-    if (this.ELECTRO_STANDARD_ONLY.has(view)) return heatingSystemConfiguration === HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_STANDARD;
-    if (this.EAF_ONLY.has(view)) return heatingSystemConfiguration === HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF;
-    if (this.STEAM_CUSTOM_ONLY.has(view)) {
-      return heatingSystemConfiguration === HeatingEquipmentConfiguration.STEAM || heatingSystemConfiguration === HeatingEquipmentConfiguration.CUSTOM_ELECTROTECHNOLOGY;
-    }
-    return true;
+    return isViewVisibleForConfiguration(view, this.heatingSystemConfigurationSignal());
   }
 
   private findNextVisibleStep(startIndex: number, direction: 'forward' | 'back'): number {

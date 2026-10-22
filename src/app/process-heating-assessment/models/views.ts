@@ -144,3 +144,23 @@ export const REPORT_VIEW_LINKS: ViewLink[] = [
   { view: ReportView.INPUT_SUMMARY, label: 'Input Summary' },
   { view: ReportView.FACILITY_INFO, label: 'Facility Info' },
 ];
+
+const FUEL_FIRED_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.FLUE_GAS, LossView.GAS_LEAKAGE]);
+const ELECTRO_STANDARD_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.AUXILIARY_POWER, LossView.ENERGY_INPUT_EXHAUST_GAS]);
+const EAF_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.ENERGY_INPUT, LossView.EXHAUST_GAS, LossView.SLAG]);
+const STEAM_CUSTOM_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.HEAT_SYSTEM_EFFICIENCY]);
+
+/**
+ * @param view route view token
+ * @param configuration the assessment's heating equipment configuration
+ * @returns false when the view only applies to a different configuration
+ */
+export function isViewVisibleForConfiguration(view: string, configuration: HeatingEquipmentConfiguration): boolean {
+  if (FUEL_FIRED_ONLY_VIEWS.has(view)) return configuration === HeatingEquipmentConfiguration.FUEL_FIRED;
+  if (ELECTRO_STANDARD_ONLY_VIEWS.has(view)) return configuration === HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_STANDARD;
+  if (EAF_ONLY_VIEWS.has(view)) return configuration === HeatingEquipmentConfiguration.ELECTROTECHNOLOGY_EAF;
+  if (STEAM_CUSTOM_ONLY_VIEWS.has(view)) {
+    return configuration === HeatingEquipmentConfiguration.STEAM || configuration === HeatingEquipmentConfiguration.CUSTOM_ELECTROTECHNOLOGY;
+  }
+  return true;
+}
