@@ -18,7 +18,7 @@
 <!-- SMALL SCREEN TABS -->
 <nav class="hide-print d-flex d-lg-none tabs subtabs progress-tabs process-heating-assessment flex-wrap flex-fill">
   <ul class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill process-heating-assessment">
-    <li class="page-item" [class.disabled]="!canContinue()">
+    <li class="page-item" [class.disabled]="!canGoBack()">
       <a class="nav-link small" (click)="back()"><span class="fa fa-chevron-left"></span></a>
     </li>
     @for (link of BASELINE_VIEW_LINKS; track $index) {

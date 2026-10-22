@@ -17,6 +17,7 @@ export class BaselineTabsComponent {
   readonly BASELINE_VIEW_LINKS = BASELINE_VIEW_LINKS;
   readonly childView: Signal<string> = this.uiService.childView;
   readonly canContinue: Signal<boolean> = this.uiService.canContinue;
+  readonly canGoBack: Signal<boolean> = this.uiService.canGoBack;
 
   isLinkDisabled(link: ViewLink): boolean {
     return this.tabNavHelper.isLinkDisabled(link);
