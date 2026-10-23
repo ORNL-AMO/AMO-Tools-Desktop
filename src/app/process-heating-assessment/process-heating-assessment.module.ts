@@ -468,7 +468,7 @@ export const ROUTES: Route[] = [
     ProcessHeatingOperationsFormService,
     ProcessHeatingResultsService,
     ProcessHeatingValidityService,
-    // Stateless form builders the validity service uses to rebuild saved entries; the loss steps keep their own instances.
+    // Stateless form builders for module-scoped services; each loss step still provides its own instance.
     SolidMaterialFormService,
     LiquidMaterialFormService,
     GasMaterialFormService,

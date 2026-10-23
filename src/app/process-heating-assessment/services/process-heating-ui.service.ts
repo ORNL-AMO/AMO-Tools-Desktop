@@ -126,10 +126,9 @@ export class ProcessHeatingUiService {
   }
 
   continue(): void {
+    if (!this.canContinue()) return;
     const nextIndex = this.findNextVisibleStep(this.currentStepIndex() + 1, 'forward');
-    if (nextIndex !== -1 && this.canVisitView(this.STEPPED_ROUTES[nextIndex].view)) {
-      this.router.navigateByUrl(this.buildUrl(this.STEPPED_ROUTES[nextIndex].path));
-    }
+    this.router.navigateByUrl(this.buildUrl(this.STEPPED_ROUTES[nextIndex].path));
   }
 
   back(): void {

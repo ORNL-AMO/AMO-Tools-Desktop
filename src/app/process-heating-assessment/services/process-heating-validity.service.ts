@@ -29,6 +29,7 @@ import { AssessmentScenario, deriveHeatingEquipmentConfiguration, ProcessHeating
 import { ProcessHeatingOperationsFormService } from './process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './process-heating-results.service';
 
+// Derived so the checks table tracks every per-step flag PhastValid declares.
 type ValidityKey = Exclude<keyof PhastValid, 'isValid'>;
 
 interface ValidityCheck {
