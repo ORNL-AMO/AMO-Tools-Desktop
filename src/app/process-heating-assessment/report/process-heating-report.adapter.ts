@@ -192,9 +192,10 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
   }
 
   /** One chart set per modification so the pies and comparison bar paginate together; only the first chart forces a page break. */
-  private buildReportGraphsSections(ui: ReportGraphsUI): ChartSection[] {
+  private buildReportGraphsSections(ui: ReportGraphsUI): Array<ChartSection | KeyValueSection> {
     const [baseline, ...modifications] = ui.scenarios;
     const group = ROUTE_TOKENS.reportGraphs;
+    const invalidModifications = this.buildInvalidModificationSections(group, true);
     const render = (chart: { traces: unknown[]; layout: object }) => () => renderPlotlyChart(this.chartRenderService, chart);
 
     if (!modifications.length) {
@@ -208,9 +209,9 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
       }];
     }
 
-    return modifications.flatMap((modification, index) => {
+    return [...invalidModifications, ...modifications.flatMap((modification, index) => {
       const sections: ChartSection[] = [{
-        type: 'chart', title: `Loss Distribution — Baseline vs. ${modification.name}`, group, pageBreakBefore: index === 0,
+        type: 'chart', title: `Loss Distribution — Baseline vs. ${modification.name}`, group, pageBreakBefore: !invalidModifications.length && index === 0,
         imageDataProvider: render(this.phastChartsService.buildPieChart([
           { valuesAndLabels: baseline.lossValuesAndLabels, unit: ui.lossUnit, label: 'Baseline' },
           { valuesAndLabels: modification.lossValuesAndLabels, unit: ui.lossUnit, label: modification.name },
@@ -234,7 +235,7 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
         })), ui.lossUnit)),
       });
       return sections;
-    });
+    })];
   }
 
   /** An invalid scenario has no trustworthy flows to draw. */

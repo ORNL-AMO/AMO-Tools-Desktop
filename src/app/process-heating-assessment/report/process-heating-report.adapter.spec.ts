@@ -302,6 +302,14 @@ describe('ProcessHeatingReportAdapter', () => {
       expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, false]);
     });
 
+    it('lists them ahead of the report graphs and moves the first chart page break to the list', async () => {
+      const sections = (await build()).sections.filter(candidate => candidate.group === 'report-graphs');
+
+      expect(sections[0].title).toBe('Invalid Modifications');
+      expect(sections.slice(1).every(candidate => candidate.type === 'chart')).toBeTrue();
+      expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, ...sections.slice(1).map(() => false)]);
+    });
+
     it('leaves an invalid scenario out of the sankey charts', async () => {
       reportSankey = buildReportSankey(2);
       invalidModifications = [{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }];

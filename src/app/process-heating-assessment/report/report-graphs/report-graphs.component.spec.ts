@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { ReportGraphsComponent } from './report-graphs.component';
 import { ReportGraphsResultsService, ReportGraphsUI } from './report-graphs-results.service';
 
@@ -22,15 +23,20 @@ describe('ReportGraphsComponent', () => {
   let fixture: ComponentFixture<ReportGraphsComponent>;
   let component: ReportGraphsComponent;
   let ui: WritableSignal<ReportGraphsUI | undefined>;
+  let invalidModifications: WritableSignal<InvalidModification[]>;
 
   const pies = (): number => fixture.nativeElement.querySelectorAll('app-plotly-pie-chart').length;
 
   beforeEach(() => {
     ui = signal<ReportGraphsUI | undefined>(buildUI());
+    invalidModifications = signal<InvalidModification[]>([]);
     TestBed.configureTestingModule({
       declarations: [ReportGraphsComponent],
       imports: [FormsModule],
-      providers: [{ provide: ReportGraphsResultsService, useValue: { reportGraphsUI: ui } }],
+      providers: [
+        { provide: ReportGraphsResultsService, useValue: { reportGraphsUI: ui } },
+        { provide: ProcessHeatingValidityService, useValue: { invalidModifications } },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ReportGraphsComponent);
@@ -65,6 +71,16 @@ describe('ReportGraphsComponent', () => {
     fixture.detectChanges();
     expect(pies()).toBe(1);
     expect(fixture.nativeElement.querySelector('app-plotly-bar-chart')).toBeNull();
+  });
+
+  it('shows the invalid modification alert only when a modification is invalid', () => {
+    const alert = (): Element | null => fixture.nativeElement.querySelector('app-invalid-modification-alert');
+    expect(alert()).toBeNull();
+
+    invalidModifications.set([{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }]);
+    fixture.detectChanges();
+
+    expect(alert()).not.toBeNull();
   });
 
   it('renders nothing when results are unavailable', () => {
