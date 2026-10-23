@@ -39,6 +39,7 @@ import { OtherFormService } from './heat-balance/losses/other/other-form.service
 import { SlagFormService } from './heat-balance/losses/slag/slag-form.service';
 import { WallLossesFormService } from './heat-balance/losses/wall-losses/wall-losses-form.service';
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
+import { requiresValidBaselineGuard } from './routing/requires-valid-baseline.guard';
 import { PhastChartsService } from '../phast/phast-report/phast-charts.service';
 import { SankeySharedModule } from '../shared/sankey/sankey-shared.module';
 import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
@@ -283,6 +284,7 @@ export const ROUTES: Route[] = [
         path: ROUTE_TOKENS.assessment,
         component: AssessmentComponent,
         data: { mainView: ROUTE_TOKENS.assessment, stepIndex: 21 },
+        canActivate: [requiresValidBaselineGuard],
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.exploreOpportunities, pathMatch: 'full' },
           {
@@ -301,6 +303,7 @@ export const ROUTES: Route[] = [
         path: ROUTE_TOKENS.report,
         component: ReportComponent,
         data: { mainView: ROUTE_TOKENS.report, stepIndex: 22 },
+        canActivate: [requiresValidBaselineGuard],
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.energySummary, pathMatch: 'full' },
           {
