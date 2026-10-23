@@ -1,34 +1,38 @@
-<p class="small" *ngIf="!modificationExists && currentTab == 'modify-conditions'">The Modify All Conditions section is an expert view, allowing you to change any input. You can create many different scenarios,
-  to compare changes to your system. Notes for each loss page can be added in the right tab (NOTES), these will be added
+@if (!modificationExists && currentTab == 'modify-conditions') {
+  <p class="small">The Modify All Conditions section is an expert view, allowing you to change any input. You can create many different scenarios,
+    to compare changes to your system. Notes for each loss page can be added in the right tab (NOTES), these will be added
   to your final report. Data will be copied from your current baseline condition.</p>
-<p class="small" *ngIf="!modificationExists && currentTab == 'explore-opportunities'">The Explore Opportunities section is a novice view to help you find and evaluate different opportunities for your system.
-  Notes can be added in the right tab (NOTES), these will be added to your final report. Data will
+}
+@if (!modificationExists && currentTab == 'explore-opportunities') {
+  <p class="small">The Explore Opportunities section is a novice view to help you find and evaluate different opportunities for your system.
+    Notes can be added in the right tab (NOTES), these will be added to your final report. Data will
   be copied from your current baseline condition.</p>
+}
 <hr>
-<form>
-  <div class="form-section">
-    <div class="form-group d-flex">
-      <label class="w-50">Scenario Name</label>
-      <input name="newAssessmentName" type="text" class="form-control w-50" [(ngModel)]="newModificationName">
+  <form>
+    <div class="form-section">
+      <div class="form-group d-flex">
+        <label class="w-50">Scenario Name</label>
+        <input name="newAssessmentName" type="text" class="form-control w-50" [(ngModel)]="newModificationName">
+      </div>
     </div>
-  </div>
 
-  <div *ngIf="currentTab != 'explore-opportunities'">
-    <span class="small text-left bold">Compare two existing pumps or what-if scenario?</span>
-  
-    <div class="form-check">
-      <span>
-        <input type="radio" id="twoExisting" name="twoExisting" [value]="false" 
-          (input)="saveScenarioChange(false)" [(ngModel)]="isWhatIfScenario">
-        <label for="twoExisting">Two Existing Pumps</label><br>
-      
-        <input type="radio" id="whatIf" name="whatIf" [value]="true"
-          (input)="saveScenarioChange(true)" [(ngModel)]="isWhatIfScenario">
-        <label for="whatIf">What If Scenario</label><br>
-      </span>
-    </div>
-  </div>
+    @if (currentTab != 'explore-opportunities') {
+      <div>
+        <span class="small text-left bold">Compare two existing pumps or what-if scenario?</span>
+        <div class="form-check">
+          <span>
+            <input type="radio" id="twoExisting" name="twoExisting" [value]="false"
+              (input)="saveScenarioChange(false)" [(ngModel)]="isWhatIfScenario">
+              <label for="twoExisting">Two Existing Pumps</label><br>
+              <input type="radio" id="whatIf" name="whatIf" [value]="true"
+                (input)="saveScenarioChange(true)" [(ngModel)]="isWhatIfScenario">
+                <label for="whatIf">What If Scenario</label><br>
+              </span>
+            </div>
+          </div>
+        }
 
-</form>
-<hr>
-<button class="btn btn-primary pull-right" (click)="addModification()">Create</button>
+      </form>
+      <hr>
+        <button class="btn btn-primary pull-right" (click)="addModification()">Create</button>

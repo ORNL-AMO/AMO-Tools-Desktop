@@ -5,7 +5,7 @@ import { Settings } from '../../../shared/models/settings';
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem } from '../../pump-inventory';
 import { PumpInventoryService } from '../../pump-inventory.service';
 import { PumpCatalogService } from '../pump-catalog/pump-catalog.service';
-import { pumpTypesConstant, statusTypes } from '../../../psat/psatConstants';
+import { inventoryPumpTypesConstant, statusTypes } from '../../../psat/psatConstants';
 
 @Component({
     selector: 'app-department-catalog-table',
@@ -96,7 +96,7 @@ export class DepartmentCatalogTableComponent implements OnInit {
 
   getPumpItemData(pumpItem: PumpItem): DepartmentCatalogTableDataItem {
     let status = statusTypes.find(status => status.value == pumpItem.pumpStatus.status).display;
-    let pumpType = pumpTypesConstant.find(pumpType => pumpType.value == pumpItem.pumpEquipment.pumpType).display;
+    let pumpType = inventoryPumpTypesConstant.find(pumpType => pumpType.value == pumpItem.pumpEquipment.pumpType).display;
     let tableDataItem: DepartmentCatalogTableDataItem = {
       name: pumpItem.name,
       operatingHours: pumpItem.fieldMeasurements.yearlyOperatingHours,

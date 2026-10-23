@@ -40,14 +40,14 @@ export class SlidingCondenserWaterTemperatureComponent implements OnInit {
     this.baselineFollowingTempDifferential = baselineValues.useSlidingCondenserWaterTemp.followingTempDifferential;
     this.form = this.exploreOpportunitiesFormService.getSlidingCondenserWaterTempForm(this.baselineFollowingTempDifferential, this.settings());
     this.observeFormChanges();
-    
+
     this.modificationService.selectedModification$.pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe((modification: Modification) => {
       if (modification) {
         this.isOpportunityDisabled = modification.decreaseCondenserWaterTemp.useOpportunity === true;
         this.useOpportunity = modification.useSlidingCondenserWaterTemp.useOpportunity;
-        
+
         this.form.patchValue({
           followingTempDifferential: modification.useSlidingCondenserWaterTemp.followingTempDifferential
         }, { emitEvent: false });

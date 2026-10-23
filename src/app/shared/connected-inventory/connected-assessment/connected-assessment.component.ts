@@ -21,6 +21,8 @@ export class ConnectedAssessmentComponent {
   @Input()
   isItemValid: boolean;
   @Input()
+  isItemTypeSupported: boolean = true;
+  @Input()
   integratedCreateType: string;
   @Output('focusedField')
   focusedField = new EventEmitter();  

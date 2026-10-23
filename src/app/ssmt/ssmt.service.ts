@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { SSMT, SSMTInputs, TurbineInput, PressureTurbine, HeaderInput, SsmtValid, SSMTResults } from '../shared/models/steam/ssmt';
 import { SteamService } from '../calculator/steam/steam.service';
@@ -12,10 +13,12 @@ import { ConvertSteamService } from '../calculator/steam/convert-steam.service';
 import { ConvertUnitsService } from '../shared/convert-units/convert-units.service';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { SSMT_MAIN_VIEWS, SsmtMainView } from './routing/ssmt.routing';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class SsmtService {
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<SsmtMainView>;
   stepTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
   steamModelTab: BehaviorSubject<string>;
@@ -35,6 +38,7 @@ export class SsmtService {
   showExportModal: BehaviorSubject<boolean>;
 
   iterationCount: number;
+  assessmentId: number;
 
    //baseline tabs
    stepTabs: Array<string> = [
@@ -47,8 +51,9 @@ export class SsmtService {
 
   constructor(private steamService: SteamService, 
     private assessmentCo2SavingsService: AssessmentCo2SavingsService, private convertSteamService: ConvertSteamService, private boilerService: BoilerService, private headerService: HeaderService,
-    private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService) {
-    this.mainTab = new BehaviorSubject<string>('baseline');
+    private turbineService: TurbineService, private operationsService: OperationsService, private convertUnitsService: ConvertUnitsService,
+    private router: Router) {
+    this.mainTab = new BehaviorSubject<SsmtMainView>('baseline');
     this.stepTab = new BehaviorSubject<string>('baseline');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.steamModelTab = new BehaviorSubject<string>('operations');
@@ -414,23 +419,46 @@ export class SsmtService {
   continue() {
     let tmpStepTab: string = this.stepTab.getValue();
     if (tmpStepTab === 'turbine') {
-      this.mainTab.next('assessment');
+      this.goToMainTab('assessment');
     } else {
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
-      this.stepTab.next(nextTab);
+      const nextTab: string = getSteppedView(this.stepTabs, tmpStepTab, 1);
+      if (nextTab) {
+        this.stepTab.next(nextTab);
+      }
     }
   }
 
   back() {
     let tmpStepTab: string = this.stepTab.getValue();
     if (tmpStepTab !== 'baseline' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
-      this.stepTab.next(nextTab);
+      const previousTab: string = getSteppedView(this.stepTabs, tmpStepTab, -1);
+      if (previousTab) {
+        this.stepTab.next(previousTab);
+      }
     } else if (this.mainTab.getValue() == 'assessment') {
-      this.mainTab.next('baseline');
+      this.goToMainTab('baseline');
     }
-  }  
+  }
+
+  goToMainTab(view: SsmtMainView) {
+    if (this.assessmentId) {
+      this.router.navigate(['/ssmt', this.assessmentId, view]);
+    }
+  }
+
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
+  backMainTab() {
+    this.stepMainTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const view: SsmtMainView = getSteppedView(SSMT_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
+    }
+  }
 
 }

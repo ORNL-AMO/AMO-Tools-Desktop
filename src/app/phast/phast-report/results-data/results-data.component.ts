@@ -96,7 +96,7 @@ export class ResultsDataComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.selectedPhastsSub) {this.selectedPhastsSub.unsubscribe; }
+    if (this.selectedPhastsSub) {this.selectedPhastsSub.unsubscribe(); }
   }
 
   useModification() {

@@ -12,7 +12,8 @@
             [integratedCreateType]="'Pump'"
             [connectedInventoryItem]="connectedPumpItem" 
             [connectedAssessmentItems]="selectedPumpItem.connectedAssessments" 
-            [isItemValid]="selectedPumpItem.validPump.isValid" 
+            [isItemValid]="selectedPumpItem.validPump.isValid"
+            [isItemTypeSupported]="isPumpTypeConnectable"
             (modalOpen)="setModalOpenView($event)"></app-connected-assessment>
     </div>
     <div class="col-12">

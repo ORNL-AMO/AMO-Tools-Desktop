@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { WaterDiagram } from 'process-flow-lib';
 import { configureAppStore } from '../components/Diagram/store';
 import { diagramInitialized, nodeDataPropertyChange } from '../components/Diagram/diagramReducer';
@@ -6,7 +6,7 @@ import { selectComponent } from '../components/Diagram/diagramThunks';
 import { makeSystemNode } from '../__fixtures__/builders';
 
 const makeStoreWithSystems = () => {
-  const store = configureAppStore({ flowDiagramData: { name: 'test', diagramNotes: '' } } as WaterDiagram);
+  const store = configureAppStore({ flowDiagramData: { name: 'test', diagramNotes: '' } } as WaterDiagram, vi.fn());
   store.dispatch(diagramInitialized({
     diagramData: { name: 't', nodes: [makeSystemNode('sysA'), makeSystemNode('sysB')], edges: [], diagramFlowErrors: {}, userDiagramOptions: undefined, settings: undefined, calculatedData: { nodes: {} }, recentNodeColors: [], recentEdgeColors: [] } as any,
     parentContainer: { height: 0, headerHeight: 0, footerHeight: 0 },

@@ -47,6 +47,8 @@ export class SuiteApiHelperService {
         return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.LARGE_END_SUCTION;
       case 11:
         return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.SPECIFIED_OPTIMAL_EFFICIENCY;
+      case 12:
+        return this.toolsSuiteApiService.ToolsSuiteModule.PumpStyle.POSITIVE_DISPLACEMENT;
     }
   }
 
