@@ -4,11 +4,11 @@ on:
   workflow_call:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
-    if: github.event_name == 'push' && github.ref_name == 'master'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
@@ -37,9 +37,9 @@ jobs:
         shell: bash
         run: |
           find . -name "package-lock.json" -not -path "*/node_modules/*" -not -path "*/dist/*" -exec dirname {} \; | sort -u |
-          while read dir; do
+          while IFS= read -r dir; do
             echo "Installing dependencies for: $dir"
-            (cd $dir && npm ci $dir);
+            (cd "$dir" && npm ci);
           done
       - name: Build
         run: npm run build-prod-desktop-ci
@@ -57,8 +57,8 @@ jobs:
       BUILD_VERSION: ${{ steps.output.outputs.BUILD_VERSION }}
 
   bundle_macos:
-    if: github.event_name == 'push' && github.ref_name == 'master'
-    runs-on: macos-14
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
+    runs-on: macos-26
     needs: [build]
     steps:
       - name: Checkout
@@ -92,22 +92,23 @@ jobs:
           PROV_PROF_PATH=$RUNNER_TEMP/embedded.provisionprofile
           KEYCHAIN_PATH=$RUNNER_TEMP/build.keychain
 
-          echo -n "$APPLE_CERT_A_BASE64" | base64 --decode -o $CERT_A_PATH
-          echo -n "$APPLE_PROV_PROF_BASE64" | base64 --decode -o $PROV_PROF_PATH
+          echo -n "$APPLE_CERT_A_BASE64" | base64 --decode -o "$CERT_A_PATH"
+          echo -n "$APPLE_PROV_PROF_BASE64" | base64 --decode -o "$PROV_PROF_PATH"
 
-          security -v create-keychain -p "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
-          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
-          security -v default-keychain -s $KEYCHAIN_PATH
-          security -v unlock-keychain -p "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
+          security -v create-keychain -p "$APPLE_KEYCHAIN_SECRET" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security -v default-keychain -s "$KEYCHAIN_PATH"
+          security -v unlock-keychain -p "$APPLE_KEYCHAIN_SECRET" "$KEYCHAIN_PATH"
 
-          security -v import $CERT_A_PATH -P "$APPLE_CERT_SECRET" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$APPLE_KEYCHAIN_SECRET" $KEYCHAIN_PATH
+          security -v import "$CERT_A_PATH" -P "$APPLE_CERT_SECRET" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$APPLE_KEYCHAIN_SECRET" "$KEYCHAIN_PATH"
 
           cp "$PROV_PROF_PATH" ./embedded.provisionprofile
       - name: Bundle
         run: npm run dist -- --mac --universal --publish never
       - name: Verify
         run: |
+          lipo -verify_arch x86_64 arm64 output/mac-universal/MEASUR.app/Contents/MacOS/MEASUR
           codesign --verify --deep --strict --verbose=2 output/mac-universal/MEASUR.app
       - name: Notarize
         env:
@@ -116,8 +117,11 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
           BUNDLE_PATH=$(find output -name "MEASUR-*.*.*.dmg")
-          xcrun notarytool submit --wait --apple-id "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_APP_SECRET }}" --team-id "${{ secrets.APPLE_TEAM_ID }}" $BUNDLE_PATH &&
-          xcrun stapler staple $BUNDLE_PATH
+          test -n "$BUNDLE_PATH"
+          xcrun notarytool submit "$BUNDLE_PATH" --wait --apple-id "$APPLE_ID" --password "$APPLE_APP_SECRET" --team-id "$APPLE_TEAM_ID" --output-format json > "$RUNNER_TEMP/notarization.json"
+          node -e 'if (JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).status !== "Accepted") process.exit(1)' "$RUNNER_TEMP/notarization.json"
+          xcrun stapler staple "$BUNDLE_PATH"
+          xcrun stapler validate "$BUNDLE_PATH"
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
@@ -133,7 +137,7 @@ jobs:
           retention-days: 1
 
   bundle_win:
-    if: github.event_name == 'push' && github.ref_name == 'master'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
     runs-on: windows-2025
     needs: [build]
     steps:
@@ -181,7 +185,7 @@ jobs:
           retention-days: 1
 
   bundle_linux:
-    if: github.event_name == 'push' && github.ref_name == 'master'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04
     needs: [build]
     steps:
@@ -220,65 +224,117 @@ jobs:
           retention-days: 1
 
   sign_win:
-    if: github.event_name == 'push' && github.ref_name == 'master'
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
     runs-on: [self-hosted, cs]
     needs: [bundle_win]
     steps:
+      - name: Prepare signing staging directory
+        id: staging
+        run: |
+          SIGN_DIR=$(mktemp -d "$RUNNER_TEMP/measur-sign.XXXXXX")
+          echo "path=$SIGN_DIR" >> "$GITHUB_OUTPUT"
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: sign-win-artifact
-          path: output/
+          path: ${{ steps.staging.outputs.path }}
       - name: Codesign
+        env:
+          SIGN_DIR: ${{ steps.staging.outputs.path }}
+          WIN_CERT_BASE64: ${{ secrets.WIN_CERT_BASE64 }}
+          WIN_STORE_TYPE: ${{ secrets.WIN_STORE_TYPE }}
+          WIN_STORE_SECRET: ${{ secrets.WIN_STORE_SECRET }}
         run: |
-          TMP_CERT_PATH="$RUNNER_TEMP/cert.pem"
-          BUNDLE_PATH=$(find output -name "MEASUR-Setup-*.*.*.exe")
+          umask 077
+          TMP_CERT_PATH="$SIGN_DIR/cert.pem"
+          BUNDLES=( "$SIGN_DIR"/MEASUR-Setup-*.exe )
+          [[ ${#BUNDLES[@]} -eq 1 && -f "${BUNDLES[0]}" ]]
+          BUNDLE_PATH=${BUNDLES[0]}
 
-          echo -n "${{ secrets.WIN_CERT_BASE64 }}" | base64 --decode > $TMP_CERT_PATH
+          echo -n "$WIN_CERT_BASE64" | base64 --decode > "$TMP_CERT_PATH"
 
-          jsign --storetype "${{ secrets.WIN_STORE_TYPE }}" \
-                --storepass "${{ secrets.WIN_STORE_SECRET }}" \
+          jsign --storetype "$WIN_STORE_TYPE" \
+                --storepass "$WIN_STORE_SECRET" \
                 --tsaurl "http://timestamp.sectigo.com" \
-                --certfile $TMP_CERT_PATH \
-                $BUNDLE_PATH
+                --certfile "$TMP_CERT_PATH" \
+                "$BUNDLE_PATH"
 
-          OLD_HASH=$(grep -o -P -m 1 '(?<=sha512:\s).*' ./output/latest.yml)
+          OLD_HASH=$(grep -o -P -m 1 '(?<=sha512:\s).*' "$SIGN_DIR/latest.yml")
           NEW_HASH=$(gen_hash -f "$BUNDLE_PATH")
-          sed -i "s|$OLD_HASH|$NEW_HASH|g" ./output/latest.yml
+          test -n "$OLD_HASH"
+          test -n "$NEW_HASH"
+          sed -i "s|$OLD_HASH|$NEW_HASH|g" "$SIGN_DIR/latest.yml"
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
           name: release-win-artifact
           path: |
-            output/*.exe
-            output/latest.yml
+            ${{ steps.staging.outputs.path }}/*.exe
+            ${{ steps.staging.outputs.path }}/latest.yml
           compression-level: 0
           if-no-files-found: error
           retention-days: 1
       - name: Cleanup
-        run: rm -rf ./output
+        if: always() && steps.staging.outputs.path != ''
+        env:
+          SIGN_DIR: ${{ steps.staging.outputs.path }}
+        run: rm -rf -- "$SIGN_DIR"
 
   release:
-    if: github.event_name == 'push' && github.ref_name == 'master'
+    # Do not let an unexpectedly skipped prerequisite yield a successful caller.
+    if: >-
+      always() && !cancelled() &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
     runs-on: ubuntu-22.04
-    needs: [build, bundle_macos, bundle_linux, sign_win]
+    needs: [build, bundle_macos, bundle_win, bundle_linux, sign_win]
+    permissions:
+      actions: read
+      contents: write
     env:
       VERSION: ${{ needs.build.outputs.BUILD_VERSION }}
     steps:
+      - name: Require all desktop stages to succeed
+        env:
+          BUILD_RESULT: ${{ needs.build.result }}
+          MACOS_RESULT: ${{ needs.bundle_macos.result }}
+          WINDOWS_RESULT: ${{ needs.bundle_win.result }}
+          LINUX_RESULT: ${{ needs.bundle_linux.result }}
+          SIGN_RESULT: ${{ needs.sign_win.result }}
+        run: |
+          for result in "$BUILD_RESULT" "$MACOS_RESULT" "$WINDOWS_RESULT" "$LINUX_RESULT" "$SIGN_RESULT"; do
+            if [[ "$result" != 'success' ]]; then
+              echo "All desktop stages must succeed before a draft release can be created (found: $result)."
+              exit 1
+            fi
+          done
+      - name: Checkout release validation
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Check production release state
+        uses: ./.github/actions/check-production-state
+        with:
+          release-tag: v${{ env.VERSION }}
+      - name: Setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ needs.build.outputs.NODE_VERSION }}
       - name: Get artifacts
         uses: actions/download-artifact@v4
         with:
           pattern: release-*-artifact
           path: release
           merge-multiple: true
+      - name: Verify complete release assets
+        run: node .github/scripts/check-release-assets.cjs release "$VERSION"
       - name: Release
         uses: softprops/action-gh-release@v3
-        # if: startsWith(github.ref, 'refs/tags/') # Uncomment if enabling tag gating
         with:
           name: MEASUR v${{ env.VERSION }}
           tag_name: v${{ env.VERSION }}
-          target_commitish: master
-          draft: true # Comment out if enabling tag gating and publishing via action
+          target_commitish: ${{ github.sha }}
+          draft: true
           generate_release_notes: false
+          fail_on_unmatched_files: true
           files: |
             release/*

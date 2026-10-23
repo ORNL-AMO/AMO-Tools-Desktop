@@ -38,6 +38,10 @@ When suite packaging changes, check:
 - Electron and browser path resolution,
 - process-flow suite initialization if it uses the same package version.
 
+## Release Pipeline
+
+The [release process](../release-process.md) describes CI/CD triggers, required checks, artifact contracts, and recovery. Tests and release policy gate web and desktop builds. On `master`, production web deployment waits for all signed installers, macOS notarization, and draft GitHub Release creation for the same run and commit. Development web deployment is independent of desktop packaging. macOS packaging pins `macos-26` and preserves universal Intel/Apple Silicon installers; publishing the desktop draft remains manual.
+
 ## Verification Choices
 
 Choose verification based on the blast radius:

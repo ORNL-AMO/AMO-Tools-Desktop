@@ -40,6 +40,7 @@ Most calculations follow this path:
 - `docs/architecture/measur-tools-suite-integration.md`: suite loading, adapter services, declarations, memory management, and default suite data.
 - `docs/architecture/data-persistence.md`: IndexedDB services, settings, default data, backups, and saved assessment considerations.
 - `docs/architecture/build-and-runtime.md`: build scripts, process-flow bundling, Electron/web runtime differences, and WASM asset loading.
+- [Release process](docs/release-process.md): CI/CD gates, web/desktop release ordering, version policy, promotion, and recovery.
 - `docs/architecture/main-tab-routing.md`: main-tab URL routing for assessments and inventories, the shared helpers, and the pattern new modules follow.
 - `docs/adr/0001-suite-api-boundary.md`: why new Angular code should use `src/app/tools-suite-api/` rather than raw suite imports.
 
