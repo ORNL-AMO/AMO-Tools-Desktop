@@ -20,7 +20,26 @@ import { ProcessHeatingAssessmentService } from './services/process-heating-asse
 import { ModificationService } from './services/modification.service';
 import { ProcessHeatingOperationsFormService } from './services/process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './services/process-heating-results.service';
+import { ProcessHeatingValidityService } from './services/process-heating-validity.service';
+import { AtmosphereFormService } from './heat-balance/losses/atmosphere/atmosphere-form.service';
+import { AuxiliaryPowerFormService } from './heat-balance/losses/auxiliary-power/auxiliary-power-form.service';
+import { GasMaterialFormService } from './heat-balance/losses/charge-material/gas-form/gas-material-form.service';
+import { LiquidMaterialFormService } from './heat-balance/losses/charge-material/liquid-form/liquid-material-form.service';
+import { SolidMaterialFormService } from './heat-balance/losses/charge-material/solid-form/solid-material-form.service';
+import { CoolingFormService } from './heat-balance/losses/cooling/cooling-form.service';
+import { EnergyInputExhaustGasFormService } from './heat-balance/losses/energy-input-exhaust-gas/energy-input-exhaust-gas-form.service';
+import { EnergyInputFormService } from './heat-balance/losses/energy-input/energy-input-form.service';
+import { ExhaustGasFormService } from './heat-balance/losses/exhaust-gas/exhaust-gas-form.service';
+import { ExtendedSurfaceFormService } from './heat-balance/losses/extended-surface/extended-surface-form.service';
+import { FixtureFormService } from './heat-balance/losses/fixture/fixture-form.service';
+import { FlueGasFormService } from './heat-balance/losses/flue-gas/flue-gas-form.service';
+import { GasLeakageFormService } from './heat-balance/losses/gas-leakage/gas-leakage-form.service';
+import { OpeningFormService } from './heat-balance/losses/opening/opening-form.service';
+import { OtherFormService } from './heat-balance/losses/other/other-form.service';
+import { SlagFormService } from './heat-balance/losses/slag/slag-form.service';
+import { WallLossesFormService } from './heat-balance/losses/wall-losses/wall-losses-form.service';
 import { ProcessHeatingAssessmentResolver } from './routing/process-heating-assessment.resolver';
+import { requiresValidBaselineGuard } from './routing/requires-valid-baseline.guard';
 import { PhastChartsService } from '../phast/phast-report/phast-charts.service';
 import { SankeySharedModule } from '../shared/sankey/sankey-shared.module';
 import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
@@ -63,6 +82,7 @@ import { ResultsDataComponent } from './report/results-data/results-data.compone
 import { ReportGraphsComponent } from './report/report-graphs/report-graphs.component';
 import { ReportSankeyComponent } from './report/report-sankey/report-sankey.component';
 import { ExecutiveSummaryComponent } from './report/executive-summary/executive-summary.component';
+import { InvalidModificationAlertComponent } from './report/invalid-modification-alert/invalid-modification-alert.component';
 import { ProcessHeatingReportAdapter } from './report/process-heating-report.adapter';
 import { ReportBuilderModule } from '../shared/report-builder/report-builder.module';
 import { InputSummaryResultsService } from './report/input-summary/input-summary-results.service';
@@ -264,6 +284,7 @@ export const ROUTES: Route[] = [
         path: ROUTE_TOKENS.assessment,
         component: AssessmentComponent,
         data: { mainView: ROUTE_TOKENS.assessment, stepIndex: 21 },
+        canActivate: [requiresValidBaselineGuard],
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.exploreOpportunities, pathMatch: 'full' },
           {
@@ -282,6 +303,7 @@ export const ROUTES: Route[] = [
         path: ROUTE_TOKENS.report,
         component: ReportComponent,
         data: { mainView: ROUTE_TOKENS.report, stepIndex: 22 },
+        canActivate: [requiresValidBaselineGuard],
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.energySummary, pathMatch: 'full' },
           {
@@ -354,6 +376,7 @@ export const ROUTES: Route[] = [
     ExpertViewComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
+    InvalidModificationAlertComponent,
     EnergySummaryComponent,
     ResultsDataComponent,
     ReportGraphsComponent,
@@ -444,6 +467,25 @@ export const ROUTES: Route[] = [
     ModificationService,
     ProcessHeatingOperationsFormService,
     ProcessHeatingResultsService,
+    ProcessHeatingValidityService,
+    // Stateless form builders for module-scoped services; each loss step still provides its own instance.
+    SolidMaterialFormService,
+    LiquidMaterialFormService,
+    GasMaterialFormService,
+    FlueGasFormService,
+    FixtureFormService,
+    WallLossesFormService,
+    CoolingFormService,
+    AtmosphereFormService,
+    OpeningFormService,
+    GasLeakageFormService,
+    ExtendedSurfaceFormService,
+    OtherFormService,
+    SlagFormService,
+    EnergyInputFormService,
+    ExhaustGasFormService,
+    EnergyInputExhaustGasFormService,
+    AuxiliaryPowerFormService,
     ExecutiveSummaryResultsService,
     ResultsDataResultsService,
     ReportGraphsResultsService,

@@ -6,6 +6,7 @@ import { ReportDocument } from '../../shared/report-builder/models/report-docume
 import { KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { PHAST } from '../models/phast';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { InvalidModification, ProcessHeatingValidityService } from '../services/process-heating-validity.service';
 import { EnergySummaryResultsService, EnergySummaryUI } from './energy-summary/energy-summary-results.service';
 import { ExecutiveSummaryResultsService, ExecutiveSummaryUI } from './executive-summary/executive-summary-results.service';
 import { ResultsDataResultsService, ResultsDataUI } from './results-data/results-data-results.service';
@@ -100,6 +101,7 @@ describe('ProcessHeatingReportAdapter', () => {
   let renderService: jasmine.SpyObj<ReportChartRenderService>;
   let inputSummary: InputSummaryUI | undefined;
   let processHeating: PHAST;
+  let invalidModifications: InvalidModification[];
 
   const assessment = { name: 'Furnace 1' } as Assessment;
 
@@ -124,6 +126,7 @@ describe('ProcessHeatingReportAdapter', () => {
     renderService = jasmine.createSpyObj<ReportChartRenderService>('ReportChartRenderService', ['renderChartToImage']);
     renderService.renderChartToImage.and.resolveTo('data:image/jpeg;base64,abc');
     inputSummary = INPUT_SUMMARY;
+    invalidModifications = [];
     processHeating = { equipmentNotes: 'Batch furnace', operatingHours: { operatingConditions: 'Two shifts' } } as PHAST;
     TestBed.configureTestingModule({
       providers: [
@@ -143,6 +146,11 @@ describe('ProcessHeatingReportAdapter', () => {
         { provide: ReportSankeyResultsService, useValue: { reportSankeyUI: () => reportSankey } },
         { provide: ResultsDataResultsService, useValue: { resultsDataUI: () => resultsData } },
         { provide: InputSummaryResultsService, useValue: { inputSummaryUI: () => inputSummary } },
+        { provide: ProcessHeatingValidityService, useValue: {
+          invalidModifications: () => invalidModifications,
+          scenarioValidity: (scenario: string) => ({ isValid: !invalidModifications.some(modification => modification.id === scenario) }),
+        },
+        },
       ],
     });
     adapter = TestBed.inject(ProcessHeatingReportAdapter);
@@ -271,6 +279,54 @@ describe('ProcessHeatingReportAdapter', () => {
     expect(table.subGroupHeaderIndices).toEqual([0]);
     expect(table.rows[0][0]).toBe('Wall Loss 1');
     expect(table.rows[1]).toEqual(['Ambient Temperature (℉)', '80', '90']);
+  });
+
+  describe('invalid modifications', () => {
+    beforeEach(() => {
+      invalidModifications = [{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall', 'Errors found in Cooling'] }];
+    });
+
+    it('lists them ahead of the executive summary table', async () => {
+      const sections = (await build()).sections.filter(candidate => candidate.group === 'executive-summary');
+      const alert = sections[0] as KeyValueSection;
+
+      expect(alert.title).toBe('Invalid Modifications');
+      expect(alert.rows).toEqual([{ label: 'Scenario 1', value: 'Errors found in Wall, Errors found in Cooling' }]);
+      expect(sections[1].title).toBe('Executive Summary');
+    });
+
+    it('lists them ahead of the result data table and moves its page break to the list', async () => {
+      const sections = (await build()).sections.filter(candidate => candidate.group === 'results-data');
+
+      expect(sections.map(candidate => candidate.title)).toEqual(['Invalid Modifications', 'Result Data']);
+      expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, false]);
+    });
+
+    it('lists them ahead of the report graphs and moves the first chart page break to the list', async () => {
+      const sections = (await build()).sections.filter(candidate => candidate.group === 'report-graphs');
+
+      expect(sections[0].title).toBe('Invalid Modifications');
+      expect(sections.slice(1).every(candidate => candidate.type === 'chart')).toBeTrue();
+      expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, ...sections.slice(1).map(() => false)]);
+    });
+
+    it('leaves an invalid scenario out of the sankey charts', async () => {
+      reportSankey = buildReportSankey(2);
+      invalidModifications = [{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }];
+
+      const charts = (await build()).sections.filter(candidate => candidate.group === 'report-sankey') as ChartSection[];
+
+      expect(charts.map(chart => chart.title)).toEqual(['Baseline Sankey', 'Scenario 2 Sankey']);
+      expect(charts.map(chart => !!chart.pageBreakBefore)).toEqual([true, false]);
+    });
+
+    it('adds nothing when every modification is valid', async () => {
+      invalidModifications = [];
+      const document = await build();
+
+      expect(document.sections.some(candidate => candidate.title === 'Invalid Modifications')).toBeFalse();
+      expect(section<SummaryTableSection>(document, 'Result Data').pageBreakBefore).toBeTrue();
+    });
   });
 
   it('skips sections whose summaries are unavailable', async () => {

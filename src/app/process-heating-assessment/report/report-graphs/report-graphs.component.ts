@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, Signal } from '@angular/core';
+import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { ReportGraphsResultsService, ReportGraphsScenario, ReportGraphsUI } from './report-graphs-results.service';
 
 interface BarChartData {
@@ -17,6 +18,7 @@ export class ReportGraphsComponent {
   private readonly reportGraphsResultsService = inject(ReportGraphsResultsService);
 
   readonly reportGraphsUI: Signal<ReportGraphsUI | undefined> = this.reportGraphsResultsService.reportGraphsUI;
+  readonly invalidModifications: Signal<InvalidModification[]> = inject(ProcessHeatingValidityService).invalidModifications;
   readonly baselineSelection = signal('baseline');
   readonly modificationSelection = signal<string | undefined>(undefined);
 

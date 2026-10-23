@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { ReportTableCellPipe } from '../../../shared/pipes/report-table-cell.pipe';
 import { ResultsDataComponent } from './results-data.component';
 import { ResultsDataResultsService, ResultsDataUI } from './results-data-results.service';
@@ -19,16 +20,21 @@ function buildUI(overrides: Partial<ResultsDataUI> = {}): ResultsDataUI {
 
 describe('ResultsDataComponent', () => {
   let fixture: ComponentFixture<ResultsDataComponent>;
+  let invalidModifications: WritableSignal<InvalidModification[]>;
   let ui: WritableSignal<ResultsDataUI | undefined>;
 
   const text = (): string => fixture.nativeElement.textContent.replace(/\s+/g, ' ');
 
   beforeEach(() => {
+    invalidModifications = signal<InvalidModification[]>([]);
     ui = signal<ResultsDataUI | undefined>(buildUI());
     TestBed.configureTestingModule({
       declarations: [ResultsDataComponent],
       imports: [ReportTableCellPipe],
-      providers: [{ provide: ResultsDataResultsService, useValue: { resultsDataUI: ui } }],
+      providers: [
+        { provide: ResultsDataResultsService, useValue: { resultsDataUI: ui } },
+        { provide: ProcessHeatingValidityService, useValue: { invalidModifications } },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     });
     fixture = TestBed.createComponent(ResultsDataComponent);
@@ -57,5 +63,15 @@ describe('ResultsDataComponent', () => {
     ui.set(undefined);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('table')).toBeNull();
+  });
+
+  it('shows the invalid modification alert only when a modification is invalid', () => {
+    const alert = (): Element | null => fixture.nativeElement.querySelector('app-invalid-modification-alert');
+    expect(alert()).toBeNull();
+
+    invalidModifications.set([{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }]);
+    fixture.detectChanges();
+
+    expect(alert()).not.toBeNull();
   });
 });
