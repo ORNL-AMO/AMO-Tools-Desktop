@@ -1,0 +1,4343 @@
+{
+  "assessment": {
+    "appVersion": "1.6.10",
+    "compressedAirAssessment": {
+      "compressedAirDayTypes": [
+        {
+          "dayTypeId": "ca-real-006-day-type-01",
+          "name": "Day Type 1",
+          "numberOfDays": 261,
+          "profileDataType": "power"
+        },
+        {
+          "dayTypeId": "ca-real-006-day-type-02",
+          "name": "Day Type 2",
+          "numberOfDays": 104,
+          "profileDataType": "power"
+        }
+      ],
+      "compressorInventoryItems": [
+        {
+          "centrifugalSpecifics": {
+            "maxFullLoadCapacity": null,
+            "maxFullLoadPressure": null,
+            "minFullLoadCapacity": null,
+            "minFullLoadPressure": null,
+            "surgeAirflow": null
+          },
+          "compressorControls": {
+            "automaticShutdown": false,
+            "controlType": 2,
+            "numberOfUnloadSteps": 2,
+            "unloadPointCapacity": 40,
+            "unloadSumpPressure": 15
+          },
+          "description": "",
+          "designDetails": {
+            "blowdownTime": 40,
+            "designEfficiency": 94.1,
+            "inputPressure": 14.5,
+            "maxFullFlowPressure": 120,
+            "modulatingPressureRange": 1.7,
+            "noLoadPowerFM": 80,
+            "noLoadPowerUL": 30,
+            "serviceFactor": 1.15
+          },
+          "isValid": true,
+          "itemId": "ca-real-006-compressor-01",
+          "modifiedDate": "2000-01-01T00:00:00.000Z",
+          "name": "Compressor 1",
+          "nameplateData": {
+            "compressorType": 1,
+            "fullLoadAmps": null,
+            "fullLoadOperatingPressure": 110,
+            "fullLoadRatedCapacity": 1014,
+            "motorPower": 200,
+            "ploytropicCompressorExponent": 1.4,
+            "ratedLoadPower": null,
+            "totalPackageInputPower": 175
+          },
+          "performancePoints": {
+            "blowoff": {
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true
+            },
+            "fullLoad": {
+              "airflow": 1006,
+              "dischargePressure": 110,
+              "isDefaultAirFlow": false,
+              "isDefaultPower": true,
+              "isDefaultPressure": true,
+              "power": 175
+            },
+            "maxFullFlow": {
+              "airflow": 998,
+              "dischargePressure": 120,
+              "isDefaultAirFlow": true,
+              "isDefaultPower": false,
+              "isDefaultPressure": true,
+              "power": 175
+            },
+            "midTurndown": {
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true
+            },
+            "noLoad": {
+              "airflow": 0,
+              "dischargePressure": 15,
+              "isDefaultAirFlow": true,
+              "isDefaultPower": false,
+              "isDefaultPressure": true,
+              "power": 35.8
+            },
+            "turndown": {
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true
+            },
+            "unloadPoint": {
+              "airflow": 402,
+              "dischargePressure": 121,
+              "isDefaultAirFlow": true,
+              "isDefaultPower": false,
+              "isDefaultPressure": false,
+              "power": 138.4
+            }
+          }
+        },
+        {
+          "centrifugalSpecifics": {
+            "maxFullLoadCapacity": null,
+            "maxFullLoadPressure": null,
+            "minFullLoadCapacity": null,
+            "minFullLoadPressure": null,
+            "surgeAirflow": null
+          },
+          "compressorControls": {
+            "automaticShutdown": false,
+            "controlType": 2,
+            "numberOfUnloadSteps": 2,
+            "unloadPointCapacity": 40,
+            "unloadSumpPressure": 15
+          },
+          "description": "",
+          "designDetails": {
+            "blowdownTime": 40,
+            "designEfficiency": 94.1,
+            "inputPressure": 14.5,
+            "maxFullFlowPressure": 115,
+            "modulatingPressureRange": 1.7,
+            "noLoadPowerFM": 80,
+            "noLoadPowerUL": 30,
+            "serviceFactor": 1.15
+          },
+          "isValid": true,
+          "itemId": "ca-real-006-compressor-02",
+          "modifiedDate": "2000-01-01T00:00:00.000Z",
+          "name": "Compressor 2",
+          "nameplateData": {
+            "compressorType": 1,
+            "fullLoadAmps": null,
+            "fullLoadOperatingPressure": 105,
+            "fullLoadRatedCapacity": 1266,
+            "motorPower": 250,
+            "ploytropicCompressorExponent": 1.4,
+            "ratedLoadPower": null,
+            "totalPackageInputPower": 225
+          },
+          "performancePoints": {
+            "blowoff": {
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true
+            },
+            "fullLoad": {
+              "airflow": 1266,
+              "dischargePressure": 105,
+              "isDefaultAirFlow": false,
+              "isDefaultPower": true,
+              "isDefaultPressure": true,
+              "power": 225
+            },
+            "maxFullFlow": {
+              "airflow": 1257,
+              "dischargePressure": 115,
+              "isDefaultAirFlow": true,
+              "isDefaultPower": false,
+              "isDefaultPressure": true,
+              "power": 225
+            },
+            "midTurndown": {
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true
+            },
+            "noLoad": {
+              "airflow": 0,
+              "dischargePressure": 15,
+              "isDefaultAirFlow": true,
+              "isDefaultPower": false,
+              "isDefaultPressure": true,
+              "power": 34.7
+            },
+            "turndown": {
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true
+            },
+            "unloadPoint": {
+              "airflow": 506,
+              "dischargePressure": 116,
+              "isDefaultAirFlow": true,
+              "isDefaultPower": false,
+              "isDefaultPressure": false,
+              "power": 178
+            }
+          }
+        },
+        {
+          "centrifugalSpecifics": {
+            "maxFullLoadCapacity": null,
+            "maxFullLoadPressure": null,
+            "minFullLoadCapacity": null,
+            "minFullLoadPressure": null,
+            "surgeAirflow": null
+          },
+          "compressorControls": {
+            "automaticShutdown": true,
+            "controlType": 11,
+            "numberOfUnloadSteps": 2,
+            "unloadPointCapacity": 5,
+            "unloadSumpPressure": 15
+          },
+          "description": "",
+          "designDetails": {
+            "blowdownTime": 40,
+            "designEfficiency": 93.6,
+            "inputPressure": 14.5,
+            "maxFullFlowPressure": 100,
+            "modulatingPressureRange": 20,
+            "noLoadPowerFM": 65,
+            "noLoadPowerUL": 5,
+            "serviceFactor": 1.15
+          },
+          "isValid": true,
+          "itemId": "ca-real-006-compressor-03",
+          "modifiedDate": "2000-01-01T00:00:00.000Z",
+          "name": "Compressor 3",
+          "nameplateData": {
+            "compressorType": 1,
+            "fullLoadAmps": null,
+            "fullLoadOperatingPressure": 100,
+            "fullLoadRatedCapacity": 1527,
+            "motorPower": 250,
+            "ploytropicCompressorExponent": 1.4,
+            "ratedLoadPower": null,
+            "totalPackageInputPower": 253.9
+          },
+          "performancePoints": {
+            "blowoff": {
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true
+            },
+            "fullLoad": {
+              "airflow": 1527,
+              "dischargePressure": 100,
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true,
+              "power": 253.9
+            },
+            "maxFullFlow": {
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true
+            },
+            "midTurndown": {
+              "airflow": 1247,
+              "dischargePressure": 101.1,
+              "isDefaultAirFlow": false,
+              "isDefaultPower": false,
+              "isDefaultPressure": true,
+              "power": 203.8
+            },
+            "noLoad": {
+              "airflow": 0,
+              "dischargePressure": 15,
+              "isDefaultAirFlow": true,
+              "isDefaultPower": false,
+              "isDefaultPressure": true,
+              "power": 1
+            },
+            "turndown": {
+              "airflow": 437,
+              "dischargePressure": 104.3,
+              "isDefaultAirFlow": false,
+              "isDefaultPower": false,
+              "isDefaultPressure": true,
+              "power": 18.22
+            },
+            "unloadPoint": {
+              "isDefaultAirFlow": true,
+              "isDefaultPower": true,
+              "isDefaultPressure": true
+            }
+          }
+        }
+      ],
+      "endUseData": {
+        "dayTypeAirFlowTotals": {
+          "exceededAirflowPercent": null,
+          "totalDayTypeAverageAirflow": 1175.3,
+          "totalDayTypeEndUseAirflow": null,
+          "totalDayTypeEndUseAirflowPercent": null,
+          "unaccountedAirflowPercent": null
+        },
+        "endUseDayTypeSetup": {
+          "dayTypeLeakRates": [
+            {
+              "dayTypeId": "ca-real-006-day-type-01",
+              "dayTypeLeakRate": 100
+            },
+            {
+              "dayTypeId": "ca-real-006-day-type-02",
+              "dayTypeLeakRate": 100
+            }
+          ],
+          "selectedDayTypeId": "ca-real-006-day-type-01"
+        },
+        "endUses": [
+          {
+            "dayTypeEndUses": [
+              {
+                "dayTypeId": "ca-real-006-day-type-01",
+                "dayTypeLeakRate": 0,
+                "regulated": false
+              }
+            ],
+            "endUseDescription": "",
+            "endUseId": "ca-real-006-end-use-01",
+            "endUseName": "End Use 1",
+            "isValid": false,
+            "location": "",
+            "modifiedDate": "2000-01-01T00:00:00.000Z"
+          }
+        ]
+      },
+      "modifications": [
+        {
+          "addPrimaryReceiverVolume": {
+            "implementationCost": 0,
+            "increasedVolume": 0,
+            "order": 100
+          },
+          "adjustCascadingSetPoints": {
+            "implementationCost": 0,
+            "order": 100,
+            "setPointData": [
+              {
+                "compressorId": "ca-real-006-compressor-01",
+                "compressorType": 1,
+                "controlType": 2,
+                "fullLoadDischargePressure": 110,
+                "maxFullFlowDischargePressure": 120
+              },
+              {
+                "compressorId": "ca-real-006-compressor-02",
+                "compressorType": 1,
+                "controlType": 2,
+                "fullLoadDischargePressure": 105,
+                "maxFullFlowDischargePressure": 115
+              },
+              {
+                "compressorId": "ca-real-006-compressor-03",
+                "compressorType": 1,
+                "controlType": 11,
+                "fullLoadDischargePressure": 100
+              }
+            ]
+          },
+          "flowReallocation": {
+            "implementationCost": 0
+          },
+          "improveEndUseEfficiency": {
+            "endUseEfficiencyItems": [
+              {
+                "collapsed": false,
+                "equipmentDemand": 0,
+                "implementationCost": 0,
+                "name": "Efficiency Item 1",
+                "reductionData": [
+                  {
+                    "data": [
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 0
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 1
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 2
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 3
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 4
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 5
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 6
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 7
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 8
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 9
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 10
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 11
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 12
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 13
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 14
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 15
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 16
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 17
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 18
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 19
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 20
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 21
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 22
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 23
+                      }
+                    ],
+                    "dayTypeId": "ca-real-006-day-type-01",
+                    "dayTypeName": "Sanitized Day Type"
+                  },
+                  {
+                    "data": [
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 0
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 1
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 2
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 3
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 4
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 5
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 6
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 7
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 8
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 9
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 10
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 11
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 12
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 13
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 14
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 15
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 16
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 17
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 18
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 19
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 20
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 21
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 22
+                      },
+                      {
+                        "applyReduction": false,
+                        "hourInterval": 23
+                      }
+                    ],
+                    "dayTypeId": "ca-real-006-day-type-02",
+                    "dayTypeName": "Sanitized Day Type"
+                  }
+                ],
+                "reductionType": "Fixed",
+                "substituteAuxiliaryEquipment": false
+              }
+            ],
+            "order": 100
+          },
+          "modificationId": "ca-real-006-modification-01",
+          "name": "Modification 1",
+          "reduceAirLeaks": {
+            "implementationCost": 5000,
+            "leakFlow": 200,
+            "leakReduction": 50,
+            "order": 2
+          },
+          "reduceRuntime": {
+            "implementationCost": 100000,
+            "order": 1,
+            "runtimeData": [
+              {
+                "automaticShutdownTimer": true,
+                "compressorId": "ca-real-006-compressor-01",
+                "dayTypeId": "ca-real-006-day-type-01",
+                "fullLoadCapacity": 1006,
+                "intervalData": [
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 0
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 1
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 2
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 3
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 4
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 5
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 6
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 7
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 8
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 9
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 10
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 11
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 12
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 13
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 14
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 15
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 16
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 17
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 18
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 19
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 20
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 21
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 22
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": true,
+                "compressorId": "ca-real-006-compressor-02",
+                "dayTypeId": "ca-real-006-day-type-01",
+                "fullLoadCapacity": 1266,
+                "intervalData": [
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 0
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 1
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 2
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 3
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 4
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 5
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 6
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 7
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 8
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 9
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 10
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 11
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 12
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 13
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 14
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 15
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 16
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 17
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 18
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 19
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 20
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 21
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 22
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": true,
+                "compressorId": "ca-real-006-compressor-03",
+                "dayTypeId": "ca-real-006-day-type-01",
+                "fullLoadCapacity": 1527,
+                "intervalData": [
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 0
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 1
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 2
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 3
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 4
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 5
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 6
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 7
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 8
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 9
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 10
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 11
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 12
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 13
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 14
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 15
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 16
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 17
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 18
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 19
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 20
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 21
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 22
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": true,
+                "compressorId": "ca-real-006-compressor-01",
+                "dayTypeId": "ca-real-006-day-type-02",
+                "fullLoadCapacity": 1006,
+                "intervalData": [
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 0
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 1
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 2
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 3
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 4
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 5
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 6
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 7
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 8
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 9
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 10
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 11
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 12
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 13
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 14
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 15
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 16
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 17
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 18
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 19
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 20
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 21
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 22
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": true,
+                "compressorId": "ca-real-006-compressor-02",
+                "dayTypeId": "ca-real-006-day-type-02",
+                "fullLoadCapacity": 1266,
+                "intervalData": [
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 0
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 1
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 2
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 3
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 4
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 5
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 6
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 7
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 8
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 9
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 10
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 11
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 12
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 13
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 14
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 15
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 16
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 17
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 18
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 19
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 20
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 21
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 22
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": true,
+                "compressorId": "ca-real-006-compressor-03",
+                "dayTypeId": "ca-real-006-day-type-02",
+                "fullLoadCapacity": 1527,
+                "intervalData": [
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 0
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 1
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 2
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 3
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 4
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 5
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 6
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 7
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 8
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 9
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 10
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 11
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 12
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 13
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 14
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 15
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 16
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 17
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 18
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 19
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 20
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 21
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 22
+                  },
+                  {
+                    "isCompressorOn": true,
+                    "timeInterval": 23
+                  }
+                ]
+              }
+            ]
+          },
+          "reduceSystemAirPressure": {
+            "implementationCost": 0,
+            "order": 100
+          },
+          "useAutomaticSequencer": {
+            "implementationCost": 0,
+            "order": 100,
+            "profileSummary": [
+              {
+                "automaticShutdownTimer": false,
+                "avgAirflow": 823.50375,
+                "avgPercentCapacity": 89.30092394308963,
+                "avgPower": 169.05000000000004,
+                "avgPrecentPower": 96.60000000000001,
+                "compressorId": "ca-real-006-compressor-01",
+                "dayTypeId": "ca-real-006-day-type-01",
+                "fullLoadCapacity": 1006,
+                "fullLoadPressure": 110,
+                "profileSummaryData": [
+                  {
+                    "airflow": 0,
+                    "order": 1,
+                    "percentCapacity": 0,
+                    "percentPower": 79.14285714285715,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 21.180608655757762,
+                    "power": 138.5,
+                    "timeInterval": 0
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 1,
+                    "percentCapacity": 0,
+                    "percentPower": 79.19999999999999,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 21.195901513992965,
+                    "power": 138.6,
+                    "timeInterval": 1
+                  },
+                  {
+                    "airflow": 260.07,
+                    "order": 1,
+                    "percentCapacity": 25.851719243135562,
+                    "percentPower": 78.85714285714286,
+                    "percentSystemCapacity": 6.831318507642337,
+                    "percentSystemPower": 21.104144364581742,
+                    "power": 138,
+                    "timeInterval": 2
+                  },
+                  {
+                    "airflow": 257.8,
+                    "order": 1,
+                    "percentCapacity": 25.62575036197927,
+                    "percentPower": 78.17142857142858,
+                    "percentSystemCapacity": 6.771606215957748,
+                    "percentSystemPower": 20.920630065759294,
+                    "power": 136.8,
+                    "timeInterval": 3
+                  },
+                  {
+                    "airflow": 474.26,
+                    "order": 1,
+                    "percentCapacity": 47.14285714285714,
+                    "percentPower": 89.42857142857143,
+                    "percentSystemCapacity": 12.457503095800968,
+                    "percentSystemPower": 23.93332313809451,
+                    "power": 156.5,
+                    "timeInterval": 4
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.37142857142858,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.12953050925218,
+                    "power": 177.4,
+                    "timeInterval": 5
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.77142857142856,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.236580516898606,
+                    "power": 178.09999999999997,
+                    "timeInterval": 6
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 102.11428571428571,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.32833766630983,
+                    "power": 178.7,
+                    "timeInterval": 7
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.71428571428571,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.221287658663407,
+                    "power": 178,
+                    "timeInterval": 8
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.82857142857142,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.251873375133812,
+                    "power": 178.2,
+                    "timeInterval": 9
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 100.97142857142856,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.022480501605745,
+                    "power": 176.69999999999996,
+                    "timeInterval": 10
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.25714285714284,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.098944792781772,
+                    "power": 177.2,
+                    "timeInterval": 11
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.31428571428572,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.114237651016975,
+                    "power": 177.29999999999998,
+                    "timeInterval": 12
+                  },
+                  {
+                    "airflow": 672.58,
+                    "order": 1,
+                    "percentCapacity": 66.85714285714288,
+                    "percentPower": 93.37142857142857,
+                    "percentSystemCapacity": 17.66700439040865,
+                    "percentSystemPower": 24.988530356323597,
+                    "power": 163.4,
+                    "timeInterval": 13
+                  },
+                  {
+                    "airflow": 997.38,
+                    "order": 1,
+                    "percentCapacity": 99.14285714285711,
+                    "percentPower": 99.82857142857142,
+                    "percentSystemCapacity": 26.19850651056324,
+                    "percentSystemPower": 26.71662333690167,
+                    "power": 174.7,
+                    "timeInterval": 14
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 100.28571428571429,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 26.838966202783297,
+                    "power": 175.5,
+                    "timeInterval": 15
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 100.22857142857143,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 26.823673344548094,
+                    "power": 175.39999999999998,
+                    "timeInterval": 16
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 100,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 26.762501911607277,
+                    "power": 175,
+                    "timeInterval": 17
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 100.68571428571428,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 26.946016210429736,
+                    "power": 176.20000000000002,
+                    "timeInterval": 18
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 100.57142857142858,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 26.91543049395932,
+                    "power": 176,
+                    "timeInterval": 19
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.14285714285714,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.06835907631136,
+                    "power": 176.99999999999997,
+                    "timeInterval": 20
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.6,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.190701942192995,
+                    "power": 177.8,
+                    "timeInterval": 21
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.65714285714287,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.2059948004282,
+                    "power": 177.9,
+                    "timeInterval": 22
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 101.88571428571429,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.267166233369018,
+                    "power": 178.3,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": false,
+                "avgAirflow": 278.35125000000005,
+                "avgPercentCapacity": 27.66918280003821,
+                "avgPower": 83.46666666666668,
+                "avgPrecentPower": 47.6952380952381,
+                "compressorId": "ca-real-006-compressor-01",
+                "dayTypeId": "ca-real-006-day-type-02",
+                "fullLoadCapacity": 1006,
+                "fullLoadPressure": 110,
+                "profileSummaryData": [
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 103.37142857142858,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.664780547484323,
+                    "power": 180.9,
+                    "timeInterval": 0
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 103.08571428571429,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.588316256308303,
+                    "power": 180.4,
+                    "timeInterval": 1
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 102.74285714285716,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.496559106897084,
+                    "power": 179.80000000000004,
+                    "timeInterval": 2
+                  },
+                  {
+                    "airflow": 1006,
+                    "order": 1,
+                    "percentCapacity": 100,
+                    "percentPower": 102.51428571428572,
+                    "percentSystemCapacity": 26.42500656685054,
+                    "percentSystemPower": 27.435387673956264,
+                    "power": 179.4,
+                    "timeInterval": 3
+                  },
+                  {
+                    "airflow": 681.21,
+                    "order": 1,
+                    "percentCapacity": 67.71428571428568,
+                    "percentPower": 93.54285714285714,
+                    "percentSystemCapacity": 17.893504446695925,
+                    "percentSystemPower": 25.034408931029205,
+                    "power": 163.7,
+                    "timeInterval": 4
+                  },
+                  {
+                    "airflow": 107.6,
+                    "order": 1,
+                    "percentCapacity": 10.69549605799201,
+                    "percentPower": 34.22857142857143,
+                    "percentSystemCapacity": 2.8262855356816288,
+                    "percentSystemPower": 9.160422082887292,
+                    "power": 59.900000000000006,
+                    "timeInterval": 5
+                  },
+                  {
+                    "airflow": 103.91,
+                    "order": 1,
+                    "percentCapacity": 10.328851036414683,
+                    "percentPower": 33.65714285714286,
+                    "percentSystemCapacity": 2.7293995646527893,
+                    "percentSystemPower": 9.00749350053525,
+                    "power": 58.9,
+                    "timeInterval": 6
+                  },
+                  {
+                    "airflow": 104.98,
+                    "order": 1,
+                    "percentCapacity": 10.435581263547194,
+                    "percentPower": 33.82857142857143,
+                    "percentSystemCapacity": 2.75760303418137,
+                    "percentSystemPower": 9.053372075240864,
+                    "power": 59.2,
+                    "timeInterval": 7
+                  },
+                  {
+                    "airflow": 105.71,
+                    "order": 1,
+                    "percentCapacity": 10.508276018248614,
+                    "percentPower": 33.94285714285714,
+                    "percentSystemCapacity": 2.7768126278849765,
+                    "percentSystemPower": 9.08395779171127,
+                    "power": 59.4,
+                    "timeInterval": 8
+                  },
+                  {
+                    "airflow": 107.21,
+                    "order": 1,
+                    "percentCapacity": 10.657419790969126,
+                    "percentPower": 34.17142857142857,
+                    "percentSystemCapacity": 2.8162238796204204,
+                    "percentSystemPower": 9.145129224652088,
+                    "power": 59.8,
+                    "timeInterval": 9
+                  },
+                  {
+                    "airflow": 103.21,
+                    "order": 1,
+                    "percentCapacity": 10.259219226763715,
+                    "percentPower": 33.542857142857144,
+                    "percentSystemCapacity": 2.710999354379905,
+                    "percentSystemPower": 8.976907784064842,
+                    "power": 58.7,
+                    "timeInterval": 10
+                  },
+                  {
+                    "airflow": 102.18,
+                    "order": 1,
+                    "percentCapacity": 10.157017735243496,
+                    "percentPower": 33.37142857142857,
+                    "percentSystemCapacity": 2.683992603534268,
+                    "percentSystemPower": 8.93102920935923,
+                    "power": 58.39999999999999,
+                    "timeInterval": 11
+                  },
+                  {
+                    "airflow": 100.85,
+                    "order": 1,
+                    "percentCapacity": 10.024858899666572,
+                    "percentPower": 33.14285714285714,
+                    "percentSystemCapacity": 2.649069622554392,
+                    "percentSystemPower": 8.869857776418412,
+                    "power": 57.99999999999999,
+                    "timeInterval": 12
+                  },
+                  {
+                    "airflow": 102.52,
+                    "order": 1,
+                    "percentCapacity": 10.190787949373469,
+                    "percentPower": 33.42857142857143,
+                    "percentSystemCapacity": 2.6929163848357525,
+                    "percentSystemPower": 8.946322067594433,
+                    "power": 58.5,
+                    "timeInterval": 13
+                  },
+                  {
+                    "airflow": 101.51,
+                    "order": 1,
+                    "percentCapacity": 10.09035812239264,
+                    "percentPower": 33.25714285714286,
+                    "percentSystemCapacity": 2.666377796460992,
+                    "percentSystemPower": 8.90044349288882,
+                    "power": 58.2,
+                    "timeInterval": 14
+                  },
+                  {
+                    "airflow": 100.2,
+                    "order": 1,
+                    "percentCapacity": 9.960502439255952,
+                    "percentPower": 33.02857142857143,
+                    "percentSystemCapacity": 2.6320634236646936,
+                    "percentSystemPower": 8.839272059948005,
+                    "power": 57.800000000000004,
+                    "timeInterval": 15
+                  },
+                  {
+                    "airflow": 99.88,
+                    "order": 1,
+                    "percentCapacity": 9.928746986516114,
+                    "percentPower": 32.971428571428575,
+                    "percentSystemCapacity": 2.6236720431928577,
+                    "percentSystemPower": 8.8239792017128,
+                    "power": 57.7,
+                    "timeInterval": 16
+                  },
+                  {
+                    "airflow": 101.18,
+                    "order": 1,
+                    "percentCapacity": 10.057464542701894,
+                    "percentPower": 33.2,
+                    "percentSystemCapacity": 2.6576856658676395,
+                    "percentSystemPower": 8.885150634653618,
+                    "power": 58.1,
+                    "timeInterval": 17
+                  },
+                  {
+                    "airflow": 105.71,
+                    "order": 1,
+                    "percentCapacity": 10.508276018248614,
+                    "percentPower": 33.94285714285714,
+                    "percentSystemCapacity": 2.7768126278849765,
+                    "percentSystemPower": 9.08395779171127,
+                    "power": 59.4,
+                    "timeInterval": 18
+                  },
+                  {
+                    "airflow": 104.62,
+                    "order": 1,
+                    "percentCapacity": 10.399697893244825,
+                    "percentPower": 33.77142857142857,
+                    "percentSystemCapacity": 2.748120851222562,
+                    "percentSystemPower": 9.03807921700566,
+                    "power": 59.10000000000001,
+                    "timeInterval": 19
+                  },
+                  {
+                    "airflow": 106.08,
+                    "order": 1,
+                    "percentCapacity": 10.545090495934645,
+                    "percentPower": 34,
+                    "percentSystemCapacity": 2.786540856031062,
+                    "percentSystemPower": 9.099250649946477,
+                    "power": 59.50000000000001,
+                    "timeInterval": 20
+                  },
+                  {
+                    "airflow": 106.08,
+                    "order": 1,
+                    "percentCapacity": 10.545090495934645,
+                    "percentPower": 34,
+                    "percentSystemCapacity": 2.786540856031062,
+                    "percentSystemPower": 9.099250649946477,
+                    "power": 59.50000000000001,
+                    "timeInterval": 21
+                  },
+                  {
+                    "airflow": 105.71,
+                    "order": 1,
+                    "percentCapacity": 10.508276018248614,
+                    "percentPower": 33.94285714285714,
+                    "percentSystemCapacity": 2.7768126278849765,
+                    "percentSystemPower": 9.08395779171127,
+                    "power": 59.4,
+                    "timeInterval": 22
+                  },
+                  {
+                    "airflow": 106.08,
+                    "order": 1,
+                    "percentCapacity": 10.545090495934645,
+                    "percentPower": 34,
+                    "percentSystemCapacity": 2.786540856031062,
+                    "percentSystemPower": 9.099250649946477,
+                    "power": 59.50000000000001,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": false,
+                "avgAirflow": 351.75916666666666,
+                "avgPercentCapacity": 27.785071464761188,
+                "avgPower": 161.15,
+                "avgPrecentPower": 71.62222222222223,
+                "compressorId": "ca-real-006-compressor-02",
+                "dayTypeId": "ca-real-006-day-type-01",
+                "fullLoadCapacity": 1266,
+                "fullLoadPressure": 105,
+                "profileSummaryData": [
+                  {
+                    "airflow": 431.73,
+                    "order": 2,
+                    "percentCapacity": 34.101821594015114,
+                    "percentPower": 61.46666666666667,
+                    "percentSystemCapacity": 11.340400876811959,
+                    "percentSystemPower": 21.150022939287354,
+                    "power": 138.3,
+                    "timeInterval": 0
+                  },
+                  {
+                    "airflow": 430.35,
+                    "order": 2,
+                    "percentCapacity": 33.99258914700205,
+                    "percentPower": 61.73333333333334,
+                    "percentSystemCapacity": 11.304076138719358,
+                    "percentSystemPower": 21.24178008869858,
+                    "power": 138.9,
+                    "timeInterval": 1
+                  },
+                  {
+                    "airflow": 429.38,
+                    "order": 2,
+                    "percentCapacity": 33.916057455900095,
+                    "percentPower": 61.91111111111112,
+                    "percentSystemCapacity": 11.278625883679936,
+                    "percentSystemPower": 21.302951521639397,
+                    "power": 139.3,
+                    "timeInterval": 2
+                  },
+                  {
+                    "airflow": 426.53,
+                    "order": 2,
+                    "percentCapacity": 33.69082128149934,
+                    "percentPower": 62.4,
+                    "percentSystemCapacity": 11.203724649954863,
+                    "percentSystemPower": 21.471172962226643,
+                    "power": 140.4,
+                    "timeInterval": 3
+                  },
+                  {
+                    "airflow": 374.75,
+                    "order": 2,
+                    "percentCapacity": 29.601448355401416,
+                    "percentPower": 68.57777777777778,
+                    "percentSystemCapacity": 9.843822857351771,
+                    "percentSystemPower": 23.596880256920024,
+                    "power": 154.3,
+                    "timeInterval": 4
+                  },
+                  {
+                    "airflow": 330.87,
+                    "order": 2,
+                    "percentCapacity": 26.13475289458904,
+                    "percentPower": 74.57777777777778,
+                    "percentSystemCapacity": 8.690989536262077,
+                    "percentSystemPower": 25.66141611867258,
+                    "power": 167.8,
+                    "timeInterval": 5
+                  },
+                  {
+                    "airflow": 331.53,
+                    "order": 2,
+                    "percentCapacity": 26.187342280907444,
+                    "percentPower": 74.4,
+                    "percentSystemCapacity": 8.70847789010476,
+                    "percentSystemPower": 25.600244685731766,
+                    "power": 167.4,
+                    "timeInterval": 6
+                  },
+                  {
+                    "airflow": 332.07,
+                    "order": 2,
+                    "percentCapacity": 26.229684182320057,
+                    "percentPower": 74.26666666666665,
+                    "percentSystemCapacity": 8.722558490889726,
+                    "percentSystemPower": 25.554366111026148,
+                    "power": 167.1,
+                    "timeInterval": 7
+                  },
+                  {
+                    "airflow": 331.53,
+                    "order": 2,
+                    "percentCapacity": 26.187342280907444,
+                    "percentPower": 74.4,
+                    "percentSystemCapacity": 8.70847789010476,
+                    "percentSystemPower": 25.600244685731766,
+                    "power": 167.4,
+                    "timeInterval": 8
+                  },
+                  {
+                    "airflow": 333.03,
+                    "order": 2,
+                    "percentCapacity": 26.305616437570478,
+                    "percentPower": 74.04444444444445,
+                    "percentSystemCapacity": 8.747809406347315,
+                    "percentSystemPower": 25.47790181985013,
+                    "power": 166.6,
+                    "timeInterval": 9
+                  },
+                  {
+                    "airflow": 332.44,
+                    "order": 2,
+                    "percentCapacity": 26.259262792970617,
+                    "percentPower": 74.17777777777778,
+                    "percentSystemCapacity": 8.732394719175414,
+                    "percentSystemPower": 25.523780394555747,
+                    "power": 166.9,
+                    "timeInterval": 10
+                  },
+                  {
+                    "airflow": 334.07,
+                    "order": 2,
+                    "percentCapacity": 26.38803350960721,
+                    "percentPower": 73.82222222222222,
+                    "percentSystemCapacity": 8.775216817221626,
+                    "percentSystemPower": 25.40143752867411,
+                    "power": 166.1,
+                    "timeInterval": 11
+                  },
+                  {
+                    "airflow": 337.66,
+                    "order": 2,
+                    "percentCapacity": 26.67167769417844,
+                    "percentPower": 73.15555555555555,
+                    "percentSystemCapacity": 8.869541360869428,
+                    "percentSystemPower": 25.17204465514605,
+                    "power": 164.6,
+                    "timeInterval": 12
+                  },
+                  {
+                    "airflow": 332.07,
+                    "order": 2,
+                    "percentCapacity": 26.229684182320057,
+                    "percentPower": 74.26666666666665,
+                    "percentSystemCapacity": 8.722558490889726,
+                    "percentSystemPower": 25.554366111026148,
+                    "power": 167.1,
+                    "timeInterval": 13
+                  },
+                  {
+                    "airflow": 335.67,
+                    "order": 2,
+                    "percentCapacity": 26.513832696569395,
+                    "percentPower": 73.51111111111112,
+                    "percentSystemCapacity": 8.817050747007315,
+                    "percentSystemPower": 25.294387521027684,
+                    "power": 165.4,
+                    "timeInterval": 14
+                  },
+                  {
+                    "airflow": 337.93,
+                    "order": 2,
+                    "percentCapacity": 26.69241570747083,
+                    "percentPower": 73.11111111111111,
+                    "percentSystemCapacity": 8.876437689954837,
+                    "percentSystemPower": 25.156751796910843,
+                    "power": 164.5,
+                    "timeInterval": 15
+                  },
+                  {
+                    "airflow": 339,
+                    "order": 2,
+                    "percentCapacity": 26.77751953683547,
+                    "percentPower": 72.93333333333332,
+                    "percentSystemCapacity": 8.904738569381063,
+                    "percentSystemPower": 25.095580363970026,
+                    "power": 164.1,
+                    "timeInterval": 16
+                  },
+                  {
+                    "airflow": 335.9,
+                    "order": 2,
+                    "percentCapacity": 26.532761065028865,
+                    "percentPower": 73.46666666666667,
+                    "percentSystemCapacity": 8.823345287188479,
+                    "percentSystemPower": 25.279094662792478,
+                    "power": 165.3,
+                    "timeInterval": 17
+                  },
+                  {
+                    "airflow": 334.51,
+                    "order": 2,
+                    "percentCapacity": 26.422759700671605,
+                    "percentPower": 73.73333333333333,
+                    "percentSystemCapacity": 8.786764849238311,
+                    "percentSystemPower": 25.370851812203703,
+                    "power": 165.9,
+                    "timeInterval": 18
+                  },
+                  {
+                    "airflow": 333.03,
+                    "order": 2,
+                    "percentCapacity": 26.305616437570478,
+                    "percentPower": 74.04444444444445,
+                    "percentSystemCapacity": 8.747809406347315,
+                    "percentSystemPower": 25.47790181985013,
+                    "power": 166.6,
+                    "timeInterval": 19
+                  },
+                  {
+                    "airflow": 333.03,
+                    "order": 2,
+                    "percentCapacity": 26.305616437570478,
+                    "percentPower": 74.04444444444445,
+                    "percentSystemCapacity": 8.747809406347315,
+                    "percentSystemPower": 25.47790181985013,
+                    "power": 166.6,
+                    "timeInterval": 20
+                  },
+                  {
+                    "airflow": 334.51,
+                    "order": 2,
+                    "percentCapacity": 26.422759700671605,
+                    "percentPower": 73.73333333333333,
+                    "percentSystemCapacity": 8.786764849238311,
+                    "percentSystemPower": 25.370851812203703,
+                    "power": 165.9,
+                    "timeInterval": 21
+                  },
+                  {
+                    "airflow": 335.67,
+                    "order": 2,
+                    "percentCapacity": 26.513832696569395,
+                    "percentPower": 73.51111111111112,
+                    "percentSystemCapacity": 8.817050747007315,
+                    "percentSystemPower": 25.294387521027684,
+                    "power": 165.4,
+                    "timeInterval": 22
+                  },
+                  {
+                    "airflow": 334.96,
+                    "order": 2,
+                    "percentCapacity": 26.458467086121473,
+                    "percentPower": 73.64444444444443,
+                    "percentSystemCapacity": 8.798639172847329,
+                    "percentSystemPower": 25.340266095733295,
+                    "power": 165.7,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": false,
+                "avgAirflow": 227.16625000000002,
+                "avgPercentCapacity": 17.94361747195144,
+                "avgPower": 100.46249999999999,
+                "avgPrecentPower": 44.65,
+                "compressorId": "ca-real-006-compressor-02",
+                "dayTypeId": "ca-real-006-day-type-02",
+                "fullLoadCapacity": 1266,
+                "fullLoadPressure": 105,
+                "profileSummaryData": [
+                  {
+                    "airflow": 330.26,
+                    "order": 2,
+                    "percentCapacity": 26.086700458257184,
+                    "percentPower": 74.75555555555556,
+                    "percentSystemCapacity": 8.675009923864879,
+                    "percentSystemPower": 25.722587551613397,
+                    "power": 168.2,
+                    "timeInterval": 0
+                  },
+                  {
+                    "airflow": 333.23,
+                    "order": 2,
+                    "percentCapacity": 26.32158912293221,
+                    "percentPower": 74,
+                    "percentSystemCapacity": 8.753121047972728,
+                    "percentSystemPower": 25.462608961614926,
+                    "power": 166.5,
+                    "timeInterval": 1
+                  },
+                  {
+                    "airflow": 332.44,
+                    "order": 2,
+                    "percentCapacity": 26.259262792970617,
+                    "percentPower": 74.17777777777778,
+                    "percentSystemCapacity": 8.732394719175414,
+                    "percentSystemPower": 25.523780394555747,
+                    "power": 166.9,
+                    "timeInterval": 2
+                  },
+                  {
+                    "airflow": 335.43,
+                    "order": 2,
+                    "percentCapacity": 26.495139570336335,
+                    "percentPower": 73.55555555555556,
+                    "percentSystemCapacity": 8.810834435525559,
+                    "percentSystemPower": 25.309680379262883,
+                    "power": 165.5,
+                    "timeInterval": 3
+                  },
+                  {
+                    "airflow": 363.69,
+                    "order": 2,
+                    "percentCapacity": 28.727766220938022,
+                    "percentPower": 69.77777777777779,
+                    "percentSystemCapacity": 9.553283959996726,
+                    "percentSystemPower": 24.00978742927053,
+                    "power": 157,
+                    "timeInterval": 4
+                  },
+                  {
+                    "airflow": 209.1,
+                    "order": 2,
+                    "percentCapacity": 16.516348251784773,
+                    "percentPower": 37.91111111111111,
+                    "percentSystemCapacity": 5.492434170412273,
+                    "percentSystemPower": 13.044808074629149,
+                    "power": 85.3,
+                    "timeInterval": 5
+                  },
+                  {
+                    "airflow": 211.09,
+                    "order": 2,
+                    "percentCapacity": 16.67385777613921,
+                    "percentPower": 38.044444444444444,
+                    "percentSystemCapacity": 5.544813224216506,
+                    "percentSystemPower": 13.09068664933476,
+                    "power": 85.6,
+                    "timeInterval": 6
+                  },
+                  {
+                    "airflow": 211.09,
+                    "order": 2,
+                    "percentCapacity": 16.67385777613921,
+                    "percentPower": 38.044444444444444,
+                    "percentSystemCapacity": 5.544813224216506,
+                    "percentSystemPower": 13.09068664933476,
+                    "power": 85.6,
+                    "timeInterval": 7
+                  },
+                  {
+                    "airflow": 211.09,
+                    "order": 2,
+                    "percentCapacity": 16.67385777613921,
+                    "percentPower": 38.044444444444444,
+                    "percentSystemCapacity": 5.544813224216506,
+                    "percentSystemPower": 13.09068664933476,
+                    "power": 85.6,
+                    "timeInterval": 8
+                  },
+                  {
+                    "airflow": 207.77,
+                    "order": 2,
+                    "percentCapacity": 16.411919563895882,
+                    "percentPower": 37.822222222222216,
+                    "percentSystemCapacity": 5.457706899892878,
+                    "percentSystemPower": 13.014222358158738,
+                    "power": 85.1,
+                    "timeInterval": 9
+                  },
+                  {
+                    "airflow": 205.15,
+                    "order": 2,
+                    "percentCapacity": 16.20448515678161,
+                    "percentPower": 37.644444444444446,
+                    "percentSystemCapacity": 5.388725560411222,
+                    "percentSystemPower": 12.953050925217923,
+                    "power": 84.7,
+                    "timeInterval": 10
+                  },
+                  {
+                    "airflow": 199.97,
+                    "order": 2,
+                    "percentCapacity": 15.795531272869479,
+                    "percentPower": 37.28888888888889,
+                    "percentSystemCapacity": 5.252729863791111,
+                    "percentSystemPower": 12.83070805933629,
+                    "power": 83.9,
+                    "timeInterval": 11
+                  },
+                  {
+                    "airflow": 199.33,
+                    "order": 2,
+                    "percentCapacity": 15.744985616553798,
+                    "percentPower": 37.24444444444444,
+                    "percentSystemCapacity": 5.235921142778331,
+                    "percentSystemPower": 12.815415201101086,
+                    "power": 83.8,
+                    "timeInterval": 12
+                  },
+                  {
+                    "airflow": 194.9,
+                    "order": 2,
+                    "percentCapacity": 15.394877003423302,
+                    "percentPower": 36.93333333333333,
+                    "percentSystemCapacity": 5.1194941650469925,
+                    "percentSystemPower": 12.708365193454657,
+                    "power": 83.1,
+                    "timeInterval": 13
+                  },
+                  {
+                    "airflow": 193.03,
+                    "order": 2,
+                    "percentCapacity": 15.246869377428396,
+                    "percentPower": 36.8,
+                    "percentSystemCapacity": 5.0702749229903725,
+                    "percentSystemPower": 12.662486618749044,
+                    "power": 82.8,
+                    "timeInterval": 14
+                  },
+                  {
+                    "airflow": 191.17,
+                    "order": 2,
+                    "percentCapacity": 15.100120423222158,
+                    "percentPower": 36.666666666666664,
+                    "percentSystemCapacity": 5.021474246335501,
+                    "percentSystemPower": 12.616608044043431,
+                    "power": 82.5,
+                    "timeInterval": 15
+                  },
+                  {
+                    "airflow": 192.4,
+                    "order": 2,
+                    "percentCapacity": 15.197812020679685,
+                    "percentPower": 36.75555555555556,
+                    "percentSystemCapacity": 5.053961129020353,
+                    "percentSystemPower": 12.647193760513842,
+                    "power": 82.7,
+                    "timeInterval": 16
+                  },
+                  {
+                    "airflow": 193.65,
+                    "order": 2,
+                    "percentCapacity": 15.296066590516183,
+                    "percentPower": 36.84444444444445,
+                    "percentSystemCapacity": 5.086635225530204,
+                    "percentSystemPower": 12.677779476984249,
+                    "power": 82.9,
+                    "timeInterval": 17
+                  },
+                  {
+                    "airflow": 190.55,
+                    "order": 2,
+                    "percentCapacity": 15.051487941149189,
+                    "percentPower": 36.62222222222222,
+                    "percentSystemCapacity": 5.005301742446775,
+                    "percentSystemPower": 12.601315185808229,
+                    "power": 82.4,
+                    "timeInterval": 18
+                  },
+                  {
+                    "airflow": 188.72,
+                    "order": 2,
+                    "percentCapacity": 14.906454186615187,
+                    "percentPower": 36.48888888888889,
+                    "percentSystemCapacity": 4.9570714474007955,
+                    "percentSystemPower": 12.555436611102614,
+                    "power": 82.1,
+                    "timeInterval": 19
+                  },
+                  {
+                    "airflow": 190.55,
+                    "order": 2,
+                    "percentCapacity": 15.051487941149189,
+                    "percentPower": 36.62222222222222,
+                    "percentSystemCapacity": 5.005301742446775,
+                    "percentSystemPower": 12.601315185808229,
+                    "power": 82.4,
+                    "timeInterval": 20
+                  },
+                  {
+                    "airflow": 188.72,
+                    "order": 2,
+                    "percentCapacity": 14.906454186615187,
+                    "percentPower": 36.48888888888889,
+                    "percentSystemCapacity": 4.9570714474007955,
+                    "percentSystemPower": 12.555436611102614,
+                    "power": 82.1,
+                    "timeInterval": 21
+                  },
+                  {
+                    "airflow": 188.11,
+                    "order": 2,
+                    "percentCapacity": 14.858400359149426,
+                    "percentPower": 36.44444444444444,
+                    "percentSystemCapacity": 4.941091372388541,
+                    "percentSystemPower": 12.540143752867412,
+                    "power": 82,
+                    "timeInterval": 22
+                  },
+                  {
+                    "airflow": 190.55,
+                    "order": 2,
+                    "percentCapacity": 15.051487941149189,
+                    "percentPower": 36.62222222222222,
+                    "percentSystemCapacity": 5.005301742446775,
+                    "percentSystemPower": 12.601315185808229,
+                    "power": 82.4,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": true,
+                "avgAirflow": 0,
+                "avgPercentCapacity": null,
+                "avgPower": 0,
+                "avgPrecentPower": null,
+                "compressorId": "ca-real-006-compressor-03",
+                "dayTypeId": "ca-real-006-day-type-01",
+                "fullLoadCapacity": 1527,
+                "fullLoadPressure": 100,
+                "profileSummaryData": [
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 0
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 1
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 2
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 3
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 4
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 5
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 6
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 7
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 8
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 9
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 10
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 11
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 12
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 13
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 14
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 15
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 16
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 17
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 18
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 19
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 20
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 21
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 22
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 23
+                  }
+                ]
+              },
+              {
+                "automaticShutdownTimer": true,
+                "avgAirflow": 0,
+                "avgPercentCapacity": null,
+                "avgPower": 0,
+                "avgPrecentPower": null,
+                "compressorId": "ca-real-006-compressor-03",
+                "dayTypeId": "ca-real-006-day-type-02",
+                "fullLoadCapacity": 1527,
+                "fullLoadPressure": 100,
+                "profileSummaryData": [
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 0
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 1
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 2
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 3
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 4
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 5
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 6
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 7
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 8
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 9
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 10
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 11
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 12
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 13
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 14
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 15
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 16
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 17
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 18
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 19
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 20
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 21
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 22
+                  },
+                  {
+                    "airflow": 0,
+                    "order": 0,
+                    "percentCapacity": 0,
+                    "percentPower": 0,
+                    "percentSystemCapacity": 0,
+                    "percentSystemPower": 0,
+                    "power": 0,
+                    "timeInterval": 23
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "name": "ca-real-006",
+      "setupDone": true,
+      "systemBasics": {
+        "demandCost": 0,
+        "electricityCost": 0.0954,
+        "notes": "",
+        "utilityType": "Electricity"
+      },
+      "systemInformation": {
+        "atmosphericPressure": 14.7,
+        "atmosphericPressureKnown": true,
+        "co2SavingsData": {
+          "eGridRegion": "Sanitized",
+          "eGridSubregion": "Sanitized",
+          "electricityUse": 459087.2,
+          "energySource": "Sanitized",
+          "energyType": "electricity",
+          "fuelType": "Sanitized",
+          "totalEmissionOutput": 0,
+          "totalEmissionOutputRate": 431.96,
+          "totalFuelEmissionOutputRate": 0,
+          "userEnteredBaselineEmissions": false,
+          "userEnteredModificationEmissions": false,
+          "zipcode": "00000"
+        },
+        "isSequencerUsed": false,
+        "multiCompressorSystemControls": "cascading",
+        "systemElevation": null,
+        "targetPressure": null,
+        "totalAirStorage": 3351,
+        "trimSelections": [],
+        "variance": null
+      },
+      "systemProfile": {
+        "profileSummary": [
+          {
+            "avgAirflow": 823.50375,
+            "avgPercentCapacity": 89.30092394308963,
+            "avgPower": 169.05000000000004,
+            "avgPrecentPower": 96.60000000000001,
+            "compressorId": "ca-real-006-compressor-01",
+            "dayTypeId": "ca-real-006-day-type-01",
+            "fullLoadCapacity": 1006,
+            "fullLoadPressure": 110,
+            "profileSummaryData": [
+              {
+                "airflow": 0,
+                "order": 1,
+                "percentCapacity": 0,
+                "percentPower": 79.14285714285715,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 21.180608655757762,
+                "power": 138.5,
+                "timeInterval": 0
+              },
+              {
+                "airflow": 0,
+                "order": 1,
+                "percentCapacity": 0,
+                "percentPower": 79.19999999999999,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 21.195901513992965,
+                "power": 138.6,
+                "timeInterval": 1
+              },
+              {
+                "airflow": 260.07,
+                "order": 1,
+                "percentCapacity": 25.851719243135562,
+                "percentPower": 78.85714285714286,
+                "percentSystemCapacity": 6.831318507642337,
+                "percentSystemPower": 21.104144364581742,
+                "power": 138,
+                "timeInterval": 2
+              },
+              {
+                "airflow": 257.8,
+                "order": 1,
+                "percentCapacity": 25.62575036197927,
+                "percentPower": 78.17142857142858,
+                "percentSystemCapacity": 6.771606215957748,
+                "percentSystemPower": 20.920630065759294,
+                "power": 136.8,
+                "timeInterval": 3
+              },
+              {
+                "airflow": 474.26,
+                "order": 1,
+                "percentCapacity": 47.14285714285714,
+                "percentPower": 89.42857142857143,
+                "percentSystemCapacity": 12.457503095800968,
+                "percentSystemPower": 23.93332313809451,
+                "power": 156.5,
+                "timeInterval": 4
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.37142857142858,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.12953050925218,
+                "power": 177.4,
+                "timeInterval": 5
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.77142857142856,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.236580516898606,
+                "power": 178.09999999999997,
+                "timeInterval": 6
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 102.11428571428571,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.32833766630983,
+                "power": 178.7,
+                "timeInterval": 7
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.71428571428571,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.221287658663407,
+                "power": 178,
+                "timeInterval": 8
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.82857142857142,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.251873375133812,
+                "power": 178.2,
+                "timeInterval": 9
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 100.97142857142856,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.022480501605745,
+                "power": 176.69999999999996,
+                "timeInterval": 10
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.25714285714284,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.098944792781772,
+                "power": 177.2,
+                "timeInterval": 11
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.31428571428572,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.114237651016975,
+                "power": 177.29999999999998,
+                "timeInterval": 12
+              },
+              {
+                "airflow": 672.58,
+                "order": 1,
+                "percentCapacity": 66.85714285714288,
+                "percentPower": 93.37142857142857,
+                "percentSystemCapacity": 17.66700439040865,
+                "percentSystemPower": 24.988530356323597,
+                "power": 163.4,
+                "timeInterval": 13
+              },
+              {
+                "airflow": 997.38,
+                "order": 1,
+                "percentCapacity": 99.14285714285711,
+                "percentPower": 99.82857142857142,
+                "percentSystemCapacity": 26.19850651056324,
+                "percentSystemPower": 26.71662333690167,
+                "power": 174.7,
+                "timeInterval": 14
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 100.28571428571429,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 26.838966202783297,
+                "power": 175.5,
+                "timeInterval": 15
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 100.22857142857143,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 26.823673344548094,
+                "power": 175.39999999999998,
+                "timeInterval": 16
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 100,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 26.762501911607277,
+                "power": 175,
+                "timeInterval": 17
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 100.68571428571428,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 26.946016210429736,
+                "power": 176.20000000000002,
+                "timeInterval": 18
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 100.57142857142858,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 26.91543049395932,
+                "power": 176,
+                "timeInterval": 19
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.14285714285714,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.06835907631136,
+                "power": 176.99999999999997,
+                "timeInterval": 20
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.6,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.190701942192995,
+                "power": 177.8,
+                "timeInterval": 21
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.65714285714287,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.2059948004282,
+                "power": 177.9,
+                "timeInterval": 22
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 101.88571428571429,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.267166233369018,
+                "power": 178.3,
+                "timeInterval": 23
+              }
+            ]
+          },
+          {
+            "avgAirflow": 278.35125000000005,
+            "avgPercentCapacity": 27.66918280003821,
+            "avgPower": 83.46666666666668,
+            "avgPrecentPower": 47.6952380952381,
+            "compressorId": "ca-real-006-compressor-01",
+            "dayTypeId": "ca-real-006-day-type-02",
+            "fullLoadCapacity": 1006,
+            "fullLoadPressure": 110,
+            "profileSummaryData": [
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 103.37142857142858,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.664780547484323,
+                "power": 180.9,
+                "timeInterval": 0
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 103.08571428571429,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.588316256308303,
+                "power": 180.4,
+                "timeInterval": 1
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 102.74285714285716,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.496559106897084,
+                "power": 179.80000000000004,
+                "timeInterval": 2
+              },
+              {
+                "airflow": 1006,
+                "order": 1,
+                "percentCapacity": 100,
+                "percentPower": 102.51428571428572,
+                "percentSystemCapacity": 26.42500656685054,
+                "percentSystemPower": 27.435387673956264,
+                "power": 179.4,
+                "timeInterval": 3
+              },
+              {
+                "airflow": 681.21,
+                "order": 1,
+                "percentCapacity": 67.71428571428568,
+                "percentPower": 93.54285714285714,
+                "percentSystemCapacity": 17.893504446695925,
+                "percentSystemPower": 25.034408931029205,
+                "power": 163.7,
+                "timeInterval": 4
+              },
+              {
+                "airflow": 107.6,
+                "order": 1,
+                "percentCapacity": 10.69549605799201,
+                "percentPower": 34.22857142857143,
+                "percentSystemCapacity": 2.8262855356816288,
+                "percentSystemPower": 9.160422082887292,
+                "power": 59.900000000000006,
+                "timeInterval": 5
+              },
+              {
+                "airflow": 103.91,
+                "order": 1,
+                "percentCapacity": 10.328851036414683,
+                "percentPower": 33.65714285714286,
+                "percentSystemCapacity": 2.7293995646527893,
+                "percentSystemPower": 9.00749350053525,
+                "power": 58.9,
+                "timeInterval": 6
+              },
+              {
+                "airflow": 104.98,
+                "order": 1,
+                "percentCapacity": 10.435581263547194,
+                "percentPower": 33.82857142857143,
+                "percentSystemCapacity": 2.75760303418137,
+                "percentSystemPower": 9.053372075240864,
+                "power": 59.2,
+                "timeInterval": 7
+              },
+              {
+                "airflow": 105.71,
+                "order": 1,
+                "percentCapacity": 10.508276018248614,
+                "percentPower": 33.94285714285714,
+                "percentSystemCapacity": 2.7768126278849765,
+                "percentSystemPower": 9.08395779171127,
+                "power": 59.4,
+                "timeInterval": 8
+              },
+              {
+                "airflow": 107.21,
+                "order": 1,
+                "percentCapacity": 10.657419790969126,
+                "percentPower": 34.17142857142857,
+                "percentSystemCapacity": 2.8162238796204204,
+                "percentSystemPower": 9.145129224652088,
+                "power": 59.8,
+                "timeInterval": 9
+              },
+              {
+                "airflow": 103.21,
+                "order": 1,
+                "percentCapacity": 10.259219226763715,
+                "percentPower": 33.542857142857144,
+                "percentSystemCapacity": 2.710999354379905,
+                "percentSystemPower": 8.976907784064842,
+                "power": 58.7,
+                "timeInterval": 10
+              },
+              {
+                "airflow": 102.18,
+                "order": 1,
+                "percentCapacity": 10.157017735243496,
+                "percentPower": 33.37142857142857,
+                "percentSystemCapacity": 2.683992603534268,
+                "percentSystemPower": 8.93102920935923,
+                "power": 58.39999999999999,
+                "timeInterval": 11
+              },
+              {
+                "airflow": 100.85,
+                "order": 1,
+                "percentCapacity": 10.024858899666572,
+                "percentPower": 33.14285714285714,
+                "percentSystemCapacity": 2.649069622554392,
+                "percentSystemPower": 8.869857776418412,
+                "power": 57.99999999999999,
+                "timeInterval": 12
+              },
+              {
+                "airflow": 102.52,
+                "order": 1,
+                "percentCapacity": 10.190787949373469,
+                "percentPower": 33.42857142857143,
+                "percentSystemCapacity": 2.6929163848357525,
+                "percentSystemPower": 8.946322067594433,
+                "power": 58.5,
+                "timeInterval": 13
+              },
+              {
+                "airflow": 101.51,
+                "order": 1,
+                "percentCapacity": 10.09035812239264,
+                "percentPower": 33.25714285714286,
+                "percentSystemCapacity": 2.666377796460992,
+                "percentSystemPower": 8.90044349288882,
+                "power": 58.2,
+                "timeInterval": 14
+              },
+              {
+                "airflow": 100.2,
+                "order": 1,
+                "percentCapacity": 9.960502439255952,
+                "percentPower": 33.02857142857143,
+                "percentSystemCapacity": 2.6320634236646936,
+                "percentSystemPower": 8.839272059948005,
+                "power": 57.800000000000004,
+                "timeInterval": 15
+              },
+              {
+                "airflow": 99.88,
+                "order": 1,
+                "percentCapacity": 9.928746986516114,
+                "percentPower": 32.971428571428575,
+                "percentSystemCapacity": 2.6236720431928577,
+                "percentSystemPower": 8.8239792017128,
+                "power": 57.7,
+                "timeInterval": 16
+              },
+              {
+                "airflow": 101.18,
+                "order": 1,
+                "percentCapacity": 10.057464542701894,
+                "percentPower": 33.2,
+                "percentSystemCapacity": 2.6576856658676395,
+                "percentSystemPower": 8.885150634653618,
+                "power": 58.1,
+                "timeInterval": 17
+              },
+              {
+                "airflow": 105.71,
+                "order": 1,
+                "percentCapacity": 10.508276018248614,
+                "percentPower": 33.94285714285714,
+                "percentSystemCapacity": 2.7768126278849765,
+                "percentSystemPower": 9.08395779171127,
+                "power": 59.4,
+                "timeInterval": 18
+              },
+              {
+                "airflow": 104.62,
+                "order": 1,
+                "percentCapacity": 10.399697893244825,
+                "percentPower": 33.77142857142857,
+                "percentSystemCapacity": 2.748120851222562,
+                "percentSystemPower": 9.03807921700566,
+                "power": 59.10000000000001,
+                "timeInterval": 19
+              },
+              {
+                "airflow": 106.08,
+                "order": 1,
+                "percentCapacity": 10.545090495934645,
+                "percentPower": 34,
+                "percentSystemCapacity": 2.786540856031062,
+                "percentSystemPower": 9.099250649946477,
+                "power": 59.50000000000001,
+                "timeInterval": 20
+              },
+              {
+                "airflow": 106.08,
+                "order": 1,
+                "percentCapacity": 10.545090495934645,
+                "percentPower": 34,
+                "percentSystemCapacity": 2.786540856031062,
+                "percentSystemPower": 9.099250649946477,
+                "power": 59.50000000000001,
+                "timeInterval": 21
+              },
+              {
+                "airflow": 105.71,
+                "order": 1,
+                "percentCapacity": 10.508276018248614,
+                "percentPower": 33.94285714285714,
+                "percentSystemCapacity": 2.7768126278849765,
+                "percentSystemPower": 9.08395779171127,
+                "power": 59.4,
+                "timeInterval": 22
+              },
+              {
+                "airflow": 106.08,
+                "order": 1,
+                "percentCapacity": 10.545090495934645,
+                "percentPower": 34,
+                "percentSystemCapacity": 2.786540856031062,
+                "percentSystemPower": 9.099250649946477,
+                "power": 59.50000000000001,
+                "timeInterval": 23
+              }
+            ]
+          },
+          {
+            "avgAirflow": 351.75916666666666,
+            "avgPercentCapacity": 27.785071464761188,
+            "avgPower": 161.15,
+            "avgPrecentPower": 71.62222222222223,
+            "compressorId": "ca-real-006-compressor-02",
+            "dayTypeId": "ca-real-006-day-type-01",
+            "fullLoadCapacity": 1266,
+            "fullLoadPressure": 105,
+            "profileSummaryData": [
+              {
+                "airflow": 431.73,
+                "order": 2,
+                "percentCapacity": 34.101821594015114,
+                "percentPower": 61.46666666666667,
+                "percentSystemCapacity": 11.340400876811959,
+                "percentSystemPower": 21.150022939287354,
+                "power": 138.3,
+                "timeInterval": 0
+              },
+              {
+                "airflow": 430.35,
+                "order": 2,
+                "percentCapacity": 33.99258914700205,
+                "percentPower": 61.73333333333334,
+                "percentSystemCapacity": 11.304076138719358,
+                "percentSystemPower": 21.24178008869858,
+                "power": 138.9,
+                "timeInterval": 1
+              },
+              {
+                "airflow": 429.38,
+                "order": 2,
+                "percentCapacity": 33.916057455900095,
+                "percentPower": 61.91111111111112,
+                "percentSystemCapacity": 11.278625883679936,
+                "percentSystemPower": 21.302951521639397,
+                "power": 139.3,
+                "timeInterval": 2
+              },
+              {
+                "airflow": 426.53,
+                "order": 2,
+                "percentCapacity": 33.69082128149934,
+                "percentPower": 62.4,
+                "percentSystemCapacity": 11.203724649954863,
+                "percentSystemPower": 21.471172962226643,
+                "power": 140.4,
+                "timeInterval": 3
+              },
+              {
+                "airflow": 374.75,
+                "order": 2,
+                "percentCapacity": 29.601448355401416,
+                "percentPower": 68.57777777777778,
+                "percentSystemCapacity": 9.843822857351771,
+                "percentSystemPower": 23.596880256920024,
+                "power": 154.3,
+                "timeInterval": 4
+              },
+              {
+                "airflow": 330.87,
+                "order": 2,
+                "percentCapacity": 26.13475289458904,
+                "percentPower": 74.57777777777778,
+                "percentSystemCapacity": 8.690989536262077,
+                "percentSystemPower": 25.66141611867258,
+                "power": 167.8,
+                "timeInterval": 5
+              },
+              {
+                "airflow": 331.53,
+                "order": 2,
+                "percentCapacity": 26.187342280907444,
+                "percentPower": 74.4,
+                "percentSystemCapacity": 8.70847789010476,
+                "percentSystemPower": 25.600244685731766,
+                "power": 167.4,
+                "timeInterval": 6
+              },
+              {
+                "airflow": 332.07,
+                "order": 2,
+                "percentCapacity": 26.229684182320057,
+                "percentPower": 74.26666666666665,
+                "percentSystemCapacity": 8.722558490889726,
+                "percentSystemPower": 25.554366111026148,
+                "power": 167.1,
+                "timeInterval": 7
+              },
+              {
+                "airflow": 331.53,
+                "order": 2,
+                "percentCapacity": 26.187342280907444,
+                "percentPower": 74.4,
+                "percentSystemCapacity": 8.70847789010476,
+                "percentSystemPower": 25.600244685731766,
+                "power": 167.4,
+                "timeInterval": 8
+              },
+              {
+                "airflow": 333.03,
+                "order": 2,
+                "percentCapacity": 26.305616437570478,
+                "percentPower": 74.04444444444445,
+                "percentSystemCapacity": 8.747809406347315,
+                "percentSystemPower": 25.47790181985013,
+                "power": 166.6,
+                "timeInterval": 9
+              },
+              {
+                "airflow": 332.44,
+                "order": 2,
+                "percentCapacity": 26.259262792970617,
+                "percentPower": 74.17777777777778,
+                "percentSystemCapacity": 8.732394719175414,
+                "percentSystemPower": 25.523780394555747,
+                "power": 166.9,
+                "timeInterval": 10
+              },
+              {
+                "airflow": 334.07,
+                "order": 2,
+                "percentCapacity": 26.38803350960721,
+                "percentPower": 73.82222222222222,
+                "percentSystemCapacity": 8.775216817221626,
+                "percentSystemPower": 25.40143752867411,
+                "power": 166.1,
+                "timeInterval": 11
+              },
+              {
+                "airflow": 337.66,
+                "order": 2,
+                "percentCapacity": 26.67167769417844,
+                "percentPower": 73.15555555555555,
+                "percentSystemCapacity": 8.869541360869428,
+                "percentSystemPower": 25.17204465514605,
+                "power": 164.6,
+                "timeInterval": 12
+              },
+              {
+                "airflow": 332.07,
+                "order": 2,
+                "percentCapacity": 26.229684182320057,
+                "percentPower": 74.26666666666665,
+                "percentSystemCapacity": 8.722558490889726,
+                "percentSystemPower": 25.554366111026148,
+                "power": 167.1,
+                "timeInterval": 13
+              },
+              {
+                "airflow": 335.67,
+                "order": 2,
+                "percentCapacity": 26.513832696569395,
+                "percentPower": 73.51111111111112,
+                "percentSystemCapacity": 8.817050747007315,
+                "percentSystemPower": 25.294387521027684,
+                "power": 165.4,
+                "timeInterval": 14
+              },
+              {
+                "airflow": 337.93,
+                "order": 2,
+                "percentCapacity": 26.69241570747083,
+                "percentPower": 73.11111111111111,
+                "percentSystemCapacity": 8.876437689954837,
+                "percentSystemPower": 25.156751796910843,
+                "power": 164.5,
+                "timeInterval": 15
+              },
+              {
+                "airflow": 339,
+                "order": 2,
+                "percentCapacity": 26.77751953683547,
+                "percentPower": 72.93333333333332,
+                "percentSystemCapacity": 8.904738569381063,
+                "percentSystemPower": 25.095580363970026,
+                "power": 164.1,
+                "timeInterval": 16
+              },
+              {
+                "airflow": 335.9,
+                "order": 2,
+                "percentCapacity": 26.532761065028865,
+                "percentPower": 73.46666666666667,
+                "percentSystemCapacity": 8.823345287188479,
+                "percentSystemPower": 25.279094662792478,
+                "power": 165.3,
+                "timeInterval": 17
+              },
+              {
+                "airflow": 334.51,
+                "order": 2,
+                "percentCapacity": 26.422759700671605,
+                "percentPower": 73.73333333333333,
+                "percentSystemCapacity": 8.786764849238311,
+                "percentSystemPower": 25.370851812203703,
+                "power": 165.9,
+                "timeInterval": 18
+              },
+              {
+                "airflow": 333.03,
+                "order": 2,
+                "percentCapacity": 26.305616437570478,
+                "percentPower": 74.04444444444445,
+                "percentSystemCapacity": 8.747809406347315,
+                "percentSystemPower": 25.47790181985013,
+                "power": 166.6,
+                "timeInterval": 19
+              },
+              {
+                "airflow": 333.03,
+                "order": 2,
+                "percentCapacity": 26.305616437570478,
+                "percentPower": 74.04444444444445,
+                "percentSystemCapacity": 8.747809406347315,
+                "percentSystemPower": 25.47790181985013,
+                "power": 166.6,
+                "timeInterval": 20
+              },
+              {
+                "airflow": 334.51,
+                "order": 2,
+                "percentCapacity": 26.422759700671605,
+                "percentPower": 73.73333333333333,
+                "percentSystemCapacity": 8.786764849238311,
+                "percentSystemPower": 25.370851812203703,
+                "power": 165.9,
+                "timeInterval": 21
+              },
+              {
+                "airflow": 335.67,
+                "order": 2,
+                "percentCapacity": 26.513832696569395,
+                "percentPower": 73.51111111111112,
+                "percentSystemCapacity": 8.817050747007315,
+                "percentSystemPower": 25.294387521027684,
+                "power": 165.4,
+                "timeInterval": 22
+              },
+              {
+                "airflow": 334.96,
+                "order": 2,
+                "percentCapacity": 26.458467086121473,
+                "percentPower": 73.64444444444443,
+                "percentSystemCapacity": 8.798639172847329,
+                "percentSystemPower": 25.340266095733295,
+                "power": 165.7,
+                "timeInterval": 23
+              }
+            ]
+          },
+          {
+            "avgAirflow": 227.16625000000002,
+            "avgPercentCapacity": 17.943617471951423,
+            "avgPower": 100.46249999999999,
+            "avgPrecentPower": 44.65,
+            "compressorId": "ca-real-006-compressor-02",
+            "dayTypeId": "ca-real-006-day-type-02",
+            "fullLoadCapacity": 1266,
+            "fullLoadPressure": 105,
+            "profileSummaryData": [
+              {
+                "airflow": 330.26,
+                "order": 2,
+                "percentCapacity": 26.086700458257184,
+                "percentPower": 74.75555555555556,
+                "percentSystemCapacity": 8.675009923864879,
+                "percentSystemPower": 25.722587551613397,
+                "power": 168.2,
+                "timeInterval": 0
+              },
+              {
+                "airflow": 333.23,
+                "order": 2,
+                "percentCapacity": 26.32158912293221,
+                "percentPower": 74,
+                "percentSystemCapacity": 8.753121047972728,
+                "percentSystemPower": 25.462608961614926,
+                "power": 166.5,
+                "timeInterval": 1
+              },
+              {
+                "airflow": 332.44,
+                "order": 2,
+                "percentCapacity": 26.259262792970617,
+                "percentPower": 74.17777777777778,
+                "percentSystemCapacity": 8.732394719175414,
+                "percentSystemPower": 25.523780394555747,
+                "power": 166.9,
+                "timeInterval": 2
+              },
+              {
+                "airflow": 335.43,
+                "order": 2,
+                "percentCapacity": 26.495139570336335,
+                "percentPower": 73.55555555555556,
+                "percentSystemCapacity": 8.810834435525559,
+                "percentSystemPower": 25.309680379262883,
+                "power": 165.5,
+                "timeInterval": 3
+              },
+              {
+                "airflow": 363.69,
+                "order": 2,
+                "percentCapacity": 28.727766220937667,
+                "percentPower": 69.77777777777779,
+                "percentSystemCapacity": 9.553283959996607,
+                "percentSystemPower": 24.00978742927053,
+                "power": 157,
+                "timeInterval": 4
+              },
+              {
+                "airflow": 209.1,
+                "order": 2,
+                "percentCapacity": 16.516348251784773,
+                "percentPower": 37.91111111111111,
+                "percentSystemCapacity": 5.492434170412273,
+                "percentSystemPower": 13.044808074629149,
+                "power": 85.3,
+                "timeInterval": 5
+              },
+              {
+                "airflow": 211.09,
+                "order": 2,
+                "percentCapacity": 16.67385777613921,
+                "percentPower": 38.044444444444444,
+                "percentSystemCapacity": 5.544813224216506,
+                "percentSystemPower": 13.09068664933476,
+                "power": 85.6,
+                "timeInterval": 6
+              },
+              {
+                "airflow": 211.09,
+                "order": 2,
+                "percentCapacity": 16.67385777613921,
+                "percentPower": 38.044444444444444,
+                "percentSystemCapacity": 5.544813224216506,
+                "percentSystemPower": 13.09068664933476,
+                "power": 85.6,
+                "timeInterval": 7
+              },
+              {
+                "airflow": 211.09,
+                "order": 2,
+                "percentCapacity": 16.67385777613921,
+                "percentPower": 38.044444444444444,
+                "percentSystemCapacity": 5.544813224216506,
+                "percentSystemPower": 13.09068664933476,
+                "power": 85.6,
+                "timeInterval": 8
+              },
+              {
+                "airflow": 207.77,
+                "order": 2,
+                "percentCapacity": 16.411919563895882,
+                "percentPower": 37.822222222222216,
+                "percentSystemCapacity": 5.457706899892878,
+                "percentSystemPower": 13.014222358158738,
+                "power": 85.1,
+                "timeInterval": 9
+              },
+              {
+                "airflow": 205.15,
+                "order": 2,
+                "percentCapacity": 16.20448515678161,
+                "percentPower": 37.644444444444446,
+                "percentSystemCapacity": 5.388725560411222,
+                "percentSystemPower": 12.953050925217923,
+                "power": 84.7,
+                "timeInterval": 10
+              },
+              {
+                "airflow": 199.97,
+                "order": 2,
+                "percentCapacity": 15.795531272869479,
+                "percentPower": 37.28888888888889,
+                "percentSystemCapacity": 5.252729863791111,
+                "percentSystemPower": 12.83070805933629,
+                "power": 83.9,
+                "timeInterval": 11
+              },
+              {
+                "airflow": 199.33,
+                "order": 2,
+                "percentCapacity": 15.744985616553798,
+                "percentPower": 37.24444444444444,
+                "percentSystemCapacity": 5.235921142778331,
+                "percentSystemPower": 12.815415201101086,
+                "power": 83.8,
+                "timeInterval": 12
+              },
+              {
+                "airflow": 194.9,
+                "order": 2,
+                "percentCapacity": 15.394877003423302,
+                "percentPower": 36.93333333333333,
+                "percentSystemCapacity": 5.1194941650469925,
+                "percentSystemPower": 12.708365193454657,
+                "power": 83.1,
+                "timeInterval": 13
+              },
+              {
+                "airflow": 193.03,
+                "order": 2,
+                "percentCapacity": 15.246869377428396,
+                "percentPower": 36.8,
+                "percentSystemCapacity": 5.0702749229903725,
+                "percentSystemPower": 12.662486618749044,
+                "power": 82.8,
+                "timeInterval": 14
+              },
+              {
+                "airflow": 191.17,
+                "order": 2,
+                "percentCapacity": 15.100120423222158,
+                "percentPower": 36.666666666666664,
+                "percentSystemCapacity": 5.021474246335501,
+                "percentSystemPower": 12.616608044043431,
+                "power": 82.5,
+                "timeInterval": 15
+              },
+              {
+                "airflow": 192.4,
+                "order": 2,
+                "percentCapacity": 15.197812020679685,
+                "percentPower": 36.75555555555556,
+                "percentSystemCapacity": 5.053961129020353,
+                "percentSystemPower": 12.647193760513842,
+                "power": 82.7,
+                "timeInterval": 16
+              },
+              {
+                "airflow": 193.65,
+                "order": 2,
+                "percentCapacity": 15.296066590516183,
+                "percentPower": 36.84444444444445,
+                "percentSystemCapacity": 5.086635225530204,
+                "percentSystemPower": 12.677779476984249,
+                "power": 82.9,
+                "timeInterval": 17
+              },
+              {
+                "airflow": 190.55,
+                "order": 2,
+                "percentCapacity": 15.051487941149189,
+                "percentPower": 36.62222222222222,
+                "percentSystemCapacity": 5.005301742446775,
+                "percentSystemPower": 12.601315185808229,
+                "power": 82.4,
+                "timeInterval": 18
+              },
+              {
+                "airflow": 188.72,
+                "order": 2,
+                "percentCapacity": 14.906454186615187,
+                "percentPower": 36.48888888888889,
+                "percentSystemCapacity": 4.9570714474007955,
+                "percentSystemPower": 12.555436611102614,
+                "power": 82.1,
+                "timeInterval": 19
+              },
+              {
+                "airflow": 190.55,
+                "order": 2,
+                "percentCapacity": 15.051487941149189,
+                "percentPower": 36.62222222222222,
+                "percentSystemCapacity": 5.005301742446775,
+                "percentSystemPower": 12.601315185808229,
+                "power": 82.4,
+                "timeInterval": 20
+              },
+              {
+                "airflow": 188.72,
+                "order": 2,
+                "percentCapacity": 14.906454186615187,
+                "percentPower": 36.48888888888889,
+                "percentSystemCapacity": 4.9570714474007955,
+                "percentSystemPower": 12.555436611102614,
+                "power": 82.1,
+                "timeInterval": 21
+              },
+              {
+                "airflow": 188.11,
+                "order": 2,
+                "percentCapacity": 14.858400359149426,
+                "percentPower": 36.44444444444444,
+                "percentSystemCapacity": 4.941091372388541,
+                "percentSystemPower": 12.540143752867412,
+                "power": 82,
+                "timeInterval": 22
+              },
+              {
+                "airflow": 190.55,
+                "order": 2,
+                "percentCapacity": 15.051487941149189,
+                "percentPower": 36.62222222222222,
+                "percentSystemCapacity": 5.005301742446775,
+                "percentSystemPower": 12.601315185808229,
+                "power": 82.4,
+                "timeInterval": 23
+              }
+            ]
+          },
+          {
+            "avgAirflow": 0,
+            "avgPercentCapacity": null,
+            "avgPower": 0,
+            "avgPrecentPower": null,
+            "compressorId": "ca-real-006-compressor-03",
+            "dayTypeId": "ca-real-006-day-type-01",
+            "fullLoadCapacity": 1527,
+            "fullLoadPressure": 100,
+            "profileSummaryData": [
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 0
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 1
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 2
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 3
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 4
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 5
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 6
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 7
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 8
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 9
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 10
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 11
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 12
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 13
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 14
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 15
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 16
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 17
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 18
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 19
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 20
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 21
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 22
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 23
+              }
+            ]
+          },
+          {
+            "avgAirflow": 0,
+            "avgPercentCapacity": null,
+            "avgPower": 0,
+            "avgPrecentPower": null,
+            "compressorId": "ca-real-006-compressor-03",
+            "dayTypeId": "ca-real-006-day-type-02",
+            "fullLoadCapacity": 1527,
+            "fullLoadPressure": 100,
+            "profileSummaryData": [
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 0
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 1
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 2
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 3
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 4
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 5
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 6
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 7
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 8
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 9
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 10
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 11
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 12
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 13
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 14
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 15
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 16
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 17
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 18
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 19
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 20
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 21
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 22
+              },
+              {
+                "airflow": 0,
+                "order": 0,
+                "percentCapacity": 0,
+                "percentPower": 0,
+                "percentSystemCapacity": 0,
+                "percentSystemPower": 0,
+                "power": 0,
+                "timeInterval": 23
+              }
+            ]
+          }
+        ],
+        "systemProfileSetup": {
+          "dataInterval": 1,
+          "dayTypeId": "ca-real-006-day-type-01",
+          "numberOfHours": 24,
+          "profileDataType": "power"
+        }
+      }
+    },
+    "name": "ca-real-006",
+    "type": "CompressedAir"
+  },
+  "coverageTags": [
+    "compressor-type:1",
+    "control-type:11",
+    "control-type:2",
+    "eem:flow-reallocation",
+    "eem:reduce-air-leaks",
+    "eem:reduce-runtime",
+    "interval:1",
+    "multiple-day-types",
+    "profile-type:power",
+    "system-control:cascading",
+    "units:Imperial"
+  ],
+  "fixtureId": "ca-real-006",
+  "settings": {
+    "co2SavingsEnergySource": "Sanitized",
+    "co2SavingsEnergyType": "electricity",
+    "co2SavingsFuelType": "Sanitized",
+    "eGridRegion": "Sanitized",
+    "eGridSubregion": "Sanitized",
+    "electricityUse": 0,
+    "emissionsUnit": "Metric",
+    "totalEmissionOutput": 0,
+    "totalEmissionOutputRate": 401.07,
+    "totalFuelEmissionOutputRate": 0,
+    "unitsOfMeasure": "Imperial",
+    "userEnteredBaselineEmissions": false,
+    "userEnteredModificationEmissions": false,
+    "zipcode": "00000"
+  },
+  "source": "sanitized-backup"
+}

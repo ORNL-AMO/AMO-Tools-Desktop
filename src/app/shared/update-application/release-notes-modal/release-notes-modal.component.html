@@ -45,6 +45,74 @@
 
           <label>Water</label>
           <ul>
+            <li><b>Fixed:</b> Diagram data being lost or overwritten when the diagram was not saved by changing tabs, or when the app was refreshed before assessment data finished loading</li>
+            <li><b>Fixed:</b> Bug where diagram console showed errors but none were present on data entry tray</li>
+            <li><b>Enhanced:</b> Added route-based navigation for Water Assessment main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Wastewater</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for Wastewater Assessment main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Compressed Air</label>
+          <ul>
+            <li><b>Fixed:</b> Changed color of validation message for negative values for "Average System Pressure Reduction" and "Airflow Reduction" to yellow</li>
+            <li><b>Enhanced:</b> Explore Opportunities form now has a more prominent drag handle for resizing</li>
+            <li><b>Enhanced:</b> Updated compressor modeling to use the corrected engineering behavior in the latest MEASUR Tools Suite</li>
+            <li><b>Enhanced:</b> Verified route-based analytics coverage for Compressed Air Assessment main tabs</li>
+          </ul>
+          <label>Process Cooling Assessment</label>
+          <ul>
+            <li><b>Added:</b> Equipment notes throughout the Process Cooling Assessment</li>
+            <li><b>Fixed:</b> Issue regarding EEM to apply VSD to water pumps</li>
+            <li><b>Enhanced:</b> Verified route-based analytics coverage for Process Cooling Assessment main tabs</li>
+          </ul>
+          <label>Process Heating</label>
+          <ul>
+            <li><b>Fixed:</b> Bug where extended surface losses were not incorporated into the heat balance properly</li>
+          </ul>
+          <label>Pumps</label>
+          <ul>
+            <li><b>Enhanced:</b> Moved the Stages field up into the Pump section of Pump &amp; Fluid</li>
+            <li><b>Enhanced:</b> Added route-based navigation for PSAT main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Pump Inventory</label>
+          <ul>
+            <li><b>Added:</b> Support for Positive Displacement Pumps</li>
+            <li><b>Enhanced:</b> Added route-based navigation for Pump Inventory main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Motor Inventory</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for Motor Inventory main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Compressed Air Inventory</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for Compressed Air Inventory main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Treasure Hunt</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for Treasure Hunt main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Fans</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for FSAT main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Steam</label>
+          <ul>
+            <li><b>Enhanced:</b> Added route-based navigation for SSMT main tabs to improve analytics visibility</li>
+          </ul>
+          <label>Application</label>
+          <ul>
+            <li><b>Fixed:</b> Export Reports panel cutoff on small devices and media views</li>
+            <li><b>Fixed:</b> Privacy notice link now points to the current ORNL security and privacy notice</li>
+            <li><b>Enhanced:</b> Updated JUSTIFI export modal language (Non-Energy Benefits renamed to Multiple Benefits) and Knowledge Library link</li>
+            <li><b>Enhanced:</b> Updated the body text of emails sent from MEASUR</li>
+          </ul>
+
+          <!--  Include prev version -->
+          <label class="header-label">Here are the details of what's new in version 1.9.0:</label>
+
+          <label>Water</label>
+          <ul>
             <li><b>Fixed:</b> True cost result support for diagram configurations containing multi-component losses and unaccounted flows</li>
             <li><b>Fixed:</b> Intake and treatment cost attribution for configurations with chained/forked treatment losses (RO with misallocated wastewater treatment, treatment loss intake attribution)</li>
             <li><b>Fixed:</b> Diagram flow validation reworked to remove false-positive errors and add missing checks (total-flow mismatch, known losses, discharge flow)</li>

@@ -17,6 +17,7 @@ import { getDefaultProcessCoolingAssessment } from '../process-cooling-assessmen
 import { TreasureHunt } from '../shared/models/treasure-hunt';
 import { OperatingHours } from '../shared/models/operations';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { getRoutedAssessmentUrl } from './routed-assessment-tabs';
 
 @Injectable()
 export class AssessmentService {
@@ -43,37 +44,18 @@ export class AssessmentService {
       this.subTab = subTab;
     }
 
+    const routedUrl: string | undefined = getRoutedAssessmentUrl(assessment, mainTab);
+    if (routedUrl) {
+      this.dashboardService.navigateWithSidebarOptions(routedUrl, { shouldCollapse: true });
+      return;
+    }
+
     let itemSegment: string;
-    if (assessment.type === 'PSAT') {
-      if (assessment.psat.setupDone && !mainTab && (!assessment.isExample)) {
-        this.startingTab = 'assessment';
-      }
-      itemSegment = '/psat/';
-    } else if (assessment.type === 'PHAST') {
+    if (assessment.type === 'PHAST') {
       if (assessment.phast.setupDone && !mainTab && (!assessment.isExample)) {
         this.startingTab = 'assessment';
       }
       itemSegment = '/phast/';
-    } else if (assessment.type === 'FSAT') {
-      if (assessment.fsat.setupDone && !mainTab && !assessment.isExample) {
-        this.startingTab = 'assessment';
-      }
-      itemSegment = '/fsat/';
-    } else if (assessment.type === 'SSMT') {
-      if (assessment.ssmt.setupDone && !mainTab && !assessment.isExample) {
-        this.startingTab = 'assessment';
-      }
-      itemSegment = '/ssmt/';
-    } else if (assessment.type == 'TreasureHunt') {
-      if (assessment.treasureHunt.setupDone && !mainTab && !assessment.isExample) {
-        this.startingTab = 'treasure-chest';
-      }
-      itemSegment = '/treasure-hunt/';
-    } else if (assessment.type == 'WasteWater') {
-      if (assessment.wasteWater.setupDone && !mainTab && !assessment.isExample) {
-        this.startingTab = 'assessment';
-      }
-      itemSegment = '/waste-water/';
     } else if (assessment.type == 'CompressedAir') {
       let url: string = '/compressed-air/' + assessment.id;
       if (mainTab == 'baseline' && subTab == 'day-types') {
@@ -92,12 +74,6 @@ export class AssessmentService {
         this.startingTab = 'assessment';
       }
       itemSegment = '/process-cooling/';
-    } else if (assessment.type == 'Water') {
-      // todo check setupDone or validation
-      if (assessment.water && !mainTab && !assessment.isExample) {
-        this.startingTab = 'baseline';
-      }
-      itemSegment = '/water/';
     }
 
     this.dashboardService.navigateWithSidebarOptions(itemSegment + assessment.id, { shouldCollapse: true })

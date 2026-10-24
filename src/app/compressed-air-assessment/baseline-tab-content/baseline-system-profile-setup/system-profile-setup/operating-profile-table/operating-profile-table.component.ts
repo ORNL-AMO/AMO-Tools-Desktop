@@ -178,7 +178,7 @@ export class OperatingProfileTableComponent implements OnInit {
               if (average && profileSummaryData) {
                 let assessmentDayType: CompressedAirDayType = this.assessmentDayTypes.find(dayType => { return dayType.dayTypeId == profileSummary.dayTypeId });
                 if (assessmentDayType) {
-                  profileSummaryData.powerFactor = Number(average.value.toFixed(0));
+                  profileSummaryData.powerFactor = average.value;
                 }
               }
             });

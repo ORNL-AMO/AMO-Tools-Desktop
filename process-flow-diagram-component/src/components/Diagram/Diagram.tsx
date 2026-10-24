@@ -16,14 +16,13 @@ import {
 } from '@xyflow/react';
 
 import '@xyflow/react/dist/style.css';
-import { formatDataForMEASUR, getEdgeTypesFromString, updateAssessmentCreatedNodes } from './FlowUtils';
+import { getEdgeTypesFromString, updateAssessmentCreatedNodes } from './FlowUtils';
 import { edgeTypes, nodeTypes } from './FlowTypes';
-import useDiagramStateDebounce from '../../hooks/useDiagramStateDebounce';
 import WarningDialog from './WarningDialog';
 import { useAppDispatch, useAppSelector } from '../../hooks/state';
 import { AppStore, configureAppStore, RootState, selectEdges, selectFlowConfidenceEnabled, selectNodes } from './store';
 import { Provider } from 'react-redux';
-import { addNode, addNodes, connectEdge, diagramInitialized, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange } from './diagramReducer';
+import { addNode, addNodes, connectEdge, diagramInitialized, diagramReady, edgesChange, edgesUpdate, keyboardDeleteNode, nodesChange, saveDiagramState } from './diagramReducer';
 import { openDrawerWithSelected, selectComponent } from './diagramThunks';
 import ValidationWindow, { ValidationWindowLocation } from './ValidationWindow';
 import StaticModal from '../Forms/StaticModal';
@@ -32,7 +31,7 @@ import DataSidebar from '../Drawer/DataSidebar';
 import SharedDrawer, { drawerClosedOffsetPx, drawerOpenOffsetPx } from '../Drawer/SharedDrawer';
 import DiagramAlert, { DiagramAlertState } from './DiagramAlert';
 import FlowConfidenceLegend from './FlowConfidenceLegend';
-import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ConvertValueFn, ProcessFlowPart, UserDiagramOptions, DiagramSettings, DiagramCalculatedData, DiagramFlowErrors, getIsDiagramValid } from 'process-flow-lib';
+import { ParentContainerDimensions, WaterDiagram, FlowDiagramData, ConvertValueFn, ProcessFlowPart, UserDiagramOptions, DiagramFlowErrors, getIsDiagramValid } from 'process-flow-lib';
 
 
 export interface DiagramProps {
@@ -43,6 +42,10 @@ export interface DiagramProps {
   appVersion?: string;
   saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
   convertValueFn?: ConvertValueFn;
+  /** Hands the host a function that emits any pending debounced save immediately. */
+  registerFlush?: (flush: () => void) => void;
+  /** Called once the canvas has initialized and the diagram data is hydrated. */
+  onReady?: () => void;
 }
 
 
@@ -53,18 +56,11 @@ const Diagram = (props: DiagramProps) => {
       return node;
     }
   })
-  const diagramNotes = useAppSelector((state: RootState) => state.diagram.diagramNotes);
-  const meta = useAppSelector((state: RootState) => state.diagram.meta);
   const [assessmentCreatedNodes, setAssessmentCreatedNodes] = useState<Node[]>(assessmentNodes);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
   const isDialogOpen = useAppSelector((state: RootState) => state.ui.isDialogOpen);
   const edges: Edge[] = useAppSelector(selectEdges);
   const userDiagramOptions: UserDiagramOptions = useAppSelector((state: RootState) => state.diagram.diagramOptions);
-  const settings: DiagramSettings = useAppSelector((state: RootState) => state.diagram.settings);
-  const recentNodeColors = useAppSelector((state: RootState) => state.diagram.recentNodeColors);
-  const recentEdgeColors = useAppSelector((state: RootState) => state.diagram.recentEdgeColors);
-  const paletteColors = userDiagramOptions.paletteColors;
-  const calculatedData: DiagramCalculatedData = useAppSelector((state: RootState) => state.diagram.calculatedData);
   const animated: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.animated);
   const minimapVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.minimapVisible);
   const controlsVisible: boolean = useAppSelector((state: RootState) => state.diagram.diagramOptions.controlsVisible);
@@ -81,7 +77,6 @@ const Diagram = (props: DiagramProps) => {
   const diagramFlowErrors: DiagramFlowErrors = useAppSelector((state: RootState) => state.diagram.diagramFlowErrors);
   const nodes: Node[] = useAppSelector(selectNodes);
 
-  const { debouncedNodes, debouncedEdges, debouncedDiagramNotes } = useDiagramStateDebounce(nodes, edges, diagramNotes);
   const isDiagramValid = useMemo(() => getIsDiagramValid(diagramFlowErrors), [diagramFlowErrors]);
 
   useEffect(() => {
@@ -99,31 +94,12 @@ const Diagram = (props: DiagramProps) => {
         setAssessmentCreatedNodes([]);
         dispatch(addNodes(updatedNodes));
       }
+      dispatch(diagramReady());
+      props.onReady?.();
     }
   }, [reactFlowInstance]);
 
 
-  // todo 6918 - eventually move to side-effect/async middleware of state changes
-  // todo 6918 - move debouncing to middleware?
-  useEffect(() => {
-    if (assessmentCreatedNodes.length === 0) {
-      const updatedDiagramData: FlowDiagramData = {
-        name: props.processDiagram.flowDiagramData.name,
-        meta,
-        nodes: nodes,
-        diagramFlowErrors: diagramFlowErrors,
-        edges: debouncedEdges,
-        settings,
-        userDiagramOptions,
-        calculatedData,
-        recentNodeColors,
-        recentEdgeColors,
-        diagramNotes: debouncedDiagramNotes
-      };
-      formatDataForMEASUR(updatedDiagramData);
-      props.saveFlowDiagramData(updatedDiagramData);
-    }
-  }, [debouncedNodes, debouncedEdges, diagramFlowErrors, userDiagramOptions, settings, debouncedDiagramNotes, paletteColors]);
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -278,11 +254,22 @@ const Diagram = (props: DiagramProps) => {
 }
 
 export default (props: DiagramProps) => {
+  // * saveFlowDiagramData reads shadowRoot off `this`, so it must stay a method call on the current props
+  const propsRef = useRef(props);
+  propsRef.current = props;
   // * prevent multiple store instances on parent re-renders. Could also be lifted to AppWebComponent.tsx if needed
   const storeRef = useRef<AppStore | null>(null);
   if (!storeRef.current) {
-    storeRef.current = configureAppStore(props.processDiagram);
+    storeRef.current = configureAppStore(props.processDiagram, (flowDiagramData) => propsRef.current.saveFlowDiagramData(flowDiagramData));
   }
+  // * emit any debounced save still pending when the diagram unmounts
+  // * Angular tears down before React's unmount cleanup runs, so the host must be able to flush earlier than that
+  useEffect(() => {
+    propsRef.current.registerFlush?.(() => storeRef.current.dispatch(saveDiagramState()));
+  }, []);
+  useEffect(() => () => {
+    storeRef.current.dispatch(saveDiagramState());
+  }, []);
   return (
     <Provider store={storeRef.current}>
       <Diagram {...props} />

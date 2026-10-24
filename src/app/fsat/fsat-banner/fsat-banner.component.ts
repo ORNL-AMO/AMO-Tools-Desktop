@@ -7,6 +7,8 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { FSAT_SETUP_GATED_VIEWS, FsatMainView } from '../routing/fsat-main-views';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-fsat-banner',
@@ -36,11 +38,13 @@ export class FsatBannerComponent implements OnInit {
     this.mainTabSubscription.unsubscribe();
   }
 
-  changeTab(str: string) {
-    if (str === 'baseline' || str === 'calculators') {
-      this.fsatService.mainTab.next(str);
-    } else if (this.assessment.fsat.setupDone) {
-      this.fsatService.mainTab.next(str);
+  canOpenMainTab(view: FsatMainView): boolean {
+    return isMainTabAllowed(FSAT_SETUP_GATED_VIEWS, view, this.assessment.fsat.setupDone);
+  }
+
+  changeTab(str: FsatMainView) {
+    if (this.canOpenMainTab(str)) {
+      this.fsatService.goToMainTab(str);
     }
     this.collapseBanner();
   }
@@ -64,31 +68,11 @@ export class FsatBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'calculators') {
-      this.fsatService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.fsatService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.fsatService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.fsatService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('baseline');
-    }
+    this.fsatService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.fsatService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.fsatService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.fsatService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.fsatService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.fsatService.mainTab.next('calculators');
-    }
+    this.fsatService.continueMainTab();
   }
 
   openExportModal() {

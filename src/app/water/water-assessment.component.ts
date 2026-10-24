@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, firstValueFrom } from 'rxjs';
-import { AssessmentService } from '../dashboard/assessment.service';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Subscription, filter, firstValueFrom } from 'rxjs';
 import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
 import { AnalyticsService } from '../shared/analytics/analytics.service';
+import { WaterRouteData } from './routing/water.routing';
 import { Assessment } from '../shared/models/assessment';
 import { WaterAssessmentService, WaterMainTabString } from './water-assessment.service';
 import { ConvertWaterAssessmentService } from './convert-water-assessment.service';
@@ -13,6 +13,8 @@ import { UpdateAssessmentFromDiagramService } from './update-assessment-from-dia
 import { WaterSystemComponentService } from './water-system-component.service';
 import { ParentContainerDimensions, WasteWaterTreatment, WaterAssessment } from 'process-flow-lib';
 import { WaterProcessDiagramService } from '../water-process-diagram/water-process-diagram.service';
+import { WaterDiagramSyncService } from '../water-process-diagram/water-diagram-sync.service';
+import { AssessmentService } from '../dashboard/assessment.service';
 
 @Component({
   selector: 'app-water-assessment',
@@ -39,9 +41,12 @@ export class WaterAssessmentComponent {
   oldSettings: Settings;
   mainTab: string;
   mainTabSub: Subscription;
+  routerEventsSub: Subscription;
+  isInitialized: boolean = false;
   setupTab: string;
   setupTabSub: Subscription;
   waterAssessmentSub: Subscription;
+  assessmentSyncedFromDiagramSub: Subscription;
   disableNext: boolean = false;
   showModificationListSub: Subscription;
   showModificationList: boolean = false;
@@ -55,8 +60,11 @@ export class WaterAssessmentComponent {
   smallScreenTab: string = 'form';
   showExportModal: boolean = false;
   showExportModalSub: Subscription;
+  // * the first waterAssessment emission after opening only seeds the forms, it is not an edit to save
+  isSeedingWaterAssessment: boolean = false;
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
+    private assessmentService: AssessmentService,
     private convertWaterAssessmentService: ConvertWaterAssessmentService, 
     private updateAssessmentFromDiagramService: UpdateAssessmentFromDiagramService,
     private assessmentDbService: AssessmentDbService, 
@@ -64,9 +72,9 @@ export class WaterAssessmentComponent {
     private cd: ChangeDetectorRef, 
     private settingsDbService: SettingsDbService, 
     private waterAssessmentService: WaterAssessmentService,
-    private assessmentService: AssessmentService,
     private analyticsService: AnalyticsService,
-    private waterProcessDiagramService: WaterProcessDiagramService) { }
+    private waterProcessDiagramService: WaterProcessDiagramService,
+    private waterDiagramSyncService: WaterDiagramSyncService) { }
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-water-assessment', undefined);
@@ -77,22 +85,45 @@ export class WaterAssessmentComponent {
 
     this.waterAssessmentSub = this.waterAssessmentService.waterAssessment.subscribe(val => {
       if (val && this.assessment) {
-        this.save(val);
+        if (this.isSeedingWaterAssessment) {
+          this.isSeedingWaterAssessment = false;
+        } else {
+          this.assessmentChanged(val);
+        }
         this.setDisableNext();
       }
     })
+
+    this.assessmentSyncedFromDiagramSub = this.waterDiagramSyncService.assessmentSyncedFromDiagram.subscribe(syncedAssessment => {
+      if (syncedAssessment.id === this.assessment?.id) {
+        this.isSeedingWaterAssessment = true;
+        this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
+      }
+    });
 
     let startingTab: WaterMainTabString = this.assessmentService.getStartingTab() as WaterMainTabString;
     if (startingTab) {
       this.waterAssessmentService.mainTab.next(startingTab);
     }
-    this.mainTabSub = this.waterAssessmentService.mainTab.subscribe(newMainTab => {
+
+    this.routerEventsSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => this.syncMainTabFromRoute());
+
+    this.mainTabSub = this.waterAssessmentService.mainTab.subscribe(async newMainTab => {
       if (this.mainTab === 'diagram') {
-        this.updateAssessmentFromDiagram();
+        this.waterDiagramSyncService.flushDiagram();
+        await this.waterDiagramSyncService.whenIdle();
       }
       this.mainTab = newMainTab;
       this.setContainerHeight();
+      if (newMainTab === 'diagram') {
+        // * show the tab before re-mounting the diagram, which needs a visible container to size itself
+        this.cd.detectChanges();
+        this.waterDiagramSyncService.remountDiagramIfStale();
+      }
     });
+    this.syncMainTabFromRoute();
 
     this.setupTabSub = this.waterAssessmentService.setupTab.subscribe(val => {
       this.setupTab = val;
@@ -127,9 +158,12 @@ export class WaterAssessmentComponent {
   }
 
   ngOnDestroy() {    
+    this.routerEventsSub.unsubscribe();
+    this.waterAssessmentService.assessmentId = undefined;
     this.mainTabSub.unsubscribe();
     this.setupTabSub.unsubscribe();
     this.waterAssessmentSub.unsubscribe();
+    this.assessmentSyncedFromDiagramSub.unsubscribe();
     this.modalOpenSub.unsubscribe();
     this.assessmentTabSub.unsubscribe();
     this.showAddModificationSub.unsubscribe();
@@ -149,6 +183,7 @@ export class WaterAssessmentComponent {
   }
 
   async initAssessment(assessmentId: number) {
+    this.isInitialized = false;
     this.assessment = this.assessmentDbService.findById(assessmentId);
     this.waterAssessmentService.assessmentId = assessmentId;
     let settings: Settings = this.settingsDbService.getByAssessmentId(this.assessment, true);
@@ -159,9 +194,36 @@ export class WaterAssessmentComponent {
       this.settings = settings;
       this.waterAssessmentService.settings.next(settings);
     }
-    this.setDiagram();
+    // TODO: confirm the issue 8852 branch changes fix the init race here (:id changing while a prior init is pending)
+    const diagramReady: Promise<void> = this.setDiagram();
     this.waterAssessmentService.setAssessment(this.assessment);
+    this.isSeedingWaterAssessment = true;
     this.waterAssessmentService.updateWaterAssessment(this.assessment.water);
+    await diagramReady;
+    // A superseded init (:id changed mid-init) must not mark init complete or redirect a bare /diagram with the new assessment's possibly-undefined diagramId
+    if (this.assessment?.id !== assessmentId) {
+      return;
+    }
+    this.isInitialized = true;
+    this.syncMainTabFromRoute();
+  }
+
+  /**
+   * Bare `/diagram` has no diagram component, so once the assessment's diagram exists it is redirected to `diagram/:diagramId`.
+   */
+  syncMainTabFromRoute() {
+    const childRoute: ActivatedRoute = this.activatedRoute.firstChild;
+    const mainView: WaterMainTabString = (childRoute?.snapshot.data as WaterRouteData)?.mainView;
+    if (!mainView) {
+      return;
+    }
+    if (mainView === 'diagram' && !childRoute.snapshot.paramMap.has('diagramId')) {
+      if (this.isInitialized) {
+        this.router.navigate(['diagram', this.assessment.diagramId], { relativeTo: this.activatedRoute, replaceUrl: true });
+      }
+    } else if (this.waterAssessmentService.mainTab.getValue() !== mainView) {
+      this.waterAssessmentService.mainTab.next(mainView);
+    }
   }
 
  async addSettings(settings: Settings) {
@@ -183,28 +245,21 @@ export class WaterAssessmentComponent {
 
   async setDiagram() {
     if (this.assessment.diagramId) {
-      await this.updateAssessmentFromDiagramService.syncAssessmentToDiagram(this.assessment, this.settings);
+      await this.waterDiagramSyncService.reconcileWithDiagram(this.assessment);
     } else {
       await this.updateAssessmentFromDiagramService.createAssesmentDiagram(this.assessment, this.settings);
       this.save(this.assessment.water);
     }
-
-    this.router.navigate(['diagram', this.assessment.diagramId], {
-      relativeTo: this.activatedRoute,
-      skipLocationChange: true,
-    });
   }
 
   async save(waterAssessment: WaterAssessment) {
     this.assessment.water = waterAssessment;
-    await firstValueFrom(this.assessmentDbService.updateWithObservable(this.assessment));
-    let assessments: Assessment[] = await firstValueFrom(this.assessmentDbService.getAllAssessments());
-    this.assessmentDbService.setAll(assessments);
+    await this.waterDiagramSyncService.saveAssessment(this.assessment);
   }
 
-  async updateAssessmentFromDiagram() {
-    await this.updateAssessmentFromDiagramService.syncAssessmentToDiagram(this.assessment, this.settings);
-    this.save(this.assessment.water);
+  async assessmentChanged(waterAssessment: WaterAssessment) {
+    this.assessment.water = waterAssessment;
+    await this.waterDiagramSyncService.assessmentChanged(this.assessment);
   }
 
   setDisableNext() {
@@ -232,6 +287,8 @@ export class WaterAssessmentComponent {
         if (this.smallTabSelect && this.smallTabSelect.nativeElement) {
           this.containerHeight = this.containerHeight - this.smallTabSelect.nativeElement.offsetHeight;
         }
+        // * only measure while the diagram tab is showing: the diagram tab is hidden (d-none) otherwise, and the
+        // * diagram web component mounts as soon as this emits, so a hidden measurement would mount it at zero size
         if (this.mainTab === 'diagram') {
           this.waterProcessDiagramService.parentContainer.next({
             height: contentHeight,
@@ -251,7 +308,7 @@ export class WaterAssessmentComponent {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.waterAssessmentService.mainTab.next('baseline');
+      this.waterAssessmentService.goToMainTab('baseline');
       this.waterAssessmentService.setupTab.next('system-basics');
     }
     this.showUpdateUnitsModal = false;
