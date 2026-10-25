@@ -47,7 +47,7 @@
           <label for="modificationHPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
           <div class="input-group mod-max-width">
             <input name="modificationHPCondensateRecovery" type="number" step="any"
-              id="modificationHPCondensateRecovery" class="form-control"
+              id="modificationHPCondensateRecovery" [readonly]="hasProcessSteamUsageData('highPressureHeader')" class="form-control"
               (focus)="focusField('condensationRecoveryRate')" (input)="save()"
               formControlName="condensationRecoveryRate" />
             <span class="input-group-addon units">%</span>
@@ -65,6 +65,9 @@
             </span>
           </div>
         </div>
+        <a class="form-text small click-link" (click)="showProcessSteamUsage('highPressureHeader')">
+          {{ hasProcessSteamUsageData('highPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+        </a>
       </form>
     </li>
   </div>
@@ -112,7 +115,7 @@
             <label for="modificationMPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
             <div class="input-group mod-max-width">
               <input name="modificationMPCondensateRecovery" type="number" step="any"
-                id="modificationMPCondensateRecovery" class="form-control"
+                id="modificationMPCondensateRecovery" [readonly]="hasProcessSteamUsageData('mediumPressureHeader')" class="form-control"
                 (focus)="focusField('condensationRecoveryRate')" (input)="save()"
                 formControlName="condensationRecoveryRate" />
               <span class="input-group-addon units">%</span>
@@ -129,6 +132,9 @@
               </span>
             </div>
           </div>
+          <a class="form-text small click-link" (click)="showProcessSteamUsage('mediumPressureHeader')">
+            {{ hasProcessSteamUsageData('mediumPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+          </a>
         </form>
       </li>
     </div>
@@ -176,7 +182,7 @@
             <label for="modificationLPCondensateRecovery" class="mod-value-label"> Condensate Recovery Rate</label>
             <div class="input-group mod-max-width">
               <input name="modificationLPCondensateRecovery" type="number" step="any"
-                id="modificationLPCondensateRecovery" class="form-control"
+                id="modificationLPCondensateRecovery" [readonly]="hasProcessSteamUsageData('lowPressureHeader')" class="form-control"
                 (focus)="focusField('condensationRecoveryRate')" (input)="save()"
                 formControlName="condensationRecoveryRate" />
               <span class="input-group-addon units">%</span>
@@ -195,6 +201,9 @@
               </span>
             </div>
           </div>
+          <a class="form-text small click-link" (click)="showProcessSteamUsage('lowPressureHeader')">
+            {{ hasProcessSteamUsageData('lowPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+          </a>
         </form>
       </li>
     </div>
