@@ -1,52 +1,79 @@
-<div class="print-graphs-container" *ngFor="let scenarioSummary of scenarioSummaries; let index = index;">
-  <div class="print-page-title mb-3" *ngIf="scenarioSummary.modificationGraphData">
-    Scenario: {{scenarioSummary.modificationGraphData.name}}
-  </div>
-  <div class="d-block print-mod-notes mb-4" *ngIf="scenarioSummary.notes.length != 0">
-    <div class="h3">Scenario Notes:</div>
-    <ul>
-      <li *ngFor="let note of scenarioSummary.notes">{{note}}</li>
-    </ul>
-  </div>
-
-  <div class="row no-gutters mt-2">
-    <div class="print-pie-width">
-      <div class="h3 mb-0">Baseline</div>
-      <app-plotly-pie-chart [valuesAndLabels]="scenarioSummary.baselineGraphData.valuesAndLabels" [valuesUnit]="'kW'"
-        [isPrint]="true">
-      </app-plotly-pie-chart>
-    </div>
-    <div class="print-pie-width" *ngIf="scenarioSummary.modificationGraphData">
-      <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
-      <app-plotly-pie-chart *ngIf="scenarioSummary.modificationGraphData.valid.isValid"
-        [valuesAndLabels]="scenarioSummary.modificationGraphData.valuesAndLabels" [valuesUnit]="'kW'" [isPrint]="true">
-      </app-plotly-pie-chart>
-      <div class="alert-danger small" *ngIf="!scenarioSummary.modificationGraphData.valid.isValid">
-        Invalid modification<br>
-        <span *ngIf="!scenarioSummary.modificationGraphData.valid.fluidValid">Errors found in Fluid<br></span>
-        <span *ngIf="!scenarioSummary.modificationGraphData.valid.fieldDataValid">Errors found in Field Data<br></span>
-        <span *ngIf="!scenarioSummary.modificationGraphData.valid.fanValid">Errors found in Fan Setup<br></span>
-        <span *ngIf="!scenarioSummary.modificationGraphData.valid.motorValid">Errors found in Motor<br></span>
+@for (scenarioSummary of scenarioSummaries; track scenarioSummary; let index = $index) {
+  <div class="print-graphs-container">
+    @if (scenarioSummary.modificationGraphData) {
+      <div class="print-page-title mb-3">
+        Scenario: {{scenarioSummary.modificationGraphData.name}}
       </div>
+    }
+    @if (scenarioSummary.notes.length != 0) {
+      <div class="d-block print-mod-notes mb-4">
+        <div class="h3">Scenario Notes:</div>
+        <ul>
+          @for (note of scenarioSummary.notes; track note) {
+            <li>{{note}}</li>
+          }
+        </ul>
+      </div>
+    }
+    <div class="row no-gutters mt-2">
+      <div class="print-pie-width">
+        <div class="h3 mb-0">Baseline</div>
+        <app-plotly-pie-chart [valuesAndLabels]="scenarioSummary.baselineGraphData.valuesAndLabels" [valuesUnit]="'kW'"
+          [isPrint]="true">
+        </app-plotly-pie-chart>
+      </div>
+      @if (scenarioSummary.modificationGraphData) {
+        <div class="print-pie-width">
+          <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
+          @if (scenarioSummary.modificationGraphData.valid.isValid) {
+            <app-plotly-pie-chart
+              [valuesAndLabels]="scenarioSummary.modificationGraphData.valuesAndLabels" [valuesUnit]="'kW'" [isPrint]="true">
+            </app-plotly-pie-chart>
+          }
+          @if (!scenarioSummary.modificationGraphData.valid.isValid) {
+            <div class="alert-danger small">
+              Invalid modification<br>
+              @if (!scenarioSummary.modificationGraphData.valid.fluidValid) {
+                <span>Errors found in Fluid<br></span>
+              }
+              @if (!scenarioSummary.modificationGraphData.valid.fieldDataValid) {
+                <span>Errors found in Field Data<br></span>
+              }
+              @if (!scenarioSummary.modificationGraphData.valid.fanValid) {
+                <span>Errors found in Fan Setup<br></span>
+              }
+              @if (!scenarioSummary.modificationGraphData.valid.motorValid) {
+                <span>Errors found in Motor<br></span>
+              }
+            </div>
+          }
+        </div>
+      }
     </div>
+    @if (scenarioSummary.modificationGraphData && scenarioSummary.modificationGraphData.valid.isValid) {
+      <div class="row no-gutters w-100"
+        >
+        <app-plotly-bar-chart class="w-100"
+          [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
+        [yAxisLabel]="'Power (kW)'" [hoverLabel]="'Power'" [isPrint]="true"></app-plotly-bar-chart>
+      </div>
+    }
+    @if (printSankey) {
+      <div class="row print-avoid-break">
+        <div class="col-12">
+          <div class="h3 mb-0">Baseline</div>
+          <app-fsat-sankey [fsat]="fsat" [settings]="settings"
+          [isBaseline]="true" [printView]="true"></app-fsat-sankey>
+        </div>
+        @if (scenarioSummary.modificationGraphData) {
+          <div class="col-12">
+            <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
+            <app-fsat-sankey [fsat]="scenarioSummary.modificationGraphData.modification.fsat"
+              [settings]="settings" [isBaseline]="false" [printView]="true">
+            </app-fsat-sankey>
+          </div>
+        }
+      </div>
+    }
   </div>
-  <div class="row no-gutters w-100"
-    *ngIf="scenarioSummary.modificationGraphData && scenarioSummary.modificationGraphData.valid.isValid">
-    <app-plotly-bar-chart class="w-100"
-      [barChartDataArray]="[scenarioSummary.baselineGraphData, scenarioSummary.modificationGraphData]"
-      [yAxisLabel]="'Power (kW)'" [hoverLabel]="'Power'" [isPrint]="true"></app-plotly-bar-chart>
-  </div>
-  <div class="row print-avoid-break" *ngIf="printSankey">
-    <div class="col-12">
-      <div class="h3 mb-0">Baseline</div>
-      <app-fsat-sankey [fsat]="fsat" [settings]="settings"
-        [isBaseline]="true" [printView]="true"></app-fsat-sankey>
-    </div>
-    <div class="col-12" *ngIf="scenarioSummary.modificationGraphData">
-      <div class="h3 mb-0">{{scenarioSummary.modificationGraphData.name}}</div>
-      <app-fsat-sankey [fsat]="scenarioSummary.modificationGraphData.modification.fsat"
-       [settings]="settings" [isBaseline]="false" [printView]="true">
-      </app-fsat-sankey>
-    </div>
-  </div>
-</div>
+}

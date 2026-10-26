@@ -5,88 +5,107 @@
     </h5>
   </div>
 
-  <div *ngIf="!collapse || printView">
-    <div class="card-body">
-      <div class="output-summary">
-        <table #copyTable class="table table-hover table-striped">
-          <thead>
-            <tr>
-              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
-              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
-                Baseline
-              </th>
-              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of fsat.modifications">
-                {{mod.fsat.name}}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':fanTypeDiff[0] == true}">
-                Fan Type
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':fanTypeDiff[0] == true}">
-                {{getFanType(fanSetup.baseline.fanType)}}
-              </td>
-              <td *ngFor="let mod of fanSetup.modifications">
-                <span *ngIf="mod.fanType == 12">
-                  &mdash; &mdash;
-                </span>
-                <span *ngIf="mod.fanType != 12" [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanType, mod.fanType, 'fanTypeDiff', 0)}">
-                  {{getFanType(mod.fanType)}}
-                </span>
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':fanSpeedDiff[0] == true}">
-                Fan Speed
-                (rpm)
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':fanSpeedDiff[0] == true}">
-                {{fanSetup.baseline.fanSpeed}}
-              </td>
-              <td *ngFor="let mod of fanSetup.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanSpeed, mod.fanSpeed, 'fanSpeedDiff', 0)}">
-                {{mod.fanSpeed}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':driveDiff[0] == true}">
-                Drive
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':driveDiff[0] == true}">
-                {{getDriveType(fanSetup.baseline.drive)}}
-              </td>
-              <td *ngFor="let mod of fanSetup.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.drive, mod.drive, 'driveDiff', 0)}">
-                {{getDriveType(mod.drive)}}
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                Drive Efficiency
-                (%)
-              </td>
-              <td>
-                <span *ngIf="fanSetup.baseline.drive == 4">
-                  {{fanSetup.baseline.specifiedDriveEfficiency | number: '1.0-2'}} %
-                </span>
-                <span *ngIf="!fanSetup.baseline.drive != 4">
-                  &mdash; &mdash;
-                </span>
-              </td>
-              <td *ngFor="let mod of fanSetup.modifications">
-                <span *ngIf="mod.drive == 4">
-                  {{mod.specifiedDriveEfficiency | number: '1.0-2'}} %
-                </span>
-                <span *ngIf="mod.drive != 4">
-                  &mdash; &mdash;
-                </span>
-              </td>
-            </tr>
-            <!-- <tr>
+  @if (!collapse || printView) {
+    <div>
+      <div class="card-body">
+        <div class="output-summary">
+          <table #copyTable class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+                <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                  Baseline
+                </th>
+                @for (mod of fsat.modifications; track mod) {
+                  <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                    {{mod.fsat.name}}
+                  </th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':fanTypeDiff[0] == true}">
+                  Fan Type
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':fanTypeDiff[0] == true}">
+                  {{getFanType(fanSetup.baseline.fanType)}}
+                </td>
+                @for (mod of fanSetup.modifications; track mod) {
+                  <td>
+                    @if (mod.fanType == 12) {
+                      <span>
+                        &mdash; &mdash;
+                      </span>
+                    }
+                    @if (mod.fanType != 12) {
+                      <span [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanType, mod.fanType, 'fanTypeDiff', 0)}">
+                        {{getFanType(mod.fanType)}}
+                      </span>
+                    }
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':fanSpeedDiff[0] == true}">
+                  Fan Speed
+                  (rpm)
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':fanSpeedDiff[0] == true}">
+                  {{fanSetup.baseline.fanSpeed}}
+                </td>
+                @for (mod of fanSetup.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanSpeed, mod.fanSpeed, 'fanSpeedDiff', 0)}">
+                    {{mod.fanSpeed}}
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':driveDiff[0] == true}">
+                  Drive
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':driveDiff[0] == true}">
+                  {{getDriveType(fanSetup.baseline.drive)}}
+                </td>
+                @for (mod of fanSetup.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.drive, mod.drive, 'driveDiff', 0)}">
+                    {{getDriveType(mod.drive)}}
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td>
+                  Drive Efficiency
+                  (%)
+                </td>
+                <td>
+                  @if (fanSetup.baseline.drive == 4) {
+                    <span>
+                      {{fanSetup.baseline.specifiedDriveEfficiency | number: '1.0-2'}} %
+                    </span>
+                  }
+                  @if (!fanSetup.baseline.drive != 4) {
+                    <span>
+                      &mdash; &mdash;
+                    </span>
+                  }
+                </td>
+                @for (mod of fanSetup.modifications; track mod) {
+                  <td>
+                    @if (mod.drive == 4) {
+                      <span>
+                        {{mod.specifiedDriveEfficiency | number: '1.0-2'}} %
+                      </span>
+                    }
+                    @if (mod.drive != 4) {
+                      <span>
+                        &mdash; &mdash;
+                      </span>
+                    }
+                  </td>
+                }
+              </tr>
+              <!-- <tr>
               <td [ngClass]="{'indicate-report-field-different':fanEfficiencyDiff[0] == true}">
                 Fan Specified
               </td>
@@ -97,7 +116,6 @@
                 {{mod.fanEfficiency}}
               </td>
             </tr> -->
-
             <tr>
               <td [ngClass]="{'indicate-report-field-different':fanEfficiencyDiff[0] == true}">
                 Fan Efficiency
@@ -106,15 +124,18 @@
               <td [ngClass]="{'indicate-report-field-different':fanEfficiencyDiff[0] == true}">
                 {{fanSetup.baseline.fanEfficiency | number: '1.0-2'}} %
               </td>
-              <td *ngFor="let mod of fanSetup.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanEfficiency, mod.fanEfficiency, 'fanEfficiencyDiff', 0)}">
-                {{mod.fanEfficiency | number: '1.0-2'}} %
-              </td>
+              @for (mod of fanSetup.modifications; track mod) {
+                <td [ngClass]="{'indicate-report-field-different': checkDiff(fanSetup.baseline.fanEfficiency, mod.fanEfficiency, 'fanEfficiencyDiff', 0)}">
+                  {{mod.fanEfficiency | number: '1.0-2'}} %
+                </td>
+              }
             </tr>
           </tbody>
         </table>
         <app-exportable-results-table [tableString]="copyTableString"
-          (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+        (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
       </div>
     </div>
   </div>
+}
 </div>

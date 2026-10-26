@@ -83,4 +83,56 @@ describe('FsatBannerComponent', () => {
       });
     });
   });
+
+  describe('template visibility', () => {
+    const collapsedToggle = (): HTMLElement => fixture.nativeElement.querySelector('.d-block.d-lg-none.ml-2.pr-2.h-100.flex-wrap');
+    const mobileNav = (): HTMLElement => fixture.nativeElement.querySelector('.d-block.d-lg-none.nav-pills');
+    const expandedMenu = (): HTMLElement => fixture.nativeElement.querySelector('.d-block.d-lg-none.ml-auto.pr-2.h-100.flex-wrap');
+
+    describe('when the banner is collapsed', () => {
+      it('shows only the menu toggle', () => {
+        component.bannerCollapsed = true;
+        fixture.detectChanges();
+
+        expect(collapsedToggle()).not.toBeNull();
+        expect(collapsedToggle().querySelectorAll('.fa-bars').length).toBe(1);
+        expect(mobileNav()).toBeNull();
+        expect(expandedMenu()).toBeNull();
+      });
+    });
+
+    describe('when the banner is expanded', () => {
+      beforeEach(() => {
+        component.bannerCollapsed = false;
+        fixture.detectChanges();
+      });
+
+      it('hides the menu toggle', () => {
+        expect(collapsedToggle()).toBeNull();
+      });
+
+      it('shows the mobile tab navigation with one item per tab', () => {
+        expect(mobileNav()).not.toBeNull();
+        expect(mobileNav().querySelectorAll('.nav-item').length).toBe(6);
+      });
+
+      it('shows the mobile action menu with a collapse button and the action items', () => {
+        expect(expandedMenu()).not.toBeNull();
+        expect(expandedMenu().querySelectorAll('.fa-bars').length).toBe(1);
+        expect(expandedMenu().querySelectorAll('.home-nav-item').length).toBe(8);
+      });
+    });
+
+    it('switches between the collapsed and expanded views when the banner is toggled', () => {
+      component.collapseBanner();
+      fixture.detectChanges();
+      expect(mobileNav()).not.toBeNull();
+      expect(collapsedToggle()).toBeNull();
+
+      component.collapseBanner();
+      fixture.detectChanges();
+      expect(mobileNav()).toBeNull();
+      expect(collapsedToggle()).not.toBeNull();
+    });
+  });
 });
