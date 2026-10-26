@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, map, startWith } from 'rxjs';
+import { filter, map, startWith, Subject } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
@@ -38,6 +38,8 @@ export class ProcessCoolingUiService {
   showModificationListModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
+  showUpdateUnitsModalSignal: WritableSignal<boolean> = signal<boolean>(false);
+  readonly updateUnitsModalResult: Subject<boolean> = new Subject<boolean>();
   
   executiveSummaryViewSignal: WritableSignal<SummaryView> = signal<SummaryView>('baseline-panel');
   profileViewSignal: WritableSignal<ProfileView> = signal<ProfileView>('baseline');

@@ -12,6 +12,7 @@ import { ProcessCoolingAssessmentService } from '../services/process-cooling-ass
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
 import { ChillerInventoryService } from '../services/chiller-inventory.service';
 import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-context.token';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-system-basics',
@@ -36,7 +37,12 @@ export class SystemBasicsComponent {
   oldSettings!: Settings;
   showUpdateDataReminder: boolean = false;
   showSuccessMessage: boolean = false;
-  showUpdateUnitsModal: boolean = false;
+
+  constructor() {
+    this.processCoolingUIService.updateUnitsModalResult.pipe(
+      takeUntilDestroyed()
+    ).subscribe((shouldUpdateData: boolean) => this.selectUpdateAction(shouldUpdateData));
+  }
 
   ngOnInit() {
     this.settingsForm = this.settingsService.getFormFromSettings(this.settings());
@@ -61,7 +67,7 @@ export class SystemBasicsComponent {
       this.processCoolingAssessmentService.setProcessCooling(processCooling);
       this.showUpdateDataReminder = true;
       if (newSettings.unitsOfMeasure != currentSettings.unitsOfMeasure) {
-        this.showUpdateUnitsModal = true;
+        this.processCoolingUIService.showUpdateUnitsModalSignal.set(true);
       }
     } else if (this.showUpdateDataReminder) {
       // * units were changed back to the units of the existing data
@@ -134,6 +140,5 @@ export class SystemBasicsComponent {
     if (shouldUpdateData == true) {
       this.updateData();
     }
-    this.showUpdateUnitsModal = false;
   }
 }
