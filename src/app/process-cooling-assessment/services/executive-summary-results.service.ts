@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingResultsService } from './process-cooling-results.service';
 import { ExecutiveSummaryResults, ModificationEEMSUsed, ProcessCoolingResults } from '../../shared/models/process-cooling-assessment';
 import { map, combineLatest } from 'rxjs';
-import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { getProcessCoolingUnitLabel } from '../constants/process-cooling-units';
 import { ModificationService } from './modification.service';
 import { ModificationNameCell, PercentSavings, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
@@ -133,7 +133,7 @@ export class ExecutiveSummaryResultsService {
   ): ReportTableRow[] {      
     const defaultpipeFormat = '1.0-0';
     const defaultclassName: 'default' | 'emphasis' = 'default';
-    const defaultEnergyUnit = this.settingsSignal().unitsOfMeasure? PROCESS_COOLING_UNITS.energy.labelHTML.imperial : PROCESS_COOLING_UNITS.energy.labelHTML.metric;
+    const defaultEnergyUnit = getProcessCoolingUnitLabel('energy', this.settingsSignal().unitsOfMeasure);
     
     const defaultRow: ReportTableRow = {
       label: 'Result',

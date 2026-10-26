@@ -77,8 +77,8 @@
             Capacity
             <br>
             <small class="text-muted">
-                Typical values range from 0.6 to 1.0 kW/ton
-                for water-cooled chillers and 1.0 to 1.4 kW/ton for air-cooled chillers. The allowable range is 0.02 to 3, selectable in increments of .01.
+                Typical values range from @if (settings().unitsOfMeasure === 'Metric') {0.17 to 0.28 kW/kW} @else {0.6 to 1.0 kW/ton}
+                for water-cooled chillers and @if (settings().unitsOfMeasure === 'Metric') {0.28 to 0.40 kW/kW} @else {1.0 to 1.4 kW/ton} for air-cooled chillers. The allowable range is @if (settings().unitsOfMeasure === 'Metric') {0.006 to 0.85} @else {0.02 to 3, selectable in increments of .01}.
                 <hr>
             </small>
         </h6>

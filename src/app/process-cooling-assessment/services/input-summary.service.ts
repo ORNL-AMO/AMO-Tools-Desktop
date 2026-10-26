@@ -1,11 +1,11 @@
 import { inject, Injectable } from '@angular/core';
 import { ProcessCoolingResultsService } from './process-cooling-results.service';
-import { ProcessCoolingResults, ProcessCoolingAssessment, CondenserCoolingMethod, ChillerInventoryItem, PumpInput, AirCooledSystemInput } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingResults, ProcessCoolingAssessment, CondenserCoolingMethod, ChillerInventoryItem, PumpInput, AirCooledSystemInput, TowerSizeMetric } from '../../shared/models/process-cooling-assessment';
 import { map, combineLatest } from 'rxjs';
 import { ProcessCoolingAssessmentService } from './process-cooling-assessment.service';
 import { InputSummaryResults } from '../../shared/models/process-cooling-assessment';
 import { ModificationService } from './modification.service';
-import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { getProcessCoolingUnitLabel, PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { TowerTypes, TowerSizeMetricLabels, FanTypeLabels, CondenserCoolingMethodLabels, CompressorChillerTypes } from '../constants/process-cooling-constants';
 import { InputSummarySection, ModificationNameCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 
@@ -143,8 +143,8 @@ export class InputSummaryService {
                 label: 'Chilled Water Supply Temperature',
                 units: tempUnit,
                 className: defaultclassName,
-                baseline: { value: baseline?.chilledWaterSupplyTemp ?? null, decimalPipe: defaultpipeFormat },
-                modifications: modifications ? modifications.map(mod => ({ value: mod.chilledWaterSupplyTemp ?? null, decimalPipe: defaultpipeFormat })) : []
+                baseline: { value: baseline?.chilledWaterSupplyTemp ?? null, decimalPipe: '1.0-1' },
+                modifications: modifications ? modifications.map(mod => ({ value: mod.chilledWaterSupplyTemp ?? null, decimalPipe: '1.0-1' })) : []
             },
             {
                 label: 'Condenser Cooling Method',
@@ -210,8 +210,8 @@ export class InputSummaryService {
                 label: 'HEX Approach Temp',
                 units: tempUnit,
                 className: defaultclassName,
-                baseline: { value: baseline?.HEXApproachTemp ?? null, decimalPipe: defaultpipeFormat },
-                modifications: modifications ? modifications.map(mod => ({ value: mod.HEXApproachTemp ?? null, decimalPipe: defaultpipeFormat })) : []
+                baseline: { value: baseline?.HEXApproachTemp ?? null, decimalPipe: '1.0-1' },
+                modifications: modifications ? modifications.map(mod => ({ value: mod.HEXApproachTemp ?? null, decimalPipe: '1.0-1' })) : []
             }
         ];
 
@@ -224,6 +224,8 @@ export class InputSummaryService {
     }
 
     private mapToPumpSections(baseline: InputSummaryResults | null, mods: InputSummaryResults[]): InputSummarySection[] {
+        const unitsOfMeasure = this.settingsSignal().unitsOfMeasure;
+        const flowRatePipe = unitsOfMeasure === 'Metric' ? '1.4-4' : '1.2-2';
         const pumpRows = (pump: PumpInput | null, modPumps: InputSummaryResults[], fieldName: string): ReportTableRow[] => [
             {
                 label: 'Variable Flow', units: '', className: 'default',
@@ -231,9 +233,9 @@ export class InputSummaryService {
                 modifications: modPumps.map(m => ({ value: m?.[fieldName] ? (m[fieldName].variableFlow ? 'Yes' : 'No') : null }))
             },
             {
-                label: 'Flow Rate', units: 'gpm/ton', className: 'default',
-                baseline: { value: pump?.flowRate ?? null, decimalPipe: '1.2-2' },
-                modifications: modPumps.map(m => ({ value: m?.[fieldName]?.flowRate ?? null, decimalPipe: '1.2-2' }))
+                label: 'Flow Rate', units: getProcessCoolingUnitLabel('volumeFlowRate', unitsOfMeasure), className: 'default',
+                baseline: { value: pump?.flowRate ?? null, decimalPipe: flowRatePipe },
+                modifications: modPumps.map(m => ({ value: m?.[fieldName]?.flowRate ?? null, decimalPipe: flowRatePipe }))
             },
             {
                 label: 'Efficiency', units: '%', className: 'default',
@@ -241,7 +243,7 @@ export class InputSummaryService {
                 modifications: modPumps.map(m => ({ value: m?.[fieldName]?.efficiency ?? null, decimalPipe: '1.0-0' }))
             },
             {
-                label: 'Motor Size', units: 'hp', className: 'default',
+                label: 'Motor Size', units: getProcessCoolingUnitLabel('motorPower', unitsOfMeasure), className: 'default',
                 baseline: { value: pump?.motorSize ?? null, decimalPipe: '1.0-0' },
                 modifications: modPumps.map(m => ({ value: m?.[fieldName]?.motorSize ?? null, decimalPipe: '1.0-0' }))
             },
@@ -276,13 +278,13 @@ export class InputSummaryService {
                     },
                     {
                         label: 'Condenser Water Temperature', units: tempUnit, className: 'default',
-                        baseline: { value: baseline?.waterCooledSystemInput?.condenserWaterTemp ?? null, decimalPipe: '1.0-0' },
-                        modifications: mods.map(m => ({ value: m?.waterCooledSystemInput?.condenserWaterTemp ?? null, decimalPipe: '1.0-0' }))
+                        baseline: { value: baseline?.waterCooledSystemInput?.condenserWaterTemp ?? null, decimalPipe: '1.0-1' },
+                        modifications: mods.map(m => ({ value: m?.waterCooledSystemInput?.condenserWaterTemp ?? null, decimalPipe: '1.0-1' }))
                     },
                     {
                         label: 'Following Temperature Differential', units: tempUnit, className: 'default',
-                        baseline: { value: baseline?.waterCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-0' },
-                        modifications: mods.map(m => ({ value: m?.waterCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-0' }))
+                        baseline: { value: baseline?.waterCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-1' },
+                        modifications: mods.map(m => ({ value: m?.waterCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-1' }))
                     },
                 ]
             }];
@@ -298,8 +300,8 @@ export class InputSummaryService {
                     },
                     {
                         label: 'Outdoor Air Design Temperature', units: tempUnit, className: 'default',
-                        baseline: { value: baseline?.airCooledSystemInput?.outdoorAirTemp ?? null, decimalPipe: '1.0-0' },
-                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput?.outdoorAirTemp ?? null, decimalPipe: '1.0-0' }))
+                        baseline: { value: baseline?.airCooledSystemInput?.outdoorAirTemp ?? null, decimalPipe: '1.0-1' },
+                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput?.outdoorAirTemp ?? null, decimalPipe: '1.0-1' }))
                     },
                     {
                         label: 'Air Cooling Source', units: '', className: 'default',
@@ -308,13 +310,13 @@ export class InputSummaryService {
                     },
                     {
                         label: 'Indoor Temperature', units: tempUnit, className: 'default',
-                        baseline: { value: baseline?.airCooledSystemInput?.indoorTemp ?? null, decimalPipe: '1.0-0' },
-                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput?.indoorTemp ?? null, decimalPipe: '1.0-0' }))
+                        baseline: { value: baseline?.airCooledSystemInput?.indoorTemp ?? null, decimalPipe: '1.0-1' },
+                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput?.indoorTemp ?? null, decimalPipe: '1.0-1' }))
                     },
                     {
                         label: 'Following Temperature Differential', units: tempUnit, className: 'default',
-                        baseline: { value: baseline?.airCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-0' },
-                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-0' }))
+                        baseline: { value: baseline?.airCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-1' },
+                        modifications: mods.map(m => ({ value: m?.airCooledSystemInput?.followingTempDifferential ?? null, decimalPipe: '1.0-1' }))
                     },
                 ]
             }];
@@ -347,7 +349,7 @@ export class InputSummaryService {
                     modifications: mods.map(m => ({ value: TowerSizeMetricLabels[m?.towerSizeMetric] ?? '' }))
                 },
                 {
-                    label: 'Tower Size', units: '', className: 'default',
+                    label: 'Tower Size', units: this.getTowerSizeUnit(baseline?.towerSizeMetric), className: 'default',
                     baseline: { value: baseline?.towerSize ?? null, decimalPipe: '1.0-0' },
                     modifications: mods.map(m => ({ value: m?.towerSize ?? null, decimalPipe: '1.0-0' }))
                 },
@@ -368,8 +370,8 @@ export class InputSummaryService {
                 },
                 {
                     label: 'HEX Approach Temperature', units: tempUnit, className: 'default',
-                    baseline: { value: baseline?.HEXApproachTemp ?? null, decimalPipe: '1.0-0' },
-                    modifications: mods.map(m => ({ value: m?.HEXApproachTemp ?? null, decimalPipe: '1.0-0' }))
+                    baseline: { value: baseline?.HEXApproachTemp ?? null, decimalPipe: '1.0-1' },
+                    modifications: mods.map(m => ({ value: m?.HEXApproachTemp ?? null, decimalPipe: '1.0-1' }))
                 },
             ]
         }];
@@ -377,6 +379,8 @@ export class InputSummaryService {
 
     private mapToInventorySections(baseline: InputSummaryResults | null, mods: InputSummaryResults[]): InputSummarySection[] {
         const baselineInventory: ChillerInventoryItem[] = baseline?.inventory ?? [];
+        const unitsOfMeasure = this.settingsSignal().unitsOfMeasure;
+        const efficiencyPipe = unitsOfMeasure === 'Metric' ? '1.3-3' : '1.2-2';
         return baselineInventory.map((chiller, idx) => ({
             label: chiller.name || 'Chiller',
             rows: [
@@ -386,7 +390,7 @@ export class InputSummaryService {
                     modifications: mods.map(m => ({ value: CompressorChillerTypes[m?.inventory?.[idx]?.chillerType] ?? '' }))
                 },
                 {
-                    label: 'Capacity', units: 'tons', className: 'default',
+                    label: 'Capacity', units: getProcessCoolingUnitLabel('capacity', unitsOfMeasure), className: 'default',
                     baseline: { value: chiller.capacity ?? null, decimalPipe: '1.0-0' },
                     modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.capacity ?? null, decimalPipe: '1.0-0' }))
                 },
@@ -396,9 +400,9 @@ export class InputSummaryService {
                     modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.isFullLoadEfficiencyKnown ? 'Yes' : 'No' }))
                 },
                 {
-                    label: 'Full Load Efficiency', units: 'kW/ton', className: 'default',
-                    baseline: { value: chiller.fullLoadEfficiency ?? null, decimalPipe: '1.2-2' },
-                    modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.fullLoadEfficiency ?? null, decimalPipe: '1.2-2' }))
+                    label: 'Full Load Efficiency', units: getProcessCoolingUnitLabel('fullLoadEfficiency', unitsOfMeasure), className: 'default',
+                    baseline: { value: chiller.fullLoadEfficiency ?? null, decimalPipe: efficiencyPipe },
+                    modifications: mods.map(m => ({ value: m?.inventory?.[idx]?.fullLoadEfficiency ?? null, decimalPipe: efficiencyPipe }))
                 },
                 {
                     label: 'Age', units: 'yrs', className: 'default',
@@ -407,6 +411,16 @@ export class InputSummaryService {
                 },
             ]
         }));
+    }
+
+    private getTowerSizeUnit(towerSizeMetric: TowerSizeMetric): string {
+        const unitsOfMeasure = this.settingsSignal().unitsOfMeasure;
+        if (towerSizeMetric === TowerSizeMetric.Tons) {
+            return getProcessCoolingUnitLabel('towerSizeTons', unitsOfMeasure);
+        } else if (towerSizeMetric === TowerSizeMetric.HP) {
+            return getProcessCoolingUnitLabel('towerSizeHP', unitsOfMeasure);
+        }
+        return '';
     }
 
 }

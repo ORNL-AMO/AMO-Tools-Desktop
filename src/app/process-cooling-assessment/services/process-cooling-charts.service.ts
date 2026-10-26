@@ -3,7 +3,7 @@ import { ProcessCoolingChillerOutput } from '../../shared/models/process-cooling
 import { TraceData } from '../../shared/models/plotting';
 import { graphColors } from '../../shared/graphColors';
 import { defaultPlotlyConfig } from '../../shared/helperFunctions';
-import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { getProcessCoolingUnitLabel } from '../constants/process-cooling-units';
 import { CHART_TITLE_FONT_SIZE } from '../../shared/report-builder/adapters/report-chart-style.constants';
 
 export interface PlotlyChartConfig {
@@ -30,8 +30,9 @@ function hexToRgba(hex: string, alpha: number): string {
 @Injectable({ providedIn: 'root' })
 export class ProcessCoolingChartsService {
 
-  buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[], showFactoredProfile = false): PlotlyChartConfig {
-    const efficiencyLabel = PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial;
+  buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[], unitsOfMeasure: string, showFactoredProfile = false): PlotlyChartConfig {
+    const efficiencyLabel = getProcessCoolingUnitLabel('efficiency', unitsOfMeasure);
+    const efficiencyHoverFormat = unitsOfMeasure === 'Metric' ? '.3f' : '.2f';
 
     const traces: TraceData[] = chillerOutput.map((chiller, index) => {
       const color = graphColors[index % graphColors.length];
@@ -47,7 +48,7 @@ export class ProcessCoolingChartsService {
         line: { width: 2, dash, color },
         fill: 'tozeroy',
         fillcolor: fillColor,
-        hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`
+        hovertemplate: `${chiller.name}<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:${efficiencyHoverFormat}}<extra></extra>`
       };
     });
 
@@ -61,7 +62,7 @@ export class ProcessCoolingChartsService {
         name: `${chiller.name} (Adjusted)`,
         marker: { size: 8, color, symbol: MARKER_SHAPES[index % MARKER_SHAPES.length], line: { color: '#ffffff', width: 1 } },
         line: { width: 2, dash: 'dot', color },
-        hovertemplate: `${chiller.name} (Adjusted)<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:.2f}<extra></extra>`
+        hovertemplate: `${chiller.name} (Adjusted)<br>Load: %{x}<br>Efficiency (${efficiencyLabel}): %{y:${efficiencyHoverFormat}}<extra></extra>`
       };
     }) : [];
 

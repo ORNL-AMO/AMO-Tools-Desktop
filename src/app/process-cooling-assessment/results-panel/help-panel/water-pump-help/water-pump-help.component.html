@@ -29,14 +29,14 @@
         <br>
         <small class="text-muted">
             The pump flow rate is generally specified as a function of the chiller
-            capacity in tons. For constant flow systems, this value specifies the pump flow rate under all
+            capacity in @if (settings().unitsOfMeasure === 'Metric') {kW} @else {tons}. For constant flow systems, this value specifies the pump flow rate under all
             conditions. For variable flow systems, this value specifies the pump flow rate coinciding with
             full chiller load. Even in variable flow systems, however, the pump flow rate generally remains
             at 50% of the rated flow or above. 
             
-            <br><br>Typical values are 2.4 gpm per ton for chilled water pumps and 3.0 gpm per ton for
-            condenser water pumps. The allowable range for chilled water pumps is 1.6 to 3.0, and the range
-            for condenser water pumps is 2.0 to 4.0.
+            <br><br>Typical values are @if (settings().unitsOfMeasure === 'Metric') {0.043 L/s per kW} @else {2.4 gpm per ton} for chilled water pumps and @if (settings().unitsOfMeasure === 'Metric') {0.054 L/s per kW} @else {3.0 gpm per ton} for
+            condenser water pumps. The allowable range for chilled water pumps is @if (settings().unitsOfMeasure === 'Metric') {0.029 to 0.054} @else {1.6 to 3.0}, and the range
+            for condenser water pumps is @if (settings().unitsOfMeasure === 'Metric') {0.036 to 0.072} @else {2.0 to 4.0}.
             <hr>
         </small>
     </h6>

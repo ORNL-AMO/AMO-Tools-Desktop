@@ -1,5 +1,6 @@
-import { Component, inject, WritableSignal } from '@angular/core';
+import { Component, inject, Signal, WritableSignal } from '@angular/core';
 import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.service';
+import { Settings } from '../../../../shared/models/settings';
 import { ProcessCoolingAssessmentService } from '../../../services/process-cooling-assessment.service';
 import { CondenserCoolingMethod } from '../../../../shared/models/process-cooling-assessment';
 import { Observable } from 'rxjs';
@@ -16,6 +17,7 @@ export class CondenserCoolingHelpComponent {
 
   CondenserCoolingMethod = CondenserCoolingMethod;
   focusedField: WritableSignal<string> = this.processCoolingService.focusedFieldSignal;
+  settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
   condenserCoolingMethod: number = this.processCoolingAssessmentService.condenserCoolingMethod;
 
 }

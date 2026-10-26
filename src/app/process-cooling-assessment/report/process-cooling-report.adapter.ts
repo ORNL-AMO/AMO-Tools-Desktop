@@ -159,7 +159,7 @@ export class ProcessCoolingReportAdapter implements ReportDataAdapter {
         const results = await firstValueFrom(this.resultsService.baselineResults$);
         if (!results?.chiller?.length) throw new Error('No chiller results available');
 
-        const { traces, layout } = this.chartsService.buildChillerProfileChart(results.chiller);
+        const { traces, layout } = this.chartsService.buildChillerProfileChart(results.chiller, this.execSummaryService.settingsSignal().unitsOfMeasure);
         return this.chartRenderService.renderChartToImage(traces, layout);
       },
     };

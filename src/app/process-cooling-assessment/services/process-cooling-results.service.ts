@@ -85,12 +85,18 @@ export class ProcessCoolingResultsService {
     const weatherData: WeatherContextData = this.processCoolingWeatherContextService.getWeatherData();
     const isValidWeatherData: boolean = this.processCoolingWeatherContextService.isValidWeatherData();
     if (isValidWeatherData) {
-      const convertedWeatherDataInput = this.convertProcessCoolingService.convertWeatherDataForSuiteApi(weatherData, this.processCoolingAssessmentService.settingsSignal());
-      if (processCoolingAssessment.systemInformation.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
-        results = this.suiteApi.getWaterCooledResults(processCoolingAssessment, convertedWeatherDataInput, suiteModificationArgs);
+      // * Suite API expects Imperial inputs and returns Imperial results
+      const settings = this.processCoolingAssessmentService.settingsSignal();
+      const convertedWeatherDataInput = this.convertProcessCoolingService.convertWeatherDataForSuiteApi(weatherData, settings);
+      const suiteInput: ProcessCoolingAssessment = this.convertProcessCoolingService.convertInputsForSuite(processCoolingAssessment, settings);
+      if (suiteInput.systemInformation.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
+        results = this.suiteApi.getWaterCooledResults(suiteInput, convertedWeatherDataInput, suiteModificationArgs);
       } else {
-        results = this.suiteApi.getAirCooledResults(processCoolingAssessment, convertedWeatherDataInput, suiteModificationArgs);
+        results = this.suiteApi.getAirCooledResults(suiteInput, convertedWeatherDataInput, suiteModificationArgs);
       }
+      results = this.convertProcessCoolingService.convertProcessCoolingResults(results, settings);
+      // * fuelCost is passed through by the Suite, keep it in the assessment units
+      results.fuelCost = processCoolingAssessment.systemInformation.operations.fuelCost;
     }
     if (debugContext) {
       this.recordSuiteDebugData(debugContext, processCoolingAssessment, suiteModificationArgs, results);

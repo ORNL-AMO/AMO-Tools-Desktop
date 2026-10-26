@@ -131,7 +131,7 @@ After each write, it also refreshes the in-memory assessment list (`getAllAssess
 | `ChillerLoadScheduleService` | Manages the load schedule form for the currently selected chiller. |
 | `ModificationService` | CRUD for EEM modifications on the assessment. Manages `selectedModificationId` in localStorage + as a signal. |
 | `ExploreOpportunitiesFormService` | Builds reactive forms for each EEM type. |
-| `ConvertProcessCoolingService` | Converts all numeric fields in a `ProcessCoolingAssessment` between Imperial and Metric using the `ConvertValue` utility. |
+| `ConvertProcessCoolingService` | Converts saved assessment data between Imperial and Metric on a units change, and converts Suite inputs to Imperial / Suite results back to Metric. |
 | `MonthlyOperatingScheduleService` | Manages the monthly operating schedule form and helpers. |
 | `WeeklyOperatingScheduleService` | Manages the weekly operating schedule form and helpers (implied, part of operating-schedule folder). |
 
@@ -166,7 +166,7 @@ The resolver pre-populates the weather context from saved assessment data so the
 
 `ProcessCoolingResultsService` is the only service that calls the Suite API. It receives the `ProcessCoolingAssessment` and `Settings`, assembles the Suite API input shape, invokes `ProcessCoolingSuiteApiService.getResults()` (injected from the shared WASM loader), and maps the output to `ProcessCoolingResults[]`.
 
-All Suite API calls must receive data in **Imperial units**. The `existingDataUnits` field on `ProcessCoolingAssessment` tracks the original storage units, and `ConvertProcessCoolingService` handles any necessary conversion before results are computed.
+All Suite API calls must receive data in **Imperial units**. Assessment data is stored in the settings units, so `getProcessCoolingSuiteResults()` converts a copy of the inputs (`convertInputsForSuite`) and the weather data to Imperial before the call, and converts results back (`convertProcessCoolingResults`) after it. See [data-model.md](data-model.md#units-of-measure).
 
 ---
 

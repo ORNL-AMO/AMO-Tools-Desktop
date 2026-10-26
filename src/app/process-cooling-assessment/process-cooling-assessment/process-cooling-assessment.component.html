@@ -18,3 +18,8 @@
 
 
 @if (showWelcomeScreen) {<app-welcome-screen (emitClose)="closeWelcomeScreen()"></app-welcome-screen>}
+
+@if (showUpdateUnitsModal()) {
+<app-update-units-modal [assessmentType]="'process-cooling'" (emitShouldUpdateData)="selectUpdateAction($event)" [settings]="settings()">
+</app-update-units-modal>
+}
