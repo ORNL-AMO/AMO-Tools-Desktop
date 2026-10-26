@@ -194,9 +194,9 @@ export const getDefaultProcessCoolingAssessment = (settings: Settings): ProcessC
               doChillerLoadSchedulesVary: undefined
             },
             airCooledSystemInput: {
-              outdoorAirTemp: 54,
+              outdoorAirTemp: 95,
               airCoolingSource: 0,
-              indoorTemp: 95,
+              indoorTemp: 75,
               followingTempDifferential: 0
             },
             waterCooledSystemInput: {

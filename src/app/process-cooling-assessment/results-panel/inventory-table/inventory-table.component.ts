@@ -5,6 +5,7 @@ import { ChillerInventoryBaseComponent } from './chiller-inventory-base.componen
 import { ModalDialogService } from '../../../shared/modal-dialog.service';
 import { ConfirmActionComponent } from '../../../shared/confirm-action/confirm-action.component';
 import { FilterChillerInventoryParams } from '../../pipes/filter-chiller-inventory.pipe';
+import { PROCESS_COOLING_UNITS } from '../../constants/process-cooling-units';
 
 @Component({
   selector: 'app-inventory-table',
@@ -15,6 +16,8 @@ import { FilterChillerInventoryParams } from '../../pipes/filter-chiller-invento
 export class InventoryTableComponent extends ChillerInventoryBaseComponent {
   private modalDialogService: ModalDialogService = inject(ModalDialogService);
   filterInventoryParams: FilterChillerInventoryParams = null;
+  readonly settings = this.processCoolingService.settingsSignal;
+  readonly PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
 
   override ngOnInit(): void {
     super.ngOnInit();

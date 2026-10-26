@@ -91,6 +91,6 @@ export class ChillerInventoryComponent implements OnInit {
   }
 
   get fullLoadEfficiencyWarning(): string | null {
-    return this.inventoryService.getFullLoadEfficiencyWarning(this.form.controls.fullLoadEfficiency.value);
+    return this.inventoryService.getFullLoadEfficiencyWarning(this.form.controls.fullLoadEfficiency.value, this.settings().unitsOfMeasure);
   }
 }

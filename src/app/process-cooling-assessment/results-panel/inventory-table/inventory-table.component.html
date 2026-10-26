@@ -12,8 +12,9 @@
                 <tr>
                     <th>Name</th>
                     <th>Compressor / Chiller Type</th>
-                    <th>Full Load Efficiency (kW/ton)</th>
-                    <th>Chiller Capacity (tons)</th>
+                    @let isImperial = settings().unitsOfMeasure !== 'Metric';
+                    <th>Full Load Efficiency (<span [innerHTML]="isImperial ? PROCESS_COOLING_UNITS.fullLoadEfficiency.labelHTML.imperial : PROCESS_COOLING_UNITS.fullLoadEfficiency.labelHTML.metric"></span>)</th>
+                    <th>Chiller Capacity (<span [innerHTML]="isImperial ? PROCESS_COOLING_UNITS.capacity.labelHTML.imperial : PROCESS_COOLING_UNITS.capacity.labelHTML.metric"></span>)</th>
                     <th></th>
                     <th></th>
                 </tr>
