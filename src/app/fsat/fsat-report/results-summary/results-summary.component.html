@@ -7,10 +7,11 @@
       <tr>
         <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"></th>
         <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"
-          [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
-        <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"
-          *ngFor="let modification of fsat.modifications; let index = index;"
+        [ngClass]="{'selected-modification': selectedModificationIndex == -1}">Baseline</th>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <th [ngStyle]="{'width.%': 100 /(fsat.modifications.length+2)}"
           [ngClass]="{'selected-modification': index == selectedModificationIndex}">{{modification.fsat.name}}</th>
+        }
       </tr>
     </thead>
     <tbody>
@@ -19,197 +20,275 @@
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash; &mdash;
         </td>
-        <td class="percent-graph" *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <div class="hide-print" *ngIf="modification.fsat.outputs.percentSavings">
-            <app-percent-graph *ngIf="modification.fsat.valid.isValid"
-              [value]="modification.fsat.outputs.percentSavings"></app-percent-graph>
-            <div class="alert-danger small" *ngIf="!modification.fsat.valid.isValid">
-              Invalid modification<br>
-              <span *ngIf="!modification.fsat.valid.fluidValid">Errors found in Fluid<br></span>
-              <span *ngIf="!modification.fsat.valid.fieldDataValid">Errors found in Field Data<br></span>
-              <span *ngIf="!modification.fsat.valid.fanValid">Errors found in Fan Setup<br></span>
-              <span *ngIf="!modification.fsat.valid.motorValid">Errors found in Motor<br></span>
-            </div>
-          </div>
-          <div class="show-print text-center" *ngIf="modification.fsat.outputs.percentSavings">
-            {{modification.fsat.outputs.percentSavings | number:'1.0'}} %
-          </div>
-          <div *ngIf="!modification.fsat.outputs.percentSavings" class="mx-auto">&mdash; &mdash;</div>
-        </td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td class="percent-graph"
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            @if (modification.fsat.outputs.percentSavings) {
+              <div class="hide-print">
+                @if (modification.fsat.valid.isValid) {
+                  <app-percent-graph
+                  [value]="modification.fsat.outputs.percentSavings"></app-percent-graph>
+                }
+                @if (!modification.fsat.valid.isValid) {
+                  <div class="alert-danger small">
+                    Invalid modification<br>
+                    @if (!modification.fsat.valid.fluidValid) {
+                      <span>Errors found in Fluid<br></span>
+                    }
+                    @if (!modification.fsat.valid.fieldDataValid) {
+                      <span>Errors found in Field Data<br></span>
+                    }
+                    @if (!modification.fsat.valid.fanValid) {
+                      <span>Errors found in Fan Setup<br></span>
+                    }
+                    @if (!modification.fsat.valid.motorValid) {
+                      <span>Errors found in Motor<br></span>
+                    }
+                  </div>
+                }
+              </div>
+            }
+            @if (modification.fsat.outputs.percentSavings) {
+              <div class="show-print text-center">
+                {{modification.fsat.outputs.percentSavings | number:'1.0'}} %
+              </div>
+            }
+            @if (!modification.fsat.outputs.percentSavings) {
+              <div class="mx-auto">&mdash; &mdash;</div>
+            }
+          </td>
+        }
       </tr>
       <tr>
         <td>Fan Energy Index</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.fanEnergyIndex | number:'1.0-2'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+        {{fsat.outputs.fanEnergyIndex | number:'1.0-2'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
           {{modification.fsat.outputs.fanEnergyIndex | number:'1.0-2'}}</td>
+        }
       </tr>
       <tr>
         <td>Fan efficiency (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.fanEfficiency | number:'1.0-1'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.fanEfficiency
+        {{fsat.outputs.fanEfficiency | number:'1.0-1'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.fanEfficiency
           | number:'1.0-1'}}</td>
+        }
       </tr>
       <tr>
         <td>Motor rated power ({{settings.fanPowerMeasurement}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.motorRatedPower | number:'1.0-0'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.motorRatedPower
+        {{fsat.outputs.motorRatedPower | number:'1.0-0'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.motorRatedPower
           | number:'2.0-0'}}</td>
+        }
       </tr>
       <tr>
         <td>Motor shaft power ({{settings.fanPowerMeasurement}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.motorShaftPower | number:'1.0-1'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.motorShaftPower
+        {{fsat.outputs.motorShaftPower | number:'1.0-1'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.motorShaftPower
           | number:'1.0-1'}}</td>
+        }
       </tr>
       <tr>
         <td>Fan shaft power ({{settings.fanPowerMeasurement}})</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.fanShaftPower | number:'1.0-1'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.fanShaftPower
+        {{fsat.outputs.fanShaftPower | number:'1.0-1'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.fanShaftPower
           | number:'1.0-1'}}</td>
+        }
       </tr>
       <tr>
         <td>Motor efficiency (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.motorEfficiency | number:'1.0-1'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.motorEfficiency
+        {{fsat.outputs.motorEfficiency | number:'1.0-1'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.motorEfficiency
           | number:'1.0-1'}}</td>
+        }
       </tr>
       <tr>
         <td>Motor power factor (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.motorPowerFactor | number:'1.0-1'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.motorPowerFactor
+        {{fsat.outputs.motorPowerFactor | number:'1.0-1'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.motorPowerFactor
           | number:'1.0-1'}}</td>
+        }
       </tr>
       <tr>
         <td>Percent Loaded (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.loadFactor*100 | number:'1.0-1'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.loadFactor*100
+        {{fsat.outputs.loadFactor*100 | number:'1.0-1'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.loadFactor*100
           | number:'1.0-1'}}</td>
+        }
       </tr>
       <tr>
         <td>Drive efficiency (%)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.driveEfficiency | number:'1.0-1'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.driveEfficiency
+        {{fsat.outputs.driveEfficiency | number:'1.0-1'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.driveEfficiency
           | number:'1.0-1'}}</td>
+        }
       </tr>
       <tr>
         <td>Motor current (amps)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.motorCurrent | number:'1.0-0'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.motorCurrent
+        {{fsat.outputs.motorCurrent | number:'1.0-0'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.motorCurrent
           | number:'1.0-0'}}</td>
+        }
       </tr>
       <tr>
         <td>Motor power (kW)</td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.motorPower | number:'1.0-1'}}</td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.motorPower
+        {{fsat.outputs.motorPower | number:'1.0-1'}}</td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.motorPower
           | number:'1.0-1'}}</td>
-      </tr>  
-      
+        }
+      </tr>
+
       @if (showOperationalImpacts()) {
-      <tr class="callout">
-        <th>Annual CO2 Emissions
-          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
-        </th>
-        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{fsat.outputs.co2EmissionsOutput |
+        <tr class="callout">
+          <th>Annual CO2 Emissions
+            @if (settings.emissionsUnit === 'Imperial') {
+              <span>(ton CO<sub>2</sub>)</span>
+            }
+            @if (settings.emissionsUnit === 'Metric') {
+              <span>(tonne CO<sub>2</sub>)</span>
+            }
+          </th>
+          <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">{{fsat.outputs.co2EmissionsOutput |
           number:'1.1-1'}}</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.fsat.outputs.co2EmissionsOutput">{{modification.fsat.outputs.co2EmissionsOutput |
-            number:'1.1-1'}}</span>
-          <span *ngIf="!modification.fsat.outputs.co2EmissionsOutput">&mdash;</span>
-        </th>
-      </tr>
-      <tr class="callout">
-        <th>Annual CO2 Emissions Savings
-          <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
-          <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
-        </th>
-        <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
-          <span
-            *ngIf="modification.fsat.whatIfScenario == true">
-            {{fsat.outputs.co2EmissionsOutput - modification.fsat.outputs.co2EmissionsOutput| sigFigs:'3'}}</span>
-          <span
-            *ngIf="modification.fsat.whatIfScenario == false">
-            &mdash;</span>
-        </th>
-      </tr>
+          @for (modification of fsat.modifications; track modification; let index = $index) {
+            <th
+              [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+              @if (modification.fsat.outputs.co2EmissionsOutput) {
+                <span>{{modification.fsat.outputs.co2EmissionsOutput |
+                number:'1.1-1'}}</span>
+              }
+              @if (!modification.fsat.outputs.co2EmissionsOutput) {
+                <span>&mdash;</span>
+              }
+            </th>
+          }
+        </tr>
+        <tr class="callout">
+          <th>Annual CO2 Emissions Savings
+            @if (settings.emissionsUnit === 'Imperial') {
+              <span>(ton CO<sub>2</sub>)</span>
+            }
+            @if (settings.emissionsUnit === 'Metric') {
+              <span>(tonne CO<sub>2</sub>)</span>
+            }
+          </th>
+          <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
+          @for (modification of fsat.modifications; track modification; let index = $index) {
+            <th
+              [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
+              @if (modification.fsat.whatIfScenario == true) {
+                <span
+                  >
+                {{fsat.outputs.co2EmissionsOutput - modification.fsat.outputs.co2EmissionsOutput| sigFigs:'3'}}</span>
+              }
+              @if (modification.fsat.whatIfScenario == false) {
+                <span
+                  >
+                &mdash;</span>
+              }
+            </th>
+          }
+        </tr>
       }
       <tr>
         <th>Annual Energy (MWh)</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.annualEnergy | number:'1.0-0'}}</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          {{modification.fsat.outputs.annualEnergy
+        {{fsat.outputs.annualEnergy | number:'1.0-0'}}</th>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <th
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            {{modification.fsat.outputs.annualEnergy
           | number:'1.0-0'}}</th>
+        }
       </tr>
       <tr>
         <th>Annual Energy Savings (MWh)</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.fsat.whatIfScenario == true">
-            {{modification.fsat.outputs.energySavings | number:'1.0-0'}}
-          </span>
-          <span *ngIf="modification.fsat.whatIfScenario == false">
-            &mdash;
-          </span>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <th
+            [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
+            @if (modification.fsat.whatIfScenario == true) {
+              <span>
+                {{modification.fsat.outputs.energySavings | number:'1.0-0'}}
+              </span>
+            }
+            @if (modification.fsat.whatIfScenario == false) {
+              <span>
+                &mdash;
+              </span>
+            }
           </th>
+        }
       </tr>
       <tr>
         <th>Annual Cost ({{settings.currency}})</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          {{fsat.outputs.annualCost | number: '1.0-0'}}</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;"
+        {{fsat.outputs.annualCost | number: '1.0-0'}}</th>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <th
           [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10,'selected-modification': index == selectedModificationIndex}">{{modification.fsat.outputs.annualCost | number: '1.0-0'}}</th>
+        }
       </tr>
       <tr>
         <th>Annual Savings ({{settings.currency}})</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.fsat.whatIfScenario == true">
-            {{modification.fsat.outputs.annualSavings | number:'1.0-0'}}
-          </span>
-          <span *ngIf="modification.fsat.whatIfScenario == false">
-            &mdash;
-          </span>
-        </th>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <th
+            [ngClass]="{'positive-savings': modification.fsat.outputs.percentSavings > 10, 'selected-modification': index == selectedModificationIndex}">
+            @if (modification.fsat.whatIfScenario == true) {
+              <span>
+                {{modification.fsat.outputs.annualSavings | number:'1.0-0'}}
+              </span>
+            }
+            @if (modification.fsat.whatIfScenario == false) {
+              <span>
+                &mdash;
+              </span>
+            }
+          </th>
+        }
       </tr>
       <tr>
         <td>
@@ -218,12 +297,18 @@
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash;
         </td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.fsat.implementationCosts">{{modification.fsat.implementationCosts|
-            number:'2.0-0'}}</span>
-          <span *ngIf="!modification.fsat.implementationCosts">&mdash;</span>
-        </td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            @if (modification.fsat.implementationCosts) {
+              <span>{{modification.fsat.implementationCosts|
+              number:'2.0-0'}}</span>
+            }
+            @if (!modification.fsat.implementationCosts) {
+              <span>&mdash;</span>
+            }
+          </td>
+        }
       </tr>
       <tr>
         <td>
@@ -232,102 +317,146 @@
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
           &mdash;
         </td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.fsat.implementationCosts">{{getPaybackPeriod(modification.fsat) |
-            sigFigs:'5'}}</span>
-          <span *ngIf="!modification.fsat.implementationCosts">0</span>
-        </td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            @if (modification.fsat.implementationCosts) {
+              <span>{{getPaybackPeriod(modification.fsat) |
+              sigFigs:'5'}}</span>
+            }
+            @if (!modification.fsat.implementationCosts) {
+              <span>0</span>
+            }
+          </td>
+        }
       </tr>
       <!--  -->
       <tr>
         <th>Selected Energy Projects</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span class="d-block"
-            *ngIf="modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity">{{
-            modification.exploreOppsShowVfd.display }}</span>
-          <span class="d-block"
-            *ngIf="modification.exploreOppsShowDrive && modification.exploreOppsShowDrive.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity">{{
-            modification.exploreOppsShowDrive.display }}</span>
-          <span class="d-block"
-            *ngIf="modification.exploreOppsShowFanType && modification.exploreOppsShowFanType.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity">{{
-            modification.exploreOppsShowFanType.display }}</span>
-          <span class="d-block"
-            *ngIf="modification.exploreOppsShowMotor && modification.exploreOppsShowMotor.hasOpportunity">{{
-            modification.exploreOppsShowMotor.display }}</span>
-          <span class="d-block"
-            *ngIf="modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity">{{
-            modification.exploreOppsShowFlowRate.display }}</span>
-          <span class="d-block"
-            *ngIf="modification.exploreOppsShowReducePressure && modification.exploreOppsShowReducePressure.hasOpportunity">{{
-            modification.exploreOppsShowReducePressure.display }}</span>
-          <span class="d-block"
-            *ngIf="modification.exploreOppsShowOpData && modification.exploreOppsShowOpData.hasOpportunity">{{
-            modification.exploreOppsShowOpData.display }}</span>
-        </th>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <th
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            @if (modification.exploreOppsShowVfd && modification.exploreOppsShowVfd.hasOpportunity) {
+              <span class="d-block"
+                >{{
+              modification.exploreOppsShowVfd.display }}</span>
+            }
+            @if (modification.exploreOppsShowDrive && modification.exploreOppsShowDrive.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
+              <span class="d-block"
+                >{{
+              modification.exploreOppsShowDrive.display }}</span>
+            }
+            @if (modification.exploreOppsShowFanType && modification.exploreOppsShowFanType.hasOpportunity && !modification.exploreOppsShowVfd.hasOpportunity) {
+              <span class="d-block"
+                >{{
+              modification.exploreOppsShowFanType.display }}</span>
+            }
+            @if (modification.exploreOppsShowMotor && modification.exploreOppsShowMotor.hasOpportunity) {
+              <span class="d-block"
+                >{{
+              modification.exploreOppsShowMotor.display }}</span>
+            }
+            @if (modification.exploreOppsShowFlowRate && modification.exploreOppsShowFlowRate.hasOpportunity) {
+              <span class="d-block"
+                >{{
+              modification.exploreOppsShowFlowRate.display }}</span>
+            }
+            @if (modification.exploreOppsShowReducePressure && modification.exploreOppsShowReducePressure.hasOpportunity) {
+              <span class="d-block"
+                >{{
+              modification.exploreOppsShowReducePressure.display }}</span>
+            }
+            @if (modification.exploreOppsShowOpData && modification.exploreOppsShowOpData.hasOpportunity) {
+              <span class="d-block"
+                >{{
+              modification.exploreOppsShowOpData.display }}</span>
+            }
+          </th>
+        }
       </tr>
       <tr>
         <th>Modification Scenario</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <div *ngFor="let modificationScenario of getModificationScenario(modification.fsat)">
-            {{modificationScenario}}<br>
-          </div>
-        </th>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <th
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            @for (modificationScenario of getModificationScenario(modification.fsat); track modificationScenario) {
+              <div>
+                {{modificationScenario}}<br>
+              </div>
+            }
+          </th>
+        }
       </tr>
       <tr>
         <th>Modifications</th>
         <th [ngClass]="{'selected-modification': selectedModificationIndex == -1}">&mdash;</th>
-        <th *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <div *ngFor="let modificationMade of getModificationsMadeList(modification.fsat)">
-            {{modificationMade}}<br>
-          </div>
-        </th>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <th
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            @for (modificationMade of getModificationsMadeList(modification.fsat); track modificationMade) {
+              <div>
+                {{modificationMade}}<br>
+              </div>
+            }
+          </th>
+        }
       </tr>
       <tr>
         <td></td>
         <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}"></td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <span *ngIf="modification.fsat.fanSetup.fanType != 12" class="text-muted">*Optimized</span>
-        </td>
+        @for (modification of fsat.modifications; track modification; let index = $index) {
+          <td
+            [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+            @if (modification.fsat.fanSetup.fanType != 12) {
+              <span class="text-muted">*Optimized</span>
+            }
+          </td>
+        }
       </tr>
-      <tr class="hide-print" *ngIf="inRollup">
-        <td>Use for Summary</td>
-        <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
-          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="-1"
-            [(ngModel)]="selectedModificationIndex">
-        </td>
-        <td *ngFor="let modification of fsat.modifications; let index = index;"
-          [ngClass]="{'selected-modification': index == selectedModificationIndex}">
-          <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index"
-            [(ngModel)]="selectedModificationIndex">
-        </td>
-      </tr>
+      @if (inRollup) {
+        <tr class="hide-print">
+          <td>Use for Summary</td>
+          <td [ngClass]="{'selected-modification': selectedModificationIndex == -1}">
+            <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="-1"
+              [(ngModel)]="selectedModificationIndex">
+          </td>
+          @for (modification of fsat.modifications; track modification; let index = $index) {
+            <td
+              [ngClass]="{'selected-modification': index == selectedModificationIndex}">
+              <input name="{{'summarySelect_'+assessment.id}}" type="radio" (change)="useModification()" [value]="index"
+                [(ngModel)]="selectedModificationIndex">
+            </td>
+          }
+        </tr>
+      }
     </tbody>
   </table>
-  <div class="row" *ngIf="notes.length != 0">
-    <div class="col">
-      <h5>Modification Notes</h5>
-      <p>
-        <small>
-          <span *ngFor="let note of notes">
-            <span *ngIf = "note.modNote">
-              <b>{{note.modName}} &mdash; {{note.modMade}}:</b> {{note.modNote}}
-              <br>
-            </span>
-          </span>
-        </small>
-      </p>
-    </div>   
+  @if (notes.length != 0) {
+    <div class="row">
+      <div class="col">
+        <h5>Modification Notes</h5>
+        <p>
+          <small>
+            @for (note of notes; track note) {
+              <span>
+                @if (note.modNote) {
+                  <span>
+                    <b>{{note.modName}} &mdash; {{note.modMade}}:</b> {{note.modNote}}
+                    <br>
+                    </span>
+                  }
+                </span>
+              }
+            </small>
+          </p>
+        </div>
+      </div>
+    }
   </div>
-</div>
 
-<app-exportable-results-table [tableString]="copyTableString"
-    (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+  <app-exportable-results-table [tableString]="copyTableString"
+  (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
 
-<!-- Scenario -->
+  <!-- Scenario -->

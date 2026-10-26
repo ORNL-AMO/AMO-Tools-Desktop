@@ -1,20 +1,29 @@
-<div class="note-form" *ngIf="currentTab == 'baseline'">
+@if (currentTab == 'baseline') {
+  <div class="note-form">
     <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.systemBasicsNotes" placeholder="Add note for baseline"></textarea>
   </div>
-  
-  <div class="note-form" *ngIf="currentTab == 'fsat-fluid'">
+}
+
+@if (currentTab == 'fsat-fluid') {
+  <div class="note-form">
     <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.fluidNotes" placeholder="Add notes for modification fluid"></textarea>
   </div>
-  
-  <div class="note-form" *ngIf="currentTab == 'fan-setup'">
+}
+
+@if (currentTab == 'fan-setup') {
+  <div class="note-form">
     <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.fanSetupNotes" placeholder="Add notes for modification fan setup"></textarea>
   </div>
-  
-  <div class="note-form" *ngIf="currentTab == 'fan-motor'">
+}
+
+@if (currentTab == 'fan-motor') {
+  <div class="note-form">
     <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.fanMotorNotes" placeholder="Add notes for modification motor"></textarea>
   </div>
-  
-  <div class="note-form" *ngIf="currentTab == 'fan-field-data'">
-      <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.fieldDataNotes" placeholder="Add notes for modification field data"></textarea>
-    </div>
-      
+}
+
+@if (currentTab == 'fan-field-data') {
+  <div class="note-form">
+    <textarea rows="6" id="notes" (input)="save()" [(ngModel)]="notes.fieldDataNotes" placeholder="Add notes for modification field data"></textarea>
+  </div>
+}

@@ -1,326 +1,430 @@
-<div class="d-flex flex-column my-table" *ngIf="showResults">
-  <div class="d-flex stripe my-table-bg border-top-0">
-    <div [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-    </div>
-    <div class="bold table-text d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      Baseline
-    </div>
-    <div class="col-4 bold table-text d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      {{modificationName}}
-
-    </div>
-  </div>
-  <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Percent Savings (%)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text"> &mdash; &mdash;</span>
-    </div>
-    <div class="col-4 d-lg-none d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span
-        *ngIf="fsat.modifications[modificationIndex].fsat.valid.isValid && modificationResults.percentSavings && modificationResults.percentSavings >= 0"
-        class="table-text">
-        {{modificationResults.percentSavings | number:'1.0-1'}}%
-      </span>
-      <span
-        *ngIf="fsat.modifications[modificationIndex].fsat.valid.isValid && modificationResults.percentSavings && modificationResults.percentSavings < 0"
-        class="table-text">
-        0%
-      </span>
-      <div class="alert-danger small" *ngIf="!fsat.modifications[modificationIndex].fsat.valid.isValid">
-        Invalid modification<br>
-        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fluidValid">Errors found in Fluid<br></span>
-        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fieldDataValid">Errors found in Field
-          Data<br></span>
-        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fanValid">Errors found in Fan
-          Setup<br></span>
-        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.motorValid">Errors found in Motor<br></span>
+@if (showResults) {
+  <div class="d-flex flex-column my-table">
+    <div class="d-flex stripe my-table-bg border-top-0">
+      <div [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
       </div>
-    </div>
-    <div class="col-4 d-none d-lg-flex" *ngIf="showModification">
-      <app-percent-graph
-        *ngIf="fsat.modifications[modificationIndex].fsat.valid.isValid && modificationResults.percentSavings"
-        [value]="modificationResults.percentSavings"></app-percent-graph>
-      <div class="alert-danger small" *ngIf="!fsat.modifications[modificationIndex].fsat.valid.isValid">
-        Invalid modification<br>
-        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fluidValid">Errors found in Fluid<br></span>
-        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fieldDataValid">Errors found in Field
-          Data<br></span>
-        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.fanValid">Errors found in Fan
-          Setup<br></span>
-        <span *ngIf="!fsat.modifications[modificationIndex].fsat.valid.motorValid">Errors found in Motor<br></span>
+      <div class="bold table-text d-flex align-items-center pl-1 pr-1"
+        [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+        Baseline
       </div>
+      @if (showModification) {
+        <div class="col-4 bold table-text d-flex align-items-center pl-1 pr-1">
+          {{modificationName}}
+        </div>
+      }
     </div>
-  </div>
-  <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Fan Energy Index</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.fanEnergyIndex | number:'1.0-2'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text">{{modificationResults.fanEnergyIndex | number:'1.0-2'}}</span>
-    </div>
-  </div>
-  <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Fan efficiency (%)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.fanEfficiency | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text">{{modificationResults.fanEfficiency | number:'2.0-1'}}</span>
-    </div>
-  </div>
-  <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Motor rated power ({{settings.fanPowerMeasurement}})</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.motorRatedPower | number:'2.0-0'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text">{{modificationResults.motorRatedPower | number:'2.0-0'}}</span>
-    </div>
-  </div>
-  <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Motor shaft power ({{settings.fanPowerMeasurement}})</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.motorShaftPower | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text">{{modificationResults.motorShaftPower | number:'2.0-1'}}</span>
-    </div>
-  </div>
-  <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Fan shaft power ({{settings.fanPowerMeasurement}})</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.fanShaftPower | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text">{{modificationResults.fanShaftPower | number:'2.0-1'}}</span>
-    </div>
-  </div>
-  <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Motor efficiency (%)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.motorEfficiency | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text"
-        *ngIf="modificationResults.motorEfficiency">{{modificationResults.motorEfficiency | number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.motorEfficiency">&mdash;</span>
-    </div>
-  </div>
-
-  <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Motor power factor (%)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.motorPowerFactor | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text"
-        *ngIf="modificationResults.motorPowerFactor">{{modificationResults.motorPowerFactor | number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.motorPowerFactor">&mdash;</span>
-    </div>
-  </div>
-
-
-
-  <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Percent Loaded (%)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.loadFactor*100 | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text"
-        *ngIf="modificationResults.loadFactor">{{modificationResults.loadFactor*100 | number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.loadFactor">&mdash;</span>
-    </div>
-  </div>
-
-
-  <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Drive efficiency (%)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.driveEfficiency | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text"
-        *ngIf="modificationResults.driveEfficiency">{{modificationResults.driveEfficiency | number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.driveEfficiency">&mdash;</span>
-    </div>
-  </div>
-
-
-  <div class="d-flex my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Motor current (A)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.motorCurrent | number:'2.0-0'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text"
-        *ngIf="modificationResults.motorCurrent">{{modificationResults.motorCurrent | number:'2.0-0'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.motorCurrent">&mdash;</span>
-    </div>
-  </div>
-
-
-  <div class="d-flex stripe my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">Motor power (kW)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="table-text">{{baselineResults.motorPower | number:'2.0-1'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="table-text"
-        *ngIf="modificationResults.motorPower">{{modificationResults.motorPower | number:'2.0-1'}}</span>
-      <span class="table-text" *ngIf="!modificationResults.motorPower">&mdash;</span>
-    </div>
-  </div>
-
-  @if (showOperationalImpacts()) {
-  <div class="d-flex stripe my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">Annual CO2 Emissions
-        <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
-        <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
-      </span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">{{baselineResults.co2EmissionsOutput | number:'1.1-1'}} </span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="!inSetup">
-      <span class="bold table-text"
-        *ngIf="modificationResults.co2EmissionsOutput">{{modificationResults.co2EmissionsOutput | number:'1.1-1'}} </span>
-      <span class="bold table-text" *ngIf="!modificationResults.co2EmissionsOutput">&mdash;</span>
-    </div>
-  </div>
-
-  <div class="d-flex stripe my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">Annual CO2 Emissions Savings
-        <span *ngIf="settings.emissionsUnit === 'Imperial'">(ton CO<sub>2</sub>)</span>
-        <span *ngIf="settings.emissionsUnit === 'Metric'">(tonne CO<sub>2</sub>)</span>
-      </span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
-      <span class="bold table-text">&mdash;</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="!inSetup">
-      <span class="bold table-text" *ngIf="modificationResults.co2EmissionsOutput && isWhatIfScenario == true">
-        {{baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput | number:'0.0-1'}}
-      </span>
-      <span class="bold table-text" *ngIf="!modificationResults.co2EmissionsOutput || isWhatIfScenario == false">&mdash;</span>
-    </div>
-  </div>
-  }
-
-  <div class="d-flex my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">Annual Energy (MWh)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold  table-text">{{baselineResults.annualEnergy | number:'2.0-0'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.annualEnergy"
-        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualEnergy | number:'2.0-0'}}</span>
-      <span class="bold table-text" *ngIf="!modificationResults.annualEnergy">&mdash;</span>
-    </div>
-  </div>
-
-  <div class="d-flex stripe my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">Annual Energy Savings (MWh)</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">&mdash;</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.energySavings && isWhatIfScenario == true"
-        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.energySavings | number:'2.0-0'}}</span>
-      <span class="bold table-text" *ngIf="!modificationResults.energySavings || isWhatIfScenario == false">&mdash;</span>
-    </div>
-  </div>
-
-  <div class="d-flex my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">Annual Cost ({{settings.currency}})</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">{{baselineResults.annualCost | number:'2.0-0'}}</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.annualCost"
-        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualCost | number:'2.0-0'}}</span>
-      <span class="bold table-text" *ngIf="!modificationResults.annualCost">&mdash;</span>
-    </div>
-  </div>
-
-  <div class="d-flex stripe my-table-bg my-table-item">
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">Annual Savings ({{settings.currency }})</span>
-    </div>
-    <div class="d-flex align-items-center pl-1 pr-1"
-      [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
-      <span class="bold table-text">&mdash;</span>
-    </div>
-    <div class="col-4 d-flex align-items-center pl-1 pr-1" *ngIf="showModification">
-      <span class="bold table-text" *ngIf="modificationResults.annualSavings && isWhatIfScenario == true"
-        [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">
-        {{modificationResults.annualSavings | number:'2.0-0'}}</span>
-      <span class="bold table-text" *ngIf="!modificationResults.annualSavings || isWhatIfScenario == false">&mdash;</span>
-    </div>
-  </div>
-</div>
+    <div class="d-flex my-table-item">
+      <div class="d-flex align-items-center pl-1 pr-1"
+        [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+        <span class="table-text">Percent Savings (%)</span>
+      </div>
+      <div class="d-flex align-items-center pl-1 pr-1"
+        [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+        <span class="table-text"> &mdash; &mdash;</span>
+      </div>
+      @if (showModification) {
+        <div class="col-4 d-lg-none d-flex align-items-center pl-1 pr-1">
+          @if (fsat.modifications[modificationIndex].fsat.valid.isValid && modificationResults.percentSavings && modificationResults.percentSavings >= 0) {
+            <span
+              class="table-text">
+              {{modificationResults.percentSavings | number:'1.0-1'}}%
+            </span>
+          }
+          @if (fsat.modifications[modificationIndex].fsat.valid.isValid && modificationResults.percentSavings && modificationResults.percentSavings < 0) {
+            <span
+              class="table-text">
+              0%
+            </span>
+          }
+          @if (!fsat.modifications[modificationIndex].fsat.valid.isValid) {
+            <div class="alert-danger small">
+              Invalid modification<br>
+              @if (!fsat.modifications[modificationIndex].fsat.valid.fluidValid) {
+                <span>Errors found in Fluid<br></span>
+              }
+              @if (!fsat.modifications[modificationIndex].fsat.valid.fieldDataValid) {
+                <span>Errors found in Field
+                  Data<br></span>
+                }
+                @if (!fsat.modifications[modificationIndex].fsat.valid.fanValid) {
+                  <span>Errors found in Fan
+                    Setup<br></span>
+                  }
+                  @if (!fsat.modifications[modificationIndex].fsat.valid.motorValid) {
+                    <span>Errors found in Motor<br></span>
+                  }
+                </div>
+              }
+            </div>
+          }
+          @if (showModification) {
+            <div class="col-4 d-none d-lg-flex">
+              @if (fsat.modifications[modificationIndex].fsat.valid.isValid && modificationResults.percentSavings) {
+                <app-percent-graph
+                [value]="modificationResults.percentSavings"></app-percent-graph>
+              }
+              @if (!fsat.modifications[modificationIndex].fsat.valid.isValid) {
+                <div class="alert-danger small">
+                  Invalid modification<br>
+                  @if (!fsat.modifications[modificationIndex].fsat.valid.fluidValid) {
+                    <span>Errors found in Fluid<br></span>
+                  }
+                  @if (!fsat.modifications[modificationIndex].fsat.valid.fieldDataValid) {
+                    <span>Errors found in Field
+                      Data<br></span>
+                    }
+                    @if (!fsat.modifications[modificationIndex].fsat.valid.fanValid) {
+                      <span>Errors found in Fan
+                        Setup<br></span>
+                      }
+                      @if (!fsat.modifications[modificationIndex].fsat.valid.motorValid) {
+                        <span>Errors found in Motor<br></span>
+                      }
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+            <div class="d-flex stripe my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Fan Energy Index</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.fanEnergyIndex | number:'1.0-2'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  <span class="table-text">{{modificationResults.fanEnergyIndex | number:'1.0-2'}}</span>
+                </div>
+              }
+            </div>
+            <div class="d-flex my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Fan efficiency (%)</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.fanEfficiency | number:'2.0-1'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  <span class="table-text">{{modificationResults.fanEfficiency | number:'2.0-1'}}</span>
+                </div>
+              }
+            </div>
+            <div class="d-flex stripe my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Motor rated power ({{settings.fanPowerMeasurement}})</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.motorRatedPower | number:'2.0-0'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  <span class="table-text">{{modificationResults.motorRatedPower | number:'2.0-0'}}</span>
+                </div>
+              }
+            </div>
+            <div class="d-flex my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Motor shaft power ({{settings.fanPowerMeasurement}})</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.motorShaftPower | number:'2.0-1'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  <span class="table-text">{{modificationResults.motorShaftPower | number:'2.0-1'}}</span>
+                </div>
+              }
+            </div>
+            <div class="d-flex stripe my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Fan shaft power ({{settings.fanPowerMeasurement}})</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.fanShaftPower | number:'2.0-1'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  <span class="table-text">{{modificationResults.fanShaftPower | number:'2.0-1'}}</span>
+                </div>
+              }
+            </div>
+            <div class="d-flex my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Motor efficiency (%)</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.motorEfficiency | number:'2.0-1'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.motorEfficiency) {
+                    <span class="table-text"
+                    >{{modificationResults.motorEfficiency | number:'2.0-1'}}</span>
+                  }
+                  @if (!modificationResults.motorEfficiency) {
+                    <span class="table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="d-flex stripe my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Motor power factor (%)</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.motorPowerFactor | number:'2.0-1'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.motorPowerFactor) {
+                    <span class="table-text"
+                    >{{modificationResults.motorPowerFactor | number:'2.0-1'}}</span>
+                  }
+                  @if (!modificationResults.motorPowerFactor) {
+                    <span class="table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="d-flex my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Percent Loaded (%)</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.loadFactor*100 | number:'2.0-1'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.loadFactor) {
+                    <span class="table-text"
+                    >{{modificationResults.loadFactor*100 | number:'2.0-1'}}</span>
+                  }
+                  @if (!modificationResults.loadFactor) {
+                    <span class="table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="d-flex stripe my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Drive efficiency (%)</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.driveEfficiency | number:'2.0-1'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.driveEfficiency) {
+                    <span class="table-text"
+                    >{{modificationResults.driveEfficiency | number:'2.0-1'}}</span>
+                  }
+                  @if (!modificationResults.driveEfficiency) {
+                    <span class="table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="d-flex my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Motor current (A)</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.motorCurrent | number:'2.0-0'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.motorCurrent) {
+                    <span class="table-text"
+                    >{{modificationResults.motorCurrent | number:'2.0-0'}}</span>
+                  }
+                  @if (!modificationResults.motorCurrent) {
+                    <span class="table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="d-flex stripe my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">Motor power (kW)</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="table-text">{{baselineResults.motorPower | number:'2.0-1'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.motorPower) {
+                    <span class="table-text"
+                    >{{modificationResults.motorPower | number:'2.0-1'}}</span>
+                  }
+                  @if (!modificationResults.motorPower) {
+                    <span class="table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+            @if (showOperationalImpacts()) {
+              <div class="d-flex stripe my-table-bg my-table-item">
+                <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
+                  <span class="bold table-text">Annual CO2 Emissions
+                    @if (settings.emissionsUnit === 'Imperial') {
+                      <span>(ton CO<sub>2</sub>)</span>
+                    }
+                    @if (settings.emissionsUnit === 'Metric') {
+                      <span>(tonne CO<sub>2</sub>)</span>
+                    }
+                  </span>
+                </div>
+                <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
+                  <span class="bold table-text">{{baselineResults.co2EmissionsOutput | number:'1.1-1'}} </span>
+                </div>
+                @if (!inSetup) {
+                  <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                    @if (modificationResults.co2EmissionsOutput) {
+                      <span class="bold table-text"
+                      >{{modificationResults.co2EmissionsOutput | number:'1.1-1'}} </span>
+                    }
+                    @if (!modificationResults.co2EmissionsOutput) {
+                      <span class="bold table-text">&mdash;</span>
+                    }
+                  </div>
+                }
+              </div>
+              <div class="d-flex stripe my-table-bg my-table-item">
+                <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
+                  <span class="bold table-text">Annual CO2 Emissions Savings
+                    @if (settings.emissionsUnit === 'Imperial') {
+                      <span>(ton CO<sub>2</sub>)</span>
+                    }
+                    @if (settings.emissionsUnit === 'Metric') {
+                      <span>(tonne CO<sub>2</sub>)</span>
+                    }
+                  </span>
+                </div>
+                <div class="d-flex align-items-center pl-1 pr-1" [ngClass]="{'col-4': !inSetup, 'col-6': inSetup}">
+                  <span class="bold table-text">&mdash;</span>
+                </div>
+                @if (!inSetup) {
+                  <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                    @if (modificationResults.co2EmissionsOutput && isWhatIfScenario == true) {
+                      <span class="bold table-text">
+                        {{baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput | number:'0.0-1'}}
+                      </span>
+                    }
+                    @if (!modificationResults.co2EmissionsOutput || isWhatIfScenario == false) {
+                      <span class="bold table-text">&mdash;</span>
+                    }
+                  </div>
+                }
+              </div>
+            }
+            <div class="d-flex my-table-bg my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="bold table-text">Annual Energy (MWh)</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="bold  table-text">{{baselineResults.annualEnergy | number:'2.0-0'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.annualEnergy) {
+                    <span class="bold table-text"
+                    [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualEnergy | number:'2.0-0'}}</span>
+                  }
+                  @if (!modificationResults.annualEnergy) {
+                    <span class="bold table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="d-flex stripe my-table-bg my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="bold table-text">Annual Energy Savings (MWh)</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="bold table-text">&mdash;</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.energySavings && isWhatIfScenario == true) {
+                    <span class="bold table-text"
+                    [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.energySavings | number:'2.0-0'}}</span>
+                  }
+                  @if (!modificationResults.energySavings || isWhatIfScenario == false) {
+                    <span class="bold table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="d-flex my-table-bg my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="bold table-text">Annual Cost ({{settings.currency}})</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="bold table-text">{{baselineResults.annualCost | number:'2.0-0'}}</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.annualCost) {
+                    <span class="bold table-text"
+                    [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">{{modificationResults.annualCost | number:'2.0-0'}}</span>
+                  }
+                  @if (!modificationResults.annualCost) {
+                    <span class="bold table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="d-flex stripe my-table-bg my-table-item">
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="bold table-text">Annual Savings ({{settings.currency }})</span>
+              </div>
+              <div class="d-flex align-items-center pl-1 pr-1"
+                [ngClass]="{'col-4': showModification, 'col-6': !showModification}">
+                <span class="bold table-text">&mdash;</span>
+              </div>
+              @if (showModification) {
+                <div class="col-4 d-flex align-items-center pl-1 pr-1">
+                  @if (modificationResults.annualSavings && isWhatIfScenario == true) {
+                    <span class="bold table-text"
+                      [ngClass]="{'positive-savings': modificationResults.percentSavings > 10}">
+                    {{modificationResults.annualSavings | number:'2.0-0'}}</span>
+                  }
+                  @if (!modificationResults.annualSavings || isWhatIfScenario == false) {
+                    <span class="bold table-text">&mdash;</span>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }

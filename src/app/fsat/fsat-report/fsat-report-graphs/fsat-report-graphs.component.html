@@ -1,45 +1,71 @@
-<div class="d-flex flex-wrap" *ngIf="!printView">
-  <div class="d-flex col-12 col-lg-6 flex-column">
-    <div class="pl-2 pr-2">
-      <select name="selectedBaselineData" class="form-control mx-auto" id="selectedBaselineData"
-        [(ngModel)]="selectedBaselineData">
-        <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
-      </select>
-    </div>
-    <div class="p-2 pie-chart-container">
-      <app-plotly-pie-chart [valuesAndLabels]="selectedBaselineData.valuesAndLabels" [valuesUnit]="'kW'">
-      </app-plotly-pie-chart>
-    </div>
-  </div>
-  <div *ngIf="selectedModificationData" class="d-flex col-12 col-lg-6 flex-column">
-    <div class="pl-2 pr-2">
-      <select name="selectedModificationData" class="form-control mx-auto" id="selectedModificationData"
-        [(ngModel)]="selectedModificationData">
-        <option *ngFor="let dataOption of allChartData" [ngValue]="dataOption">{{dataOption.name}}</option>
-      </select>
-    </div>
-    <div class="p-2 pie-chart-container">
-      <app-plotly-pie-chart *ngIf="selectedModificationData.valid.isValid"
-        [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
-      </app-plotly-pie-chart>
-      <div class="alert-danger small" *ngIf="!selectedModificationData.valid.isValid">
-        Invalid modification<br>
-        <span *ngIf="!selectedModificationData.valid.fluidValid">Errors found in Fluid<br></span>
-        <span *ngIf="!selectedModificationData.valid.fieldDataValid">Errors found in Field Data<br></span>
-        <span *ngIf="!selectedModificationData.valid.fanValid">Errors found in Fan Setup<br></span>
-        <span *ngIf="!selectedModificationData.valid.motorValid">Errors found in Motor<br></span>
+@if (!printView) {
+  <div class="d-flex flex-wrap">
+    <div class="d-flex col-12 col-lg-6 flex-column">
+      <div class="pl-2 pr-2">
+        <select name="selectedBaselineData" class="form-control mx-auto" id="selectedBaselineData"
+          [(ngModel)]="selectedBaselineData">
+          @for (dataOption of allChartData; track dataOption) {
+            <option [ngValue]="dataOption">{{dataOption.name}}</option>
+          }
+        </select>
+      </div>
+      <div class="p-2 pie-chart-container">
+        <app-plotly-pie-chart [valuesAndLabels]="selectedBaselineData.valuesAndLabels" [valuesUnit]="'kW'">
+        </app-plotly-pie-chart>
       </div>
     </div>
+    @if (selectedModificationData) {
+      <div class="d-flex col-12 col-lg-6 flex-column">
+        <div class="pl-2 pr-2">
+          <select name="selectedModificationData" class="form-control mx-auto" id="selectedModificationData"
+            [(ngModel)]="selectedModificationData">
+            @for (dataOption of allChartData; track dataOption) {
+              <option [ngValue]="dataOption">{{dataOption.name}}</option>
+            }
+          </select>
+        </div>
+        <div class="p-2 pie-chart-container">
+          @if (selectedModificationData.valid.isValid) {
+            <app-plotly-pie-chart
+              [valuesAndLabels]="selectedModificationData.valuesAndLabels" [valuesUnit]="'kW'">
+            </app-plotly-pie-chart>
+          }
+          @if (!selectedModificationData.valid.isValid) {
+            <div class="alert-danger small">
+              Invalid modification<br>
+              @if (!selectedModificationData.valid.fluidValid) {
+                <span>Errors found in Fluid<br></span>
+              }
+              @if (!selectedModificationData.valid.fieldDataValid) {
+                <span>Errors found in Field Data<br></span>
+              }
+              @if (!selectedModificationData.valid.fanValid) {
+                <span>Errors found in Fan Setup<br></span>
+              }
+              @if (!selectedModificationData.valid.motorValid) {
+                <span>Errors found in Motor<br></span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+    @if (selectedModificationData) {
+      <div class="w-100">
+        @if (selectedModificationData.valid.isValid) {
+          <app-plotly-bar-chart
+            [barChartDataArray]="[selectedBaselineData, selectedModificationData]" [yAxisLabel]="barChartYAxisLabel"
+            [yValueUnit]="'kW'" [hoverLabel]="'Power'">
+          </app-plotly-bar-chart>
+        }
+      </div>
+    }
   </div>
-  <div *ngIf="selectedModificationData" class="w-100">
-    <app-plotly-bar-chart *ngIf="selectedModificationData.valid.isValid"
-      [barChartDataArray]="[selectedBaselineData, selectedModificationData]" [yAxisLabel]="barChartYAxisLabel"
-      [yValueUnit]="'kW'" [hoverLabel]="'Power'">
-    </app-plotly-bar-chart>
-  </div>
-</div>
+}
 
-<div *ngIf="printView">
-  <app-fsat-report-graphs-print [allChartData]="allChartData" [settings]="settings" [printSankey]="printSankey"
+@if (printView) {
+  <div>
+    <app-fsat-report-graphs-print [allChartData]="allChartData" [settings]="settings" [printSankey]="printSankey"
     [printGraphs]="printGraphs" [fsat]="fsat"></app-fsat-report-graphs-print>
-</div>
+  </div>
+}
