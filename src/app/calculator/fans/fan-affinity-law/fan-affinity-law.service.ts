@@ -45,7 +45,7 @@ export class FanAffinityLawService {
       electricalRate: [inputObj.electricalRate, [Validators.required, Validators.min(0)]],
       efficiencyMotor: [inputObj.efficiencyMotor, [Validators.required, Validators.min(0), Validators.max(100)]],
       powerMotor: [inputObj.powerMotor, [Validators.required, Validators.min(0)]],
-      ratedFlow: [inputObj.ratedFlow, [Validators.required, Validators.min(0)]],
+      ratedFlow: [inputObj.ratedFlow, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       actualFlow: [inputObj.actualFlow, [Validators.required, Validators.min(0)]],
       motorControlTypeCurrent: [inputObj.motorControlTypeCurrent, [Validators.required]],
       motorControlTypeNew: [inputObj.motorControlTypeNew, [Validators.required]],
@@ -74,7 +74,7 @@ export class FanAffinityLawService {
 
     form.controls.diameterFan.setValidators([Validators.required, GreaterThanValidator.greaterThan(0)]);
     if (form.controls.changeFanSize.value) {
-      form.controls.diameterFanNew.setValidators([Validators.required, GreaterThanValidator.greaterThan(form.controls.diameterFan.value)]);
+      form.controls.diameterFanNew.setValidators([Validators.required, Validators.min(0), Validators.max(form.controls.diameterFan.value)]);
     } else {
       // form.controls.diameterFan.clearValidators();
       form.controls.diameterFanNew.clearValidators();
@@ -85,6 +85,7 @@ export class FanAffinityLawService {
   }
 
   getObjFromForm(form: UntypedFormGroup): FanAffinityLawsInput {
+    form = this.setValidators(form);
     let obj: FanAffinityLawsInput = {
       hoursOperation: form.controls.hoursOperation.value,
       electricalRate: form.controls.electricalRate.value,
