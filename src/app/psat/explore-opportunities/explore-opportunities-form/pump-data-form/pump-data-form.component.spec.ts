@@ -91,8 +91,8 @@ describe('PumpDataFormComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('drops the last pump type option from the constant list', () => {
-      expect(component.pumpTypes.length).toBe(pumpTypesConstant.length - 1);
+    it('includes every pump type option from the constant list', () => {
+      expect(component.pumpTypes).toEqual(pumpTypesConstant);
     });
 
     it('sets baselinePumpEfficiency from the baseline psat results', () => {

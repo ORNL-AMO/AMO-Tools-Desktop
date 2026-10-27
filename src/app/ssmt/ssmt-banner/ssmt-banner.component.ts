@@ -7,6 +7,8 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { SSMT_SETUP_GATED_VIEWS, SsmtMainView } from '../routing/ssmt.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
   selector: 'app-ssmt-banner',
@@ -50,11 +52,13 @@ export class SsmtBannerComponent implements OnInit {
     );
   }
 
-  changeTab(str: string) {
-    if (str === 'baseline' || str === 'calculators') {
-      this.ssmtService.mainTab.next(str);
-    } else if (this.assessment.ssmt.setupDone) {
-      this.ssmtService.mainTab.next(str);
+  canOpenMainTab(view: SsmtMainView): boolean {
+    return isMainTabAllowed(SSMT_SETUP_GATED_VIEWS, view, this.assessment.ssmt.setupDone);
+  }
+
+  changeTab(str: SsmtMainView) {
+    if (this.canOpenMainTab(str)) {
+      this.ssmtService.goToMainTab(str);
     }
     this.collapseBanner();
   }
@@ -65,31 +69,11 @@ export class SsmtBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'calculators') {
-      this.ssmtService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.ssmtService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.ssmtService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.ssmtService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.ssmtService.mainTab.next('baseline');
-    }
+    this.ssmtService.backMainTab();
   }
 
   continue() {
-    if (this.mainTab == 'baseline') {
-      this.ssmtService.mainTab.next('assessment');
-    } else if (this.mainTab == 'assessment') {
-      this.ssmtService.mainTab.next('diagram');
-    } else if (this.mainTab == 'diagram') {
-      this.ssmtService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.ssmtService.mainTab.next('sankey');
-    } else if (this.mainTab == 'sankey') {
-      this.ssmtService.mainTab.next('calculators');
-    }
+    this.ssmtService.continueMainTab();
   }
 
   openExportModal() {

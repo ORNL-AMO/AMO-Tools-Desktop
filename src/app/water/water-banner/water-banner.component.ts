@@ -5,7 +5,7 @@ import { EmailMeasurDataService } from '../../shared/email-measur-data/email-mea
 import { Assessment } from '../../shared/models/assessment';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
-import { WaterAssessmentService } from '../water-assessment.service';
+import { WaterAssessmentService, WaterMainTabString } from '../water-assessment.service';
 import { Modification, WaterAssessment } from 'process-flow-lib';
 
 @Component({
@@ -99,9 +99,9 @@ export class WaterBannerComponent {
     );
   }
 
-  changeTab(str: string) {
+  changeTab(str: WaterMainTabString) {
     if (str == 'baseline' || str == 'diagram' || str == 'report') {
-      this.waterAssessmentService.mainTab.next(str);
+      this.waterAssessmentService.goToMainTab(str);
     }
     this.collapseBanner();
   }

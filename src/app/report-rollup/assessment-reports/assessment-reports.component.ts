@@ -16,6 +16,8 @@ import { CompressedAirReportRollupService } from '../compressed-air-report-rollu
 import { ReportSummaryGraphsService } from '../report-summary-graphs/report-summary-graphs.service';
 import { Assessment } from '../../shared/models/assessment';
 import { DashboardService } from '../../dashboard/dashboard.service';
+import { getRoutedAssessmentUrl } from '../../dashboard/routed-assessment-tabs';
+import { AssessmentService } from '../../dashboard/assessment.service';
 import { Directory } from '../../shared/models/directory';
 import { DirectoryDbService } from '../../indexedDb/directory-db.service';
 
@@ -54,7 +56,8 @@ export class AssessmentReportsComponent implements OnInit {
 
   constructor(private reportRollupService: ReportRollupService, private printOptionsMenuService: PrintOptionsMenuService, private psatReportRollupService: PsatReportRollupService, private phastReportRollupService: PhastReportRollupService,
     private fsatReportRollupService: FsatReportRollupService, private ssmtReportRollupService: SsmtReportRollupService, private treasureHuntReportRollupService: TreasureHuntReportRollupService,
-    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private dashboardService: DashboardService) { }
+    private wasteWaterReportRollupService: WasteWaterReportRollupService, private compressedAirReportRollupService: CompressedAirReportRollupService, private reportSummaryGraphService: ReportSummaryGraphsService, private dashboardService: DashboardService,
+    private assessmentService: AssessmentService) { }
 
   ngOnInit(): void {
     this.settings = this.reportRollupService.settings.getValue();
@@ -131,20 +134,17 @@ export class AssessmentReportsComponent implements OnInit {
   }
 
   goToAssessment(assessment: Assessment) {
-    let tab: string;
+    const routedUrl: string | undefined = getRoutedAssessmentUrl(assessment);
+    if (routedUrl) {
+      this.dashboardService.navigateWithSidebarOptions(routedUrl, { shouldCollapse: true });
+      return;
+    }
+
     let itemSegment: string;
-    if (assessment.type === 'PSAT') {
-      itemSegment = '/psat/';
-    } else if (assessment.type === 'PHAST') {
+    if (assessment.type === 'PHAST') {
+      // PHAST reads its starting tab from AssessmentService; clear any value left by an earlier dashboard visit
+      this.assessmentService.setStartingTab('baseline');
       itemSegment = '/phast/';
-    } else if (assessment.type === 'FSAT') {
-      itemSegment = '/fsat/';
-    } else if (assessment.type === 'SSMT') {
-      itemSegment = '/ssmt/';
-    } else if (assessment.type == 'TreasureHunt') {
-      itemSegment = '/treasure-hunt/';
-    } else if (assessment.type == 'WasteWater') {
-      itemSegment = '/waste-water/';
     } else if (assessment.type == 'CompressedAir') {
       itemSegment = '/compressed-air/';
     }

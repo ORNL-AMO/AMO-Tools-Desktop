@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { MotorEnergy } from 'process-flow-lib';
+import { GreaterThanValidator } from '../../../../shared/validators/greater-than';
 
 @Injectable()
 export class MotorEnergyService {
@@ -15,7 +16,7 @@ export class MotorEnergyService {
       hoursPerYear: [motorEnergy.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
       loadFactor: [motorEnergy.loadFactor],
       ratedPower: [motorEnergy.ratedPower],
-      systemEfficiency: [motorEnergy.systemEfficiency, [Validators.min(0), Validators.max(100)]],
+      systemEfficiency: [motorEnergy.systemEfficiency, [GreaterThanValidator.greaterThan(0), Validators.max(100)]],
     });
     this.markFormDirtyToDisplayValidation(form);
     return form;

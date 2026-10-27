@@ -12,8 +12,8 @@ import {
   applyEstimatedFlowResultsReducer,
   edgesChangeFromPropagationReducer,
 } from './flowCalculationReducers';
-import { WaterProcessComponentType, DiagramMetaData, ProcessFlowPart, DiagramSettings, UserDiagramOptions, DiagramCalculatedData, ParentContainerDimensions, DiagramFlowErrors, getDefaultUserDiagramOptions, getDefaultColorPalette, FlowDiagramData, CustomEdgeData, checkDiagramNodeErrors, getContrastTextColor, WaterTreatment, NodeFlowProperty, FlowConfidence, Handles, getEdgeFromConnection, ConvertValueFn, convertFlowDiagramData, WaterSystemResults, getConnectionFromEdgeId, migrateFlowDiagramFieldNames, getDefaultFlowConfidence, ProcessFlowNodeType, getEdgeDescription, DEFAULT_EDGE_STROKE_COLOR, getDefaultSettings } from 'process-flow-lib';
 import { createNewNode, ensureFlowTotalTouched, getNodeTargetEdges, mirrorSingleEdgeConfidenceToTotal, getNodeSourceEdges, formatDataForMEASUR } from './FlowUtils';
+import { checkDiagramNodeErrors, convertFlowDiagramData, convertNodeEnergyData, ConvertValueFn, CustomEdgeData, DEFAULT_EDGE_STROKE_COLOR, DiagramCalculatedData, DiagramFlowErrors, DiagramMetaData, DiagramSettings, FlowConfidence, FlowDiagramData, getConnectionFromEdgeId, getContrastTextColor, getDefaultColorPalette, getDefaultFlowConfidence, getDefaultSettings, getDefaultUserDiagramOptions, getEdgeDescription, getEdgeFromConnection, Handles, migrateFlowDiagramFieldNames, migrateInapplicableNodeTotals, NodeFlowProperty, ParentContainerDimensions, ProcessFlowNodeType, ProcessFlowPart, UserDiagramOptions, WaterProcessComponentType, WaterSystemResults, WaterTreatment, withNodeEnergyDefaults } from 'process-flow-lib';
 
 import packageJson from '../../../package.json';
 const CURRENT_DIAGRAM_VERSION: string = packageJson.version;
@@ -57,6 +57,8 @@ export interface DiagramState {
   diagramFlowErrors: DiagramFlowErrors,
   assessmentId: number,
   diagramNotes: string,
+  // * true once parent data is hydrated into the store; saves are skipped until then
+  isInitialized: boolean,
 }
 
 export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState => {
@@ -80,6 +82,7 @@ export const getDefaultDiagramData = (currentState?: DiagramState): DiagramState
     },
     assessmentId: undefined,
     diagramNotes: '',
+    isInitialized: currentState?.isInitialized ?? false,
   }
 }
 
@@ -110,10 +113,15 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
     if (node.position) {
       return node;
     }
+  }).map((node: Node<ProcessFlowPart>) => {
+    const data = withNodeEnergyDefaults(node.data);
+    return data === node.data ? node : { ...node, data };
   });
   state.edges = diagramData.edges.map((edge: Edge<CustomEdgeData>) => edge);
   state.diagramOptions = diagramData.userDiagramOptions ? { ...diagramData.userDiagramOptions } : getDefaultUserDiagramOptions();
-  state.settings = diagramData.settings ? { ...diagramData.settings } : getDefaultSettings();
+  const defaultSettings = getDefaultSettings();
+  state.settings = { ...defaultSettings, ...diagramData.settings };
+  state.settings.fuelCost = state.settings.fuelCost ?? defaultSettings.fuelCost;
   state.calculatedData = diagramData.calculatedData ? { ...diagramData.calculatedData } : { nodes: {} };
   const diagramFlowErrors = checkDiagramNodeErrors(state.nodes, state.edges, state.settings);
   state.diagramFlowErrors = diagramFlowErrors;
@@ -133,6 +141,10 @@ const diagramInitializedReducer = (state: DiagramState, action: PayloadAction<{ 
   state.selectedDataId = undefined;
   state.diagramParentDimensions = { ...parentContainer };
   state.assessmentId = assessmentId
+}
+
+const diagramReadyReducer = (state: DiagramState) => {
+  state.isInitialized = true;
 }
 
 const resetDiagramReducer = (state: DiagramState) => {
@@ -187,7 +199,8 @@ const setNodeNameReducer = (state: DiagramState, action: PayloadAction<string>) 
 }
 
 const nodeDataPropertyChangeReducer = <K extends keyof ProcessFlowPart, T extends keyof WaterTreatment>(state: DiagramState, action: PayloadAction<NodeDataPayload<K> | NodeTreatmentDataPayload<T>>) => {
-  const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === state.selectedDataId) as Node<ProcessFlowPart>;
+  const targetNodeId = (action.payload as NodeDataPayload<K>).nodeId ?? state.selectedDataId;
+  const updateNode: Node<ProcessFlowPart> = state.nodes.find((n: Node<ProcessFlowPart>) => n.data.diagramNodeId === targetNodeId) as Node<ProcessFlowPart>;
   const { optionsProp, updatedValue } = action.payload;
   if (updateNode && optionsProp in updateNode.data) {
     updateNode.data[optionsProp] = updatedValue;
@@ -370,6 +383,7 @@ const unitsOfMeasureChangeReducer = (state: DiagramState, action: PayloadAction<
   const { newUnits, convertValueFn } = action.payload;
   const convertedDiagramData = { nodes: state.nodes as Node[], edges: state.edges as Edge[], calculatedData: state.calculatedData };
   convertFlowDiagramData(convertedDiagramData, newUnits, convertValueFn);
+  convertedDiagramData.nodes = convertNodeEnergyData(convertedDiagramData.nodes, newUnits, convertValueFn, state.settings.flowDecimalPrecision);
 
   state.settings.unitsOfMeasure = newUnits;
   state.nodes = convertedDiagramData.nodes;
@@ -460,6 +474,7 @@ export const diagramSlice = createSlice({
     resetDiagram: resetDiagramReducer,
     recomputeNodeErrors: recomputeNodeErrorsReducer,
     diagramInitialized: diagramInitializedReducer,
+    diagramReady: diagramReadyReducer,
     nodesChange: nodesChangeReducer,
     addNode: addNodeReducer,
     addNodes: addNodesReducer,
@@ -511,6 +526,7 @@ export const {
   deleteNode,
   keyboardDeleteNode,
   diagramInitialized,
+  diagramReady,
   nodeDataPropertyChange,
   setNodeStyle,
   totalFlowChange,
@@ -555,6 +571,7 @@ export const RECOMPUTES_DIAGRAM_ERRORS: Record<DiagramActionType, boolean> = {
   // self-referential / already-handled inline — matching these would be redundant or circular
   recomputeNodeErrors: false, // this *is* the recompute action
   diagramInitialized: false, // recomputes inline in diagramInitializedReducer
+  diagramReady: false, // lifecycle flag only
   resetDiagram: false, // resets diagramFlowErrors to {} directly via getDefaultDiagramData
 
   // cosmetic — position/selection/viewport/styling, never read by checkDiagramNodeErrors
@@ -602,7 +619,8 @@ export const RECOMPUTES_DIAGRAM_ERRORS: Record<DiagramActionType, boolean> = {
 };
 
 export interface UserOptionsPayload<K extends keyof UserDiagramOptions> { optionsProp: K, updatedValue: UserDiagramOptions[K], updateDependencies?: OptionsDependentState[] };
-export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K] };
+// * nodeId (diagramNodeId) targets a specific node - defaults to the selected node. Set it for writes that can land after selection changes (debounced input)
+export interface NodeDataPayload<K extends keyof ProcessFlowPart> { optionsProp: K, updatedValue: ProcessFlowPart[K], nodeId?: string };
 export interface NodeTreatmentDataPayload<K extends keyof WaterTreatment> { optionsProp: K, updatedValue: WaterTreatment[K] };
 
 /**
@@ -612,31 +630,39 @@ export interface EstimatedSystemPayload<K extends keyof WaterSystemResults> { sy
 export type OptionsDependentState = 'updateEdges' | 'updateEdgeProperties';
 
 
-// todo 7364 - migrate save event to thunk
-// pass MEASUR save method here, 
-// need to check for assessment added nodes,
-//  handle debouncing
-export const saveDiagramState = createAsyncThunk(
+/**
+ * Thunk `extra` argument (see configureAppStore). Kept out of state/actions because the save callback is a function.
+ * `hasPendingSave` is set by the persistence listener and cleared on emit, so a flush dispatched on unmount
+ * only emits when a debounced save has not fired yet.
+ */
+export interface DiagramSaveExtra {
+  saveFlowDiagramData: (flowDiagramData: FlowDiagramData) => void;
+  hasPendingSave: boolean;
+}
+
+export const saveDiagramState = createAsyncThunk<void, void, { state: { diagram: DiagramState }, extra: DiagramSaveExtra }>(
   'diagram/save',
-  async (_, { getState }) => {
-    const diagramState = getState() as DiagramState;
-    const { name, nodes, edges, diagramFlowErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors } = diagramState;
-    const userDiagramOptions = diagramOptions;
+  async (_, { getState, extra }) => {
+    const { name, meta, nodes, edges, diagramFlowErrors, settings, diagramOptions, calculatedData, recentNodeColors, recentEdgeColors, diagramNotes } = getState().diagram;
     const updatedDiagramData: FlowDiagramData = {
-      name: name,
-      nodes: nodes,
-      diagramFlowErrors: diagramFlowErrors,
-      edges: edges,
+      name,
+      meta,
+      nodes,
+      diagramFlowErrors,
+      edges,
       settings,
-      userDiagramOptions,
+      userDiagramOptions: diagramOptions,
       calculatedData,
       recentNodeColors,
       recentEdgeColors,
+      diagramNotes,
     };
     formatDataForMEASUR(updatedDiagramData);
-
-    // props.saveFlowDiagram(updatedDiagramData);
-    // console.log('=== SAVED FlowDiagram', updatedDiagramData);
+    extra.hasPendingSave = false;
+    extra.saveFlowDiagramData(updatedDiagramData);
+  },
+  {
+    condition: (_, { getState, extra }) => getState().diagram.isInitialized && extra.hasPendingSave,
   }
 );
 
@@ -677,6 +703,7 @@ const upgradeDiagram = (diagramData: FlowDiagramData, appVersion?: string) => {
   upgradeNodeData(diagramData);
   upgradeEdgeData(diagramData);
   migrateFlowDiagramFieldNames(diagramData);
+  migrateInapplicableNodeTotals(diagramData);
 
   diagramData.meta.upgrades.push({
     fromVersion,
