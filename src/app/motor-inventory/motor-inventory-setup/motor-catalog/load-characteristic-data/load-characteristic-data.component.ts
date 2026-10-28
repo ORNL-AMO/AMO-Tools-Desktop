@@ -98,6 +98,10 @@ export class LoadCharacteristicDataComponent implements OnInit {
       powerFactorInput.motorCurrent,
       powerFactorInput.motorEfficiency,
       powerFactorInput.ratedVoltage,
+      powerFactorInput.lineFrequency,
+      powerFactorInput.motorRPM,
+      powerFactorInput.efficiencyClass,
+      powerFactorInput.specifiedEfficiencyPercent,
       powerFactorInput.settings,
       );
     this.motorForm.controls.powerFactor25.patchValue(calculatedPowerFactor);
@@ -112,6 +116,10 @@ export class LoadCharacteristicDataComponent implements OnInit {
       powerFactorInput.motorCurrent,
       powerFactorInput.motorEfficiency,
       powerFactorInput.ratedVoltage,
+      powerFactorInput.lineFrequency,
+      powerFactorInput.motorRPM,
+      powerFactorInput.efficiencyClass,
+      powerFactorInput.specifiedEfficiencyPercent,
       powerFactorInput.settings,
       );
     this.motorForm.controls.powerFactor50.patchValue(calculatedPowerFactor);
@@ -126,6 +134,10 @@ export class LoadCharacteristicDataComponent implements OnInit {
       powerFactorInput.motorCurrent,
       powerFactorInput.motorEfficiency,
       powerFactorInput.ratedVoltage,
+      powerFactorInput.lineFrequency,
+      powerFactorInput.motorRPM,
+      powerFactorInput.efficiencyClass,
+      powerFactorInput.specifiedEfficiencyPercent,
       powerFactorInput.settings,
       );
     this.motorForm.controls.powerFactor75.patchValue(calculatedPowerFactor);
@@ -140,6 +152,10 @@ export class LoadCharacteristicDataComponent implements OnInit {
       powerFactorInput.motorCurrent,
       powerFactorInput.motorEfficiency,
       powerFactorInput.ratedVoltage,
+      powerFactorInput.lineFrequency,
+      powerFactorInput.motorRPM,
+      powerFactorInput.efficiencyClass,
+      powerFactorInput.specifiedEfficiencyPercent,
       powerFactorInput.settings,
       );
     this.motorForm.controls.powerFactor100.patchValue(calculatedPowerFactor);
@@ -156,6 +172,10 @@ export class LoadCharacteristicDataComponent implements OnInit {
       motorEfficiency: motorEfficiency,
       motorCurrent: motorCurrent,
       ratedVoltage: this.selectedMotorItem.nameplateData.ratedVoltage,
+      lineFrequency: this.selectedMotorItem.nameplateData.lineFrequency,
+      motorRPM: this.selectedMotorItem.nameplateData.fullLoadSpeed,
+      efficiencyClass: this.selectedMotorItem.nameplateData.efficiencyClass,
+      specifiedEfficiencyPercent: this.selectedMotorItem.nameplateData.nominalEfficiency,
       settings: settings
     }
   }

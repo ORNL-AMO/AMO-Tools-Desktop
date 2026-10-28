@@ -492,13 +492,24 @@ export class PsatService {
     motorCurrent: number,
     motorEfficiencyPercent: number,
     ratedVoltage: number,
+    lineFreq: number,
+    motorRPM: number,
+    efficiencyClass: number,
+    specifiedEfficiencyPercent: number,
     settings: Settings
   ): number {
-    if (motorRatedPower && motorCurrent && ratedVoltage) {
+    // Loaded PF does not use nameplate model data. Require it only for the near-zero branch,
+    // retaining loaded estimates for inventories where optional speed/class data is absent.
+    const nearZeroLoad: boolean = Math.abs(loadFactorPercent / 100) < 0.001;
+    const hasNameplateData: boolean = lineFreq != null && motorRPM != null && efficiencyClass != null &&
+      (efficiencyClass !== 3 || specifiedEfficiencyPercent != null);
+    if (motorRatedPower && motorCurrent && ratedVoltage && (!nearZeroLoad || hasNameplateData)) {
       if (settings.unitsOfMeasure != 'Imperial') {
         motorRatedPower = this.convertUnitsService.value(motorRatedPower).from(settings.powerMeasurement).to('hp');
       }
-      let powerFactor: number = this.pumpsSuiteApiService.motorPowerFactor(motorRatedPower, loadFactorPercent, motorCurrent, motorEfficiencyPercent, ratedVoltage);
+      const powerFactor: number = this.pumpsSuiteApiService.motorPowerFactor(motorRatedPower,
+        loadFactorPercent, motorCurrent, motorEfficiencyPercent, ratedVoltage, lineFreq, motorRPM,
+        efficiencyClass, specifiedEfficiencyPercent ?? 0);
       return this.roundVal(powerFactor, 2);
     } else {
       return 0;

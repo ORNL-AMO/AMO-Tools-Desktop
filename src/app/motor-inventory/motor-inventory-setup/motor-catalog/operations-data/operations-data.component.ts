@@ -112,7 +112,10 @@ export class OperationsDataComponent implements OnInit {
       let efficiencyAtAverageLoad: number = this.motorForm.controls.efficiencyAtAverageLoad.value;
       let loadFactor: number = this.motorForm.controls.averageLoadFactor.value;
       let motorCurrent: number = this.motorForm.controls.currentAtLoad.value;
-      let powerFactorAtLoad: number = this.psatService.motorPowerFactor(motorPower, loadFactor, motorCurrent, efficiencyAtAverageLoad, ratedVoltage, settings);
+      let powerFactorAtLoad: number = this.psatService.motorPowerFactor(motorPower, loadFactor, motorCurrent,
+        efficiencyAtAverageLoad, ratedVoltage, selectedMotorItem.nameplateData.lineFrequency,
+        selectedMotorItem.nameplateData.fullLoadSpeed, selectedMotorItem.nameplateData.efficiencyClass,
+        selectedMotorItem.nameplateData.nominalEfficiency, settings);
       this.motorForm.controls.powerFactorAtLoad.patchValue(powerFactorAtLoad);
       this.save();
     }
