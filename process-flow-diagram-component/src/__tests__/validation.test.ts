@@ -329,6 +329,22 @@ describe('checkDiagramNodeErrors — wiring', () => {
     expect(errors.discharge).toBeUndefined();
   });
 
+  it('does not validate the inapplicable side of an intake (source) or discharge outlet (discharge), even with a stored 0', () => {
+    const intake = makeIntakeNode('intake');
+    const system = makeSystemNode('system');
+    const discharge = makeDischargeNode('discharge');
+    (intake.data as any).userEnteredData.totalSourceFlow = 0;
+    (intake.data as any).userEnteredData.totalDischargeFlow = 100;
+    (system.data as any).userEnteredData.totalSourceFlow = 100;
+    (system.data as any).userEnteredData.totalDischargeFlow = 100;
+    (discharge.data as any).userEnteredData.totalSourceFlow = 100;
+    (discharge.data as any).userEnteredData.totalDischargeFlow = 0;
+    const edges = [makeEdge('intake', 'system', 100), makeEdge('system', 'discharge', 100)];
+
+    const errors = checkDiagramNodeErrors([intake, system, discharge], edges, settings);
+    expect(errors).toEqual({});
+  });
+
   it('returns an empty object when no node has any error', () => {
     const intake = makeIntakeNode('intake');
     const system = makeSystemNode('system');

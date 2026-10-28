@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { PumpInventoryData, PumpInventoryDepartment, PumpItem, PumpPropertyDisplayOptions, ValidPump } from './pump-inventory';
@@ -9,13 +10,15 @@ import { PumpEquipmentCatalogService } from './pump-inventory-setup/pump-catalog
 import { UntypedFormGroup } from '@angular/forms';
 import { PumpMotorCatalogService } from './pump-inventory-setup/pump-catalog/pump-motor-catalog/pump-motor-catalog.service';
 import { copyObject } from '../shared/helperFunctions';
+import { PUMP_INVENTORY_MAIN_VIEWS, PUMP_INVENTORY_SETUP_GATED_VIEWS, PUMP_INVENTORY_SETUP_VIEWS, PUMP_INVENTORY_SUMMARY_VIEWS, PumpInventoryMainView, PumpInventorySetupView, PumpInventorySummaryView } from './pump-inventory.routing';
+import { getMergedRouteData, getSteppedView, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Injectable()
 export class PumpInventoryService {
 
-  mainTab: BehaviorSubject<string>;
-  setupTab: BehaviorSubject<string>;
-  summaryTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<PumpInventoryMainView>;
+  setupTab: BehaviorSubject<PumpInventorySetupView>;
+  summaryTab: BehaviorSubject<PumpInventorySummaryView>;
   pumpInventoryData: BehaviorSubject<PumpInventoryData>;
   focusedField: BehaviorSubject<string>;
   focusedDataGroup: BehaviorSubject<string>;
@@ -31,15 +34,16 @@ export class PumpInventoryService {
     private fieldCatalogService: FieldMeasurementsCatalogService,
     private motorCatalogService: PumpMotorCatalogService,
     private pumpEquipmentService: PumpEquipmentCatalogService,
-    private pumpMotorIntegrationService: PumpMotorIntegrationService) {
-    this.setupTab = new BehaviorSubject<string>('plant-setup');
-    this.mainTab = new BehaviorSubject<string>('setup');
+    private pumpMotorIntegrationService: PumpMotorIntegrationService,
+    private router: Router) {
+    this.setupTab = new BehaviorSubject<PumpInventorySetupView>('plant-setup');
+    this.mainTab = new BehaviorSubject<PumpInventoryMainView>('setup');
     let inventoryData: PumpInventoryData = this.initInventoryData();
     this.pumpInventoryData = new BehaviorSubject<PumpInventoryData>(inventoryData);
     this.focusedField = new BehaviorSubject<string>('default');
     this.focusedDataGroup = new BehaviorSubject<string>(undefined);
     this.modalOpen = new BehaviorSubject<boolean>(false);
-    this.summaryTab = new BehaviorSubject<string>('overview');
+    this.summaryTab = new BehaviorSubject<PumpInventorySummaryView>('overview');
     this.settings = new BehaviorSubject<Settings>(undefined);
     this.helpPanelTab = new BehaviorSubject<string>(undefined);
     this.showExportModal = new BehaviorSubject<boolean>(false);
@@ -49,6 +53,97 @@ export class PumpInventoryService {
       motorRatedPowerValues: new Array(),
       statusValues: new Array()
     });
+  }
+
+  /**
+   * Pushes the main, setup and summary tab values found in the route data into the tab subjects.
+   * @param snapshot snapshot to walk down through its `firstChild` chain
+   */
+  syncTabsFromRoute(snapshot: ActivatedRouteSnapshot) {
+    const data = getMergedRouteData<PumpInventoryMainView, PumpInventorySetupView, PumpInventorySummaryView>(snapshot);
+    if (data.mainView && data.mainView !== this.mainTab.getValue()) {
+      this.mainTab.next(data.mainView);
+    }
+    if (data.setupView && data.setupView !== this.setupTab.getValue()) {
+      this.setupTab.next(data.setupView);
+    }
+    if (data.summaryView && data.summaryView !== this.summaryTab.getValue()) {
+      this.summaryTab.next(data.summaryView);
+    }
+  }
+
+  /**
+   * Replaces the summary route with plant setup while the inventory is invalid, so Back does not return to it.
+   */
+  redirectInvalidSummary() {
+    if (!isMainTabAllowed(PUMP_INVENTORY_SETUP_GATED_VIEWS, this.mainTab.getValue(), this.pumpInventoryData.getValue().isValid)) {
+      this.router.navigate(['/pump-inventory', this.currentInventoryId, PUMP_INVENTORY_MAIN_VIEWS[0], PUMP_INVENTORY_SETUP_VIEWS[0]], { replaceUrl: true });
+    }
+  }
+
+  /**
+   * Opens a main tab on its last visited sub-tab.
+   * @param tab `setup` or `summary`
+   */
+  goToMainTab(tab: PumpInventoryMainView) {
+    if (tab === 'setup') {
+      this.goToSetupTab(this.setupTab.getValue());
+    } else {
+      this.goToSummaryTab(this.summaryTab.getValue());
+    }
+  }
+
+  goToSetupTab(tab: PumpInventorySetupView) {
+    this.router.navigate(['/pump-inventory', this.currentInventoryId, 'setup', tab]);
+  }
+
+  goToSummaryTab(tab: PumpInventorySummaryView) {
+    this.router.navigate(['/pump-inventory', this.currentInventoryId, 'summary', tab]);
+  }
+
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
+  backMainTab() {
+    this.stepMainTab(-1);
+  }
+
+  continueSetupTab() {
+    this.stepSetupTab(1);
+  }
+
+  backSetupTab() {
+    this.stepSetupTab(-1);
+  }
+
+  continueSummaryTab() {
+    this.stepSummaryTab(1);
+  }
+
+  backSummaryTab() {
+    this.stepSummaryTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const view: PumpInventoryMainView = getSteppedView(PUMP_INVENTORY_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
+    }
+  }
+
+  private stepSetupTab(offset: number) {
+    const view: PumpInventorySetupView = getSteppedView(PUMP_INVENTORY_SETUP_VIEWS, this.setupTab.getValue(), offset);
+    if (view) {
+      this.goToSetupTab(view);
+    }
+  }
+
+  private stepSummaryTab(offset: number) {
+    const view: PumpInventorySummaryView = getSteppedView(PUMP_INVENTORY_SUMMARY_VIEWS, this.summaryTab.getValue(), offset);
+    if (view) {
+      this.goToSummaryTab(view);
+    }
   }
 
   updatePumpItem(selectedPump: PumpItem) {
@@ -157,6 +252,7 @@ export class PumpInventoryService {
         operatingFlowRate: undefined,
         loadEstimationMethod: 1,
         operatingHead: undefined,
+        operatingDifferentialPressure: undefined,
         measuredPower: undefined,
         measuredCurrent: undefined,
         measuredVoltage: undefined,

@@ -16,7 +16,6 @@ import { FanMotorService } from './fan-motor/fan-motor.service';
 import { OperationsService } from './operations/operations.service';
 import { Assessment } from '../shared/models/assessment';
 import { Settings } from '../shared/models/settings';
-import { STEPPED_ROUTES } from './routing/stepped-routes';
 
 describe('FsatService.initAssessmentSettings', () => {
   let service: FsatService;
@@ -33,7 +32,7 @@ describe('FsatService.initAssessmentSettings', () => {
     TestBed.configureTestingModule({
       providers: [
         FsatService,
-        { provide: Router, useValue: { events: of(), routerState: { snapshot: { root: undefined } } } },
+        { provide: Router, useValue: {} },
         { provide: SettingsDbService, useValue: settingsDbService },
         { provide: SettingsService, useValue: settingsService },
         { provide: ConvertFsatService, useValue: {} },
@@ -46,7 +45,6 @@ describe('FsatService.initAssessmentSettings', () => {
         { provide: FanSetupService, useValue: {} },
         { provide: FanMotorService, useValue: {} },
         { provide: OperationsService, useValue: {} },
-        { provide: STEPPED_ROUTES, useValue: [] },
       ]
     });
     service = TestBed.inject(FsatService);
@@ -77,5 +75,79 @@ describe('FsatService.initAssessmentSettings', () => {
     expect(settingsDbService.addWithObservable).toHaveBeenCalled();
     expect(settingsDbService.setAll).toHaveBeenCalledWith([createdSettings]);
     expect(result).toBe(createdSettings);
+  });
+});
+
+describe('FsatService main tab stepping', () => {
+  let service: FsatService;
+  let routerSpy: jasmine.SpyObj<Router>;
+
+  beforeEach(() => {
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    TestBed.configureTestingModule({
+      providers: [
+        FsatService,
+        { provide: Router, useValue: routerSpy },
+        { provide: SettingsDbService, useValue: {} },
+        { provide: SettingsService, useValue: {} },
+        { provide: ConvertFsatService, useValue: {} },
+        { provide: FansSuiteApiService, useValue: {} },
+        { provide: AssessmentCo2SavingsService, useValue: {} },
+        { provide: ConvertUnitsService, useValue: {} },
+        { provide: FanFieldDataService, useValue: {} },
+        { provide: ConvertFanAnalysisService, useValue: {} },
+        { provide: FsatFluidService, useValue: {} },
+        { provide: FanSetupService, useValue: {} },
+        { provide: FanMotorService, useValue: {} },
+        { provide: OperationsService, useValue: {} },
+      ]
+    });
+    service = TestBed.inject(FsatService);
+    service.assessment.next({ id: 7 } as Assessment);
+  });
+
+  it('continueMainTab navigates to the next main tab', () => {
+    service.mainTab.next('report');
+    service.continueMainTab();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/fsat', 7, 'sankey']);
+  });
+
+  it('continueMainTab does nothing on the last main tab', () => {
+    service.mainTab.next('calculators');
+    service.continueMainTab();
+    expect(routerSpy.navigate).not.toHaveBeenCalled();
+  });
+
+  it('backMainTab navigates to the previous main tab', () => {
+    service.mainTab.next('calculators');
+    service.backMainTab();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/fsat', 7, 'sankey']);
+  });
+
+  it('backMainTab does nothing on the first main tab', () => {
+    service.mainTab.next('baseline');
+    service.backMainTab();
+    expect(routerSpy.navigate).not.toHaveBeenCalled();
+  });
+
+  describe('baseline step tabs', () => {
+    it('continue advances to the next step tab', () => {
+      service.stepTab.next('fan-operations');
+      service.continue();
+      expect(service.stepTab.value).toBe('fan-setup');
+    });
+
+    it('continue from the last step tab opens the assessment tab', () => {
+      service.stepTab.next('fan-field-data');
+      service.continue();
+      expect(routerSpy.navigate).toHaveBeenCalledWith(['/fsat', 7, 'assessment']);
+    });
+
+    it('back returns to the previous step tab on baseline', () => {
+      service.mainTab.next('baseline');
+      service.stepTab.next('fan-motor');
+      service.back();
+      expect(service.stepTab.value).toBe('fan-setup');
+    });
   });
 });

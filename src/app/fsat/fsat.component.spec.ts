@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BehaviorSubject, Subject, of } from 'rxjs';
+import { ActivatedRoute, Data, Event, NavigationEnd, Router } from '@angular/router';
 import { FsatComponent } from './fsat.component';
 import { FsatService } from './fsat.service';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -21,6 +22,9 @@ describe('FsatComponent', () => {
   let assessmentDbServiceStub: any;
   let compareServiceStub: any;
   let convertFsatServiceStub: any;
+  let routerSpy: jasmine.SpyObj<Router>;
+  let routerEvents: Subject<Event>;
+  let activatedRouteMock: { firstChild: { snapshot: { data: Data } } };
 
   const assessment: Assessment = { id: 1, type: 'FSAT' } as Assessment;
   const settings: Settings = { id: 1 } as Settings;
@@ -85,6 +89,10 @@ describe('FsatComponent', () => {
       convertExistingData: jasmine.createSpy('convertExistingData').and.returnValue(getFsat()),
     };
 
+    routerEvents = new Subject<Event>();
+    routerSpy = jasmine.createSpyObj('Router', ['navigate'], { events: routerEvents });
+    activatedRouteMock = { firstChild: { snapshot: { data: {} } } };
+
     await TestBed.configureTestingModule({
       imports: [ModalModule.forRoot()],
       declarations: [FsatComponent],
@@ -96,12 +104,49 @@ describe('FsatComponent', () => {
         { provide: CompareService, useValue: compareServiceStub },
         { provide: ConvertFsatService, useValue: convertFsatServiceStub },
         { provide: AnalyticsService, useValue: { sendEvent: jasmine.createSpy('sendEvent') } },
+        { provide: Router, useValue: routerSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(FsatComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+  });
+
+  describe('syncMainTabFromRoute', () => {
+    function navigateTo(mainView: string) {
+      activatedRouteMock.firstChild.snapshot.data = { mainView };
+      routerEvents.next(new NavigationEnd(1, `/fsat/1/${mainView}`, `/fsat/1/${mainView}`));
+    }
+
+    it('updates mainTab on NavigationEnd when setup is done', () => {
+      component.assessment = { ...assessment, fsat: { setupDone: true } as FSAT };
+      navigateTo('report');
+      expect(fsatServiceStub.mainTab.value).toBe('report');
+    });
+
+    ['assessment', 'diagram', 'report', 'sankey'].forEach(mainView => {
+      it(`redirects ${mainView} to baseline, replacing the URL, when setup is not done`, () => {
+        component.assessment = { ...assessment, fsat: { setupDone: false } as FSAT };
+        navigateTo(mainView);
+        expect(routerSpy.navigate).toHaveBeenCalledWith(['/fsat', 1, 'baseline'], { replaceUrl: true });
+        expect(fsatServiceStub.mainTab.value).toBe('baseline');
+      });
+    });
+
+    it('allows calculators when setup is not done', () => {
+      component.assessment = { ...assessment, fsat: { setupDone: false } as FSAT };
+      navigateTo('calculators');
+      expect(routerSpy.navigate).not.toHaveBeenCalled();
+      expect(fsatServiceStub.mainTab.value).toBe('calculators');
+    });
+
+    it('stops syncing after destroy', () => {
+      fixture.destroy();
+      navigateTo('calculators');
+      expect(fsatServiceStub.mainTab.value).toBe('baseline');
+    });
   });
 
   describe('save', () => {

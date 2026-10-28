@@ -1,4 +1,7 @@
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { WATER_MAIN_VIEWS } from './routing/water-main-views';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 import { BehaviorSubject, combineLatest, debounceTime, filter, map, Observable } from 'rxjs';
 import { Settings } from '../shared/models/settings';
 import { WaterSystemComponentService } from './water-system-component.service';
@@ -12,6 +15,7 @@ import { UpdateDiagramFromAssessmentService } from '../water-process-diagram/upd
 })
 export class WaterAssessmentService {
   private readonly updateDiagramFromAssessmentService = inject(UpdateDiagramFromAssessmentService);
+  private readonly router = inject(Router);
 
   waterAssessment: BehaviorSubject<WaterAssessment>;
 
@@ -48,13 +52,6 @@ export class WaterAssessmentService {
   showModificationListModal: BehaviorSubject<boolean>;
   showAddModificationModal: BehaviorSubject<boolean>;
   showExportModal: BehaviorSubject<boolean>;
-  mainTabs: Array<WaterMainTabString> = [
-    'baseline',
-    // todo assessment tab not implemented yet
-    // 'assessment',
-    'diagram',
-    'report',
-  ];
   setupTabs: Array<WaterSetupTabString> = [
     'system-basics',
     'water-intake',
@@ -227,41 +224,53 @@ export class WaterAssessmentService {
     }
   }
 
-  continueMainTab() {
-    let mainTab: WaterMainTabString = this.mainTab.getValue();
-    let nextTab: WaterMainTabString;
-    if (mainTab !== 'report') {
-      let assessmentTabIndex: number = this.mainTabs.indexOf(mainTab);
-      nextTab = this.mainTabs[assessmentTabIndex + 1];
-      this.mainTab.next(nextTab);
+  /**
+   * @param view one of `WATER_MAIN_VIEWS`
+   */
+  goToMainTab(view: WaterMainTabString) {
+    if (!this.assessmentId) {
+      return;
+    }
+    const diagramId: number = this.assessment.getValue()?.diagramId;
+    if (view === 'diagram' && diagramId) {
+      this.router.navigate(['/water', this.assessmentId, 'diagram', diagramId]);
+    } else {
+      this.router.navigate(['/water', this.assessmentId, view]);
     }
   }
 
+  continueMainTab() {
+    this.stepMainTab(1);
+  }
+
   backMainTab() {
-    let mainTab: WaterMainTabString = this.mainTab.getValue();
-    if (mainTab !== 'baseline') {
-      let assessmentTabIndex: number = this.mainTabs.indexOf(mainTab);
-      let nextTab: WaterMainTabString = this.mainTabs[assessmentTabIndex - 1];
-      this.mainTab.next(nextTab);
+    this.stepMainTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const view: WaterMainTabString = getSteppedView(WATER_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
     }
   }
 
   continueSetupTab() {
     let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
-    let nextTab: WaterSetupTabString;
     if (tmpSetupTab !== 'waste-water-treatment' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-      nextTab = this.setupTabs[assessmentTabIndex + 1];
-      this.setupTab.next(nextTab);
+      const nextTab: WaterSetupTabString = getSteppedView(this.setupTabs, tmpSetupTab, 1);
+      if (nextTab) {
+        this.setupTab.next(nextTab);
+      }
     }
   }
 
   backSetupTab() {
     let tmpSetupTab: WaterSetupTabString = this.setupTab.getValue();
     if (tmpSetupTab !== 'system-basics' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.setupTabs.indexOf(tmpSetupTab);
-      let nextTab: WaterSetupTabString = this.setupTabs[assessmentTabIndex - 1];
-      this.setupTab.next(nextTab);
+      const previousTab: WaterSetupTabString = getSteppedView(this.setupTabs, tmpSetupTab, -1);
+      if (previousTab) {
+        this.setupTab.next(previousTab);
+      }
     }
   }
 

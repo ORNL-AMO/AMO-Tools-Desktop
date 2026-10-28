@@ -2,7 +2,7 @@ import { Root, createRoot } from 'react-dom/client';
 import App from './App';
 import { CacheProvider } from '@emotion/react';
 import createCache, { EmotionCache } from "@emotion/cache";
-import { ProcessFlowParentState, FlowDiagramData, ProcessFlowDiagramState, ConvertValueFn } from 'process-flow-lib';
+import { ProcessFlowParentState, FlowDiagramData, ProcessFlowDiagramState, ConvertValueFn, OpenDiagramCalculatorFn } from 'process-flow-lib';
 
 class AppWebComponent extends HTMLElement {
   mountPoint!: HTMLDivElement;
@@ -18,6 +18,7 @@ class AppWebComponent extends HTMLElement {
   MUIStylesCache: EmotionCache;
   // * plain JS property, not an observed attribute like parentstate - functions can't be stringified
   private _convertValueFn?: ConvertValueFn;
+  private _openCalculatorFn?: OpenDiagramCalculatorFn;
 
   renderDiagramComponent(parentState: ProcessFlowParentState) {
     if (parentState && parentState.parentContainer) {
@@ -30,10 +31,30 @@ class AppWebComponent extends HTMLElement {
             shadowRoot={this.shadowRoot}
             saveFlowDiagramData={this.emitFlowDiagramDataUpdate}
             convertValueFn={this._convertValueFn}
+            openCalculatorFn={this._openCalculatorFn}
+            registerFlush={this.registerFlush}
+            onReady={this.emitDiagramReady}
             />
         </CacheProvider>
         )
     }
+  }
+
+  private flushPendingSave?: () => void;
+
+  // * dispatched from shadowRoot for the same reason as updateDiagramDetailEvent, see note at shadowRoot declaration
+  emitDiagramReady = () => {
+    this.shadowRoot.dispatchEvent(new CustomEvent('diagramReadyEvent', { composed: true, bubbles: true }));
+  }
+
+  // * arrow properties keep `this` bound when passed into React
+  registerFlush = (flush: () => void) => {
+    this.flushPendingSave = flush;
+  }
+
+  /** Emits any debounced save that has not fired yet. Call before removing the element. */
+  flush() {
+    this.flushPendingSave?.();
   }
 
   get convertValueFn(): ConvertValueFn | undefined {
@@ -42,6 +63,17 @@ class AppWebComponent extends HTMLElement {
 
   set convertValueFn(fn: ConvertValueFn | undefined) {
     this._convertValueFn = fn;
+    if (this.appRef && this.parentstate) {
+      this.renderDiagramComponent(this.parentstate);
+    }
+  }
+
+  get openCalculatorFn(): OpenDiagramCalculatorFn | undefined {
+    return this._openCalculatorFn;
+  }
+
+  set openCalculatorFn(fn: OpenDiagramCalculatorFn | undefined) {
+    this._openCalculatorFn = fn;
     if (this.appRef && this.parentstate) {
       this.renderDiagramComponent(this.parentstate);
     }

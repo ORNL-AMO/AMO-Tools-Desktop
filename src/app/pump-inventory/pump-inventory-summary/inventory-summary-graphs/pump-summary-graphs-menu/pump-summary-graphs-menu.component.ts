@@ -53,7 +53,7 @@ export class PumpSummaryGraphsMenuComponent {
     let pumpInventoryData: PumpInventoryData = this.pumpInventoryService.pumpInventoryData.getValue();
     let pumps = this.pumpInventorySummaryService.getAllPumps(pumpInventoryData);
     this.groups.push({
-      options: this.pumpInventorySummaryService.getNameplateDataFields(pumpInventoryData.displayOptions.nameplateDataOptions, settings),
+      options: this.pumpInventorySummaryService.getNameplateDataFields(pumpInventoryData.displayOptions.nameplateDataOptions),
       groupLabel: 'Nameplate Data',
       showGroup: true
     });
@@ -68,7 +68,7 @@ export class PumpSummaryGraphsMenuComponent {
       showGroup: false
     });
     this.groups.push({
-      options: this.pumpInventorySummaryService.getFieldMeasurementsFields(pumpInventoryData.displayOptions.fieldMeasurementOptions, settings),
+      options: this.pumpInventorySummaryService.getFieldMeasurementsFields(pumpInventoryData.displayOptions.fieldMeasurementOptions, settings, pumps),
       groupLabel: 'Field Measurements',
       showGroup: false
     });
@@ -78,7 +78,7 @@ export class PumpSummaryGraphsMenuComponent {
       showGroup: false
     });
     this.groups.push({
-      options: this.pumpInventorySummaryService.getPumpStatusFields(pumpInventoryData.displayOptions.pumpStatusOptions, settings),
+      options: this.pumpInventorySummaryService.getPumpStatusFields(pumpInventoryData.displayOptions.pumpStatusOptions),
       groupLabel: 'Status',
       showGroup: false
     });

@@ -104,10 +104,10 @@ export class InventoryIntegrationComponent {
           url = `/motor-inventory/${connectedItem.inventoryId}`;
           break;
         case 'pump':
-          url = `/pump-inventory/${connectedItem.inventoryId}`;
+          url = `/pump-inventory/${connectedItem.inventoryId}/setup/pump-catalog`;
           break;
         case 'compressed-air':
-          url = `/compressed-air-inventory/${connectedItem.inventoryId}`;
+          url = `/compressed-air-inventory/${connectedItem.inventoryId}/setup/compressed-air-catalog`;
           break;
         default:
           url = undefined;

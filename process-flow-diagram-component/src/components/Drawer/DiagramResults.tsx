@@ -70,7 +70,9 @@ const DiagramResults = () => {
     return total + getMotorEnergyCost(motorEnergy, settings.electricityCost, settings.unitsOfMeasure);
   }, 0);
 
-  const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems.map((system: WaterUsingSystem) => system.heatEnergy).filter((heatEnergy: HeatEnergy) => heatEnergy !== undefined);
+  const systemHeatEnergyData: HeatEnergy[] = waterUsingSystems
+    .filter((system: WaterUsingSystem) => system.heatEnergy !== undefined)
+    .map((system: WaterUsingSystem) => ({ ...system.heatEnergy, systemWaterUse: getNodeTotalInflow(system, calculatedData) }));
   const heatEnergyCosts = systemHeatEnergyData.reduce((total, heatEnergy) => {
     const unitCost = heatEnergy.heatingFuelType === 0? settings.electricityCost : settings.fuelCost;
     return total + getHeatEnergyCost(heatEnergy, unitCost, settings.unitsOfMeasure);
