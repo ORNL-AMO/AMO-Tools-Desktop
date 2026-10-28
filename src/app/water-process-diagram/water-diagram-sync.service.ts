@@ -39,7 +39,7 @@ export class WaterDiagramSyncService {
 
   private lastTask: Promise<void> = Promise.resolve();
   private pendingTasks: number = 0;
-  
+
   // * a queued sync reads the latest state when it runs, so requests made for the same record while one is waiting are already covered
   private pendingAssessmentSyncs = new Map<number, Diagram>();
   private pendingDiagramSyncs = new Map<number, Assessment>();
