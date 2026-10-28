@@ -625,5 +625,15 @@
     ]
   },
   "regressionProtection": "src/app/tools-suite-api/motor-driven-regression-tests/motor-driven-results.spec.ts: immutable input comparison, exact per-field accepted-difference gate, required nameplate data, report formatting and fraction/ownership tests",
-  "impact": "Recalculated MotorPerformance efficiency/power-factor and standalone near-zero PF display values change only for documented approved corrections. Captured pumps, fans, annual totals and inventory actions are unchanged; no saved data migration."
+  "impact": "Recalculated MotorPerformance efficiency/power-factor and standalone near-zero PF display values change only for documented approved corrections. Captured pumps, fans, annual totals and inventory actions are unchanged; no saved data migration.",
+  "candidateDesktopCommit": "40034c7002035fdccb607d214817972280434401",
+  "review": {
+    "base": "9b7ff3d7416ff8172ad3ab24fc01ab2ef29acbc9",
+    "head": "40034c7002035fdccb607d214817972280434401",
+    "reviewer": "desktop_integration_review",
+    "readiness": "Ready",
+    "unresolvedFindings": 0,
+    "resolvedFinding": "P2 smoke assertion now rejects nonfinite values; browser and focused tests rerun passed",
+    "scope": "Electron-specific coverage excluded at user request"
+  }
 }

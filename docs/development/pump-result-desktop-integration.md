@@ -78,3 +78,14 @@ The existing process-flow `test:typecheck` script runs `vitest typecheck` as a f
 Electron-specific checks and scaffolding were removed at the user's request: this PR changes calculation adapters and dependency pins, with no Electron implementation or asset-path changes.
 
 Validation and exact reviewed commits are recorded in Desktop issue [#8957](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957) and the implementation PR. Final release versions and merging remain deferred.
+
+## Independent pre-PR review
+
+- Intended base: Desktop `epic-pump-result-refactor` at `9b7ff3d7416ff8172ad3ab24fc01ab2ef29acbc9`.
+- Final reviewed source: `40034c7002035fdccb607d214817972280434401`.
+- Reviewer: `desktop_integration_review`, review-only; readiness **Ready**, no unresolved actionable findings.
+- Complete child diff audited: all 214 inherited-only files match develop `c0163f8084c8b61e7ef8509b21a05832925ea656`; the author delta contains the migration/evidence and one whitespace-only inherited cleanup.
+- One P2 verification finding was resolved: the browser smoke check now rejects nonfinite actual and expected values. Reviewer independently exercised NaN, infinities, mismatches and valid finite values. Browser verification and focused 17 tests passed after the fix and requested Electron-scaffolding removal.
+- Reviewer independently checked application types, the immutable hash, all 72 reconciliation results, all 23 accepted fields, exact dependency pins and generated lockfile changes. No unrelated dependency versions changed; 21 removed root entries are optional development dependencies.
+- Other browser/CI runtimes have not been verified locally; the exact comparison gate reports any discrepancy rather than masking it. New PR CI remains pending.
+- This final documentation/report metadata update records the completed review without changing runtime code or accepted results.
