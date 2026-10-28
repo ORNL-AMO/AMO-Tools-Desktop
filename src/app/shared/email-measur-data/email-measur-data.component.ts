@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn, FormControl } from '@angular/forms';
-import { EmailMeasurDataService, EmailSentStatus } from './email-measur-data.service';
+import { EmailMeasurDataService, EmailSentStatus, MeasurItemAttachment } from './email-measur-data.service';
 import { Subscription } from 'rxjs';
 import { ContactDbService, SavedContact } from '../../indexedDb/contact-db.service';
+import { ExportOpportunitiesService } from '../../treasure-hunt/treasure-chest/export-opportunities.service';
 @Component({
     selector: 'app-email-measur-data',
     templateUrl: './email-measur-data.component.html',
@@ -25,9 +26,11 @@ export class EmailMeasurDataComponent {
   currentEmailToken: string = '';
   canAddCurrentEmailAsContact: boolean = false;
   showContactAddedBanner: boolean = false;
+  showIncludeUnselected: boolean = false;
   private contactAddedBannerTimeout: any;
 
-  constructor(private fb: FormBuilder, private emailMeasurDataService: EmailMeasurDataService, private contactDbService: ContactDbService) { }
+  constructor(private fb: FormBuilder, private emailMeasurDataService: EmailMeasurDataService, private contactDbService: ContactDbService,
+    private exportOpportunitiesService: ExportOpportunitiesService) { }
 
   ngOnInit() {
     const primaryContact: SavedContact = this.contactDbService.primaryContact;
@@ -41,8 +44,11 @@ export class EmailMeasurDataComponent {
       emailAttachmentName: [
         this.emailMeasurDataService.measurItemAttachment.itemName,
         [Validators.required, this.invalidCharactersValidator()]
-      ]
+      ],
+      includeUnselected: [false]
     });
+    const attachment: MeasurItemAttachment = this.emailMeasurDataService.measurItemAttachment;
+    this.showIncludeUnselected = attachment.itemType === 'opportunities' && this.exportOpportunitiesService.hasUnselectedOpportunities(attachment.itemData);
     this.save();
 
     this.emailSentStatusSubscription = this.emailMeasurDataService.emailSentStatus.subscribe(sentStatus => {

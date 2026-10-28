@@ -6,8 +6,7 @@ import { SortCardsData } from '../opportunity-cards/sort-cards-by.pipe';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { EmailMeasurDataService } from '../../../shared/email-measur-data/email-measur-data.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
-import { ImportExportOpportunities, TreasureHunt } from '../../../shared/models/treasure-hunt';
-import { ExportOpportunitiesService } from '../export-opportunities.service';
+import { TreasureHunt } from '../../../shared/models/treasure-hunt';
 import { CoreService } from '../../../core/core.service';
 @Component({
     selector: 'app-treasure-chest-menu',
@@ -60,7 +59,6 @@ export class TreasureChestMenuComponent implements OnInit {
     private cd: ChangeDetectorRef,
     private emailMeasurDataService: EmailMeasurDataService,
     private treasureHuntService: TreasureHuntService,
-    private exportOpportunitiesService: ExportOpportunitiesService,
     private coreService: CoreService,
   ) { }
 
@@ -178,12 +176,11 @@ export class TreasureChestMenuComponent implements OnInit {
 
   openShareDataModal() {
     const treasureHunt: TreasureHunt = this.treasureHuntService.treasureHunt.getValue();
-    const opportunitiesData: ImportExportOpportunities = this.exportOpportunitiesService.setImportExportData(treasureHunt);
-    
+
     this.emailMeasurDataService.measurItemAttachment = {
       itemType: 'opportunities',
       itemName: 'Treasure Hunt Opportunities',
-      itemData: opportunitiesData
+      itemData: treasureHunt
     }
 
     this.emailMeasurDataService.emailItemType.next('opportunities');

@@ -8,6 +8,10 @@ i.fa.fa-chevron-down:hover,
     font-size: 16px;
 }
 
+.include-unselected {
+  cursor: pointer;
+}
+
 .alert-danger {
   width: unset;
 }

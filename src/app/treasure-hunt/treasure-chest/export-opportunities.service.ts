@@ -46,6 +46,11 @@ export class ExportOpportunitiesService {
       return exportOpportunities;
     }
   
+    hasUnselectedOpportunities(treasureHunt: TreasureHunt): boolean {
+      const allOpportunities: ImportExportOpportunities = this.setImportExportData(treasureHunt, true);
+      return Object.values(allOpportunities).some(opportunities => Array.isArray(opportunities) && opportunities.some((opportunity: TreasureHuntOpportunity) => !opportunity.selected));
+    }
+
     private getSelectedOpportunitiesGeneric<T extends TreasureHuntOpportunity>(opportunities: Array<T>, includeUnselected: boolean): Array<T> | undefined {
       if (opportunities && opportunities.length > 0) {
         if (includeUnselected) {

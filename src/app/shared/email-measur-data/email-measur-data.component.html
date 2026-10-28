@@ -52,6 +52,14 @@
       <label class="bold mr-2 w-25" for="emailAttachmentName">Attachment Name</label>
       <div class="input-group">
         <input type="text" formControlName="emailAttachmentName" class="form-control" (input)="save()" id="emailAttachmentName" />
+        @if (showIncludeUnselected) {
+          <div class="input-group-append">
+            <label class="input-group-text include-unselected mb-0" for="includeUnselected">
+              <input type="checkbox" formControlName="includeUnselected" id="includeUnselected" class="mr-2" (change)="save()" />
+              Include unselected
+            </label>
+          </div>
+        }
       </div>
       <div class="input-group">
         @if (emailAttachmentName.invalid) {
