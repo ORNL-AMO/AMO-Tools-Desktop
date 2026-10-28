@@ -21,7 +21,7 @@ async function run() {
     cost_kw_hour:0.05,fluidType:'Water',fluidTemperature:68});
   const performance = pumps.motorPerformance(60,3,200,1780,90,460,225,1);
   const powerFactor = pumps.motorPowerFactor(200,0,60,90,460,60,1780,1,90);
-  const near = (actual: number, expected: number) => { if (Math.abs(actual-expected)>1e-8) throw new Error(`${actual} != ${expected}`); };
+  const near = (actual: number, expected: number) => { if (!Number.isFinite(actual) || !Number.isFinite(expected) || Math.abs(actual-expected)>1e-8) throw new Error(`${actual} != ${expected}`); };
   if(suitePackage.version!=='1.2.7-beta.446.1') throw new Error('Wrong Suite version');
   near(result.motor_power,80);near(result.annual_energy,700.8);near(result.annual_cost,35040);
   near(performance.efficiency,89.1);near(powerFactor,4.669958457276021);
