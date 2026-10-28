@@ -50,12 +50,41 @@ export class WaterReductionTreasureHuntService {
       utilityType: 'Electricity',
     }
 
-    if (waterReduction.baseline[0].isWastewater == true) {
+    if (waterReduction.baseline[0].isWastewater == 1) {
       treasureHuntOpportunityResults.utilityType = 'Waste Water';
+    } else if (waterReduction.baseline[0].isWastewater == 2) {
+      treasureHuntOpportunityResults.utilityType = 'Mixed';
+      treasureHuntOpportunityResults.costSavings = results.annualCostSavings + results.annualWastewaterCostSavings;
+      treasureHuntOpportunityResults.baselineCost = results.baselineResults.waterCost + results.baselineResults.wastewaterCost;
+      treasureHuntOpportunityResults.modificationCost = results.modificationResults.waterCost + results.modificationResults.wastewaterCost;
     } else {
       treasureHuntOpportunityResults.utilityType = 'Water';
     }
 
+    return treasureHuntOpportunityResults;
+  }
+
+  getWaterOpportunityResults(waterReduction: WaterReductionTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
+    let results: WaterReductionResults = this.waterReductionService.getResults(settings, waterReduction.baseline, waterReduction.modification);
+    let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
+      costSavings: results.annualCostSavings,
+      energySavings: results.annualWaterSavings,
+      baselineCost: results.baselineResults.waterCost,
+      modificationCost: results.modificationResults.waterCost,
+      utilityType: 'Water',
+    }
+    return treasureHuntOpportunityResults;
+  }
+
+  getWastewaterOpportunityResults(waterReduction: WaterReductionTreasureHunt, settings: Settings): TreasureHuntOpportunityResults {
+    let results: WaterReductionResults = this.waterReductionService.getResults(settings, waterReduction.baseline, waterReduction.modification);
+    let treasureHuntOpportunityResults: TreasureHuntOpportunityResults = {
+      costSavings: results.annualWastewaterCostSavings,
+      energySavings: results.annualWastewaterSavings,
+      baselineCost: results.baselineResults.wastewaterCost,
+      modificationCost: results.modificationResults.wastewaterCost,
+      utilityType: 'Waste Water',
+    }
     return treasureHuntOpportunityResults;
   }
 
@@ -66,7 +95,7 @@ export class WaterReductionTreasureHuntService {
       unitStr = 'kgal';
     }
     //electricity utility
-    if (reduction.baseline[0].isWastewater == true) {
+    if (reduction.baseline[0].isWastewater == 1) {
       utilityCost = currentEnergyUsage.wasteWaterCosts;
     }
 
@@ -77,6 +106,40 @@ export class WaterReductionTreasureHuntService {
       }
     }
 
+    let annualEnergySavings: Array<{ savings: number, energyUnit: string, label: string }> = [{
+      savings: opportunitySummary.totalEnergySavings,
+      energyUnit: unitStr,
+      label: opportunitySummary.utilityType
+    }];
+    let utilityTypes: Array<string> = [opportunitySummary.utilityType];
+    let percentSavings: Array<{ percent: number, label: string, baselineCost: number, modificationCost: number }> = [{
+      percent: (opportunitySummary.costSavings / utilityCost) * 100,
+      label: opportunitySummary.utilityType,
+      baselineCost: opportunitySummary.baselineCost,
+      modificationCost: opportunitySummary.modificationCost,
+    }];
+
+    if (reduction.baseline[0].isWastewater == 2 && opportunitySummary.mixedIndividualResults) {
+      annualEnergySavings = new Array();
+      utilityTypes = new Array();
+      percentSavings = new Array();
+      opportunitySummary.mixedIndividualResults.forEach(summary => {
+        let currentCost: number = summary.utilityType == 'Waste Water' ? currentEnergyUsage.wasteWaterCosts : currentEnergyUsage.waterCosts;
+        annualEnergySavings.push({
+          savings: summary.totalEnergySavings,
+          energyUnit: unitStr,
+          label: summary.utilityType
+        });
+        utilityTypes.push(summary.utilityType);
+        percentSavings.push({
+          percent: currentCost ? (summary.costSavings / currentCost) * 100 : 0,
+          label: summary.utilityType,
+          baselineCost: summary.baselineCost,
+          modificationCost: summary.modificationCost,
+        });
+      });
+    }
+
     let cardData: OpportunityCardData = {
       implementationCost: opportunitySummary.totalCost,
       paybackPeriod: opportunitySummary.payback,
@@ -84,18 +147,9 @@ export class WaterReductionTreasureHuntService {
       opportunityType: 'water-reduction',
       opportunityIndex: index,
       annualCostSavings: annualCostSavings,
-      annualEnergySavings: [{
-        savings: opportunitySummary.totalEnergySavings,
-        energyUnit: unitStr,
-        label: opportunitySummary.utilityType
-      }],
-      utilityType: [opportunitySummary.utilityType],
-      percentSavings: [{
-        percent: (opportunitySummary.costSavings / utilityCost) * 100,
-        label: opportunitySummary.utilityType,
-        baselineCost: opportunitySummary.baselineCost,
-        modificationCost: opportunitySummary.modificationCost,
-      }],
+      annualEnergySavings: annualEnergySavings,
+      utilityType: utilityTypes,
+      percentSavings: percentSavings,
       waterReduction: reduction,
       name: opportunitySummary.opportunityName,
       opportunitySheet: reduction.opportunitySheet,
