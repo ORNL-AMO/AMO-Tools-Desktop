@@ -7,7 +7,8 @@
       <td class="bold text-center">Modification</td>
     </tr>
     <tr>
-      <td class="bold">Water Use</td>
+      <td class="bold" *ngIf="isWastewater != 1">Water Use</td>
+      <td class="bold" *ngIf="isWastewater == 1">Wastewater Disposal</td>
       <td class="text-center">{{waterReductionResults.baselineResults.waterUse | number:'1.0-0'}}
         <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
         <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
@@ -21,8 +22,8 @@
       </td>
     </tr>
     <tr>
-      <td class="bold" *ngIf="!isWastewater">Water Cost</td>
-      <td class="bold" *ngIf="isWastewater">Wastewater Disposal Cost</td>
+      <td class="bold" *ngIf="isWastewater != 1">Water Cost</td>
+      <td class="bold" *ngIf="isWastewater == 1">Wastewater Cost</td>
       <td class="text-center">
         {{waterReductionResults.baselineResults.waterCost | currency: 'USD': 'symbol': '1.0-0'}} /yr
       </td>
@@ -32,8 +33,36 @@
         </span>
       </td>
     </tr>
+    <ng-container *ngIf="isWastewater == 2">
+      <tr>
+        <td class="bold">Wastewater Disposal</td>
+        <td class="text-center">{{waterReductionResults.baselineResults.wastewaterDisposal | number:'1.0-0'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
+        </td>
+        <td class="text-center">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.wastewaterDisposal | number:'1.0-0'}}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold">Wastewater Cost</td>
+        <td class="text-center">
+          {{waterReductionResults.baselineResults.wastewaterCost | currency: 'USD': 'symbol': '1.0-0'}} /yr
+        </td>
+        <td class="text-center">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists">{{waterReductionResults.modificationResults.wastewaterCost | currency: 'USD': 'symbol': '1.0-0'}} /yr
+          </span>
+        </td>
+      </tr>
+    </ng-container>
     <tr>
-      <td class="bold">Annual Water Savings</td>
+      <td class="bold" *ngIf="isWastewater != 1">Annual Water Savings</td>
+      <td class="bold" *ngIf="isWastewater == 1">Annual Wastewater Savings</td>
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
@@ -44,8 +73,9 @@
       </td>
     </tr>
     <tr>
-      <td class="bold" *ngIf="!isWastewater">Cost Savings</td>
-      <td class="bold" *ngIf="isWastewater">Disposal Cost Savings</td>
+      <td class="bold" *ngIf="isWastewater == 0">Cost Savings</td>
+      <td class="bold" *ngIf="isWastewater == 1">Wastewater Cost Savings</td>
+      <td class="bold" *ngIf="isWastewater == 2">Water Cost Savings</td>
       <td class="text-center" colspan="2">
         <span *ngIf="!modificationExists">&mdash;</span>
         <span *ngIf="modificationExists">
@@ -53,6 +83,37 @@
         </span>
       </td>
     </tr>
+    <ng-container *ngIf="isWastewater == 2">
+      <tr>
+        <td class="bold">Annual Wastewater Savings</td>
+        <td class="text-center" colspan="2">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists">
+            {{waterReductionResults.annualWastewaterSavings | number: '1.0-0'}}
+            <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
+            <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold">Wastewater Cost Savings</td>
+        <td class="text-center" colspan="2">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists">
+            {{waterReductionResults.annualWastewaterCostSavings | currency: 'USD': 'symbol': '1.0-0'}} /yr
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="bold">Total Cost Savings</td>
+        <td class="text-center" colspan="2">
+          <span *ngIf="!modificationExists">&mdash;</span>
+          <span *ngIf="modificationExists">
+            {{waterReductionResults.annualCostSavings + waterReductionResults.annualWastewaterCostSavings | currency: 'USD': 'symbol': '1.0-0'}} /yr
+          </span>
+        </td>
+      </tr>
+    </ng-container>
 
   </tbody>
 </table>

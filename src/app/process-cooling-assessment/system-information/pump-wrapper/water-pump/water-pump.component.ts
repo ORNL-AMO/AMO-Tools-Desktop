@@ -36,7 +36,7 @@ export class WaterPumpComponent {
   constructor() {
     effect(() => {
       const pumpInput = this.processCooling().systemInformation[this.pumpFormType()];
-      this.form = this.systemInformationFormService.getPumpInputForm(pumpInput, this.settings());
+      this.form = this.systemInformationFormService.getPumpInputForm(pumpInput, this.pumpFormType(), this.settings());
       this.controlIds = generateFormControlIds(this.form.controls);
       this.observeFormChanges();
       this.observeIsMotorSizeKnownChanges();
@@ -61,7 +61,7 @@ export class WaterPumpComponent {
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(
       (isKnown) => {
-        this.motorSize.setValidators(this.systemInformationFormService.getMotorSizeValidators(isKnown));
+        this.motorSize.setValidators(this.systemInformationFormService.getMotorSizeValidators(isKnown, this.settings()));
         if (!isKnown) {
           this.motorSize.setValue(0);
         }

@@ -46,10 +46,13 @@
         <div class="input-group">
             <input name="towerSize" type="number" step="any" class="form-control" id="{{controlIds.towerSize}}"
                 formControlName="towerSize" (focus)="focusField('towerSize')">
-            <app-input-unit
-                [defaultUnit]="towerSizeMetric.value === TowerSizeMetrics.Tons ? PROCESS_COOLING_UNITS.towerSize.otherTypes.tons.labelHTML : PROCESS_COOLING_UNITS.towerSize.otherTypes.hp.labelHTML"></app-input-unit>
+            @let towerSizeUnits = towerSizeMetric.value === TowerSizeMetrics.Tons ? PROCESS_COOLING_UNITS.towerSizeTons : PROCESS_COOLING_UNITS.towerSizeHP;
+            <app-input-unit [settings]="settings()" [imperialUnit]="towerSizeUnits.labelHTML.imperial"
+                [metricUnit]="towerSizeUnits.labelHTML.metric"></app-input-unit>
         </div>
-        <app-form-control-errors [control]="towerSize"></app-form-control-errors>
+        <app-form-control-errors [control]="towerSize" [settings]="settings()"
+            [imperialUnit]="towerSizeUnits.labelHTML.imperial"
+            [metricUnit]="towerSizeUnits.labelHTML.metric"></app-form-control-errors>
     </div>
 
     <div class="form-group">

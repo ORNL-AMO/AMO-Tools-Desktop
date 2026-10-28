@@ -18,8 +18,8 @@
                 In certain systems, it may be possible to raise the chilled water temperature without any negative results.  
                 For example, in some industrial settings chilled water flow is throttled to reduce the flow rate for a particular process.  
                 Instead of reducing the flow via valve control, significant energy savings may be possible if the full flow is used, but at an increased temperature.  
-                In this case, the amount of cooling provided by the chilled water can remain unchanged.  A new chilled water supply temperature results in new chiller efficiency (kW/ton) for each load point.  
-                Raising the chilled water temperature set point 1°F typically saves 1% to 2% of the chiller compressor energy.  
+                In this case, the amount of cooling provided by the chilled water can remain unchanged.  A new chilled water supply temperature results in new chiller efficiency (@if (settings().unitsOfMeasure === 'Metric') {kW/kW} @else {kW/ton}) for each load point.  
+                Raising the chilled water temperature set point @if (settings().unitsOfMeasure === 'Metric') {1°C typically saves 1.8% to 3.6%} @else {1°F typically saves 1% to 2%} of the chiller compressor energy.  
                 <hr>
             </small>
         </h6>

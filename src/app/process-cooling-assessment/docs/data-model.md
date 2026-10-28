@@ -101,7 +101,7 @@ Used for both chilled-water and condenser-water pumps.
 ```typescript
 {
   variableFlow: boolean;
-  flowRate: number;      // gpm (Imperial) or m³/s (Metric)
+  flowRate: number;      // gpm/ton (Imperial) or L/s/kW (Metric)
   efficiency: number;    // %
   motorSize: number;     // HP (Imperial) or kW (Metric)
   motorEfficiency: number; // %
@@ -209,18 +209,35 @@ EEM display names are defined in `EEM_LABELS` in [process-cooling-constants.ts](
 
 ### Storage Convention
 
-All data is persisted in **Imperial** units. The `existingDataUnits` field tracks what units were in effect when the data was saved (always `'Imperial'` for new assessments).
+MEASUR uses "Imperial" and "Metric" (not "SI"). Data is persisted in the units of the assessment settings (`Settings.unitsOfMeasure`). Defaults are defined in Imperial. `existingDataUnits` records the units the stored data is currently in; when it differs from the settings, System Basics shows the "Update Data" reminder.
+
+| Quantity | Imperial | Metric | Conversion |
+|---|---|---|---|
+| Temperature | °F | °C | `F` ↔ `C` |
+| Temperature difference (following differential, HEX approach) | °F | °C | `R` ↔ `K` (scale only, no 32° offset) |
+| Chiller capacity, tower size (Tons sizing) | tons | kW | `tons` ↔ `kW` |
+| Pump motor size, tower size (HP sizing) | hp | kW | `hp` ↔ `kW` |
+| Chiller efficiency (full load, custom curve, results) | kW/ton | kW/kW | `convertChillerEfficiency` |
+| Pump flow rate | gpm/ton | L/s/kW | `convertFlowRatePerTon` |
+| Fuel cost | $/MMBtu | $/GJ | `MMBtu` ↔ `GJ` |
+| Power, energy, electricity cost | kW, kWh, $/kWh | same | none |
+
+Unit pairs live in `constants/process-cooling-units.ts` (`PROCESS_COOLING_UNITS`). Ratio units are not defined in `ConvertValue`, so they use the helper functions in the same file.
 
 ### Conversion
 
-`ConvertProcessCoolingService.convertProcessCooling(assessment, oldSettings, newSettings)` walks every numeric field and converts in-place using the shared `ConvertValue` utility. This is called in two situations:
+`ConvertProcessCoolingService.convertProcessCooling(assessment, oldSettings, newSettings)` converts the baseline, modifications and stored weather data in place (rounded for display). It is called:
 
-1. **On first load** — if the facility-level settings are Metric and the assessment was stored in Imperial
-2. **When the user changes units** — triggered from `SystemBasicsComponent`
+1. **When an assessment is first created under Metric settings** — `initAssessmentSettings()` converts the Imperial defaults (fuel cost is taken from settings as-is) and sets `existingDataUnits = 'Metric'`
+2. **When the user changes units** — `SystemBasicsComponent` opens the update-units modal; "Update Data" (modal or reminder link) runs the conversion
+
+### Suite boundary
+
+The Suite always expects Imperial. `ProcessCoolingResultsService.getProcessCoolingSuiteResults()` calls `convertInputsForSuite()` (unrounded Imperial copy) and `convertWeatherDataForSuiteApi()` before the Suite call, and `convertProcessCoolingResults()` after it (chiller efficiency kW/ton → kW/kW).
 
 ### Validators
 
-`process-cooling-validation-rules.ts` defines all form field min/max bounds. `SystemInformationFormService` applies these as Angular `Validators.min()` / `Validators.max()` when building each reactive form. The bounds for temperature, flow rate, capacity, etc. are different for Imperial vs. Metric and are selected based on the active `Settings.unitsOfMeasure`.
+`process-cooling-validation-rules.ts` defines all form field min/max bounds in Imperial. `SystemInformationFormService` converts them to Metric when `Settings.unitsOfMeasure` is Metric.
 
 ---
 
