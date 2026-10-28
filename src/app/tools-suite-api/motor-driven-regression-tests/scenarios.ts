@@ -38,9 +38,9 @@ export function canonical(value: unknown): unknown {
   return value;
 }
 
-export async function initializeMotorDrivenServices(isElectron = false) {
+export async function initializeMotorDrivenServices() {
   const tools = new ToolsSuiteApiService(null, null, null, null, null, null, null, null,
-    { isElectron } as ElectronService);
+    { isElectron: false } as ElectronService);
   await tools.initializeModule();
   const helper = new SuiteApiHelperService(tools);
   const pumps = new PumpsSuiteApiService(helper, tools);

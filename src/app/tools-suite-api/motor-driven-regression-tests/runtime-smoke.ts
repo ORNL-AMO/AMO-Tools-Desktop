@@ -1,15 +1,12 @@
-import 'zone.js';
 import '@angular/compiler';
-import { NgZone } from '@angular/core';
-import { ElectronService } from '../../electron/electron.service';
+import type { ElectronService } from '../../electron/electron.service';
 import { ToolsSuiteApiService } from '../tools-suite-api.service';
 import { SuiteApiHelperService } from '../suite-api-helper.service';
 import { PumpsSuiteApiService } from '../pumps-suite-api.service';
 import suitePackage from 'measur-tools-suite/package.json';
 
 async function run() {
-  const electron = new ElectronService(new NgZone({ enableLongStackTrace: false }));
-  const tools = new ToolsSuiteApiService(null, null, null, null, null, null, null, null, electron);
+  const tools = new ToolsSuiteApiService(null, null, null, null, null, null, null, null, { isElectron: false } as ElectronService);
   await tools.initializeModule();
   const pumps = new PumpsSuiteApiService(new SuiteApiHelperService(tools), tools);
   const result = pumps.resultsExisting({pump_style:6,pump_specified:80,pump_rated_speed:1780,
@@ -25,13 +22,11 @@ async function run() {
   if(suitePackage.version!=='1.2.7-beta.446.1') throw new Error('Wrong Suite version');
   near(result.motor_power,80);near(result.annual_energy,700.8);near(result.annual_cost,35040);
   near(performance.efficiency,89.1);near(powerFactor,4.669958457276021);
-  const summary={passed:true,version:suitePackage.version,isElectron:!!electron.isElectron,
-    protocol:location.protocol,motorPowerKw:result.motor_power,annualEnergyMWh:result.annual_energy,
+  const summary={passed:true,version:suitePackage.version,protocol:location.protocol,motorPowerKw:result.motor_power,annualEnergyMWh:result.annual_energy,
     annualCostDollars:result.annual_cost,specifiedMotorEfficiencyPercent:performance.efficiency,
     nearZeroPowerFactorPercent:powerFactor};
   document.getElementById('result')!.textContent=JSON.stringify(summary);
-  if(window['electronAPI']) window['electronAPI'].send('ready',summary);
 }
 run().catch(error=>{const result={passed:false,error:String(error)};
   document.getElementById('result')!.textContent=JSON.stringify(result);
-  if(window['electronAPI'])window['electronAPI'].send('ready',result);});
+});

@@ -8,12 +8,12 @@ npm test -- --watch=false --no-progress --include='src/app/tools-suite-api/motor
 
 The test emits every raw difference as a base64 JSON `MOTOR_DRIVEN_DIFFERENCES` record, including values within tolerance. An unexplained/new change fails even when small. See [the integration evidence](../../docs/development/pump-result-desktop-integration.md) for exact versions, capture provenance and the complete difference ledger.
 
-After a web or desktop build, verify the installed artifact in an isolated Electron renderer:
+After the web build, prepare a standalone browser consumer of the actual Desktop adapters:
 
 ```sh
-node scripts/motor-driven-regression-tests/runtime-smoke.mjs --electron
+node scripts/motor-driven-regression-tests/runtime-smoke.mjs
 ```
 
-The check uses the real preload and `ToolsSuiteApiService`, `file:` WASM lookup, a temporary user profile, and representative pump/motor calculations. It verifies that the built WASM bytes match the installed package. Set `ELECTRON_BIN` only to select an already-installed Electron binary. The temporary renderer reports through the preload's existing allowed `ready` channel. No application database/default data is initialized.
+The command checks that the built WASM bytes match the installed package and prepares the consumer under ignored `tmp/motor-driven-regression-tests/runtime-smoke/`. Serve that directory over localhost to check the browser lookup. The normal real-WASM Karma regression tests also exercise the web adapter. No application database/default data is initialized.
 
-Without `--electron`, the command prepares the same consumer under ignored `tmp/motor-driven-regression-tests/runtime-smoke/`. Serve that directory over localhost to verify browser lookup. The normal real-WASM Karma regression tests also exercise the web adapter.
+Electron-specific coverage is outside this calculation-adapter change; no Electron implementation or asset-path change is included.

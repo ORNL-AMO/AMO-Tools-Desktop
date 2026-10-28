@@ -71,8 +71,10 @@ Before/after values and deltas below use each scenario's units recorded in the i
 
 ## Validation and review
 
-Author validation: Angular application/spec typechecks; focused wrappers/comparison gate; all 1,648 Desktop unit tests; all compressed-air fixture/privacy tests and 49 full calculation fixtures; 257 process-flow tests (one existing todo); process-flow TypeScript compilation; and production web/desktop builds passed. Final compatibility edits were followed by full unit/typecheck reruns and target rebuilds. Browser and isolated Electron renderers initialized the installed beta through the production ToolsSuiteApiService and calculated the pump/motor examples successfully.
+Author validation: Angular application/spec typechecks; focused wrappers/comparison gate; all 1,648 Desktop unit tests; all compressed-air fixture/privacy tests and 49 full calculation fixtures; 257 process-flow tests (one existing todo); process-flow TypeScript compilation; and the production web build passed. Final compatibility edits were followed by full unit/typecheck reruns and target rebuilds. The browser consumer initialized the installed beta through the production ToolsSuiteApiService and calculated the pump/motor examples successfully.
 
-The existing process-flow `test:typecheck` script runs `vitest typecheck` as a file filter and exits with no tests. Actual `tsc --noEmit -p process-flow-diagram-component/tsconfig.json` passed instead. Initial Electron harness collection used a channel rejected by the real preload whitelist; using its existing `ready` channel confirmed successful execution. No application preload or security settings were changed.
+The existing process-flow `test:typecheck` script runs `vitest typecheck` as a file filter and exits with no tests. Actual `tsc --noEmit -p process-flow-diagram-component/tsconfig.json` passed instead.
+
+Electron-specific checks and scaffolding were removed at the user's request: this PR changes calculation adapters and dependency pins, with no Electron implementation or asset-path changes.
 
 Validation and exact reviewed commits are recorded in Desktop issue [#8957](https://github.com/ORNL-AMO/AMO-Tools-Desktop/issues/8957) and the implementation PR. Final release versions and merging remain deferred.
