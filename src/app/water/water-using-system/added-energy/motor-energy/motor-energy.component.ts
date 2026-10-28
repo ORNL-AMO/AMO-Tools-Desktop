@@ -1,7 +1,5 @@
 import { Output, ViewChild, HostListener, Component, Input, EventEmitter, ElementRef } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap/modal";
-import { PercentLoadEstimationService } from "../../../../calculator/motors/percent-load-estimation/percent-load-estimation.service";
 import { OperatingHours } from "../../../../shared/models/operations";
 import { WaterAssessmentService } from "../../../water-assessment.service";
 import { MotorEnergyService } from "./motor-energy.service";
@@ -23,6 +21,7 @@ export class MotorEnergyComponent {
   form: FormGroup;
   formWidth: number;
   showOperatingHoursModal: boolean = false;
+  showLoadFactorModal: boolean = false;
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
   @HostListener('window:resize', ['$event'])
@@ -30,10 +29,7 @@ export class MotorEnergyComponent {
     this.setOpHoursModalWidth();
   }
 
-  @ViewChild('loadFactorModal', { static: false }) public loadFactorModal: ModalDirective;
-
-  constructor(private waterAssessmentService: WaterAssessmentService, 
-    private percentLoadEstimationService: PercentLoadEstimationService,
+  constructor(private waterAssessmentService: WaterAssessmentService,
     private motorEnergyService: MotorEnergyService) {}
 
   ngOnInit() {
@@ -83,34 +79,22 @@ export class MotorEnergyComponent {
 
   }
 
-  showLoadFactorModal() {
-    this.percentLoadEstimationService.fieldMeasurementInputs = {
-      phase1Voltage: 0,
-      phase1Amps: 0,
-      phase2Voltage: 0,
-      phase2Amps: 0,
-      phase3Voltage: 0,
-      phase3Amps: 0,
-      ratedVoltage: 0,
-      ratedCurrent: 0,
-      powerFactor: this.form.controls.loadFactor.value
-    }
+  openLoadFactorModal() {
     this.waterAssessmentService.modalOpen.next(true);
-    this.loadFactorModal.show();
+    this.showLoadFactorModal = true;
   }
 
   hideLoadFactorModal() {
-    this.loadFactorModal.hide();
+    this.showLoadFactorModal = false;
     this.waterAssessmentService.modalOpen.next(false);
   }
 
-  applyModalData() {
-    let percentLoad: number;
-    percentLoad = this.percentLoadEstimationService.getResults(this.percentLoadEstimationService.fieldMeasurementInputs).percentLoad;
-    this.form.controls.loadFactor.patchValue(Number(percentLoad.toFixed(1)));
+  applyModalData(percentLoad: number) {
+    this.form.controls.loadFactor.patchValue(percentLoad);
     this.save();
     this.hideLoadFactorModal();
   }
+
 
 
 }

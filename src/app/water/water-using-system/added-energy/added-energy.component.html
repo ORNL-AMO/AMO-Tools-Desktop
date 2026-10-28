@@ -1,6 +1,8 @@
-<app-heat-energy *ngIf="selectedWaterUsingSystem.heatEnergy" [heatEnergy]="selectedWaterUsingSystem.heatEnergy"
-    (updateHeatEnergy)="saveHeatEnergy($event)">
+@if (selectedWaterUsingSystem.heatEnergy) {
+<app-heat-energy [heatEnergy]="selectedWaterUsingSystem.heatEnergy"
+    [systemWaterUse]="systemWaterUse" (updateHeatEnergy)="saveHeatEnergy($event)">
 </app-heat-energy>
+}
 <label class="group-label pl-3">
     Added Pump Energy
 </label>
@@ -16,8 +18,8 @@
 </div>
 
 <div class="motor-equipment">
-    <div class="form-section"
-        *ngFor="let motorEquipment of selectedWaterUsingSystem.addedMotorEnergy; let i = index">
+    @for (motorEquipment of selectedWaterUsingSystem.addedMotorEnergy; track $index; let i = $index) {
+    <div class="form-section">
         <app-motor-energy [motorEnergy]="motorEquipment" (updateMotorEnergy)="saveMotorEnergy($event, i)">
         </app-motor-energy>
         <div class="text-center">
@@ -25,9 +27,12 @@
                 {{motorEquipment.name}}</a>
         </div>
     </div>
+    }
 </div>
 
 
-<app-confirm-delete-modal *ngIf="showConfirmDeleteModal" [confirmDeleteData]="confirmDeleteData"
+@if (showConfirmDeleteModal) {
+<app-confirm-delete-modal [confirmDeleteData]="confirmDeleteData"
     (emitShouldDelete)="onConfirmDeleteClose($event)">
 </app-confirm-delete-modal>
+}

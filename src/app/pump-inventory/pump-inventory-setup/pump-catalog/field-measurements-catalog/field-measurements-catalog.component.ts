@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { OperatingHours } from '../../../../shared/models/operations';
@@ -7,6 +7,7 @@ import { FieldMeasurementsOptions, PumpInventoryFieldWarnings, PumpItem } from '
 import { PumpInventoryService } from '../../../pump-inventory.service';
 import { PumpCatalogService } from '../pump-catalog.service';
 import { FieldMeasurementsCatalogService } from './field-measurements-catalog.service';
+import { isPositiveDisplacementPump } from '../../../../psat/psatConstants';
 
 @Component({
     selector: 'app-field-measurements-catalog',
@@ -40,13 +41,14 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
   ];
 
   @ViewChild('formElement', { static: false }) formElement: ElementRef;
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  @HostListener('window:resize')
+  onResize() {
     this.setOpHoursModalWidth();
   }
   
   showOperatingHoursModal: boolean = false;
   fieldDataWarnings: PumpInventoryFieldWarnings;
+  isPositiveDisplacement: boolean = false;
 
   constructor(private pumpCatalogService: PumpCatalogService, private pumpInventoryService: PumpInventoryService,
     private fieldMeasurementsCatalogService: FieldMeasurementsCatalogService) { }
@@ -59,12 +61,17 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
     this.selectedPumpItemSub = this.pumpCatalogService.selectedPumpItem.subscribe(selectedPump => {
       if (selectedPump) {
         this.form = this.fieldMeasurementsCatalogService.getFormFromFieldMeasurements(selectedPump.fieldMeasurements, selectedPump.pumpEquipment.pumpType);
+        this.isPositiveDisplacement = isPositiveDisplacementPump(selectedPump.pumpEquipment.pumpType);
         this.fieldDataWarnings = this.pumpCatalogService.checkFieldWarnings(selectedPump, this.settings);
       }
     });
     this.pumpTypeChangedSub = this.pumpCatalogService.pumpTypeChanged.subscribe(pumpType => {
       if (this.form && pumpType !== undefined) {
-        this.form = this.fieldMeasurementsCatalogService.updateOperatingHeadValidators(this.form, pumpType);
+        let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
+        this.form = this.fieldMeasurementsCatalogService.updatePumpTypeValidators(this.form, selectedPump.pumpEquipment.pumpType);
+        this.form.controls.operatingHead.patchValue(selectedPump.fieldMeasurements.operatingHead);
+        this.form.controls.operatingDifferentialPressure.patchValue(selectedPump.fieldMeasurements.operatingDifferentialPressure);
+        this.isPositiveDisplacement = isPositiveDisplacementPump(selectedPump.pumpEquipment.pumpType);
       }
     });
   }
@@ -77,7 +84,7 @@ export class FieldMeasurementsCatalogComponent implements OnInit {
 
   save() {
     let selectedPump: PumpItem = this.pumpCatalogService.selectedPumpItem.getValue();
-    selectedPump.fieldMeasurements = this.fieldMeasurementsCatalogService.updateFieldMeasurementsFromForm(this.form, selectedPump.fieldMeasurements);
+    selectedPump.fieldMeasurements = this.fieldMeasurementsCatalogService.updateFieldMeasurementsFromForm(this.form, selectedPump.fieldMeasurements, selectedPump.pumpEquipment.pumpType);
     this.fieldDataWarnings = this.pumpCatalogService.checkFieldWarnings(selectedPump, this.settings);
     this.pumpInventoryService.updatePumpItem(selectedPump);
   }

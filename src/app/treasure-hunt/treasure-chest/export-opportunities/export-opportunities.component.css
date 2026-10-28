@@ -10,6 +10,48 @@
     font-size: small;
 }
 
+.modal-body label{
+    text-decoration: underline;
+    font-weight: bold;
+}
+
 .btn{
     padding: 6px;
+}
+
+.not-exported{
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+.export-footer .form-group label,
+.export-footer .form-group .form-control{
+    float: none;
+    width: auto;
+    white-space: nowrap;
+}
+
+.export-footer .export-controls,
+.export-footer .form-group,
+.export-footer .form-control{
+    min-width: 0;
+}
+
+.export-footer .form-group .export-switch{
+    flex: 0 0 52px;
+    width: 52px;
+    height: 26px;
+}
+
+@media (max-width: 575.98px){
+    .export-footer .export-controls{
+        order: -1;
+        width: 100%;
+    }
+}
+
+@media (min-width: 576px){
+    .export-modal{
+        max-width: 50%;
+    }
 }

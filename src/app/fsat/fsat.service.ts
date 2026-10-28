@@ -1,8 +1,6 @@
-import { DestroyRef, Inject, inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, firstValueFrom } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Fan203Inputs, BaseGasDensity, Plane, Modification, FSAT, FsatInput, FsatOutput, PlaneResults, Fan203Results, FsatValid, PsychrometricResults, VelocityResults } from '../shared/models/fans';
 import { FanFieldDataService } from './fan-field-data/fan-field-data.service';
 import { FanSetupService } from './fan-setup/fan-setup.service';
@@ -23,12 +21,13 @@ import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption
 import { EnergyUseItem } from '../shared/models/treasure-hunt';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
 import { getNewIdString } from '../shared/helperFunctions';
-import { STEPPED_ROUTES, SteppedRoute } from './routing/stepped-routes';
+import { FSAT_MAIN_VIEWS, FsatMainView } from './routing/fsat-main-views';
+import { getSteppedView } from '../shared/main-tab-routing/main-tab-routing';
 
 
 @Injectable()
 export class FsatService {
-  mainTab: BehaviorSubject<string>;
+  mainTab: BehaviorSubject<FsatMainView>;
   stepTab: BehaviorSubject<string>;
   assessmentTab: BehaviorSubject<string>;
   openNewModal: BehaviorSubject<boolean>;
@@ -64,42 +63,15 @@ export class FsatService {
     'fan-field-data'
   ];
 
-  private destroyRef = inject(DestroyRef);
-
   constructor
   (private convertFsatService: ConvertFsatService, private router: Router,
     private settingsDbService: SettingsDbService, private settingsService: SettingsService,
-    private fansSuiteApiService: FansSuiteApiService, private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService,
-    @Inject(STEPPED_ROUTES) private steppedRoutes: SteppedRoute[]) {
+    private fansSuiteApiService: FansSuiteApiService, private assessmentCo2Service: AssessmentCo2SavingsService, private convertUnitsService: ConvertUnitsService, private fanFieldDataService: FanFieldDataService, private convertFanAnalysisService: ConvertFanAnalysisService, private fsatFluidService: FsatFluidService, private fanSetupService: FanSetupService, private fanMotorService: FanMotorService, private fanOperationsService: OperationsService) {
     this.initData();
-    /**
-     * banner/footer navigation only ever has to call router.navigate(), never mainTab.next() directly.
-     */
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(() => {
-      const mainView: string = this.getActiveMainView();
-      if (mainView) {
-        this.mainTab.next(mainView);
-      }
-    });
-  }
-
-  private getActiveMainView(): string | undefined {
-    let snapshot = this.router.routerState.snapshot.root;
-    let mainView: string | undefined;
-    while (snapshot) {
-      if (snapshot.data && (snapshot.data as { mainView?: string }).mainView) {
-        mainView = (snapshot.data as { mainView?: string }).mainView;
-      }
-      snapshot = snapshot.firstChild;
-    }
-    return mainView;
   }
 
   initData() {
-    this.mainTab = new BehaviorSubject<string>('baseline');
+    this.mainTab = new BehaviorSubject<FsatMainView>('baseline');
     this.stepTab = new BehaviorSubject<string>('baseline');
     this.assessmentTab = new BehaviorSubject<string>('explore-opportunities');
     this.calculatorTab = new BehaviorSubject<string>('fan-efficiency');
@@ -219,25 +191,27 @@ export class FsatService {
     if (tmpStepTab === 'fan-field-data') {
       this.goToMainTab('assessment');
     } else {
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex + 1];
-      this.stepTab.next(nextTab);
+      const nextTab: string = getSteppedView(this.stepTabs, tmpStepTab, 1);
+      if (nextTab) {
+        this.stepTab.next(nextTab);
+      }
     }
   }
 
   back() {
     let tmpStepTab: string = this.stepTab.getValue();
     if (tmpStepTab !== 'baseline' && this.mainTab.getValue() == 'baseline') {
-      let assessmentTabIndex: number = this.stepTabs.indexOf(tmpStepTab);
-      let nextTab: string = this.stepTabs[assessmentTabIndex - 1];
-      this.stepTab.next(nextTab);
+      const previousTab: string = getSteppedView(this.stepTabs, tmpStepTab, -1);
+      if (previousTab) {
+        this.stepTab.next(previousTab);
+      }
     } else if (this.mainTab.getValue() == 'assessment') {
       this.goToMainTab('baseline');
     }
   }
 
 
-  goToMainTab(tab: string) {
+  goToMainTab(tab: FsatMainView) {
     const assessmentId: number = this.assessment.getValue()?.id;
     if (assessmentId) {
       this.router.navigate(['/fsat', assessmentId, tab]);
@@ -245,18 +219,17 @@ export class FsatService {
   }
 
   continueMainTab() {
-    const currentIndex: number = this.steppedRoutes.findIndex(route => route.view === this.mainTab.getValue());
-    const nextRoute: SteppedRoute = this.steppedRoutes[currentIndex + 1];
-    if (nextRoute) {
-      this.goToMainTab(nextRoute.view);
-    }
+    this.stepMainTab(1);
   }
 
   backMainTab() {
-    const currentIndex: number = this.steppedRoutes.findIndex(route => route.view === this.mainTab.getValue());
-    const previousRoute: SteppedRoute = this.steppedRoutes[currentIndex - 1];
-    if (previousRoute) {
-      this.goToMainTab(previousRoute.view);
+    this.stepMainTab(-1);
+  }
+
+  private stepMainTab(offset: number) {
+    const view: FsatMainView = getSteppedView(FSAT_MAIN_VIEWS, this.mainTab.getValue(), offset);
+    if (view) {
+      this.goToMainTab(view);
     }
   }
 

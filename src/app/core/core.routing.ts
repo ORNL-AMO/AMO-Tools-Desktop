@@ -3,11 +3,14 @@ import { diagramResolver } from '../water-process-diagram/diagram.resolver';
 import { DashboardComponent } from '../dashboard/dashboard.component';
 import { PhastComponent } from '../phast/phast.component';
 import { PsatComponent } from '../psat/psat.component';
+import { psatRoutes } from '../psat/routing/psat.routing';
 import { FsatComponent } from '../fsat/fsat.component';
 import { fsatRoutes } from '../fsat/routing/fsat.routing';
 import { FsatAssessmentResolver } from '../fsat/routing/fsat-assessment.resolver';
 import { SsmtComponent } from '../ssmt/ssmt.component';
+import { ssmtRoutes } from '../ssmt/routing/ssmt.routing';
 import { TreasureHuntComponent } from '../treasure-hunt/treasure-hunt.component';
+import { treasureHuntRoutes } from '../treasure-hunt/routing/treasure-hunt.routing';
 import { LandingScreenComponent } from '../dashboard/landing-screen/landing-screen.component';
 import { TutorialsComponent } from '../tutorials/tutorials.component';
 import { AboutPageComponent } from '../dashboard/about-page/about-page.component';
@@ -100,6 +103,7 @@ import { FixtureComponent } from '../calculator/furnaces/fixture/fixture.compone
 import { WasteHeatComponent } from '../calculator/furnaces/waste-heat/waste-heat.component';
 import { HeatCascadingComponent } from '../calculator/furnaces/heat-cascading/heat-cascading.component';
 import { WasteWaterComponent } from '../waste-water/waste-water.component';
+import { wasteWaterRoutes } from '../waste-water/routing/waste-water.routing';
 import { ChillerPerformanceComponent } from '../calculator/process-cooling/chiller-performance/chiller-performance.component';
 import { CoolingTowerFanComponent } from '../calculator/process-cooling/cooling-tower-fan/cooling-tower-fan.component';
 import { CoolingTowerBasinComponent } from '../calculator/process-cooling/cooling-tower-basin/cooling-tower-basin.component';
@@ -118,6 +122,7 @@ import { PumpInventoryComponent } from '../pump-inventory/pump-inventory.compone
 import { pumpInventoryRoutes } from '../pump-inventory/pump-inventory.routing';
 import { WaterProcessDiagramComponent } from '../water-process-diagram/water-process-diagram.component';
 import { WaterAssessmentComponent } from '../water/water-assessment.component';
+import { waterRoutes } from '../water/routing/water.routing';
 import { DataAndBackupComponent } from '../dashboard/data-and-backup/data-and-backup.component';
 import { PowerFactorTriangleComponent } from '../calculator/utilities/power-factor-triangle/power-factor-triangle.component';
 import { ValveEnergyLossComponent } from '../calculator/pumps/valve-energy-loss/valve-energy-loss.component';
@@ -562,7 +567,8 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'psat/:id',
-    component: PsatComponent
+    component: PsatComponent,
+    children: psatRoutes
   },
   {
     path: 'fsat/:id',
@@ -572,11 +578,13 @@ export const coreRoutes: Routes = [
   },
   {
     path: 'ssmt/:id',
-    component: SsmtComponent
+    component: SsmtComponent,
+    children: ssmtRoutes
   },
   {
     path: 'treasure-hunt/:id',
-    component: TreasureHuntComponent
+    component: TreasureHuntComponent,
+    children: treasureHuntRoutes
   },
   {
     path: 'compressed-air/:id',
@@ -611,6 +619,7 @@ export const coreRoutes: Routes = [
   {
     component: WasteWaterComponent,
     path: 'waste-water/:id',
+    children: wasteWaterRoutes
   },
   {
     component: CompressedAirInventoryComponent,
@@ -620,14 +629,7 @@ export const coreRoutes: Routes = [
   {
     path: 'water/:id',
     component: WaterAssessmentComponent,
-    children: [
-      {
-        path: 'diagram/:diagramId',
-        component: WaterProcessDiagramComponent,
-        resolve: { diagram: diagramResolver },
-        data: { integrated: true },
-      }
-    ]
+    children: waterRoutes
   },
   {
     path: 'process-flow-diagram/:id',

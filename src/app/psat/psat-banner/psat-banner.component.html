@@ -54,19 +54,19 @@
       </a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.psat.setupDone}"
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !canOpenMainTab('assessment')}"
       (click)="changeTab('assessment')">Assessment</a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.psat.setupDone}"
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !canOpenMainTab('diagram')}"
       (click)="changeTab('diagram')">Diagram</a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.psat.setupDone}"
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !canOpenMainTab('report')}"
       (click)="changeTab('report')">Report</a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
-      <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.psat.setupDone}"
+      <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !canOpenMainTab('sankey')}"
       (click)="changeTab('sankey')">Sankey</a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
@@ -84,19 +84,19 @@
         </a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !assessment.psat.setupDone}"
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !canOpenMainTab('assessment')}"
         (click)="changeTab('assessment')">Assessment</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !assessment.psat.setupDone}"
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !canOpenMainTab('diagram')}"
         (click)="changeTab('diagram')">Diagram</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !assessment.psat.setupDone}"
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !canOpenMainTab('report')}"
         (click)="changeTab('report')">Report</a>
       </div>
       <div class="nav-item">
-        <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !assessment.psat.setupDone}"
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !canOpenMainTab('sankey')}"
         (click)="changeTab('sankey')">Sankey</a>
       </div>
       <div class="nav-item">

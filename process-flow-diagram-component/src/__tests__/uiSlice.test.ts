@@ -6,7 +6,7 @@ import { uiSlice, getDefaultDiagramUiState } from '../components/Diagram/uiSlice
 import { openDrawerWithSelected, selectComponent } from '../components/Diagram/diagramThunks';
 import { makeIntakeNode, makeSystemNode, makeEdge } from '../__fixtures__/builders';
 
-const makeStore = () => configureAppStore({ flowDiagramData: { name: 'test', diagramNotes: '' } } as WaterDiagram);
+const makeStore = () => configureAppStore({ flowDiagramData: { name: 'test', diagramNotes: '' } } as WaterDiagram, () => {});
 
 describe('uiSlice defaults', () => {
   it('matches the fields the old DiagramState carried', () => {

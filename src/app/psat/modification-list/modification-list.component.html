@@ -87,7 +87,7 @@
                       </div>
                       <div class="col-12 col-lg-4">
                         <div class="d-flex flex-wrap">
-                          @for (badge of getBadges(modification.psat); track badge) {
+                          @for (badge of getBadges(modification.psat); track badge.componentStr) {
                             <div class="badge badge-primary"
                             (click)="goToModification(index, badge.componentStr)">{{badge.badge}}</div>
                           }

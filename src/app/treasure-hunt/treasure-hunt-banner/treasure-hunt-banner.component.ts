@@ -8,6 +8,8 @@ import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-priva
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { EmailMeasurDataService } from '../../shared/email-measur-data/email-measur-data.service';
 import { CoreService } from '../../core/core.service';
+import { TREASURE_HUNT_SETUP_GATED_VIEWS, TreasureHuntMainView } from '../routing/treasure-hunt.routing';
+import { isMainTabAllowed } from '../../shared/main-tab-routing/main-tab-routing';
 
 @Component({
     selector: 'app-treasure-hunt-banner',
@@ -66,12 +68,14 @@ export class TreasureHuntBannerComponent implements OnInit {
   }
 
 
-  changeTab(str: string) {
+  canOpenMainTab(view: TreasureHuntMainView): boolean {
+    return isMainTabAllowed(TREASURE_HUNT_SETUP_GATED_VIEWS, view, this.assessment.treasureHunt.setupDone);
+  }
+
+  changeTab(str: TreasureHuntMainView) {
     if (this.disableTabs == false) {
-      if (str == 'baseline') {
-        this.treasureHuntService.mainTab.next(str);
-      } else if (this.assessment.treasureHunt.setupDone == true) {
-        this.treasureHuntService.mainTab.next(str);
+      if (this.canOpenMainTab(str)) {
+        this.treasureHuntService.goToMainTab(str);
       }
     }
     this.collapseBanner();
@@ -91,13 +95,9 @@ export class TreasureHuntBannerComponent implements OnInit {
   }
 
   back() {
-    if (this.mainTab == 'report') {
-      this.treasureHuntService.mainTab.next('treasure-chest');
-    } else if (this.mainTab == 'treasure-chest') {
-      this.treasureHuntService.mainTab.next('find-treasure');
-    } else if (this.mainTab == 'find-treasure') {
-      this.treasureHuntService.mainTab.next('baseline');
-    } else if (this.mainTab == 'baseline') {
+    if (this.mainTab != 'baseline') {
+      this.treasureHuntService.backMainTab();
+    } else {
       if (this.subTab == 'operation-costs') {
         this.treasureHuntService.subTab.next('settings');
       } else if (this.subTab == 'settings') {
@@ -111,14 +111,10 @@ export class TreasureHuntBannerComponent implements OnInit {
       if (this.subTab == 'settings') {
         this.treasureHuntService.subTab.next('operation-costs');
       } else if (this.subTab == 'operation-costs') {
-        this.treasureHuntService.mainTab.next('find-treasure');
+        this.treasureHuntService.continueMainTab();
       }
-    } else if (this.mainTab == 'find-treasure') {
-      this.treasureHuntService.mainTab.next('treasure-chest');
-    } else if (this.mainTab == 'treasure-chest') {
-      this.treasureHuntService.mainTab.next('report');
-    } else if (this.mainTab == 'report') {
-      this.treasureHuntService.mainTab.next('report');
+    } else {
+      this.treasureHuntService.continueMainTab();
     }
   }
 

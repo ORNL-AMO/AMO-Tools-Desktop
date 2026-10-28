@@ -46,7 +46,7 @@ describe('PsatBannerComponent', () => {
 
     psatTabServiceSpy = jasmine.createSpyObj(
       'PsatTabService',
-      [],
+      ['goToMainTab', 'backMainTab', 'continueMainTab'],
       {
         mainTab: mainTabSubject,
         showExportModal: new BehaviorSubject<boolean>(false),
@@ -117,6 +117,16 @@ describe('PsatBannerComponent', () => {
     });
   });
 
+  describe('canOpenMainTab', () => {
+    it('allows gated tabs only once setup is done', () => {
+      component.assessment = makeAssessment(false);
+      expect(component.canOpenMainTab('baseline')).toBeTrue();
+      expect(component.canOpenMainTab('report')).toBeFalse();
+      component.assessment = makeAssessment(true);
+      expect(component.canOpenMainTab('report')).toBeTrue();
+    });
+  });
+
   describe('changeTab', () => {
     it('changes to baseline and collapses the banner regardless of setupDone', () => {
       component.assessment = makeAssessment(false);
@@ -124,7 +134,7 @@ describe('PsatBannerComponent', () => {
 
       component.changeTab('baseline');
 
-      expect(mainTabSubject.value).toBe('baseline');
+      expect(psatTabServiceSpy.goToMainTab).toHaveBeenCalledWith('baseline');
       expect(component.bannerCollapsed).toBeTrue();
     });
 
@@ -133,7 +143,7 @@ describe('PsatBannerComponent', () => {
 
       component.changeTab('calculators');
 
-      expect(mainTabSubject.value).toBe('calculators');
+      expect(psatTabServiceSpy.goToMainTab).toHaveBeenCalledWith('calculators');
     });
 
     it('changes to another tab when setupDone is true', () => {
@@ -141,53 +151,29 @@ describe('PsatBannerComponent', () => {
 
       component.changeTab('assessment');
 
-      expect(mainTabSubject.value).toBe('assessment');
+      expect(psatTabServiceSpy.goToMainTab).toHaveBeenCalledWith('assessment');
     });
 
     it('does not change to another tab when setupDone is false', () => {
       component.assessment = makeAssessment(false);
-      mainTabSubject.next('baseline');
 
       component.changeTab('assessment');
 
-      expect(mainTabSubject.value).toBe('baseline');
+      expect(psatTabServiceSpy.goToMainTab).not.toHaveBeenCalled();
     });
   });
 
   describe('back / continue', () => {
-    it('back() moves from calculators to sankey', () => {
-      mainTabSubject.next('calculators');
-      component.mainTab = 'calculators';
-
+    it('back() delegates to psatTabService.backMainTab', () => {
       component.back();
 
-      expect(mainTabSubject.value).toBe('sankey');
+      expect(psatTabServiceSpy.backMainTab).toHaveBeenCalled();
     });
 
-    it('back() does nothing when mainTab is baseline', () => {
-      mainTabSubject.next('baseline');
-      component.mainTab = 'baseline';
-
-      component.back();
-
-      expect(mainTabSubject.value).toBe('baseline');
-    });
-
-    it('continue() moves from baseline to assessment', () => {
-      component.mainTab = 'baseline';
-
+    it('continue() delegates to psatTabService.continueMainTab', () => {
       component.continue();
 
-      expect(mainTabSubject.value).toBe('assessment');
-    });
-
-    it('continue() does nothing when mainTab is calculators', () => {
-      mainTabSubject.next('calculators');
-      component.mainTab = 'calculators';
-
-      component.continue();
-
-      expect(mainTabSubject.value).toBe('calculators');
+      expect(psatTabServiceSpy.continueMainTab).toHaveBeenCalled();
     });
   });
 

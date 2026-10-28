@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener, ChangeDetectorRef } from '@angular/core';
 import { Assessment } from '../shared/models/assessment';
-import { ActivatedRoute, Router } from '@angular/router';
-import { firstValueFrom, Subscription } from 'rxjs';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { SsmtService } from './ssmt.service';
 import { Settings } from '../shared/models/settings';
 import { SettingsDbService } from '../indexedDb/settings-db.service';
@@ -10,7 +10,6 @@ import { AssessmentDbService } from '../indexedDb/assessment-db.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompareService } from './compare.service';
 import * as _ from 'lodash';
-import { AssessmentService } from '../dashboard/assessment.service';
 import { SettingsService, SteamImperialDefaults, SteamMetricDefaults } from '../settings/settings.service';
 import { ConvertSsmtService } from './convert-ssmt.service';
 import { SteamService } from '../calculator/steam/steam.service';
@@ -18,6 +17,8 @@ import { AnalyticsService } from '../shared/analytics/analytics.service';
 import { SnackbarService } from '../shared/snackbar-notification/snackbar.service';
 import { SaturatedPropertiesOutput } from '../shared/models/steam/steam-outputs';
 import { BoilerService } from './boiler/boiler.service';
+import { SSMT_MAIN_VIEWS, SSMT_SETUP_GATED_VIEWS, SsmtMainView } from './routing/ssmt.routing';
+import { getMergedRouteData, isMainTabAllowed } from '../shared/main-tab-routing/main-tab-routing';
 
 @Component({
     selector: 'app-ssmt',
@@ -54,6 +55,7 @@ export class SsmtComponent implements OnInit {
   _ssmt: SSMT;
   mainTab: string;
   mainTabSubscription: Subscription;
+  routerEventsSub: Subscription;
   steamModelerErrorSubscription: Subscription;
   stepTab: string;
   stepTabSubscription: Subscription;
@@ -99,7 +101,6 @@ export class SsmtComponent implements OnInit {
     private settingsDbService: SettingsDbService,
     private assessmentDbService: AssessmentDbService,
     private compareService: CompareService,
-    private assessmentService: AssessmentService,
     private cd: ChangeDetectorRef,
     private settingsService: SettingsService,
     private steamService: SteamService,
@@ -136,12 +137,13 @@ export class SsmtComponent implements OnInit {
         if (this._ssmt.boilerInput) {
           this.boilerService.initializeSSMTCalculatedFields(this._ssmt.boilerInput, this._ssmt, this.settings, true);
         }
-        let tmpTab = this.assessmentService.getStartingTab();
-        if (tmpTab) {
-          this.ssmtService.mainTab.next(tmpTab);
-        }
+        this.ssmtService.assessmentId = this.assessment.id;
+        this.syncMainTabFromRoute();
       }
     });
+    this.routerEventsSub = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => this.syncMainTabFromRoute());
     this.subscribeTabs();
 
     this.steamModelerErrorSubscription = this.steamService.steamModelerError.subscribe(error => {
@@ -202,6 +204,8 @@ export class SsmtComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.routerEventsSub?.unsubscribe();
+    this.ssmtService.assessmentId = undefined;
     this.mainTabSubscription.unsubscribe();
     this.stepTabSubscription.unsubscribe();
     this.modelTabSubscription.unsubscribe();
@@ -219,6 +223,18 @@ export class SsmtComponent implements OnInit {
     this.saveSsmtSub.unsubscribe();
     this.steamModelerErrorSubscription.unsubscribe();
     this.showExportModalSub.unsubscribe();
+  }
+
+  syncMainTabFromRoute() {
+    const mainView: SsmtMainView = getMergedRouteData<SsmtMainView>(this.activatedRoute.firstChild?.snapshot).mainView;
+    if (!mainView || !this.assessment) {
+      return;
+    }
+    if (isMainTabAllowed(SSMT_SETUP_GATED_VIEWS, mainView, this.assessment.ssmt.setupDone)) {
+      this.ssmtService.mainTab.next(mainView);
+    } else {
+      this.router.navigate(['/ssmt', this.assessment.id, SSMT_MAIN_VIEWS[0]], { replaceUrl: true });
+    }
   }
 
   subscribeTabs() {
@@ -355,17 +371,17 @@ export class SsmtComponent implements OnInit {
         this.ssmtService.stepTab.next(nextTab);
       }
     } else if (this.mainTab === 'assessment') {
-      this.ssmtService.mainTab.next('baseline');
+      this.ssmtService.goToMainTab('baseline');
     }
   }
 
   goToReport() {
-    this.ssmtService.mainTab.next('report');
+    this.ssmtService.goToMainTab('report');
   }
 
   continue() {
     if (this.stepTab === 'turbine') {
-      this.ssmtService.mainTab.next('assessment');
+      this.ssmtService.goToMainTab('assessment');
     } else {
       let assessmentTabIndex: number = this.stepTabIndex + 1;
       let nextTab: string = this.stepTabs[assessmentTabIndex];
@@ -397,7 +413,7 @@ export class SsmtComponent implements OnInit {
         return false;
       }
     } else if (this.stepTab === 'turbine') {
-      if (ssmtValid.boilerValid && ssmtValid.headerValid && ssmtValid.turbineValid && ssmtValid.operationsValid) {
+      if (ssmtValid.boilerValid && ssmtValid.headerValid && ssmtValid.turbineValid && ssmtValid.operationsValid && this._ssmt.setupDone) {
         return true;
       } else {
         return false;
@@ -513,7 +529,7 @@ export class SsmtComponent implements OnInit {
 
   closeUpdateUnitsModal(updated?: boolean) {
     if (updated) {
-      this.ssmtService.mainTab.next('baseline');
+      this.ssmtService.goToMainTab('baseline');
       this.ssmtService.stepTab.next('baseline');
     }
     this.showUpdateUnitsModal = false;
