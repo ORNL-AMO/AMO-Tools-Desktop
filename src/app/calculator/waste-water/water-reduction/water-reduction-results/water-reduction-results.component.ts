@@ -16,7 +16,7 @@ export class WaterReductionResultsComponent implements OnInit {
   @Input()
   modificationExists: boolean;
   @Input()
-  isWastewater: boolean;
+  isWastewater: number;
 
   @ViewChild('copyTable', { static: false }) copyTable: ElementRef;
   tableString: any;

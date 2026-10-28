@@ -15,7 +15,7 @@ export class WaterReductionService {
   operatingHours: OperatingHours;
   constructor(private formBuilder: UntypedFormBuilder, private convertUnitsService: ConvertUnitsService, private standaloneService: StandaloneService) { }
 
-  initObject(index: number, settings: Settings, isWastewater: boolean, operatingHours: OperatingHours): WaterReductionData {
+  initObject(index: number, settings: Settings, isWastewater: number, operatingHours: OperatingHours): WaterReductionData {
     let defaultVolumeMeterMethodData: VolumeMeterMethodData = {
       finalMeterReading: 5842,
       initialMeterReading: 4235,
@@ -36,15 +36,7 @@ export class WaterReductionService {
     if (operatingHours) {
       hoursPerYear = operatingHours.hoursPerYear;
     }
-    let waterCost: number = 0.005;
-    if (settings) {
-      if (isWastewater && settings.waterWasteCost) {
-        waterCost = settings.waterWasteCost;
-      }
-      else if (!isWastewater && settings.waterCost) {
-        waterCost = settings.waterCost;
-      }
-    }
+    let waterCost: number = this.getDefaultWaterCost(settings, isWastewater);
     let obj: WaterReductionData = {
       name: 'Equipment #' + (index + 1),
       hoursPerYear: hoursPerYear,
@@ -62,10 +54,36 @@ export class WaterReductionService {
     return obj;
   }
 
-  convertInitData(inputData: WaterReductionData): WaterReductionData {
+  getDefaultWaterCost(settings: Settings, isWastewater: number): number {
+    let waterCost: number = 0.005;
+    if (settings) {
+      if ((isWastewater == 1) && settings.waterWasteCost) {
+        waterCost = settings.waterWasteCost;
+      }
+      // "Both" uses the water unit cost here; wastewater cost comes from settings in results
+      else if (isWastewater != 1 && settings.waterCost) {
+        waterCost = settings.waterCost;
+      }
+    }
+    return waterCost;
+  }
+
+  // default cost in the units the form displays (initObject converts via convertInitData)
+  getDefaultWaterCostForForm(settings: Settings, isWastewater: number): number {
+    let waterCost: number = this.getDefaultWaterCost(settings, isWastewater);
+    if (settings.unitsOfMeasure != 'Imperial') {
+      waterCost = this.convertInitWaterCost(waterCost);
+    }
+    return waterCost;
+  }
+
+  convertInitWaterCost(waterCost: number): number {
     let gallonConversionHelper = this.convertUnitsService.value(1).from('gal').to('m3');
-    inputData.waterCost = inputData.waterCost / gallonConversionHelper;
-    inputData.waterCost = Number(inputData.waterCost.toFixed(3));
+    return Number((waterCost / gallonConversionHelper).toFixed(3));
+  }
+
+  convertInitData(inputData: WaterReductionData): WaterReductionData {
+    inputData.waterCost = this.convertInitWaterCost(inputData.waterCost);
     inputData.meteredFlowMethodData.meterReading = this.convertUnitsService.value(inputData.meteredFlowMethodData.meterReading).from('gal').to('m3');
     inputData.meteredFlowMethodData.meterReading = Number(inputData.meteredFlowMethodData.meterReading.toFixed(3));
     inputData.volumeMeterMethodData.finalMeterReading = this.convertUnitsService.value(inputData.volumeMeterMethodData.finalMeterReading).from('gal').to('m3');
@@ -83,7 +101,8 @@ export class WaterReductionService {
     let form: UntypedFormGroup = this.formBuilder.group({
       name: [inputObj.name, [Validators.required]],
       hoursPerYear: [inputObj.hoursPerYear, [Validators.required, Validators.min(0), Validators.max(8760)]],
-      isWastewater: [{ value: inputObj.isWastewater, disabled: (index != 0 || !isBaseline) }],
+      // legacy data stored isWastewater as boolean; Number() maps false/true to 0/1
+      isWastewater: [{ value: Number(inputObj.isWastewater ?? 0), disabled: (index != 0 || !isBaseline) }],
       waterCost: [inputObj.waterCost, [Validators.required, Validators.min(0)]],
       measurementMethod: [inputObj.measurementMethod],
 
@@ -185,7 +204,22 @@ export class WaterReductionService {
       waterReductionResults.annualWaterSavings = baselineResults.waterUse - modificationResults.waterUse;
       waterReductionResults.annualCostSavings = baselineResults.waterCost - modificationResults.waterCost;
     }
+
+    if (baseline[0]?.isWastewater == 2) {
+      this.setWastewaterResults(baselineResults, settings);
+      if (modificationResults !== baselineResults) {
+        this.setWastewaterResults(modificationResults, settings);
+      }
+      waterReductionResults.annualWastewaterSavings = baselineResults.wastewaterDisposal - modificationResults.wastewaterDisposal;
+      waterReductionResults.annualWastewaterCostSavings = baselineResults.wastewaterCost - modificationResults.wastewaterCost;
+    }
     return waterReductionResults;
+  }
+
+  setWastewaterResults(results: WaterReductionResult, settings: Settings) {
+    // waterUse is kgal (Imperial) or m3 (Metric); waterWasteCost is $/gal or $/L, so x1000 in both systems
+    results.wastewaterDisposal = results.waterUse;
+    results.wastewaterCost = results.waterUse * 1000 * (settings.waterWasteCost || 0);
   }
 
   calculate(input: Array<WaterReductionData>, settings: Settings): WaterReductionResult {
@@ -235,7 +269,7 @@ export class WaterReductionService {
 
 
   getBaselineExample(settings: Settings, operatingHours: OperatingHours): WaterReductionData {
-    let baselineData: WaterReductionData = this.initObject(0, settings, false, operatingHours);
+    let baselineData: WaterReductionData = this.initObject(0, settings, 0, operatingHours);
     baselineData.measurementMethod = 2;
     baselineData.bucketMethodData.bucketFillTime = 20;
     baselineData.bucketMethodData.bucketVolume = 10;
