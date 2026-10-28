@@ -11,29 +11,30 @@
             <div class="modal-body pb-0 scroll-item">
                 <div class="row no-gutters">
                     <ng-container *ngFor="let section of previewSections">
-                        <div class="col-6 p-2" *ngIf="treasureHunt[section.key]?.length > 0">
-                            <label>{{section.label}}</label>
-                            <ul>
-                                <li *ngFor="let opportunity of treasureHunt[section.key]; let index = index;"
-                                    [class.not-exported]="!opportunity.selected && !includeUnselected"
-                                    [attr.title]="opportunity.selected || includeUnselected ? null : 'Not selected for export'">
-                                    {{getOpportunityName(section, opportunity, index)}}
-                                </li>
-                            </ul>
-                        </div>
+                        @if (treasureHunt[section.key]?.length > 0) {
+                            <div class="col-6 p-2">
+                                <label>{{section.label}}</label>
+                                <ul>
+                                    <li *ngFor="let opportunity of treasureHunt[section.key]; let index = index;"
+                                        [class.not-exported]="!opportunity.selected && !includeUnselected"
+                                        [attr.title]="opportunity.selected || includeUnselected ? null : 'Not selected for export'">
+                                        {{getOpportunityName(section, opportunity, index)}}
+                                    </li>
+                                </ul>
+                            </div>
+                        }
                     </ng-container>
                 </div>
             </div>
             <div class="modal-footer export-footer flex-wrap justify-content-between">
                 <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>
                 <div class="export-controls d-flex flex-wrap align-items-center justify-content-end ml-auto">
-                    <div class="form-group d-flex align-items-center my-1 mr-3">
-                        <label for="includeUnselected" class="mb-0 mr-2">Include unselected:</label>
-                        <label class="switch export-switch mb-0">
+                    @if (hasUnselectedOpportunities) {
+                        <div class="form-group d-flex align-items-center my-1 mr-3">
+                            <label for="includeUnselected" class="mb-0 mr-2">Include unselected:</label>
                             <input name="includeUnselected" id="includeUnselected" type="checkbox" [(ngModel)]="includeUnselected">
-                            <span class="slider round"></span>
-                        </label>
-                    </div>
+                        </div>
+                    }
                     <div class="form-group d-flex align-items-center my-1 mr-2">
                         <label for="exportName" class="mb-0 mr-2">Name your file:</label>
                         <input type="text" class="form-control" id="exportName" [(ngModel)]="exportName">
