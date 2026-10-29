@@ -277,6 +277,14 @@ export class BoilerComponent implements OnInit {
     }
   }
 
+  isSendBlowdownToDeaeratorDifferent() {
+    if (this.canCompare()) {
+      return this.compareService.isSendBlowdownToDeaeratorDifferent();
+    } else {
+      return false;
+    }
+  }
+
   closeBlowdownRateModal() {
     this.showBlowdownRateModal = false;
     this.ssmtService.modalOpen.next(false);

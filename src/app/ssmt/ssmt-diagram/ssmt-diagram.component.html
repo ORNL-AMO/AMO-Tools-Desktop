@@ -54,7 +54,8 @@
             </div>
             <div class="p-0 w-25">
               <!--high to medium turbine-->
-              <app-turbine-diagram *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.highToMediumTurbine.useTurbine == true"
+              <app-turbine-diagram
+                *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.highToMediumTurbine.useTurbine == true"
                 [noOutletConnection]="false" [turbine]="outputData.highPressureToMediumPressureTurbine"
                 [inletColor]="'high-pressure'" [outletColor]="'medium-pressure'" (emitSetHover)="setHover($event)"
                 [turbineType]="'highToMedium'"
@@ -63,7 +64,8 @@
             </div>
             <div class="p-0 w-25">
               <!--high to low turbine-->
-              <app-turbine-diagram *ngIf="inputData.headerInput.numberOfHeaders > 1 && inputData.turbineInput.highToLowTurbine.useTurbine == true"
+              <app-turbine-diagram
+                *ngIf="inputData.headerInput.numberOfHeaders > 1 && inputData.turbineInput.highToLowTurbine.useTurbine == true"
                 [noOutletConnection]="inputData.headerInput.numberOfHeaders == 3"
                 [turbine]="outputData.highPressureToLowPressureTurbine" [inletColor]="'high-pressure'"
                 [outletColor]="'low-pressure'" (emitSetHover)="setHover($event)" [turbineType]="'highToLow'"
@@ -128,7 +130,8 @@
             </div>
             <div class="p-0 w-25">
               <!--medium to low pressure turbine-->
-              <app-turbine-diagram *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.mediumToLowTurbine.useTurbine == true"
+              <app-turbine-diagram
+                *ngIf="inputData.headerInput.numberOfHeaders == 3 && inputData.turbineInput.mediumToLowTurbine.useTurbine == true"
                 [noOutletConnection]="false" [turbine]="outputData.mediumPressureToLowPressureTurbine"
                 [inletColor]="'medium-pressure'" [outletColor]="'low-pressure'" (emitSetHover)="setHover($event)"
                 [turbineType]="'mediumToLow'" (emitSelectEquipment)="selectTable('mediumToLowPressureTurbine')"
@@ -175,31 +178,39 @@
     <div class="d-flex w-100 pl-4">
       <div class="d-flex flex-fill">
         <div class="w-25 deaerator-margin" [ngClass]="{'pt-3': inputData.headerInput.numberOfHeaders > 1}">
-          <!--dearator diagram for more than one header system-->
+          <!--deaerator diagram for more than one header system-->
           <app-deaerator-diagram *ngIf="inputData.headerInput.numberOfHeaders > 1"
             [deaerator]="outputData.deaeratorOutput" [inletPressure]="'low-pressure'" (emitSetHover)="setHover($event)"
-            (emitSelectEquipment)="selectTable($event)" [settings]="settings"></app-deaerator-diagram>
+            (emitSelectEquipment)="selectTable($event)" [settings]="settings"
+            [boilerInput]="inputData.boilerInput"></app-deaerator-diagram>
           <!--deaerator diagram for one header system-->
           <app-deaerator-diagram *ngIf="inputData.headerInput.numberOfHeaders == 1"
             [deaerator]="outputData.deaeratorOutput" [inletPressure]="'high-pressure'" (emitSetHover)="setHover($event)"
-            (emitSelectEquipment)="selectTable($event)" [settings]="settings"></app-deaerator-diagram>
+            (emitSelectEquipment)="selectTable($event)" [settings]="settings"
+            [boilerInput]="inputData.boilerInput"></app-deaerator-diagram>
         </div>
-        <div class="w-25 deaerator-condensate-padding">
-          <app-turbine-connector *ngIf="inputData.turbineInput.condensingTurbine.useTurbine == true"
-            [noOutletConnection]="false" [noInletConnection]="outputData.lowPressureHeaderSteam != undefined"
-            [inletColor]="'makeup-water'" (emitSetHover)="setHover($event)"
-            [massFlow]="outputData.condensingTurbine.massFlow" (emitSelectEquipment)="selectTable($event)">
-          </app-turbine-connector>
-        </div>
-        <div class="p-0 w-25">
-          <!--diagram spacer-->
+        <div class="d-flex w-50 deaerator-route-columns">
+          <div class="w-50 deaerator-condensate-padding">
+            <app-turbine-connector *ngIf="inputData.turbineInput.condensingTurbine.useTurbine == true"
+              [noOutletConnection]="false" [noInletConnection]="outputData.lowPressureHeaderSteam != undefined"
+              [inletColor]="'makeup-water'" (emitSetHover)="setHover($event)"
+              [massFlow]="outputData.condensingTurbine.massFlow" (emitSelectEquipment)="selectTable($event)">
+            </app-turbine-connector>
+          </div>
+          <div class="p-0 w-50"></div>
+          @if(routeBlowdownToDeaerator){
+          <app-blowdown-flash-tank-connector class="blowdown-flash-route"
+            [flashTank]="outputData.blowdownFlashTank" (emitSetHover)="setHover($event)"
+            (emitSelectEquipment)="selectTable($event)" [settings]="settings">
+          </app-blowdown-flash-tank-connector>
+          }
         </div>
         <div class="p-0 w-25">
           <!--blowdown flash tank-->
           <app-blowdown-flash-tank *ngIf="inputData.boilerInput.blowdownFlashed == true"
             [flashTank]="outputData.blowdownFlashTank" (emitSetHover)="setHover($event)"
             (emitSelectEquipment)="selectTable($event)" [settings]="settings"
-            [numberOfHeaders]="inputData.headerInput.numberOfHeaders">
+            [numberOfHeaders]="inputData.headerInput.numberOfHeaders" [boilerInput]="inputData.boilerInput">
           </app-blowdown-flash-tank>
         </div>
       </div>

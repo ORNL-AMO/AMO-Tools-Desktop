@@ -35,6 +35,11 @@ export class SsmtDiagramComponent implements OnInit {
   ngOnInit() {
   }
 
+  get routeBlowdownToDeaerator(): boolean {
+    return this.inputData?.boilerInput?.blowdownFlashed === true
+      && this.inputData.boilerInput.sendBlowdownToDeaerator === true;
+  }
+
   setHover(str: string) {
     this.hoveredEquipment = str;
     this.emitHoverChange.emit(this.hoveredEquipment);

@@ -8,10 +8,30 @@
 
 .deaerator-margin{
     margin-left: -1.5rem;
+    position: relative;
+    z-index: 2;
 }
 
 .deaerator-condensate-padding{
     padding-left: 5rem;
+}
+
+.deaerator-route-columns{
+    position: relative;
+}
+
+.blowdown-flash-route{
+    display: block;
+    position: absolute;
+    left: 5rem;
+    right: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.deaerator-route-columns app-turbine-connector{
+    position: relative;
+    z-index: 2;
 }
 
 .inner-system-padding{
@@ -23,6 +43,3 @@
     /* min-width: 875px; */
     width: 900px;
 }
-
-
-

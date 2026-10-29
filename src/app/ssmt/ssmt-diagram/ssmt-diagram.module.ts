@@ -19,6 +19,7 @@ import { ReturnCondensateConnectorComponent } from './return-condensate-connecto
 import { HoverTableModule } from './hover-table/hover-table.module';
 import { FormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module';
+import { BlowdownFlashTankConnectorComponent } from './blowdown-flash-tank-connector/blowdown-flash-tank-connector.component';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { SharedPipesModule } from '../../shared/shared-pipes/shared-pipes.module
     CondensateConnectorComponent,
     OneHeaderConnectorComponent,
     FeedwaterDiagramComponent,
-    ReturnCondensateConnectorComponent
+    ReturnCondensateConnectorComponent,
+    BlowdownFlashTankConnectorComponent
   ],
   exports: [
     SsmtDiagramComponent
