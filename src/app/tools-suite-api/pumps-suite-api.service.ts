@@ -6,15 +6,17 @@ import { SuiteApiHelperService } from './suite-api-helper.service';
 import { ToolsSuiteApiService } from './tools-suite-api.service';
 import {
   type ExistingPumpResultInput,
-  type EstimateFLA,
+  type EstimateFLAInput,
+  type EstimateFLAOutput,
   type LineFrequency,
   type ModifiedPumpResultInput,
-  type MotorCurrent,
+  type MotorCurrentInput,
+  type MotorCurrentOutput,
   type MotorEfficiencyClass,
   type MotorEfficiencyInput,
   type MotorPerformance,
   type MotorPerformanceOutput,
-  type MotorPowerFactor,
+  type MotorPowerFactorInput,
   type PumpEfficiency as SuitePumpEfficiency,
   type PumpEfficiencyResults,
   type PumpHeadResult,
@@ -194,19 +196,20 @@ export class PumpsSuiteApiService {
   }
 
   estimateFla(motorRatedPower: number, motorRPM: number, frequency: number, efficiencyClass: number, efficiencyPercent: number, motorVoltage: number): number {
-    let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(frequency);
-    let motorEfficiencyEnum: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let efficiency: number = efficiencyPercent / 100;
-    let instance: EstimateFLA = new this.toolsSuiteApiService.ToolsSuiteModule.EstimateFLA(motorRatedPower, motorRPM, lineFrequency, motorEfficiencyEnum, efficiency, motorVoltage);
-    let estimatedFLA: number = instance.getEstimatedFLA();
-    instance.delete();
-    return estimatedFLA;
+    const input: EstimateFLAInput = {
+      motorRatedPower, motorRpm: motorRPM,
+      lineFrequency: this.suiteApiHelperService.getLineFrequencyEnum(frequency),
+      efficiencyClass: this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass),
+      specifiedEfficiency: efficiencyPercent / 100, ratedVoltage: motorVoltage,
+    };
+    const result: EstimateFLAOutput = this.toolsSuiteApiService.ToolsSuiteModule.calculateEstimateFLA(input);
+    return result.estimatedFLA;
   }
 
-  motorPerformance(lineFreq: number, efficiencyClass: number, motorRatedPower: number, motorRPM: number, specifiedEfficiency: number, motorRatedVoltage: number, fullLoadAmps: number, loadFactor: number): MotorPerformanceResults {
+  motorPerformance(lineFreq: number, efficiencyClass: number, motorRatedPower: number, motorRPM: number, specifiedEfficiencyPercent: number, motorRatedVoltage: number, fullLoadAmps: number, loadFactor: number): MotorPerformanceResults {
     let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
     let motorEfficiencyClass: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let instance: MotorPerformance = new this.toolsSuiteApiService.ToolsSuiteModule.MotorPerformance(lineFrequency, motorRPM, motorEfficiencyClass, motorRatedPower, specifiedEfficiency, loadFactor, motorRatedVoltage, fullLoadAmps);
+    let instance: MotorPerformance = new this.toolsSuiteApiService.ToolsSuiteModule.MotorPerformance(lineFrequency, motorRPM, motorEfficiencyClass, motorRatedPower, specifiedEfficiencyPercent / 100, loadFactor, motorRatedVoltage, fullLoadAmps);
     let tmpResults: MotorPerformanceOutput = instance.calculate();
     let results: MotorPerformanceResults = {
       efficiency: tmpResults.efficiency,
@@ -256,37 +259,36 @@ export class PumpsSuiteApiService {
     return this.toolsSuiteApiService.ToolsSuiteModule.calculateMotorEfficiency(input) * 100;
   }
 
-  
-  /**
- * motorPowerFactor
- *
- * @param {number} loadFactorPercent - as percent
- * @param {number} motorEfficiencyPercent - as percent
- * @returns {number} motorEfficiency (as percent)
- */
-  motorPowerFactor(motorRatedPower: number, loadFactorPercent: number, motorCurrent: number, motorEfficiencyPercent: number, ratedVoltage: number): number {
-    // * will be incorrect if incorrect estimated efficiency values are generated
-    let instance: MotorPowerFactor = new this.toolsSuiteApiService.ToolsSuiteModule.MotorPowerFactor(motorRatedPower, loadFactorPercent / 100, motorCurrent, motorEfficiencyPercent / 100, ratedVoltage);
-    let powerFactor: number = instance.calculate();
-    powerFactor = powerFactor* 100;
-    instance.delete();
-    return powerFactor;
+
+  /** Calculates power factor in percent from motor nameplate and operating data. */
+  motorPowerFactor(motorRatedPower: number, loadFactorPercent: number, motorCurrent: number,
+    motorEfficiencyPercent: number, ratedVoltage: number, lineFreq: number, motorRPM: number,
+    efficiencyClass: number, specifiedEfficiencyPercent: number): number {
+    const nearZeroLoad: boolean = Math.abs(loadFactorPercent / 100) < 0.001;
+    // Embind requires every field. In the loaded branch these model fields are ignored;
+    // structural sentinels preserve the old five-input calculation without inventing a near-zero model.
+    const input: MotorPowerFactorInput = {
+      motorRatedPower, loadFactor: loadFactorPercent / 100, motorCurrent,
+      motorEfficiency: motorEfficiencyPercent / 100, ratedVoltage,
+      lineFrequency: this.suiteApiHelperService.getLineFrequencyEnum(nearZeroLoad ? lineFreq : lineFreq ?? 60),
+      motorRpm: nearZeroLoad ? motorRPM : motorRPM ?? 0,
+      efficiencyClass: this.suiteApiHelperService.getMotorEfficiencyEnum(nearZeroLoad ? efficiencyClass : efficiencyClass ?? 0),
+      specifiedEfficiency: (specifiedEfficiencyPercent ?? 0) / 100,
+    };
+    return this.toolsSuiteApiService.ToolsSuiteModule.calculateMotorPowerFactor(input) * 100;
   }
 
-
-    /**
- * motorPowerFactor
- *
- * @param {number} loadFactorPercent - as percent
- * @param {number} specifiedEfficiencyPercent - as percent
- * @returns {number} motorCurrent in amps
- */
-  motorCurrent(motorRatedPower: number, motorRPM: number, lineFreq: number, efficiencyClass: number, specifiedEfficiencyPercent: number, loadFactorPercent: number, ratedVoltage: number, fullLoadAmps: number): number {
-    let lineFrequency: LineFrequency = this.suiteApiHelperService.getLineFrequencyEnum(lineFreq);
-    let efficiencyClassEnum: MotorEfficiencyClass = this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass);
-    let instance: MotorCurrent = new this.toolsSuiteApiService.ToolsSuiteModule.MotorCurrent(motorRatedPower, motorRPM, lineFrequency, efficiencyClassEnum, specifiedEfficiencyPercent, loadFactorPercent / 100, ratedVoltage);
-    let motorCurrent: number = instance.calculateCurrent(fullLoadAmps);
-    instance.delete();
-    return motorCurrent;
+  /** Returns operating line current in A, normalized to the supplied full-load current. */
+  motorCurrent(motorRatedPower: number, motorRPM: number, lineFreq: number, efficiencyClass: number,
+    specifiedEfficiencyPercent: number, loadFactorPercent: number, ratedVoltage: number, fullLoadAmps: number): number {
+    const input: MotorCurrentInput = {
+      motorRatedPower, motorRpm: motorRPM,
+      lineFrequency: this.suiteApiHelperService.getLineFrequencyEnum(lineFreq),
+      efficiencyClass: this.suiteApiHelperService.getMotorEfficiencyEnum(efficiencyClass),
+      specifiedEfficiency: specifiedEfficiencyPercent / 100,
+      loadFactor: loadFactorPercent / 100, ratedVoltage,
+    };
+    const result: MotorCurrentOutput = this.toolsSuiteApiService.ToolsSuiteModule.calculateMotorCurrent(input, fullLoadAmps);
+    return result.current;
   }
 }
