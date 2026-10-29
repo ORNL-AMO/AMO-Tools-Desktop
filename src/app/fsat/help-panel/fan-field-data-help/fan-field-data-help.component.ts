@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-fan-field-data-help',
@@ -7,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
     standalone: false
 })
 export class FanFieldDataHelpComponent implements OnInit {
+  docsLink: string = environment.measurDocsUrl;
+
   @Input()
   currentField: string;
 

@@ -89,3 +89,16 @@ Validation and exact reviewed commits are recorded in Desktop issue [#8957](http
 - Reviewer independently checked application types, the immutable hash, all 72 reconciliation results, all 23 accepted fields, exact dependency pins and generated lockfile changes. No unrelated dependency versions changed; 21 removed root entries are optional development dependencies.
 - Other browser/CI runtimes have not been verified locally; the exact comparison gate reports any discrepancy rather than masking it. New PR CI remains pending.
 - This final documentation/report metadata update records the completed review without changing runtime code or accepted results.
+
+
+## Calculator help documentation links
+
+The follow-up to Desktop PR #9054 adds 24 documentation links across seven help panels: Motor Performance, Full-Load Amps, pump motor, pump/fluid, pump field data, fan motor and fan field data. They cover all 14 refactored calculator groups; the existing NEMA Motor Efficiency and Pump Head links remain in place.
+
+Links use `environment.measurDocsUrl`, the existing extensionless page convention, and the established external-link presentation. Every new target was checked against the generated Suite Doxygen page, and every environment import and external-link attribute was verified. The documentation server redirects `.html` URLs to extensionless routes, so the pre-existing NEMA URL was retained.
+
+The development site's Motor Current page returned HTTP 404 during the check on 2026-10-28. The links target the generated documentation pages; deployment of the new Suite documentation is a remaining release dependency before shipping the help links. No documentation deployment or release was performed here.
+
+This follow-up changes help templates and their configured documentation addresses only. It does not change calculation adapters, dependencies, fixtures or accepted numerical differences. Validation and the exact follow-up commit are recorded in PR #9054 and issue #8957.
+
+Follow-up validation: Angular application/template compilation (`ngc -p src/tsconfig.app.json --noEmit`), all 24 link targets/attributes/imports, the help-only scope guard and whitespace checks passed. The follow-up review found no actionable code defects; readiness is Ready with documented documentation-deployment follow-up. Calculation regressions were not rerun for this help-only change.

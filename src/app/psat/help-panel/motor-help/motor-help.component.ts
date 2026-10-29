@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../psat.service';
 import { Settings } from '../../../shared/models/settings';
@@ -11,6 +12,8 @@ import { Subscription } from 'rxjs';
     standalone: false
 })
 export class MotorHelpComponent implements OnInit {
+  docsLink: string = environment.measurDocsUrl;
+
   currentField: string;
   @Input()
   psat: PSAT;

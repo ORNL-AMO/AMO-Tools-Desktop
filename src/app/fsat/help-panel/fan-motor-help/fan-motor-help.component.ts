@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-fan-motor-help',
@@ -7,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
     standalone: false
 })
 export class FanMotorHelpComponent implements OnInit {
+  docsLink: string = environment.measurDocsUrl;
+
   @Input()
   currentField: string;
 
