@@ -66,7 +66,7 @@
 
       @if(boilerForm.controls.blowdownFlashed.value == true) {
       <div class="form-group">
-        <label for="{{idString+'sendBlowdownToDeaerator'}}">Send Blowdown to Deaerator?</label>
+        <label for="{{idString+'sendBlowdownToDeaerator'}}">Send Blowdown flash steam to Deaerator?</label>
         <select name="sendBlowdownToDeaerator" class="form-control" id="{{idString+'sendBlowdownToDeaerator'}}" (change)="save()"
           (focus)="focusField('sendBlowdownToDeaerator')" formControlName="sendBlowdownToDeaerator"
           [ngClass]="{'indicate-different': isSendBlowdownToDeaeratorDifferent()}">
