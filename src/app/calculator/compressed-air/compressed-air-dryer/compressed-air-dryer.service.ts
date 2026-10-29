@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { DryerOperatingCostInput, DryerOperatingCostOutput, DryerType, PurgeInputMode } from '../../../shared/models/standalone';
 import { Settings } from '../../../shared/models/settings';
 import { OperatingHours } from '../../../shared/models/operations';
@@ -47,17 +47,36 @@ export class CompressedAirDryerService {
   }
 
   generateExample(settings: Settings): DryerOperatingCostInput {
-    const dryerType = DryerType.Heatless;
-    let input: DryerOperatingCostInput = {
-      dryerType,
-      annualOperatingHours: 8736,
+    return this.getExampleInput({
+      dryerType: DryerType.Heatless,
+      flowRate: 1752,
+      pressure: 50,
+      temperature: 100,
+      costOfElectricity: 0.08,
+      costOfCompressedAir: 0.20,
+      costOfCoolingWater: 0.25,
+    }, settings);
+  }
+
+  generateExampleModification(settings: Settings): DryerOperatingCostInput {
+    return this.getExampleInput({
+      dryerType: DryerType.Refrigerated,
       flowRate: 500,
       pressure: 100,
       temperature: 70,
-      costOfElectricity: settings?.electricityCost ?? 0.066,
+      costOfElectricity: 0.066,
       costOfCompressedAir: 0.25,
-      costOfCoolingWater: 0.50,
-      ...this.getTypeDefaults(dryerType),
+      costOfCoolingWater: 0.25,
+    }, settings);
+  }
+
+  // Example values are Imperial; type-specific assumptions use the dryer type's defaults.
+  private getExampleInput(values: Pick<DryerOperatingCostInput, 'dryerType' | 'flowRate' | 'pressure' | 'temperature'
+    | 'costOfElectricity' | 'costOfCompressedAir' | 'costOfCoolingWater'>, settings: Settings): DryerOperatingCostInput {
+    const input: DryerOperatingCostInput = {
+      ...values,
+      annualOperatingHours: 8736,
+      ...this.getTypeDefaults(values.dryerType),
     } as DryerOperatingCostInput;
     return settings ? this.convertCompressedAirDryerService.convertDefaultsToMetric(input, settings) : input;
   }
@@ -70,12 +89,12 @@ export class CompressedAirDryerService {
       flowRate:                [inputObj.flowRate, [Validators.required, Validators.min(ranges.flowRate.min), Validators.max(ranges.flowRate.max)]],
       pressure:                [inputObj.pressure, [Validators.required, Validators.min(ranges.pressure.min), Validators.max(ranges.pressure.max)]],
       temperature:             [inputObj.temperature, [Validators.required, Validators.min(ranges.temperature.min), Validators.max(ranges.temperature.max)]],
-      costOfElectricity:       [inputObj.costOfElectricity, [Validators.required, Validators.min(ranges.costOfElectricity.min), Validators.max(ranges.costOfElectricity.max)]],
-      costOfCompressedAir:     [inputObj.costOfCompressedAir, [Validators.required, Validators.min(ranges.costOfCompressedAir.min), Validators.max(ranges.costOfCompressedAir.max)]],
-      costOfCoolingWater:      [inputObj.costOfCoolingWater, [Validators.required, Validators.min(ranges.costOfCoolingWater.min), Validators.max(ranges.costOfCoolingWater.max)]],
+      costOfElectricity:       [inputObj.costOfElectricity, [Validators.required, Validators.min(0)]],
+      costOfCompressedAir:     [inputObj.costOfCompressedAir, [Validators.required, Validators.min(0)]],
+      costOfCoolingWater:      [inputObj.costOfCoolingWater, [Validators.required, Validators.min(0)]],
       purgeInputMode:          [inputObj.purgeInputMode ?? PurgeInputMode.PercentOfDryerCapacity, [Validators.required]],
       purgeRate:               [inputObj.purgeRate, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(ranges.purgeRate.max)]],
-      purgeFlowRate:           [inputObj.purgeFlowRate, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(ranges.purgeFlowRate.max)]],
+      purgeFlowRate:           [inputObj.purgeFlowRate, [Validators.required, GreaterThanValidator.greaterThan(0), this.maxFlowRateValidator]],
       // Heater/motor modes are form-only: the Suite treats a zero power as "size automatically".
       heaterMode:              [inputObj.heaterPower > 0 ? 'manual' : 'auto'],
       heaterPower:             [inputObj.heaterPower, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(ranges.heaterPower.max)]],
@@ -85,8 +104,25 @@ export class CompressedAirDryerService {
       designDDCPercentage:     [inputObj.designDDCPercentage, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)]],
       regenerationCycleLength: [inputObj.regenerationCycleLength, [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(24)]],
     });
+    // The flow rate limit reads the sibling control, which doesn't exist until the group is built.
+    form.controls.purgeFlowRate.updateValueAndValidity({ emitEvent: false });
     this.setConditionalControls(form);
     return form;
+  }
+
+  // Purge air can't exceed the air entering the dryer.
+  private maxFlowRateValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const flowRate = control.parent?.get('flowRate')?.value;
+    return flowRate === null || flowRate === undefined ? null : Validators.max(flowRate)(control);
+  };
+
+  // Re-checks purge flow against a changed flow rate and shows the error if it now exceeds it.
+  validatePurgeFlowRate(form: UntypedFormGroup): void {
+    const purgeFlowRate = form.controls.purgeFlowRate;
+    purgeFlowRate.updateValueAndValidity({ emitEvent: false });
+    if (purgeFlowRate.enabled && purgeFlowRate.invalid) {
+      purgeFlowRate.markAsDirty();
+    }
   }
 
   // Resets type-specific assumptions and auto/manual modes; shared operating and utility values are kept.

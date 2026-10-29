@@ -175,10 +175,9 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
   btnGenerateExample(): void {
     this.baselineInput = this.compressedAirDryerService.generateExample(this.settings);
     this.baselineForm = this.compressedAirDryerService.getFormFromObj(this.baselineInput, this.settings);
-    if (this.modificationExists) {
-      this.modificationInput = this.compressedAirDryerService.generateExample(this.settings);
-      this.modificationForm = this.compressedAirDryerService.getFormFromObj(this.modificationInput, this.settings);
-    }
+    this.modificationInput = this.compressedAirDryerService.generateExampleModification(this.settings);
+    this.modificationForm = this.compressedAirDryerService.getFormFromObj(this.modificationInput, this.settings);
+    this.modificationExists = true;
     this.getResults();
   }
 
