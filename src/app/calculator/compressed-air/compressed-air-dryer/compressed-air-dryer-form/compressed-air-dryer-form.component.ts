@@ -4,7 +4,8 @@ import { Settings } from '../../../../shared/models/settings';
 import { OperatingHours } from '../../../../shared/models/operations';
 import { PurgeInputMode } from '../../../../shared/models/standalone';
 import { CompressedAirDryerService } from '../compressed-air-dryer.service';
-import { DRYER_TYPE_OPTIONS, DryerTypeConfig } from '../compressed-air-dryer-type-config';
+import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
+import { DRYER_TYPE_OPTIONS, DryerTypeConfig, getMinimumPurgeAirRate } from '../compressed-air-dryer-type-config';
 
 @Component({
   selector: 'app-compressed-air-dryer-form',
@@ -31,7 +32,8 @@ export class CompressedAirDryerFormComponent implements AfterViewInit {
   showOperatingHoursModal: boolean = false;
   formWidth: number;
 
-  constructor(private compressedAirDryerService: CompressedAirDryerService) { }
+  constructor(private compressedAirDryerService: CompressedAirDryerService,
+    private convertUnitsService: ConvertUnitsService) { }
 
   ngAfterViewInit(): void {
     setTimeout(() => this.setOpHoursModalWidth(), 100);
@@ -41,8 +43,31 @@ export class CompressedAirDryerFormComponent implements AfterViewInit {
     return this.compressedAirDryerService.getTypeConfig(this.form.controls.dryerType.value);
   }
 
+  // Warning when the entered rate is below the electricity-based purge air floor; null when the
+  // type has no purge air, inputs are invalid, or the entered rate is at or above the floor.
+  get minimumPurgeAirRateWarning(): string | null {
+    const controls = this.form.controls;
+    if (!controls.purgeInputMode.enabled || controls.costOfElectricity.invalid || controls.costOfCompressedAir.invalid) {
+      return null;
+    }
+    const isImperial = this.settings.unitsOfMeasure === 'Imperial';
+    let minimumRate = getMinimumPurgeAirRate(controls.costOfElectricity.value);
+    if (!isImperial) {
+      minimumRate = this.convertUnitsService.convertDollarPerValue(minimumRate, 'ft3', 'm3');
+    }
+    if (controls.costOfCompressedAir.value >= minimumRate) {
+      return null;
+    }
+    return `Purge air is priced at $${minimumRate.toFixed(3)}/1000 ${isImperial ? 'SCF' : 'm3'}, the minimum based on your electricity cost. Rates below this are not used.`;
+  }
+
   onFormChange(): void {
     this.calculate.emit(true);
+  }
+
+  changeFlowRate(): void {
+    this.compressedAirDryerService.validatePurgeFlowRate(this.form);
+    this.onFormChange();
   }
 
   changeDryerType(): void {

@@ -46,7 +46,7 @@
         <label class="small" for="{{'flowRate_' + idString}}">Flow Rate</label>
         <div class="input-group">
           <input class="form-control" type="number" id="{{'flowRate_' + idString}}" formControlName="flowRate"
-            (input)="onFormChange()" (focus)="focusField('flowRate')" onfocus="this.select();">
+            (input)="changeFlowRate()" (focus)="focusField('flowRate')" onfocus="this.select();">
           <span class="units input-group-addon">
             @if (settings.unitsOfMeasure == 'Imperial') {
               <span>SCFM</span>
@@ -178,6 +178,9 @@
             }
           </span>
         }
+        @if (minimumPurgeAirRateWarning !== null) {
+          <span class="alert-warning pull-right small">{{minimumPurgeAirRateWarning}}</span>
+        }
       </div>
 
       @if (typeConfig.showCoolingWater) {
@@ -268,7 +271,7 @@
                   <span>Value must be greater than {{form.controls.purgeFlowRate.errors.greaterThan}}.</span>
                 }
                 @if (form.controls.purgeFlowRate.errors.max) {
-                  <span>Value can't be greater than {{form.controls.purgeFlowRate.errors.max.max}}.</span>
+                  <span>Value can't be greater than {{form.controls.purgeFlowRate.errors.max.max}} {{settings.unitsOfMeasure == 'Imperial' ? 'SCFM' : 'm3/min'}}.</span>
                 }
               </span>
             }

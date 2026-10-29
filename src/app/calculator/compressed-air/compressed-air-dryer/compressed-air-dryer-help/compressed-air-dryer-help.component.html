@@ -16,52 +16,16 @@
         Dryer Type
         <small class="text-muted">
           <br>
-          Select the regenerative or refrigerated dryer technology installed in the system. The dryer type determines
-          which inputs apply; changing the type resets them to that type's defaults and keeps operating conditions and utility costs.
+          The dryer technology. The type sets which inputs apply and resets its type-specific inputs to default values.
           <ul class="mt-2 mb-0 pl-3">
-            @for (type of dryerTypeHelp; track type.label) {
-              <li><b>{{type.label}}:</b> {{type.applicability}}.</li>
-            }
+            <li><b>Heatless:</b> purge only.</li>
+            <li><b>Heated Externally:</b> purge and heater.</li>
+            <li><b>Blower Purge (With Sweep):</b> purge, heater and blower motor.</li>
+            <li><b>Blower Purge (Without Sweep):</b> heater and blower motor, no purge.</li>
+            <li><b>Heat of Compression (HC):</b> purge and a calculated heater.</li>
+            <li><b>Heat of Compression (SP):</b> controls only.</li>
+            <li><b>Refrigerated:</b> refrigeration motor and cooling water.</li>
           </ul>
-          <hr>
-        </small>
-      </h6>
-    </div>
-  }
-
-  @if (currentField === 'flowRate') {
-    <div class="my-2">
-      <h6>
-        Flow Rate
-        <small class="text-muted">
-          <br>
-          The rated inlet flow rate of the dryer in standard cubic feet per minute (SCFM). Valid range: 1–50,000 SCFM.
-          <hr>
-        </small>
-      </h6>
-    </div>
-  }
-
-  @if (currentField === 'pressure') {
-    <div class="my-2">
-      <h6>
-        Inlet Pressure
-        <small class="text-muted">
-          <br>
-          The operating inlet pressure of the dryer. Valid range: 25–150 psig.
-          <hr>
-        </small>
-      </h6>
-    </div>
-  }
-
-  @if (currentField === 'temperature') {
-    <div class="my-2">
-      <h6>
-        Inlet Temperature
-        <small class="text-muted">
-          <br>
-          The temperature of compressed air entering the dryer. Valid range: 50–120 &deg;F.
           <hr>
         </small>
       </h6>
@@ -74,7 +38,46 @@
         Annual Operating Hours
         <small class="text-muted">
           <br>
-          The number of hours per year the dryer operates. Enter it directly or use the calculator button to build it from hours, days, and weeks. Valid range: 0–8760 hrs/yr.
+          Hours per year the dryer operates. Enter a value, or use the calculator button to build it from hours per day, days per week and weeks per year. Range: 0&ndash;8,760 hrs/yr.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField === 'flowRate') {
+    <div class="my-2">
+      <h6>
+        Flow Rate
+        <small class="text-muted">
+          <br>
+          Compressed air flow entering the dryer, in {{isMetric ? 'm3/min' : 'SCFM'}}. It sets the water load and the dryer size. Range: {{ranges.flowRate.min | number:'1.0-3'}}&ndash;{{ranges.flowRate.max | number:'1.0-3'}} {{isMetric ? 'm3/min' : 'SCFM'}}.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField === 'pressure') {
+    <div class="my-2">
+      <h6>
+        Pressure
+        <small class="text-muted">
+          <br>
+          Operating pressure of the air entering the dryer, in {{isMetric ? 'barg' : 'psig'}}. Higher pressure lowers the moisture the air carries. Range: {{ranges.pressure.min | number:'1.0-3'}}&ndash;{{ranges.pressure.max | number:'1.0-3'}} {{isMetric ? 'barg' : 'psig'}}.
+          <hr>
+        </small>
+      </h6>
+    </div>
+  }
+
+  @if (currentField === 'temperature') {
+    <div class="my-2">
+      <h6>
+        Temperature
+        <small class="text-muted">
+          <br>
+          Temperature of the air entering the dryer, in &deg;{{isMetric ? 'C' : 'F'}}. Warmer air carries more moisture. Range: {{ranges.temperature.min | number:'1.0-3'}}&ndash;{{ranges.temperature.max | number:'1.0-3'}} &deg;{{isMetric ? 'C' : 'F'}}.
           <hr>
         </small>
       </h6>
@@ -84,10 +87,10 @@
   @if (currentField === 'costOfElectricity') {
     <div class="my-2">
       <h6>
-        Cost of Electricity
+        Electricity
         <small class="text-muted">
           <br>
-          Per-unit cost of electricity in $/kWh. Valid range: $0.01–$0.20/kWh.
+          Cost of electricity, in $/kWh. It prices the heater, motor and controls, and sets the minimum price of purge air.
           <hr>
         </small>
       </h6>
@@ -97,10 +100,10 @@
   @if (currentField === 'costOfCompressedAir') {
     <div class="my-2">
       <h6>
-        Cost of Compressed Air
+        Compressed Air Rate
         <small class="text-muted">
           <br>
-          Cost of compressed air lost through purging in $/kSCF. Valid range: $0.20–$0.50/kSCF.
+          Cost of the compressed air lost to purge, in $/1000 {{isMetric ? 'm3' : 'SCF'}}. Purge air is never priced below the electricity cost of compressing it (about {{purgeAirRateMultiplier | number:'1.2-2'}} &times; the electricity rate), so a lower entry has no effect.
           <hr>
         </small>
       </h6>
@@ -110,10 +113,10 @@
   @if (currentField === 'costOfCoolingWater') {
     <div class="my-2">
       <h6>
-        Cost of Cooling Water
+        Cooling Water Rate
         <small class="text-muted">
           <br>
-          Cost of cooling water in $/1000 gal ($/1000 L in metric). Shown only for refrigerated dryers. Valid range: $0.25–$10.00/1000 gal.
+          Cost of cooling water, in $/1000 {{isMetric ? 'L' : 'gal'}}. Shown only for Refrigerated dryers.
           <hr>
         </small>
       </h6>
@@ -126,9 +129,7 @@
         Purge Input
         <small class="text-muted">
           <br>
-          Choose how purge air is entered. <b>Percent of Dryer Capacity</b> enters purge as a percentage of the dryer's rated
-          capacity; <b>Direct Flow</b> enters the purge airflow itself in SCFM (m3/min in metric). Only the selected value is used,
-          and the results report both the resolved purge flow and the equivalent purge rate.
+          How purge air is entered. <b>Percent of Dryer Capacity</b> uses a percentage of the dryer's size. <b>Direct Flow</b> uses an airflow in {{isMetric ? 'm3/min' : 'SCFM'}}. The results show both the purge flow and the equivalent purge rate.
           <hr>
         </small>
       </h6>
@@ -141,7 +142,7 @@
         Purge Rate
         <small class="text-muted">
           <br>
-          Purge airflow as a percentage of dryer capacity. Defaults depend on the dryer type. Must be greater than 0 and no more than 100%.
+          Purge air as a percentage of dryer capacity. Defaults: Heatless 15%, Heated Externally 7%, Blower Purge (With Sweep) 7%, Heat of Compression (HC) 2%. Must be above 0 and no more than 100%.
           <hr>
         </small>
       </h6>
@@ -154,7 +155,7 @@
         Purge Flow
         <small class="text-muted">
           <br>
-          Purge airflow entered directly, in SCFM (m3/min in metric). Must be greater than 0.
+          Purge airflow, in {{isMetric ? 'm3/min' : 'SCFM'}}. Must be above 0 and no more than the Flow Rate.
           <hr>
         </small>
       </h6>
@@ -167,8 +168,7 @@
         Heater Sizing
         <small class="text-muted">
           <br>
-          <b>Automatic</b> sizes the regeneration heater from the dryer type and operating conditions.
-          <b>Manual</b> uses a known heater power from the nameplate or measurement. The heater load used is shown in the results.
+          <b>Automatic</b> sizes the regeneration heater from the dryer type and operating conditions. <b>Manual</b> uses a heater power you enter. Heat of Compression (HC) is always automatic.
           <hr>
         </small>
       </h6>
@@ -181,7 +181,7 @@
         Heater Power
         <small class="text-muted">
           <br>
-          Known regeneration heater power, in kW. Must be greater than 0 and no more than 1000 kW.
+          Heater power from the nameplate or a measurement, in kW. Must be above 0.
           <hr>
         </small>
       </h6>
@@ -194,7 +194,7 @@
         Hrs Heating Per 24 Hours
         <small class="text-muted">
           <br>
-          Hours per 24-hour period the heater operates. Valid range: 0–24 hrs.
+          Hours per day the heater operates. Defaults: 18 hrs for Heated Externally and Blower Purge, 3 hrs for Heat of Compression (HC). Range: 0&ndash;24 hrs.
           <hr>
         </small>
       </h6>
@@ -207,8 +207,7 @@
         Motor Sizing
         <small class="text-muted">
           <br>
-          <b>Automatic</b> sizes the blower or refrigeration motor from the dryer type and operating conditions.
-          <b>Manual</b> uses a known motor size from the nameplate. The motor power used is shown in the results.
+          <b>Automatic</b> sizes the blower or refrigeration motor from the dryer type and operating conditions. <b>Manual</b> uses a motor power you enter. The motor is costed for all operating hours.
           <hr>
         </small>
       </h6>
@@ -221,7 +220,7 @@
         Motor Power
         <small class="text-muted">
           <br>
-          Known motor size, in hp (kW in metric). Must be greater than 0.
+          Motor power from the nameplate, in {{isMetric ? 'kW' : 'hp'}}. Must be above 0.
           <hr>
         </small>
       </h6>
@@ -234,7 +233,7 @@
         Design DDC
         <small class="text-muted">
           <br>
-          Design desiccant capacity, as a percentage. Defaults depend on the dryer type. Must be greater than 0 and no more than 100%.
+          Design desiccant capacity: the water the desiccant holds, as a percentage of its weight. A lower value gives a larger dryer. Default 16.33% (4% for Heat of Compression SP). Not used by Heatless. Must be above 0 and no more than 100%.
           <hr>
         </small>
       </h6>
@@ -247,7 +246,7 @@
         Regeneration Half-Cycle Length
         <small class="text-muted">
           <br>
-          Length of one regeneration half-cycle, in hours. Defaults depend on the dryer type. Must be greater than 0 and no more than 24 hrs.
+          Duration of one regeneration half-cycle, in hours. A longer half-cycle gives a larger dryer. Default 4 hrs (2 hrs for Heat of Compression SP). Not used by Heatless. Must be above 0 and no more than 24 hrs.
           <hr>
         </small>
       </h6>

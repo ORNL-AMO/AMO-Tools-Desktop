@@ -279,6 +279,23 @@ describe('ConvertCompressedAirDryerService', () => {
       expect(suiteInputs.length).toBe(0);
     });
 
+    it('accepts any rate of 0 or more and rejects negative or blank rates', () => {
+      const entry = { ...buildImperialEntry(), dryerType: DryerType.Refrigerated };
+      for (const field of ['costOfElectricity', 'costOfCompressedAir', 'costOfCoolingWater']) {
+        expect(dryerService.getFormFromObj({ ...entry, [field]: 0 }, imperial).valid).withContext(`${field} 0`).toBeTrue();
+        expect(dryerService.getFormFromObj({ ...entry, [field]: 50 }, imperial).valid).withContext(`${field} 50`).toBeTrue();
+        expect(dryerService.getFormFromObj({ ...entry, [field]: -0.01 }, imperial).valid).withContext(`${field} -0.01`).toBeFalse();
+        expect(dryerService.getFormFromObj({ ...entry, [field]: null }, imperial).valid).withContext(`${field} blank`).toBeFalse();
+      }
+    });
+
+    it('rejects a direct purge flow greater than the flow rate', () => {
+      dryerService.calculate({ ...buildImperialEntry(), flowRate: 1725, purgeFlowRate: 3000 }, imperial);
+      expect(suiteInputs.length).toBe(0);
+      dryerService.calculate({ ...buildImperialEntry(), flowRate: 1725, purgeFlowRate: 1725 }, imperial);
+      expect(suiteInputs.length).toBe(1);
+    });
+
     it('requires a purge rate greater than 0 for dryer types that purge', () => {
       const percentMode = { ...buildImperialEntry(), purgeInputMode: PurgeInputMode.PercentOfDryerCapacity, purgeFlowRate: 0 };
       dryerService.calculate({ ...percentMode, purgeRate: 0 }, imperial);
@@ -292,8 +309,22 @@ describe('ConvertCompressedAirDryerService', () => {
       expect(suiteInputs.length).toBe(1);
     });
 
-    it('uses 8736 annual operating hours for the example', () => {
-      expect(dryerService.generateExample(imperial).annualOperatingHours).toBe(8736);
+    it('generates a valid baseline example', () => {
+      const baseline = dryerService.generateExample(imperial);
+      expect(baseline).toEqual(jasmine.objectContaining({
+        dryerType: DryerType.Heatless, flowRate: 1752, pressure: 50, temperature: 100, annualOperatingHours: 8736,
+        costOfElectricity: 0.08, costOfCompressedAir: 0.20, costOfCoolingWater: 0.25,
+      }));
+      expect(dryerService.getFormFromObj(baseline, imperial).valid).toBeTrue();
+    });
+
+    it('generates a valid refrigerated modification example', () => {
+      const modification = dryerService.generateExampleModification(imperial);
+      expect(modification).toEqual(jasmine.objectContaining({
+        dryerType: DryerType.Refrigerated, flowRate: 500, pressure: 100, temperature: 70, annualOperatingHours: 8736,
+        costOfElectricity: 0.066, costOfCompressedAir: 0.25, costOfCoolingWater: 0.25,
+      }));
+      expect(dryerService.getFormFromObj(modification, imperial).valid).toBeTrue();
     });
 
     it('keeps a blank direct purge flow blank through a units change', () => {

@@ -62,20 +62,10 @@ export const DRYER_TYPE_OPTIONS: Array<{ value: DryerType, label: string }> = Ob
   .map(key => Number(key) as DryerType)
   .map(value => ({ value, label: DRYER_TYPE_CONFIG[value].label }));
 
-// Plain-language list of the inputs that apply to a dryer type, derived from its configuration.
-export function getDryerTypeApplicability(dryerType: DryerType): string {
-  const config = getDryerTypeConfig(dryerType);
-  const parts: Array<string> = [];
-  if (config.purgeRate !== null) parts.push('purge');
-  if (config.heater === 'autoManual') parts.push('heater (automatic/manual)');
-  if (config.heater === 'automatic') parts.push('heater (always calculated)');
-  if (config.heatingHoursPerDay !== null) parts.push('heating hours');
-  if (config.motor === 'autoManual') parts.push('motor (automatic/manual)');
-  if (config.designDDCPercentage !== null) parts.push('DDC');
-  if (config.regenerationCycleLength !== null) parts.push('cycle length');
-  if (config.showCoolingWater) parts.push('cooling water rate');
-  if (parts.length <= 1) return parts.join('');
-  return parts.slice(0, -1).join(', ') + (parts.length > 2 ? ',' : '') + ' and ' + parts[parts.length - 1];
+// The Suite prices purge air at the higher of the entered compressed air rate and this
+// electricity-based floor ($/1000 SCF): 1000 SCF / 60 / 4.5 SCFM per hp, * 0.7457 kW/hp / 0.9 efficiency.
+export function getMinimumPurgeAirRate(costOfElectricity: number): number {
+  return (1000 / 60 / 4.5) * 0.7457 / 0.9 * costOfElectricity;
 }
 
 export function getDryerTypeConfig(dryerType: DryerType): DryerTypeConfig {
