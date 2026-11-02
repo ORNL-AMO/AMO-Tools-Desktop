@@ -226,14 +226,18 @@ Unit pairs live in `constants/process-cooling-units.ts` (`PROCESS_COOLING_UNITS`
 
 ### Conversion
 
-`ConvertProcessCoolingService.convertProcessCooling(assessment, oldSettings, newSettings)` converts the baseline, modifications and stored weather data in place (rounded for display). It is called:
+`ConvertProcessCoolingService.convertProcessCooling(assessment, oldSettings, newSettings)` converts the baseline and modifications in place (rounded for display). Stored weather data comes from a station or file, so it is never reinterpreted in new units: `SystemBasicsComponent.saveSettings()` converts it with `convertWeatherData()` on every settings units change, whether or not the user chooses "Update Data". `convertProcessCooling` is called:
 
 1. **When an assessment is first created under Metric settings** — `initAssessmentSettings()` converts the Imperial defaults (fuel cost is taken from settings as-is) and sets `existingDataUnits = 'Metric'`
-2. **When the user changes units** — `SystemBasicsComponent` opens the update-units modal; "Update Data" (modal or reminder link) runs the conversion
+2. **When the user changes units** — `SystemBasicsComponent` opens the update-units modal; "Update Data" (modal or reminder link) calls `ProcessCoolingAssessmentService.updateDataUnits()`, which converts from `existingDataUnits` to the settings units. The reminder is derived from `existingDataUnits !== settings.unitsOfMeasure`
+
+### Legacy Metric data (v1.10 and earlier)
+
+Earlier versions converted Metric data only partially (efficiency and tower size left unconverted, flow rate as gpm → m³/min, temperature differences as absolute temperatures), and a new Metric assessment could be converted twice from the "Update Data" reminder. For assessments saved at v1.10.0 or earlier with Metric settings, `UpdateDataService.updateLegacyMetricProcessCooling()` converts chiller efficiency and tower size (never converted by those versions, so the conversion is exact) and sets `existingDataUnits = 'Metric'` so the data can't be converted again. Other values are left as stored; values outside the Metric validation ranges are flagged in the forms for the user to re-enter. `AssessmentDbService` reads the assessment's settings from the store for this migration.
 
 ### Suite boundary
 
-The Suite always expects Imperial. `ProcessCoolingResultsService.getProcessCoolingSuiteResults()` calls `convertInputsForSuite()` (unrounded Imperial copy) and `convertWeatherDataForSuiteApi()` before the Suite call, and `convertProcessCoolingResults()` after it (chiller efficiency kW/ton → kW/kW).
+The Suite always expects Imperial. `ProcessCoolingResultsService.getProcessCoolingSuiteResults()` calls `ConvertProcessCoolingService.getSuiteResults()`, which runs `convertInputsForSuite()` (unrounded Imperial copy) and `convertWeatherDataForSuiteApi()` before the Suite call, and `convertProcessCoolingResults()` after it (chiller efficiency kW/ton → kW/kW, fuel cost from the assessment).
 
 ### Validators
 

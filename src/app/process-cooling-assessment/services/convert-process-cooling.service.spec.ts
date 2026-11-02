@@ -1,7 +1,9 @@
+import { TestBed } from '@angular/core/testing';
 import { ConvertProcessCoolingService } from './convert-process-cooling.service';
+import { ProcessCoolingSuiteApiService } from '../../tools-suite-api/process-cooling-suite-api.service';
 import { Settings } from '../../shared/models/settings';
 import { getDefaultProcessCoolingAssessment } from '../constants/process-cooling-constants';
-import { Modification, ProcessCoolingAssessment, ProcessCoolingResults, TowerSizeMetric } from '../../shared/models/process-cooling-assessment';
+import { CondenserCoolingMethod, Modification, ProcessCoolingAssessment, ProcessCoolingResults, TowerSizeMetric } from '../../shared/models/process-cooling-assessment';
 import { copyObject } from '../../shared/helperFunctions';
 import { convertChillerEfficiency, convertFlowRatePerTon } from '../constants/process-cooling-units';
 
@@ -38,9 +40,26 @@ function getImperialAssessment(): ProcessCoolingAssessment {
 
 describe('ConvertProcessCoolingService', () => {
   let service: ConvertProcessCoolingService;
+  let suiteCalls: Array<{ method: string, input: ProcessCoolingAssessment, weatherData: any }>;
 
   beforeEach(() => {
-    service = new ConvertProcessCoolingService();
+    suiteCalls = [];
+    const getSuiteResult = (method: string) => (input: ProcessCoolingAssessment, weatherData: any): ProcessCoolingResults => {
+      suiteCalls.push({ method, input, weatherData });
+      return { fuelCost: 99, chiller: [{ efficiency: [0.78] } as any] } as ProcessCoolingResults;
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        ConvertProcessCoolingService,
+        {
+          provide: ProcessCoolingSuiteApiService, useValue: {
+            getWaterCooledResults: getSuiteResult('water'),
+            getAirCooledResults: getSuiteResult('air'),
+          }
+        },
+      ]
+    });
+    service = TestBed.inject(ConvertProcessCoolingService);
   });
 
   describe('unit helpers', () => {
@@ -71,8 +90,8 @@ describe('ConvertProcessCoolingService', () => {
       expect(metric.inventory[0].capacity).toBe(351.69);
       expect(metric.inventory[0].fullLoadEfficiency).toBe(0.2218);
       expect(metric.inventory[0].kWPerTonAtLoad[3]).toBe(0.2218);
-      expect(metric.weatherData.weatherDataPoints[0].dry_bulb_temp).toBeCloseTo(100, 10);
-      expect(metric.weatherData.weatherDataPoints[0].wet_bulb_temp).toBeCloseTo(0, 10);
+      // * weather data is converted on settings change by convertWeatherData, not with the assessment data
+      expect(metric.weatherData.weatherDataPoints[0].dry_bulb_temp).toBe(212);
 
       const modification = metric.modifications[0];
       expect(modification.increaseChilledWaterTemp.chilledWaterSupplyTemp).toBe(10);
@@ -115,6 +134,30 @@ describe('ConvertProcessCoolingService', () => {
   });
 
   describe('Suite boundary', () => {
+    it('getSuiteResults sends Imperial inputs and weather to the Suite and returns Metric results', () => {
+      const metric = service.convertProcessCooling(getImperialAssessment(), IMPERIAL, METRIC, false);
+      const metricWeather = service.convertWeatherData(metric.weatherData, IMPERIAL, METRIC);
+
+      const results = service.getSuiteResults(metric, metricWeather, METRIC);
+
+      expect(suiteCalls.length).toBe(1);
+      expect(suiteCalls[0].method).toBe('water');
+      expect(suiteCalls[0].input.inventory[0].capacity).toBeCloseTo(100, 8);
+      expect(suiteCalls[0].weatherData.weatherDataPoints[0].dry_bulb_temp).toBeCloseTo(212, 8);
+      expect(results.chiller[0].efficiency[0]).toBeCloseTo(0.2218, 4);
+      expect(results.fuelCost).toBe(metric.systemInformation.operations.fuelCost);
+    });
+
+    it('getSuiteResults uses the air-cooled calculation for air-cooled systems', () => {
+      const processCooling = getImperialAssessment();
+      processCooling.systemInformation.operations.condenserCoolingMethod = CondenserCoolingMethod.Air;
+
+      service.getSuiteResults(processCooling, processCooling.weatherData, IMPERIAL);
+
+      expect(suiteCalls[0].method).toBe('air');
+      expect(suiteCalls[0].input).toBe(processCooling);
+    });
+
     it('convertInputsForSuite returns Imperial values without modifying the Metric input', () => {
       const original = getImperialAssessment();
       const metric = service.convertProcessCooling(copyObject(original), IMPERIAL, METRIC, false);
@@ -132,11 +175,30 @@ describe('ConvertProcessCoolingService', () => {
       expect(suiteInput.inventory[0].kWPerTonAtLoad[0]).toBeCloseTo(0.5, 8);
     });
 
-    it('convertInputsForSuite leaves Imperial input unchanged', () => {
+    it('convertInputsForSuite returns Imperial input as is', () => {
       const original = getImperialAssessment();
       const suiteInput = service.convertInputsForSuite(original, IMPERIAL);
-      expect(suiteInput).toEqual(original);
-      expect(suiteInput).not.toBe(original);
+      expect(suiteInput).toBe(original);
+    });
+
+    it('convertInputsForSuite shares weather data instead of copying it', () => {
+      const original = service.convertProcessCooling(getImperialAssessment(), IMPERIAL, METRIC);
+      const suiteInput = service.convertInputsForSuite(original, METRIC);
+      expect(suiteInput.weatherData).toBe(original.weatherData);
+    });
+
+    it('convertWeatherData converts F to C and back', () => {
+      const weatherData = {
+        addressString: '',
+        selectedStation: null,
+        weatherDataPoints: [{ dry_bulb_temp: 212, wet_bulb_temp: 32 } as any],
+      };
+      const metric = service.convertWeatherData(weatherData, IMPERIAL, METRIC);
+      expect(metric.weatherDataPoints[0].dry_bulb_temp).toBeCloseTo(100, 10);
+      expect(metric.weatherDataPoints[0].wet_bulb_temp).toBeCloseTo(0, 10);
+      const imperial = service.convertWeatherData(metric, METRIC, IMPERIAL);
+      expect(imperial.weatherDataPoints[0].dry_bulb_temp).toBeCloseTo(212, 10);
+      expect(weatherData.weatherDataPoints[0].dry_bulb_temp).toBe(212);
     });
 
     it('convertWeatherDataForSuiteApi converts Metric weather to F', () => {
@@ -164,14 +226,16 @@ describe('ConvertProcessCoolingService', () => {
         pump: { chillerPumpingEnergy: [] },
       });
 
-      const metricResults = service.convertProcessCoolingResults(getResults(), METRIC);
+      const metricResults = service.convertProcessCoolingResults(getResults(), METRIC, 9.48);
+      expect(metricResults.fuelCost).toBe(9.48);
       expect(metricResults.chiller[0].efficiency[0]).toBeCloseTo(0.2218, 4);
       expect(metricResults.chiller[0].ariEfficiencyProfile[0]).toBeCloseTo(0.2218, 4);
       expect(metricResults.chiller[0].ariEfficiencyProfileFactored[0]).toBeCloseTo(0.2218, 4);
       expect(metricResults.chiller[0].power[0]).toBe(100);
       expect(metricResults.chiller[0].energy[0]).toBe(1000);
 
-      const imperialResults = service.convertProcessCoolingResults(getResults(), IMPERIAL);
+      const imperialResults = service.convertProcessCoolingResults(getResults(), IMPERIAL, 10);
+      expect(imperialResults.fuelCost).toBe(10);
       expect(imperialResults.chiller[0].efficiency[0]).toBe(0.78);
     });
   });

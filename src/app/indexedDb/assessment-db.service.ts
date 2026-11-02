@@ -3,7 +3,8 @@ import { Assessment } from '../shared/models/assessment';
 import * as _ from 'lodash';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 import { BehaviorSubject, firstValueFrom, map, mergeMap, Observable } from 'rxjs';
-import { AssessmentStoreMeta } from './dbConfig';
+import { AssessmentStoreMeta, SettingsStoreMeta } from './dbConfig';
+import { Settings } from '../shared/models/settings';
 import { UpdateDataService } from '../shared/helper-services/update-data.service';
 import { environment } from '../../environments/environment';
 import { CalculatorDbService } from './calculator-db.service';
@@ -57,7 +58,8 @@ export class AssessmentDbService {
       mergeMap(async (assessments: Array<Assessment>) => {
         for await (let assessment of assessments) {
           if (assessment.appVersion !== environment.version) {
-            this.updateDataService.updateAssessmentVersion(assessment);
+            const settings: Settings = await this.getProcessCoolingSettings(assessment);
+            this.updateDataService.updateAssessmentVersion(assessment, settings);
             let assessmentCalculators: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
             let updatedAssessmentCalculators = this.updateDataService.updateAssessmentCalculatorVersion(assessmentCalculators);
             if (updatedAssessmentCalculators) {
@@ -71,6 +73,11 @@ export class AssessmentDbService {
         }
         return assessments;
       }));
+  }
+
+  private async getProcessCoolingSettings(assessment: Assessment): Promise<Settings> {
+    if (assessment.type !== 'ProcessCooling' || assessment.id == null) return undefined;
+    return firstValueFrom(this.dbService.getByIndex<Settings>(SettingsStoreMeta.store, 'assessmentId', assessment.id));
   }
 
   private async updateWaterDiagramIfPresent(assessment: Assessment): Promise<void> {

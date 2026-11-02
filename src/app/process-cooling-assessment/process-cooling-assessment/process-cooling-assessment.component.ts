@@ -13,11 +13,12 @@ import { Settings } from '../../shared/models/settings';
 export class ProcessCoolingAssessmentComponent {
   private readonly processCoolingUiService = inject(ProcessCoolingUiService);
   private readonly analyticsService = inject(AnalyticsService);
+  private readonly processCoolingAssessmentService = inject(ProcessCoolingAssessmentService);
 
   showWelcomeScreen: boolean = false;
   smallScreenTab: string = 'form';
   readonly showUpdateUnitsModal: Signal<boolean> = this.processCoolingUiService.showUpdateUnitsModalSignal;
-  readonly settings: Signal<Settings> = inject(ProcessCoolingAssessmentService).settingsSignal;
+  readonly settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-process-cooling-assessment', undefined);
@@ -36,7 +37,9 @@ export class ProcessCoolingAssessmentComponent {
 
   selectUpdateAction(shouldUpdateData: boolean) {
     this.processCoolingUiService.showUpdateUnitsModalSignal.set(false);
-    this.processCoolingUiService.updateUnitsModalResult.next(shouldUpdateData);
+    if (shouldUpdateData) {
+      this.processCoolingAssessmentService.updateDataUnits(this.settings());
+    }
   }
 
 }

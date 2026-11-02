@@ -1,4 +1,4 @@
-import { Component, inject, Signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, Signal, WritableSignal } from '@angular/core';
 import { ProcessCoolingUiService } from '../../../services/process-cooling-ui.service';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessCoolingAssessmentService } from '../../../services/process-cooling-assessment.service';
@@ -17,7 +17,8 @@ export class CondenserCoolingHelpComponent {
 
   CondenserCoolingMethod = CondenserCoolingMethod;
   focusedField: WritableSignal<string> = this.processCoolingService.focusedFieldSignal;
-  settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
+  private readonly settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
+  readonly isMetric: Signal<boolean> = computed(() => this.settings()?.unitsOfMeasure === 'Metric');
   condenserCoolingMethod: number = this.processCoolingAssessmentService.condenserCoolingMethod;
 
 }

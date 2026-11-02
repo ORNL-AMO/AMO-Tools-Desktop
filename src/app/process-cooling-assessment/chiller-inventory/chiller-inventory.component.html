@@ -95,9 +95,8 @@
             </label>
 
             @if (form.controls.isCustomChiller.value) {
-                @let htmlUnit = settings().unitsOfMeasure === 'Imperial' ? PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial : PROCESS_COOLING_UNITS.efficiency.labelHTML.metric;
                 <div class="alert alert-info my-2 w-100 small">
-                    Specify efficiency values (<span [innerHTML]="htmlUnit"></span>) at 25%, 50%, 75% and 100% loadings as per AHRI 550/590 Specification
+                    Specify efficiency values (<span [innerHTML]="efficiencyLabel()"></span>) at 25%, 50%, 75% and 100% loadings as per AHRI 550/590 Specification
                 </div>
             <ng-container formArrayName="chillerCurvePoints">
                 @for (point of form.controls.chillerCurvePoints.controls; track $index) {

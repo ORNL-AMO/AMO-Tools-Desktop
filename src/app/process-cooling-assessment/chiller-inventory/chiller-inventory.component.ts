@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, DestroyRef, Signal } from '@angular/core';
+import { Component, OnInit, inject, DestroyRef, Signal, computed } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { debounceTime, distinct, distinctUntilChanged, Observable } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -8,7 +8,7 @@ import { ProcessCoolingUiService } from '../services/process-cooling-ui.service'
 import { ChillerInventoryForm, ChillerInventoryService } from '../services/chiller-inventory.service';
 import { getChillerTypes, getDefaultInventoryItem, getRefrigerantTypes } from '../constants/process-cooling-constants';
 import { FormControlIds, generateFormControlIds } from '../../shared/helperFunctions';
-import { PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
+import { getProcessCoolingUnitLabel, PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { Settings } from '../../shared/models/settings';
 
 @Component({
@@ -34,6 +34,7 @@ export class ChillerInventoryComponent implements OnInit {
 
   PROCESS_COOLING_UNITS = PROCESS_COOLING_UNITS;
   settings: Signal<Settings> = this.processCoolingAssessmentService.settingsSignal;
+  readonly efficiencyLabel: Signal<string> = computed(() => getProcessCoolingUnitLabel('efficiency', this.settings()?.unitsOfMeasure));
   ngOnInit(): void {
     const defaultChillerValues = this.inventoryService.selectedChillerValue ? this.inventoryService.selectedChillerValue : getDefaultInventoryItem();
     this.form = this.inventoryService.getChillerForm(defaultChillerValues);

@@ -1,19 +1,38 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Settings } from '../../shared/models/settings';
-import { ProcessCoolingAssessment, SystemInformation, Operations, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, PumpInput, ChillerInventoryItem, Modification, IncreaseChilledWaterTemp, DecreaseCondenserWaterTemp, UseSlidingCondenserWaterTemp, ProcessCoolingResults, UseFreeCooling, ReplaceChillers, TowerSizeMetric, ProcessCoolingChillerOutput } from '../../shared/models/process-cooling-assessment';
+import { ProcessCoolingAssessment, SystemInformation, Operations, AirCooledSystemInput, WaterCooledSystemInput, TowerInput, PumpInput, ChillerInventoryItem, Modification, IncreaseChilledWaterTemp, DecreaseCondenserWaterTemp, UseSlidingCondenserWaterTemp, ProcessCoolingResults, UseFreeCooling, ReplaceChillers, TowerSizeMetric, ProcessCoolingChillerOutput, CondenserCoolingMethod } from '../../shared/models/process-cooling-assessment';
 import { ConvertValue } from '../../shared/convert-units/ConvertValue';
 import { copyObject, roundVal } from '../../shared/helperFunctions';
 import { AppUnits, convertChillerEfficiency, convertFlowRatePerTon, PROCESS_COOLING_UNITS } from '../constants/process-cooling-units';
 import { WeatherContextData } from '../../shared/modules/weather-data/weather-context.token';
 import { WeatherDataPoint } from '../../shared/weather-api.service';
+import { ProcessCoolingSuiteApiService, SuiteModificationArgs } from '../../tools-suite-api/process-cooling-suite-api.service';
 
 /**
  * Process Cooling data is stored in the units of the assessment settings.
  * - convertProcessCooling converts saved data in place when the user changes units (rounded for display)
- * - convertInputsForSuite / convertProcessCoolingResults convert at the Suite boundary, which always expects Imperial (unrounded)
+ * - convertWeatherData converts stored weather data whenever the settings units change, whether or not the user updates their data
+ *   (weather data comes from a station or file, so it is never reinterpreted in new units)
+ * - getSuiteResults converts at the Suite boundary, which always expects Imperial (unrounded), with convertInputsForSuite / convertWeatherDataForSuiteApi / convertProcessCoolingResults
  */
 @Injectable()
 export class ConvertProcessCoolingService {
+  private readonly suiteApi = inject(ProcessCoolingSuiteApiService);
+
+  /**
+   * Suite API expects Imperial inputs and returns Imperial results. Returns results in the settings units.
+   */
+  getSuiteResults(processCooling: ProcessCoolingAssessment, weatherData: WeatherContextData, settings: Settings, suiteModificationArgs?: SuiteModificationArgs): ProcessCoolingResults {
+    const suiteWeatherData: WeatherContextData = this.convertWeatherDataForSuiteApi(weatherData, settings);
+    const suiteInput: ProcessCoolingAssessment = this.convertInputsForSuite(processCooling, settings);
+    let results: ProcessCoolingResults;
+    if (suiteInput.systemInformation.operations.condenserCoolingMethod === CondenserCoolingMethod.Water) {
+      results = this.suiteApi.getWaterCooledResults(suiteInput, suiteWeatherData, suiteModificationArgs);
+    } else {
+      results = this.suiteApi.getAirCooledResults(suiteInput, suiteWeatherData, suiteModificationArgs);
+    }
+    return this.convertProcessCoolingResults(results, settings, processCooling.systemInformation.operations.fuelCost);
+  }
 
   convertProcessCooling(processCoolingAssessment: ProcessCoolingAssessment, oldSettings: Settings, newSettings: Settings, shouldRound: boolean = true): ProcessCoolingAssessment {
     processCoolingAssessment = this.convertProcessCoolingAssessmentData(processCoolingAssessment, oldSettings, newSettings, shouldRound);
@@ -26,18 +45,19 @@ export class ConvertProcessCoolingService {
   convertProcessCoolingAssessmentData(processCooling: ProcessCoolingAssessment, oldSettings: Settings, newSettings: Settings, shouldRound: boolean = true): ProcessCoolingAssessment {
     processCooling.systemInformation = this.convertSystemInformation(processCooling.systemInformation, oldSettings, newSettings, shouldRound);
     processCooling.inventory = this.convertInventory(processCooling.inventory, oldSettings, newSettings, shouldRound);
-    processCooling.weatherData = this.convertWeatherData(processCooling.weatherData, oldSettings, newSettings);
     return processCooling;
   }
 
   /**
-   * Returns an Imperial copy of the assessment for the Suite API. Input is not modified.
+   * Returns Imperial inputs for the Suite API. Input is not modified.
+   * Imperial input is returned as is. weatherData is shared, not copied: the Suite reads weather from the weather context.
    */
   convertInputsForSuite(processCooling: ProcessCoolingAssessment, settings: Settings): ProcessCoolingAssessment {
-    const processCoolingCopy: ProcessCoolingAssessment = copyObject(processCooling);
     if (settings.unitsOfMeasure !== 'Metric') {
-      return processCoolingCopy;
+      return processCooling;
     }
+    const { weatherData, ...inputs } = processCooling;
+    const processCoolingCopy: ProcessCoolingAssessment = { ...copyObject(inputs), weatherData };
     const imperialSettings: Settings = { ...settings, unitsOfMeasure: 'Imperial' };
     processCoolingCopy.systemInformation = this.convertSystemInformation(processCoolingCopy.systemInformation, settings, imperialSettings, false);
     processCoolingCopy.inventory = this.convertInventory(processCoolingCopy.inventory, settings, imperialSettings, false);
@@ -168,8 +188,13 @@ export class ConvertProcessCoolingService {
   /**
    * Suite results are Imperial. Power (kW) and energy (kWh) are the same in both unit systems, only chiller efficiency (kW/ton) is converted.
    */
-  convertProcessCoolingResults(results: ProcessCoolingResults, settings: Settings): ProcessCoolingResults {
-    if (!results || settings.unitsOfMeasure !== 'Metric') return results;
+  /**
+   * Converts Suite results to the settings units. fuelCost is passed through by the Suite, so it is set from the assessment, which is already in settings units.
+   */
+  convertProcessCoolingResults(results: ProcessCoolingResults, settings: Settings, fuelCost: number): ProcessCoolingResults {
+    if (!results) return results;
+    results.fuelCost = fuelCost;
+    if (settings.unitsOfMeasure !== 'Metric') return results;
     results.chiller = results.chiller?.map((chillerOutput: ProcessCoolingChillerOutput) => {
       return {
         ...chillerOutput,
