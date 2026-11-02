@@ -313,7 +313,7 @@ describe('ConvertCompressedAirDryerService', () => {
       const baseline = dryerService.generateExample(imperial);
       expect(baseline).toEqual(jasmine.objectContaining({
         dryerType: DryerType.Heatless, flowRate: 1752, pressure: 50, temperature: 100, annualOperatingHours: 8736,
-        costOfElectricity: 0.08, costOfCompressedAir: 0.20, costOfCoolingWater: 0.25,
+        costOfElectricity: 0.08, costOfCompressedAir: 0.25, costOfCoolingWater: 0.25,
       }));
       expect(dryerService.getFormFromObj(baseline, imperial).valid).toBeTrue();
     });

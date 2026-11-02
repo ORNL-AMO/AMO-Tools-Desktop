@@ -53,7 +53,7 @@ export class CompressedAirDryerService {
       pressure: 50,
       temperature: 100,
       costOfElectricity: 0.08,
-      costOfCompressedAir: 0.20,
+      costOfCompressedAir: 0.25,
       costOfCoolingWater: 0.25,
     }, settings);
   }
