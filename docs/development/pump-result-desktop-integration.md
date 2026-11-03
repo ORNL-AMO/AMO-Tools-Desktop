@@ -102,3 +102,14 @@ The development site's Motor Current page returned HTTP 404 during the check on 
 This follow-up changes help templates and their configured documentation addresses only. It does not change calculation adapters, dependencies, fixtures or accepted numerical differences. Validation and the exact follow-up commit are recorded in PR #9054 and issue #8957.
 
 Follow-up validation: Angular application/template compilation (`ngc -p src/tsconfig.app.json --noEmit`), all 24 link targets/attributes/imports, the help-only scope guard and whitespace checks passed. The follow-up review found no actionable code defects; readiness is Ready with documented documentation-deployment follow-up. Calculation regressions were not rerun for this help-only change.
+
+
+## Help-link unit-test repair — 2026-11-03
+
+CI run [40875041347](https://github.com/ORNL-AMO/AMO-Tools-Desktop/actions/runs/40875041347/job/123451578919) at head `63731150bc54edca5e879f0a283c05eb31adf35a` reported 30 failed help-visibility assertions and 1,618 passing unit tests. The failures were reproduced locally: 30 failures among the 47 tests in the three affected pump-help suites.
+
+The documentation links reused `.my-2` spacing containers. Existing tests counted every `.my-2` container as field-specific help, so the always-visible documentation links inflated the counts in MotorHelpComponent, FieldDataHelpComponent and PumpFluidHelpComponent. The fix counts field-help headings (`.my-2 > h6`) and checks the selected field's own help text. Three additional tests verify the configured documentation URLs and external-link attributes with and without a selected field; they distinguish the calculator documentation from older field-specific external references.
+
+The repaired focused suites pass all 50 tests, and spec TypeScript compilation passes. This repair changes only those three test files and this evidence record. Calculation adapters, help templates, package pins and accepted numerical differences remain unchanged; the immutable baseline retains its recorded SHA-256. Review of the repair against `63731150bc54edca5e879f0a283c05eb31adf35a` found no actionable defects. The earlier documentation-deployment follow-up remains separate from this unit-test repair.
+
+The full CI-equivalent Desktop unit command (`npm test -- --watch=false --no-progress`) passed **1,651 of 1,651 tests** after the repair (Chrome Headless 147 on macOS). Complete-diff whitespace passed. No Electron checks were needed for this test-only repair. The exact pushed repair commit and new CI state are recorded in PR #9054 and issue #8957.
