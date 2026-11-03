@@ -1,4 +1,3 @@
-<!-- * This component uses host component styling - see component.ts decorator -->
 <div class="navbar assessment-bar">
     <ul class="h-100 tabs subtabs progress-tabs process-cooling-assessment d-none d-lg-block p-2">
         @for (link of ASSESSMENT_VIEW_LINKS; track $index) {
@@ -92,13 +91,7 @@
 </div>
 
 
-<div class="assessment-container tab-content">
-    <div class="assessment-panel-container modification">
-        <router-outlet></router-outlet>
-    </div>
-
-    <div class="assessment-panel-container scroll-item"
-        [class.small-screen-tab]="smallScreenPanelTab === 'details'">
-        <app-results-panel></app-results-panel>
-    </div>
-</div>
+<app-layout-workspace [mainLabel]="mainPanelLabel()" asideLabel="Details">
+    <router-outlet lyMain></router-outlet>
+    <app-results-panel lyAside></app-results-panel>
+</app-layout-workspace>

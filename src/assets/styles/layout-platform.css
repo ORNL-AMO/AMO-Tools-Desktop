@@ -29,7 +29,8 @@
 
   --ly-radius: 0.25rem;
   --ly-border-color: #dee2e6;
-  --ly-panel-bg: #fff;
+  --ly-panel-bg: transparent;
+  --ly-surface: #fff;
   --ly-muted-bg: #e9ecef;
   --ly-text: #212529;
 
@@ -76,7 +77,9 @@
 }
 
 /* Routed component hosts sit beside their router-outlet and must pass the
-   height chain through. Add this class to a routed component's host. */
+   height chain through. Add this class to the host of a routed component that
+   sits between the shell and a workspace. Do not use it inside a panel; panel
+   content keeps its natural height so the panel can scroll. */
 .ly-fill {
   display: flex;
   flex-direction: column;
@@ -112,7 +115,6 @@
 
 .ly-workspace__aside {
   grid-area: aside;
-  border-left: 1px solid var(--ly-border-color);
 }
 
 .ly-workspace__switcher {
@@ -137,7 +139,6 @@
   .ly-workspace:not(.ly-workspace--solo) > .ly-workspace__main,
   .ly-workspace:not(.ly-workspace--solo) > .ly-workspace__aside {
     grid-area: panel;
-    border-left: none;
   }
 
   .ly-workspace[data-active-panel="main"] > .ly-workspace__aside,
@@ -158,7 +159,7 @@
 }
 
 .ly-workspace__switch[aria-selected="true"] {
-  background: var(--ly-panel-bg);
+  background: var(--ly-surface);
   box-shadow: inset 0 -2px 0 var(--ly-accent);
 }
 
@@ -179,11 +180,28 @@
   container: ly-panel / inline-size;
 }
 
+.ly-panel::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.5rem;
+}
+
+.ly-panel::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.ly-panel::-webkit-scrollbar-thumb {
+  background-color: var(--ly-accent);
+}
+
+.ly-panel::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+}
+
 .ly-panel__header {
   position: sticky;
   top: 0;
   z-index: var(--ly-z-sticky);
-  background: var(--ly-panel-bg);
+  background: var(--ly-surface);
 }
 
 /* ---------- Stack ---------- */
@@ -246,7 +264,7 @@
   position: sticky;
   left: 0;
   z-index: 1;
-  background: var(--ly-panel-bg);
+  background: var(--ly-surface);
 }
 
 /* ---------- Media ---------- */
@@ -266,7 +284,9 @@
 }
 
 /* ---------- Step nav ---------- */
-/* Tabs on wide screens, the existing prev/next pager at the medium tier. */
+/* Tabs on wide screens, the existing prev/next pager at the medium tier.
+   Put these classes on wrappers around the tab and pager markup so legacy tab
+   classes cannot override the display toggle. */
 .ly-stepnav__pager {
   display: none;
 }
@@ -283,11 +303,6 @@
 
 /* ---------- Print ---------- */
 @media print {
-  .ly-shell {
-    height: auto;
-    overflow: visible;
-  }
-
   .ly-panel {
     overflow: visible;
   }
