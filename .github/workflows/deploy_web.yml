@@ -1,0 +1,29 @@
+name: "Deploy: Web"
+
+on:
+  workflow_call:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  call_deploy-dev:
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/develop'
+    uses: ./.github/workflows/template_deploy.yml
+    with:
+      app-dir: measur
+      artifact-name: web-dist
+      backup-dir: /opt/actions-runner/backups
+      deploy-dir: /var/www/html
+      tag: dev
+
+  call_deploy-prod:
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/master'
+    uses: ./.github/workflows/template_deploy.yml
+    with:
+      app-dir: measur
+      artifact-name: web-dist
+      backup-dir: /opt/actions-runner/backups
+      deploy-dir: /var/www/html
+      tag: prod

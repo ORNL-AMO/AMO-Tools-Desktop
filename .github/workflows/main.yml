@@ -8,16 +8,89 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions: {}
+
+# Queue production work without cancelling releases already waiting or running.
+# The release policy also checks sequence; queue order is not commit order.
+concurrency:
+  group: ${{ github.ref == 'refs/heads/master' && 'measur-production-release' || format('measur-ci-{0}', github.run_id) }}
+  queue: max
+
 jobs:
+  release-policy:
+    if: >-
+      (github.event_name == 'pull_request' &&
+       (github.base_ref == 'develop' || github.base_ref == 'master' || startsWith(github.base_ref, 'epic-'))) ||
+      ((github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+       github.ref_type == 'branch' && (github.ref_name == 'develop' || github.ref_name == 'master'))
+    permissions:
+      actions: read
+      contents: read
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+      - name: Get Node version
+        id: node
+        run: node -p '"version=" + require("./package.json").engines.node' >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ steps.node.outputs.version }}
+      - name: Validate version metadata
+        run: node .github/scripts/check-release-version.cjs metadata
+      - name: Validate production release policy
+        if: github.ref == 'refs/heads/master' || github.base_ref == 'master'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node .github/scripts/check-release-policy.cjs
+      - name: Test release policy helpers
+        run: node --test .github/scripts/*.test.cjs .github/actions/check-production-state/*.test.cjs
+
   pr-checks:
-    if: github.event_name == 'pull_request' && (github.base_ref == 'develop' || github.base_ref == 'master' || startsWith(github.base_ref, 'epic-'))
+    if: >-
+      (github.event_name == 'pull_request' &&
+       (github.base_ref == 'develop' || github.base_ref == 'master' || startsWith(github.base_ref, 'epic-'))) ||
+      ((github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+       github.ref_type == 'branch' && (github.ref_name == 'develop' || github.ref_name == 'master'))
+    permissions:
+      contents: read
     uses: ./.github/workflows/pr_checks.yml
 
-  web:
-    if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
-    uses: ./.github/workflows/release_web.yml
+  web_build:
+    needs: [release-policy, pr-checks]
+    if: >-
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      github.ref_type == 'branch' && (github.ref_name == 'develop' || github.ref_name == 'master')
+    permissions:
+      contents: read
+    uses: ./.github/workflows/template_build.yml
+    with:
+      artifact-name: web-dist
+      artifact-path: dist/browser
 
   desktop:
-    if: github.event_name == 'push' && github.ref_name == 'master'
+    needs: [release-policy, pr-checks]
+    if: >-
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      github.ref == 'refs/heads/master'
+    permissions:
+      actions: read
+      contents: write
     uses: ./.github/workflows/release_desktop.yml
     secrets: inherit
+
+  web_deploy:
+    needs: [web_build, desktop]
+    # Evaluate develop despite its intentionally skipped desktop dependency.
+    if: >-
+      always() && !cancelled() &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
+      needs.web_build.result == 'success' &&
+      (github.ref == 'refs/heads/develop' ||
+       (github.ref == 'refs/heads/master' && needs.desktop.result == 'success'))
+    permissions:
+      actions: read
+      contents: read
+    uses: ./.github/workflows/deploy_web.yml
