@@ -149,8 +149,9 @@ export interface BoilerInput {
     deaeratorPressure: number;
     approachTemperature: number;
     blowdownConductivity?: number;
-    feedwaterConductivity?: number,
-    stackLossInput?: StackLossInput
+    feedwaterConductivity?: number;
+    stackLossInput?: StackLossInput;
+    sendBlowdownToDeaerator?: boolean;
 }
 
 export interface SteamPropertiesValidationRanges {
