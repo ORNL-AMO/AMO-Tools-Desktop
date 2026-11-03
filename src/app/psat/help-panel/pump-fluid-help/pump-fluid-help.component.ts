@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 import { HelpPanelService } from '../help-panel.service';
 import { PSAT } from '../../../shared/models/psat';
 import { Subscription } from 'rxjs';
@@ -11,6 +12,8 @@ import { Settings } from '../../../shared/models/settings';
     standalone: false
 })
 export class PumpFluidHelpComponent implements OnInit {
+  docsLink: string = environment.measurDocsUrl;
+
   @Input()
   settings: Settings;
   @Input()

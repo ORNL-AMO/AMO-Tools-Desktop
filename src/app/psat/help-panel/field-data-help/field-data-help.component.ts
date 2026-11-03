@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 import { PSAT } from '../../../shared/models/psat';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -12,6 +13,8 @@ import { PsatWarningService } from '../../psat-warning.service';
     standalone: false
 })
 export class FieldDataHelpComponent implements OnInit {
+  docsLink: string = environment.measurDocsUrl;
+
   @Input()
   settings: Settings;
   @Input()

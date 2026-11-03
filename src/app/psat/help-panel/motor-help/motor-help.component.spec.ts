@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 
 import { MotorHelpComponent } from './motor-help.component';
 import { HelpPanelService } from '../help-panel.service';
@@ -77,8 +78,31 @@ describe('MotorHelpComponent', () => {
   });
 
   describe('template visibility', () => {
-    it('renders no help block when currentField does not match any known field', () => {
-      expect(fixture.nativeElement.querySelectorAll('.my-2').length).toBe(0);
+    // Field help has a heading; always-visible documentation links share the
+    // spacing class but are independent of the selected field.
+    it('keeps calculation documentation links available with and without a selected field', () => {
+      const expectedPaths = [
+        'group__motor__efficiency__calculator',
+        'group__estimate__fla__calculator',
+        'group__poles__calculator',
+      ];
+
+      for (const field of ['unrecognized-field', 'lineFrequency']) {
+        helpPanelService.currentField.next(field);
+        fixture.detectChanges();
+
+        const links: HTMLAnchorElement[] = Array.from(fixture.nativeElement.querySelectorAll('.my-2 > a[target="_blank"]'));
+        expect(links.map(link => link.getAttribute('href')))
+          .toEqual(expectedPaths.map(path => environment.measurDocsUrl + path));
+        links.forEach(link => {
+          expect(link.relList.contains('noopener')).toBeTrue();
+          expect(link.relList.contains('noreferrer')).toBeTrue();
+        });
+      }
+    });
+
+    it('renders no field help block when currentField does not match any known field', () => {
+      expect(fixture.nativeElement.querySelectorAll('.my-2 > h6').length).toBe(0);
     });
 
     FIELD_BRANCHES.forEach(({ field, heading }) => {
@@ -86,8 +110,8 @@ describe('MotorHelpComponent', () => {
         helpPanelService.currentField.next(field);
         fixture.detectChanges();
 
-        expect(fixture.nativeElement.querySelectorAll('.my-2').length).toBe(1);
-        expect(fixture.nativeElement.textContent).toContain(heading);
+        expect(fixture.nativeElement.querySelectorAll('.my-2 > h6').length).toBe(1);
+        expect(fixture.nativeElement.querySelector('.my-2 > h6').parentElement.textContent).toContain(heading);
       });
     });
   });

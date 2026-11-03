@@ -1,0 +1,639 @@
+{
+  "baselineDesktopCommit": "9b7ff3d7416ff8172ad3ab24fc01ab2ef29acbc9",
+  "reconciledDesktopCommit": "14e4cc7585524a32007c393710ca2c5ad75695ed",
+  "beforeSuiteVersion": "1.2.6-beta.365.1",
+  "afterSuiteVersion": "1.2.7-beta.446.1",
+  "scenarios": 72,
+  "changedScenarios": 8,
+  "fieldDifferences": 23,
+  "changes": [
+    {
+      "id": "current-3-0",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "fields": [
+        {
+          "path": "result.raw",
+          "before": 62.03310557374408,
+          "after": 62.03310557374413,
+          "absoluteDelta": 4.973799150320701e-14,
+          "relativeDelta": 8.017975408965974e-16,
+          "withinTolerance": true
+        }
+      ]
+    },
+    {
+      "id": "current-3-25",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "A",
+      "fields": [
+        {
+          "path": "result.raw",
+          "before": 81.23980620274482,
+          "after": 81.23980620274484,
+          "absoluteDelta": 2.842170943040401e-14,
+          "relativeDelta": 3.4984954739396875e-16,
+          "withinTolerance": true
+        }
+      ]
+    },
+    {
+      "id": "performance-3-0.25",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.25,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "fields": [
+        {
+          "path": "result.displayed.efficiency",
+          "before": 8756.559,
+          "after": 86.069,
+          "absoluteDelta": 8670.49,
+          "relativeDelta": 0.9901709107424503,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.displayed.powerFactor",
+          "before": 0.658,
+          "after": 66.954,
+          "absoluteDelta": 66.29599999999999,
+          "relativeDelta": 100.75379939209725,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.raw.current",
+          "before": 36.10658053455325,
+          "after": 36.10658053455326,
+          "absoluteDelta": 7.105427357601002e-15,
+          "relativeDelta": 1.967903704091074e-16,
+          "withinTolerance": true
+        },
+        {
+          "path": "result.raw.efficiency",
+          "before": 8756.558954142425,
+          "after": 86.0691928479951,
+          "absoluteDelta": 8670.48976129443,
+          "relativeDelta": 0.9901708886677135,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.raw.powerFactor",
+          "before": 0.6580941316084499,
+          "after": 66.95357386448163,
+          "absoluteDelta": 66.29547973287318,
+          "relativeDelta": 100.73859733536932,
+          "withinTolerance": false
+        }
+      ]
+    },
+    {
+      "id": "performance-3-0.75",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0.75,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "fields": [
+        {
+          "path": "result.displayed.efficiency",
+          "before": 9006.063,
+          "after": 89.91,
+          "absoluteDelta": 8916.153,
+          "relativeDelta": 0.9900167253993227,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.displayed.powerFactor",
+          "before": 0.904,
+          "after": 90.593,
+          "absoluteDelta": 89.68900000000001,
+          "relativeDelta": 99.21349557522124,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.raw.efficiency",
+          "before": 9006.062571210281,
+          "after": 89.91029824825681,
+          "absoluteDelta": 8916.152272962025,
+          "relativeDelta": 0.9900166918076193,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.raw.powerFactor",
+          "before": 0.9044154468513277,
+          "after": 90.5927603779257,
+          "absoluteDelta": 89.68834493107437,
+          "relativeDelta": 99.16719715847333,
+          "withinTolerance": false
+        }
+      ]
+    },
+    {
+      "id": "performance-3-1",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 1,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "fields": [
+        {
+          "path": "result.displayed.efficiency",
+          "before": 9000,
+          "after": 89.1,
+          "absoluteDelta": 8910.9,
+          "relativeDelta": 0.9901,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.displayed.powerFactor",
+          "before": 0.925,
+          "after": 93.409,
+          "absoluteDelta": 92.48400000000001,
+          "relativeDelta": 99.98270270270271,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.raw.efficiency",
+          "before": 8999.999999999949,
+          "after": 89.10000000000741,
+          "absoluteDelta": 8910.899999999941,
+          "relativeDelta": 0.9900999999999991,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.raw.powerFactor",
+          "before": 0.9247521219870698,
+          "after": 93.4093052512109,
+          "absoluteDelta": 92.48455312922383,
+          "relativeDelta": 100.01010101009206,
+          "withinTolerance": false
+        }
+      ]
+    },
+    {
+      "id": "power-factor-0",
+      "inputs": {
+        "currentA": 60,
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0,
+        "rpm": 1780,
+        "specifiedEfficiencyPercent": 90,
+        "volts": 460
+      },
+      "units": "%",
+      "fields": [
+        {
+          "path": "result.displayed",
+          "before": -62.1,
+          "after": 4.67,
+          "absoluteDelta": 66.77,
+          "relativeDelta": 1.0752012882447664,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.raw",
+          "before": -62.09998759583456,
+          "after": 4.669958457276021,
+          "absoluteDelta": 66.76994605311059,
+          "relativeDelta": 1.075200634300759,
+          "withinTolerance": false
+        }
+      ]
+    },
+    {
+      "id": "power-factor-0.05",
+      "inputs": {
+        "currentA": 60,
+        "efficiencyClass": 1,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadPercent": 0.05,
+        "rpm": 1780,
+        "specifiedEfficiencyPercent": 90,
+        "volts": 460
+      },
+      "units": "%",
+      "fields": [
+        {
+          "path": "result.displayed",
+          "before": -62.1,
+          "after": 4.67,
+          "absoluteDelta": 66.77,
+          "relativeDelta": 1.0752012882447664,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.raw",
+          "before": -62.09998759583456,
+          "after": 4.669958457276021,
+          "absoluteDelta": 66.76994605311059,
+          "relativeDelta": 1.075200634300759,
+          "withinTolerance": false
+        }
+      ]
+    },
+    {
+      "id": "performance-3-zero",
+      "inputs": {
+        "efficiencyClass": 3,
+        "efficiencyPercent": 90,
+        "hp": 200,
+        "hz": 60,
+        "loadFraction": 0,
+        "rpm": 1780,
+        "suppliedFLA": 225,
+        "volts": 460
+      },
+      "units": "current as % of supplied FLA; efficiency/PF %",
+      "fields": [
+        {
+          "path": "result.displayed.powerFactor",
+          "before": -60.065,
+          "after": 9.772,
+          "absoluteDelta": 69.837,
+          "relativeDelta": 1.162690418713061,
+          "withinTolerance": false
+        },
+        {
+          "path": "result.raw.current",
+          "before": 27.570269143886257,
+          "after": 27.57026914388628,
+          "absoluteDelta": 2.1316282072803006e-14,
+          "relativeDelta": 7.731619144360047e-16,
+          "withinTolerance": true
+        },
+        {
+          "path": "result.raw.efficiency",
+          "before": {
+            "$number": "-0"
+          },
+          "after": 0
+        },
+        {
+          "path": "result.raw.powerFactor",
+          "before": -60.0646899955808,
+          "after": 9.772043372827799,
+          "absoluteDelta": 69.8367333684086,
+          "relativeDelta": 1.1626919804888158,
+          "withinTolerance": false
+        }
+      ]
+    }
+  ],
+  "explanations": {
+    "initialized-nameplate": "Old five-argument MotorPowerFactor constructor left frequency/RPM/class/specified efficiency uninitialized. Complete nameplate input makes the near-zero branch deterministic. User separately approved this correction after reviewing before/after values.",
+    "current-normalization-rounding": "Required percentage-to-fraction normalization changes the selected reference-current scale. Supplied-FLA normalization cancels that scale mathematically, but floating-point multiplication/division leaves a last-bit difference. Reproducing the old percent input with the new function reproduces the captured old value; displayed currents are identical.",
+    "motor-performance-percentage": "The form supplies 90 percent but the retained MotorPerformance wrapper passed 90 as a fraction, yielding efficiencies near 9000 percent. Passing 0.90 corrects efficiency and power factor. The specified zero-load path also receives initialized Suite nameplate fields; the zero sign changes without a displayed efficiency change. Approved during planning."
+  },
+  "approvals": [
+    {
+      "scenario": "current-3-0",
+      "path": "result.raw",
+      "before": 62.03310557374408,
+      "after": 62.03310557374413,
+      "absoluteDelta": 4.973799150320701e-14,
+      "relativeDelta": 8.017975408965974e-16,
+      "withinTolerance": true,
+      "cause": "current-normalization-rounding",
+      "approval": "required percent-to-fraction migration; displayed result unchanged",
+      "approved": true
+    },
+    {
+      "scenario": "current-3-25",
+      "path": "result.raw",
+      "before": 81.23980620274482,
+      "after": 81.23980620274484,
+      "absoluteDelta": 2.842170943040401e-14,
+      "relativeDelta": 3.4984954739396875e-16,
+      "withinTolerance": true,
+      "cause": "current-normalization-rounding",
+      "approval": "required percent-to-fraction migration; displayed result unchanged",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-0.25",
+      "path": "result.displayed.efficiency",
+      "before": 8756.559,
+      "after": 86.069,
+      "absoluteDelta": 8670.49,
+      "relativeDelta": 0.9901709107424503,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-0.25",
+      "path": "result.displayed.powerFactor",
+      "before": 0.658,
+      "after": 66.954,
+      "absoluteDelta": 66.29599999999999,
+      "relativeDelta": 100.75379939209725,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-0.25",
+      "path": "result.raw.current",
+      "before": 36.10658053455325,
+      "after": 36.10658053455326,
+      "absoluteDelta": 7.105427357601002e-15,
+      "relativeDelta": 1.967903704091074e-16,
+      "withinTolerance": true,
+      "cause": "current-normalization-rounding",
+      "approval": "required percent-to-fraction migration; displayed result unchanged",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-0.25",
+      "path": "result.raw.efficiency",
+      "before": 8756.558954142425,
+      "after": 86.0691928479951,
+      "absoluteDelta": 8670.48976129443,
+      "relativeDelta": 0.9901708886677135,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-0.25",
+      "path": "result.raw.powerFactor",
+      "before": 0.6580941316084499,
+      "after": 66.95357386448163,
+      "absoluteDelta": 66.29547973287318,
+      "relativeDelta": 100.73859733536932,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-0.75",
+      "path": "result.displayed.efficiency",
+      "before": 9006.063,
+      "after": 89.91,
+      "absoluteDelta": 8916.153,
+      "relativeDelta": 0.9900167253993227,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-0.75",
+      "path": "result.displayed.powerFactor",
+      "before": 0.904,
+      "after": 90.593,
+      "absoluteDelta": 89.68900000000001,
+      "relativeDelta": 99.21349557522124,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-0.75",
+      "path": "result.raw.efficiency",
+      "before": 9006.062571210281,
+      "after": 89.91029824825681,
+      "absoluteDelta": 8916.152272962025,
+      "relativeDelta": 0.9900166918076193,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-0.75",
+      "path": "result.raw.powerFactor",
+      "before": 0.9044154468513277,
+      "after": 90.5927603779257,
+      "absoluteDelta": 89.68834493107437,
+      "relativeDelta": 99.16719715847333,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-1",
+      "path": "result.displayed.efficiency",
+      "before": 9000,
+      "after": 89.1,
+      "absoluteDelta": 8910.9,
+      "relativeDelta": 0.9901,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-1",
+      "path": "result.displayed.powerFactor",
+      "before": 0.925,
+      "after": 93.409,
+      "absoluteDelta": 92.48400000000001,
+      "relativeDelta": 99.98270270270271,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-1",
+      "path": "result.raw.efficiency",
+      "before": 8999.999999999949,
+      "after": 89.10000000000741,
+      "absoluteDelta": 8910.899999999941,
+      "relativeDelta": 0.9900999999999991,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-1",
+      "path": "result.raw.powerFactor",
+      "before": 0.9247521219870698,
+      "after": 93.4093052512109,
+      "absoluteDelta": 92.48455312922383,
+      "relativeDelta": 100.01010101009206,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "power-factor-0",
+      "path": "result.displayed",
+      "before": -62.1,
+      "after": 4.67,
+      "absoluteDelta": 66.77,
+      "relativeDelta": 1.0752012882447664,
+      "withinTolerance": false,
+      "cause": "initialized-nameplate",
+      "approval": "user explicitly approved standalone near-zero correction on 2026-10-28 after reviewing -62.10% to 4.67% evidence",
+      "approved": true
+    },
+    {
+      "scenario": "power-factor-0",
+      "path": "result.raw",
+      "before": -62.09998759583456,
+      "after": 4.669958457276021,
+      "absoluteDelta": 66.76994605311059,
+      "relativeDelta": 1.075200634300759,
+      "withinTolerance": false,
+      "cause": "initialized-nameplate",
+      "approval": "user explicitly approved standalone near-zero correction on 2026-10-28 after reviewing -62.10% to 4.67% evidence",
+      "approved": true
+    },
+    {
+      "scenario": "power-factor-0.05",
+      "path": "result.displayed",
+      "before": -62.1,
+      "after": 4.67,
+      "absoluteDelta": 66.77,
+      "relativeDelta": 1.0752012882447664,
+      "withinTolerance": false,
+      "cause": "initialized-nameplate",
+      "approval": "user explicitly approved standalone near-zero correction on 2026-10-28 after reviewing -62.10% to 4.67% evidence",
+      "approved": true
+    },
+    {
+      "scenario": "power-factor-0.05",
+      "path": "result.raw",
+      "before": -62.09998759583456,
+      "after": 4.669958457276021,
+      "absoluteDelta": 66.76994605311059,
+      "relativeDelta": 1.075200634300759,
+      "withinTolerance": false,
+      "cause": "initialized-nameplate",
+      "approval": "user explicitly approved standalone near-zero correction on 2026-10-28 after reviewing -62.10% to 4.67% evidence",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-zero",
+      "path": "result.displayed.powerFactor",
+      "before": -60.065,
+      "after": 9.772,
+      "absoluteDelta": 69.837,
+      "relativeDelta": 1.162690418713061,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-zero",
+      "path": "result.raw.current",
+      "before": 27.570269143886257,
+      "after": 27.57026914388628,
+      "absoluteDelta": 2.1316282072803006e-14,
+      "relativeDelta": 7.731619144360047e-16,
+      "withinTolerance": true,
+      "cause": "current-normalization-rounding",
+      "approval": "required percent-to-fraction migration; displayed result unchanged",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-zero",
+      "path": "result.raw.efficiency",
+      "before": {
+        "$number": "-0"
+      },
+      "after": 0,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    },
+    {
+      "scenario": "performance-3-zero",
+      "path": "result.raw.powerFactor",
+      "before": -60.0646899955808,
+      "after": 9.772043372827799,
+      "absoluteDelta": 69.8367333684086,
+      "relativeDelta": 1.1626919804888158,
+      "withinTolerance": false,
+      "cause": "motor-performance-percentage",
+      "approval": "user approved on 2026-10-28; includes specified near-zero correction",
+      "approved": true
+    }
+  ],
+  "baselineSha256": "36d68f909802c35a353fc4c0a5fcf806a8ef01ff1a05873f174dcf8028cbe352",
+  "reconciliationChangedScenarios": 0,
+  "runtime": "Chrome Headless 147.0.0.0 / macOS; same browser for legacy, reconciled and migrated captures",
+  "unexplainedDifferences": 0,
+  "sourceLocations": {
+    "initialized-nameplate": [
+      "src/app/tools-suite-api/pumps-suite-api.service.ts::motorPowerFactor",
+      "src/app/psat/psat.service.ts::motorPowerFactor",
+      "Suite pre-refactor include/motorDriven/motor/MotorPowerFactor.h five-argument constructor"
+    ],
+    "current-normalization-rounding": [
+      "src/app/tools-suite-api/pumps-suite-api.service.ts::motorCurrent",
+      "Suite motor_current::calculate supplied-FLA normalization",
+      "motor-driven-results.spec.ts legacy-percent provenance test"
+    ],
+    "motor-performance-percentage": [
+      "src/app/tools-suite-api/pumps-suite-api.service.ts::motorPerformance",
+      "src/app/calculator/motors/motor-performance/motor-performance.service.ts percentage form inputs",
+      "Suite MotorPerformance near-zero dependency initialization"
+    ]
+  },
+  "regressionProtection": "src/app/tools-suite-api/motor-driven-regression-tests/motor-driven-results.spec.ts: immutable input comparison, exact per-field accepted-difference gate, required nameplate data, report formatting and fraction/ownership tests",
+  "impact": "Recalculated MotorPerformance efficiency/power-factor and standalone near-zero PF display values change only for documented approved corrections. Captured pumps, fans, annual totals and inventory actions are unchanged; no saved data migration.",
+  "candidateDesktopCommit": "40034c7002035fdccb607d214817972280434401",
+  "review": {
+    "base": "9b7ff3d7416ff8172ad3ab24fc01ab2ef29acbc9",
+    "head": "40034c7002035fdccb607d214817972280434401",
+    "reviewer": "desktop_integration_review",
+    "readiness": "Ready",
+    "unresolvedFindings": 0,
+    "resolvedFinding": "P2 smoke assertion now rejects nonfinite values; browser and focused tests rerun passed",
+    "scope": "Electron-specific coverage excluded at user request"
+  }
+}

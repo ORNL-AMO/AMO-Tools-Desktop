@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../../../../../environments/environment';
 import { Subscription } from 'rxjs';
 import { FullLoadAmpsService } from '../full-load-amps.service';
 
@@ -9,6 +10,8 @@ import { FullLoadAmpsService } from '../full-load-amps.service';
     standalone: false
 })
 export class FullLoadAmpsHelpComponent implements OnInit {
+  docsLink: string = environment.measurDocsUrl;
+
   currentField: string;
   currentFieldSub: Subscription;
 
