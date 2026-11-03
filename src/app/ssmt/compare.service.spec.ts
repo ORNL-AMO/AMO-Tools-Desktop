@@ -21,4 +21,13 @@ describe('CompareService blowdown routing', () => {
   it('does not report a change when both values match', () => {
     expect(service.isSendBlowdownToDeaeratorDifferent(buildSsmt(false), buildSsmt(false))).toBeFalse();
   });
+
+  it('includes a routing-only modification in aggregate boiler differences', () => {
+    expect(service.checkBoilerDifferent(buildSsmt(false), buildSsmt(true))).toBeTrue();
+  });
+
+  it('treats a missing legacy value as false', () => {
+    expect(service.isSendBlowdownToDeaeratorDifferent(buildSsmt(), buildSsmt(false))).toBeFalse();
+    expect(service.checkBoilerDifferent(buildSsmt(), buildSsmt(false))).toBeFalse();
+  });
 });

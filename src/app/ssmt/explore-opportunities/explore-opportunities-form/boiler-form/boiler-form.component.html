@@ -251,6 +251,47 @@
 
   <li class="explore-opps-item">
     <div class="checkbox mt-2">
+      <label for="modifySendBlowdownToDeaerator" class="steam-check-label">
+        <input type="checkbox" id="modifySendBlowdownToDeaerator"
+          (focus)="focusField('sendBlowdownToDeaerator')" (change)="toggleSendBlowdownToDeaerator()"
+          [(ngModel)]="showSendBlowdownToDeaerator" /> Send Blowdown Flash Steam to Deaerator
+      </label>
+    </div>
+  </li>
+  <hr class="mt-0 mb-0">
+
+<div *ngIf="showSendBlowdownToDeaerator">
+  <li class="explore-opps-header">
+    <span class="explore-opps-title text-muted">Baseline</span>
+    <span class="explore-opps-title text-muted">Modifications</span>
+  </li>
+
+  <li class="explore-opps-item mb-2">
+    <form class="explore-opps-form" [formGroup]="baselineForm">
+      <div class="text-center">
+        <label for="baselineSendBlowdownToDeaerator" class="baseline-value-label">Send to Deaerator</label>
+        <div class="text-muted text-center baseline-value-input">
+          <span *ngIf="baselineForm.controls.sendBlowdownToDeaerator.value">Yes</span>
+          <span *ngIf="!baselineForm.controls.sendBlowdownToDeaerator.value">No</span>
+        </div>
+      </div>
+    </form>
+    <form class="explore-opps-form" [formGroup]="modificationForm">
+      <div class="form-group explore-opps-formgroup">
+        <label for="modificationSendBlowdownToDeaerator" class="mod-value-label">Send to Deaerator</label>
+        <select name="modificationSendBlowdownToDeaerator" id="modificationSendBlowdownToDeaerator"
+          class="form-control mod-max-width" (focus)="focusField('sendBlowdownToDeaerator')" (change)="save()"
+          formControlName="sendBlowdownToDeaerator">
+          <option [ngValue]="true">Yes</option>
+          <option [ngValue]="false">No</option>
+        </select>
+      </div>
+    </form>
+  </li>
+</div>
+
+  <li class="explore-opps-item">
+    <div class="checkbox mt-2">
       <label for="modifyPreheatMakeupWater" class="steam-check-label">
         <input type="checkbox" id="modifyPreheatMakeupWater" (focus)="focusField('preheatMakeupWater')"
           (change)="togglePreheatBlowdownWater()" [(ngModel)]="showPreheatBlowdownWater" /> Preheat Makeup Water with

@@ -56,6 +56,7 @@ export class BoilerFormComponent implements OnInit {
   showFuelType: boolean = false;
   showBlowdownRate: boolean = false;
   showBlowdownFlashed: boolean = false;
+  showSendBlowdownToDeaerator: boolean = false;
   showPreheatBlowdownWater: boolean = false;
   showInitialSteamTemperature: boolean = false;
   showDeaeratorConditions: boolean = false;
@@ -121,11 +122,12 @@ export class BoilerFormComponent implements OnInit {
     this.initFuel();
     this.initBlowdownRate();
     this.initBlowdownFlashed();
+    this.initSendBlowdownToDeaerator();
     this.initPreheatMakeupWater();
     this.initInitialSteamTemperature();
     this.initDeaeratorConditions();
 
-    if (this.showCombustionEfficiency || this.showFuelType || this.showBlowdownRate || this.showBlowdownFlashed || this.showPreheatBlowdownWater || this.showInitialSteamTemperature || this.showDeaeratorConditions) {
+    if (this.showCombustionEfficiency || this.showFuelType || this.showBlowdownRate || this.showBlowdownFlashed || this.showSendBlowdownToDeaerator || this.showPreheatBlowdownWater || this.showInitialSteamTemperature || this.showDeaeratorConditions) {
       this.ssmt.modifications[this.exploreModIndex].exploreOppsShowBoilerData = {hasOpportunity: true, display: "Adjust Boiler Operations"};      
     } else {
       this.ssmt.modifications[this.exploreModIndex].exploreOppsShowBoilerData = {hasOpportunity: false, display: "Adjust Boiler Operations"};      
@@ -221,6 +223,11 @@ export class BoilerFormComponent implements OnInit {
     }
   }
 
+  initSendBlowdownToDeaerator() {
+    this.showSendBlowdownToDeaerator = this.baselineForm.controls.sendBlowdownToDeaerator.value
+      !== this.modificationForm.controls.sendBlowdownToDeaerator.value;
+  }
+
   initPreheatMakeupWater() {
     if (this.baselineForm.controls.preheatMakeupWater.value !== this.modificationForm.controls.preheatMakeupWater.value ||
       this.baselineForm.controls.approachTemperature.value !== this.modificationForm.controls.approachTemperature.value) {
@@ -253,12 +260,14 @@ export class BoilerFormComponent implements OnInit {
       this.showFuelType = false;
       this.showBlowdownRate = false;
       this.showBlowdownFlashed = false;
+      this.showSendBlowdownToDeaerator = false;
       this.showPreheatBlowdownWater = false;
       this.showInitialSteamTemperature = false;
       this.showDeaeratorConditions = false;
       this.toggleDeaeratorConditions();
       this.toggleInitialSteamTemperature();
       this.togglePreheatBlowdownWater();
+      this.toggleSendBlowdownToDeaerator();
       this.toggleBlowdownFlashed();
       this.toggleBlowdownRate();
       this.toggleCombustionEfficiency();
@@ -293,6 +302,13 @@ export class BoilerFormComponent implements OnInit {
   toggleBlowdownFlashed() {
     if (this.showBlowdownFlashed === false) {
       this.modificationForm.controls.blowdownFlashed.patchValue(this.baselineForm.controls.blowdownFlashed.value);
+      this.save();
+    }
+  }
+
+  toggleSendBlowdownToDeaerator() {
+    if (this.showSendBlowdownToDeaerator === false) {
+      this.modificationForm.controls.sendBlowdownToDeaerator.patchValue(this.baselineForm.controls.sendBlowdownToDeaerator.value);
       this.save();
     }
   }
