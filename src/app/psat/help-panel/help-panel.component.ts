@@ -103,7 +103,7 @@ export class HelpPanelComponent implements OnInit {
     let psatResults: {baselineResults: PsatOutputs, modificationResults: PsatOutputs, annualSavings: number, percentSavings: number};
     if(this.modification){
       this.modificationName = this.modification.psat.name;
-      this.modification.psat.valid = this.psatService.isPsatValid(this.modification.psat.inputs, false);
+      this.modification.psat.valid = this.psatService.isPsatValid(this.modification.psat.inputs, false, this.settings);
       psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.modification.psat.inputs)
     }else{
       psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings);

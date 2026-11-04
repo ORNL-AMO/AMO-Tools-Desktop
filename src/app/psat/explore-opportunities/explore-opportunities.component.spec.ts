@@ -128,7 +128,7 @@ describe('ExploreOpportunitiesComponent', () => {
 
       component.getResults();
 
-      expect(psatServiceSpy.isPsatValid).toHaveBeenCalledWith(component.psat.modifications[0].psat.inputs, false);
+      expect(psatServiceSpy.isPsatValid).toHaveBeenCalledWith(component.psat.modifications[0].psat.inputs, false, component.settings);
       expect(psatServiceSpy.getPsatResults).toHaveBeenCalledWith(component.psat.inputs, component.settings, component.psat.modifications[0].psat.inputs);
     });
 
@@ -140,7 +140,7 @@ describe('ExploreOpportunitiesComponent', () => {
 
       component.getResults();
 
-      expect(psatServiceSpy.isPsatValid).toHaveBeenCalledWith(component.psat.modifications[0].psat.inputs, true);
+      expect(psatServiceSpy.isPsatValid).toHaveBeenCalledWith(component.psat.modifications[0].psat.inputs, true, component.settings);
       expect(psatServiceSpy.getPsatResults).toHaveBeenCalledWith(component.psat.inputs, component.settings);
       expect(component.modificationResults).toEqual(component.baselineResults);
     });
@@ -152,7 +152,7 @@ describe('ExploreOpportunitiesComponent', () => {
 
       component.getResults();
 
-      expect(psatServiceSpy.isPsatValid).toHaveBeenCalledWith(component.psat.inputs, true);
+      expect(psatServiceSpy.isPsatValid).toHaveBeenCalledWith(component.psat.inputs, true, component.settings);
       expect(psatServiceSpy.getPsatResults).toHaveBeenCalledWith(component.psat.inputs, component.settings);
       expect(component.psat.valid).toBe(MOCK_VALID);
     });

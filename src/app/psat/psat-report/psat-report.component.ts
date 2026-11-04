@@ -132,7 +132,7 @@ export class PsatReportComponent implements OnInit {
 
   getResults(psat: PSAT, settings: Settings, isBaseline: boolean): PsatOutputs {
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(psat.inputs));
-    psat.valid = this.psatService.isPsatValid(psatInputs, isBaseline);
+    psat.valid = this.psatService.isPsatValid(psatInputs, isBaseline, settings);
     if (psat.valid.isValid) {
       if (isBaseline || !psat.inputs.whatIfScenario){
         return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
@@ -145,12 +145,14 @@ export class PsatReportComponent implements OnInit {
   }
 
   getSavingsPercentage(baseline: PSAT, modification: PSAT): number {
+    if (baseline.valid?.isValid === false || modification.valid?.isValid === false) { return 0; }
     const costSavings = baseline.outputs.annual_cost - modification.outputs.annual_cost;
     const savingsPercent = Math.round((costSavings / baseline.outputs.annual_cost) * 100);
     return savingsPercent;
   }
 
   getPaybackPeriod(baseline: PSAT, modification: PSAT): number {
+    if (baseline.valid?.isValid === false || modification.valid?.isValid === false) { return 0; }
     const annualCostSavings = (baseline.outputs?.annual_cost ?? 0) - (modification.outputs?.annual_cost ?? 0);
     const implementationCosts = modification.inputs?.implementationCosts ?? 0;
     if (!implementationCosts || annualCostSavings <= 1) return 0;

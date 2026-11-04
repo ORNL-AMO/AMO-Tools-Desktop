@@ -179,7 +179,7 @@ describe('HelpPanelComponent', () => {
       component.getResults();
 
       expect(component.modificationName).toBe('Modification A');
-      expect(psatServiceSpy.isPsatValid).toHaveBeenCalledWith(modification.psat.inputs, false);
+      expect(psatServiceSpy.isPsatValid).toHaveBeenCalledWith(modification.psat.inputs, false, component.settings);
       expect(modification.psat.valid).toBe(validity);
       expect(psatServiceSpy.getPsatResults).toHaveBeenCalledWith(MOCK_PSAT_INPUTS, MOCK_SETTINGS, modification.psat.inputs);
       expect(component.annualSavings).toBe(200);

@@ -98,7 +98,7 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   renderChart() {
     this.initChartSetup();
-    this.dataPointTraces = this.selectedDataPoints.slice(1).map(point => {
+    this.dataPointTraces = this.selectedDataPoints.filter(point => point.pointColor !== '#000').map(point => {
       const trace = this.specificSpeedService.getTraceDataFromPoint(point);
       if (point.calculationMethod === 'legacy') { trace.name += ' (earlier method)'; }
       return trace;
@@ -185,12 +185,13 @@ export class SpecificSpeedGraphComponent implements OnInit {
   }
 
   createDataPoint(graphData) {
-    if (!Number.isFinite(graphData.points[0].x) || !Number.isFinite(graphData.points[0].y)) { return; }
+    const correction = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, graphData.points[0].x);
+    if (!Number.isFinite(graphData.points[0].x) || !Number.isFinite(correction)) { return; }
     let selectedPoint: DataPoint = {
       calculationMethod: 'hi-2020-pchip',
       pointColor: this.pointColors[(this.dataPointTraces.length + 1) % this.pointColors.length],
       x: graphData.points[0].x,
-      y: graphData.points[0].y
+      y: correction
     }
 
     let selectedPointTrace = this.specificSpeedService.getTraceDataFromPoint(selectedPoint);

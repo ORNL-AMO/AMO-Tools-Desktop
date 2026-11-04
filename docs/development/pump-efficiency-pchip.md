@@ -39,22 +39,44 @@ WASM filename/path or Electron loading changes are included.
 
 ## Verification and packages
 
-Author validation privately copies freshly rebuilt Suite WASM/declarations into this checkout's
-ignored node_modules. This is local source validation, **not** acceptance of package pin
-`1.2.7-beta.446.1`. Both committed pins stay aligned until the reviewed exact PCHIP beta is published;
-then update both manifests and npm-generated lockfiles and repeat affected verification.
+Initial author validation used a private freshly rebuilt Suite module. Published-beta acceptance now
+uses **measur-tools-suite@1.2.7-beta.459.1**, installed from npm in both root and process-flow packages.
+Both manifests and both npm-generated lockfiles change together; no unrelated dependency pins changed.
+[Suite PR #459](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/459) CI passed declarations/docs,
+Linux native/Valgrind and rebuilt WASM checks. Publication evidence is the
+[exact beta comment](https://github.com/ORNL-AMO/MEASUR-Tools-Suite/pull/459#issuecomment-6633132045).
 
 - Suite: 8626 native assertions / 362 cases and 301 fresh-WASM browser tests passed.
 - Independent SciPy 1.17.1 goldens use extrapolate=False; every knot and interval samples are covered.
-- Final local-source Desktop suite: 1666 tests passed, including startup migration, graphs and failed requests.
-- Application and spec TypeScript checks passed; complete diff whitespace passed.
-- Web build passed. Process-flow: 257 passed, one existing todo; typecheck passed.
-- The immutable 72-scenario motor-driven gate retains its original approved differences.
-- Doxygen generated the changed Suite pages with its existing BibTeX error and unrelated warnings;
-  no new pump/PCHIP diagnostic was reported.
+- Published-beta Desktop full suite: 1670 tests passed, with the immutable 72-scenario motor-driven
+  baseline and its earlier accepted differences unchanged.
+- Application/spec TypeScript checks and complete diff whitespace passed.
+- Final post-beta web build passed.
+- Published-beta process-flow verification: 257 passed, one existing todo; typecheck passed.
+- Doxygen generated changed Suite pages with the existing local BibTeX error/unrelated warnings;
+  no new pump/PCHIP diagnostic. CI declarations/documentation checks passed.
 
-Exact review commits and published-beta verification are pending.
-Final-package adoption requires the same two-manifest/two-lockfile update and repeated checks.
+### Independent Desktop review and fixes
+
+Initial review of `96c39cccca82db3cdb8a3f52864cf2c28a471e7f` against base
+`cbf65e9dd1dcecc2b7da9deca0c2c3da4fa2a542` found five actionable issues, all addressed:
+
+1. Measured modifications incorrectly required an optimal efficiency. Measured scenarios now bypass
+   HI/supplied-optimal requirements, with real production-service regression for a null saved optimum.
+2. Optional settings bypassed HI validation and empty results could imply 100% savings. Production
+   callers now pass settings; HI validation fails closed without them; comparison/report savings are
+   zero when either scenario is invalid. Invalid modifications are excluded from integrated energy
+   options. Direct modified calculation still requires a valid supplied efficiency and HI duty.
+3. Achievable graph refresh appended duplicate current points after an unavailable duty. Current
+   rows are inserted at index zero, preserving saved user points through repeated refreshes.
+4. Speed graph rendering dropped the first historical point after current-point removal. It now
+   filters by current-point identity instead of array position.
+5. Clicking a historical speed point could falsely label old values as HI. The correction is now
+   recomputed and range-checked before adding a new HI point; unavailable clicks add nothing.
+
+The regression tests use the published WASM, actual form/CO2/calculation services, and both graph
+lifecycles. Final fix-candidate review commits/readiness will be recorded before PR creation. Final
+package adoption remains deferred until engineering acceptance and requires repeating affected checks.
 
 ## Engineering release gates
 

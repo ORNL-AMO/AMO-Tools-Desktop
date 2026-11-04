@@ -174,7 +174,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       }
 
       if (this.selectedDataPoints.length === 0 || this.selectedDataPoints[0].id !== undefined) {
-        this.selectedDataPoints.push(maximumPoint);
+        this.selectedDataPoints.unshift(maximumPoint);
       } else {
         this.selectedDataPoints.shift();
         this.selectedDataPoints.unshift(maximumPoint);

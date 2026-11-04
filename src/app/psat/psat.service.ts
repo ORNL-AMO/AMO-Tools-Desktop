@@ -94,7 +94,7 @@ export class PsatService {
     if (!usablePumpEfficiency(psatInputs.pump_specified) || psatInputs.pumpEfficiencyModel?.source === 'needs-review') {
       return this.emptyResults();
     }
-    let valid: PsatValid = this.isPsatValid(psatInputs, false, settings)
+    let valid: PsatValid = this.isPsatValid({...psatInputs, whatIfScenario: true}, false, settings)
     if (valid.isValid) {
       let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
       tmpInputs.margin = 1;
@@ -138,7 +138,9 @@ export class PsatService {
     if (integratedAssessment.hasModifications) {
       let modificationEnergyOptions: Array<ModificationEnergyOption> = [];
       psat.modifications.forEach(modification => {
-        let modificationOutputs = this.resultsModified(modification.psat.inputs, settings);
+        if (!this.isPsatValid(modification.psat.inputs, false, settings).isValid) { return; }
+        let modificationOutputs = modification.psat.inputs.whatIfScenario === true
+          ? this.resultsModified(modification.psat.inputs, settings) : this.resultsExisting(modification.psat.inputs, settings);
         modificationOutputs.annual_energy = this.convertUnitsService.value(modificationOutputs.annual_energy).from('MWh').to('kWh');
         modificationOutputs.annual_energy = this.convertUnitsService.roundVal(modificationOutputs.annual_energy, 0);
 
@@ -621,12 +623,15 @@ export class PsatService {
     //create copies of inputs to use for calcs
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(baselinePsatInputs));
     let isPsatValid: PsatValid = this.isPsatValid(psatInputs, true, settings);
+    const baselineValid = isPsatValid.isValid;
+    let modificationValid = false;
     if (isPsatValid.isValid) {
       baselineResults = this.resultsExisting(psatInputs, settings);
     }
     if (modificationPsatInputs) {
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
       isPsatValid = this.isPsatValid(modInputs, false, settings);
+      modificationValid = isPsatValid.isValid;
       if (isPsatValid.isValid) {
         if (modInputs.whatIfScenario == true) {
           modificationResults = this.resultsModified(modInputs, settings);
@@ -638,6 +643,11 @@ export class PsatService {
     annualSavings = baselineResults.annual_cost - modificationResults.annual_cost;
     co2EmissionsSavings = baselineResults.co2EmissionsOutput - modificationResults.co2EmissionsOutput;
     percentSavings = Number(Math.round((((annualSavings * 100) / baselineResults.annual_cost) * 100) / 100).toFixed(0));
+    if (!baselineValid || (modificationPsatInputs && !modificationValid)) {
+      annualSavings = 0;
+      co2EmissionsSavings = 0;
+      percentSavings = 0;
+    }
     return {
       baselineResults: baselineResults,
       modificationResults: modificationResults,
@@ -668,11 +678,11 @@ export class PsatService {
     let tmpPumpFluidForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(psatInputs);
     let tmpMotorForm: UntypedFormGroup = this.motorService.getFormFromObj(psatInputs);
     let tmpFieldDataForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(psatInputs, isBaseline);
-    const estimatedDutyValid = !settings || psatInputs.pumpEfficiencyModel?.source !== 'hi-2020-pchip' ||
-      psatInputs.pump_style === 11 || psatInputs.pump_style === 12 || usablePumpEfficiency(this.pumpEfficiency(
+    const estimatedDutyValid = psatInputs.pumpEfficiencyModel?.source !== 'hi-2020-pchip' ||
+      psatInputs.pump_style === 11 || psatInputs.pump_style === 12 || (!!settings && usablePumpEfficiency(this.pumpEfficiency(
         psatInputs.pump_style, psatInputs.flow_rate, psatInputs.pump_rated_speed, psatInputs.kinematic_viscosity,
-        psatInputs.stages, psatInputs.head, 100, settings).max * 100);
-    const efficiencyValid = isBaseline || (usablePumpEfficiency(psatInputs.pump_specified) && estimatedDutyValid &&
+        psatInputs.stages, psatInputs.head, 100, settings).max * 100));
+    const efficiencyValid = isBaseline || psatInputs.whatIfScenario !== true || (usablePumpEfficiency(psatInputs.pump_specified) && estimatedDutyValid &&
       psatInputs.pumpEfficiencyModel?.source !== 'needs-review');
     return {
       isValid: efficiencyValid && tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid,

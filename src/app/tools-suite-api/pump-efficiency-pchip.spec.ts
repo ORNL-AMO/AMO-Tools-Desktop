@@ -6,10 +6,23 @@ import { AchievableEfficiencyService } from '../calculator/pumps/achievable-effi
 import { AchievableEfficiencyGraphComponent } from '../calculator/pumps/achievable-efficiency/achievable-efficiency-graph/achievable-efficiency-graph.component';
 import { SpecificSpeedGraphComponent } from '../calculator/pumps/specific-speed/specific-speed-graph/specific-speed-graph.component';
 import { SpecificSpeedService } from '../calculator/pumps/specific-speed/specific-speed.service';
+import { PsatService } from '../psat/psat.service';
+import { PumpFluidService } from '../psat/pump-fluid/pump-fluid.service';
+import { MotorService } from '../psat/motor/motor.service';
+import { FieldDataService } from '../psat/field-data/field-data.service';
+import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
+import { ChangeDetectorRef } from '@angular/core';
+import { PsatReportComponent } from '../psat/psat-report/psat-report.component';
 
 describe('HI 2020 pump-efficiency production WASM integration', () => {
   let services: MotorDrivenServices;
-  beforeAll(async () => { services = await initializeMotorDrivenServices(); });
+  beforeAll(async () => {
+    services = await initializeMotorDrivenServices();
+    const forms = new UntypedFormBuilder();
+    services.psat = new PsatService(services.pumps, services.convert,
+      new AssessmentCo2SavingsService(services.convert, forms), new PumpFluidService(forms),
+      new MotorService(forms), new FieldDataService(forms));
+  });
 
   it('preserves measured/modified energy, costs, efficiencies and report rounding after legacy migration', () => {
     for (const style of Array.from({length: 11}, (_, i) => i)) {
@@ -95,5 +108,84 @@ describe('HI 2020 pump-efficiency production WASM integration', () => {
     expect(graph.selectedDataPoints).toEqual([]);
     graph.settings = {...imperial, flowMeasurement: 'm3/h'};
     expect(graph.setXRange().range.max).toBeCloseTo(services.convert.value(1300).from('gpm').to('m3/h'), 10);
+  });
+
+  it('preserves real measured modifications with no saved optimum through migration and comparison', () => {
+    const baseline = pumpInputs({whatIfScenario: false});
+    const measured = pumpInputs({whatIfScenario: false, pump_specified: null, motor_field_power: 70});
+    const before = services.psat.resultsExisting(structuredClone(measured), imperial);
+    const assessment: PSAT = {inputs: baseline, modifications: [{id: 'measured', psat: {inputs: measured}}]};
+    migratePumpEfficiencies(assessment);
+    expect(measured.pumpEfficiencyModel.source).toBe('needs-review');
+    expect(services.psat.isPsatValid(measured, false, imperial).isValid).toBeTrue();
+    const comparison = services.psat.getPsatResults(baseline, imperial, measured);
+    expect(comparison.modificationResults).toEqual(before);
+    expect(comparison.modificationResults.annual_cost).toBeGreaterThan(0);
+    expect(comparison.percentSavings).toBeLessThan(100);
+  });
+
+  it('rejects unsupported HI duties consistently and never reports their empty output as savings', () => {
+    const baseline = pumpInputs({whatIfScenario: false});
+    const unavailable = pumpInputs({whatIfScenario: true, pump_style: 4, flow_rate: 2000,
+      pumpEfficiencyModel: {version: 1, source: 'hi-2020-pchip'}});
+    expect(services.psat.isPsatValid(unavailable, false).isValid).toBeFalse();
+    expect(services.psat.isPsatValid(unavailable, false, imperial).isValid).toBeFalse();
+    const comparison = services.psat.getPsatResults(baseline, imperial, unavailable);
+    expect(comparison.baselineResults.annual_cost).toBeGreaterThan(0);
+    expect(comparison.annualSavings).toBe(0);
+    expect(comparison.percentSavings).toBe(0);
+    expect(comparison.co2EmissionsSavings).toBe(0);
+    const report = new PsatReportComponent(null, null, null, services.psat, null);
+    const baselineScenario: PSAT = {inputs: baseline};
+    const invalidScenario: PSAT = {inputs: unavailable};
+    baselineScenario.outputs = report.getResults(baselineScenario, imperial, true);
+    invalidScenario.outputs = report.getResults(invalidScenario, imperial, false);
+    expect(invalidScenario.valid.isValid).toBeFalse();
+    expect(report.getSavingsPercentage(baselineScenario, invalidScenario)).toBe(0);
+    expect(report.getPaybackPeriod(baselineScenario, invalidScenario)).toBe(0);
+  });
+
+  it('retains saved achievable points across unavailable-to-valid refreshes without duplicate current rows', () => {
+    const forms = new UntypedFormBuilder();
+    const service = new AchievableEfficiencyService(forms, services.convert);
+    const cd = jasmine.createSpyObj<ChangeDetectorRef>('cd', ['detectChanges']);
+    const graph = new AchievableEfficiencyGraphComponent(services.psat, service, cd, null);
+    graph.settings = imperial;
+    graph.efficiencyForm = service.getFormFromObj({pumpType: 6, flowRate: 7000, rpm: 2000,
+      kinematicViscosity: 1.107, stageCount: 1, head: 137, pumpEfficiency: 100});
+    graph.efficiencyChart = service.efficiencyChart.getValue();
+    graph.pointColors = ['red', 'blue'];
+    const saved = {id: 'saved', x: 400, y: 70, calculationMethod: 'legacy' as const};
+    graph.selectedDataPoints = [{id: undefined, x: 100, y: 60}, saved];
+    graph.setMaxAndAvgPoints();
+    expect(graph.selectedDataPoints).toEqual([saved]);
+    graph.efficiencyForm.controls.flowRate.setValue(2000);
+    graph.setMaxAndAvgPoints();
+    graph.setMaxAndAvgPoints();
+    expect(graph.selectedDataPoints.length).toBe(2);
+    expect(graph.selectedDataPoints[0].id).toBeUndefined();
+    expect(graph.selectedDataPoints[1]).toBe(saved);
+  });
+
+  it('renders all historical speed points and recomputes clicked values before attributing HI provenance', () => {
+    const forms = new UntypedFormBuilder();
+    const service = new SpecificSpeedService(forms, services.convert);
+    const cd = jasmine.createSpyObj<ChangeDetectorRef>('cd', ['detectChanges']);
+    const graph = new SpecificSpeedGraphComponent(services.psat, service, cd, null);
+    graph.speedForm = service.initForm(imperial);
+    graph.speedForm.controls.pumpType.setValue(6);
+    graph.speedForm.controls.pumpRPM.setValue(1);
+    service.selectedDataPoints.next([{pointColor: 'red', x: 7000, y: 99, calculationMethod: 'legacy'},
+      {pointColor: 'blue', x: 990, y: 88, calculationMethod: 'legacy'}]);
+    graph.pointColors = ['red', 'blue'];
+    graph.renderChart();
+    expect(graph.dataPointTraces.length).toBe(2);
+    const count = graph.selectedDataPoints.length;
+    graph.createDataPoint({points: [{x: 7000, y: 99}]});
+    expect(graph.selectedDataPoints.length).toBe(count);
+    graph.createDataPoint({points: [{x: 990, y: 88}]});
+    expect(graph.selectedDataPoints[count].y).toBe(6.59);
+    expect(graph.selectedDataPoints[count].calculationMethod).toBe('hi-2020-pchip');
+    expect(graph.selectedDataPoints[1].y).toBe(88);
   });
 });
