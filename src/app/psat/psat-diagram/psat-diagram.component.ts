@@ -43,7 +43,9 @@ export class PsatDiagramComponent implements OnInit {
   }
 
   getResults(psat: PSAT, settings: Settings, isModification?: boolean): PsatOutputs {
-    if (!isModification) {
+    psat.valid = this.psatService.isPsatValid(psat.inputs, !isModification, settings);
+    if (!psat.valid.isValid) { return this.psatService.emptyResults(); }
+    if (!isModification || psat.inputs.whatIfScenario !== true) {
       return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
     } else {
       return this.psatService.resultsModified(JSON.parse(JSON.stringify(psat.inputs)), settings);

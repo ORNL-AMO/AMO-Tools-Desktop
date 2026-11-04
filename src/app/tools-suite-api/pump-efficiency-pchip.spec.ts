@@ -13,6 +13,17 @@ import { FieldDataService } from '../psat/field-data/field-data.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { PsatReportComponent } from '../psat/psat-report/psat-report.component';
+import { PsatReportRollupService } from '../report-rollup/psat-report-rollup.service';
+import { ExportToJustifiPsatService } from '../shared/export-to-justifi-modal/export-to-justifi-services/export-to-justifi-psat.service';
+import { SettingsDbService } from '../indexedDb/settings-db.service';
+import { Assessment } from '../shared/models/assessment';
+import { PsatSummaryCardComponent } from '../dashboard/directory-dashboard/directory-items/assessment-item/psat-summary-card/psat-summary-card.component';
+import { PsatDiagramComponent } from '../psat/psat-diagram/psat-diagram.component';
+import { PsatSankeyComponent } from '../shared/psat-sankey/psat-sankey.component';
+import { PsatChartsService } from '../psat/services/psat-charts.service';
+import { PlotlyService } from 'angular-plotly.js';
+import { TestBed } from '@angular/core/testing';
+import * as ExcelJS from 'exceljs';
 
 describe('HI 2020 pump-efficiency production WASM integration', () => {
   let services: MotorDrivenServices;
@@ -128,7 +139,7 @@ describe('HI 2020 pump-efficiency production WASM integration', () => {
     const baseline = pumpInputs({whatIfScenario: false});
     const unavailable = pumpInputs({whatIfScenario: true, pump_style: 4, flow_rate: 2000,
       pumpEfficiencyModel: {version: 1, source: 'hi-2020-pchip'}});
-    expect(services.psat.isPsatValid(unavailable, false).isValid).toBeFalse();
+    expect(services.psat.isPsatValid(unavailable, false, undefined).isValid).toBeFalse();
     expect(services.psat.isPsatValid(unavailable, false, imperial).isValid).toBeFalse();
     const comparison = services.psat.getPsatResults(baseline, imperial, unavailable);
     expect(comparison.baselineResults.annual_cost).toBeGreaterThan(0);
@@ -187,5 +198,75 @@ describe('HI 2020 pump-efficiency production WASM integration', () => {
     expect(graph.selectedDataPoints[count].y).toBe(6.59);
     expect(graph.selectedDataPoints[count].calculationMethod).toBe('hi-2020-pchip');
     expect(graph.selectedDataPoints[1].y).toBe(88);
+  });
+
+  it('omits unavailable rollup comparisons, retains original modification indexes and falls back to baseline', () => {
+    const invalid = {id: 'invalid', psat: {name: 'Unavailable HI', inputs: pumpInputs({whatIfScenario: true,
+      pump_style: 4, flow_rate: 2000, pumpEfficiencyModel: {version: 1, source: 'hi-2020-pchip'}})}};
+    const measured = {id: 'measured', psat: {name: 'Measured', inputs: pumpInputs({whatIfScenario: false,
+      pump_specified: null, motor_field_power: 70})}};
+    const assessment: Assessment = {id: 1, name: 'Synthetic pump', type: 'PSAT',
+      psat: {name: 'Baseline', setupDone: true, inputs: pumpInputs({whatIfScenario: false}), modifications: [invalid, measured]}};
+    migratePumpEfficiencies(assessment.psat);
+    const item = {assessment, settings: {...imperial, pumpsRollupUnit: 'MWh'}};
+    const rollup = new PsatReportRollupService(services.psat, services.convert);
+    rollup.psatAssessments.next([item]);
+    rollup.setAllPsatResults([item]);
+    expect(rollup.allPsatResults[0].modificationIndexes).toEqual([1]);
+    rollup.initPsatCompare();
+    expect(rollup.selectedPsats.value[0].selectedIndex).toBe(1);
+    rollup.setResultsFromSelected(rollup.selectedPsats.value);
+    rollup.setTotals(item.settings);
+    expect(rollup.totals.savingPotential).toBeGreaterThan(0);
+    expect(rollup.totals.savingPotential).toBeLessThan(rollup.selectedPsatResults[0].baselineResults.annual_cost);
+    assessment.psat.modifications = [invalid];
+    rollup.setAllPsatResults([item]);
+    rollup.initPsatCompare();
+    expect(rollup.selectedPsats.value[0].selectedIndex).toBe(-1);
+    rollup.setResultsFromSelected(rollup.selectedPsats.value);
+    rollup.setTotals(item.settings);
+    expect(rollup.totals.savingPotential).toBe(0);
+    rollup.setResultsFromSelected([{...rollup.selectedPsats.value[0], modification: invalid.psat, selectedIndex: 0}]);
+    expect(rollup.selectedPsatResults).toEqual([]);
+  });
+
+  it('does not export an unavailable HI duty as full baseline energy savings', () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Assessments');
+    workbook.addWorksheet('Energy_Efficiency_Measures');
+    const settings = jasmine.createSpyObj<SettingsDbService>('settings', ['getByAssessmentId']);
+    settings.getByAssessmentId.and.returnValue(imperial);
+    const exporter = new ExportToJustifiPsatService(services.psat, settings);
+    const assessment: Assessment = {id: 1, name: 'Synthetic pump', type: 'PSAT',
+      psat: {setupDone: true, inputs: pumpInputs({whatIfScenario: false}), modifications: [{id: 'unavailable',
+        psat: {inputs: pumpInputs({whatIfScenario: true, pump_style: 4, flow_rate: 2000,
+          pumpEfficiencyModel: {version: 1, source: 'hi-2020-pchip'}})}}]}};
+    expect(exporter.fillPSATWorksheet(workbook, assessment, 2, 2)).toBe(2);
+    expect(worksheet.getCell('E2').value).toBeGreaterThan(0);
+    expect(worksheet.getCell('G2').value).toBeNull();
+  });
+
+  it('keeps dashboard, Sankey and diagram measured results available while validating HI duties with settings', () => {
+    const measured: PSAT = {inputs: pumpInputs({whatIfScenario: false, pump_specified: null})};
+    migratePumpEfficiencies(measured);
+    const expected = services.psat.resultsExisting(structuredClone(measured.inputs), imperial);
+    const summary = new PsatSummaryCardComponent(services.psat, null, null);
+    summary.psatResults = expected;
+    expect(summary.getResults(measured, imperial, false)).toEqual(expected);
+    const diagram = new PsatDiagramComponent(services.psat, services.convert);
+    expect(diagram.getResults(measured, imperial, true)).toEqual(expected);
+    TestBed.configureTestingModule({providers: [{provide: PsatService, useValue: services.psat},
+      {provide: PlotlyService, useValue: {}}, {provide: PsatChartsService, useValue: {}}]});
+    const sankey = TestBed.runInInjectionContext(() => new PsatSankeyComponent());
+    sankey.psat = measured;
+    sankey.settings = imperial;
+    sankey.isBaseline = false;
+    sankey.getChartData();
+    expect(sankey.validPsat.isValid).toBeTrue();
+    expect(sankey.selectedResults).toEqual(expected);
+    const validHI: PSAT = {inputs: pumpInputs({whatIfScenario: true, pump_style: 6,
+      pumpEfficiencyModel: {version: 1, source: 'hi-2020-pchip'}})};
+    expect(summary.getResults(validHI, imperial, false).annual_cost).toBeGreaterThan(0);
+    expect(validHI.valid.isValid).toBeTrue();
   });
 });

@@ -42,6 +42,8 @@ export interface PsatResultsData {
 
 
 export interface AllPsatResultsData {
+    /** Original assessment indexes for the valid modification results. */
+    modificationIndexes?: number[];
     baselineResults: PsatOutputs;
     modificationResults: Array<PsatOutputs>;
     assessmentId: number;

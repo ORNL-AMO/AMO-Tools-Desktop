@@ -46,7 +46,7 @@ function makeOutputs(overrides: Partial<PsatOutputs> = {}): PsatOutputs {
 function makeModification(name = 'Modification 1', inputOverrides: Partial<PsatInputs> = {}): Modification {
   return {
     id: 'mod-1',
-    psat: { name, inputs: makePsatInputs(inputOverrides) },
+    psat: { name, inputs: makePsatInputs({whatIfScenario: true, ...inputOverrides}) },
   } as Modification;
 }
 
@@ -65,7 +65,9 @@ describe('PsatDiagramComponent', () => {
   let convertUnitsServiceSpy: jasmine.SpyObj<ConvertUnitsService>;
 
   beforeEach(async () => {
-    psatServiceSpy = jasmine.createSpyObj('PsatService', ['getPumpStyleFromEnum', 'resultsExisting', 'resultsModified']);
+    psatServiceSpy = jasmine.createSpyObj('PsatService', ['getPumpStyleFromEnum', 'resultsExisting', 'resultsModified', 'isPsatValid', 'emptyResults']);
+    psatServiceSpy.isPsatValid.and.returnValue({isValid: true, pumpFluidValid: true, motorValid: true, fieldDataValid: true});
+    psatServiceSpy.emptyResults.and.returnValue(makeOutputs());
     psatServiceSpy.getPumpStyleFromEnum.and.returnValue('Centrifugal');
     psatServiceSpy.resultsExisting.and.returnValue(makeOutputs());
     psatServiceSpy.resultsModified.and.returnValue(makeOutputs({ motor_efficiency: 88.1 }));

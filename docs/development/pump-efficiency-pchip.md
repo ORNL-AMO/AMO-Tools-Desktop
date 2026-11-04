@@ -48,7 +48,7 @@ Linux native/Valgrind and rebuilt WASM checks. Publication evidence is the
 
 - Suite: 8626 native assertions / 362 cases and 301 fresh-WASM browser tests passed.
 - Independent SciPy 1.17.1 goldens use extrapolate=False; every knot and interval samples are covered.
-- Published-beta Desktop full suite: 1670 tests passed, with the immutable 72-scenario motor-driven
+- Final published-beta Desktop full suite: 1673 tests passed, with the immutable 72-scenario motor-driven
   baseline and its earlier accepted differences unchanged.
 - Application/spec TypeScript checks and complete diff whitespace passed.
 - Final post-beta web build passed.
@@ -73,6 +73,15 @@ Initial review of `96c39cccca82db3cdb8a3f52864cf2c28a471e7f` against base
    filters by current-point identity instead of array position.
 5. Clicking a historical speed point could falsely label old values as HI. The correction is now
    recomputed and range-checked before adding a new HI point; unavailable clicks add nothing.
+
+Follow-up review found two additional downstream groups: rollup/export comparisons could still turn
+empty results into full savings, and dashboard/Sankey validation omitted settings and measured routing.
+All production validation callers now pass required settings, enforced by TypeScript. Dashboard, Sankey,
+diagram and motor-warning consumers respect measured scenarios. Rollups filter unavailable comparisons,
+retain original modification indexes, and fall back to baseline when none are valid; invalid explicit
+selections are omitted. The Justifi export leaves unavailable savings blank instead of exporting baseline
+energy as savings. Actual-service regression cases cover these paths. The preexisting Justifi measured
+export behavior is unchanged; this work does not correct unrelated export semantics.
 
 The regression tests use the published WASM, actual form/CO2/calculation services, and both graph
 lifecycles. Final fix-candidate review commits/readiness will be recorded before PR creation. Final

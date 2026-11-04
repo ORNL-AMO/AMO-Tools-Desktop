@@ -674,7 +674,7 @@ export class PsatService {
   }
 
 
-  isPsatValid(psatInputs: PsatInputs, isBaseline: boolean, settings?: Settings): PsatValid {
+  isPsatValid(psatInputs: PsatInputs, isBaseline: boolean, settings: Settings): PsatValid {
     let tmpPumpFluidForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(psatInputs);
     let tmpMotorForm: UntypedFormGroup = this.motorService.getFormFromObj(psatInputs);
     let tmpFieldDataForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(psatInputs, isBaseline);

@@ -40,7 +40,8 @@ export class PsatReportRollupService {
     let tmpResults: Array<PsatCompare> = new Array<PsatCompare>();
     this.allPsatResults.forEach(result => {
       let minCost = _.minBy(result.modificationResults, (result) => { return result.annual_cost; });
-      let modIndex = _.findIndex(result.modificationResults, { annual_cost: minCost.annual_cost });
+      const resultIndex = _.findIndex(result.modificationResults, { annual_cost: minCost.annual_cost });
+      const modIndex = result.modificationIndexes?.[resultIndex] ?? resultIndex;
       let psatAssessments = this.psatAssessments.value;
       let assessmentIndex = _.findIndex(psatAssessments, (val) => { return val.assessment.id === result.assessmentId; });
       let item = psatAssessments[assessmentIndex];
@@ -66,37 +67,39 @@ export class PsatReportRollupService {
   }
 
   setAllPsatResults(psatArr: Array<ReportItem>) {
-    this.allPsatResults = new Array<AllPsatResultsData>();
+    this.allPsatResults = [];
     psatArr.forEach(val => {
-      if (val.assessment.psat.setupDone) {
-        let baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.assessment.psat.inputs)), val.settings);
-        if (val.assessment.psat.modifications) {
-          if (val.assessment.psat.modifications.length !== 0) {
-            let modResultsArr = new Array<PsatOutputs>();
-            val.assessment.psat.modifications.forEach(mod => {
-              let tmpResults: PsatOutputs = this.psatService.resultsModified(JSON.parse(JSON.stringify(mod.psat.inputs)), val.settings);
-              modResultsArr.push(tmpResults);
-            });
-            this.allPsatResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id });
-          } else {
-            let modResultsArr = new Array<PsatOutputs>();
-            modResultsArr.push(baselineResults);
-            this.allPsatResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
-          }
-        } else {
-          let modResultsArr = new Array<PsatOutputs>();
-          modResultsArr.push(baselineResults);
-          this.allPsatResults.push({ baselineResults: baselineResults, modificationResults: modResultsArr, assessmentId: val.assessment.id, isBaseline: true });
-        }
-      }
+      const psat = val.assessment.psat;
+      if (!psat.setupDone || !this.psatService.isPsatValid(psat.inputs, true, val.settings).isValid) { return; }
+      const baselineResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), val.settings);
+      const modificationResults: PsatOutputs[] = [];
+      const modificationIndexes: number[] = [];
+      (psat.modifications ?? []).forEach((mod, index) => {
+        mod.psat.valid = this.psatService.isPsatValid(mod.psat.inputs, false, val.settings);
+        if (!mod.psat.valid.isValid) { return; }
+        const input = JSON.parse(JSON.stringify(mod.psat.inputs));
+        modificationResults.push(input.whatIfScenario === true
+          ? this.psatService.resultsModified(input, val.settings) : this.psatService.resultsExisting(input, val.settings));
+        modificationIndexes.push(index);
+      });
+      const isBaseline = modificationResults.length === 0;
+      if (isBaseline) { modificationResults.push(baselineResults); }
+      this.allPsatResults.push({baselineResults, modificationResults, modificationIndexes,
+        assessmentId: val.assessment.id, isBaseline});
     });
   }
 
   setResultsFromSelected(selectedPsats: Array<PsatCompare>) {
     this.selectedPsatResults = new Array<PsatResultsData>();
     selectedPsats.forEach(val => {
+      if (!this.psatService.isPsatValid(val.baseline.inputs, true, val.settings).isValid) { return; }
+      val.modification.valid = this.psatService.isPsatValid(val.modification.inputs, val.selectedIndex === -1, val.settings);
+      if (!val.modification.valid.isValid) { return; }
       let baselineResults: PsatOutputs = this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.baseline.inputs)), val.settings);
-      let modificationResults: PsatOutputs = this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings);
+      let modificationResults: PsatOutputs = val.selectedIndex === -1 ? baselineResults
+        : val.modification.inputs.whatIfScenario === true
+          ? this.psatService.resultsModified(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings)
+          : this.psatService.resultsExisting(JSON.parse(JSON.stringify(val.modification.inputs)), val.settings);
       this.selectedPsatResults.push({ baselineResults: baselineResults, modificationResults: modificationResults, assessmentId: val.assessmentId, name: val.name, modName: val.modification.name, baseline: val.baseline, modification: val.modification, settings: val.settings });
     });
   }

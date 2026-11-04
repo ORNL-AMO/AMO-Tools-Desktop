@@ -110,7 +110,7 @@ export class PsatSankeyComponent implements OnInit {
 
   getChartData() {
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    this.psat.valid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline);
+    this.psat.valid = this.psatService.isPsatValid(this.selectedInputs, this.isBaseline, this.settings);
     if (!this.baselineResults && !this.modResults) {
       this.validPsat = this.psat.valid;
       this.getResults();
@@ -121,8 +121,8 @@ export class PsatSankeyComponent implements OnInit {
 
   getResults() {
     this.selectedInputs = JSON.parse(JSON.stringify(this.psat.inputs));
-    if (this.psat.valid) {
-      if (this.isBaseline) {
+    if (this.psat.valid?.isValid) {
+      if (this.isBaseline || this.selectedInputs.whatIfScenario !== true) {
         this.selectedResults = this.psatService.resultsExisting(this.selectedInputs, this.settings);
       } else {
         this.selectedResults = this.psatService.resultsModified(this.selectedInputs, this.settings);
