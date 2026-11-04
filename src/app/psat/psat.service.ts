@@ -13,6 +13,7 @@ import { PSAT } from '../shared/models/psat';
 import { MotorPerformanceResults } from '../calculator/motors/motor-performance/motor-performance.service';
 import { AssessmentCo2SavingsService } from '../shared/assessment-co2-savings/assessment-co2-savings.service';
 import { PumpsSuiteApiService } from '../tools-suite-api/pumps-suite-api.service';
+import { usablePumpEfficiency } from '../shared/pump-efficiency';
 import { IntegratedAssessment, IntegratedEnergyOptions, ModificationEnergyOption } from '../shared/assessment-integration/assessment-integration.service';
 import { EnergyUseItem } from '../shared/models/treasure-hunt';
 import { Co2SavingsData } from '../calculator/utilities/co2-savings/co2-savings.service';
@@ -76,7 +77,7 @@ export class PsatService {
 
   //results
   resultsExisting(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    let valid: PsatValid = this.isPsatValid(psatInputs, true)
+    let valid: PsatValid = this.isPsatValid(psatInputs, true, settings)
     if (valid.isValid) {
       let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
       let psatOutputs: PsatOutputs = this.pumpsSuiteApiService.resultsExisting(tmpInputs);
@@ -90,7 +91,10 @@ export class PsatService {
   }
 
   resultsModified(psatInputs: PsatInputs, settings: Settings): PsatOutputs {
-    let valid: PsatValid = this.isPsatValid(psatInputs, false)
+    if (!usablePumpEfficiency(psatInputs.pump_specified) || psatInputs.pumpEfficiencyModel?.source === 'needs-review') {
+      return this.emptyResults();
+    }
+    let valid: PsatValid = this.isPsatValid(psatInputs, false, settings)
     if (valid.isValid) {
       let tmpInputs: PsatInputs = this.convertInputs(psatInputs, settings);
       tmpInputs.margin = 1;
@@ -386,6 +390,23 @@ export class PsatService {
   }
 
   //specific speed
+  pumpEfficiencyLimits(pumpStyle: number, settings?: Settings) {
+    const limits = this.pumpsSuiteApiService.pumpEfficiencyLimits(pumpStyle);
+    if (settings && settings.flowMeasurement !== 'gpm' && limits.supported) {
+      return {...limits,
+        minimumFlowRate: this.convertUnitsService.value(limits.minimumFlowRate).from('gpm').to(settings.flowMeasurement),
+        maximumFlowRate: this.convertUnitsService.value(limits.maximumFlowRate).from('gpm').to(settings.flowMeasurement)};
+    }
+    return limits;
+  }
+
+  pumpEfficiencyRangeMessage(pumpStyle: number, settings: Settings): string {
+    const limits = this.pumpEfficiencyLimits(pumpStyle, settings);
+    return limits.supported
+      ? `HI 2020 estimation requires flow from ${limits.minimumFlowRate.toLocaleString()} to ${limits.maximumFlowRate.toLocaleString()} ${settings.flowMeasurement} and specific speed from ${limits.minimumSpecificSpeed.toLocaleString()} to ${limits.maximumSpecificSpeed.toLocaleString()} (US convention). Enter a supplied efficiency for other duties.`
+      : 'This pump type requires a supplied efficiency.';
+  }
+
   achievableEfficiency(
     pumpStyle: number,
     specificSpeed: number
@@ -599,13 +620,13 @@ export class PsatService {
 
     //create copies of inputs to use for calcs
     let psatInputs: PsatInputs = JSON.parse(JSON.stringify(baselinePsatInputs));
-    let isPsatValid: PsatValid = this.isPsatValid(psatInputs, true);
+    let isPsatValid: PsatValid = this.isPsatValid(psatInputs, true, settings);
     if (isPsatValid.isValid) {
       baselineResults = this.resultsExisting(psatInputs, settings);
     }
     if (modificationPsatInputs) {
       let modInputs: PsatInputs = JSON.parse(JSON.stringify(modificationPsatInputs));
-      isPsatValid = this.isPsatValid(modInputs, false);
+      isPsatValid = this.isPsatValid(modInputs, false, settings);
       if (isPsatValid.isValid) {
         if (modInputs.whatIfScenario == true) {
           modificationResults = this.resultsModified(modInputs, settings);
@@ -643,13 +664,19 @@ export class PsatService {
   }
 
 
-  isPsatValid(psatInputs: PsatInputs, isBaseline: boolean): PsatValid {
+  isPsatValid(psatInputs: PsatInputs, isBaseline: boolean, settings?: Settings): PsatValid {
     let tmpPumpFluidForm: UntypedFormGroup = this.pumpFluidService.getFormFromObj(psatInputs);
     let tmpMotorForm: UntypedFormGroup = this.motorService.getFormFromObj(psatInputs);
     let tmpFieldDataForm: UntypedFormGroup = this.fieldDataService.getFormFromObj(psatInputs, isBaseline);
+    const estimatedDutyValid = !settings || psatInputs.pumpEfficiencyModel?.source !== 'hi-2020-pchip' ||
+      psatInputs.pump_style === 11 || psatInputs.pump_style === 12 || usablePumpEfficiency(this.pumpEfficiency(
+        psatInputs.pump_style, psatInputs.flow_rate, psatInputs.pump_rated_speed, psatInputs.kinematic_viscosity,
+        psatInputs.stages, psatInputs.head, 100, settings).max * 100);
+    const efficiencyValid = isBaseline || (usablePumpEfficiency(psatInputs.pump_specified) && estimatedDutyValid &&
+      psatInputs.pumpEfficiencyModel?.source !== 'needs-review');
     return {
-      isValid: tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid,
-      pumpFluidValid: tmpPumpFluidForm.valid,
+      isValid: efficiencyValid && tmpPumpFluidForm.valid && tmpMotorForm.valid && tmpFieldDataForm.valid,
+      pumpFluidValid: efficiencyValid && tmpPumpFluidForm.valid,
       motorValid: tmpMotorForm.valid,
       fieldDataValid: tmpFieldDataForm.valid
     }

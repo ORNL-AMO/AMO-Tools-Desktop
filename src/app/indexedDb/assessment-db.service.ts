@@ -10,6 +10,7 @@ import { CalculatorDbService } from './calculator-db.service';
 import { Calculator } from '../shared/models/calculators';
 import { DiagramIdbService } from './diagram-idb.service';
 import { Diagram } from '../shared/models/diagram';
+import { migratePumpEfficiencies } from '../shared/pump-efficiency';
 declare const packageJson;
 
 @Injectable()
@@ -56,12 +57,17 @@ export class AssessmentDbService {
     return this.dbService.getAll(this.storeName).pipe(
       mergeMap(async (assessments: Array<Assessment>) => {
         for await (let assessment of assessments) {
-          if (assessment.appVersion !== environment.version) {
-            this.updateDataService.updateAssessmentVersion(assessment);
-            let assessmentCalculators: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
-            let updatedAssessmentCalculators = this.updateDataService.updateAssessmentCalculatorVersion(assessmentCalculators);
-            if (updatedAssessmentCalculators) {
-              this.calculatorDbService.saveAssessmentCalculator(assessment, updatedAssessmentCalculators);
+          // Feature migration also applies to old imports carrying the current app version.
+          const pumpMigration = assessment.type === 'PSAT' && migratePumpEfficiencies(assessment.psat);
+          const versionChanged = assessment.appVersion !== environment.version;
+          if (versionChanged || pumpMigration) {
+            if (versionChanged) {
+              this.updateDataService.updateAssessmentVersion(assessment);
+              const assessmentCalculators: Calculator = this.calculatorDbService.getByAssessmentId(assessment.id);
+              const updatedAssessmentCalculators = this.updateDataService.updateAssessmentCalculatorVersion(assessmentCalculators);
+              if (updatedAssessmentCalculators) {
+                this.calculatorDbService.saveAssessmentCalculator(assessment, updatedAssessmentCalculators);
+              }
             }
             await Promise.all([
               firstValueFrom(this.updateWithObservable(assessment)),

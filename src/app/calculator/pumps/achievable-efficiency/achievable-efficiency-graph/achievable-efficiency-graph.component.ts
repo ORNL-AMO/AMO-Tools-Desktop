@@ -6,7 +6,6 @@ import { graphColors } from '../../../../shared/graphColors';
 import { FormGroup } from '../../../../../../node_modules/@angular/forms';
 import { SimpleChart, TraceData, TraceCoordinates } from '../../../../shared/models/plotting';
 import { AchievableEfficiencyService, EfficiencyPoint, EfficiencyTrace } from '../achievable-efficiency.service';
-import { pumpTypeRanges } from '../../../../psat/psatConstants';
 import { PlotlyService } from 'angular-plotly.js';
 import { defaultPlotlyConfig } from '../../../../shared/helperFunctions';
 @Component({
@@ -79,13 +78,17 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (!this.firstChange) {
       if (this.checkForm()) {
-        this.achievableEfficiencyService.initChartData();
+        if (changes.toggleResetData) { this.achievableEfficiencyService.initChartData(); }
         this.renderChart();
       }
     } else {
       this.firstChange = false;
     }
   }
+
+  get rangeGuidance(): string { return this.psatService.pumpEfficiencyRangeMessage(this.efficiencyForm.controls.pumpType.value, this.settings); }
+
+  get hasLegacyPoints(): boolean { return this.selectedDataPoints?.some(point => point.calculationMethod === 'legacy') ?? false; }
 
   save() {
     this.achievableEfficiencyService.efficiencyChart.next(this.efficiencyChart);
@@ -98,6 +101,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     this.efficiencyChart = this.achievableEfficiencyService.efficiencyChart.getValue();
     this.dataPointTraces = this.achievableEfficiencyService.dataPointTraces.getValue();
     this.selectedDataPoints = this.achievableEfficiencyService.selectedDataPoints.getValue();
+    this.selectedDataPoints.forEach(point => { point.calculationMethod ??= 'legacy'; });
     this.setMaxAvgLines();
     this.setMaxAndAvgPoints();
     this.newPlot();
@@ -160,7 +164,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     if (!isInvalidPlot && isDefinedPlot) {
       this.validEfficiency = true;
       let maximumPoint: EfficiencyPoint = {
-        id: undefined,
+        calculationMethod: 'hi-2020-pchip',
+      id: undefined,
         pointColor: this.getPointColor(0),
         x: currentPoints[0].x,
         y: currentPoints[0].y,
@@ -168,7 +173,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         avgMaxEffColumn: this.getAvgMaxEffColumn(currentPoints[1].y, currentPoints[0].y)
       }
 
-      if (this.selectedDataPoints.length === 0) {
+      if (this.selectedDataPoints.length === 0 || this.selectedDataPoints[0].id !== undefined) {
         this.selectedDataPoints.push(maximumPoint);
       } else {
         this.selectedDataPoints.shift();
@@ -186,7 +191,8 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   
       let averagePoint: EfficiencyPoint = {
-        id: undefined,
+        calculationMethod: 'hi-2020-pchip',
+      id: undefined,
         pointColor: this.getPointColor(1),
         x: currentPoints[1].x,
         y: currentPoints[1].y,
@@ -204,6 +210,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
     } else {
       this.validEfficiency = false;
+      if (this.selectedDataPoints[0]?.id === undefined) { this.selectedDataPoints.shift(); }
+      for (let i = this.defaultTraceCount; i < this.defaultTraceCount + 2; ++i) {
+        if (this.efficiencyChart.data[i]) { this.efficiencyChart.data[i].x = []; this.efficiencyChart.data[i].y = []; }
+      }
     }
   }
 
@@ -214,18 +224,20 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     let efficiencyMax = this.calculateYmax(flowRateValue);
     let efficiencyAvg = this.calculateYaverage(flowRateValue);
 
-    if (efficiencyMax >= 0 && efficiencyAvg >= 0) {
+    if (Number.isFinite(efficiencyMax) && Number.isFinite(efficiencyAvg) && efficiencyMax >= 0 && efficiencyMax <= 100 && efficiencyAvg >= 0 && efficiencyAvg <= 100) {
       points.push({
-        id: undefined,
+        calculationMethod: 'hi-2020-pchip',
+      id: undefined,
         pairId: undefined,
         x: flowRateValue,
         y: efficiencyMax,
         avgMaxEffColumn: this.getAvgMaxEffColumn(efficiencyMax, efficiencyAvg)
       });
     }
-    if (efficiencyAvg >= 0) {
+    if (points.length && efficiencyAvg >= 0) {
       points.push({
-        id: undefined,
+        calculationMethod: 'hi-2020-pchip',
+      id: undefined,
         x: flowRateValue,
         y: efficiencyAvg,
         avgMaxEffColumn: undefined
@@ -237,8 +249,10 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
   createDataPoints(graphData) {
     let dataPoints: EfficiencyPoint[] = this.getCurrentPoints(true, graphData.points[0].x);
+    if (dataPoints.length < 2) { return; }
 
     let maximumPoint: EfficiencyPoint = {
+      calculationMethod: 'hi-2020-pchip',
       id: undefined,
       pairId: undefined,
       pointColor: this.getPointColor(0),
@@ -253,6 +267,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
     maximumPointTrace.hovertemplate = hoverTemplate;
 
     let averagePoint: EfficiencyPoint = {
+      calculationMethod: 'hi-2020-pchip',
       id: undefined,
       pointColor: this.getPointColor(1),
       x: dataPoints[1].x,
@@ -286,12 +301,9 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
 
 
   setXRange() {
-    let ranges = JSON.parse(JSON.stringify(pumpTypeRanges));
-    let xRange = {
-      range: { min: 0, max: 0 },
-      increment: 10,
-    };
-    xRange.range = ranges.find(pumpType => pumpType.value == this.efficiencyForm.controls.pumpType.value).range;
+    const limits = this.psatService.pumpEfficiencyLimits(this.efficiencyForm.controls.pumpType.value, this.settings);
+    const xRange = {range: {min: limits.supported ? limits.minimumFlowRate : 0,
+      max: limits.supported ? limits.maximumFlowRate : 0}, increment: 10};
     if (xRange.range.min <= 5000) {
       xRange.increment = 10;
     } else if (xRange.range.max <= 50000) {
@@ -316,7 +328,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.settings
       );
       return tmpResults.average * 100;
-    } else { return 0; }
+    } else { return NaN; }
   }
 
   calculateYmax(flow: number) {
@@ -332,7 +344,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
         this.settings
       );
       return tmpResults.max * 100;
-    } else { return 0; }
+    } else { return NaN; }
   }
 
   getAvgData(): TraceCoordinates {
@@ -342,7 +354,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       y: [],
     };
     for (let i = xRange.range.min; i < xRange.range.max; i = i + xRange.increment) {
-      if (this.calculateYaverage(i) <= 100) {
+      if (Number.isFinite(this.calculateYaverage(i)) && this.calculateYaverage(i) >= 0 && this.calculateYaverage(i) <= 100) {
         data.x.push(i);
         data.y.push(this.calculateYaverage(i));
       }
@@ -356,7 +368,7 @@ export class AchievableEfficiencyGraphComponent implements OnInit {
       y: [],
     };
     for (let i = xRange.range.min; i < xRange.range.max; i = i + xRange.increment) {
-      if (this.calculateYmax(i) <= 100) {
+      if (Number.isFinite(this.calculateYmax(i)) && this.calculateYmax(i) >= 0 && this.calculateYmax(i) <= 100) {
         data.x.push(i);
         data.y.push(this.calculateYmax(i));
       }

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PsatInputs } from '../../shared/models/psat';
+import { usablePumpEfficiency } from '../../shared/pump-efficiency';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import{ WholeNumberValidator } from '../../shared/validators/whole-number';
 
@@ -68,6 +69,13 @@ export class PumpFluidService {
   }
 
   getPsatInputsFromForm(form: UntypedFormGroup, psatInputs: PsatInputs): PsatInputs {
+    if (form.controls.pumpType.value === 11 && usablePumpEfficiency(form.controls.specifiedPumpEfficiency.value) &&
+        (form.controls.pumpType.value !== psatInputs.pump_style || form.controls.specifiedPumpEfficiency.value !== psatInputs.pump_specified ||
+         psatInputs.pumpEfficiencyModel?.source === 'needs-review')) {
+      psatInputs.pumpEfficiencyModel = {...psatInputs.pumpEfficiencyModel, version: 1, source: 'specified',
+        originalPumpStyle: psatInputs.pumpEfficiencyModel?.originalPumpStyle ??
+          (psatInputs.pump_style >= 0 && psatInputs.pump_style <= 10 ? psatInputs.pump_style : undefined)};
+    }
     psatInputs.pump_style = form.controls.pumpType.value;
     psatInputs.pump_specified = form.controls.specifiedPumpEfficiency.value;
     psatInputs.pump_rated_speed = form.controls.pumpRPM.value;

@@ -95,6 +95,7 @@ export class AssessmentService {
     let newPsatInputs: PsatInputs = {
       pump_style: 6,
       pump_specified: null,
+      pumpEfficiencyModel: { version: 1, source: 'hi-2020-pchip' },
       pump_rated_speed: 1780,
       drive: 0,
       kinematic_viscosity: 1.107,

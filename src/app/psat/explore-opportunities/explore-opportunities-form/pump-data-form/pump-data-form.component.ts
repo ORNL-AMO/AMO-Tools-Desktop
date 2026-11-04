@@ -5,6 +5,7 @@ import { PumpFluidService } from '../../../pump-fluid/pump-fluid.service';
 import { pumpTypesConstant, driveConstants } from '../../../psatConstants';
 import { PsatService } from '../../../psat.service';
 import { PsatOutputs, PSAT } from '../../../../shared/models/psat';
+import { physicalPumpStyle, usablePumpEfficiency } from '../../../../shared/pump-efficiency';
 
 @Component({
     selector: 'app-pump-data-form',
@@ -33,6 +34,7 @@ export class PumpDataFormComponent implements OnInit {
   pumpTypes: Array<{ display: string, value: number }>;
   drives: Array<{ display: string, value: number }>;
   baselinePumpEfficiency: number;
+  pumpEfficiencyError: string;
   constructor(private pumpFluidService: PumpFluidService, private psatService: PsatService, private cd: ChangeDetectorRef) {
 
   }
@@ -107,7 +109,9 @@ export class PumpDataFormComponent implements OnInit {
   }
 
   enablePumpType() {
-    this.modificationForm.controls.pumpType.patchValue(this.baselineForm.controls.pumpType.value);
+    this.modificationForm.controls.pumpType.patchValue(
+      this.psat.modifications[this.exploreModIndex].psat.inputs.pumpEfficiencyModel?.originalPumpStyle ??
+      (this.baselineForm.controls.pumpType.value === 11 ? physicalPumpStyle(this.psat.inputs) : this.baselineForm.controls.pumpType.value));
     this.modificationForm.controls.pumpType.enable();
     this.getPumpEfficiency();
   }
@@ -119,10 +123,26 @@ export class PumpDataFormComponent implements OnInit {
   }
 
 
-  getPumpEfficiency() {
+  reestimatePumpEfficiency() {
+    this.modificationForm.controls.pumpType.patchValue(physicalPumpStyle(this.psat.modifications[this.exploreModIndex].psat.inputs));
+    this.getPumpEfficiency();
+  }
+
+  getPumpEfficiency(): boolean {
+    const input = this.psat.modifications[this.exploreModIndex].psat.inputs;
+    const style = this.modificationForm.controls.pumpType.value;
+    if (style === 11 || style === 12) { this.calculate(); return true; }
     let tmpEfficiency: number = this.psatService.pumpEfficiency(this.modificationForm.controls.pumpType.value, this.psat.modifications[this.exploreModIndex].psat.inputs.flow_rate, this.psat.modifications[this.exploreModIndex].psat.inputs.pump_rated_speed, this.psat.modifications[this.exploreModIndex].psat.inputs.kinematic_viscosity, this.psat.modifications[this.exploreModIndex].psat.inputs.stages, this.psat.modifications[this.exploreModIndex].psat.inputs.head, 100, this.settings).max;
+    if (!usablePumpEfficiency(tmpEfficiency * 100)) {
+      this.pumpEfficiencyError = this.psatService.pumpEfficiencyRangeMessage(style, this.settings);
+      this.modificationForm.controls.pumpType.patchValue(input.pump_style);
+      return false;
+    }
+    this.pumpEfficiencyError = undefined;
+    input.pumpEfficiencyModel = {version: 1, source: 'hi-2020-pchip', originalPumpStyle: style};
     this.modificationForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency * 100);
     this.calculate();
+    return true;
   }
 
   setPumpTypes() {
@@ -130,7 +150,6 @@ export class PumpDataFormComponent implements OnInit {
     //this.baselineForm = this.pumpFluidService.updateSpecifiedPumpEfficiency(this.baselineForm);
     this.modificationForm = this.pumpFluidService.updateSpecifiedPumpEfficiency(this.modificationForm);
     this.getPumpEfficiency();
-    this.calculate();
   }
 
   setMotorDrive() {

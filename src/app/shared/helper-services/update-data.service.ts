@@ -8,6 +8,7 @@ import { LightingReplacementData } from '../models/lighting';
 import { FSAT } from '../models/fans';
 import { AirLeakSurveyData, CompressedAirPressureReductionData, CompressedAirReductionData, ElectricityReductionData, FacilityCompressorData } from '../models/standalone';
 import { PSAT } from '../models/psat';
+import { migratePumpEfficiencies } from '../pump-efficiency';
 import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
@@ -290,6 +291,7 @@ export class UpdateDataService {
     }
 
     updatePsat(assessment: Assessment): Assessment {
+        migratePumpEfficiencies(assessment.psat);
         if (assessment.psat.modifications && assessment.psat.modifications.length > 0) {
             assessment.psat.modifications.map(mod => {
                 if (mod.id === undefined || mod.id === null) {
@@ -321,7 +323,7 @@ export class UpdateDataService {
     }
 
     addWhatIfScenarioPsat(psat: PSAT): PSAT {
-        if (!psat.inputs.whatIfScenario) {
+        if (psat.inputs.whatIfScenario === undefined || psat.inputs.whatIfScenario === null) {
             psat.inputs.whatIfScenario = true;
         }
         return psat;

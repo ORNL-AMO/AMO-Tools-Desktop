@@ -1,4 +1,30 @@
 <form [formGroup]="psatForm">
+  @if (psat.inputs.pumpEfficiencyModel?.source === 'legacy-preserved') {
+    <div class="mx-3 my-2 small">
+      The saved pump efficiency is preserved as a specified value.
+      <button type="button" class="btn btn-link btn-sm" [disabled]="!selected"
+        (click)="reestimatePumpEfficiency()">Re-estimate with HI 2020</button>
+    </div>
+  }
+  @if (psat.inputs.pumpEfficiencyModel?.source === 'needs-review') {
+    <div class="mx-3 my-2 text-warning" role="status">
+      This saved scenario has no usable pump efficiency. Enter a supplied efficiency or request a new estimate.
+      <button type="button" class="btn btn-link btn-sm" [disabled]="!selected"
+        (click)="reestimatePumpEfficiency()">Re-estimate with HI 2020</button>
+    </div>
+  }
+  @if (baseline && psat.inputs.pumpEfficiencyModel?.originalPumpStyle != null) {
+    <div class="mx-3 my-2 form-group">
+      <label for="preservedOptimalEfficiency">Specified optimal efficiency (%)</label>
+      <input id="preservedOptimalEfficiency" type="number" min="0" max="100" step="any"
+        class="form-control" formControlName="specifiedPumpEfficiency"
+        (input)="psatForm.controls.pumpType.setValue(11); save()">
+      <span class="small text-muted">This value does not replace measured baseline efficiency.</span>
+    </div>
+  }
+  @if (pumpEfficiencyError) {
+    <div class="mx-3 my-2 text-warning" role="status">{{pumpEfficiencyError}} The saved efficiency has been retained.</div>
+  }
   @if (inSetup) {
     <div class="d-flex flex-column">
       <div class="header mr-2 ml-2">

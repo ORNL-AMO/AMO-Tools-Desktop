@@ -1,3 +1,4 @@
+import { physicalPumpStyle } from '../../shared/pump-efficiency';
 import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
@@ -206,7 +207,7 @@ export class PsatReportAdapter implements ReportDataAdapter {
     ];
 
     const pumpFluidRows: string[][] = [
-      buildSummaryRow(mods, 'Pump Type', inputs.pump_style, m => m.psat?.inputs?.pump_style,
+      buildSummaryRow(mods, 'Pump Type', physicalPumpStyle(inputs), m => physicalPumpStyle(m.psat?.inputs),
         v => this.psatService.getPumpStyleFromEnum(v)),
       buildSummaryRow(mods, 'Speed (rpm)', inputs.pump_rated_speed, m => m.psat?.inputs?.pump_rated_speed),
       buildSummaryRow(mods, 'Drive', inputs.drive, m => m.psat?.inputs?.drive,

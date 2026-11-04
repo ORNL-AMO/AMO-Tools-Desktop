@@ -17,15 +17,15 @@ import {
   type MotorPerformance,
   type MotorPerformanceOutput,
   type MotorPowerFactorInput,
-  type PumpEfficiency as SuitePumpEfficiency,
-  type PumpEfficiencyResults,
+  type PumpEfficiencyInput,
+  type PumpEfficiencyResult,
+  type PumpEfficiencyLimits,
   type PumpHeadResult,
   type PumpHeadSuctionGaugeInput,
   type PumpHeadSuctionTankInput,
   type PumpResultOutput,
   type PumpResultSystemInput,
   type PumpStyle,
-  type OptimalSpecificSpeedCorrection,
 } from 'measur-tools-suite';
 
 @Injectable()
@@ -169,30 +169,26 @@ export class PumpsSuiteApiService {
   }
 
   achievableEfficiency(pumpStyle: number, specificSpeed: number): number {
-    let pumpStyleEnum: PumpStyle = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
-    let instance: OptimalSpecificSpeedCorrection = new this.toolsSuiteApiService.ToolsSuiteModule.OptimalSpecificSpeedCorrection(pumpStyleEnum, specificSpeed);
-    let results: number = instance.calculate() * 100;
-    instance.delete();
-    return results;
+    const style: PumpStyle = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
+    return this.toolsSuiteApiService.ToolsSuiteModule.calculateOptimalSpecificSpeedCorrection({style, specificSpeed}) * 100;
   }
 
-  pumpEfficiency(pumpStyle: number,
-      flowRate: number,
-      rpm: number,
-      kinematicViscosity: number,
-      stageCount: number,
-      head: number,
-      pumpEfficiencyInput: number): { average: number, max: number } {
-    let pumpStyleEnum: PumpStyle = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
-    let instance: SuitePumpEfficiency = new this.toolsSuiteApiService.ToolsSuiteModule.PumpEfficiency(pumpStyleEnum, pumpEfficiencyInput, rpm, kinematicViscosity, stageCount, flowRate, head);
-    let pumpEfficiency: PumpEfficiencyResults = instance.calculate();
-    let results: { average: number, max: number } = {
-      average: pumpEfficiency.average,
-      max: pumpEfficiency.max
-    };
-    pumpEfficiency.delete();
-    instance.delete();
-    return results;
+  pumpEfficiencyLimits(pumpStyle: number): PumpEfficiencyLimits {
+    if (!Number.isInteger(pumpStyle) || pumpStyle < 0 || pumpStyle > 12) {
+      return {supported: false, minimumFlowRate: NaN, maximumFlowRate: NaN,
+        minimumSpecificSpeed: NaN, maximumSpecificSpeed: NaN};
+    }
+    const style: PumpStyle = this.suiteApiHelperService.getPumpStyleEnum(pumpStyle);
+    const limits: PumpEfficiencyLimits = this.toolsSuiteApiService.ToolsSuiteModule.getPumpEfficiencyLimits(style);
+    return {...limits};
+  }
+
+  pumpEfficiency(pumpStyle: number, flowRate: number, rpm: number, kinematicViscosity: number,
+      stageCount: number, head: number, pumpEfficiencyInput: number): {average: number, max: number} {
+    const input: PumpEfficiencyInput = {style: this.suiteApiHelperService.getPumpStyleEnum(pumpStyle),
+      flowRate, rpm, kinematicViscosity, stageCount, head};
+    const result: PumpEfficiencyResult = this.toolsSuiteApiService.ToolsSuiteModule.calculatePumpEfficiency(input);
+    return {average: result.average, max: result.max};
   }
 
   estimateFla(motorRatedPower: number, motorRPM: number, frequency: number, efficiencyClass: number, efficiencyPercent: number, motorVoltage: number): number {

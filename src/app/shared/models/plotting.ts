@@ -92,6 +92,7 @@ export interface AxisObj {
 }
 
 export interface TraceData {
+    calculationMethod?: 'legacy' | 'hi-2020-pchip';
     // x/y are required for scatter/bar/line traces; optional for pie/sankey traces
     x?: Array<number | string>,
     y?: Array<number | string>,
@@ -168,6 +169,7 @@ export interface ChartConfig {
 }
 
 export interface DataPoint {
+    calculationMethod?: 'legacy' | 'hi-2020-pchip';
     pointColor?: string;
     pointOutlineColor?: string;
     pointTraceIndex?: number;

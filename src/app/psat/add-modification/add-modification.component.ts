@@ -1,3 +1,4 @@
+import { physicalPumpStyle } from '../../shared/pump-efficiency';
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { PSAT, PsatOutputs } from '../../shared/models/psat';
 import { Modification } from '../../shared/models/psat';
@@ -70,6 +71,7 @@ export class AddModificationComponent implements OnInit {
     modification.exploreOpportunities = (this.currentTab == 'explore-opportunities');
     let baselineResults: PsatOutputs = this.psatService.resultsExisting(this.psat.inputs, this.settings);
     modification.psat.inputs.pump_specified = baselineResults.pump_efficiency;
+    modification.psat.inputs.pumpEfficiencyModel = {version: 1, source: 'specified', originalPumpStyle: physicalPumpStyle(this.psat.inputs)};
     this.save.emit(modification)
   }
 

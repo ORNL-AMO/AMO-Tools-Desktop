@@ -11,6 +11,7 @@ import { PsatWarningService } from '../psat-warning.service';
 import { PumpFluidService } from './pump-fluid.service';
 import { IntegrationStateService } from '../../shared/connected-inventory/integration-state.service';
 import { notWholeNumberMsg } from '../../psat/psatConstants';
+import { physicalPumpStyle, usablePumpEfficiency } from '../../shared/pump-efficiency';
 
 @Component({
     selector: 'app-pump-fluid',
@@ -48,6 +49,7 @@ export class PumpFluidComponent implements OnInit {
   idString: string;
   pumpFluidWarnings: { rpmError: string, temperatureError: string };
   hasConnectedPumpInventory: boolean;
+  pumpEfficiencyError: string;
   constructor(private psatService: PsatService, 
               private psatWarningService: PsatWarningService, 
               private compareService: CompareService, 
@@ -141,7 +143,8 @@ export class PumpFluidComponent implements OnInit {
   }
 
   enablePumpType() {
-    this.psatForm.controls.pumpType.patchValue(this.compareService.baselinePSAT.inputs.pump_style);
+    this.psatForm.controls.pumpType.patchValue(this.psat.inputs.pumpEfficiencyModel?.originalPumpStyle ??
+      physicalPumpStyle(this.compareService.baselinePSAT.inputs));
     // this.psatForm.controls.pumpType.enable();
     this.getPumpEfficiency();
   }
@@ -154,10 +157,25 @@ export class PumpFluidComponent implements OnInit {
   }
 
 
-  getPumpEfficiency() {
+  reestimatePumpEfficiency() {
+    this.psatForm.controls.pumpType.patchValue(physicalPumpStyle(this.psat.inputs));
+    this.getPumpEfficiency();
+  }
+
+  getPumpEfficiency(): boolean {
+    const style = this.psatForm.controls.pumpType.value;
+    if (style === 11 || style === 12) { this.save(); return true; }
     let tmpEfficiency: number = this.psatService.pumpEfficiency(this.psatForm.controls.pumpType.value, this.psat.inputs.flow_rate, this.psat.inputs.pump_rated_speed, this.psat.inputs.kinematic_viscosity, this.psat.inputs.stages, this.psat.inputs.head, 100, this.settings).max;
+    if (!usablePumpEfficiency(tmpEfficiency * 100)) {
+      this.pumpEfficiencyError = this.psatService.pumpEfficiencyRangeMessage(style, this.settings);
+      this.psatForm.controls.pumpType.patchValue(this.psat.inputs.pump_style);
+      return false;
+    }
+    this.pumpEfficiencyError = undefined;
+    this.psat.inputs.pumpEfficiencyModel = {version: 1, source: 'hi-2020-pchip', originalPumpStyle: style};
     this.psatForm.controls.specifiedPumpEfficiency.patchValue(tmpEfficiency * 100);
     this.save();
+    return true;
   }
 
 
@@ -196,6 +214,7 @@ export class PumpFluidComponent implements OnInit {
     this.psatForm.controls.specifiedPumpEfficiency.markAsDirty();
     if (!this.baseline) {
       this.getPumpEfficiency();
+      return;
     }
     this.save();
   }
