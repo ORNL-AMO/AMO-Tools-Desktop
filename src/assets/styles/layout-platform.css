@@ -309,6 +309,15 @@
   }
 }
 
+/* ---------- Tier visibility ---------- */
+/* Shell chrome that only exists on wide screens (e.g. the Back/Next footer the
+   pager replaces). Use instead of Bootstrap d-none d-lg-* so tiers line up. */
+@media screen and (max-width: 1024px) {
+  .ly-wide-only {
+    display: none;
+  }
+}
+
 /* ---------- Print ---------- */
 @media print {
   .ly-panel {

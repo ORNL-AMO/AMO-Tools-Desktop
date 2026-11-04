@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
   selector: 'app-assessment',
   standalone: false,
   templateUrl: './assessment.component.html',
+  styleUrl: './assessment.component.css',
   host: { class: 'ly-fill' }
 })
 export class AssessmentComponent {
@@ -34,7 +35,7 @@ export class AssessmentComponent {
     this.modalDialogService.openModal(
       ModificationListComponent, 
       {
-        width: '1200px', 
+        width: 'min(1200px, 95vw)',
         data: undefined,
       },
       this.injector

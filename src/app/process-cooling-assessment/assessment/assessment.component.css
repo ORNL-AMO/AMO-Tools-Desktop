@@ -1,0 +1,31 @@
+.assessment-header {
+    justify-content: space-between;
+    padding: var(--ly-space-2) var(--ly-space-3);
+}
+
+/* lets the tab list's h-100 fill the row height, as it did as a direct flex child */
+.assessment-header > .ly-stepnav__tabs {
+    align-self: stretch;
+}
+
+.scenario-select {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+/* Narrow: scenario block takes the full row, pager sits below it */
+@media screen and (max-width: 1024px) {
+    .scenario-select {
+        flex: 1 1 100%;
+    }
+
+    .scenario-select > * {
+        flex: 1 1 auto;
+    }
+
+    .assessment-header .ly-stepnav__pager {
+        flex: 1 1 100%;
+        order: 1;
+    }
+}

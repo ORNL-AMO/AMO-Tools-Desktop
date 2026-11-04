@@ -28,7 +28,7 @@ export class ExploreOpportunitiesComponent {
     this.modalService.openModal(
       AddModificationComponent, 
       {
-        width: '800px',
+        width: 'min(800px, 95vw)',
         data: undefined,
       },
       // * injector required for providing services inside the global (core) module

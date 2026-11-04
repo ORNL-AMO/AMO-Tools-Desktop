@@ -74,7 +74,7 @@ export class ProcessCoolingBannerComponent {
     this.modalDialogService.openModal(
       ExportItemComponent,
       {
-        width: '600px',
+        width: 'min(600px, 95vw)',
         data: {
           inAssessment: true,
           assessment: this.processCoolingService.assessmentValue
@@ -88,7 +88,7 @@ export class ProcessCoolingBannerComponent {
     this.modalDialogService.openModal(
       EmailMeasurDataItemComponent,
       {
-        width: '800px',
+        width: 'min(800px, 95vw)',
         data: {
           measurItemAttachment: {
             itemType: 'assessment',
