@@ -40,10 +40,20 @@
   border-color: var(--process-cooling-assessment);
 }
 
+.day-row {
+  display: flex;
+  align-items: center;
+}
+
 .day-label {
   font-size: 1rem;
   font-weight: 500;
   min-width: 100px;
+  margin-right: 0.5rem;
+}
+
+.day-type {
+  margin-right: 1rem;
 }
 
 /* .btn btn-outline-secondary {
@@ -57,4 +67,29 @@
 
 select:hover {
   cursor: pointer;
+}
+
+/* Narrow panels: day label, schedule type and hours each take their own line. */
+@container ly-panel (max-width: 44rem) {
+  .day-row {
+    flex-wrap: wrap;
+    row-gap: var(--ly-space-1);
+  }
+
+  .day-label,
+  .day-type {
+    flex-basis: 100%;
+    margin-right: 0;
+  }
+
+  .day-type .btn {
+    flex: 1 1 0;
+  }
+
+  .start-control,
+  .end-control {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+  }
 }

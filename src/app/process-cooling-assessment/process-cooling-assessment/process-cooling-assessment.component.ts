@@ -13,7 +13,6 @@ export class ProcessCoolingAssessmentComponent {
   private readonly analyticsService = inject(AnalyticsService);
 
   showWelcomeScreen: boolean = false;
-  smallScreenTab: string = 'form';
   showUpdateUnitsModal: boolean = false;
 
   ngOnInit() {

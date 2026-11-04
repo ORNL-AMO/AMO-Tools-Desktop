@@ -286,7 +286,9 @@
 /* ---------- Step nav ---------- */
 /* Tabs on wide screens, the existing prev/next pager at the medium tier.
    Put these classes on wrappers around the tab and pager markup so legacy tab
-   classes cannot override the display toggle. */
+   classes cannot override the display toggle. Mark each step link in the pager
+   with ly-stepnav__step (and .active on the current one): at the compact tier
+   only the current step shows between the arrows. */
 .ly-stepnav__pager {
   display: none;
 }
@@ -298,6 +300,12 @@
 
   .ly-stepnav__pager {
     display: flex;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .ly-stepnav__pager .ly-stepnav__step:not(.active) {
+    display: none;
   }
 }
 

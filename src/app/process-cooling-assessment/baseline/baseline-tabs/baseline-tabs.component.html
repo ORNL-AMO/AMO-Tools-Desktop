@@ -41,7 +41,7 @@
             @let isActive = setupView() == link.view;
             @let isDisabled = isLinkDisabled(link);
             @let isInvalid = isTabInvalid(link);
-            <li class="page-item" routerLinkActive="active"
+            <li class="page-item ly-stepnav__step" routerLinkActive="active"
                 [class.disabled]="isDisabled"
                 [class.invalid]="isInvalid"
                 (click)="handleCanNavigate($event, link)" [routerLink]="[link.view]">

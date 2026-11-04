@@ -40,6 +40,12 @@ export class LayoutWorkspaceComponent {
   visiblePanel = computed<WorkspacePanel>(() => this.hasAside() ? this.activePanel() : 'main');
 
   showPanel(panel: WorkspacePanel) {
+    if (panel === this.activePanel()) {
+      return;
+    }
     this.activePanel.set(panel);
+    // * Charts drawn while their panel was hidden have the wrong size. Plotly and billboard redraw on window resize,
+    // * so signal one after the newly shown panel has laid out.
+    requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
   }
 }

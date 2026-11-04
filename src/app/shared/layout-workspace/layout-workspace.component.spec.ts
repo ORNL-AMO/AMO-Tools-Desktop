@@ -65,6 +65,19 @@ describe('LayoutWorkspaceComponent', () => {
     expect(switches()[0].getAttribute('aria-selected')).toBe('false');
   });
 
+  it('signals a window resize after switching so charts in the shown panel redraw', async () => {
+    const resized = jasmine.createSpy('resize');
+    window.addEventListener('resize', resized);
+
+    switches()[1].click();
+    fixture.detectChanges();
+    await new Promise(resolve => requestAnimationFrame(resolve));
+
+    window.removeEventListener('resize', resized);
+    // * at least once: a switch made by another test can also land in this window
+    expect(resized).toHaveBeenCalled();
+  });
+
   it('renders no switcher or aside for the solo variant and always shows main', () => {
     switches()[1].click();
     fixture.componentInstance.variant.set('solo');
