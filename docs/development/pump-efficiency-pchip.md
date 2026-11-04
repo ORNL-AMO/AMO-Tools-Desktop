@@ -84,8 +84,19 @@ energy as savings. Actual-service regression cases cover these paths. The preexi
 export behavior is unchanged; this work does not correct unrelated export semantics.
 
 The regression tests use the published WASM, actual form/CO2/calculation services, and both graph
-lifecycles. Final fix-candidate review commits/readiness will be recorded before PR creation. Final
-package adoption remains deferred until engineering acceptance and requires repeating affected checks.
+lifecycles. Independent final review by `desktop_pchip_review` is **ready with documented follow-up**,
+with no unresolved actionable findings. Exact intended base is
+`cbf65e9dd1dcecc2b7da9deca0c2c3da4fa2a542`; reviewed final source head is
+`24c265417c695bb8123cbbcc791653d9f820dbe6`. All original five findings and both downstream finding
+groups are resolved. Reviewer independently passed application/spec typechecks and full-diff whitespace,
+verified synchronized beta pins/lockfiles/installed WASM hashes and unchanged immutable baseline, and
+confirmed logs for 1673 Desktop tests, final web build and 257 process-flow tests (one existing todo).
+Only review metadata follows the reviewed source.
+
+The PR is stacked on #9054's `codex/issue-8957-suite-integration` branch. Desktop's existing CI runs
+PR checks only for develop/master/epic-* targets, so retarget and run normal PR CI after parent
+integration. Local full beta verification is complete. Final-package adoption remains deferred until
+engineering acceptance and requires repeating affected checks.
 
 ## Engineering release gates
 
