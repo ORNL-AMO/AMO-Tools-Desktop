@@ -1,5 +1,5 @@
 <app-baseline-tabs></app-baseline-tabs>
-<app-layout-workspace class="tab-content" mainClass="modification" asideClass="scroll-item" [variant]="showResultsPanel() ? 'even' : 'solo'" [mainLabel]="mainPanelLabel()" asideLabel="Details">
+<app-layout-workspace [raisedMain]="true" [variant]="showResultsPanel() ? 'even' : 'solo'" [mainLabel]="mainPanelLabel()" asideLabel="Details">
     <router-outlet lyMain></router-outlet>
     @if (showResultsPanel()) {
     <app-results-panel lyAside></app-results-panel>

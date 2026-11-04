@@ -5,7 +5,7 @@
   <br>
 </div>
 <form class="pl-3 pr-3" [formGroup]="form" #formElement>
-  <div class="form-group">
+  <div class="form-group ly-field">
     <label for="{{controlIds.outdoorAirTemp}}">Design Outdoor Air Temperature</label>
     <div class="input-group">
       <input name="outdoorAirTemp" type="number" step="any" class="form-control" id="{{controlIds.outdoorAirTemp}}"
@@ -17,7 +17,7 @@
                 [metricUnit]="PROCESS_COOLING_UNITS.temperature.labelHTML.metric"></app-form-control-errors>
   </div>
 
-  <div class="form-group">
+  <div class="form-group ly-field">
     <label for="{{controlIds.airCoolingSource}}">Air Cooling Source</label>
     <div class="input-group">
       <select class="form-control" id="{{controlIds.airCoolingSource}}" formControlName="airCoolingSource"
@@ -29,7 +29,7 @@
   </div>
 
   @if (airCoolingSource.value === AirCoolingSource.Indoor) {
-  <div class="form-group">
+  <div class="form-group ly-field">
     <label for="{{controlIds.indoorTemp}}">Average Indoor Temperature</label>
     <div class="input-group">
       <input name="indoorTemp" type="number" step="any" class="form-control" id="{{controlIds.indoorTemp}}"

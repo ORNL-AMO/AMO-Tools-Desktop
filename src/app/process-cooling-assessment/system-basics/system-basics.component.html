@@ -28,7 +28,7 @@
 
   <div class="pl-3 pr-3">
     <form>
-      <div class="form-group">
+      <div class="form-group ly-field">
         <label class="group-label w-100">Equipment Notes</label>
         <textarea name="notes" rows="4" id="notes" class="w-100" [ngModel]="processCooling().systemBasics.notes"
           (ngModelChange)="updateNotes($event)" (focus)="focusField('equipmentNotes')"

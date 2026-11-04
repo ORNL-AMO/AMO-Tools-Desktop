@@ -11,8 +11,7 @@ let nextWorkspaceId = 0;
  * Views project content with the lyMain and lyAside attributes and never hold switcher state themselves.
  *   - variant: 'even' (50/50), 'weighted' (2:1), 'solo' (main only, no switcher)
  *   - mainLabel / asideLabel: switcher labels
- *   - mainClass / asideClass: extra classes for each panel. Temporary bridge for legacy global classes
- *     (e.g. modification, scroll-item) that content still depends on; remove once views use ly-* primitives.
+ *   - raisedMain: give the main panel the raised surface (white, shadow over the aside)
  */
 @Component({
   selector: 'app-layout-workspace',
@@ -30,8 +29,7 @@ export class LayoutWorkspaceComponent {
   variant = input<WorkspaceVariant>('even');
   mainLabel = input<string>('Form');
   asideLabel = input<string>('Details');
-  mainClass = input<string>('');
-  asideClass = input<string>('');
+  raisedMain = input<boolean>(false);
 
   readonly id = `ly-workspace-${nextWorkspaceId++}`;
   private activePanel = signal<WorkspacePanel>('main');

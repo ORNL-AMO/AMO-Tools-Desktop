@@ -8,11 +8,11 @@
       (click)="showPanel('aside')">{{ asideLabel() }}</button>
   </div>
 }
-<div class="ly-workspace__main ly-panel" [class]="mainClass()" role="tabpanel" [id]="id + '-main'" [attr.aria-labelledby]="hasAside() ? id + '-main-tab' : null">
+<div class="ly-workspace__main ly-panel" [class.ly-panel--raised]="raisedMain()" role="tabpanel" [id]="id + '-main'" [attr.aria-labelledby]="hasAside() ? id + '-main-tab' : null">
   <ng-content select="[lyMain]"></ng-content>
 </div>
 @if (hasAside()) {
-  <div class="ly-workspace__aside ly-panel" [class]="asideClass()" role="tabpanel" [id]="id + '-aside'" [attr.aria-labelledby]="id + '-aside-tab'">
+  <div class="ly-workspace__aside ly-panel" role="tabpanel" [id]="id + '-aside'" [attr.aria-labelledby]="id + '-aside-tab'">
     <ng-content select="[lyAside]"></ng-content>
   </div>
 }

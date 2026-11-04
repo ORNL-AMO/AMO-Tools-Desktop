@@ -50,8 +50,7 @@
     </div>
 </div>
 
-<app-layout-workspace class="tab-content" [mainLabel]="mainPanelLabel()" asideLabel="Details"
-    mainClass="modification" asideClass="scroll-item">
+<app-layout-workspace [raisedMain]="true" [mainLabel]="mainPanelLabel()" asideLabel="Details">
     <router-outlet lyMain></router-outlet>
     <app-results-panel lyAside></app-results-panel>
 </app-layout-workspace>

@@ -197,6 +197,13 @@
   cursor: pointer;
 }
 
+/* Raised surface: white panel lifted above its neighbour with a soft shadow. */
+.ly-panel--raised {
+  background: var(--ly-surface);
+  box-shadow: 0 0 69px -1px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
 .ly-panel__header {
   position: sticky;
   top: 0;
@@ -213,18 +220,50 @@
 }
 
 /* ---------- Field row ---------- */
-/* Label beside input in wide panels, label above input in narrow panels. */
-.ly-field {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: center;
-  gap: var(--ly-space-1) var(--ly-space-3);
-  min-width: 0;
+/* Label beside input in wide panels, label above input in narrow panels.
+   The wide layout reproduces the legacy `.tab-content .form-group` float rows
+   exactly (same rules, same specificity), because where error and warning lines
+   wrap depends on their length in that layout and a grid cannot match it.
+   Only applies inside a layout panel. */
+.ly-panel .ly-field::after {
+  display: table;
+  content: "";
+  clear: both;
+}
+
+.ly-panel .ly-field .form-control,
+.ly-panel .ly-field label,
+.ly-panel .ly-field .form-check {
+  float: left;
+}
+
+.ly-panel .ly-field .form-check label {
+  float: none;
+}
+
+.ly-panel .ly-field label {
+  width: 50%;
+}
+
+.ly-panel .ly-field .form-control {
+  width: 50%;
 }
 
 @container ly-panel (max-width: 30rem) {
-  .ly-field {
-    grid-template-columns: minmax(0, 1fr);
+  .ly-panel .ly-field .form-control,
+  .ly-panel .ly-field label,
+  .ly-panel .ly-field .form-check {
+    float: none;
+  }
+
+  .ly-panel .ly-field label,
+  .ly-panel .ly-field .form-control {
+    width: 100%;
+  }
+
+  /* inputs with a unit box: grow beside the unit (Bootstrap input-group sizing) */
+  .ly-panel .ly-field .input-group > .form-control {
+    width: 1%;
   }
 }
 

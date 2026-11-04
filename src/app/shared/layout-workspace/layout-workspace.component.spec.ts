@@ -6,7 +6,7 @@ import { LayoutWorkspaceComponent, WorkspaceVariant } from './layout-workspace.c
   standalone: true,
   imports: [LayoutWorkspaceComponent],
   template: `
-    <app-layout-workspace [variant]="variant()" mainLabel="Inputs" asideLabel="Results">
+    <app-layout-workspace [variant]="variant()" [raisedMain]="raisedMain()" mainLabel="Inputs" asideLabel="Results">
       <div lyMain class="test-main">Main content</div>
       <div lyAside class="test-aside">Aside content</div>
     </app-layout-workspace>
@@ -14,6 +14,7 @@ import { LayoutWorkspaceComponent, WorkspaceVariant } from './layout-workspace.c
 })
 class TestHostComponent {
   variant = signal<WorkspaceVariant>('even');
+  raisedMain = signal(false);
 }
 
 describe('LayoutWorkspaceComponent', () => {
@@ -76,6 +77,15 @@ describe('LayoutWorkspaceComponent', () => {
     window.removeEventListener('resize', resized);
     // * at least once: a switch made by another test can also land in this window
     expect(resized).toHaveBeenCalled();
+  });
+
+  it('raises the main panel only when asked', () => {
+    const main = () => host.querySelector('.ly-workspace__main');
+    expect(main().classList).not.toContain('ly-panel--raised');
+
+    fixture.componentInstance.raisedMain.set(true);
+    fixture.detectChanges();
+    expect(main().classList).toContain('ly-panel--raised');
   });
 
   it('renders no switcher or aside for the solo variant and always shows main', () => {
