@@ -1,9 +1,11 @@
 <form [formGroup]="operationsForm" #formElement>
-  <div *ngIf="inSetup" class="d-flex flex-column">
-    <div class="header mr-2 ml-2">
-      <h3>Operations</h3>
+  @if (inSetup) {
+    <div class="d-flex flex-column">
+      <div class="header mr-2 ml-2">
+        <h3>Operations</h3>
+      </div>
     </div>
-  </div>
+  }
 
   <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }">
     <!--min/max-->
@@ -19,14 +21,22 @@
           (focus)="focusField('operatingHours')" onfocus="this.select();" [readonly]="!selected">
         <span class="input-group-addon units">hrs/yr</span>
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="operationsForm.controls.operatingHours.invalid && !operationsForm.controls.operatingHours.pristine">
-        <span *ngIf="operationsForm.controls.operatingHours.errors.required">Value Required</span>
-        <span *ngIf="operationsForm.controls.operatingHours.errors.max">Value can't be greater than
-          {{operationsForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
-        <span *ngIf="operationsForm.controls.operatingHours.errors.min">Value can't be less than
-          {{operationsForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
-      </span>
+      @if (operationsForm.controls.operatingHours.invalid && !operationsForm.controls.operatingHours.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (operationsForm.controls.operatingHours.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (operationsForm.controls.operatingHours.errors.max) {
+            <span>Value can't be greater than
+            {{operationsForm.controls.operatingHours.errors.max.max}} hrs/yr.</span>
+          }
+          @if (operationsForm.controls.operatingHours.errors.min) {
+            <span>Value can't be less than
+            {{operationsForm.controls.operatingHours.errors.min.min}} hrs/yr.</span>
+          }
+        </span>
+      }
     </div>
     <!--min-->
     <div class="form-group"
@@ -38,40 +48,54 @@
           [readonly]="!selected">
         <span class="input-group-addon units">$/kWh</span>
       </div>
-      <span class="alert-danger pull-right small"
-        *ngIf="operationsForm.controls.cost.invalid && !operationsForm.controls.cost.pristine">
-        <span *ngIf="operationsForm.controls.cost.errors.required">Value Required</span>
-        <span *ngIf="operationsForm.controls.cost.errors.min">Value can't be less than
-          {{operationsForm.controls.cost.errors.min.min}} $/kWh.</span>
-      </span>
-      <span class="alert-warning pull-right small"
-        *ngIf="warnings.costError !== null && !operationsForm.controls.cost.pristine && !operationsForm.controls.cost.invalid">{{warnings.costError}}
+      @if (operationsForm.controls.cost.invalid && !operationsForm.controls.cost.pristine) {
+        <span class="alert-danger pull-right small"
+          >
+          @if (operationsForm.controls.cost.errors.required) {
+            <span>Value Required</span>
+          }
+          @if (operationsForm.controls.cost.errors.min) {
+            <span>Value can't be less than
+            {{operationsForm.controls.cost.errors.min.min}} $/kWh.</span>
+          }
+        </span>
+      }
+      @if (warnings.costError !== null && !operationsForm.controls.cost.pristine && !operationsForm.controls.cost.invalid) {
+        <span class="alert-warning pull-right small"
+          >{{warnings.costError}}
         $/kWh.</span>
+      }
     </div>
   </div>
 </form>
 
 @if (showOperationalImpacts()) {
-  <div *ngIf="inSetup" class="d-flex flex-column">
-    <div class="header mr-2 ml-2">
-      <h3>Carbon Emissions</h3>
+  @if (inSetup) {
+    <div class="d-flex flex-column">
+      <div class="header mr-2 ml-2">
+        <h3>Carbon Emissions</h3>
+      </div>
     </div>
-  </div>
+  }
 
-  <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }"
-    *ngIf="cO2SavingsData">
-    <app-assessment-co2-savings
-      [co2SavingsData]="cO2SavingsData"
-      [totalEmissionOutputRateDifferent]="totalEmissionOutputRateDifferent"
-      [isFormDisabled]="co2SavingsFormDisabled"
-      [inBaseline]="baseline"
-      (emitCurrentField)="focusField($event)"
-      (emitUpdateCo2SavingsData)="updateFsatCo2SavingsData($event)"
-    ></app-assessment-co2-savings>
-  </div>
+  @if (cO2SavingsData) {
+    <div [ngClass]="{'p-4': inSetup, 'p-3': !inSetup }"
+      >
+      <app-assessment-co2-savings
+        [co2SavingsData]="cO2SavingsData"
+        [totalEmissionOutputRateDifferent]="totalEmissionOutputRateDifferent"
+        [isFormDisabled]="co2SavingsFormDisabled"
+        [inBaseline]="baseline"
+        (emitCurrentField)="focusField($event)"
+        (emitUpdateCo2SavingsData)="updateFsatCo2SavingsData($event)"
+      ></app-assessment-co2-savings>
+    </div>
+  }
 }
 
-<app-operating-hours-modal *ngIf="showOperatingHoursModal" (emitClose)="closeOperatingHoursModal()"
-  (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
-  [operatingHours]="fsat.operatingHours">
-</app-operating-hours-modal>
+@if (showOperatingHoursModal) {
+  <app-operating-hours-modal (emitClose)="closeOperatingHoursModal()"
+    (emitSave)="updateOperatingHours($event)" [width]="formWidth" [showMinutesSeconds]="false"
+    [operatingHours]="fsat.operatingHours">
+  </app-operating-hours-modal>
+}

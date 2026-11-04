@@ -1,11 +1,12 @@
 <div class="card summary-card">
-    <div class="card-header" (click)="toggleCollapse()">
-      <h5>Fan Operations
-        <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
-      </h5>
-    </div>
-  
-    <div *ngIf="!collapse || printView">
+  <div class="card-header" (click)="toggleCollapse()">
+    <h5>Fan Operations
+      <span class="pull-right fa hide-print" [ngClass]="{'fa-chevron-up': collapse, 'fa-chevron-down': !collapse}"></span>
+    </h5>
+  </div>
+
+  @if (!collapse || printView) {
+    <div>
       <div class="card-body">
         <div class="output-summary">
           <table #copyTable class="table table-hover table-striped">
@@ -15,13 +16,14 @@
                 <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
                   Baseline
                 </th>
-                <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of fsat.modifications">
-                  {{mod.fsat.name}}
-                </th>
+                @for (mod of fsat.modifications; track mod) {
+                  <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                    {{mod.fsat.name}}
+                  </th>
+                }
               </tr>
             </thead>
             <tbody>
-  
               <tr>
                 <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
                   Operating Hours
@@ -29,46 +31,48 @@
                 <td [ngClass]="{'indicate-report-field-different':operatingHoursDiff[0] == true}">
                   {{fsatOperations.baseline.operatingHours}}
                 </td>
-                <td *ngFor="let mod of fsatOperations.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fsatOperations.baseline.operatingHours, mod.operatingHours, 'operatingHoursDiff', 0)}">
-                  {{mod.operatingHours}}
-                </td>
+                @for (mod of fsatOperations.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fsatOperations.baseline.operatingHours, mod.operatingHours, 'operatingHoursDiff', 0)}">
+                    {{mod.operatingHours}}
+                  </td>
+                }
               </tr>
-  
               <tr>
                 <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
-                  Cost 
+                  Cost
                   ($/kWh)
                 </td>
                 <td [ngClass]="{'indicate-report-field-different':costDiff[0] == true}">
                   {{fsatOperations.baseline.cost | currency: 'USD': 'symbol' : '1.0-0'}}
                 </td>
-                <td *ngFor="let mod of fsatOperations.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fsatOperations.baseline.cost, mod.cost, 'costDiff', 0)}">
-                  {{mod.cost | currency: 'USD': 'symbol' : '1.0-0'}}
-                </td>
-              </tr>  
-
-
-
-
-              @if (showOperationalImpacts()) {
-              <tr>
-                <td [ngClass]="{'indicate-report-field-different':totalEmissionOutputRateDiff[0] == true}">
-                  Total Emission Output Rate <span>(kg CO<sub>2</sub>/MWh)</span>
-                </td>
-                <td [ngClass]="{'indicate-report-field-different':totalEmissionOutputRateDiff[0] == true}">
-                  {{fsatOperations.baseline.cO2SavingsData.totalEmissionOutputRate | number : '1.0-2'}}
-                </td>
-                <td *ngFor="let mod of fsatOperations.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fsatOperations.baseline.cO2SavingsData.totalEmissionOutputRate, mod.cO2SavingsData.totalEmissionOutputRate, 'totalEmissionOutputRateDiff', 0)}">
-                  {{mod.cO2SavingsData.totalEmissionOutputRate | number : '1.0-2'}}
-                </td>
+                @for (mod of fsatOperations.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fsatOperations.baseline.cost, mod.cost, 'costDiff', 0)}">
+                    {{mod.cost | currency: 'USD': 'symbol' : '1.0-0'}}
+                  </td>
+                }
               </tr>
+              @if (showOperationalImpacts()) {
+                <tr>
+                  <td [ngClass]="{'indicate-report-field-different':totalEmissionOutputRateDiff[0] == true}">
+                    Total Emission Output Rate <span>(kg CO<sub>2</sub>/MWh)</span>
+                  </td>
+                  <td [ngClass]="{'indicate-report-field-different':totalEmissionOutputRateDiff[0] == true}">
+                    {{fsatOperations.baseline.cO2SavingsData.totalEmissionOutputRate | number : '1.0-2'}}
+                  </td>
+                  @for (mod of fsatOperations.modifications; track mod) {
+                    <td [ngClass]="{'indicate-report-field-different': checkDiff(fsatOperations.baseline.cO2SavingsData.totalEmissionOutputRate, mod.cO2SavingsData.totalEmissionOutputRate, 'totalEmissionOutputRateDiff', 0)}">
+                      {{mod.cO2SavingsData.totalEmissionOutputRate | number : '1.0-2'}}
+                    </td>
+                  }
+                </tr>
               }
             </tbody>
           </table>
           <app-exportable-results-table [tableString]="copyTableString"
-            (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+          (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
         </div>
       </div>
     </div>
-  
-  </div>
+  }
+
+</div>

@@ -5,124 +5,144 @@
     </h5>
   </div>
 
-  <div *ngIf="!collapse || printView">
-    <div class="card-body">
-      <div class="output-summary">
-        <table #copyTable class="table table-hover table-striped">
-          <thead>
-            <tr>
-              <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
-              <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
-                Baseline
-              </th>
-              <th [ngStyle]="{'width.%': 100 /(numMods+2)}" *ngFor="let mod of fsat.modifications">
-                {{mod.fsat.name}}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
-                Flow Rate
-                (<span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>)
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
-                {{fieldData.baseline.flowRate}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.flowRate, mod.flowRate, 'flowRateDiff', 0)}">
-                {{mod.flowRate}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
-                Inlet Pressure
-                (<span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>)
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
-                {{fieldData.baseline.inletPressure}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.inletPressure, mod.inletPressure, 'inletPressureDiff', 0)}">
-                {{mod.inletPressure}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
-                Outlet Pressure
-                (<span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>)
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
-                {{fieldData.baseline.outletPressure}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.outletPressure, mod.outletPressure, 'outletPressureDiff', 0)}">
-                {{mod.outletPressure}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':loadEstimatedMethodDiff[0] == true}">
-                Load Estimated Method
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':loadEstimatedMethodDiff[0] == true}">
-                <span *ngIf="fieldData.baseline.loadEstimatedMethod == 0">
-                  Power
-                </span>
-                <span *ngIf="fieldData.baseline.loadEstimatedMethod == 1">
-                  Current
-                </span>
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.loadEstimatedMethod, mod.loadEstimatedMethod, 'loadEstimatedMethodDiff', 0)}">
-                &mdash; &mdash;
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
-                <span *ngIf="fieldData.baseline.loadEstimatedMethod == 0">
-                  Motor Power (kW)
-                </span>
-                <span *ngIf="fieldData.baseline.loadEstimatedMethod == 1">
-                  Motor Current (A)
-                </span>
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
-                {{fieldData.baseline.motorPower}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.motorPower, mod.motorPower, 'motorPowerDiff', 0)}">
-               &mdash; &mdash;
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':compressibilityFactorDiff[0] == true}">
-                Compressibility Factor
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':compressibilityFactorDiff[0] == true}">
-                {{fieldData.baseline.compressibilityFactor}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.compressibilityFactor, mod.compressibilityFactor, 'compressibilityFactorDiff', 0)}">
-                {{mod.compressibilityFactor}}
-              </td>
-            </tr>
-
-            <tr>
-              <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
-                Measured Voltage (V)
-              </td>
-              <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
-                {{fieldData.baseline.measuredVoltage}}
-              </td>
-              <td *ngFor="let mod of fieldData.modifications" [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.measuredVoltage, mod.measuredVoltage, 'measuredVoltageDiff', 0)}">
-                {{mod.measuredVoltage}}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <app-exportable-results-table [tableString]="copyTableString"
+  @if (!collapse || printView) {
+    <div>
+      <div class="card-body">
+        <div class="output-summary">
+          <table #copyTable class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th [ngStyle]="{'width.%': 100 /(numMods+2)}"></th>
+                <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                  Baseline
+                </th>
+                @for (mod of fsat.modifications; track mod) {
+                  <th [ngStyle]="{'width.%': 100 /(numMods+2)}">
+                    {{mod.fsat.name}}
+                  </th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
+                  Flow Rate
+                  (<span [innerHTML]="settings.fanFlowRate | settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':flowRateDiff[0] == true}">
+                  {{fieldData.baseline.flowRate}}
+                </td>
+                @for (mod of fieldData.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.flowRate, mod.flowRate, 'flowRateDiff', 0)}">
+                    {{mod.flowRate}}
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
+                  Inlet Pressure
+                  (<span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':inletPressureDiff[0] == true}">
+                  {{fieldData.baseline.inletPressure}}
+                </td>
+                @for (mod of fieldData.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.inletPressure, mod.inletPressure, 'inletPressureDiff', 0)}">
+                    {{mod.inletPressure}}
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
+                  Outlet Pressure
+                  (<span [innerHTML]="settings.fanPressureMeasurement | settingsLabel"></span>)
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':outletPressureDiff[0] == true}">
+                  {{fieldData.baseline.outletPressure}}
+                </td>
+                @for (mod of fieldData.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.outletPressure, mod.outletPressure, 'outletPressureDiff', 0)}">
+                    {{mod.outletPressure}}
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':loadEstimatedMethodDiff[0] == true}">
+                  Load Estimated Method
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':loadEstimatedMethodDiff[0] == true}">
+                  @if (fieldData.baseline.loadEstimatedMethod == 0) {
+                    <span>
+                      Power
+                    </span>
+                  }
+                  @if (fieldData.baseline.loadEstimatedMethod == 1) {
+                    <span>
+                      Current
+                    </span>
+                  }
+                </td>
+                @for (mod of fieldData.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.loadEstimatedMethod, mod.loadEstimatedMethod, 'loadEstimatedMethodDiff', 0)}">
+                    &mdash; &mdash;
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
+                  @if (fieldData.baseline.loadEstimatedMethod == 0) {
+                    <span>
+                      Motor Power (kW)
+                    </span>
+                  }
+                  @if (fieldData.baseline.loadEstimatedMethod == 1) {
+                    <span>
+                      Motor Current (A)
+                    </span>
+                  }
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':motorPowerDiff[0] == true}">
+                  {{fieldData.baseline.motorPower}}
+                </td>
+                @for (mod of fieldData.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.motorPower, mod.motorPower, 'motorPowerDiff', 0)}">
+                    &mdash; &mdash;
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':compressibilityFactorDiff[0] == true}">
+                  Compressibility Factor
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':compressibilityFactorDiff[0] == true}">
+                  {{fieldData.baseline.compressibilityFactor}}
+                </td>
+                @for (mod of fieldData.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.compressibilityFactor, mod.compressibilityFactor, 'compressibilityFactorDiff', 0)}">
+                    {{mod.compressibilityFactor}}
+                  </td>
+                }
+              </tr>
+              <tr>
+                <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
+                  Measured Voltage (V)
+                </td>
+                <td [ngClass]="{'indicate-report-field-different':measuredVoltageDiff[0] == true}">
+                  {{fieldData.baseline.measuredVoltage}}
+                </td>
+                @for (mod of fieldData.modifications; track mod) {
+                  <td [ngClass]="{'indicate-report-field-different': checkDiff(fieldData.baseline.measuredVoltage, mod.measuredVoltage, 'measuredVoltageDiff', 0)}">
+                    {{mod.measuredVoltage}}
+                  </td>
+                }
+              </tr>
+            </tbody>
+          </table>
+          <app-exportable-results-table [tableString]="copyTableString"
           (updateTableString)="updateCopyTableString()"></app-exportable-results-table>
+        </div>
       </div>
     </div>
-  </div>
+  }
 
 </div>

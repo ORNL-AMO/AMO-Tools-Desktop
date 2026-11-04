@@ -1,11 +1,11 @@
 <nav class="fsat navbar banner d-flex mr-auto p-0 flex-nowrap">
   <div class="d-block d-lg-none mr-0 mr-2 pl-2 h-100">
-		<div class="pr-2 border-right home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
-			<button type="button" class="btn chevron-btn p-0" (click)="back()" [disabled]="(!assessment.fsat.setupDone || mainTab == 'baseline')">
-				<span class="fa fa-chevron-left"></span>
-			</button>
-		</div>
-	</div>
+    <div class="pr-2 border-right home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
+      <button type="button" class="btn chevron-btn p-0" (click)="back()" [disabled]="(!assessment.fsat.setupDone || mainTab == 'baseline')">
+        <span class="fa fa-chevron-left"></span>
+      </button>
+    </div>
+  </div>
   <div class="d-none d-lg-flex align-items-center p-1">
     <div class="img-col col-sm-auto col-md-auto col-lg-auto">
       <img class="img-icon" src="assets/images/ico-fsat-diagram.png">
@@ -44,156 +44,162 @@
     </div>
     <div class="nav-item d-none d-lg-inline-block">
       <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !canOpenMainTab('assessment')}"
-        (click)="changeTab('assessment')">Assessment</a>
+      (click)="changeTab('assessment')">Assessment</a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
       <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !canOpenMainTab('diagram')}"
-        (click)="changeTab('diagram')">Diagram</a>
+      (click)="changeTab('diagram')">Diagram</a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
       <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !canOpenMainTab('report')}"
-        (click)="changeTab('report')">Report</a>
+      (click)="changeTab('report')">Report</a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
       <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !canOpenMainTab('sankey')}"
-        (click)="changeTab('sankey')">Sankey</a>
+      (click)="changeTab('sankey')">Sankey</a>
     </div>
     <div class="nav-item d-none d-lg-inline-block">
       <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}"
-        (click)="changeTab('calculators')">Calculators</a>
+      (click)="changeTab('calculators')">Calculators</a>
     </div>
   </div>
 
-  <div *ngIf="!bannerCollapsed" class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">		
-		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}" (click)="changeTab('baseline')">Baseline</a>
-		</div>
-		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !canOpenMainTab('assessment')}"
-				(click)="changeTab('assessment')">Assessment</a>
-		</div>
-		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !canOpenMainTab('diagram')}"
-				(click)="changeTab('diagram')">Diagram</a>
-		</div>
-		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !canOpenMainTab('report')}"
-				(click)="changeTab('report')">Report</a>
-		</div>
-		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !canOpenMainTab('sankey')}"
-				(click)="changeTab('sankey')">Sankey</a>
-		</div>
-		<div class="nav-item">
-			<a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}"
-				(click)="changeTab('calculators')">Calculators</a>
-		</div>		
-	</div>
+  @if (!bannerCollapsed) {
+    <div class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
+      <div class="nav-item">
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'baseline'}" (click)="changeTab('baseline')">Baseline</a>
+      </div>
+      <div class="nav-item">
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'assessment', 'disabled': !canOpenMainTab('assessment')}"
+        (click)="changeTab('assessment')">Assessment</a>
+      </div>
+      <div class="nav-item">
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'diagram', 'disabled': !canOpenMainTab('diagram')}"
+        (click)="changeTab('diagram')">Diagram</a>
+      </div>
+      <div class="nav-item">
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'report', 'disabled': !canOpenMainTab('report')}"
+        (click)="changeTab('report')">Report</a>
+      </div>
+      <div class="nav-item">
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'sankey', 'disabled': !canOpenMainTab('sankey')}"
+        (click)="changeTab('sankey')">Sankey</a>
+      </div>
+      <div class="nav-item">
+        <a class="nav-link" [ngClass]="{'active': mainTab == 'calculators'}"
+        (click)="changeTab('calculators')">Calculators</a>
+      </div>
+    </div>
+  }
 
 
   <div class="d-flex ml-auto pr-2 h-100 flex-wrap d-none d-lg-inline-block">
     <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="openShareDataModal()">
       <app-banner-tooltips [message]="'Share'" [adjustLeft]="20">
         <span class="fa fa-share-square-o"></span>
-      </app-banner-tooltips>		
+      </app-banner-tooltips>
     </div>
-    <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" 
-    (click)="showSecurityAndPrivacyModal()">
+    <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block"
+      (click)="showSecurityAndPrivacyModal()">
       <app-banner-tooltips [message]="'Security & Privacy'" [adjustLeft]="20">
         <span class="fa fa-lock"></span>
-      </app-banner-tooltips>    
+      </app-banner-tooltips>
     </div>
     <div class="pl-2 pr-2 download-nav-item home-nav-item d-none d-lg-inline-block" (click)="openExportModal()">
       <app-banner-tooltips [message]="'Export'" [adjustLeft]="20">
         <span class="fa fa-download"></span>
-      </app-banner-tooltips>    
+      </app-banner-tooltips>
     </div>
     <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block">
       <app-banner-tooltips [message]="'Manual'" [adjustLeft]="20">
         <a class="user-manual" href="https://industrialresources.ornl.gov/measur/user-guides/view-guide/Fans-User-Manual" target="_blank">
-            <span class="fa fa-book"></span>
-        </a>            
+          <span class="fa fa-book"></span>
+        </a>
       </app-banner-tooltips>
     </div>
     <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" [routerLink]="['/settings']">
       <app-banner-tooltips [message]="'Settings'" [adjustLeft]="20">
         <span class="fa fa-cog"></span>
-      </app-banner-tooltips>    
+      </app-banner-tooltips>
     </div>
     <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block"
       [routerLink]="['/directory-dashboard', assessment.directoryId]">
       <app-banner-tooltips [message]="'Assessment Dashboard'" [adjustLeft]="-20">
         <span class="fa fa-folder-open"></span>
-      </app-banner-tooltips>    
+      </app-banner-tooltips>
     </div>
     <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="navigateHome()">
       <app-banner-tooltips [message]="'Home'" [adjustLeft]="-20">
         <span class="fa fa-home"></span>
-      </app-banner-tooltips>    
+      </app-banner-tooltips>
     </div>
   </div>
 
   <div class="d-block d-lg-none ml-2 mr-0 pr-1 h-100">
-		<div class="pl-2 border-left home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
-			<button type="button" class="btn chevron-btn p-0" (click)="continue()" [disabled]="(!assessment.fsat.setupDone || mainTab == 'calculators')">
-				<span class="fa fa-chevron-right"></span>
-			</button>
-		</div>
-	</div>
+    <div class="pl-2 border-left home-nav-item" [ngClass]="{'collapse': !bannerCollapsed}">
+      <button type="button" class="btn chevron-btn p-0" (click)="continue()" [disabled]="(!assessment.fsat.setupDone || mainTab == 'calculators')">
+        <span class="fa fa-chevron-right"></span>
+      </button>
+    </div>
+  </div>
 
-	<div *ngIf="bannerCollapsed" class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
-		<div class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
-      <app-banner-tooltips [message]="'Collapse'" [adjustLeft]="20">
-        <span class="fa fa-bars"></span>
-      </app-banner-tooltips>
-		</div>
-	</div>
-
-  <div *ngIf="!bannerCollapsed" class="d-block d-lg-none ml-auto pr-2 h-100 flex-wrap">
-		<div class="pl-2 pr-2 home-nav-item d-block" (click)="collapseBanner()">
-      <app-banner-tooltips [message]="'Collapse'" [adjustLeft]="20">
-        <span class="fa fa-bars"></span>
-      </app-banner-tooltips>
-		</div>
-    <div class="pl-2 pr-2 home-nav-item d-block" (click)="openShareDataModal()">
-      <app-banner-tooltips [message]="'Share'" [adjustLeft]="20">
-        <span class="fa fa-share-square-o"></span>
-      </app-banner-tooltips>
-    </div>
-    <div class="pl-2 pr-2 home-nav-item d-block" 
-    (click)="showSecurityAndPrivacyModal()">
-      <app-banner-tooltips [message]="'Security & Privacy'" [adjustLeft]="20">
-        <span class="fa fa-lock"></span>
-      </app-banner-tooltips>
-    </div>
-    <div class="pl-2 pr-2 download-nav-item home-nav-item d-block" (click)="openExportModal()">
-      <app-banner-tooltips [message]="'Export'" [adjustLeft]="20">
-        <span class="fa fa-download"></span>
-      </app-banner-tooltips>
-    </div>
-		<div class="pl-2 pr-2 home-nav-item d-block">
-      <app-banner-tooltips [message]="'Manual'" [adjustLeft]="20">
-        <a class="user-manual" href="https://industrialresources.ornl.gov/measur/user-guides/view-guide/Fans-User-Manual" target="_blank" target="_blank">
-          <span class="fa fa-book"></span>
-        </a>
-      </app-banner-tooltips>
-		</div>
-		<div class="pl-2 pr-2 home-nav-item d-block" [routerLink]="['/settings']">
-      <app-banner-tooltips [message]="'Settings'" [adjustLeft]="20">
-        <span class="fa fa-cog"></span>
-      </app-banner-tooltips>
-    </div>
-		<div class="pl-2 pr-2 home-nav-item d-block"
-			[routerLink]="['/directory-dashboard', assessment.directoryId]">
-      <app-banner-tooltips [message]="'Assessment Dashboard'" [adjustLeft]="-20">
-        <span class="fa fa-folder-open"></span>
-      </app-banner-tooltips>
+  @if (bannerCollapsed) {
+    <div class="d-block d-lg-none ml-2 pr-2 h-100 flex-wrap">
+      <div class="pl-2 border-left home-nav-item d-block" (click)="collapseBanner()">
+        <app-banner-tooltips [message]="'Collapse'" [adjustLeft]="20">
+          <span class="fa fa-bars"></span>
+        </app-banner-tooltips>
       </div>
-		<div class="pl-2 pr-2 home-nav-item d-block" (click)="navigateHome()">
-      <app-banner-tooltips [message]="'Home'" [adjustLeft]="-20">
-        <span class="fa fa-home"></span>
-      </app-banner-tooltips>
     </div>
-	</div>
+  }
+
+  @if (!bannerCollapsed) {
+    <div class="d-block d-lg-none ml-auto pr-2 h-100 flex-wrap">
+      <div class="pl-2 pr-2 home-nav-item d-block" (click)="collapseBanner()">
+        <app-banner-tooltips [message]="'Collapse'" [adjustLeft]="20">
+          <span class="fa fa-bars"></span>
+        </app-banner-tooltips>
+      </div>
+      <div class="pl-2 pr-2 home-nav-item d-block" (click)="openShareDataModal()">
+        <app-banner-tooltips [message]="'Share'" [adjustLeft]="20">
+          <span class="fa fa-share-square-o"></span>
+        </app-banner-tooltips>
+      </div>
+      <div class="pl-2 pr-2 home-nav-item d-block"
+        (click)="showSecurityAndPrivacyModal()">
+        <app-banner-tooltips [message]="'Security & Privacy'" [adjustLeft]="20">
+          <span class="fa fa-lock"></span>
+        </app-banner-tooltips>
+      </div>
+      <div class="pl-2 pr-2 download-nav-item home-nav-item d-block" (click)="openExportModal()">
+        <app-banner-tooltips [message]="'Export'" [adjustLeft]="20">
+          <span class="fa fa-download"></span>
+        </app-banner-tooltips>
+      </div>
+      <div class="pl-2 pr-2 home-nav-item d-block">
+        <app-banner-tooltips [message]="'Manual'" [adjustLeft]="20">
+          <a class="user-manual" href="https://industrialresources.ornl.gov/measur/user-guides/view-guide/Fans-User-Manual" target="_blank" target="_blank">
+            <span class="fa fa-book"></span>
+          </a>
+        </app-banner-tooltips>
+      </div>
+      <div class="pl-2 pr-2 home-nav-item d-block" [routerLink]="['/settings']">
+        <app-banner-tooltips [message]="'Settings'" [adjustLeft]="20">
+          <span class="fa fa-cog"></span>
+        </app-banner-tooltips>
+      </div>
+      <div class="pl-2 pr-2 home-nav-item d-block"
+        [routerLink]="['/directory-dashboard', assessment.directoryId]">
+        <app-banner-tooltips [message]="'Assessment Dashboard'" [adjustLeft]="-20">
+          <span class="fa fa-folder-open"></span>
+        </app-banner-tooltips>
+      </div>
+      <div class="pl-2 pr-2 home-nav-item d-block" (click)="navigateHome()">
+        <app-banner-tooltips [message]="'Home'" [adjustLeft]="-20">
+          <span class="fa fa-home"></span>
+        </app-banner-tooltips>
+      </div>
+    </div>
+  }
 
 </nav>

@@ -1,8 +1,12 @@
 <div class="panel-container d-block d-lg-flex w-100">
   <div class="panel-column flow-pressure-form col-12 col-lg-6 scroll-item pl-1 pr-1" [ngStyle]="{'height.px': bodyHeight}">
     <app-calculate-flow-pressure-banner [settings]="settings"></app-calculate-flow-pressure-banner>
-    <app-fan-info-form *ngIf="stepTab == 'fan-info'" [inModal]="true" [settings]="settings"></app-fan-info-form>
-    <app-plane-data-form *ngIf="stepTab == 'plane-data'" [settings]="settings"></app-plane-data-form>
+    @if (stepTab == 'fan-info') {
+      <app-fan-info-form [inModal]="true" [settings]="settings"></app-fan-info-form>
+    }
+    @if (stepTab == 'plane-data') {
+      <app-plane-data-form [settings]="settings"></app-plane-data-form>
+    }
   </div>
   <div class="col-12 col-lg-6 help-panel scroll-item" [ngStyle]="{'height.px': bodyHeight}">
     <app-help-and-results-panel [settings]="settings"></app-help-and-results-panel>
