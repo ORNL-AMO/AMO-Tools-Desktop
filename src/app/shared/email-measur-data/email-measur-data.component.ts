@@ -4,6 +4,8 @@ import { EmailMeasurDataService, EmailSentStatus, MeasurItemAttachment } from '.
 import { Subscription } from 'rxjs';
 import { ContactDbService, SavedContact } from '../../indexedDb/contact-db.service';
 import { ExportOpportunitiesService } from '../../treasure-hunt/treasure-chest/export-opportunities.service';
+import { OpportunityCounts } from '../../treasure-hunt/treasure-chest/opportunity-export-sections';
+import { TreasureHunt } from '../models/treasure-hunt';
 @Component({
     selector: 'app-email-measur-data',
     templateUrl: './email-measur-data.component.html',
@@ -27,6 +29,10 @@ export class EmailMeasurDataComponent {
   canAddCurrentEmailAsContact: boolean = false;
   showContactAddedBanner: boolean = false;
   showIncludeUnselected: boolean = false;
+  isOpportunities: boolean = false;
+  treasureHunt: TreasureHunt;
+  opportunityCounts: OpportunityCounts;
+  showOpportunitiesPreview: boolean = false;
   private contactAddedBannerTimeout: any;
 
   constructor(private fb: FormBuilder, private emailMeasurDataService: EmailMeasurDataService, private contactDbService: ContactDbService,
@@ -48,7 +54,12 @@ export class EmailMeasurDataComponent {
       includeUnselected: [false]
     });
     const attachment: MeasurItemAttachment = this.emailMeasurDataService.measurItemAttachment;
-    this.showIncludeUnselected = attachment.itemType === 'opportunities' && this.exportOpportunitiesService.hasUnselectedOpportunities(attachment.itemData);
+    this.isOpportunities = attachment.itemType === 'opportunities';
+    if (this.isOpportunities) {
+      this.treasureHunt = attachment.itemData;
+      this.opportunityCounts = this.exportOpportunitiesService.getOpportunityCounts(this.treasureHunt);
+      this.showIncludeUnselected = this.exportOpportunitiesService.hasUnselectedOpportunities(this.treasureHunt);
+    }
     this.save();
 
     this.emailSentStatusSubscription = this.emailMeasurDataService.emailSentStatus.subscribe(sentStatus => {
@@ -101,6 +112,10 @@ export class EmailMeasurDataComponent {
     this.showPreview = !this.showPreview;
   }
 
+  toggleOpportunitiesPreview() {
+    this.showOpportunitiesPreview = !this.showOpportunitiesPreview;
+  }
+
   multipleEmailsValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) {
@@ -126,5 +141,9 @@ export class EmailMeasurDataComponent {
 
   get emailAttachmentName() {
     return this.emailDataForm.get('emailAttachmentName');
+  }
+
+  get includedOpportunityCount(): number {
+    return this.exportOpportunitiesService.getIncludedOpportunityCount(this.opportunityCounts, this.emailDataForm.controls.includeUnselected.value);
   }
 }

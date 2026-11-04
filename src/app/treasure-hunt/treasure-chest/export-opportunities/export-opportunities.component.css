@@ -10,18 +10,8 @@
     font-size: small;
 }
 
-.modal-body label{
-    text-decoration: underline;
-    font-weight: bold;
-}
-
 .btn{
     padding: 6px;
-}
-
-.not-exported{
-    opacity: 0.5;
-    text-decoration: line-through;
 }
 
 .export-footer .form-group label,

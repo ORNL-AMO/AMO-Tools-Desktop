@@ -1,0 +1,31 @@
+:host {
+    display: block;
+}
+
+label {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.not-exported {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+.compact {
+    column-width: 200px;
+    column-gap: 8px;
+}
+
+.compact-section {
+    break-inside: avoid;
+}
+
+.compact label {
+    margin-bottom: 0;
+}
+
+.compact ul {
+    margin-bottom: 4px;
+    padding-left: 20px;
+}

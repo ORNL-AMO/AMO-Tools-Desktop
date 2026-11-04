@@ -8,8 +8,8 @@ import { ExportOpportunitiesService } from '../export-opportunities.service';
 import { ImportExportService } from '../../../shared/import-export/import-export.service';
 import { TreasureHuntService } from '../../treasure-hunt.service';
 import { TreasureChestMenuService } from '../treasure-chest-menu/treasure-chest-menu.service';
-import { EmailMeasurDataService } from '../../../shared/email-measur-data/email-measur-data.service';
 import { TreasureHunt } from '../../../shared/models/treasure-hunt';
+import { OpportunitiesExportPreviewComponent } from '../../../shared/opportunities-export-preview/opportunities-export-preview.component';
 
 function makeTreasureHunt(selectedFlags: Array<boolean>): TreasureHunt {
   return {
@@ -39,14 +39,13 @@ describe('ExportOpportunitiesComponent', () => {
     importExportServiceSpy = jasmine.createSpyObj('ImportExportService', ['downloadOpportunities']);
 
     await TestBed.configureTestingModule({
-      declarations: [ExportOpportunitiesComponent],
+      declarations: [ExportOpportunitiesComponent, OpportunitiesExportPreviewComponent],
       imports: [FormsModule, ModalModule.forRoot()],
       providers: [
         ExportOpportunitiesService,
         { provide: ImportExportService, useValue: importExportServiceSpy },
         { provide: TreasureHuntService, useValue: { treasureHunt: treasureHuntSubject } },
-        { provide: TreasureChestMenuService, useValue: { showExportModal: new BehaviorSubject<boolean>(false) } },
-        { provide: EmailMeasurDataService, useValue: {} }
+        { provide: TreasureChestMenuService, useValue: { showExportModal: new BehaviorSubject<boolean>(false) } }
       ]
     }).compileComponents();
   });
@@ -88,5 +87,24 @@ describe('ExportOpportunitiesComponent', () => {
     const exported = importExportServiceSpy.downloadOpportunities.calls.mostRecent().args[0];
     expect(exported.opportunitySheets.length).toBe(2);
     expect(exported.opportunitySheets[1].selected).toBeFalse();
+  });
+
+  it('strikes through unselected opportunities in the preview until include unselected is checked', () => {
+    createComponent(makeTreasureHunt([true, false]));
+    expect(document.querySelectorAll('app-opportunities-export-preview li.not-exported').length).toBe(1);
+
+    component.includeUnselected = true;
+    fixture.detectChanges();
+    expect(document.querySelectorAll('app-opportunities-export-preview li.not-exported').length).toBe(0);
+  });
+
+  it('shows the included count in the header and updates it when include unselected is checked', () => {
+    createComponent(makeTreasureHunt([true, false, true]));
+    const header: HTMLElement = document.querySelector('.modal-header');
+    expect(header.textContent).toContain('(2 of 3)');
+
+    component.includeUnselected = true;
+    fixture.detectChanges();
+    expect(header.textContent).toContain('(3 of 3)');
   });
 });

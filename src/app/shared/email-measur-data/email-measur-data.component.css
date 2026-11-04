@@ -8,8 +8,15 @@ i.fa.fa-chevron-down:hover,
     font-size: 16px;
 }
 
-.include-unselected {
-  cursor: pointer;
+.include-unselected input[type="checkbox"] {
+  width: 19.5px;
+  height: 19.5px;
+  flex-shrink: 0;
+}
+
+.opportunities-preview {
+  max-height: 180px;
+  overflow-y: auto;
 }
 
 .alert-danger {

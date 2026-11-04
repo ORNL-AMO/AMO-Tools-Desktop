@@ -10,6 +10,7 @@ import { ExportService } from '../import-export/export.service';
 import { AnalyticsService } from '../analytics/analytics.service';
 import { ExportOpportunitiesService } from '../../treasure-hunt/treasure-chest/export-opportunities.service';
 import { ImportExportOpportunities, TreasureHunt } from '../models/treasure-hunt';
+import { OpportunitiesExportPreviewComponent } from '../opportunities-export-preview/opportunities-export-preview.component';
 
 function makeTreasureHunt(selectedFlags: Array<boolean>): TreasureHunt {
   return {
@@ -47,7 +48,7 @@ describe('EmailMeasurDataComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EmailMeasurDataComponent],
+      declarations: [EmailMeasurDataComponent, OpportunitiesExportPreviewComponent],
       imports: [ReactiveFormsModule],
       providers: [
         provideHttpClient(),
@@ -85,6 +86,57 @@ describe('EmailMeasurDataComponent', () => {
     it('starts unchecked', () => {
       createComponent(makeOpportunitiesAttachment([true, false]));
       expect(getIncludeUnselectedCheckbox().checked).toBeFalse();
+    });
+  });
+
+  describe('opportunities preview', () => {
+    function getPreviewHeader(): HTMLElement {
+      return fixture.nativeElement.querySelector('form .card-header.preview');
+    }
+
+    function getPreviewItems(): NodeListOf<HTMLLIElement> {
+      return fixture.nativeElement.querySelectorAll('app-opportunities-export-preview li');
+    }
+
+    it('does not show for non-opportunity attachments', () => {
+      createComponent({ itemType: 'assessment', itemName: 'Assessment', itemData: {} });
+      expect(getPreviewHeader()).toBeNull();
+    });
+
+    it('starts collapsed with the included count in the header', () => {
+      createComponent(makeOpportunitiesAttachment([true, false, true]));
+      expect(getPreviewHeader().textContent).toContain('(2 of 3)');
+      expect(getPreviewItems().length).toBe(0);
+    });
+
+    it('lists every opportunity when expanded, striking through unselected ones', () => {
+      createComponent(makeOpportunitiesAttachment([true, false]));
+      getPreviewHeader().click();
+      fixture.detectChanges();
+
+      const items: NodeListOf<HTMLLIElement> = getPreviewItems();
+      expect(items.length).toBe(2);
+      expect(items[0].classList).not.toContain('not-exported');
+      expect(items[1].classList).toContain('not-exported');
+    });
+
+    it('updates when include unselected is checked', () => {
+      createComponent(makeOpportunitiesAttachment([true, false]));
+      getPreviewHeader().click();
+      getIncludeUnselectedCheckbox().click();
+      fixture.detectChanges();
+
+      expect(getPreviewHeader().textContent).toContain('(2 of 2)');
+      expect(fixture.nativeElement.querySelectorAll('app-opportunities-export-preview li.not-exported').length).toBe(0);
+    });
+
+    it('does not expand or collapse when the checkbox in the header is clicked', () => {
+      createComponent(makeOpportunitiesAttachment([true, false]));
+      getIncludeUnselectedCheckbox().click();
+      fixture.detectChanges();
+
+      expect(component.showOpportunitiesPreview).toBeFalse();
+      expect(getPreviewHeader().contains(getIncludeUnselectedCheckbox())).toBeTrue();
     });
   });
 

@@ -3,28 +3,16 @@
     <div class="modal-dialog modal-lg export-modal">
         <div class="modal-content">
             <div class="modal-header">
-                Data to be exported
+                <span>
+                    Data to be exported
+                    <span class="small text-muted ml-1">({{includedOpportunityCount}} of {{opportunityCounts.total}})</span>
+                </span>
                 <button class="close" aria-label="Close" (click)="hideExportModal()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body pb-0 scroll-item">
-                <div class="row no-gutters">
-                    <ng-container *ngFor="let section of previewSections">
-                        @if (treasureHunt[section.key]?.length > 0) {
-                            <div class="col-6 p-2">
-                                <label>{{section.label}}</label>
-                                <ul>
-                                    <li *ngFor="let opportunity of treasureHunt[section.key]; let index = index;"
-                                        [class.not-exported]="!opportunity.selected && !includeUnselected"
-                                        [attr.title]="opportunity.selected || includeUnselected ? null : 'Not selected for export'">
-                                        {{getOpportunityName(section, opportunity, index)}}
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                    </ng-container>
-                </div>
+                <app-opportunities-export-preview [treasureHunt]="treasureHunt" [includeUnselected]="includeUnselected"></app-opportunities-export-preview>
             </div>
             <div class="modal-footer export-footer flex-wrap justify-content-between">
                 <button class="btn btn-secondary" (click)="hideExportModal()">Cancel</button>

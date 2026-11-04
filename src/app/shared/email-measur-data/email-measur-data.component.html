@@ -52,14 +52,6 @@
       <label class="bold mr-2 w-25" for="emailAttachmentName">Attachment Name</label>
       <div class="input-group">
         <input type="text" formControlName="emailAttachmentName" class="form-control" (input)="save()" id="emailAttachmentName" />
-        @if (showIncludeUnselected) {
-          <div class="input-group-append">
-            <label class="input-group-text include-unselected mb-0" for="includeUnselected">
-              <input type="checkbox" formControlName="includeUnselected" id="includeUnselected" class="mr-2" (change)="save()" />
-              Include unselected
-            </label>
-          </div>
-        }
       </div>
       <div class="input-group">
         @if (emailAttachmentName.invalid) {
@@ -76,6 +68,34 @@
         }
       </div>
     </div>
+
+    @if (isOpportunities) {
+      <div class="card mb-3">
+        <div class="card-header preview" (click)="toggleOpportunitiesPreview()">
+          Attached Opportunities
+          <span class="small text-muted ml-1">({{includedOpportunityCount}} of {{opportunityCounts.total}})</span>
+          <span class="pull-right d-flex align-items-center">
+            @if (showIncludeUnselected) {
+              <span class="include-unselected d-flex align-items-center mr-3" (click)="$event.stopPropagation()">
+                <label for="includeUnselected" class="mb-0 mr-2">Include unselected:</label>
+                <input type="checkbox" formControlName="includeUnselected" id="includeUnselected" (change)="save()" />
+              </span>
+            }
+            @if (showOpportunitiesPreview) {
+              <i class="fa fa-chevron-down"></i>
+            } @else {
+              <i class="fa fa-chevron-up"></i>
+            }
+          </span>
+        </div>
+        @if (showOpportunitiesPreview) {
+          <div class="card-body small p-1 opportunities-preview">
+            <app-opportunities-export-preview [compact]="true" [treasureHunt]="treasureHunt"
+              [includeUnselected]="emailDataForm.controls.includeUnselected.value"></app-opportunities-export-preview>
+          </div>
+        }
+      </div>
+    }
 
   </form>
 }
