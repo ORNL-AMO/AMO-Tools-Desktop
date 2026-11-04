@@ -19,7 +19,7 @@ export class ProcessCoolingAssessmentComponent {
     this.analyticsService.sendEvent('view-process-cooling-assessment', undefined);
   }
 
-  next() {
+  continue() {
     this.processCoolingUiService.continue();
   }
 

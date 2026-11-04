@@ -1,10 +1,9 @@
 import { Component, computed, inject, Signal } from '@angular/core';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
-import { ROUTE_TOKENS } from '../constants/process-cooling-routes';
 import { ProcessCoolingUiService } from '../services/process-cooling-ui.service';
-import { MAIN_VIEW_LINKS, MainView, ViewLink } from '../models/views';
+import { MAIN_VIEW_LINKS, ViewLink } from '../models/views';
 import { DashboardService } from '../../dashboard/dashboard.service';
 import { ModalDialogService } from '../../shared/modal-dialog.service';
 import { SecurityAndPrivacyItemComponent } from '../../shared/security-and-privacy/security-and-privacy-item/security-and-privacy-item.component';
@@ -22,9 +21,7 @@ export class ProcessCoolingBannerComponent {
   private readonly dashboardService = inject(DashboardService);
   private readonly modalDialogService = inject(ModalDialogService);
 
-  readonly ROUTE_TOKENS = ROUTE_TOKENS;
   readonly MAIN_VIEW_LINKS = MAIN_VIEW_LINKS;
-  readonly MainView = MainView; 
   readonly assessment$: Observable<Assessment> = this.processCoolingService.assessment$;
 
   mainView: Signal<string> = this.processCoolingUiService.mainView;
@@ -79,7 +76,6 @@ export class ProcessCoolingBannerComponent {
     );
   }
 
-  
   continue() {
     this.processCoolingUiService.continueMainTab();
   }
@@ -87,7 +83,6 @@ export class ProcessCoolingBannerComponent {
   back() {
     this.processCoolingUiService.backMainTab();
   }
-
 
   isLinkDisabled(link: ViewLink): boolean {
     return !this.processCoolingUiService.canVisitView(link.view);

@@ -35,6 +35,6 @@
 
 @container ly-panel (max-width: 36rem) {
 	.schedule-flex {
-		padding: var(--ly-space-2) var(--ly-space-2);
+		padding: var(--ly-space-2);
 	}
 }

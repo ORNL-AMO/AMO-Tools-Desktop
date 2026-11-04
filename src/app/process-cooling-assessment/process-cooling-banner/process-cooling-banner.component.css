@@ -32,11 +32,6 @@
     margin-left: .5rem !important;
 } */
 
-.nav-link.current-main-tab,
-.nav-link.current-main-tab:hover {
-    cursor: default;
-}
-
 .nav-link.disabled {
     color: rgba(255,255,255,0.3);
 }
@@ -62,6 +57,11 @@
 .nav-link:not(.disabled):hover{
     cursor: pointer;
     background-color: #808B96;
+}
+
+.nav-link.current-main-tab,
+.nav-link.current-main-tab:hover {
+    cursor: default;
 }
 
 .nav-link.disabled:hover{

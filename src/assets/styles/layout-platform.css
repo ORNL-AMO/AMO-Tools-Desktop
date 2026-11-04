@@ -5,7 +5,8 @@
   their structure from these classes; component stylesheets only style content.
 
   Rules:
-  - CSS owns layout. No JS height math, resize listeners or [ngStyle] heights.
+  - CSS owns layout. No JS height math, resize listeners or [ngStyle] heights
+    for structure. Charts may read their width to pick font and marker sizes.
   - Media queries are for shell-level structure only (the medium tier switch).
     Content inside a panel responds to the panel width via container queries.
   - Do not combine Bootstrap layout classes (row, col-*, d-*-flex) with ly-*
@@ -121,6 +122,27 @@
   display: none;
 }
 
+.ly-workspace__switch {
+  flex: 1 1 0;
+  padding: var(--ly-space-2) var(--ly-space-3);
+  border: none;
+  border-radius: var(--ly-radius);
+  background: transparent;
+  color: var(--ly-text);
+  cursor: pointer;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.ly-workspace__switch[aria-selected="true"] {
+  background: var(--ly-surface);
+  box-shadow: inset 0 -2px 0 var(--ly-accent);
+}
+
+.ly-workspace__switch:focus-visible {
+  outline: 2px solid var(--ly-accent);
+  outline-offset: 1px;
+}
+
 @media screen and (max-width: 1024px) {
   .ly-workspace:not(.ly-workspace--solo) {
     grid-template-columns: minmax(0, 1fr);
@@ -147,27 +169,6 @@
   }
 }
 
-.ly-workspace__switch {
-  flex: 1 1 0;
-  padding: var(--ly-space-2) var(--ly-space-3);
-  border: none;
-  border-radius: var(--ly-radius);
-  background: transparent;
-  color: var(--ly-text);
-  cursor: pointer;
-  transition: background-color 0.1s ease-in-out;
-}
-
-.ly-workspace__switch[aria-selected="true"] {
-  background: var(--ly-surface);
-  box-shadow: inset 0 -2px 0 var(--ly-accent);
-}
-
-.ly-workspace__switch:focus-visible {
-  outline: 2px solid var(--ly-accent);
-  outline-offset: 1px;
-}
-
 /* ---------- Panel ---------- */
 /* One scrolling region. It is the container that content queries respond to. */
 .ly-panel {
@@ -180,6 +181,7 @@
   container: ly-panel / inline-size;
 }
 
+/* scrollbar sizes match the legacy .scroll-item rule (two-panel.css) */
 .ly-panel::-webkit-scrollbar {
   width: 0.5em;
   height: 0.5rem;
@@ -307,8 +309,8 @@
 }
 
 /* ---------- Media ---------- */
-/* Maps and charts. The hosted component redraws on its own size change
-   (ResizeObserver), not on window resize events. */
+/* Maps and charts. Plotly and billboard redraw on window resize events;
+   app-layout-workspace fires one when it switches panels. */
 .ly-media {
   position: relative;
   width: 100%;

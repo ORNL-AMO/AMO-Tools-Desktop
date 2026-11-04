@@ -42,14 +42,11 @@ export class AssessmentComponent {
     );
   }
 
-  next() {
-  this.processCoolingUiService.continue();
+  continue() {
+    this.processCoolingUiService.continue();
   }
 
   back() {
     this.processCoolingUiService.back();
   }
-
-  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
-  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBack;
 }

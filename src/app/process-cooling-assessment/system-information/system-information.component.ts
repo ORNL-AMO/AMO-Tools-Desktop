@@ -18,7 +18,6 @@ export class SystemInformationComponent {
   private readonly destroyRef = inject(DestroyRef);
   isSystemInformationValid: boolean = false;
 
-  isModalOpen: boolean = false;
   setupSubView: Signal<string> = this.processCoolingUiService.setupSubView;
 
   SYSTEM_INFORMATION_VIEW_LINKS = SYSTEM_INFORMATION_VIEW_LINKS;
@@ -53,7 +52,7 @@ export class SystemInformationComponent {
     });
   }
 
-  next() {
+  continue() {
     this.processCoolingUiService.continue();
   }
 

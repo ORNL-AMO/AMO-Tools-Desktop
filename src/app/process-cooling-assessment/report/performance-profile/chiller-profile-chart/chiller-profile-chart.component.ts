@@ -5,7 +5,7 @@ import { ProcessCoolingResultsService } from '../../../services/process-cooling-
 import { ProcessCoolingChartsService } from '../../../services/process-cooling-charts.service';
 import { ProcessCoolingChillerOutput } from '../../../../shared/models/process-cooling-assessment';
 
-const COMPACT_MEDIA_QUERY = '(max-width: 576px)';
+const COMPACT_MEDIA_QUERY = '(max-width: 575px)';
 
 @Component({
   selector: 'app-chiller-profile-chart',
@@ -27,11 +27,11 @@ export class ChillerProfileChartComponent {
   private baselineResults = toSignal(this.processCoolingResultsService.baselineResults$);
 
   constructor() {
-    const phoneQuery = window.matchMedia(COMPACT_MEDIA_QUERY);
-    this.compact.set(phoneQuery.matches);
-    const onPhoneQueryChange = (event: MediaQueryListEvent) => this.compact.set(event.matches);
-    phoneQuery.addEventListener('change', onPhoneQueryChange);
-    this.destroyRef.onDestroy(() => phoneQuery.removeEventListener('change', onPhoneQueryChange));
+    const compactQuery = window.matchMedia(COMPACT_MEDIA_QUERY);
+    this.compact.set(compactQuery.matches);
+    const onCompactQueryChange = (event: MediaQueryListEvent) => this.compact.set(event.matches);
+    compactQuery.addEventListener('change', onCompactQueryChange);
+    this.destroyRef.onDestroy(() => compactQuery.removeEventListener('change', onCompactQueryChange));
 
     effect(() => {
       const nativeElement: HTMLDivElement | undefined = this.chartRef()?.nativeElement;

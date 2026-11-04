@@ -42,7 +42,7 @@
             }
             <li class="page-item"
                 [class.disabled]="assessmentView() == ROUTE_TOKENS.modificationGraphs || !selectedModification">
-                <a class="nav-link small" (click)="next()"
+                <a class="nav-link small" (click)="continue()"
                     [class.disabled]="assessmentView() == ROUTE_TOKENS.modificationGraphs || !selectedModification">
                     <span class="fa fa-chevron-right"></span></a>
             </li>

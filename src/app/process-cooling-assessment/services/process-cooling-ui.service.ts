@@ -8,7 +8,7 @@ import { WEATHER_CONTEXT } from '../../shared/modules/weather-data/weather-conte
 import { ROUTE_TOKENS as WEATHER_ROUTE_TOKENS } from '../../shared/modules/weather-data/models/routes';
 import { SummaryView } from './executive-summary-results.service';
 import { ProfileView } from './system-profile.service';
-import { MAIN_VIEW_LINKS, ProcessCoolingView, SETUP_VIEW_LINKS,SetupView, SystemInformationView, ViewLink } from '../models/views';
+import { MAIN_VIEW_LINKS, ProcessCoolingView, SETUP_VIEW_LINKS, SetupView, SystemInformationView, ViewLink } from '../models/views';
 export { ProcessCoolingMainTabString, ProcessCoolingSetupTabString, ProcessCoolingAssessmentTabString, ProcessCoolingView, MainView, SetupView, SystemInformationView, AssessmentView, ReportView, ViewLink, MAIN_VIEW_LINKS, SETUP_VIEW_LINKS, SYSTEM_INFORMATION_VIEW_LINKS, ASSESSMENT_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
 
 interface ProcessCoolingRouteData {
@@ -38,7 +38,6 @@ export class ProcessCoolingUiService {
   showModificationListModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
-  
   executiveSummaryViewSignal: WritableSignal<SummaryView> = signal<SummaryView>('baseline-panel');
   profileViewSignal: WritableSignal<ProfileView> = signal<ProfileView>('baseline');
 
@@ -143,9 +142,23 @@ export class ProcessCoolingUiService {
   readonly setupSubView: Signal<string> = computed(() => this.routeData().setupSubView ?? '');
 
   readonly currentStepIndex: Signal<number> = computed(() => this.routeData().stepIndex ?? -1);
+  private readonly setupTabIndex: Signal<number> = computed(() => SETUP_VIEW_LINKS.findIndex(link => link.view === this.childView()));
+  private readonly mainTabIndex: Signal<number> = computed(() => MAIN_VIEW_LINKS.findIndex(link => link.view === this.mainView()));
 
   readonly canContinue: Signal<boolean> = computed(() => this.canVisitSteppedView(this.currentStepIndex() + 1));
   readonly canGoBack: Signal<boolean> = computed(() => this.currentStepIndex() > 0);
+
+  readonly canGoBackSetupTab: Signal<boolean> = computed(() => this.setupTabIndex() > 0);
+  readonly canContinueSetupTab: Signal<boolean> = computed(() => {
+    const nextLink = SETUP_VIEW_LINKS[this.setupTabIndex() + 1];
+    return nextLink ? this.canVisitView(nextLink.view) : this.canContinue();
+  });
+
+  readonly canGoBackMainTab: Signal<boolean> = computed(() => this.mainTabIndex() > 0);
+  readonly canContinueMainTab: Signal<boolean> = computed(() => {
+    const nextLink = MAIN_VIEW_LINKS[this.mainTabIndex() + 1];
+    return nextLink ? this.canVisitView(nextLink.view) : false;
+  });
 
   private buildUrl(path: string): string {
     const id = this.processCoolingAssessmentService.assessmentId;
@@ -168,14 +181,6 @@ export class ProcessCoolingUiService {
     }
   }
 
-  private readonly setupTabIndex: Signal<number> = computed(() => SETUP_VIEW_LINKS.findIndex(link => link.view === this.childView()));
-
-  readonly canGoBackSetupTab: Signal<boolean> = computed(() => this.setupTabIndex() > 0);
-  readonly canContinueSetupTab: Signal<boolean> = computed(() => {
-    const nextLink = SETUP_VIEW_LINKS[this.setupTabIndex() + 1];
-    return nextLink ? this.canVisitView(nextLink.view) : this.canContinue();
-  });
-
   /** Step between baseline tabs, skipping their sub-tabs. Past the last tab, continue into the assessment. */
   continueSetupTab(): void {
     const nextLink = SETUP_VIEW_LINKS[this.setupTabIndex() + 1];
@@ -192,14 +197,6 @@ export class ProcessCoolingUiService {
       this.router.navigateByUrl(this.buildUrl(`${ROUTE_TOKENS.baseline}/${prevLink.view}`));
     }
   }
-
-  private readonly mainTabIndex: Signal<number> = computed(() => MAIN_VIEW_LINKS.findIndex(link => link.view === this.mainView()));
-
-  readonly canGoBackMainTab: Signal<boolean> = computed(() => this.mainTabIndex() > 0);
-  readonly canContinueMainTab: Signal<boolean> = computed(() => {
-    const nextLink = MAIN_VIEW_LINKS[this.mainTabIndex() + 1];
-    return nextLink ? this.canVisitView(nextLink.view) : false;
-  });
 
   /** Step between main tabs (Baseline, Assessment, Report), skipping their sub-tabs. */
   continueMainTab(): void {

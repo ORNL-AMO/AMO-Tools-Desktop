@@ -50,9 +50,9 @@
     <div class="d-flex nav-pills nav-fill flex-wrap mx-auto d-none d-lg-inline-block">
         @for (link of MAIN_VIEW_LINKS; track link.view) {
             <div class="nav-item d-none d-lg-inline-block">
-                <a class="nav-link" 
+                <a class="nav-link"
                     routerLinkActive="active"
-                    [routerLink]="[link.view]"       
+                    [routerLink]="[link.view]"
                     [class.disabled]="isLinkDisabled(link)"
                     (click)="handleCanNavigate($event, link)"
                 >{{link.label}}</a>
@@ -64,14 +64,14 @@
     @if (!bannerCollapsed) {
     <div class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
         @for (link of MAIN_VIEW_LINKS; track link.view) {
-        <div class="nav-item">
+            <div class="nav-item">
                 <a class="nav-link"
                     routerLinkActive="active"
                     [routerLink]="[link.view]"
                     [class.disabled]="isLinkDisabled(link)"
                     (click)="selectSmallScreenLink($event, link)"
                 >{{link.label}}</a>
-        </div>
+            </div>
         }
     </div>
     }
@@ -79,8 +79,8 @@
 
     <div class="d-flex ml-auto pr-2 h-100 d-none d-lg-inline-block">
         <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="emailAssessment()">
-			<span class="fa fa-share-square-o"></span>
-		</div>
+            <span class="fa fa-share-square-o"></span>
+        </div>
         <div class="pl-2 pr-2 home-nav-item d-none d-lg-inline-block" (click)="showSecurityAndPrivacyModal()">
             <span class="fa fa-lock"></span>
         </div>
@@ -127,8 +127,8 @@
             <span class="fa fa-bars"></span>
         </div>
         <div class="pl-2 pr-2 home-nav-item d-block" (click)="emailAssessment()">
-			<span class="fa fa-share-square-o"></span>
-		</div>
+            <span class="fa fa-share-square-o"></span>
+        </div>
         <div class="pl-2 pr-2 home-nav-item d-block" (click)="showSecurityAndPrivacyModal()">
             <span class="fa fa-lock"></span>
         </div>

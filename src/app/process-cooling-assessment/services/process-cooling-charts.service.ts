@@ -17,8 +17,9 @@ const MARKER_SHAPES: Array<string> = [
   'star', 'star-diamond', 'hexagram', 'star-square', 'square',
   'diamond', 'cross', 'x', 'diamond-wide', 'diamond-tall'
 ];
-const CHILLER_FILL_ALPHA = 0.07;
 const COMPACT_FONT_SIZE = 11;
+const COMPACT_MARKER_SCALE = 0.6;
+const CHILLER_FILL_ALPHA = 0.07;
 const CHILLER_DASH_PATTERNS: Array<string> = ['solid', 'dash', 'dot', 'dashdot', 'longdash', 'longdashdot'];
 
 function hexToRgba(hex: string, alpha: number): string {
@@ -33,7 +34,7 @@ export class ProcessCoolingChartsService {
 
   buildChillerProfileChart(chillerOutput: ProcessCoolingChillerOutput[], showFactoredProfile = false, compact = false): PlotlyChartConfig {
     const titleFontSize = compact ? COMPACT_FONT_SIZE : CHART_TITLE_FONT_SIZE;
-    const markerScale = compact ? 0.6 : 1;
+    const markerScale = compact ? COMPACT_MARKER_SCALE : 1;
     const efficiencyLabel = PROCESS_COOLING_UNITS.efficiency.labelHTML.imperial;
 
     const traces: TraceData[] = chillerOutput.map((chiller, index) => {
