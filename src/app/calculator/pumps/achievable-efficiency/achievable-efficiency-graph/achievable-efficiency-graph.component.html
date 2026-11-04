@@ -1,3 +1,5 @@
+<p class="small text-muted">{{rangeGuidance}}</p>
+@if (hasLegacyPoints) { <p class="small text-muted">Saved points from the earlier method retain their original values. Current curves use HI 2020.</p> }
 <div #ngChartContainer class="panel-chart-container" [ngClass]="{'expanded-chart': expanded}">
   <div *ngIf="expanded" class="row">
     <div class="col-12">

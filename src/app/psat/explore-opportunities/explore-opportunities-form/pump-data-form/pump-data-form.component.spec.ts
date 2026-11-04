@@ -13,6 +13,7 @@ const BASELINE_PUMP_EFFICIENCY = 80;
 
 function makePsatInputs(overrides: Partial<PsatInputs> = {}): PsatInputs {
   return {
+    pump_style: 0,
     operating_hours: 8760,
     fluidType: 'water',
     fluidTemperature: 60,
@@ -66,9 +67,10 @@ describe('PumpDataFormComponent', () => {
     pumpFluidServiceSpy.updateSpecifiedPumpEfficiency.and.callFake((form: UntypedFormGroup) => form);
     pumpFluidServiceSpy.updateSpecifiedDriveEfficiency.and.callFake((form: UntypedFormGroup) => form);
 
-    psatServiceSpy = jasmine.createSpyObj('PsatService', ['resultsExisting', 'pumpEfficiency']);
+    psatServiceSpy = jasmine.createSpyObj('PsatService', ['resultsExisting', 'pumpEfficiency', 'pumpEfficiencyRangeMessage']);
     psatServiceSpy.resultsExisting.and.returnValue({ pump_efficiency: BASELINE_PUMP_EFFICIENCY } as PsatOutputs);
     psatServiceSpy.pumpEfficiency.and.returnValue({ average: 0.7, max: 0.8 });
+    psatServiceSpy.pumpEfficiencyRangeMessage.and.returnValue('Outside HI 2020 reference range. Enter a supplied efficiency.');
 
     await TestBed.configureTestingModule({
       imports: [FormsModule, ReactiveFormsModule],
@@ -224,6 +226,7 @@ describe('PumpDataFormComponent', () => {
 
   describe('getPumpEfficiency', () => {
     it('computes and patches specifiedPumpEfficiency from the psatService result, then recalculates', () => {
+      component.modificationForm.controls.pumpType.setValue(6);
       psatServiceSpy.pumpEfficiency.and.returnValue({ average: 0.7, max: 0.85 });
       const emitted: boolean[] = [];
       component.emitCalculate.subscribe(v => emitted.push(v));
@@ -248,6 +251,7 @@ describe('PumpDataFormComponent', () => {
 
   describe('setPumpTypes', () => {
     it('updates specified pump efficiency validators and recalculates pump efficiency', () => {
+      component.modificationForm.controls.pumpType.setValue(6);
       pumpFluidServiceSpy.updateSpecifiedPumpEfficiency.calls.reset();
 
       component.setPumpTypes();
@@ -450,5 +454,22 @@ describe('PumpDataFormComponent', () => {
       fixture.detectChanges();
       expect(fixture.nativeElement.textContent).toContain('to use the efficiency calculated by your baseline');
     });
+  });
+
+  it('retains the stored modification when re-estimation is unavailable', () => {
+    const input = component.psat.modifications[0].psat.inputs;
+    input.pump_style = 11;
+    input.pump_specified = 83.123456;
+    input.pumpEfficiencyModel = {version: 1, source: 'legacy-preserved', originalPumpStyle: 6};
+    component.modificationForm.controls.pumpType.setValue(11);
+    component.modificationForm.controls.specifiedPumpEfficiency.setValue(83.123456);
+    const before = structuredClone(input);
+    psatServiceSpy.pumpEfficiency.and.returnValue({average: NaN, max: NaN});
+    const calculate = spyOn(component, 'calculate');
+    component.reestimatePumpEfficiency();
+    expect(input).toEqual(before);
+    expect(component.modificationForm.controls.pumpType.value).toBe(11);
+    expect(component.modificationForm.controls.specifiedPumpEfficiency.value).toBe(83.123456);
+    expect(calculate).not.toHaveBeenCalled();
   });
 });

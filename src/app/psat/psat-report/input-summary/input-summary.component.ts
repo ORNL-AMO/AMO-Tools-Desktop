@@ -1,3 +1,4 @@
+import { physicalPumpStyle } from '../../../shared/pump-efficiency';
 import { Component, OnInit, Input, ViewChild, ElementRef, Signal, inject } from '@angular/core';
 import { PSAT } from '../../../shared/models/psat';
 import { PsatService } from '../../psat.service';
@@ -11,6 +12,7 @@ import { FeatureFlagService } from '../../../shared/feature-flag.service';
     standalone: false
 })
 export class InputSummaryComponent implements OnInit {
+  physicalPumpStyle = physicalPumpStyle;
   private featureFlagService = inject(FeatureFlagService);
   showOperationalImpacts: Signal<boolean> = this.featureFlagService.showOperationalImpacts;
   
@@ -97,7 +99,7 @@ export class InputSummaryComponent implements OnInit {
         if (mod.psat.inputs.co2SavingsData.totalEmissionOutputRate != this.psat.inputs.co2SavingsData.totalEmissionOutputRate) {
         this.totalEmissionOutputRateDiff = true;
         }
-        if (mod.psat.inputs.pump_style != this.psat.inputs.pump_style) {
+        if (physicalPumpStyle(mod.psat.inputs) != physicalPumpStyle(this.psat.inputs)) {
           this.pumpDiff = true;
         }
         if (mod.psat.inputs.pump_rated_speed != this.psat.inputs.pump_rated_speed) {

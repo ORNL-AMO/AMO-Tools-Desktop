@@ -27,6 +27,13 @@ export interface PsatValid {
 };
 
 export interface PsatInputs {
+  /** Versioned provenance for HI estimates and preservation of legacy saved efficiencies. */
+  pumpEfficiencyModel?: {
+    version: 1;
+    source: 'hi-2020-pchip' | 'specified' | 'legacy-preserved' | 'needs-review';
+    /** Physical pump classification retained when pump_style is specified efficiency (11). */
+    originalPumpStyle?: number;
+  };
   pump_style?: number;
   pump_specified?: number;
   pump_rated_speed?: number;

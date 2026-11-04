@@ -117,18 +117,18 @@ export class ExploreOpportunitiesComponent implements OnInit {
     let psatResults: ExploreOpportunitiesResults;
     if (this.modificationExists) {
       if (this.psat.modifications[this.modificationIndex].psat.inputs.whatIfScenario === true) {
-        this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, false);
+        this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, false, this.settings);
         this.opportunityPsatValid = this.psat.modifications[this.modificationIndex].psat.valid;
         psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings, this.psat.modifications[this.modificationIndex].psat.inputs);
       } else if (!this.psat.modifications[this.modificationIndex].psat.inputs.whatIfScenario) {
         // Pass scenario as baseline
-        this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, true);
+        this.psat.modifications[this.modificationIndex].psat.valid = this.psatService.isPsatValid(this.psat.modifications[this.modificationIndex].psat.inputs, true, this.settings);
         this.opportunityPsatValid = this.psat.modifications[this.modificationIndex].psat.valid;
         psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings);
         psatResults.modificationResults = psatResults.baselineResults;
       }
     } else {
-      this.psat.valid = this.psatService.isPsatValid(this.psat.inputs, true);
+      this.psat.valid = this.psatService.isPsatValid(this.psat.inputs, true, this.settings);
       this.opportunityPsatValid = this.psat.valid;
       psatResults = this.psatService.getPsatResults(this.psat.inputs, this.settings);
     }

@@ -56,9 +56,9 @@ export class PsatSummaryCardComponent implements OnInit {
 
 
     getResults(psat: PSAT, settings: Settings, isBaseline: boolean): PsatOutputs {
-        psat.valid = this.psatService.isPsatValid(psat.inputs, isBaseline);
+        psat.valid = this.psatService.isPsatValid(psat.inputs, isBaseline, settings);
         if (psat.valid.isValid) {
-            if (isBaseline) {
+            if (isBaseline || psat.inputs.whatIfScenario !== true) {
                 return this.psatService.resultsExisting(JSON.parse(JSON.stringify(psat.inputs)), settings);
             } else {
                 if (this.psatResults.pump_efficiency) {

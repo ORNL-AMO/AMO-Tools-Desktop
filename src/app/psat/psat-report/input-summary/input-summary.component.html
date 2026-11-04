@@ -77,19 +77,19 @@
       </tr>
       <tr>
         <td [ngClass]="{'indicate-report-field-different': pumpDiff == true}">Pump Type</td>
-        <td [ngClass]="{'indicate-report-field-different': pumpDiff == true}">{{getPumpType(psat.inputs.pump_style)}}
+        <td [ngClass]="{'indicate-report-field-different': pumpDiff == true}">{{getPumpType(physicalPumpStyle(psat.inputs))}}
         </td>
         @for (modification of psat.modifications; track modification) {
           <td
-            [ngClass]="{'indicate-report-field-different': modification.psat.inputs.pump_style != psat.inputs.pump_style}">
-            @if (modification.psat.inputs.pump_style == 11) {
+            [ngClass]="{'indicate-report-field-different': physicalPumpStyle(modification.psat.inputs) != physicalPumpStyle(psat.inputs)}">
+            @if (modification.psat.inputs.pump_style == 11 && modification.psat.inputs.pumpEfficiencyModel?.originalPumpStyle == null) {
               <span>
                 &mdash; &mdash;
               </span>
             }
-            @if (modification.psat.inputs.pump_style != 11) {
+            @if (modification.psat.inputs.pump_style != 11 || modification.psat.inputs.pumpEfficiencyModel?.originalPumpStyle != null) {
               <span>
-                {{getPumpType(modification.psat.inputs.pump_style)}}
+                {{getPumpType(physicalPumpStyle(modification.psat.inputs))}}
               </span>
             }
           </td>

@@ -232,9 +232,10 @@ export class PsatWarningService {
         if (settings.powerMeasurement == 'hp') {
           val = this.convertUnitsService.value(psat.inputs.motor_rated_power).from(settings.powerMeasurement).to('kW');
           if (isModification) {
-            psat.valid = this.psatService.isPsatValid(psat.inputs, false);
+            psat.valid = this.psatService.isPsatValid(psat.inputs, false, settings);
             if (psat.valid.isValid) {
-              let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
+              let modificationResults: PsatOutputs = psat.inputs.whatIfScenario === true
+                ? this.psatService.resultsModified(psat.inputs, settings) : this.psatService.resultsExisting(psat.inputs, settings);
               compare = modificationResults.motor_power;
             } else {
               compare = this.convertUnitsService.value(motorFieldPower).from(settings.powerMeasurement).to('kW');
@@ -246,9 +247,10 @@ export class PsatWarningService {
         } else {
           val = psat.inputs.motor_rated_power;
           if (isModification) {
-            psat.valid = this.psatService.isPsatValid(psat.inputs, false);
+            psat.valid = this.psatService.isPsatValid(psat.inputs, false, settings);
             if (psat.valid.isValid) {
-              let modificationResults: PsatOutputs = this.psatService.resultsModified(psat.inputs, settings);
+              let modificationResults: PsatOutputs = psat.inputs.whatIfScenario === true
+                ? this.psatService.resultsModified(psat.inputs, settings) : this.psatService.resultsExisting(psat.inputs, settings);
               compare = modificationResults.motor_power;
             } else {
               compare = motorFieldPower;

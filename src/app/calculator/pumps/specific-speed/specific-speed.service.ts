@@ -1,3 +1,4 @@
+import { physicalPumpStyle } from '../../../shared/pump-efficiency';
 import { Injectable } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { PsatInputs } from '../../../shared/models/psat';
@@ -63,7 +64,7 @@ export class SpecificSpeedService {
 
   initFormFromPsat(psatInputs: PsatInputs): UntypedFormGroup {
     return this.formBuilder.group({
-      pumpType: [psatInputs.pump_style, Validators.required],
+      pumpType: [physicalPumpStyle(psatInputs), Validators.required],
       pumpRPM: [psatInputs.pump_rated_speed, [Validators.required, Validators.min(0)]],
       flowRate: [psatInputs.flow_rate, [Validators.required, Validators.min(0)]],
       head: [psatInputs.head, [Validators.required, Validators.min(0)]]
@@ -92,6 +93,7 @@ export class SpecificSpeedService {
   getTraceDataFromPoint(selectedPoint: DataPoint): TraceData {
     let hoverTemplate = 'Specific Speed' + ': %{x:.2r} <br>' + 'Efficiency Correction' + ': %{y:.2r}%' + '<extra></extra>';
     let trace: TraceData = {
+      calculationMethod: selectedPoint.calculationMethod,
       x: [selectedPoint.x],
       y: [selectedPoint.y],
       type: 'scatter',

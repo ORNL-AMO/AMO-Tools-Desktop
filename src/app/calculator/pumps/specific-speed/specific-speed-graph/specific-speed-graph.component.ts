@@ -83,6 +83,14 @@ export class SpecificSpeedGraphComponent implements OnInit {
     }
   }
 
+  get rangeGuidance(): string {
+    const limits = this.psatService.pumpEfficiencyLimits(this.speedForm.controls.pumpType.value);
+    return limits.supported ? `HI 2020 correction requires specific speed from ${limits.minimumSpecificSpeed} to ${limits.maximumSpecificSpeed} (US convention).`
+      : 'This pump type uses a supplied efficiency.';
+  }
+
+  get hasLegacyPoints(): boolean { return this.selectedDataPoints?.some(point => point.calculationMethod === 'legacy') ?? false; }
+
   save() {
     this.specificSpeedService.specificSpeedChart.next(this.specificSpeedChart);
     this.specificSpeedService.selectedDataPoints.next(this.selectedDataPoints);
@@ -90,8 +98,12 @@ export class SpecificSpeedGraphComponent implements OnInit {
 
   renderChart() {
     this.initChartSetup();
-    this.dataPointTraces = new Array();
-    this.selectedDataPoints = new Array();
+    this.dataPointTraces = this.selectedDataPoints.filter(point => point.pointColor !== '#000').map(point => {
+      const trace = this.specificSpeedService.getTraceDataFromPoint(point);
+      if (point.calculationMethod === 'legacy') { trace.name += ' (earlier method)'; }
+      return trace;
+    });
+    this.selectedDataPoints = this.selectedDataPoints ?? [];
     this.setCalculatedTrace();
     this.newPlot();
     this.save();
@@ -134,17 +146,20 @@ export class SpecificSpeedGraphComponent implements OnInit {
     this.pointColors = graphColors;
     this.specificSpeedChart = this.specificSpeedService.specificSpeedChart.getValue();
     this.selectedDataPoints = this.specificSpeedService.selectedDataPoints.getValue();
+    this.selectedDataPoints.forEach(point => { point.calculationMethod ??= 'legacy'; });
 
     // lineTrace
     this.specificSpeedChart.data[0].x = currentData.x;
     this.specificSpeedChart.data[0].y = currentData.y;
+    this.specificSpeedChart.layout.yaxis.autorange = true;
   }
 
   setCalculatedTrace() {
-    let specificSpeed = Math.round(this.getSpecificSpeed());
+    let specificSpeed = this.getSpecificSpeed();
     let efficiencyCorrection = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, specificSpeed);
 
     let calculatedPoint: DataPoint = {
+      calculationMethod: 'hi-2020-pchip',
       pointColor: '#000',
       x: specificSpeed,
       y: efficiencyCorrection
@@ -153,21 +168,30 @@ export class SpecificSpeedGraphComponent implements OnInit {
     let resultCoordinateTrace: TraceData = this.specificSpeedService.getTraceDataFromPoint(calculatedPoint);
     resultCoordinateTrace.name = "Current Specific Speed";
 
-    if (!isNaN(calculatedPoint.x)) {
+    if (Number.isFinite(calculatedPoint.x) && Number.isFinite(calculatedPoint.y)) {
       this.validCurrentSpeed = true;
       this.specificSpeedChart.data[1] = resultCoordinateTrace;
-      this.selectedDataPoints.splice(0, 1, calculatedPoint);
+      if (this.selectedDataPoints[0]?.pointColor === '#000') { this.selectedDataPoints.splice(0, 1, calculatedPoint); }
+      else { this.selectedDataPoints.unshift(calculatedPoint); }
       this.cd.detectChanges();
     } else {
       this.validCurrentSpeed = false;
+      if (this.selectedDataPoints[0]?.pointColor === '#000') { this.selectedDataPoints.shift(); }
+      if (this.specificSpeedChart.data[1]) {
+        this.specificSpeedChart.data[1].x = [];
+        this.specificSpeedChart.data[1].y = [];
+      }
     }
   }
 
   createDataPoint(graphData) {
+    const correction = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, graphData.points[0].x);
+    if (!Number.isFinite(graphData.points[0].x) || !Number.isFinite(correction)) { return; }
     let selectedPoint: DataPoint = {
+      calculationMethod: 'hi-2020-pchip',
       pointColor: this.pointColors[(this.dataPointTraces.length + 1) % this.pointColors.length],
       x: graphData.points[0].x,
-      y: graphData.points[0].y
+      y: correction
     }
 
     let selectedPointTrace = this.specificSpeedService.getTraceDataFromPoint(selectedPoint);
@@ -196,29 +220,15 @@ export class SpecificSpeedGraphComponent implements OnInit {
       y: new Array<number>()
     };
 
-    let curveType: any;
-    if (this.speedForm.controls.pumpType.value === 9) {
-      // Vertical Turbine
-      curveType = {
-        init: 1720,
-        end: 16350,
-        step: 25
-      };
-    }
-    else {
-      curveType = {
-        init: 680,
-        end: 7300,
-        step: 25
-      };
-    }
-
-    for (let i = curveType.init; i < curveType.end; i += curveType.step) {
-      let efficiencyCorrection: number = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, i);
-      if (efficiencyCorrection <= 5.5) {
-        traceCoordinates.x.push(i);
-        traceCoordinates.y.push(efficiencyCorrection);
-      }
+    const limits = this.psatService.pumpEfficiencyLimits(this.speedForm.controls.pumpType.value);
+    if (!limits.supported) { return traceCoordinates; }
+    const step = 25;
+    const speeds = [limits.minimumSpecificSpeed];
+    for (let speed = limits.minimumSpecificSpeed + step; speed < limits.maximumSpecificSpeed; speed += step) { speeds.push(speed); }
+    speeds.push(limits.maximumSpecificSpeed);
+    for (const speed of speeds) {
+      const correction = this.psatService.achievableEfficiency(this.speedForm.controls.pumpType.value, speed);
+      if (Number.isFinite(correction)) { traceCoordinates.x.push(speed); traceCoordinates.y.push(correction); }
     }
 
     return traceCoordinates;

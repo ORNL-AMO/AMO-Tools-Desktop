@@ -1,3 +1,11 @@
+@if (psat.modifications[exploreModIndex].psat.inputs.pumpEfficiencyModel?.source === 'legacy-preserved') {
+  <div class="small my-2">The saved pump efficiency is preserved as a specified value.
+    <button type="button" class="btn btn-link btn-sm" (click)="reestimatePumpEfficiency()">Re-estimate with HI 2020</button>
+  </div>
+}
+@if (pumpEfficiencyError) {
+  <div class="text-warning my-2" role="status">{{pumpEfficiencyError}} The saved efficiency has been retained.</div>
+}
 @if (!isVFD) {
   <div class="checkbox">
     <label class="group-label" for="modifyMotorDrive">

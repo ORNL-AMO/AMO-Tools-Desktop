@@ -25,6 +25,7 @@ export class ExportToJustifiPsatService {
 
     if (assessment.psat.setupDone == true) {
       let settings: Settings = this.settingsDbService.getByAssessmentId(assessment);
+      if (!this.psatService.isPsatValid(assessment.psat.inputs, true, settings).isValid) { return eemRowIndex; }
       let baselineResults: PsatOutputs = this.psatService.resultsExisting(JSON.parse(JSON.stringify(assessment.psat.inputs)), settings);
       //E: electricity use
       assessmentWorksheet.getCell('E' + assessmentRowIndex).value = baselineResults.annual_energy;
@@ -39,6 +40,10 @@ export class ExportToJustifiPsatService {
         modification = assessment.psat.modifications[0];
       }
       if (modification) {
+        if (!this.psatService.isPsatValid(modification.psat.inputs, false, settings).isValid) {
+          assessmentWorksheet.getCell('G' + assessmentRowIndex).value = null;
+          return eemRowIndex;
+        }
         let modResults: PsatOutputs;
         if (!modification.psat.inputs.whatIfScenario) {
           modResults = this.psatService.resultsExisting(JSON.parse(JSON.stringify(assessment.psat.inputs)), settings);

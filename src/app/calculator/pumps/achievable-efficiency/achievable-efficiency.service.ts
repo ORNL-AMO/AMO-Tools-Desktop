@@ -1,3 +1,4 @@
+import { physicalPumpStyle } from '../../../shared/pump-efficiency';
 import { Injectable } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { SimpleChart, TraceData } from '../../../shared/models/plotting';
@@ -83,7 +84,7 @@ export class AchievableEfficiencyService {
     } 
 
     let form: UntypedFormGroup = this.formBuilder.group({
-      pumpType: [psat.inputs.pump_style, Validators.required],
+      pumpType: [physicalPumpStyle(psat.inputs), Validators.required],
       flowRate: [flowRate, [Validators.required, Validators.min(0)]],
       rpm: [psat.inputs.pump_rated_speed, Validators.required],
       kinematicViscosity: [psat.inputs.kinematic_viscosity, Validators.required],
@@ -99,6 +100,7 @@ export class AchievableEfficiencyService {
 
   getTraceDataFromPoint(selectedPoint: EfficiencyPoint): EfficiencyTrace {
     let trace: EfficiencyTrace = {
+      calculationMethod: selectedPoint.calculationMethod,
       x: [selectedPoint.x],
       y: [selectedPoint.y],
       id: getNewIdString(),
@@ -191,6 +193,7 @@ export class AchievableEfficiencyService {
 
 
 export interface EfficiencyPoint {
+  calculationMethod?: 'legacy' | 'hi-2020-pchip';
   id: string,
   pairId?: string,
   pointColor?: string;

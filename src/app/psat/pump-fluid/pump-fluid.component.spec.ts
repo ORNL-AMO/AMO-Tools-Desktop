@@ -150,9 +150,10 @@ describe('PumpFluidComponent', () => {
       stages: form.controls.stages.value,
     }));
 
-    psatServiceSpy = jasmine.createSpyObj('PsatService', ['resultsExisting', 'pumpEfficiency', 'roundVal']);
+    psatServiceSpy = jasmine.createSpyObj('PsatService', ['resultsExisting', 'pumpEfficiency', 'roundVal', 'pumpEfficiencyRangeMessage']);
     psatServiceSpy.roundVal.and.callFake((val: number) => val);
     psatServiceSpy.pumpEfficiency.and.returnValue({ average: 0.7, max: 0.8 });
+    psatServiceSpy.pumpEfficiencyRangeMessage.and.returnValue('Outside HI 2020 reference range. Enter a supplied efficiency.');
     psatServiceSpy.resultsExisting.and.returnValue({ pump_efficiency: 72 } as PsatOutputs);
 
     psatWarningServiceSpy = jasmine.createSpyObj('PsatWarningService', ['checkPumpFluidWarnings']);
@@ -470,5 +471,41 @@ describe('PumpFluidComponent', () => {
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('[formControlName="specifiedDriveEfficiency"]')).not.toBeNull();
     });
+  });
+
+  it('retains the exact preserved estimate and input method when HI re-estimation is unavailable', () => {
+    component.psat.inputs.pump_style = 11;
+    component.psat.inputs.pump_specified = 83.123456;
+    component.psat.inputs.pumpEfficiencyModel = {version: 1, source: 'legacy-preserved', originalPumpStyle: 6};
+    component.psatForm.controls.pumpType.setValue(11);
+    component.psatForm.controls.specifiedPumpEfficiency.setValue(83.123456);
+    const before = structuredClone(component.psat.inputs);
+    psatServiceSpy.pumpEfficiency.and.returnValue({average: NaN, max: NaN});
+    const save = spyOn(component, 'save');
+    component.reestimatePumpEfficiency();
+    expect(component.psat.inputs).toEqual(before);
+    expect(component.psatForm.controls.pumpType.value).toBe(11);
+    expect(component.psatForm.controls.specifiedPumpEfficiency.value).toBe(83.123456);
+    expect(save).not.toHaveBeenCalled();
+    expect(component.pumpEfficiencyError).toContain('supplied efficiency');
+  });
+
+  it('does not request HI estimates for supplied-efficiency or PD input methods', () => {
+    for (const style of [11, 12]) {
+      component.psatForm.controls.pumpType.setValue(style);
+      psatServiceSpy.pumpEfficiency.calls.reset();
+      component.getPumpEfficiency();
+      expect(psatServiceSpy.pumpEfficiency).not.toHaveBeenCalled();
+    }
+  });
+
+  it('applies an explicitly requested valid HI estimate using the retained physical pump type', () => {
+    component.psat.inputs.pump_style = 11;
+    component.psat.inputs.pumpEfficiencyModel = {version: 1, source: 'legacy-preserved', originalPumpStyle: 6};
+    component.psatForm.controls.pumpType.setValue(11);
+    component.reestimatePumpEfficiency();
+    expect(component.psatForm.controls.pumpType.value).toBe(6);
+    expect(component.psatForm.controls.specifiedPumpEfficiency.value).toBe(80);
+    expect(component.psat.inputs.pumpEfficiencyModel.source).toBe('hi-2020-pchip');
   });
 });

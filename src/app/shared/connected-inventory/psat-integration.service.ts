@@ -1,3 +1,4 @@
+import { physicalPumpStyle, setPhysicalPumpStyle } from '../pump-efficiency';
 import { Injectable } from '@angular/core';
 import { Assessment } from '../models/assessment';
 import { AssessmentOption, ConnectedInventoryData, ConnectedItem, ConnectedValueFormField, IntegrationState, InventoryOption } from './integrations';
@@ -134,7 +135,7 @@ export class PsatIntegrationService {
     }
 
     if (connectedInventoryData.canConnect) {
-      psat.inputs.pump_style = selectedPumpItem.pumpEquipment.pumpType;
+      setPhysicalPumpStyle(psat.inputs, selectedPumpItem.pumpEquipment.pumpType);
       psat.inputs.pump_rated_speed = selectedPumpItem.fieldMeasurements.pumpSpeed;
       psat.inputs.drive = selectedPumpItem.systemProperties.driveType;
       psat.inputs.stages = selectedPumpItem.pumpEquipment.numStages;
@@ -483,7 +484,7 @@ export class PsatIntegrationService {
           differingConnectedValues.push(fluidFormField);
         }
 
-        if (assessment.psat.inputs.pump_style !== currentAssessment.connectedPumpFromState.pumpEquipment.pumpType ||
+        if (physicalPumpStyle(assessment.psat.inputs) !== currentAssessment.connectedPumpFromState.pumpEquipment.pumpType ||
           assessment.psat.inputs.drive !== currentAssessment.connectedPumpFromState.pumpSystem.driveType) {
           let numStagesField: ConnectedValueFormField = {
             formGroup: 'pump',
@@ -544,7 +545,7 @@ export class PsatIntegrationService {
     });
 
     console.log(currentAssessment.connectedPumpFromState.pumpMotor)
-    psat.inputs.pump_style = currentAssessment.connectedPumpFromState.pumpEquipment.pumpType;
+    setPhysicalPumpStyle(psat.inputs, currentAssessment.connectedPumpFromState.pumpEquipment.pumpType);
     psat.inputs.drive = currentAssessment.connectedPumpFromState.pumpSystem.driveType;
     psat.inputs.stages = currentAssessment.connectedPumpFromState.pumpEquipment.numStages;
     psat.inputs.line_frequency = currentAssessment.connectedPumpFromState.pumpMotor.lineFrequency;
