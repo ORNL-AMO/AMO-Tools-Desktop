@@ -16,7 +16,8 @@ export class BaselineTabsComponent {
   private readonly processCoolingService = inject(ProcessCoolingAssessmentService);
   private readonly destroyRef = inject(DestroyRef);
 
-  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinueSetupTab;
+  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBackSetupTab;
 
   readonly SETUP_VIEW_LINKS = SETUP_VIEW_LINKS;
 
@@ -36,11 +37,11 @@ export class BaselineTabsComponent {
   }
 
   continue() {
-    this.processCoolingUiService.continue();
+    this.processCoolingUiService.continueSetupTab();
   }
 
   back() {
-    this.processCoolingUiService.back();
+    this.processCoolingUiService.backSetupTab();
   }
 
   isTabInvalid(link: ViewLink): boolean {

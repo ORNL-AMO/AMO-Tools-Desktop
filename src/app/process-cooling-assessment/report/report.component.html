@@ -28,7 +28,7 @@
                 <span class="small text-uppercase">Menu</span>
             </div>
             @for (link of REPORT_VIEW_LINKS; track $index) {
-            <div routerLinkActive="active" [class.disabled]="link.meta?.disabled" [routerLink]="[link.view]">
+            <div routerLinkActive="active" [class.disabled]="link.meta?.disabled" [class.collapse]="tabsCollapsed" [routerLink]="[link.view]">
                 <a [routerLink]="[link.view]" [class.disabled]="link.meta?.disabled">
                     {{link.label}}
                 </a>

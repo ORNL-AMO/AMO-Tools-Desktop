@@ -22,23 +22,28 @@
                 </span>
             </div>
         </div>
-        <app-alert-badge [alertText]="'Beta'"></app-alert-badge>
+        <!-- <app-alert-badge [alertText]="'Beta'"></app-alert-badge> -->
     </div>
     <div class="d-block d-lg-none align-items-center p-1">
         <div class="img-col col-sm-auto col-md-auto col-lg-auto" [class.collapse]="bannerCollapsed">
             <img class="img-icon" src="assets/images/process-cooling-icon.png">
         </div>
         <div class="d-flex flex-column pl-2">
-            <div class="h2-name">
+            <div class="h2-name d-flex align-items-center">
                 {{assessment.name}}
+                <!-- <app-alert-badge class="d-flex name-badge" [alertText]="'Beta'"></app-alert-badge> -->
             </div>
             <div class="h2-name" [class.collapse]="bannerCollapsed">
                 <span class="small">
                     Last modified: {{assessment.modifiedDate | date:'mediumDate'}}
                 </span>
             </div>
+            @if (bannerCollapsed && currentMainLink(); as link) {
+            <div class="d-flex nav-pills justify-content-center">
+                <span class="nav-link active current-main-tab">{{link.label}}</span>
+            </div>
+            }
         </div>
-        <app-alert-badge [alertText]="'Beta'"></app-alert-badge>
     </div>
 
 
@@ -58,14 +63,16 @@
     <!-- Small screens -->
     @if (!bannerCollapsed) {
     <div class="d-block d-lg-none align-items-center nav-pills nav-fill mx-auto">
+        @for (link of MAIN_VIEW_LINKS; track link.view) {
         <div class="nav-item">
-                <a class="nav-link" 
+                <a class="nav-link"
                     routerLinkActive="active"
-                    [routerLink]="[link.view]"       
+                    [routerLink]="[link.view]"
                     [class.disabled]="isLinkDisabled(link)"
-                    (click)="handleCanNavigate($event, link)"
+                    (click)="selectSmallScreenLink($event, link)"
                 >{{link.label}}</a>
         </div>
+        }
     </div>
     }
 

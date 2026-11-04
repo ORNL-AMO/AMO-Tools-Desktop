@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, Signal } from '@angular/core';
 import { ProcessCoolingAssessmentService } from '../services/process-cooling-assessment.service';
 import { map, Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
@@ -31,6 +31,7 @@ export class ProcessCoolingBannerComponent {
   readonly assessment$: Observable<Assessment> = this.processCoolingService.assessment$;
 
   mainView: Signal<string> = this.processCoolingUiService.mainView;
+  readonly currentMainLink: Signal<ViewLink | undefined> = computed(() => MAIN_VIEW_LINKS.find(link => link.view === this.mainView()));
   bannerCollapsed: boolean = true;
 
   ngOnInit(): void {
@@ -42,7 +43,7 @@ export class ProcessCoolingBannerComponent {
   }
 
   collapseBanner() {
-    // this.bannerCollapsed = !this.bannerCollapsed;
+    this.bannerCollapsed = !this.bannerCollapsed;
     window.dispatchEvent(new Event("resize"));
   }
 
@@ -101,16 +102,16 @@ export class ProcessCoolingBannerComponent {
   }
 
   
-  next() {
-    this.processCoolingUiService.continue();
+  continue() {
+    this.processCoolingUiService.continueMainTab();
   }
 
   back() {
-    this.processCoolingUiService.back();
+    this.processCoolingUiService.backMainTab();
   }
 
-  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinue;
-  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBack;
+  readonly canContinue: Signal<boolean> = this.processCoolingUiService.canContinueMainTab;
+  readonly canGoBack: Signal<boolean> = this.processCoolingUiService.canGoBackMainTab;
 
   isLinkDisabled(link: ViewLink): boolean {
     return !this.processCoolingUiService.canVisitView(link.view);
@@ -123,6 +124,12 @@ export class ProcessCoolingBannerComponent {
       return false;
     } else {
       return true;
+    }
+  }
+
+  selectSmallScreenLink(event: MouseEvent, link: ViewLink) {
+    if (this.handleCanNavigate(event, link)) {
+      this.collapseBanner();
     }
   }
 }

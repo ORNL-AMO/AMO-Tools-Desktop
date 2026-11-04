@@ -31,9 +31,9 @@
 <nav class="hide-print tabs subtabs progress-tabs process-cooling-assessment flex-wrap flex-fill">
     <ul
         class="pagination d-flex justify-content-between tabs subtabs progress-tabs flex-fill process-cooling-assessment">
-        <li class="page-item" [class.disabled]="setupView() == 'system-basics' || !canContinue()">
+        <li class="page-item" [class.disabled]="!canGoBack()">
             <a class="nav-link small" (click)="back()"
-                [class.disabled]="setupView() == 'system-basics' || !canContinue()">
+                [class.disabled]="!canGoBack()">
                 <span class="fa fa-chevron-left"></span></a>
         </li>
 
