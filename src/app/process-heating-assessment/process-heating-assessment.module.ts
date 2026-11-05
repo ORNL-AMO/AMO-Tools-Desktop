@@ -104,6 +104,7 @@ import { AssessmentSettingsComponent } from './assessment-settings/assessment-se
 import { OperationsComponent } from './operations/operations.component';
 import { HeatBalanceComponent } from './heat-balance/heat-balance.component';
 import { HeatBalanceLossTabsComponent } from './heat-balance/heat-balance-loss-tabs/heat-balance-loss-tabs.component';
+import { LossTabBadgeComponent } from './heat-balance/loss-tab-badge/loss-tab-badge.component';
 import { AuxiliaryEquipmentComponent } from './auxiliary-equipment/auxiliary-equipment.component';
 import { DesignedEnergyComponent } from './designed-energy/designed-energy.component';
 import { MeteredEnergyComponent } from './metered-energy/metered-energy.component';
@@ -407,6 +408,7 @@ export const ROUTES: Route[] = [
     OperationsComponent,
     HeatBalanceComponent,
     HeatBalanceLossTabsComponent,
+    LossTabBadgeComponent,
     AuxiliaryEquipmentComponent,
     DesignedEnergyComponent,
     MeteredEnergyComponent,

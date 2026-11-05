@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LossView, ViewLink } from '../../models/views';
 import { ProcessHeatingUiService } from '../../services/process-heating-ui.service';
 import { TabNavHelper } from '../../services/tab-nav-helper.service';
+import { LossTabBadgeComponent } from '../loss-tab-badge/loss-tab-badge.component';
 import { HeatBalanceLossTabsComponent } from './heat-balance-loss-tabs.component';
 
 describe('HeatBalanceLossTabsComponent', () => {
@@ -38,7 +39,7 @@ describe('HeatBalanceLossTabsComponent', () => {
       canGoBack: signal(true),
     });
     TestBed.configureTestingModule({
-      declarations: [HeatBalanceLossTabsComponent],
+      declarations: [HeatBalanceLossTabsComponent, LossTabBadgeComponent],
       providers: [
         { provide: ProcessHeatingUiService, useValue: uiService },
         { provide: TabNavHelper, useValue: tabNavHelper },

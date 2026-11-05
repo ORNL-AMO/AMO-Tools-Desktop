@@ -1,0 +1,9 @@
+@if (count() || invalid()) {
+  <span class="badge gray-badge" [class.success]="!invalid()" [class.missing-data]="invalid()">
+    @if (count() === undefined) {
+      <span class="fa fa-exclamation"></span>
+    } @else {
+      <strong>{{count()}}</strong>
+    }
+  </span>
+}

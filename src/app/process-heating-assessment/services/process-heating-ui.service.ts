@@ -6,7 +6,7 @@ import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { Losses, Notes } from '../models/phast';
 import { AssessmentView, BaselineView, EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
-import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
+import { AssessmentScenario, ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingValidityService } from './process-heating-validity.service';
 export { MainView, BaselineView, AssessmentView, ReportView, LossView, HeatingEquipmentConfiguration, ProcessHeatingView, ViewLink, MAIN_VIEW_LINKS, BASELINE_VIEW_LINKS, HEAT_BALANCE_VIEW_LINKS, REPORT_VIEW_LINKS } from '../models/views';
 
@@ -192,14 +192,15 @@ export class ProcessHeatingUiService {
 
   /**
    * @param view heat balance step
-   * @returns how many baseline entries the step holds; undefined for a step that doesn't hold entries
+   * @param scenario 'baseline' or a modification id
+   * @returns how many entries the scenario's step holds; undefined for a step that doesn't hold entries
    */
-  lossCount(view: string): number | undefined {
+  lossCount(view: string, scenario: AssessmentScenario = 'baseline'): number | undefined {
     if (view === LossView.HEAT_SYSTEM_EFFICIENCY) {
-      return this.processHeatingAssessmentService.scenarioPhastSignal('baseline')?.systemEfficiency ? 1 : 0;
+      return this.processHeatingAssessmentService.scenarioPhastSignal(scenario)?.systemEfficiency ? 1 : 0;
     }
     const lossKey = this.LOSS_VIEW_KEYS[view];
-    return lossKey ? this.processHeatingAssessmentService.lossSignal('baseline', lossKey)?.length ?? 0 : undefined;
+    return lossKey ? this.processHeatingAssessmentService.lossSignal(scenario, lossKey)?.length ?? 0 : undefined;
   }
 
   /** Assessment, Diagram, Report and Sankey need valid baseline inputs, since they present results built from them. */

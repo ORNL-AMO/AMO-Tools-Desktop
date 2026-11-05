@@ -4,6 +4,7 @@ import { ModificationService } from '../services/modification.service';
 import { getModificationName, ProcessHeatingModification } from '../models/modification';
 import { LossView, ProcessHeatingView, ViewLink } from '../models/views';
 import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
+import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
 import { AddModificationComponent, DEFAULT_DESCRIPTION } from '../../shared/add-modification/add-modification.component';
 
 @Component({
@@ -18,6 +19,7 @@ export class ExpertViewComponent {
   private readonly injector = inject(Injector);
   private readonly modificationService = inject(ModificationService);
   private readonly uiService = inject(ProcessHeatingUiService);
+  private readonly validityService = inject(ProcessHeatingValidityService);
 
   readonly LossView = LossView;
   readonly selectedModification: Signal<ProcessHeatingModification | undefined> = this.modificationService.selectedModification;
@@ -26,6 +28,20 @@ export class ExpertViewComponent {
 
   selectTab(view: ProcessHeatingView): void {
     this.uiService.selectExpertViewTab(view);
+  }
+
+  /** Marks a tab whose step is invalid in the baseline or in the modification, since both are edited here. */
+  isTabInvalid(link: ViewLink, modification: ProcessHeatingModification): boolean {
+    return !this.validityService.isStepValid('baseline', link.view) || !this.validityService.isStepValid(modification.id, link.view);
+  }
+
+  /** @returns the accessible name and tooltip for a marked tab, or null while its inputs are valid */
+  invalidTabLabel(link: ViewLink, modification: ProcessHeatingModification): string | null {
+    return this.isTabInvalid(link, modification) ? `${link.label}, has invalid inputs` : null;
+  }
+
+  lossCount(link: ViewLink, modification: ProcessHeatingModification): number | undefined {
+    return this.uiService.lossCount(link.view, modification.id);
   }
 
   modificationName(modification: ProcessHeatingModification): string {

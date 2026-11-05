@@ -10,17 +10,7 @@
          [attr.aria-label]="invalidTabLabel(link)"
          [attr.title]="invalidTabLabel(link)">
         {{link.label}}
-        @let count = lossCount(link);
-        @let isInvalid = isTabInvalid(link);
-        @if (count || isInvalid) {
-          <span class="badge gray-badge" [class.success]="!isInvalid" [class.missing-data]="isInvalid">
-            @if (count === undefined) {
-              <span class="fa fa-exclamation"></span>
-            } @else {
-              <strong>{{count}}</strong>
-            }
-          </span>
-        }
+        <app-loss-tab-badge [count]="lossCount(link)" [invalid]="isTabInvalid(link)"></app-loss-tab-badge>
       </a>
     </li>
   }
@@ -42,17 +32,7 @@
            [attr.aria-label]="invalidTabLabel(link)"
            [attr.title]="invalidTabLabel(link)">
           {{link.label}}
-          @let count = lossCount(link);
-          @let isInvalid = isTabInvalid(link);
-          @if (count || isInvalid) {
-            <span class="badge gray-badge" [class.success]="!isInvalid" [class.missing-data]="isInvalid">
-              @if (count === undefined) {
-                <span class="fa fa-exclamation"></span>
-              } @else {
-                <strong>{{count}}</strong>
-              }
-            </span>
-          }
+          <app-loss-tab-badge [count]="lossCount(link)" [invalid]="isTabInvalid(link)"></app-loss-tab-badge>
         </a>
       </li>
     }
