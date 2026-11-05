@@ -1,0 +1,15 @@
+:host {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.sankey-padding {
+  padding-bottom: 4rem;
+  padding-top: 2rem;
+}
+
+.btn-sm.active {
+  color: white;
+  background-color: var(--process-heating-assessment);
+}

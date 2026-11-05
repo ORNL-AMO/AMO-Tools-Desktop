@@ -1,32 +1,29 @@
 import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { PHAST as SharedPHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
-import { ProcessHeatingModification } from '../../models/modification';
-import { PHAST } from '../../models/phast';
-import { ModificationService } from '../../services/modification.service';
-import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { SankeyResultsService, SankeyScenario } from '../../sankey/sankey-results.service';
 import { ExecutiveSummaryResultsService, ScenarioSavings } from '../executive-summary/executive-summary-results.service';
 import { ReportSankeyResultsService } from './report-sankey-results.service';
 
 describe('ReportSankeyResultsService', () => {
   let service: ReportSankeyResultsService;
   let savings: WritableSignal<Record<string, ScenarioSavings>>;
-  let modifications: WritableSignal<ProcessHeatingModification[]>;
+  let scenarios: SankeyScenario[];
 
   beforeEach(() => {
     savings = signal({ baseline: { costSavings: 0, energySavings: 0 }, mod1: { costSavings: 10000, energySavings: 2000 } });
-    modifications = signal<ProcessHeatingModification[]>([{ id: 'mod1', scenarioOverrides: { name: 'Scenario 1' } }]);
+    scenarios = [
+      { id: 'baseline', name: 'Baseline', phast: { name: 'baseline' } as SharedPHAST },
+      { id: 'mod1', name: 'Scenario 1', phast: { name: 'mod1' } as SharedPHAST },
+    ];
     TestBed.configureTestingModule({
       providers: [
         ReportSankeyResultsService,
         {
-          provide: ProcessHeatingAssessmentService,
-          useValue: {
-            settingsSignal: signal<Partial<Settings>>({ energyResultUnit: 'MMBtu' }),
-            scenarioPhastSignal: (id: string) => ({ name: id } as PHAST),
-          },
+          provide: SankeyResultsService,
+          useValue: { settings: signal<Partial<Settings>>({ energyResultUnit: 'MMBtu' }), scenarios: signal(scenarios) },
         },
-        { provide: ModificationService, useValue: { modifications } },
         { provide: ExecutiveSummaryResultsService, useValue: { scenarioSavings: savings } },
       ],
     });
@@ -40,9 +37,8 @@ describe('ReportSankeyResultsService', () => {
     expect(ui.energySavingsUnit).toBe('MMBtu/yr');
   });
 
-  it('passes the shared sankey a copy of the scenario, not the signal value', () => {
-    const [baseline] = service.reportSankeyUI().scenarios;
-    expect((baseline.phast as unknown as PHAST).name).toBe('baseline');
+  it('keeps the shared scenario phast reference so sankey validity can identify the scenario', () => {
+    expect(service.reportSankeyUI().scenarios[0].phast).toBe(scenarios[0].phast);
   });
 
   it('skips modifications without results', () => {

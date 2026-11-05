@@ -283,22 +283,24 @@ describe('ProcessHeatingUiService validity gating', () => {
     expect(service.isHeatBalanceValidSignal()).toBeFalse();
   });
 
-  it('allows Assessment and Report when settings and baseline are valid', () => {
+  it('allows Assessment, Diagram, Report and Sankey when settings and baseline are valid', () => {
     expect(service.canVisitView(MainView.ASSESSMENT)).toBeTrue();
     expect(service.canVisitView(MainView.REPORT)).toBeTrue();
     expect(service.canVisitView(MainView.DIAGRAM)).toBeTrue();
+    expect(service.canVisitView(MainView.SANKEY)).toBeTrue();
   });
 
   for (const [name, invalidate] of [
     ['the settings are', () => settingsValid.set(false)],
     ['the baseline heat balance is', () => baselineValid.set(false)],
   ] as const) {
-    it(`blocks Assessment and Report views while ${name} invalid`, () => {
+    it(`blocks Assessment, Diagram, Report and Sankey views while ${name} invalid`, () => {
       invalidate();
 
       expect(service.canVisitView(MainView.ASSESSMENT)).toBeFalse();
       expect(service.canVisitView(MainView.REPORT)).toBeFalse();
       expect(service.canVisitView(MainView.DIAGRAM)).toBeFalse();
+      expect(service.canVisitView(MainView.SANKEY)).toBeFalse();
       expect(service.canVisitView(ReportView.EXECUTIVE_SUMMARY)).toBeFalse();
     });
 

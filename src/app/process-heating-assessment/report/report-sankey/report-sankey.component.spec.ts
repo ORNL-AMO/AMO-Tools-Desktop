@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { PhastValidService } from '../../../phast/phast-valid.service';
 import { Settings } from '../../../shared/models/settings';
 import { ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
+import { SankeyResultsService } from '../../sankey/sankey-results.service';
 import { PHAST, PhastValid } from '../../../shared/models/phast/phast';
 import { SankeyScenarioPickerComponent } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
 import { ReportSankeyComponent } from './report-sankey.component';
@@ -38,6 +39,7 @@ describe('ReportSankeyComponent', () => {
       declarations: [ReportSankeyComponent],
       providers: [
         { provide: ReportSankeyResultsService, useValue: { reportSankeyUI: ui } },
+        { provide: SankeyResultsService, useValue: { scenarios: () => ui().scenarios } },
         { provide: ProcessHeatingValidityService, useValue: { scenarioValidity } },
       ],
       schemas: [NO_ERRORS_SCHEMA],

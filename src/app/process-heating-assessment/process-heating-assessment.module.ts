@@ -77,6 +77,8 @@ import { OpeningEmissivityOpportunityComponent } from './explore-opportunities/o
 import { OpeningTimeOpenOpportunityComponent } from './explore-opportunities/opening-time-open-opportunity/opening-time-open-opportunity.component';
 import { ExpertViewComponent } from './expert-view/expert-view.component';
 import { ProcessHeatingDiagramComponent } from './diagram/process-heating-diagram.component';
+import { ProcessHeatingSankeyComponent } from './sankey/process-heating-sankey.component';
+import { SankeyResultsService } from './sankey/sankey-results.service';
 import { ReportComponent } from './report/report.component';
 import { EnergySummaryComponent } from './report/energy-summary/energy-summary.component';
 import { EnergySummaryResultsService } from './report/energy-summary/energy-summary-results.service';
@@ -352,6 +354,12 @@ export const ROUTES: Route[] = [
           },
         ]
       },
+      {
+        path: ROUTE_TOKENS.sankey,
+        component: ProcessHeatingSankeyComponent,
+        data: { mainView: ROUTE_TOKENS.sankey, stepIndex: 24 },
+        canActivate: [requiresValidBaselineGuard],
+      },
     ]
   }
 ];
@@ -385,6 +393,7 @@ export const ROUTES: Route[] = [
     OperationsOpportunityComponent,
     ExpertViewComponent,
     ProcessHeatingDiagramComponent,
+    ProcessHeatingSankeyComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
     InvalidModificationAlertComponent,
@@ -501,6 +510,7 @@ export const ROUTES: Route[] = [
     ExecutiveSummaryResultsService,
     ResultsDataResultsService,
     ReportGraphsResultsService,
+    SankeyResultsService,
     ReportSankeyResultsService,
     // Root-scoped legacy service that injects the module-scoped PhastResultsService, so it must be provided here
     // to resolve that dep from this module, not the root injector (SankeyService comes via PhastSankeyModule).
