@@ -24,49 +24,37 @@
 
   <div class="form-group">
     <label for="specificHeatOfLiquid_{{ instanceId() }}">Specific Heat of Liquid</label>
-    <div class="input-group" [class.invalid]="f.specificHeatOfLiquid.invalid" [class.indicate-different]="liquidDifferences().has('specificHeatLiquid')">
+    <div class="input-group" [class.invalid]="f.specificHeatOfLiquid.invalid" [class.indicate-different]="liquidDifferences().has('specificHeatLiquid')" [class.indicate-different-db]="differs(f.specificHeatOfLiquid.value, materialSelector.selectedMaterial?.specificHeatLiquid, UNITS.specificHeat)">
       <input type="number" class="form-control" id="specificHeatOfLiquid_{{ instanceId() }}" formControlName="specificHeatOfLiquid">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
-    @if (differs(f.specificHeatOfLiquid.value, materialSelector.selectedMaterial?.specificHeatLiquid, UNITS.specificHeat)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.specificHeatOfLiquid" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
     <label for="vaporizingTemperature_{{ instanceId() }}">Vaporizing Temperature</label>
-    <div class="input-group" [class.invalid]="f.vaporizingTemperature.invalid" [class.indicate-different]="liquidDifferences().has('vaporizingTemperature')">
+    <div class="input-group" [class.invalid]="f.vaporizingTemperature.invalid" [class.indicate-different]="liquidDifferences().has('vaporizingTemperature')" [class.indicate-different-db]="differs(f.vaporizingTemperature.value, materialSelector.selectedMaterial?.vaporizationTemperature, UNITS.temperature)">
       <input type="number" class="form-control" id="vaporizingTemperature_{{ instanceId() }}" formControlName="vaporizingTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
-    @if (differs(f.vaporizingTemperature.value, materialSelector.selectedMaterial?.vaporizationTemperature, UNITS.temperature)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.vaporizingTemperature" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
     <label for="latentHeatOfVaporization_{{ instanceId() }}">Latent Heat of Vaporization</label>
-    <div class="input-group" [class.invalid]="f.latentHeatOfVaporization.invalid" [class.indicate-different]="liquidDifferences().has('latentHeat')">
+    <div class="input-group" [class.invalid]="f.latentHeatOfVaporization.invalid" [class.indicate-different]="liquidDifferences().has('latentHeat')" [class.indicate-different-db]="differs(f.latentHeatOfVaporization.value, materialSelector.selectedMaterial?.latentHeat, UNITS.latentHeat)">
       <input type="number" class="form-control" id="latentHeatOfVaporization_{{ instanceId() }}" formControlName="latentHeatOfVaporization">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
-    @if (differs(f.latentHeatOfVaporization.value, materialSelector.selectedMaterial?.latentHeat, UNITS.latentHeat)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.latentHeatOfVaporization" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
     <label for="specificHeatOfVapor_{{ instanceId() }}">Specific Heat of Vapor</label>
-    <div class="input-group" [class.invalid]="f.specificHeatOfVapor.invalid" [class.indicate-different]="liquidDifferences().has('specificHeatVapor')">
+    <div class="input-group" [class.invalid]="f.specificHeatOfVapor.invalid" [class.indicate-different]="liquidDifferences().has('specificHeatVapor')" [class.indicate-different-db]="differs(f.specificHeatOfVapor.value, materialSelector.selectedMaterial?.specificHeatVapor, UNITS.specificHeat)">
       <input type="number" class="form-control" id="specificHeatOfVapor_{{ instanceId() }}" formControlName="specificHeatOfVapor">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
-    @if (differs(f.specificHeatOfVapor.value, materialSelector.selectedMaterial?.specificHeatVapor, UNITS.specificHeat)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.specificHeatOfVapor" [settings]="settings()"></app-form-control-errors>
   </div>
 

@@ -197,14 +197,14 @@ describe('ChargeMaterialSolidFormComponent', () => {
       expect(fixture.nativeElement.querySelector('.alert-warning')).not.toBeNull();
     });
 
-    it('hides the "differs from database" note when the value matches the selected material', () => {
+    it('does not highlight the field green when the value matches the selected material', () => {
       setInputsAndInit(makeSolidForm(solidFormService, { materialId: 1, specificHeatSolid: 0.11 }));
-      expect(fixture.nativeElement.querySelector('[formcontrolname="materialSpecificHeatOfSolidMaterial"] ~ .text-warning')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.indicate-different-db')).toBeNull();
     });
 
-    it('shows the "differs from database" note when the value has been overridden', () => {
+    it('highlights the field green when the value has been overridden', () => {
       setInputsAndInit(makeSolidForm(solidFormService, { materialId: 1, specificHeatSolid: 99 }));
-      expect(fixture.nativeElement.querySelector('.text-warning')).not.toBeNull();
+      expect(fixture.nativeElement.querySelector('.indicate-different-db')).not.toBeNull();
     });
 
     it('shows a required error on feedRate when empty', () => {

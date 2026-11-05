@@ -24,13 +24,10 @@
 
   <div class="form-group">
     <label for="specificHeatOfGas_{{ instanceId() }}">Specific Heat of Gas</label>
-    <div class="input-group" [class.invalid]="f.specificHeatOfGas.invalid" [class.indicate-different]="gasDifferences().has('specificHeatGas')">
+    <div class="input-group" [class.invalid]="f.specificHeatOfGas.invalid" [class.indicate-different]="gasDifferences().has('specificHeatGas')" [class.indicate-different-db]="differs(f.specificHeatOfGas.value, materialSelector.selectedMaterial?.specificHeatVapor, UNITS.specificHeat)">
       <input type="number" class="form-control" id="specificHeatOfGas_{{ instanceId() }}" formControlName="specificHeatOfGas">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
-    @if (differs(f.specificHeatOfGas.value, materialSelector.selectedMaterial?.specificHeatVapor, UNITS.specificHeat)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.specificHeatOfGas" [settings]="settings()"></app-form-control-errors>
   </div>
 

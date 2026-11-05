@@ -24,49 +24,37 @@
 
   <div class="form-group">
     <label for="materialSpecificHeatOfSolidMaterial_{{ instanceId() }}">Average Specific Heat of Solid</label>
-    <div class="input-group" [class.invalid]="f.materialSpecificHeatOfSolidMaterial.invalid" [class.indicate-different]="solidDifferences().has('specificHeatSolid')">
+    <div class="input-group" [class.invalid]="f.materialSpecificHeatOfSolidMaterial.invalid" [class.indicate-different]="solidDifferences().has('specificHeatSolid')" [class.indicate-different-db]="differs(f.materialSpecificHeatOfSolidMaterial.value, materialSelector.selectedMaterial?.specificHeatSolid, UNITS.specificHeat)">
       <input type="number" class="form-control" id="materialSpecificHeatOfSolidMaterial_{{ instanceId() }}" formControlName="materialSpecificHeatOfSolidMaterial">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
-    @if (differs(f.materialSpecificHeatOfSolidMaterial.value, materialSelector.selectedMaterial?.specificHeatSolid, UNITS.specificHeat)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.materialSpecificHeatOfSolidMaterial" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
     <label for="materialLatentHeatOfFusion_{{ instanceId() }}">Latent Heat of Fusion</label>
-    <div class="input-group" [class.invalid]="f.materialLatentHeatOfFusion.invalid" [class.indicate-different]="solidDifferences().has('latentHeat')">
+    <div class="input-group" [class.invalid]="f.materialLatentHeatOfFusion.invalid" [class.indicate-different]="solidDifferences().has('latentHeat')" [class.indicate-different-db]="differs(f.materialLatentHeatOfFusion.value, materialSelector.selectedMaterial?.latentHeat, UNITS.latentHeat)">
       <input type="number" class="form-control" id="materialLatentHeatOfFusion_{{ instanceId() }}" formControlName="materialLatentHeatOfFusion">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
-    @if (differs(f.materialLatentHeatOfFusion.value, materialSelector.selectedMaterial?.latentHeat, UNITS.latentHeat)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.materialLatentHeatOfFusion" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
     <label for="materialHeatOfLiquid_{{ instanceId() }}">Average Specific Heat of Molten Material</label>
-    <div class="input-group" [class.invalid]="f.materialHeatOfLiquid.invalid" [class.indicate-different]="solidDifferences().has('specificHeatLiquid')">
+    <div class="input-group" [class.invalid]="f.materialHeatOfLiquid.invalid" [class.indicate-different]="solidDifferences().has('specificHeatLiquid')" [class.indicate-different-db]="differs(f.materialHeatOfLiquid.value, materialSelector.selectedMaterial?.specificHeatLiquid, UNITS.specificHeat)">
       <input type="number" class="form-control" id="materialHeatOfLiquid_{{ instanceId() }}" formControlName="materialHeatOfLiquid">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
-    @if (differs(f.materialHeatOfLiquid.value, materialSelector.selectedMaterial?.specificHeatLiquid, UNITS.specificHeat)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.materialHeatOfLiquid" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
     <label for="materialMeltingPoint_{{ instanceId() }}">Melting Point</label>
-    <div class="input-group" [class.invalid]="f.materialMeltingPoint.invalid" [class.indicate-different]="solidDifferences().has('meltingPoint')">
+    <div class="input-group" [class.invalid]="f.materialMeltingPoint.invalid" [class.indicate-different]="solidDifferences().has('meltingPoint')" [class.indicate-different-db]="differs(f.materialMeltingPoint.value, materialSelector.selectedMaterial?.meltingPoint, UNITS.temperature)">
       <input type="number" class="form-control" id="materialMeltingPoint_{{ instanceId() }}" formControlName="materialMeltingPoint">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
-    @if (differs(f.materialMeltingPoint.value, materialSelector.selectedMaterial?.meltingPoint, UNITS.temperature)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.materialMeltingPoint" [settings]="settings()"></app-form-control-errors>
   </div>
 

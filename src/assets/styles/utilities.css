@@ -215,6 +215,22 @@ app-expert-view .form-control.indicate-different.invalid {
     border: red solid 2px;
 }
 
+app-process-heating-assessment .input-group.indicate-different,
+app-process-heating-assessment .form-control.indicate-different {
+    border: #007bff solid 2px;
+}
+
+app-process-heating-assessment .input-group.indicate-different-db,
+app-process-heating-assessment .form-control.indicate-different-db {
+    border: #33CC33 solid 2px;
+    box-shadow: 0px 0px 5px #33CC33;
+}
+
+app-process-heating-assessment .input-group.invalid,
+app-process-heating-assessment .form-control.invalid {
+    border: red solid 2px;
+}
+
 
 .ssmt .input-group .ng-invalid,
 .ssmt .input-group.indicate-different .ng-invalid,
