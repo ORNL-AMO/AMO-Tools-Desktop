@@ -27,18 +27,18 @@ describe('ReportSankeyComponent', () => {
   let fixture: ComponentFixture<ReportSankeyComponent>;
   let component: ReportSankeyComponent;
   let ui: WritableSignal<ReportSankeyUI | undefined>;
-  let checkValid: jasmine.Spy;
+  let scenarioValidity: jasmine.Spy;
 
   const pickers = (): HTMLElement[] => Array.from(fixture.nativeElement.querySelectorAll('app-sankey-scenario-picker'));
 
   beforeEach(() => {
     ui = signal<ReportSankeyUI | undefined>(buildUI());
-    checkValid = jasmine.createSpy('checkValid');
+    scenarioValidity = jasmine.createSpy('scenarioValidity');
     TestBed.configureTestingModule({
       declarations: [ReportSankeyComponent],
       providers: [
         { provide: ReportSankeyResultsService, useValue: { reportSankeyUI: ui } },
-        { provide: ProcessHeatingValidityService, useValue: { checkValid: checkValid } },
+        { provide: ProcessHeatingValidityService, useValue: { scenarioValidity } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
@@ -47,15 +47,14 @@ describe('ReportSankeyComponent', () => {
     fixture.detectChanges();
   });
 
-  it('checks the sankey input with the module validity service instead of legacy validity', () => {
+  it('checks the sankey input against its scenario\'s cached module validity instead of legacy validity', () => {
     const invalid = { isValid: false } as PhastValid;
-    checkValid.and.returnValue(invalid);
-    const phast = { name: 'scenario' } as PHAST;
-    const settings = { energyResultUnit: 'MMBtu' } as Settings;
+    scenarioValidity.and.returnValue(invalid);
+    const { phast } = ui().scenarios[1];
 
-    const result = fixture.debugElement.injector.get(PhastValidService).checkValid(phast, settings);
+    const result = fixture.debugElement.injector.get(PhastValidService).checkValid(phast, ui().settings);
 
-    expect(checkValid).toHaveBeenCalledWith(phast, settings);
+    expect(scenarioValidity).toHaveBeenCalledWith('mod1');
     expect(result).toBe(invalid);
   });
 

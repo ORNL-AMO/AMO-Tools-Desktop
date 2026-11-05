@@ -23,6 +23,10 @@ export class BaselineTabsComponent {
     return this.tabNavHelper.isLinkDisabled(link);
   }
 
+  isTabInvalid(link: ViewLink): boolean {
+    return this.tabNavHelper.isTabInvalid(link);
+  }
+
   handleCanNavigate(event: MouseEvent, link: ViewLink): boolean {
     return this.tabNavHelper.handleCanNavigate(event, link);
   }

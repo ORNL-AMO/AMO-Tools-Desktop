@@ -38,7 +38,7 @@ interface ValidityCheck {
   view: LossView;
   /** Names the failing step in the alert, matching legacy's "Errors found in ..." lines. */
   label: string;
-  isValid: (phast: PHAST, settings: Settings) => boolean;
+  isValid: (phast: PHAST, settings: Settings, scenario: AssessmentScenario) => boolean;
 }
 
 export interface InvalidModification {
@@ -100,7 +100,7 @@ export class ProcessHeatingValidityService {
     { key: 'extendedSurfaceValid', view: LossView.EXTENDED_SURFACE, label: 'Extended Surface', isValid: phast => this.allValid(phast.losses?.extendedSurfaces, loss => this.extendedSurfaceFormService.getExtendedSurfaceForm(loss)) },
     { key: 'otherValid', view: LossView.OTHER, label: 'Other', isValid: phast => this.allValid(phast.losses?.otherLosses, loss => this.otherFormService.getOtherForm(loss)) },
     { key: 'slagValid', view: LossView.SLAG, label: 'Slag', isValid: phast => this.allValid(phast.losses?.slagLosses, loss => this.slagFormService.getSlagForm(loss)) },
-    { key: 'energyInputValid', view: LossView.ENERGY_INPUT, label: 'Energy Input', isValid: (phast, settings) => this.isEnergyInputValid(phast, settings) },
+    { key: 'energyInputValid', view: LossView.ENERGY_INPUT, label: 'Energy Input', isValid: (phast, settings, scenario) => this.isEnergyInputValid(phast, settings, scenario) },
     { key: 'systemEfficiencyValid', view: LossView.HEAT_SYSTEM_EFFICIENCY, label: 'System Efficiency', isValid: phast => new FormControl(phast.systemEfficiency ?? null, HEAT_SYSTEM_EFFICIENCY_VALIDATORS).valid },
     { key: 'auxPowerValid', view: LossView.AUXILIARY_POWER, label: 'Auxiliary Power', isValid: phast => this.allValid(phast.losses?.auxiliaryPowerLosses, loss => this.auxiliaryPowerFormService.getAuxiliaryPowerForm(loss)) },
     { key: 'inputExhaustValid', view: LossView.ENERGY_INPUT_EXHAUST_GAS, label: 'Energy Input Exhaust Gas', isValid: phast => this.allValid(phast.losses?.energyInputExhaustGasLoss, loss => this.energyInputExhaustGasFormService.getEnergyInputExhaustGasForm(loss)) },
@@ -130,24 +130,35 @@ export class ProcessHeatingValidityService {
   scenarioValidity(scenario: AssessmentScenario): PhastValid {
     let cached = this.scenarioValidityCache.get(scenario);
     if (!cached) {
-      cached = computed(() => this.checkValid(this.assessmentService.scenarioPhastSignal(scenario), this.assessmentService.settingsSignal()), { equal: isEqual });
+      cached = computed(() => this.checkValid(scenario), { equal: isEqual });
       this.scenarioValidityCache.set(scenario, cached);
     }
     return cached();
   }
 
   /**
-   * @param phast the scenario's effective inputs
-   * @param settings assessment settings; decide which steps apply
+   * @param scenario 'baseline' or a modification id
    * @returns whether each step's saved inputs pass its form validation. A scenario that doesn't exist is invalid.
    */
-  checkValid(phast: PHAST | undefined, settings: Settings): PhastValid {
+  private checkValid(scenario: AssessmentScenario): PhastValid {
+    const phast = this.assessmentService.scenarioPhastSignal(scenario);
+    const settings = this.assessmentService.settingsSignal();
     const configuration = deriveHeatingEquipmentConfiguration(settings);
     const valid = Object.fromEntries(this.checks.map(check => [
       check.key,
-      !phast || !isViewVisibleForConfiguration(check.view, configuration) || check.isValid(phast, settings),
+      !phast || !isViewVisibleForConfiguration(check.view, configuration) || check.isValid(phast, settings, scenario),
     ])) as Record<ValidityKey, boolean>;
     return { ...valid, isValid: !!phast && Object.values(valid).every(Boolean) };
+  }
+
+  /**
+   * @param scenario 'baseline' or a modification id
+   * @param view the heat balance step
+   * @returns whether the step's saved inputs pass its form validation; a step without a check is valid
+   */
+  isStepValid(scenario: AssessmentScenario, view: string): boolean {
+    const check = this.checks.find(candidate => candidate.view === view);
+    return !check || this.scenarioValidity(scenario)[check.key];
   }
 
   private errorLines(validity: PhastValid): string[] {
@@ -159,13 +170,13 @@ export class ProcessHeatingValidityService {
   }
 
   /** The electricity input can't fall below what the scenario's other inputs require. */
-  private isEnergyInputValid(phast: PHAST, settings: Settings): boolean {
+  private isEnergyInputValid(phast: PHAST, settings: Settings, scenario: AssessmentScenario): boolean {
     const losses = phast.losses?.energyInputEAF;
     if (!losses?.length) {
       return true;
     }
     // The legacy EAF results read operating hours, which the Operations check reports as missing
-    const results = phast.operatingHours ? this.resultsService.getResults(phast, settings) : undefined;
+    const results = phast.operatingHours ? this.resultsService.scenarioResults(scenario) : undefined;
     const minElectricityInput = this.energyInputFormService.getMinElectricityInput(results, settings);
     return losses.every(loss => {
       const form = this.energyInputFormService.getEnergyInputForm(loss, settings);

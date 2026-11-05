@@ -10,6 +10,10 @@ export class TabNavHelper {
     return !this.uiService.canVisitView(link.view);
   }
 
+  isTabInvalid(link: ViewLink): boolean {
+    return this.uiService.isViewInvalid(link.view);
+  }
+
   handleCanNavigate(event: MouseEvent, link: ViewLink): boolean {
     if (this.isLinkDisabled(link)) {
       event.preventDefault();
