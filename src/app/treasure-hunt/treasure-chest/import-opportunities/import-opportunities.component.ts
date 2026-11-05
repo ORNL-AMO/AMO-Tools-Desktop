@@ -112,7 +112,8 @@ export class ImportOpportunitiesComponent implements OnInit {
           coolingTowerFanOpportunities: assessment.treasureHunt.coolingTowerFanOpportunities,
           coolingTowerBasinOpportunities: assessment.treasureHunt.coolingTowerBasinOpportunities,
           boilerBlowdownRateOpportunities: assessment.treasureHunt.boilerBlowdownRateOpportunities,
-          powerFactorCorrectionOpportunities: assessment.treasureHunt.powerFactorCorrectionOpportunities
+          powerFactorCorrectionOpportunities: assessment.treasureHunt.powerFactorCorrectionOpportunities,
+          compressedAirDryerOpportunities: assessment.treasureHunt.compressedAirDryerOpportunities
         };
         this.importJson = importExportOpportunities;
         this.fileImportStatus = {
