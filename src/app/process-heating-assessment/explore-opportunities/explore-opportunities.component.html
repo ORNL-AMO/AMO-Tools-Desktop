@@ -12,8 +12,12 @@
       />
     </div>
     <hr>
-    @for (component of visibleOpportunityComponents(); track component) {
-      <ng-container *ngComponentOutlet="component"></ng-container>
+    @for (group of visibleOpportunityGroups(); track group.notesKey) {
+      <div (focusin)="setNotesKey(group.notesKey)">
+        @for (component of group.components; track component) {
+          <ng-container *ngComponentOutlet="component"></ng-container>
+        }
+      </div>
     }
   } @else {
     <div class="no-data text-center">

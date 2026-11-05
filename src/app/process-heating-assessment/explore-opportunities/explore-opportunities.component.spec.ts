@@ -6,6 +6,7 @@ import { Losses } from '../models/phast';
 import { HeatingEquipmentConfiguration } from '../models/views';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
+import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
 import { ExploreOpportunitiesComponent } from './explore-opportunities.component';
 import { OPPORTUNITY_REGISTRY } from './opportunity-registry';
 import { ChargeMaterialOpportunityComponent } from './charge-material-opportunity/charge-material-opportunity.component';
@@ -60,12 +61,14 @@ class SecondStubOpportunityComponent {}
 describe('ExploreOpportunitiesComponent opportunity registry', () => {
   let configuration: WritableSignal<HeatingEquipmentConfiguration>;
   let populatedLossKeys: Set<keyof Losses>;
+  let uiService: jasmine.SpyObj<ProcessHeatingUiService>;
 
   function createComponent(): ExploreOpportunitiesComponent {
     return TestBed.createComponent(ExploreOpportunitiesComponent).componentInstance;
   }
 
   beforeEach(() => {
+    uiService = jasmine.createSpyObj<ProcessHeatingUiService>('ProcessHeatingUiService', ['setExploreNotesKey']);
     populatedLossKeys = new Set(Object.keys(COMPONENTS_BY_LOSS_KEY) as (keyof Losses)[]);
     configuration = signal<HeatingEquipmentConfiguration>(HeatingEquipmentConfiguration.FUEL_FIRED);
     TestBed.configureTestingModule({
@@ -73,6 +76,7 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: ModalDialogService, useValue: {} },
+        { provide: ProcessHeatingUiService, useValue: uiService },
         { provide: ModificationService, useValue: { selectedModification: signal(undefined), modifications: signal([]) } },
         {
           provide: ProcessHeatingAssessmentService,
@@ -137,6 +141,27 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
     });
   }
 
+  it('sets the notes key when focus moves into an opportunity group', () => {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      declarations: [ExploreOpportunitiesComponent, FirstStubOpportunityComponent],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: ModalDialogService, useValue: {} },
+        { provide: ProcessHeatingUiService, useValue: uiService },
+        { provide: ModificationService, useValue: { selectedModification: signal({ id: 'mod' }), modifications: signal([]) } },
+        { provide: ProcessHeatingAssessmentService, useValue: { heatingEquipmentConfiguration: configuration, lossSignal: () => [{}] } },
+      ],
+    });
+    const fixture = TestBed.createComponent(ExploreOpportunitiesComponent);
+    spyOn(fixture.componentInstance, 'visibleOpportunityGroups').and.returnValue([{ notesKey: 'wallNotes', components: [FirstStubOpportunityComponent] }]);
+    fixture.detectChanges();
+
+    fixture.debugElement.query(By.css('app-first-stub-opportunity')).nativeElement.parentElement.dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+
+    expect(uiService.setExploreNotesKey).toHaveBeenCalledWith('wallNotes');
+  });
+
   it('renders visible opportunities through NgComponentOutlet in order', () => {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
@@ -144,6 +169,7 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
         { provide: ModalDialogService, useValue: {} },
+        { provide: ProcessHeatingUiService, useValue: uiService },
         { provide: ModificationService, useValue: { selectedModification: signal({ id: 'mod' }), modifications: signal([]) } },
         {
           provide: ProcessHeatingAssessmentService,
@@ -152,7 +178,10 @@ describe('ExploreOpportunitiesComponent opportunity registry', () => {
       ],
     });
     const fixture = TestBed.createComponent(ExploreOpportunitiesComponent);
-    spyOn(fixture.componentInstance, 'visibleOpportunityComponents').and.returnValue([SecondStubOpportunityComponent, FirstStubOpportunityComponent]);
+    spyOn(fixture.componentInstance, 'visibleOpportunityGroups').and.returnValue([
+      { notesKey: 'wallNotes', components: [SecondStubOpportunityComponent] },
+      { notesKey: 'chargeNotes', components: [FirstStubOpportunityComponent] },
+    ]);
     fixture.detectChanges();
 
     const rendered = fixture.debugElement.queryAll(By.css('app-first-stub-opportunity, app-second-stub-opportunity'));

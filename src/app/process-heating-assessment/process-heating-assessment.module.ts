@@ -54,6 +54,7 @@ import { Co2SavingsPhastService } from '../phast/losses/operations/co2-savings-p
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
+import { NotesComponent } from './results-panel/notes/notes.component';
 
 import { ProcessHeatingAssessmentComponent } from './process-heating-assessment/process-heating-assessment.component';
 import { ProcessHeatingBannerComponent } from './process-heating-banner/process-heating-banner.component';
@@ -362,6 +363,7 @@ export const ROUTES: Route[] = [
     ResultsPanelComponent,
     AssessmentResultsComponent,
     HelpPanelComponent,
+    NotesComponent,
     BaselineComponent,
     BaselineTabsComponent,
     AssessmentComponent,

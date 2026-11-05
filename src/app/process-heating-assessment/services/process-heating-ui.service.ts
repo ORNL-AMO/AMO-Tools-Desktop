@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, map, startWith } from 'rxjs';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
-import { Losses } from '../models/phast';
+import { Losses, Notes } from '../models/phast';
 import { AssessmentView, BaselineView, EXPERT_VIEW_LOSS_VIEWS, HEAT_BALANCE_VIEW_LINKS, HeatingEquipmentConfiguration, isViewVisibleForConfiguration, LossView, MainView, ProcessHeatingView, ReportView, ViewLink } from '../models/views';
 import { ProcessHeatingRouteData, STEPPED_ROUTES } from '../routing/stepped-routes';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
@@ -53,6 +53,18 @@ export class ProcessHeatingUiService {
   showModificationListModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showAddModificationModalSignal: WritableSignal<boolean> = signal<boolean>(false);
   showExportModalSignal: WritableSignal<boolean> = signal<boolean>(false);
+
+  private readonly exploreNotesFocus = signal<{ modificationId: string | undefined; key: keyof Notes } | undefined>(undefined);
+
+  /** Notes field of the Explore Opportunities section last focused for the active modification. */
+  readonly exploreNotesKey: Signal<keyof Notes | undefined> = computed(() => {
+    const focus = this.exploreNotesFocus();
+    return focus?.modificationId === this.activeModificationIdSignal() ? focus?.key : undefined;
+  });
+
+  setExploreNotesKey(key: keyof Notes): void {
+    this.exploreNotesFocus.set({ modificationId: this.activeModificationIdSignal(), key });
+  }
 
   readonly isAssessmentSettingsValidSignal: Signal<boolean> = this.validityService.isAssessmentSettingsValid;
   readonly isHeatBalanceValidSignal: Signal<boolean> = computed(() => this.validityService.scenarioValidity('baseline').isValid);

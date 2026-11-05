@@ -13,6 +13,13 @@
               <div>Help</div>
             </a>
           </div>
+          @if (showNotesTab()) {
+            <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab === 'notes'">
+              <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('notes')">
+                <div>Notes</div>
+              </a>
+            </div>
+          }
         </div>
       </div>
     </div>
@@ -23,6 +30,13 @@
         }
         @if (selectedPanelTab === 'help') {
           <app-process-heating-help-panel></app-process-heating-help-panel>
+        }
+        @if (selectedPanelTab === 'notes' && showNotesTab()) {
+          @if (scenario() === 'baseline') {
+            <p class="p-2 mb-0">You must add a modification to take notes on it.</p>
+          } @else {
+            <app-process-heating-notes [modificationId]="scenario()" [notesKey]="notesKey()"></app-process-heating-notes>
+          }
         }
       </div>
     </div>
