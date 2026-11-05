@@ -26,9 +26,10 @@ const LEGACY_FLAG_KEYS: Record<ExploreOpportunityCategory, keyof LegacyModificat
  * The shared JUSTIFI exporter reads each modification's full `phast` clone and legacy `exploreOppsShowX` fields;
  * this module stores `scenarioOverrides` and `exploreOpportunityFlags` instead.
  * @param assessment assessment saved by this module
+ * @param setupDone whether the settings and baseline are complete; the exporter writes no results without it
  * @returns a copy whose modifications carry the legacy shape the exporter reads; the input is not mutated
  */
-export function toLegacyJustifiAssessment(assessment: Assessment): Assessment {
+export function toLegacyJustifiAssessment(assessment: Assessment, setupDone: boolean): Assessment {
   const baseline = assessment.phast as unknown as PHAST;
   const modifications = (baseline.modifications ?? []) as ProcessHeatingModification[];
   const legacyModifications = modifications.map(modification => {
@@ -45,5 +46,5 @@ export function toLegacyJustifiAssessment(assessment: Assessment): Assessment {
       phast: getEffectivePhast(baseline, modification) as unknown as LegacyPHAST,
     } as LegacyModification;
   });
-  return { ...assessment, phast: { ...assessment.phast, modifications: legacyModifications } };
+  return { ...assessment, phast: { ...assessment.phast, setupDone, modifications: legacyModifications } };
 }

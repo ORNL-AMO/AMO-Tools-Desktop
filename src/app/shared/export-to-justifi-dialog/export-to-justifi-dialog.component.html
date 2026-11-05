@@ -18,6 +18,9 @@
       <li>Upload the downloaded JUSTIFI template file to the platform.</li>
       <li>Work through the JUSTIFI platform to find NEBs for your energy efficiency projects!</li>
     </ol>
+    @if (exportError()) {
+      <div class="alert alert-danger" role="alert">The export failed. Check your connection and try again.</div>
+    }
     @if (!exportDone()) {
       <table class="table table-sm table-bordered mb-0">
         <colgroup>

@@ -25,16 +25,22 @@ export class ExportToJustifiDialogComponent {
   readonly assessment: Assessment = inject<ExportToJustifiDialogData>(DIALOG_DATA).assessment;
   readonly modifications = this.assessment.phast.modifications ?? [];
   readonly exportDone = signal(false);
+  readonly exportError = signal(false);
   selectedModificationId: string | undefined = this.modifications[0]?.id;
 
   close(): void {
     this.dialogRef.close();
   }
 
-  exportToJustifi(): void {
+  async exportToJustifi(): Promise<void> {
+    this.exportError.set(false);
     const assessment: Assessment = { ...this.assessment, phast: { ...this.assessment.phast, selectedModificationId: this.selectedModificationId } };
     const settings = this.settingsDbService.getByAssessmentId(assessment, true);
-    this.exportToJustifiTemplateService.exportData(settings, [assessment]);
-    this.exportDone.set(true);
+    try {
+      await this.exportToJustifiTemplateService.exportData(settings, [assessment]);
+      this.exportDone.set(true);
+    } catch {
+      this.exportError.set(true);
+    }
   }
 }

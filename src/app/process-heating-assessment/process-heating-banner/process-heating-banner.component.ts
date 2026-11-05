@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@a
 import { Observable } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { DashboardService } from '../../dashboard/dashboard.service';
-import { MAIN_VIEW_LINKS, ViewLink } from '../models/views';
+import { MAIN_VIEW_LINKS, MainView, ViewLink } from '../models/views';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
 import { TabNavHelper } from '../services/tab-nav-helper.service';
@@ -31,6 +31,7 @@ export class ProcessHeatingBannerComponent {
   readonly mainView: Signal<string> = this.uiService.mainView;
   readonly canContinue: Signal<boolean> = this.uiService.canContinue;
   readonly canGoBack: Signal<boolean> = this.uiService.canGoBack;
+  readonly blockedReason: Signal<string | undefined> = this.uiService.blockedReason;
   bannerCollapsed = true;
 
   readonly furnaceSubtitle: Signal<string> = computed(() => {
@@ -76,7 +77,7 @@ export class ProcessHeatingBannerComponent {
       width: '600px',
       data: {
         measurItemAttachment: { itemType: 'assessment', itemName: assessment.name, itemData: assessment },
-        justifiAssessment: toLegacyJustifiAssessment(assessment),
+        justifiAssessment: toLegacyJustifiAssessment(assessment, this.uiService.canVisitView(MainView.REPORT)),
       },
     });
   }
