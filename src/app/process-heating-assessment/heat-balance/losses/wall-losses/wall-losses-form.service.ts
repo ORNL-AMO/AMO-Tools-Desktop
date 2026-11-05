@@ -13,20 +13,23 @@ export type WallLossForm = FormGroup<{
   correctionFactor: FormControl<number | null>;
 }>;
 
+/** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
+export const NEW_WALL_LOSS: WallLoss = { windVelocity: 0, conditionFactor: 1.394, surfaceEmissivity: 0.9, correctionFactor: 1.0 };
+
 @Injectable()
 export class WallLossesFormService {
   private readonly fb = inject(FormBuilder);
 
-  getWallLossForm(wallLoss: WallLoss = {}): WallLossForm {
+  getWallLossForm(wallLoss: WallLoss = NEW_WALL_LOSS): WallLossForm {
     const form: WallLossForm = this.fb.group({
       surfaceArea: [wallLoss.surfaceArea ?? null, [Validators.required, Validators.min(0)]],
       avgSurfaceTemp: [wallLoss.surfaceTemperature ?? null, Validators.required],
       ambientTemp: [wallLoss.ambientTemperature ?? null, Validators.required],
-      windVelocity: [wallLoss.windVelocity ?? 0, [Validators.required, Validators.min(0)]],
+      windVelocity: [wallLoss.windVelocity ?? null, [Validators.required, Validators.min(0)]],
       surfaceShape: [wallLoss.surfaceShape ?? null, Validators.required],
-      conditionFactor: [wallLoss.conditionFactor ?? 1.394, Validators.required],
-      surfaceEmissivity: [wallLoss.surfaceEmissivity ?? 0.9, [Validators.required, Validators.min(0), Validators.max(1)]],
-      correctionFactor: [wallLoss.correctionFactor ?? 1.0, Validators.required],
+      conditionFactor: [wallLoss.conditionFactor ?? null, Validators.required],
+      surfaceEmissivity: [wallLoss.surfaceEmissivity ?? null, [Validators.required, Validators.min(0), Validators.max(1)]],
+      correctionFactor: [wallLoss.correctionFactor ?? null, Validators.required],
     });
     return this.setSurfaceTempValidator(form);
   }

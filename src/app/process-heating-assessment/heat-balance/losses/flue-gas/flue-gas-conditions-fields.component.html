@@ -1,4 +1,5 @@
 @let f = form().controls;
+@let w = warnings();
 
 <div [formGroup]="form()">
   <div class="form-group">
@@ -8,54 +9,9 @@
       <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
     </div>
     <app-form-control-errors [control]="f.flueGasTemperature" [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-form-control-errors>
-  </div>
-
-  <div class="form-group">
-    <label for="oxygenCalculationMethod_{{ instanceId() }}">Oxygen Calculation Method</label>
-    <select class="form-control" id="oxygenCalculationMethod_{{ instanceId() }}" formControlName="oxygenCalculationMethod" [class.indicate-different]="differingFields()?.has('oxygenCalculationMethod')"
-      (change)="changeOxygenCalculationMethod()">
-      @for (method of calculationMethods; track method) {
-        <option [ngValue]="method">{{ method }}</option>
-      }
-    </select>
-  </div>
-
-  @if (f.oxygenCalculationMethod.value === OxygenCalculationMethod.ExcessAir) {
-    <div class="form-group">
-      <label for="excessAirPercentage_{{ instanceId() }}">Excess Air</label>
-      <div class="input-group" [class.invalid]="f.excessAirPercentage.invalid" [class.indicate-different]="differingFields()?.has('excessAirPercentage')">
-        <input type="number" step="1" class="form-control" id="excessAirPercentage_{{ instanceId() }}" formControlName="excessAirPercentage" onfocus="this.select();">
-        <span class="input-group-addon units">%</span>
-      </div>
-      <app-form-control-errors [control]="f.excessAirPercentage" [settings]="settings()"></app-form-control-errors>
-    </div>
-  } @else {
-    <div class="form-group">
-      <label for="o2InFlueGas_{{ instanceId() }}">O<sub>2</sub> in Flue Gas</label>
-      <div class="input-group" [class.invalid]="f.o2InFlueGas.invalid" [class.indicate-different]="differingFields()?.has('o2InFlueGas')">
-        <input type="number" step="0.1" class="form-control" id="o2InFlueGas_{{ instanceId() }}" formControlName="o2InFlueGas" onfocus="this.select();">
-        <span class="input-group-addon units">%</span>
-      </div>
-      <app-form-control-errors [control]="f.o2InFlueGas" [settings]="settings()"></app-form-control-errors>
-    </div>
-  }
-
-  <div class="form-group">
-    <label for="combustionAirTemperature_{{ instanceId() }}">Combustion Air Temperature</label>
-    <div class="input-group" [class.invalid]="f.combustionAirTemperature.invalid" [class.indicate-different]="differingFields()?.has('combustionAirTemperature')">
-      <input type="number" step="10" class="form-control" id="combustionAirTemperature_{{ instanceId() }}" formControlName="combustionAirTemperature" onfocus="this.select();">
-      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
-    </div>
-    <app-form-control-errors [control]="f.combustionAirTemperature" [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-form-control-errors>
-  </div>
-
-  <div class="form-group">
-    <label for="fuelTemperature_{{ instanceId() }}">Fuel Temperature</label>
-    <div class="input-group" [class.invalid]="f.fuelTemperature.invalid" [class.indicate-different]="differingFields()?.has('fuelTemperature')">
-      <input type="number" step="10" class="form-control" id="fuelTemperature_{{ instanceId() }}" formControlName="fuelTemperature" onfocus="this.select();">
-      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
-    </div>
-    <app-form-control-errors [control]="f.fuelTemperature" [settings]="settings()"></app-form-control-errors>
+    @if (w?.flueGasTemp; as warning) {
+      <div class="alert-warning small">{{ warning }}</div>
+    }
   </div>
 
   <div class="form-group">
@@ -68,12 +24,73 @@
   </div>
 
   <div class="form-group">
-    <label for="moistureInAirCombustion_{{ instanceId() }}">Moisture in Combustion Air</label>
-    <button type="button" class="btn btn-link btn-sm p-0 d-block" (click)="openMoistureModal()">Calculate</button>
-    <div class="input-group" [class.invalid]="f.moistureInAirCombustion.invalid" [class.indicate-different]="differingFields()?.has('moistureInAirCombustion')">
-      <input type="number" step="0.1" class="form-control" id="moistureInAirCombustion_{{ instanceId() }}" formControlName="moistureInAirCombustion" onfocus="this.select();">
+    <label for="oxygenCalculationMethod_{{ instanceId() }}">Percent Oxygen Or Excess Air?</label>
+    <select class="form-control" id="oxygenCalculationMethod_{{ instanceId() }}" formControlName="oxygenCalculationMethod" [class.indicate-different]="differingFields()?.has('oxygenCalculationMethod')"
+      (change)="changeOxygenCalculationMethod()">
+      @for (method of calculationMethods; track method) {
+        <option [ngValue]="method">{{ method }}</option>
+      }
+    </select>
+  </div>
+
+  @if (f.oxygenCalculationMethod.value === OxygenCalculationMethod.ExcessAir) {
+    <div class="form-group">
+      <label for="excessAirPercentage_{{ instanceId() }}">Excess Air</label>
+      <div class="input-group" [class.invalid]="f.excessAirPercentage.invalid" [class.indicate-different]="differingFields()?.has('excessAirPercentage')">
+        <input type="number" step="any" class="form-control" id="excessAirPercentage_{{ instanceId() }}" formControlName="excessAirPercentage" onfocus="this.select();">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <app-form-control-errors [control]="f.excessAirPercentage" [settings]="settings()"></app-form-control-errors>
+      @if (w?.excessAirWarning; as warning) {
+        <div class="alert-warning small">{{ warning }}</div>
+      }
+    </div>
+  } @else {
+    <div class="form-group">
+      <label for="o2InFlueGas_{{ instanceId() }}">O<sub>2</sub> in Flue Gas</label>
+      <div class="input-group" [class.invalid]="f.o2InFlueGas.invalid" [class.error]="!!w?.o2Warning" [class.indicate-different]="differingFields()?.has('o2InFlueGas')">
+        <input type="number" step="1" min="0" max="20.5" class="form-control" id="o2InFlueGas_{{ instanceId() }}" formControlName="o2InFlueGas" onfocus="this.select();">
+        <span class="input-group-addon units">%</span>
+      </div>
+      <app-form-control-errors [control]="f.o2InFlueGas" [settings]="settings()"></app-form-control-errors>
+      @if (w?.o2Warning; as warning) {
+        <div class="alert-warning small">{{ warning }}</div>
+      }
+    </div>
+  }
+
+  <div class="form-group">
+    <label for="combustionAirTemperature_{{ instanceId() }}">Combustion Air Temperature</label>
+    <div class="input-group" [class.invalid]="f.combustionAirTemperature.invalid" [class.indicate-different]="differingFields()?.has('combustionAirTemperature')">
+      <input type="number" step="10" class="form-control" id="combustionAirTemperature_{{ instanceId() }}" formControlName="combustionAirTemperature" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.combustionAirTemperature" [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-form-control-errors>
+    @if (w?.combustionAirTempWarning; as warning) {
+      <div class="alert-warning small">{{ warning }}</div>
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="fuelTemperature_{{ instanceId() }}">Fuel Temperature</label>
+    <div class="input-group" [class.invalid]="f.fuelTemperature.invalid" [class.indicate-different]="differingFields()?.has('fuelTemperature')">
+      <input type="number" step="10" class="form-control" id="fuelTemperature_{{ instanceId() }}" formControlName="fuelTemperature" onfocus="this.select();">
+      <app-input-unit [settings]="settings()" imperialUnit="&#8457;" metricUnit="&#8451;"></app-input-unit>
+    </div>
+    <app-form-control-errors [control]="f.fuelTemperature" [settings]="settings()"></app-form-control-errors>
+  </div>
+
+  <div class="form-group">
+    <label for="moistureInAirCombustion_{{ instanceId() }}">Moisture in Combustion Air
+      <button type="button" class="btn btn-link p-0 d-block small" (click)="openMoistureModal()">Calculate</button>
+    </label>
+    <div class="input-group" [class.invalid]="f.moistureInAirCombustion.invalid" [class.error]="!!w?.moistureInAirCombustionWarning" [class.indicate-different]="differingFields()?.has('moistureInAirCombustion')">
+      <input type="number" step="any" min="0" max="100" class="form-control" id="moistureInAirCombustion_{{ instanceId() }}" formControlName="moistureInAirCombustion" onfocus="this.select();">
       <span class="input-group-addon units">%</span>
     </div>
     <app-form-control-errors [control]="f.moistureInAirCombustion" [settings]="settings()"></app-form-control-errors>
+    @if (w?.moistureInAirCombustionWarning; as warning) {
+      <div class="alert-warning small">{{ warning }}</div>
+    }
   </div>
 </div>

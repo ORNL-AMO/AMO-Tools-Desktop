@@ -48,3 +48,22 @@ tr > th:not(:first-child){
 .chart-body {
     padding: 20px; 
 }
+
+.category-header {
+    width: 100%;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.category-body.collapsed {
+    display: none;
+}
+
+@media print {
+    .category-body.collapsed {
+        display: block !important;
+    }
+}

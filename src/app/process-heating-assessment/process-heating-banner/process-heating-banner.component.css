@@ -91,7 +91,6 @@ li.page-item {
 
 .download-nav-item {
     border: none !important;
-    background-color: var(--process-heating-assessment);
 }
 
 .download-nav-item:hover {

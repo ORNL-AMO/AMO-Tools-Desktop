@@ -8,7 +8,7 @@ import { Losses } from '../../../models/phast';
 import { AssessmentScenario } from '../../../services/process-heating-assessment.service';
 import { LossFormItem, LossFormListService } from '../loss-form-list.service';
 import { WallLossCalculationService } from './wall-loss-calculation.service';
-import { WallLossForm, WallLossesFormService } from './wall-losses-form.service';
+import { WallLossForm, WallLossesFormService, NEW_WALL_LOSS } from './wall-losses-form.service';
 
 export type WallLossItem = LossFormItem<WallLossForm>;
 
@@ -28,6 +28,10 @@ export class WallLossesService extends LossFormListService<WallLoss, WallLossFor
     this.wallSurfaceDbService.getAllWithObservable()
       .pipe(take(1))
       .subscribe(surfaces => this.surfaceOptions.set(surfaces));
+  }
+
+  protected override newLoss(): WallLoss {
+    return NEW_WALL_LOSS;
   }
 
   protected buildForm(loss: WallLoss): WallLossForm {

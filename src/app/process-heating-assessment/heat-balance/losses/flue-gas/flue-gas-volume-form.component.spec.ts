@@ -146,11 +146,11 @@ describe('FlueGasVolumeFormComponent', () => {
       expect(fixture.nativeElement.querySelector('.alert-warning')).not.toBeNull();
     });
 
-    it('renders an input for every gas fraction', () => {
+    it('does not render inputs for the gas fractions', () => {
       render();
 
       for (const fraction of ['CH4', 'C2H6', 'N2', 'H2', 'C3H8', 'C4H10_CnH2n', 'H2O', 'CO', 'CO2', 'SO2', 'O2']) {
-        expect(fixture.nativeElement.querySelector(`#${fraction}_instance-1`)).withContext(fraction).not.toBeNull();
+        expect(fixture.nativeElement.querySelector(`#${fraction}_instance-1`)).withContext(fraction).toBeNull();
       }
     });
   });
@@ -168,22 +168,20 @@ describe('FlueGasVolumeFormComponent', () => {
   });
 
   describe('compare indicators', () => {
-    const group = (id: string): HTMLElement => fixture.nativeElement.querySelector(`[id="${id}"]`).closest('.input-group');
-
-    it('highlights fields listed as differing from baseline', () => {
+    it('highlights the fuel select when it differs from baseline', () => {
       render();
-      fixture.componentRef.setInput('differingFields', new Set(['flueGasByVolume.CH4']));
+      fixture.componentRef.setInput('differingFields', new Set(['flueGasByVolume.gasTypeId']));
       fixture.detectChanges();
 
-      expect(group('CH4_instance-1').classList).toContain('indicate-different');
+      expect(fixture.nativeElement.querySelector('[id="materialId_instance-1"]').classList).toContain('indicate-different');
     });
 
-    it('leaves fields that match baseline unhighlighted', () => {
+    it('leaves the fuel select unhighlighted when only another field differs', () => {
       render();
-      fixture.componentRef.setInput('differingFields', new Set(['flueGasByVolume.CH4']));
+      fixture.componentRef.setInput('differingFields', new Set(['flueGasByVolume.flueGasTemperature']));
       fixture.detectChanges();
 
-      expect(group('C2H6_instance-1').classList).not.toContain('indicate-different');
+      expect(fixture.nativeElement.querySelector('[id="materialId_instance-1"]').classList).not.toContain('indicate-different');
     });
 
     it('highlights nothing without differing fields', () => {

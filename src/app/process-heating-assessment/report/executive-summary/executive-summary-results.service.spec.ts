@@ -263,7 +263,7 @@ describe('ExecutiveSummaryResultsService', () => {
         scenarioOverrides: { name: 'Scenario 1' },
         notes: { wallNotes: 'Added insulation' },
       }]);
-      expect(ui().notes).toEqual([{ modificationName: 'Scenario 1', lossName: 'Wall Losses', note: 'Added insulation' }]);
+      expect(ui().notes).toEqual([{ modificationId: 'mod1', modificationName: 'Scenario 1', lossName: 'Wall Losses', note: 'Added insulation' }]);
     });
   });
 

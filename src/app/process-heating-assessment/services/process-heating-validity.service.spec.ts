@@ -24,6 +24,7 @@ import { SlagFormService } from '../heat-balance/losses/slag/slag-form.service';
 import { WallLossesFormService } from '../heat-balance/losses/wall-losses/wall-losses-form.service';
 import { ProcessHeatingModification } from '../models/modification';
 import { Losses, PHAST, PhastResults } from '../models/phast';
+import { BaselineView, LossView } from '../models/views';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingOperationsFormService } from './process-heating-operations-form.service';
 import { ProcessHeatingResultsService } from './process-heating-results.service';
@@ -46,8 +47,17 @@ describe('ProcessHeatingValidityService', () => {
   let scenarios: Record<string, WritableSignal<PHAST | undefined>>;
   let processHeating: WritableSignal<PHAST>;
   let settingsFormValid: boolean;
+  let getResults: jasmine.Spy;
+  let scenarioResults: jasmine.Spy;
 
   beforeEach(() => {
+    getResults = jasmine.createSpy('getResults');
+    scenarioResults = jasmine.createSpy('scenarioResults').and.callFake((scenario: string) => {
+      if (!scenarios[scenario]().operatingHours) {
+        throw new TypeError("Cannot read properties of undefined (reading 'hoursPerYear')");
+      }
+      return { totalInput: 1000, exothermicHeat: -100, energyInputTotalChemEnergy: 300 } as PhastResults;
+    });
     settings = signal(FUEL_FIRED);
     scenarios = {
       baseline: signal<PHAST | undefined>(phastWith({})),
@@ -81,12 +91,8 @@ describe('ProcessHeatingValidityService', () => {
         {
           provide: ProcessHeatingResultsService,
           useValue: {
-            getResults: (phast: PHAST) => {
-              if (!phast.operatingHours) {
-                throw new TypeError("Cannot read properties of undefined (reading 'hoursPerYear')");
-              }
-              return { totalInput: 1000, exothermicHeat: -100, energyInputTotalChemEnergy: 300 } as PhastResults;
-            },
+            getResults,
+            scenarioResults,
           },
         },
         {
@@ -120,6 +126,15 @@ describe('ProcessHeatingValidityService', () => {
       expect(validity.wallValid).toBeFalse();
       expect(validity.operationsValid).toBeTrue();
       expect(validity.coolingValid).toBeTrue();
+    });
+
+    it('flags a saved entry whose cleared field a new entry would default', () => {
+      const wallLoss = { surfaceArea: 100, surfaceTemperature: 300, ambientTemperature: 70, surfaceShape: 3, conditionFactor: 1.394, surfaceEmissivity: 0.9, correctionFactor: 1 };
+      scenarios.baseline.set(phastWith({ wallLosses: [{ ...wallLoss, windVelocity: 5 }] }));
+      expect(service.scenarioValidity('baseline').wallValid).toBeTrue();
+
+      scenarios.baseline.set(phastWith({ wallLosses: [wallLoss] }));
+      expect(service.scenarioValidity('baseline').wallValid).toBeFalse();
     });
 
     it('flags missing operations', () => {
@@ -204,6 +219,29 @@ describe('ProcessHeatingValidityService', () => {
 
         expect(service.scenarioValidity('baseline').energyInputValid).toBeTrue();
       });
+
+      it('reads the scenario\'s cached results instead of recalculating them', () => {
+        scenarios.baseline.set(phastWith(energyInput(600)));
+
+        service.scenarioValidity('baseline');
+
+        expect(scenarioResults).toHaveBeenCalledWith('baseline');
+        expect(getResults).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('isStepValid', () => {
+    it('flags only the step with invalid inputs, in that scenario only', () => {
+      scenarios.baseline.set(phastWith({ wallLosses: [{}] }));
+
+      expect(service.isStepValid('baseline', LossView.WALL_LOSSES)).toBeFalse();
+      expect(service.isStepValid('baseline', LossView.FIXTURE)).toBeTrue();
+      expect(service.isStepValid('mod1', LossView.WALL_LOSSES)).toBeTrue();
+    });
+
+    it('treats a step without a validity check as valid', () => {
+      expect(service.isStepValid('baseline', BaselineView.METERED_ENERGY)).toBeTrue();
     });
   });
 

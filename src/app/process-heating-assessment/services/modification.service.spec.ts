@@ -50,6 +50,28 @@ describe('ModificationService', () => {
     expect(service.selectedModification()).toBeUndefined();
   });
 
+  it('adds a modification with empty legacy note defaults', () => {
+    service.addModification();
+    expect(service.selectedModification()?.notes?.chargeNotes).toBe('');
+    expect(service.selectedModification()?.notes?.operationsNotes).toBe('');
+    expect(service.selectedModification()?.notes?.energyInputNotes).toBe('');
+  });
+
+  it('sets one note on one modification without touching its other notes or other modifications', () => {
+    const firstId = service.addModification();
+    const secondId = service.addModification();
+
+    service.setModificationNote(firstId, 'wallNotes', 'check insulation');
+    service.setModificationNote(firstId, 'chargeNotes', 'new charge');
+
+    const [first, second] = service.modifications();
+    expect(first.id).toBe(firstId);
+    expect(first.notes?.wallNotes).toBe('check insulation');
+    expect(first.notes?.chargeNotes).toBe('new charge');
+    expect(second.id).toBe(secondId);
+    expect(second.notes?.wallNotes).toBe('');
+  });
+
   it('adds a modification with an incrementing default name, auto-selecting it', () => {
     const firstId = service.addModification();
     expect(service.selectedModificationId()).toBe(firstId);

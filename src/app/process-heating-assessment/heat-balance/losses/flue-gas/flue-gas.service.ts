@@ -55,7 +55,7 @@ export class FlueGasService {
     return this.differences().get(this.id);
   }
 
-  /** Rebuilds a saved entry through its form so its defaults match what a save would persist. */
+  /** Rebuilds a saved entry through its form so it compares in the shape a save would persist. */
   private normalize(loss: FlueGas): FlueGas {
     const settings = this.assessmentService.settingsSignal();
     if (loss.flueGasType !== FlueGasType.ByMass) {

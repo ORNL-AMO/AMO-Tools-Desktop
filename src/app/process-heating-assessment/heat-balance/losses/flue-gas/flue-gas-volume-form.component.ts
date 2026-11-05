@@ -8,7 +8,7 @@ import { MaterialSelector } from '../charge-material/material-selector';
 import { AddFlueGasMaterialModalComponent } from './add-flue-gas-material-modal.component';
 import { adaptFlueGasMaterialDb } from './flue-gas-material-db.adapter';
 import { FLUE_GAS_COMPONENTS, FlueGasVolumeForm } from './flue-gas-form.service';
-import { FlueGas, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasWarnings, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
 import { LossFieldDifferences, nestedDifferences } from '../loss-compare.util';
 
 @Component({
@@ -22,12 +22,11 @@ export class FlueGasVolumeFormComponent implements OnInit {
   readonly settings = input.required<Settings>();
   readonly instanceId = input.required<string>();
   readonly differingFields = input<LossFieldDifferences<FlueGas>>();
+  readonly warnings = input<FlueGasWarnings | null>(null);
 
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly volumeDifferences = computed(() => nestedDifferences<FlueGasByVolume>(this.differingFields(), 'flueGasByVolume'));
-
-  readonly components = FLUE_GAS_COMPONENTS;
 
   readonly materialSelector = new MaterialSelector<FlueGasMaterial, FlueGasVolumeForm>({
     form: this.form,

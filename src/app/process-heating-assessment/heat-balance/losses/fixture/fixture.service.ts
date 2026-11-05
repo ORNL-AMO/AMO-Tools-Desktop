@@ -4,7 +4,7 @@ import { FixtureLoss } from '../../../../shared/models/phast/losses/fixtureLoss'
 import { Losses } from '../../../models/phast';
 import { LossFormItem, LossFormListService } from '../loss-form-list.service';
 import { FixtureCalculationService } from './fixture-calculation.service';
-import { FixtureForm, FixtureFormService } from './fixture-form.service';
+import { FixtureForm, FixtureFormService, NEW_FIXTURE_LOSS } from './fixture-form.service';
 
 export type FixtureItem = LossFormItem<FixtureForm>;
 
@@ -16,6 +16,10 @@ export class FixtureService extends LossFormListService<FixtureLoss, FixtureForm
   protected readonly lossKey: keyof Losses = 'fixtureLosses';
 
   readonly losses: Signal<FixtureItem[]> = this.items;
+
+  protected override newLoss(): FixtureLoss {
+    return NEW_FIXTURE_LOSS;
+  }
 
   protected buildForm(loss: FixtureLoss): FixtureForm {
     return this.formService.getFixtureForm(loss);

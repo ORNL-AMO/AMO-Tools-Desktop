@@ -1,5 +1,5 @@
 import { Type } from '@angular/core';
-import { Losses } from '../models/phast';
+import { Losses, Notes } from '../models/phast';
 import { HeatingEquipmentConfiguration } from '../models/views';
 import { ChargeMaterialOpportunityComponent } from './charge-material-opportunity/charge-material-opportunity.component';
 import { WallLossOpportunityComponent } from './wall-loss-opportunity/wall-loss-opportunity.component';
@@ -26,6 +26,8 @@ export interface OpportunityRegistration {
 export interface OpportunityRegistryEntry {
   /** Opportunities render only while the baseline has at least one loss of this type; omit for a non-loss opportunity that always renders. */
   lossKey?: keyof Losses;
+  /** Notes field edited while focus is inside this entry's opportunities. */
+  notesKey: keyof Notes;
   /** Rendered in array order. */
   opportunityComponents: OpportunityRegistration[];
 }
@@ -44,15 +46,15 @@ const STEAM_CUSTOM_ONLY = [HeatingEquipmentConfiguration.STEAM, HeatingEquipment
  * The shell template needs no change.
  */
 export const OPPORTUNITY_REGISTRY: readonly OpportunityRegistryEntry[] = [
-  { lossKey: 'chargeMaterials', opportunityComponents: [{ component: ChargeMaterialOpportunityComponent }] },
-  { lossKey: 'wallLosses', opportunityComponents: [{ component: WallLossOpportunityComponent }] },
-  { lossKey: 'atmosphereLosses', opportunityComponents: [{ component: AtmosphereOpportunityComponent }] },
-  { lossKey: 'fixtureLosses', opportunityComponents: [{ component: FixtureMaterialsHandlingOpportunityComponent }, { component: FixtureCoolingOpportunityComponent }] },
-  { lossKey: 'coolingLosses', opportunityComponents: [{ component: CoolingOpportunityComponent }] },
-  { lossKey: 'openingLosses', opportunityComponents: [{ component: OpeningSizeOpportunityComponent }, { component: OpeningEmissivityOpportunityComponent }, { component: OpeningTimeOpenOpportunityComponent }] },
-  { lossKey: 'leakageLosses', opportunityComponents: [{ component: GasLeakageOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
-  { lossKey: 'flueGasLosses', opportunityComponents: [{ component: AirFuelRatioOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }, { component: PreheatCombustionAirOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
-  { lossKey: 'slagLosses', opportunityComponents: [{ component: SlagOpportunityComponent, heatingEquipmentConfigurations: ELECTROTECHNOLOGY_EAF_ONLY }] },
-  { opportunityComponents: [{ component: OperationsOpportunityComponent }] },
-  { opportunityComponents: [{ component: HeatSystemEfficiencyOpportunityComponent, heatingEquipmentConfigurations: STEAM_CUSTOM_ONLY }] },
+  { lossKey: 'chargeMaterials', notesKey: 'chargeNotes', opportunityComponents: [{ component: ChargeMaterialOpportunityComponent }] },
+  { lossKey: 'wallLosses', notesKey: 'wallNotes', opportunityComponents: [{ component: WallLossOpportunityComponent }] },
+  { lossKey: 'atmosphereLosses', notesKey: 'atmosphereNotes', opportunityComponents: [{ component: AtmosphereOpportunityComponent }] },
+  { lossKey: 'fixtureLosses', notesKey: 'fixtureNotes', opportunityComponents: [{ component: FixtureMaterialsHandlingOpportunityComponent }, { component: FixtureCoolingOpportunityComponent }] },
+  { lossKey: 'coolingLosses', notesKey: 'coolingNotes', opportunityComponents: [{ component: CoolingOpportunityComponent }] },
+  { lossKey: 'openingLosses', notesKey: 'openingNotes', opportunityComponents: [{ component: OpeningSizeOpportunityComponent }, { component: OpeningEmissivityOpportunityComponent }, { component: OpeningTimeOpenOpportunityComponent }] },
+  { lossKey: 'leakageLosses', notesKey: 'leakageNotes', opportunityComponents: [{ component: GasLeakageOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
+  { lossKey: 'flueGasLosses', notesKey: 'flueGasNotes', opportunityComponents: [{ component: AirFuelRatioOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }, { component: PreheatCombustionAirOpportunityComponent, heatingEquipmentConfigurations: FUEL_FIRED_ONLY }] },
+  { lossKey: 'slagLosses', notesKey: 'slagNotes', opportunityComponents: [{ component: SlagOpportunityComponent, heatingEquipmentConfigurations: ELECTROTECHNOLOGY_EAF_ONLY }] },
+  { notesKey: 'operationsNotes', opportunityComponents: [{ component: OperationsOpportunityComponent }] },
+  { notesKey: 'heatSystemEfficiencyNotes', opportunityComponents: [{ component: HeatSystemEfficiencyOpportunityComponent, heatingEquipmentConfigurations: STEAM_CUSTOM_ONLY }] },
 ];

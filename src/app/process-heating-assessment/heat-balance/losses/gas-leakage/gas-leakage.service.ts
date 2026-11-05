@@ -4,7 +4,7 @@ import { LeakageLoss } from '../../../../shared/models/phast/losses/leakageLoss'
 import { Losses } from '../../../models/phast';
 import { LossFormItem, LossFormListService } from '../loss-form-list.service';
 import { GasLeakageCalculationService } from './gas-leakage-calculation.service';
-import { GasLeakageForm, GasLeakageFormService } from './gas-leakage-form.service';
+import { GasLeakageForm, GasLeakageFormService, NEW_LEAKAGE_LOSS } from './gas-leakage-form.service';
 
 export type GasLeakageItem = LossFormItem<GasLeakageForm>;
 
@@ -16,6 +16,10 @@ export class GasLeakageService extends LossFormListService<LeakageLoss, GasLeaka
   protected readonly lossKey: keyof Losses = 'leakageLosses';
 
   readonly losses: Signal<GasLeakageItem[]> = this.items;
+
+  protected override newLoss(): LeakageLoss {
+    return NEW_LEAKAGE_LOSS;
+  }
 
   protected buildForm(loss: LeakageLoss): GasLeakageForm {
     return this.formService.getGasLeakageForm(loss);

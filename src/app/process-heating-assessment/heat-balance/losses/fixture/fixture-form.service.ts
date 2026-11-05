@@ -16,18 +16,21 @@ export type FixtureForm = FormGroup<{
   specificHeatLiquid: FormControl<number | null>;
 }>;
 
+/** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
+export const NEW_FIXTURE_LOSS: FixtureLoss = { correctionFactor: 1.0 };
+
 @Injectable()
 export class FixtureFormService {
   private readonly fb = inject(FormBuilder);
 
-  getFixtureForm(loss: FixtureLoss = {}): FixtureForm {
+  getFixtureForm(loss: FixtureLoss = NEW_FIXTURE_LOSS): FixtureForm {
     return this.fb.group({
       materialId: [loss.materialName ?? null, Validators.required],
       specificHeat: [loss.specificHeat ?? null, [Validators.required, Validators.min(0)]],
       feedRate: [loss.feedRate ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       initialTemp: [loss.initialTemperature ?? null, Validators.required],
       finalTemp: [loss.finalTemperature ?? null, Validators.required],
-      correctionFactor: [loss.correctionFactor ?? 1.0, Validators.required],
+      correctionFactor: [loss.correctionFactor ?? null, Validators.required],
       latentHeat: [loss.latentHeat ?? null],
       meltingPoint: [loss.meltingPoint ?? null],
       specificHeatLiquid: [loss.specificHeatLiquid ?? null],

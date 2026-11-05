@@ -6,7 +6,7 @@ import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losses/energyInputExhaustGasLosses';
 import { Settings } from '../../../../shared/models/settings';
 import { EnergyInputExhaustGasFormComponent } from './energy-input-exhaust-gas-form.component';
-import { EnergyInputExhaustGasFormService } from './energy-input-exhaust-gas-form.service';
+import { EnergyInputExhaustGasFormService, NEW_ENERGY_INPUT_EXHAUST_GAS_LOSS } from './energy-input-exhaust-gas-form.service';
 import { EnergyInputExhaustGasItem } from './energy-input-exhaust-gas.service';
 
 const IMPERIAL = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
@@ -35,7 +35,7 @@ describe('EnergyInputExhaustGasFormComponent', () => {
     component = fixture.componentInstance;
   });
 
-  function render(loss: EnergyInputExhaustGasLoss = {}, settings: Settings = IMPERIAL): EnergyInputExhaustGasItem {
+  function render(loss: EnergyInputExhaustGasLoss = NEW_ENERGY_INPUT_EXHAUST_GAS_LOSS, settings: Settings = IMPERIAL): EnergyInputExhaustGasItem {
     const item: EnergyInputExhaustGasItem = { id: 'item-1', name: 'Loss #1', collapse: false, heatLoss: null, form: formService.getEnergyInputExhaustGasForm(loss) };
     fixture.componentRef.setInput('item', item);
     fixture.componentRef.setInput('settings', settings);

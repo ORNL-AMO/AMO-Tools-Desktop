@@ -23,24 +23,27 @@ export type GasMaterialForm = FormGroup<{
   additionalHeatRequired: FormControl<number | null>;
 }>;
 
+/** Starting values for a new material; a saved one rebuilds from exactly what was saved so a cleared field stays invalid. */
+const NEW_GAS_MATERIAL: GasChargeMaterial = { materialId: 1, percentVapor: 0, specificHeatVapor: 0, percentReacted: 0, reactionHeat: 0, thermicReactionType: ThermicReactionType.Endothermic, additionalHeat: 0 };
+
 @Injectable()
 export class GasMaterialFormService {
   private readonly formBuilder = inject(FormBuilder);
 
   getGasChargeMaterialForm(chargeMaterial: ChargeMaterial): GasMaterialForm {
-    const gas = chargeMaterial.gasChargeMaterial ?? {};
+    const gas = chargeMaterial.gasChargeMaterial ?? NEW_GAS_MATERIAL;
     const form: GasMaterialForm = this.formBuilder.group({
-      materialId: [gas.materialId ?? 1, Validators.required],
+      materialId: [gas.materialId ?? null, Validators.required],
       specificHeatOfGas: [gas.specificHeatGas ?? null, [Validators.required, Validators.min(0)]],
       feedRate: [gas.feedRate ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      percentVaporInGasMixture: [gas.percentVapor ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      percentVaporInGasMixture: [gas.percentVapor ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
       initialTemperature: [gas.initialTemperature ?? null, Validators.required],
       chargeMaterialDischargeTemperature: [gas.dischargeTemperature ?? null, Validators.required],
-      specificHeatOfVapor: [gas.specificHeatVapor ?? 0, [Validators.required, Validators.min(0)]],
-      percentChargeReacted: [gas.percentReacted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      heatOfReaction: [gas.reactionHeat ?? 0, [Validators.required, Validators.min(0)]],
-      endothermicOrExothermic: [gas.thermicReactionType ?? ThermicReactionType.Endothermic, Validators.required],
-      additionalHeatRequired: [gas.additionalHeat ?? 0, Validators.required],
+      specificHeatOfVapor: [gas.specificHeatVapor ?? null, [Validators.required, Validators.min(0)]],
+      percentChargeReacted: [gas.percentReacted ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      heatOfReaction: [gas.reactionHeat ?? null, [Validators.required, Validators.min(0)]],
+      endothermicOrExothermic: [gas.thermicReactionType ?? null, Validators.required],
+      additionalHeatRequired: [gas.additionalHeat ?? null, Validators.required],
     });
     return this.setInitialTempValidator(form);
   }

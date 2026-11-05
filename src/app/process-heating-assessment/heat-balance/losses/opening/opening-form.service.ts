@@ -16,21 +16,24 @@ export type OpeningForm = FormGroup<{
   percentTimeOpen: FormControl<number | null>;
 }>;
 
+/** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
+export const NEW_OPENING_LOSS: OpeningLoss = { openingType: 'Round', emissivity: 0.9 };
+
 @Injectable()
 export class OpeningFormService {
   private readonly fb = inject(FormBuilder);
 
-  getOpeningForm(loss: OpeningLoss = {}): OpeningForm {
+  getOpeningForm(loss: OpeningLoss = NEW_OPENING_LOSS): OpeningForm {
     const form: OpeningForm = this.fb.group({
       numberOfOpenings: [loss.numberOfOpenings ?? null, [Validators.required, Validators.min(0)]],
       thickness: [loss.thickness ?? null, [Validators.required, Validators.min(0)]],
-      openingType: [loss.openingType ?? 'Round', Validators.required],
+      openingType: [loss.openingType ?? null, Validators.required],
       lengthOfOpening: [loss.lengthOfOpening ?? null],
       heightOfOpening: [loss.heightOfOpening ?? null],
       viewFactor: [loss.viewFactor ?? null, [Validators.required, Validators.min(0)]],
       insideTemperature: [loss.insideTemperature ?? null, Validators.required],
       ambientTemperature: [loss.ambientTemperature ?? null],
-      emissivity: [loss.emissivity ?? 0.9, [Validators.required, Validators.min(0), Validators.max(1)]],
+      emissivity: [loss.emissivity ?? null, [Validators.required, Validators.min(0), Validators.max(1)]],
       percentTimeOpen: [loss.percentTimeOpen ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
     });
     this.setDimensionValidators(form);

@@ -26,6 +26,7 @@ export interface ScenarioSavings {
 }
 
 export interface SummaryNote {
+  modificationId: string;
   modificationName: string;
   lossName: string;
   note: string;
@@ -61,7 +62,8 @@ const NOTE_LABELS: Array<{ key: keyof Notes; label: string }> = [
   { key: 'auxiliaryPowerNotes', label: 'Auxiliary Power Losses' },
   { key: 'chargeNotes', label: 'Charge Materials' },
   { key: 'coolingNotes', label: 'Cooling Losses' },
-  { key: 'energyInputExhaustGasNotes', label: 'Energy Input' },
+  { key: 'energyInputNotes', label: 'Energy Input' },
+  { key: 'energyInputExhaustGasNotes', label: 'Energy Input Exhaust Gas' },
   { key: 'exhaustGasNotes', label: 'Exhaust Gas Losses' },
   { key: 'extendedNotes', label: 'Extended Surface Losses' },
   { key: 'fixtureNotes', label: 'Fixture Losses' },
@@ -401,6 +403,7 @@ export class ExecutiveSummaryResultsService {
       NOTE_LABELS
         .filter(({ key }) => modification.notes?.[key])
         .map(({ key, label }) => ({
+          modificationId: modification.id,
           modificationName: getModificationName(modification),
           lossName: label,
           note: modification.notes[key],

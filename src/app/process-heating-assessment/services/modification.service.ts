@@ -1,11 +1,31 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
 import { getNewIdString } from '../../shared/helperFunctions';
-import { ExploreOpportunityCategory } from '../models/phast';
+import { ExploreOpportunityCategory, Notes } from '../models/phast';
 import { ProcessHeatingModification, ScenarioOverrides } from '../models/modification';
 import { SavingsOpportunity } from '../../shared/models/explore-opps';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
 import { ProcessHeatingUiService } from './process-heating-ui.service';
 import { getBaselineSnapshot } from './scenario-merge.util';
+
+const EMPTY_NOTES: Notes = {
+  chargeNotes: '',
+  wallNotes: '',
+  atmosphereNotes: '',
+  fixtureNotes: '',
+  openingNotes: '',
+  coolingNotes: '',
+  flueGasNotes: '',
+  otherNotes: '',
+  leakageNotes: '',
+  extendedNotes: '',
+  slagNotes: '',
+  auxiliaryPowerNotes: '',
+  exhaustGasNotes: '',
+  energyInputNotes: '',
+  energyInputExhaustGasNotes: '',
+  heatSystemEfficiencyNotes: '',
+  operationsNotes: '',
+};
 
 @Injectable()
 export class ModificationService {
@@ -42,7 +62,7 @@ export class ModificationService {
     if (scenarioOverrides.co2SavingsData) {
       scenarioOverrides.co2SavingsData.userEnteredModificationEmissions = baseline.co2SavingsData?.userEnteredBaselineEmissions;
     }
-    const modification: ProcessHeatingModification = { id, scenarioOverrides };
+    const modification: ProcessHeatingModification = { id, scenarioOverrides, notes: { ...EMPTY_NOTES } };
     this.writeModifications([...modifications, modification]);
     this.selectModification(id);
     return id;
@@ -76,6 +96,13 @@ export class ModificationService {
       modification.id === id
         ? { ...modification, exploreOpportunityFlags: { ...modification.exploreOpportunityFlags, [category]: value } }
         : modification
+    );
+    this.writeModifications(updated);
+  }
+
+  setModificationNote(id: string, key: keyof Notes, value: string): void {
+    const updated = this.modifications().map(modification =>
+      modification.id === id ? { ...modification, notes: { ...modification.notes, [key]: value } } : modification
     );
     this.writeModifications(updated);
   }

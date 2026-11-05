@@ -30,33 +30,42 @@ export class ExportToJustifiTemplateService {
     this.showExportToJustifiModal = new BehaviorSubject<boolean>(false);
   }
 
-  exportData(settings: Settings, assessments: Array<Assessment>) {
-    let workbook = new ExcelJS.Workbook();
-    var request = new XMLHttpRequest();
-    request.open('GET', 'assets/templates/JUSTIFI_project_template.xlsx', true);
-    request.responseType = 'blob';
-    request.onload = () => {
-      workbook.xlsx.load(request.response).then(() => {
-        this.fillWorkbook(workbook, settings, assessments);
-        workbook.xlsx.writeBuffer().then(excelData => {
-          let blob: Blob = new Blob([excelData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-          let a = document.createElement("a");
-          let url = window.URL.createObjectURL(blob);
+  /**
+   * @param settings settings used to fill the facility worksheet
+   * @param assessments assessments to export
+   * @returns resolves once the file download is triggered; rejects if the template fails to load or the workbook cannot be built
+   */
+  exportData(settings: Settings, assessments: Array<Assessment>): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      const workbook = new ExcelJS.Workbook();
+      const request = new XMLHttpRequest();
+      request.open('GET', 'assets/templates/JUSTIFI_project_template.xlsx', true);
+      request.responseType = 'blob';
+      request.onerror = () => reject(new Error('The JUSTIFI template could not be loaded.'));
+      request.onload = () => {
+        if (request.status < 200 || request.status >= 300) {
+          reject(new Error(`The JUSTIFI template could not be loaded (status ${request.status}).`));
+          return;
+        }
+        workbook.xlsx.load(request.response).then(() => {
+          this.fillWorkbook(workbook, settings, assessments);
+          return workbook.xlsx.writeBuffer();
+        }).then(excelData => {
+          const blob: Blob = new Blob([excelData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const a = document.createElement("a");
+          const url = window.URL.createObjectURL(blob);
           a.href = url;
-          let date = new Date();
-          let datePipe = new DatePipe('en-us');
-          a.download = "MEASUR_To_JUSTIFI" + "-" + datePipe.transform(date, 'MM-dd-yyyy');
+          const datePipe = new DatePipe('en-us');
+          a.download = "MEASUR_To_JUSTIFI" + "-" + datePipe.transform(new Date(), 'MM-dd-yyyy');
           document.body.appendChild(a);
           a.click();
           window.URL.revokeObjectURL(url);
           document.body.removeChild(a);
-          // this.loadingService.setLoadingStatus(false);
-        });
-      })
-    };
-    // this.loadingService.setLoadingMessage('Exporting to .xlsx template');
-    // this.loadingService.setLoadingStatus(true);
-    request.send();
+          resolve();
+        }).catch(reject);
+      };
+      request.send();
+    });
   }
 
   fillWorkbook(workbook: ExcelJS.Workbook, settings: Settings, assessments: Array<Assessment>) {

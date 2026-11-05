@@ -12,7 +12,7 @@ div#processHeatingFooter.footer {
 
 #processHeatingBanner {
     flex: 0 0 auto;
-    z-index: 0;
+    z-index: 100;
 }
 
 .modal-open {

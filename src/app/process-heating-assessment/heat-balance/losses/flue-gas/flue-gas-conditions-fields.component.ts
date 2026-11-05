@@ -6,7 +6,7 @@ import { ModalDialogService } from '../../../../shared/modal-dialog.service';
 import { FlueGasMoistureDialogComponent, FlueGasMoistureDialogData } from './flue-gas-moisture-dialog.component';
 import { Settings } from '../../../../shared/models/settings';
 import { FlueGasForm, OXYGEN_CALCULATION_METHODS, OxygenCalculationMethod } from './flue-gas-form.service';
-import { FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGasByMass, FlueGasByVolume, FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 
 /** Operating-condition fields shared by the By Volume and By Mass flue gas forms. */
 @Component({
@@ -20,6 +20,7 @@ export class FlueGasConditionsFieldsComponent {
   readonly settings = input.required<Settings>();
   readonly instanceId = input.required<string>();
   readonly differingFields = input<ReadonlySet<keyof FlueGasByMass & keyof FlueGasByVolume & string>>();
+  readonly warnings = input<FlueGasWarnings | null>(null);
 
   private readonly modalDialogService = inject(ModalDialogService);
   private readonly injector = inject(Injector);

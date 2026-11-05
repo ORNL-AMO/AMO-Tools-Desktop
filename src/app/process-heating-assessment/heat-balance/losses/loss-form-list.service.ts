@@ -80,7 +80,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
 
   add(): void {
     const id = getNewIdString();
-    const item = this.buildItem({ id } as TLoss & EntityWithId, this.store.all().length + 1);
+    const item = this.buildItem({ ...this.newLoss(), id }, this.store.all().length + 1);
     this.store.add(item);
     this.saveLosses();
   }
@@ -100,7 +100,7 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
     return this.differences().get(id);
   }
 
-  /** Rebuilds a saved loss through the form so its defaults match what a save would persist. */
+  /** Rebuilds a saved loss through the form so it compares in the shape a save would persist. */
   private normalize(loss: TLoss): TLoss {
     return { ...this.buildLoss(this.buildForm(loss)), id: loss.id, heatLoss: loss.heatLoss };
   }
@@ -176,6 +176,11 @@ export abstract class LossFormListService<TLoss extends LossEntity, TForm extend
         this.store.set(item.id, updated);
       }
     }
+  }
+
+  /** Starting values for a new entry; saved entries rebuild from exactly what was saved so a cleared field stays invalid. */
+  protected newLoss(): TLoss {
+    return {} as TLoss;
   }
 
   /** Called after entries are loaded or saved; override for work that depends on the scenario's updated losses. */

@@ -1,11 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { CoolingComponent } from './cooling.component';
 import { CoolingItem, CoolingService } from './cooling.service';
 import { CoolingFormService } from './cooling-form.service';
 import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.module';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
 import { Settings } from '../../../../shared/models/settings';
+
+@Component({ selector: 'app-gas-cooling-form', template: '<ng-content></ng-content>', standalone: false })
+class GasCoolingFormStubComponent {}
+
+@Component({ selector: 'app-liquid-cooling-form', template: '<ng-content></ng-content>', standalone: false })
+class LiquidCoolingFormStubComponent {}
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
 
@@ -42,7 +48,7 @@ describe('CoolingComponent', () => {
     );
 
     await TestBed.configureTestingModule({
-      declarations: [CoolingComponent],
+      declarations: [CoolingComponent, GasCoolingFormStubComponent, LiquidCoolingFormStubComponent],
       imports: [SharedPipesModule],
       providers: [
         { provide: ProcessHeatingAssessmentService, useValue: assessmentServiceSpy },
@@ -171,8 +177,16 @@ describe('CoolingComponent', () => {
       expect(fixture.nativeElement.querySelector('.loss-total')).toBeNull();
     });
 
-    it('shows the total from the service when losses exist', () => {
+    it('hides the total when there is a single loss', () => {
       lossesSignal.set([item]);
+      totalSignal.set(456);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.loss-total')).toBeNull();
+    });
+
+    it('shows the total from the service when multiple losses exist', () => {
+      lossesSignal.set([item, { ...item, id: 'second' }]);
       totalSignal.set(456);
       fixture.detectChanges();
 

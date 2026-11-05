@@ -6,6 +6,8 @@ import { FlueGasCalculationService } from './flue-gas-calculation.service';
 import { FlueGasForm, FlueGasFormService, FlueGasMassForm, FlueGasType, FlueGasVolumeForm } from './flue-gas-form.service';
 import { FlueGasService } from './flue-gas.service';
 import { getAvailableHeatWarning } from './flue-gas-warnings';
+import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
+import { calculateSystemEfficiencyResults } from '../heat-system-efficiency/heat-system-efficiency.component';
 
 @Component({
   selector: 'app-flue-gas',
@@ -19,14 +21,28 @@ export class FlueGasComponent {
   readonly scenario = input<AssessmentScenario>('baseline');
 
   private readonly assessmentService = inject(ProcessHeatingAssessmentService);
+  private readonly resultsService = inject(ProcessHeatingResultsService);
   protected readonly service = inject(FlueGasService);
 
   readonly FlueGasType = FlueGasType;
 
   readonly settings: Signal<Settings> = this.assessmentService.settingsSignal;
 
-  readonly flueGasTempWarning = computed(() => this.service.warnings()?.flueGasTemp ?? null);
   readonly availableHeatWarning = computed(() => getAvailableHeatWarning(this.service.result()?.availableHeat));
+
+  /** Gross heat and flue gas losses from the scenario's total heat input, exothermic heat and calculated available heat. */
+  readonly systemResults = computed(() => {
+    const availableHeat = this.service.result()?.availableHeat;
+    const phast = this.assessmentService.scenarioPhastSignal(this.scenario());
+    const settings = this.settings();
+    const phastResults = availableHeat && phast && settings ? this.resultsService.getResults(phast, settings) : undefined;
+    return phastResults ? calculateSystemEfficiencyResults(phastResults.totalInput, phastResults.exothermicHeat, availableHeat) : null;
+  });
+
+  get resultsUnit(): string {
+    const unit = this.settings()?.energyResultUnit;
+    return unit === 'kWh' ? 'kW' : `${unit}/hr`;
+  }
 
   asMassForm(form: FlueGasForm): FlueGasMassForm {
     return form as FlueGasMassForm;

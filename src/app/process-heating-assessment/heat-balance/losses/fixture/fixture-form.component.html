@@ -11,26 +11,24 @@
 
 <form [formGroup]="form()">
   <div class="form-group">
-    <label for="materialId_{{ instanceId() }}">Material Name</label>
+    <label for="materialId_{{ instanceId() }}">Material Name
+      <button type="button" class="btn btn-link p-0 d-block small" (click)="materialSelector.openAddMaterialModal()">Add New Solid Material</button>
+    </label>
     <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" [class.indicate-different]="differingFields()?.has('materialName')"
-      (change)="materialSelector.onMaterialSelected(f.materialId.value)">
+      (change)="materialSelector.onMaterialSelected(f.materialId.value)" [class.invalid]="f.materialId.invalid">
       @for (material of materialSelector.materialTypes(); track material.id) {
         <option [ngValue]="material.id">{{ material.substance }}</option>
       }
     </select>
-    <button type="button" class="btn btn-link p-0 form-text small" (click)="materialSelector.openAddMaterialModal()">Add New...</button>
     <app-form-control-errors [control]="f.materialId" [settings]="settings()"></app-form-control-errors>
   </div>
 
   <div class="form-group">
     <label for="specificHeat_{{ instanceId() }}">Average Specific Heat of Material</label>
-    <div class="input-group" [class.invalid]="f.specificHeat.invalid" [class.indicate-different]="differingFields()?.has('specificHeat')">
+    <div class="input-group" [class.invalid]="f.specificHeat.invalid" [class.indicate-different]="differingFields()?.has('specificHeat')" [class.indicate-different-db]="differs(f.specificHeat.value, materialSelector.selectedMaterial?.specificHeatSolid)">
       <input type="number" step="0.1" min="0" class="form-control" id="specificHeat_{{ instanceId() }}" formControlName="specificHeat" onfocus="this.select();">
       <app-input-unit [settings]="settings()" imperialUnit="Btu/(lb-&#8457;)" metricUnit="kJ/(kg-&#8451;)"></app-input-unit>
     </div>
-    @if (differs(f.specificHeat.value, materialSelector.selectedMaterial?.specificHeatSolid)) {
-      <span class="text-warning small">Differs from database</span>
-    }
     <app-form-control-errors [control]="f.specificHeat" [settings]="settings()"></app-form-control-errors>
   </div>
 

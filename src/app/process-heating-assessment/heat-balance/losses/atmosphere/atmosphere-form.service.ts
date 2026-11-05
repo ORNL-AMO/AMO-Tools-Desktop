@@ -12,18 +12,21 @@ export type AtmosphereForm = FormGroup<{
   correctionFactor: FormControl<number | null>;
 }>;
 
+/** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
+export const NEW_ATMOSPHERE_LOSS: AtmosphereLoss = { correctionFactor: 1.0 };
+
 @Injectable()
 export class AtmosphereFormService {
   private readonly fb = inject(FormBuilder);
 
-  getAtmosphereForm(loss: AtmosphereLoss = {}): AtmosphereForm {
+  getAtmosphereForm(loss: AtmosphereLoss = NEW_ATMOSPHERE_LOSS): AtmosphereForm {
     const form: AtmosphereForm = this.fb.group({
       materialId: [loss.atmosphereGas ?? null, Validators.required],
       specificHeat: [loss.specificHeat ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       inletTemp: [loss.inletTemperature ?? null, Validators.required],
       outletTemp: [loss.outletTemperature ?? null, Validators.required],
       flowRate: [loss.flowRate ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      correctionFactor: [loss.correctionFactor ?? 1.0, Validators.required],
+      correctionFactor: [loss.correctionFactor ?? null, Validators.required],
     });
     return this.setOutletTempValidator(form);
   }

@@ -54,6 +54,7 @@ import { Co2SavingsPhastService } from '../phast/losses/operations/co2-savings-p
 import { ResultsPanelComponent } from './results-panel/results-panel.component';
 import { AssessmentResultsComponent } from './results-panel/assessment-results/assessment-results.component';
 import { HelpPanelComponent } from './results-panel/help-panel/help-panel.component';
+import { NotesComponent } from './results-panel/notes/notes.component';
 
 import { ProcessHeatingAssessmentComponent } from './process-heating-assessment/process-heating-assessment.component';
 import { ProcessHeatingBannerComponent } from './process-heating-banner/process-heating-banner.component';
@@ -75,6 +76,7 @@ import { OpeningSizeOpportunityComponent } from './explore-opportunities/opening
 import { OpeningEmissivityOpportunityComponent } from './explore-opportunities/opening-emissivity-opportunity/opening-emissivity-opportunity.component';
 import { OpeningTimeOpenOpportunityComponent } from './explore-opportunities/opening-time-open-opportunity/opening-time-open-opportunity.component';
 import { ExpertViewComponent } from './expert-view/expert-view.component';
+import { ProcessHeatingDiagramComponent } from './diagram/process-heating-diagram.component';
 import { ReportComponent } from './report/report.component';
 import { EnergySummaryComponent } from './report/energy-summary/energy-summary.component';
 import { EnergySummaryResultsService } from './report/energy-summary/energy-summary-results.service';
@@ -91,6 +93,7 @@ import { ReportGraphsResultsService } from './report/report-graphs/report-graphs
 import { ResultsDataResultsService } from './report/results-data/results-data-results.service';
 import { ExecutiveSummaryResultsService } from './report/executive-summary/executive-summary-results.service';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
 import { InputSummaryComponent } from './report/input-summary/input-summary.component';
@@ -300,9 +303,15 @@ export const ROUTES: Route[] = [
         ]
       },
       {
+        path: ROUTE_TOKENS.diagram,
+        component: ProcessHeatingDiagramComponent,
+        data: { mainView: ROUTE_TOKENS.diagram, stepIndex: 22 },
+        canActivate: [requiresValidBaselineGuard],
+      },
+      {
         path: ROUTE_TOKENS.report,
         component: ReportComponent,
-        data: { mainView: ROUTE_TOKENS.report, stepIndex: 22 },
+        data: { mainView: ROUTE_TOKENS.report, stepIndex: 23 },
         canActivate: [requiresValidBaselineGuard],
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.energySummary, pathMatch: 'full' },
@@ -354,6 +363,7 @@ export const ROUTES: Route[] = [
     ResultsPanelComponent,
     AssessmentResultsComponent,
     HelpPanelComponent,
+    NotesComponent,
     BaselineComponent,
     BaselineTabsComponent,
     AssessmentComponent,
@@ -374,6 +384,7 @@ export const ROUTES: Route[] = [
     PreheatCombustionAirOpportunityComponent,
     OperationsOpportunityComponent,
     ExpertViewComponent,
+    ProcessHeatingDiagramComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
     InvalidModificationAlertComponent,
@@ -453,6 +464,7 @@ export const ROUTES: Route[] = [
     ModificationListComponent,
     PercentGraphModule,
     ExportableResultsTableModule,
+    BannerTooltipsModule,
     ReportTableCellPipe,
     ReportBuilderModule,
     PieChartModule,

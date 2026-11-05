@@ -10,7 +10,9 @@
       <button class="btn btn-default" (click)="back()" [disabled]="!canGoBack()">Back</button>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" (click)="next()" [disabled]="!canContinue()">Next</button>
+      <span [attr.title]="canContinue() ? null : blockedReason()">
+        <button class="btn btn-primary" (click)="next()" [disabled]="!canContinue()">Next</button>
+      </span>
     </div>
   </div>
 </div>

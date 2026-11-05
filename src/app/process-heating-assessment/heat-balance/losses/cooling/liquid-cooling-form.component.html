@@ -1,6 +1,7 @@
 @let f = form().controls;
 
 <form [formGroup]="form()">
+  <ng-content></ng-content>
   <div class="form-group">
     <label for="coolingMedium_{{ instanceId() }}">Name of Cooling Medium</label>
     <input type="text" class="form-control" id="coolingMedium_{{ instanceId() }}" formControlName="coolingMedium" [class.indicate-different]="differingFields()?.has('coolingMedium')" onfocus="this.select();">

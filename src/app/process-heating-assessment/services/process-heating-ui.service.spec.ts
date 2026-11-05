@@ -2,7 +2,9 @@ import { signal, WritableSignal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { WallLoss } from '../../shared/models/phast/losses/wallLoss';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
+import { Losses, PHAST } from '../models/phast';
 import { BaselineView, HeatingEquipmentConfiguration, LossView, MainView, ReportView } from '../models/views';
 import { STEPPED_ROUTES } from '../routing/stepped-routes';
 import { ProcessHeatingAssessmentService } from './process-heating-assessment.service';
@@ -206,10 +208,12 @@ describe('ProcessHeatingUiService validity gating', () => {
   let routeData: { stepIndex: number };
   let settingsValid: WritableSignal<boolean>;
   let baselineValid: WritableSignal<boolean>;
+  let invalidBaselineSteps: WritableSignal<string[]>;
 
   beforeEach(() => {
     settingsValid = signal(true);
     baselineValid = signal(true);
+    invalidBaselineSteps = signal<string[]>([]);
     routeData = { stepIndex: 0 };
     router = {
       events: new Subject(),
@@ -224,11 +228,48 @@ describe('ProcessHeatingUiService validity gating', () => {
         { provide: STEPPED_ROUTES, useValue: STEPS },
         {
           provide: ProcessHeatingValidityService,
-          useValue: { isAssessmentSettingsValid: settingsValid, scenarioValidity: () => ({ isValid: baselineValid() }) },
+          useValue: {
+            isAssessmentSettingsValid: settingsValid,
+            scenarioValidity: () => ({ isValid: baselineValid() }),
+            isStepValid: (scenario: string, view: string) => scenario !== 'baseline' || !invalidBaselineSteps().includes(view),
+            invalidStepLabels: () => invalidBaselineSteps(),
+          },
         },
       ],
     });
     service = TestBed.inject(ProcessHeatingUiService);
+  });
+
+  it('explains nothing while the settings and baseline are valid', () => {
+    expect(service.blockedReason()).toBeUndefined();
+  });
+
+  it('names the invalid settings step in the blocked reason', () => {
+    settingsValid.set(false);
+    expect(service.blockedReason()).toBe('Fix invalid inputs in: Assessment Settings');
+  });
+
+  it('names the invalid baseline steps in the blocked reason', () => {
+    invalidBaselineSteps.set(['Wall', 'Cooling']);
+    expect(service.blockedReason()).toBe('Fix invalid inputs in: Wall, Cooling');
+  });
+
+  it('lists the settings step before the invalid baseline steps', () => {
+    settingsValid.set(false);
+    invalidBaselineSteps.set(['Wall']);
+    expect(service.blockedReason()).toBe('Fix invalid inputs in: Assessment Settings, Wall');
+  });
+
+  it('returns the explore notes key only for the modification it was set on', () => {
+    service.activeModificationIdSignal.set('mod1');
+    service.setExploreNotesKey('wallNotes');
+    expect(service.exploreNotesKey()).toBe('wallNotes');
+
+    service.activeModificationIdSignal.set('mod2');
+    expect(service.exploreNotesKey()).toBeUndefined();
+
+    service.activeModificationIdSignal.set('mod1');
+    expect(service.exploreNotesKey()).toBe('wallNotes');
   });
 
   it('exposes the validity of the settings and the baseline heat balance', () => {
@@ -245,6 +286,7 @@ describe('ProcessHeatingUiService validity gating', () => {
   it('allows Assessment and Report when settings and baseline are valid', () => {
     expect(service.canVisitView(MainView.ASSESSMENT)).toBeTrue();
     expect(service.canVisitView(MainView.REPORT)).toBeTrue();
+    expect(service.canVisitView(MainView.DIAGRAM)).toBeTrue();
   });
 
   for (const [name, invalidate] of [
@@ -256,6 +298,7 @@ describe('ProcessHeatingUiService validity gating', () => {
 
       expect(service.canVisitView(MainView.ASSESSMENT)).toBeFalse();
       expect(service.canVisitView(MainView.REPORT)).toBeFalse();
+      expect(service.canVisitView(MainView.DIAGRAM)).toBeFalse();
       expect(service.canVisitView(ReportView.EXECUTIVE_SUMMARY)).toBeFalse();
     });
 
@@ -275,11 +318,81 @@ describe('ProcessHeatingUiService validity gating', () => {
     });
   }
 
+  it('marks no tab invalid when settings and baseline are valid', () => {
+    expect(service.isViewInvalid(BaselineView.ASSESSMENT_SETTINGS)).toBeFalse();
+    expect(service.isViewInvalid(BaselineView.HEAT_BALANCE)).toBeFalse();
+    expect(service.isViewInvalid(LossView.WALL_LOSSES)).toBeFalse();
+  });
+
+  it('marks the Assessment Settings tab invalid when the settings are', () => {
+    settingsValid.set(false);
+
+    expect(service.isViewInvalid(BaselineView.ASSESSMENT_SETTINGS)).toBeTrue();
+    expect(service.isViewInvalid(BaselineView.HEAT_BALANCE)).toBeFalse();
+  });
+
+  it('marks the Heat Balance tab and only the failing loss tab invalid when a baseline step is', () => {
+    baselineValid.set(false);
+    invalidBaselineSteps.set([LossView.WALL_LOSSES]);
+
+    expect(service.isViewInvalid(BaselineView.HEAT_BALANCE)).toBeTrue();
+    expect(service.isViewInvalid(LossView.WALL_LOSSES)).toBeTrue();
+    expect(service.isViewInvalid(LossView.FIXTURE)).toBeFalse();
+    expect(service.isViewInvalid(BaselineView.ASSESSMENT_SETTINGS)).toBeFalse();
+  });
+
   it('continues from the end of Baseline to Assessment when valid', () => {
     expect(service.canContinue()).toBeTrue();
 
     service.continue();
 
     expect(router.navigateByUrl).toHaveBeenCalledWith('/process-heating/7/assessment');
+  });
+});
+
+describe('ProcessHeatingUiService loss counts', () => {
+  let service: ProcessHeatingUiService;
+  let baseline: WritableSignal<PHAST>;
+
+  beforeEach(() => {
+    baseline = signal<PHAST>({ losses: { wallLosses: [{}, {}] as WallLoss[] }, systemEfficiency: 80 });
+    const router = {
+      events: new Subject(),
+      routerState: { snapshot: { root: { params: {}, data: {}, firstChild: null } } },
+    };
+    TestBed.configureTestingModule({
+      providers: [
+        ProcessHeatingUiService,
+        { provide: Router, useValue: router },
+        {
+          provide: ProcessHeatingAssessmentService,
+          useValue: {
+            heatingEquipmentConfiguration: signal(HeatingEquipmentConfiguration.FUEL_FIRED),
+            scenarioPhastSignal: () => baseline(),
+            lossSignal: (_scenario: string, lossKey: keyof Losses) => baseline().losses?.[lossKey],
+          },
+        },
+        { provide: STEPPED_ROUTES, useValue: [] },
+        { provide: ProcessHeatingValidityService, useValue: VALID_BASELINE },
+      ],
+    });
+    service = TestBed.inject(ProcessHeatingUiService);
+  });
+
+  it('counts the baseline entries a loss step holds', () => {
+    expect(service.lossCount(LossView.WALL_LOSSES)).toBe(2);
+    expect(service.lossCount(LossView.FIXTURE)).toBe(0);
+  });
+
+  it('counts a set system efficiency as one entry', () => {
+    expect(service.lossCount(LossView.HEAT_SYSTEM_EFFICIENCY)).toBe(1);
+
+    baseline.set({ losses: {} });
+
+    expect(service.lossCount(LossView.HEAT_SYSTEM_EFFICIENCY)).toBe(0);
+  });
+
+  it('has no count for Operations, which holds no entries', () => {
+    expect(service.lossCount(LossView.OPERATIONS)).toBeUndefined();
   });
 });

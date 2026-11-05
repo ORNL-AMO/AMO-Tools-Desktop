@@ -33,18 +33,26 @@ export class EnergyInputFormService {
   private readonly fb = inject(FormBuilder);
   private readonly convertUnitsService = inject(ConvertUnitsService);
 
-  getEnergyInputForm(loss: EnergyInputEAF = {}, settings?: Settings): EnergyInputForm {
+  getEnergyInputForm(loss: EnergyInputEAF = {}): EnergyInputForm {
     const nonNegative = [Validators.required, Validators.min(0)];
     return this.fb.group({
       naturalGasHeatInput: [loss.naturalGasHeatInput ?? null, nonNegative],
       flowRateInput: [loss.flowRateInput ?? null],
       coalCarbonInjection: [loss.coalCarbonInjection ?? null, nonNegative],
-      coalHeatingValue: [loss.coalHeatingValue ?? this.defaultHeatingValue(DEFAULT_COAL_HEATING_VALUE_BTU_LB, settings), nonNegative],
+      coalHeatingValue: [loss.coalHeatingValue ?? null, nonNegative],
       electrodeUse: [loss.electrodeUse ?? null, nonNegative],
-      electrodeHeatingValue: [loss.electrodeHeatingValue ?? this.defaultHeatingValue(DEFAULT_ELECTRODE_HEATING_VALUE_BTU_LB, settings), nonNegative],
+      electrodeHeatingValue: [loss.electrodeHeatingValue ?? null, nonNegative],
       otherFuels: [loss.otherFuels ?? null, nonNegative],
       electricityInput: [loss.electricityInput ?? null, nonNegative],
     });
+  }
+
+  /** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
+  newEnergyInput(settings: Settings): EnergyInputEAF {
+    return {
+      coalHeatingValue: this.defaultHeatingValue(DEFAULT_COAL_HEATING_VALUE_BTU_LB, settings),
+      electrodeHeatingValue: this.defaultHeatingValue(DEFAULT_ELECTRODE_HEATING_VALUE_BTU_LB, settings),
+    };
   }
 
   buildEnergyInput(form: EnergyInputForm): EnergyInputEAF {

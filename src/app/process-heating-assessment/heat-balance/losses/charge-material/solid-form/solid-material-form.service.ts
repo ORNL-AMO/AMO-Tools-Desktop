@@ -38,29 +38,32 @@ export const EMPTY_WARNINGS: SolidMaterialWarnings = {
   dischargeBelowMeltingPointWithMeltPercent: null,
 };
 
+/** Starting values for a new material; a saved one rebuilds from exactly what was saved so a cleared field stays invalid. */
+const NEW_SOLID_MATERIAL: SolidChargeMaterial = { materialId: 1, waterContentCharged: 0, waterContentDischarged: 0, waterVaporDischargeTemperature: 0, chargeMelted: 0, chargeReacted: 0, reactionHeat: 0, thermicReactionType: ThermicReactionType.Endothermic, additionalHeat: 0 };
+
 @Injectable()
 export class SolidMaterialFormService {
   private readonly formBuilder = inject(FormBuilder);
 
   getSolidChargeMaterialForm(chargeMaterial: ChargeMaterial): SolidMaterialForm {
-    const solid = chargeMaterial.solidChargeMaterial ?? {};
+    const solid = chargeMaterial.solidChargeMaterial ?? NEW_SOLID_MATERIAL;
     const form: SolidMaterialForm = this.formBuilder.group({
-      materialId: [solid.materialId ?? 1, Validators.required],
+      materialId: [solid.materialId ?? null, Validators.required],
       materialSpecificHeatOfSolidMaterial: [solid.specificHeatSolid ?? null, [Validators.required, Validators.min(0)]],
       materialLatentHeatOfFusion: [solid.latentHeat ?? null, [Validators.required, Validators.min(0)]],
       materialHeatOfLiquid: [solid.specificHeatLiquid ?? null, [Validators.required, Validators.min(0)]],
       materialMeltingPoint: [solid.meltingPoint ?? null, Validators.required],
       feedRate: [solid.chargeFeedRate ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]],
-      waterContentAsCharged: [solid.waterContentCharged ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      waterContentAsDischarged: [solid.waterContentDischarged ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      waterContentAsCharged: [solid.waterContentCharged ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      waterContentAsDischarged: [solid.waterContentDischarged ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
       initialTemperature: [solid.initialTemperature ?? null, Validators.required],
       chargeMaterialDischargeTemperature: [solid.dischargeTemperature ?? null, Validators.required],
-      waterVaporDischargeTemperature: [solid.waterVaporDischargeTemperature ?? 0, Validators.required],
-      percentChargeMelted: [solid.chargeMelted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      percentChargeReacted: [solid.chargeReacted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      heatOfReaction: [solid.reactionHeat ?? 0, [Validators.required, Validators.min(0)]],
-      endothermicOrExothermic: [solid.thermicReactionType ?? ThermicReactionType.Endothermic, Validators.required],
-      additionalHeatRequired: [solid.additionalHeat ?? 0, Validators.required],
+      waterVaporDischargeTemperature: [solid.waterVaporDischargeTemperature ?? null, Validators.required],
+      percentChargeMelted: [solid.chargeMelted ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      percentChargeReacted: [solid.chargeReacted ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      heatOfReaction: [solid.reactionHeat ?? null, [Validators.required, Validators.min(0)]],
+      endothermicOrExothermic: [solid.thermicReactionType ?? null, Validators.required],
+      additionalHeatRequired: [solid.additionalHeat ?? null, Validators.required],
     });
     return this.setInitialTempValidator(form);
   }

@@ -4,15 +4,25 @@
       <div class="col-12">
         <div class="d-flex flex-wrap tabs primary mr-2 ml-2 sticky-top">
           <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab === 'results'">
-            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('results')">
+            <a class="h-100 d-flex justify-content-center align-items-center" role="button" tabindex="0" [attr.aria-pressed]="selectedPanelTab === 'results'"
+              (click)="setPanelTab('results')" (keydown.enter)="setPanelTab('results')" (keydown.space)="setPanelTab('results'); $event.preventDefault()">
               <div>Results</div>
             </a>
           </div>
           <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab === 'help'">
-            <a class="h-100 d-flex justify-content-center align-items-center" (click)="setPanelTab('help')">
+            <a class="h-100 d-flex justify-content-center align-items-center" role="button" tabindex="0" [attr.aria-pressed]="selectedPanelTab === 'help'"
+              (click)="setPanelTab('help')" (keydown.enter)="setPanelTab('help')" (keydown.space)="setPanelTab('help'); $event.preventDefault()">
               <div>Help</div>
             </a>
           </div>
+          @if (showNotesTab()) {
+            <div class="panel-tab-item h-100 flex-fill" [class.active]="selectedPanelTab === 'notes'">
+              <a class="h-100 d-flex justify-content-center align-items-center" role="button" tabindex="0" [attr.aria-pressed]="selectedPanelTab === 'notes'"
+                (click)="setPanelTab('notes')" (keydown.enter)="setPanelTab('notes')" (keydown.space)="setPanelTab('notes'); $event.preventDefault()">
+                <div>Notes</div>
+              </a>
+            </div>
+          }
         </div>
       </div>
     </div>
@@ -23,6 +33,13 @@
         }
         @if (selectedPanelTab === 'help') {
           <app-process-heating-help-panel></app-process-heating-help-panel>
+        }
+        @if (selectedPanelTab === 'notes' && showNotesTab()) {
+          @if (scenario() === 'baseline') {
+            <p class="p-2 mb-0">You must add a modification to take notes on it.</p>
+          } @else {
+            <app-process-heating-notes [modificationId]="scenario()" [notesKey]="notesKey()"></app-process-heating-notes>
+          }
         }
       </div>
     </div>

@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-header p-2 d-flex justify-content-between">
+    <h5 class="mt-auto mb-0">
+      <span class="fa fa-share-square-o"></span>
+      Share MEASUR Data
+    </h5>
+    <button type="button" class="close p-0 m-0" aria-label="Close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card-body p-2">
+    <div class="d-flex w-100">
+      <div class="w-50 m-2">
+        <button type="button" class="btn btn-secondary w-100" (click)="emailMeasurData()">
+          <span class="fa fa-envelope"></span><br><br>
+          Email MEASUR Data
+        </button>
+        <p class="small text-center">
+          Share your MEASUR assessment data with others by emailing it to them.
+        </p>
+      </div>
+      <div class="w-50 m-2">
+        <button type="button" class="btn btn-secondary w-100" (click)="exportToJustifi()">
+          <span class="fa fa-file-excel-o"> </span><br><br>
+          Export to JUSTIFI
+        </button>
+        <p class="small text-center">
+          Export your MEASUR assessment data to an excel file and upload it to JUSTIFI.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer d-flex justify-content-end p-2">
+    <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+  </div>
+</div>

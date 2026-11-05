@@ -215,6 +215,97 @@ app-expert-view .form-control.indicate-different.invalid {
     border: red solid 2px;
 }
 
+app-process-heating-assessment .input-group.indicate-different,
+app-process-heating-assessment .form-control.indicate-different {
+    border: #007bff solid 2px;
+}
+
+app-process-heating-assessment .input-group.indicate-different-db,
+app-process-heating-assessment .form-control.indicate-different-db {
+    border: #33CC33 solid 2px;
+    box-shadow: 0px 0px 5px #33CC33;
+}
+
+app-process-heating-assessment .input-group.error,
+app-process-heating-assessment .form-control.error {
+    border: orange solid 2px;
+}
+
+app-process-heating-assessment .input-group.invalid,
+app-process-heating-assessment .form-control.invalid {
+    border: red solid 2px;
+}
+
+app-process-heating-assessment .panel-container .form-group {
+    margin-bottom: 0.5rem;
+}
+
+app-process-heating-assessment .panel-container .form-group > label {
+    font-size: 0.875rem;
+}
+
+app-process-heating-assessment .panel-container h6 {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+app-process-heating-assessment .form-group .btn-link.small {
+    font-size: 0.7rem;
+    line-height: 1.2;
+}
+
+app-process-heating-assessment .loss-name-input {
+    max-width: 260px;
+}
+
+app-process-heating-assessment .loss-add-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+}
+
+app-process-heating-assessment .result-strip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.25rem 1.5rem;
+}
+
+app-process-heating-assessment .result-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+}
+
+app-process-heating-assessment .result-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #6c757d;
+}
+
+app-process-heating-assessment .result-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #343a40;
+}
+
+app-process-heating-assessment .result-totals {
+    padding: 0.25rem 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.2rem;
+}
+
+app-process-heating-assessment .result-strip-title {
+    flex-basis: 100%;
+    text-align: right;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #343a40;
+}
+
 
 .ssmt .input-group .ng-invalid,
 .ssmt .input-group.indicate-different .ng-invalid,

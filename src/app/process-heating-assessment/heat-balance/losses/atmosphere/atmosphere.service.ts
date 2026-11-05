@@ -4,7 +4,7 @@ import { AtmosphereLoss } from '../../../../shared/models/phast/losses/atmospher
 import { Losses } from '../../../models/phast';
 import { LossFormItem, LossFormListService } from '../loss-form-list.service';
 import { AtmosphereCalculationService } from './atmosphere-calculation.service';
-import { AtmosphereForm, AtmosphereFormService } from './atmosphere-form.service';
+import { AtmosphereForm, AtmosphereFormService, NEW_ATMOSPHERE_LOSS } from './atmosphere-form.service';
 
 export type AtmosphereItem = LossFormItem<AtmosphereForm>;
 
@@ -16,6 +16,10 @@ export class AtmosphereService extends LossFormListService<AtmosphereLoss, Atmos
   protected readonly lossKey: keyof Losses = 'atmosphereLosses';
 
   readonly losses: Signal<AtmosphereItem[]> = this.items;
+
+  protected override newLoss(): AtmosphereLoss {
+    return NEW_ATMOSPHERE_LOSS;
+  }
 
   protected buildForm(loss: AtmosphereLoss): AtmosphereForm {
     return this.formService.getAtmosphereForm(loss);

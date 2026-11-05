@@ -2,11 +2,15 @@
 <ul class="tabs subtabs progress-tabs process-heating-assessment d-none d-lg-block">
   @for (link of BASELINE_VIEW_LINKS; track $index) {
     @let isDisabled = isLinkDisabled(link);
+    @let isInvalid = isTabInvalid(link);
     <li routerLinkActive="active" [routerLink]="[link.view]"
         [class.disabled]="isDisabled"
+        [class.missing-data]="isInvalid"
         (click)="handleCanNavigate($event, link)">
       <a routerLinkActive="active" [routerLink]="[link.view]"
          [class.disabled]="isDisabled"
+         [attr.aria-label]="invalidTabLabel(link)"
+         [attr.title]="invalidTabLabel(link)"
          (click)="handleCanNavigate($event, link)">
         <span class="step-number">{{$index + 1}}</span>
         {{link.label}}
@@ -23,11 +27,15 @@
     </li>
     @for (link of BASELINE_VIEW_LINKS; track $index) {
       @let isDisabled = isLinkDisabled(link);
+      @let isInvalid = isTabInvalid(link);
       <li class="page-item" routerLinkActive="active"
           [class.disabled]="isDisabled"
+          [class.missing-data]="isInvalid"
           (click)="handleCanNavigate($event, link)" [routerLink]="[link.view]">
         <a class="nav-link small" routerLinkActive="active" [routerLink]="[link.view]"
            [class.disabled]="isDisabled"
+           [attr.aria-label]="invalidTabLabel(link)"
+           [attr.title]="invalidTabLabel(link)"
            (click)="handleCanNavigate($event, link)">
           <span class="step-number">{{$index + 1}}</span>
           {{link.label}}

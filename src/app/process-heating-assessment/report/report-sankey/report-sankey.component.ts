@@ -1,20 +1,24 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, Signal } from '@angular/core';
 import { PhastValidService } from '../../../phast/phast-valid.service';
 import { PHAST as SharedPHAST, PhastValid as SharedPhastValid } from '../../../shared/models/phast/phast';
-import { Settings } from '../../../shared/models/settings';
-import { PHAST } from '../../models/phast';
 import { ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { SankeyScenarioOption } from '../../../shared/sankey/sankey-scenario-picker/sankey-scenario-picker.component';
 import { ReportSankeyResultsService, ReportSankeyScenario, ReportSankeyUI } from './report-sankey-results.service';
 
 export type SankeyLabelStyle = 'percent' | 'power' | 'both';
 
-/** The shared sankey checks its input's validity itself, so it gets this module's check in place of legacy's. */
+/**
+ * The shared sankey checks its input's validity itself, so it gets this module's cached scenario validity in place of legacy's.
+ * Its input is the scenario's own `phast` copy, which identifies the scenario.
+ */
 function providePhastValidService(): Pick<PhastValidService, 'checkValid'> {
   const validityService = inject(ProcessHeatingValidityService);
+  const reportSankeyResultsService = inject(ReportSankeyResultsService);
   return {
-    checkValid: (phast: SharedPHAST, settings: Settings): SharedPhastValid =>
-      validityService.checkValid(phast as unknown as PHAST, settings),
+    checkValid: (phast: SharedPHAST): SharedPhastValid => {
+      const scenario = reportSankeyResultsService.reportSankeyUI().scenarios.find(entry => entry.phast === phast);
+      return validityService.scenarioValidity(scenario.id);
+    },
   };
 }
 

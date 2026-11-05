@@ -177,14 +177,14 @@ describe('FixtureFormComponent', () => {
       expect(fixture.nativeElement.querySelector('.alert-warning')).not.toBeNull();
     });
 
-    it('hides the "differs from database" note when the value matches the selected material', () => {
+    it('does not highlight the field green when the value matches the selected material', () => {
       setInputsAndInit(makeFixtureItem(formService, { materialName: 1, specificHeat: 0.12 }));
-      expect(fixture.nativeElement.querySelector('.text-warning')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.indicate-different-db')).toBeNull();
     });
 
-    it('shows the "differs from database" note when the value has been overridden', () => {
+    it('highlights the field green when the value has been overridden', () => {
       setInputsAndInit(makeFixtureItem(formService, { materialName: 1, specificHeat: 99 }));
-      expect(fixture.nativeElement.querySelector('.text-warning')).not.toBeNull();
+      expect(fixture.nativeElement.querySelector('.indicate-different-db')).not.toBeNull();
     });
   });
 

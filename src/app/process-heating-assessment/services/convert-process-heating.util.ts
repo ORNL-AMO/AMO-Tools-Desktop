@@ -25,7 +25,7 @@ import { CHARGE_MATERIAL_UNITS } from '../heat-balance/losses/charge-material/ch
 
 /**
  * - `exact`: skip the 4-decimal rounding. Material-DB-linked fields must stay exact because the
- *   form's "Differs from database" check (`differsFromDb`, 1e-6 tolerance) compares them against an
+ *   form's differs-from-database highlight (`differsFromDb`, 1e-6 tolerance) compares them against an
  *   unrounded `convertDbValue`; rounding here would falsely flag them after a unit switch.
  * - `inverse`: the field is a cost or rate *per* unit, so it scales by the reciprocal of the
  *   quantity conversion ($/lb to $/kg multiplies by lb-per-kg).

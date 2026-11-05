@@ -20,8 +20,12 @@ export class EnergyInputService extends LossFormListService<EnergyInputEAF, Ener
   readonly losses: Signal<EnergyInputItem[]> = this.items;
   readonly warnings = signal<EnergyInputWarnings>({ electricityInput: null, heatDelivered: null });
 
+  protected override newLoss(): EnergyInputEAF {
+    return this.formService.newEnergyInput(this.assessmentService.settingsSignal());
+  }
+
   protected buildForm(loss: EnergyInputEAF): EnergyInputForm {
-    return this.formService.getEnergyInputForm(loss, this.assessmentService.settingsSignal());
+    return this.formService.getEnergyInputForm(loss);
   }
 
   protected buildLoss(form: EnergyInputForm): EnergyInputEAF {

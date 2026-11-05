@@ -23,6 +23,18 @@ export class HeatBalanceLossTabsComponent {
     return this.tabNavHelper.isLinkDisabled(link);
   }
 
+  isTabInvalid(link: ViewLink): boolean {
+    return this.tabNavHelper.isTabInvalid(link);
+  }
+
+  invalidTabLabel(link: ViewLink): string | null {
+    return this.tabNavHelper.invalidTabLabel(link);
+  }
+
+  lossCount(link: ViewLink): number | undefined {
+    return this.uiService.lossCount(link.view);
+  }
+
   handleCanNavigate(event: MouseEvent, link: ViewLink): boolean {
     return this.tabNavHelper.handleCanNavigate(event, link);
   }

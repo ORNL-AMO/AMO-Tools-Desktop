@@ -353,6 +353,10 @@
     border-bottom: var(--process-cooling-assessment) groove 2px;
 }
 
+.process-heating-assessment .group-label{
+    border-bottom: var(--process-heating-assessment) groove 2px;
+}
+
 .general .group-label{
     border-bottom: #145A32 solid 2px;
 }

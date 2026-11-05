@@ -1,6 +1,9 @@
+import { Notes } from './phast';
+
 export const MainView = {
   BASELINE: 'baseline',
   ASSESSMENT: 'assessment',
+  DIAGRAM: 'diagram',
   REPORT: 'report',
 } as const;
 export type MainView = typeof MainView[keyof typeof MainView];
@@ -54,6 +57,26 @@ export type LossView = typeof LossView[keyof typeof LossView];
 
 export type ProcessHeatingView = MainView | BaselineView | AssessmentView | ReportView | LossView;
 
+/** Notes field edited from the results panel while each heat balance step is selected in Expert View. Operations has no Expert View step. */
+export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes>> = {
+  [LossView.CHARGE_MATERIAL]: 'chargeNotes',
+  [LossView.WALL_LOSSES]: 'wallNotes',
+  [LossView.EXTENDED_SURFACE]: 'extendedNotes',
+  [LossView.ATMOSPHERE]: 'atmosphereNotes',
+  [LossView.FIXTURE]: 'fixtureNotes',
+  [LossView.COOLING]: 'coolingNotes',
+  [LossView.OPENING]: 'openingNotes',
+  [LossView.OTHER]: 'otherNotes',
+  [LossView.FLUE_GAS]: 'flueGasNotes',
+  [LossView.GAS_LEAKAGE]: 'leakageNotes',
+  [LossView.AUXILIARY_POWER]: 'auxiliaryPowerNotes',
+  [LossView.ENERGY_INPUT_EXHAUST_GAS]: 'energyInputExhaustGasNotes',
+  [LossView.ENERGY_INPUT]: 'energyInputNotes',
+  [LossView.EXHAUST_GAS]: 'exhaustGasNotes',
+  [LossView.SLAG]: 'slagNotes',
+  [LossView.HEAT_SYSTEM_EFFICIENCY]: 'heatSystemEfficiencyNotes',
+};
+
 export const HeatingEquipmentConfiguration = {
   FUEL_FIRED: 'fuel-fired',
   ELECTROTECHNOLOGY_STANDARD: 'electrotechnology-standard',
@@ -79,6 +102,7 @@ export interface ViewLink {
 export const MAIN_VIEW_LINKS: ViewLink[] = [
   { view: MainView.BASELINE, label: 'Baseline' },
   { view: MainView.ASSESSMENT, label: 'Assessment' },
+  { view: MainView.DIAGRAM, label: 'Diagram' },
   { view: MainView.REPORT, label: 'Report' },
 ];
 

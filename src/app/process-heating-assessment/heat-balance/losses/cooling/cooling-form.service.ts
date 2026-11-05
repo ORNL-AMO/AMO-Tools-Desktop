@@ -85,7 +85,7 @@ export class CoolingFormService {
       flowRate: [gas?.flowRate ?? null, [Validators.required, Validators.min(0)]],
       inletTemp: [gas?.initialTemperature ?? null, Validators.required],
       outletTemp: [gas?.finalTemperature ?? null, Validators.required],
-      correctionFactor: [gas?.correctionFactor ?? 1.0, Validators.required],
+      correctionFactor: [gas ? gas.correctionFactor ?? null : 1.0, Validators.required],
     });
   }
 
@@ -100,7 +100,7 @@ export class CoolingFormService {
       flowRate: [liquid?.flowRate ?? null, [Validators.required, Validators.min(0)]],
       inletTemp: [liquid?.initialTemperature ?? null, Validators.required],
       outletTemp: [liquid?.outletTemperature ?? null, Validators.required],
-      correctionFactor: [liquid?.correctionFactor ?? 1.0, Validators.required],
+      correctionFactor: [liquid ? liquid.correctionFactor ?? null : 1.0, Validators.required],
     });
   }
 

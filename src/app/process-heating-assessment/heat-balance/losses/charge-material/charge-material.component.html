@@ -5,29 +5,38 @@
 @let unit = resultsUnit();
 @let panelPrefix = scenario();
 
-<div class="panel-container p-3">
-  <div class="d-flex align-items-center justify-content-between mb-2">
-    <h4 class="mb-0">Charge Material</h4>
-    @if (!isMaterialAdditionLocked) {
-      <button type="button" class="btn btn-primary btn-sm" (click)="addMaterial()">+ Add Material</button>
-    }
-  </div>
+<div class="panel-container p-2">
+  @if (!isMaterialAdditionLocked) {
+    <div class="d-flex justify-content-end mb-2">
+      <button type="button" class="btn btn-primary loss-add-btn" (click)="addMaterial()">Add Charge Material</button>
+    </div>
+  }
 
-  @if (materials.length > 0) {
-    <div class="charge-material-totals d-flex flex-wrap">
-      <div class="p-2"><strong>Heat Required (net):</strong> {{ materialResultTotals.netHeatLoss | number: '1.0-2' }} {{ unit }}</div>
-      <div class="p-2"><strong>Reaction Heat (Endo/Exo):</strong> {{ materialResultTotals.endoExoHeat | number: '1.0-2' }} {{ unit }}</div>
-      <div class="p-2"><strong>Total Heat Required (gross):</strong> {{ materialResultTotals.heatRequired | number: '1.0-2' }} {{ unit }}</div>
+  @if (materials.length > 1) {
+    <div class="charge-material-totals result-strip result-totals">
+      <div class="result-strip-title">All Materials</div>
+      <div class="result-item">
+        <span class="result-label">Heat Required (net)</span>
+        <span class="result-value">{{ materialResultTotals.netHeatLoss | number: '1.0-2' }} {{ unit }}</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Reaction Heat (Endo/Exo)</span>
+        <span class="result-value">{{ materialResultTotals.endoExoHeat | number: '1.0-2' }} {{ unit }}</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Total Heat Required (gross)</span>
+        <span class="result-value">{{ materialResultTotals.heatRequired | number: '1.0-2' }} {{ unit }}</span>
+      </div>
     </div>
   }
 
   @for (item of materials; track scenario() + '_' + item.id) {
     @let itemResult = results.get(item.id);
-    <div class="card charge-material-card mb-3">
-      <div class="card-header d-flex align-items-center flex-wrap">
+    <div class="card charge-material-card mb-2">
+      <div class="card-header d-flex align-items-center flex-wrap py-1 px-2">
         <button
           type="button"
-          class="btn btn-link p-0 mr-2"
+          class="btn btn-link btn-sm p-0 mr-2"
           [attr.aria-label]="isCollapsed(item) ? 'Expand material' : 'Collapse material'"
           (click)="toggleCollapse(item)"
         >
@@ -36,13 +45,13 @@
         <input
           #nameInput
           type="text"
-          class="form-control charge-material-name mr-2"
+          class="form-control form-control-sm charge-material-name mr-2"
           [value]="item.name"
           (change)="onNameChange(item, nameInput.value)"
         />
         <select
           #typeSelect
-          class="form-control charge-material-type-select mr-2"
+          class="form-control form-control-sm charge-material-type-select mr-2"
           [class.indicate-different]="chargeMaterialService.differingFields(item.id)?.has('chargeMaterialType')"
           [value]="item.type"
           (change)="onTypeChange(item, typeSelect.value)"
@@ -52,29 +61,14 @@
           <option [value]="CMT.Gas">Gas</option>
         </select>
         @if (!isMaterialAdditionLocked) {
-          <button type="button" class="btn btn-link text-danger ml-auto" (click)="removeMaterial(item)">
+          <button type="button" class="btn btn-link btn-sm small text-danger py-0 ml-auto" (click)="removeMaterial(item)">
             <span class="fa fa-trash"></span> Remove
           </button>
         }
       </div>
 
-      @if (isCollapsed(item)) {
-        <div class="card-body charge-material-summary d-flex flex-wrap">
-          <div class="p-2">
-            <strong>Heat Required: </strong>
-            {{ itemResult?.heatRequired != null ? (itemResult.heatRequired | number: '1.0-2') + ' ' + unit : '——' }}
-          </div>
-          <div class="p-2">
-            <strong>Net Heat Loss: </strong>
-            {{ itemResult?.netHeatLoss != null ? (itemResult.netHeatLoss | number: '1.0-2') + ' ' + unit : '——' }}
-          </div>
-          <div class="p-2">
-            <strong>Endo/Exo Heat: </strong>
-            {{ itemResult?.endoExoHeat != null ? (itemResult.endoExoHeat | number: '1.0-2') + ' ' + unit : '——' }}
-          </div>
-        </div>
-      } @else {
-        <div class="card-body">
+      @if (!isCollapsed(item)) {
+        <div class="card-body p-2">
           @switch (item.type) {
             @case (CMT.Solid) {
               <app-charge-material-solid-form [form]="item.form" [differingFields]="chargeMaterialService.differingFields(item.id)" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-charge-material-solid-form>
@@ -88,6 +82,21 @@
           }
         </div>
       }
+
+      <div class="card-body charge-material-summary result-strip p-2">
+        <div class="result-item">
+          <span class="result-label">Heat Required</span>
+          <span class="result-value">{{ itemResult?.heatRequired != null ? (itemResult.heatRequired | number: '1.0-2') + ' ' + unit : '——' }}</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Net Heat Loss</span>
+          <span class="result-value">{{ itemResult?.netHeatLoss != null ? (itemResult.netHeatLoss | number: '1.0-2') + ' ' + unit : '——' }}</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Endo/Exo Heat</span>
+          <span class="result-value">{{ itemResult?.endoExoHeat != null ? (itemResult.endoExoHeat | number: '1.0-2') + ' ' + unit : '——' }}</span>
+        </div>
+      </div>
     </div>
   }
 

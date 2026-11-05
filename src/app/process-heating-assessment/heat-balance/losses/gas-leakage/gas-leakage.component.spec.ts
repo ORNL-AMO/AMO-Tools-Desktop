@@ -171,8 +171,16 @@ describe('GasLeakageComponent', () => {
       expect(fixture.nativeElement.querySelector('.loss-total')).toBeNull();
     });
 
-    it('shows the total from the service when losses exist', () => {
+    it('hides the total when there is a single loss', () => {
       lossesSignal.set([item]);
+      totalSignal.set(456);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.loss-total')).toBeNull();
+    });
+
+    it('shows the total from the service when multiple losses exist', () => {
+      lossesSignal.set([item, { ...item, id: 'second' }]);
       totalSignal.set(456);
       fixture.detectChanges();
 

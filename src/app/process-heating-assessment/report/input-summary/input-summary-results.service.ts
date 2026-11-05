@@ -14,9 +14,16 @@ import { ProcessHeatingAssessmentService } from '../../services/process-heating-
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
 import { EMPTY_LOOKUPS, FieldDefinition, InputSummaryLookups, resolveUnit, SECTION_DEFINITIONS, SectionDefinition, SummaryValue } from './input-summary-definitions';
 
+/** One summary definition's sections; `count` is the number of item entries and is omitted for scenario-level definitions. */
+export interface InputSummaryCategory {
+  label: string;
+  count?: number;
+  sections: InputSummarySection[];
+}
+
 export interface InputSummaryUI {
   modificationNames: ModificationNameCell[];
-  sections: InputSummarySection[];
+  categories: InputSummaryCategory[];
 }
 
 /** Builds read-only input tables for baseline and every modification from live scenario data. */
@@ -46,14 +53,17 @@ export class InputSummaryResultsService {
     const categories = this.resultsService.getResultCategories(settings);
     const lookups = this.lookups();
 
-    const sections = SECTION_DEFINITIONS
+    const summaryCategories = SECTION_DEFINITIONS
       .filter(definition => !definition.isVisible || definition.isVisible(categories))
-      .flatMap(definition => this.buildSections(definition, scenarios, settings, lookups))
-      .filter(section => section.rows.length > 0);
+      .map((definition): InputSummaryCategory => {
+        const sections = this.buildSections(definition, scenarios, settings, lookups).filter(section => section.rows.length > 0);
+        return { label: definition.label, count: definition.kind === 'items' ? sections.length : undefined, sections };
+      })
+      .filter(category => category.sections.length > 0);
 
     return {
       modificationNames: modifications.map(modification => ({ id: modification.id, name: getModificationName(modification) })),
-      sections,
+      categories: summaryCategories,
     };
   });
 

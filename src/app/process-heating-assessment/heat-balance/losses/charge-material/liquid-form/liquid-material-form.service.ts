@@ -39,14 +39,17 @@ export const EMPTY_WARNINGS: LiquidMaterialWarnings = {
   dischargeAboveVaporizingNoVaporPercentAlt: null,
 };
 
+/** Starting values for a new material; a saved one rebuilds from exactly what was saved so a cleared field stays invalid. */
+const NEW_LIQUID_MATERIAL: LiquidChargeMaterial = { materialId: 1, percentVaporized: 0, percentReacted: 0, reactionHeat: 0, thermicReactionType: ThermicReactionType.Endothermic, additionalHeat: 0 };
+
 @Injectable()
 export class LiquidMaterialFormService {
   private readonly formBuilder = inject(FormBuilder);
 
   getLiquidChargeMaterialForm(chargeMaterial: ChargeMaterial): LiquidMaterialForm {
-    const liquid = chargeMaterial.liquidChargeMaterial ?? {};
+    const liquid = chargeMaterial.liquidChargeMaterial ?? NEW_LIQUID_MATERIAL;
     const form: LiquidMaterialForm = this.formBuilder.group({
-      materialId: [liquid.materialId ?? 1, Validators.required],
+      materialId: [liquid.materialId ?? null, Validators.required],
       specificHeatOfLiquid: [liquid.specificHeatLiquid ?? null, [Validators.required, Validators.min(0)]],
       vaporizingTemperature: [liquid.vaporizingTemperature ?? null, Validators.required],
       latentHeatOfVaporization: [liquid.latentHeat ?? null, [Validators.required, Validators.min(0)]],
@@ -54,11 +57,11 @@ export class LiquidMaterialFormService {
       feedRate: [liquid.chargeFeedRate ?? null, [Validators.required, GreaterThanValidator.greaterThan(0)]],
       initialTemperature: [liquid.initialTemperature ?? null, Validators.required],
       chargeMaterialDischargeTemperature: [liquid.dischargeTemperature ?? null, Validators.required],
-      percentChargeVaporized: [liquid.percentVaporized ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      percentChargeReacted: [liquid.percentReacted ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      heatOfReaction: [liquid.reactionHeat ?? 0, [Validators.required, Validators.min(0)]],
-      endothermicOrExothermic: [liquid.thermicReactionType ?? ThermicReactionType.Endothermic, Validators.required],
-      additionalHeatRequired: [liquid.additionalHeat ?? 0, Validators.required],
+      percentChargeVaporized: [liquid.percentVaporized ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      percentChargeReacted: [liquid.percentReacted ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      heatOfReaction: [liquid.reactionHeat ?? null, [Validators.required, Validators.min(0)]],
+      endothermicOrExothermic: [liquid.thermicReactionType ?? null, Validators.required],
+      additionalHeatRequired: [liquid.additionalHeat ?? null, Validators.required],
     });
     return this.setInitialTempValidator(form);
   }

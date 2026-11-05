@@ -10,6 +10,15 @@ export class TabNavHelper {
     return !this.uiService.canVisitView(link.view);
   }
 
+  isTabInvalid(link: ViewLink): boolean {
+    return this.uiService.isViewInvalid(link.view);
+  }
+
+  /** @returns the accessible name and tooltip for a marked tab, or null while its inputs are valid */
+  invalidTabLabel(link: ViewLink): string | null {
+    return this.isTabInvalid(link) ? `${link.label}, has invalid inputs` : null;
+  }
+
   handleCanNavigate(event: MouseEvent, link: ViewLink): boolean {
     if (this.isLinkDisabled(link)) {
       event.preventDefault();

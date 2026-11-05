@@ -96,7 +96,11 @@ describe('FlueGasService', () => {
   });
 
   it('builds a By Mass form when the saved entry is By Mass', () => {
-    existing = [{ name: 'Coal', flueGasType: FlueGasType.ByMass, flueGasByMass: { gasTypeId: 2, carbon: 70, hydrogen: 5, sulphur: 1, inertAsh: 10, o2: 8, moisture: 4, nitrogen: 2 } }];
+    existing = [{ name: 'Coal', flueGasType: FlueGasType.ByMass, flueGasByMass: {
+      gasTypeId: 2, carbon: 70, hydrogen: 5, sulphur: 1, inertAsh: 10, o2: 8, moisture: 4, nitrogen: 2,
+      flueGasTemperature: 700, oxygenCalculationMethod: 'Excess Air', excessAirPercentage: 10, o2InFlueGas: 2, combustionAirTemperature: 80,
+      moistureInAirCombustion: 0.0077, fuelTemperature: 65, ambientAirTemp: 65, ashDischargeTemperature: 100, unburnedCarbonInAsh: 1,
+    } }];
     service.initialize('baseline');
 
     expect(service.flueGasType()).toBe(FlueGasType.ByMass);

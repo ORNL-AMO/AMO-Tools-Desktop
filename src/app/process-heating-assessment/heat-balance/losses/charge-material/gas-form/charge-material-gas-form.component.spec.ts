@@ -171,14 +171,14 @@ describe('ChargeMaterialGasFormComponent', () => {
       expect(fixture.nativeElement.querySelector('.alert-warning')).not.toBeNull();
     });
 
-    it('hides the "differs from database" note when the value matches the selected material', () => {
+    it('does not highlight the field green when the value matches the selected material', () => {
       setInputsAndInit(makeGasForm(gasFormService, { materialId: 1, specificHeatVapor: 0.24 }));
-      expect(fixture.nativeElement.querySelector('.text-warning')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.indicate-different-db')).toBeNull();
     });
 
-    it('shows the "differs from database" note when the value has been overridden', () => {
+    it('highlights the field green when the value has been overridden', () => {
       setInputsAndInit(makeGasForm(gasFormService, { materialId: 1, specificHeatVapor: 99 }));
-      expect(fixture.nativeElement.querySelector('.text-warning')).not.toBeNull();
+      expect(fixture.nativeElement.querySelector('.indicate-different-db')).not.toBeNull();
     });
 
     it('shows a required error on feedRate when empty', () => {
