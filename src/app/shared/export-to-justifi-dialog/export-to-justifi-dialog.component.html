@@ -1,0 +1,66 @@
+<div class="card">
+  <div class="card-header p-2 d-flex justify-content-between">
+    <h5 class="mt-auto mb-0">Export Content to JUSTIFI Template</h5>
+    <button type="button" class="close p-0 m-0" aria-label="Close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="card-body px-3 py-2">
+    <p class="intro mb-2">
+      The all new <u class="bold">JUSTIFI</u> platform can help you find Non-Energy Benefits (NEBs) of
+      your energy efficiency projects! If you are new to NEBs, the National Laboratory of the Rockies (NRL) has compiled a knowledge library on the topic (<a
+        href="https://www.nrel.gov/manufacturing/non-energy-benefits" target="_blank">https://www.nrel.gov/manufacturing/non-energy-benefits</a>) where you can
+      learn more!
+    </p>
+    <ol class="mb-2">
+      <li>Clicking "Export" below to download the selected assessments to a JUSTIFI excel template.</li>
+      <li>Navigate to the JUSTIFI platform at <a href="https://justifi.ornl.gov" target="_blank">https://justifi.ornl.gov</a>.</li>
+      <li>Upload the downloaded JUSTIFI template file to the platform.</li>
+      <li>Work through the JUSTIFI platform to find NEBs for your energy efficiency projects!</li>
+    </ol>
+    @if (!exportDone()) {
+      <table class="table table-sm table-bordered mb-0">
+        <colgroup>
+          <col class="type-column">
+          <col class="name-column">
+          <col>
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Assessment Type</th>
+            <th>Assessment Name</th>
+            <th>Select Modification</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><img class="icon-image pl-1 pr-1" src="assets/images/ico-phast-diagram.png"> Process Heating</td>
+            <td>{{assessment.name}}</td>
+            <td>
+              @if (modifications.length > 0) {
+                <select class="form-select form-select-sm w-100" id="justifiModification" [(ngModel)]="selectedModificationId">
+                  @for (modification of modifications; track modification.id) {
+                    <option [ngValue]="modification.id">{{modification.phast.name}}</option>
+                  }
+                </select>
+              } @else {
+                <span class="text-muted">No modifications available</span>
+              }
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    } @else {
+      <div class="text-center mt-3">
+        <p class="text-success">Export completed successfully!</p>
+        <p class="text-muted">You can now upload the downloaded file to the JUSTIFI platform.</p>
+      </div>
+    }
+  </div>
+  <div class="card-footer d-flex justify-content-end p-2">
+    <button type="button" class="btn btn-secondary mr-2" (click)="close()">Close</button>
+    @if (!exportDone()) {
+      <button type="button" class="btn btn-primary" (click)="exportToJustifi()">Export</button>
+    }
+  </div>
+</div>

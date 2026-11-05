@@ -1,0 +1,49 @@
+import { Assessment } from '../../shared/models/assessment';
+import { Modification as LegacyModification, PHAST as LegacyPHAST } from '../../shared/models/phast/phast';
+import { ExploreOpportunityCategory, PHAST } from '../models/phast';
+import { ProcessHeatingModification } from '../models/modification';
+import { getEffectivePhast } from './scenario-merge.util';
+
+const LEGACY_FLAG_KEYS: Record<ExploreOpportunityCategory, keyof LegacyModification> = {
+  [ExploreOpportunityCategory.FlueGas]: 'exploreOppsShowFlueGas',
+  [ExploreOpportunityCategory.AirTemp]: 'exploreOppsShowAirTemp',
+  [ExploreOpportunityCategory.Material]: 'exploreOppsShowMaterial',
+  [ExploreOpportunityCategory.AllTimeOpen]: 'exploreOppsShowAllTimeOpen',
+  [ExploreOpportunityCategory.Opening]: 'exploreOppsShowOpening',
+  [ExploreOpportunityCategory.AllEmissivity]: 'exploreOppsShowAllEmissivity',
+  [ExploreOpportunityCategory.Cooling]: 'exploreOppsShowCooling',
+  [ExploreOpportunityCategory.Atmosphere]: 'exploreOppsShowAtmosphere',
+  [ExploreOpportunityCategory.Operations]: 'exploreOppsShowOperations',
+  [ExploreOpportunityCategory.Leakage]: 'exploreOppsShowLeakage',
+  [ExploreOpportunityCategory.Slag]: 'exploreOppsShowSlag',
+  [ExploreOpportunityCategory.EfficiencyData]: 'exploreOppsShowEfficiencyData',
+  [ExploreOpportunityCategory.Wall]: 'exploreOppsShowWall',
+  [ExploreOpportunityCategory.AllTemp]: 'exploreOppsShowAllTemp',
+  [ExploreOpportunityCategory.Fixtures]: 'exploreOppsShowFixtures',
+};
+
+/**
+ * The shared JUSTIFI exporter reads each modification's full `phast` clone and legacy `exploreOppsShowX` fields;
+ * this module stores `scenarioOverrides` and `exploreOpportunityFlags` instead.
+ * @param assessment assessment saved by this module
+ * @returns a copy whose modifications carry the legacy shape the exporter reads; the input is not mutated
+ */
+export function toLegacyJustifiAssessment(assessment: Assessment): Assessment {
+  const baseline = assessment.phast as unknown as PHAST;
+  const modifications = (baseline.modifications ?? []) as ProcessHeatingModification[];
+  const legacyModifications = modifications.map(modification => {
+    const flags = modification.exploreOpportunityFlags ?? {};
+    const legacyFlags: Partial<LegacyModification> = {};
+    (Object.keys(flags) as ExploreOpportunityCategory[]).forEach(category => {
+      legacyFlags[LEGACY_FLAG_KEYS[category] as string] = flags[category];
+    });
+    return {
+      id: modification.id,
+      notes: modification.notes,
+      exploreOpportunities: Object.keys(flags).length > 0,
+      ...legacyFlags,
+      phast: getEffectivePhast(baseline, modification) as unknown as LegacyPHAST,
+    } as LegacyModification;
+  });
+  return { ...assessment, phast: { ...assessment.phast, modifications: legacyModifications } };
+}

@@ -91,6 +91,7 @@ import { ReportGraphsResultsService } from './report/report-graphs/report-graphs
 import { ResultsDataResultsService } from './report/results-data/results-data-results.service';
 import { ExecutiveSummaryResultsService } from './report/executive-summary/executive-summary-results.service';
 import { PercentGraphModule } from '../shared/percent-graph/percent-graph.module';
+import { BannerTooltipsModule } from '../shared/app-banner-tooltips/app-banner-tooltips.module';
 import { ExportableResultsTableModule } from '../shared/exportable-results-table/exportable-results-table.module';
 import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
 import { InputSummaryComponent } from './report/input-summary/input-summary.component';
@@ -453,6 +454,7 @@ export const ROUTES: Route[] = [
     ModificationListComponent,
     PercentGraphModule,
     ExportableResultsTableModule,
+    BannerTooltipsModule,
     ReportTableCellPipe,
     ReportBuilderModule,
     PieChartModule,

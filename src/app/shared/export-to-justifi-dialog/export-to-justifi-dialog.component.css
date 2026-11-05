@@ -1,0 +1,43 @@
+:host {
+    display: block;
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+h5 {
+    font-size: 20px;
+}
+
+.intro {
+    max-width: 85ch;
+}
+
+ol {
+    margin: 0 0 16px;
+    padding-left: 22px;
+}
+
+li + li {
+    margin-top: 4px;
+}
+
+th {
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+th, td {
+    vertical-align: middle;
+}
+
+.type-column {
+    width: 20%;
+}
+
+.name-column {
+    width: 35%;
+}
+
+.icon-image {
+    width: 28px;
+}
