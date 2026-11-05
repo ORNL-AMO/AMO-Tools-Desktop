@@ -154,7 +154,7 @@ export class ChargeMaterialService {
     this.saveLosses();
   }
 
-  /** Rebuilds a saved material through its type's form so its defaults match what a save would persist. */
+  /** Rebuilds a saved material through its type's form so it compares in the shape a save would persist. */
   private normalize(material: ChargeMaterial): ChargeMaterial {
     return { ...this.buildChargeMaterial(this.createItem(material, material.id ?? '', 0)), id: material.id };
   }

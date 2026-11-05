@@ -13,7 +13,7 @@
   <div class="form-group">
     <label for="materialId_{{ instanceId() }}">Atmosphere Gas</label>
     <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" [class.indicate-different]="differingFields()?.has('atmosphereGas')"
-      (change)="materialSelector.onMaterialSelected(f.materialId.value)">
+      (change)="materialSelector.onMaterialSelected(f.materialId.value)" [class.invalid]="f.materialId.invalid">
       @for (material of materialSelector.materialTypes(); track material.id) {
         <option [ngValue]="material.id">{{ material.substance }}</option>
       }

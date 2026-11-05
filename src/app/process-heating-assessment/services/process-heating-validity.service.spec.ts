@@ -128,6 +128,15 @@ describe('ProcessHeatingValidityService', () => {
       expect(validity.coolingValid).toBeTrue();
     });
 
+    it('flags a saved entry whose cleared field a new entry would default', () => {
+      const wallLoss = { surfaceArea: 100, surfaceTemperature: 300, ambientTemperature: 70, surfaceShape: 3, conditionFactor: 1.394, surfaceEmissivity: 0.9, correctionFactor: 1 };
+      scenarios.baseline.set(phastWith({ wallLosses: [{ ...wallLoss, windVelocity: 5 }] }));
+      expect(service.scenarioValidity('baseline').wallValid).toBeTrue();
+
+      scenarios.baseline.set(phastWith({ wallLosses: [wallLoss] }));
+      expect(service.scenarioValidity('baseline').wallValid).toBeFalse();
+    });
+
     it('flags missing operations', () => {
       scenarios.baseline.set({ losses: {} });
 

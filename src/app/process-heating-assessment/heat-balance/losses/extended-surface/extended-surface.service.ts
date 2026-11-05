@@ -5,7 +5,7 @@ import { WallLoss } from '../../../models/wall-loss';
 import { Losses } from '../../../models/phast';
 import { LossFormItem, LossFormListService } from '../loss-form-list.service';
 import { WallLossCalculationService } from '../wall-losses/wall-loss-calculation.service';
-import { ExtendedSurfaceForm, ExtendedSurfaceFormService } from './extended-surface-form.service';
+import { ExtendedSurfaceForm, ExtendedSurfaceFormService, NEW_EXTENDED_SURFACE } from './extended-surface-form.service';
 
 export type ExtendedSurfaceItem = LossFormItem<ExtendedSurfaceForm>;
 
@@ -17,6 +17,10 @@ export class ExtendedSurfaceService extends LossFormListService<ExtendedSurface,
   protected readonly lossKey: keyof Losses = 'extendedSurfaces';
 
   readonly surfaces: Signal<ExtendedSurfaceItem[]> = this.items;
+
+  protected override newLoss(): ExtendedSurface {
+    return NEW_EXTENDED_SURFACE;
+  }
 
   protected buildForm(surface: ExtendedSurface): ExtendedSurfaceForm {
     return this.formService.getExtendedSurfaceForm(surface);

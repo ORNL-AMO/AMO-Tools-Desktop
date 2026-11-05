@@ -12,19 +12,22 @@ export type GasLeakageForm = FormGroup<{
   correctionFactor: FormControl<number | null>;
 }>;
 
+/** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
+export const NEW_LEAKAGE_LOSS: LeakageLoss = { coefficient: 0.8052, specificGravity: 1, correctionFactor: 1 };
+
 @Injectable()
 export class GasLeakageFormService {
   private readonly fb = inject(FormBuilder);
 
-  getGasLeakageForm(loss: LeakageLoss = {}): GasLeakageForm {
+  getGasLeakageForm(loss: LeakageLoss = NEW_LEAKAGE_LOSS): GasLeakageForm {
     return this.fb.group({
       draftPressure: [loss.draftPressure ?? null, [Validators.required, Validators.min(0)]],
       openingArea: [loss.openingArea ?? null, [Validators.required, Validators.min(0)]],
       leakageGasTemperature: [loss.leakageGasTemperature ?? null, Validators.required],
       ambientTemperature: [loss.ambientTemperature ?? null, Validators.required],
-      coefficient: [loss.coefficient ?? 0.8052, Validators.required],
-      specificGravity: [loss.specificGravity ?? 1, [Validators.required, Validators.min(0)]],
-      correctionFactor: [loss.correctionFactor ?? 1, Validators.required],
+      coefficient: [loss.coefficient ?? null, Validators.required],
+      specificGravity: [loss.specificGravity ?? null, [Validators.required, Validators.min(0)]],
+      correctionFactor: [loss.correctionFactor ?? null, Validators.required],
     });
   }
 

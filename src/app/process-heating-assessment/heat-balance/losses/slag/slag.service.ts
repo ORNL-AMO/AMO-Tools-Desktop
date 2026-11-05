@@ -4,7 +4,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { Losses } from '../../../models/phast';
 import { LossFormItem, LossFormListService } from '../loss-form-list.service';
 import { SlagCalculationService } from './slag-calculation.service';
-import { SlagForm, SlagFormService } from './slag-form.service';
+import { SlagForm, SlagFormService, NEW_SLAG_LOSS } from './slag-form.service';
 
 export type SlagItem = LossFormItem<SlagForm>;
 
@@ -16,6 +16,10 @@ export class SlagService extends LossFormListService<Slag, SlagForm> {
   protected readonly lossKey: keyof Losses = 'slagLosses';
 
   readonly losses: Signal<SlagItem[]> = this.items;
+
+  protected override newLoss(): Slag {
+    return NEW_SLAG_LOSS;
+  }
 
   protected buildForm(loss: Slag): SlagForm {
     return this.formService.getSlagForm(loss);

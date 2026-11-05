@@ -13,7 +13,7 @@
   <div class="form-group">
     <label for="materialId_{{ instanceId() }}">Name of Material</label>
     <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" [class.indicate-different]="gasDifferences().has('materialId')"
-      (change)="materialSelector.onMaterialSelected(f.materialId.value)">
+      (change)="materialSelector.onMaterialSelected(f.materialId.value)" [class.invalid]="f.materialId.invalid">
       @for (material of materialSelector.materialTypes(); track material.id) {
         <option [ngValue]="material.id">{{ material.substance }}</option>
       }
@@ -24,7 +24,7 @@
 
   <div class="form-group">
     <label for="specificHeatOfGas_{{ instanceId() }}">Specific Heat of Gas</label>
-    <div class="input-group" [class.indicate-different]="gasDifferences().has('specificHeatGas')">
+    <div class="input-group" [class.invalid]="f.specificHeatOfGas.invalid" [class.indicate-different]="gasDifferences().has('specificHeatGas')">
       <input type="number" class="form-control" id="specificHeatOfGas_{{ instanceId() }}" formControlName="specificHeatOfGas">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
@@ -36,21 +36,21 @@
 
   <div class="form-group">
     <label for="feedRate_{{ instanceId() }}">Charge Feed Rate</label>
-    <div class="input-group" [class.indicate-different]="gasDifferences().has('feedRate')">
+    <div class="input-group" [class.invalid]="f.feedRate.invalid" [class.indicate-different]="gasDifferences().has('feedRate')">
       <input type="number" class="form-control" id="feedRate_{{ instanceId() }}" formControlName="feedRate">
       <app-input-unit [settings]="settings()" [imperialUnit]="'lb/hr'" [metricUnit]="'kg/hr'"></app-input-unit>
     </div>
-    @if (f.feedRate.invalid && (f.feedRate.dirty || f.feedRate.touched)) {
-      <div class="text-danger small">
-        @if (f.feedRate.errors?.required) { <div>Value Required</div> }
-        @if (f.feedRate.errors?.greaterThan !== undefined) { <div>Value must be greater than {{ f.feedRate.errors.greaterThan }}.</div> }
-      </div>
+    @if (f.feedRate.invalid) {
+      <span class="alert-danger pull-right small">
+        @if (f.feedRate.errors?.required) { <span>Value Required</span> }
+        @if (f.feedRate.errors?.greaterThan !== undefined) { <span>Value must be greater than {{ f.feedRate.errors.greaterThan }}.</span> }
+      </span>
     }
   </div>
 
   <div class="form-group">
     <label for="percentVaporInGasMixture_{{ instanceId() }}">Vapor in Gas Mixture</label>
-    <div class="input-group" [class.indicate-different]="gasDifferences().has('percentVapor')">
+    <div class="input-group" [class.invalid]="f.percentVaporInGasMixture.invalid" [class.indicate-different]="gasDifferences().has('percentVapor')">
       <input type="number" class="form-control" id="percentVaporInGasMixture_{{ instanceId() }}" formControlName="percentVaporInGasMixture">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
@@ -59,23 +59,23 @@
 
   <div class="form-group">
     <label for="initialTemperature_{{ instanceId() }}">Charge Inlet Temperature</label>
-    <div class="input-group" [class.indicate-different]="gasDifferences().has('initialTemperature')">
+    <div class="input-group" [class.invalid]="f.initialTemperature.invalid" [class.indicate-different]="gasDifferences().has('initialTemperature')">
       <input type="number" class="form-control" id="initialTemperature_{{ instanceId() }}" formControlName="initialTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
-    @if (f.initialTemperature.invalid && (f.initialTemperature.dirty || f.initialTemperature.touched)) {
-      <div class="text-danger small">
-        @if (f.initialTemperature.errors?.required) { <div>Value Required</div> }
+    @if (f.initialTemperature.invalid) {
+      <span class="alert-danger pull-right small">
+        @if (f.initialTemperature.errors?.required) { <span>Value Required</span> }
         @if (f.initialTemperature.errors?.max) {
-          <div>Value can't be greater than Charge Outlet Temperature ({{ f.chargeMaterialDischargeTemperature.value }}&deg;).</div>
+          <span>Value can't be greater than Charge Outlet Temperature ({{ f.chargeMaterialDischargeTemperature.value }}&deg;).</span>
         }
-      </div>
+      </span>
     }
   </div>
 
   <div class="form-group">
     <label for="chargeMaterialDischargeTemperature_{{ instanceId() }}">Charge Outlet Temperature</label>
-    <div class="input-group" [class.indicate-different]="gasDifferences().has('dischargeTemperature')">
+    <div class="input-group" [class.invalid]="f.chargeMaterialDischargeTemperature.invalid" [class.indicate-different]="gasDifferences().has('dischargeTemperature')">
       <input type="number" class="form-control" id="chargeMaterialDischargeTemperature_{{ instanceId() }}" formControlName="chargeMaterialDischargeTemperature">
       <app-input-unit [settings]="settings()" [imperialUnit]="'&#8457;'" [metricUnit]="'&#8451;'"></app-input-unit>
     </div>
@@ -84,7 +84,7 @@
 
   <div class="form-group">
     <label for="specificHeatOfVapor_{{ instanceId() }}">Specific Heat of Vapor</label>
-    <div class="input-group" [class.indicate-different]="gasDifferences().has('specificHeatVapor')">
+    <div class="input-group" [class.invalid]="f.specificHeatOfVapor.invalid" [class.indicate-different]="gasDifferences().has('specificHeatVapor')">
       <input type="number" class="form-control" id="specificHeatOfVapor_{{ instanceId() }}" formControlName="specificHeatOfVapor">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/(lb-&#8457;)'" [metricUnit]="'kJ/(kg-&#8451;)'"></app-input-unit>
     </div>
@@ -93,7 +93,7 @@
 
   <div class="form-group">
     <label for="percentChargeReacted_{{ instanceId() }}">Charge Reacted</label>
-    <div class="input-group" [class.indicate-different]="gasDifferences().has('percentReacted')">
+    <div class="input-group" [class.invalid]="f.percentChargeReacted.invalid" [class.indicate-different]="gasDifferences().has('percentReacted')">
       <input type="number" class="form-control" id="percentChargeReacted_{{ instanceId() }}" formControlName="percentChargeReacted">
       <app-input-unit [defaultUnit]="'%'"></app-input-unit>
     </div>
@@ -102,7 +102,7 @@
 
   <div class="form-group">
     <label for="heatOfReaction_{{ instanceId() }}">Heat of Reaction</label>
-    <div class="input-group" [class.indicate-different]="gasDifferences().has('reactionHeat')">
+    <div class="input-group" [class.invalid]="f.heatOfReaction.invalid" [class.indicate-different]="gasDifferences().has('reactionHeat')">
       <input type="number" class="form-control" id="heatOfReaction_{{ instanceId() }}" formControlName="heatOfReaction">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/lb'" [metricUnit]="'kJ/kg'"></app-input-unit>
     </div>
@@ -112,7 +112,7 @@
 
   <div class="form-group">
     <label for="endothermicOrExothermic_{{ instanceId() }}">Type of Reaction</label>
-    <select class="form-control" id="endothermicOrExothermic_{{ instanceId() }}" formControlName="endothermicOrExothermic" [class.indicate-different]="gasDifferences().has('thermicReactionType')">
+    <select class="form-control" id="endothermicOrExothermic_{{ instanceId() }}" formControlName="endothermicOrExothermic" [class.indicate-different]="gasDifferences().has('thermicReactionType')" [class.invalid]="f.endothermicOrExothermic.invalid">
       <option [ngValue]="0">Endothermic</option>
       <option [ngValue]="1">Exothermic</option>
     </select>
@@ -120,7 +120,7 @@
 
   <div class="form-group">
     <label for="additionalHeatRequired_{{ instanceId() }}">Additional Heat Required</label>
-    <div class="input-group" [class.indicate-different]="gasDifferences().has('additionalHeat')">
+    <div class="input-group" [class.invalid]="f.additionalHeatRequired.invalid" [class.indicate-different]="gasDifferences().has('additionalHeat')">
       <input type="number" class="form-control" id="additionalHeatRequired_{{ instanceId() }}" formControlName="additionalHeatRequired">
       <app-input-unit [settings]="settings()" [imperialUnit]="'Btu/hr'" [metricUnit]="'kJ/hr'"></app-input-unit>
     </div>

@@ -4,7 +4,7 @@ import { OpeningLoss } from '../../../../shared/models/phast/losses/openingLoss'
 import { Losses } from '../../../models/phast';
 import { LossFormItem, LossFormListService } from '../loss-form-list.service';
 import { OpeningCalculationService } from './opening-calculation.service';
-import { OpeningForm, OpeningFormService } from './opening-form.service';
+import { OpeningForm, OpeningFormService, NEW_OPENING_LOSS } from './opening-form.service';
 
 export type OpeningItem = LossFormItem<OpeningForm>;
 
@@ -16,6 +16,10 @@ export class OpeningService extends LossFormListService<OpeningLoss, OpeningForm
   protected readonly lossKey: keyof Losses = 'openingLosses';
 
   readonly losses: Signal<OpeningItem[]> = this.items;
+
+  protected override newLoss(): OpeningLoss {
+    return NEW_OPENING_LOSS;
+  }
 
   protected buildForm(loss: OpeningLoss): OpeningForm {
     return this.formService.getOpeningForm(loss);

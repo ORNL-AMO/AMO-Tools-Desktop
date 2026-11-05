@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
-import { FlueGas } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasByMass, FlueGasByVolume } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 
 /** Saved `oxygenCalculationMethod` values. */
@@ -100,32 +100,31 @@ export class FlueGasFormService {
   private readonly convertUnitsService = inject(ConvertUnitsService);
 
   getFlueGasVolumeForm(loss: FlueGas = {}, settings: Settings): FlueGasVolumeForm {
-    const volume = loss.flueGasByVolume;
-    const defaultTemp = this.toSettingsTemp(DEFAULT_TEMP_F, settings);
+    const volume = loss.flueGasByVolume ?? { ...this.newFlueGasConditions(settings), gasTypeId: DEFAULT_MATERIAL_ID };
     const form: FlueGasVolumeForm = this.fb.group({
-      materialId: [volume?.gasTypeId ?? DEFAULT_MATERIAL_ID, Validators.required],
-      flueGasTemperature: [volume?.flueGasTemperature ?? this.toSettingsTemp(DEFAULT_FLUE_GAS_TEMP_F, settings), Validators.required],
-      oxygenCalculationMethod: this.fb.nonNullable.control<OxygenCalculationMethod>(volume?.oxygenCalculationMethod ?? OxygenCalculationMethod.ExcessAir, Validators.required),
-      excessAirPercentage: [volume?.excessAirPercentage ?? 0, [Validators.required, Validators.min(0)]],
-      o2InFlueGas: [volume?.o2InFlueGas ?? 0, [Validators.required, Validators.min(0), Validators.max(MAX_O2_IN_FLUE_GAS)]],
-      combustionAirTemperature: [volume?.combustionAirTemperature ?? defaultTemp, Validators.required],
-      moistureInAirCombustion: [volume?.moistureInAirCombustion ?? DEFAULT_MOISTURE_PERCENT, [Validators.required, Validators.min(0), Validators.max(100)]],
-      fuelTemperature: [volume?.fuelTemperature ?? defaultTemp, Validators.required],
-      ambientAirTemp: [volume?.ambientAirTemp ?? defaultTemp, Validators.required],
-      CH4: [volume?.CH4 ?? null, PERCENT_VALIDATORS],
-      C2H6: [volume?.C2H6 ?? null, PERCENT_VALIDATORS],
-      N2: [volume?.N2 ?? null, PERCENT_VALIDATORS],
-      H2: [volume?.H2 ?? null, PERCENT_VALIDATORS],
-      C3H8: [volume?.C3H8 ?? null, PERCENT_VALIDATORS],
-      C4H10_CnH2n: [volume?.C4H10_CnH2n ?? null, PERCENT_VALIDATORS],
-      H2O: [volume?.H2O ?? null, PERCENT_VALIDATORS],
-      CO: [volume?.CO ?? null, PERCENT_VALIDATORS],
-      CO2: [volume?.CO2 ?? null, PERCENT_VALIDATORS],
-      SO2: [volume?.SO2 ?? null, PERCENT_VALIDATORS],
-      O2: [volume?.O2 ?? null, PERCENT_VALIDATORS],
-      specificGravity: [volume?.specificGravity ?? null],
-      heatingValue: [volume?.heatingValue ?? null],
-      heatingValueVolume: [volume?.heatingValueVolume ?? null],
+      materialId: [volume.gasTypeId ?? null, Validators.required],
+      flueGasTemperature: [volume.flueGasTemperature ?? null, Validators.required],
+      oxygenCalculationMethod: this.fb.nonNullable.control<OxygenCalculationMethod>(volume.oxygenCalculationMethod ?? OxygenCalculationMethod.ExcessAir, Validators.required),
+      excessAirPercentage: [volume.excessAirPercentage ?? null, [Validators.required, Validators.min(0)]],
+      o2InFlueGas: [volume.o2InFlueGas ?? null, [Validators.required, Validators.min(0), Validators.max(MAX_O2_IN_FLUE_GAS)]],
+      combustionAirTemperature: [volume.combustionAirTemperature ?? null, Validators.required],
+      moistureInAirCombustion: [volume.moistureInAirCombustion ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      fuelTemperature: [volume.fuelTemperature ?? null, Validators.required],
+      ambientAirTemp: [volume.ambientAirTemp ?? null, Validators.required],
+      CH4: [volume.CH4 ?? null, PERCENT_VALIDATORS],
+      C2H6: [volume.C2H6 ?? null, PERCENT_VALIDATORS],
+      N2: [volume.N2 ?? null, PERCENT_VALIDATORS],
+      H2: [volume.H2 ?? null, PERCENT_VALIDATORS],
+      C3H8: [volume.C3H8 ?? null, PERCENT_VALIDATORS],
+      C4H10_CnH2n: [volume.C4H10_CnH2n ?? null, PERCENT_VALIDATORS],
+      H2O: [volume.H2O ?? null, PERCENT_VALIDATORS],
+      CO: [volume.CO ?? null, PERCENT_VALIDATORS],
+      CO2: [volume.CO2 ?? null, PERCENT_VALIDATORS],
+      SO2: [volume.SO2 ?? null, PERCENT_VALIDATORS],
+      O2: [volume.O2 ?? null, PERCENT_VALIDATORS],
+      specificGravity: [volume.specificGravity ?? null],
+      heatingValue: [volume.heatingValue ?? null],
+      heatingValueVolume: [volume.heatingValueVolume ?? null],
     });
     return this.setTemperatureValidators(form);
   }
@@ -164,28 +163,27 @@ export class FlueGasFormService {
   }
 
   getFlueGasMassForm(loss: FlueGas = {}, settings: Settings): FlueGasMassForm {
-    const mass = loss.flueGasByMass;
-    const defaultTemp = this.toSettingsTemp(DEFAULT_TEMP_F, settings);
+    const mass = loss.flueGasByMass ?? { ...this.newFlueGasConditions(settings), gasTypeId: DEFAULT_MASS_MATERIAL_ID, ashDischargeTemperature: 0, unburnedCarbonInAsh: 0 };
     const form: FlueGasMassForm = this.fb.group({
-      materialId: [mass?.gasTypeId ?? DEFAULT_MASS_MATERIAL_ID, Validators.required],
-      flueGasTemperature: [mass?.flueGasTemperature ?? this.toSettingsTemp(DEFAULT_FLUE_GAS_TEMP_F, settings), Validators.required],
-      oxygenCalculationMethod: this.fb.nonNullable.control<OxygenCalculationMethod>(mass?.oxygenCalculationMethod ?? OxygenCalculationMethod.ExcessAir, Validators.required),
-      excessAirPercentage: [mass?.excessAirPercentage ?? 0, [Validators.required, Validators.min(0)]],
-      o2InFlueGas: [mass?.o2InFlueGas ?? 0, [Validators.required, Validators.min(0), Validators.max(MAX_O2_IN_FLUE_GAS)]],
-      combustionAirTemperature: [mass?.combustionAirTemperature ?? defaultTemp, Validators.required],
-      moistureInAirCombustion: [mass?.moistureInAirCombustion ?? DEFAULT_MOISTURE_PERCENT, [Validators.required, Validators.min(0), Validators.max(100)]],
-      fuelTemperature: [mass?.fuelTemperature ?? defaultTemp, Validators.required],
-      ambientAirTemp: [mass?.ambientAirTemp ?? defaultTemp, Validators.required],
-      ashDischargeTemperature: [mass?.ashDischargeTemperature ?? 0, Validators.required],
-      unburnedCarbonInAsh: [mass?.unburnedCarbonInAsh ?? 0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      carbon: [mass?.carbon ?? null, PERCENT_VALIDATORS],
-      hydrogen: [mass?.hydrogen ?? null, PERCENT_VALIDATORS],
-      sulphur: [mass?.sulphur ?? null, PERCENT_VALIDATORS],
-      inertAsh: [mass?.inertAsh ?? null, PERCENT_VALIDATORS],
-      o2: [mass?.o2 ?? null, PERCENT_VALIDATORS],
-      moisture: [mass?.moisture ?? null, PERCENT_VALIDATORS],
-      nitrogen: [mass?.nitrogen ?? null, PERCENT_VALIDATORS],
-      heatingValue: [mass?.heatingValue ?? null],
+      materialId: [mass.gasTypeId ?? null, Validators.required],
+      flueGasTemperature: [mass.flueGasTemperature ?? null, Validators.required],
+      oxygenCalculationMethod: this.fb.nonNullable.control<OxygenCalculationMethod>(mass.oxygenCalculationMethod ?? OxygenCalculationMethod.ExcessAir, Validators.required),
+      excessAirPercentage: [mass.excessAirPercentage ?? null, [Validators.required, Validators.min(0)]],
+      o2InFlueGas: [mass.o2InFlueGas ?? null, [Validators.required, Validators.min(0), Validators.max(MAX_O2_IN_FLUE_GAS)]],
+      combustionAirTemperature: [mass.combustionAirTemperature ?? null, Validators.required],
+      moistureInAirCombustion: [mass.moistureInAirCombustion ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      fuelTemperature: [mass.fuelTemperature ?? null, Validators.required],
+      ambientAirTemp: [mass.ambientAirTemp ?? null, Validators.required],
+      ashDischargeTemperature: [mass.ashDischargeTemperature ?? null, Validators.required],
+      unburnedCarbonInAsh: [mass.unburnedCarbonInAsh ?? null, [Validators.required, Validators.min(0), Validators.max(100)]],
+      carbon: [mass.carbon ?? null, PERCENT_VALIDATORS],
+      hydrogen: [mass.hydrogen ?? null, PERCENT_VALIDATORS],
+      sulphur: [mass.sulphur ?? null, PERCENT_VALIDATORS],
+      inertAsh: [mass.inertAsh ?? null, PERCENT_VALIDATORS],
+      o2: [mass.o2 ?? null, PERCENT_VALIDATORS],
+      moisture: [mass.moisture ?? null, PERCENT_VALIDATORS],
+      nitrogen: [mass.nitrogen ?? null, PERCENT_VALIDATORS],
+      heatingValue: [mass.heatingValue ?? null],
     });
     return this.setTemperatureValidators(form);
   }
@@ -233,6 +231,21 @@ export class FlueGasFormService {
       control.updateValueAndValidity({ emitEvent: false });
     });
     return form;
+  }
+
+  /** Starting values for a new entry or a type switch; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
+  private newFlueGasConditions(settings: Settings): FlueGasByVolume & FlueGasByMass {
+    const defaultTemp = this.toSettingsTemp(DEFAULT_TEMP_F, settings);
+    return {
+      flueGasTemperature: this.toSettingsTemp(DEFAULT_FLUE_GAS_TEMP_F, settings),
+      oxygenCalculationMethod: OxygenCalculationMethod.ExcessAir,
+      excessAirPercentage: 0,
+      o2InFlueGas: 0,
+      combustionAirTemperature: defaultTemp,
+      moistureInAirCombustion: DEFAULT_MOISTURE_PERCENT,
+      fuelTemperature: defaultTemp,
+      ambientAirTemp: defaultTemp,
+    };
   }
 
   private withBound(validator: (bound: number) => ReturnType<typeof Validators.min>, bound: number | null) {

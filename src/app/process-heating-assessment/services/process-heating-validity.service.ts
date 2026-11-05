@@ -179,7 +179,7 @@ export class ProcessHeatingValidityService {
     const results = phast.operatingHours ? this.resultsService.scenarioResults(scenario) : undefined;
     const minElectricityInput = this.energyInputFormService.getMinElectricityInput(results, settings);
     return losses.every(loss => {
-      const form = this.energyInputFormService.getEnergyInputForm(loss, settings);
+      const form = this.energyInputFormService.getEnergyInputForm(loss);
       this.energyInputFormService.setMinElectricityInput(form, minElectricityInput);
       return form.valid;
     });

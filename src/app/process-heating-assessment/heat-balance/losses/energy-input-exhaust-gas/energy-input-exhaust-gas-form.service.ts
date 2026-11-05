@@ -9,17 +9,20 @@ export type EnergyInputExhaustGasForm = FormGroup<{
   electricalHeaterEfficiency: FormControl<number | null>;
 }>;
 
+/** Starting values for a new entry; a saved entry rebuilds from exactly what was saved so a cleared field stays invalid. */
+export const NEW_ENERGY_INPUT_EXHAUST_GAS_LOSS: EnergyInputExhaustGasLoss = { totalHeatInput: 0, availableHeat: 100, electricalHeaterEfficiency: 100 };
+
 @Injectable()
 export class EnergyInputExhaustGasFormService {
   private readonly fb = inject(FormBuilder);
 
-  getEnergyInputExhaustGasForm(loss: EnergyInputExhaustGasLoss = {}): EnergyInputExhaustGasForm {
+  getEnergyInputExhaustGasForm(loss: EnergyInputExhaustGasLoss = NEW_ENERGY_INPUT_EXHAUST_GAS_LOSS): EnergyInputExhaustGasForm {
     const percentValidators = [Validators.required, GreaterThanValidator.greaterThan(0), Validators.max(100)];
-    const totalHeatInput = loss.totalHeatInput ?? 0;
+    const totalHeatInput = loss.totalHeatInput ?? null;
     const form = this.fb.group({
       totalHeatInput: [totalHeatInput, [Validators.required, Validators.min(0)]],
-      availableHeat: [totalHeatInput > 0 ? loss.availableHeat ?? 100 : 100, percentValidators],
-      electricalHeaterEfficiency: [loss.electricalHeaterEfficiency ?? 100, percentValidators],
+      availableHeat: [totalHeatInput > 0 ? loss.availableHeat ?? null : 100, percentValidators],
+      electricalHeaterEfficiency: [loss.electricalHeaterEfficiency ?? null, percentValidators],
     });
 
     // The Available Heat field is hidden at zero heat input, so an invalid leftover value there would block the form with no visible error

@@ -26,6 +26,13 @@ describe('EnergyInputExhaustGasFormService', () => {
     expect(service.getEnergyInputExhaustGasForm({ electricalHeaterEfficiency: 101 }).controls.electricalHeaterEfficiency.errors?.['max']).toBeTruthy();
   });
 
+  it('keeps a saved value that was cleared empty, so the form stays invalid', () => {
+    const form = service.getEnergyInputExhaustGasForm({ totalHeatInput: 5, availableHeat: 80 });
+
+    expect(form.controls.electricalHeaterEfficiency.value).toBeNull();
+    expect(form.valid).toBeFalse();
+  });
+
   it('requires total heat input', () => {
     const form = service.getEnergyInputExhaustGasForm();
     form.controls.totalHeatInput.setValue(null);
@@ -38,7 +45,7 @@ describe('EnergyInputExhaustGasFormService', () => {
   });
 
   it('resets an invalid available heat to 100 when heat input goes to 0', () => {
-    const form = service.getEnergyInputExhaustGasForm({ totalHeatInput: 5, availableHeat: 80 });
+    const form = service.getEnergyInputExhaustGasForm({ totalHeatInput: 5, availableHeat: 80, electricalHeaterEfficiency: 90 });
     form.controls.availableHeat.setValue(0);
     expect(form.valid).toBeFalse();
 
@@ -57,7 +64,7 @@ describe('EnergyInputExhaustGasFormService', () => {
   });
 
   it('ignores a stored available heat when the loaded heat input is 0', () => {
-    expect(service.getEnergyInputExhaustGasForm({ totalHeatInput: 0, availableHeat: 0 }).valid).toBeTrue();
+    expect(service.getEnergyInputExhaustGasForm({ totalHeatInput: 0, availableHeat: 0, electricalHeaterEfficiency: 90 }).valid).toBeTrue();
   });
 
   it('builds a loss with otherLosses fixed at 0', () => {

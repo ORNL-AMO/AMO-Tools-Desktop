@@ -21,34 +21,37 @@ describe('EnergyInputFormService', () => {
     convert = TestBed.inject(ConvertUnitsService);
   });
 
-  it('is invalid on an empty loss and defaults heating values in Imperial', () => {
-    const form = service.getEnergyInputForm({}, settingsFor('Imperial'));
+  it('starts a new entry with Imperial heating values', () => {
+    const form = service.getEnergyInputForm(service.newEnergyInput(settingsFor('Imperial')));
 
     expect(form.valid).toBeFalse();
     expect(form.controls.coalHeatingValue.value).toBe(12000);
     expect(form.controls.electrodeHeatingValue.value).toBe(14000);
   });
 
-  it('defaults heating values in kJ/kg for Metric', () => {
-    const form = service.getEnergyInputForm({}, settingsFor('Metric'));
+  it('starts a new entry with heating values in kJ/kg for Metric', () => {
+    const form = service.getEnergyInputForm(service.newEnergyInput(settingsFor('Metric')));
 
     expect(form.controls.coalHeatingValue.value).toBeCloseTo(convert.value(12000).from('btuLb').to('kJkg'), 6);
   });
 
-  it('keeps saved heating values over defaults', () => {
-    expect(service.getEnergyInputForm({ ...LOSS, coalHeatingValue: 9000 }, settingsFor('Imperial')).controls.coalHeatingValue.value).toBe(9000);
+  it('keeps a saved heating value that was cleared empty, so the form stays invalid', () => {
+    const form = service.getEnergyInputForm({ ...LOSS, coalHeatingValue: undefined });
+
+    expect(form.controls.coalHeatingValue.value).toBeNull();
+    expect(form.valid).toBeFalse();
   });
 
   it('is valid for a complete loss', () => {
-    expect(service.getEnergyInputForm(LOSS, settingsFor('Imperial')).valid).toBeTrue();
+    expect(service.getEnergyInputForm(LOSS).valid).toBeTrue();
   });
 
   it('rejects negative inputs', () => {
-    expect(service.getEnergyInputForm({ ...LOSS, electricityInput: -1 }, settingsFor('Imperial')).controls.electricityInput.errors?.['min']).toBeTruthy();
+    expect(service.getEnergyInputForm({ ...LOSS, electricityInput: -1 }).controls.electricityInput.errors?.['min']).toBeTruthy();
   });
 
   it('round-trips a loss through the form', () => {
-    expect(service.buildEnergyInput(service.getEnergyInputForm(LOSS, settingsFor('Imperial')))).toEqual(LOSS);
+    expect(service.buildEnergyInput(service.getEnergyInputForm(LOSS))).toEqual(LOSS);
   });
 
   it('derives natural gas heat input from flow rate', () => {
@@ -73,7 +76,7 @@ describe('EnergyInputFormService', () => {
     });
 
     it('makes electricity input below the minimum invalid and at or above it valid', () => {
-      const form = service.getEnergyInputForm(LOSS, settingsFor('Imperial'));
+      const form = service.getEnergyInputForm(LOSS);
       service.setMinElectricityInput(form, 6000);
       expect(form.controls.electricityInput.invalid).toBeTrue();
 
@@ -82,14 +85,14 @@ describe('EnergyInputFormService', () => {
     });
 
     it('falls back to non-negative when no minimum is available', () => {
-      const form = service.getEnergyInputForm(LOSS, settingsFor('Imperial'));
+      const form = service.getEnergyInputForm(LOSS);
       service.setMinElectricityInput(form, 6000);
       service.setMinElectricityInput(form, undefined);
       expect(form.controls.electricityInput.valid).toBeTrue();
     });
 
     it('does not emit value changes when the validators are replaced', () => {
-      const form = service.getEnergyInputForm(LOSS, settingsFor('Imperial'));
+      const form = service.getEnergyInputForm(LOSS);
       let emissions = 0;
       form.valueChanges.subscribe(() => emissions++);
       service.setMinElectricityInput(form, 6000);

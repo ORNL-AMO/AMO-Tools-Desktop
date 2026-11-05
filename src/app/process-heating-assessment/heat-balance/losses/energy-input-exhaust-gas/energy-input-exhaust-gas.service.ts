@@ -4,7 +4,7 @@ import { EnergyInputExhaustGasLoss } from '../../../../shared/models/phast/losse
 import { Losses } from '../../../models/phast';
 import { LossFormItem, LossFormListService } from '../loss-form-list.service';
 import { EnergyInputExhaustGasCalculationService } from './energy-input-exhaust-gas-calculation.service';
-import { EnergyInputExhaustGasForm, EnergyInputExhaustGasFormService } from './energy-input-exhaust-gas-form.service';
+import { EnergyInputExhaustGasForm, EnergyInputExhaustGasFormService, NEW_ENERGY_INPUT_EXHAUST_GAS_LOSS } from './energy-input-exhaust-gas-form.service';
 
 export type EnergyInputExhaustGasItem = LossFormItem<EnergyInputExhaustGasForm>;
 
@@ -16,6 +16,10 @@ export class EnergyInputExhaustGasService extends LossFormListService<EnergyInpu
   protected readonly lossKey: keyof Losses = 'energyInputExhaustGasLoss';
 
   readonly losses: Signal<EnergyInputExhaustGasItem[]> = this.items;
+
+  protected override newLoss(): EnergyInputExhaustGasLoss {
+    return NEW_ENERGY_INPUT_EXHAUST_GAS_LOSS;
+  }
 
   protected buildForm(loss: EnergyInputExhaustGasLoss): EnergyInputExhaustGasForm {
     return this.formService.getEnergyInputExhaustGasForm(loss);
