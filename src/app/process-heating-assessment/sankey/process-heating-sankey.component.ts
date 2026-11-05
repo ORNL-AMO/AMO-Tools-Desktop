@@ -22,9 +22,17 @@ export class ProcessHeatingSankeyComponent {
   readonly labelStyleOptions = SANKEY_LABEL_STYLE_OPTIONS;
   readonly selectedId = signal<string>('baseline');
 
-  readonly scenarios: Signal<SankeyScenario[]> = computed(() =>
-    this.sankeyResultsService.scenarios().filter(scenario => this.validityService.scenarioValidity(scenario.id).isValid)
-  );
+  /**
+   * Empty while the baseline is invalid, even if a modification's overrides make it valid.
+   * Validity passes a scenario without a losses object, which the shared sankey can't read.
+   */
+  readonly scenarios: Signal<SankeyScenario[]> = computed(() => {
+    if (!this.validityService.scenarioValidity('baseline').isValid) {
+      return [];
+    }
+    return this.sankeyResultsService.scenarios()
+      .filter(scenario => scenario.phast.losses && this.validityService.scenarioValidity(scenario.id).isValid);
+  });
 
   /** Falls back to the first scenario when the selected one is deleted or becomes invalid. */
   readonly selectedScenario: Signal<SankeyScenario | undefined> = computed(() =>

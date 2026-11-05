@@ -12,7 +12,7 @@ function buildScenarios(count = 3): SankeyScenario[] {
   return Array.from({ length: count }, (_, i) => ({
     id: i === 0 ? 'baseline' : `mod${i}`,
     name: i === 0 ? 'Baseline' : `Scenario ${i}`,
-    phast: { name: `phast${i}` } as SharedPHAST,
+    phast: { name: `phast${i}`, losses: {} } as SharedPHAST,
   }));
 }
 
@@ -65,6 +65,22 @@ describe('ProcessHeatingSankeyComponent', () => {
       invalidIds.set(['mod1']);
       fixture.detectChanges();
       expect(options()).toEqual(['Baseline', 'Scenario 2']);
+    });
+
+    it('hides scenarios without losses, which the shared sankey cannot read', () => {
+      scenarios.update(list => list.map(scenario => scenario.id === 'mod1' ? { ...scenario, phast: { name: 'phast1' } as SharedPHAST } : scenario));
+      fixture.detectChanges();
+      expect(options()).toEqual(['Baseline', 'Scenario 2']);
+    });
+
+    it('renders no controls or sankey while the baseline is invalid, even with a valid modification', () => {
+      invalidIds.set(['baseline']);
+      fixture.detectChanges();
+
+      expect(component.selectedScenario()).toBeUndefined();
+      expect(fixture.nativeElement.querySelector('select')).toBeNull();
+      expect(fixture.nativeElement.querySelectorAll('button').length).toBe(0);
+      expect(sankeys().length).toBe(0);
     });
 
     it('falls back to the first scenario when the selected one becomes invalid', () => {
