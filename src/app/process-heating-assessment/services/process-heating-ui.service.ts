@@ -19,7 +19,7 @@ export class ProcessHeatingUiService {
   private readonly STEPPED_ROUTES = inject(STEPPED_ROUTES);
 
   private readonly REQUIRES_VALID_BASELINE_VIEWS: ReadonlySet<string> = new Set<string>([
-    MainView.ASSESSMENT, MainView.DIAGRAM, MainView.REPORT, ...Object.values(AssessmentView), ...Object.values(ReportView),
+    MainView.ASSESSMENT, MainView.DIAGRAM, MainView.REPORT, MainView.SANKEY, ...Object.values(AssessmentView), ...Object.values(ReportView),
   ]);
 
   private readonly LOSS_VIEW_KEYS: Partial<Record<string, keyof Losses>> = {
@@ -69,7 +69,7 @@ export class ProcessHeatingUiService {
   readonly isAssessmentSettingsValidSignal: Signal<boolean> = this.validityService.isAssessmentSettingsValid;
   readonly isHeatBalanceValidSignal: Signal<boolean> = computed(() => this.validityService.scenarioValidity('baseline').isValid);
 
-  /** Why Assessment, Diagram and Report are disabled; undefined while the settings and baseline are valid. */
+  /** Why Assessment, Diagram, Report and Sankey are disabled; undefined while the settings and baseline are valid. */
   readonly blockedReason: Signal<string | undefined> = computed(() => {
     const invalidSteps = [
       ...(this.isAssessmentSettingsValidSignal() ? [] : ['Assessment Settings']),
@@ -202,7 +202,7 @@ export class ProcessHeatingUiService {
     return lossKey ? this.processHeatingAssessmentService.lossSignal('baseline', lossKey)?.length ?? 0 : undefined;
   }
 
-  /** Assessment and Report need valid baseline inputs, since they present results built from them. */
+  /** Assessment, Diagram, Report and Sankey need valid baseline inputs, since they present results built from them. */
   canVisitView(view: string): boolean {
     if (!this.isTabVisibleForHeatingEquipmentConfiguration(view)) return false;
     return !this.REQUIRES_VALID_BASELINE_VIEWS.has(view) || (this.isAssessmentSettingsValidSignal() && this.isHeatBalanceValidSignal());

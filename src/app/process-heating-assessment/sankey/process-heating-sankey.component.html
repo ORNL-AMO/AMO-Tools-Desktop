@@ -1,0 +1,24 @@
+@let scenario = selectedScenario();
+<nav class="navbar">
+  <div class="d-flex justify-content-start align-items-center w-100 flex-wrap">
+    <div class="px-2">
+      <select name="sankeyScenario" class="form-control" [ngModel]="scenario?.id" (ngModelChange)="selectedId.set($event)">
+        @for (option of scenarios(); track option.id) {
+          <option [ngValue]="option.id">{{option.name}}</option>
+        }
+      </select>
+    </div>
+    <div class="btn-group btn-group-sm align-self-center">
+      @for (option of labelStyleOptions; track option.style) {
+        <button type="button" class="btn btn-sm" [class.active]="labelStyle() === option.style"
+          (click)="labelStyle.set(option.style)">{{option.label}}</button>
+      }
+    </div>
+  </div>
+</nav>
+@if (scenario) {
+  <div class="sankey-padding">
+    <app-phast-sankey [phast]="scenario.phast" [settings]="settings()" [labelStyle]="labelStyle()"
+      [appBackground]="true"></app-phast-sankey>
+  </div>
+}

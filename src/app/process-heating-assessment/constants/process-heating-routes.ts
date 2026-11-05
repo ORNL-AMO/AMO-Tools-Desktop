@@ -4,6 +4,7 @@ export const ROUTE_TOKENS = {
   assessment: 'assessment',
   diagram: 'diagram',
   report: 'report',
+  sankey: 'sankey',
 
   // Baseline sub-tabs
   assessmentSettings: 'assessment-settings',

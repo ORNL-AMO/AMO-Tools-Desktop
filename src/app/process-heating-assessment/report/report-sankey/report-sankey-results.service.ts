@@ -1,16 +1,9 @@
 import { computed, inject, Injectable, Signal } from '@angular/core';
-import { PHAST as SharedPHAST } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
-import { getModificationName } from '../../models/modification';
-import { ModificationService } from '../../services/modification.service';
-import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
+import { SankeyResultsService, SankeyScenario } from '../../sankey/sankey-results.service';
 import { ExecutiveSummaryResultsService } from '../executive-summary/executive-summary-results.service';
 
-export interface ReportSankeyScenario {
-  id: string;
-  name: string;
-  /** Legacy-shaped scenario copy, since the shared sankey component reads and annotates its input */
-  phast: SharedPHAST;
+export interface ReportSankeyScenario extends SankeyScenario {
   costSavings: number;
   energySavings: number;
 }
@@ -24,29 +17,19 @@ export interface ReportSankeyUI {
 /** Builds the per-scenario sankey inputs and savings for the Sankey tab and its export. */
 @Injectable()
 export class ReportSankeyResultsService {
-  private readonly assessmentService = inject(ProcessHeatingAssessmentService);
-  private readonly modificationService = inject(ModificationService);
+  private readonly sankeyResultsService = inject(SankeyResultsService);
   private readonly executiveSummaryService = inject(ExecutiveSummaryResultsService);
 
   readonly reportSankeyUI: Signal<ReportSankeyUI | undefined> = computed(() => {
-    const settings = this.assessmentService.settingsSignal();
+    const settings = this.sankeyResultsService.settings();
     const savings = this.executiveSummaryService.scenarioSavings();
     if (!savings.baseline) {
       return undefined;
     }
 
-    const scenarioIds = [
-      { id: 'baseline', name: 'Baseline' },
-      ...this.modificationService.modifications().map(modification => ({ id: modification.id, name: getModificationName(modification) })),
-    ];
-    const scenarios = scenarioIds
+    const scenarios = this.sankeyResultsService.scenarios()
       .filter(({ id }) => savings[id])
-      .map(({ id, name }) => ({
-        id,
-        name,
-        phast: { ...this.assessmentService.scenarioPhastSignal(id) } as unknown as SharedPHAST,
-        ...savings[id],
-      }));
+      .map(scenario => ({ ...scenario, ...savings[scenario.id] }));
     return { settings, scenarios, energySavingsUnit: `${settings.energyResultUnit}/yr` };
   });
 }
