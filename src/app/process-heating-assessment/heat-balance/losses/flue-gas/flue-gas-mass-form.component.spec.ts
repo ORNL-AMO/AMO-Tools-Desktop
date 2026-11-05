@@ -147,11 +147,19 @@ describe('FlueGasMassFormComponent', () => {
       expect(fixture.nativeElement.querySelector('.alert-warning')).not.toBeNull();
     });
 
-    it('renders ash discharge, unburned carbon and an input for every analysis field', () => {
+    it('renders ash discharge and unburned carbon inputs', () => {
       render();
 
-      for (const control of ['ashDischargeTemperature', 'unburnedCarbonInAsh', ...FLUE_GAS_FUEL_ANALYSIS.map(({ key }) => key)]) {
+      for (const control of ['ashDischargeTemperature', 'unburnedCarbonInAsh']) {
         expect(fixture.nativeElement.querySelector(`#${control}_instance-1`)).withContext(control).not.toBeNull();
+      }
+    });
+
+    it('does not render inputs for the fuel analysis fields', () => {
+      render();
+
+      for (const { key } of FLUE_GAS_FUEL_ANALYSIS) {
+        expect(fixture.nativeElement.querySelector(`#${key}_instance-1`)).withContext(key).toBeNull();
       }
     });
   });
@@ -194,7 +202,7 @@ describe('FlueGasMassFormComponent', () => {
 
     it('ignores differences that belong to another material type', () => {
       render();
-      fixture.componentRef.setInput('differingFields', new Set(['flueGasByVolume.CH4']));
+      fixture.componentRef.setInput('differingFields', new Set(['flueGasByVolume.flueGasTemperature']));
       fixture.detectChanges();
 
       expect(fixture.nativeElement.querySelector('.indicate-different')).toBeNull();

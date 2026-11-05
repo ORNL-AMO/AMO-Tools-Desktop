@@ -155,8 +155,15 @@ describe('ChargeMaterialComponent', () => {
       expect(fixture.nativeElement.querySelector('.charge-material-totals')).toBeNull();
     });
 
-    it('shows totals with values from materialResultTotals when materials exist', () => {
+    it('hides totals when there is a single material', () => {
       materialsSignal.set([solidItem]);
+      fixture.detectChanges();
+
+      expect(fixture.nativeElement.querySelector('.charge-material-totals')).toBeNull();
+    });
+
+    it('shows totals with values from materialResultTotals when multiple materials exist', () => {
+      materialsSignal.set([solidItem, { ...solidItem, id: 'second' }]);
       materialResultTotalsSignal.set({ heatRequired: 12, netHeatLoss: 8, endoExoHeat: 4 });
       fixture.detectChanges();
 
@@ -209,7 +216,7 @@ describe('ChargeMaterialComponent', () => {
       expect(fixture.nativeElement.querySelector('.text-danger')).not.toBeNull();
     });
 
-    it('shows the summary view and hides the sub-form when the item is collapsed', () => {
+    it('shows the results and hides the sub-form when the item is collapsed', () => {
       materialsSignal.set([solidItem]);
       collapsedIdsSignal.set(new Set([solidItem.id]));
       fixture.detectChanges();
@@ -218,11 +225,11 @@ describe('ChargeMaterialComponent', () => {
       expect(fixture.nativeElement.querySelector('app-charge-material-solid-form')).toBeNull();
     });
 
-    it('shows the sub-form and hides the summary view when the item is expanded', () => {
+    it('shows both the results and the sub-form when the item is expanded', () => {
       materialsSignal.set([solidItem]);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('.charge-material-summary')).toBeNull();
+      expect(fixture.nativeElement.querySelector('.charge-material-summary')).not.toBeNull();
       expect(fixture.nativeElement.querySelector('app-charge-material-solid-form')).not.toBeNull();
     });
 

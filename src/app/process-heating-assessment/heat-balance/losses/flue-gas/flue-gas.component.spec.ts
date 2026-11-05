@@ -1,16 +1,23 @@
-import { NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, signal, WritableSignal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { SharedPipesModule } from '../../../../shared/shared-pipes/shared-pipes.module';
 import { FlueGasWarnings } from '../../../../shared/models/phast/losses/flueGas';
 import { Settings } from '../../../../shared/models/settings';
 import { ProcessHeatingAssessmentService } from '../../../services/process-heating-assessment.service';
+import { ProcessHeatingResultsService } from '../../../services/process-heating-results.service';
 import { FlueGasAvailableHeatResult } from './flue-gas-calculation.service';
 import { FlueGasComponent } from './flue-gas.component';
 import { FlueGasForm, FlueGasType } from './flue-gas-form.service';
 import { FlueGasService } from './flue-gas.service';
 
 const MOCK_SETTINGS = { unitsOfMeasure: 'Imperial', energyResultUnit: 'Btu' } as Settings;
+@Component({ selector: 'app-flue-gas-volume-form', template: '<ng-content></ng-content>', standalone: false })
+class FlueGasVolumeFormStubComponent {}
+
+@Component({ selector: 'app-flue-gas-mass-form', template: '<ng-content></ng-content>', standalone: false })
+class FlueGasMassFormStubComponent {}
+
 const RESULT: FlueGasAvailableHeatResult = { calculatedFlueGasO2: 2, calculatedExcessAir: 10, availableHeat: 75 };
 
 describe('FlueGasComponent', () => {
@@ -21,19 +28,24 @@ describe('FlueGasComponent', () => {
   let flueGasType: WritableSignal<FlueGasType>;
   let result: WritableSignal<FlueGasAvailableHeatResult | null>;
   let warnings: WritableSignal<FlueGasWarnings | null>;
+  let resultsServiceSpy: jasmine.SpyObj<ProcessHeatingResultsService>;
+  let phast: WritableSignal<object | undefined>;
 
   beforeEach(async () => {
     formList = signal<FlueGasForm[]>([]);
     flueGasType = signal<FlueGasType>(FlueGasType.ByVolume);
     result = signal<FlueGasAvailableHeatResult | null>(null);
     warnings = signal<FlueGasWarnings | null>(null);
+    phast = signal<object | undefined>(undefined);
+    resultsServiceSpy = jasmine.createSpyObj('ProcessHeatingResultsService', ['getResults']);
     serviceSpy = jasmine.createSpyObj('FlueGasService', ['initialize', 'switchType', 'differingFields'], { formList, flueGasType, result, warnings });
 
     await TestBed.configureTestingModule({
       imports: [FormsModule, SharedPipesModule],
-      declarations: [FlueGasComponent],
+      declarations: [FlueGasComponent, FlueGasVolumeFormStubComponent, FlueGasMassFormStubComponent],
       providers: [
-        { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: signal(MOCK_SETTINGS) } },
+        { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: signal(MOCK_SETTINGS), scenarioPhastSignal: () => phast() } },
+        { provide: ProcessHeatingResultsService, useValue: resultsServiceSpy },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -81,6 +93,8 @@ describe('FlueGasComponent', () => {
 
   describe('fuel type switch', () => {
     it('asks the service to switch type when the selection changes', () => {
+      formList.set([{} as FlueGasForm]);
+      fixture.detectChanges();
       const select: HTMLSelectElement = fixture.nativeElement.querySelector('select');
       select.value = select.options[1].value;
       select.dispatchEvent(new Event('change'));
@@ -140,20 +154,16 @@ describe('FlueGasComponent', () => {
       expect(fixture.nativeElement.querySelector('.alert-warning')).not.toBeNull();
     });
 
-    it('shows the condensing flue gas advisory when the service reports it', () => {
+    it('shows gross heat and flue gas losses from the total heat input and available heat', () => {
       formList.set([{} as FlueGasForm]);
-      warnings.set({ flueGasTemp: 'Flue Gas Temperature less than 212, gases may be condensing' });
+      phast.set({});
+      resultsServiceSpy.getResults.and.returnValue({ totalInput: 75, exothermicHeat: 0 } as never);
+      result.set(RESULT);
       fixture.detectChanges();
 
-      expect(fixture.nativeElement.querySelector('.alert-warning').textContent).toContain('condensing');
-    });
-
-    it('does not render warnings that a validator already guards', () => {
-      formList.set([{} as FlueGasForm]);
-      warnings.set({ excessAirWarning: 'Excess Air must be greater than 0 percent', o2Warning: 'O2 out of range' });
-      fixture.detectChanges();
-
-      expect(fixture.nativeElement.querySelector('.alert-warning')).toBeNull();
+      const text = fixture.nativeElement.querySelector('.loss-results').textContent;
+      expect(text).toContain('Gross Heat 100.000 Btu/hr');
+      expect(text).toContain('Flue Gas Losses 25.0000 Btu/hr');
     });
   });
 
@@ -161,6 +171,7 @@ describe('FlueGasComponent', () => {
     const select = (): HTMLElement => fixture.nativeElement.querySelector('select');
 
     it('highlights the fuel type select when it differs from baseline', () => {
+      formList.set([{} as FlueGasForm]);
       serviceSpy.differingFields.and.returnValue(new Set(['flueGasType']) as never);
       fixture.detectChanges();
 
@@ -168,6 +179,7 @@ describe('FlueGasComponent', () => {
     });
 
     it('leaves the fuel type select unhighlighted when it matches baseline', () => {
+      formList.set([{} as FlueGasForm]);
       serviceSpy.differingFields.and.returnValue(new Set(['flueGasByVolume.CH4']) as never);
       fixture.detectChanges();
 

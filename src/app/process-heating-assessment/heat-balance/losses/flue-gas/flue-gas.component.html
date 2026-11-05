@@ -1,44 +1,57 @@
 @let panelPrefix = scenario();
 
-<div class="panel-container p-3">
-  <h5 class="mb-2">Flue Gas</h5>
-
+<ng-template #fuelTypeSelect>
   <div class="form-group">
-    <label for="flueGasType_{{ panelPrefix }}">Fuel Type</label>
+    <label for="flueGasType_{{ panelPrefix }}">Type of fuel</label>
     <select class="form-control" id="flueGasType_{{ panelPrefix }}" [class.indicate-different]="service.differingFields()?.has('flueGasType')" [ngModel]="service.flueGasType()" (ngModelChange)="service.switchType($event)">
-      <option [value]="FlueGasType.ByVolume">Gas (By Volume)</option>
-      <option [value]="FlueGasType.ByMass">Solid/Liquid (By Mass)</option>
+      <option [value]="FlueGasType.ByVolume">Gas</option>
+      <option [value]="FlueGasType.ByMass">Solid/Liquid</option>
     </select>
-    <span class="form-text small text-muted">Switching type resets the flue gas inputs.</span>
   </div>
+</ng-template>
 
-  @for (form of service.formList(); track form) {
-    @if (service.flueGasType() === FlueGasType.ByMass) {
-      <app-flue-gas-mass-form [form]="asMassForm(form)" [differingFields]="service.differingFields()" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-mass-form>
-    } @else {
-      <app-flue-gas-volume-form [form]="asVolumeForm(form)" [differingFields]="service.differingFields()" [settings]="settings()" [instanceId]="panelPrefix"></app-flue-gas-volume-form>
-    }
+<div class="panel-container p-2">
+  <div class="card mb-2">
+    <div class="card-body p-2">
+      @for (form of service.formList(); track form) {
+        @if (service.flueGasType() === FlueGasType.ByMass) {
+          <app-flue-gas-mass-form [form]="asMassForm(form)" [differingFields]="service.differingFields()" [warnings]="service.warnings()" [settings]="settings()" [instanceId]="panelPrefix">
+            <ng-container *ngTemplateOutlet="fuelTypeSelect"></ng-container>
+          </app-flue-gas-mass-form>
+        } @else {
+          <app-flue-gas-volume-form [form]="asVolumeForm(form)" [differingFields]="service.differingFields()" [warnings]="service.warnings()" [settings]="settings()" [instanceId]="panelPrefix">
+            <ng-container *ngTemplateOutlet="fuelTypeSelect"></ng-container>
+          </app-flue-gas-volume-form>
+        }
+      }
+    </div>
 
     @let result = service.result();
-    <div class="loss-results mt-3">
-      @if (flueGasTempWarning(); as warning) {
-        <div class="alert alert-warning small">{{warning}}</div>
-      }
-      @if (availableHeatWarning(); as warning) {
-        <div class="alert alert-warning small">{{warning}}</div>
-      }
-      <div class="d-flex justify-content-between small">
-        <span class="font-weight-bold">Calculated Flue Gas O<sub>2</sub></span>
-        <span>@if (result) { {{result.calculatedFlueGasO2 | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
+    @let heatResults = systemResults();
+    @if (availableHeatWarning(); as warning) {
+      <div class="alert alert-warning small mx-2 mb-2">{{warning}}</div>
+    }
+    <div class="loss-results result-strip card-body p-2">
+      <div class="result-item">
+        <span class="result-label">O<sub>2</sub> In Flue Gas</span>
+        <span class="result-value">@if (result) { {{result.calculatedFlueGasO2 | sigFigs: 6}} % } @else { —— }</span>
       </div>
-      <div class="d-flex justify-content-between small">
-        <span class="font-weight-bold">Calculated Excess Air</span>
-        <span>@if (result) { {{result.calculatedExcessAir | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
+      <div class="result-item">
+        <span class="result-label">Excess Air</span>
+        <span class="result-value">@if (result) { {{result.calculatedExcessAir | sigFigs: 6}} % } @else { —— }</span>
       </div>
-      <div class="d-flex justify-content-between small">
-        <span class="font-weight-bold">Available Heat</span>
-        <span>@if (result) { {{result.availableHeat | sigFigs: 6}} % } @else { &mdash;&mdash; }</span>
+      <div class="result-item">
+        <span class="result-label">Available Heat</span>
+        <span class="result-value">@if (result) { {{result.availableHeat | sigFigs: 6}} % } @else { —— }</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Gross Heat</span>
+        <span class="result-value">@if (heatResults) { {{heatResults.grossHeat | sigFigs: 6}} {{resultsUnit}} } @else { —— }</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">Flue Gas Losses</span>
+        <span class="result-value">@if (heatResults) { {{heatResults.systemLosses | sigFigs: 6}} {{resultsUnit}} } @else { —— }</span>
       </div>
     </div>
-  }
+  </div>
 </div>

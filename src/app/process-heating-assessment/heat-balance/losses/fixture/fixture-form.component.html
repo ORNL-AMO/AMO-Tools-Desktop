@@ -11,14 +11,15 @@
 
 <form [formGroup]="form()">
   <div class="form-group">
-    <label for="materialId_{{ instanceId() }}">Material Name</label>
+    <label for="materialId_{{ instanceId() }}">Material Name
+      <button type="button" class="btn btn-link p-0 d-block small" (click)="materialSelector.openAddMaterialModal()">Add New Solid Material</button>
+    </label>
     <select class="form-control" id="materialId_{{ instanceId() }}" formControlName="materialId" [class.indicate-different]="differingFields()?.has('materialName')"
       (change)="materialSelector.onMaterialSelected(f.materialId.value)" [class.invalid]="f.materialId.invalid">
       @for (material of materialSelector.materialTypes(); track material.id) {
         <option [ngValue]="material.id">{{ material.substance }}</option>
       }
     </select>
-    <button type="button" class="btn btn-link p-0 form-text small" (click)="materialSelector.openAddMaterialModal()">Add New...</button>
     <app-form-control-errors [control]="f.materialId" [settings]="settings()"></app-form-control-errors>
   </div>
 

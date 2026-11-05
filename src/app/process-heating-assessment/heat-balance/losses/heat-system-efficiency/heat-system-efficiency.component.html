@@ -1,32 +1,29 @@
-<div class="panel-container p-3">
-  <h5>Heat System Efficiency</h5>
-  <form [formGroup]="form">
-    <div class="form-section">
-      <div class="form-group">
-        <label class="small" for="efficiency_{{scenario()}}">Heat System Efficiency</label>
-        <div class="input-group" [class.invalid]="form.controls.efficiency.invalid" [class.indicate-different]="efficiencyDiffersFromBaseline()">
-          <input type="number" step="any" min="0" max="100" class="form-control"
-            id="efficiency_{{scenario()}}" formControlName="efficiency" onfocus="this.select();">
-          <span class="input-group-addon units">%</span>
+<div class="panel-container p-2">
+  <div class="card mb-2">
+    <form [formGroup]="form" class="card-body p-2">
+      <div class="form-section">
+        <div class="form-group">
+          <label class="small" for="efficiency_{{scenario()}}">Heat System Efficiency</label>
+          <div class="input-group" [class.invalid]="form.controls.efficiency.invalid" [class.indicate-different]="efficiencyDiffersFromBaseline()">
+            <input type="number" step="any" min="0" max="100" class="form-control"
+              id="efficiency_{{scenario()}}" formControlName="efficiency" onfocus="this.select();">
+            <span class="input-group-addon units">%</span>
+          </div>
+          <app-form-control-errors [control]="form.controls.efficiency" [settings]="settings()">
+          </app-form-control-errors>
         </div>
-        <app-form-control-errors [control]="form.controls.efficiency" [settings]="settings()">
-        </app-form-control-errors>
       </div>
-    </div>
-  </form>
+    </form>
 
-  <div class="loss-results mt-3">
-    <div class="d-flex justify-content-between small font-weight-bold">
-      <span>Gross Heat</span>
-      <span>
-        @if (results(); as r) { {{r.grossHeat | sigFigs: 6}} {{resultsUnit}} } @else { &mdash;&mdash; }
-      </span>
-    </div>
-    <div class="d-flex justify-content-between small font-weight-bold">
-      <span>System Losses</span>
-      <span>
-        @if (results(); as r) { {{r.systemLosses | sigFigs: 6}} {{resultsUnit}} } @else { &mdash;&mdash; }
-      </span>
+    <div class="loss-results result-strip card-body p-2">
+      <div class="result-item">
+        <span class="result-label">Gross Heat</span>
+        <span class="result-value">@if (results(); as r) { {{r.grossHeat | sigFigs: 6}} {{resultsUnit}} } @else { —— }</span>
+      </div>
+      <div class="result-item">
+        <span class="result-label">System Losses</span>
+        <span class="result-value">@if (results(); as r) { {{r.systemLosses | sigFigs: 6}} {{resultsUnit}} } @else { —— }</span>
+      </div>
     </div>
   </div>
 </div>

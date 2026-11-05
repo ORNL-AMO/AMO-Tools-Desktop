@@ -115,6 +115,34 @@ describe('FlueGasConditionsFieldsComponent', () => {
     });
   });
 
+  describe('field order and warnings', () => {
+    it('lists ambient air temperature right after flue gas temperature', () => {
+      render(OxygenCalculationMethod.ExcessAir);
+
+      const ids = Array.from(fixture.nativeElement.querySelectorAll('input, select')).map((el: Element) => el.id.replace('_instance-1', ''));
+      expect(ids.slice(0, 4)).toEqual(['flueGasTemperature', 'ambientAirTemp', 'oxygenCalculationMethod', 'excessAirPercentage']);
+    });
+
+    it('shows a warning beside its field and marks O2 and moisture inputs with the error class', () => {
+      render(OxygenCalculationMethod.OxygenInFlueGas);
+      fixture.componentRef.setInput('warnings', { o2Warning: 'O2 out of range', moistureInAirCombustionWarning: 'Moisture too high', flueGasTemp: 'Condensing' });
+      fixture.detectChanges();
+
+      const text = fixture.nativeElement.textContent;
+      expect(text).toContain('O2 out of range');
+      expect(text).toContain('Moisture too high');
+      expect(text).toContain('Condensing');
+      expect(fixture.nativeElement.querySelector('[id="o2InFlueGas_instance-1"]').closest('.input-group').classList).toContain('error');
+      expect(fixture.nativeElement.querySelector('[id="moistureInAirCombustion_instance-1"]').closest('.input-group').classList).toContain('error');
+    });
+
+    it('shows no warnings when none are reported', () => {
+      render(OxygenCalculationMethod.OxygenInFlueGas);
+
+      expect(fixture.nativeElement.querySelector('.alert-warning')).toBeNull();
+    });
+  });
+
   describe('compare indicators', () => {
     const group = (id: string): HTMLElement => fixture.nativeElement.querySelector(`[id="${id}"]`).closest('.input-group');
 

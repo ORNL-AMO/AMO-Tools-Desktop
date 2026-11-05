@@ -8,7 +8,7 @@ import { MaterialSelector } from '../charge-material/material-selector';
 import { AddSolidLiquidFlueGasMaterialModalComponent } from './add-solid-liquid-flue-gas-material-modal.component';
 import { adaptSolidLiquidFlueGasMaterialDb } from './flue-gas-material-db.adapter';
 import { FLUE_GAS_FUEL_ANALYSIS, FlueGasMassForm } from './flue-gas-form.service';
-import { FlueGas, FlueGasByMass } from '../../../../shared/models/phast/losses/flueGas';
+import { FlueGas, FlueGasWarnings, FlueGasByMass } from '../../../../shared/models/phast/losses/flueGas';
 import { LossFieldDifferences, nestedDifferences } from '../loss-compare.util';
 
 @Component({
@@ -22,12 +22,11 @@ export class FlueGasMassFormComponent implements OnInit {
   readonly settings = input.required<Settings>();
   readonly instanceId = input.required<string>();
   readonly differingFields = input<LossFieldDifferences<FlueGas>>();
+  readonly warnings = input<FlueGasWarnings | null>(null);
 
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly massDifferences = computed(() => nestedDifferences<FlueGasByMass>(this.differingFields(), 'flueGasByMass'));
-
-  readonly fuelAnalysis = FLUE_GAS_FUEL_ANALYSIS;
 
   readonly materialSelector = new MaterialSelector<SolidLiquidFlueGasMaterial, FlueGasMassForm>({
     form: this.form,

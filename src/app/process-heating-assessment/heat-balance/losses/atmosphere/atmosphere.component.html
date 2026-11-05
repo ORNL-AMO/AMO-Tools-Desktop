@@ -1,10 +1,19 @@
 @let panelPrefix = scenario();
 
-<div class="panel-container p-3">
-  <div class="d-flex align-items-center justify-content-between mb-2">
-    <h5 class="mb-0">Atmosphere</h5>
-    <button class="btn btn-primary btn-sm" (click)="service.add()">+ Add Loss</button>
+<div class="panel-container p-2">
+  <div class="d-flex justify-content-end mb-2">
+    <button class="btn btn-primary loss-add-btn" (click)="service.add()">Add Loss</button>
   </div>
+
+  @if (service.losses().length > 1) {
+    <div class="loss-total result-strip result-totals">
+      <div class="result-strip-title">All Losses</div>
+      <div class="result-item">
+        <span class="result-label">Total Atmosphere Heat Loss</span>
+        <span class="result-value">{{ service.total() | sigFigs: 6 }} {{ resultsUnit }}</span>
+      </div>
+    </div>
+  }
 
   @if (service.losses().length === 0) {
     <div class="no-data text-center p-4">
@@ -13,47 +22,38 @@
   }
 
   @for (item of service.losses(); track scenario() + '_' + item.id) {
-    <div class="card mb-3">
-      <div class="card-header d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-2 flex-grow-1">
-          <button class="btn btn-sm btn-link p-0 text-dark" (click)="service.toggleCollapse(item.id)">
-            @if (item.collapse) { <span class="fa fa-chevron-right"></span> } @else { <span class="fa fa-chevron-down"></span> }
-          </button>
-          <input type="text" class="form-control form-control-sm flex-grow-1"
-            [value]="item.name"
-            (input)="service.setName(item.id, $event.target['value'])">
-        </div>
-        <button class="btn btn-sm btn-link text-danger" (click)="service.remove(item.id)" title="Remove loss">
-          <span class="fa fa-times"></span>
+    <div class="card mb-2">
+      <div class="card-header d-flex align-items-center flex-wrap py-1 px-2">
+        <button
+          type="button"
+          class="btn btn-link btn-sm p-0 mr-2"
+          [attr.aria-label]="item.collapse ? 'Expand loss' : 'Collapse loss'"
+          (click)="service.toggleCollapse(item.id)"
+        >
+          <span class="fa" [class.fa-chevron-right]="item.collapse" [class.fa-chevron-down]="!item.collapse"></span>
+        </button>
+        <input
+          type="text"
+          class="form-control form-control-sm loss-name-input mr-2"
+          [value]="item.name"
+          (input)="service.setName(item.id, $event.target['value'])"
+        />
+        <button class="btn btn-link btn-sm small text-danger py-0 ml-auto" (click)="service.remove(item.id)" title="Remove loss">
+          <span class="fa fa-trash"></span> Remove
         </button>
       </div>
 
       @if (!item.collapse) {
-        <div class="card-body">
+        <div class="card-body p-2">
           <app-atmosphere-form [item]="item" [differingFields]="service.differingFields(item.id)" [settings]="settings()" [instanceId]="panelPrefix + '_' + item.id"></app-atmosphere-form>
-
-          <div class="loss-results mt-3">
-            <div class="d-flex justify-content-between small">
-              <span class="font-weight-bold">{{item.name}} Heat Loss</span>
-              <span>
-                @if (item.heatLoss != null) {
-                  {{item.heatLoss | sigFigs: 6}} {{resultsUnit}}
-                } @else {
-                  &mdash;&mdash;
-                }
-              </span>
-            </div>
-          </div>
         </div>
       }
-    </div>
-  }
 
-  @if (service.losses().length > 0) {
-    <div class="loss-total mt-3 p-2 border-top">
-      <div class="d-flex justify-content-between small font-weight-bold">
-        <span>Total Atmosphere Heat Loss</span>
-        <span>{{service.total() | sigFigs: 6}} {{resultsUnit}}</span>
+      <div class="loss-results result-strip card-body p-2">
+        <div class="result-item">
+          <span class="result-label">Heat Loss</span>
+          <span class="result-value">{{ item.heatLoss != null ? (item.heatLoss | sigFigs: 6) + ' ' + resultsUnit : '——' }}</span>
+        </div>
       </div>
     </div>
   }
