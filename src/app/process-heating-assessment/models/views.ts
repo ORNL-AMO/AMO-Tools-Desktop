@@ -1,6 +1,7 @@
 export const MainView = {
   BASELINE: 'baseline',
   ASSESSMENT: 'assessment',
+  DIAGRAM: 'diagram',
   REPORT: 'report',
 } as const;
 export type MainView = typeof MainView[keyof typeof MainView];
@@ -79,6 +80,7 @@ export interface ViewLink {
 export const MAIN_VIEW_LINKS: ViewLink[] = [
   { view: MainView.BASELINE, label: 'Baseline' },
   { view: MainView.ASSESSMENT, label: 'Assessment' },
+  { view: MainView.DIAGRAM, label: 'Diagram' },
   { view: MainView.REPORT, label: 'Report' },
 ];
 

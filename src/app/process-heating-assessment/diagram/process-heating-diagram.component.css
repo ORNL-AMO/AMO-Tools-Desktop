@@ -1,0 +1,12 @@
+:host {
+    display: block;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.diagram-image {
+    width: 1110px;
+    max-width: 100%;
+    height: auto;
+}

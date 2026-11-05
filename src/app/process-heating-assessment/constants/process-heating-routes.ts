@@ -2,6 +2,7 @@ export const ROUTE_TOKENS = {
   // Main tabs
   baseline: 'baseline',
   assessment: 'assessment',
+  diagram: 'diagram',
   report: 'report',
 
   // Baseline sub-tabs

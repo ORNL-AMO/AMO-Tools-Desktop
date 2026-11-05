@@ -19,7 +19,7 @@ export class ProcessHeatingUiService {
   private readonly STEPPED_ROUTES = inject(STEPPED_ROUTES);
 
   private readonly REQUIRES_VALID_BASELINE_VIEWS: ReadonlySet<string> = new Set<string>([
-    MainView.ASSESSMENT, MainView.REPORT, ...Object.values(AssessmentView), ...Object.values(ReportView),
+    MainView.ASSESSMENT, MainView.DIAGRAM, MainView.REPORT, ...Object.values(AssessmentView), ...Object.values(ReportView),
   ]);
 
   private readonly LOSS_VIEW_KEYS: Partial<Record<string, keyof Losses>> = {

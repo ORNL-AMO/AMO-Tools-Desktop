@@ -75,6 +75,7 @@ import { OpeningSizeOpportunityComponent } from './explore-opportunities/opening
 import { OpeningEmissivityOpportunityComponent } from './explore-opportunities/opening-emissivity-opportunity/opening-emissivity-opportunity.component';
 import { OpeningTimeOpenOpportunityComponent } from './explore-opportunities/opening-time-open-opportunity/opening-time-open-opportunity.component';
 import { ExpertViewComponent } from './expert-view/expert-view.component';
+import { ProcessHeatingDiagramComponent } from './diagram/process-heating-diagram.component';
 import { ReportComponent } from './report/report.component';
 import { EnergySummaryComponent } from './report/energy-summary/energy-summary.component';
 import { EnergySummaryResultsService } from './report/energy-summary/energy-summary-results.service';
@@ -301,9 +302,15 @@ export const ROUTES: Route[] = [
         ]
       },
       {
+        path: ROUTE_TOKENS.diagram,
+        component: ProcessHeatingDiagramComponent,
+        data: { mainView: ROUTE_TOKENS.diagram, stepIndex: 22 },
+        canActivate: [requiresValidBaselineGuard],
+      },
+      {
         path: ROUTE_TOKENS.report,
         component: ReportComponent,
-        data: { mainView: ROUTE_TOKENS.report, stepIndex: 22 },
+        data: { mainView: ROUTE_TOKENS.report, stepIndex: 23 },
         canActivate: [requiresValidBaselineGuard],
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.energySummary, pathMatch: 'full' },
@@ -375,6 +382,7 @@ export const ROUTES: Route[] = [
     PreheatCombustionAirOpportunityComponent,
     OperationsOpportunityComponent,
     ExpertViewComponent,
+    ProcessHeatingDiagramComponent,
     ReportComponent,
     ExecutiveSummaryComponent,
     InvalidModificationAlertComponent,

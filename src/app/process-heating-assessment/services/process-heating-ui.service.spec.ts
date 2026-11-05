@@ -253,6 +253,7 @@ describe('ProcessHeatingUiService validity gating', () => {
   it('allows Assessment and Report when settings and baseline are valid', () => {
     expect(service.canVisitView(MainView.ASSESSMENT)).toBeTrue();
     expect(service.canVisitView(MainView.REPORT)).toBeTrue();
+    expect(service.canVisitView(MainView.DIAGRAM)).toBeTrue();
   });
 
   for (const [name, invalidate] of [
@@ -264,6 +265,7 @@ describe('ProcessHeatingUiService validity gating', () => {
 
       expect(service.canVisitView(MainView.ASSESSMENT)).toBeFalse();
       expect(service.canVisitView(MainView.REPORT)).toBeFalse();
+      expect(service.canVisitView(MainView.DIAGRAM)).toBeFalse();
       expect(service.canVisitView(ReportView.EXECUTIVE_SUMMARY)).toBeFalse();
     });
 

@@ -31,6 +31,7 @@ describe('deriveSteppedRoutes', () => {
       { view: ROUTE_TOKENS.meteredEnergy, path: `${ROUTE_TOKENS.baseline}/${ROUTE_TOKENS.meteredEnergy}` },
       /** `assessment`'s target is its bare path; the router's own `redirectTo` resolves it, same as `report` below. */
       { view: ROUTE_TOKENS.assessment, path: ROUTE_TOKENS.assessment },
+      { view: ROUTE_TOKENS.diagram, path: ROUTE_TOKENS.diagram },
       { view: ROUTE_TOKENS.report, path: ROUTE_TOKENS.report },
     ]);
   });
