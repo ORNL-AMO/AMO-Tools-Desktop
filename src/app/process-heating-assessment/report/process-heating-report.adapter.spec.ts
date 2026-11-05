@@ -85,9 +85,13 @@ function buildReportSankey(modificationCount = 1): ReportSankeyUI {
 
 const INPUT_SUMMARY: InputSummaryUI = {
   modificationNames: MODIFICATION_NAMES,
-  sections: [{
-    label: 'Wall Loss 1',
-    rows: [{ label: 'Ambient Temperature', units: '℉', baseline: { value: 80 }, modifications: [{ value: 90 }] }],
+  categories: [{
+    label: 'Wall Loss',
+    count: 1,
+    sections: [{
+      label: 'Wall Loss 1',
+      rows: [{ label: 'Ambient Temperature', units: '℉', baseline: { value: 80 }, modifications: [{ value: 90 }] }],
+    }],
   }],
 };
 

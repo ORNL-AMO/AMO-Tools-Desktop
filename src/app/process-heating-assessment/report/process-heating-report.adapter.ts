@@ -270,7 +270,7 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
     const headers = this.buildHeaders(ui.modificationNames);
     const rows: string[][] = [];
     const subGroupHeaderIndices: number[] = [];
-    ui.sections.forEach(section => {
+    ui.categories.flatMap(category => category.sections).forEach(section => {
       appendSubGroup(rows, subGroupHeaderIndices, headers.length, decodeHtmlEntities(section.label), section.rows.map(row => this.rowToStrings(row)));
     });
     return [{

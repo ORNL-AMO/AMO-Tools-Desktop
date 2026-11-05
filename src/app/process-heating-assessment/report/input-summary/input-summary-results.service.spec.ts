@@ -48,7 +48,7 @@ describe('InputSummaryResultsService', () => {
   }
 
   function section(label: string) {
-    return ui().sections.find(candidate => candidate.label === label);
+    return ui().categories.flatMap(category => category.sections).find(candidate => candidate.label === label);
   }
 
   function row(sectionLabel: string, rowLabel: string) {
@@ -126,6 +126,16 @@ describe('InputSummaryResultsService', () => {
     const added = row('Wall Loss 2: South wall', 'Total Outside Surface Area');
     expect(added.baseline.value).toBeNull();
     expect(added.modifications[0].value).toBe(50);
+  });
+
+  it('groups sections into categories, counting item entries but not scenario-level sections', () => {
+    scenarios['baseline'] = buildPhast({
+      losses: { wallLosses: [{ name: 'North wall', surfaceArea: 100 }, { name: 'South wall', surfaceArea: 50 }] } as Losses,
+    });
+    const categoriesByLabel = new Map(ui().categories.map(category => [category.label, category]));
+    expect(categoriesByLabel.get('Wall Loss').count).toBe(2);
+    expect(categoriesByLabel.get('Wall Loss').sections.length).toBe(2);
+    expect(categoriesByLabel.get('Operations').count).toBeUndefined();
   });
 
   it('reports modification names', () => {
@@ -214,7 +224,7 @@ describe('InputSummaryResultsService', () => {
     it('lists entries only a modification has after the baseline entries', () => {
       scenarios['baseline'] = buildPhast({ losses: { wallLosses: [wall('a', 'A')] } as Losses });
       scenarios['mod1'] = buildPhast({ losses: { wallLosses: [wall('c', 'C'), wall('a', 'A')] } as Losses });
-      expect(ui().sections.map(section => section.label).filter(label => label.startsWith('Wall'))).toEqual(['Wall Loss 1: A', 'Wall Loss 2: C']);
+      expect(ui().categories.flatMap(category => category.sections).map(section => section.label).filter(label => label.startsWith('Wall'))).toEqual(['Wall Loss 1: A', 'Wall Loss 2: C']);
     });
 
     it('falls back to position for entries saved without an ID', () => {

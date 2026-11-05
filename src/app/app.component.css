@@ -348,6 +348,11 @@ select.form-control:not([size]):not([multiple]) {
     border: #BF3D00 solid !important;
 }
 
+.process-heating-assessment .indicate-report-field-different {
+    color: var(--process-heating-assessment) !important;
+    font-weight: bold !important;
+}
+
 .fsat .indicate-report-field-different {
   font-weight: bold;
   color: #007bff  !important;
