@@ -161,6 +161,15 @@ export class ProcessHeatingValidityService {
     return !check || this.scenarioValidity(scenario)[check.key];
   }
 
+  /**
+   * @param scenario 'baseline' or a modification id
+   * @returns labels of the steps whose saved inputs fail validation, in the order legacy's alert lists them
+   */
+  invalidStepLabels(scenario: AssessmentScenario): string[] {
+    const validity = this.scenarioValidity(scenario);
+    return this.checks.filter(check => !validity[check.key]).map(check => check.label);
+  }
+
   private errorLines(validity: PhastValid): string[] {
     return this.checks.filter(check => !validity[check.key]).map(check => `Errors found in ${check.label}`);
   }

@@ -232,11 +232,44 @@ describe('ProcessHeatingUiService validity gating', () => {
             isAssessmentSettingsValid: settingsValid,
             scenarioValidity: () => ({ isValid: baselineValid() }),
             isStepValid: (scenario: string, view: string) => scenario !== 'baseline' || !invalidBaselineSteps().includes(view),
+            invalidStepLabels: () => invalidBaselineSteps(),
           },
         },
       ],
     });
     service = TestBed.inject(ProcessHeatingUiService);
+  });
+
+  it('explains nothing while the settings and baseline are valid', () => {
+    expect(service.blockedReason()).toBeUndefined();
+  });
+
+  it('names the invalid settings step in the blocked reason', () => {
+    settingsValid.set(false);
+    expect(service.blockedReason()).toBe('Fix invalid inputs in: Assessment Settings');
+  });
+
+  it('names the invalid baseline steps in the blocked reason', () => {
+    invalidBaselineSteps.set(['Wall', 'Cooling']);
+    expect(service.blockedReason()).toBe('Fix invalid inputs in: Wall, Cooling');
+  });
+
+  it('lists the settings step before the invalid baseline steps', () => {
+    settingsValid.set(false);
+    invalidBaselineSteps.set(['Wall']);
+    expect(service.blockedReason()).toBe('Fix invalid inputs in: Assessment Settings, Wall');
+  });
+
+  it('returns the explore notes key only for the modification it was set on', () => {
+    service.activeModificationIdSignal.set('mod1');
+    service.setExploreNotesKey('wallNotes');
+    expect(service.exploreNotesKey()).toBe('wallNotes');
+
+    service.activeModificationIdSignal.set('mod2');
+    expect(service.exploreNotesKey()).toBeUndefined();
+
+    service.activeModificationIdSignal.set('mod1');
+    expect(service.exploreNotesKey()).toBe('wallNotes');
   });
 
   it('exposes the validity of the settings and the baseline heat balance', () => {

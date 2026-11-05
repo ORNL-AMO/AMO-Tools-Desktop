@@ -41,6 +41,7 @@
           routerLinkActive="active"
           [routerLink]="[link.view]"
           [class.disabled]="isLinkDisabled(link)"
+          [attr.title]="isLinkDisabled(link) ? blockedReason() : null"
           (click)="handleCanNavigate($event, link)">{{link.label}}</a>
       </div>
     }
@@ -54,6 +55,7 @@
             routerLinkActive="active"
             [routerLink]="[link.view]"
             [class.disabled]="isLinkDisabled(link)"
+          [attr.title]="isLinkDisabled(link) ? blockedReason() : null"
             (click)="handleCanNavigate($event, link)">{{link.label}}</a>
         </div>
       }

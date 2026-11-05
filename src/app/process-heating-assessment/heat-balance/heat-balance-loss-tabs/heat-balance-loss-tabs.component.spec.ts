@@ -29,7 +29,8 @@ describe('HeatBalanceLossTabsComponent', () => {
       }));
 
   beforeEach(() => {
-    tabNavHelper = jasmine.createSpyObj('TabNavHelper', ['isLinkDisabled', 'isTabInvalid', 'handleCanNavigate']);
+    tabNavHelper = jasmine.createSpyObj('TabNavHelper', ['isLinkDisabled', 'isTabInvalid', 'invalidTabLabel', 'handleCanNavigate']);
+    tabNavHelper.invalidTabLabel.and.callFake(link => tabNavHelper.isTabInvalid(link) ? `${link.label}, has invalid inputs` : null);
     uiService = jasmine.createSpyObj('ProcessHeatingUiService', ['continue', 'back', 'lossCount'], {
       visibleHeatBalanceTabs: signal(tabs),
       lossSubView: signal(''),
@@ -58,6 +59,17 @@ describe('HeatBalanceLossTabsComponent', () => {
     fixture.detectChanges();
 
     expect(badgedTabs()).toEqual(['Flue Gas']);
+  });
+
+  it('gives only the invalid tabs an accessible name and tooltip stating why they are marked', () => {
+    tabNavHelper.isTabInvalid.and.callFake(link => link.view === LossView.FLUE_GAS);
+    uiService.lossCount.and.returnValue(2);
+    fixture.detectChanges();
+
+    const links = Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('ul.d-lg-block > li > a'));
+    expect(links[1].getAttribute('aria-label')).toBe('Flue Gas, has invalid inputs');
+    expect(links[1].getAttribute('title')).toBe('Flue Gas, has invalid inputs');
+    expect(links[0].hasAttribute('aria-label')).toBeFalse();
   });
 
   it('shows each tab\'s entry count, green while its inputs are valid', () => {

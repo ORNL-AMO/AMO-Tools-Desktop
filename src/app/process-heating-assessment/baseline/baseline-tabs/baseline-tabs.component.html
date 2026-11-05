@@ -9,6 +9,8 @@
         (click)="handleCanNavigate($event, link)">
       <a routerLinkActive="active" [routerLink]="[link.view]"
          [class.disabled]="isDisabled"
+         [attr.aria-label]="invalidTabLabel(link)"
+         [attr.title]="invalidTabLabel(link)"
          (click)="handleCanNavigate($event, link)">
         <span class="step-number">{{$index + 1}}</span>
         {{link.label}}
@@ -32,6 +34,8 @@
           (click)="handleCanNavigate($event, link)" [routerLink]="[link.view]">
         <a class="nav-link small" routerLinkActive="active" [routerLink]="[link.view]"
            [class.disabled]="isDisabled"
+           [attr.aria-label]="invalidTabLabel(link)"
+           [attr.title]="invalidTabLabel(link)"
            (click)="handleCanNavigate($event, link)">
           <span class="step-number">{{$index + 1}}</span>
           {{link.label}}

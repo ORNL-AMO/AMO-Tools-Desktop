@@ -6,7 +6,9 @@
         [class.disabled]="isDisabled"
         (click)="handleCanNavigate($event, link)">
       <a routerLinkActive="active" [routerLink]="[link.view]"
-         [class.disabled]="isDisabled">
+         [class.disabled]="isDisabled"
+         [attr.aria-label]="invalidTabLabel(link)"
+         [attr.title]="invalidTabLabel(link)">
         {{link.label}}
         @let count = lossCount(link);
         @let isInvalid = isTabInvalid(link);
@@ -36,7 +38,9 @@
           [class.disabled]="isDisabled"
           (click)="handleCanNavigate($event, link)" [routerLink]="[link.view]">
         <a class="nav-link small" routerLinkActive="active" [routerLink]="[link.view]"
-           [class.disabled]="isDisabled">
+           [class.disabled]="isDisabled"
+           [attr.aria-label]="invalidTabLabel(link)"
+           [attr.title]="invalidTabLabel(link)">
           {{link.label}}
           @let count = lossCount(link);
           @let isInvalid = isTabInvalid(link);

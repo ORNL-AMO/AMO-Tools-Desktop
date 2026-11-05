@@ -24,7 +24,8 @@ describe('BaselineTabsComponent', () => {
       canGoBack,
     });
 
-    tabNavHelper = jasmine.createSpyObj('TabNavHelper', ['isLinkDisabled', 'isTabInvalid', 'handleCanNavigate']);
+    tabNavHelper = jasmine.createSpyObj('TabNavHelper', ['isLinkDisabled', 'isTabInvalid', 'invalidTabLabel', 'handleCanNavigate']);
+    tabNavHelper.invalidTabLabel.and.callFake(link => tabNavHelper.isTabInvalid(link) ? `${link.label}, has invalid inputs` : null);
     TestBed.configureTestingModule({
       declarations: [BaselineTabsComponent],
       providers: [
@@ -42,6 +43,17 @@ describe('BaselineTabsComponent', () => {
 
     const invalidTabs = Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('ul.d-lg-block > li.missing-data'));
     expect(invalidTabs.map(tab => tab.textContent.trim())).toEqual(['1 Assessment Settings']);
+  });
+
+  it('gives only the invalid tabs an accessible name and tooltip stating why they are marked', () => {
+    tabNavHelper.isTabInvalid.and.callFake(link => link.view === BaselineView.ASSESSMENT_SETTINGS);
+    fixture.detectChanges();
+
+    const links = Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('ul.d-lg-block > li > a'));
+    expect(links[0].getAttribute('aria-label')).toBe('Assessment Settings, has invalid inputs');
+    expect(links[0].getAttribute('title')).toBe('Assessment Settings, has invalid inputs');
+    expect(links[1].hasAttribute('aria-label')).toBeFalse();
+    expect(links[1].hasAttribute('title')).toBeFalse();
   });
 
   describe('small screen step controls', () => {

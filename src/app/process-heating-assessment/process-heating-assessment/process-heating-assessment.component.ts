@@ -15,6 +15,7 @@ export class ProcessHeatingAssessmentComponent implements OnInit {
 
   readonly canContinue: Signal<boolean> = this.uiService.canContinue;
   readonly canGoBack: Signal<boolean> = this.uiService.canGoBack;
+  readonly blockedReason: Signal<string | undefined> = this.uiService.blockedReason;
 
   ngOnInit() {
     this.analyticsService.sendEvent('view-process-heating-assessment', undefined);

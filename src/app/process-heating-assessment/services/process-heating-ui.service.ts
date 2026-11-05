@@ -69,6 +69,15 @@ export class ProcessHeatingUiService {
   readonly isAssessmentSettingsValidSignal: Signal<boolean> = this.validityService.isAssessmentSettingsValid;
   readonly isHeatBalanceValidSignal: Signal<boolean> = computed(() => this.validityService.scenarioValidity('baseline').isValid);
 
+  /** Why Assessment, Diagram and Report are disabled; undefined while the settings and baseline are valid. */
+  readonly blockedReason: Signal<string | undefined> = computed(() => {
+    const invalidSteps = [
+      ...(this.isAssessmentSettingsValidSignal() ? [] : ['Assessment Settings']),
+      ...this.validityService.invalidStepLabels('baseline'),
+    ];
+    return invalidSteps.length ? `Fix invalid inputs in: ${invalidSteps.join(', ')}` : undefined;
+  });
+
   // Loss tabs filtered to the active HeatingSystemConfiguration
   readonly visibleHeatBalanceTabs: Signal<ViewLink[]> = computed(() =>
     HEAT_BALANCE_VIEW_LINKS.filter(link => this.isTabVisibleForHeatingEquipmentConfiguration(link.view))
