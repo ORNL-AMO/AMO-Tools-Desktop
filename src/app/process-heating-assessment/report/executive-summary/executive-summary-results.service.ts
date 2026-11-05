@@ -26,6 +26,7 @@ export interface ScenarioSavings {
 }
 
 export interface SummaryNote {
+  modificationId: string;
   modificationName: string;
   lossName: string;
   note: string;
@@ -401,6 +402,7 @@ export class ExecutiveSummaryResultsService {
       NOTE_LABELS
         .filter(({ key }) => modification.notes?.[key])
         .map(({ key, label }) => ({
+          modificationId: modification.id,
           modificationName: getModificationName(modification),
           lossName: label,
           note: modification.notes[key],

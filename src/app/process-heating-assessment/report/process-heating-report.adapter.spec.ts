@@ -3,7 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { firstValueFrom } from 'rxjs';
 import { Assessment } from '../../shared/models/assessment';
 import { ReportDocument } from '../../shared/report-builder/models/report-document.model';
-import { KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { AlertSection, KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { PHAST } from '../models/phast';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
 import { InvalidModification, ProcessHeatingValidityService } from '../services/process-heating-validity.service';
@@ -186,7 +187,7 @@ describe('ProcessHeatingReportAdapter', () => {
     const row = buildExecutiveSummary().summaryRows[0];
     executiveSummary = buildExecutiveSummary({
       costRows: [row],
-      notes: [{ modificationName: 'Scenario 1', lossName: 'Wall Losses', note: 'Added insulation' }],
+      notes: [{ modificationId: 'mod1', modificationName: 'Scenario 1', lossName: 'Wall Losses', note: 'Added insulation' }],
     });
     const document = await build();
     expect(section<SummaryTableSection>(document, 'Annual Costs')).toBeDefined();
@@ -282,49 +283,80 @@ describe('ProcessHeatingReportAdapter', () => {
   });
 
   describe('invalid modifications', () => {
+    const TWO_MODIFICATION_NAMES = [{ id: 'mod1', name: 'Scenario 1' }, { id: 'mod2', name: 'Scenario 2' }];
+    const withTwoModifications = (row: ReportTableRow): ReportTableRow => ({ ...row, modifications: [{ value: 'mod1 value' }, { value: 'mod2 value' }] });
+    const groupSections = async (group: string) => (await build()).sections.filter(candidate => candidate.group === group);
+
     beforeEach(() => {
       invalidModifications = [{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall', 'Errors found in Cooling'] }];
     });
 
-    it('lists them ahead of the executive summary table', async () => {
-      const sections = (await build()).sections.filter(candidate => candidate.group === 'executive-summary');
-      const alert = sections[0] as KeyValueSection;
+    it('warns about them in an alert ahead of the executive summary table', async () => {
+      const alert = (await groupSections('executive-summary'))[0] as AlertSection;
 
-      expect(alert.title).toBe('Invalid Modifications');
-      expect(alert.rows).toEqual([{ label: 'Scenario 1', value: 'Errors found in Wall, Errors found in Cooling' }]);
-      expect(sections[1].title).toBe('Executive Summary');
+      expect(alert.type).toBe('alert');
+      expect(alert.title).toBe('Invalid Modifications (Omitted)');
+      expect(alert.lines).toEqual(['Scenario 1: Errors found in Wall, Errors found in Cooling']);
     });
 
-    it('lists them ahead of the result data table and moves its page break to the list', async () => {
-      const sections = (await build()).sections.filter(candidate => candidate.group === 'results-data');
+    it('leaves them out of the executive summary tables and notes', async () => {
+      executiveSummary = buildExecutiveSummary({
+        modificationNames: TWO_MODIFICATION_NAMES,
+        summaryRows: buildExecutiveSummary().summaryRows.slice(1, 2).map(withTwoModifications),
+        notes: [
+          { modificationId: 'mod1', modificationName: 'Scenario 1', lossName: 'Wall Losses', note: 'Added insulation' },
+          { modificationId: 'mod2', modificationName: 'Scenario 2', lossName: 'Wall Losses', note: 'Thicker walls' },
+        ],
+      });
+      const document = await build();
+      const table = section<SummaryTableSection>(document, 'Executive Summary');
 
-      expect(sections.map(candidate => candidate.title)).toEqual(['Invalid Modifications', 'Result Data']);
+      expect(table.headers).toEqual(['', 'Baseline', 'Scenario 2']);
+      expect(table.rows[0]).toEqual(['Energy Used (MMBtu/yr)', '10,000', 'mod2 value']);
+      expect(section<KeyValueSection>(document, 'Modification Notes').rows).toEqual([{ label: 'Scenario 2 — Wall Losses', value: 'Thicker walls' }]);
+    });
+
+    it('leaves them out of the result data table, warning ahead of it with the page break', async () => {
+      resultsData = { ...RESULTS_DATA, modificationNames: TWO_MODIFICATION_NAMES, rows: RESULTS_DATA.rows.map(withTwoModifications) };
+      const sections = await groupSections('results-data');
+      const table = sections[1] as SummaryTableSection;
+
+      expect(sections.map(candidate => candidate.type)).toEqual(['alert', 'summary-table']);
+      expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, false]);
+      expect(table.headers).toEqual(['Hourly Energy Loss/Use (MMBtu/hr)', 'Baseline', 'Scenario 2']);
+      expect(table.rows[0]).toEqual(['Wall Losses', '1.50', 'mod2 value']);
+    });
+
+    it('leaves them out of the report graphs, warning ahead of them with the page break', async () => {
+      reportGraphs = buildReportGraphs(2);
+      const sections = await groupSections('report-graphs');
+
+      expect(sections.map(candidate => candidate.title)).toEqual([
+        'Invalid Modifications (Omitted)', 'Loss Distribution — Baseline vs. Scenario 2', 'Baseline vs. Scenario 2 Loss Comparison',
+      ]);
+      expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, false, false]);
+    });
+
+    it('falls back to the baseline distribution chart when every modification is invalid', async () => {
+      const sections = await groupSections('report-graphs');
+
+      expect(sections.map(candidate => candidate.title)).toEqual(['Invalid Modifications (Omitted)', 'Baseline Energy Distribution']);
       expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, false]);
     });
 
-    it('lists them ahead of the report graphs and moves the first chart page break to the list', async () => {
-      const sections = (await build()).sections.filter(candidate => candidate.group === 'report-graphs');
-
-      expect(sections[0].title).toBe('Invalid Modifications');
-      expect(sections.slice(1).every(candidate => candidate.type === 'chart')).toBeTrue();
-      expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, ...sections.slice(1).map(() => false)]);
-    });
-
-    it('leaves an invalid scenario out of the sankey charts', async () => {
+    it('leaves them out of the sankey charts, warning ahead of them with the page break', async () => {
       reportSankey = buildReportSankey(2);
-      invalidModifications = [{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }];
+      const sections = await groupSections('report-sankey');
 
-      const charts = (await build()).sections.filter(candidate => candidate.group === 'report-sankey') as ChartSection[];
-
-      expect(charts.map(chart => chart.title)).toEqual(['Baseline Sankey', 'Scenario 2 Sankey']);
-      expect(charts.map(chart => !!chart.pageBreakBefore)).toEqual([true, false]);
+      expect(sections.map(candidate => candidate.title)).toEqual(['Invalid Modifications (Omitted)', 'Baseline Sankey', 'Scenario 2 Sankey']);
+      expect(sections.map(candidate => !!candidate.pageBreakBefore)).toEqual([true, false, false]);
     });
 
-    it('adds nothing when every modification is valid', async () => {
+    it('adds no warning when every modification is valid', async () => {
       invalidModifications = [];
       const document = await build();
 
-      expect(document.sections.some(candidate => candidate.title === 'Invalid Modifications')).toBeFalse();
+      expect(document.sections.some(candidate => candidate.type === 'alert')).toBeFalse();
       expect(section<SummaryTableSection>(document, 'Result Data').pageBreakBefore).toBeTrue();
     });
   });

@@ -6,7 +6,7 @@ import { ReportChartRenderService } from '../../shared/report-builder/services/r
 import { ReportDataAdapter } from '../../shared/report-builder/adapters/report-data-adapter';
 import { appendSubGroup, buildFacilityInfoSections, decodeHtmlEntities, formatCell, formatNumber, labelWithUnits, renderPlotlyChart } from '../../shared/report-builder/adapters/report-adapter.utils';
 import { ReportDocument, ReportMeta, ReportSectionGroup } from '../../shared/report-builder/models/report-document.model';
-import { ChartSection, KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
+import { AlertSection, ChartSection, KeyValueSection, SummaryTableSection } from '../../shared/report-builder/models/report-section.model';
 import { ModificationNameCell, ReportColumnCell, ReportTableRow } from '../../shared/report-builder/models/report-ui-models';
 import { ROUTE_TOKENS } from '../constants/process-heating-routes';
 import { ProcessHeatingAssessmentService } from '../services/process-heating-assessment.service';
@@ -86,19 +86,20 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
     return rows.length ? [{ type: 'key-value-list', title: 'Equipment', rows, group: ROUTE_TOKENS.facilityInfo }] : [];
   }
 
-  private buildExecutiveSummarySections(ui: ExecutiveSummaryUI): Array<SummaryTableSection | KeyValueSection> {
-    const headers = this.buildHeaders(ui.modificationNames);
+  private buildExecutiveSummarySections(ui: ExecutiveSummaryUI): Array<SummaryTableSection | KeyValueSection | AlertSection> {
+    const isValidColumn = this.isValidModificationColumn(ui.modificationNames);
+    const headers = this.buildHeaders(ui.modificationNames.filter(isValidColumn));
     const toSection = (title: string, rows: ReportTableRow[], pageBreakBefore = false): SummaryTableSection => ({
       type: 'summary-table',
       title,
       headers,
-      rows: rows.map(row => this.rowToStrings(row)),
+      rows: rows.map(row => this.rowToStrings({ ...row, modifications: row.modifications.filter(isValidColumn) })),
       emphasisRowsIndices: rows.flatMap((row, index) => (row.className === 'emphasis' ? [index] : [])),
       group: ROUTE_TOKENS.executiveSummary,
       pageBreakBefore,
     });
 
-    const sections: Array<SummaryTableSection | KeyValueSection> = [
+    const sections: Array<SummaryTableSection | KeyValueSection | AlertSection> = [
       ...this.buildInvalidModificationSections(ROUTE_TOKENS.executiveSummary),
       toSection('Executive Summary', ui.summaryRows),
     ];
@@ -109,11 +110,12 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
     ];
     optionalTables.filter(([, rows]) => rows.length).forEach(([title, rows]) => sections.push(toSection(title, rows)));
 
-    if (ui.notes.length) {
+    const notes = ui.notes.filter(note => this.isScenarioValid(note.modificationId));
+    if (notes.length) {
       sections.push({
         type: 'key-value-list',
         title: 'Modification Notes',
-        rows: ui.notes.map(note => ({ label: `${note.modificationName} — ${note.lossName}`, value: note.note })),
+        rows: notes.map(note => ({ label: `${note.modificationName} — ${note.lossName}`, value: note.note })),
         group: ROUTE_TOKENS.executiveSummary,
       });
     }
@@ -163,15 +165,16 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
     return [sourcesTable, ...notesSection, comparisonTable];
   }
 
-  private buildResultsDataSections(ui: ResultsDataUI): Array<SummaryTableSection | KeyValueSection> {
+  private buildResultsDataSections(ui: ResultsDataUI): Array<SummaryTableSection | AlertSection> {
     const invalidModifications = this.buildInvalidModificationSections(ROUTE_TOKENS.resultsData, true);
+    const isValidColumn = this.isValidModificationColumn(ui.modificationNames);
     return [
       ...invalidModifications,
       {
         type: 'summary-table',
         title: 'Result Data',
-        headers: [ui.title, ...this.buildHeaders(ui.modificationNames).slice(1)],
-        rows: ui.rows.map(row => this.rowToStrings(row)),
+        headers: [ui.title, ...this.buildHeaders(ui.modificationNames.filter(isValidColumn)).slice(1)],
+        rows: ui.rows.map(row => this.rowToStrings({ ...row, modifications: row.modifications.filter(isValidColumn) })),
         emphasisRowsIndices: ui.rows.flatMap((row, index) => (row.className === 'emphasis' ? [index] : [])),
         group: ROUTE_TOKENS.resultsData,
         pageBreakBefore: !invalidModifications.length,
@@ -179,21 +182,34 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
     ];
   }
 
-  /** Results still export for an invalid modification, so the warning has to travel with them. */
-  private buildInvalidModificationSections(group: string, pageBreakBefore = false): KeyValueSection[] {
+  /** An invalid modification has no trustworthy results, so the export leaves it out and this warning explains why it is missing. */
+  private buildInvalidModificationSections(group: string, pageBreakBefore = false): AlertSection[] {
     const invalidModifications = this.validityService.invalidModifications();
     return invalidModifications.length ? [{
-      type: 'key-value-list',
-      title: 'Invalid Modifications',
-      rows: invalidModifications.map(modification => ({ label: modification.name, value: modification.errors.join(', ') })),
+      type: 'alert',
+      title: 'Invalid Modifications (Omitted)',
+      lines: invalidModifications.map(modification => `${modification.name}: ${modification.errors.join(', ')}`),
       group,
       pageBreakBefore,
     }] : [];
   }
 
+  private isScenarioValid(id: string): boolean {
+    return this.validityService.scenarioValidity(id).isValid;
+  }
+
+  /**
+   * @param modificationNames the table's modification columns, in order
+   * @returns an array filter callback that keeps the cells of valid modification columns
+   */
+  private isValidModificationColumn(modificationNames: ModificationNameCell[]): (cell: unknown, index: number) => boolean {
+    return (_, index) => this.isScenarioValid(modificationNames[index].id);
+  }
+
   /** One chart set per modification so the pies and comparison bar paginate together; only the first chart forces a page break. */
-  private buildReportGraphsSections(ui: ReportGraphsUI): Array<ChartSection | KeyValueSection> {
-    const [baseline, ...modifications] = ui.scenarios;
+  private buildReportGraphsSections(ui: ReportGraphsUI): Array<ChartSection | AlertSection> {
+    const [baseline, ...allModifications] = ui.scenarios;
+    const modifications = allModifications.filter(modification => this.isScenarioValid(modification.id));
     const group = ROUTE_TOKENS.reportGraphs;
     const invalidModifications = this.buildInvalidModificationSections(group, true);
     const render = (chart: { traces: unknown[]; layout: object }) => () => renderPlotlyChart(this.chartRenderService, chart);
@@ -203,8 +219,8 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
       if (baseline.deliverValuesAndLabels.length) {
         cells.push({ valuesAndLabels: baseline.deliverValuesAndLabels, unit: ui.deliverUnit, label: 'Heat Delivered' });
       }
-      return [{
-        type: 'chart', title: `${baseline.name} Energy Distribution`, group, pageBreakBefore: true,
+      return [...invalidModifications, {
+        type: 'chart', title: `${baseline.name} Energy Distribution`, group, pageBreakBefore: !invalidModifications.length,
         imageDataProvider: render(this.phastChartsService.buildPieChart(cells)),
       }];
     }
@@ -238,16 +254,16 @@ export class ProcessHeatingReportAdapter implements ReportDataAdapter {
     })];
   }
 
-  /** An invalid scenario has no trustworthy flows to draw. */
-  private buildSankeySections(ui: ReportSankeyUI): ChartSection[] {
-    return ui.scenarios.filter(scenario => this.validityService.scenarioValidity(scenario.id).isValid).map((scenario, index) => ({
+  private buildSankeySections(ui: ReportSankeyUI): Array<ChartSection | AlertSection> {
+    const invalidModifications = this.buildInvalidModificationSections(ROUTE_TOKENS.reportSankey, true);
+    return [...invalidModifications, ...ui.scenarios.filter(scenario => this.isScenarioValid(scenario.id)).map((scenario, index): ChartSection => ({
       type: 'chart',
       title: `${scenario.name} Sankey`,
       group: ROUTE_TOKENS.reportSankey,
-      pageBreakBefore: index === 0,
+      pageBreakBefore: !invalidModifications.length && index === 0,
       aspectRatio: 1400 / 500,
       imageDataProvider: () => this.phastChartsService.renderSankeyAsImage(scenario.phast, ui.settings),
-    }));
+    }))];
   }
 
   private buildInputSummarySections(ui: InputSummaryUI): SummaryTableSection[] {

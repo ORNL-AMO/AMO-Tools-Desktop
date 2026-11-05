@@ -1,4 +1,4 @@
-export type ReportSectionType = 'text' | 'key-value-list' | 'paired-key-value' | 'summary-table' | 'chart';
+export type ReportSectionType = 'text' | 'alert' | 'key-value-list' | 'paired-key-value' | 'summary-table' | 'chart';
 
 export interface ReportSection {
   type: ReportSectionType;
@@ -10,6 +10,13 @@ export interface ReportSection {
 export interface TextSection extends ReportSection {
   type: 'text';
   content: string;
+}
+
+/** An error message drawn as a red box, like a Bootstrap danger alert: the title as its heading, then one line per entry. */
+export interface AlertSection extends ReportSection {
+  type: 'alert';
+  title: string;
+  lines: string[];
 }
 
 export interface KeyValueSection extends ReportSection {

@@ -85,7 +85,7 @@ describe('ExecutiveSummaryComponent', () => {
 
   it('renders modification notes only when present', () => {
     expect(text()).not.toContain('Modification Notes');
-    ui.set(buildUI({ notes: [{ modificationName: 'Scenario 1', lossName: 'Wall Losses', note: 'Added insulation' }] }));
+    ui.set(buildUI({ notes: [{ modificationId: 'mod1', modificationName: 'Scenario 1', lossName: 'Wall Losses', note: 'Added insulation' }] }));
     fixture.detectChanges();
     expect(text()).toContain('Modification Notes');
     expect(text()).toContain('Scenario 1 — Wall Losses:');
