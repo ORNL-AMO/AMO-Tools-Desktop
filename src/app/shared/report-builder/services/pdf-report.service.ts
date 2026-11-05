@@ -171,26 +171,54 @@ export class PdfReportService extends BaseReportService {
 
   /**
    * Renders the title and lines inside a red box styled like a Bootstrap danger alert, moving the whole box to a new page when it does not fit.
-   * Returns the Y position after the box.
+   * An alert taller than a page continues in a new box on each following page, repeating the title.
+   * Returns the Y position after the last box.
    */
   private renderAlert(pdf: jsPDF, section: AlertSection, cursorY: number): number {
     const LINE_HEIGHT_MM = 4.5;
     const PADDING_MM = 4;
-    /** Distance from a line's top to its text baseline at BODY_FONT_SIZE */
-    const BASELINE_OFFSET_MM = 3.5;
+    const bottomY = PAGE_HEIGHT_MM - PAGE_MARGIN_MM;
     const textWidth = CONTENT_WIDTH_MM - PADDING_MM * 2;
 
     pdf.setFontSize(BODY_FONT_SIZE);
     pdf.setFont('helvetica', 'bold');
     const titleLines: string[] = pdf.splitTextToSize(`${section.title}:`, textWidth);
     pdf.setFont('helvetica', 'normal');
-    const bodyLines: string[] = section.lines.flatMap(line => pdf.splitTextToSize(line, textWidth));
-    const height = PADDING_MM * 2 + (titleLines.length + bodyLines.length) * LINE_HEIGHT_MM;
+    let remainingLines: string[] = section.lines.flatMap(line => pdf.splitTextToSize(line, textWidth));
 
-    if (cursorY + height > PAGE_HEIGHT_MM - PAGE_MARGIN_MM) {
+    const boxHeight = (bodyLineCount: number): number => PADDING_MM * 2 + (titleLines.length + bodyLineCount) * LINE_HEIGHT_MM;
+    const bodyLinesThatFit = (fromY: number): number => Math.floor((bottomY - fromY - PADDING_MM * 2) / LINE_HEIGHT_MM) - titleLines.length;
+
+    if (cursorY + boxHeight(remainingLines.length) > bottomY && boxHeight(remainingLines.length) <= bottomY - PAGE_MARGIN_MM) {
       pdf.addPage();
       cursorY = PAGE_MARGIN_MM;
     }
+
+    do {
+      let fit = bodyLinesThatFit(cursorY);
+      if (fit < 1 && remainingLines.length) {
+        pdf.addPage();
+        cursorY = PAGE_MARGIN_MM;
+        fit = bodyLinesThatFit(cursorY);
+      }
+      const chunk = remainingLines.slice(0, Math.max(fit, 1));
+      remainingLines = remainingLines.slice(chunk.length);
+      cursorY += this.drawAlertBox(pdf, titleLines, chunk, cursorY, boxHeight(chunk.length));
+      if (remainingLines.length) {
+        pdf.addPage();
+        cursorY = PAGE_MARGIN_MM;
+      }
+    } while (remainingLines.length);
+
+    return cursorY + SECTION_GAP_MM;
+  }
+
+  /** Draws one alert box at `cursorY` and returns its height. */
+  private drawAlertBox(pdf: jsPDF, titleLines: string[], bodyLines: string[], cursorY: number, height: number): number {
+    const LINE_HEIGHT_MM = 4.5;
+    const PADDING_MM = 4;
+    /** Distance from a line's top to its text baseline at BODY_FONT_SIZE */
+    const BASELINE_OFFSET_MM = 3.5;
 
     pdf.setFillColor(...ALERT_DANGER_FILL_COLOR);
     pdf.setDrawColor(...ALERT_DANGER_BORDER_COLOR);
@@ -210,7 +238,7 @@ export class PdfReportService extends BaseReportService {
       textY += LINE_HEIGHT_MM;
     });
 
-    return cursorY + height + SECTION_GAP_MM;
+    return height;
   }
 
   /**
