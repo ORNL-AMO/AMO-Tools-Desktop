@@ -12,25 +12,19 @@ import { PHAST } from '../models/phast/phast';
 import { ConvertUnitsService } from '../convert-units/convert-units.service';
 import { FlueGasByMass, FlueGasByVolume } from '../models/phast/losses/flueGas';
 import { environment } from '../../../environments/environment';
-import { getNewIdString, roundVal } from '../helperFunctions';
+import { getNewIdString } from '../helperFunctions';
 import { Calculator } from '../models/calculators';
 import { SteamPressureOrTemp, SteamQuality } from '../models/steam/steam-inputs';
 import { AdjustedOrActual, BilledForDemand, MonthyInputs } from '../../calculator/utilities/power-factor-correction/power-factor-correction.service';
-import { ChillerInventoryItem, ProcessCoolingAssessment, TowerInput, TowerSizeMetric } from '../models/process-cooling-assessment';
+import { ProcessCoolingAssessment } from '../models/process-cooling-assessment';
 import { getTowerTypeDependentValues } from '../../process-cooling-assessment/constants/process-cooling-constants';
-import { AppUnits, convertChillerEfficiency, PROCESS_COOLING_UNITS } from '../../process-cooling-assessment/constants/process-cooling-units';
-import { ConvertValue } from '../convert-units/ConvertValue';
-import { Settings } from '../models/settings';
-
-// * last version whose Process Cooling Metric data needs updateLegacyMetricProcessCooling
-const LEGACY_PROCESS_COOLING_METRIC_VERSION: string = '1.10.0';
 
 @Injectable()
 export class UpdateDataService {
 
     constructor(private convertUnitsService: ConvertUnitsService) { }
 
-    updateAssessmentVersion(assessment: Assessment, settings?: Settings): Assessment {
+    updateAssessmentVersion(assessment: Assessment): Assessment {
         console.log('current Assessment version: ' + assessment.appVersion);
         if (assessment.type === 'PSAT') {
             return this.updatePsat(assessment);
@@ -49,7 +43,7 @@ export class UpdateDataService {
         } else if (assessment.type === 'Water') {
             return this.updateWater(assessment);
         } else if (assessment.type === 'ProcessCooling') {
-            return this.updateProcessCooling(assessment, settings);
+            return this.updateProcessCooling(assessment);
         }
     }
 
@@ -79,62 +73,12 @@ export class UpdateDataService {
     }
 
 
-    updateProcessCooling(assessment: Assessment, settings?: Settings): Assessment {
-        const savedVersion: string = assessment.appVersion;
+    updateProcessCooling(assessment: Assessment): Assessment {
         assessment.appVersion = environment.version;
         if (assessment.processCooling) {
             assessment.processCooling = this.updateTowerFanSpeedType(assessment.processCooling);
-            if (settings?.unitsOfMeasure === 'Metric' && this.isVersionAtOrBefore(savedVersion, LEGACY_PROCESS_COOLING_METRIC_VERSION)) {
-                assessment.processCooling = this.updateLegacyMetricProcessCooling(assessment.processCooling);
-            }
         }
         return assessment;
-    }
-
-    /**
-     * Through v1.10, Process Cooling Metric conversion never converted chiller efficiency (kW/ton) or towerSize (tons/hp),
-     * so both are still Imperial in any Metric assessment and are converted here exactly.
-     * Other legacy Metric values are left as stored, out of range values are flagged by the form validators.
-     * existingDataUnits is set to Metric so the "Update Data" reminder can't convert the data again.
-     */
-    updateLegacyMetricProcessCooling(processCooling: ProcessCoolingAssessment): ProcessCoolingAssessment {
-        const towerInput: TowerInput = processCooling.systemInformation?.towerInput;
-        if (towerInput?.towerSize != null) {
-            const towerSizeUnits: AppUnits = towerInput.towerSizeMetric === TowerSizeMetric.HP ? PROCESS_COOLING_UNITS.towerSizeHP : PROCESS_COOLING_UNITS.towerSizeTons;
-            towerInput.towerSize = roundVal(new ConvertValue(towerInput.towerSize, towerSizeUnits.imperial, towerSizeUnits.metric).convertedValue, 2);
-        }
-        processCooling.inventory?.forEach(chiller => this.updateLegacyMetricChillerEfficiency(chiller));
-        processCooling.modifications?.forEach(mod => {
-            if (mod.replaceChillers?.newChiller) {
-                this.updateLegacyMetricChillerEfficiency(mod.replaceChillers.newChiller);
-            }
-        });
-        processCooling.existingDataUnits = 'Metric';
-        return processCooling;
-    }
-
-    private updateLegacyMetricChillerEfficiency(chiller: ChillerInventoryItem): ChillerInventoryItem {
-        if (chiller.fullLoadEfficiency != null) {
-            chiller.fullLoadEfficiency = roundVal(convertChillerEfficiency(chiller.fullLoadEfficiency, true), 4);
-        }
-        if (chiller.kWPerTonAtLoad) {
-            chiller.kWPerTonAtLoad = chiller.kWPerTonAtLoad.map(value => roundVal(convertChillerEfficiency(value, true), 4));
-        }
-        return chiller;
-    }
-
-    /**
-     * Missing versions are treated as legacy
-     */
-    private isVersionAtOrBefore(version: string, targetVersion: string): boolean {
-        if (!version) return true;
-        const versionParts: number[] = version.split('.').map(part => parseInt(part, 10) || 0);
-        const targetParts: number[] = targetVersion.split('.').map(part => parseInt(part, 10) || 0);
-        for (let i = 0; i < Math.max(versionParts.length, targetParts.length); i++) {
-            const difference: number = (versionParts[i] ?? 0) - (targetParts[i] ?? 0);
-            if (difference !== 0) return difference < 0;
-        }
-        return true;
     }
 
     updateTowerFanSpeedType(processCooling: ProcessCoolingAssessment): ProcessCoolingAssessment {

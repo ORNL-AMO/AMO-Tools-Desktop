@@ -233,7 +233,7 @@ Unit pairs live in `constants/process-cooling-units.ts` (`PROCESS_COOLING_UNITS`
 
 ### Legacy Metric data (v1.10 and earlier)
 
-Earlier versions converted Metric data only partially (efficiency and tower size left unconverted, flow rate as gpm → m³/min, temperature differences as absolute temperatures), and a new Metric assessment could be converted twice from the "Update Data" reminder. For assessments saved at v1.10.0 or earlier with Metric settings, `UpdateDataService.updateLegacyMetricProcessCooling()` converts chiller efficiency and tower size (never converted by those versions, so the conversion is exact) and sets `existingDataUnits = 'Metric'` so the data can't be converted again. Other values are left as stored; values outside the Metric validation ranges are flagged in the forms for the user to re-enter. `AssessmentDbService` reads the assessment's settings from the store for this migration.
+Earlier versions converted Metric data only partially (efficiency and tower size left unconverted, flow rate as gpm → m³/min, temperature differences as absolute temperatures). No Metric Process Cooling assessments are expected to have been saved by those versions, so there is no load-time migration: `UpdateDataService.updateProcessCooling()` treats stored data as already being in `existingDataUnits`. If legacy Metric data turns up, it needs a dedicated migration; note that `updateProcessCooling()` overwrites `appVersion` on first load, so a later version-gated migration could not identify it.
 
 ### Suite boundary
 
