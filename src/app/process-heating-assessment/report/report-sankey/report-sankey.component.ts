@@ -9,6 +9,7 @@ import { ReportSankeyResultsService, ReportSankeyScenario, ReportSankeyUI } from
   selector: 'app-report-sankey',
   standalone: false,
   templateUrl: './report-sankey.component.html',
+  styleUrl: './report-sankey.component.css',
   providers: [{ provide: PhastValidService, useFactory: providePhastValidService }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

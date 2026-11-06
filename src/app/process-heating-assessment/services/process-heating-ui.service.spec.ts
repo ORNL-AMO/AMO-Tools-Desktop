@@ -355,9 +355,12 @@ describe('ProcessHeatingUiService validity gating', () => {
 describe('ProcessHeatingUiService loss counts', () => {
   let service: ProcessHeatingUiService;
   let baseline: WritableSignal<PHAST>;
+  let modification: WritableSignal<PHAST>;
+  const scenarioPhast = (scenario: string): PHAST => scenario === 'baseline' ? baseline() : modification();
 
   beforeEach(() => {
     baseline = signal<PHAST>({ losses: { wallLosses: [{}, {}] as WallLoss[] }, systemEfficiency: 80 });
+    modification = signal<PHAST>({ losses: { wallLosses: [{}, {}, {}] as WallLoss[] } });
     const router = {
       events: new Subject(),
       routerState: { snapshot: { root: { params: {}, data: {}, firstChild: null } } },
@@ -370,8 +373,8 @@ describe('ProcessHeatingUiService loss counts', () => {
           provide: ProcessHeatingAssessmentService,
           useValue: {
             heatingEquipmentConfiguration: signal(HeatingEquipmentConfiguration.FUEL_FIRED),
-            scenarioPhastSignal: () => baseline(),
-            lossSignal: (_scenario: string, lossKey: keyof Losses) => baseline().losses?.[lossKey],
+            scenarioPhastSignal: scenarioPhast,
+            lossSignal: (scenario: string, lossKey: keyof Losses) => scenarioPhast(scenario).losses?.[lossKey],
           },
         },
         { provide: STEPPED_ROUTES, useValue: [] },
@@ -396,5 +399,10 @@ describe('ProcessHeatingUiService loss counts', () => {
 
   it('has no count for Operations, which holds no entries', () => {
     expect(service.lossCount(LossView.OPERATIONS)).toBeUndefined();
+  });
+
+  it('counts the entries of the given modification', () => {
+    expect(service.lossCount(LossView.WALL_LOSSES, 'mod-1')).toBe(3);
+    expect(service.lossCount(LossView.HEAT_SYSTEM_EFFICIENCY, 'mod-1')).toBe(0);
   });
 });

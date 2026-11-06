@@ -72,4 +72,31 @@ describe('ProcessHeatingResultsService', () => {
       expect(legacyGetResults).not.toHaveBeenCalled();
     });
   });
+
+  describe('getCo2EmissionsSavings', () => {
+    function results(hourlyTotalEmissionOutput?: number): PhastResults {
+      return { co2EmissionsOutput: { hourlyTotalEmissionOutput } } as PhastResults;
+    }
+
+    it('subtracts modification from baseline emissions', () => {
+      expect(service.getCo2EmissionsSavings(results(10), results(7.5), 'hourlyTotalEmissionOutput')).toBe(2.5);
+    });
+
+    it('is undefined when both scenarios have an emissions object with no value', () => {
+      expect(service.getCo2EmissionsSavings(results(), results(), 'hourlyTotalEmissionOutput')).toBeUndefined();
+    });
+
+    it('is undefined when only one scenario has a value', () => {
+      expect(service.getCo2EmissionsSavings(results(10), results(), 'hourlyTotalEmissionOutput')).toBeUndefined();
+      expect(service.getCo2EmissionsSavings(results(), results(10), 'hourlyTotalEmissionOutput')).toBeUndefined();
+    });
+
+    it('is undefined when a scenario has no emissions object', () => {
+      expect(service.getCo2EmissionsSavings({} as PhastResults, results(1), 'hourlyTotalEmissionOutput')).toBeUndefined();
+    });
+
+    it('still subtracts when the baseline is zero', () => {
+      expect(service.getCo2EmissionsSavings(results(0), results(4), 'hourlyTotalEmissionOutput')).toBe(-4);
+    });
+  });
 });

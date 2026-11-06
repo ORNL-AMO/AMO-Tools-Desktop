@@ -65,13 +65,26 @@ describe('ResultsDataComponent', () => {
     expect(fixture.nativeElement.querySelector('table')).toBeNull();
   });
 
-  it('shows the invalid modification alert only when a modification is invalid', () => {
-    const alert = (): Element | null => fixture.nativeElement.querySelector('app-invalid-modification-alert');
-    expect(alert()).toBeNull();
+  describe('invalid modification', () => {
+    const headerCell = (index: number): HTMLElement => fixture.nativeElement.querySelectorAll('thead th')[index];
 
-    invalidModifications.set([{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }]);
-    fixture.detectChanges();
+    beforeEach(() => {
+      ui.set(buildUI({ modificationNames: [{ id: 'mod1', name: 'Scenario 1' }, { id: 'mod2', name: 'Scenario 2' }] }));
+    });
 
-    expect(alert()).not.toBeNull();
+    it('shows no alert when every modification is valid', () => {
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('.alert-danger')).toBeNull();
+    });
+
+    it('shows the errors above the invalid modification name only', () => {
+      invalidModifications.set([{ id: 'mod2', name: 'Scenario 2', errors: ['Errors found in Wall'] }]);
+      fixture.detectChanges();
+
+      expect(headerCell(2).querySelector('.alert-danger')).toBeNull();
+      const alert: HTMLElement = headerCell(3).querySelector('.alert-danger');
+      expect(alert.innerText.split('\n').filter(Boolean)).toEqual(['Invalid Modification', 'Errors found in Wall']);
+      expect(alert.nextElementSibling.textContent.trim()).toBe('Scenario 2');
+    });
   });
 });

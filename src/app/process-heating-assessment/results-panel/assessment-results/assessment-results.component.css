@@ -1,36 +1,35 @@
-.results-panel {
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
+.output-summary .table {
+  font-size: 14px;
 }
 
-.results-panel-header {
-  font-weight: bold;
-  padding: 0.25rem 0;
-  border-bottom: 2px solid var(--process-heating-assessment);
-  margin-bottom: 0.25rem;
+.output-summary .table th {
+  border: none;
+  padding: 0;
+  text-align: left;
 }
 
-.result-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.1rem 0;
-  font-size: 0.85rem;
+.output-summary .table td {
+  text-align: left;
 }
 
-.result-label {
-  color: #555;
+.panel-table td:first-child,
+.panel-table th:first-child {
+  width: 50%;
 }
 
-.result-value {
-  font-weight: 500;
+.panel-table td:not(:first-child),
+.panel-table th:not(:first-child) {
+  width: 25%;
 }
 
-.result-label--bold {
-  font-weight: bold;
-  color: #333;
+.tr-underline {
+  border-bottom: 2px groove #bf3d00;
 }
 
-.result-value--bold {
+.tr-border {
+  border-top: 2px groove #bf3d00;
+}
+
+.gross-heat-input td {
   font-weight: bold;
 }

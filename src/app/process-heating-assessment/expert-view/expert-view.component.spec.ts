@@ -5,6 +5,8 @@ import { ProcessHeatingModification } from '../models/modification';
 import { HEAT_BALANCE_VIEW_LINKS, LossView, ProcessHeatingView, ViewLink } from '../models/views';
 import { ModificationService } from '../services/modification.service';
 import { ProcessHeatingUiService } from '../services/process-heating-ui.service';
+import { ProcessHeatingValidityService } from '../services/process-heating-validity.service';
+import { LossTabBadgeComponent } from '../heat-balance/loss-tab-badge/loss-tab-badge.component';
 import { ExpertViewComponent } from './expert-view.component';
 
 const EXPERT_VIEW_TABS: ViewLink[] = HEAT_BALANCE_VIEW_LINKS.filter(link =>
@@ -24,14 +26,37 @@ class FakeProcessHeatingUiService {
   readonly visibleExpertViewTabs = signal<ViewLink[]>(EXPERT_VIEW_TABS);
   readonly selectedExpertViewTab: WritableSignal<ProcessHeatingView | undefined> = signal<ProcessHeatingView | undefined>(LossView.CHARGE_MATERIAL);
 
+  readonly counts = signal<Record<string, Partial<Record<string, number>>>>({});
+
   selectExpertViewTab(view: ProcessHeatingView): void {
     this.selectedExpertViewTab.set(view);
+  }
+
+  lossCount(view: string, scenario = 'baseline'): number | undefined {
+    return this.counts()[scenario]?.[view] ?? 0;
+  }
+}
+
+class FakeValidityService {
+  readonly invalidSteps = signal<Record<string, string[]>>({});
+
+  isStepValid(scenario: string, view: string): boolean {
+    return !this.invalidSteps()[scenario]?.includes(view);
   }
 }
 
 describe('ExpertViewComponent', () => {
   let fixture: ComponentFixture<ExpertViewComponent>;
   let modificationService: FakeModificationService;
+  let uiService: FakeProcessHeatingUiService;
+  let validityService: FakeValidityService;
+
+  const badges = (): { label: string; badge: string; isValid: boolean }[] =>
+    query('.tabs li .badge').map(badge => ({
+      label: badge.closest('a').firstChild.textContent.trim(),
+      badge: badge.textContent.trim(),
+      isValid: badge.classList.contains('success'),
+    }));
 
   function query(selector: string): HTMLElement[] {
     return Array.from(fixture.nativeElement.querySelectorAll(selector));
@@ -39,16 +64,19 @@ describe('ExpertViewComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ExpertViewComponent],
+      declarations: [ExpertViewComponent, LossTabBadgeComponent],
       providers: [
         { provide: ModificationService, useClass: FakeModificationService },
         { provide: ProcessHeatingUiService, useClass: FakeProcessHeatingUiService },
+        { provide: ProcessHeatingValidityService, useClass: FakeValidityService },
         { provide: ModalDialogService, useValue: {} },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
 
     modificationService = TestBed.inject(ModificationService) as unknown as FakeModificationService;
+    uiService = TestBed.inject(ProcessHeatingUiService) as unknown as FakeProcessHeatingUiService;
+    validityService = TestBed.inject(ProcessHeatingValidityService) as unknown as FakeValidityService;
     fixture = TestBed.createComponent(ExpertViewComponent);
     fixture.detectChanges();
   });
@@ -112,6 +140,45 @@ describe('ExpertViewComponent', () => {
       expect(query('.tabs li.active')[0].textContent.trim()).toBe(label);
     });
   }
+
+  it('shows the modification\'s entry count on each tab, green while both scenarios are valid', () => {
+    uiService.counts.set({
+      baseline: { [LossView.WALL_LOSSES]: 1 },
+      'mod-1': { [LossView.CHARGE_MATERIAL]: 2, [LossView.WALL_LOSSES]: 3 },
+    });
+    fixture.detectChanges();
+
+    expect(badges()).toEqual([
+      { label: 'Charge Material', badge: '2', isValid: true },
+      { label: 'Wall Losses', badge: '3', isValid: true },
+    ]);
+  });
+
+  it('turns a tab red when only the baseline step is invalid', () => {
+    uiService.counts.set({ 'mod-1': { [LossView.WALL_LOSSES]: 3 } });
+    validityService.invalidSteps.set({ baseline: [LossView.WALL_LOSSES] });
+    fixture.detectChanges();
+
+    expect(badges()).toEqual([{ label: 'Wall Losses', badge: '3', isValid: false }]);
+  });
+
+  it('turns a tab red when only the modification step is invalid', () => {
+    uiService.counts.set({ 'mod-1': { [LossView.SLAG]: 1 } });
+    validityService.invalidSteps.set({ 'mod-1': [LossView.SLAG] });
+    fixture.detectChanges();
+
+    expect(badges()).toEqual([{ label: 'Slag', badge: '1', isValid: false }]);
+  });
+
+  it('gives only the invalid tabs an accessible name and tooltip stating why they are marked', () => {
+    validityService.invalidSteps.set({ 'mod-1': [LossView.WALL_LOSSES] });
+    fixture.detectChanges();
+
+    const links = query('.tabs li > a');
+    expect(links[1].getAttribute('aria-label')).toBe('Wall Losses, has invalid inputs');
+    expect(links[1].getAttribute('title')).toBe('Wall Losses, has invalid inputs');
+    expect(links[0].hasAttribute('aria-label')).toBeFalse();
+  });
 
   it('shows no tabs when there is no modification', () => {
     modificationService.selectedModification.set(undefined);

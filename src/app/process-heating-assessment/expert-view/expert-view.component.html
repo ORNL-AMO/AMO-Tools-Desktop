@@ -2,7 +2,10 @@
   <ul class="tabs subtabs process-heating-assessment">
     @for (link of tabs(); track link.view) {
       <li [class.active]="link.view === selectedTab()" (click)="selectTab(link.view)">
-        <a>{{ link.label }}</a>
+        <a [attr.aria-label]="invalidTabLabel(link, modification)" [attr.title]="invalidTabLabel(link, modification)">
+          {{ link.label }}
+          <app-loss-tab-badge [count]="lossCount(link, modification)" [invalid]="isTabInvalid(link, modification)"></app-loss-tab-badge>
+        </a>
       </li>
     }
   </ul>

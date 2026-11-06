@@ -4,8 +4,11 @@ import { FeatureFlagService } from '../../../shared/feature-flag.service';
 import { ShowResultsCategories } from '../../../shared/models/phast/phast';
 import { Settings } from '../../../shared/models/settings';
 import { PhastResults } from '../../models/phast';
+import { ProcessHeatingModification } from '../../models/modification';
 import { ProcessHeatingAssessmentService } from '../../services/process-heating-assessment.service';
 import { ProcessHeatingResultsService } from '../../services/process-heating-results.service';
+import { ModificationService } from '../../services/modification.service';
+import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { AssessmentResultsComponent } from './assessment-results.component';
 
 const NO_CATEGORIES: ShowResultsCategories = {
@@ -18,80 +21,74 @@ const NO_CATEGORIES: ShowResultsCategories = {
   showExGas: false,
 };
 
-const LABELS = {
-  auxPower: 'Aux Power Losses',
-  slag: 'Slag Losses',
-  flueGasAvailableHeat: 'Available Heat (%)',
-  flueGasSystemLosses: 'Flue Gas System Losses',
-  exothermic: 'Exothermic Heat from Process',
-  fuelInputAvailableHeat: 'Fuel Input Available Heat',
-  exhaustGas: 'Exhaust Gas Losses',
-  systemEfficiency: 'System Efficiency',
-  totalSystemLosses: 'Total System Losses',
-  co2: 'CO2 Emissions',
-};
+const MODIFICATION = { id: 'mod-1', scenarioOverrides: { name: 'Better Walls' } } as ProcessHeatingModification;
+
+function makeResults(overrides: Partial<PhastResults> = {}): PhastResults {
+  return { totalWallLoss: 10, totalInput: 30, grossHeatInput: 40, ...overrides } as PhastResults;
+}
+
+function co2(hourlyTotalEmissionOutput: number): PhastResults['co2EmissionsOutput'] {
+  return { hourlyTotalEmissionOutput } as PhastResults['co2EmissionsOutput'];
+}
 
 describe('AssessmentResultsComponent', () => {
   let fixture: ComponentFixture<AssessmentResultsComponent>;
   let categories: WritableSignal<ShowResultsCategories>;
-  let results: WritableSignal<Partial<PhastResults>>;
+  let baselineResults: WritableSignal<PhastResults | undefined>;
+  let modificationResults: WritableSignal<PhastResults | undefined>;
   let settings: WritableSignal<Partial<Settings>>;
+  let invalidModifications: WritableSignal<InvalidModification[]>;
   let showOperationalImpacts: WritableSignal<boolean>;
   let resultsService: jasmine.SpyObj<ProcessHeatingResultsService>;
 
-  function labels(): string[] {
-    return Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('.result-label')).map((el) =>
-      el.textContent.replace(/\s+/g, ' ').trim()
+  function text(el: Element | null): string {
+    return el?.textContent.replace(/\s+/g, ' ').trim() ?? '';
+  }
+
+  function headerCells(): string[] {
+    return Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('thead tr:first-child th')).map(text);
+  }
+
+  function row(label: string): HTMLTableRowElement | undefined {
+    return Array.from<HTMLTableRowElement>(fixture.nativeElement.querySelectorAll('tbody tr')).find(tr =>
+      text(tr.cells[0]).startsWith(label)
     );
   }
 
-  function rowValue(label: string): string {
-    const row = Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('.result-row')).find((el) =>
-      el.querySelector('.result-label').textContent.replace(/\s+/g, ' ').trim().startsWith(label)
-    );
-    return row?.querySelector('.result-value').textContent.replace(/\s+/g, ' ').trim();
+  function rowCells(label: string): string[] {
+    const tr = row(label);
+    return tr ? Array.from(tr.cells).slice(1).map(text) : [];
   }
 
-  function render(): void {
+  function render(scenario = 'baseline'): void {
+    fixture.componentRef.setInput('scenario', scenario);
     fixture.detectChanges();
   }
 
   beforeEach(() => {
-    categories = signal<ShowResultsCategories>({ ...NO_CATEGORIES });
-    results = signal<Partial<PhastResults>>({
-      totalInput: 10,
-      grossHeatInput: 20,
-      totalAuxPower: 1.5,
-      totalSlag: 2.5,
-      flueGasAvailableHeat: 55.5,
-      flueGasSystemLosses: 3,
-      exothermicHeat: 4,
-      availableHeatPercent: 60,
-      totalExhaustGas: 5,
-      totalExhaustGasEAF: 6,
-      heatingSystemEfficiency: 70,
-      totalSystemLosses: 7,
-    });
-    settings = signal<Partial<Settings>>({ emissionsUnit: 'Imperial' });
+    categories = signal({ ...NO_CATEGORIES });
+    baselineResults = signal(makeResults());
+    modificationResults = signal(makeResults({ totalWallLoss: 5 }));
+    settings = signal<Partial<Settings>>({ energyResultUnit: 'MMBtu', emissionsUnit: 'Imperial' });
+    invalidModifications = signal([]);
     showOperationalImpacts = signal(false);
 
     resultsService = jasmine.createSpyObj<ProcessHeatingResultsService>('ProcessHeatingResultsService', [
-      'getResults',
+      'scenarioResults',
       'getResultCategories',
+      'getCo2EmissionsSavings',
     ]);
-    resultsService.getResults.and.callFake(() => results() as PhastResults);
+    resultsService.scenarioResults.and.callFake(scenario => (scenario === 'baseline' ? baselineResults() : modificationResults()));
     resultsService.getResultCategories.and.callFake(() => categories());
-
-    const assessmentService = jasmine.createSpyObj('ProcessHeatingAssessmentService', ['scenarioPhastSignal'], {
-      settingsSignal: settings,
-    });
-    assessmentService.scenarioPhastSignal.and.returnValue({ losses: {} });
+    resultsService.getCo2EmissionsSavings.and.returnValue(2.5);
 
     TestBed.configureTestingModule({
       declarations: [AssessmentResultsComponent],
       providers: [
-        { provide: ProcessHeatingAssessmentService, useValue: assessmentService },
+        { provide: ProcessHeatingAssessmentService, useValue: { settingsSignal: settings } },
         { provide: ProcessHeatingResultsService, useValue: resultsService },
+        { provide: ModificationService, useValue: { modifications: signal([MODIFICATION]) } },
+        { provide: ProcessHeatingValidityService, useValue: { invalidModifications } },
         { provide: FeatureFlagService, useValue: { showOperationalImpacts } },
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -104,136 +101,187 @@ describe('AssessmentResultsComponent', () => {
       expect(fixture.componentInstance.scenario()).toBe('baseline');
     });
 
-    it('renders nothing when results are unavailable', () => {
-      resultsService.getResults.and.returnValue(undefined);
-      render();
-      expect(fixture.nativeElement.querySelector('.results-panel')).toBeNull();
-    });
-
-    it('does not log results to the console', () => {
-      const log = spyOn(console, 'log');
-      render();
-      expect(log).not.toHaveBeenCalled();
+    it('requests baseline results and the selected modification results', () => {
+      render('mod-1');
+      expect(resultsService.scenarioResults).toHaveBeenCalledWith('baseline');
+      expect(resultsService.scenarioResults).toHaveBeenCalledWith('mod-1');
     });
   });
 
-  describe('base rows', () => {
-    it('always shows Total Available Heat Required and Gross Heat Input', () => {
+  describe('columns', () => {
+    it('shows only the baseline column on Baseline steps', () => {
       render();
-      expect(rowValue('Total Available Heat Required')).toBe('10.00');
-      expect(rowValue('Gross Heat Input')).toBe('20.00');
+      expect(headerCells()).toEqual(['Hourly Energy Loss/Use', 'Baseline']);
+      expect(rowCells('Wall Losses')).toEqual(['10.00']);
     });
 
-    it('shows Exothermic Heat for every configuration', () => {
+    it('adds the selected modification column alongside baseline', () => {
+      render('mod-1');
+      expect(headerCells()).toEqual(['Hourly Energy Loss/Use', 'Baseline', 'Better Walls']);
+      expect(rowCells('Wall Losses')).toEqual(['10.00', '5.00']);
+    });
+
+    it('shows the hourly loss unit under each value column', () => {
+      render('mod-1');
+      const units = Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('thead tr:nth-child(2) th')).map(text);
+      expect(units).toEqual(['', 'MMBtu/hr', 'MMBtu/hr']);
+    });
+
+    it('uses whole numbers for units other than MMBtu, GJ, and kWh', () => {
+      settings.set({ energyResultUnit: 'Btu' });
+      baselineResults.set(makeResults({ totalWallLoss: 1234.56 }));
       render();
-      expect(labels()).toContain(LABELS.exothermic);
+      expect(rowCells('Wall Losses')).toEqual(['1,235']);
+    });
+
+    it('shows placeholders in the modification column when the modification has no losses', () => {
+      modificationResults.set(undefined);
+      render('mod-1');
+      expect(rowCells('Wall Losses')).toEqual(['10.00', '— —']);
+    });
+
+    it('shows placeholders for zero values', () => {
+      render();
+      expect(rowCells('Charge Materials')).toEqual(['— —']);
+    });
+  });
+
+  describe('invalid modification', () => {
+    it('shows the error lines in the modification header', () => {
+      invalidModifications.set([{ id: 'mod-1', name: 'Better Walls', errors: ['Errors found in Wall'] }]);
+      render('mod-1');
+      const alert: HTMLElement = fixture.nativeElement.querySelector('thead th .alert-danger');
+      expect(alert.innerText.split('\n').filter(Boolean)).toEqual(['Invalid Modification', 'Errors found in Wall']);
+    });
+
+    it('hides the alert when the modification is valid', () => {
+      invalidModifications.set([{ id: 'other', name: 'Other', errors: ['Errors found in Wall'] }]);
+      render('mod-1');
+      expect(fixture.nativeElement.querySelector('.alert-danger')).toBeNull();
     });
   });
 
   describe('conditional rows', () => {
-    it('hides every conditional row when no category applies', () => {
+    it('hides configuration-specific rows when no category applies', () => {
       render();
-      [
-        LABELS.auxPower,
-        LABELS.slag,
-        LABELS.flueGasAvailableHeat,
-        LABELS.flueGasSystemLosses,
-        LABELS.fuelInputAvailableHeat,
-        LABELS.exhaustGas,
-        LABELS.systemEfficiency,
-        LABELS.totalSystemLosses,
-      ].forEach((label) => expect(labels()).not.toContain(label));
-    });
-
-    it('shows Aux Power Losses when showAuxPower is set', () => {
-      categories.set({ ...NO_CATEGORIES, showAuxPower: true });
-      render();
-      expect(rowValue(LABELS.auxPower)).toBe('1.50');
-    });
-
-    it('shows Slag Losses when showSlag is set', () => {
-      categories.set({ ...NO_CATEGORIES, showSlag: true });
-      render();
-      expect(rowValue(LABELS.slag)).toBe('2.50');
+      ['Aux Power Losses', 'Slag Losses', 'Available Heat (%)', 'Flue Gas Losses', 'Fuel Input Available Heat', 'System Efficiency', 'Electrical Heat Delivered']
+        .forEach(label => expect(row(label)).withContext(label).toBeUndefined());
     });
 
     it('shows fuel-fired rows when showFlueGas is set', () => {
       categories.set({ ...NO_CATEGORIES, showFlueGas: true });
+      baselineResults.set(makeResults({ flueGasAvailableHeat: 55.5, flueGasSystemLosses: 3 }));
       render();
-      expect(rowValue(LABELS.flueGasAvailableHeat)).toBe('55.5%');
-      expect(rowValue(LABELS.flueGasSystemLosses)).toBe('3.00');
+      expect(rowCells('Available Heat (%)')).toEqual(['55.5%']);
+      expect(rowCells('Flue Gas Losses')).toEqual(['3.00']);
     });
 
-    it('shows standard electrotechnology rows when the configuration applies', () => {
-      categories.set({ ...NO_CATEGORIES, showEnInput2: true });
-      render();
-      expect(rowValue(LABELS.fuelInputAvailableHeat)).toBe('60%');
-      expect(rowValue(LABELS.exhaustGas)).toBe('5.00');
-    });
-
-    it('shows the EAF exhaust gas row when showExGas is set', () => {
-      categories.set({ ...NO_CATEGORIES, showExGas: true });
-      render();
-      expect(rowValue(LABELS.exhaustGas)).toBe('6.00');
-    });
-
-    it('shows system efficiency rows when showSystemEff is set', () => {
+    it('shows system efficiency as a whole percent for baseline and modification', () => {
       categories.set({ ...NO_CATEGORIES, showSystemEff: true });
+      baselineResults.set(makeResults({ heatingSystemEfficiency: 70 }));
+      modificationResults.set(makeResults({ heatingSystemEfficiency: 75 }));
+      render('mod-1');
+      expect(rowCells('System Efficiency')).toEqual(['70%', '75%']);
+    });
+
+    it('reads EAF electrical heat from energy input heat delivered', () => {
+      categories.set({ ...NO_CATEGORIES, showElectricalDelivered: true });
+      settings.set({ energyResultUnit: 'kWh', furnaceType: 'Electric Arc Furnace (EAF)' });
+      baselineResults.set(makeResults({ energyInputHeatDelivered: 8, electricalHeatDelivered: 9 }));
       render();
-      expect(rowValue(LABELS.systemEfficiency)).toBe('70%');
-      expect(rowValue(LABELS.totalSystemLosses)).toBe('7.00');
+      expect(rowCells('Electrical Heat Delivered')).toEqual(['8.00']);
+      expect(row('Electrical Heat Delivered').classList).not.toContain('tr-border');
+    });
+
+    it('reads non-EAF electrical heat from electrical heat delivered with a top border', () => {
+      categories.set({ ...NO_CATEGORIES, showElectricalDelivered: true });
+      baselineResults.set(makeResults({ energyInputHeatDelivered: 8, electricalHeatDelivered: 9 }));
+      render();
+      expect(rowCells('Electrical Heat Delivered')).toEqual(['9.00']);
+      expect(row('Electrical Heat Delivered').classList).toContain('tr-border');
+    });
+  });
+
+  describe('separators', () => {
+    it('underlines Other Losses and borders Gross Heat Input', () => {
+      render();
+      expect(row('Other Losses').classList).toContain('tr-underline');
+      expect(row('Gross Heat Input').classList).toContain('tr-border');
     });
   });
 
   describe('CO2 emissions', () => {
-    it('hides the row when operational impacts are disabled', () => {
-      render();
-      expect(labels().some((label) => label.startsWith('CO2 Emissions'))).toBeFalse();
+    it('hides the rows when operational impacts are disabled', () => {
+      render('mod-1');
+      expect(row('CO2 Emissions')).toBeUndefined();
     });
 
-    it('shows the imperial unit and value when enabled', () => {
+    it('shows the imperial unit and hourly emissions', () => {
       showOperationalImpacts.set(true);
-      results.update((r) => ({ ...r, co2EmissionsOutput: { hourlyTotalEmissionOutput: 12.345 } as PhastResults['co2EmissionsOutput'] }));
+      baselineResults.set(makeResults({ co2EmissionsOutput: co2(12.345) }));
       render();
-      expect(labels()).toContain(`${LABELS.co2} (ton CO2)`);
-      expect(rowValue(LABELS.co2)).toBe('12.35');
+      expect(text(row('CO2 Emissions').cells[0])).toBe('CO2 Emissions (ton CO2)');
+      expect(rowCells('CO2 Emissions')).toEqual(['12.35']);
     });
 
-    it('shows the metric unit when emissionsUnit is Metric', () => {
+    it('shows the metric unit', () => {
       showOperationalImpacts.set(true);
-      settings.set({ emissionsUnit: 'Metric' });
+      settings.set({ energyResultUnit: 'GJ', emissionsUnit: 'Metric' });
       render();
-      expect(labels()).toContain(`${LABELS.co2} (tonne CO2)`);
+      expect(text(row('CO2 Emissions').cells[0])).toBe('CO2 Emissions (tonne CO2)');
     });
 
-    it('shows zero when emissions are zero', () => {
+    it('omits the savings row on Baseline steps', () => {
       showOperationalImpacts.set(true);
-      results.update((r) => ({ ...r, co2EmissionsOutput: { hourlyTotalEmissionOutput: 0 } as PhastResults['co2EmissionsOutput'] }));
       render();
-      expect(rowValue(LABELS.co2)).toBe('0');
+      expect(row('CO2 Emissions Savings')).toBeUndefined();
     });
 
-    it('shows a placeholder when emissions are missing', () => {
+    it('shows savings for the modification against baseline', () => {
       showOperationalImpacts.set(true);
-      render();
-      expect(rowValue(LABELS.co2)).toBe('— —');
+      const baseline = makeResults({ co2EmissionsOutput: co2(10) });
+      const modification = makeResults({ co2EmissionsOutput: co2(7.5) });
+      baselineResults.set(baseline);
+      modificationResults.set(modification);
+      render('mod-1');
+      expect(resultsService.getCo2EmissionsSavings).toHaveBeenCalledWith(baseline, modification, 'hourlyTotalEmissionOutput');
+      expect(rowCells('CO2 Emissions Savings')).toEqual(['— —', '2.5']);
+      expect(row('CO2 Emissions Savings').classList).toContain('tr-underline');
+    });
+
+    it('shows placeholders when the modification emissions object has no hourly value', () => {
+      showOperationalImpacts.set(true);
+      baselineResults.set(makeResults({ co2EmissionsOutput: co2(10) }));
+      modificationResults.set(makeResults({ co2EmissionsOutput: co2(undefined) }));
+      resultsService.getCo2EmissionsSavings.and.returnValue(undefined);
+      render('mod-1');
+      expect(rowCells('CO2 Emissions')).toEqual(['10', '— —']);
+    });
+
+    it('shows a zero modification value', () => {
+      showOperationalImpacts.set(true);
+      baselineResults.set(makeResults({ co2EmissionsOutput: co2(10) }));
+      modificationResults.set(makeResults({ co2EmissionsOutput: co2(0) }));
+      render('mod-1');
+      expect(rowCells('CO2 Emissions')).toEqual(['10', '0']);
+    });
+
+    it('shows a placeholder in the savings cell when savings are undefined', () => {
+      showOperationalImpacts.set(true);
+      baselineResults.set(makeResults({ co2EmissionsOutput: co2(10) }));
+      modificationResults.set(makeResults({ co2EmissionsOutput: co2(7.5) }));
+      resultsService.getCo2EmissionsSavings.and.returnValue(undefined);
+      render('mod-1');
+      expect(rowCells('CO2 Emissions Savings')).toEqual(['— —', '— —']);
     });
   });
 
   describe('reactivity', () => {
     it('updates rendered values when results change', () => {
-      render();
-      expect(rowValue('Gross Heat Input')).toBe('20.00');
-      results.update((r) => ({ ...r, grossHeatInput: 99 }));
-      render();
-      expect(rowValue('Gross Heat Input')).toBe('99.00');
-    });
-
-    it('requests results for the scenario input', () => {
-      fixture.componentRef.setInput('scenario', 'mod-1');
-      render();
-      const assessmentService = TestBed.inject(ProcessHeatingAssessmentService) as jasmine.SpyObj<ProcessHeatingAssessmentService>;
-      expect(assessmentService.scenarioPhastSignal).toHaveBeenCalledWith('mod-1');
+      render('mod-1');
+      modificationResults.set(makeResults({ totalWallLoss: 99 }));
+      fixture.detectChanges();
+      expect(rowCells('Wall Losses')).toEqual(['10.00', '99.00']);
     });
   });
 });

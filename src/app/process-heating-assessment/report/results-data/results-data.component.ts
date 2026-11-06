@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, Signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, Signal, viewChild } from '@angular/core';
 import { InvalidModification, ProcessHeatingValidityService } from '../../services/process-heating-validity.service';
 import { ResultsDataResultsService, ResultsDataUI } from './results-data-results.service';
 
@@ -12,7 +12,11 @@ export class ResultsDataComponent {
   private readonly resultsDataResultsService = inject(ResultsDataResultsService);
 
   readonly resultsDataUI: Signal<ResultsDataUI | undefined> = this.resultsDataResultsService.resultsDataUI;
-  readonly invalidModifications: Signal<InvalidModification[]> = inject(ProcessHeatingValidityService).invalidModifications;
+  private readonly invalidModifications: Signal<InvalidModification[]> = inject(ProcessHeatingValidityService).invalidModifications;
+  /** Keyed by modification id so each column header shows only its own errors. */
+  readonly invalidModificationsById: Signal<Map<string, InvalidModification>> = computed(() =>
+    new Map(this.invalidModifications().map(modification => [modification.id, modification]))
+  );
   private readonly copyTable = viewChild<ElementRef<HTMLTableElement>>('copyTable');
   copyTableString: string;
 

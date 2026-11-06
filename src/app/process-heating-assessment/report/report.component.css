@@ -2,7 +2,9 @@ li a {
   padding: 12px;
 }
 
+/* Anchors the copy-table toast above the assessment footer. */
 .report-container {
+  position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
