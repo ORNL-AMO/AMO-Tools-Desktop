@@ -264,7 +264,7 @@
           </td>
           <td>@if (base?.co2EmissionsOutput?.hourlyTotalEmissionOutput) { {{base.co2EmissionsOutput.hourlyTotalEmissionOutput | number: '1.0-2'}} } @else {&mdash; &mdash;}</td>
           @if (modification()) {
-            <td>@if (mod?.co2EmissionsOutput) { {{mod.co2EmissionsOutput.hourlyTotalEmissionOutput | number: '1.0-2'}} } @else {&mdash; &mdash;}</td>
+            <td>@if (mod?.co2EmissionsOutput?.hourlyTotalEmissionOutput != null) { {{mod.co2EmissionsOutput.hourlyTotalEmissionOutput | number: '1.0-2'}} } @else {&mdash; &mdash;}</td>
           }
         </tr>
         @if (modification()) {
@@ -278,7 +278,7 @@
               }
             </td>
             <td>&mdash; &mdash;</td>
-            <td>@if (mod?.co2EmissionsOutput) { {{co2EmissionsSavings() | number: '1.0-2'}} } @else {&mdash; &mdash;}</td>
+            <td>@if (co2EmissionsSavings() != null) { {{co2EmissionsSavings() | number: '1.0-2'}} } @else {&mdash; &mdash;}</td>
           </tr>
         }
       }

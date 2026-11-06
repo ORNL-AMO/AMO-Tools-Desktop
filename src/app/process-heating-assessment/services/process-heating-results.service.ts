@@ -51,13 +51,15 @@ export class ProcessHeatingResultsService {
    * @param baseline results of the baseline scenario
    * @param modification results of the modification being compared
    * @param field emissions basis to compare: annual total or hourly total
-   * @returns baseline emissions minus modification emissions, or undefined when either scenario has no emissions output
+   * @returns baseline emissions minus modification emissions, or undefined when either scenario has no value for the field
    */
   getCo2EmissionsSavings(baseline: PhastResults, modification: PhastResults, field: 'totalEmissionOutput' | 'hourlyTotalEmissionOutput'): number | undefined {
-    if (!baseline.co2EmissionsOutput || !modification.co2EmissionsOutput) {
+    const baselineEmissions = baseline.co2EmissionsOutput?.[field];
+    const modificationEmissions = modification.co2EmissionsOutput?.[field];
+    if (baselineEmissions == null || modificationEmissions == null) {
       return undefined;
     }
-    return baseline.co2EmissionsOutput[field] - modification.co2EmissionsOutput[field];
+    return baselineEmissions - modificationEmissions;
   }
 
   /** @returns energy source rows data (fuel name, heating value, energy used) for the Energy Summary */

@@ -248,6 +248,32 @@ describe('AssessmentResultsComponent', () => {
       expect(rowCells('CO2 Emissions Savings')).toEqual(['— —', '2.5']);
       expect(row('CO2 Emissions Savings').classList).toContain('tr-underline');
     });
+
+    it('shows placeholders when the modification emissions object has no hourly value', () => {
+      showOperationalImpacts.set(true);
+      baselineResults.set(makeResults({ co2EmissionsOutput: co2(10) }));
+      modificationResults.set(makeResults({ co2EmissionsOutput: co2(undefined) }));
+      resultsService.getCo2EmissionsSavings.and.returnValue(undefined);
+      render('mod-1');
+      expect(rowCells('CO2 Emissions')).toEqual(['10', '— —']);
+    });
+
+    it('shows a zero modification value', () => {
+      showOperationalImpacts.set(true);
+      baselineResults.set(makeResults({ co2EmissionsOutput: co2(10) }));
+      modificationResults.set(makeResults({ co2EmissionsOutput: co2(0) }));
+      render('mod-1');
+      expect(rowCells('CO2 Emissions')).toEqual(['10', '0']);
+    });
+
+    it('shows a placeholder in the savings cell when savings are undefined', () => {
+      showOperationalImpacts.set(true);
+      baselineResults.set(makeResults({ co2EmissionsOutput: co2(10) }));
+      modificationResults.set(makeResults({ co2EmissionsOutput: co2(7.5) }));
+      resultsService.getCo2EmissionsSavings.and.returnValue(undefined);
+      render('mod-1');
+      expect(rowCells('CO2 Emissions Savings')).toEqual(['— —', '— —']);
+    });
   });
 
   describe('reactivity', () => {
