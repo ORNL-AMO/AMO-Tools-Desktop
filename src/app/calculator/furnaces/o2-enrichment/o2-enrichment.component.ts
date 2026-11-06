@@ -95,6 +95,8 @@ export class O2EnrichmentComponent implements OnInit {
       this.enrichmentInputs = value;
       this.o2EnrichmentService.calculate(this.settings);
       if(this.inAssessment){
+         // Generate Example and Reset replace the inputs array, so re-point the saved calculator at the current one
+         this.calculator.o2EnrichmentInputs = value;
          await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.calculator);
       }
     })

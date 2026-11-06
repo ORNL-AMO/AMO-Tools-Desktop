@@ -26,6 +26,10 @@ export class FlueGasMoistureDialogComponent {
   protected readonly settings: Settings = { ...inject<FlueGasMoistureDialogData>(DIALOG_DATA).settings };
 
   constructor() {
+    // The moisture calculator treats anything but Imperial as Metric, so Custom must be normalized here
+    if (this.settings.unitsOfMeasure === 'Custom') {
+      this.settings.unitsOfMeasure = 'Imperial';
+    }
     if (this.settings.unitsOfMeasure === 'Metric') {
       this.seedMetricDefaults();
     }

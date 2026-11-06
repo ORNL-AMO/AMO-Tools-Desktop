@@ -39,9 +39,11 @@ describe('FlueGasMoistureDialogComponent', () => {
 
   it('treats Custom units as Imperial', () => {
     const service = render({ ...IMPERIAL, unitsOfMeasure: 'Custom' } as Settings);
+    const modalSettings: Settings = fixture.nativeElement.querySelector('app-flue-gas-moisture-modal').settings;
 
     expect(service.baseGasDensity.dryBulbTemp).toBe(68);
     expect(service.baseGasDensity.barometricPressure).toBe(29.92);
+    expect(modalSettings.unitsOfMeasure).toBe('Imperial');
   });
 
   it('converts the defaults to Metric fan units', () => {

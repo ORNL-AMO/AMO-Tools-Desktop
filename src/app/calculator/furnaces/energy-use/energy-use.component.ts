@@ -127,6 +127,11 @@ export class EnergyUseComponent implements OnInit {
     this.updateTableString();
   }
 
+  updateFlowCalculations(data: FlowCalculations) {
+    this.flowCalculations = data;
+    this.calculate();
+  }
+
   async calculate() {
     if (!this.inAssessment) {
       this.flowCalculations = this.energyUseService.flowCalculations;
