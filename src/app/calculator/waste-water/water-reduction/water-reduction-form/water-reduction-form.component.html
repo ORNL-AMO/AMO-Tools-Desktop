@@ -48,7 +48,8 @@
       </div>
 
       <div class="form-group">
-        <label class="small" for="{{'waterCost_'+idString}}">Water Cost</label>
+        <label class="small" for="{{'waterCost_'+idString}}" *ngIf="isWastewater != 1">Water Cost</label>
+        <label class="small" for="{{'waterCost_'+idString}}" *ngIf="isWastewater == 1">Wastewater Cost</label>
         <div class="input-group">
           <input class="form-control" type="number" name="waterCost" id="{{'waterCost_'+idString}}"
             formControlName="waterCost" (input)="calculate()" (focus)="focusField('waterCost')" (blur)="focusOut()">
@@ -186,8 +187,8 @@
     <!-- offsheet/other method -->
     <div class="form-section" *ngIf="form.controls.measurementMethod.value == 3">
       <div class="form-group">
-        <label *ngIf="!isWastewater" class="small" for="{{'consumption_'+idString}}">Water Consumption</label>
-        <label *ngIf="isWastewater" class="small" for="{{'consumption_'+idString}}">Wastewater Disposal</label>
+        <label *ngIf="isWastewater != 1" class="small" for="{{'consumption_'+idString}}">Water Consumption</label>
+        <label *ngIf="isWastewater == 1" class="small" for="{{'consumption_'+idString}}">Wastewater Disposal</label>
         <div class="input-group">
           <input class="form-control" type="number" name="consumption" id="{{'consumption_'+idString}}"
             formControlName="consumption" (input)="calculate()" (focus)="focusField('consumption')" (blur)="focusOut()">
@@ -205,8 +206,20 @@
 
     <div class="row">
       <div class="col-6">
-        <label class="small bold" *ngIf="!isWastewater">Water Consumption</label>
-        <label class="small bold" *ngIf="isWastewater">Wastewater Disposal</label>
+        <label class="small bold" *ngIf="isWastewater != 1">Water Consumption</label>
+        <label class="small bold" *ngIf="isWastewater == 1">Wastewater Disposal</label>
+      </div>
+      <div class="col-6 text-center">
+        <span class="small bold">{{individualResults.waterUse | number:'1.0-0'}}
+          <span *ngIf="settings.unitsOfMeasure == 'Imperial'">kgal/yr</span>
+          <span *ngIf="settings.unitsOfMeasure == 'Metric'">m<sup>3</sup>/yr</span>
+        </span>
+      </div>
+    </div>
+    <!-- "Both": wastewater disposal equals water use -->
+    <div class="row" *ngIf="isWastewater == 2">
+      <div class="col-6">
+        <label class="small bold">Wastewater Disposal</label>
       </div>
       <div class="col-6 text-center">
         <span class="small bold">{{individualResults.waterUse | number:'1.0-0'}}

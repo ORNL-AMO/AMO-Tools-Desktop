@@ -14,7 +14,7 @@ export class WaterReductionHelpComponent implements OnInit {
   @Input()
   currentField: string;
   @Input()
-  isWastewater: boolean;
+  isWastewater: number;
 
   docsLink: string = environment.measurDocsUrl;
 

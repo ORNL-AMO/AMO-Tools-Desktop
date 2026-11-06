@@ -26,7 +26,7 @@ export class WaterReductionComponent implements OnInit {
   @Input()
   operatingHours: OperatingHours;
   @Input()
-  isWastewater: boolean = false;
+  isWastewater: number = 0;
   @Input()
   assessment: Assessment;
 

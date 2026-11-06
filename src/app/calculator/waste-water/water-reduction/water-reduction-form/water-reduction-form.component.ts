@@ -21,7 +21,7 @@ export class WaterReductionFormComponent implements OnInit {
   @Input()
   isBaseline: boolean;
   @Input()
-  isWastewater: boolean;
+  isWastewater: number;
   @Output('emitCalculate')
   emitCalculate = new EventEmitter<WaterReductionData>();
   @Output('emitRemoveEquipment')
@@ -46,9 +46,10 @@ export class WaterReductionFormComponent implements OnInit {
     { value: 2, name: 'Bucket Method' },
     { value: 3, name: 'Offsheet / Other Method' }
   ];
-  calculatorTypes: Array<{ value: boolean, name: string }> = [
-    { value: false, name: 'Water' },
-    { value: true, name: 'Wastewater' }
+  calculatorTypes: Array<{ value: number, name: string }> = [
+    { value: 0, name: 'Water' },
+    { value: 1, name: 'Wastewater' },
+    { value: 2, name: 'Both' }
   ];
 
   form: UntypedFormGroup;
@@ -73,8 +74,10 @@ export class WaterReductionFormComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.isWastewater && !changes.isWastewater.firstChange) {
-      this.form.patchValue({ isWastewater: this.isWastewater })
+    if (changes.isWastewater && !changes.isWastewater.firstChange && this.form.controls.isWastewater.value != this.isWastewater) {
+      this.form.patchValue({ isWastewater: this.isWastewater });
+      this.resetWaterCost();
+      this.calculate();
     }
     if (changes.selected && !changes.selected.firstChange) {
       if (this.selected == false) {
@@ -100,8 +103,14 @@ export class WaterReductionFormComponent implements OnInit {
   }
 
   changeCalculatorType() {
+    this.resetWaterCost();
     this.waterReductionService.setValidators(this.form);
     this.calculate();
+  }
+
+  resetWaterCost() {
+    let waterCost: number = this.waterReductionService.getDefaultWaterCostForForm(this.settings, this.form.controls.isWastewater.value);
+    this.form.patchValue({ waterCost: waterCost });
   }
 
   calculate() {
