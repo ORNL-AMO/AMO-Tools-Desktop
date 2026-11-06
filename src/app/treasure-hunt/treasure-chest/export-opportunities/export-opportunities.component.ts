@@ -58,6 +58,7 @@ export class ExportOpportunitiesComponent implements OnInit {
     { label: 'Cooling Tower Fan', key: 'coolingTowerFanOpportunities', fallbackName: 'Cooling Tower Fan' },
     { label: 'Cooling Tower Basin', key: 'coolingTowerBasinOpportunities', fallbackName: 'Cooling Tower Basin' },
     { label: 'Power Factor Correction', key: 'powerFactorCorrectionOpportunities', fallbackName: 'Power Factor Correction' },
+    { label: 'Compressed Air Dryer', key: 'compressedAirDryerOpportunities', fallbackName: 'Compressed Air Dryer' },
     { label: 'Opportunity Sheets', key: 'opportunitySheets', fallbackName: 'Opportunity Sheet', usesItemName: true },
     { label: 'Assessment Opportunities', key: 'assessmentOpportunities', fallbackName: 'Assessment Opportunity', usesItemName: true }
   ];

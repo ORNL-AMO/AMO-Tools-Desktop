@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, AssessmentOpportunityResults, Treasure, BoilerBlowdownRateTreasureHunt, PowerFactorCorrectionTreasureHunt, SteamLeakSurveyTreasureHunt } from '../../../shared/models/treasure-hunt';
+import { TreasureHunt, LightingReplacementTreasureHunt, OpportunitySheet, ReplaceExistingMotorTreasureHunt, MotorDriveInputsTreasureHunt, NaturalGasReductionTreasureHunt, ElectricityReductionTreasureHunt, CompressedAirReductionTreasureHunt, CompressedAirPressureReductionTreasureHunt, WaterReductionTreasureHunt, EnergyUsage, OpportunitySheetResults, OpportunitySummary, SteamReductionTreasureHunt, PipeInsulationReductionTreasureHunt, TankInsulationReductionTreasureHunt, AirLeakSurveyTreasureHunt, WallLossTreasureHunt, EnergySourceData, FlueGasTreasureHunt, LeakageLossTreasureHunt, OpeningLossTreasureHunt, WasteHeatTreasureHunt, HeatCascadingTreasureHunt, WaterHeatingTreasureHunt, AirHeatingTreasureHunt, CoolingTowerMakeupWaterTreasureHunt, ChillerStagingTreasureHunt, ChillerPerformanceTreasureHunt, CoolingTowerFanTreasureHunt, CoolingTowerBasinTreasureHunt, AssessmentOpportunity, AssessmentOpportunityResults, Treasure, BoilerBlowdownRateTreasureHunt, PowerFactorCorrectionTreasureHunt, SteamLeakSurveyTreasureHunt, CompressedAirDryerTreasureHunt } from '../../../shared/models/treasure-hunt';
 import *  as _ from 'lodash';
 import { Settings } from '../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../shared/convert-units/convert-units.service';
@@ -36,6 +36,8 @@ import { BoilerBlowdownRateTreasureHuntService } from '../../treasure-hunt-calcu
 import { PowerFactorCorrectionTreasureHuntService } from '../../treasure-hunt-calculator-services/power-factor-correction-treasure-hunt.service';
 import { SteamLeakTreasureHuntService } from '../../treasure-hunt-calculator-services/steam-leak-treasure-hunt.service';
 import { AssessmentIntegrationService } from '../../../shared/assessment-integration/assessment-integration.service';
+import { CompressedAirDryerTreasureHuntService } from '../../treasure-hunt-calculator-services/compressed-air-dryer-treasure-hunt.service';
+
 @Injectable()
 export class OpportunityCardsService {
 
@@ -75,7 +77,8 @@ export class OpportunityCardsService {
     private steamLeakTreasureHuntService: SteamLeakTreasureHuntService,
     private boilerBlowdownRateTreasureHuntService: BoilerBlowdownRateTreasureHuntService,
     private powerFactorCorrectionTreasureHuntService: PowerFactorCorrectionTreasureHuntService,
-    private assessmentIntegrationService: AssessmentIntegrationService
+    private assessmentIntegrationService: AssessmentIntegrationService,
+    private compressedAirDryerTreasureHuntService: CompressedAirDryerTreasureHuntService
   ) {
     this.updatedOpportunityCard = new BehaviorSubject<OpportunityCardData>(undefined);
     this.opportunityCards = new BehaviorSubject(new Array());
@@ -115,7 +118,8 @@ export class OpportunityCardsService {
     let assessmentOpportunityData: Array<OpportunityCardData> = this.getAssessmentOpportunities(treasureHunt.assessmentOpportunities, treasureHunt.currentEnergyUsage, settings)
     let boilerBlowdownRate: Array<OpportunityCardData> = this.getBoilerBlowdownRateOpportunities(treasureHunt.boilerBlowdownRateOpportunities, treasureHunt.currentEnergyUsage, settings);
     let powerFactorCorrection: Array<OpportunityCardData> = this.getPowerFactorCorrectionOpportunities(treasureHunt.powerFactorCorrectionOpportunities, treasureHunt.currentEnergyUsage, settings);
-    
+    let compressedAirDryer: Array<OpportunityCardData> = this.getCompressedAirDryerOpportunities(treasureHunt.compressedAirDryerOpportunities, treasureHunt.currentEnergyUsage, settings);
+
     opportunityCardsData = _.union(
       lightingReplacementsCardData,
       replaceExistingData,
@@ -146,7 +150,8 @@ export class OpportunityCardsService {
       assessmentOpportunityData,
       boilerBlowdownRate,
       steamLeakSurveyData,
-      powerFactorCorrection
+      powerFactorCorrection,
+      compressedAirDryer
     );
     let index: number = 0;
     opportunityCardsData.forEach(card => {
@@ -850,6 +855,20 @@ export class OpportunityCardsService {
       steamLeakSurveyOpportunities.forEach(steamLeakSurvey => {
         let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(steamLeakSurvey, settings);
         let cardData: OpportunityCardData = this.steamLeakTreasureHuntService.getSteamLeakSurveyCardData(steamLeakSurvey, opportunitySummary, settings, index, currentEnergyUsage);
+          opportunityCardsData.push(cardData);
+        index++;
+      });
+    }
+    return opportunityCardsData;
+  }
+  
+  getCompressedAirDryerOpportunities(compressedAirDryerOpportunities: Array<CompressedAirDryerTreasureHunt>, currentEnergyUsage: EnergyUsage, settings: Settings): Array<OpportunityCardData> {
+    let opportunityCardsData: Array<OpportunityCardData> = new Array();
+    if (compressedAirDryerOpportunities) {
+      let index: number = 0;
+      compressedAirDryerOpportunities.forEach(compressedAirDryer => {
+        let opportunitySummary: OpportunitySummary = this.opportunitySummaryService.getIndividualOpportunitySummary(compressedAirDryer, settings);
+        let cardData: OpportunityCardData = this.compressedAirDryerTreasureHuntService.getCompressedAirDryerCardData(compressedAirDryer, opportunitySummary, index, currentEnergyUsage, settings);
         opportunityCardsData.push(cardData);
         index++;
       });
@@ -858,8 +877,6 @@ export class OpportunityCardsService {
   }
 
 }
-
-
 export interface OpportunityCardData {
   index?: number,
   teamName: string;
@@ -909,6 +926,7 @@ export interface OpportunityCardData {
   boilerBlowdownRate?: BoilerBlowdownRateTreasureHunt;
   powerFactorCorrection?: PowerFactorCorrectionTreasureHunt;
   steamLeakSurvey?: SteamLeakSurveyTreasureHunt;
+  compressedAirDryer?: CompressedAirDryerTreasureHunt;
   iconCalcType?: string;
   needBackground?: boolean;
   hasStaleAssessmentData?: boolean;

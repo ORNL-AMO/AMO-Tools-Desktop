@@ -41,7 +41,8 @@ export class ExportOpportunitiesService {
         coolingTowerBasinOpportunities: this.getSelectedOpportunitiesGeneric(treasureHunt.coolingTowerBasinOpportunities, includeUnselected),
         boilerBlowdownRateOpportunities: this.getSelectedOpportunitiesGeneric(treasureHunt.boilerBlowdownRateOpportunities, includeUnselected),
         steamLeakSurveys: this.getSelectedOpportunitiesGeneric(treasureHunt.steamLeakSurveys, includeUnselected),
-        powerFactorCorrectionOpportunities: this.getSelectedOpportunitiesGeneric(treasureHunt.powerFactorCorrectionOpportunities, includeUnselected)
+        powerFactorCorrectionOpportunities: this.getSelectedOpportunitiesGeneric(treasureHunt.powerFactorCorrectionOpportunities, includeUnselected),
+        compressedAirDryerOpportunities: this.getSelectedOpportunitiesGeneric(treasureHunt.compressedAirDryerOpportunities, includeUnselected)
       }
       return exportOpportunities;
     }

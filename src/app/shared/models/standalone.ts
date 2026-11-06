@@ -858,3 +858,54 @@ export interface PowerFactorTriangleOutputs {
 
 //==== END Power Factor Triangle objects =====
 
+
+//====== Dryer Operating Cost objects ======
+export enum DryerType {
+  Heatless = 0,
+  HeatedExternally = 1,
+  BlowerPurgeWithSweep = 2,
+  BlowerPurgeWithoutSweep = 3,
+  HeatOfCompressionHC = 4,
+  HeatOfCompressionSP = 5,
+  Refrigerated = 6,
+}
+
+export enum PurgeInputMode {
+  PercentOfDryerCapacity = 0,
+  DirectFlow = 1,
+}
+
+export interface DryerOperatingCostInput {
+  dryerType: DryerType;
+  flowRate: number;
+  pressure: number;
+  temperature: number;
+  annualOperatingHours: number;
+  costOfElectricity: number;
+  costOfCompressedAir: number;
+  costOfCoolingWater: number;
+  heaterPower: number;
+  heatingHoursPerDay: number;
+  purgeRate: number;
+  purgeFlowRate: number;
+  designDDCPercentage: number;
+  regenerationCycleLength: number;
+  motorPower: number;
+  purgeInputMode: PurgeInputMode;
+}
+
+export interface DryerOperatingCostOutput {
+  waterRemoved: number;
+  totalCostPerYear: number;
+  heaterPower: number;
+  heatingHoursPerDay: number;
+  purgeRate: number;
+  designDDCPercentage: number;
+  purgeFlowRate: number;
+  motorPower: number;
+  regenerationCycleLength: number;
+  // UI-derived from waterRemoved; not returned by the Suite.
+  waterRemovedVolume?: number;
+}
+//===== END Dryer Operating Cost objects =====
+
