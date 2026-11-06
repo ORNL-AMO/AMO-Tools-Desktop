@@ -133,16 +133,16 @@ export class CompressedAirDryerComponent implements OnInit, AfterViewInit, OnDes
 
   async getCalculatorForAssessment(): Promise<void> {
     this.assessmentCalculator = this.calculatorDbService.getByAssessmentId(this.assessment.id);
-    if (this.assessmentCalculator) {
-      if (this.assessmentCalculator.dryerOperatingCost) {
-        this.compressedAirDryerService.baselineInput = this.assessmentCalculator.dryerOperatingCost.baseline;
-        if (this.assessmentCalculator.dryerOperatingCost.modification) {
-          this.compressedAirDryerService.modificationInput = this.assessmentCalculator.dryerOperatingCost.modification;
-        }
+    if (this.assessmentCalculator?.dryerOperatingCost) {
+      this.compressedAirDryerService.baselineInput = this.assessmentCalculator.dryerOperatingCost.baseline;
+      if (this.assessmentCalculator.dryerOperatingCost.modification) {
+        this.compressedAirDryerService.modificationInput = this.assessmentCalculator.dryerOperatingCost.modification;
       }
-      this.initData();
-      this.getResults();
-    } else {
+    }
+    this.initData();
+    // Saves an existing calculator; a new one is created and saved below once the baseline exists.
+    this.getResults();
+    if (!this.assessmentCalculator) {
       this.assessmentCalculator = this.initNewAssessmentCalculator();
       await this.calculatorDbService.saveAssessmentCalculator(this.assessment, this.assessmentCalculator);
     }

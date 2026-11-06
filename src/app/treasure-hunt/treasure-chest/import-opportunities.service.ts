@@ -260,10 +260,6 @@ export class ImportOpportunitiesService {
       if (opportunityType == Treasure.electricityReduction) {
         this.updateDataService.updateElectricityReductionTreasureHunt(opp, settings);
       }
-
-      if (opportunityType == Treasure.compressedAirDryer) {
-        this.updateDataService.updateCompressedAirDryerTreasureHunt(opp);
-      }
     });
   }
 

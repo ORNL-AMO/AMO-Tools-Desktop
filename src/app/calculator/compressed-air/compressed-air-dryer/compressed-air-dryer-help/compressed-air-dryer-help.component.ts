@@ -3,6 +3,7 @@ import { Settings } from '../../../../shared/models/settings';
 import { ConvertUnitsService } from '../../../../shared/convert-units/convert-units.service';
 import { ConvertCompressedAirDryerService } from '../convert-compressed-air-dryer.service';
 import { getMinimumPurgeAirRate } from '../compressed-air-dryer-type-config';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-compressed-air-dryer-help',
@@ -13,6 +14,7 @@ import { getMinimumPurgeAirRate } from '../compressed-air-dryer-type-config';
 export class CompressedAirDryerHelpComponent implements OnChanges {
   @Input() currentField: string;
   @Input() settings: Settings;
+  docsLink: string = environment.measurDocsUrl;
 
   isMetric: boolean = false;
   // Same bounds the form validates against, in the current units.

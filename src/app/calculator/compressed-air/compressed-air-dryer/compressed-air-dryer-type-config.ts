@@ -17,8 +17,8 @@ export interface DryerTypeConfig {
   showCoolingWater: boolean;
 }
 
-// Single source for dryer type defaults and conditional fields, used by the form, results, and
-// saved-data migration. Values follow the V2 integration spec; provenance verification is a separate follow-up.
+// Single source for dryer type defaults and conditional fields, used by the form and results.
+// Values follow the V2 integration spec; provenance verification is a separate follow-up.
 export const DRYER_TYPE_CONFIG: Record<DryerType, DryerTypeConfig> = {
   [DryerType.Heatless]: {
     label: 'Heatless',
