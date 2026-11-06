@@ -7,6 +7,9 @@ span.measur-item-type::first-letter {
 }
 
 
-.modal-lg {
-  max-width: 40%;
+/* matches the local opportunities export modal: full width on phones, half the screen above that */
+@media (min-width: 576px) {
+  .modal-lg {
+    max-width: 50%;
+  }
 }
