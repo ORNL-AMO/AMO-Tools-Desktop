@@ -37,6 +37,13 @@ describe('FlueGasMoistureDialogComponent', () => {
     expect(service.baseGasDensity.barometricPressure).toBe(29.92);
   });
 
+  it('treats Custom units as Imperial', () => {
+    const service = render({ ...IMPERIAL, unitsOfMeasure: 'Custom' } as Settings);
+
+    expect(service.baseGasDensity.dryBulbTemp).toBe(68);
+    expect(service.baseGasDensity.barometricPressure).toBe(29.92);
+  });
+
   it('converts the defaults to Metric fan units', () => {
     const service = render(METRIC);
 

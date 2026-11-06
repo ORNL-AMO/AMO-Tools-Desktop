@@ -45,7 +45,6 @@ import { SankeySharedModule } from '../shared/sankey/sankey-shared.module';
 import { PhastSankeyModule } from '../shared/phast-sankey/phast-sankey.module';
 import { PieChartModule } from '../shared/pie-chart/pie-chart.module';
 import { PhastResultsService } from '../phast/phast-results.service';
-import { PhastService } from '../phast/phast.service';
 import { O2EnrichmentModule } from '../calculator/furnaces/o2-enrichment/o2-enrichment.module';
 import { EnergyEquivalencyModule } from '../calculator/furnaces/energy-equivalency/energy-equivalency.module';
 import { EnergyUseModule } from '../calculator/furnaces/energy-use/energy-use.module';
@@ -106,10 +105,7 @@ import { ReportTableCellPipe } from '../shared/pipes/report-table-cell.pipe';
 import { InputSummaryComponent } from './report/input-summary/input-summary.component';
 import { FacilityInfoComponent } from './report/facility-info/facility-info.component';
 import { CalculatorsComponent } from './calculators/calculators.component';
-import { O2EnrichmentTabComponent } from './calculators/o2-enrichment-tab.component';
-import { FuelElectricityEquivalencyTabComponent } from './calculators/fuel-electricity-equivalency-tab.component';
-import { OrificeMeterTabComponent } from './calculators/orifice-meter-tab.component';
-import { UnitConverterTabComponent } from './calculators/unit-converter-tab.component';
+import { CalculatorTabComponent } from './calculators/calculator-tab.component';
 import { AssessmentSettingsComponent } from './assessment-settings/assessment-settings.component';
 import { OperationsComponent } from './operations/operations.component';
 import { HeatBalanceComponent } from './heat-balance/heat-balance.component';
@@ -366,38 +362,38 @@ export const ROUTES: Route[] = [
         ]
       },
       {
+        path: ROUTE_TOKENS.sankey,
+        component: ProcessHeatingSankeyComponent,
+        data: { mainView: ROUTE_TOKENS.sankey, stepIndex: 24 },
+        canActivate: [requiresValidBaselineGuard],
+      },
+      {
         path: ROUTE_TOKENS.calculators,
         component: CalculatorsComponent,
-        data: { mainView: ROUTE_TOKENS.calculators, stepIndex: 24 },
+        data: { mainView: ROUTE_TOKENS.calculators, stepIndex: 25 },
         children: [
           { path: '', redirectTo: ROUTE_TOKENS.o2Enrichment, pathMatch: 'full' },
           {
             path: ROUTE_TOKENS.o2Enrichment,
-            component: O2EnrichmentTabComponent,
+            component: CalculatorTabComponent,
             data: { childView: ROUTE_TOKENS.o2Enrichment },
           },
           {
             path: ROUTE_TOKENS.fuelElectricityEquivalency,
-            component: FuelElectricityEquivalencyTabComponent,
+            component: CalculatorTabComponent,
             data: { childView: ROUTE_TOKENS.fuelElectricityEquivalency },
           },
           {
             path: ROUTE_TOKENS.orificeMeter,
-            component: OrificeMeterTabComponent,
+            component: CalculatorTabComponent,
             data: { childView: ROUTE_TOKENS.orificeMeter },
           },
           {
             path: ROUTE_TOKENS.unitConverter,
-            component: UnitConverterTabComponent,
+            component: CalculatorTabComponent,
             data: { childView: ROUTE_TOKENS.unitConverter },
           },
         ]
-      },
-      {
-        path: ROUTE_TOKENS.sankey,
-        component: ProcessHeatingSankeyComponent,
-        data: { mainView: ROUTE_TOKENS.sankey, stepIndex: 25 },
-        canActivate: [requiresValidBaselineGuard],
       },
     ]
   }
@@ -435,10 +431,7 @@ export const ROUTES: Route[] = [
     ProcessHeatingSankeyComponent,
     ReportComponent,
     CalculatorsComponent,
-    O2EnrichmentTabComponent,
-    FuelElectricityEquivalencyTabComponent,
-    OrificeMeterTabComponent,
-    UnitConverterTabComponent,
+    CalculatorTabComponent,
     ExecutiveSummaryComponent,
     InvalidModificationAlertComponent,
     EnergySummaryComponent,
@@ -575,7 +568,6 @@ export const ROUTES: Route[] = [
     // type gets its own local result service (see charge-material-results.service.ts), it stops
     // reading that field from here.
     PhastResultsService,
-    PhastService,
     MeteredEnergyService,
     DesignedEnergyService,
     Co2SavingsPhastService,

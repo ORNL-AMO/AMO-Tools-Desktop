@@ -5,8 +5,8 @@ export const MainView = {
   ASSESSMENT: 'assessment',
   DIAGRAM: 'diagram',
   REPORT: 'report',
-  CALCULATORS: 'calculators',
   SANKEY: 'sankey',
+  CALCULATORS: 'calculators',
 } as const;
 export type MainView = typeof MainView[keyof typeof MainView];
 
@@ -114,8 +114,8 @@ export const MAIN_VIEW_LINKS: ViewLink[] = [
   { view: MainView.ASSESSMENT, label: 'Assessment' },
   { view: MainView.DIAGRAM, label: 'Diagram' },
   { view: MainView.REPORT, label: 'Report' },
-  { view: MainView.CALCULATORS, label: 'Calculators' },
   { view: MainView.SANKEY, label: 'Sankey' },
+  { view: MainView.CALCULATORS, label: 'Calculators' },
 ];
 
 export const BASELINE_VIEW_LINKS: ViewLink[] = [

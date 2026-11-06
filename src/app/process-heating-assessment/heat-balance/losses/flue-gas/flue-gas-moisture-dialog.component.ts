@@ -26,7 +26,7 @@ export class FlueGasMoistureDialogComponent {
   protected readonly settings: Settings = { ...inject<FlueGasMoistureDialogData>(DIALOG_DATA).settings };
 
   constructor() {
-    if (this.settings.unitsOfMeasure !== 'Imperial') {
+    if (this.settings.unitsOfMeasure === 'Metric') {
       this.seedMetricDefaults();
     }
   }
