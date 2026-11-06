@@ -103,13 +103,38 @@ describe('ExecutiveSummaryComponent', () => {
     expect(fixture.componentInstance.copyTableString).toContain('Annual Result Totals');
   });
 
-  it('shows the invalid modification alert only when a modification is invalid', () => {
-    const alert = (): Element | null => fixture.nativeElement.querySelector('app-invalid-modification-alert');
-    expect(alert()).toBeNull();
+  describe('invalid modification', () => {
+    const headerRows = (table = 0): HTMLTableRowElement[] =>
+      Array.from(fixture.nativeElement.querySelectorAll('table')[table].querySelectorAll('thead tr'));
 
-    invalidModifications.set([{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }]);
-    fixture.detectChanges();
+    beforeEach(() => {
+      ui.set(buildUI({ modificationNames: [{ id: 'mod1', name: 'Scenario 1' }, { id: 'mod2', name: 'Scenario 2' }] }));
+    });
 
-    expect(alert()).not.toBeNull();
+    it('adds no alert row when every modification is valid', () => {
+      fixture.detectChanges();
+      expect(headerRows().length).toBe(1);
+      expect(fixture.nativeElement.querySelector('.alert-danger')).toBeNull();
+    });
+
+    it('shows the errors above the invalid modification column only', () => {
+      invalidModifications.set([{ id: 'mod2', name: 'Scenario 2', errors: ['Errors found in Wall'] }]);
+      fixture.detectChanges();
+
+      const [alertRow, titleRow] = headerRows();
+      expect(alertRow.cells.length).toBe(titleRow.cells.length);
+      expect(alertRow.cells[2].querySelector('.alert-danger')).toBeNull();
+      const alert = alertRow.cells[3].querySelector<HTMLElement>('.alert-danger');
+      expect(alert.innerText.split('\n').filter(Boolean)).toEqual(['Invalid Modification', 'Errors found in Wall']);
+    });
+
+    it('repeats the alert row on every table', () => {
+      const row = buildUI().summaryRows[0];
+      ui.set(buildUI({ modificationNames: [{ id: 'mod1', name: 'Scenario 1' }], costRows: [row] }));
+      invalidModifications.set([{ id: 'mod1', name: 'Scenario 1', errors: ['Errors found in Wall'] }]);
+      fixture.detectChanges();
+
+      expect(headerRows(1)[0].querySelector('.alert-danger')).not.toBeNull();
+    });
   });
 });
