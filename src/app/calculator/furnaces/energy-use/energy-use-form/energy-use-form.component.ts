@@ -19,7 +19,7 @@ export class EnergyUseFormComponent implements OnInit {
   @Output('changeField')
   changeField = new EventEmitter<string>();
   @Output('emitCalculate')
-  emitCalculate = new EventEmitter<boolean>();
+  emitCalculate = new EventEmitter<FlowCalculations>();
   @Input()
   settings: Settings;
 
@@ -103,7 +103,7 @@ export class EnergyUseFormComponent implements OnInit {
 
     properties = this.rangeCheck.dischargeCoefficient;
 
-    this.emitCalculate.emit(true);
+    this.emitCalculate.emit(this.flowCalculations);
 
   }
 

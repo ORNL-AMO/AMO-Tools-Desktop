@@ -4,7 +4,14 @@ export const ROUTE_TOKENS = {
   assessment: 'assessment',
   diagram: 'diagram',
   report: 'report',
+  calculators: 'calculators',
   sankey: 'sankey',
+
+  // Calculators sub-tabs
+  o2Enrichment: 'o2-enrichment',
+  fuelElectricityEquivalency: 'fuel-electricity-equivalency',
+  orificeMeter: 'orifice-meter',
+  unitConverter: 'unit-converter',
 
   // Baseline sub-tabs
   assessmentSettings: 'assessment-settings',

@@ -6,6 +6,7 @@ export const MainView = {
   DIAGRAM: 'diagram',
   REPORT: 'report',
   SANKEY: 'sankey',
+  CALCULATORS: 'calculators',
 } as const;
 export type MainView = typeof MainView[keyof typeof MainView];
 
@@ -35,6 +36,14 @@ export const ReportView = {
 } as const;
 export type ReportView = typeof ReportView[keyof typeof ReportView];
 
+export const CalculatorsView = {
+  O2_ENRICHMENT: 'o2-enrichment',
+  FUEL_ELECTRICITY_EQUIVALENCY: 'fuel-electricity-equivalency',
+  ORIFICE_METER: 'orifice-meter',
+  UNIT_CONVERTER: 'unit-converter',
+} as const;
+export type CalculatorsView = typeof CalculatorsView[keyof typeof CalculatorsView];
+
 export const LossView = {
   OPERATIONS: 'operations',
   CHARGE_MATERIAL: 'charge-material',
@@ -56,7 +65,7 @@ export const LossView = {
 } as const;
 export type LossView = typeof LossView[keyof typeof LossView];
 
-export type ProcessHeatingView = MainView | BaselineView | AssessmentView | ReportView | LossView;
+export type ProcessHeatingView = MainView | BaselineView | AssessmentView | ReportView | CalculatorsView | LossView;
 
 /** Notes field edited from the results panel while each heat balance step is selected in Expert View. Operations has no Expert View step. */
 export const LOSS_VIEW_NOTES_KEY: Partial<Record<ProcessHeatingView, keyof Notes>> = {
@@ -106,6 +115,7 @@ export const MAIN_VIEW_LINKS: ViewLink[] = [
   { view: MainView.DIAGRAM, label: 'Diagram' },
   { view: MainView.REPORT, label: 'Report' },
   { view: MainView.SANKEY, label: 'Sankey' },
+  { view: MainView.CALCULATORS, label: 'Calculators' },
 ];
 
 export const BASELINE_VIEW_LINKS: ViewLink[] = [
@@ -169,6 +179,13 @@ export const REPORT_VIEW_LINKS: ViewLink[] = [
   { view: ReportView.REPORT_SANKEY, label: 'Sankey' },
   { view: ReportView.INPUT_SUMMARY, label: 'Input Summary' },
   { view: ReportView.FACILITY_INFO, label: 'Facility Info' },
+];
+
+export const CALCULATORS_VIEW_LINKS: ViewLink[] = [
+  { view: CalculatorsView.O2_ENRICHMENT, label: 'O2 Enrichment' },
+  { view: CalculatorsView.FUEL_ELECTRICITY_EQUIVALENCY, label: 'Fuel to Electricity Equivalency' },
+  { view: CalculatorsView.ORIFICE_METER, label: 'Orifice Meter Flow' },
+  { view: CalculatorsView.UNIT_CONVERTER, label: 'Unit Converter' },
 ];
 
 const FUEL_FIRED_ONLY_VIEWS: ReadonlySet<string> = new Set<string>([LossView.FLUE_GAS, LossView.GAS_LEAKAGE]);
