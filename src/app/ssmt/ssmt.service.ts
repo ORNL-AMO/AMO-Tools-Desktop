@@ -303,6 +303,10 @@ export class SsmtService {
     } else if (headerInput.numberOfHeaders == 2) {
       headerInput.mediumPressureHeader = null;
     }
+    // The row breakdown is Desktop-only data. The Suite continues to receive the existing aggregate inputs.
+    delete headerInput.highPressureHeader?.processSteamUsageData;
+    delete headerInput.mediumPressureHeader?.processSteamUsageData;
+    delete headerInput.lowPressureHeader?.processSteamUsageData;
     return headerInput;
   }
 

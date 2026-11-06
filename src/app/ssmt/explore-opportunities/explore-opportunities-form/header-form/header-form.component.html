@@ -4,7 +4,9 @@
   [baselineMediumPressureForm]="baselineMediumPressureForm"
   [modificationMediumPressureForm]="modificationMediumPressureForm" [baselineLowPressureForm]="baselineLowPressureForm"
   [modificationLowPressureForm]="modificationLowPressureForm" [baselineWarnings]="baselineWarnings"
-  [modificationWarnings]="modificationWarnings"></app-condensate-handling-form>
+  [modificationWarnings]="modificationWarnings"
+  (emitShowProcessSteamUsage)="showProcessSteamUsageModal($event)"
+  (emitResetProcessSteamUsage)="resetProcessSteamUsage($event)"></app-condensate-handling-form>
 
 <!--HEAT LOSS-->
 <div class="checkbox">
@@ -229,7 +231,7 @@
         <div class="form-group explore-opps-formgroup">
           <label for="modificationHPSteamUsage" class="mod-value-label">Steam Usage</label>
           <div class="input-group mod-max-width">
-            <input name="modificationHPSteamUsage" type="number" step="any" id="modificationHPSteamUsage"
+            <input name="modificationHPSteamUsage" type="number" step="any" id="modificationHPSteamUsage" [readonly]="hasProcessSteamUsageData('highPressureHeader')"
               class="form-control" (focus)="focusField('processSteamUsage')" (input)="save()"
               formControlName="processSteamUsage" />
             <span class="units input-group-addon"
@@ -248,6 +250,9 @@
             </span>
           </div>
         </div>
+        <a class="form-text small click-link" (click)="showProcessSteamUsageModal('highPressureHeader')">
+          {{ hasProcessSteamUsageData('highPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+        </a>
       </form>
     </li>
   </div>
@@ -295,7 +300,7 @@
           <div class="form-group explore-opps-formgroup">
             <label for="modificationMPSteamUsage" class="mod-value-label">Steam Usage</label>
             <div class="input-group mod-max-width">
-              <input name="modificationMPSteamUsage" type="number" step="any" id="modificationMPSteamUsage"
+              <input name="modificationMPSteamUsage" type="number" step="any" id="modificationMPSteamUsage" [readonly]="hasProcessSteamUsageData('mediumPressureHeader')"
                 class="form-control" (focus)="focusField('processSteamUsage')" (input)="save()"
                 formControlName="processSteamUsage" />
               <span class="units input-group-addon"><span
@@ -316,6 +321,9 @@
               </span>
             </div>
           </div>
+          <a class="form-text small click-link" (click)="showProcessSteamUsageModal('mediumPressureHeader')">
+            {{ hasProcessSteamUsageData('mediumPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+          </a>
         </form>
       </li>
     </div>
@@ -361,7 +369,7 @@
           <div class="form-group explore-opps-formgroup">
             <label for="modificationLPSteamUsage" class="mod-value-label">Steam Usage</label>
             <div class="input-group mod-max-width">
-              <input name="modificationLPSteamUsage" type="number" step="any" id="modificationLPSteamUsage"
+              <input name="modificationLPSteamUsage" type="number" step="any" id="modificationLPSteamUsage" [readonly]="hasProcessSteamUsageData('lowPressureHeader')"
                 class="form-control" (focus)="focusField('processSteamUsage')" (input)="save()"
                 formControlName="processSteamUsage" />
               <span class="units input-group-addon"><span
@@ -380,9 +388,43 @@
               </span>
             </div>
           </div>
+          <a class="form-text small click-link" (click)="showProcessSteamUsageModal('lowPressureHeader')">
+            {{ hasProcessSteamUsageData('lowPressureHeader') ? 'Edit process steam usage calculation.' : 'Calculate process steam usage.' }}
+          </a>
         </form>
       </li>
     </div>
   </div>
 
 </ul>
+
+<div bsModal #processSteamUsageModal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="exploreProcessSteamUsageModalLabel" aria-hidden="true"
+  [config]="{backdrop: 'static', keyboard: false}">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exploreProcessSteamUsageModalLabel">
+          Process Steam Usage (Modification)
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="hideProcessSteamUsageModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body p-0">
+        @if (processSteamUsageDataCopy) {
+          <app-process-steam-usage-modal [data]="processSteamUsageDataCopy" [settings]="settings"
+            [pressureLevel]="processSteamUsagePressureLevel" [idPrefix]="'explore_' + processSteamUsagePressureLevel">
+          </app-process-steam-usage-modal>
+        }
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" (click)="hideProcessSteamUsageModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="applyProcessSteamUsageData()"
+          [disabled]="!!processSteamUsageCalculator?.form?.invalid">
+          Apply Data
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
